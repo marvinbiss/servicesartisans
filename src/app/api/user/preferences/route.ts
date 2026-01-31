@@ -15,6 +15,8 @@ const supabaseAdmin = createClient(
 )
 
 // GET /api/user/preferences - Get user preferences
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   try {
     const cookieStore = await cookies()

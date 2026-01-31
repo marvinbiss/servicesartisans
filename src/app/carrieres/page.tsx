@@ -254,10 +254,13 @@ export default function CarrieresPage() {
                       ))}
                     </div>
                   </div>
-                  <button className="flex-shrink-0 bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center gap-2">
+                  <a
+                    href={`mailto:careers@servicesartisans.fr?subject=Candidature: ${offre.titre}&body=Bonjour,%0A%0AJe souhaite postuler au poste de ${offre.titre} (${offre.equipe}).%0A%0AMerci de trouver ci-joint mon CV et ma lettre de motivation.%0A%0ACordialement`}
+                    className="flex-shrink-0 bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center gap-2"
+                  >
                     Postuler
                     <ArrowRight className="w-4 h-4" />
-                  </button>
+                  </a>
                 </div>
               </div>
             ))}

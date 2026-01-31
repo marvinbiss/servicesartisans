@@ -7,6 +7,8 @@ import {
   FileText, Download, ExternalLink, ArrowLeft, CreditCard,
   CheckCircle, Clock, XCircle, Calendar, Euro
 } from 'lucide-react'
+import Breadcrumb from '@/components/Breadcrumb'
+import { QuickSiteLinks } from '@/components/InternalLinks'
 
 interface Invoice {
   id: string
@@ -119,6 +121,13 @@ export default function FacturesPage() {
       {/* Header */}
       <div className="bg-white border-b">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <Breadcrumb
+            items={[
+              { label: 'Mon espace', href: '/espace-client' },
+              { label: 'Factures et paiements' }
+            ]}
+            className="mb-4"
+          />
           <div className="flex items-center gap-4">
             <Link href="/espace-client" className="text-gray-600 hover:text-gray-900">
               <ArrowLeft className="w-5 h-5" />
@@ -326,6 +335,9 @@ export default function FacturesPage() {
             </div>
           </div>
         )}
+
+        {/* Quick Site Links */}
+        <QuickSiteLinks className="mt-8" />
       </div>
     </div>
   )

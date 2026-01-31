@@ -4,8 +4,11 @@ import { useState } from 'react'
 import Link from 'next/link'
 import {
   Wrench, Zap, Key, Flame, PaintBucket, Home, Hammer, HardHat,
-  MapPin, Phone, Mail, User, FileText, CheckCircle, ArrowRight, ArrowLeft
+  MapPin, Phone, Mail, User, FileText, CheckCircle, ArrowRight, ArrowLeft,
+  Loader2, AlertCircle
 } from 'lucide-react'
+import Breadcrumb from '@/components/Breadcrumb'
+import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
 
 const services = [
   { name: 'Plombier', slug: 'plombier', icon: Wrench },
@@ -38,15 +41,37 @@ export default function DevisPage() {
     telephone: '',
   })
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleServiceSelect = (slug: string) => {
     setFormData({ ...formData, service: slug })
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Simulation d'envoi
-    setIsSubmitted(true)
+    setError(null)
+    setIsLoading(true)
+
+    try {
+      const response = await fetch('/api/devis', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Erreur lors de l\'envoi de la demande')
+      }
+
+      setIsSubmitted(true)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erreur lors de l\'envoi')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   if (isSubmitted) {
@@ -78,11 +103,16 @@ export default function DevisPage() {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-12">
-        <div className="max-w-3xl mx-auto px-4 text-center">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">
+        <div className="max-w-3xl mx-auto px-4">
+          {/* Breadcrumb */}
+          <Breadcrumb
+            items={[{ label: 'Demander un devis' }]}
+            className="mb-6 text-blue-100 [&_a]:text-blue-200 [&_a:hover]:text-white [&_svg]:text-blue-300"
+          />
+          <h1 className="text-3xl md:text-4xl font-bold mb-4 text-center">
             Demandez un devis gratuit
           </h1>
-          <p className="text-xl text-blue-100">
+          <p className="text-xl text-blue-100 text-center">
             Recevez jusqu'à 3 devis d'artisans qualifiés près de chez vous
           </p>
         </div>
@@ -273,6 +303,13 @@ export default function DevisPage() {
                 Vos coordonnées
               </h2>
 
+              {error && (
+                <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-3 text-red-700">
+                  <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                  <span>{error}</span>
+                </div>
+              )}
+
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -343,16 +380,69 @@ export default function DevisPage() {
                 </button>
                 <button
                   type="submit"
-                  className="flex items-center gap-2 bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                  disabled={isLoading}
+                  className="flex items-center gap-2 bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Recevoir mes devis
-                  <CheckCircle className="w-5 h-5" />
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Envoi en cours...
+                    </>
+                  ) : (
+                    <>
+                      Recevoir mes devis
+                      <CheckCircle className="w-5 h-5" />
+                    </>
+                  )}
                 </button>
               </div>
             </div>
           )}
         </form>
+
+        {/* Contextual Links */}
+        <div className="mt-8 bg-white rounded-xl shadow-lg p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            Vous ne trouvez pas votre service ?
+          </h3>
+          <p className="text-gray-600 mb-4">
+            Consultez notre liste complète de services ou découvrez les artisans disponibles dans les principales villes de France.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href="/services"
+              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
+            >
+              Tous nos services <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link
+              href="/comment-ca-marche"
+              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
+            >
+              Comment ça marche ? <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link
+              href="/faq"
+              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
+            >
+              Questions fréquentes <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
       </div>
+
+      {/* Related Links Section */}
+      <section className="bg-gray-100 py-12 mt-8">
+        <div className="max-w-3xl mx-auto px-4">
+          <h2 className="text-xl font-bold text-gray-900 mb-6">
+            Trouvez un artisan près de chez vous
+          </h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            <PopularServicesLinks />
+            <PopularCitiesLinks />
+          </div>
+        </div>
+      </section>
     </div>
   )
 }

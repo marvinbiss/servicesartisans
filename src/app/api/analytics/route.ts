@@ -14,6 +14,8 @@ const supabase = createClient(
 )
 
 // POST /api/analytics - Store analytics event
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: Request) {
   try {
     const body = await request.json()

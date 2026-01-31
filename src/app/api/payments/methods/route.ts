@@ -22,6 +22,8 @@ const supabaseAdmin = createClient(
 )
 
 // GET - Get user's saved payment methods
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   try {
     const cookieStore = await cookies()

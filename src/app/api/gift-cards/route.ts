@@ -18,6 +18,8 @@ function generateGiftCardCode(): string {
 }
 
 // POST /api/gift-cards - Create/purchase a gift card
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: Request) {
   try {
     const body = await request.json()

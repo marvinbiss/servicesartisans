@@ -1,9 +1,10 @@
 import Link from 'next/link'
 import { Metadata } from 'next'
-import { Search, MapPin, Star, Shield, ArrowRight, Clock, CheckCircle, Wrench, Zap, Award, Users, TrendingUp, ChevronRight } from 'lucide-react'
+import { Search, MapPin, Star, Shield, ArrowRight, Clock, CheckCircle, Wrench, Zap, Award, Users, TrendingUp, ChevronRight, HelpCircle, FileText, Phone } from 'lucide-react'
 import JsonLd from '@/components/JsonLd'
 import { getOrganizationSchema, getWebsiteSchema } from '@/lib/seo/jsonld'
 import { REVALIDATE } from '@/lib/cache'
+import { GeographicNavigation, PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
 
 // ISR: Revalidate homepage every hour
 export const revalidate = REVALIDATE.services
@@ -45,23 +46,29 @@ const testimonials = [
   {
     name: 'Marie L.',
     city: 'Paris',
+    citySlug: 'paris',
     rating: 5,
     text: 'Excellent service ! J\'ai trouve un plombier en moins de 2h pour une urgence. Tres professionnel.',
     service: 'Plomberie',
+    serviceSlug: 'plombier',
   },
   {
     name: 'Pierre D.',
     city: 'Lyon',
+    citySlug: 'lyon',
     rating: 5,
     text: 'La plateforme est tres facile a utiliser. Les avis sont fiables et m\'ont aide a choisir.',
     service: 'Electricite',
+    serviceSlug: 'electricien',
   },
   {
     name: 'Sophie M.',
     city: 'Bordeaux',
+    citySlug: 'bordeaux',
     rating: 5,
     text: 'Enfin une plateforme serieuse pour trouver des artisans de confiance. Je recommande !',
     service: 'Menuiserie',
+    serviceSlug: 'menuisier',
   },
 ]
 
@@ -131,18 +138,51 @@ export default function HomePage() {
               </form>
             </div>
 
-            {/* Popular searches */}
+            {/* Popular searches with internal links */}
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
               <span className="text-slate-400 text-sm">Recherches populaires :</span>
-              {['Plombier Paris', 'Electricien Lyon', 'Serrurier urgence'].map((term) => (
-                <Link
-                  key={term}
-                  href={`/recherche?q=${encodeURIComponent(term)}`}
-                  className="text-sm text-blue-300 hover:text-blue-200 hover:underline"
-                >
-                  {term}
-                </Link>
-              ))}
+              <Link
+                href="/services/plombier/paris"
+                className="text-sm text-blue-300 hover:text-blue-200 hover:underline"
+              >
+                Plombier Paris
+              </Link>
+              <Link
+                href="/services/electricien/lyon"
+                className="text-sm text-blue-300 hover:text-blue-200 hover:underline"
+              >
+                Electricien Lyon
+              </Link>
+              <Link
+                href="/services/serrurier"
+                className="text-sm text-blue-300 hover:text-blue-200 hover:underline"
+              >
+                Serrurier urgence
+              </Link>
+              <Link
+                href="/recherche"
+                className="text-sm text-blue-300 hover:text-blue-200 hover:underline"
+              >
+                Recherche avancee
+              </Link>
+            </div>
+
+            {/* Quick access links */}
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-sm">
+              <Link
+                href="/devis"
+                className="inline-flex items-center gap-1 text-amber-300 hover:text-amber-200"
+              >
+                <FileText className="w-4 h-4" />
+                Demander un devis gratuit
+              </Link>
+              <Link
+                href="/comment-ca-marche"
+                className="inline-flex items-center gap-1 text-slate-300 hover:text-white"
+              >
+                <HelpCircle className="w-4 h-4" />
+                Comment ca marche ?
+              </Link>
             </div>
           </div>
         </div>
@@ -178,7 +218,7 @@ export default function HomePage() {
               Tous les services du batiment
             </h2>
             <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-              Trouvez l'artisan qu'il vous faut parmi nos 50 categories de services
+              Trouvez l'artisan qu'il vous faut parmi nos <Link href="/services" className="text-blue-600 hover:underline">50 categories de services</Link>
             </p>
           </div>
 
@@ -210,15 +250,49 @@ export default function HomePage() {
               <ArrowRight className="w-5 h-5" />
             </Link>
           </div>
+
+          {/* Service-City Cross Links */}
+          <div className="mt-12 pt-8 border-t border-slate-200">
+            <h3 className="text-lg font-semibold text-slate-900 mb-4 text-center">
+              Trouver un artisan par service et ville
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+              <Link href="/services/plombier/paris" className="text-sm text-slate-600 hover:text-blue-600 py-1">Plombier Paris</Link>
+              <Link href="/services/electricien/lyon" className="text-sm text-slate-600 hover:text-blue-600 py-1">Electricien Lyon</Link>
+              <Link href="/services/serrurier/marseille" className="text-sm text-slate-600 hover:text-blue-600 py-1">Serrurier Marseille</Link>
+              <Link href="/services/chauffagiste/toulouse" className="text-sm text-slate-600 hover:text-blue-600 py-1">Chauffagiste Toulouse</Link>
+              <Link href="/services/menuisier/bordeaux" className="text-sm text-slate-600 hover:text-blue-600 py-1">Menuisier Bordeaux</Link>
+              <Link href="/services/peintre-en-batiment/nantes" className="text-sm text-slate-600 hover:text-blue-600 py-1">Peintre Nantes</Link>
+              <Link href="/services/couvreur/lille" className="text-sm text-slate-600 hover:text-blue-600 py-1">Couvreur Lille</Link>
+              <Link href="/services/macon/nice" className="text-sm text-slate-600 hover:text-blue-600 py-1">Macon Nice</Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Geographic Navigation Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4">
+              Trouvez des artisans partout en France
+            </h2>
+            <p className="text-slate-600">
+              Plus de 35 000 villes couvertes dans toutes les <Link href="/regions" className="text-blue-600 hover:underline">regions</Link> et <Link href="/departements" className="text-blue-600 hover:underline">departements</Link>
+            </p>
+          </div>
+          <GeographicNavigation />
         </div>
       </section>
 
       {/* How it works */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
-              Comment ca marche ?
+              <Link href="/comment-ca-marche" className="hover:text-blue-600">
+                Comment ca marche ?
+              </Link>
             </h2>
             <p className="text-xl text-slate-600">
               Reservez un artisan en 3 etapes simples
@@ -232,46 +306,56 @@ export default function HomePage() {
                 title: 'Recherchez',
                 description: 'Entrez le service recherche et votre localisation pour trouver les artisans disponibles.',
                 icon: Search,
+                link: '/recherche',
               },
               {
                 step: '2',
                 title: 'Comparez',
                 description: 'Consultez les profils, les avis clients et les disponibilites pour faire votre choix.',
                 icon: Star,
+                link: '/services',
               },
               {
                 step: '3',
                 title: 'Reservez',
                 description: 'Selectionnez un creneau et confirmez votre reservation en quelques clics.',
                 icon: CheckCircle,
+                link: '/devis',
               },
             ].map((item, i) => (
               <div key={i} className="relative">
                 {i < 2 && (
                   <div className="hidden md:block absolute top-20 left-full w-full h-0.5 bg-gradient-to-r from-blue-200 to-transparent -translate-x-1/2" />
                 )}
-                <div className="text-center">
+                <Link href={item.link} className="text-center block group">
                   <div className="relative inline-block mb-6">
-                    <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-xl shadow-blue-500/30">
+                    <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-xl shadow-blue-500/30 group-hover:scale-105 transition-transform">
                       <item.icon className="w-10 h-10 text-white" />
                     </div>
                     <div className="absolute -top-2 -right-2 w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center text-white font-bold shadow-lg">
                       {item.step}
                     </div>
                   </div>
-                  <h3 className="text-xl font-semibold text-slate-900 mb-3">{item.title}</h3>
+                  <h3 className="text-xl font-semibold text-slate-900 mb-3 group-hover:text-blue-600">{item.title}</h3>
                   <p className="text-slate-600">{item.description}</p>
-                </div>
+                </Link>
               </div>
             ))}
           </div>
 
-          <div className="text-center mt-12">
+          <div className="text-center mt-12 space-x-4">
             <Link
               href="/recherche"
               className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg shadow-blue-600/30"
             >
               Trouver un artisan
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+            <Link
+              href="/comment-ca-marche"
+              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold"
+            >
+              En savoir plus
               <ArrowRight className="w-5 h-5" />
             </Link>
           </div>
@@ -308,11 +392,19 @@ export default function HomePage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="font-semibold">{testimonial.name}</div>
-                    <div className="text-sm text-slate-400">{testimonial.city}</div>
+                    <Link
+                      href={`/villes/${testimonial.citySlug}`}
+                      className="text-sm text-slate-400 hover:text-blue-300"
+                    >
+                      {testimonial.city}
+                    </Link>
                   </div>
-                  <span className="text-sm text-blue-300 bg-blue-500/20 px-3 py-1 rounded-full">
+                  <Link
+                    href={`/services/${testimonial.serviceSlug}`}
+                    className="text-sm text-blue-300 bg-blue-500/20 px-3 py-1 rounded-full hover:bg-blue-500/30 transition-colors"
+                  >
                     {testimonial.service}
-                  </span>
+                  </Link>
                 </div>
               </div>
             ))}
@@ -320,25 +412,101 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Cities Section */}
+      {/* Cities Section with proper links */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4">
               Artisans dans les grandes villes
             </h2>
+            <p className="text-slate-600">
+              Trouvez des artisans qualifies dans votre <Link href="/villes" className="text-blue-600 hover:underline">ville</Link>
+            </p>
           </div>
 
           <div className="flex flex-wrap justify-center gap-3">
             {popularCities.map((city) => (
               <Link
                 key={city.slug}
-                href={`/recherche?location=${city.slug}`}
+                href={`/villes/${city.slug}`}
                 className="px-6 py-3 bg-slate-100 hover:bg-blue-50 hover:text-blue-600 rounded-full text-slate-700 font-medium transition-colors"
               >
                 {city.name}
               </Link>
             ))}
+          </div>
+
+          <div className="text-center mt-8">
+            <Link
+              href="/villes"
+              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold"
+            >
+              Voir toutes les villes
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Popular Services and Cities Links Section */}
+      <section className="py-16 bg-slate-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 gap-8">
+            <PopularServicesLinks showTitle={true} className="bg-white p-6 rounded-xl shadow-sm" />
+            <PopularCitiesLinks showTitle={true} className="bg-white p-6 rounded-xl shadow-sm" />
+          </div>
+        </div>
+      </section>
+
+      {/* Help Section with FAQ and Contact links */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4">
+              Besoin d'aide ?
+            </h2>
+            <p className="text-slate-600 max-w-2xl mx-auto">
+              Nous sommes la pour vous accompagner dans votre recherche d'artisan
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            <Link
+              href="/comment-ca-marche"
+              className="flex items-center gap-4 p-6 bg-slate-50 rounded-xl hover:bg-blue-50 transition-colors group"
+            >
+              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                <HelpCircle className="w-6 h-6 text-blue-600" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-slate-900 group-hover:text-blue-600">Comment ca marche</h3>
+                <p className="text-sm text-slate-500">Decouvrez notre processus</p>
+              </div>
+            </Link>
+            <Link
+              href="/faq"
+              className="flex items-center gap-4 p-6 bg-slate-50 rounded-xl hover:bg-blue-50 transition-colors group"
+            >
+              <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center group-hover:bg-green-200 transition-colors">
+                <FileText className="w-6 h-6 text-green-600" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-slate-900 group-hover:text-green-600">FAQ</h3>
+                <p className="text-sm text-slate-500">Questions frequentes</p>
+              </div>
+            </Link>
+            <Link
+              href="/contact"
+              className="flex items-center gap-4 p-6 bg-slate-50 rounded-xl hover:bg-blue-50 transition-colors group"
+            >
+              <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center group-hover:bg-amber-200 transition-colors">
+                <Phone className="w-6 h-6 text-amber-600" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-slate-900 group-hover:text-amber-600">Contact</h3>
+                <p className="text-sm text-slate-500">Nous contacter</p>
+              </div>
+            </Link>
           </div>
         </div>
       </section>
@@ -369,6 +537,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
     </div>
   )
 }

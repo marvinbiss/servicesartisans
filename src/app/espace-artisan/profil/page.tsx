@@ -2,7 +2,10 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { FileText, MessageSquare, Star, Settings, LogOut, TrendingUp, Euro, ArrowLeft, Camera, MapPin, Phone, Mail, Globe, Clock, Shield, Award, Plus, X } from 'lucide-react'
+import { FileText, MessageSquare, Star, Settings, TrendingUp, Euro, ArrowLeft, Camera, MapPin, Phone, Mail, Globe, Clock, Shield, Award, Plus, X, ExternalLink, Search } from 'lucide-react'
+import Breadcrumb from '@/components/Breadcrumb'
+import { QuickSiteLinks } from '@/components/InternalLinks'
+import LogoutButton from '@/components/LogoutButton'
 
 export default function ProfilArtisanPage() {
   const [formData, setFormData] = useState({
@@ -75,6 +78,16 @@ export default function ProfilArtisanPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Breadcrumb */}
+      <div className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          <Breadcrumb items={[
+            { label: 'Espace Artisan', href: '/espace-artisan' },
+            { label: 'Mon profil' }
+          ]} />
+        </div>
+      </div>
+
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -137,10 +150,7 @@ export default function ProfilArtisanPage() {
                 <Euro className="w-5 h-5" />
                 Abonnement
               </Link>
-              <button className="flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 w-full">
-                <LogOut className="w-5 h-5" />
-                Déconnexion
-              </button>
+              <LogoutButton />
             </nav>
 
             {/* Certifications */}
@@ -162,6 +172,37 @@ export default function ProfilArtisanPage() {
                   <Shield className="w-4 h-4 text-green-500" />
                   <span>Garantie décennale</span>
                 </div>
+              </div>
+            </div>
+
+            {/* Voir mon profil public */}
+            <div className="bg-white rounded-xl shadow-sm p-4 mt-4">
+              <Link
+                href="/services/artisan/martin-plomberie-paris"
+                className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
+              >
+                <ExternalLink className="w-4 h-4" />
+                Voir mon profil public
+              </Link>
+            </div>
+
+            {/* Quick links */}
+            <div className="mt-4">
+              <QuickSiteLinks />
+            </div>
+
+            {/* Additional links */}
+            <div className="bg-white rounded-xl shadow-sm p-4 mt-4">
+              <h4 className="font-medium text-gray-900 mb-3">Liens utiles</h4>
+              <div className="space-y-2 text-sm">
+                <Link href="/services" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 py-1">
+                  <Search className="w-4 h-4" />
+                  Parcourir les services
+                </Link>
+                <Link href="/recherche" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 py-1">
+                  <Search className="w-4 h-4" />
+                  Rechercher un artisan
+                </Link>
               </div>
             </div>
           </div>

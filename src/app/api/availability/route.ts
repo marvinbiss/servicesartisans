@@ -3,6 +3,8 @@ import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
 
 // GET /api/availability - Get artisan's availability settings
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const artisanId = searchParams.get('artisanId')

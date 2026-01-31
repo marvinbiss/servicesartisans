@@ -1,0 +1,65 @@
+/**
+ * Password Reset API - ServicesArtisans
+ * Sends password reset email via Supabase
+ */
+
+import { NextResponse } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
+import { z } from 'zod'
+
+export const dynamic = 'force-dynamic'
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+const resetSchema = z.object({
+  email: z.string().email('Email invalide'),
+})
+
+export async function POST(request: Request) {
+  try {
+    if (!supabaseUrl || !supabaseServiceKey) {
+      return NextResponse.json(
+        { error: 'Configuration serveur manquante' },
+        { status: 500 }
+      )
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseServiceKey)
+    const body = await request.json()
+
+    // Validate input
+    const validation = resetSchema.safeParse(body)
+    if (!validation.success) {
+      return NextResponse.json(
+        { error: 'Email invalide' },
+        { status: 400 }
+      )
+    }
+
+    const { email } = validation.data
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
+
+    // Send password reset email
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${siteUrl}/reset-password`,
+    })
+
+    if (error) {
+      console.error('Reset password error:', error)
+      // Don't reveal if email exists or not for security
+    }
+
+    // Always return success for security (don't reveal if email exists)
+    return NextResponse.json({
+      success: true,
+      message: 'Si un compte existe avec cet email, vous recevrez un lien de reinitialisation.',
+    })
+  } catch (error) {
+    console.error('Reset password API error:', error)
+    return NextResponse.json(
+      { error: 'Erreur serveur' },
+      { status: 500 }
+    )
+  }
+}

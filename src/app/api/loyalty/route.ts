@@ -3,6 +3,8 @@ import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
 
 // GET /api/loyalty - Get client's loyalty points
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)

@@ -65,8 +65,6 @@ const nextConfig = {
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr',
   },
 
-  // Output configuration for deployment
-  output: 'standalone',
 }
 
 module.exports = nextConfig

@@ -6,6 +6,8 @@ import { getServiceBySlug, getLocationsByService, getProvidersByService } from '
 import JsonLd from '@/components/JsonLd'
 import { getServiceSchema, getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { REVALIDATE } from '@/lib/cache'
+import Breadcrumb from '@/components/Breadcrumb'
+import { PopularCitiesLinks, PopularServicesLinks, popularServices } from '@/components/InternalLinks'
 
 // ISR: Revalidate every 30 minutes
 export const revalidate = REVALIDATE.serviceDetail
@@ -88,17 +90,12 @@ export default async function ServicePage({ params }: PageProps) {
       {/* Breadcrumb */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          <nav className="flex items-center gap-2 text-sm">
-            <Link href="/" className="text-gray-500 hover:text-gray-700">
-              Accueil
-            </Link>
-            <span className="text-gray-400">/</span>
-            <Link href="/services" className="text-gray-500 hover:text-gray-700">
-              Services
-            </Link>
-            <span className="text-gray-400">/</span>
-            <span className="text-gray-900 font-medium">{service.name}</span>
-          </nav>
+          <Breadcrumb
+            items={[
+              { label: 'Services', href: '/services' },
+              { label: service.name },
+            ]}
+          />
         </div>
       </div>
 
@@ -294,6 +291,37 @@ export default async function ServicePage({ params }: PageProps) {
           </Link>
         </div>
       </section>
+
+      {/* Voir aussi - Autres services */}
+      <section className="py-12 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Voir aussi</h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-4">Autres services artisanaux</h3>
+              <div className="flex flex-wrap gap-2">
+                {popularServices
+                  .filter(s => s.slug !== serviceSlug)
+                  .slice(0, 6)
+                  .map((s) => (
+                    <Link
+                      key={s.slug}
+                      href={`/services/${s.slug}`}
+                      className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-full text-sm transition-colors"
+                    >
+                      {s.name}
+                    </Link>
+                  ))}
+              </div>
+            </div>
+            <div>
+              <PopularCitiesLinks showTitle={true} limit={8} />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Internal Links Footer */}
     </div>
   )
 }

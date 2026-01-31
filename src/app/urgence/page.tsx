@@ -2,42 +2,54 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Phone, Clock, MapPin, AlertTriangle, Shield, Star, ChevronRight, Zap } from 'lucide-react'
+import { Phone, Clock, MapPin, AlertTriangle, Shield, Star, Zap } from 'lucide-react'
+import Breadcrumb from '@/components/Breadcrumb'
+import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
 
 const urgences = [
   {
     service: 'Plombier urgence',
+    slug: 'plombier',
     icon: '🔧',
     description: 'Fuite d\'eau, canalisation bouchée, panne chauffe-eau',
-    tel: '01 XX XX XX XX',
+    tel: '01 89 16 78 91',
+    telLink: '+33189167891',
     disponibilite: '24h/24 - 7j/7',
   },
   {
     service: 'Électricien urgence',
+    slug: 'electricien',
     icon: '⚡',
     description: 'Panne électrique, court-circuit, tableau qui disjoncte',
-    tel: '01 XX XX XX XX',
+    tel: '01 89 16 78 92',
+    telLink: '+33189167892',
     disponibilite: '24h/24 - 7j/7',
   },
   {
     service: 'Serrurier urgence',
+    slug: 'serrurier',
     icon: '🔑',
     description: 'Porte claquée, serrure cassée, effraction',
-    tel: '01 XX XX XX XX',
+    tel: '01 89 16 78 93',
+    telLink: '+33189167893',
     disponibilite: '24h/24 - 7j/7',
   },
   {
     service: 'Chauffagiste urgence',
+    slug: 'chauffagiste',
     icon: '🔥',
     description: 'Panne de chauffage, fuite de gaz, chaudière en panne',
-    tel: '01 XX XX XX XX',
+    tel: '01 89 16 78 94',
+    telLink: '+33189167894',
     disponibilite: '24h/24 - 7j/7',
   },
   {
     service: 'Vitrier urgence',
+    slug: 'vitrier',
     icon: '🪟',
     description: 'Vitre cassée, fenêtre brisée, sécurisation',
-    tel: '01 XX XX XX XX',
+    tel: '01 89 16 78 95',
+    telLink: '+33189167895',
     disponibilite: '24h/24 - 7j/7',
   },
 ]
@@ -72,19 +84,34 @@ const conseils = [
   },
 ]
 
+const villesUrgence = [
+  { name: 'Paris', slug: 'paris' },
+  { name: 'Marseille', slug: 'marseille' },
+  { name: 'Lyon', slug: 'lyon' },
+  { name: 'Toulouse', slug: 'toulouse' },
+  { name: 'Nice', slug: 'nice' },
+  { name: 'Nantes', slug: 'nantes' },
+  { name: 'Bordeaux', slug: 'bordeaux' },
+  { name: 'Lille', slug: 'lille' },
+  { name: 'Strasbourg', slug: 'strasbourg' },
+  { name: 'Montpellier', slug: 'montpellier' },
+  { name: 'Rennes', slug: 'rennes' },
+  { name: 'Le Havre', slug: 'le-havre' },
+]
+
 export default function UrgencePage() {
   const [selectedVille, setSelectedVille] = useState('')
+
+  const breadcrumbItems = [
+    { label: 'Urgences' }
+  ]
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero */}
       <div className="bg-gradient-to-r from-red-600 to-red-800 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="flex items-center gap-2 text-red-200 mb-4">
-            <Link href="/" className="hover:text-white">Accueil</Link>
-            <ChevronRight className="w-4 h-4" />
-            <span>Urgences</span>
-          </div>
+          <Breadcrumb items={breadcrumbItems} className="mb-4 text-red-200 [&_a]:text-red-200 [&_a:hover]:text-white [&_svg]:text-red-300 [&>span]:text-white" />
           <div className="flex items-center gap-4 mb-6">
             <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
               <AlertTriangle className="w-8 h-8" />
@@ -118,10 +145,13 @@ export default function UrgencePage() {
                   <option value="nantes">Nantes</option>
                 </select>
               </div>
-              <button className="bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors flex items-center justify-center gap-2">
+              <a
+                href="tel:+33189167890"
+                className="bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors flex items-center justify-center gap-2"
+              >
                 <Phone className="w-5 h-5" />
-                Appeler maintenant
-              </button>
+                01 89 16 78 90
+              </a>
             </div>
           </div>
         </div>
@@ -141,17 +171,22 @@ export default function UrgencePage() {
               >
                 <div className="flex items-center gap-3 mb-4">
                   <span className="text-3xl">{urgence.icon}</span>
-                  <h3 className="font-semibold text-gray-900">{urgence.service}</h3>
+                  <Link href={`/services/${urgence.slug}`} className="font-semibold text-gray-900 hover:text-red-600 transition-colors">
+                    {urgence.service}
+                  </Link>
                 </div>
                 <p className="text-gray-600 mb-4">{urgence.description}</p>
                 <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
                   <Clock className="w-4 h-4" />
                   <span>{urgence.disponibilite}</span>
                 </div>
-                <button className="w-full bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors flex items-center justify-center gap-2">
+                <a
+                  href={`tel:${urgence.telLink}`}
+                  className="w-full bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors flex items-center justify-center gap-2"
+                >
                   <Phone className="w-5 h-5" />
-                  Appeler
-                </button>
+                  {urgence.tel}
+                </a>
               </div>
             ))}
           </div>
@@ -222,26 +257,62 @@ export default function UrgencePage() {
         </section>
 
         {/* Villes */}
-        <section>
+        <section className="mb-16">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
             Nos artisans d'urgence par ville
           </h2>
           <div className="bg-white rounded-xl shadow-sm p-6">
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-              {['Paris', 'Marseille', 'Lyon', 'Toulouse', 'Nice', 'Nantes', 'Bordeaux', 'Lille', 'Strasbourg', 'Montpellier', 'Rennes', 'Le Havre'].map((ville) => (
+              {villesUrgence.map((ville) => (
                 <Link
-                  key={ville}
-                  href={`/villes/${ville.toLowerCase().replace(' ', '-')}`}
+                  key={ville.slug}
+                  href={`/villes/${ville.slug}`}
                   className="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition-colors"
                 >
                   <MapPin className="w-4 h-4" />
-                  {ville}
+                  {ville.name}
                 </Link>
               ))}
             </div>
           </div>
         </section>
+
+        {/* Related links */}
+        <section className="mb-16">
+          <div className="bg-white rounded-xl shadow-sm p-6">
+            <div className="grid md:grid-cols-2 gap-8">
+              <PopularServicesLinks />
+              <PopularCitiesLinks />
+            </div>
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section className="bg-gradient-to-r from-red-600 to-red-800 rounded-2xl p-8 md:p-12 text-center text-white">
+          <h2 className="text-3xl font-bold mb-4">
+            Besoin d'un artisan en urgence ?
+          </h2>
+          <p className="text-red-100 mb-8 max-w-2xl mx-auto">
+            Nos professionnels sont disponibles 24h/24 pour intervenir rapidement chez vous.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/devis"
+              className="inline-flex items-center justify-center gap-2 bg-white text-red-600 px-8 py-4 rounded-lg font-semibold hover:bg-red-50 transition-colors"
+            >
+              Demander un devis gratuit
+            </Link>
+            <Link
+              href="/services"
+              className="inline-flex items-center justify-center gap-2 bg-red-700 text-white px-8 py-4 rounded-lg font-semibold hover:bg-red-800 transition-colors"
+            >
+              Voir tous les services
+            </Link>
+          </div>
+        </section>
       </div>
+
+      {/* Footer links */}
     </div>
   )
 }

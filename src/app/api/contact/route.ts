@@ -1,0 +1,105 @@
+/**
+ * Contact API - ServicesArtisans
+ * Handles contact form submissions and sends emails via Resend
+ */
+
+import { NextResponse } from 'next/server'
+import { Resend } from 'resend'
+import { z } from 'zod'
+
+export const dynamic = 'force-dynamic'
+
+const resend = new Resend(process.env.RESEND_API_KEY)
+
+const contactSchema = z.object({
+  nom: z.string().min(2, 'Le nom doit contenir au moins 2 caractères'),
+  email: z.string().email('Email invalide'),
+  sujet: z.string().min(1, 'Veuillez sélectionner un sujet'),
+  message: z.string().min(10, 'Le message doit contenir au moins 10 caractères'),
+})
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json()
+
+    // Validate input
+    const validation = contactSchema.safeParse(body)
+    if (!validation.success) {
+      return NextResponse.json(
+        { error: 'Données invalides', details: validation.error.flatten() },
+        { status: 400 }
+      )
+    }
+
+    const { nom, email, sujet, message } = validation.data
+
+    // Map subject to readable text
+    const sujetTexte: Record<string, string> = {
+      devis: 'Question sur un devis',
+      artisan: 'Problème avec un artisan',
+      inscription: 'Inscription artisan',
+      partenariat: 'Partenariat',
+      autre: 'Autre',
+    }
+
+    // Send email to support team
+    const { error: sendError } = await resend.emails.send({
+      from: process.env.FROM_EMAIL || 'contact@servicesartisans.fr',
+      to: 'contact@servicesartisans.fr',
+      reply_to: email,
+      subject: `[Contact] ${sujetTexte[sujet] || sujet} - ${nom}`,
+      html: `
+        <h2>Nouveau message de contact</h2>
+        <p><strong>Nom:</strong> ${nom}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Sujet:</strong> ${sujetTexte[sujet] || sujet}</p>
+        <hr />
+        <h3>Message:</h3>
+        <p>${message.replace(/\n/g, '<br />')}</p>
+        <hr />
+        <p style="color: #666; font-size: 12px;">
+          Message envoyé depuis le formulaire de contact de ServicesArtisans
+        </p>
+      `,
+    })
+
+    if (sendError) {
+      console.error('Error sending email:', sendError)
+      return NextResponse.json(
+        { error: 'Erreur lors de l\'envoi du message' },
+        { status: 500 }
+      )
+    }
+
+    // Send confirmation email to user
+    await resend.emails.send({
+      from: process.env.FROM_EMAIL || 'noreply@servicesartisans.fr',
+      to: email,
+      subject: 'Votre message a bien été reçu - ServicesArtisans',
+      html: `
+        <h2>Bonjour ${nom},</h2>
+        <p>Nous avons bien reçu votre message et nous vous répondrons dans les plus brefs délais.</p>
+        <p><strong>Sujet:</strong> ${sujetTexte[sujet] || sujet}</p>
+        <hr />
+        <p><strong>Votre message:</strong></p>
+        <p>${message.replace(/\n/g, '<br />')}</p>
+        <hr />
+        <p>Cordialement,<br />L'équipe ServicesArtisans</p>
+        <p style="color: #666; font-size: 12px;">
+          <a href="https://servicesartisans.fr">servicesartisans.fr</a>
+        </p>
+      `,
+    })
+
+    return NextResponse.json({
+      success: true,
+      message: 'Message envoyé avec succès',
+    })
+  } catch (error) {
+    console.error('Contact API error:', error)
+    return NextResponse.json(
+      { error: 'Erreur serveur' },
+      { status: 500 }
+    )
+  }
+}

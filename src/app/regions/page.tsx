@@ -1,6 +1,8 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { MapPin, ArrowRight } from 'lucide-react'
+import { MapPin, ArrowRight, Users, Star, Shield, Sparkles, Building2 } from 'lucide-react'
+import Breadcrumb from '@/components/Breadcrumb'
+import { PopularServicesLinks, GeographicNavigation } from '@/components/InternalLinks'
 
 export const metadata: Metadata = {
   title: 'Artisans par région - Toutes les régions de France',
@@ -112,49 +114,161 @@ const domTom = [
 export default function RegionsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero */}
-      <section className="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Artisans par région
+      {/* Premium Hero */}
+      <section className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 text-white py-20 overflow-hidden">
+        {/* Background decoration */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl" />
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl" />
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          {/* Trust badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 mb-6">
+            <Building2 className="w-4 h-4 text-amber-400" />
+            <span className="text-sm font-medium text-white/90">13 régions métropolitaines + DOM-TOM</span>
+          </div>
+
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight">
+            Artisans par{' '}
+            <span className="bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 bg-clip-text text-transparent">
+              région
+            </span>
           </h1>
-          <p className="text-xl text-blue-100 max-w-2xl mx-auto">
+          <p className="text-xl text-slate-300 max-w-2xl mx-auto">
             Trouvez un artisan qualifié dans votre région.
             Toute la France métropolitaine et les DOM-TOM couverts.
           </p>
+
+          {/* Stats */}
+          <div className="flex flex-wrap justify-center gap-6 mt-10">
+            <div className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg">
+              <Users className="w-5 h-5 text-amber-400" />
+              <span className="text-slate-300">120 000+ artisans</span>
+            </div>
+            <div className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg">
+              <Star className="w-5 h-5 text-amber-400" />
+              <span className="text-slate-300">4.8/5 satisfaction</span>
+            </div>
+            <div className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg">
+              <Shield className="w-5 h-5 text-amber-400" />
+              <span className="text-slate-300">100% vérifiés</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Breadcrumb + Navigation */}
+      <section className="bg-white border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <Breadcrumb items={[{ label: 'Régions' }]} className="mb-4" />
+          <GeographicNavigation />
         </div>
       </section>
 
       {/* Régions métropolitaines */}
-      <section className="py-16">
+      <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8">
-            France métropolitaine
-          </h2>
+          <div className="flex items-center gap-3 mb-10">
+            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/25">
+              <MapPin className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">France métropolitaine</h2>
+              <p className="text-sm text-gray-500">13 régions, 101 départements</p>
+            </div>
+          </div>
+
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {regions.map((region) => (
               <Link
                 key={region.slug}
                 href={`/regions/${region.slug}`}
-                className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg hover:border-blue-300 transition-all group"
+                className="group relative bg-white rounded-2xl border border-gray-100 p-6 hover:border-gray-200 transition-all duration-300 hover:shadow-xl hover:shadow-gray-200/50 hover:-translate-y-1"
               >
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center group-hover:bg-blue-200 transition-colors">
-                      <MapPin className="w-6 h-6 text-blue-600" />
+                {/* Decorative gradient */}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-50 to-transparent rounded-bl-[100px] opacity-0 group-hover:opacity-100 transition-opacity" />
+
+                <div className="relative">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl flex items-center justify-center group-hover:from-blue-100 group-hover:to-blue-200 transition-colors">
+                        <MapPin className="w-6 h-6 text-blue-600" />
+                      </div>
+                      <h3 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                        {region.name}
+                      </h3>
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
-                      {region.name}
-                    </h3>
+                    <ArrowRight className="w-5 h-5 text-gray-300 group-hover:text-blue-500 group-hover:translate-x-1 transition-all" />
                   </div>
-                  <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors" />
+
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="flex items-center gap-1.5 text-sm text-gray-600">
+                      <Users className="w-4 h-4 text-gray-400" />
+                      {region.population}
+                    </div>
+                    <div className="flex items-center gap-1.5 text-sm font-medium text-blue-600">
+                      <Sparkles className="w-4 h-4" />
+                      {region.artisans} artisans
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 text-sm text-gray-500">
+                    <Building2 className="w-4 h-4 text-gray-400" />
+                    {region.departments.length} départements
+                  </div>
                 </div>
-                <div className="flex gap-4 text-sm text-gray-600 mb-3">
-                  <span>{region.population} hab.</span>
-                  <span className="text-blue-600 font-medium">{region.artisans} artisans</span>
-                </div>
-                <div className="text-sm text-gray-500">
-                  {region.departments.length} départements
+              </Link>
+            ))}
+          </div>
+
+          {/* Lien vers départements */}
+          <div className="mt-8 text-center">
+            <Link
+              href="/departements"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-blue-50 text-blue-700 rounded-xl hover:bg-blue-100 font-medium transition-colors"
+            >
+              <Building2 className="w-5 h-5" />
+              Voir tous les départements
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+
+          {/* Services populaires - Maillage interne */}
+          <div className="mt-16 pt-12 border-t border-gray-200">
+            <PopularServicesLinks showTitle={true} limit={8} />
+          </div>
+        </div>
+      </section>
+
+      {/* DOM-TOM */}
+      <section className="py-16 bg-gradient-to-b from-gray-50 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-3 mb-10">
+            <div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl flex items-center justify-center shadow-lg shadow-amber-500/25">
+              <MapPin className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">Outre-mer</h2>
+              <p className="text-sm text-gray-500">5 départements et régions d'outre-mer</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            {domTom.map((region) => (
+              <Link
+                key={region.slug}
+                href={`/regions/${region.slug}`}
+                className="group relative bg-white rounded-xl border border-gray-100 p-5 hover:border-amber-200 transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/10 hover:-translate-y-1 text-center"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-amber-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
+                <div className="relative">
+                  <div className="w-10 h-10 bg-amber-50 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-amber-100 transition-colors">
+                    <span className="text-sm font-bold text-amber-600">{region.code}</span>
+                  </div>
+                  <div className="font-semibold text-gray-900 group-hover:text-amber-600 transition-colors">
+                    {region.name}
+                  </div>
                 </div>
               </Link>
             ))}
@@ -162,26 +276,33 @@ export default function RegionsPage() {
         </div>
       </section>
 
-      {/* DOM-TOM */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8">
-            Outre-mer
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            {domTom.map((region) => (
-              <Link
-                key={region.slug}
-                href={`/regions/${region.slug}`}
-                className="bg-gray-50 rounded-xl p-4 hover:bg-blue-50 transition-colors group text-center"
-              >
-                <div className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
-                  {region.name}
-                </div>
-                <div className="text-sm text-gray-500">({region.code})</div>
-              </Link>
-            ))}
+      {/* Premium CTA */}
+      <section className="relative py-20 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900" />
+        <div className="absolute inset-0">
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-amber-500/20 rounded-full blur-3xl" />
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500/20 backdrop-blur-sm rounded-full border border-amber-500/30 mb-6">
+            <Sparkles className="w-4 h-4 text-amber-400" />
+            <span className="text-sm font-medium text-amber-300">Couverture nationale</span>
           </div>
+
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            Besoin d'un artisan rapidement ?
+          </h2>
+          <p className="text-xl text-slate-300 mb-10 max-w-xl mx-auto">
+            Obtenez jusqu'à 3 devis gratuits en quelques clics.
+          </p>
+          <Link
+            href="/devis"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold rounded-xl hover:from-amber-600 hover:via-amber-500 hover:to-amber-600 transition-all shadow-xl shadow-amber-500/30 hover:shadow-amber-500/40 hover:-translate-y-0.5"
+          >
+            Demander un devis gratuit
+            <ArrowRight className="w-5 h-5" />
+          </Link>
         </div>
       </section>
     </div>

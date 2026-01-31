@@ -16,6 +16,8 @@ const supabase = createClient(
 )
 
 // GET /api/cron/send-reminders-1h - Send 1h reminder SMS
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: Request) {
   try {
     // Verify cron secret

@@ -8,6 +8,8 @@ import {
 import { logger } from '@/lib/logger'
 
 // POST /api/bookings/payment - Create payment session for booking deposit
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: Request) {
   try {
     const body = await request.json()

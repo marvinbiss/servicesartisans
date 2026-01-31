@@ -9,6 +9,8 @@ const supabase = createClient(
 )
 
 // GET /api/bookings/[id] - Get booking details
+export const dynamic = 'force-dynamic'
+
 export async function GET(
   request: Request,
   { params }: { params: { id: string } }

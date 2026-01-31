@@ -6,6 +6,8 @@ import { logger } from '@/lib/logger'
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
 
 // POST /api/waitlist - Add to waitlist for a specific artisan/date
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: Request) {
   try {
     const body = await request.json()

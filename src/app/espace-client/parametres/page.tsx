@@ -4,11 +4,14 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  FileText, MessageSquare, Star, Settings, LogOut, ArrowLeft,
+  FileText, MessageSquare, Star, Settings, ArrowLeft,
   User, Mail, Phone, Lock, Bell, Shield, Trash2, Download,
   Globe, Palette, Eye, EyeOff
 } from 'lucide-react'
 import usePushNotifications from '@/hooks/usePushNotifications'
+import Breadcrumb from '@/components/Breadcrumb'
+import { QuickSiteLinks } from '@/components/InternalLinks'
+import LogoutButton from '@/components/LogoutButton'
 
 interface NotificationPreferences {
   email_booking_confirmation: boolean
@@ -278,6 +281,13 @@ export default function ParametresClientPage() {
       {/* Header */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <Breadcrumb
+            items={[
+              { label: 'Mon espace', href: '/espace-client' },
+              { label: 'Paramètres' }
+            ]}
+            className="mb-4"
+          />
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Link href="/espace-client" className="text-gray-600 hover:text-gray-900">
@@ -300,7 +310,7 @@ export default function ParametresClientPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid lg:grid-cols-4 gap-8">
           {/* Sidebar */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 space-y-4">
             <nav className="bg-white rounded-xl shadow-sm p-4 space-y-1">
               {tabs.map((tab) => (
                 <button
@@ -324,11 +334,9 @@ export default function ParametresClientPage() {
                 <FileText className="w-5 h-5" />
                 Mes demandes
               </Link>
-              <button className="flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 w-full">
-                <LogOut className="w-5 h-5" />
-                Deconnexion
-              </button>
+              <LogoutButton />
             </nav>
+            <QuickSiteLinks />
           </div>
 
           {/* Content */}

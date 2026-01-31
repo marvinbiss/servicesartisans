@@ -2,13 +2,14 @@
 
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { Home, Search, Calendar, User, MessageSquare } from 'lucide-react'
+import { Home, Search, FileText, User, Phone } from 'lucide-react'
 
 interface NavItem {
   href: string
   icon: React.ElementType
   label: string
   activeRoutes?: string[]
+  urgent?: boolean
 }
 
 const navItems: NavItem[] = [
@@ -19,33 +20,40 @@ const navItems: NavItem[] = [
     activeRoutes: ['/'],
   },
   {
-    href: '/services',
+    href: '/recherche',
     icon: Search,
-    label: 'Services',
-    activeRoutes: ['/services'],
+    label: 'Rechercher',
+    activeRoutes: ['/recherche', '/services'],
   },
   {
-    href: '/espace-client',
-    icon: Calendar,
-    label: 'Mes RDV',
-    activeRoutes: ['/espace-client', '/booking'],
+    href: '/devis',
+    icon: FileText,
+    label: 'Devis',
+    activeRoutes: ['/devis'],
   },
   {
-    href: '/messages',
-    icon: MessageSquare,
-    label: 'Messages',
-    activeRoutes: ['/messages'],
+    href: '/urgence',
+    icon: Phone,
+    label: 'Urgence',
+    activeRoutes: ['/urgence'],
+    urgent: true,
   },
   {
-    href: '/profil',
+    href: '/connexion',
     icon: User,
-    label: 'Profil',
-    activeRoutes: ['/profil', '/espace-artisan'],
+    label: 'Compte',
+    activeRoutes: ['/connexion', '/inscription', '/espace-client', '/espace-artisan'],
   },
 ]
 
 export default function MobileBottomNav() {
   const pathname = usePathname()
+
+  // Ne pas afficher dans les espaces connectés (ils ont leur propre nav)
+  const hideOnPages = ['/espace-client', '/espace-artisan', '/admin']
+  const shouldHide = hideOnPages.some(page => pathname.startsWith(page))
+
+  if (shouldHide) return null
 
   const isActive = (item: NavItem) => {
     if (item.activeRoutes) {
@@ -57,8 +65,8 @@ export default function MobileBottomNav() {
   }
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 md:hidden safe-area-bottom">
-      <div className="flex items-center justify-around h-16">
+    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 md:hidden">
+      <div className="flex items-center justify-around px-1 pb-safe">
         {navItems.map((item) => {
           const active = isActive(item)
           const Icon = item.icon
@@ -67,14 +75,24 @@ export default function MobileBottomNav() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-col items-center justify-center flex-1 h-full transition-colors ${
-                active
-                  ? 'text-blue-600'
-                  : 'text-gray-500 hover:text-gray-700'
+              className={`flex flex-col items-center justify-center min-w-[60px] min-h-[56px] px-2 py-2 rounded-lg transition-all ${
+                item.urgent
+                  ? 'text-red-600'
+                  : active
+                  ? 'text-blue-600 bg-blue-50'
+                  : 'text-gray-500 active:bg-gray-100'
               }`}
             >
-              <Icon className={`w-6 h-6 ${active ? 'stroke-[2.5]' : ''}`} />
-              <span className={`text-xs mt-1 ${active ? 'font-medium' : ''}`}>
+              <div className="relative">
+                <Icon className={`w-6 h-6 ${active && !item.urgent ? 'stroke-[2.5]' : ''}`} />
+                {item.urgent && (
+                  <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+                  </span>
+                )}
+              </div>
+              <span className={`text-[11px] mt-1 ${active || item.urgent ? 'font-semibold' : 'font-medium'}`}>
                 {item.label}
               </span>
             </Link>

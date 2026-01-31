@@ -1,11 +1,8 @@
-import { Metadata } from 'next'
-import Link from 'next/link'
-import { Calendar, Clock, ArrowRight, User } from 'lucide-react'
+'use client'
 
-export const metadata: Metadata = {
-  title: 'Blog - Conseils travaux et rénovation | ServicesArtisans',
-  description: 'Retrouvez tous nos conseils pour vos travaux : guides pratiques, astuces, tendances déco et informations sur les aides financières.',
-}
+import { useState } from 'react'
+import Link from 'next/link'
+import { Calendar, Clock, ArrowRight, User, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
 
 const articles = [
   {
@@ -94,6 +91,42 @@ const categories = [
 ]
 
 export default function BlogPage() {
+  const [email, setEmail] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [isSubscribed, setIsSubscribed] = useState(false)
+  const [error, setError] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState('Tous')
+
+  const filteredArticles = selectedCategory === 'Tous'
+    ? articles
+    : articles.filter(a => a.category === selectedCategory)
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsLoading(true)
+    setError('')
+
+    try {
+      const response = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Erreur lors de l\'inscription')
+      }
+
+      setIsSubscribed(true)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erreur lors de l\'inscription')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero */}
@@ -115,8 +148,9 @@ export default function BlogPage() {
             {categories.map((cat) => (
               <button
                 key={cat}
+                onClick={() => setSelectedCategory(cat)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  cat === 'Tous'
+                  cat === selectedCategory
                     ? 'bg-blue-600 text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
@@ -132,7 +166,7 @@ export default function BlogPage() {
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {articles.map((article) => (
+            {filteredArticles.map((article) => (
               <Link
                 key={article.slug}
                 href={`/blog/${article.slug}`}
@@ -197,19 +231,42 @@ export default function BlogPage() {
           <p className="text-xl text-blue-100 mb-8">
             Recevez nos derniers articles et conseils directement dans votre boîte mail
           </p>
-          <form className="max-w-md mx-auto flex gap-4">
-            <input
-              type="email"
-              placeholder="Votre email"
-              className="flex-1 px-4 py-3 rounded-lg focus:ring-2 focus:ring-blue-300"
-            />
-            <button
-              type="submit"
-              className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
-            >
-              S'inscrire
-            </button>
-          </form>
+          {isSubscribed ? (
+            <div className="max-w-md mx-auto bg-white/20 rounded-lg p-6 flex items-center justify-center gap-3 text-white">
+              <CheckCircle className="w-6 h-6" />
+              <span className="font-medium">Merci ! Vous êtes inscrit à notre newsletter.</span>
+            </div>
+          ) : (
+            <form onSubmit={handleNewsletterSubmit} className="max-w-md mx-auto">
+              <div className="flex gap-4">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Votre email"
+                  required
+                  className="flex-1 px-4 py-3 rounded-lg focus:ring-2 focus:ring-blue-300"
+                />
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors disabled:opacity-50 flex items-center gap-2"
+                >
+                  {isLoading ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    "S'inscrire"
+                  )}
+                </button>
+              </div>
+              {error && (
+                <div className="mt-4 flex items-center justify-center gap-2 text-red-200">
+                  <AlertCircle className="w-4 h-4" />
+                  <span>{error}</span>
+                </div>
+              )}
+            </form>
+          )}
         </div>
       </section>
     </div>

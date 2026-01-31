@@ -16,6 +16,8 @@ const supabaseAdmin = createClient(
 )
 
 // GET - Get user's invoice history
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   try {
     const cookieStore = await cookies()

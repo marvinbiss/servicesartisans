@@ -18,6 +18,8 @@ function getSupabaseAdmin() {
 }
 
 // POST /api/gdpr/export - Request data export
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: Request) {
   try {
     const cookieStore = await cookies()

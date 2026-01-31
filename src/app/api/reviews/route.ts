@@ -88,6 +88,8 @@ const getQuerySchema = z.object({
 })
 
 // GET /api/reviews - Get booking info for review or artisan reviews
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)

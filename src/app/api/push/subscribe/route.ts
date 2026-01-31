@@ -14,6 +14,8 @@ const supabase = createClient(
 )
 
 // GET /api/push/subscribe - Get VAPID public key
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   const vapidKey = getVapidPublicKey()
 

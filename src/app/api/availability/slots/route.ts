@@ -83,6 +83,8 @@ function generateDemoAvailability(artisanId: string, startDate: Date, days: numb
 }
 
 // GET /api/availability/slots?artisanIds=id1,id2,id3&days=5
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)

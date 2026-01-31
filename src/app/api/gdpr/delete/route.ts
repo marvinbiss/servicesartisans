@@ -18,6 +18,8 @@ function getSupabaseAdmin() {
 }
 
 // POST /api/gdpr/delete - Request account deletion
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: Request) {
   try {
     const cookieStore = await cookies()

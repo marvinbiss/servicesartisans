@@ -12,6 +12,8 @@ import {
 } from '@/lib/stripe/advanced-payments'
 import { logger } from '@/lib/logger'
 
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: Request) {
   try {
     const cookieStore = await cookies()

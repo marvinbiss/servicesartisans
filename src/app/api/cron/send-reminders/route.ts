@@ -10,6 +10,8 @@ const supabase = createClient(
 )
 
 // GET /api/cron/send-reminders - Send reminder emails for tomorrow's bookings
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: Request) {
   try {
     // Verify cron secret

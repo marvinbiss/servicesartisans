@@ -5,10 +5,11 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import {
-  Search, MapPin, ChevronLeft, ChevronRight, Filter, X,
-  Star, Clock, CheckCircle, Calendar, Sliders
+  Search, MapPin, ChevronLeft, ChevronRight, X,
+  Star, Calendar, Sliders, Shield, Sparkles, Users, TrendingUp
 } from 'lucide-react'
 import ArtisanResultCard from '@/components/ArtisanResultCard'
+import { PopularServicesLinks, PopularCitiesLinks, popularServices } from '@/components/InternalLinks'
 
 interface TimeSlot {
   time: string
@@ -158,68 +159,96 @@ function SearchPageContent() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <form onSubmit={handleSearch} className="flex items-center gap-3">
-            <Link href="/" className="text-gray-600 hover:text-gray-900">
-              <ChevronLeft className="w-5 h-5" />
-            </Link>
-            <div className="flex-1 flex items-center gap-2">
-              <div className="flex-1 relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="text"
-                  name="q"
-                  defaultValue={query || service}
-                  placeholder="Specialite, nom du professionnel..."
-                  className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-              <div className="hidden md:block relative w-64">
-                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="text"
-                  name="location"
-                  defaultValue={location}
-                  placeholder="Ou ? (ville, adresse...)"
-                  className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-              <button
-                type="submit"
-                className="px-6 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700"
-              >
-                Rechercher
-              </button>
+      {/* Premium Search Header */}
+      <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-blue-900 border-b border-white/10">
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          {/* Trust badges */}
+          <div className="flex flex-wrap items-center justify-center gap-4 mb-6">
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-sm rounded-full">
+              <Shield className="w-4 h-4 text-green-400" />
+              <span className="text-sm text-white/90">Artisans vérifiés</span>
             </div>
-            {/* Mobile filter button */}
-            <button
-              type="button"
-              onClick={() => setShowMobileFilters(true)}
-              className="md:hidden relative p-2.5 border border-gray-300 rounded-lg"
-            >
-              <Sliders className="w-5 h-5" />
-              {activeFiltersCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-blue-600 text-white text-xs rounded-full flex items-center justify-center">
-                  {activeFiltersCount}
-                </span>
-              )}
-            </button>
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-sm rounded-full">
+              <Star className="w-4 h-4 text-amber-400" />
+              <span className="text-sm text-white/90">4.8/5 satisfaction</span>
+            </div>
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-sm rounded-full">
+              <TrendingUp className="w-4 h-4 text-blue-400" />
+              <span className="text-sm text-white/90">Réponse en 2h</span>
+            </div>
+          </div>
+
+          <form onSubmit={handleSearch} className="max-w-4xl mx-auto">
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 to-blue-500 rounded-2xl blur opacity-25 group-hover:opacity-40 transition-opacity" />
+              <div className="relative bg-white/10 backdrop-blur-xl rounded-xl border border-white/20 p-2">
+                <div className="flex items-center gap-2">
+                  <Link href="/" className="p-2 text-white/70 hover:text-white transition-colors">
+                    <ChevronLeft className="w-5 h-5" />
+                  </Link>
+                  <div className="flex-1 relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                    <input
+                      type="text"
+                      name="q"
+                      defaultValue={query || service}
+                      placeholder="Spécialité, nom du professionnel..."
+                      className="w-full pl-10 pr-4 py-3 bg-transparent text-white placeholder-slate-400 focus:outline-none"
+                    />
+                  </div>
+                  <div className="hidden md:block w-px h-8 bg-white/20" />
+                  <div className="hidden md:block relative flex-1">
+                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                    <input
+                      type="text"
+                      name="location"
+                      defaultValue={location}
+                      placeholder="Où ? (ville, adresse...)"
+                      className="w-full pl-10 pr-4 py-3 bg-transparent text-white placeholder-slate-400 focus:outline-none"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="px-6 py-3 bg-gradient-to-r from-amber-500 to-amber-400 text-white font-semibold rounded-lg hover:from-amber-600 hover:to-amber-500 transition-all shadow-lg shadow-amber-500/25"
+                  >
+                    Rechercher
+                  </button>
+                  {/* Mobile filter button */}
+                  <button
+                    type="button"
+                    onClick={() => setShowMobileFilters(true)}
+                    className="md:hidden relative p-3 bg-white/10 rounded-lg text-white hover:bg-white/20 transition-colors"
+                  >
+                    <Sliders className="w-5 h-5" />
+                    {activeFiltersCount > 0 && (
+                      <span className="absolute -top-1 -right-1 w-5 h-5 bg-amber-500 text-white text-xs rounded-full flex items-center justify-center">
+                        {activeFiltersCount}
+                      </span>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
           </form>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="flex gap-6">
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="flex gap-8">
           {/* Sidebar Filters - Desktop */}
-          <aside className="hidden md:block w-64 flex-shrink-0">
-            <div className="bg-white rounded-lg shadow-sm p-4 sticky top-24">
-              <h3 className="font-semibold text-gray-900 mb-4">Filtres</h3>
+          <aside className="hidden md:block w-72 flex-shrink-0">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-24">
+              <div className="flex items-center gap-2 mb-6">
+                <Sliders className="w-5 h-5 text-blue-600" />
+                <h3 className="font-semibold text-gray-900">Filtres</h3>
+              </div>
 
               {/* Availability Filter */}
-              <div className="mb-6">
-                <h4 className="text-sm font-medium text-gray-700 mb-2">Disponibilite</h4>
+              <div className="mb-8">
+                <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                  <Calendar className="w-4 h-4 text-gray-400" />
+                  Disponibilité
+                </h4>
                 <div className="space-y-2">
                   {[
                     { value: 'today', label: 'Aujourd\'hui' },
@@ -234,13 +263,12 @@ function SearchPageContent() {
                           availability_filter === option.value ? null : option.value
                         )
                       }
-                      className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
+                      className={`w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                         availability_filter === option.value
-                          ? 'bg-blue-100 text-blue-700'
-                          : 'hover:bg-gray-100 text-gray-700'
+                          ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/25'
+                          : 'bg-gray-50 hover:bg-gray-100 text-gray-700'
                       }`}
                     >
-                      <Calendar className="w-4 h-4 inline mr-2" />
                       {option.label}
                     </button>
                   ))}
@@ -248,9 +276,12 @@ function SearchPageContent() {
               </div>
 
               {/* Rating Filter */}
-              <div className="mb-6">
-                <h4 className="text-sm font-medium text-gray-700 mb-2">Note minimum</h4>
-                <div className="space-y-1">
+              <div className="mb-8">
+                <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                  <Star className="w-4 h-4 text-gray-400" />
+                  Note minimum
+                </h4>
+                <div className="space-y-2">
                   {[5, 4, 3].map((rating) => (
                     <button
                       key={rating}
@@ -260,10 +291,10 @@ function SearchPageContent() {
                           minRating === rating.toString() ? null : rating.toString()
                         )
                       }
-                      className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
+                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all ${
                         minRating === rating.toString()
-                          ? 'bg-blue-100 text-blue-700'
-                          : 'hover:bg-gray-100 text-gray-700'
+                          ? 'bg-gradient-to-r from-amber-500 to-amber-400 text-white shadow-lg shadow-amber-500/25'
+                          : 'bg-gray-50 hover:bg-gray-100 text-gray-700'
                       }`}
                     >
                       <div className="flex">
@@ -271,7 +302,13 @@ function SearchPageContent() {
                           <Star
                             key={i}
                             className={`w-4 h-4 ${
-                              i < rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'
+                              i < rating
+                                ? minRating === rating.toString()
+                                  ? 'text-white fill-white'
+                                  : 'text-amber-400 fill-amber-400'
+                                : minRating === rating.toString()
+                                  ? 'text-white/40'
+                                  : 'text-gray-300'
                             }`}
                           />
                         ))}
@@ -284,21 +321,28 @@ function SearchPageContent() {
 
               {/* Cities from facets */}
               {results?.facets?.cities && results.facets.cities.length > 0 && (
-                <div className="mb-6">
-                  <h4 className="text-sm font-medium text-gray-700 mb-2">Villes proches</h4>
-                  <div className="space-y-1">
+                <div className="mb-8">
+                  <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                    <MapPin className="w-4 h-4 text-gray-400" />
+                    Villes proches
+                  </h4>
+                  <div className="space-y-2">
                     {results.facets.cities.slice(0, 5).map(({ city, count }) => (
                       <button
                         key={city}
                         onClick={() => updateFilter('location', city)}
-                        className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors ${
+                        className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm transition-all ${
                           location === city
-                            ? 'bg-blue-100 text-blue-700'
-                            : 'hover:bg-gray-100 text-gray-700'
+                            ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/25'
+                            : 'bg-gray-50 hover:bg-gray-100 text-gray-700'
                         }`}
                       >
-                        <span>{city}</span>
-                        <span className="text-gray-400">({count})</span>
+                        <span className="font-medium">{city}</span>
+                        <span className={`text-xs px-2 py-0.5 rounded-full ${
+                          location === city ? 'bg-white/20' : 'bg-gray-200'
+                        }`}>
+                          {count}
+                        </span>
                       </button>
                     ))}
                   </div>
@@ -314,25 +358,49 @@ function SearchPageContent() {
                     if (location) params.set('location', location)
                     router.push(`/recherche?${params.toString()}`)
                   }}
-                  className="w-full text-sm text-blue-600 hover:underline"
+                  className="w-full py-3 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-xl transition-colors"
                 >
                   Effacer les filtres
                 </button>
               )}
+
+              {/* Liens rapides - Maillage interne */}
+              <div className="mt-8 pt-6 border-t border-gray-100">
+                <h4 className="text-sm font-semibold text-gray-700 mb-3">Parcourir</h4>
+                <div className="space-y-2 text-sm">
+                  <Link href="/services" className="block text-gray-600 hover:text-blue-600 py-1">
+                    Tous les services
+                  </Link>
+                  <Link href="/villes" className="block text-gray-600 hover:text-blue-600 py-1">
+                    Toutes les villes
+                  </Link>
+                  <Link href="/regions" className="block text-gray-600 hover:text-blue-600 py-1">
+                    Par région
+                  </Link>
+                  <Link href="/departements" className="block text-gray-600 hover:text-blue-600 py-1">
+                    Par département
+                  </Link>
+                </div>
+              </div>
             </div>
           </aside>
 
           {/* Results */}
           <main className="flex-1 min-w-0">
             {/* Results Count & Description */}
-            <div className="mb-6">
-              <h1 className="text-2xl font-bold text-gray-900 mb-2">
-                {results?.pagination.total || 0} resultat{(results?.pagination.total || 0) > 1 ? 's' : ''}
-              </h1>
+            <div className="mb-8">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+                  <Users className="w-5 h-5 text-white" />
+                </div>
+                <h1 className="text-2xl font-bold text-gray-900">
+                  {results?.pagination.total || 0} résultat{(results?.pagination.total || 0) > 1 ? 's' : ''}
+                </h1>
+              </div>
               <p className="text-gray-600">
                 Prenez rendez-vous en ligne avec{' '}
-                <strong>{getServiceLabel()}</strong> ou des professionnels proposant des
-                services de {getServiceLabel()} a <strong>{getLocationLabel()}</strong> ou
+                <strong className="text-gray-900">{getServiceLabel()}</strong> ou des professionnels proposant des
+                services de {getServiceLabel()} à <strong className="text-gray-900">{getLocationLabel()}</strong> ou
                 dans les environs
               </p>
             </div>
@@ -341,7 +409,7 @@ function SearchPageContent() {
             {isLoading && (
               <div className="space-y-4">
                 {[...Array(5)].map((_, i) => (
-                  <div key={i} className="bg-white rounded-lg p-6 animate-pulse">
+                  <div key={i} className="bg-white rounded-2xl p-6 border border-gray-100 animate-pulse">
                     <div className="flex gap-4">
                       <div className="w-16 h-16 bg-gray-200 rounded-full"></div>
                       <div className="flex-1">
@@ -349,7 +417,7 @@ function SearchPageContent() {
                         <div className="h-4 bg-gray-200 rounded w-1/4 mb-4"></div>
                         <div className="flex gap-2">
                           {[...Array(5)].map((_, j) => (
-                            <div key={j} className="w-[72px] h-24 bg-gray-100 rounded"></div>
+                            <div key={j} className="w-[72px] h-24 bg-gray-100 rounded-xl"></div>
                           ))}
                         </div>
                       </div>
@@ -376,36 +444,46 @@ function SearchPageContent() {
                   </motion.div>
                 ))}
 
-                {/* Empty State */}
+                {/* Empty State avec Maillage Interne */}
                 {results.results.length === 0 && (
-                  <div className="text-center py-12 bg-white rounded-lg">
-                    <div className="text-6xl mb-4">🔍</div>
-                    <h2 className="text-xl font-semibold text-gray-900 mb-2">
-                      Aucun resultat trouve
-                    </h2>
-                    <p className="text-gray-600 mb-6">
-                      Essayez de modifier vos criteres de recherche ou elargissez la zone
-                      geographique
-                    </p>
-                    <button
-                      onClick={() => router.push('/recherche')}
-                      className="text-blue-600 hover:underline"
-                    >
-                      Voir tous les professionnels
-                    </button>
+                  <div className="bg-white rounded-2xl border border-gray-100 p-8">
+                    <div className="text-center mb-10">
+                      <div className="w-20 h-20 bg-gradient-to-br from-blue-50 to-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <Search className="w-10 h-10 text-blue-500" />
+                      </div>
+                      <h2 className="text-xl font-semibold text-gray-900 mb-2">
+                        Aucun résultat trouvé
+                      </h2>
+                      <p className="text-gray-600 mb-8 max-w-md mx-auto">
+                        Essayez de modifier vos critères de recherche ou parcourez nos services et villes
+                      </p>
+                      <button
+                        onClick={() => router.push('/recherche')}
+                        className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all shadow-lg shadow-blue-500/25"
+                      >
+                        <Sparkles className="w-5 h-5" />
+                        Voir tous les professionnels
+                      </button>
+                    </div>
+
+                    {/* Suggestions - Maillage interne */}
+                    <div className="grid md:grid-cols-2 gap-8 pt-8 border-t border-gray-100">
+                      <PopularServicesLinks showTitle={true} limit={6} />
+                      <PopularCitiesLinks showTitle={true} limit={8} />
+                    </div>
                   </div>
                 )}
 
                 {/* Pagination */}
                 {results.pagination.totalPages > 1 && (
-                  <div className="flex items-center justify-center gap-2 mt-8 pt-4 border-t">
+                  <div className="flex items-center justify-center gap-2 mt-10 pt-6 border-t border-gray-200">
                     <button
                       onClick={() => handlePageChange(page - 1)}
                       disabled={page === 1}
-                      className="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="px-5 py-2.5 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed font-medium text-gray-700 transition-colors"
                     >
-                      <ChevronLeft className="w-5 h-5 inline" />
-                      Precedent
+                      <ChevronLeft className="w-5 h-5 inline mr-1" />
+                      Précédent
                     </button>
 
                     <div className="flex items-center gap-1">
@@ -425,10 +503,10 @@ function SearchPageContent() {
                           <button
                             key={pageNum}
                             onClick={() => handlePageChange(pageNum)}
-                            className={`w-10 h-10 rounded-lg font-medium ${
+                            className={`w-11 h-11 rounded-xl font-medium transition-all ${
                               page === pageNum
-                                ? 'bg-blue-600 text-white'
-                                : 'hover:bg-gray-100'
+                                ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/25'
+                                : 'bg-white border border-gray-200 hover:bg-gray-50 text-gray-700'
                             }`}
                           >
                             {pageNum}
@@ -440,10 +518,10 @@ function SearchPageContent() {
                     <button
                       onClick={() => handlePageChange(page + 1)}
                       disabled={page === results.pagination.totalPages}
-                      className="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="px-5 py-2.5 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed font-medium text-gray-700 transition-colors"
                     >
                       Suivant
-                      <ChevronRight className="w-5 h-5 inline" />
+                      <ChevronRight className="w-5 h-5 inline ml-1" />
                     </button>
                   </div>
                 )}
@@ -457,7 +535,7 @@ function SearchPageContent() {
       {showMobileFilters && (
         <div className="fixed inset-0 z-50 md:hidden">
           <div
-            className="absolute inset-0 bg-black/50"
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
             onClick={() => setShowMobileFilters(false)}
           />
           <motion.div
@@ -466,16 +544,25 @@ function SearchPageContent() {
             exit={{ x: '100%' }}
             className="absolute right-0 top-0 bottom-0 w-80 bg-white overflow-y-auto"
           >
-            <div className="p-4 border-b flex items-center justify-between">
-              <h3 className="font-semibold text-gray-900">Filtres</h3>
-              <button onClick={() => setShowMobileFilters(false)}>
+            <div className="p-5 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-slate-900 to-blue-900">
+              <h3 className="font-semibold text-white flex items-center gap-2">
+                <Sliders className="w-5 h-5" />
+                Filtres
+              </h3>
+              <button
+                onClick={() => setShowMobileFilters(false)}
+                className="p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+              >
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <div className="p-4">
+            <div className="p-5">
               {/* Same filters as sidebar */}
-              <div className="mb-6">
-                <h4 className="text-sm font-medium text-gray-700 mb-2">Disponibilite</h4>
+              <div className="mb-8">
+                <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                  <Calendar className="w-4 h-4 text-gray-400" />
+                  Disponibilité
+                </h4>
                 <div className="space-y-2">
                   {[
                     { value: 'today', label: 'Aujourd\'hui' },
@@ -491,9 +578,9 @@ function SearchPageContent() {
                         )
                         setShowMobileFilters(false)
                       }}
-                      className={`w-full text-left px-3 py-2 rounded-lg text-sm ${
+                      className={`w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                         availability_filter === option.value
-                          ? 'bg-blue-100 text-blue-700'
+                          ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white'
                           : 'bg-gray-100 text-gray-700'
                       }`}
                     >
@@ -503,9 +590,12 @@ function SearchPageContent() {
                 </div>
               </div>
 
-              <div className="mb-6">
-                <h4 className="text-sm font-medium text-gray-700 mb-2">Note minimum</h4>
-                <div className="space-y-1">
+              <div className="mb-8">
+                <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                  <Star className="w-4 h-4 text-gray-400" />
+                  Note minimum
+                </h4>
+                <div className="space-y-2">
                   {[5, 4, 3].map((rating) => (
                     <button
                       key={rating}
@@ -516,15 +606,19 @@ function SearchPageContent() {
                         )
                         setShowMobileFilters(false)
                       }}
-                      className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm ${
+                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all ${
                         minRating === rating.toString()
-                          ? 'bg-blue-100 text-blue-700'
+                          ? 'bg-gradient-to-r from-amber-500 to-amber-400 text-white'
                           : 'bg-gray-100 text-gray-700'
                       }`}
                     >
                       <div className="flex">
                         {[...Array(rating)].map((_, i) => (
-                          <Star key={i} className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+                          <Star key={i} className={`w-4 h-4 ${
+                            minRating === rating.toString()
+                              ? 'text-white fill-white'
+                              : 'text-amber-400 fill-amber-400'
+                          }`} />
                         ))}
                       </div>
                       <span>et plus</span>
@@ -535,9 +629,9 @@ function SearchPageContent() {
 
               <button
                 onClick={() => setShowMobileFilters(false)}
-                className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium"
+                className="w-full py-4 bg-gradient-to-r from-amber-500 to-amber-400 text-white rounded-xl font-semibold shadow-lg shadow-amber-500/25"
               >
-                Voir les resultats
+                Voir les résultats
               </button>
             </div>
           </motion.div>
@@ -552,7 +646,10 @@ export default function SearchPage() {
     <Suspense
       fallback={
         <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"></div>
+          <div className="flex flex-col items-center gap-4">
+            <div className="h-12 w-12 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"></div>
+            <p className="text-gray-500 font-medium">Chargement...</p>
+          </div>
         </div>
       }
     >

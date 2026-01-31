@@ -19,6 +19,8 @@ const getQuerySchema = z.object({
 })
 
 // GET /api/bookings - Get artisan's bookings or available slots
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)

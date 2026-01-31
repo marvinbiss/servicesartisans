@@ -2,7 +2,10 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { FileText, MessageSquare, Star, Settings, LogOut, ArrowLeft, Edit2, Trash2 } from 'lucide-react'
+import { FileText, MessageSquare, Star, Settings, ArrowLeft, Edit2, Trash2 } from 'lucide-react'
+import Breadcrumb from '@/components/Breadcrumb'
+import { QuickSiteLinks } from '@/components/InternalLinks'
+import LogoutButton from '@/components/LogoutButton'
 
 const avisPublies = [
   {
@@ -55,6 +58,13 @@ export default function AvisClientPage() {
       {/* Header */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <Breadcrumb
+            items={[
+              { label: 'Mon espace', href: '/espace-client' },
+              { label: 'Mes avis' }
+            ]}
+            className="mb-4"
+          />
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Link href="/espace-client" className="text-gray-600 hover:text-gray-900">
@@ -72,7 +82,7 @@ export default function AvisClientPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid lg:grid-cols-4 gap-8">
           {/* Sidebar */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 space-y-4">
             <nav className="bg-white rounded-xl shadow-sm p-4 space-y-1">
               <Link
                 href="/espace-client"
@@ -103,11 +113,9 @@ export default function AvisClientPage() {
                 <Settings className="w-5 h-5" />
                 Paramètres
               </Link>
-              <button className="flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 w-full">
-                <LogOut className="w-5 h-5" />
-                Déconnexion
-              </button>
+              <LogoutButton />
             </nav>
+            <QuickSiteLinks />
           </div>
 
           {/* Content */}

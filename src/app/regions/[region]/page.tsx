@@ -1,7 +1,9 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { MapPin, Users, ArrowRight, ChevronRight } from 'lucide-react'
+import { MapPin, Users, ArrowRight, Shield, Star, Clock } from 'lucide-react'
+import Breadcrumb from '@/components/Breadcrumb'
+import { PopularServicesLinks, PopularCitiesLinks, popularRegions } from '@/components/InternalLinks'
 
 const regionsData: Record<string, {
   name: string
@@ -159,17 +161,16 @@ export default async function RegionPage({ params }: PageProps) {
       {/* Breadcrumb */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          <nav className="flex items-center gap-2 text-sm">
-            <Link href="/" className="text-gray-500 hover:text-gray-700">Accueil</Link>
-            <ChevronRight className="w-4 h-4 text-gray-400" />
-            <Link href="/regions" className="text-gray-500 hover:text-gray-700">Régions</Link>
-            <ChevronRight className="w-4 h-4 text-gray-400" />
-            <span className="text-gray-900 font-medium">{region.name}</span>
-          </nav>
+          <Breadcrumb
+            items={[
+              { label: 'Régions', href: '/regions' },
+              { label: region.name },
+            ]}
+          />
         </div>
       </div>
 
-      {/* Hero */}
+      {/* Hero - Premium Branding */}
       <section className="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-4 mb-4">
@@ -181,6 +182,26 @@ export default async function RegionPage({ params }: PageProps) {
           <p className="text-xl text-blue-100 max-w-2xl">
             {region.description}
           </p>
+
+          {/* Premium badges */}
+          <div className="flex flex-wrap gap-3 mt-8">
+            <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full">
+              <Shield className="w-4 h-4" />
+              <span className="text-sm font-medium">Artisans vérifiés</span>
+            </div>
+            <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full">
+              <Star className="w-4 h-4" />
+              <span className="text-sm font-medium">Avis clients authentiques</span>
+            </div>
+            <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full">
+              <Clock className="w-4 h-4" />
+              <span className="text-sm font-medium">Devis sous 24h</span>
+            </div>
+            <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full">
+              <Users className="w-4 h-4" />
+              <span className="text-sm font-medium">{region.departments.length} départements</span>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -241,10 +262,10 @@ export default async function RegionPage({ params }: PageProps) {
       <section className="py-16 bg-blue-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
-            Besoin d'un artisan en {region.name} ?
+            Besoin d&apos;un artisan en {region.name} ?
           </h2>
           <p className="text-xl text-blue-100 mb-8">
-            Recevez jusqu'à 3 devis gratuits de professionnels qualifiés
+            Recevez jusqu&apos;à 3 devis gratuits de professionnels qualifiés
           </p>
           <Link
             href="/devis"
@@ -255,6 +276,52 @@ export default async function RegionPage({ params }: PageProps) {
           </Link>
         </div>
       </section>
+
+      {/* Voir aussi - Related Content */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-8">Voir aussi</h2>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Services populaires */}
+            <div>
+              <PopularServicesLinks showTitle={true} limit={6} />
+            </div>
+
+            {/* Autres régions */}
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-4">Autres régions</h3>
+              <div className="space-y-2">
+                {popularRegions
+                  .filter(r => r.slug !== regionSlug)
+                  .slice(0, 5)
+                  .map((r) => (
+                    <Link
+                      key={r.slug}
+                      href={`/regions/${r.slug}`}
+                      className="block text-gray-600 hover:text-blue-600 text-sm py-1 transition-colors"
+                    >
+                      Artisans en {r.name}
+                    </Link>
+                  ))}
+              </div>
+              <Link
+                href="/regions"
+                className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3"
+              >
+                Toutes les régions <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+
+            {/* Villes populaires */}
+            <div>
+              <PopularCitiesLinks showTitle={true} limit={6} />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Internal Links Footer */}
     </div>
   )
 }

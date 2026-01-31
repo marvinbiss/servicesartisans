@@ -1,47 +1,49 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { Check, X, Star, ArrowRight, Zap, Crown, Building } from 'lucide-react'
+import Breadcrumb from '@/components/Breadcrumb'
+import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
 
 export const metadata: Metadata = {
   title: 'Tarifs Artisans - Offres et abonnements | ServicesArtisans',
-  description: 'Découvrez nos offres pour les artisans. Inscription gratuite, visibilité maximale et demandes de devis qualifiées.',
+  description: 'Decouvrez nos offres pour les artisans. Inscription gratuite, visibilite maximale et demandes de devis qualifiees.',
 }
 
 const plans = [
   {
     name: 'Gratuit',
     icon: Zap,
-    price: '0€',
+    price: '0',
     period: '/mois',
-    description: 'Pour démarrer et tester la plateforme',
+    description: 'Pour demarrer et tester la plateforme',
     features: [
       { text: 'Fiche artisan basique', included: true },
-      { text: 'Visibilité dans les recherches', included: true },
+      { text: 'Visibilite dans les recherches', included: true },
       { text: '5 demandes de devis/mois', included: true },
       { text: 'Avis clients', included: true },
-      { text: 'Badge vérifié', included: false },
+      { text: 'Badge verifie', included: false },
       { text: 'Mise en avant', included: false },
-      { text: 'Statistiques détaillées', included: false },
+      { text: 'Statistiques detaillees', included: false },
       { text: 'Support prioritaire', included: false },
     ],
-    cta: 'Créer mon profil',
+    cta: 'Creer mon profil',
     ctaLink: '/inscription-artisan',
     popular: false,
   },
   {
     name: 'Pro',
     icon: Star,
-    price: '49€',
+    price: '49',
     period: '/mois',
-    description: 'Pour développer votre activité',
+    description: 'Pour developper votre activite',
     features: [
-      { text: 'Fiche artisan complète', included: true },
-      { text: 'Visibilité prioritaire', included: true },
-      { text: 'Demandes de devis illimitées', included: true },
+      { text: 'Fiche artisan complete', included: true },
+      { text: 'Visibilite prioritaire', included: true },
+      { text: 'Demandes de devis illimitees', included: true },
       { text: 'Avis clients', included: true },
-      { text: 'Badge vérifié', included: true },
+      { text: 'Badge verifie', included: true },
       { text: 'Mise en avant locale', included: true },
-      { text: 'Statistiques détaillées', included: true },
+      { text: 'Statistiques detaillees', included: true },
       { text: 'Support prioritaire', included: false },
     ],
     cta: 'Essai gratuit 14 jours',
@@ -51,17 +53,17 @@ const plans = [
   {
     name: 'Premium',
     icon: Crown,
-    price: '99€',
+    price: '99',
     period: '/mois',
     description: 'Pour les artisans ambitieux',
     features: [
       { text: 'Fiche artisan premium', included: true },
-      { text: 'Visibilité maximale', included: true },
-      { text: 'Demandes de devis illimitées', included: true },
-      { text: 'Avis clients + réponses', included: true },
-      { text: 'Badge vérifié + premium', included: true },
+      { text: 'Visibilite maximale', included: true },
+      { text: 'Demandes de devis illimitees', included: true },
+      { text: 'Avis clients + reponses', included: true },
+      { text: 'Badge verifie + premium', included: true },
       { text: 'Mise en avant nationale', included: true },
-      { text: 'Statistiques avancées', included: true },
+      { text: 'Statistiques avancees', included: true },
       { text: 'Support prioritaire 24/7', included: true },
     ],
     cta: 'Essai gratuit 14 jours',
@@ -72,21 +74,25 @@ const plans = [
 
 const faqs = [
   {
-    q: 'Puis-je changer d\'offre à tout moment ?',
-    a: 'Oui, vous pouvez upgrader ou downgrader votre abonnement à tout moment. Le changement prend effet immédiatement.',
+    q: 'Puis-je changer d\'offre a tout moment ?',
+    a: 'Oui, vous pouvez upgrader ou downgrader votre abonnement a tout moment. Le changement prend effet immediatement.',
   },
   {
     q: 'Y a-t-il un engagement ?',
-    a: 'Non, tous nos abonnements sont sans engagement. Vous pouvez résilier à tout moment.',
+    a: 'Non, tous nos abonnements sont sans engagement. Vous pouvez resilier a tout moment.',
   },
   {
     q: 'Comment fonctionne l\'essai gratuit ?',
-    a: 'L\'essai gratuit de 14 jours vous donne accès à toutes les fonctionnalités de l\'offre choisie. Aucune carte bancaire requise.',
+    a: 'L\'essai gratuit de 14 jours vous donne acces a toutes les fonctionnalites de l\'offre choisie. Aucune carte bancaire requise.',
   },
   {
-    q: 'Les demandes de devis sont-elles qualifiées ?',
-    a: 'Oui, nous vérifions chaque demande pour vous envoyer uniquement des projets sérieux correspondant à vos compétences et votre zone d\'intervention.',
+    q: 'Les demandes de devis sont-elles qualifiees ?',
+    a: 'Oui, nous verifions chaque demande pour vous envoyer uniquement des projets serieux correspondant a vos competences et votre zone d\'intervention.',
   },
+]
+
+const breadcrumbItems = [
+  { label: 'Tarifs artisans' }
 ]
 
 export default function TarifsArtisansPage() {
@@ -95,11 +101,12 @@ export default function TarifsArtisansPage() {
       {/* Hero */}
       <section className="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <Breadcrumb items={breadcrumbItems} className="mb-6 justify-center text-blue-200 [&_a]:text-blue-200 [&_a:hover]:text-white [&_svg]:text-blue-300 [&>span]:text-white" />
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            Développez votre activité
+            Developpez votre activite
           </h1>
           <p className="text-xl text-blue-100 max-w-2xl mx-auto">
-            Rejoignez plus de 120 000 artisans et recevez des demandes de devis qualifiées
+            Rejoignez plus de 120 000 artisans et recevez des demandes de devis qualifiees
           </p>
         </div>
       </section>
@@ -130,7 +137,7 @@ export default function TarifsArtisansPage() {
                     <h3 className="text-2xl font-bold text-gray-900">{plan.name}</h3>
                     <p className="text-gray-600 mt-1">{plan.description}</p>
                     <div className="mt-4">
-                      <span className="text-4xl font-bold text-gray-900">{plan.price}</span>
+                      <span className="text-4xl font-bold text-gray-900">{plan.price}EUR</span>
                       <span className="text-gray-500">{plan.period}</span>
                     </div>
                   </div>
@@ -177,13 +184,13 @@ export default function TarifsArtisansPage() {
                 <h3 className="text-2xl font-bold">Offre Entreprise</h3>
               </div>
               <p className="text-gray-300 mb-4">
-                Vous avez plusieurs équipes ou agences ? Contactez-nous pour une offre sur mesure
-                avec des tarifs dégressifs et un accompagnement personnalisé.
+                Vous avez plusieurs equipes ou agences ? Contactez-nous pour une offre sur mesure
+                avec des tarifs degressifs et un accompagnement personnalise.
               </p>
               <ul className="text-gray-300 space-y-2">
-                <li>✓ Multi-comptes et multi-agences</li>
-                <li>✓ Tableau de bord centralisé</li>
-                <li>✓ Account manager dédié</li>
+                <li>+ Multi-comptes et multi-agences</li>
+                <li>+ Tableau de bord centralise</li>
+                <li>+ Account manager dedie</li>
               </ul>
             </div>
             <Link
@@ -201,7 +208,7 @@ export default function TarifsArtisansPage() {
       <section className="py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
-            Questions fréquentes
+            Questions frequentes
           </h2>
           <div className="space-y-6">
             {faqs.map((faq, i) => (
@@ -214,24 +221,69 @@ export default function TarifsArtisansPage() {
         </div>
       </section>
 
+      {/* Related links */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-8">Explorer le reseau</h2>
+          <div className="grid md:grid-cols-2 gap-8 mb-12">
+            <PopularServicesLinks />
+            <PopularCitiesLinks />
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            <Link
+              href="/inscription-artisan"
+              className="bg-blue-50 hover:bg-blue-100 rounded-xl p-6 transition-colors group"
+            >
+              <h3 className="font-semibold text-blue-700 group-hover:text-blue-800 mb-2">S'inscrire maintenant</h3>
+              <p className="text-blue-600 text-sm">Creez votre profil artisan gratuitement</p>
+            </Link>
+            <Link
+              href="/avis"
+              className="bg-gray-50 hover:bg-gray-100 rounded-xl p-6 transition-colors group"
+            >
+              <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 mb-2">Avis clients</h3>
+              <p className="text-gray-600 text-sm">Ce que disent nos clients de nos artisans</p>
+            </Link>
+            <Link
+              href="/comment-ca-marche"
+              className="bg-gray-50 hover:bg-gray-100 rounded-xl p-6 transition-colors group"
+            >
+              <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 mb-2">Comment ca marche</h3>
+              <p className="text-gray-600 text-sm">Tout savoir sur notre plateforme</p>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="py-16 bg-blue-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
-            Prêt à développer votre activité ?
+            Pret a developper votre activite ?
           </h2>
           <p className="text-xl text-blue-100 mb-8">
-            Rejoignez ServicesArtisans et recevez vos premières demandes de devis
+            Rejoignez ServicesArtisans et recevez vos premieres demandes de devis
           </p>
-          <Link
-            href="/inscription-artisan"
-            className="inline-flex items-center gap-2 bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-blue-50 transition-colors text-lg"
-          >
-            Créer mon profil gratuitement
-            <ArrowRight className="w-5 h-5" />
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/inscription-artisan"
+              className="inline-flex items-center justify-center gap-2 bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-blue-50 transition-colors text-lg"
+            >
+              Creer mon profil gratuitement
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+            <Link
+              href="/urgence"
+              className="inline-flex items-center justify-center gap-2 bg-blue-700 text-white px-8 py-4 rounded-xl font-semibold hover:bg-blue-800 transition-colors text-lg"
+            >
+              Services d'urgence
+            </Link>
+          </div>
         </div>
       </section>
+
+      {/* Footer links */}
     </div>
   )
 }

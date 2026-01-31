@@ -19,6 +19,8 @@ const supabase = createClient(
 )
 
 // POST /api/video - Create video room for a booking
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: Request) {
   try {
     const body = await request.json()

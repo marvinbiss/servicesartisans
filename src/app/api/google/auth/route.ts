@@ -5,6 +5,8 @@ import { v4 as uuidv4 } from 'uuid'
 import { logger } from '@/lib/logger'
 
 // GET /api/google/auth - Initiate Google OAuth flow
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: Request) {
   try {
     const supabase = createClient()

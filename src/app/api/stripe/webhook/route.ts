@@ -21,6 +21,8 @@ function getSupabaseAdmin(): SupabaseClient {
   return supabaseAdminInstance
 }
 
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: Request) {
   const body = await request.text()
   const signature = headers().get('stripe-signature')!

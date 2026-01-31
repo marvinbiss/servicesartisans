@@ -1,7 +1,10 @@
 'use client'
 
 import Link from 'next/link'
-import { FileText, MessageSquare, Star, Settings, LogOut, Bell, ChevronRight, Clock, CheckCircle, AlertCircle } from 'lucide-react'
+import { FileText, MessageSquare, Star, Settings, Bell, ChevronRight, Clock, CheckCircle, AlertCircle, Home, Search, Wrench } from 'lucide-react'
+import Breadcrumb from '@/components/Breadcrumb'
+import { QuickSiteLinks } from '@/components/InternalLinks'
+import LogoutButton from '@/components/LogoutButton'
 
 const demandesDevis = [
   { id: 1, service: 'Plombier', ville: 'Paris 15e', date: '2024-01-20', status: 'en_attente', devisRecus: 2 },
@@ -17,20 +20,30 @@ const notifications = [
 export default function EspaceClientPage() {
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
+      {/* Header avec Breadcrumb */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <Breadcrumb items={[{ label: 'Mon espace' }]} className="mb-4" />
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">Mon espace</h1>
               <p className="text-gray-600">Bienvenue, Jean Dupont</p>
             </div>
-            <Link
-              href="/devis"
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
-            >
-              Nouvelle demande
-            </Link>
+            <div className="flex items-center gap-3">
+              <Link
+                href="/recherche"
+                className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+              >
+                <Search className="w-4 h-4" />
+                Rechercher
+              </Link>
+              <Link
+                href="/devis"
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+              >
+                Nouvelle demande
+              </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -69,11 +82,11 @@ export default function EspaceClientPage() {
                 <Settings className="w-5 h-5" />
                 Paramètres
               </Link>
-              <button className="flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 w-full">
-                <LogOut className="w-5 h-5" />
-                Déconnexion
-              </button>
+              <LogoutButton />
             </nav>
+
+            {/* Liens vers le site - Maillage interne */}
+            <QuickSiteLinks className="mt-4" />
           </div>
 
           {/* Main content */}

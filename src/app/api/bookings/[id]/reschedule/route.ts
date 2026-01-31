@@ -4,6 +4,8 @@ import { sendBookingConfirmation, logNotification } from '@/lib/notifications/em
 import { logger } from '@/lib/logger'
 
 // POST /api/bookings/[id]/reschedule - Reschedule a booking to a new slot
+export const dynamic = 'force-dynamic'
+
 export async function POST(
   request: Request,
   { params }: { params: { id: string } }

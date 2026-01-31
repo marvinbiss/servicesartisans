@@ -6,6 +6,8 @@ import { logger } from '@/lib/logger'
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
 
 // GET /api/google/callback - Handle Google OAuth callback
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)

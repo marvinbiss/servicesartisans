@@ -2,15 +2,38 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Mail, ArrowRight, ArrowLeft, CheckCircle } from 'lucide-react'
+import { Mail, ArrowRight, ArrowLeft, CheckCircle, Loader2, AlertCircle } from 'lucide-react'
 
 export default function MotDePasseOubliePage() {
   const [email, setEmail] = useState('')
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsSubmitted(true)
+    setError(null)
+    setIsLoading(true)
+
+    try {
+      const response = await fetch('/api/auth/reset-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Erreur lors de l\'envoi')
+      }
+
+      setIsSubmitted(true)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erreur lors de l\'envoi')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   if (isSubmitted) {
@@ -63,6 +86,13 @@ export default function MotDePasseOubliePage() {
             </p>
           </div>
 
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-3 text-red-700">
+              <AlertCircle className="w-5 h-5 flex-shrink-0" />
+              <span>{error}</span>
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -75,7 +105,8 @@ export default function MotDePasseOubliePage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  disabled={isLoading}
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50"
                   placeholder="votre@email.com"
                 />
               </div>
@@ -83,10 +114,20 @@ export default function MotDePasseOubliePage() {
 
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+              disabled={isLoading}
+              className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Envoyer le lien
-              <ArrowRight className="w-5 h-5" />
+              {isLoading ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  Envoi en cours...
+                </>
+              ) : (
+                <>
+                  Envoyer le lien
+                  <ArrowRight className="w-5 h-5" />
+                </>
+              )}
             </button>
           </form>
 

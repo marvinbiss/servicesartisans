@@ -1,7 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { FileText, MessageSquare, Star, Settings, LogOut, TrendingUp, Euro, ArrowLeft, ThumbsUp, MessageCircle } from 'lucide-react'
+import { FileText, MessageSquare, Star, Settings, TrendingUp, Euro, ArrowLeft, ThumbsUp, MessageCircle } from 'lucide-react'
+import LogoutButton from '@/components/LogoutButton'
 
 const avis = [
   {
@@ -121,10 +122,7 @@ export default function AvisArtisanPage() {
                 <Euro className="w-5 h-5" />
                 Abonnement
               </Link>
-              <button className="flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 w-full">
-                <LogOut className="w-5 h-5" />
-                Déconnexion
-              </button>
+              <LogoutButton />
             </nav>
           </div>
 

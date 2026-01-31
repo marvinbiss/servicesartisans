@@ -12,6 +12,8 @@ import { logger } from '@/lib/logger'
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: Request) {
   try {
     // Validate environment

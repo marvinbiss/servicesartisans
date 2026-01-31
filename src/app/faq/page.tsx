@@ -1,25 +1,26 @@
 'use client'
 
 import { useState } from 'react'
-import { Metadata } from 'next'
 import Link from 'next/link'
 import { ChevronDown, Search, HelpCircle, ArrowRight } from 'lucide-react'
+import Breadcrumb from '@/components/Breadcrumb'
+import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
 
 const faqCategories = [
   {
-    name: 'Général',
+    name: 'General',
     questions: [
       {
         q: 'Qu\'est-ce que ServicesArtisans ?',
-        a: 'ServicesArtisans est une plateforme gratuite qui met en relation les particuliers avec des artisans qualifiés et vérifiés. Nous couvrons plus de 50 métiers du bâtiment dans toute la France.',
+        a: 'ServicesArtisans est une plateforme gratuite qui met en relation les particuliers avec des artisans qualifies et verifies. Nous couvrons plus de 50 metiers du batiment dans toute la France.',
       },
       {
         q: 'Le service est-il gratuit ?',
-        a: 'Oui, notre service est entièrement gratuit pour les particuliers. Vous pouvez demander autant de devis que vous le souhaitez sans aucun engagement.',
+        a: 'Oui, notre service est entierement gratuit pour les particuliers. Vous pouvez demander autant de devis que vous le souhaitez sans aucun engagement.',
       },
       {
         q: 'Comment fonctionne ServicesArtisans ?',
-        a: 'C\'est simple : 1) Décrivez votre projet, 2) Recevez jusqu\'à 3 devis d\'artisans qualifiés, 3) Comparez et choisissez le professionnel qui vous convient.',
+        a: 'C\'est simple : 1) Decrivez votre projet, 2) Recevez jusqu\'a 3 devis d\'artisans qualifies, 3) Comparez et choisissez le professionnel qui vous convient.',
       },
     ],
   },
@@ -28,19 +29,19 @@ const faqCategories = [
     questions: [
       {
         q: 'Comment demander un devis ?',
-        a: 'Cliquez sur "Demander un devis", remplissez le formulaire en décrivant votre projet, et nous transmettons votre demande aux artisans qualifiés de votre région.',
+        a: 'Cliquez sur "Demander un devis", remplissez le formulaire en decrivant votre projet, et nous transmettons votre demande aux artisans qualifies de votre region.',
       },
       {
         q: 'Combien de devis vais-je recevoir ?',
-        a: 'Vous recevrez jusqu\'à 3 devis d\'artisans différents, généralement sous 24 à 48 heures.',
+        a: 'Vous recevrez jusqu\'a 3 devis d\'artisans differents, generalement sous 24 a 48 heures.',
       },
       {
-        q: 'Suis-je obligé d\'accepter un devis ?',
-        a: 'Non, vous êtes libre de refuser tous les devis. Notre service est sans engagement.',
+        q: 'Suis-je oblige d\'accepter un devis ?',
+        a: 'Non, vous etes libre de refuser tous les devis. Notre service est sans engagement.',
       },
       {
         q: 'Les devis sont-ils vraiment gratuits ?',
-        a: 'Oui, les devis sont 100% gratuits et sans engagement. Vous ne payez que si vous décidez de faire appel à un artisan.',
+        a: 'Oui, les devis sont 100% gratuits et sans engagement. Vous ne payez que si vous decidez de faire appel a un artisan.',
       },
     ],
   },
@@ -48,16 +49,16 @@ const faqCategories = [
     name: 'Artisans',
     questions: [
       {
-        q: 'Comment sont sélectionnés les artisans ?',
-        a: 'Nous vérifions l\'identité, les assurances et les qualifications de chaque artisan. Nous suivons également les avis clients pour maintenir un niveau de qualité élevé.',
+        q: 'Comment sont selectionnes les artisans ?',
+        a: 'Nous verifions l\'identite, les assurances et les qualifications de chaque artisan. Nous suivons egalement les avis clients pour maintenir un niveau de qualite eleve.',
       },
       {
-        q: 'Les artisans sont-ils assurés ?',
-        a: 'Oui, tous nos artisans partenaires doivent justifier d\'une assurance responsabilité civile professionnelle et d\'une garantie décennale pour les travaux concernés.',
+        q: 'Les artisans sont-ils assures ?',
+        a: 'Oui, tous nos artisans partenaires doivent justifier d\'une assurance responsabilite civile professionnelle et d\'une garantie decennale pour les travaux concernes.',
       },
       {
         q: 'Puis-je voir les avis sur un artisan ?',
-        a: 'Oui, chaque fiche artisan affiche les avis et notes laissés par les clients précédents.',
+        a: 'Oui, chaque fiche artisan affiche les avis et notes laisses par les clients precedents.',
       },
     ],
   },
@@ -66,32 +67,32 @@ const faqCategories = [
     questions: [
       {
         q: 'Comment payer l\'artisan ?',
-        a: 'Le paiement se fait directement entre vous et l\'artisan, selon les modalités convenues ensemble (espèces, chèque, virement, etc.).',
+        a: 'Le paiement se fait directement entre vous et l\'artisan, selon les modalites convenues ensemble (especes, cheque, virement, etc.).',
       },
       {
         q: 'Quelles garanties ai-je sur les travaux ?',
-        a: 'Les travaux sont couverts par les garanties légales : garantie de parfait achèvement (1 an), garantie biennale (2 ans) et garantie décennale (10 ans) selon la nature des travaux.',
+        a: 'Les travaux sont couverts par les garanties legales : garantie de parfait achevement (1 an), garantie biennale (2 ans) et garantie decennale (10 ans) selon la nature des travaux.',
       },
       {
         q: 'Que faire en cas de litige ?',
-        a: 'Contactez-nous via notre page Contact. Nous vous accompagnons dans la résolution du litige et pouvons servir de médiateur avec l\'artisan.',
+        a: 'Contactez-nous via notre page Contact. Nous vous accompagnons dans la resolution du litige et pouvons servir de mediateur avec l\'artisan.',
       },
     ],
   },
   {
-    name: 'Compte & Données',
+    name: 'Compte & Donnees',
     questions: [
       {
-        q: 'Dois-je créer un compte ?',
-        a: 'Non, vous pouvez demander un devis sans créer de compte. Cependant, un compte vous permet de suivre vos demandes et de conserver votre historique.',
+        q: 'Dois-je creer un compte ?',
+        a: 'Non, vous pouvez demander un devis sans creer de compte. Cependant, un compte vous permet de suivre vos demandes et de conserver votre historique.',
       },
       {
         q: 'Comment supprimer mon compte ?',
-        a: 'Vous pouvez demander la suppression de votre compte et de vos données en nous contactant à dpo@servicesartisans.fr.',
+        a: 'Vous pouvez demander la suppression de votre compte et de vos donnees en nous contactant a dpo@servicesartisans.fr.',
       },
       {
-        q: 'Mes données sont-elles protégées ?',
-        a: 'Oui, nous respectons le RGPD et protégeons vos données. Consultez notre politique de confidentialité pour plus de détails.',
+        q: 'Mes donnees sont-elles protegees ?',
+        a: 'Oui, nous respectons le RGPD et protegeons vos donnees. Consultez notre politique de confidentialite pour plus de details.',
       },
     ],
   },
@@ -120,26 +121,33 @@ export default function FAQPage() {
     <div className="min-h-screen bg-gray-50">
       {/* Hero */}
       <section className="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <HelpCircle className="w-16 h-16 mx-auto mb-6 opacity-80" />
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Questions fréquentes
-          </h1>
-          <p className="text-xl text-blue-100 mb-8">
-            Trouvez rapidement les réponses à vos questions
-          </p>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Breadcrumb */}
+          <Breadcrumb
+            items={[{ label: 'FAQ' }]}
+            className="mb-6 text-blue-100 [&_a]:text-blue-200 [&_a:hover]:text-white [&_svg]:text-blue-300"
+          />
+          <div className="text-center">
+            <HelpCircle className="w-16 h-16 mx-auto mb-6 opacity-80" />
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+              Questions frequentes
+            </h1>
+            <p className="text-xl text-blue-100 mb-8">
+              Trouvez rapidement les reponses a vos questions
+            </p>
 
-          {/* Search */}
-          <div className="max-w-xl mx-auto">
-            <div className="relative">
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Rechercher une question..."
-                className="w-full pl-12 pr-4 py-4 rounded-xl text-gray-900 focus:ring-2 focus:ring-blue-300"
-              />
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            {/* Search */}
+            <div className="max-w-xl mx-auto">
+              <div className="relative">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Rechercher une question..."
+                  className="w-full pl-12 pr-4 py-4 rounded-xl text-gray-900 focus:ring-2 focus:ring-blue-300"
+                />
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              </div>
             </div>
           </div>
         </div>
@@ -187,9 +195,56 @@ export default function FAQPage() {
 
           {filteredCategories.length === 0 && (
             <div className="text-center py-12">
-              <p className="text-gray-500">Aucun résultat pour "{searchQuery}"</p>
+              <p className="text-gray-500">Aucun resultat pour "{searchQuery}"</p>
             </div>
           )}
+        </div>
+      </section>
+
+      {/* Contextual Links */}
+      <section className="py-12 bg-gray-100">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-xl font-bold text-gray-900 mb-6">
+            Ressources utiles
+          </h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            <Link
+              href="/comment-ca-marche"
+              className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow"
+            >
+              <h3 className="font-semibold text-gray-900 mb-2">Comment ca marche ?</h3>
+              <p className="text-gray-600 text-sm mb-3">
+                Decouvrez le fonctionnement de notre service en 3 etapes.
+              </p>
+              <span className="text-blue-600 text-sm font-medium inline-flex items-center gap-1">
+                En savoir plus <ArrowRight className="w-4 h-4" />
+              </span>
+            </Link>
+            <Link
+              href="/devis"
+              className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow"
+            >
+              <h3 className="font-semibold text-gray-900 mb-2">Demander un devis</h3>
+              <p className="text-gray-600 text-sm mb-3">
+                Obtenez jusqu'a 3 devis gratuits d'artisans qualifies.
+              </p>
+              <span className="text-blue-600 text-sm font-medium inline-flex items-center gap-1">
+                Demander <ArrowRight className="w-4 h-4" />
+              </span>
+            </Link>
+            <Link
+              href="/inscription"
+              className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow"
+            >
+              <h3 className="font-semibold text-gray-900 mb-2">Creer un compte</h3>
+              <p className="text-gray-600 text-sm mb-3">
+                Inscrivez-vous pour suivre vos demandes et reservations.
+              </p>
+              <span className="text-blue-600 text-sm font-medium inline-flex items-center gap-1">
+                S'inscrire <ArrowRight className="w-4 h-4" />
+              </span>
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -197,10 +252,10 @@ export default function FAQPage() {
       <section className="py-16 bg-white border-t">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">
-            Vous n'avez pas trouvé votre réponse ?
+            Vous n'avez pas trouve votre reponse ?
           </h2>
           <p className="text-gray-600 mb-8">
-            Notre équipe est là pour vous aider
+            Notre equipe est la pour vous aider
           </p>
           <Link
             href="/contact"
@@ -209,6 +264,19 @@ export default function FAQPage() {
             Contactez-nous
             <ArrowRight className="w-5 h-5" />
           </Link>
+        </div>
+      </section>
+
+      {/* Related Links Section */}
+      <section className="bg-gray-50 py-12 border-t">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-xl font-bold text-gray-900 mb-6">
+            Trouvez un artisan pres de chez vous
+          </h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            <PopularServicesLinks />
+            <PopularCitiesLinks />
+          </div>
         </div>
       </section>
     </div>

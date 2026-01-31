@@ -4,6 +4,8 @@ import { sendCancellationNotification, logNotification } from '@/lib/notificatio
 import { logger } from '@/lib/logger'
 
 // POST /api/bookings/[id]/cancel - Cancel a booking
+export const dynamic = 'force-dynamic'
+
 export async function POST(
   request: Request,
   { params }: { params: { id: string } }

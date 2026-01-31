@@ -1,5 +1,7 @@
 import Link from 'next/link'
-import { MapPin, Users, Building, ChevronRight, Star, Phone, ArrowRight } from 'lucide-react'
+import { MapPin, Users, Building, Star, Phone, ArrowRight, Shield, Clock } from 'lucide-react'
+import Breadcrumb from '@/components/Breadcrumb'
+import { PopularServicesLinks, PopularCitiesLinks, popularRegions } from '@/components/InternalLinks'
 
 const villesData: Record<string, {
   name: string
@@ -99,16 +101,21 @@ export default function VillePage({ params }: { params: { ville: string } }) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero */}
+      {/* Breadcrumb */}
+      <div className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          <Breadcrumb
+            items={[
+              { label: 'Villes', href: '/villes' },
+              { label: ville.name },
+            ]}
+          />
+        </div>
+      </div>
+
+      {/* Hero - Premium Branding */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="flex items-center gap-2 text-blue-200 mb-4">
-            <Link href="/" className="hover:text-white">Accueil</Link>
-            <ChevronRight className="w-4 h-4" />
-            <Link href="/villes" className="hover:text-white">Villes</Link>
-            <ChevronRight className="w-4 h-4" />
-            <span>{ville.name}</span>
-          </div>
           <h1 className="text-4xl font-bold mb-4">
             Artisans à {ville.name}
           </h1>
@@ -127,6 +134,22 @@ export default function VillePage({ params }: { params: { ville: string } }) {
             <div className="flex items-center gap-2">
               <Users className="w-5 h-5" />
               <span>{ville.population} habitants</span>
+            </div>
+          </div>
+
+          {/* Premium badges */}
+          <div className="flex flex-wrap gap-3 mt-8">
+            <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full">
+              <Shield className="w-4 h-4" />
+              <span className="text-sm font-medium">Artisans vérifiés</span>
+            </div>
+            <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full">
+              <Star className="w-4 h-4" />
+              <span className="text-sm font-medium">Avis clients authentiques</span>
+            </div>
+            <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full">
+              <Clock className="w-4 h-4" />
+              <span className="text-sm font-medium">Devis sous 24h</span>
             </div>
           </div>
         </div>
@@ -222,10 +245,10 @@ export default function VillePage({ params }: { params: { ville: string } }) {
         {/* CTA */}
         <section className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl p-8 md:p-12 text-center text-white">
           <h2 className="text-3xl font-bold mb-4">
-            Besoin d'un artisan à {ville.name} ?
+            Besoin d&apos;un artisan à {ville.name} ?
           </h2>
           <p className="text-blue-100 mb-8 max-w-2xl mx-auto">
-            Décrivez votre projet et recevez jusqu'à 5 devis gratuits d'artisans qualifiés près de chez vous.
+            Décrivez votre projet et recevez jusqu&apos;à 5 devis gratuits d&apos;artisans qualifiés près de chez vous.
           </p>
           <Link
             href="/devis"
@@ -235,7 +258,42 @@ export default function VillePage({ params }: { params: { ville: string } }) {
             <ArrowRight className="w-5 h-5" />
           </Link>
         </section>
+
+        {/* Voir aussi - Related Content */}
+        <section className="mt-16">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Voir aussi</h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="bg-white rounded-xl shadow-sm p-6">
+              <h3 className="font-semibold text-gray-900 mb-4">Explorer la région {ville.region}</h3>
+              <p className="text-gray-600 text-sm mb-4">
+                Découvrez tous les artisans disponibles dans votre région.
+              </p>
+              {popularRegions.find(r => r.name === ville.region) ? (
+                <Link
+                  href={`/regions/${popularRegions.find(r => r.name === ville.region)?.slug}`}
+                  className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
+                >
+                  Artisans en {ville.region}
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              ) : (
+                <Link
+                  href="/regions"
+                  className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
+                >
+                  Toutes les régions
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              )}
+            </div>
+            <div className="bg-white rounded-xl shadow-sm p-6">
+              <PopularCitiesLinks showTitle={true} limit={6} />
+            </div>
+          </div>
+        </section>
       </div>
+
+      {/* Internal Links Footer */}
     </div>
   )
 }
