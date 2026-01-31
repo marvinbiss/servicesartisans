@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { Home, Search, FileText, User, Phone } from 'lucide-react'
+import { useMobileMenu } from '@/contexts/MobileMenuContext'
 
 interface NavItem {
   href: string
@@ -48,12 +49,14 @@ const navItems: NavItem[] = [
 
 export default function MobileBottomNav() {
   const pathname = usePathname()
+  const { isMenuOpen } = useMobileMenu()
 
   // Ne pas afficher dans les espaces connectés (ils ont leur propre nav)
   const hideOnPages = ['/espace-client', '/espace-artisan', '/admin']
   const shouldHide = hideOnPages.some(page => pathname.startsWith(page))
 
-  if (shouldHide) return null
+  // Masquer quand le menu mobile est ouvert
+  if (shouldHide || isMenuOpen) return null
 
   const isActive = (item: NavItem) => {
     if (item.activeRoutes) {

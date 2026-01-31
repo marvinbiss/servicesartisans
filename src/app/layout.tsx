@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic'
 import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import { MobileMenuProvider } from '@/contexts/MobileMenuContext'
 
 // Dynamic imports for performance
 const MobileBottomNav = dynamic(() => import('@/components/MobileBottomNav'), {
@@ -102,18 +103,20 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://umjmbdbwcsxrvfqktiui.supabase.co" />
       </head>
       <body className={`${inter.variable} ${plusJakarta.variable} font-sans bg-gray-50 antialiased`}>
-        {/* Skip to main content for accessibility */}
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary-600 text-white px-4 py-2 rounded-lg z-50 font-medium"
-        >
-          Aller au contenu principal
-        </a>
-        <Header />
-        <main id="main-content" className="pb-16 md:pb-0">{children}</main>
-        <Footer />
-        <MobileBottomNav />
-        <ServiceWorkerRegistration />
+        <MobileMenuProvider>
+          {/* Skip to main content for accessibility */}
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary-600 text-white px-4 py-2 rounded-lg z-50 font-medium"
+          >
+            Aller au contenu principal
+          </a>
+          <Header />
+          <main id="main-content" className="pb-16 md:pb-0">{children}</main>
+          <Footer />
+          <MobileBottomNav />
+          <ServiceWorkerRegistration />
+        </MobileMenuProvider>
       </body>
     </html>
   )

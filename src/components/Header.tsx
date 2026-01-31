@@ -8,6 +8,7 @@ import {
   ShieldCheck, Sparkles, Star, Clock, Phone, ArrowRight, Users, Award
 } from 'lucide-react'
 import { useState, useRef, useEffect } from 'react'
+import { useMobileMenu } from '@/contexts/MobileMenuContext'
 
 // Services populaires organisés par catégorie
 const serviceCategories = [
@@ -81,7 +82,7 @@ const services = serviceCategories.flatMap(cat => cat.services)
 
 export default function Header() {
   const router = useRouter()
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const { isMenuOpen, setIsMenuOpen } = useMobileMenu()
   const [searchQuery, setSearchQuery] = useState('')
   const [activeMenu, setActiveMenu] = useState<'services' | 'villes' | null>(null)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -434,7 +435,7 @@ export default function Header() {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="lg:hidden py-4 border-t border-gray-100">
+          <div className="lg:hidden py-4 border-t border-gray-100 max-h-[calc(100vh-120px)] overflow-y-auto">
             {/* Search Mobile */}
             <form onSubmit={handleSearch} className="mb-4">
               <div className="relative">
