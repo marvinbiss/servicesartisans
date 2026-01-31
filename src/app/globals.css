@@ -216,6 +216,130 @@
     background-image: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-secondary) 100%);
   }
 
+  /* Premium text gradient - Gold */
+  .text-gradient-premium {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #D97706 0%, #F59E0B 25%, #FBBF24 50%, #F59E0B 75%, #D97706 100%);
+  }
+
+  /* Premium text gradient - Blue */
+  .text-gradient-blue {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #1E40AF 0%, #3B82F6 50%, #60A5FA 100%);
+  }
+
+  /* =========================================
+     PREMIUM WORLD-CLASS COMPONENTS
+     ========================================= */
+
+  /* Premium Card */
+  .premium-card {
+    @apply bg-white rounded-2xl border border-gray-100;
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.06), 0 12px 40px -4px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .premium-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px -8px rgba(0, 0, 0, 0.12), 0 20px 60px -12px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Premium Button - Gold Gradient */
+  .premium-button {
+    @apply relative px-8 py-4 rounded-xl font-semibold text-white overflow-hidden;
+    background: linear-gradient(135deg, #D97706 0%, #F59E0B 50%, #FBBF24 100%);
+    box-shadow: 0 4px 20px rgba(245, 158, 11, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .premium-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(245, 158, 11, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+
+  .premium-button:active {
+    transform: translateY(0);
+  }
+
+  /* Glass Effect - Glassmorphism */
+  .glass-effect {
+    @apply backdrop-blur-xl bg-white/80 border border-white/20;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  }
+
+  .glass-effect-dark {
+    @apply backdrop-blur-xl bg-slate-900/80 border border-white/10;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Hover Lift Effect */
+  .hover-lift {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-4px);
+  }
+
+  /* Premium Input */
+  .premium-input {
+    @apply w-full px-5 py-4 bg-gray-50/50 border border-gray-200 rounded-xl;
+    @apply focus:outline-none focus:bg-white focus:border-primary-400 focus:ring-4 focus:ring-primary-100;
+    @apply placeholder:text-gray-400;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .premium-input:hover:not(:focus) {
+    @apply border-gray-300 bg-gray-50;
+  }
+
+  /* Premium Badge */
+  .premium-badge {
+    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium;
+    @apply bg-gradient-to-r from-amber-50 to-yellow-50 text-amber-700 border border-amber-200;
+  }
+
+  /* Animated Underline on Hover */
+  .hover-underline {
+    @apply relative;
+  }
+
+  .hover-underline::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-0 h-0.5 bg-primary-500;
+    transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .hover-underline:hover::after {
+    @apply w-full;
+  }
+
+  /* Shimmer Effect */
+  .shimmer {
+    background: linear-gradient(
+      110deg,
+      transparent 25%,
+      rgba(255, 255, 255, 0.3) 50%,
+      transparent 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s linear infinite;
+  }
+
+  /* Premium Section Title */
+  .section-title {
+    @apply text-3xl md:text-4xl font-bold text-gray-900 tracking-tight;
+  }
+
+  .section-subtitle {
+    @apply text-lg text-gray-600 max-w-2xl;
+  }
+
+  /* Trust Badge */
+  .trust-badge {
+    @apply inline-flex items-center gap-2 px-4 py-2 bg-green-50 text-green-700 rounded-full text-sm font-medium border border-green-200;
+  }
+
   /* Screen reader only */
   .sr-only {
     position: absolute;

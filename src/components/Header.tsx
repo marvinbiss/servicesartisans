@@ -165,31 +165,43 @@ export default function Header() {
   }
 
   return (
-    <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+    <header className="bg-white/95 backdrop-blur-xl border-b border-gray-100 sticky top-0 z-50 transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2 group">
-            <div className="w-9 h-9 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-glow transition-shadow">
-              <span className="text-white font-bold text-lg">SA</span>
+        <div className="flex justify-between items-center h-18 py-3">
+          {/* Logo Premium */}
+          <Link href="/" className="flex items-center space-x-3 group">
+            <div className="relative">
+              <div className="w-10 h-10 bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-glow transition-all duration-300 group-hover:scale-105">
+                <span className="text-white font-bold text-lg tracking-tight">SA</span>
+              </div>
+              <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-gradient-to-br from-amber-400 to-amber-500 rounded-full border-2 border-white"></div>
             </div>
-            <span className="text-xl font-heading font-bold text-gray-900">
-              Services<span className="text-primary-600">Artisans</span>
-            </span>
+            <div className="flex flex-col">
+              <span className="text-xl font-heading font-bold text-gray-900 tracking-tight">
+                Services<span className="text-gradient-blue">Artisans</span>
+              </span>
+              <span className="text-[10px] text-gray-500 font-medium tracking-wide hidden lg:block">L&apos;EXCELLENCE ARTISANALE</span>
+            </div>
           </Link>
 
-          {/* Search Bar - Desktop */}
-          <div className="hidden md:flex flex-1 max-w-lg mx-8">
-            <div className="relative w-full">
+          {/* Search Bar Premium - Desktop */}
+          <div className="hidden md:flex flex-1 max-w-xl mx-8">
+            <div className="relative w-full group">
               <input
                 type="text"
                 placeholder="Rechercher un artisan, un service..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full pl-12 pr-4 py-3 bg-gray-50/80 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-400 focus:border-primary-400 focus:bg-white transition-all duration-300 text-gray-900 placeholder:text-gray-400"
               />
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 group-focus-within:text-primary-500 transition-colors" />
             </div>
+          </div>
+
+          {/* Trust Badge - Desktop */}
+          <div className="hidden xl:flex items-center gap-2 px-3 py-1.5 bg-green-50 rounded-full border border-green-200 mr-4">
+            <ShieldCheck className="w-4 h-4 text-green-600" />
+            <span className="text-xs font-semibold text-green-700">120 000+ artisans vérifiés</span>
           </div>
 
           {/* Navigation - Desktop avec Megamenu */}
@@ -211,9 +223,9 @@ export default function Header() {
                 <ChevronDown className={`w-4 h-4 transition-transform ${activeMenu === 'services' ? 'rotate-180' : ''}`} />
               </button>
 
-              {/* Dropdown Services - Megamenu Style Doctolib */}
+              {/* Dropdown Services - Premium Megamenu */}
               {activeMenu === 'services' && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-[800px] bg-white rounded-xl shadow-2xl border border-gray-100 animate-fadeIn overflow-hidden">
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[820px] bg-white/95 backdrop-blur-xl rounded-2xl shadow-premium border border-gray-100/50 animate-fade-in-down overflow-hidden">
                   <div className="flex">
                     {/* Categories sidebar */}
                     <div className="w-1/3 bg-gray-50 p-4 border-r border-gray-100">
@@ -318,9 +330,9 @@ export default function Header() {
                 <ChevronDown className={`w-4 h-4 transition-transform ${activeMenu === 'villes' ? 'rotate-180' : ''}`} />
               </button>
 
-              {/* Dropdown Villes - Megamenu Style Doctolib */}
+              {/* Dropdown Villes - Premium Megamenu */}
               {activeMenu === 'villes' && (
-                <div className="absolute top-full right-0 mt-1 w-[850px] bg-white rounded-xl shadow-2xl border border-gray-100 animate-fadeIn overflow-hidden">
+                <div className="absolute top-full right-0 mt-2 w-[860px] bg-white/95 backdrop-blur-xl rounded-2xl shadow-premium border border-gray-100/50 animate-fade-in-down overflow-hidden">
                   <div className="flex">
                     {/* Search & Quick links sidebar */}
                     <div className="w-1/4 bg-gray-50 p-4 border-r border-gray-100">
@@ -431,23 +443,28 @@ export default function Header() {
 
             <Link
               href="/urgence"
-              className="text-red-600 hover:text-red-700 px-3 py-2 rounded-lg font-medium hover:bg-red-50 transition-colors"
+              className="relative text-red-600 hover:text-red-700 px-3 py-2 rounded-lg font-medium hover:bg-red-50 transition-all duration-200 flex items-center gap-1.5"
             >
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+              </span>
               Urgences
             </Link>
 
             <Link
               href="/connexion"
-              className="text-gray-600 hover:text-primary-600 px-3 py-2 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+              className="text-gray-600 hover:text-primary-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-50 transition-all duration-200 hover-underline"
             >
               Connexion
             </Link>
 
             <Link
               href="/devis"
-              className="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors font-medium ml-2"
+              className="relative overflow-hidden bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white px-6 py-2.5 rounded-xl font-semibold ml-3 shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/30 transition-all duration-300 hover:-translate-y-0.5 group"
             >
-              Demander un devis
+              <span className="relative z-10">Demander un devis</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </Link>
           </nav>
 
@@ -464,9 +481,9 @@ export default function Header() {
           </button>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu Premium */}
         {isMenuOpen && (
-          <div className="md:hidden py-4 border-t border-gray-200">
+          <div className="md:hidden py-4 border-t border-gray-100 bg-gradient-to-b from-white to-gray-50/50 animate-fade-in-down">
             {/* Search Bar - Mobile */}
             <div className="relative mb-4">
               <input
@@ -525,17 +542,17 @@ export default function Header() {
                 </div>
               </div>
 
-              <div className="flex gap-2 mt-2">
+              <div className="flex gap-3 mt-3">
                 <Link
                   href="/urgence"
-                  className="flex-1 bg-red-600 text-white px-4 py-3 rounded-lg hover:bg-red-700 transition-colors font-medium text-center"
+                  className="flex-1 bg-gradient-to-r from-red-600 to-red-500 text-white px-4 py-3.5 rounded-xl font-semibold text-center shadow-lg shadow-red-500/25 active:scale-[0.98] transition-transform"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Urgences 24h/24
                 </Link>
                 <Link
                   href="/connexion"
-                  className="flex-1 border border-gray-300 text-gray-700 px-4 py-3 rounded-lg hover:bg-gray-50 transition-colors font-medium text-center"
+                  className="flex-1 border-2 border-gray-200 text-gray-700 px-4 py-3.5 rounded-xl font-semibold text-center hover:bg-gray-50 active:scale-[0.98] transition-all"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Connexion
@@ -544,7 +561,7 @@ export default function Header() {
 
               <Link
                 href="/devis"
-                className="bg-primary-600 text-white px-4 py-3 rounded-lg hover:bg-primary-700 transition-colors font-medium text-center mt-2"
+                className="bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white px-4 py-4 rounded-xl font-bold text-center mt-3 shadow-lg shadow-amber-500/30 active:scale-[0.98] transition-transform"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Demander un devis gratuit
