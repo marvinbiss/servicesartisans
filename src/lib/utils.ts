@@ -1,0 +1,263 @@
+import { type ClassValue, clsx } from 'clsx'
+import { twMerge } from 'tailwind-merge'
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
+
+// Format price with currency
+export function formatPrice(price: number, currency = 'EUR'): string {
+  return new Intl.NumberFormat('fr-FR', {
+    style: 'currency',
+    currency,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(price)
+}
+
+// Format date in French
+export function formatDate(date: string | Date, options?: Intl.DateTimeFormatOptions): string {
+  const defaultOptions: Intl.DateTimeFormatOptions = {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  }
+  return new Intl.DateTimeFormat('fr-FR', options || defaultOptions).format(new Date(date))
+}
+
+// Format relative time
+export function formatRelativeTime(date: string | Date): string {
+  const now = new Date()
+  const past = new Date(date)
+  const diffMs = now.getTime() - past.getTime()
+  const diffMins = Math.floor(diffMs / 60000)
+  const diffHours = Math.floor(diffMs / 3600000)
+  const diffDays = Math.floor(diffMs / 86400000)
+
+  if (diffMins < 1) return "À l'instant"
+  if (diffMins < 60) return `Il y a ${diffMins} min`
+  if (diffHours < 24) return `Il y a ${diffHours}h`
+  if (diffDays < 7) return `Il y a ${diffDays}j`
+  return formatDate(date, { day: 'numeric', month: 'short' })
+}
+
+// Slugify string
+export function slugify(text: string): string {
+  return text
+    .toString()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/[^\w-]+/g, '')
+    .replace(/--+/g, '-')
+}
+
+// Truncate text
+export function truncate(text: string, length: number): string {
+  if (text.length <= length) return text
+  return text.slice(0, length).trim() + '...'
+}
+
+// Generate initials from name
+export function getInitials(name: string): string {
+  return name
+    .split(' ')
+    .map((n) => n[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2)
+}
+
+// Validate email
+export function isValidEmail(email: string): boolean {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  return emailRegex.test(email)
+}
+
+// Validate French phone number
+export function isValidFrenchPhone(phone: string): boolean {
+  const phoneRegex = /^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$/
+  return phoneRegex.test(phone)
+}
+
+// Format French phone number
+export function formatFrenchPhone(phone: string): string {
+  const cleaned = phone.replace(/\D/g, '')
+  if (cleaned.length === 10) {
+    return cleaned.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5')
+  }
+  return phone
+}
+
+// Validate SIRET
+export function isValidSIRET(siret: string): boolean {
+  const cleaned = siret.replace(/\s/g, '')
+  if (!/^\d{14}$/.test(cleaned)) return false
+
+  // Luhn algorithm for SIRET
+  let sum = 0
+  for (let i = 0; i < 14; i++) {
+    let digit = parseInt(cleaned[i], 10)
+    if (i % 2 === 0) {
+      digit *= 2
+      if (digit > 9) digit -= 9
+    }
+    sum += digit
+  }
+  return sum % 10 === 0
+}
+
+// Debounce function
+export function debounce<T extends (...args: unknown[]) => unknown>(
+  func: T,
+  wait: number
+): (...args: Parameters<T>) => void {
+  let timeout: NodeJS.Timeout | null = null
+
+  return (...args: Parameters<T>) => {
+    if (timeout) clearTimeout(timeout)
+    timeout = setTimeout(() => func(...args), wait)
+  }
+}
+
+// Throttle function
+export function throttle<T extends (...args: unknown[]) => unknown>(
+  func: T,
+  limit: number
+): (...args: Parameters<T>) => void {
+  let inThrottle: boolean
+
+  return (...args: Parameters<T>) => {
+    if (!inThrottle) {
+      func(...args)
+      inThrottle = true
+      setTimeout(() => (inThrottle = false), limit)
+    }
+  }
+}
+
+// Calculate distance between two coordinates (Haversine formula)
+export function calculateDistance(
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number
+): number {
+  const R = 6371 // Radius of the earth in km
+  const dLat = deg2rad(lat2 - lat1)
+  const dLon = deg2rad(lon2 - lon1)
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(deg2rad(lat1)) *
+      Math.cos(deg2rad(lat2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2)
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+  return R * c // Distance in km
+}
+
+function deg2rad(deg: number): number {
+  return deg * (Math.PI / 180)
+}
+
+// Get rating color
+export function getRatingColor(rating: number): string {
+  if (rating >= 4.5) return 'text-green-600'
+  if (rating >= 4) return 'text-green-500'
+  if (rating >= 3.5) return 'text-yellow-500'
+  if (rating >= 3) return 'text-orange-500'
+  return 'text-red-500'
+}
+
+// Parse query string
+export function parseQueryString(queryString: string): Record<string, string> {
+  const params = new URLSearchParams(queryString)
+  const result: Record<string, string> = {}
+  params.forEach((value, key) => {
+    result[key] = value
+  })
+  return result
+}
+
+// Web Vitals reporting
+export interface WebVitalMetric {
+  id: string
+  name: 'FCP' | 'LCP' | 'CLS' | 'FID' | 'TTFB' | 'INP'
+  value: number
+  rating: 'good' | 'needs-improvement' | 'poor'
+}
+
+export function reportWebVitals(metric: WebVitalMetric): void {
+  // In production, send to analytics service
+  if (process.env.NODE_ENV === 'production') {
+    const body = JSON.stringify({
+      name: metric.name,
+      value: metric.value,
+      rating: metric.rating,
+      id: metric.id,
+      page: typeof window !== 'undefined' ? window.location.pathname : '',
+      timestamp: Date.now(),
+    })
+
+    // Use sendBeacon for reliable delivery
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon('/api/analytics/vitals', body)
+    }
+  } else {
+    // Log to console in development
+    console.log(`[Web Vitals] ${metric.name}: ${metric.value} (${metric.rating})`)
+  }
+}
+
+// Performance timing utilities
+export function measurePerformance(name: string): () => void {
+  const start = performance.now()
+  return () => {
+    const duration = performance.now() - start
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`[Performance] ${name}: ${duration.toFixed(2)}ms`)
+    }
+  }
+}
+
+// Lazy load images with IntersectionObserver
+export function lazyLoadImages(selector = 'img[data-src]'): void {
+  if (typeof window === 'undefined' || !('IntersectionObserver' in window)) return
+
+  const images = document.querySelectorAll<HTMLImageElement>(selector)
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const img = entry.target as HTMLImageElement
+          const src = img.dataset.src
+          if (src) {
+            img.src = src
+            img.removeAttribute('data-src')
+          }
+          observer.unobserve(img)
+        }
+      })
+    },
+    { rootMargin: '200px' }
+  )
+
+  images.forEach((img) => observer.observe(img))
+}
+
+// Preload critical resources
+export function preloadResource(url: string, as: 'script' | 'style' | 'image' | 'font'): void {
+  if (typeof document === 'undefined') return
+
+  const link = document.createElement('link')
+  link.rel = 'preload'
+  link.href = url
+  link.as = as
+  if (as === 'font') {
+    link.crossOrigin = 'anonymous'
+  }
+  document.head.appendChild(link)
+}

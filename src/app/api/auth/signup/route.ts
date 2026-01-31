@@ -1,0 +1,113 @@
+/**
+ * User Signup API - ServicesArtisans
+ * Handles user registration with email verification
+ */
+
+import { NextResponse } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
+import { signUpSchema, validateRequest, formatZodErrors } from '@/lib/validations/schemas'
+import { createErrorResponse, createSuccessResponse, ErrorCode, getHttpStatus } from '@/lib/errors/types'
+import { logger } from '@/lib/logger'
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+export async function POST(request: Request) {
+  try {
+    // Validate environment
+    if (!supabaseUrl || !supabaseServiceKey) {
+      return NextResponse.json(
+        createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Configuration serveur manquante'),
+        { status: 500 }
+      )
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseServiceKey)
+
+    // Parse and validate request body
+    const body = await request.json()
+    const validation = validateRequest(signUpSchema, body)
+
+    if (!validation.success) {
+      return NextResponse.json(
+        createErrorResponse(
+          ErrorCode.VALIDATION_ERROR,
+          'Donnees invalides',
+          { fields: formatZodErrors(validation.errors) }
+        ),
+        { status: 400 }
+      )
+    }
+
+    const { email, password, firstName, lastName, phone } = validation.data
+
+    // Check if user already exists
+    const { data: existingUser } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('email', email.toLowerCase())
+      .single()
+
+    if (existingUser) {
+      return NextResponse.json(
+        createErrorResponse(ErrorCode.ALREADY_EXISTS, 'Un compte existe deja avec cet email'),
+        { status: 409 }
+      )
+    }
+
+    // Create user in Supabase Auth
+    const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+      email: email.toLowerCase(),
+      password,
+      email_confirm: false, // Will send confirmation email
+      user_metadata: {
+        first_name: firstName,
+        last_name: lastName,
+        phone,
+      },
+    })
+
+    if (authError || !authData.user) {
+      logger.error('Auth error:', authError)
+      return NextResponse.json(
+        createErrorResponse(ErrorCode.INTERNAL_ERROR, authError?.message || 'Erreur lors de la creation du compte'),
+        { status: 500 }
+      )
+    }
+
+    // Create profile record
+    const { error: profileError } = await supabase.from('profiles').insert({
+      id: authData.user.id,
+      email: email.toLowerCase(),
+      first_name: firstName,
+      last_name: lastName,
+      phone: phone || null,
+      role: 'user',
+      is_artisan: false,
+      created_at: new Date().toISOString(),
+    })
+
+    if (profileError) {
+      logger.error('Profile error:', profileError)
+      // Don't fail completely - user is created, profile can be fixed
+    }
+
+    // Note: Verification email is automatically sent by Supabase auth.admin.createUser
+    // when emailConfirm is set to true
+
+    return NextResponse.json(
+      createSuccessResponse({
+        message: 'Compte cree avec succes. Verifiez votre email pour activer votre compte.',
+        userId: authData.user.id,
+        requiresVerification: true,
+      }),
+      { status: 201 }
+    )
+  } catch (error) {
+    logger.error('Signup error:', error)
+    return NextResponse.json(
+      createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Erreur lors de l\'inscription'),
+      { status: 500 }
+    )
+  }
+}

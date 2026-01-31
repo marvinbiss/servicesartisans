@@ -1,0 +1,213 @@
+/**
+ * SMS Notification System - ServicesArtisans
+ * World-class SMS reminders using Twilio
+ * Based on best practices: 98% open rate, responses within 90 seconds
+ */
+
+import twilio from 'twilio'
+
+const accountSid = process.env.TWILIO_ACCOUNT_SID
+const authToken = process.env.TWILIO_AUTH_TOKEN
+const fromNumber = process.env.TWILIO_PHONE_NUMBER
+
+// Lazy initialize Twilio client
+let twilioClient: twilio.Twilio | null = null
+
+function getTwilioClient(): twilio.Twilio {
+  if (!twilioClient) {
+    if (!accountSid || !authToken) {
+      throw new Error('Twilio credentials not configured')
+    }
+    twilioClient = twilio(accountSid, authToken)
+  }
+  return twilioClient
+}
+
+export interface SMSData {
+  to: string
+  clientName: string
+  artisanName: string
+  serviceName: string
+  date: string
+  time: string
+  bookingId: string
+}
+
+// Format phone number for France
+function formatPhoneNumber(phone: string): string {
+  // Remove all non-digits
+  let cleaned = phone.replace(/\D/g, '')
+
+  // Handle French numbers
+  if (cleaned.startsWith('0') && cleaned.length === 10) {
+    cleaned = '33' + cleaned.substring(1)
+  }
+
+  // Add + prefix
+  if (!cleaned.startsWith('+')) {
+    cleaned = '+' + cleaned
+  }
+
+  return cleaned
+}
+
+// SMS Templates - Keep under 160 chars for single message
+const smsTemplates = {
+  // Immediate confirmation
+  bookingConfirmation: (data: SMSData) =>
+    `RDV confirmé ✓
+${data.date} à ${data.time}
+${data.artisanName}
+Gérer: servicesartisans.fr/b/${data.bookingId.slice(0, 8)}`,
+
+  // 24h reminder (highest impact)
+  reminder24h: (data: SMSData) =>
+    `Rappel: RDV demain
+${data.date} à ${data.time}
+${data.artisanName}
+Confirmer/Annuler: servicesartisans.fr/b/${data.bookingId.slice(0, 8)}`,
+
+  // 1h reminder
+  reminder1h: (data: SMSData) =>
+    `RDV dans 1h
+${data.time} - ${data.artisanName}
+${data.serviceName}`,
+
+  // Cancellation
+  cancellation: (data: SMSData) =>
+    `RDV annulé
+${data.date} à ${data.time}
+${data.artisanName}
+Reprogrammer: servicesartisans.fr`,
+
+  // Reschedule confirmation
+  reschedule: (data: SMSData) =>
+    `RDV reporté ✓
+Nouveau: ${data.date} à ${data.time}
+${data.artisanName}
+Gérer: servicesartisans.fr/b/${data.bookingId.slice(0, 8)}`,
+
+  // Waitlist notification
+  waitlistAvailable: (data: SMSData) =>
+    `Créneau dispo !
+${data.artisanName}
+${data.date}
+Réservez vite: servicesartisans.fr`,
+
+  // Review request (post-appointment)
+  reviewRequest: (data: SMSData) =>
+    `Comment s'est passé votre RDV avec ${data.artisanName}?
+Donnez votre avis: servicesartisans.fr/avis/${data.bookingId.slice(0, 8)}`,
+}
+
+// Send SMS function
+export async function sendSMS(
+  to: string,
+  message: string
+): Promise<{ success: boolean; messageId?: string; error?: string }> {
+  try {
+    if (!fromNumber) {
+      console.warn('SMS sending disabled: TWILIO_PHONE_NUMBER not configured')
+      return { success: false, error: 'SMS not configured' }
+    }
+
+    const client = getTwilioClient()
+    const formattedTo = formatPhoneNumber(to)
+
+    const result = await client.messages.create({
+      body: message,
+      from: fromNumber,
+      to: formattedTo,
+    })
+
+    console.log(`SMS sent to ${formattedTo}: ${result.sid}`)
+    return { success: true, messageId: result.sid }
+  } catch (error) {
+    console.error('SMS send error:', error)
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    }
+  }
+}
+
+// High-level SMS functions
+export async function sendBookingConfirmationSMS(data: SMSData) {
+  const message = smsTemplates.bookingConfirmation(data)
+  return sendSMS(data.to, message)
+}
+
+export async function sendReminder24hSMS(data: SMSData) {
+  const message = smsTemplates.reminder24h(data)
+  return sendSMS(data.to, message)
+}
+
+export async function sendReminder1hSMS(data: SMSData) {
+  const message = smsTemplates.reminder1h(data)
+  return sendSMS(data.to, message)
+}
+
+export async function sendCancellationSMS(data: SMSData) {
+  const message = smsTemplates.cancellation(data)
+  return sendSMS(data.to, message)
+}
+
+export async function sendRescheduleSMS(data: SMSData) {
+  const message = smsTemplates.reschedule(data)
+  return sendSMS(data.to, message)
+}
+
+export async function sendWaitlistNotificationSMS(data: SMSData) {
+  const message = smsTemplates.waitlistAvailable(data)
+  return sendSMS(data.to, message)
+}
+
+export async function sendReviewRequestSMS(data: SMSData) {
+  const message = smsTemplates.reviewRequest(data)
+  return sendSMS(data.to, message)
+}
+
+// Batch send for multiple recipients
+export async function sendBatchSMS(
+  recipients: { phone: string; message: string }[]
+): Promise<{ sent: number; failed: number }> {
+  let sent = 0
+  let failed = 0
+
+  for (const recipient of recipients) {
+    const result = await sendSMS(recipient.phone, recipient.message)
+    if (result.success) {
+      sent++
+    } else {
+      failed++
+    }
+
+    // Rate limiting: max 1 SMS per 100ms
+    await new Promise((resolve) => setTimeout(resolve, 100))
+  }
+
+  return { sent, failed }
+}
+
+// Calculate optimal reminder times
+export function calculateReminderTimes(appointmentDate: Date): {
+  reminder24h: Date
+  reminder1h: Date
+  reviewRequest: Date
+} {
+  const reminder24h = new Date(appointmentDate)
+  reminder24h.setHours(reminder24h.getHours() - 24)
+
+  // Send 24h reminder at 6 PM for best response rate
+  if (reminder24h.getHours() < 18) {
+    reminder24h.setHours(18, 0, 0, 0)
+  }
+
+  const reminder1h = new Date(appointmentDate)
+  reminder1h.setHours(reminder1h.getHours() - 1)
+
+  const reviewRequest = new Date(appointmentDate)
+  reviewRequest.setHours(reviewRequest.getHours() + 2) // 2 hours after appointment
+
+  return { reminder24h, reminder1h, reviewRequest }
+}

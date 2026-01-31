@@ -1,0 +1,124 @@
+/**
+ * Error Types - ServicesArtisans
+ * Standardized error responses for all API routes
+ */
+
+export enum ErrorCode {
+  // Authentication errors (1xxx)
+  UNAUTHORIZED = 1001,
+  INVALID_TOKEN = 1002,
+  TOKEN_EXPIRED = 1003,
+  INSUFFICIENT_PERMISSIONS = 1004,
+
+  // Validation errors (2xxx)
+  VALIDATION_ERROR = 2001,
+  MISSING_REQUIRED_FIELD = 2002,
+  INVALID_FORMAT = 2003,
+  VALUE_OUT_OF_RANGE = 2004,
+
+  // Resource errors (3xxx)
+  NOT_FOUND = 3001,
+  ALREADY_EXISTS = 3002,
+  RESOURCE_LOCKED = 3003,
+  RESOURCE_DELETED = 3004,
+
+  // Business logic errors (4xxx)
+  BOOKING_CONFLICT = 4001,
+  SLOT_UNAVAILABLE = 4002,
+  CANCELLATION_TOO_LATE = 4003,
+  PAYMENT_REQUIRED = 4004,
+  REVIEW_ALREADY_EXISTS = 4005,
+
+  // Payment errors (5xxx)
+  PAYMENT_FAILED = 5001,
+  INVALID_PAYMENT_METHOD = 5002,
+  REFUND_FAILED = 5003,
+
+  // Server errors (9xxx)
+  INTERNAL_ERROR = 9001,
+  DATABASE_ERROR = 9002,
+  EXTERNAL_SERVICE_ERROR = 9003,
+  RATE_LIMIT_EXCEEDED = 9004,
+}
+
+export interface ApiError {
+  code: ErrorCode
+  message: string
+  details?: Record<string, unknown>
+  field?: string
+}
+
+export interface ApiErrorResponse {
+  success: false
+  error: ApiError
+}
+
+export interface ApiSuccessResponse<T> {
+  success: true
+  data: T
+}
+
+export type ApiResponse<T> = ApiSuccessResponse<T> | ApiErrorResponse
+
+export function createErrorResponse(
+  code: ErrorCode,
+  message: string,
+  details?: Record<string, unknown>,
+  field?: string
+): ApiErrorResponse {
+  return {
+    success: false,
+    error: {
+      code,
+      message,
+      details,
+      field,
+    },
+  }
+}
+
+export function createSuccessResponse<T>(data: T): ApiSuccessResponse<T> {
+  return {
+    success: true,
+    data,
+  }
+}
+
+export const ErrorMessages: Record<ErrorCode, string> = {
+  [ErrorCode.UNAUTHORIZED]: 'Authentification requise',
+  [ErrorCode.INVALID_TOKEN]: 'Token invalide',
+  [ErrorCode.TOKEN_EXPIRED]: 'Session expiree',
+  [ErrorCode.INSUFFICIENT_PERMISSIONS]: 'Permissions insuffisantes',
+  [ErrorCode.VALIDATION_ERROR]: 'Donnees invalides',
+  [ErrorCode.MISSING_REQUIRED_FIELD]: 'Champ requis manquant',
+  [ErrorCode.INVALID_FORMAT]: 'Format invalide',
+  [ErrorCode.VALUE_OUT_OF_RANGE]: 'Valeur hors limites',
+  [ErrorCode.NOT_FOUND]: 'Ressource introuvable',
+  [ErrorCode.ALREADY_EXISTS]: 'Cette ressource existe deja',
+  [ErrorCode.RESOURCE_LOCKED]: 'Ressource verrouillee',
+  [ErrorCode.RESOURCE_DELETED]: 'Ressource supprimee',
+  [ErrorCode.BOOKING_CONFLICT]: 'Conflit de reservation',
+  [ErrorCode.SLOT_UNAVAILABLE]: 'Creneau indisponible',
+  [ErrorCode.CANCELLATION_TOO_LATE]: 'Annulation tardive impossible',
+  [ErrorCode.PAYMENT_REQUIRED]: 'Paiement requis',
+  [ErrorCode.REVIEW_ALREADY_EXISTS]: 'Avis deja depose',
+  [ErrorCode.PAYMENT_FAILED]: 'Paiement echoue',
+  [ErrorCode.INVALID_PAYMENT_METHOD]: 'Methode de paiement invalide',
+  [ErrorCode.REFUND_FAILED]: 'Remboursement echoue',
+  [ErrorCode.INTERNAL_ERROR]: 'Erreur interne',
+  [ErrorCode.DATABASE_ERROR]: 'Erreur base de donnees',
+  [ErrorCode.EXTERNAL_SERVICE_ERROR]: 'Erreur service externe',
+  [ErrorCode.RATE_LIMIT_EXCEEDED]: 'Limite de requetes atteinte',
+}
+
+export function getHttpStatus(code: ErrorCode): number {
+  if (code >= 1001 && code <= 1003) return 401
+  if (code === ErrorCode.INSUFFICIENT_PERMISSIONS) return 403
+  if (code >= 2001 && code <= 2004) return 400
+  if (code === ErrorCode.NOT_FOUND) return 404
+  if (code === ErrorCode.ALREADY_EXISTS) return 409
+  if (code >= 4001 && code <= 4005) return 422
+  if (code >= 5001 && code <= 5003) return 402
+  if (code === ErrorCode.RATE_LIMIT_EXCEEDED) return 429
+  return 500
+}

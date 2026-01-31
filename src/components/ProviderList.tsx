@@ -1,0 +1,95 @@
+'use client'
+
+import { useState } from 'react'
+import { Provider } from '@/types'
+import ProviderCard from './ProviderCard'
+import SearchFilters from './SearchFilters'
+
+interface ProviderListProps {
+  providers: Provider[]
+  serviceSlug: string
+  locationSlug: string
+  onProviderHover?: (provider: Provider | null) => void
+}
+
+interface FilterState {
+  verified: boolean
+  premium: boolean
+  minRating: number | null
+  sortBy: 'relevance' | 'rating' | 'name'
+}
+
+export default function ProviderList({
+  providers,
+  serviceSlug,
+  locationSlug,
+  onProviderHover,
+}: ProviderListProps) {
+  const [filters, setFilters] = useState<FilterState>({
+    verified: false,
+    premium: false,
+    minRating: null,
+    sortBy: 'relevance',
+  })
+
+  // Apply filters
+  const filteredProviders = providers.filter((provider) => {
+    if (filters.verified && !provider.is_verified) return false
+    if (filters.premium && !provider.is_premium) return false
+    // Rating filter would need actual rating data
+    return true
+  })
+
+  // Apply sorting
+  const sortedProviders = [...filteredProviders].sort((a, b) => {
+    switch (filters.sortBy) {
+      case 'name':
+        return a.name.localeCompare(b.name)
+      case 'rating':
+        // Would need actual rating data
+        return 0
+      case 'relevance':
+      default:
+        // Premium first, then verified
+        if (a.is_premium !== b.is_premium) return a.is_premium ? -1 : 1
+        if (a.is_verified !== b.is_verified) return a.is_verified ? -1 : 1
+        return 0
+    }
+  })
+
+  return (
+    <div className="flex flex-col h-full">
+      {/* Filters */}
+      <SearchFilters
+        onFilterChange={setFilters}
+        totalResults={sortedProviders.length}
+      />
+
+      {/* Provider list */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        {sortedProviders.length > 0 ? (
+          sortedProviders.map((provider) => (
+            <div
+              key={provider.id}
+              onMouseEnter={() => onProviderHover?.(provider)}
+              onMouseLeave={() => onProviderHover?.(null)}
+            >
+              <ProviderCard
+                provider={provider}
+                serviceSlug={serviceSlug}
+                locationSlug={locationSlug}
+              />
+            </div>
+          ))
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-gray-500 text-lg">Aucun artisan trouvé</p>
+            <p className="text-gray-400 text-sm mt-2">
+              Essayez de modifier vos filtres
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}

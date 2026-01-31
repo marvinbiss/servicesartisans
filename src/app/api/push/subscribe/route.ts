@@ -1,0 +1,117 @@
+/**
+ * Push Subscription API - ServicesArtisans
+ * Manages push notification subscriptions
+ */
+
+import { NextResponse } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
+import { getVapidPublicKey } from '@/lib/notifications/push'
+import { logger } from '@/lib/logger'
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+)
+
+// GET /api/push/subscribe - Get VAPID public key
+export async function GET() {
+  const vapidKey = getVapidPublicKey()
+
+  if (!vapidKey) {
+    return NextResponse.json(
+      { error: 'Push notifications not configured' },
+      { status: 503 }
+    )
+  }
+
+  return NextResponse.json({ vapidPublicKey: vapidKey })
+}
+
+// POST /api/push/subscribe - Subscribe to push notifications
+export async function POST(request: Request) {
+  try {
+    const body = await request.json()
+    const { userId, subscription } = body
+
+    if (!userId || !subscription) {
+      return NextResponse.json(
+        { error: 'userId and subscription required' },
+        { status: 400 }
+      )
+    }
+
+    const { endpoint, keys } = subscription
+
+    if (!endpoint || !keys?.p256dh || !keys?.auth) {
+      return NextResponse.json(
+        { error: 'Invalid subscription format' },
+        { status: 400 }
+      )
+    }
+
+    // Get user agent
+    const userAgent = request.headers.get('user-agent') || ''
+
+    // Upsert subscription
+    const { error } = await supabase
+      .from('push_subscriptions')
+      .upsert(
+        {
+          user_id: userId,
+          endpoint,
+          p256dh: keys.p256dh,
+          auth: keys.auth,
+          user_agent: userAgent,
+          is_active: true,
+          last_used_at: new Date().toISOString(),
+        },
+        { onConflict: 'endpoint' }
+      )
+
+    if (error) throw error
+
+    return NextResponse.json({ success: true })
+  } catch (error) {
+    logger.error('Push subscribe error:', error)
+    return NextResponse.json(
+      { error: 'Failed to save subscription' },
+      { status: 500 }
+    )
+  }
+}
+
+// DELETE /api/push/subscribe - Unsubscribe from push notifications
+export async function DELETE(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url)
+    const endpoint = searchParams.get('endpoint')
+    const userId = searchParams.get('userId')
+
+    if (!endpoint && !userId) {
+      return NextResponse.json(
+        { error: 'endpoint or userId required' },
+        { status: 400 }
+      )
+    }
+
+    let query = supabase.from('push_subscriptions')
+
+    if (endpoint) {
+      // Delete specific subscription
+      const { error } = await query.delete().eq('endpoint', endpoint)
+      if (error) throw error
+    } else if (userId) {
+      // Delete all subscriptions for user
+      const { error } = await query.delete().eq('user_id', userId)
+      if (error) throw error
+    }
+
+    return NextResponse.json({ success: true })
+  } catch (error) {
+    logger.error('Push unsubscribe error:', error)
+    return NextResponse.json(
+      { error: 'Failed to remove subscription' },
+      { status: 500 }
+    )
+  }
+}
