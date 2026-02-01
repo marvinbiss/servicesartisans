@@ -62,16 +62,18 @@ export async function GET(request: NextRequest) {
       .from('providers')
       .select(SELECT_COLUMNS, { count: 'exact' })
 
-    // Apply filters using match() method for combined filters
+    // Apply filters - using different approach based on filter type
+    // For boolean filters, use explicit string comparison or eq
     if (filter === 'verified') {
-      console.log('[Admin API] Applying verified filter with match()')
-      query = query.match({ is_verified: true, is_active: true })
+      console.log('[Admin API] Applying verified filter')
+      // Try using in() with single value array to force proper comparison
+      query = query.in('is_verified', [true]).in('is_active', [true])
     } else if (filter === 'pending') {
-      console.log('[Admin API] Applying pending filter with match()')
-      query = query.match({ is_verified: false, is_active: true })
+      console.log('[Admin API] Applying pending filter')
+      query = query.in('is_verified', [false]).in('is_active', [true])
     } else if (filter === 'suspended') {
       console.log('[Admin API] Applying suspended filter')
-      query = query.eq('is_active', false)
+      query = query.in('is_active', [false])
     } else {
       console.log('[Admin API] No filter (showing all)')
     }
