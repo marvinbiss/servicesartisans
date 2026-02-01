@@ -3,6 +3,30 @@ import { createAdminClient } from '@/lib/supabase/admin'
 
 export const dynamic = 'force-dynamic'
 
+// Define the select columns once
+const SELECT_COLUMNS = `
+  id,
+  name,
+  slug,
+  email,
+  phone,
+  address_city,
+  address_region,
+  address_department,
+  siret,
+  is_verified,
+  is_active,
+  is_premium,
+  source,
+  created_at,
+  provider_services (
+    service:services (
+      name,
+      slug
+    )
+  )
+`
+
 export async function GET(request: NextRequest) {
   try {
     // Utilise le client admin pour contourner RLS
@@ -13,57 +37,42 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '20')
     const filter = searchParams.get('filter') || 'all'
     const search = searchParams.get('search') || ''
-    const cacheBuster = searchParams.get('_t') || '' // Used for cache busting
+    const cacheBuster = searchParams.get('_t') || ''
 
-    console.log(`[Admin API] GET providers - filter=${filter}, page=${page}, _t=${cacheBuster}`)
+    console.log(`[Admin API] GET providers - filter="${filter}", page=${page}, limit=${limit}, _t=${cacheBuster}`)
 
     const offset = (page - 1) * limit
 
+    // Build query with filters
     let query = supabase
       .from('providers')
-      .select(`
-        id,
-        name,
-        slug,
-        email,
-        phone,
-        address_city,
-        address_region,
-        address_department,
-        siret,
-        is_verified,
-        is_active,
-        is_premium,
-        source,
-        created_at,
-        provider_services (
-          service:services (
-            name,
-            slug
-          )
-        )
-      `, { count: 'exact' })
+      .select(SELECT_COLUMNS, { count: 'exact' })
 
-    // Apply filters with detailed logging
-    console.log(`[Admin API] Applying filter: "${filter}" (type: ${typeof filter})`)
+    // Apply filters using filter() method for more explicit control
     if (filter === 'verified') {
-      console.log('[Admin API] Adding verified filter: is_verified=true AND is_active=true')
-      query = query.eq('is_verified', true).eq('is_active', true)
+      console.log('[Admin API] Applying verified filter')
+      query = query
+        .filter('is_verified', 'eq', true)
+        .filter('is_active', 'eq', true)
     } else if (filter === 'pending') {
-      console.log('[Admin API] Adding pending filter: is_verified=false AND is_active=true')
-      query = query.eq('is_verified', false).eq('is_active', true)
+      console.log('[Admin API] Applying pending filter')
+      query = query
+        .filter('is_verified', 'eq', false)
+        .filter('is_active', 'eq', true)
     } else if (filter === 'suspended') {
-      console.log('[Admin API] Adding suspended filter: is_active=false')
-      query = query.eq('is_active', false)
+      console.log('[Admin API] Applying suspended filter')
+      query = query
+        .filter('is_active', 'eq', false)
     } else {
-      console.log('[Admin API] No filter applied (showing all)')
+      console.log('[Admin API] No filter (showing all)')
     }
 
-    // Apply search - utilise les vrais noms de colonnes
+    // Apply search
     if (search) {
       query = query.or(`name.ilike.%${search}%,email.ilike.%${search}%,address_city.ilike.%${search}%,siret.ilike.%${search}%`)
     }
 
+    // Execute query with ordering and pagination
     const { data: providers, count, error } = await query
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1)
@@ -73,9 +82,9 @@ export async function GET(request: NextRequest) {
       throw error
     }
 
-    console.log(`[Admin API] Query returned ${providers?.length || 0} providers, count=${count}`)
+    console.log(`[Admin API] Query returned ${providers?.length || 0} providers, total count=${count}`)
 
-    // Transformer les données pour correspondre au format frontend
+    // Transform data for frontend
     const transformedProviders = (providers || []).map((p: Record<string, unknown>) => {
       const providerServices = p.provider_services as Array<{ service: { name: string; slug: string } }> | undefined
       const firstService = providerServices?.[0]?.service
@@ -100,10 +109,9 @@ export async function GET(request: NextRequest) {
       }
     })
 
-    // Log pour debugging
-    const verifiedCount = transformedProviders.filter((p) => p.is_verified === true).length
-    const activeCount = transformedProviders.filter((p) => p.is_active === true).length
-    console.log(`[Admin API] Returning ${transformedProviders.length} providers (${verifiedCount} verified, ${activeCount} active)`)
+    // Debug logging
+    const verifiedInResult = transformedProviders.filter((p) => p.is_verified === true).length
+    console.log(`[Admin API] In result: ${verifiedInResult} verified out of ${transformedProviders.length}`)
 
     const response = NextResponse.json({
       success: true,
@@ -111,10 +119,15 @@ export async function GET(request: NextRequest) {
       total: count || 0,
       page,
       totalPages: Math.ceil((count || 0) / limit),
-      _timestamp: Date.now(), // Include timestamp in response for debugging
+      _debug: {
+        filter,
+        timestamp: Date.now(),
+        resultCount: transformedProviders.length,
+        verifiedInResult,
+      },
     })
 
-    // Aggressively prevent caching at all levels
+    // Prevent caching
     response.headers.set('Cache-Control', 'private, no-store, no-cache, must-revalidate, max-age=0')
     response.headers.set('Pragma', 'no-cache')
     response.headers.set('Expires', '0')
