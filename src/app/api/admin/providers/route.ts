@@ -62,21 +62,16 @@ export async function GET(request: NextRequest) {
       .from('providers')
       .select(SELECT_COLUMNS, { count: 'exact' })
 
-    // Apply filters using filter() method for more explicit control
+    // Apply filters using match() method for combined filters
     if (filter === 'verified') {
-      console.log('[Admin API] Applying verified filter')
-      query = query
-        .filter('is_verified', 'eq', true)
-        .filter('is_active', 'eq', true)
+      console.log('[Admin API] Applying verified filter with match()')
+      query = query.match({ is_verified: true, is_active: true })
     } else if (filter === 'pending') {
-      console.log('[Admin API] Applying pending filter')
-      query = query
-        .filter('is_verified', 'eq', false)
-        .filter('is_active', 'eq', true)
+      console.log('[Admin API] Applying pending filter with match()')
+      query = query.match({ is_verified: false, is_active: true })
     } else if (filter === 'suspended') {
       console.log('[Admin API] Applying suspended filter')
-      query = query
-        .filter('is_active', 'eq', false)
+      query = query.eq('is_active', false)
     } else {
       console.log('[Admin API] No filter (showing all)')
     }
