@@ -2,12 +2,17 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { AdminSidebar } from '@/components/admin/sidebar'
 
+// Admin email whitelist (temporary until profiles table is set up)
+const ADMIN_EMAILS = [
+  'marvin.bissohong@yeoskin.com',
+]
+
 export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  // Verify user is authenticated and has admin role
+  // Verify user is authenticated
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
@@ -15,17 +20,27 @@ export default async function AdminLayout({
     redirect('/connexion?redirect=/admin')
   }
 
-  // Check if user has admin role
-  const { data: profile } = await supabase
+  // Check admin access: first try profiles table, then fall back to email whitelist
+  let isAdmin = false
+
+  // Try profiles table
+  const { data: profile, error: profileError } = await supabase
     .from('profiles')
     .select('role, is_admin')
     .eq('id', user.id)
     .single()
 
-  const isAdmin = profile?.role === 'super_admin' ||
-                  profile?.role === 'admin' ||
-                  profile?.role === 'moderator' ||
-                  profile?.is_admin === true
+  if (!profileError && profile) {
+    isAdmin = profile.role === 'super_admin' ||
+              profile.role === 'admin' ||
+              profile.role === 'moderator' ||
+              profile.is_admin === true
+  }
+
+  // Fallback: check email whitelist
+  if (!isAdmin && user.email && ADMIN_EMAILS.includes(user.email)) {
+    isAdmin = true
+  }
 
   if (!isAdmin) {
     redirect('/?error=unauthorized')
