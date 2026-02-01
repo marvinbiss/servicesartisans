@@ -93,11 +93,21 @@ export const TRANCHES_EFFECTIFS: Record<string, { min: number; max: number }> = 
 }
 
 // Configuration de l'API
+// Option 1: API INSEE officielle (necessite authentification)
 export const SIRENE_CONFIG = {
   tokenUrl: 'https://auth.insee.net/auth/realms/apim-gravitee/protocol/openid-connect/token',
   baseUrl: 'https://api.insee.fr/api-sirene/3.11',
   rateLimit: 30, // requetes par minute
   pageSize: 1000, // max 1000
   retryDelay: 2000, // ms
+  maxRetries: 3,
+}
+
+// Option 2: API SIRENE Open Data (gratuite, sans authentification)
+export const SIRENE_OPEN_CONFIG = {
+  baseUrl: 'https://api.recherche-entreprises.fabrique.social.gouv.fr',
+  rateLimit: 10, // requetes par minute (plus restrictif)
+  pageSize: 25, // max 25 par page
+  retryDelay: 2000,
   maxRetries: 3,
 }

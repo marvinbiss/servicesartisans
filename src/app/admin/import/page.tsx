@@ -57,6 +57,7 @@ export default function ImportPage() {
   const [isRunning, setIsRunning] = useState(false)
   const [result, setResult] = useState<ImportResult | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [useOpenApi, setUseOpenApi] = useState(true) // Utiliser l'API ouverte par defaut
 
   const toggleDept = (code: string) => {
     setSelectedDepts(prev =>
@@ -84,15 +85,42 @@ export default function ImportPage() {
     setError(null)
 
     try {
-      const response = await fetch('/api/import/sirene', {
+      // Utiliser l'API ouverte ou l'API INSEE
+      const apiUrl = useOpenApi ? '/api/import/sirene-open' : '/api/import/sirene'
+
+      const body = useOpenApi
+        ? {
+            departments: selectedDepts,
+            metiers: selectedNaf.map(code => {
+              // Mapper les codes NAF vers les noms de metiers
+              const mapping: Record<string, string> = {
+                '4321A': 'electricien',
+                '4322A': 'plombier',
+                '4322B': 'chauffagiste',
+                '4332A': 'menuisier',
+                '4333Z': 'carreleur',
+                '4334Z': 'peintre',
+                '4331Z': 'plaquiste',
+                '4391B': 'couvreur',
+                '4399C': 'macon',
+                '4329A': 'isolation',
+              }
+              return mapping[code] || 'artisan'
+            }),
+            max_per_department: maxPerDept,
+            dry_run: dryRun,
+          }
+        : {
+            departments: selectedDepts,
+            naf_codes: selectedNaf,
+            max_per_department: maxPerDept,
+            dry_run: dryRun,
+          }
+
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          departments: selectedDepts,
-          naf_codes: selectedNaf,
-          max_per_department: maxPerDept,
-          dry_run: dryRun,
-        }),
+        body: JSON.stringify(body),
       })
 
       const data = await response.json()
@@ -333,20 +361,53 @@ export default function ImportPage() {
               </div>
             )}
 
-            {/* Instructions */}
-            <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-              <h3 className="font-semibold text-amber-900 mb-2">Configuration requise</h3>
-              <p className="text-sm text-amber-800 mb-2">
-                Ajoutez dans votre fichier <code>.env.local</code> :
-              </p>
-              <pre className="text-xs bg-amber-100 p-2 rounded overflow-x-auto">
+            {/* Choix de l'API */}
+            <div className="bg-white rounded-xl shadow-sm p-4">
+              <h3 className="font-semibold text-gray-900 mb-3">Source de donnees</h3>
+              <div className="space-y-2">
+                <label className="flex items-start gap-3 cursor-pointer p-3 rounded-lg border-2 transition-colors ${useOpenApi ? 'border-green-500 bg-green-50' : 'border-gray-200'}">
+                  <input
+                    type="radio"
+                    checked={useOpenApi}
+                    onChange={() => setUseOpenApi(true)}
+                    className="mt-1"
+                  />
+                  <div>
+                    <span className="font-medium text-gray-900">API Ouverte (recommande)</span>
+                    <p className="text-sm text-gray-500">Sans authentification, gratuite</p>
+                  </div>
+                </label>
+                <label className="flex items-start gap-3 cursor-pointer p-3 rounded-lg border-2 transition-colors ${!useOpenApi ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}">
+                  <input
+                    type="radio"
+                    checked={!useOpenApi}
+                    onChange={() => setUseOpenApi(false)}
+                    className="mt-1"
+                  />
+                  <div>
+                    <span className="font-medium text-gray-900">API INSEE officielle</span>
+                    <p className="text-sm text-gray-500">Necessite cles API</p>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            {/* Instructions INSEE (si API officielle) */}
+            {!useOpenApi && (
+              <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+                <h3 className="font-semibold text-amber-900 mb-2">Configuration requise</h3>
+                <p className="text-sm text-amber-800 mb-2">
+                  Ajoutez dans votre fichier <code>.env.local</code> :
+                </p>
+                <pre className="text-xs bg-amber-100 p-2 rounded overflow-x-auto">
 {`INSEE_CONSUMER_KEY=votre_cle
 INSEE_CONSUMER_SECRET=votre_secret`}
-              </pre>
-              <p className="text-xs text-amber-700 mt-2">
-                Obtenez vos cles sur <a href="https://api.insee.fr" target="_blank" className="underline">api.insee.fr</a>
-              </p>
-            </div>
+                </pre>
+                <p className="text-xs text-amber-700 mt-2">
+                  Obtenez vos cles sur <a href="https://portail-api.insee.fr" target="_blank" className="underline">portail-api.insee.fr</a>
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>
