@@ -222,7 +222,23 @@ export async function PATCH(
       throw error
     }
 
-    console.log('[Admin PATCH] Update success, data:', data?.id)
+    console.log('[Admin PATCH] Update success!')
+    console.log('[Admin PATCH] New is_verified:', data?.is_verified)
+    console.log('[Admin PATCH] New is_active:', data?.is_active)
+
+    // Verify the update actually persisted by reading back
+    const { data: verifyData } = await supabase
+      .from('providers')
+      .select('id, name, is_verified, is_active')
+      .eq('id', providerId)
+      .single()
+
+    console.log('[Admin PATCH] Verified from DB:', {
+      id: verifyData?.id,
+      name: verifyData?.name,
+      is_verified: verifyData?.is_verified,
+      is_active: verifyData?.is_active,
+    })
 
     // Gérer les services si fournis
     if (body.services && Array.isArray(body.services)) {

@@ -78,14 +78,21 @@ export default function AdminProvidersPage() {
     return () => clearTimeout(timer)
   }, [search])
 
-  const fetchProviders = useCallback(async () => {
+  const fetchProviders = useCallback(async (forceRefresh = false) => {
     try {
       setLoading(true)
+
+      // Clear providers immediately when force refreshing for better UX feedback
+      if (forceRefresh) {
+        setProviders([])
+      }
+
       const params = new URLSearchParams({
         page: String(page),
         limit: '20',
         filter,
         search: searchDebounce,
+        _t: String(Date.now()), // Cache buster - ensures fresh data from server
       })
 
       // Disable cache to always get fresh data
@@ -94,13 +101,20 @@ export default function AdminProvidersPage() {
         headers: {
           'Cache-Control': 'no-cache, no-store, must-revalidate',
           'Pragma': 'no-cache',
+          'Expires': '0',
         },
         cache: 'no-store',
+        next: { revalidate: 0 },
       })
 
       if (response.ok) {
         const data = await response.json()
         if (data.success) {
+          console.log(`[Admin] Fetched ${data.providers?.length || 0} providers for filter="${filter}", page=${page}, total=${data.total}`)
+          // Log verified status of each provider for debugging
+          data.providers?.forEach((p: Provider) => {
+            console.log(`  - ${p.company_name}: is_verified=${p.is_verified}, is_active=${p.is_active}`)
+          })
           setProviders(data.providers || [])
           setTotalPages(data.totalPages || 1)
           setTotal(data.total || 0)
@@ -168,8 +182,9 @@ export default function AdminProvidersPage() {
           return p
         }))
 
-        // Then refresh from server to ensure consistency
-        await fetchProviders()
+        // Small delay to ensure database consistency, then force refresh
+        await new Promise(resolve => setTimeout(resolve, 300))
+        await fetchProviders(true)
       } else {
         console.error('Action failed:', data.error || data.message)
         setToast({ message: `Erreur: ${data.error || data.message || 'Action échouée'}`, type: 'error' })
@@ -183,7 +198,8 @@ export default function AdminProvidersPage() {
   }
 
   const handleRefresh = () => {
-    fetchProviders()
+    console.log('[Admin] Manual refresh triggered')
+    fetchProviders(true)
   }
 
   const getStatusBadge = (provider: Provider) => {
@@ -263,14 +279,19 @@ export default function AdminProvidersPage() {
                 <button
                   key={f}
                   onClick={() => {
-                    setFilter(f)
-                    setPage(1) // Reset to first page on filter change
+                    if (filter !== f) {
+                      // Clear current data to force visual refresh
+                      setProviders([])
+                      setFilter(f)
+                      setPage(1) // Reset to first page on filter change
+                    }
                   }}
+                  disabled={loading}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                     filter === f
                       ? 'bg-blue-600 text-white'
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  }`}
+                  } ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   {f === 'all' ? 'Tous' :
                    f === 'verified' ? 'Vérifiés' :

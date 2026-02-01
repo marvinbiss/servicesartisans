@@ -13,6 +13,9 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '20')
     const filter = searchParams.get('filter') || 'all'
     const search = searchParams.get('search') || ''
+    const cacheBuster = searchParams.get('_t') || '' // Used for cache busting
+
+    console.log(`[Admin API] GET providers - filter=${filter}, page=${page}, _t=${cacheBuster}`)
 
     const offset = (page - 1) * limit
 
@@ -89,17 +92,27 @@ export async function GET(request: NextRequest) {
       }
     })
 
+    // Log pour debugging
+    const verifiedCount = transformedProviders.filter((p: { is_verified: boolean }) => p.is_verified).length
+    const activeCount = transformedProviders.filter((p: { is_active: boolean }) => p.is_active).length
+    console.log(`[Admin API] Returning ${transformedProviders.length} providers (${verifiedCount} verified, ${activeCount} active)`)
+
     const response = NextResponse.json({
       success: true,
       providers: transformedProviders,
       total: count || 0,
       page,
       totalPages: Math.ceil((count || 0) / limit),
+      _timestamp: Date.now(), // Include timestamp in response for debugging
     })
 
-    // Prevent caching
-    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate')
+    // Aggressively prevent caching at all levels
+    response.headers.set('Cache-Control', 'private, no-store, no-cache, must-revalidate, max-age=0')
     response.headers.set('Pragma', 'no-cache')
+    response.headers.set('Expires', '0')
+    response.headers.set('Surrogate-Control', 'no-store')
+    response.headers.set('CDN-Cache-Control', 'no-store')
+    response.headers.set('Vercel-CDN-Cache-Control', 'no-store')
 
     return response
   } catch (error) {
