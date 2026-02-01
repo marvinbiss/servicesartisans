@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   Settings,
@@ -11,35 +11,95 @@ import {
   Globe,
   Save,
   AlertTriangle,
+  RefreshCw,
+  CheckCircle,
 } from 'lucide-react'
+import { ConfirmationModal } from '@/components/admin/ConfirmationModal'
+
+interface PlatformSettings {
+  siteName: string
+  contactEmail: string
+  supportEmail: string
+  maintenanceMode: boolean
+  registrationEnabled: boolean
+  emailNotifications: boolean
+  smsNotifications: boolean
+  maxQuotesPerDay: number
+  requireEmailVerification: boolean
+  commissionRate: number
+}
+
+const DEFAULT_SETTINGS: PlatformSettings = {
+  siteName: 'Services Artisans',
+  contactEmail: 'contact@servicesartisans.fr',
+  supportEmail: 'support@servicesartisans.fr',
+  maintenanceMode: false,
+  registrationEnabled: true,
+  emailNotifications: true,
+  smsNotifications: false,
+  maxQuotesPerDay: 10,
+  requireEmailVerification: true,
+  commissionRate: 10,
+}
 
 export default function AdminParametresPage() {
   const router = useRouter()
   const [saving, setSaving] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [saveSuccess, setSaveSuccess] = useState(false)
+  const [resetModal, setResetModal] = useState(false)
 
-  // Settings state
-  const [settings, setSettings] = useState({
-    siteName: 'Services Artisans',
-    contactEmail: 'contact@servicesartisans.fr',
-    supportEmail: 'support@servicesartisans.fr',
-    maintenanceMode: false,
-    registrationEnabled: true,
-    emailNotifications: true,
-    smsNotifications: false,
-  })
+  const [settings, setSettings] = useState<PlatformSettings>(DEFAULT_SETTINGS)
+  const [originalSettings, setOriginalSettings] = useState<PlatformSettings>(DEFAULT_SETTINGS)
+
+  useEffect(() => {
+    fetchSettings()
+  }, [])
+
+  const fetchSettings = async () => {
+    try {
+      setLoading(true)
+      const response = await fetch('/api/admin/settings')
+      if (response.ok) {
+        const data = await response.json()
+        const merged = { ...DEFAULT_SETTINGS, ...data.settings }
+        setSettings(merged)
+        setOriginalSettings(merged)
+      }
+    } catch (error) {
+      console.error('Failed to fetch settings:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handleSave = async () => {
     try {
       setSaving(true)
-      // Simulated save
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      alert('Paramètres enregistrés')
+      const response = await fetch('/api/admin/settings', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(settings),
+      })
+
+      if (response.ok) {
+        setOriginalSettings(settings)
+        setSaveSuccess(true)
+        setTimeout(() => setSaveSuccess(false), 3000)
+      }
     } catch (error) {
       console.error('Save failed:', error)
     } finally {
       setSaving(false)
     }
   }
+
+  const handleReset = () => {
+    setSettings(originalSettings)
+    setResetModal(false)
+  }
+
+  const hasChanges = JSON.stringify(settings) !== JSON.stringify(originalSettings)
 
   const sections = [
     {
@@ -76,6 +136,12 @@ export default function AdminParametresPage() {
           type: 'toggle',
           description: 'Permettre aux nouveaux utilisateurs de s\'inscrire',
         },
+        {
+          label: 'Vérification email obligatoire',
+          key: 'requireEmailVerification',
+          type: 'toggle',
+          description: 'Les utilisateurs doivent vérifier leur email',
+        },
       ],
     },
     {
@@ -97,6 +163,24 @@ export default function AdminParametresPage() {
       ],
     },
     {
+      title: 'Devis',
+      icon: Settings,
+      fields: [
+        {
+          label: 'Devis max par jour',
+          key: 'maxQuotesPerDay',
+          type: 'number',
+          description: 'Nombre maximum de demandes de devis par utilisateur par jour',
+        },
+        {
+          label: 'Commission (%)',
+          key: 'commissionRate',
+          type: 'number',
+          description: 'Taux de commission prélevé sur les transactions',
+        },
+      ],
+    },
+    {
       title: 'Maintenance',
       icon: AlertTriangle,
       fields: [
@@ -111,6 +195,14 @@ export default function AdminParametresPage() {
     },
   ]
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -120,14 +212,31 @@ export default function AdminParametresPage() {
             <h1 className="text-2xl font-bold text-gray-900">Paramètres</h1>
             <p className="text-gray-500 mt-1">Configuration de la plateforme</p>
           </div>
-          <button
-            onClick={handleSave}
-            disabled={saving}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
-          >
-            <Save className="w-4 h-4" />
-            {saving ? 'Enregistrement...' : 'Enregistrer'}
-          </button>
+          <div className="flex items-center gap-3">
+            {saveSuccess && (
+              <span className="flex items-center gap-1 text-green-600 text-sm">
+                <CheckCircle className="w-4 h-4" />
+                Enregistré
+              </span>
+            )}
+            {hasChanges && (
+              <button
+                onClick={() => setResetModal(true)}
+                className="flex items-center gap-2 px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200"
+              >
+                <RefreshCw className="w-4 h-4" />
+                Réinitialiser
+              </button>
+            )}
+            <button
+              onClick={handleSave}
+              disabled={saving || !hasChanges}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <Save className="w-4 h-4" />
+              {saving ? 'Enregistrement...' : 'Enregistrer'}
+            </button>
+          </div>
         </div>
 
         {/* Quick Links */}
@@ -194,24 +303,34 @@ export default function AdminParametresPage() {
                           <button
                             onClick={() => setSettings({
                               ...settings,
-                              [field.key]: !settings[field.key as keyof typeof settings],
+                              [field.key]: !settings[field.key as keyof PlatformSettings],
                             })}
                             className={`relative w-12 h-6 rounded-full transition-colors ${
-                              settings[field.key as keyof typeof settings]
+                              settings[field.key as keyof PlatformSettings]
                                 ? ('warning' in field && field.warning) ? 'bg-red-600' : 'bg-blue-600'
                                 : 'bg-gray-300'
                             }`}
                           >
                             <span
                               className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform ${
-                                settings[field.key as keyof typeof settings] ? 'translate-x-6' : ''
+                                settings[field.key as keyof PlatformSettings] ? 'translate-x-6' : ''
                               }`}
                             />
                           </button>
+                        ) : field.type === 'number' ? (
+                          <input
+                            type="number"
+                            value={settings[field.key as keyof PlatformSettings] as number}
+                            onChange={(e) => setSettings({
+                              ...settings,
+                              [field.key]: parseInt(e.target.value) || 0,
+                            })}
+                            className="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-right"
+                          />
                         ) : (
                           <input
                             type={field.type}
-                            value={settings[field.key as keyof typeof settings] as string}
+                            value={settings[field.key as keyof PlatformSettings] as string}
                             onChange={(e) => setSettings({
                               ...settings,
                               [field.key]: e.target.value,
@@ -233,7 +352,7 @@ export default function AdminParametresPage() {
           <div className="px-6 py-4 border-b border-red-200 bg-red-50">
             <h2 className="text-lg font-semibold text-red-900">Zone de danger</h2>
           </div>
-          <div className="p-6">
+          <div className="p-6 space-y-4">
             <div className="flex items-start justify-between">
               <div>
                 <p className="font-medium text-gray-900">Réinitialiser les statistiques</p>
@@ -241,15 +360,35 @@ export default function AdminParametresPage() {
                   Remettre à zéro toutes les statistiques de la plateforme. Cette action est irréversible.
                 </p>
               </div>
-              <button
-                className="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200"
-              >
+              <button className="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200">
                 Réinitialiser
+              </button>
+            </div>
+            <div className="flex items-start justify-between pt-4 border-t border-gray-100">
+              <div>
+                <p className="font-medium text-gray-900">Vider le cache</p>
+                <p className="text-sm text-gray-500 mt-1">
+                  Supprimer tous les fichiers en cache. Peut ralentir temporairement le site.
+                </p>
+              </div>
+              <button className="px-4 py-2 bg-amber-100 text-amber-700 rounded-lg hover:bg-amber-200">
+                Vider le cache
               </button>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Reset Modal */}
+      <ConfirmationModal
+        isOpen={resetModal}
+        onClose={() => setResetModal(false)}
+        onConfirm={handleReset}
+        title="Réinitialiser les modifications"
+        message="Voulez-vous annuler toutes les modifications non enregistrées ?"
+        confirmText="Réinitialiser"
+        variant="warning"
+      />
     </div>
   )
 }

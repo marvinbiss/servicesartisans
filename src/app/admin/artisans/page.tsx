@@ -7,6 +7,7 @@ import {
   Filter,
   MoreHorizontal,
   Eye,
+  Edit2,
   Ban,
   CheckCircle,
   Star,
@@ -287,6 +288,13 @@ export default function AdminProvidersPage() {
                               title="Voir le profil"
                             >
                               <Eye className="w-5 h-5" />
+                            </button>
+                            <button
+                              onClick={() => router.push(`/admin/artisans/${provider.id}/edit`)}
+                              className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg"
+                              title="Modifier"
+                            >
+                              <Edit2 className="w-5 h-5" />
                             </button>
                             {!provider.is_verified && (
                               <button
