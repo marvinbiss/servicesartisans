@@ -975,6 +975,38 @@ export default function ArtisanPage() {
                     Etre notifie des disponibilites
                   </button>
                 </div>
+              ) : availability.length === 0 || !availability.some(day => day.slots.length > 0) ? (
+                /* Pas de calendrier si aucune disponibilite configuree */
+                <div className="text-center py-6">
+                  <Calendar className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                  <p className="text-gray-600 mb-2 font-medium">Calendrier non configure</p>
+                  <p className="text-gray-500 text-sm mb-4">Cet artisan n'a pas encore configure ses disponibilites en ligne.</p>
+
+                  {/* Contact Alternative */}
+                  <div className="space-y-2">
+                    {artisan.phone ? (
+                      <a
+                        href={`tel:${artisan.phone}`}
+                        className="w-full flex items-center justify-center gap-2 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors"
+                      >
+                        <Phone className="w-5 h-5" />
+                        Appeler pour RDV
+                      </a>
+                    ) : (
+                      <Link
+                        href={`/devis?artisan=${artisanId}`}
+                        className="w-full flex items-center justify-center gap-2 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors"
+                      >
+                        <FileText className="w-5 h-5" />
+                        Demander un devis
+                      </Link>
+                    )}
+                    <button className="w-full flex items-center justify-center gap-2 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
+                      <MessageCircle className="w-4 h-4" />
+                      Envoyer un message
+                    </button>
+                  </div>
+                </div>
               ) : (
                 <>
                   {/* Calendar Navigation */}
