@@ -93,8 +93,8 @@ export async function GET(request: NextRequest) {
     })
 
     // Log pour debugging
-    const verifiedCount = transformedProviders.filter((p: { is_verified: boolean }) => p.is_verified).length
-    const activeCount = transformedProviders.filter((p: { is_active: boolean }) => p.is_active).length
+    const verifiedCount = transformedProviders.filter((p) => p.is_verified === true).length
+    const activeCount = transformedProviders.filter((p) => p.is_active === true).length
     console.log(`[Admin API] Returning ${transformedProviders.length} providers (${verifiedCount} verified, ${activeCount} active)`)
 
     const response = NextResponse.json({
