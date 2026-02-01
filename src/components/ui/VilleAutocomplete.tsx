@@ -2,12 +2,66 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { MapPin, Loader2, Navigation, X } from 'lucide-react'
-import { autocompleteVille, reverseGeocode, type AdresseSuggestion } from '@/lib/api/adresse'
+
+// Simple client-side city autocomplete
+interface CitySuggestion {
+  id: string
+  city: string
+  context: string
+  label: string
+  postcode: string
+  coordinates: [number, number]
+}
+
+async function searchCities(query: string): Promise<CitySuggestion[]> {
+  if (!query || query.length < 2) return []
+
+  try {
+    const url = `https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(query)}&type=municipality&limit=8&autocomplete=1`
+    const response = await fetch(url)
+    if (!response.ok) return []
+    const data = await response.json()
+    return data.features?.map((f: {
+      properties: { id: string; city: string; context: string; label: string; postcode: string }
+      geometry: { coordinates: [number, number] }
+    }) => ({
+      id: f.properties.id,
+      city: f.properties.city || f.properties.label,
+      context: f.properties.context,
+      label: f.properties.label,
+      postcode: f.properties.postcode,
+      coordinates: f.geometry.coordinates
+    })) || []
+  } catch {
+    return []
+  }
+}
+
+async function getLocationFromCoords(lon: number, lat: number): Promise<CitySuggestion | null> {
+  try {
+    const url = `https://api-adresse.data.gouv.fr/reverse/?lon=${lon}&lat=${lat}`
+    const response = await fetch(url)
+    if (!response.ok) return null
+    const data = await response.json()
+    const f = data.features?.[0]
+    if (!f) return null
+    return {
+      id: f.properties.id,
+      city: f.properties.city || f.properties.label,
+      context: f.properties.context,
+      label: f.properties.label,
+      postcode: f.properties.postcode,
+      coordinates: f.geometry.coordinates
+    }
+  } catch {
+    return null
+  }
+}
 
 interface VilleAutocompleteProps {
   value?: string
   placeholder?: string
-  onSelect: (ville: string, codePostal: string, coords: [number, number]) => void
+  onSelect: (ville: string, codePostal: string, coords?: [number, number]) => void
   onClear?: () => void
   showGeolocation?: boolean
   className?: string
@@ -26,7 +80,7 @@ export function VilleAutocomplete({
   disabled = false
 }: VilleAutocompleteProps) {
   const [query, setQuery] = useState(value)
-  const [suggestions, setSuggestions] = useState<AdresseSuggestion[]>([])
+  const [suggestions, setSuggestions] = useState<CitySuggestion[]>([])
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isLocating, setIsLocating] = useState(false)
@@ -50,7 +104,7 @@ export function VilleAutocomplete({
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  // Debounced search
+  // Debounced search - direct API call
   useEffect(() => {
     if (query.length < 2) {
       setSuggestions([])
@@ -60,23 +114,18 @@ export function VilleAutocomplete({
 
     const timer = setTimeout(async () => {
       setIsLoading(true)
-      try {
-        const results = await autocompleteVille(query, 8)
-        setSuggestions(results)
-        setIsOpen(results.length > 0)
-        setHighlightedIndex(-1)
-      } catch (error) {
-        console.error('Erreur autocomplete:', error)
-      } finally {
-        setIsLoading(false)
-      }
+      const results = await searchCities(query)
+      setSuggestions(results)
+      setIsOpen(results.length > 0)
+      setHighlightedIndex(-1)
+      setIsLoading(false)
     }, 200)
 
     return () => clearTimeout(timer)
   }, [query])
 
   // Handle selection
-  const handleSelect = useCallback((suggestion: AdresseSuggestion) => {
+  const handleSelect = useCallback((suggestion: CitySuggestion) => {
     setQuery(suggestion.city)
     setIsOpen(false)
     setSuggestions([])
@@ -115,7 +164,7 @@ export function VilleAutocomplete({
   // Geolocation
   const handleGeolocation = async () => {
     if (!navigator.geolocation) {
-      alert('La géolocalisation n\'est pas supportée par votre navigateur')
+      alert('La geolocalisation n\'est pas supportee par votre navigateur')
       return
     }
 
@@ -124,7 +173,7 @@ export function VilleAutocomplete({
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         try {
-          const result = await reverseGeocode(
+          const result = await getLocationFromCoords(
             position.coords.longitude,
             position.coords.latitude
           )
@@ -133,14 +182,13 @@ export function VilleAutocomplete({
             setQuery(result.city)
             onSelect(result.city, result.postcode, result.coordinates)
           }
-        } catch (error) {
-          console.error('Erreur reverse geocoding:', error)
+        } catch {
+          // Ignore errors
         } finally {
           setIsLocating(false)
         }
       },
-      (error) => {
-        console.error('Erreur géolocalisation:', error)
+      () => {
         setIsLocating(false)
         alert('Impossible d\'obtenir votre position')
       },
@@ -157,6 +205,16 @@ export function VilleAutocomplete({
     onClear?.()
   }
 
+  // Popular cities for quick selection
+  const popularCities = [
+    { name: 'Paris', postcode: '75001' },
+    { name: 'Lyon', postcode: '69001' },
+    { name: 'Marseille', postcode: '13001' },
+    { name: 'Toulouse', postcode: '31000' },
+    { name: 'Bordeaux', postcode: '33000' },
+    { name: 'Nantes', postcode: '44000' },
+  ]
+
   return (
     <div ref={containerRef} className={`relative ${className}`}>
       <div className="relative">
@@ -165,8 +223,11 @@ export function VilleAutocomplete({
           ref={inputRef}
           type="text"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onFocus={() => suggestions.length > 0 && setIsOpen(true)}
+          onChange={(e) => {
+            setQuery(e.target.value)
+            if (e.target.value.length >= 2) setIsOpen(true)
+          }}
+          onFocus={() => setIsOpen(true)}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
           disabled={disabled || isLocating}
@@ -225,7 +286,7 @@ export function VilleAutocomplete({
       </div>
 
       {/* Dropdown */}
-      {isOpen && suggestions.length > 0 && (
+      {isOpen && (
         <ul
           className="
             absolute z-50 w-full mt-1
@@ -234,38 +295,63 @@ export function VilleAutocomplete({
           "
           role="listbox"
         >
-          {suggestions.map((suggestion, index) => (
-            <li
-              key={suggestion.id}
-              onClick={() => handleSelect(suggestion)}
-              onMouseEnter={() => setHighlightedIndex(index)}
-              className={`
-                px-4 py-3 cursor-pointer
-                flex items-center gap-3
-                transition-colors
-                ${index === highlightedIndex
-                  ? 'bg-blue-50 text-blue-900'
-                  : 'hover:bg-gray-50 text-gray-900'
-                }
-                ${index === 0 ? 'rounded-t-xl' : ''}
-                ${index === suggestions.length - 1 ? 'rounded-b-xl' : ''}
-              `}
-              role="option"
-              aria-selected={index === highlightedIndex}
-            >
-              <MapPin className={`w-4 h-4 flex-shrink-0 ${
-                index === highlightedIndex ? 'text-blue-600' : 'text-gray-400'
-              }`} />
-              <div className="flex-1 min-w-0">
-                <div className="font-medium truncate">
-                  {suggestion.city}
+          {suggestions.length > 0 ? (
+            suggestions.map((suggestion, index) => (
+              <li
+                key={suggestion.id}
+                onClick={() => handleSelect(suggestion)}
+                onMouseEnter={() => setHighlightedIndex(index)}
+                className={`
+                  px-4 py-3 cursor-pointer
+                  flex items-center gap-3
+                  transition-colors
+                  ${index === highlightedIndex
+                    ? 'bg-blue-50 text-blue-900'
+                    : 'hover:bg-gray-50 text-gray-900'
+                  }
+                  ${index === 0 ? 'rounded-t-xl' : ''}
+                  ${index === suggestions.length - 1 ? 'rounded-b-xl' : ''}
+                `}
+                role="option"
+                aria-selected={index === highlightedIndex}
+              >
+                <MapPin className={`w-4 h-4 flex-shrink-0 ${
+                  index === highlightedIndex ? 'text-blue-600' : 'text-gray-400'
+                }`} />
+                <div className="flex-1 min-w-0">
+                  <div className="font-medium truncate">
+                    {suggestion.city}
+                  </div>
+                  <div className="text-sm text-gray-500 truncate">
+                    {suggestion.postcode} - {suggestion.context}
+                  </div>
                 </div>
-                <div className="text-sm text-gray-500 truncate">
-                  {suggestion.postcode} - {suggestion.context}
-                </div>
+              </li>
+            ))
+          ) : (
+            <div className="p-3">
+              <div className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
+                Villes populaires
               </div>
-            </li>
-          ))}
+              <div className="grid grid-cols-2 gap-1">
+                {popularCities.map((city) => (
+                  <button
+                    key={city.name}
+                    type="button"
+                    onClick={() => {
+                      setQuery(city.name)
+                      setIsOpen(false)
+                      onSelect(city.name, city.postcode)
+                    }}
+                    className="flex items-center gap-2 px-3 py-2 hover:bg-blue-50 rounded-lg text-left transition-colors"
+                  >
+                    <MapPin className="w-4 h-4 text-blue-600" />
+                    <span className="text-sm text-gray-700">{city.name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </ul>
       )}
     </div>
