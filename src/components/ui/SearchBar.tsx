@@ -4,7 +4,45 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Search, MapPin, ArrowRight, Clock, TrendingUp, X, Navigation, Wrench } from 'lucide-react'
 import { services as allServices } from '@/lib/data/france'
-import { autocompleteVille, reverseGeocode, type AdresseSuggestion } from '@/lib/api/adresse'
+
+// Simple client-side city autocomplete
+interface CitySuggestion {
+  city: string
+  context: string
+  label: string
+  postcode: string
+}
+
+async function searchCities(query: string): Promise<CitySuggestion[]> {
+  if (!query || query.length < 2) return []
+
+  try {
+    const url = `https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(query)}&type=municipality&limit=6&autocomplete=1`
+    const response = await fetch(url)
+    if (!response.ok) return []
+    const data = await response.json()
+    return data.features?.map((f: { properties: { city: string; context: string; label: string; postcode: string } }) => ({
+      city: f.properties.city || f.properties.label,
+      context: f.properties.context,
+      label: f.properties.label,
+      postcode: f.properties.postcode
+    })) || []
+  } catch {
+    return []
+  }
+}
+
+async function getLocationFromCoords(lon: number, lat: number): Promise<string | null> {
+  try {
+    const url = `https://api-adresse.data.gouv.fr/reverse/?lon=${lon}&lat=${lat}`
+    const response = await fetch(url)
+    if (!response.ok) return null
+    const data = await response.json()
+    return data.features?.[0]?.properties?.city || null
+  } catch {
+    return null
+  }
+}
 
 interface SearchBarProps {
   variant?: 'hero' | 'header' | 'page'
@@ -56,7 +94,7 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
   const [showLocationSuggestions, setShowLocationSuggestions] = useState(false)
   const [isLocating, setIsLocating] = useState(false)
   const [serviceSuggestions, setServiceSuggestions] = useState<typeof allServices>([])
-  const [locationSuggestions, setLocationSuggestions] = useState<AdresseSuggestion[]>([])
+  const [locationSuggestions, setLocationSuggestions] = useState<CitySuggestion[]>([])
   const [highlightedServiceIndex, setHighlightedServiceIndex] = useState(-1)
   const [highlightedLocationIndex, setHighlightedLocationIndex] = useState(-1)
   const [recentSearches, setRecentSearches] = useState<Array<{ service: string; location: string }>>([])
@@ -108,7 +146,7 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
 
     const timer = setTimeout(async () => {
       try {
-        const results = await autocompleteVille(location, 6)
+        const results = await searchCities(location)
         setLocationSuggestions(results)
         setHighlightedLocationIndex(-1)
       } catch {
@@ -128,12 +166,12 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         try {
-          const result = await reverseGeocode(
+          const city = await getLocationFromCoords(
             position.coords.longitude,
             position.coords.latitude
           )
-          if (result) {
-            setLocation(result.city)
+          if (city) {
+            setLocation(city)
             setShowLocationSuggestions(false)
           }
         } catch {
@@ -180,7 +218,7 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
   }, [])
 
   // Select a location
-  const selectLocation = useCallback((loc: AdresseSuggestion) => {
+  const selectLocation = useCallback((loc: CitySuggestion) => {
     setLocation(loc.city)
     setShowLocationSuggestions(false)
     setLocationSuggestions([])

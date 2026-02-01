@@ -11,7 +11,50 @@ import {
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useMobileMenu } from '@/contexts/MobileMenuContext'
 import { services as allServices } from '@/lib/data/france'
-import { autocompleteVille, reverseGeocode, type AdresseSuggestion } from '@/lib/api/adresse'
+
+// Simple client-side city autocomplete (no server dependencies)
+interface CitySuggestion {
+  city: string
+  context: string
+  label: string
+  postcode: string
+}
+
+async function searchCities(query: string): Promise<CitySuggestion[]> {
+  if (!query || query.length < 2) return []
+
+  try {
+    const url = `https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(query)}&type=municipality&limit=6&autocomplete=1`
+    const response = await fetch(url)
+
+    if (!response.ok) return []
+
+    const data = await response.json()
+
+    return data.features?.map((f: { properties: { city: string; context: string; label: string; postcode: string } }) => ({
+      city: f.properties.city || f.properties.label,
+      context: f.properties.context,
+      label: f.properties.label,
+      postcode: f.properties.postcode
+    })) || []
+  } catch {
+    return []
+  }
+}
+
+async function getLocationFromCoords(lon: number, lat: number): Promise<string | null> {
+  try {
+    const url = `https://api-adresse.data.gouv.fr/reverse/?lon=${lon}&lat=${lat}`
+    const response = await fetch(url)
+
+    if (!response.ok) return null
+
+    const data = await response.json()
+    return data.features?.[0]?.properties?.city || null
+  } catch {
+    return null
+  }
+}
 
 // Services populaires organisés par catégorie
 const serviceCategories = [
@@ -138,7 +181,7 @@ export default function Header() {
   const [serviceQuery, setServiceQuery] = useState('')
   const [locationQuery, setLocationQuery] = useState('')
   const [serviceSuggestions, setServiceSuggestions] = useState<typeof allServices>([])
-  const [locationSuggestions, setLocationSuggestions] = useState<AdresseSuggestion[]>([])
+  const [locationSuggestions, setLocationSuggestions] = useState<CitySuggestion[]>([])
   const [showServiceDropdown, setShowServiceDropdown] = useState(false)
   const [showLocationDropdown, setShowLocationDropdown] = useState(false)
   const [highlightedServiceIndex, setHighlightedServiceIndex] = useState(-1)
@@ -176,7 +219,7 @@ export default function Header() {
     setHighlightedServiceIndex(-1)
   }, [serviceQuery])
 
-  // Debounced location search
+  // Debounced location search - direct API call
   useEffect(() => {
     if (locationQuery.length < 2) {
       setLocationSuggestions([])
@@ -184,13 +227,9 @@ export default function Header() {
     }
 
     const timer = setTimeout(async () => {
-      try {
-        const results = await autocompleteVille(locationQuery, 6)
-        setLocationSuggestions(results)
-        setHighlightedLocationIndex(-1)
-      } catch {
-        setLocationSuggestions([])
-      }
+      const results = await searchCities(locationQuery)
+      setLocationSuggestions(results)
+      setHighlightedLocationIndex(-1)
     }, 200)
 
     return () => clearTimeout(timer)
@@ -256,7 +295,7 @@ export default function Header() {
   }, [])
 
   // Handle location selection
-  const selectLocation = useCallback((location: AdresseSuggestion) => {
+  const selectLocation = useCallback((location: CitySuggestion) => {
     setLocationQuery(location.city)
     setShowLocationDropdown(false)
     setLocationSuggestions([])
@@ -282,13 +321,12 @@ export default function Header() {
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         try {
-          const result = await reverseGeocode(
+          const city = await getLocationFromCoords(
             position.coords.longitude,
             position.coords.latitude
           )
-          if (result) {
-            setLocationQuery(result.city)
-            // Auto-submit if we have a service
+          if (city) {
+            setLocationQuery(city)
             if (serviceQuery.trim()) {
               setTimeout(() => {
                 handleSearch()
