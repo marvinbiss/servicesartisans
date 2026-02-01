@@ -92,12 +92,16 @@ export async function GET(
     const supabase = createAdminClient()
     const artisanId = params.id
 
+    console.log(`[Public API] Fetching artisan: ${artisanId}`)
+
     // Variable pour stocker l'artisan trouvé
     let artisan: ArtisanDetails | null = null
     let reviews: Review[] = []
     let source: 'provider' | 'profile' | 'demo' = 'demo'
 
     // 1. Chercher d'abord dans la table providers (données scrapées/Pappers)
+    // Note: On utilise neq('is_active', false) au lieu de eq('is_active', true)
+    // pour inclure les providers avec is_active = null (valeur par défaut)
     const { data: provider, error: providerError } = await supabase
       .from('providers')
       .select(`
@@ -112,10 +116,19 @@ export async function GET(
         )
       `)
       .eq('id', artisanId)
-      .eq('is_active', true)
+      .neq('is_active', false)
       .single()
 
+    console.log(`[Public API] Provider found: ${!!provider}, Error: ${providerError?.message || 'none'}`)
+
     if (provider && !providerError) {
+      console.log(`[Public API] Provider data:`, {
+        name: provider.name,
+        city: provider.address_city,
+        description: provider.meta_description?.substring(0, 50),
+        phone: provider.phone,
+        is_active: provider.is_active,
+      })
       source = 'provider'
 
       // Récupérer les avis pour ce provider
