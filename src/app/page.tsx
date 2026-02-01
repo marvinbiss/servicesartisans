@@ -5,6 +5,7 @@ import JsonLd from '@/components/JsonLd'
 import { getOrganizationSchema, getWebsiteSchema } from '@/lib/seo/jsonld'
 import { REVALIDATE } from '@/lib/cache'
 import { GeographicNavigation, PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
+import { SearchBar } from '@/components/ui/SearchBar'
 
 // ISR: Revalidate homepage every hour
 export const revalidate = REVALIDATE.services
@@ -111,36 +112,9 @@ export default function HomePage() {
               Trouvez, comparez et reservez les meilleurs artisans pres de chez vous en quelques clics.
             </p>
 
-            {/* Search Form - Premium with glass morphism */}
-            <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] p-4 md:p-5 max-w-3xl mx-auto border border-white/20 hover:shadow-[0_25px_70px_-15px_rgba(0,0,0,0.35)] transition-all duration-500">
-              <form action="/recherche" className="flex flex-col md:flex-row gap-3">
-                <div className="flex-1 relative group">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 transition-colors group-focus-within:text-blue-600" />
-                  <input
-                    type="text"
-                    name="q"
-                    placeholder="Quel service recherchez-vous ?"
-                    className="w-full pl-12 pr-4 py-4 bg-slate-100/80 border-2 border-transparent rounded-xl text-slate-900 placeholder-slate-500 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition-all duration-300"
-                  />
-                </div>
-                <div className="flex-1 relative group">
-                  <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 transition-colors group-focus-within:text-blue-600" />
-                  <input
-                    type="text"
-                    name="location"
-                    placeholder="Ville ou code postal"
-                    className="w-full pl-12 pr-4 py-4 bg-slate-100/80 border-2 border-transparent rounded-xl text-slate-900 placeholder-slate-500 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition-all duration-300"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 shadow-lg shadow-blue-600/30 hover:shadow-xl hover:shadow-blue-600/40 hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 group"
-                >
-                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
-                  <span className="relative">Rechercher</span>
-                  <ArrowRight className="w-5 h-5 relative group-hover:translate-x-0.5 transition-transform" />
-                </button>
-              </form>
+            {/* Search Form - With Autocomplete */}
+            <div className="max-w-3xl mx-auto">
+              <SearchBar variant="hero" />
             </div>
 
             {/* Popular searches with internal links */}

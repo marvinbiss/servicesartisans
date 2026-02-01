@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { Search, MapPin, ArrowRight, Clock, TrendingUp, X } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { Search, MapPin, ArrowRight, Clock, TrendingUp, X, Navigation, Wrench } from 'lucide-react'
+import { services as allServices } from '@/lib/data/france'
+import { autocompleteVille, reverseGeocode, type AdresseSuggestion } from '@/lib/api/adresse'
 
 interface SearchBarProps {
   variant?: 'hero' | 'header' | 'page'
@@ -11,31 +12,41 @@ interface SearchBarProps {
   onSearch?: (query: string, location: string) => void
 }
 
-// Services populaires pour suggestions
-const popularServices = [
-  { name: 'Plombier', slug: 'plombier', searches: '12k recherches/mois' },
-  { name: 'Électricien', slug: 'electricien', searches: '9k recherches/mois' },
-  { name: 'Serrurier', slug: 'serrurier', searches: '7k recherches/mois' },
-  { name: 'Chauffagiste', slug: 'chauffagiste', searches: '5k recherches/mois' },
-  { name: 'Menuisier', slug: 'menuisier', searches: '4k recherches/mois' },
-  { name: 'Peintre', slug: 'peintre-en-batiment', searches: '4k recherches/mois' },
-]
+// Normalize text for fuzzy matching
+function normalizeText(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s]/g, '')
+}
 
-// Villes populaires
-const popularCities = [
-  { name: 'Paris', slug: 'paris' },
-  { name: 'Lyon', slug: 'lyon' },
-  { name: 'Marseille', slug: 'marseille' },
-  { name: 'Toulouse', slug: 'toulouse' },
-  { name: 'Bordeaux', slug: 'bordeaux' },
-  { name: 'Nantes', slug: 'nantes' },
-]
+// Get recent searches from localStorage
+function getRecentSearches(): Array<{ service: string; location: string }> {
+  if (typeof window === 'undefined') return []
+  try {
+    const stored = localStorage.getItem('recentSearches')
+    return stored ? JSON.parse(stored).slice(0, 5) : []
+  } catch {
+    return []
+  }
+}
 
-// Recherches récentes (simulées)
-const recentSearches = [
-  { service: 'Plombier', location: 'Paris 15e' },
-  { service: 'Électricien', location: 'Lyon' },
-]
+// Save search to localStorage
+function saveRecentSearch(service: string, location: string) {
+  if (typeof window === 'undefined' || (!service && !location)) return
+  try {
+    const searches = getRecentSearches()
+    const newSearch = { service, location }
+    const filtered = searches.filter(
+      s => s.service !== service || s.location !== location
+    )
+    const updated = [newSearch, ...filtered].slice(0, 5)
+    localStorage.setItem('recentSearches', JSON.stringify(updated))
+  } catch {
+    // Ignore storage errors
+  }
+}
 
 export function SearchBar({ variant = 'hero', className = '', onSearch }: SearchBarProps) {
   const router = useRouter()
@@ -44,12 +55,22 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
   const [showServiceSuggestions, setShowServiceSuggestions] = useState(false)
   const [showLocationSuggestions, setShowLocationSuggestions] = useState(false)
   const [isLocating, setIsLocating] = useState(false)
+  const [serviceSuggestions, setServiceSuggestions] = useState<typeof allServices>([])
+  const [locationSuggestions, setLocationSuggestions] = useState<AdresseSuggestion[]>([])
+  const [highlightedServiceIndex, setHighlightedServiceIndex] = useState(-1)
+  const [highlightedLocationIndex, setHighlightedLocationIndex] = useState(-1)
+  const [recentSearches, setRecentSearches] = useState<Array<{ service: string; location: string }>>([])
 
   const serviceInputRef = useRef<HTMLInputElement>(null)
   const locationInputRef = useRef<HTMLInputElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
-  // Fermer les suggestions au clic extérieur
+  // Load recent searches on mount
+  useEffect(() => {
+    setRecentSearches(getRecentSearches())
+  }, [])
+
+  // Close suggestions on click outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
@@ -61,38 +82,76 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  // Filtrer les services
-  const filteredServices = popularServices.filter(s =>
-    s.name.toLowerCase().includes(query.toLowerCase())
-  )
+  // Filter services based on query
+  useEffect(() => {
+    if (!query.trim()) {
+      setServiceSuggestions([])
+      return
+    }
 
-  // Géolocalisation
-  const handleGeolocate = () => {
+    const normalized = normalizeText(query)
+    const filtered = allServices.filter(s =>
+      normalizeText(s.name).includes(normalized) ||
+      normalizeText(s.slug).includes(normalized)
+    ).slice(0, 6)
+
+    setServiceSuggestions(filtered)
+    setHighlightedServiceIndex(-1)
+  }, [query])
+
+  // Debounced location search via API
+  useEffect(() => {
+    if (location.length < 2) {
+      setLocationSuggestions([])
+      return
+    }
+
+    const timer = setTimeout(async () => {
+      try {
+        const results = await autocompleteVille(location, 6)
+        setLocationSuggestions(results)
+        setHighlightedLocationIndex(-1)
+      } catch {
+        setLocationSuggestions([])
+      }
+    }, 200)
+
+    return () => clearTimeout(timer)
+  }, [location])
+
+  // Geolocation
+  const handleGeolocate = useCallback(async () => {
     if (!navigator.geolocation) return
 
     setIsLocating(true)
+
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         try {
-          // Reverse geocoding (simplified - in production use a proper API)
-          const { latitude, longitude } = position.coords
-          // For demo, just set "Ma position"
-          setLocation('Ma position')
+          const result = await reverseGeocode(
+            position.coords.longitude,
+            position.coords.latitude
+          )
+          if (result) {
+            setLocation(result.city)
+            setShowLocationSuggestions(false)
+          }
         } catch {
-          setLocation('Paris') // Fallback
+          // Ignore errors
         } finally {
           setIsLocating(false)
         }
       },
       () => {
         setIsLocating(false)
-      }
+      },
+      { timeout: 10000, enableHighAccuracy: true }
     )
-  }
+  }, [])
 
-  // Soumission
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+  // Submit handler
+  const handleSubmit = useCallback((e?: React.FormEvent) => {
+    e?.preventDefault()
 
     if (onSearch) {
       onSearch(query, location)
@@ -100,209 +159,308 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
       const params = new URLSearchParams()
       if (query) params.set('q', query)
       if (location) params.set('location', location)
+
+      if (query || location) {
+        saveRecentSearch(query, location)
+        setRecentSearches(getRecentSearches())
+        router.push(`/recherche?${params.toString()}`)
+      }
+    }
+
+    setShowServiceSuggestions(false)
+    setShowLocationSuggestions(false)
+  }, [query, location, onSearch, router])
+
+  // Select a service
+  const selectService = useCallback((service: typeof allServices[0]) => {
+    setQuery(service.name)
+    setShowServiceSuggestions(false)
+    setServiceSuggestions([])
+    locationInputRef.current?.focus()
+  }, [])
+
+  // Select a location
+  const selectLocation = useCallback((loc: AdresseSuggestion) => {
+    setLocation(loc.city)
+    setShowLocationSuggestions(false)
+    setLocationSuggestions([])
+    // Auto-submit after location selection
+    setTimeout(() => {
+      const params = new URLSearchParams()
+      if (query) params.set('q', query)
+      params.set('location', loc.city)
+      saveRecentSearch(query, loc.city)
+      setRecentSearches(getRecentSearches())
       router.push(`/recherche?${params.toString()}`)
+    }, 100)
+  }, [query, router])
+
+  // Apply recent search
+  const applyRecentSearch = useCallback((search: { service: string; location: string }) => {
+    setQuery(search.service)
+    setLocation(search.location)
+    const params = new URLSearchParams()
+    if (search.service) params.set('q', search.service)
+    if (search.location) params.set('location', search.location)
+    router.push(`/recherche?${params.toString()}`)
+    setShowServiceSuggestions(false)
+    setShowLocationSuggestions(false)
+  }, [router])
+
+  // Keyboard navigation for service input
+  const handleServiceKeyDown = (e: React.KeyboardEvent) => {
+    const suggestions = serviceSuggestions.length > 0 ? serviceSuggestions : []
+
+    switch (e.key) {
+      case 'ArrowDown':
+        e.preventDefault()
+        setHighlightedServiceIndex(prev =>
+          prev < suggestions.length - 1 ? prev + 1 : 0
+        )
+        break
+      case 'ArrowUp':
+        e.preventDefault()
+        setHighlightedServiceIndex(prev =>
+          prev > 0 ? prev - 1 : suggestions.length - 1
+        )
+        break
+      case 'Enter':
+        e.preventDefault()
+        if (highlightedServiceIndex >= 0 && suggestions[highlightedServiceIndex]) {
+          selectService(suggestions[highlightedServiceIndex])
+        } else if (!showServiceSuggestions || suggestions.length === 0) {
+          handleSubmit()
+        }
+        break
+      case 'Escape':
+        setShowServiceSuggestions(false)
+        break
+      case 'Tab':
+        setShowServiceSuggestions(false)
+        break
     }
   }
 
-  // Sélection d'un service
-  const selectService = (service: typeof popularServices[0]) => {
-    setQuery(service.name)
-    setShowServiceSuggestions(false)
-    locationInputRef.current?.focus()
-  }
-
-  // Sélection d'une ville
-  const selectCity = (city: typeof popularCities[0]) => {
-    setLocation(city.name)
-    setShowLocationSuggestions(false)
+  // Keyboard navigation for location input
+  const handleLocationKeyDown = (e: React.KeyboardEvent) => {
+    switch (e.key) {
+      case 'ArrowDown':
+        e.preventDefault()
+        setHighlightedLocationIndex(prev =>
+          prev < locationSuggestions.length - 1 ? prev + 1 : 0
+        )
+        break
+      case 'ArrowUp':
+        e.preventDefault()
+        setHighlightedLocationIndex(prev =>
+          prev > 0 ? prev - 1 : locationSuggestions.length - 1
+        )
+        break
+      case 'Enter':
+        e.preventDefault()
+        if (highlightedLocationIndex >= 0 && locationSuggestions[highlightedLocationIndex]) {
+          selectLocation(locationSuggestions[highlightedLocationIndex])
+        } else {
+          handleSubmit()
+        }
+        break
+      case 'Escape':
+        setShowLocationSuggestions(false)
+        break
+    }
   }
 
   const isHero = variant === 'hero'
-  const isHeader = variant === 'header'
+
+  // Popular services for initial display
+  const popularServices = allServices.slice(0, 6)
 
   return (
     <div ref={containerRef} className={`relative ${className}`}>
       <form onSubmit={handleSubmit}>
         <div className={`
-          ${isHero ? 'bg-white rounded-2xl shadow-2xl p-3 md:p-4' : ''}
-          ${isHeader ? 'bg-slate-100 rounded-xl p-1' : ''}
-          ${variant === 'page' ? 'bg-white rounded-xl shadow-lg p-4 border border-slate-200' : ''}
+          ${isHero ? 'bg-white/95 backdrop-blur-xl rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] p-4 md:p-5 border border-white/20' : ''}
+          ${variant === 'page' ? 'bg-white rounded-2xl shadow-xl p-4 border border-gray-100' : ''}
         `}>
-          <div className={`flex ${isHeader ? 'flex-row' : 'flex-col md:flex-row'} gap-3`}>
-            {/* Champ service */}
+          <div className="flex flex-col md:flex-row gap-3">
+            {/* Service field */}
             <div className="flex-1 relative">
-              <Search className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 ${isHero ? 'text-slate-400' : 'text-slate-500'}`} />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 ref={serviceInputRef}
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 onFocus={() => setShowServiceSuggestions(true)}
+                onKeyDown={handleServiceKeyDown}
                 placeholder="Quel service recherchez-vous ?"
-                className={`
-                  w-full pl-12 pr-4 py-4 border-0 rounded-xl
-                  ${isHero ? 'bg-slate-50 text-slate-900 placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:bg-white' : ''}
-                  ${isHeader ? 'bg-white text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-blue-500 py-3' : ''}
-                  transition-all
-                `}
+                className="w-full pl-12 pr-10 py-4 bg-gray-100/80 border-2 border-transparent rounded-xl text-gray-900 placeholder-gray-500 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition-all"
+                autoComplete="off"
               />
               {query && (
                 <button
                   type="button"
-                  onClick={() => setQuery('')}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  onClick={() => {
+                    setQuery('')
+                    serviceInputRef.current?.focus()
+                  }}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1"
                 >
                   <X className="w-4 h-4" />
                 </button>
               )}
 
-              {/* Suggestions services */}
-              <AnimatePresence>
-                {showServiceSuggestions && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-slate-200 z-50 overflow-hidden"
-                  >
-                    {/* Recherches récentes */}
-                    {recentSearches.length > 0 && !query && (
-                      <div className="p-3 border-b border-slate-100">
-                        <div className="flex items-center gap-2 text-xs text-slate-500 mb-2">
-                          <Clock className="w-3 h-3" />
-                          Recherches récentes
-                        </div>
-                        {recentSearches.map((search, i) => (
-                          <button
-                            key={i}
-                            type="button"
-                            onClick={() => {
-                              setQuery(search.service)
-                              setLocation(search.location)
-                              setShowServiceSuggestions(false)
-                            }}
-                            className="w-full text-left px-3 py-2 hover:bg-slate-50 rounded-lg text-sm text-slate-700"
-                          >
-                            {search.service} à {search.location}
-                          </button>
-                        ))}
+              {/* Service suggestions dropdown */}
+              {showServiceSuggestions && (
+                <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50">
+                  {/* Recent searches */}
+                  {recentSearches.length > 0 && !query && (
+                    <div className="p-3 border-b border-gray-100">
+                      <div className="flex items-center gap-2 text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
+                        <Clock className="w-3 h-3" />
+                        Recherches récentes
                       </div>
-                    )}
-
-                    {/* Services populaires/filtrés */}
-                    <div className="p-3">
-                      <div className="flex items-center gap-2 text-xs text-slate-500 mb-2">
-                        <TrendingUp className="w-3 h-3" />
-                        {query ? 'Résultats' : 'Services populaires'}
-                      </div>
-                      {(query ? filteredServices : popularServices).map((service) => (
+                      {recentSearches.slice(0, 3).map((search, idx) => (
                         <button
-                          key={service.slug}
+                          key={idx}
                           type="button"
-                          onClick={() => selectService(service)}
-                          className="w-full text-left px-3 py-2.5 hover:bg-blue-50 rounded-lg flex items-center justify-between group"
+                          onClick={() => applyRecentSearch(search)}
+                          className="w-full flex items-center gap-3 px-3 py-2 hover:bg-blue-50 rounded-xl text-left transition-colors"
                         >
-                          <span className="font-medium text-slate-900 group-hover:text-blue-600">
-                            {service.name}
-                          </span>
-                          <span className="text-xs text-slate-400">
-                            {service.searches}
+                          <Clock className="w-4 h-4 text-gray-300" />
+                          <span className="text-sm text-gray-700 truncate">
+                            {search.service || 'Tous'}{search.location && ` · ${search.location}`}
                           </span>
                         </button>
                       ))}
                     </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                  )}
+
+                  {/* Service suggestions */}
+                  {serviceSuggestions.length > 0 ? (
+                    <div className="p-2 max-h-64 overflow-y-auto">
+                      {serviceSuggestions.map((service, idx) => (
+                        <button
+                          key={service.slug}
+                          type="button"
+                          onClick={() => selectService(service)}
+                          className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl text-left transition-all ${
+                            idx === highlightedServiceIndex
+                              ? 'bg-blue-50 shadow-sm'
+                              : 'hover:bg-gray-50'
+                          }`}
+                        >
+                          <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                            idx === highlightedServiceIndex ? 'bg-blue-100' : 'bg-gray-100'
+                          }`}>
+                            <Wrench className={`w-5 h-5 ${idx === highlightedServiceIndex ? 'text-blue-600' : 'text-gray-500'}`} />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className={`font-medium truncate ${idx === highlightedServiceIndex ? 'text-blue-700' : 'text-gray-900'}`}>
+                              {service.name}
+                            </div>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  ) : !query && (
+                    <div className="p-3">
+                      <div className="flex items-center gap-2 text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
+                        <TrendingUp className="w-3 h-3" />
+                        Services populaires
+                      </div>
+                      <div className="grid grid-cols-2 gap-1">
+                        {popularServices.map((service) => (
+                          <button
+                            key={service.slug}
+                            type="button"
+                            onClick={() => selectService(service)}
+                            className="flex items-center gap-2 px-3 py-2.5 hover:bg-blue-50 rounded-xl text-left transition-colors"
+                          >
+                            <div className="w-8 h-8 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg flex items-center justify-center">
+                              <Wrench className="w-4 h-4 text-blue-600" />
+                            </div>
+                            <span className="text-sm font-medium text-gray-700">{service.name}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
-            {/* Champ localisation */}
+            {/* Location field */}
             <div className="flex-1 relative">
-              <MapPin className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 ${isHero ? 'text-slate-400' : 'text-slate-500'}`} />
+              <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 ref={locationInputRef}
                 type="text"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
                 onFocus={() => setShowLocationSuggestions(true)}
+                onKeyDown={handleLocationKeyDown}
                 placeholder="Ville ou code postal"
-                className={`
-                  w-full pl-12 pr-12 py-4 border-0 rounded-xl
-                  ${isHero ? 'bg-slate-50 text-slate-900 placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:bg-white' : ''}
-                  ${isHeader ? 'bg-white text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-blue-500 py-3' : ''}
-                  transition-all
-                `}
+                className="w-full pl-12 pr-12 py-4 bg-gray-100/80 border-2 border-transparent rounded-xl text-gray-900 placeholder-gray-500 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition-all"
+                autoComplete="off"
               />
 
-              {/* Bouton géolocalisation */}
+              {/* Geolocation button */}
               <button
                 type="button"
                 onClick={handleGeolocate}
                 disabled={isLocating}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 hover:text-blue-600 disabled:text-slate-300"
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors disabled:opacity-50"
                 title="Utiliser ma position"
               >
                 {isLocating ? (
-                  <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+                  <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
                 ) : (
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
+                  <Navigation className="w-5 h-5" />
                 )}
               </button>
 
-              {/* Suggestions villes */}
-              <AnimatePresence>
-                {showLocationSuggestions && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-slate-200 z-50 overflow-hidden"
-                  >
-                    <div className="p-3">
-                      <div className="flex items-center gap-2 text-xs text-slate-500 mb-2">
-                        <MapPin className="w-3 h-3" />
-                        Villes populaires
-                      </div>
-                      <div className="grid grid-cols-2 gap-1">
-                        {popularCities.map((city) => (
-                          <button
-                            key={city.slug}
-                            type="button"
-                            onClick={() => selectCity(city)}
-                            className="text-left px-3 py-2 hover:bg-blue-50 rounded-lg text-sm font-medium text-slate-900 hover:text-blue-600"
-                          >
-                            {city.name}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              {/* Location suggestions dropdown */}
+              {showLocationSuggestions && locationSuggestions.length > 0 && (
+                <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50">
+                  <div className="p-2 max-h-64 overflow-y-auto">
+                    {locationSuggestions.map((loc, idx) => (
+                      <button
+                        key={loc.label}
+                        type="button"
+                        onClick={() => selectLocation(loc)}
+                        className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl text-left transition-all ${
+                          idx === highlightedLocationIndex
+                            ? 'bg-blue-50 shadow-sm'
+                            : 'hover:bg-gray-50'
+                        }`}
+                      >
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                          idx === highlightedLocationIndex ? 'bg-blue-100' : 'bg-gray-100'
+                        }`}>
+                          <MapPin className={`w-5 h-5 ${idx === highlightedLocationIndex ? 'text-blue-600' : 'text-gray-500'}`} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className={`font-medium truncate ${idx === highlightedLocationIndex ? 'text-blue-700' : 'text-gray-900'}`}>
+                            {loc.city}
+                          </div>
+                          <div className="text-xs text-gray-400 truncate">{loc.context}</div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
-            {/* Bouton rechercher */}
+            {/* Submit button */}
             <button
               type="submit"
-              className={`
-                bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800
-                text-white px-8 py-4 rounded-xl font-semibold transition-all
-                shadow-lg shadow-blue-600/30 hover:shadow-xl hover:shadow-blue-600/40
-                flex items-center justify-center gap-2
-                ${isHeader ? 'px-6 py-3' : ''}
-              `}
+              className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 rounded-xl font-semibold transition-all shadow-lg shadow-blue-600/30 hover:shadow-xl hover:shadow-blue-600/40 hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 group"
             >
-              {isHeader ? (
-                <Search className="w-5 h-5" />
-              ) : (
-                <>
-                  Rechercher
-                  <ArrowRight className="w-5 h-5" />
-                </>
-              )}
+              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
+              <span className="relative">Rechercher</span>
+              <ArrowRight className="w-5 h-5 relative group-hover:translate-x-0.5 transition-transform" />
             </button>
           </div>
         </div>
