@@ -17,6 +17,7 @@ import {
   Shield,
   Lock,
   Settings,
+  Database,
 } from 'lucide-react'
 
 const nav = [
@@ -32,6 +33,7 @@ const nav = [
   { name: 'Signalements', href: '/admin/signalements', icon: Flag },
   { name: 'Audit', href: '/admin/audit', icon: Shield },
   { name: 'RGPD', href: '/admin/rgpd', icon: Lock },
+  { name: 'Import SIRENE', href: '/admin/import', icon: Database },
   { name: 'Paramètres', href: '/admin/parametres', icon: Settings },
 ]
 
