@@ -125,6 +125,10 @@ export default function Header() {
     setOpenMenu(current => current === menu ? null : menu)
   }
 
+  const openMenuOnHover = (menu: 'services' | 'villes') => {
+    setOpenMenu(menu)
+  }
+
   const closeMenus = () => {
     setOpenMenu(null)
   }
@@ -201,7 +205,11 @@ export default function Header() {
           {/* Navigation Desktop */}
           <nav className="hidden lg:flex items-center space-x-1">
             {/* Services Dropdown */}
-            <div className="relative">
+            <div
+              className="relative"
+              onMouseEnter={() => openMenuOnHover('services')}
+              onMouseLeave={closeMenus}
+            >
               <button
                 type="button"
                 data-menu-trigger="services"
@@ -305,7 +313,11 @@ export default function Header() {
             </div>
 
             {/* Villes Dropdown */}
-            <div className="relative">
+            <div
+              className="relative"
+              onMouseEnter={() => openMenuOnHover('villes')}
+              onMouseLeave={closeMenus}
+            >
               <button
                 type="button"
                 data-menu-trigger="villes"

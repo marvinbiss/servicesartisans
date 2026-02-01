@@ -5,6 +5,12 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
+// Helper to check if a string is a valid UUID
+function isValidUUID(str: string): boolean {
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+  return uuidRegex.test(str)
+}
+
 // Types pour les requêtes
 export async function getServices() {
   const { data, error } = await supabase
@@ -99,6 +105,11 @@ export async function getProvidersByServiceAndLocation(
 
   if (!service || !location) return []
 
+  // If the service ID is not a valid UUID (static fallback), return empty array
+  if (!isValidUUID(service.id)) {
+    return []
+  }
+
   const { data, error } = await supabase
     .from('providers')
     .select(`
@@ -111,7 +122,7 @@ export async function getProvidersByServiceAndLocation(
     .eq('is_active', true)
     .order('is_premium', { ascending: false })
     .order('name')
-  
+
   if (error) throw error
   return data
 }
@@ -119,6 +130,11 @@ export async function getProvidersByServiceAndLocation(
 export async function getProvidersByService(serviceSlug: string, limit = 100) {
   const service = await getServiceBySlug(serviceSlug)
   if (!service) return []
+
+  // If the service ID is not a valid UUID (static fallback), return empty array
+  if (!isValidUUID(service.id)) {
+    return []
+  }
 
   const { data, error } = await supabase
     .from('providers')
@@ -133,7 +149,7 @@ export async function getProvidersByService(serviceSlug: string, limit = 100) {
     .eq('is_active', true)
     .order('is_premium', { ascending: false })
     .limit(limit)
-  
+
   if (error) throw error
   return data
 }
@@ -141,6 +157,11 @@ export async function getProvidersByService(serviceSlug: string, limit = 100) {
 export async function getLocationsByService(serviceSlug: string) {
   const service = await getServiceBySlug(serviceSlug)
   if (!service) return []
+
+  // If the service ID is not a valid UUID (static fallback), return empty array
+  if (!isValidUUID(service.id)) {
+    return []
+  }
 
   const { data, error } = await supabase
     .from('locations')
@@ -156,7 +177,7 @@ export async function getLocationsByService(serviceSlug: string) {
     .eq('is_active', true)
     .order('population', { ascending: false })
     .limit(100)
-  
+
   if (error) throw error
   return data
 }
