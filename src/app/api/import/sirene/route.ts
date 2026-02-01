@@ -4,6 +4,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import { logger } from '@/lib/logger'
 import { createClient } from '@/lib/supabase/server'
 import { searchEtablissements, transformToProvider } from '@/lib/sirene/client'
 import { NAF_CODES_PRIORITAIRES, NAF_TO_SERVICE } from '@/lib/sirene/config'
@@ -80,7 +81,7 @@ export async function POST(request: NextRequest) {
 
     // Traiter chaque departement
     for (const dept of departments) {
-      console.log(`Import departement ${dept}...`)
+      logger.info('Import departement', { dept })
       result.departments_processed.push(dept)
 
       let page = 0
@@ -106,7 +107,7 @@ export async function POST(request: NextRequest) {
               const provider = transformToProvider(etab)
 
               if (dryRun) {
-                console.log('DRY RUN:', provider.name, provider.address_city)
+                logger.debug('DRY RUN', { name: provider.name, city: provider.address_city })
                 result.total_inserted++
                 totalForDept++
                 continue
@@ -223,7 +224,7 @@ export async function POST(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('Import SIRENE error:', error)
+    logger.error('Import SIRENE error', error)
     return NextResponse.json(
       {
         success: false,

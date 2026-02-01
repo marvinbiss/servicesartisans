@@ -7,6 +7,7 @@
 import { sendBookingConfirmation, sendBookingReminder, sendCancellationEmail, sendPaymentFailedEmail, logNotification } from './email'
 import { sendBookingConfirmationSMS, sendReminder24hSMS, sendReminder1hSMS, sendCancellationSMS, sendRescheduleSMS, type SMSData } from './sms'
 import { createClient } from '@supabase/supabase-js'
+import { logger } from '@/lib/logger'
 
 // Notification types
 export type NotificationType =
@@ -101,10 +102,7 @@ async function withRetry<T>(
       return { success: true, result, attempts: attempt + 1 }
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error))
-      console.warn(
-        `[Notification] ${operationName} attempt ${attempt + 1} failed:`,
-        lastError.message
-      )
+      logger.warn(`[Notification] ${operationName} attempt ${attempt + 1} failed`, { message: lastError.message })
 
       if (attempt < RETRY_CONFIG.maxRetries - 1) {
         const delay = calculateRetryDelay(attempt)
@@ -315,7 +313,7 @@ export class UnifiedNotificationService {
         error_message: error,
       })
     } catch (err) {
-      console.error('[Notification] Failed to log notification:', err)
+      logger.error('[Notification] Failed to log notification', err as Error)
     }
   }
 
@@ -392,12 +390,19 @@ export class UnifiedNotificationService {
       .order('sent_at', { ascending: false })
 
     if (error) {
-      console.error('[Notification] Failed to get history:', error)
+      logger.error('[Notification] Failed to get history', error)
       return []
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return (data || []).map((log: any) => ({
+    interface NotificationLog {
+      type: string
+      status: string
+      recipient_email: string
+      sent_at: string
+      error_message?: string
+    }
+
+    return (data || []).map((log: NotificationLog) => ({
       type: log.type,
       status: log.status,
       recipient: log.recipient_email,

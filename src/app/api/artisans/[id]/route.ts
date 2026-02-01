@@ -4,6 +4,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import { logger } from '@/lib/logger'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 export const dynamic = 'force-dynamic'
@@ -355,7 +356,7 @@ export async function GET(
     })
 
   } catch (error) {
-    console.error('Error fetching artisan:', error)
+    logger.error('Error fetching artisan', error)
     return NextResponse.json(
       {
         success: false,

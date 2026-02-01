@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { logger } from '@/lib/logger'
 import { geocoder, reverseGeocode, autocompleteVille, autocompleteAdresse } from '@/lib/api/adresse'
 
 /**
@@ -76,7 +77,7 @@ export async function GET(request: NextRequest) {
         )
     }
   } catch (error) {
-    console.error('Geocode API error:', error)
+    logger.error('Geocode API error', error)
     return NextResponse.json(
       { success: false, error: 'Internal server error' },
       { status: 500 }

@@ -1,18 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { DEFAULT_PERMISSIONS, type AdminRole } from '@/types/admin'
+import { verifyAdmin, logAdminAction } from '@/lib/admin-auth'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET(request: NextRequest) {
   try {
-    const supabase = await createClient()
-
-    // Verify admin access
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) {
-      return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
+    // Verify admin authentication
+    const authResult = await verifyAdmin()
+    if (!authResult.success || !authResult.admin) {
+      return authResult.error
     }
+
+    // Only super_admin can view admin list
+    if (authResult.admin.role !== 'super_admin') {
+      return NextResponse.json(
+        { success: false, error: { code: 'FORBIDDEN', message: 'Réservé aux super admins' } },
+        { status: 403 }
+      )
+    }
+
+    const supabase = await createClient()
 
     const { searchParams } = new URL(request.url)
     const page = parseInt(searchParams.get('page') || '1')
@@ -27,8 +37,8 @@ export async function GET(request: NextRequest) {
       .order('created_at', { ascending: false })
 
     if (error) {
-      console.error('Error fetching admins:', error)
-      return NextResponse.json({ error: error.message }, { status: 500 })
+      logger.error('Error fetching admins', error)
+      return NextResponse.json({ error: 'Erreur lors de la récupération des administrateurs' }, { status: 500 })
     }
 
     return NextResponse.json({
@@ -38,31 +48,28 @@ export async function GET(request: NextRequest) {
       page,
     })
   } catch (error) {
-    console.error('Admin fetch error:', error)
+    logger.error('Admin fetch error', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
+    // Verify admin authentication
+    const authResult = await verifyAdmin()
+    if (!authResult.success || !authResult.admin) {
+      return authResult.error
+    }
+
+    // Only super_admin can add admins
+    if (authResult.admin.role !== 'super_admin') {
+      return NextResponse.json(
+        { success: false, error: { code: 'FORBIDDEN', message: 'Seuls les super admins peuvent ajouter des administrateurs' } },
+        { status: 403 }
+      )
+    }
+
     const supabase = await createClient()
-
-    // Verify super admin access
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) {
-      return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
-    }
-
-    // Check if current user is super_admin
-    const { data: currentAdmin } = await supabase
-      .from('admin_users')
-      .select('role')
-      .eq('user_id', user.id)
-      .single()
-
-    if (!currentAdmin || currentAdmin.role !== 'super_admin') {
-      return NextResponse.json({ error: 'Seuls les super admins peuvent ajouter des administrateurs' }, { status: 403 })
-    }
 
     const { email, role } = await request.json()
 
@@ -90,22 +97,16 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (error) {
-      console.error('Error creating admin:', error)
-      return NextResponse.json({ error: error.message }, { status: 500 })
+      logger.error('Error creating admin', error)
+      return NextResponse.json({ error: 'Erreur lors de la création de l\'administrateur' }, { status: 500 })
     }
 
     // Log audit
-    await supabase.from('audit_logs').insert({
-      admin_id: user.id,
-      action: 'admin_created',
-      entity_type: 'settings',
-      entity_id: newAdmin.id,
-      new_data: { email, role },
-    })
+    await logAdminAction(authResult.admin.id, 'admin_created', 'settings', newAdmin.id, { email, role })
 
     return NextResponse.json({ admin: newAdmin })
   } catch (error) {
-    console.error('Admin create error:', error)
+    logger.error('Admin create error', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

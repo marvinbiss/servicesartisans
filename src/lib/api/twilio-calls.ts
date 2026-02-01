@@ -7,6 +7,7 @@
  */
 
 import twilio from 'twilio'
+import { logger } from '@/lib/logger'
 
 // Lazy-loaded Twilio client to avoid build errors when env vars are not set
 let twilioClient: ReturnType<typeof twilio> | null = null
@@ -18,7 +19,7 @@ function getTwilioClient() {
   const authToken = process.env.TWILIO_AUTH_TOKEN
 
   if (!accountSid || !authToken) {
-    console.warn('Twilio credentials not configured')
+    logger.warn('Twilio credentials not configured')
     return null
   }
 
@@ -98,7 +99,7 @@ export async function rechercherNumerosDisponibles(options?: {
       }
     }))
   } catch (error) {
-    console.error('Erreur recherche numéros:', error)
+    logger.error('Erreur recherche numéros', error as Error)
     return []
   }
 }
@@ -134,7 +135,7 @@ export async function acheterNumero(
       createdAt: new Date()
     }
   } catch (error) {
-    console.error('Erreur achat numéro:', error)
+    logger.error('Erreur achat numéro', error as Error)
     return null
   }
 }
@@ -160,7 +161,7 @@ export async function listerNumeros(): Promise<NumeroVirtuel[]> {
       }
     })
   } catch (error) {
-    console.error('Erreur listing numéros:', error)
+    logger.error('Erreur listing numéros', error as Error)
     return []
   }
 }
@@ -176,7 +177,7 @@ export async function supprimerNumero(phoneNumberSid: string): Promise<boolean> 
     await client.incomingPhoneNumbers(phoneNumberSid).remove()
     return true
   } catch (error) {
-    console.error('Erreur suppression numéro:', error)
+    logger.error('Erreur suppression numéro', error as Error)
     return false
   }
 }
@@ -204,18 +205,15 @@ export function genererTwiMLRouting(options: {
   )
 
   // Configuration du dial
-  const dialOptions: any = {
+  const dial = twiml.dial({
     callerId: options.callerIdNumber,
     timeout: options.timeout || 30,
-    action: `${process.env.NEXT_PUBLIC_URL}/api/twilio/dial-status`
-  }
+    action: `${process.env.NEXT_PUBLIC_URL}/api/twilio/dial-status`,
+    record: options.record ? 'record-from-answer-dual' : undefined,
+    recordingStatusCallback: options.record ? `${process.env.NEXT_PUBLIC_URL}/api/twilio/recording` : undefined,
+  })
 
-  if (options.record) {
-    dialOptions.record = 'record-from-answer-dual'
-    dialOptions.recordingStatusCallback = `${process.env.NEXT_PUBLIC_URL}/api/twilio/recording`
-  }
-
-  twiml.dial(dialOptions, options.forwardTo)
+  dial.number(options.forwardTo)
 
   // Si pas de réponse
   twiml.say(
@@ -295,7 +293,7 @@ export async function getHistoriqueAppels(options?: {
       }
     })
   } catch (error) {
-    console.error('Erreur historique appels:', error)
+    logger.error('Erreur historique appels', error as Error)
     return []
   }
 }

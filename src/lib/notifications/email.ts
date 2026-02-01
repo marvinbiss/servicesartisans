@@ -1,4 +1,6 @@
 import { Resend } from 'resend'
+import type { SupabaseClientType } from '@/types'
+import { logger } from '@/lib/logger'
 
 // Initialize Resend client (or use SendGrid if preferred)
 const resend = new Resend(process.env.RESEND_API_KEY)
@@ -480,13 +482,13 @@ export async function sendEmail({
     })
 
     if (error) {
-      console.error('Email send error:', error)
+      logger.error('Email send error', error)
       return { success: false, error: error.message }
     }
 
     return { success: true, messageId: data?.id }
   } catch (err) {
-    console.error('Email error:', err)
+    logger.error('Email error', err as Error)
     return { success: false, error: err instanceof Error ? err.message : 'Unknown error' }
   }
 }
@@ -563,7 +565,7 @@ export async function sendCancellationEmail(data: {
 
 // Log notification to database
 export async function logNotification(
-  supabase: any,
+  supabase: SupabaseClientType,
   {
     bookingId,
     type,
@@ -588,6 +590,6 @@ export async function logNotification(
   })
 
   if (error) {
-    console.error('Failed to log notification:', error)
+    logger.error('Failed to log notification', error)
   }
 }

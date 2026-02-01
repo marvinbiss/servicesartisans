@@ -4,6 +4,7 @@
  */
 
 import { Redis } from 'ioredis'
+import { logger } from '@/lib/logger'
 
 // Singleton Redis client
 let redisClient: Redis | null = null
@@ -14,7 +15,7 @@ export function getRedisClient(): Redis | null {
   const redisUrl = process.env.REDIS_URL
 
   if (!redisUrl) {
-    console.warn('Redis URL not configured - caching disabled')
+    logger.warn('Redis URL not configured - caching disabled')
     return null
   }
 
@@ -30,16 +31,16 @@ export function getRedisClient(): Redis | null {
     })
 
     redisClient.on('error', (err) => {
-      console.error('Redis connection error:', err)
+      logger.error('Redis connection error', err)
     })
 
     redisClient.on('connect', () => {
-      console.log('Redis connected')
+      logger.info('Redis connected')
     })
 
     return redisClient
   } catch (error) {
-    console.error('Failed to create Redis client:', error)
+    logger.error('Failed to create Redis client', error as Error)
     return null
   }
 }
@@ -70,7 +71,7 @@ export class CacheService {
       const value = await this.redis.get(this.getKey(key))
       return value ? JSON.parse(value) : null
     } catch (error) {
-      console.error('Cache get error:', error)
+      logger.error('Cache get error', error as Error)
       return null
     }
   }
@@ -89,7 +90,7 @@ export class CacheService {
       )
       return true
     } catch (error) {
-      console.error('Cache set error:', error)
+      logger.error('Cache set error', error as Error)
       return false
     }
   }
@@ -104,7 +105,7 @@ export class CacheService {
       await this.redis.del(this.getKey(key))
       return true
     } catch (error) {
-      console.error('Cache delete error:', error)
+      logger.error('Cache delete error', error as Error)
       return false
     }
   }
@@ -120,7 +121,7 @@ export class CacheService {
       if (keys.length === 0) return 0
       return await this.redis.del(...keys)
     } catch (error) {
-      console.error('Cache delete pattern error:', error)
+      logger.error('Cache delete pattern error', error as Error)
       return 0
     }
   }
@@ -155,7 +156,7 @@ export class CacheService {
       }
       return value
     } catch (error) {
-      console.error('Cache increment error:', error)
+      logger.error('Cache increment error', error as Error)
       return 0
     }
   }
@@ -169,7 +170,7 @@ export class CacheService {
     try {
       return (await this.redis.exists(this.getKey(key))) === 1
     } catch (error) {
-      console.error('Cache exists error:', error)
+      logger.error('Cache exists error', error as Error)
       return false
     }
   }
@@ -183,7 +184,7 @@ export class CacheService {
     try {
       return await this.redis.ttl(this.getKey(key))
     } catch (error) {
-      console.error('Cache TTL error:', error)
+      logger.error('Cache TTL error', error as Error)
       return -1
     }
   }
@@ -248,7 +249,7 @@ export class RateLimiter {
         resetAt: now + windowSeconds * 1000,
       }
     } catch (error) {
-      console.error('Rate limiter error:', error)
+      logger.error('Rate limiter error', error as Error)
       return { allowed: true, remaining: limit, resetAt: Date.now() + windowSeconds * 1000 }
     }
   }

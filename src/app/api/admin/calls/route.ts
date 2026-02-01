@@ -7,6 +7,8 @@ import {
   getHistoriqueAppels,
   calculerStatsAppels
 } from '@/lib/api/twilio-calls'
+import { verifyAdmin, logAdminAction } from '@/lib/admin-auth'
+import { logger } from '@/lib/logger'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -23,10 +25,10 @@ export async function GET(request: NextRequest) {
   const action = searchParams.get('action')
 
   try {
-    // Vérifier l'authentification admin
-    const authHeader = request.headers.get('authorization')
-    if (!authHeader) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    // Verify admin authentication
+    const authResult = await verifyAdmin()
+    if (!authResult.success || !authResult.admin) {
+      return authResult.error
     }
 
     switch (action) {
@@ -144,7 +146,7 @@ export async function GET(request: NextRequest) {
         )
     }
   } catch (error) {
-    console.error('API calls error:', error)
+    logger.error('API calls error', error)
     return NextResponse.json(
       { success: false, error: 'Internal error' },
       { status: 500 }
@@ -155,6 +157,12 @@ export async function GET(request: NextRequest) {
 // POST - Acheter un numéro ou assigner à un artisan
 export async function POST(request: NextRequest) {
   try {
+    // Verify admin authentication
+    const authResult = await verifyAdmin()
+    if (!authResult.success || !authResult.admin) {
+      return authResult.error
+    }
+
     const body = await request.json()
     const { action } = body
 
@@ -217,7 +225,7 @@ export async function POST(request: NextRequest) {
         )
     }
   } catch (error) {
-    console.error('API calls POST error:', error)
+    logger.error('API calls POST error', error)
     return NextResponse.json(
       { success: false, error: 'Internal error' },
       { status: 500 }

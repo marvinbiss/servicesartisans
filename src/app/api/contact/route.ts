@@ -4,6 +4,7 @@
  */
 
 import { NextResponse } from 'next/server'
+import { logger } from '@/lib/logger'
 import { Resend } from 'resend'
 import { z } from 'zod'
 
@@ -64,7 +65,7 @@ export async function POST(request: Request) {
     })
 
     if (sendError) {
-      console.error('Error sending email:', sendError)
+      logger.error('Error sending email', sendError)
       return NextResponse.json(
         { error: 'Erreur lors de l\'envoi du message' },
         { status: 500 }
@@ -96,7 +97,7 @@ export async function POST(request: Request) {
       message: 'Message envoyé avec succès',
     })
   } catch (error) {
-    console.error('Contact API error:', error)
+    logger.error('Contact API error', error)
     return NextResponse.json(
       { error: 'Erreur serveur' },
       { status: 500 }

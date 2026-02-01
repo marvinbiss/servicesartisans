@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { logger } from '@/lib/logger'
 import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
@@ -31,7 +32,7 @@ export async function POST(request: NextRequest) {
     })
 
     if (error) {
-      console.error('OAuth error:', error)
+      logger.error('OAuth error', error)
       return NextResponse.json(
         { error: error.message },
         { status: 400 }
@@ -40,7 +41,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ url: data.url })
   } catch (error) {
-    console.error('OAuth error:', error)
+    logger.error('OAuth error', error)
     return NextResponse.json(
       { error: 'Erreur serveur' },
       { status: 500 }

@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { requirePermission, logAdminAction } from '@/lib/admin-auth'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -9,16 +11,13 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Non autorisé' } },
-        { status: 401 }
-      )
+    // Verify admin with reviews:write permission
+    const authResult = await requirePermission('reviews', 'write')
+    if (!authResult.success || !authResult.admin) {
+      return authResult.error
     }
 
+    const supabase = await createClient()
     const body = await request.json()
 
     const { data, error } = await supabase
@@ -27,7 +26,7 @@ export async function PATCH(
         moderation_status: body.moderation_status,
         is_visible: body.is_visible,
         moderated_at: new Date().toISOString(),
-        moderated_by: user.id,
+        moderated_by: authResult.admin.id,
       })
       .eq('id', params.id)
       .select()
@@ -35,9 +34,18 @@ export async function PATCH(
 
     if (error) throw error
 
+    // Log the moderation action
+    await logAdminAction(
+      authResult.admin.id,
+      `review.${body.moderation_status}`,
+      'review',
+      params.id,
+      { moderation_status: body.moderation_status, is_visible: body.is_visible }
+    )
+
     return NextResponse.json({ success: true, data })
   } catch (error) {
-    console.error('Admin review moderation error:', error)
+    logger.error('Admin review moderation error', error)
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }

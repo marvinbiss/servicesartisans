@@ -27,7 +27,7 @@ export type BookingEvent =
 
 export interface TrackingData {
   event: BookingEvent
-  properties?: Record<string, any>
+  properties?: Record<string, unknown>
   userId?: string
   sessionId?: string
   timestamp?: string
@@ -51,7 +51,7 @@ export function getSessionId(): string {
 }
 
 // Track event (client-side)
-export function trackEvent(event: BookingEvent, properties?: Record<string, any>) {
+export function trackEvent(event: BookingEvent, properties?: Record<string, unknown>) {
   if (typeof window === 'undefined') return
 
   const data: TrackingData = {
@@ -255,9 +255,4 @@ export function getVariant(experimentId: string, variants: string[]): string {
   return variant
 }
 
-// Type declaration for gtag
-declare global {
-  interface Window {
-    gtag?: (...args: any[]) => void
-  }
-}
+// Type declaration for gtag (defined in @/types/index.ts)

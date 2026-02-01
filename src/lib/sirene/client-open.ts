@@ -4,6 +4,7 @@
  */
 
 import { SIRENE_OPEN_CONFIG, NAF_TO_SERVICE, TRANCHES_EFFECTIFS } from './config'
+import { logger } from '@/lib/logger'
 
 interface SearchResult {
   siren: string
@@ -65,7 +66,7 @@ export async function searchEntreprisesOpen(
       })
 
       if (response.status === 429) {
-        console.log('Rate limit, attente...')
+        logger.info('Rate limit, attente...')
         await new Promise(resolve => setTimeout(resolve, 60000))
         retries++
         continue
@@ -124,26 +125,26 @@ export async function searchByTermOpen(
 
   const url = `${SIRENE_OPEN_CONFIG.baseUrl}/search?${params.toString()}`
 
-  console.log('Calling API:', url)
+  logger.debug('Calling API', { url })
 
   try {
     const response = await fetch(url, {
       headers: { 'Accept': 'application/json' },
     })
 
-    console.log('API Response status:', response.status)
+    logger.debug('API Response status', { status: response.status })
 
     if (!response.ok) {
       if (response.status === 404) {
         return { results: [], total: 0, hasMore: false }
       }
       const errorText = await response.text()
-      console.error('API Error:', errorText)
+      logger.error('API Error', new Error(errorText))
       throw new Error(`Erreur API: ${response.status} - ${errorText}`)
     }
 
     const data: ApiResponse = await response.json()
-    console.log('API returned', data.total_results, 'results')
+    logger.debug('API returned results', { total: data.total_results })
 
     return {
       results: data.results || [],
@@ -152,7 +153,7 @@ export async function searchByTermOpen(
     }
 
   } catch (error) {
-    console.error('Search error:', error)
+    logger.error('Search error', error as Error)
     return { results: [], total: 0, hasMore: false }
   }
 }

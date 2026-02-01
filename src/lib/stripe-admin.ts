@@ -1,4 +1,5 @@
 import Stripe from 'stripe'
+import { logger } from '@/lib/logger'
 
 // Initialiser Stripe avec la clé secrète
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -25,7 +26,7 @@ export async function getCustomerPayments(customerId: string, limit = 10) {
       metadata: pi.metadata,
     }))
   } catch (error) {
-    console.error('Error fetching customer payments:', error)
+    logger.error('Error fetching customer payments', error as Error)
     throw error
   }
 }
@@ -57,7 +58,7 @@ export async function getSubscription(subscriptionId: string) {
       })),
     }
   } catch (error) {
-    console.error('Error fetching subscription:', error)
+    logger.error('Error fetching subscription', error as Error)
     throw error
   }
 }
@@ -91,7 +92,7 @@ export async function processRefund(
       created: new Date(refund.created * 1000).toISOString(),
     }
   } catch (error) {
-    console.error('Error processing refund:', error)
+    logger.error('Error processing refund', error as Error)
     throw error
   }
 }
@@ -125,7 +126,7 @@ export async function cancelSubscription(
       }
     }
   } catch (error) {
-    console.error('Error canceling subscription:', error)
+    logger.error('Error canceling subscription', error as Error)
     throw error
   }
 }
@@ -144,7 +145,7 @@ export async function reactivateSubscription(subscriptionId: string) {
       cancelAtPeriodEnd: false,
     }
   } catch (error) {
-    console.error('Error reactivating subscription:', error)
+    logger.error('Error reactivating subscription', error as Error)
     throw error
   }
 }
@@ -180,7 +181,7 @@ export async function changeSubscriptionPlan(
       currentPeriodEnd: new Date(updatedSubscription.current_period_end * 1000).toISOString(),
     }
   } catch (error) {
-    console.error('Error changing subscription plan:', error)
+    logger.error('Error changing subscription plan', error as Error)
     throw error
   }
 }
@@ -215,7 +216,7 @@ export async function createManualCharge(
       created: new Date(paymentIntent.created * 1000).toISOString(),
     }
   } catch (error) {
-    console.error('Error creating manual charge:', error)
+    logger.error('Error creating manual charge', error as Error)
     throw error
   }
 }
@@ -246,7 +247,7 @@ export async function getCustomerInvoices(customerId: string, limit = 10) {
         : null,
     }))
   } catch (error) {
-    console.error('Error fetching customer invoices:', error)
+    logger.error('Error fetching customer invoices', error as Error)
     throw error
   }
 }
@@ -295,7 +296,7 @@ export async function listAllSubscriptions(
       hasMore: subscriptions.has_more,
     }
   } catch (error) {
-    console.error('Error listing subscriptions:', error)
+    logger.error('Error listing subscriptions', error as Error)
     throw error
   }
 }
@@ -336,7 +337,7 @@ export async function getRevenueStats(days = 30) {
       period: `${days} derniers jours`,
     }
   } catch (error) {
-    console.error('Error getting revenue stats:', error)
+    logger.error('Error getting revenue stats', error as Error)
     throw error
   }
 }

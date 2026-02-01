@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { getSubscription, changeSubscriptionPlan, PRICE_IDS } from '@/lib/stripe-admin'
+import { requirePermission, logAdminAction } from '@/lib/admin-auth'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -10,14 +12,10 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Non autorisé' } },
-        { status: 401 }
-      )
+    // Verify admin with payments:read permission
+    const authResult = await requirePermission('payments', 'read')
+    if (!authResult.success || !authResult.admin) {
+      return authResult.error
     }
 
     const subscription = await getSubscription(params.id)
@@ -27,7 +25,7 @@ export async function GET(
       subscription,
     })
   } catch (error) {
-    console.error('Admin subscription details error:', error)
+    logger.error('Admin subscription details error', error)
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }
@@ -41,16 +39,13 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Non autorisé' } },
-        { status: 401 }
-      )
+    // Verify admin with payments:read permission (changing plans)
+    const authResult = await requirePermission('payments', 'read')
+    if (!authResult.success || !authResult.admin) {
+      return authResult.error
     }
 
+    const supabase = await createClient()
     const body = await request.json()
     const { newPlan, proration = 'create_prorations' } = body
 
@@ -93,14 +88,13 @@ export async function PATCH(
     }
 
     // Log d'audit
-    await supabase.from('audit_logs').insert({
-      admin_id: user.id,
-      action: 'subscription.change_plan',
-      entity_type: 'subscription',
-      entity_id: params.id,
-      new_data: { newPlan, newPriceId },
-      created_at: new Date().toISOString(),
-    })
+    await logAdminAction(
+      authResult.admin.id,
+      'subscription.change_plan',
+      'subscription',
+      params.id,
+      { newPlan, newPriceId }
+    )
 
     return NextResponse.json({
       success: true,
@@ -108,7 +102,7 @@ export async function PATCH(
       message: `Plan changé vers ${newPlan}`,
     })
   } catch (error) {
-    console.error('Admin subscription change error:', error)
+    logger.error('Admin subscription change error', error)
     return NextResponse.json(
       { success: false, error: { message: 'Erreur lors du changement de plan' } },
       { status: 500 }

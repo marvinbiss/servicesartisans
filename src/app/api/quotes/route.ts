@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { logger } from '@/lib/logger'
 import { createClient } from '@/lib/supabase/server'
 import { z } from 'zod'
 
@@ -96,7 +97,7 @@ export async function GET(request: NextRequest) {
       },
     })
   } catch (error) {
-    console.error('Quotes fetch error:', error)
+    logger.error('Quotes fetch error', error)
     return NextResponse.json(
       {
         success: false,
@@ -200,7 +201,7 @@ export async function POST(request: NextRequest) {
       data: quote,
     }, { status: 201 })
   } catch (error) {
-    console.error('Quote creation error:', error)
+    logger.error('Quote creation error', error)
     return NextResponse.json(
       {
         success: false,

@@ -4,6 +4,7 @@
  */
 
 import { NextResponse } from 'next/server'
+import { logger } from '@/lib/logger'
 import { createClient } from '@supabase/supabase-js'
 import { Resend } from 'resend'
 import { z } from 'zod'
@@ -85,7 +86,7 @@ export async function POST(request: Request) {
       .single()
 
     if (dbError) {
-      console.error('Database error:', dbError)
+      logger.error('Database error', dbError)
       // Continue even if DB fails - we'll still send emails
     }
 
@@ -143,7 +144,7 @@ export async function POST(request: Request) {
       id: devis?.id,
     })
   } catch (error) {
-    console.error('Devis API error:', error)
+    logger.error('Devis API error', error)
     return NextResponse.json(
       { error: 'Erreur serveur' },
       { status: 500 }

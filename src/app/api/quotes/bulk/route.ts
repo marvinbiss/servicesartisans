@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { logger } from '@/lib/logger'
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
 
@@ -86,7 +87,7 @@ export async function PATCH(request: NextRequest) {
       updated: quote_ids.length,
     })
   } catch (error) {
-    console.error('Bulk update quotes error:', error)
+    logger.error('Bulk update quotes error', error)
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }
@@ -146,7 +147,7 @@ export async function DELETE(request: NextRequest) {
       deleted: quote_ids.length,
     })
   } catch (error) {
-    console.error('Bulk delete quotes error:', error)
+    logger.error('Bulk delete quotes error', error)
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }

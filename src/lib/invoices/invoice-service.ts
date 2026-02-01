@@ -4,6 +4,7 @@
  */
 
 import { createClient as createServerClient } from '@/lib/supabase/server'
+import { logger } from '@/lib/logger'
 
 export interface InvoiceItem {
   description: string
@@ -106,12 +107,29 @@ export class InvoiceService {
       .single()
 
     if (bookingError || !booking) {
-      console.error('Error fetching booking:', bookingError)
+      logger.error('Error fetching booking', bookingError as Error)
       return null
     }
 
-    const provider = booking.provider as any
-    const client = booking.client as any
+    interface ProviderData {
+      id: string
+      company_name: string
+      address: string
+      city: string
+      postal_code: string
+      siret: string
+      email: string
+      phone: string
+      user_id: string
+    }
+    interface ClientData {
+      id: string
+      full_name: string
+      email: string
+      phone?: string
+    }
+    const provider = booking.provider as ProviderData
+    const client = booking.client as ClientData
 
     // Calculate totals
     const subtotal = input.items.reduce((sum, item) => sum + item.total, 0)
@@ -162,7 +180,7 @@ export class InvoiceService {
       .single()
 
     if (error) {
-      console.error('Error creating invoice:', error)
+      logger.error('Error creating invoice', error)
       return null
     }
 
@@ -182,7 +200,7 @@ export class InvoiceService {
       .single()
 
     if (error) {
-      console.error('Error fetching invoice:', error)
+      logger.error('Error fetching invoice', error)
       return null
     }
 
@@ -211,7 +229,7 @@ export class InvoiceService {
     const { data, error } = await query
 
     if (error) {
-      console.error('Error fetching invoices:', error)
+      logger.error('Error fetching invoices', error)
       return []
     }
 
@@ -240,7 +258,7 @@ export class InvoiceService {
     const { data, error } = await query
 
     if (error) {
-      console.error('Error fetching invoices:', error)
+      logger.error('Error fetching invoices', error)
       return []
     }
 
@@ -278,7 +296,7 @@ export class InvoiceService {
       .eq('id', invoiceId)
 
     if (error) {
-      console.error('Error updating invoice:', error)
+      logger.error('Error updating invoice', error)
       return false
     }
 
@@ -440,7 +458,7 @@ export class InvoiceService {
       .select()
 
     if (error) {
-      console.error('Error checking overdue invoices:', error)
+      logger.error('Error checking overdue invoices', error)
       return 0
     }
 

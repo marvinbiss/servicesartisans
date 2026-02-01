@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -169,7 +170,7 @@ export async function GET(request: NextRequest) {
       }
     })
   } catch (error) {
-    console.error('SIRET verification error:', error)
+    logger.error('SIRET verification error', error)
     return NextResponse.json(
       {
         success: false,

@@ -4,13 +4,14 @@
  */
 
 import * as Sentry from '@sentry/nextjs'
+import { logger } from '@/lib/logger'
 
 // Initialize Sentry (called in instrumentation.ts)
 export function initSentry() {
   const dsn = process.env.NEXT_PUBLIC_SENTRY_DSN
 
   if (!dsn) {
-    console.warn('Sentry DSN not configured - error monitoring disabled')
+    logger.warn('Sentry DSN not configured - error monitoring disabled')
     return
   }
 

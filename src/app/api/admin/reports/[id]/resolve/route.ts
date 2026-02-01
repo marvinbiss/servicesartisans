@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { verifyAdmin, logAdminAction } from '@/lib/admin-auth'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -9,16 +11,13 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   try {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Non autorisé' } },
-        { status: 401 }
-      )
+    // Verify admin authentication
+    const authResult = await verifyAdmin()
+    if (!authResult.success || !authResult.admin) {
+      return authResult.error
     }
 
+    const supabase = await createClient()
     const body = await request.json()
     const { action, resolution_notes } = body // action: 'resolve' ou 'dismiss'
 
@@ -35,7 +34,7 @@ export async function POST(
       .from('user_reports')
       .update({
         status: newStatus,
-        resolved_by: user.id,
+        resolved_by: authResult.admin.id,
         resolution_notes,
         resolved_at: new Date().toISOString(),
       })
@@ -46,14 +45,13 @@ export async function POST(
     if (error) throw error
 
     // Log d'audit
-    await supabase.from('audit_logs').insert({
-      admin_id: user.id,
-      action: `report.${action}`,
-      entity_type: 'report',
-      entity_id: params.id,
-      new_data: { status: newStatus, resolution_notes },
-      created_at: new Date().toISOString(),
-    })
+    await logAdminAction(
+      authResult.admin.id,
+      `report.${action}`,
+      'report',
+      params.id,
+      { status: newStatus, resolution_notes }
+    )
 
     return NextResponse.json({
       success: true,
@@ -61,7 +59,7 @@ export async function POST(
       message: action === 'resolve' ? 'Signalement résolu' : 'Signalement rejeté',
     })
   } catch (error) {
-    console.error('Admin report resolve error:', error)
+    logger.error('Admin report resolve error', error)
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }

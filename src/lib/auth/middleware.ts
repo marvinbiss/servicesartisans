@@ -5,6 +5,7 @@
 
 import { createClient } from '@supabase/supabase-js'
 import { NextRequest, NextResponse } from 'next/server'
+import { logger } from '@/lib/logger'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -38,7 +39,7 @@ export async function verifyAuth(request: NextRequest): Promise<AuthResult> {
     const token = authHeader.replace('Bearer ', '')
 
     if (!supabaseUrl || !supabaseServiceKey) {
-      console.error('Supabase configuration missing')
+      logger.error('Supabase configuration missing')
       return { success: false, error: 'Server configuration error' }
     }
 
@@ -69,7 +70,7 @@ export async function verifyAuth(request: NextRequest): Promise<AuthResult> {
       },
     }
   } catch (error) {
-    console.error('Auth verification error:', error)
+    logger.error('Auth verification error', error as Error)
     return { success: false, error: 'Authentication failed' }
   }
 }

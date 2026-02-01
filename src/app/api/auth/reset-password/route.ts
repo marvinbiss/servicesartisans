@@ -4,6 +4,7 @@
  */
 
 import { NextResponse } from 'next/server'
+import { logger } from '@/lib/logger'
 import { createClient } from '@supabase/supabase-js'
 import { z } from 'zod'
 
@@ -46,7 +47,7 @@ export async function POST(request: Request) {
     })
 
     if (error) {
-      console.error('Reset password error:', error)
+      logger.error('Reset password error', error)
       // Don't reveal if email exists or not for security
     }
 
@@ -56,7 +57,7 @@ export async function POST(request: Request) {
       message: 'Si un compte existe avec cet email, vous recevrez un lien de reinitialisation.',
     })
   } catch (error) {
-    console.error('Reset password API error:', error)
+    logger.error('Reset password API error', error)
     return NextResponse.json(
       { error: 'Erreur serveur' },
       { status: 500 }

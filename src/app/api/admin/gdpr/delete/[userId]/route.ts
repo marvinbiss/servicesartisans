@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { requirePermission, logAdminAction } from '@/lib/admin-auth'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -9,16 +11,13 @@ export async function POST(
   { params }: { params: { userId: string } }
 ) {
   try {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Non autorisé' } },
-        { status: 401 }
-      )
+    // Verify admin with users:delete permission (GDPR deletion is critical)
+    const authResult = await requirePermission('users', 'delete')
+    if (!authResult.success || !authResult.admin) {
+      return authResult.error
     }
 
+    const supabase = await createClient()
     const userId = params.userId
     const body = await request.json()
     const { confirmDelete } = body
@@ -70,21 +69,14 @@ export async function POST(
       .eq('user_id', userId)
 
     // Log d'audit
-    await supabase.from('audit_logs').insert({
-      admin_id: user.id,
-      action: 'gdpr.delete',
-      entity_type: 'user',
-      entity_id: userId,
-      new_data: { anonymized: true },
-      created_at: new Date().toISOString(),
-    })
+    await logAdminAction(authResult.admin.id, 'gdpr.delete', 'user', userId, { anonymized: true })
 
     return NextResponse.json({
       success: true,
       message: 'Données utilisateur anonymisées conformément au RGPD',
     })
   } catch (error) {
-    console.error('Admin GDPR delete error:', error)
+    logger.error('Admin GDPR delete error', error)
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }

@@ -4,6 +4,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import { logger } from '@/lib/logger'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { searchByTermOpen, transformOpenResultToProvider } from '@/lib/sirene/client-open'
 import { NAF_TO_SERVICE } from '@/lib/sirene/config'
@@ -67,7 +68,7 @@ export async function POST(request: NextRequest) {
     // Creer les services manquants
     for (const [slug, name] of Object.entries(METIERS_BATIMENT)) {
       if (!serviceMap.has(slug)) {
-        console.log(`Creating missing service: ${slug}`)
+        logger.info('Creating missing service', { slug })
         const { data: newService, error: serviceError } = await supabase
           .from('services')
           .insert({
@@ -83,9 +84,9 @@ export async function POST(request: NextRequest) {
 
         if (newService && !serviceError) {
           serviceMap.set(slug, newService.id)
-          console.log(`Service created: ${slug} -> ${newService.id}`)
+          logger.info('Service created', { slug, id: newService.id })
         } else {
-          console.error(`Failed to create service ${slug}:`, serviceError)
+          logger.error('Failed to create service', serviceError, { slug })
         }
       }
     }
@@ -104,7 +105,7 @@ export async function POST(request: NextRequest) {
 
     // Traiter chaque departement et metier
     for (const dept of departments) {
-      console.log(`Import departement ${dept}...`)
+      logger.info('Import departement', { dept })
       result.departments_processed.push(dept)
 
       let totalForDept = 0
@@ -130,7 +131,7 @@ export async function POST(request: NextRequest) {
                 const provider = transformOpenResultToProvider(entreprise)
 
                 if (dryRun) {
-                  console.log('DRY RUN:', provider.name, provider.address_city)
+                  logger.debug('DRY RUN', { name: provider.name, city: provider.address_city })
                   result.total_inserted++
                   totalForDept++
                   continue
@@ -250,7 +251,7 @@ export async function POST(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('Import SIRENE Open error:', error)
+    logger.error('Import SIRENE Open error', error)
     return NextResponse.json(
       { success: false, error: String(error) },
       { status: 500 }

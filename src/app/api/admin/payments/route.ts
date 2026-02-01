@@ -1,21 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { getRevenueStats, listAllSubscriptions } from '@/lib/stripe-admin'
+import { requirePermission } from '@/lib/admin-auth'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
 // GET - Statistiques et liste des paiements
 export async function GET(request: NextRequest) {
   try {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Non autorisé' } },
-        { status: 401 }
-      )
+    // Verify admin with payments:read permission
+    const authResult = await requirePermission('payments', 'read')
+    if (!authResult.success || !authResult.admin) {
+      return authResult.error
     }
+
+    const supabase = await createClient()
 
     const searchParams = request.nextUrl.searchParams
     const type = searchParams.get('type') || 'overview' // overview, subscriptions
@@ -86,7 +86,7 @@ export async function GET(request: NextRequest) {
       error: { message: 'Type invalide' },
     }, { status: 400 })
   } catch (error) {
-    console.error('Admin payments error:', error)
+    logger.error('Admin payments error', error)
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }

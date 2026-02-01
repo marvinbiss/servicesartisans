@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { DEFAULT_PERMISSIONS, type AdminRole } from '@/types/admin'
+import { verifyAdmin, logAdminAction } from '@/lib/admin-auth'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -9,12 +11,21 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const supabase = await createClient()
-
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) {
-      return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
+    // Verify admin authentication
+    const authResult = await verifyAdmin()
+    if (!authResult.success || !authResult.admin) {
+      return authResult.error
     }
+
+    // Only super_admin can view admin details
+    if (authResult.admin.role !== 'super_admin') {
+      return NextResponse.json(
+        { success: false, error: { code: 'FORBIDDEN', message: 'Réservé aux super admins' } },
+        { status: 403 }
+      )
+    }
+
+    const supabase = await createClient()
 
     const { data: admin, error } = await supabase
       .from('admin_users')
@@ -23,12 +34,13 @@ export async function GET(
       .single()
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 404 })
+      logger.error('Admin fetch error', error)
+      return NextResponse.json({ error: 'Administrateur non trouvé' }, { status: 404 })
     }
 
     return NextResponse.json({ admin })
   } catch (error) {
-    console.error('Admin fetch error:', error)
+    logger.error('Admin fetch error', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }
@@ -38,24 +50,21 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
+    // Verify admin authentication
+    const authResult = await verifyAdmin()
+    if (!authResult.success || !authResult.admin) {
+      return authResult.error
+    }
+
+    // Only super_admin can modify admins
+    if (authResult.admin.role !== 'super_admin') {
+      return NextResponse.json(
+        { success: false, error: { code: 'FORBIDDEN', message: 'Seuls les super admins peuvent modifier les rôles' } },
+        { status: 403 }
+      )
+    }
+
     const supabase = await createClient()
-
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) {
-      return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
-    }
-
-    // Check if current user is super_admin
-    const { data: currentAdmin } = await supabase
-      .from('admin_users')
-      .select('role')
-      .eq('user_id', user.id)
-      .single()
-
-    if (!currentAdmin || currentAdmin.role !== 'super_admin') {
-      return NextResponse.json({ error: 'Seuls les super admins peuvent modifier les rôles' }, { status: 403 })
-    }
-
     const { role, permissions } = await request.json()
 
     // Get old data for audit
@@ -82,22 +91,16 @@ export async function PATCH(
       .single()
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 })
+      logger.error('Admin update error', error)
+      return NextResponse.json({ error: 'Erreur lors de la mise à jour' }, { status: 500 })
     }
 
     // Log audit
-    await supabase.from('audit_logs').insert({
-      admin_id: user.id,
-      action: 'admin_updated',
-      entity_type: 'settings',
-      entity_id: params.id,
-      old_data: { role: oldAdmin?.role },
-      new_data: { role },
-    })
+    await logAdminAction(authResult.admin.id, 'admin_updated', 'settings', params.id, { role })
 
     return NextResponse.json({ admin: updatedAdmin })
   } catch (error) {
-    console.error('Admin update error:', error)
+    logger.error('Admin update error', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }
@@ -107,23 +110,21 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
+    // Verify admin authentication
+    const authResult = await verifyAdmin()
+    if (!authResult.success || !authResult.admin) {
+      return authResult.error
+    }
+
+    // Only super_admin can delete admins
+    if (authResult.admin.role !== 'super_admin') {
+      return NextResponse.json(
+        { success: false, error: { code: 'FORBIDDEN', message: 'Seuls les super admins peuvent supprimer des administrateurs' } },
+        { status: 403 }
+      )
+    }
+
     const supabase = await createClient()
-
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) {
-      return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
-    }
-
-    // Check if current user is super_admin
-    const { data: currentAdmin } = await supabase
-      .from('admin_users')
-      .select('role')
-      .eq('user_id', user.id)
-      .single()
-
-    if (!currentAdmin || currentAdmin.role !== 'super_admin') {
-      return NextResponse.json({ error: 'Seuls les super admins peuvent supprimer des administrateurs' }, { status: 403 })
-    }
 
     // Get admin data for audit
     const { data: adminToDelete } = await supabase
@@ -138,21 +139,16 @@ export async function DELETE(
       .eq('id', params.id)
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 })
+      logger.error('Admin delete error', error)
+      return NextResponse.json({ error: 'Erreur lors de la suppression' }, { status: 500 })
     }
 
     // Log audit
-    await supabase.from('audit_logs').insert({
-      admin_id: user.id,
-      action: 'admin_deleted',
-      entity_type: 'settings',
-      entity_id: params.id,
-      old_data: { email: adminToDelete?.email, role: adminToDelete?.role },
-    })
+    await logAdminAction(authResult.admin.id, 'admin_deleted', 'settings', params.id)
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Admin delete error:', error)
+    logger.error('Admin delete error', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

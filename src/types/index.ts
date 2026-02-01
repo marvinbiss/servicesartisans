@@ -128,3 +128,86 @@ export interface FilterState {
   minRating?: number
   sortBy?: 'name' | 'rating' | 'distance'
 }
+
+// Supabase Client Type (for function parameters)
+import type { SupabaseClient } from '@supabase/supabase-js'
+export type SupabaseClientType = SupabaseClient
+
+// Booking types
+export interface BookingSlot {
+  id: string
+  start_time: string
+  end_time: string
+  is_available: boolean
+  provider_id?: string
+}
+
+export interface Booking {
+  id: string
+  provider_id: string
+  client_id?: string
+  client_email: string
+  client_name: string
+  client_phone?: string
+  service: string
+  booking_date: string
+  slot_id?: string
+  slot?: BookingSlot
+  status: 'pending' | 'confirmed' | 'completed' | 'cancelled'
+  notes?: string
+  amount?: number
+  created_at: string
+  updated_at?: string
+  provider?: Provider
+  client?: {
+    id: string
+    email: string
+    full_name: string
+    phone?: string
+  }
+}
+
+// Video call participant
+export interface VideoParticipant {
+  session_id: string
+  user_id?: string
+  user_name?: string
+  video: boolean
+  audio: boolean
+  joined_at?: string
+}
+
+// Daily.co event types
+export interface DailyParticipantEvent {
+  participant: {
+    session_id: string
+    user_id?: string
+    user_name?: string
+    local: boolean
+    video: boolean
+    audio: boolean
+  }
+}
+
+export interface DailyErrorEvent {
+  errorMsg: string
+  error?: Error
+}
+
+// City data for service pages
+export interface CityData {
+  city: string
+  name?: string
+  postal_code?: string
+  provider_count?: number
+  latitude?: number
+  longitude?: number
+}
+
+// Analytics gtag type
+declare global {
+  interface Window {
+    gtag?: (...args: unknown[]) => void
+    dataLayer?: unknown[]
+  }
+}

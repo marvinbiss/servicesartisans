@@ -294,15 +294,16 @@ export async function safeFetch<T>(
     const response = await fetch(url, options)
 
     if (!response.ok) {
-      let errorData: any = {}
+      let errorMessage = response.statusText
       try {
-        errorData = await response.json()
+        const errorData = await response.json() as { error?: string }
+        errorMessage = errorData.error || response.statusText
       } catch {
         // Ignore JSON parse errors
       }
 
       const error = createBookingError(
-        { status: response.status, message: errorData.error || response.statusText },
+        { status: response.status, message: errorMessage },
         { url, status: response.status }
       )
 
@@ -330,10 +331,9 @@ export function logError(error: BookingError, context?: Record<string, unknown>)
     ...context,
   }
 
-  // Log to console in development
-  if (process.env.NODE_ENV === 'development') {
-    console.error('[BookingError]', errorLog)
-  }
+  // Log using structured logger
+  const { logger } = require('@/lib/logger')
+  logger.error('[BookingError]', new Error(error.message), errorLog)
 
   // In production, send to analytics/error tracking service
   // Example: sendToSentry(errorLog)

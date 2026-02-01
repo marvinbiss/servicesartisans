@@ -60,8 +60,9 @@ export async function POST(request: Request) {
       .eq('id', booking.artisan_id)
       .single()
 
-    const slot = booking.slot as any
-    const scheduledTime = new Date(`${slot.date}T${slot.start_time}`)
+    const slotData = booking.slot as Array<{ date: string; start_time: string; end_time: string }> | null
+    const slot = slotData?.[0]
+    const scheduledTime = new Date(`${slot?.date}T${slot?.start_time}`)
 
     // Check if there's already a video room for this booking
     let { data: existingRoom } = await supabase

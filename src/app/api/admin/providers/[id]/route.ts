@@ -7,6 +7,8 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { requirePermission, logAdminAction } from '@/lib/admin-auth'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -16,6 +18,12 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
+    // Verify admin with providers:read permission
+    const authResult = await requirePermission('providers', 'read')
+    if (!authResult.success || !authResult.admin) {
+      return authResult.error
+    }
+
     const supabase = createAdminClient()
     const providerId = params.id
 
@@ -109,7 +117,7 @@ export async function GET(
 
     return response
   } catch (error) {
-    console.error('Admin provider GET error:', error)
+    logger.error('Admin provider GET error', error)
     return NextResponse.json(
       { success: false, error: 'Erreur serveur' },
       { status: 500 }
@@ -123,6 +131,12 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
+    // Verify admin with providers:write permission
+    const authResult = await requirePermission('providers', 'write')
+    if (!authResult.success || !authResult.admin) {
+      return authResult.error
+    }
+
     const supabase = createAdminClient()
     const providerId = params.id
 
@@ -208,7 +222,7 @@ export async function PATCH(
       .single()
 
     if (error) {
-      console.error('Admin provider PATCH error:', error)
+      logger.error('Admin provider PATCH error', error)
       throw error
     }
 
@@ -241,18 +255,7 @@ export async function PATCH(
     }
 
     // Log d'audit
-    try {
-      await supabase.from('audit_logs').insert({
-        admin_id: 'system',
-        action: 'provider.update',
-        entity_type: 'provider',
-        entity_id: providerId,
-        new_data: updateData,
-        created_at: new Date().toISOString(),
-      })
-    } catch {
-      // Audit logging is non-critical
-    }
+    await logAdminAction(authResult.admin.id, 'provider.update', 'provider', providerId, updateData)
 
     const response = NextResponse.json({
       success: true,
@@ -265,7 +268,7 @@ export async function PATCH(
 
     return response
   } catch (error) {
-    console.error('Admin provider PATCH error:', error)
+    logger.error('Admin provider PATCH error', error)
     return NextResponse.json(
       { success: false, error: 'Erreur de mise à jour' },
       { status: 500 }
@@ -279,6 +282,12 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
+    // Verify admin with providers:delete permission
+    const authResult = await requirePermission('providers', 'delete')
+    if (!authResult.success || !authResult.admin) {
+      return authResult.error
+    }
+
     const supabase = createAdminClient()
     const providerId = params.id
 
@@ -293,24 +302,14 @@ export async function DELETE(
     if (error) throw error
 
     // Log d'audit
-    try {
-      await supabase.from('audit_logs').insert({
-        admin_id: 'system',
-        action: 'provider.delete',
-        entity_type: 'provider',
-        entity_id: providerId,
-        created_at: new Date().toISOString(),
-      })
-    } catch {
-      // Audit logging is non-critical
-    }
+    await logAdminAction(authResult.admin.id, 'provider.delete', 'provider', providerId)
 
     return NextResponse.json({
       success: true,
       message: 'Artisan supprimé'
     })
   } catch (error) {
-    console.error('Admin provider DELETE error:', error)
+    logger.error('Admin provider DELETE error', error)
     return NextResponse.json(
       { success: false, error: 'Erreur de suppression' },
       { status: 500 }

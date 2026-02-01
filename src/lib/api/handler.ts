@@ -8,6 +8,7 @@ import {
   AuthorizationError,
   formatErrorResponse,
 } from '@/lib/errors'
+import { logger } from '@/lib/logger'
 
 interface HandlerContext {
   request: NextRequest
@@ -100,7 +101,7 @@ export function createApiHandler<T = unknown>(
 
       return await handler(context as HandlerContext & { body: T })
     } catch (error) {
-      console.error('API Error:', error)
+      logger.error('API Error', error as Error)
 
       if (error instanceof AppError) {
         return NextResponse.json(formatErrorResponse(error), {

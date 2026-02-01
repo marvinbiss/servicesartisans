@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { verifyAdmin, logAdminAction } from '@/lib/admin-auth'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -9,16 +11,13 @@ export async function POST(
   { params }: { params: { userId: string } }
 ) {
   try {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Non autorisé' } },
-        { status: 401 }
-      )
+    // Verify admin authentication
+    const authResult = await verifyAdmin()
+    if (!authResult.success || !authResult.admin) {
+      return authResult.error
     }
 
+    const supabase = await createClient()
     const userId = params.userId
 
     // Récupérer toutes les données de l'utilisateur
@@ -40,17 +39,11 @@ export async function POST(
       reviews: reviews || [],
       conversations: conversations || [],
       exportedAt: new Date().toISOString(),
-      exportedBy: user.id,
+      exportedBy: authResult.admin.id,
     }
 
     // Log d'audit
-    await supabase.from('audit_logs').insert({
-      admin_id: user.id,
-      action: 'gdpr.export',
-      entity_type: 'user',
-      entity_id: userId,
-      created_at: new Date().toISOString(),
-    })
+    await logAdminAction(authResult.admin.id, 'gdpr.export', 'user', userId)
 
     return NextResponse.json({
       success: true,
@@ -58,7 +51,7 @@ export async function POST(
       message: 'Export RGPD généré',
     })
   } catch (error) {
-    console.error('Admin GDPR export error:', error)
+    logger.error('Admin GDPR export error', error)
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }

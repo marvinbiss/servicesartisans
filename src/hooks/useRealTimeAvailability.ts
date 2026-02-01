@@ -92,8 +92,17 @@ export function useRealTimeAvailability({
         // Transform API response to our format
         const slotsMap: Record<string, Slot[]> = {}
 
+        interface ApiSlot {
+          id: string
+          start: string
+          end: string
+          available: boolean
+          team_member_id?: string
+          team_member_name?: string
+        }
+
         Object.entries(data.slots || {}).forEach(([date, dateSlots]) => {
-          slotsMap[date] = (dateSlots as any[]).map((slot) => ({
+          slotsMap[date] = (dateSlots as ApiSlot[]).map((slot) => ({
             id: slot.id,
             date,
             startTime: slot.start,
@@ -138,7 +147,7 @@ export function useRealTimeAvailability({
 
           // Handle different events
           if (payload.eventType === 'UPDATE') {
-            const updatedSlot = payload.new as any
+            const updatedSlot = payload.new as { id: string; date: string; is_available: boolean }
 
             setSlots((prev) => {
               const date = updatedSlot.date

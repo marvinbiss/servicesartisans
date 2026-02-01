@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { verifyAdmin, logAdminAction } from '@/lib/admin-auth'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -8,12 +10,13 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const supabase = await createClient()
-
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) {
-      return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
+    // Verify admin authentication
+    const authResult = await verifyAdmin()
+    if (!authResult.success || !authResult.admin) {
+      return authResult.error
     }
+
+    const supabase = await createClient()
 
     const { data: quote, error } = await supabase
       .from('quotes')
@@ -22,12 +25,13 @@ export async function GET(
       .single()
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 404 })
+      logger.error('Quote fetch error', error)
+      return NextResponse.json({ error: 'Devis non trouvé' }, { status: 404 })
     }
 
     return NextResponse.json({ quote })
   } catch (error) {
-    console.error('Quote fetch error:', error)
+    logger.error('Quote fetch error', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }
@@ -37,13 +41,13 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    const supabase = await createClient()
-
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) {
-      return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
+    // Verify admin authentication
+    const authResult = await verifyAdmin()
+    if (!authResult.success || !authResult.admin) {
+      return authResult.error
     }
 
+    const supabase = await createClient()
     const updates = await request.json()
 
     // Get old data for audit
@@ -64,22 +68,16 @@ export async function PATCH(
       .single()
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 })
+      logger.error('Quote operation error', error)
+      return NextResponse.json({ error: 'Erreur lors de l\'opération' }, { status: 500 })
     }
 
     // Log audit
-    await supabase.from('audit_logs').insert({
-      admin_id: user.id,
-      action: 'quote_updated',
-      entity_type: 'booking',
-      entity_id: params.id,
-      old_data: oldQuote,
-      new_data: updates,
-    })
+    await logAdminAction(authResult.admin.id, 'quote_updated', 'booking', params.id, updates)
 
     return NextResponse.json({ quote })
   } catch (error) {
-    console.error('Quote update error:', error)
+    logger.error('Quote update error', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }
@@ -89,12 +87,13 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const supabase = await createClient()
-
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) {
-      return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
+    // Verify admin authentication
+    const authResult = await verifyAdmin()
+    if (!authResult.success || !authResult.admin) {
+      return authResult.error
     }
+
+    const supabase = await createClient()
 
     // Get quote data for audit
     const { data: quoteToDelete } = await supabase
@@ -109,21 +108,16 @@ export async function DELETE(
       .eq('id', params.id)
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 })
+      logger.error('Quote operation error', error)
+      return NextResponse.json({ error: 'Erreur lors de l\'opération' }, { status: 500 })
     }
 
     // Log audit
-    await supabase.from('audit_logs').insert({
-      admin_id: user.id,
-      action: 'quote_deleted',
-      entity_type: 'booking',
-      entity_id: params.id,
-      old_data: quoteToDelete,
-    })
+    await logAdminAction(authResult.admin.id, 'quote_deleted', 'booking', params.id)
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Quote delete error:', error)
+    logger.error('Quote delete error', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

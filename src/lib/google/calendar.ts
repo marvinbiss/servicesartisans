@@ -114,7 +114,13 @@ export async function updateCalendarEvent(
 ): Promise<void> {
   const calendar = getCalendarClient(accessToken, refreshToken)
 
-  const updateData: any = {}
+  const updateData: {
+    summary?: string
+    description?: string
+    location?: string
+    start?: { dateTime: string; timeZone: string }
+    end?: { dateTime: string; timeZone: string }
+  } = {}
 
   if (eventData.summary) updateData.summary = eventData.summary
   if (eventData.description) updateData.description = eventData.description
@@ -153,12 +159,26 @@ export async function deleteCalendarEvent(
   })
 }
 
+// Google Calendar Event type
+export interface CalendarEvent {
+  id?: string | null
+  summary?: string | null
+  description?: string | null
+  location?: string | null
+  start?: { dateTime?: string | null; date?: string | null; timeZone?: string | null } | null
+  end?: { dateTime?: string | null; date?: string | null; timeZone?: string | null } | null
+  attendees?: Array<{ email?: string | null; displayName?: string | null }> | null
+  status?: string | null
+  created?: string | null
+  updated?: string | null
+}
+
 // Get upcoming events
 export async function getUpcomingEvents(
   accessToken: string,
   refreshToken: string,
   maxResults: number = 10
-): Promise<any[]> {
+): Promise<CalendarEvent[]> {
   const calendar = getCalendarClient(accessToken, refreshToken)
 
   const response = await calendar.events.list({

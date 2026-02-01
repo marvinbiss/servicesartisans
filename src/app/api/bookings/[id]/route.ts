@@ -66,7 +66,8 @@ export async function GET(
     }
 
     const booking = bookings[0]
-    const slot = booking.slot as any
+    const slotData = booking.slot as Array<{ id: string; date: string; start_time: string; end_time: string; artisan_id: string }> | null
+    const slot = slotData?.[0] || null
 
     // Fetch artisan details
     const { data: artisan } = await supabase
@@ -140,7 +141,7 @@ export async function PATCH(
       )
     }
 
-    const updateData: Record<string, any> = {}
+    const updateData: Record<string, string | undefined> = {}
     if (status) updateData.status = status
     if (notes !== undefined) updateData.notes = notes
     updateData.updated_at = new Date().toISOString()

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { logger } from '@/lib/logger'
 import { createClient } from '@/lib/supabase/server'
 
 export const dynamic = 'force-dynamic'
@@ -74,7 +75,7 @@ export async function GET(
       data: quote,
     })
   } catch (error) {
-    console.error('Quote fetch error:', error)
+    logger.error('Quote fetch error', error)
     return NextResponse.json(
       {
         success: false,
@@ -210,7 +211,7 @@ export async function PATCH(
       data: updatedQuote,
     })
   } catch (error) {
-    console.error('Quote update error:', error)
+    logger.error('Quote update error', error)
     return NextResponse.json(
       {
         success: false,

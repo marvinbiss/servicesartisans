@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { requirePermission } from '@/lib/admin-auth'
+import { sanitizeSearchQuery } from '@/lib/sanitize'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -29,6 +32,12 @@ const SELECT_COLUMNS = `
 
 export async function GET(request: NextRequest) {
   try {
+    // Verify admin with providers:read permission
+    const authResult = await requirePermission('providers', 'read')
+    if (!authResult.success || !authResult.admin) {
+      return authResult.error
+    }
+
     const supabase = createAdminClient()
 
     const searchParams = request.nextUrl.searchParams
@@ -53,9 +62,12 @@ export async function GET(request: NextRequest) {
       query = query.in('is_active', [false])
     }
 
-    // Apply search
+    // Apply search (sanitized to prevent injection)
     if (search) {
-      query = query.or(`name.ilike.%${search}%,email.ilike.%${search}%,address_city.ilike.%${search}%,siret.ilike.%${search}%`)
+      const sanitized = sanitizeSearchQuery(search)
+      if (sanitized) {
+        query = query.or(`name.ilike.%${sanitized}%,email.ilike.%${sanitized}%,address_city.ilike.%${sanitized}%,siret.ilike.%${sanitized}%`)
+      }
     }
 
     // Execute query with ordering and pagination
@@ -64,7 +76,7 @@ export async function GET(request: NextRequest) {
       .range(offset, offset + limit - 1)
 
     if (error) {
-      console.error('[Admin API] Query error:', error)
+      logger.error('[Admin API] Query error', error)
       throw error
     }
 
@@ -111,7 +123,7 @@ export async function GET(request: NextRequest) {
 
     return response
   } catch (error) {
-    console.error('Admin providers list error:', error)
+    logger.error('Admin providers list error', error)
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }

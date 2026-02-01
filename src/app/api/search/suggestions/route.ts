@@ -8,6 +8,7 @@ import { createClient } from '@supabase/supabase-js'
 import { logger } from '@/lib/logger'
 import { cookies } from 'next/headers'
 import { createServerClient } from '@supabase/ssr'
+import { sanitizeSearchQuery, sanitizeUserInput } from '@/lib/sanitize'
 
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -31,11 +32,20 @@ export const dynamic = 'force-dynamic'
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
-    const query = searchParams.get('q') || ''
+    const rawQuery = searchParams.get('q') || ''
     const type = searchParams.get('type') // 'all', 'service', 'artisan', 'location'
 
-    if (query.length < 2) {
+    if (rawQuery.length < 2) {
       // Return popular searches for empty/short queries
+      return NextResponse.json({
+        suggestions: popularSearches,
+        type: 'popular',
+      })
+    }
+
+    // Sanitize the search query to prevent injection
+    const query = sanitizeSearchQuery(rawQuery)
+    if (!query) {
       return NextResponse.json({
         suggestions: popularSearches,
         type: 'popular',
@@ -44,15 +54,15 @@ export async function GET(request: Request) {
 
     const suggestions: Array<{ text: string; type: string; id?: string; subtitle?: string }> = []
 
-    // Search services
+    // Search services (local array, safe)
     if (!type || type === 'all' || type === 'service') {
       const serviceMatches = popularSearches.filter((s) =>
-        s.text.toLowerCase().includes(query.toLowerCase())
+        s.text.toLowerCase().includes(rawQuery.toLowerCase())
       )
       suggestions.push(...serviceMatches)
     }
 
-    // Search artisan names
+    // Search artisan names (sanitized query)
     if (!type || type === 'all' || type === 'artisan') {
       const { data: artisans } = await supabaseAdmin
         .from('profiles')
@@ -72,7 +82,7 @@ export async function GET(request: Request) {
       })
     }
 
-    // Search locations
+    // Search locations (sanitized query)
     if (!type || type === 'all' || type === 'location') {
       const { data: locations } = await supabaseAdmin
         .from('profiles')
@@ -116,7 +126,7 @@ export async function GET(request: Request) {
 
       const { data: { user } } = await supabase.auth.getUser()
 
-      if (user) {
+      if (user && query) {
         const { data: history } = await supabaseAdmin
           .from('search_history')
           .select('query')
@@ -173,11 +183,14 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json()
-    const { query, filters, resultsCount } = body
+    const { query: rawQuery, filters, resultsCount } = body
 
-    if (!query || query.length < 2) {
+    if (!rawQuery || rawQuery.length < 2) {
       return NextResponse.json({ success: true })
     }
+
+    // Sanitize input before saving
+    const query = sanitizeUserInput(rawQuery).slice(0, 200)
 
     // Save to search history
     await supabaseAdmin.from('search_history').insert({

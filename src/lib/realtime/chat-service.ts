@@ -5,6 +5,7 @@
 
 import { getSupabaseClient } from '@/lib/supabase/client'
 import { RealtimeChannel } from '@supabase/supabase-js'
+import { logger } from '@/lib/logger'
 
 export interface ChatMessage {
   id: string
@@ -128,7 +129,7 @@ class ChatService {
       .single()
 
     if (error) {
-      console.error('Error sending message:', error)
+      logger.error('Error sending message', error)
       return null
     }
 
@@ -214,7 +215,7 @@ class ChatService {
     const { data, error } = await query
 
     if (error) {
-      console.error('Error fetching messages:', error)
+      logger.error('Error fetching messages', error)
       return []
     }
 
@@ -256,7 +257,7 @@ class ChatService {
       .single()
 
     if (error) {
-      console.error('Error creating conversation:', error)
+      logger.error('Error creating conversation', error)
       return null
     }
 
@@ -284,7 +285,7 @@ class ChatService {
       .order('last_message_at', { ascending: false })
 
     if (error) {
-      console.error('Error fetching conversations:', error)
+      logger.error('Error fetching conversations', error)
       return []
     }
 

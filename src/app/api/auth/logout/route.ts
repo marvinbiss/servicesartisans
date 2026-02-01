@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { logger } from '@/lib/logger'
 import { createClient } from '@/lib/supabase/server'
 
 export const dynamic = 'force-dynamic'
@@ -27,7 +28,7 @@ export async function POST() {
       message: 'Deconnexion reussie'
     })
   } catch (error) {
-    console.error('Logout error:', error)
+    logger.error('Logout error', error)
     return NextResponse.json(
       {
         success: false,

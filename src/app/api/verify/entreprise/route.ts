@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { logger } from '@/lib/logger'
 import {
   getEntrepriseParSiret,
   getEntrepriseParSiren,
@@ -130,7 +131,7 @@ export async function GET(request: NextRequest) {
         )
     }
   } catch (error) {
-    console.error('Erreur API entreprise:', error)
+    logger.error('Erreur API entreprise', error)
     return NextResponse.json(
       { success: false, error: 'Erreur serveur' },
       { status: 500 }
@@ -220,7 +221,7 @@ export async function POST(request: NextRequest) {
       }
     })
   } catch (error) {
-    console.error('Erreur enrichissement entreprise:', error)
+    logger.error('Erreur enrichissement entreprise', error)
     return NextResponse.json(
       { success: false, error: 'Erreur serveur' },
       { status: 500 }

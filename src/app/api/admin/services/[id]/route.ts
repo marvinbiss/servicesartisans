@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { requirePermission, logAdminAction } from '@/lib/admin-auth'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -9,15 +11,13 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Non autorisé' } },
-        { status: 401 }
-      )
+    // Verify admin with services:read permission
+    const authResult = await requirePermission('services', 'read')
+    if (!authResult.success || !authResult.admin) {
+      return authResult.error
     }
+
+    const supabase = await createClient()
 
     const { data: service, error } = await supabase
       .from('services')
@@ -29,7 +29,7 @@ export async function GET(
 
     return NextResponse.json({ success: true, service })
   } catch (error) {
-    console.error('Admin service details error:', error)
+    logger.error('Admin service details error', error)
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }
@@ -43,16 +43,13 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Non autorisé' } },
-        { status: 401 }
-      )
+    // Verify admin with services:write permission
+    const authResult = await requirePermission('services', 'write')
+    if (!authResult.success || !authResult.admin) {
+      return authResult.error
     }
 
+    const supabase = await createClient()
     const body = await request.json()
 
     const { data, error } = await supabase
@@ -73,7 +70,7 @@ export async function PATCH(
       message: 'Service mis à jour',
     })
   } catch (error) {
-    console.error('Admin service update error:', error)
+    logger.error('Admin service update error', error)
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }
@@ -87,15 +84,16 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Non autorisé' } },
-        { status: 401 }
-      )
+    // Verify admin with services:delete permission
+    const authResult = await requirePermission('services', 'delete')
+    if (!authResult.success || !authResult.admin) {
+      return authResult.error
     }
+
+    const supabase = await createClient()
+
+    // Log the deletion
+    await logAdminAction(authResult.admin.id, 'service.delete', 'service', params.id)
 
     // Soft delete
     const { error } = await supabase
@@ -110,7 +108,7 @@ export async function DELETE(
       message: 'Service désactivé',
     })
   } catch (error) {
-    console.error('Admin service delete error:', error)
+    logger.error('Admin service delete error', error)
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }

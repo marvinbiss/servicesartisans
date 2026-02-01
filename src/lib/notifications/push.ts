@@ -4,6 +4,7 @@
  */
 
 import webpush from 'web-push'
+import { logger } from '@/lib/logger'
 
 // Configure VAPID keys
 const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!
@@ -32,7 +33,7 @@ export interface PushNotificationPayload {
   badge?: string
   image?: string
   tag?: string
-  data?: Record<string, any>
+  data?: Record<string, unknown>
   actions?: Array<{
     action: string
     title: string
@@ -140,7 +141,7 @@ export async function sendPushNotification(
 ): Promise<{ success: boolean; error?: string }> {
   try {
     if (!vapidPublicKey || !vapidPrivateKey) {
-      console.warn('VAPID keys not configured')
+      logger.warn('VAPID keys not configured')
       return { success: false, error: 'Push notifications not configured' }
     }
 
@@ -157,10 +158,11 @@ export async function sendPushNotification(
     )
 
     return { success: true }
-  } catch (error: any) {
-    console.error('Push notification error:', error)
+  } catch (err) {
+    logger.error('Push notification error', err as Error)
 
     // Handle expired subscriptions
+    const error = err as { statusCode?: number; message?: string }
     if (error.statusCode === 410 || error.statusCode === 404) {
       return { success: false, error: 'subscription_expired' }
     }

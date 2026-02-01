@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { logger } from '@/lib/logger'
 import { validerSignatureTwilio } from '@/lib/api/twilio-calls'
 import { createClient } from '@supabase/supabase-js'
 
@@ -36,10 +37,10 @@ export async function POST(request: NextRequest) {
       RecordingSid: recordingSid
     } = params
 
-    console.log(`📞 Status update: ${callSid} → ${callStatus}`)
+    logger.info('Status update', { callSid, callStatus })
 
     // Mettre à jour le log d'appel
-    const updateData: Record<string, any> = {
+    const updateData: Record<string, string | number> = {
       status: callStatus,
       updated_at: new Date().toISOString()
     }
@@ -82,7 +83,7 @@ export async function POST(request: NextRequest) {
           created_at: new Date().toISOString()
         })
 
-        console.log(`✅ Lead créé pour appel ${callSid} (durée: ${callDuration}s)`)
+        logger.info('Lead cree pour appel', { callSid, duration: callDuration })
       }
     }
 
@@ -120,7 +121,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Erreur webhook status:', error)
+    logger.error('Erreur webhook status', error)
     return NextResponse.json({ success: false, error: 'Internal error' }, { status: 500 })
   }
 }

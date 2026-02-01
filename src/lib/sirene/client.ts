@@ -4,6 +4,7 @@
  */
 
 import { SIRENE_CONFIG, TRANCHES_EFFECTIFS } from './config'
+import { logger } from '@/lib/logger'
 
 interface SireneToken {
   access_token: string
@@ -148,7 +149,7 @@ export async function searchEtablissements(
 
       if (response.status === 429) {
         // Rate limit - attendre et reessayer
-        console.log('Rate limit atteint, attente...')
+        logger.info('Rate limit atteint, attente...')
         await new Promise(resolve => setTimeout(resolve, 60000))
         retries++
         continue

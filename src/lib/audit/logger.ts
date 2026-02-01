@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { logger } from '@/lib/logger'
 
 export type AuditAction =
   | 'user.login'
@@ -52,7 +53,7 @@ export async function logAudit(entry: AuditLogEntry): Promise<void> {
       created_at: new Date().toISOString(),
     })
   } catch (error) {
-    console.error('Audit logging error:', error)
+    logger.error('Audit logging error', error as Error)
   }
 }
 

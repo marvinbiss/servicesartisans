@@ -5,6 +5,7 @@
  */
 
 import twilio from 'twilio'
+import { logger } from '@/lib/logger'
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID
 const authToken = process.env.TWILIO_AUTH_TOKEN
@@ -107,7 +108,7 @@ export async function sendSMS(
 ): Promise<{ success: boolean; messageId?: string; error?: string }> {
   try {
     if (!fromNumber) {
-      console.warn('SMS sending disabled: TWILIO_PHONE_NUMBER not configured')
+      logger.warn('SMS sending disabled: TWILIO_PHONE_NUMBER not configured')
       return { success: false, error: 'SMS not configured' }
     }
 
@@ -120,10 +121,10 @@ export async function sendSMS(
       to: formattedTo,
     })
 
-    console.log(`SMS sent to ${formattedTo}: ${result.sid}`)
+    logger.info('SMS sent', { to: formattedTo, sid: result.sid })
     return { success: true, messageId: result.sid }
   } catch (error) {
-    console.error('SMS send error:', error)
+    logger.error('SMS send error', error as Error)
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error',

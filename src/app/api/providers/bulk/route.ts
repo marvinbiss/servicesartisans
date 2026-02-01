@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { logger } from '@/lib/logger'
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
 
@@ -56,7 +57,7 @@ export async function PATCH(request: NextRequest) {
       updated: data?.length || 0,
     })
   } catch (error) {
-    console.error('Bulk update providers error:', error)
+    logger.error('Bulk update providers error', error)
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }
@@ -114,7 +115,7 @@ export async function DELETE(request: NextRequest) {
       deleted: provider_ids.length,
     })
   } catch (error) {
-    console.error('Bulk delete providers error:', error)
+    logger.error('Bulk delete providers error', error)
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }

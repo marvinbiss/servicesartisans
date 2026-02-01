@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { getCachedData, generateCacheKey, CACHE_TTL } from '@/lib/cache'
+import { logger } from '@/lib/logger'
 
 export interface Service {
   id: string
@@ -39,7 +40,7 @@ export async function getServices(): Promise<Service[]> {
         .order('name')
 
       if (error) {
-        console.error('Error fetching services:', error)
+        logger.error('Error fetching services', error)
         return []
       }
 
@@ -65,7 +66,7 @@ export async function getServiceBySlug(slug: string): Promise<Service | null> {
         .single()
 
       if (error) {
-        console.error('Error fetching service:', error)
+        logger.error('Error fetching service', error)
         return null
       }
 
@@ -125,7 +126,7 @@ export async function getArtisans(params: {
       const { data, error, count } = await query
 
       if (error) {
-        console.error('Error fetching artisans:', error)
+        logger.error('Error fetching artisans', error)
         return { artisans: [], total: 0 }
       }
 
@@ -165,7 +166,7 @@ export async function getArtisanById(id: string): Promise<Artisan | null> {
         .single()
 
       if (error) {
-        console.error('Error fetching artisan:', error)
+        logger.error('Error fetching artisan', error)
         return null
       }
 
@@ -206,7 +207,7 @@ export async function getArtisanReviews(artisanId: string, limit = 10) {
         .limit(limit)
 
       if (error) {
-        console.error('Error fetching reviews:', error)
+        logger.error('Error fetching reviews', error)
         return []
       }
 

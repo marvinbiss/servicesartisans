@@ -3,27 +3,22 @@
  * Platform-wide statistics and analytics
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
-import { createClient as createServerClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
+import { verifyAdmin, logAdminAction } from '@/lib/admin-auth'
 
 export const dynamic = 'force-dynamic'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    // Verify admin authentication using cookies
-    const supabaseClient = createServerClient()
-    const { data: { user }, error: authError } = await supabaseClient.auth.getUser()
-
-    if (authError || !user) {
-      // Pour le développement, on retourne quand même les stats mock
-      // En production, décommenter le return ci-dessous
-      // return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
-      console.log('Admin stats: User not authenticated, returning mock data')
+    // Verify admin authentication
+    const authResult = await verifyAdmin()
+    if (!authResult.success || !authResult.admin) {
+      return authResult.error
     }
 
     // Verify Supabase config

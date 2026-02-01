@@ -10,6 +10,7 @@ import { logger } from '@/lib/logger'
 import { createReviewSchema, getReviewsSchema, validateRequest, formatZodErrors } from '@/lib/validations/schemas'
 import { createErrorResponse, createSuccessResponse, ErrorCode } from '@/lib/errors/types'
 import { z } from 'zod'
+import type { SupabaseClientType } from '@/types'
 
 // Type definitions for database responses
 interface BookingSlot {
@@ -402,8 +403,7 @@ function detectFraudIndicators(comment: string, rating: number): string[] {
 }
 
 // Update artisan's average rating
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function updateArtisanRating(supabase: any, artisanId: string) {
+async function updateArtisanRating(supabase: SupabaseClientType, artisanId: string) {
   const { data: reviews } = await supabase
     .from('reviews')
     .select('rating')
@@ -424,9 +424,8 @@ async function updateArtisanRating(supabase: any, artisanId: string) {
 }
 
 // Award points for leaving a review
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function awardReviewPoints(
-  supabase: any,
+  supabase: SupabaseClientType,
   artisanId: string,
   clientEmail: string
 ) {

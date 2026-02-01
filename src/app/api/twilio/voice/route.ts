@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { logger } from '@/lib/logger'
 import { genererTwiMLRouting, genererTwiMLMessagerie, validerSignatureTwilio } from '@/lib/api/twilio-calls'
 import { createClient } from '@supabase/supabase-js'
 
@@ -38,7 +39,7 @@ export async function POST(request: NextRequest) {
     } = params
 
     // Logger l'appel entrant
-    console.log(`📞 Appel entrant: ${from} → ${to}`)
+    logger.info('Appel entrant', { from, to })
 
     // Trouver le numéro virtuel et l'artisan associé
     const { data: numeroVirtuel } = await supabase
@@ -117,7 +118,7 @@ export async function POST(request: NextRequest) {
       headers: { 'Content-Type': 'text/xml' }
     })
   } catch (error) {
-    console.error('Erreur webhook voice:', error)
+    logger.error('Erreur webhook voice', error)
 
     // Réponse d'erreur gracieuse
     const twiml = `<?xml version="1.0" encoding="UTF-8"?>

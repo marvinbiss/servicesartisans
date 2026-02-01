@@ -258,7 +258,23 @@ export async function DELETE(request: Request) {
 
     if (error) throw error
 
-    // TODO: Delete file from storage
+    // Delete file from storage if exists
+    if (doc.file_url) {
+      try {
+        // Extract bucket and path from URL
+        const urlParts = doc.file_url.split('/storage/v1/object/public/')
+        if (urlParts.length === 2) {
+          const [bucket, ...pathParts] = urlParts[1].split('/')
+          const filePath = pathParts.join('/')
+          if (bucket && filePath) {
+            await supabase.storage.from(bucket).remove([filePath])
+          }
+        }
+      } catch (storageError) {
+        // Log but don't fail the delete operation
+        logger.warn('Failed to delete file from storage', { documentId, error: storageError })
+      }
+    }
 
     return NextResponse.json({ success: true })
   } catch (error) {

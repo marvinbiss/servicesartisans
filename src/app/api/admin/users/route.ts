@@ -1,20 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { requirePermission } from '@/lib/admin-auth'
+import { sanitizeSearchQuery } from '@/lib/sanitize'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
 // GET - Liste des utilisateurs avec filtres et pagination
 export async function GET(request: NextRequest) {
   try {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Non autorisé' } },
-        { status: 401 }
-      )
+    // Verify admin with users:read permission
+    const authResult = await requirePermission('users', 'read')
+    if (!authResult.success || !authResult.admin) {
+      return authResult.error
     }
+
+    const supabase = await createClient()
 
     const searchParams = request.nextUrl.searchParams
     const page = parseInt(searchParams.get('page') || '1')
@@ -51,9 +52,12 @@ export async function GET(request: NextRequest) {
       query = query.eq('subscription_plan', plan)
     }
 
-    // Recherche
+    // Recherche (sanitized to prevent injection)
     if (search) {
-      query = query.or(`email.ilike.%${search}%,full_name.ilike.%${search}%,phone.ilike.%${search}%`)
+      const sanitized = sanitizeSearchQuery(search)
+      if (sanitized) {
+        query = query.or(`email.ilike.%${sanitized}%,full_name.ilike.%${sanitized}%,phone.ilike.%${sanitized}%`)
+      }
     }
 
     const { data: users, count, error } = await query
@@ -70,7 +74,7 @@ export async function GET(request: NextRequest) {
       totalPages: Math.ceil((count || 0) / limit),
     })
   } catch (error) {
-    console.error('Admin users list error:', error)
+    logger.error('Admin users list error', error)
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }
@@ -81,15 +85,13 @@ export async function GET(request: NextRequest) {
 // POST - Créer un nouvel utilisateur (admin only)
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Non autorisé' } },
-        { status: 401 }
-      )
+    // Verify admin with users:write permission
+    const authResult = await requirePermission('users', 'write')
+    if (!authResult.success || !authResult.admin) {
+      return authResult.error
     }
+
+    const supabase = await createClient()
 
     const body = await request.json()
     const { email, full_name, phone, user_type, password } = body
@@ -114,7 +116,7 @@ export async function POST(request: NextRequest) {
     })
 
     if (authError) {
-      console.error('Auth creation error:', authError)
+      logger.error('Auth creation error', authError)
       return NextResponse.json(
         { success: false, error: { message: authError.message } },
         { status: 400 }
@@ -135,7 +137,7 @@ export async function POST(request: NextRequest) {
         .eq('id', authData.user.id)
 
       if (profileError) {
-        console.error('Profile update error:', profileError)
+        logger.error('Profile update error', profileError)
       }
     }
 
@@ -145,7 +147,7 @@ export async function POST(request: NextRequest) {
       message: 'Utilisateur créé avec succès',
     })
   } catch (error) {
-    console.error('Admin user creation error:', error)
+    logger.error('Admin user creation error', error)
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }

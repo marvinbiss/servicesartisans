@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { logger } from '@/lib/logger'
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
 
@@ -54,7 +55,7 @@ export async function PATCH(request: NextRequest) {
       moderated: data?.length || 0,
     })
   } catch (error) {
-    console.error('Bulk moderate reviews error:', error)
+    logger.error('Bulk moderate reviews error', error)
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }

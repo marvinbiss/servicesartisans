@@ -201,6 +201,6 @@ export async function getRecordings(roomName: string): Promise<string[]> {
     return []
   }
 
-  const data = await response.json()
-  return data.data?.map((r: any) => r.download_link) || []
+  const data = await response.json() as { data?: Array<{ download_link: string }> }
+  return data.data?.map((r) => r.download_link) || []
 }
