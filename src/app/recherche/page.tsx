@@ -10,6 +10,8 @@ import {
 } from 'lucide-react'
 import ArtisanResultCard from '@/components/ArtisanResultCard'
 import { PopularServicesLinks, PopularCitiesLinks, popularServices } from '@/components/InternalLinks'
+import { MetierAutocomplete } from '@/components/ui/MetierAutocomplete'
+import { VilleAutocomplete } from '@/components/ui/VilleAutocomplete'
 
 interface TimeSlot {
   time: string
@@ -70,6 +72,10 @@ function SearchPageContent() {
   const [isLoading, setIsLoading] = useState(true)
   const [showMobileFilters, setShowMobileFilters] = useState(false)
 
+  // Autocomplete state
+  const [searchQuery, setSearchQuery] = useState('')
+  const [searchLocation, setSearchLocation] = useState('')
+
   // Search params
   const query = searchParams.get('q') || ''
   const location = searchParams.get('location') || ''
@@ -77,6 +83,12 @@ function SearchPageContent() {
   const minRating = searchParams.get('minRating')
   const availability_filter = searchParams.get('availability')
   const page = parseInt(searchParams.get('page') || '1')
+
+  // Sync state with URL params
+  useEffect(() => {
+    setSearchQuery(query || service)
+    setSearchLocation(location)
+  }, [query, service, location])
 
   useEffect(() => {
     fetchResults()
@@ -181,32 +193,52 @@ function SearchPageContent() {
           <form onSubmit={handleSearch} className="max-w-4xl mx-auto">
             <div className="relative group">
               <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 to-blue-500 rounded-2xl blur opacity-25 group-hover:opacity-40 transition-opacity" />
-              <div className="relative bg-white/10 backdrop-blur-xl rounded-xl border border-white/20 p-2">
-                <div className="flex items-center gap-2">
-                  <Link href="/" className="p-2 text-white/70 hover:text-white transition-colors">
+              <div className="relative bg-white rounded-xl border border-gray-200 p-2 shadow-2xl">
+                <div className="flex flex-col md:flex-row items-stretch gap-2">
+                  <Link href="/" className="hidden md:flex p-2 text-gray-500 hover:text-gray-700 transition-colors items-center">
                     <ChevronLeft className="w-5 h-5" />
                   </Link>
-                  <div className="flex-1 relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                    <input
-                      type="text"
-                      name="q"
-                      defaultValue={query || service}
-                      placeholder="Spécialité, nom du professionnel..."
-                      className="w-full pl-10 pr-4 py-3 bg-transparent text-white placeholder-slate-400 focus:outline-none"
+
+                  {/* Service Autocomplete */}
+                  <div className="flex-1">
+                    <MetierAutocomplete
+                      value={searchQuery}
+                      onSelect={(service) => {
+                        setSearchQuery(service.name)
+                        // Auto-submit after selection
+                        const params = new URLSearchParams()
+                        params.set('q', service.name)
+                        if (searchLocation) params.set('location', searchLocation)
+                        router.push(`/recherche?${params.toString()}`)
+                      }}
+                      onClear={() => setSearchQuery('')}
+                      placeholder="Quel artisan cherchez-vous ?"
+                      showAllOnFocus={true}
+                      inputClassName="border-0 shadow-none focus:ring-0 bg-gray-50"
                     />
                   </div>
-                  <div className="hidden md:block w-px h-8 bg-white/20" />
-                  <div className="hidden md:block relative flex-1">
-                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                    <input
-                      type="text"
-                      name="location"
-                      defaultValue={location}
-                      placeholder="Où ? (ville, adresse...)"
-                      className="w-full pl-10 pr-4 py-3 bg-transparent text-white placeholder-slate-400 focus:outline-none"
+
+                  <div className="hidden md:block w-px bg-gray-200 self-stretch my-2" />
+
+                  {/* Location Autocomplete */}
+                  <div className="flex-1">
+                    <VilleAutocomplete
+                      value={searchLocation}
+                      onSelect={(ville, codePostal) => {
+                        setSearchLocation(ville)
+                        // Auto-submit after selection
+                        const params = new URLSearchParams()
+                        if (searchQuery) params.set('q', searchQuery)
+                        params.set('location', ville)
+                        router.push(`/recherche?${params.toString()}`)
+                      }}
+                      onClear={() => setSearchLocation('')}
+                      placeholder="Ou ? (ville, code postal...)"
+                      showGeolocation={true}
+                      inputClassName="border-0 shadow-none focus:ring-0 bg-gray-50"
                     />
                   </div>
+
                   <button
                     type="submit"
                     className="px-6 py-3 bg-gradient-to-r from-amber-500 to-amber-400 text-white font-semibold rounded-lg hover:from-amber-600 hover:to-amber-500 transition-all shadow-lg shadow-amber-500/25"
@@ -217,7 +249,7 @@ function SearchPageContent() {
                   <button
                     type="button"
                     onClick={() => setShowMobileFilters(true)}
-                    className="md:hidden relative p-3 bg-white/10 rounded-lg text-white hover:bg-white/20 transition-colors"
+                    className="md:hidden relative p-3 bg-gray-100 rounded-lg text-gray-700 hover:bg-gray-200 transition-colors"
                   >
                     <Sliders className="w-5 h-5" />
                     {activeFiltersCount > 0 && (

@@ -9,8 +9,10 @@ import {
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
+import { MetierAutocomplete } from '@/components/ui/MetierAutocomplete'
+import { VilleAutocomplete } from '@/components/ui/VilleAutocomplete'
 
-const services = [
+const servicesGrid = [
   { name: 'Plombier', slug: 'plombier', icon: Wrench },
   { name: 'Électricien', slug: 'electricien', icon: Zap },
   { name: 'Serrurier', slug: 'serrurier', icon: Key },
@@ -179,43 +181,63 @@ export default function DevisPage() {
               <h2 className="text-xl font-bold text-gray-900 mb-6">
                 Quel type d'artisan recherchez-vous ?
               </h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {services.map((service, index) => {
-                  const Icon = service.icon
-                  const isSelected = formData.service === service.slug
-                  return (
-                    <button
-                      key={service.slug}
-                      type="button"
-                      onClick={() => handleServiceSelect(service.slug)}
-                      className={`p-4 rounded-2xl border-2 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] transform hover:scale-[1.02] active:scale-[0.98] ${
-                        isSelected
-                          ? 'border-blue-600 bg-blue-50 shadow-lg shadow-blue-500/10'
-                          : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50'
-                      }`}
-                      style={{ animationDelay: `${index * 50}ms` }}
-                    >
-                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-2 transition-all duration-300 ${
-                        isSelected ? 'bg-blue-600 scale-110' : 'bg-gray-100'
-                      }`}>
-                        <Icon className={`w-6 h-6 transition-colors duration-300 ${
-                          isSelected ? 'text-white' : 'text-gray-600'
-                        }`} />
-                      </div>
-                      <div className={`font-medium transition-colors duration-300 ${
-                        isSelected ? 'text-blue-600' : 'text-gray-900'
-                      }`}>
-                        {service.name}
-                      </div>
-                      {isSelected && (
-                        <div className="mt-2 flex justify-center">
-                          <CheckCircle className="w-5 h-5 text-blue-600 animate-[scaleIn_0.3s_cubic-bezier(0.16,1,0.3,1)]" />
-                        </div>
-                      )}
-                    </button>
-                  )
-                })}
+
+              {/* Autocomplete Search - World-class UX */}
+              <div className="mb-6">
+                <MetierAutocomplete
+                  value={formData.service}
+                  onSelect={(service) => {
+                    updateField('service', service.slug)
+                  }}
+                  onClear={() => updateField('service', '')}
+                  placeholder="Rechercher un metier (plombier, electricien...)"
+                  showAllOnFocus={true}
+                  maxSuggestions={10}
+                />
               </div>
+
+              {/* Quick selection grid for popular services */}
+              <div className="border-t pt-6">
+                <p className="text-sm text-gray-500 mb-4">Ou selectionnez directement :</p>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {servicesGrid.map((service, index) => {
+                    const Icon = service.icon
+                    const isSelected = formData.service === service.slug
+                    return (
+                      <button
+                        key={service.slug}
+                        type="button"
+                        onClick={() => handleServiceSelect(service.slug)}
+                        className={`p-3 rounded-xl border-2 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] transform hover:scale-[1.02] active:scale-[0.98] ${
+                          isSelected
+                            ? 'border-blue-600 bg-blue-50 shadow-lg shadow-blue-500/10'
+                            : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50'
+                        }`}
+                        style={{ animationDelay: `${index * 50}ms` }}
+                      >
+                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center mx-auto mb-1.5 transition-all duration-300 ${
+                          isSelected ? 'bg-blue-600 scale-110' : 'bg-gray-100'
+                        }`}>
+                          <Icon className={`w-5 h-5 transition-colors duration-300 ${
+                            isSelected ? 'text-white' : 'text-gray-600'
+                          }`} />
+                        </div>
+                        <div className={`text-sm font-medium transition-colors duration-300 ${
+                          isSelected ? 'text-blue-600' : 'text-gray-900'
+                        }`}>
+                          {service.name}
+                        </div>
+                        {isSelected && (
+                          <div className="mt-1 flex justify-center">
+                            <CheckCircle className="w-4 h-4 text-blue-600 animate-[scaleIn_0.3s_cubic-bezier(0.16,1,0.3,1)]" />
+                          </div>
+                        )}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+
               <div className="mt-8 flex justify-end">
                 <button
                   type="button"
@@ -280,34 +302,23 @@ export default function DevisPage() {
                   </div>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Code postal
-                    </label>
-                    <div className="relative group">
-                      <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 transition-colors group-focus-within:text-blue-600" />
-                      <input
-                        type="text"
-                        value={formData.codePostal}
-                        onChange={(e) => updateField('codePostal', e.target.value)}
-                        placeholder="75001"
-                        className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all duration-300"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Ville
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.ville}
-                      onChange={(e) => updateField('ville', e.target.value)}
-                      placeholder="Paris"
-                      className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all duration-300"
-                    />
-                  </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Ville ou code postal
+                  </label>
+                  <VilleAutocomplete
+                    value={formData.ville}
+                    onSelect={(ville, codePostal) => {
+                      updateField('ville', ville)
+                      updateField('codePostal', codePostal)
+                    }}
+                    onClear={() => {
+                      updateField('ville', '')
+                      updateField('codePostal', '')
+                    }}
+                    showGeolocation={true}
+                    placeholder="Rechercher votre ville..."
+                  />
                 </div>
               </div>
 

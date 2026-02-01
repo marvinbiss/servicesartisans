@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import Link from 'next/link'
 import {
   User, Mail, Phone, MapPin, Building, FileText,
@@ -8,12 +8,9 @@ import {
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
-
-const services = [
-  'Plombier', 'Electricien', 'Serrurier', 'Chauffagiste',
-  'Peintre', 'Couvreur', 'Menuisier', 'Macon',
-  'Carreleur', 'Plaquiste', 'Climaticien', 'Autre'
-]
+import { SiretAutocomplete } from '@/components/ui/SiretAutocomplete'
+import { MetierAutocomplete } from '@/components/ui/MetierAutocomplete'
+import { VilleAutocomplete } from '@/components/ui/VilleAutocomplete'
 
 const benefits = [
   { icon: Users, title: 'Nouveaux clients', description: 'Recevez des demandes de devis qualifiees' },
@@ -188,44 +185,31 @@ export default function InscriptionArtisanPage() {
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Numero SIRET *
                       </label>
-                      <input
-                        type="text"
+                      <SiretAutocomplete
                         value={formData.siret}
-                        onChange={(e) => setFormData({ ...formData, siret: e.target.value })}
-                        required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                        placeholder="123 456 789 00012"
+                        onValidated={(siret, company) => {
+                          setFormData(prev => ({
+                            ...prev,
+                            siret,
+                            entreprise: company?.name || prev.entreprise
+                          }))
+                        }}
+                        onClear={() => setFormData(prev => ({ ...prev, siret: '' }))}
+                        showCompanyPreview={true}
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Metier principal *
                       </label>
-                      <select
+                      <MetierAutocomplete
                         value={formData.metier}
-                        onChange={(e) => setFormData({ ...formData, metier: e.target.value })}
-                        required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                      >
-                        <option value="">Selectionnez votre metier</option>
-                        {services.map((s) => (
-                          <option key={s} value={s}>{s}</option>
-                        ))}
-                      </select>
+                        onSelect={(service) => setFormData(prev => ({ ...prev, metier: service.name }))}
+                        onClear={() => setFormData(prev => ({ ...prev, metier: '' }))}
+                        placeholder="Rechercher votre metier..."
+                        showAllOnFocus={true}
+                      />
                     </div>
-                    {formData.metier === 'Autre' && (
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Precisez votre metier *
-                        </label>
-                        <input
-                          type="text"
-                          value={formData.autreMetier}
-                          onChange={(e) => setFormData({ ...formData, autreMetier: e.target.value })}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                        />
-                      </div>
-                    )}
                   </div>
                 )}
 
@@ -301,27 +285,21 @@ export default function InscriptionArtisanPage() {
                         />
                       </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Code postal *</label>
-                        <input
-                          type="text"
-                          value={formData.codePostal}
-                          onChange={(e) => setFormData({ ...formData, codePostal: e.target.value })}
-                          required
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Ville *</label>
-                        <input
-                          type="text"
-                          value={formData.ville}
-                          onChange={(e) => setFormData({ ...formData, ville: e.target.value })}
-                          required
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                        />
-                      </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Ville *</label>
+                      <VilleAutocomplete
+                        value={formData.ville}
+                        onSelect={(ville, codePostal, coords) => {
+                          setFormData(prev => ({
+                            ...prev,
+                            ville,
+                            codePostal
+                          }))
+                        }}
+                        onClear={() => setFormData(prev => ({ ...prev, ville: '', codePostal: '' }))}
+                        showGeolocation={true}
+                        placeholder="Rechercher votre ville..."
+                      />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">

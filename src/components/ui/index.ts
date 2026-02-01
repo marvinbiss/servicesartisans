@@ -53,3 +53,9 @@ export { SearchBar } from './SearchBar'
 
 // Artisan Cards (Airbnb-style)
 export { ArtisanCard, ArtisanGrid } from './ArtisanCard'
+
+// Autocomplete (World-class, Stripe/Doctolib-style)
+export { VilleAutocomplete } from './VilleAutocomplete'
+export { AdresseAutocomplete } from './AdresseAutocomplete'
+export { SiretAutocomplete } from './SiretAutocomplete'
+export { MetierAutocomplete } from './MetierAutocomplete'
