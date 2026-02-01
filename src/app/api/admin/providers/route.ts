@@ -89,13 +89,19 @@ export async function GET(request: NextRequest) {
       }
     })
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       providers: transformedProviders,
       total: count || 0,
       page,
       totalPages: Math.ceil((count || 0) / limit),
     })
+
+    // Prevent caching
+    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate')
+    response.headers.set('Pragma', 'no-cache')
+
+    return response
   } catch (error) {
     console.error('Admin providers list error:', error)
     return NextResponse.json(

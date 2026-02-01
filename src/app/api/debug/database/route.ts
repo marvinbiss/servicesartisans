@@ -4,13 +4,13 @@
  */
 
 import { NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
   try {
-    const supabase = createClient()
+    const supabase = createAdminClient()
     const results: Record<string, unknown> = {}
 
     // Verifier les providers (artisans importes/scrapes)

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import {
   ChevronLeft,
@@ -13,7 +13,10 @@ import {
   Star,
   Clock,
   Euro,
-  Image,
+  Loader2,
+  AlertCircle,
+  CheckCircle,
+  X,
 } from 'lucide-react'
 
 interface ArtisanData {
@@ -24,17 +27,23 @@ interface ArtisanData {
   company_name: string | null
   phone: string | null
   siret: string | null
+  siren: string | null
   description: string | null
   services: string[]
   zones: string[]
   address: string | null
   city: string | null
   postal_code: string | null
+  department: string | null
+  region: string | null
   hourly_rate: number | null
   is_verified: boolean
   is_featured: boolean
+  is_active: boolean
   rating: number | null
   reviews_count: number
+  website: string | null
+  legal_form: string | null
   availability: {
     monday?: { start: string; end: string }
     tuesday?: { start: string; end: string }
@@ -46,6 +55,7 @@ interface ArtisanData {
   } | null
   profile_image: string | null
   created_at: string
+  updated_at: string | null
 }
 
 const DAYS = [
@@ -58,6 +68,26 @@ const DAYS = [
   { key: 'sunday', label: 'Dimanche' },
 ]
 
+// Toast component
+function Toast({ message, type, onClose }: { message: string; type: 'success' | 'error'; onClose: () => void }) {
+  useEffect(() => {
+    const timer = setTimeout(onClose, 5000)
+    return () => clearTimeout(timer)
+  }, [onClose])
+
+  return (
+    <div className={`fixed bottom-4 right-4 z-50 flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg max-w-md ${
+      type === 'success' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'
+    }`}>
+      {type === 'success' ? <CheckCircle className="w-5 h-5 flex-shrink-0" /> : <AlertCircle className="w-5 h-5 flex-shrink-0" />}
+      <span className="flex-1">{message}</span>
+      <button onClick={onClose} className="hover:opacity-80 flex-shrink-0">
+        <X className="w-4 h-4" />
+      </button>
+    </div>
+  )
+}
+
 export default function EditArtisanPage() {
   const router = useRouter()
   const params = useParams()
@@ -66,7 +96,7 @@ export default function EditArtisanPage() {
   const [artisan, setArtisan] = useState<ArtisanData | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
-  const [error, setError] = useState('')
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
 
   // Form state
   const [formData, setFormData] = useState({
@@ -76,122 +106,162 @@ export default function EditArtisanPage() {
     phone: '',
     siret: '',
     description: '',
+    website: '',
     services: [] as string[],
     zones: [] as string[],
     address: '',
     city: '',
     postal_code: '',
+    department: '',
+    region: '',
     hourly_rate: '',
     is_verified: false,
     is_featured: false,
     availability: {} as Record<string, { start: string; end: string }>,
   })
 
-  const [successMessage, setSuccessMessage] = useState('')
+  // Track if form has changes
+  const [hasChanges, setHasChanges] = useState(false)
 
   // Input states for services and zones
   const [newService, setNewService] = useState('')
   const [newZone, setNewZone] = useState('')
 
-  useEffect(() => {
-    fetchArtisan()
-  }, [artisanId])
-
-  const fetchArtisan = async () => {
+  const fetchArtisan = useCallback(async () => {
     try {
       setLoading(true)
-      const response = await fetch(`/api/admin/providers/${artisanId}`)
+      const response = await fetch(`/api/admin/providers/${artisanId}`, {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache',
+        },
+      })
+
       if (response.ok) {
         const data = await response.json()
-        setArtisan(data.provider)
-        setFormData({
-          email: data.provider.email || '',
-          full_name: data.provider.full_name || '',
-          company_name: data.provider.company_name || '',
-          phone: data.provider.phone || '',
-          siret: data.provider.siret || '',
-          description: data.provider.description || '',
-          services: data.provider.services || [],
-          zones: data.provider.zones || [],
-          address: data.provider.address || '',
-          city: data.provider.city || '',
-          postal_code: data.provider.postal_code || '',
-          hourly_rate: data.provider.hourly_rate?.toString() || '',
-          is_verified: data.provider.is_verified || false,
-          is_featured: data.provider.is_featured || false,
-          availability: data.provider.availability || {},
-        })
+        if (data.success && data.provider) {
+          setArtisan(data.provider)
+          setFormData({
+            email: data.provider.email || '',
+            full_name: data.provider.full_name || '',
+            company_name: data.provider.company_name || '',
+            phone: data.provider.phone || '',
+            siret: data.provider.siret || '',
+            description: data.provider.description || '',
+            website: data.provider.website || '',
+            services: data.provider.services || [],
+            zones: data.provider.zones || [],
+            address: data.provider.address || '',
+            city: data.provider.city || '',
+            postal_code: data.provider.postal_code || '',
+            department: data.provider.department || '',
+            region: data.provider.region || '',
+            hourly_rate: data.provider.hourly_rate?.toString() || '',
+            is_verified: data.provider.is_verified || false,
+            is_featured: data.provider.is_featured || false,
+            availability: data.provider.availability || {},
+          })
+          setHasChanges(false)
+        } else {
+          setToast({ message: 'Artisan non trouvé', type: 'error' })
+        }
       } else {
-        setError('Artisan non trouvé')
+        setToast({ message: 'Erreur lors du chargement', type: 'error' })
       }
     } catch (err) {
-      setError('Erreur de chargement')
+      console.error('Fetch error:', err)
+      setToast({ message: 'Erreur de connexion', type: 'error' })
     } finally {
       setLoading(false)
     }
+  }, [artisanId])
+
+  useEffect(() => {
+    fetchArtisan()
+  }, [fetchArtisan])
+
+  // Track form changes
+  const updateFormData = (updates: Partial<typeof formData>) => {
+    setFormData(prev => ({ ...prev, ...updates }))
+    setHasChanges(true)
   }
 
   const handleSave = async () => {
+    if (saving) return
+
     try {
       setSaving(true)
-      setError('')
-      setSuccessMessage('')
+
+      // Prepare data for API
+      const payload = {
+        ...formData,
+        hourly_rate: formData.hourly_rate ? parseFloat(formData.hourly_rate) : null,
+      }
+
+      console.log('[Edit] Saving artisan:', artisanId)
+      console.log('[Edit] Payload:', payload)
 
       const response = await fetch(`/api/admin/providers/${artisanId}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          hourly_rate: formData.hourly_rate ? parseFloat(formData.hourly_rate) : null,
-        }),
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache',
+        },
+        body: JSON.stringify(payload),
+        cache: 'no-store',
       })
 
       const data = await response.json()
+      console.log('[Edit] Response:', data)
 
       if (response.ok && data.success) {
-        setSuccessMessage('Artisan mis à jour avec succès!')
+        setToast({ message: 'Artisan mis à jour avec succès!', type: 'success' })
+        setHasChanges(false)
+
         // Refresh data to show updated values
         await fetchArtisan()
-        // Optionally redirect after a short delay
+
+        // Redirect after a short delay
         setTimeout(() => {
           router.push(`/admin/artisans/${artisanId}`)
         }, 1500)
       } else {
-        setError(data.error || data.message || 'Erreur de sauvegarde')
+        const errorMsg = data.error || data.message || 'Erreur de sauvegarde'
+        console.error('[Edit] Save error:', errorMsg)
+        setToast({ message: errorMsg, type: 'error' })
       }
     } catch (err) {
-      console.error('Save error:', err)
-      setError('Erreur de sauvegarde - vérifiez la connexion')
+      console.error('[Edit] Save exception:', err)
+      setToast({ message: 'Erreur de connexion au serveur', type: 'error' })
     } finally {
       setSaving(false)
     }
   }
 
   const addService = () => {
-    if (newService && !formData.services.includes(newService)) {
-      setFormData({ ...formData, services: [...formData.services, newService] })
+    if (newService.trim() && !formData.services.includes(newService.trim())) {
+      updateFormData({ services: [...formData.services, newService.trim()] })
       setNewService('')
     }
   }
 
   const removeService = (service: string) => {
-    setFormData({ ...formData, services: formData.services.filter(s => s !== service) })
+    updateFormData({ services: formData.services.filter(s => s !== service) })
   }
 
   const addZone = () => {
-    if (newZone && !formData.zones.includes(newZone)) {
-      setFormData({ ...formData, zones: [...formData.zones, newZone] })
+    if (newZone.trim() && !formData.zones.includes(newZone.trim())) {
+      updateFormData({ zones: [...formData.zones, newZone.trim()] })
       setNewZone('')
     }
   }
 
   const removeZone = (zone: string) => {
-    setFormData({ ...formData, zones: formData.zones.filter(z => z !== zone) })
+    updateFormData({ zones: formData.zones.filter(z => z !== zone) })
   }
 
   const updateAvailability = (day: string, field: 'start' | 'end', value: string) => {
-    setFormData({
-      ...formData,
+    updateFormData({
       availability: {
         ...formData.availability,
         [day]: {
@@ -205,10 +275,9 @@ export default function EditArtisanPage() {
   const toggleDayAvailability = (day: string) => {
     if (formData.availability[day]) {
       const { [day]: _, ...rest } = formData.availability
-      setFormData({ ...formData, availability: rest })
+      updateFormData({ availability: rest })
     } else {
-      setFormData({
-        ...formData,
+      updateFormData({
         availability: {
           ...formData.availability,
           [day]: { start: '09:00', end: '18:00' },
@@ -220,16 +289,21 @@ export default function EditArtisanPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 text-blue-600 mx-auto animate-spin" />
+          <p className="text-gray-500 mt-4">Chargement de l&apos;artisan...</p>
+        </div>
       </div>
     )
   }
 
-  if (error && !artisan) {
+  if (!artisan) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-red-600 mb-4">{error}</p>
+          <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Artisan non trouvé</h2>
+          <p className="text-gray-500 mb-4">L&apos;artisan demandé n&apos;existe pas ou a été supprimé.</p>
           <button
             onClick={() => router.push('/admin/artisans')}
             className="text-blue-600 hover:underline"
@@ -243,6 +317,15 @@ export default function EditArtisanPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Toast notification */}
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
+
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -255,29 +338,26 @@ export default function EditArtisanPage() {
               Retour à la liste
             </button>
             <h1 className="text-2xl font-bold text-gray-900">Modifier l&apos;artisan</h1>
-            <p className="text-gray-500 mt-1">{artisan?.email}</p>
+            <p className="text-gray-500 mt-1">{artisan.company_name || artisan.full_name}</p>
           </div>
           <button
             onClick={handleSave}
-            disabled={saving}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            disabled={saving || !hasChanges}
+            className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
-            <Save className="w-5 h-5" />
-            {saving ? 'Enregistrement...' : 'Enregistrer'}
+            {saving ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin" />
+                Enregistrement...
+              </>
+            ) : (
+              <>
+                <Save className="w-5 h-5" />
+                Enregistrer
+              </>
+            )}
           </button>
         </div>
-
-        {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
-            {error}
-          </div>
-        )}
-
-        {successMessage && (
-          <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-6">
-            {successMessage}
-          </div>
-        )}
 
         {/* Form */}
         <div className="space-y-6">
@@ -296,8 +376,9 @@ export default function EditArtisanPage() {
                   <input
                     type="text"
                     value={formData.full_name}
-                    onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    onChange={(e) => updateFormData({ full_name: e.target.value })}
+                    placeholder="Jean Dupont"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
                 <div>
@@ -307,8 +388,9 @@ export default function EditArtisanPage() {
                   <input
                     type="text"
                     value={formData.company_name}
-                    onChange={(e) => setFormData({ ...formData, company_name: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    onChange={(e) => updateFormData({ company_name: e.target.value })}
+                    placeholder="Entreprise Dupont SARL"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
               </div>
@@ -321,9 +403,9 @@ export default function EditArtisanPage() {
                   <input
                     type="email"
                     value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="email@example.com"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    onChange={(e) => updateFormData({ email: e.target.value })}
+                    placeholder="contact@entreprise.fr"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
                 <div>
@@ -334,8 +416,9 @@ export default function EditArtisanPage() {
                   <input
                     type="tel"
                     value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    onChange={(e) => updateFormData({ phone: e.target.value })}
+                    placeholder="01 23 45 67 89"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
               </div>
@@ -347,8 +430,21 @@ export default function EditArtisanPage() {
                   <input
                     type="text"
                     value={formData.siret}
-                    onChange={(e) => setFormData({ ...formData, siret: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    onChange={(e) => updateFormData({ siret: e.target.value })}
+                    placeholder="12345678901234"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Site web
+                  </label>
+                  <input
+                    type="url"
+                    value={formData.website}
+                    onChange={(e) => updateFormData({ website: e.target.value })}
+                    placeholder="https://www.entreprise.fr"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
               </div>
@@ -358,9 +454,10 @@ export default function EditArtisanPage() {
                 </label>
                 <textarea
                   value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  onChange={(e) => updateFormData({ description: e.target.value })}
                   rows={4}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  placeholder="Décrivez l'entreprise, ses services, son expertise..."
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
             </div>
@@ -375,27 +472,17 @@ export default function EditArtisanPage() {
             <div className="grid gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Adresse
+                  Adresse complète
                 </label>
                 <input
                   type="text"
                   value={formData.address}
-                  onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  onChange={(e) => updateFormData({ address: e.target.value })}
+                  placeholder="123 rue de la République"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Ville
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.city}
-                    onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
+              <div className="grid md:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Code postal
@@ -403,8 +490,33 @@ export default function EditArtisanPage() {
                   <input
                     type="text"
                     value={formData.postal_code}
-                    onChange={(e) => setFormData({ ...formData, postal_code: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    onChange={(e) => updateFormData({ postal_code: e.target.value })}
+                    placeholder="75001"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Ville
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.city}
+                    onChange={(e) => updateFormData({ city: e.target.value })}
+                    placeholder="Paris"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Département
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.department}
+                    onChange={(e) => updateFormData({ department: e.target.value })}
+                    placeholder="75"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
               </div>
@@ -418,20 +530,24 @@ export default function EditArtisanPage() {
               Services proposés
             </h2>
             <div className="flex flex-wrap gap-2 mb-4">
-              {formData.services.map((service) => (
-                <span
-                  key={service}
-                  className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm"
-                >
-                  {service}
-                  <button
-                    onClick={() => removeService(service)}
-                    className="ml-1 hover:text-blue-900"
+              {formData.services.length === 0 ? (
+                <p className="text-gray-400 text-sm">Aucun service défini</p>
+              ) : (
+                formData.services.map((service) => (
+                  <span
+                    key={service}
+                    className="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-100 text-blue-700 rounded-full text-sm"
                   >
-                    ×
-                  </button>
-                </span>
-              ))}
+                    {service}
+                    <button
+                      onClick={() => removeService(service)}
+                      className="ml-1 hover:text-blue-900"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
+                ))
+              )}
             </div>
             <div className="flex gap-2">
               <input
@@ -439,12 +555,13 @@ export default function EditArtisanPage() {
                 value={newService}
                 onChange={(e) => setNewService(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addService())}
-                placeholder="Ajouter un service..."
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                placeholder="Ajouter un service (ex: Plomberie, Électricité...)"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
               <button
                 onClick={addService}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                disabled={!newService.trim()}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Ajouter
               </button>
@@ -458,20 +575,24 @@ export default function EditArtisanPage() {
               Zones d&apos;intervention
             </h2>
             <div className="flex flex-wrap gap-2 mb-4">
-              {formData.zones.map((zone) => (
-                <span
-                  key={zone}
-                  className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm"
-                >
-                  {zone}
-                  <button
-                    onClick={() => removeZone(zone)}
-                    className="ml-1 hover:text-green-900"
+              {formData.zones.length === 0 ? (
+                <p className="text-gray-400 text-sm">Aucune zone définie</p>
+              ) : (
+                formData.zones.map((zone) => (
+                  <span
+                    key={zone}
+                    className="inline-flex items-center gap-1 px-3 py-1.5 bg-green-100 text-green-700 rounded-full text-sm"
                   >
-                    ×
-                  </button>
-                </span>
-              ))}
+                    {zone}
+                    <button
+                      onClick={() => removeZone(zone)}
+                      className="ml-1 hover:text-green-900"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
+                ))
+              )}
             </div>
             <div className="flex gap-2">
               <input
@@ -479,12 +600,13 @@ export default function EditArtisanPage() {
                 value={newZone}
                 onChange={(e) => setNewZone(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addZone())}
-                placeholder="Ajouter une zone (ex: Paris 75000)..."
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                placeholder="Ajouter une zone (ex: Paris 75000, Île-de-France...)"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
               <button
                 onClick={addZone}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                disabled={!newZone.trim()}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Ajouter
               </button>
@@ -506,49 +628,50 @@ export default function EditArtisanPage() {
                   <input
                     type="number"
                     value={formData.hourly_rate}
-                    onChange={(e) => setFormData({ ...formData, hourly_rate: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    onChange={(e) => updateFormData({ hourly_rate: e.target.value })}
+                    placeholder="50"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
                     Vérifié
                   </label>
                   <button
                     type="button"
-                    onClick={() => setFormData({ ...formData, is_verified: !formData.is_verified })}
-                    className={`relative w-12 h-6 rounded-full transition-colors ${
+                    onClick={() => updateFormData({ is_verified: !formData.is_verified })}
+                    className={`relative w-14 h-7 rounded-full transition-colors ${
                       formData.is_verified ? 'bg-green-600' : 'bg-gray-300'
                     }`}
                   >
                     <span
-                      className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform ${
-                        formData.is_verified ? 'translate-x-6' : ''
+                      className={`absolute top-1 left-1 w-5 h-5 rounded-full bg-white transition-transform shadow ${
+                        formData.is_verified ? 'translate-x-7' : ''
                       }`}
                     />
                   </button>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
                     Mis en avant
                   </label>
                   <button
                     type="button"
-                    onClick={() => setFormData({ ...formData, is_featured: !formData.is_featured })}
-                    className={`relative w-12 h-6 rounded-full transition-colors ${
+                    onClick={() => updateFormData({ is_featured: !formData.is_featured })}
+                    className={`relative w-14 h-7 rounded-full transition-colors ${
                       formData.is_featured ? 'bg-amber-500' : 'bg-gray-300'
                     }`}
                   >
                     <span
-                      className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform ${
-                        formData.is_featured ? 'translate-x-6' : ''
+                      className={`absolute top-1 left-1 w-5 h-5 rounded-full bg-white transition-transform shadow ${
+                        formData.is_featured ? 'translate-x-7' : ''
                       }`}
                     />
                   </button>
                 </div>
               </div>
               {artisan && (
-                <div className="flex items-center gap-4 pt-4 border-t border-gray-100">
+                <div className="flex items-center gap-6 pt-4 border-t border-gray-100">
                   <div className="flex items-center gap-2">
                     <Star className="w-4 h-4 text-amber-500" />
                     <span className="text-sm text-gray-600">
@@ -558,6 +681,11 @@ export default function EditArtisanPage() {
                   <div className="text-sm text-gray-500">
                     {artisan.reviews_count} avis
                   </div>
+                  {artisan.updated_at && (
+                    <div className="text-sm text-gray-400">
+                      Dernière modification: {new Date(artisan.updated_at).toLocaleDateString('fr-FR')}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -572,8 +700,8 @@ export default function EditArtisanPage() {
             <div className="space-y-3">
               {DAYS.map(({ key, label }) => (
                 <div key={key} className="flex items-center gap-4">
-                  <div className="w-28">
-                    <label className="flex items-center gap-2">
+                  <div className="w-32">
+                    <label className="flex items-center gap-2 cursor-pointer">
                       <input
                         type="checkbox"
                         checked={!!formData.availability[key]}
@@ -589,14 +717,14 @@ export default function EditArtisanPage() {
                         type="time"
                         value={formData.availability[key]?.start || '09:00'}
                         onChange={(e) => updateAvailability(key, 'start', e.target.value)}
-                        className="px-2 py-1 border border-gray-300 rounded text-sm"
+                        className="px-2 py-1 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-blue-500"
                       />
                       <span className="text-gray-500">à</span>
                       <input
                         type="time"
                         value={formData.availability[key]?.end || '18:00'}
                         onChange={(e) => updateAvailability(key, 'end', e.target.value)}
-                        className="px-2 py-1 border border-gray-300 rounded text-sm"
+                        className="px-2 py-1 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
                   )}
@@ -604,6 +732,27 @@ export default function EditArtisanPage() {
               ))}
             </div>
           </div>
+        </div>
+
+        {/* Sticky save button for mobile */}
+        <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 md:hidden">
+          <button
+            onClick={handleSave}
+            disabled={saving || !hasChanges}
+            className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {saving ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin" />
+                Enregistrement...
+              </>
+            ) : (
+              <>
+                <Save className="w-5 h-5" />
+                Enregistrer les modifications
+              </>
+            )}
+          </button>
         </div>
       </div>
     </div>

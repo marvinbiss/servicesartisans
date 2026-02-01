@@ -100,10 +100,16 @@ export async function GET(
       _provider_locations: provider.provider_locations,
     }
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       provider: transformedProvider,
     })
+
+    // Prevent caching
+    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate')
+    response.headers.set('Pragma', 'no-cache')
+
+    return response
   } catch (error) {
     console.error('Admin provider GET error:', error)
     return NextResponse.json(
@@ -263,11 +269,17 @@ export async function PATCH(
       // Ignorer les erreurs d'audit
     }
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       data,
       message: 'Artisan mis à jour avec succès'
     })
+
+    // Prevent caching
+    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate')
+    response.headers.set('Pragma', 'no-cache')
+
+    return response
   } catch (error) {
     console.error('Admin provider PATCH error:', error)
     return NextResponse.json(

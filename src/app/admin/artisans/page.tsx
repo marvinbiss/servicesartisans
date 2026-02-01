@@ -1,22 +1,23 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   Search,
-  Filter,
-  MoreHorizontal,
   Eye,
   Edit2,
   Ban,
   CheckCircle,
   Star,
   MapPin,
-  Phone,
   Mail,
   ChevronLeft,
   ChevronRight,
   Briefcase,
+  Loader2,
+  RefreshCw,
+  AlertCircle,
+  Check,
 } from 'lucide-react'
 
 interface Provider {
@@ -38,6 +39,24 @@ interface Provider {
   siret?: string
 }
 
+// Toast notification component
+function Toast({ message, type, onClose }: { message: string; type: 'success' | 'error'; onClose: () => void }) {
+  useEffect(() => {
+    const timer = setTimeout(onClose, 4000)
+    return () => clearTimeout(timer)
+  }, [onClose])
+
+  return (
+    <div className={`fixed bottom-4 right-4 z-50 flex items-center gap-2 px-4 py-3 rounded-lg shadow-lg ${
+      type === 'success' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'
+    }`}>
+      {type === 'success' ? <Check className="w-5 h-5" /> : <AlertCircle className="w-5 h-5" />}
+      <span>{message}</span>
+      <button onClick={onClose} className="ml-2 hover:opacity-80">&times;</button>
+    </div>
+  )
+}
+
 export default function AdminProvidersPage() {
   const router = useRouter()
   const [providers, setProviders] = useState<Provider[]>([])
@@ -46,124 +65,135 @@ export default function AdminProvidersPage() {
   const [filter, setFilter] = useState<'all' | 'verified' | 'pending' | 'suspended'>('all')
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
+  const [total, setTotal] = useState(0)
 
+  // Action states
+  const [actionLoading, setActionLoading] = useState<string | null>(null)
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
+
+  // Debounce search
+  const [searchDebounce, setSearchDebounce] = useState('')
   useEffect(() => {
-    fetchProviders()
-  }, [page, filter, search])
+    const timer = setTimeout(() => setSearchDebounce(search), 300)
+    return () => clearTimeout(timer)
+  }, [search])
 
-  const fetchProviders = async () => {
+  const fetchProviders = useCallback(async () => {
     try {
       setLoading(true)
       const params = new URLSearchParams({
         page: String(page),
         limit: '20',
         filter,
-        search,
+        search: searchDebounce,
       })
-      const response = await fetch(`/api/admin/providers?${params}`)
+
+      // Disable cache to always get fresh data
+      const response = await fetch(`/api/admin/providers?${params}`, {
+        method: 'GET',
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+        },
+        cache: 'no-store',
+      })
+
       if (response.ok) {
         const data = await response.json()
-        setProviders(data.providers || [])
-        setTotalPages(data.totalPages || 1)
+        if (data.success) {
+          setProviders(data.providers || [])
+          setTotalPages(data.totalPages || 1)
+          setTotal(data.total || 0)
+        } else {
+          console.error('API returned error:', data.error)
+          setToast({ message: data.error || 'Erreur lors du chargement', type: 'error' })
+        }
+      } else {
+        console.error('Failed to fetch providers:', response.status)
+        setToast({ message: 'Erreur de connexion au serveur', type: 'error' })
       }
     } catch (error) {
       console.error('Failed to fetch providers:', error)
+      setToast({ message: 'Erreur de connexion', type: 'error' })
     } finally {
       setLoading(false)
     }
-  }
+  }, [page, filter, searchDebounce])
+
+  useEffect(() => {
+    fetchProviders()
+  }, [fetchProviders])
 
   const handleAction = async (providerId: string, action: 'verify' | 'suspend' | 'activate') => {
+    // Prevent double-click
+    if (actionLoading) return
+
     try {
+      setActionLoading(providerId)
+
       const updates: Record<string, unknown> = {}
       if (action === 'verify') updates.is_verified = true
       if (action === 'suspend') updates.is_active = false
       if (action === 'activate') updates.is_active = true
 
+      console.log(`[Admin] Sending ${action} for provider ${providerId}`, updates)
+
       const response = await fetch(`/api/admin/providers/${providerId}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache',
+        },
         body: JSON.stringify(updates),
+        cache: 'no-store',
       })
 
       const data = await response.json()
+      console.log(`[Admin] Response:`, data)
 
       if (response.ok && data.success) {
-        // Refresh the list to show updated status
+        // Show success toast
+        const actionText = action === 'verify' ? 'vérifié' : action === 'suspend' ? 'suspendu' : 'réactivé'
+        setToast({ message: `Artisan ${actionText} avec succès!`, type: 'success' })
+
+        // Update local state immediately for better UX
+        setProviders(prev => prev.map(p => {
+          if (p.id === providerId) {
+            return {
+              ...p,
+              is_verified: action === 'verify' ? true : p.is_verified,
+              is_active: action === 'suspend' ? false : action === 'activate' ? true : p.is_active,
+            }
+          }
+          return p
+        }))
+
+        // Then refresh from server to ensure consistency
         await fetchProviders()
       } else {
         console.error('Action failed:', data.error || data.message)
-        alert(`Erreur: ${data.error || data.message || 'Action échouée'}`)
+        setToast({ message: `Erreur: ${data.error || data.message || 'Action échouée'}`, type: 'error' })
       }
     } catch (error) {
       console.error('Action failed:', error)
-      alert('Erreur de connexion')
+      setToast({ message: 'Erreur de connexion au serveur', type: 'error' })
+    } finally {
+      setActionLoading(null)
     }
   }
 
-  // Mock data for demo
-  const mockProviders: Provider[] = [
-    {
-      id: '1',
-      company_name: 'Plomberie Pro Paris',
-      slug: 'plomberie-pro-paris',
-      email: 'contact@plomberiepro.fr',
-      phone: '01 23 45 67 89',
-      city: 'Paris',
-      region: 'Île-de-France',
-      service_type: 'Plombier',
-      is_verified: true,
-      is_active: true,
-      subscription_type: 'premium',
-      rating_average: 4.8,
-      review_count: 156,
-      created_at: '2024-01-15',
-    },
-    {
-      id: '2',
-      company_name: 'Électricité Express',
-      slug: 'electricite-express',
-      email: 'info@elecexpress.fr',
-      phone: '01 98 76 54 32',
-      city: 'Lyon',
-      region: 'Auvergne-Rhône-Alpes',
-      service_type: 'Électricien',
-      is_verified: true,
-      is_active: true,
-      subscription_type: 'basic',
-      rating_average: 4.5,
-      review_count: 89,
-      created_at: '2024-02-20',
-    },
-    {
-      id: '3',
-      company_name: 'Serrurerie 24/7',
-      slug: 'serrurerie-247',
-      email: 'urgence@serrurerie247.fr',
-      phone: '06 12 34 56 78',
-      city: 'Marseille',
-      region: "Provence-Alpes-Côte d'Azur",
-      service_type: 'Serrurier',
-      is_verified: false,
-      is_active: true,
-      subscription_type: 'free',
-      rating_average: 0,
-      review_count: 0,
-      created_at: '2024-03-01',
-    },
-  ]
-
-  // Afficher les vrais providers, pas les mock data
-  const displayProviders = providers
+  const handleRefresh = () => {
+    fetchProviders()
+  }
 
   const getStatusBadge = (provider: Provider) => {
     if (!provider.is_active) {
-      return <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs">Suspendu</span>
+      return <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs font-medium">Suspendu</span>
     }
     if (!provider.is_verified) {
-      return <span className="px-2 py-1 bg-amber-100 text-amber-700 rounded-full text-xs">En attente</span>
+      return <span className="px-2 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-medium">En attente</span>
     }
-    return <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">Vérifié</span>
+    return <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">Vérifié</span>
   }
 
   const getSubscriptionBadge = (type: string) => {
@@ -173,18 +203,46 @@ export default function AdminProvidersPage() {
       free: 'bg-gray-100 text-gray-700',
     }
     return (
-      <span className={`px-2 py-1 rounded-full text-xs ${colors[type] || colors.free}`}>
+      <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[type] || colors.free}`}>
         {type.charAt(0).toUpperCase() + type.slice(1)}
       </span>
     )
   }
 
+  // Count by status for filter badges
+  const getFilterCount = (f: string) => {
+    if (f === 'all') return total
+    // We don't have exact counts, so don't show them for filtered views
+    return null
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Toast notification */}
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Gestion des Artisans</h1>
-          <p className="text-gray-500 mt-1">Gérez les profils et vérifications des artisans</p>
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Gestion des Artisans</h1>
+            <p className="text-gray-500 mt-1">
+              {total > 0 ? `${total} artisan${total > 1 ? 's' : ''} au total` : 'Gérez les profils et vérifications des artisans'}
+            </p>
+          </div>
+          <button
+            onClick={handleRefresh}
+            disabled={loading}
+            className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+          >
+            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+            Actualiser
+          </button>
         </div>
 
         {/* Filters */}
@@ -194,17 +252,20 @@ export default function AdminProvidersPage() {
               <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
-                placeholder="Rechercher par nom, email, ville..."
+                placeholder="Rechercher par nom, email, ville, SIRET..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap">
               {(['all', 'verified', 'pending', 'suspended'] as const).map((f) => (
                 <button
                   key={f}
-                  onClick={() => setFilter(f)}
+                  onClick={() => {
+                    setFilter(f)
+                    setPage(1) // Reset to first page on filter change
+                  }}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                     filter === f
                       ? 'bg-blue-600 text-white'
@@ -222,25 +283,39 @@ export default function AdminProvidersPage() {
 
         {/* Providers Table */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          {loading ? (
-            <div className="p-8 text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+          {loading && providers.length === 0 ? (
+            <div className="p-12 text-center">
+              <Loader2 className="w-8 h-8 text-blue-600 mx-auto animate-spin" />
+              <p className="text-gray-500 mt-4">Chargement des artisans...</p>
             </div>
-          ) : displayProviders.length === 0 ? (
+          ) : providers.length === 0 ? (
             <div className="p-12 text-center">
               <Briefcase className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">Aucun artisan</h3>
-              <p className="text-gray-500 mb-4">Commencez par importer des artisans depuis SIRENE</p>
-              <a
-                href="/admin/import"
-                className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-              >
-                Importer des artisans
-              </a>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">Aucun artisan trouvé</h3>
+              <p className="text-gray-500 mb-4">
+                {filter !== 'all' || search
+                  ? 'Aucun résultat pour cette recherche. Essayez de modifier vos filtres.'
+                  : 'Commencez par importer des artisans depuis SIRENE'}
+              </p>
+              {filter === 'all' && !search && (
+                <a
+                  href="/admin/import"
+                  className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                >
+                  Importer des artisans
+                </a>
+              )}
             </div>
           ) : (
             <>
-              <div className="overflow-x-auto">
+              {/* Loading overlay */}
+              {loading && (
+                <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-10">
+                  <Loader2 className="w-6 h-6 text-blue-600 animate-spin" />
+                </div>
+              )}
+
+              <div className="overflow-x-auto relative">
                 <table className="w-full">
                   <thead className="bg-gray-50 border-b border-gray-100">
                     <tr>
@@ -268,8 +343,11 @@ export default function AdminProvidersPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100">
-                    {displayProviders.map((provider) => (
-                      <tr key={provider.id} className="hover:bg-gray-50">
+                    {providers.map((provider) => (
+                      <tr
+                        key={provider.id}
+                        className={`hover:bg-gray-50 transition-colors ${actionLoading === provider.id ? 'opacity-50' : ''}`}
+                      >
                         <td className="px-6 py-4">
                           <div>
                             <div className="flex items-center gap-2">
@@ -284,7 +362,7 @@ export default function AdminProvidersPage() {
                                 {provider.email}
                               </div>
                             ) : provider.siret ? (
-                              <div className="mt-1 text-sm text-gray-400">
+                              <div className="mt-1 text-sm text-gray-400 font-mono">
                                 SIRET: {provider.siret}
                               </div>
                             ) : null}
@@ -299,9 +377,11 @@ export default function AdminProvidersPage() {
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2">
                             <MapPin className="w-4 h-4 text-gray-400" />
-                            <span className="text-gray-900">{provider.city}</span>
+                            <span className="text-gray-900">{provider.city || 'Non renseigné'}</span>
                           </div>
-                          <p className="text-sm text-gray-500">{provider.region}</p>
+                          {provider.region && (
+                            <p className="text-sm text-gray-500">{provider.region}</p>
+                          )}
                         </td>
                         <td className="px-6 py-4">{getStatusBadge(provider)}</td>
                         <td className="px-6 py-4">
@@ -317,45 +397,67 @@ export default function AdminProvidersPage() {
                         </td>
                         <td className="px-6 py-4">{getSubscriptionBadge(provider.subscription_type)}</td>
                         <td className="px-6 py-4">
-                          <div className="flex items-center justify-end gap-2">
+                          <div className="flex items-center justify-end gap-1">
+                            {/* View button */}
                             <button
                               onClick={() => router.push(`/admin/artisans/${provider.id}`)}
-                              className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg"
+                              className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                               title="Voir le profil"
                             >
                               <Eye className="w-5 h-5" />
                             </button>
+
+                            {/* Edit button */}
                             <button
                               onClick={() => router.push(`/admin/artisans/${provider.id}/edit`)}
-                              className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg"
+                              className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
                               title="Modifier"
                             >
                               <Edit2 className="w-5 h-5" />
                             </button>
+
+                            {/* Verify button - only show if not verified */}
                             {!provider.is_verified && (
                               <button
                                 onClick={() => handleAction(provider.id, 'verify')}
-                                className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg"
-                                title="Vérifier"
+                                disabled={actionLoading === provider.id}
+                                className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors disabled:opacity-50"
+                                title="Vérifier cet artisan"
                               >
-                                <CheckCircle className="w-5 h-5" />
+                                {actionLoading === provider.id ? (
+                                  <Loader2 className="w-5 h-5 animate-spin" />
+                                ) : (
+                                  <CheckCircle className="w-5 h-5" />
+                                )}
                               </button>
                             )}
+
+                            {/* Suspend/Activate button */}
                             {provider.is_active ? (
                               <button
                                 onClick={() => handleAction(provider.id, 'suspend')}
-                                className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg"
+                                disabled={actionLoading === provider.id}
+                                className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
                                 title="Suspendre"
                               >
-                                <Ban className="w-5 h-5" />
+                                {actionLoading === provider.id ? (
+                                  <Loader2 className="w-5 h-5 animate-spin" />
+                                ) : (
+                                  <Ban className="w-5 h-5" />
+                                )}
                               </button>
                             ) : (
                               <button
                                 onClick={() => handleAction(provider.id, 'activate')}
-                                className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg"
+                                disabled={actionLoading === provider.id}
+                                className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors disabled:opacity-50"
                                 title="Réactiver"
                               >
-                                <CheckCircle className="w-5 h-5" />
+                                {actionLoading === provider.id ? (
+                                  <Loader2 className="w-5 h-5 animate-spin" />
+                                ) : (
+                                  <CheckCircle className="w-5 h-5" />
+                                )}
                               </button>
                             )}
                           </div>
@@ -369,19 +471,19 @@ export default function AdminProvidersPage() {
               {/* Pagination */}
               <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
                 <p className="text-sm text-gray-500">
-                  Page {page} sur {totalPages}
+                  Page {page} sur {totalPages} ({total} résultat{total > 1 ? 's' : ''})
                 </p>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setPage(Math.max(1, page - 1))}
-                    disabled={page === 1}
+                    disabled={page === 1 || loading}
                     className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
                   >
                     <ChevronLeft className="w-5 h-5" />
                   </button>
                   <button
                     onClick={() => setPage(Math.min(totalPages, page + 1))}
-                    disabled={page === totalPages}
+                    disabled={page === totalPages || loading}
                     className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
                   >
                     <ChevronRight className="w-5 h-5" />
