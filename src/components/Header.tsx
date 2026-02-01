@@ -412,18 +412,11 @@ export default function Header() {
           {/* Mobile menu button */}
           <button
             type="button"
-            onClick={(e) => {
-              e.preventDefault()
-              e.stopPropagation()
-              setIsMenuOpen(!isMenuOpen)
-            }}
-            onTouchEnd={(e) => {
-              e.preventDefault()
-              setIsMenuOpen(!isMenuOpen)
-            }}
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label={isMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
             aria-expanded={isMenuOpen}
-            className="lg:hidden flex items-center justify-center w-12 h-12 -mr-2 rounded-xl active:bg-gray-200 hover:bg-gray-100 transition-colors touch-manipulation"
+            className="lg:hidden flex items-center justify-center w-12 h-12 -mr-2 rounded-xl active:bg-gray-200 hover:bg-gray-100 transition-colors"
+            style={{ WebkitTapHighlightColor: 'transparent' }}
           >
             {isMenuOpen ? (
               <X className="w-6 h-6 text-gray-700" />

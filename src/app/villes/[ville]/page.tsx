@@ -1,81 +1,37 @@
 import Link from 'next/link'
 import { MapPin, Users, Building, Star, Phone, ArrowRight, Shield, Clock } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
-import { PopularServicesLinks, PopularCitiesLinks, popularRegions } from '@/components/InternalLinks'
+import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
+import { popularRegions } from '@/lib/constants/navigation'
+import { villes, getVilleBySlug, services } from '@/lib/data/france'
+import { Metadata } from 'next'
 
-const villesData: Record<string, {
-  name: string
-  region: string
-  departement: string
-  population: string
-  description: string
-  codePostal: string
-  quartiers: string[]
-}> = {
-  'paris': {
-    name: 'Paris',
-    region: 'Île-de-France',
-    departement: 'Paris (75)',
-    population: '2 161 000',
-    codePostal: '75000',
-    description: 'Capitale de la France, Paris est le centre économique et culturel du pays. Nos artisans interviennent dans tous les arrondissements parisiens.',
-    quartiers: ['1er arr.', '2e arr.', '3e arr.', '4e arr.', '5e arr.', '6e arr.', '7e arr.', '8e arr.', '9e arr.', '10e arr.', '11e arr.', '12e arr.', '13e arr.', '14e arr.', '15e arr.', '16e arr.', '17e arr.', '18e arr.', '19e arr.', '20e arr.'],
-  },
-  'marseille': {
-    name: 'Marseille',
-    region: 'Provence-Alpes-Côte d\'Azur',
-    departement: 'Bouches-du-Rhône (13)',
-    population: '870 000',
-    codePostal: '13000',
-    description: 'Deuxième ville de France, Marseille est un port méditerranéen dynamique. Trouvez des artisans qualifiés dans tous les quartiers marseillais.',
-    quartiers: ['Vieux-Port', 'Le Panier', 'La Joliette', 'Castellane', 'La Canebière', 'Prado', 'Bonneveine', 'Les Calanques'],
-  },
-  'lyon': {
-    name: 'Lyon',
-    region: 'Auvergne-Rhône-Alpes',
-    departement: 'Rhône (69)',
-    population: '522 000',
-    codePostal: '69000',
-    description: 'Troisième ville de France, Lyon est renommée pour sa gastronomie et son patrimoine. Nos artisans couvrent tous les arrondissements lyonnais.',
-    quartiers: ['Presqu\'île', 'Vieux Lyon', 'Part-Dieu', 'Confluence', 'Croix-Rousse', 'Gerland', 'Villeurbanne'],
-  },
-  'toulouse': {
-    name: 'Toulouse',
-    region: 'Occitanie',
-    departement: 'Haute-Garonne (31)',
-    population: '493 000',
-    codePostal: '31000',
-    description: 'La ville rose, capitale de l\'aéronautique, offre un cadre de vie exceptionnel. Trouvez votre artisan à Toulouse et sa métropole.',
-    quartiers: ['Capitole', 'Saint-Cyprien', 'Carmes', 'Les Minimes', 'Saint-Michel', 'Rangueil', 'Blagnac'],
-  },
-  'nice': {
-    name: 'Nice',
-    region: 'Provence-Alpes-Côte d\'Azur',
-    departement: 'Alpes-Maritimes (06)',
-    population: '342 000',
-    codePostal: '06000',
-    description: 'Capitale de la Côte d\'Azur, Nice bénéficie d\'un climat méditerranéen idéal. Nos artisans interviennent sur toute la métropole niçoise.',
-    quartiers: ['Vieux Nice', 'Promenade des Anglais', 'Cimiez', 'Port', 'Libération', 'Saint-Roch'],
-  },
-  'nantes': {
-    name: 'Nantes',
-    region: 'Pays de la Loire',
-    departement: 'Loire-Atlantique (44)',
-    population: '318 000',
-    codePostal: '44000',
-    description: 'Ville dynamique de l\'Ouest, Nantes est connue pour sa créativité. Découvrez nos artisans qualifiés dans la métropole nantaise.',
-    quartiers: ['Centre-ville', 'Île de Nantes', 'Doulon', 'Erdre', 'Chantenay', 'Saint-Herblain'],
-  },
+// Générer les pages statiques pour toutes les villes
+export function generateStaticParams() {
+  return villes.map((ville) => ({
+    ville: ville.slug,
+  }))
 }
 
-const services = [
-  { slug: 'plombier', name: 'Plombier', icon: '🔧' },
-  { slug: 'electricien', name: 'Électricien', icon: '⚡' },
-  { slug: 'serrurier', name: 'Serrurier', icon: '🔑' },
-  { slug: 'chauffagiste', name: 'Chauffagiste', icon: '🔥' },
-  { slug: 'peintre', name: 'Peintre', icon: '🎨' },
-  { slug: 'menuisier', name: 'Menuisier', icon: '🪚' },
-]
+// Métadonnées dynamiques SEO
+export async function generateMetadata({ params }: { params: { ville: string } }): Promise<Metadata> {
+  const ville = getVilleBySlug(params.ville)
+
+  if (!ville) {
+    return {
+      title: 'Ville non trouvée | ServicesArtisans',
+    }
+  }
+
+  return {
+    title: `Artisans à ${ville.name} - Plombier, Électricien, Serrurier | ServicesArtisans`,
+    description: `Trouvez les meilleurs artisans à ${ville.name} (${ville.departementCode}). Plombiers, électriciens, serruriers et plus. Devis gratuit, artisans vérifiés.`,
+    openGraph: {
+      title: `Artisans à ${ville.name} | ServicesArtisans`,
+      description: ville.description,
+    },
+  }
+}
 
 const artisansExemple = [
   { name: 'Martin Plomberie', note: 4.9, avis: 127, metier: 'Plombier' },
@@ -84,7 +40,7 @@ const artisansExemple = [
 ]
 
 export default function VillePage({ params }: { params: { ville: string } }) {
-  const ville = villesData[params.ville]
+  const ville = getVilleBySlug(params.ville)
 
   if (!ville) {
     return (
@@ -168,7 +124,7 @@ export default function VillePage({ params }: { params: { ville: string } }) {
                 href={`/services/${service.slug}/${params.ville}`}
                 className="bg-white rounded-xl shadow-sm p-6 text-center hover:shadow-md transition-shadow group"
               >
-                <div className="text-4xl mb-3">{service.icon}</div>
+                <div className="text-4xl mb-3">{service.emoji}</div>
                 <h3 className="font-medium text-gray-900 group-hover:text-blue-600">
                   {service.name}
                 </h3>

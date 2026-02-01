@@ -1,56 +1,151 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { FileText, MessageSquare, Star, Settings, ArrowLeft, Edit2, Trash2 } from 'lucide-react'
+import { FileText, MessageSquare, Star, Settings, ArrowLeft, Edit2, Trash2, Loader2 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { QuickSiteLinks } from '@/components/InternalLinks'
 import LogoutButton from '@/components/LogoutButton'
 
-const avisPublies = [
-  {
-    id: 1,
-    artisan: 'Martin Plomberie',
-    service: 'Réparation fuite',
-    date: '2024-01-15',
-    note: 5,
-    commentaire: 'Excellent travail ! Intervention rapide et efficace. Le plombier était très professionnel et a résolu mon problème en moins d\'une heure. Je recommande vivement.',
-  },
-  {
-    id: 2,
-    artisan: 'Électricité Plus',
-    service: 'Installation tableau électrique',
-    date: '2024-01-10',
-    note: 4,
-    commentaire: 'Bon travail dans l\'ensemble. L\'électricien connaissait bien son métier. Seul bémol : un léger retard le jour de l\'intervention.',
-  },
-]
+interface AvisPublie {
+  id: string
+  artisan: string
+  artisan_id: string
+  service: string
+  date: string
+  note: number
+  commentaire: string
+  reponse?: string
+}
 
-const avisEnAttente = [
-  {
-    id: 3,
-    artisan: 'Peinture Pro',
-    service: 'Peinture salon',
-    date: '2024-01-18',
-  },
-]
+interface AvisEnAttente {
+  id: string
+  artisan: string
+  artisan_id: string
+  service: string
+  date: string
+  devis_id: string
+}
 
 export default function AvisClientPage() {
+  const [avisPublies, setAvisPublies] = useState<AvisPublie[]>([])
+  const [avisEnAttente, setAvisEnAttente] = useState<AvisEnAttente[]>([])
+  const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
-  const [selectedAvis, setSelectedAvis] = useState<typeof avisEnAttente[0] | null>(null)
+  const [selectedAvis, setSelectedAvis] = useState<AvisEnAttente | null>(null)
+  const [editingAvis, setEditingAvis] = useState<AvisPublie | null>(null)
   const [note, setNote] = useState(5)
   const [commentaire, setCommentaire] = useState('')
+  const [submitting, setSubmitting] = useState(false)
 
-  const handleSubmitAvis = (e: React.FormEvent) => {
-    e.preventDefault()
-    setShowModal(false)
-    setNote(5)
-    setCommentaire('')
+  useEffect(() => {
+    fetchAvis()
+  }, [])
+
+  const fetchAvis = async () => {
+    try {
+      const response = await fetch('/api/client/avis')
+      if (response.ok) {
+        const data = await response.json()
+        setAvisPublies(data.avisPublies || [])
+        setAvisEnAttente(data.avisEnAttente || [])
+      }
+    } catch (error) {
+      console.error('Error fetching avis:', error)
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const openModal = (avis: typeof avisEnAttente[0]) => {
+  const handleSubmitAvis = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!selectedAvis && !editingAvis) return
+
+    setSubmitting(true)
+    try {
+      if (editingAvis) {
+        // Update existing review
+        const response = await fetch('/api/client/avis', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            review_id: editingAvis.id,
+            rating: note,
+            comment: commentaire,
+          }),
+        })
+
+        if (response.ok) {
+          await fetchAvis()
+          setShowModal(false)
+          setEditingAvis(null)
+        }
+      } else if (selectedAvis) {
+        // Create new review
+        const response = await fetch('/api/client/avis', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            artisan_id: selectedAvis.artisan_id,
+            devis_id: selectedAvis.devis_id,
+            rating: note,
+            comment: commentaire,
+          }),
+        })
+
+        if (response.ok) {
+          await fetchAvis()
+          setShowModal(false)
+          setSelectedAvis(null)
+        }
+      }
+    } catch (error) {
+      console.error('Error submitting avis:', error)
+    } finally {
+      setSubmitting(false)
+      setNote(5)
+      setCommentaire('')
+    }
+  }
+
+  const handleDeleteAvis = async (avisId: string) => {
+    if (!confirm('Êtes-vous sûr de vouloir supprimer cet avis ?')) return
+
+    try {
+      const response = await fetch(`/api/client/avis?id=${avisId}`, {
+        method: 'DELETE',
+      })
+
+      if (response.ok) {
+        await fetchAvis()
+      }
+    } catch (error) {
+      console.error('Error deleting avis:', error)
+    }
+  }
+
+  const openModal = (avis: AvisEnAttente) => {
     setSelectedAvis(avis)
+    setEditingAvis(null)
+    setNote(5)
+    setCommentaire('')
     setShowModal(true)
+  }
+
+  const openEditModal = (avis: AvisPublie) => {
+    setEditingAvis(avis)
+    setSelectedAvis(null)
+    setNote(avis.note)
+    setCommentaire(avis.commentaire)
+    setShowModal(true)
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+      </div>
+    )
   }
 
   return (
@@ -97,7 +192,6 @@ export default function AvisClientPage() {
               >
                 <MessageSquare className="w-5 h-5" />
                 Messages
-                <span className="ml-auto bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full">2</span>
               </Link>
               <Link
                 href="/espace-client/avis"
@@ -158,59 +252,77 @@ export default function AvisClientPage() {
               <h2 className="text-lg font-semibold text-gray-900 mb-4">
                 Avis publiés ({avisPublies.length})
               </h2>
-              <div className="space-y-4">
-                {avisPublies.map((avis) => (
-                  <div
-                    key={avis.id}
-                    className="border border-gray-200 rounded-lg p-4"
-                  >
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
-                          <h3 className="font-medium text-gray-900">{avis.artisan}</h3>
-                          <div className="flex">
-                            {[...Array(5)].map((_, i) => (
-                              <Star
-                                key={i}
-                                className={`w-4 h-4 ${
-                                  i < avis.note ? 'text-yellow-400 fill-current' : 'text-gray-300'
-                                }`}
-                              />
-                            ))}
+              {avisPublies.length === 0 ? (
+                <p className="text-gray-500 text-center py-8">
+                  Vous n&apos;avez pas encore publié d&apos;avis.
+                </p>
+              ) : (
+                <div className="space-y-4">
+                  {avisPublies.map((avis) => (
+                    <div
+                      key={avis.id}
+                      className="border border-gray-200 rounded-lg p-4"
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-2">
+                            <h3 className="font-medium text-gray-900">{avis.artisan}</h3>
+                            <div className="flex">
+                              {[...Array(5)].map((_, i) => (
+                                <Star
+                                  key={i}
+                                  className={`w-4 h-4 ${
+                                    i < avis.note ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                                  }`}
+                                />
+                              ))}
+                            </div>
                           </div>
+                          <p className="text-sm text-gray-600 mb-2">{avis.service}</p>
+                          <p className="text-gray-700">{avis.commentaire}</p>
+                          {avis.reponse && (
+                            <div className="mt-3 bg-gray-50 rounded-lg p-3">
+                              <p className="text-sm font-medium text-gray-700 mb-1">Réponse de l&apos;artisan :</p>
+                              <p className="text-sm text-gray-600">{avis.reponse}</p>
+                            </div>
+                          )}
+                          <p className="text-sm text-gray-500 mt-2">
+                            Publié le {new Date(avis.date).toLocaleDateString('fr-FR')}
+                          </p>
                         </div>
-                        <p className="text-sm text-gray-600 mb-2">{avis.service}</p>
-                        <p className="text-gray-700">{avis.commentaire}</p>
-                        <p className="text-sm text-gray-500 mt-2">
-                          Publié le {new Date(avis.date).toLocaleDateString('fr-FR')}
-                        </p>
-                      </div>
-                      <div className="flex gap-2">
-                        <button className="p-2 text-gray-400 hover:text-blue-600 transition-colors">
-                          <Edit2 className="w-4 h-4" />
-                        </button>
-                        <button className="p-2 text-gray-400 hover:text-red-600 transition-colors">
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => openEditModal(avis)}
+                            className="p-2 text-gray-400 hover:text-blue-600 transition-colors"
+                          >
+                            <Edit2 className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteAvis(avis.id)}
+                            className="p-2 text-gray-400 hover:text-red-600 transition-colors"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
       </div>
 
       {/* Modal */}
-      {showModal && selectedAvis && (
+      {showModal && (selectedAvis || editingAvis) && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl max-w-lg w-full p-6">
             <h2 className="text-xl font-bold text-gray-900 mb-4">
-              Laisser un avis pour {selectedAvis.artisan}
+              {editingAvis ? 'Modifier votre avis' : `Laisser un avis pour ${selectedAvis?.artisan}`}
             </h2>
             <p className="text-gray-600 mb-6">
-              Service : {selectedAvis.service}
+              Service : {editingAvis?.service || selectedAvis?.service}
             </p>
 
             <form onSubmit={handleSubmitAvis} className="space-y-6">
@@ -255,16 +367,22 @@ export default function AvisClientPage() {
               <div className="flex gap-4">
                 <button
                   type="button"
-                  onClick={() => setShowModal(false)}
+                  onClick={() => {
+                    setShowModal(false)
+                    setSelectedAvis(null)
+                    setEditingAvis(null)
+                  }}
                   className="flex-1 px-4 py-3 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors"
                 >
                   Annuler
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                  disabled={submitting}
+                  className="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                 >
-                  Publier l'avis
+                  {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
+                  {editingAvis ? 'Mettre à jour' : 'Publier l\'avis'}
                 </button>
               </div>
             </form>

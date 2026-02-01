@@ -3,7 +3,8 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { MapPin, Users, ArrowRight, Shield, Star, Clock } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
-import { PopularServicesLinks, PopularCitiesLinks, popularRegions } from '@/components/InternalLinks'
+import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
+import { popularRegions } from '@/lib/constants/navigation'
 
 const regionsData: Record<string, {
   name: string

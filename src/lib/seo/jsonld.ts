@@ -249,6 +249,92 @@ export function getReservationSchema(booking: {
   }
 }
 
+// Schema.org ItemList (pour les pages de listing SEO programmatique style TripAdvisor)
+export function getItemListSchema(params: {
+  name: string
+  description: string
+  url: string
+  items: Array<{
+    name: string
+    url: string
+    position: number
+    image?: string
+    rating?: number
+    reviewCount?: number
+  }>
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: params.name,
+    description: params.description,
+    url: `${SITE_URL}${params.url}`,
+    numberOfItems: params.items.length,
+    itemListElement: params.items.map((item) => ({
+      '@type': 'ListItem',
+      position: item.position,
+      item: {
+        '@type': 'LocalBusiness',
+        name: item.name,
+        url: `${SITE_URL}${item.url}`,
+        image: item.image,
+        ...(item.rating && {
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: item.rating,
+            reviewCount: item.reviewCount || 0,
+          },
+        }),
+      },
+    })),
+  }
+}
+
+// Schema.org City/Place (pour pages villes)
+export function getPlaceSchema(city: {
+  name: string
+  slug: string
+  region?: string
+  department?: string
+  description?: string
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'City',
+    name: city.name,
+    url: `${SITE_URL}/villes/${city.slug}`,
+    description: city.description || `Trouvez les meilleurs artisans à ${city.name}`,
+    containedInPlace: city.region
+      ? {
+          '@type': 'AdministrativeArea',
+          name: city.region,
+        }
+      : undefined,
+  }
+}
+
+// Schema.org CollectionPage (pour pages de catégories de services)
+export function getCollectionPageSchema(params: {
+  name: string
+  description: string
+  url: string
+  itemCount: number
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: params.name,
+    description: params.description,
+    url: `${SITE_URL}${params.url}`,
+    numberOfItems: params.itemCount,
+    isPartOf: {
+      '@type': 'WebSite',
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
+  }
+}
+
 // Schema.org ProfessionalService (enhanced for artisans with booking)
 export function getProfessionalServiceSchema(artisan: {
   id: string

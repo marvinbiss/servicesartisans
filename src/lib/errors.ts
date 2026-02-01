@@ -1,0 +1,118 @@
+/**
+ * Custom error classes for ServicesArtisans
+ */
+
+export class AppError extends Error {
+  public readonly code: string
+  public readonly statusCode: number
+
+  constructor(message: string, code: string, statusCode: number = 500) {
+    super(message)
+    this.name = 'AppError'
+    this.code = code
+    this.statusCode = statusCode
+    Error.captureStackTrace(this, this.constructor)
+  }
+}
+
+export class ValidationError extends AppError {
+  constructor(message: string = 'Données invalides') {
+    super(message, 'VALIDATION_ERROR', 400)
+    this.name = 'ValidationError'
+  }
+}
+
+export class NotFoundError extends AppError {
+  constructor(resource: string = 'Ressource') {
+    super(`${resource} non trouvé`, 'NOT_FOUND', 404)
+    this.name = 'NotFoundError'
+  }
+}
+
+export class AuthenticationError extends AppError {
+  constructor(message: string = 'Authentification requise') {
+    super(message, 'AUTHENTICATION_ERROR', 401)
+    this.name = 'AuthenticationError'
+  }
+}
+
+export class AuthorizationError extends AppError {
+  constructor(message: string = 'Accès non autorisé') {
+    super(message, 'AUTHORIZATION_ERROR', 403)
+    this.name = 'AuthorizationError'
+  }
+}
+
+export class RateLimitError extends AppError {
+  constructor(retryAfterSeconds: number = 60) {
+    super(
+      `Trop de requêtes. Réessayez dans ${retryAfterSeconds} secondes.`,
+      'RATE_LIMIT_ERROR',
+      429
+    )
+    this.name = 'RateLimitError'
+  }
+}
+
+export class ExternalServiceError extends AppError {
+  constructor(serviceName: string, details?: string) {
+    super(
+      `Erreur du service externe ${serviceName}${details ? `: ${details}` : ''}`,
+      'EXTERNAL_SERVICE_ERROR',
+      502
+    )
+    this.name = 'ExternalServiceError'
+  }
+}
+
+export class ConflictError extends AppError {
+  constructor(message: string = 'Conflit de données') {
+    super(message, 'CONFLICT_ERROR', 409)
+    this.name = 'ConflictError'
+  }
+}
+
+export class PaymentError extends AppError {
+  constructor(message: string = 'Erreur de paiement') {
+    super(message, 'PAYMENT_ERROR', 402)
+    this.name = 'PaymentError'
+  }
+}
+
+/**
+ * Check if an error is an AppError
+ */
+export function isAppError(error: unknown): error is AppError {
+  return error instanceof AppError
+}
+
+/**
+ * Convert unknown error to AppError
+ */
+export function toAppError(error: unknown): AppError {
+  if (isAppError(error)) {
+    return error
+  }
+
+  if (error instanceof Error) {
+    return new AppError(error.message, 'UNKNOWN_ERROR', 500)
+  }
+
+  return new AppError('Une erreur inattendue est survenue', 'UNKNOWN_ERROR', 500)
+}
+
+/**
+ * Format error for API response
+ */
+export function formatErrorResponse(error: unknown) {
+  const appError = toAppError(error)
+
+  return {
+    success: false,
+    error: {
+      code: appError.code,
+      message: appError.message,
+      statusCode: appError.statusCode,
+    },
+  }
+}

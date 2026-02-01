@@ -1,71 +1,148 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { FileText, MessageSquare, Star, Settings, TrendingUp, Euro, ArrowLeft, Send, Search, Paperclip, ExternalLink } from 'lucide-react'
+import { FileText, MessageSquare, Star, Settings, TrendingUp, Euro, ArrowLeft, Send, Search, Paperclip, ExternalLink, Loader2 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { QuickSiteLinks } from '@/components/InternalLinks'
 import LogoutButton from '@/components/LogoutButton'
 
-const conversations = [
-  {
-    id: 1,
-    client: 'Jean Dupont',
-    avatar: 'JD',
-    lastMessage: 'D\'accord, à demain 14h alors !',
-    time: '10:30',
-    unread: 2,
-    service: 'Réparation fuite',
-  },
-  {
-    id: 2,
-    client: 'Marie Lambert',
-    avatar: 'ML',
-    lastMessage: 'Merci pour le devis, je vous recontacte rapidement.',
-    time: 'Hier',
-    unread: 0,
-    service: 'Installation chauffe-eau',
-  },
-  {
-    id: 3,
-    client: 'Pierre Martin',
-    avatar: 'PM',
-    lastMessage: 'Super travail, merci beaucoup !',
-    time: 'Lun',
-    unread: 0,
-    service: 'Débouchage canalisation',
-  },
-  {
-    id: 4,
-    client: 'Sophie Bernard',
-    avatar: 'SB',
-    lastMessage: 'Pouvez-vous me faire un devis ?',
-    time: 'Dim',
-    unread: 1,
-    service: 'Recherche de fuite',
-  },
-]
+interface Partner {
+  id: string
+  full_name: string | null
+  company_name: string | null
+  avatar_url: string | null
+}
 
-const messages = [
-  { id: 1, sender: 'client', text: 'Bonjour, je vous contacte suite à ma demande de devis.', time: '09:00' },
-  { id: 2, sender: 'artisan', text: 'Bonjour M. Dupont, j\'ai bien reçu votre demande.', time: '09:05' },
-  { id: 3, sender: 'artisan', text: 'Je peux intervenir demain après-midi si cela vous convient.', time: '09:06' },
-  { id: 4, sender: 'client', text: 'Oui, 14h serait parfait pour moi.', time: '09:15' },
-  { id: 5, sender: 'artisan', text: 'Très bien, c\'est noté. Pouvez-vous me confirmer l\'adresse exacte ?', time: '09:20' },
-  { id: 6, sender: 'client', text: '15 rue de la Paix, 75015 Paris, code 1234', time: '10:25' },
-  { id: 7, sender: 'client', text: 'D\'accord, à demain 14h alors !', time: '10:30' },
-]
+interface Message {
+  id: string
+  sender_id: string
+  receiver_id: string
+  content: string
+  created_at: string
+  is_read: boolean
+}
+
+interface Conversation {
+  id: string
+  partner: Partner
+  lastMessage: Message
+  unreadCount: number
+  service: string | null
+}
 
 export default function MessagesArtisanPage() {
-  const [selectedConversation, setSelectedConversation] = useState(conversations[0])
+  const [loading, setLoading] = useState(true)
+  const [sendingMessage, setSendingMessage] = useState(false)
+  const [conversations, setConversations] = useState<Conversation[]>([])
+  const [messages, setMessages] = useState<Message[]>([])
+  const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null)
   const [newMessage, setNewMessage] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null)
+  const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  const handleSendMessage = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (newMessage.trim()) {
-      setNewMessage('')
+  useEffect(() => {
+    fetchConversations()
+  }, [])
+
+  useEffect(() => {
+    if (selectedConversation) {
+      fetchMessages(selectedConversation.id)
     }
+  }, [selectedConversation])
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages])
+
+  const fetchConversations = async () => {
+    try {
+      setLoading(true)
+      const response = await fetch('/api/artisan/messages')
+      const data = await response.json()
+
+      if (response.ok) {
+        setConversations(data.conversations || [])
+        if (data.conversations?.length > 0) {
+          setSelectedConversation(data.conversations[0])
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching conversations:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const fetchMessages = async (partnerId: string) => {
+    try {
+      const response = await fetch(`/api/artisan/messages?with=${partnerId}`)
+      const data = await response.json()
+
+      if (response.ok) {
+        setMessages(data.messages || [])
+        // Extract current user ID from messages
+        if (data.messages?.length > 0) {
+          const msg = data.messages[0]
+          setCurrentUserId(msg.sender_id === partnerId ? msg.receiver_id : msg.sender_id)
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching messages:', error)
+    }
+  }
+
+  const handleSendMessage = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!newMessage.trim() || !selectedConversation) return
+
+    setSendingMessage(true)
+    try {
+      const response = await fetch('/api/artisan/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          receiver_id: selectedConversation.id,
+          content: newMessage.trim(),
+        }),
+      })
+
+      if (response.ok) {
+        setNewMessage('')
+        // Refresh messages
+        fetchMessages(selectedConversation.id)
+      }
+    } catch (error) {
+      console.error('Error sending message:', error)
+    } finally {
+      setSendingMessage(false)
+    }
+  }
+
+  const getAvatar = (partner: Partner) => {
+    const name = partner.company_name || partner.full_name || 'U'
+    return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2)
+  }
+
+  const getDisplayName = (partner: Partner) => {
+    return partner.company_name || partner.full_name || 'Utilisateur'
+  }
+
+  const formatTime = (dateStr: string) => {
+    const date = new Date(dateStr)
+    const now = new Date()
+    const diff = now.getTime() - date.getTime()
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+
+    if (days === 0) {
+      return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+    } else if (days === 1) {
+      return 'Hier'
+    } else if (days < 7) {
+      return date.toLocaleDateString('fr-FR', { weekday: 'short' })
+    }
+    return date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })
   }
 
   return (
@@ -181,125 +258,167 @@ export default function MessagesArtisanPage() {
 
           {/* Messages */}
           <div className="lg:col-span-3">
-            <div className="bg-white rounded-xl shadow-sm overflow-hidden h-[600px] flex">
-              {/* Conversations list */}
-              <div className="w-1/3 border-r">
-                <div className="p-4 border-b">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                    <input
-                      type="text"
-                      placeholder="Rechercher..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                </div>
-                <div className="overflow-y-auto h-[calc(100%-73px)]">
-                  {conversations.map((conv) => (
-                    <button
-                      key={conv.id}
-                      onClick={() => setSelectedConversation(conv)}
-                      className={`w-full p-4 flex items-start gap-3 hover:bg-gray-50 transition-colors ${
-                        selectedConversation.id === conv.id ? 'bg-blue-50' : ''
-                      }`}
-                    >
-                      <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-gray-600 font-semibold">
-                        {conv.avatar}
-                      </div>
-                      <div className="flex-1 min-w-0 text-left">
-                        <div className="flex items-center justify-between">
-                          <span className="font-medium text-gray-900 truncate">{conv.client}</span>
-                          <span className="text-xs text-gray-500">{conv.time}</span>
-                        </div>
-                        <p className="text-xs text-blue-600 mb-1">{conv.service}</p>
-                        <p className="text-sm text-gray-500 truncate">{conv.lastMessage}</p>
-                      </div>
-                      {conv.unread > 0 && (
-                        <span className="bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full">
-                          {conv.unread}
-                        </span>
-                      )}
-                    </button>
-                  ))}
+            {loading ? (
+              <div className="bg-white rounded-xl shadow-sm p-12 text-center h-[600px] flex items-center justify-center">
+                <div>
+                  <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
+                  <p className="text-gray-600">Chargement des messages...</p>
                 </div>
               </div>
-
-              {/* Chat */}
-              <div className="flex-1 flex flex-col">
-                {/* Chat header */}
-                <div className="p-4 border-b flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-gray-600 font-semibold">
-                      {selectedConversation.avatar}
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-gray-900">{selectedConversation.client}</h3>
-                      <span className="text-sm text-blue-600">{selectedConversation.service}</span>
+            ) : conversations.length === 0 ? (
+              <div className="bg-white rounded-xl shadow-sm p-12 text-center h-[600px] flex items-center justify-center">
+                <div>
+                  <MessageSquare className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+                  <h3 className="font-medium text-gray-900 mb-2">Aucune conversation</h3>
+                  <p className="text-gray-500">Vos conversations avec les clients apparaîtront ici.</p>
+                </div>
+              </div>
+            ) : (
+              <div className="bg-white rounded-xl shadow-sm overflow-hidden h-[600px] flex">
+                {/* Conversations list */}
+                <div className="w-1/3 border-r">
+                  <div className="p-4 border-b">
+                    <div className="relative">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <input
+                        type="text"
+                        placeholder="Rechercher..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+                      />
                     </div>
                   </div>
-                  <Link
-                    href="/espace-artisan/demandes"
-                    className="text-sm text-blue-600 hover:underline"
-                  >
-                    Voir la demande
-                  </Link>
-                </div>
-
-                {/* Messages */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                  {messages.map((message) => (
-                    <div
-                      key={message.id}
-                      className={`flex ${message.sender === 'artisan' ? 'justify-end' : 'justify-start'}`}
-                    >
-                      <div
-                        className={`max-w-[70%] rounded-2xl px-4 py-2 ${
-                          message.sender === 'artisan'
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-gray-100 text-gray-900'
-                        }`}
-                      >
-                        <p>{message.text}</p>
-                        <span
-                          className={`text-xs ${
-                            message.sender === 'artisan' ? 'text-blue-200' : 'text-gray-500'
+                  <div className="overflow-y-auto h-[calc(100%-73px)]">
+                    {conversations
+                      .filter(conv =>
+                        !searchQuery ||
+                        getDisplayName(conv.partner).toLowerCase().includes(searchQuery.toLowerCase())
+                      )
+                      .map((conv) => (
+                        <button
+                          key={conv.id}
+                          onClick={() => setSelectedConversation(conv)}
+                          className={`w-full p-4 flex items-start gap-3 hover:bg-gray-50 transition-colors ${
+                            selectedConversation?.id === conv.id ? 'bg-blue-50' : ''
                           }`}
                         >
-                          {message.time}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
+                          <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-gray-600 font-semibold">
+                            {getAvatar(conv.partner)}
+                          </div>
+                          <div className="flex-1 min-w-0 text-left">
+                            <div className="flex items-center justify-between">
+                              <span className="font-medium text-gray-900 truncate">{getDisplayName(conv.partner)}</span>
+                              <span className="text-xs text-gray-500">{formatTime(conv.lastMessage.created_at)}</span>
+                            </div>
+                            {conv.service && <p className="text-xs text-blue-600 mb-1">{conv.service}</p>}
+                            <p className="text-sm text-gray-500 truncate">{conv.lastMessage.content}</p>
+                          </div>
+                          {conv.unreadCount > 0 && (
+                            <span className="bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full">
+                              {conv.unreadCount}
+                            </span>
+                          )}
+                        </button>
+                      ))}
+                  </div>
                 </div>
 
-                {/* Input */}
-                <form onSubmit={handleSendMessage} className="p-4 border-t">
-                  <div className="flex gap-2">
-                    <button
-                      type="button"
-                      className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
-                    >
-                      <Paperclip className="w-5 h-5" />
-                    </button>
-                    <input
-                      type="text"
-                      value={newMessage}
-                      onChange={(e) => setNewMessage(e.target.value)}
-                      placeholder="Écrivez votre message..."
-                      className="flex-1 px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500"
-                    />
-                    <button
-                      type="submit"
-                      className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                      <Send className="w-5 h-5" />
-                    </button>
-                  </div>
-                </form>
+                {/* Chat */}
+                <div className="flex-1 flex flex-col">
+                  {selectedConversation ? (
+                    <>
+                      {/* Chat header */}
+                      <div className="p-4 border-b flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-gray-600 font-semibold">
+                            {getAvatar(selectedConversation.partner)}
+                          </div>
+                          <div>
+                            <h3 className="font-semibold text-gray-900">{getDisplayName(selectedConversation.partner)}</h3>
+                            {selectedConversation.service && (
+                              <span className="text-sm text-blue-600">{selectedConversation.service}</span>
+                            )}
+                          </div>
+                        </div>
+                        <Link
+                          href="/espace-artisan/demandes"
+                          className="text-sm text-blue-600 hover:underline"
+                        >
+                          Voir la demande
+                        </Link>
+                      </div>
+
+                      {/* Messages */}
+                      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                        {messages.map((message) => {
+                          const isOwnMessage = message.sender_id === currentUserId
+                          return (
+                            <div
+                              key={message.id}
+                              className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'}`}
+                            >
+                              <div
+                                className={`max-w-[70%] rounded-2xl px-4 py-2 ${
+                                  isOwnMessage
+                                    ? 'bg-blue-600 text-white'
+                                    : 'bg-gray-100 text-gray-900'
+                                }`}
+                              >
+                                <p>{message.content}</p>
+                                <span
+                                  className={`text-xs ${
+                                    isOwnMessage ? 'text-blue-200' : 'text-gray-500'
+                                  }`}
+                                >
+                                  {formatTime(message.created_at)}
+                                </span>
+                              </div>
+                            </div>
+                          )
+                        })}
+                        <div ref={messagesEndRef} />
+                      </div>
+
+                      {/* Input */}
+                      <form onSubmit={handleSendMessage} className="p-4 border-t">
+                        <div className="flex gap-2">
+                          <button
+                            type="button"
+                            className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+                          >
+                            <Paperclip className="w-5 h-5" />
+                          </button>
+                          <input
+                            type="text"
+                            value={newMessage}
+                            onChange={(e) => setNewMessage(e.target.value)}
+                            placeholder="Écrivez votre message..."
+                            className="flex-1 px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500"
+                            disabled={sendingMessage}
+                          />
+                          <button
+                            type="submit"
+                            disabled={sendingMessage || !newMessage.trim()}
+                            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+                          >
+                            {sendingMessage ? (
+                              <Loader2 className="w-5 h-5 animate-spin" />
+                            ) : (
+                              <Send className="w-5 h-5" />
+                            )}
+                          </button>
+                        </div>
+                      </form>
+                    </>
+                  ) : (
+                    <div className="flex-1 flex items-center justify-center text-gray-500">
+                      Sélectionnez une conversation
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

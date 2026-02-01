@@ -14,6 +14,10 @@ const ServiceWorkerRegistration = dynamic(
   () => import('@/components/ServiceWorkerRegistration'),
   { ssr: false }
 )
+const CapacitorInit = dynamic(
+  () => import('@/components/CapacitorInit').then(mod => ({ default: mod.CapacitorInit })),
+  { ssr: false }
+)
 
 // Body font - Inter for readability
 const inter = Inter({
@@ -116,6 +120,7 @@ export default function RootLayout({
           <Footer />
           <MobileBottomNav />
           <ServiceWorkerRegistration />
+          <CapacitorInit />
         </MobileMenuProvider>
       </body>
     </html>

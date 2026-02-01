@@ -1,12 +1,13 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { MapPin, Search, ArrowRight, Users, Star, Shield, Sparkles, TrendingUp, Building2, Wrench, Zap, Key, Flame, PaintBucket, Hammer, HardHat, TreeDeciduous } from 'lucide-react'
+import { MapPin, Search, ArrowRight, Users, Star, Shield, Sparkles, TrendingUp, Wrench, Zap, Key, Flame, PaintBucket, Hammer, HardHat, TreeDeciduous } from 'lucide-react'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema, getOrganizationSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { REVALIDATE } from '@/lib/cache'
 import Breadcrumb from '@/components/Breadcrumb'
 import { GeographicNavigation } from '@/components/InternalLinks'
 import { popularServices as popularServicesData } from '@/lib/constants/navigation'
+import { villes } from '@/lib/data/france'
 
 // Map icon names to actual components for server-side rendering
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -22,141 +23,38 @@ const popularServices = popularServicesData.map(s => ({
 export const revalidate = REVALIDATE.locations
 
 export const metadata: Metadata = {
-  title: 'Artisans par ville - Trouvez un artisan près de chez vous',
-  description: 'Trouvez un artisan qualifié dans votre ville. Plus de 35 000 villes couvertes en France. Paris, Lyon, Marseille, Toulouse, Bordeaux et toutes les villes de France.',
+  title: 'Artisans par ville - Trouvez un artisan près de chez vous | ServicesArtisans',
+  description: 'Trouvez un artisan qualifié dans votre ville. Plus de 100 villes principales couvertes en France. Paris, Lyon, Marseille, Toulouse, Bordeaux et toutes les villes de France.',
   openGraph: {
     title: 'Artisans par ville en France',
-    description: 'Plus de 35 000 villes couvertes. Trouvez un artisan qualifié près de chez vous.',
+    description: 'Plus de 100 villes principales couvertes. Trouvez un artisan qualifié près de chez vous.',
   },
 }
 
-const regions = [
-  {
-    name: 'Île-de-France',
-    villes: [
-      { name: 'Paris', slug: 'paris', population: '2 161 000' },
-      { name: 'Boulogne-Billancourt', slug: 'boulogne-billancourt', population: '121 000' },
-      { name: 'Saint-Denis', slug: 'saint-denis', population: '113 000' },
-      { name: 'Argenteuil', slug: 'argenteuil', population: '110 000' },
-      { name: 'Montreuil', slug: 'montreuil', population: '109 000' },
-      { name: 'Nanterre', slug: 'nanterre', population: '96 000' },
-      { name: 'Vitry-sur-Seine', slug: 'vitry-sur-seine', population: '94 000' },
-      { name: 'Créteil', slug: 'creteil', population: '92 000' },
-      { name: 'Versailles', slug: 'versailles', population: '85 000' },
-      { name: 'Colombes', slug: 'colombes', population: '85 000' },
-    ]
-  },
-  {
-    name: 'Auvergne-Rhône-Alpes',
-    villes: [
-      { name: 'Lyon', slug: 'lyon', population: '522 000' },
-      { name: 'Grenoble', slug: 'grenoble', population: '158 000' },
-      { name: 'Saint-Étienne', slug: 'saint-etienne', population: '172 000' },
-      { name: 'Villeurbanne', slug: 'villeurbanne', population: '152 000' },
-      { name: 'Clermont-Ferrand', slug: 'clermont-ferrand', population: '147 000' },
-      { name: 'Annecy', slug: 'annecy', population: '130 000' },
-      { name: 'Vénissieux', slug: 'venissieux', population: '66 000' },
-      { name: 'Valence', slug: 'valence', population: '64 000' },
-    ]
-  },
-  {
-    name: 'Provence-Alpes-Côte d\'Azur',
-    villes: [
-      { name: 'Marseille', slug: 'marseille', population: '870 000' },
-      { name: 'Nice', slug: 'nice', population: '342 000' },
-      { name: 'Toulon', slug: 'toulon', population: '178 000' },
-      { name: 'Aix-en-Provence', slug: 'aix-en-provence', population: '147 000' },
-      { name: 'Avignon', slug: 'avignon', population: '91 000' },
-      { name: 'Antibes', slug: 'antibes', population: '74 000' },
-      { name: 'Cannes', slug: 'cannes', population: '74 000' },
-      { name: 'La Seyne-sur-Mer', slug: 'la-seyne-sur-mer', population: '65 000' },
-    ]
-  },
-  {
-    name: 'Occitanie',
-    villes: [
-      { name: 'Toulouse', slug: 'toulouse', population: '493 000' },
-      { name: 'Montpellier', slug: 'montpellier', population: '295 000' },
-      { name: 'Nîmes', slug: 'nimes', population: '151 000' },
-      { name: 'Perpignan', slug: 'perpignan', population: '121 000' },
-      { name: 'Béziers', slug: 'beziers', population: '78 000' },
-      { name: 'Narbonne', slug: 'narbonne', population: '55 000' },
-      { name: 'Carcassonne', slug: 'carcassonne', population: '46 000' },
-      { name: 'Albi', slug: 'albi', population: '49 000' },
-    ]
-  },
-  {
-    name: 'Nouvelle-Aquitaine',
-    villes: [
-      { name: 'Bordeaux', slug: 'bordeaux', population: '260 000' },
-      { name: 'Limoges', slug: 'limoges', population: '132 000' },
-      { name: 'Poitiers', slug: 'poitiers', population: '89 000' },
-      { name: 'La Rochelle', slug: 'la-rochelle', population: '79 000' },
-      { name: 'Pau', slug: 'pau', population: '77 000' },
-      { name: 'Mérignac', slug: 'merignac', population: '74 000' },
-      { name: 'Pessac', slug: 'pessac', population: '65 000' },
-      { name: 'Angoulême', slug: 'angouleme', population: '42 000' },
-    ]
-  },
-  {
-    name: 'Hauts-de-France',
-    villes: [
-      { name: 'Lille', slug: 'lille', population: '236 000' },
-      { name: 'Amiens', slug: 'amiens', population: '134 000' },
-      { name: 'Roubaix', slug: 'roubaix', population: '98 000' },
-      { name: 'Tourcoing', slug: 'tourcoing', population: '98 000' },
-      { name: 'Dunkerque', slug: 'dunkerque', population: '87 000' },
-      { name: 'Villeneuve-d\'Ascq', slug: 'villeneuve-dascq', population: '62 000' },
-      { name: 'Calais', slug: 'calais', population: '68 000' },
-      { name: 'Beauvais', slug: 'beauvais', population: '56 000' },
-    ]
-  },
-  {
-    name: 'Grand Est',
-    villes: [
-      { name: 'Strasbourg', slug: 'strasbourg', population: '287 000' },
-      { name: 'Reims', slug: 'reims', population: '182 000' },
-      { name: 'Metz', slug: 'metz', population: '118 000' },
-      { name: 'Mulhouse', slug: 'mulhouse', population: '109 000' },
-      { name: 'Nancy', slug: 'nancy', population: '105 000' },
-      { name: 'Colmar', slug: 'colmar', population: '70 000' },
-      { name: 'Troyes', slug: 'troyes', population: '61 000' },
-      { name: 'Charleville-Mézières', slug: 'charleville-mezieres', population: '46 000' },
-    ]
-  },
-  {
-    name: 'Pays de la Loire',
-    villes: [
-      { name: 'Nantes', slug: 'nantes', population: '320 000' },
-      { name: 'Angers', slug: 'angers', population: '157 000' },
-      { name: 'Le Mans', slug: 'le-mans', population: '144 000' },
-      { name: 'Saint-Nazaire', slug: 'saint-nazaire', population: '72 000' },
-      { name: 'La Roche-sur-Yon', slug: 'la-roche-sur-yon', population: '57 000' },
-      { name: 'Cholet', slug: 'cholet', population: '54 000' },
-    ]
-  },
-  {
-    name: 'Bretagne',
-    villes: [
-      { name: 'Rennes', slug: 'rennes', population: '222 000' },
-      { name: 'Brest', slug: 'brest', population: '139 000' },
-      { name: 'Quimper', slug: 'quimper', population: '63 000' },
-      { name: 'Lorient', slug: 'lorient', population: '57 000' },
-      { name: 'Vannes', slug: 'vannes', population: '54 000' },
-      { name: 'Saint-Brieuc', slug: 'saint-brieuc', population: '45 000' },
-    ]
-  },
-  {
-    name: 'Normandie',
-    villes: [
-      { name: 'Le Havre', slug: 'le-havre', population: '170 000' },
-      { name: 'Rouen', slug: 'rouen', population: '113 000' },
-      { name: 'Caen', slug: 'caen', population: '106 000' },
-      { name: 'Cherbourg', slug: 'cherbourg', population: '79 000' },
-      { name: 'Évreux', slug: 'evreux', population: '47 000' },
-      { name: 'Dieppe', slug: 'dieppe', population: '29 000' },
-    ]
-  },
+// Grouper les villes par région
+const villesByRegion = villes.reduce((acc, ville) => {
+  if (!acc[ville.region]) {
+    acc[ville.region] = []
+  }
+  acc[ville.region].push(ville)
+  return acc
+}, {} as Record<string, typeof villes>)
+
+// Ordre des régions (les plus peuplées d'abord)
+const regionOrder = [
+  'Île-de-France',
+  'Auvergne-Rhône-Alpes',
+  'Provence-Alpes-Côte d\'Azur',
+  'Occitanie',
+  'Nouvelle-Aquitaine',
+  'Hauts-de-France',
+  'Grand Est',
+  'Pays de la Loire',
+  'Bretagne',
+  'Normandie',
+  'Bourgogne-Franche-Comté',
+  'Centre-Val de Loire',
+  'Corse',
 ]
 
 export default function VillesPage() {
@@ -183,7 +81,7 @@ export default function VillesPage() {
           {/* Trust badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 mb-6">
             <Shield className="w-4 h-4 text-green-400" />
-            <span className="text-sm font-medium text-white/90">35 000+ villes couvertes en France</span>
+            <span className="text-sm font-medium text-white/90">{villes.length}+ villes principales couvertes</span>
           </div>
 
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight">
@@ -246,50 +144,58 @@ export default function VillesPage() {
       {/* Villes par région */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {regions.map((region, idx) => (
-            <div key={region.name} className="mb-16">
-              <div className="flex items-center justify-between mb-8">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/25">
-                    <MapPin className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h2 className="text-2xl font-bold text-gray-900">
-                      {region.name}
-                    </h2>
-                    <p className="text-sm text-gray-500">{region.villes.length} villes principales</p>
-                  </div>
-                </div>
-                <Link
-                  href={`/regions/${region.name.toLowerCase().replace(/[^a-z]/g, '-').replace(/-+/g, '-')}`}
-                  className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
-                >
-                  Voir la région <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
-              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                {region.villes.map((ville) => (
-                  <Link
-                    key={ville.slug}
-                    href={`/villes/${ville.slug}`}
-                    className="group relative bg-white rounded-xl border border-gray-100 p-5 hover:border-blue-200 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 hover:-translate-y-1"
-                  >
-                    <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-blue-50 to-transparent rounded-bl-[100px] opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <div className="relative">
-                      <div className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">
-                        {ville.name}
-                      </div>
-                      <div className="text-sm text-gray-500 flex items-center gap-1">
-                        <Users className="w-3 h-3" />
-                        {ville.population} hab.
-                      </div>
+          {regionOrder.map((regionName) => {
+            const regionVilles = villesByRegion[regionName]
+            if (!regionVilles || regionVilles.length === 0) return null
+
+            return (
+              <div key={regionName} className="mb-16">
+                <div className="flex items-center justify-between mb-8">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/25">
+                      <MapPin className="w-6 h-6 text-white" />
                     </div>
-                    <ArrowRight className="absolute bottom-4 right-4 w-4 h-4 text-gray-300 group-hover:text-blue-500 group-hover:translate-x-1 transition-all" />
+                    <div>
+                      <h2 className="text-2xl font-bold text-gray-900">
+                        {regionName}
+                      </h2>
+                      <p className="text-sm text-gray-500">{regionVilles.length} villes principales</p>
+                    </div>
+                  </div>
+                  <Link
+                    href={`/regions/${regionName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, '-').replace(/-+/g, '-')}`}
+                    className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
+                  >
+                    Voir la région <ArrowRight className="w-4 h-4" />
                   </Link>
-                ))}
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                  {regionVilles.map((ville) => (
+                    <Link
+                      key={ville.slug}
+                      href={`/villes/${ville.slug}`}
+                      className="group relative bg-white rounded-xl border border-gray-100 p-5 hover:border-blue-200 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 hover:-translate-y-1"
+                    >
+                      <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-blue-50 to-transparent rounded-bl-[100px] opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <div className="relative">
+                        <div className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">
+                          {ville.name}
+                        </div>
+                        <div className="text-sm text-gray-500 flex items-center gap-1">
+                          <Users className="w-3 h-3" />
+                          {ville.population} hab.
+                        </div>
+                        <div className="text-xs text-gray-400 mt-1">
+                          {ville.departement} ({ville.departementCode})
+                        </div>
+                      </div>
+                      <ArrowRight className="absolute bottom-4 right-4 w-4 h-4 text-gray-300 group-hover:text-blue-500 group-hover:translate-x-1 transition-all" />
+                    </Link>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
 
           {/* Services populaires - Maillage interne */}
           <div className="mt-12 pt-12 border-t border-gray-200">
@@ -331,20 +237,20 @@ export default function VillesPage() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500/20 backdrop-blur-sm rounded-full border border-amber-500/30 mb-6">
             <Sparkles className="w-4 h-4 text-amber-400" />
-            <span className="text-sm font-medium text-amber-300">35 000+ communes couvertes</span>
+            <span className="text-sm font-medium text-amber-300">Toutes les communes de France</span>
           </div>
 
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Votre ville n'est pas listée ?
+            Votre ville n&apos;est pas listée ?
           </h2>
           <p className="text-xl text-slate-300 mb-10 max-w-xl mx-auto">
             Nous couvrons toute la France. Recherchez votre commune pour trouver un artisan.
           </p>
           <Link
-            href="/recherche"
+            href="/devis"
             className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold rounded-xl hover:from-amber-600 hover:via-amber-500 hover:to-amber-600 transition-all shadow-xl shadow-amber-500/30 hover:shadow-amber-500/40 hover:-translate-y-0.5"
           >
-            Rechercher ma ville
+            Demander un devis gratuit
             <ArrowRight className="w-5 h-5" />
           </Link>
         </div>

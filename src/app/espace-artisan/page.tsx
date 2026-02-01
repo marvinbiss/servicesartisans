@@ -1,25 +1,85 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { FileText, MessageSquare, Star, Settings, TrendingUp, Users, Eye, Euro, ChevronRight, Calendar, ExternalLink, Search } from 'lucide-react'
+import { FileText, MessageSquare, Star, Settings, TrendingUp, Users, Eye, Euro, ChevronRight, Calendar, ExternalLink, Search, Loader2 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { QuickSiteLinks } from '@/components/InternalLinks'
 import LogoutButton from '@/components/LogoutButton'
 
-const stats = [
-  { label: 'Vues du profil', value: '1 247', change: '+12%', icon: Eye },
-  { label: 'Demandes reçues', value: '38', change: '+8%', icon: FileText },
-  { label: 'Devis envoyés', value: '24', change: '+15%', icon: Euro },
-  { label: 'Clients satisfaits', value: '18', change: '+5%', icon: Users },
-]
+interface StatsData {
+  profileViews: { value: number; change: string }
+  demandesRecues: { value: number; change: string }
+  devisEnvoyes: { value: number; change: string }
+  clientsSatisfaits: { value: number; change: string }
+  unreadMessages: number
+}
 
-const demandes = [
-  { id: 1, client: 'Jean D.', service: 'Réparation fuite', ville: 'Paris 15e', date: '2024-01-20', budget: '150-300€', status: 'nouveau' },
-  { id: 2, client: 'Marie L.', service: 'Installation chauffe-eau', ville: 'Paris 11e', date: '2024-01-19', budget: '500-800€', status: 'devis_envoye' },
-  { id: 3, client: 'Pierre M.', service: 'Débouchage canalisation', ville: 'Boulogne', date: '2024-01-18', budget: '100-200€', status: 'accepte' },
-]
+interface Demande {
+  id: string
+  client_name: string
+  service_name: string
+  city: string | null
+  created_at: string
+  budget: string | null
+  status: string
+}
+
+interface Profile {
+  company_name: string | null
+  full_name: string | null
+  city: string | null
+  is_verified: boolean
+  subscription_plan: string
+}
 
 export default function EspaceArtisanPage() {
+  const [loading, setLoading] = useState(true)
+  const [stats, setStats] = useState<StatsData | null>(null)
+  const [demandes, setDemandes] = useState<Demande[]>([])
+  const [profile, setProfile] = useState<Profile | null>(null)
+
+  useEffect(() => {
+    fetchDashboardData()
+  }, [])
+
+  const fetchDashboardData = async () => {
+    try {
+      const response = await fetch('/api/artisan/stats')
+      const data = await response.json()
+
+      if (response.ok) {
+        setStats(data.stats)
+        setDemandes(data.recentDemandes || [])
+        setProfile(data.profile)
+      }
+    } catch (error) {
+      console.error('Error fetching dashboard:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const statsDisplay = [
+    { label: 'Vues du profil', value: stats?.profileViews.value || 0, change: stats?.profileViews.change || '+0%', icon: Eye },
+    { label: 'Demandes reçues', value: stats?.demandesRecues.value || 0, change: stats?.demandesRecues.change || '+0%', icon: FileText },
+    { label: 'Devis envoyés', value: stats?.devisEnvoyes.value || 0, change: stats?.devisEnvoyes.change || '+0%', icon: Euro },
+    { label: 'Clients satisfaits', value: stats?.clientsSatisfaits.value || 0, change: stats?.clientsSatisfaits.change || '+0%', icon: Users },
+  ]
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
+          <p className="text-gray-600">Chargement...</p>
+        </div>
+      </div>
+    )
+  }
+
+  const displayName = profile?.company_name || profile?.full_name || 'Mon entreprise'
+  const displayCity = profile?.city || ''
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Breadcrumb */}
@@ -35,15 +95,24 @@ export default function EspaceArtisanPage() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold">Espace Artisan</h1>
-              <p className="text-blue-100">Martin Plomberie - Paris</p>
+              <p className="text-blue-100">{displayName}{displayCity && ` - ${displayCity}`}</p>
             </div>
             <div className="flex items-center gap-4">
-              <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                Profil vérifié
-              </span>
-              <span className="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                Premium
-              </span>
+              {profile?.is_verified && (
+                <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                  Profil vérifié
+                </span>
+              )}
+              {profile?.subscription_plan === 'premium' && (
+                <span className="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                  Premium
+                </span>
+              )}
+              {profile?.subscription_plan === 'pro' && (
+                <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                  Pro
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -145,7 +214,7 @@ export default function EspaceArtisanPage() {
           <div className="lg:col-span-3 space-y-8">
             {/* Stats */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              {stats.map((stat) => {
+              {statsDisplay.map((stat) => {
                 const Icon = stat.icon
                 return (
                   <div key={stat.label} className="bg-white rounded-xl shadow-sm p-6">
@@ -171,47 +240,60 @@ export default function EspaceArtisanPage() {
                 </Link>
               </div>
               <div className="space-y-4">
-                {demandes.map((demande) => (
-                  <div
-                    key={demande.id}
-                    className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h3 className="font-medium text-gray-900">
-                          {demande.service}
-                        </h3>
-                        <div className="flex items-center gap-4 mt-1 text-sm text-gray-500">
-                          <span>{demande.client}</span>
-                          <span>{demande.ville}</span>
-                          <span className="flex items-center gap-1">
-                            <Calendar className="w-4 h-4" />
-                            {new Date(demande.date).toLocaleDateString('fr-FR')}
+                {demandes.length === 0 ? (
+                  <div className="text-center py-8 text-gray-500">
+                    <FileText className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                    <p>Aucune demande pour le moment</p>
+                  </div>
+                ) : (
+                  demandes.map((demande) => (
+                    <div
+                      key={demande.id}
+                      className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h3 className="font-medium text-gray-900">
+                            {demande.service_name}
+                          </h3>
+                          <div className="flex items-center gap-4 mt-1 text-sm text-gray-500">
+                            <span>{demande.client_name}</span>
+                            <span>{demande.city || 'Non précisé'}</span>
+                            <span className="flex items-center gap-1">
+                              <Calendar className="w-4 h-4" />
+                              {new Date(demande.created_at).toLocaleDateString('fr-FR')}
+                            </span>
+                          </div>
+                          {demande.budget && (
+                            <div className="mt-2 text-sm font-medium text-blue-600">
+                              Budget : {demande.budget}
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-4">
+                          <span
+                            className={`px-3 py-1 rounded-full text-sm font-medium ${
+                              demande.status === 'pending'
+                                ? 'bg-red-100 text-red-700'
+                                : demande.status === 'sent'
+                                ? 'bg-yellow-100 text-yellow-700'
+                                : demande.status === 'accepted'
+                                ? 'bg-green-100 text-green-700'
+                                : 'bg-gray-100 text-gray-700'
+                            }`}
+                          >
+                            {demande.status === 'pending' && 'Nouveau'}
+                            {demande.status === 'sent' && 'Devis envoyé'}
+                            {demande.status === 'accepted' && 'Accepté'}
+                            {demande.status === 'refused' && 'Refusé'}
+                            {demande.status === 'completed' && 'Terminé'}
                           </span>
+                          <ChevronRight className="w-5 h-5 text-gray-400" />
                         </div>
-                        <div className="mt-2 text-sm font-medium text-blue-600">
-                          Budget : {demande.budget}
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-4">
-                        <span
-                          className={`px-3 py-1 rounded-full text-sm font-medium ${
-                            demande.status === 'nouveau'
-                              ? 'bg-red-100 text-red-700'
-                              : demande.status === 'devis_envoye'
-                              ? 'bg-yellow-100 text-yellow-700'
-                              : 'bg-green-100 text-green-700'
-                          }`}
-                        >
-                          {demande.status === 'nouveau' && 'Nouveau'}
-                          {demande.status === 'devis_envoye' && 'Devis envoyé'}
-                          {demande.status === 'accepte' && 'Accepté'}
-                        </span>
-                        <ChevronRight className="w-5 h-5 text-gray-400" />
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </div>
 

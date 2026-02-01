@@ -1,0 +1,96 @@
+'use client'
+
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { createClient } from '@/lib/supabase/client'
+import { Button, Input } from '@/components/ui'
+
+export function LoginForm() {
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  })
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsLoading(true)
+    setError('')
+
+    try {
+      const supabase = createClient()
+      const { error: authError } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password,
+      })
+
+      if (authError) {
+        if (authError.message.includes('Invalid login')) {
+          setError('Email ou mot de passe incorrect')
+        } else {
+          setError(authError.message)
+        }
+        return
+      }
+
+      router.push('/espace-artisan')
+      router.refresh()
+    } catch (err) {
+      setError('Une erreur est survenue')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      {error && (
+        <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+          {error}
+        </div>
+      )}
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Email
+        </label>
+        <Input
+          type="email"
+          value={formData.email}
+          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          placeholder="vous@exemple.fr"
+          required
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Mot de passe
+        </label>
+        <Input
+          type="password"
+          value={formData.password}
+          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+          placeholder="••••••••"
+          required
+        />
+      </div>
+
+      <div className="flex items-center justify-between">
+        <label className="flex items-center gap-2">
+          <input type="checkbox" className="rounded border-gray-300" />
+          <span className="text-sm text-gray-600">Se souvenir de moi</span>
+        </label>
+        <a href="/mot-de-passe-oublie" className="text-sm text-blue-600 hover:underline">
+          Mot de passe oublié ?
+        </a>
+      </div>
+
+      <Button type="submit" disabled={isLoading} fullWidth>
+        {isLoading ? 'Connexion...' : 'Se connecter'}
+      </Button>
+    </form>
+  )
+}

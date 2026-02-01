@@ -1,13 +1,42 @@
 /**
  * Advanced Search API - ServicesArtisans
  * Full-text search with filters and facets
+ * Uses Supabase for real data, falls back to demo data if empty
  */
 
 import { NextResponse } from 'next/server'
+import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
 
-// Demo data for testing - Artisans du batiment
-const DEMO_ARTISANS = [
+// Artisan type for search results
+interface SearchArtisan {
+  id: string
+  business_name: string | null
+  first_name: string | null
+  last_name: string | null
+  avatar_url: string | null
+  city: string | null
+  postal_code: string
+  address: string | null
+  specialty: string
+  description: string | null
+  average_rating: number
+  review_count: number
+  hourly_rate: number | null
+  is_verified: boolean
+  is_premium: boolean
+  is_center: boolean
+  team_size: number | null
+  services: string[]
+  availability_status: 'available_today' | 'available_this_week' | 'unavailable'
+  response_time: string | null
+  distance: number | null
+  accepts_new_clients: boolean
+  intervention_zone: string
+}
+
+// Demo data for testing - Artisans du batiment (fallback)
+const DEMO_ARTISANS: SearchArtisan[] = [
   {
     id: 'demo-1',
     business_name: 'Plomberie Martin & Fils',
@@ -364,6 +393,7 @@ export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
   try {
+    const supabase = createClient()
     const { searchParams } = new URL(request.url)
 
     // Search parameters
@@ -377,40 +407,103 @@ export async function GET(request: Request) {
     const limit = parseInt(searchParams.get('limit') || '20')
     const offset = (page - 1) * limit
 
-    // Use demo data
-    let filteredDemo = [...DEMO_ARTISANS]
+    // Try to fetch from Supabase first
+    let useRealData = false
+    let dbArtisans: SearchArtisan[] = []
 
-    // Filter by query
-    if (query) {
-      const q = query.toLowerCase()
-      filteredDemo = filteredDemo.filter(a =>
-        a.specialty?.toLowerCase().includes(q) ||
-        a.business_name?.toLowerCase().includes(q) ||
-        a.first_name?.toLowerCase().includes(q) ||
-        a.last_name?.toLowerCase().includes(q) ||
-        a.description?.toLowerCase().includes(q)
-      )
+    try {
+      // Query artisans from profiles table
+      let dbQuery = supabase
+        .from('profiles')
+        .select('*')
+        .eq('user_type', 'artisan')
+
+      // Filter by search query
+      if (query) {
+        dbQuery = dbQuery.or(
+          `company_name.ilike.%${query}%,full_name.ilike.%${query}%,description.ilike.%${query}%`
+        )
+      }
+
+      // Filter by location
+      if (location) {
+        dbQuery = dbQuery.or(
+          `city.ilike.%${location}%,postal_code.ilike.%${location}%`
+        )
+      }
+
+      const { data: profiles, error } = await dbQuery
+
+      if (!error && profiles && profiles.length > 0) {
+        useRealData = true
+        // Transform profiles to artisan format
+        dbArtisans = profiles.map(p => ({
+          id: p.id,
+          business_name: p.company_name,
+          first_name: p.full_name?.split(' ')[0] || null,
+          last_name: p.full_name?.split(' ').slice(1).join(' ') || null,
+          avatar_url: p.avatar_url,
+          city: p.city,
+          postal_code: p.postal_code || '',
+          address: p.address,
+          specialty: (p.services && p.services[0]) || 'Artisan',
+          description: p.description,
+          average_rating: 4.5, // Default, would need reviews table aggregation
+          review_count: 0,
+          hourly_rate: null,
+          is_verified: p.is_verified,
+          is_premium: p.subscription_plan === 'premium',
+          is_center: !!p.company_name,
+          team_size: null,
+          services: p.services || [],
+          availability_status: 'available_this_week' as const,
+          response_time: '< 2h',
+          distance: null,
+          accepts_new_clients: true,
+          intervention_zone: '20 km',
+        }))
+      }
+    } catch (dbError) {
+      logger.warn('Database query failed, using demo data:', { error: String(dbError) })
     }
 
-    // Filter by location
-    if (location) {
-      const loc = location.toLowerCase()
-      filteredDemo = filteredDemo.filter(a =>
-        a.city?.toLowerCase().includes(loc) ||
-        a.postal_code?.includes(loc)
-      )
+    // Use demo data as fallback
+    let filteredData = useRealData ? dbArtisans : [...DEMO_ARTISANS]
+
+    // Apply additional filters if using demo data (already applied in DB query)
+    if (!useRealData) {
+      // Filter by query
+      if (query) {
+        const q = query.toLowerCase()
+        filteredData = filteredData.filter(a =>
+          a.specialty?.toLowerCase().includes(q) ||
+          a.business_name?.toLowerCase().includes(q) ||
+          a.first_name?.toLowerCase().includes(q) ||
+          a.last_name?.toLowerCase().includes(q) ||
+          a.description?.toLowerCase().includes(q)
+        )
+      }
+
+      // Filter by location
+      if (location) {
+        const loc = location.toLowerCase()
+        filteredData = filteredData.filter(a =>
+          a.city?.toLowerCase().includes(loc) ||
+          a.postal_code?.includes(loc)
+        )
+      }
     }
 
-    // Filter by rating
+    // Filter by rating (applies to both)
     if (minRating) {
-      filteredDemo = filteredDemo.filter(a => a.average_rating >= parseFloat(minRating))
+      filteredData = filteredData.filter(a => a.average_rating >= parseFloat(minRating))
     }
 
     // Filter by availability
     if (availability === 'today') {
-      filteredDemo = filteredDemo.filter(a => a.availability_status === 'available_today')
+      filteredData = filteredData.filter(a => a.availability_status === 'available_today')
     } else if (availability === 'week' || availability === 'tomorrow') {
-      filteredDemo = filteredDemo.filter(a =>
+      filteredData = filteredData.filter(a =>
         a.availability_status === 'available_today' ||
         a.availability_status === 'available_this_week'
       )
@@ -418,11 +511,11 @@ export async function GET(request: Request) {
 
     // Sort
     if (sortBy === 'rating') {
-      filteredDemo.sort((a, b) => b.average_rating - a.average_rating)
+      filteredData.sort((a, b) => b.average_rating - a.average_rating)
     }
 
-    const totalCount = filteredDemo.length
-    let artisans = filteredDemo.slice(offset, offset + limit)
+    const totalCount = filteredData.length
+    let artisans = filteredData.slice(offset, offset + limit)
 
     // Add availability to artisans
     artisans = artisans.map(a => ({
@@ -432,14 +525,20 @@ export async function GET(request: Request) {
         : generateDemoAvailability(a.id).map(d => ({ ...d, slots: [] }))
     }))
 
-    // Build facets
+    // Build facets from data
+    const cityCount = new Map<string, number>()
+    filteredData.forEach(a => {
+      if (a.city) {
+        cityCount.set(a.city, (cityCount.get(a.city) || 0) + 1)
+      }
+    })
+    const cities = Array.from(cityCount.entries())
+      .map(([city, count]) => ({ city, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 10)
+
     const facets = {
-      cities: [
-        { city: 'Le Pre-Saint-Gervais', count: 6 },
-        { city: 'Pantin', count: 3 },
-        { city: 'Paris', count: 1 },
-        { city: 'Les Lilas', count: 2 },
-      ],
+      cities,
       ratings: { '5': 2, '4': 8, '3': 2, '2': 0, '1': 0 },
     }
 
@@ -460,6 +559,7 @@ export async function GET(request: Request) {
         availability,
         sortBy,
       },
+      source: useRealData ? 'database' : 'demo',
     })
   } catch (error) {
     logger.error('Search error:', error)

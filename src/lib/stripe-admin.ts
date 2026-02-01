@@ -1,0 +1,348 @@
+import Stripe from 'stripe'
+
+// Initialiser Stripe avec la clé secrète
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: '2023-10-16',
+})
+
+/**
+ * Récupérer l'historique des paiements d'un client
+ */
+export async function getCustomerPayments(customerId: string, limit = 10) {
+  try {
+    const paymentIntents = await stripe.paymentIntents.list({
+      customer: customerId,
+      limit,
+    })
+
+    return paymentIntents.data.map((pi) => ({
+      id: pi.id,
+      amount: pi.amount,
+      currency: pi.currency,
+      status: pi.status,
+      description: pi.description,
+      created: new Date(pi.created * 1000).toISOString(),
+      metadata: pi.metadata,
+    }))
+  } catch (error) {
+    console.error('Error fetching customer payments:', error)
+    throw error
+  }
+}
+
+/**
+ * Récupérer les détails d'un abonnement
+ */
+export async function getSubscription(subscriptionId: string) {
+  try {
+    const subscription = await stripe.subscriptions.retrieve(subscriptionId, {
+      expand: ['default_payment_method', 'latest_invoice'],
+    })
+
+    return {
+      id: subscription.id,
+      status: subscription.status,
+      currentPeriodStart: new Date(subscription.current_period_start * 1000).toISOString(),
+      currentPeriodEnd: new Date(subscription.current_period_end * 1000).toISOString(),
+      cancelAtPeriodEnd: subscription.cancel_at_period_end,
+      canceledAt: subscription.canceled_at
+        ? new Date(subscription.canceled_at * 1000).toISOString()
+        : null,
+      items: subscription.items.data.map((item) => ({
+        id: item.id,
+        priceId: item.price.id,
+        productId: typeof item.price.product === 'string' ? item.price.product : item.price.product.id,
+        amount: item.price.unit_amount,
+        interval: item.price.recurring?.interval,
+      })),
+    }
+  } catch (error) {
+    console.error('Error fetching subscription:', error)
+    throw error
+  }
+}
+
+/**
+ * Traiter un remboursement (total ou partiel)
+ */
+export async function processRefund(
+  paymentIntentId: string,
+  amount?: number, // En centimes, undefined = remboursement total
+  reason?: 'duplicate' | 'fraudulent' | 'requested_by_customer'
+) {
+  try {
+    const refundParams: Stripe.RefundCreateParams = {
+      payment_intent: paymentIntentId,
+      reason: reason || 'requested_by_customer',
+    }
+
+    if (amount) {
+      refundParams.amount = amount
+    }
+
+    const refund = await stripe.refunds.create(refundParams)
+
+    return {
+      id: refund.id,
+      amount: refund.amount,
+      currency: refund.currency,
+      status: refund.status,
+      reason: refund.reason,
+      created: new Date(refund.created * 1000).toISOString(),
+    }
+  } catch (error) {
+    console.error('Error processing refund:', error)
+    throw error
+  }
+}
+
+/**
+ * Annuler un abonnement
+ */
+export async function cancelSubscription(
+  subscriptionId: string,
+  immediately = false
+) {
+  try {
+    if (immediately) {
+      // Annulation immédiate
+      const subscription = await stripe.subscriptions.cancel(subscriptionId)
+      return {
+        id: subscription.id,
+        status: subscription.status,
+        canceledAt: new Date().toISOString(),
+      }
+    } else {
+      // Annulation à la fin de la période
+      const subscription = await stripe.subscriptions.update(subscriptionId, {
+        cancel_at_period_end: true,
+      })
+      return {
+        id: subscription.id,
+        status: subscription.status,
+        cancelAtPeriodEnd: true,
+        currentPeriodEnd: new Date(subscription.current_period_end * 1000).toISOString(),
+      }
+    }
+  } catch (error) {
+    console.error('Error canceling subscription:', error)
+    throw error
+  }
+}
+
+/**
+ * Réactiver un abonnement annulé (si pas encore expiré)
+ */
+export async function reactivateSubscription(subscriptionId: string) {
+  try {
+    const subscription = await stripe.subscriptions.update(subscriptionId, {
+      cancel_at_period_end: false,
+    })
+    return {
+      id: subscription.id,
+      status: subscription.status,
+      cancelAtPeriodEnd: false,
+    }
+  } catch (error) {
+    console.error('Error reactivating subscription:', error)
+    throw error
+  }
+}
+
+/**
+ * Changer le plan d'un abonnement
+ */
+export async function changeSubscriptionPlan(
+  subscriptionId: string,
+  newPriceId: string,
+  prorationBehavior: 'create_prorations' | 'none' | 'always_invoice' = 'create_prorations'
+) {
+  try {
+    // Récupérer l'abonnement actuel
+    const subscription = await stripe.subscriptions.retrieve(subscriptionId)
+    const subscriptionItemId = subscription.items.data[0].id
+
+    // Mettre à jour avec le nouveau prix
+    const updatedSubscription = await stripe.subscriptions.update(subscriptionId, {
+      items: [
+        {
+          id: subscriptionItemId,
+          price: newPriceId,
+        },
+      ],
+      proration_behavior: prorationBehavior,
+    })
+
+    return {
+      id: updatedSubscription.id,
+      status: updatedSubscription.status,
+      newPriceId,
+      currentPeriodEnd: new Date(updatedSubscription.current_period_end * 1000).toISOString(),
+    }
+  } catch (error) {
+    console.error('Error changing subscription plan:', error)
+    throw error
+  }
+}
+
+/**
+ * Créer une charge manuelle
+ */
+export async function createManualCharge(
+  customerId: string,
+  amount: number, // En centimes
+  description: string,
+  metadata?: Record<string, string>
+) {
+  try {
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount,
+      currency: 'eur',
+      customer: customerId,
+      description,
+      metadata,
+      confirm: true,
+      automatic_payment_methods: {
+        enabled: true,
+        allow_redirects: 'never',
+      },
+    })
+
+    return {
+      id: paymentIntent.id,
+      amount: paymentIntent.amount,
+      status: paymentIntent.status,
+      created: new Date(paymentIntent.created * 1000).toISOString(),
+    }
+  } catch (error) {
+    console.error('Error creating manual charge:', error)
+    throw error
+  }
+}
+
+/**
+ * Récupérer les factures d'un client
+ */
+export async function getCustomerInvoices(customerId: string, limit = 10) {
+  try {
+    const invoices = await stripe.invoices.list({
+      customer: customerId,
+      limit,
+    })
+
+    return invoices.data.map((invoice) => ({
+      id: invoice.id,
+      number: invoice.number,
+      amount: invoice.amount_paid,
+      currency: invoice.currency,
+      status: invoice.status,
+      pdfUrl: invoice.invoice_pdf,
+      created: new Date(invoice.created * 1000).toISOString(),
+      periodStart: invoice.period_start
+        ? new Date(invoice.period_start * 1000).toISOString()
+        : null,
+      periodEnd: invoice.period_end
+        ? new Date(invoice.period_end * 1000).toISOString()
+        : null,
+    }))
+  } catch (error) {
+    console.error('Error fetching customer invoices:', error)
+    throw error
+  }
+}
+
+/**
+ * Récupérer tous les abonnements avec pagination
+ */
+export async function listAllSubscriptions(
+  limit = 20,
+  startingAfter?: string,
+  status?: 'active' | 'canceled' | 'past_due' | 'trialing' | 'all'
+) {
+  try {
+    const params: Stripe.SubscriptionListParams = {
+      limit,
+      expand: ['data.customer'],
+    }
+
+    if (startingAfter) {
+      params.starting_after = startingAfter
+    }
+
+    if (status && status !== 'all') {
+      params.status = status
+    }
+
+    const subscriptions = await stripe.subscriptions.list(params)
+
+    return {
+      data: subscriptions.data.map((sub) => ({
+        id: sub.id,
+        customerId: typeof sub.customer === 'string' ? sub.customer : sub.customer.id,
+        customerEmail:
+          typeof sub.customer === 'object' && 'email' in sub.customer
+            ? sub.customer.email
+            : null,
+        status: sub.status,
+        currentPeriodStart: new Date(sub.current_period_start * 1000).toISOString(),
+        currentPeriodEnd: new Date(sub.current_period_end * 1000).toISOString(),
+        cancelAtPeriodEnd: sub.cancel_at_period_end,
+        amount: sub.items.data[0]?.price.unit_amount || 0,
+        interval: sub.items.data[0]?.price.recurring?.interval,
+        priceId: sub.items.data[0]?.price.id,
+        created: new Date(sub.created * 1000).toISOString(),
+      })),
+      hasMore: subscriptions.has_more,
+    }
+  } catch (error) {
+    console.error('Error listing subscriptions:', error)
+    throw error
+  }
+}
+
+/**
+ * Obtenir les statistiques de revenus
+ */
+export async function getRevenueStats(days = 30) {
+  try {
+    const now = Math.floor(Date.now() / 1000)
+    const startDate = now - days * 24 * 60 * 60
+
+    const [charges, refunds] = await Promise.all([
+      stripe.charges.list({
+        created: { gte: startDate },
+        limit: 100,
+      }),
+      stripe.refunds.list({
+        created: { gte: startDate },
+        limit: 100,
+      }),
+    ])
+
+    const totalRevenue = charges.data
+      .filter((c) => c.status === 'succeeded')
+      .reduce((sum, c) => sum + c.amount, 0)
+
+    const totalRefunded = refunds.data
+      .filter((r) => r.status === 'succeeded')
+      .reduce((sum, r) => sum + r.amount, 0)
+
+    return {
+      totalRevenue,
+      totalRefunded,
+      netRevenue: totalRevenue - totalRefunded,
+      chargesCount: charges.data.length,
+      refundsCount: refunds.data.length,
+      period: `${days} derniers jours`,
+    }
+  } catch (error) {
+    console.error('Error getting revenue stats:', error)
+    throw error
+  }
+}
+
+// Export des IDs de prix pour les plans
+export const PRICE_IDS = {
+  pro: process.env.STRIPE_PRO_PRICE_ID,
+  premium: process.env.STRIPE_PREMIUM_PRICE_ID,
+}

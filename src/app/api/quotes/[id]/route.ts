@@ -1,0 +1,222 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { createClient } from '@/lib/supabase/server'
+
+export const dynamic = 'force-dynamic'
+
+// GET - Get single quote
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: { code: 1001, message: 'Authentification requise' }
+        },
+        { status: 401 }
+      )
+    }
+
+    const { data: quote, error } = await supabase
+      .from('quotes')
+      .select(`
+        *,
+        booking:bookings(
+          id,
+          service_type,
+          scheduled_date,
+          address,
+          description,
+          client:users!bookings_client_id_fkey(full_name, email, phone),
+          provider:providers(business_name, phone)
+        )
+      `)
+      .eq('id', params.id)
+      .single()
+
+    if (error || !quote) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: { code: 2002, message: 'Devis non trouve' }
+        },
+        { status: 404 }
+      )
+    }
+
+    // Check authorization
+    const { data: provider } = await supabase
+      .from('providers')
+      .select('id')
+      .eq('user_id', user.id)
+      .single()
+
+    const isProvider = provider?.id === quote.provider_id
+    const isClient = quote.client_id === user.id
+
+    if (!isProvider && !isClient) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: { code: 1002, message: 'Acces non autorise' }
+        },
+        { status: 403 }
+      )
+    }
+
+    return NextResponse.json({
+      success: true,
+      data: quote,
+    })
+  } catch (error) {
+    console.error('Quote fetch error:', error)
+    return NextResponse.json(
+      {
+        success: false,
+        error: { code: 9999, message: 'Erreur serveur' }
+      },
+      { status: 500 }
+    )
+  }
+}
+
+// PATCH - Update quote status
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: { code: 1001, message: 'Authentification requise' }
+        },
+        { status: 401 }
+      )
+    }
+
+    const body = await request.json()
+    const { action } = body
+
+    const { data: quote } = await supabase
+      .from('quotes')
+      .select('*')
+      .eq('id', params.id)
+      .single()
+
+    if (!quote) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: { code: 2002, message: 'Devis non trouve' }
+        },
+        { status: 404 }
+      )
+    }
+
+    // Check authorization and validate action
+    const { data: provider } = await supabase
+      .from('providers')
+      .select('id')
+      .eq('user_id', user.id)
+      .single()
+
+    const isProvider = provider?.id === quote.provider_id
+    const isClient = quote.client_id === user.id
+
+    let newStatus: string
+
+    switch (action) {
+      case 'accept':
+        if (!isClient) {
+          return NextResponse.json(
+            {
+              success: false,
+              error: { code: 1002, message: 'Seul le client peut accepter le devis' }
+            },
+            { status: 403 }
+          )
+        }
+        newStatus = 'accepted'
+        break
+
+      case 'reject':
+        if (!isClient) {
+          return NextResponse.json(
+            {
+              success: false,
+              error: { code: 1002, message: 'Seul le client peut refuser le devis' }
+            },
+            { status: 403 }
+          )
+        }
+        newStatus = 'rejected'
+        break
+
+      case 'cancel':
+        if (!isProvider) {
+          return NextResponse.json(
+            {
+              success: false,
+              error: { code: 1002, message: 'Seul l\'artisan peut annuler le devis' }
+            },
+            { status: 403 }
+          )
+        }
+        newStatus = 'cancelled'
+        break
+
+      default:
+        return NextResponse.json(
+          {
+            success: false,
+            error: { code: 2001, message: 'Action invalide' }
+          },
+          { status: 400 }
+        )
+    }
+
+    const { data: updatedQuote, error } = await supabase
+      .from('quotes')
+      .update({
+        status: newStatus,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', params.id)
+      .select()
+      .single()
+
+    if (error) throw error
+
+    // If accepted, update booking status
+    if (newStatus === 'accepted') {
+      await supabase
+        .from('bookings')
+        .update({ status: 'confirmed', total_price: quote.amount })
+        .eq('id', quote.booking_id)
+    }
+
+    return NextResponse.json({
+      success: true,
+      data: updatedQuote,
+    })
+  } catch (error) {
+    console.error('Quote update error:', error)
+    return NextResponse.json(
+      {
+        success: false,
+        error: { code: 9999, message: 'Erreur serveur' }
+      },
+      { status: 500 }
+    )
+  }
+}

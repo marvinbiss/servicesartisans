@@ -1,0 +1,63 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { z } from 'zod'
+import { createClient } from '@/lib/supabase/server'
+
+export const dynamic = 'force-dynamic'
+
+const bulkModerateSchema = z.object({
+  review_ids: z.array(z.string().uuid()).min(1).max(50),
+  action: z.enum(['approve', 'reject']),
+})
+
+// PATCH /api/reviews/bulk - Bulk moderate reviews (Admin only)
+export async function PATCH(request: NextRequest) {
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Non autorisé' } },
+        { status: 401 }
+      )
+    }
+
+    const body = await request.json()
+    const parsed = bulkModerateSchema.safeParse(body)
+
+    if (!parsed.success) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Données invalides' } },
+        { status: 400 }
+      )
+    }
+
+    const { review_ids, action } = parsed.data
+
+    const updates = {
+      moderation_status: action === 'approve' ? 'approved' : 'rejected',
+      is_visible: action === 'approve',
+      moderated_at: new Date().toISOString(),
+      moderated_by: user.id,
+    }
+
+    const { data, error } = await supabase
+      .from('reviews')
+      .update(updates)
+      .in('id', review_ids)
+      .select('id')
+
+    if (error) throw error
+
+    return NextResponse.json({
+      success: true,
+      moderated: data?.length || 0,
+    })
+  } catch (error) {
+    console.error('Bulk moderate reviews error:', error)
+    return NextResponse.json(
+      { success: false, error: { message: 'Erreur serveur' } },
+      { status: 500 }
+    )
+  }
+}

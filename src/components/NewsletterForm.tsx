@@ -1,0 +1,77 @@
+'use client'
+
+import { useState } from 'react'
+import { Loader2, CheckCircle } from 'lucide-react'
+
+export default function NewsletterForm() {
+  const [email, setEmail] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!email) return
+
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      const response = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Erreur lors de l\'inscription')
+      }
+
+      setIsSubmitted(true)
+      setEmail('')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erreur lors de l\'inscription')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  if (isSubmitted) {
+    return (
+      <div className="flex items-center gap-3 px-5 py-3.5 bg-green-500/20 border border-green-500/30 rounded-xl">
+        <CheckCircle className="w-5 h-5 text-green-400" />
+        <span className="text-green-400 font-medium">Merci pour votre inscription !</span>
+      </div>
+    )
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="flex w-full max-w-md gap-3">
+      <div className="flex-1">
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Votre email"
+          required
+          disabled={isLoading}
+          className="w-full px-5 py-3.5 bg-slate-800/50 border border-slate-700 rounded-xl text-white placeholder:text-gray-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all disabled:opacity-50"
+        />
+        {error && <p className="text-red-400 text-sm mt-1">{error}</p>}
+      </div>
+      <button
+        type="submit"
+        disabled={isLoading}
+        className="px-6 py-3.5 bg-gradient-to-r from-primary-600 to-primary-500 text-white font-semibold rounded-xl hover:from-primary-500 hover:to-primary-400 transition-all duration-300 shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/30 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+      >
+        {isLoading ? (
+          <Loader2 className="w-5 h-5 animate-spin" />
+        ) : (
+          "S'inscrire"
+        )}
+      </button>
+    </form>
+  )
+}

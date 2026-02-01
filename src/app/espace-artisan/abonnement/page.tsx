@@ -1,9 +1,18 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { FileText, MessageSquare, Star, Settings, TrendingUp, Euro, ArrowLeft, Check, Crown, Zap, CreditCard, Download, Calendar } from 'lucide-react'
+import { FileText, MessageSquare, Star, Settings, TrendingUp, Euro, ArrowLeft, Check, Crown, Zap, CreditCard, Download, Calendar, Loader2 } from 'lucide-react'
 import LogoutButton from '@/components/LogoutButton'
+
+interface SubscriptionData {
+  plan: string
+  status: string | null
+  periodEnd: string | null
+  devisUsed: number
+  devisLimit: number
+  invoices: { id: string; date: string; montant: number; status: string; url: string | null }[]
+}
 
 const plans = [
   {
@@ -61,21 +70,78 @@ const plans = [
   },
 ]
 
-const factures = [
-  { id: 1, date: '2024-01-01', montant: 49, status: 'payé' },
-  { id: 2, date: '2023-12-01', montant: 49, status: 'payé' },
-  { id: 3, date: '2023-11-01', montant: 49, status: 'payé' },
-]
-
 export default function AbonnementArtisanPage() {
-  const [currentPlan] = useState('pro')
+  const [loading, setLoading] = useState(true)
+  const [subscription, setSubscription] = useState<SubscriptionData | null>(null)
   const [showUpgradeModal, setShowUpgradeModal] = useState(false)
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
+  const [upgrading, setUpgrading] = useState(false)
+
+  useEffect(() => {
+    fetchSubscription()
+  }, [])
+
+  const fetchSubscription = async () => {
+    try {
+      const response = await fetch('/api/artisan/subscription')
+      const data = await response.json()
+
+      if (response.ok) {
+        setSubscription(data)
+      }
+    } catch (error) {
+      console.error('Error fetching subscription:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const currentPlan = subscription?.plan || 'gratuit'
+  const factures = subscription?.invoices || []
 
   const openUpgradeModal = (planId: string) => {
     setSelectedPlan(planId)
     setShowUpgradeModal(true)
   }
+
+  const handleUpgrade = async () => {
+    if (!selectedPlan) return
+
+    setUpgrading(true)
+    try {
+      const response = await fetch('/api/stripe/create-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan: selectedPlan }),
+      })
+
+      const data = await response.json()
+
+      if (data.url) {
+        window.location.href = data.url
+      }
+    } catch (error) {
+      console.error('Error creating checkout:', error)
+    } finally {
+      setUpgrading(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
+          <p className="text-gray-600">Chargement...</p>
+        </div>
+      </div>
+    )
+  }
+
+  const currentPlanInfo = plans.find(p => p.id === currentPlan)
+  const periodEndDate = subscription?.periodEnd
+    ? new Date(subscription.periodEnd).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
+    : null
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -155,12 +221,17 @@ export default function AbonnementArtisanPage() {
                     <Crown className="w-6 h-6 text-yellow-400" />
                     <span className="text-sm font-medium text-blue-200">Abonnement actuel</span>
                   </div>
-                  <h2 className="text-2xl font-bold mb-1">Pro</h2>
-                  <p className="text-blue-200">49€/mois • Renouvelé le 1er février 2024</p>
+                  <h2 className="text-2xl font-bold mb-1 capitalize">{currentPlan}</h2>
+                  <p className="text-blue-200">
+                    {currentPlanInfo?.price || 0}€/mois
+                    {periodEndDate && ` • Renouvelé le ${periodEndDate}`}
+                  </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm text-blue-200 mb-2">Demandes restantes ce mois</p>
-                  <div className="text-3xl font-bold">24/30</div>
+                  <p className="text-sm text-blue-200 mb-2">Devis envoyés ce mois</p>
+                  <div className="text-3xl font-bold">
+                    {subscription?.devisUsed || 0}/{subscription?.devisLimit === 9999 ? '∞' : subscription?.devisLimit || 5}
+                  </div>
                 </div>
               </div>
             </div>
@@ -262,29 +333,39 @@ export default function AbonnementArtisanPage() {
                 <Calendar className="w-5 h-5" />
                 Historique des factures
               </h2>
-              <div className="space-y-3">
-                {factures.map((facture) => (
-                  <div
-                    key={facture.id}
-                    className="flex items-center justify-between p-4 border border-gray-200 rounded-lg"
-                  >
-                    <div>
-                      <p className="font-medium text-gray-900">
-                        Facture {new Date(facture.date).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}
-                      </p>
-                      <p className="text-sm text-gray-500">{facture.montant}€</p>
+              {factures.length === 0 ? (
+                <p className="text-gray-500 text-center py-4">Aucune facture pour le moment</p>
+              ) : (
+                <div className="space-y-3">
+                  {factures.map((facture) => (
+                    <div
+                      key={facture.id}
+                      className="flex items-center justify-between p-4 border border-gray-200 rounded-lg"
+                    >
+                      <div>
+                        <p className="font-medium text-gray-900">
+                          Facture {new Date(facture.date).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}
+                        </p>
+                        <p className="text-sm text-gray-500">{facture.montant}€</p>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <span className={`px-3 py-1 rounded-full text-sm font-medium capitalize ${
+                          facture.status === 'paid' ? 'bg-green-100 text-green-700' :
+                          facture.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
+                          'bg-red-100 text-red-700'
+                        }`}>
+                          {facture.status === 'paid' ? 'Payé' : facture.status === 'pending' ? 'En attente' : 'Échoué'}
+                        </span>
+                        {facture.url && (
+                          <a href={facture.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-700">
+                            <Download className="w-5 h-5" />
+                          </a>
+                        )}
+                      </div>
                     </div>
-                    <div className="flex items-center gap-4">
-                      <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium capitalize">
-                        {facture.status}
-                      </span>
-                      <button className="text-blue-600 hover:text-blue-700">
-                        <Download className="w-5 h-5" />
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Cancel */}
@@ -306,20 +387,23 @@ export default function AbonnementArtisanPage() {
             </h2>
             <p className="text-gray-600 mb-6">
               Vous allez passer à l'offre <strong>{plans.find(p => p.id === selectedPlan)?.name}</strong> à {plans.find(p => p.id === selectedPlan)?.price}€/mois.
-              Le changement sera effectif immédiatement.
+              Vous serez redirigé vers la page de paiement sécurisée.
             </p>
             <div className="flex gap-4">
               <button
                 onClick={() => setShowUpgradeModal(false)}
-                className="flex-1 px-4 py-3 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+                disabled={upgrading}
+                className="flex-1 px-4 py-3 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors disabled:opacity-50"
               >
                 Annuler
               </button>
               <button
-                onClick={() => setShowUpgradeModal(false)}
-                className="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                onClick={handleUpgrade}
+                disabled={upgrading}
+                className="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
               >
-                Confirmer
+                {upgrading && <Loader2 className="w-4 h-4 animate-spin" />}
+                {upgrading ? 'Redirection...' : 'Continuer vers le paiement'}
               </button>
             </div>
           </div>

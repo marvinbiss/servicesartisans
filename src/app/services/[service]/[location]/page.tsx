@@ -9,7 +9,8 @@ import ServiceLocationPageClient from './PageClient'
 import { REVALIDATE } from '@/lib/cache'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import Breadcrumb from '@/components/Breadcrumb'
-import { PopularServicesLinks, popularServices, popularCities } from '@/components/InternalLinks'
+import { PopularServicesLinks } from '@/components/InternalLinks'
+import { popularServices, popularCities } from '@/lib/constants/navigation'
 import Link from 'next/link'
 
 // ISR: Revalidate every 15 minutes for service+location pages

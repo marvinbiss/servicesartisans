@@ -1,61 +1,99 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { FileText, MessageSquare, Star, Settings, TrendingUp, Euro, ArrowLeft, ThumbsUp, MessageCircle } from 'lucide-react'
+import { FileText, MessageSquare, Star, Settings, TrendingUp, Euro, ArrowLeft, ThumbsUp, MessageCircle, Loader2, X } from 'lucide-react'
 import LogoutButton from '@/components/LogoutButton'
 
-const avis = [
-  {
-    id: 1,
-    client: 'Jean D.',
-    service: 'Réparation fuite',
-    date: '2024-01-15',
-    note: 5,
-    commentaire: 'Excellent travail ! Intervention rapide et efficace. Le plombier était très professionnel et a résolu mon problème en moins d\'une heure. Je recommande vivement.',
-    reponse: null,
-  },
-  {
-    id: 2,
-    client: 'Marie L.',
-    service: 'Installation chauffe-eau',
-    date: '2024-01-10',
-    note: 5,
-    commentaire: 'Très satisfaite de l\'installation de mon nouveau chauffe-eau. Travail soigné et propre. Merci !',
-    reponse: 'Merci beaucoup pour votre confiance Marie ! Ce fut un plaisir de travailler pour vous.',
-  },
-  {
-    id: 3,
-    client: 'Pierre M.',
-    service: 'Débouchage canalisation',
-    date: '2024-01-05',
-    note: 4,
-    commentaire: 'Bon travail dans l\'ensemble. Intervention efficace mais un petit retard au départ.',
-    reponse: 'Merci Pierre pour votre retour. Je m\'excuse pour le léger retard dû à un embouteillage. Content que le problème soit résolu !',
-  },
-  {
-    id: 4,
-    client: 'Sophie B.',
-    service: 'Remplacement robinet',
-    date: '2024-01-01',
-    note: 5,
-    commentaire: 'Artisan ponctuel, travail impeccable. Prix raisonnable. Je ferai appel à lui à nouveau.',
-    reponse: null,
-  },
-]
+interface Avis {
+  id: string
+  client: string
+  service: string
+  date: string
+  note: number
+  commentaire: string | null
+  reponse: string | null
+}
 
-const stats = {
-  moyenne: 4.8,
-  total: 124,
-  distribution: [
-    { note: 5, count: 98 },
-    { note: 4, count: 18 },
-    { note: 3, count: 5 },
-    { note: 2, count: 2 },
-    { note: 1, count: 1 },
-  ],
+interface Stats {
+  moyenne: number
+  total: number
+  distribution: { note: number; count: number }[]
 }
 
 export default function AvisArtisanPage() {
+  const [loading, setLoading] = useState(true)
+  const [avis, setAvis] = useState<Avis[]>([])
+  const [stats, setStats] = useState<Stats>({
+    moyenne: 0,
+    total: 0,
+    distribution: [5, 4, 3, 2, 1].map(note => ({ note, count: 0 })),
+  })
+  const [replyingTo, setReplyingTo] = useState<string | null>(null)
+  const [replyText, setReplyText] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+
+  useEffect(() => {
+    fetchAvis()
+  }, [])
+
+  const fetchAvis = async () => {
+    try {
+      const response = await fetch('/api/artisan/avis')
+      const data = await response.json()
+
+      if (response.ok) {
+        setAvis(data.avis || [])
+        setStats(data.stats || stats)
+      }
+    } catch (error) {
+      console.error('Error fetching avis:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleReply = async (reviewId: string) => {
+    if (!replyText.trim()) return
+
+    setSubmitting(true)
+    try {
+      const response = await fetch('/api/artisan/avis', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          review_id: reviewId,
+          response: replyText.trim(),
+        }),
+      })
+
+      if (response.ok) {
+        // Update local state
+        setAvis(prev =>
+          prev.map(a =>
+            a.id === reviewId ? { ...a, reponse: replyText.trim() } : a
+          )
+        )
+        setReplyingTo(null)
+        setReplyText('')
+      }
+    } catch (error) {
+      console.error('Error replying:', error)
+    } finally {
+      setSubmitting(false)
+    }
+  }
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
+          <p className="text-gray-600">Chargement des avis...</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -190,13 +228,50 @@ export default function AvisArtisanPage() {
                         </p>
                       </div>
                       {!item.reponse && (
-                        <button className="flex items-center gap-2 text-blue-600 text-sm hover:underline">
+                        <button
+                          onClick={() => setReplyingTo(item.id)}
+                          className="flex items-center gap-2 text-blue-600 text-sm hover:underline"
+                        >
                           <MessageCircle className="w-4 h-4" />
                           Répondre
                         </button>
                       )}
                     </div>
                     <p className="text-gray-700 mb-3">{item.commentaire}</p>
+
+                    {/* Reply form */}
+                    {replyingTo === item.id && (
+                      <div className="bg-gray-50 rounded-lg p-4 ml-4 mb-3">
+                        <div className="flex items-center justify-between mb-2">
+                          <p className="text-sm text-gray-600 font-medium">Votre réponse :</p>
+                          <button
+                            onClick={() => {
+                              setReplyingTo(null)
+                              setReplyText('')
+                            }}
+                            className="text-gray-400 hover:text-gray-600"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+                        <textarea
+                          value={replyText}
+                          onChange={(e) => setReplyText(e.target.value)}
+                          placeholder="Écrivez votre réponse..."
+                          className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 mb-2"
+                          rows={3}
+                        />
+                        <button
+                          onClick={() => handleReply(item.id)}
+                          disabled={submitting || !replyText.trim()}
+                          className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center gap-2"
+                        >
+                          {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
+                          Envoyer
+                        </button>
+                      </div>
+                    )}
+
                     {item.reponse && (
                       <div className="bg-blue-50 rounded-lg p-4 ml-4">
                         <p className="text-sm text-blue-600 font-medium mb-1">Votre réponse :</p>

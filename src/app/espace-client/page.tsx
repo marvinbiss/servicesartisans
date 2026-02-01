@@ -1,23 +1,90 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { FileText, MessageSquare, Star, Settings, Bell, ChevronRight, Clock, CheckCircle, AlertCircle, Home, Search, Wrench } from 'lucide-react'
+import { FileText, MessageSquare, Star, Settings, Bell, ChevronRight, Clock, CheckCircle, AlertCircle, Home, Search, Wrench, Loader2 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { QuickSiteLinks } from '@/components/InternalLinks'
 import LogoutButton from '@/components/LogoutButton'
 
-const demandesDevis = [
-  { id: 1, service: 'Plombier', ville: 'Paris 15e', date: '2024-01-20', status: 'en_attente', devisRecus: 2 },
-  { id: 2, service: 'Électricien', ville: 'Paris 11e', date: '2024-01-18', status: 'termine', devisRecus: 3 },
-  { id: 3, service: 'Peintre', ville: 'Boulogne', date: '2024-01-15', status: 'en_cours', devisRecus: 1 },
-]
+interface Profile {
+  full_name: string | null
+  email: string
+}
 
-const notifications = [
-  { id: 1, text: 'Nouveau devis reçu de Martin Plomberie', time: '2h', unread: true },
-  { id: 2, text: 'Votre demande de devis a été envoyée', time: '1j', unread: false },
-]
+interface Demande {
+  id: string
+  service_name: string
+  city: string | null
+  postal_code: string
+  created_at: string
+  status: string
+  devis?: { id: string }[]
+}
+
+interface Stats {
+  total: number
+  enAttente: number
+  devisRecus: number
+  acceptes: number
+  termines: number
+}
+
+const statusConfig: Record<string, { label: string; color: string; icon?: React.ComponentType<{ className?: string }> }> = {
+  pending: { label: 'En attente', color: 'bg-yellow-100 text-yellow-700', icon: AlertCircle },
+  sent: { label: 'Devis reçus', color: 'bg-blue-100 text-blue-700' },
+  accepted: { label: 'En cours', color: 'bg-blue-100 text-blue-700' },
+  completed: { label: 'Terminé', color: 'bg-green-100 text-green-700', icon: CheckCircle },
+  refused: { label: 'Refusé', color: 'bg-gray-100 text-gray-700' },
+}
 
 export default function EspaceClientPage() {
+  const [loading, setLoading] = useState(true)
+  const [profile, setProfile] = useState<Profile | null>(null)
+  const [demandes, setDemandes] = useState<Demande[]>([])
+  const [stats, setStats] = useState<Stats | null>(null)
+
+  useEffect(() => {
+    fetchData()
+  }, [])
+
+  const fetchData = async () => {
+    try {
+      // Fetch profile and demandes in parallel
+      const [profileRes, demandesRes] = await Promise.all([
+        fetch('/api/client/profile'),
+        fetch('/api/client/demandes'),
+      ])
+
+      if (profileRes.ok) {
+        const profileData = await profileRes.json()
+        setProfile(profileData.profile)
+      }
+
+      if (demandesRes.ok) {
+        const demandesData = await demandesRes.json()
+        setDemandes(demandesData.demandes || [])
+        setStats(demandesData.stats)
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const displayName = profile?.full_name || 'Bienvenue'
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
+          <p className="text-gray-600">Chargement...</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header avec Breadcrumb */}
@@ -27,7 +94,7 @@ export default function EspaceClientPage() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">Mon espace</h1>
-              <p className="text-gray-600">Bienvenue, Jean Dupont</p>
+              <p className="text-gray-600">Bienvenue, {displayName}</p>
             </div>
             <div className="flex items-center gap-3">
               <Link
@@ -91,92 +158,84 @@ export default function EspaceClientPage() {
 
           {/* Main content */}
           <div className="lg:col-span-3 space-y-8">
-            {/* Notifications */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                  <Bell className="w-5 h-5" />
-                  Notifications
-                </h2>
-                <button className="text-sm text-blue-600 hover:underline">
-                  Tout marquer comme lu
-                </button>
+            {/* Stats Summary */}
+            {stats && (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="bg-white rounded-xl shadow-sm p-4 text-center">
+                  <div className="text-2xl font-bold text-gray-900">{stats.total}</div>
+                  <div className="text-sm text-gray-500">Demandes</div>
+                </div>
+                <div className="bg-white rounded-xl shadow-sm p-4 text-center">
+                  <div className="text-2xl font-bold text-yellow-600">{stats.enAttente}</div>
+                  <div className="text-sm text-gray-500">En attente</div>
+                </div>
+                <div className="bg-white rounded-xl shadow-sm p-4 text-center">
+                  <div className="text-2xl font-bold text-blue-600">{stats.devisRecus}</div>
+                  <div className="text-sm text-gray-500">Devis reçus</div>
+                </div>
+                <div className="bg-white rounded-xl shadow-sm p-4 text-center">
+                  <div className="text-2xl font-bold text-green-600">{stats.termines}</div>
+                  <div className="text-sm text-gray-500">Terminés</div>
+                </div>
               </div>
-              <div className="space-y-3">
-                {notifications.map((notif) => (
-                  <div
-                    key={notif.id}
-                    className={`flex items-center justify-between p-3 rounded-lg ${
-                      notif.unread ? 'bg-blue-50' : 'bg-gray-50'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      {notif.unread && (
-                        <div className="w-2 h-2 bg-blue-600 rounded-full" />
-                      )}
-                      <span className={notif.unread ? 'text-gray-900' : 'text-gray-600'}>
-                        {notif.text}
-                      </span>
-                    </div>
-                    <span className="text-sm text-gray-500">{notif.time}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+            )}
 
             {/* Demandes de devis */}
             <div className="bg-white rounded-xl shadow-sm p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-6">
-                Mes demandes de devis
-              </h2>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-lg font-semibold text-gray-900">
+                  Mes demandes de devis
+                </h2>
+                <Link href="/devis" className="text-sm text-blue-600 hover:underline">
+                  Nouvelle demande
+                </Link>
+              </div>
               <div className="space-y-4">
-                {demandesDevis.map((demande) => (
-                  <div
-                    key={demande.id}
-                    className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h3 className="font-medium text-gray-900">
-                          {demande.service} - {demande.ville}
-                        </h3>
-                        <div className="flex items-center gap-4 mt-1 text-sm text-gray-500">
-                          <span className="flex items-center gap-1">
-                            <Clock className="w-4 h-4" />
-                            {new Date(demande.date).toLocaleDateString('fr-FR')}
-                          </span>
-                          <span>{demande.devisRecus} devis reçus</span>
+                {demandes.length === 0 ? (
+                  <div className="text-center py-8">
+                    <FileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+                    <p className="text-gray-500 mb-4">Aucune demande de devis pour le moment</p>
+                    <Link
+                      href="/devis"
+                      className="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                    >
+                      Faire une demande
+                    </Link>
+                  </div>
+                ) : (
+                  demandes.map((demande) => {
+                    const statusInfo = statusConfig[demande.status] || { label: demande.status, color: 'bg-gray-100 text-gray-700' }
+                    const devisCount = demande.devis?.length || 0
+                    return (
+                      <div
+                        key={demande.id}
+                        className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
+                      >
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <h3 className="font-medium text-gray-900">
+                              {demande.service_name} - {demande.city || demande.postal_code}
+                            </h3>
+                            <div className="flex items-center gap-4 mt-1 text-sm text-gray-500">
+                              <span className="flex items-center gap-1">
+                                <Clock className="w-4 h-4" />
+                                {new Date(demande.created_at).toLocaleDateString('fr-FR')}
+                              </span>
+                              <span>{devisCount} devis reçu{devisCount > 1 ? 's' : ''}</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-4">
+                            <span className={`px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1 ${statusInfo.color}`}>
+                              {statusInfo.icon && <statusInfo.icon className="w-4 h-4" />}
+                              {statusInfo.label}
+                            </span>
+                            <ChevronRight className="w-5 h-5 text-gray-400" />
+                          </div>
                         </div>
                       </div>
-                      <div className="flex items-center gap-4">
-                        <span
-                          className={`px-3 py-1 rounded-full text-sm font-medium ${
-                            demande.status === 'en_attente'
-                              ? 'bg-yellow-100 text-yellow-700'
-                              : demande.status === 'en_cours'
-                              ? 'bg-blue-100 text-blue-700'
-                              : 'bg-green-100 text-green-700'
-                          }`}
-                        >
-                          {demande.status === 'en_attente' && (
-                            <span className="flex items-center gap-1">
-                              <AlertCircle className="w-4 h-4" />
-                              En attente
-                            </span>
-                          )}
-                          {demande.status === 'en_cours' && 'En cours'}
-                          {demande.status === 'termine' && (
-                            <span className="flex items-center gap-1">
-                              <CheckCircle className="w-4 h-4" />
-                              Terminé
-                            </span>
-                          )}
-                        </span>
-                        <ChevronRight className="w-5 h-5 text-gray-400" />
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                    )
+                  })
+                )}
               </div>
             </div>
           </div>

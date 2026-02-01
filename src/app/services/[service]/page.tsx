@@ -7,7 +7,8 @@ import JsonLd from '@/components/JsonLd'
 import { getServiceSchema, getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { REVALIDATE } from '@/lib/cache'
 import Breadcrumb from '@/components/Breadcrumb'
-import { PopularCitiesLinks, PopularServicesLinks, popularServices } from '@/components/InternalLinks'
+import { PopularCitiesLinks, PopularServicesLinks } from '@/components/InternalLinks'
+import { popularServices } from '@/lib/constants/navigation'
 
 // ISR: Revalidate every 30 minutes
 export const revalidate = REVALIDATE.serviceDetail

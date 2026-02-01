@@ -1,26 +1,48 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { FileText, MessageSquare, Star, Settings, TrendingUp, Euro, ArrowLeft, Camera, MapPin, Phone, Mail, Globe, Clock, Shield, Award, Plus, X, ExternalLink, Search } from 'lucide-react'
+import { FileText, MessageSquare, Star, Settings, TrendingUp, Euro, ArrowLeft, Camera, MapPin, Phone, Mail, Globe, Clock, Shield, Award, Plus, X, ExternalLink, Search, Loader2 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { QuickSiteLinks } from '@/components/InternalLinks'
 import LogoutButton from '@/components/LogoutButton'
 
+interface Profile {
+  id: string
+  email: string
+  full_name: string | null
+  company_name: string | null
+  siret: string | null
+  phone: string | null
+  address: string | null
+  city: string | null
+  postal_code: string | null
+  description: string | null
+  services: string[] | null
+  zones: string[] | null
+  is_verified: boolean
+  subscription_plan: string
+}
+
 export default function ProfilArtisanPage() {
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState<string | null>(null)
+  const [profile, setProfile] = useState<Profile | null>(null)
+
   const [formData, setFormData] = useState({
-    entreprise: 'Martin Plomberie',
-    siret: '123 456 789 00012',
-    nom: 'Martin',
-    prenom: 'Jean',
-    email: 'contact@martin-plomberie.fr',
-    telephone: '01 23 45 67 89',
-    mobile: '06 12 34 56 78',
-    adresse: '15 rue de la République',
-    codePostal: '75015',
-    ville: 'Paris',
-    siteWeb: 'www.martin-plomberie.fr',
-    description: 'Plombier professionnel depuis plus de 15 ans, je propose mes services de plomberie générale, installation et dépannage dans tout Paris et sa proche banlieue. Intervention rapide, devis gratuit.',
+    entreprise: '',
+    siret: '',
+    nom: '',
+    email: '',
+    telephone: '',
+    mobile: '',
+    adresse: '',
+    codePostal: '',
+    ville: '',
+    siteWeb: '',
+    description: '',
   })
 
   const [horaires, setHoraires] = useState({
@@ -33,25 +55,87 @@ export default function ProfilArtisanPage() {
     dimanche: { ouvert: false, debut: '', fin: '' },
   })
 
-  const [services, setServices] = useState([
-    'Plomberie générale',
-    'Dépannage urgence',
-    'Installation sanitaire',
-    'Chauffe-eau',
-    'Débouchage',
-  ])
-
-  const [zones, setZones] = useState([
-    'Paris (75)',
-    'Hauts-de-Seine (92)',
-    'Val-de-Marne (94)',
-  ])
-
+  const [services, setServices] = useState<string[]>([])
+  const [zones, setZones] = useState<string[]>([])
   const [newService, setNewService] = useState('')
   const [newZone, setNewZone] = useState('')
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Fetch profile on mount
+  useEffect(() => {
+    fetchProfile()
+  }, [])
+
+  const fetchProfile = async () => {
+    try {
+      setLoading(true)
+      const response = await fetch('/api/artisan/profile')
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Erreur lors du chargement')
+      }
+
+      const p = data.profile as Profile
+      setProfile(p)
+      setFormData({
+        entreprise: p.company_name || '',
+        siret: p.siret || '',
+        nom: p.full_name || '',
+        email: p.email || '',
+        telephone: p.phone || '',
+        mobile: '',
+        adresse: p.address || '',
+        codePostal: p.postal_code || '',
+        ville: p.city || '',
+        siteWeb: '',
+        description: p.description || '',
+      })
+      setServices(p.services || [])
+      setZones(p.zones || [])
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erreur de chargement')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setError(null)
+    setSuccess(null)
+    setSaving(true)
+
+    try {
+      const response = await fetch('/api/artisan/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          company_name: formData.entreprise,
+          siret: formData.siret,
+          full_name: formData.nom,
+          phone: formData.telephone,
+          address: formData.adresse,
+          city: formData.ville,
+          postal_code: formData.codePostal,
+          description: formData.description,
+          services,
+          zones,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Erreur lors de la sauvegarde')
+      }
+
+      setSuccess('Profil mis à jour avec succès')
+      setTimeout(() => setSuccess(null), 3000)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erreur de sauvegarde')
+    } finally {
+      setSaving(false)
+    }
   }
 
   const addService = () => {
@@ -74,6 +158,17 @@ export default function ProfilArtisanPage() {
 
   const removeZone = (index: number) => {
     setZones(zones.filter((_, i) => i !== index))
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
+          <p className="text-gray-600">Chargement du profil...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -503,12 +598,26 @@ export default function ProfilArtisanPage() {
                 </div>
               </div>
 
+              {/* Error/Success messages */}
+              {error && (
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                  {error}
+                </div>
+              )}
+              {success && (
+                <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
+                  {success}
+                </div>
+              )}
+
               <div className="mt-6">
                 <button
                   type="submit"
-                  className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                  disabled={saving}
+                  className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                 >
-                  Enregistrer les modifications
+                  {saving && <Loader2 className="w-4 h-4 animate-spin" />}
+                  {saving ? 'Enregistrement...' : 'Enregistrer les modifications'}
                 </button>
               </div>
             </form>

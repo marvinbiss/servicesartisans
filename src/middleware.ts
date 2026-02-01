@@ -60,8 +60,33 @@ function generateNonce(): string {
 }
 
 // Security headers
-function addSecurityHeaders(response: NextResponse, nonce: string): NextResponse {
-  // Content Security Policy - More secure version
+function addSecurityHeaders(response: NextResponse, nonce: string, request: NextRequest): NextResponse {
+  // Skip strict CSP in development or for mobile app (Capacitor WebView)
+  const userAgent = request.headers.get('user-agent') || ''
+  const isCapacitor = userAgent.includes('Capacitor') || userAgent.includes('Android') || userAgent.includes('iPhone')
+  const isDev = process.env.NODE_ENV === 'development'
+
+  // In development or mobile app, use permissive CSP
+  if (isDev || isCapacitor) {
+    const permissiveCsp = [
+      "default-src * 'self' data: blob:",
+      "script-src * 'self' 'unsafe-inline' 'unsafe-eval'",
+      "style-src * 'self' 'unsafe-inline'",
+      "font-src * 'self' data:",
+      "img-src * 'self' data: blob: https: http:",
+      "connect-src * 'self' https: http: ws: wss:",
+      "frame-src *",
+    ]
+    response.headers.set('Content-Security-Policy', permissiveCsp.join('; '))
+
+    // Other security headers
+    response.headers.set('X-Content-Type-Options', 'nosniff')
+    response.headers.set('X-DNS-Prefetch-Control', 'on')
+
+    return response
+  }
+
+  // Content Security Policy - Strict version for production web
   const cspDirectives = [
     "default-src 'self'",
     `script-src 'self' 'nonce-${nonce}' https://js.stripe.com https://maps.googleapis.com`,
@@ -76,12 +101,6 @@ function addSecurityHeaders(response: NextResponse, nonce: string): NextResponse
     "frame-ancestors 'none'",
     "upgrade-insecure-requests",
   ]
-
-  // In development, allow unsafe-inline for hot reload
-  if (process.env.NODE_ENV === 'development') {
-    cspDirectives[1] = "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://maps.googleapis.com"
-    cspDirectives[2] = "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com"
-  }
 
   response.headers.set('Content-Security-Policy', cspDirectives.join('; '))
 
@@ -191,7 +210,7 @@ export async function middleware(request: NextRequest) {
   response.headers.set('x-nonce', nonce)
 
   // Add security headers
-  return addSecurityHeaders(response, nonce)
+  return addSecurityHeaders(response, nonce, request)
 }
 
 export const config = {
