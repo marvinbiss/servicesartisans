@@ -6,10 +6,12 @@ import {
   Search, Menu, X, ChevronDown, MapPin, Wrench, Zap, Key, Flame,
   PaintBucket, Home, Hammer, HardHat, Wind, Droplets, TreeDeciduous,
   ShieldCheck, Sparkles, Star, Clock, Phone, ArrowRight, Users, Award,
-  ChefHat, Layers, Brush
+  ChefHat, Layers, Brush, Navigation, History
 } from 'lucide-react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useMobileMenu } from '@/contexts/MobileMenuContext'
+import { services as allServices } from '@/lib/data/france'
+import { autocompleteVille, reverseGeocode, type AdresseSuggestion } from '@/lib/api/adresse'
 
 // Services populaires organisés par catégorie
 const serviceCategories = [
@@ -91,18 +93,123 @@ const popularCities = [
 // Flat list of services
 const services = serviceCategories.flatMap(cat => cat.services)
 
+// Normalize text for search
+function normalizeText(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s]/g, '')
+}
+
+// Get recent searches from localStorage
+function getRecentSearches(): Array<{ service: string; location: string }> {
+  if (typeof window === 'undefined') return []
+  try {
+    const stored = localStorage.getItem('recentSearches')
+    return stored ? JSON.parse(stored).slice(0, 5) : []
+  } catch {
+    return []
+  }
+}
+
+// Save search to localStorage
+function saveRecentSearch(service: string, location: string) {
+  if (typeof window === 'undefined' || (!service && !location)) return
+  try {
+    const searches = getRecentSearches()
+    const newSearch = { service, location }
+    const filtered = searches.filter(
+      s => s.service !== service || s.location !== location
+    )
+    const updated = [newSearch, ...filtered].slice(0, 5)
+    localStorage.setItem('recentSearches', JSON.stringify(updated))
+  } catch {
+    // Ignore storage errors
+  }
+}
+
 export default function Header() {
   const router = useRouter()
   const pathname = usePathname()
   const { isMenuOpen, setIsMenuOpen } = useMobileMenu()
-  const [searchQuery, setSearchQuery] = useState('')
+
+  // Search state
+  const [serviceQuery, setServiceQuery] = useState('')
+  const [locationQuery, setLocationQuery] = useState('')
+  const [serviceSuggestions, setServiceSuggestions] = useState<typeof allServices>([])
+  const [locationSuggestions, setLocationSuggestions] = useState<AdresseSuggestion[]>([])
+  const [showServiceDropdown, setShowServiceDropdown] = useState(false)
+  const [showLocationDropdown, setShowLocationDropdown] = useState(false)
+  const [highlightedServiceIndex, setHighlightedServiceIndex] = useState(-1)
+  const [highlightedLocationIndex, setHighlightedLocationIndex] = useState(-1)
+  const [isLocating, setIsLocating] = useState(false)
+  const [recentSearches, setRecentSearches] = useState<Array<{ service: string; location: string }>>([])
+
   const [mounted, setMounted] = useState(false)
   const [openMenu, setOpenMenu] = useState<'services' | 'villes' | null>(null)
+
+  const serviceInputRef = useRef<HTMLInputElement>(null)
+  const locationInputRef = useRef<HTMLInputElement>(null)
+  const searchContainerRef = useRef<HTMLDivElement>(null)
 
   // Wait for client-side mount
   useEffect(() => {
     setMounted(true)
+    setRecentSearches(getRecentSearches())
   }, [])
+
+  // Filter services based on query
+  useEffect(() => {
+    if (!serviceQuery.trim()) {
+      setServiceSuggestions([])
+      return
+    }
+
+    const normalized = normalizeText(serviceQuery)
+    const filtered = allServices.filter(s =>
+      normalizeText(s.name).includes(normalized) ||
+      normalizeText(s.slug).includes(normalized)
+    ).slice(0, 6)
+
+    setServiceSuggestions(filtered)
+    setHighlightedServiceIndex(-1)
+  }, [serviceQuery])
+
+  // Debounced location search
+  useEffect(() => {
+    if (locationQuery.length < 2) {
+      setLocationSuggestions([])
+      return
+    }
+
+    const timer = setTimeout(async () => {
+      try {
+        const results = await autocompleteVille(locationQuery, 6)
+        setLocationSuggestions(results)
+        setHighlightedLocationIndex(-1)
+      } catch {
+        setLocationSuggestions([])
+      }
+    }, 200)
+
+    return () => clearTimeout(timer)
+  }, [locationQuery])
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    if (!mounted) return
+
+    const handleClickOutside = (e: MouseEvent) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(e.target as Node)) {
+        setShowServiceDropdown(false)
+        setShowLocationDropdown(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [mounted])
 
   // Close all menus on route change
   useEffect(() => {
@@ -125,12 +232,156 @@ export default function Header() {
     return () => document.removeEventListener('click', handleClick, true)
   }, [mounted])
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (searchQuery.trim()) {
-      router.push(`/recherche?q=${encodeURIComponent(searchQuery.trim())}`)
+  const handleSearch = useCallback((e?: React.FormEvent) => {
+    e?.preventDefault()
+    const params = new URLSearchParams()
+    if (serviceQuery.trim()) params.set('q', serviceQuery.trim())
+    if (locationQuery.trim()) params.set('location', locationQuery.trim())
+
+    if (params.toString()) {
+      saveRecentSearch(serviceQuery.trim(), locationQuery.trim())
+      setRecentSearches(getRecentSearches())
+      router.push(`/recherche?${params.toString()}`)
+      setShowServiceDropdown(false)
+      setShowLocationDropdown(false)
+    }
+  }, [serviceQuery, locationQuery, router])
+
+  // Handle service selection
+  const selectService = useCallback((service: typeof allServices[0]) => {
+    setServiceQuery(service.name)
+    setShowServiceDropdown(false)
+    setServiceSuggestions([])
+    locationInputRef.current?.focus()
+  }, [])
+
+  // Handle location selection
+  const selectLocation = useCallback((location: AdresseSuggestion) => {
+    setLocationQuery(location.city)
+    setShowLocationDropdown(false)
+    setLocationSuggestions([])
+    // Auto-submit after location selection
+    setTimeout(() => {
+      const params = new URLSearchParams()
+      if (serviceQuery.trim()) params.set('q', serviceQuery.trim())
+      params.set('location', location.city)
+      saveRecentSearch(serviceQuery.trim(), location.city)
+      setRecentSearches(getRecentSearches())
+      router.push(`/recherche?${params.toString()}`)
+    }, 100)
+  }, [serviceQuery, router])
+
+  // Handle geolocation
+  const handleGeolocation = useCallback(async () => {
+    if (!navigator.geolocation) {
+      return
+    }
+
+    setIsLocating(true)
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const result = await reverseGeocode(
+            position.coords.longitude,
+            position.coords.latitude
+          )
+          if (result) {
+            setLocationQuery(result.city)
+            // Auto-submit if we have a service
+            if (serviceQuery.trim()) {
+              setTimeout(() => {
+                handleSearch()
+              }, 100)
+            }
+          }
+        } catch {
+          // Ignore errors
+        } finally {
+          setIsLocating(false)
+        }
+      },
+      () => {
+        setIsLocating(false)
+      },
+      { timeout: 10000, enableHighAccuracy: true }
+    )
+  }, [serviceQuery, handleSearch])
+
+  // Handle keyboard navigation for service input
+  const handleServiceKeyDown = (e: React.KeyboardEvent) => {
+    const suggestions = serviceSuggestions.length > 0 ? serviceSuggestions : []
+
+    switch (e.key) {
+      case 'ArrowDown':
+        e.preventDefault()
+        setHighlightedServiceIndex(prev =>
+          prev < suggestions.length - 1 ? prev + 1 : 0
+        )
+        break
+      case 'ArrowUp':
+        e.preventDefault()
+        setHighlightedServiceIndex(prev =>
+          prev > 0 ? prev - 1 : suggestions.length - 1
+        )
+        break
+      case 'Enter':
+        e.preventDefault()
+        if (highlightedServiceIndex >= 0 && suggestions[highlightedServiceIndex]) {
+          selectService(suggestions[highlightedServiceIndex])
+        } else if (!showServiceDropdown || suggestions.length === 0) {
+          handleSearch()
+        }
+        break
+      case 'Escape':
+        setShowServiceDropdown(false)
+        break
+      case 'Tab':
+        setShowServiceDropdown(false)
+        break
     }
   }
+
+  // Handle keyboard navigation for location input
+  const handleLocationKeyDown = (e: React.KeyboardEvent) => {
+    switch (e.key) {
+      case 'ArrowDown':
+        e.preventDefault()
+        setHighlightedLocationIndex(prev =>
+          prev < locationSuggestions.length - 1 ? prev + 1 : 0
+        )
+        break
+      case 'ArrowUp':
+        e.preventDefault()
+        setHighlightedLocationIndex(prev =>
+          prev > 0 ? prev - 1 : locationSuggestions.length - 1
+        )
+        break
+      case 'Enter':
+        e.preventDefault()
+        if (highlightedLocationIndex >= 0 && locationSuggestions[highlightedLocationIndex]) {
+          selectLocation(locationSuggestions[highlightedLocationIndex])
+        } else {
+          handleSearch()
+        }
+        break
+      case 'Escape':
+        setShowLocationDropdown(false)
+        break
+    }
+  }
+
+  // Apply recent search
+  const applyRecentSearch = useCallback((search: { service: string; location: string }) => {
+    setServiceQuery(search.service)
+    setLocationQuery(search.location)
+    const params = new URLSearchParams()
+    if (search.service) params.set('q', search.service)
+    if (search.location) params.set('location', search.location)
+    router.push(`/recherche?${params.toString()}`)
+    setShowServiceDropdown(false)
+    setShowLocationDropdown(false)
+  }, [router])
 
   const toggleMenu = (menu: 'services' | 'villes') => {
     setOpenMenu(current => current === menu ? null : menu)
@@ -193,22 +444,168 @@ export default function Header() {
             </div>
           </Link>
 
-          {/* Search Bar */}
-          <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-lg mx-6">
-            <div className="relative w-full">
-              <input
-                type="text"
-                placeholder="Rechercher un artisan, un service..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-11 pl-12 pr-24 bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 transition-all text-gray-900 placeholder:text-gray-500"
-              />
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          {/* Search Bar - Dual Field (Service + Location) */}
+          <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-2xl mx-6">
+            <div
+              ref={searchContainerRef}
+              className="relative w-full flex bg-gray-50 border-2 border-gray-200 rounded-xl focus-within:border-blue-500 focus-within:bg-white focus-within:ring-4 focus-within:ring-blue-500/10 transition-all"
+            >
+              {/* Service Input */}
+              <div className="relative flex-1 min-w-0">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  ref={serviceInputRef}
+                  type="text"
+                  placeholder="Quel service ? (plombier, électricien...)"
+                  value={serviceQuery}
+                  onChange={(e) => setServiceQuery(e.target.value)}
+                  onFocus={() => setShowServiceDropdown(true)}
+                  onKeyDown={handleServiceKeyDown}
+                  className="w-full h-11 pl-12 pr-3 bg-transparent text-gray-900 placeholder:text-gray-500 focus:outline-none"
+                  autoComplete="off"
+                />
+
+                {/* Service Dropdown */}
+                {showServiceDropdown && (
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden z-[9999]">
+                    {/* Recent Searches */}
+                    {recentSearches.length > 0 && !serviceQuery && (
+                      <div className="p-3 border-b border-gray-100">
+                        <div className="flex items-center gap-2 text-xs font-medium text-gray-500 mb-2">
+                          <History className="w-3.5 h-3.5" />
+                          Recherches récentes
+                        </div>
+                        {recentSearches.map((search, idx) => (
+                          <button
+                            key={idx}
+                            type="button"
+                            onClick={() => applyRecentSearch(search)}
+                            className="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-50 rounded-lg text-left"
+                          >
+                            <Clock className="w-4 h-4 text-gray-400" />
+                            <div className="text-sm">
+                              <span className="text-gray-900">{search.service || 'Tous services'}</span>
+                              {search.location && (
+                                <span className="text-gray-500"> - {search.location}</span>
+                              )}
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Service Suggestions */}
+                    {serviceSuggestions.length > 0 ? (
+                      <div className="p-2">
+                        {serviceSuggestions.map((service, idx) => (
+                          <button
+                            key={service.slug}
+                            type="button"
+                            onClick={() => selectService(service)}
+                            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-colors ${
+                              idx === highlightedServiceIndex ? 'bg-blue-50 text-blue-700' : 'hover:bg-gray-50'
+                            }`}
+                          >
+                            <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                              <Wrench className="w-4 h-4 text-blue-600" />
+                            </div>
+                            <div>
+                              <div className="font-medium text-gray-900">{service.name}</div>
+                              <div className="text-xs text-gray-500">{service.slug}</div>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    ) : !serviceQuery && recentSearches.length === 0 && (
+                      <div className="p-3">
+                        <div className="text-xs font-medium text-gray-500 mb-2">Services populaires</div>
+                        <div className="grid grid-cols-2 gap-1">
+                          {services.slice(0, 6).map((service) => {
+                            const Icon = service.icon
+                            return (
+                              <button
+                                key={service.slug}
+                                type="button"
+                                onClick={() => {
+                                  setServiceQuery(service.name)
+                                  setShowServiceDropdown(false)
+                                  locationInputRef.current?.focus()
+                                }}
+                                className="flex items-center gap-2 px-3 py-2 hover:bg-blue-50 rounded-lg text-left"
+                              >
+                                <Icon className="w-4 h-4 text-blue-600" />
+                                <span className="text-sm text-gray-700">{service.name}</span>
+                              </button>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Separator */}
+              <div className="w-px h-6 bg-gray-300 my-auto" />
+
+              {/* Location Input */}
+              <div className="relative flex-1 min-w-0">
+                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  ref={locationInputRef}
+                  type="text"
+                  placeholder="Où ? (ville, code postal...)"
+                  value={locationQuery}
+                  onChange={(e) => setLocationQuery(e.target.value)}
+                  onFocus={() => setShowLocationDropdown(true)}
+                  onKeyDown={handleLocationKeyDown}
+                  className="w-full h-11 pl-10 pr-10 bg-transparent text-gray-900 placeholder:text-gray-500 focus:outline-none"
+                  autoComplete="off"
+                />
+
+                {/* Geolocation Button */}
+                <button
+                  type="button"
+                  onClick={handleGeolocation}
+                  disabled={isLocating}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-gray-200 rounded-lg transition-colors disabled:opacity-50"
+                  title="Utiliser ma position"
+                >
+                  <Navigation className={`w-4 h-4 ${isLocating ? 'animate-pulse text-blue-600' : 'text-gray-500'}`} />
+                </button>
+
+                {/* Location Dropdown */}
+                {showLocationDropdown && locationSuggestions.length > 0 && (
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden z-[9999]">
+                    <div className="p-2">
+                      {locationSuggestions.map((location, idx) => (
+                        <button
+                          key={location.label}
+                          type="button"
+                          onClick={() => selectLocation(location)}
+                          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-colors ${
+                            idx === highlightedLocationIndex ? 'bg-blue-50 text-blue-700' : 'hover:bg-gray-50'
+                          }`}
+                        >
+                          <MapPin className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                          <div className="min-w-0">
+                            <div className="font-medium text-gray-900 truncate">{location.city}</div>
+                            <div className="text-xs text-gray-500 truncate">{location.context}</div>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Search Button */}
               <button
                 type="submit"
-                className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors"
+                className="m-1 px-5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors flex items-center gap-2"
               >
-                Rechercher
+                <Search className="w-4 h-4" />
+                <span className="hidden lg:inline">Rechercher</span>
               </button>
             </div>
           </form>
@@ -453,18 +850,50 @@ export default function Header() {
         {/* Mobile Menu */}
         {isMenuOpen && (
           <div className="lg:hidden py-4 border-t border-gray-100 max-h-[calc(100vh-120px)] overflow-y-auto">
-            {/* Search Mobile */}
-            <form onSubmit={handleSearch} className="mb-4">
+            {/* Search Mobile - Dual Field */}
+            <form onSubmit={handleSearch} className="mb-4 space-y-2">
+              {/* Service Input Mobile */}
               <div className="relative">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="Rechercher un artisan..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full h-12 pl-12 pr-4 bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:bg-white text-gray-900"
+                  placeholder="Quel service ? (plombier, électricien...)"
+                  value={serviceQuery}
+                  onChange={(e) => setServiceQuery(e.target.value)}
+                  className="w-full h-12 pl-12 pr-4 bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:bg-white text-gray-900 placeholder:text-gray-500"
                 />
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               </div>
+
+              {/* Location Input Mobile */}
+              <div className="relative">
+                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Où ? (ville, code postal...)"
+                  value={locationQuery}
+                  onChange={(e) => setLocationQuery(e.target.value)}
+                  className="w-full h-12 pl-12 pr-12 bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:bg-white text-gray-900 placeholder:text-gray-500"
+                />
+                {/* Geolocation Button Mobile */}
+                <button
+                  type="button"
+                  onClick={handleGeolocation}
+                  disabled={isLocating}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-2 hover:bg-gray-200 rounded-lg transition-colors disabled:opacity-50"
+                  title="Utiliser ma position"
+                >
+                  <Navigation className={`w-5 h-5 ${isLocating ? 'animate-pulse text-blue-600' : 'text-gray-500'}`} />
+                </button>
+              </div>
+
+              {/* Search Button Mobile */}
+              <button
+                type="submit"
+                className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-colors flex items-center justify-center gap-2"
+              >
+                <Search className="w-5 h-5" />
+                Rechercher
+              </button>
             </form>
 
             <nav className="space-y-4">
