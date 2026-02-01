@@ -8,7 +8,8 @@ import {
   CheckCircle, Shield, Award, Calendar, Wrench, Euro, Navigation,
   MessageCircle, Heart, Share2, AlertCircle, Camera, CreditCard,
   Banknote, Users, TrendingUp, ChevronDown, ChevronUp, Zap,
-  FileText, Home, BadgeCheck, Timer, ThumbsUp, ExternalLink
+  FileText, Home, BadgeCheck, Timer, ThumbsUp, ExternalLink,
+  Globe, Building2
 } from 'lucide-react'
 
 interface TimeSlot {
@@ -73,6 +74,18 @@ interface Artisan {
   bookings_this_week?: number
   portfolio?: PortfolioItem[]
   faq?: Array<{ question: string; answer: string }>
+  // Donnees Pappers
+  siret?: string
+  siren?: string
+  legal_form?: string
+  creation_date?: string
+  employee_count?: number
+  annual_revenue?: number
+  phone?: string
+  email?: string
+  website?: string
+  latitude?: number
+  longitude?: number
 }
 
 interface Review {
@@ -87,17 +100,7 @@ interface Review {
   verified?: boolean
 }
 
-// Demo portfolio images (using placeholder colors)
-const DEMO_PORTFOLIO: PortfolioItem[] = [
-  { id: '1', title: 'Renovation salle de bain complete', description: 'Installation douche italienne, meuble vasque, carrelage', imageUrl: '', category: 'Salle de bain' },
-  { id: '2', title: 'Remplacement chauffe-eau', description: 'Installation chauffe-eau thermodynamique 200L', imageUrl: '', category: 'Chauffage' },
-  { id: '3', title: 'Depannage fuite urgente', description: 'Reparation canalisation sous evier', imageUrl: '', category: 'Depannage' },
-  { id: '4', title: 'Installation cuisine', description: 'Raccordement eau et evacuation cuisine complete', imageUrl: '', category: 'Cuisine' },
-  { id: '5', title: 'Renovation WC', description: 'Remplacement WC suspendu avec bati-support', imageUrl: '', category: 'Salle de bain' },
-  { id: '6', title: 'Installation radiateurs', description: 'Pose de 5 radiateurs avec desembouage circuit', imageUrl: '', category: 'Chauffage' },
-]
-
-// Demo artisan data
+// Demo data fallback
 const DEMO_ARTISANS: Record<string, Artisan> = {
   'demo-1': {
     id: 'demo-1',
@@ -138,7 +141,11 @@ const DEMO_ARTISANS: Record<string, Artisan> = {
     member_since: '2019',
     response_rate: 98,
     bookings_this_week: 12,
-    portfolio: DEMO_PORTFOLIO,
+    siret: '12345678901234',
+    legal_form: 'SARL',
+    creation_date: '1985-03-15',
+    employee_count: 3,
+    phone: '01 23 45 67 89',
     faq: [
       { question: 'Intervenez-vous le week-end ?', answer: 'Oui, nous intervenons 7j/7 pour les urgences. Les interventions le week-end peuvent faire l\'objet d\'une majoration de 30%.' },
       { question: 'Le devis est-il gratuit ?', answer: 'Oui, le devis est toujours gratuit et sans engagement. Pour les interventions a distance de plus de 20km, des frais de deplacement peuvent s\'appliquer.' },
@@ -156,20 +163,17 @@ const DEMO_ARTISANS: Record<string, Artisan> = {
     postal_code: '93310',
     address: '9 Avenue Faidherbe',
     specialty: 'Electricien',
-    description: 'Electricien agree avec plus de 15 ans d\'experience. Specialise dans la mise aux normes electriques, l\'installation de tableaux et le depannage. Je travaille aussi bien pour les particuliers que pour les professionnels. Tarifs transparents et travail soigne.',
+    description: 'Electricien agree avec plus de 15 ans d\'experience. Specialise dans la mise aux normes electriques, l\'installation de tableaux et le depannage.',
     average_rating: 4.8,
     review_count: 156,
     hourly_rate: 50,
     is_verified: true,
     is_premium: false,
     is_center: false,
-    team_size: undefined,
-    services: ['Mise aux normes', 'Installation tableau electrique', 'Depannage', 'Prises et interrupteurs', 'Eclairage', 'Domotique'],
+    services: ['Mise aux normes', 'Installation tableau electrique', 'Depannage', 'Prises et interrupteurs'],
     service_prices: [
       { name: 'Diagnostic electrique', description: 'Verification installation complete', price: '90€', duration: '1h' },
       { name: 'Remplacement prise/interrupteur', description: 'Fourniture et pose', price: '45-70€', duration: '30 min' },
-      { name: 'Installation tableau electrique', description: 'Tableau aux normes NF C 15-100', price: '800-1500€', duration: '1 jour' },
-      { name: 'Mise aux normes', description: 'Mise en conformite installation', price: 'Sur devis', duration: 'Variable' },
     ],
     accepts_new_clients: true,
     intervention_zone: '15 km',
@@ -183,107 +187,18 @@ const DEMO_ARTISANS: Record<string, Artisan> = {
     member_since: '2020',
     response_rate: 95,
     bookings_this_week: 8,
-    portfolio: [],
-    faq: [
-      { question: 'Delivrez-vous un certificat Consuel ?', answer: 'Oui, pour toute nouvelle installation ou renovation complete, je fournis l\'attestation de conformite Consuel.' },
-      { question: 'Travaillez-vous avec les coproprietes ?', answer: 'Oui, j\'interviens regulierement pour des coproprietes et peux fournir tous les documents necessaires.' },
-    ],
-  },
-  'demo-3': {
-    id: 'demo-3',
-    business_name: null,
-    first_name: 'Michel',
-    last_name: 'BERNARD',
-    avatar_url: null,
-    city: 'Le Pre-Saint-Gervais',
-    postal_code: '93310',
-    address: '12 Avenue Edouard Vaillant',
-    specialty: 'Menuisier',
-    description: 'Menuisier ebeniste passionne par le travail du bois depuis 20 ans. Je realise des meubles sur mesure, pose de cuisines, placards et amenagements interieurs. Chaque projet est unique et realise avec le plus grand soin.',
-    average_rating: 4.5,
-    review_count: 89,
-    hourly_rate: 45,
-    is_verified: true,
-    is_premium: false,
-    is_center: false,
-    team_size: undefined,
-    services: ['Menuiserie sur mesure', 'Pose de cuisine', 'Placards', 'Parquet', 'Escaliers', 'Restauration meubles'],
-    service_prices: [
-      { name: 'Pose de cuisine', description: 'Installation complete cuisine equipee', price: '500-1500€', duration: '1-2 jours' },
-      { name: 'Placard sur mesure', description: 'Conception et installation', price: '800-2000€', duration: '2-3 jours' },
-      { name: 'Pose parquet', description: 'Pose flottante ou collee (par m2)', price: '35-55€/m2', duration: 'Variable' },
-    ],
-    accepts_new_clients: true,
-    intervention_zone: '25 km',
-    response_time: '< 4h',
-    experience_years: 20,
-    certifications: ['Maitre Artisan', 'Compagnon du Devoir'],
-    insurance: ['Garantie decennale', 'RC Professionnelle'],
-    payment_methods: ['Carte bancaire', 'Cheque', 'Virement'],
-    languages: ['Francais', 'Italien'],
-    emergency_available: false,
-    member_since: '2021',
-    response_rate: 92,
-    bookings_this_week: 5,
-    portfolio: [],
     faq: [],
   },
 }
 
-// Demo reviews
 const DEMO_REVIEWS: Review[] = [
-  {
-    id: '1',
-    author: 'Marie L.',
-    rating: 5,
-    date: '15 janvier 2026',
-    comment: 'Intervention rapide et efficace. Le probleme de fuite a ete resolu en moins d\'une heure. Tres professionnel, je recommande vivement !',
-    service: 'Depannage plomberie',
-    verified: true,
-  },
-  {
-    id: '2',
-    author: 'Pierre D.',
-    rating: 5,
-    date: '12 janvier 2026',
-    comment: 'Excellent travail pour l\'installation de mon nouveau chauffe-eau. Propre, ponctuel et de bons conseils. Prix correct.',
-    service: 'Chauffe-eau',
-    hasPhoto: true,
-    photoUrl: '',
-    verified: true,
-  },
-  {
-    id: '3',
-    author: 'Sophie M.',
-    rating: 4,
-    date: '8 janvier 2026',
-    comment: 'Bonne prestation pour le debouchage de mes canalisations. Un peu de retard mais travail bien fait.',
-    service: 'Debouchage',
-    verified: true,
-  },
-  {
-    id: '4',
-    author: 'Jean-Paul R.',
-    rating: 5,
-    date: '3 janvier 2026',
-    comment: 'Tres satisfait de l\'installation complete de ma salle de bain. Equipe competente et a l\'ecoute. Le resultat est impeccable.',
-    service: 'Installation sanitaire',
-    hasPhoto: true,
-    photoUrl: '',
-    verified: true,
-  },
-  {
-    id: '5',
-    author: 'Isabelle C.',
-    rating: 4,
-    date: '28 decembre 2025',
-    comment: 'Intervention pour une recherche de fuite. Probleme trouve et repare rapidement. Bon rapport qualite/prix.',
-    service: 'Recherche de fuite',
-    verified: false,
-  },
+  { id: '1', author: 'Marie L.', rating: 5, date: '15 janvier 2026', comment: 'Intervention rapide et efficace. Le probleme de fuite a ete resolu en moins d\'une heure. Tres professionnel, je recommande vivement !', service: 'Depannage plomberie', verified: true },
+  { id: '2', author: 'Pierre D.', rating: 5, date: '12 janvier 2026', comment: 'Excellent travail pour l\'installation de mon nouveau chauffe-eau. Propre, ponctuel et de bons conseils. Prix correct.', service: 'Chauffe-eau', hasPhoto: true, verified: true },
+  { id: '3', author: 'Sophie M.', rating: 4, date: '8 janvier 2026', comment: 'Bonne prestation pour le debouchage de mes canalisations. Un peu de retard mais travail bien fait.', service: 'Debouchage', verified: true },
+  { id: '4', author: 'Jean-Paul R.', rating: 5, date: '3 janvier 2026', comment: 'Tres satisfait de l\'installation complete de ma salle de bain. Equipe competente et a l\'ecoute.', service: 'Installation sanitaire', hasPhoto: true, verified: true },
+  { id: '5', author: 'Isabelle C.', rating: 4, date: '28 decembre 2025', comment: 'Intervention pour une recherche de fuite. Probleme trouve et repare rapidement.', service: 'Recherche de fuite', verified: false },
 ]
 
-// Similar artisans
 const SIMILAR_ARTISANS = [
   { id: 'demo-7', name: 'Yohan LEROY', specialty: 'Plombier', rating: 4.4, reviews: 92, city: 'Pantin', hourly_rate: 52 },
   { id: 'demo-4', name: 'Serrurier Express 93', specialty: 'Serrurier', rating: 4.3, reviews: 67, city: 'Le Pre-Saint-Gervais', hourly_rate: 60 },
@@ -296,6 +211,7 @@ export default function ArtisanPage() {
   const artisanId = params.id as string
 
   const [artisan, setArtisan] = useState<Artisan | null>(null)
+  const [reviews, setReviews] = useState<Review[]>([])
   const [availability, setAvailability] = useState<DayAvailability[]>([])
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
   const [selectedTime, setSelectedTime] = useState<string | null>(null)
@@ -305,7 +221,7 @@ export default function ArtisanPage() {
   const [activeTab, setActiveTab] = useState<'infos' | 'tarifs' | 'photos' | 'avis'>('infos')
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null)
   const [showAllPrices, setShowAllPrices] = useState(false)
-  const [selectedPortfolioImage, setSelectedPortfolioImage] = useState<string | null>(null)
+  const [dataSource, setDataSource] = useState<'api' | 'demo'>('demo')
 
   useEffect(() => {
     loadArtisan()
@@ -314,9 +230,31 @@ export default function ArtisanPage() {
 
   const loadArtisan = async () => {
     setIsLoading(true)
+
+    try {
+      // Essayer de charger depuis l'API
+      const response = await fetch(`/api/artisans/${artisanId}`)
+
+      if (response.ok) {
+        const data = await response.json()
+        if (data.success && data.artisan) {
+          setArtisan(data.artisan)
+          setReviews(data.reviews || [])
+          setDataSource('api')
+          setIsLoading(false)
+          return
+        }
+      }
+    } catch (error) {
+      console.error('Error loading artisan from API:', error)
+    }
+
+    // Fallback vers les donnees demo
     const demoArtisan = DEMO_ARTISANS[artisanId]
     if (demoArtisan) {
       setArtisan(demoArtisan)
+      setReviews(DEMO_REVIEWS)
+      setDataSource('demo')
     }
     setIsLoading(false)
   }
@@ -462,7 +400,6 @@ export default function ArtisanPage() {
                       <h1 className="text-2xl font-bold text-gray-900">{displayName}</h1>
                       <p className="text-lg text-blue-600 font-medium">{artisan.specialty}</p>
                     </div>
-                    {/* Emergency Badge */}
                     {artisan.emergency_available && (
                       <span className="inline-flex items-center gap-1 text-sm text-orange-700 bg-orange-100 px-3 py-1 rounded-full self-center sm:self-start">
                         <Zap className="w-4 h-4" />
@@ -486,7 +423,7 @@ export default function ArtisanPage() {
                       ))}
                     </div>
                     <span className="font-semibold">{artisan.average_rating.toFixed(1)}</span>
-                    <span className="text-gray-500">({artisan.review_count} avis verifies)</span>
+                    <span className="text-gray-500">({artisan.review_count} avis{artisan.review_count > 0 ? ' verifies' : ''})</span>
                   </div>
 
                   {/* Badges */}
@@ -507,6 +444,11 @@ export default function ArtisanPage() {
                       <span className="inline-flex items-center gap-1 text-sm text-blue-700 bg-blue-50 px-3 py-1 rounded-full">
                         <Users className="w-4 h-4" />
                         {artisan.team_size} professionnels
+                      </span>
+                    )}
+                    {dataSource === 'api' && (
+                      <span className="inline-flex items-center gap-1 text-xs text-purple-600 bg-purple-50 px-2 py-0.5 rounded-full">
+                        Donnees verifiees
                       </span>
                     )}
                   </div>
@@ -598,8 +540,46 @@ export default function ArtisanPage() {
                     {/* Description */}
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900 mb-3">Presentation</h3>
-                      <p className="text-gray-600 leading-relaxed">{artisan.description}</p>
+                      <p className="text-gray-600 leading-relaxed">{artisan.description || 'Artisan qualifie a votre service.'}</p>
                     </div>
+
+                    {/* Informations entreprise (Pappers) */}
+                    {(artisan.siret || artisan.legal_form || artisan.creation_date) && (
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                          <Building2 className="w-5 h-5 text-blue-600" />
+                          Informations entreprise
+                        </h3>
+                        <div className="bg-blue-50 rounded-xl p-4 space-y-2">
+                          {artisan.siret && (
+                            <div className="flex justify-between">
+                              <span className="text-gray-600">SIRET</span>
+                              <span className="font-mono text-gray-900">{artisan.siret}</span>
+                            </div>
+                          )}
+                          {artisan.legal_form && (
+                            <div className="flex justify-between">
+                              <span className="text-gray-600">Forme juridique</span>
+                              <span className="text-gray-900">{artisan.legal_form}</span>
+                            </div>
+                          )}
+                          {artisan.creation_date && (
+                            <div className="flex justify-between">
+                              <span className="text-gray-600">Date de creation</span>
+                              <span className="text-gray-900">
+                                {new Date(artisan.creation_date).toLocaleDateString('fr-FR')}
+                              </span>
+                            </div>
+                          )}
+                          {artisan.employee_count && (
+                            <div className="flex justify-between">
+                              <span className="text-gray-600">Effectif</span>
+                              <span className="text-gray-900">{artisan.employee_count} employe(s)</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
 
                     {/* Services */}
                     <div>
@@ -623,10 +603,7 @@ export default function ArtisanPage() {
                           <h3 className="text-lg font-semibold text-gray-900 mb-3">Certifications</h3>
                           <div className="space-y-2">
                             {artisan.certifications.map((cert, index) => (
-                              <div
-                                key={index}
-                                className="flex items-center gap-2 text-green-700"
-                              >
+                              <div key={index} className="flex items-center gap-2 text-green-700">
                                 <CheckCircle className="w-5 h-5" />
                                 <span>{cert}</span>
                               </div>
@@ -640,10 +617,7 @@ export default function ArtisanPage() {
                           <h3 className="text-lg font-semibold text-gray-900 mb-3">Assurances & Garanties</h3>
                           <div className="space-y-2">
                             {artisan.insurance.map((ins, index) => (
-                              <div
-                                key={index}
-                                className="flex items-center gap-2 text-blue-700"
-                              >
+                              <div key={index} className="flex items-center gap-2 text-blue-700">
                                 <Shield className="w-5 h-5" />
                                 <span>{ins}</span>
                               </div>
@@ -659,10 +633,7 @@ export default function ArtisanPage() {
                         <h3 className="text-lg font-semibold text-gray-900 mb-3">Moyens de paiement acceptes</h3>
                         <div className="flex flex-wrap gap-3">
                           {artisan.payment_methods.map((method, index) => (
-                            <span
-                              key={index}
-                              className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm"
-                            >
+                            <span key={index} className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm">
                               {method === 'Carte bancaire' && <CreditCard className="w-4 h-4" />}
                               {method === 'Especes' && <Banknote className="w-4 h-4" />}
                               {method === 'Cheque' && <FileText className="w-4 h-4" />}
@@ -671,6 +642,33 @@ export default function ArtisanPage() {
                               {method}
                             </span>
                           ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Contact */}
+                    {(artisan.phone || artisan.email || artisan.website) && (
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-900 mb-3">Contact</h3>
+                        <div className="space-y-2">
+                          {artisan.phone && (
+                            <a href={`tel:${artisan.phone}`} className="flex items-center gap-3 text-gray-600 hover:text-blue-600">
+                              <Phone className="w-5 h-5" />
+                              <span>{artisan.phone}</span>
+                            </a>
+                          )}
+                          {artisan.email && (
+                            <a href={`mailto:${artisan.email}`} className="flex items-center gap-3 text-gray-600 hover:text-blue-600">
+                              <Mail className="w-5 h-5" />
+                              <span>{artisan.email}</span>
+                            </a>
+                          )}
+                          {artisan.website && (
+                            <a href={artisan.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-gray-600 hover:text-blue-600">
+                              <Globe className="w-5 h-5" />
+                              <span>{artisan.website}</span>
+                            </a>
+                          )}
                         </div>
                       </div>
                     )}
@@ -686,7 +684,6 @@ export default function ArtisanPage() {
                             <p className="text-gray-600">{artisan.postal_code} {artisan.city}</p>
                           </div>
                         </div>
-                        {/* Map placeholder */}
                         <div className="h-48 bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg flex items-center justify-center">
                           <div className="text-center">
                             <Navigation className="w-8 h-8 text-blue-500 mx-auto mb-2" />
@@ -716,9 +713,7 @@ export default function ArtisanPage() {
                                 )}
                               </button>
                               {expandedFaq === index && (
-                                <div className="px-4 pb-4 text-gray-600">
-                                  {item.answer}
-                                </div>
+                                <div className="px-4 pb-4 text-gray-600">{item.answer}</div>
                               )}
                             </div>
                           ))}
@@ -741,29 +736,35 @@ export default function ArtisanPage() {
                   <div className="space-y-6">
                     <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
                       <p className="text-blue-800 text-sm">
-                        <strong>Devis gratuit :</strong> Les prix indiques sont donnees a titre indicatif. Chaque situation etant unique, un devis personnalise vous sera propose apres etude de votre demande.
+                        <strong>Devis gratuit :</strong> Les prix indiques sont donnes a titre indicatif. Chaque situation etant unique, un devis personnalise vous sera propose apres etude de votre demande.
                       </p>
                     </div>
 
-                    <div className="divide-y">
-                      {artisan.service_prices.slice(0, showAllPrices ? undefined : 4).map((service, index) => (
-                        <div key={index} className="py-4 flex items-start justify-between gap-4">
-                          <div className="flex-1">
-                            <h4 className="font-semibold text-gray-900">{service.name}</h4>
-                            <p className="text-sm text-gray-500">{service.description}</p>
-                            {service.duration && (
-                              <p className="text-sm text-gray-400 mt-1">
-                                <Clock className="w-4 h-4 inline mr-1" />
-                                Duree estimee : {service.duration}
-                              </p>
-                            )}
+                    {artisan.service_prices.length > 0 ? (
+                      <div className="divide-y">
+                        {artisan.service_prices.slice(0, showAllPrices ? undefined : 4).map((service, index) => (
+                          <div key={index} className="py-4 flex items-start justify-between gap-4">
+                            <div className="flex-1">
+                              <h4 className="font-semibold text-gray-900">{service.name}</h4>
+                              <p className="text-sm text-gray-500">{service.description}</p>
+                              {service.duration && (
+                                <p className="text-sm text-gray-400 mt-1">
+                                  <Clock className="w-4 h-4 inline mr-1" />
+                                  Duree estimee : {service.duration}
+                                </p>
+                              )}
+                            </div>
+                            <div className="text-right">
+                              <span className="text-lg font-bold text-blue-600">{service.price}</span>
+                            </div>
                           </div>
-                          <div className="text-right">
-                            <span className="text-lg font-bold text-blue-600">{service.price}</span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-8 text-gray-500">
+                        <p>Tarifs disponibles sur demande de devis</p>
+                      </div>
+                    )}
 
                     {artisan.service_prices.length > 4 && (
                       <button
@@ -781,9 +782,12 @@ export default function ArtisanPage() {
                     <div className="bg-gray-50 rounded-xl p-6 text-center">
                       <h4 className="font-semibold text-gray-900 mb-2">Besoin d'un devis personnalise ?</h4>
                       <p className="text-gray-600 text-sm mb-4">Decrivez votre projet et recevez un devis detaille sous 24h</p>
-                      <button className="px-6 py-3 bg-white border-2 border-blue-600 text-blue-600 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
+                      <Link
+                        href={`/devis?artisan=${artisanId}`}
+                        className="inline-block px-6 py-3 bg-white border-2 border-blue-600 text-blue-600 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
+                      >
                         Demander un devis gratuit
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 )}
@@ -793,15 +797,18 @@ export default function ArtisanPage() {
                   <div>
                     {artisan.portfolio && artisan.portfolio.length > 0 ? (
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                        {artisan.portfolio.map((item, index) => (
+                        {artisan.portfolio.map((item) => (
                           <div
                             key={item.id}
                             className="aspect-square bg-gradient-to-br from-gray-200 to-gray-300 rounded-xl overflow-hidden cursor-pointer hover:opacity-90 transition-opacity relative group"
-                            onClick={() => setSelectedPortfolioImage(item.id)}
                           >
-                            <div className="absolute inset-0 flex items-center justify-center">
-                              <Camera className="w-10 h-10 text-gray-400" />
-                            </div>
+                            {item.imageUrl ? (
+                              <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover" />
+                            ) : (
+                              <div className="absolute inset-0 flex items-center justify-center">
+                                <Camera className="w-10 h-10 text-gray-400" />
+                              </div>
+                            )}
                             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-3 translate-y-full group-hover:translate-y-0 transition-transform">
                               <p className="text-white text-sm font-medium truncate">{item.title}</p>
                               <p className="text-white/80 text-xs">{item.category}</p>
@@ -837,7 +844,7 @@ export default function ArtisanPage() {
                             />
                           ))}
                         </div>
-                        <div className="text-sm text-gray-500 mt-1">{artisan.review_count} avis verifies</div>
+                        <div className="text-sm text-gray-500 mt-1">{artisan.review_count} avis</div>
                       </div>
                       <div className="flex-1 space-y-2 w-full sm:w-auto">
                         {[5, 4, 3, 2, 1].map((stars) => {
@@ -847,10 +854,7 @@ export default function ArtisanPage() {
                               <span className="text-sm text-gray-500 w-3">{stars}</span>
                               <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
                               <div className="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden">
-                                <div
-                                  className="h-full bg-yellow-400 rounded-full transition-all"
-                                  style={{ width: `${percentage}%` }}
-                                />
+                                <div className="h-full bg-yellow-400 rounded-full transition-all" style={{ width: `${percentage}%` }} />
                               </div>
                               <span className="text-sm text-gray-500 w-10">{percentage}%</span>
                             </div>
@@ -860,58 +864,65 @@ export default function ArtisanPage() {
                     </div>
 
                     {/* Reviews List */}
-                    <div className="space-y-4">
-                      {DEMO_REVIEWS.map((review) => (
-                        <div key={review.id} className="border rounded-xl p-5">
-                          <div className="flex items-start justify-between mb-3">
-                            <div className="flex items-center gap-3">
-                              <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                                {review.author.charAt(0)}
-                              </div>
-                              <div>
-                                <div className="flex items-center gap-2">
-                                  <p className="font-semibold text-gray-900">{review.author}</p>
-                                  {review.verified && (
-                                    <span className="inline-flex items-center gap-1 text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
-                                      <CheckCircle className="w-3 h-3" />
-                                      Verifie
-                                    </span>
-                                  )}
+                    {reviews.length > 0 ? (
+                      <div className="space-y-4">
+                        {reviews.map((review) => (
+                          <div key={review.id} className="border rounded-xl p-5">
+                            <div className="flex items-start justify-between mb-3">
+                              <div className="flex items-center gap-3">
+                                <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                                  {review.author.charAt(0)}
                                 </div>
-                                <p className="text-sm text-gray-500">{review.date}</p>
+                                <div>
+                                  <div className="flex items-center gap-2">
+                                    <p className="font-semibold text-gray-900">{review.author}</p>
+                                    {review.verified && (
+                                      <span className="inline-flex items-center gap-1 text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
+                                        <CheckCircle className="w-3 h-3" />
+                                        Verifie
+                                      </span>
+                                    )}
+                                  </div>
+                                  <p className="text-sm text-gray-500">{review.date}</p>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                {[...Array(5)].map((_, i) => (
+                                  <Star
+                                    key={i}
+                                    className={`w-4 h-4 ${
+                                      i < review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'
+                                    }`}
+                                  />
+                                ))}
                               </div>
                             </div>
-                            <div className="flex items-center gap-1">
-                              {[...Array(5)].map((_, i) => (
-                                <Star
-                                  key={i}
-                                  className={`w-4 h-4 ${
-                                    i < review.rating
-                                      ? 'text-yellow-400 fill-yellow-400'
-                                      : 'text-gray-300'
-                                  }`}
-                                />
-                              ))}
-                            </div>
+                            <span className="inline-block text-xs text-blue-600 bg-blue-50 px-3 py-1 rounded-full mb-3">
+                              {review.service}
+                            </span>
+                            <p className="text-gray-700 leading-relaxed">{review.comment}</p>
+                            {review.hasPhoto && (
+                              <div className="mt-3 flex gap-2">
+                                <div className="w-20 h-20 bg-gray-200 rounded-lg flex items-center justify-center">
+                                  <Camera className="w-6 h-6 text-gray-400" />
+                                </div>
+                              </div>
+                            )}
                           </div>
-                          <span className="inline-block text-xs text-blue-600 bg-blue-50 px-3 py-1 rounded-full mb-3">
-                            {review.service}
-                          </span>
-                          <p className="text-gray-700 leading-relaxed">{review.comment}</p>
-                          {review.hasPhoto && (
-                            <div className="mt-3 flex gap-2">
-                              <div className="w-20 h-20 bg-gray-200 rounded-lg flex items-center justify-center">
-                                <Camera className="w-6 h-6 text-gray-400" />
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-12">
+                        <Star className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                        <p className="text-gray-500">Aucun avis pour le moment</p>
+                      </div>
+                    )}
 
-                    <button className="w-full py-3 text-blue-600 hover:text-blue-700 font-medium border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors">
-                      Voir tous les {artisan.review_count} avis
-                    </button>
+                    {artisan.review_count > reviews.length && (
+                      <button className="w-full py-3 text-blue-600 hover:text-blue-700 font-medium border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors">
+                        Voir tous les {artisan.review_count} avis
+                      </button>
+                    )}
                   </div>
                 )}
               </div>
@@ -959,9 +970,7 @@ export default function ArtisanPage() {
               {artisan.accepts_new_clients === false ? (
                 <div className="text-center py-6">
                   <AlertCircle className="w-12 h-12 text-amber-500 mx-auto mb-3" />
-                  <p className="text-gray-600 mb-4">
-                    Cet artisan n'accepte pas de nouveaux clients pour le moment.
-                  </p>
+                  <p className="text-gray-600 mb-4">Cet artisan n'accepte pas de nouveaux clients pour le moment.</p>
                   <button className="w-full py-3 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-colors">
                     Etre notifie des disponibilites
                   </button>
@@ -980,10 +989,7 @@ export default function ArtisanPage() {
                     <span className="font-medium text-gray-700">
                       {availability[0]?.month} {new Date().getFullYear()}
                     </span>
-                    <button
-                      onClick={() => loadMoreDays('next')}
-                      className="p-2 hover:bg-gray-100 rounded-lg"
-                    >
+                    <button onClick={() => loadMoreDays('next')} className="p-2 hover:bg-gray-100 rounded-lg">
                       <ChevronRight className="w-5 h-5" />
                     </button>
                   </div>
@@ -1047,9 +1053,7 @@ export default function ArtisanPage() {
                     disabled={!selectedDate || !selectedTime}
                     className="w-full py-3.5 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed shadow-lg shadow-blue-600/30 disabled:shadow-none"
                   >
-                    {selectedDate && selectedTime
-                      ? 'Confirmer le rendez-vous'
-                      : 'Selectionnez un creneau'}
+                    {selectedDate && selectedTime ? 'Confirmer le rendez-vous' : 'Selectionnez un creneau'}
                   </button>
 
                   {selectedDate && selectedTime && (
@@ -1062,10 +1066,20 @@ export default function ArtisanPage() {
                   <div className="mt-6 pt-6 border-t">
                     <p className="text-sm text-gray-500 text-center mb-3">Ou contactez directement</p>
                     <div className="space-y-2">
-                      <button className="w-full flex items-center justify-center gap-2 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
-                        <Phone className="w-4 h-4" />
-                        Appeler
-                      </button>
+                      {artisan.phone ? (
+                        <a
+                          href={`tel:${artisan.phone}`}
+                          className="w-full flex items-center justify-center gap-2 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+                        >
+                          <Phone className="w-4 h-4" />
+                          Appeler
+                        </a>
+                      ) : (
+                        <button className="w-full flex items-center justify-center gap-2 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
+                          <Phone className="w-4 h-4" />
+                          Appeler
+                        </button>
+                      )}
                       <button className="w-full flex items-center justify-center gap-2 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
                         <MessageCircle className="w-4 h-4" />
                         Envoyer un message
@@ -1095,12 +1109,13 @@ export default function ArtisanPage() {
         <div className="flex items-center gap-4">
           <div className="flex-1">
             <p className="text-sm text-gray-500">A partir de</p>
-            <p className="text-xl font-bold text-gray-900">{artisan.hourly_rate}€<span className="text-sm font-normal text-gray-500">/h</span></p>
+            <p className="text-xl font-bold text-gray-900">
+              {artisan.hourly_rate ? `${artisan.hourly_rate}€` : 'Sur devis'}
+              {artisan.hourly_rate && <span className="text-sm font-normal text-gray-500">/h</span>}
+            </p>
           </div>
           <button
-            onClick={() => {
-              document.querySelector('.lg\\:col-span-1')?.scrollIntoView({ behavior: 'smooth' })
-            }}
+            onClick={() => document.querySelector('.lg\\:col-span-1')?.scrollIntoView({ behavior: 'smooth' })}
             className="flex-1 py-3.5 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors shadow-lg"
           >
             Reserver
