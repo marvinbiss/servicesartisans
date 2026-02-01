@@ -171,7 +171,7 @@ export default function EmailTemplatesPage() {
     preview = preview.replace(/\{\{client_name\}\}/g, 'Marie Durand')
     preview = preview.replace(/\{\{verify_link\}\}/g, 'https://servicesartisans.fr/verify/abc123')
     preview = preview.replace(/\{\{reset_link\}\}/g, 'https://servicesartisans.fr/reset/xyz789')
-    preview = preview.replace(/\{\{dashboard_link\}\}/g, 'https://servicesartisans.fr/dashboard')
+    preview = preview.replace(/\{\{dashboard_link\}\}/g, 'https://servicesartisans.fr/espace-artisan')
     preview = preview.replace(/\{\{expiry_time\}\}/g, '24 heures')
     preview = preview.replace(/\{\{service\}\}/g, 'Plomberie')
     preview = preview.replace(/\{\{description\}\}/g, 'Réparation fuite sous évier')

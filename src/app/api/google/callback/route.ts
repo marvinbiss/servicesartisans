@@ -29,7 +29,7 @@ export async function GET(request: Request) {
       )
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Verify state token
     const { data: oauthState, error: stateError } = await supabase

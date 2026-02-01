@@ -28,7 +28,7 @@ export async function POST(request: Request) {
       )
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Check if already on waitlist
     const { data: existing } = await supabase
@@ -92,7 +92,7 @@ export async function GET(request: Request) {
       )
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
 
     const { data, error } = await supabase
       .from('waitlist')
@@ -128,7 +128,7 @@ export async function DELETE(request: Request) {
       )
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
 
     if (action === 'notify') {
       // Get waitlist entry

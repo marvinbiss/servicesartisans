@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 
@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
       return authResult.error
     }
 
-    const supabase = await createClient()
+    const supabase = createAdminClient()
 
     const searchParams = request.nextUrl.searchParams
     const page = parseInt(searchParams.get('page') || '1')
@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
       .from('audit_logs')
       .select(`
         *,
-        admin:admin_id (
+        admin:user_id (
           email,
           full_name
         )
@@ -43,11 +43,11 @@ export async function GET(request: NextRequest) {
     }
 
     if (entityType !== 'all') {
-      query = query.eq('entity_type', entityType)
+      query = query.eq('resource_type', entityType)
     }
 
     if (adminId) {
-      query = query.eq('admin_id', adminId)
+      query = query.eq('user_id', adminId)
     }
 
     if (dateFrom) {

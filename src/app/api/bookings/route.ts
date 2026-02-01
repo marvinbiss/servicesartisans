@@ -44,7 +44,7 @@ export async function GET(request: Request) {
     }
 
     const { artisanId, date, month } = queryValidation.data
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // If fetching for a specific month (client view - available slots)
     if (month) {
@@ -177,7 +177,7 @@ export async function POST(request: Request) {
       depositAmount,
     } = validation.data
 
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Check if slot is still available
     const { data: slot, error: slotError } = await supabase

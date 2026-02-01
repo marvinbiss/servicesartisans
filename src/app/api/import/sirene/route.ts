@@ -37,7 +37,7 @@ const DEPARTEMENTS = [
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Verifier l'authentification admin (optionnel pour securiser)
     const { data: { user } } = await supabase.auth.getUser()

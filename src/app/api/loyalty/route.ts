@@ -18,7 +18,7 @@ export async function GET(request: Request) {
       )
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
 
     let query = supabase
       .from('loyalty_points')
@@ -78,7 +78,7 @@ export async function POST(request: Request) {
       )
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Add points
     const { data, error } = await supabase
@@ -132,7 +132,7 @@ export async function PUT(request: Request) {
       )
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Get current total points
     const { data: allPoints } = await supabase

@@ -75,10 +75,10 @@ export function AdminSidebar() {
       </nav>
       <div className="p-4 border-t border-gray-800">
         <Link
-          href="/dashboard"
+          href="/"
           className="flex items-center gap-2 px-3 py-2 text-sm text-gray-400 hover:text-white rounded-lg hover:bg-gray-800 transition-colors"
         >
-          ← Retour au dashboard
+          ← Retour au site
         </Link>
       </div>
     </aside>

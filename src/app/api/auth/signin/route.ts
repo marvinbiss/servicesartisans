@@ -1,16 +1,17 @@
 /**
  * User Signin API - ServicesArtisans
- * Handles user authentication
+ * Handles user authentication with proper cookie management
  */
 
 import { NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { createServerClient, type CookieOptions } from '@supabase/ssr'
+import { cookies } from 'next/headers'
 import { signInSchema, validateRequest, formatZodErrors } from '@/lib/validations/schemas'
 import { createErrorResponse, createSuccessResponse, ErrorCode } from '@/lib/errors/types'
 import { logger } from '@/lib/logger'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
 
 export const dynamic = 'force-dynamic'
 
@@ -23,8 +24,6 @@ export async function POST(request: Request) {
         { status: 500 }
       )
     }
-
-    const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
     // Parse and validate request body
     const body = await request.json()
@@ -42,6 +41,29 @@ export async function POST(request: Request) {
     }
 
     const { email, password } = validation.data
+
+    // Create response to set cookies on
+    const response = NextResponse.json({ success: true })
+
+    // Create Supabase client with cookie handling
+    const cookieStore = await cookies()
+    const supabase = createServerClient(
+      supabaseUrl,
+      supabaseAnonKey,
+      {
+        cookies: {
+          get(name: string) {
+            return cookieStore.get(name)?.value
+          },
+          set(name: string, value: string, options: CookieOptions) {
+            cookieStore.set({ name, value, ...options })
+          },
+          remove(name: string, options: CookieOptions) {
+            cookieStore.set({ name, value: '', ...options })
+          },
+        },
+      }
+    )
 
     // Attempt sign in
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -76,7 +98,7 @@ export async function POST(request: Request) {
       )
     }
 
-    // Get user profile
+    // Get user profile (may not exist yet)
     const { data: profile } = await supabase
       .from('profiles')
       .select('role, is_artisan, artisan_id, first_name, last_name')

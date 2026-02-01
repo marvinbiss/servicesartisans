@@ -21,7 +21,7 @@ export async function POST(
       )
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Fetch current booking
     const { data: booking, error: bookingError } = await supabase

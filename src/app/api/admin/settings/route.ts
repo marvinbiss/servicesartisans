@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 
@@ -30,7 +30,7 @@ export async function GET() {
       return authResult.error
     }
 
-    const supabase = await createClient()
+    const supabase = createAdminClient()
 
     // Fetch settings from database
     const { data: settings, error } = await supabase
@@ -58,7 +58,7 @@ export async function PATCH(request: NextRequest) {
       return authResult.error
     }
 
-    const supabase = await createClient()
+    const supabase = createAdminClient()
     const updates = await request.json()
 
     // Fetch current settings for audit

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { verifyAdmin } from '@/lib/admin-auth'
 import { sanitizeSearchQuery } from '@/lib/sanitize'
 import { logger } from '@/lib/logger'
@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
       return authResult.error
     }
 
-    const supabase = await createClient()
+    const supabase = createAdminClient()
 
     const searchParams = request.nextUrl.searchParams
     const page = parseInt(searchParams.get('page') || '1')

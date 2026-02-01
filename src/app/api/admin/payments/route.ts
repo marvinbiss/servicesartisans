@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { getRevenueStats, listAllSubscriptions } from '@/lib/stripe-admin'
 import { requirePermission } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
       return authResult.error
     }
 
-    const supabase = await createClient()
+    const supabase = createAdminClient()
 
     const searchParams = request.nextUrl.searchParams
     const type = searchParams.get('type') || 'overview' // overview, subscriptions

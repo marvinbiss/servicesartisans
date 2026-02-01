@@ -210,6 +210,9 @@ export async function middleware(request: NextRequest) {
   // Add nonce to response for use in pages
   response.headers.set('x-nonce', nonce)
 
+  // Add pathname for server components
+  response.headers.set('x-pathname', pathname)
+
   // Add security headers
   return addSecurityHeaders(response, nonce, request)
 }

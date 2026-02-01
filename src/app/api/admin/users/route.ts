@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission } from '@/lib/admin-auth'
-import { sanitizeSearchQuery } from '@/lib/sanitize'
 import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
@@ -15,63 +14,84 @@ export async function GET(request: NextRequest) {
       return authResult.error
     }
 
-    const supabase = await createClient()
+    const supabase = createAdminClient()
 
     const searchParams = request.nextUrl.searchParams
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '20')
-    const filter = searchParams.get('filter') || 'all' // all, clients, artisans, banned
-    const status = searchParams.get('status') || 'all' // all, active, inactive
-    const plan = searchParams.get('plan') || 'all' // all, gratuit, pro, premium
+    const filter = searchParams.get('filter') || 'all'
     const search = searchParams.get('search') || ''
 
-    const offset = (page - 1) * limit
+    // Fetch users from Supabase Auth
+    const { data: authUsers, error: authError } = await supabase.auth.admin.listUsers({
+      page,
+      perPage: limit,
+    })
 
-    let query = supabase
-      .from('profiles')
-      .select('*', { count: 'exact' })
-
-    // Filtre par type d'utilisateur
-    if (filter === 'clients') {
-      query = query.eq('user_type', 'client')
-    } else if (filter === 'artisans') {
-      query = query.eq('user_type', 'artisan')
-    } else if (filter === 'banned') {
-      query = query.eq('is_banned', true)
+    if (authError) {
+      logger.error('Admin users list error', authError)
+      throw authError
     }
 
-    // Filtre par statut
-    if (status === 'active') {
-      query = query.eq('is_verified', true).neq('is_banned', true)
-    } else if (status === 'inactive') {
-      query = query.or('is_verified.eq.false,is_banned.eq.true')
-    }
+    // Try to get profiles if table exists
+    let profilesMap = new Map<string, Record<string, unknown>>()
+    try {
+      const { data: profiles } = await supabase
+        .from('profiles')
+        .select('*')
 
-    // Filtre par plan
-    if (plan !== 'all') {
-      query = query.eq('subscription_plan', plan)
-    }
-
-    // Recherche (sanitized to prevent injection)
-    if (search) {
-      const sanitized = sanitizeSearchQuery(search)
-      if (sanitized) {
-        query = query.or(`email.ilike.%${sanitized}%,full_name.ilike.%${sanitized}%,phone.ilike.%${sanitized}%`)
+      if (profiles) {
+        profiles.forEach(p => profilesMap.set(p.id, p))
       }
+    } catch {
+      // profiles table doesn't exist, continue without it
     }
 
-    const { data: users, count, error } = await query
-      .order('created_at', { ascending: false })
-      .range(offset, offset + limit - 1)
+    // Transform users
+    let users = authUsers.users.map(user => {
+      const profile = profilesMap.get(user.id) || {}
+      return {
+        id: user.id,
+        email: user.email || '',
+        full_name: (profile.full_name as string) || user.user_metadata?.full_name || user.user_metadata?.name || null,
+        phone: (profile.phone as string) || user.user_metadata?.phone || null,
+        user_type: (profile.user_type as string) || (user.user_metadata?.is_artisan ? 'artisan' : 'client'),
+        is_verified: !!user.email_confirmed_at,
+        is_banned: (profile.is_banned as boolean) || user.banned_until !== null,
+        subscription_plan: (profile.subscription_plan as string) || 'gratuit',
+        subscription_status: (profile.subscription_status as string) || null,
+        created_at: user.created_at,
+        last_sign_in_at: user.last_sign_in_at,
+      }
+    })
 
-    if (error) throw error
+    // Apply filters
+    if (filter === 'clients') {
+      users = users.filter(u => u.user_type === 'client')
+    } else if (filter === 'artisans') {
+      users = users.filter(u => u.user_type === 'artisan')
+    } else if (filter === 'banned') {
+      users = users.filter(u => u.is_banned)
+    }
+
+    // Apply search
+    if (search) {
+      const searchLower = search.toLowerCase()
+      users = users.filter(u =>
+        u.email.toLowerCase().includes(searchLower) ||
+        (u.full_name && u.full_name.toLowerCase().includes(searchLower)) ||
+        (u.phone && u.phone.includes(search))
+      )
+    }
+
+    const total = users.length
 
     return NextResponse.json({
       success: true,
-      users: users || [],
-      total: count || 0,
+      users,
+      total,
       page,
-      totalPages: Math.ceil((count || 0) / limit),
+      totalPages: Math.ceil(total / limit),
     })
   } catch (error) {
     logger.error('Admin users list error', error)
@@ -91,7 +111,7 @@ export async function POST(request: NextRequest) {
       return authResult.error
     }
 
-    const supabase = await createClient()
+    const supabase = createAdminClient()
 
     const body = await request.json()
     const { email, full_name, phone, user_type, password } = body
@@ -103,8 +123,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Créer l'utilisateur avec Supabase Auth
-    // Note: En production, utiliser le service role key pour créer des utilisateurs
+    // Create user with Supabase Auth Admin
     const { data: authData, error: authError } = await supabase.auth.admin.createUser({
       email,
       password,
@@ -112,6 +131,7 @@ export async function POST(request: NextRequest) {
       user_metadata: {
         full_name,
         phone,
+        is_artisan: user_type === 'artisan',
       },
     })
 
@@ -123,21 +143,22 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Le profil devrait être créé automatiquement par un trigger
-    // Mais on met à jour les infos supplémentaires
+    // Try to create/update profile if table exists
     if (authData.user) {
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .update({
-          full_name,
-          phone,
-          user_type: user_type || 'client',
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', authData.user.id)
-
-      if (profileError) {
-        logger.error('Profile update error', profileError)
+      try {
+        await supabase
+          .from('profiles')
+          .upsert({
+            id: authData.user.id,
+            email,
+            full_name,
+            phone,
+            user_type: user_type || 'client',
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          })
+      } catch {
+        // profiles table doesn't exist, that's OK
       }
     }
 

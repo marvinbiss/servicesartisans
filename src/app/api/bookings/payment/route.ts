@@ -26,7 +26,7 @@ export async function POST(request: Request) {
       )
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Fetch booking details
     const { data: booking, error: bookingError } = await supabase
@@ -157,7 +157,7 @@ export async function GET(request: Request) {
       )
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
 
     const { data: booking, error } = await supabase
       .from('bookings')

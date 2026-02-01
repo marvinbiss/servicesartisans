@@ -121,7 +121,7 @@ export async function GET(request: Request) {
 
     // If artisanId and serviceId provided, try to get base price from database
     if (artisanId && serviceId) {
-      const supabase = createClient()
+      const supabase = await createClient()
       const { data: service } = await supabase
         .from('artisan_services')
         .select('price')
@@ -173,7 +173,7 @@ export async function POST(request: Request) {
       )
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
 
     const { error } = await supabase
       .from('artisan_pricing_settings')

@@ -47,7 +47,7 @@ export async function POST(request: Request) {
       )
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Generate unique code
     const code = generateGiftCardCode()
@@ -131,7 +131,7 @@ export async function GET(request: Request) {
       )
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
 
     const { data: card, error } = await supabase
       .from('gift_cards')
@@ -194,7 +194,7 @@ export async function PUT(request: Request) {
       )
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Get gift card
     const { data: card, error: cardError } = await supabase

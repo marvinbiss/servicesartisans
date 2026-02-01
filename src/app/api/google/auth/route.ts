@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
   try {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Verify user is authenticated
     const { data: { user } } = await supabase.auth.getUser()

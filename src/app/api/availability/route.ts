@@ -17,7 +17,7 @@ export async function GET(request: Request) {
   }
 
   try {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     const { data: settings, error } = await supabase
       .from('availability_settings')
@@ -66,7 +66,7 @@ export async function POST(request: Request) {
       )
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Verify artisan has Pro or Premium subscription
     const { data: profile, error: profileError } = await supabase
@@ -133,7 +133,7 @@ export async function PUT(request: Request) {
       )
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Upsert settings
     const { data, error } = await supabase
@@ -174,7 +174,7 @@ export async function DELETE(request: Request) {
   }
 
   try {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Check if slot has a booking
     const { data: slot, error: slotError } = await supabase

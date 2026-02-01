@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { DEFAULT_PERMISSIONS, type AdminRole } from '@/types/admin'
 import { verifyAdmin, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
@@ -25,7 +25,7 @@ export async function GET(
       )
     }
 
-    const supabase = await createClient()
+    const supabase = createAdminClient()
 
     const { data: admin, error } = await supabase
       .from('admin_users')
@@ -64,7 +64,7 @@ export async function PATCH(
       )
     }
 
-    const supabase = await createClient()
+    const supabase = createAdminClient()
     const { role, permissions } = await request.json()
 
     // Get old data for audit
@@ -124,7 +124,7 @@ export async function DELETE(
       )
     }
 
-    const supabase = await createClient()
+    const supabase = createAdminClient()
 
     // Get admin data for audit
     const { data: adminToDelete } = await supabase

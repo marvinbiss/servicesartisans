@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { DEFAULT_PERMISSIONS, type AdminRole } from '@/types/admin'
 import { verifyAdmin, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const supabase = await createClient()
+    const supabase = createAdminClient()
 
     const { searchParams } = new URL(request.url)
     const page = parseInt(searchParams.get('page') || '1')
@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const supabase = await createClient()
+    const supabase = createAdminClient()
 
     const { email, role } = await request.json()
 

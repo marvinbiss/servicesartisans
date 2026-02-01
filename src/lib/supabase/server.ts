@@ -5,13 +5,13 @@ import { logger } from '@/lib/logger'
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
 
-export function createClient() {
+export async function createClient() {
   // Return null-safe client for build time when env vars are missing
   if (!supabaseUrl || !supabaseKey) {
     logger.warn('Supabase environment variables not configured')
   }
 
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
 
   return createServerClient(
     supabaseUrl,

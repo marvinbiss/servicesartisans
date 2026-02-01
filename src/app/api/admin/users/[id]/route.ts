@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 
@@ -17,56 +17,91 @@ export async function GET(
       return authResult.error
     }
 
-    const supabase = await createClient()
+    const supabase = createAdminClient()
+    const userId = params.id
 
-    const { data: profile, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', params.id)
-      .single()
+    // Get user from Supabase Auth
+    const { data: authUser, error: authError } = await supabase.auth.admin.getUserById(userId)
 
-    if (error) {
-      if (error.code === 'PGRST116') {
-        return NextResponse.json(
-          { success: false, error: { message: 'Utilisateur non trouvé' } },
-          { status: 404 }
-        )
-      }
-      throw error
+    if (authError || !authUser.user) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Utilisateur non trouvé' } },
+        { status: 404 }
+      )
     }
 
-    // Récupérer les stats associées si c'est un artisan
+    const user = authUser.user
+
+    // Try to get profile if table exists
+    let profile: Record<string, unknown> = {}
+    try {
+      const { data } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single()
+      if (data) profile = data
+    } catch {
+      // profiles table doesn't exist
+    }
+
+    // Get provider data if exists
     let providerData = null
-    if (profile.user_type === 'artisan') {
+    try {
       const { data: provider } = await supabase
         .from('providers')
         .select('*')
-        .eq('user_id', params.id)
+        .eq('user_id', userId)
         .single()
       providerData = provider
+    } catch {
+      // No provider or table doesn't exist
     }
 
-    // Récupérer le nombre de réservations
-    const { count: bookingsCount } = await supabase
-      .from('bookings')
-      .select('*', { count: 'exact', head: true })
-      .or(`artisan_id.eq.${params.id},client_email.eq.${profile.email}`)
+    // Get bookings count
+    let bookingsCount = 0
+    try {
+      const { count } = await supabase
+        .from('bookings')
+        .select('*', { count: 'exact', head: true })
+        .or(`artisan_id.eq.${userId},client_email.eq.${user.email}`)
+      bookingsCount = count || 0
+    } catch {
+      // bookings table doesn't exist
+    }
 
-    // Récupérer le nombre d'avis
-    const { count: reviewsCount } = await supabase
-      .from('reviews')
-      .select('*', { count: 'exact', head: true })
-      .eq('client_id', params.id)
+    // Get reviews count
+    let reviewsCount = 0
+    try {
+      const { count } = await supabase
+        .from('reviews')
+        .select('*', { count: 'exact', head: true })
+        .eq('client_id', userId)
+      reviewsCount = count || 0
+    } catch {
+      // reviews table doesn't exist
+    }
 
     return NextResponse.json({
       success: true,
       user: {
-        ...profile,
+        id: user.id,
+        email: user.email,
+        full_name: profile.full_name || user.user_metadata?.full_name || user.user_metadata?.name || null,
+        phone: profile.phone || user.user_metadata?.phone || null,
+        user_type: profile.user_type || (user.user_metadata?.is_artisan ? 'artisan' : 'client'),
+        is_verified: !!user.email_confirmed_at,
+        is_banned: profile.is_banned || user.banned_until !== null,
+        subscription_plan: profile.subscription_plan || 'gratuit',
+        subscription_status: profile.subscription_status || null,
+        created_at: user.created_at,
+        last_sign_in_at: user.last_sign_in_at,
         provider: providerData,
         stats: {
-          bookings: bookingsCount || 0,
-          reviews: reviewsCount || 0,
+          bookings: bookingsCount,
+          reviews: reviewsCount,
         },
+        ...profile,
       },
     })
   } catch (error) {
@@ -90,45 +125,64 @@ export async function PATCH(
       return authResult.error
     }
 
-    const supabase = await createClient()
+    const supabase = createAdminClient()
+    const userId = params.id
     const body = await request.json()
 
-    // Champs autorisés à modifier
-    const allowedFields = [
-      'full_name',
-      'phone',
-      'user_type',
-      'company_name',
-      'siret',
-      'description',
-      'address',
-      'city',
-      'postal_code',
-      'is_verified',
-      'subscription_plan',
-    ]
+    // Update user metadata in Supabase Auth
+    const userMetadataUpdates: Record<string, unknown> = {}
+    if (body.full_name !== undefined) userMetadataUpdates.full_name = body.full_name
+    if (body.phone !== undefined) userMetadataUpdates.phone = body.phone
+    if (body.user_type !== undefined) userMetadataUpdates.is_artisan = body.user_type === 'artisan'
 
-    const updates: Record<string, unknown> = {}
-    for (const field of allowedFields) {
-      if (field in body) {
-        updates[field] = body[field]
+    if (Object.keys(userMetadataUpdates).length > 0) {
+      const { error: authError } = await supabase.auth.admin.updateUserById(userId, {
+        user_metadata: userMetadataUpdates,
+      })
+      if (authError) {
+        logger.error('Auth update error', authError)
       }
     }
 
-    updates.updated_at = new Date().toISOString()
+    // Try to update profile if table exists
+    try {
+      const allowedFields = [
+        'full_name',
+        'phone',
+        'user_type',
+        'company_name',
+        'siret',
+        'description',
+        'address',
+        'city',
+        'postal_code',
+        'is_verified',
+        'subscription_plan',
+      ]
 
-    const { data, error } = await supabase
-      .from('profiles')
-      .update(updates)
-      .eq('id', params.id)
-      .select()
-      .single()
+      const updates: Record<string, unknown> = {}
+      for (const field of allowedFields) {
+        if (field in body) {
+          updates[field] = body[field]
+        }
+      }
+      updates.updated_at = new Date().toISOString()
 
-    if (error) throw error
+      await supabase
+        .from('profiles')
+        .upsert({
+          id: userId,
+          ...updates,
+        })
+    } catch {
+      // profiles table doesn't exist
+    }
+
+    // Log the action
+    await logAdminAction(authResult.admin.id, 'user.update', 'user', userId, body)
 
     return NextResponse.json({
       success: true,
-      user: data,
       message: 'Utilisateur mis à jour',
     })
   } catch (error) {
@@ -140,7 +194,7 @@ export async function PATCH(
   }
 }
 
-// DELETE - Supprimer un utilisateur (soft delete)
+// DELETE - Supprimer un utilisateur
 export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -152,31 +206,48 @@ export async function DELETE(
       return authResult.error
     }
 
-    const supabase = await createClient()
+    const supabase = createAdminClient()
+    const userId = params.id
 
-    // Log the deletion
-    await logAdminAction(authResult.admin.id, 'user.delete', 'user', params.id)
+    // Log the deletion first
+    await logAdminAction(authResult.admin.id, 'user.delete', 'user', userId)
 
-    // Soft delete: marquer comme supprimé plutôt que supprimer réellement
-    const { error } = await supabase
-      .from('profiles')
-      .update({
-        is_deleted: true,
-        deleted_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', params.id)
+    // Ban the user instead of hard delete (safer)
+    const { error: banError } = await supabase.auth.admin.updateUserById(userId, {
+      ban_duration: '876000h', // ~100 years
+    })
 
-    if (error) throw error
+    if (banError) {
+      logger.error('User ban error', banError)
+      throw banError
+    }
 
-    // Désactiver également le provider si c'est un artisan
-    await supabase
-      .from('providers')
-      .update({
-        is_active: false,
-        updated_at: new Date().toISOString(),
-      })
-      .eq('user_id', params.id)
+    // Try to soft delete in profiles table if exists
+    try {
+      await supabase
+        .from('profiles')
+        .update({
+          is_deleted: true,
+          deleted_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', userId)
+    } catch {
+      // profiles table doesn't exist
+    }
+
+    // Deactivate provider if exists
+    try {
+      await supabase
+        .from('providers')
+        .update({
+          is_active: false,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('user_id', userId)
+    } catch {
+      // providers table doesn't exist or no provider
+    }
 
     return NextResponse.json({
       success: true,

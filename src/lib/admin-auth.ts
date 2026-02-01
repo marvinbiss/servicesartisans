@@ -8,6 +8,11 @@ import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 
+// Admin email whitelist (fallback when profiles table doesn't exist)
+const ADMIN_EMAILS = [
+  'marvin.bissohong@yeoskin.com',
+]
+
 export type AdminRole = 'super_admin' | 'admin' | 'moderator'
 
 export interface AdminUser {
@@ -84,26 +89,28 @@ export async function verifyAdmin(): Promise<AdminAuthResult> {
 
     // Check admin role in profiles table
     const adminSupabase = createAdminClient()
+    let role: AdminRole | null = null
+    let isAdmin = false
+
+    // Try profiles table first
     const { data: profile, error: profileError } = await adminSupabase
       .from('profiles')
       .select('role, is_admin')
       .eq('id', user.id)
       .single()
 
-    if (profileError) {
-      logger.error('Admin auth profile error', profileError)
-      return {
-        success: false,
-        error: NextResponse.json(
-          { success: false, error: { code: 'PROFILE_ERROR', message: 'Erreur de profil' } },
-          { status: 500 }
-        ),
-      }
+    if (!profileError && profile) {
+      role = profile.role as AdminRole | null
+      isAdmin = profile.is_admin === true
     }
 
-    // Verify admin role
-    const role = profile?.role as AdminRole | null
-    const isAdmin = profile?.is_admin === true
+    // Fallback: check email whitelist
+    if (!isAdmin && !role && user.email && ADMIN_EMAILS.includes(user.email)) {
+      isAdmin = true
+      role = 'super_admin' // Give full permissions to whitelisted emails
+    }
+
+    // Verify admin access
     const validRoles: AdminRole[] = ['super_admin', 'admin', 'moderator']
 
     if (!isAdmin && (!role || !validRoles.includes(role))) {
@@ -119,7 +126,7 @@ export async function verifyAdmin(): Promise<AdminAuthResult> {
       }
     }
 
-    const adminRole: AdminRole = role && validRoles.includes(role) ? role : 'admin'
+    const adminRole: AdminRole = role && validRoles.includes(role) ? role : 'super_admin'
 
     return {
       success: true,
@@ -194,11 +201,11 @@ export async function logAdminAction(
   try {
     const supabase = createAdminClient()
     await supabase.from('audit_logs').insert({
-      admin_id: adminId,
+      user_id: adminId,
       action,
-      entity_type: entityType,
-      entity_id: entityId,
-      new_data: details || {},
+      resource_type: entityType,
+      resource_id: entityId,
+      new_value: details || {},
       created_at: new Date().toISOString(),
     })
   } catch (error) {

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { verifyAdmin, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 
@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
       return authResult.error
     }
 
-    const supabase = await createClient()
+    const supabase = createAdminClient()
     const url = new URL(request.url)
     const type = url.searchParams.get('type') || 'providers'
     const format = url.searchParams.get('format') || 'json'

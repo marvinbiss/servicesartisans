@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { getSubscription, changeSubscriptionPlan, PRICE_IDS } from '@/lib/stripe-admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
@@ -45,7 +45,7 @@ export async function PATCH(
       return authResult.error
     }
 
-    const supabase = await createClient()
+    const supabase = createAdminClient()
     const body = await request.json()
     const { newPlan, proration = 'create_prorations' } = body
 

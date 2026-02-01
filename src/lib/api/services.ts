@@ -32,7 +32,7 @@ export async function getServices(): Promise<Service[]> {
   return getCachedData(
     'services:all',
     async () => {
-      const supabase = createClient()
+      const supabase = await createClient()
       const { data, error } = await supabase
         .from('services')
         .select('*')
@@ -57,7 +57,7 @@ export async function getServiceBySlug(slug: string): Promise<Service | null> {
   return getCachedData(
     `service:${slug}`,
     async () => {
-      const supabase = createClient()
+      const supabase = await createClient()
       const { data, error } = await supabase
         .from('services')
         .select('*')
@@ -91,7 +91,7 @@ export async function getArtisans(params: {
   return getCachedData(
     cacheKey,
     async () => {
-      const supabase = createClient()
+      const supabase = await createClient()
       let query = supabase
         .from('profiles')
         .select('*', { count: 'exact' })
@@ -157,7 +157,7 @@ export async function getArtisanById(id: string): Promise<Artisan | null> {
   return getCachedData(
     `artisan:${id}`,
     async () => {
-      const supabase = createClient()
+      const supabase = await createClient()
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
@@ -194,7 +194,7 @@ export async function getArtisanReviews(artisanId: string, limit = 10) {
   return getCachedData(
     `reviews:${artisanId}:${limit}`,
     async () => {
-      const supabase = createClient()
+      const supabase = await createClient()
       const { data, error } = await supabase
         .from('reviews')
         .select(`
@@ -224,7 +224,7 @@ export async function getPlatformStats() {
   return getCachedData(
     'stats:platform',
     async () => {
-      const supabase = createClient()
+      const supabase = await createClient()
 
       const [artisansResult, reviewsResult, citiesResult] = await Promise.all([
         supabase
