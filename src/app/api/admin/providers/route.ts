@@ -32,9 +32,6 @@ export async function GET(request: NextRequest) {
     // Utilise le client admin pour contourner RLS
     const supabase = createAdminClient()
 
-    // Debug: Check if Supabase connection is working
-    console.log('[Admin API] Supabase client created')
-
     const searchParams = request.nextUrl.searchParams
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '20')
@@ -45,17 +42,6 @@ export async function GET(request: NextRequest) {
     console.log(`[Admin API] GET providers - filter="${filter}", page=${page}, limit=${limit}, _t=${cacheBuster}`)
 
     const offset = (page - 1) * limit
-
-    // First, do a simple count test to verify DB connection
-    const { count: totalProvidersCount, error: countError } = await supabase
-      .from('providers')
-      .select('*', { count: 'exact', head: true })
-
-    if (countError) {
-      console.error('[Admin API] DB connection test failed:', countError)
-    } else {
-      console.log(`[Admin API] DB connection OK, total providers in DB: ${totalProvidersCount}`)
-    }
 
     // Build query with filters
     let query = supabase
@@ -120,24 +106,12 @@ export async function GET(request: NextRequest) {
       }
     })
 
-    // Debug logging
-    const verifiedInResult = transformedProviders.filter((p) => p.is_verified === true).length
-    console.log(`[Admin API] In result: ${verifiedInResult} verified out of ${transformedProviders.length}`)
-
     const response = NextResponse.json({
       success: true,
       providers: transformedProviders,
       total: count || 0,
       page,
       totalPages: Math.ceil((count || 0) / limit),
-      _debug: {
-        filter,
-        timestamp: Date.now(),
-        resultCount: transformedProviders.length,
-        verifiedInResult,
-        totalProvidersInDb: totalProvidersCount || 'unknown',
-        hasCountError: !!countError,
-      },
     })
 
     // Prevent caching
