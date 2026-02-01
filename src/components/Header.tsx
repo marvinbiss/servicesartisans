@@ -110,6 +110,11 @@ export default function Header() {
     }, 150)
   }
 
+  const handleClick = (menu: 'services' | 'villes') => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current)
+    setActiveMenu(activeMenu === menu ? null : menu)
+  }
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
     if (searchQuery.trim()) {
@@ -195,6 +200,7 @@ export default function Header() {
               onMouseLeave={handleMouseLeave}
             >
               <button
+                onClick={() => handleClick('services')}
                 className={`flex items-center gap-1.5 px-4 py-2 rounded-lg font-medium transition-all ${
                   activeMenu === 'services'
                     ? 'text-blue-600 bg-blue-50'
@@ -309,6 +315,7 @@ export default function Header() {
               onMouseLeave={handleMouseLeave}
             >
               <button
+                onClick={() => handleClick('villes')}
                 className={`flex items-center gap-1.5 px-4 py-2 rounded-lg font-medium transition-all ${
                   activeMenu === 'villes'
                     ? 'text-blue-600 bg-blue-50'
