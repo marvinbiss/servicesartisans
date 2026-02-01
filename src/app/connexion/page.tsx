@@ -62,13 +62,45 @@ export default function ConnexionPage() {
   }
 
   const handleGoogleLogin = async () => {
-    // TODO: Implement Google OAuth
-    setError('Connexion Google bientot disponible')
+    try {
+      setIsLoading(true)
+      const response = await fetch('/api/auth/oauth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ provider: 'google' }),
+      })
+      const data = await response.json()
+      if (data.url) {
+        window.location.href = data.url
+      } else {
+        setError('Connexion Google temporairement indisponible')
+      }
+    } catch {
+      setError('Erreur de connexion Google')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleFacebookLogin = async () => {
-    // TODO: Implement Facebook OAuth
-    setError('Connexion Facebook bientot disponible')
+    try {
+      setIsLoading(true)
+      const response = await fetch('/api/auth/oauth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ provider: 'facebook' }),
+      })
+      const data = await response.json()
+      if (data.url) {
+        window.location.href = data.url
+      } else {
+        setError('Connexion Facebook temporairement indisponible')
+      }
+    } catch {
+      setError('Erreur de connexion Facebook')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
