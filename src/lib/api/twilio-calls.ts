@@ -8,9 +8,27 @@
 
 import twilio from 'twilio'
 
-const accountSid = process.env.TWILIO_ACCOUNT_SID!
-const authToken = process.env.TWILIO_AUTH_TOKEN!
-const client = twilio(accountSid, authToken)
+// Lazy-loaded Twilio client to avoid build errors when env vars are not set
+let twilioClient: ReturnType<typeof twilio> | null = null
+
+function getTwilioClient() {
+  if (twilioClient) return twilioClient
+
+  const accountSid = process.env.TWILIO_ACCOUNT_SID
+  const authToken = process.env.TWILIO_AUTH_TOKEN
+
+  if (!accountSid || !authToken) {
+    console.warn('Twilio credentials not configured')
+    return null
+  }
+
+  twilioClient = twilio(accountSid, authToken)
+  return twilioClient
+}
+
+function getAuthToken() {
+  return process.env.TWILIO_AUTH_TOKEN || ''
+}
 
 // Types
 export interface NumeroVirtuel {
@@ -58,6 +76,9 @@ export async function rechercherNumerosDisponibles(options?: {
   contains?: string
   limit?: number
 }) {
+  const client = getTwilioClient()
+  if (!client) return []
+
   try {
     const numbers = await client.availablePhoneNumbers('FR')
       .local
@@ -90,6 +111,9 @@ export async function acheterNumero(
   ville: string,
   metier: string
 ): Promise<NumeroVirtuel | null> {
+  const client = getTwilioClient()
+  if (!client) return null
+
   try {
     const baseUrl = process.env.NEXT_PUBLIC_URL || 'https://servicesartisans.fr'
 
@@ -119,6 +143,9 @@ export async function acheterNumero(
  * Liste tous les numéros achetés
  */
 export async function listerNumeros(): Promise<NumeroVirtuel[]> {
+  const client = getTwilioClient()
+  if (!client) return []
+
   try {
     const numbers = await client.incomingPhoneNumbers.list({ limit: 100 })
 
@@ -142,6 +169,9 @@ export async function listerNumeros(): Promise<NumeroVirtuel[]> {
  * Supprime un numéro
  */
 export async function supprimerNumero(phoneNumberSid: string): Promise<boolean> {
+  const client = getTwilioClient()
+  if (!client) return false
+
   try {
     await client.incomingPhoneNumbers(phoneNumberSid).remove()
     return true
@@ -236,6 +266,9 @@ export async function getHistoriqueAppels(options?: {
   endDate?: Date
   limit?: number
 }): Promise<AppelLog[]> {
+  const client = getTwilioClient()
+  if (!client) return []
+
   try {
     const calls = await client.calls.list({
       from: options?.from,
@@ -335,6 +368,9 @@ export function validerSignatureTwilio(
   url: string,
   params: Record<string, string>
 ): boolean {
+  const authToken = getAuthToken()
+  if (!authToken) return false
+
   return twilio.validateRequest(
     authToken,
     signature,
