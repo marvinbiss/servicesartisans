@@ -1,0 +1,179 @@
+/**
+ * Centralized API Exports
+ * World-class API infrastructure for ServicesArtisans
+ */
+
+// ============================================
+// UTILITIES
+// ============================================
+export * from '../utils/errors'
+export * from '../utils/retry'
+export * from '../utils/cache'
+export * from '../utils/logger'
+
+// ============================================
+// API Clients
+// ============================================
+
+// Pappers - Business data
+export {
+  getEntrepriseParSiret,
+  getEntrepriseParSiren,
+  rechercherEntreprises,
+  verifierSanteEntreprise,
+  getBadgeConfiance,
+  validateSiren,
+  validateSiret,
+  formaterMontant,
+  formaterAnciennete,
+  formaterSiret,
+  formaterSiren,
+  CODES_NAF_ARTISANS,
+  type EntrepriseComplete,
+  type RechercheResultat,
+} from './pappers'
+
+// SIRENE - Official French business registry
+export {
+  getEtablissementBySiret,
+  getUniteLegaleBySiren,
+  rechercherEtablissements,
+  verifierSiret,
+  formatAdresseEtablissement,
+  getLibelleTrancheEffectifs,
+  TRANCHES_EFFECTIFS,
+  type EtablissementSirene,
+  type UniteLegaleSirene,
+} from './sirene'
+
+// Adresse - French address API
+export {
+  autocompleteAdresse,
+  autocompleteVille,
+  geocoder,
+  reverseGeocode,
+  getCommunesByCodePostal,
+  geocodeBatch,
+  calculerDistance,
+  filterByRadius,
+  sortByDistance,
+  isValidCodePostal,
+  getDepartementFromCodePostal,
+  formaterAdresse,
+  parseAdresse,
+  DEPARTEMENTS,
+  type AdresseSuggestion,
+  type GeocodageResult,
+} from './adresse'
+
+// Stripe - Payments
+export {
+  createCustomer,
+  getCustomer,
+  updateCustomer,
+  findCustomerByEmail,
+  createSubscription,
+  getSubscription,
+  cancelSubscription,
+  updateSubscription,
+  listSubscriptions,
+  createPaymentIntent,
+  getPaymentIntent,
+  confirmPaymentIntent,
+  createRefund,
+  getInvoice,
+  listInvoices,
+  createCheckoutSession,
+  createPortalSession,
+  constructWebhookEvent,
+  formatAmount,
+  getSubscriptionStatusLabel,
+  type CreateCustomerParams,
+  type CreateSubscriptionParams,
+  type CreatePaymentIntentParams,
+} from './stripe-client'
+
+// Resend - Email
+export {
+  sendEmail,
+  sendBatchEmails,
+  sendWelcomeEmail,
+  sendPasswordResetEmail,
+  sendBookingConfirmationEmail,
+  sendQuoteRequestEmail,
+  type EmailParams,
+  type EmailResult,
+  type BatchEmailParams,
+} from './resend-client'
+
+// Mapbox - Maps and geocoding
+export {
+  geocodeAddress,
+  reverseGeocode as mapboxReverseGeocode,
+  getDirections,
+  getDistanceAndDuration,
+  getIsochrone,
+  getStaticMapUrl,
+  formatDistance,
+  formatDuration,
+  calculateDistance as mapboxCalculateDistance,
+  isWithinRadius,
+  getBoundingBox,
+  type Coordinates,
+  type GeocodingResult as MapboxGeocodingResult,
+  type DirectionsResult,
+  type IsochroneResult,
+} from './mapbox-client'
+
+// Twilio - Calls
+export {
+  rechercherNumerosDisponibles,
+  acheterNumero,
+  listerNumeros,
+  supprimerNumero,
+  genererTwiMLRouting,
+  genererTwiMLMessagerie,
+  getHistoriqueAppels,
+  calculerStatsAppels,
+  formaterNumeroFR,
+  validerSignatureTwilio,
+  type NumeroVirtuel,
+  type AppelLog,
+  type StatsAppels,
+} from './twilio-calls'
+
+// ============================================
+// SERVICES
+// ============================================
+export {
+  verifyEntreprise,
+  quickVerify,
+  verifySiren,
+  batchVerify,
+  calculateTrustScore,
+  getVerificationSummary,
+  type VerificationResult,
+  type QuickVerificationResult,
+} from '../services/verification.service'
+
+// ============================================
+// HOOKS (Client-side)
+// ============================================
+// Note: These are exported separately for client components
+// Import from '@/lib/hooks/useAutocomplete' in client components
+
+// ============================================
+// AUDIT
+// ============================================
+export {
+  logAuditEvent,
+  getAdminInfo,
+  auditUserAction,
+  auditProviderAction,
+  auditReviewAction,
+  auditPaymentAction,
+  auditReportAction,
+  auditGdprAction,
+  type AuditAction,
+  type EntityType,
+} from '../audit-logger'

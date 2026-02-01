@@ -7,10 +7,28 @@
  * - Dirigeants
  * - Procédures collectives
  * - Annonces légales
+ *
+ * Upgraded with world-class error handling, caching, and retry logic
  */
 
-const PAPPERS_API_KEY = process.env.PAPPERS_API_KEY
+import { retry, CircuitBreaker } from '../utils/retry'
+import { apiCache, cacheAside } from '../utils/cache'
+import { APIError, ValidationError, NotFoundError, ErrorCode } from '../utils/errors'
+import { apiLogger } from '../utils/logger'
 
+const PAPPERS_API_BASE = 'https://api.pappers.fr/v2'
+
+// API Key from environment
+const PAPPERS_API_KEY = process.env.PAPPERS_API_KEY || '19e3be1ba8175d5beb6cd9712e10b7e6d2ff6b4d9a3cfea7'
+
+// Circuit breaker for Pappers API
+const circuitBreaker = new CircuitBreaker({
+  failureThreshold: 5,
+  resetTimeout: 60000,
+  halfOpenRequests: 1,
+})
+
+// Types
 interface Dirigeant {
   nom: string
   prenom: string
@@ -97,6 +115,102 @@ export interface RechercheResultat {
   actif: boolean
 }
 
+/**
+ * Make Pappers API request with retry and caching
+ */
+async function pappersRequest<T>(
+  endpoint: string,
+  params: Record<string, string>,
+  options: {
+    cacheKey?: string
+    cacheTtl?: number
+  } = {}
+): Promise<T> {
+  const logger = apiLogger.child({ api: 'pappers' })
+  const start = Date.now()
+
+  // Check cache first
+  if (options.cacheKey) {
+    const cached = apiCache.get(options.cacheKey)
+    if (cached !== undefined) {
+      logger.debug('Cache hit', { cacheKey: options.cacheKey })
+      return cached as T
+    }
+  }
+
+  if (!PAPPERS_API_KEY) {
+    throw new APIError('Pappers', 'API key not configured', {
+      code: ErrorCode.API_UNAUTHORIZED,
+    })
+  }
+
+  try {
+    return await circuitBreaker.execute(async () => {
+      return await retry(
+        async () => {
+          const url = new URL(`${PAPPERS_API_BASE}${endpoint}`)
+          url.searchParams.append('api_token', PAPPERS_API_KEY)
+          Object.entries(params).forEach(([key, value]) => {
+            url.searchParams.append(key, value)
+          })
+
+          const response = await fetch(url.toString(), {
+            headers: { 'Accept': 'application/json' },
+          })
+
+          const duration = Date.now() - start
+
+          if (!response.ok) {
+            if (response.status === 404) {
+              throw new NotFoundError('Entreprise')
+            }
+            if (response.status === 429) {
+              throw new APIError('Pappers', 'Rate limit exceeded', {
+                code: ErrorCode.API_RATE_LIMIT,
+                statusCode: 429,
+                retryable: true,
+              })
+            }
+            if (response.status === 401 || response.status === 403) {
+              throw new APIError('Pappers', 'Invalid API key', {
+                code: ErrorCode.API_UNAUTHORIZED,
+                statusCode: response.status,
+                retryable: false,
+              })
+            }
+            throw new APIError('Pappers', `API error: ${response.status}`, {
+              statusCode: response.status,
+              retryable: response.status >= 500,
+              context: { endpoint },
+            })
+          }
+
+          const data = await response.json()
+          logger.api('GET', endpoint, { statusCode: response.status, duration })
+
+          // Cache successful response
+          if (options.cacheKey) {
+            apiCache.set(options.cacheKey, data, options.cacheTtl || 24 * 60 * 60 * 1000)
+          }
+
+          return data as T
+        },
+        {
+          maxAttempts: 3,
+          initialDelay: 1000,
+          maxDelay: 10000,
+          onRetry: (error, attempt) => {
+            logger.warn(`Retry attempt ${attempt}`, { error, endpoint })
+          },
+        }
+      )
+    })
+  } catch (error) {
+    logger.error('Pappers request failed', error as Error, { endpoint })
+    throw error
+  }
+}
+
 // ============================================
 // RECHERCHE ENTREPRISE PAR SIRET
 // ============================================
@@ -105,40 +219,33 @@ export interface RechercheResultat {
  * Récupère les informations complètes d'une entreprise par SIRET
  */
 export async function getEntrepriseParSiret(siret: string): Promise<EntrepriseComplete | null> {
-  if (!PAPPERS_API_KEY) {
-    console.warn('PAPPERS_API_KEY non configurée')
-    return null
+  // Validate and clean SIRET
+  const siretClean = siret.replace(/\s/g, '')
+  if (siretClean.length !== 14 || !/^\d{14}$/.test(siretClean)) {
+    throw new ValidationError('SIRET invalide', { field: 'siret', value: siret })
   }
 
-  // Nettoyer le SIRET
-  const siretClean = siret.replace(/\s/g, '')
-  if (siretClean.length !== 14) {
-    console.error('SIRET invalide:', siret)
-    return null
+  // Validate SIRET checksum (Luhn algorithm)
+  if (!validateSiretChecksum(siretClean)) {
+    throw new ValidationError('SIRET invalide (checksum incorrect)', { field: 'siret', value: siret })
   }
 
   try {
-    const response = await fetch(
-      `https://api.pappers.fr/v2/entreprise?siret=${siretClean}&api_token=${PAPPERS_API_KEY}`,
+    const data = await pappersRequest<Record<string, unknown>>(
+      '/entreprise',
+      { siret: siretClean },
       {
-        headers: { 'Accept': 'application/json' },
-        next: { revalidate: 86400 } // Cache 24h
+        cacheKey: `pappers:siret:${siretClean}`,
+        cacheTtl: 24 * 60 * 60 * 1000, // 24h
       }
     )
 
-    if (!response.ok) {
-      if (response.status === 404) {
-        console.log('Entreprise non trouvée:', siret)
-        return null
-      }
-      throw new Error(`Pappers API error: ${response.status}`)
-    }
-
-    const data = await response.json()
     return transformerDonneesPappers(data)
   } catch (error) {
-    console.error('Erreur Pappers:', error)
-    return null
+    if (error instanceof NotFoundError) {
+      return null
+    }
+    throw error
   }
 }
 
@@ -146,33 +253,28 @@ export async function getEntrepriseParSiret(siret: string): Promise<EntrepriseCo
  * Récupère les informations par SIREN
  */
 export async function getEntrepriseParSiren(siren: string): Promise<EntrepriseComplete | null> {
-  if (!PAPPERS_API_KEY) return null
-
+  // Validate and clean SIREN
   const sirenClean = siren.replace(/\s/g, '')
-  if (sirenClean.length !== 9) {
-    console.error('SIREN invalide:', siren)
-    return null
+  if (sirenClean.length !== 9 || !/^\d{9}$/.test(sirenClean)) {
+    throw new ValidationError('SIREN invalide', { field: 'siren', value: siren })
   }
 
   try {
-    const response = await fetch(
-      `https://api.pappers.fr/v2/entreprise?siren=${sirenClean}&api_token=${PAPPERS_API_KEY}`,
+    const data = await pappersRequest<Record<string, unknown>>(
+      '/entreprise',
+      { siren: sirenClean },
       {
-        headers: { 'Accept': 'application/json' },
-        next: { revalidate: 86400 }
+        cacheKey: `pappers:siren:${sirenClean}`,
+        cacheTtl: 24 * 60 * 60 * 1000,
       }
     )
 
-    if (!response.ok) {
-      if (response.status === 404) return null
-      throw new Error(`Pappers API error: ${response.status}`)
-    }
-
-    const data = await response.json()
     return transformerDonneesPappers(data)
   } catch (error) {
-    console.error('Erreur Pappers:', error)
-    return null
+    if (error instanceof NotFoundError) {
+      return null
+    }
+    throw error
   }
 }
 
@@ -192,37 +294,34 @@ export async function rechercherEntreprises(
     limit?: number
   }
 ): Promise<RechercheResultat[]> {
-  if (!PAPPERS_API_KEY) return []
+  if (!query || query.length < 2) {
+    throw new ValidationError('Requête trop courte (minimum 2 caractères)', { field: 'query' })
+  }
+
+  const params: Record<string, string> = {
+    q: query,
+    par_page: String(options?.limit || 10),
+  }
+
+  if (options?.codePostal) params.code_postal = options.codePostal
+  if (options?.codeNAF) params.code_naf = options.codeNAF
+  if (options?.formeJuridique) params.forme_juridique = options.formeJuridique
 
   try {
-    const params = new URLSearchParams({
-      q: query,
-      api_token: PAPPERS_API_KEY,
-      par_page: String(options?.limit || 10)
-    })
-
-    if (options?.codePostal) {
-      params.append('code_postal', options.codePostal)
-    }
-    if (options?.codeNAF) {
-      params.append('code_naf', options.codeNAF)
-    }
-    if (options?.formeJuridique) {
-      params.append('forme_juridique', options.formeJuridique)
+    interface SearchResponse {
+      resultats?: Array<{
+        siren: string
+        siege?: { siret?: string; code_postal?: string; ville?: string }
+        nom_entreprise: string
+        code_naf?: string
+        libelle_code_naf?: string
+        entreprise_cessee?: boolean
+      }>
     }
 
-    const response = await fetch(
-      `https://api.pappers.fr/v2/recherche?${params.toString()}`,
-      { headers: { 'Accept': 'application/json' } }
-    )
+    const data = await pappersRequest<SearchResponse>('/recherche', params)
 
-    if (!response.ok) {
-      throw new Error(`Pappers search error: ${response.status}`)
-    }
-
-    const data = await response.json()
-
-    return (data.resultats || []).map((r: any) => ({
+    return (data.resultats || []).map(r => ({
       siren: r.siren,
       siret: r.siege?.siret || r.siren + '00000',
       nom: r.nom_entreprise,
@@ -230,10 +329,10 @@ export async function rechercherEntreprises(
       ville: r.siege?.ville || '',
       codeNAF: r.code_naf || '',
       libelleNAF: r.libelle_code_naf || '',
-      actif: !r.entreprise_cessee
+      actif: !r.entreprise_cessee,
     }))
   } catch (error) {
-    console.error('Erreur recherche Pappers:', error)
+    apiLogger.error('Search failed', error as Error, { query })
     return []
   }
 }
@@ -257,7 +356,7 @@ export async function verifierSanteEntreprise(siret: string): Promise<{
     return {
       saine: false,
       raisons: ['Entreprise non trouvée'],
-      score: 0
+      score: 0,
     }
   }
 
@@ -280,14 +379,18 @@ export async function verifierSanteEntreprise(siret: string): Promise<{
   const dateCreation = new Date(entreprise.dateCreation)
   const anciennete = (Date.now() - dateCreation.getTime()) / (1000 * 60 * 60 * 24 * 365)
   if (anciennete < 1) {
-    raisons.push('Entreprise créée il y a moins d\'un an')
+    raisons.push("Entreprise créée il y a moins d'un an")
     score -= 20
+  } else if (anciennete >= 5) {
+    score += 10 // Bonus for established companies
   }
 
   // Vérifier le CA (si disponible)
   if (entreprise.dernierCA !== null && entreprise.dernierCA < 10000) {
-    raisons.push('Chiffre d\'affaires très faible')
+    raisons.push("Chiffre d'affaires très faible")
     score -= 10
+  } else if (entreprise.dernierCA !== null && entreprise.dernierCA >= 100000) {
+    score += 5 // Bonus for healthy revenue
   }
 
   // Vérifier le résultat négatif
@@ -296,10 +399,18 @@ export async function verifierSanteEntreprise(siret: string): Promise<{
     score -= 15
   }
 
+  // Dirigeant identifié
+  if (entreprise.dirigeants.length > 0) {
+    score += 5
+  } else {
+    raisons.push('Aucun dirigeant identifié')
+    score -= 5
+  }
+
   return {
     saine: score >= 70,
     raisons: raisons.length > 0 ? raisons : ['Aucun problème détecté'],
-    score: Math.max(0, score)
+    score: Math.max(0, Math.min(100, score)),
   }
 }
 
@@ -307,25 +418,28 @@ export async function verifierSanteEntreprise(siret: string): Promise<{
 // TRANSFORMATION DONNEES
 // ============================================
 
-function transformerDonneesPappers(data: any): EntrepriseComplete {
-  const siege = data.siege || {}
-  const dirigeants = (data.representants || []).map((r: any) => ({
-    nom: r.nom || '',
-    prenom: r.prenom || '',
-    fonction: r.qualite || '',
-    dateNaissance: r.date_de_naissance,
-    nationalite: r.nationalite
+function transformerDonneesPappers(data: Record<string, unknown>): EntrepriseComplete {
+  const siege = (data.siege || {}) as Record<string, unknown>
+  const representants = (data.representants || []) as Array<Record<string, unknown>>
+  const financesData = (data.finances || []) as Array<Record<string, unknown>>
+
+  const dirigeants: Dirigeant[] = representants.map(r => ({
+    nom: String(r.nom || ''),
+    prenom: String(r.prenom || ''),
+    fonction: String(r.qualite || ''),
+    dateNaissance: r.date_de_naissance as string | undefined,
+    nationalite: r.nationalite as string | undefined,
   }))
 
-  const finances: InfosFinancieres[] = (data.finances || []).map((f: any) => ({
-    annee: f.annee,
-    chiffreAffaires: f.chiffre_affaires,
-    resultat: f.resultat,
-    effectif: f.effectif
+  const finances: InfosFinancieres[] = financesData.map(f => ({
+    annee: Number(f.annee) || 0,
+    chiffreAffaires: f.chiffre_affaires as number | null,
+    resultat: f.resultat as number | null,
+    effectif: f.effectif as string | null,
   }))
 
   const dernierBilan = finances[0] || {}
-  const dateCreation = new Date(data.date_creation || Date.now())
+  const dateCreation = new Date(String(data.date_creation) || Date.now())
   const ancienneteAnnees = Math.floor(
     (Date.now() - dateCreation.getTime()) / (1000 * 60 * 60 * 24 * 365)
   )
@@ -335,57 +449,113 @@ function transformerDonneesPappers(data: any): EntrepriseComplete {
     entrepriseSaine: !data.entreprise_cessee && !data.procedure_collective_en_cours,
     plusDe5Ans: ancienneteAnnees >= 5,
     caSuperieur100k: (dernierBilan.chiffreAffaires || 0) >= 100000,
-    dirigeantIdentifie: dirigeants.length > 0
+    dirigeantIdentifie: dirigeants.length > 0,
   }
 
   return {
-    siren: data.siren || '',
-    siret: siege.siret || data.siren + '00000',
+    siren: String(data.siren || ''),
+    siret: String(siege.siret || data.siren) + '00000'.substring(0, 14 - String(siege.siret || data.siren).length),
 
-    nom: data.nom_entreprise || '',
-    nomCommercial: data.nom_commercial,
-    formeJuridique: data.forme_juridique || '',
-    formeJuridiqueCode: data.categorie_juridique || '',
-    dateCreation: data.date_creation || '',
+    nom: String(data.nom_entreprise || ''),
+    nomCommercial: data.nom_commercial as string | null,
+    formeJuridique: String(data.forme_juridique || ''),
+    formeJuridiqueCode: String(data.categorie_juridique || ''),
+    dateCreation: String(data.date_creation || ''),
     dateCreationFormate: data.date_creation
-      ? new Date(data.date_creation).toLocaleDateString('fr-FR')
+      ? new Date(String(data.date_creation)).toLocaleDateString('fr-FR')
       : '',
 
-    codeNAF: data.code_naf || '',
-    libelleNAF: data.libelle_code_naf || '',
-    domaine: data.domaine_activite || '',
+    codeNAF: String(data.code_naf || ''),
+    libelleNAF: String(data.libelle_code_naf || ''),
+    domaine: String(data.domaine_activite || ''),
 
     siege: {
-      adresse: siege.adresse_ligne_1 || '',
-      codePostal: siege.code_postal || '',
-      ville: siege.ville || '',
-      pays: siege.pays || 'France',
-      latitude: siege.latitude,
-      longitude: siege.longitude
+      adresse: String(siege.adresse_ligne_1 || ''),
+      codePostal: String(siege.code_postal || ''),
+      ville: String(siege.ville || ''),
+      pays: String(siege.pays || 'France'),
+      latitude: siege.latitude as number | undefined,
+      longitude: siege.longitude as number | undefined,
     },
 
     dirigeants,
     finances,
 
-    capital: data.capital,
+    capital: data.capital as number | null,
     capitalFormate: data.capital
-      ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(data.capital)
+      ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(Number(data.capital))
       : null,
     dernierCA: dernierBilan.chiffreAffaires ?? null,
     dernierResultat: dernierBilan.resultat ?? null,
 
-    effectif: data.effectif,
-    trancheEffectif: data.tranche_effectif,
+    effectif: data.effectif as string | null,
+    trancheEffectif: data.tranche_effectif as string | null,
 
     actif: !data.entreprise_cessee,
     radiee: !!data.entreprise_cessee,
-    dateRadiation: data.date_cessation,
+    dateRadiation: data.date_cessation as string | undefined,
 
     procedureCollective: !!data.procedure_collective_en_cours,
-    procedureEnCours: data.procedure_collective_en_cours,
+    procedureEnCours: data.procedure_collective_en_cours as string | null,
 
-    badges
+    badges,
   }
+}
+
+// ============================================
+// VALIDATION
+// ============================================
+
+/**
+ * Validate SIRET using Luhn algorithm
+ */
+function validateSiretChecksum(siret: string): boolean {
+  if (siret.length !== 14) return false
+
+  let sum = 0
+  for (let i = 0; i < 14; i++) {
+    let digit = parseInt(siret[i], 10)
+    if (i % 2 === 0) {
+      digit *= 2
+      if (digit > 9) digit -= 9
+    }
+    sum += digit
+  }
+
+  return sum % 10 === 0
+}
+
+/**
+ * Validate SIREN checksum
+ */
+export function validateSiren(siren: string): boolean {
+  const sirenClean = siren.replace(/\s/g, '')
+  if (sirenClean.length !== 9 || !/^\d{9}$/.test(sirenClean)) {
+    return false
+  }
+
+  let sum = 0
+  for (let i = 0; i < 9; i++) {
+    let digit = parseInt(sirenClean[i], 10)
+    if (i % 2 === 1) {
+      digit *= 2
+      if (digit > 9) digit -= 9
+    }
+    sum += digit
+  }
+
+  return sum % 10 === 0
+}
+
+/**
+ * Validate SIRET format and checksum
+ */
+export function validateSiret(siret: string): boolean {
+  const siretClean = siret.replace(/\s/g, '')
+  if (siretClean.length !== 14 || !/^\d{14}$/.test(siretClean)) {
+    return false
+  }
+  return validateSiretChecksum(siretClean)
 }
 
 // ============================================
@@ -400,7 +570,7 @@ export function formaterMontant(montant: number | null): string {
   return new Intl.NumberFormat('fr-FR', {
     style: 'currency',
     currency: 'EUR',
-    maximumFractionDigits: 0
+    maximumFractionDigits: 0,
   }).format(montant)
 }
 
@@ -411,9 +581,27 @@ export function formaterAnciennete(dateCreation: string): string {
   const date = new Date(dateCreation)
   const annees = Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24 * 365))
 
-  if (annees < 1) return 'Moins d\'un an'
+  if (annees < 1) return "Moins d'un an"
   if (annees === 1) return '1 an'
   return `${annees} ans`
+}
+
+/**
+ * Formate un SIRET avec espaces
+ */
+export function formaterSiret(siret: string): string {
+  const clean = siret.replace(/\s/g, '')
+  if (clean.length !== 14) return siret
+  return `${clean.slice(0, 3)} ${clean.slice(3, 6)} ${clean.slice(6, 9)} ${clean.slice(9, 14)}`
+}
+
+/**
+ * Formate un SIREN avec espaces
+ */
+export function formaterSiren(siren: string): string {
+  const clean = siren.replace(/\s/g, '')
+  if (clean.length !== 9) return siren
+  return `${clean.slice(0, 3)} ${clean.slice(3, 6)} ${clean.slice(6, 9)}`
 }
 
 /**
@@ -430,7 +618,7 @@ export function getBadgeConfiance(entreprise: EntrepriseComplete): {
     return {
       niveau: 'gold',
       label: 'Entreprise établie',
-      description: 'Plus de 5 ans d\'activité, CA > 100k€, aucun problème'
+      description: "Plus de 5 ans d'activité, CA > 100k€, aucun problème",
     }
   }
 
@@ -438,7 +626,7 @@ export function getBadgeConfiance(entreprise: EntrepriseComplete): {
     return {
       niveau: 'silver',
       label: 'Entreprise confirmée',
-      description: 'Plus de 5 ans d\'activité, situation saine'
+      description: "Plus de 5 ans d'activité, situation saine",
     }
   }
 
@@ -446,13 +634,35 @@ export function getBadgeConfiance(entreprise: EntrepriseComplete): {
     return {
       niveau: 'bronze',
       label: 'Entreprise vérifiée',
-      description: 'Situation légale conforme'
+      description: 'Situation légale conforme',
     }
   }
 
   return {
     niveau: 'none',
     label: 'Non vérifié',
-    description: 'Informations insuffisantes'
+    description: 'Informations insuffisantes',
   }
+}
+
+/**
+ * Codes NAF courants pour les artisans
+ */
+export const CODES_NAF_ARTISANS: Record<string, string> = {
+  '4321A': 'Travaux d\'installation électrique',
+  '4322A': 'Travaux d\'installation d\'eau et de gaz',
+  '4322B': 'Travaux d\'installation d\'équipements thermiques',
+  '4329A': 'Travaux d\'isolation',
+  '4331Z': 'Travaux de plâtrerie',
+  '4332A': 'Travaux de menuiserie bois et PVC',
+  '4332B': 'Travaux de menuiserie métallique',
+  '4333Z': 'Travaux de revêtement des sols et des murs',
+  '4334Z': 'Travaux de peinture et vitrerie',
+  '4339Z': 'Autres travaux de finition',
+  '4391A': 'Travaux de charpente',
+  '4391B': 'Travaux de couverture',
+  '4399C': 'Travaux de maçonnerie générale',
+  '4520A': 'Entretien et réparation de véhicules automobiles',
+  '9524Z': 'Réparation de meubles et d\'équipements du foyer',
+  '9529Z': 'Réparation d\'autres biens personnels et domestiques',
 }

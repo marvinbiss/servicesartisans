@@ -232,3 +232,160 @@ export const DEFAULT_PERMISSIONS: Record<AdminRole, AdminPermissions> = {
     audit: { read: false },
   },
 }
+
+// ============================================
+// ADDITIONAL TYPES
+// ============================================
+
+// Service/Category types
+export interface AdminService {
+  id: string
+  name: string
+  slug: string
+  description?: string
+  category_id: string
+  category_name?: string
+  icon?: string
+  image?: string
+  is_active: boolean
+  provider_count?: number
+  booking_count?: number
+  created_at: string
+  updated_at?: string
+}
+
+export interface AdminCategory {
+  id: string
+  name: string
+  slug: string
+  description?: string
+  icon?: string
+  image?: string
+  is_active: boolean
+  service_count?: number
+  display_order: number
+  created_at: string
+  updated_at?: string
+}
+
+// Dashboard stats
+export interface DashboardStats {
+  users: {
+    total: number
+    active: number
+    newThisMonth: number
+    growthPercent: number
+  }
+  providers: {
+    total: number
+    verified: number
+    pending: number
+    newThisMonth: number
+  }
+  bookings: {
+    total: number
+    thisMonth: number
+    completed: number
+    canceled: number
+  }
+  revenue: {
+    total: number
+    thisMonth: number
+    growthPercent: number
+    avgPerProvider: number
+  }
+  reviews: {
+    total: number
+    avgRating: number
+    pending: number
+    flagged: number
+  }
+}
+
+// Time series for charts
+export interface TimeSeriesData {
+  date: string
+  value: number
+  label?: string
+}
+
+// Bulk action result
+export interface BulkActionResult {
+  success: number
+  failed: number
+  errors: Array<{
+    id: string
+    error: string
+  }>
+}
+
+// API response wrapper
+export interface ApiResponse<T = unknown> {
+  success: boolean
+  data?: T
+  error?: string
+  code?: string
+  message?: string
+}
+
+// Provider verification details
+export interface ProviderVerification {
+  siret: string
+  siretValid: boolean
+  siretVerified: boolean
+  siretVerifiedAt?: string
+  companyName?: string
+  trustBadge?: 'gold' | 'silver' | 'bronze' | 'none'
+  healthScore?: number
+  pappersData?: Record<string, unknown>
+}
+
+// Call/Lead tracking
+export interface AdminCall {
+  id: string
+  call_sid: string
+  from_number: string
+  to_number: string
+  artisan_id?: string
+  artisan_name?: string
+  direction: 'inbound' | 'outbound'
+  status: 'ringing' | 'in-progress' | 'completed' | 'busy' | 'no-answer' | 'failed'
+  duration: number
+  is_lead: boolean
+  lead_charged: boolean
+  lead_amount?: number
+  recording_url?: string
+  created_at: string
+}
+
+// Notification/Email log
+export interface AdminNotification {
+  id: string
+  user_id: string
+  user_email: string
+  type: 'email' | 'sms' | 'push'
+  template: string
+  subject?: string
+  status: 'pending' | 'sent' | 'failed' | 'bounced'
+  sent_at?: string
+  error?: string
+  created_at: string
+}
+
+// Settings
+export interface PlatformSettings {
+  siteName: string
+  siteUrl: string
+  supportEmail: string
+  maintenanceMode: boolean
+  allowRegistration: boolean
+  requireEmailVerification: boolean
+  defaultSubscriptionPlan: string
+  leadPrice: number
+  commissionRate: number
+  trialDays: number
+}
+
+// Export helper types
+export type SortOrder = 'asc' | 'desc'
+export type EntityType = 'user' | 'provider' | 'review' | 'payment' | 'service' | 'booking' | 'quote' | 'report'
