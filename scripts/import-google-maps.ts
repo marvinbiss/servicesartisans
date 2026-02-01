@@ -331,7 +331,7 @@ async function importGoogleMapsData() {
   for (let i = 0; i < providers.length; i += BATCH_SIZE) {
     const batch = providers.slice(i, i + BATCH_SIZE)
 
-    const { data: result, error } = await supabase
+    const { error } = await supabase
       .from('providers')
       .upsert(batch, {
         onConflict: 'source_id',

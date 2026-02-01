@@ -110,11 +110,6 @@ export default function AdminProvidersPage() {
       if (response.ok) {
         const data = await response.json()
         if (data.success) {
-          console.log(`[Admin] Fetched ${data.providers?.length || 0} providers for filter="${filter}", page=${page}, total=${data.total}`)
-          // Log verified status of each provider for debugging
-          data.providers?.forEach((p: Provider) => {
-            console.log(`  - ${p.company_name}: is_verified=${p.is_verified}, is_active=${p.is_active}`)
-          })
           setProviders(data.providers || [])
           setTotalPages(data.totalPages || 1)
           setTotal(data.total || 0)
@@ -150,8 +145,6 @@ export default function AdminProvidersPage() {
       if (action === 'suspend') updates.is_active = false
       if (action === 'activate') updates.is_active = true
 
-      console.log(`[Admin] Sending ${action} for provider ${providerId}`, updates)
-
       const response = await fetch(`/api/admin/providers/${providerId}`, {
         method: 'PATCH',
         headers: {
@@ -163,7 +156,6 @@ export default function AdminProvidersPage() {
       })
 
       const data = await response.json()
-      console.log(`[Admin] Response:`, data)
 
       if (response.ok && data.success) {
         // Show success toast
@@ -198,7 +190,6 @@ export default function AdminProvidersPage() {
   }
 
   const handleRefresh = () => {
-    console.log('[Admin] Manual refresh triggered')
     fetchProviders(true)
   }
 

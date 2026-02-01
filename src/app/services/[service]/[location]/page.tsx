@@ -70,8 +70,26 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
+interface ServiceData {
+  name: string
+}
+
+interface LocationData {
+  name: string
+  postal_code?: string
+  region_name?: string
+  region_slug?: string
+  department_name?: string
+  department_code?: string
+}
+
+interface ProviderData {
+  id: string
+  name: string
+}
+
 // JSON-LD structured data for SEO
-function generateJsonLd(service: any, location: any, providers: any[], serviceSlug: string, locationSlug: string) {
+function generateJsonLd(service: ServiceData, location: LocationData, providers: ProviderData[], serviceSlug: string, locationSlug: string) {
   const serviceSchema = {
     '@context': 'https://schema.org',
     '@type': 'Service',
@@ -195,7 +213,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
               </h3>
               <div className="flex flex-wrap gap-2">
                 {nearbyCities.length > 0 ? (
-                  nearbyCities.map((city: any) => (
+                  nearbyCities.map((city) => (
                     <Link
                       key={city.slug}
                       href={`/services/${serviceSlug}/${city.slug}`}

@@ -84,7 +84,6 @@ export default function AdminArtisanDetailPage() {
       })
       if (response.ok) {
         const data = await response.json()
-        console.log('[Detail] Fetched artisan:', data.provider)
         setArtisan(data.provider)
       } else {
         router.push('/admin/artisans')
@@ -111,7 +110,6 @@ export default function AdminArtisanDetailPage() {
         setVerifyModal(false)
         await fetchArtisan()
       } else {
-        console.error('Verify failed:', data.error)
         alert(`Erreur: ${data.error || 'Vérification échouée'}`)
       }
     } catch (error) {
@@ -134,7 +132,6 @@ export default function AdminArtisanDetailPage() {
         setSuspendModal(false)
         await fetchArtisan()
       } else {
-        console.error('Suspend failed:', data.error)
         alert(`Erreur: ${data.error || 'Action échouée'}`)
       }
     } catch (error) {
@@ -154,7 +151,6 @@ export default function AdminArtisanDetailPage() {
       if (response.ok && data.success) {
         router.push('/admin/artisans')
       } else {
-        console.error('Delete failed:', data.error)
         alert(`Erreur: ${data.error || 'Suppression échouée'}`)
       }
     } catch (error) {

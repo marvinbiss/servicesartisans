@@ -143,8 +143,6 @@ export function useRealTimeAvailability({
           filter: `artisan_id=eq.${artisanId}`,
         },
         (payload) => {
-          console.log('Real-time update received:', payload)
-
           // Handle different events
           if (payload.eventType === 'UPDATE') {
             const updatedSlot = payload.new as { id: string; date: string; is_available: boolean }

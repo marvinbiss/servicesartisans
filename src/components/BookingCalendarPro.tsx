@@ -247,7 +247,7 @@ export default function BookingCalendarPro({
     const recommendation = recommendedSlots.find((r) => r.slotId === slot.id)
     if (!recommendation) return null
 
-    const badges: Record<string, { icon: any; text: string; color: string }> = {
+    const badges: Record<string, { icon: React.ComponentType<{ className?: string }>; text: string; color: string }> = {
       popular: { icon: TrendingUp, text: 'Populaire', color: 'bg-orange-100 text-orange-700' },
       recommended: { icon: Sparkles, text: 'Recommandé', color: 'bg-blue-100 text-blue-700' },
       last_minute: { icon: Clock, text: 'Dernière minute', color: 'bg-green-100 text-green-700' },

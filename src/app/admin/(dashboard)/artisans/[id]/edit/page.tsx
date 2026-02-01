@@ -198,9 +198,6 @@ export default function EditArtisanPage() {
         hourly_rate: formData.hourly_rate ? parseFloat(formData.hourly_rate) : null,
       }
 
-      console.log('[Edit] Saving artisan:', artisanId)
-      console.log('[Edit] Payload:', payload)
-
       const response = await fetch(`/api/admin/providers/${artisanId}`, {
         method: 'PATCH',
         headers: {
@@ -212,7 +209,6 @@ export default function EditArtisanPage() {
       })
 
       const data = await response.json()
-      console.log('[Edit] Response:', data)
 
       if (response.ok && data.success) {
         setToast({ message: 'Artisan mis à jour avec succès!', type: 'success' })
@@ -224,11 +220,10 @@ export default function EditArtisanPage() {
         }, 1500)
       } else {
         const errorMsg = data.error || data.message || 'Erreur de sauvegarde'
-        console.error('[Edit] Save error:', errorMsg)
         setToast({ message: errorMsg, type: 'error' })
       }
     } catch (err) {
-      console.error('[Edit] Save exception:', err)
+      console.error('Save exception:', err)
       setToast({ message: 'Erreur de connexion au serveur', type: 'error' })
     } finally {
       setSaving(false)

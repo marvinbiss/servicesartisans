@@ -10,8 +10,6 @@ import {
   ChevronRight,
   Eye,
   RefreshCw,
-  XCircle,
-  CheckCircle,
   Calendar,
 } from 'lucide-react'
 
