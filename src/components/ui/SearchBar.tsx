@@ -421,34 +421,78 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
               </button>
 
               {/* Location suggestions dropdown */}
-              {showLocationSuggestions && locationSuggestions.length > 0 && (
+              {showLocationSuggestions && (
                 <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50">
-                  <div className="p-2 max-h-64 overflow-y-auto">
-                    {locationSuggestions.map((loc, idx) => (
-                      <button
-                        key={loc.label}
-                        type="button"
-                        onClick={() => selectLocation(loc)}
-                        className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl text-left transition-all ${
-                          idx === highlightedLocationIndex
-                            ? 'bg-blue-50 shadow-sm'
-                            : 'hover:bg-gray-50'
-                        }`}
-                      >
-                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                          idx === highlightedLocationIndex ? 'bg-blue-100' : 'bg-gray-100'
-                        }`}>
-                          <MapPin className={`w-5 h-5 ${idx === highlightedLocationIndex ? 'text-blue-600' : 'text-gray-500'}`} />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className={`font-medium truncate ${idx === highlightedLocationIndex ? 'text-blue-700' : 'text-gray-900'}`}>
-                            {loc.city}
+                  {locationSuggestions.length > 0 ? (
+                    <div className="p-2 max-h-64 overflow-y-auto">
+                      {locationSuggestions.map((loc, idx) => (
+                        <button
+                          key={loc.label}
+                          type="button"
+                          onClick={() => selectLocation(loc)}
+                          className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl text-left transition-all ${
+                            idx === highlightedLocationIndex
+                              ? 'bg-blue-50 shadow-sm'
+                              : 'hover:bg-gray-50'
+                          }`}
+                        >
+                          <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                            idx === highlightedLocationIndex ? 'bg-blue-100' : 'bg-gray-100'
+                          }`}>
+                            <MapPin className={`w-5 h-5 ${idx === highlightedLocationIndex ? 'text-blue-600' : 'text-gray-500'}`} />
                           </div>
-                          <div className="text-xs text-gray-400 truncate">{loc.context}</div>
-                        </div>
-                      </button>
-                    ))}
-                  </div>
+                          <div className="flex-1 min-w-0">
+                            <div className={`font-medium truncate ${idx === highlightedLocationIndex ? 'text-blue-700' : 'text-gray-900'}`}>
+                              {loc.city}
+                            </div>
+                            <div className="text-xs text-gray-400 truncate">{loc.context}</div>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  ) : (
+                    /* Popular cities when empty */
+                    <div className="p-3">
+                      <div className="flex items-center gap-2 text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
+                        <MapPin className="w-3 h-3" />
+                        Villes populaires
+                      </div>
+                      <div className="grid grid-cols-2 gap-1">
+                        {[
+                          { name: 'Paris', slug: 'paris' },
+                          { name: 'Lyon', slug: 'lyon' },
+                          { name: 'Marseille', slug: 'marseille' },
+                          { name: 'Toulouse', slug: 'toulouse' },
+                          { name: 'Bordeaux', slug: 'bordeaux' },
+                          { name: 'Nantes', slug: 'nantes' },
+                          { name: 'Nice', slug: 'nice' },
+                          { name: 'Lille', slug: 'lille' },
+                        ].map((city) => (
+                          <button
+                            key={city.slug}
+                            type="button"
+                            onClick={() => {
+                              setLocation(city.name)
+                              setShowLocationSuggestions(false)
+                              // Auto-submit
+                              setTimeout(() => {
+                                const params = new URLSearchParams()
+                                if (query) params.set('q', query)
+                                params.set('location', city.name)
+                                saveRecentSearch(query, city.name)
+                                setRecentSearches(getRecentSearches())
+                                router.push(`/recherche?${params.toString()}`)
+                              }, 100)
+                            }}
+                            className="flex items-center gap-2 px-3 py-2.5 hover:bg-blue-50 rounded-xl text-left transition-colors"
+                          >
+                            <MapPin className="w-4 h-4 text-blue-600" />
+                            <span className="text-sm font-medium text-gray-700">{city.name}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
