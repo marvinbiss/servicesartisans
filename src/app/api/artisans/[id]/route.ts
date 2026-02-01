@@ -8,6 +8,7 @@ import { logger } from '@/lib/logger'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 export const dynamic = 'force-dynamic'
+export const revalidate = 0 // Ensure no caching
 
 // Type pour les données artisan enrichies
 interface ArtisanDetails {
@@ -37,6 +38,7 @@ interface ArtisanDetails {
   }>
   accepts_new_clients: boolean
   intervention_zone: string | null
+  intervention_zones: string[]
   response_time: string | null
   experience_years: number | null
   certifications: string[]
@@ -92,7 +94,7 @@ export async function GET(
     const supabase = createAdminClient()
     const artisanId = params.id
 
-    console.log(`[Public API] Fetching artisan: ${artisanId}`)
+    console.log(`[Public API v2] Fetching artisan: ${artisanId} at ${new Date().toISOString()}`)
 
     // Variable pour stocker l'artisan trouvé
     let artisan: ArtisanDetails | null = null
@@ -120,6 +122,7 @@ export async function GET(
       .single()
 
     console.log(`[Public API] Provider found: ${!!provider}, Error: ${providerError?.message || 'none'}`)
+    console.log(`[Public API] DEBUG - Raw provider phone: "${provider?.phone}", Raw services count: ${provider?.provider_services?.length}`)
 
     if (provider && !providerError) {
       console.log(`[Public API] Provider data:`, {
@@ -128,6 +131,7 @@ export async function GET(
         description: provider.meta_description?.substring(0, 50),
         phone: provider.phone,
         is_active: provider.is_active,
+        services_raw: provider.provider_services?.map((ps: { service?: { name: string } }) => ps.service?.name),
       })
       source = 'provider'
 
@@ -152,6 +156,18 @@ export async function GET(
       const services = provider.provider_services?.map((ps: { service?: { name: string } }) =>
         ps.service?.name
       ).filter(Boolean) || []
+
+      // Extraire les zones d'intervention
+      const interventionZones = provider.provider_locations?.map((pl: {
+        location?: { name: string; postal_code?: string }
+      }) => {
+        if (pl.location?.name) {
+          return pl.location.postal_code
+            ? `${pl.location.name} (${pl.location.postal_code})`
+            : pl.location.name
+        }
+        return null
+      }).filter(Boolean) || []
 
       // Transformer en format ArtisanDetails
       artisan = {
@@ -192,6 +208,7 @@ export async function GET(
         intervention_zone: provider.provider_locations?.[0]?.radius_km
           ? `${provider.provider_locations[0].radius_km} km`
           : '20 km',
+        intervention_zones: interventionZones,
         response_time: '< 2h',
         experience_years: provider.creation_date
           ? new Date().getFullYear() - new Date(provider.creation_date).getFullYear()
@@ -298,6 +315,7 @@ export async function GET(
           service_prices: [],
           accepts_new_clients: true,
           intervention_zone: '20 km',
+          intervention_zones: [],
           response_time: '< 2h',
           experience_years: null,
           certifications: [],

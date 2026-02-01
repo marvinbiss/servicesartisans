@@ -5,25 +5,12 @@ import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
   Star, MapPin, Phone, Mail, Clock, ChevronLeft, ChevronRight,
-  CheckCircle, Shield, Award, Calendar, Wrench, Euro, Navigation,
+  CheckCircle, Shield, Award, Wrench, Euro, Navigation,
   MessageCircle, Heart, Share2, AlertCircle, Camera, CreditCard,
   Banknote, Users, TrendingUp, ChevronDown, ChevronUp, Zap,
-  FileText, Home, BadgeCheck, Timer, ThumbsUp, ExternalLink,
-  Globe, Building2
+  FileText, BadgeCheck, Timer, ThumbsUp, ExternalLink,
+  Globe, Building2, Calendar
 } from 'lucide-react'
-
-interface TimeSlot {
-  time: string
-  available: boolean
-}
-
-interface DayAvailability {
-  date: string
-  dayName: string
-  dayNumber: number
-  month: string
-  slots: TimeSlot[]
-}
 
 interface ServicePrice {
   name: string
@@ -62,6 +49,7 @@ interface Artisan {
   service_prices: ServicePrice[]
   accepts_new_clients?: boolean
   intervention_zone?: string
+  intervention_zones?: string[] // Liste des zones d'intervention
   response_time?: string
   experience_years?: number
   certifications?: string[]
@@ -146,6 +134,9 @@ const DEMO_ARTISANS: Record<string, Artisan> = {
     creation_date: '1985-03-15',
     employee_count: 3,
     phone: '01 23 45 67 89',
+    latitude: 48.8827,
+    longitude: 2.4024,
+    intervention_zones: ['Le Pré-Saint-Gervais (93310)', 'Pantin (93500)', 'Les Lilas (93260)', 'Romainville (93230)', 'Bobigny (93000)'],
     faq: [
       { question: 'Intervenez-vous le week-end ?', answer: 'Oui, nous intervenons 7j/7 pour les urgences. Les interventions le week-end peuvent faire l\'objet d\'une majoration de 30%.' },
       { question: 'Le devis est-il gratuit ?', answer: 'Oui, le devis est toujours gratuit et sans engagement. Pour les interventions a distance de plus de 20km, des frais de deplacement peuvent s\'appliquer.' },
@@ -187,6 +178,9 @@ const DEMO_ARTISANS: Record<string, Artisan> = {
     member_since: '2020',
     response_rate: 95,
     bookings_this_week: 8,
+    latitude: 48.8854,
+    longitude: 2.3996,
+    intervention_zones: ['Le Pré-Saint-Gervais (93310)', 'Paris 19e', 'Paris 20e'],
     faq: [],
   },
 }
@@ -212,10 +206,6 @@ export default function ArtisanPage() {
 
   const [artisan, setArtisan] = useState<Artisan | null>(null)
   const [reviews, setReviews] = useState<Review[]>([])
-  const [availability, setAvailability] = useState<DayAvailability[]>([])
-  const [selectedDate, setSelectedDate] = useState<string | null>(null)
-  const [selectedTime, setSelectedTime] = useState<string | null>(null)
-  const [calendarOffset, setCalendarOffset] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
   const [isFavorite, setIsFavorite] = useState(false)
   const [activeTab, setActiveTab] = useState<'infos' | 'tarifs' | 'photos' | 'avis'>('infos')
@@ -225,7 +215,6 @@ export default function ArtisanPage() {
 
   useEffect(() => {
     loadArtisan()
-    loadAvailability()
   }, [artisanId])
 
   const loadArtisan = async () => {
@@ -263,50 +252,6 @@ export default function ArtisanPage() {
       setDataSource('demo')
     }
     setIsLoading(false)
-  }
-
-  const loadAvailability = async (startDate?: Date) => {
-    try {
-      const params = new URLSearchParams({
-        artisanIds: artisanId,
-        days: '7',
-      })
-      if (startDate) {
-        params.set('startDate', startDate.toISOString().split('T')[0])
-      }
-
-      const response = await fetch(`/api/availability/slots?${params}`)
-      if (response.ok) {
-        const data = await response.json()
-        if (data.availability[artisanId]) {
-          setAvailability(data.availability[artisanId])
-        }
-      }
-    } catch (error) {
-      console.error('Failed to load availability:', error)
-    }
-  }
-
-  const loadMoreDays = async (direction: 'prev' | 'next') => {
-    const newOffset = direction === 'next' ? calendarOffset + 7 : calendarOffset - 7
-    if (newOffset < 0) return
-
-    const startDate = new Date()
-    startDate.setDate(startDate.getDate() + newOffset)
-
-    await loadAvailability(startDate)
-    setCalendarOffset(newOffset)
-  }
-
-  const handleSlotSelect = (date: string, time: string) => {
-    setSelectedDate(date)
-    setSelectedTime(time)
-  }
-
-  const handleBooking = () => {
-    if (selectedDate && selectedTime) {
-      router.push(`/booking?artisanId=${artisanId}&date=${selectedDate}&time=${selectedTime}`)
-    }
   }
 
   const displayName = artisan?.is_center
@@ -681,22 +626,53 @@ export default function ArtisanPage() {
 
                     {/* Location */}
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-3">Zone d'intervention</h3>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-3">Zone d&apos;intervention</h3>
                       <div className="bg-gray-100 rounded-xl p-4">
                         <div className="flex items-start gap-3 mb-4">
                           <MapPin className="w-5 h-5 text-blue-600 mt-0.5" />
                           <div>
                             <p className="font-medium text-gray-900">{artisan.address}</p>
                             <p className="text-gray-600">{artisan.postal_code} {artisan.city}</p>
+                            {artisan.intervention_zone && (
+                              <p className="text-sm text-blue-600 mt-1">Rayon d&apos;intervention : {artisan.intervention_zone}</p>
+                            )}
                           </div>
                         </div>
-                        <div className="h-48 bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg flex items-center justify-center">
-                          <div className="text-center">
-                            <Navigation className="w-8 h-8 text-blue-500 mx-auto mb-2" />
-                            <p className="text-blue-700 font-medium">Rayon d'intervention : {artisan.intervention_zone}</p>
-                            <p className="text-blue-600 text-sm">Carte interactive bientot disponible</p>
+
+                        {/* OpenStreetMap */}
+                        {artisan.latitude && artisan.longitude ? (
+                          <div className="h-64 rounded-lg overflow-hidden">
+                            <iframe
+                              width="100%"
+                              height="100%"
+                              style={{ border: 0 }}
+                              loading="lazy"
+                              src={`https://www.openstreetmap.org/export/embed.html?bbox=${artisan.longitude - 0.05},${artisan.latitude - 0.03},${artisan.longitude + 0.05},${artisan.latitude + 0.03}&layer=mapnik&marker=${artisan.latitude},${artisan.longitude}`}
+                            />
                           </div>
-                        </div>
+                        ) : (
+                          <div className="h-48 bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg flex items-center justify-center">
+                            <div className="text-center">
+                              <Navigation className="w-8 h-8 text-blue-500 mx-auto mb-2" />
+                              <p className="text-blue-700 font-medium">{artisan.city}</p>
+                              <p className="text-blue-600 text-sm">{artisan.postal_code}</p>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Zones d'intervention */}
+                        {artisan.intervention_zones && artisan.intervention_zones.length > 0 && (
+                          <div className="mt-4">
+                            <p className="text-sm font-medium text-gray-700 mb-2">Villes desservies :</p>
+                            <div className="flex flex-wrap gap-2">
+                              {artisan.intervention_zones.map((zone, idx) => (
+                                <span key={idx} className="px-3 py-1 bg-white text-gray-700 rounded-full text-sm border">
+                                  {zone}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
 
@@ -968,174 +944,75 @@ export default function ArtisanPage() {
             </div>
           </div>
 
-          {/* Sidebar - Booking */}
+          {/* Sidebar - Contact */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-xl shadow-sm p-6 sticky top-20">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Prendre rendez-vous</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Contacter cet artisan</h3>
 
               {artisan.accepts_new_clients === false ? (
                 <div className="text-center py-6">
                   <AlertCircle className="w-12 h-12 text-amber-500 mx-auto mb-3" />
-                  <p className="text-gray-600 mb-4">Cet artisan n'accepte pas de nouveaux clients pour le moment.</p>
+                  <p className="text-gray-600 mb-4">Cet artisan n&apos;accepte pas de nouveaux clients pour le moment.</p>
                   <button className="w-full py-3 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-colors">
                     Etre notifie des disponibilites
                   </button>
                 </div>
-              ) : availability.length === 0 || !availability.some(day => day.slots.length > 0) ? (
-                /* Pas de calendrier si aucune disponibilite configuree */
-                <div className="text-center py-6">
-                  <Calendar className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                  <p className="text-gray-600 mb-2 font-medium">Calendrier non configure</p>
-                  <p className="text-gray-500 text-sm mb-4">Cet artisan n'a pas encore configure ses disponibilites en ligne.</p>
-
-                  {/* Contact Alternative */}
-                  <div className="space-y-2">
-                    {artisan.phone ? (
-                      <a
-                        href={`tel:${artisan.phone}`}
-                        className="w-full flex items-center justify-center gap-2 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors"
-                      >
-                        <Phone className="w-5 h-5" />
-                        Appeler pour RDV
-                      </a>
-                    ) : (
-                      <Link
-                        href={`/devis?artisan=${artisanId}`}
-                        className="w-full flex items-center justify-center gap-2 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors"
-                      >
-                        <FileText className="w-5 h-5" />
-                        Demander un devis
-                      </Link>
-                    )}
-                    <button className="w-full flex items-center justify-center gap-2 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
-                      <MessageCircle className="w-4 h-4" />
-                      Envoyer un message
-                    </button>
-                  </div>
-                </div>
               ) : (
-                <>
-                  {/* Calendar Navigation */}
-                  <div className="flex items-center justify-between mb-4">
-                    <button
-                      onClick={() => loadMoreDays('prev')}
-                      disabled={calendarOffset === 0}
-                      className="p-2 hover:bg-gray-100 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                <div className="space-y-3">
+                  {/* Primary CTA */}
+                  {artisan.phone ? (
+                    <a
+                      href={`tel:${artisan.phone}`}
+                      className="w-full flex items-center justify-center gap-2 py-3.5 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/30"
                     >
-                      <ChevronLeft className="w-5 h-5" />
-                    </button>
-                    <span className="font-medium text-gray-700">
-                      {availability[0]?.month} {new Date().getFullYear()}
-                    </span>
-                    <button onClick={() => loadMoreDays('next')} className="p-2 hover:bg-gray-100 rounded-lg">
-                      <ChevronRight className="w-5 h-5" />
-                    </button>
-                  </div>
-
-                  {/* Calendar Grid */}
-                  <div className="grid grid-cols-7 gap-1 mb-4">
-                    {availability.slice(0, 7).map((day, index) => {
-                      const hasSlots = day.slots.length > 0
-                      const isSelected = selectedDate === day.date
-
-                      return (
-                        <button
-                          key={index}
-                          onClick={() => hasSlots && setSelectedDate(day.date)}
-                          disabled={!hasSlots}
-                          className={`py-2 rounded-lg text-center transition-all ${
-                            isSelected
-                              ? 'bg-blue-600 text-white shadow-lg scale-105'
-                              : hasSlots
-                              ? 'hover:bg-blue-50 text-gray-700 border border-transparent hover:border-blue-200'
-                              : 'text-gray-300 cursor-not-allowed'
-                          }`}
-                        >
-                          <div className="text-xs">{day.dayName.slice(0, 3)}</div>
-                          <div className="font-semibold">{day.dayNumber}</div>
-                          {hasSlots && !isSelected && (
-                            <div className="w-1.5 h-1.5 bg-green-500 rounded-full mx-auto mt-1" />
-                          )}
-                        </button>
-                      )
-                    })}
-                  </div>
-
-                  {/* Time Slots */}
-                  {selectedDate && (
-                    <div className="mb-4">
-                      <h4 className="text-sm font-medium text-gray-700 mb-2">Creneaux disponibles</h4>
-                      <div className="grid grid-cols-3 gap-2">
-                        {availability
-                          .find((d) => d.date === selectedDate)
-                          ?.slots.map((slot, index) => (
-                            <button
-                              key={index}
-                              onClick={() => handleSlotSelect(selectedDate, slot.time)}
-                              className={`py-2.5 rounded-lg text-sm font-medium transition-all ${
-                                selectedTime === slot.time
-                                  ? 'bg-blue-600 text-white shadow-lg'
-                                  : 'bg-blue-50 text-blue-600 hover:bg-blue-100'
-                              }`}
-                            >
-                              {slot.time}
-                            </button>
-                          ))}
-                      </div>
-                    </div>
+                      <Phone className="w-5 h-5" />
+                      Appeler maintenant
+                    </a>
+                  ) : (
+                    <Link
+                      href={`/devis?artisan=${artisanId}`}
+                      className="w-full flex items-center justify-center gap-2 py-3.5 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/30"
+                    >
+                      <FileText className="w-5 h-5" />
+                      Demander un devis gratuit
+                    </Link>
                   )}
 
-                  {/* Book Button */}
-                  <button
-                    onClick={handleBooking}
-                    disabled={!selectedDate || !selectedTime}
-                    className="w-full py-3.5 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed shadow-lg shadow-blue-600/30 disabled:shadow-none"
+                  {/* Secondary CTAs */}
+                  <Link
+                    href={`/devis?artisan=${artisanId}`}
+                    className="w-full flex items-center justify-center gap-2 py-2.5 border-2 border-blue-600 text-blue-600 rounded-lg font-medium hover:bg-blue-50 transition-colors"
                   >
-                    {selectedDate && selectedTime ? 'Confirmer le rendez-vous' : 'Selectionnez un creneau'}
+                    <FileText className="w-4 h-4" />
+                    Demander un devis
+                  </Link>
+
+                  <button className="w-full flex items-center justify-center gap-2 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
+                    <MessageCircle className="w-4 h-4" />
+                    Envoyer un message
                   </button>
 
-                  {selectedDate && selectedTime && (
-                    <p className="text-center text-sm text-gray-500 mt-2">
-                      {new Date(selectedDate).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })} a {selectedTime}
-                    </p>
+                  {/* Phone display */}
+                  {artisan.phone && (
+                    <div className="pt-3 border-t text-center">
+                      <p className="text-sm text-gray-500 mb-1">Telephone</p>
+                      <a href={`tel:${artisan.phone}`} className="text-lg font-semibold text-gray-900 hover:text-blue-600">
+                        {artisan.phone}
+                      </a>
+                    </div>
                   )}
 
-                  {/* Contact Alternative */}
-                  <div className="mt-6 pt-6 border-t">
-                    <p className="text-sm text-gray-500 text-center mb-3">Ou contactez directement</p>
-                    <div className="space-y-2">
-                      {artisan.phone ? (
-                        <a
-                          href={`tel:${artisan.phone}`}
-                          className="w-full flex items-center justify-center gap-2 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
-                        >
-                          <Phone className="w-4 h-4" />
-                          Appeler
-                        </a>
-                      ) : (
-                        <button className="w-full flex items-center justify-center gap-2 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
-                          <Phone className="w-4 h-4" />
-                          Appeler
-                        </button>
-                      )}
-                      <button className="w-full flex items-center justify-center gap-2 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
-                        <MessageCircle className="w-4 h-4" />
-                        Envoyer un message
-                      </button>
-                    </div>
-                  </div>
-
                   {/* Guarantee */}
-                  <div className="mt-6 pt-6 border-t">
+                  <div className="pt-4 border-t">
                     <div className="flex items-start gap-3 text-sm text-gray-600">
                       <Shield className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
                       <p>
-                        <strong className="text-gray-900">Reservation securisee</strong><br />
-                        Annulation gratuite jusqu'a 24h avant le rendez-vous
+                        <strong className="text-gray-900">Devis gratuit</strong><br />
+                        Sans engagement, reponse sous 24h
                       </p>
                     </div>
                   </div>
-                </>
+                </div>
               )}
             </div>
           </div>
@@ -1152,12 +1029,21 @@ export default function ArtisanPage() {
               {artisan.hourly_rate && <span className="text-sm font-normal text-gray-500">/h</span>}
             </p>
           </div>
-          <button
-            onClick={() => document.querySelector('.lg\\:col-span-1')?.scrollIntoView({ behavior: 'smooth' })}
-            className="flex-1 py-3.5 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors shadow-lg"
-          >
-            Reserver
-          </button>
+          {artisan.phone ? (
+            <a
+              href={`tel:${artisan.phone}`}
+              className="flex-1 py-3.5 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors shadow-lg text-center"
+            >
+              Appeler
+            </a>
+          ) : (
+            <Link
+              href={`/devis?artisan=${artisanId}`}
+              className="flex-1 py-3.5 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors shadow-lg text-center"
+            >
+              Devis gratuit
+            </Link>
+          )}
         </div>
       </div>
     </div>

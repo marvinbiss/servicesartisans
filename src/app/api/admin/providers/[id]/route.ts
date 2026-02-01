@@ -300,6 +300,77 @@ export async function PATCH(
       }
     }
 
+    // Step 6b: Update zones/locations if provided
+    if (body.zones && Array.isArray(body.zones)) {
+      log('INFO', 'Step 6b: Updating zones', { zones: body.zones })
+      try {
+        // Delete existing provider_locations
+        await supabase
+          .from('provider_locations')
+          .delete()
+          .eq('provider_id', providerId)
+
+        // For each zone, find or create the location and link it
+        for (const zone of body.zones) {
+          if (!zone || typeof zone !== 'string') continue
+
+          // Parse zone format: "City Name (postal_code)" or just "City Name"
+          const match = zone.match(/^(.+?)(?:\s*\((\d{5})\))?$/)
+          if (!match) continue
+
+          const locationName = match[1].trim()
+          const postalCode = match[2] || null
+
+          // Try to find existing location
+          let locationQuery = supabase
+            .from('locations')
+            .select('id')
+            .ilike('name', locationName)
+
+          if (postalCode) {
+            locationQuery = locationQuery.eq('postal_code', postalCode)
+          }
+
+          const { data: existingLocation } = await locationQuery.single()
+          let locationId = existingLocation?.id
+
+          // If not found, create new location
+          if (!locationId) {
+            const { data: newLocation, error: createError } = await supabase
+              .from('locations')
+              .insert({
+                name: locationName,
+                postal_code: postalCode,
+                is_active: true,
+              })
+              .select('id')
+              .single()
+
+            if (createError) {
+              log('WARN', `Failed to create location: ${zone}`, createError)
+              continue
+            }
+            locationId = newLocation?.id
+          }
+
+          // Link provider to location
+          if (locationId) {
+            await supabase
+              .from('provider_locations')
+              .insert({
+                provider_id: providerId,
+                location_id: locationId,
+                is_primary: body.zones.indexOf(zone) === 0,
+                radius_km: 20, // Default radius
+              })
+          }
+        }
+        log('INFO', 'Zones updated successfully')
+      } catch (zonesError) {
+        log('WARN', 'Zones update failed but main update succeeded', zonesError)
+      }
+    }
+
     // Step 7: Log audit action
     try {
       await logAdminAction(authResult.admin.id, 'provider.update', 'provider', providerId, updateData)
