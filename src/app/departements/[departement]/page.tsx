@@ -1,8 +1,13 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { MapPin, ChevronRight, ArrowRight, Users, Building, Shield, Star, Clock } from 'lucide-react'
+import { MapPin, ChevronRight, ArrowRight, Users, Building, Shield, Star, Clock, Wrench, Zap, Key, Flame, PaintBucket, Hammer, Grid3X3, Home, TreeDeciduous, Square, Wind, Blocks } from 'lucide-react'
 import { departements, getDepartementBySlug, getVillesByDepartement, services } from '@/lib/data/france'
+
+// Map des icônes
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  Wrench, Zap, Key, Flame, PaintBucket, Hammer, Grid3X3, Home, TreeDeciduous, Square, Wind, Blocks
+}
 
 // Générer les pages statiques pour tous les départements
 export function generateStaticParams() {
@@ -112,21 +117,26 @@ export default async function DepartementPage({ params }: PageProps) {
             Trouver un artisan dans le {dept.name}
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            {services.slice(0, 12).map((service) => (
-              <Link
-                key={service.slug}
-                href={`/services/${service.slug}/${villesDuDepartement[0]?.slug || dept.chefLieu.toLowerCase().replace(/\s+/g, '-')}`}
-                className="bg-gray-50 hover:bg-blue-50 rounded-xl p-4 text-center transition-colors group border border-gray-100 hover:border-blue-200"
-              >
-                <div className="text-3xl mb-2">{service.emoji}</div>
-                <span className="font-medium text-gray-900 group-hover:text-blue-600 block">
-                  {service.name}
-                </span>
-                <span className="block text-xs text-gray-500 mt-1">
-                  dans le {dept.code}
-                </span>
-              </Link>
-            ))}
+            {services.slice(0, 12).map((service) => {
+              const IconComponent = iconMap[service.icon] || Wrench
+              return (
+                <Link
+                  key={service.slug}
+                  href={`/services/${service.slug}/${villesDuDepartement[0]?.slug || dept.chefLieu.toLowerCase().replace(/\s+/g, '-')}`}
+                  className="bg-white hover:bg-blue-50 rounded-xl p-4 text-center transition-all duration-300 group border border-gray-100 hover:border-blue-200 hover:shadow-md hover:-translate-y-0.5"
+                >
+                  <div className={`w-12 h-12 mx-auto mb-3 rounded-xl bg-gradient-to-br ${service.color} flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300`}>
+                    <IconComponent className="w-6 h-6 text-white" />
+                  </div>
+                  <span className="font-medium text-gray-900 group-hover:text-blue-600 block">
+                    {service.name}
+                  </span>
+                  <span className="block text-xs text-gray-500 mt-1">
+                    dans le {dept.code}
+                  </span>
+                </Link>
+              )
+            })}
           </div>
         </div>
       </section>

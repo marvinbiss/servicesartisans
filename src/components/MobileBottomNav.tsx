@@ -68,7 +68,7 @@ export default function MobileBottomNav() {
   }
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 md:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-gray-200/80 z-50 md:hidden shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
       <div className="flex items-center justify-around px-1 pb-safe">
         {navItems.map((item) => {
           const active = isActive(item)
@@ -78,16 +78,16 @@ export default function MobileBottomNav() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-col items-center justify-center min-w-[60px] min-h-[56px] px-2 py-2 rounded-lg transition-all ${
+              className={`flex flex-col items-center justify-center min-w-[60px] min-h-[56px] px-2 py-2 rounded-xl transition-all duration-300 touch-manipulation active:scale-95 ${
                 item.urgent
                   ? 'text-red-600'
                   : active
-                  ? 'text-blue-600 bg-blue-50'
+                  ? 'text-blue-600 bg-blue-50/80'
                   : 'text-gray-500 active:bg-gray-100'
               }`}
             >
-              <div className="relative">
-                <Icon className={`w-6 h-6 ${active && !item.urgent ? 'stroke-[2.5]' : ''}`} />
+              <div className={`relative transition-transform duration-300 ${active ? 'scale-110' : ''}`}>
+                <Icon className={`w-6 h-6 transition-all duration-300 ${active && !item.urgent ? 'stroke-[2.5]' : ''}`} />
                 {item.urgent && (
                   <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
@@ -95,9 +95,12 @@ export default function MobileBottomNav() {
                   </span>
                 )}
               </div>
-              <span className={`text-[11px] mt-1 ${active || item.urgent ? 'font-semibold' : 'font-medium'}`}>
+              <span className={`text-[11px] mt-1 transition-all duration-300 ${active || item.urgent ? 'font-semibold' : 'font-medium'}`}>
                 {item.label}
               </span>
+              {active && !item.urgent && (
+                <span className="absolute bottom-1 w-1 h-1 bg-blue-600 rounded-full" />
+              )}
             </Link>
           )
         })}

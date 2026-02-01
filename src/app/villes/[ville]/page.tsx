@@ -1,10 +1,15 @@
 import Link from 'next/link'
-import { MapPin, Users, Building, Star, Phone, ArrowRight, Shield, Clock } from 'lucide-react'
+import { MapPin, Users, Building, Star, Phone, ArrowRight, Shield, Clock, Wrench, Zap, Key, Flame, PaintBucket, Hammer, Grid3X3, Home, TreeDeciduous, Square, Wind, Blocks } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
 import { popularRegions } from '@/lib/constants/navigation'
 import { villes, getVilleBySlug, services } from '@/lib/data/france'
 import { Metadata } from 'next'
+
+// Map des icônes
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  Wrench, Zap, Key, Flame, PaintBucket, Hammer, Grid3X3, Home, TreeDeciduous, Square, Wind, Blocks
+}
 
 // Générer les pages statiques pour toutes les villes
 export function generateStaticParams() {
@@ -118,19 +123,24 @@ export default function VillePage({ params }: { params: { ville: string } }) {
             Trouver un artisan à {ville.name}
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {services.map((service) => (
-              <Link
-                key={service.slug}
-                href={`/services/${service.slug}/${params.ville}`}
-                className="bg-white rounded-xl shadow-sm p-6 text-center hover:shadow-md transition-shadow group"
-              >
-                <div className="text-4xl mb-3">{service.emoji}</div>
-                <h3 className="font-medium text-gray-900 group-hover:text-blue-600">
-                  {service.name}
-                </h3>
-                <p className="text-sm text-gray-500 mt-1">à {ville.name}</p>
-              </Link>
-            ))}
+            {services.map((service) => {
+              const IconComponent = iconMap[service.icon] || Wrench
+              return (
+                <Link
+                  key={service.slug}
+                  href={`/services/${service.slug}/${params.ville}`}
+                  className="bg-white rounded-xl shadow-sm p-6 text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group border border-gray-100"
+                >
+                  <div className={`w-14 h-14 mx-auto mb-3 rounded-xl bg-gradient-to-br ${service.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                    <IconComponent className="w-7 h-7 text-white" />
+                  </div>
+                  <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                    {service.name}
+                  </h3>
+                  <p className="text-sm text-gray-500 mt-1">à {ville.name}</p>
+                </Link>
+              )
+            })}
           </div>
         </section>
 

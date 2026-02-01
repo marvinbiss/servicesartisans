@@ -1,13 +1,13 @@
 'use client'
 
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import {
   Search, Menu, X, ChevronDown, MapPin, Wrench, Zap, Key, Flame,
   PaintBucket, Home, Hammer, HardHat, Wind, Droplets, TreeDeciduous,
   ShieldCheck, Sparkles, Star, Clock, Phone, ArrowRight, Users, Award
 } from 'lucide-react'
-import { useState, useRef, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useMobileMenu } from '@/contexts/MobileMenuContext'
 
 // Services populaires organisés par catégorie
@@ -82,38 +82,37 @@ const services = serviceCategories.flatMap(cat => cat.services)
 
 export default function Header() {
   const router = useRouter()
+  const pathname = usePathname()
   const { isMenuOpen, setIsMenuOpen } = useMobileMenu()
   const [searchQuery, setSearchQuery] = useState('')
-  const [activeMenu, setActiveMenu] = useState<'services' | 'villes' | null>(null)
-  const menuRef = useRef<HTMLDivElement>(null)
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const [mounted, setMounted] = useState(false)
+  const [openMenu, setOpenMenu] = useState<'services' | 'villes' | null>(null)
 
-  // Fermer le menu quand on clique en dehors
+  // Wait for client-side mount
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setActiveMenu(null)
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
+    setMounted(true)
   }, [])
 
-  const handleMouseEnter = (menu: 'services' | 'villes') => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current)
-    setActiveMenu(menu)
-  }
+  // Close all menus on route change
+  useEffect(() => {
+    setOpenMenu(null)
+    setIsMenuOpen(false)
+  }, [pathname, setIsMenuOpen])
 
-  const handleMouseLeave = () => {
-    timeoutRef.current = setTimeout(() => {
-      setActiveMenu(null)
-    }, 150)
-  }
+  // Close menu when clicking outside
+  useEffect(() => {
+    if (!mounted) return
 
-  const handleClick = (menu: 'services' | 'villes') => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current)
-    setActiveMenu(activeMenu === menu ? null : menu)
-  }
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement
+      if (!target.closest('[data-menu-trigger]') && !target.closest('[data-menu-content]')) {
+        setOpenMenu(null)
+      }
+    }
+
+    document.addEventListener('click', handleClick, true)
+    return () => document.removeEventListener('click', handleClick, true)
+  }, [mounted])
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -122,8 +121,16 @@ export default function Header() {
     }
   }
 
+  const toggleMenu = (menu: 'services' | 'villes') => {
+    setOpenMenu(current => current === menu ? null : menu)
+  }
+
+  const closeMenus = () => {
+    setOpenMenu(null)
+  }
+
   return (
-    <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
       {/* Top bar premium */}
       <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-blue-900 text-white py-2">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between text-sm">
@@ -171,7 +178,7 @@ export default function Header() {
             </div>
           </Link>
 
-          {/* Search Bar - Prominent */}
+          {/* Search Bar */}
           <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-lg mx-6">
             <div className="relative w-full">
               <input
@@ -192,42 +199,39 @@ export default function Header() {
           </form>
 
           {/* Navigation Desktop */}
-          <nav className="hidden lg:flex items-center space-x-1" ref={menuRef}>
-            {/* Megamenu Services */}
-            <div
-              className="relative"
-              onMouseEnter={() => handleMouseEnter('services')}
-              onMouseLeave={handleMouseLeave}
-            >
+          <nav className="hidden lg:flex items-center space-x-1">
+            {/* Services Dropdown */}
+            <div className="relative">
               <button
-                onClick={() => handleClick('services')}
+                type="button"
+                data-menu-trigger="services"
+                onClick={() => toggleMenu('services')}
                 className={`flex items-center gap-1.5 px-4 py-2 rounded-lg font-medium transition-all ${
-                  activeMenu === 'services'
+                  openMenu === 'services'
                     ? 'text-blue-600 bg-blue-50'
                     : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
                 }`}
               >
                 Services
-                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${activeMenu === 'services' ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${openMenu === 'services' ? 'rotate-180' : ''}`} />
               </button>
 
-              {/* Megamenu Services Premium */}
-              {activeMenu === 'services' && (
+              {/* Services Megamenu */}
+              {mounted && openMenu === 'services' && (
                 <div
-                  className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[900px] bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden"
-                  style={{ animation: 'fadeInDown 0.2s ease-out' }}
+                  data-menu-content="services"
+                  className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-[900px] bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden"
+                  style={{ zIndex: 9999 }}
                 >
-                  {/* Header du menu */}
+                  {/* Header */}
                   <div className="bg-gradient-to-r from-slate-900 to-blue-900 px-6 py-4 flex items-center justify-between">
                     <div>
                       <h3 className="text-white font-semibold text-lg">Nos services artisans</h3>
                       <p className="text-slate-300 text-sm">Plus de 50 métiers disponibles</p>
                     </div>
-                    <div className="flex items-center gap-4">
-                      <div className="flex items-center gap-2 text-sm text-white/80">
-                        <Users className="w-4 h-4 text-amber-400" />
-                        120 000+ artisans
-                      </div>
+                    <div className="flex items-center gap-2 text-sm text-white/80">
+                      <Users className="w-4 h-4 text-amber-400" />
+                      120 000+ artisans
                     </div>
                   </div>
 
@@ -238,12 +242,8 @@ export default function Header() {
                         const isUrgent = cat.color === 'red'
                         return (
                           <div key={cat.category} className="space-y-3">
-                            <div className={`flex items-center gap-2 pb-2 border-b ${
-                              isUrgent ? 'border-red-200' : 'border-gray-100'
-                            }`}>
-                              <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                                isUrgent ? 'bg-red-100' : 'bg-blue-50'
-                              }`}>
+                            <div className={`flex items-center gap-2 pb-2 border-b ${isUrgent ? 'border-red-200' : 'border-gray-100'}`}>
+                              <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${isUrgent ? 'bg-red-100' : 'bg-blue-50'}`}>
                                 <CatIcon className={`w-4 h-4 ${isUrgent ? 'text-red-600' : 'text-blue-600'}`} />
                               </div>
                               <span className={`font-semibold text-sm ${isUrgent ? 'text-red-700' : 'text-gray-900'}`}>
@@ -257,19 +257,15 @@ export default function Header() {
                                   <Link
                                     key={service.slug}
                                     href={`/services/${service.slug}`}
-                                    className={`flex items-center gap-2 px-2 py-2 rounded-lg transition-all group ${
-                                      isUrgent
-                                        ? 'hover:bg-red-50'
-                                        : 'hover:bg-blue-50'
+                                    onClick={closeMenus}
+                                    className={`flex items-center gap-2 px-3 py-2.5 rounded-xl transition-colors group/link ${
+                                      isUrgent ? 'hover:bg-red-50' : 'hover:bg-blue-50'
                                     }`}
-                                    onClick={() => setActiveMenu(null)}
                                   >
-                                    <Icon className={`w-4 h-4 ${isUrgent ? 'text-red-500' : 'text-gray-400 group-hover:text-blue-600'}`} />
+                                    <Icon className={`w-4 h-4 ${isUrgent ? 'text-red-500' : 'text-gray-400 group-hover/link:text-blue-600'}`} />
                                     <div className="flex-1">
                                       <div className={`text-sm font-medium ${
-                                        isUrgent
-                                          ? 'text-gray-900 group-hover:text-red-700'
-                                          : 'text-gray-700 group-hover:text-blue-700'
+                                        isUrgent ? 'text-gray-900 group-hover/link:text-red-700' : 'text-gray-700 group-hover/link:text-blue-700'
                                       }`}>
                                         {service.name}
                                       </div>
@@ -284,20 +280,20 @@ export default function Header() {
                       })}
                     </div>
 
-                    {/* Footer du menu */}
+                    {/* Footer */}
                     <div className="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
                       <Link
                         href="/services"
+                        onClick={closeMenus}
                         className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold"
-                        onClick={() => setActiveMenu(null)}
                       >
                         Voir tous les services
                         <ArrowRight className="w-4 h-4" />
                       </Link>
                       <Link
                         href="/urgence"
+                        onClick={closeMenus}
                         className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 font-medium transition-colors"
-                        onClick={() => setActiveMenu(null)}
                       >
                         <Phone className="w-4 h-4" />
                         Urgence ? Artisan disponible maintenant
@@ -308,29 +304,28 @@ export default function Header() {
               )}
             </div>
 
-            {/* Megamenu Villes */}
-            <div
-              className="relative"
-              onMouseEnter={() => handleMouseEnter('villes')}
-              onMouseLeave={handleMouseLeave}
-            >
+            {/* Villes Dropdown */}
+            <div className="relative">
               <button
-                onClick={() => handleClick('villes')}
+                type="button"
+                data-menu-trigger="villes"
+                onClick={() => toggleMenu('villes')}
                 className={`flex items-center gap-1.5 px-4 py-2 rounded-lg font-medium transition-all ${
-                  activeMenu === 'villes'
+                  openMenu === 'villes'
                     ? 'text-blue-600 bg-blue-50'
                     : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
                 }`}
               >
                 Villes
-                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${activeMenu === 'villes' ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${openMenu === 'villes' ? 'rotate-180' : ''}`} />
               </button>
 
-              {/* Megamenu Villes Premium */}
-              {activeMenu === 'villes' && (
+              {/* Villes Megamenu */}
+              {mounted && openMenu === 'villes' && (
                 <div
-                  className="absolute top-full right-0 mt-2 w-[700px] bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden"
-                  style={{ animation: 'fadeInDown 0.2s ease-out' }}
+                  data-menu-content="villes"
+                  className="absolute top-full right-0 mt-1 w-[700px] bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden"
+                  style={{ zIndex: 9999 }}
                 >
                   {/* Header */}
                   <div className="bg-gradient-to-r from-slate-900 to-blue-900 px-6 py-4">
@@ -339,27 +334,27 @@ export default function Header() {
                   </div>
 
                   <div className="p-6">
-                    {/* Navigation rapide */}
+                    {/* Quick links */}
                     <div className="flex gap-3 mb-6">
                       <Link
                         href="/regions"
+                        onClick={closeMenus}
                         className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors font-medium text-sm"
-                        onClick={() => setActiveMenu(null)}
                       >
                         <MapPin className="w-4 h-4" />
                         Par région
                       </Link>
                       <Link
                         href="/departements"
+                        onClick={closeMenus}
                         className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium text-sm"
-                        onClick={() => setActiveMenu(null)}
                       >
                         <MapPin className="w-4 h-4" />
                         Par département
                       </Link>
                     </div>
 
-                    {/* Villes populaires */}
+                    {/* Popular cities */}
                     <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
                       <Star className="w-4 h-4 text-amber-500" />
                       Villes populaires
@@ -369,11 +364,11 @@ export default function Header() {
                         <Link
                           key={city.slug}
                           href={`/villes/${city.slug}`}
-                          className="group flex items-center justify-between p-3 bg-gray-50 hover:bg-blue-50 rounded-xl transition-all"
-                          onClick={() => setActiveMenu(null)}
+                          onClick={closeMenus}
+                          className="group/city flex items-center justify-between p-3 bg-gray-50 hover:bg-blue-50 rounded-xl transition-colors"
                         >
                           <div>
-                            <div className="font-medium text-gray-900 group-hover:text-blue-700">{city.name}</div>
+                            <div className="font-medium text-gray-900 group-hover/city:text-blue-700">{city.name}</div>
                             <div className="text-xs text-gray-500">{city.region}</div>
                           </div>
                           <div className="text-xs text-gray-400 bg-white px-2 py-0.5 rounded-full">{city.population}</div>
@@ -385,8 +380,8 @@ export default function Header() {
                     <div className="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
                       <Link
                         href="/villes"
+                        onClick={closeMenus}
                         className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold"
-                        onClick={() => setActiveMenu(null)}
                       >
                         Toutes les villes
                         <ArrowRight className="w-4 h-4" />
@@ -410,7 +405,7 @@ export default function Header() {
 
             <Link
               href="/devis"
-              className="ml-2 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-amber-400 text-white font-semibold rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/30 hover:-translate-y-0.5 transition-all"
+              className="ml-2 px-6 py-2.5 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-300"
             >
               Devis gratuit
             </Link>
@@ -423,7 +418,6 @@ export default function Header() {
             aria-label={isMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
             aria-expanded={isMenuOpen}
             className="lg:hidden flex items-center justify-center w-12 h-12 -mr-2 rounded-xl active:bg-gray-200 hover:bg-gray-100 transition-colors"
-            style={{ WebkitTapHighlightColor: 'transparent' }}
           >
             {isMenuOpen ? (
               <X className="w-6 h-6 text-gray-700" />
@@ -527,19 +521,6 @@ export default function Header() {
           </div>
         )}
       </div>
-
-      <style jsx global>{`
-        @keyframes fadeInDown {
-          from {
-            opacity: 0;
-            transform: translateY(-10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
     </header>
   )
 }

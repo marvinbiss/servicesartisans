@@ -2,21 +2,26 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Search, MapPin, ArrowRight, Sparkles, Clock, TrendingUp, Zap } from 'lucide-react'
+import { Search, MapPin, ArrowRight, Sparkles, Clock, TrendingUp, Zap, Wrench, Key, Flame, PaintBucket, Hammer, Grid3X3, Home, TreeDeciduous } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-// Services avec emojis et stats (style Thumbtack)
+// Map des icônes
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  Wrench, Zap, Key, Flame, PaintBucket, Hammer, Grid3X3, Home, TreeDeciduous
+}
+
+// Services avec icônes premium
 const services = [
-  { name: 'Plombier', slug: 'plombier', emoji: '🔧', searches: '15k/mois', urgent: true },
-  { name: 'Électricien', slug: 'electricien', emoji: '⚡', searches: '12k/mois', urgent: true },
-  { name: 'Serrurier', slug: 'serrurier', emoji: '🔐', searches: '9k/mois', urgent: true },
-  { name: 'Chauffagiste', slug: 'chauffagiste', emoji: '🔥', searches: '7k/mois', urgent: false },
-  { name: 'Peintre', slug: 'peintre-en-batiment', emoji: '🎨', searches: '6k/mois', urgent: false },
-  { name: 'Menuisier', slug: 'menuisier', emoji: '🪚', searches: '5k/mois', urgent: false },
-  { name: 'Carreleur', slug: 'carreleur', emoji: '🔲', searches: '4k/mois', urgent: false },
-  { name: 'Couvreur', slug: 'couvreur', emoji: '🏠', searches: '4k/mois', urgent: false },
-  { name: 'Maçon', slug: 'macon', emoji: '🧱', searches: '3k/mois', urgent: false },
-  { name: 'Jardinier', slug: 'jardinier', emoji: '🌿', searches: '3k/mois', urgent: false },
+  { name: 'Plombier', slug: 'plombier', icon: 'Wrench', color: 'from-blue-500 to-blue-600', searches: '15k/mois', urgent: true },
+  { name: 'Électricien', slug: 'electricien', icon: 'Zap', color: 'from-amber-500 to-amber-600', searches: '12k/mois', urgent: true },
+  { name: 'Serrurier', slug: 'serrurier', icon: 'Key', color: 'from-slate-600 to-slate-700', searches: '9k/mois', urgent: true },
+  { name: 'Chauffagiste', slug: 'chauffagiste', icon: 'Flame', color: 'from-orange-500 to-orange-600', searches: '7k/mois', urgent: false },
+  { name: 'Peintre', slug: 'peintre-en-batiment', icon: 'PaintBucket', color: 'from-purple-500 to-purple-600', searches: '6k/mois', urgent: false },
+  { name: 'Menuisier', slug: 'menuisier', icon: 'Hammer', color: 'from-amber-600 to-amber-700', searches: '5k/mois', urgent: false },
+  { name: 'Carreleur', slug: 'carreleur', icon: 'Grid3X3', color: 'from-teal-500 to-teal-600', searches: '4k/mois', urgent: false },
+  { name: 'Couvreur', slug: 'couvreur', icon: 'Home', color: 'from-red-500 to-red-600', searches: '4k/mois', urgent: false },
+  { name: 'Maçon', slug: 'macon', icon: 'Wrench', color: 'from-stone-500 to-stone-600', searches: '3k/mois', urgent: false },
+  { name: 'Jardinier', slug: 'jardinier', icon: 'TreeDeciduous', color: 'from-green-500 to-green-600', searches: '3k/mois', urgent: false },
 ]
 
 const cities = [
@@ -158,29 +163,34 @@ export function HeroSearch() {
                         <TrendingUp className="w-3 h-3" />
                         {query ? 'Résultats' : 'Services populaires'}
                       </div>
-                      {filteredServices.map((service) => (
-                        <button
-                          key={service.slug}
-                          type="button"
-                          onClick={() => selectService(service)}
-                          className="w-full flex items-center gap-3 px-3 py-3 hover:bg-blue-50 rounded-lg transition-colors group"
-                        >
-                          <span className="text-2xl">{service.emoji}</span>
-                          <div className="flex-1 text-left">
-                            <div className="font-medium text-slate-900 group-hover:text-blue-600">
-                              {service.name}
+                      {filteredServices.map((service) => {
+                        const IconComponent = iconMap[service.icon] || Wrench
+                        return (
+                          <button
+                            key={service.slug}
+                            type="button"
+                            onClick={() => selectService(service)}
+                            className="w-full flex items-center gap-3 px-3 py-3 hover:bg-blue-50 rounded-lg transition-colors group"
+                          >
+                            <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${service.color} flex items-center justify-center shadow-sm`}>
+                              <IconComponent className="w-5 h-5 text-white" />
                             </div>
-                            <div className="text-xs text-slate-500">
-                              {service.searches} recherches
+                            <div className="flex-1 text-left">
+                              <div className="font-medium text-slate-900 group-hover:text-blue-600">
+                                {service.name}
+                              </div>
+                              <div className="text-xs text-slate-500">
+                                {service.searches} recherches
+                              </div>
                             </div>
-                          </div>
-                          {service.urgent && (
-                            <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full">
-                              Urgence 24h
-                            </span>
-                          )}
-                        </button>
-                      ))}
+                            {service.urgent && (
+                              <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full">
+                                Urgence 24h
+                              </span>
+                            )}
+                          </button>
+                        )
+                      })}
                     </div>
                   </motion.div>
                 )}
@@ -292,18 +302,22 @@ export function HeroSearch() {
         className="mt-6 flex flex-wrap items-center justify-center gap-3"
       >
         <span className="text-sm text-white/60">Populaire :</span>
-        {services.slice(0, 4).map((service) => (
-          <button
-            key={service.slug}
-            onClick={() => {
-              setQuery(service.name)
-              setActiveField('location')
-            }}
-            className="text-sm text-white/80 hover:text-white bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-full transition-colors"
-          >
-            {service.emoji} {service.name}
-          </button>
-        ))}
+        {services.slice(0, 4).map((service) => {
+          const IconComponent = iconMap[service.icon] || Wrench
+          return (
+            <button
+              key={service.slug}
+              onClick={() => {
+                setQuery(service.name)
+                setActiveField('location')
+              }}
+              className="text-sm text-white/80 hover:text-white bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1.5"
+            >
+              <IconComponent className="w-3.5 h-3.5" />
+              {service.name}
+            </button>
+          )
+        })}
       </motion.div>
     </div>
   )

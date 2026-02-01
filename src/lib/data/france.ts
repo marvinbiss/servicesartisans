@@ -1176,18 +1176,18 @@ export function getVillesByDepartement(departementCode: string): Ville[] {
   return villes.filter(v => v.departementCode === departementCode)
 }
 
-// Services disponibles
+// Services disponibles avec icônes Lucide
 export const services = [
-  { slug: 'plombier', name: 'Plombier', emoji: '🔧' },
-  { slug: 'electricien', name: 'Électricien', emoji: '⚡' },
-  { slug: 'serrurier', name: 'Serrurier', emoji: '🔐' },
-  { slug: 'chauffagiste', name: 'Chauffagiste', emoji: '🔥' },
-  { slug: 'peintre-en-batiment', name: 'Peintre', emoji: '🎨' },
-  { slug: 'menuisier', name: 'Menuisier', emoji: '🪚' },
-  { slug: 'carreleur', name: 'Carreleur', emoji: '🔲' },
-  { slug: 'couvreur', name: 'Couvreur', emoji: '🏠' },
-  { slug: 'macon', name: 'Maçon', emoji: '🧱' },
-  { slug: 'jardinier', name: 'Jardinier', emoji: '🌿' },
-  { slug: 'vitrier', name: 'Vitrier', emoji: '🪟' },
-  { slug: 'climaticien', name: 'Climaticien', emoji: '❄️' },
+  { slug: 'plombier', name: 'Plombier', icon: 'Wrench', color: 'from-blue-500 to-blue-600' },
+  { slug: 'electricien', name: 'Électricien', icon: 'Zap', color: 'from-amber-500 to-amber-600' },
+  { slug: 'serrurier', name: 'Serrurier', icon: 'Key', color: 'from-slate-600 to-slate-700' },
+  { slug: 'chauffagiste', name: 'Chauffagiste', icon: 'Flame', color: 'from-orange-500 to-orange-600' },
+  { slug: 'peintre-en-batiment', name: 'Peintre', icon: 'PaintBucket', color: 'from-purple-500 to-purple-600' },
+  { slug: 'menuisier', name: 'Menuisier', icon: 'Hammer', color: 'from-amber-600 to-amber-700' },
+  { slug: 'carreleur', name: 'Carreleur', icon: 'Grid3X3', color: 'from-teal-500 to-teal-600' },
+  { slug: 'couvreur', name: 'Couvreur', icon: 'Home', color: 'from-red-500 to-red-600' },
+  { slug: 'macon', name: 'Maçon', icon: 'Blocks', color: 'from-stone-500 to-stone-600' },
+  { slug: 'jardinier', name: 'Jardinier', icon: 'TreeDeciduous', color: 'from-green-500 to-green-600' },
+  { slug: 'vitrier', name: 'Vitrier', icon: 'Square', color: 'from-sky-500 to-sky-600' },
+  { slug: 'climaticien', name: 'Climaticien', icon: 'Wind', color: 'from-cyan-500 to-cyan-600' },
 ]

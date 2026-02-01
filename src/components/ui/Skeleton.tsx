@@ -2,13 +2,15 @@ import { cn } from '@/lib/utils'
 
 interface SkeletonProps {
   className?: string
+  shimmer?: boolean
 }
 
-export function Skeleton({ className }: SkeletonProps) {
+export function Skeleton({ className, shimmer = true }: SkeletonProps) {
   return (
     <div
       className={cn(
-        'animate-pulse rounded-md bg-gray-200',
+        'rounded-md bg-gray-200 relative overflow-hidden',
+        shimmer && 'after:absolute after:inset-0 after:translate-x-[-100%] after:animate-[shimmer_2s_infinite] after:bg-gradient-to-r after:from-transparent after:via-white/60 after:to-transparent',
         className
       )}
     />

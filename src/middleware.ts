@@ -86,12 +86,13 @@ function addSecurityHeaders(response: NextResponse, nonce: string, request: Next
     return response
   }
 
-  // Content Security Policy - Strict version for production web
+  // Content Security Policy - Production version compatible with Next.js
+  // Note: 'unsafe-inline' is required for Next.js inline scripts/styles
   const cspDirectives = [
     "default-src 'self'",
-    `script-src 'self' 'nonce-${nonce}' https://js.stripe.com https://maps.googleapis.com`,
-    `style-src 'self' 'nonce-${nonce}' https://fonts.googleapis.com`,
-    "font-src 'self' https://fonts.gstatic.com",
+    `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://maps.googleapis.com`,
+    `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`,
+    "font-src 'self' https://fonts.gstatic.com data:",
     "img-src 'self' data: blob: https: http:",
     "connect-src 'self' https://*.supabase.co https://api.stripe.com wss://*.supabase.co",
     "frame-src 'self' https://js.stripe.com https://hooks.stripe.com",
