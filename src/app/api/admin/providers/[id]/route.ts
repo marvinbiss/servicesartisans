@@ -8,9 +8,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
-import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
+
+// Simple console logger for debugging
+const log = (level: string, message: string, data?: unknown) => {
+  console.log(`[${new Date().toISOString()}] [${level}] ${message}`, data ? JSON.stringify(data, null, 2) : '')
+}
 
 // GET - Récupérer un provider complet
 export async function GET(
@@ -117,9 +121,9 @@ export async function GET(
 
     return response
   } catch (error) {
-    logger.error('Admin provider GET error', error)
+    log('ERROR', 'Admin provider GET error', error)
     return NextResponse.json(
-      { success: false, error: 'Erreur serveur' },
+      { success: false, error: `Erreur serveur: ${(error as Error).message}` },
       { status: 500 }
     )
   }
@@ -131,106 +135,83 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   const providerId = params.id
+  log('INFO', `PATCH /api/admin/providers/${providerId} started`)
 
   try {
-    // Verify admin with providers:write permission
+    // Step 1: Verify admin authentication
+    log('INFO', 'Step 1: Verifying admin permission')
     const authResult = await requirePermission('providers', 'write')
     if (!authResult.success || !authResult.admin) {
+      log('ERROR', 'Auth failed', authResult)
       return authResult.error
     }
+    log('INFO', 'Auth successful', { adminId: authResult.admin.id })
 
-    const supabase = createAdminClient()
-
-    // Vérifier que le provider existe
-    const { data: existingProvider, error: checkError } = await supabase
-      .from('providers')
-      .select('id, name, is_verified, is_active')
-      .eq('id', providerId)
-      .single()
-
-    if (checkError) {
-      logger.error('Provider check error', { error: checkError, providerId })
+    // Step 2: Create Supabase client
+    log('INFO', 'Step 2: Creating Supabase admin client')
+    let supabase
+    try {
+      supabase = createAdminClient()
+      log('INFO', 'Supabase client created')
+    } catch (clientError) {
+      log('ERROR', 'Failed to create Supabase client', clientError)
       return NextResponse.json(
-        { success: false, error: `Provider non trouvé: ${checkError.message}` },
-        { status: 404 }
+        { success: false, error: `Erreur client Supabase: ${(clientError as Error).message}` },
+        { status: 500 }
       )
     }
 
-    if (!existingProvider) {
-      return NextResponse.json(
-        { success: false, error: 'Provider non trouvé' },
-        { status: 404 }
-      )
-    }
-
+    // Step 3: Parse request body
+    log('INFO', 'Step 3: Parsing request body')
     let body
     try {
       body = await request.json()
+      log('INFO', 'Body parsed', { keys: Object.keys(body) })
     } catch (parseError) {
+      log('ERROR', 'JSON parse error', parseError)
       return NextResponse.json(
         { success: false, error: 'JSON invalide dans le body' },
         { status: 400 }
       )
     }
 
-    // Mapper les champs frontend -> database
+    // Step 4: Build update data
+    log('INFO', 'Step 4: Building update data')
     const updateData: Record<string, unknown> = {
       updated_at: new Date().toISOString(),
     }
 
-    // Champs directs - Priorité à company_name, sinon full_name
-    if (body.company_name && body.company_name.trim()) {
-      updateData.name = body.company_name.trim()
-    } else if (body.full_name && body.full_name.trim()) {
-      updateData.name = body.full_name.trim()
-    }
-    if (body.phone !== undefined) updateData.phone = body.phone
-    if (body.email !== undefined) updateData.email = body.email
-    if (body.siret !== undefined) updateData.siret = body.siret
-    if (body.description !== undefined) updateData.meta_description = body.description
-    if (body.address !== undefined) updateData.address_street = body.address
-    if (body.city !== undefined) updateData.address_city = body.city
-    if (body.postal_code !== undefined) updateData.address_postal_code = body.postal_code
-    if (body.department !== undefined) updateData.address_department = body.department
-    if (body.region !== undefined) updateData.address_region = body.region
-    if (body.latitude !== undefined) updateData.latitude = body.latitude
-    if (body.longitude !== undefined) updateData.longitude = body.longitude
-    if (body.hourly_rate !== undefined) updateData.hourly_rate = body.hourly_rate
-    if (body.website !== undefined) updateData.website = body.website
-    if (body.legal_form !== undefined) updateData.legal_form = body.legal_form
+    // Map frontend fields to database fields
+    if (body.company_name?.trim()) updateData.name = body.company_name.trim()
+    else if (body.full_name?.trim()) updateData.name = body.full_name.trim()
 
-    // Champs booléens
+    if (body.phone !== undefined) updateData.phone = body.phone || null
+    if (body.email !== undefined) updateData.email = body.email || null
+    if (body.siret !== undefined) updateData.siret = body.siret || null
+    if (body.description !== undefined) updateData.meta_description = body.description || null
+    if (body.address !== undefined) updateData.address_street = body.address || null
+    if (body.city !== undefined) updateData.address_city = body.city || null
+    if (body.postal_code !== undefined) updateData.address_postal_code = body.postal_code || null
+    if (body.department !== undefined) updateData.address_department = body.department || null
+    if (body.region !== undefined) updateData.address_region = body.region || null
+    if (body.hourly_rate !== undefined) updateData.hourly_rate = body.hourly_rate || null
+    if (body.website !== undefined) updateData.website = body.website || null
+    if (body.legal_form !== undefined) updateData.legal_form = body.legal_form || null
+
+    // Boolean fields
     if (body.is_verified !== undefined) {
-      updateData.is_verified = body.is_verified
+      updateData.is_verified = Boolean(body.is_verified)
       if (body.is_verified) {
         updateData.verification_date = new Date().toISOString()
       }
     }
-    if (body.is_featured !== undefined) updateData.is_premium = body.is_featured
-    if (body.is_active !== undefined) updateData.is_active = body.is_active
+    if (body.is_featured !== undefined) updateData.is_premium = Boolean(body.is_featured)
+    if (body.is_active !== undefined) updateData.is_active = Boolean(body.is_active)
 
-    // Régénérer le slug si le nom change
-    if (updateData.name) {
-      const name = updateData.name as string
-      const slug = name
-        .toLowerCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-|-$/g, '')
-        .substring(0, 100)
+    log('INFO', 'Update data built', { fields: Object.keys(updateData) })
 
-      const { data: existing } = await supabase
-        .from('providers')
-        .select('slug, siren')
-        .eq('id', providerId)
-        .single()
-
-      const suffix = existing?.siren || providerId.substring(0, 8)
-      updateData.slug = `${slug}-${suffix}`
-    }
-
-    // Update principal
+    // Step 5: Execute update
+    log('INFO', 'Step 5: Executing database update')
     const { data, error } = await supabase
       .from('providers')
       .update(updateData)
@@ -239,71 +220,50 @@ export async function PATCH(
       .single()
 
     if (error) {
-      logger.error('Admin provider PATCH DB error', { error, updateData, providerId })
-      return NextResponse.json(
-        { success: false, error: `Erreur DB: ${error.message}`, details: error },
-        { status: 500 }
-      )
+      log('ERROR', 'Database update failed', {
+        code: error.code,
+        message: error.message,
+        details: error.details,
+        hint: error.hint
+      })
+      return NextResponse.json({
+        success: false,
+        error: `Erreur DB: ${error.message}`,
+        code: error.code,
+        hint: error.hint,
+        details: error.details
+      }, { status: 500 })
     }
 
-    // Gérer les services si fournis
-    if (body.services && Array.isArray(body.services) && body.services.length > 0) {
-      const { error: deleteError } = await supabase
-        .from('provider_services')
-        .delete()
-        .eq('provider_id', providerId)
+    log('INFO', 'Update successful', { providerId: data?.id })
 
-      if (deleteError) {
-        logger.error('Error deleting provider_services', deleteError)
-      }
-
-      const { data: servicesList } = await supabase
-        .from('services')
-        .select('id, name, slug')
-
-      if (servicesList && servicesList.length > 0) {
-        const serviceMap = new Map(servicesList.map(s => [s.name.toLowerCase(), s.id]))
-        const serviceMapBySlug = new Map(servicesList.map(s => [s.slug, s.id]))
-
-        for (const serviceName of body.services) {
-          const serviceId = serviceMap.get(serviceName.toLowerCase()) || serviceMapBySlug.get(serviceName.toLowerCase())
-          if (serviceId) {
-            await supabase
-              .from('provider_services')
-              .insert({
-                provider_id: providerId,
-                service_id: serviceId,
-                is_primary: body.services.indexOf(serviceName) === 0,
-              })
-          }
-        }
-      }
-    }
-
-    // Log d'audit (ne pas bloquer en cas d'erreur)
+    // Step 6: Log audit action
     try {
       await logAdminAction(authResult.admin.id, 'provider.update', 'provider', providerId, updateData)
     } catch (auditError) {
-      logger.error('Audit log error (non-blocking)', auditError)
+      log('WARN', 'Audit log failed but update succeeded', auditError)
     }
 
-    const response = NextResponse.json({
+    // Step 7: Return success
+    return NextResponse.json({
       success: true,
       data,
       message: 'Artisan mis à jour avec succès'
+    }, {
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate',
+        'Pragma': 'no-cache'
+      }
     })
 
-    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate')
-    response.headers.set('Pragma', 'no-cache')
-
-    return response
   } catch (error) {
     const err = error as Error
-    logger.error('Admin provider PATCH error', { error: err.message, stack: err.stack, providerId })
-    return NextResponse.json(
-      { success: false, error: `Erreur: ${err.message}` },
-      { status: 500 }
-    )
+    log('ERROR', 'Unexpected error', { message: err.message, stack: err.stack })
+    return NextResponse.json({
+      success: false,
+      error: `Erreur inattendue: ${err.message}`,
+      stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+    }, { status: 500 })
   }
 }
 
@@ -312,15 +272,18 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const providerId = params.id
+  log('INFO', `DELETE /api/admin/providers/${providerId} started`)
+
   try {
     // Verify admin with providers:delete permission
     const authResult = await requirePermission('providers', 'delete')
     if (!authResult.success || !authResult.admin) {
+      log('ERROR', 'Auth failed for DELETE', authResult)
       return authResult.error
     }
 
     const supabase = createAdminClient()
-    const providerId = params.id
 
     const { error } = await supabase
       .from('providers')
@@ -330,19 +293,32 @@ export async function DELETE(
       })
       .eq('id', providerId)
 
-    if (error) throw error
+    if (error) {
+      log('ERROR', 'Database delete failed', error)
+      return NextResponse.json(
+        { success: false, error: `Erreur DB: ${error.message}` },
+        { status: 500 }
+      )
+    }
 
     // Log d'audit
-    await logAdminAction(authResult.admin.id, 'provider.delete', 'provider', providerId)
+    try {
+      await logAdminAction(authResult.admin.id, 'provider.delete', 'provider', providerId)
+    } catch (auditError) {
+      log('WARN', 'Audit log failed but delete succeeded', auditError)
+    }
+
+    log('INFO', 'DELETE successful', { providerId })
 
     return NextResponse.json({
       success: true,
       message: 'Artisan supprimé'
     })
   } catch (error) {
-    logger.error('Admin provider DELETE error', error)
+    const err = error as Error
+    log('ERROR', 'Unexpected DELETE error', { message: err.message, stack: err.stack })
     return NextResponse.json(
-      { success: false, error: 'Erreur de suppression' },
+      { success: false, error: `Erreur de suppression: ${err.message}` },
       { status: 500 }
     )
   }
