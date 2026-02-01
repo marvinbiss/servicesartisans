@@ -44,13 +44,19 @@ export async function GET(request: NextRequest) {
         )
       `, { count: 'exact' })
 
-    // Apply filters
+    // Apply filters with detailed logging
+    console.log(`[Admin API] Applying filter: "${filter}" (type: ${typeof filter})`)
     if (filter === 'verified') {
+      console.log('[Admin API] Adding verified filter: is_verified=true AND is_active=true')
       query = query.eq('is_verified', true).eq('is_active', true)
     } else if (filter === 'pending') {
+      console.log('[Admin API] Adding pending filter: is_verified=false AND is_active=true')
       query = query.eq('is_verified', false).eq('is_active', true)
     } else if (filter === 'suspended') {
+      console.log('[Admin API] Adding suspended filter: is_active=false')
       query = query.eq('is_active', false)
+    } else {
+      console.log('[Admin API] No filter applied (showing all)')
     }
 
     // Apply search - utilise les vrais noms de colonnes
@@ -63,9 +69,11 @@ export async function GET(request: NextRequest) {
       .range(offset, offset + limit - 1)
 
     if (error) {
-      console.error('Query error:', error)
+      console.error('[Admin API] Query error:', error)
       throw error
     }
+
+    console.log(`[Admin API] Query returned ${providers?.length || 0} providers, count=${count}`)
 
     // Transformer les données pour correspondre au format frontend
     const transformedProviders = (providers || []).map((p: Record<string, unknown>) => {
