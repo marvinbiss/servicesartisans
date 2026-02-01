@@ -444,171 +444,183 @@ export default function Header() {
             </div>
           </Link>
 
-          {/* Search Bar - Dual Field (Service + Location) */}
-          <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-2xl mx-6">
-            <div
-              ref={searchContainerRef}
-              className="relative w-full flex bg-gray-50 border-2 border-gray-200 rounded-xl focus-within:border-blue-500 focus-within:bg-white focus-within:ring-4 focus-within:ring-blue-500/10 transition-all"
-            >
-              {/* Service Input */}
-              <div className="relative flex-1 min-w-0">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  ref={serviceInputRef}
-                  type="text"
-                  placeholder="Quel service ? (plombier, électricien...)"
-                  value={serviceQuery}
-                  onChange={(e) => setServiceQuery(e.target.value)}
-                  onFocus={() => setShowServiceDropdown(true)}
-                  onKeyDown={handleServiceKeyDown}
-                  className="w-full h-11 pl-12 pr-3 bg-transparent text-gray-900 placeholder:text-gray-500 focus:outline-none"
-                  autoComplete="off"
-                />
+          {/* Search Bar - Dual Field (Service + Location) - Style Doctolib */}
+          <div ref={searchContainerRef} className="hidden md:flex flex-1 max-w-xl mx-4 lg:mx-8">
+            <form onSubmit={handleSearch} className="relative w-full">
+              <div className="flex items-center bg-white border-2 border-gray-200 rounded-full shadow-sm hover:shadow-md hover:border-gray-300 focus-within:border-blue-500 focus-within:shadow-lg focus-within:ring-4 focus-within:ring-blue-500/10 transition-all">
 
-                {/* Service Dropdown */}
-                {showServiceDropdown && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden z-[9999]">
-                    {/* Recent Searches */}
-                    {recentSearches.length > 0 && !serviceQuery && (
-                      <div className="p-3 border-b border-gray-100">
-                        <div className="flex items-center gap-2 text-xs font-medium text-gray-500 mb-2">
-                          <History className="w-3.5 h-3.5" />
-                          Recherches récentes
-                        </div>
-                        {recentSearches.map((search, idx) => (
-                          <button
-                            key={idx}
-                            type="button"
-                            onClick={() => applyRecentSearch(search)}
-                            className="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-50 rounded-lg text-left"
-                          >
-                            <Clock className="w-4 h-4 text-gray-400" />
-                            <div className="text-sm">
-                              <span className="text-gray-900">{search.service || 'Tous services'}</span>
-                              {search.location && (
-                                <span className="text-gray-500"> - {search.location}</span>
-                              )}
-                            </div>
-                          </button>
-                        ))}
-                      </div>
-                    )}
+                {/* Service Input */}
+                <div className="relative flex-[1.2]">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <input
+                    ref={serviceInputRef}
+                    type="text"
+                    placeholder="Service..."
+                    value={serviceQuery}
+                    onChange={(e) => setServiceQuery(e.target.value)}
+                    onFocus={() => setShowServiceDropdown(true)}
+                    onKeyDown={handleServiceKeyDown}
+                    className="w-full h-12 pl-11 pr-2 bg-transparent text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none rounded-l-full"
+                    autoComplete="off"
+                  />
+                </div>
 
-                    {/* Service Suggestions */}
-                    {serviceSuggestions.length > 0 ? (
-                      <div className="p-2">
-                        {serviceSuggestions.map((service, idx) => (
-                          <button
-                            key={service.slug}
-                            type="button"
-                            onClick={() => selectService(service)}
-                            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-colors ${
-                              idx === highlightedServiceIndex ? 'bg-blue-50 text-blue-700' : 'hover:bg-gray-50'
-                            }`}
-                          >
-                            <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                              <Wrench className="w-4 h-4 text-blue-600" />
-                            </div>
-                            <div>
-                              <div className="font-medium text-gray-900">{service.name}</div>
-                              <div className="text-xs text-gray-500">{service.slug}</div>
-                            </div>
-                          </button>
-                        ))}
-                      </div>
-                    ) : !serviceQuery && recentSearches.length === 0 && (
-                      <div className="p-3">
-                        <div className="text-xs font-medium text-gray-500 mb-2">Services populaires</div>
-                        <div className="grid grid-cols-2 gap-1">
-                          {services.slice(0, 6).map((service) => {
-                            const Icon = service.icon
-                            return (
-                              <button
-                                key={service.slug}
-                                type="button"
-                                onClick={() => {
-                                  setServiceQuery(service.name)
-                                  setShowServiceDropdown(false)
-                                  locationInputRef.current?.focus()
-                                }}
-                                className="flex items-center gap-2 px-3 py-2 hover:bg-blue-50 rounded-lg text-left"
-                              >
-                                <Icon className="w-4 h-4 text-blue-600" />
-                                <span className="text-sm text-gray-700">{service.name}</span>
-                              </button>
-                            )
-                          })}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
+                {/* Separator */}
+                <div className="w-px h-7 bg-gray-200 flex-shrink-0" />
+
+                {/* Location Input */}
+                <div className="relative flex-1">
+                  <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <input
+                    ref={locationInputRef}
+                    type="text"
+                    placeholder="Ville..."
+                    value={locationQuery}
+                    onChange={(e) => setLocationQuery(e.target.value)}
+                    onFocus={() => setShowLocationDropdown(true)}
+                    onKeyDown={handleLocationKeyDown}
+                    className="w-full h-12 pl-9 pr-9 bg-transparent text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none"
+                    autoComplete="off"
+                  />
+
+                  {/* Geolocation Button */}
+                  <button
+                    type="button"
+                    onClick={handleGeolocation}
+                    disabled={isLocating}
+                    className="absolute right-1 top-1/2 -translate-y-1/2 p-2 hover:bg-gray-100 rounded-full transition-colors disabled:opacity-50"
+                    title="Ma position"
+                  >
+                    <Navigation className={`w-4 h-4 ${isLocating ? 'animate-spin text-blue-600' : 'text-gray-400 hover:text-blue-600'}`} />
+                  </button>
+                </div>
+
+                {/* Search Button */}
+                <button
+                  type="submit"
+                  className="flex-shrink-0 m-1.5 w-10 h-10 bg-blue-600 hover:bg-blue-700 text-white rounded-full transition-all flex items-center justify-center shadow-md hover:shadow-lg hover:scale-105"
+                  aria-label="Rechercher"
+                >
+                  <Search className="w-4 h-4" />
+                </button>
               </div>
 
-              {/* Separator */}
-              <div className="w-px h-6 bg-gray-300 my-auto" />
-
-              {/* Location Input */}
-              <div className="relative flex-1 min-w-0">
-                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  ref={locationInputRef}
-                  type="text"
-                  placeholder="Où ? (ville, code postal...)"
-                  value={locationQuery}
-                  onChange={(e) => setLocationQuery(e.target.value)}
-                  onFocus={() => setShowLocationDropdown(true)}
-                  onKeyDown={handleLocationKeyDown}
-                  className="w-full h-11 pl-10 pr-10 bg-transparent text-gray-900 placeholder:text-gray-500 focus:outline-none"
-                  autoComplete="off"
-                />
-
-                {/* Geolocation Button */}
-                <button
-                  type="button"
-                  onClick={handleGeolocation}
-                  disabled={isLocating}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-gray-200 rounded-lg transition-colors disabled:opacity-50"
-                  title="Utiliser ma position"
-                >
-                  <Navigation className={`w-4 h-4 ${isLocating ? 'animate-pulse text-blue-600' : 'text-gray-500'}`} />
-                </button>
-
-                {/* Location Dropdown */}
-                {showLocationDropdown && locationSuggestions.length > 0 && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden z-[9999]">
-                    <div className="p-2">
-                      {locationSuggestions.map((location, idx) => (
+              {/* Service Dropdown */}
+              {showServiceDropdown && (
+                <div className="absolute top-full left-0 w-72 mt-2 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-[9999]">
+                  {/* Recent Searches */}
+                  {recentSearches.length > 0 && !serviceQuery && (
+                    <div className="p-3 border-b border-gray-100">
+                      <div className="flex items-center gap-2 text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
+                        <History className="w-3 h-3" />
+                        Récent
+                      </div>
+                      {recentSearches.slice(0, 3).map((search, idx) => (
                         <button
-                          key={location.label}
+                          key={idx}
                           type="button"
-                          onClick={() => selectLocation(location)}
-                          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-colors ${
-                            idx === highlightedLocationIndex ? 'bg-blue-50 text-blue-700' : 'hover:bg-gray-50'
+                          onClick={() => applyRecentSearch(search)}
+                          className="w-full flex items-center gap-3 px-3 py-2 hover:bg-blue-50 rounded-xl text-left transition-colors"
+                        >
+                          <Clock className="w-4 h-4 text-gray-300" />
+                          <span className="text-sm text-gray-700 truncate">
+                            {search.service || 'Tous'}{search.location && ` · ${search.location}`}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Service Suggestions */}
+                  {serviceSuggestions.length > 0 ? (
+                    <div className="p-2 max-h-64 overflow-y-auto">
+                      {serviceSuggestions.map((service, idx) => (
+                        <button
+                          key={service.slug}
+                          type="button"
+                          onClick={() => selectService(service)}
+                          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all ${
+                            idx === highlightedServiceIndex
+                              ? 'bg-blue-50 shadow-sm'
+                              : 'hover:bg-gray-50'
                           }`}
                         >
-                          <MapPin className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                          <div className="min-w-0">
-                            <div className="font-medium text-gray-900 truncate">{location.city}</div>
-                            <div className="text-xs text-gray-500 truncate">{location.context}</div>
+                          <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${
+                            idx === highlightedServiceIndex ? 'bg-blue-100' : 'bg-gray-100'
+                          }`}>
+                            <Wrench className={`w-4 h-4 ${idx === highlightedServiceIndex ? 'text-blue-600' : 'text-gray-500'}`} />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className={`text-sm font-medium truncate ${idx === highlightedServiceIndex ? 'text-blue-700' : 'text-gray-900'}`}>
+                              {service.name}
+                            </div>
                           </div>
                         </button>
                       ))}
                     </div>
-                  </div>
-                )}
-              </div>
+                  ) : !serviceQuery && recentSearches.length === 0 && (
+                    <div className="p-3">
+                      <div className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Populaires</div>
+                      <div className="space-y-1">
+                        {services.slice(0, 5).map((service) => {
+                          const Icon = service.icon
+                          return (
+                            <button
+                              key={service.slug}
+                              type="button"
+                              onClick={() => {
+                                setServiceQuery(service.name)
+                                setShowServiceDropdown(false)
+                                locationInputRef.current?.focus()
+                              }}
+                              className="w-full flex items-center gap-3 px-3 py-2 hover:bg-blue-50 rounded-xl text-left transition-colors"
+                            >
+                              <div className="w-8 h-8 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg flex items-center justify-center">
+                                <Icon className="w-4 h-4 text-blue-600" />
+                              </div>
+                              <span className="text-sm text-gray-700">{service.name}</span>
+                            </button>
+                          )
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
 
-              {/* Search Button */}
-              <button
-                type="submit"
-                className="m-1 px-5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors flex items-center gap-2"
-              >
-                <Search className="w-4 h-4" />
-                <span className="hidden lg:inline">Rechercher</span>
-              </button>
-            </div>
-          </form>
+              {/* Location Dropdown */}
+              {showLocationDropdown && locationSuggestions.length > 0 && (
+                <div className="absolute top-full right-0 w-72 mt-2 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-[9999]">
+                  <div className="p-2 max-h-64 overflow-y-auto">
+                    {locationSuggestions.map((location, idx) => (
+                      <button
+                        key={location.label}
+                        type="button"
+                        onClick={() => selectLocation(location)}
+                        className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all ${
+                          idx === highlightedLocationIndex
+                            ? 'bg-blue-50 shadow-sm'
+                            : 'hover:bg-gray-50'
+                        }`}
+                      >
+                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${
+                          idx === highlightedLocationIndex ? 'bg-blue-100' : 'bg-gray-100'
+                        }`}>
+                          <MapPin className={`w-4 h-4 ${idx === highlightedLocationIndex ? 'text-blue-600' : 'text-gray-500'}`} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className={`text-sm font-medium truncate ${idx === highlightedLocationIndex ? 'text-blue-700' : 'text-gray-900'}`}>
+                            {location.city}
+                          </div>
+                          <div className="text-xs text-gray-400 truncate">{location.context}</div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </form>
+          </div>
 
           {/* Navigation Desktop */}
           <nav className="hidden lg:flex items-center space-x-1">
@@ -851,49 +863,54 @@ export default function Header() {
         {isMenuOpen && (
           <div className="lg:hidden py-4 border-t border-gray-100 max-h-[calc(100vh-120px)] overflow-y-auto">
             {/* Search Mobile - Dual Field */}
-            <form onSubmit={handleSearch} className="mb-4 space-y-2">
-              {/* Service Input Mobile */}
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Quel service ? (plombier, électricien...)"
-                  value={serviceQuery}
-                  onChange={(e) => setServiceQuery(e.target.value)}
-                  className="w-full h-12 pl-12 pr-4 bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:bg-white text-gray-900 placeholder:text-gray-500"
-                />
-              </div>
+            <form onSubmit={handleSearch} className="mb-4">
+              <div className="flex items-center bg-white border-2 border-gray-200 rounded-2xl overflow-hidden focus-within:border-blue-500 transition-colors">
+                {/* Service Input Mobile */}
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Service..."
+                    value={serviceQuery}
+                    onChange={(e) => setServiceQuery(e.target.value)}
+                    className="w-full h-12 pl-9 pr-2 bg-transparent text-gray-900 placeholder:text-gray-400 focus:outline-none text-sm"
+                  />
+                </div>
 
-              {/* Location Input Mobile */}
-              <div className="relative">
-                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Où ? (ville, code postal...)"
-                  value={locationQuery}
-                  onChange={(e) => setLocationQuery(e.target.value)}
-                  className="w-full h-12 pl-12 pr-12 bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:bg-white text-gray-900 placeholder:text-gray-500"
-                />
-                {/* Geolocation Button Mobile */}
+                {/* Separator */}
+                <div className="w-px h-7 bg-gray-200" />
+
+                {/* Location Input Mobile */}
+                <div className="relative flex-1">
+                  <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Ville..."
+                    value={locationQuery}
+                    onChange={(e) => setLocationQuery(e.target.value)}
+                    className="w-full h-12 pl-9 pr-10 bg-transparent text-gray-900 placeholder:text-gray-400 focus:outline-none text-sm"
+                  />
+                  {/* Geolocation Button Mobile */}
+                  <button
+                    type="button"
+                    onClick={handleGeolocation}
+                    disabled={isLocating}
+                    className="absolute right-1 top-1/2 -translate-y-1/2 p-2 hover:bg-gray-100 rounded-full transition-colors disabled:opacity-50"
+                    title="Ma position"
+                  >
+                    <Navigation className={`w-4 h-4 ${isLocating ? 'animate-spin text-blue-600' : 'text-gray-400'}`} />
+                  </button>
+                </div>
+
+                {/* Search Button Mobile */}
                 <button
-                  type="button"
-                  onClick={handleGeolocation}
-                  disabled={isLocating}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-2 hover:bg-gray-200 rounded-lg transition-colors disabled:opacity-50"
-                  title="Utiliser ma position"
+                  type="submit"
+                  className="flex-shrink-0 m-1.5 w-10 h-10 bg-blue-600 hover:bg-blue-700 text-white rounded-full transition-all flex items-center justify-center"
+                  aria-label="Rechercher"
                 >
-                  <Navigation className={`w-5 h-5 ${isLocating ? 'animate-pulse text-blue-600' : 'text-gray-500'}`} />
+                  <Search className="w-4 h-4" />
                 </button>
               </div>
-
-              {/* Search Button Mobile */}
-              <button
-                type="submit"
-                className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-colors flex items-center justify-center gap-2"
-              >
-                <Search className="w-5 h-5" />
-                Rechercher
-              </button>
             </form>
 
             <nav className="space-y-4">
