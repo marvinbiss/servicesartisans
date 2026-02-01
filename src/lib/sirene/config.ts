@@ -94,8 +94,8 @@ export const TRANCHES_EFFECTIFS: Record<string, { min: number; max: number }> = 
 
 // Configuration de l'API
 export const SIRENE_CONFIG = {
-  tokenUrl: 'https://api.insee.fr/token',
-  baseUrl: 'https://api.insee.fr/entreprises/sirene/V3.11',
+  tokenUrl: 'https://auth.insee.net/auth/realms/apim-gravitee/protocol/openid-connect/token',
+  baseUrl: 'https://api.insee.fr/api-sirene/3.11',
   rateLimit: 30, // requetes par minute
   pageSize: 1000, // max 1000
   retryDelay: 2000, // ms

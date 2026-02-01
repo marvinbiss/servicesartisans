@@ -55,6 +55,7 @@ let cachedToken: SireneToken | null = null
 
 /**
  * Obtenir un token OAuth2 pour l'API SIRENE
+ * Nouvelle API INSEE utilise OpenID Connect
  */
 export async function getToken(): Promise<string> {
   // Verifier si le token en cache est encore valide
@@ -69,15 +70,17 @@ export async function getToken(): Promise<string> {
     throw new Error('INSEE_CONSUMER_KEY et INSEE_CONSUMER_SECRET doivent etre definis dans .env')
   }
 
-  const credentials = Buffer.from(`${consumerKey}:${consumerSecret}`).toString('base64')
-
+  // Nouvelle methode d'authentification INSEE (OpenID Connect)
   const response = await fetch(SIRENE_CONFIG.tokenUrl, {
     method: 'POST',
     headers: {
-      'Authorization': `Basic ${credentials}`,
       'Content-Type': 'application/x-www-form-urlencoded',
     },
-    body: 'grant_type=client_credentials',
+    body: new URLSearchParams({
+      grant_type: 'client_credentials',
+      client_id: consumerKey,
+      client_secret: consumerSecret,
+    }).toString(),
   })
 
   if (!response.ok) {
@@ -87,10 +90,11 @@ export async function getToken(): Promise<string> {
 
   const data = await response.json()
 
-  // Cache le token (expire dans 24h, on prend 23h pour etre safe)
+  // Cache le token (utilise expires_in si disponible, sinon 1h par defaut)
+  const expiresIn = data.expires_in ? (data.expires_in - 60) * 1000 : 3500 * 1000
   cachedToken = {
     access_token: data.access_token,
-    expires_at: Date.now() + (23 * 60 * 60 * 1000),
+    expires_at: Date.now() + expiresIn,
   }
 
   return cachedToken.access_token
