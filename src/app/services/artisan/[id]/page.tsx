@@ -1,94 +1,9 @@
-'use client'
+import { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import ArtisanPageClient from './ArtisanPageClient'
+import { Artisan, Review } from '@/components/artisan'
 
-import { useState, useEffect } from 'react'
-import { useParams, useRouter } from 'next/navigation'
-import Link from 'next/link'
-import {
-  Star, MapPin, Phone, Mail, Clock, ChevronLeft, ChevronRight,
-  CheckCircle, Shield, Award, Wrench, Euro, Navigation,
-  MessageCircle, Heart, Share2, AlertCircle, Camera, CreditCard,
-  Banknote, Users, TrendingUp, ChevronDown, ChevronUp, Zap,
-  FileText, BadgeCheck, Timer, ThumbsUp, ExternalLink,
-  Globe, Building2, Calendar
-} from 'lucide-react'
-
-interface ServicePrice {
-  name: string
-  description: string
-  price: string
-  duration?: string
-}
-
-interface PortfolioItem {
-  id: string
-  title: string
-  description: string
-  imageUrl: string
-  category: string
-}
-
-interface Artisan {
-  id: string
-  business_name: string | null
-  first_name: string | null
-  last_name: string | null
-  avatar_url: string | null
-  city: string
-  postal_code: string
-  address?: string
-  specialty: string
-  description?: string
-  average_rating: number
-  review_count: number
-  hourly_rate?: number
-  is_verified: boolean
-  is_premium: boolean
-  is_center?: boolean
-  team_size?: number
-  services: string[]
-  service_prices: ServicePrice[]
-  accepts_new_clients?: boolean
-  intervention_zone?: string
-  intervention_zones?: string[] // Liste des zones d'intervention
-  response_time?: string
-  experience_years?: number
-  certifications?: string[]
-  insurance?: string[]
-  payment_methods?: string[]
-  languages?: string[]
-  emergency_available?: boolean
-  member_since?: string
-  response_rate?: number
-  bookings_this_week?: number
-  portfolio?: PortfolioItem[]
-  faq?: Array<{ question: string; answer: string }>
-  // Donnees Pappers
-  siret?: string
-  siren?: string
-  legal_form?: string
-  creation_date?: string
-  employee_count?: number
-  annual_revenue?: number
-  phone?: string
-  email?: string
-  website?: string
-  latitude?: number
-  longitude?: number
-}
-
-interface Review {
-  id: string
-  author: string
-  rating: number
-  date: string
-  comment: string
-  service: string
-  hasPhoto?: boolean
-  photoUrl?: string
-  verified?: boolean
-}
-
-// Demo data fallback
+// Demo data for fallback
 const DEMO_ARTISANS: Record<string, Artisan> = {
   'demo-1': {
     id: 'demo-1',
@@ -136,7 +51,7 @@ const DEMO_ARTISANS: Record<string, Artisan> = {
     phone: '01 23 45 67 89',
     latitude: 48.8827,
     longitude: 2.4024,
-    intervention_zones: ['Le Pré-Saint-Gervais (93310)', 'Pantin (93500)', 'Les Lilas (93260)', 'Romainville (93230)', 'Bobigny (93000)'],
+    intervention_zones: ['Le Pre-Saint-Gervais (93310)', 'Pantin (93500)', 'Les Lilas (93260)', 'Romainville (93230)', 'Bobigny (93000)'],
     faq: [
       { question: 'Intervenez-vous le week-end ?', answer: 'Oui, nous intervenons 7j/7 pour les urgences. Les interventions le week-end peuvent faire l\'objet d\'une majoration de 30%.' },
       { question: 'Le devis est-il gratuit ?', answer: 'Oui, le devis est toujours gratuit et sans engagement. Pour les interventions a distance de plus de 20km, des frais de deplacement peuvent s\'appliquer.' },
@@ -180,7 +95,7 @@ const DEMO_ARTISANS: Record<string, Artisan> = {
     bookings_this_week: 8,
     latitude: 48.8854,
     longitude: 2.3996,
-    intervention_zones: ['Le Pré-Saint-Gervais (93310)', 'Paris 19e', 'Paris 20e'],
+    intervention_zones: ['Le Pre-Saint-Gervais (93310)', 'Paris 19e', 'Paris 20e'],
     faq: [],
   },
 }
@@ -193,859 +108,127 @@ const DEMO_REVIEWS: Review[] = [
   { id: '5', author: 'Isabelle C.', rating: 4, date: '28 decembre 2025', comment: 'Intervention pour une recherche de fuite. Probleme trouve et repare rapidement.', service: 'Recherche de fuite', verified: false },
 ]
 
-const SIMILAR_ARTISANS = [
-  { id: 'demo-7', name: 'Yohan LEROY', specialty: 'Plombier', rating: 4.4, reviews: 92, city: 'Pantin', hourly_rate: 52 },
-  { id: 'demo-4', name: 'Serrurier Express 93', specialty: 'Serrurier', rating: 4.3, reviews: 67, city: 'Le Pre-Saint-Gervais', hourly_rate: 60 },
-  { id: 'demo-8', name: 'Pierre ROUX', specialty: 'Electricien', rating: 4.6, reviews: 134, city: 'Pantin', hourly_rate: 55 },
-]
+// Helper function to get display name
+function getDisplayName(artisan: Artisan): string {
+  if (artisan.is_center && artisan.business_name) {
+    return artisan.business_name
+  }
+  if (artisan.business_name) {
+    return artisan.business_name
+  }
+  return `${artisan.first_name || ''} ${artisan.last_name || ''}`.trim() || 'Artisan'
+}
 
-export default function ArtisanPage() {
-  const params = useParams()
-  const router = useRouter()
-  const artisanId = params.id as string
-
-  const [artisan, setArtisan] = useState<Artisan | null>(null)
-  const [reviews, setReviews] = useState<Review[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [isFavorite, setIsFavorite] = useState(false)
-  const [activeTab, setActiveTab] = useState<'infos' | 'tarifs' | 'photos' | 'avis'>('infos')
-  const [expandedFaq, setExpandedFaq] = useState<number | null>(null)
-  const [showAllPrices, setShowAllPrices] = useState(false)
-  const [dataSource, setDataSource] = useState<'api' | 'demo'>('demo')
-
-  useEffect(() => {
-    loadArtisan()
-  }, [artisanId])
-
-  const loadArtisan = async () => {
-    setIsLoading(true)
-
-    try {
-      // Essayer de charger depuis l'API avec cache-busting
-      const response = await fetch(`/api/artisans/${artisanId}`, {
-        cache: 'no-store',
-        headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache',
-        },
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        if (data.success && data.artisan) {
-          setArtisan(data.artisan)
-          setReviews(data.reviews || [])
-          setDataSource('api')
-          setIsLoading(false)
-          return
-        }
-      }
-    } catch (error) {
-      console.error('Error loading artisan from API:', error)
-    }
-
-    // Fallback vers les donnees demo
-    const demoArtisan = DEMO_ARTISANS[artisanId]
+// Fetch artisan data (server-side)
+async function getArtisan(id: string): Promise<{ artisan: Artisan | null; reviews: Review[] }> {
+  // Try demo data first for demo IDs
+  if (id.startsWith('demo-')) {
+    const demoArtisan = DEMO_ARTISANS[id]
     if (demoArtisan) {
-      setArtisan(demoArtisan)
-      setReviews(DEMO_REVIEWS)
-      setDataSource('demo')
+      return { artisan: demoArtisan, reviews: DEMO_REVIEWS }
     }
-    setIsLoading(false)
   }
 
-  const displayName = artisan?.is_center
-    ? artisan.business_name
-    : artisan?.business_name || `${artisan?.first_name || ''} ${artisan?.last_name || ''}`.trim()
+  // Try API for real artisans
+  try {
+    // Use localhost in development, production URL otherwise
+    const isDev = process.env.NODE_ENV === 'development'
+    const baseUrl = isDev
+      ? 'http://localhost:3000'
+      : (process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr')
+    const response = await fetch(`${baseUrl}/api/artisans/${id}`, {
+      cache: 'no-store',
+    })
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"></div>
-      </div>
-    )
+    if (response.ok) {
+      const data = await response.json()
+      if (data.success && data.artisan) {
+        return { artisan: data.artisan, reviews: data.reviews || [] }
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching artisan:', error)
   }
+
+  return { artisan: null, reviews: [] }
+}
+
+// Generate dynamic metadata
+export async function generateMetadata({
+  params,
+}: {
+  params: { id: string }
+}): Promise<Metadata> {
+  const { artisan } = await getArtisan(params.id)
 
   if (!artisan) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <AlertCircle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Artisan non trouve</h1>
-          <p className="text-gray-600 mb-6">Cet artisan n'existe pas ou n'est plus disponible.</p>
-          <Link href="/recherche" className="text-blue-600 hover:underline">
-            Retour a la recherche
-          </Link>
-        </div>
-      </div>
-    )
+    return {
+      title: 'Artisan non trouve | ServicesArtisans',
+      description: 'Cet artisan n\'existe pas ou n\'est plus disponible sur ServicesArtisans.',
+    }
   }
 
+  const displayName = getDisplayName(artisan)
+  const title = `${displayName} - ${artisan.specialty} a ${artisan.city} | ServicesArtisans`
+  const description = `${displayName}, ${artisan.specialty} a ${artisan.city}. ⭐ ${artisan.average_rating}/5 (${artisan.review_count} avis). ${artisan.is_verified ? 'SIRET verifie.' : ''} ${artisan.hourly_rate ? `Tarifs a partir de ${artisan.hourly_rate}€/h.` : ''} Reservez en ligne.`
+
+  return {
+    title,
+    description,
+    keywords: [
+      artisan.specialty,
+      artisan.city,
+      'artisan',
+      ...artisan.services.slice(0, 5),
+      artisan.postal_code,
+    ],
+    openGraph: {
+      title: `${displayName} - ${artisan.specialty} a ${artisan.city}`,
+      description: `⭐ ${artisan.average_rating}/5 - ${artisan.review_count} avis verifies. ${artisan.description?.substring(0, 150) || ''}`,
+      type: 'website',
+      locale: 'fr_FR',
+      url: `https://servicesartisans.fr/services/artisan/${artisan.id}`,
+      siteName: 'ServicesArtisans',
+      images: artisan.avatar_url ? [
+        {
+          url: artisan.avatar_url,
+          width: 400,
+          height: 400,
+          alt: displayName,
+        },
+      ] : [],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${displayName} - ${artisan.specialty}`,
+      description: `⭐ ${artisan.average_rating}/5 - ${artisan.review_count} avis`,
+    },
+    alternates: {
+      canonical: `https://servicesartisans.fr/services/artisan/${artisan.id}`,
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
+  }
+}
+
+// ISR configuration
+export const revalidate = 3600 // Revalidate every hour
+
+// Main page component (server component)
+export default async function ArtisanPage({
+  params,
+}: {
+  params: { id: string }
+}) {
+  const { artisan, reviews } = await getArtisan(params.id)
+
   return (
-    <div className="min-h-screen bg-gray-50 pb-24 lg:pb-0">
-      {/* Header */}
-      <div className="bg-white border-b sticky top-0 z-40">
-        <div className="max-w-6xl mx-auto px-4 py-3">
-          {/* Breadcrumbs */}
-          <div className="hidden sm:flex items-center gap-2 text-sm text-gray-500 mb-2">
-            <Link href="/" className="hover:text-blue-600">Accueil</Link>
-            <ChevronRight className="w-4 h-4" />
-            <Link href="/recherche" className="hover:text-blue-600">Recherche</Link>
-            <ChevronRight className="w-4 h-4" />
-            <span className="text-gray-900">{displayName}</span>
-          </div>
-          <div className="flex items-center justify-between">
-            <button
-              onClick={() => router.back()}
-              className="flex items-center text-gray-600 hover:text-gray-900 sm:hidden"
-            >
-              <ChevronLeft className="w-5 h-5" />
-              <span className="ml-1">Retour</span>
-            </button>
-            <div className="hidden sm:block" />
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => setIsFavorite(!isFavorite)}
-                className={`p-2 rounded-full border ${isFavorite ? 'text-red-500 border-red-200 bg-red-50' : 'text-gray-400 border-gray-200 hover:text-gray-600'}`}
-              >
-                <Heart className={`w-5 h-5 ${isFavorite ? 'fill-current' : ''}`} />
-              </button>
-              <button className="p-2 text-gray-400 hover:text-gray-600 rounded-full border border-gray-200">
-                <Share2 className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="max-w-6xl mx-auto px-4 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Main Content */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Profile Card */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <div className="flex flex-col sm:flex-row gap-4">
-                {/* Avatar */}
-                <div className="flex-shrink-0 mx-auto sm:mx-0">
-                  {artisan.avatar_url ? (
-                    <img
-                      src={artisan.avatar_url}
-                      alt={displayName || 'Artisan'}
-                      className="w-28 h-28 rounded-xl object-cover"
-                    />
-                  ) : artisan.is_center ? (
-                    <div className="w-28 h-28 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
-                      <Wrench className="w-14 h-14 text-white" />
-                    </div>
-                  ) : (
-                    <div className="w-28 h-28 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-white text-4xl font-bold">
-                      {displayName?.charAt(0) || 'A'}
-                    </div>
-                  )}
-                </div>
-
-                {/* Info */}
-                <div className="flex-1 text-center sm:text-left">
-                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
-                    <div>
-                      <h1 className="text-2xl font-bold text-gray-900">{displayName}</h1>
-                      <p className="text-lg text-blue-600 font-medium">{artisan.specialty}</p>
-                    </div>
-                    {artisan.emergency_available && (
-                      <span className="inline-flex items-center gap-1 text-sm text-orange-700 bg-orange-100 px-3 py-1 rounded-full self-center sm:self-start">
-                        <Zap className="w-4 h-4" />
-                        Urgences 24/7
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Rating */}
-                  <div className="flex items-center justify-center sm:justify-start gap-2 mt-3">
-                    <div className="flex items-center">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`w-5 h-5 ${
-                            i < Math.floor(artisan.average_rating)
-                              ? 'text-yellow-400 fill-yellow-400'
-                              : 'text-gray-300'
-                          }`}
-                        />
-                      ))}
-                    </div>
-                    <span className="font-semibold">{artisan.average_rating.toFixed(1)}</span>
-                    <span className="text-gray-500">({artisan.review_count} avis{artisan.review_count > 0 ? ' verifies' : ''})</span>
-                  </div>
-
-                  {/* Badges */}
-                  <div className="flex flex-wrap justify-center sm:justify-start gap-2 mt-3">
-                    {artisan.is_verified && (
-                      <span className="inline-flex items-center gap-1 text-sm text-green-700 bg-green-50 px-3 py-1 rounded-full">
-                        <BadgeCheck className="w-4 h-4" />
-                        Identite verifiee
-                      </span>
-                    )}
-                    {artisan.is_premium && (
-                      <span className="inline-flex items-center gap-1 text-sm text-amber-700 bg-amber-50 px-3 py-1 rounded-full">
-                        <Award className="w-4 h-4" />
-                        Premium
-                      </span>
-                    )}
-                    {artisan.is_center && artisan.team_size && (
-                      <span className="inline-flex items-center gap-1 text-sm text-blue-700 bg-blue-50 px-3 py-1 rounded-full">
-                        <Users className="w-4 h-4" />
-                        {artisan.team_size} professionnels
-                      </span>
-                    )}
-                    {dataSource === 'api' && (
-                      <span className="inline-flex items-center gap-1 text-xs text-purple-600 bg-purple-50 px-2 py-0.5 rounded-full">
-                        Donnees verifiees
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Trust Signals */}
-                  <div className="flex flex-wrap justify-center sm:justify-start gap-4 mt-4 text-sm text-gray-600">
-                    {artisan.response_rate && (
-                      <span className="flex items-center gap-1">
-                        <ThumbsUp className="w-4 h-4 text-green-500" />
-                        {artisan.response_rate}% de reponse
-                      </span>
-                    )}
-                    {artisan.bookings_this_week && artisan.bookings_this_week > 0 && (
-                      <span className="flex items-center gap-1">
-                        <TrendingUp className="w-4 h-4 text-blue-500" />
-                        {artisan.bookings_this_week} reservations cette semaine
-                      </span>
-                    )}
-                    {artisan.member_since && (
-                      <span className="flex items-center gap-1">
-                        <Calendar className="w-4 h-4 text-gray-400" />
-                        Membre depuis {artisan.member_since}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Quick Stats */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 pt-6 border-t">
-                {artisan.hourly_rate && (
-                  <div className="text-center p-3 bg-gray-50 rounded-xl">
-                    <Euro className="w-6 h-6 text-blue-600 mx-auto mb-1" />
-                    <p className="text-xs text-gray-500">Tarif horaire</p>
-                    <p className="font-bold text-lg">{artisan.hourly_rate}€/h</p>
-                  </div>
-                )}
-                {artisan.experience_years && (
-                  <div className="text-center p-3 bg-gray-50 rounded-xl">
-                    <Award className="w-6 h-6 text-blue-600 mx-auto mb-1" />
-                    <p className="text-xs text-gray-500">Experience</p>
-                    <p className="font-bold text-lg">{artisan.experience_years} ans</p>
-                  </div>
-                )}
-                {artisan.response_time && (
-                  <div className="text-center p-3 bg-gray-50 rounded-xl">
-                    <Timer className="w-6 h-6 text-blue-600 mx-auto mb-1" />
-                    <p className="text-xs text-gray-500">Reponse</p>
-                    <p className="font-bold text-lg">{artisan.response_time}</p>
-                  </div>
-                )}
-                {artisan.intervention_zone && (
-                  <div className="text-center p-3 bg-gray-50 rounded-xl">
-                    <Navigation className="w-6 h-6 text-blue-600 mx-auto mb-1" />
-                    <p className="text-xs text-gray-500">Zone</p>
-                    <p className="font-bold text-lg">{artisan.intervention_zone}</p>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Tabs */}
-            <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-              <div className="flex border-b overflow-x-auto">
-                {[
-                  { id: 'infos', label: 'Informations' },
-                  { id: 'tarifs', label: 'Tarifs' },
-                  { id: 'photos', label: `Photos${artisan.portfolio && artisan.portfolio.length > 0 ? ` (${artisan.portfolio.length})` : ''}` },
-                  { id: 'avis', label: `Avis (${artisan.review_count})` },
-                ].map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id as typeof activeTab)}
-                    className={`flex-shrink-0 px-6 py-4 text-center font-medium transition-colors whitespace-nowrap ${
-                      activeTab === tab.id
-                        ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/50'
-                        : 'text-gray-500 hover:text-gray-700'
-                    }`}
-                  >
-                    {tab.label}
-                  </button>
-                ))}
-              </div>
-
-              <div className="p-6">
-                {/* Infos Tab */}
-                {activeTab === 'infos' && (
-                  <div className="space-y-8">
-                    {/* Description */}
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-3">Presentation</h3>
-                      <p className="text-gray-600 leading-relaxed">{artisan.description || 'Artisan qualifie a votre service.'}</p>
-                    </div>
-
-                    {/* Informations entreprise (Pappers) */}
-                    {(artisan.siret || artisan.legal_form || artisan.creation_date) && (
-                      <div>
-                        <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                          <Building2 className="w-5 h-5 text-blue-600" />
-                          Informations entreprise
-                        </h3>
-                        <div className="bg-blue-50 rounded-xl p-4 space-y-2">
-                          {artisan.siret && (
-                            <div className="flex justify-between">
-                              <span className="text-gray-600">SIRET</span>
-                              <span className="font-mono text-gray-900">{artisan.siret}</span>
-                            </div>
-                          )}
-                          {artisan.legal_form && (
-                            <div className="flex justify-between">
-                              <span className="text-gray-600">Forme juridique</span>
-                              <span className="text-gray-900">{artisan.legal_form}</span>
-                            </div>
-                          )}
-                          {artisan.creation_date && (
-                            <div className="flex justify-between">
-                              <span className="text-gray-600">Date de creation</span>
-                              <span className="text-gray-900">
-                                {new Date(artisan.creation_date).toLocaleDateString('fr-FR')}
-                              </span>
-                            </div>
-                          )}
-                          {artisan.employee_count && (
-                            <div className="flex justify-between">
-                              <span className="text-gray-600">Effectif</span>
-                              <span className="text-gray-900">{artisan.employee_count} employe(s)</span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Services */}
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-3">Services proposes</h3>
-                      <div className="flex flex-wrap gap-2">
-                        {artisan.services.map((service, index) => (
-                          <span
-                            key={index}
-                            className="px-4 py-2 bg-blue-50 text-blue-700 rounded-full text-sm font-medium"
-                          >
-                            {service}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Certifications & Insurance */}
-                    <div className="grid sm:grid-cols-2 gap-6">
-                      {artisan.certifications && artisan.certifications.length > 0 && (
-                        <div>
-                          <h3 className="text-lg font-semibold text-gray-900 mb-3">Certifications</h3>
-                          <div className="space-y-2">
-                            {artisan.certifications.map((cert, index) => (
-                              <div key={index} className="flex items-center gap-2 text-green-700">
-                                <CheckCircle className="w-5 h-5" />
-                                <span>{cert}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {artisan.insurance && artisan.insurance.length > 0 && (
-                        <div>
-                          <h3 className="text-lg font-semibold text-gray-900 mb-3">Assurances & Garanties</h3>
-                          <div className="space-y-2">
-                            {artisan.insurance.map((ins, index) => (
-                              <div key={index} className="flex items-center gap-2 text-blue-700">
-                                <Shield className="w-5 h-5" />
-                                <span>{ins}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Payment Methods */}
-                    {artisan.payment_methods && artisan.payment_methods.length > 0 && (
-                      <div>
-                        <h3 className="text-lg font-semibold text-gray-900 mb-3">Moyens de paiement acceptes</h3>
-                        <div className="flex flex-wrap gap-3">
-                          {artisan.payment_methods.map((method, index) => (
-                            <span key={index} className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm">
-                              {method === 'Carte bancaire' && <CreditCard className="w-4 h-4" />}
-                              {method === 'Especes' && <Banknote className="w-4 h-4" />}
-                              {method === 'Cheque' && <FileText className="w-4 h-4" />}
-                              {method === 'Virement' && <ExternalLink className="w-4 h-4" />}
-                              {method === 'Cheque energie' && <Zap className="w-4 h-4" />}
-                              {method}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Contact */}
-                    {(artisan.phone || artisan.email || artisan.website) && (
-                      <div>
-                        <h3 className="text-lg font-semibold text-gray-900 mb-3">Contact</h3>
-                        <div className="space-y-2">
-                          {artisan.phone && (
-                            <a href={`tel:${artisan.phone}`} className="flex items-center gap-3 text-gray-600 hover:text-blue-600">
-                              <Phone className="w-5 h-5" />
-                              <span>{artisan.phone}</span>
-                            </a>
-                          )}
-                          {artisan.email && (
-                            <a href={`mailto:${artisan.email}`} className="flex items-center gap-3 text-gray-600 hover:text-blue-600">
-                              <Mail className="w-5 h-5" />
-                              <span>{artisan.email}</span>
-                            </a>
-                          )}
-                          {artisan.website && (
-                            <a href={artisan.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-gray-600 hover:text-blue-600">
-                              <Globe className="w-5 h-5" />
-                              <span>{artisan.website}</span>
-                            </a>
-                          )}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Location */}
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-3">Zone d&apos;intervention</h3>
-                      <div className="bg-gray-100 rounded-xl p-4">
-                        <div className="flex items-start gap-3 mb-4">
-                          <MapPin className="w-5 h-5 text-blue-600 mt-0.5" />
-                          <div>
-                            <p className="font-medium text-gray-900">{artisan.address}</p>
-                            <p className="text-gray-600">{artisan.postal_code} {artisan.city}</p>
-                            {artisan.intervention_zone && (
-                              <p className="text-sm text-blue-600 mt-1">Rayon d&apos;intervention : {artisan.intervention_zone}</p>
-                            )}
-                          </div>
-                        </div>
-
-                        {/* OpenStreetMap */}
-                        {artisan.latitude && artisan.longitude ? (
-                          <div className="h-64 rounded-lg overflow-hidden">
-                            <iframe
-                              width="100%"
-                              height="100%"
-                              style={{ border: 0 }}
-                              loading="lazy"
-                              src={`https://www.openstreetmap.org/export/embed.html?bbox=${artisan.longitude - 0.05},${artisan.latitude - 0.03},${artisan.longitude + 0.05},${artisan.latitude + 0.03}&layer=mapnik&marker=${artisan.latitude},${artisan.longitude}`}
-                            />
-                          </div>
-                        ) : (
-                          <div className="h-48 bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg flex items-center justify-center">
-                            <div className="text-center">
-                              <Navigation className="w-8 h-8 text-blue-500 mx-auto mb-2" />
-                              <p className="text-blue-700 font-medium">{artisan.city}</p>
-                              <p className="text-blue-600 text-sm">{artisan.postal_code}</p>
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Zones d'intervention */}
-                        {artisan.intervention_zones && artisan.intervention_zones.length > 0 && (
-                          <div className="mt-4">
-                            <p className="text-sm font-medium text-gray-700 mb-2">Villes desservies :</p>
-                            <div className="flex flex-wrap gap-2">
-                              {artisan.intervention_zones.map((zone, idx) => (
-                                <span key={idx} className="px-3 py-1 bg-white text-gray-700 rounded-full text-sm border">
-                                  {zone}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* FAQ */}
-                    {artisan.faq && artisan.faq.length > 0 && (
-                      <div>
-                        <h3 className="text-lg font-semibold text-gray-900 mb-3">Questions frequentes</h3>
-                        <div className="space-y-2">
-                          {artisan.faq.map((item, index) => (
-                            <div key={index} className="border rounded-lg overflow-hidden">
-                              <button
-                                onClick={() => setExpandedFaq(expandedFaq === index ? null : index)}
-                                className="w-full flex items-center justify-between p-4 text-left hover:bg-gray-50"
-                              >
-                                <span className="font-medium text-gray-900">{item.question}</span>
-                                {expandedFaq === index ? (
-                                  <ChevronUp className="w-5 h-5 text-gray-400" />
-                                ) : (
-                                  <ChevronDown className="w-5 h-5 text-gray-400" />
-                                )}
-                              </button>
-                              {expandedFaq === index && (
-                                <div className="px-4 pb-4 text-gray-600">{item.answer}</div>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Languages */}
-                    {artisan.languages && artisan.languages.length > 0 && (
-                      <div>
-                        <h3 className="text-lg font-semibold text-gray-900 mb-3">Langues parlees</h3>
-                        <p className="text-gray-600">{artisan.languages.join(', ')}</p>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* Tarifs Tab */}
-                {activeTab === 'tarifs' && (
-                  <div className="space-y-6">
-                    <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
-                      <p className="text-blue-800 text-sm">
-                        <strong>Devis gratuit :</strong> Les prix indiques sont donnes a titre indicatif. Chaque situation etant unique, un devis personnalise vous sera propose apres etude de votre demande.
-                      </p>
-                    </div>
-
-                    {artisan.service_prices.length > 0 ? (
-                      <div className="divide-y">
-                        {artisan.service_prices.slice(0, showAllPrices ? undefined : 4).map((service, index) => (
-                          <div key={index} className="py-4 flex items-start justify-between gap-4">
-                            <div className="flex-1">
-                              <h4 className="font-semibold text-gray-900">{service.name}</h4>
-                              <p className="text-sm text-gray-500">{service.description}</p>
-                              {service.duration && (
-                                <p className="text-sm text-gray-400 mt-1">
-                                  <Clock className="w-4 h-4 inline mr-1" />
-                                  Duree estimee : {service.duration}
-                                </p>
-                              )}
-                            </div>
-                            <div className="text-right">
-                              <span className="text-lg font-bold text-blue-600">{service.price}</span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="text-center py-8 text-gray-500">
-                        <p>Tarifs disponibles sur demande de devis</p>
-                      </div>
-                    )}
-
-                    {artisan.service_prices.length > 4 && (
-                      <button
-                        onClick={() => setShowAllPrices(!showAllPrices)}
-                        className="w-full py-3 text-blue-600 hover:text-blue-700 font-medium flex items-center justify-center gap-2"
-                      >
-                        {showAllPrices ? (
-                          <>Voir moins <ChevronUp className="w-5 h-5" /></>
-                        ) : (
-                          <>Voir tous les tarifs ({artisan.service_prices.length}) <ChevronDown className="w-5 h-5" /></>
-                        )}
-                      </button>
-                    )}
-
-                    <div className="bg-gray-50 rounded-xl p-6 text-center">
-                      <h4 className="font-semibold text-gray-900 mb-2">Besoin d'un devis personnalise ?</h4>
-                      <p className="text-gray-600 text-sm mb-4">Decrivez votre projet et recevez un devis detaille sous 24h</p>
-                      <Link
-                        href={`/devis?artisan=${artisanId}`}
-                        className="inline-block px-6 py-3 bg-white border-2 border-blue-600 text-blue-600 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
-                      >
-                        Demander un devis gratuit
-                      </Link>
-                    </div>
-                  </div>
-                )}
-
-                {/* Photos Tab */}
-                {activeTab === 'photos' && (
-                  <div>
-                    {artisan.portfolio && artisan.portfolio.length > 0 ? (
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                        {artisan.portfolio.map((item) => (
-                          <div
-                            key={item.id}
-                            className="aspect-square bg-gradient-to-br from-gray-200 to-gray-300 rounded-xl overflow-hidden cursor-pointer hover:opacity-90 transition-opacity relative group"
-                          >
-                            {item.imageUrl ? (
-                              <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover" />
-                            ) : (
-                              <div className="absolute inset-0 flex items-center justify-center">
-                                <Camera className="w-10 h-10 text-gray-400" />
-                              </div>
-                            )}
-                            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-3 translate-y-full group-hover:translate-y-0 transition-transform">
-                              <p className="text-white text-sm font-medium truncate">{item.title}</p>
-                              <p className="text-white/80 text-xs">{item.category}</p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="text-center py-12">
-                        <Camera className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                        <p className="text-gray-500">Aucune photo disponible pour le moment</p>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* Avis Tab */}
-                {activeTab === 'avis' && (
-                  <div className="space-y-6">
-                    {/* Rating Summary */}
-                    <div className="flex flex-col sm:flex-row items-center gap-6 p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl">
-                      <div className="text-center">
-                        <div className="text-5xl font-bold text-gray-900">{artisan.average_rating.toFixed(1)}</div>
-                        <div className="flex items-center justify-center mt-2">
-                          {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className={`w-5 h-5 ${
-                                i < Math.floor(artisan.average_rating)
-                                  ? 'text-yellow-400 fill-yellow-400'
-                                  : 'text-gray-300'
-                              }`}
-                            />
-                          ))}
-                        </div>
-                        <div className="text-sm text-gray-500 mt-1">{artisan.review_count} avis</div>
-                      </div>
-                      <div className="flex-1 space-y-2 w-full sm:w-auto">
-                        {[5, 4, 3, 2, 1].map((stars) => {
-                          const percentage = stars === 5 ? 68 : stars === 4 ? 22 : stars === 3 ? 7 : stars === 2 ? 2 : 1
-                          return (
-                            <div key={stars} className="flex items-center gap-2">
-                              <span className="text-sm text-gray-500 w-3">{stars}</span>
-                              <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                              <div className="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden">
-                                <div className="h-full bg-yellow-400 rounded-full transition-all" style={{ width: `${percentage}%` }} />
-                              </div>
-                              <span className="text-sm text-gray-500 w-10">{percentage}%</span>
-                            </div>
-                          )
-                        })}
-                      </div>
-                    </div>
-
-                    {/* Reviews List */}
-                    {reviews.length > 0 ? (
-                      <div className="space-y-4">
-                        {reviews.map((review) => (
-                          <div key={review.id} className="border rounded-xl p-5">
-                            <div className="flex items-start justify-between mb-3">
-                              <div className="flex items-center gap-3">
-                                <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                                  {review.author.charAt(0)}
-                                </div>
-                                <div>
-                                  <div className="flex items-center gap-2">
-                                    <p className="font-semibold text-gray-900">{review.author}</p>
-                                    {review.verified && (
-                                      <span className="inline-flex items-center gap-1 text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
-                                        <CheckCircle className="w-3 h-3" />
-                                        Verifie
-                                      </span>
-                                    )}
-                                  </div>
-                                  <p className="text-sm text-gray-500">{review.date}</p>
-                                </div>
-                              </div>
-                              <div className="flex items-center gap-1">
-                                {[...Array(5)].map((_, i) => (
-                                  <Star
-                                    key={i}
-                                    className={`w-4 h-4 ${
-                                      i < review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'
-                                    }`}
-                                  />
-                                ))}
-                              </div>
-                            </div>
-                            <span className="inline-block text-xs text-blue-600 bg-blue-50 px-3 py-1 rounded-full mb-3">
-                              {review.service}
-                            </span>
-                            <p className="text-gray-700 leading-relaxed">{review.comment}</p>
-                            {review.hasPhoto && (
-                              <div className="mt-3 flex gap-2">
-                                <div className="w-20 h-20 bg-gray-200 rounded-lg flex items-center justify-center">
-                                  <Camera className="w-6 h-6 text-gray-400" />
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="text-center py-12">
-                        <Star className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                        <p className="text-gray-500">Aucun avis pour le moment</p>
-                      </div>
-                    )}
-
-                    {artisan.review_count > reviews.length && (
-                      <button className="w-full py-3 text-blue-600 hover:text-blue-700 font-medium border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors">
-                        Voir tous les {artisan.review_count} avis
-                      </button>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Similar Artisans */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Artisans similaires</h3>
-              <div className="grid sm:grid-cols-3 gap-4">
-                {SIMILAR_ARTISANS.map((similar) => (
-                  <Link
-                    key={similar.id}
-                    href={`/services/artisan/${similar.id}`}
-                    className="block p-4 border rounded-xl hover:border-blue-300 hover:shadow-md transition-all"
-                  >
-                    <div className="flex items-center gap-3 mb-2">
-                      <div className="w-12 h-12 bg-gradient-to-br from-gray-400 to-gray-500 rounded-full flex items-center justify-center text-white font-bold">
-                        {similar.name.charAt(0)}
-                      </div>
-                      <div>
-                        <p className="font-medium text-gray-900 line-clamp-1">{similar.name}</p>
-                        <p className="text-sm text-gray-500">{similar.specialty}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <div className="flex items-center gap-1">
-                        <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                        <span className="font-medium">{similar.rating}</span>
-                        <span className="text-gray-400">({similar.reviews})</span>
-                      </div>
-                      <span className="text-blue-600 font-medium">{similar.hourly_rate}€/h</span>
-                    </div>
-                    <p className="text-xs text-gray-400 mt-1">{similar.city}</p>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Sidebar - Contact */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-xl shadow-sm p-6 sticky top-20">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Contacter cet artisan</h3>
-
-              {artisan.accepts_new_clients === false ? (
-                <div className="text-center py-6">
-                  <AlertCircle className="w-12 h-12 text-amber-500 mx-auto mb-3" />
-                  <p className="text-gray-600 mb-4">Cet artisan n&apos;accepte pas de nouveaux clients pour le moment.</p>
-                  <button className="w-full py-3 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-colors">
-                    Etre notifie des disponibilites
-                  </button>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {/* Primary CTA */}
-                  {artisan.phone ? (
-                    <a
-                      href={`tel:${artisan.phone}`}
-                      className="w-full flex items-center justify-center gap-2 py-3.5 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/30"
-                    >
-                      <Phone className="w-5 h-5" />
-                      Appeler maintenant
-                    </a>
-                  ) : (
-                    <Link
-                      href={`/devis?artisan=${artisanId}`}
-                      className="w-full flex items-center justify-center gap-2 py-3.5 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/30"
-                    >
-                      <FileText className="w-5 h-5" />
-                      Demander un devis gratuit
-                    </Link>
-                  )}
-
-                  {/* Secondary CTAs */}
-                  <Link
-                    href={`/devis?artisan=${artisanId}`}
-                    className="w-full flex items-center justify-center gap-2 py-2.5 border-2 border-blue-600 text-blue-600 rounded-lg font-medium hover:bg-blue-50 transition-colors"
-                  >
-                    <FileText className="w-4 h-4" />
-                    Demander un devis
-                  </Link>
-
-                  <button className="w-full flex items-center justify-center gap-2 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
-                    <MessageCircle className="w-4 h-4" />
-                    Envoyer un message
-                  </button>
-
-                  {/* Phone display */}
-                  {artisan.phone && (
-                    <div className="pt-3 border-t text-center">
-                      <p className="text-sm text-gray-500 mb-1">Telephone</p>
-                      <a href={`tel:${artisan.phone}`} className="text-lg font-semibold text-gray-900 hover:text-blue-600">
-                        {artisan.phone}
-                      </a>
-                    </div>
-                  )}
-
-                  {/* Guarantee */}
-                  <div className="pt-4 border-t">
-                    <div className="flex items-start gap-3 text-sm text-gray-600">
-                      <Shield className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <p>
-                        <strong className="text-gray-900">Devis gratuit</strong><br />
-                        Sans engagement, reponse sous 24h
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Fixed Bottom Bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t p-4 lg:hidden z-50">
-        <div className="flex items-center gap-4">
-          <div className="flex-1">
-            <p className="text-sm text-gray-500">A partir de</p>
-            <p className="text-xl font-bold text-gray-900">
-              {artisan.hourly_rate ? `${artisan.hourly_rate}€` : 'Sur devis'}
-              {artisan.hourly_rate && <span className="text-sm font-normal text-gray-500">/h</span>}
-            </p>
-          </div>
-          {artisan.phone ? (
-            <a
-              href={`tel:${artisan.phone}`}
-              className="flex-1 py-3.5 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors shadow-lg text-center"
-            >
-              Appeler
-            </a>
-          ) : (
-            <Link
-              href={`/devis?artisan=${artisanId}`}
-              className="flex-1 py-3.5 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors shadow-lg text-center"
-            >
-              Devis gratuit
-            </Link>
-          )}
-        </div>
-      </div>
-    </div>
+    <ArtisanPageClient
+      initialArtisan={artisan}
+      initialReviews={reviews}
+      artisanId={params.id}
+    />
   )
 }

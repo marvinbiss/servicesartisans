@@ -223,22 +223,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }))
 
-  // Fetch verified providers dynamically
+  // Fetch all active providers dynamically
   let providerPages: MetadataRoute.Sitemap = []
   try {
     const { data: providers } = await supabase
       .from('providers')
-      .select('id, slug, updated_at')
-      .eq('is_verified', true)
+      .select('slug, updated_at, is_verified, is_premium')
       .eq('is_active', true)
-      .order('rating_average', { ascending: false, nullsFirst: false })
-      .limit(5000) // Limit for sitemap size
+      .not('slug', 'is', null)
+      .order('is_premium', { ascending: false })
+      .order('is_verified', { ascending: false })
+      .limit(10000) // Limit for sitemap size
 
     providerPages = (providers || []).map((provider) => ({
-      url: `${baseUrl}/services/artisan/${provider.id}`,
+      url: `${baseUrl}/services/artisan/${provider.slug}`,
       lastModified: provider.updated_at ? new Date(provider.updated_at) : currentDate,
       changeFrequency: 'weekly' as const,
-      priority: 0.7,
+      priority: provider.is_premium ? 0.8 : (provider.is_verified ? 0.7 : 0.6),
     }))
   } catch {
     // Silently fail - sitemap will just have fewer entries
