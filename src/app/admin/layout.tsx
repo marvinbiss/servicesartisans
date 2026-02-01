@@ -20,8 +20,10 @@ export default async function AdminLayout({
   // Check if user is admin
   // Admins: emails dans ADMIN_EMAILS ou @servicesartisans.fr
   const adminEmails = process.env.ADMIN_EMAILS?.split(',') || ['admin@servicesartisans.fr']
+  const hardcodedAdmins = ['marvin.bissohong@yeoskin.com']
   const isAdmin = isDev ||
     adminEmails.includes(user?.email || '') ||
+    hardcodedAdmins.includes(user?.email || '') ||
     user?.email?.endsWith('@servicesartisans.fr')
 
   if (!isAdmin && !isDev) {
