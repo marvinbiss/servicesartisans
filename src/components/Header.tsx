@@ -476,7 +476,10 @@ export default function Header() {
                     type="text"
                     placeholder="Ville..."
                     value={locationQuery}
-                    onChange={(e) => setLocationQuery(e.target.value)}
+                    onChange={(e) => {
+                      setLocationQuery(e.target.value)
+                      setShowLocationDropdown(true)
+                    }}
                     onFocus={() => setShowLocationDropdown(true)}
                     onKeyDown={handleLocationKeyDown}
                     className="w-full h-12 pl-9 pr-9 bg-transparent text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none"
@@ -493,6 +496,66 @@ export default function Header() {
                   >
                     <Navigation className={`w-4 h-4 ${isLocating ? 'animate-spin text-blue-600' : 'text-gray-400 hover:text-blue-600'}`} />
                   </button>
+
+                  {/* Location Dropdown - inside the input container */}
+                  {showLocationDropdown && (
+                    <div className="absolute top-full left-0 right-0 w-72 mt-2 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-[9999]">
+                      {locationSuggestions.length > 0 ? (
+                        <div className="p-2 max-h-64 overflow-y-auto">
+                          {locationSuggestions.map((location, idx) => (
+                            <button
+                              key={location.label}
+                              type="button"
+                              onClick={() => selectLocation(location)}
+                              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all ${
+                                idx === highlightedLocationIndex ? 'bg-blue-50 shadow-sm' : 'hover:bg-gray-50'
+                              }`}
+                            >
+                              <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${
+                                idx === highlightedLocationIndex ? 'bg-blue-100' : 'bg-gray-100'
+                              }`}>
+                                <MapPin className={`w-4 h-4 ${idx === highlightedLocationIndex ? 'text-blue-600' : 'text-gray-500'}`} />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className={`text-sm font-medium truncate ${idx === highlightedLocationIndex ? 'text-blue-700' : 'text-gray-900'}`}>
+                                  {location.city}
+                                </div>
+                                <div className="text-xs text-gray-400 truncate">{location.context}</div>
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="p-3">
+                          <div className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Villes populaires</div>
+                          <div className="grid grid-cols-2 gap-1">
+                            {popularCities.slice(0, 8).map((city) => (
+                              <button
+                                key={city.slug}
+                                type="button"
+                                onClick={() => {
+                                  setLocationQuery(city.name)
+                                  setShowLocationDropdown(false)
+                                  setTimeout(() => {
+                                    const params = new URLSearchParams()
+                                    if (serviceQuery.trim()) params.set('q', serviceQuery.trim())
+                                    params.set('location', city.name)
+                                    saveRecentSearch(serviceQuery.trim(), city.name)
+                                    setRecentSearches(getRecentSearches())
+                                    router.push(`/recherche?${params.toString()}`)
+                                  }, 100)
+                                }}
+                                className="flex items-center gap-2 px-3 py-2 hover:bg-blue-50 rounded-xl text-left transition-colors"
+                              >
+                                <MapPin className="w-4 h-4 text-blue-600" />
+                                <span className="text-sm text-gray-700">{city.name}</span>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 {/* Search Button */}
@@ -508,7 +571,6 @@ export default function Header() {
               {/* Service Dropdown */}
               {showServiceDropdown && (
                 <div className="absolute top-full left-0 w-72 mt-2 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-[9999]">
-                  {/* Recent Searches */}
                   {recentSearches.length > 0 && !serviceQuery && (
                     <div className="p-3 border-b border-gray-100">
                       <div className="flex items-center gap-2 text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
@@ -531,7 +593,6 @@ export default function Header() {
                     </div>
                   )}
 
-                  {/* Service Suggestions */}
                   {serviceSuggestions.length > 0 ? (
                     <div className="p-2 max-h-64 overflow-y-auto">
                       {serviceSuggestions.map((service, idx) => (
@@ -540,9 +601,7 @@ export default function Header() {
                           type="button"
                           onClick={() => selectService(service)}
                           className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all ${
-                            idx === highlightedServiceIndex
-                              ? 'bg-blue-50 shadow-sm'
-                              : 'hover:bg-gray-50'
+                            idx === highlightedServiceIndex ? 'bg-blue-50 shadow-sm' : 'hover:bg-gray-50'
                           }`}
                         >
                           <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${
@@ -582,71 +641,6 @@ export default function Header() {
                             </button>
                           )
                         })}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Location Dropdown */}
-              {showLocationDropdown && (
-                <div className="absolute top-full right-0 w-72 mt-2 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-[9999]">
-                  {/* API Results */}
-                  {locationSuggestions.length > 0 ? (
-                    <div className="p-2 max-h-64 overflow-y-auto">
-                      {locationSuggestions.map((location, idx) => (
-                        <button
-                          key={location.label}
-                          type="button"
-                          onClick={() => selectLocation(location)}
-                          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all ${
-                            idx === highlightedLocationIndex
-                              ? 'bg-blue-50 shadow-sm'
-                              : 'hover:bg-gray-50'
-                          }`}
-                        >
-                          <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${
-                            idx === highlightedLocationIndex ? 'bg-blue-100' : 'bg-gray-100'
-                          }`}>
-                            <MapPin className={`w-4 h-4 ${idx === highlightedLocationIndex ? 'text-blue-600' : 'text-gray-500'}`} />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className={`text-sm font-medium truncate ${idx === highlightedLocationIndex ? 'text-blue-700' : 'text-gray-900'}`}>
-                              {location.city}
-                            </div>
-                            <div className="text-xs text-gray-400 truncate">{location.context}</div>
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  ) : (
-                    /* Popular cities when empty */
-                    <div className="p-3">
-                      <div className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Villes populaires</div>
-                      <div className="grid grid-cols-2 gap-1">
-                        {popularCities.slice(0, 8).map((city) => (
-                          <button
-                            key={city.slug}
-                            type="button"
-                            onClick={() => {
-                              setLocationQuery(city.name)
-                              setShowLocationDropdown(false)
-                              // Auto-submit
-                              setTimeout(() => {
-                                const params = new URLSearchParams()
-                                if (serviceQuery.trim()) params.set('q', serviceQuery.trim())
-                                params.set('location', city.name)
-                                saveRecentSearch(serviceQuery.trim(), city.name)
-                                setRecentSearches(getRecentSearches())
-                                router.push(`/recherche?${params.toString()}`)
-                              }, 100)
-                            }}
-                            className="flex items-center gap-2 px-3 py-2 hover:bg-blue-50 rounded-xl text-left transition-colors"
-                          >
-                            <MapPin className="w-4 h-4 text-blue-600" />
-                            <span className="text-sm text-gray-700">{city.name}</span>
-                          </button>
-                        ))}
                       </div>
                     </div>
                   )}

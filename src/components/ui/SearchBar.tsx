@@ -397,7 +397,10 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
                 ref={locationInputRef}
                 type="text"
                 value={location}
-                onChange={(e) => setLocation(e.target.value)}
+                onChange={(e) => {
+                  setLocation(e.target.value)
+                  setShowLocationSuggestions(true)
+                }}
                 onFocus={() => setShowLocationSuggestions(true)}
                 onKeyDown={handleLocationKeyDown}
                 placeholder="Ville ou code postal"
