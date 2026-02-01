@@ -237,14 +237,77 @@ export async function PATCH(
 
     log('INFO', 'Update successful', { providerId: data?.id })
 
-    // Step 6: Log audit action
+    // Step 6: Update services if provided
+    if (body.services && Array.isArray(body.services)) {
+      log('INFO', 'Step 6: Updating services', { services: body.services })
+      try {
+        // Delete existing provider_services
+        await supabase
+          .from('provider_services')
+          .delete()
+          .eq('provider_id', providerId)
+
+        // For each service name, find or create the service and link it
+        for (const serviceName of body.services) {
+          if (!serviceName || typeof serviceName !== 'string') continue
+
+          // Try to find existing service by name
+          let { data: existingService } = await supabase
+            .from('services')
+            .select('id')
+            .ilike('name', serviceName.trim())
+            .single()
+
+          let serviceId = existingService?.id
+
+          // If not found, create new service
+          if (!serviceId) {
+            const slug = serviceName.trim().toLowerCase()
+              .replace(/[^a-z0-9]+/g, '-')
+              .replace(/^-|-$/g, '')
+
+            const { data: newService, error: createError } = await supabase
+              .from('services')
+              .insert({
+                name: serviceName.trim(),
+                slug: slug,
+                is_active: true,
+              })
+              .select('id')
+              .single()
+
+            if (createError) {
+              log('WARN', `Failed to create service: ${serviceName}`, createError)
+              continue
+            }
+            serviceId = newService?.id
+          }
+
+          // Link provider to service
+          if (serviceId) {
+            await supabase
+              .from('provider_services')
+              .insert({
+                provider_id: providerId,
+                service_id: serviceId,
+                is_primary: body.services.indexOf(serviceName) === 0,
+              })
+          }
+        }
+        log('INFO', 'Services updated successfully')
+      } catch (servicesError) {
+        log('WARN', 'Services update failed but main update succeeded', servicesError)
+      }
+    }
+
+    // Step 7: Log audit action
     try {
       await logAdminAction(authResult.admin.id, 'provider.update', 'provider', providerId, updateData)
     } catch (auditError) {
       log('WARN', 'Audit log failed but update succeeded', auditError)
     }
 
-    // Step 7: Return success
+    // Step 8: Return success
     return NextResponse.json({
       success: true,
       data,
