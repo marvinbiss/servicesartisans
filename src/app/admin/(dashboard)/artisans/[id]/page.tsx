@@ -75,9 +75,16 @@ export default function AdminArtisanDetailPage() {
   const fetchArtisan = async () => {
     try {
       setLoading(true)
-      const response = await fetch(`/api/admin/providers/${artisanId}`)
+      const response = await fetch(`/api/admin/providers/${artisanId}`, {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+        },
+      })
       if (response.ok) {
         const data = await response.json()
+        console.log('[Detail] Fetched artisan:', data.provider)
         setArtisan(data.provider)
       } else {
         router.push('/admin/artisans')

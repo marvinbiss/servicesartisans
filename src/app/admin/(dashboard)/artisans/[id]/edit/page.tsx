@@ -218,12 +218,9 @@ export default function EditArtisanPage() {
         setToast({ message: 'Artisan mis à jour avec succès!', type: 'success' })
         setHasChanges(false)
 
-        // Refresh data to show updated values
-        await fetchArtisan()
-
-        // Redirect after a short delay
+        // Redirect after a short delay with full page reload to clear cache
         setTimeout(() => {
-          router.push(`/admin/artisans/${artisanId}`)
+          window.location.href = `/admin/artisans/${artisanId}`
         }, 1500)
       } else {
         const errorMsg = data.error || data.message || 'Erreur de sauvegarde'
