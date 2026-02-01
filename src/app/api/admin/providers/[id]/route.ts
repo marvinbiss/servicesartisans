@@ -95,7 +95,6 @@ export async function GET(
       created_at: provider.created_at,
       updated_at: provider.updated_at,
       slug: provider.slug,
-      // Relations brutes pour l'édition avancée
       _provider_services: provider.provider_services,
       _provider_locations: provider.provider_locations,
     }
@@ -105,7 +104,6 @@ export async function GET(
       provider: transformedProvider,
     })
 
-    // Prevent caching
     response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate')
     response.headers.set('Pragma', 'no-cache')
 
@@ -136,7 +134,6 @@ export async function PATCH(
       .single()
 
     if (checkError || !existingProvider) {
-      console.error('[Admin PATCH] Provider not found:', providerId)
       return NextResponse.json(
         { success: false, error: 'Provider non trouvé' },
         { status: 404 }
@@ -144,10 +141,6 @@ export async function PATCH(
     }
 
     const body = await request.json()
-
-    console.log('[Admin PATCH] Provider ID:', providerId)
-    console.log('[Admin PATCH] Existing provider:', existingProvider.name)
-    console.log('[Admin PATCH] Body received:', JSON.stringify(body, null, 2))
 
     // Mapper les champs frontend -> database
     const updateData: Record<string, unknown> = {
@@ -196,7 +189,6 @@ export async function PATCH(
         .replace(/^-|-$/g, '')
         .substring(0, 100)
 
-      // Garder le suffix existant ou utiliser l'id
       const { data: existing } = await supabase
         .from('providers')
         .select('slug, siren')
@@ -207,8 +199,6 @@ export async function PATCH(
       updateData.slug = `${slug}-${suffix}`
     }
 
-    console.log('[Admin PATCH] Update data:', JSON.stringify(updateData, null, 2))
-
     // Update principal
     const { data, error } = await supabase
       .from('providers')
@@ -218,37 +208,17 @@ export async function PATCH(
       .single()
 
     if (error) {
-      console.error('[Admin PATCH] Update error:', error)
+      console.error('Admin provider PATCH error:', error)
       throw error
     }
 
-    console.log('[Admin PATCH] Update success!')
-    console.log('[Admin PATCH] New is_verified:', data?.is_verified)
-    console.log('[Admin PATCH] New is_active:', data?.is_active)
-
-    // Verify the update actually persisted by reading back
-    const { data: verifyData } = await supabase
-      .from('providers')
-      .select('id, name, is_verified, is_active')
-      .eq('id', providerId)
-      .single()
-
-    console.log('[Admin PATCH] Verified from DB:', {
-      id: verifyData?.id,
-      name: verifyData?.name,
-      is_verified: verifyData?.is_verified,
-      is_active: verifyData?.is_active,
-    })
-
     // Gérer les services si fournis
     if (body.services && Array.isArray(body.services)) {
-      // Supprimer les anciens liens
       await supabase
         .from('provider_services')
         .delete()
         .eq('provider_id', providerId)
 
-      // Récupérer les services par nom
       const { data: servicesList } = await supabase
         .from('services')
         .select('id, name, slug')
@@ -256,7 +226,6 @@ export async function PATCH(
       const serviceMap = new Map(servicesList?.map(s => [s.name.toLowerCase(), s.id]) || [])
       const serviceMapBySlug = new Map(servicesList?.map(s => [s.slug, s.id]) || [])
 
-      // Créer les nouveaux liens
       for (const serviceName of body.services) {
         const serviceId = serviceMap.get(serviceName.toLowerCase()) || serviceMapBySlug.get(serviceName.toLowerCase())
         if (serviceId) {
@@ -282,7 +251,7 @@ export async function PATCH(
         created_at: new Date().toISOString(),
       })
     } catch {
-      // Ignorer les erreurs d'audit
+      // Audit logging is non-critical
     }
 
     const response = NextResponse.json({
@@ -291,7 +260,6 @@ export async function PATCH(
       message: 'Artisan mis à jour avec succès'
     })
 
-    // Prevent caching
     response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate')
     response.headers.set('Pragma', 'no-cache')
 
@@ -334,7 +302,7 @@ export async function DELETE(
         created_at: new Date().toISOString(),
       })
     } catch {
-      // Ignorer
+      // Audit logging is non-critical
     }
 
     return NextResponse.json({

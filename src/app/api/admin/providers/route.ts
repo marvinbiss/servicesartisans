@@ -29,7 +29,6 @@ const SELECT_COLUMNS = `
 
 export async function GET(request: NextRequest) {
   try {
-    // Utilise le client admin pour contourner RLS
     const supabase = createAdminClient()
 
     const searchParams = request.nextUrl.searchParams
@@ -37,9 +36,6 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '20')
     const filter = searchParams.get('filter') || 'all'
     const search = searchParams.get('search') || ''
-    const cacheBuster = searchParams.get('_t') || ''
-
-    console.log(`[Admin API] GET providers - filter="${filter}", page=${page}, limit=${limit}, _t=${cacheBuster}`)
 
     const offset = (page - 1) * limit
 
@@ -48,20 +44,13 @@ export async function GET(request: NextRequest) {
       .from('providers')
       .select(SELECT_COLUMNS, { count: 'exact' })
 
-    // Apply filters - using different approach based on filter type
-    // For boolean filters, use explicit string comparison or eq
+    // Apply filters using in() for reliable boolean comparison
     if (filter === 'verified') {
-      console.log('[Admin API] Applying verified filter')
-      // Try using in() with single value array to force proper comparison
       query = query.in('is_verified', [true]).in('is_active', [true])
     } else if (filter === 'pending') {
-      console.log('[Admin API] Applying pending filter')
       query = query.in('is_verified', [false]).in('is_active', [true])
     } else if (filter === 'suspended') {
-      console.log('[Admin API] Applying suspended filter')
       query = query.in('is_active', [false])
-    } else {
-      console.log('[Admin API] No filter (showing all)')
     }
 
     // Apply search
@@ -78,8 +67,6 @@ export async function GET(request: NextRequest) {
       console.error('[Admin API] Query error:', error)
       throw error
     }
-
-    console.log(`[Admin API] Query returned ${providers?.length || 0} providers, total count=${count}`)
 
     // Transform data for frontend
     const transformedProviders = (providers || []).map((p: Record<string, unknown>) => {

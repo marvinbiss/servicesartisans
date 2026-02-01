@@ -1,0 +1,37 @@
+# Robots.txt for ServicesArtisans
+# https://servicesartisans.fr
+
+User-agent: *
+Allow: /
+
+# Disallow admin and private areas
+Disallow: /admin/
+Disallow: /api/
+Disallow: /espace-client/
+Disallow: /espace-artisan/
+Disallow: /pro/
+Disallow: /auth/
+Disallow: /callback/
+Disallow: /confirmation/
+Disallow: /mot-de-passe-oublie
+Disallow: /reset-password
+
+# Disallow search and filter pages with parameters
+Disallow: /*?*
+
+# Allow important crawlable content
+Allow: /services/
+Allow: /villes/
+Allow: /regions/
+Allow: /artisans/
+Allow: /faq
+Allow: /tarifs-artisans
+Allow: /mentions-legales
+Allow: /cgu
+Allow: /confidentialite
+
+# Sitemap location
+Sitemap: https://servicesartisans.fr/sitemap.xml
+
+# Crawl delay (optional, respected by some bots)
+Crawl-delay: 1

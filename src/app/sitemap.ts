@@ -223,7 +223,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }))
 
-  // Fetch verified artisans dynamically
+  // Fetch verified providers dynamically
+  let providerPages: MetadataRoute.Sitemap = []
+  try {
+    const { data: providers } = await supabase
+      .from('providers')
+      .select('id, slug, updated_at')
+      .eq('is_verified', true)
+      .eq('is_active', true)
+      .order('rating_average', { ascending: false, nullsFirst: false })
+      .limit(5000) // Limit for sitemap size
+
+    providerPages = (providers || []).map((provider) => ({
+      url: `${baseUrl}/services/artisan/${provider.id}`,
+      lastModified: provider.updated_at ? new Date(provider.updated_at) : currentDate,
+      changeFrequency: 'weekly' as const,
+      priority: 0.7,
+    }))
+  } catch {
+    // Silently fail - sitemap will just have fewer entries
+  }
+
+  // Also fetch from profiles for backwards compatibility
   let artisanPages: MetadataRoute.Sitemap = []
   try {
     const { data: artisans } = await supabase
@@ -240,8 +261,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly' as const,
       priority: 0.6,
     }))
-  } catch (error) {
-    console.error('Error fetching artisans for sitemap:', error)
+  } catch {
+    // Silently fail
   }
 
   return [
@@ -251,6 +272,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...regionPages,
     ...departementPages,
     ...blogPages,
+    ...providerPages,
     ...artisanPages,
   ]
 }
