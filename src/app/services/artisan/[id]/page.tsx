@@ -232,8 +232,14 @@ export default function ArtisanPage() {
     setIsLoading(true)
 
     try {
-      // Essayer de charger depuis l'API
-      const response = await fetch(`/api/artisans/${artisanId}`)
+      // Essayer de charger depuis l'API avec cache-busting
+      const response = await fetch(`/api/artisans/${artisanId}`, {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+        },
+      })
 
       if (response.ok) {
         const data = await response.json()

@@ -348,12 +348,18 @@ export async function GET(
       )
     }
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       artisan,
       reviews,
       source,
     })
+
+    // Disable caching to always get fresh data
+    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate')
+    response.headers.set('Pragma', 'no-cache')
+
+    return response
 
   } catch (error) {
     logger.error('Error fetching artisan', error)
