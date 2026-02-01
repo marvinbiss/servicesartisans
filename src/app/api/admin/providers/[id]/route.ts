@@ -91,7 +91,7 @@ export async function GET(
       region: provider.address_region || '',
       latitude: provider.latitude,
       longitude: provider.longitude,
-      hourly_rate: provider.hourly_rate || null,
+      hourly_rate: null, // Not stored in providers table - prices are in provider_services
       is_verified: provider.is_verified || false,
       is_featured: provider.is_premium || false,
       is_active: provider.is_active !== false,
@@ -194,7 +194,7 @@ export async function PATCH(
     if (body.postal_code !== undefined) updateData.address_postal_code = body.postal_code || null
     if (body.department !== undefined) updateData.address_department = body.department || null
     if (body.region !== undefined) updateData.address_region = body.region || null
-    if (body.hourly_rate !== undefined) updateData.hourly_rate = body.hourly_rate || null
+    // Note: hourly_rate is not a column in providers table - prices are in provider_services
     if (body.website !== undefined) updateData.website = body.website || null
     if (body.legal_form !== undefined) updateData.legal_form = body.legal_form || null
 
