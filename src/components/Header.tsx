@@ -5,7 +5,8 @@ import { useRouter, usePathname } from 'next/navigation'
 import {
   Search, Menu, X, ChevronDown, MapPin, Wrench, Zap, Key, Flame,
   PaintBucket, Home, Hammer, HardHat, Wind, Droplets, TreeDeciduous,
-  ShieldCheck, Sparkles, Star, Clock, Phone, ArrowRight, Users, Award
+  ShieldCheck, Sparkles, Star, Clock, Phone, ArrowRight, Users, Award,
+  ChefHat, Layers, Brush
 } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useMobileMenu } from '@/contexts/MobileMenuContext'
@@ -48,6 +49,16 @@ const serviceCategories = [
     services: [
       { name: 'Peintre', slug: 'peintre-en-batiment', icon: PaintBucket, description: 'Peinture int. et ext.' },
       { name: 'Carreleur', slug: 'carreleur', icon: Sparkles, description: 'Carrelage, faïence' },
+      { name: 'Solier', slug: 'solier', icon: Layers, description: 'Parquet, moquette, lino' },
+    ]
+  },
+  {
+    category: 'Aménagement',
+    color: 'pink',
+    icon: ChefHat,
+    services: [
+      { name: 'Cuisiniste', slug: 'cuisiniste', icon: ChefHat, description: 'Cuisines sur mesure' },
+      { name: 'Nettoyage', slug: 'nettoyage', icon: Brush, description: 'Ménage professionnel' },
     ]
   },
   {
@@ -134,7 +145,7 @@ export default function Header() {
   }
 
   return (
-    <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+    <header className="bg-white border-b border-gray-200 sticky top-0 z-[9999] shadow-sm">
       {/* Top bar premium */}
       <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-blue-900 text-white py-2">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between text-sm">

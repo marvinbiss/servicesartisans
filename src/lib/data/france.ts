@@ -1190,4 +1190,7 @@ export const services = [
   { slug: 'jardinier', name: 'Jardinier', icon: 'TreeDeciduous', color: 'from-green-500 to-green-600' },
   { slug: 'vitrier', name: 'Vitrier', icon: 'Square', color: 'from-sky-500 to-sky-600' },
   { slug: 'climaticien', name: 'Climaticien', icon: 'Wind', color: 'from-cyan-500 to-cyan-600' },
+  { slug: 'cuisiniste', name: 'Cuisiniste', icon: 'ChefHat', color: 'from-rose-500 to-rose-600' },
+  { slug: 'solier', name: 'Solier', icon: 'Layers', color: 'from-indigo-500 to-indigo-600' },
+  { slug: 'nettoyage', name: 'Nettoyage', icon: 'Sparkles', color: 'from-emerald-500 to-emerald-600' },
 ]

@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { MapPin, Users, Building, Star, Phone, ArrowRight, Shield, Clock, Wrench, Zap, Key, Flame, PaintBucket, Hammer, Grid3X3, Home, TreeDeciduous, Square, Wind, Blocks } from 'lucide-react'
+import { MapPin, Users, Building, Star, Phone, ArrowRight, Shield, Clock, Wrench, Zap, Key, Flame, PaintBucket, Hammer, Grid3X3, Home, TreeDeciduous, Square, Wind, Blocks, ChefHat, Layers, Sparkles } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
 import { popularRegions } from '@/lib/constants/navigation'
@@ -8,7 +8,7 @@ import { Metadata } from 'next'
 
 // Map des icônes
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-  Wrench, Zap, Key, Flame, PaintBucket, Hammer, Grid3X3, Home, TreeDeciduous, Square, Wind, Blocks
+  Wrench, Zap, Key, Flame, PaintBucket, Hammer, Grid3X3, Home, TreeDeciduous, Square, Wind, Blocks, ChefHat, Layers, Sparkles
 }
 
 // Générer les pages statiques pour toutes les villes

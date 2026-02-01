@@ -38,6 +38,9 @@ const staticServices: Record<string, { id: string; name: string; slug: string; d
   'paysagiste': { id: 'paysagiste', name: 'Paysagiste', slug: 'paysagiste', description: 'Aménagement paysager, création de jardins.', category: 'Extérieur', is_active: true },
   'vitrier': { id: 'vitrier', name: 'Vitrier', slug: 'vitrier', description: 'Remplacement de vitres, double vitrage, miroirs.', category: 'Bâtiment', is_active: true },
   'climaticien': { id: 'climaticien', name: 'Climaticien', slug: 'climaticien', description: 'Installation et entretien de climatisation, réversible.', category: 'Chauffage', is_active: true },
+  'cuisiniste': { id: 'cuisiniste', name: 'Cuisiniste', slug: 'cuisiniste', description: 'Conception, fabrication et installation de cuisines sur mesure.', category: 'Aménagement', is_active: true },
+  'solier': { id: 'solier', name: 'Solier', slug: 'solier', description: 'Pose de revêtements de sols : parquet, moquette, lino, carrelage souple.', category: 'Finitions', is_active: true },
+  'nettoyage': { id: 'nettoyage', name: 'Nettoyage', slug: 'nettoyage', description: 'Nettoyage professionnel, ménage, entretien de locaux.', category: 'Services', is_active: true },
 }
 
 export async function getServiceBySlug(slug: string) {
