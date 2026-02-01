@@ -92,40 +92,67 @@ export default function AdminArtisanDetailPage() {
 
   const handleVerify = async () => {
     try {
-      await fetch(`/api/admin/providers/${artisanId}`, {
+      const response = await fetch(`/api/admin/providers/${artisanId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ is_verified: true }),
       })
-      setVerifyModal(false)
-      fetchArtisan()
+
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        setVerifyModal(false)
+        await fetchArtisan()
+      } else {
+        console.error('Verify failed:', data.error)
+        alert(`Erreur: ${data.error || 'Vérification échouée'}`)
+      }
     } catch (error) {
       console.error('Verify failed:', error)
+      alert('Erreur de connexion')
     }
   }
 
   const handleSuspend = async () => {
     try {
-      await fetch(`/api/admin/providers/${artisanId}`, {
+      const response = await fetch(`/api/admin/providers/${artisanId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ is_active: !artisan?.is_active }),
       })
-      setSuspendModal(false)
-      fetchArtisan()
+
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        setSuspendModal(false)
+        await fetchArtisan()
+      } else {
+        console.error('Suspend failed:', data.error)
+        alert(`Erreur: ${data.error || 'Action échouée'}`)
+      }
     } catch (error) {
       console.error('Suspend failed:', error)
+      alert('Erreur de connexion')
     }
   }
 
   const handleDelete = async () => {
     try {
-      await fetch(`/api/admin/providers/${artisanId}`, {
+      const response = await fetch(`/api/admin/providers/${artisanId}`, {
         method: 'DELETE',
       })
-      router.push('/admin/artisans')
+
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        router.push('/admin/artisans')
+      } else {
+        console.error('Delete failed:', data.error)
+        alert(`Erreur: ${data.error || 'Suppression échouée'}`)
+      }
     } catch (error) {
       console.error('Delete failed:', error)
+      alert('Erreur de connexion')
     }
   }
 
@@ -198,13 +225,24 @@ export default function AdminArtisanDetailPage() {
               </div>
             </div>
 
-            <button
-              onClick={() => router.push(`/admin/artisans/${artisanId}/edit`)}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-            >
-              <Edit2 className="w-4 h-4" />
-              Modifier
-            </button>
+            <div className="flex items-center gap-3">
+              <a
+                href={`/services/artisan/${artisanId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+              >
+                <ExternalLink className="w-4 h-4" />
+                Voir page publique
+              </a>
+              <button
+                onClick={() => router.push(`/admin/artisans/${artisanId}/edit`)}
+                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+                <Edit2 className="w-4 h-4" />
+                Modifier
+              </button>
+            </div>
           </div>
         </div>
 

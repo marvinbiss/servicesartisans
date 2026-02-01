@@ -7,7 +7,6 @@ import { SIRENE_OPEN_CONFIG, NAF_TO_SERVICE, TRANCHES_EFFECTIFS } from './config
 
 interface SearchResult {
   siren: string
-  siret: string
   nom_complet: string
   nom_raison_sociale: string
   siege: {
@@ -17,8 +16,8 @@ interface SearchResult {
     libelle_commune: string
     departement: string
     region: string
-    latitude: number
-    longitude: number
+    latitude: string
+    longitude: string
   }
   activite_principale: string
   nature_juridique: string
@@ -54,7 +53,7 @@ export async function searchEntreprisesOpen(
     per_page: SIRENE_OPEN_CONFIG.pageSize.toString(),
   })
 
-  const url = `${SIRENE_OPEN_CONFIG.baseUrl}/search?${params}`
+  const url = `${SIRENE_OPEN_CONFIG.baseUrl}/search?${params.toString()}`
 
   let retries = 0
   while (retries < SIRENE_OPEN_CONFIG.maxRetries) {
@@ -123,21 +122,28 @@ export async function searchByTermOpen(
   // Filtrer sur les activites du batiment (codes NAF 41, 42, 43)
   params.set('section_activite_principale', 'F') // Section F = Construction
 
-  const url = `${SIRENE_OPEN_CONFIG.baseUrl}/search?${params}`
+  const url = `${SIRENE_OPEN_CONFIG.baseUrl}/search?${params.toString()}`
+
+  console.log('Calling API:', url)
 
   try {
     const response = await fetch(url, {
       headers: { 'Accept': 'application/json' },
     })
 
+    console.log('API Response status:', response.status)
+
     if (!response.ok) {
       if (response.status === 404) {
         return { results: [], total: 0, hasMore: false }
       }
-      throw new Error(`Erreur API: ${response.status}`)
+      const errorText = await response.text()
+      console.error('API Error:', errorText)
+      throw new Error(`Erreur API: ${response.status} - ${errorText}`)
     }
 
     const data: ApiResponse = await response.json()
+    console.log('API returned', data.total_results, 'results')
 
     return {
       results: data.results || [],
@@ -193,8 +199,12 @@ export function transformOpenResultToProvider(result: SearchResult): {
     ? Math.round((TRANCHES_EFFECTIFS[tranche].min + TRANCHES_EFFECTIFS[tranche].max) / 2)
     : null
 
+  // Parse latitude/longitude as numbers
+  const latitude = result.siege?.latitude ? parseFloat(result.siege.latitude) : null
+  const longitude = result.siege?.longitude ? parseFloat(result.siege.longitude) : null
+
   return {
-    siret: result.siege?.siret || result.siret,
+    siret: result.siege?.siret || result.siren + '00000',
     siren: result.siren,
     name: name.substring(0, 255),
     slug: `${slug}-${result.siren}`,
@@ -203,8 +213,8 @@ export function transformOpenResultToProvider(result: SearchResult): {
     address_postal_code: result.siege?.code_postal || null,
     address_department: result.siege?.departement || null,
     address_region: result.siege?.region || null,
-    latitude: result.siege?.latitude || null,
-    longitude: result.siege?.longitude || null,
+    latitude: latitude && !isNaN(latitude) ? latitude : null,
+    longitude: longitude && !isNaN(longitude) ? longitude : null,
     legal_form: result.nature_juridique || null,
     creation_date: result.date_creation || null,
     employee_count: effectif,
@@ -213,6 +223,6 @@ export function transformOpenResultToProvider(result: SearchResult): {
     is_active: true,
     is_premium: false,
     source: 'sirene-open',
-    source_id: result.siret,
+    source_id: result.siege?.siret || result.siren,
   }
 }

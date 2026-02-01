@@ -34,6 +34,8 @@ interface Provider {
   rating_average: number
   review_count: number
   created_at: string
+  source?: string
+  siret?: string
 }
 
 export default function AdminProvidersPage() {
@@ -78,14 +80,24 @@ export default function AdminProvidersPage() {
       if (action === 'suspend') updates.is_active = false
       if (action === 'activate') updates.is_active = true
 
-      await fetch(`/api/admin/providers/${providerId}`, {
+      const response = await fetch(`/api/admin/providers/${providerId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updates),
       })
-      fetchProviders()
+
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        // Refresh the list to show updated status
+        await fetchProviders()
+      } else {
+        console.error('Action failed:', data.error || data.message)
+        alert(`Erreur: ${data.error || data.message || 'Action échouée'}`)
+      }
     } catch (error) {
       console.error('Action failed:', error)
+      alert('Erreur de connexion')
     }
   }
 
@@ -141,7 +153,8 @@ export default function AdminProvidersPage() {
     },
   ]
 
-  const displayProviders = providers.length > 0 ? providers : mockProviders
+  // Afficher les vrais providers, pas les mock data
+  const displayProviders = providers
 
   const getStatusBadge = (provider: Provider) => {
     if (!provider.is_active) {
@@ -213,6 +226,18 @@ export default function AdminProvidersPage() {
             <div className="p-8 text-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
             </div>
+          ) : displayProviders.length === 0 ? (
+            <div className="p-12 text-center">
+              <Briefcase className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 mb-2">Aucun artisan</h3>
+              <p className="text-gray-500 mb-4">Commencez par importer des artisans depuis SIRENE</p>
+              <a
+                href="/admin/import"
+                className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+                Importer des artisans
+              </a>
+            </div>
           ) : (
             <>
               <div className="overflow-x-auto">
@@ -247,11 +272,22 @@ export default function AdminProvidersPage() {
                       <tr key={provider.id} className="hover:bg-gray-50">
                         <td className="px-6 py-4">
                           <div>
-                            <p className="font-medium text-gray-900">{provider.company_name}</p>
-                            <div className="flex items-center gap-2 mt-1 text-sm text-gray-500">
-                              <Mail className="w-3 h-3" />
-                              {provider.email}
+                            <div className="flex items-center gap-2">
+                              <p className="font-medium text-gray-900">{provider.company_name}</p>
+                              {provider.source === 'sirene-open' && (
+                                <span className="px-1.5 py-0.5 bg-indigo-100 text-indigo-700 rounded text-xs">SIRENE</span>
+                              )}
                             </div>
+                            {provider.email ? (
+                              <div className="flex items-center gap-2 mt-1 text-sm text-gray-500">
+                                <Mail className="w-3 h-3" />
+                                {provider.email}
+                              </div>
+                            ) : provider.siret ? (
+                              <div className="mt-1 text-sm text-gray-400">
+                                SIRET: {provider.siret}
+                              </div>
+                            ) : null}
                           </div>
                         </td>
                         <td className="px-6 py-4">

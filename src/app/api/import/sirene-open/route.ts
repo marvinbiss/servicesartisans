@@ -4,7 +4,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { searchByTermOpen, transformOpenResultToProvider } from '@/lib/sirene/client-open'
 import { NAF_TO_SERVICE } from '@/lib/sirene/config'
 
@@ -20,31 +20,33 @@ interface ImportResult {
   errors: string[]
 }
 
-// Metiers du batiment a rechercher
-const METIERS_BATIMENT = [
-  'plombier',
-  'electricien',
-  'chauffagiste',
-  'menuisier',
-  'peintre',
-  'carreleur',
-  'macon',
-  'couvreur',
-  'plaquiste',
-  'serrurier',
-]
+// Metiers du batiment a rechercher avec leurs noms complets
+const METIERS_BATIMENT: Record<string, string> = {
+  'plombier': 'Plombier',
+  'electricien': 'Électricien',
+  'chauffagiste': 'Chauffagiste',
+  'menuisier': 'Menuisier',
+  'peintre': 'Peintre',
+  'carreleur': 'Carreleur',
+  'macon': 'Maçon',
+  'couvreur': 'Couvreur',
+  'plaquiste': 'Plaquiste',
+  'serrurier': 'Serrurier',
+  'isolation': 'Isolation',
+  'charpentier': 'Charpentier',
+}
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createClient()
+    const supabase = createAdminClient()
 
     const body = await request.json().catch(() => ({}))
 
     // Parametres
     const departments: string[] = body.departments || ['75', '92', '93', '94']
-    const metiers: string[] = body.metiers || METIERS_BATIMENT.slice(0, 3)
+    const metiers: string[] = body.metiers || Object.keys(METIERS_BATIMENT).slice(0, 3)
     const maxPerDepartment: number = body.max_per_department || 50
-    const dryRun: boolean = body.dry_run || false
+    const dryRun: boolean = body.dry_run === true
 
     const result: ImportResult = {
       total_fetched: 0,
@@ -56,11 +58,37 @@ export async function POST(request: NextRequest) {
     }
 
     // Recuperer les services existants pour le mapping
-    const { data: services } = await supabase
+    const { data: existingServices } = await supabase
       .from('services')
       .select('id, slug')
 
-    const serviceMap = new Map(services?.map(s => [s.slug, s.id]) || [])
+    const serviceMap = new Map(existingServices?.map(s => [s.slug, s.id]) || [])
+
+    // Creer les services manquants
+    for (const [slug, name] of Object.entries(METIERS_BATIMENT)) {
+      if (!serviceMap.has(slug)) {
+        console.log(`Creating missing service: ${slug}`)
+        const { data: newService, error: serviceError } = await supabase
+          .from('services')
+          .insert({
+            name,
+            slug,
+            description: `Service de ${name.toLowerCase()}`,
+            is_active: true,
+            meta_title: `${name} - Services Artisans`,
+            meta_description: `Trouvez un ${name.toLowerCase()} qualifié près de chez vous`,
+          })
+          .select('id')
+          .single()
+
+        if (newService && !serviceError) {
+          serviceMap.set(slug, newService.id)
+          console.log(`Service created: ${slug} -> ${newService.id}`)
+        } else {
+          console.error(`Failed to create service ${slug}:`, serviceError)
+        }
+      }
+    }
 
     // Recuperer les locations existantes pour le mapping
     const { data: locations } = await supabase
@@ -243,6 +271,6 @@ export async function GET() {
         dry_run: 'true pour simuler',
       },
     },
-    metiers_disponibles: METIERS_BATIMENT,
+    metiers_disponibles: Object.keys(METIERS_BATIMENT),
   })
 }

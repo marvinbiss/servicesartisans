@@ -70,6 +70,7 @@ export default function EditArtisanPage() {
 
   // Form state
   const [formData, setFormData] = useState({
+    email: '',
     full_name: '',
     company_name: '',
     phone: '',
@@ -85,6 +86,8 @@ export default function EditArtisanPage() {
     is_featured: false,
     availability: {} as Record<string, { start: string; end: string }>,
   })
+
+  const [successMessage, setSuccessMessage] = useState('')
 
   // Input states for services and zones
   const [newService, setNewService] = useState('')
@@ -102,6 +105,7 @@ export default function EditArtisanPage() {
         const data = await response.json()
         setArtisan(data.provider)
         setFormData({
+          email: data.provider.email || '',
           full_name: data.provider.full_name || '',
           company_name: data.provider.company_name || '',
           phone: data.provider.phone || '',
@@ -130,6 +134,9 @@ export default function EditArtisanPage() {
   const handleSave = async () => {
     try {
       setSaving(true)
+      setError('')
+      setSuccessMessage('')
+
       const response = await fetch(`/api/admin/providers/${artisanId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -139,14 +146,22 @@ export default function EditArtisanPage() {
         }),
       })
 
-      if (response.ok) {
-        router.push(`/admin/artisans`)
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        setSuccessMessage('Artisan mis à jour avec succès!')
+        // Refresh data to show updated values
+        await fetchArtisan()
+        // Optionally redirect after a short delay
+        setTimeout(() => {
+          router.push(`/admin/artisans/${artisanId}`)
+        }, 1500)
       } else {
-        const data = await response.json()
-        setError(data.error || 'Erreur de sauvegarde')
+        setError(data.error || data.message || 'Erreur de sauvegarde')
       }
     } catch (err) {
-      setError('Erreur de sauvegarde')
+      console.error('Save error:', err)
+      setError('Erreur de sauvegarde - vérifiez la connexion')
     } finally {
       setSaving(false)
     }
@@ -258,6 +273,12 @@ export default function EditArtisanPage() {
           </div>
         )}
 
+        {successMessage && (
+          <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-6">
+            {successMessage}
+          </div>
+        )}
+
         {/* Form */}
         <div className="space-y-6">
           {/* Personal & Company Info */}
@@ -294,6 +315,19 @@ export default function EditArtisanPage() {
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <Mail className="w-4 h-4 inline mr-1" />
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    placeholder="email@example.com"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     <Phone className="w-4 h-4 inline mr-1" />
                     Téléphone
                   </label>
@@ -304,6 +338,8 @@ export default function EditArtisanPage() {
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
+              </div>
+              <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     SIRET
