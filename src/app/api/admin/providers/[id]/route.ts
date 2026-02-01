@@ -130,6 +130,8 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const providerId = params.id
+
   try {
     // Verify admin with providers:write permission
     const authResult = await requirePermission('providers', 'write')
@@ -138,7 +140,6 @@ export async function PATCH(
     }
 
     const supabase = createAdminClient()
-    const providerId = params.id
 
     // Vérifier que le provider existe
     const { data: existingProvider, error: checkError } = await supabase
@@ -147,14 +148,30 @@ export async function PATCH(
       .eq('id', providerId)
       .single()
 
-    if (checkError || !existingProvider) {
+    if (checkError) {
+      logger.error('Provider check error', { error: checkError, providerId })
+      return NextResponse.json(
+        { success: false, error: `Provider non trouvé: ${checkError.message}` },
+        { status: 404 }
+      )
+    }
+
+    if (!existingProvider) {
       return NextResponse.json(
         { success: false, error: 'Provider non trouvé' },
         { status: 404 }
       )
     }
 
-    const body = await request.json()
+    let body
+    try {
+      body = await request.json()
+    } catch (parseError) {
+      return NextResponse.json(
+        { success: false, error: 'JSON invalide dans le body' },
+        { status: 400 }
+      )
+    }
 
     // Mapper les champs frontend -> database
     const updateData: Record<string, unknown> = {
@@ -222,40 +239,53 @@ export async function PATCH(
       .single()
 
     if (error) {
-      logger.error('Admin provider PATCH error', error)
-      throw error
+      logger.error('Admin provider PATCH DB error', { error, updateData, providerId })
+      return NextResponse.json(
+        { success: false, error: `Erreur DB: ${error.message}`, details: error },
+        { status: 500 }
+      )
     }
 
     // Gérer les services si fournis
-    if (body.services && Array.isArray(body.services)) {
-      await supabase
+    if (body.services && Array.isArray(body.services) && body.services.length > 0) {
+      const { error: deleteError } = await supabase
         .from('provider_services')
         .delete()
         .eq('provider_id', providerId)
+
+      if (deleteError) {
+        logger.error('Error deleting provider_services', deleteError)
+      }
 
       const { data: servicesList } = await supabase
         .from('services')
         .select('id, name, slug')
 
-      const serviceMap = new Map(servicesList?.map(s => [s.name.toLowerCase(), s.id]) || [])
-      const serviceMapBySlug = new Map(servicesList?.map(s => [s.slug, s.id]) || [])
+      if (servicesList && servicesList.length > 0) {
+        const serviceMap = new Map(servicesList.map(s => [s.name.toLowerCase(), s.id]))
+        const serviceMapBySlug = new Map(servicesList.map(s => [s.slug, s.id]))
 
-      for (const serviceName of body.services) {
-        const serviceId = serviceMap.get(serviceName.toLowerCase()) || serviceMapBySlug.get(serviceName.toLowerCase())
-        if (serviceId) {
-          await supabase
-            .from('provider_services')
-            .insert({
-              provider_id: providerId,
-              service_id: serviceId,
-              is_primary: body.services.indexOf(serviceName) === 0,
-            })
+        for (const serviceName of body.services) {
+          const serviceId = serviceMap.get(serviceName.toLowerCase()) || serviceMapBySlug.get(serviceName.toLowerCase())
+          if (serviceId) {
+            await supabase
+              .from('provider_services')
+              .insert({
+                provider_id: providerId,
+                service_id: serviceId,
+                is_primary: body.services.indexOf(serviceName) === 0,
+              })
+          }
         }
       }
     }
 
-    // Log d'audit
-    await logAdminAction(authResult.admin.id, 'provider.update', 'provider', providerId, updateData)
+    // Log d'audit (ne pas bloquer en cas d'erreur)
+    try {
+      await logAdminAction(authResult.admin.id, 'provider.update', 'provider', providerId, updateData)
+    } catch (auditError) {
+      logger.error('Audit log error (non-blocking)', auditError)
+    }
 
     const response = NextResponse.json({
       success: true,
@@ -268,9 +298,10 @@ export async function PATCH(
 
     return response
   } catch (error) {
-    logger.error('Admin provider PATCH error', error)
+    const err = error as Error
+    logger.error('Admin provider PATCH error', { error: err.message, stack: err.stack, providerId })
     return NextResponse.json(
-      { success: false, error: 'Erreur de mise à jour' },
+      { success: false, error: `Erreur: ${err.message}` },
       { status: 500 }
     )
   }
