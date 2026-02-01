@@ -27,16 +27,15 @@ export async function GET(request: NextRequest) {
       .from('conversations')
       .select(`
         *,
-        client:client_id (
+        client:profiles!conversations_client_id_fkey (
           id,
           email,
           full_name
         ),
-        provider:provider_id (
+        provider:providers!conversations_provider_id_fkey (
           id,
           email,
-          full_name,
-          company_name
+          name
         )
       `, { count: 'exact' })
 
