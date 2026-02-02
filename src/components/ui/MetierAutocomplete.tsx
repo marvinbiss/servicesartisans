@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
-import { Search, Loader2, X, Wrench, Zap, Key, Flame, Hammer, Home, Wind } from 'lucide-react'
+import { Search, X, Wrench, Zap, Key, Flame, Hammer, Home, Wind } from 'lucide-react'
 import { services } from '@/lib/data/france'
 
 interface ServiceItem {
@@ -222,13 +222,6 @@ export function MetierAutocomplete({
   const handleFocus = () => {
     if (showAllOnFocus || query.length > 0) {
       setIsOpen(true)
-    }
-  }
-
-  // Get gradient style for service
-  const getGradientStyle = (color: string) => {
-    return {
-      background: `linear-gradient(135deg, var(--tw-gradient-from), var(--tw-gradient-to))`,
     }
   }
 

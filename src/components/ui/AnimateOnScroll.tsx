@@ -47,9 +47,7 @@ export default function AnimateOnScroll({
   }, [threshold, once])
 
   const getAnimationStyles = () => {
-    const baseTransform = isVisible ? 'translate3d(0, 0, 0) scale(1)' : ''
     const baseOpacity = isVisible ? 1 : 0
-    const baseFilter = isVisible ? 'blur(0)' : ''
 
     switch (animation) {
       case 'fade-up':

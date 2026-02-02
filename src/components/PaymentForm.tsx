@@ -8,8 +8,8 @@ import {
   useStripe,
   useElements,
 } from '@stripe/react-stripe-js'
-import { motion, AnimatePresence } from 'framer-motion'
-import { CreditCard, Smartphone, Check, AlertCircle, Lock, Calendar, Percent } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { Check, AlertCircle, Lock } from 'lucide-react'
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
 

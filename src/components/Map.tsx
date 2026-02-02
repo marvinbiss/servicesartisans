@@ -6,28 +6,7 @@ import L from 'leaflet'
 import { Provider } from '@/types'
 import 'leaflet/dist/leaflet.css'
 
-// Fix Leaflet default marker icon issue
-const defaultIcon = L.icon({
-  iconUrl: '/marker-icon.png',
-  iconRetinaUrl: '/marker-icon-2x.png',
-  shadowUrl: '/marker-shadow.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41],
-})
-
-const premiumIcon = L.icon({
-  iconUrl: '/marker-icon-gold.png',
-  iconRetinaUrl: '/marker-icon-gold-2x.png',
-  shadowUrl: '/marker-shadow.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41],
-})
-
-// Fallback icon using divIcon
+// Custom marker icon using divIcon (CSS-based, no external images needed)
 const createDivIcon = (isPremium: boolean) => {
   return L.divIcon({
     className: 'custom-marker',
@@ -66,7 +45,7 @@ export default function Map({
   center,
   zoom = 12,
   onMarkerClick,
-  selectedProvider,
+  selectedProvider: _selectedProvider,
 }: MapProps) {
   const [isMounted, setIsMounted] = useState(false)
 

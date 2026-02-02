@@ -60,7 +60,7 @@ function generateNonce(): string {
 }
 
 // Security headers
-function addSecurityHeaders(response: NextResponse, nonce: string, request: NextRequest): NextResponse {
+function addSecurityHeaders(response: NextResponse, _nonce: string, request: NextRequest): NextResponse {
   // Skip strict CSP in development or for mobile app (Capacitor WebView)
   const userAgent = request.headers.get('user-agent') || ''
   const isCapacitor = userAgent.includes('Capacitor') || userAgent.includes('Android') || userAgent.includes('iPhone')
@@ -143,21 +143,6 @@ function getCanonicalUrl(request: NextRequest): string | null {
   return null
 }
 
-// Protected routes that require authentication
-const PROTECTED_ROUTES = [
-  '/espace-client',
-  '/espace-artisan',
-  '/mes-reservations',
-  '/mon-profil',
-  '/parametres',
-]
-
-// Admin routes
-const ADMIN_ROUTES = [
-  '/admin',
-  '/api/admin',
-]
-
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   const nonce = generateNonce()
@@ -166,7 +151,7 @@ export async function middleware(request: NextRequest) {
   if (pathname.startsWith('/api/')) {
     const config = getRateLimitConfig(pathname)
     const rateLimitKey = getRateLimitKey(request)
-    const { allowed, remaining } = checkRateLimit(rateLimitKey, config)
+    const { allowed } = checkRateLimit(rateLimitKey, config)
 
     if (!allowed) {
       return new NextResponse(
