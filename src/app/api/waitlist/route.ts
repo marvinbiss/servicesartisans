@@ -2,6 +2,29 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { sendEmail } from '@/lib/notifications/email'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// POST request schema
+const waitlistPostSchema = z.object({
+  artisanId: z.string().uuid(),
+  clientName: z.string().min(1).max(100),
+  clientEmail: z.string().email(),
+  clientPhone: z.string().max(20).optional(),
+  preferredDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  preferredTimeSlot: z.enum(['morning', 'afternoon', 'any']).optional().default('any'),
+  serviceName: z.string().max(200).optional(),
+})
+
+// GET query params schema
+const waitlistGetSchema = z.object({
+  artisanId: z.string().uuid(),
+})
+
+// DELETE query params schema
+const waitlistDeleteSchema = z.object({
+  id: z.string().uuid(),
+  action: z.enum(['remove', 'notify']).optional().default('remove'),
+})
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
 
@@ -11,22 +34,22 @@ export const dynamic = 'force-dynamic'
 export async function POST(request: Request) {
   try {
     const body = await request.json()
+    const result = waitlistPostSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json(
+        { error: 'Validation error', details: result.error.flatten() },
+        { status: 400 }
+      )
+    }
     const {
       artisanId,
       clientName,
       clientEmail,
       clientPhone,
       preferredDate,
-      preferredTimeSlot, // 'morning' | 'afternoon' | 'any'
+      preferredTimeSlot,
       serviceName,
-    } = body
-
-    if (!artisanId || !clientName || !clientEmail || !preferredDate) {
-      return NextResponse.json(
-        { error: 'Champs requis manquants' },
-        { status: 400 }
-      )
-    }
+    } = result.data
 
     const supabase = await createClient()
 
@@ -83,14 +106,17 @@ export async function POST(request: Request) {
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
-    const artisanId = searchParams.get('artisanId')
-
-    if (!artisanId) {
+    const queryParams = {
+      artisanId: searchParams.get('artisanId'),
+    }
+    const result = waitlistGetSchema.safeParse(queryParams)
+    if (!result.success) {
       return NextResponse.json(
-        { error: 'artisanId is required' },
+        { error: 'Invalid parameters', details: result.error.flatten() },
         { status: 400 }
       )
     }
+    const { artisanId } = result.data
 
     const supabase = await createClient()
 
@@ -118,15 +144,18 @@ export async function GET(request: Request) {
 export async function DELETE(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
-    const waitlistId = searchParams.get('id')
-    const action = searchParams.get('action') // 'remove' or 'notify'
-
-    if (!waitlistId) {
+    const queryParams = {
+      id: searchParams.get('id'),
+      action: searchParams.get('action') || 'remove',
+    }
+    const result = waitlistDeleteSchema.safeParse(queryParams)
+    if (!result.success) {
       return NextResponse.json(
-        { error: 'id is required' },
+        { error: 'Invalid parameters', details: result.error.flatten() },
         { status: 400 }
       )
     }
+    const { id: waitlistId, action } = result.data
 
     const supabase = await createClient()
 

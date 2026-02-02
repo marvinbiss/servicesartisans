@@ -1,20 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { createClient } from '@supabase/supabase-js'
+import { z } from 'zod'
+
+// POST request schema
+const oauthSchema = z.object({
+  provider: z.enum(['google', 'facebook', 'apple']),
+})
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
 export async function POST(request: NextRequest) {
   try {
-    const { provider } = await request.json()
-
-    if (!provider || !['google', 'facebook', 'apple'].includes(provider)) {
+    const body = await request.json()
+    const result = oauthSchema.safeParse(body)
+    if (!result.success) {
       return NextResponse.json(
-        { error: 'Provider invalide' },
+        { error: 'Provider invalide', details: result.error.flatten() },
         { status: 400 }
       )
     }
+    const { provider } = result.data
 
     const supabase = createClient(supabaseUrl, supabaseAnonKey)
 

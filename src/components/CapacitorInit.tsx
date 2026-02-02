@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { initCapacitor, isNative, getPlatform } from '@/lib/capacitor'
+import { initCapacitor } from '@/lib/capacitor'
 
 export function CapacitorInit() {
   useEffect(() => {

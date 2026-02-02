@@ -1,9 +1,9 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import {
-  User, Mail, Phone, MapPin, Building, FileText,
+  Mail, Phone, MapPin, Building,
   CheckCircle, ArrowRight, ArrowLeft, Star, Users, TrendingUp, Loader2, AlertCircle
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -289,7 +289,7 @@ export default function InscriptionArtisanPage() {
                       <label className="block text-sm font-medium text-gray-700 mb-1">Ville *</label>
                       <VilleAutocomplete
                         value={formData.ville}
-                        onSelect={(ville, codePostal, coords) => {
+                        onSelect={(ville, codePostal, _coords) => {
                           setFormData(prev => ({
                             ...prev,
                             ville,

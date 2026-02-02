@@ -2,6 +2,12 @@ import { NextResponse } from 'next/server'
 import { stripe, PLANS, PlanId } from '@/lib/stripe/server'
 import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// POST request schema
+const checkoutSchema = z.object({
+  planId: z.enum(['starter', 'pro', 'premium'] as const),
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -17,9 +23,17 @@ export async function POST(request: Request) {
       )
     }
 
-    const { planId } = await request.json()
+    const body = await request.json()
+    const result = checkoutSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json(
+        { error: 'Validation error', details: result.error.flatten() },
+        { status: 400 }
+      )
+    }
+    const { planId } = result.data
 
-    if (!planId || !(planId in PLANS)) {
+    if (!(planId in PLANS)) {
       return NextResponse.json(
         { error: 'Plan invalide' },
         { status: 400 }

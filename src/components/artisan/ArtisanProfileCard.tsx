@@ -18,7 +18,6 @@ import {
   Zap,
   Award,
   ThumbsUp,
-  Users,
 } from 'lucide-react'
 
 interface ArtisanProfileCardProps {

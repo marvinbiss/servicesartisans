@@ -3,6 +3,15 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { getRevenueStats, listAllSubscriptions } from '@/lib/stripe-admin'
 import { requirePermission } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// GET query params schema
+const paymentsQuerySchema = z.object({
+  type: z.enum(['overview', 'subscriptions']).optional().default('overview'),
+  status: z.enum(['all', 'active', 'canceled', 'past_due']).optional().default('all'),
+  limit: z.coerce.number().int().min(1).max(100).optional().default(20),
+  cursor: z.string().max(100).optional(),
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -18,10 +27,20 @@ export async function GET(request: NextRequest) {
     const supabase = createAdminClient()
 
     const searchParams = request.nextUrl.searchParams
-    const type = searchParams.get('type') || 'overview' // overview, subscriptions
-    const status = searchParams.get('status') || 'all'
-    const limit = parseInt(searchParams.get('limit') || '20')
-    const cursor = searchParams.get('cursor') || undefined
+    const queryParams = {
+      type: searchParams.get('type') || 'overview',
+      status: searchParams.get('status') || 'all',
+      limit: searchParams.get('limit') || '20',
+      cursor: searchParams.get('cursor') || undefined,
+    }
+    const result = paymentsQuerySchema.safeParse(queryParams)
+    if (!result.success) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Invalid parameters', details: result.error.flatten() } },
+        { status: 400 }
+      )
+    }
+    const { type, status, limit, cursor } = result.data
 
     if (type === 'overview') {
       // Statistiques générales

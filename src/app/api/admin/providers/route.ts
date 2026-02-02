@@ -3,6 +3,15 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission } from '@/lib/admin-auth'
 import { sanitizeSearchQuery } from '@/lib/sanitize'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// GET query params schema
+const providersQuerySchema = z.object({
+  page: z.coerce.number().int().min(1).optional().default(1),
+  limit: z.coerce.number().int().min(1).max(100).optional().default(20),
+  filter: z.enum(['all', 'verified', 'pending', 'suspended']).optional().default('all'),
+  search: z.string().max(100).optional().default(''),
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -41,10 +50,20 @@ export async function GET(request: NextRequest) {
     const supabase = createAdminClient()
 
     const searchParams = request.nextUrl.searchParams
-    const page = parseInt(searchParams.get('page') || '1')
-    const limit = parseInt(searchParams.get('limit') || '20')
-    const filter = searchParams.get('filter') || 'all'
-    const search = searchParams.get('search') || ''
+    const queryParams = {
+      page: searchParams.get('page') || '1',
+      limit: searchParams.get('limit') || '20',
+      filter: searchParams.get('filter') || 'all',
+      search: searchParams.get('search') || '',
+    }
+    const result = providersQuerySchema.safeParse(queryParams)
+    if (!result.success) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Invalid parameters', details: result.error.flatten() } },
+        { status: 400 }
+      )
+    }
+    const { page, limit, filter, search } = result.data
 
     const offset = (page - 1) * limit
 

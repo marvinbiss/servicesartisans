@@ -34,7 +34,7 @@ export default function AdminRgpdPage() {
   const [status, setStatus] = useState<'all' | 'pending' | 'processing' | 'completed'>('pending')
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
-  const [total, setTotal] = useState(0)
+  const [_total, setTotal] = useState(0)
 
   // Search user for manual action
   const [searchEmail, setSearchEmail] = useState('')

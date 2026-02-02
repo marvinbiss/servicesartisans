@@ -12,7 +12,7 @@
  */
 
 import { retry, CircuitBreaker } from '../utils/retry'
-import { apiCache, cacheAside } from '../utils/cache'
+import { apiCache } from '../utils/cache'
 import { APIError, ValidationError, NotFoundError, ErrorCode } from '../utils/errors'
 import { apiLogger } from '../utils/logger'
 

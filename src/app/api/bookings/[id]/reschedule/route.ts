@@ -2,6 +2,12 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { sendBookingConfirmation, logNotification } from '@/lib/notifications/email'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// POST request schema
+const rescheduleBookingSchema = z.object({
+  newSlotId: z.string().uuid(),
+})
 
 // POST /api/bookings/[id]/reschedule - Reschedule a booking to a new slot
 export const dynamic = 'force-dynamic'
@@ -12,14 +18,14 @@ export async function POST(
 ) {
   try {
     const body = await request.json()
-    const { newSlotId } = body
-
-    if (!newSlotId) {
+    const result = rescheduleBookingSchema.safeParse(body)
+    if (!result.success) {
       return NextResponse.json(
-        { error: 'newSlotId is required' },
+        { error: 'Validation error', details: result.error.flatten() },
         { status: 400 }
       )
     }
+    const { newSlotId } = result.data
 
     const supabase = await createClient()
 

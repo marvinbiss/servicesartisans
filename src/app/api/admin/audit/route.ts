@@ -2,6 +2,18 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// GET query params schema
+const auditQuerySchema = z.object({
+  page: z.coerce.number().int().min(1).optional().default(1),
+  limit: z.coerce.number().int().min(1).max(100).optional().default(50),
+  action: z.string().max(100).optional().default('all'),
+  entityType: z.string().max(50).optional().default('all'),
+  adminId: z.string().uuid().optional().or(z.literal('')),
+  dateFrom: z.string().datetime().optional().or(z.literal('')),
+  dateTo: z.string().datetime().optional().or(z.literal('')),
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -17,13 +29,23 @@ export async function GET(request: NextRequest) {
     const supabase = createAdminClient()
 
     const searchParams = request.nextUrl.searchParams
-    const page = parseInt(searchParams.get('page') || '1')
-    const limit = parseInt(searchParams.get('limit') || '50')
-    const action = searchParams.get('action') || 'all'
-    const entityType = searchParams.get('entityType') || 'all'
-    const adminId = searchParams.get('adminId') || ''
-    const dateFrom = searchParams.get('dateFrom') || ''
-    const dateTo = searchParams.get('dateTo') || ''
+    const queryParams = {
+      page: searchParams.get('page') || '1',
+      limit: searchParams.get('limit') || '50',
+      action: searchParams.get('action') || 'all',
+      entityType: searchParams.get('entityType') || 'all',
+      adminId: searchParams.get('adminId') || '',
+      dateFrom: searchParams.get('dateFrom') || '',
+      dateTo: searchParams.get('dateTo') || '',
+    }
+    const result = auditQuerySchema.safeParse(queryParams)
+    if (!result.success) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Invalid parameters', details: result.error.flatten() } },
+        { status: 400 }
+      )
+    }
+    const { page, limit, action, entityType, adminId, dateFrom, dateTo } = result.data
 
     const offset = (page - 1) * limit
 

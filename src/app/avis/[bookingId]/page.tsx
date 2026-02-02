@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { Star, Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
 
 interface BookingInfo {
@@ -13,7 +13,6 @@ interface BookingInfo {
 
 export default function ReviewPage() {
   const params = useParams()
-  const router = useRouter()
   const bookingId = params.bookingId as string
 
   const [bookingInfo, setBookingInfo] = useState<BookingInfo | null>(null)

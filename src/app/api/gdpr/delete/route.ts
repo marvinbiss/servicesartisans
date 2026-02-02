@@ -8,6 +8,14 @@ import { createClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 import { createServerClient } from '@supabase/ssr'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// POST request schema
+const deletePostSchema = z.object({
+  reason: z.string().max(500).optional(),
+  password: z.string().min(1),
+  confirmText: z.literal('SUPPRIMER MON COMPTE'),
+})
 
 // Lazy initialize to avoid build-time errors
 function getSupabaseAdmin() {
@@ -50,15 +58,11 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json()
-    const { reason, password, confirmText } = body
-
-    // Verify confirmation text
-    if (confirmText !== 'SUPPRIMER MON COMPTE') {
-      return NextResponse.json(
-        { error: 'Please type the confirmation text exactly' },
-        { status: 400 }
-      )
+    const result = deletePostSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json({ error: 'Invalid request', details: result.error.flatten() }, { status: 400 })
     }
+    const { reason, password, confirmText: _confirmText } = result.data
 
     // Verify password
     const { error: signInError } = await supabase.auth.signInWithPassword({
@@ -145,7 +149,7 @@ export async function POST(request: Request) {
 }
 
 // DELETE /api/gdpr/delete - Cancel deletion request
-export async function DELETE(request: Request) {
+export async function DELETE(_request: Request) {
   try {
     const cookieStore = await cookies()
     const supabase = createServerClient(
@@ -207,7 +211,7 @@ export async function DELETE(request: Request) {
 }
 
 // GET /api/gdpr/delete - Get deletion status
-export async function GET(request: Request) {
+export async function GET(_request: Request) {
   try {
     const cookieStore = await cookies()
     const supabase = createServerClient(

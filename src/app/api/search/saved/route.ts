@@ -8,6 +8,20 @@ import { createClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 import { createServerClient } from '@supabase/ssr'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// POST request schema
+const saveSearchSchema = z.object({
+  name: z.string().min(1).max(100),
+  query: z.string().min(1).max(500),
+  filters: z.record(z.string(), z.unknown()).optional(),
+  notifyNewResults: z.boolean().optional().default(false),
+})
+
+// DELETE request query params schema
+const deleteSearchSchema = z.object({
+  id: z.string().uuid(),
+})
 
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -95,14 +109,11 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json()
-    const { name, query, filters, notifyNewResults } = body
-
-    if (!name || !query) {
-      return NextResponse.json(
-        { error: 'Name and query are required' },
-        { status: 400 }
-      )
+    const result = saveSearchSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json({ error: 'Invalid request', details: result.error.flatten() }, { status: 400 })
     }
+    const { name, query, filters, notifyNewResults } = result.data
 
     // Check for duplicates
     const { data: existing } = await supabaseAdmin
@@ -190,14 +201,12 @@ export async function DELETE(request: Request) {
     }
 
     const { searchParams } = new URL(request.url)
-    const id = searchParams.get('id')
-
-    if (!id) {
-      return NextResponse.json(
-        { error: 'Search ID required' },
-        { status: 400 }
-      )
+    const queryParams = { id: searchParams.get('id') }
+    const result = deleteSearchSchema.safeParse(queryParams)
+    if (!result.success) {
+      return NextResponse.json({ error: 'Invalid request', details: result.error.flatten() }, { status: 400 })
     }
+    const { id } = result.data
 
     const { error } = await supabaseAdmin
       .from('saved_searches')

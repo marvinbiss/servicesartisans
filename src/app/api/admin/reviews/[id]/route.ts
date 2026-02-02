@@ -2,6 +2,13 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// PATCH request schema
+const moderateReviewSchema = z.object({
+  moderation_status: z.enum(['pending', 'approved', 'rejected']),
+  is_visible: z.boolean().optional(),
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -19,12 +26,19 @@ export async function PATCH(
 
     const supabase = createAdminClient()
     const body = await request.json()
+    const result = moderateReviewSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
+        { status: 400 }
+      )
+    }
 
     const { data, error } = await supabase
       .from('reviews')
       .update({
-        moderation_status: body.moderation_status,
-        is_visible: body.is_visible,
+        moderation_status: result.data.moderation_status,
+        is_visible: result.data.is_visible,
         moderated_at: new Date().toISOString(),
         moderated_by: authResult.admin.id,
       })
@@ -37,10 +51,10 @@ export async function PATCH(
     // Log the moderation action
     await logAdminAction(
       authResult.admin.id,
-      `review.${body.moderation_status}`,
+      `review.${result.data.moderation_status}`,
       'review',
       params.id,
-      { moderation_status: body.moderation_status, is_visible: body.is_visible }
+      { moderation_status: result.data.moderation_status, is_visible: result.data.is_visible }
     )
 
     return NextResponse.json({ success: true, data })

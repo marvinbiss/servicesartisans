@@ -5,8 +5,39 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import * as fs from 'fs'
-import * as path from 'path'
+import { z } from 'zod'
+// fs and path available if needed for file operations
+
+// POST request schema
+const googleMapsEntrySchema = z.object({
+  place_id: z.string(),
+  url: z.string().url(),
+  country: z.string(),
+  name: z.string(),
+  category: z.string(),
+  address: z.string(),
+  description: z.string().nullable(),
+  business_details: z.array(z.object({
+    details: z.string(),
+    field_name: z.string(),
+    link: z.string().nullable(),
+  })).optional(),
+  open_hours: z.record(z.string(), z.string()).nullable().optional(),
+  reviews_count: z.number().int().min(0).optional().default(0),
+  rating: z.number().min(0).max(5).optional().default(0),
+  main_image: z.string().nullable().optional(),
+  lat: z.number(),
+  lon: z.number(),
+  services_provided: z.array(z.string()).nullable().optional(),
+  open_website: z.string().nullable().optional(),
+  phone_number: z.string().nullable().optional(),
+  permanently_closed: z.boolean().optional().default(false),
+  photos_and_videos: z.array(z.string()).nullable().optional(),
+})
+
+const importRequestSchema = z.object({
+  data: z.array(googleMapsEntrySchema).min(1),
+})
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 300 // 5 minutes max
@@ -19,22 +50,22 @@ interface GoogleMapsEntry {
   category: string
   address: string
   description: string | null
-  business_details: Array<{
+  business_details?: Array<{
     details: string
     field_name: string
     link: string | null
   }>
-  open_hours: Record<string, string> | null
+  open_hours?: Record<string, string> | null
   reviews_count: number
   rating: number
-  main_image: string | null
+  main_image?: string | null
   lat: number
   lon: number
-  services_provided: string[] | null
-  open_website: string | null
-  phone_number: string | null
+  services_provided?: string[] | null
+  open_website?: string | null
+  phone_number?: string | null
   permanently_closed: boolean
-  photos_and_videos: string[] | null
+  photos_and_videos?: string[] | null
 }
 
 // Parse French address
@@ -220,11 +251,11 @@ export async function POST(request: NextRequest) {
 
     // Get JSON data from request body
     const body = await request.json()
-    const data: GoogleMapsEntry[] = body.data || []
-
-    if (!Array.isArray(data) || data.length === 0) {
-      return NextResponse.json({ error: 'No data provided' }, { status: 400 })
+    const result = importRequestSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json({ error: 'Validation error', details: result.error.flatten() }, { status: 400 })
     }
+    const data: GoogleMapsEntry[] = result.data.data
 
     console.log(`[Import] Processing ${data.length} entries...`)
 

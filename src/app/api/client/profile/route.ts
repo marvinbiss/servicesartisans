@@ -7,6 +7,16 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// PUT request schema
+const updateClientProfileSchema = z.object({
+  full_name: z.string().max(100).optional(),
+  phone: z.string().max(20).optional(),
+  address: z.string().max(200).optional(),
+  city: z.string().max(100).optional(),
+  postal_code: z.string().max(10).optional(),
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -65,13 +75,20 @@ export async function PUT(request: Request) {
 
     // Parse request body
     const body = await request.json()
+    const result = updateClientProfileSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json(
+        { error: 'Validation error', details: result.error.flatten() },
+        { status: 400 }
+      )
+    }
     const {
       full_name,
       phone,
       address,
       city,
       postal_code,
-    } = body
+    } = result.data
 
     // Update profile
     const { data: profile, error: updateError } = await supabase

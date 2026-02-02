@@ -12,6 +12,20 @@ import {
   deleteVideoRoom,
   getRoomInfo,
 } from '@/lib/video/daily-client'
+import { z } from 'zod'
+
+// POST request schema
+const videoPostSchema = z.object({
+  bookingId: z.string().uuid(),
+  userId: z.string().uuid(),
+  userName: z.string().min(1).max(100),
+  isArtisan: z.boolean().optional().default(false),
+})
+
+// GET/DELETE query params schema
+const videoQuerySchema = z.object({
+  bookingId: z.string().uuid(),
+})
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -24,14 +38,11 @@ export const dynamic = 'force-dynamic'
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { bookingId, userId, userName, isArtisan } = body
-
-    if (!bookingId || !userId || !userName) {
-      return NextResponse.json(
-        { error: 'bookingId, userId, and userName are required' },
-        { status: 400 }
-      )
+    const result = videoPostSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json({ error: 'Invalid request', details: result.error.flatten() }, { status: 400 })
     }
+    const { bookingId, userId, userName, isArtisan } = result.data
 
     // Get booking details
     const { data: booking, error: bookingError } = await supabase
@@ -127,14 +138,12 @@ export async function POST(request: Request) {
 export async function DELETE(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
-    const bookingId = searchParams.get('bookingId')
-
-    if (!bookingId) {
-      return NextResponse.json(
-        { error: 'bookingId is required' },
-        { status: 400 }
-      )
+    const queryParams = { bookingId: searchParams.get('bookingId') }
+    const result = videoQuerySchema.safeParse(queryParams)
+    if (!result.success) {
+      return NextResponse.json({ error: 'Invalid request', details: result.error.flatten() }, { status: 400 })
     }
+    const { bookingId } = result.data
 
     // Get room info
     const { data: room } = await supabase
@@ -168,14 +177,12 @@ export async function DELETE(request: Request) {
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
-    const bookingId = searchParams.get('bookingId')
-
-    if (!bookingId) {
-      return NextResponse.json(
-        { error: 'bookingId is required' },
-        { status: 400 }
-      )
+    const queryParams = { bookingId: searchParams.get('bookingId') }
+    const result = videoQuerySchema.safeParse(queryParams)
+    if (!result.success) {
+      return NextResponse.json({ error: 'Invalid request', details: result.error.flatten() }, { status: 400 })
     }
+    const { bookingId } = result.data
 
     const { data: room } = await supabase
       .from('video_rooms')

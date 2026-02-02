@@ -6,7 +6,6 @@ import {
   FileText,
   Plus,
   Search,
-  Filter,
   Send,
   Clock,
   CheckCircle2,
@@ -18,7 +17,6 @@ import {
   MoreVertical,
   Download,
   Copy,
-  Trash2,
   Eye,
   Edit3,
 } from 'lucide-react'
@@ -134,7 +132,7 @@ export default function ProDevisPage() {
   const [quotes] = useState(mockQuotes)
   const [searchQuery, setSearchQuery] = useState('')
   const [filterStatus, setFilterStatus] = useState<FilterStatus>('all')
-  const [selectedQuote, setSelectedQuote] = useState<Quote | null>(null)
+  const [_selectedQuote, _setSelectedQuote] = useState<Quote | null>(null)
 
   const filteredQuotes = quotes.filter((q) => {
     if (filterStatus !== 'all' && q.status !== filterStatus) return false

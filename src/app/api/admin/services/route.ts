@@ -2,6 +2,17 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// POST request schema
+const createServiceSchema = z.object({
+  name: z.string().min(1).max(100),
+  description: z.string().max(500).optional(),
+  icon: z.string().max(50).optional(),
+  parent_id: z.string().uuid().optional().nullable(),
+  meta_title: z.string().max(100).optional(),
+  meta_description: z.string().max(200).optional(),
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -61,14 +72,14 @@ export async function POST(request: NextRequest) {
 
     const supabase = createAdminClient()
     const body = await request.json()
-    const { name, description, icon, parent_id, meta_title, meta_description } = body
-
-    if (!name) {
+    const result = createServiceSchema.safeParse(body)
+    if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Le nom est requis' } },
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
         { status: 400 }
       )
     }
+    const { name, description, icon, parent_id, meta_title, meta_description } = result.data
 
     // Générer le slug
     const slug = name

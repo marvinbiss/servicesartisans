@@ -1,12 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { createClient } from '@/lib/supabase/server'
+import { z } from 'zod'
+
+// PATCH request schema
+const quoteUpdateSchema = z.object({
+  action: z.enum(['accept', 'reject', 'cancel']),
+})
 
 export const dynamic = 'force-dynamic'
 
 // GET - Get single quote
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -106,7 +112,17 @@ export async function PATCH(
     }
 
     const body = await request.json()
-    const { action } = body
+    const result = quoteUpdateSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: { code: 2001, message: 'Validation error', details: result.error.flatten() }
+        },
+        { status: 400 }
+      )
+    }
+    const { action } = result.data
 
     const { data: quote } = await supabase
       .from('quotes')
@@ -175,15 +191,6 @@ export async function PATCH(
         }
         newStatus = 'cancelled'
         break
-
-      default:
-        return NextResponse.json(
-          {
-            success: false,
-            error: { code: 2001, message: 'Action invalide' }
-          },
-          { status: 400 }
-        )
     }
 
     const { data: updatedQuote, error } = await supabase

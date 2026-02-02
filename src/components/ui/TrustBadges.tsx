@@ -1,6 +1,6 @@
 'use client'
 
-import { Shield, CheckCircle, Award, Star, Clock, Users, BadgeCheck, Lock } from 'lucide-react'
+import { Shield, CheckCircle, Star, Clock, BadgeCheck, Lock } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 // Trust badges comme Doctolib/Airbnb

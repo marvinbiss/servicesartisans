@@ -1,7 +1,7 @@
 'use client'
 
 import { ReactNode } from 'react'
-import { Filter, X } from 'lucide-react'
+import { X } from 'lucide-react'
 
 interface FilterOption {
   value: string

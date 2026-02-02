@@ -4,7 +4,7 @@
  */
 
 import { getEntrepriseParSiret, verifierSanteEntreprise, getBadgeConfiance, validateSiret, validateSiren } from '../api/pappers'
-import { getEtablissementBySiret, verifierSiret as verifierSiretSirene } from '../api/sirene'
+import { verifierSiret as verifierSiretSirene } from '../api/sirene'
 import { geocoder } from '../api/adresse'
 import { apiLogger } from '../utils/logger'
 import type { EntrepriseComplete } from '../api/pappers'

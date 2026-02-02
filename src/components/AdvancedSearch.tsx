@@ -4,8 +4,8 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useRouter, useSearchParams } from 'next/navigation'
 import {
-  Search, X, MapPin, Star, Clock, Filter, ChevronDown,
-  Bookmark, History, TrendingUp, Sliders, Check
+  Search, X, MapPin, Star,
+  History, TrendingUp, Sliders
 } from 'lucide-react'
 import { useDebounce } from '@/hooks/useDebounce'
 
@@ -81,7 +81,7 @@ export default function AdvancedSearch({
   const [recentSearches, setRecentSearches] = useState<string[]>([])
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [showFilterPanel, setShowFilterPanel] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const [_isLoading, _setIsLoading] = useState(false)
 
   const inputRef = useRef<HTMLInputElement>(null)
   const suggestionsRef = useRef<HTMLDivElement>(null)

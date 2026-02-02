@@ -3,11 +3,18 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { DEFAULT_PERMISSIONS, type AdminRole } from '@/types/admin'
 import { verifyAdmin, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// PATCH request schema
+const updateAdminSchema = z.object({
+  role: z.enum(['super_admin', 'admin', 'moderator', 'support']).optional(),
+  permissions: z.record(z.string(), z.record(z.string(), z.boolean())).optional(),
+})
 
 export const dynamic = 'force-dynamic'
 
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -65,10 +72,18 @@ export async function PATCH(
     }
 
     const supabase = createAdminClient()
-    const { role, permissions } = await request.json()
+    const body = await request.json()
+    const result = updateAdminSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
+        { status: 400 }
+      )
+    }
+    const { role, permissions } = result.data
 
     // Get old data for audit
-    const { data: oldAdmin } = await supabase
+    const { data: _oldAdmin } = await supabase
       .from('admin_users')
       .select('*')
       .eq('id', params.id)
@@ -106,7 +121,7 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -127,7 +142,7 @@ export async function DELETE(
     const supabase = createAdminClient()
 
     // Get admin data for audit
-    const { data: adminToDelete } = await supabase
+    const { data: _adminToDelete } = await supabase
       .from('admin_users')
       .select('*')
       .eq('id', params.id)

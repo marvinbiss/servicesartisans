@@ -14,6 +14,73 @@ import {
   type DocumentData,
   type DocumentType,
 } from '@/lib/documents/pdf-generator'
+import { z } from 'zod'
+
+// GET query params schema
+const documentsGetSchema = z.object({
+  userId: z.string().uuid().optional().nullable(),
+  bookingId: z.string().uuid().optional().nullable(),
+  type: z.enum(['invoice', 'quote', 'receipt', 'other']).optional().nullable(),
+}).refine(data => data.userId || data.bookingId, {
+  message: 'userId or bookingId required',
+})
+
+// POST request schema for generate action
+const documentItemSchema = z.object({
+  description: z.string().max(500),
+  quantity: z.number().positive(),
+  unitPrice: z.number().min(0),
+  taxRate: z.number().min(0).max(100).optional(),
+})
+
+const recipientSchema = z.object({
+  name: z.string().max(200),
+  company: z.string().max(200).optional(),
+  address: z.string().max(500).optional(),
+  city: z.string().max(100).optional(),
+  postalCode: z.string().max(20).optional(),
+  email: z.string().email().optional(),
+  phone: z.string().max(20).optional(),
+})
+
+const generateDocumentSchema = z.object({
+  action: z.literal('generate'),
+  userId: z.string().uuid(),
+  bookingId: z.string().uuid().optional().nullable(),
+  type: z.enum(['invoice', 'quote', 'receipt']),
+  data: z.object({
+    items: z.array(documentItemSchema).min(1),
+    recipient: recipientSchema,
+    notes: z.string().max(1000).optional(),
+    validDays: z.number().int().positive().max(365).optional(),
+  }),
+})
+
+const uploadDocumentSchema = z.object({
+  action: z.literal('upload'),
+  userId: z.string().uuid(),
+  bookingId: z.string().uuid().optional().nullable(),
+  type: z.enum(['invoice', 'quote', 'receipt', 'other']).optional(),
+  data: z.object({
+    name: z.string().max(200),
+    fileUrl: z.string().url(),
+    fileSize: z.number().int().positive().optional(),
+    mimeType: z.string().max(100).optional(),
+    description: z.string().max(500).optional(),
+    isPublic: z.boolean().optional(),
+  }),
+})
+
+const documentsPostSchema = z.discriminatedUnion('action', [
+  generateDocumentSchema,
+  uploadDocumentSchema,
+])
+
+// DELETE query params schema
+const documentsDeleteSchema = z.object({
+  id: z.string().uuid(),
+  userId: z.string().uuid(),
+})
 
 // Lazy initialize to avoid build-time errors
 function getSupabase() {
@@ -29,16 +96,19 @@ export const dynamic = 'force-dynamic'
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
-    const userId = searchParams.get('userId')
-    const bookingId = searchParams.get('bookingId')
-    const type = searchParams.get('type')
-
-    if (!userId && !bookingId) {
+    const queryParams = {
+      userId: searchParams.get('userId'),
+      bookingId: searchParams.get('bookingId'),
+      type: searchParams.get('type'),
+    }
+    const result = documentsGetSchema.safeParse(queryParams)
+    if (!result.success) {
       return NextResponse.json(
-        { error: 'userId or bookingId required' },
+        { error: 'Invalid parameters', details: result.error.flatten() },
         { status: 400 }
       )
     }
+    const { userId, bookingId, type } = result.data
 
     const supabase = getSupabase()
     let query = supabase
@@ -75,14 +145,14 @@ export async function POST(request: Request) {
   try {
     const supabase = getSupabase()
     const body = await request.json()
-    const { action, userId, bookingId, type, data } = body
-
-    if (!userId) {
+    const result = documentsPostSchema.safeParse(body)
+    if (!result.success) {
       return NextResponse.json(
-        { error: 'userId required' },
+        { error: 'Validation error', details: result.error.flatten() },
         { status: 400 }
       )
     }
+    const { action, userId, bookingId, type, data } = result.data
 
     // Generate PDF document
     if (action === 'generate') {
@@ -136,7 +206,7 @@ export async function POST(request: Request) {
           address: recipient.address,
           city: recipient.city,
           postalCode: recipient.postalCode,
-          email: recipient.email,
+          email: recipient.email || '',
           phone: recipient.phone,
         },
         items,
@@ -226,15 +296,18 @@ export async function DELETE(request: Request) {
   try {
     const supabase = getSupabase()
     const { searchParams } = new URL(request.url)
-    const documentId = searchParams.get('id')
-    const userId = searchParams.get('userId')
-
-    if (!documentId || !userId) {
+    const queryParams = {
+      id: searchParams.get('id'),
+      userId: searchParams.get('userId'),
+    }
+    const result = documentsDeleteSchema.safeParse(queryParams)
+    if (!result.success) {
       return NextResponse.json(
-        { error: 'id and userId required' },
+        { error: 'Invalid parameters', details: result.error.flatten() },
         { status: 400 }
       )
     }
+    const { id: documentId, userId } = result.data
 
     // Verify ownership
     const { data: doc } = await supabase

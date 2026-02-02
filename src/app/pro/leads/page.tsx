@@ -4,14 +4,11 @@ import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Search,
-  Filter,
   SlidersHorizontal,
   Users,
   Zap,
   Clock,
-  Calendar,
   CheckCircle2,
-  XCircle,
   ArrowUpDown,
   ChevronDown,
 } from 'lucide-react'

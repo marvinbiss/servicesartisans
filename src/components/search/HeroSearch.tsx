@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Search, MapPin, ArrowRight, Sparkles, Clock, TrendingUp, Zap, Wrench, Key, Flame, PaintBucket, Hammer, Grid3X3, Home, TreeDeciduous } from 'lucide-react'
+import { Search, MapPin, TrendingUp, Zap, Wrench, Key, Flame, PaintBucket, Hammer, Grid3X3, Home, TreeDeciduous } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 // Map des icônes

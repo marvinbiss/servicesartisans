@@ -6,7 +6,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { logger } from '@/lib/logger'
-import { verifyAdmin, logAdminAction } from '@/lib/admin-auth'
+import { verifyAdmin } from '@/lib/admin-auth'
 
 export const dynamic = 'force-dynamic'
 
@@ -31,10 +31,9 @@ export async function GET() {
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey)
 
-    // Get date ranges
+    // Get date ranges (available for future use)
     const now = new Date()
-    const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-    const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
+    void now
 
     // Since tables might not exist, return mock data directly
     // In production, you would have proper tables and this would work
@@ -108,11 +107,3 @@ export async function GET() {
   }
 }
 
-function formatTimeAgo(date: Date): string {
-  const seconds = Math.floor((Date.now() - date.getTime()) / 1000)
-
-  if (seconds < 60) return 'À l\'instant'
-  if (seconds < 3600) return `Il y a ${Math.floor(seconds / 60)} min`
-  if (seconds < 86400) return `Il y a ${Math.floor(seconds / 3600)}h`
-  return `Il y a ${Math.floor(seconds / 86400)}j`
-}

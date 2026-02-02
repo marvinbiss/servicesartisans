@@ -1,13 +1,11 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import {
   Search,
   Calendar,
   ChevronLeft,
   ChevronRight,
-  Eye,
   XCircle,
   Clock,
   User,
@@ -36,7 +34,6 @@ interface Booking {
 }
 
 export default function AdminReservationsPage() {
-  const router = useRouter()
   const [bookings, setBookings] = useState<Booking[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')

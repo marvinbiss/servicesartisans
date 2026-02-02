@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { HelpCircle, ChevronDown, Plus, Minus } from 'lucide-react'
+import { HelpCircle, Plus, Minus } from 'lucide-react'
 import { Artisan } from './types'
 
 interface ArtisanFAQProps {

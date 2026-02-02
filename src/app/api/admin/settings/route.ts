@@ -2,6 +2,24 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// PATCH request schema
+const updateSettingsSchema = z.object({
+  siteName: z.string().max(100).optional(),
+  contactEmail: z.string().email().optional(),
+  supportEmail: z.string().email().optional(),
+  maintenanceMode: z.boolean().optional(),
+  registrationEnabled: z.boolean().optional(),
+  emailNotifications: z.boolean().optional(),
+  smsNotifications: z.boolean().optional(),
+  maxQuotesPerDay: z.number().int().min(1).max(100).optional(),
+  requireEmailVerification: z.boolean().optional(),
+  requirePhoneVerification: z.boolean().optional(),
+  commissionRate: z.number().min(0).max(100).optional(),
+  minBookingNotice: z.number().int().min(0).max(168).optional(), // max 1 week in hours
+  maxBookingAdvance: z.number().int().min(1).max(365).optional(), // max 1 year in days
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -59,7 +77,15 @@ export async function PATCH(request: NextRequest) {
     }
 
     const supabase = createAdminClient()
-    const updates = await request.json()
+    const body = await request.json()
+    const result = updateSettingsSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
+        { status: 400 }
+      )
+    }
+    const updates = result.data
 
     // Fetch current settings for audit
     const { data: currentSettings } = await supabase

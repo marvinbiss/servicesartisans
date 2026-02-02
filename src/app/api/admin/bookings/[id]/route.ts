@@ -2,12 +2,23 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { verifyAdmin, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// PATCH request schema
+const updateBookingSchema = z.object({
+  status: z.enum(['pending', 'confirmed', 'completed', 'cancelled', 'no_show']).optional(),
+  notes: z.string().max(1000).optional(),
+  client_name: z.string().max(100).optional(),
+  client_email: z.string().email().optional(),
+  client_phone: z.string().max(20).optional(),
+  service_description: z.string().max(500).optional(),
+})
 
 export const dynamic = 'force-dynamic'
 
 // GET - Détails d'une réservation
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -60,11 +71,18 @@ export async function PATCH(
 
     const supabase = createAdminClient()
     const body = await request.json()
+    const result = updateBookingSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
+        { status: 400 }
+      )
+    }
 
     const { data, error } = await supabase
       .from('bookings')
       .update({
-        ...body,
+        ...result.data,
         updated_at: new Date().toISOString(),
       })
       .eq('id', params.id)
@@ -89,7 +107,7 @@ export async function PATCH(
 
 // DELETE - Annuler une réservation
 export async function DELETE(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {

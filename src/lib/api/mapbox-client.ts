@@ -5,7 +5,7 @@
  */
 
 import { retry } from '../utils/retry'
-import { geocodeCache, cacheAside } from '../utils/cache'
+import { geocodeCache } from '../utils/cache'
 import { APIError, ValidationError, ErrorCode } from '../utils/errors'
 import { apiLogger } from '../utils/logger'
 

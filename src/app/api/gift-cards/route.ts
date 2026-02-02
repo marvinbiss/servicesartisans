@@ -1,8 +1,32 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { stripe } from '@/lib/stripe/server'
-import { v4 as uuidv4 } from 'uuid'
+// uuid available if needed for future features
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// POST request schema
+const createGiftCardSchema = z.object({
+  amount: z.number().int().min(10).max(500),
+  senderName: z.string().max(100).optional(),
+  senderEmail: z.string().email(),
+  recipientName: z.string().max(100).optional(),
+  recipientEmail: z.string().email(),
+  message: z.string().max(500).optional(),
+  artisanId: z.string().uuid().optional().nullable(),
+})
+
+// GET query params schema
+const getGiftCardSchema = z.object({
+  code: z.string().min(1).max(25),
+})
+
+// PUT request schema
+const redeemGiftCardSchema = z.object({
+  code: z.string().min(1).max(25),
+  bookingId: z.string().uuid(),
+  amountToRedeem: z.number().positive(),
+})
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
 
@@ -23,29 +47,22 @@ export const dynamic = 'force-dynamic'
 export async function POST(request: Request) {
   try {
     const body = await request.json()
+    const result = createGiftCardSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json(
+        { error: 'Validation error', details: result.error.flatten() },
+        { status: 400 }
+      )
+    }
     const {
-      amount, // In euros
+      amount,
       senderName,
       senderEmail,
       recipientName,
       recipientEmail,
       message,
-      artisanId, // Optional: for a specific artisan
-    } = body
-
-    if (!amount || !senderEmail || !recipientEmail) {
-      return NextResponse.json(
-        { error: 'Montant et emails requis' },
-        { status: 400 }
-      )
-    }
-
-    if (amount < 10 || amount > 500) {
-      return NextResponse.json(
-        { error: 'Montant entre 10 et 500 EUR' },
-        { status: 400 }
-      )
-    }
+      artisanId,
+    } = result.data
 
     const supabase = await createClient()
 
@@ -62,7 +79,7 @@ export async function POST(request: Request) {
             currency: 'eur',
             product_data: {
               name: 'Carte Cadeau ServicesArtisans',
-              description: `Pour ${recipientName} - ${amount} EUR`,
+              description: `Pour ${recipientName || 'le destinataire'} - ${amount} EUR`,
             },
             unit_amount: amount * 100,
           },
@@ -75,7 +92,7 @@ export async function POST(request: Request) {
         amount: amount.toString(),
         sender_name: senderName || 'Anonyme',
         sender_email: senderEmail,
-        recipient_name: recipientName,
+        recipient_name: recipientName || '',
         recipient_email: recipientEmail,
         message: message || '',
         artisan_id: artisanId || '',
@@ -122,14 +139,17 @@ export async function POST(request: Request) {
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
-    const code = searchParams.get('code')
-
-    if (!code) {
+    const queryParams = {
+      code: searchParams.get('code'),
+    }
+    const result = getGiftCardSchema.safeParse(queryParams)
+    if (!result.success) {
       return NextResponse.json(
-        { error: 'Code requis' },
+        { error: 'Invalid parameters', details: result.error.flatten() },
         { status: 400 }
       )
     }
+    const { code } = result.data
 
     const supabase = await createClient()
 
@@ -185,14 +205,14 @@ export async function GET(request: Request) {
 export async function PUT(request: Request) {
   try {
     const body = await request.json()
-    const { code, bookingId, amountToRedeem } = body
-
-    if (!code || !bookingId || !amountToRedeem) {
+    const result = redeemGiftCardSchema.safeParse(body)
+    if (!result.success) {
       return NextResponse.json(
-        { error: 'Code, booking et montant requis' },
+        { error: 'Validation error', details: result.error.flatten() },
         { status: 400 }
       )
     }
+    const { code, bookingId, amountToRedeem } = result.data
 
     const supabase = await createClient()
 

@@ -2,6 +2,24 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// GET query params schema
+const usersQuerySchema = z.object({
+  page: z.coerce.number().int().min(1).optional().default(1),
+  limit: z.coerce.number().int().min(1).max(100).optional().default(20),
+  filter: z.enum(['all', 'clients', 'artisans', 'banned']).optional().default('all'),
+  search: z.string().max(100).optional().default(''),
+})
+
+// POST request schema
+const createUserSchema = z.object({
+  email: z.string().email().max(255),
+  password: z.string().min(8).max(100),
+  full_name: z.string().max(100).optional(),
+  phone: z.string().max(20).optional(),
+  user_type: z.enum(['client', 'artisan']).optional().default('client'),
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -17,10 +35,20 @@ export async function GET(request: NextRequest) {
     const supabase = createAdminClient()
 
     const searchParams = request.nextUrl.searchParams
-    const page = parseInt(searchParams.get('page') || '1')
-    const limit = parseInt(searchParams.get('limit') || '20')
-    const filter = searchParams.get('filter') || 'all'
-    const search = searchParams.get('search') || ''
+    const queryParams = {
+      page: searchParams.get('page') || '1',
+      limit: searchParams.get('limit') || '20',
+      filter: searchParams.get('filter') || 'all',
+      search: searchParams.get('search') || '',
+    }
+    const result = usersQuerySchema.safeParse(queryParams)
+    if (!result.success) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Invalid parameters', details: result.error.flatten() } },
+        { status: 400 }
+      )
+    }
+    const { page, limit, filter, search } = result.data
 
     // Fetch users from Supabase Auth
     const { data: authUsers, error: authError } = await supabase.auth.admin.listUsers({
@@ -114,14 +142,14 @@ export async function POST(request: NextRequest) {
     const supabase = createAdminClient()
 
     const body = await request.json()
-    const { email, full_name, phone, user_type, password } = body
-
-    if (!email || !password) {
+    const result = createUserSchema.safeParse(body)
+    if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Email et mot de passe requis' } },
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
         { status: 400 }
       )
     }
+    const { email, full_name, phone, user_type, password } = result.data
 
     // Create user with Supabase Auth Admin
     const { data: authData, error: authError } = await supabase.auth.admin.createUser({

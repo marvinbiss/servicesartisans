@@ -29,7 +29,7 @@ export default function ProfilArtisanPage() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
-  const [profile, setProfile] = useState<Profile | null>(null)
+  const [_profile, setProfile] = useState<Profile | null>(null)
 
   const [formData, setFormData] = useState({
     entreprise: '',

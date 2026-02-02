@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import {
   Calendar,
@@ -53,7 +53,6 @@ interface AvailableSlot {
 
 export default function BookingPage() {
   const params = useParams()
-  const router = useRouter()
   const bookingId = params.id as string
 
   const [booking, setBooking] = useState<BookingDetails | null>(null)

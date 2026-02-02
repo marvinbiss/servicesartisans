@@ -4,7 +4,7 @@
  * Based on best practices from Doctolib, Calendly, and Acuity
  */
 
-import { sendBookingConfirmation, sendBookingReminder, sendCancellationEmail, sendPaymentFailedEmail, logNotification } from './email'
+import { sendBookingConfirmation, sendBookingReminder, sendCancellationEmail, sendPaymentFailedEmail } from './email'
 import { sendBookingConfirmationSMS, sendReminder24hSMS, sendReminder1hSMS, sendCancellationSMS, sendRescheduleSMS, type SMSData } from './sms'
 import { createClient } from '@supabase/supabase-js'
 import { logger } from '@/lib/logger'
@@ -334,7 +334,7 @@ export class UnifiedNotificationService {
   }> {
     // Sort by priority
     const sortedPayloads = [...payloads].sort(
-      (a, b) =>
+      (_a, _b) =>
         NOTIFICATION_PRIORITY[type] - NOTIFICATION_PRIORITY[type]
     )
 

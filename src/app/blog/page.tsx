@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Calendar, Clock, ArrowRight, User, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
+import { Calendar, Clock, ArrowRight, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
 
 const articles = [
   {

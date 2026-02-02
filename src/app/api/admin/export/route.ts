@@ -1,7 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { verifyAdmin, logAdminAction } from '@/lib/admin-auth'
+import { verifyAdmin } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// GET query params schema
+const exportQuerySchema = z.object({
+  type: z.enum(['providers', 'quotes', 'reviews']).optional().default('providers'),
+  format: z.enum(['json', 'csv']).optional().default('json'),
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -16,8 +23,18 @@ export async function GET(request: NextRequest) {
 
     const supabase = createAdminClient()
     const url = new URL(request.url)
-    const type = url.searchParams.get('type') || 'providers'
-    const format = url.searchParams.get('format') || 'json'
+    const queryParams = {
+      type: url.searchParams.get('type') || 'providers',
+      format: url.searchParams.get('format') || 'json',
+    }
+    const result = exportQuerySchema.safeParse(queryParams)
+    if (!result.success) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Invalid parameters', details: result.error.flatten() } },
+        { status: 400 }
+      )
+    }
+    const { type, format } = result.data
 
     let data: unknown[]
     let filename: string

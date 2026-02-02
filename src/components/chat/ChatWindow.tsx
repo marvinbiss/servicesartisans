@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { Send, Paperclip, Image, X, Check, CheckCheck } from 'lucide-react'
+import { Send, Paperclip, Image, Check, CheckCheck } from 'lucide-react'
 import { Button, Input } from '@/components/ui'
 import { chatService, ChatMessage, TypingIndicator } from '@/lib/realtime/chat-service'
 import { cn } from '@/lib/utils'

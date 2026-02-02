@@ -2,6 +2,14 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// GET query params schema
+const subscriptionsQuerySchema = z.object({
+  page: z.coerce.number().int().min(1).optional().default(1),
+  limit: z.coerce.number().int().min(1).max(100).optional().default(20),
+  filter: z.enum(['all', 'active', 'past_due', 'canceled']).optional().default('all'),
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -16,9 +24,19 @@ export async function GET(request: NextRequest) {
     const supabase = createAdminClient()
 
     const searchParams = request.nextUrl.searchParams
-    const page = parseInt(searchParams.get('page') || '1')
-    const limit = parseInt(searchParams.get('limit') || '20')
-    const filter = searchParams.get('filter') || 'all'
+    const queryParams = {
+      page: searchParams.get('page') || '1',
+      limit: searchParams.get('limit') || '20',
+      filter: searchParams.get('filter') || 'all',
+    }
+    const result = subscriptionsQuerySchema.safeParse(queryParams)
+    if (!result.success) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Invalid parameters', details: result.error.flatten() } },
+        { status: 400 }
+      )
+    }
+    const { page, limit, filter } = result.data
 
     const offset = (page - 1) * limit
 

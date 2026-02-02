@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { AlertCircle, ArrowLeft, Share2, Heart } from 'lucide-react'
@@ -32,10 +32,10 @@ interface ArtisanPageClientProps {
 export default function ArtisanPageClient({
   initialArtisan,
   initialReviews,
-  artisanId,
+  artisanId: _artisanId,
 }: ArtisanPageClientProps) {
-  const [artisan, setArtisan] = useState<Artisan | null>(initialArtisan)
-  const [reviews, setReviews] = useState<Review[]>(initialReviews)
+  const [artisan, _setArtisan] = useState<Artisan | null>(initialArtisan)
+  const [reviews, _setReviews] = useState<Review[]>(initialReviews)
   const [isFavorite, setIsFavorite] = useState(false)
 
   const handleShare = async () => {

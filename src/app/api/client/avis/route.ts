@@ -9,6 +9,27 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// POST request schema
+const createReviewSchema = z.object({
+  artisan_id: z.string().uuid(),
+  devis_id: z.string().uuid().optional().nullable(),
+  rating: z.number().int().min(1).max(5),
+  comment: z.string().min(10).max(2000),
+})
+
+// PUT request schema
+const updateReviewSchema = z.object({
+  review_id: z.string().uuid(),
+  rating: z.number().int().min(1).max(5).optional(),
+  comment: z.string().min(10).max(2000).optional(),
+})
+
+// DELETE query params schema
+const deleteReviewSchema = z.object({
+  id: z.string().uuid(),
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -112,14 +133,14 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json()
-    const { artisan_id, devis_id, rating, comment } = body
-
-    if (!artisan_id || !rating || !comment) {
+    const result = createReviewSchema.safeParse(body)
+    if (!result.success) {
       return NextResponse.json(
-        { error: 'Artisan, note et commentaire requis' },
+        { error: 'Validation error', details: result.error.flatten() },
         { status: 400 }
       )
     }
+    const { artisan_id, devis_id, rating, comment } = result.data
 
     // Insert review
     const { data: review, error: insertError } = await supabase
@@ -171,14 +192,14 @@ export async function PUT(request: Request) {
     }
 
     const body = await request.json()
-    const { review_id, rating, comment } = body
-
-    if (!review_id) {
+    const result = updateReviewSchema.safeParse(body)
+    if (!result.success) {
       return NextResponse.json(
-        { error: 'ID de l\'avis requis' },
+        { error: 'Validation error', details: result.error.flatten() },
         { status: 400 }
       )
     }
+    const { review_id, rating, comment } = result.data
 
     // Verify the review belongs to this client
     const { data: existingReview } = await supabase
@@ -240,14 +261,17 @@ export async function DELETE(request: Request) {
     }
 
     const { searchParams } = new URL(request.url)
-    const review_id = searchParams.get('id')
-
-    if (!review_id) {
+    const queryParams = {
+      id: searchParams.get('id'),
+    }
+    const result = deleteReviewSchema.safeParse(queryParams)
+    if (!result.success) {
       return NextResponse.json(
-        { error: 'ID de l\'avis requis' },
+        { error: 'Invalid parameters', details: result.error.flatten() },
         { status: 400 }
       )
     }
+    const review_id = result.data.id
 
     // Verify the review belongs to this client
     const { data: existingReview } = await supabase

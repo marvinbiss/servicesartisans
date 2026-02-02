@@ -2,11 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import {
-  Search,
   Shield,
   ChevronLeft,
   ChevronRight,
-  Filter,
   User,
   Calendar,
   FileText,

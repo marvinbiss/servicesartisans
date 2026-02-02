@@ -14,7 +14,6 @@ import {
   Settings,
   HelpCircle,
   ChevronLeft,
-  Bell,
   LogOut,
   CreditCard,
   FileText,

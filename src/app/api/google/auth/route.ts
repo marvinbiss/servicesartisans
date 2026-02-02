@@ -7,7 +7,7 @@ import { logger } from '@/lib/logger'
 // GET /api/google/auth - Initiate Google OAuth flow
 export const dynamic = 'force-dynamic'
 
-export async function GET(request: Request) {
+export async function GET(_request: Request) {
   try {
     const supabase = await createClient()
 

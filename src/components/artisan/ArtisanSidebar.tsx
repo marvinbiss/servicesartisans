@@ -2,8 +2,8 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Phone, Mail, MessageCircle, Calendar, CheckCircle, Zap, Clock, Shield } from 'lucide-react'
-import { Artisan, getDisplayName } from './types'
+import { Phone, Mail, MessageCircle, CheckCircle, Zap, Clock, Shield } from 'lucide-react'
+import { Artisan } from './types'
 
 interface ArtisanSidebarProps {
   artisan: Artisan
@@ -11,7 +11,6 @@ interface ArtisanSidebarProps {
 
 export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
   const [showPhone, setShowPhone] = useState(false)
-  const displayName = getDisplayName(artisan)
 
   const handleCall = () => {
     if (artisan.phone) {

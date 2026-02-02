@@ -1,20 +1,60 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// GET query params schema
+const availabilityGetSchema = z.object({
+  artisanId: z.string().uuid(),
+})
+
+// POST request schema
+const availabilityPostSchema = z.object({
+  artisanId: z.string().uuid(),
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  slots: z.array(z.object({
+    start: z.string().regex(/^\d{2}:\d{2}$/),
+    end: z.string().regex(/^\d{2}:\d{2}$/),
+  })),
+})
+
+// PUT request schema
+const availabilityPutSchema = z.object({
+  artisanId: z.string().uuid(),
+  settings: z.object({
+    default_slots: z.array(z.object({
+      start: z.string().regex(/^\d{2}:\d{2}$/),
+      end: z.string().regex(/^\d{2}:\d{2}$/),
+    })).optional(),
+    working_days: z.array(z.number().int().min(0).max(6)).optional(),
+    booking_enabled: z.boolean().optional(),
+    advance_booking_days: z.number().int().min(1).max(365).optional(),
+    min_notice_hours: z.number().int().min(0).max(168).optional(),
+    intervention_radius_km: z.number().min(1).max(200).optional(),
+  }),
+})
+
+// DELETE query params schema
+const availabilityDeleteSchema = z.object({
+  slotId: z.string().uuid(),
+})
 
 // GET /api/availability - Get artisan's availability settings
 export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
-  const artisanId = searchParams.get('artisanId')
-
-  if (!artisanId) {
+  const queryParams = {
+    artisanId: searchParams.get('artisanId'),
+  }
+  const result = availabilityGetSchema.safeParse(queryParams)
+  if (!result.success) {
     return NextResponse.json(
-      { error: 'artisanId is required' },
+      { error: 'Invalid parameters', details: result.error.flatten() },
       { status: 400 }
     )
   }
+  const { artisanId } = result.data
 
   try {
     const supabase = await createClient()
@@ -57,14 +97,14 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { artisanId, slots, date } = body
-
-    if (!artisanId || !slots || !date) {
+    const result = availabilityPostSchema.safeParse(body)
+    if (!result.success) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: 'Validation error', details: result.error.flatten() },
         { status: 400 }
       )
     }
+    const { artisanId, slots, date } = result.data
 
     const supabase = await createClient()
 
@@ -124,14 +164,14 @@ export async function POST(request: Request) {
 export async function PUT(request: Request) {
   try {
     const body = await request.json()
-    const { artisanId, settings } = body
-
-    if (!artisanId || !settings) {
+    const result = availabilityPutSchema.safeParse(body)
+    if (!result.success) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: 'Validation error', details: result.error.flatten() },
         { status: 400 }
       )
     }
+    const { artisanId, settings } = result.data
 
     const supabase = await createClient()
 
@@ -164,14 +204,17 @@ export async function PUT(request: Request) {
 // DELETE /api/availability - Delete a slot
 export async function DELETE(request: Request) {
   const { searchParams } = new URL(request.url)
-  const slotId = searchParams.get('slotId')
-
-  if (!slotId) {
+  const queryParams = {
+    slotId: searchParams.get('slotId'),
+  }
+  const result = availabilityDeleteSchema.safeParse(queryParams)
+  if (!result.success) {
     return NextResponse.json(
-      { error: 'slotId is required' },
+      { error: 'Invalid parameters', details: result.error.flatten() },
       { status: 400 }
     )
   }
+  const { slotId } = result.data
 
   try {
     const supabase = await createClient()

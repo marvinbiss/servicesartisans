@@ -69,7 +69,7 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
       name: 'Services',
-      itemListElement: artisan.service_prices.map((s, i) => ({
+      itemListElement: artisan.service_prices.map((s, _i) => ({
         '@type': 'Offer',
         itemOffered: {
           '@type': 'Service',

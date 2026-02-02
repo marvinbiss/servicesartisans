@@ -2,12 +2,28 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// PATCH request schema
+const updateUserSchema = z.object({
+  full_name: z.string().max(100).optional(),
+  phone: z.string().max(20).optional(),
+  user_type: z.enum(['client', 'artisan']).optional(),
+  company_name: z.string().max(100).optional(),
+  siret: z.string().max(20).optional(),
+  description: z.string().max(1000).optional(),
+  address: z.string().max(200).optional(),
+  city: z.string().max(100).optional(),
+  postal_code: z.string().max(10).optional(),
+  is_verified: z.boolean().optional(),
+  subscription_plan: z.string().max(50).optional(),
+})
 
 export const dynamic = 'force-dynamic'
 
 // GET - Détails d'un utilisateur
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -128,12 +144,19 @@ export async function PATCH(
     const supabase = createAdminClient()
     const userId = params.id
     const body = await request.json()
+    const result = updateUserSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
+        { status: 400 }
+      )
+    }
 
     // Update user metadata in Supabase Auth
     const userMetadataUpdates: Record<string, unknown> = {}
-    if (body.full_name !== undefined) userMetadataUpdates.full_name = body.full_name
-    if (body.phone !== undefined) userMetadataUpdates.phone = body.phone
-    if (body.user_type !== undefined) userMetadataUpdates.is_artisan = body.user_type === 'artisan'
+    if (result.data.full_name !== undefined) userMetadataUpdates.full_name = result.data.full_name
+    if (result.data.phone !== undefined) userMetadataUpdates.phone = result.data.phone
+    if (result.data.user_type !== undefined) userMetadataUpdates.is_artisan = result.data.user_type === 'artisan'
 
     if (Object.keys(userMetadataUpdates).length > 0) {
       const { error: authError } = await supabase.auth.admin.updateUserById(userId, {
@@ -162,8 +185,8 @@ export async function PATCH(
 
       const updates: Record<string, unknown> = {}
       for (const field of allowedFields) {
-        if (field in body) {
-          updates[field] = body[field]
+        if (field in result.data) {
+          updates[field] = result.data[field as keyof typeof result.data]
         }
       }
       updates.updated_at = new Date().toISOString()
@@ -179,7 +202,7 @@ export async function PATCH(
     }
 
     // Log the action
-    await logAdminAction(authResult.admin.id, 'user.update', 'user', userId, body)
+    await logAdminAction(authResult.admin.id, 'user.update', 'user', userId, result.data)
 
     return NextResponse.json({
       success: true,
@@ -196,7 +219,7 @@ export async function PATCH(
 
 // DELETE - Supprimer un utilisateur
 export async function DELETE(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {

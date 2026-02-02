@@ -40,8 +40,8 @@ export interface Participant {
 // Create a video room for a booking
 export async function createVideoRoom(
   bookingId: string,
-  artisanName: string,
-  clientName: string,
+  _artisanName: string,
+  _clientName: string,
   scheduledTime: Date,
   durationMinutes: number = 60
 ): Promise<{ roomUrl: string; roomName: string }> {

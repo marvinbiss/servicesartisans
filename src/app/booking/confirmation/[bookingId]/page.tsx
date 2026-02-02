@@ -10,7 +10,6 @@ import {
   MapPin,
   User,
   Phone,
-  Mail,
   Plus,
   Share2,
   Bell,

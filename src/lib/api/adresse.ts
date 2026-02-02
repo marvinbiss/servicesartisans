@@ -9,8 +9,8 @@
  */
 
 import { retry } from '../utils/retry'
-import { searchCache, geocodeCache, cacheAside } from '../utils/cache'
-import { APIError, ValidationError, ErrorCode } from '../utils/errors'
+import { searchCache, geocodeCache } from '../utils/cache'
+import { APIError, ValidationError } from '../utils/errors'
 import { apiLogger } from '../utils/logger'
 
 const API_BASE = 'https://api-adresse.data.gouv.fr'

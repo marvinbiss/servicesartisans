@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Calendar, User, Clock, ArrowLeft, Share2, Facebook, Twitter, Linkedin, Tag, ChevronRight } from 'lucide-react'
+import { Calendar, User, Clock, ArrowLeft, Facebook, Twitter, Linkedin, Tag, ChevronRight } from 'lucide-react'
 
 const articles: Record<string, {
   title: string

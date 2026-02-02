@@ -16,7 +16,7 @@ export default function BookingPayment({
   serviceName,
   artisanName,
   depositAmount = 10,
-  onPaymentComplete,
+  onPaymentComplete: _onPaymentComplete,
 }: BookingPaymentProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)

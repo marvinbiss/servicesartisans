@@ -4,26 +4,19 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import {
   TrendingUp,
-  TrendingDown,
   Users,
   Euro,
   Star,
   Eye,
-  Calendar,
   Clock,
   Target,
-  ArrowUpRight,
-  ChevronDown,
 } from 'lucide-react'
 import { StatsCard } from '@/components/pro/StatsCard'
 import {
   format,
   subDays,
-  subMonths,
   eachDayOfInterval,
-  eachMonthOfInterval,
 } from 'date-fns'
-import { fr } from 'date-fns/locale'
 
 // Mock chart data
 const generateChartData = (days: number, baseValue: number, variance: number) => {
@@ -38,18 +31,6 @@ const generateChartData = (days: number, baseValue: number, variance: number) =>
 
 const revenueData = generateChartData(30, 150, 100)
 const leadsData = generateChartData(30, 5, 4)
-const viewsData = generateChartData(30, 50, 30)
-
-// Mock monthly data
-const monthlyData = eachMonthOfInterval({
-  start: subMonths(new Date(), 11),
-  end: new Date(),
-}).map((date) => ({
-  month: format(date, 'MMM', { locale: fr }),
-  revenue: Math.floor(2000 + Math.random() * 3000),
-  leads: Math.floor(10 + Math.random() * 20),
-  conversions: Math.floor(5 + Math.random() * 15),
-}))
 
 type TimeRange = '7d' | '30d' | '90d' | '12m'
 

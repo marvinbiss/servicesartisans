@@ -6,7 +6,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { sendBookingNotifications, type NotificationPayload } from '@/lib/notifications/unified-notification-service'
-import { createBookingSchema, getBookingsSchema, validateRequest, formatZodErrors } from '@/lib/validations/schemas'
+import { createBookingSchema, validateRequest, formatZodErrors } from '@/lib/validations/schemas'
 import { createErrorResponse, createSuccessResponse, ErrorCode } from '@/lib/errors/types'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'

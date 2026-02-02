@@ -2,11 +2,20 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { verifyAdmin, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// PATCH request schema
+const updateQuoteSchema = z.object({
+  status: z.enum(['pending', 'sent', 'accepted', 'rejected', 'expired']).optional(),
+  amount: z.number().positive().max(1000000).optional(),
+  notes: z.string().max(1000).optional(),
+  valid_until: z.string().datetime().optional(),
+})
 
 export const dynamic = 'force-dynamic'
 
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -48,10 +57,18 @@ export async function PATCH(
     }
 
     const supabase = createAdminClient()
-    const updates = await request.json()
+    const body = await request.json()
+    const result = updateQuoteSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
+        { status: 400 }
+      )
+    }
+    const updates = result.data
 
     // Get old data for audit
-    const { data: oldQuote } = await supabase
+    const { data: _oldQuote } = await supabase
       .from('quotes')
       .select('*')
       .eq('id', params.id)
@@ -83,7 +100,7 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -96,7 +113,7 @@ export async function DELETE(
     const supabase = createAdminClient()
 
     // Get quote data for audit
-    const { data: quoteToDelete } = await supabase
+    const { data: _quoteToDelete } = await supabase
       .from('quotes')
       .select('*')
       .eq('id', params.id)

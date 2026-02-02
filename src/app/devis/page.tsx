@@ -4,7 +4,7 @@ import { useState, useCallback, useTransition } from 'react'
 import Link from 'next/link'
 import {
   Wrench, Zap, Key, Flame, PaintBucket, Home, Hammer, HardHat,
-  MapPin, Phone, Mail, User, FileText, CheckCircle, ArrowRight, ArrowLeft,
+  Phone, Mail, User, FileText, CheckCircle, ArrowRight, ArrowLeft,
   Loader2, AlertCircle, Sparkles
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -33,7 +33,7 @@ const urgencyOptions = [
 export default function DevisPage() {
   const [step, setStep] = useState(1)
   const [direction, setDirection] = useState<'forward' | 'back'>('forward')
-  const [isPending, startTransition] = useTransition()
+  const [_isPending, startTransition] = useTransition()
   const [formData, setFormData] = useState({
     service: '',
     urgency: '',

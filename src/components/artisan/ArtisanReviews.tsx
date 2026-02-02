@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Star, ThumbsUp, CheckCircle, ChevronDown } from 'lucide-react'
+import { Star, CheckCircle, ChevronDown } from 'lucide-react'
 import { Artisan, Review } from './types'
 
 interface ArtisanReviewsProps {

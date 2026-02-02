@@ -8,6 +8,19 @@ import { createClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 import { createServerClient } from '@supabase/ssr'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// POST request schema
+const consentPostSchema = z.object({
+  preferences: z.object({
+    necessary: z.boolean(),
+    analytics: z.boolean(),
+    marketing: z.boolean(),
+    personalization: z.boolean(),
+  }),
+  timestamp: z.string().datetime().optional(),
+  userAgent: z.string().max(500).optional(),
+})
 
 // Lazy initialize to avoid build-time errors
 function getSupabaseAdmin() {
@@ -23,7 +36,11 @@ export const dynamic = 'force-dynamic'
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { preferences, timestamp, userAgent } = body
+    const result = consentPostSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json({ error: 'Invalid request', details: result.error.flatten() }, { status: 400 })
+    }
+    const { preferences, timestamp, userAgent } = result.data
 
     // Get user if authenticated
     let userId: string | null = null
@@ -81,7 +98,7 @@ export async function POST(request: Request) {
 }
 
 // GET /api/gdpr/consent - Get user's consent history
-export async function GET(request: Request) {
+export async function GET(_request: Request) {
   try {
     const cookieStore = await cookies()
     const supabase = createServerClient(

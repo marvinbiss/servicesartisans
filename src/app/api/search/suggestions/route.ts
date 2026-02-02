@@ -9,6 +9,20 @@ import { logger } from '@/lib/logger'
 import { cookies } from 'next/headers'
 import { createServerClient } from '@supabase/ssr'
 import { sanitizeSearchQuery, sanitizeUserInput } from '@/lib/sanitize'
+import { z } from 'zod'
+
+// GET query params schema
+const suggestionsQuerySchema = z.object({
+  q: z.string().max(200).optional().default(''),
+  type: z.enum(['all', 'service', 'artisan', 'location']).optional().nullable(),
+})
+
+// POST request schema
+const saveSearchSchema = z.object({
+  query: z.string().min(2).max(200),
+  filters: z.record(z.string(), z.unknown()).optional(),
+  resultsCount: z.number().int().min(0).optional(),
+})
 
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -32,8 +46,19 @@ export const dynamic = 'force-dynamic'
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
-    const rawQuery = searchParams.get('q') || ''
-    const type = searchParams.get('type') // 'all', 'service', 'artisan', 'location'
+    const queryParams = {
+      q: searchParams.get('q') || '',
+      type: searchParams.get('type'),
+    }
+    const result = suggestionsQuerySchema.safeParse(queryParams)
+    if (!result.success) {
+      return NextResponse.json(
+        { error: 'Invalid parameters', details: result.error.flatten() },
+        { status: 400 }
+      )
+    }
+    const rawQuery = result.data.q
+    const type = result.data.type
 
     if (rawQuery.length < 2) {
       // Return popular searches for empty/short queries
@@ -183,11 +208,11 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json()
-    const { query: rawQuery, filters, resultsCount } = body
-
-    if (!rawQuery || rawQuery.length < 2) {
-      return NextResponse.json({ success: true })
+    const result = saveSearchSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json({ success: true }) // Silent fail for invalid data
     }
+    const { query: rawQuery, filters, resultsCount } = result.data
 
     // Sanitize input before saving
     const query = sanitizeUserInput(rawQuery).slice(0, 200)

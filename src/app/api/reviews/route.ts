@@ -7,7 +7,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { logger } from '@/lib/logger'
-import { createReviewSchema, getReviewsSchema, validateRequest, formatZodErrors } from '@/lib/validations/schemas'
+import { createReviewSchema, validateRequest, formatZodErrors } from '@/lib/validations/schemas'
 import { createErrorResponse, createSuccessResponse, ErrorCode } from '@/lib/errors/types'
 import { z } from 'zod'
 import type { SupabaseClientType } from '@/types'

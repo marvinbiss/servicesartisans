@@ -8,6 +8,12 @@ import { createClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 import { createServerClient } from '@supabase/ssr'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// POST request schema
+const exportPostSchema = z.object({
+  format: z.enum(['json', 'csv']).optional().default('json'),
+})
 
 // Lazy initialize to avoid build-time errors
 function getSupabaseAdmin() {
@@ -50,7 +56,11 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json()
-    const { format = 'json' } = body
+    const result = exportPostSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json({ error: 'Invalid request', details: result.error.flatten() }, { status: 400 })
+    }
+    const { format } = result.data
 
     // Check for existing pending request
     const { data: existingRequest } = await getSupabaseAdmin()

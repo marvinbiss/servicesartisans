@@ -7,8 +7,6 @@ import {
   Edit2,
   Trash2,
   Grid,
-  Check,
-  X,
 } from 'lucide-react'
 import { StatusBadge } from '@/components/admin/StatusBadge'
 import { ConfirmationModal } from '@/components/admin/ConfirmationModal'

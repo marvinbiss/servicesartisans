@@ -7,14 +7,10 @@ import {
   MessageSquare,
   ThumbsUp,
   Flag,
-  Filter,
-  ArrowUpDown,
-  TrendingUp,
-  Calendar,
   User,
   CheckCircle2,
 } from 'lucide-react'
-import { format, formatDistanceToNow } from 'date-fns'
+import { formatDistanceToNow } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
 interface Review {

@@ -1,0 +1,238 @@
+import { describe, it, expect } from 'vitest'
+import {
+  cn,
+  formatPrice,
+  slugify,
+  truncate,
+  getInitials,
+  isValidEmail,
+  isValidFrenchPhone,
+  formatFrenchPhone,
+  isValidSIRET,
+  calculateDistance,
+  getRatingColor,
+  parseQueryString
+} from './utils'
+
+describe('cn (classNames utility)', () => {
+  it('should merge simple class names', () => {
+    expect(cn('class1', 'class2')).toBe('class1 class2')
+  })
+
+  it('should handle conditional classes', () => {
+    expect(cn('base', true && 'included', false && 'excluded')).toBe('base included')
+  })
+
+  it('should handle undefined and null values', () => {
+    expect(cn('base', undefined, null, 'valid')).toBe('base valid')
+  })
+
+  it('should merge tailwind classes correctly', () => {
+    expect(cn('px-2 py-1', 'px-4')).toBe('py-1 px-4')
+    expect(cn('text-red-500', 'text-blue-500')).toBe('text-blue-500')
+  })
+
+  it('should handle empty input', () => {
+    expect(cn()).toBe('')
+  })
+})
+
+describe('formatPrice', () => {
+  it('should format price in EUR by default', () => {
+    const result = formatPrice(100)
+    expect(result).toContain('100')
+    expect(result).toMatch(/€|EUR/)
+  })
+
+  it('should format large numbers with proper grouping', () => {
+    const result = formatPrice(1000)
+    expect(result).toMatch(/1[\s\u00A0\u202F]?000/)
+  })
+
+  it('should handle zero', () => {
+    const result = formatPrice(0)
+    expect(result).toContain('0')
+  })
+})
+
+describe('slugify', () => {
+  it('should convert to lowercase', () => {
+    expect(slugify('HELLO')).toBe('hello')
+  })
+
+  it('should replace spaces with hyphens', () => {
+    expect(slugify('hello world')).toBe('hello-world')
+  })
+
+  it('should remove accents', () => {
+    expect(slugify('cafe')).toBe('cafe')
+    expect(slugify('resume')).toBe('resume')
+  })
+
+  it('should remove special characters', () => {
+    expect(slugify('hello@world!')).toBe('helloworld')
+  })
+
+  it('should handle multiple spaces', () => {
+    expect(slugify('hello   world')).toBe('hello-world')
+  })
+
+  it('should trim whitespace', () => {
+    expect(slugify('  hello world  ')).toBe('hello-world')
+  })
+})
+
+describe('truncate', () => {
+  it('should not truncate short text', () => {
+    expect(truncate('hello', 10)).toBe('hello')
+  })
+
+  it('should truncate long text with ellipsis', () => {
+    expect(truncate('hello world', 5)).toBe('hello...')
+  })
+
+  it('should handle exact length', () => {
+    expect(truncate('hello', 5)).toBe('hello')
+  })
+
+  it('should handle empty string', () => {
+    expect(truncate('', 10)).toBe('')
+  })
+})
+
+describe('getInitials', () => {
+  it('should get initials from full name', () => {
+    expect(getInitials('John Doe')).toBe('JD')
+  })
+
+  it('should handle single name', () => {
+    expect(getInitials('John')).toBe('J')
+  })
+
+  it('should limit to 2 characters', () => {
+    expect(getInitials('Jean Pierre Dupont')).toBe('JP')
+  })
+
+  it('should handle lowercase names', () => {
+    expect(getInitials('john doe')).toBe('JD')
+  })
+})
+
+describe('isValidEmail', () => {
+  it('should validate correct email', () => {
+    expect(isValidEmail('test@example.com')).toBe(true)
+    expect(isValidEmail('user.name@domain.fr')).toBe(true)
+  })
+
+  it('should reject invalid emails', () => {
+    expect(isValidEmail('invalid')).toBe(false)
+    expect(isValidEmail('invalid@')).toBe(false)
+    expect(isValidEmail('@domain.com')).toBe(false)
+    expect(isValidEmail('test@.com')).toBe(false)
+  })
+
+  it('should reject emails with spaces', () => {
+    expect(isValidEmail('test @example.com')).toBe(false)
+  })
+})
+
+describe('isValidFrenchPhone', () => {
+  it('should validate correct French phone numbers', () => {
+    expect(isValidFrenchPhone('0612345678')).toBe(true)
+    expect(isValidFrenchPhone('06 12 34 56 78')).toBe(true)
+    expect(isValidFrenchPhone('+33612345678')).toBe(true)
+    expect(isValidFrenchPhone('+33 6 12 34 56 78')).toBe(true)
+  })
+
+  it('should reject invalid phone numbers', () => {
+    expect(isValidFrenchPhone('123')).toBe(false)
+    expect(isValidFrenchPhone('abcdefghij')).toBe(false)
+  })
+})
+
+describe('formatFrenchPhone', () => {
+  it('should format 10-digit phone number', () => {
+    expect(formatFrenchPhone('0612345678')).toBe('06 12 34 56 78')
+  })
+
+  it('should return original if not 10 digits', () => {
+    expect(formatFrenchPhone('+33612345678')).toBe('+33612345678')
+  })
+})
+
+describe('isValidSIRET', () => {
+  it('should validate correct SIRET numbers', () => {
+    // Test with a known valid SIRET (Luhn algorithm valid)
+    expect(isValidSIRET('73282932000074')).toBe(true)
+  })
+
+  it('should reject invalid SIRET numbers', () => {
+    expect(isValidSIRET('12345678901234')).toBe(false) // Invalid Luhn
+    expect(isValidSIRET('1234567890123')).toBe(false) // Too short
+    expect(isValidSIRET('123456789012345')).toBe(false) // Too long
+    expect(isValidSIRET('abcdefghijklmn')).toBe(false) // Non-numeric
+  })
+
+  it('should handle SIRET with spaces', () => {
+    expect(isValidSIRET('732 829 320 00074')).toBe(true)
+  })
+})
+
+describe('calculateDistance', () => {
+  it('should calculate distance between two points', () => {
+    // Paris to Lyon is approximately 392 km
+    const distance = calculateDistance(48.8566, 2.3522, 45.7640, 4.8357)
+    expect(distance).toBeGreaterThan(380)
+    expect(distance).toBeLessThan(410)
+  })
+
+  it('should return 0 for same coordinates', () => {
+    const distance = calculateDistance(48.8566, 2.3522, 48.8566, 2.3522)
+    expect(distance).toBe(0)
+  })
+})
+
+describe('getRatingColor', () => {
+  it('should return green-600 for excellent ratings', () => {
+    expect(getRatingColor(5)).toBe('text-green-600')
+    expect(getRatingColor(4.5)).toBe('text-green-600')
+  })
+
+  it('should return green-500 for very good ratings', () => {
+    expect(getRatingColor(4.2)).toBe('text-green-500')
+    expect(getRatingColor(4)).toBe('text-green-500')
+  })
+
+  it('should return yellow-500 for good ratings', () => {
+    expect(getRatingColor(3.7)).toBe('text-yellow-500')
+    expect(getRatingColor(3.5)).toBe('text-yellow-500')
+  })
+
+  it('should return orange-500 for average ratings', () => {
+    expect(getRatingColor(3.2)).toBe('text-orange-500')
+    expect(getRatingColor(3)).toBe('text-orange-500')
+  })
+
+  it('should return red-500 for poor ratings', () => {
+    expect(getRatingColor(2.5)).toBe('text-red-500')
+    expect(getRatingColor(1)).toBe('text-red-500')
+  })
+})
+
+describe('parseQueryString', () => {
+  it('should parse simple query string', () => {
+    const result = parseQueryString('?foo=bar&baz=qux')
+    expect(result.foo).toBe('bar')
+    expect(result.baz).toBe('qux')
+  })
+
+  it('should handle empty query string', () => {
+    const result = parseQueryString('')
+    expect(Object.keys(result)).toHaveLength(0)
+  })
+
+  it('should handle encoded values', () => {
+    const result = parseQueryString('?name=John%20Doe')
+    expect(result.name).toBe('John Doe')
+  })
+})

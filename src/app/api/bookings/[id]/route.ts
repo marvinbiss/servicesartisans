@@ -1,6 +1,13 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// PATCH request schema
+const bookingPatchSchema = z.object({
+  status: z.enum(['confirmed', 'completed', 'cancelled', 'no_show']).optional(),
+  notes: z.string().max(1000).optional(),
+})
 
 // Use service role for booking access (allows partial ID lookup)
 const supabase = createClient(
@@ -12,7 +19,7 @@ const supabase = createClient(
 export const dynamic = 'force-dynamic'
 
 export async function GET(
-  request: Request,
+  _request: Request,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -130,16 +137,11 @@ export async function PATCH(
   try {
     const bookingId = params.id
     const body = await request.json()
-    const { status, notes } = body
-
-    // Validate status
-    const validStatuses = ['confirmed', 'completed', 'cancelled', 'no_show']
-    if (status && !validStatuses.includes(status)) {
-      return NextResponse.json(
-        { error: 'Statut invalide' },
-        { status: 400 }
-      )
+    const result = bookingPatchSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json({ error: 'Invalid request', details: result.error.flatten() }, { status: 400 })
     }
+    const { status, notes } = result.data
 
     const updateData: Record<string, string | undefined> = {}
     if (status) updateData.status = status

@@ -1,5 +1,4 @@
 import { Metadata } from 'next'
-import { notFound } from 'next/navigation'
 import ArtisanPageClient from './ArtisanPageClient'
 import { Artisan, Review } from '@/components/artisan'
 

@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  FileText, MessageSquare, Star, Settings, ArrowLeft,
+  FileText, ArrowLeft,
   User, Mail, Phone, Lock, Bell, Shield, Trash2, Download,
-  Globe, Palette, Eye, EyeOff
+  Globe, Palette
 } from 'lucide-react'
 import usePushNotifications from '@/hooks/usePushNotifications'
 import Breadcrumb from '@/components/Breadcrumb'

@@ -5,9 +5,7 @@ import Link from 'next/link'
 import { createBrowserClient } from '@supabase/ssr'
 import {
   TrendingUp,
-  TrendingDown,
   Calendar,
-  Users,
   Euro,
   Star,
   Clock,

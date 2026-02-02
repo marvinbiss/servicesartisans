@@ -1,21 +1,17 @@
 'use client'
 
 import { useState } from 'react'
-import { motion } from 'framer-motion'
 import {
   User,
   Bell,
   Shield,
   CreditCard,
   Globe,
-  Clock,
   Smartphone,
   Mail,
   Key,
   Trash2,
   Download,
-  ChevronRight,
-  Check,
   Moon,
   Sun,
 } from 'lucide-react'

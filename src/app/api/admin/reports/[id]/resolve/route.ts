@@ -2,6 +2,13 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { verifyAdmin, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// POST request schema
+const resolveReportSchema = z.object({
+  action: z.enum(['resolve', 'dismiss']),
+  resolution_notes: z.string().max(1000).optional(),
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -19,14 +26,14 @@ export async function POST(
 
     const supabase = createAdminClient()
     const body = await request.json()
-    const { action, resolution_notes } = body // action: 'resolve' ou 'dismiss'
-
-    if (!['resolve', 'dismiss'].includes(action)) {
+    const result = resolveReportSchema.safeParse(body)
+    if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: "Action invalide. Utilisez 'resolve' ou 'dismiss'" } },
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
         { status: 400 }
       )
     }
+    const { action, resolution_notes } = result.data
 
     const newStatus = action === 'resolve' ? 'resolved' : 'dismissed'
 

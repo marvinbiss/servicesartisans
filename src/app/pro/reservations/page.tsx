@@ -1,19 +1,16 @@
 'use client'
 
 import { useState } from 'react'
-import { motion } from 'framer-motion'
 import {
   Calendar,
   List,
   Plus,
-  Filter,
   CheckCircle2,
   Clock,
-  XCircle,
   Search,
 } from 'lucide-react'
 import { ReservationCalendar, ReservationList, Reservation } from '@/components/pro/ReservationCalendar'
-import { addDays, addHours } from 'date-fns'
+import { addDays } from 'date-fns'
 
 // Mock data
 const mockReservations: Reservation[] = [
@@ -115,7 +112,7 @@ export default function ProReservationsPage() {
   const [viewMode, setViewMode] = useState<ViewMode>('calendar')
   const [filterStatus, setFilterStatus] = useState<FilterStatus>('all')
   const [searchQuery, setSearchQuery] = useState('')
-  const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null)
+  const [_selectedReservation, setSelectedReservation] = useState<Reservation | null>(null)
 
   // Filter reservations
   const filteredReservations = mockReservations.filter((r) => {

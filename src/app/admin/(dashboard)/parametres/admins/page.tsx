@@ -8,12 +8,9 @@ import {
   ChevronLeft,
   ChevronRight,
   Trash2,
-  Edit2,
-  CheckCircle,
-  XCircle,
 } from 'lucide-react'
 import { ConfirmationModal } from '@/components/admin/ConfirmationModal'
-import type { AdminRole, AdminUser, DEFAULT_PERMISSIONS } from '@/types/admin'
+import type { AdminRole, AdminUser } from '@/types/admin'
 
 const ROLE_LABELS: Record<AdminRole, { label: string; color: string }> = {
   super_admin: { label: 'Super Admin', color: 'bg-red-100 text-red-700' },

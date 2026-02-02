@@ -7,6 +7,19 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// GET query params schema
+const searchQuerySchema = z.object({
+  q: z.string().max(200).optional().default(''),
+  service: z.string().max(100).optional().nullable(),
+  location: z.string().max(100).optional().nullable(),
+  minRating: z.coerce.number().min(0).max(5).optional().nullable(),
+  availability: z.enum(['today', 'tomorrow', 'week', 'all']).optional().nullable(),
+  sortBy: z.enum(['relevance', 'rating', 'distance', 'price']).optional().default('relevance'),
+  page: z.coerce.number().int().min(1).optional().default(1),
+  limit: z.coerce.number().int().min(1).max(50).optional().default(20),
+})
 
 // Artisan type for search results
 interface SearchArtisan {
@@ -396,15 +409,25 @@ export async function GET(request: Request) {
     const supabase = await createClient()
     const { searchParams } = new URL(request.url)
 
-    // Search parameters
-    const query = searchParams.get('q') || ''
-    const service = searchParams.get('service')
-    const location = searchParams.get('location')
-    const minRating = searchParams.get('minRating')
-    const availability = searchParams.get('availability')
-    const sortBy = searchParams.get('sortBy') || 'relevance'
-    const page = parseInt(searchParams.get('page') || '1')
-    const limit = parseInt(searchParams.get('limit') || '20')
+    // Parse and validate search parameters
+    const queryParams = {
+      q: searchParams.get('q') || '',
+      service: searchParams.get('service'),
+      location: searchParams.get('location'),
+      minRating: searchParams.get('minRating'),
+      availability: searchParams.get('availability'),
+      sortBy: searchParams.get('sortBy') || 'relevance',
+      page: searchParams.get('page') || '1',
+      limit: searchParams.get('limit') || '20',
+    }
+    const result = searchQuerySchema.safeParse(queryParams)
+    if (!result.success) {
+      return NextResponse.json(
+        { error: 'Invalid parameters', details: result.error.flatten() },
+        { status: 400 }
+      )
+    }
+    const { q: query, service, location, minRating, availability, sortBy, page, limit } = result.data
     const offset = (page - 1) * limit
 
     // Try to fetch from Supabase first
@@ -496,7 +519,7 @@ export async function GET(request: Request) {
 
     // Filter by rating (applies to both)
     if (minRating) {
-      filteredData = filteredData.filter(a => a.average_rating >= parseFloat(minRating))
+      filteredData = filteredData.filter(a => a.average_rating >= minRating)
     }
 
     // Filter by availability

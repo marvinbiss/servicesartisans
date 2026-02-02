@@ -6,7 +6,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { signUpSchema, validateRequest, formatZodErrors } from '@/lib/validations/schemas'
-import { createErrorResponse, createSuccessResponse, ErrorCode, getHttpStatus } from '@/lib/errors/types'
+import { createErrorResponse, createSuccessResponse, ErrorCode, getHttpStatus as _getHttpStatus } from '@/lib/errors/types'
 import { logger } from '@/lib/logger'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL

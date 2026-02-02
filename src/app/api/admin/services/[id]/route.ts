@@ -2,12 +2,25 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// PATCH request schema
+const updateServiceSchema = z.object({
+  name: z.string().min(1).max(100).optional(),
+  description: z.string().max(500).optional(),
+  icon: z.string().max(50).optional(),
+  parent_id: z.string().uuid().optional().nullable(),
+  meta_title: z.string().max(100).optional(),
+  meta_description: z.string().max(200).optional(),
+  is_active: z.boolean().optional(),
+  slug: z.string().max(100).optional(),
+})
 
 export const dynamic = 'force-dynamic'
 
 // GET - Détails d'un service
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -51,11 +64,18 @@ export async function PATCH(
 
     const supabase = createAdminClient()
     const body = await request.json()
+    const result = updateServiceSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
+        { status: 400 }
+      )
+    }
 
     const { data, error } = await supabase
       .from('services')
       .update({
-        ...body,
+        ...result.data,
         updated_at: new Date().toISOString(),
       })
       .eq('id', params.id)
@@ -80,7 +100,7 @@ export async function PATCH(
 
 // DELETE - Supprimer/désactiver un service
 export async function DELETE(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {

@@ -60,7 +60,7 @@ export async function createDepositCheckoutSession({
   clientName,
   serviceName,
   serviceDescription,
-  servicePriceInCents,
+  servicePriceInCents: _servicePriceInCents,
   depositAmountInCents,
   bookingDate,
   bookingTime,

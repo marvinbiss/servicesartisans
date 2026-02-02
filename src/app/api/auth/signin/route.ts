@@ -42,9 +42,6 @@ export async function POST(request: Request) {
 
     const { email, password } = validation.data
 
-    // Create response to set cookies on
-    const response = NextResponse.json({ success: true })
-
     // Create Supabase client with cookie handling
     const cookieStore = await cookies()
     const supabase = createServerClient(

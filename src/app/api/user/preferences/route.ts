@@ -8,6 +8,12 @@ import { createClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 import { createServerClient } from '@supabase/ssr'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// PUT request schema
+const preferencesSchema = z.object({
+  preferences: z.record(z.string(), z.unknown()),
+})
 
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -96,7 +102,11 @@ export async function PUT(request: Request) {
     }
 
     const body = await request.json()
-    const { preferences } = body
+    const result = preferencesSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json({ error: 'Invalid request', details: result.error.flatten() }, { status: 400 })
+    }
+    const { preferences } = result.data
 
     // Upsert preferences
     const { error } = await supabaseAdmin

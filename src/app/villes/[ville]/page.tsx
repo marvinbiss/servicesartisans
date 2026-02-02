@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { MapPin, Users, Building, Star, Phone, ArrowRight, Shield, Clock, Wrench, Zap, Key, Flame, PaintBucket, Hammer, Grid3X3, Home, TreeDeciduous, Square, Wind, Blocks, ChefHat, Layers, Sparkles } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
-import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
+import { PopularCitiesLinks } from '@/components/InternalLinks'
 import { popularRegions } from '@/lib/constants/navigation'
 import { villes, getVilleBySlug, services } from '@/lib/data/france'
 import { Metadata } from 'next'

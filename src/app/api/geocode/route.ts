@@ -1,6 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { geocoder, reverseGeocode, autocompleteVille, autocompleteAdresse } from '@/lib/api/adresse'
+import { z } from 'zod'
+
+// Query schemas for each action
+const geocodeSchema = z.object({
+  action: z.literal('geocode'),
+  address: z.string().min(1).max(500),
+})
+
+const reverseSchema = z.object({
+  action: z.literal('reverse'),
+  lon: z.coerce.number().min(-180).max(180),
+  lat: z.coerce.number().min(-90).max(90),
+})
+
+const citiesSchema = z.object({
+  action: z.literal('cities'),
+  q: z.string().min(1).max(200),
+  limit: z.coerce.number().int().min(1).max(100).optional().default(10),
+})
+
+const addressesSchema = z.object({
+  action: z.literal('addresses'),
+  q: z.string().min(1).max(500),
+  limit: z.coerce.number().int().min(1).max(100).optional().default(5),
+  postcode: z.string().max(10).optional().nullable(),
+})
 
 /**
  * API Route pour le géocodage côté serveur
@@ -15,57 +41,75 @@ export async function GET(request: NextRequest) {
     switch (action) {
       // Géocodage : Adresse → GPS
       case 'geocode': {
-        const address = searchParams.get('address')
-        if (!address) {
+        const queryParams = {
+          action: 'geocode' as const,
+          address: searchParams.get('address'),
+        }
+        const result = geocodeSchema.safeParse(queryParams)
+        if (!result.success) {
           return NextResponse.json(
-            { success: false, error: 'Address is required' },
+            { success: false, error: 'Address is required', details: result.error.flatten() },
             { status: 400 }
           )
         }
-        const result = await geocoder(address)
-        return NextResponse.json({ success: true, data: result })
+        const data = await geocoder(result.data.address)
+        return NextResponse.json({ success: true, data })
       }
 
       // Reverse geocoding : GPS → Adresse
       case 'reverse': {
-        const lon = parseFloat(searchParams.get('lon') || '')
-        const lat = parseFloat(searchParams.get('lat') || '')
-        if (isNaN(lon) || isNaN(lat)) {
+        const queryParams = {
+          action: 'reverse' as const,
+          lon: searchParams.get('lon'),
+          lat: searchParams.get('lat'),
+        }
+        const result = reverseSchema.safeParse(queryParams)
+        if (!result.success) {
           return NextResponse.json(
-            { success: false, error: 'Valid lon and lat are required' },
+            { success: false, error: 'Valid lon and lat are required', details: result.error.flatten() },
             { status: 400 }
           )
         }
-        const result = await reverseGeocode(lon, lat)
-        return NextResponse.json({ success: true, data: result })
+        const data = await reverseGeocode(result.data.lon, result.data.lat)
+        return NextResponse.json({ success: true, data })
       }
 
       // Autocomplete villes
       case 'cities': {
-        const query = searchParams.get('q')
-        const limit = parseInt(searchParams.get('limit') || '10')
-        if (!query) {
+        const queryParams = {
+          action: 'cities' as const,
+          q: searchParams.get('q'),
+          limit: searchParams.get('limit') || '10',
+        }
+        const result = citiesSchema.safeParse(queryParams)
+        if (!result.success) {
           return NextResponse.json(
-            { success: false, error: 'Query is required' },
+            { success: false, error: 'Query is required', details: result.error.flatten() },
             { status: 400 }
           )
         }
-        const results = await autocompleteVille(query, limit)
+        const results = await autocompleteVille(result.data.q, result.data.limit)
         return NextResponse.json({ success: true, data: results })
       }
 
       // Autocomplete adresses
       case 'addresses': {
-        const query = searchParams.get('q')
-        if (!query) {
+        const queryParams = {
+          action: 'addresses' as const,
+          q: searchParams.get('q'),
+          limit: searchParams.get('limit') || '5',
+          postcode: searchParams.get('postcode'),
+        }
+        const result = addressesSchema.safeParse(queryParams)
+        if (!result.success) {
           return NextResponse.json(
-            { success: false, error: 'Query is required' },
+            { success: false, error: 'Query is required', details: result.error.flatten() },
             { status: 400 }
           )
         }
-        const results = await autocompleteAdresse(query, {
-          limit: parseInt(searchParams.get('limit') || '5'),
-          postcode: searchParams.get('postcode') || undefined
+        const results = await autocompleteAdresse(result.data.q, {
+          limit: result.data.limit,
+          postcode: result.data.postcode || undefined
         })
         return NextResponse.json({ success: true, data: results })
       }

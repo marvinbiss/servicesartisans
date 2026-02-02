@@ -3,7 +3,7 @@
  * Utilise l'API de recherche-entreprises.fabrique.social.gouv.fr
  */
 
-import { SIRENE_OPEN_CONFIG, NAF_TO_SERVICE, TRANCHES_EFFECTIFS } from './config'
+import { SIRENE_OPEN_CONFIG, TRANCHES_EFFECTIFS } from './config'
 import { logger } from '@/lib/logger'
 
 interface SearchResult {

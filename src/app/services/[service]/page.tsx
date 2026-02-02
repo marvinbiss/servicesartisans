@@ -1,13 +1,13 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { MapPin, ArrowRight, Users, Star, Shield, Clock } from 'lucide-react'
+import { MapPin, ArrowRight, Users, Star, Shield } from 'lucide-react'
 import { getServiceBySlug, getLocationsByService, getProvidersByService } from '@/lib/supabase'
 import JsonLd from '@/components/JsonLd'
 import { getServiceSchema, getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { REVALIDATE } from '@/lib/cache'
 import Breadcrumb from '@/components/Breadcrumb'
-import { PopularCitiesLinks, PopularServicesLinks } from '@/components/InternalLinks'
+import { PopularCitiesLinks } from '@/components/InternalLinks'
 import { popularServices } from '@/lib/constants/navigation'
 
 // ISR: Revalidate every 30 minutes

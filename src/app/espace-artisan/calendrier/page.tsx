@@ -89,7 +89,7 @@ export default function CalendrierPage() {
   const [showSettingsModal, setShowSettingsModal] = useState(false)
   const [schedule, setSchedule] = useState<DaySchedule[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [isLoadingSlots, setIsLoadingSlots] = useState(false)
+  const [_isLoadingSlots, setIsLoadingSlots] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [profile, setProfile] = useState<UserProfile | null>(null)

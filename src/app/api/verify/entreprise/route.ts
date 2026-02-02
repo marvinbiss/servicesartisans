@@ -7,6 +7,36 @@ import {
   verifierSanteEntreprise,
   getBadgeConfiance
 } from '@/lib/api/pappers'
+import { z } from 'zod'
+
+// GET query params schemas
+const verifySchema = z.object({
+  action: z.literal('verify').optional().default('verify'),
+  siret: z.string().min(14).max(14),
+})
+
+const sirenSchema = z.object({
+  action: z.literal('siren'),
+  siren: z.string().min(9).max(9),
+})
+
+const searchSchema = z.object({
+  action: z.literal('search'),
+  q: z.string().min(2).max(200),
+  codePostal: z.string().max(10).optional().nullable(),
+  limit: z.coerce.number().int().min(1).max(100).optional().default(10),
+})
+
+const healthSchema = z.object({
+  action: z.literal('health'),
+  siret: z.string().min(14).max(14),
+})
+
+// POST request schema
+const entreprisePostSchema = z.object({
+  siret: z.string().min(14).max(14),
+  artisanId: z.string().uuid().optional(),
+})
 
 /**
  * API de vérification d'entreprise
@@ -21,13 +51,18 @@ export async function GET(request: NextRequest) {
     switch (action) {
       // Vérification complète par SIRET
       case 'verify': {
-        const siret = searchParams.get('siret')
-        if (!siret) {
+        const queryParams = {
+          action: 'verify' as const,
+          siret: searchParams.get('siret'),
+        }
+        const result = verifySchema.safeParse(queryParams)
+        if (!result.success) {
           return NextResponse.json(
-            { success: false, error: 'SIRET requis' },
+            { success: false, error: 'SIRET requis (14 chiffres)', details: result.error.flatten() },
             { status: 400 }
           )
         }
+        const { siret } = result.data
 
         // Récupérer les infos Pappers
         const entreprise = await getEntrepriseParSiret(siret)
@@ -58,13 +93,18 @@ export async function GET(request: NextRequest) {
 
       // Vérification par SIREN
       case 'siren': {
-        const siren = searchParams.get('siren')
-        if (!siren) {
+        const queryParams = {
+          action: 'siren' as const,
+          siren: searchParams.get('siren'),
+        }
+        const result = sirenSchema.safeParse(queryParams)
+        if (!result.success) {
           return NextResponse.json(
-            { success: false, error: 'SIREN requis' },
+            { success: false, error: 'SIREN requis (9 chiffres)', details: result.error.flatten() },
             { status: 400 }
           )
         }
+        const { siren } = result.data
 
         const entreprise = await getEntrepriseParSiren(siren)
 
@@ -84,19 +124,23 @@ export async function GET(request: NextRequest) {
 
       // Recherche par nom
       case 'search': {
-        const q = searchParams.get('q')
-        if (!q || q.length < 2) {
+        const queryParams = {
+          action: 'search' as const,
+          q: searchParams.get('q'),
+          codePostal: searchParams.get('codePostal'),
+          limit: searchParams.get('limit') || '10',
+        }
+        const result = searchSchema.safeParse(queryParams)
+        if (!result.success) {
           return NextResponse.json(
-            { success: false, error: 'Requête trop courte (min 2 caractères)' },
+            { success: false, error: 'Requête trop courte (min 2 caractères)', details: result.error.flatten() },
             { status: 400 }
           )
         }
-
-        const codePostal = searchParams.get('codePostal') || undefined
-        const limit = parseInt(searchParams.get('limit') || '10')
+        const { q, codePostal, limit } = result.data
 
         const resultats = await rechercherEntreprises(q, {
-          codePostal,
+          codePostal: codePostal || undefined,
           limit
         })
 
@@ -108,13 +152,18 @@ export async function GET(request: NextRequest) {
 
       // Vérification santé rapide
       case 'health': {
-        const siret = searchParams.get('siret')
-        if (!siret) {
+        const queryParams = {
+          action: 'health' as const,
+          siret: searchParams.get('siret'),
+        }
+        const result = healthSchema.safeParse(queryParams)
+        if (!result.success) {
           return NextResponse.json(
-            { success: false, error: 'SIRET requis' },
+            { success: false, error: 'SIRET requis (14 chiffres)', details: result.error.flatten() },
             { status: 400 }
           )
         }
+        const { siret } = result.data
 
         const sante = await verifierSanteEntreprise(siret)
 
@@ -145,14 +194,14 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { siret, artisanId } = body
-
-    if (!siret) {
+    const result = entreprisePostSchema.safeParse(body)
+    if (!result.success) {
       return NextResponse.json(
-        { success: false, error: 'SIRET requis' },
+        { success: false, error: 'Validation error', details: result.error.flatten() },
         { status: 400 }
       )
     }
+    const { siret, artisanId } = result.data
 
     // Récupérer les données Pappers
     const entreprise = await getEntrepriseParSiret(siret)

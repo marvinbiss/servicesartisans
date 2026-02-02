@@ -68,7 +68,7 @@ export function initSentry() {
     ],
 
     // Before send hook for custom filtering
-    beforeSend(event, hint) {
+    beforeSend(event, _hint) {
       // Filter out non-error events in development
       if (process.env.NODE_ENV === 'development') {
         return null

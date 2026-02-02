@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { FileText, MessageSquare, Star, Settings, Bell, ChevronRight, Clock, CheckCircle, AlertCircle, Home, Search, Wrench, Loader2 } from 'lucide-react'
+import { FileText, MessageSquare, Star, Settings, ChevronRight, Clock, CheckCircle, AlertCircle, Search, Loader2 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { QuickSiteLinks } from '@/components/InternalLinks'
 import LogoutButton from '@/components/LogoutButton'

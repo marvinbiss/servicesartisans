@@ -1,5 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// GET query params schema
+const siretQuerySchema = z.object({
+  siret: z.string().min(1),
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -27,9 +33,11 @@ interface SireneResponse {
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
-  const siret = searchParams.get('siret')
-
-  if (!siret) {
+  const queryParams = {
+    siret: searchParams.get('siret'),
+  }
+  const result = siretQuerySchema.safeParse(queryParams)
+  if (!result.success) {
     return NextResponse.json(
       {
         success: false,
@@ -41,6 +49,7 @@ export async function GET(request: NextRequest) {
       { status: 400 }
     )
   }
+  const { siret } = result.data
 
   // Validate SIRET format (14 digits)
   const siretClean = siret.replace(/\s/g, '')

@@ -11,7 +11,6 @@ import {
   ScreenShareOff,
   MessageSquare,
   Users,
-  Settings,
   Maximize,
   Minimize,
   Loader2,
@@ -42,9 +41,9 @@ export default function VideoConsultation({
   roomUrl,
   token,
   userName,
-  isArtisan,
-  bookingId,
-  scheduledTime,
+  isArtisan: _isArtisan,
+  bookingId: _bookingId,
+  scheduledTime: _scheduledTime,
   onLeave,
 }: VideoConsultationProps) {
   const [callState, setCallState] = useState<'loading' | 'ready' | 'joined' | 'error'>('loading')
@@ -104,15 +103,15 @@ export default function VideoConsultation({
           onLeave?.()
         })
 
-        callFrame.on('participant-joined', (event: any) => {
+        callFrame.on('participant-joined', (_event: any) => {
           updateParticipants(callFrame)
         })
 
-        callFrame.on('participant-left', (event: any) => {
+        callFrame.on('participant-left', (_event: any) => {
           updateParticipants(callFrame)
         })
 
-        callFrame.on('participant-updated', (event: any) => {
+        callFrame.on('participant-updated', (_event: any) => {
           updateParticipants(callFrame)
         })
 

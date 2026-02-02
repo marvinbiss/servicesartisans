@@ -11,7 +11,6 @@ import {
   Mail,
   Video,
   ChevronDown,
-  ChevronRight,
   ExternalLink,
   FileText,
   Settings,

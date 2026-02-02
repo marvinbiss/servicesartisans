@@ -6,6 +6,13 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// POST request schema
+const voteSchema = z.object({
+  reviewId: z.string().uuid(),
+  isHelpful: z.boolean().optional().default(true),
+})
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -17,14 +24,11 @@ export const dynamic = 'force-dynamic'
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { reviewId, isHelpful } = body
-
-    if (!reviewId) {
-      return NextResponse.json(
-        { error: 'reviewId requis' },
-        { status: 400 }
-      )
+    const result = voteSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json({ error: 'Invalid request', details: result.error.flatten() }, { status: 400 })
     }
+    const { reviewId, isHelpful } = result.data
 
     // Get voter IP for deduplication
     const voterIp =

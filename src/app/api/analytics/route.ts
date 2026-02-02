@@ -6,6 +6,22 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// POST request schema
+const analyticsPostSchema = z.object({
+  event: z.string().min(1).max(100),
+  properties: z.record(z.string(), z.unknown()).optional(),
+  sessionId: z.string().min(1).max(100).optional(),
+  timestamp: z.string().datetime().optional(),
+})
+
+// GET request query params schema
+const analyticsGetSchema = z.object({
+  artisanId: z.string().uuid(),
+  period: z.enum(['7d', '30d', '90d']).optional(),
+  type: z.enum(['funnel', 'overview', 'trends']).optional(),
+})
 
 // Use service role for analytics storage
 const supabase = createClient(
@@ -19,7 +35,11 @@ export const dynamic = 'force-dynamic'
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { event, properties, sessionId, timestamp } = body
+    const result = analyticsPostSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json({ error: 'Invalid request', details: result.error.flatten() }, { status: 400 })
+    }
+    const { event, properties, sessionId, timestamp } = result.data
 
     // Get client info from headers
     const userAgent = request.headers.get('user-agent') || ''
@@ -53,16 +73,16 @@ export async function POST(request: Request) {
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
-    const artisanId = searchParams.get('artisanId')
-    const period = searchParams.get('period') || '30d' // 7d, 30d, 90d
-    const type = searchParams.get('type') || 'funnel' // funnel, overview, trends
-
-    if (!artisanId) {
-      return NextResponse.json(
-        { error: 'artisanId is required' },
-        { status: 400 }
-      )
+    const queryParams = {
+      artisanId: searchParams.get('artisanId'),
+      period: searchParams.get('period') || '30d',
+      type: searchParams.get('type') || 'funnel',
     }
+    const result = analyticsGetSchema.safeParse(queryParams)
+    if (!result.success) {
+      return NextResponse.json({ error: 'Invalid request', details: result.error.flatten() }, { status: 400 })
+    }
+    const { artisanId, period, type } = result.data
 
     // Calculate date range
     const days = period === '7d' ? 7 : period === '90d' ? 90 : 30

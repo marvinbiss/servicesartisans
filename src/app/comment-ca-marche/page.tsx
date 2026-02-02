@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { Search, FileText, Users, CheckCircle, ArrowRight, Shield, Star, Clock } from 'lucide-react'
+import { Search, Users, CheckCircle, ArrowRight, Shield, Star, Clock } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
 

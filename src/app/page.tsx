@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Metadata } from 'next'
-import { Search, MapPin, Star, Shield, ArrowRight, Clock, CheckCircle, Wrench, Zap, Award, Users, TrendingUp, ChevronRight, HelpCircle, FileText, Phone } from 'lucide-react'
+import { Search, Star, Shield, ArrowRight, Clock, CheckCircle, Wrench, Zap, Award, Users, TrendingUp, ChevronRight, HelpCircle, FileText, Phone } from 'lucide-react'
 import JsonLd from '@/components/JsonLd'
 import { getOrganizationSchema, getWebsiteSchema } from '@/lib/seo/jsonld'
 import { REVALIDATE } from '@/lib/cache'

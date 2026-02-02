@@ -11,6 +11,21 @@ import {
   createOrUpdateCustomer,
 } from '@/lib/stripe/advanced-payments'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// POST request schema
+const paymentIntentSchema = z.object({
+  amount: z.number().int().positive().max(1000000),
+  bookingId: z.string().uuid(),
+  artisanId: z.string().uuid(),
+  description: z.string().max(500).optional(),
+  paymentType: z.enum(['full', 'deposit', 'split']).optional().default('full'),
+  depositPercentage: z.number().int().min(10).max(100).optional().default(30),
+  splitInstallments: z.number().int().min(2).max(4).optional().default(3),
+  customerEmail: z.string().email().optional(),
+  customerName: z.string().max(100).optional(),
+  customerPhone: z.string().max(20).optional(),
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -37,25 +52,22 @@ export async function POST(request: Request) {
     const { data: { user } } = await supabase.auth.getUser()
 
     const body = await request.json()
+    const validation = paymentIntentSchema.safeParse(body)
+    if (!validation.success) {
+      return NextResponse.json({ error: 'Invalid request', details: validation.error.flatten() }, { status: 400 })
+    }
     const {
       amount,
       bookingId,
       artisanId,
       description,
-      paymentType = 'full', // 'full', 'deposit', 'split'
-      depositPercentage = 30,
-      splitInstallments = 3,
+      paymentType,
+      depositPercentage,
+      splitInstallments,
       customerEmail,
       customerName,
       customerPhone,
-    } = body
-
-    if (!amount || !bookingId || !artisanId) {
-      return NextResponse.json(
-        { error: 'Missing required fields' },
-        { status: 400 }
-      )
-    }
+    } = validation.data
 
     // Create or get Stripe customer
     let customerId: string | undefined

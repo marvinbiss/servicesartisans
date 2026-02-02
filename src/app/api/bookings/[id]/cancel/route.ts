@@ -2,6 +2,13 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { sendCancellationNotification, logNotification } from '@/lib/notifications/email'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// POST request schema
+const cancelBookingSchema = z.object({
+  cancelledBy: z.enum(['client', 'artisan']),
+  reason: z.string().max(500).optional(),
+})
 
 // POST /api/bookings/[id]/cancel - Cancel a booking
 export const dynamic = 'force-dynamic'
@@ -12,14 +19,14 @@ export async function POST(
 ) {
   try {
     const body = await request.json()
-    const { cancelledBy, reason } = body
-
-    if (!cancelledBy || !['client', 'artisan'].includes(cancelledBy)) {
+    const result = cancelBookingSchema.safeParse(body)
+    if (!result.success) {
       return NextResponse.json(
-        { error: 'cancelledBy must be "client" or "artisan"' },
+        { error: 'Validation error', details: result.error.flatten() },
         { status: 400 }
       )
     }
+    const { cancelledBy, reason } = result.data
 
     const supabase = await createClient()
 

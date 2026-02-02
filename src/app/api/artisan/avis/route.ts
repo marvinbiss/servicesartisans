@@ -7,6 +7,13 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// POST request schema (reply to review)
+const replyToReviewSchema = z.object({
+  review_id: z.string().uuid(),
+  response: z.string().min(1).max(2000),
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -100,14 +107,14 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json()
-    const { review_id, response } = body
-
-    if (!review_id || !response) {
+    const result = replyToReviewSchema.safeParse(body)
+    if (!result.success) {
       return NextResponse.json(
-        { error: 'ID de l\'avis et réponse requis' },
+        { error: 'Validation error', details: result.error.flatten() },
         { status: 400 }
       )
     }
+    const { review_id, response } = result.data
 
     // Verify the review belongs to this artisan
     const { data: review } = await supabase

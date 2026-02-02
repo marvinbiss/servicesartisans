@@ -3,12 +3,19 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { getSubscription, changeSubscriptionPlan, PRICE_IDS } from '@/lib/stripe-admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// PATCH request schema
+const changeSubscriptionSchema = z.object({
+  newPlan: z.enum(['pro', 'premium']),
+  proration: z.enum(['create_prorations', 'none', 'always_invoice']).optional().default('create_prorations'),
+})
 
 export const dynamic = 'force-dynamic'
 
 // GET - Détails d'un abonnement
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -47,20 +54,22 @@ export async function PATCH(
 
     const supabase = createAdminClient()
     const body = await request.json()
-    const { newPlan, proration = 'create_prorations' } = body
+    const validation = changeSubscriptionSchema.safeParse(body)
+    if (!validation.success) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Validation error', details: validation.error.flatten() } },
+        { status: 400 }
+      )
+    }
+    const { newPlan, proration } = validation.data
 
     // Déterminer le price ID
-    let newPriceId: string | undefined
-    if (newPlan === 'pro') {
-      newPriceId = PRICE_IDS.pro
-    } else if (newPlan === 'premium') {
-      newPriceId = PRICE_IDS.premium
-    }
+    const newPriceId = newPlan === 'pro' ? PRICE_IDS.pro : PRICE_IDS.premium
 
     if (!newPriceId) {
       return NextResponse.json(
-        { success: false, error: { message: 'Plan invalide' } },
-        { status: 400 }
+        { success: false, error: { message: 'Configuration Stripe manquante pour ce plan' } },
+        { status: 500 }
       )
     }
 

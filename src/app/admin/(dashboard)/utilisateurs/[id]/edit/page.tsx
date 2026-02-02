@@ -12,7 +12,6 @@ import {
   Shield,
   CreditCard,
 } from 'lucide-react'
-import { SubscriptionBadge } from '@/components/admin/StatusBadge'
 
 interface UserData {
   id: string

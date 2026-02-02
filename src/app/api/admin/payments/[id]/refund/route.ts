@@ -2,6 +2,13 @@ import { NextRequest, NextResponse } from 'next/server'
 import { processRefund } from '@/lib/stripe-admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// POST request schema
+const refundSchema = z.object({
+  amount: z.number().int().positive().max(10000000).optional(), // optional = full refund
+  reason: z.enum(['duplicate', 'fraudulent', 'requested_by_customer']).optional(),
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -19,7 +26,14 @@ export async function POST(
 
     const paymentIntentId = params.id
     const body = await request.json()
-    const { amount, reason } = body
+    const result = refundSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
+        { status: 400 }
+      )
+    }
+    const { amount, reason } = result.data
 
     // Traiter le remboursement via Stripe
     const refund = await processRefund(

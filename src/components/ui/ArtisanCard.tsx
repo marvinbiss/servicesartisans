@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { Star, MapPin, Clock, Shield, CheckCircle, Heart, BadgeCheck, Calendar } from 'lucide-react'
+import { Star, MapPin, Clock, Heart, BadgeCheck, Calendar } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 
@@ -46,7 +46,7 @@ export function ArtisanCard({
   variant = 'default',
 }: ArtisanCardProps) {
   const [isFavorite, setIsFavorite] = useState(false)
-  const [isHovered, setIsHovered] = useState(false)
+  const [_isHovered, setIsHovered] = useState(false)
 
   const href = `/services/${slug}/${locationSlug}/${id}`
 

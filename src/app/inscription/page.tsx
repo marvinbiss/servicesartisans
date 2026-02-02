@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { Mail, Lock, User, Eye, EyeOff, ArrowRight, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
@@ -12,7 +11,6 @@ interface FormErrors {
 }
 
 export default function InscriptionPage() {
-  const router = useRouter()
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',

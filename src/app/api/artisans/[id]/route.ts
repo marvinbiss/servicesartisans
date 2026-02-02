@@ -79,7 +79,7 @@ function generateDemoPortfolio(specialty: string) {
 }
 
 // Générer une FAQ de démonstration
-function generateDemoFAQ(specialty: string, city: string) {
+function generateDemoFAQ(_specialty: string, city: string) {
   return [
     {
       question: `Quels sont vos délais d'intervention à ${city} ?`,
@@ -210,7 +210,7 @@ interface Review {
 }
 
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {

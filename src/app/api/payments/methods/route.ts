@@ -13,6 +13,18 @@ import {
   savePaymentMethod,
 } from '@/lib/stripe/advanced-payments'
 import Stripe from 'stripe'
+import { z } from 'zod'
+
+// POST request schema
+const saveMethodSchema = z.object({
+  paymentMethodId: z.string().min(1).max(100),
+  setAsDefault: z.boolean().optional().default(true),
+})
+
+// DELETE request query params schema
+const deleteMethodSchema = z.object({
+  id: z.string().min(1).max(100),
+})
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
 
@@ -107,14 +119,11 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json()
-    const { paymentMethodId, setAsDefault = true } = body
-
-    if (!paymentMethodId) {
-      return NextResponse.json(
-        { error: 'Payment method ID required' },
-        { status: 400 }
-      )
+    const result = saveMethodSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json({ error: 'Invalid request', details: result.error.flatten() }, { status: 400 })
     }
+    const { paymentMethodId, setAsDefault } = result.data
 
     // Get or create Stripe customer
     const { data: profile } = await supabaseAdmin
@@ -199,14 +208,12 @@ export async function DELETE(request: Request) {
     }
 
     const { searchParams } = new URL(request.url)
-    const paymentMethodId = searchParams.get('id')
-
-    if (!paymentMethodId) {
-      return NextResponse.json(
-        { error: 'Payment method ID required' },
-        { status: 400 }
-      )
+    const queryParams = { id: searchParams.get('id') }
+    const result = deleteMethodSchema.safeParse(queryParams)
+    if (!result.success) {
+      return NextResponse.json({ error: 'Invalid request', details: result.error.flatten() }, { status: 400 })
     }
+    const paymentMethodId = result.data.id
 
     // Verify payment method belongs to user
     const { data: profile } = await supabaseAdmin

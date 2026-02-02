@@ -1,6 +1,31 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// GET query params schema
+const loyaltyGetSchema = z.object({
+  email: z.string().email(),
+  artisanId: z.string().uuid().optional().nullable(),
+})
+
+// POST request schema
+const loyaltyPostSchema = z.object({
+  artisanId: z.string().uuid(),
+  clientEmail: z.string().email(),
+  clientName: z.string().max(100).optional(),
+  bookingId: z.string().uuid().optional(),
+  points: z.number().int().min(1).max(10000),
+  reason: z.string().max(200).optional(),
+})
+
+// PUT request schema
+const loyaltyPutSchema = z.object({
+  artisanId: z.string().uuid(),
+  clientEmail: z.string().email(),
+  pointsToRedeem: z.number().int().positive(),
+  rewardType: z.string().max(100).optional(),
+})
 
 // GET /api/loyalty - Get client's loyalty points
 export const dynamic = 'force-dynamic'
@@ -8,15 +33,18 @@ export const dynamic = 'force-dynamic'
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
-    const clientEmail = searchParams.get('email')
-    const artisanId = searchParams.get('artisanId')
-
-    if (!clientEmail) {
+    const queryParams = {
+      email: searchParams.get('email'),
+      artisanId: searchParams.get('artisanId'),
+    }
+    const result = loyaltyGetSchema.safeParse(queryParams)
+    if (!result.success) {
       return NextResponse.json(
-        { error: 'email is required' },
+        { error: 'Invalid parameters', details: result.error.flatten() },
         { status: 400 }
       )
     }
+    const { email: clientEmail, artisanId } = result.data
 
     const supabase = await createClient()
 
@@ -62,6 +90,13 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json()
+    const result = loyaltyPostSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json(
+        { error: 'Validation error', details: result.error.flatten() },
+        { status: 400 }
+      )
+    }
     const {
       artisanId,
       clientEmail,
@@ -69,19 +104,12 @@ export async function POST(request: Request) {
       bookingId,
       points,
       reason,
-    } = body
-
-    if (!artisanId || !clientEmail || !points) {
-      return NextResponse.json(
-        { error: 'Champs requis manquants' },
-        { status: 400 }
-      )
-    }
+    } = result.data
 
     const supabase = await createClient()
 
     // Add points
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('loyalty_points')
       .insert({
         artisan_id: artisanId,
@@ -123,14 +151,14 @@ export async function POST(request: Request) {
 export async function PUT(request: Request) {
   try {
     const body = await request.json()
-    const { artisanId, clientEmail, pointsToRedeem, rewardType } = body
-
-    if (!artisanId || !clientEmail || !pointsToRedeem) {
+    const result = loyaltyPutSchema.safeParse(body)
+    if (!result.success) {
       return NextResponse.json(
-        { error: 'Champs requis manquants' },
+        { error: 'Validation error', details: result.error.flatten() },
         { status: 400 }
       )
     }
+    const { artisanId, clientEmail, pointsToRedeem, rewardType } = result.data
 
     const supabase = await createClient()
 

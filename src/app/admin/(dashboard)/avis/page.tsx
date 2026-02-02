@@ -6,7 +6,6 @@ import {
   Flag,
   CheckCircle,
   XCircle,
-  Eye,
   ChevronLeft,
   ChevronRight,
   MessageSquare,

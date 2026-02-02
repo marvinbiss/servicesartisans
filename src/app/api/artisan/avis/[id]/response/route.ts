@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { createClient } from '@/lib/supabase/server'
+import { z } from 'zod'
+
+// POST request schema
+const reviewResponseSchema = z.object({
+  response: z.string().min(10, 'La réponse doit contenir au moins 10 caractères').max(2000),
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -21,14 +27,14 @@ export async function POST(
     }
 
     const body = await request.json()
-    const { response } = body
-
-    if (!response || response.trim().length < 10) {
+    const result = reviewResponseSchema.safeParse(body)
+    if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'La réponse doit contenir au moins 10 caractères' } },
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
         { status: 400 }
       )
     }
+    const { response } = result.data
 
     // Get provider for this user
     const { data: provider } = await supabase

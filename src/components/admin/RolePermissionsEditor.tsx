@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import { Check, X, Shield, Users, Briefcase, Star, CreditCard, Grid, Settings, FileText } from 'lucide-react'
 import type { AdminPermissions, AdminRole } from '@/types/admin'
 
@@ -122,12 +121,6 @@ export function RolePermissionsEditor({
   const isGroupFullyEnabled = (groupKey: string) => {
     const group = permissions[groupKey as keyof AdminPermissions] as Record<string, boolean>
     return Object.values(group).every(v => v === true)
-  }
-
-  const isGroupPartiallyEnabled = (groupKey: string) => {
-    const group = permissions[groupKey as keyof AdminPermissions] as Record<string, boolean>
-    const values = Object.values(group)
-    return values.some(v => v) && !values.every(v => v)
   }
 
   return (

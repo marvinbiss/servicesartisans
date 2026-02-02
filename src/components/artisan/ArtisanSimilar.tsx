@@ -33,7 +33,7 @@ const DEMO_SIMILAR: SimilarArtisan[] = [
   { id: 'demo-10', name: 'Marie BERNARD', specialty: 'Plombier', rating: 4.5, reviews: 76, city: 'Les Lilas', hourly_rate: 50, is_verified: true },
 ]
 
-export function ArtisanSimilar({ artisan, similarArtisans }: ArtisanSimilarProps) {
+export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSimilarProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
 
   const similar = similarArtisans && similarArtisans.length > 0

@@ -2,6 +2,12 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// POST request schema
+const gdprDeleteSchema = z.object({
+  confirmDelete: z.literal('SUPPRIMER'),
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -20,11 +26,10 @@ export async function POST(
     const supabase = createAdminClient()
     const userId = params.userId
     const body = await request.json()
-    const { confirmDelete } = body
-
-    if (confirmDelete !== 'SUPPRIMER') {
+    const result = gdprDeleteSchema.safeParse(body)
+    if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Confirmation requise' } },
+        { success: false, error: { message: 'Confirmation requise (SUPPRIMER)', details: result.error.flatten() } },
         { status: 400 }
       )
     }

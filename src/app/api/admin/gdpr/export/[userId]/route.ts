@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic'
 
 // POST - Exporter les données d'un utilisateur (RGPD)
 export async function POST(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { userId: string } }
 ) {
   try {

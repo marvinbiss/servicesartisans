@@ -1,6 +1,31 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// GET query params schema
+const pricingGetSchema = z.object({
+  artisanId: z.string().uuid().optional().nullable(),
+  serviceId: z.string().uuid().optional().nullable(),
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  time: z.string().regex(/^\d{2}:\d{2}$/),
+  basePrice: z.coerce.number().positive().optional().nullable(),
+})
+
+// POST request schema
+const pricingPostSchema = z.object({
+  artisanId: z.string().uuid(),
+  enableDynamicPricing: z.boolean().optional(),
+  offPeakDiscount: z.number().min(-50).max(0).optional(),
+  weekendSurcharge: z.number().min(0).max(50).optional(),
+  lastMinuteSurcharge: z.number().min(0).max(50).optional(),
+  holidaySurcharge: z.number().min(0).max(100).optional(),
+  customRules: z.array(z.object({
+    type: z.string(),
+    discount: z.number(),
+    description: z.string(),
+  })).optional(),
+})
 
 interface PricingRule {
   type: 'off_peak' | 'last_minute' | 'holiday' | 'high_demand'
@@ -104,20 +129,23 @@ export const dynamic = 'force-dynamic'
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
-    const artisanId = searchParams.get('artisanId')
-    const serviceId = searchParams.get('serviceId')
-    const date = searchParams.get('date')
-    const time = searchParams.get('time')
-    const basePrice = searchParams.get('basePrice')
-
-    if (!date || !time) {
+    const queryParams = {
+      artisanId: searchParams.get('artisanId'),
+      serviceId: searchParams.get('serviceId'),
+      date: searchParams.get('date'),
+      time: searchParams.get('time'),
+      basePrice: searchParams.get('basePrice'),
+    }
+    const result = pricingGetSchema.safeParse(queryParams)
+    if (!result.success) {
       return NextResponse.json(
-        { error: 'date and time are required' },
+        { error: 'Invalid parameters', details: result.error.flatten() },
         { status: 400 }
       )
     }
+    const { artisanId, serviceId, date, time, basePrice } = result.data
 
-    let price = basePrice ? parseFloat(basePrice) : 50 // Default base price
+    let price = basePrice ?? 50 // Default base price
 
     // If artisanId and serviceId provided, try to get base price from database
     if (artisanId && serviceId) {
@@ -156,6 +184,13 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json()
+    const result = pricingPostSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json(
+        { error: 'Validation error', details: result.error.flatten() },
+        { status: 400 }
+      )
+    }
     const {
       artisanId,
       enableDynamicPricing,
@@ -164,14 +199,7 @@ export async function POST(request: Request) {
       lastMinuteSurcharge,
       holidaySurcharge,
       customRules,
-    } = body
-
-    if (!artisanId) {
-      return NextResponse.json(
-        { error: 'artisanId is required' },
-        { status: 400 }
-      )
-    }
+    } = result.data
 
     const supabase = await createClient()
 

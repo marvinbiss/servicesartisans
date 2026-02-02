@@ -7,6 +7,19 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// GET query params schema
+const messagesQuerySchema = z.object({
+  with: z.string().uuid().optional(),
+})
+
+// POST request schema
+const sendMessageSchema = z.object({
+  receiver_id: z.string().uuid(),
+  content: z.string().min(1).max(5000),
+  devis_request_id: z.string().uuid().optional().nullable(),
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -14,7 +27,17 @@ export async function GET(request: Request) {
   try {
     const supabase = await createClient()
     const { searchParams } = new URL(request.url)
-    const conversationWith = searchParams.get('with')
+    const queryParams = {
+      with: searchParams.get('with') || undefined,
+    }
+    const result = messagesQuerySchema.safeParse(queryParams)
+    if (!result.success) {
+      return NextResponse.json(
+        { error: 'Invalid parameters', details: result.error.flatten() },
+        { status: 400 }
+      )
+    }
+    const conversationWith = result.data.with
 
     // Get current user
     const { data: { user }, error: authError } = await supabase.auth.getUser()
@@ -127,14 +150,14 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json()
-    const { receiver_id, content, devis_request_id } = body
-
-    if (!receiver_id || !content) {
+    const result = sendMessageSchema.safeParse(body)
+    if (!result.success) {
       return NextResponse.json(
-        { error: 'Destinataire et contenu requis' },
+        { error: 'Validation error', details: result.error.flatten() },
         { status: 400 }
       )
     }
+    const { receiver_id, content, devis_request_id } = result.data
 
     // Insert new message
     const { data: message, error: insertError } = await supabase

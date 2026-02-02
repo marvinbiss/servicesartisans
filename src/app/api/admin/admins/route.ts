@@ -3,6 +3,19 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { DEFAULT_PERMISSIONS, type AdminRole } from '@/types/admin'
 import { verifyAdmin, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// GET query params schema
+const adminsQuerySchema = z.object({
+  page: z.coerce.number().int().min(1).optional().default(1),
+  limit: z.coerce.number().int().min(1).max(100).optional().default(20),
+})
+
+// POST request schema
+const createAdminSchema = z.object({
+  email: z.string().email().max(255),
+  role: z.enum(['super_admin', 'admin', 'moderator', 'support']),
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -25,8 +38,18 @@ export async function GET(request: NextRequest) {
     const supabase = createAdminClient()
 
     const { searchParams } = new URL(request.url)
-    const page = parseInt(searchParams.get('page') || '1')
-    const limit = parseInt(searchParams.get('limit') || '20')
+    const queryParams = {
+      page: searchParams.get('page') || '1',
+      limit: searchParams.get('limit') || '20',
+    }
+    const result = adminsQuerySchema.safeParse(queryParams)
+    if (!result.success) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Invalid parameters', details: result.error.flatten() } },
+        { status: 400 }
+      )
+    }
+    const { page, limit } = result.data
     const offset = (page - 1) * limit
 
     // Fetch admins from admin_users table
@@ -71,11 +94,15 @@ export async function POST(request: NextRequest) {
 
     const supabase = createAdminClient()
 
-    const { email, role } = await request.json()
-
-    if (!email || !role) {
-      return NextResponse.json({ error: 'Email et rôle requis' }, { status: 400 })
+    const body = await request.json()
+    const result = createAdminSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
+        { status: 400 }
+      )
     }
+    const { email, role } = result.data
 
     // Find user by email
     const { data: targetUser } = await supabase

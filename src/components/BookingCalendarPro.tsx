@@ -6,7 +6,7 @@
  * Based on best practices from Doctolib, Booksy, Calendly
  */
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Calendar,
   ChevronLeft,
@@ -28,7 +28,6 @@ import { useRealTimeAvailability, type Slot } from '@/hooks/useRealTimeAvailabil
 import { BookingFunnel } from '@/lib/analytics/tracking'
 import {
   getRecommendedSlots,
-  analyzeBookingPatterns,
   type SuggestedSlot,
 } from '@/lib/booking/smart-suggestions'
 
@@ -71,7 +70,7 @@ export default function BookingCalendarPro({
   servicePrice,
   requireDeposit = false,
   depositPercentage = 30,
-  onBookingComplete,
+  onBookingComplete: _onBookingComplete,
 }: BookingCalendarProProps) {
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
@@ -97,7 +96,7 @@ export default function BookingCalendarPro({
     slots,
     isLoading,
     error: slotsError,
-    refresh,
+    refresh: _refresh,
     optimisticallyReserve,
     cancelOptimisticReservation,
   } = useRealTimeAvailability({

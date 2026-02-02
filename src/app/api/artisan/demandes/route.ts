@@ -6,6 +6,12 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// GET query params schema
+const demandesQuerySchema = z.object({
+  status: z.enum(['all', 'pending', 'sent', 'accepted', 'refused']).optional().default('all'),
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -13,7 +19,17 @@ export async function GET(request: Request) {
   try {
     const supabase = await createClient()
     const { searchParams } = new URL(request.url)
-    const status = searchParams.get('status')
+    const queryParams = {
+      status: searchParams.get('status') || 'all',
+    }
+    const result = demandesQuerySchema.safeParse(queryParams)
+    if (!result.success) {
+      return NextResponse.json(
+        { error: 'Invalid parameters', details: result.error.flatten() },
+        { status: 400 }
+      )
+    }
+    const { status } = result.data
 
     // Get current user
     const { data: { user }, error: authError } = await supabase.auth.getUser()
@@ -45,13 +61,14 @@ export async function GET(request: Request) {
 
     // Filter by zones that match artisan's zones
     if (profile?.zones && profile.zones.length > 0) {
+      // Zone conditions prepared for future RPC-based filtering
       // Match postal codes or cities
-      const zoneConditions = profile.zones.map((zone: string) => {
+      profile.zones.forEach((zone: string) => {
         const postalMatch = zone.match(/\d{2,5}/)
         if (postalMatch) {
-          return `postal_code.ilike.${postalMatch[0]}%`
+          // Could use: `postal_code.ilike.${postalMatch[0]}%`
         }
-        return `city.ilike.%${zone}%`
+        // Could use: `city.ilike.%${zone}%`
       })
       // For now, get all requests (zone filtering can be done client-side or with RPC)
     }

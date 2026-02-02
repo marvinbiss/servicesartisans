@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import {
-  Star, MapPin, CheckCircle, Building2, Wrench,
+  Star, CheckCircle, Building2, Wrench,
   ChevronLeft, ChevronRight
 } from 'lucide-react'
 

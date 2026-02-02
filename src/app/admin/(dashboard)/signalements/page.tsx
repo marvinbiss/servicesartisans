@@ -12,7 +12,6 @@ import {
   Calendar,
 } from 'lucide-react'
 import { ReportStatusBadge, StatusBadge } from '@/components/admin/StatusBadge'
-import { ConfirmationModal } from '@/components/admin/ConfirmationModal'
 
 interface Report {
   id: string

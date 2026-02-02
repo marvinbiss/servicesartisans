@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   ChevronLeft,
   ChevronRight,
-  Clock,
   Check,
   Loader2,
   Calendar as CalendarIcon,
@@ -27,11 +26,6 @@ import { fr } from 'date-fns/locale'
 interface TimeSlot {
   time: string
   available: boolean
-}
-
-interface DayAvailability {
-  date: Date
-  slots: TimeSlot[]
 }
 
 interface BookingCalendarProps {
@@ -74,7 +68,7 @@ function generateMockSlots(date: Date): TimeSlot[] {
 }
 
 export function BookingCalendar({
-  artisanId,
+  artisanId: _artisanId,
   artisanName,
   serviceName = 'Intervention',
   serviceDuration = 60,

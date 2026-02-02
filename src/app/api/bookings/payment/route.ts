@@ -6,6 +6,19 @@ import {
   DEFAULT_DEPOSIT_CONFIG,
 } from '@/lib/stripe/deposits'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// POST request schema
+const paymentPostSchema = z.object({
+  bookingId: z.string().uuid(),
+  servicePriceInCents: z.number().int().positive().optional(),
+  depositAmountInCents: z.number().int().positive().optional(),
+})
+
+// GET query params schema
+const paymentGetSchema = z.object({
+  bookingId: z.string().uuid(),
+})
 
 // POST /api/bookings/payment - Create payment session for booking deposit
 export const dynamic = 'force-dynamic'
@@ -13,18 +26,18 @@ export const dynamic = 'force-dynamic'
 export async function POST(request: Request) {
   try {
     const body = await request.json()
+    const result = paymentPostSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json(
+        { error: 'Validation error', details: result.error.flatten() },
+        { status: 400 }
+      )
+    }
     const {
       bookingId,
       servicePriceInCents,
       depositAmountInCents,
-    } = body
-
-    if (!bookingId) {
-      return NextResponse.json(
-        { error: 'bookingId is required' },
-        { status: 400 }
-      )
-    }
+    } = result.data
 
     const supabase = await createClient()
 
@@ -148,14 +161,17 @@ export async function POST(request: Request) {
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
-    const bookingId = searchParams.get('bookingId')
-
-    if (!bookingId) {
+    const queryParams = {
+      bookingId: searchParams.get('bookingId'),
+    }
+    const result = paymentGetSchema.safeParse(queryParams)
+    if (!result.success) {
       return NextResponse.json(
-        { error: 'bookingId is required' },
+        { error: 'Invalid parameters', details: result.error.flatten() },
         { status: 400 }
       )
     }
+    const { bookingId } = result.data
 
     const supabase = await createClient()
 

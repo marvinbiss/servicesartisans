@@ -2,6 +2,13 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// POST request schema
+const banUserSchema = z.object({
+  action: z.enum(['ban', 'unban']),
+  reason: z.string().max(500).optional(),
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -19,14 +26,14 @@ export async function POST(
 
     const supabase = createAdminClient()
     const body = await request.json()
-    const { action, reason } = body // action: 'ban' ou 'unban'
-
-    if (!action || !['ban', 'unban'].includes(action)) {
+    const result = banUserSchema.safeParse(body)
+    if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: "Action invalide. Utilisez 'ban' ou 'unban'" } },
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
         { status: 400 }
       )
     }
+    const { action, reason } = result.data
 
     const isBanning = action === 'ban'
 

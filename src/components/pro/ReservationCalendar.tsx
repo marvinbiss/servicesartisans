@@ -7,12 +7,7 @@ import {
   ChevronRight,
   Clock,
   MapPin,
-  Phone,
   User,
-  CheckCircle2,
-  XCircle,
-  AlertCircle,
-  MoreVertical,
   Calendar,
 } from 'lucide-react'
 import {

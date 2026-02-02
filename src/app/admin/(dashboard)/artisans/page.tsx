@@ -216,13 +216,6 @@ export default function AdminProvidersPage() {
     )
   }
 
-  // Count by status for filter badges
-  const getFilterCount = (f: string) => {
-    if (f === 'all') return total
-    // We don't have exact counts, so don't show them for filtered views
-    return null
-  }
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Toast notification */}

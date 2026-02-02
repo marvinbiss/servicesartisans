@@ -19,7 +19,6 @@ export function SearchBar({
   className = '',
 }: SearchBarProps) {
   const [internalValue, setInternalValue] = useState(controlledValue || '')
-  const value = controlledValue !== undefined ? controlledValue : internalValue
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   // Cleanup timeout on unmount

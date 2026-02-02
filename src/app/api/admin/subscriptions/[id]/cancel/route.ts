@@ -3,6 +3,13 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { cancelSubscription, reactivateSubscription } from '@/lib/stripe-admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// POST request schema
+const cancelSubscriptionSchema = z.object({
+  action: z.enum(['cancel', 'reactivate']),
+  immediately: z.boolean().optional().default(false),
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -20,11 +27,18 @@ export async function POST(
 
     const supabase = createAdminClient()
     const body = await request.json()
-    const { action, immediately = false } = body // action: 'cancel' ou 'reactivate'
+    const result = cancelSubscriptionSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
+        { status: 400 }
+      )
+    }
+    const { action, immediately } = result.data
 
-    let result
+    let stripeResult
     if (action === 'cancel') {
-      result = await cancelSubscription(params.id, immediately)
+      stripeResult = await cancelSubscription(params.id, immediately)
 
       // Mettre à jour le profil si annulation immédiate
       if (immediately) {
@@ -45,13 +59,8 @@ export async function POST(
             .eq('id', profile.id)
         }
       }
-    } else if (action === 'reactivate') {
-      result = await reactivateSubscription(params.id)
     } else {
-      return NextResponse.json(
-        { success: false, error: { message: "Action invalide. Utilisez 'cancel' ou 'reactivate'" } },
-        { status: 400 }
-      )
+      stripeResult = await reactivateSubscription(params.id)
     }
 
     // Log d'audit
@@ -65,7 +74,7 @@ export async function POST(
 
     return NextResponse.json({
       success: true,
-      result,
+      result: stripeResult,
       message: action === 'cancel' ? 'Abonnement annulé' : 'Abonnement réactivé',
     })
   } catch (error) {

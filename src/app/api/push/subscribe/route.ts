@@ -7,6 +7,27 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { getVapidPublicKey } from '@/lib/notifications/push'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// POST request schema
+const subscribePostSchema = z.object({
+  userId: z.string().uuid(),
+  subscription: z.object({
+    endpoint: z.string().url(),
+    keys: z.object({
+      p256dh: z.string().min(1),
+      auth: z.string().min(1),
+    }),
+  }),
+})
+
+// DELETE request query params schema
+const unsubscribeSchema = z.object({
+  endpoint: z.string().url().optional(),
+  userId: z.string().uuid().optional(),
+}).refine(data => data.endpoint || data.userId, {
+  message: 'endpoint or userId required',
+})
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -33,23 +54,12 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { userId, subscription } = body
-
-    if (!userId || !subscription) {
-      return NextResponse.json(
-        { error: 'userId and subscription required' },
-        { status: 400 }
-      )
+    const result = subscribePostSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json({ error: 'Invalid request', details: result.error.flatten() }, { status: 400 })
     }
-
+    const { userId, subscription } = result.data
     const { endpoint, keys } = subscription
-
-    if (!endpoint || !keys?.p256dh || !keys?.auth) {
-      return NextResponse.json(
-        { error: 'Invalid subscription format' },
-        { status: 400 }
-      )
-    }
 
     // Get user agent
     const userAgent = request.headers.get('user-agent') || ''
@@ -86,15 +96,15 @@ export async function POST(request: Request) {
 export async function DELETE(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
-    const endpoint = searchParams.get('endpoint')
-    const userId = searchParams.get('userId')
-
-    if (!endpoint && !userId) {
-      return NextResponse.json(
-        { error: 'endpoint or userId required' },
-        { status: 400 }
-      )
+    const queryParams = {
+      endpoint: searchParams.get('endpoint') || undefined,
+      userId: searchParams.get('userId') || undefined,
     }
+    const result = unsubscribeSchema.safeParse(queryParams)
+    if (!result.success) {
+      return NextResponse.json({ error: 'Invalid request', details: result.error.flatten() }, { status: 400 })
+    }
+    const { endpoint, userId } = result.data
 
     let query = supabase.from('push_subscriptions')
 

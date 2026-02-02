@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
-import { genererTwiMLRouting, genererTwiMLMessagerie, validerSignatureTwilio } from '@/lib/api/twilio-calls'
+import { genererTwiMLRouting, validerSignatureTwilio } from '@/lib/api/twilio-calls'
 import { createClient } from '@supabase/supabase-js'
 
 const supabase = createClient(

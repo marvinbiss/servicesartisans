@@ -7,8 +7,29 @@ import {
   getHistoriqueAppels,
   calculerStatsAppels
 } from '@/lib/api/twilio-calls'
-import { verifyAdmin, logAdminAction } from '@/lib/admin-auth'
+import { verifyAdmin } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+// GET query params schema
+const callsQuerySchema = z.object({
+  action: z.enum(['numbers', 'available', 'stats', 'history', 'artisan-stats']),
+  areaCode: z.string().max(10).optional(),
+  startDate: z.string().datetime().optional(),
+  endDate: z.string().datetime().optional(),
+  artisanId: z.string().uuid().optional(),
+  limit: z.coerce.number().int().min(1).max(1000).optional().default(50),
+})
+
+// POST request schema
+const callsPostSchema = z.object({
+  action: z.enum(['buy', 'assign']),
+  phoneNumber: z.string().max(20).optional(),
+  ville: z.string().max(100).optional(),
+  metier: z.string().max(100).optional(),
+  artisanId: z.string().uuid().optional().nullable(),
+  numeroId: z.string().uuid().optional(),
+})
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -22,7 +43,23 @@ const supabase = createClient(
 // GET - Récupérer les stats et l'historique des appels
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
-  const action = searchParams.get('action')
+  const queryParams = {
+    action: searchParams.get('action'),
+    areaCode: searchParams.get('areaCode') || undefined,
+    startDate: searchParams.get('startDate') || undefined,
+    endDate: searchParams.get('endDate') || undefined,
+    artisanId: searchParams.get('artisanId') || undefined,
+    limit: searchParams.get('limit') || '50',
+  }
+
+  const result = callsQuerySchema.safeParse(queryParams)
+  if (!result.success) {
+    return NextResponse.json(
+      { success: false, error: 'Invalid parameters', details: result.error.flatten() },
+      { status: 400 }
+    )
+  }
+  const { action, areaCode, startDate, endDate, artisanId, limit } = result.data
 
   try {
     // Verify admin authentication
@@ -55,7 +92,6 @@ export async function GET(request: NextRequest) {
 
       // Rechercher des numéros disponibles à l'achat
       case 'available': {
-        const areaCode = searchParams.get('areaCode') || undefined
         const numeros = await rechercherNumerosDisponibles({
           areaCode,
           limit: 20
@@ -65,9 +101,6 @@ export async function GET(request: NextRequest) {
 
       // Statistiques globales des appels
       case 'stats': {
-        const startDate = searchParams.get('startDate')
-        const endDate = searchParams.get('endDate')
-
         const appels = await getHistoriqueAppels({
           startDate: startDate ? new Date(startDate) : undefined,
           endDate: endDate ? new Date(endDate) : undefined,
@@ -80,9 +113,6 @@ export async function GET(request: NextRequest) {
 
       // Historique des appels
       case 'history': {
-        const artisanId = searchParams.get('artisanId')
-        const limit = parseInt(searchParams.get('limit') || '50')
-
         const query = supabase
           .from('appels_logs')
           .select('*, artisan:providers(id, name)')
@@ -102,7 +132,6 @@ export async function GET(request: NextRequest) {
 
       // Stats par artisan
       case 'artisan-stats': {
-        const artisanId = searchParams.get('artisanId')
         if (!artisanId) {
           return NextResponse.json(
             { error: 'artisanId required' },
@@ -164,15 +193,27 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { action } = body
+    const result = callsPostSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json(
+        { success: false, error: 'Validation error', details: result.error.flatten() },
+        { status: 400 }
+      )
+    }
+    const { action, phoneNumber, ville, metier, artisanId, numeroId } = result.data
 
     switch (action) {
       // Acheter un nouveau numéro
       case 'buy': {
-        const { phoneNumber, ville, metier, artisanId } = body
+        if (!phoneNumber) {
+          return NextResponse.json(
+            { error: 'phoneNumber is required for buy action' },
+            { status: 400 }
+          )
+        }
 
         // Acheter via Twilio
-        const numero = await acheterNumero(phoneNumber, ville, metier)
+        const numero = await acheterNumero(phoneNumber, ville || '', metier || '')
         if (!numero) {
           return NextResponse.json(
             { error: 'Failed to purchase number' },
@@ -201,7 +242,12 @@ export async function POST(request: NextRequest) {
 
       // Assigner un numéro à un artisan
       case 'assign': {
-        const { numeroId, artisanId } = body
+        if (!numeroId) {
+          return NextResponse.json(
+            { error: 'numeroId required' },
+            { status: 400 }
+          )
+        }
 
         const { data, error } = await supabase
           .from('numeros_virtuels')

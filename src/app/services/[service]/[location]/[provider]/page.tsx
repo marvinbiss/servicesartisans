@@ -12,7 +12,6 @@ import {
   ArrowLeft,
   Share2,
   Heart,
-  Calendar,
   Clock,
 } from 'lucide-react'
 import { getProviderBySlug, getServiceBySlug, getLocationBySlug } from '@/lib/supabase'

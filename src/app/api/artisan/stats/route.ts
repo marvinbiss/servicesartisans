@@ -38,13 +38,13 @@ export async function GET() {
     }
 
     // Get devis sent by this artisan
-    const { data: devis, error: devisError } = await supabase
+    const { data: devis } = await supabase
       .from('devis')
       .select('*, request:devis_requests(*)')
       .eq('artisan_id', user.id)
 
     // Get reviews for this artisan
-    const { data: reviews, error: reviewsError } = await supabase
+    const { data: reviews } = await supabase
       .from('reviews')
       .select('*')
       .eq('artisan_id', user.id)

@@ -8,6 +8,29 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
+import { z } from 'zod'
+
+// PATCH request schema
+const updateProviderSchema = z.object({
+  company_name: z.string().max(200).optional(),
+  full_name: z.string().max(200).optional(),
+  phone: z.string().max(20).optional().nullable(),
+  email: z.string().email().optional().nullable(),
+  siret: z.string().max(20).optional().nullable(),
+  description: z.string().max(2000).optional().nullable(),
+  address: z.string().max(200).optional().nullable(),
+  city: z.string().max(100).optional().nullable(),
+  postal_code: z.string().max(10).optional().nullable(),
+  department: z.string().max(100).optional().nullable(),
+  region: z.string().max(100).optional().nullable(),
+  website: z.string().url().optional().nullable().or(z.literal('')),
+  legal_form: z.string().max(50).optional().nullable(),
+  is_verified: z.boolean().optional(),
+  is_featured: z.boolean().optional(),
+  is_active: z.boolean().optional(),
+  services: z.array(z.string().max(100)).optional(),
+  zones: z.array(z.string().max(100)).optional(),
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -18,7 +41,7 @@ const log = (level: string, message: string, data?: unknown) => {
 
 // GET - Récupérer un provider complet
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -171,6 +194,16 @@ export async function PATCH(
       log('ERROR', 'JSON parse error', parseError)
       return NextResponse.json(
         { success: false, error: 'JSON invalide dans le body' },
+        { status: 400 }
+      )
+    }
+
+    // Validate request body
+    const validationResult = updateProviderSchema.safeParse(body)
+    if (!validationResult.success) {
+      log('ERROR', 'Validation failed', validationResult.error.flatten())
+      return NextResponse.json(
+        { success: false, error: 'Validation error', details: validationResult.error.flatten() },
         { status: 400 }
       )
     }
@@ -403,7 +436,7 @@ export async function PATCH(
 
 // DELETE - Soft delete
 export async function DELETE(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   const providerId = params.id

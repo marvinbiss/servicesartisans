@@ -9,7 +9,7 @@ import {
   Star, Calendar, Sliders, Shield, Sparkles, Users, TrendingUp
 } from 'lucide-react'
 import ArtisanResultCard from '@/components/ArtisanResultCard'
-import { PopularServicesLinks, PopularCitiesLinks, popularServices } from '@/components/InternalLinks'
+import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
 import { MetierAutocomplete } from '@/components/ui/MetierAutocomplete'
 import { VilleAutocomplete } from '@/components/ui/VilleAutocomplete'
 
@@ -224,7 +224,7 @@ function SearchPageContent() {
                   <div className="flex-1">
                     <VilleAutocomplete
                       value={searchLocation}
-                      onSelect={(ville, codePostal) => {
+                      onSelect={(ville, _codePostal) => {
                         setSearchLocation(ville)
                         // Auto-submit after selection
                         const params = new URLSearchParams()

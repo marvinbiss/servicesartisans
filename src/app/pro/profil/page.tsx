@@ -1,14 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { motion } from 'framer-motion'
 import {
   User,
   Camera,
-  MapPin,
-  Phone,
-  Mail,
-  Globe,
   Clock,
   Briefcase,
   Star,
