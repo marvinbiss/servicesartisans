@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { FileText, MessageSquare, Star, Settings, TrendingUp, Users, Eye, Euro, ChevronRight, Calendar, ExternalLink, Search, Loader2 } from 'lucide-react'
+import { FileText, MessageSquare, Star, Settings, TrendingUp, Users, Eye, Euro, ChevronRight, Calendar, ExternalLink, Search, Loader2, AlertCircle } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { QuickSiteLinks } from '@/components/InternalLinks'
 import LogoutButton from '@/components/LogoutButton'
@@ -35,6 +35,7 @@ interface Profile {
 
 export default function EspaceArtisanPage() {
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [stats, setStats] = useState<StatsData | null>(null)
   const [demandes, setDemandes] = useState<Demande[]>([])
   const [profile, setProfile] = useState<Profile | null>(null)
@@ -45,6 +46,7 @@ export default function EspaceArtisanPage() {
 
   const fetchDashboardData = async () => {
     try {
+      setError(null)
       const response = await fetch('/api/artisan/stats')
       const data = await response.json()
 
@@ -52,9 +54,17 @@ export default function EspaceArtisanPage() {
         setStats(data.stats)
         setDemandes(data.recentDemandes || [])
         setProfile(data.profile)
+      } else if (response.status === 401) {
+        window.location.href = '/connexion?redirect=/espace-artisan'
+        return
+      } else if (response.status === 403) {
+        setError('Accès réservé aux artisans. Veuillez vous inscrire en tant qu\'artisan.')
+      } else {
+        setError(data.error || 'Erreur lors du chargement des données')
       }
-    } catch (error) {
-      console.error('Error fetching dashboard:', error)
+    } catch (err) {
+      console.error('Error fetching dashboard:', err)
+      setError('Erreur de connexion. Veuillez vérifier votre connexion internet.')
     } finally {
       setLoading(false)
     }
@@ -66,12 +76,42 @@ export default function EspaceArtisanPage() {
     { label: 'Devis envoyés', value: stats?.devisEnvoyes.value || 0, change: stats?.devisEnvoyes.change || '+0%', icon: Euro },
     { label: 'Clients satisfaits', value: stats?.clientsSatisfaits.value || 0, change: stats?.clientsSatisfaits.change || '+0%', icon: Users },
   ]
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
           <p className="text-gray-600">Chargement...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center p-8 bg-white rounded-xl shadow-sm max-w-md">
+          <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Erreur</h2>
+          <p className="text-gray-600 mb-6">{error}</p>
+          <div className="flex flex-col gap-3">
+            <button
+              onClick={() => {
+                setLoading(true)
+                fetchDashboardData()
+              }}
+              className="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+            >
+              Réessayer
+            </button>
+            <Link
+              href="/inscription-artisan"
+              className="text-blue-600 hover:underline text-sm"
+            >
+              S'inscrire en tant qu'artisan
+            </Link>
+          </div>
         </div>
       </div>
     )
