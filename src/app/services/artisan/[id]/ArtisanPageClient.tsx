@@ -135,21 +135,40 @@ export default function ArtisanPageClient({
     )
   }
 
+  const displayName = getDisplayName(artisan)
+
   return (
     <>
       {/* Schema.org JSON-LD */}
       <ArtisanSchema artisan={artisan} reviews={reviews} />
 
+      {/* Skip links for keyboard navigation */}
+      <nav aria-label="Liens rapides" className="sr-only focus-within:not-sr-only">
+        <a
+          href="#main-content"
+          className="absolute top-4 left-4 z-50 bg-blue-600 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-white"
+        >
+          Aller au contenu principal
+        </a>
+        <a
+          href="#contact-sidebar"
+          className="absolute top-4 left-4 z-50 bg-blue-600 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-white"
+        >
+          Aller aux informations de contact
+        </a>
+      </nav>
+
       <div className="min-h-screen bg-gray-50 pb-24 md:pb-8">
         {/* Header */}
-        <div className="bg-white border-b border-gray-100 sticky top-0 z-40">
+        <header className="bg-white border-b border-gray-100 sticky top-0 z-40">
           <div className="max-w-7xl mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <Link
                 href="/recherche"
-                className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+                className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg p-1"
+                aria-label="Retour a la recherche"
               >
-                <ArrowLeft className="w-5 h-5" />
+                <ArrowLeft className="w-5 h-5" aria-hidden="true" />
                 <span className="hidden sm:inline">Retour</span>
               </Link>
 
@@ -158,55 +177,74 @@ export default function ArtisanPageClient({
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={handleShare}
-                  className="p-2.5 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
+                  className="p-2.5 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  aria-label="Partager cette page"
                 >
-                  <Share2 className="w-5 h-5 text-gray-600" />
+                  <Share2 className="w-5 h-5 text-gray-600" aria-hidden="true" />
                 </motion.button>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setIsFavorite(!isFavorite)}
-                  className={`p-2.5 rounded-full transition-colors ${
+                  className={`p-2.5 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
                     isFavorite ? 'bg-red-100 text-red-500' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
+                  aria-label={isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'}
+                  aria-pressed={isFavorite}
                 >
-                  <Heart className={`w-5 h-5 ${isFavorite ? 'fill-current' : ''}`} />
+                  <Heart className={`w-5 h-5 ${isFavorite ? 'fill-current' : ''}`} aria-hidden="true" />
                 </motion.button>
               </div>
             </div>
           </div>
-        </div>
+        </header>
 
         {/* Main content */}
-        <main className="max-w-7xl mx-auto px-4 py-6">
+        <main id="main-content" className="max-w-7xl mx-auto px-4 py-6" aria-label={`Profil de ${displayName}`}>
           {/* Breadcrumb */}
-          <div className="mb-6">
+          <nav className="mb-6" aria-label="Fil d'Ariane">
             <ArtisanBreadcrumb artisan={artisan} />
-          </div>
+          </nav>
 
           {/* Photo Grid - Airbnb style (full width) */}
-          <div className="mb-6">
+          <section className="mb-6" aria-label="Galerie photos">
             <ArtisanPhotoGrid artisan={artisan} />
-          </div>
+          </section>
 
           {/* Grid layout */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Left column - Main content */}
             <div className="lg:col-span-2 space-y-6">
-              <ArtisanHero artisan={artisan} />
-              <ArtisanStats artisan={artisan} />
-              <ArtisanAbout artisan={artisan} />
-              <ArtisanServices artisan={artisan} />
-              <ArtisanReviews artisan={artisan} reviews={reviews} />
-              <ArtisanFAQ artisan={artisan} />
-              <ArtisanMap artisan={artisan} />
-              <ArtisanSimilar artisan={artisan} />
+              <section aria-label="Informations principales">
+                <ArtisanHero artisan={artisan} />
+              </section>
+              <section aria-label="Statistiques">
+                <ArtisanStats artisan={artisan} />
+              </section>
+              <section aria-label="A propos">
+                <ArtisanAbout artisan={artisan} />
+              </section>
+              <section id="services" aria-label="Services et tarifs">
+                <ArtisanServices artisan={artisan} />
+              </section>
+              <section id="reviews" aria-label="Avis clients">
+                <ArtisanReviews artisan={artisan} reviews={reviews} />
+              </section>
+              <section aria-label="Questions frequentes">
+                <ArtisanFAQ artisan={artisan} />
+              </section>
+              <section aria-label="Localisation">
+                <ArtisanMap artisan={artisan} />
+              </section>
+              <section aria-label="Artisans similaires">
+                <ArtisanSimilar artisan={artisan} />
+              </section>
             </div>
 
             {/* Right column - Sticky sidebar */}
-            <div className="hidden lg:block">
+            <aside id="contact-sidebar" className="hidden lg:block" aria-label="Informations de contact">
               <ArtisanSidebar artisan={artisan} />
-            </div>
+            </aside>
           </div>
         </main>
 
