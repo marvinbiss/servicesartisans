@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
 import { AlertCircle, ArrowLeft, Share2, Heart } from 'lucide-react'
 import {
@@ -12,17 +13,60 @@ import {
   ArtisanStats,
   ArtisanAbout,
   ArtisanServices,
-  ArtisanReviews,
-  ArtisanFAQ,
-  ArtisanMap,
   ArtisanSidebar,
   ArtisanMobileCTA,
   ArtisanSchema,
   ArtisanBreadcrumb,
-  ArtisanSimilar,
-  ArtisanPhotoGrid,
   ArtisanPageSkeleton,
+  ArtisanPhotoGridSkeleton,
 } from '@/components/artisan'
+
+// Loading skeleton for lazy-loaded sections
+function SectionSkeleton({ height = 'h-64' }: { height?: string }) {
+  return (
+    <div className={`bg-white rounded-2xl shadow-sm border border-gray-100 p-6 ${height} animate-pulse`}>
+      <div className="h-6 w-40 bg-gray-200 rounded mb-4" />
+      <div className="space-y-3">
+        <div className="h-4 bg-gray-200 rounded w-full" />
+        <div className="h-4 bg-gray-200 rounded w-3/4" />
+        <div className="h-4 bg-gray-200 rounded w-1/2" />
+      </div>
+    </div>
+  )
+}
+
+// Dynamic imports for heavy components - reduces initial bundle
+// These components load lazily to reduce initial page bundle size
+
+// Photo grid with lightbox (heavy - includes next/image + lightbox)
+const ArtisanPhotoGrid = dynamic(
+  () => import('@/components/artisan/ArtisanPhotoGrid').then(mod => ({ default: mod.ArtisanPhotoGrid })),
+  { loading: () => <ArtisanPhotoGridSkeleton />, ssr: false }
+)
+
+// Reviews section with animations
+const ArtisanReviews = dynamic(
+  () => import('@/components/artisan/ArtisanReviews').then(mod => ({ default: mod.ArtisanReviews })),
+  { loading: () => <SectionSkeleton height="h-96" />, ssr: false }
+)
+
+// Map component with iframe
+const ArtisanMap = dynamic(
+  () => import('@/components/artisan/ArtisanMap').then(mod => ({ default: mod.ArtisanMap })),
+  { loading: () => <SectionSkeleton height="h-80" />, ssr: false }
+)
+
+// Similar artisans carousel
+const ArtisanSimilar = dynamic(
+  () => import('@/components/artisan/ArtisanSimilar').then(mod => ({ default: mod.ArtisanSimilar })),
+  { loading: () => <SectionSkeleton height="h-72" />, ssr: false }
+)
+
+// FAQ accordion
+const ArtisanFAQ = dynamic(
+  () => import('@/components/artisan/ArtisanFAQ').then(mod => ({ default: mod.ArtisanFAQ })),
+  { loading: () => <SectionSkeleton height="h-64" />, ssr: false }
+)
 
 interface ArtisanPageClientProps {
   initialArtisan: Artisan | null

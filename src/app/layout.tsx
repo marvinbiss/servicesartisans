@@ -100,11 +100,19 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
 
-        {/* Preconnect for performance */}
+        {/* Preconnect for performance - fonts */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+
+        {/* Preconnect for Supabase backend */}
         <link rel="preconnect" href="https://umjmbdbwcsxrvfqktiui.supabase.co" />
         <link rel="dns-prefetch" href="https://umjmbdbwcsxrvfqktiui.supabase.co" />
+
+        {/* Preconnect for images - Unsplash */}
+        <link rel="preconnect" href="https://images.unsplash.com" />
+        <link rel="dns-prefetch" href="https://images.unsplash.com" />
       </head>
       <body className={`${inter.variable} ${plusJakarta.variable} font-sans bg-gray-50 antialiased`}>
         <MobileMenuProvider>

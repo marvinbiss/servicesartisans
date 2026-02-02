@@ -12,6 +12,59 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
   const displayName = getDisplayName(artisan)
   const baseUrl = 'https://servicesartisans.fr'
 
+  // Organization Schema for ServicesArtisans platform
+  const organizationSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    '@id': `${baseUrl}#organization`,
+    name: 'ServicesArtisans',
+    url: baseUrl,
+    logo: `${baseUrl}/logo.png`,
+    description: 'Plateforme de mise en relation entre particuliers et artisans qualifies en France',
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'customer service',
+      availableLanguage: ['French'],
+      url: `${baseUrl}/contact`,
+    },
+    sameAs: [
+      'https://www.facebook.com/servicesartisans',
+      'https://www.linkedin.com/company/servicesartisans',
+    ],
+  }
+
+  // Individual Service Schemas for each service offered
+  const serviceSchemas = artisan.service_prices.map((service, index) => ({
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    '@id': `${baseUrl}/services/artisan/${artisan.id}#service-${index}`,
+    name: service.name,
+    description: service.description || `${service.name} par ${displayName}`,
+    provider: {
+      '@type': 'LocalBusiness',
+      '@id': `${baseUrl}/services/artisan/${artisan.id}#business`,
+      name: displayName,
+    },
+    areaServed: {
+      '@type': 'City',
+      name: artisan.city,
+      ...(artisan.region && { containedInPlace: { '@type': 'AdministrativeArea', name: artisan.region } }),
+    },
+    ...(service.price && {
+      offers: {
+        '@type': 'Offer',
+        price: service.price.replace(/[^0-9]/g, '') || '0',
+        priceCurrency: 'EUR',
+        availability: artisan.accepts_new_clients ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+      },
+    }),
+    ...(service.duration && {
+      estimatedDuration: service.duration,
+    }),
+    serviceType: artisan.specialty,
+    termsOfService: `${baseUrl}/cgv`,
+  }))
+
   // LocalBusiness Schema
   const localBusinessSchema = {
     '@context': 'https://schema.org',
@@ -24,6 +77,11 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
     email: artisan.email,
     url: `${baseUrl}/services/artisan/${artisan.id}`,
     priceRange: artisan.hourly_rate ? `${artisan.hourly_rate}€ - ${artisan.hourly_rate * 2}€` : '€€',
+    parentOrganization: {
+      '@type': 'Organization',
+      '@id': `${baseUrl}#organization`,
+      name: 'ServicesArtisans',
+    },
 
     address: {
       '@type': 'PostalAddress',
@@ -42,13 +100,13 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
       },
     }),
 
-    aggregateRating: {
+    aggregateRating: artisan.review_count > 0 ? {
       '@type': 'AggregateRating',
       ratingValue: artisan.average_rating,
       reviewCount: artisan.review_count,
       bestRating: 5,
       worstRating: 1,
-    },
+    } : undefined,
 
     review: reviews.slice(0, 5).map(r => ({
       '@type': 'Review',
@@ -109,6 +167,26 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
     ...(artisan.website && {
       sameAs: [artisan.website],
     }),
+
+    // Additional SEO-friendly properties
+    ...(artisan.experience_years && {
+      foundingDate: new Date(new Date().getFullYear() - artisan.experience_years, 0, 1).toISOString().split('T')[0],
+    }),
+    ...(artisan.employee_count && {
+      numberOfEmployees: {
+        '@type': 'QuantitativeValue',
+        value: artisan.employee_count,
+      },
+    }),
+    ...(artisan.certifications && artisan.certifications.length > 0 && {
+      hasCredential: artisan.certifications.map(cert => ({
+        '@type': 'EducationalOccupationalCredential',
+        credentialCategory: 'certification',
+        name: cert,
+      })),
+    }),
+    paymentAccepted: artisan.payment_methods?.join(', ') || 'Cash, Credit Card',
+    currenciesAccepted: 'EUR',
   }
 
   // FAQPage Schema
@@ -161,25 +239,30 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
     })),
   }
 
+  // Combined schema graph for better SEO (single JSON-LD with @graph)
+  const combinedSchema = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      organizationSchema,
+      localBusinessSchema,
+      breadcrumbSchema,
+      ...(faqSchema ? [faqSchema] : []),
+      ...serviceSchemas,
+    ],
+  }
+
   return (
     <>
       <Script
-        id="schema-local-business"
+        id="schema-combined"
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(combinedSchema, null, 0)
+            .replace(/</g, '\\u003c')
+            .replace(/>/g, '\\u003e')
+        }}
       />
-      <Script
-        id="schema-breadcrumb"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
-      {faqSchema && (
-        <Script
-          id="schema-faq"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-        />
-      )}
     </>
   )
 }
