@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { AlertCircle, ArrowLeft, Share2, Heart } from 'lucide-react'
@@ -12,7 +12,6 @@ import {
   ArtisanStats,
   ArtisanAbout,
   ArtisanServices,
-  ArtisanGallery,
   ArtisanReviews,
   ArtisanFAQ,
   ArtisanMap,
@@ -21,6 +20,8 @@ import {
   ArtisanSchema,
   ArtisanBreadcrumb,
   ArtisanSimilar,
+  ArtisanPhotoGrid,
+  ArtisanPageSkeleton,
 } from '@/components/artisan'
 
 interface ArtisanPageClientProps {
@@ -37,6 +38,13 @@ export default function ArtisanPageClient({
   const [artisan, _setArtisan] = useState<Artisan | null>(initialArtisan)
   const [reviews, _setReviews] = useState<Review[]>(initialReviews)
   const [isFavorite, setIsFavorite] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+
+  // Simulate hydration loading
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 100)
+    return () => clearTimeout(timer)
+  }, [])
 
   const handleShare = async () => {
     if (navigator.share && artisan) {
@@ -52,6 +60,11 @@ export default function ArtisanPageClient({
     } else {
       navigator.clipboard.writeText(window.location.href)
     }
+  }
+
+  // Loading state (skeleton)
+  if (isLoading && !artisan) {
+    return <ArtisanPageSkeleton />
   }
 
   // Not found state
@@ -127,6 +140,11 @@ export default function ArtisanPageClient({
             <ArtisanBreadcrumb artisan={artisan} />
           </div>
 
+          {/* Photo Grid - Airbnb style (full width) */}
+          <div className="mb-6">
+            <ArtisanPhotoGrid artisan={artisan} />
+          </div>
+
           {/* Grid layout */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Left column - Main content */}
@@ -135,7 +153,6 @@ export default function ArtisanPageClient({
               <ArtisanStats artisan={artisan} />
               <ArtisanAbout artisan={artisan} />
               <ArtisanServices artisan={artisan} />
-              <ArtisanGallery artisan={artisan} />
               <ArtisanReviews artisan={artisan} reviews={reviews} />
               <ArtisanFAQ artisan={artisan} />
               <ArtisanMap artisan={artisan} />

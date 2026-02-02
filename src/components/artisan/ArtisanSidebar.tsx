@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Phone, Mail, MessageCircle, CheckCircle, Zap, Clock, Shield } from 'lucide-react'
 import { Artisan } from './types'
+import { QuoteRequestModal } from './QuoteRequestModal'
 
 interface ArtisanSidebarProps {
   artisan: Artisan
@@ -11,6 +12,7 @@ interface ArtisanSidebarProps {
 
 export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
   const [showPhone, setShowPhone] = useState(false)
+  const [showQuoteModal, setShowQuoteModal] = useState(false)
 
   const handleCall = () => {
     if (artisan.phone) {
@@ -66,11 +68,19 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
+          onClick={() => setShowQuoteModal(true)}
           className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-green-600 to-green-700 text-white font-semibold flex items-center justify-center gap-2 shadow-lg shadow-green-500/25 hover:shadow-green-500/40 transition-shadow"
         >
           <MessageCircle className="w-5 h-5" />
           Demander un devis gratuit
         </motion.button>
+
+        {/* Quote Request Modal */}
+        <QuoteRequestModal
+          artisan={artisan}
+          isOpen={showQuoteModal}
+          onClose={() => setShowQuoteModal(false)}
+        />
 
         {artisan.email && (
           <motion.button
@@ -135,6 +145,8 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
 
 // Mobile CTA bar
 export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
+  const [showQuoteModal, setShowQuoteModal] = useState(false)
+
   const handleCall = () => {
     if (artisan.phone) {
       window.location.href = `tel:${artisan.phone.replace(/\s/g, '')}`
@@ -142,31 +154,41 @@ export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
   }
 
   return (
-    <motion.div
-      initial={{ y: 100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.3 }}
-      className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 md:hidden z-50 safe-area-bottom"
-    >
-      <div className="flex gap-3">
-        {artisan.phone && (
+    <>
+      <motion.div
+        initial={{ y: 100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.3 }}
+        className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 md:hidden z-50 safe-area-bottom"
+      >
+        <div className="flex gap-3">
+          {artisan.phone && (
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={handleCall}
+              className="flex-1 py-3.5 px-4 rounded-xl bg-blue-600 text-white font-semibold flex items-center justify-center gap-2"
+            >
+              <Phone className="w-5 h-5" />
+              Appeler
+            </motion.button>
+          )}
           <motion.button
             whileTap={{ scale: 0.95 }}
-            onClick={handleCall}
-            className="flex-1 py-3.5 px-4 rounded-xl bg-blue-600 text-white font-semibold flex items-center justify-center gap-2"
+            onClick={() => setShowQuoteModal(true)}
+            className="flex-1 py-3.5 px-4 rounded-xl bg-green-600 text-white font-semibold flex items-center justify-center gap-2"
           >
-            <Phone className="w-5 h-5" />
-            Appeler
+            <MessageCircle className="w-5 h-5" />
+            Devis gratuit
           </motion.button>
-        )}
-        <motion.button
-          whileTap={{ scale: 0.95 }}
-          className="flex-1 py-3.5 px-4 rounded-xl bg-green-600 text-white font-semibold flex items-center justify-center gap-2"
-        >
-          <MessageCircle className="w-5 h-5" />
-          Devis gratuit
-        </motion.button>
-      </div>
-    </motion.div>
+        </div>
+      </motion.div>
+
+      {/* Quote Request Modal */}
+      <QuoteRequestModal
+        artisan={artisan}
+        isOpen={showQuoteModal}
+        onClose={() => setShowQuoteModal(false)}
+      />
+    </>
   )
 }
