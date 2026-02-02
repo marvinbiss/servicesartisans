@@ -103,18 +103,20 @@ export function ArtisanReviews({ artisan, reviews }: ArtisanReviewsProps) {
         </div>
 
         {/* Distribution bars - clickable filters */}
-        <div className="flex-1 space-y-2">
+        <div className="flex-1 space-y-2" role="group" aria-label="Filtrer par nombre d'etoiles">
           {ratingDistribution.map(({ rating, count, percentage }) => (
             <button
               key={rating}
               onClick={() => handleFilterChange(rating.toString() as FilterType)}
-              className={`w-full flex items-center gap-3 p-1 rounded-lg transition-colors ${
+              aria-pressed={filter === rating.toString()}
+              aria-label={`Filtrer les avis ${rating} etoiles (${count} avis)`}
+              className={`w-full flex items-center gap-3 p-1 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-1 ${
                 filter === rating.toString() ? 'bg-amber-50' : 'hover:bg-gray-50'
               }`}
             >
-              <span className="text-sm text-gray-600 w-6">{rating}</span>
-              <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
-              <div className="flex-1 h-2.5 bg-gray-100 rounded-full overflow-hidden">
+              <span className="text-sm text-gray-600 w-6" aria-hidden="true">{rating}</span>
+              <Star className="w-4 h-4 text-amber-500 fill-amber-500" aria-hidden="true" />
+              <div className="flex-1 h-2.5 bg-gray-100 rounded-full overflow-hidden" role="progressbar" aria-valuenow={percentage} aria-valuemin={0} aria-valuemax={100}>
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${percentage}%` }}
@@ -124,18 +126,19 @@ export function ArtisanReviews({ artisan, reviews }: ArtisanReviewsProps) {
                   }`}
                 />
               </div>
-              <span className="text-sm text-gray-500 w-10 text-right">{count}</span>
+              <span className="text-sm text-gray-500 w-10 text-right" aria-hidden="true">{count}</span>
             </button>
           ))}
         </div>
       </div>
 
       {/* Filters */}
-      <div className="flex flex-wrap items-center gap-2 mb-6">
-        <Filter className="w-4 h-4 text-gray-400" />
+      <div className="flex flex-wrap items-center gap-2 mb-6" role="group" aria-label="Filtres des avis">
+        <Filter className="w-4 h-4 text-gray-400" aria-hidden="true" />
         <button
           onClick={() => handleFilterChange('all')}
-          className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+          aria-pressed={filter === 'all'}
+          className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 ${
             filter === 'all'
               ? 'bg-blue-600 text-white'
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -145,31 +148,35 @@ export function ArtisanReviews({ artisan, reviews }: ArtisanReviewsProps) {
         </button>
         <button
           onClick={() => handleFilterChange('verified')}
-          className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors flex items-center gap-1 ${
+          aria-pressed={filter === 'verified'}
+          className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-1 ${
             filter === 'verified'
               ? 'bg-green-600 text-white'
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
         >
-          <CheckCircle className="w-3.5 h-3.5" />
+          <CheckCircle className="w-3.5 h-3.5" aria-hidden="true" />
           Verifies
         </button>
         <button
           onClick={() => handleFilterChange('photo')}
-          className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors flex items-center gap-1 ${
+          aria-pressed={filter === 'photo'}
+          className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-1 ${
             filter === 'photo'
               ? 'bg-purple-600 text-white'
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
         >
-          <ImageIcon className="w-3.5 h-3.5" />
+          <ImageIcon className="w-3.5 h-3.5" aria-hidden="true" />
           Avec photo
         </button>
 
         <div className="flex-1" />
 
         {/* Sort */}
+        <label htmlFor="reviews-sort" className="sr-only">Trier les avis</label>
         <select
+          id="reviews-sort"
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value as 'recent' | 'rating')}
           className="px-3 py-1.5 rounded-lg border border-gray-200 text-sm text-gray-600 bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"

@@ -30,16 +30,22 @@ export function ArtisanAbout({ artisan }: ArtisanAboutProps) {
 
       {/* Description */}
       <div className="relative">
-        <p className={`text-gray-600 leading-relaxed ${!expanded && isLong ? 'line-clamp-4' : ''}`}>
+        <div
+          id="about-description"
+          aria-expanded={isLong ? expanded : undefined}
+          className={`text-gray-600 leading-relaxed ${!expanded && isLong ? 'line-clamp-4' : ''}`}
+        >
           {description}
-        </p>
+        </div>
         {isLong && (
           <button
             onClick={() => setExpanded(!expanded)}
-            className="mt-2 text-blue-600 font-medium text-sm flex items-center gap-1 hover:text-blue-700"
+            aria-expanded={expanded}
+            aria-controls="about-description"
+            className="mt-2 text-blue-600 font-medium text-sm flex items-center gap-1 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded"
           >
             {expanded ? 'Voir moins' : 'Voir plus'}
-            <ChevronDown className={`w-4 h-4 transition-transform ${expanded ? 'rotate-180' : ''}`} />
+            <ChevronDown className={`w-4 h-4 transition-transform ${expanded ? 'rotate-180' : ''}`} aria-hidden="true" />
           </button>
         )}
       </div>

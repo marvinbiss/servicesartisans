@@ -52,15 +52,16 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
       )}
 
       {/* CTA Buttons */}
-      <div className="space-y-3 mb-6">
+      <div className="space-y-3 mb-6" role="group" aria-label="Actions de contact">
         {artisan.phone && (
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => showPhone ? handleCall() : setShowPhone(true)}
-            className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-shadow"
+            className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            aria-label={showPhone ? `Appeler ${artisan.phone}` : 'Afficher le numero de telephone'}
           >
-            <Phone className="w-5 h-5" />
+            <Phone className="w-5 h-5" aria-hidden="true" />
             {showPhone ? artisan.phone : 'Afficher le telephone'}
           </motion.button>
         )}
@@ -69,9 +70,10 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => setShowQuoteModal(true)}
-          className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-green-600 to-green-700 text-white font-semibold flex items-center justify-center gap-2 shadow-lg shadow-green-500/25 hover:shadow-green-500/40 transition-shadow"
+          className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-green-600 to-green-700 text-white font-semibold flex items-center justify-center gap-2 shadow-lg shadow-green-500/25 hover:shadow-green-500/40 transition-shadow focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+          aria-label="Ouvrir le formulaire de demande de devis gratuit"
         >
-          <MessageCircle className="w-5 h-5" />
+          <MessageCircle className="w-5 h-5" aria-hidden="true" />
           Demander un devis gratuit
         </motion.button>
 
@@ -87,9 +89,10 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={handleEmail}
-            className="w-full py-3 px-4 rounded-xl border-2 border-gray-200 text-gray-700 font-medium flex items-center justify-center gap-2 hover:border-gray-300 hover:bg-gray-50 transition-colors"
+            className="w-full py-3 px-4 rounded-xl border-2 border-gray-200 text-gray-700 font-medium flex items-center justify-center gap-2 hover:border-gray-300 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+            aria-label={`Envoyer un email a ${artisan.email}`}
           >
-            <Mail className="w-5 h-5" />
+            <Mail className="w-5 h-5" aria-hidden="true" />
             Envoyer un email
           </motion.button>
         )}
@@ -160,24 +163,28 @@ export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
         animate={{ y: 0 }}
         transition={{ duration: 0.3 }}
         className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 md:hidden z-50 safe-area-bottom"
+        role="group"
+        aria-label="Actions rapides"
       >
         <div className="flex gap-3">
           {artisan.phone && (
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={handleCall}
-              className="flex-1 py-3.5 px-4 rounded-xl bg-blue-600 text-white font-semibold flex items-center justify-center gap-2"
+              className="flex-1 py-3.5 px-4 rounded-xl bg-blue-600 text-white font-semibold flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              aria-label={`Appeler l'artisan au ${artisan.phone}`}
             >
-              <Phone className="w-5 h-5" />
+              <Phone className="w-5 h-5" aria-hidden="true" />
               Appeler
             </motion.button>
           )}
           <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={() => setShowQuoteModal(true)}
-            className="flex-1 py-3.5 px-4 rounded-xl bg-green-600 text-white font-semibold flex items-center justify-center gap-2"
+            className="flex-1 py-3.5 px-4 rounded-xl bg-green-600 text-white font-semibold flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+            aria-label="Demander un devis gratuit"
           >
-            <MessageCircle className="w-5 h-5" />
+            <MessageCircle className="w-5 h-5" aria-hidden="true" />
             Devis gratuit
           </motion.button>
         </div>

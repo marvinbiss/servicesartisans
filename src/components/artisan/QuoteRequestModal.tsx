@@ -124,6 +124,10 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
           onClick={onClose}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="quote-modal-title"
+          aria-describedby="quote-modal-description"
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -136,8 +140,8 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
             {/* Header */}
             <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
               <div>
-                <h2 className="text-xl font-bold text-gray-900">Demande de devis</h2>
-                <p className="text-sm text-gray-500">
+                <h2 id="quote-modal-title" className="text-xl font-bold text-gray-900">Demande de devis</h2>
+                <p id="quote-modal-description" className="text-sm text-gray-500">
                   Envoyer a {displayName}
                 </p>
               </div>
@@ -145,9 +149,10 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={onClose}
-                className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                className="p-2 rounded-full hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+                aria-label="Fermer le formulaire"
               >
-                <X className="w-5 h-5 text-gray-500" />
+                <X className="w-5 h-5 text-gray-500" aria-hidden="true" />
               </motion.button>
             </div>
 
@@ -158,12 +163,15 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   className="text-center py-8"
+                  role="status"
+                  aria-live="polite"
                 >
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ type: 'spring', delay: 0.1 }}
                     className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4"
+                    aria-hidden="true"
                   >
                     <CheckCircle className="w-8 h-8 text-green-600" />
                   </motion.div>
@@ -175,81 +183,97 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                   </p>
                 </motion.div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-4" noValidate>
                   {/* Name */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                      Votre nom *
+                    <label htmlFor="quote-name" className="block text-sm font-medium text-gray-700 mb-1.5">
+                      Votre nom <span aria-hidden="true">*</span>
+                      <span className="sr-only">(requis)</span>
                     </label>
                     <div className="relative">
-                      <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" aria-hidden="true" />
                       <input
+                        id="quote-name"
                         type="text"
                         value={formData.name}
                         onChange={(e) => handleChange('name', e.target.value)}
                         placeholder="Jean Dupont"
+                        aria-required="true"
+                        aria-invalid={!!errors.name}
+                        aria-describedby={errors.name ? 'quote-name-error' : undefined}
                         className={`w-full pl-10 pr-4 py-3 rounded-xl border ${
                           errors.name ? 'border-red-300 bg-red-50' : 'border-gray-200'
                         } focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors`}
                       />
                     </div>
                     {errors.name && (
-                      <p className="mt-1 text-sm text-red-600">{errors.name}</p>
+                      <p id="quote-name-error" className="mt-1 text-sm text-red-600" role="alert">{errors.name}</p>
                     )}
                   </div>
 
                   {/* Email */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                      Votre email *
+                    <label htmlFor="quote-email" className="block text-sm font-medium text-gray-700 mb-1.5">
+                      Votre email <span aria-hidden="true">*</span>
+                      <span className="sr-only">(requis)</span>
                     </label>
                     <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" aria-hidden="true" />
                       <input
+                        id="quote-email"
                         type="email"
                         value={formData.email}
                         onChange={(e) => handleChange('email', e.target.value)}
                         placeholder="jean@email.com"
+                        aria-required="true"
+                        aria-invalid={!!errors.email}
+                        aria-describedby={errors.email ? 'quote-email-error' : undefined}
                         className={`w-full pl-10 pr-4 py-3 rounded-xl border ${
                           errors.email ? 'border-red-300 bg-red-50' : 'border-gray-200'
                         } focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors`}
                       />
                     </div>
                     {errors.email && (
-                      <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                      <p id="quote-email-error" className="mt-1 text-sm text-red-600" role="alert">{errors.email}</p>
                     )}
                   </div>
 
                   {/* Phone */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                      Votre telephone *
+                    <label htmlFor="quote-phone" className="block text-sm font-medium text-gray-700 mb-1.5">
+                      Votre telephone <span aria-hidden="true">*</span>
+                      <span className="sr-only">(requis)</span>
                     </label>
                     <div className="relative">
-                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" aria-hidden="true" />
                       <input
+                        id="quote-phone"
                         type="tel"
                         value={formData.phone}
                         onChange={(e) => handleChange('phone', e.target.value)}
                         placeholder="06 12 34 56 78"
+                        aria-required="true"
+                        aria-invalid={!!errors.phone}
+                        aria-describedby={errors.phone ? 'quote-phone-error' : undefined}
                         className={`w-full pl-10 pr-4 py-3 rounded-xl border ${
                           errors.phone ? 'border-red-300 bg-red-50' : 'border-gray-200'
                         } focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors`}
                       />
                     </div>
                     {errors.phone && (
-                      <p className="mt-1 text-sm text-red-600">{errors.phone}</p>
+                      <p id="quote-phone-error" className="mt-1 text-sm text-red-600" role="alert">{errors.phone}</p>
                     )}
                   </div>
 
                   {/* Address */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                    <label htmlFor="quote-address" className="block text-sm font-medium text-gray-700 mb-1.5">
                       Adresse d'intervention
                     </label>
                     <div className="relative">
-                      <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" aria-hidden="true" />
                       <input
+                        id="quote-address"
                         type="text"
                         value={formData.address}
                         onChange={(e) => handleChange('address', e.target.value)}
@@ -260,11 +284,11 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                   </div>
 
                   {/* Urgency */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                  <fieldset>
+                    <legend className="block text-sm font-medium text-gray-700 mb-1.5">
                       Delai souhaite
-                    </label>
-                    <div className="grid grid-cols-3 gap-2">
+                    </legend>
+                    <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Delai souhaite">
                       {[
                         { value: 'urgent', label: 'Urgent', sublabel: '< 48h' },
                         { value: 'normal', label: 'Normal', sublabel: '1-2 sem' },
@@ -273,8 +297,10 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                         <button
                           key={option.value}
                           type="button"
+                          role="radio"
+                          aria-checked={formData.urgency === option.value}
                           onClick={() => handleChange('urgency', option.value)}
-                          className={`p-3 rounded-xl border-2 text-center transition-all ${
+                          className={`p-3 rounded-xl border-2 text-center transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 ${
                             formData.urgency === option.value
                               ? 'border-blue-500 bg-blue-50 text-blue-700'
                               : 'border-gray-200 hover:border-gray-300'
@@ -285,29 +311,34 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                         </button>
                       ))}
                     </div>
-                  </div>
+                  </fieldset>
 
                   {/* Description */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                      Decrivez votre besoin *
+                    <label htmlFor="quote-description" className="block text-sm font-medium text-gray-700 mb-1.5">
+                      Decrivez votre besoin <span aria-hidden="true">*</span>
+                      <span className="sr-only">(requis)</span>
                     </label>
                     <div className="relative">
-                      <FileText className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                      <FileText className="absolute left-3 top-3 w-5 h-5 text-gray-400" aria-hidden="true" />
                       <textarea
+                        id="quote-description"
                         value={formData.description}
                         onChange={(e) => handleChange('description', e.target.value)}
                         placeholder="Decrivez les travaux souhaites, le contexte, les contraintes eventuelles..."
                         rows={4}
+                        aria-required="true"
+                        aria-invalid={!!errors.description}
+                        aria-describedby={errors.description ? 'quote-description-error' : 'quote-description-hint'}
                         className={`w-full pl-10 pr-4 py-3 rounded-xl border ${
                           errors.description ? 'border-red-300 bg-red-50' : 'border-gray-200'
                         } focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none`}
                       />
                     </div>
                     {errors.description && (
-                      <p className="mt-1 text-sm text-red-600">{errors.description}</p>
+                      <p id="quote-description-error" className="mt-1 text-sm text-red-600" role="alert">{errors.description}</p>
                     )}
-                    <p className="mt-1 text-xs text-gray-500">
+                    <p id="quote-description-hint" className="mt-1 text-xs text-gray-500">
                       {formData.description.length}/500 caracteres
                     </p>
                   </div>
@@ -318,17 +349,18 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                     disabled={isSubmitting}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-green-600 to-green-700 text-white font-semibold flex items-center justify-center gap-2 shadow-lg shadow-green-500/25 hover:shadow-green-500/40 transition-shadow disabled:opacity-70 disabled:cursor-not-allowed"
+                    className="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-green-600 to-green-700 text-white font-semibold flex items-center justify-center gap-2 shadow-lg shadow-green-500/25 hover:shadow-green-500/40 transition-shadow disabled:opacity-70 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                    aria-busy={isSubmitting}
                   >
                     {isSubmitting ? (
                       <>
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                        Envoi en cours...
+                        <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
+                        <span>Envoi en cours...</span>
                       </>
                     ) : (
                       <>
-                        <Send className="w-5 h-5" />
-                        Envoyer ma demande
+                        <Send className="w-5 h-5" aria-hidden="true" />
+                        <span>Envoyer ma demande</span>
                       </>
                     )}
                   </motion.button>

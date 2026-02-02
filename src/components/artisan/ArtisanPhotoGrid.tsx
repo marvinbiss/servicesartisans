@@ -179,9 +179,10 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => openLightbox(0)}
-          className="absolute bottom-4 right-4 px-4 py-2 bg-white rounded-lg font-medium text-sm text-gray-900 shadow-lg flex items-center gap-2 hover:bg-gray-50 transition-colors"
+          className="absolute bottom-4 right-4 px-4 py-2 bg-white rounded-lg font-medium text-sm text-gray-900 shadow-lg flex items-center gap-2 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          aria-label={`Voir les ${photos.length} photos en plein ecran`}
         >
-          <Grid3X3 className="w-4 h-4" />
+          <Grid3X3 className="w-4 h-4" aria-hidden="true" />
           Voir les {photos.length} photos
         </motion.button>
       </motion.div>
@@ -197,19 +198,23 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
             onClick={closeLightbox}
             onKeyDown={handleKeyDown}
             tabIndex={0}
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Galerie photo - Image ${currentIndex + 1} sur ${photos.length}`}
           >
             {/* Close button */}
             <motion.button
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="absolute top-4 right-4 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10"
+              className="absolute top-4 right-4 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10 focus:outline-none focus:ring-2 focus:ring-white"
               onClick={closeLightbox}
+              aria-label="Fermer la galerie"
             >
-              <X className="w-6 h-6 text-white" />
+              <X className="w-6 h-6 text-white" aria-hidden="true" />
             </motion.button>
 
             {/* Counter */}
-            <div className="absolute top-4 left-4 text-white text-sm font-medium bg-black/50 px-3 py-1.5 rounded-full">
+            <div className="absolute top-4 left-4 text-white text-sm font-medium bg-black/50 px-3 py-1.5 rounded-full" aria-live="polite">
               {currentIndex + 1} / {photos.length}
             </div>
 
@@ -217,19 +222,21 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
             <motion.button
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="absolute left-4 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10"
+              className="absolute left-4 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10 focus:outline-none focus:ring-2 focus:ring-white"
               onClick={(e) => { e.stopPropagation(); goToPrevious(); }}
+              aria-label="Photo precedente"
             >
-              <ChevronLeft className="w-8 h-8 text-white" />
+              <ChevronLeft className="w-8 h-8 text-white" aria-hidden="true" />
             </motion.button>
 
             <motion.button
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="absolute right-4 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10"
+              className="absolute right-4 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10 focus:outline-none focus:ring-2 focus:ring-white"
               onClick={(e) => { e.stopPropagation(); goToNext(); }}
+              aria-label="Photo suivante"
             >
-              <ChevronRight className="w-8 h-8 text-white" />
+              <ChevronRight className="w-8 h-8 text-white" aria-hidden="true" />
             </motion.button>
 
             {/* Main image */}
