@@ -80,9 +80,9 @@ function getSlotDate(slot: BookingSlot | BookingSlot[] | null): string | null {
   return slotData?.date || null
 }
 
-// Query schema for GET request
+// Query schema for GET request - require full UUID for bookingId to prevent enumeration
 const getQuerySchema = z.object({
-  bookingId: z.string().min(8).max(36).optional(),
+  bookingId: z.string().uuid('ID de réservation invalide').optional(),
   artisanId: z.string().uuid().optional(),
 }).refine(data => data.bookingId || data.artisanId, {
   message: 'bookingId ou artisanId requis',
@@ -113,9 +113,9 @@ export async function GET(request: Request) {
     const { bookingId, artisanId } = queryValidation.data
     const supabase = getSupabaseClient()
 
-    // Get booking info for review submission
+    // Get booking info for review submission - use exact match to prevent enumeration
     if (bookingId) {
-      const { data: bookings, error } = await supabase
+      const { data: booking, error } = await supabase
         .from('bookings')
         .select(`
           id,
@@ -125,39 +125,32 @@ export async function GET(request: Request) {
           slot:availability_slots(date),
           artisan:profiles!bookings_artisan_id_fkey(full_name, company_name, business_name, first_name, last_name)
         `)
-        .ilike('id', `${bookingId}%`)
-        .limit(1)
+        .eq('id', bookingId)
+        .single()
 
-      if (error) {
-        logger.error('Database error:', error)
-        return NextResponse.json(
-          createErrorResponse(ErrorCode.DATABASE_ERROR, 'Erreur lors de la recherche de la reservation'),
-          { status: 500 }
-        )
-      }
-
-      if (!bookings || bookings.length === 0) {
+      if (error || !booking) {
+        // Don't reveal whether the booking exists or not to prevent enumeration
         return NextResponse.json(
           createErrorResponse(ErrorCode.NOT_FOUND, 'Reservation non trouvee'),
           { status: 404 }
         )
       }
 
-      const booking = bookings[0] as BookingWithRelations
+      const typedBooking = booking as BookingWithRelations
 
       // Check if already reviewed
       const { data: existingReview } = await supabase
         .from('reviews')
         .select('id')
-        .eq('booking_id', booking.id)
+        .eq('booking_id', typedBooking.id)
         .single()
 
-      const slotDate = getSlotDate(booking.slot)
+      const slotDate = getSlotDate(typedBooking.slot)
 
       return NextResponse.json(
         createSuccessResponse({
-          artisanName: getArtisanDisplayName(booking.artisan),
-          serviceName: booking.service_description || 'Service',
+          artisanName: getArtisanDisplayName(typedBooking.artisan),
+          serviceName: typedBooking.service_description || 'Service',
           date: slotDate
             ? new Date(slotDate).toLocaleDateString('fr-FR', {
                 day: 'numeric',
@@ -263,31 +256,31 @@ export async function POST(request: Request) {
     const { bookingId, rating, comment } = validation.data
     const wouldRecommend = body.wouldRecommend ?? true
 
-    const supabase = getSupabaseClient()
-
-    // Find the booking
-    const { data: bookings, error: bookingError } = await supabase
-      .from('bookings')
-      .select('id, artisan_id, client_name, client_email, status')
-      .ilike('id', `${bookingId}%`)
-      .limit(1)
-
-    if (bookingError) {
-      logger.error('Database error:', bookingError)
+    // Validate bookingId is a valid UUID to prevent enumeration
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+    if (!uuidRegex.test(bookingId)) {
       return NextResponse.json(
-        createErrorResponse(ErrorCode.DATABASE_ERROR, 'Erreur lors de la recherche de la reservation'),
-        { status: 500 }
+        createErrorResponse(ErrorCode.VALIDATION_ERROR, 'ID de réservation invalide'),
+        { status: 400 }
       )
     }
 
-    if (!bookings || bookings.length === 0) {
+    const supabase = getSupabaseClient()
+
+    // Find the booking using exact match to prevent enumeration
+    const { data: booking, error: bookingError } = await supabase
+      .from('bookings')
+      .select('id, artisan_id, client_name, client_email, status')
+      .eq('id', bookingId)
+      .single()
+
+    if (bookingError || !booking) {
+      // Generic error to prevent enumeration
       return NextResponse.json(
         createErrorResponse(ErrorCode.NOT_FOUND, 'Reservation non trouvee'),
         { status: 404 }
       )
     }
-
-    const booking = bookings[0]
 
     // Check booking status
     if (!['confirmed', 'completed'].includes(booking.status)) {

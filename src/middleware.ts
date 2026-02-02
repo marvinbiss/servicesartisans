@@ -10,6 +10,9 @@ const RATE_LIMITS = {
   api: { window: 60 * 1000, max: 60 }, // 60 requests per minute for general API
   booking: { window: 60 * 1000, max: 30 }, // 30 requests per minute for bookings
   payment: { window: 60 * 1000, max: 10 }, // 10 requests per minute for payments
+  reviews: { window: 60 * 1000, max: 5 }, // 5 requests per minute for reviews (prevent spam)
+  devis: { window: 60 * 1000, max: 10 }, // 10 requests per minute for devis requests
+  contact: { window: 300 * 1000, max: 3 }, // 3 requests per 5 minutes for contact
   default: { window: 60 * 1000, max: 100 }, // 100 requests per minute default
 }
 
@@ -17,6 +20,9 @@ function getRateLimitConfig(pathname: string) {
   if (pathname.startsWith('/api/auth')) return RATE_LIMITS.auth
   if (pathname.startsWith('/api/payments') || pathname.startsWith('/api/stripe')) return RATE_LIMITS.payment
   if (pathname.startsWith('/api/bookings')) return RATE_LIMITS.booking
+  if (pathname.startsWith('/api/reviews')) return RATE_LIMITS.reviews
+  if (pathname.startsWith('/api/devis') || pathname.startsWith('/api/artisan/devis')) return RATE_LIMITS.devis
+  if (pathname.startsWith('/api/contact')) return RATE_LIMITS.contact
   if (pathname.startsWith('/api/')) return RATE_LIMITS.api
   return RATE_LIMITS.default
 }

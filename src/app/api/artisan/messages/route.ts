@@ -50,7 +50,8 @@ export async function GET(request: Request) {
     }
 
     if (conversationWith) {
-      // Fetch specific conversation messages
+      // Fetch specific conversation messages between current user and the other user
+      // Using proper AND/OR logic: messages where user and conversationWith are both participants
       const { data: messages, error: messagesError } = await supabase
         .from('messages')
         .select(`
@@ -58,8 +59,7 @@ export async function GET(request: Request) {
           sender:profiles!sender_id(id, full_name, avatar_url),
           receiver:profiles!receiver_id(id, full_name, avatar_url)
         `)
-        .or(`sender_id.eq.${user.id},receiver_id.eq.${user.id}`)
-        .or(`sender_id.eq.${conversationWith},receiver_id.eq.${conversationWith}`)
+        .or(`and(sender_id.eq.${user.id},receiver_id.eq.${conversationWith}),and(sender_id.eq.${conversationWith},receiver_id.eq.${user.id})`)
         .order('created_at', { ascending: true })
 
       if (messagesError) {

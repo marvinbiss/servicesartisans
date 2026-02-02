@@ -34,9 +34,29 @@ const updateProviderSchema = z.object({
 
 export const dynamic = 'force-dynamic'
 
-// Simple console logger for debugging
+// Conditional logger - only logs in development to prevent sensitive data exposure
 const log = (level: string, message: string, data?: unknown) => {
-  console.log(`[${new Date().toISOString()}] [${level}] ${message}`, data ? JSON.stringify(data, null, 2) : '')
+  if (process.env.NODE_ENV === 'development') {
+    // Sanitize sensitive data before logging
+    const sanitizedData = data ? sanitizeForLogging(data) : undefined
+    console.log(`[${new Date().toISOString()}] [${level}] ${message}`, sanitizedData ? JSON.stringify(sanitizedData, null, 2) : '')
+  }
+}
+
+// Remove sensitive fields from logging
+function sanitizeForLogging(data: unknown): unknown {
+  if (typeof data !== 'object' || data === null) return data
+
+  const sensitiveFields = ['password', 'token', 'secret', 'apiKey', 'email', 'phone', 'siret', 'siren']
+  const sanitized = { ...data as Record<string, unknown> }
+
+  for (const field of sensitiveFields) {
+    if (field in sanitized) {
+      sanitized[field] = '[REDACTED]'
+    }
+  }
+
+  return sanitized
 }
 
 // GET - Récupérer un provider complet

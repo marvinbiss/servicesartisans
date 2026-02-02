@@ -1,5 +1,13 @@
 import Script from 'next/script'
 
+// Safely escape JSON for script tags to prevent XSS
+function safeJsonStringify(data: unknown): string {
+  return JSON.stringify(data)
+    .replace(/</g, '\\u003c')
+    .replace(/>/g, '\\u003e')
+    .replace(/&/g, '\\u0026')
+}
+
 interface LocalBusinessSchema {
   type: 'LocalBusiness'
   name: string
@@ -179,7 +187,7 @@ export function SchemaOrg({ schema }: SchemaOrgProps) {
     <Script
       id="schema-org"
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      dangerouslySetInnerHTML={{ __html: safeJsonStringify(jsonLd) }}
     />
   )
 }

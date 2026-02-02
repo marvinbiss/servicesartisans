@@ -12,6 +12,14 @@ import { PopularServicesLinks } from '@/components/InternalLinks'
 import { popularServices, popularCities } from '@/lib/constants/navigation'
 import Link from 'next/link'
 
+// Safely escape JSON for script tags to prevent XSS
+function safeJsonStringify(data: unknown): string {
+  return JSON.stringify(data)
+    .replace(/</g, '\\u003c')
+    .replace(/>/g, '\\u003e')
+    .replace(/&/g, '\\u0026')
+}
+
 // ISR: Revalidate every 15 minutes for service+location pages
 export const revalidate = REVALIDATE.serviceLocation
 
@@ -164,7 +172,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         <script
           key={index}
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+          dangerouslySetInnerHTML={{ __html: safeJsonStringify(schema) }}
         />
       ))}
 
