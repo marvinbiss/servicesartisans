@@ -8,10 +8,9 @@ import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 
-// Admin email whitelist (fallback when profiles table doesn't exist)
-const ADMIN_EMAILS = [
-  'marvin.bissohong@yeoskin.com',
-]
+// Admin email whitelist from environment variable (fallback when profiles table doesn't exist)
+// Set ADMIN_EMAILS in .env.local as comma-separated list: admin1@example.com,admin2@example.com
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || '').split(',').filter(email => email.trim().length > 0)
 
 export type AdminRole = 'super_admin' | 'admin' | 'moderator'
 

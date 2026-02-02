@@ -1,19 +1,17 @@
 import { NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
+
+// Booking ID schema - must be valid UUID
+const bookingIdSchema = z.string().uuid('ID de réservation invalide')
 
 // PATCH request schema
 const bookingPatchSchema = z.object({
   status: z.enum(['confirmed', 'completed', 'cancelled', 'no_show']).optional(),
   notes: z.string().max(1000).optional(),
 })
-
-// Use service role for booking access (allows partial ID lookup)
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
 
 // GET /api/bookings/[id] - Get booking details
 export const dynamic = 'force-dynamic'
@@ -25,8 +23,24 @@ export async function GET(
   try {
     const bookingId = params.id
 
-    // Build query - support both full UUID and partial ID (first 8 chars)
-    let query = supabase
+    // Validate booking ID format (must be full UUID)
+    const idValidation = bookingIdSchema.safeParse(bookingId)
+    if (!idValidation.success) {
+      return NextResponse.json(
+        { error: 'ID de réservation invalide' },
+        { status: 400 }
+      )
+    }
+
+    // Get authenticated user (optional for booking lookup by ID)
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    // Use admin client for booking lookup
+    const adminSupabase = createAdminClient()
+
+    // Query booking by exact ID only (no partial matching for security)
+    const { data: booking, error } = await adminSupabase
       .from('bookings')
       .select(`
         id,
@@ -42,6 +56,7 @@ export async function GET(
         rescheduled_at,
         payment_status,
         deposit_amount,
+        user_id,
         slot:availability_slots(
           id,
           date,
@@ -50,38 +65,47 @@ export async function GET(
           artisan_id
         )
       `)
+      .eq('id', bookingId)
+      .single()
 
-    // Check if it's a partial ID (8 chars) or full UUID (36 chars)
-    if (bookingId.length < 36) {
-      query = query.ilike('id', `${bookingId}%`)
-    } else {
-      query = query.eq('id', bookingId)
-    }
-
-    const { data: bookings, error } = await query.limit(1)
-
-    if (error) {
-      logger.error('Booking fetch error:', error)
-      throw error
-    }
-
-    if (!bookings || bookings.length === 0) {
+    if (error || !booking) {
       return NextResponse.json(
         { error: 'Réservation introuvable' },
         { status: 404 }
       )
     }
 
-    const booking = bookings[0]
     const slotData = booking.slot as Array<{ id: string; date: string; start_time: string; end_time: string; artisan_id: string }> | null
     const slot = slotData?.[0] || null
 
-    // Fetch artisan details
-    const { data: artisan } = await supabase
-      .from('profiles')
-      .select('id, full_name, company_name, phone, email, address, city, avatar_url')
-      .eq('id', slot?.artisan_id)
-      .single()
+    // Security check: If user is authenticated, verify they have access to this booking
+    // (either as the client who made it, or as the artisan)
+    if (user) {
+      const isOwner = booking.user_id === user.id
+      const isArtisan = slot?.artisan_id === user.id
+
+      // For authenticated users, they must be the owner or the artisan
+      if (!isOwner && !isArtisan) {
+        // Check if user email matches booking email (for non-registered users who made booking)
+        if (user.email?.toLowerCase() !== booking.client_email?.toLowerCase()) {
+          return NextResponse.json(
+            { error: 'Accès non autorisé à cette réservation' },
+            { status: 403 }
+          )
+        }
+      }
+    }
+
+    // Fetch artisan details (limited info for non-owners)
+    let artisan = null
+    if (slot?.artisan_id) {
+      const { data: artisanData } = await adminSupabase
+        .from('profiles')
+        .select('id, full_name, company_name, phone, email, address, city, avatar_url')
+        .eq('id', slot.artisan_id)
+        .single()
+      artisan = artisanData
+    }
 
     // Format response for confirmation page
     return NextResponse.json({
@@ -136,19 +160,68 @@ export async function PATCH(
 ) {
   try {
     const bookingId = params.id
+
+    // Validate booking ID format
+    const idValidation = bookingIdSchema.safeParse(bookingId)
+    if (!idValidation.success) {
+      return NextResponse.json(
+        { error: 'ID de réservation invalide' },
+        { status: 400 }
+      )
+    }
+
+    // Verify authentication
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+      return NextResponse.json(
+        { error: 'Authentification requise' },
+        { status: 401 }
+      )
+    }
+
     const body = await request.json()
     const result = bookingPatchSchema.safeParse(body)
     if (!result.success) {
-      return NextResponse.json({ error: 'Invalid request', details: result.error.flatten() }, { status: 400 })
+      return NextResponse.json({ error: 'Requête invalide', details: result.error.flatten() }, { status: 400 })
     }
     const { status, notes } = result.data
+
+    // Verify user has access to this booking
+    const adminSupabase = createAdminClient()
+    const { data: existingBooking, error: fetchError } = await adminSupabase
+      .from('bookings')
+      .select('id, user_id, client_email, slot:availability_slots(artisan_id)')
+      .eq('id', bookingId)
+      .single()
+
+    if (fetchError || !existingBooking) {
+      return NextResponse.json(
+        { error: 'Réservation introuvable' },
+        { status: 404 }
+      )
+    }
+
+    // Check authorization: must be owner or artisan
+    const slotData = existingBooking.slot as Array<{ artisan_id: string }> | null
+    const isOwner = existingBooking.user_id === user.id
+    const isArtisan = slotData?.[0]?.artisan_id === user.id
+    const isEmailMatch = user.email?.toLowerCase() === existingBooking.client_email?.toLowerCase()
+
+    if (!isOwner && !isArtisan && !isEmailMatch) {
+      return NextResponse.json(
+        { error: 'Vous n\'êtes pas autorisé à modifier cette réservation' },
+        { status: 403 }
+      )
+    }
 
     const updateData: Record<string, string | undefined> = {}
     if (status) updateData.status = status
     if (notes !== undefined) updateData.notes = notes
     updateData.updated_at = new Date().toISOString()
 
-    const { data, error } = await supabase
+    const { data, error } = await adminSupabase
       .from('bookings')
       .update(updateData)
       .eq('id', bookingId)

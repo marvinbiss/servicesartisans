@@ -49,6 +49,14 @@ export async function GET() {
       )
     }
 
+    // Verify user is a client (not artisan)
+    if (profile.user_type === 'artisan') {
+      return NextResponse.json(
+        { error: 'Accès réservé aux clients. Utilisez /api/artisan/profile pour les artisans.' },
+        { status: 403 }
+      )
+    }
+
     return NextResponse.json({ profile })
   } catch (error) {
     logger.error('Profile GET error:', error)
@@ -70,6 +78,27 @@ export async function PUT(request: Request) {
       return NextResponse.json(
         { error: 'Non authentifié' },
         { status: 401 }
+      )
+    }
+
+    // Verify user is a client (not artisan) before allowing update
+    const { data: existingProfile, error: profileFetchError } = await supabase
+      .from('profiles')
+      .select('user_type')
+      .eq('id', user.id)
+      .single()
+
+    if (profileFetchError || !existingProfile) {
+      return NextResponse.json(
+        { error: 'Profil introuvable' },
+        { status: 404 }
+      )
+    }
+
+    if (existingProfile.user_type === 'artisan') {
+      return NextResponse.json(
+        { error: 'Accès réservé aux clients. Utilisez /api/artisan/profile pour les artisans.' },
+        { status: 403 }
       )
     }
 

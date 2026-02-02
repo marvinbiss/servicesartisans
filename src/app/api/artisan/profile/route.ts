@@ -85,6 +85,27 @@ export async function PUT(request: Request) {
       )
     }
 
+    // Verify user is an artisan before allowing profile update
+    const { data: existingProfile, error: profileFetchError } = await supabase
+      .from('profiles')
+      .select('user_type')
+      .eq('id', user.id)
+      .single()
+
+    if (profileFetchError || !existingProfile) {
+      return NextResponse.json(
+        { error: 'Profil introuvable' },
+        { status: 404 }
+      )
+    }
+
+    if (existingProfile.user_type !== 'artisan') {
+      return NextResponse.json(
+        { error: 'Accès réservé aux artisans' },
+        { status: 403 }
+      )
+    }
+
     // Parse request body
     const body = await request.json()
     const result = updateProfileSchema.safeParse(body)

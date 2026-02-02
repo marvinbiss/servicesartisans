@@ -2,10 +2,9 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { AdminSidebar } from '@/components/admin/sidebar'
 
-// Admin email whitelist (temporary until profiles table is set up)
-const ADMIN_EMAILS = [
-  'marvin.bissohong@yeoskin.com',
-]
+// Admin email whitelist from environment variable
+// Set ADMIN_EMAILS in .env.local as comma-separated list
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || '').split(',').filter(email => email.trim().length > 0)
 
 export default async function AdminDashboardLayout({
   children,

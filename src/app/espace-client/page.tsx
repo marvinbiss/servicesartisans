@@ -40,6 +40,7 @@ const statusConfig: Record<string, { label: string; color: string; icon?: React.
 
 export default function EspaceClientPage() {
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [profile, setProfile] = useState<Profile | null>(null)
   const [demandes, setDemandes] = useState<Demande[]>([])
   const [stats, setStats] = useState<Stats | null>(null)
@@ -50,6 +51,7 @@ export default function EspaceClientPage() {
 
   const fetchData = async () => {
     try {
+      setError(null)
       // Fetch profile and demandes in parallel
       const [profileRes, demandesRes] = await Promise.all([
         fetch('/api/client/profile'),
@@ -59,6 +61,10 @@ export default function EspaceClientPage() {
       if (profileRes.ok) {
         const profileData = await profileRes.json()
         setProfile(profileData.profile)
+      } else if (profileRes.status === 401) {
+        // User is not authenticated, redirect to login
+        window.location.href = '/connexion?redirect=/espace-client'
+        return
       }
 
       if (demandesRes.ok) {
@@ -66,20 +72,43 @@ export default function EspaceClientPage() {
         setDemandes(demandesData.demandes || [])
         setStats(demandesData.stats)
       }
-    } catch (error) {
-      console.error('Error fetching data:', error)
+    } catch (err) {
+      console.error('Error fetching data:', err)
+      setError('Erreur lors du chargement des données. Veuillez réessayer.')
     } finally {
       setLoading(false)
     }
   }
 
   const displayName = profile?.full_name || 'Bienvenue'
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
           <p className="text-gray-600">Chargement...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center p-8 bg-white rounded-xl shadow-sm max-w-md">
+          <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Erreur</h2>
+          <p className="text-gray-600 mb-6">{error}</p>
+          <button
+            onClick={() => {
+              setLoading(true)
+              fetchData()
+            }}
+            className="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+          >
+            Réessayer
+          </button>
         </div>
       </div>
     )

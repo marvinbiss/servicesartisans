@@ -12,7 +12,7 @@ import { z } from 'zod'
 // POST request schema
 const createDevisSchema = z.object({
   devis_request_id: z.string().uuid(),
-  amount: z.number().positive().max(1000000),
+  amount: z.number().positive().min(10).max(1000000), // Minimum 10€
   description: z.string().max(2000).optional(),
   validity_days: z.number().int().min(1).max(365).optional().default(30),
   items: z.array(z.object({
@@ -130,10 +130,10 @@ export async function POST(request: Request) {
     }
     const { devis_request_id, amount, description, validity_days, items } = result.data
 
-    // Verify the devis_request exists
+    // Verify the devis_request exists and is assigned to this artisan
     const { data: devisRequest } = await supabase
       .from('devis_requests')
-      .select('id, client_id, client_email, client_name, service_name')
+      .select('id, client_id, client_email, client_name, service_name, artisan_id, status')
       .eq('id', devis_request_id)
       .single()
 
@@ -141,6 +141,30 @@ export async function POST(request: Request) {
       return NextResponse.json(
         { error: 'Demande de devis non trouvée' },
         { status: 404 }
+      )
+    }
+
+    // Verify this artisan is the intended recipient of the request
+    // artisan_id can be null for public requests that any artisan can respond to
+    if (devisRequest.artisan_id && devisRequest.artisan_id !== user.id) {
+      return NextResponse.json(
+        { error: 'Cette demande de devis n\'est pas destinée à votre compte' },
+        { status: 403 }
+      )
+    }
+
+    // Check if a devis was already sent for this request by this artisan
+    const { data: existingDevis } = await supabase
+      .from('devis')
+      .select('id')
+      .eq('devis_request_id', devis_request_id)
+      .eq('artisan_id', user.id)
+      .single()
+
+    if (existingDevis) {
+      return NextResponse.json(
+        { error: 'Vous avez déjà envoyé un devis pour cette demande' },
+        { status: 409 }
       )
     }
 
