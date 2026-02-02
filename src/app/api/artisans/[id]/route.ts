@@ -7,9 +7,16 @@ import { NextRequest, NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getDepartmentName, getRegionName, getDeptCodeFromPostal } from '@/lib/geography'
+import { z } from 'zod'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0 // Ensure no caching
+
+// Schema for artisan ID (UUID or slug)
+const artisanIdSchema = z.string().min(1).max(255).regex(
+  /^[a-zA-Z0-9-]+$/,
+  'ID artisan invalide'
+)
 
 // Photos de démonstration par catégorie de métier
 const DEMO_PHOTOS: Record<string, string[]> = {
@@ -214,8 +221,24 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
+    // Validate artisan ID parameter
+    const idValidation = artisanIdSchema.safeParse(params.id)
+    if (!idValidation.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: {
+            code: 'VALIDATION_ERROR',
+            message: 'ID artisan invalide',
+            details: idValidation.error.flatten()
+          }
+        },
+        { status: 400 }
+      )
+    }
+
     const supabase = createAdminClient()
-    const artisanId = params.id
+    const artisanId = idValidation.data
 
     console.log(`[Public API v2] Fetching artisan: ${artisanId} at ${new Date().toISOString()}`)
 
