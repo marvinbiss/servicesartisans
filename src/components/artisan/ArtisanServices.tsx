@@ -17,19 +17,20 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
       className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6"
     >
       <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
-        <Wrench className="w-5 h-5 text-blue-600" />
+        <Wrench className="w-5 h-5 text-blue-600" aria-hidden="true" />
         Services et Tarifs
       </h2>
 
       {/* Services tags */}
       {artisan.services.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-6">
+        <div className="flex flex-wrap gap-2 mb-6" role="list" aria-label="Services proposes">
           {artisan.services.map((service, i) => (
             <span
               key={i}
+              role="listitem"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-100 text-gray-700 text-sm font-medium"
             >
-              <CheckCircle className="w-3.5 h-3.5 text-green-500" />
+              <CheckCircle className="w-3.5 h-3.5 text-green-500" aria-hidden="true" />
               {service}
             </span>
           ))}
@@ -38,10 +39,11 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
 
       {/* Pricing table */}
       {artisan.service_prices.length > 0 && (
-        <div className="space-y-3">
+        <div className="space-y-3" role="list" aria-label="Tarifs des services">
           {artisan.service_prices.map((service, index) => (
             <motion.div
               key={index}
+              role="listitem"
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3, delay: 0.1 + index * 0.05 }}
@@ -58,14 +60,14 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
 
               <div className="flex items-center gap-4 ml-4">
                 {service.duration && (
-                  <div className="flex items-center gap-1 text-sm text-gray-500">
-                    <Clock className="w-4 h-4" />
-                    {service.duration}
+                  <div className="flex items-center gap-1 text-sm text-gray-500" aria-label={`Duree: ${service.duration}`}>
+                    <Clock className="w-4 h-4" aria-hidden="true" />
+                    <span>{service.duration}</span>
                   </div>
                 )}
-                <div className="flex items-center gap-1 text-lg font-bold text-blue-600 whitespace-nowrap">
-                  <Euro className="w-4 h-4" />
-                  {service.price}
+                <div className="flex items-center gap-1 text-lg font-bold text-blue-600 whitespace-nowrap" aria-label={`Prix: ${service.price} euros`}>
+                  <Euro className="w-4 h-4" aria-hidden="true" />
+                  <span>{service.price}</span>
                 </div>
               </div>
             </motion.div>
@@ -87,10 +89,11 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
       {artisan.payment_methods && artisan.payment_methods.length > 0 && (
         <div className="mt-6 pt-6 border-t border-gray-100">
           <h3 className="text-sm font-medium text-gray-700 mb-3">Moyens de paiement acceptes</h3>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2" role="list" aria-label="Moyens de paiement">
             {artisan.payment_methods.map((method, i) => (
               <span
                 key={i}
+                role="listitem"
                 className="px-3 py-1 rounded-lg bg-gray-100 text-gray-600 text-sm"
               >
                 {method}
