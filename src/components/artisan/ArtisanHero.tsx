@@ -2,8 +2,13 @@
 
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { Star, MapPin, CheckCircle, Shield, Zap, Users, Clock, BadgeCheck } from 'lucide-react'
+import { Star, MapPin, CheckCircle, Shield, Zap, Users, Clock, Award } from 'lucide-react'
 import { Artisan, getDisplayName } from './types'
+import {
+  VerificationLevelBadge,
+  TrustScore,
+  VerifiedBadge,
+} from '@/components/reviews/VerifiedBadge'
 
 interface ArtisanHeroProps {
   artisan: Artisan
@@ -12,8 +17,39 @@ interface ArtisanHeroProps {
 // Blur placeholder for avatar
 const BLUR_DATA_URL = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAn/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBEQCEAwEPwAB//9k='
 
+// Determine verification level based on artisan data
+function getVerificationLevel(artisan: Artisan): 'none' | 'basic' | 'standard' | 'premium' | 'enterprise' {
+  if (artisan.is_premium && artisan.is_verified && artisan.insurance && artisan.insurance.length > 0) {
+    return 'premium'
+  }
+  if (artisan.is_verified && artisan.insurance && artisan.insurance.length > 0) {
+    return 'standard'
+  }
+  if (artisan.is_verified) {
+    return 'basic'
+  }
+  return 'none'
+}
+
+// Calculate trust score based on artisan data
+function calculateTrustScore(artisan: Artisan): number {
+  let score = 30 // Base score
+
+  if (artisan.is_verified) score += 20
+  if (artisan.insurance && artisan.insurance.length > 0) score += 15
+  if (artisan.certifications && artisan.certifications.length > 0) score += 10
+  if (artisan.is_premium) score += 10
+  if ((artisan.response_rate || 0) >= 90) score += 5
+  if (artisan.review_count > 50) score += 5
+  if (artisan.average_rating >= 4.5) score += 5
+
+  return Math.min(score, 100)
+}
+
 export function ArtisanHero({ artisan }: ArtisanHeroProps) {
   const displayName = getDisplayName(artisan)
+  const verificationLevel = getVerificationLevel(artisan)
+  const trustScore = calculateTrustScore(artisan)
 
   return (
     <motion.div
@@ -57,20 +93,15 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
 
         {/* Info */}
         <div className="flex-1 min-w-0">
-          {/* Badges */}
+          {/* Top Badges Row */}
           <div className="flex flex-wrap gap-2 mb-3" role="list" aria-label="Badges et certifications">
             {artisan.is_premium && (
               <span role="listitem" className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 text-white text-xs font-semibold shadow-sm">
-                <Zap className="w-3.5 h-3.5" aria-hidden="true" />
+                <Award className="w-3.5 h-3.5" aria-hidden="true" />
                 Premium
               </span>
             )}
-            {artisan.is_verified && (
-              <span role="listitem" className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">
-                <BadgeCheck className="w-3.5 h-3.5" aria-hidden="true" />
-                SIRET Verifie
-              </span>
-            )}
+            <VerificationLevelBadge level={verificationLevel} size="sm" />
             {artisan.emergency_available && (
               <span role="listitem" className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-semibold">
                 <Zap className="w-3.5 h-3.5" aria-hidden="true" />
@@ -100,7 +131,20 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
             )}
           </div>
 
-          {/* Rating */}
+          {/* Verification Badges Row */}
+          <div className="flex flex-wrap gap-2 mb-4">
+            {artisan.is_verified && (
+              <VerifiedBadge type="identity" size="sm" />
+            )}
+            {artisan.insurance && artisan.insurance.length > 0 && (
+              <VerifiedBadge type="insurance" size="sm" />
+            )}
+            {artisan.certifications && artisan.certifications.length > 0 && (
+              <VerifiedBadge type="certification" size="sm" />
+            )}
+          </div>
+
+          {/* Rating & Stats Row */}
           <div className="flex items-center gap-4 flex-wrap">
             <div className="flex items-center gap-2" role="group" aria-label="Note moyenne">
               <div className="flex items-center gap-1 bg-amber-50 px-3 py-1.5 rounded-lg">
@@ -127,6 +171,11 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
                 <span>Equipe de {artisan.team_size}</span>
               </div>
             )}
+          </div>
+
+          {/* Trust Score */}
+          <div className="mt-4 pt-4 border-t border-gray-100">
+            <TrustScore score={trustScore} size="md" />
           </div>
         </div>
       </div>

@@ -1,21 +1,9 @@
 import { Metadata } from 'next'
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import {
-  MapPin,
-  Phone,
-  Globe,
-  Mail,
-  Star,
-  BadgeCheck,
-  Award,
-  ArrowLeft,
-  Share2,
-  Heart,
-  Clock,
-} from 'lucide-react'
 import { getProviderBySlug, getServiceBySlug, getLocationBySlug } from '@/lib/supabase'
-import BookingCalendar from '@/components/BookingCalendar'
+import { createClient } from '@/lib/supabase/server'
+import ArtisanPageClient from '@/app/services/artisan/[id]/ArtisanPageClient'
+import { Artisan, Review } from '@/components/artisan'
 
 interface PageProps {
   params: Promise<{
@@ -23,6 +11,96 @@ interface PageProps {
     location: string
     provider: string
   }>
+}
+
+// Convert provider data to Artisan format
+function convertToArtisan(provider: any, service: any, location: any): Artisan {
+  return {
+    id: provider.id,
+    business_name: provider.name || provider.business_name,
+    first_name: provider.first_name || null,
+    last_name: provider.last_name || null,
+    avatar_url: provider.avatar_url || provider.logo_url || null,
+    city: location?.name || provider.address_city || '',
+    postal_code: provider.address_postal_code || '',
+    address: provider.address_street || '',
+    specialty: service?.name || provider.specialty || 'Artisan',
+    description: provider.description || provider.bio || null,
+    average_rating: provider.rating_average || provider.average_rating || 4.5,
+    review_count: provider.review_count || 0,
+    hourly_rate: provider.hourly_rate_min || provider.hourly_rate || undefined,
+    is_verified: provider.is_verified || false,
+    is_premium: provider.is_premium || false,
+    is_center: provider.is_center || false,
+    team_size: provider.team_size || undefined,
+    services: provider.services || [],
+    service_prices: provider.service_prices || [],
+    accepts_new_clients: provider.accepts_new_clients !== false,
+    intervention_zone: provider.intervention_zone || '20 km',
+    response_time: provider.response_time || '< 2h',
+    experience_years: provider.experience_years || undefined,
+    certifications: provider.certifications || [],
+    insurance: provider.insurance || [],
+    payment_methods: provider.payment_methods || ['Carte bancaire', 'Espèces', 'Chèque'],
+    languages: provider.languages || ['Français'],
+    emergency_available: provider.emergency_available || false,
+    member_since: provider.created_at ? new Date(provider.created_at).getFullYear().toString() : undefined,
+    response_rate: provider.response_rate || 95,
+    bookings_this_week: provider.bookings_this_week || 0,
+    siret: provider.siret || undefined,
+    legal_form: provider.legal_form || undefined,
+    creation_date: provider.creation_date || undefined,
+    employee_count: provider.employee_count || undefined,
+    phone: provider.phone || undefined,
+    email: provider.email || undefined,
+    website: provider.website || undefined,
+    latitude: provider.latitude || undefined,
+    longitude: provider.longitude || undefined,
+    intervention_zones: provider.intervention_zones || [],
+    faq: provider.faq || [],
+  }
+}
+
+// Fetch reviews for provider
+async function getProviderReviews(providerId: string): Promise<Review[]> {
+  try {
+    const supabase = await createClient()
+    const { data: reviews } = await supabase
+      .from('reviews')
+      .select(`
+        id,
+        rating,
+        comment,
+        created_at,
+        is_verified,
+        booking_id,
+        profiles:client_id (
+          first_name
+        )
+      `)
+      .eq('provider_id', providerId)
+      .eq('status', 'published')
+      .order('created_at', { ascending: false })
+      .limit(10)
+
+    if (!reviews) return []
+
+    return reviews.map((r: any) => ({
+      id: r.id,
+      author: r.profiles?.first_name || 'Client',
+      rating: r.rating,
+      date: new Date(r.created_at).toLocaleDateString('fr-FR', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      }),
+      comment: r.comment || '',
+      service: r.service_name || 'Service',
+      verified: r.is_verified || !!r.booking_id,
+    }))
+  } catch {
+    return []
+  }
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -37,203 +115,76 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
     if (!provider) return { title: 'Artisan non trouvé' }
 
-    const title = `${provider.name} - ${service?.name || 'Artisan'} à ${location?.name || provider.address_city}`
-    const description = `${provider.name}, ${service?.name?.toLowerCase() || 'artisan'} à ${location?.name || provider.address_city}. Avis, tarifs et devis gratuit.`
+    const displayName = provider.name || provider.business_name || 'Artisan'
+    const cityName = location?.name || provider.address_city || ''
+    const serviceName = service?.name || 'Artisan'
 
-    return { title, description, openGraph: { title, description, type: 'profile' } }
+    const title = `${displayName} - ${serviceName} à ${cityName} | ServicesArtisans`
+    const description = `${displayName}, ${serviceName.toLowerCase()} à ${cityName}. Note ${provider.rating_average || 4.5}/5. Avis vérifiés, devis gratuit. Artisan certifié et assuré.`
+
+    return {
+      title,
+      description,
+      openGraph: {
+        title,
+        description,
+        type: 'profile',
+        locale: 'fr_FR',
+        images: provider.avatar_url ? [provider.avatar_url] : undefined,
+      },
+      alternates: {
+        canonical: `https://servicesartisans.fr/services/${serviceSlug}/${locationSlug}/${providerSlug}`,
+      },
+    }
   } catch {
     return { title: 'Artisan non trouvé' }
   }
 }
 
+export const revalidate = 3600 // Revalidate every hour
+
 export default async function ProviderPage({ params }: PageProps) {
   const { service: serviceSlug, location: locationSlug, provider: providerSlug } = await params
 
-  let provider, service, location
+  let provider: any, service: any, location: any
+
   try {
     ;[provider, service, location] = await Promise.all([
       getProviderBySlug(providerSlug),
       getServiceBySlug(serviceSlug),
       getLocationBySlug(locationSlug),
     ])
+
     if (!provider) notFound()
   } catch {
     notFound()
   }
 
-  const formatPhone = (phone: string) => {
-    const cleaned = phone.replace(/\D/g, '')
-    if (cleaned.length === 10) {
-      return cleaned.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5')
-    }
-    return phone
-  }
+  // Convert to Artisan format
+  const artisan = convertToArtisan(provider, service, location)
 
-  const ensureHttps = (url: string) => {
-    if (!url.startsWith('http')) return `https://${url}`
-    return url
-  }
+  // Fetch reviews
+  const reviews = await getProviderReviews(provider.id)
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Breadcrumb */}
-      <div className="bg-white border-b">
-        <div className="max-w-5xl mx-auto px-4 py-3">
-          <nav className="flex items-center gap-2 text-sm flex-wrap">
-            <Link href="/" className="text-gray-500 hover:text-gray-700">Accueil</Link>
-            <span className="text-gray-400">/</span>
-            <Link href={`/services/${serviceSlug}`} className="text-gray-500 hover:text-gray-700">
-              {service?.name}
-            </Link>
-            <span className="text-gray-400">/</span>
-            <Link href={`/services/${serviceSlug}/${locationSlug}`} className="text-gray-500 hover:text-gray-700">
-              {location?.name}
-            </Link>
-            <span className="text-gray-400">/</span>
-            <span className="text-gray-900 font-medium truncate">{provider.name}</span>
-          </nav>
-        </div>
-      </div>
+    <>
+      {/* Preload hints */}
+      {artisan.avatar_url && (
+        <link
+          rel="preload"
+          href={artisan.avatar_url}
+          as="image"
+          // @ts-expect-error - fetchPriority is valid but not in React types yet
+          fetchpriority="high"
+        />
+      )}
+      <link rel="dns-prefetch" href="//umjmbdbwcsxrvfqktiui.supabase.co" />
 
-      {/* Back button */}
-      <div className="max-w-5xl mx-auto px-4 py-4">
-        <Link href={`/services/${serviceSlug}/${locationSlug}`} className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900">
-          <ArrowLeft className="w-4 h-4" />
-          Retour aux résultats
-        </Link>
-      </div>
-
-      {/* Main content */}
-      <div className="max-w-5xl mx-auto px-4 pb-12">
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Left column */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Header card */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <div className="flex flex-wrap gap-2 mb-4">
-                {provider.is_premium && (
-                  <span className="inline-flex items-center gap-1 bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">
-                    <Award className="w-4 h-4" /> Artisan Premium
-                  </span>
-                )}
-                {provider.is_verified && (
-                  <span className="inline-flex items-center gap-1 bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
-                    <BadgeCheck className="w-4 h-4" /> Vérifié
-                  </span>
-                )}
-              </div>
-
-              <div className="flex justify-between items-start flex-wrap gap-4">
-                <div>
-                  <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{provider.name}</h1>
-                  <p className="text-gray-600 mt-1">{service?.name} à {location?.name || provider.address_city}</p>
-                </div>
-                <div className="flex items-center gap-1 bg-green-50 px-3 py-2 rounded-lg">
-                  <Star className="w-5 h-5 text-green-600 fill-green-600" />
-                  <span className="text-green-700 font-bold text-lg">4.5</span>
-                  <span className="text-green-600 text-sm">(12)</span>
-                </div>
-              </div>
-
-              {(provider.address_street || provider.address_city) && (
-                <div className="flex items-start gap-3 mt-6 p-4 bg-gray-50 rounded-lg">
-                  <MapPin className="w-5 h-5 text-gray-400 mt-0.5" />
-                  <div>
-                    {provider.address_street && <p className="text-gray-900">{provider.address_street}</p>}
-                    <p className="text-gray-600">{provider.address_postal_code} {provider.address_city}</p>
-                  </div>
-                </div>
-              )}
-
-              <div className="flex gap-3 mt-6">
-                <button className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50">
-                  <Share2 className="w-4 h-4" /> Partager
-                </button>
-                <button className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50">
-                  <Heart className="w-4 h-4" /> Sauvegarder
-                </button>
-              </div>
-            </div>
-
-            {/* About */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">À propos</h2>
-              <p className="text-gray-600">
-                {provider.name} est un professionnel {service?.name?.toLowerCase()} intervenant à {location?.name || provider.address_city} et ses environs.
-              </p>
-            </div>
-
-            {/* Reviews placeholder */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Avis clients</h2>
-              <div className="text-center py-8 text-gray-500">
-                <Star className="w-12 h-12 mx-auto mb-3 text-gray-300" />
-                <p>Aucun avis pour le moment</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Right column - Contact & Booking */}
-          <div className="lg:col-span-1 space-y-6">
-            {/* Booking Calendar */}
-            <div id="booking">
-              <BookingCalendar
-                artisanId={provider.id}
-                artisanName={provider.name}
-                serviceName={service?.name || 'Service'}
-              />
-            </div>
-
-            {/* Contact Card */}
-            <div className="bg-white rounded-xl shadow-sm p-6 sticky top-24">
-              <h2 className="text-lg font-bold text-gray-900 mb-4">Contact</h2>
-
-              <div className="space-y-3">
-                {provider.phone && (
-                  <a href={`tel:${provider.phone}`} className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg text-blue-700 hover:bg-blue-100 transition-colors">
-                    <Phone className="w-5 h-5" />
-                    <span className="font-medium">{formatPhone(provider.phone)}</span>
-                  </a>
-                )}
-
-                {provider.email && (
-                  <a href={`mailto:${provider.email}`} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
-                    <Mail className="w-5 h-5" />
-                    <span className="truncate">{provider.email}</span>
-                  </a>
-                )}
-
-                {provider.website && (
-                  <a href={ensureHttps(provider.website)} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
-                    <Globe className="w-5 h-5" />
-                    <span className="truncate">Site web</span>
-                  </a>
-                )}
-              </div>
-
-              {/* CTA */}
-              <div className="mt-6 space-y-3" id="devis">
-                <a
-                  href="#booking"
-                  className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
-                >
-                  <Clock className="w-5 h-5" />
-                  Réserver un créneau
-                </a>
-                {provider.phone && (
-                  <a href={`tel:${provider.phone}`} className="block w-full border-2 border-green-600 text-green-600 py-3 px-4 rounded-lg font-semibold hover:bg-green-50 transition-colors text-center">
-                    Appeler maintenant
-                  </a>
-                )}
-              </div>
-
-              <p className="text-xs text-gray-500 text-center mt-4">
-                Réservation en ligne disponible 24h/24
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+      <ArtisanPageClient
+        initialArtisan={artisan}
+        initialReviews={reviews}
+        artisanId={provider.id}
+      />
+    </>
   )
 }

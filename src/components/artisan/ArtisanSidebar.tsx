@@ -2,17 +2,34 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Phone, Mail, MessageCircle, CheckCircle, Zap, Clock, Shield } from 'lucide-react'
+import { Phone, Mail, MessageCircle, CheckCircle, Zap, Clock, Shield, FileCheck, Award, Lock } from 'lucide-react'
 import { Artisan } from './types'
 import { QuoteRequestModal } from './QuoteRequestModal'
+import { TrustScore } from '@/components/reviews/VerifiedBadge'
 
 interface ArtisanSidebarProps {
   artisan: Artisan
 }
 
+// Calculate trust score based on artisan data
+function calculateTrustScore(artisan: Artisan): number {
+  let score = 30 // Base score
+
+  if (artisan.is_verified) score += 20
+  if (artisan.insurance && artisan.insurance.length > 0) score += 15
+  if (artisan.certifications && artisan.certifications.length > 0) score += 10
+  if (artisan.is_premium) score += 10
+  if ((artisan.response_rate || 0) >= 90) score += 5
+  if (artisan.review_count > 50) score += 5
+  if (artisan.average_rating >= 4.5) score += 5
+
+  return Math.min(score, 100)
+}
+
 export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
   const [showPhone, setShowPhone] = useState(false)
   const [showQuoteModal, setShowQuoteModal] = useState(false)
+  const trustScore = calculateTrustScore(artisan)
 
   const handleCall = () => {
     if (artisan.phone) {
@@ -98,6 +115,14 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
         )}
       </div>
 
+      {/* Trust Score */}
+      <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border border-blue-100">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-sm font-medium text-gray-700">Score de confiance</span>
+        </div>
+        <TrustScore score={trustScore} size="md" />
+      </div>
+
       {/* Quick info */}
       <div className="space-y-3 mb-6 pb-6 border-b border-gray-100">
         <div className="flex items-center gap-3 text-sm text-gray-600">
@@ -119,24 +144,44 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
       </div>
 
       {/* Trust badges */}
-      <div className="space-y-2">
+      <div className="space-y-2 mb-6 pb-6 border-b border-gray-100">
+        <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Verifications</h4>
         {artisan.is_verified && (
           <div className="flex items-center gap-2 text-sm text-gray-600">
             <Shield className="w-4 h-4 text-green-500" />
-            <span>SIRET verifie</span>
+            <span>Identite verifiee (SIRET)</span>
           </div>
         )}
         {artisan.insurance && artisan.insurance.length > 0 && (
           <div className="flex items-center gap-2 text-sm text-gray-600">
-            <Shield className="w-4 h-4 text-blue-500" />
-            <span>{artisan.insurance[0]}</span>
+            <FileCheck className="w-4 h-4 text-green-500" />
+            <span>Assurance verifiee</span>
+          </div>
+        )}
+        {artisan.certifications && artisan.certifications.length > 0 && (
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <Award className="w-4 h-4 text-purple-500" />
+            <span>{artisan.certifications.length} certification(s)</span>
           </div>
         )}
       </div>
 
+      {/* Escrow Notice */}
+      <div className="p-4 bg-blue-50 rounded-xl border border-blue-100 mb-6">
+        <div className="flex items-start gap-3">
+          <Lock className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+          <div>
+            <p className="font-semibold text-blue-900 text-sm">Protection Escrow</p>
+            <p className="text-xs text-blue-700 mt-1 leading-relaxed">
+              Pour les projets de +500€, securisez votre paiement. Les fonds sont bloques jusqu'a validation des travaux.
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* SIRET */}
       {artisan.siret && (
-        <div className="mt-6 pt-4 border-t border-gray-100">
+        <div className="pt-4 border-t border-gray-100">
           <div className="text-xs text-gray-400">
             SIRET: {artisan.siret}
           </div>
