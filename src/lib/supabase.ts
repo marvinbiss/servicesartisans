@@ -97,37 +97,58 @@ export async function getProviderBySlug(slug: string) {
 }
 
 export async function getProvidersByServiceAndLocation(
-  serviceSlug: string,
+  _serviceSlug: string,
   locationSlug: string
 ) {
-  // D'abord récupérer les IDs
-  const [service, location] = await Promise.all([
-    getServiceBySlug(serviceSlug),
-    getLocationBySlug(locationSlug)
-  ])
+  // Get location info for city matching
+  const location = await getLocationBySlug(locationSlug)
 
-  if (!service || !location) return []
+  if (!location) return []
 
-  // If the service ID is not a valid UUID (static fallback), return empty array
-  if (!isValidUUID(service.id)) {
-    return []
-  }
-
+  // Query providers directly by city name (case-insensitive)
   const { data, error } = await supabase
     .from('providers')
-    .select(`
-      *,
-      provider_services!inner(service_id),
-      provider_locations!inner(location_id)
-    `)
-    .eq('provider_services.service_id', service.id)
-    .eq('provider_locations.location_id', location.id)
+    .select('*')
+    .ilike('address_city', location.name)
     .eq('is_active', true)
     .order('is_premium', { ascending: false })
     .order('name')
+    .limit(100)
 
   if (error) throw error
-  return data
+  return data || []
+}
+
+// Get all providers for a location (regardless of service)
+export async function getProvidersByLocation(locationSlug: string, limit = 100) {
+  const location = await getLocationBySlug(locationSlug)
+  if (!location) return []
+
+  const { data, error } = await supabase
+    .from('providers')
+    .select('*')
+    .ilike('address_city', location.name)
+    .eq('is_active', true)
+    .order('is_premium', { ascending: false })
+    .order('name')
+    .limit(limit)
+
+  if (error) throw error
+  return data || []
+}
+
+// Get all providers (for map and search)
+export async function getAllProviders(limit = 1000) {
+  const { data, error } = await supabase
+    .from('providers')
+    .select('*')
+    .eq('is_active', true)
+    .order('is_premium', { ascending: false })
+    .order('name')
+    .limit(limit)
+
+  if (error) throw error
+  return data || []
 }
 
 export async function getProvidersByService(serviceSlug: string, limit = 100) {

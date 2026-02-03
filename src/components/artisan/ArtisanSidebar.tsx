@@ -5,31 +5,14 @@ import { motion } from 'framer-motion'
 import { Phone, Mail, MessageCircle, CheckCircle, Zap, Clock, Shield, FileCheck, Award, Lock } from 'lucide-react'
 import { Artisan } from './types'
 import { QuoteRequestModal } from './QuoteRequestModal'
-import { TrustScore } from '@/components/reviews/VerifiedBadge'
 
 interface ArtisanSidebarProps {
   artisan: Artisan
 }
 
-// Calculate trust score based on artisan data
-function calculateTrustScore(artisan: Artisan): number {
-  let score = 30 // Base score
-
-  if (artisan.is_verified) score += 20
-  if (artisan.insurance && artisan.insurance.length > 0) score += 15
-  if (artisan.certifications && artisan.certifications.length > 0) score += 10
-  if (artisan.is_premium) score += 10
-  if ((artisan.response_rate || 0) >= 90) score += 5
-  if (artisan.review_count > 50) score += 5
-  if (artisan.average_rating >= 4.5) score += 5
-
-  return Math.min(score, 100)
-}
-
 export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
   const [showPhone, setShowPhone] = useState(false)
   const [showQuoteModal, setShowQuoteModal] = useState(false)
-  const trustScore = calculateTrustScore(artisan)
 
   const handleCall = () => {
     if (artisan.phone) {
@@ -113,14 +96,6 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
             Envoyer un email
           </motion.button>
         )}
-      </div>
-
-      {/* Trust Score */}
-      <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border border-blue-100">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-gray-700">Score de confiance</span>
-        </div>
-        <TrustScore score={trustScore} size="md" />
       </div>
 
       {/* Quick info */}

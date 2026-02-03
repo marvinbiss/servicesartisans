@@ -79,7 +79,7 @@ export function ArtisanReviews({ artisan, reviews }: ArtisanReviewsProps) {
     >
       <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
         <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
-        Avis clients ({artisan.review_count})
+        Avis clients {artisan.review_count > 0 && `(${artisan.review_count})`}
       </h2>
 
       {/* Rating overview */}
@@ -99,7 +99,9 @@ export function ArtisanReviews({ artisan, reviews }: ArtisanReviewsProps) {
               />
             ))}
           </div>
-          <div className="text-sm text-gray-500 mt-1">{artisan.review_count} avis</div>
+          {artisan.review_count > 0 && (
+            <div className="text-sm text-gray-500 mt-1">{artisan.review_count} avis</div>
+          )}
         </div>
 
         {/* Distribution bars - clickable filters */}

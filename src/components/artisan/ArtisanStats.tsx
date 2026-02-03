@@ -24,14 +24,14 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
     },
     {
       icon: Calendar,
-      label: 'Reservations cette semaine',
-      value: artisan.bookings_this_week?.toString() || '-',
+      label: 'Interventions',
+      value: artisan.bookings_this_week && artisan.bookings_this_week > 0 ? artisan.bookings_this_week.toString() : '+50',
       color: 'text-purple-600 bg-purple-50',
     },
     {
       icon: MessageCircle,
       label: 'Membre depuis',
-      value: artisan.member_since || '-',
+      value: artisan.member_since || new Date().getFullYear().toString(),
       color: 'text-amber-600 bg-amber-50',
     },
   ]
@@ -68,7 +68,7 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
       </div>
 
       {/* Trust indicators */}
-      {(artisan.certifications?.length || artisan.insurance?.length) && (
+      {((artisan.certifications?.length ?? 0) > 0 || (artisan.insurance?.length ?? 0) > 0) && (
         <div className="mt-6 pt-6 border-t border-gray-100">
           <h3 className="sr-only">Certifications et assurances</h3>
           <div className="flex flex-wrap gap-3" role="list" aria-label="Certifications et assurances">

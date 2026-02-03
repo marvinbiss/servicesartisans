@@ -6,7 +6,6 @@ import { Star, MapPin, CheckCircle, Shield, Zap, Users, Clock, Award } from 'luc
 import { Artisan, getDisplayName } from './types'
 import {
   VerificationLevelBadge,
-  TrustScore,
   VerifiedBadge,
 } from '@/components/reviews/VerifiedBadge'
 
@@ -31,25 +30,9 @@ function getVerificationLevel(artisan: Artisan): 'none' | 'basic' | 'standard' |
   return 'none'
 }
 
-// Calculate trust score based on artisan data
-function calculateTrustScore(artisan: Artisan): number {
-  let score = 30 // Base score
-
-  if (artisan.is_verified) score += 20
-  if (artisan.insurance && artisan.insurance.length > 0) score += 15
-  if (artisan.certifications && artisan.certifications.length > 0) score += 10
-  if (artisan.is_premium) score += 10
-  if ((artisan.response_rate || 0) >= 90) score += 5
-  if (artisan.review_count > 50) score += 5
-  if (artisan.average_rating >= 4.5) score += 5
-
-  return Math.min(score, 100)
-}
-
 export function ArtisanHero({ artisan }: ArtisanHeroProps) {
   const displayName = getDisplayName(artisan)
   const verificationLevel = getVerificationLevel(artisan)
-  const trustScore = calculateTrustScore(artisan)
 
   return (
     <motion.div
@@ -153,12 +136,14 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
                   {artisan.average_rating.toFixed(1)}
                 </span>
               </div>
-              <span className="text-gray-600" aria-label={`${artisan.review_count} avis clients`}>
-                ({artisan.review_count} avis)
-              </span>
+              {artisan.review_count > 0 && (
+                <span className="text-gray-600" aria-label={`${artisan.review_count} avis clients`}>
+                  ({artisan.review_count} avis)
+                </span>
+              )}
             </div>
 
-            {artisan.experience_years && (
+            {artisan.experience_years && artisan.experience_years > 0 && (
               <div className="flex items-center gap-1.5 text-gray-600">
                 <Clock className="w-4 h-4" aria-hidden="true" />
                 <span>{artisan.experience_years} ans d'exp.</span>
@@ -171,11 +156,6 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
                 <span>Equipe de {artisan.team_size}</span>
               </div>
             )}
-          </div>
-
-          {/* Trust Score */}
-          <div className="mt-4 pt-4 border-t border-gray-100">
-            <TrustScore score={trustScore} size="md" />
           </div>
         </div>
       </div>

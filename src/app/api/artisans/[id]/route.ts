@@ -330,28 +330,33 @@ export async function GET(
       const departmentName = getDepartmentName(deptCode) || getDepartmentName(provider.address_department)
       const regionName = getRegionName(deptCode) || getRegionName(provider.address_region)
 
+      // Use database columns with fallbacks
+      const finalRating = provider.rating_average || (averageRating > 0 ? averageRating : 4.5)
+      const finalReviewCount = provider.review_count || reviewCount
+      const finalSpecialty = provider.specialty || services[0] || 'Artisan'
+
       artisan = {
         id: provider.id,
         business_name: provider.name,
         first_name: null,
         last_name: null,
-        avatar_url: null,
+        avatar_url: provider.avatar_url || null,
         city: provider.address_city || '',
         postal_code: postalCode,
         address: provider.address_street,
         department: departmentName || undefined,
         department_code: deptCode || undefined,
         region: regionName || undefined,
-        specialty: services[0] || 'Artisan',
-        description: provider.meta_description || `${provider.name} - Artisan qualifié à ${provider.address_city}`,
-        average_rating: Math.round(averageRating * 10) / 10 || 4.5,
-        review_count: reviewCount,
-        hourly_rate: null,
+        specialty: finalSpecialty,
+        description: provider.description || provider.meta_description || `${provider.name} - Artisan qualifié à ${provider.address_city}`,
+        average_rating: Math.round(Number(finalRating) * 10) / 10,
+        review_count: finalReviewCount,
+        hourly_rate: provider.hourly_rate_min || null,
         is_verified: provider.is_verified,
         is_premium: provider.is_premium,
         is_center: (provider.employee_count || 0) > 1,
         team_size: provider.employee_count,
-        services,
+        services: services.length > 0 ? services : [finalSpecialty],
         service_prices: provider.provider_services?.map((ps: {
           service?: { name: string }
           price_min?: number
@@ -368,26 +373,26 @@ export async function GET(
           duration: undefined
         })) || [],
         accepts_new_clients: true,
-        intervention_zone: provider.provider_locations?.[0]?.radius_km
+        intervention_zone: provider.intervention_zone || (provider.provider_locations?.[0]?.radius_km
           ? `${provider.provider_locations[0].radius_km} km`
-          : '20 km',
+          : '20 km'),
         intervention_zones: interventionZones,
-        response_time: '< 2h',
+        response_time: provider.response_time || '< 2h',
         experience_years: provider.creation_date
           ? new Date().getFullYear() - new Date(provider.creation_date).getFullYear()
           : null,
-        certifications: [],
-        insurance: ['Garantie décennale', 'RC Professionnelle'],
-        payment_methods: ['Carte bancaire', 'Espèces', 'Chèque', 'Virement'],
-        languages: ['Français'],
-        emergency_available: false,
+        certifications: provider.certifications || [],
+        insurance: provider.insurance || ['Garantie décennale', 'RC Professionnelle'],
+        payment_methods: provider.payment_methods || ['Carte bancaire', 'Espèces', 'Chèque', 'Virement'],
+        languages: provider.languages || ['Français'],
+        emergency_available: provider.emergency_available || false,
         member_since: provider.created_at
           ? new Date(provider.created_at).getFullYear().toString()
           : null,
-        response_rate: 95,
+        response_rate: provider.response_rate || 95,
         bookings_this_week: null,
-        portfolio: generateDemoPortfolio(services[0] || 'Artisan'),
-        faq: generateDemoFAQ(services[0] || 'artisan', provider.address_city || 'votre ville'),
+        portfolio: generateDemoPortfolio(finalSpecialty),
+        faq: generateDemoFAQ(finalSpecialty, provider.address_city || 'votre ville'),
         // Données Pappers
         siret: provider.siret,
         siren: provider.siren,
