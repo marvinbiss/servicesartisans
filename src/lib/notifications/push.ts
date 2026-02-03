@@ -6,16 +6,36 @@
 import webpush from 'web-push'
 import { logger } from '@/lib/logger'
 
-// Configure VAPID keys
-const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!
-const vapidPrivateKey = process.env.VAPID_PRIVATE_KEY!
+// Lazy VAPID configuration to avoid build-time errors
+let vapidConfigured = false
 
-if (vapidPublicKey && vapidPrivateKey) {
-  webpush.setVapidDetails(
-    'mailto:support@servicesartisans.fr',
-    vapidPublicKey,
-    vapidPrivateKey
-  )
+function getVapidKeys() {
+  const publicKey = (process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || '').trim()
+  const privateKey = (process.env.VAPID_PRIVATE_KEY || '').trim()
+  return { publicKey, privateKey }
+}
+
+function ensureVapidConfigured(): boolean {
+  if (vapidConfigured) return true
+
+  const { publicKey, privateKey } = getVapidKeys()
+
+  if (!publicKey || !privateKey) {
+    return false
+  }
+
+  try {
+    webpush.setVapidDetails(
+      'mailto:support@servicesartisans.fr',
+      publicKey,
+      privateKey
+    )
+    vapidConfigured = true
+    return true
+  } catch (err) {
+    logger.error('Failed to configure VAPID', err as Error)
+    return false
+  }
 }
 
 export interface PushSubscription {
@@ -140,7 +160,7 @@ export async function sendPushNotification(
   payload: PushNotificationPayload
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    if (!vapidPublicKey || !vapidPrivateKey) {
+    if (!ensureVapidConfigured()) {
       logger.warn('VAPID keys not configured')
       return { success: false, error: 'Push notifications not configured' }
     }
@@ -203,5 +223,6 @@ export async function sendPushToUser(
 
 // Get VAPID public key for client
 export function getVapidPublicKey(): string | null {
-  return vapidPublicKey || null
+  const { publicKey } = getVapidKeys()
+  return publicKey || null
 }
