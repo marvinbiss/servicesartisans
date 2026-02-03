@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { Star, MapPin, CheckCircle, Shield, Zap, Users, Clock, Award } from 'lucide-react'
+import { Star, MapPin, CheckCircle, Shield, Zap, Users, Clock, Award, Phone } from 'lucide-react'
 import { Artisan, getDisplayName } from './types'
 import {
   VerificationLevelBadge,
@@ -113,6 +113,18 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
               <span className="text-gray-400">• Zone: {artisan.intervention_zone}</span>
             )}
           </div>
+
+          {/* Phone - Display directly if available */}
+          {artisan.phone && (
+            <a
+              href={`tel:${artisan.phone.replace(/\s/g, '')}`}
+              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium mb-4 transition-colors"
+              aria-label={`Appeler au ${artisan.phone}`}
+            >
+              <Phone className="w-4 h-4" />
+              <span>{artisan.phone}</span>
+            </a>
+          )}
 
           {/* Verification Badges Row */}
           <div className="flex flex-wrap gap-2 mb-4">
