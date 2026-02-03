@@ -11,14 +11,14 @@ export function getOrganizationSchema() {
     description: 'Plateforme de mise en relation entre particuliers et artisans qualifiés en France.',
     address: {
       '@type': 'PostalAddress',
-      streetAddress: '123 Avenue des Artisans',
+      streetAddress: '42 Rue de la Republique',
       addressLocality: 'Paris',
-      postalCode: '75001',
+      postalCode: '75011',
       addressCountry: 'FR',
     },
     contactPoint: {
       '@type': 'ContactPoint',
-      telephone: '+33-1-23-45-67-89',
+      telephone: '+33-1-84-80-00-00',
       contactType: 'customer service',
       availableLanguage: 'French',
     },
