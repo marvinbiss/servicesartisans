@@ -1,0 +1,90 @@
+/**
+ * Message Search API
+ * GET: Full-text search in conversation
+ */
+
+import { NextRequest, NextResponse } from 'next/server'
+import { createClient } from '@/lib/supabase/server'
+import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+const searchSchema = z.object({
+  conversation_id: z.string().uuid(),
+  q: z.string().min(1).max(200),
+  limit: z.coerce.number().int().min(1).max(100).default(20),
+})
+
+export async function GET(request: NextRequest) {
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+      return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
+    }
+
+    const { searchParams } = new URL(request.url)
+    const queryParams = {
+      conversation_id: searchParams.get('conversation_id'),
+      q: searchParams.get('q'),
+      limit: searchParams.get('limit') || '20',
+    }
+
+    const parsed = searchSchema.safeParse(queryParams)
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: 'Paramètres invalides', details: parsed.error.flatten() },
+        { status: 400 }
+      )
+    }
+
+    const { conversation_id, q, limit } = parsed.data
+
+    // Verify user has access to conversation
+    const { data: conversation } = await supabase
+      .from('conversations')
+      .select('id')
+      .eq('id', conversation_id)
+      .or(`client_id.eq.${user.id},provider_id.eq.${user.id}`)
+      .single()
+
+    if (!conversation) {
+      return NextResponse.json(
+        { error: 'Conversation non trouvée ou non autorisée' },
+        { status: 404 }
+      )
+    }
+
+    // Full-text search
+    const { data: messages, error } = await supabase
+      .from('messages')
+      .select('*')
+      .eq('conversation_id', conversation_id)
+      .is('deleted_at', null)
+      .textSearch('search_vector', q, {
+        config: 'french',
+      })
+      .order('created_at', { ascending: false })
+      .limit(limit)
+
+    if (error) {
+      logger.error('Message search error', error)
+      return NextResponse.json(
+        { error: 'Erreur de recherche' },
+        { status: 500 }
+      )
+    }
+
+    return NextResponse.json({
+      results: messages,
+      query: q,
+      total: messages.length,
+    })
+  } catch (error) {
+    logger.error('Search error', error)
+    return NextResponse.json(
+      { error: 'Erreur serveur' },
+      { status: 500 }
+    )
+  }
+}

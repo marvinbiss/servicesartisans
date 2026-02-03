@@ -39,11 +39,15 @@ export default function ProviderCard({ provider, serviceSlug, locationSlug }: Pr
           )}
         </div>
 
-        {/* Rating Placeholder */}
+        {/* Rating */}
         <div className="flex items-center gap-1 bg-green-50 px-2 py-1 rounded-lg">
           <Star className="w-4 h-4 text-green-600 fill-green-600" />
-          <span className="text-green-700 font-semibold">4.5</span>
-          <span className="text-green-600 text-sm">(12)</span>
+          <span className="text-green-700 font-semibold">
+            {provider.rating_average?.toFixed(1) || 'N/A'}
+          </span>
+          <span className="text-green-600 text-sm">
+            ({provider.review_count || 0})
+          </span>
         </div>
       </div>
 

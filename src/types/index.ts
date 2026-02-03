@@ -54,11 +54,25 @@ export interface Provider {
   verification_date?: string
   meta_title?: string
   meta_description?: string
+  description?: string
+  specialty?: string
   created_at: string
   updated_at: string
   scraped_at?: string
   source?: string
   source_id?: string
+  // Trust & ratings (Phase 4)
+  rating_average?: number
+  review_count?: number
+  trust_badge?: 'none' | 'bronze' | 'silver' | 'gold' | 'platinum'
+  trust_score?: number
+  avg_response_time_hours?: number
+  response_rate?: number
+  years_on_platform?: number
+  // Search & pricing (Phase 5)
+  hourly_rate_min?: number
+  hourly_rate_max?: number
+  intervention_zone?: string
   // Relations
   provider_services?: ProviderService[]
   provider_locations?: ProviderLocation[]
@@ -211,3 +225,6 @@ declare global {
     dataLayer?: unknown[]
   }
 }
+
+// Portfolio types
+export * from './portfolio'
