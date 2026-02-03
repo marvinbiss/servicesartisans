@@ -10,22 +10,16 @@ interface ArtisanGalleryProps {
   artisan: Artisan
 }
 
-// Demo photos for testing
-const DEMO_PHOTOS: PortfolioItem[] = [
-  { id: '1', title: 'Installation salle de bain', description: 'Renovation complete', imageUrl: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&h=600&fit=crop', category: 'Renovation' },
-  { id: '2', title: 'Reparation chauffe-eau', description: 'Remplacement complet', imageUrl: 'https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=800&h=600&fit=crop', category: 'Depannage' },
-  { id: '3', title: 'Installation robinetterie', description: 'Pose robinet design', imageUrl: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&h=600&fit=crop', category: 'Installation' },
-  { id: '4', title: 'Debouchage canalisation', description: 'Intervention rapide', imageUrl: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop', category: 'Depannage' },
-  { id: '5', title: 'Renovation cuisine', description: 'Plomberie complete', imageUrl: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&h=600&fit=crop', category: 'Renovation' },
-]
-
 export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
 
-  const photos = artisan.portfolio && artisan.portfolio.length > 0
-    ? artisan.portfolio
-    : DEMO_PHOTOS
+  // Only show if artisan has real portfolio items
+  const photos = artisan.portfolio || []
+
+  if (photos.length === 0) {
+    return null
+  }
 
   const openLightbox = useCallback((index: number) => {
     setCurrentIndex(index)
@@ -59,8 +53,6 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [lightboxOpen, closeLightbox, goToPrevious, goToNext])
-
-  if (photos.length === 0) return null
 
   const currentPhoto = photos[currentIndex]
 

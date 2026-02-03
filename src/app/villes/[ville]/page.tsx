@@ -1,10 +1,17 @@
 import Link from 'next/link'
-import { MapPin, Users, Building, Star, Phone, ArrowRight, Shield, Clock, Wrench, Zap, Key, Flame, PaintBucket, Hammer, Grid3X3, Home, TreeDeciduous, Square, Wind, Blocks, ChefHat, Layers, Sparkles } from 'lucide-react'
+import dynamic from 'next/dynamic'
+import { MapPin, Users, Building, Star, ArrowRight, Shield, Clock, Wrench, Zap, Key, Flame, PaintBucket, Hammer, Grid3X3, Home, TreeDeciduous, Square, Wind, Blocks, ChefHat, Layers, Sparkles } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularCitiesLinks } from '@/components/InternalLinks'
 import { popularRegions } from '@/lib/constants/navigation'
 import { villes, getVilleBySlug, services } from '@/lib/data/france'
 import { Metadata } from 'next'
+import { createAdminClient } from '@/lib/supabase/admin'
+
+// Dynamic import for the map component (client-side only)
+const CityMap = dynamic(() => import('@/components/maps/CityMap'), {
+  ssr: false,
+})
 
 // Map des icônes
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -38,13 +45,29 @@ export async function generateMetadata({ params }: { params: { ville: string } }
   }
 }
 
-const artisansExemple = [
-  { name: 'Martin Plomberie', note: 4.9, avis: 127, metier: 'Plombier' },
-  { name: 'Élec Express', note: 4.8, avis: 89, metier: 'Électricien' },
-  { name: 'Serrures & Clés', note: 4.7, avis: 56, metier: 'Serrurier' },
-]
+// Fetch real artisans for this city
+async function getArtisansForCity(cityName: string) {
+  try {
+    const supabase = createAdminClient()
 
-export default function VillePage({ params }: { params: { ville: string } }) {
+    const { data: providers } = await supabase
+      .from('providers')
+      .select('id, name, slug, specialty, rating_average, review_count, avatar_url')
+      .eq('is_active', true)
+      .ilike('address_city', `%${cityName}%`)
+      .order('rating_average', { ascending: false })
+      .limit(6)
+
+    return providers || []
+  } catch (error) {
+    console.error('Error fetching artisans for city:', error)
+    return []
+  }
+}
+
+export const revalidate = 3600 // Revalidate every hour
+
+export default async function VillePage({ params }: { params: { ville: string } }) {
   const ville = getVilleBySlug(params.ville)
 
   if (!ville) {
@@ -59,6 +82,9 @@ export default function VillePage({ params }: { params: { ville: string } }) {
       </div>
     )
   }
+
+  // Fetch real artisans
+  const artisans = await getArtisansForCity(ville.name)
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -144,69 +170,87 @@ export default function VillePage({ params }: { params: { ville: string } }) {
           </div>
         </section>
 
-        {/* Top artisans */}
-        <section className="mb-16">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">
-              Artisans les mieux notés à {ville.name}
-            </h2>
-            <Link href={`/services/plombier/${params.ville}`} className="text-blue-600 hover:underline">
-              Voir tous
-            </Link>
-          </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {artisansExemple.map((artisan, index) => (
-              <div key={index} className="bg-white rounded-xl shadow-sm p-6">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-xl">
-                    {artisan.name.charAt(0)}
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900">{artisan.name}</h3>
-                    <p className="text-sm text-gray-500">{artisan.metier}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="flex">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className={`w-4 h-4 ${
-                          i < Math.round(artisan.note) ? 'text-yellow-400 fill-current' : 'text-gray-300'
-                        }`}
-                      />
-                    ))}
-                  </div>
-                  <span className="font-medium text-gray-900">{artisan.note}</span>
-                  <span className="text-gray-500">({artisan.avis} avis)</span>
-                </div>
-                <button className="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
-                  <Phone className="w-4 h-4" />
-                  Contacter
-                </button>
-              </div>
-            ))}
-          </div>
-        </section>
+        {/* Interactive Map */}
+        <CityMap cityName={ville.name} citySlug={params.ville} />
 
-        {/* Quartiers */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            Quartiers desservis à {ville.name}
-          </h2>
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <div className="flex flex-wrap gap-2">
-              {ville.quartiers.map((quartier) => (
-                <span
-                  key={quartier}
-                  className="bg-gray-100 text-gray-700 px-4 py-2 rounded-full text-sm"
+        {/* Top artisans - Only show if we have real artisans */}
+        {artisans.length > 0 && (
+          <section className="mb-16">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">
+                Artisans les mieux notés à {ville.name}
+              </h2>
+              <Link href={`/recherche?location=${params.ville}`} className="text-blue-600 hover:underline">
+                Voir tous
+              </Link>
+            </div>
+            <div className="grid md:grid-cols-3 gap-6">
+              {artisans.slice(0, 3).map((artisan) => (
+                <Link
+                  key={artisan.id}
+                  href={`/services/artisan/${artisan.slug || artisan.id}`}
+                  className="bg-white rounded-xl shadow-sm p-6 hover:shadow-lg transition-shadow"
                 >
-                  {quartier}
-                </span>
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-xl overflow-hidden">
+                      {artisan.avatar_url ? (
+                        <img src={artisan.avatar_url} alt="" className="w-full h-full object-cover" />
+                      ) : (
+                        artisan.name?.charAt(0) || 'A'
+                      )}
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900">{artisan.name}</h3>
+                      <p className="text-sm text-gray-500">{artisan.specialty}</p>
+                    </div>
+                  </div>
+                  {artisan.rating_average > 0 && (
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="flex">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`w-4 h-4 ${
+                              i < Math.round(artisan.rating_average) ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                            }`}
+                          />
+                        ))}
+                      </div>
+                      <span className="font-medium text-gray-900">{artisan.rating_average.toFixed(1)}</span>
+                      {artisan.review_count > 0 && (
+                        <span className="text-gray-500">({artisan.review_count} avis)</span>
+                      )}
+                    </div>
+                  )}
+                  <span className="inline-block w-full bg-blue-600 text-white py-2 rounded-lg font-medium text-center hover:bg-blue-700 transition-colors">
+                    Voir le profil
+                  </span>
+                </Link>
               ))}
             </div>
-          </div>
-        </section>
+          </section>
+        )}
+
+        {/* Quartiers */}
+        {ville.quartiers && ville.quartiers.length > 0 && (
+          <section className="mb-16">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+              Quartiers desservis à {ville.name}
+            </h2>
+            <div className="bg-white rounded-xl shadow-sm p-6">
+              <div className="flex flex-wrap gap-2">
+                {ville.quartiers.map((quartier) => (
+                  <span
+                    key={quartier}
+                    className="bg-gray-100 text-gray-700 px-4 py-2 rounded-full text-sm"
+                  >
+                    {quartier}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* CTA */}
         <section className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl p-8 md:p-12 text-center text-white">
@@ -258,8 +302,6 @@ export default function VillePage({ params }: { params: { ville: string } }) {
           </div>
         </section>
       </div>
-
-      {/* Internal Links Footer */}
     </div>
   )
 }

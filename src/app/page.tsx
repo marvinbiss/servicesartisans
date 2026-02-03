@@ -43,39 +43,72 @@ const popularCities = [
   { name: 'Lille', slug: 'lille' },
 ]
 
-const testimonials = [
-  {
-    name: 'Marie L.',
-    city: 'Paris',
-    citySlug: 'paris',
-    rating: 5,
-    text: 'Excellent service ! J\'ai trouve un plombier en moins de 2h pour une urgence. Tres professionnel.',
-    service: 'Plomberie',
-    serviceSlug: 'plombier',
-  },
-  {
-    name: 'Pierre D.',
-    city: 'Lyon',
-    citySlug: 'lyon',
-    rating: 5,
-    text: 'La plateforme est tres facile a utiliser. Les avis sont fiables et m\'ont aide a choisir.',
-    service: 'Electricite',
-    serviceSlug: 'electricien',
-  },
-  {
-    name: 'Sophie M.',
-    city: 'Bordeaux',
-    citySlug: 'bordeaux',
-    rating: 5,
-    text: 'Enfin une plateforme serieuse pour trouver des artisans de confiance. Je recommande !',
-    service: 'Menuiserie',
-    serviceSlug: 'menuisier',
-  },
-]
+// Fetch real stats from database
+async function getStats() {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
+    const response = await fetch(`${baseUrl}/api/stats/public`, {
+      next: { revalidate: 3600 }
+    })
+    if (response.ok) {
+      return await response.json()
+    }
+  } catch (error) {
+    console.error('Error fetching stats:', error)
+  }
+  return null
+}
 
-export default function HomePage() {
+// Fetch real testimonials from database
+async function getTestimonials() {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
+    const response = await fetch(`${baseUrl}/api/reviews/featured`, {
+      next: { revalidate: 3600 }
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data.reviews || []
+    }
+  } catch (error) {
+    console.error('Error fetching testimonials:', error)
+  }
+  return []
+}
+
+export default async function HomePage() {
   const organizationSchema = getOrganizationSchema()
   const websiteSchema = getWebsiteSchema()
+
+  // Fetch real data
+  const [stats, testimonials] = await Promise.all([
+    getStats(),
+    getTestimonials()
+  ])
+
+  // Format stats for display
+  const displayStats = [
+    {
+      value: stats?.artisanCount ? `${Math.floor(stats.artisanCount / 1000)}K+` : '2 900+',
+      label: 'Artisans verifies',
+      icon: Users
+    },
+    {
+      value: stats?.bookingCount ? `${Math.floor(stats.bookingCount / 1000)}K+` : '10K+',
+      label: 'Reservations',
+      icon: CheckCircle
+    },
+    {
+      value: stats?.averageRating ? `${stats.averageRating.toFixed(1)}/5` : '4.5/5',
+      label: 'Note moyenne',
+      icon: Star
+    },
+    {
+      value: '< 2h',
+      label: 'Temps de reponse',
+      icon: Clock
+    },
+  ]
 
   return (
     <div className="min-h-screen">
@@ -171,12 +204,7 @@ export default function HomePage() {
       <section className="py-16 bg-white border-b relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 stagger-children">
-            {[
-              { value: '120 000+', label: 'Artisans verifies', icon: Users },
-              { value: '500 000+', label: 'Reservations', icon: CheckCircle },
-              { value: '4.8/5', label: 'Note moyenne', icon: Star },
-              { value: '< 2h', label: 'Temps de reponse', icon: Clock },
-            ].map((stat, i) => (
+            {displayStats.map((stat, i) => (
               <div key={i} className="text-center group cursor-default">
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl mb-4 shadow-lg shadow-blue-500/25 group-hover:scale-110 group-hover:shadow-xl group-hover:shadow-blue-500/35 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]">
                   <stat.icon className="w-8 h-8 text-white" />
@@ -342,55 +370,70 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-20 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Ils nous font confiance
-            </h2>
-            <p className="text-xl text-slate-300">
-              Plus de 500 000 clients satisfaits
-            </p>
-          </div>
+      {/* Testimonials - Only show if we have real reviews */}
+      {testimonials.length > 0 && (
+        <section className="py-20 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                Ils nous font confiance
+              </h2>
+              <p className="text-xl text-slate-300">
+                Avis verifies de nos clients
+              </p>
+            </div>
 
-          <div className="grid md:grid-cols-3 gap-8 stagger-children">
-            {testimonials.map((testimonial, i) => (
-              <div
-                key={i}
-                className="bg-white/10 backdrop-blur-md rounded-2xl p-8 hover:bg-white/15 transition-all duration-500 border border-white/10 hover:border-white/20 hover:shadow-xl hover:-translate-y-1"
-              >
-                <div className="flex items-center gap-1 mb-4">
-                  {[...Array(5)].map((_, j) => (
-                    <Star
-                      key={j}
-                      className={`w-5 h-5 ${j < testimonial.rating ? 'text-amber-400 fill-amber-400' : 'text-slate-600'}`}
-                    />
-                  ))}
-                </div>
-                <p className="text-lg text-slate-200 mb-6">&ldquo;{testimonial.text}&rdquo;</p>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="font-semibold">{testimonial.name}</div>
-                    <Link
-                      href={`/villes/${testimonial.citySlug}`}
-                      className="text-sm text-slate-400 hover:text-blue-300"
-                    >
-                      {testimonial.city}
-                    </Link>
+            <div className="grid md:grid-cols-3 gap-8 stagger-children">
+              {testimonials.slice(0, 3).map((testimonial: {
+                id: string
+                author_name: string
+                rating: number
+                comment: string
+                city?: string
+                city_slug?: string
+                service?: string
+                service_slug?: string
+              }, i: number) => (
+                <div
+                  key={testimonial.id || i}
+                  className="bg-white/10 backdrop-blur-md rounded-2xl p-8 hover:bg-white/15 transition-all duration-500 border border-white/10 hover:border-white/20 hover:shadow-xl hover:-translate-y-1"
+                >
+                  <div className="flex items-center gap-1 mb-4">
+                    {[...Array(5)].map((_, j) => (
+                      <Star
+                        key={j}
+                        className={`w-5 h-5 ${j < testimonial.rating ? 'text-amber-400 fill-amber-400' : 'text-slate-600'}`}
+                      />
+                    ))}
                   </div>
-                  <Link
-                    href={`/services/${testimonial.serviceSlug}`}
-                    className="text-sm text-blue-300 bg-blue-500/20 px-3 py-1 rounded-full hover:bg-blue-500/30 transition-colors"
-                  >
-                    {testimonial.service}
-                  </Link>
+                  <p className="text-lg text-slate-200 mb-6">&ldquo;{testimonial.comment}&rdquo;</p>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-semibold">{testimonial.author_name}</div>
+                      {testimonial.city && testimonial.city_slug && (
+                        <Link
+                          href={`/villes/${testimonial.city_slug}`}
+                          className="text-sm text-slate-400 hover:text-blue-300"
+                        >
+                          {testimonial.city}
+                        </Link>
+                      )}
+                    </div>
+                    {testimonial.service && testimonial.service_slug && (
+                      <Link
+                        href={`/services/${testimonial.service_slug}`}
+                        className="text-sm text-blue-300 bg-blue-500/20 px-3 py-1 rounded-full hover:bg-blue-500/30 transition-colors"
+                      >
+                        {testimonial.service}
+                      </Link>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Cities Section with proper links */}
       <section className="py-16 bg-white">

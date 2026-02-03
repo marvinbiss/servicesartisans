@@ -84,23 +84,6 @@ const plans: Plan[] = [
   },
 ]
 
-const testimonials = [
-  {
-    name: 'Jean-Pierre M.',
-    role: 'Plombier à Paris',
-    content: 'Depuis que je suis passé au plan Pro, j\'ai multiplié mes clients par 3. L\'investissement est largement rentabilisé.',
-    rating: 5,
-    plan: 'Pro',
-  },
-  {
-    name: 'Marie D.',
-    role: 'Électricienne à Lyon',
-    content: 'Le badge vérifié et la mise en avant m\'ont vraiment aidé à me démarquer de la concurrence.',
-    rating: 5,
-    plan: 'Pro',
-  },
-]
-
 export default function ProAbonnementPage() {
   const [currentPlan] = useState('pro')
   const [billingInterval, setBillingInterval] = useState<'month' | 'year'>('month')
@@ -257,34 +240,6 @@ export default function ProAbonnementPage() {
               <div>
                 <h3 className="font-semibold text-slate-900">{feature.title}</h3>
                 <p className="text-sm text-slate-500">{feature.desc}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Testimonials */}
-      <div className="mb-16">
-        <h2 className="text-2xl font-bold text-slate-900 mb-8 text-center">
-          Ils ont choisi Pro
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {testimonials.map((testimonial, i) => (
-            <div key={i} className="bg-white rounded-2xl border border-slate-200 p-6">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(testimonial.rating)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 text-amber-400 fill-amber-400" />
-                ))}
-              </div>
-              <p className="text-slate-600 mb-4">"{testimonial.content}"</p>
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="font-semibold text-slate-900">{testimonial.name}</div>
-                  <div className="text-sm text-slate-500">{testimonial.role}</div>
-                </div>
-                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
-                  {testimonial.plan}
-                </span>
               </div>
             </div>
           ))}

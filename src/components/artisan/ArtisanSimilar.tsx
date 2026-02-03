@@ -24,21 +24,15 @@ interface ArtisanSimilarProps {
   similarArtisans?: SimilarArtisan[]
 }
 
-// Demo similar artisans
-const DEMO_SIMILAR: SimilarArtisan[] = [
-  { id: 'demo-7', name: 'Yohan LEROY', specialty: 'Plombier', rating: 4.4, reviews: 92, city: 'Pantin', hourly_rate: 52, is_verified: true },
-  { id: 'demo-4', name: 'Serrurier Express 93', specialty: 'Serrurier', rating: 4.3, reviews: 67, city: 'Le Pre-Saint-Gervais', hourly_rate: 60, is_premium: true },
-  { id: 'demo-8', name: 'Pierre ROUX', specialty: 'Electricien', rating: 4.6, reviews: 134, city: 'Pantin', hourly_rate: 55, is_verified: true },
-  { id: 'demo-9', name: 'Chauffage Plus', specialty: 'Chauffagiste', rating: 4.7, reviews: 89, city: 'Bobigny', hourly_rate: 58, is_verified: true, is_premium: true },
-  { id: 'demo-10', name: 'Marie BERNARD', specialty: 'Plombier', rating: 4.5, reviews: 76, city: 'Les Lilas', hourly_rate: 50, is_verified: true },
-]
-
 export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSimilarProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
 
-  const similar = similarArtisans && similarArtisans.length > 0
-    ? similarArtisans
-    : DEMO_SIMILAR
+  // Only show if we have real similar artisans
+  if (!similarArtisans || similarArtisans.length === 0) {
+    return null
+  }
+
+  const similar = similarArtisans
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
