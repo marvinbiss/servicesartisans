@@ -98,9 +98,12 @@ export async function POST(request: Request) {
     // Get user profile (may not exist yet)
     const { data: profile } = await supabase
       .from('profiles')
-      .select('role, is_artisan, artisan_id, first_name, last_name')
+      .select('role, user_type, artisan_id, first_name, last_name')
       .eq('id', data.user.id)
       .single()
+
+    // Déterminer si l'utilisateur est un artisan basé sur user_type
+    const isArtisan = profile?.user_type === 'artisan'
 
     return NextResponse.json(
       createSuccessResponse({
@@ -110,7 +113,8 @@ export async function POST(request: Request) {
           firstName: profile?.first_name || data.user.user_metadata?.first_name,
           lastName: profile?.last_name || data.user.user_metadata?.last_name,
           role: profile?.role || 'user',
-          isArtisan: profile?.is_artisan || false,
+          userType: profile?.user_type || 'client',
+          isArtisan,
           artisanId: profile?.artisan_id,
         },
         session: {

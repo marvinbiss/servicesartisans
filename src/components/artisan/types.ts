@@ -7,12 +7,19 @@ export interface ServicePrice {
   duration?: string
 }
 
+export type MediaType = 'image' | 'video' | 'before_after'
+
 export interface PortfolioItem {
   id: string
   title: string
   description: string
   imageUrl: string
   category: string
+  mediaType?: MediaType
+  videoUrl?: string
+  beforeImageUrl?: string
+  afterImageUrl?: string
+  thumbnailUrl?: string
 }
 
 export interface Artisan {

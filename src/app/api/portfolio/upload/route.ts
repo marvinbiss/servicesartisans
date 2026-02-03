@@ -1,0 +1,136 @@
+/**
+ * Portfolio Upload API
+ * POST: Upload file to Supabase Storage
+ */
+
+import { NextRequest, NextResponse } from 'next/server'
+import { createClient } from '@/lib/supabase/server'
+import { logger } from '@/lib/logger'
+
+const PORTFOLIO_BUCKET = 'portfolio'
+
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+const ALLOWED_VIDEO_TYPES = ['video/mp4', 'video/webm']
+const MAX_IMAGE_SIZE = 10 * 1024 * 1024 // 10MB
+const MAX_VIDEO_SIZE = 50 * 1024 * 1024 // 50MB
+
+export const dynamic = 'force-dynamic'
+
+function generateFilePath(artisanId: string, fileName: string): string {
+  const timestamp = Date.now()
+  const randomStr = Math.random().toString(36).substring(2, 8)
+  const extension = fileName.split('.').pop()?.toLowerCase() || 'jpg'
+  const sanitizedName = fileName
+    .replace(/\.[^/.]+$/, '')
+    .replace(/[^a-zA-Z0-9-_]/g, '_')
+    .substring(0, 50)
+
+  return `${artisanId}/${timestamp}-${randomStr}-${sanitizedName}.${extension}`
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const supabase = await createClient()
+
+    // Get current user
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+
+    if (authError || !user) {
+      return NextResponse.json(
+        { error: 'Non authentifié' },
+        { status: 401 }
+      )
+    }
+
+    // Verify user is an artisan
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('user_type')
+      .eq('id', user.id)
+      .single()
+
+    if (!profile || profile.user_type !== 'artisan') {
+      return NextResponse.json(
+        { error: 'Accès réservé aux artisans' },
+        { status: 403 }
+      )
+    }
+
+    // Parse multipart form data
+    const formData = await request.formData()
+    const file = formData.get('file') as File | null
+    const fileType = formData.get('type') as string | null // 'image' | 'video' | 'before' | 'after'
+
+    if (!file) {
+      return NextResponse.json(
+        { error: 'Aucun fichier fourni' },
+        { status: 400 }
+      )
+    }
+
+    // Validate file type
+    const isVideo = file.type.startsWith('video/')
+    const allowedTypes = isVideo ? ALLOWED_VIDEO_TYPES : ALLOWED_IMAGE_TYPES
+    const maxSize = isVideo ? MAX_VIDEO_SIZE : MAX_IMAGE_SIZE
+
+    if (!allowedTypes.includes(file.type)) {
+      return NextResponse.json(
+        { error: `Type de fichier non supporté. Types acceptés: ${allowedTypes.join(', ')}` },
+        { status: 400 }
+      )
+    }
+
+    if (file.size > maxSize) {
+      const maxSizeMB = maxSize / (1024 * 1024)
+      return NextResponse.json(
+        { error: `Fichier trop volumineux. Taille maximum: ${maxSizeMB}MB` },
+        { status: 400 }
+      )
+    }
+
+    // Generate file path
+    const filePath = generateFilePath(user.id, file.name)
+
+    // Convert File to ArrayBuffer for upload
+    const arrayBuffer = await file.arrayBuffer()
+    const buffer = Buffer.from(arrayBuffer)
+
+    // Upload to Supabase Storage
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from(PORTFOLIO_BUCKET)
+      .upload(filePath, buffer, {
+        contentType: file.type,
+        cacheControl: '31536000', // 1 year
+        upsert: false,
+      })
+
+    if (uploadError) {
+      logger.error('Storage upload error:', uploadError)
+      return NextResponse.json(
+        { error: `Erreur d'upload: ${uploadError.message}` },
+        { status: 500 }
+      )
+    }
+
+    // Get public URL
+    const { data: urlData } = supabase.storage
+      .from(PORTFOLIO_BUCKET)
+      .getPublicUrl(uploadData.path)
+
+    return NextResponse.json({
+      success: true,
+      url: urlData.publicUrl,
+      fileName: file.name,
+      fileSize: file.size,
+      mimeType: file.type,
+      path: uploadData.path,
+      type: fileType || (isVideo ? 'video' : 'image'),
+    })
+  } catch (error) {
+    logger.error('Portfolio upload error:', error)
+    return NextResponse.json(
+      { error: 'Erreur serveur lors de l\'upload' },
+      { status: 500 }
+    )
+  }
+}

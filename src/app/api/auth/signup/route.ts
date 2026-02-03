@@ -77,7 +77,7 @@ export async function POST(request: Request) {
       )
     }
 
-    // Create profile record
+    // Create profile record - default to client user type
     const { error: profileError } = await supabase.from('profiles').insert({
       id: authData.user.id,
       email: email.toLowerCase(),
@@ -85,6 +85,7 @@ export async function POST(request: Request) {
       last_name: lastName,
       phone: phone || null,
       role: 'user',
+      user_type: 'client', // Explicitement défini comme client
       is_artisan: false,
       created_at: new Date().toISOString(),
     })

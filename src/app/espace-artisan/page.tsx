@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { FileText, MessageSquare, Star, Settings, TrendingUp, Users, Eye, Euro, ChevronRight, Calendar, ExternalLink, Search, Loader2, AlertCircle } from 'lucide-react'
+import { FileText, MessageSquare, Star, Settings, TrendingUp, Users, Eye, Euro, ChevronRight, Calendar, ExternalLink, Search, Loader2, AlertCircle, Image as ImageIcon } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { QuickSiteLinks } from '@/components/InternalLinks'
 import LogoutButton from '@/components/LogoutButton'
@@ -193,6 +193,13 @@ export default function EspaceArtisanPage() {
                 <MessageSquare className="w-5 h-5" />
                 Messages
                 <span className="ml-auto bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full">5</span>
+              </Link>
+              <Link
+                href="/espace-artisan/portfolio"
+                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
+              >
+                <ImageIcon className="w-5 h-5" />
+                Portfolio
               </Link>
               <Link
                 href="/espace-artisan/avis"

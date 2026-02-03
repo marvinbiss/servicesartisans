@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, ChevronLeft, ChevronRight, Camera, ZoomIn } from 'lucide-react'
+import { X, ChevronLeft, ChevronRight, Camera, ZoomIn, Play, Layers } from 'lucide-react'
 import { Artisan, PortfolioItem } from './types'
+import { BeforeAfterSlider, VideoPlayer } from '@/components/portfolio'
 
 interface ArtisanGalleryProps {
   artisan: Artisan
@@ -45,14 +46,35 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
     setCurrentIndex((prev) => (prev === photos.length - 1 ? 0 : prev + 1))
   }, [photos.length])
 
-  // Handle keyboard navigation
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (e.key === 'Escape') closeLightbox()
-    if (e.key === 'ArrowLeft') goToPrevious()
-    if (e.key === 'ArrowRight') goToNext()
-  }, [closeLightbox, goToPrevious, goToNext])
+  // Keyboard navigation
+  useEffect(() => {
+    if (!lightboxOpen) return
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeLightbox()
+      if (e.key === 'ArrowLeft') goToPrevious()
+      if (e.key === 'ArrowRight') goToNext()
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [lightboxOpen, closeLightbox, goToPrevious, goToNext])
 
   if (photos.length === 0) return null
+
+  const currentPhoto = photos[currentIndex]
+
+  // Get thumbnail URL for display
+  const getThumbnail = (photo: PortfolioItem) => {
+    return photo.thumbnailUrl || photo.imageUrl || photo.afterImageUrl || ''
+  }
+
+  // Count different media types
+  const stats = {
+    images: photos.filter(p => !p.mediaType || p.mediaType === 'image').length,
+    videos: photos.filter(p => p.mediaType === 'video').length,
+    beforeAfter: photos.filter(p => p.mediaType === 'before_after').length,
+  }
 
   return (
     <>
@@ -64,7 +86,17 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
       >
         <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
           <Camera className="w-5 h-5 text-blue-600" />
-          Realisations ({photos.length} photos)
+          Réalisations ({photos.length})
+          {stats.videos > 0 && (
+            <span className="ml-2 text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">
+              {stats.videos} vidéo{stats.videos > 1 ? 's' : ''}
+            </span>
+          )}
+          {stats.beforeAfter > 0 && (
+            <span className="ml-1 text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">
+              {stats.beforeAfter} avant/après
+            </span>
+          )}
         </h2>
 
         {/* Airbnb-style photo grid */}
@@ -76,13 +108,24 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
             onClick={() => openLightbox(0)}
           >
             <img
-              src={photos[0].imageUrl}
+              src={getThumbnail(photos[0])}
               alt={photos[0].title}
               className="w-full h-full object-cover"
               loading="lazy"
             />
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
-              <ZoomIn className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+              {photos[0].mediaType === 'video' ? (
+                <div className="w-16 h-16 rounded-full bg-black/60 flex items-center justify-center">
+                  <Play className="w-8 h-8 text-white ml-1" fill="currentColor" />
+                </div>
+              ) : photos[0].mediaType === 'before_after' ? (
+                <div className="px-4 py-2 bg-black/60 rounded-lg flex items-center gap-2">
+                  <Layers className="w-5 h-5 text-white" />
+                  <span className="text-white font-medium">Avant/Après</span>
+                </div>
+              ) : (
+                <ZoomIn className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+              )}
             </div>
           </motion.div>
 
@@ -95,20 +138,26 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
               onClick={() => openLightbox(index + 1)}
             >
               <img
-                src={photo.imageUrl}
+                src={getThumbnail(photo)}
                 alt={photo.title}
                 className="w-full h-full object-cover"
                 loading="lazy"
               />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
-                <ZoomIn className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                {photo.mediaType === 'video' ? (
+                  <Play className="w-6 h-6 text-white" fill="currentColor" />
+                ) : photo.mediaType === 'before_after' ? (
+                  <Layers className="w-6 h-6 text-white" />
+                ) : (
+                  <ZoomIn className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                )}
               </div>
 
               {/* Show more overlay on last visible image */}
               {index === 3 && photos.length > 5 && (
                 <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
                   <span className="text-white font-semibold text-lg">
-                    +{photos.length - 5} photos
+                    +{photos.length - 5}
                   </span>
                 </div>
               )}
@@ -125,7 +174,7 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
             className="mt-4 w-full py-3 px-4 rounded-xl border border-gray-200 text-gray-700 font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
           >
             <Camera className="w-5 h-5" />
-            Voir toutes les photos
+            Voir toutes les réalisations
           </motion.button>
         )}
       </motion.div>
@@ -137,92 +186,101 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center"
+            className="fixed inset-0 z-[100] bg-black/95 flex flex-col"
             onClick={closeLightbox}
-            onKeyDown={handleKeyDown}
-            tabIndex={0}
           >
-            {/* Close button */}
-            <motion.button
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10"
-              onClick={closeLightbox}
-            >
-              <X className="w-6 h-6 text-white" />
-            </motion.button>
-
-            {/* Counter */}
-            <div className="absolute top-4 left-4 text-white/80 text-sm font-medium">
-              {currentIndex + 1} / {photos.length}
+            {/* Header */}
+            <div className="flex items-center justify-between p-4 text-white">
+              <div>
+                <h3 className="font-semibold text-lg">{currentPhoto.title}</h3>
+                {currentPhoto.category && (
+                  <span className="text-white/70 text-sm">{currentPhoto.category}</span>
+                )}
+              </div>
+              <div className="flex items-center gap-4">
+                <span className="text-white/70">
+                  {currentIndex + 1} / {photos.length}
+                </span>
+                <button
+                  className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                  onClick={closeLightbox}
+                >
+                  <X className="w-6 h-6 text-white" />
+                </button>
+              </div>
             </div>
 
-            {/* Previous button */}
-            <motion.button
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="absolute left-4 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10"
-              onClick={(e) => { e.stopPropagation(); goToPrevious(); }}
-            >
-              <ChevronLeft className="w-8 h-8 text-white" />
-            </motion.button>
-
-            {/* Next button */}
-            <motion.button
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="absolute right-4 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10"
-              onClick={(e) => { e.stopPropagation(); goToNext(); }}
-            >
-              <ChevronRight className="w-8 h-8 text-white" />
-            </motion.button>
-
-            {/* Main image */}
-            <motion.div
-              key={currentIndex}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ duration: 0.2 }}
-              className="max-w-5xl max-h-[85vh] mx-4"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <img
-                src={photos[currentIndex].imageUrl}
-                alt={photos[currentIndex].title}
-                className="max-w-full max-h-[75vh] object-contain rounded-lg"
-              />
-
-              {/* Caption */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mt-4 text-center"
+            {/* Main content */}
+            <div className="flex-1 flex items-center justify-center p-4 relative">
+              {/* Previous button */}
+              <motion.button
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="absolute left-4 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10"
+                onClick={(e) => { e.stopPropagation(); goToPrevious(); }}
               >
-                <h3 className="text-white font-semibold text-lg">
-                  {photos[currentIndex].title}
-                </h3>
-                {photos[currentIndex].description && (
-                  <p className="text-white/70 text-sm mt-1">
-                    {photos[currentIndex].description}
-                  </p>
-                )}
-                {photos[currentIndex].category && (
-                  <span className="inline-block mt-2 px-3 py-1 rounded-full bg-white/10 text-white/80 text-xs">
-                    {photos[currentIndex].category}
-                  </span>
+                <ChevronLeft className="w-8 h-8 text-white" />
+              </motion.button>
+
+              {/* Next button */}
+              <motion.button
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="absolute right-4 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10"
+                onClick={(e) => { e.stopPropagation(); goToNext(); }}
+              >
+                <ChevronRight className="w-8 h-8 text-white" />
+              </motion.button>
+
+              {/* Media content */}
+              <motion.div
+                key={currentIndex}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.2 }}
+                className="max-w-5xl w-full max-h-[70vh]"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {currentPhoto.mediaType === 'before_after' &&
+                currentPhoto.beforeImageUrl &&
+                currentPhoto.afterImageUrl ? (
+                  <BeforeAfterSlider
+                    beforeImage={currentPhoto.beforeImageUrl}
+                    afterImage={currentPhoto.afterImageUrl}
+                    className="max-h-[70vh]"
+                  />
+                ) : currentPhoto.mediaType === 'video' && currentPhoto.videoUrl ? (
+                  <VideoPlayer
+                    src={currentPhoto.videoUrl}
+                    poster={currentPhoto.thumbnailUrl}
+                    className="max-h-[70vh] aspect-video mx-auto"
+                  />
+                ) : (
+                  <img
+                    src={currentPhoto.imageUrl}
+                    alt={currentPhoto.title}
+                    className="max-w-full max-h-[70vh] object-contain rounded-lg mx-auto"
+                  />
                 )}
               </motion.div>
-            </motion.div>
+            </div>
+
+            {/* Description */}
+            {currentPhoto.description && (
+              <div className="p-4 text-center">
+                <p className="text-white/80 max-w-2xl mx-auto">{currentPhoto.description}</p>
+              </div>
+            )}
 
             {/* Thumbnail strip */}
-            <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 px-4 overflow-x-auto">
+            <div className="p-4 flex justify-center gap-2 overflow-x-auto">
               {photos.map((photo, index) => (
                 <motion.button
                   key={photo.id}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
-                  className={`flex-shrink-0 w-16 h-12 rounded-lg overflow-hidden transition-all ${
+                  className={`flex-shrink-0 w-16 h-12 rounded-lg overflow-hidden transition-all relative ${
                     index === currentIndex
                       ? 'ring-2 ring-white opacity-100'
                       : 'opacity-50 hover:opacity-75'
@@ -230,10 +288,20 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
                   onClick={(e) => { e.stopPropagation(); setCurrentIndex(index); }}
                 >
                   <img
-                    src={photo.imageUrl}
+                    src={getThumbnail(photo)}
                     alt={photo.title}
                     className="w-full h-full object-cover"
                   />
+                  {photo.mediaType === 'video' && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                      <Play className="w-4 h-4 text-white" fill="currentColor" />
+                    </div>
+                  )}
+                  {photo.mediaType === 'before_after' && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                      <Layers className="w-4 h-4 text-white" />
+                    </div>
+                  )}
                 </motion.button>
               ))}
             </div>
