@@ -64,51 +64,7 @@ interface SearchArtisan {
   trust_score: number
 }
 
-// Generate availability for artisans
-function generateAvailability(artisanId: string) {
-  const days = []
-  const dayNames = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi']
-  const monthNames = ['janv.', 'fevr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'aout', 'sept.', 'oct.', 'nov.', 'dec.']
-  const today = new Date()
-
-  const seed = artisanId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)
-
-  for (let i = 0; i < 5; i++) {
-    const date = new Date(today)
-    date.setDate(today.getDate() + i)
-
-    const dayOfWeek = date.getDay()
-    const slots: Array<{ time: string; available: boolean }> = []
-
-    if (dayOfWeek !== 0) {
-      const allTimes = ['08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00']
-      const dayHash = (seed + i) % 10
-
-      let selectedTimes: string[] = []
-      if (dayHash < 3) {
-        selectedTimes = allTimes.filter((_, idx) => (idx + seed) % 5 === 0).slice(0, 2)
-      } else if (dayHash < 7) {
-        selectedTimes = allTimes.filter((_, idx) => (idx + seed + i) % 3 === 0).slice(0, 4)
-      } else {
-        selectedTimes = allTimes.filter((_, idx) => (idx + seed) % 2 === 0).slice(0, 5)
-      }
-
-      selectedTimes.sort().forEach(time => {
-        slots.push({ time, available: true })
-      })
-    }
-
-    days.push({
-      date: date.toISOString().split('T')[0],
-      dayName: dayNames[dayOfWeek],
-      dayNumber: date.getDate(),
-      month: monthNames[date.getMonth()],
-      slots,
-    })
-  }
-
-  return days
-}
+// Availability data is no longer generated - should be fetched from real scheduling data
 
 // Transform provider to artisan format
 function transformProviderToArtisan(provider: any, distanceKm?: number): SearchArtisan {
@@ -127,9 +83,9 @@ function transformProviderToArtisan(provider: any, distanceKm?: number): SearchA
     else if (name.includes('jardin') || name.includes('paysag')) specialty = 'Jardinier'
   }
 
-  const seed = provider.id.split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0)
-  const rating = provider.rating_average || (4 + (seed % 10) / 10)
-  const reviewCount = provider.review_count || (20 + (seed % 80))
+  // Use real data only, no fake generation
+  const rating = provider.rating_average || 0
+  const reviewCount = provider.review_count || 0
 
   return {
     id: provider.id,
@@ -151,7 +107,7 @@ function transformProviderToArtisan(provider: any, distanceKm?: number): SearchA
     is_center: (provider.employee_count || 0) > 1,
     team_size: provider.employee_count || null,
     services: [specialty],
-    availability_status: seed % 3 === 0 ? 'available_today' : seed % 3 === 1 ? 'available_this_week' : 'unavailable',
+    availability_status: 'unavailable' as const, // Real availability from scheduling system not yet implemented
     response_time: provider.avg_response_time_hours ? `< ${Math.ceil(provider.avg_response_time_hours)}h` : '< 2h',
     distance_km: distanceKm !== undefined ? parseFloat(distanceKm.toFixed(2)) : null,
     accepts_new_clients: true,
@@ -259,13 +215,7 @@ export async function GET(request: Request) {
           artisans = artisans.filter((a: SearchArtisan) => a.is_verified)
         }
 
-        // Add availability data
-        artisans = artisans.map((a: SearchArtisan) => ({
-          ...a,
-          availability: a.accepts_new_clients
-            ? generateAvailability(a.id)
-            : generateAvailability(a.id).map(d => ({ ...d, slots: [] }))
-        }))
+        // Don't add fake availability data - will be fetched separately if needed
 
         // Build facets
         const facets = buildFacets(artisans)
@@ -388,13 +338,7 @@ export async function GET(request: Request) {
       })
     }
 
-    // Add availability data
-    artisans = artisans.map((a: SearchArtisan) => ({
-      ...a,
-      availability: a.accepts_new_clients
-        ? generateAvailability(a.id)
-        : generateAvailability(a.id).map(d => ({ ...d, slots: [] }))
-    }))
+    // Don't add fake availability data - will be fetched separately if needed
 
     // Build facets
     const facets = buildFacets(artisans)
