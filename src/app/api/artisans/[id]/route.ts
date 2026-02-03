@@ -190,20 +190,29 @@ export async function GET(
         return null
       }).filter(Boolean) || []
 
-      // Récupérer le portfolio réel
-      const portfolio = (provider.portfolio_items || []).map((item: {
-        id: string
-        title?: string
-        description?: string
-        image_url?: string
-        category?: string
-      }) => ({
-        id: item.id,
-        title: item.title || 'Réalisation',
-        description: item.description || '',
-        imageUrl: item.image_url || '',
-        category: item.category || 'Travaux',
-      }))
+      // Récupérer le portfolio réel (filtrer les données de démo avec images Unsplash)
+      const portfolio = (provider.portfolio_items || [])
+        .filter((item: { image_url?: string }) => {
+          // Exclure les images de démo (Unsplash, placeholder, etc.)
+          const imageUrl = item.image_url || ''
+          return !imageUrl.includes('unsplash.com') &&
+                 !imageUrl.includes('placeholder') &&
+                 !imageUrl.includes('picsum.photos') &&
+                 imageUrl.length > 0
+        })
+        .map((item: {
+          id: string
+          title?: string
+          description?: string
+          image_url?: string
+          category?: string
+        }) => ({
+          id: item.id,
+          title: item.title || 'Réalisation',
+          description: item.description || '',
+          imageUrl: item.image_url || '',
+          category: item.category || 'Travaux',
+        }))
 
       // Récupérer la FAQ réelle
       const { data: faqData } = await supabase
@@ -343,26 +352,35 @@ export async function GET(
           .order('created_at', { ascending: false })
           .limit(20)
 
-        // Récupérer le portfolio
+        // Récupérer le portfolio (filtrer les données de démo)
         const { data: portfolioData } = await supabase
           .from('portfolio_items')
           .select('*')
           .eq('user_id', artisanId)
           .order('created_at', { ascending: false })
 
-        const portfolio = (portfolioData || []).map((item: {
-          id: string
-          title?: string
-          description?: string
-          image_url?: string
-          category?: string
-        }) => ({
-          id: item.id,
-          title: item.title || 'Réalisation',
-          description: item.description || '',
-          imageUrl: item.image_url || '',
-          category: item.category || 'Travaux',
-        }))
+        const portfolio = (portfolioData || [])
+          .filter((item: { image_url?: string }) => {
+            // Exclure les images de démo (Unsplash, placeholder, etc.)
+            const imageUrl = item.image_url || ''
+            return !imageUrl.includes('unsplash.com') &&
+                   !imageUrl.includes('placeholder') &&
+                   !imageUrl.includes('picsum.photos') &&
+                   imageUrl.length > 0
+          })
+          .map((item: {
+            id: string
+            title?: string
+            description?: string
+            image_url?: string
+            category?: string
+          }) => ({
+            id: item.id,
+            title: item.title || 'Réalisation',
+            description: item.description || '',
+            imageUrl: item.image_url || '',
+            category: item.category || 'Travaux',
+          }))
 
         // Récupérer la FAQ
         const { data: faqData } = await supabase
