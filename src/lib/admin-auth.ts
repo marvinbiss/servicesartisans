@@ -103,10 +103,27 @@ export async function verifyAdmin(): Promise<AdminAuthResult> {
       isAdmin = profile.is_admin === true
     }
 
-    // Fallback: check email whitelist
-    if (!isAdmin && !role && user.email && ADMIN_EMAILS.includes(user.email)) {
+    // Fallback: check email whitelist ONLY if profile was found and verified
+    // SECURITY FIX: Ne jamais accorder super_admin si le profil n'est pas accessible
+    if (profileError) {
+      logger.error('Profile access failed - denying admin access for security', {
+        userId: user.id,
+        email: user.email,
+        error: profileError
+      })
+      return {
+        success: false,
+        error: NextResponse.json(
+          { success: false, error: { code: 'PROFILE_ACCESS_ERROR', message: 'Impossible de vérifier les permissions' } },
+          { status: 503 }
+        ),
+      }
+    }
+
+    // Whitelist check ONLY with valid profile
+    if (!isAdmin && !role && user.email && ADMIN_EMAILS.includes(user.email) && profile) {
       isAdmin = true
-      role = 'super_admin' // Give full permissions to whitelisted emails
+      role = profile.role as AdminRole || 'admin' // Use profile role, not super_admin by default
     }
 
     // Verify admin access

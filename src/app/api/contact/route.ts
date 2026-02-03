@@ -8,6 +8,21 @@ import { logger } from '@/lib/logger'
 import { Resend } from 'resend'
 import { z } from 'zod'
 
+// HTML escape function to prevent XSS
+function escapeHtml(text: string): string {
+  const htmlEntities: Record<string, string> = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+    '/': '&#x2F;',
+    '`': '&#x60;',
+    '=': '&#x3D;'
+  }
+  return text.replace(/[&<>"'`=/]/g, (char) => htmlEntities[char])
+}
+
 export const dynamic = 'force-dynamic'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
@@ -43,20 +58,26 @@ export async function POST(request: Request) {
       autre: 'Autre',
     }
 
+    // Sanitize all user inputs for HTML
+    const safeNom = escapeHtml(nom)
+    const safeEmail = escapeHtml(email)
+    const safeSujet = escapeHtml(sujetTexte[sujet] || sujet)
+    const safeMessage = escapeHtml(message).replace(/\n/g, '<br />')
+
     // Send email to support team
     const { error: sendError } = await resend.emails.send({
       from: process.env.FROM_EMAIL || 'contact@servicesartisans.fr',
       to: 'contact@servicesartisans.fr',
       reply_to: email,
-      subject: `[Contact] ${sujetTexte[sujet] || sujet} - ${nom}`,
+      subject: `[Contact] ${safeSujet} - ${safeNom}`,
       html: `
         <h2>Nouveau message de contact</h2>
-        <p><strong>Nom:</strong> ${nom}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Sujet:</strong> ${sujetTexte[sujet] || sujet}</p>
+        <p><strong>Nom:</strong> ${safeNom}</p>
+        <p><strong>Email:</strong> ${safeEmail}</p>
+        <p><strong>Sujet:</strong> ${safeSujet}</p>
         <hr />
         <h3>Message:</h3>
-        <p>${message.replace(/\n/g, '<br />')}</p>
+        <p>${safeMessage}</p>
         <hr />
         <p style="color: #666; font-size: 12px;">
           Message envoyé depuis le formulaire de contact de ServicesArtisans
@@ -72,18 +93,18 @@ export async function POST(request: Request) {
       )
     }
 
-    // Send confirmation email to user
+    // Send confirmation email to user (with sanitized content)
     await resend.emails.send({
       from: process.env.FROM_EMAIL || 'noreply@servicesartisans.fr',
       to: email,
       subject: 'Votre message a bien été reçu - ServicesArtisans',
       html: `
-        <h2>Bonjour ${nom},</h2>
+        <h2>Bonjour ${safeNom},</h2>
         <p>Nous avons bien reçu votre message et nous vous répondrons dans les plus brefs délais.</p>
-        <p><strong>Sujet:</strong> ${sujetTexte[sujet] || sujet}</p>
+        <p><strong>Sujet:</strong> ${safeSujet}</p>
         <hr />
         <p><strong>Votre message:</strong></p>
-        <p>${message.replace(/\n/g, '<br />')}</p>
+        <p>${safeMessage}</p>
         <hr />
         <p>Cordialement,<br />L'équipe ServicesArtisans</p>
         <p style="color: #666; font-size: 12px;">

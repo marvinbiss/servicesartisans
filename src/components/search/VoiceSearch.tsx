@@ -1,8 +1,63 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { Mic, MicOff, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
+
+// Proper TypeScript types for Web Speech API
+interface SpeechRecognitionEvent extends Event {
+  resultIndex: number
+  results: SpeechRecognitionResultList
+}
+
+interface SpeechRecognitionErrorEvent extends Event {
+  error: 'no-speech' | 'aborted' | 'audio-capture' | 'network' | 'not-allowed' | 'service-not-allowed' | 'bad-grammar' | 'language-not-supported'
+  message: string
+}
+
+interface SpeechRecognitionResult {
+  isFinal: boolean
+  readonly length: number
+  item(index: number): SpeechRecognitionAlternative
+  [index: number]: SpeechRecognitionAlternative
+}
+
+interface SpeechRecognitionResultList {
+  readonly length: number
+  item(index: number): SpeechRecognitionResult
+  [index: number]: SpeechRecognitionResult
+}
+
+interface SpeechRecognitionAlternative {
+  transcript: string
+  confidence: number
+}
+
+interface ISpeechRecognition extends EventTarget {
+  continuous: boolean
+  interimResults: boolean
+  lang: string
+  maxAlternatives: number
+  onstart: ((this: ISpeechRecognition, ev: Event) => void) | null
+  onend: ((this: ISpeechRecognition, ev: Event) => void) | null
+  onerror: ((this: ISpeechRecognition, ev: SpeechRecognitionErrorEvent) => void) | null
+  onresult: ((this: ISpeechRecognition, ev: SpeechRecognitionEvent) => void) | null
+  start(): void
+  stop(): void
+  abort(): void
+}
+
+interface ISpeechRecognitionConstructor {
+  new (): ISpeechRecognition
+}
+
+// Extend window interface
+declare global {
+  interface Window {
+    SpeechRecognition?: ISpeechRecognitionConstructor
+    webkitSpeechRecognition?: ISpeechRecognitionConstructor
+  }
+}
 
 interface VoiceSearchProps {
   onResult: (transcript: string) => void
@@ -20,24 +75,33 @@ export function VoiceSearch({
   const [isListening, setIsListening] = useState(false)
   const [transcript, setTranscript] = useState('')
   const [isSupported, setIsSupported] = useState(true)
+  const recognitionRef = useRef<ISpeechRecognition | null>(null)
 
   useEffect(() => {
     // Check if speech recognition is supported
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
-    if (!SpeechRecognition) {
+    const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition
+    if (!SpeechRecognitionAPI) {
       setIsSupported(false)
+    }
+
+    // Cleanup on unmount
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.abort()
+      }
     }
   }, [])
 
   const startListening = useCallback(() => {
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+    const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition
 
-    if (!SpeechRecognition) {
+    if (!SpeechRecognitionAPI) {
       onError?.('La reconnaissance vocale n\'est pas supportée par votre navigateur')
       return
     }
 
-    const recognition = new SpeechRecognition()
+    const recognition = new SpeechRecognitionAPI()
+    recognitionRef.current = recognition
     recognition.lang = language
     recognition.continuous = false
     recognition.interimResults = true
@@ -47,7 +111,7 @@ export function VoiceSearch({
       setTranscript('')
     }
 
-    recognition.onresult = (event: any) => {
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
       const current = event.resultIndex
       const result = event.results[current]
       const text = result[0].transcript
@@ -60,7 +124,7 @@ export function VoiceSearch({
       }
     }
 
-    recognition.onerror = (event: any) => {
+    recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
       setIsListening(false)
       if (event.error === 'no-speech') {
         onError?.('Aucune parole détectée')
@@ -77,7 +141,7 @@ export function VoiceSearch({
 
     try {
       recognition.start()
-    } catch (err) {
+    } catch {
       onError?.('Erreur lors du démarrage')
     }
   }, [language, onResult, onError])

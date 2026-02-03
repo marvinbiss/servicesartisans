@@ -105,7 +105,9 @@ export async function POST(request: Request) {
     // Déterminer si l'utilisateur est un artisan basé sur user_type
     const isArtisan = profile?.user_type === 'artisan'
 
-    return NextResponse.json(
+    // SECURITY FIX: Ne pas exposer le refresh token dans la réponse JSON
+    // Le refresh token est géré par les cookies HTTP-only de Supabase
+    const response = NextResponse.json(
       createSuccessResponse({
         user: {
           id: data.user.id,
@@ -119,11 +121,22 @@ export async function POST(request: Request) {
         },
         session: {
           accessToken: data.session.access_token,
-          refreshToken: data.session.refresh_token,
           expiresAt: data.session.expires_at,
+          // refreshToken intentionally omitted for security
         },
       })
     )
+
+    // Set refresh token as HTTP-only cookie for security
+    response.cookies.set('sb-refresh-token', data.session.refresh_token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      path: '/api/auth',
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+    })
+
+    return response
   } catch (error) {
     logger.error('Signin error:', error)
     return NextResponse.json(

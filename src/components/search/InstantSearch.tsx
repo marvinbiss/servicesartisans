@@ -38,30 +38,57 @@ export function InstantSearch({
   const containerRef = useRef<HTMLDivElement>(null)
 
   const debouncedQuery = useDebounce(query, 200)
+  const abortControllerRef = useRef<AbortController | null>(null)
 
-  // Fetch suggestions
+  // Fetch suggestions with AbortController to cancel stale requests
   const fetchSuggestions = useCallback(async () => {
+    // Cancel any pending request
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort()
+    }
+
     if (!debouncedQuery.trim()) {
       setSuggestions([])
       return
     }
 
+    // Create new AbortController for this request
+    const controller = new AbortController()
+    abortControllerRef.current = controller
+
     setIsLoading(true)
     try {
-      const response = await fetch(`/api/search/suggestions?q=${encodeURIComponent(debouncedQuery)}`)
+      const response = await fetch(
+        `/api/search/suggestions?q=${encodeURIComponent(debouncedQuery)}`,
+        { signal: controller.signal }
+      )
       if (response.ok) {
         const data = await response.json()
         setSuggestions(data.suggestions || [])
       }
     } catch (error) {
+      // Ignore abort errors - they're expected when cancelling stale requests
+      if (error instanceof Error && error.name === 'AbortError') {
+        return
+      }
       console.error('Error fetching suggestions:', error)
     } finally {
-      setIsLoading(false)
+      // Only update loading state if this controller wasn't aborted
+      if (!controller.signal.aborted) {
+        setIsLoading(false)
+      }
     }
   }, [debouncedQuery])
 
   useEffect(() => {
     fetchSuggestions()
+
+    // Cleanup: abort pending request on unmount or when query changes
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort()
+      }
+    }
   }, [fetchSuggestions])
 
   // Handle click outside

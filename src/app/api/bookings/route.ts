@@ -179,74 +179,44 @@ export async function POST(request: Request) {
 
     const supabase = await createClient()
 
-    // Check if slot is still available
-    const { data: slot, error: slotError } = await supabase
-      .from('availability_slots')
-      .select('*')
-      .eq('id', slotId)
-      .eq('is_available', true)
-      .single()
+    // SECURITY FIX: Use atomic transaction to prevent double booking
+    const { data: result, error: rpcError } = await supabase.rpc('create_booking_atomic', {
+      p_artisan_id: artisanId,
+      p_slot_id: slotId,
+      p_client_name: clientName.trim(),
+      p_client_phone: clientPhone,
+      p_client_email: clientEmail.toLowerCase().trim(),
+      p_service_description: serviceDescription?.slice(0, 1000) || null,
+      p_address: address?.slice(0, 500) || null,
+      p_payment_intent_id: paymentIntentId || null,
+      p_deposit_amount: depositAmount || null,
+    })
 
-    if (slotError || !slot) {
-      return NextResponse.json(
-        createErrorResponse(ErrorCode.SLOT_UNAVAILABLE, 'Ce creneau n\'est plus disponible'),
-        { status: 409 }
-      )
-    }
-
-    // Check for existing booking with same email on same date (prevent duplicates)
-    const { data: existingBooking } = await supabase
-      .from('bookings')
-      .select('id')
-      .eq('slot_id', slotId)
-      .eq('client_email', clientEmail.toLowerCase())
-      .eq('status', 'confirmed')
-      .single()
-
-    if (existingBooking) {
-      return NextResponse.json(
-        createErrorResponse(ErrorCode.ALREADY_EXISTS, 'Vous avez deja une reservation pour ce creneau'),
-        { status: 409 }
-      )
-    }
-
-    // Create booking
-    const { data: booking, error: bookingError } = await supabase
-      .from('bookings')
-      .insert({
-        artisan_id: artisanId,
-        slot_id: slotId,
-        client_name: clientName.trim(),
-        client_phone: clientPhone,
-        client_email: clientEmail.toLowerCase().trim(),
-        service_description: serviceDescription?.slice(0, 1000) || null,
-        address: address?.slice(0, 500) || null,
-        payment_intent_id: paymentIntentId || null,
-        deposit_amount: depositAmount || null,
-        status: 'confirmed',
-        created_at: new Date().toISOString(),
-      })
-      .select()
-      .single()
-
-    if (bookingError) {
-      logger.error('Booking creation error', bookingError)
+    if (rpcError) {
+      logger.error('Booking RPC error', rpcError)
       return NextResponse.json(
         createErrorResponse(ErrorCode.DATABASE_ERROR, 'Erreur lors de la creation de la reservation'),
         { status: 500 }
       )
     }
 
-    // Mark slot as unavailable
-    const { error: updateError } = await supabase
-      .from('availability_slots')
-      .update({ is_available: false })
-      .eq('id', slotId)
-
-    if (updateError) {
-      logger.error('Slot update error', updateError)
-      // Don't fail the booking, but log the error
+    // Check result from atomic function
+    if (!result.success) {
+      const errorMap: Record<string, { code: ErrorCode; status: number }> = {
+        'SLOT_UNAVAILABLE': { code: ErrorCode.SLOT_UNAVAILABLE, status: 409 },
+        'SLOT_ALREADY_BOOKED': { code: ErrorCode.SLOT_UNAVAILABLE, status: 409 },
+        'DUPLICATE_BOOKING': { code: ErrorCode.ALREADY_EXISTS, status: 409 },
+        'DATABASE_ERROR': { code: ErrorCode.DATABASE_ERROR, status: 500 },
+      }
+      const errorInfo = errorMap[result.error] || { code: ErrorCode.INTERNAL_ERROR, status: 500 }
+      return NextResponse.json(
+        createErrorResponse(errorInfo.code, result.message),
+        { status: errorInfo.status }
+      )
     }
+
+    const booking = { id: result.booking_id }
+    const slot = result.slot
 
     // Fetch artisan details for email notification
     const { data: artisan } = await supabase
@@ -294,7 +264,7 @@ export async function POST(request: Request) {
       createSuccessResponse({
         booking: {
           id: booking.id,
-          status: booking.status,
+          status: 'confirmed', // RPC sets status to confirmed
           date: slot.date,
           startTime: slot.start_time,
           endTime: slot.end_time,
