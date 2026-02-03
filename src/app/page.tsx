@@ -43,37 +43,94 @@ const popularCities = [
   { name: 'Lille', slug: 'lille' },
 ]
 
+import { createAdminClient } from '@/lib/supabase/admin'
+
 // Fetch real stats from database
 async function getStats() {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
-    const response = await fetch(`${baseUrl}/api/stats/public`, {
-      next: { revalidate: 3600 }
-    })
-    if (response.ok) {
-      return await response.json()
+    const supabase = createAdminClient()
+
+    const [
+      { count: artisanCount },
+      { count: bookingCount },
+      { data: ratingData }
+    ] = await Promise.all([
+      supabase
+        .from('providers')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_active', true),
+      supabase
+        .from('bookings')
+        .select('*', { count: 'exact', head: true }),
+      supabase
+        .from('reviews')
+        .select('rating')
+        .eq('is_visible', true)
+    ])
+
+    let averageRating = 0
+    if (ratingData && ratingData.length > 0) {
+      const total = ratingData.reduce((sum, r) => sum + r.rating, 0)
+      averageRating = total / ratingData.length
+    }
+
+    return {
+      artisanCount: artisanCount || 0,
+      bookingCount: bookingCount || 0,
+      averageRating: Math.round(averageRating * 10) / 10
     }
   } catch (error) {
     console.error('Error fetching stats:', error)
+    return null
   }
-  return null
 }
 
 // Fetch real testimonials from database
 async function getTestimonials() {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
-    const response = await fetch(`${baseUrl}/api/reviews/featured`, {
-      next: { revalidate: 3600 }
-    })
-    if (response.ok) {
-      const data = await response.json()
-      return data.reviews || []
-    }
+    const supabase = createAdminClient()
+
+    const { data: reviews } = await supabase
+      .from('reviews')
+      .select(`
+        id,
+        rating,
+        comment,
+        author_name,
+        created_at,
+        is_verified,
+        service_name,
+        provider:providers (
+          id,
+          name,
+          specialty,
+          address_city,
+          slug
+        )
+      `)
+      .eq('is_visible', true)
+      .gte('rating', 4)
+      .not('comment', 'is', null)
+      .order('created_at', { ascending: false })
+      .limit(6)
+
+    return (reviews || [])
+      .filter(r => r.comment && r.comment.length > 20)
+      .map(review => ({
+        id: review.id,
+        author_name: review.author_name || 'Client',
+        rating: review.rating,
+        comment: review.comment,
+        is_verified: review.is_verified,
+        city: review.provider?.address_city || null,
+        city_slug: review.provider?.address_city?.toLowerCase().replace(/\s+/g, '-') || null,
+        service: review.service_name || review.provider?.specialty || null,
+        service_slug: review.provider?.specialty?.toLowerCase().replace(/\s+/g, '-') || null,
+      }))
   } catch (error) {
     console.error('Error fetching testimonials:', error)
+    return []
   }
-  return []
 }
 
 export default async function HomePage() {
