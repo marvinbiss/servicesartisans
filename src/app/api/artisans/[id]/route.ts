@@ -214,20 +214,40 @@ export async function GET(
           category: item.category || 'Travaux',
         }))
 
-      // Récupérer la FAQ réelle
+      // Récupérer la FAQ réelle (filtrer les FAQ de démo/template)
       const { data: faqData } = await supabase
         .from('provider_faq')
         .select('*')
         .eq('provider_id', provider.id)
         .order('sort_order', { ascending: true })
 
-      const faq = (faqData || []).map((item: {
-        question: string
-        answer: string
-      }) => ({
-        question: item.question,
-        answer: item.answer,
-      }))
+      // Questions de démo courantes à filtrer
+      const demoFaqPatterns = [
+        'délai d\'intervention',
+        'devis sont-ils gratuits',
+        'modes de paiement',
+        'zone d\'intervention',
+        'intervenons généralement',
+        '24 à 48h',
+      ]
+
+      const faq = (faqData || [])
+        .filter((item: { question: string; answer: string }) => {
+          const lowerQuestion = item.question.toLowerCase()
+          const lowerAnswer = item.answer.toLowerCase()
+          // Exclure les FAQ qui correspondent aux patterns de démo
+          return !demoFaqPatterns.some(pattern =>
+            lowerQuestion.includes(pattern.toLowerCase()) ||
+            lowerAnswer.includes(pattern.toLowerCase())
+          )
+        })
+        .map((item: {
+          question: string
+          answer: string
+        }) => ({
+          question: item.question,
+          answer: item.answer,
+        }))
 
       const postalCode = provider.address_postal_code || ''
       const deptCode = getDeptCodeFromPostal(postalCode)
