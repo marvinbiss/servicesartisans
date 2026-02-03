@@ -116,17 +116,21 @@ async function getTestimonials() {
 
     return (reviews || [])
       .filter(r => r.comment && r.comment.length > 20)
-      .map(review => ({
-        id: review.id,
-        author_name: review.author_name || 'Client',
-        rating: review.rating,
-        comment: review.comment,
-        is_verified: review.is_verified,
-        city: review.provider?.address_city || null,
-        city_slug: review.provider?.address_city?.toLowerCase().replace(/\s+/g, '-') || null,
-        service: review.service_name || review.provider?.specialty || null,
-        service_slug: review.provider?.specialty?.toLowerCase().replace(/\s+/g, '-') || null,
-      }))
+      .map(review => {
+        // Provider can be null, single object, or array depending on the relation
+        const provider = Array.isArray(review.provider) ? review.provider[0] : review.provider
+        return {
+          id: review.id,
+          author_name: review.author_name || 'Client',
+          rating: review.rating,
+          comment: review.comment,
+          is_verified: review.is_verified,
+          city: provider?.address_city || null,
+          city_slug: provider?.address_city?.toLowerCase().replace(/\s+/g, '-') || null,
+          service: review.service_name || provider?.specialty || null,
+          service_slug: provider?.specialty?.toLowerCase().replace(/\s+/g, '-') || null,
+        }
+      })
   } catch (error) {
     console.error('Error fetching testimonials:', error)
     return []
