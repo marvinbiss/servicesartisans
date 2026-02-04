@@ -25,8 +25,7 @@ export async function GET(request: Request) {
         created_at,
         author_verified,
         author_name,
-        has_media,
-        booking_id
+        has_media
       `)
       .eq('provider_id', providerId)
       .order('created_at', { ascending: false })

@@ -112,8 +112,7 @@ async function getProviderReviews(providerId: string): Promise<Review[]> {
         created_at,
         author_verified,
         author_name,
-        has_media,
-        booking_id
+        has_media
       `)
       .eq('provider_id', providerId)
       // REMOVED: .eq('status', 'published') to show ALL real reviews
