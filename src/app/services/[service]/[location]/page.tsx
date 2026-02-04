@@ -6,7 +6,7 @@ import {
   getProvidersByServiceAndLocation,
 } from '@/lib/supabase'
 import ServiceLocationPageClient from './PageClient'
-import { REVALIDATE } from '@/lib/cache'
+
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { PopularServicesLinks } from '@/components/InternalLinks'
 import { popularServices, popularCities } from '@/lib/constants/navigation'
