@@ -150,29 +150,29 @@ export default async function HomePage() {
     getTestimonials()
   ])
 
-  // Format stats for display with real data
+  // Format stats for display with REAL data only (no fake fallbacks)
   const displayStats = [
-    {
-      value: stats?.artisanCount ? `${stats.artisanCount.toLocaleString('fr-FR')}` : '4 000+',
+    stats?.artisanCount && stats.artisanCount > 0 ? {
+      value: `${stats.artisanCount.toLocaleString('fr-FR')}`,
       label: 'Artisans verifies',
       icon: Users
-    },
-    {
-      value: stats?.reviewCount ? `${Math.floor(stats.reviewCount / 1000)}K+` : '59K+',
-      label: 'Avis Google',
+    } : null,
+    stats?.reviewCount && stats.reviewCount > 0 ? {
+      value: stats.reviewCount >= 1000 ? `${Math.floor(stats.reviewCount / 1000)}K+` : `${stats.reviewCount}`,
+      label: 'Avis verifies',
       icon: CheckCircle
-    },
-    {
-      value: stats?.averageRating ? `${stats.averageRating.toFixed(1)}/5` : '4.8/5',
+    } : null,
+    stats?.averageRating && stats.averageRating > 0 ? {
+      value: `${stats.averageRating.toFixed(1)}/5`,
       label: 'Note moyenne',
       icon: Star
-    },
+    } : null,
     {
       value: '< 2h',
       label: 'Temps de reponse',
       icon: Clock
     },
-  ]
+  ].filter(Boolean)
 
   return (
     <div className="min-h-screen">

@@ -138,11 +138,7 @@ export default function VillesPage() {
           <div className="flex flex-wrap justify-center gap-8 mt-12" role="list" aria-label="Statistiques clés">
             <div className="flex items-center gap-2" role="listitem">
               <Users className="w-5 h-5 text-amber-400" aria-hidden="true" />
-              <span className="text-slate-300">4 000+ artisans</span>
-            </div>
-            <div className="flex items-center gap-2" role="listitem">
-              <Star className="w-5 h-5 text-amber-400" aria-hidden="true" />
-              <span className="text-slate-300">4.8/5 satisfaction</span>
+              <span className="text-slate-300">Artisans qualifiés</span>
             </div>
             <div className="flex items-center gap-2" role="listitem">
               <TrendingUp className="w-5 h-5 text-amber-400" aria-hidden="true" />

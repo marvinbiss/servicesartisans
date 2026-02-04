@@ -441,11 +441,7 @@ export default function Header() {
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-green-400" />
-              <span className="text-white/90">4 000+ artisans vérifiés</span>
-            </div>
-            <div className="hidden md:flex items-center gap-2">
-              <Star className="w-4 h-4 text-amber-400" />
-              <span className="text-white/90">4.8/5 satisfaction</span>
+              <span className="text-white/90">Artisans vérifiés</span>
             </div>
           </div>
           <div className="flex items-center gap-4">
@@ -724,7 +720,7 @@ export default function Header() {
                     </div>
                     <div className="flex items-center gap-2 text-sm text-white/80">
                       <Users className="w-4 h-4 text-amber-400" />
-                      4 000+ artisans
+                      Tous nos artisans
                     </div>
                   </div>
 

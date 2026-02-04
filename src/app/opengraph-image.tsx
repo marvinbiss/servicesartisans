@@ -90,7 +90,7 @@ export default async function Image() {
               fontSize: 20,
             }}
           >
-            4000+ artisans verifies
+            Artisans verifies
           </div>
           <div
             style={{

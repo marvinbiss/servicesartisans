@@ -196,7 +196,7 @@ function SearchPageContent() {
             </div>
             <div className="flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-sm rounded-full">
               <Star className="w-4 h-4 text-amber-400" />
-              <span className="text-sm text-white/90">4.8/5 satisfaction</span>
+              <span className="text-sm text-white/90">Qualité garantie</span>
             </div>
             <div className="flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-sm rounded-full">
               <TrendingUp className="w-4 h-4 text-blue-400" />

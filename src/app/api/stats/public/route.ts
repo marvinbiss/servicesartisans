@@ -13,10 +13,10 @@ export async function GET() {
   try {
     const supabase = createAdminClient()
 
-    // Get stats from providers table (which has Google Maps data)
+    // Get REAL stats from actual reviews table (NOT from providers table which had fake data)
     const [
       { count: artisanCount },
-      { data: providerStats }
+      { data: realReviews }
     ] = await Promise.all([
       // Count active artisans
       supabase
@@ -24,30 +24,27 @@ export async function GET() {
         .select('*', { count: 'exact', head: true })
         .eq('is_active', true),
 
-      // Get review stats from providers
+      // Get REAL reviews only (exclude synthetic/fake reviews)
       supabase
-        .from('providers')
-        .select('review_count, rating_average')
-        .eq('is_active', true)
-        .gt('review_count', 0)
+        .from('reviews')
+        .select('rating, source')
+        .not('source', 'is', null)
+        .neq('source', '')
+        .neq('source', 'synthetic')
     ])
 
-    // Calculate total reviews and weighted average rating
+    // Calculate total REAL reviews and average rating
     let totalReviews = 0
-    let weightedRatingSum = 0
+    let totalRating = 0
 
-    if (providerStats && providerStats.length > 0) {
-      for (const p of providerStats) {
-        const reviews = p.review_count || 0
-        const rating = p.rating_average || 0
-        totalReviews += reviews
-        weightedRatingSum += rating * reviews
-      }
+    if (realReviews && realReviews.length > 0) {
+      totalReviews = realReviews.length
+      totalRating = realReviews.reduce((sum, r) => sum + (r.rating || 0), 0)
     }
 
     const averageRating = totalReviews > 0
-      ? Math.round((weightedRatingSum / totalReviews) * 10) / 10
-      : 4.7
+      ? Math.round((totalRating / totalReviews) * 10) / 10
+      : 0 // Return 0 if no real reviews, NOT a fake fallback value
 
     return NextResponse.json({
       artisanCount: artisanCount || 0,

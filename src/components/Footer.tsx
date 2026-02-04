@@ -70,7 +70,7 @@ export default function Footer() {
               </div>
               <div>
                 <p className="text-white font-semibold text-sm">Satisfaction garantie</p>
-                <p className="text-gray-500 text-xs">97% clients satisfaits</p>
+                <p className="text-gray-500 text-xs">Artisans qualifiés</p>
               </div>
             </div>
             <div className="flex items-center gap-3 justify-center md:justify-start">

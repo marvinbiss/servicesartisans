@@ -106,16 +106,8 @@ export default function DepartementsPage() {
           {/* Stats */}
           <div className="flex flex-wrap justify-center gap-6 mt-10" role="list" aria-label="Statistiques clés">
             <div className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg" role="listitem">
-              <Users className="w-5 h-5 text-amber-400" aria-hidden="true" />
-              <span className="text-slate-300">4 000+ artisans</span>
-            </div>
-            <div className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg" role="listitem">
-              <Star className="w-5 h-5 text-amber-400" aria-hidden="true" />
-              <span className="text-slate-300">4.8/5 satisfaction</span>
-            </div>
-            <div className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg" role="listitem">
               <Shield className="w-5 h-5 text-amber-400" aria-hidden="true" />
-              <span className="text-slate-300">100% vérifiés</span>
+              <span className="text-slate-300">Artisans vérifiés</span>
             </div>
           </div>
         </div>
