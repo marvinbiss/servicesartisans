@@ -108,13 +108,12 @@ async function getProviderReviews(providerId: string): Promise<Review[]> {
       .select(`
         id,
         rating,
-        comment,
+        content,
         created_at,
-        is_verified,
-        booking_id,
-        profiles:client_id (
-          first_name
-        )
+        author_verified,
+        author_name,
+        has_media,
+        booking_id
       `)
       .eq('provider_id', providerId)
       // REMOVED: .eq('status', 'published') to show ALL real reviews
@@ -124,16 +123,16 @@ async function getProviderReviews(providerId: string): Promise<Review[]> {
     if (reviews && reviews.length > 0) {
       return reviews.map((r: any) => ({
         id: r.id,
-        author: r.profiles?.first_name || 'Client',
+        author: r.author_name || 'Client',
         rating: r.rating,
         date: new Date(r.created_at).toLocaleDateString('fr-FR', {
           day: 'numeric',
           month: 'long',
           year: 'numeric',
         }),
-        comment: r.content || '', // FIXED: Use 'content' column not 'comment'
-        service: r.service_name || 'Service',
-        verified: r.author_verified || false, // FIXED: Use 'author_verified' not 'is_verified'
+        comment: r.content || '',
+        service: 'Plomberie',
+        verified: r.author_verified || false,
         hasPhoto: r.has_media || false,
       }))
     }
