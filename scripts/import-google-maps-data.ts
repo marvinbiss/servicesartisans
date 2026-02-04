@@ -6,6 +6,10 @@
 import { createClient } from '@supabase/supabase-js'
 import fs from 'fs'
 import path from 'path'
+import { config } from 'dotenv'
+
+// Charger les variables d'environnement depuis .env.local
+config({ path: path.join(process.cwd(), '.env.local') })
 
 // Configuration
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!
