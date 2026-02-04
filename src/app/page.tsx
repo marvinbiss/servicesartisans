@@ -172,7 +172,7 @@ export default async function HomePage() {
       label: 'Temps de reponse',
       icon: Clock
     },
-  ].filter(Boolean)
+  ].filter((stat): stat is { value: string; label: string; icon: any } => stat !== null)
 
   return (
     <div className="min-h-screen">
