@@ -185,8 +185,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-export const revalidate = 3600 // Revalidate every hour
-
 export default async function ProviderPage({ params }: PageProps) {
   const { service: serviceSlug, location: locationSlug, provider: providerSlug } = await params
 
