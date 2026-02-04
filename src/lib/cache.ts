@@ -14,7 +14,7 @@ export const CACHE_TTL = {
 export const REVALIDATE = {
   services: 3600, // 1 hour
   serviceDetail: 1800, // 30 minutes
-  serviceLocation: 900, // 15 minutes
+  serviceLocation: 60, // 1 minute - Court pour voir les changements rapidement
   artisanProfile: 300, // 5 minutes
   locations: 86400, // 24 hours
   blog: 3600, // 1 hour
