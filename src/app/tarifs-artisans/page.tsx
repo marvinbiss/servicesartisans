@@ -106,7 +106,7 @@ export default function TarifsArtisansPage() {
             Developpez votre activite
           </h1>
           <p className="text-xl text-blue-100 max-w-2xl mx-auto">
-            Rejoignez plus de 120 000 artisans et recevez des demandes de devis qualifiees
+            Rejoignez plus de 4 000 artisans et recevez des demandes de devis qualifiees
           </p>
         </div>
       </section>

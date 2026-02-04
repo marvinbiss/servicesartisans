@@ -5,9 +5,11 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Star, MapPin, ChevronLeft, ChevronRight, Users, Zap, BadgeCheck } from 'lucide-react'
 import { Artisan } from './types'
+import { getArtisanUrl } from '@/lib/utils'
 
 interface SimilarArtisan {
   id: string
+  slug?: string
   name: string
   specialty: string
   rating: number
@@ -98,7 +100,7 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSi
             style={{ scrollSnapAlign: 'start' }}
           >
             <Link
-              href={`/services/artisan/${item.id}`}
+              href={getArtisanUrl({ id: item.id, slug: item.slug, specialty: item.specialty, city: item.city, business_name: item.name })}
               aria-label={`Voir le profil de ${item.name}, ${item.specialty} a ${item.city}, note ${item.rating} sur 5`}
             >
               <motion.article

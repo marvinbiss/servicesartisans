@@ -3,6 +3,22 @@
 import Script from 'next/script'
 import { Artisan, Review, getDisplayName } from './types'
 
+// Helper to create URL-safe slugs
+const slugify = (text: string) => text
+  .toLowerCase()
+  .normalize('NFD')
+  .replace(/[\u0300-\u036f]/g, '')
+  .replace(/[^a-z0-9]+/g, '-')
+  .replace(/^-|-$/g, '')
+
+// Generate SEO-friendly artisan URL
+const getArtisanUrl = (artisan: Artisan, baseUrl: string) => {
+  const serviceSlug = slugify(artisan.specialty || 'artisan')
+  const citySlug = slugify(artisan.city || 'france')
+  const artisanSlug = artisan.slug || slugify(artisan.business_name || artisan.id)
+  return `${baseUrl}/services/${serviceSlug}/${citySlug}/${artisanSlug}`
+}
+
 interface ArtisanSchemaProps {
   artisan: Artisan
   reviews: Review[]
@@ -33,16 +49,18 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
     ],
   }
 
+  const artisanUrl = getArtisanUrl(artisan, baseUrl)
+
   // Individual Service Schemas for each service offered
   const serviceSchemas = artisan.service_prices.map((service, index) => ({
     '@context': 'https://schema.org',
     '@type': 'Service',
-    '@id': `${baseUrl}/services/artisan/${artisan.id}#service-${index}`,
+    '@id': `${artisanUrl}#service-${index}`,
     name: service.name,
     description: service.description || `${service.name} par ${displayName}`,
     provider: {
       '@type': 'LocalBusiness',
-      '@id': `${baseUrl}/services/artisan/${artisan.id}#business`,
+      '@id': `${artisanUrl}#business`,
       name: displayName,
     },
     areaServed: {
@@ -69,13 +87,13 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
   const localBusinessSchema = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
-    '@id': `${baseUrl}/services/artisan/${artisan.id}#business`,
+    '@id': `${artisanUrl}#business`,
     name: displayName,
     description: artisan.description || `${displayName} - ${artisan.specialty} a ${artisan.city}`,
     image: artisan.avatar_url || `${baseUrl}/og-artisan.jpg`,
     telephone: artisan.phone,
     email: artisan.email,
-    url: `${baseUrl}/services/artisan/${artisan.id}`,
+    url: artisanUrl,
     priceRange: artisan.hourly_rate ? `${artisan.hourly_rate}€ - ${artisan.hourly_rate * 2}€` : '€€',
     parentOrganization: {
       '@type': 'Organization',
@@ -202,14 +220,6 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
       },
     })),
   } : null
-
-  // Helper to create URL-safe slugs
-  const slugify = (text: string) => text
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '')
 
   // BreadcrumbList Schema with full geographic hierarchy
   const breadcrumbItems = [

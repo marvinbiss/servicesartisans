@@ -7,19 +7,35 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 )
 
+// Helper to create URL-safe slugs
+function slugify(text: string): string {
+  return text
+    .toString()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/[^\w-]+/g, '')
+    .replace(/--+/g, '-')
+}
+
 const services = [
   'plombier',
   'electricien',
   'serrurier',
   'chauffagiste',
-  'peintre',
+  'peintre-en-batiment',
   'menuisier',
   'carreleur',
-  'maconnerie',
+  'macon',
   'couvreur',
   'jardinier',
-  'climatisation',
-  'demenagement',
+  'vitrier',
+  'climaticien',
+  'cuisiniste',
+  'solier',
+  'nettoyage',
 ]
 
 const villes = [
@@ -228,19 +244,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const { data: providers } = await supabase
       .from('providers')
-      .select('slug, updated_at, is_verified, is_premium')
+      .select('slug, name, specialty, address_city, updated_at, is_verified, is_premium')
       .eq('is_active', true)
       .not('slug', 'is', null)
       .order('is_premium', { ascending: false })
       .order('is_verified', { ascending: false })
       .limit(10000) // Limit for sitemap size
 
-    providerPages = (providers || []).map((provider) => ({
-      url: `${baseUrl}/services/artisan/${provider.slug}`,
-      lastModified: provider.updated_at ? new Date(provider.updated_at) : currentDate,
-      changeFrequency: 'weekly' as const,
-      priority: provider.is_premium ? 0.8 : (provider.is_verified ? 0.7 : 0.6),
-    }))
+    providerPages = (providers || []).map((provider) => {
+      // Generate SEO-friendly URL
+      const serviceSlug = slugify(provider.specialty || 'artisan')
+      const citySlug = slugify(provider.address_city || 'france')
+      const artisanSlug = provider.slug || slugify(provider.name || '')
+
+      return {
+        url: `${baseUrl}/services/${serviceSlug}/${citySlug}/${artisanSlug}`,
+        lastModified: provider.updated_at ? new Date(provider.updated_at) : currentDate,
+        changeFrequency: 'weekly' as const,
+        priority: provider.is_premium ? 0.8 : (provider.is_verified ? 0.7 : 0.6),
+      }
+    })
   } catch {
     // Silently fail - sitemap will just have fewer entries
   }

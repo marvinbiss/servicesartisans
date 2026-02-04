@@ -12,10 +12,10 @@ export const revalidate = REVALIDATE.services
 
 export const metadata: Metadata = {
   title: 'ServicesArtisans - Trouvez les meilleurs artisans pres de chez vous',
-  description: 'Trouvez et comparez les meilleurs artisans de votre region. Plombiers, electriciens, serruriers et plus. Devis gratuits et avis verifies sur plus de 35 000 villes.',
+  description: 'Trouvez et comparez les meilleurs artisans de votre region. Plombiers, electriciens, serruriers et plus. Devis gratuits et avis verifies sur plus de 500 villes.',
   openGraph: {
     title: 'ServicesArtisans - Trouvez les meilleurs artisans pres de chez vous',
-    description: 'Plus de 120 000 artisans verifies. Comparez les avis et obtenez des devis gratuits.',
+    description: 'Plus de 4 000 artisans verifies. Comparez les avis et obtenez des devis gratuits.',
     type: 'website',
   },
 }
@@ -45,39 +45,47 @@ const popularCities = [
 
 import { createAdminClient } from '@/lib/supabase/admin'
 
-// Fetch real stats from database
+// Fetch real stats from database (using Google Maps data from providers)
 async function getStats() {
   try {
     const supabase = createAdminClient()
 
     const [
       { count: artisanCount },
-      { count: bookingCount },
-      { data: ratingData }
+      { data: providerStats }
     ] = await Promise.all([
       supabase
         .from('providers')
         .select('*', { count: 'exact', head: true })
         .eq('is_active', true),
       supabase
-        .from('bookings')
-        .select('*', { count: 'exact', head: true }),
-      supabase
-        .from('reviews')
-        .select('rating')
-        .eq('is_visible', true)
+        .from('providers')
+        .select('review_count, rating_average')
+        .eq('is_active', true)
+        .gt('review_count', 0)
     ])
 
-    let averageRating = 0
-    if (ratingData && ratingData.length > 0) {
-      const total = ratingData.reduce((sum, r) => sum + r.rating, 0)
-      averageRating = total / ratingData.length
+    // Calculate total reviews and weighted average from Google Maps data
+    let totalReviews = 0
+    let weightedRatingSum = 0
+
+    if (providerStats && providerStats.length > 0) {
+      for (const p of providerStats) {
+        const reviews = p.review_count || 0
+        const rating = p.rating_average || 0
+        totalReviews += reviews
+        weightedRatingSum += rating * reviews
+      }
     }
+
+    const averageRating = totalReviews > 0
+      ? Math.round((weightedRatingSum / totalReviews) * 10) / 10
+      : 4.7
 
     return {
       artisanCount: artisanCount || 0,
-      bookingCount: bookingCount || 0,
-      averageRating: Math.round(averageRating * 10) / 10
+      reviewCount: totalReviews,
+      averageRating: averageRating
     }
   } catch (error) {
     console.error('Error fetching stats:', error)
@@ -85,52 +93,36 @@ async function getStats() {
   }
 }
 
-// Fetch real testimonials from database
+// Fetch featured artisans with best ratings as testimonials
 async function getTestimonials() {
   try {
     const supabase = createAdminClient()
 
-    const { data: reviews } = await supabase
-      .from('reviews')
-      .select(`
-        id,
-        rating,
-        comment,
-        author_name,
-        created_at,
-        is_verified,
-        service_name,
-        provider:providers (
-          id,
-          name,
-          specialty,
-          address_city,
-          slug
-        )
-      `)
-      .eq('is_visible', true)
-      .gte('rating', 4)
-      .not('comment', 'is', null)
-      .order('created_at', { ascending: false })
+    // Get top-rated artisans with most reviews (real Google Maps data)
+    const { data: providers } = await supabase
+      .from('providers')
+      .select('id, name, specialty, address_city, rating_average, review_count, slug')
+      .eq('is_active', true)
+      .gte('rating_average', 4.5)
+      .gte('review_count', 20)
+      .order('review_count', { ascending: false })
       .limit(6)
 
-    return (reviews || [])
-      .filter(r => r.comment && r.comment.length > 20)
-      .map(review => {
-        // Provider can be null, single object, or array depending on the relation
-        const provider = Array.isArray(review.provider) ? review.provider[0] : review.provider
-        return {
-          id: review.id,
-          author_name: review.author_name || 'Client',
-          rating: review.rating,
-          comment: review.comment,
-          is_verified: review.is_verified,
-          city: provider?.address_city || null,
-          city_slug: provider?.address_city?.toLowerCase().replace(/\s+/g, '-') || null,
-          service: review.service_name || provider?.specialty || null,
-          service_slug: provider?.specialty?.toLowerCase().replace(/\s+/g, '-') || null,
-        }
-      })
+    if (!providers || providers.length === 0) return []
+
+    // Create testimonial-style entries from real artisan data
+    return providers.map(p => ({
+      id: p.id,
+      author_name: p.name,
+      rating: Math.round(p.rating_average),
+      comment: `${p.name} - Artisan ${p.specialty || 'professionnel'} avec ${p.review_count} avis Google verifies. Note moyenne: ${p.rating_average}/5`,
+      is_verified: true,
+      city: p.address_city,
+      city_slug: p.address_city?.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-') || null,
+      service: p.specialty,
+      service_slug: p.specialty?.toLowerCase().replace(/\s+/g, '-') || null,
+      provider_slug: p.slug,
+    }))
   } catch (error) {
     console.error('Error fetching testimonials:', error)
     return []
@@ -147,20 +139,20 @@ export default async function HomePage() {
     getTestimonials()
   ])
 
-  // Format stats for display
+  // Format stats for display with real data
   const displayStats = [
     {
-      value: stats?.artisanCount ? `${Math.floor(stats.artisanCount / 1000)}K+` : '2 900+',
+      value: stats?.artisanCount ? `${stats.artisanCount.toLocaleString('fr-FR')}` : '4 000+',
       label: 'Artisans verifies',
       icon: Users
     },
     {
-      value: stats?.bookingCount ? `${Math.floor(stats.bookingCount / 1000)}K+` : '10K+',
-      label: 'Reservations',
+      value: stats?.reviewCount ? `${Math.floor(stats.reviewCount / 1000)}K+` : '59K+',
+      label: 'Avis Google',
       icon: CheckCircle
     },
     {
-      value: stats?.averageRating ? `${stats.averageRating.toFixed(1)}/5` : '4.5/5',
+      value: stats?.averageRating ? `${stats.averageRating.toFixed(1)}/5` : '4.8/5',
       label: 'Note moyenne',
       icon: Star
     },
@@ -192,7 +184,7 @@ export default async function HomePage() {
                 <span className="absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75 animate-ping" />
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-400" />
               </span>
-              <span className="text-sm text-blue-100 font-medium">+2 500 artisans disponibles maintenant</span>
+              <span className="text-sm text-blue-100 font-medium">+{stats?.artisanCount ? stats.artisanCount.toLocaleString('fr-FR') : '4 000'} artisans disponibles maintenant</span>
             </div>
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight tracking-tight">
@@ -347,7 +339,7 @@ export default async function HomePage() {
               Trouvez des artisans partout en France
             </h2>
             <p className="text-slate-600">
-              Plus de 35 000 villes couvertes dans toutes les <Link href="/regions" className="text-blue-600 hover:underline">regions</Link> et <Link href="/departements" className="text-blue-600 hover:underline">departements</Link>
+              Plus de 500 villes couvertes dans toutes les <Link href="/regions" className="text-blue-600 hover:underline">regions</Link> et <Link href="/departements" className="text-blue-600 hover:underline">departements</Link>
             </p>
           </div>
           <GeographicNavigation />
@@ -602,7 +594,7 @@ export default async function HomePage() {
             Vous etes artisan ?
           </h2>
           <p className="text-xl text-blue-100 mb-8">
-            Rejoignez notre reseau de plus de 120 000 artisans et developpez votre activite.
+            Rejoignez notre reseau de plus de 4 000 artisans et developpez votre activite.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link

@@ -15,7 +15,7 @@ export const defaultSEOConfig = {
     siteName: SITE_NAME,
     images: [
       {
-        url: `${SITE_URL}/images/og-image.jpg`,
+        url: `${SITE_URL}/images/og-image.svg`,
         width: 1200,
         height: 630,
         alt: 'ServicesArtisans - Trouvez les meilleurs artisans',

@@ -7,6 +7,7 @@ import { popularRegions } from '@/lib/constants/navigation'
 import { villes, getVilleBySlug, services } from '@/lib/data/france'
 import { Metadata } from 'next'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { getArtisanUrl } from '@/lib/utils'
 
 // Dynamic import for the map component (client-side only)
 const CityMap = dynamic(() => import('@/components/maps/CityMap'), {
@@ -188,7 +189,7 @@ export default async function VillePage({ params }: { params: { ville: string } 
               {artisans.slice(0, 3).map((artisan) => (
                 <Link
                   key={artisan.id}
-                  href={`/services/artisan/${artisan.slug || artisan.id}`}
+                  href={getArtisanUrl({ id: artisan.id, slug: artisan.slug, specialty: artisan.specialty, city: ville.name, business_name: artisan.name })}
                   className="bg-white rounded-xl shadow-sm p-6 hover:shadow-lg transition-shadow"
                 >
                   <div className="flex items-center gap-4 mb-4">

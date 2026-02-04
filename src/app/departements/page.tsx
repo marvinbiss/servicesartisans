@@ -89,7 +89,7 @@ export default function DepartementsPage() {
           <div className="flex flex-wrap justify-center gap-6 mt-10">
             <div className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg">
               <Users className="w-5 h-5 text-amber-400" />
-              <span className="text-slate-300">120 000+ artisans</span>
+              <span className="text-slate-300">4 000+ artisans</span>
             </div>
             <div className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg">
               <Star className="w-5 h-5 text-amber-400" />

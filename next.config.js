@@ -82,11 +82,19 @@ const nextConfig = {
         ],
       },
       {
-        source: '/services/artisan/:id*',
+        // SEO-friendly artisan URLs: /services/[service]/[city]/[artisan-slug]
+        source: '/services/:service/:city/:artisan*',
         headers: [
           { key: 'Cache-Control', value: 's-maxage=3600, stale-while-revalidate=86400' },
           // Preload critical resources for artisan pages
           { key: 'Link', value: '</fonts/inter-var.woff2>; rel=preload; as=font; type=font/woff2; crossorigin' },
+        ],
+      },
+      {
+        // Legacy artisan URL format redirect
+        source: '/services/artisan/:id*',
+        headers: [
+          { key: 'Cache-Control', value: 's-maxage=3600, stale-while-revalidate=86400' },
         ],
       },
       {

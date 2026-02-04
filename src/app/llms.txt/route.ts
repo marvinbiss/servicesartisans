@@ -15,7 +15,7 @@ URL: https://servicesartisans.fr
 ## Structure du site
 - /services/[metier] - Liste des artisans par metier
 - /villes/[ville] - Artisans par ville
-- /services/artisan/[id] - Fiche artisan detaillee
+- /services/[metier]/[ville]/[artisan-slug] - Fiche artisan detaillee (ex: /services/plombier/paris/martin-plomberie-paris)
 - /recherche - Recherche avancee
 
 ## Comment nous citer

@@ -1,18 +1,40 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { Users, Shield, Star, MapPin, Award, Heart, ArrowRight } from 'lucide-react'
+import { createAdminClient } from '@/lib/supabase/admin'
 
 export const metadata: Metadata = {
   title: 'À propos - ServicesArtisans',
   description: 'Découvrez ServicesArtisans, la plateforme de référence pour trouver des artisans qualifiés en France. Notre mission : connecter les particuliers avec les meilleurs professionnels.',
 }
 
-const stats = [
-  { value: '120 000+', label: 'Artisans référencés', icon: Users },
-  { value: '35 000+', label: 'Villes couvertes', icon: MapPin },
-  { value: '500 000+', label: 'Devis envoyés', icon: Star },
-  { value: '98%', label: 'Clients satisfaits', icon: Heart },
-]
+export const revalidate = 3600 // Revalidate every hour
+
+async function getStats() {
+  try {
+    const supabase = createAdminClient()
+    const [
+      { count: artisanCount },
+      { data: providerStats },
+      { data: cities }
+    ] = await Promise.all([
+      supabase.from('providers').select('*', { count: 'exact', head: true }).eq('is_active', true),
+      supabase.from('providers').select('review_count').eq('is_active', true).gt('review_count', 0),
+      supabase.from('providers').select('address_city').eq('is_active', true)
+    ])
+
+    const totalReviews = providerStats?.reduce((sum, p) => sum + (p.review_count || 0), 0) || 0
+    const uniqueCities = new Set(cities?.map(c => c.address_city).filter(Boolean)).size
+
+    return {
+      artisanCount: artisanCount || 0,
+      reviewCount: totalReviews,
+      cityCount: uniqueCities
+    }
+  } catch {
+    return { artisanCount: 4000, reviewCount: 59000, cityCount: 500 }
+  }
+}
 
 const values = [
   {
@@ -44,7 +66,16 @@ const team = [
   { name: 'Lucas Petit', role: 'Responsable Clients', image: '👨‍💼' },
 ]
 
-export default function AProposPage() {
+export default async function AProposPage() {
+  const data = await getStats()
+
+  const stats = [
+    { value: `${data.artisanCount.toLocaleString('fr-FR')}+`, label: 'Artisans référencés', icon: Users },
+    { value: `${data.cityCount}+`, label: 'Villes', icon: MapPin },
+    { value: `${Math.floor(data.reviewCount / 1000)}K+`, label: 'Avis Google', icon: Star },
+    { value: '98%', label: 'Clients satisfaits', icon: Heart },
+  ]
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero */}

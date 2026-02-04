@@ -14,7 +14,8 @@ test.describe('Provider Detail Page', () => {
   })
 
   test('quote form is visible on provider pages', async ({ page }) => {
-    await page.goto('/services/artisan/test')
+    // Use SEO-friendly URL format: /services/[service]/[city]/[artisan-slug]
+    await page.goto('/services/plombier/paris/test')
 
     // Check for quote form elements
     const quoteSection = page.locator('text=Demander un devis, text=devis')
@@ -23,7 +24,8 @@ test.describe('Provider Detail Page', () => {
   })
 
   test('phone number link format', async ({ page }) => {
-    await page.goto('/services/artisan/test')
+    // Use SEO-friendly URL format
+    await page.goto('/services/plombier/paris/test')
 
     const phoneLink = page.locator('a[href^="tel:"]')
     if (await phoneLink.isVisible()) {
@@ -33,7 +35,8 @@ test.describe('Provider Detail Page', () => {
   })
 
   test('reviews section if available', async ({ page }) => {
-    await page.goto('/services/artisan/test')
+    // Use SEO-friendly URL format
+    await page.goto('/services/plombier/paris/test')
 
     const reviewsSection = page.locator('text=Avis, text=avis')
     // Reviews may or may not be present

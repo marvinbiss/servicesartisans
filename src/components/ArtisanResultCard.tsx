@@ -7,6 +7,7 @@ import {
   Star, CheckCircle, Building2, Wrench,
   ChevronLeft, ChevronRight
 } from 'lucide-react'
+import { getArtisanUrl } from '@/lib/utils'
 
 interface TimeSlot {
   time: string
@@ -23,6 +24,7 @@ interface DayAvailability {
 
 interface Artisan {
   id: string
+  slug?: string
   business_name: string | null
   first_name: string | null
   last_name: string | null
@@ -150,7 +152,7 @@ export default function ArtisanResultCard({
                 {/* Name & Distance */}
                 <div className="flex items-center gap-2 flex-wrap">
                   <Link
-                    href={`/services/artisan/${artisan.id}`}
+                    href={getArtisanUrl(artisan)}
                     className="text-lg font-semibold text-blue-600 hover:underline"
                   >
                     {displayName}

@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
-import { MapPin, Loader2, Star } from 'lucide-react'
+import { Loader2, Star } from 'lucide-react'
 import Link from 'next/link'
+import { getArtisanUrl } from '@/lib/utils'
 
 // Dynamic imports for Leaflet
 const MapContainer = dynamic(
@@ -50,7 +51,7 @@ export default function GeographicMap({
   centerLng,
   zoom = 12,
   providers = [],
-  locationName,
+  locationName: _locationName,
   height = '400px',
   className = ''
 }: GeographicMapProps) {
@@ -60,6 +61,7 @@ export default function GeographicMap({
   useEffect(() => {
     // Import Leaflet and its CSS on client side
     import('leaflet').then((leaflet) => {
+      // @ts-ignore - CSS import
       import('leaflet/dist/leaflet.css')
       setL(leaflet.default)
       setMapReady(true)
@@ -136,7 +138,7 @@ export default function GeographicMap({
                   </div>
                 )}
                 <Link
-                  href={`/services/artisan/${provider.slug || provider.id}`}
+                  href={getArtisanUrl({ id: provider.id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city, business_name: provider.name })}
                   className="inline-block bg-blue-600 text-white px-3 py-1.5 rounded text-sm font-medium hover:bg-blue-700 transition-colors"
                 >
                   Voir le profil

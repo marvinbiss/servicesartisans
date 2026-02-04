@@ -54,6 +54,21 @@ export function slugify(text: string): string {
     .replace(/--+/g, '-')
 }
 
+// Generate SEO-friendly artisan URL
+export function getArtisanUrl(artisan: {
+  id: string
+  slug?: string
+  specialty?: string
+  city?: string
+  business_name?: string | null
+}): string {
+  const serviceSlug = slugify(artisan.specialty || 'artisan')
+  const citySlug = slugify(artisan.city || 'france')
+  const artisanSlug = artisan.slug || slugify(artisan.business_name || artisan.id)
+
+  return `/services/${serviceSlug}/${citySlug}/${artisanSlug}`
+}
+
 // Truncate text
 export function truncate(text: string, length: number): string {
   if (text.length <= length) return text

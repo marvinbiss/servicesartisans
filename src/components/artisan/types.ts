@@ -24,6 +24,7 @@ export interface PortfolioItem {
 
 export interface Artisan {
   id: string
+  slug?: string
   business_name: string | null
   first_name: string | null
   last_name: string | null

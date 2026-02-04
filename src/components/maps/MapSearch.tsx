@@ -9,6 +9,7 @@ import {
   List, Map as MapIcon
 } from 'lucide-react'
 import Link from 'next/link'
+import { getArtisanUrl } from '@/lib/utils'
 
 // Dynamic imports for Leaflet
 const MapContainer = dynamic(
@@ -584,7 +585,7 @@ export default function MapSearch() {
                         {/* Quick Actions */}
                         <div className="flex gap-2 mt-3">
                           <Link
-                            href={`/services/artisan/${provider.slug || provider.id}`}
+                            href={getArtisanUrl({ id: provider.id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city, business_name: provider.name })}
                             onClick={(e) => e.stopPropagation()}
                             className="flex-1 text-center py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
                           >
@@ -695,7 +696,7 @@ export default function MapSearch() {
                         </div>
                         <div className="flex gap-2 mt-3">
                           <Link
-                            href={`/services/artisan/${provider.slug || provider.id}`}
+                            href={getArtisanUrl({ id: provider.id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city, business_name: provider.name })}
                             className="flex-1 text-center py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700"
                           >
                             Voir profil
@@ -888,7 +889,7 @@ export default function MapSearch() {
               {providers.map((provider) => (
                 <Link
                   key={provider.id}
-                  href={`/services/artisan/${provider.slug || provider.id}`}
+                  href={getArtisanUrl({ id: provider.id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city, business_name: provider.name })}
                   className="flex gap-4 p-4 border-b hover:bg-gray-50"
                 >
                   <div className="w-16 h-16 bg-gray-200 rounded-xl flex items-center justify-center flex-shrink-0">

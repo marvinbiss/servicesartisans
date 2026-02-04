@@ -59,7 +59,7 @@ const DEFAULT_CENTER = { lat: 46.2276, lng: 2.2137 }
 
 export default function CityMap({ cityName, citySlug }: CityMapProps) {
   const [providers, setProviders] = useState<Provider[]>([])
-  const [loading, setLoading] = useState(true)
+  const [_loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   // Get coordinates for this city

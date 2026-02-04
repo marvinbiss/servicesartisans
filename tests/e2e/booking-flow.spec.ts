@@ -58,7 +58,8 @@ test.describe('Booking Flow', () => {
 
 test.describe('Provider Booking', () => {
   test('provider profile shows booking options', async ({ page }) => {
-    await page.goto('/services/artisan/test-provider')
+    // Use SEO-friendly URL format: /services/[service]/[city]/[artisan-slug]
+    await page.goto('/services/plombier/paris/test-provider')
 
     // Should show provider page or 404
     await expect(page.locator('body')).toBeVisible()

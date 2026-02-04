@@ -7,26 +7,18 @@ export function getOrganizationSchema() {
     '@type': 'Organization',
     name: SITE_NAME,
     url: SITE_URL,
-    logo: `${SITE_URL}/images/logo.png`,
+    logo: `${SITE_URL}/icon.svg`,
     description: 'Plateforme de mise en relation entre particuliers et artisans qualifiés en France.',
-    address: {
-      '@type': 'PostalAddress',
-      streetAddress: '42 Rue de la Republique',
-      addressLocality: 'Paris',
-      postalCode: '75011',
-      addressCountry: 'FR',
+    areaServed: {
+      '@type': 'Country',
+      name: 'France',
     },
     contactPoint: {
       '@type': 'ContactPoint',
-      telephone: '+33-1-84-80-00-00',
+      url: `${SITE_URL}/contact`,
       contactType: 'customer service',
       availableLanguage: 'French',
     },
-    sameAs: [
-      'https://www.facebook.com/servicesartisans',
-      'https://twitter.com/servicesartisans',
-      'https://www.linkedin.com/company/servicesartisans',
-    ],
   }
 }
 

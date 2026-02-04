@@ -78,7 +78,8 @@ export async function getLocationBySlug(slug: string) {
 }
 
 export async function getProviderBySlug(slug: string) {
-  const { data, error } = await supabase
+  // First, try to find by exact slug match
+  const { data: bySlug } = await supabase
     .from('providers')
     .select(`
       *,
@@ -91,9 +92,49 @@ export async function getProviderBySlug(slug: string) {
     `)
     .eq('slug', slug)
     .single()
-  
-  if (error) throw error
-  return data
+
+  if (bySlug) return bySlug
+
+  // If not found by slug, try by ID (in case it's a UUID)
+  if (isValidUUID(slug)) {
+    const { data: byId } = await supabase
+      .from('providers')
+      .select(`
+        *,
+        provider_services(
+          service:services(*)
+        ),
+        provider_locations(
+          location:locations(*)
+        )
+      `)
+      .eq('id', slug)
+      .single()
+
+    if (byId) return byId
+  }
+
+  // If still not found, try a fuzzy search on the name (for generated slugs)
+  // Convert slug back to potential name pattern: "martin-plomberie-paris" -> "martin plomberie paris"
+  const namePattern = slug.replace(/-/g, ' ')
+  const { data: byName } = await supabase
+    .from('providers')
+    .select(`
+      *,
+      provider_services(
+        service:services(*)
+      ),
+      provider_locations(
+        location:locations(*)
+      )
+    `)
+    .ilike('name', `%${namePattern}%`)
+    .limit(1)
+    .single()
+
+  if (byName) return byName
+
+  return null
 }
 
 export async function getProvidersByServiceAndLocation(

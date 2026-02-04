@@ -119,7 +119,7 @@ export default function VillesPage() {
           <div className="flex flex-wrap justify-center gap-8 mt-12">
             <div className="flex items-center gap-2">
               <Users className="w-5 h-5 text-amber-400" />
-              <span className="text-slate-300">120 000+ artisans</span>
+              <span className="text-slate-300">4 000+ artisans</span>
             </div>
             <div className="flex items-center gap-2">
               <Star className="w-5 h-5 text-amber-400" />

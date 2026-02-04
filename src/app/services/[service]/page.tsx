@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     if (!service) return { title: 'Service non trouvé' }
 
     const title = `${service.name} - Trouvez un ${service.name.toLowerCase()} près de chez vous`
-    const description = `Comparez les meilleurs ${service.name.toLowerCase()}s de France. Consultez les avis, obtenez des devis gratuits. Plus de 35 000 villes couvertes.`
+    const description = `Comparez les meilleurs ${service.name.toLowerCase()}s de France. Consultez les avis, obtenez des devis gratuits. Plus de 500 villes couvertes.`
 
     return {
       title,

@@ -1,6 +1,8 @@
 import { Metadata } from 'next'
+import { redirect } from 'next/navigation'
 import ArtisanPageClient from './ArtisanPageClient'
 import { Artisan, Review } from '@/components/artisan'
+import { slugify } from '@/lib/utils'
 
 // Preload critical resources component for better performance
 function PreloadHints({ artisan }: { artisan: Artisan | null }) {
@@ -158,7 +160,7 @@ export async function generateMetadata({
         },
       ] : [
         {
-          url: 'https://servicesartisans.fr/og-artisan.jpg',
+          url: 'https://servicesartisans.fr/og-artisan.svg',
           width: 1200,
           height: 630,
           alt: `${displayName} - ${artisan.specialty} a ${artisan.city}`,
@@ -199,6 +201,7 @@ export async function generateMetadata({
 export const revalidate = 3600 // Revalidate every hour
 
 // Main page component (server component)
+// This legacy route redirects to the new SEO-friendly URL format
 export default async function ArtisanPage({
   params,
 }: {
@@ -206,6 +209,17 @@ export default async function ArtisanPage({
 }) {
   const { artisan, reviews } = await getArtisan(params.id)
 
+  // Redirect to the new SEO-friendly URL if artisan is found
+  if (artisan) {
+    const serviceSlug = slugify(artisan.specialty || 'artisan')
+    const citySlug = slugify(artisan.city || 'france')
+    const artisanSlug = slugify(artisan.business_name || artisan.id)
+
+    // Redirect to the new URL format with 301 (permanent redirect)
+    redirect(`/services/${serviceSlug}/${citySlug}/${artisanSlug}`)
+  }
+
+  // If artisan not found, show the page (which will display "not found" state)
   return (
     <>
       {/* Preload critical resources for faster page load */}

@@ -143,7 +143,7 @@ export function GeographicNavigation({ className = '' }: { className?: string })
         </div>
         <div>
           <div className="font-semibold text-gray-900 group-hover:text-amber-600">Par ville</div>
-          <div className="text-sm text-gray-500">35 000+ villes</div>
+          <div className="text-sm text-gray-500">500+ villes</div>
         </div>
       </Link>
     </div>

@@ -526,7 +526,7 @@ export default function CalendrierPage() {
             {/* Voir mon profil public */}
             <div className="bg-white rounded-xl shadow-sm p-4 mt-4">
               <Link
-                href="/services/artisan/martin-plomberie-paris"
+                href="/services/plombier/paris/martin-plomberie-paris"
                 className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
               >
                 <ExternalLink className="w-4 h-4" />
