@@ -31,7 +31,7 @@ export default function ServiceLocationPageClient({
   location,
   providers,
 }: ServiceLocationPageClientProps) {
-  const [selectedProvider, setSelectedProvider] = useState<Provider | null>(null)
+  const [_selectedProvider, setSelectedProvider] = useState<Provider | null>(null)
   const [viewMode, setViewMode] = useState<'split' | 'list' | 'map'>('split')
   const [_isMobile, setIsMobile] = useState(false)
 
