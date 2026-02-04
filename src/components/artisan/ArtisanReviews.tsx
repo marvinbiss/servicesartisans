@@ -86,7 +86,9 @@ export function ArtisanReviews({ artisan, reviews }: ArtisanReviewsProps) {
       <div className="flex flex-col md:flex-row gap-8 mb-6 pb-6 border-b border-gray-100">
         {/* Big rating */}
         <div className="text-center md:text-left flex-shrink-0">
-          <div className="text-5xl font-bold text-gray-900">{artisan.average_rating.toFixed(1)}</div>
+          <div className="text-5xl font-bold text-gray-900">
+            {artisan.average_rating !== null && artisan.average_rating > 0 ? artisan.average_rating.toFixed(1) : 'N/A'}
+          </div>
           <div className="flex items-center justify-center md:justify-start gap-1 mt-2">
             {[1, 2, 3, 4, 5].map(star => (
               <Star

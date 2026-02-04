@@ -180,11 +180,13 @@ export function ArtisanProfileCard({
               </h3>
               <p className="text-slate-600">{profession}</p>
             </div>
-            <div className="flex items-center gap-1 bg-amber-50 px-2.5 py-1 rounded-lg">
-              <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
-              <span className="font-bold text-slate-900">{rating.toFixed(1)}</span>
-              <span className="text-slate-500 text-sm">({reviewCount})</span>
-            </div>
+            {rating !== null && rating > 0 && (
+              <div className="flex items-center gap-1 bg-amber-50 px-2.5 py-1 rounded-lg">
+                <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
+                <span className="font-bold text-slate-900">{rating.toFixed(1)}</span>
+                <span className="text-slate-500 text-sm">({reviewCount})</span>
+              </div>
+            )}
           </div>
 
           {/* Location & Response */}
@@ -351,11 +353,13 @@ export function ArtisanProfileCard({
                 </div>
                 <p className="text-slate-600">{profession}</p>
               </div>
-              <div className="flex items-center gap-1">
-                <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
-                <span className="font-bold">{rating.toFixed(1)}</span>
-                <span className="text-slate-500 text-sm">({reviewCount})</span>
-              </div>
+              {rating !== null && rating > 0 && (
+                <div className="flex items-center gap-1">
+                  <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
+                  <span className="font-bold">{rating.toFixed(1)}</span>
+                  <span className="text-slate-500 text-sm">({reviewCount})</span>
+                </div>
+              )}
             </div>
 
             <div className="flex items-center gap-4 text-sm text-slate-500 mb-3">
@@ -455,10 +459,12 @@ export function ArtisanProfileCard({
           </div>
           <p className="text-sm text-slate-500 truncate">{profession} • {location}</p>
         </div>
-        <div className="flex items-center gap-1 flex-shrink-0">
-          <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
-          <span className="font-semibold text-sm">{rating.toFixed(1)}</span>
-        </div>
+        {rating !== null && rating > 0 && (
+          <div className="flex items-center gap-1 flex-shrink-0">
+            <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
+            <span className="font-semibold text-sm">{rating.toFixed(1)}</span>
+          </div>
+        )}
       </Link>
     )
   }
@@ -530,11 +536,13 @@ export function ArtisanProfileCard({
               </h3>
               {isVerified && <BadgeCheck className="w-4 h-4 text-blue-500" />}
             </div>
-            <div className="flex items-center gap-1">
-              <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
-              <span className="font-semibold text-sm">{rating.toFixed(1)}</span>
-              <span className="text-slate-500 text-sm">({reviewCount})</span>
-            </div>
+            {rating !== null && rating > 0 && (
+              <div className="flex items-center gap-1">
+                <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
+                <span className="font-semibold text-sm">{rating.toFixed(1)}</span>
+                <span className="text-slate-500 text-sm">({reviewCount})</span>
+              </div>
+            )}
           </div>
           <p className="text-slate-600 text-sm">{profession}</p>
           <p className="text-slate-500 text-sm flex items-center gap-1">

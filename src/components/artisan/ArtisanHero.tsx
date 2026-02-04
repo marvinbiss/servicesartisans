@@ -142,12 +142,14 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
           {/* Rating & Stats Row */}
           <div className="flex items-center gap-4 flex-wrap">
             <div className="flex items-center gap-2" role="group" aria-label="Note moyenne">
-              <div className="flex items-center gap-1 bg-amber-50 px-3 py-1.5 rounded-lg">
-                <Star className="w-5 h-5 text-amber-500 fill-amber-500" aria-hidden="true" />
-                <span className="font-bold text-gray-900" aria-label={`Note de ${artisan.average_rating.toFixed(1)} sur 5`}>
-                  {artisan.average_rating.toFixed(1)}
-                </span>
-              </div>
+              {artisan.average_rating !== null && artisan.average_rating > 0 && (
+                <div className="flex items-center gap-1 bg-amber-50 px-3 py-1.5 rounded-lg">
+                  <Star className="w-5 h-5 text-amber-500 fill-amber-500" aria-hidden="true" />
+                  <span className="font-bold text-gray-900" aria-label={`Note de ${artisan.average_rating.toFixed(1)} sur 5`}>
+                    {artisan.average_rating.toFixed(1)}
+                  </span>
+                </div>
+              )}
               {artisan.review_count > 0 && (
                 <span className="text-gray-600" aria-label={`${artisan.review_count} avis clients`}>
                   ({artisan.review_count} avis)
