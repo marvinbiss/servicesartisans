@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import dynamic from 'next/dynamic'
 import { motion, AnimatePresence } from 'framer-motion'
-import './map-styles.css'
 import {
   Search, Filter, MapPin, Star, Phone, ChevronDown, ChevronUp,
   Loader2, Navigation, Layers, X, Shield, Award, Zap, Heart, ExternalLink,
@@ -13,6 +12,7 @@ import Link from 'next/link'
 import { getArtisanUrl } from '@/lib/utils'
 import { useGeolocation } from '@/hooks/useGeolocation'
 import { useMapSearchCache } from '@/hooks/useMapSearchCache'
+import './map-styles.css'
 
 // Dynamic imports for Leaflet
 const MapContainer = dynamic(
