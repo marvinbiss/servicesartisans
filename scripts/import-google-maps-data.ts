@@ -77,21 +77,6 @@ function mapCategory(googleCategory: string): string {
 async function importData() {
   console.log('🚀 Début de l\'import des données Google Maps...\n')
 
-  // Vérifier si des données existent déjà
-  const { count: existingCount } = await supabase
-    .from('providers')
-    .select('*', { count: 'exact', head: true })
-    .eq('source', 'google_places')
-
-  if (existingCount && existingCount > 0) {
-    console.log(`⚠️  ATTENTION: ${existingCount} providers Google existent déjà!`)
-    console.log('❌ Pour éviter les doublons, le script s\'arrête.')
-    console.log('\n📝 Pour réimporter, supprimez d\'abord les données existantes:')
-    console.log('   DELETE FROM reviews WHERE provider_id IN (SELECT id FROM providers WHERE source = \'google_places\');')
-    console.log('   DELETE FROM providers WHERE source = \'google_places\';')
-    process.exit(1)
-  }
-
   // Lire le fichier JSON
   const filePath = path.join(process.cwd(), 'Google Maps full information.json')
   console.log('📂 Lecture du fichier:', filePath)
@@ -149,33 +134,51 @@ async function importData() {
         .from('providers')
         .select('id')
         .eq('source_id', item.place_id)
-        .single()
+        .maybeSingle()
+
+      let providerId: string
 
       if (existingProvider) {
-        console.log(`  ⏭️  Déjà existant, ignoré`)
-        continue
-      }
+        // Mettre à jour le provider existant
+        const { data: updatedProvider, error: updateError } = await supabase
+          .from('providers')
+          .update(providerData)
+          .eq('id', existingProvider.id)
+          .select('id')
+          .single()
 
-      // Insérer le provider
-      const { data: provider, error: providerError } = await supabase
-        .from('providers')
-        .insert(providerData)
-        .select('id')
-        .single()
+        if (updateError) {
+          console.error(`  ❌ Erreur update: ${updateError.message}`)
+          errors++
+          continue
+        }
 
-      if (providerError) {
-        console.error(`  ❌ Erreur provider: ${providerError.message}`)
-        errors++
-        continue
+        providerId = updatedProvider.id
+        console.log(`  🔄 Provider mis à jour (ID: ${providerId})`)
+      } else {
+        // Insérer un nouveau provider
+        const { data: newProvider, error: insertError } = await supabase
+          .from('providers')
+          .insert(providerData)
+          .select('id')
+          .single()
+
+        if (insertError) {
+          console.error(`  ❌ Erreur insert: ${insertError.message}`)
+          errors++
+          continue
+        }
+
+        providerId = newProvider.id
+        console.log(`  ✅ Provider inséré (ID: ${providerId})`)
       }
 
       providersInserted++
-      console.log(`  ✅ Provider inséré (ID: ${provider.id})`)
 
       // Insérer les avis si disponibles
       if (item.top_reviews && item.top_reviews.length > 0) {
         const reviewsData = item.top_reviews.map((review: any) => ({
-          provider_id: provider.id,
+          provider_id: providerId,
           author_name: review.reviewer_name,
           rating: review.rating,
           content: review.content,
