@@ -141,18 +141,32 @@ export async function getProvidersByServiceAndLocation(
   serviceSlug: string,
   locationSlug: string
 ) {
+  console.log('🔍 [getProvidersByServiceAndLocation] START', { serviceSlug, locationSlug })
+
   // Get service and location info
   const [service, location] = await Promise.all([
     getServiceBySlug(serviceSlug),
     getLocationBySlug(locationSlug),
   ])
 
-  if (!service || !location) return []
+  console.log('📋 [getProvidersByServiceAndLocation] Service:', service)
+  console.log('📍 [getProvidersByServiceAndLocation] Location:', location)
+
+  if (!service || !location) {
+    console.log('❌ [getProvidersByServiceAndLocation] Service ou location manquant')
+    return []
+  }
 
   // If the service ID is not a valid UUID (static fallback), return empty array
   if (!isValidUUID(service.id)) {
+    console.log('❌ [getProvidersByServiceAndLocation] Service ID invalide:', service.id)
     return []
   }
+
+  console.log('🔎 [getProvidersByServiceAndLocation] Requête Supabase avec:', {
+    service_id: service.id,
+    city: location.name,
+  })
 
   // Query providers by service AND city - no limit
   const { data, error } = await supabase
@@ -167,7 +181,22 @@ export async function getProvidersByServiceAndLocation(
     .order('is_premium', { ascending: false })
     .order('name')
 
-  if (error) throw error
+  if (error) {
+    console.error('❌ [getProvidersByServiceAndLocation] Erreur Supabase:', error)
+    throw error
+  }
+
+  console.log('✅ [getProvidersByServiceAndLocation] Résultats:', data?.length || 0, 'providers')
+  
+  // Log premiers résultats pour debug
+  if (data && data.length > 0) {
+    console.log('📋 Premiers 3 providers:', data.slice(0, 3).map(p => ({
+      name: p.name,
+      city: p.address_city,
+      services: p.provider_services,
+    })))
+  }
+
   return data || []
 }
 
