@@ -138,18 +138,30 @@ export async function getProviderBySlug(slug: string) {
 }
 
 export async function getProvidersByServiceAndLocation(
-  _serviceSlug: string,
+  serviceSlug: string,
   locationSlug: string
 ) {
-  // Get location info for city matching
-  const location = await getLocationBySlug(locationSlug)
+  // Get service and location info
+  const [service, location] = await Promise.all([
+    getServiceBySlug(serviceSlug),
+    getLocationBySlug(locationSlug),
+  ])
 
-  if (!location) return []
+  if (!service || !location) return []
 
-  // Query providers directly by city name (case-insensitive) - no limit
+  // If the service ID is not a valid UUID (static fallback), return empty array
+  if (!isValidUUID(service.id)) {
+    return []
+  }
+
+  // Query providers by service AND city - no limit
   const { data, error } = await supabase
     .from('providers')
-    .select('*')
+    .select(`
+      *,
+      provider_services!inner(service_id)
+    `)
+    .eq('provider_services.service_id', service.id)
     .ilike('address_city', location.name)
     .eq('is_active', true)
     .order('is_premium', { ascending: false })
