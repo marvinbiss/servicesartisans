@@ -19,7 +19,7 @@ interface CarteAvecListeProps {
   location?: string
 }
 
-type MapProvider = Partial<Provider> & Pick<Provider, 'id' | 'name' | 'slug' | 'latitude' | 'longitude'>
+type MapProvider = Pick<Provider, 'id' | 'name' | 'slug' | 'latitude' | 'longitude'> & Partial<Provider>
 
 export default function CarteAvecListe({
   initialCenter = [48.8566, 2.3522],
@@ -61,8 +61,12 @@ export default function CarteAvecListe({
         const data = await response.json()
 
         if (data.success && data.providers) {
-          const validProviders = data.providers
-            .filter((p: MapProvider) => p.latitude && p.longitude && p.slug)
+          const validProviders = data.providers.filter(
+            (p: Provider): p is MapProvider =>
+              typeof p.latitude === 'number' &&
+              typeof p.longitude === 'number' &&
+              Boolean(p.slug)
+          )
           setProviders(validProviders)
         }
       } catch (error) {
