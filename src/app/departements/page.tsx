@@ -8,6 +8,9 @@ import { departements } from '@/lib/data/france'
 export const metadata: Metadata = {
   title: 'Artisans par département - Tous les départements de France | ServicesArtisans',
   description: 'Trouvez un artisan qualifié dans votre département. 96 départements métropolitains + DOM-TOM couverts. Plombiers, électriciens, serruriers et plus.',
+  alternates: {
+    canonical: 'https://servicesartisans.fr/departements',
+  },
 }
 
 // Grouper les départements par région

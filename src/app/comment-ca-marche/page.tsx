@@ -7,6 +7,9 @@ import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalL
 export const metadata: Metadata = {
   title: 'Comment ca marche - ServicesArtisans',
   description: 'Decouvrez comment trouver un artisan qualifie en 3 etapes simples. Service gratuit et sans engagement.',
+  alternates: {
+    canonical: 'https://servicesartisans.fr/comment-ca-marche',
+  },
 }
 
 const steps = [

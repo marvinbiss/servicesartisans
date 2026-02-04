@@ -17,9 +17,13 @@ export const revalidate = REVALIDATE.services
 export const metadata: Metadata = {
   title: 'Tous les services artisans - ServicesArtisans',
   description: 'Découvrez tous nos services : plombier, électricien, serrurier, chauffagiste, peintre, couvreur, menuisier, maçon et bien plus. Trouvez un artisan qualifié près de chez vous.',
+  alternates: {
+    canonical: 'https://servicesartisans.fr/services',
+  },
   openGraph: {
     title: 'Tous les services artisans - ServicesArtisans',
     description: 'Plus de 50 métiers du bâtiment pour tous vos travaux. Trouvez un artisan qualifié près de chez vous.',
+    url: 'https://servicesartisans.fr/services',
   },
 }
 

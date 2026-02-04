@@ -13,10 +13,15 @@ export const revalidate = REVALIDATE.services
 export const metadata: Metadata = {
   title: 'ServicesArtisans - Trouvez les meilleurs artisans pres de chez vous',
   description: 'Trouvez et comparez les meilleurs artisans de votre region. Plombiers, electriciens, serruriers et plus. Devis gratuits et avis verifies sur plus de 500 villes.',
+  alternates: {
+    canonical: 'https://servicesartisans.fr',
+  },
   openGraph: {
     title: 'ServicesArtisans - Trouvez les meilleurs artisans pres de chez vous',
     description: 'Plus de 4 000 artisans verifies. Comparez les avis et obtenez des devis gratuits.',
     type: 'website',
+    url: 'https://servicesartisans.fr',
+    images: [{ url: 'https://servicesartisans.fr/images/og-image.svg', width: 1200, height: 630 }],
   },
 }
 

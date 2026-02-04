@@ -36,12 +36,12 @@ const plusJakarta = Plus_Jakarta_Sans({
   weight: ['500', '600', '700', '800'],
 })
 
-// Viewport configuration - Primary brand color
+// Viewport configuration - Primary brand color (aligned with brand-config.ts)
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
-  themeColor: '#3366FF', // Primary brand color
+  themeColor: '#2563eb', // Primary brand color - Blue 600
 }
 
 export const metadata: Metadata = {

@@ -7,6 +7,9 @@ import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalL
 export const metadata: Metadata = {
   title: 'Tarifs Artisans - Offres et abonnements | ServicesArtisans',
   description: 'Decouvrez nos offres pour les artisans. Inscription gratuite, visibilite maximale et demandes de devis qualifiees.',
+  alternates: {
+    canonical: 'https://servicesartisans.fr/tarifs-artisans',
+  },
 }
 
 const plans = [

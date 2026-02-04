@@ -6,6 +6,9 @@ import { createAdminClient } from '@/lib/supabase/admin'
 export const metadata: Metadata = {
   title: 'À propos - ServicesArtisans',
   description: 'Découvrez ServicesArtisans, la plateforme de référence pour trouver des artisans qualifiés en France. Notre mission : connecter les particuliers avec les meilleurs professionnels.',
+  alternates: {
+    canonical: 'https://servicesartisans.fr/a-propos',
+  },
 }
 
 export const revalidate = 3600 // Revalidate every hour

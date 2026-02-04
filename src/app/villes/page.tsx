@@ -25,9 +25,13 @@ export const revalidate = REVALIDATE.locations
 export const metadata: Metadata = {
   title: 'Artisans par ville - Trouvez un artisan près de chez vous | ServicesArtisans',
   description: 'Trouvez un artisan qualifié dans votre ville. Plus de 100 villes principales couvertes en France. Paris, Lyon, Marseille, Toulouse, Bordeaux et toutes les villes de France.',
+  alternates: {
+    canonical: 'https://servicesartisans.fr/villes',
+  },
   openGraph: {
     title: 'Artisans par ville en France',
     description: 'Plus de 100 villes principales couvertes. Trouvez un artisan qualifié près de chez vous.',
+    url: 'https://servicesartisans.fr/villes',
   },
 }
 

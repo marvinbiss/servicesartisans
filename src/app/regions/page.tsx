@@ -7,6 +7,9 @@ import { PopularServicesLinks, GeographicNavigation } from '@/components/Interna
 export const metadata: Metadata = {
   title: 'Artisans par région - Toutes les régions de France',
   description: 'Trouvez un artisan qualifié dans votre région. Toutes les régions de France métropolitaine et DOM-TOM couvertes.',
+  alternates: {
+    canonical: 'https://servicesartisans.fr/regions',
+  },
 }
 
 const regions = [
