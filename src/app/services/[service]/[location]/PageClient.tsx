@@ -7,12 +7,15 @@ import { Provider, Service, Location } from '@/types'
 import ProviderList from '@/components/ProviderList'
 import Breadcrumb from '@/components/Breadcrumb'
 
-// Import Map dynamically to avoid SSR issues with Leaflet
-const Map = dynamic(() => import('@/components/Map'), {
+// Import GeographicMap (world-class version) dynamically to avoid SSR issues with Leaflet
+const GeographicMap = dynamic(() => import('@/components/maps/GeographicMap'), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-full bg-gray-100 animate-pulse flex items-center justify-center">
-      <span className="text-gray-500">Chargement de la carte...</span>
+    <div className="w-full h-full bg-gray-100 animate-pulse flex items-center justify-center rounded-xl">
+      <div className="text-center">
+        <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+        <span className="text-gray-500 font-medium">Chargement de la carte...</span>
+      </div>
     </div>
   ),
 })
@@ -166,15 +169,29 @@ export default function ServiceLocationPageClient({
                 : 'w-full'
             }`}
           >
-            <Map
-              providers={providers}
-              center={mapCenter}
+            <GeographicMap
+              centerLat={mapCenter[0]}
+              centerLng={mapCenter[1]}
               zoom={mapZoom}
-              onMarkerClick={(provider) => {
-                setSelectedProvider(provider)
-                // Could scroll to provider in list
-              }}
-              selectedProvider={selectedProvider}
+              providers={providers.map(p => ({
+                id: p.id,
+                name: p.business_name || p.name || '',
+                slug: p.slug,
+                latitude: p.latitude || 0,
+                longitude: p.longitude || 0,
+                rating_average: p.rating_average,
+                review_count: p.review_count,
+                specialty: p.specialty,
+                address_city: p.address_city,
+                is_verified: p.is_verified || false,
+                is_premium: p.is_premium || false,
+                phone: p.phone,
+                address_street: p.address_street,
+                address_postal_code: p.address_postal_code
+              }))}
+              locationName={location.name}
+              height="100%"
+              className="h-full"
             />
           </div>
         )}
