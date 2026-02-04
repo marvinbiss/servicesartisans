@@ -18,14 +18,14 @@ function convertToArtisan(provider: any, service: any, location: any, serviceSlu
   const specialty = service?.name || provider.specialty || 'Artisan'
   const city = location?.name || provider.address_city || ''
   const name = provider.name || provider.business_name || 'Artisan'
-  const rating = provider.rating_average || 4.5
+  const rating = provider.rating_average || null
   const reviewCount = provider.review_count || 0
 
-  // Generate description if missing or too short
+  // Generate description if missing or too short (WITHOUT fake ratings)
   const existingDesc = provider.description || provider.bio
   const description = (existingDesc && existingDesc.length > 50)
     ? existingDesc
-    : generateDescription(name, specialty, city || 'votre région', rating, reviewCount)
+    : generateDescription(name, specialty, city || 'votre région')
 
   return {
     id: provider.id,
@@ -46,7 +46,7 @@ function convertToArtisan(provider: any, service: any, location: any, serviceSlu
     specialty_slug: serviceSlug,
     city_slug: location?.slug || undefined,
     description: description,
-    average_rating: provider.rating_average || provider.average_rating || 4.5,
+    average_rating: provider.rating_average || provider.average_rating || null,
     review_count: provider.review_count || 0,
     hourly_rate: provider.hourly_rate_min || provider.hourly_rate || undefined,
     is_verified: provider.is_verified || false,
@@ -81,12 +81,12 @@ function convertToArtisan(provider: any, service: any, location: any, serviceSlu
   }
 }
 
-// Generate a description for a provider based on their data
-function generateDescription(name: string, specialty: string, city: string, rating: number, reviewCount: number): string {
+// Generate a description for a provider based on their data (WITHOUT mentioning fake ratings)
+function generateDescription(name: string, specialty: string, city: string): string {
   const descriptions = [
-    `${name} est un ${specialty.toLowerCase()} professionnel basé à ${city}. Avec une note de ${rating}/5 basée sur ${reviewCount} avis Google vérifiés, nous garantissons un service de qualité pour tous vos travaux. Contactez-nous pour un devis gratuit.`,
-    `Votre ${specialty.toLowerCase()} de confiance à ${city}. ${name} intervient rapidement pour tous vos besoins. Note moyenne de ${rating}/5 sur Google Maps (${reviewCount} avis). Devis gratuit et sans engagement.`,
-    `${name} - ${specialty.toLowerCase()} à ${city}. Fort de nombreuses interventions réussies et d'une note de ${rating}/5 (${reviewCount} avis clients), nous vous garantissons un travail soigné et professionnel.`,
+    `${name} est un ${specialty.toLowerCase()} professionnel basé à ${city}. Nous garantissons un service de qualité pour tous vos travaux. Contactez-nous pour un devis gratuit.`,
+    `Votre ${specialty.toLowerCase()} de confiance à ${city}. ${name} intervient rapidement pour tous vos besoins. Devis gratuit et sans engagement.`,
+    `${name} - ${specialty.toLowerCase()} à ${city}. Fort de nombreuses interventions réussies, nous vous garantissons un travail soigné et professionnel.`,
   ]
   let seed = 0
   for (let i = 0; i < name.length; i++) {
@@ -95,90 +95,7 @@ function generateDescription(name: string, specialty: string, city: string, rati
   return descriptions[seed % descriptions.length]
 }
 
-// French first names for generating reviewers
-const FRENCH_FIRST_NAMES = [
-  'Marie', 'Jean', 'Pierre', 'Sophie', 'Michel', 'Isabelle', 'Philippe', 'Catherine',
-  'François', 'Nathalie', 'Laurent', 'Sylvie', 'Patrick', 'Christine', 'Nicolas',
-  'Sandrine', 'Christophe', 'Valérie', 'Thierry', 'Céline', 'Eric', 'Véronique',
-  'Olivier', 'Anne', 'David', 'Martine', 'Frédéric', 'Monique', 'Stéphane', 'Brigitte'
-]
-
-// Review templates by rating
-const REVIEW_TEMPLATES: Record<number, string[]> = {
-  5: [
-    "Excellent travail ! Intervention rapide et travail impeccable. Je recommande vivement !",
-    "Très professionnel, ponctuel et efficace. Le travail a été réalisé dans les règles de l'art.",
-    "Service irréprochable de A à Z. Prix correct, travail soigné, je suis très satisfait(e).",
-    "Je recommande les yeux fermés ! Intervention rapide, propre et efficace. Artisan de confiance.",
-    "Travail de qualité, personne très agréable et professionnelle. N'hésitez pas à faire appel.",
-    "Parfait ! Réactif, compétent et prix honnête. Je ferai appel à nouveau sans hésiter.",
-    "Excellente prestation, travail soigné et conseils pertinents. Un vrai professionnel.",
-    "Super expérience ! Intervention le jour même, problème résolu rapidement. Merci beaucoup !",
-  ],
-  4: [
-    "Bon artisan, travail bien fait. Petit retard à l'arrivée mais le résultat est là.",
-    "Intervention correcte, prix raisonnable. Je recommande.",
-    "Professionnel sérieux, travail propre. Satisfait de la prestation.",
-    "Bon rapport qualité-prix. Artisan compétent et disponible.",
-    "Service satisfaisant, quelques finitions à revoir mais dans l'ensemble c'est bien.",
-    "Travail conforme à mes attentes. Je referais appel si besoin.",
-  ],
-  3: [
-    "Travail correct mais communication à améliorer.",
-    "Prestation moyenne, le travail est fait mais sans plus.",
-    "RAS, le travail est fait. Prix dans la moyenne.",
-  ]
-}
-
-// Generate synthetic reviews based on provider rating data
-function generateSyntheticReviews(provider: any, count: number): Review[] {
-  const reviews: Review[] = []
-  const rating = provider.rating_average || 4.5
-  const usedNames = new Set<string>()
-
-  // Generate ratings that average to match the provider's Google rating
-  const generateRating = (): number => {
-    if (rating >= 4.8) return Math.random() < 0.9 ? 5 : 4
-    if (rating >= 4.5) return Math.random() < 0.7 ? 5 : 4
-    if (rating >= 4.0) return Math.random() < 0.5 ? 5 : Math.random() < 0.7 ? 4 : 3
-    return Math.random() < 0.3 ? 5 : Math.random() < 0.6 ? 4 : 3
-  }
-
-  for (let i = 0; i < count; i++) {
-    const reviewRating = generateRating()
-    const templates = REVIEW_TEMPLATES[reviewRating] || REVIEW_TEMPLATES[4]
-    const template = templates[Math.floor(Math.random() * templates.length)]
-
-    // Get unique reviewer name
-    let reviewerName: string
-    do {
-      reviewerName = FRENCH_FIRST_NAMES[Math.floor(Math.random() * FRENCH_FIRST_NAMES.length)]
-    } while (usedNames.has(reviewerName) && usedNames.size < FRENCH_FIRST_NAMES.length)
-    usedNames.add(reviewerName)
-
-    // Random date in last 2 years
-    const daysAgo = Math.floor(Math.random() * 730)
-    const reviewDate = new Date()
-    reviewDate.setDate(reviewDate.getDate() - daysAgo)
-
-    reviews.push({
-      id: `synth-${provider.id}-${i}`,
-      author: reviewerName + ' ' + String.fromCharCode(65 + Math.floor(Math.random() * 26)) + '.',
-      rating: reviewRating,
-      date: reviewDate.toLocaleDateString('fr-FR', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-      }),
-      comment: template,
-      service: provider.specialty || 'Service',
-      verified: Math.random() < 0.8,
-    })
-  }
-
-  // Sort by date (most recent first)
-  return reviews.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-}
+// REMOVED: Fake review generation (illegal and unethical)
 
 // Fetch reviews for provider (with fallback to synthetic reviews)
 async function getProviderReviews(providerId: string, provider: any): Promise<Review[]> {
@@ -218,19 +135,10 @@ async function getProviderReviews(providerId: string, provider: any): Promise<Re
       }))
     }
 
-    // No reviews in database, generate synthetic ones based on Google Maps data
-    const reviewCount = Math.min(provider.review_count || 5, 8)
-    if (reviewCount > 0 && provider.rating_average) {
-      return generateSyntheticReviews(provider, reviewCount)
-    }
-
+    // No fake reviews! Return empty array if no real reviews in database
     return []
   } catch {
-    // On error, try to generate synthetic reviews
-    const reviewCount = Math.min(provider.review_count || 5, 8)
-    if (reviewCount > 0 && provider.rating_average) {
-      return generateSyntheticReviews(provider, reviewCount)
-    }
+    // On error, return empty array (no fake reviews!)
     return []
   }
 }
@@ -252,7 +160,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const serviceName = service?.name || 'Artisan'
 
     const title = `${displayName} - ${serviceName} à ${cityName} | ServicesArtisans`
-    const description = `${displayName}, ${serviceName.toLowerCase()} à ${cityName}. Note ${provider.rating_average || 4.5}/5. Avis vérifiés, devis gratuit. Artisan certifié et assuré.`
+    const ratingText = provider.rating_average ? `Note ${provider.rating_average}/5. ` : ''
+    const description = `${displayName}, ${serviceName.toLowerCase()} à ${cityName}. ${ratingText}Devis gratuit. Artisan professionnel.`
 
     return {
       title,
