@@ -24,13 +24,13 @@ export async function GET() {
         .select('*', { count: 'exact', head: true })
         .eq('is_active', true),
 
-      // Get REAL reviews only (exclude synthetic/fake reviews)
+      // Get ALL reviews (only exclude synthetic/fake ones)
       supabase
         .from('reviews')
         .select('rating, source')
-        .not('source', 'is', null)
-        .neq('source', '')
-        .neq('source', 'synthetic')
+        // Only exclude reviews explicitly marked as synthetic
+        // Include reviews with NULL or empty source (they are real)
+        .or('source.is.null,source.eq.,source.neq.synthetic')
     ])
 
     // Calculate total REAL reviews and average rating

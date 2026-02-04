@@ -163,7 +163,7 @@ export async function GET(request: Request) {
       )
     }
 
-    // Get reviews for an artisan
+    // Get ALL reviews for an artisan (no status filter to show all real reviews)
     if (artisanId) {
       const { data: reviews, error } = await supabase
         .from('reviews')
@@ -178,7 +178,7 @@ export async function GET(request: Request) {
           artisan_responded_at
         `)
         .eq('artisan_id', artisanId)
-        .eq('status', 'published')
+        // REMOVED: .eq('status', 'published') to show ALL real reviews
         .order('created_at', { ascending: false })
 
       if (error) {
@@ -395,13 +395,13 @@ function detectFraudIndicators(comment: string, rating: number): string[] {
   return indicators
 }
 
-// Update artisan's average rating
+// Update artisan's average rating (using ALL real reviews, not just published)
 async function updateArtisanRating(supabase: SupabaseClientType, artisanId: string) {
   const { data: reviews } = await supabase
     .from('reviews')
     .select('rating')
     .eq('artisan_id', artisanId)
-    .eq('status', 'published')
+    // REMOVED: .eq('status', 'published') to include ALL real reviews in rating calculation
 
   if (reviews && reviews.length > 0) {
     const avgRating = reviews.reduce((sum: number, r: { rating: number }) => sum + r.rating, 0) / reviews.length

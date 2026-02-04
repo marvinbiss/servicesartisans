@@ -202,7 +202,7 @@ export async function getArtisanReviews(artisanId: string, limit = 10) {
           client:profiles!reviews_client_id_fkey(full_name)
         `)
         .eq('artisan_id', artisanId)
-        .eq('is_verified', true)
+        // REMOVED: .eq('is_verified', true) to show ALL real reviews
         .order('created_at', { ascending: false })
         .limit(limit)
 
@@ -234,8 +234,8 @@ export async function getPlatformStats() {
           .eq('is_verified', true),
         supabase
           .from('reviews')
-          .select('rating')
-          .eq('is_verified', true),
+          .select('rating'),
+          // REMOVED: .eq('is_verified', true) to include ALL real reviews in stats
         supabase
           .from('profiles')
           .select('city')

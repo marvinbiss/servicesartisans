@@ -207,14 +207,14 @@ export async function GET(
     if (provider && !providerError) {
       source = 'provider'
 
-      // Récupérer les avis pour ce provider
+      // Récupérer TOUS les avis réels pour ce provider (pas de filtre is_visible)
       const { data: providerReviews } = await supabase
         .from('reviews')
         .select('*')
         .eq('provider_id', provider.id)
-        .eq('is_visible', true)
+        // REMOVED: .eq('is_visible', true) to show ALL real reviews
         .order('created_at', { ascending: false })
-        .limit(20)
+        .limit(100) // Increased limit to show more reviews
 
       // Calculer la note moyenne
       let averageRating = 0

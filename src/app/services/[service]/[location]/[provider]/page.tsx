@@ -113,9 +113,9 @@ async function getProviderReviews(providerId: string): Promise<Review[]> {
         )
       `)
       .eq('provider_id', providerId)
-      .eq('status', 'published')
+      // REMOVED: .eq('status', 'published') to show ALL real reviews
       .order('created_at', { ascending: false })
-      .limit(10)
+      .limit(100) // Increased limit to show more reviews
 
     if (reviews && reviews.length > 0) {
       return reviews.map((r: any) => ({
