@@ -100,47 +100,14 @@ interface Review {
   verified: boolean
 }
 
-// French first names for generating reviewers
-const FRENCH_FIRST_NAMES = [
-  'Marie', 'Jean', 'Pierre', 'Sophie', 'Michel', 'Isabelle', 'Philippe', 'Catherine',
-  'François', 'Nathalie', 'Laurent', 'Sylvie', 'Patrick', 'Christine', 'Nicolas',
-  'Sandrine', 'Christophe', 'Valérie', 'Thierry', 'Céline', 'Eric', 'Véronique',
-  'Olivier', 'Anne', 'David', 'Martine', 'Frédéric', 'Monique', 'Stéphane', 'Brigitte'
-]
+// REMOVED: Fake review generation templates (illegal and unethical)
 
-// Review templates by rating
-const REVIEW_TEMPLATES: Record<number, string[]> = {
-  5: [
-    "Excellent travail ! Intervention rapide et travail impeccable. Je recommande vivement !",
-    "Très professionnel, ponctuel et efficace. Le travail a été réalisé dans les règles de l'art.",
-    "Service irréprochable de A à Z. Prix correct, travail soigné, je suis très satisfait(e).",
-    "Je recommande les yeux fermés ! Intervention rapide, propre et efficace. Artisan de confiance.",
-    "Travail de qualité, personne très agréable et professionnelle. N'hésitez pas à faire appel.",
-    "Parfait ! Réactif, compétent et prix honnête. Je ferai appel à nouveau sans hésiter.",
-    "Excellente prestation, travail soigné et conseils pertinents. Un vrai professionnel.",
-    "Super expérience ! Intervention le jour même, problème résolu rapidement. Merci beaucoup !",
-  ],
-  4: [
-    "Bon artisan, travail bien fait. Petit retard à l'arrivée mais le résultat est là.",
-    "Intervention correcte, prix raisonnable. Je recommande.",
-    "Professionnel sérieux, travail propre. Satisfait de la prestation.",
-    "Bon rapport qualité-prix. Artisan compétent et disponible.",
-    "Service satisfaisant, quelques finitions à revoir mais dans l'ensemble c'est bien.",
-    "Travail conforme à mes attentes. Je referais appel si besoin.",
-  ],
-  3: [
-    "Travail correct mais communication à améliorer.",
-    "Prestation moyenne, le travail est fait mais sans plus.",
-    "RAS, le travail est fait. Prix dans la moyenne.",
-  ]
-}
-
-// Generate a description for a provider based on their data
-function generateDescription(name: string, specialty: string, city: string, rating: number, reviewCount: number): string {
+// Generate a description for a provider based on their data (WITHOUT fake ratings)
+function generateDescription(name: string, specialty: string, city: string): string {
   const descriptions = [
-    `${name} est un ${specialty.toLowerCase()} professionnel basé à ${city}. Avec une note de ${rating}/5 basée sur ${reviewCount} avis Google vérifiés, nous garantissons un service de qualité pour tous vos travaux. Contactez-nous pour un devis gratuit.`,
-    `Votre ${specialty.toLowerCase()} de confiance à ${city}. ${name} intervient rapidement pour tous vos besoins. Note moyenne de ${rating}/5 sur Google Maps (${reviewCount} avis). Devis gratuit et sans engagement.`,
-    `${name} - ${specialty.toLowerCase()} à ${city}. Fort de nombreuses interventions réussies et d'une note de ${rating}/5 (${reviewCount} avis clients), nous vous garantissons un travail soigné et professionnel.`,
+    `${name} est un ${specialty.toLowerCase()} professionnel basé à ${city}. Nous garantissons un service de qualité pour tous vos travaux. Contactez-nous pour un devis gratuit.`,
+    `Votre ${specialty.toLowerCase()} de confiance à ${city}. ${name} intervient rapidement pour tous vos besoins. Devis gratuit et sans engagement.`,
+    `${name} - ${specialty.toLowerCase()} à ${city}. Fort de nombreuses interventions réussies, nous vous garantissons un travail soigné et professionnel.`,
   ]
 
   // Use provider name to pick a consistent description
@@ -151,80 +118,7 @@ function generateDescription(name: string, specialty: string, city: string, rati
   return descriptions[seed % descriptions.length]
 }
 
-// Generate synthetic reviews based on provider rating data from Google Maps
-function generateSyntheticReviews(providerId: string, ratingAverage: number, reviewCount: number, specialty: string): Review[] {
-  const reviews: Review[] = []
-  const count = Math.min(reviewCount || 5, 8)
-  const usedNames = new Set<string>()
-
-  // Seeded random for consistency
-  const seededRandom = (seed: number) => {
-    const x = Math.sin(seed++) * 10000
-    return x - Math.floor(x)
-  }
-
-  // Create a numeric seed from provider ID
-  let seed = 0
-  for (let i = 0; i < providerId.length; i++) {
-    seed += providerId.charCodeAt(i)
-  }
-
-  // Generate ratings that average to match the provider's Google rating
-  const generateRating = (s: number): number => {
-    const rand = seededRandom(s)
-    if (ratingAverage >= 4.8) return rand < 0.9 ? 5 : 4
-    if (ratingAverage >= 4.5) return rand < 0.7 ? 5 : 4
-    if (ratingAverage >= 4.0) return rand < 0.5 ? 5 : seededRandom(s + 1) < 0.7 ? 4 : 3
-    return rand < 0.3 ? 5 : seededRandom(s + 1) < 0.6 ? 4 : 3
-  }
-
-  for (let i = 0; i < count; i++) {
-    const reviewRating = generateRating(seed + i * 100)
-    const templates = REVIEW_TEMPLATES[reviewRating] || REVIEW_TEMPLATES[4]
-    const templateIndex = Math.floor(seededRandom(seed + i * 50) * templates.length)
-    const template = templates[templateIndex]
-
-    // Get unique reviewer name
-    let reviewerName: string
-    let nameAttempts = 0
-    do {
-      const nameIndex = Math.floor(seededRandom(seed + i * 10 + nameAttempts) * FRENCH_FIRST_NAMES.length)
-      reviewerName = FRENCH_FIRST_NAMES[nameIndex]
-      nameAttempts++
-    } while (usedNames.has(reviewerName) && usedNames.size < FRENCH_FIRST_NAMES.length)
-    usedNames.add(reviewerName)
-
-    // Consistent random date in last 2 years
-    const daysAgo = Math.floor(seededRandom(seed + i * 200) * 730)
-    const reviewDate = new Date()
-    reviewDate.setDate(reviewDate.getDate() - daysAgo)
-
-    const lastInitial = String.fromCharCode(65 + Math.floor(seededRandom(seed + i * 300) * 26))
-
-    reviews.push({
-      id: `synth-${providerId}-${i}`,
-      author: `${reviewerName} ${lastInitial}.`,
-      rating: reviewRating,
-      date: reviewDate.toLocaleDateString('fr-FR', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-      }),
-      comment: template,
-      service: specialty || 'Service',
-      hasPhoto: false,
-      photoUrl: null,
-      verified: seededRandom(seed + i * 400) < 0.8,
-    })
-  }
-
-  // Sort by date (most recent first)
-  return reviews.sort((a, b) => {
-    const dateA = new Date(a.date.split(' ').reverse().join(' '))
-    const dateB = new Date(b.date.split(' ').reverse().join(' '))
-    return dateB.getTime() - dateA.getTime()
-  })
-}
+// REMOVED: generateSyntheticReviews function (illegal fake review generation)
 
 export async function GET(
   _request: NextRequest,
@@ -422,9 +316,7 @@ export async function GET(
         : generateDescription(
             provider.name || 'Cet artisan',
             finalSpecialty,
-            provider.address_city || 'votre région',
-            Math.round(Number(finalRating) * 10) / 10 || 4.5,
-            finalReviewCount || 0
+            provider.address_city || 'votre région'
           )
 
       artisan = {
@@ -518,15 +410,8 @@ export async function GET(
           photoUrl: r.photo_url || null,
           verified: r.is_verified,
         }))
-      } else if (provider.rating_average && provider.review_count > 0) {
-        // Generate synthetic reviews based on Google Maps rating data
-        reviews = generateSyntheticReviews(
-          provider.id,
-          provider.rating_average,
-          provider.review_count,
-          finalSpecialty
-        )
       }
+      // NO fake reviews! Return empty array if no real reviews in database
     }
 
     // 2. Si pas trouvé dans providers, chercher dans profiles (utilisateurs inscrits)
