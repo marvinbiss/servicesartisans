@@ -33,6 +33,13 @@ export const metadata: Metadata = {
     description: 'Plus de 100 villes principales couvertes. Trouvez un artisan qualifié près de chez vous.',
     url: 'https://servicesartisans.fr/villes',
   },
+  robots: {
+    index: true,
+    follow: true,
+    'max-snippet': -1,
+    'max-image-preview': 'large',
+    'max-video-preview': -1,
+  },
 }
 
 // Grouper les villes par région

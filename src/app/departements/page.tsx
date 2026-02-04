@@ -11,6 +11,13 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://servicesartisans.fr/departements',
   },
+  robots: {
+    index: true,
+    follow: true,
+    'max-snippet': -1,
+    'max-image-preview': 'large',
+    'max-video-preview': -1,
+  },
 }
 
 // Grouper les départements par région

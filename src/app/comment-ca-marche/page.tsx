@@ -3,12 +3,21 @@ import Link from 'next/link'
 import { Search, Users, CheckCircle, ArrowRight, Shield, Star, Clock } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
+import JsonLd from '@/components/JsonLd'
+import { getHowToSchema, getBreadcrumbSchema } from '@/lib/seo/jsonld'
 
 export const metadata: Metadata = {
   title: 'Comment ca marche - ServicesArtisans',
   description: 'Decouvrez comment trouver un artisan qualifie en 3 etapes simples. Service gratuit et sans engagement.',
   alternates: {
     canonical: 'https://servicesartisans.fr/comment-ca-marche',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    'max-snippet': -1,
+    'max-image-preview': 'large',
+    'max-video-preview': -1,
   },
 }
 
@@ -72,7 +81,21 @@ const guarantees = [
 ]
 
 export default function CommentCaMarchePage() {
+  // Structured data for HowTo schema
+  const howToSchema = getHowToSchema([
+    { name: 'Decrivez votre projet', text: 'Remplissez notre formulaire en quelques minutes. Precisez le type de travaux, votre localisation et vos disponibilites.' },
+    { name: 'Recevez des devis', text: 'Nous transmettons votre demande aux artisans qualifies de votre region. Vous recevez jusqu\'a 3 devis detailles.' },
+    { name: 'Choisissez votre artisan', text: 'Comparez les devis, consultez les avis clients et selectionnez l\'artisan qui correspond a vos attentes.' },
+  ])
+
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: 'Accueil', url: '/' },
+    { name: 'Comment ca marche', url: '/comment-ca-marche' },
+  ])
+
   return (
+    <>
+      <JsonLd data={[howToSchema, breadcrumbSchema]} />
     <div className="min-h-screen bg-gray-50">
       {/* Hero */}
       <section className="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-20">
@@ -257,5 +280,6 @@ export default function CommentCaMarchePage() {
         </div>
       </section>
     </div>
+    </>
   )
 }
