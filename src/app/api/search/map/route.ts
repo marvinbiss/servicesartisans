@@ -18,7 +18,7 @@ const mapSearchSchema = z.object({
   minRating: z.coerce.number().min(0).max(5).optional(),
   verified: z.coerce.boolean().optional(),
   premium: z.coerce.boolean().optional(),
-  limit: z.coerce.number().min(1).max(100).optional().default(50),
+  limit: z.coerce.number().min(1).max(500000).optional().default(50),
 })
 
 function getSupabaseClient() {

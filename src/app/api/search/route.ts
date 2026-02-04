@@ -24,7 +24,7 @@ const searchQuerySchema = z.object({
   verified: z.enum(['true', 'false']).optional().nullable(),
   sortBy: z.enum(['relevance', 'rating', 'distance', 'price_low', 'price_high']).optional().default('relevance'),
   page: z.coerce.number().int().min(1).optional().default(1),
-  limit: z.coerce.number().int().min(1).max(50).optional().default(20),
+  limit: z.coerce.number().int().min(1).max(500000).optional().default(20),
 })
 
 // Artisan type for search results

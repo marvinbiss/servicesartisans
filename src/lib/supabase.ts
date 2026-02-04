@@ -244,7 +244,7 @@ export async function getLocationsByService(serviceSlug: string) {
     .eq('provider_locations.provider.provider_services.service_id', service.id)
     .eq('is_active', true)
     .order('population', { ascending: false })
-    .limit(100)
+    .limit(500000)
 
   if (error) throw error
   return data
