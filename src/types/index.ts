@@ -69,6 +69,8 @@ export interface Provider {
   avg_response_time_hours?: number
   response_rate?: number
   years_on_platform?: number
+  response_time?: string
+  experience_years?: number
   // Search & pricing (Phase 5)
   hourly_rate_min?: number
   hourly_rate_max?: number
