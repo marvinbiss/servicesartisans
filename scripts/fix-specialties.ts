@@ -45,16 +45,6 @@ const SPECIALTY_KEYWORDS: Record<string, string[]> = {
   'Assainissement': ['assainissement', 'fosse septique', 'vidange'],
 }
 
-// Slugify function
-function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '')
-}
-
 // Detect specialty from business name
 function detectSpecialty(name: string): string | null {
   const lowerName = name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
@@ -96,8 +86,6 @@ async function main() {
     const detectedSpecialty = detectSpecialty(provider.name || '')
 
     if (detectedSpecialty) {
-      const specialtySlug = slugify(detectedSpecialty)
-
       const { error: updateError } = await supabase
         .from('providers')
         .update({

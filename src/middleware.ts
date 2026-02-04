@@ -149,9 +149,54 @@ function getCanonicalUrl(request: NextRequest): string | null {
   return null
 }
 
+// Check if string is a valid UUID
+function isValidUUID(str: string): boolean {
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+  return uuidRegex.test(str)
+}
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   const nonce = generateNonce()
+
+  // Redirect legacy /services/artisan/[uuid] to new SEO-friendly URLs
+  const legacyArtisanMatch = pathname.match(/^\/services\/artisan\/([^\/]+)$/)
+  if (legacyArtisanMatch) {
+    const idOrSlug = legacyArtisanMatch[1]
+    // Only redirect UUIDs - slugs might be valid routes
+    if (isValidUUID(idOrSlug)) {
+      try {
+        // Fetch provider data to get the correct redirect URL
+        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
+        const apiResponse = await fetch(`${baseUrl}/api/artisans/${idOrSlug}`, {
+          headers: { 'Accept': 'application/json' },
+        })
+
+        if (apiResponse.ok) {
+          const data = await apiResponse.json()
+          if (data.success && data.artisan) {
+            const artisan = data.artisan
+            // Generate slugs for the new URL
+            const slugify = (text: string) => text
+              .toLowerCase()
+              .normalize('NFD')
+              .replace(/[\u0300-\u036f]/g, '')
+              .replace(/[^a-z0-9]+/g, '-')
+              .replace(/^-|-$/g, '')
+
+            const serviceSlug = artisan.specialty_slug || slugify(artisan.specialty || 'artisan')
+            const citySlug = artisan.city_slug || slugify(artisan.city || 'france')
+            const artisanSlug = artisan.slug || slugify(artisan.business_name || idOrSlug)
+
+            const newUrl = `${baseUrl}/services/${serviceSlug}/${citySlug}/${artisanSlug}`
+            return NextResponse.redirect(newUrl, 301)
+          }
+        }
+      } catch (error) {
+        console.error('Error redirecting legacy artisan URL:', error)
+      }
+    }
+  }
 
   // Rate limiting for all API routes
   if (pathname.startsWith('/api/')) {
