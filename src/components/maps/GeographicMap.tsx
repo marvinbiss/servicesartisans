@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
-import { Loader2, Star } from 'lucide-react'
+import { Loader2, Star, MapPin, Phone, Shield, Award } from 'lucide-react'
 import Link from 'next/link'
 import { getArtisanUrl } from '@/lib/utils'
+import './map-styles.css'
 
 // Dynamic imports for Leaflet
 const MapContainer = dynamic(
@@ -34,6 +35,11 @@ interface Provider {
   review_count?: number
   specialty?: string
   address_city?: string
+  is_verified?: boolean
+  is_premium?: boolean
+  phone?: string
+  address_street?: string
+  address_postal_code?: string
 }
 
 interface GeographicMapProps {
@@ -68,24 +74,49 @@ export default function GeographicMap({
     })
   }, [])
 
-  // Create custom marker icon
-  const createMarkerIcon = (isHighlighted = false) => {
+  // World-class marker icon with animations
+  const createMarkerIcon = (provider?: Provider, isHighlighted = false) => {
     if (!L) return undefined
+
+    const isPremium = provider?.is_verified || false
+    const size = isHighlighted ? 44 : 36
+    const bgColor = isPremium ? '#22c55e' : isHighlighted ? '#2563eb' : '#3b82f6'
 
     return L.divIcon({
       className: 'custom-marker',
       html: `
-        <div class="relative">
-          <div class="${isHighlighted ? 'bg-blue-600' : 'bg-blue-500'} text-white rounded-full p-2 shadow-lg transform ${isHighlighted ? 'scale-125' : ''} transition-transform">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+        <div style="
+          position: relative;
+          width: ${size}px;
+          height: ${size}px;
+        ">
+          <div style="
+            background: ${bgColor};
+            width: 100%;
+            height: 100%;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg) ${isHighlighted ? 'scale(1.15)' : 'scale(1)'};
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: ${isHighlighted ? '4px' : '3px'} solid white;
+            box-shadow: ${isHighlighted ? '0 6px 20px rgba(0,0,0,0.45)' : '0 3px 12px rgba(0,0,0,0.35)'};
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          ">
+            <svg xmlns="http://www.w3.org/2000/svg" 
+                 width="${isHighlighted ? 20 : 16}" 
+                 height="${isHighlighted ? 20 : 16}" 
+                 viewBox="0 0 24 24" 
+                 fill="white"
+                 style="transform: rotate(45deg); filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));">
               <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
             </svg>
           </div>
         </div>
       `,
-      iconSize: [32, 32],
-      iconAnchor: [16, 32],
-      popupAnchor: [0, -32],
+      iconSize: [size, size],
+      iconAnchor: [size / 2, size],
+      popupAnchor: [0, -size],
     })
   }
 
@@ -116,33 +147,89 @@ export default function GeographicMap({
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        {providers.map((provider) => (
+        {providers
+          .filter(p => 
+            p.latitude && 
+            p.longitude && 
+            !isNaN(p.latitude) && 
+            !isNaN(p.longitude) &&
+            p.latitude >= -90 && 
+            p.latitude <= 90 &&
+            p.longitude >= -180 && 
+            p.longitude <= 180
+          )
+          .map((provider) => (
           <Marker
             key={provider.id}
             position={[provider.latitude, provider.longitude]}
-            icon={createMarkerIcon()}
+            icon={createMarkerIcon(provider)}
           >
-            <Popup>
-              <div className="min-w-[200px]">
-                <h3 className="font-semibold text-gray-900 mb-1">{provider.name}</h3>
-                {provider.specialty && (
-                  <p className="text-sm text-gray-500 mb-2">{provider.specialty}</p>
+            <Popup className="custom-popup" maxWidth={320} minWidth={280}>
+              <div className="p-2">
+                {/* Premium Badge */}
+                {provider.is_premium && (
+                  <div className="flex items-center gap-1.5 text-amber-700 text-xs font-bold mb-3 bg-gradient-to-r from-amber-100 to-yellow-100 w-fit px-3 py-1.5 rounded-full border border-amber-200 shadow-sm">
+                    <Award className="w-3.5 h-3.5" />
+                    <span>PREMIUM</span>
+                  </div>
                 )}
+
+                {/* Name and verification */}
+                <div className="flex items-start justify-between gap-2 mb-2">
+                  <h3 className="font-bold text-gray-900 text-base leading-tight">{provider.name}</h3>
+                  {provider.is_verified && (
+                    <Shield className="w-5 h-5 text-green-500 flex-shrink-0" title="Vérifié" />
+                  )}
+                </div>
+
+                {/* Specialty */}
+                {provider.specialty && (
+                  <p className="text-sm text-blue-600 font-medium mb-2">{provider.specialty}</p>
+                )}
+
+                {/* Rating */}
                 {provider.rating_average && provider.rating_average > 0 && (
-                  <div className="flex items-center gap-1 mb-2">
-                    <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                    <span className="font-medium">{provider.rating_average.toFixed(1)}</span>
+                  <div className="flex items-center gap-1.5 mb-2">
+                    <div className="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded-full">
+                      <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+                      <span className="font-bold text-gray-900 text-sm">{provider.rating_average.toFixed(1)}</span>
+                    </div>
                     {provider.review_count && provider.review_count > 0 && (
-                      <span className="text-gray-400 text-sm">({provider.review_count} avis)</span>
+                      <span className="text-gray-500 text-sm">({provider.review_count} avis)</span>
                     )}
                   </div>
                 )}
-                <Link
-                  href={getArtisanUrl({ id: provider.id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city, business_name: provider.name })}
-                  className="inline-block bg-blue-600 text-white px-3 py-1.5 rounded text-sm font-medium hover:bg-blue-700 transition-colors"
-                >
-                  Voir le profil
-                </Link>
+
+                {/* Address */}
+                {(provider.address_street || provider.address_city) && (
+                  <p className="text-sm text-gray-600 mb-3 flex items-start gap-1.5">
+                    <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0 text-gray-400" />
+                    <span>
+                      {provider.address_street && `${provider.address_street}, `}
+                      {provider.address_postal_code} {provider.address_city}
+                    </span>
+                  </p>
+                )}
+
+                {/* Actions */}
+                <div className="flex gap-2">
+                  {provider.phone && (
+                    <a
+                      href={`tel:${provider.phone}`}
+                      className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg text-sm font-semibold hover:from-green-700 hover:to-green-800 transition-all shadow-md hover:shadow-lg transform hover:scale-[1.02]"
+                      title="Appeler"
+                    >
+                      <Phone className="w-4 h-4" />
+                      Appeler
+                    </a>
+                  )}
+                  <Link
+                    href={getArtisanUrl({ id: provider.id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city, business_name: provider.name })}
+                    className="flex-1 text-center px-3 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg text-sm font-semibold hover:from-blue-700 hover:to-blue-800 transition-all shadow-md hover:shadow-lg transform hover:scale-[1.02]"
+                  >
+                    Voir le profil
+                  </Link>
+                </div>
               </div>
             </Popup>
           </Marker>

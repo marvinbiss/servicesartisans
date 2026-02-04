@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import dynamic from 'next/dynamic'
 import { motion, AnimatePresence } from 'framer-motion'
+import './map-styles.css'
 import {
   Search, Filter, MapPin, Star, Phone, ChevronDown, ChevronUp,
   Loader2, Navigation, Layers, X, Shield, Award, Zap, Heart, ExternalLink,
@@ -10,6 +11,8 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { getArtisanUrl } from '@/lib/utils'
+import { useGeolocation } from '@/hooks/useGeolocation'
+import { useMapSearchCache } from '@/hooks/useMapSearchCache'
 
 // Dynamic imports for Leaflet
 const MapContainer = dynamic(
@@ -30,6 +33,43 @@ const Popup = dynamic(
 )
 const MapBoundsHandler = dynamic(
   () => import('./MapBoundsHandler'),
+  { ssr: false }
+)
+const MapPerformanceIndicator = dynamic(
+  () => import('./MapPerformanceIndicator'),
+  { ssr: false }
+)
+
+// World-class MapViewController for smooth provider selection animations
+const MapViewController = dynamic(
+  () => Promise.resolve(({ selectedProvider, providers }: { 
+    selectedProvider: Provider | null
+    providers: Provider[]
+  }) => {
+    // This will only run on client side due to dynamic import
+    const { useMap } = require('react-leaflet')
+    const map = useMap()
+
+    useEffect(() => {
+      if (!map || !selectedProvider) return
+
+      const provider = providers.find(p => p.id === selectedProvider.id)
+      if (provider?.latitude && provider?.longitude && 
+          !isNaN(provider.latitude) && !isNaN(provider.longitude)) {
+        // World-class: smooth animation with flyTo
+        map.flyTo(
+          [provider.latitude, provider.longitude], 
+          Math.max(map.getZoom(), 15),
+          {
+            duration: 1.5,
+            easeLinearity: 0.25
+          }
+        )
+      }
+    }, [selectedProvider, providers, map])
+
+    return null
+  }),
   { ssr: false }
 )
 
@@ -100,11 +140,20 @@ export default function MapSearch() {
   const [showStylePicker, setShowStylePicker] = useState(false)
   const [viewMode, setViewMode] = useState<'split' | 'map' | 'list'>('split')
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false)
-  const [userLocation, setUserLocation] = useState<[number, number] | null>(null)
-  const [locating, setLocating] = useState(false)
   const [favorites, setFavorites] = useState<Set<string>>(new Set())
+  const [responseTime, setResponseTime] = useState<number | undefined>()
+  const [showPerformance, setShowPerformance] = useState(false)
 
   const searchDebounceRef = useRef<NodeJS.Timeout>()
+  
+  // World-class geolocation hook
+  const geolocation = useGeolocation({ enableHighAccuracy: true })
+  const userLocation: [number, number] | null = geolocation.latitude && geolocation.longitude 
+    ? [geolocation.latitude, geolocation.longitude] 
+    : null
+
+  // World-class caching system
+  const searchCache = useMapSearchCache<Provider[]>()
   const listRef = useRef<HTMLDivElement>(null)
 
   const [filters, setFilters] = useState<Filters>({
@@ -129,11 +178,23 @@ export default function MapSearch() {
     ].filter(Boolean).length
   }, [filters])
 
-  // Search in current map bounds
+  // World-class search with caching and performance monitoring
   const searchInBounds = useCallback(async (bounds: any, query?: string) => {
     if (!bounds) return
 
+    // Check cache first
+    const cacheKey = { ...filters, query }
+    const cachedData = searchCache.get(bounds, cacheKey)
+    
+    if (cachedData) {
+      setProviders(cachedData)
+      setShowPerformance(true)
+      return
+    }
+
     setLoading(true)
+    const startTime = performance.now()
+    
     try {
       const params = new URLSearchParams({
         north: bounds.north.toString(),
@@ -153,13 +214,18 @@ export default function MapSearch() {
 
       if (data.success && data.providers) {
         setProviders(data.providers)
+        // Cache the results
+        searchCache.set(bounds, data.providers, cacheKey)
       }
     } catch (error) {
       console.error('Search error:', error)
     } finally {
+      const endTime = performance.now()
+      setResponseTime(Math.round(endTime - startTime))
+      setShowPerformance(true)
       setLoading(false)
     }
-  }, [filters])
+  }, [filters, searchCache])
 
   // Handle bounds change with debounce
   const handleBoundsChange = useCallback((bounds: any) => {
@@ -174,25 +240,14 @@ export default function MapSearch() {
     }, 300)
   }, [searchInBounds, searchQuery])
 
-  // Get user location
+  // World-class user location with better error handling
   const getUserLocation = useCallback(() => {
-    if (!navigator.geolocation) return
-
-    setLocating(true)
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const loc: [number, number] = [position.coords.latitude, position.coords.longitude]
-        setUserLocation(loc)
-        setMapCenter(loc)
-        setMapZoom(13)
-        setLocating(false)
-      },
-      () => {
-        setLocating(false)
-        alert('Impossible de récupérer votre position')
-      }
-    )
-  }, [])
+    geolocation.getLocation()
+    if (geolocation.latitude && geolocation.longitude) {
+      setMapCenter([geolocation.latitude, geolocation.longitude])
+      setMapZoom(13)
+    }
+  }, [geolocation])
 
   // Toggle favorite
   const toggleFavorite = (id: string) => {
@@ -214,35 +269,73 @@ export default function MapSearch() {
     const L = require('leaflet')
 
     const isHighlighted = isHovered || isSelected
-    const size = isHighlighted ? 44 : 36
-    const zIndex = isHighlighted ? 1000 : 1
+    const size = isHighlighted ? 48 : 38
+    const zIndex = isHighlighted ? 1000 : provider.is_premium ? 500 : 1
 
     let bgColor = '#3b82f6' // blue default
     if (provider.is_premium) bgColor = '#f59e0b' // amber
     else if (provider.is_verified) bgColor = '#22c55e' // green
 
+    // World-class: pulse animation for selected
+    const pulseAnimation = isSelected ? `
+      @keyframes pulse {
+        0%, 100% { transform: rotate(-45deg) scale(1); }
+        50% { transform: rotate(-45deg) scale(1.05); }
+      }
+    ` : ''
+
     return L.divIcon({
       className: 'custom-marker',
       html: `
+        <style>${pulseAnimation}</style>
         <div style="
           background: ${bgColor};
           width: ${size}px;
           height: ${size}px;
           border-radius: 50% 50% 50% 0;
-          transform: rotate(-45deg);
+          transform: rotate(-45deg) ${isSelected ? 'scale(1.15)' : 'scale(1)'};
           display: flex;
           align-items: center;
           justify-content: center;
           border: ${isHighlighted ? '4px' : '3px'} solid white;
-          box-shadow: ${isHighlighted ? '0 4px 16px rgba(0,0,0,0.4)' : '0 2px 8px rgba(0,0,0,0.3)'};
-          transition: all 0.2s ease;
+          box-shadow: ${isHighlighted ? '0 6px 20px rgba(0,0,0,0.45)' : '0 3px 12px rgba(0,0,0,0.35)'};
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          animation: ${isSelected ? 'pulse 2s ease-in-out infinite' : 'none'};
           z-index: ${zIndex};
+          cursor: pointer;
+          position: relative;
         ">
+          ${provider.is_premium ? `
+            <div style="
+              position: absolute;
+              top: -8px;
+              right: -8px;
+              width: 18px;
+              height: 18px;
+              background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+              border: 2px solid white;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+              transform: rotate(45deg);
+              z-index: 10;
+            ">
+              <span style="
+                transform: rotate(-45deg);
+                color: white;
+                font-size: 10px;
+                font-weight: bold;
+              ">★</span>
+            </div>
+          ` : ''}
           <span style="
             transform: rotate(45deg);
             color: white;
             font-weight: bold;
-            font-size: ${isHighlighted ? '14px' : '12px'};
+            font-size: ${isHighlighted ? '15px' : '13px'};
+            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
           ">${provider.rating_average?.toFixed(1) || '—'}</span>
         </div>
       `,
@@ -652,9 +745,20 @@ export default function MapSearch() {
               />
 
               <MapBoundsHandler onBoundsChange={handleBoundsChange} />
+              <MapViewController selectedProvider={selectedProvider} providers={providers} />
 
-              {providers.map((provider) => (
-                provider.latitude && provider.longitude && (
+              {providers
+                .filter(p => 
+                  p.latitude && 
+                  p.longitude && 
+                  !isNaN(p.latitude) && 
+                  !isNaN(p.longitude) &&
+                  p.latitude >= -90 && 
+                  p.latitude <= 90 &&
+                  p.longitude >= -180 && 
+                  p.longitude <= 180
+                )
+                .map((provider) => (
                   <Marker
                     key={provider.id}
                     position={[provider.latitude, provider.longitude]}
@@ -672,39 +776,80 @@ export default function MapSearch() {
                       mouseout: () => setHoveredProvider(null)
                     }}
                   >
-                    <Popup>
-                      <div className="min-w-[280px] p-1">
-                        <div className="flex gap-3">
-                          <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
-                            {provider.avatar_url ? (
-                              <img src={provider.avatar_url} alt="" className="w-full h-full object-cover" />
-                            ) : (
-                              <span className="text-2xl font-bold text-gray-400">
-                                {provider.name.charAt(0)}
-                              </span>
-                            )}
+                    <Popup className="custom-popup" maxWidth={340} minWidth={300}>
+                      <div className="p-2">
+                        {/* Premium Badge - World Class */}
+                        {provider.is_premium && (
+                          <div className="flex items-center gap-1.5 text-amber-700 text-xs font-bold mb-3 bg-gradient-to-r from-amber-100 to-yellow-100 w-fit px-3 py-1.5 rounded-full border border-amber-200 shadow-sm">
+                            <Award className="w-3.5 h-3.5" />
+                            <span>ARTISAN PREMIUM</span>
                           </div>
-                          <div className="flex-1">
-                            <h3 className="font-bold text-gray-900">{provider.name}</h3>
-                            <p className="text-sm text-blue-600">{provider.specialty || 'Artisan'}</p>
-                            <div className="flex items-center gap-2 mt-1">
-                              <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-                              <span className="font-medium">{provider.rating_average?.toFixed(1)}</span>
-                              <span className="text-gray-500 text-sm">({provider.review_count} avis)</span>
+                        )}
+
+                        <div className="flex gap-3">
+                          {/* Avatar with premium ring */}
+                          <div className={`relative flex-shrink-0 ${provider.is_premium ? 'ring-2 ring-amber-400 ring-offset-2' : ''} rounded-xl`}>
+                            <div className="w-20 h-20 bg-gradient-to-br from-gray-200 to-gray-300 rounded-xl flex items-center justify-center overflow-hidden">
+                              {provider.avatar_url ? (
+                                <img src={provider.avatar_url} alt={provider.name} className="w-full h-full object-cover" />
+                              ) : (
+                                <span className="text-3xl font-bold text-gray-400">
+                                  {provider.name.charAt(0)}
+                                </span>
+                              )}
                             </div>
                           </div>
+
+                          {/* Info */}
+                          <div className="flex-1 min-w-0">
+                            {/* Name and verification */}
+                            <div className="flex items-start justify-between gap-2 mb-1">
+                              <h3 className="font-bold text-gray-900 text-base leading-tight">{provider.name}</h3>
+                              {provider.is_verified && (
+                                <Shield className="w-5 h-5 text-green-500 flex-shrink-0" title="Artisan vérifié" />
+                              )}
+                            </div>
+
+                            {/* Specialty */}
+                            <p className="text-sm text-blue-600 font-medium mb-2">{provider.specialty || 'Artisan'}</p>
+
+                            {/* Rating - Enhanced */}
+                            <div className="flex items-center gap-1.5">
+                              <div className="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded-full">
+                                <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+                                <span className="font-bold text-gray-900 text-sm">{provider.rating_average?.toFixed(1)}</span>
+                              </div>
+                              <span className="text-gray-500 text-sm">({provider.review_count} avis)</span>
+                            </div>
+
+                            {/* Location */}
+                            <p className="text-sm text-gray-600 mt-1.5 flex items-center gap-1">
+                              <MapPin className="w-3.5 h-3.5 text-gray-400" />
+                              {provider.address_city}
+                            </p>
+
+                            {/* Hourly rate if available */}
+                            {provider.hourly_rate_min && (
+                              <p className="text-sm text-green-600 font-medium mt-1">
+                                À partir de {provider.hourly_rate_min}€/h
+                              </p>
+                            )}
+                          </div>
                         </div>
-                        <div className="flex gap-2 mt-3">
+
+                        {/* Actions - World Class Design */}
+                        <div className="flex gap-2 mt-4">
                           <Link
                             href={getArtisanUrl({ id: provider.id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city, business_name: provider.name })}
-                            className="flex-1 text-center py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700"
+                            className="flex-1 text-center py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-semibold rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all shadow-md hover:shadow-lg transform hover:scale-[1.02]"
                           >
-                            Voir profil
+                            Voir le profil
                           </Link>
                           {provider.phone && (
                             <a
                               href={`tel:${provider.phone}`}
-                              className="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 flex items-center gap-1"
+                              className="px-4 py-2.5 bg-gradient-to-r from-green-600 to-green-700 text-white text-sm font-semibold rounded-lg hover:from-green-700 hover:to-green-800 flex items-center gap-1.5 transition-all shadow-md hover:shadow-lg transform hover:scale-[1.02]"
+                              title="Appeler maintenant"
                             >
                               <Phone className="w-4 h-4" />
                               Appeler
@@ -745,19 +890,29 @@ export default function MapSearch() {
             </MapContainer>
           )}
 
+          {/* World-class Performance Indicator */}
+          <MapPerformanceIndicator
+            cacheStats={searchCache.stats}
+            responseTime={responseTime}
+            resultsCount={providers.length}
+            show={showPerformance}
+          />
+
           {/* Map Controls */}
           <div className="absolute top-4 right-4 z-20 flex flex-col gap-2">
-            {/* Geolocation */}
+            {/* Geolocation - World Class */}
             <button
               onClick={getUserLocation}
-              disabled={locating}
-              className="p-3 bg-white rounded-xl shadow-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
-              title="Ma position"
+              disabled={geolocation.loading}
+              className={`p-3 bg-white rounded-xl shadow-lg transition-colors disabled:opacity-50 ${
+                geolocation.error ? 'border-2 border-red-400' : 'hover:bg-gray-50'
+              } ${userLocation ? 'bg-blue-50 border-2 border-blue-400' : ''}`}
+              title={geolocation.error || (userLocation ? 'Position détectée' : 'Ma position')}
             >
-              {locating ? (
+              {geolocation.loading ? (
                 <Loader2 className="w-5 h-5 animate-spin text-blue-600" />
               ) : (
-                <Navigation className="w-5 h-5 text-gray-700" />
+                <Navigation className={`w-5 h-5 ${userLocation ? 'text-blue-600' : 'text-gray-700'}`} />
               )}
             </button>
 
