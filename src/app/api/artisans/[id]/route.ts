@@ -393,22 +393,22 @@ export async function GET(
         longitude: provider.longitude,
       }
 
-      // Transformer les avis réels ou générer des avis synthétiques
+      // Transformer les avis réels
       if (providerReviews && providerReviews.length > 0) {
         reviews = providerReviews.map(r => ({
           id: r.id,
           author: r.author_name || 'Client',
           rating: r.rating,
-          date: new Date(r.review_date || r.created_at).toLocaleDateString('fr-FR', {
+          date: new Date(r.source_date || r.created_at).toLocaleDateString('fr-FR', {
             day: 'numeric',
             month: 'long',
             year: 'numeric'
           }),
-          comment: r.comment || '',
+          comment: r.content || '', // FIXED: Use 'content' column
           service: r.service_name || services[0] || 'Prestation',
-          hasPhoto: !!r.photo_url,
-          photoUrl: r.photo_url || null,
-          verified: r.is_verified,
+          hasPhoto: r.has_media || false,
+          photoUrl: null,
+          verified: r.author_verified || false, // FIXED: Use 'author_verified' column
         }))
       }
       // NO fake reviews! Return empty array if no real reviews in database

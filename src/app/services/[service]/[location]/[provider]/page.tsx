@@ -127,9 +127,10 @@ async function getProviderReviews(providerId: string): Promise<Review[]> {
           month: 'long',
           year: 'numeric',
         }),
-        comment: r.comment || '',
+        comment: r.content || '', // FIXED: Use 'content' column not 'comment'
         service: r.service_name || 'Service',
-        verified: r.is_verified || !!r.booking_id,
+        verified: r.author_verified || false, // FIXED: Use 'author_verified' not 'is_verified'
+        hasPhoto: r.has_media || false,
       }))
     }
 
