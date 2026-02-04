@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic'
 import { Loader2, Star, MapPin, Phone, Shield, Award } from 'lucide-react'
 import Link from 'next/link'
 import { getArtisanUrl } from '@/lib/utils'
-import { createPremiumMarker, createPremiumPopupHTML } from '@/lib/maps/premium-markers'
+import { createPremiumMarker } from '@/lib/maps/premium-markers'
 import './premium-branding.css'
 
 // Dynamic imports for Leaflet
