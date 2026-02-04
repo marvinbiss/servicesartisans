@@ -7,7 +7,7 @@ import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 export const dynamic = 'force-dynamic'
-export const revalidate = 3600 // Cache for 1 hour
+export const revalidate = 60 // Cache for 1 minute (updated more frequently)
 
 export async function GET() {
   try {
