@@ -112,14 +112,29 @@ async function importMasons() {
           }
         }
       } else {
-        // Insert new provider
+        // Upsert to handle slug conflicts
         const { error } = await supabase
           .from('providers')
-          .insert(providerData)
+          .upsert(providerData, { onConflict: 'slug' })
 
         if (error) {
-          console.error(`❌ Erreur insert ${mason.title}:`, error.message)
-          errors++
+          // If still error, try with modified slug
+          const modifiedSlug = `${slug}-${sourceId.substring(0, 8)}`
+          const modifiedData = { ...providerData, slug: modifiedSlug }
+          
+          const { error: retryError } = await supabase
+            .from('providers')
+            .insert(modifiedData)
+          
+          if (retryError) {
+            console.error(`❌ Erreur insert ${mason.title}:`, retryError.message)
+            errors++
+          } else {
+            imported++
+            if (imported % 50 === 0) {
+              console.log(`✨ ${imported} nouveaux artisans importés...`)
+            }
+          }
         } else {
           imported++
           if (imported % 50 === 0) {
