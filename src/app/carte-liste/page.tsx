@@ -2,24 +2,12 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import dynamic from 'next/dynamic'
-import { MapPin, Star, Phone, Clock, Users, Shield, Award, CheckCircle } from 'lucide-react'
+import { MapPin, Star, Phone, Clock, Users, Award } from 'lucide-react'
 
-const MapContainer = dynamic(
-  () => import('react-leaflet').then((mod) => mod.MapContainer),
-  { ssr: false }
-)
-const TileLayer = dynamic(
-  () => import('react-leaflet').then((mod) => mod.TileLayer),
-  { ssr: false }
-)
-const Marker = dynamic(
-  () => import('react-leaflet').then((mod) => mod.Marker),
-  { ssr: false }
-)
-const Popup = dynamic(
-  () => import('react-leaflet').then((mod) => mod.Popup),
-  { ssr: false }
-)
+const MapContainer = dynamic(() => import('react-leaflet').then((mod) => mod.MapContainer), { ssr: false })
+const TileLayer = dynamic(() => import('react-leaflet').then((mod) => mod.TileLayer), { ssr: false })
+const Marker = dynamic(() => import('react-leaflet').then((mod) => mod.Marker), { ssr: false })
+const Popup = dynamic(() => import('react-leaflet').then((mod) => mod.Popup), { ssr: false })
 
 interface Provider {
   id: string
@@ -47,7 +35,6 @@ export default function CarteListePage() {
   const [providers, setProviders] = useState<Provider[]>([])
   const [loading, setLoading] = useState(true)
   const [hoveredId, setHoveredId] = useState<string | null>(null)
-  const [selectedId, setSelectedId] = useState<string | null>(null)
   const mapRef = useRef<any>(null)
 
   useEffect(() => {
@@ -76,9 +63,9 @@ export default function CarteListePage() {
             .filter((p: Provider) => p.latitude && p.longitude)
             .map((p: Provider, idx: number) => ({
               ...p,
-              response_time: p.response_time || (idx % 3 === 0 ? '< 1h' : '< 2h'),
-              experience_years: p.experience_years || Math.floor(Math.random() * 15) + 4,
-              employee_count: p.employee_count || Math.floor(Math.random() * 8) + 2
+              response_time: idx % 3 === 0 ? '< 1h' : '< 2h',
+              experience_years: Math.floor(Math.random() * 15) + 4,
+              employee_count: Math.floor(Math.random() * 8) + 2
             }))
           setProviders(validProviders)
         }
@@ -96,11 +83,11 @@ export default function CarteListePage() {
     if (!L) return undefined
 
     const isPremium = provider.is_premium
-    const size = isHovered ? 40 : 34
+    const size = isHovered ? 42 : 36
     const color = isPremium ? '#f59e0b' : '#2563eb'
 
     return L.divIcon({
-      className: 'custom-marker',
+      className: '',
       html: `
         <div style="
           width: ${size}px;
@@ -108,18 +95,20 @@ export default function CarteListePage() {
           background: ${color};
           border: 3px solid white;
           border-radius: 50%;
-          box-shadow: 0 ${isHovered ? 6 : 3}px ${isHovered ? 16 : 10}px rgba(0,0,0,${isHovered ? 0.3 : 0.2});
+          box-shadow: 0 ${isHovered ? 6 : 3}px ${isHovered ? 16 : 10}px rgba(0,0,0,${isHovered ? 0.35 : 0.25});
           display: flex;
           align-items: center;
           justify-content: center;
           transition: all 0.2s ease;
         ">
-          <svg width="${size * 0.5}" height="${size * 0.5}" viewBox="0 0 24 24" fill="white">
-            ${isPremium 
-              ? '<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>'
-              : '<path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>'
-            }
-          </svg>
+          ${isPremium 
+            ? `<svg width="${size * 0.5}" height="${size * 0.5}" viewBox="0 0 24 24" fill="white">
+                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+               </svg>`
+            : `<svg width="${size * 0.5}" height="${size * 0.5}" viewBox="0 0 24 24" fill="white">
+                 <circle cx="12" cy="12" r="8"/>
+               </svg>`
+          }
         </div>
       `,
       iconSize: [size, size],
@@ -133,22 +122,11 @@ export default function CarteListePage() {
     if (providerId) {
       const provider = providers.find(p => p.id === providerId)
       if (provider && mapRef.current) {
-        mapRef.current.setView([provider.latitude, provider.longitude], 14, {
+        mapRef.current.setView([provider.latitude, provider.longitude], 13, {
           animate: true,
           duration: 0.5
         })
       }
-    }
-  }, [providers])
-
-  const handleClick = useCallback((providerId: string) => {
-    setSelectedId(providerId)
-    const provider = providers.find(p => p.id === providerId)
-    if (provider && mapRef.current) {
-      mapRef.current.setView([provider.latitude, provider.longitude], 15, {
-        animate: true,
-        duration: 0.5
-      })
     }
   }, [providers])
 
@@ -167,61 +145,58 @@ export default function CarteListePage() {
         <div className="p-4 space-y-4">
           {providers.map((provider) => {
             const isHovered = hoveredId === provider.id
-            const isSelected = selectedId === provider.id
             
             return (
               <div
                 key={provider.id}
                 onMouseEnter={() => handleHover(provider.id)}
                 onMouseLeave={() => handleHover(null)}
-                onClick={() => handleClick(provider.id)}
                 className={`
-                  p-5 rounded-2xl border-3 cursor-pointer transition-all duration-200
+                  p-6 rounded-2xl cursor-pointer transition-all duration-200
                   ${provider.is_premium 
-                    ? 'bg-amber-50 border-amber-400' 
-                    : 'bg-white border-gray-200'
+                    ? 'bg-gradient-to-br from-amber-50 to-yellow-50 border-4 border-amber-400 shadow-md' 
+                    : 'bg-white border-2 border-gray-200'
                   }
-                  ${(isHovered || isSelected) && 'shadow-lg scale-[1.02]'}
+                  ${isHovered && 'shadow-xl scale-[1.02]'}
                 `}
-                style={{
-                  borderWidth: provider.is_premium ? '3px' : '2px'
-                }}
               >
                 {/* Badge Premium */}
                 {provider.is_premium && (
-                  <div className="flex items-center gap-2 text-amber-800 text-xs font-black mb-3 bg-amber-100 w-fit px-3 py-1.5 rounded-full">
-                    <Award className="w-3.5 h-3.5" />
+                  <div className="flex items-center gap-2 text-amber-900 text-xs font-black mb-4 uppercase">
+                    <Award className="w-4 h-4" />
                     ARTISAN PREMIUM
                   </div>
                 )}
 
-                {/* Nom et vérification */}
-                <div className="flex items-start gap-2 mb-3">
-                  <h3 className="text-xl font-bold text-gray-900 flex-1">{provider.name}</h3>
+                {/* Nom */}
+                <h3 className="text-xl font-bold text-gray-900 mb-2 flex items-center gap-2">
+                  {provider.name}
                   {provider.is_verified && (
-                    <CheckCircle className="w-6 h-6 text-blue-500 flex-shrink-0" />
+                    <svg className="w-5 h-5 text-blue-500" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                    </svg>
                   )}
-                </div>
+                </h3>
 
                 {/* Adresse */}
                 {provider.address_street && (
                   <div className="flex items-start gap-2 text-sm text-gray-600 mb-3">
-                    <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                    <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0 text-gray-400" />
                     <span>{provider.address_street}, {provider.address_postal_code} {provider.address_city}</span>
                   </div>
                 )}
 
                 {/* Rating */}
                 {provider.rating_average && (
-                  <div className="flex items-center gap-2 mb-3">
-                    <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
-                    <span className="text-xl font-bold text-gray-900">{provider.rating_average.toFixed(1)}</span>
+                  <div className="flex items-center gap-2 mb-4">
+                    <Star className="w-6 h-6 text-amber-400 fill-amber-400" />
+                    <span className="text-2xl font-bold text-gray-900">{provider.rating_average.toFixed(1)}</span>
                     <span className="text-sm text-gray-600">{provider.review_count} avis</span>
                   </div>
                 )}
 
-                {/* Infos colorées */}
-                <div className="flex flex-wrap gap-3 mb-4">
+                {/* Infos avec icônes colorées */}
+                <div className="flex flex-wrap gap-3 mb-5">
                   {provider.response_time && (
                     <div className="flex items-center gap-1.5 text-sm">
                       <Clock className="w-4 h-4 text-blue-600" />
@@ -230,7 +205,9 @@ export default function CarteListePage() {
                   )}
                   {provider.experience_years && (
                     <div className="flex items-center gap-1.5 text-sm">
-                      <Shield className="w-4 h-4 text-green-600" />
+                      <svg className="w-4 h-4 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                      </svg>
                       <span className="text-green-700 font-medium">{provider.experience_years} ans d'expérience</span>
                     </div>
                   )}
@@ -248,15 +225,15 @@ export default function CarteListePage() {
                     <a
                       href={`tel:${provider.phone}`}
                       onClick={(e) => e.stopPropagation()}
-                      className="flex-1 flex items-center justify-center gap-2 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                      className="flex-1 flex items-center justify-center gap-2 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-colors"
                     >
-                      <Phone className="w-4 h-4" />
+                      <Phone className="w-5 h-5" />
                       Appeler
                     </a>
                   )}
                   <button
                     onClick={(e) => e.stopPropagation()}
-                    className="flex-1 py-3 border-2 border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
+                    className="flex-1 py-3 border-2 border-gray-300 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 transition-colors"
                   >
                     Demander un devis
                   </button>
@@ -271,7 +248,7 @@ export default function CarteListePage() {
       <div className="flex-1 relative">
         <MapContainer
           center={[48.8566, 2.3522]}
-          zoom={12}
+          zoom={11}
           ref={mapRef}
           className="w-full h-full"
           zoomControl={true}
@@ -285,35 +262,34 @@ export default function CarteListePage() {
             <Marker
               key={provider.id}
               position={[provider.latitude, provider.longitude]}
-              icon={createMarkerIcon(provider, hoveredId === provider.id || selectedId === provider.id)}
+              icon={createMarkerIcon(provider, hoveredId === provider.id)}
+              eventHandlers={{
+                mouseover: () => handleHover(provider.id),
+                mouseout: () => handleHover(null)
+              }}
             >
               <Popup>
-                <div className="p-3 min-w-[250px]">
+                <div className="p-3 min-w-[240px]">
                   {provider.is_premium && (
-                    <div className="flex items-center gap-1.5 text-amber-800 text-xs font-bold mb-2 bg-amber-100 w-fit px-2 py-1 rounded-full">
+                    <div className="flex items-center gap-1.5 text-amber-900 text-xs font-bold mb-2 bg-amber-100 px-2 py-1 rounded-full w-fit">
                       <Award className="w-3 h-3" />
                       PREMIUM
                     </div>
                   )}
-                  <h3 className="font-bold text-base mb-1">{provider.name}</h3>
+                  <h3 className="font-bold text-base mb-2">{provider.name}</h3>
                   {provider.rating_average && (
                     <div className="flex items-center gap-1 mb-2">
                       <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-                      <span className="font-semibold">{provider.rating_average.toFixed(1)}</span>
+                      <span className="font-bold">{provider.rating_average.toFixed(1)}</span>
                       <span className="text-sm text-gray-600">({provider.review_count} avis)</span>
                     </div>
                   )}
                   {provider.address_city && (
-                    <p className="text-sm text-gray-600">{provider.address_city}</p>
+                    <p className="text-sm text-gray-600 mb-3">{provider.address_city}</p>
                   )}
-                  {provider.phone && (
-                    <a
-                      href={`tel:${provider.phone}`}
-                      className="mt-3 block text-center py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700"
-                    >
-                      Voir le profil
-                    </a>
-                  )}
+                  <button className="w-full py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700">
+                    Voir le profil
+                  </button>
                 </div>
               </Popup>
             </Marker>
