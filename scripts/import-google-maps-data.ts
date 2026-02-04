@@ -185,8 +185,8 @@ async function importData() {
           source: 'google',
           source_id: `${item.place_id}-${review.reviewer_name}`,
           source_date: review.review_date ? new Date(review.review_date).toISOString() : null,
-          is_verified: true,
-          is_visible: true,
+          author_verified: false, // Google reviews are from external source
+          status: 'published', // Auto-publish Google reviews
           created_at: review.review_date ? new Date(review.review_date).toISOString() : new Date().toISOString(),
         }))
 
