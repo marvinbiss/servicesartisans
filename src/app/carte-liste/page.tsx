@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import dynamic from 'next/dynamic'
 import { MapPin, Star, Phone, Clock, Users, Shield, Award, CheckCircle } from 'lucide-react'
-import Link from 'next/link'
 
 const MapContainer = dynamic(
   () => import('react-leaflet').then((mod) => mod.MapContainer),
