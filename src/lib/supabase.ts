@@ -146,7 +146,7 @@ export async function getProvidersByServiceAndLocation(
 
   if (!location) return []
 
-  // Query providers directly by city name (case-insensitive)
+  // Query providers directly by city name (case-insensitive) - no limit
   const { data, error } = await supabase
     .from('providers')
     .select('*')
@@ -154,14 +154,13 @@ export async function getProvidersByServiceAndLocation(
     .eq('is_active', true)
     .order('is_premium', { ascending: false })
     .order('name')
-    .limit(100)
 
   if (error) throw error
   return data || []
 }
 
-// Get all providers for a location (regardless of service)
-export async function getProvidersByLocation(locationSlug: string, limit = 100) {
+// Get all providers for a location (regardless of service) - no limit by default
+export async function getProvidersByLocation(locationSlug: string) {
   const location = await getLocationBySlug(locationSlug)
   if (!location) return []
 
@@ -172,27 +171,25 @@ export async function getProvidersByLocation(locationSlug: string, limit = 100) 
     .eq('is_active', true)
     .order('is_premium', { ascending: false })
     .order('name')
-    .limit(limit)
 
   if (error) throw error
   return data || []
 }
 
-// Get all providers (for map and search)
-export async function getAllProviders(limit = 1000) {
+// Get all providers (for map and search) - no limit
+export async function getAllProviders() {
   const { data, error } = await supabase
     .from('providers')
     .select('*')
     .eq('is_active', true)
     .order('is_premium', { ascending: false })
     .order('name')
-    .limit(limit)
 
   if (error) throw error
   return data || []
 }
 
-export async function getProvidersByService(serviceSlug: string, limit = 100) {
+export async function getProvidersByService(serviceSlug: string, limit?: number) {
   const service = await getServiceBySlug(serviceSlug)
   if (!service) return []
 
@@ -201,7 +198,7 @@ export async function getProvidersByService(serviceSlug: string, limit = 100) {
     return []
   }
 
-  const { data, error } = await supabase
+  let query = supabase
     .from('providers')
     .select(`
       *,
@@ -213,7 +210,13 @@ export async function getProvidersByService(serviceSlug: string, limit = 100) {
     .eq('provider_services.service_id', service.id)
     .eq('is_active', true)
     .order('is_premium', { ascending: false })
-    .limit(limit)
+
+  // Apply limit only if specified
+  if (limit) {
+    query = query.limit(limit)
+  }
+
+  const { data, error } = await query
 
   if (error) throw error
   return data

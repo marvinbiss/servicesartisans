@@ -14,7 +14,7 @@ interface PageProps {
 }
 
 // Convert provider data to Artisan format
-function convertToArtisan(provider: any, service: any, location: any): Artisan {
+function convertToArtisan(provider: any, service: any, location: any, serviceSlug: string): Artisan {
   const specialty = service?.name || provider.specialty || 'Artisan'
   const city = location?.name || provider.address_city || ''
   const name = provider.name || provider.business_name || 'Artisan'
@@ -29,14 +29,22 @@ function convertToArtisan(provider: any, service: any, location: any): Artisan {
 
   return {
     id: provider.id,
+    slug: provider.slug,
     business_name: name,
     first_name: provider.first_name || null,
     last_name: provider.last_name || null,
     avatar_url: provider.avatar_url || provider.logo_url || null,
     city: city,
-    postal_code: provider.address_postal_code || '',
+    postal_code: location?.postal_code || provider.address_postal_code || '',
     address: provider.address_street || '',
+    // Geographic hierarchy from location data
+    department: location?.department_name || undefined,
+    department_code: location?.department_code || undefined,
+    region: location?.region_name || undefined,
     specialty: specialty,
+    // Store the service slug for breadcrumb URL generation
+    specialty_slug: serviceSlug,
+    city_slug: location?.slug || undefined,
     description: description,
     average_rating: provider.rating_average || provider.average_rating || 4.5,
     review_count: provider.review_count || 0,
@@ -285,7 +293,7 @@ export default async function ProviderPage({ params }: PageProps) {
   }
 
   // Convert to Artisan format
-  const artisan = convertToArtisan(provider, service, location)
+  const artisan = convertToArtisan(provider, service, location, serviceSlug)
 
   // Fetch reviews (with synthetic fallback based on Google Maps data)
   const reviews = await getProviderReviews(provider.id, provider)

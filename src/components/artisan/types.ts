@@ -30,12 +30,14 @@ export interface Artisan {
   last_name: string | null
   avatar_url: string | null
   city: string
+  city_slug?: string       // Slug de la ville pour les URLs
   postal_code: string
   address?: string
   department?: string      // Nom complet du département
   department_code?: string // Code département (ex: "93")
   region?: string          // Nom complet de la région
   specialty: string
+  specialty_slug?: string  // Slug du service pour les URLs
   description?: string
   average_rating: number
   review_count: number
