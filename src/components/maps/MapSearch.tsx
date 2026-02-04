@@ -214,11 +214,15 @@ export default function MapSearch() {
   // World-class user location with better error handling
   const getUserLocation = useCallback(() => {
     geolocation.getLocation()
+  }, [])
+
+  // Update map when geolocation changes
+  useEffect(() => {
     if (geolocation.latitude && geolocation.longitude) {
       setMapCenter([geolocation.latitude, geolocation.longitude])
       setMapZoom(13)
     }
-  }, [geolocation])
+  }, [geolocation.latitude, geolocation.longitude])
 
   // Toggle favorite
   const toggleFavorite = (id: string) => {
