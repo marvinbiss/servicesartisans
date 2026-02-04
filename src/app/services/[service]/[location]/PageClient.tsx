@@ -31,7 +31,7 @@ export default function ServiceLocationPageClient({
   location,
   providers,
 }: ServiceLocationPageClientProps) {
-  const [_selectedProvider, setSelectedProvider] = useState<Provider | null>(null)
+  const [selectedProvider, setSelectedProvider] = useState<Provider | null>(null)
   const [viewMode, setViewMode] = useState<'split' | 'list' | 'map'>('split')
   const [_isMobile, setIsMobile] = useState(false)
 
@@ -185,10 +185,12 @@ export default function ServiceLocationPageClient({
                 address_city: p.address_city,
                 is_verified: p.is_verified || false,
                 is_premium: p.is_premium || false,
+                trust_badge: p.trust_badge,
                 phone: p.phone,
                 address_street: p.address_street,
                 address_postal_code: p.address_postal_code
               }))}
+              highlightedProviderId={selectedProvider?.id}
               locationName={location.name}
               height="100%"
               className="h-full"

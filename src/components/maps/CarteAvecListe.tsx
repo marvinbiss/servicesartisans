@@ -87,7 +87,10 @@ export default function CarteAvecListe({
   const createMarkerIcon = useCallback((provider: Provider, isHovered: boolean) => {
     if (!L) return undefined
 
-    const isPremium = provider.is_premium
+    const isPremium =
+      provider.is_premium ||
+      provider.trust_badge === 'gold' ||
+      provider.trust_badge === 'platinum'
     const size = isHovered ? 42 : 36
     const color = isPremium ? '#f59e0b' : '#2563eb'
 
@@ -176,7 +179,7 @@ export default function CarteAvecListe({
             >
               <Popup>
                 <div className="p-4 min-w-[260px]">
-                  {provider.is_premium && (
+                  {(provider.is_premium || provider.trust_badge === 'gold' || provider.trust_badge === 'platinum') && (
                     <div
                       className="inline-flex items-center gap-2 text-amber-900 text-xs font-black mb-2 px-3 py-1.5 rounded-full"
                       style={{

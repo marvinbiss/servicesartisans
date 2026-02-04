@@ -30,13 +30,18 @@ export default function ProviderCard({
       : undefined
   const employeeCount = provider.employee_count
 
+  const isPremiumLike =
+    provider.is_premium ||
+    provider.trust_badge === 'gold' ||
+    provider.trust_badge === 'platinum'
+
   return (
     <div
       style={{
-        background: provider.is_premium
+        background: isPremiumLike
           ? 'linear-gradient(135deg, #fff7d1 0%, #fffef5 60%)'
           : 'white',
-        border: provider.is_premium ? '3px solid #fbbf24' : '2px solid #e5e7eb',
+        border: isPremiumLike ? '3px solid #fbbf24' : '2px solid #e5e7eb',
         borderRadius: '16px',
         padding: '24px',
         transition: 'all 0.2s',
@@ -45,7 +50,7 @@ export default function ProviderCard({
       }}
     >
       {/* Badge Premium */}
-      {provider.is_premium && (
+      {isPremiumLike && (
         <div 
           className="inline-flex items-center gap-2 text-amber-900 text-xs font-black mb-3 px-3 py-1.5 rounded-full"
           style={{ 

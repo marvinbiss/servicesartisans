@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import dynamic from 'next/dynamic'
 import { Loader2, Star, MapPin, Phone, Award } from 'lucide-react'
 import Link from 'next/link'
@@ -37,6 +37,7 @@ interface Provider {
   address_city?: string
   is_verified?: boolean
   is_premium?: boolean
+  trust_badge?: 'none' | 'bronze' | 'silver' | 'gold' | 'platinum'
   phone?: string
   address_street?: string
   address_postal_code?: string
@@ -47,6 +48,7 @@ interface GeographicMapProps {
   centerLng: number
   zoom?: number
   providers?: Provider[]
+  highlightedProviderId?: string
   locationName?: string
   height?: string
   className?: string
@@ -57,12 +59,14 @@ export default function GeographicMap({
   centerLng,
   zoom = 12,
   providers = [],
+  highlightedProviderId,
   locationName: _locationName,
   height = '400px',
   className = ''
 }: GeographicMapProps) {
   const [mapReady, setMapReady] = useState(false)
   const [_L, setL] = useState<typeof import('leaflet') | null>(null)
+  const mapRef = useRef<import('leaflet').Map | null>(null)
 
   useEffect(() => {
     // Import Leaflet and its CSS on client side
@@ -80,7 +84,10 @@ export default function GeographicMap({
     if (!_L) return undefined
 
     const size = isHighlighted ? 40 : 32
-    const isPremium = provider?.is_premium
+    const isPremium =
+      provider?.is_premium ||
+      provider?.trust_badge === 'gold' ||
+      provider?.trust_badge === 'platinum'
     const color = isPremium ? '#f59e0b' : '#2563eb'
 
     return _L.divIcon({
@@ -124,6 +131,17 @@ export default function GeographicMap({
     )
   }
 
+  useEffect(() => {
+    if (!highlightedProviderId || !mapRef.current) return
+    const target = providers.find((p) => p.id === highlightedProviderId)
+    if (target) {
+      mapRef.current.setView([target.latitude, target.longitude], Math.max(zoom, 13), {
+        animate: true,
+        duration: 0.4,
+      })
+    }
+  }, [highlightedProviderId, providers, zoom])
+
   return (
     <div className={`rounded-xl overflow-hidden ${className}`} style={{ height }}>
       <MapContainer
@@ -131,6 +149,9 @@ export default function GeographicMap({
         zoom={zoom}
         style={{ height: '100%', width: '100%' }}
         scrollWheelZoom={false}
+        whenCreated={(mapInstance) => {
+          mapRef.current = mapInstance
+        }}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -148,16 +169,18 @@ export default function GeographicMap({
             p.longitude >= -180 && 
             p.longitude <= 180
           )
-          .map((provider) => (
+          .map((provider) => {
+            const isHighlighted = provider.id === highlightedProviderId
+            return (
           <Marker
             key={provider.id}
             position={[provider.latitude, provider.longitude]}
-            icon={createMarkerIcon(provider)}
+            icon={createMarkerIcon(provider, isHighlighted)}
           >
             <Popup className="custom-popup" maxWidth={320} minWidth={280}>
               <div className="p-4">
                 {/* Premium Badge */}
-                {provider.is_premium && (
+                {(provider.is_premium || provider.trust_badge === 'gold' || provider.trust_badge === 'platinum') && (
                   <div
                     className="inline-flex items-center gap-2 text-amber-900 text-xs font-black mb-3 px-3 py-1.5 rounded-full"
                     style={{
@@ -239,7 +262,8 @@ export default function GeographicMap({
               </div>
             </Popup>
           </Marker>
-        ))}
+        )
+        })}
       </MapContainer>
     </div>
   )

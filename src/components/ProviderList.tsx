@@ -34,6 +34,7 @@ export default function ProviderList({
     minRating: null,
     sortBy: 'relevance',
   })
+  const [hoveredId, setHoveredId] = useState<string | null>(null)
 
   // Apply filters
   const filteredProviders = providers.filter((provider) => {
@@ -82,15 +83,28 @@ export default function ProviderList({
             {sortedProviders.map((provider) => (
               <li
                 key={provider.id}
-                onMouseEnter={() => onProviderHover?.(provider)}
-                onMouseLeave={() => onProviderHover?.(null)}
-                onFocus={() => onProviderHover?.(provider)}
-                onBlur={() => onProviderHover?.(null)}
+                onMouseEnter={() => {
+                  setHoveredId(provider.id)
+                  onProviderHover?.(provider)
+                }}
+                onMouseLeave={() => {
+                  setHoveredId(null)
+                  onProviderHover?.(null)
+                }}
+                onFocus={() => {
+                  setHoveredId(provider.id)
+                  onProviderHover?.(provider)
+                }}
+                onBlur={() => {
+                  setHoveredId(null)
+                  onProviderHover?.(null)
+                }}
               >
                 <ProviderCard
                   provider={provider}
                   serviceSlug={serviceSlug}
                   locationSlug={locationSlug}
+                  isHovered={hoveredId === provider.id}
                 />
               </li>
             ))}
