@@ -175,7 +175,7 @@ export default function ServiceLocationPageClient({
               zoom={mapZoom}
               providers={providers.map(p => ({
                 id: p.id,
-                name: p.business_name || p.name || '',
+                name: p.name || '',
                 slug: p.slug,
                 latitude: p.latitude || 0,
                 longitude: p.longitude || 0,
