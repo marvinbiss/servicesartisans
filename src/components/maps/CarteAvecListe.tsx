@@ -19,7 +19,11 @@ interface CarteAvecListeProps {
   location?: string
 }
 
-type MapProvider = Pick<Provider, 'id' | 'name' | 'slug' | 'latitude' | 'longitude'> & Partial<Provider>
+type MapProvider = Provider & {
+  latitude: number
+  longitude: number
+  slug: string
+}
 
 export default function CarteAvecListe({
   initialCenter = [48.8566, 2.3522],
@@ -65,7 +69,8 @@ export default function CarteAvecListe({
             (p: Provider): p is MapProvider =>
               typeof p.latitude === 'number' &&
               typeof p.longitude === 'number' &&
-              Boolean(p.slug)
+              typeof p.slug === 'string' &&
+              p.slug.length > 0
           )
           setProviders(validProviders)
         }
