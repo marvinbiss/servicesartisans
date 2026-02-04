@@ -95,8 +95,8 @@ function generateDescription(name: string, specialty: string, city: string): str
 
 // REMOVED: Fake review generation (illegal and unethical)
 
-// Fetch reviews for provider (with fallback to synthetic reviews)
-async function getProviderReviews(providerId: string, provider: any): Promise<Review[]> {
+// Fetch reviews for provider (only real reviews from database)
+async function getProviderReviews(providerId: string): Promise<Review[]> {
   try {
     const supabase = await createClient()
     const { data: reviews } = await supabase
@@ -202,8 +202,8 @@ export default async function ProviderPage({ params }: PageProps) {
   // Convert to Artisan format
   const artisan = convertToArtisan(provider, service, location, serviceSlug)
 
-  // Fetch reviews (with synthetic fallback based on Google Maps data)
-  const reviews = await getProviderReviews(provider.id, provider)
+  // Fetch reviews (only real reviews from database)
+  const reviews = await getProviderReviews(provider.id)
 
   return (
     <>
