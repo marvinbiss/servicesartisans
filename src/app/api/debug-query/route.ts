@@ -51,7 +51,7 @@ export async function GET() {
       .order('name')
 
     // 5. Vérifier les associations provider_services
-    const { data: associations, count: assocCount } = await supabase
+    const { count: assocCount } = await supabase
       .from('provider_services')
       .select('provider_id', { count: 'exact' })
       .eq('service_id', service.id)
