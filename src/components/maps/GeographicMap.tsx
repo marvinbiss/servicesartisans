@@ -149,8 +149,8 @@ export default function GeographicMap({
         zoom={zoom}
         style={{ height: '100%', width: '100%' }}
         scrollWheelZoom={false}
-        whenCreated={(mapInstance) => {
-          mapRef.current = mapInstance
+        whenReady={(event) => {
+          mapRef.current = event.target
         }}
       >
         <TileLayer
