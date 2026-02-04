@@ -63,7 +63,7 @@ export default function GeographicMap({
   className = ''
 }: GeographicMapProps) {
   const [mapReady, setMapReady] = useState(false)
-  const [L, setL] = useState<typeof import('leaflet') | null>(null)
+  const [_L, setL] = useState<typeof import('leaflet') | null>(null)
 
   useEffect(() => {
     // Import Leaflet and its CSS on client side
