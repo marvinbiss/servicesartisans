@@ -85,7 +85,7 @@ async function importMasons() {
         slug: slug,
         source_id: sourceId,
         source: 'google_maps',
-        specialty: mason.categoryName || 'Maçon',
+        specialty: mason.categoryName || 'Artisan',
         address_street: mason.street || '',
         address_city: mason.city || '',
         phone: mason.phone || null,
@@ -93,7 +93,6 @@ async function importMasons() {
         rating_average: mason.totalScore || null,
         review_count: mason.reviewsCount || 0,
         is_verified: false,
-        accepts_new_clients: true,
       }
 
       if (existingProvider) {
