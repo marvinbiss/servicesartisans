@@ -20,8 +20,9 @@ function safeJsonStringify(data: unknown): string {
     .replace(/&/g, '\\u0026')
 }
 
-// ISR: Désactivé temporairement pour debug (force dynamic rendering)
-export const revalidate = 0 // 0 = pas de cache, toujours dynamique
+// Force dynamic rendering - pas de cache ISR
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 interface PageProps {
   params: Promise<{
