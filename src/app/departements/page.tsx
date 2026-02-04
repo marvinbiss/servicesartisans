@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { MapPin, Search, Shield, Star, Sparkles, Building2, ArrowRight } from 'lucide-react'
+import { MapPin, Search, Shield, Sparkles, Building2, ArrowRight } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularServicesLinks, GeographicNavigation, PopularCitiesLinks } from '@/components/InternalLinks'
 import { departements } from '@/lib/data/france'
