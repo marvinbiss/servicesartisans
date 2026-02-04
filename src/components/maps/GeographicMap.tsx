@@ -77,12 +77,12 @@ export default function GeographicMap({
   // World-class marker icon with animations
   // Marqueurs simples et propres
   const createMarkerIcon = (provider?: Provider, isHighlighted = false) => {
-    if (!L) return undefined
+    if (!_L) return undefined
 
     const size = isHighlighted ? 40 : 32
     const color = provider?.is_premium ? '#2563eb' : '#3b82f6'
 
-    return L.divIcon({
+    return _L.divIcon({
       className: 'custom-marker',
       html: `
         <div style="
