@@ -3,7 +3,7 @@ import Link from 'next/link'
 import {
   Wrench, Zap, Key, Flame, PaintBucket, Home, Hammer, HardHat,
   Droplets, Wind, Thermometer, TreeDeciduous, Car, Sofa, Sparkles,
-  ShieldCheck, ArrowRight, Star, Users, TrendingUp, Award, MapPin
+  ShieldCheck, ArrowRight, TrendingUp, Award, MapPin
 } from 'lucide-react'
 import JsonLd from '@/components/JsonLd'
 import { getOrganizationSchema, getBreadcrumbSchema } from '@/lib/seo/jsonld'
