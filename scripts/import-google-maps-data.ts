@@ -73,6 +73,21 @@ function mapCategory(googleCategory: string): string {
 async function importData() {
   console.log('🚀 Début de l\'import des données Google Maps...\n')
 
+  // Vérifier si des données existent déjà
+  const { count: existingCount } = await supabase
+    .from('providers')
+    .select('*', { count: 'exact', head: true })
+    .eq('source', 'google_places')
+
+  if (existingCount && existingCount > 0) {
+    console.log(`⚠️  ATTENTION: ${existingCount} providers Google existent déjà!`)
+    console.log('❌ Pour éviter les doublons, le script s\'arrête.')
+    console.log('\n📝 Pour réimporter, supprimez d\'abord les données existantes:')
+    console.log('   DELETE FROM reviews WHERE provider_id IN (SELECT id FROM providers WHERE source = \'google_places\');')
+    console.log('   DELETE FROM providers WHERE source = \'google_places\';')
+    process.exit(1)
+  }
+
   // Lire le fichier JSON
   const filePath = path.join(process.cwd(), 'Google Maps full information.json')
   console.log('📂 Lecture du fichier:', filePath)
@@ -123,6 +138,18 @@ async function importData() {
         avatar_url: item.main_image || null,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
+      }
+
+      // Vérifier si le provider existe déjà (par source_id)
+      const { data: existingProvider } = await supabase
+        .from('providers')
+        .select('id')
+        .eq('source_id', item.place_id)
+        .single()
+
+      if (existingProvider) {
+        console.log(`  ⏭️  Déjà existant, ignoré`)
+        continue
       }
 
       // Insérer le provider
