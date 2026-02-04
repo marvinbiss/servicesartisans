@@ -20,8 +20,8 @@ function safeJsonStringify(data: unknown): string {
     .replace(/&/g, '\\u0026')
 }
 
-// ISR: Revalidate every 15 minutes for service+location pages
-export const revalidate = REVALIDATE.serviceLocation
+// ISR: Désactivé temporairement pour debug (force dynamic rendering)
+export const revalidate = 0 // 0 = pas de cache, toujours dynamique
 
 interface PageProps {
   params: Promise<{
