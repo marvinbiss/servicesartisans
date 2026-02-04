@@ -77,9 +77,10 @@ function truncateText(text: string, maxLength: number): string {
 export async function generateMetadata({
   params,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }): Promise<Metadata> {
-  const { artisan, reviews } = await getArtisan(params.id)
+  const { id } = await params
+  const { artisan, reviews } = await getArtisan(id)
 
   if (!artisan) {
     return {
@@ -205,9 +206,10 @@ export const revalidate = 3600 // Revalidate every hour
 export default async function ArtisanPage({
   params,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
-  const { artisan, reviews } = await getArtisan(params.id)
+  const { id } = await params
+  const { artisan, reviews } = await getArtisan(id)
 
   // Redirect to the new SEO-friendly URL if artisan is found
   if (artisan) {
@@ -229,7 +231,7 @@ export default async function ArtisanPage({
       <ArtisanPageClient
         initialArtisan={artisan}
         initialReviews={reviews}
-        artisanId={params.id}
+        artisanId={id}
       />
     </>
   )
