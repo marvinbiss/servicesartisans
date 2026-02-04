@@ -151,19 +151,25 @@ export default function CarteListePage() {
                 key={provider.id}
                 onMouseEnter={() => handleHover(provider.id)}
                 onMouseLeave={() => handleHover(null)}
-                className={`
-                  p-6 rounded-2xl cursor-pointer transition-all duration-200
-                  ${provider.is_premium 
-                    ? 'bg-gradient-to-br from-amber-50 to-yellow-50 border-4 border-amber-400 shadow-md' 
-                    : 'bg-white border-2 border-gray-200'
-                  }
-                  ${isHovered && 'shadow-xl scale-[1.02]'}
-                `}
+                style={{
+                  backgroundColor: provider.is_premium ? '#fffbeb' : 'white',
+                  border: provider.is_premium ? '4px solid #fbbf24' : '2px solid #e5e7eb',
+                  borderRadius: '16px',
+                  padding: '24px',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                  boxShadow: isHovered ? '0 4px 12px rgba(0,0,0,0.1)' : 'none',
+                  transform: isHovered ? 'scale(1.01)' : 'scale(1)'
+                }}
+                className="mb-4"
               >
                 {/* Badge Premium */}
                 {provider.is_premium && (
-                  <div className="flex items-center gap-2 text-amber-900 text-xs font-black mb-4 uppercase">
-                    <Award className="w-4 h-4" />
+                  <div className="flex items-center gap-2 text-amber-900 text-xs font-black mb-3" style={{
+                    backgroundColor: 'transparent',
+                    letterSpacing: '0.5px'
+                  }}>
+                    <Award className="w-4 h-4 text-amber-600" />
                     ARTISAN PREMIUM
                   </div>
                 )}
