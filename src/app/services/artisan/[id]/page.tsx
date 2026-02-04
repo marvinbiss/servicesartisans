@@ -211,9 +211,11 @@ export default async function ArtisanPage({
 
   // Redirect to the new SEO-friendly URL if artisan is found
   if (artisan) {
-    const serviceSlug = slugify(artisan.specialty || 'artisan')
-    const citySlug = slugify(artisan.city || 'france')
-    const artisanSlug = slugify(artisan.business_name || artisan.id)
+    // Use actual slugs from the data, or generate them as fallback
+    const serviceSlug = (artisan as any).specialty_slug || slugify(artisan.specialty || 'artisan')
+    const citySlug = (artisan as any).city_slug || slugify(artisan.city || 'france')
+    // Use the provider's actual slug, not the generated one from business_name
+    const artisanSlug = (artisan as any).slug || slugify(artisan.business_name || artisan.id)
 
     // Redirect to the new URL format with 301 (permanent redirect)
     redirect(`/services/${serviceSlug}/${citySlug}/${artisanSlug}`)

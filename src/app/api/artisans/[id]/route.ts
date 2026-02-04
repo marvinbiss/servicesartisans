@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getDepartmentName, getRegionName, getDeptCodeFromPostal } from '@/lib/geography'
+import { slugify } from '@/lib/utils'
 import { z } from 'zod'
 
 export const dynamic = 'force-dynamic'
@@ -21,17 +22,20 @@ const artisanIdSchema = z.string().min(1).max(255).regex(
 // Type pour les données artisan enrichies
 interface ArtisanDetails {
   id: string
+  slug?: string  // URL slug for SEO-friendly URLs
   business_name: string | null
   first_name: string | null
   last_name: string | null
   avatar_url: string | null
   city: string
+  city_slug?: string  // URL slug for city
   postal_code: string
   address: string | null
   department?: string
   department_code?: string
   region?: string
   specialty: string
+  specialty_slug?: string  // URL slug for specialty/service
   description: string | null
   average_rating: number
   review_count: number
@@ -425,17 +429,20 @@ export async function GET(
 
       artisan = {
         id: provider.id,
+        slug: provider.slug || undefined,
         business_name: provider.name,
         first_name: null,
         last_name: null,
         avatar_url: provider.avatar_url || null,
         city: provider.address_city || '',
+        city_slug: provider.address_city ? slugify(provider.address_city) : undefined,
         postal_code: postalCode,
         address: provider.address_street,
         department: departmentName || undefined,
         department_code: deptCode || undefined,
         region: regionName || undefined,
         specialty: finalSpecialty,
+        specialty_slug: finalSpecialty ? slugify(finalSpecialty) : undefined,
         description: finalDescription,
         average_rating: Math.round(Number(finalRating) * 10) / 10,
         review_count: finalReviewCount,
