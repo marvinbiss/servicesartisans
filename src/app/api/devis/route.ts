@@ -6,14 +6,15 @@
 import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { createClient } from '@supabase/supabase-js'
-import { Resend } from 'resend'
+import { getResendClient } from '@/lib/api/resend-client'
 import { z } from 'zod'
 
 export const dynamic = 'force-dynamic'
 
+const getResend = () => getResendClient()
+
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-const resend = new Resend(process.env.RESEND_API_KEY)
 
 const devisSchema = z.object({
   service: z.string().min(1, 'Veuillez sélectionner un service'),
@@ -91,7 +92,7 @@ export async function POST(request: Request) {
     }
 
     // Send confirmation email to client
-    await resend.emails.send({
+    await getResend().emails.send({
       from: process.env.FROM_EMAIL || 'noreply@servicesartisans.fr',
       to: data.email,
       subject: 'Votre demande de devis - ServicesArtisans',
@@ -114,7 +115,7 @@ export async function POST(request: Request) {
     })
 
     // Send notification to admin
-    await resend.emails.send({
+    await getResend().emails.send({
       from: process.env.FROM_EMAIL || 'noreply@servicesartisans.fr',
       to: 'contact@servicesartisans.fr',
       subject: `[Nouveau Devis] ${serviceNames[data.service] || data.service} - ${data.ville || 'France'}`,

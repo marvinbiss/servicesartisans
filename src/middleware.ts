@@ -232,8 +232,63 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(canonicalUrl, 301)
   }
 
-  // Check for protected routes (client-side will handle redirect)
-  // Note: Actual auth check happens in the page/API route level
+  // Redirect /pro/* to /espace-artisan/* (unification)
+  if (pathname.startsWith('/pro')) {
+    const newPath = pathname.replace('/pro', '/espace-artisan')
+    return NextResponse.redirect(new URL(newPath, request.url), 301)
+  }
+
+  // PROTECTION STRICTE DES ESPACES CLIENT/ARTISAN
+  // Check BEFORE processing session to avoid unnecessary work
+  if (pathname.startsWith('/espace-client') || pathname.startsWith('/espace-artisan')) {
+    try {
+      const { createServerClient } = await import('@supabase/ssr')
+      
+      const supabase = createServerClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        {
+          cookies: {
+            get(name: string) {
+              return request.cookies.get(name)?.value
+            },
+            set() {},
+            remove() {},
+          },
+        }
+      )
+
+      const { data: { user }, error: authError } = await supabase.auth.getUser()
+
+      if (authError || !user) {
+        // No session, redirect to login
+        const redirectUrl = encodeURIComponent(pathname)
+        return NextResponse.redirect(new URL(`/connexion?redirect=${redirectUrl}`, request.url))
+      }
+
+      // Fetch user profile to check user_type
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('user_type')
+        .eq('id', user.id)
+        .single()
+
+      if (profile) {
+        // Block clients from artisan space
+        if (pathname.startsWith('/espace-artisan') && profile.user_type !== 'artisan') {
+          return NextResponse.redirect(new URL('/espace-client', request.url))
+        }
+
+        // Block artisans from client space
+        if (pathname.startsWith('/espace-client') && profile.user_type === 'artisan') {
+          return NextResponse.redirect(new URL('/espace-artisan', request.url))
+        }
+      }
+    } catch (error) {
+      console.error('Error checking user type in middleware:', error)
+      // In case of error, let the page handle auth
+    }
+  }
 
   // Process session and continue
   let response: NextResponse

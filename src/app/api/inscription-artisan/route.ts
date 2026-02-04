@@ -6,7 +6,7 @@
 import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { createClient } from '@supabase/supabase-js'
-import { Resend } from 'resend'
+import { getResendClient } from '@/lib/api/resend-client'
 import { z } from 'zod'
 
 export const dynamic = 'force-dynamic'
@@ -16,7 +16,7 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 )
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const getResend = () => getResendClient()
 
 const artisanSchema = z.object({
   // Step 1 - Company
@@ -84,7 +84,7 @@ export async function POST(request: Request) {
     }
 
     // Send confirmation email to artisan
-    await resend.emails.send({
+    await getResend().emails.send({
       from: process.env.FROM_EMAIL || 'noreply@servicesartisans.fr',
       to: data.email,
       subject: 'Votre inscription sur ServicesArtisans - Confirmation',
@@ -108,7 +108,7 @@ export async function POST(request: Request) {
     })
 
     // Send notification to admin
-    await resend.emails.send({
+    await getResend().emails.send({
       from: process.env.FROM_EMAIL || 'noreply@servicesartisans.fr',
       to: 'artisans@servicesartisans.fr',
       subject: `[Nouvelle inscription] ${data.entreprise} - ${metierFinal}`,

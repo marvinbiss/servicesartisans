@@ -151,14 +151,14 @@ export default function MessagesClientPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Breadcrumb
             items={[
-              { label: 'Mon espace', href: '/espace-client' },
+              { label: 'Espace Client', href: '/espace-client' },
               { label: 'Messages' }
             ]}
             className="mb-4"
           />
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Link href="/espace-client" className="text-gray-600 hover:text-gray-900">
+              <Link href="/espace-client/mes-demandes" className="text-gray-600 hover:text-gray-900">
                 <ArrowLeft className="w-5 h-5" />
               </Link>
               <div>
@@ -176,7 +176,7 @@ export default function MessagesClientPage() {
           <div className="lg:col-span-1 space-y-4">
             <nav className="bg-white rounded-xl shadow-sm p-4 space-y-1">
               <Link
-                href="/espace-client"
+                href="/espace-client/mes-demandes"
                 className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
               >
                 <FileText className="w-5 h-5" />
@@ -191,11 +191,11 @@ export default function MessagesClientPage() {
                 <span className="ml-auto bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full">2</span>
               </Link>
               <Link
-                href="/espace-client/avis"
+                href="/espace-client/avis-donnes"
                 className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
               >
                 <Star className="w-5 h-5" />
-                Mes avis
+                Avis donnés
               </Link>
               <Link
                 href="/espace-client/parametres"

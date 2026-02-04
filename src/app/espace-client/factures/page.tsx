@@ -123,13 +123,13 @@ export default function FacturesPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Breadcrumb
             items={[
-              { label: 'Mon espace', href: '/espace-client' },
+              { label: 'Espace Client', href: '/espace-client' },
               { label: 'Factures et paiements' }
             ]}
             className="mb-4"
           />
           <div className="flex items-center gap-4">
-            <Link href="/espace-client" className="text-gray-600 hover:text-gray-900">
+            <Link href="/espace-client/mes-demandes" className="text-gray-600 hover:text-gray-900">
               <ArrowLeft className="w-5 h-5" />
             </Link>
             <div>

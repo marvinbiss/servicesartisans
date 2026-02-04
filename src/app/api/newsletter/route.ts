@@ -6,7 +6,7 @@
 import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { createClient } from '@supabase/supabase-js'
-import { Resend } from 'resend'
+import { getResendClient } from '@/lib/api/resend-client'
 import { z } from 'zod'
 
 export const dynamic = 'force-dynamic'
@@ -16,7 +16,7 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 )
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const getResend = () => getResendClient()
 
 const newsletterSchema = z.object({
   email: z.string().email('Email invalide'),
@@ -66,7 +66,7 @@ export async function POST(request: Request) {
     }
 
     // Send welcome email
-    await resend.emails.send({
+    await getResend().emails.send({
       from: process.env.FROM_EMAIL || 'noreply@servicesartisans.fr',
       to: email,
       subject: 'Bienvenue dans la newsletter ServicesArtisans !',

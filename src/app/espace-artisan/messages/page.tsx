@@ -161,7 +161,7 @@ export default function MessagesArtisanPage() {
       <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center gap-4">
-            <Link href="/espace-artisan" className="text-white/80 hover:text-white">
+            <Link href="/espace-artisan/dashboard" className="text-white/80 hover:text-white">
               <ArrowLeft className="w-5 h-5" />
             </Link>
             <div>
@@ -178,14 +178,14 @@ export default function MessagesArtisanPage() {
           <div className="lg:col-span-1">
             <nav className="bg-white rounded-xl shadow-sm p-4 space-y-1">
               <Link
-                href="/espace-artisan"
+                href="/espace-artisan/dashboard"
                 className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
               >
                 <TrendingUp className="w-5 h-5" />
                 Tableau de bord
               </Link>
               <Link
-                href="/espace-artisan/demandes"
+                href="/espace-artisan/demandes-recues"
                 className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
               >
                 <FileText className="w-5 h-5" />
@@ -201,11 +201,11 @@ export default function MessagesArtisanPage() {
                 <span className="ml-auto bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full">5</span>
               </Link>
               <Link
-                href="/espace-artisan/avis"
+                href="/espace-artisan/avis-recus"
                 className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
               >
                 <Star className="w-5 h-5" />
-                Avis clients
+                Avis reçus
               </Link>
               <Link
                 href="/espace-artisan/profil"
@@ -342,7 +342,7 @@ export default function MessagesArtisanPage() {
                           </div>
                         </div>
                         <Link
-                          href="/espace-artisan/demandes"
+                          href="/espace-artisan/demandes-recues"
                           className="text-sm text-blue-600 hover:underline"
                         >
                           Voir la demande

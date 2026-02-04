@@ -283,14 +283,14 @@ export default function ParametresClientPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Breadcrumb
             items={[
-              { label: 'Mon espace', href: '/espace-client' },
+              { label: 'Espace Client', href: '/espace-client' },
               { label: 'Paramètres' }
             ]}
             className="mb-4"
           />
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Link href="/espace-client" className="text-gray-600 hover:text-gray-900">
+              <Link href="/espace-client/mes-demandes" className="text-gray-600 hover:text-gray-900">
                 <ArrowLeft className="w-5 h-5" />
               </Link>
               <div>
@@ -328,7 +328,7 @@ export default function ParametresClientPage() {
               ))}
               <hr className="my-2" />
               <Link
-                href="/espace-client"
+                href="/espace-client/mes-demandes"
                 className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
               >
                 <FileText className="w-5 h-5" />

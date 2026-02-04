@@ -25,7 +25,13 @@ function escapeHtml(text: string): string {
 
 export const dynamic = 'force-dynamic'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Lazy initialization to avoid build-time errors
+const getResend = () => {
+  if (!process.env.RESEND_API_KEY) {
+    throw new Error('RESEND_API_KEY is not configured')
+  }
+  return new Resend(process.env.RESEND_API_KEY)
+}
 
 const contactSchema = z.object({
   nom: z.string().min(2, 'Le nom doit contenir au moins 2 caractères'),
@@ -65,7 +71,7 @@ export async function POST(request: Request) {
     const safeMessage = escapeHtml(message).replace(/\n/g, '<br />')
 
     // Send email to support team
-    const { error: sendError } = await resend.emails.send({
+    const { error: sendError } = await getResend().emails.send({
       from: process.env.FROM_EMAIL || 'contact@servicesartisans.fr',
       to: 'contact@servicesartisans.fr',
       reply_to: email,
@@ -94,7 +100,7 @@ export async function POST(request: Request) {
     }
 
     // Send confirmation email to user (with sanitized content)
-    await resend.emails.send({
+    await getResend().emails.send({
       from: process.env.FROM_EMAIL || 'noreply@servicesartisans.fr',
       to: email,
       subject: 'Votre message a bien été reçu - ServicesArtisans',

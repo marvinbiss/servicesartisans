@@ -12,7 +12,7 @@ import { apiLogger } from '../utils/logger'
 // Lazy-loaded Resend client
 let resendClient: Resend | null = null
 
-function getResendClient(): Resend {
+export function getResendClient(): Resend {
   if (resendClient) return resendClient
 
   const apiKey = process.env.RESEND_API_KEY

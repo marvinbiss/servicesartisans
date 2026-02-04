@@ -472,7 +472,7 @@ export default function CalendrierPage() {
           <div className="lg:col-span-1">
             <nav className="bg-white rounded-xl shadow-sm p-4 space-y-1">
               <Link
-                href="/espace-artisan"
+                href="/espace-artisan/dashboard"
                 className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
               >
                 <TrendingUp className="w-5 h-5" />
@@ -486,7 +486,7 @@ export default function CalendrierPage() {
                 Calendrier
               </Link>
               <Link
-                href="/espace-artisan/demandes"
+                href="/espace-artisan/demandes-recues"
                 className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
               >
                 <FileText className="w-5 h-5" />
@@ -500,11 +500,11 @@ export default function CalendrierPage() {
                 Messages
               </Link>
               <Link
-                href="/espace-artisan/avis"
+                href="/espace-artisan/avis-recus"
                 className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
               >
                 <Star className="w-5 h-5" />
-                Avis clients
+                Avis reçus
               </Link>
               <Link
                 href="/espace-artisan/profil"

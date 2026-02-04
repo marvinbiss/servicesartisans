@@ -52,7 +52,7 @@ async function resetPasswords() {
         console.log(`   ⚠️  Compte non trouvé - création...`)
         
         // Créer le compte s'il n'existe pas
-        const { data: newUser, error: createError } = await supabase.auth.admin.createUser({
+        const { error: createError } = await supabase.auth.admin.createUser({
           email: account.email,
           password: account.password,
           email_confirm: true,

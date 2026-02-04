@@ -1,9 +1,9 @@
-import { Resend } from 'resend'
 import type { SupabaseClientType } from '@/types'
 import { logger } from '@/lib/logger'
+import { getResendClient } from '@/lib/api/resend-client'
 
-// Initialize Resend client (or use SendGrid if preferred)
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Lazy getter for Resend client
+const getResend = () => getResendClient()
 
 const FROM_EMAIL = process.env.FROM_EMAIL || 'noreply@servicesartisans.fr'
 const SITE_NAME = 'ServicesArtisans'
@@ -473,7 +473,7 @@ export async function sendEmail({
   text: string
 }): Promise<{ success: boolean; error?: string; messageId?: string }> {
   try {
-    const { data, error } = await resend.emails.send({
+    const { data, error } = await getResend().emails.send({
       from: FROM_EMAIL,
       to,
       subject,
