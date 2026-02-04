@@ -1,4 +1,4 @@
-import { ServiceGridSkeleton } from '@/components/ui/Skeleton'
+   import { GridSkeleton } from '@/components/ui/Skeleton'
 
 export default function ServicesLoading() {
   return (
@@ -10,7 +10,7 @@ export default function ServicesLoading() {
         </div>
       </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <ServiceGridSkeleton count={8} />
+         <GridSkeleton count={8} cols={3} />
       </div>
     </div>
   )
