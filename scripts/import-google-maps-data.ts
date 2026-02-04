@@ -125,7 +125,7 @@ async function importData() {
         address_street: street,
         address_city: city,
         address_postal_code: postalCode,
-        address_country: 'France',
+        // REMOVED: address_country (column does not exist in providers table)
         phone: item.phone_number || null,
         email: null,
         website: item.open_website || null,
