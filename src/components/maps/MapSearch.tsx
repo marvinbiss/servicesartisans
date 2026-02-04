@@ -834,8 +834,8 @@ export default function MapSearch() {
                       </div>
                     </Popup>
                   </Marker>
-                )
-              ))}
+                ))
+              }
 
               {/* User Location Marker */}
               {userLocation && (
