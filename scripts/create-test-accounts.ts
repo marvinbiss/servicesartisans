@@ -28,7 +28,7 @@ async function createTestAccounts() {
   // 1. Créer le compte Client
   console.log('📧 Création du compte CLIENT...')
   const clientEmail = 'client.test@servicesartisans.fr'
-  const clientPassword = 'TestClient123!'
+  const clientPassword = 'Test123!'
 
   const { data: clientAuth, error: clientAuthError } = await supabase.auth.admin.createUser({
     email: clientEmail,
@@ -72,7 +72,7 @@ async function createTestAccounts() {
   // 2. Créer le compte Artisan
   console.log('\n🔧 Création du compte ARTISAN...')
   const artisanEmail = 'artisan.test@servicesartisans.fr'
-  const artisanPassword = 'TestArtisan123!'
+  const artisanPassword = 'Test123!'
 
   const { data: artisanAuth, error: artisanAuthError } = await supabase.auth.admin.createUser({
     email: artisanEmail,
@@ -148,7 +148,7 @@ async function createTestAccounts() {
   // 3. Créer un compte Admin
   console.log('\n👑 Création du compte ADMIN...')
   const adminEmail = 'admin@servicesartisans.fr'
-  const adminPassword = 'AdminTest123!'
+  const adminPassword = 'Test123!'
 
   const { data: adminAuth, error: adminAuthError } = await supabase.auth.admin.createUser({
     email: adminEmail,

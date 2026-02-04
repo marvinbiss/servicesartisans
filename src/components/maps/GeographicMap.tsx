@@ -5,7 +5,8 @@ import dynamic from 'next/dynamic'
 import { Loader2, Star, MapPin, Phone, Shield, Award } from 'lucide-react'
 import Link from 'next/link'
 import { getArtisanUrl } from '@/lib/utils'
-import './map-styles.css'
+import { createPremiumMarker, createPremiumPopupHTML } from '@/lib/maps/premium-markers'
+import './premium-branding.css'
 
 // Dynamic imports for Leaflet
 const MapContainer = dynamic(
@@ -75,48 +76,12 @@ export default function GeographicMap({
   }, [])
 
   // World-class marker icon with animations
+  // Utiliser le système de marqueurs premium
   const createMarkerIcon = (provider?: Provider, isHighlighted = false) => {
-    if (!L) return undefined
-
-    const isPremium = provider?.is_verified || false
-    const size = isHighlighted ? 44 : 36
-    const bgColor = isPremium ? '#22c55e' : isHighlighted ? '#2563eb' : '#3b82f6'
-
-    return L.divIcon({
-      className: 'custom-marker',
-      html: `
-        <div style="
-          position: relative;
-          width: ${size}px;
-          height: ${size}px;
-        ">
-          <div style="
-            background: ${bgColor};
-            width: 100%;
-            height: 100%;
-            border-radius: 50% 50% 50% 0;
-            transform: rotate(-45deg) ${isHighlighted ? 'scale(1.15)' : 'scale(1)'};
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: ${isHighlighted ? '4px' : '3px'} solid white;
-            box-shadow: ${isHighlighted ? '0 6px 20px rgba(0,0,0,0.45)' : '0 3px 12px rgba(0,0,0,0.35)'};
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          ">
-            <svg xmlns="http://www.w3.org/2000/svg" 
-                 width="${isHighlighted ? 20 : 16}" 
-                 height="${isHighlighted ? 20 : 16}" 
-                 viewBox="0 0 24 24" 
-                 fill="white"
-                 style="transform: rotate(45deg); filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));">
-              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-            </svg>
-          </div>
-        </div>
-      `,
-      iconSize: [size, size],
-      iconAnchor: [size / 2, size],
-      popupAnchor: [0, -size],
+    return createPremiumMarker({
+      isPremium: provider?.is_premium || false,
+      isHighlighted,
+      size: 36
     })
   }
 
