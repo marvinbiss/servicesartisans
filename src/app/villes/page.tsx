@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { MapPin, Search, ArrowRight, Users, Star, Shield, Sparkles, TrendingUp, Wrench, Zap, Key, Flame, PaintBucket, Hammer, HardHat, TreeDeciduous } from 'lucide-react'
+import { MapPin, Search, ArrowRight, Users, Shield, Sparkles, TrendingUp, Wrench, Zap, Key, Flame, PaintBucket, Hammer, HardHat, TreeDeciduous } from 'lucide-react'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { REVALIDATE } from '@/lib/cache'
