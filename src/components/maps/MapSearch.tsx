@@ -781,7 +781,9 @@ export default function MapSearch() {
                             <div className="flex items-start justify-between gap-2 mb-1">
                               <h3 className="font-bold text-gray-900 text-base leading-tight">{provider.name}</h3>
                               {provider.is_verified && (
-                                <Shield className="w-5 h-5 text-green-500 flex-shrink-0" title="Artisan vérifié" />
+                                <span title="Artisan vérifié">
+                                  <Shield className="w-5 h-5 text-green-500 flex-shrink-0" />
+                                </span>
                               )}
                             </div>
 
