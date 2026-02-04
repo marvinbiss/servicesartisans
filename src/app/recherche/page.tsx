@@ -92,23 +92,37 @@ function SearchPageContent() {
 
   useEffect(() => {
     fetchResults()
-  }, [searchParams])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams.toString()])
 
   const fetchResults = async () => {
     setIsLoading(true)
     try {
-      const response = await fetch(`/api/search?${searchParams.toString()}`)
-      if (response.ok) {
-        const data = await response.json()
-        setResults(data)
+      const queryString = searchParams.toString() || ''
+      const url = queryString ? `/api/search?${queryString}` : '/api/search'
+      
+      console.log('Fetching results from:', url)
+      const response = await fetch(url)
+      
+      if (!response.ok) {
+        console.error('Search API error:', response.status, response.statusText)
+        // Set empty results instead of staying in loading
+        setResults({ results: [], pagination: { page: 1, limit: 20, total: 0, totalPages: 0 } })
+        return
+      }
+      
+      const data = await response.json()
+      console.log('Search results:', data)
+      setResults(data)
 
-        // Fetch availability for all results
-        if (data.results.length > 0) {
-          fetchAvailability(data.results.map((a: Artisan) => a.id))
-        }
+      // Fetch availability for all results
+      if (data.results?.length > 0) {
+        fetchAvailability(data.results.map((a: Artisan) => a.id))
       }
     } catch (error) {
       console.error('Search failed:', error)
+      // Set empty results on error
+      setResults({ results: [], pagination: { page: 1, limit: 20, total: 0, totalPages: 0 } })
     } finally {
       setIsLoading(false)
     }
