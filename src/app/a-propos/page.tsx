@@ -104,12 +104,12 @@ export default async function AProposPage() {
       {/* Stats */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8" role="list" aria-label="Statistiques clés de ServicesArtisans">
             {stats.map((stat) => {
               const Icon = stat.icon
               return (
-                <div key={stat.label} className="text-center">
-                  <div className="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <div key={stat.label} className="text-center" role="listitem">
+                  <div className="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4" aria-hidden="true">
                     <Icon className="w-7 h-7 text-blue-600" />
                   </div>
                   <div className="text-3xl font-bold text-gray-900">{stat.value}</div>
@@ -184,12 +184,12 @@ export default async function AProposPage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8" role="list" aria-label="Nos valeurs">
             {values.map((value) => {
               const Icon = value.icon
               return (
-                <div key={value.title} className="text-center">
-                  <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <div key={value.title} className="text-center" role="listitem">
+                  <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4" aria-hidden="true">
                     <Icon className="w-8 h-8 text-blue-600" />
                   </div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">{value.title}</h3>
@@ -213,10 +213,10 @@ export default async function AProposPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8" role="list" aria-label="Membres de l'équipe">
             {team.map((member) => (
-              <div key={member.name} className="text-center">
-                <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4 text-5xl">
+              <div key={member.name} className="text-center" role="listitem">
+                <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4 text-5xl" aria-hidden="true">
                   {member.image}
                 </div>
                 <h3 className="font-semibold text-gray-900">{member.name}</h3>
@@ -236,20 +236,20 @@ export default async function AProposPage() {
           <p className="text-xl text-blue-100 mb-8">
             Que vous soyez particulier ou artisan, nous sommes là pour vous
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center" role="group" aria-label="Actions principales">
             <Link
               href="/devis"
-              className="inline-flex items-center justify-center gap-2 bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
+              className="inline-flex items-center justify-center gap-2 bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-blue-600"
             >
               Demander un devis
-              <ArrowRight className="w-5 h-5" />
+              <ArrowRight className="w-5 h-5" aria-hidden="true" />
             </Link>
             <Link
               href="/inscription-artisan"
-              className="inline-flex items-center justify-center gap-2 bg-blue-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-400 transition-colors"
+              className="inline-flex items-center justify-center gap-2 bg-blue-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-400 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-300 focus-visible:ring-offset-2 focus-visible:ring-offset-blue-600"
             >
               Devenir artisan partenaire
-              <ArrowRight className="w-5 h-5" />
+              <ArrowRight className="w-5 h-5" aria-hidden="true" />
             </Link>
           </div>
         </div>

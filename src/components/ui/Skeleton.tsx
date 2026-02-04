@@ -110,3 +110,57 @@ export function FormSkeleton() {
     </div>
   )
 }
+
+// Provider card skeleton - matches ProviderCard layout
+export function ProviderCardSkeleton() {
+  return (
+    <div
+      className="bg-white rounded-2xl border border-gray-200 p-4 shadow-sm"
+      role="article"
+      aria-busy="true"
+      aria-label="Chargement d'un artisan"
+    >
+      {/* Badge placeholder */}
+      <Skeleton className="h-6 w-32 rounded-full mb-3" />
+
+      {/* Header */}
+      <div className="flex justify-between items-start mb-3">
+        <div className="flex-1">
+          <Skeleton className="h-6 w-48 mb-2" />
+          <Skeleton className="h-5 w-20 rounded-full" />
+        </div>
+        <Skeleton className="h-7 w-24 rounded-full ml-3" />
+      </div>
+
+      {/* Address */}
+      <div className="flex items-start gap-2 mb-2">
+        <Skeleton className="w-4 h-4 rounded mt-0.5" />
+        <Skeleton className="h-4 w-56" />
+      </div>
+
+      {/* Contact */}
+      <div className="flex gap-4 mt-3 pt-3 border-t border-gray-100">
+        <Skeleton className="h-5 w-28" />
+        <Skeleton className="h-5 w-20" />
+      </div>
+
+      {/* CTA buttons */}
+      <div className="flex gap-2 mt-4">
+        <Skeleton className="flex-1 h-10 rounded-xl" />
+        <Skeleton className="flex-1 h-10 rounded-xl" />
+      </div>
+    </div>
+  )
+}
+
+// Provider list skeleton
+export function ProviderListSkeleton({ count = 5 }: { count?: number }) {
+  return (
+    <div className="space-y-4" role="status" aria-label="Chargement des artisans">
+      {Array.from({ length: count }).map((_, i) => (
+        <ProviderCardSkeleton key={i} />
+      ))}
+      <span className="sr-only">Chargement en cours...</span>
+    </div>
+  )
+}

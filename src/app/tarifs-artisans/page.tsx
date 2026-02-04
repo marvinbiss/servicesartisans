@@ -141,27 +141,27 @@ export default function TarifsArtisansPage() {
                   )}
 
                   <div className="text-center mb-8">
-                    <div className={`w-16 h-16 ${plan.popular ? 'bg-blue-100' : 'bg-gray-100'} rounded-2xl flex items-center justify-center mx-auto mb-4`}>
+                    <div className={`w-16 h-16 ${plan.popular ? 'bg-blue-100' : 'bg-gray-100'} rounded-2xl flex items-center justify-center mx-auto mb-4`} aria-hidden="true">
                       <Icon className={`w-8 h-8 ${plan.popular ? 'text-blue-600' : 'text-gray-600'}`} />
                     </div>
                     <h3 className="text-2xl font-bold text-gray-900">{plan.name}</h3>
                     <p className="text-gray-600 mt-1">{plan.description}</p>
-                    <div className="mt-4">
-                      <span className="text-4xl font-bold text-gray-900">{plan.price}EUR</span>
+                    <div className="mt-4" aria-label={`Prix: ${plan.price} euros par mois`}>
+                      <span className="text-4xl font-bold text-gray-900">{plan.price}€</span>
                       <span className="text-gray-500">{plan.period}</span>
                     </div>
                   </div>
 
-                  <ul className="space-y-4 mb-8">
+                  <ul className="space-y-4 mb-8" aria-label={`Fonctionnalités de l'offre ${plan.name}`}>
                     {plan.features.map((feature, i) => (
                       <li key={i} className="flex items-center gap-3">
                         {feature.included ? (
-                          <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
+                          <Check className="w-5 h-5 text-green-500 flex-shrink-0" aria-hidden="true" />
                         ) : (
-                          <X className="w-5 h-5 text-gray-300 flex-shrink-0" />
+                          <X className="w-5 h-5 text-gray-300 flex-shrink-0" aria-hidden="true" />
                         )}
                         <span className={feature.included ? 'text-gray-700' : 'text-gray-400'}>
-                          {feature.text}
+                          {feature.included ? '' : 'Non inclus: '}{feature.text}
                         </span>
                       </li>
                     ))}
@@ -187,11 +187,11 @@ export default function TarifsArtisansPage() {
       {/* Enterprise */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-8 md:p-12 text-white flex flex-col md:flex-row items-center gap-8">
+          <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-8 md:p-12 text-white flex flex-col md:flex-row items-center gap-8" role="region" aria-labelledby="enterprise-heading">
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-4">
-                <Building className="w-8 h-8" />
-                <h3 className="text-2xl font-bold">Offre Entreprise</h3>
+                <Building className="w-8 h-8" aria-hidden="true" />
+                <h3 id="enterprise-heading" className="text-2xl font-bold">Offre Entreprise</h3>
               </div>
               <p className="text-gray-300 mb-4">
                 Vous avez plusieurs equipes ou agences ? Contactez-nous pour une offre sur mesure

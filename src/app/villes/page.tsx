@@ -108,36 +108,44 @@ export default function VillesPage() {
 
           {/* Premium Search */}
           <div className="max-w-2xl mx-auto">
-            <div className="relative group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 to-blue-500 rounded-2xl blur opacity-25 group-hover:opacity-40 transition-opacity" />
-              <div className="relative bg-white/10 backdrop-blur-xl rounded-xl border border-white/20 p-2">
-                <div className="flex items-center">
-                  <Search className="w-5 h-5 text-slate-400 ml-4" />
-                  <input
-                    type="text"
-                    placeholder="Rechercher une ville..."
-                    className="flex-1 px-4 py-3 bg-transparent text-white placeholder-slate-400 focus:outline-none"
-                  />
-                  <button className="px-6 py-3 bg-gradient-to-r from-amber-500 to-amber-400 text-white font-semibold rounded-lg hover:from-amber-600 hover:to-amber-500 transition-all shadow-lg shadow-amber-500/25">
-                    Rechercher
-                  </button>
+            <div role="search" aria-label="Rechercher une ville">
+              <div className="relative group">
+                <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 to-blue-500 rounded-2xl blur opacity-25 group-hover:opacity-40 transition-opacity" aria-hidden="true" />
+                <div className="relative bg-white/10 backdrop-blur-xl rounded-xl border border-white/20 p-2">
+                  <label htmlFor="city-search" className="sr-only">Rechercher une ville</label>
+                  <div className="flex items-center">
+                    <Search className="w-5 h-5 text-slate-400 ml-4" aria-hidden="true" />
+                    <input
+                      id="city-search"
+                      type="search"
+                      placeholder="Rechercher une ville..."
+                      className="flex-1 px-4 py-3 bg-transparent text-white placeholder-slate-400 focus:outline-none"
+                      autoComplete="off"
+                    />
+                    <button
+                      type="button"
+                      className="px-6 py-3 bg-gradient-to-r from-amber-500 to-amber-400 text-white font-semibold rounded-lg hover:from-amber-600 hover:to-amber-500 transition-all shadow-lg shadow-amber-500/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
+                    >
+                      Rechercher
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Stats */}
-          <div className="flex flex-wrap justify-center gap-8 mt-12">
-            <div className="flex items-center gap-2">
-              <Users className="w-5 h-5 text-amber-400" />
+          <div className="flex flex-wrap justify-center gap-8 mt-12" role="list" aria-label="Statistiques clés">
+            <div className="flex items-center gap-2" role="listitem">
+              <Users className="w-5 h-5 text-amber-400" aria-hidden="true" />
               <span className="text-slate-300">4 000+ artisans</span>
             </div>
-            <div className="flex items-center gap-2">
-              <Star className="w-5 h-5 text-amber-400" />
+            <div className="flex items-center gap-2" role="listitem">
+              <Star className="w-5 h-5 text-amber-400" aria-hidden="true" />
               <span className="text-slate-300">4.8/5 satisfaction</span>
             </div>
-            <div className="flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-amber-400" />
+            <div className="flex items-center gap-2" role="listitem">
+              <TrendingUp className="w-5 h-5 text-amber-400" aria-hidden="true" />
               <span className="text-slate-300">Réponse en 2h</span>
             </div>
           </div>
