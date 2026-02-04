@@ -18,8 +18,6 @@ function convertToArtisan(provider: any, service: any, location: any, serviceSlu
   const specialty = service?.name || provider.specialty || 'Artisan'
   const city = location?.name || provider.address_city || ''
   const name = provider.name || provider.business_name || 'Artisan'
-  const rating = provider.rating_average || null
-  const reviewCount = provider.review_count || 0
 
   // Generate description if missing or too short (WITHOUT fake ratings)
   const existingDesc = provider.description || provider.bio
