@@ -20,8 +20,16 @@ export default function ProviderCard({
   const providerUrl = `/services/${serviceSlug}/${locationSlug}/${provider.slug}`
   const ratingValue = provider.rating_average?.toFixed(1)
   const reviewCount = provider.review_count
-  const responseTime = provider.response_time
-  const experienceYears = provider.experience_years
+  const responseTime =
+    provider.response_time ??
+    (typeof provider.avg_response_time_hours === 'number'
+      ? `< ${Math.max(1, Math.ceil(provider.avg_response_time_hours))}h`
+      : undefined)
+  const experienceYears =
+    provider.experience_years ??
+    (typeof provider.years_on_platform === 'number'
+      ? Math.max(0, Math.floor(provider.years_on_platform))
+      : undefined)
   const employeeCount = provider.employee_count
 
   return (

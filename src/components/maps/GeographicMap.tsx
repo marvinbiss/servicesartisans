@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
-import { Loader2, Star, MapPin, Phone, Shield, Award } from 'lucide-react'
+import { Loader2, Star, MapPin, Phone, Award } from 'lucide-react'
 import Link from 'next/link'
 import { getArtisanUrl } from '@/lib/utils'
 import './map-styles.css'
@@ -80,7 +80,8 @@ export default function GeographicMap({
     if (!_L) return undefined
 
     const size = isHighlighted ? 40 : 32
-    const color = provider?.is_premium ? '#2563eb' : '#3b82f6'
+    const isPremium = provider?.is_premium
+    const color = isPremium ? '#f59e0b' : '#2563eb'
 
     return _L.divIcon({
       className: 'custom-marker',
@@ -96,9 +97,11 @@ export default function GeographicMap({
           align-items: center;
           justify-content: center;
         ">
-          <svg width="${size * 0.5}" height="${size * 0.5}" viewBox="0 0 24 24" fill="white">
-            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-          </svg>
+          ${
+            isPremium
+              ? `<svg width="${size * 0.5}" height="${size * 0.5}" viewBox="0 0 24 24" fill="white"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`
+              : `<svg width="${size * 0.5}" height="${size * 0.5}" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="12" r="8"/></svg>`
+          }
         </div>
       `,
       iconSize: [size, size],
@@ -152,21 +155,37 @@ export default function GeographicMap({
             icon={createMarkerIcon(provider)}
           >
             <Popup className="custom-popup" maxWidth={320} minWidth={280}>
-              <div className="p-2">
+              <div className="p-4">
                 {/* Premium Badge */}
                 {provider.is_premium && (
-                  <div className="flex items-center gap-1.5 text-amber-700 text-xs font-bold mb-3 bg-gradient-to-r from-amber-100 to-yellow-100 w-fit px-3 py-1.5 rounded-full border border-amber-200 shadow-sm">
-                    <Award className="w-3.5 h-3.5" />
+                  <div
+                    className="inline-flex items-center gap-2 text-amber-900 text-xs font-black mb-3 px-3 py-1.5 rounded-full"
+                    style={{
+                      letterSpacing: '0.5px',
+                      background: 'linear-gradient(90deg, #fde68a 0%, #fff7d1 100%)',
+                      border: '1px solid #f59e0b'
+                    }}
+                  >
+                    <Award className="w-3 h-3" />
                     <span>PREMIUM</span>
                   </div>
                 )}
 
                 {/* Name and verification */}
-                <div className="flex items-start justify-between gap-2 mb-2">
-                  <h3 className="font-bold text-gray-900 text-base leading-tight">{provider.name}</h3>
+                <div className="flex items-start justify-between gap-3 mb-2">
+                  <div className="min-w-0">
+                    <h3 className="font-bold text-gray-900 text-base leading-tight">{provider.name}</h3>
+                  </div>
                   {provider.is_verified && (
-                    <span title="Artisan vérifié">
-                      <Shield className="w-5 h-5 text-green-500 flex-shrink-0" />
+                    <span
+                      className="inline-flex items-center justify-center w-5 h-5 rounded-full flex-shrink-0"
+                      style={{ backgroundColor: '#1877f2' }}
+                      aria-label="Artisan vérifié"
+                      title="Artisan vérifié"
+                    >
+                      <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                      </svg>
                     </span>
                   )}
                 </div>
@@ -178,13 +197,13 @@ export default function GeographicMap({
 
                 {/* Rating */}
                 {provider.rating_average && provider.rating_average > 0 && (
-                  <div className="flex items-center gap-1.5 mb-2">
-                    <div className="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded-full">
+                  <div className="flex items-start justify-between gap-3 mb-2">
+                    <div className="flex items-center gap-1">
                       <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
                       <span className="font-bold text-gray-900 text-sm">{provider.rating_average.toFixed(1)}</span>
                     </div>
                     {provider.review_count && provider.review_count > 0 && (
-                      <span className="text-gray-500 text-sm">({provider.review_count} avis)</span>
+                      <div className="text-xs text-gray-500">{provider.review_count} avis</div>
                     )}
                   </div>
                 )}
