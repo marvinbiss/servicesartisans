@@ -5,6 +5,10 @@ import { createClient } from '@/lib/supabase/server'
 import ArtisanPageClient from '@/app/services/artisan/[id]/ArtisanPageClient'
 import { Artisan, Review } from '@/components/artisan'
 
+// Force dynamic rendering to always fetch fresh data
+export const revalidate = 0
+export const dynamic = 'force-dynamic'
+
 interface PageProps {
   params: Promise<{
     service: string
