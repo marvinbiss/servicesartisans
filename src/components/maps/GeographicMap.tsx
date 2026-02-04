@@ -5,8 +5,7 @@ import dynamic from 'next/dynamic'
 import { Loader2, Star, MapPin, Phone, Shield, Award } from 'lucide-react'
 import Link from 'next/link'
 import { getArtisanUrl } from '@/lib/utils'
-import { createPremiumMarker } from '@/lib/maps/premium-markers'
-import './premium-branding.css'
+import './map-styles.css'
 
 // Dynamic imports for Leaflet
 const MapContainer = dynamic(
@@ -76,12 +75,35 @@ export default function GeographicMap({
   }, [])
 
   // World-class marker icon with animations
-  // Utiliser le système de marqueurs premium
+  // Marqueurs simples et propres
   const createMarkerIcon = (provider?: Provider, isHighlighted = false) => {
-    return createPremiumMarker({
-      isPremium: provider?.is_premium || false,
-      isHighlighted,
-      size: 36
+    if (!L) return undefined
+
+    const size = isHighlighted ? 40 : 32
+    const color = provider?.is_premium ? '#2563eb' : '#3b82f6'
+
+    return L.divIcon({
+      className: 'custom-marker',
+      html: `
+        <div style="
+          width: ${size}px;
+          height: ${size}px;
+          background: ${color};
+          border: 3px solid white;
+          border-radius: 50%;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        ">
+          <svg width="${size * 0.5}" height="${size * 0.5}" viewBox="0 0 24 24" fill="white">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+          </svg>
+        </div>
+      `,
+      iconSize: [size, size],
+      iconAnchor: [size / 2, size],
+      popupAnchor: [0, -size],
     })
   }
 
