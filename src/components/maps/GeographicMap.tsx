@@ -196,15 +196,13 @@ export default function GeographicMap({
                 )}
 
                 {/* Rating */}
-                {provider.rating_average && provider.rating_average > 0 && (
+                {provider.rating_average && provider.rating_average > 0 && provider.review_count && provider.review_count > 0 && (
                   <div className="flex items-start justify-between gap-3 mb-2">
                     <div className="flex items-center gap-1">
                       <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
                       <span className="font-bold text-gray-900 text-sm">{provider.rating_average.toFixed(1)}</span>
                     </div>
-                    {provider.review_count && provider.review_count > 0 && (
-                      <div className="text-xs text-gray-500">{provider.review_count} avis</div>
-                    )}
+                    <div className="text-xs text-gray-500">{provider.review_count} avis</div>
                   </div>
                 )}
 

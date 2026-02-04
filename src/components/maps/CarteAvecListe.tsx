@@ -182,15 +182,13 @@ export default function CarteAvecListe({
                   )}
                   <div className="flex items-start justify-between gap-3 mb-2">
                     <h3 className="font-bold text-base">{provider.name}</h3>
-                    {provider.rating_average && (
+                    {provider.rating_average && provider.review_count && provider.review_count > 0 && (
                       <div className="text-right">
                         <div className="flex items-center gap-1 justify-end">
                           <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
                           <span className="font-bold">{provider.rating_average.toFixed(1)}</span>
                         </div>
-                        {typeof provider.review_count === 'number' && (
-                          <div className="text-xs text-gray-500">{provider.review_count} avis</div>
-                        )}
+                        <div className="text-xs text-gray-500">{provider.review_count} avis</div>
                       </div>
                     )}
                   </div>

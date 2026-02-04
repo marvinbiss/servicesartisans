@@ -21,15 +21,13 @@ export default function ProviderCard({
   const ratingValue = provider.rating_average?.toFixed(1)
   const reviewCount = provider.review_count
   const responseTime =
-    provider.response_time ??
-    (typeof provider.avg_response_time_hours === 'number'
+    typeof provider.avg_response_time_hours === 'number'
       ? `< ${Math.max(1, Math.ceil(provider.avg_response_time_hours))}h`
-      : undefined)
+      : undefined
   const experienceYears =
-    provider.experience_years ??
-    (typeof provider.years_on_platform === 'number'
-      ? Math.max(0, Math.floor(provider.years_on_platform))
-      : undefined)
+    typeof provider.years_on_platform === 'number' && provider.years_on_platform > 0
+      ? Math.floor(provider.years_on_platform)
+      : undefined
   const employeeCount = provider.employee_count
 
   return (
@@ -82,7 +80,7 @@ export default function ProviderCard({
             )}
           </div>
         </div>
-        {ratingValue && (
+        {ratingValue && typeof reviewCount === 'number' && reviewCount > 0 && (
           <div className="text-right flex-shrink-0">
             <div className="flex items-center gap-1 justify-end">
               <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
@@ -113,7 +111,7 @@ export default function ProviderCard({
             <span className="text-blue-700 font-medium">Répond en {responseTime}</span>
           </div>
         )}
-        {typeof experienceYears === 'number' && (
+        {typeof experienceYears === 'number' && experienceYears > 0 && (
           <div className="flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-full bg-green-50">
             <svg className="w-4 h-4 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>

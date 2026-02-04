@@ -87,7 +87,6 @@ async function importData() {
   console.log(`✅ ${googleData.length} artisans trouvés dans le fichier\n`)
 
   let providersInserted = 0
-  let reviewsInserted = 0
   let errors = 0
 
   // Traiter chaque artisan
@@ -115,19 +114,22 @@ async function importData() {
         email: null,
         website: item.open_website || null,
         description: item.description || null,
-        rating_average: item.rating || null,
-        review_count: item.reviews_count || 0,
+        rating_average: typeof item.rating === 'number' ? item.rating : null,
+        review_count: typeof item.reviews_count === 'number' ? item.reviews_count : null,
         latitude: item.lat || null,
         longitude: item.lon || null,
         source: 'google_places',
         source_id: item.place_id,
-        is_verified: true,
         is_active: !item.permanently_closed && !item.temporarily_closed,
-        is_premium: false,
         avatar_url: item.main_image || null,
-        created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       }
+
+      const cleanedProviderData = Object.fromEntries(
+        Object.entries(providerData).filter(([, value]) =>
+          value !== null && value !== undefined && value !== ''
+        )
+      )
 
       // Vérifier si le provider existe déjà (par source_id)
       const { data: existingProvider } = await supabase
@@ -142,7 +144,7 @@ async function importData() {
         // Mettre à jour le provider existant
         const { data: updatedProvider, error: updateError } = await supabase
           .from('providers')
-          .update(providerData)
+          .update(cleanedProviderData)
           .eq('id', existingProvider.id)
           .select('id')
           .single()
@@ -159,7 +161,7 @@ async function importData() {
         // Insérer un nouveau provider
         const { data: newProvider, error: insertError } = await supabase
           .from('providers')
-          .insert(providerData)
+          .insert(cleanedProviderData)
           .select('id')
           .single()
 
@@ -174,33 +176,6 @@ async function importData() {
       }
 
       providersInserted++
-
-      // Insérer les avis si disponibles
-      if (item.top_reviews && item.top_reviews.length > 0) {
-        const reviewsData = item.top_reviews.map((review: any) => ({
-          provider_id: providerId,
-          author_name: review.reviewer_name,
-          rating: review.rating,
-          content: review.content,
-          source: 'google',
-          source_id: `${item.place_id}-${review.reviewer_name}`,
-          source_date: review.review_date ? new Date(review.review_date).toISOString() : null,
-          author_verified: false, // Google reviews are from external source
-          status: 'published', // Auto-publish Google reviews
-          created_at: review.review_date ? new Date(review.review_date).toISOString() : new Date().toISOString(),
-        }))
-
-        const { error: reviewsError } = await supabase
-          .from('reviews')
-          .insert(reviewsData)
-
-        if (reviewsError) {
-          console.error(`  ⚠️  Erreur avis: ${reviewsError.message}`)
-        } else {
-          reviewsInserted += reviewsData.length
-          console.log(`  ✅ ${reviewsData.length} avis insérés`)
-        }
-      }
 
       // Pause pour éviter de surcharger l'API
       if (i % 10 === 0 && i > 0) {
@@ -217,7 +192,6 @@ async function importData() {
   console.log('📊 RÉSUMÉ DE L\'IMPORT')
   console.log('='.repeat(60))
   console.log(`✅ Providers insérés: ${providersInserted}`)
-  console.log(`✅ Avis insérés: ${reviewsInserted}`)
   console.log(`❌ Erreurs: ${errors}`)
   console.log('='.repeat(60))
 }
