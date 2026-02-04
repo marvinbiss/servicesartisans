@@ -37,19 +37,19 @@ export const brand = {
  * Inspired by luxury service platforms (Treatwell, Doctolib, Airbnb)
  */
 export const colors = {
-  // Primary - Deep Ocean Blue (Trust, Professionalism)
+  // Primary - Deep Ocean Blue (Trust, Professionalism) - Aligned with Tailwind Blue
   primary: {
-    50: '#EEF4FF',
-    100: '#DCE8FF',
-    200: '#B9D1FF',
-    300: '#8BB4FF',
-    400: '#5B8EFF',
-    500: '#3366FF', // Main primary
-    600: '#1A4FE6',
-    700: '#1240CC',
-    800: '#0D33A6',
-    900: '#0A2680',
-    950: '#061852',
+    50: '#eff6ff',
+    100: '#dbeafe',
+    200: '#bfdbfe',
+    300: '#93c5fd',
+    400: '#60a5fa',
+    500: '#3b82f6', // Main primary
+    600: '#2563eb',
+    700: '#1d4ed8',
+    800: '#1e40af',
+    900: '#1e3a8a',
+    950: '#172554',
   },
 
   // Secondary - Warm Amber (Energy, Artisanat)

@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, ReactNode } from 'react'
+import { Fragment, ReactNode, useEffect, useRef } from 'react'
 import { X } from 'lucide-react'
 import { clsx } from 'clsx'
 
@@ -33,6 +33,71 @@ export function Modal({
   showCloseButton = true,
   closeOnOverlayClick = true,
 }: ModalProps) {
+  const modalRef = useRef<HTMLDivElement>(null)
+  const previousActiveElement = useRef<HTMLElement | null>(null)
+
+  // Focus trap and initial focus
+  useEffect(() => {
+    if (!isOpen) return
+
+    // Save previously focused element
+    previousActiveElement.current = document.activeElement as HTMLElement
+
+    // Focus first focusable element in modal
+    const focusableElements = modalRef.current?.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    )
+    const firstElement = focusableElements?.[0] as HTMLElement
+    firstElement?.focus()
+
+    // Restore focus on close
+    return () => {
+      previousActiveElement.current?.focus()
+    }
+  }, [isOpen])
+
+  // Handle Escape key and focus trap
+  useEffect(() => {
+    if (!isOpen) return
+
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose()
+      }
+    }
+
+    // Focus trap
+    const handleTab = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab' || !modalRef.current) return
+
+      const focusableElements = modalRef.current.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      )
+      const firstElement = focusableElements[0] as HTMLElement
+      const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement
+
+      if (e.shiftKey) {
+        if (document.activeElement === firstElement) {
+          e.preventDefault()
+          lastElement?.focus()
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          e.preventDefault()
+          firstElement?.focus()
+        }
+      }
+    }
+
+    document.addEventListener('keydown', handleEscape)
+    document.addEventListener('keydown', handleTab)
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape)
+      document.removeEventListener('keydown', handleTab)
+    }
+  }, [isOpen, onClose])
+
   if (!isOpen) return null
 
   const handleOverlayClick = (e: React.MouseEvent) => {
