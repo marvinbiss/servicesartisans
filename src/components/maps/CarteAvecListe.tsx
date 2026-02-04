@@ -40,8 +40,8 @@ interface CarteAvecListeProps {
 export default function CarteAvecListe({
   initialCenter = [48.8566, 2.3522],
   initialZoom = 11,
-  service,
-  location
+  service: _service,
+  location: _location
 }: CarteAvecListeProps) {
   const [mapReady, setMapReady] = useState(false)
   const [L, setL] = useState<any>(null)
