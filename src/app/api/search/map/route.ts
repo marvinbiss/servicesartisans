@@ -59,7 +59,7 @@ export async function GET(request: Request) {
 
     const supabase = getSupabaseClient()
 
-    // Build the query - select all relevant columns including new ones
+    // Build the query - select only real columns (no derived/fake values)
     let query = supabase
       .from('providers')
       .select(`
@@ -68,6 +68,7 @@ export async function GET(request: Request) {
         slug,
         latitude,
         longitude,
+        address_street,
         address_city,
         address_postal_code,
         phone,
@@ -81,6 +82,9 @@ export async function GET(request: Request) {
         specialty,
         avatar_url,
         hourly_rate_min,
+        avg_response_time_hours,
+        years_on_platform,
+        employee_count,
         response_time,
         emergency_available,
         certifications,
@@ -130,27 +134,9 @@ export async function GET(request: Request) {
       )
     }
 
-    // Transform providers data - use actual database columns
+    // Transform providers data - keep only real database values
     const transformedProviders = providers?.map((provider) => {
-      // Use database values, with fallback to generated values if null
-      const seed = provider.id.split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0)
-      const rating = provider.rating_average || (4 + (seed % 10) / 10)
-      const reviewCount = provider.review_count || (20 + (seed % 80))
-
-      // Use specialty from database, fallback to extracting from name
-      let specialty = provider.specialty || 'Artisan'
-      if (!provider.specialty) {
-        const name = provider.name?.toLowerCase() || ''
-        if (name.includes('plomb')) specialty = 'Plombier'
-        else if (name.includes('electr')) specialty = 'Électricien'
-        else if (name.includes('serr')) specialty = 'Serrurier'
-        else if (name.includes('peintr')) specialty = 'Peintre'
-        else if (name.includes('maçon') || name.includes('macon')) specialty = 'Maçon'
-        else if (name.includes('menuisi')) specialty = 'Menuisier'
-        else if (name.includes('chauff')) specialty = 'Chauffagiste'
-        else if (name.includes('couv')) specialty = 'Couvreur'
-        else if (name.includes('charpent')) specialty = 'Charpentier'
-      }
+      const services = provider.specialty ? [provider.specialty] : []
 
       return {
         id: provider.id,
@@ -158,16 +144,21 @@ export async function GET(request: Request) {
         slug: provider.slug,
         latitude: provider.latitude,
         longitude: provider.longitude,
-        rating_average: parseFloat(Number(rating).toFixed(1)),
-        review_count: reviewCount,
+        rating_average: provider.rating_average,
+        review_count: provider.review_count,
+        address_street: provider.address_street,
         address_city: provider.address_city,
+        address_postal_code: provider.address_postal_code,
         phone: provider.phone,
         is_verified: provider.is_verified,
         is_premium: provider.is_premium,
-        specialty,
-        services: [specialty],
+        specialty: provider.specialty,
+        services,
         avatar_url: provider.avatar_url,
         hourly_rate_min: provider.hourly_rate_min,
+        avg_response_time_hours: provider.avg_response_time_hours,
+        years_on_platform: provider.years_on_platform,
+        employee_count: provider.employee_count,
         emergency_available: provider.emergency_available,
         response_time: provider.response_time,
         certifications: provider.certifications,
