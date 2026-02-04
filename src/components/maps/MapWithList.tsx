@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Search, Filter, MapPin, Star, Phone, Clock, Users, Shield,
-  Loader2, X, ChevronDown
+  Loader2, ChevronDown
 } from 'lucide-react'
 import { createPremiumMarker } from '@/lib/maps/premium-markers'
 import './premium-branding.css'
