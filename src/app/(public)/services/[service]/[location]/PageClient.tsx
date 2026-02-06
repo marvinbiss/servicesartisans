@@ -176,7 +176,7 @@ export default function ServiceLocationPageClient({
               providers={providers.map(p => ({
                 id: p.id,
                 name: p.name || '',
-                slug: p.slug,
+                slug: p.stable_id || p.slug,
                 latitude: p.latitude || 0,
                 longitude: p.longitude || 0,
                 rating_average: p.rating_average,
@@ -184,8 +184,6 @@ export default function ServiceLocationPageClient({
                 specialty: p.specialty,
                 address_city: p.address_city,
                 is_verified: p.is_verified || false,
-                is_premium: p.is_premium || false,
-                trust_badge: p.trust_badge,
                 phone: p.phone,
                 address_street: p.address_street,
                 address_postal_code: p.address_postal_code

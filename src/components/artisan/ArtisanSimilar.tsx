@@ -3,7 +3,7 @@
 import { useRef } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Star, MapPin, ChevronLeft, ChevronRight, Users, Zap, BadgeCheck } from 'lucide-react'
+import { Star, MapPin, ChevronLeft, ChevronRight, Users, BadgeCheck } from 'lucide-react'
 import { Artisan } from './types'
 import { getArtisanUrl } from '@/lib/utils'
 
@@ -15,9 +15,7 @@ interface SimilarArtisan {
   rating: number
   reviews: number
   city: string
-  hourly_rate?: number
   is_verified?: boolean
-  is_premium?: boolean
   avatar_url?: string
 }
 
@@ -129,12 +127,6 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSi
 
                 {/* Badges */}
                 <div className="flex flex-wrap gap-1.5 mb-3">
-                  {item.is_premium && (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 text-xs font-medium">
-                      <Zap className="w-3 h-3" aria-hidden="true" />
-                      Premium
-                    </span>
-                  )}
                   {item.is_verified && (
                     <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-xs font-medium">
                       <BadgeCheck className="w-3 h-3" aria-hidden="true" />
@@ -156,13 +148,6 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSi
                   </div>
                 </div>
 
-                {/* Price */}
-                {item.hourly_rate && (
-                  <div className="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between">
-                    <span className="text-sm text-gray-500">A partir de</span>
-                    <span className="font-bold text-blue-600">{item.hourly_rate}€/h</span>
-                  </div>
-                )}
               </motion.article>
             </Link>
           </motion.div>

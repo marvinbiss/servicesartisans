@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { getProviderBySlug, getServiceBySlug, getLocationBySlug } from '@/lib/supabase'
+import { getProviderByStableId, getServiceBySlug, getLocationBySlug } from '@/lib/supabase'
 import { createClient } from '@/lib/supabase/server'
 import ArtisanPageClient from '@/components/artisan/ArtisanPageClient'
 import { Artisan, Review } from '@/components/artisan'
@@ -31,6 +31,7 @@ function convertToArtisan(provider: any, service: any, location: any, serviceSlu
 
   return {
     id: provider.id,
+    stable_id: provider.stable_id || undefined,
     slug: provider.slug,
     business_name: name,
     first_name: provider.first_name || null,
@@ -39,27 +40,21 @@ function convertToArtisan(provider: any, service: any, location: any, serviceSlu
     city: city,
     postal_code: location?.postal_code || provider.address_postal_code || '',
     address: provider.address_street || '',
-    // Geographic hierarchy from location data
     department: location?.department_name || undefined,
     department_code: location?.department_code || undefined,
     region: location?.region_name || undefined,
     specialty: specialty,
-    // Store the service slug for breadcrumb URL generation
     specialty_slug: serviceSlug,
     city_slug: location?.slug || undefined,
     description: description,
     average_rating: provider.rating_average || provider.average_rating || null,
     review_count: provider.review_count || 0,
-    hourly_rate: provider.hourly_rate_min || provider.hourly_rate || undefined,
     is_verified: provider.is_verified || false,
-    is_premium: provider.is_premium || false,
     is_center: provider.is_center || false,
     team_size: provider.team_size || undefined,
     services: provider.services || [],
     service_prices: provider.service_prices || [],
     accepts_new_clients: provider.accepts_new_clients !== false,
-    intervention_zone: provider.intervention_zone || '20 km',
-    response_time: provider.response_time || '< 2h',
     experience_years: provider.experience_years || undefined,
     certifications: provider.certifications || [],
     insurance: provider.insurance || [],
@@ -67,8 +62,6 @@ function convertToArtisan(provider: any, service: any, location: any, serviceSlu
     languages: provider.languages || ['Français'],
     emergency_available: provider.emergency_available || false,
     member_since: provider.created_at ? new Date(provider.created_at).getFullYear().toString() : undefined,
-    response_rate: provider.response_rate || 95,
-    bookings_this_week: provider.bookings_this_week || 0,
     siret: provider.siret || undefined,
     legal_form: provider.legal_form || undefined,
     creation_date: provider.creation_date || undefined,
@@ -78,7 +71,6 @@ function convertToArtisan(provider: any, service: any, location: any, serviceSlu
     website: provider.website || undefined,
     latitude: provider.latitude || undefined,
     longitude: provider.longitude || undefined,
-    intervention_zones: provider.intervention_zones || [],
     faq: provider.faq || [],
   }
 }
@@ -149,7 +141,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   try {
     const [provider, service, location] = await Promise.all([
-      getProviderBySlug(providerSlug),
+      getProviderByStableId(providerSlug),
       getServiceBySlug(serviceSlug),
       getLocationBySlug(locationSlug),
     ])
@@ -190,7 +182,7 @@ export default async function ProviderPage({ params }: PageProps) {
 
   try {
     ;[provider, service, location] = await Promise.all([
-      getProviderBySlug(providerSlug),
+      getProviderByStableId(providerSlug),
       getServiceBySlug(serviceSlug),
       getLocationBySlug(locationSlug),
     ])

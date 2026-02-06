@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { Star, MapPin, CheckCircle, Shield, Zap, Users, Clock, Award, Phone } from 'lucide-react'
+import { Star, MapPin, CheckCircle, Zap, Users, Clock, Phone } from 'lucide-react'
 import { Artisan, getDisplayName } from './types'
 import {
   VerificationLevelBadge,
@@ -18,9 +18,6 @@ const BLUR_DATA_URL = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA
 
 // Determine verification level based on artisan data
 function getVerificationLevel(artisan: Artisan): 'none' | 'basic' | 'standard' | 'premium' | 'enterprise' {
-  if (artisan.is_premium && artisan.is_verified && artisan.insurance && artisan.insurance.length > 0) {
-    return 'premium'
-  }
   if (artisan.is_verified && artisan.insurance && artisan.insurance.length > 0) {
     return 'standard'
   }
@@ -78,23 +75,11 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
         <div className="flex-1 min-w-0">
           {/* Top Badges Row */}
           <div className="flex flex-wrap gap-2 mb-3" role="list" aria-label="Badges et certifications">
-            {artisan.is_premium && (
-              <span role="listitem" className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 text-white text-xs font-semibold shadow-sm">
-                <Award className="w-3.5 h-3.5" aria-hidden="true" />
-                Premium
-              </span>
-            )}
             <VerificationLevelBadge level={verificationLevel} size="sm" />
             {artisan.emergency_available && (
               <span role="listitem" className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-semibold">
                 <Zap className="w-3.5 h-3.5" aria-hidden="true" />
                 Urgences 24/7
-              </span>
-            )}
-            {(artisan.response_rate || 0) >= 90 && (
-              <span role="listitem" className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-semibold">
-                <Shield className="w-3.5 h-3.5" aria-hidden="true" />
-                Top Pro
               </span>
             )}
           </div>
@@ -109,9 +94,6 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
           <div className="flex items-center gap-2 text-gray-500 mb-4">
             <MapPin className="w-4 h-4" />
             <span>{artisan.city} ({artisan.postal_code})</span>
-            {artisan.intervention_zone && (
-              <span className="text-gray-400">• Zone: {artisan.intervention_zone}</span>
-            )}
           </div>
 
           {/* Phone - Display directly if available */}

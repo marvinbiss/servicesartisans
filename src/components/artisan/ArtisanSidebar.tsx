@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Phone, Mail, MessageCircle, CheckCircle, Zap, Clock, Shield, FileCheck, Award, Lock } from 'lucide-react'
+import { Phone, Mail, MessageCircle, Zap, Clock, Shield, FileCheck, Award, Lock } from 'lucide-react'
 import { Artisan } from './types'
 import { QuoteRequestModal } from './QuoteRequestModal'
 
@@ -38,16 +38,6 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
         <div className="flex items-center gap-2 text-green-600 mb-4 pb-4 border-b border-gray-100">
           <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
           <span className="text-sm font-medium">Accepte de nouveaux clients</span>
-        </div>
-      )}
-
-      {/* Price */}
-      {artisan.hourly_rate && (
-        <div className="mb-6">
-          <div className="text-sm text-gray-500">A partir de</div>
-          <div className="text-3xl font-bold text-gray-900">
-            {artisan.hourly_rate}€<span className="text-lg text-gray-500 font-normal">/heure</span>
-          </div>
         </div>
       )}
 
@@ -100,20 +90,16 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
 
       {/* Quick info */}
       <div className="space-y-3 mb-6 pb-6 border-b border-gray-100">
-        <div className="flex items-center gap-3 text-sm text-gray-600">
-          <Clock className="w-4 h-4 text-gray-400" />
-          <span>Repond en {artisan.response_time || '< 2h'}</span>
-        </div>
-        {artisan.response_rate && (
-          <div className="flex items-center gap-3 text-sm text-gray-600">
-            <CheckCircle className="w-4 h-4 text-green-500" />
-            <span>Taux de reponse : {artisan.response_rate}%</span>
-          </div>
-        )}
         {artisan.emergency_available && (
           <div className="flex items-center gap-3 text-sm text-red-600">
             <Zap className="w-4 h-4" />
             <span className="font-medium">Urgences 24h/24</span>
+          </div>
+        )}
+        {artisan.experience_years && artisan.experience_years > 0 && (
+          <div className="flex items-center gap-3 text-sm text-gray-600">
+            <Clock className="w-4 h-4 text-gray-400" />
+            <span>{artisan.experience_years} ans d'experience</span>
           </div>
         )}
       </div>

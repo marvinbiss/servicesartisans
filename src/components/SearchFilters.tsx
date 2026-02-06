@@ -1,11 +1,10 @@
 'use client'
 
 import { useState, useId } from 'react'
-import { Filter, ChevronDown, X, BadgeCheck, Award, Star } from 'lucide-react'
+import { Filter, ChevronDown, X, BadgeCheck, Star } from 'lucide-react'
 
 interface FilterState {
   verified: boolean
-  premium: boolean
   minRating: number | null
   sortBy: 'relevance' | 'rating' | 'name'
 }
@@ -18,7 +17,6 @@ interface SearchFiltersProps {
 export default function SearchFilters({ onFilterChange, totalResults }: SearchFiltersProps) {
   const [filters, setFilters] = useState<FilterState>({
     verified: false,
-    premium: false,
     minRating: null,
     sortBy: 'relevance',
   })
@@ -35,7 +33,6 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
   const clearFilters = () => {
     const defaultFilters: FilterState = {
       verified: false,
-      premium: false,
       minRating: null,
       sortBy: 'relevance',
     }
@@ -45,7 +42,6 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
 
   const activeFiltersCount = [
     filters.verified,
-    filters.premium,
     filters.minRating !== null,
   ].filter(Boolean).length
 
@@ -132,20 +128,6 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
             >
               <BadgeCheck className="w-4 h-4" aria-hidden="true" />
               <span>Vérifié</span>
-            </button>
-
-            {/* Premium filter */}
-            <button
-              onClick={() => updateFilter('premium', !filters.premium)}
-              aria-pressed={filters.premium}
-              className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 ${
-                filters.premium
-                  ? 'bg-yellow-50 border-yellow-200 text-yellow-700'
-                  : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
-              }`}
-            >
-              <Award className="w-4 h-4" aria-hidden="true" />
-              <span>Premium</span>
             </button>
 
             {/* Rating filter */}

@@ -94,7 +94,7 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
     telephone: artisan.phone,
     email: artisan.email,
     url: artisanUrl,
-    priceRange: artisan.hourly_rate ? `${artisan.hourly_rate}€ - ${artisan.hourly_rate * 2}€` : '€€',
+    priceRange: '€€',
     parentOrganization: {
       '@type': 'Organization',
       '@id': `${baseUrl}#organization`,
@@ -161,18 +161,6 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
         }),
       })),
     },
-
-    ...(artisan.intervention_zone && {
-      areaServed: {
-        '@type': 'GeoCircle',
-        geoMidpoint: {
-          '@type': 'GeoCoordinates',
-          latitude: artisan.latitude || 48.8566,
-          longitude: artisan.longitude || 2.3522,
-        },
-        geoRadius: parseInt(artisan.intervention_zone) * 1000 || 20000,
-      },
-    }),
 
     ...(artisan.siret && {
       identifier: {

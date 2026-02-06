@@ -10,30 +10,30 @@ interface ArtisanStatsProps {
 
 export function ArtisanStats({ artisan }: ArtisanStatsProps) {
   const stats = [
-    {
+    ...(artisan.experience_years ? [{
       icon: Clock,
-      label: 'Temps de reponse',
-      value: artisan.response_time || '< 2h',
+      label: 'Experience',
+      value: `${artisan.experience_years} ans`,
       color: 'text-blue-600 bg-blue-50',
-    },
-    {
+    }] : []),
+    ...(artisan.review_count > 0 ? [{
       icon: TrendingUp,
-      label: 'Taux de reponse',
-      value: artisan.response_rate ? `${artisan.response_rate}%` : '95%',
+      label: 'Avis clients',
+      value: artisan.review_count.toString(),
       color: 'text-green-600 bg-green-50',
-    },
-    {
+    }] : []),
+    ...(artisan.employee_count ? [{
       icon: Calendar,
-      label: 'Interventions',
-      value: artisan.bookings_this_week && artisan.bookings_this_week > 0 ? artisan.bookings_this_week.toString() : '+50',
+      label: 'Employes',
+      value: artisan.employee_count.toString(),
       color: 'text-purple-600 bg-purple-50',
-    },
-    {
+    }] : []),
+    ...(artisan.member_since ? [{
       icon: MessageCircle,
       label: 'Membre depuis',
-      value: artisan.member_since || new Date().getFullYear().toString(),
+      value: artisan.member_since,
       color: 'text-amber-600 bg-amber-50',
-    },
+    }] : []),
   ]
 
   return (

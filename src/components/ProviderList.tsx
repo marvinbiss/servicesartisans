@@ -16,7 +16,6 @@ interface ProviderListProps {
 
 interface FilterState {
   verified: boolean
-  premium: boolean
   minRating: number | null
   sortBy: 'relevance' | 'rating' | 'name'
 }
@@ -30,7 +29,6 @@ export default function ProviderList({
 }: ProviderListProps) {
   const [filters, setFilters] = useState<FilterState>({
     verified: false,
-    premium: false,
     minRating: null,
     sortBy: 'relevance',
   })
@@ -39,8 +37,7 @@ export default function ProviderList({
   // Apply filters
   const filteredProviders = providers.filter((provider) => {
     if (filters.verified && !provider.is_verified) return false
-    if (filters.premium && !provider.is_premium) return false
-    // Rating filter would need actual rating data
+    if (filters.minRating && (provider.rating_average || 0) < filters.minRating) return false
     return true
   })
 
@@ -50,14 +47,12 @@ export default function ProviderList({
       case 'name':
         return a.name.localeCompare(b.name)
       case 'rating':
-        // Would need actual rating data
-        return 0
+        return (b.rating_average || 0) - (a.rating_average || 0)
       case 'relevance':
       default:
-        // Premium first, then verified
-        if (a.is_premium !== b.is_premium) return a.is_premium ? -1 : 1
+        // Verified first, then alphabetical
         if (a.is_verified !== b.is_verified) return a.is_verified ? -1 : 1
-        return 0
+        return a.name.localeCompare(b.name)
     }
   })
 

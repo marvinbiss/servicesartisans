@@ -143,17 +143,7 @@ export default function DashboardArtisanPage() {
             <div className="flex items-center gap-4">
               {profile?.is_verified && (
                 <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                  Profil vérifié
-                </span>
-              )}
-              {profile?.subscription_plan === 'premium' && (
-                <span className="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                  Premium
-                </span>
-              )}
-              {profile?.subscription_plan === 'pro' && (
-                <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                  Pro
+                  Profil verifie
                 </span>
               )}
             </div>
@@ -354,23 +344,6 @@ export default function DashboardArtisanPage() {
               </div>
             </div>
 
-            {/* Upgrade banner */}
-            <div className="bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl p-6 text-white">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-xl font-bold mb-2">Passez à Premium</h3>
-                  <p className="text-yellow-100">
-                    Multipliez par 3 vos demandes de devis avec l'offre Premium
-                  </p>
-                </div>
-                <Link
-                  href="/tarifs-artisans"
-                  className="bg-white text-orange-600 px-6 py-2 rounded-lg font-semibold hover:bg-orange-50 transition-colors"
-                >
-                  Découvrir
-                </Link>
-              </div>
-            </div>
           </div>
         </div>
       </div>

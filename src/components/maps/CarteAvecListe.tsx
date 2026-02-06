@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import dynamic from 'next/dynamic'
-import { Star, Award } from 'lucide-react'
+import { Star } from 'lucide-react'
 import Link from 'next/link'
 import ProviderCard from '@/components/ProviderCard'
 import { Provider } from '@/types'
@@ -87,21 +87,14 @@ export default function CarteAvecListe({
   const createMarkerIcon = useCallback((provider: Provider, isHovered: boolean) => {
     if (!L) return undefined
 
-    const isPremium =
-      provider.is_premium ||
-      provider.trust_badge === 'gold' ||
-      provider.trust_badge === 'platinum'
     const size = isHovered ? 42 : 36
-    const color = isPremium ? '#f59e0b' : '#2563eb'
+    const color = provider.is_verified ? '#2563eb' : '#6b7280'
 
     return L.divIcon({
       className: '',
       html: `
         <div style="width: ${size}px; height: ${size}px; background: ${color}; border: 3px solid white; border-radius: 50%; box-shadow: 0 ${isHovered ? 6 : 3}px ${isHovered ? 16 : 10}px rgba(0,0,0,${isHovered ? 0.35 : 0.25}); display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;">
-          ${isPremium 
-            ? `<svg width="${size * 0.5}" height="${size * 0.5}" viewBox="0 0 24 24" fill="white"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`
-            : `<svg width="${size * 0.5}" height="${size * 0.5}" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="12" r="8"/></svg>`
-          }
+          <svg width="${size * 0.5}" height="${size * 0.5}" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="12" r="8"/></svg>
         </div>
       `,
       iconSize: [size, size],
@@ -179,19 +172,6 @@ export default function CarteAvecListe({
             >
               <Popup>
                 <div className="p-4 min-w-[260px]">
-                  {(provider.is_premium || provider.trust_badge === 'gold' || provider.trust_badge === 'platinum') && (
-                    <div
-                      className="inline-flex items-center gap-2 text-amber-900 text-xs font-black mb-2 px-3 py-1.5 rounded-full"
-                      style={{
-                        letterSpacing: '0.5px',
-                        background: 'linear-gradient(90deg, #fde68a 0%, #fff7d1 100%)',
-                        border: '1px solid #f59e0b'
-                      }}
-                    >
-                      <Award className="w-3 h-3" />
-                      PREMIUM
-                    </div>
-                  )}
                   <div className="flex items-start justify-between gap-3 mb-2">
                     <h3 className="font-bold text-base">{provider.name}</h3>
                     {provider.rating_average && provider.review_count && provider.review_count > 0 && (

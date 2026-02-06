@@ -75,16 +75,6 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
         </div>
       )}
 
-      {/* Hourly rate */}
-      {artisan.hourly_rate && (
-        <div className="mt-6 pt-6 border-t border-gray-100">
-          <div className="flex items-center justify-between p-4 rounded-xl bg-blue-50">
-            <span className="font-medium text-gray-900">Taux horaire</span>
-            <span className="text-xl font-bold text-blue-600">{artisan.hourly_rate}€/h</span>
-          </div>
-        </div>
-      )}
-
       {/* Payment methods */}
       {artisan.payment_methods && artisan.payment_methods.length > 0 && (
         <div className="mt-6 pt-6 border-t border-gray-100">

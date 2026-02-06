@@ -56,34 +56,6 @@ export function ArtisanMap({ artisan }: ArtisanMapProps) {
         </address>
       )}
 
-      {/* Intervention zones */}
-      {artisan.intervention_zones && artisan.intervention_zones.length > 0 && (
-        <div>
-          <h3 className="text-sm font-medium text-gray-700 mb-3">Communes desservies</h3>
-          <div className="flex flex-wrap gap-2" role="list" aria-label="Communes desservies">
-            {artisan.intervention_zones.map((zone, i) => (
-              <span
-                key={i}
-                role="listitem"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 text-sm"
-              >
-                <MapPin className="w-3.5 h-3.5" aria-hidden="true" />
-                {zone}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Intervention radius */}
-      {artisan.intervention_zone && (
-        <div className="mt-4 pt-4 border-t border-gray-100">
-          <div className="flex items-center gap-2 text-gray-600">
-            <Navigation className="w-4 h-4" aria-hidden="true" />
-            <span>Rayon d'intervention : <strong>{artisan.intervention_zone}</strong></span>
-          </div>
-        </div>
-      )}
     </motion.div>
   )
 }
