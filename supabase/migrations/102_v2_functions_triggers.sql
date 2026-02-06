@@ -111,41 +111,14 @@ CREATE TRIGGER trigger_providers_updated_at
   EXECUTE FUNCTION set_updated_at();
 
 -- =============================================================================
--- 3. REVIEW TRIGGERS
+-- 3. REVIEW TRIGGERS — DEFERRED
+-- update_provider_rating() will be created in a later PR when reviews are wired
+-- For now, just clean up the old toxic trigger
 -- =============================================================================
-
--- Update provider rating_average and review_count when reviews change
-CREATE OR REPLACE FUNCTION update_provider_rating()
-RETURNS TRIGGER AS $$
-DECLARE
-  v_provider_id UUID;
-BEGIN
-  v_provider_id := coalesce(NEW.provider_id, OLD.provider_id);
-
-  UPDATE providers SET
-    rating_average = coalesce((
-      SELECT round(avg(rating)::numeric, 2)
-      FROM reviews
-      WHERE provider_id = v_provider_id AND is_visible = TRUE
-    ), 0),
-    review_count = (
-      SELECT count(*)
-      FROM reviews
-      WHERE provider_id = v_provider_id AND is_visible = TRUE
-    )
-  WHERE id = v_provider_id;
-
-  RETURN coalesce(NEW, OLD);
-END;
-$$ LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS trigger_update_provider_rating ON reviews;
 DROP TRIGGER IF EXISTS trigger_update_artisan_rating ON reviews;
 DROP TRIGGER IF EXISTS trigger_update_provider_trust ON reviews;
-CREATE TRIGGER trigger_update_provider_rating
-  AFTER INSERT OR UPDATE OR DELETE ON reviews
-  FOR EACH ROW
-  EXECUTE FUNCTION update_provider_rating();
 
 -- =============================================================================
 -- 4. CONVERSATION TRIGGERS
@@ -248,285 +221,18 @@ BEGIN
 END $$;
 
 -- =============================================================================
--- 6. BUSINESS LOGIC FUNCTIONS
+-- 6. BUSINESS LOGIC FUNCTIONS — DEFERRED
 -- =============================================================================
-
--- Atomic booking creation (prevents double-booking via advisory lock)
-CREATE OR REPLACE FUNCTION create_booking_atomic(
-  p_artisan_id UUID,
-  p_slot_id UUID,
-  p_client_name TEXT,
-  p_client_phone TEXT,
-  p_client_email TEXT,
-  p_service_description TEXT DEFAULT NULL,
-  p_address TEXT DEFAULT NULL,
-  p_payment_intent_id TEXT DEFAULT NULL,
-  p_deposit_amount INTEGER DEFAULT NULL
-) RETURNS JSON AS $$
-DECLARE
-  v_booking_id UUID;
-  v_slot RECORD;
-  v_existing RECORD;
-BEGIN
-  -- Advisory lock on slot to prevent race conditions
-  PERFORM pg_advisory_xact_lock(hashtext(p_slot_id::text));
-
-  -- Check slot exists and is available
-  SELECT * INTO v_slot
-  FROM availability_slots
-  WHERE id = p_slot_id
-    AND artisan_id = p_artisan_id
-    AND is_available = TRUE
-  FOR UPDATE;
-
-  IF NOT FOUND THEN
-    RETURN json_build_object(
-      'success', false,
-      'error', 'SLOT_UNAVAILABLE',
-      'message', 'Ce créneau n''est plus disponible'
-    );
-  END IF;
-
-  -- Check for existing booking on this slot
-  SELECT id INTO v_existing
-  FROM bookings
-  WHERE slot_id = p_slot_id
-    AND status IN ('confirmed', 'pending')
-  LIMIT 1;
-
-  IF FOUND THEN
-    RETURN json_build_object(
-      'success', false,
-      'error', 'SLOT_ALREADY_BOOKED',
-      'message', 'Ce créneau est déjà réservé'
-    );
-  END IF;
-
-  -- Check duplicate by same client
-  SELECT id INTO v_existing
-  FROM bookings
-  WHERE slot_id = p_slot_id
-    AND lower(client_email) = lower(p_client_email)
-    AND status = 'confirmed'
-  LIMIT 1;
-
-  IF FOUND THEN
-    RETURN json_build_object(
-      'success', false,
-      'error', 'DUPLICATE_BOOKING',
-      'message', 'Vous avez déjà une réservation pour ce créneau'
-    );
-  END IF;
-
-  -- Create booking
-  INSERT INTO bookings (
-    artisan_id, slot_id, client_name, client_phone, client_email,
-    service_description, address, payment_intent_id, deposit_amount,
-    status, created_at
-  ) VALUES (
-    p_artisan_id, p_slot_id, p_client_name, p_client_phone,
-    lower(p_client_email), p_service_description, p_address,
-    p_payment_intent_id, p_deposit_amount, 'confirmed', NOW()
-  )
-  RETURNING id INTO v_booking_id;
-
-  -- Mark slot as unavailable
-  UPDATE availability_slots SET is_available = FALSE WHERE id = p_slot_id;
-
-  RETURN json_build_object(
-    'success', true,
-    'booking_id', v_booking_id,
-    'slot', json_build_object(
-      'id', v_slot.id,
-      'date', v_slot.date,
-      'start_time', v_slot.start_time,
-      'end_time', v_slot.end_time
-    )
-  );
-
-EXCEPTION WHEN OTHERS THEN
-  RETURN json_build_object(
-    'success', false,
-    'error', 'DATABASE_ERROR',
-    'message', SQLERRM
-  );
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-
-COMMENT ON FUNCTION create_booking_atomic IS
-  'Atomic booking creation with advisory lock — prevents double-booking';
-
--- Artisan dashboard stats (single RPC call, no N+1)
-CREATE OR REPLACE FUNCTION get_artisan_dashboard_stats(
-  p_artisan_id UUID,
-  p_period TEXT DEFAULT 'month'
-) RETURNS JSON AS $$
-DECLARE
-  v_result JSON;
-  v_now TIMESTAMP := NOW();
-  v_period_start DATE;
-  v_last_period_start DATE;
-BEGIN
-  CASE p_period
-    WHEN 'week' THEN
-      v_period_start := date_trunc('week', v_now);
-      v_last_period_start := v_period_start - INTERVAL '1 week';
-    WHEN 'year' THEN
-      v_period_start := date_trunc('year', v_now);
-      v_last_period_start := v_period_start - INTERVAL '1 year';
-    ELSE
-      v_period_start := date_trunc('month', v_now);
-      v_last_period_start := v_period_start - INTERVAL '1 month';
-  END CASE;
-
-  SELECT json_build_object(
-    'totalBookings', (
-      SELECT count(*) FROM bookings
-      WHERE artisan_id = p_artisan_id AND status IN ('confirmed', 'completed')
-    ),
-    'periodBookings', (
-      SELECT count(*) FROM bookings b
-      JOIN availability_slots s ON b.slot_id = s.id
-      WHERE b.artisan_id = p_artisan_id
-        AND b.status IN ('confirmed', 'completed')
-        AND s.date >= v_period_start
-    ),
-    'lastPeriodBookings', (
-      SELECT count(*) FROM bookings b
-      JOIN availability_slots s ON b.slot_id = s.id
-      WHERE b.artisan_id = p_artisan_id
-        AND b.status IN ('confirmed', 'completed')
-        AND s.date >= v_last_period_start
-        AND s.date < v_period_start
-    ),
-    'periodRevenue', coalesce((
-      SELECT sum(b.deposit_amount) FROM bookings b
-      JOIN availability_slots s ON b.slot_id = s.id
-      WHERE b.artisan_id = p_artisan_id
-        AND b.status IN ('confirmed', 'completed')
-        AND s.date >= v_period_start
-    ), 0) / 100.0,
-    'averageRating', coalesce((
-      SELECT round(avg(r.rating)::numeric, 1) FROM reviews r
-      WHERE r.provider_id IN (SELECT id FROM providers WHERE user_id = p_artisan_id)
-    ), 0),
-    'totalReviews', (
-      SELECT count(*) FROM reviews r
-      WHERE r.provider_id IN (SELECT id FROM providers WHERE user_id = p_artisan_id)
-    ),
-    'upcomingBookings', (
-      SELECT count(*) FROM bookings b
-      JOIN availability_slots s ON b.slot_id = s.id
-      WHERE b.artisan_id = p_artisan_id
-        AND b.status = 'confirmed'
-        AND s.date >= CURRENT_DATE
-    ),
-    'cancelRate', (
-      SELECT CASE WHEN count(*) > 0
-        THEN round((count(*) FILTER (WHERE status = 'cancelled')::numeric / count(*)) * 100)
-        ELSE 0
-      END FROM bookings WHERE artisan_id = p_artisan_id
-    ),
-    'fillRate', (
-      SELECT CASE WHEN count(*) > 0
-        THEN round((count(*) FILTER (WHERE is_available = FALSE)::numeric / count(*)) * 100)
-        ELSE 0
-      END FROM availability_slots
-      WHERE artisan_id = p_artisan_id
-        AND date >= CURRENT_DATE - INTERVAL '30 days'
-        AND date <= CURRENT_DATE
-    )
-  ) INTO v_result;
-
-  RETURN v_result;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-
-COMMENT ON FUNCTION get_artisan_dashboard_stats IS
-  'Single optimized RPC for artisan dashboard stats — no N+1';
-
--- =============================================================================
--- 7. SEARCH FUNCTION (replaces search_providers_by_distance)
--- Cleaned: no is_premium bias, no trust_badge/trust_score in output
--- =============================================================================
-
+-- The following functions are NOT part of the v2 socle minimal.
+-- They will be created in dedicated PRs:
+--
+--   create_booking_atomic()        → PR: booking-v2
+--   get_artisan_dashboard_stats()  → PR: dashboard-artisan-v2
+--   search_providers_v2()          → PR: search-api-v2
+--   update_provider_rating()       → PR: reviews-v2
+--
+-- For now, just drop the old toxic search function:
 DROP FUNCTION IF EXISTS search_providers_by_distance;
-
-CREATE OR REPLACE FUNCTION search_providers_v2(
-  p_lat DECIMAL DEFAULT NULL,
-  p_lon DECIMAL DEFAULT NULL,
-  p_radius_km INTEGER DEFAULT 25,
-  p_query TEXT DEFAULT NULL,
-  p_service TEXT DEFAULT NULL,
-  p_min_rating DECIMAL DEFAULT NULL,
-  p_sort_by TEXT DEFAULT 'relevance',
-  p_limit INTEGER DEFAULT 20,
-  p_offset INTEGER DEFAULT 0
-)
-RETURNS TABLE (
-  id UUID,
-  stable_id TEXT,
-  name TEXT,
-  specialty TEXT,
-  address_city TEXT,
-  address_postal_code TEXT,
-  latitude DECIMAL,
-  longitude DECIMAL,
-  rating_average DECIMAL,
-  review_count INTEGER,
-  is_verified BOOLEAN,
-  distance_km DECIMAL,
-  description TEXT
-) AS $$
-BEGIN
-  RETURN QUERY
-  SELECT
-    p.id,
-    p.stable_id,
-    p.name,
-    p.specialty,
-    p.address_city,
-    p.address_postal_code,
-    p.latitude,
-    p.longitude,
-    p.rating_average,
-    p.review_count,
-    p.is_verified,
-    CASE WHEN p_lat IS NOT NULL AND p_lon IS NOT NULL AND p.location IS NOT NULL THEN
-      round((ST_Distance(
-        p.location,
-        ST_SetSRID(ST_MakePoint(p_lon, p_lat), 4326)::geography
-      ) / 1000)::DECIMAL, 2)
-    ELSE NULL
-    END as distance_km,
-    p.description
-  FROM providers p
-  WHERE p.is_active = TRUE
-    AND (p_lat IS NULL OR p_lon IS NULL OR p.location IS NULL OR ST_DWithin(
-      p.location,
-      ST_SetSRID(ST_MakePoint(p_lon, p_lat), 4326)::geography,
-      p_radius_km * 1000
-    ))
-    AND (p_query IS NULL OR p.search_vector @@ plainto_tsquery('french', p_query))
-    AND (p_service IS NULL OR p.specialty ILIKE '%' || p_service || '%')
-    AND (p_min_rating IS NULL OR p.rating_average >= p_min_rating)
-  ORDER BY
-    CASE WHEN p_sort_by = 'distance' AND p_lat IS NOT NULL THEN
-      ST_Distance(p.location, ST_SetSRID(ST_MakePoint(p_lon, p_lat), 4326)::geography)
-    END ASC NULLS LAST,
-    CASE WHEN p_sort_by = 'rating' THEN p.rating_average END DESC NULLS LAST,
-    CASE WHEN p_sort_by = 'reviews' THEN p.review_count END DESC NULLS LAST,
-    CASE WHEN p_sort_by = 'relevance' OR p_sort_by IS NULL THEN
-      -- Neutral relevance: verified first, then by review count (no premium bias)
-      p.is_verified::INTEGER * 100 + least(p.review_count, 100)
-    END DESC NULLS LAST
-  LIMIT p_limit
-  OFFSET p_offset;
-END;
-$$ LANGUAGE plpgsql STABLE;
-
-COMMENT ON FUNCTION search_providers_v2 IS
-  'Search providers by location, query, and filters — no premium bias, no trust_score exposure';
 
 -- =============================================================================
 -- 8. PERFORMANCE INDEXES
@@ -710,18 +416,20 @@ ANALYZE conversations;
 ANALYZE messages;
 
 -- =============================================================================
--- DONE — v2 migration complete
+-- DONE — v2 socle minimal complete
 -- =============================================================================
--- Summary of what's been created:
---   • generate_stable_id() — HMAC function for provider public IDs
---   • set_provider_stable_id() — auto-set on INSERT
---   • prevent_stable_id_change() — immutability guard
---   • update_provider_location() — auto-sync lat/lon → geography
---   • update_provider_search_vector() — French full-text search
---   • update_provider_rating() — review aggregate cache
---   • update_conversation_on_message() — conversation freshness
---   • set_updated_at() — generic timestamp trigger
---   • create_booking_atomic() — double-booking prevention
---   • get_artisan_dashboard_stats() — single RPC for dashboard
---   • search_providers_v2() — clean search without premium bias
+-- Created (socle):
+--   • generate_stable_id()              — HMAC for provider public IDs
+--   • set_provider_stable_id()          — auto-set on INSERT
+--   • prevent_stable_id_change()        — immutability guard
+--   • update_provider_location()        — lat/lon → geography sync
+--   • update_provider_search_vector()   — French full-text search
+--   • update_conversation_on_message()  — conversation freshness
+--   • set_updated_at()                  — generic timestamp trigger
+--
+-- Deferred (later PRs):
+--   • update_provider_rating()          → PR reviews-v2
+--   • create_booking_atomic()           → PR booking-v2
+--   • get_artisan_dashboard_stats()     → PR dashboard-artisan-v2
+--   • search_providers_v2()             → PR search-api-v2
 -- =============================================================================

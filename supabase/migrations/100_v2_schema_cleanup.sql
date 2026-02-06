@@ -26,27 +26,29 @@ DECLARE
   hmac_secret TEXT;
   raw_hmac BYTEA;
 BEGIN
-  -- In production, store the secret in Supabase Vault:
+  -- Secret MUST be set before calling this function.
+  -- Set it via:  ALTER DATABASE postgres SET app.stable_id_secret = 'your-secret-here';
+  -- Or in production via Supabase Vault:
   --   SELECT decrypted_secret FROM vault.decrypted_secrets WHERE name = 'stable_id_secret'
-  -- For now, use app.settings (set via ALTER DATABASE ... SET app.stable_id_secret = '...')
-  hmac_secret := coalesce(
-    current_setting('app.stable_id_secret', true),
-    'sa-stable-id-v2-default-change-me'
-  );
+  hmac_secret := current_setting('app.stable_id_secret', true);
+
+  IF hmac_secret IS NULL OR hmac_secret = '' THEN
+    RAISE EXCEPTION 'app.stable_id_secret is not set. Run: ALTER DATABASE postgres SET app.stable_id_secret = ''your-secret'';';
+  END IF;
 
   raw_hmac := hmac(provider_uuid::text::bytea, hmac_secret::bytea, 'sha256');
 
-  -- Base64url encode, take first 12 chars (~72 bits entropy)
-  -- Collision probability with 50K providers: ~5×10^-13
+  -- Base64url encode, take first 16 chars (~96 bits entropy)
+  -- Collision probability with 500K providers: ~3.2×10^-18
   RETURN left(
     replace(replace(encode(raw_hmac, 'base64'), '+', '-'), '/', '_'),
-    12
+    16
   );
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
 COMMENT ON FUNCTION generate_stable_id IS
-  'Generates a deterministic, URL-safe, 12-char public identifier from a provider UUID via HMAC-SHA256';
+  'Generates a deterministic, URL-safe, 16-char public identifier from a provider UUID via HMAC-SHA256. Requires app.stable_id_secret to be set.';
 
 -- =============================================================================
 -- 2. ADD NEW COLUMNS TO providers
@@ -59,12 +61,32 @@ ALTER TABLE providers ADD COLUMN IF NOT EXISTS stable_id TEXT;
 -- Wave-based sitemap will flip to FALSE for verified providers
 ALTER TABLE providers ADD COLUMN IF NOT EXISTS noindex BOOLEAN NOT NULL DEFAULT TRUE;
 
--- Backfill stable_id for all existing providers that don't have one
+-- ============================================================================
+-- BACKFILL: Run this AFTER setting the secret.
+-- PREREQUISITE:
+--   ALTER DATABASE postgres SET app.stable_id_secret = 'your-random-secret-here';
+--   SELECT pg_reload_conf();  -- reload so current session picks it up
+--
+-- This is a ONE-SHOT migration step. It populates stable_id for all ~50K
+-- existing providers. Run it in a separate transaction if the table is large:
+--   BEGIN; UPDATE providers SET stable_id = generate_stable_id(id) WHERE stable_id IS NULL; COMMIT;
+--
+-- After backfill, the NOT NULL + UNIQUE constraints are applied.
+-- ============================================================================
+
 UPDATE providers
 SET stable_id = generate_stable_id(id)
 WHERE stable_id IS NULL;
 
--- Now make it NOT NULL + UNIQUE
+-- Verify no NULLs remain (safety check)
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM providers WHERE stable_id IS NULL LIMIT 1) THEN
+    RAISE EXCEPTION 'Backfill failed: some providers still have NULL stable_id';
+  END IF;
+END $$;
+
+-- Now lock it down: NOT NULL + UNIQUE
 ALTER TABLE providers ALTER COLUMN stable_id SET NOT NULL;
 
 DO $$
