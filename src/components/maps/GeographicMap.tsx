@@ -149,7 +149,8 @@ export default function GeographicMap({
         zoom={zoom}
         style={{ height: '100%', width: '100%' }}
         scrollWheelZoom={false}
-        whenReady={(event) => {
+        // @ts-expect-error whenReady typing mismatch with react-leaflet
+        whenReady={(event: any) => {
           mapRef.current = event.target
         }}
       >
