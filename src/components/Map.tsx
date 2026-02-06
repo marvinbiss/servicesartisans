@@ -7,11 +7,11 @@ import { Provider } from '@/types'
 import 'leaflet/dist/leaflet.css'
 
 // Custom marker icon using divIcon (CSS-based, no external images needed)
-const createDivIcon = (isVerified: boolean) => {
+const createDivIcon = (isPremium: boolean) => {
   return L.divIcon({
     className: 'custom-marker',
     html: `
-      <div class="w-8 h-8 ${isVerified ? 'bg-blue-600' : 'bg-gray-500'} rounded-full border-2 border-white shadow-lg flex items-center justify-center">
+      <div class="w-8 h-8 ${isPremium ? 'bg-yellow-500' : 'bg-blue-600'} rounded-full border-2 border-white shadow-lg flex items-center justify-center">
         <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
           <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
         </svg>
@@ -83,7 +83,7 @@ export default function Map({
         <Marker
           key={provider.id}
           position={[provider.latitude!, provider.longitude!]}
-          icon={createDivIcon(provider.is_verified)}
+          icon={createDivIcon(!!provider.is_premium)}
           eventHandlers={{
             click: () => onMarkerClick?.(provider),
           }}
@@ -104,9 +104,9 @@ export default function Map({
                   {provider.phone}
                 </a>
               )}
-              {provider.is_verified && (
-                <span className="inline-block mt-2 text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full">
-                  Verifie
+              {provider.is_premium && (
+                <span className="inline-block mt-2 text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-full">
+                  Premium
                 </span>
               )}
             </div>

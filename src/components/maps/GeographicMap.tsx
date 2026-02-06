@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import dynamic from 'next/dynamic'
-import { Loader2, Star, MapPin, Phone } from 'lucide-react'
+import { Loader2, Star, MapPin, Phone, Award } from 'lucide-react'
 import Link from 'next/link'
 import { getArtisanUrl } from '@/lib/utils'
 import './map-styles.css'
@@ -36,6 +36,8 @@ interface Provider {
   specialty?: string
   address_city?: string
   is_verified?: boolean
+  is_premium?: boolean
+  trust_badge?: 'none' | 'bronze' | 'silver' | 'gold' | 'platinum'
   phone?: string
   address_street?: string
   address_postal_code?: string
@@ -82,8 +84,11 @@ export default function GeographicMap({
     if (!_L) return undefined
 
     const size = isHighlighted ? 40 : 32
-    const isVerified = provider?.is_verified
-    const color = isVerified ? '#2563eb' : '#6b7280'
+    const isPremium =
+      provider?.is_premium ||
+      provider?.trust_badge === 'gold' ||
+      provider?.trust_badge === 'platinum'
+    const color = isPremium ? '#f59e0b' : '#2563eb'
 
     return _L.divIcon({
       className: 'custom-marker',
@@ -99,7 +104,11 @@ export default function GeographicMap({
           align-items: center;
           justify-content: center;
         ">
-          <svg width="${size * 0.5}" height="${size * 0.5}" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="12" r="8"/></svg>
+          ${
+            isPremium
+              ? `<svg width="${size * 0.5}" height="${size * 0.5}" viewBox="0 0 24 24" fill="white"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`
+              : `<svg width="${size * 0.5}" height="${size * 0.5}" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="12" r="8"/></svg>`
+          }
         </div>
       `,
       iconSize: [size, size],
@@ -171,6 +180,21 @@ export default function GeographicMap({
           >
             <Popup className="custom-popup" maxWidth={320} minWidth={280}>
               <div className="p-4">
+                {/* Premium Badge */}
+                {(provider.is_premium || provider.trust_badge === 'gold' || provider.trust_badge === 'platinum') && (
+                  <div
+                    className="inline-flex items-center gap-2 text-amber-900 text-xs font-black mb-3 px-3 py-1.5 rounded-full"
+                    style={{
+                      letterSpacing: '0.5px',
+                      background: 'linear-gradient(90deg, #fde68a 0%, #fff7d1 100%)',
+                      border: '1px solid #f59e0b'
+                    }}
+                  >
+                    <Award className="w-3 h-3" />
+                    <span>PREMIUM</span>
+                  </div>
+                )}
+
                 {/* Name and verification */}
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <div className="min-w-0">

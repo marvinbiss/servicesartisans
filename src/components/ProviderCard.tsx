@@ -17,8 +17,8 @@ export default function ProviderCard({
   locationSlug,
   isHovered = false,
 }: ProviderCardProps) {
-  // Use stable_id for URLs, fallback to slug for legacy
-  const providerIdentifier = provider.stable_id || provider.slug || provider.id
+  // stable_id is the only authorized URL key
+  const providerIdentifier = provider.stable_id
   const providerUrl = `/services/${serviceSlug}/${locationSlug}/${providerIdentifier}`
   const ratingValue = provider.rating_average?.toFixed(1)
   const reviewCount = provider.review_count

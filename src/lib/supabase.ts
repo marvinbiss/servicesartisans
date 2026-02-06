@@ -84,7 +84,7 @@ export async function getLocationBySlug(slug: string) {
   return data
 }
 
-// Primary lookup: by stable_id. Fallback: by slug (legacy URLs).
+// Lookup by stable_id ONLY — no fallback.
 export async function getProviderByStableId(stableId: string) {
   const { data } = await supabase
     .from('providers')
@@ -93,22 +93,19 @@ export async function getProviderByStableId(stableId: string) {
     .eq('is_active', true)
     .single()
 
-  if (data) return data
+  return data || null
+}
 
-  // Fallback: legacy slug
-  const { data: bySlug } = await supabase
+// Legacy — still used by non-slice code paths. Will be removed in a future PR.
+export async function getProviderBySlug(slug: string) {
+  const { data } = await supabase
     .from('providers')
     .select(PROVIDER_SELECT)
-    .eq('slug', stableId)
+    .eq('slug', slug)
     .eq('is_active', true)
     .single()
 
-  return bySlug || null
-}
-
-// Legacy compat
-export async function getProviderBySlug(slug: string) {
-  return getProviderByStableId(slug)
+  return data || null
 }
 
 export async function getProvidersByServiceAndLocation(

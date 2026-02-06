@@ -61,6 +61,10 @@ export interface Provider {
   rating_average?: number
   review_count?: number
   experience_years?: number
+  // Legacy fields — kept for backward compat, will be undefined at runtime
+  is_premium?: boolean
+  trust_badge?: string
+  trust_score?: number
   // Relations
   provider_services?: ProviderService[]
   provider_locations?: ProviderLocation[]

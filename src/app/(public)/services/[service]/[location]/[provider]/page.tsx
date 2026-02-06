@@ -72,6 +72,13 @@ function convertToArtisan(provider: any, service: any, location: any, serviceSlu
     latitude: provider.latitude || undefined,
     longitude: provider.longitude || undefined,
     faq: provider.faq || [],
+    // Legacy fields — undefined at runtime (columns dropped), kept for sub-component compat
+    is_premium: false,
+    hourly_rate: provider.hourly_rate || undefined,
+    response_time: provider.response_time || undefined,
+    response_rate: provider.response_rate || undefined,
+    intervention_zone: provider.intervention_zone || undefined,
+    intervention_zones: provider.intervention_zones || [],
   }
 }
 

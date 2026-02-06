@@ -15,6 +15,7 @@ function createTestArtisan(overrides: Partial<Artisan> = {}): Artisan {
     average_rating: 4.5,
     review_count: 10,
     is_verified: false,
+    is_premium: false,
     services: [],
     service_prices: [],
     ...overrides

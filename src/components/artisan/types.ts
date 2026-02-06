@@ -67,6 +67,15 @@ export interface Artisan {
   website?: string
   latitude?: number
   longitude?: number
+  // Legacy fields — kept for backward compat with non-slice components
+  is_premium?: boolean
+  hourly_rate?: number
+  response_time?: string
+  response_rate?: number
+  intervention_zone?: string
+  intervention_zones?: string[]
+  bookings_this_week?: number
+  annual_revenue?: number
 }
 
 export interface Review {
