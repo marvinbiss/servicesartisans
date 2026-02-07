@@ -97,34 +97,22 @@ CREATE TRIGGER trigger_access_logs_no_delete
   FOR EACH ROW EXECUTE FUNCTION prevent_access_log_mutation();
 
 -- ============================================================
--- 4. RLS policies
+-- 4. RLS policies (V1: admin-only; artisan policy added later)
 -- ============================================================
 
 -- lead_events
 ALTER TABLE lead_events ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Artisans view own lead events" ON lead_events
-  FOR SELECT USING (
-    provider_id IN (
-      SELECT id FROM providers WHERE user_id = auth.uid()
-    )
-  );
-
+DROP POLICY IF EXISTS "Admins view all lead events" ON lead_events;
 CREATE POLICY "Admins view all lead events" ON lead_events
   FOR SELECT USING (is_admin());
-
--- No INSERT/UPDATE/DELETE for regular users
--- Events are inserted via service_role (admin client) which bypasses RLS
 
 -- access_logs
 ALTER TABLE access_logs ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Admins view access logs" ON access_logs;
 CREATE POLICY "Admins view access logs" ON access_logs
   FOR SELECT USING (is_admin());
-
--- No INSERT/UPDATE/DELETE for regular users
--- Logs are inserted via service_role (admin client) which bypasses RLS
-
 -- ============================================================
 -- 5. Comments
 -- ============================================================
