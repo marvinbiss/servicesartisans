@@ -30,7 +30,7 @@ export interface Location {
 
 export interface Provider {
   id: string
-  stable_id: string
+  stable_id?: string
   name: string
   slug: string
   siren?: string

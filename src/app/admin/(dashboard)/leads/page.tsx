@@ -22,7 +22,6 @@ import { URGENCY_META, STATUS_META } from '@/types/leads'
 
 interface ArtisanRow {
   id: string
-  stable_id: string | null
   name: string
   slug: string
   specialty: string

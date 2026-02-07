@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { MapPin, Phone, Star, Clock, Users } from 'lucide-react'
 import { Provider } from '@/types'
 
-type ProviderCardProvider = Partial<Provider> & Pick<Provider, 'id' | 'name'> & { stable_id?: string; slug?: string }
+type ProviderCardProvider = Partial<Provider> & Pick<Provider, 'id' | 'name'> & { slug?: string }
 
 interface ProviderCardProps {
   provider: ProviderCardProvider
@@ -17,8 +17,7 @@ export default function ProviderCard({
   locationSlug,
   isHovered = false,
 }: ProviderCardProps) {
-  // stable_id is the only authorized URL key
-  const providerIdentifier = provider.stable_id
+  const providerIdentifier = provider.slug
   const providerUrl = `/services/${serviceSlug}/${locationSlug}/${providerIdentifier}`
   const ratingValue = provider.rating_average?.toFixed(1)
   const reviewCount = provider.review_count

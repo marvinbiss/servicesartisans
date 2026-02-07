@@ -45,7 +45,7 @@ export async function GET(request: Request) {
     // 3. Active artisans list (optionally filtered by city/service)
     let artisansQuery = supabase
       .from('providers')
-      .select('id, stable_id, name, slug, specialty, address_city, is_verified, last_lead_assigned_at')
+      .select('id, name, slug, specialty, address_city, is_verified, last_lead_assigned_at')
       .eq('is_active', true)
       .order('name', { ascending: true })
       .limit(100)

@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { getProviderByStableId, getServiceBySlug, getLocationBySlug } from '@/lib/supabase'
+import { getProviderBySlug, getServiceBySlug, getLocationBySlug } from '@/lib/supabase'
 import { createClient } from '@/lib/supabase/server'
 import ArtisanPageClient from '@/components/artisan/ArtisanPageClient'
 import { Review } from '@/components/artisan'
@@ -32,7 +32,7 @@ function convertToArtisan(provider: any, service: any, location: any, serviceSlu
 
   return {
     id: provider.id,
-    stable_id: provider.stable_id || undefined,
+    stable_id: undefined,
     slug: provider.slug,
     business_name: name,
     first_name: provider.first_name || null,
@@ -144,7 +144,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   try {
     const [provider, service, location] = await Promise.all([
-      getProviderByStableId(publicId),
+      getProviderBySlug(publicId),
       getServiceBySlug(serviceSlug),
       getLocationBySlug(locationSlug),
     ])
@@ -187,7 +187,7 @@ export default async function ProviderPage({ params }: PageProps) {
 
   try {
     ;[provider, service, location] = await Promise.all([
-      getProviderByStableId(publicId),
+      getProviderBySlug(publicId),
       getServiceBySlug(serviceSlug),
       getLocationBySlug(locationSlug),
     ])

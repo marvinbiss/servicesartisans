@@ -1,7 +1,11 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.warn('[supabase] NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY missing — queries will fail at runtime')
+}
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
@@ -84,19 +88,7 @@ export async function getLocationBySlug(slug: string) {
   return data
 }
 
-// Lookup by stable_id ONLY — no fallback.
-export async function getProviderByStableId(stableId: string) {
-  const { data } = await supabase
-    .from('providers')
-    .select(PROVIDER_SELECT)
-    .eq('stable_id', stableId)
-    .eq('is_active', true)
-    .single()
-
-  return data || null
-}
-
-// Legacy — still used by non-slice code paths. Will be removed in a future PR.
+// Primary provider lookup — by slug (public URL identifier).
 export async function getProviderBySlug(slug: string) {
   const { data } = await supabase
     .from('providers')
