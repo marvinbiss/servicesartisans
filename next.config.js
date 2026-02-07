@@ -55,13 +55,10 @@ const nextConfig = {
     return [
       { source: '/home', destination: '/', permanent: true },
       { source: '/accueil', destination: '/', permanent: true },
-      // Legacy routes → 410 Gone (via redirect to a gone page or 404)
-      { source: '/villes/:path*', destination: '/services', permanent: true },
-      { source: '/regions/:path*', destination: '/services', permanent: true },
-      { source: '/departements/:path*', destination: '/services', permanent: true },
-      { source: '/france', destination: '/services', permanent: true },
-      { source: '/carte', destination: '/services', permanent: true },
-      { source: '/carte-liste', destination: '/services', permanent: true },
+      // Legacy routes that no longer exist
+      { source: '/france', destination: '/villes', permanent: true },
+      { source: '/carte', destination: '/villes', permanent: true },
+      { source: '/carte-liste', destination: '/villes', permanent: true },
       { source: '/recherche', destination: '/services', permanent: true },
       { source: '/pro/:path*', destination: '/espace-artisan', permanent: true },
       { source: '/services/artisan/:path*', destination: '/services', permanent: true },
