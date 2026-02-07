@@ -6,7 +6,6 @@ import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
 import { AlertCircle, ArrowLeft, Share2, Heart } from 'lucide-react'
 import {
-  Artisan,
   Review,
   getDisplayName,
   ArtisanHero,
@@ -20,6 +19,7 @@ import {
   ArtisanPageSkeleton,
   ArtisanPhotoGridSkeleton,
 } from '@/components/artisan'
+import type { LegacyArtisan } from '@/types/legacy'
 
 // Loading skeleton for lazy-loaded sections
 function SectionSkeleton({ height = 'h-64' }: { height?: string }) {
@@ -69,7 +69,7 @@ const ArtisanFAQ = dynamic(
 )
 
 interface ArtisanPageClientProps {
-  initialArtisan: Artisan | null
+  initialArtisan: LegacyArtisan | null
   initialReviews: Review[]
   artisanId: string
 }
@@ -79,7 +79,7 @@ export default function ArtisanPageClient({
   initialReviews,
   artisanId: _artisanId,
 }: ArtisanPageClientProps) {
-  const [artisan, _setArtisan] = useState<Artisan | null>(initialArtisan)
+  const [artisan, _setArtisan] = useState<LegacyArtisan | null>(initialArtisan)
   const [reviews, _setReviews] = useState<Review[]>(initialReviews)
   const [isFavorite, setIsFavorite] = useState(false)
   const [isLoading, setIsLoading] = useState(true)

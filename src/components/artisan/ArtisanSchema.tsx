@@ -1,7 +1,8 @@
 'use client'
 
 import Script from 'next/script'
-import { Artisan, Review, getDisplayName } from './types'
+import { Review, getDisplayName } from './types'
+import type { LegacyArtisan } from '@/types/legacy'
 
 // Helper to create URL-safe slugs
 const slugify = (text: string) => text
@@ -12,7 +13,7 @@ const slugify = (text: string) => text
   .replace(/^-|-$/g, '')
 
 // Generate SEO-friendly artisan URL
-const getArtisanUrl = (artisan: Artisan, baseUrl: string) => {
+const getArtisanUrl = (artisan: LegacyArtisan, baseUrl: string) => {
   const serviceSlug = slugify(artisan.specialty || 'artisan')
   const citySlug = slugify(artisan.city || 'france')
   const artisanSlug = artisan.slug || slugify(artisan.business_name || artisan.id)
@@ -20,7 +21,7 @@ const getArtisanUrl = (artisan: Artisan, baseUrl: string) => {
 }
 
 interface ArtisanSchemaProps {
-  artisan: Artisan
+  artisan: LegacyArtisan
   reviews: Review[]
 }
 

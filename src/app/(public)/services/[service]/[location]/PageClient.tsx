@@ -184,8 +184,6 @@ export default function ServiceLocationPageClient({
                 specialty: p.specialty,
                 address_city: p.address_city,
                 is_verified: p.is_verified || false,
-                is_premium: false,
-                trust_badge: undefined,
                 phone: p.phone,
                 address_street: p.address_street,
                 address_postal_code: p.address_postal_code

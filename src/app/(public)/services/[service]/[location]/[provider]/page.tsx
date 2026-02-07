@@ -3,7 +3,8 @@ import { notFound } from 'next/navigation'
 import { getProviderByStableId, getServiceBySlug, getLocationBySlug } from '@/lib/supabase'
 import { createClient } from '@/lib/supabase/server'
 import ArtisanPageClient from '@/components/artisan/ArtisanPageClient'
-import { Artisan, Review } from '@/components/artisan'
+import { Review } from '@/components/artisan'
+import type { LegacyArtisan } from '@/types/legacy'
 
 // Force dynamic rendering to always fetch fresh data
 export const revalidate = 0
@@ -17,8 +18,8 @@ interface PageProps {
   }>
 }
 
-// Convert provider data to Artisan format
-function convertToArtisan(provider: any, service: any, location: any, serviceSlug: string): Artisan {
+// Convert provider data to LegacyArtisan format (sub-components still read legacy fields)
+function convertToArtisan(provider: any, service: any, location: any, serviceSlug: string): LegacyArtisan {
   const specialty = service?.name || provider.specialty || 'Artisan'
   const city = location?.name || provider.address_city || ''
   const name = provider.name || provider.business_name || 'Artisan'
@@ -73,12 +74,7 @@ function convertToArtisan(provider: any, service: any, location: any, serviceSlu
     longitude: provider.longitude || undefined,
     faq: provider.faq || [],
     // Legacy fields — undefined at runtime (columns dropped), kept for sub-component compat
-    is_premium: false,
-    hourly_rate: provider.hourly_rate || undefined,
-    response_time: provider.response_time || undefined,
-    response_rate: provider.response_rate || undefined,
-    intervention_zone: provider.intervention_zone || undefined,
-    intervention_zones: provider.intervention_zones || [],
+    // Will be removed when each sub-component migrates to v2 Artisan type
   }
 }
 
