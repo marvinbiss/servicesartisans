@@ -34,36 +34,40 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let providerEntries: MetadataRoute.Sitemap = []
   let hubEntries: MetadataRoute.Sitemap = []
 
-  // Dynamic entries require DB — no fallback, fail loud
-  const { createAdminClient } = await import('@/lib/supabase/admin')
-  const supabase = createAdminClient()
+  try {
+    const { createAdminClient } = await import('@/lib/supabase/admin')
+    const supabase = createAdminClient()
 
-  // Fetch all indexable providers (noindex=false)
-  // TODO: paginate when provider count exceeds Supabase default limit
-  const { data: providers, error } = await supabase
-    .from('providers')
-    .select('stable_id, specialty, address_city, updated_at')
-    .eq('is_active', true)
-    .eq('noindex', false)
-    .order('updated_at', { ascending: false })
+    // Fetch all indexable providers (noindex=false)
+    // TODO: paginate when provider count exceeds Supabase default limit
+    const { data: providers, error } = await supabase
+      .from('providers')
+      .select('slug, specialty, address_city, updated_at')
+      .eq('is_active', true)
+      .eq('noindex', false)
+      .order('updated_at', { ascending: false })
 
-  if (error) {
-    throw new Error(`Sitemap DB error: ${error.message}`)
-  }
+    if (error) {
+      console.error('Sitemap DB error', error)
+      return staticEntries
+    }
 
-  if (providers && providers.length > 0) {
+    if (!providers || providers.length === 0) {
+      return staticEntries
+    }
+
     // Track unique hub pages (service × location)
     const hubs = new Set<string>()
 
     providerEntries = providers
-      .filter((p) => p.stable_id && p.specialty && p.address_city)
+      .filter((p) => p.slug && p.specialty && p.address_city)
       .map((p) => {
         const serviceSlug = slugify(p.specialty!)
         const locationSlug = slugify(p.address_city!)
         hubs.add(`${serviceSlug}/${locationSlug}`)
 
         return {
-          url: `${BASE_URL}/services/${serviceSlug}/${locationSlug}/${p.stable_id}`,
+          url: `${BASE_URL}/services/${serviceSlug}/${locationSlug}/${p.slug}`,
           lastModified: p.updated_at ? new Date(p.updated_at) : now,
           changeFrequency: 'weekly' as const,
           priority: 0.7,
@@ -77,6 +81,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly' as const,
       priority: 0.8,
     }))
+  } catch (err) {
+    console.error('Sitemap DB error', err)
+    return staticEntries
   }
 
   return [...staticEntries, ...hubEntries, ...providerEntries]
