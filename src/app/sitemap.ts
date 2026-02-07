@@ -34,50 +34,49 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let providerEntries: MetadataRoute.Sitemap = []
   let hubEntries: MetadataRoute.Sitemap = []
 
-  try {
-    // Import admin client lazily to avoid build-time env errors
-    const { createAdminClient } = await import('@/lib/supabase/admin')
-    const supabase = createAdminClient()
+  // Dynamic entries require DB — no fallback, fail loud
+  const { createAdminClient } = await import('@/lib/supabase/admin')
+  const supabase = createAdminClient()
 
-    // Fetch indexable providers (noindex=false)
-    const { data: providers } = await supabase
-      .from('providers')
-      .select('stable_id, specialty, address_city, updated_at')
-      .eq('is_active', true)
-      .eq('noindex', false)
-      .order('updated_at', { ascending: false })
-      .limit(5000)
+  // Fetch all indexable providers (noindex=false)
+  // TODO: paginate when provider count exceeds Supabase default limit
+  const { data: providers, error } = await supabase
+    .from('providers')
+    .select('stable_id, specialty, address_city, updated_at')
+    .eq('is_active', true)
+    .eq('noindex', false)
+    .order('updated_at', { ascending: false })
 
-    if (providers && providers.length > 0) {
-      // Track unique hub pages (service × location)
-      const hubs = new Set<string>()
+  if (error) {
+    throw new Error(`Sitemap DB error: ${error.message}`)
+  }
 
-      providerEntries = providers
-        .filter((p) => p.stable_id && p.specialty && p.address_city)
-        .map((p) => {
-          const serviceSlug = slugify(p.specialty!)
-          const locationSlug = slugify(p.address_city!)
-          hubs.add(`${serviceSlug}/${locationSlug}`)
+  if (providers && providers.length > 0) {
+    // Track unique hub pages (service × location)
+    const hubs = new Set<string>()
 
-          return {
-            url: `${BASE_URL}/services/${serviceSlug}/${locationSlug}/${p.stable_id}`,
-            lastModified: p.updated_at ? new Date(p.updated_at) : now,
-            changeFrequency: 'weekly' as const,
-            priority: 0.7,
-          }
-        })
+    providerEntries = providers
+      .filter((p) => p.stable_id && p.specialty && p.address_city)
+      .map((p) => {
+        const serviceSlug = slugify(p.specialty!)
+        const locationSlug = slugify(p.address_city!)
+        hubs.add(`${serviceSlug}/${locationSlug}`)
 
-      // Hub pages for each unique service × location with indexable providers
-      hubEntries = Array.from(hubs).map((hub) => ({
-        url: `${BASE_URL}/services/${hub}`,
-        lastModified: now,
-        changeFrequency: 'weekly' as const,
-        priority: 0.8,
-      }))
-    }
-  } catch (error) {
-    // At build time or when env is missing, return static-only sitemap
-    console.warn('Sitemap: skipping dynamic entries (DB unavailable):', error)
+        return {
+          url: `${BASE_URL}/services/${serviceSlug}/${locationSlug}/${p.stable_id}`,
+          lastModified: p.updated_at ? new Date(p.updated_at) : now,
+          changeFrequency: 'weekly' as const,
+          priority: 0.7,
+        }
+      })
+
+    // Hub pages for each unique service × location with indexable providers
+    hubEntries = Array.from(hubs).map((hub) => ({
+      url: `${BASE_URL}/services/${hub}`,
+      lastModified: now,
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    }))
   }
 
   return [...staticEntries, ...hubEntries, ...providerEntries]

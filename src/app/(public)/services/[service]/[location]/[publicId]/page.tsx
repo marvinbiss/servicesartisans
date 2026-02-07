@@ -14,7 +14,7 @@ interface PageProps {
   params: Promise<{
     service: string
     location: string
-    provider: string
+    publicId: string
   }>
 }
 
@@ -140,11 +140,11 @@ async function getProviderReviews(providerId: string): Promise<Review[]> {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { service: serviceSlug, location: locationSlug, provider: providerSlug } = await params
+  const { service: serviceSlug, location: locationSlug, publicId } = await params
 
   try {
     const [provider, service, location] = await Promise.all([
-      getProviderByStableId(providerSlug),
+      getProviderByStableId(publicId),
       getServiceBySlug(serviceSlug),
       getLocationBySlug(locationSlug),
     ])
@@ -172,7 +172,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         images: provider.avatar_url ? [provider.avatar_url] : undefined,
       },
       alternates: {
-        canonical: `https://servicesartisans.fr/services/${serviceSlug}/${locationSlug}/${providerSlug}`,
+        canonical: `https://servicesartisans.fr/services/${serviceSlug}/${locationSlug}/${publicId}`,
       },
     }
   } catch {
@@ -181,13 +181,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function ProviderPage({ params }: PageProps) {
-  const { service: serviceSlug, location: locationSlug, provider: providerSlug } = await params
+  const { service: serviceSlug, location: locationSlug, publicId } = await params
 
   let provider: any, service: any, location: any
 
   try {
     ;[provider, service, location] = await Promise.all([
-      getProviderByStableId(providerSlug),
+      getProviderByStableId(publicId),
       getServiceBySlug(serviceSlug),
       getLocationBySlug(locationSlug),
     ])
