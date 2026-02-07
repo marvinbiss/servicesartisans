@@ -104,17 +104,22 @@ export default function ParametresClientPage() {
       }
 
       // Load profile data
-      const profileResponse = await fetch('/api/user/profile')
+      const profileResponse = await fetch('/api/client/profile')
       if (profileResponse.ok) {
         const profileData = await profileResponse.json()
         if (profileData.profile) {
+          const fullName = profileData.profile.full_name || ''
+          const spaceIdx = fullName.indexOf(' ')
           setFormData({
-            prenom: profileData.profile.first_name || '',
-            nom: profileData.profile.last_name || '',
+            prenom: spaceIdx > 0 ? fullName.slice(0, spaceIdx) : fullName,
+            nom: spaceIdx > 0 ? fullName.slice(spaceIdx + 1) : '',
             email: profileData.profile.email || '',
             telephone: profileData.profile.phone || '',
           })
         }
+      } else if (profileResponse.status === 401) {
+        window.location.href = '/connexion?redirect=/espace-client/parametres'
+        return
       }
     } catch (error) {
       console.error('Failed to load user data:', error)
@@ -164,10 +169,13 @@ export default function ParametresClientPage() {
     setIsSaving(true)
 
     try {
-      const response = await fetch('/api/user/profile', {
+      const response = await fetch('/api/client/profile', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          full_name: `${formData.prenom} ${formData.nom}`.trim(),
+          phone: formData.telephone,
+        }),
       })
 
       if (response.ok) {

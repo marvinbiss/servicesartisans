@@ -51,9 +51,13 @@ export default function FacturesPage() {
         const data = await response.json()
         setInvoices(data.invoices || [])
         setPayments(data.payments || [])
+      } else if (response.status === 401) {
+        window.location.href = '/connexion?redirect=/espace-client/factures'
+        return
       }
-    } catch (error) {
-      console.error('Failed to fetch invoices:', error)
+      // 404 or other errors: silently show empty state (endpoint may not exist yet)
+    } catch {
+      // Network error: show empty state gracefully
     } finally {
       setIsLoading(false)
     }

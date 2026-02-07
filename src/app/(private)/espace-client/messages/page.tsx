@@ -61,16 +61,21 @@ export default function MessagesClientPage() {
     try {
       setLoading(true)
       const response = await fetch('/api/client/messages')
-      const data = await response.json()
+
+      if (response.status === 401) {
+        window.location.href = '/connexion?redirect=/espace-client/messages'
+        return
+      }
 
       if (response.ok) {
+        const data = await response.json()
         setConversations(data.conversations || [])
         if (data.conversations?.length > 0) {
           setSelectedConversation(data.conversations[0])
         }
       }
-    } catch (error) {
-      console.error('Error fetching conversations:', error)
+    } catch {
+      // Network error: show empty state
     } finally {
       setLoading(false)
     }

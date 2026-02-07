@@ -49,9 +49,12 @@ export default function AvisDonnesPage() {
         const data = await response.json()
         setAvisPublies(data.avisPublies || [])
         setAvisEnAttente(data.avisEnAttente || [])
+      } else if (response.status === 401) {
+        window.location.href = '/connexion?redirect=/espace-client/avis-donnes'
+        return
       }
-    } catch (error) {
-      console.error('Error fetching avis:', error)
+    } catch {
+      // Network error: show empty state
     } finally {
       setLoading(false)
     }
