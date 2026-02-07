@@ -1,27 +1,94 @@
 import { MetadataRoute } from 'next'
 
+const BASE_URL = 'https://servicesartisans.fr'
+
 /**
- * Sitemap v2 stub — will be replaced by wave-based dynamic sitemap
- * using stable_id (HMAC) once the supabase-v2 schema is in place.
+ * Sitemap wave 1 — controlled activation via `noindex` column.
  *
- * For now: only static pages are indexed.
+ * Only providers with noindex=false are included.
+ * Hub pages (service × location) are included if they have at least one
+ * indexable provider.
+ *
+ * Static pages are always included.
  */
-export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://servicesartisans.fr'
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date()
 
-  return [
-    { url: baseUrl, lastModified: now, changeFrequency: 'daily', priority: 1 },
-    { url: `${baseUrl}/services`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
-    { url: `${baseUrl}/faq`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${baseUrl}/a-propos`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${baseUrl}/contact`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${baseUrl}/comment-ca-marche`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${baseUrl}/tarifs-artisans`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${baseUrl}/blog`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
-    { url: `${baseUrl}/mentions-legales`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
-    { url: `${baseUrl}/confidentialite`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
-    { url: `${baseUrl}/cgv`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
-    { url: `${baseUrl}/accessibilite`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
+  // Static pages (always indexed)
+  const staticEntries: MetadataRoute.Sitemap = [
+    { url: BASE_URL, lastModified: now, changeFrequency: 'daily', priority: 1 },
+    { url: `${BASE_URL}/services`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${BASE_URL}/faq`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${BASE_URL}/a-propos`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${BASE_URL}/contact`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${BASE_URL}/comment-ca-marche`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${BASE_URL}/tarifs-artisans`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${BASE_URL}/blog`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${BASE_URL}/mentions-legales`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
+    { url: `${BASE_URL}/confidentialite`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
+    { url: `${BASE_URL}/cgv`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
+    { url: `${BASE_URL}/accessibilite`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
   ]
+
+  // Dynamic entries: only providers with noindex=false
+  let providerEntries: MetadataRoute.Sitemap = []
+  let hubEntries: MetadataRoute.Sitemap = []
+
+  try {
+    // Import admin client lazily to avoid build-time env errors
+    const { createAdminClient } = await import('@/lib/supabase/admin')
+    const supabase = createAdminClient()
+
+    // Fetch indexable providers (noindex=false)
+    const { data: providers } = await supabase
+      .from('providers')
+      .select('stable_id, specialty, address_city, updated_at')
+      .eq('is_active', true)
+      .eq('noindex', false)
+      .order('updated_at', { ascending: false })
+      .limit(5000)
+
+    if (providers && providers.length > 0) {
+      // Track unique hub pages (service × location)
+      const hubs = new Set<string>()
+
+      providerEntries = providers
+        .filter((p) => p.stable_id && p.specialty && p.address_city)
+        .map((p) => {
+          const serviceSlug = slugify(p.specialty!)
+          const locationSlug = slugify(p.address_city!)
+          hubs.add(`${serviceSlug}/${locationSlug}`)
+
+          return {
+            url: `${BASE_URL}/services/${serviceSlug}/${locationSlug}/${p.stable_id}`,
+            lastModified: p.updated_at ? new Date(p.updated_at) : now,
+            changeFrequency: 'weekly' as const,
+            priority: 0.7,
+          }
+        })
+
+      // Hub pages for each unique service × location with indexable providers
+      hubEntries = Array.from(hubs).map((hub) => ({
+        url: `${BASE_URL}/services/${hub}`,
+        lastModified: now,
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
+      }))
+    }
+  } catch (error) {
+    // At build time or when env is missing, return static-only sitemap
+    console.warn('Sitemap: skipping dynamic entries (DB unavailable):', error)
+  }
+
+  return [...staticEntries, ...hubEntries, ...providerEntries]
+}
+
+/** Simple French-safe slugifier */
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
 }

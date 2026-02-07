@@ -162,6 +162,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {
       title,
       description,
+      // Wave-based indexing: noindex until explicitly activated
+      robots: provider.noindex ? { index: false, follow: false } : undefined,
       openGraph: {
         title,
         description,
