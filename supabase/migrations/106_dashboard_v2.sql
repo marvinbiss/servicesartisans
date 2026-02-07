@@ -7,7 +7,7 @@
 -- ============================================================
 CREATE TABLE IF NOT EXISTS lead_events (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  lead_id UUID NOT NULL REFERENCES devis_requests(id) ON DELETE CASCADE,
+ lead_id UUID NOT NULL REFERENCES leads(id) ON DELETE CASCADE,
   provider_id UUID REFERENCES providers(id) ON DELETE SET NULL,
   actor_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
   event_type TEXT NOT NULL CHECK (event_type IN (
