@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { z } from 'zod'
+import { dispatchLead } from './dispatch'
 
 const leadSchema = z.object({
   providerId: z.string().min(1),
@@ -57,7 +58,7 @@ export async function submitLead(
       flexible: 'normal',
     }
 
-    const { error } = await supabase.from('devis_requests').insert({
+    const { data: inserted, error } = await supabase.from('devis_requests').insert({
       service_name: data.serviceName,
       postal_code: data.postalCode || '',
       city: data.city || null,
@@ -67,12 +68,17 @@ export async function submitLead(
       client_name: data.name,
       client_email: data.email,
       client_phone: data.phone,
-    })
+    }).select('id').single()
 
-    if (error) {
+    if (error || !inserted) {
       console.error('Lead insert error:', error)
       return { success: false, error: 'Erreur lors de l\'envoi. Reessayez.' }
     }
+
+    // Dispatch lead to one eligible artisan (fire-and-forget, non-blocking)
+    dispatchLead(inserted.id, data.serviceName, data.city).catch((err) =>
+      console.error('Dispatch failed (non-blocking):', err)
+    )
 
     return { success: true }
   } catch (err) {
