@@ -21,10 +21,12 @@ import {
   ArrowRight,
   Wrench,
   BookOpen,
+  Gauge,
 } from 'lucide-react'
 
 const nav = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
+  { name: 'Système', href: '/admin/systeme', icon: Gauge },
   { name: 'Leads', href: '/admin/leads', icon: FileText },
   { name: 'Dispatch', href: '/admin/dispatch', icon: ArrowRight },
   { name: 'Outils', href: '/admin/outils', icon: Wrench },

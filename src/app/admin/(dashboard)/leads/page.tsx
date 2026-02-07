@@ -10,9 +10,15 @@ import {
   Wrench,
   CheckCircle,
   Search,
-  ChevronLeft,
-  ChevronRight,
+  AlertCircle,
+  Clock,
+  Send,
+  RefreshCw,
+  Inbox,
 } from 'lucide-react'
+import { StatCard } from '@/components/dashboard/StatCard'
+import { Pagination } from '@/components/dashboard/Pagination'
+import { URGENCY_META, STATUS_META } from '@/types/leads'
 
 interface ArtisanRow {
   id: string
@@ -29,107 +35,210 @@ interface LeadRow {
   id: string
   service_name: string
   city: string | null
+  postal_code: string | null
   urgency: string
+  client_name: string
   status: string
   created_at: string
-  assignment_count: number
 }
 
-interface LeadsData {
-  leadsCreated: number
-  leadsAssigned: number
-  artisans: ArtisanRow[]
-  artisanCount: number
-  leads: LeadRow[]
-  filters: { city: string | null; service: string | null }
+interface AssignmentRow {
+  id: string
+  lead_id: string
+  provider_id: string
+  status: string
+  assigned_at: string
+  viewed_at: string | null
 }
 
-type ViewTab = 'artisans' | 'leads'
+type ViewTab = 'leads' | 'artisans'
 
 export default function AdminLeadsPage() {
-  const [data, setData] = useState<LeadsData | null>(null)
+  const [leads, setLeads] = useState<LeadRow[]>([])
+  const [assignments, setAssignments] = useState<AssignmentRow[]>([])
+  const [artisans, setArtisans] = useState<ArtisanRow[]>([])
+  const [providerNames, setProviderNames] = useState<Record<string, string>>({})
+  const [stats, setStats] = useState({ totalLeads: 0, pendingAssignments: 0, dispatchedToday: 0 })
+  const [pagination, setPagination] = useState({ page: 1, pageSize: 20, total: 0, totalPages: 1 })
   const [loading, setLoading] = useState(true)
-  const [city, setCity] = useState('Paris')
-  const [service, setService] = useState('Plombier')
+  const [error, setError] = useState<string | null>(null)
+
+  const [city, setCity] = useState('')
+  const [service, setService] = useState('')
+  const [searchQuery, setSearchQuery] = useState('')
+  const [urgencyFilter, setUrgencyFilter] = useState('')
   const [tab, setTab] = useState<ViewTab>('leads')
   const [page, setPage] = useState(1)
-  const pageSize = 20
+
+  // Dispatch state
+  const [dispatchLeadId, setDispatchLeadId] = useState<string | null>(null)
+  const [dispatchLoading, setDispatchLoading] = useState(false)
 
   const fetchData = useCallback(async () => {
     setLoading(true)
+    setError(null)
     try {
-      const params = new URLSearchParams()
+      const params = new URLSearchParams({ page: String(page), pageSize: '20' })
       if (city) params.set('city', city)
       if (service) params.set('service', service)
+      if (searchQuery) params.set('search', searchQuery)
+      if (urgencyFilter) params.set('urgency', urgencyFilter)
 
-      const res = await fetch(`/api/admin/leads?${params}`)
-      if (res.ok) {
-        setData(await res.json())
+      // Fetch leads from the existing admin endpoint
+      const [leadsRes, artisansRes] = await Promise.all([
+        fetch(`/api/admin/leads?${params}`),
+        fetch(`/api/admin/leads?city=${encodeURIComponent(city)}&service=${encodeURIComponent(service)}`),
+      ])
+
+      if (leadsRes.ok) {
+        const leadsData = await leadsRes.json()
+        setLeads(leadsData.leads || [])
+        setAssignments(leadsData.assignments || [])
+        setProviderNames(leadsData.providerNames || {})
+        if (leadsData.stats) setStats(leadsData.stats)
+        if (leadsData.pagination) setPagination(leadsData.pagination)
       }
-    } catch (err) {
-      console.error('Failed to fetch admin leads:', err)
+
+      if (artisansRes.ok) {
+        const artData = await artisansRes.json()
+        setArtisans(artData.artisans || [])
+      }
+    } catch {
+      setError('Erreur de connexion')
     } finally {
       setLoading(false)
     }
-  }, [city, service])
+  }, [page, city, service, searchQuery, urgencyFilter])
 
   useEffect(() => {
     fetchData()
   }, [fetchData])
 
-  const urgencyBadge = (u: string) => {
-    if (u === 'urgent') return 'bg-red-100 text-red-700'
-    if (u === 'tres_urgent') return 'bg-red-200 text-red-800'
-    return 'bg-gray-100 text-gray-600'
+  const handleDispatch = async (leadId: string) => {
+    setDispatchLeadId(leadId)
+    setDispatchLoading(true)
+    try {
+      const res = await fetch('/api/admin/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ leadId }),
+      })
+      if (res.ok) {
+        fetchData()
+      } else {
+        const data = await res.json()
+        setError(data.error || 'Erreur de dispatch')
+      }
+    } catch {
+      setError('Erreur de connexion')
+    } finally {
+      setDispatchLoading(false)
+      setDispatchLeadId(null)
+    }
   }
 
-  const statusBadge = (s: string) => {
-    if (s === 'pending') return { text: 'En attente', cls: 'bg-yellow-100 text-yellow-700' }
-    if (s === 'sent') return { text: 'Envoyé', cls: 'bg-blue-100 text-blue-700' }
-    if (s === 'accepted') return { text: 'Accepté', cls: 'bg-green-100 text-green-700' }
-    if (s === 'completed') return { text: 'Terminé', cls: 'bg-green-200 text-green-800' }
-    return { text: s, cls: 'bg-gray-100 text-gray-600' }
-  }
-
-  // Paginate leads locally
-  const allLeads = data?.leads || []
-  const totalPages = Math.max(1, Math.ceil(allLeads.length / pageSize))
-  const paginatedLeads = allLeads.slice((page - 1) * pageSize, page * pageSize)
+  // Get assignments for a specific lead
+  const getLeadAssignments = (leadId: string) => assignments.filter((a) => a.lead_id === leadId)
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Leads — Vue globale</h1>
-        <p className="text-gray-500 mb-8">Suivi des leads par ville × métier</p>
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Leads — Vue globale</h1>
+            <p className="text-gray-500 mt-1">Gestion des leads et dispatch</p>
+          </div>
+          <button
+            onClick={fetchData}
+            className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 border border-gray-200 rounded-lg hover:bg-white transition-colors"
+          >
+            <RefreshCw className="w-4 h-4" />
+            Actualiser
+          </button>
+        </div>
+
+        {/* KPI cards */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
+          <StatCard
+            title="Total leads"
+            value={stats.totalLeads}
+            icon={<Inbox className="w-5 h-5" />}
+            color="blue"
+          />
+          <StatCard
+            title="En attente"
+            value={stats.pendingAssignments}
+            icon={<Clock className="w-5 h-5" />}
+            color="yellow"
+          />
+          <StatCard
+            title="Dispatchés aujourd'hui"
+            value={stats.dispatchedToday}
+            icon={<Send className="w-5 h-5" />}
+            color="green"
+          />
+          <StatCard
+            title="Artisans actifs"
+            value={artisans.length}
+            icon={<Users className="w-5 h-5" />}
+            color="indigo"
+          />
+        </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
+        <div className="bg-white rounded-xl border border-gray-200 p-5 mb-6">
           <div className="flex flex-wrap gap-4 items-end">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Ville</label>
+              <label className="block text-xs font-medium text-gray-500 uppercase mb-1">Ville</label>
               <div className="relative">
                 <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
                   type="text"
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
-                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent w-40"
                   placeholder="Paris"
                 />
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Métier</label>
+              <label className="block text-xs font-medium text-gray-500 uppercase mb-1">Métier</label>
               <div className="relative">
                 <Wrench className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
                   type="text"
                   value={service}
                   onChange={(e) => setService(e.target.value)}
-                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent w-40"
                   placeholder="Plombier"
                 />
               </div>
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-500 uppercase mb-1">Recherche</label>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent w-48"
+                  placeholder="Nom, service..."
+                />
+              </div>
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-500 uppercase mb-1">Urgence</label>
+              <select
+                value={urgencyFilter}
+                onChange={(e) => setUrgencyFilter(e.target.value)}
+                className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Toutes</option>
+                <option value="normal">Normal</option>
+                <option value="urgent">Urgent</option>
+                <option value="tres_urgent">Très urgent</option>
+              </select>
             </div>
             <button
               onClick={() => { fetchData(); setPage(1) }}
@@ -141,196 +250,184 @@ export default function AdminLeadsPage() {
           </div>
         </div>
 
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-center gap-3">
+            <AlertCircle className="w-5 h-5 text-red-500" />
+            <p className="text-red-700 text-sm">{error}</p>
+          </div>
+        )}
+
+        {/* Tab toggle */}
+        <div className="flex gap-2 mb-6">
+          <button
+            onClick={() => setTab('leads')}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              tab === 'leads' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+            }`}
+          >
+            <FileText className="w-4 h-4 inline mr-1.5" />
+            Leads
+          </button>
+          <button
+            onClick={() => setTab('artisans')}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              tab === 'artisans' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+            }`}
+          >
+            <Users className="w-4 h-4 inline mr-1.5" />
+            Artisans ({artisans.length})
+          </button>
+        </div>
+
         {loading ? (
           <div className="flex justify-center py-16">
             <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
           </div>
-        ) : data ? (
+        ) : (
           <>
-            {/* Stats cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="p-2 bg-blue-100 rounded-lg">
-                    <FileText className="w-5 h-5 text-blue-600" />
-                  </div>
-                  <span className="text-sm font-medium text-gray-500">Leads créés</span>
-                </div>
-                <p className="text-3xl font-bold text-gray-900">{data.leadsCreated}</p>
-              </div>
-
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="p-2 bg-green-100 rounded-lg">
-                    <ArrowRight className="w-5 h-5 text-green-600" />
-                  </div>
-                  <span className="text-sm font-medium text-gray-500">Leads assignés</span>
-                </div>
-                <p className="text-3xl font-bold text-gray-900">{data.leadsAssigned}</p>
-              </div>
-
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="p-2 bg-violet-100 rounded-lg">
-                    <Users className="w-5 h-5 text-violet-600" />
-                  </div>
-                  <span className="text-sm font-medium text-gray-500">Artisans actifs</span>
-                </div>
-                <p className="text-3xl font-bold text-gray-900">{data.artisanCount}</p>
-              </div>
-            </div>
-
-            {/* Tab toggle */}
-            <div className="flex gap-2 mb-6">
-              <button
-                onClick={() => { setTab('leads'); setPage(1) }}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  tab === 'leads' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 border border-gray-200'
-                }`}
-              >
-                <FileText className="w-4 h-4 inline mr-1" />
-                Leads ({allLeads.length})
-              </button>
-              <button
-                onClick={() => setTab('artisans')}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  tab === 'artisans' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 border border-gray-200'
-                }`}
-              >
-                <Users className="w-4 h-4 inline mr-1" />
-                Artisans ({data.artisans.length})
-              </button>
-            </div>
-
             {/* Leads table */}
             {tab === 'leads' && (
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-                <div className="p-6 border-b border-gray-100">
-                  <h2 className="font-semibold text-gray-900">
-                    Leads — {data.filters.service || 'Tous'} à {data.filters.city || 'Toutes villes'}
-                  </h2>
+              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-gray-100 bg-gray-50/50">
+                        <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Service</th>
+                        <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Lieu</th>
+                        <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Client</th>
+                        <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Urgence</th>
+                        <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Assignations</th>
+                        <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Date</th>
+                        <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                      {leads.length === 0 ? (
+                        <tr>
+                          <td colSpan={7} className="px-4 py-12 text-center text-gray-500">
+                            <FileText className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+                            Aucun lead trouvé
+                          </td>
+                        </tr>
+                      ) : (
+                        leads.map((lead) => {
+                          const urg = URGENCY_META[lead.urgency] || URGENCY_META.normal
+                          const leadAssignments = getLeadAssignments(lead.id)
+
+                          return (
+                            <tr key={lead.id} className="hover:bg-gray-50/50 transition-colors">
+                              <td className="px-4 py-3">
+                                <span className="font-medium text-gray-900">{lead.service_name}</span>
+                              </td>
+                              <td className="px-4 py-3 text-gray-600">
+                                {lead.city ? (
+                                  <span className="flex items-center gap-1">
+                                    <MapPin className="w-3.5 h-3.5 text-gray-400" />
+                                    {lead.city} {lead.postal_code && `(${lead.postal_code})`}
+                                  </span>
+                                ) : '—'}
+                              </td>
+                              <td className="px-4 py-3 text-gray-600">{lead.client_name}</td>
+                              <td className="px-4 py-3">
+                                <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${urg.cls}`}>
+                                  {urg.label}
+                                </span>
+                              </td>
+                              <td className="px-4 py-3">
+                                {leadAssignments.length > 0 ? (
+                                  <div className="flex flex-wrap gap-1">
+                                    {leadAssignments.map((a) => {
+                                      const st = STATUS_META[a.status] || STATUS_META.pending
+                                      return (
+                                        <span key={a.id} className={`px-1.5 py-0.5 rounded text-xs font-medium ${st.cls}`}>
+                                          {providerNames[a.provider_id]?.split(' ')[0] || a.provider_id.slice(0, 6)}: {st.label}
+                                        </span>
+                                      )
+                                    })}
+                                  </div>
+                                ) : (
+                                  <span className="text-xs text-gray-400">Non assigné</span>
+                                )}
+                              </td>
+                              <td className="px-4 py-3 text-gray-500 text-xs whitespace-nowrap">
+                                {new Date(lead.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })}
+                              </td>
+                              <td className="px-4 py-3">
+                                <button
+                                  onClick={() => handleDispatch(lead.id)}
+                                  disabled={dispatchLoading && dispatchLeadId === lead.id}
+                                  className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 disabled:opacity-50 transition-colors"
+                                >
+                                  {dispatchLoading && dispatchLeadId === lead.id ? (
+                                    <Loader2 className="w-3 h-3 animate-spin" />
+                                  ) : (
+                                    <ArrowRight className="w-3 h-3" />
+                                  )}
+                                  Dispatcher
+                                </button>
+                              </td>
+                            </tr>
+                          )
+                        })
+                      )}
+                    </tbody>
+                  </table>
                 </div>
-                {paginatedLeads.length === 0 ? (
-                  <div className="p-12 text-center text-gray-500">
-                    <FileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                    <p>Aucun lead trouvé</p>
-                  </div>
-                ) : (
-                  <>
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-sm">
-                        <thead>
-                          <tr className="border-b border-gray-100 text-left text-gray-500">
-                            <th className="px-6 py-3 font-medium">Service</th>
-                            <th className="px-6 py-3 font-medium">Ville</th>
-                            <th className="px-6 py-3 font-medium">Urgence</th>
-                            <th className="px-6 py-3 font-medium">Statut</th>
-                            <th className="px-6 py-3 font-medium">Date</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-50">
-                          {paginatedLeads.map((l) => {
-                            const st = statusBadge(l.status)
-                            return (
-                              <tr key={l.id} className="hover:bg-gray-50">
-                                <td className="px-6 py-3 font-medium text-gray-900">{l.service_name}</td>
-                                <td className="px-6 py-3 text-gray-600">{l.city || '—'}</td>
-                                <td className="px-6 py-3">
-                                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${urgencyBadge(l.urgency)}`}>
-                                    {l.urgency}
-                                  </span>
-                                </td>
-                                <td className="px-6 py-3">
-                                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${st.cls}`}>
-                                    {st.text}
-                                  </span>
-                                </td>
-                                <td className="px-6 py-3 text-gray-500">
-                                  {new Date(l.created_at).toLocaleDateString('fr-FR')}
-                                </td>
-                              </tr>
-                            )
-                          })}
-                        </tbody>
-                      </table>
-                    </div>
-                    {totalPages > 1 && (
-                      <div className="flex items-center justify-center gap-4 p-4 border-t border-gray-100">
-                        <button
-                          onClick={() => setPage((p) => Math.max(1, p - 1))}
-                          disabled={page === 1}
-                          className="flex items-center gap-1 px-3 py-1.5 text-sm rounded border disabled:opacity-40"
-                        >
-                          <ChevronLeft className="w-4 h-4" /> Préc.
-                        </button>
-                        <span className="text-sm text-gray-600">{page} / {totalPages}</span>
-                        <button
-                          onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                          disabled={page === totalPages}
-                          className="flex items-center gap-1 px-3 py-1.5 text-sm rounded border disabled:opacity-40"
-                        >
-                          Suiv. <ChevronRight className="w-4 h-4" />
-                        </button>
-                      </div>
-                    )}
-                  </>
-                )}
+
+                <Pagination page={page} totalPages={pagination.totalPages} onPageChange={setPage} />
               </div>
             )}
 
             {/* Artisans table */}
             {tab === 'artisans' && (
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-                <div className="p-6 border-b border-gray-100">
-                  <h2 className="font-semibold text-gray-900">
-                    Artisans — {data.filters.service || 'Tous'} à {data.filters.city || 'Toutes villes'}
-                  </h2>
-                </div>
-                {data.artisans.length === 0 ? (
-                  <div className="p-12 text-center text-gray-500">
-                    <Users className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                    <p>Aucun artisan trouvé</p>
-                  </div>
-                ) : (
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-sm">
-                      <thead>
-                        <tr className="border-b border-gray-100 text-left text-gray-500">
-                          <th className="px-6 py-3 font-medium">Nom</th>
-                          <th className="px-6 py-3 font-medium">Métier</th>
-                          <th className="px-6 py-3 font-medium">Ville</th>
-                          <th className="px-6 py-3 font-medium">Vérifié</th>
-                          <th className="px-6 py-3 font-medium">Dernier lead</th>
+              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-gray-100 bg-gray-50/50">
+                        <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Nom</th>
+                        <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Métier</th>
+                        <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Ville</th>
+                        <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Vérifié</th>
+                        <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Dernier lead</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                      {artisans.length === 0 ? (
+                        <tr>
+                          <td colSpan={5} className="px-4 py-12 text-center text-gray-500">
+                            <Users className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+                            Aucun artisan trouvé
+                          </td>
                         </tr>
-                      </thead>
-                      <tbody className="divide-y divide-gray-50">
-                        {data.artisans.map((a) => (
-                          <tr key={a.id} className="hover:bg-gray-50">
-                            <td className="px-6 py-3 font-medium text-gray-900">{a.name}</td>
-                            <td className="px-6 py-3 text-gray-600">{a.specialty}</td>
-                            <td className="px-6 py-3 text-gray-600">{a.address_city || '—'}</td>
-                            <td className="px-6 py-3">
+                      ) : (
+                        artisans.map((a) => (
+                          <tr key={a.id} className="hover:bg-gray-50/50 transition-colors">
+                            <td className="px-4 py-3 font-medium text-gray-900">{a.name}</td>
+                            <td className="px-4 py-3 text-gray-600">{a.specialty}</td>
+                            <td className="px-4 py-3 text-gray-600">{a.address_city || '—'}</td>
+                            <td className="px-4 py-3">
                               {a.is_verified ? (
                                 <CheckCircle className="w-4 h-4 text-green-500" />
                               ) : (
-                                <span className="text-gray-400">—</span>
+                                <span className="text-gray-400 text-xs">Non</span>
                               )}
                             </td>
-                            <td className="px-6 py-3 text-gray-500">
+                            <td className="px-4 py-3 text-gray-500 text-xs">
                               {a.last_lead_assigned_at
-                                ? new Date(a.last_lead_assigned_at).toLocaleDateString('fr-FR')
+                                ? new Date(a.last_lead_assigned_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
                                 : 'Jamais'}
                             </td>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                )}
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             )}
           </>
-        ) : null}
+        )}
       </div>
     </div>
   )

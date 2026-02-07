@@ -7,7 +7,6 @@ import {
   Loader2,
   AlertCircle,
   ArrowLeft,
-  Clock,
   MapPin,
   Phone,
   Mail,
@@ -15,8 +14,14 @@ import {
   Eye,
   Send,
   X,
+  Euro,
   History,
+  User,
+  Calendar,
 } from 'lucide-react'
+import { EventTimeline } from '@/components/dashboard/EventTimeline'
+import { URGENCY_META, STATUS_META } from '@/types/leads'
+import type { LeadEventType } from '@/types/leads'
 
 interface LeadData {
   id: string
@@ -41,13 +46,22 @@ interface Assignment {
   lead: LeadData
 }
 
+interface TimelineEvent {
+  id: string
+  event_type: LeadEventType
+  metadata: Record<string, unknown>
+  created_at: string
+}
+
 export default function LeadDetailPage() {
   const params = useParams()
   const router = useRouter()
   const id = params.id as string
 
   const [assignment, setAssignment] = useState<Assignment | null>(null)
+  const [events, setEvents] = useState<TimelineEvent[]>([])
   const [loading, setLoading] = useState(true)
+  const [eventsLoading, setEventsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [actionLoading, setActionLoading] = useState<string | null>(null)
   const [showQuoteForm, setShowQuoteForm] = useState(false)
@@ -74,9 +88,24 @@ export default function LeadDetailPage() {
     }
   }, [id])
 
+  const fetchEvents = useCallback(async () => {
+    try {
+      const res = await fetch(`/api/artisan/leads/${id}/history`)
+      const data = await res.json()
+      if (res.ok) {
+        setEvents(data.events || [])
+      }
+    } catch {
+      // Non-blocking
+    } finally {
+      setEventsLoading(false)
+    }
+  }, [id])
+
   useEffect(() => {
     fetchLead()
-  }, [fetchLead])
+    fetchEvents()
+  }, [fetchLead, fetchEvents])
 
   // Auto-mark as viewed on first load
   useEffect(() => {
@@ -89,6 +118,7 @@ export default function LeadDetailPage() {
         setAssignment((prev) =>
           prev ? { ...prev, status: 'viewed', viewed_at: new Date().toISOString() } : prev
         )
+        fetchEvents()
       })
     }
   }, [assignment?.status, id]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -123,24 +153,13 @@ export default function LeadDetailPage() {
     handleAction('quote', { amount, description: quoteDesc })
   }
 
-  const urgencyLabel = (u: string) => {
-    if (u === 'urgent') return { text: 'Urgent', cls: 'bg-red-100 text-red-700' }
-    if (u === 'tres_urgent') return { text: 'Très urgent', cls: 'bg-red-200 text-red-800' }
-    return { text: 'Normal', cls: 'bg-gray-100 text-gray-700' }
-  }
-
-  const statusLabel = (s: string) => {
-    if (s === 'pending') return { text: 'Nouveau', cls: 'bg-blue-100 text-blue-700' }
-    if (s === 'viewed') return { text: 'Vu', cls: 'bg-yellow-100 text-yellow-700' }
-    if (s === 'quoted') return { text: 'Devis envoyé', cls: 'bg-green-100 text-green-700' }
-    if (s === 'declined') return { text: 'Décliné', cls: 'bg-gray-100 text-gray-600' }
-    return { text: s, cls: 'bg-gray-100 text-gray-700' }
-  }
-
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto" />
+          <p className="text-sm text-gray-500 mt-2">Chargement...</p>
+        </div>
       </div>
     )
   }
@@ -148,9 +167,9 @@ export default function LeadDetailPage() {
   if (error && !assignment) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md">
-          <AlertCircle className="w-6 h-6 text-red-500 mb-2" />
-          <p className="text-red-700">{error}</p>
+        <div className="bg-white rounded-xl border border-red-200 p-8 max-w-md text-center">
+          <AlertCircle className="w-8 h-8 text-red-500 mx-auto mb-3" />
+          <p className="text-red-700 font-medium">{error}</p>
           <Link href="/espace-artisan/leads" className="text-blue-600 hover:underline text-sm mt-4 block">
             Retour aux leads
           </Link>
@@ -161,181 +180,257 @@ export default function LeadDetailPage() {
 
   if (!assignment) return null
   const lead = assignment.lead
-  const urg = urgencyLabel(lead.urgency)
-  const st = statusLabel(assignment.status)
+  const urg = URGENCY_META[lead.urgency] || URGENCY_META.normal
+  const st = STATUS_META[assignment.status] || STATUS_META.pending
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="bg-white border-b">
-        <div className="max-w-3xl mx-auto px-4 py-3 text-sm text-gray-500">
-          <Link href="/espace-artisan" className="hover:text-gray-900">Espace Artisan</Link>
-          <span className="mx-2">/</span>
-          <Link href="/espace-artisan/leads" className="hover:text-gray-900">Leads</Link>
-          <span className="mx-2">/</span>
-          <span className="text-gray-900">Détail</span>
+      {/* Header */}
+      <div className="bg-white border-b sticky top-0 z-10">
+        <div className="max-w-5xl mx-auto px-4 py-3">
+          <div className="flex items-center gap-2 text-sm text-gray-500">
+            <Link href="/espace-artisan" className="hover:text-gray-900">Espace Artisan</Link>
+            <span>/</span>
+            <Link href="/espace-artisan/leads" className="hover:text-gray-900">Leads</Link>
+            <span>/</span>
+            <span className="text-gray-900 font-medium">Détail</span>
+          </div>
         </div>
       </div>
 
-      <div className="max-w-3xl mx-auto px-4 py-8">
+      <div className="max-w-5xl mx-auto px-4 py-6">
         <Link
           href="/espace-artisan/leads"
-          className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-900 mb-6"
+          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-900 mb-6 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          Retour
+          Retour aux leads
         </Link>
 
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-center gap-3">
             <AlertCircle className="w-5 h-5 text-red-500" />
-            <p className="text-red-700">{error}</p>
+            <p className="text-red-700 text-sm">{error}</p>
           </div>
         )}
 
-        {/* Lead header */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
-          <div className="flex items-center gap-2 mb-4">
-            <h1 className="text-xl font-bold text-gray-900">{lead.service_name}</h1>
-            <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${urg.cls}`}>
-              {urg.text}
-            </span>
-            <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${st.cls}`}>
-              {st.text}
-            </span>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Main content */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Lead header card */}
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <div className="px-6 py-4 bg-gray-50 border-b border-gray-100">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h1 className="text-xl font-bold text-gray-900">{lead.service_name}</h1>
+                  <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${urg.cls}`}>
+                    {urg.label}
+                  </span>
+                  <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${st.cls}`}>
+                    {st.label}
+                  </span>
+                </div>
+              </div>
+
+              <div className="p-6">
+                <p className="text-gray-700 leading-relaxed mb-6">{lead.description}</p>
+
+                {lead.budget && (
+                  <div className="flex items-center gap-2 text-sm text-gray-600 mb-4 p-3 bg-green-50 rounded-lg border border-green-100">
+                    <Euro className="w-4 h-4 text-green-600" />
+                    <span><strong>Budget indicatif :</strong> {lead.budget}</span>
+                  </div>
+                )}
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                    <Calendar className="w-4 h-4 text-gray-400" />
+                    <div>
+                      <p className="text-xs text-gray-400">Reçu le</p>
+                      <p className="text-sm text-gray-700">
+                        {new Date(lead.created_at).toLocaleDateString('fr-FR', {
+                          day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                  {lead.city && (
+                    <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                      <MapPin className="w-4 h-4 text-gray-400" />
+                      <div>
+                        <p className="text-xs text-gray-400">Localisation</p>
+                        <p className="text-sm text-gray-700">
+                          {lead.city} {lead.postal_code && `(${lead.postal_code})`}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                    <User className="w-4 h-4 text-gray-400" />
+                    <div>
+                      <p className="text-xs text-gray-400">Client</p>
+                      <p className="text-sm text-gray-700">{lead.client_name}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                    <Phone className="w-4 h-4 text-gray-400" />
+                    <div>
+                      <p className="text-xs text-gray-400">Téléphone</p>
+                      <p className="text-sm text-gray-700">{lead.client_phone}</p>
+                    </div>
+                  </div>
+                  {lead.client_email && (
+                    <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg sm:col-span-2">
+                      <Mail className="w-4 h-4 text-gray-400" />
+                      <div>
+                        <p className="text-xs text-gray-400">Email</p>
+                        <p className="text-sm text-gray-700">{lead.client_email}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Actions */}
+            {assignment.status !== 'quoted' && assignment.status !== 'declined' && (
+              <div className="bg-white rounded-xl border border-gray-200 p-6">
+                <h2 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-gray-400" />
+                  Actions
+                </h2>
+
+                {showQuoteForm ? (
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                        Montant du devis (€)
+                      </label>
+                      <input
+                        type="number"
+                        min="1"
+                        step="0.01"
+                        value={quoteAmount}
+                        onChange={(e) => setQuoteAmount(e.target.value)}
+                        className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="ex: 350.00"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                        Description du devis
+                      </label>
+                      <textarea
+                        value={quoteDesc}
+                        onChange={(e) => setQuoteDesc(e.target.value)}
+                        rows={4}
+                        className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="Détails de l'intervention, matériaux, délais..."
+                      />
+                    </div>
+                    <div className="flex gap-3">
+                      <button
+                        onClick={handleQuoteSubmit}
+                        disabled={actionLoading === 'quote'}
+                        className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50 transition-colors"
+                      >
+                        {actionLoading === 'quote' ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <Send className="w-4 h-4" />
+                        )}
+                        Envoyer le devis
+                      </button>
+                      <button
+                        onClick={() => setShowQuoteForm(false)}
+                        className="px-4 py-2.5 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition-colors"
+                      >
+                        Annuler
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-wrap gap-3">
+                    {assignment.status === 'pending' && (
+                      <button
+                        onClick={() => handleAction('view')}
+                        disabled={!!actionLoading}
+                        className="flex items-center gap-2 px-4 py-2.5 bg-yellow-50 text-yellow-700 border border-yellow-200 rounded-lg text-sm font-medium hover:bg-yellow-100 disabled:opacity-50 transition-colors"
+                      >
+                        <Eye className="w-4 h-4" />
+                        Marquer comme vu
+                      </button>
+                    )}
+                    <button
+                      onClick={() => setShowQuoteForm(true)}
+                      className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+                    >
+                      <FileText className="w-4 h-4" />
+                      Envoyer un devis
+                    </button>
+                    <button
+                      onClick={() => handleAction('decline')}
+                      disabled={!!actionLoading}
+                      className="flex items-center gap-2 px-4 py-2.5 border border-gray-200 text-gray-600 rounded-lg text-sm font-medium hover:bg-gray-50 disabled:opacity-50 transition-colors"
+                    >
+                      {actionLoading === 'decline' ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <X className="w-4 h-4" />
+                      )}
+                      Décliner
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
-          <p className="text-gray-700 mb-6">{lead.description}</p>
-
-          {lead.budget && (
-            <p className="text-sm text-gray-500 mb-4">
-              <strong>Budget indicatif :</strong> {lead.budget}
-            </p>
-          )}
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-            <div className="flex items-center gap-2 text-gray-600">
-              <Clock className="w-4 h-4 text-gray-400" />
-              <span>Reçu le {new Date(lead.created_at).toLocaleDateString('fr-FR', {
-                day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
-              })}</span>
+          {/* Sidebar: Timeline */}
+          <div className="space-y-6">
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                <History className="w-5 h-5 text-gray-400" />
+                Historique
+              </h3>
+              {eventsLoading ? (
+                <div className="flex justify-center py-6">
+                  <Loader2 className="w-5 h-5 animate-spin text-gray-400" />
+                </div>
+              ) : (
+                <EventTimeline events={events} compact />
+              )}
             </div>
-            {lead.city && (
-              <div className="flex items-center gap-2 text-gray-600">
-                <MapPin className="w-4 h-4 text-gray-400" />
-                <span>{lead.city} {lead.postal_code && `(${lead.postal_code})`}</span>
+
+            {/* Quick info */}
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <h3 className="font-semibold text-gray-900 mb-3 text-sm">Informations</h3>
+              <div className="space-y-3 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-500">ID Assignment</span>
+                  <span className="text-gray-700 font-mono text-xs">{id.slice(0, 8)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Assigné le</span>
+                  <span className="text-gray-700">
+                    {new Date(assignment.assigned_at).toLocaleDateString('fr-FR', {
+                      day: 'numeric', month: 'short'
+                    })}
+                  </span>
+                </div>
+                {assignment.viewed_at && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Vu le</span>
+                    <span className="text-gray-700">
+                      {new Date(assignment.viewed_at).toLocaleDateString('fr-FR', {
+                        day: 'numeric', month: 'short'
+                      })}
+                    </span>
+                  </div>
+                )}
               </div>
-            )}
-            <div className="flex items-center gap-2 text-gray-600">
-              <Phone className="w-4 h-4 text-gray-400" />
-              <span>{lead.client_name} — {lead.client_phone}</span>
             </div>
-            {lead.client_email && (
-              <div className="flex items-center gap-2 text-gray-600">
-                <Mail className="w-4 h-4 text-gray-400" />
-                <span>{lead.client_email}</span>
-              </div>
-            )}
           </div>
         </div>
-
-        {/* Actions */}
-        {assignment.status !== 'quoted' && assignment.status !== 'declined' && (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
-            <h2 className="font-semibold text-gray-900 mb-4">Actions</h2>
-
-            {showQuoteForm ? (
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Montant du devis (€)
-                  </label>
-                  <input
-                    type="number"
-                    min="1"
-                    step="0.01"
-                    value={quoteAmount}
-                    onChange={(e) => setQuoteAmount(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
-                    placeholder="ex: 350.00"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Description du devis
-                  </label>
-                  <textarea
-                    value={quoteDesc}
-                    onChange={(e) => setQuoteDesc(e.target.value)}
-                    rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
-                    placeholder="Détails de l'intervention..."
-                  />
-                </div>
-                <div className="flex gap-3">
-                  <button
-                    onClick={handleQuoteSubmit}
-                    disabled={actionLoading === 'quote'}
-                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
-                  >
-                    {actionLoading === 'quote' ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : (
-                      <Send className="w-4 h-4" />
-                    )}
-                    Envoyer le devis
-                  </button>
-                  <button
-                    onClick={() => setShowQuoteForm(false)}
-                    className="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50"
-                  >
-                    Annuler
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="flex flex-wrap gap-3">
-                {assignment.status === 'pending' && (
-                  <button
-                    onClick={() => handleAction('view')}
-                    disabled={!!actionLoading}
-                    className="flex items-center gap-2 px-4 py-2 bg-yellow-50 text-yellow-700 border border-yellow-200 rounded-lg text-sm font-medium hover:bg-yellow-100 disabled:opacity-50"
-                  >
-                    <Eye className="w-4 h-4" />
-                    Marquer comme vu
-                  </button>
-                )}
-                <button
-                  onClick={() => setShowQuoteForm(true)}
-                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700"
-                >
-                  <FileText className="w-4 h-4" />
-                  Envoyer un devis
-                </button>
-                <button
-                  onClick={() => handleAction('decline')}
-                  disabled={!!actionLoading}
-                  className="flex items-center gap-2 px-4 py-2 border border-gray-200 text-gray-600 rounded-lg text-sm font-medium hover:bg-gray-50 disabled:opacity-50"
-                >
-                  {actionLoading === 'decline' ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <X className="w-4 h-4" />
-                  )}
-                  Décliner
-                </button>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* History link */}
-        <Link
-          href={`/espace-artisan/leads/${id}/historique`}
-          className="flex items-center gap-2 text-sm text-blue-600 hover:underline"
-        >
-          <History className="w-4 h-4" />
-          Voir l'historique complet
-        </Link>
       </div>
     </div>
   )
