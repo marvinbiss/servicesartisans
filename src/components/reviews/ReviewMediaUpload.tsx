@@ -114,7 +114,7 @@ export function ReviewMediaUpload({
       const updatedFiles = [...files, ...uploadedFiles]
       setFiles(updatedFiles)
       onUpload(updatedFiles)
-    } catch (err) {
+    } catch (_err) {
       setError('Erreur lors de l\'upload')
     } finally {
       setUploading(false)

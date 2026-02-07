@@ -173,7 +173,7 @@ export async function GET(
 
     // Now get full data with relations (if tables exist)
     let provider = simpleProvider
-    let providerError = simpleError
+    const providerError = simpleError
 
     if (simpleProvider) {
       // Try to get related data, but don't fail if relations don't exist

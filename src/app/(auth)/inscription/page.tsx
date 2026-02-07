@@ -119,7 +119,7 @@ export default function InscriptionPage() {
       }
 
       setIsSubmitted(true)
-    } catch (error) {
+    } catch (_error) {
       setGeneralError('Erreur de connexion au serveur')
     } finally {
       setIsLoading(false)

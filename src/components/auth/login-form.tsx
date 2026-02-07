@@ -37,7 +37,7 @@ export function LoginForm() {
 
       router.push('/espace-artisan')
       router.refresh()
-    } catch (err) {
+    } catch (_err) {
       setError('Une erreur est survenue')
     } finally {
       setIsLoading(false)

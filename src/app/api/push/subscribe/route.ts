@@ -106,7 +106,7 @@ export async function DELETE(request: Request) {
     }
     const { endpoint, userId } = result.data
 
-    let query = supabase.from('push_subscriptions')
+    const query = supabase.from('push_subscriptions')
 
     if (endpoint) {
       // Delete specific subscription

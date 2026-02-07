@@ -5,6 +5,7 @@
 
 import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 3600 // Cache for 1 hour
@@ -39,7 +40,7 @@ export async function GET() {
       .limit(6)
 
     if (error) {
-      console.error('Error fetching featured reviews:', error)
+      logger.error('Error fetching featured reviews:', error)
       return NextResponse.json({ reviews: [] })
     }
 
@@ -70,7 +71,7 @@ export async function GET() {
     })
 
   } catch (error) {
-    console.error('Error fetching featured reviews:', error)
+    logger.error('Error fetching featured reviews:', error)
     return NextResponse.json(
       { reviews: [] },
       { status: 200 } // Return empty array instead of error

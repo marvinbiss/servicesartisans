@@ -5,21 +5,32 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { z } from 'zod'
+import { logger } from '@/lib/logger'
+
+const byCityQuerySchema = z.object({
+  city: z.string().min(1, 'City parameter is required').max(200),
+  limit: z.coerce.number().int().min(1).max(200).default(50),
+})
 
 export const dynamic = 'force-dynamic'
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
-    const city = searchParams.get('city')
-    const limit = parseInt(searchParams.get('limit') || '50', 10)
+    const queryValidation = byCityQuerySchema.safeParse({
+      city: searchParams.get('city') || undefined,
+      limit: searchParams.get('limit') || undefined,
+    })
 
-    if (!city) {
+    if (!queryValidation.success) {
       return NextResponse.json(
-        { error: 'City parameter is required' },
+        { error: queryValidation.error.issues[0]?.message || 'Parametres invalides' },
         { status: 400 }
       )
     }
+
+    const { city, limit } = queryValidation.data
 
     const supabase = createAdminClient()
 
@@ -34,7 +45,7 @@ export async function GET(request: NextRequest) {
       .limit(limit)
 
     if (error) {
-      console.error('Error fetching providers by city:', error)
+      logger.error('Error fetching providers by city:', error)
       return NextResponse.json(
         { error: 'Failed to fetch providers' },
         { status: 500 }
@@ -47,7 +58,7 @@ export async function GET(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('Error in providers by city API:', error)
+    logger.error('Error in providers by city API:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

@@ -6,6 +6,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+const portfolioUploadTypeSchema = z.enum(['image', 'video', 'before', 'after']).nullable()
 
 const PORTFOLIO_BUCKET = 'portfolio'
 
@@ -59,7 +62,17 @@ export async function POST(request: NextRequest) {
     // Parse multipart form data
     const formData = await request.formData()
     const file = formData.get('file') as File | null
-    const fileType = formData.get('type') as string | null // 'image' | 'video' | 'before' | 'after'
+    const rawType = formData.get('type') as string | null
+
+    // Validate type field
+    const typeValidation = portfolioUploadTypeSchema.safeParse(rawType)
+    if (!typeValidation.success) {
+      return NextResponse.json(
+        { error: 'Type invalide. Valeurs acceptées: image, video, before, after' },
+        { status: 400 }
+      )
+    }
+    const fileType = typeValidation.data
 
     if (!file) {
       return NextResponse.json(

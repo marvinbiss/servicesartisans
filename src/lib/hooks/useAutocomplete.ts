@@ -348,7 +348,7 @@ export function useSiretValidation() {
             ? { name: result.companyName, active: result.active }
             : null
         )
-      } catch (err) {
+      } catch (_err) {
         setIsValid(null)
         setError('Erreur de vérification')
       } finally {

@@ -212,7 +212,7 @@ export function transformToProvider(etab: SireneEtablissement): {
   const periode = etab.periodesEtablissement?.[0]
 
   // Construire le nom
-  let name = ul.denominationUniteLegale
+  const name = ul.denominationUniteLegale
     || ul.denominationUsuelle1UniteLegale
     || periode?.denominationUsuelleEtablissement
     || periode?.enseigne1Etablissement

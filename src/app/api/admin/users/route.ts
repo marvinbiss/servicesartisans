@@ -62,7 +62,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Try to get profiles if table exists
-    let profilesMap = new Map<string, Record<string, unknown>>()
+    const profilesMap = new Map<string, Record<string, unknown>>()
     try {
       const { data: profiles } = await supabase
         .from('profiles')

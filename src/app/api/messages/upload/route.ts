@@ -6,6 +6,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+const uploadMetadataSchema = z.object({
+  conversation_id: z.string().uuid('ID de conversation invalide').nullable(),
+  message_id: z.string().uuid('ID de message invalide').nullable(),
+})
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
 const ALLOWED_TYPES = [
@@ -37,8 +43,21 @@ export async function POST(request: NextRequest) {
 
     const formData = await request.formData()
     const file = formData.get('file') as File | null
-    const conversationId = formData.get('conversation_id') as string | null
-    const messageId = formData.get('message_id') as string | null
+
+    // Validate metadata fields
+    const metadataValidation = uploadMetadataSchema.safeParse({
+      conversation_id: formData.get('conversation_id') || null,
+      message_id: formData.get('message_id') || null,
+    })
+
+    if (!metadataValidation.success) {
+      return NextResponse.json(
+        { error: metadataValidation.error.issues[0]?.message || 'Parametres invalides' },
+        { status: 400 }
+      )
+    }
+
+    const { conversation_id: conversationId, message_id: messageId } = metadataValidation.data
 
     if (!file) {
       return NextResponse.json(

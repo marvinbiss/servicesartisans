@@ -55,7 +55,7 @@ export function RegisterForm() {
       }
 
       setSuccess(true)
-    } catch (err) {
+    } catch (_err) {
       setError('Une erreur est survenue')
     } finally {
       setIsLoading(false)

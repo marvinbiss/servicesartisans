@@ -145,14 +145,11 @@ export default function GeographicMap({
   return (
     <div className={`rounded-xl overflow-hidden ${className}`} style={{ height }}>
       <MapContainer
+        ref={mapRef}
         center={[centerLat, centerLng]}
         zoom={zoom}
         style={{ height: '100%', width: '100%' }}
         scrollWheelZoom={false}
-        // @ts-expect-error whenReady typing mismatch with react-leaflet
-        whenReady={(event: any) => {
-          mapRef.current = event.target
-        }}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'

@@ -259,7 +259,7 @@ export async function batchVerify(
       batch.map(async (siret) => {
         try {
           return { siret, result: await verifyEntreprise(siret) }
-        } catch (error) {
+        } catch (_error) {
           return {
             siret,
             result: {

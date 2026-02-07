@@ -54,7 +54,7 @@ export default function ConnexionPage() {
       } else {
         router.push('/espace-client')
       }
-    } catch (err) {
+    } catch (_err) {
       setError('Erreur de connexion au serveur')
     } finally {
       setIsLoading(false)

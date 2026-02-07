@@ -305,7 +305,7 @@ export async function PATCH(
           if (!serviceName || typeof serviceName !== 'string') continue
 
           // Try to find existing service by name
-          let { data: existingService } = await supabase
+          const { data: existingService } = await supabase
             .from('services')
             .select('id')
             .ilike('name', serviceName.trim())
