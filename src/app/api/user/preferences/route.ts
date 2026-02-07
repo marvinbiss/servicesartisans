@@ -4,9 +4,9 @@
  */
 
 import { NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 import { createServerClient } from '@supabase/ssr'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
@@ -15,20 +15,15 @@ const preferencesSchema = z.object({
   preferences: z.record(z.string(), z.unknown()),
 })
 
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
-
-// GET /api/user/preferences - Get user preferences
 export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export async function GET() {
   try {
     const cookieStore = await cookies()
     const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '',
       {
         cookies: {
           getAll() {
@@ -51,6 +46,8 @@ export async function GET() {
         { status: 401 }
       )
     }
+
+    const supabaseAdmin = createAdminClient()
 
     const { data: preferences } = await supabaseAdmin
       .from('user_preferences')
@@ -76,8 +73,8 @@ export async function PUT(request: Request) {
   try {
     const cookieStore = await cookies()
     const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '',
       {
         cookies: {
           getAll() {
@@ -109,6 +106,7 @@ export async function PUT(request: Request) {
     const { preferences } = result.data
 
     // Upsert preferences
+    const supabaseAdmin = createAdminClient()
     const { error } = await supabaseAdmin
       .from('user_preferences')
       .upsert(

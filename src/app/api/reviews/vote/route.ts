@@ -4,7 +4,7 @@
  */
 
 import { NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
@@ -14,15 +14,12 @@ const voteSchema = z.object({
   isHelpful: z.boolean().optional().default(true),
 })
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
-
 export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export async function POST(request: Request) {
   try {
+    const supabase = createAdminClient()
     const body = await request.json()
     const result = voteSchema.safeParse(body)
     if (!result.success) {

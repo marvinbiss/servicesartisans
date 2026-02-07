@@ -5,16 +5,11 @@
 
 import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
-import { createClient } from '@supabase/supabase-js'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { getResendClient } from '@/lib/api/resend-client'
 import { z } from 'zod'
 
 export const dynamic = 'force-dynamic'
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
 
 const getResend = () => getResendClient()
 
@@ -57,6 +52,7 @@ export async function POST(request: Request) {
     const metierFinal = data.metier === 'Autre' ? data.autreMetier : data.metier
 
     // Store in database
+    const supabase = createAdminClient()
     const { error: dbError } = await supabase
       .from('artisan_applications')
       .insert({

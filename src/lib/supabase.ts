@@ -1,13 +1,19 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+// Lazy singleton — never instantiated at module load (build-safe).
+let _client: SupabaseClient | null = null
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.warn('[supabase] NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY missing — queries will fail at runtime')
+function getClient(): SupabaseClient {
+  if (!_client) {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    if (!url || !key) {
+      throw new Error('[supabase] NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are required')
+    }
+    _client = createClient(url, key)
+  }
+  return _client
 }
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 // Helper to check if a string is a valid UUID
 function isValidUUID(str: string): boolean {
@@ -26,7 +32,7 @@ const PROVIDER_SELECT = `
 `
 
 export async function getServices() {
-  const { data, error } = await supabase
+  const { data, error } = await getClient()
     .from('services')
     .select('*')
     .eq('is_active', true)
@@ -58,7 +64,7 @@ const staticServices: Record<string, { id: string; name: string; slug: string; d
 
 export async function getServiceBySlug(slug: string) {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await getClient()
       .from('services')
       .select('*')
       .eq('slug', slug)
@@ -78,7 +84,7 @@ export async function getServiceBySlug(slug: string) {
 }
 
 export async function getLocationBySlug(slug: string) {
-  const { data, error } = await supabase
+  const { data, error } = await getClient()
     .from('locations')
     .select('*')
     .eq('slug', slug)
@@ -90,7 +96,7 @@ export async function getLocationBySlug(slug: string) {
 
 // Primary provider lookup — by slug (public URL identifier).
 export async function getProviderBySlug(slug: string) {
-  const { data } = await supabase
+  const { data } = await getClient()
     .from('providers')
     .select(PROVIDER_SELECT)
     .eq('slug', slug)
@@ -113,7 +119,7 @@ export async function getProvidersByServiceAndLocation(
   if (!isValidUUID(service.id)) return []
 
   // Neutral ordering: verified first, then alphabetical (no premium bias)
-  const { data, error } = await supabase
+  const { data, error } = await getClient()
     .from('providers')
     .select(`
       *,
@@ -133,7 +139,7 @@ export async function getProvidersByLocation(locationSlug: string) {
   const location = await getLocationBySlug(locationSlug)
   if (!location) return []
 
-  const { data, error } = await supabase
+  const { data, error } = await getClient()
     .from('providers')
     .select('*')
     .ilike('address_city', location.name)
@@ -146,7 +152,7 @@ export async function getProvidersByLocation(locationSlug: string) {
 }
 
 export async function getAllProviders() {
-  const { data, error } = await supabase
+  const { data, error } = await getClient()
     .from('providers')
     .select('*')
     .eq('is_active', true)
@@ -162,7 +168,7 @@ export async function getProvidersByService(serviceSlug: string, limit?: number)
   if (!service) return []
   if (!isValidUUID(service.id)) return []
 
-  let query = supabase
+  let query = getClient()
     .from('providers')
     .select(`
       *,
@@ -189,7 +195,7 @@ export async function getLocationsByService(serviceSlug: string) {
   if (!service) return []
   if (!isValidUUID(service.id)) return []
 
-  const { data, error } = await supabase
+  const { data, error } = await getClient()
     .from('locations')
     .select(`
       *,

@@ -4,7 +4,7 @@
  */
 
 import { NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { getVapidPublicKey } from '@/lib/notifications/push'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
@@ -29,11 +29,6 @@ const unsubscribeSchema = z.object({
   message: 'endpoint or userId required',
 })
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
-
 // GET /api/push/subscribe - Get VAPID public key
 export const dynamic = 'force-dynamic'
 
@@ -53,6 +48,7 @@ export async function GET() {
 // POST /api/push/subscribe - Subscribe to push notifications
 export async function POST(request: Request) {
   try {
+    const supabase = createAdminClient()
     const body = await request.json()
     const result = subscribePostSchema.safeParse(body)
     if (!result.success) {
@@ -95,6 +91,7 @@ export async function POST(request: Request) {
 // DELETE /api/push/subscribe - Unsubscribe from push notifications
 export async function DELETE(request: Request) {
   try {
+    const supabase = createAdminClient()
     const { searchParams } = new URL(request.url)
     const queryParams = {
       endpoint: searchParams.get('endpoint') || undefined,

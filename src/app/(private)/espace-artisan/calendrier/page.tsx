@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
-import { createBrowserClient } from '@supabase/ssr'
+import { getSupabaseClient } from '@/lib/supabase/client'
 import {
   Calendar,
   ChevronLeft,
@@ -57,11 +57,8 @@ interface UserProfile {
   is_verified: boolean
 }
 
-// Create Supabase client
-const supabase = createBrowserClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
+// Use shared Supabase client singleton
+const supabase = getSupabaseClient()
 
 // Génération des jours du mois
 function getDaysInMonth(year: number, month: number) {
