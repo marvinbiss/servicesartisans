@@ -1,12 +1,12 @@
 'use client'
 
 import Link from 'next/link'
-import { FileText, MessageSquare, Star, Settings, TrendingUp, Euro, Calendar, ExternalLink, Search, Image as ImageIcon } from 'lucide-react'
+import { FileText, MessageSquare, Star, Settings, TrendingUp, Euro, Calendar, ExternalLink, Search, Image as ImageIcon, Inbox } from 'lucide-react'
 import { QuickSiteLinks } from '@/components/InternalLinks'
 import LogoutButton from '@/components/LogoutButton'
 
 interface ArtisanSidebarProps {
-  activePage?: 'dashboard' | 'demandes-recues' | 'calendrier' | 'messages' | 'portfolio' | 'statistiques' | 'avis-recus' | 'profil' | 'abonnement'
+  activePage?: 'dashboard' | 'leads' | 'demandes-recues' | 'calendrier' | 'messages' | 'portfolio' | 'statistiques' | 'avis-recus' | 'profil' | 'abonnement'
   newDemandesCount?: number
   unreadMessagesCount?: number
 }
@@ -23,6 +23,15 @@ export default function ArtisanSidebar({ activePage = 'dashboard', newDemandesCo
         >
           <TrendingUp className="w-5 h-5" />
           Tableau de bord
+        </Link>
+        <Link
+          href="/espace-artisan/leads"
+          className={`flex items-center gap-3 px-4 py-3 rounded-lg ${
+            activePage === 'leads' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700 hover:bg-gray-50'
+          }`}
+        >
+          <Inbox className="w-5 h-5" />
+          Leads reçus
         </Link>
         <Link
           href="/espace-artisan/demandes-recues"

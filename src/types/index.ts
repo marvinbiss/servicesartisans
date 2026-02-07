@@ -30,6 +30,7 @@ export interface Location {
 
 export interface Provider {
   id: string
+  stable_id: string
   name: string
   slug: string
   siren?: string
@@ -47,34 +48,21 @@ export interface Provider {
   legal_form?: string
   creation_date?: string
   employee_count?: number
-  annual_revenue?: number
   is_verified: boolean
   is_active: boolean
-  is_premium: boolean
-  verification_date?: string
-  meta_title?: string
+  noindex: boolean
   meta_description?: string
   description?: string
   specialty?: string
   created_at: string
   updated_at: string
-  scraped_at?: string
   source?: string
   source_id?: string
-  // Trust & ratings (Phase 4)
   rating_average?: number
   review_count?: number
-  trust_badge?: 'none' | 'bronze' | 'silver' | 'gold' | 'platinum'
-  trust_score?: number
-  avg_response_time_hours?: number
-  response_rate?: number
-  years_on_platform?: number
-  response_time?: string
   experience_years?: number
-  // Search & pricing (Phase 5)
-  hourly_rate_min?: number
-  hourly_rate_max?: number
-  intervention_zone?: string
+  // GUARD: Do NOT add is_premium, trust_badge, trust_score here.
+  // Legacy fields live in src/types/legacy/ (LegacyProvider).
   // Relations
   provider_services?: ProviderService[]
   provider_locations?: ProviderLocation[]
@@ -140,7 +128,6 @@ export interface SearchFiltersProps {
 
 export interface FilterState {
   verified?: boolean
-  premium?: boolean
   minRating?: number
   sortBy?: 'name' | 'rating' | 'distance'
 }
@@ -181,33 +168,6 @@ export interface Booking {
     full_name: string
     phone?: string
   }
-}
-
-// Video call participant
-export interface VideoParticipant {
-  session_id: string
-  user_id?: string
-  user_name?: string
-  video: boolean
-  audio: boolean
-  joined_at?: string
-}
-
-// Daily.co event types
-export interface DailyParticipantEvent {
-  participant: {
-    session_id: string
-    user_id?: string
-    user_name?: string
-    local: boolean
-    video: boolean
-    audio: boolean
-  }
-}
-
-export interface DailyErrorEvent {
-  errorMsg: string
-  error?: Error
 }
 
 // City data for service pages

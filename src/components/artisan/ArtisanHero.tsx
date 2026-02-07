@@ -3,21 +3,22 @@
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Star, MapPin, CheckCircle, Shield, Zap, Users, Clock, Award, Phone } from 'lucide-react'
-import { Artisan, getDisplayName } from './types'
+import { getDisplayName } from './types'
+import type { LegacyArtisan } from '@/types/legacy'
 import {
   VerificationLevelBadge,
   VerifiedBadge,
 } from '@/components/reviews/VerifiedBadge'
 
 interface ArtisanHeroProps {
-  artisan: Artisan
+  artisan: LegacyArtisan
 }
 
 // Blur placeholder for avatar
 const BLUR_DATA_URL = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAn/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBEQCEAwEPwAB//9k='
 
 // Determine verification level based on artisan data
-function getVerificationLevel(artisan: Artisan): 'none' | 'basic' | 'standard' | 'premium' | 'enterprise' {
+function getVerificationLevel(artisan: LegacyArtisan): 'none' | 'basic' | 'standard' | 'premium' | 'enterprise' {
   if (artisan.is_premium && artisan.is_verified && artisan.insurance && artisan.insurance.length > 0) {
     return 'premium'
   }

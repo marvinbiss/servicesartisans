@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic'
 import { Star, Award } from 'lucide-react'
 import Link from 'next/link'
 import ProviderCard from '@/components/ProviderCard'
-import { Provider } from '@/types'
+import type { LegacyProvider } from '@/types/legacy'
 
 const MapContainer = dynamic(() => import('react-leaflet').then((mod) => mod.MapContainer), { ssr: false })
 const TileLayer = dynamic(() => import('react-leaflet').then((mod) => mod.TileLayer), { ssr: false })
@@ -19,7 +19,7 @@ interface CarteAvecListeProps {
   location?: string
 }
 
-type MapProvider = Provider & {
+type MapProvider = LegacyProvider & {
   latitude: number
   longitude: number
   slug: string
@@ -66,7 +66,7 @@ export default function CarteAvecListe({
 
         if (data.success && data.providers) {
           const validProviders = data.providers.filter(
-            (p: Provider): p is MapProvider =>
+            (p: LegacyProvider): p is MapProvider =>
               typeof p.latitude === 'number' &&
               typeof p.longitude === 'number' &&
               typeof p.slug === 'string' &&
@@ -84,7 +84,7 @@ export default function CarteAvecListe({
     loadProviders()
   }, [mapReady, initialCenter])
 
-  const createMarkerIcon = useCallback((provider: Provider, isHovered: boolean) => {
+  const createMarkerIcon = useCallback((provider: LegacyProvider, isHovered: boolean) => {
     if (!L) return undefined
 
     const isPremium =

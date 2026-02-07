@@ -18,10 +18,19 @@ import {
   Lock,
   Settings,
   Database,
+  ArrowRight,
+  Wrench,
+  BookOpen,
+  Gauge,
 } from 'lucide-react'
 
 const nav = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
+  { name: 'Système', href: '/admin/systeme', icon: Gauge },
+  { name: 'Leads', href: '/admin/leads', icon: FileText },
+  { name: 'Dispatch', href: '/admin/dispatch', icon: ArrowRight },
+  { name: 'Outils', href: '/admin/outils', icon: Wrench },
+  { name: 'Journal', href: '/admin/journal', icon: BookOpen },
   { name: 'Utilisateurs', href: '/admin/utilisateurs', icon: Users },
   { name: 'Artisans', href: '/admin/artisans', icon: Briefcase },
   { name: 'Réservations', href: '/admin/reservations', icon: Calendar },

@@ -6,10 +6,13 @@ import {
   ChevronLeft,
   ChevronRight,
   User,
-  Calendar,
   FileText,
+  Loader2,
+  Activity,
 } from 'lucide-react'
 import { StatusBadge } from '@/components/admin/StatusBadge'
+import { StatCard } from '@/components/dashboard/StatCard'
+import type { LeadEventType } from '@/types/leads'
 
 interface AuditLog {
   id: string
@@ -28,6 +31,16 @@ interface AuditLog {
   }
 }
 
+interface LeadEvent {
+  id: string
+  lead_id: string
+  provider_id: string | null
+  actor_id: string | null
+  event_type: LeadEventType
+  metadata: Record<string, unknown>
+  created_at: string
+}
+
 const ENTITY_TYPES = [
   { value: 'all', label: 'Tous' },
   { value: 'user', label: 'Utilisateurs' },
@@ -40,56 +53,94 @@ const ENTITY_TYPES = [
   { value: 'report', label: 'Signalements' },
 ]
 
-export default function AdminAuditPage() {
-  const [logs, setLogs] = useState<AuditLog[]>([])
-  const [loading, setLoading] = useState(true)
-  const [page, setPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
-  const [total, setTotal] = useState(0)
+type AuditTab = 'audit_logs' | 'lead_events'
 
-  // Filters
+export default function AdminAuditPage() {
+  const [activeTab, setActiveTab] = useState<AuditTab>('lead_events')
+
+  // Audit logs state
+  const [logs, setLogs] = useState<AuditLog[]>([])
+  const [logsLoading, setLogsLoading] = useState(true)
+  const [logsPage, setLogsPage] = useState(1)
+  const [logsTotalPages, setLogsTotalPages] = useState(1)
+  const [logsTotal, setLogsTotal] = useState(0)
   const [entityType, setEntityType] = useState('all')
   const [action, setAction] = useState('')
   const [dateFrom, setDateFrom] = useState('')
   const [dateTo, setDateTo] = useState('')
 
-  useEffect(() => {
-    fetchLogs()
-  }, [page, entityType, action, dateFrom, dateTo])
+  // Lead events state
+  const [leadEvents, setLeadEvents] = useState<LeadEvent[]>([])
+  const [eventsLoading, setEventsLoading] = useState(true)
+  const [eventsPage, setEventsPage] = useState(1)
+  const [eventsTotalPages, setEventsTotalPages] = useState(1)
+  const [eventsTotal, setEventsTotal] = useState(0)
+  const [eventTypeCounts, setEventTypeCounts] = useState<Record<string, number>>({})
+  const [eventTypeFilter, setEventTypeFilter] = useState('')
 
-  const fetchLogs = async () => {
-    try {
-      setLoading(true)
-      const params = new URLSearchParams({
-        page: String(page),
-        limit: '50',
-        entityType,
-        action,
-        dateFrom,
-        dateTo,
-      })
-      const response = await fetch(`/api/admin/audit?${params}`)
-      if (response.ok) {
-        const data = await response.json()
-        setLogs(data.logs || [])
-        setTotalPages(data.totalPages || 1)
-        setTotal(data.total || 0)
+  // Fetch audit logs
+  useEffect(() => {
+    if (activeTab !== 'audit_logs') return
+    const fetchLogs = async () => {
+      try {
+        setLogsLoading(true)
+        const params = new URLSearchParams({
+          page: String(logsPage),
+          limit: '50',
+          entityType,
+          action,
+          dateFrom,
+          dateTo,
+        })
+        const response = await fetch(`/api/admin/audit?${params}`)
+        if (response.ok) {
+          const data = await response.json()
+          setLogs(data.logs || [])
+          setLogsTotalPages(data.totalPages || 1)
+          setLogsTotal(data.total || 0)
+        }
+      } catch (error) {
+        console.error('Failed to fetch audit logs:', error)
+      } finally {
+        setLogsLoading(false)
       }
-    } catch (error) {
-      console.error('Failed to fetch audit logs:', error)
-    } finally {
-      setLoading(false)
     }
-  }
+    fetchLogs()
+  }, [activeTab, logsPage, entityType, action, dateFrom, dateTo])
+
+  // Fetch lead events
+  useEffect(() => {
+    if (activeTab !== 'lead_events') return
+    const fetchEvents = async () => {
+      try {
+        setEventsLoading(true)
+        const params = new URLSearchParams({
+          page: String(eventsPage),
+          pageSize: '50',
+        })
+        if (eventTypeFilter) params.set('event_type', eventTypeFilter)
+
+        const response = await fetch(`/api/admin/audit?${params}`)
+        if (response.ok) {
+          const data = await response.json()
+          setLeadEvents(data.events || [])
+          setEventsTotalPages(data.pagination?.totalPages || 1)
+          setEventsTotal(data.pagination?.total || 0)
+          setEventTypeCounts(data.typeCounts || {})
+        }
+      } catch (error) {
+        console.error('Failed to fetch lead events:', error)
+      } finally {
+        setEventsLoading(false)
+      }
+    }
+    fetchEvents()
+  }, [activeTab, eventsPage, eventTypeFilter])
 
   const formatDate = (date: string) => {
     return new Date(date).toLocaleString('fr-FR', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
+      day: '2-digit', month: 'short', year: 'numeric',
+      hour: '2-digit', minute: '2-digit', second: '2-digit',
     })
   }
 
@@ -98,196 +149,339 @@ export default function AdminAuditPage() {
     if (action.includes('update') || action.includes('change')) return <StatusBadge variant="info">Modification</StatusBadge>
     if (action.includes('delete') || action.includes('cancel')) return <StatusBadge variant="error">Suppression</StatusBadge>
     if (action.includes('ban')) return <StatusBadge variant="error">Ban</StatusBadge>
-    if (action.includes('unban')) return <StatusBadge variant="success">Débannissement</StatusBadge>
     if (action.includes('refund')) return <StatusBadge variant="warning">Remboursement</StatusBadge>
-    if (action.includes('resolve')) return <StatusBadge variant="success">Résolution</StatusBadge>
-    if (action.includes('dismiss')) return <StatusBadge variant="default">Rejet</StatusBadge>
     return <StatusBadge variant="default">Action</StatusBadge>
   }
 
+  const totalEventsAll = Object.values(eventTypeCounts).reduce((s, c) => s + c, 0)
+
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
+      <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Logs d&apos;Audit</h1>
-          <p className="text-gray-500 mt-1">{total} actions enregistrées</p>
+          <h1 className="text-2xl font-bold text-gray-900">Audit & Événements</h1>
+          <p className="text-gray-500 mt-1">Traçabilité complète — append-only</p>
         </div>
 
-        {/* Filters */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Type d&apos;entité</label>
-              <select
-                value={entityType}
-                onChange={(e) => {
-                  setEntityType(e.target.value)
-                  setPage(1)
-                }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-              >
-                {ENTITY_TYPES.map((type) => (
-                  <option key={type.value} value={type.value}>{type.label}</option>
+        {/* Stats row */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
+          <StatCard
+            title="Événements leads"
+            value={totalEventsAll}
+            icon={<Activity className="w-5 h-5" />}
+            color="blue"
+          />
+          <StatCard
+            title="Logs admin"
+            value={logsTotal}
+            icon={<Shield className="w-5 h-5" />}
+            color="indigo"
+          />
+          <StatCard
+            title="Types d'événements"
+            value={Object.keys(eventTypeCounts).length}
+            icon={<FileText className="w-5 h-5" />}
+            color="purple"
+          />
+          <StatCard
+            title="Immutabilité"
+            value="STRICT"
+            subtitle="Aucune mutation possible"
+            icon={<Shield className="w-5 h-5" />}
+            color="green"
+          />
+        </div>
+
+        {/* Tab toggle */}
+        <div className="flex gap-2 mb-6">
+          <button
+            onClick={() => setActiveTab('lead_events')}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              activeTab === 'lead_events' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+            }`}
+          >
+            <Activity className="w-4 h-4 inline mr-1.5" />
+            Événements Leads
+          </button>
+          <button
+            onClick={() => setActiveTab('audit_logs')}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              activeTab === 'audit_logs' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+            }`}
+          >
+            <Shield className="w-4 h-4 inline mr-1.5" />
+            Logs Admin
+          </button>
+        </div>
+
+        {/* Lead events tab */}
+        {activeTab === 'lead_events' && (
+          <>
+            {/* Event type filter */}
+            <div className="bg-white rounded-xl border border-gray-200 p-4 mb-6">
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => { setEventTypeFilter(''); setEventsPage(1) }}
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                    !eventTypeFilter ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  Tous ({totalEventsAll})
+                </button>
+                {Object.entries(eventTypeCounts).sort((a, b) => b[1] - a[1]).map(([type, count]) => (
+                  <button
+                    key={type}
+                    onClick={() => { setEventTypeFilter(type); setEventsPage(1) }}
+                    className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                      eventTypeFilter === type ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    {type} ({count})
+                  </button>
                 ))}
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Action</label>
-              <input
-                type="text"
-                value={action}
-                onChange={(e) => {
-                  setAction(e.target.value)
-                  setPage(1)
-                }}
-                placeholder="Ex: ban, refund..."
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Date début</label>
-              <input
-                type="date"
-                value={dateFrom}
-                onChange={(e) => {
-                  setDateFrom(e.target.value)
-                  setPage(1)
-                }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Date fin</label>
-              <input
-                type="date"
-                value={dateTo}
-                onChange={(e) => {
-                  setDateTo(e.target.value)
-                  setPage(1)
-                }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Logs Table */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          {loading ? (
-            <div className="p-8 text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-            </div>
-          ) : logs.length === 0 ? (
-            <div className="p-8 text-center text-gray-500">
-              <Shield className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-              <p>Aucun log d&apos;audit trouvé</p>
-            </div>
-          ) : (
-            <>
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="bg-gray-50 border-b border-gray-100">
-                    <tr>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
-                        Date
-                      </th>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
-                        Admin
-                      </th>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
-                        Action
-                      </th>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
-                        Entité
-                      </th>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
-                        Détails
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-100">
-                    {logs.map((log) => (
-                      <tr key={log.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 text-sm text-gray-500">
-                          <div className="flex items-center gap-2">
-                            <Calendar className="w-4 h-4" />
-                            {formatDate(log.created_at)}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="flex items-center gap-2">
-                            <User className="w-4 h-4 text-gray-400" />
-                            <div>
-                              <p className="text-sm font-medium text-gray-900">
-                                {log.admin?.full_name || 'Admin'}
-                              </p>
-                              <p className="text-xs text-gray-500">{log.admin?.email}</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="space-y-1">
-                            {getActionBadge(log.action)}
-                            <p className="text-xs text-gray-500 font-mono">{log.action}</p>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="flex items-center gap-2">
-                            <FileText className="w-4 h-4 text-gray-400" />
-                            <div>
-                              <p className="text-sm text-gray-900 capitalize">{log.entity_type}</p>
-                              {log.entity_id && (
-                                <p className="text-xs text-gray-500 font-mono">
-                                  {log.entity_id.slice(0, 8)}...
-                                </p>
-                              )}
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4">
-                          {log.new_data && (
-                            <details className="text-xs">
-                              <summary className="cursor-pointer text-blue-600 hover:text-blue-700">
-                                Voir les données
-                              </summary>
-                              <pre className="mt-2 p-2 bg-gray-100 rounded text-gray-600 overflow-x-auto max-w-xs">
-                                {JSON.stringify(log.new_data, null, 2)}
-                              </pre>
-                            </details>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
               </div>
+            </div>
 
-              {/* Pagination */}
-              <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
-                <p className="text-sm text-gray-500">
-                  Page {page} sur {totalPages}
-                </p>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => setPage(Math.max(1, page - 1))}
-                    disabled={page === 1}
-                    className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 hover:bg-gray-50"
+            {eventsLoading ? (
+              <div className="flex justify-center py-16">
+                <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+              </div>
+            ) : (
+              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-gray-100 bg-gray-50/50">
+                        <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Date</th>
+                        <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Type</th>
+                        <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Lead ID</th>
+                        <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Provider ID</th>
+                        <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Metadata</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                      {leadEvents.length === 0 ? (
+                        <tr>
+                          <td colSpan={5} className="px-4 py-12 text-center text-gray-500">
+                            <Activity className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+                            Aucun événement
+                          </td>
+                        </tr>
+                      ) : (
+                        leadEvents.map((e) => (
+                          <tr key={e.id} className="hover:bg-gray-50/50 transition-colors">
+                            <td className="px-4 py-3 text-xs text-gray-500 whitespace-nowrap">
+                              {formatDate(e.created_at)}
+                            </td>
+                            <td className="px-4 py-3">
+                              <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                                e.event_type === 'created' ? 'bg-blue-100 text-blue-700' :
+                                e.event_type === 'dispatched' ? 'bg-indigo-100 text-indigo-700' :
+                                e.event_type === 'viewed' ? 'bg-yellow-100 text-yellow-700' :
+                                e.event_type === 'quoted' ? 'bg-green-100 text-green-700' :
+                                e.event_type === 'declined' ? 'bg-gray-100 text-gray-600' :
+                                e.event_type === 'accepted' ? 'bg-emerald-100 text-emerald-700' :
+                                e.event_type === 'completed' ? 'bg-green-100 text-green-800' :
+                                'bg-gray-100 text-gray-600'
+                              }`}>
+                                {e.event_type}
+                              </span>
+                            </td>
+                            <td className="px-4 py-3 font-mono text-xs text-gray-600">
+                              {e.lead_id.slice(0, 8)}
+                            </td>
+                            <td className="px-4 py-3 font-mono text-xs text-gray-600">
+                              {e.provider_id ? e.provider_id.slice(0, 8) : '—'}
+                            </td>
+                            <td className="px-4 py-3">
+                              {Object.keys(e.metadata).length > 0 && (
+                                <details className="text-xs">
+                                  <summary className="cursor-pointer text-blue-600 hover:text-blue-700">
+                                    {Object.keys(e.metadata).length} champ(s)
+                                  </summary>
+                                  <pre className="mt-2 p-2 bg-gray-50 rounded text-gray-600 overflow-x-auto max-w-xs text-[10px]">
+                                    {JSON.stringify(e.metadata, null, 2)}
+                                  </pre>
+                                </details>
+                              )}
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+
+                {eventsTotalPages > 1 && (
+                  <div className="px-4 py-4 border-t border-gray-100 flex items-center justify-between">
+                    <span className="text-sm text-gray-500">
+                      Page {eventsPage} / {eventsTotalPages} ({eventsTotal} événements)
+                    </span>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => setEventsPage(Math.max(1, eventsPage - 1))}
+                        disabled={eventsPage === 1}
+                        className="p-2 rounded-lg border border-gray-200 disabled:opacity-40 hover:bg-gray-50"
+                      >
+                        <ChevronLeft className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => setEventsPage(Math.min(eventsTotalPages, eventsPage + 1))}
+                        disabled={eventsPage === eventsTotalPages}
+                        className="p-2 rounded-lg border border-gray-200 disabled:opacity-40 hover:bg-gray-50"
+                      >
+                        <ChevronRight className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </>
+        )}
+
+        {/* Audit logs tab */}
+        {activeTab === 'audit_logs' && (
+          <>
+            {/* Filters */}
+            <div className="bg-white rounded-xl border border-gray-200 p-4 mb-6">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 uppercase mb-1">Type d&apos;entité</label>
+                  <select
+                    value={entityType}
+                    onChange={(e) => { setEntityType(e.target.value); setLogsPage(1) }}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
                   >
-                    <ChevronLeft className="w-5 h-5" />
-                  </button>
-                  <button
-                    onClick={() => setPage(Math.min(totalPages, page + 1))}
-                    disabled={page === totalPages}
-                    className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 hover:bg-gray-50"
-                  >
-                    <ChevronRight className="w-5 h-5" />
-                  </button>
+                    {ENTITY_TYPES.map((type) => (
+                      <option key={type.value} value={type.value}>{type.label}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 uppercase mb-1">Action</label>
+                  <input
+                    type="text"
+                    value={action}
+                    onChange={(e) => { setAction(e.target.value); setLogsPage(1) }}
+                    placeholder="ban, refund..."
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 uppercase mb-1">Début</label>
+                  <input
+                    type="date"
+                    value={dateFrom}
+                    onChange={(e) => { setDateFrom(e.target.value); setLogsPage(1) }}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 uppercase mb-1">Fin</label>
+                  <input
+                    type="date"
+                    value={dateTo}
+                    onChange={(e) => { setDateTo(e.target.value); setLogsPage(1) }}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+                  />
                 </div>
               </div>
-            </>
-          )}
-        </div>
+            </div>
+
+            {/* Table */}
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              {logsLoading ? (
+                <div className="p-16 text-center">
+                  <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto" />
+                </div>
+              ) : logs.length === 0 ? (
+                <div className="p-16 text-center text-gray-500">
+                  <Shield className="w-10 h-10 mx-auto mb-3 text-gray-300" />
+                  <p>Aucun log d&apos;audit trouvé</p>
+                </div>
+              ) : (
+                <>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="border-b border-gray-100 bg-gray-50/50">
+                          <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Date</th>
+                          <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Admin</th>
+                          <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Action</th>
+                          <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Entité</th>
+                          <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Détails</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-100">
+                        {logs.map((log) => (
+                          <tr key={log.id} className="hover:bg-gray-50/50 transition-colors">
+                            <td className="px-4 py-3 text-xs text-gray-500 whitespace-nowrap">
+                              {formatDate(log.created_at)}
+                            </td>
+                            <td className="px-4 py-3">
+                              <div className="flex items-center gap-2">
+                                <User className="w-3.5 h-3.5 text-gray-400" />
+                                <div>
+                                  <p className="text-sm text-gray-900">{log.admin?.full_name || 'Admin'}</p>
+                                  <p className="text-xs text-gray-400">{log.admin?.email}</p>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="px-4 py-3">
+                              {getActionBadge(log.action)}
+                              <p className="text-xs text-gray-400 font-mono mt-0.5">{log.action}</p>
+                            </td>
+                            <td className="px-4 py-3">
+                              <p className="text-sm text-gray-700 capitalize">{log.entity_type}</p>
+                              {log.entity_id && (
+                                <p className="text-xs text-gray-400 font-mono">{log.entity_id.slice(0, 8)}</p>
+                              )}
+                            </td>
+                            <td className="px-4 py-3">
+                              {log.new_data && Object.keys(log.new_data).length > 0 && (
+                                <details className="text-xs">
+                                  <summary className="cursor-pointer text-blue-600 hover:text-blue-700">
+                                    Données
+                                  </summary>
+                                  <pre className="mt-2 p-2 bg-gray-50 rounded text-gray-600 overflow-x-auto max-w-xs text-[10px]">
+                                    {JSON.stringify(log.new_data, null, 2)}
+                                  </pre>
+                                </details>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div className="px-4 py-4 border-t border-gray-100 flex items-center justify-between">
+                    <span className="text-sm text-gray-500">
+                      Page {logsPage} / {logsTotalPages} ({logsTotal} logs)
+                    </span>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => setLogsPage(Math.max(1, logsPage - 1))}
+                        disabled={logsPage === 1}
+                        className="p-2 rounded-lg border border-gray-200 disabled:opacity-40 hover:bg-gray-50"
+                      >
+                        <ChevronLeft className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => setLogsPage(Math.min(logsTotalPages, logsPage + 1))}
+                        disabled={logsPage === logsTotalPages}
+                        className="p-2 rounded-lg border border-gray-200 disabled:opacity-40 hover:bg-gray-50"
+                      >
+                        <ChevronRight className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          </>
+        )}
       </div>
     </div>
   )

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
 import L from 'leaflet'
-import { Provider } from '@/types'
+import type { LegacyProvider } from '@/types/legacy'
 import 'leaflet/dist/leaflet.css'
 
 // Custom marker icon using divIcon (CSS-based, no external images needed)
@@ -24,11 +24,11 @@ const createDivIcon = (isPremium: boolean) => {
 }
 
 interface MapProps {
-  providers: Provider[]
+  providers: LegacyProvider[]
   center: [number, number]
   zoom?: number
-  onMarkerClick?: (provider: Provider) => void
-  selectedProvider?: Provider | null
+  onMarkerClick?: (provider: LegacyProvider) => void
+  selectedProvider?: LegacyProvider | null
 }
 
 // Component to recenter map when center changes
@@ -83,7 +83,7 @@ export default function Map({
         <Marker
           key={provider.id}
           position={[provider.latitude!, provider.longitude!]}
-          icon={createDivIcon(provider.is_premium)}
+          icon={createDivIcon(!!provider.is_premium)}
           eventHandlers={{
             click: () => onMarkerClick?.(provider),
           }}

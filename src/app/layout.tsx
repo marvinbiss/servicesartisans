@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter, Plus_Jakarta_Sans } from 'next/font/google'
 import dynamic from 'next/dynamic'
 import './globals.css'
 import Header from '@/components/Header'
@@ -18,23 +17,6 @@ const CapacitorInit = dynamic(
   () => import('@/components/CapacitorInit').then(mod => ({ default: mod.CapacitorInit })),
   { ssr: false }
 )
-
-// Body font - Inter for readability
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  preload: true,
-  variable: '--font-inter',
-})
-
-// Heading font - Plus Jakarta Sans for premium feel
-const plusJakarta = Plus_Jakarta_Sans({
-  subsets: ['latin'],
-  display: 'swap',
-  preload: true,
-  variable: '--font-heading',
-  weight: ['500', '600', '700', '800'],
-})
 
 // Viewport configuration - Primary brand color
 export const viewport: Viewport = {
@@ -197,7 +179,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://images.unsplash.com" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
       </head>
-      <body className={`${inter.variable} ${plusJakarta.variable} font-sans bg-gray-50 antialiased`}>
+      <body className="font-sans bg-gray-50 antialiased">
         <MobileMenuProvider>
           {/* Skip to main content for accessibility */}
           <a

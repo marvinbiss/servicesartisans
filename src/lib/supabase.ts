@@ -11,14 +11,23 @@ function isValidUUID(str: string): boolean {
   return uuidRegex.test(str)
 }
 
-// Types pour les requêtes
+const PROVIDER_SELECT = `
+  *,
+  provider_services(
+    service:services(*)
+  ),
+  provider_locations(
+    location:locations(*)
+  )
+`
+
 export async function getServices() {
   const { data, error } = await supabase
     .from('services')
     .select('*')
     .eq('is_active', true)
     .order('name')
-  
+
   if (error) throw error
   return data
 }
@@ -52,14 +61,12 @@ export async function getServiceBySlug(slug: string) {
       .single()
 
     if (error || !data) {
-      // Fallback vers les données statiques
       const staticService = staticServices[slug]
       if (staticService) return staticService
       throw error || new Error('Service not found')
     }
     return data
   } catch (error) {
-    // Fallback vers les données statiques
     const staticService = staticServices[slug]
     if (staticService) return staticService
     throw error
@@ -72,103 +79,48 @@ export async function getLocationBySlug(slug: string) {
     .select('*')
     .eq('slug', slug)
     .single()
-  
+
   if (error) throw error
   return data
 }
 
+// Lookup by stable_id ONLY — no fallback.
+export async function getProviderByStableId(stableId: string) {
+  const { data } = await supabase
+    .from('providers')
+    .select(PROVIDER_SELECT)
+    .eq('stable_id', stableId)
+    .eq('is_active', true)
+    .single()
+
+  return data || null
+}
+
+// Legacy — still used by non-slice code paths. Will be removed in a future PR.
 export async function getProviderBySlug(slug: string) {
-  // First, try to find by exact slug match
-  const { data: bySlug } = await supabase
+  const { data } = await supabase
     .from('providers')
-    .select(`
-      *,
-      provider_services(
-        service:services(*)
-      ),
-      provider_locations(
-        location:locations(*)
-      )
-    `)
+    .select(PROVIDER_SELECT)
     .eq('slug', slug)
+    .eq('is_active', true)
     .single()
 
-  if (bySlug) return bySlug
-
-  // If not found by slug, try by ID (in case it's a UUID)
-  if (isValidUUID(slug)) {
-    const { data: byId } = await supabase
-      .from('providers')
-      .select(`
-        *,
-        provider_services(
-          service:services(*)
-        ),
-        provider_locations(
-          location:locations(*)
-        )
-      `)
-      .eq('id', slug)
-      .single()
-
-    if (byId) return byId
-  }
-
-  // If still not found, try a fuzzy search on the name (for generated slugs)
-  // Convert slug back to potential name pattern: "martin-plomberie-paris" -> "martin plomberie paris"
-  const namePattern = slug.replace(/-/g, ' ')
-  const { data: byName } = await supabase
-    .from('providers')
-    .select(`
-      *,
-      provider_services(
-        service:services(*)
-      ),
-      provider_locations(
-        location:locations(*)
-      )
-    `)
-    .ilike('name', `%${namePattern}%`)
-    .limit(1)
-    .single()
-
-  if (byName) return byName
-
-  return null
+  return data || null
 }
 
 export async function getProvidersByServiceAndLocation(
   serviceSlug: string,
   locationSlug: string
 ) {
-  console.log('🔍 [getProvidersByServiceAndLocation] START', { serviceSlug, locationSlug })
-
-  // Get service and location info
   const [service, location] = await Promise.all([
     getServiceBySlug(serviceSlug),
     getLocationBySlug(locationSlug),
   ])
 
-  console.log('📋 [getProvidersByServiceAndLocation] Service:', service)
-  console.log('📍 [getProvidersByServiceAndLocation] Location:', location)
+  if (!service || !location) return []
+  if (!isValidUUID(service.id)) return []
 
-  if (!service || !location) {
-    console.log('❌ [getProvidersByServiceAndLocation] Service ou location manquant')
-    return []
-  }
-
-  // If the service ID is not a valid UUID (static fallback), return empty array
-  if (!isValidUUID(service.id)) {
-    console.log('❌ [getProvidersByServiceAndLocation] Service ID invalide:', service.id)
-    return []
-  }
-
-  console.log('🔎 [getProvidersByServiceAndLocation] Requête Supabase avec:', {
-    service_id: service.id,
-    city: location.name,
-  })
-
-  // Query providers by service AND city - no limit
+  // Neutral ordering: verified first, then alphabetical (no premium bias)
   const { data, error } = await supabase
     .from('providers')
     .select(`
@@ -178,29 +130,13 @@ export async function getProvidersByServiceAndLocation(
     .eq('provider_services.service_id', service.id)
     .ilike('address_city', location.name)
     .eq('is_active', true)
-    .order('is_premium', { ascending: false })
+    .order('is_verified', { ascending: false })
     .order('name')
 
-  if (error) {
-    console.error('❌ [getProvidersByServiceAndLocation] Erreur Supabase:', error)
-    throw error
-  }
-
-  console.log('✅ [getProvidersByServiceAndLocation] Résultats:', data?.length || 0, 'providers')
-  
-  // Log premiers résultats pour debug
-  if (data && data.length > 0) {
-    console.log('📋 Premiers 3 providers:', data.slice(0, 3).map(p => ({
-      name: p.name,
-      city: p.address_city,
-      services: p.provider_services,
-    })))
-  }
-
+  if (error) throw error
   return data || []
 }
 
-// Get all providers for a location (regardless of service) - no limit by default
 export async function getProvidersByLocation(locationSlug: string) {
   const location = await getLocationBySlug(locationSlug)
   if (!location) return []
@@ -210,20 +146,19 @@ export async function getProvidersByLocation(locationSlug: string) {
     .select('*')
     .ilike('address_city', location.name)
     .eq('is_active', true)
-    .order('is_premium', { ascending: false })
+    .order('is_verified', { ascending: false })
     .order('name')
 
   if (error) throw error
   return data || []
 }
 
-// Get all providers (for map and search) - no limit
 export async function getAllProviders() {
   const { data, error } = await supabase
     .from('providers')
     .select('*')
     .eq('is_active', true)
-    .order('is_premium', { ascending: false })
+    .order('is_verified', { ascending: false })
     .order('name')
 
   if (error) throw error
@@ -233,11 +168,7 @@ export async function getAllProviders() {
 export async function getProvidersByService(serviceSlug: string, limit?: number) {
   const service = await getServiceBySlug(serviceSlug)
   if (!service) return []
-
-  // If the service ID is not a valid UUID (static fallback), return empty array
-  if (!isValidUUID(service.id)) {
-    return []
-  }
+  if (!isValidUUID(service.id)) return []
 
   let query = supabase
     .from('providers')
@@ -250,15 +181,13 @@ export async function getProvidersByService(serviceSlug: string, limit?: number)
     `)
     .eq('provider_services.service_id', service.id)
     .eq('is_active', true)
-    .order('is_premium', { ascending: false })
+    .order('is_verified', { ascending: false })
 
-  // Apply limit only if specified
   if (limit) {
     query = query.limit(limit)
   }
 
   const { data, error } = await query
-
   if (error) throw error
   return data
 }
@@ -266,11 +195,7 @@ export async function getProvidersByService(serviceSlug: string, limit?: number)
 export async function getLocationsByService(serviceSlug: string) {
   const service = await getServiceBySlug(serviceSlug)
   if (!service) return []
-
-  // If the service ID is not a valid UUID (static fallback), return empty array
-  if (!isValidUUID(service.id)) {
-    return []
-  }
+  if (!isValidUUID(service.id)) return []
 
   const { data, error } = await supabase
     .from('locations')

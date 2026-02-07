@@ -24,6 +24,10 @@ Thumbs.db
 /playwright-report/
 /test-results/
 
+# TypeScript
+tsconfig.tsbuildinfo
+*.tsbuildinfo
+
 # Misc
 *.log
 npm-debug.log*

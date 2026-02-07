@@ -1,0 +1,26 @@
+name: Guardrails CI
+
+on:
+  push:
+    branches: ['master', 'claude/**']
+  pull_request:
+    branches: ['master']
+
+jobs:
+  guardrails:
+    name: SEO & Security Guardrails
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Admin auth invariant
+        run: bash scripts/ci/check-admin-auth.sh
+
+      - name: Toxic fields ban
+        run: bash scripts/ci/check-toxic-fields.sh
+
+      - name: Fallback URL ban
+        run: bash scripts/ci/check-fallback-urls.sh
+
+      - name: Build artifacts check
+        run: bash scripts/ci/check-build-artifacts.sh

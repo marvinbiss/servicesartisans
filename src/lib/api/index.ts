@@ -106,41 +106,7 @@ export {
   type BatchEmailParams,
 } from './resend-client'
 
-// Mapbox - Maps and geocoding
-export {
-  geocodeAddress,
-  reverseGeocode as mapboxReverseGeocode,
-  getDirections,
-  getDistanceAndDuration,
-  getIsochrone,
-  getStaticMapUrl,
-  formatDistance,
-  formatDuration,
-  calculateDistance as mapboxCalculateDistance,
-  isWithinRadius,
-  getBoundingBox,
-  type Coordinates,
-  type GeocodingResult as MapboxGeocodingResult,
-  type DirectionsResult,
-  type IsochroneResult,
-} from './mapbox-client'
-
-// Twilio - Calls
-export {
-  rechercherNumerosDisponibles,
-  acheterNumero,
-  listerNumeros,
-  supprimerNumero,
-  genererTwiMLRouting,
-  genererTwiMLMessagerie,
-  getHistoriqueAppels,
-  calculerStatsAppels,
-  formaterNumeroFR,
-  validerSignatureTwilio,
-  type NumeroVirtuel,
-  type AppelLog,
-  type StatsAppels,
-} from './twilio-calls'
+// Mapbox, Twilio — removed in v2 cleanup
 
 // ============================================
 // SERVICES

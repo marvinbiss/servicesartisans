@@ -4,7 +4,7 @@ import { useRef } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Star, MapPin, ChevronLeft, ChevronRight, Users, Zap, BadgeCheck } from 'lucide-react'
-import { Artisan } from './types'
+import type { LegacyArtisan } from '@/types/legacy'
 import { getArtisanUrl } from '@/lib/utils'
 
 interface SimilarArtisan {
@@ -22,7 +22,7 @@ interface SimilarArtisan {
 }
 
 interface ArtisanSimilarProps {
-  artisan: Artisan
+  artisan: LegacyArtisan
   similarArtisans?: SimilarArtisan[]
 }
 

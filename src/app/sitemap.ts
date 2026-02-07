@@ -1,302 +1,93 @@
 import { MetadataRoute } from 'next'
-import { createClient } from '@supabase/supabase-js'
 
-// Create Supabase client for fetching dynamic data
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
+const BASE_URL = 'https://servicesartisans.fr'
 
-// Helper to create URL-safe slugs
-function slugify(text: string): string {
-  return text
-    .toString()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, '-')
-    .replace(/[^\w-]+/g, '')
-    .replace(/--+/g, '-')
+/**
+ * Sitemap wave 1 — controlled activation via `noindex` column.
+ *
+ * Only providers with noindex=false are included.
+ * Hub pages (service × location) are included if they have at least one
+ * indexable provider.
+ *
+ * Static pages are always included.
+ */
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const now = new Date()
+
+  // Static pages (always indexed)
+  const staticEntries: MetadataRoute.Sitemap = [
+    { url: BASE_URL, lastModified: now, changeFrequency: 'daily', priority: 1 },
+    { url: `${BASE_URL}/services`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${BASE_URL}/faq`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${BASE_URL}/a-propos`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${BASE_URL}/contact`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${BASE_URL}/comment-ca-marche`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${BASE_URL}/tarifs-artisans`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${BASE_URL}/blog`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${BASE_URL}/mentions-legales`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
+    { url: `${BASE_URL}/confidentialite`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
+    { url: `${BASE_URL}/cgv`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
+    { url: `${BASE_URL}/accessibilite`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
+  ]
+
+  // Dynamic entries: only providers with noindex=false
+  let providerEntries: MetadataRoute.Sitemap = []
+  let hubEntries: MetadataRoute.Sitemap = []
+
+  // Dynamic entries require DB — no fallback, fail loud
+  const { createAdminClient } = await import('@/lib/supabase/admin')
+  const supabase = createAdminClient()
+
+  // Fetch all indexable providers (noindex=false)
+  // TODO: paginate when provider count exceeds Supabase default limit
+  const { data: providers, error } = await supabase
+    .from('providers')
+    .select('stable_id, specialty, address_city, updated_at')
+    .eq('is_active', true)
+    .eq('noindex', false)
+    .order('updated_at', { ascending: false })
+
+  if (error) {
+    throw new Error(`Sitemap DB error: ${error.message}`)
+  }
+
+  if (providers && providers.length > 0) {
+    // Track unique hub pages (service × location)
+    const hubs = new Set<string>()
+
+    providerEntries = providers
+      .filter((p) => p.stable_id && p.specialty && p.address_city)
+      .map((p) => {
+        const serviceSlug = slugify(p.specialty!)
+        const locationSlug = slugify(p.address_city!)
+        hubs.add(`${serviceSlug}/${locationSlug}`)
+
+        return {
+          url: `${BASE_URL}/services/${serviceSlug}/${locationSlug}/${p.stable_id}`,
+          lastModified: p.updated_at ? new Date(p.updated_at) : now,
+          changeFrequency: 'weekly' as const,
+          priority: 0.7,
+        }
+      })
+
+    // Hub pages for each unique service × location with indexable providers
+    hubEntries = Array.from(hubs).map((hub) => ({
+      url: `${BASE_URL}/services/${hub}`,
+      lastModified: now,
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    }))
+  }
+
+  return [...staticEntries, ...hubEntries, ...providerEntries]
 }
 
-const services = [
-  'plombier',
-  'electricien',
-  'serrurier',
-  'chauffagiste',
-  'peintre-en-batiment',
-  'menuisier',
-  'carreleur',
-  'macon',
-  'couvreur',
-  'jardinier',
-  'vitrier',
-  'climaticien',
-  'cuisiniste',
-  'solier',
-  'nettoyage',
-]
-
-const villes = [
-  'paris', 'marseille', 'lyon', 'toulouse', 'nice', 'nantes',
-  'strasbourg', 'montpellier', 'bordeaux', 'lille', 'rennes',
-  'reims', 'le-havre', 'saint-etienne', 'toulon', 'grenoble',
-  'dijon', 'angers', 'nimes', 'villeurbanne', 'clermont-ferrand',
-  'le-mans', 'aix-en-provence', 'brest', 'tours', 'amiens',
-]
-
-const regions = [
-  'ile-de-france', 'provence-alpes-cote-d-azur', 'auvergne-rhone-alpes',
-  'nouvelle-aquitaine', 'occitanie', 'hauts-de-france', 'grand-est',
-  'pays-de-la-loire', 'bretagne', 'normandie', 'bourgogne-franche-comte',
-  'centre-val-de-loire', 'corse',
-]
-
-const departements = [
-  'ain', 'aisne', 'allier', 'alpes-de-haute-provence', 'hautes-alpes',
-  'alpes-maritimes', 'ardeche', 'ardennes', 'ariege', 'aube', 'aude',
-  'aveyron', 'bouches-du-rhone', 'calvados', 'cantal', 'charente',
-  'charente-maritime', 'cher', 'correze', 'corse-du-sud', 'haute-corse',
-  'cote-d-or', 'cotes-d-armor', 'creuse', 'dordogne', 'doubs', 'drome',
-  'eure', 'eure-et-loir', 'finistere', 'gard', 'haute-garonne', 'gers',
-  'gironde', 'herault', 'ille-et-vilaine', 'indre', 'indre-et-loire',
-  'isere', 'jura', 'landes', 'loir-et-cher', 'loire', 'haute-loire',
-  'loire-atlantique', 'loiret', 'lot', 'lot-et-garonne', 'lozere',
-  'maine-et-loire', 'manche', 'marne', 'haute-marne', 'mayenne',
-  'meurthe-et-moselle', 'meuse', 'morbihan', 'moselle', 'nievre',
-  'nord', 'oise', 'orne', 'pas-de-calais', 'puy-de-dome', 'pyrenees-atlantiques',
-  'hautes-pyrenees', 'pyrenees-orientales', 'bas-rhin', 'haut-rhin',
-  'rhone', 'haute-saone', 'saone-et-loire', 'sarthe', 'savoie',
-  'haute-savoie', 'paris', 'seine-maritime', 'seine-et-marne', 'yvelines',
-  'deux-sevres', 'somme', 'tarn', 'tarn-et-garonne', 'var', 'vaucluse',
-  'vendee', 'vienne', 'haute-vienne', 'vosges', 'yonne', 'territoire-de-belfort',
-  'essonne', 'hauts-de-seine', 'seine-saint-denis', 'val-de-marne', 'val-d-oise',
-]
-
-const blogSlugs = [
-  'comment-choisir-plombier',
-  'renovation-energetique-2024',
-  'urgence-plomberie-que-faire',
-  'tendances-decoration-2024',
-]
-
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
-  const currentDate = new Date()
-
-  // Pages statiques principales
-  const staticPages: MetadataRoute.Sitemap = [
-    {
-      url: baseUrl,
-      lastModified: currentDate,
-      changeFrequency: 'daily',
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}/services`,
-      lastModified: currentDate,
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/villes`,
-      lastModified: currentDate,
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/regions`,
-      lastModified: currentDate,
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/departements`,
-      lastModified: currentDate,
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/devis`,
-      lastModified: currentDate,
-      changeFrequency: 'monthly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/contact`,
-      lastModified: currentDate,
-      changeFrequency: 'monthly',
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/a-propos`,
-      lastModified: currentDate,
-      changeFrequency: 'monthly',
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}/faq`,
-      lastModified: currentDate,
-      changeFrequency: 'monthly',
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/comment-ca-marche`,
-      lastModified: currentDate,
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/blog`,
-      lastModified: currentDate,
-      changeFrequency: 'weekly',
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/tarifs-artisans`,
-      lastModified: currentDate,
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/inscription`,
-      lastModified: currentDate,
-      changeFrequency: 'monthly',
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}/inscription-artisan`,
-      lastModified: currentDate,
-      changeFrequency: 'monthly',
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/connexion`,
-      lastModified: currentDate,
-      changeFrequency: 'monthly',
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}/mentions-legales`,
-      lastModified: currentDate,
-      changeFrequency: 'yearly',
-      priority: 0.3,
-    },
-    {
-      url: `${baseUrl}/confidentialite`,
-      lastModified: currentDate,
-      changeFrequency: 'yearly',
-      priority: 0.3,
-    },
-    {
-      url: `${baseUrl}/cgv`,
-      lastModified: currentDate,
-      changeFrequency: 'yearly',
-      priority: 0.3,
-    },
-  ]
-
-  // Pages de services
-  const servicePages: MetadataRoute.Sitemap = services.map((service) => ({
-    url: `${baseUrl}/services/${service}`,
-    lastModified: currentDate,
-    changeFrequency: 'weekly' as const,
-    priority: 0.8,
-  }))
-
-  // Pages services + villes principales
-  const serviceVillePages: MetadataRoute.Sitemap = services.flatMap((service) =>
-    villes.slice(0, 10).map((ville) => ({
-      url: `${baseUrl}/services/${service}/${ville}`,
-      lastModified: currentDate,
-      changeFrequency: 'weekly' as const,
-      priority: 0.7,
-    }))
-  )
-
-  // Pages régions
-  const regionPages: MetadataRoute.Sitemap = regions.map((region) => ({
-    url: `${baseUrl}/regions/${region}`,
-    lastModified: currentDate,
-    changeFrequency: 'weekly' as const,
-    priority: 0.6,
-  }))
-
-  // Pages départements
-  const departementPages: MetadataRoute.Sitemap = departements.map((dept) => ({
-    url: `${baseUrl}/departements/${dept}`,
-    lastModified: currentDate,
-    changeFrequency: 'weekly' as const,
-    priority: 0.5,
-  }))
-
-  // Pages blog
-  const blogPages: MetadataRoute.Sitemap = blogSlugs.map((slug) => ({
-    url: `${baseUrl}/blog/${slug}`,
-    lastModified: currentDate,
-    changeFrequency: 'monthly' as const,
-    priority: 0.6,
-  }))
-
-  // Fetch all active providers dynamically
-  let providerPages: MetadataRoute.Sitemap = []
-  try {
-    const { data: providers } = await supabase
-      .from('providers')
-      .select('slug, name, specialty, address_city, updated_at, is_verified, is_premium')
-      .eq('is_active', true)
-      .not('slug', 'is', null)
-      .order('is_premium', { ascending: false })
-      .order('is_verified', { ascending: false })
-      .limit(10000) // Limit for sitemap size
-
-    providerPages = (providers || []).map((provider) => {
-      // Generate SEO-friendly URL
-      const serviceSlug = slugify(provider.specialty || 'artisan')
-      const citySlug = slugify(provider.address_city || 'france')
-      const artisanSlug = provider.slug || slugify(provider.name || '')
-
-      return {
-        url: `${baseUrl}/services/${serviceSlug}/${citySlug}/${artisanSlug}`,
-        lastModified: provider.updated_at ? new Date(provider.updated_at) : currentDate,
-        changeFrequency: 'weekly' as const,
-        priority: provider.is_premium ? 0.8 : (provider.is_verified ? 0.7 : 0.6),
-      }
-    })
-  } catch {
-    // Silently fail - sitemap will just have fewer entries
-  }
-
-  // Also fetch from profiles for backwards compatibility
-  let artisanPages: MetadataRoute.Sitemap = []
-  try {
-    const { data: artisans } = await supabase
-      .from('profiles')
-      .select('id, updated_at')
-      .eq('user_type', 'artisan')
-      .eq('is_verified', true)
-      .in('subscription_plan', ['pro', 'premium'])
-      .limit(1000)
-
-    artisanPages = (artisans || []).map((artisan) => ({
-      url: `${baseUrl}/artisan/${artisan.id}`,
-      lastModified: artisan.updated_at ? new Date(artisan.updated_at) : currentDate,
-      changeFrequency: 'weekly' as const,
-      priority: 0.6,
-    }))
-  } catch {
-    // Silently fail
-  }
-
-  return [
-    ...staticPages,
-    ...servicePages,
-    ...serviceVillePages,
-    ...regionPages,
-    ...departementPages,
-    ...blogPages,
-    ...providerPages,
-    ...artisanPages,
-  ]
+/** Simple French-safe slugifier */
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
 }

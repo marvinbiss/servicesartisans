@@ -2,10 +2,10 @@
 
 import { motion } from 'framer-motion'
 import { Wrench, Clock, Euro, CheckCircle } from 'lucide-react'
-import { Artisan } from './types'
+import type { LegacyArtisan } from '@/types/legacy'
 
 interface ArtisanServicesProps {
-  artisan: Artisan
+  artisan: LegacyArtisan
 }
 
 export function ArtisanServices({ artisan }: ArtisanServicesProps) {

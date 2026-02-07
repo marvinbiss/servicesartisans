@@ -1,0 +1,279 @@
+'use client'
+
+import { useState, useEffect, useCallback } from 'react'
+import {
+  Loader2,
+  AlertCircle,
+  RefreshCw,
+  ArrowRight,
+  Clock,
+  Eye,
+  Send,
+  Inbox,
+} from 'lucide-react'
+import { StatCard } from '@/components/dashboard/StatCard'
+import { StatusTabs } from '@/components/dashboard/StatusTabs'
+import { Pagination } from '@/components/dashboard/Pagination'
+import { STATUS_META } from '@/types/leads'
+
+interface DispatchAssignment {
+  id: string
+  status: string
+  assigned_at: string
+  viewed_at: string | null
+  lead: {
+    id: string
+    service_name: string
+    city: string
+    urgency: string
+    status: string
+    created_at: string
+  } | null
+  provider: {
+    id: string
+    name: string
+    specialty: string
+    address_city: string
+  } | null
+}
+
+interface DispatchData {
+  assignments: DispatchAssignment[]
+  stats: {
+    pending: number
+    viewed: number
+    quoted: number
+    declined?: number
+    total: number
+  }
+  page: number
+  pageSize: number
+}
+
+type StatusFilter = 'all' | 'pending' | 'viewed' | 'quoted' | 'declined'
+
+export default function AdminDispatchPage() {
+  const [data, setData] = useState<DispatchData | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [page, setPage] = useState(1)
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all')
+  const [actionLoading, setActionLoading] = useState<string | null>(null)
+
+  const fetchData = useCallback(async () => {
+    setLoading(true)
+    setError(null)
+    try {
+      const params = new URLSearchParams({ page: String(page) })
+      if (statusFilter !== 'all') params.set('status', statusFilter)
+      const res = await fetch(`/api/admin/dispatch?${params}`)
+      if (res.ok) {
+        setData(await res.json())
+      } else {
+        const err = await res.json()
+        setError(err.error || 'Erreur')
+      }
+    } catch {
+      setError('Erreur de connexion')
+    } finally {
+      setLoading(false)
+    }
+  }, [page, statusFilter])
+
+  useEffect(() => {
+    fetchData()
+  }, [fetchData])
+
+  const handleReplay = async (assignmentId: string) => {
+    setActionLoading(assignmentId)
+    try {
+      const res = await fetch('/api/admin/dispatch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'replay', assignmentId }),
+      })
+      if (res.ok) {
+        fetchData()
+      } else {
+        const err = await res.json()
+        setError(err.error || 'Erreur')
+      }
+    } catch {
+      setError('Erreur')
+    } finally {
+      setActionLoading(null)
+    }
+  }
+
+  const statusTabs = [
+    { key: 'all', label: 'Tous', count: data?.stats.total || 0 },
+    { key: 'pending', label: 'En attente', count: data?.stats.pending || 0 },
+    { key: 'viewed', label: 'Vus', count: data?.stats.viewed || 0 },
+    { key: 'quoted', label: 'Devis', count: data?.stats.quoted || 0 },
+    { key: 'declined', label: 'Déclinés', count: data?.stats.declined || 0 },
+  ]
+
+  const responseRate = data && data.stats.total > 0
+    ? Math.round(((data.stats.viewed + data.stats.quoted) / data.stats.total) * 100)
+    : 0
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Monitoring Dispatch</h1>
+            <p className="text-gray-500 mt-1">Suivi des assignations en temps réel</p>
+          </div>
+          <button
+            onClick={fetchData}
+            className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 border border-gray-200 rounded-lg hover:bg-white transition-colors"
+          >
+            <RefreshCw className="w-4 h-4" />
+            Actualiser
+          </button>
+        </div>
+
+        {/* KPI cards */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
+          <StatCard
+            title="Total assignations"
+            value={data?.stats.total || 0}
+            icon={<Inbox className="w-5 h-5" />}
+            color="blue"
+          />
+          <StatCard
+            title="En attente"
+            value={data?.stats.pending || 0}
+            icon={<Clock className="w-5 h-5" />}
+            color="yellow"
+          />
+          <StatCard
+            title="Devis envoyés"
+            value={data?.stats.quoted || 0}
+            icon={<Send className="w-5 h-5" />}
+            color="green"
+          />
+          <StatCard
+            title="Taux réponse"
+            value={`${responseRate}%`}
+            icon={<Eye className="w-5 h-5" />}
+            color="indigo"
+          />
+        </div>
+
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-center gap-3">
+            <AlertCircle className="w-5 h-5 text-red-500" />
+            <p className="text-red-700 text-sm">{error}</p>
+          </div>
+        )}
+
+        {/* Status filter */}
+        <div className="mb-6">
+          <StatusTabs
+            tabs={statusTabs}
+            activeTab={statusFilter}
+            onTabChange={(k) => { setStatusFilter(k as StatusFilter); setPage(1) }}
+          />
+        </div>
+
+        {loading ? (
+          <div className="flex justify-center py-16">
+            <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+          </div>
+        ) : data ? (
+          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-gray-100 bg-gray-50/50">
+                    <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Lead</th>
+                    <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Artisan</th>
+                    <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Statut</th>
+                    <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Assigné le</th>
+                    <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Vu le</th>
+                    <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {data.assignments.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="px-4 py-12 text-center text-gray-500">
+                        <ArrowRight className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+                        Aucune assignation
+                      </td>
+                    </tr>
+                  ) : (
+                    data.assignments.map((a) => {
+                      const st = STATUS_META[a.status] || STATUS_META.pending
+                      return (
+                        <tr key={a.id} className="hover:bg-gray-50/50 transition-colors">
+                          <td className="px-4 py-3">
+                            <span className="font-medium text-gray-900">
+                              {a.lead?.service_name || '—'}
+                            </span>
+                            {a.lead?.city && (
+                              <p className="text-xs text-gray-400 mt-0.5">{a.lead.city}</p>
+                            )}
+                          </td>
+                          <td className="px-4 py-3">
+                            <span className="text-gray-700">{a.provider?.name || '—'}</span>
+                            {a.provider?.specialty && (
+                              <p className="text-xs text-gray-400 mt-0.5">{a.provider.specialty}</p>
+                            )}
+                          </td>
+                          <td className="px-4 py-3">
+                            <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${st.cls}`}>
+                              {st.label}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-gray-500 text-xs whitespace-nowrap">
+                            {new Date(a.assigned_at).toLocaleString('fr-FR', {
+                              day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
+                            })}
+                          </td>
+                          <td className="px-4 py-3 text-gray-500 text-xs whitespace-nowrap">
+                            {a.viewed_at
+                              ? new Date(a.viewed_at).toLocaleString('fr-FR', {
+                                  day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
+                                })
+                              : <span className="text-gray-300">—</span>}
+                          </td>
+                          <td className="px-4 py-3">
+                            {a.status === 'pending' && (
+                              <button
+                                onClick={() => handleReplay(a.id)}
+                                disabled={actionLoading === a.id}
+                                className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 disabled:opacity-50 transition-colors"
+                              >
+                                {actionLoading === a.id ? (
+                                  <Loader2 className="w-3 h-3 animate-spin" />
+                                ) : (
+                                  <RefreshCw className="w-3 h-3" />
+                                )}
+                                Relancer
+                              </button>
+                            )}
+                          </td>
+                        </tr>
+                      )
+                    })
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {data.assignments.length >= data.pageSize && (
+              <Pagination
+                page={page}
+                totalPages={Math.ceil((data.stats.total || 1) / data.pageSize)}
+                onPageChange={setPage}
+              />
+            )}
+          </div>
+        ) : null}
+      </div>
+    </div>
+  )
+}

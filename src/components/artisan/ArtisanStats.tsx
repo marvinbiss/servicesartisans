@@ -2,10 +2,10 @@
 
 import { motion } from 'framer-motion'
 import { Clock, TrendingUp, Calendar, MessageCircle, Shield, Award } from 'lucide-react'
-import { Artisan } from './types'
+import type { LegacyArtisan } from '@/types/legacy'
 
 interface ArtisanStatsProps {
-  artisan: Artisan
+  artisan: LegacyArtisan
 }
 
 export function ArtisanStats({ artisan }: ArtisanStatsProps) {

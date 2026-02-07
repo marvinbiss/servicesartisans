@@ -3,11 +3,11 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Phone, Mail, MessageCircle, CheckCircle, Zap, Clock, Shield, FileCheck, Award, Lock } from 'lucide-react'
-import { Artisan } from './types'
+import type { LegacyArtisan } from '@/types/legacy'
 import { QuoteRequestModal } from './QuoteRequestModal'
 
 interface ArtisanSidebarProps {
-  artisan: Artisan
+  artisan: LegacyArtisan
 }
 
 export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {

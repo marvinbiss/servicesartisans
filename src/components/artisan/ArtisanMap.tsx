@@ -2,10 +2,10 @@
 
 import { motion } from 'framer-motion'
 import { MapPin, Navigation } from 'lucide-react'
-import { Artisan } from './types'
+import type { LegacyArtisan } from '@/types/legacy'
 
 interface ArtisanMapProps {
-  artisan: Artisan
+  artisan: LegacyArtisan
 }
 
 export function ArtisanMap({ artisan }: ArtisanMapProps) {

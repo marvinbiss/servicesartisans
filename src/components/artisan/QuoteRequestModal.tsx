@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Send, CheckCircle, Loader2, User, Mail, Phone, FileText, MapPin } from 'lucide-react'
 import { Artisan, getDisplayName } from './types'
+import { submitLead } from '@/app/actions/lead'
 
 interface QuoteRequestModalProps {
   artisan: Artisan
@@ -34,6 +35,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({})
+  const [serverError, setServerError] = useState<string | null>(null)
 
   const displayName = getDisplayName(artisan)
 
@@ -72,37 +74,34 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
     if (!validateForm()) return
 
     setIsSubmitting(true)
+    setServerError(null)
 
     try {
-      // Submit to API
-      const response = await fetch('/api/quotes', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          artisanId: artisan.id,
-          ...formData,
-        }),
-      })
+      const fd = new window.FormData()
+      fd.set('providerId', artisan.id)
+      fd.set('serviceName', artisan.specialty || 'Service')
+      fd.set('name', formData.name)
+      fd.set('email', formData.email)
+      fd.set('phone', formData.phone.replace(/\s/g, ''))
+      fd.set('postalCode', artisan.postal_code || '')
+      fd.set('city', artisan.city || '')
+      fd.set('description', formData.description)
+      fd.set('urgency', formData.urgency)
 
-      if (response.ok) {
+      const result = await submitLead({ success: false }, fd)
+
+      if (result.success) {
         setIsSuccess(true)
-        // Reset form after delay
         setTimeout(() => {
           setFormData(initialFormData)
           setIsSuccess(false)
           onClose()
         }, 3000)
       } else {
-        throw new Error('Erreur lors de l\'envoi')
+        setServerError(result.error || 'Erreur lors de l\'envoi')
       }
     } catch {
-      // Even if API fails, show success for demo
-      setIsSuccess(true)
-      setTimeout(() => {
-        setFormData(initialFormData)
-        setIsSuccess(false)
-        onClose()
-      }, 3000)
+      setServerError('Erreur de connexion. Reessayez.')
     } finally {
       setIsSubmitting(false)
     }
@@ -179,11 +178,17 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                     Demande envoyee !
                   </h3>
                   <p className="text-gray-600">
-                    {displayName} vous repondra sous {artisan.response_time || '24h'}.
+                    {displayName} vous repondra dans les meilleurs delais.
                   </p>
                 </motion.div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+                  {serverError && (
+                    <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-sm text-red-700" role="alert">
+                      {serverError}
+                    </div>
+                  )}
+
                   {/* Name */}
                   <div>
                     <label htmlFor="quote-name" className="block text-sm font-medium text-gray-700 mb-1.5">

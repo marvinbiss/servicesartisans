@@ -24,34 +24,30 @@ export interface PortfolioItem {
 
 export interface Artisan {
   id: string
+  stable_id?: string
   slug?: string
   business_name: string | null
   first_name: string | null
   last_name: string | null
   avatar_url: string | null
   city: string
-  city_slug?: string       // Slug de la ville pour les URLs
+  city_slug?: string
   postal_code: string
   address?: string
-  department?: string      // Nom complet du département
-  department_code?: string // Code département (ex: "93")
-  region?: string          // Nom complet de la région
+  department?: string
+  department_code?: string
+  region?: string
   specialty: string
-  specialty_slug?: string  // Slug du service pour les URLs
+  specialty_slug?: string
   description?: string
   average_rating: number
   review_count: number
-  hourly_rate?: number
   is_verified: boolean
-  is_premium: boolean
   is_center?: boolean
   team_size?: number
   services: string[]
   service_prices: ServicePrice[]
   accepts_new_clients?: boolean
-  intervention_zone?: string
-  intervention_zones?: string[]
-  response_time?: string
   experience_years?: number
   certifications?: string[]
   insurance?: string[]
@@ -59,8 +55,6 @@ export interface Artisan {
   languages?: string[]
   emergency_available?: boolean
   member_since?: string
-  response_rate?: number
-  bookings_this_week?: number
   portfolio?: PortfolioItem[]
   faq?: Array<{ question: string; answer: string }>
   siret?: string
@@ -68,12 +62,13 @@ export interface Artisan {
   legal_form?: string
   creation_date?: string
   employee_count?: number
-  annual_revenue?: number
   phone?: string
   email?: string
   website?: string
   latitude?: number
   longitude?: number
+  // GUARD: Do NOT add is_premium, hourly_rate, response_time, etc. here.
+  // Legacy fields live in src/types/legacy/ (LegacyArtisan).
 }
 
 export interface Review {
