@@ -27,16 +27,11 @@ CREATE INDEX IF NOT EXISTS idx_lead_events_created ON lead_events(created_at DES
 -- ============================================================
 -- 2. access_logs — page access tracking
 -- ============================================================
-CREATE TABLE IF NOT EXISTS access_logs (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
-  path TEXT NOT NULL,
-  method TEXT NOT NULL DEFAULT 'GET',
-  status_code INTEGER,
-  ip_address TEXT,
-  user_agent TEXT,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
-);
+CREATE INDEX IF NOT EXISTS idx_access_logs_path
+  ON access_logs(path, created_at DESC);
+
+CREATE INDEX IF NOT EXISTS idx_access_logs_created
+  ON access_logs(created_at DESC);
 
 CREATE INDEX IF NOT EXISTS idx_access_logs_user ON access_logs(user_id, created_at DESC)
   WHERE user_id IS NOT NULL;
