@@ -4,6 +4,7 @@
  */
 
 import { createAdminClient } from '@/lib/supabase/admin'
+import { processLeadEvent } from '@/lib/notifications/lead-notifications'
 
 export type LeadEventType =
   | 'created'
@@ -27,16 +28,29 @@ export async function logLeadEvent(
   }
 ) {
   const supabase = createAdminClient()
-  const { error } = await supabase.from('lead_events').insert({
+  const { data, error } = await supabase.from('lead_events').insert({
     lead_id: leadId,
     event_type: eventType,
     provider_id: opts?.providerId ?? null,
     actor_id: opts?.actorId ?? null,
     metadata: opts?.metadata ?? {},
-  })
+  }).select('id').single()
   if (error) {
     console.error('Failed to log lead event:', error.message)
+    return
   }
+
+  // Fire-and-forget: process notifications (idempotent)
+  processLeadEvent({
+    id: data.id,
+    lead_id: leadId,
+    event_type: eventType,
+    provider_id: opts?.providerId ?? null,
+    actor_id: opts?.actorId ?? null,
+    metadata: opts?.metadata ?? {},
+  }).catch((err) => {
+    console.error('Notification processing failed:', err)
+  })
 }
 
 export async function logAccess(
