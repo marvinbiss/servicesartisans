@@ -133,6 +133,15 @@ export async function middleware(request: NextRequest) {
 
   response.headers.set('x-pathname', pathname)
 
+  // X-Robots-Tag: noindex for all private and admin routes
+  if (
+    pathname.startsWith('/espace-artisan') ||
+    pathname.startsWith('/espace-client') ||
+    pathname.startsWith('/admin')
+  ) {
+    response.headers.set('X-Robots-Tag', 'noindex, nofollow')
+  }
+
   return addSecurityHeaders(response, request)
 }
 
