@@ -150,17 +150,33 @@ describe('Dashboard V2 — No Public Imports', () => {
   }
 })
 
-describe('Dashboard V2 — X-Robots-Tag', () => {
+describe('Dashboard V2 — X-Robots-Tag + Cache-Control', () => {
+  const middleware = readFileSync(
+    join(process.cwd(), 'src/middleware.ts'),
+    'utf-8'
+  )
+
   it('middleware sets X-Robots-Tag for private routes', () => {
-    const middleware = readFileSync(
-      join(process.cwd(), 'src/middleware.ts'),
-      'utf-8'
-    )
     expect(middleware).toContain('X-Robots-Tag')
     expect(middleware).toContain('noindex, nofollow')
     expect(middleware).toContain('/espace-artisan')
     expect(middleware).toContain('/espace-client')
     expect(middleware).toContain('/admin')
+  })
+
+  it('middleware sets Cache-Control no-store for private routes', () => {
+    expect(middleware).toContain('Cache-Control')
+    expect(middleware).toContain('no-store')
+  })
+})
+
+describe('Dashboard V2 — Admin Auth on /api/admin/leads', () => {
+  it('/api/admin/leads/route.ts calls verifyAdmin()', () => {
+    const content = readFileSync(
+      join(process.cwd(), 'src/app/api/admin/leads/route.ts'),
+      'utf-8'
+    )
+    expect(content).toContain('verifyAdmin')
   })
 })
 

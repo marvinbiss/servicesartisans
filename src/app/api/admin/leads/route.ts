@@ -6,11 +6,15 @@
 
 import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { verifyAdmin } from '@/lib/admin-auth'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
   try {
+    const auth = await verifyAdmin()
+    if (!auth.success || !auth.admin) return auth.error!
+
     const supabase = createAdminClient()
     const { searchParams } = new URL(request.url)
 
