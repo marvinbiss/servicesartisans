@@ -1,16 +1,23 @@
 /**
  * Admin Leads API
  * GET: Lead counts + active artisans for a city × métier
- * Uses service_role (bypasses RLS)
+ * Uses service_role (bypasses RLS) — requires admin auth
  */
 
 import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { verifyAdmin } from '@/lib/admin-auth'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
   try {
+    // Verify admin authentication — deny all unauthenticated/non-admin access
+    const authResult = await verifyAdmin()
+    if (!authResult.success || !authResult.admin) {
+      return authResult.error
+    }
+
     const supabase = createAdminClient()
     const { searchParams } = new URL(request.url)
 
