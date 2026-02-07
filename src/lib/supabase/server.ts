@@ -5,9 +5,10 @@ export async function createClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-  // Build-time safety: ne rien faire si env manquantes
   if (!supabaseUrl || !supabaseKey) {
-    return null
+    throw new Error(
+      'Supabase env vars missing: NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY'
+    )
   }
 
   const cookieStore = cookies()
@@ -23,14 +24,20 @@ export async function createClient() {
         set(name: string, value: string, options: CookieOptions) {
           try {
             cookieStore.set({ name, value, ...options })
-          } catch {}
+          } catch {
+            // no-op (Server Components)
+          }
         },
         remove(name: string, options: CookieOptions) {
           try {
             cookieStore.set({ name, value: '', ...options })
-          } catch {}
+          } catch {
+            // no-op (Server Components)
+          }
         },
       },
     }
   )
 }
+
+        
