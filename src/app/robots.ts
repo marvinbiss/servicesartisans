@@ -20,6 +20,7 @@ export default function robots(): MetadataRoute.Robots {
           '/a-propos',
           '/contact',
           '/comment-ca-marche',
+          '/urgence',
         ],
         disallow: [
           '/api/',
