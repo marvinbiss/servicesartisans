@@ -6,6 +6,7 @@
 import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { createClient } from '@supabase/supabase-js'
+import { createClient as createServerClient } from '@/lib/supabase/server'
 import { getResendClient } from '@/lib/api/resend-client'
 import { z } from 'zod'
 
@@ -57,6 +58,16 @@ export async function POST(request: Request) {
     const supabase = createClient(supabaseUrl, supabaseServiceKey)
     const body = await request.json()
 
+    // Resolve authenticated user if present (null for anonymous submissions)
+    let clientId: string | null = null
+    try {
+      const serverSupabase = await createServerClient()
+      const { data: { user } } = await serverSupabase.auth.getUser()
+      clientId = user?.id ?? null
+    } catch {
+      // Anonymous submission — no session cookie
+    }
+
     // Validate input
     const validation = devisSchema.safeParse(body)
     if (!validation.success) {
@@ -72,6 +83,7 @@ export async function POST(request: Request) {
     const { data: devis, error: dbError } = await supabase
       .from('devis_requests')
       .insert({
+        client_id: clientId,
         service: data.service,
         urgency: data.urgency,
         description: data.description || null,

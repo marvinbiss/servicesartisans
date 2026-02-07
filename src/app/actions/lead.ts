@@ -51,6 +51,9 @@ export async function submitLead(
   try {
     const supabase = await createClient()
 
+    // Resolve authenticated user (null if anonymous submission)
+    const { data: { user } } = await supabase.auth.getUser()
+
     // Map urgency to DB enum
     const urgencyMap: Record<string, string> = {
       urgent: 'urgent',
@@ -59,6 +62,7 @@ export async function submitLead(
     }
 
     const { data: inserted, error } = await supabase.from('devis_requests').insert({
+      client_id: user?.id ?? null,
       service_name: data.serviceName,
       postal_code: data.postalCode || '',
       city: data.city || null,
