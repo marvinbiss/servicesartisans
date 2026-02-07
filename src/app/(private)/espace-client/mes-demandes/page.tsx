@@ -96,18 +96,21 @@ export default function MesDemandesPage() {
         status: statusFilter,
       })
       const res = await fetch(`/api/client/leads?${params}`)
-      const data = await res.json()
 
-      if (res.ok) {
-        setLeads(data.leads || [])
-        setStats(data.stats || null)
-        setPagination(data.pagination || null)
-      } else if (res.status === 401) {
+      if (res.status === 401) {
         window.location.href = '/connexion?redirect=/espace-client/mes-demandes'
         return
-      } else {
-        setError(data.error || 'Erreur lors du chargement')
       }
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        setError(data.error || 'Erreur lors du chargement')
+        return
+      }
+
+      const data = await res.json()
+      setLeads(data.leads || [])
+      setStats(data.stats || null)
+      setPagination(data.pagination || null)
     } catch {
       setError('Erreur de connexion')
     } finally {

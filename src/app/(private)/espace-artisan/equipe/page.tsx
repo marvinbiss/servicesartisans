@@ -37,9 +37,8 @@ const COLORS = [
   { name: 'Cyan', value: '#06b6d4' },
 ]
 
-const supabase = getSupabaseClient()
-
 export default function EquipePage() {
+  const supabase = getSupabaseClient()
   const [members, setMembers] = useState<TeamMember[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [showAddModal, setShowAddModal] = useState(false)

@@ -34,9 +34,8 @@ interface Stats {
   upcomingBookings: number
 }
 
-const supabase = getSupabaseClient()
-
 export default function StatistiquesPage() {
+  const supabase = getSupabaseClient()
   const [stats, setStats] = useState<Stats | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [period, setPeriod] = useState<'week' | 'month' | 'year'>('month')

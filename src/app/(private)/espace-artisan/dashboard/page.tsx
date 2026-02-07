@@ -48,22 +48,26 @@ export default function DashboardArtisanPage() {
     try {
       setError(null)
       const response = await fetch('/api/artisan/stats')
-      const data = await response.json()
 
-      if (response.ok) {
-        setStats(data.stats)
-        setDemandes(data.recentDemandes || [])
-        setProfile(data.profile)
-      } else if (response.status === 401) {
+      if (response.status === 401) {
         window.location.href = '/connexion?redirect=/espace-artisan'
         return
-      } else if (response.status === 403) {
-        setError('Accès réservé aux artisans. Veuillez vous inscrire en tant qu\'artisan.')
-      } else {
-        setError(data.error || 'Erreur lors du chargement des données')
       }
-    } catch (err) {
-      console.error('Error fetching dashboard:', err)
+      if (response.status === 403) {
+        setError('Accès réservé aux artisans. Veuillez vous inscrire en tant qu\'artisan.')
+        return
+      }
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}))
+        setError(data.error || 'Erreur lors du chargement des données')
+        return
+      }
+
+      const data = await response.json()
+      setStats(data.stats)
+      setDemandes(data.recentDemandes || [])
+      setProfile(data.profile)
+    } catch {
       setError('Erreur de connexion. Veuillez vérifier votre connexion internet.')
     } finally {
       setLoading(false)

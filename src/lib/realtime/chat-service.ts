@@ -103,9 +103,16 @@ export interface QuickReplyTemplate {
 }
 
 class ChatService {
-  private supabase = getSupabaseClient()
+  private _supabase: ReturnType<typeof getSupabaseClient> | null = null
   private channels: Map<string, RealtimeChannel> = new Map()
   private typingTimeouts: Map<string, NodeJS.Timeout> = new Map()
+
+  private get supabase() {
+    if (!this._supabase) {
+      this._supabase = getSupabaseClient()
+    }
+    return this._supabase
+  }
 
   /**
    * Subscribe to a conversation for real-time messages

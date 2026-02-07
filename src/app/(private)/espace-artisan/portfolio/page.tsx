@@ -40,18 +40,20 @@ export default function PortfolioPage() {
     try {
       setError(null)
       const response = await fetch('/api/portfolio')
-      const data = await response.json()
 
-      if (response.ok) {
-        setItems(data.items || [])
-      } else if (response.status === 401) {
+      if (response.status === 401) {
         window.location.href = '/connexion?redirect=/espace-artisan/portfolio'
         return
-      } else {
-        setError(data.error || 'Erreur lors du chargement')
       }
-    } catch (err) {
-      console.error('Error fetching portfolio:', err)
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}))
+        setError(data.error || 'Erreur lors du chargement')
+        return
+      }
+
+      const data = await response.json()
+      setItems(data.items || [])
+    } catch {
       setError('Erreur de connexion')
     } finally {
       setLoading(false)

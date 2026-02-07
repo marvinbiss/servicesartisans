@@ -57,9 +57,6 @@ interface UserProfile {
   is_verified: boolean
 }
 
-// Use shared Supabase client singleton
-const supabase = getSupabaseClient()
-
 // Génération des jours du mois
 function getDaysInMonth(year: number, month: number) {
   const date = new Date(year, month, 1)
@@ -80,6 +77,7 @@ const defaultSlots = [
 ]
 
 export default function CalendrierPage() {
+  const supabase = getSupabaseClient()
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [showSlotModal, setShowSlotModal] = useState(false)

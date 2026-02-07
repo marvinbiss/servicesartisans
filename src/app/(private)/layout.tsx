@@ -11,12 +11,21 @@ export default async function PrivateLayout({
 }: {
   children: React.ReactNode
 }) {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  try {
+    const supabase = await createClient()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
-  if (!user) {
+    if (!user) {
+      redirect('/connexion')
+    }
+  } catch (e: unknown) {
+    // redirect() throws a special NEXT_REDIRECT error — re-throw it
+    if (e && typeof e === 'object' && 'digest' in e) {
+      throw e
+    }
+    // Supabase error (down, timeout, malformed cookie) — redirect to login
     redirect('/connexion')
   }
 

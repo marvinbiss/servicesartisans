@@ -72,15 +72,19 @@ export default function LeadDetailPage() {
     try {
       setError(null)
       const res = await fetch(`/api/artisan/leads/${id}`)
-      const data = await res.json()
-      if (res.ok) {
-        setAssignment(data.assignment)
-      } else if (res.status === 401) {
+
+      if (res.status === 401) {
         window.location.href = '/connexion?redirect=/espace-artisan/leads'
         return
-      } else {
-        setError(data.error || 'Erreur')
       }
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        setError(data.error || 'Erreur')
+        return
+      }
+
+      const data = await res.json()
+      setAssignment(data.assignment)
     } catch {
       setError('Erreur de connexion')
     } finally {
@@ -91,10 +95,10 @@ export default function LeadDetailPage() {
   const fetchEvents = useCallback(async () => {
     try {
       const res = await fetch(`/api/artisan/leads/${id}/history`)
+      if (!res.ok) return
+
       const data = await res.json()
-      if (res.ok) {
-        setEvents(data.events || [])
-      }
+      setEvents(data.events || [])
     } catch {
       // Non-blocking
     } finally {
@@ -119,7 +123,7 @@ export default function LeadDetailPage() {
           prev ? { ...prev, status: 'viewed', viewed_at: new Date().toISOString() } : prev
         )
         fetchEvents()
-      })
+      }).catch(() => { /* non-blocking */ })
     }
   }, [assignment?.status, id]) // eslint-disable-line react-hooks/exhaustive-deps
 

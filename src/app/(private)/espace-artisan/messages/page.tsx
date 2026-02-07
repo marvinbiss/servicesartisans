@@ -60,16 +60,20 @@ export default function MessagesArtisanPage() {
     try {
       setLoading(true)
       const response = await fetch('/api/artisan/messages')
-      const data = await response.json()
 
-      if (response.ok) {
-        setConversations(data.conversations || [])
-        if (data.conversations?.length > 0) {
-          setSelectedConversation(data.conversations[0])
-        }
+      if (response.status === 401) {
+        window.location.href = '/connexion?redirect=/espace-artisan/messages'
+        return
       }
-    } catch (error) {
-      console.error('Error fetching conversations:', error)
+      if (!response.ok) return
+
+      const data = await response.json()
+      setConversations(data.conversations || [])
+      if (data.conversations?.length > 0) {
+        setSelectedConversation(data.conversations[0])
+      }
+    } catch {
+      // Network error — show empty state
     } finally {
       setLoading(false)
     }
@@ -78,18 +82,16 @@ export default function MessagesArtisanPage() {
   const fetchMessages = async (partnerId: string) => {
     try {
       const response = await fetch(`/api/artisan/messages?with=${partnerId}`)
-      const data = await response.json()
+      if (!response.ok) return
 
-      if (response.ok) {
-        setMessages(data.messages || [])
-        // Extract current user ID from messages
-        if (data.messages?.length > 0) {
-          const msg = data.messages[0]
-          setCurrentUserId(msg.sender_id === partnerId ? msg.receiver_id : msg.sender_id)
-        }
+      const data = await response.json()
+      setMessages(data.messages || [])
+      if (data.messages?.length > 0) {
+        const msg = data.messages[0]
+        setCurrentUserId(msg.sender_id === partnerId ? msg.receiver_id : msg.sender_id)
       }
-    } catch (error) {
-      console.error('Error fetching messages:', error)
+    } catch {
+      // Network error — non-blocking
     }
   }
 

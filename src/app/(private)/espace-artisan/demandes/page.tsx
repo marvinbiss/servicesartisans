@@ -65,14 +65,18 @@ export default function DemandesArtisanPage() {
         ? '/api/artisan/demandes'
         : `/api/artisan/demandes?status=${filterStatus}`
       const response = await fetch(url)
-      const data = await response.json()
 
-      if (response.ok) {
-        setDemandes(data.demandes || [])
-        setStats(data.stats)
+      if (response.status === 401) {
+        window.location.href = '/connexion?redirect=/espace-artisan/demandes'
+        return
       }
-    } catch (error) {
-      console.error('Error fetching demandes:', error)
+      if (!response.ok) return
+
+      const data = await response.json()
+      setDemandes(data.demandes || [])
+      setStats(data.stats)
+    } catch {
+      // Network error — show empty state
     } finally {
       setLoading(false)
     }
@@ -106,14 +110,13 @@ export default function DemandesArtisanPage() {
         }),
       })
 
-      const data = await response.json()
-
       if (response.ok) {
         setShowDevisModal(false)
         setSelectedDemande(null)
         await fetchDemandes()
         alert('Devis envoyé avec succès!')
       } else {
+        const data = await response.json().catch(() => ({}))
         alert(data.error || 'Erreur lors de l\'envoi du devis')
       }
     } catch (error) {
