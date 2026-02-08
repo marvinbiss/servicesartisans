@@ -10,6 +10,7 @@ import { SITE_URL } from '@/lib/seo/config'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularCitiesLinks } from '@/components/InternalLinks'
 import { popularServices } from '@/lib/constants/navigation'
+import { services as staticServicesList, villes } from '@/lib/data/france'
 
 // ISR: Revalidate every 30 minutes
 export const revalidate = REVALIDATE.serviceDetail
@@ -20,38 +21,56 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { service: serviceSlug } = await params
-  
+
+  let serviceName = ''
+
   try {
     const service = await getServiceBySlug(serviceSlug)
-    if (!service) notFound()
+    if (service) serviceName = service.name
+  } catch {
+    // DB down — fallback to static data
+  }
 
-    const title = `${service.name} - Trouvez un ${service.name.toLowerCase()} près de chez vous`
-    const description = `Comparez les meilleurs ${service.name.toLowerCase()}s de France. Consultez les avis, obtenez des devis gratuits. Plus de 500 villes couvertes.`
+  if (!serviceName) {
+    const staticSvc = staticServicesList.find(s => s.slug === serviceSlug)
+    if (!staticSvc) notFound()
+    serviceName = staticSvc.name
+  }
 
-    return {
+  const title = `${serviceName} - Trouvez un ${serviceName.toLowerCase()} près de chez vous`
+  const description = `Comparez les meilleurs ${serviceName.toLowerCase()}s de France. Consultez les avis, obtenez des devis gratuits. Plus de 500 villes couvertes.`
+
+  return {
+    title,
+    description,
+    openGraph: {
       title,
       description,
-      openGraph: {
-        title,
-        description,
-        type: 'website',
-      },
-      alternates: {
-        canonical: `${SITE_URL}/services/${serviceSlug}`,
-      },
-    }
-  } catch (error) {
-    console.error('Service page metadata error:', error)
-    throw error  // Let error boundary handle it → 500
+      type: 'website',
+    },
+    alternates: {
+      canonical: `${SITE_URL}/services/${serviceSlug}`,
+    },
   }
+}
+
+/** Convert static villes to Location-like shape for fallback display */
+function getStaticCities() {
+  return villes.slice(0, 20).map(v => ({
+    id: v.slug,
+    name: v.name,
+    slug: v.slug,
+    department_code: v.departementCode,
+    region_name: v.region,
+  }))
 }
 
 export default async function ServicePage({ params }: PageProps) {
   const { service: serviceSlug } = await params
 
-  let service
-  let topCities
-  let recentProviders
+  let service: { name: string; slug: string; description?: string; category?: string } | null = null
+  let topCities: any[] = []
+  let recentProviders: any[] = []
 
   try {
     service = await getServiceBySlug(serviceSlug)
@@ -63,11 +82,19 @@ export default async function ServicePage({ params }: PageProps) {
     ])
   } catch (error) {
     console.error('Service page DB error:', error)
-    throw error
+    // Continue with fallback data instead of crashing
   }
 
+  // Fallback to static data if DB failed
   if (!service) {
-    notFound()
+    const staticSvc = staticServicesList.find(s => s.slug === serviceSlug)
+    if (!staticSvc) notFound()
+    service = { name: staticSvc.name, slug: staticSvc.slug }
+  }
+
+  // Fallback cities if DB returned nothing
+  if (!topCities || topCities.length === 0) {
+    topCities = getStaticCities()
   }
 
   // Grouper les villes par région
