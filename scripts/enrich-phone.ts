@@ -1,17 +1,18 @@
 /**
- * Enrichissement Telephonique des Artisans via Pages Jaunes
+ * Enrichissement Telephonique des Artisans via Pages Jaunes (Playwright)
  *
- * Recherche les numeros de telephone des artisans sur pagesjaunes.fr
- * et met a jour la base de donnees Supabase.
+ * Utilise un navigateur headless pour contourner la protection anti-bot de PJ.
+ * Extrait les telephones depuis le JSON-LD des fiches individuelles.
  *
  * Usage:
  *   npx tsx scripts/enrich-phone.ts                    # Lancement complet
  *   npx tsx scripts/enrich-phone.ts --resume           # Reprendre apres interruption
  *   npx tsx scripts/enrich-phone.ts --limit 500        # Limiter a 500 artisans
  *   npx tsx scripts/enrich-phone.ts --dept 75          # Uniquement Paris
- *   npx tsx scripts/enrich-phone.ts --dept 13 --limit 100 --resume
+ *   npx tsx scripts/enrich-phone.ts --tabs 5           # 5 onglets paralleles
  */
 
+import { chromium, Browser, BrowserContext, Page } from 'playwright'
 import { supabase } from './lib/supabase-admin'
 import * as fs from 'fs'
 import * as path from 'path'
@@ -21,20 +22,18 @@ import * as path from 'path'
 // ============================================
 
 const BATCH_SIZE = 100
-const RATE_LIMIT_MS = 1000         // 1 requete par seconde
-const MAX_JITTER_MS = 500          // Jitter aleatoire 0-500ms
-const MAX_RETRIES = 3
-const BACKOFF_BASE_MS = 5000       // Backoff exponentiel: 5s, 10s, 20s
+const DEFAULT_PARALLEL_TABS = 3
+const NAV_TIMEOUT = 20000
+const DELAY_BETWEEN_REQUESTS_MS = 2000
+const MAX_JITTER_MS = 1500
 const PROGRESS_FILE = path.join(__dirname, '.enrich-phone-progress.json')
-const PROGRESS_REPORT_INTERVAL = 50
+const PROGRESS_REPORT_INTERVAL = 25
 
-// User-Agent realiste (Chrome sur Windows)
 const USER_AGENTS = [
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
-  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-  'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0',
-  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Safari/605.1.15',
+  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:122.0) Gecko/20100101 Firefox/122.0',
 ]
 
 // ============================================
@@ -42,6 +41,8 @@ const USER_AGENTS = [
 // ============================================
 
 let shuttingDown = false
+let browser: Browser | null = null
+let context: BrowserContext | null = null
 
 const stats = {
   processed: 0,
@@ -62,6 +63,7 @@ let startTime = Date.now()
 interface Provider {
   id: string
   name: string
+  siren: string | null
   address_city: string | null
   address_postal_code: string | null
   address_department: string | null
@@ -84,6 +86,7 @@ interface CliArgs {
   resume: boolean
   limit: number
   dept?: string
+  tabs: number
 }
 
 // ============================================
@@ -94,12 +97,8 @@ function sleep(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-function randomJitter(): number {
-  return Math.floor(Math.random() * MAX_JITTER_MS)
-}
-
-function getRandomUserAgent(): string {
-  return USER_AGENTS[Math.floor(Math.random() * USER_AGENTS.length)]
+function randomDelay(): number {
+  return DELAY_BETWEEN_REQUESTS_MS + Math.floor(Math.random() * MAX_JITTER_MS)
 }
 
 function formatDuration(ms: number): string {
@@ -115,70 +114,44 @@ function formatNumber(n: number): string {
   return n.toLocaleString('fr-FR')
 }
 
+/** Normalize string for PJ URL slugs */
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // Remove accents
+    .replace(/[^a-z0-9\s-]/g, '') // Keep only alphanumeric, spaces, hyphens
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+    .substring(0, 80)
+}
+
 // ============================================
 // PHONE VALIDATION & NORMALIZATION
 // ============================================
 
-/**
- * Nettoie et normalise un numero de telephone francais.
- * Retourne le format 0XXXXXXXXX (10 chiffres) ou null si invalide.
- */
 function normalizePhone(raw: string): string | null {
   if (!raw) return null
-
-  // Supprimer tous les caracteres non-numeriques sauf le +
   let cleaned = raw.replace(/[^\d+]/g, '')
-
-  // Convertir +33 en 0
-  if (cleaned.startsWith('+33')) {
-    cleaned = '0' + cleaned.substring(3)
-  }
-
-  // Convertir 0033 en 0
-  if (cleaned.startsWith('0033')) {
-    cleaned = '0' + cleaned.substring(4)
-  }
-
-  // Verifier le format: 10 chiffres commencant par 0[1-9]
-  if (!/^0[1-9]\d{8}$/.test(cleaned)) {
-    return null
-  }
-
-  // Exclure les numeros surtaxes (08XX) sauf 0800 (gratuit)
-  if (cleaned.startsWith('089') || cleaned.startsWith('0891') || cleaned.startsWith('0892') || cleaned.startsWith('0899')) {
-    return null
-  }
-
+  if (cleaned.startsWith('+33')) cleaned = '0' + cleaned.substring(3)
+  if (cleaned.startsWith('0033')) cleaned = '0' + cleaned.substring(4)
+  if (!/^0[1-9]\d{8}$/.test(cleaned)) return null
+  if (cleaned.startsWith('089')) return null
   return cleaned
 }
 
-/**
- * Valide qu'un email a un format correct.
- */
 function isValidEmail(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && !email.includes('..')
 }
 
-/**
- * Valide et nettoie une URL de site web.
- */
-function normalizeWebsite(raw: string): string | null {
+function normalizeWebsite(raw: string | undefined | null): string | null {
   if (!raw) return null
-
   let url = raw.trim()
-
-  // Ajouter https:// si absent
-  if (!url.startsWith('http://') && !url.startsWith('https://')) {
-    url = 'https://' + url
-  }
-
+  if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url
   try {
     const parsed = new URL(url)
-    // Exclure les domaines generiques (pages jaunes, facebook, etc.)
-    const excludedDomains = ['pagesjaunes.fr', 'facebook.com', 'instagram.com', 'twitter.com', 'linkedin.com']
-    if (excludedDomains.some(d => parsed.hostname.includes(d))) {
-      return null
-    }
+    const excluded = ['pagesjaunes.fr', 'facebook.com', 'instagram.com', 'twitter.com', 'linkedin.com', 'x.com']
+    if (excluded.some(d => parsed.hostname.includes(d))) return null
     return parsed.toString()
   } catch {
     return null
@@ -186,221 +159,207 @@ function normalizeWebsite(raw: string): string | null {
 }
 
 // ============================================
-// PAGES JAUNES SCRAPING
+// PLAYWRIGHT BROWSER MANAGEMENT
+// ============================================
+
+async function initBrowser(numTabs: number): Promise<Page[]> {
+  browser = await chromium.launch({ headless: true })
+  context = await browser.newContext({
+    userAgent: USER_AGENTS[0],
+    locale: 'fr-FR',
+    viewport: { width: 1920, height: 1080 },
+    extraHTTPHeaders: {
+      'Accept-Language': 'fr-FR,fr;q=0.9',
+    },
+  })
+
+  const pages: Page[] = []
+  for (let i = 0; i < numTabs; i++) {
+    const page = await context.newPage()
+    // Block unnecessary resources for speed
+    await page.route('**/*.{png,jpg,jpeg,gif,svg,webp,ico,woff,woff2,ttf,eot}', route => route.abort())
+    await page.route('**/ads*', route => route.abort())
+    await page.route('**/analytics*', route => route.abort())
+    await page.route('**/tracking*', route => route.abort())
+    await page.route('**/gtm*', route => route.abort())
+    await page.route('**/google-analytics*', route => route.abort())
+    pages.push(page)
+  }
+
+  // Accept cookies on first page
+  try {
+    await pages[0].goto('https://www.pagesjaunes.fr', { waitUntil: 'domcontentloaded', timeout: 15000 })
+    const consentBtn = await pages[0].$('#didomi-notice-agree-button')
+    if (consentBtn) {
+      await consentBtn.click()
+      await sleep(1000)
+    }
+  } catch { /* ignore */ }
+
+  return pages
+}
+
+async function closeBrowser(): Promise<void> {
+  if (context) await context.close().catch(() => {})
+  if (browser) await browser.close().catch(() => {})
+}
+
+// ============================================
+// PAGES JAUNES SCRAPING WITH PLAYWRIGHT
 // ============================================
 
 /**
- * Extrait les numeros de telephone depuis le HTML de Pages Jaunes.
- * Recherche dans plusieurs patterns courants du site.
- */
-function extractPhoneFromHtml(html: string): string | null {
-  const phones: string[] = []
-
-  // Pattern 1: data-phone attribute
-  const dataPhoneRegex = /data-phone="([^"]+)"/gi
-  let match: RegExpExecArray | null
-  while ((match = dataPhoneRegex.exec(html)) !== null) {
-    const normalized = normalizePhone(match[1])
-    if (normalized) phones.push(normalized)
-  }
-
-  // Pattern 2: tel: links
-  const telLinkRegex = /href="tel:([^"]+)"/gi
-  while ((match = telLinkRegex.exec(html)) !== null) {
-    const normalized = normalizePhone(match[1])
-    if (normalized) phones.push(normalized)
-  }
-
-  // Pattern 3: data-num attribute (PJ specific)
-  const dataNumRegex = /data-num="([^"]+)"/gi
-  while ((match = dataNumRegex.exec(html)) !== null) {
-    const normalized = normalizePhone(match[1])
-    if (normalized) phones.push(normalized)
-  }
-
-  // Pattern 4: Phone number in visible text (French format)
-  // 0X XX XX XX XX or 0X.XX.XX.XX.XX or 0X-XX-XX-XX-XX or +33 X XX XX XX XX
-  const visiblePhoneRegex = /(?:(?:\+33|0033)\s*[1-9](?:[\s.-]*\d{2}){4}|0[1-9](?:[\s.-]*\d{2}){4})/g
-  while ((match = visiblePhoneRegex.exec(html)) !== null) {
-    const normalized = normalizePhone(match[0])
-    if (normalized) phones.push(normalized)
-  }
-
-  // Pattern 5: JSON-LD structured data
-  const jsonLdRegex = /"telephone"\s*:\s*"([^"]+)"/gi
-  while ((match = jsonLdRegex.exec(html)) !== null) {
-    const normalized = normalizePhone(match[1])
-    if (normalized) phones.push(normalized)
-  }
-
-  // Retourner le premier numero valide trouve (priorite aux patterns specifiques PJ)
-  if (phones.length > 0) {
-    return phones[0]
-  }
-
-  return null
-}
-
-/**
- * Extrait l'email depuis le HTML de Pages Jaunes.
- */
-function extractEmailFromHtml(html: string): string | null {
-  // Pattern 1: mailto: links
-  const mailtoRegex = /href="mailto:([^"?]+)"/gi
-  const match = mailtoRegex.exec(html)
-  if (match) {
-    const email = match[1].trim().toLowerCase()
-    if (isValidEmail(email)) return email
-  }
-
-  // Pattern 2: data-email attribute
-  const dataEmailRegex = /data-email="([^"]+)"/gi
-  const match2 = dataEmailRegex.exec(html)
-  if (match2) {
-    const email = match2[1].trim().toLowerCase()
-    if (isValidEmail(email)) return email
-  }
-
-  // Pattern 3: JSON-LD structured data
-  const jsonLdRegex = /"email"\s*:\s*"([^"]+)"/gi
-  const match3 = jsonLdRegex.exec(html)
-  if (match3) {
-    const email = match3[1].trim().toLowerCase()
-    if (isValidEmail(email)) return email
-  }
-
-  return null
-}
-
-/**
- * Extrait le site web depuis le HTML de Pages Jaunes.
- */
-function extractWebsiteFromHtml(html: string): string | null {
-  // Pattern 1: Lien vers le site web (class contenant "website" ou "site")
-  const websiteLinkRegex = /class="[^"]*(?:website|site-internet|site_web)[^"]*"[^>]*href="([^"]+)"/gi
-  const match = websiteLinkRegex.exec(html)
-  if (match) {
-    return normalizeWebsite(match[1])
-  }
-
-  // Pattern 2: data-pjlb contenant "website" suivi d'un href
-  const pjWebsiteRegex = /data-pjlb="[^"]*website[^"]*"[^>]*href="([^"]+)"/gi
-  const match2 = pjWebsiteRegex.exec(html)
-  if (match2) {
-    return normalizeWebsite(match2[1])
-  }
-
-  // Pattern 3: JSON-LD structured data
-  const jsonLdRegex = /"url"\s*:\s*"([^"]+)"/gi
-  let jsonMatch: RegExpExecArray | null
-  while ((jsonMatch = jsonLdRegex.exec(html)) !== null) {
-    const url = normalizeWebsite(jsonMatch[1])
-    if (url) return url
-  }
-
-  return null
-}
-
-/**
- * Recherche un artisan sur Pages Jaunes et extrait ses coordonnees.
+ * Search PJ for an artisan and extract contact info.
+ * Strategy:
+ *   1. Search by name + city on PJ
+ *   2. Find the first matching result
+ *   3. Visit detail page → extract phone from JSON-LD
  */
 async function searchPagesJaunes(
+  page: Page,
   name: string,
   city: string,
   postalCode?: string,
+  dept?: string,
 ): Promise<ScrapedContact | null> {
-  // Premiere tentative: recherche par nom + ville
-  const searchUrl = `https://www.pagesjaunes.fr/pagesblanches/recherche?quoiqui=${encodeURIComponent(name)}&ou=${encodeURIComponent(city)}`
+  try {
+    // Build search URL - use the /annuaire format
+    const cityPart = dept ? `${slugify(city)}-${dept}` : slugify(city)
+    const namePart = slugify(name)
+    const searchUrl = `https://www.pagesjaunes.fr/annuaire/${cityPart}/${namePart}`
 
-  let html = await fetchPageWithRetry(searchUrl)
+    // Navigate to search
+    const response = await page.goto(searchUrl, {
+      waitUntil: 'domcontentloaded',
+      timeout: NAV_TIMEOUT,
+    })
 
-  // Si la recherche par ville ne donne rien, essayer avec le code postal
-  if (!html && postalCode) {
-    const fallbackUrl = `https://www.pagesjaunes.fr/pagesblanches/recherche?quoiqui=${encodeURIComponent(name)}&ou=${encodeURIComponent(postalCode)}`
-    html = await fetchPageWithRetry(fallbackUrl)
+    if (!response || response.status() >= 400) {
+      // Fallback: try with postal code
+      if (postalCode) {
+        const fallbackUrl = `https://www.pagesjaunes.fr/annuaire/${postalCode}/${namePart}`
+        const resp2 = await page.goto(fallbackUrl, {
+          waitUntil: 'domcontentloaded',
+          timeout: NAV_TIMEOUT,
+        })
+        if (!resp2 || resp2.status() >= 400) return null
+      } else {
+        return null
+      }
+    }
+
+    await page.waitForTimeout(1000)
+
+    // Check if we landed on a detail page directly (redirect)
+    if (page.url().includes('/pros/')) {
+      return extractFromPage(page)
+    }
+
+    // We're on search results page - find the first listing's detail link
+    const detailHref = await page.$eval(
+      '.bi-content a[href*="/pros/"], .bi-header-title a[href*="/pros/"], .bi-denomination a[href*="/pros/"]',
+      el => el.getAttribute('href')
+    ).catch(() => null)
+
+    if (!detailHref) {
+      // No results found
+      return null
+    }
+
+    // Visit the detail page
+    const detailUrl = detailHref.startsWith('http')
+      ? detailHref
+      : `https://www.pagesjaunes.fr${detailHref}`
+
+    await page.goto(detailUrl, {
+      waitUntil: 'domcontentloaded',
+      timeout: NAV_TIMEOUT,
+    })
+    await page.waitForTimeout(800)
+
+    return extractFromPage(page)
+  } catch {
+    return null
   }
-
-  if (!html) return null
-
-  // Extraire les informations de contact
-  const phone = extractPhoneFromHtml(html)
-  const email = extractEmailFromHtml(html)
-  const website = extractWebsiteFromHtml(html)
-
-  // Si on n'a trouve aucune information utile, retourner null
-  if (!phone && !email && !website) return null
-
-  const result: ScrapedContact = {}
-  if (phone) result.phone = phone
-  if (email) result.email = email
-  if (website) result.website = website
-
-  return result
 }
 
 /**
- * Fetch une page avec gestion des erreurs et retries.
+ * Extract contact info from a PJ page (detail or search results).
+ * Prioritizes JSON-LD structured data, falls back to regex.
  */
-async function fetchPageWithRetry(url: string): Promise<string | null> {
-  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
-    try {
-      const response = await fetch(url, {
-        headers: {
-          'User-Agent': getRandomUserAgent(),
-          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-          'Accept-Language': 'fr-FR,fr;q=0.9,en-US;q=0.5,en;q=0.3',
-          'Accept-Encoding': 'gzip, deflate, br',
-          'DNT': '1',
-          'Connection': 'keep-alive',
-          'Upgrade-Insecure-Requests': '1',
-          'Sec-Fetch-Dest': 'document',
-          'Sec-Fetch-Mode': 'navigate',
-          'Sec-Fetch-Site': 'none',
-          'Sec-Fetch-User': '?1',
-          'Cache-Control': 'max-age=0',
-        },
-        signal: AbortSignal.timeout(15000),
-        redirect: 'follow',
-      })
+async function extractFromPage(page: Page): Promise<ScrapedContact | null> {
+  const result: ScrapedContact = {}
 
-      // Gestion du rate limiting (429)
-      if (response.status === 429) {
-        const backoffMs = BACKOFF_BASE_MS * Math.pow(2, attempt - 1)
-        console.warn(`   [429] Rate limit atteint, attente ${backoffMs / 1000}s (tentative ${attempt}/${MAX_RETRIES})`)
-        await sleep(backoffMs)
-        continue
-      }
+  try {
+    // Strategy 1: JSON-LD structured data (most reliable)
+    const jsonLdTexts = await page.$$eval(
+      'script[type="application/ld+json"]',
+      els => els.map(e => e.textContent || '')
+    ).catch(() => [])
 
-      // Page non trouvee ou erreur client
-      if (response.status === 404 || response.status === 403) {
-        return null
-      }
-
-      // Autres erreurs serveur
-      if (!response.ok) {
-        if (attempt === MAX_RETRIES) return null
-        await sleep(2000 * attempt)
-        continue
-      }
-
-      const html = await response.text()
-
-      // Verification que le contenu est du HTML valide (pas une page d'erreur vide)
-      if (html.length < 500) return null
-
-      return html
-    } catch {
-      // Erreur reseau ou timeout
-      if (attempt === MAX_RETRIES) {
-        return null
-      }
-
-      // Attendre avant de reessayer en cas d'erreur reseau
-      await sleep(2000 * attempt)
+    for (const jsonText of jsonLdTexts) {
+      try {
+        const data = JSON.parse(jsonText)
+        // Handle both single objects and arrays
+        const items = Array.isArray(data) ? data : [data]
+        for (const item of items) {
+          if (item.telephone) {
+            const phone = normalizePhone(item.telephone)
+            if (phone) result.phone = phone
+          }
+          if (item.email && isValidEmail(item.email)) {
+            result.email = item.email.toLowerCase()
+          }
+          if (item.url) {
+            const website = normalizeWebsite(item.url)
+            if (website) result.website = website
+          }
+        }
+      } catch { /* invalid JSON */ }
     }
-  }
 
-  return null
+    // Strategy 2: tel: links on the page
+    if (!result.phone) {
+      const telHrefs = await page.$$eval(
+        'a[href^="tel:"]',
+        els => els.map(e => e.getAttribute('href')?.replace('tel:', '') || '')
+      ).catch(() => [])
+
+      for (const tel of telHrefs) {
+        const phone = normalizePhone(tel)
+        if (phone) { result.phone = phone; break }
+      }
+    }
+
+    // Strategy 3: Regex on visible text
+    if (!result.phone) {
+      const bodyText = await page.evaluate(() => document.body?.innerText || '').catch(() => '')
+      const phoneRegex = /(?:(?:\+33|0)\s*[1-9])(?:[\s.-]*\d{2}){4}/g
+      const matches = bodyText.match(phoneRegex) || []
+      for (const m of matches) {
+        const phone = normalizePhone(m)
+        if (phone) { result.phone = phone; break }
+      }
+    }
+
+    // Strategy 4: mailto links for email
+    if (!result.email) {
+      const mailtoHrefs = await page.$$eval(
+        'a[href^="mailto:"]',
+        els => els.map(e => e.getAttribute('href')?.replace('mailto:', '').split('?')[0] || '')
+      ).catch(() => [])
+
+      for (const email of mailtoHrefs) {
+        if (isValidEmail(email.toLowerCase())) {
+          result.email = email.toLowerCase()
+          break
+        }
+      }
+    }
+  } catch { /* extraction error */ }
+
+  if (!result.phone && !result.email && !result.website) return null
+  return result
 }
 
 // ============================================
@@ -410,29 +369,23 @@ async function fetchPageWithRetry(url: string): Promise<string | null> {
 function loadProgress(): ProgressState {
   try {
     if (fs.existsSync(PROGRESS_FILE)) {
-      const data = JSON.parse(fs.readFileSync(PROGRESS_FILE, 'utf-8'))
-      return data as ProgressState
+      return JSON.parse(fs.readFileSync(PROGRESS_FILE, 'utf-8')) as ProgressState
     }
-  } catch { /* ignorer */ }
-  return {
-    offset: 0,
-    startedAt: new Date().toISOString(),
-    stats: { ...stats },
-  }
+  } catch { /* ignore */ }
+  return { offset: 0, startedAt: new Date().toISOString(), stats: { ...stats } }
 }
 
 function saveProgress(offset: number, dept?: string): void {
-  const progress: ProgressState = {
+  fs.writeFileSync(PROGRESS_FILE, JSON.stringify({
     offset,
     startedAt: new Date().toISOString(),
     stats: { ...stats },
     dept,
-  }
-  fs.writeFileSync(PROGRESS_FILE, JSON.stringify(progress, null, 2))
+  }, null, 2))
 }
 
 function clearProgress(): void {
-  try { fs.unlinkSync(PROGRESS_FILE) } catch { /* ignorer */ }
+  try { fs.unlinkSync(PROGRESS_FILE) } catch { /* ignore */ }
 }
 
 // ============================================
@@ -441,50 +394,42 @@ function clearProgress(): void {
 
 function parseArgs(): CliArgs {
   const args = process.argv.slice(2)
-  const result: CliArgs = {
-    resume: false,
-    limit: 0, // 0 = pas de limite
-  }
+  const result: CliArgs = { resume: false, limit: 0, tabs: DEFAULT_PARALLEL_TABS }
 
   for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
-      case '--resume':
-        result.resume = true
-        break
+      case '--resume': result.resume = true; break
       case '--limit':
         result.limit = parseInt(args[++i], 10)
         if (isNaN(result.limit) || result.limit <= 0) {
-          console.error('Erreur: --limit doit etre un nombre positif')
-          process.exit(1)
+          console.error('Erreur: --limit doit etre un nombre positif'); process.exit(1)
         }
         break
       case '--dept':
         result.dept = args[++i]
-        if (!result.dept || result.dept.length < 1) {
-          console.error('Erreur: --dept doit etre un code departement valide (ex: 75, 13, 2A)')
-          process.exit(1)
+        if (!result.dept) { console.error('Erreur: --dept requis'); process.exit(1) }
+        break
+      case '--tabs':
+        result.tabs = parseInt(args[++i], 10)
+        if (isNaN(result.tabs) || result.tabs < 1 || result.tabs > 10) {
+          console.error('Erreur: --tabs doit etre entre 1 et 10'); process.exit(1)
         }
         break
-      case '--help':
-      case '-h':
+      case '--help': case '-h':
         console.log(`
 Usage: npx tsx scripts/enrich-phone.ts [options]
 
 Options:
   --resume        Reprendre apres interruption
-  --limit N       Limiter a N artisans a traiter
-  --dept XX       Filtrer par departement (ex: 75, 13, 2A)
-  --help, -h      Afficher cette aide
-`)
-        process.exit(0)
-        break
+  --limit N       Limiter a N artisans
+  --dept XX       Filtrer par departement (ex: 75, 13)
+  --tabs N        Nombre d'onglets paralleles (1-10, defaut: ${DEFAULT_PARALLEL_TABS})
+  --help, -h      Aide
+`); process.exit(0); break
       default:
-        console.error(`Option inconnue: ${args[i]}`)
-        console.error('Utiliser --help pour afficher les options disponibles')
-        process.exit(1)
+        console.error(`Option inconnue: ${args[i]}`); process.exit(1)
     }
   }
-
   return result
 }
 
@@ -492,102 +437,76 @@ Options:
 // PROVIDER FETCHING
 // ============================================
 
-/**
- * Recupere un batch de providers necessitant un enrichissement telephonique.
- */
-async function fetchProviderBatch(
-  offset: number,
-  batchSize: number,
-  dept?: string,
-): Promise<Provider[]> {
+async function fetchProviderBatch(offset: number, batchSize: number, dept?: string): Promise<Provider[]> {
   let query = supabase
     .from('providers')
-    .select('id, name, address_city, address_postal_code, address_department')
+    .select('id, name, siren, address_city, address_postal_code, address_department')
     .is('phone', null)
     .eq('source', 'annuaire_entreprises')
     .eq('is_active', true)
     .order('data_quality_score', { ascending: false })
     .range(offset, offset + batchSize - 1)
 
-  if (dept) {
-    query = query.eq('address_department', dept)
-  }
-
+  if (dept) query = query.eq('address_department', dept)
   const { data, error } = await query
-
-  if (error) {
-    console.error(`Erreur recuperation providers: ${error.message}`)
-    return []
-  }
-
+  if (error) { console.error(`Erreur: ${error.message}`); return [] }
   return (data || []) as Provider[]
 }
 
 // ============================================
-// ENRICHMENT
+// PARALLEL ENRICHMENT
 // ============================================
 
 /**
- * Enrichit un seul provider avec les donnees Pages Jaunes.
+ * Process a single provider using a browser page.
  */
-async function enrichProvider(provider: Provider): Promise<boolean> {
+async function processProvider(page: Page, provider: Provider): Promise<boolean> {
   const city = provider.address_city
-  if (!city) {
-    stats.notFound++
-    return false
-  }
+  if (!city) { stats.notFound++; stats.processed++; return false }
 
   try {
     const contact = await searchPagesJaunes(
+      page,
       provider.name,
       city,
       provider.address_postal_code || undefined,
+      provider.address_department || undefined,
     )
 
     if (!contact) {
       stats.notFound++
+      stats.processed++
       return false
     }
 
-    // Construire les champs a mettre a jour
     const updateFields: Record<string, unknown> = {}
-
-    if (contact.phone) {
-      updateFields.phone = contact.phone
-      stats.phonesUpdated++
-    }
-
-    if (contact.email) {
-      updateFields.email = contact.email
-      stats.emailsUpdated++
-    }
-
-    if (contact.website) {
-      updateFields.website = contact.website
-      stats.websitesUpdated++
-    }
+    if (contact.phone) { updateFields.phone = contact.phone; stats.phonesUpdated++ }
+    if (contact.email) { updateFields.email = contact.email; stats.emailsUpdated++ }
+    if (contact.website) { updateFields.website = contact.website; stats.websitesUpdated++ }
 
     if (Object.keys(updateFields).length === 0) {
       stats.notFound++
+      stats.processed++
       return false
     }
 
-    // Mise a jour en base
     const { error } = await supabase
       .from('providers')
       .update(updateFields)
       .eq('id', provider.id)
 
     if (error) {
-      console.error(`   Erreur mise a jour ${provider.name}: ${error.message}`)
       stats.errors++
+      stats.processed++
       return false
     }
 
     stats.found++
+    stats.processed++
     return true
   } catch {
     stats.errors++
+    stats.processed++
     return false
   }
 }
@@ -599,47 +518,31 @@ async function enrichProvider(provider: Provider): Promise<boolean> {
 function printProgress(): void {
   const elapsed = Date.now() - startTime
   const rate = elapsed > 0 ? Math.round(stats.processed / (elapsed / 60000)) : 0
-  const successRate = stats.processed > 0
-    ? Math.round((stats.found / stats.processed) * 100)
-    : 0
-
+  const successRate = stats.processed > 0 ? Math.round((stats.found / stats.processed) * 100) : 0
   console.log('')
   console.log(`   --- Progression (${formatNumber(stats.processed)} traites) ---`)
-  console.log(`   Telephones trouves:    ${formatNumber(stats.found)}`)
-  console.log(`   Non trouves:           ${formatNumber(stats.notFound)}`)
-  console.log(`   Erreurs:               ${formatNumber(stats.errors)}`)
-  console.log(`   Taux de reussite:      ${successRate}%`)
-  console.log(`   Debit:                 ${formatNumber(rate)}/min`)
-  console.log(`   Duree ecoulee:         ${formatDuration(elapsed)}`)
+  console.log(`   Telephones: ${formatNumber(stats.phonesUpdated)} | Emails: ${formatNumber(stats.emailsUpdated)} | Sites: ${formatNumber(stats.websitesUpdated)}`)
+  console.log(`   Taux: ${successRate}% | Debit: ${formatNumber(rate)}/min | Duree: ${formatDuration(elapsed)}`)
   console.log('')
 }
 
 function printSummary(): void {
   const elapsed = Date.now() - startTime
   const rate = elapsed > 0 ? Math.round(stats.processed / (elapsed / 60000)) : 0
-  const successRate = stats.processed > 0
-    ? Math.round((stats.found / stats.processed) * 100)
-    : 0
-
-  console.log('')
-  console.log('='.repeat(60))
+  const successRate = stats.processed > 0 ? Math.round((stats.found / stats.processed) * 100) : 0
+  console.log('\n' + '='.repeat(60))
   console.log('  RESUME DE L\'ENRICHISSEMENT TELEPHONIQUE')
   console.log('='.repeat(60))
-  console.log(`  Duree:                  ${formatDuration(elapsed)}`)
-  console.log(`  Artisans traites:       ${formatNumber(stats.processed)}`)
+  console.log(`  Duree:              ${formatDuration(elapsed)}`)
+  console.log(`  Artisans traites:   ${formatNumber(stats.processed)}`)
   console.log('  ' + '-'.repeat(40))
-  console.log(`  Telephones trouves:     ${formatNumber(stats.phonesUpdated)}`)
-  console.log(`  Emails trouves:         ${formatNumber(stats.emailsUpdated)}`)
-  console.log(`  Sites web trouves:      ${formatNumber(stats.websitesUpdated)}`)
+  console.log(`  Telephones:         ${formatNumber(stats.phonesUpdated)}`)
+  console.log(`  Emails:             ${formatNumber(stats.emailsUpdated)}`)
+  console.log(`  Sites web:          ${formatNumber(stats.websitesUpdated)}`)
   console.log('  ' + '-'.repeat(40))
-  console.log(`  Contacts trouves:       ${formatNumber(stats.found)}`)
-  console.log(`  Non trouves:            ${formatNumber(stats.notFound)}`)
-  console.log(`  Erreurs:                ${formatNumber(stats.errors)}`)
-  console.log('  ' + '-'.repeat(40))
-  console.log(`  Taux de reussite:       ${successRate}%`)
-  console.log(`  Debit:                  ${formatNumber(rate)} artisans/min`)
-  console.log('='.repeat(60))
-  console.log('')
+  console.log(`  Taux de reussite:   ${successRate}%`)
+  console.log(`  Debit:              ${formatNumber(rate)} artisans/min`)
+  console.log('='.repeat(60) + '\n')
 }
 
 // ============================================
@@ -649,138 +552,111 @@ function printSummary(): void {
 async function main() {
   const args = parseArgs()
 
-  console.log('')
-  console.log('='.repeat(60))
+  console.log('\n' + '='.repeat(60))
   console.log('  ENRICHISSEMENT TELEPHONIQUE DES ARTISANS')
-  console.log('  Source: Pages Jaunes (pagesjaunes.fr)')
-  console.log('='.repeat(60))
-  console.log('')
+  console.log('  Source: Pages Jaunes via Playwright (navigateur headless)')
+  console.log('='.repeat(60) + '\n')
 
-  // Arret gracieux sur Ctrl+C
+  // Graceful shutdown
   process.on('SIGINT', () => {
-    if (shuttingDown) {
-      console.log('\n\n   Arret force')
-      process.exit(1)
-    }
-    console.log('\n\n   Arret gracieux en cours... sauvegarde de la progression...')
+    if (shuttingDown) { console.log('\n   Arret force'); process.exit(1) }
+    console.log('\n   Arret gracieux...')
     shuttingDown = true
   })
 
-  // Gestion de la reprise
+  // Resume
   let currentOffset = 0
-
   if (args.resume) {
     const progress = loadProgress()
     currentOffset = progress.offset
-
-    // Restaurer les stats de la session precedente
-    if (progress.stats) {
-      Object.assign(stats, progress.stats)
-    }
-
+    if (progress.stats) Object.assign(stats, progress.stats)
     console.log(`   Reprise a l'offset ${formatNumber(currentOffset)}`)
-    if (progress.dept) {
-      console.log(`   Departement precedent: ${progress.dept}`)
-    }
-    console.log('')
   }
 
-  if (args.dept) {
-    console.log(`   Filtre departement: ${args.dept}`)
-  }
-  if (args.limit > 0) {
-    console.log(`   Limite: ${formatNumber(args.limit)} artisans`)
-  }
-  console.log(`   Taille des batchs: ${BATCH_SIZE}`)
-  console.log(`   Delai entre requetes: ${RATE_LIMIT_MS}ms + jitter ${MAX_JITTER_MS}ms`)
-  console.log('')
+  if (args.dept) console.log(`   Departement: ${args.dept}`)
+  if (args.limit > 0) console.log(`   Limite: ${formatNumber(args.limit)}`)
+  console.log(`   Onglets paralleles: ${args.tabs}`)
+  console.log(`   Delai: ${DELAY_BETWEEN_REQUESTS_MS}ms + jitter ${MAX_JITTER_MS}ms\n`)
+
+  // Init browser
+  console.log('   Lancement du navigateur...')
+  const pages = await initBrowser(args.tabs)
+  console.log(`   ${pages.length} onglet(s) prets\n`)
 
   startTime = Date.now()
   let totalProcessed = 0
   let hasMore = true
+  let consecutiveEmpty = 0
 
   while (hasMore && !shuttingDown) {
-    // Verifier la limite
-    if (args.limit > 0 && totalProcessed >= args.limit) {
-      console.log(`   Limite de ${formatNumber(args.limit)} artisans atteinte`)
-      break
-    }
+    if (args.limit > 0 && totalProcessed >= args.limit) break
 
-    // Calculer la taille du batch en tenant compte de la limite
     let batchSize = BATCH_SIZE
-    if (args.limit > 0) {
-      batchSize = Math.min(BATCH_SIZE, args.limit - totalProcessed)
-    }
+    if (args.limit > 0) batchSize = Math.min(BATCH_SIZE, args.limit - totalProcessed)
 
-    // Recuperer le prochain batch
     const providers = await fetchProviderBatch(currentOffset, batchSize, args.dept)
-
     if (providers.length === 0) {
-      hasMore = false
-      console.log('   Plus aucun artisan a enrichir')
-      break
+      consecutiveEmpty++
+      if (consecutiveEmpty >= 3) { hasMore = false; console.log('   Plus aucun artisan a enrichir'); break }
+      currentOffset += batchSize
+      continue
     }
+    consecutiveEmpty = 0
 
     console.log(`   Batch: offset=${formatNumber(currentOffset)}, taille=${providers.length}`)
 
-    // Traiter chaque provider du batch
-    for (const provider of providers) {
-      if (shuttingDown) break
-
-      // Verifier la limite
+    // Process providers in parallel using tab pool
+    let providerIdx = 0
+    while (providerIdx < providers.length && !shuttingDown) {
       if (args.limit > 0 && totalProcessed >= args.limit) break
 
-      // Afficher le provider en cours
-      const cityInfo = provider.address_city || 'ville inconnue'
-      process.stdout.write(
-        `\r   [${formatNumber(totalProcessed + 1)}] ${provider.name.substring(0, 40).padEnd(40)} | ${cityInfo.substring(0, 20).padEnd(20)}`,
-      )
+      // Launch parallel tasks for each available tab
+      const chunk = providers.slice(providerIdx, providerIdx + pages.length)
+      const promises = chunk.map(async (provider, i) => {
+        const page = pages[i % pages.length]
+        const cityInfo = provider.address_city || '?'
+        const found = await processProvider(page, provider)
 
-      // Enrichir
-      const found = await enrichProvider(provider)
+        if (found) {
+          console.log(`   [${formatNumber(totalProcessed + i + 1)}] ${provider.name.substring(0, 35).padEnd(35)} | ${cityInfo.substring(0, 15).padEnd(15)} -> TROUVE`)
+        }
 
-      if (found) {
-        process.stdout.write(' -> TROUVE\n')
-      }
+        // Rate limit per tab
+        await sleep(randomDelay())
+      })
 
-      stats.processed++
-      totalProcessed++
+      await Promise.all(promises)
+      providerIdx += chunk.length
+      totalProcessed += chunk.length
 
-      // Rapport de progression periodique
-      if (stats.processed % PROGRESS_REPORT_INTERVAL === 0) {
+      // Progress report
+      if (stats.processed % PROGRESS_REPORT_INTERVAL === 0 && stats.processed > 0) {
         printProgress()
       }
-
-      // Rate limiting avec jitter
-      await sleep(RATE_LIMIT_MS + randomJitter())
     }
 
-    // Avancer l'offset.
-    // Les providers enrichis (phone != null) disparaissent du filtre phone IS NULL,
-    // mais les providers non trouves restent. On avance l'offset pour eviter
-    // de retraiter les memes providers sans resultats en boucle.
     currentOffset += providers.length
-
-    // Sauvegarder la progression
     saveProgress(currentOffset, args.dept)
   }
 
-  // Nettoyage de la progression si termine sans interruption
-  if (!shuttingDown && (!args.limit || totalProcessed < args.limit || !hasMore)) {
+  // Cleanup
+  await closeBrowser()
+
+  if (!shuttingDown) {
     clearProgress()
-  } else if (shuttingDown) {
+  } else {
     saveProgress(currentOffset, args.dept)
     console.log(`\n   Progression sauvegardee (offset: ${formatNumber(currentOffset)})`)
-    console.log(`   Utilisez --resume pour reprendre`)
+    console.log('   Utilisez --resume pour reprendre')
   }
 
-  // Resume final
   printSummary()
 }
 
 main()
   .then(() => process.exit(0))
-  .catch((error) => {
+  .catch(async (error) => {
     console.error('\n   Erreur fatale:', error)
+    await closeBrowser()
     process.exit(1)
   })
