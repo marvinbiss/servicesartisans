@@ -10,6 +10,11 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://servicesartisans.fr/mentions-legales',
   },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
 }
 
 export default function MentionsLegalesPage() {
@@ -140,6 +145,11 @@ export default function MentionsLegalesPage() {
               <li>
                 <Link href="/a-propos" className="text-blue-600 hover:text-blue-800 hover:underline transition-colors">
                   À propos de {companyIdentity.name}
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="text-blue-600 hover:text-blue-800 hover:underline transition-colors">
+                  Contact
                 </Link>
               </li>
             </ul>

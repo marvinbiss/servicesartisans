@@ -1,8 +1,9 @@
 import Link from 'next/link'
 import { MapPin, Phone, Star, Clock, Users } from 'lucide-react'
 import { Provider } from '@/types'
+import { getArtisanUrl } from '@/lib/utils'
 
-type ProviderCardProvider = Partial<Provider> & Pick<Provider, 'id' | 'name'> & { stable_id?: string; slug?: string }
+type ProviderCardProvider = Partial<Provider> & Pick<Provider, 'id' | 'name'> & { stable_id?: string; slug?: string; specialty?: string; address_city?: string }
 
 interface ProviderCardProps {
   provider: ProviderCardProvider
@@ -13,13 +14,13 @@ interface ProviderCardProps {
 
 export default function ProviderCard({
   provider,
-  serviceSlug,
-  locationSlug,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  serviceSlug: _serviceSlug,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  locationSlug: _locationSlug,
   isHovered = false,
 }: ProviderCardProps) {
-  // stable_id is the only authorized URL key
-  const providerIdentifier = provider.stable_id
-  const providerUrl = `/services/${serviceSlug}/${locationSlug}/${providerIdentifier}`
+  const providerUrl = getArtisanUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city })
   const ratingValue = provider.rating_average?.toFixed(1)
   const reviewCount = provider.review_count
   const employeeCount = provider.employee_count

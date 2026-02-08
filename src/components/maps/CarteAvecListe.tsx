@@ -6,6 +6,7 @@ import { Star, Award } from 'lucide-react'
 import Link from 'next/link'
 import ProviderCard from '@/components/ProviderCard'
 import type { LegacyProvider } from '@/types/legacy'
+import { slugify, getArtisanUrl } from '@/lib/utils'
 
 const MapContainer = dynamic(() => import('react-leaflet').then((mod) => mod.MapContainer), { ssr: false })
 const TileLayer = dynamic(() => import('react-leaflet').then((mod) => mod.TileLayer), { ssr: false })
@@ -124,10 +125,7 @@ export default function CarteAvecListe({
     }
   }, [providers])
 
-  const slugify = (value?: string) => {
-    if (!value) return 'france'
-    return value.toLowerCase().trim().replace(/\s+/g, '-')
-  }
+  // slugify imported from '@/lib/utils' (canonical implementation)
 
   if (!mapReady || loading) {
     return (
@@ -209,7 +207,7 @@ export default function CarteAvecListe({
                     <p className="text-sm text-gray-600 mb-3">{provider.address_city}</p>
                   )}
                   <Link
-                    href={`/services/${provider.specialty?.toLowerCase() || 'artisan'}/${provider.address_city?.toLowerCase() || 'france'}/${provider.stable_id || provider.slug}`}
+                    href={getArtisanUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city })}
                     className="block w-full py-2 bg-blue-600 text-white text-center rounded-lg text-sm font-semibold hover:bg-blue-700"
                   >
                     Voir le profil

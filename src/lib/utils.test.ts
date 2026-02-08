@@ -70,7 +70,7 @@ describe('slugify', () => {
   })
 
   it('should remove special characters', () => {
-    expect(slugify('hello@world!')).toBe('helloworld')
+    expect(slugify('hello@world!')).toBe('hello-world')
   })
 
   it('should handle multiple spaces', () => {

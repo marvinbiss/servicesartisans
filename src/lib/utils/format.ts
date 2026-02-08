@@ -97,21 +97,6 @@ export function formatRelativeDate(date: string | Date): string {
 }
 
 /**
- * Convert a string to a URL-friendly slug
- */
-export function slugify(text: string): string {
-  return text
-    .toString()
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '') // Remove accents
-    .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
-    .trim()
-    .replace(/\s+/g, '-') // Replace spaces with hyphens
-    .replace(/-+/g, '-') // Replace multiple hyphens with single
-}
-
-/**
  * Truncate text with ellipsis
  */
 export function truncate(text: string, maxLength: number): string {

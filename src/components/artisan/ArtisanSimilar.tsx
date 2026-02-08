@@ -101,7 +101,7 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSi
             style={{ scrollSnapAlign: 'start' }}
           >
             <Link
-              href={getArtisanUrl({ id: item.id, stable_id: item.stable_id, slug: item.slug, specialty: item.specialty, city: item.city, business_name: item.name })}
+              href={getArtisanUrl({ stable_id: item.stable_id, slug: item.slug, specialty: item.specialty, city: item.city })}
               aria-label={`Voir le profil de ${item.name}, ${item.specialty} a ${item.city}, note ${item.rating} sur 5`}
             >
               <motion.article

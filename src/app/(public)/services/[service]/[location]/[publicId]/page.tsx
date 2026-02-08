@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { getProviderByStableId, getServiceBySlug, getLocationBySlug } from '@/lib/supabase'
+import { getArtisanUrl } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/server'
 import ArtisanPageClient from '@/components/artisan/ArtisanPageClient'
 import { Review } from '@/components/artisan'
@@ -196,6 +197,17 @@ export default async function ProviderPage({ params }: PageProps) {
 
   if (!provider) {
     notFound()
+  }
+
+  // Canonical redirect: if the URL segments don't match the canonical slugs, redirect
+  const canonicalUrl = getArtisanUrl({
+    stable_id: provider.stable_id,
+    specialty: provider.specialty,
+    city: provider.address_city,
+  })
+  const currentPath = `/services/${serviceSlug}/${locationSlug}/${publicId}`
+  if (currentPath !== canonicalUrl) {
+    redirect(canonicalUrl)
   }
 
   // Convert to Artisan format

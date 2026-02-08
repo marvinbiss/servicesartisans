@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next'
-import { services, villes } from '@/lib/data/france'
+import { services, villes, regions, departements } from '@/lib/data/france'
 
 const BASE_URL = 'https://servicesartisans.fr'
 
@@ -41,7 +41,47 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/notre-processus-de-verification`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
     { url: `${BASE_URL}/politique-avis`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
     { url: `${BASE_URL}/mediation`, lastModified: now, changeFrequency: 'yearly', priority: 0.4 },
+    { url: `${BASE_URL}/carrieres`, lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
+    { url: `${BASE_URL}/presse`, lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
+    { url: `${BASE_URL}/partenaires`, lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
+    { url: `${BASE_URL}/villes`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${BASE_URL}/regions`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${BASE_URL}/departements`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${BASE_URL}/blog/comment-choisir-plombier`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${BASE_URL}/blog/renovation-energetique-2024`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${BASE_URL}/blog/urgence-plomberie-que-faire`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${BASE_URL}/blog/tendances-decoration-2024`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
   ]
+
+  // Service category hub pages
+  const serviceHubEntries: MetadataRoute.Sitemap = services.map(s => ({
+    url: `${BASE_URL}/services/${s.slug}`,
+    lastModified: now,
+    changeFrequency: 'weekly' as const,
+    priority: 0.8,
+  }))
+
+  // Geographic pages
+  const villeEntries: MetadataRoute.Sitemap = villes.map(v => ({
+    url: `${BASE_URL}/villes/${v.slug}`,
+    lastModified: now,
+    changeFrequency: 'weekly' as const,
+    priority: 0.6,
+  }))
+
+  const regionEntries: MetadataRoute.Sitemap = regions.map(r => ({
+    url: `${BASE_URL}/regions/${r.slug}`,
+    lastModified: now,
+    changeFrequency: 'monthly' as const,
+    priority: 0.5,
+  }))
+
+  const deptEntries: MetadataRoute.Sitemap = departements.map(d => ({
+    url: `${BASE_URL}/departements/${d.slug}`,
+    lastModified: now,
+    changeFrequency: 'monthly' as const,
+    priority: 0.5,
+  }))
 
   // Build lookup maps: normalized name → static slug
   const serviceMap = new Map<string, string>()
@@ -91,7 +131,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
 
     if (allProviders.length === 0) {
-      return staticEntries
+      return [...staticEntries, ...serviceHubEntries, ...regionEntries, ...deptEntries, ...villeEntries]
     }
 
     // Track unique hub pages (service × location)
@@ -126,8 +166,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }))
   } catch (err) {
     console.error('Sitemap DB error', err)
-    return staticEntries
+    return [...staticEntries, ...serviceHubEntries, ...regionEntries, ...deptEntries, ...villeEntries]
   }
 
-  return [...staticEntries, ...hubEntries, ...providerEntries]
+  return [...staticEntries, ...serviceHubEntries, ...regionEntries, ...deptEntries, ...villeEntries, ...hubEntries, ...providerEntries]
 }

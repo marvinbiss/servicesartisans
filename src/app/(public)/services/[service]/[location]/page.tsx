@@ -12,6 +12,7 @@ import { PopularServicesLinks } from '@/components/InternalLinks'
 import { popularServices, popularCities } from '@/lib/constants/navigation'
 import Link from 'next/link'
 import { REVALIDATE } from '@/lib/cache'
+import { slugify } from '@/lib/utils'
 import { services as staticServicesList, villes, getVilleBySlug } from '@/lib/data/france'
 import type { Service, Location as LocationType, Provider } from '@/types'
 
@@ -52,11 +53,7 @@ function villeToLocation(slug: string): LocationType | null {
   }
 }
 
-/** Slugify a region name for URL (e.g. "Île-de-France" → "ile-de-france") */
-function regionSlugify(name: string): string {
-  return name.toLowerCase().normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
-}
+// slugify imported from '@/lib/utils'
 
 interface PageProps {
   params: Promise<{
@@ -316,7 +313,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
               <div className="space-y-2">
                 {location.region_name && (
                   <Link
-                    href={`/regions/${location.region_name ? regionSlugify(location.region_name) : ''}`}
+                    href={`/regions/${location.region_name ? slugify(location.region_name) : ''}`}
                     className="block px-3 py-2 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-lg text-sm transition-colors"
                   >
                     Artisans en {location.region_name}

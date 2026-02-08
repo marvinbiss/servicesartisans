@@ -186,6 +186,39 @@ export default function NotreProcessusDeVerificationPage() {
                   Comment les avis sont collectés, modérés et publiés sur la plateforme.
                 </p>
               </Link>
+              <Link
+                href="/mediation"
+                className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow group"
+              >
+                <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                  Médiation et résolution des litiges
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  En cas de litige, découvrez notre processus de médiation.
+                </p>
+              </Link>
+              <Link
+                href="/mentions-legales"
+                className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow group"
+              >
+                <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                  Mentions légales
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  Informations juridiques, éditeur et hébergeur du site.
+                </p>
+              </Link>
+              <Link
+                href="/contact"
+                className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow group"
+              >
+                <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                  Contact
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  Une question ? Contactez notre équipe.
+                </p>
+              </Link>
             </div>
           </div>
         </div>

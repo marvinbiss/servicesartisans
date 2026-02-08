@@ -11,6 +11,7 @@ import {
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useMobileMenu } from '@/contexts/MobileMenuContext'
 import { services as allServices } from '@/lib/data/france'
+import { companyIdentity } from '@/lib/config/company-identity'
 
 // Simple client-side city autocomplete (no server dependencies)
 interface CitySuggestion {
@@ -473,7 +474,7 @@ export default function Header() {
             </div>
             <div className="hidden sm:flex flex-col">
               <span className="text-xl font-bold text-gray-900">
-                Services<span className="text-blue-600">Artisans</span>
+                {companyIdentity.name.replace('Artisans', '')}<span className="text-blue-600">Artisans</span>
               </span>
             </div>
           </Link>

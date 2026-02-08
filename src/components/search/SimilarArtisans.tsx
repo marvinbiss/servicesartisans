@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Star, MapPin, Sparkles, ChevronRight, Loader2 } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { cn, getArtisanUrl } from '@/lib/utils'
 import { TrustBadge } from '@/components/reviews/TrustBadge'
 
 interface SimilarArtisan {
@@ -94,7 +94,7 @@ export function SimilarArtisans({
 
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
         {artisans.map((artisan) => {
-          const providerUrl = `/services/${serviceSlug}/${locationSlug}/${artisan.stable_id || artisan.slug}`
+          const providerUrl = getArtisanUrl({ stable_id: artisan.stable_id, slug: artisan.slug, specialty: artisan.specialty, city: artisan.city })
 
           return (
             <Link

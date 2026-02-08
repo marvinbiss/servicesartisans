@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import { services, villes } from '@/lib/data/france'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -44,30 +45,30 @@ export function formatRelativeTime(date: string | Date): string {
 // Slugify string
 export function slugify(text: string): string {
   return text
-    .toString()
+    .toLowerCase()
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
     .trim()
-    .replace(/\s+/g, '-')
-    .replace(/[^\w-]+/g, '')
-    .replace(/--+/g, '-')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
 }
 
-// Generate SEO-friendly artisan URL
-export function getArtisanUrl(artisan: {
-  id: string
-  stable_id?: string
-  slug?: string
-  specialty?: string
-  city?: string
-  business_name?: string | null
-}): string {
-  const serviceSlug = slugify(artisan.specialty || 'artisan')
-  const citySlug = slugify(artisan.city || 'france')
-  const artisanSlug = artisan.stable_id || artisan.slug
+// Static slug lookup maps — prefer canonical slugs from france.ts over dynamic slugification
+const _normalize = (t: string) => t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
+const _serviceMap = new Map(services.map(s => [_normalize(s.name), s.slug]))
+const _villeMap = new Map(villes.map(v => [_normalize(v.name), v.slug]))
 
-  return `/services/${serviceSlug}/${citySlug}/${artisanSlug}`
+// Generate SEO-friendly artisan URL using static slug lookup
+export function getArtisanUrl(artisan: {
+  stable_id?: string | null
+  slug?: string | null
+  specialty?: string | null
+  city?: string | null
+}): string {
+  const serviceSlug = _serviceMap.get(_normalize(artisan.specialty || '')) || slugify(artisan.specialty || 'artisan')
+  const locationSlug = _villeMap.get(_normalize(artisan.city || '')) || slugify(artisan.city || 'france')
+  const id = artisan.stable_id || artisan.slug || ''
+  return `/services/${serviceSlug}/${locationSlug}/${id}`
 }
 
 // Truncate text

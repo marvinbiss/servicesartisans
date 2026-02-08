@@ -1,22 +1,8 @@
 import React from 'react'
 import { Review, getDisplayName } from './types'
 import type { LegacyArtisan } from '@/types/legacy'
-
-// Helper to create URL-safe slugs
-const slugify = (text: string) => text
-  .toLowerCase()
-  .normalize('NFD')
-  .replace(/[\u0300-\u036f]/g, '')
-  .replace(/[^a-z0-9]+/g, '-')
-  .replace(/^-|-$/g, '')
-
-// Generate SEO-friendly artisan URL
-const getArtisanUrl = (artisan: LegacyArtisan, baseUrl: string) => {
-  const serviceSlug = slugify(artisan.specialty || 'artisan')
-  const citySlug = slugify(artisan.city || 'france')
-  const artisanSlug = artisan.stable_id || artisan.slug || slugify(artisan.business_name || artisan.id)
-  return `${baseUrl}/services/${serviceSlug}/${citySlug}/${artisanSlug}`
-}
+import { slugify, getArtisanUrl } from '@/lib/utils'
+import { companyIdentity } from '@/lib/config/company-identity'
 
 interface ArtisanSchemaProps {
   artisan: LegacyArtisan
@@ -25,7 +11,7 @@ interface ArtisanSchemaProps {
 
 export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
   const displayName = getDisplayName(artisan)
-  const baseUrl = 'https://servicesartisans.fr'
+  const baseUrl = companyIdentity.url
 
   // Organization Schema for ServicesArtisans platform
   const organizationSchema = {
@@ -34,7 +20,7 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
     '@id': `${baseUrl}#organization`,
     name: 'ServicesArtisans',
     url: baseUrl,
-    logo: `${baseUrl}/logo.png`,
+    logo: `${baseUrl}/icon.svg`,
     description: 'Plateforme de mise en relation entre particuliers et artisans qualifies en France',
     contactPoint: {
       '@type': 'ContactPoint',
@@ -48,7 +34,7 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
     ],
   }
 
-  const artisanUrl = getArtisanUrl(artisan, baseUrl)
+  const artisanUrl = `${baseUrl}${getArtisanUrl(artisan)}`
 
   // Individual Service Schemas for each service offered
   const serviceSchemas = artisan.service_prices.map((service, index) => ({

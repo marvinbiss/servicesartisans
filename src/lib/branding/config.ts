@@ -26,7 +26,7 @@ export const brand = {
     facebook: 'https://facebook.com/servicesartisans',
     instagram: 'https://instagram.com/servicesartisans',
     linkedin: 'https://linkedin.com/company/servicesartisans',
-    twitter: 'https://twitter.com/servicesartisan',
+    twitter: 'https://twitter.com/servicesartisans',
   },
 }
 

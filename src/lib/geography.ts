@@ -2,6 +2,8 @@
  * Mappings géographiques France
  * Codes postaux -> Départements -> Régions
  */
+import { slugify } from '@/lib/utils'
+export { slugify }
 
 // Mapping des codes départements vers noms complets
 export const DEPARTMENTS: Record<string, string> = {
@@ -156,17 +158,7 @@ export function getGeographyFromPostal(postalCode: string | null | undefined): {
   }
 }
 
-/**
- * Génère un slug URL-safe pour une région ou département
- */
-export function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '')
-}
+// slugify imported from '@/lib/utils' (canonical implementation)
 
 /**
  * Liste des régions avec leurs slugs

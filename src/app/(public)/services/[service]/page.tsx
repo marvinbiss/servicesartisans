@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   
   try {
     const service = await getServiceBySlug(serviceSlug)
-    if (!service) return { title: 'Service non trouvé' }
+    if (!service) notFound()
 
     const title = `${service.name} - Trouvez un ${service.name.toLowerCase()} près de chez vous`
     const description = `Comparez les meilleurs ${service.name.toLowerCase()}s de France. Consultez les avis, obtenez des devis gratuits. Plus de 500 villes couvertes.`
@@ -40,8 +40,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         canonical: `${SITE_URL}/services/${serviceSlug}`,
       },
     }
-  } catch {
-    return { title: 'Service non trouvé' }
+  } catch (error) {
+    console.error('Service page metadata error:', error)
+    throw error  // Let error boundary handle it → 500
   }
 }
 

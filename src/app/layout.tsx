@@ -70,6 +70,7 @@ export const metadata: Metadata = {
     title: 'ServicesArtisans - Trouvez les meilleurs artisans pres de chez vous',
     description:
       'Trouvez et comparez les meilleurs artisans de votre region. Plombiers, electriciens, menuisiers et plus.',
+    images: [{ url: 'https://servicesartisans.fr/images/og-image.svg', width: 1200, height: 630, alt: 'ServicesArtisans — Trouvez des artisans qualifiés' }],
   },
   twitter: {
     card: 'summary_large_image',
