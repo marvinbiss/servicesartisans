@@ -29,7 +29,7 @@ function convertToArtisan(provider: any, service: any, location: any, serviceSlu
   const existingDesc = provider.description || provider.bio
   const description = (existingDesc && existingDesc.length > 50)
     ? existingDesc
-    : generateDescription(name, specialty, city || 'votre région')
+    : generateDescription(name, specialty, city || 'votre région', provider)
 
   return {
     id: provider.id,
@@ -40,7 +40,7 @@ function convertToArtisan(provider: any, service: any, location: any, serviceSlu
     last_name: provider.last_name || null,
     avatar_url: provider.avatar_url || provider.logo_url || null,
     city: city,
-    postal_code: location?.postal_code || provider.address_postal_code || '',
+    postal_code: String(location?.postal_code || provider.address_postal_code || '').replace(/\.0$/, ''),
     address: provider.address_street || '',
     department: location?.department_name || undefined,
     department_code: location?.department_code || undefined,
@@ -79,24 +79,36 @@ function convertToArtisan(provider: any, service: any, location: any, serviceSlu
   }
 }
 
-// Generate a description for a provider based on their data (WITHOUT mentioning fake ratings)
-function generateDescription(name: string, specialty: string, city: string): string {
-  const descriptions = [
-    `${name} est un ${specialty.toLowerCase()} professionnel basé à ${city}. Nous garantissons un service de qualité pour tous vos travaux. Contactez-nous pour un devis gratuit.`,
-    `Votre ${specialty.toLowerCase()} de confiance à ${city}. ${name} intervient rapidement pour tous vos besoins. Devis gratuit et sans engagement.`,
-    `${name} - ${specialty.toLowerCase()} à ${city}. Fort de nombreuses interventions réussies, nous vous garantissons un travail soigné et professionnel.`,
-  ]
-  let seed = 0
-  for (let i = 0; i < name.length; i++) {
-    seed += name.charCodeAt(i)
+// Generate a unique description based on provider data
+function generateDescription(name: string, specialty: string, city: string, provider?: any): string {
+  const spe = specialty.toLowerCase()
+  const parts: string[] = []
+
+  parts.push(`${name} est ${spe} à ${city}.`)
+
+  if (provider?.siret) {
+    parts.push(`Entreprise immatriculée et vérifiée (SIRET).`)
   }
-  return descriptions[seed % descriptions.length]
+  if (provider?.experience_years && provider.experience_years > 0) {
+    parts.push(`${provider.experience_years} ans d'expérience dans le métier.`)
+  }
+  if (provider?.creation_date) {
+    const year = new Date(provider.creation_date).getFullYear()
+    parts.push(`Entreprise créée en ${year}.`)
+  }
+  if (provider?.employee_count && provider.employee_count > 1) {
+    parts.push(`Équipe de ${provider.employee_count} personnes.`)
+  }
+
+  parts.push(`Demandez un devis gratuit et sans engagement.`)
+
+  return parts.join(' ')
 }
 
 // REMOVED: Fake review generation (illegal and unethical)
 
 // Fetch reviews for provider (only real reviews from database)
-async function getProviderReviews(providerId: string): Promise<Review[]> {
+async function getProviderReviews(providerId: string, serviceName?: string): Promise<Review[]> {
   try {
     const supabase = await createClient()
     const { data: reviews } = await supabase
@@ -127,7 +139,7 @@ async function getProviderReviews(providerId: string): Promise<Review[]> {
         }),
         comment: r.content || '',
         dateISO: r.created_at ? r.created_at.split('T')[0] : undefined,
-        service: 'Plomberie',
+        service: serviceName || '',
         verified: r.author_verified || false,
         hasPhoto: r.has_media || false,
       }))
@@ -160,7 +172,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const cityName = location?.name || provider.address_city || ''
     const serviceName = service?.name || 'Artisan'
 
-    const title = `${displayName} - ${serviceName} à ${cityName} | ServicesArtisans`
+    const title = `${displayName} - ${serviceName} à ${cityName}`
     const ratingText = provider.rating_average ? `Note ${provider.rating_average}/5. ` : ''
     const description = `${displayName}, ${serviceName.toLowerCase()} à ${cityName}. ${ratingText}Devis gratuit. Artisan professionnel.`
 
@@ -232,7 +244,7 @@ export default async function ProviderPage({ params }: PageProps) {
   const artisan = convertToArtisan(provider, service, location, serviceSlug)
 
   // Fetch reviews (only real reviews from database)
-  const reviews = await getProviderReviews(provider.id)
+  const reviews = await getProviderReviews(provider.id, service?.name || artisan.specialty)
 
   return (
     <>

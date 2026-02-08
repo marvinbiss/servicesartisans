@@ -2,8 +2,27 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { User, ChevronDown, Globe, Building2, Users, Calendar, Shield, Award, CheckCircle, FileCheck, AlertCircle } from 'lucide-react'
+import { User, ChevronDown, Globe, Building2, Users, Calendar, Shield, Award, CheckCircle, FileCheck } from 'lucide-react'
 import { Artisan, getDisplayName } from './types'
+
+// Map legal form codes to readable labels
+const LEGAL_FORMS: Record<string, string> = {
+  '1000': 'Entrepreneur individuel',
+  '5410': 'SARL',
+  '5499': 'SARL',
+  '5498': 'SARL unipersonnelle',
+  '5710': 'SAS',
+  '5720': 'SASU',
+  '5599': 'SA',
+  '5505': 'SA',
+  '6540': 'SCM',
+  '9220': 'Association',
+  '9210': 'Association',
+}
+
+function getLegalFormLabel(code: string): string {
+  return LEGAL_FORMS[code] || (code.length <= 10 ? code : code)
+}
 
 interface ArtisanAboutProps {
   artisan: Artisan
@@ -58,58 +77,44 @@ export function ArtisanAbout({ artisan }: ArtisanAboutProps) {
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {/* Identity Verification */}
-          <div className={`p-3 rounded-xl border ${artisan.is_verified ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200'}`}>
-            <div className="flex items-center gap-2">
-              {artisan.is_verified ? (
+          {/* Identity Verification — only show if verified */}
+          {artisan.is_verified && (
+            <div className="p-3 rounded-xl border bg-green-50 border-green-200">
+              <div className="flex items-center gap-2">
                 <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
-              ) : (
-                <AlertCircle className="w-5 h-5 text-gray-400 flex-shrink-0" />
-              )}
-              <div>
-                <p className="font-medium text-gray-900 text-sm">Identité vérifiée</p>
-                <p className="text-xs text-gray-500">SIRET contrôlé</p>
+                <div>
+                  <p className="font-medium text-gray-900 text-sm">Identité vérifiée</p>
+                  <p className="text-xs text-gray-500">SIRET contrôlé</p>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
-          {/* Insurance */}
-          <div className={`p-3 rounded-xl border ${artisan.insurance && artisan.insurance.length > 0 ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200'}`}>
-            <div className="flex items-center gap-2">
-              {artisan.insurance && artisan.insurance.length > 0 ? (
+          {/* Insurance — only show if available */}
+          {artisan.insurance && artisan.insurance.length > 0 && (
+            <div className="p-3 rounded-xl border bg-green-50 border-green-200">
+              <div className="flex items-center gap-2">
                 <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
-              ) : (
-                <AlertCircle className="w-5 h-5 text-gray-400 flex-shrink-0" />
-              )}
-              <div>
-                <p className="font-medium text-gray-900 text-sm">Assurance</p>
-                <p className="text-xs text-gray-500">
-                  {artisan.insurance && artisan.insurance.length > 0
-                    ? artisan.insurance[0]
-                    : 'Non renseignée'}
-                </p>
+                <div>
+                  <p className="font-medium text-gray-900 text-sm">Assurance</p>
+                  <p className="text-xs text-gray-500">{artisan.insurance[0]}</p>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
-          {/* Certifications */}
-          <div className={`p-3 rounded-xl border ${artisan.certifications && artisan.certifications.length > 0 ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200'}`}>
-            <div className="flex items-center gap-2">
-              {artisan.certifications && artisan.certifications.length > 0 ? (
+          {/* Certifications — only show if available */}
+          {artisan.certifications && artisan.certifications.length > 0 && (
+            <div className="p-3 rounded-xl border bg-green-50 border-green-200">
+              <div className="flex items-center gap-2">
                 <Award className="w-5 h-5 text-green-600 flex-shrink-0" />
-              ) : (
-                <AlertCircle className="w-5 h-5 text-gray-400 flex-shrink-0" />
-              )}
-              <div>
-                <p className="font-medium text-gray-900 text-sm">Certifications</p>
-                <p className="text-xs text-gray-500">
-                  {artisan.certifications && artisan.certifications.length > 0
-                    ? `${artisan.certifications.length} certification(s)`
-                    : 'Non renseignées'}
-                </p>
+                <div>
+                  <p className="font-medium text-gray-900 text-sm">Certifications</p>
+                  <p className="text-xs text-gray-500">{artisan.certifications.length} certification(s)</p>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           {/* Escrow Available */}
           <div className="p-3 rounded-xl border bg-blue-50 border-blue-200">
@@ -176,7 +181,7 @@ export function ArtisanAbout({ artisan }: ArtisanAboutProps) {
               </div>
               <div>
                 <div className="text-xs text-gray-500">Forme juridique</div>
-                <div className="font-medium text-gray-900">{artisan.legal_form}</div>
+                <div className="font-medium text-gray-900">{getLegalFormLabel(artisan.legal_form)}</div>
               </div>
             </div>
           )}

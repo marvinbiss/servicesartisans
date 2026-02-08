@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
@@ -16,7 +16,6 @@ import {
   ArtisanMobileCTA,
   ArtisanSchema,
   ArtisanBreadcrumb,
-  ArtisanPageSkeleton,
   ArtisanPhotoGridSkeleton,
 } from '@/components/artisan'
 import type { LegacyArtisan } from '@/types/legacy'
@@ -41,31 +40,31 @@ function SectionSkeleton({ height = 'h-64' }: { height?: string }) {
 // Photo grid with lightbox (heavy - includes next/image + lightbox)
 const ArtisanPhotoGrid = dynamic(
   () => import('@/components/artisan/ArtisanPhotoGrid').then(mod => ({ default: mod.ArtisanPhotoGrid })),
-  { loading: () => <ArtisanPhotoGridSkeleton />, ssr: false }
+  { loading: () => <ArtisanPhotoGridSkeleton /> }
 )
 
 // Reviews section with animations
 const ArtisanReviews = dynamic(
   () => import('@/components/artisan/ArtisanReviews').then(mod => ({ default: mod.ArtisanReviews })),
-  { loading: () => <SectionSkeleton height="h-96" />, ssr: false }
+  { loading: () => <SectionSkeleton height="h-96" /> }
 )
 
 // Map component with iframe
 const ArtisanMap = dynamic(
   () => import('@/components/artisan/ArtisanMap').then(mod => ({ default: mod.ArtisanMap })),
-  { loading: () => <SectionSkeleton height="h-80" />, ssr: false }
+  { loading: () => <SectionSkeleton height="h-80" /> }
 )
 
 // Similar artisans carousel
 const ArtisanSimilar = dynamic(
   () => import('@/components/artisan/ArtisanSimilar').then(mod => ({ default: mod.ArtisanSimilar })),
-  { loading: () => <SectionSkeleton height="h-72" />, ssr: false }
+  { loading: () => <SectionSkeleton height="h-72" /> }
 )
 
 // FAQ accordion
 const ArtisanFAQ = dynamic(
   () => import('@/components/artisan/ArtisanFAQ').then(mod => ({ default: mod.ArtisanFAQ })),
-  { loading: () => <SectionSkeleton height="h-64" />, ssr: false }
+  { loading: () => <SectionSkeleton height="h-64" /> }
 )
 
 interface ArtisanPageClientProps {
@@ -82,13 +81,6 @@ export default function ArtisanPageClient({
   const [artisan, _setArtisan] = useState<LegacyArtisan | null>(initialArtisan)
   const [reviews, _setReviews] = useState<Review[]>(initialReviews)
   const [isFavorite, setIsFavorite] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
-
-  // Simulate hydration loading
-  useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 100)
-    return () => clearTimeout(timer)
-  }, [])
 
   const handleShare = async () => {
     if (navigator.share && artisan) {
@@ -104,11 +96,6 @@ export default function ArtisanPageClient({
     } else {
       navigator.clipboard.writeText(window.location.href)
     }
-  }
-
-  // Loading state (skeleton)
-  if (isLoading && !artisan) {
-    return <ArtisanPageSkeleton />
   }
 
   // Not found state

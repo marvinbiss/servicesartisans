@@ -9,32 +9,30 @@ interface ArtisanStatsProps {
 }
 
 export function ArtisanStats({ artisan }: ArtisanStatsProps) {
-  const stats = [
-    {
-      icon: Clock,
-      label: 'Temps de réponse',
-      value: artisan.response_time || '< 2h',
-      color: 'text-blue-600 bg-blue-50',
-    },
-    {
-      icon: TrendingUp,
-      label: 'Taux de réponse',
-      value: artisan.response_rate ? `${artisan.response_rate}%` : '95%',
-      color: 'text-green-600 bg-green-50',
-    },
-    {
-      icon: Calendar,
-      label: 'Interventions',
-      value: artisan.bookings_this_week && artisan.bookings_this_week > 0 ? artisan.bookings_this_week.toString() : '+50',
-      color: 'text-purple-600 bg-purple-50',
-    },
-    {
-      icon: MessageCircle,
-      label: 'Membre depuis',
-      value: artisan.member_since || new Date().getFullYear().toString(),
-      color: 'text-amber-600 bg-amber-50',
-    },
-  ]
+  // Only show stats that have real data
+  const stats: { icon: typeof Clock; label: string; value: string; color: string }[] = []
+
+  if (artisan.response_time) {
+    stats.push({ icon: Clock, label: 'Temps de réponse', value: artisan.response_time, color: 'text-blue-600 bg-blue-50' })
+  }
+  if (artisan.response_rate) {
+    stats.push({ icon: TrendingUp, label: 'Taux de réponse', value: `${artisan.response_rate}%`, color: 'text-green-600 bg-green-50' })
+  }
+  if (artisan.experience_years && artisan.experience_years > 0) {
+    stats.push({ icon: Calendar, label: 'Expérience', value: `${artisan.experience_years} ans`, color: 'text-purple-600 bg-purple-50' })
+  }
+  if (artisan.member_since) {
+    stats.push({ icon: MessageCircle, label: 'Membre depuis', value: artisan.member_since, color: 'text-amber-600 bg-amber-50' })
+  }
+  if (artisan.creation_date) {
+    const year = new Date(artisan.creation_date).getFullYear()
+    if (!artisan.member_since) {
+      stats.push({ icon: Calendar, label: 'Entreprise créée', value: year.toString(), color: 'text-purple-600 bg-purple-50' })
+    }
+  }
+
+  // Don't render section if no real stats
+  if (stats.length === 0) return null
 
   return (
     <motion.div
@@ -48,7 +46,7 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
         Statistiques
       </h2>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4" role="list" aria-label="Statistiques de l'artisan">
+      <div className={`grid grid-cols-2 ${stats.length >= 4 ? 'md:grid-cols-4' : stats.length === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-4`} role="list" aria-label="Statistiques de l'artisan">
         {stats.map((stat, index) => (
           <motion.div
             key={stat.label}
