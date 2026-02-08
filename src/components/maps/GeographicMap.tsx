@@ -79,7 +79,18 @@ export default function GeographicMap({
     })
   }, [])
 
-  // World-class marker icon with animations
+  // Pan to highlighted provider when it changes
+  useEffect(() => {
+    if (!highlightedProviderId || !mapRef.current) return
+    const target = providers.find((p) => p.id === highlightedProviderId)
+    if (target) {
+      mapRef.current.setView([target.latitude, target.longitude], Math.max(zoom, 13), {
+        animate: true,
+        duration: 0.4,
+      })
+    }
+  }, [highlightedProviderId, providers, zoom])
+
   // Marqueurs simples et propres
   const createMarkerIcon = (provider?: Provider, isHighlighted = false) => {
     if (!_L) return undefined
@@ -131,17 +142,6 @@ export default function GeographicMap({
       </div>
     )
   }
-
-  useEffect(() => {
-    if (!highlightedProviderId || !mapRef.current) return
-    const target = providers.find((p) => p.id === highlightedProviderId)
-    if (target) {
-      mapRef.current.setView([target.latitude, target.longitude], Math.max(zoom, 13), {
-        animate: true,
-        duration: 0.4,
-      })
-    }
-  }, [highlightedProviderId, providers, zoom])
 
   return (
     <div className={`rounded-xl overflow-hidden ${className}`} style={{ height }}>
