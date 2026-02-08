@@ -6,9 +6,7 @@ import ArtisanPageClient from '@/components/artisan/ArtisanPageClient'
 import { Review } from '@/components/artisan'
 import type { LegacyArtisan } from '@/types/legacy'
 
-// Force dynamic rendering to always fetch fresh data
-export const revalidate = 0
-export const dynamic = 'force-dynamic'
+export const revalidate = 300
 
 interface PageProps {
   params: Promise<{
@@ -176,7 +174,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       },
     }
   } catch {
-    return { title: 'Artisan non trouvé' }
+    return { title: 'Artisan non trouvé', robots: { index: false, follow: false } }
   }
 }
 
@@ -191,9 +189,12 @@ export default async function ProviderPage({ params }: PageProps) {
       getServiceBySlug(serviceSlug),
       getLocationBySlug(locationSlug),
     ])
+  } catch (error) {
+    console.error('Provider page DB error:', error)
+    throw error
+  }
 
-    if (!provider) notFound()
-  } catch {
+  if (!provider) {
     notFound()
   }
 

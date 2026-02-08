@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
-import { companyIdentity, isCompanyRegistered } from '@/lib/config/company-identity'
+import { companyIdentity } from '@/lib/config/company-identity'
 
 export const metadata: Metadata = {
   title: 'Mentions légales - ServicesArtisans',
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 }
 
 export default function MentionsLegalesPage() {
-  const registered = isCompanyRegistered()
+  const isPreLaunch = companyIdentity.status === 'pre-launch'
 
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
@@ -35,51 +35,48 @@ export default function MentionsLegalesPage() {
           <div className="bg-white rounded-xl shadow-sm p-8 prose prose-gray max-w-none">
 
             <h2>Éditeur du site</h2>
-            {registered ? (
-              <>
-                <ul>
-                  {companyIdentity.legalName && (
-                    <li><strong>Raison sociale :</strong> {companyIdentity.legalName}</li>
-                  )}
-                  {companyIdentity.formeJuridique && (
-                    <li><strong>Forme juridique :</strong> {companyIdentity.formeJuridique}</li>
-                  )}
-                  {companyIdentity.capitalSocial && (
-                    <li><strong>Capital social :</strong> {companyIdentity.capitalSocial}</li>
-                  )}
-                  {companyIdentity.siret && (
-                    <li><strong>SIRET :</strong> {companyIdentity.siret}</li>
-                  )}
-                  {companyIdentity.rcs && (
-                    <li><strong>RCS :</strong> {companyIdentity.rcs}</li>
-                  )}
-                  {companyIdentity.tvaIntracom && (
-                    <li><strong>TVA intracommunautaire :</strong> {companyIdentity.tvaIntracom}</li>
-                  )}
-                  {companyIdentity.address && (
-                    <li><strong>Siège social :</strong> {companyIdentity.address}</li>
-                  )}
-                  {companyIdentity.phone && (
-                    <li><strong>Téléphone :</strong> {companyIdentity.phone}</li>
-                  )}
-                  {companyIdentity.directeurPublication && (
-                    <li><strong>Directeur de la publication :</strong> {companyIdentity.directeurPublication}</li>
-                  )}
-                  <li><strong>Email :</strong> {companyIdentity.email}</li>
-                </ul>
-              </>
-            ) : (
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 not-prose">
+            {isPreLaunch && (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 not-prose mb-4">
                 <p className="text-blue-800 text-sm">
                   Le site {companyIdentity.name} est en cours de développement.
                   Les informations légales complètes (dénomination sociale, SIRET, adresse du siège)
-                  seront publiées lors de l'immatriculation de la société.
+                  seront publiées lors de l&apos;immatriculation de la société.
                 </p>
                 <p className="text-blue-800 text-sm mt-2">
                   Contact : <strong>{companyIdentity.email}</strong>
                 </p>
               </div>
             )}
+            <ul>
+              {companyIdentity.legalName && (
+                <li><strong>Raison sociale :</strong> {companyIdentity.legalName}</li>
+              )}
+              {companyIdentity.formeJuridique && (
+                <li><strong>Forme juridique :</strong> {companyIdentity.formeJuridique}</li>
+              )}
+              {companyIdentity.capitalSocial && (
+                <li><strong>Capital social :</strong> {companyIdentity.capitalSocial}</li>
+              )}
+              {companyIdentity.siret && (
+                <li><strong>SIRET :</strong> {companyIdentity.siret}</li>
+              )}
+              {companyIdentity.rcs && (
+                <li><strong>RCS :</strong> {companyIdentity.rcs}</li>
+              )}
+              {companyIdentity.tvaIntracom && (
+                <li><strong>TVA intracommunautaire :</strong> {companyIdentity.tvaIntracom}</li>
+              )}
+              {companyIdentity.address && (
+                <li><strong>Siège social :</strong> {companyIdentity.address}</li>
+              )}
+              {companyIdentity.phone && (
+                <li><strong>Téléphone :</strong> {companyIdentity.phone}</li>
+              )}
+              {companyIdentity.directeurPublication && (
+                <li><strong>Directeur de la publication :</strong> {companyIdentity.directeurPublication}</li>
+              )}
+              <li><strong>Email :</strong> {companyIdentity.email}</li>
+            </ul>
 
             <h2>Hébergement</h2>
             <ul>

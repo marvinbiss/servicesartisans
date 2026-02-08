@@ -22,17 +22,17 @@ export const companyIdentity = {
     'Plateforme de mise en relation entre particuliers et artisans qualifiés en France.',
   url: process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr',
 
-  // Legal identity (Level 1 — null until company registration)
-  legalName: null as string | null,
-  formeJuridique: null as string | null,
-  capitalSocial: null as string | null,
-  siret: null as string | null,
-  rcs: null as string | null,
-  tvaIntracom: null as string | null,
-  address: null as string | null,
-  phone: null as string | null,
-  directeurPublication: null as string | null,
-  foundingDate: null as string | null,
+  // Legal identity (Level 1 — from env vars, null until company registration)
+  legalName: process.env.COMPANY_LEGAL_NAME || null,
+  formeJuridique: process.env.COMPANY_FORME_JURIDIQUE || null,
+  capitalSocial: process.env.COMPANY_CAPITAL_SOCIAL || null,
+  siret: process.env.COMPANY_SIRET || null,
+  rcs: process.env.COMPANY_RCS || null,
+  tvaIntracom: process.env.COMPANY_TVA || null,
+  address: process.env.COMPANY_ADDRESS || null,
+  phone: process.env.COMPANY_PHONE || null,
+  directeurPublication: process.env.COMPANY_DIRECTEUR_PUBLICATION || null,
+  foundingDate: process.env.COMPANY_FOUNDING_DATE || null,
 
   // Contact (real and functional)
   email: 'contact@servicesartisans.fr',
@@ -58,8 +58,8 @@ export const companyIdentity = {
   },
 
   // Platform status
-  status: 'pre-launch' as 'pre-launch' | 'launched',
-} as const
+  status: (process.env.COMPANY_STATUS as 'pre-launch' | 'launched') || 'pre-launch',
+}
 
 /** True when SIRET, legal name, and address are all filled. */
 export function isCompanyRegistered(): boolean {

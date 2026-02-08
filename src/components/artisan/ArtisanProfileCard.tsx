@@ -219,10 +219,6 @@ export function ArtisanProfileCard({
                 <div className="text-xs text-slate-500">missions</div>
               </div>
             )}
-            <div className="text-center">
-              <div className="text-lg font-bold text-green-600">98%</div>
-              <div className="text-xs text-slate-500">satisfaits</div>
-            </div>
           </div>
 
           {/* Specialties */}

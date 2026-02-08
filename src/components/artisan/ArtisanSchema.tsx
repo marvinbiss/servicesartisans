@@ -117,10 +117,10 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
       },
     }),
 
-    aggregateRating: artisan.review_count > 0 ? {
+    aggregateRating: reviews.length > 0 ? {
       '@type': 'AggregateRating',
-      ratingValue: artisan.average_rating,
-      reviewCount: artisan.review_count,
+      ratingValue: (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1),
+      reviewCount: reviews.length,
       bestRating: 5,
       worstRating: 1,
     } : undefined,

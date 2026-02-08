@@ -54,7 +54,6 @@ export default async function ServicePage({ params }: PageProps) {
 
   try {
     service = await getServiceBySlug(serviceSlug)
-    if (!service) notFound()
 
     // Récupérer les villes populaires et les artisans récents
     ;[topCities, recentProviders] = await Promise.all([
@@ -62,7 +61,11 @@ export default async function ServicePage({ params }: PageProps) {
       getProvidersByService(serviceSlug, 12),
     ])
   } catch (error) {
-    console.error('Error fetching service data:', error)
+    console.error('Service page DB error:', error)
+    throw error
+  }
+
+  if (!service) {
     notFound()
   }
 

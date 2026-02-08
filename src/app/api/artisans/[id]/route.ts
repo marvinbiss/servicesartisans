@@ -305,8 +305,8 @@ export async function GET(
       const departmentName = getDepartmentName(deptCode) || getDepartmentName(provider.address_department)
       const regionName = getRegionName(deptCode) || getRegionName(provider.address_region)
 
-      const finalRating = provider.rating_average || (averageRating > 0 ? averageRating : 0)
-      const finalReviewCount = provider.review_count || reviewCount
+      const finalRating = averageRating > 0 ? averageRating : 0
+      const finalReviewCount = reviewCount
       const finalSpecialty = provider.specialty || services[0] || 'Artisan'
 
       // Generate description if not available
