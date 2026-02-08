@@ -11,6 +11,9 @@ import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { PopularServicesLinks } from '@/components/InternalLinks'
 import { popularServices, popularCities } from '@/lib/constants/navigation'
 import Link from 'next/link'
+import { REVALIDATE } from '@/lib/cache'
+import { services as staticServicesList, villes, getVilleBySlug } from '@/lib/data/france'
+import type { Service, Location as LocationType, Provider } from '@/types'
 
 // Safely escape JSON for script tags to prevent XSS
 function safeJsonStringify(data: unknown): string {
@@ -20,9 +23,40 @@ function safeJsonStringify(data: unknown): string {
     .replace(/&/g, '\\u0026')
 }
 
-// Force dynamic rendering - pas de cache ISR
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+// ISR: revalidate every 60s — stale cache served on DB outage
+export const revalidate = REVALIDATE.serviceLocation
+// Hard 404 for slugs not in generateStaticParams
+export const dynamicParams = false
+
+// 15 services × 141 villes = 2,115 pre-rendered paths
+export function generateStaticParams() {
+  return staticServicesList.flatMap(s =>
+    villes.map(v => ({ service: s.slug, location: v.slug }))
+  )
+}
+
+/** Resolve a ville from static data to Location shape (fallback when DB is down) */
+function villeToLocation(slug: string): LocationType | null {
+  const ville = getVilleBySlug(slug)
+  if (!ville) return null
+  return {
+    id: '',
+    name: ville.name,
+    slug: ville.slug,
+    postal_code: ville.codePostal,
+    region_name: ville.region,
+    department_name: ville.departement,
+    department_code: ville.departementCode,
+    is_active: true,
+    created_at: '',
+  }
+}
+
+/** Slugify a region name for URL (e.g. "Île-de-France" → "ile-de-france") */
+function regionSlugify(name: string): string {
+  return name.toLowerCase().normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+}
 
 interface PageProps {
   params: Promise<{
@@ -34,70 +68,80 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { service: serviceSlug, location: locationSlug } = await params
 
+  let serviceName = ''
+  let locationName = ''
+  let postalCode = ''
+  let departmentCode = ''
+  let hasProviders = true
+
   try {
     const [service, location] = await Promise.all([
       getServiceBySlug(serviceSlug),
       getLocationBySlug(locationSlug),
     ])
 
-    if (!service || !location) {
-      return { title: 'Page non trouvée' }
+    if (service) serviceName = service.name
+    if (location) {
+      locationName = location.name
+      postalCode = location.postal_code || ''
+      departmentCode = location.department_code || ''
     }
 
-    const title = `${service.name} ${location.name} (${location.postal_code || location.department_code}) - Devis gratuit`
-    const description = `Trouvez le meilleur ${service.name.toLowerCase()} à ${location.name}. Comparez les avis, tarifs et obtenez jusqu'à 3 devis gratuits. Artisans vérifiés et disponibles.`
+    // Check provider count for noindex decision
+    const providers = await getProvidersByServiceAndLocation(serviceSlug, locationSlug)
+    hasProviders = providers && providers.length > 0
+  } catch {
+    // DB down — fallback to static data
+    const staticSvc = staticServicesList.find(s => s.slug === serviceSlug)
+    const ville = getVilleBySlug(locationSlug)
+    if (staticSvc) serviceName = staticSvc.name
+    if (ville) {
+      locationName = ville.name
+      postalCode = ville.codePostal
+      departmentCode = ville.departementCode
+    }
+    hasProviders = false // conservative: noindex when DB is down
+  }
 
-    return {
+  if (!serviceName || !locationName) {
+    return { title: 'Non trouvé' }
+  }
+
+  const title = `${serviceName} ${locationName} (${postalCode || departmentCode}) - Devis gratuit`
+  const description = `Trouvez le meilleur ${serviceName.toLowerCase()} à ${locationName}. Comparez les avis, tarifs et obtenez jusqu'à 3 devis gratuits. Artisans vérifiés et disponibles.`
+  const svcLower = serviceName.toLowerCase()
+
+  return {
+    title,
+    description,
+    ...(hasProviders ? {} : { robots: { index: false, follow: true } }),
+    keywords: [
+      `${svcLower} ${locationName}`,
+      `${svcLower} ${postalCode}`,
+      `${svcLower} pas cher ${locationName}`,
+      `${svcLower} urgence ${locationName}`,
+      `devis ${svcLower} ${locationName}`,
+      `tarif ${svcLower} ${locationName}`,
+    ],
+    openGraph: {
       title,
       description,
-      keywords: [
-        `${service.name.toLowerCase()} ${location.name}`,
-        `${service.name.toLowerCase()} ${location.postal_code}`,
-        `${service.name.toLowerCase()} pas cher ${location.name}`,
-        `${service.name.toLowerCase()} urgence ${location.name}`,
-        `devis ${service.name.toLowerCase()} ${location.name}`,
-        `tarif ${service.name.toLowerCase()} ${location.name}`,
-      ],
-      openGraph: {
-        title,
-        description,
-        type: 'website',
-        locale: 'fr_FR',
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title,
-        description,
-      },
-      alternates: {
-        canonical: `https://servicesartisans.fr/services/${serviceSlug}/${locationSlug}`,
-      },
-    }
-  } catch {
-    return { title: 'Page non trouvée' }
+      type: 'website',
+      locale: 'fr_FR',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+    },
+    alternates: {
+      canonical: `https://servicesartisans.fr/services/${serviceSlug}/${locationSlug}`,
+    },
   }
 }
 
-interface ServiceData {
-  name: string
-}
-
-interface LocationData {
-  name: string
-  postal_code?: string
-  region_name?: string
-  region_slug?: string
-  department_name?: string
-  department_code?: string
-}
-
-interface ProviderData {
-  id: string
-  name: string
-}
-
 // JSON-LD structured data for SEO
-function generateJsonLd(service: ServiceData, location: LocationData, providers: ProviderData[], serviceSlug: string, locationSlug: string) {
+function generateJsonLd(service: Service, location: LocationType, providers: unknown[], serviceSlug: string, locationSlug: string) {
   const serviceSchema = {
     '@context': 'https://schema.org',
     '@type': 'Service',
@@ -140,24 +184,45 @@ function generateJsonLd(service: ServiceData, location: LocationData, providers:
 export default async function ServiceLocationPage({ params }: PageProps) {
   const { service: serviceSlug, location: locationSlug } = await params
 
-  let service
-  let location
-  let providers
-
+  // 1. Resolve service (DB → static fallback)
+  let service: Service
   try {
-    ;[service, location] = await Promise.all([
-      getServiceBySlug(serviceSlug),
-      getLocationBySlug(locationSlug),
-    ])
-
-    if (!service || !location) {
-      notFound()
+    service = await getServiceBySlug(serviceSlug)
+    if (!service) {
+      const staticSvc = staticServicesList.find(s => s.slug === serviceSlug)
+      if (!staticSvc) notFound()
+      service = { id: '', name: staticSvc.name, slug: staticSvc.slug, is_active: true, created_at: '' }
     }
+  } catch {
+    const staticSvc = staticServicesList.find(s => s.slug === serviceSlug)
+    if (!staticSvc) notFound()
+    service = { id: '', name: staticSvc.name, slug: staticSvc.slug, is_active: true, created_at: '' }
+  }
 
+  // 2. Resolve location (DB → france.ts fallback)
+  let location: LocationType
+  try {
+    const dbLocation = await getLocationBySlug(locationSlug)
+    if (!dbLocation) {
+      const fallback = villeToLocation(locationSlug)
+      if (!fallback) notFound()
+      location = fallback
+    } else {
+      location = dbLocation
+    }
+  } catch {
+    const fallback = villeToLocation(locationSlug)
+    if (!fallback) notFound()
+    location = fallback
+  }
+
+  // 3. Fetch providers (best-effort, never crash)
+  let providers: Provider[] = []
+  try {
     providers = await getProvidersByServiceAndLocation(serviceSlug, locationSlug)
   } catch (error) {
-    console.error('Error fetching data:', error)
-    notFound()
+    console.error('Hub DB error (providers):', error)
+    // Continue with empty providers — page still renders
   }
 
   const jsonLdSchemas = generateJsonLd(service, location, providers || [], serviceSlug, locationSlug)
@@ -258,7 +323,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
               <div className="space-y-2">
                 {location.region_name && (
                   <Link
-                    href={`/regions/${location.region_slug || location.region_name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
+                    href={`/regions/${location.region_name ? regionSlugify(location.region_name) : ''}`}
                     className="block px-3 py-2 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-lg text-sm transition-colors"
                   >
                     Artisans en {location.region_name}
