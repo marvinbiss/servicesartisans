@@ -10,6 +10,14 @@ interface ArtisanMapProps {
 
 export function ArtisanMap({ artisan }: ArtisanMapProps) {
   const hasCoordinates = artisan.latitude && artisan.longitude
+  const hasAddress = artisan.address && artisan.address.length > 0
+  const hasZones = artisan.intervention_zones && artisan.intervention_zones.length > 0
+  const hasRadius = !!artisan.intervention_zone
+
+  // Hide entire section when there's no useful location data
+  if (!hasCoordinates && !hasAddress && !hasZones && !hasRadius) {
+    return null
+  }
 
   return (
     <motion.div
@@ -23,27 +31,20 @@ export function ArtisanMap({ artisan }: ArtisanMapProps) {
         Zone d'intervention
       </h2>
 
-      {/* Map */}
-      <div className="rounded-xl overflow-hidden bg-gray-100 mb-4" style={{ height: '280px' }}>
-        {hasCoordinates ? (
+      {/* Map — only show when coordinates are available */}
+      {hasCoordinates && (
+        <div className="rounded-xl overflow-hidden bg-gray-100 mb-4" style={{ height: '280px' }}>
           <iframe
             width="100%"
             height="100%"
             style={{ border: 0 }}
             loading="lazy"
             src={`https://www.openstreetmap.org/export/embed.html?bbox=${artisan.longitude! - 0.08},${artisan.latitude! - 0.05},${artisan.longitude! + 0.08},${artisan.latitude! + 0.05}&layer=mapnik&marker=${artisan.latitude},${artisan.longitude}`}
-            title={`Carte de localisation de l'artisan a ${artisan.city}`}
+            title={`Carte de localisation de l'artisan à ${artisan.city}`}
             aria-label={`Carte interactive montrant la zone d'intervention autour de ${artisan.city}`}
           />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center" role="img" aria-label="Carte non disponible">
-            <div className="text-center text-gray-500">
-              <MapPin className="w-12 h-12 mx-auto mb-2 text-gray-300" aria-hidden="true" />
-              <p>Carte non disponible</p>
-            </div>
-          </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Address */}
       {artisan.address && (

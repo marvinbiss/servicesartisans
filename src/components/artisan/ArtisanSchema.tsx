@@ -187,6 +187,22 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
     }),
     paymentAccepted: artisan.payment_methods?.join(', ') || 'Cash, Credit Card',
     currenciesAccepted: 'EUR',
+
+    // Default opening hours (Mon-Fri 8-18, Sat 9-13)
+    openingHoursSpecification: [
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        opens: '08:00',
+        closes: '18:00',
+      },
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: 'Saturday',
+        opens: '09:00',
+        closes: '13:00',
+      },
+    ],
   }
 
   // FAQPage Schema

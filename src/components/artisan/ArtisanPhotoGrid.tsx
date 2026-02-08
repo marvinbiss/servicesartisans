@@ -4,7 +4,7 @@ import { useState, useCallback } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight, Grid3X3 } from 'lucide-react'
-import { Artisan, PortfolioItem } from './types'
+import { Artisan } from './types'
 
 interface ArtisanPhotoGridProps {
   artisan: Artisan
@@ -13,22 +13,14 @@ interface ArtisanPhotoGridProps {
 // Blur placeholder for images
 const BLUR_DATA_URL = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAn/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBEQCEAwEPwAB//9k='
 
-// Default demo photos if no portfolio
-const DEFAULT_PHOTOS: PortfolioItem[] = [
-  { id: '1', title: 'Realisation 1', description: 'Travaux professionnels', imageUrl: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800&h=600&fit=crop', category: 'Travaux' },
-  { id: '2', title: 'Realisation 2', description: 'Intervention soignee', imageUrl: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop', category: 'Travaux' },
-  { id: '3', title: 'Realisation 3', description: 'Finitions parfaites', imageUrl: 'https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=800&h=600&fit=crop', category: 'Travaux' },
-  { id: '4', title: 'Realisation 4', description: 'Travail de qualite', imageUrl: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop', category: 'Travaux' },
-  { id: '5', title: 'Realisation 5', description: 'Expertise reconnue', imageUrl: 'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=800&h=600&fit=crop', category: 'Travaux' },
-]
-
 export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
 
+  // Only show real portfolio photos — no fake stock images
   const photos = artisan.portfolio && artisan.portfolio.length > 0
     ? artisan.portfolio
-    : DEFAULT_PHOTOS
+    : []
 
   const openLightbox = useCallback((index: number) => {
     setCurrentIndex(index)
@@ -78,7 +70,7 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
             onClick={() => openLightbox(0)}
           >
             <Image
-              src={gridPhotos[0]?.imageUrl || DEFAULT_PHOTOS[0].imageUrl}
+              src={gridPhotos[0]?.imageUrl}
               alt={gridPhotos[0]?.title || 'Photo principale'}
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-105"

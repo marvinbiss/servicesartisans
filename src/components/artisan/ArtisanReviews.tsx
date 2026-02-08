@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Star, CheckCircle, ChevronDown, Filter, ThumbsUp, Image as ImageIcon } from 'lucide-react'
 import { Artisan, Review } from './types'
@@ -14,50 +14,60 @@ const REVIEWS_PER_PAGE = 5
 
 type FilterType = 'all' | '5' | '4' | '3' | '2' | '1' | 'verified' | 'photo'
 
-export function ArtisanReviews({ artisan, reviews }: ArtisanReviewsProps) {
+export function ArtisanReviews({ artisan: _artisan, reviews }: ArtisanReviewsProps) {
   const [displayCount, setDisplayCount] = useState(REVIEWS_PER_PAGE)
   const [filter, setFilter] = useState<FilterType>('all')
   const [sortBy, setSortBy] = useState<'recent' | 'rating'>('recent')
 
+  // If no reviews at all, show a clean CTA instead of empty bars
+  if (reviews.length === 0) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.3 }}
+        className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6"
+      >
+        <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
+          Avis clients
+        </h2>
+        <div className="text-center py-8">
+          <div className="w-16 h-16 rounded-full bg-amber-50 flex items-center justify-center mx-auto mb-4">
+            <Star className="w-8 h-8 text-amber-400" />
+          </div>
+          <p className="text-gray-900 font-medium mb-1">Pas encore d'avis</p>
+          <p className="text-gray-500 text-sm">Soyez le premier à donner votre avis sur cet artisan.</p>
+        </div>
+      </motion.div>
+    )
+  }
+
   // Calculate rating distribution
-  const ratingDistribution = useMemo(() => {
-    return [5, 4, 3, 2, 1].map(rating => {
-      const count = reviews.filter(r => Math.floor(r.rating) === rating).length
-      const percentage = reviews.length > 0 ? (count / reviews.length) * 100 : 0
-      return { rating, count, percentage }
-    })
-  }, [reviews])
+  const ratingDistribution = [5, 4, 3, 2, 1].map(rating => {
+    const count = reviews.filter(r => Math.floor(r.rating) === rating).length
+    const percentage = reviews.length > 0 ? (count / reviews.length) * 100 : 0
+    return { rating, count, percentage }
+  })
 
   // Filter and sort reviews
-  const filteredReviews = useMemo(() => {
-    let result = [...reviews]
+  let filteredResult = [...reviews]
+  switch (filter) {
+    case '5': case '4': case '3': case '2': case '1':
+      filteredResult = filteredResult.filter(r => Math.floor(r.rating) === parseInt(filter))
+      break
+    case 'verified':
+      filteredResult = filteredResult.filter(r => r.verified)
+      break
+    case 'photo':
+      filteredResult = filteredResult.filter(r => r.hasPhoto)
+      break
+  }
+  if (sortBy === 'rating') {
+    filteredResult.sort((a, b) => b.rating - a.rating)
+  }
 
-    // Apply filter
-    switch (filter) {
-      case '5':
-      case '4':
-      case '3':
-      case '2':
-      case '1':
-        result = result.filter(r => Math.floor(r.rating) === parseInt(filter))
-        break
-      case 'verified':
-        result = result.filter(r => r.verified)
-        break
-      case 'photo':
-        result = result.filter(r => r.hasPhoto)
-        break
-    }
-
-    // Apply sort
-    if (sortBy === 'rating') {
-      result.sort((a, b) => b.rating - a.rating)
-    }
-    // 'recent' is default order from API
-
-    return result
-  }, [reviews, filter, sortBy])
-
+  const filteredReviews = filteredResult
   const displayedReviews = filteredReviews.slice(0, displayCount)
   const hasMore = displayCount < filteredReviews.length
 
@@ -67,7 +77,7 @@ export function ArtisanReviews({ artisan, reviews }: ArtisanReviewsProps) {
 
   const handleFilterChange = (newFilter: FilterType) => {
     setFilter(newFilter)
-    setDisplayCount(REVIEWS_PER_PAGE) // Reset pagination
+    setDisplayCount(REVIEWS_PER_PAGE)
   }
 
   return (
@@ -79,7 +89,7 @@ export function ArtisanReviews({ artisan, reviews }: ArtisanReviewsProps) {
     >
       <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
         <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
-        Avis clients {artisan.review_count > 0 && `(${artisan.review_count})`}
+        Avis clients ({reviews.length})
       </h2>
 
       {/* Rating overview */}
@@ -87,33 +97,31 @@ export function ArtisanReviews({ artisan, reviews }: ArtisanReviewsProps) {
         {/* Big rating */}
         <div className="text-center md:text-left flex-shrink-0">
           <div className="text-5xl font-bold text-gray-900">
-            {artisan.average_rating !== null && artisan.average_rating > 0 ? artisan.average_rating.toFixed(1) : 'N/A'}
+            {(reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)}
           </div>
           <div className="flex items-center justify-center md:justify-start gap-1 mt-2">
             {[1, 2, 3, 4, 5].map(star => (
               <Star
                 key={star}
                 className={`w-5 h-5 ${
-                  star <= Math.round(artisan.average_rating)
+                  star <= Math.round(reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length)
                     ? 'text-amber-500 fill-amber-500'
                     : 'text-gray-300'
                 }`}
               />
             ))}
           </div>
-          {artisan.review_count > 0 && (
-            <div className="text-sm text-gray-500 mt-1">{artisan.review_count} avis</div>
-          )}
+          <div className="text-sm text-gray-500 mt-1">{reviews.length} avis</div>
         </div>
 
         {/* Distribution bars - clickable filters */}
-        <div className="flex-1 space-y-2" role="group" aria-label="Filtrer par nombre d'etoiles">
+        <div className="flex-1 space-y-2" role="group" aria-label="Filtrer par nombre d'étoiles">
           {ratingDistribution.map(({ rating, count, percentage }) => (
             <button
               key={rating}
               onClick={() => handleFilterChange(rating.toString() as FilterType)}
               aria-pressed={filter === rating.toString()}
-              aria-label={`Filtrer les avis ${rating} etoiles (${count} avis)`}
+              aria-label={`Filtrer les avis ${rating} étoiles (${count} avis)`}
               className={`w-full flex items-center gap-3 p-1 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-1 ${
                 filter === rating.toString() ? 'bg-amber-50' : 'hover:bg-gray-50'
               }`}
@@ -160,7 +168,7 @@ export function ArtisanReviews({ artisan, reviews }: ArtisanReviewsProps) {
           }`}
         >
           <CheckCircle className="w-3.5 h-3.5" aria-hidden="true" />
-          Verifies
+          Vérifiés
         </button>
         <button
           onClick={() => handleFilterChange('photo')}
@@ -185,16 +193,16 @@ export function ArtisanReviews({ artisan, reviews }: ArtisanReviewsProps) {
           onChange={(e) => setSortBy(e.target.value as 'recent' | 'rating')}
           className="px-3 py-1.5 rounded-lg border border-gray-200 text-sm text-gray-600 bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         >
-          <option value="recent">Plus recents</option>
+          <option value="recent">Plus récents</option>
           <option value="rating">Meilleures notes</option>
         </select>
       </div>
 
-      {/* No results */}
+      {/* No results for current filter */}
       {filteredReviews.length === 0 && (
         <div className="text-center py-8 text-gray-500">
           <Star className="w-12 h-12 mx-auto mb-3 text-gray-300" />
-          <p>Aucun avis ne correspond a ce filtre</p>
+          <p>Aucun avis ne correspond à ce filtre</p>
           <button
             onClick={() => handleFilterChange('all')}
             className="mt-2 text-blue-600 hover:underline text-sm"
@@ -294,8 +302,8 @@ export function ArtisanReviews({ artisan, reviews }: ArtisanReviewsProps) {
       {/* Shown count */}
       {filteredReviews.length > 0 && (
         <p className="mt-4 text-center text-sm text-gray-500">
-          {displayedReviews.length} sur {filteredReviews.length} avis affiches
-          {filter !== 'all' && ` (filtre: ${filter === 'verified' ? 'verifies' : filter === 'photo' ? 'avec photo' : filter + ' etoiles'})`}
+          {displayedReviews.length} sur {filteredReviews.length} avis affichés
+          {filter !== 'all' && ` (filtre: ${filter === 'verified' ? 'vérifiés' : filter === 'photo' ? 'avec photo' : filter + ' étoiles'})`}
         </p>
       )}
     </motion.div>

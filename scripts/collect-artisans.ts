@@ -471,9 +471,18 @@ async function collectForTask(
       stats.truncatedTasks++
     }
 
-    // Transform all results
+    // Transform — only active, open, non-radié businesses
     const records = response.results
-      .filter(e => e.siren && e.siren.length === 9)
+      .filter(e => {
+        if (!e.siren || e.siren.length !== 9) return false
+        // Entreprise active (pas cessée/radiée)
+        if ((e as any).etat_administratif !== 'A') return false
+        // Siège ouvert (pas fermé)
+        if ((e as any).siege?.etat_administratif === 'F') return false
+        // Diffusible (pas de données restreintes)
+        if ((e as any).statut_diffusion === 'P') return false
+        return true
+      })
       .map(e => transformEntreprise(e, codeNaf, departement))
 
     if (records.length > 0) {
