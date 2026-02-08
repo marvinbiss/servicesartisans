@@ -30,9 +30,29 @@ interface ArtisanSimilarProps {
 export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSimilarProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
 
-  // Only show if we have real similar artisans
+  // Fallback: show hub link when no similar artisans available
   if (!similarArtisans || similarArtisans.length === 0) {
-    return null
+    const hubUrl = _artisan.specialty_slug && _artisan.city_slug
+      ? `/services/${_artisan.specialty_slug}/${_artisan.city_slug}`
+      : null
+    if (!hubUrl) return null
+    return (
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+        <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2 mb-4">
+          <Users className="w-5 h-5 text-blue-600" aria-hidden="true" />
+          Artisans similaires
+        </h2>
+        <p className="text-gray-600 mb-4">
+          Découvrez d&apos;autres {_artisan.specialty?.toLowerCase() || 'artisans'} à {_artisan.city}
+        </p>
+        <Link
+          href={hubUrl}
+          className="text-blue-600 hover:text-blue-800 font-medium"
+        >
+          Voir tous les {_artisan.specialty?.toLowerCase() || 'artisans'} à {_artisan.city} →
+        </Link>
+      </div>
+    )
   }
 
   const similar = similarArtisans

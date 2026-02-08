@@ -76,6 +76,7 @@ export interface Review {
   author: string
   rating: number
   date: string
+  dateISO?: string
   comment: string
   service: string
   hasPhoto?: boolean

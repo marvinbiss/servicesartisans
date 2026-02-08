@@ -5,6 +5,7 @@ import { getProviderByStableId, getProviderBySlug, getServiceBySlug, getLocation
 import { getArtisanUrl } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/server'
 import ArtisanPageClient from '@/components/artisan/ArtisanPageClient'
+import ArtisanInternalLinks from '@/components/artisan/ArtisanInternalLinks'
 import { Review } from '@/components/artisan'
 import type { LegacyArtisan } from '@/types/legacy'
 
@@ -125,6 +126,7 @@ async function getProviderReviews(providerId: string): Promise<Review[]> {
           year: 'numeric',
         }),
         comment: r.content || '',
+        dateISO: r.created_at ? r.created_at.split('T')[0] : undefined,
         service: 'Plomberie',
         verified: r.author_verified || false,
         hasPhoto: r.has_media || false,
@@ -250,6 +252,17 @@ export default async function ProviderPage({ params }: PageProps) {
         initialArtisan={artisan}
         initialReviews={reviews}
         artisanId={provider.id}
+      />
+
+      {/* Internal Links — Maillage interne (SEO) */}
+      <ArtisanInternalLinks
+        serviceSlug={serviceSlug}
+        locationSlug={locationSlug}
+        serviceName={service?.name || artisan.specialty}
+        cityName={artisan.city}
+        regionName={location?.region_name}
+        departmentName={location?.department_name}
+        departmentCode={location?.department_code}
       />
 
       {/* Trust & Safety Links (E-E-A-T) */}

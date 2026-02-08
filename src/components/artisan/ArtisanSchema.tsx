@@ -114,7 +114,7 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
         '@type': 'Person',
         name: r.author,
       },
-      datePublished: r.date,
+      datePublished: r.dateISO || r.date,
       reviewRating: {
         '@type': 'Rating',
         ratingValue: r.rating,
@@ -231,11 +231,22 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
     })),
   }
 
+  // ProfilePage Schema (wraps the artisan profile)
+  const profilePageSchema = {
+    '@type': 'ProfilePage',
+    '@id': `${artisanUrl}#profile`,
+    mainEntity: { '@id': `${artisanUrl}#business` },
+    ...(artisan.member_since && {
+      dateCreated: `${artisan.member_since}-01-01`,
+    }),
+  }
+
   // Combined schema graph for better SEO (single JSON-LD with @graph)
   const combinedSchema = {
     '@context': 'https://schema.org',
     '@graph': [
       organizationSchema,
+      profilePageSchema,
       localBusinessSchema,
       breadcrumbSchema,
       ...(faqSchema ? [faqSchema] : []),
