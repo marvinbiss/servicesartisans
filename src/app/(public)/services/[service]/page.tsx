@@ -6,6 +6,7 @@ import { getServiceBySlug, getLocationsByService, getProvidersByService } from '
 import JsonLd from '@/components/JsonLd'
 import { getServiceSchema, getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { REVALIDATE } from '@/lib/cache'
+import { SITE_URL } from '@/lib/seo/config'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularCitiesLinks } from '@/components/InternalLinks'
 import { popularServices } from '@/lib/constants/navigation'
@@ -34,6 +35,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         title,
         description,
         type: 'website',
+      },
+      alternates: {
+        canonical: `${SITE_URL}/services/${serviceSlug}`,
       },
     }
   } catch {

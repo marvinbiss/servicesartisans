@@ -1,5 +1,12 @@
+import { Metadata } from 'next'
 import Link from 'next/link'
 import { ChevronRight, Mail, Calendar, FileText, Newspaper, Building, Users, TrendingUp, Award } from 'lucide-react'
+
+export const metadata: Metadata = {
+  title: 'Espace presse | ServicesArtisans',
+  description: 'Communiqués de presse, retombées médias et ressources pour les journalistes.',
+  robots: { index: false, follow: true },
+}
 
 const communiques = [
   {

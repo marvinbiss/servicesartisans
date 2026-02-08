@@ -1,5 +1,12 @@
+import { Metadata } from 'next'
 import Link from 'next/link'
 import { ChevronRight, Building, Users, TrendingUp, HeartHandshake, Mail, Phone, CheckCircle } from 'lucide-react'
+
+export const metadata: Metadata = {
+  title: 'Nos partenaires | ServicesArtisans',
+  description: 'Découvrez les partenaires de ServicesArtisans et les opportunités de collaboration.',
+  robots: { index: false, follow: true },
+}
 
 const partenaires = [
   {

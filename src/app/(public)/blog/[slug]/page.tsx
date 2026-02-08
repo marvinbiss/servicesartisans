@@ -1,5 +1,8 @@
+import { Metadata } from 'next'
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 import { Calendar, User, Clock, ArrowLeft, Facebook, Twitter, Linkedin, Tag, ChevronRight } from 'lucide-react'
+import { SITE_URL } from '@/lib/seo/config'
 
 const articles: Record<string, {
   title: string
@@ -113,20 +116,30 @@ const relatedArticles = [
   { slug: 'urgence-plomberie-que-faire', title: 'Urgence plomberie : que faire ?', category: 'Conseils' },
 ]
 
+export function generateStaticParams() {
+  return Object.keys(articles).map((slug) => ({ slug }))
+}
+
+export const dynamicParams = false
+
+export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
+  const article = articles[params.slug]
+  if (!article) return { title: 'Article non trouvé' }
+
+  return {
+    title: `${article.title} | Blog ServicesArtisans`,
+    description: article.excerpt,
+    alternates: {
+      canonical: `${SITE_URL}/blog/${params.slug}`,
+    },
+  }
+}
+
 export default function BlogArticlePage({ params }: { params: { slug: string } }) {
   const article = articles[params.slug]
 
   if (!article) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Article non trouvé</h1>
-          <Link href="/blog" className="text-blue-600 hover:underline">
-            Retour au blog
-          </Link>
-        </div>
-      </div>
-    )
+    notFound()
   }
 
   return (
