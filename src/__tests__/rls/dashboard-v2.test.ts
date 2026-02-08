@@ -69,9 +69,8 @@ describe('Dashboard V2 Migration — Schema Constraints', () => {
       expect(migrationSQL).toContain('ALTER TABLE lead_events ENABLE ROW LEVEL SECURITY')
     })
 
-    it('has artisan SELECT policy scoped to own providers', () => {
-      expect(migrationSQL).toContain('Artisans view own lead events')
-      expect(migrationSQL).toContain('providers WHERE user_id = auth.uid()')
+    it('has admin-only SELECT policy (artisan policy deferred to later migration)', () => {
+      expect(migrationSQL).toContain('Admins view all lead events')
     })
 
     it('has admin SELECT policy', () => {
@@ -87,8 +86,9 @@ describe('Dashboard V2 Migration — Schema Constraints', () => {
   })
 
   describe('access_logs table', () => {
-    it('creates access_logs table', () => {
-      expect(migrationSQL).toContain('CREATE TABLE IF NOT EXISTS access_logs')
+    it('adds indexes on access_logs (table created in earlier migration)', () => {
+      expect(migrationSQL).toContain('idx_access_logs_path')
+      expect(migrationSQL).toContain('idx_access_logs_created')
     })
 
     it('has BEFORE UPDATE trigger to prevent mutation', () => {
