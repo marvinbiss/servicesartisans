@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
 import {
   Search, Menu, X, ChevronDown, MapPin, Wrench, Zap, Key, Flame,
-  PaintBucket, Home, Hammer, HardHat, Wind, Droplets, TreeDeciduous,
+  PaintBucket, Home, Hammer, HardHat, Wind, TreeDeciduous,
   ShieldCheck, Sparkles, Star, Clock, Phone, ArrowRight, Users, Award,
   ChefHat, Layers, Brush, Navigation, History
 } from 'lucide-react'
@@ -111,8 +111,8 @@ const serviceCategories = [
     color: 'emerald',
     icon: TreeDeciduous,
     services: [
-      { name: 'Paysagiste', slug: 'paysagiste', icon: TreeDeciduous, description: 'Jardin, aménagement' },
-      { name: 'Pisciniste', slug: 'pisciniste', icon: Droplets, description: 'Piscine, entretien' },
+      { name: 'Jardinier', slug: 'jardinier', icon: TreeDeciduous, description: 'Jardin, aménagement' },
+      { name: 'Couvreur', slug: 'couvreur', icon: Home, description: 'Toiture, réparation' },
     ]
   },
 ]

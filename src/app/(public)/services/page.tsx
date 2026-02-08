@@ -101,7 +101,7 @@ const allServices = [
     icon: TreeDeciduous,
     color: 'emerald',
     services: [
-      { name: 'Paysagiste', slug: 'paysagiste', icon: TreeDeciduous, description: 'Création et entretien jardins' },
+      { name: 'Jardinier', slug: 'jardinier', icon: TreeDeciduous, description: 'Création et entretien jardins' },
       { name: 'Pisciniste', slug: 'pisciniste', icon: Droplets, description: 'Construction et entretien piscines' },
       { name: 'Clôturiste', slug: 'cloturiste', icon: ShieldCheck, description: 'Clôtures, portails, grillages' },
     ]

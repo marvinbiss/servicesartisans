@@ -8,7 +8,7 @@ export const popularServices = [
   { name: 'Peintre', slug: 'peintre-en-batiment', icon: 'PaintBucket' },
   { name: 'Menuisier', slug: 'menuisier', icon: 'Hammer' },
   { name: 'Maçon', slug: 'macon', icon: 'HardHat' },
-  { name: 'Paysagiste', slug: 'paysagiste', icon: 'TreeDeciduous' },
+  { name: 'Jardinier', slug: 'jardinier', icon: 'TreeDeciduous' },
 ]
 
 export const popularCities = [
