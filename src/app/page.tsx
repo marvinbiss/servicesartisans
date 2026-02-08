@@ -1,126 +1,100 @@
 import { Metadata } from 'next'
-import Link from 'next/link'
 import JsonLd from '@/components/JsonLd'
-import { PopularCitiesLinks } from '@/components/InternalLinks'
+import { PopularCitiesLinks, PopularServicesLinks, GeographicNavigation } from '@/components/InternalLinks'
 import { getOrganizationSchema, getWebsiteSchema } from '@/lib/seo/jsonld'
+import { HeroSearch } from '@/components/search/HeroSearch'
+import { TrustBadges, AvailabilityBadge } from '@/components/ui/TrustBadges'
+import {
+  StatsSection,
+  ServicesShowcase,
+  HowItWorksSection,
+  TestimonialsSection,
+  ArtisanCTASection,
+} from '@/components/home/HomePageSections'
 
 export const metadata: Metadata = {
-  title: 'ServicesArtisans - Trouvez des artisans pres de chez vous',
+  title: 'ServicesArtisans — Trouvez les meilleurs artisans près de chez vous',
   description:
-    'Trouvez et comparez des artisans de votre region. Plombiers, electriciens, menuisiers et plus. Devis gratuits.',
+    'Comparez les avis, les tarifs et obtenez des devis gratuits auprès de 2 500+ artisans vérifiés. Plombiers, électriciens, serruriers et plus dans toute la France.',
   alternates: { canonical: 'https://servicesartisans.fr' },
   openGraph: {
-    title: 'ServicesArtisans - Trouvez des artisans pres de chez vous',
+    title: 'ServicesArtisans — Trouvez les meilleurs artisans près de chez vous',
     description:
-      'Trouvez et comparez des artisans de votre region. Devis gratuits.',
+      'Comparez les avis, les tarifs et obtenez des devis gratuits auprès de 2 500+ artisans vérifiés dans toute la France.',
     type: 'website',
     url: 'https://servicesartisans.fr',
   },
 }
-
-const trades = [
-  { name: 'Plombier', slug: 'plombier' },
-  { name: 'Electricien', slug: 'electricien' },
-  { name: 'Serrurier', slug: 'serrurier' },
-  { name: 'Chauffagiste', slug: 'chauffagiste' },
-  { name: 'Peintre en batiment', slug: 'peintre-en-batiment' },
-  { name: 'Menuisier', slug: 'menuisier' },
-  { name: 'Carreleur', slug: 'carreleur' },
-  { name: 'Macon', slug: 'macon' },
-  { name: 'Couvreur', slug: 'couvreur' },
-  { name: 'Jardinier', slug: 'jardinier' },
-]
 
 export default function HomePage() {
   return (
     <div className="min-h-screen">
       <JsonLd data={[getOrganizationSchema(), getWebsiteSchema()]} />
 
-      {/* Hero */}
-      <section className="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-20">
-        <div className="max-w-5xl mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            Trouvez des artisans pres de chez vous
-          </h1>
-          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Comparez les avis, les tarifs et obtenez des devis gratuits
-            aupres d&apos;artisans verifies.
-          </p>
-          <Link
-            href="/services"
-            className="inline-block bg-white text-blue-700 font-semibold px-8 py-3 rounded-lg hover:bg-blue-50 transition-colors"
-          >
-            Voir tous les services
-          </Link>
+      {/* ─── HERO ─────────────────────────────────────────────── */}
+      <section className="relative bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white overflow-hidden">
+        {/* Background pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0" style={{
+            backgroundImage: 'radial-gradient(circle at 25% 25%, rgba(59,130,246,0.3) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(59,130,246,0.2) 0%, transparent 50%)',
+          }} />
+        </div>
+
+        <div className="relative max-w-6xl mx-auto px-4 pt-16 pb-20 md:pt-24 md:pb-28">
+          <div className="text-center mb-10">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 tracking-tight leading-tight">
+              Trouvez l&apos;artisan ideal,{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">
+                pres de chez vous
+              </span>
+            </h1>
+            <p className="text-xl text-blue-200 max-w-2xl mx-auto mb-4">
+              Comparez les avis, les tarifs et obtenez des devis gratuits
+              aupres d&apos;artisans verifies dans toute la France.
+            </p>
+            <AvailabilityBadge count={2500} />
+          </div>
+
+          {/* Search */}
+          <HeroSearch />
+
+          {/* Trust badges */}
+          <TrustBadges variant="hero" />
         </div>
       </section>
 
-      {/* Services grid */}
+      {/* ─── STATS ────────────────────────────────────────────── */}
+      <StatsSection />
+
+      {/* ─── SERVICES ─────────────────────────────────────────── */}
+      <ServicesShowcase />
+
+      {/* ─── HOW IT WORKS ─────────────────────────────────────── */}
+      <HowItWorksSection />
+
+      {/* ─── TESTIMONIALS ─────────────────────────────────────── */}
+      <TestimonialsSection />
+
+      {/* ─── GEOGRAPHIC COVERAGE ──────────────────────────────── */}
       <section className="py-16 bg-white">
-        <div className="max-w-5xl mx-auto px-4">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
-            Nos services
+        <div className="max-w-6xl mx-auto px-4">
+          <h2 className="text-2xl font-bold text-slate-900 mb-6 text-center">
+            Artisans partout en France
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {trades.map((trade) => (
-              <Link
-                key={trade.slug}
-                href={`/services/${trade.slug}`}
-                className="flex items-center justify-center px-4 py-3 bg-gray-50 hover:bg-blue-50 text-gray-700 hover:text-blue-700 rounded-lg text-sm font-medium transition-colors text-center"
-              >
-                {trade.name}
-              </Link>
-            ))}
-          </div>
+          <GeographicNavigation />
         </div>
       </section>
 
-      {/* Popular cities */}
-      <section className="py-16 bg-white border-t border-gray-100">
-        <div className="max-w-5xl mx-auto px-4">
-          <PopularCitiesLinks limit={10} showTitle />
-        </div>
-      </section>
+      {/* ─── ARTISAN CTA ──────────────────────────────────────── */}
+      <ArtisanCTASection />
 
-      {/* How it works */}
+      {/* ─── POPULAR LINKS (SEO) ──────────────────────────────── */}
       <section className="py-16 bg-gray-50">
-        <div className="max-w-5xl mx-auto px-4 text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-12">
-            Comment ca marche ?
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              { step: '1', title: 'Recherchez', desc: 'Choisissez un service et votre ville.' },
-              { step: '2', title: 'Comparez', desc: 'Consultez les profils et les avis.' },
-              { step: '3', title: 'Contactez', desc: 'Demandez un devis gratuit.' },
-            ].map((item) => (
-              <div key={item.step}>
-                <div className="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">
-                  {item.step}
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{item.title}</h3>
-                <p className="text-gray-600">{item.desc}</p>
-              </div>
-            ))}
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="grid md:grid-cols-2 gap-12">
+            <PopularServicesLinks showTitle limit={8} />
+            <PopularCitiesLinks showTitle limit={10} />
           </div>
-        </div>
-      </section>
-
-      {/* CTA artisan */}
-      <section className="py-16 bg-gradient-to-r from-blue-600 to-blue-700">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">
-            Vous etes artisan ?
-          </h2>
-          <p className="text-blue-100 mb-8">
-            Rejoignez notre reseau et developpez votre activite.
-          </p>
-          <Link
-            href="/inscription-artisan"
-            className="inline-block bg-white text-blue-600 font-semibold px-8 py-3 rounded-lg hover:bg-blue-50 transition-colors"
-          >
-            Inscrire mon entreprise
-          </Link>
         </div>
       </section>
     </div>

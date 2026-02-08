@@ -42,31 +42,31 @@ export default function Logo({
       xmlns="http://www.w3.org/2000/svg"
       className="flex-shrink-0"
     >
-      {/* Background circle with gradient */}
       <defs>
         <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor="#2563eb" />
-          <stop offset="100%" stopColor="#7c3aed" />
+          <stop offset="100%" stopColor="#1d4ed8" />
         </linearGradient>
       </defs>
 
-      {/* Main circle */}
-      <circle cx="24" cy="24" r="22" fill="url(#logoGradient)" />
+      {/* Background rounded square */}
+      <rect x="2" y="2" width="44" height="44" rx="12" fill="url(#logoGradient)" />
 
-      {/* Calendar icon */}
-      <rect x="14" y="16" width="20" height="18" rx="2" fill="white" fillOpacity="0.9" />
-      <rect x="14" y="16" width="20" height="6" rx="2" fill="white" />
-      <circle cx="19" cy="13" r="2" fill="white" />
-      <circle cx="29" cy="13" r="2" fill="white" />
-
-      {/* Check mark */}
+      {/* House roof */}
       <path
-        d="M19 27L22 30L29 23"
-        stroke="#2563eb"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+        d="M24 11L10 23H14V35H34V23H38L24 11Z"
+        fill="white"
+        fillOpacity="0.95"
       />
+
+      {/* Wrench in house */}
+      <path
+        d="M22 24C22 22.34 23.34 21 25 21C26.1 21 27.06 21.59 27.58 22.47L31 20L32 21L28.58 23.47C28.85 23.94 29 24.46 29 25C29 26.66 27.66 28 26 28C24.9 28 23.94 27.41 23.42 26.53L20 29L19 28L22.42 25.53C22.15 25.06 22 24.54 22 24Z"
+        fill="#2563eb"
+      />
+
+      {/* Door */}
+      <rect x="21" y="29" width="6" height="6" rx="1" fill="#2563eb" fillOpacity="0.3" />
     </svg>
   )
 

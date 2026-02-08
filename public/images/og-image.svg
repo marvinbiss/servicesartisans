@@ -1,12 +1,55 @@
 <svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a"/>
+      <stop offset="50%" style="stop-color:#1e3a5f"/>
+      <stop offset="100%" style="stop-color:#0f172a"/>
+    </linearGradient>
+    <linearGradient id="logoFill" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#2563eb"/>
       <stop offset="100%" style="stop-color:#1d4ed8"/>
     </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#60a5fa"/>
+      <stop offset="100%" style="stop-color:#22d3ee"/>
+    </linearGradient>
   </defs>
+
+  <!-- Dark background -->
   <rect width="100%" height="100%" fill="url(#bg)"/>
-  <text x="600" y="280" font-family="Arial, sans-serif" font-size="72" font-weight="bold" fill="white" text-anchor="middle">ServicesArtisans</text>
-  <text x="600" y="380" font-family="Arial, sans-serif" font-size="32" fill="rgba(255,255,255,0.9)" text-anchor="middle">Trouvez les meilleurs artisans pres de chez vous</text>
-  <text x="600" y="450" font-family="Arial, sans-serif" font-size="24" fill="rgba(255,255,255,0.7)" text-anchor="middle">4000+ artisans verifies | Devis gratuits | Avis clients</text>
+
+  <!-- Subtle pattern dots -->
+  <circle cx="200" cy="150" r="100" fill="#2563eb" opacity="0.08"/>
+  <circle cx="1000" cy="480" r="120" fill="#2563eb" opacity="0.06"/>
+
+  <!-- Logo icon (house + wrench) -->
+  <g transform="translate(540, 120) scale(1.5)">
+    <rect x="2" y="2" width="44" height="44" rx="12" fill="url(#logoFill)"/>
+    <path d="M24 11L10 23H14V35H34V23H38L24 11Z" fill="white" fill-opacity="0.95"/>
+    <path d="M22 24C22 22.34 23.34 21 25 21C26.1 21 27.06 21.59 27.58 22.47L31 20L32 21L28.58 23.47C28.85 23.94 29 24.46 29 25C29 26.66 27.66 28 26 28C24.9 28 23.94 27.41 23.42 26.53L20 29L19 28L22.42 25.53C22.15 25.06 22 24.54 22 24Z" fill="#2563eb"/>
+    <rect x="21" y="29" width="6" height="6" rx="1" fill="#2563eb" fill-opacity="0.3"/>
+  </g>
+
+  <!-- Brand name -->
+  <text x="600" y="290" font-family="Arial, sans-serif" font-size="64" font-weight="bold" fill="white" text-anchor="middle">
+    Services<tspan fill="url(#accent)">Artisans</tspan>
+  </text>
+
+  <!-- Tagline -->
+  <text x="600" y="350" font-family="Arial, sans-serif" font-size="28" fill="rgba(255,255,255,0.8)" text-anchor="middle">
+    Trouvez les meilleurs artisans pres de chez vous
+  </text>
+
+  <!-- Stats bar -->
+  <g transform="translate(0, 400)">
+    <rect x="150" y="0" width="900" height="60" rx="30" fill="rgba(255,255,255,0.1)"/>
+    <text x="340" y="38" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white" text-anchor="middle">2 500+ artisans</text>
+    <line x1="480" y1="15" x2="480" y2="45" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+    <text x="600" y="38" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white" text-anchor="middle">100+ villes</text>
+    <line x1="720" y1="15" x2="720" y2="45" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+    <text x="860" y="38" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white" text-anchor="middle">4.8/5 satisfaction</text>
+  </g>
+
+  <!-- URL -->
+  <text x="600" y="530" font-family="Arial, sans-serif" font-size="20" fill="rgba(255,255,255,0.5)" text-anchor="middle">servicesartisans.fr</text>
 </svg>
