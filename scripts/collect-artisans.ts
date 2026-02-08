@@ -192,10 +192,21 @@ async function smartUpsertProviders(records: Record<string, unknown>[]): Promise
     const { error } = await supabase.from('providers').insert(toInsert)
 
     if (error) {
+      // Log first batch error for diagnostics
+      if (stats.errors === 0) {
+        console.error(`\n   [DEBUG] Batch insert error: ${error.message}`)
+        console.error(`   [DEBUG] Code: ${error.code}, Details: ${error.details}`)
+      }
       // Fallback to individual inserts
+      let loggedIndividual = false
       for (const record of toInsert) {
         const { error: singleError } = await supabase.from('providers').insert(record)
         if (singleError) {
+          if (!loggedIndividual && stats.errors < 3) {
+            console.error(`   [DEBUG] Individual insert error: ${singleError.message}`)
+            console.error(`   [DEBUG] Record siren: ${record.siren}, slug: ${record.slug}`)
+            loggedIndividual = true
+          }
           result.errors++
         } else {
           result.created++
@@ -245,6 +256,18 @@ async function smartUpsertProviders(records: Record<string, unknown>[]): Promise
   }
 
   return result
+}
+
+// Map API employee count codes to actual numbers
+// See: https://www.sirene.fr/sirene/public/variable/tefen
+function parseEmployeeCount(code: string | null): number | null {
+  if (!code) return null
+  const map: Record<string, number> = {
+    '00': 0, '01': 1, '02': 3, '03': 6, '11': 10, '12': 20,
+    '21': 50, '22': 100, '31': 200, '32': 250, '41': 500,
+    '42': 1000, '51': 2000, '52': 5000, '53': 10000,
+  }
+  return map[code] ?? null
 }
 
 // ============================================
@@ -371,7 +394,7 @@ function transformEntreprise(
     specialty: NAF_TO_SPECIALTY[codeNaf] || null,
     legal_form: e.nature_juridique || null,
     creation_date: e.date_creation || null,
-    employee_count: e.tranche_effectif_salarie || null,
+    employee_count: parseEmployeeCount(e.tranche_effectif_salarie),
 
     // Status
     is_active: true,
