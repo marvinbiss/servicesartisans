@@ -41,9 +41,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/notre-processus-de-verification`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
     { url: `${BASE_URL}/politique-avis`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
     { url: `${BASE_URL}/mediation`, lastModified: now, changeFrequency: 'yearly', priority: 0.4 },
-    { url: `${BASE_URL}/carrieres`, lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
-    { url: `${BASE_URL}/presse`, lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
-    { url: `${BASE_URL}/partenaires`, lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
+    // /carrieres, /presse, /partenaires excluded — robots: { index: false }
     { url: `${BASE_URL}/villes`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${BASE_URL}/regions`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${BASE_URL}/departements`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },

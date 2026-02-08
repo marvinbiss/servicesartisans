@@ -19,6 +19,7 @@ import {
   Award,
   ThumbsUp,
 } from 'lucide-react'
+import { getArtisanUrl } from '@/lib/utils'
 
 interface ArtisanProfileCardProps {
   id: string
@@ -56,7 +57,8 @@ export function ArtisanProfileCard({
   companyName,
   profession,
   location,
-  locationSlug,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  locationSlug: _locationSlug,
   rating,
   reviewCount,
   imageUrl,
@@ -78,7 +80,7 @@ export function ArtisanProfileCard({
   const [isFavorite, setIsFavorite] = useState(false)
   const [imageError, setImageError] = useState(false)
 
-  const href = `/services/${slug}/${locationSlug}/${stableId || id}`
+  const href = getArtisanUrl({ stable_id: stableId || id, slug, specialty: profession, city: location })
 
   // Variant: Featured (homepage, large)
   if (variant === 'featured') {

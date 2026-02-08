@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Search, MapPin, TrendingUp, Zap, Wrench, Key, Flame, PaintBucket, Hammer, Grid3X3, Home, TreeDeciduous } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { slugify } from '@/lib/utils'
 
 // Map des icônes
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -78,7 +79,7 @@ export function HeroSearch() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     const serviceSlug = services.find(s => s.name.toLowerCase() === query.toLowerCase())?.slug || query.toLowerCase()
-    const citySlug = cities.find(c => c.name.toLowerCase() === location.toLowerCase())?.slug || location.toLowerCase().replace(/\s+/g, '-')
+    const citySlug = cities.find(c => c.name.toLowerCase() === location.toLowerCase())?.slug || slugify(location)
 
     if (serviceSlug && citySlug) {
       router.push(`/services/${serviceSlug}/${citySlug}`)

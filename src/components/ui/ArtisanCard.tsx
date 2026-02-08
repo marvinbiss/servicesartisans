@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { Star, MapPin, Clock, Heart, BadgeCheck, Calendar } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
+import { getArtisanUrl } from '@/lib/utils'
 
 interface ArtisanCardProps {
   id: string
@@ -32,7 +33,8 @@ export function ArtisanCard({
   profession,
   slug,
   location,
-  locationSlug,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  locationSlug: _locationSlug,
   rating,
   reviewCount,
   imageUrl,
@@ -48,7 +50,7 @@ export function ArtisanCard({
   const [isFavorite, setIsFavorite] = useState(false)
   const [_isHovered, setIsHovered] = useState(false)
 
-  const href = `/services/${slug}/${locationSlug}/${id}`
+  const href = getArtisanUrl({ stable_id: id, slug, specialty: profession, city: location })
 
   // Variant horizontal (pour les listes)
   if (variant === 'horizontal') {

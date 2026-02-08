@@ -5,6 +5,7 @@ import { MapPin, Building, Users, ArrowRight, Shield, Star, Clock } from 'lucide
 import Breadcrumb from '@/components/Breadcrumb'
 import { SITE_URL } from '@/lib/seo/config'
 import { departements, getDepartementBySlug, getVillesByDepartement, services } from '@/lib/data/france'
+import { slugify } from '@/lib/utils'
 import { PopularServicesLinks } from '@/components/InternalLinks'
 
 export function generateStaticParams() {
@@ -72,7 +73,7 @@ export default async function DepartementPage({ params }: PageProps) {
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Trouver un artisan dans le {dept.name}</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {services.slice(0, 10).map((service) => (
-              <Link key={service.slug} href={`/services/${service.slug}/${villesDuDepartement[0]?.slug || dept.chefLieu.toLowerCase().replace(/\s+/g, '-')}`} className="bg-white rounded-xl shadow-sm p-4 text-center hover:shadow-md hover:-translate-y-0.5 transition-all group border border-gray-100">
+              <Link key={service.slug} href={`/services/${service.slug}/${villesDuDepartement[0]?.slug || slugify(dept.chefLieu)}`} className="bg-white rounded-xl shadow-sm p-4 text-center hover:shadow-md hover:-translate-y-0.5 transition-all group border border-gray-100">
                 <span className="font-medium text-gray-900 group-hover:text-blue-600 block">{service.name}</span>
                 <span className="block text-xs text-gray-500 mt-1">dans le {dept.code}</span>
               </Link>
