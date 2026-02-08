@@ -20,9 +20,6 @@ export const CODES_NAF: Record<string, string> = {
   '43.91A': 'Travaux de charpente',
   '43.91B': 'Travaux de couverture par éléments',
   '43.99C': 'Travaux de maçonnerie générale et gros oeuvre de bâtiment',
-  '45.20A': "Entretien et réparation de véhicules automobiles légers",
-  '95.24Z': "Réparation de meubles et d'équipements du foyer",
-  '95.29Z': "Réparation d'autres biens personnels et domestiques",
 }
 
 // Map NAF codes to our service specialties
@@ -40,9 +37,6 @@ export const NAF_TO_SPECIALTY: Record<string, string> = {
   '43.91A': 'charpentier',
   '43.91B': 'couvreur',
   '43.99C': 'macon',
-  '45.20A': 'garagiste',
-  '95.24Z': 'reparateur-meubles',
-  '95.29Z': 'reparateur',
 }
 
 // All French departments (métropole + DOM)
