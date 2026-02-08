@@ -141,7 +141,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 // JSON-LD structured data for SEO
-function generateJsonLd(service: Service, location: LocationType, providers: unknown[], serviceSlug: string, locationSlug: string) {
+function generateJsonLd(service: Service, location: LocationType, _providers: unknown[], serviceSlug: string, locationSlug: string) {
   const serviceSchema = {
     '@context': 'https://schema.org',
     '@type': 'Service',
