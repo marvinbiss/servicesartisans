@@ -22,6 +22,7 @@ import {
 
 interface ArtisanProfileCardProps {
   id: string
+  stableId?: string
   slug: string
   name: string
   companyName?: string
@@ -49,6 +50,7 @@ interface ArtisanProfileCardProps {
 
 export function ArtisanProfileCard({
   id,
+  stableId,
   slug,
   name,
   companyName,
@@ -76,7 +78,7 @@ export function ArtisanProfileCard({
   const [isFavorite, setIsFavorite] = useState(false)
   const [imageError, setImageError] = useState(false)
 
-  const href = `/services/${slug}/${locationSlug}/${id}`
+  const href = `/services/${slug}/${locationSlug}/${stableId || id}`
 
   // Variant: Featured (homepage, large)
   if (variant === 'featured') {

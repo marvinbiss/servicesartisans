@@ -26,6 +26,7 @@ import { getArtisanUrl } from '@/lib/utils'
 
 interface ArtisanProfile {
   id: string
+  stable_id?: string
   user_id: string
   email: string
   full_name: string | null
@@ -231,7 +232,7 @@ export default function AdminArtisanDetailPage() {
 
             <div className="flex items-center gap-3">
               <a
-                href={getArtisanUrl({ id: artisanId, specialty: artisan?.services?.[0], city: artisan?.city || undefined, business_name: artisan?.company_name })}
+                href={getArtisanUrl({ id: artisanId, stable_id: artisan?.stable_id, specialty: artisan?.services?.[0], city: artisan?.city || undefined, business_name: artisan?.company_name })}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"

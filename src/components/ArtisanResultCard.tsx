@@ -24,6 +24,7 @@ interface DayAvailability {
 
 interface Artisan {
   id: string
+  stable_id?: string
   slug?: string
   business_name: string | null
   first_name: string | null

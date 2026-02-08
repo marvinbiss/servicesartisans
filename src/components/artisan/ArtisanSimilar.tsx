@@ -9,6 +9,7 @@ import { getArtisanUrl } from '@/lib/utils'
 
 interface SimilarArtisan {
   id: string
+  stable_id?: string
   slug?: string
   name: string
   specialty: string
@@ -100,7 +101,7 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSi
             style={{ scrollSnapAlign: 'start' }}
           >
             <Link
-              href={getArtisanUrl({ id: item.id, slug: item.slug, specialty: item.specialty, city: item.city, business_name: item.name })}
+              href={getArtisanUrl({ id: item.id, stable_id: item.stable_id, slug: item.slug, specialty: item.specialty, city: item.city, business_name: item.name })}
               aria-label={`Voir le profil de ${item.name}, ${item.specialty} a ${item.city}, note ${item.rating} sur 5`}
             >
               <motion.article

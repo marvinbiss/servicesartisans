@@ -14,7 +14,7 @@ const slugify = (text: string) => text
 const getArtisanUrl = (artisan: LegacyArtisan, baseUrl: string) => {
   const serviceSlug = slugify(artisan.specialty || 'artisan')
   const citySlug = slugify(artisan.city || 'france')
-  const artisanSlug = artisan.slug || slugify(artisan.business_name || artisan.id)
+  const artisanSlug = artisan.stable_id || artisan.slug || slugify(artisan.business_name || artisan.id)
   return `${baseUrl}/services/${serviceSlug}/${citySlug}/${artisanSlug}`
 }
 

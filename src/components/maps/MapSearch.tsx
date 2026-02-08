@@ -47,6 +47,7 @@ const MapViewController = dynamic(
 interface Provider {
   id: string
   name: string
+  stable_id?: string
   slug: string
   latitude: number
   longitude: number
@@ -653,7 +654,7 @@ export default function MapSearch() {
                         {/* Quick Actions */}
                         <div className="flex gap-2 mt-3">
                           <Link
-                            href={getArtisanUrl({ id: provider.id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city, business_name: provider.name })}
+                            href={getArtisanUrl({ id: provider.id, stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city, business_name: provider.name })}
                             onClick={(e) => e.stopPropagation()}
                             className="flex-1 text-center py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
                           >
@@ -817,7 +818,7 @@ export default function MapSearch() {
                         {/* Actions - World Class Design */}
                         <div className="flex gap-2 mt-4">
                           <Link
-                            href={getArtisanUrl({ id: provider.id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city, business_name: provider.name })}
+                            href={getArtisanUrl({ id: provider.id, stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city, business_name: provider.name })}
                             className="flex-1 text-center py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-semibold rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all shadow-md hover:shadow-lg transform hover:scale-[1.02]"
                           >
                             Voir le profil
@@ -1021,7 +1022,7 @@ export default function MapSearch() {
               {providers.map((provider) => (
                 <Link
                   key={provider.id}
-                  href={getArtisanUrl({ id: provider.id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city, business_name: provider.name })}
+                  href={getArtisanUrl({ id: provider.id, stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city, business_name: provider.name })}
                   className="flex gap-4 p-4 border-b hover:bg-gray-50"
                 >
                   <div className="w-16 h-16 bg-gray-200 rounded-xl flex items-center justify-center flex-shrink-0">
