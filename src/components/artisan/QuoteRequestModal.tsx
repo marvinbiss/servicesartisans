@@ -53,15 +53,15 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
     }
 
     if (!formData.phone.trim()) {
-      newErrors.phone = 'Votre telephone est requis'
+      newErrors.phone = 'Votre téléphone est requis'
     } else if (!/^(?:\+33|0)[1-9](?:[0-9]{8})$/.test(formData.phone.replace(/\s/g, ''))) {
-      newErrors.phone = 'Numero de telephone invalide'
+      newErrors.phone = 'Numéro de téléphone invalide'
     }
 
     if (!formData.description.trim()) {
-      newErrors.description = 'Decrivez votre besoin'
+      newErrors.description = 'Décrivez votre besoin'
     } else if (formData.description.trim().length < 20) {
-      newErrors.description = 'Description trop courte (min 20 caracteres)'
+      newErrors.description = 'Description trop courte (min 20 caractères)'
     }
 
     setErrors(newErrors)
@@ -321,7 +321,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                   {/* Description */}
                   <div>
                     <label htmlFor="quote-description" className="block text-sm font-medium text-gray-700 mb-1.5">
-                      Decrivez votre besoin <span aria-hidden="true">*</span>
+                      Décrivez votre besoin <span aria-hidden="true">*</span>
                       <span className="sr-only">(requis)</span>
                     </label>
                     <div className="relative">
@@ -330,7 +330,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                         id="quote-description"
                         value={formData.description}
                         onChange={(e) => handleChange('description', e.target.value)}
-                        placeholder="Decrivez les travaux souhaites, le contexte, les contraintes eventuelles..."
+                        placeholder="Décrivez les travaux souhaités, le contexte, les contraintes éventuelles..."
                         rows={4}
                         aria-required="true"
                         aria-invalid={!!errors.description}

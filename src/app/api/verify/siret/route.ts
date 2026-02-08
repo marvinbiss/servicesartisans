@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
         success: false,
         error: {
           code: 2001,
-          message: 'Le numero SIRET est requis'
+          message: 'Le numéro SIRET est requis'
         }
       },
       { status: 400 }
@@ -59,7 +59,7 @@ export async function GET(request: NextRequest) {
         success: false,
         error: {
           code: 2002,
-          message: 'Le numero SIRET doit contenir 14 chiffres'
+          message: 'Le numéro SIRET doit contenir 14 chiffres'
         }
       },
       { status: 400 }
@@ -73,7 +73,7 @@ export async function GET(request: NextRequest) {
         success: false,
         error: {
           code: 2003,
-          message: 'Le numero SIRET est invalide'
+          message: 'Le numéro SIRET est invalide'
         }
       },
       { status: 400 }
@@ -130,7 +130,7 @@ export async function GET(request: NextRequest) {
           success: false,
           error: {
             code: 2004,
-            message: 'Aucun etablissement trouve avec ce numero SIRET'
+            message: 'Aucun établissement trouvé avec ce numéro SIRET'
           }
         },
         { status: 404 }
@@ -150,7 +150,7 @@ export async function GET(request: NextRequest) {
           success: false,
           error: {
             code: 2004,
-            message: 'Aucun etablissement trouve avec ce numero SIRET'
+            message: 'Aucun établissement trouvé avec ce numéro SIRET'
           }
         },
         { status: 404 }

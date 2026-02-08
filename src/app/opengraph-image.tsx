@@ -67,7 +67,7 @@ export default async function Image() {
             maxWidth: 800,
           }}
         >
-          Trouvez des artisans pres de chez vous
+          Trouvez des artisans près de chez vous
         </div>
 
         {/* Stats */}
@@ -90,7 +90,7 @@ export default async function Image() {
               fontSize: 20,
             }}
           >
-            Artisans verifies
+            Artisans vérifiés
           </div>
           <div
             style={{

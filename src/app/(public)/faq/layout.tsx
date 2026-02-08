@@ -4,14 +4,14 @@ import { getFAQSchema, getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { faqItems } from '@/lib/data/faq-data'
 
 export const metadata: Metadata = {
-  title: 'FAQ - Questions frequentes | ServicesArtisans',
-  description: 'Trouvez les reponses a vos questions sur ServicesArtisans. Comment demander un devis, choisir un artisan, garanties et plus.',
+  title: 'FAQ - Questions fréquentes | ServicesArtisans',
+  description: 'Trouvez les réponses à vos questions sur ServicesArtisans. Comment demander un devis, choisir un artisan, garanties et plus.',
   alternates: {
     canonical: 'https://servicesartisans.fr/faq',
   },
   openGraph: {
-    title: 'FAQ - Questions frequentes | ServicesArtisans',
-    description: 'Trouvez les reponses a vos questions sur ServicesArtisans.',
+    title: 'FAQ - Questions fréquentes | ServicesArtisans',
+    description: 'Trouvez les réponses à vos questions sur ServicesArtisans.',
     url: 'https://servicesartisans.fr/faq',
   },
   robots: {

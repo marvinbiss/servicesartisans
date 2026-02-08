@@ -39,10 +39,10 @@ export default function FAQPage() {
           <div className="text-center">
             <HelpCircle className="w-16 h-16 mx-auto mb-6 opacity-80" />
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Questions frequentes
+              Questions fréquentes
             </h1>
             <p className="text-xl text-blue-100 mb-8">
-              Trouvez rapidement les reponses a vos questions
+              Trouvez rapidement les réponses à vos questions
             </p>
 
             {/* Search */}
@@ -104,7 +104,7 @@ export default function FAQPage() {
 
           {filteredCategories.length === 0 && (
             <div className="text-center py-12">
-              <p className="text-gray-500">Aucun resultat pour "{searchQuery}"</p>
+              <p className="text-gray-500">Aucun résultat pour "{searchQuery}"</p>
             </div>
           )}
         </div>
@@ -121,9 +121,9 @@ export default function FAQPage() {
               href="/comment-ca-marche"
               className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow"
             >
-              <h3 className="font-semibold text-gray-900 mb-2">Comment ca marche ?</h3>
+              <h3 className="font-semibold text-gray-900 mb-2">Comment ça marche ?</h3>
               <p className="text-gray-600 text-sm mb-3">
-                Decouvrez le fonctionnement de notre service en 3 etapes.
+                Découvrez le fonctionnement de notre service en 3 étapes.
               </p>
               <span className="text-blue-600 text-sm font-medium inline-flex items-center gap-1">
                 En savoir plus <ArrowRight className="w-4 h-4" />
@@ -135,7 +135,7 @@ export default function FAQPage() {
             >
               <h3 className="font-semibold text-gray-900 mb-2">Demander un devis</h3>
               <p className="text-gray-600 text-sm mb-3">
-                Obtenez jusqu'a 3 devis gratuits d'artisans qualifies.
+                Obtenez jusqu'à 3 devis gratuits d'artisans qualifiés.
               </p>
               <span className="text-blue-600 text-sm font-medium inline-flex items-center gap-1">
                 Demander <ArrowRight className="w-4 h-4" />
@@ -145,9 +145,9 @@ export default function FAQPage() {
               href="/inscription"
               className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow"
             >
-              <h3 className="font-semibold text-gray-900 mb-2">Creer un compte</h3>
+              <h3 className="font-semibold text-gray-900 mb-2">Créer un compte</h3>
               <p className="text-gray-600 text-sm mb-3">
-                Inscrivez-vous pour suivre vos demandes et reservations.
+                Inscrivez-vous pour suivre vos demandes et réservations.
               </p>
               <span className="text-blue-600 text-sm font-medium inline-flex items-center gap-1">
                 S'inscrire <ArrowRight className="w-4 h-4" />
@@ -161,10 +161,10 @@ export default function FAQPage() {
       <section className="py-16 bg-white border-t">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">
-            Vous n'avez pas trouve votre reponse ?
+            Vous n'avez pas trouvé votre réponse ?
           </h2>
           <p className="text-gray-600 mb-8">
-            Notre equipe est la pour vous aider
+            Notre équipe est là pour vous aider
           </p>
           <Link
             href="/contact"
@@ -180,7 +180,7 @@ export default function FAQPage() {
       <section className="bg-gray-50 py-12 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-xl font-bold text-gray-900 mb-6">
-            Trouvez un artisan pres de chez vous
+            Trouvez un artisan près de chez vous
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
             <PopularServicesLinks />

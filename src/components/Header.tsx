@@ -11,7 +11,6 @@ import {
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useMobileMenu } from '@/contexts/MobileMenuContext'
 import { services as allServices } from '@/lib/data/france'
-import { companyIdentity } from '@/lib/config/company-identity'
 
 // Simple client-side city autocomplete (no server dependencies)
 interface CitySuggestion {
@@ -465,18 +464,35 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-3 group flex-shrink-0">
-            <div className="relative">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-blue-500/30 transition-all duration-300 group-hover:scale-105">
-                <span className="text-white font-bold text-lg">SA</span>
-              </div>
-              <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-gradient-to-br from-amber-400 to-amber-500 rounded-full border-2 border-white"></div>
-            </div>
-            <div className="hidden sm:flex flex-col">
-              <span className="text-xl font-bold text-gray-900">
-                {companyIdentity.name.replace('Artisans', '')}<span className="text-blue-600">Artisans</span>
-              </span>
-            </div>
+          <Link href="/" className="flex items-center gap-2.5 group flex-shrink-0">
+            <svg
+              width="36"
+              height="36"
+              viewBox="0 0 48 48"
+              fill="none"
+              className="flex-shrink-0 group-hover:scale-105 transition-transform duration-300"
+            >
+              <defs>
+                <linearGradient id="headerLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#2563eb" />
+                  <stop offset="50%" stopColor="#1d4ed8" />
+                  <stop offset="100%" stopColor="#1e40af" />
+                </linearGradient>
+                <linearGradient id="headerAccent" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#f59e0b" />
+                  <stop offset="100%" stopColor="#d97706" />
+                </linearGradient>
+              </defs>
+              <rect x="2" y="2" width="44" height="44" rx="14" fill="url(#headerLogoGrad)" />
+              <path d="M24 10L9 22.5H13.5V36H34.5V22.5H39L24 10Z" fill="white" fillOpacity="0.95" />
+              <path d="M21.5 24.5C21.5 22.57 23.07 21 25 21C26.38 21 27.56 21.82 28.1 22.99L31.5 20.5L32.5 21.5L29.1 24.01C29.37 24.48 29.5 25.02 29.5 25.5C29.5 27.43 27.93 29 26 29C24.62 29 23.44 28.18 22.9 27.01L19.5 29.5L18.5 28.5L21.9 25.99C21.63 25.52 21.5 24.98 21.5 24.5Z" fill="#2563eb" />
+              <rect x="21.5" y="29.5" width="5" height="6.5" rx="1.5" fill="#2563eb" fillOpacity="0.25" />
+              <circle cx="39" cy="9" r="5" fill="url(#headerAccent)" />
+              <path d="M37.5 9L38.5 10L40.5 8" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            <span className="hidden sm:inline text-xl font-heading font-extrabold tracking-tight text-gray-900">
+              Services<span className="text-blue-600">Artisans</span>
+            </span>
           </Link>
 
           {/* Search Bar - Dual Field (Service + Location) - Style Doctolib */}

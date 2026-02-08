@@ -12,7 +12,7 @@ import {
 
 // ─── STATS SECTION ───────────────────────────────────────────────
 
-function AnimatedCounter({ target, suffix = '', duration = 2000 }: { target: number; suffix?: string; duration?: number }) {
+function AnimatedCounter({ target, suffix = '', decimals = 0, duration = 2000 }: { target: number; suffix?: string; decimals?: number; duration?: number }) {
   const [count, setCount] = useState(0)
   const ref = useRef<HTMLSpanElement>(null)
   const isInView = useInView(ref, { once: true, margin: '-50px' })
@@ -27,24 +27,24 @@ function AnimatedCounter({ target, suffix = '', duration = 2000 }: { target: num
         setCount(target)
         clearInterval(timer)
       } else {
-        setCount(Math.floor(start))
+        setCount(decimals > 0 ? parseFloat(start.toFixed(decimals)) : Math.floor(start))
       }
     }, 16)
     return () => clearInterval(timer)
-  }, [isInView, target, duration])
+  }, [isInView, target, duration, decimals])
 
   return (
     <span ref={ref}>
-      {count.toLocaleString('fr-FR')}{suffix}
+      {decimals > 0 ? count.toFixed(decimals) : count.toLocaleString('fr-FR')}{suffix}
     </span>
   )
 }
 
 const stats = [
-  { value: 2500, suffix: '+', label: 'Artisans vérifiés', icon: Users, color: 'from-blue-500 to-blue-600' },
-  { value: 50000, suffix: '+', label: 'Avis clients', icon: MessageSquare, color: 'from-amber-500 to-amber-600' },
-  { value: 100, suffix: '+', label: 'Villes couvertes', icon: MapPin, color: 'from-emerald-500 to-emerald-600' },
-  { value: 4.8, suffix: '/5', label: 'Satisfaction moyenne', icon: Star, color: 'from-purple-500 to-purple-600' },
+  { value: 2500, suffix: '+', decimals: 0, label: 'Artisans vérifiés', icon: Users, color: 'from-blue-500 to-blue-600' },
+  { value: 50000, suffix: '+', decimals: 0, label: 'Avis clients', icon: MessageSquare, color: 'from-amber-500 to-amber-600' },
+  { value: 100, suffix: '+', decimals: 0, label: 'Villes couvertes', icon: MapPin, color: 'from-emerald-500 to-emerald-600' },
+  { value: 4.8, suffix: '/5', decimals: 1, label: 'Satisfaction moyenne', icon: Star, color: 'from-purple-500 to-purple-600' },
 ]
 
 export function StatsSection() {
@@ -65,16 +65,8 @@ export function StatsSection() {
                 <stat.icon className="w-7 h-7 text-white" />
               </div>
               <div className="font-heading text-3xl md:text-4xl font-extrabold text-slate-900 mb-1">
-                {stat.value === 4.8 ? (
-                  <AnimatedCounter target={48} suffix="" duration={1500} />
-                ) : (
-                  <AnimatedCounter target={stat.value} suffix="" />
-                )}
-                <span className="text-blue-600">{stat.value === 4.8 ? '' : stat.suffix}</span>
+                <AnimatedCounter target={stat.value} suffix={stat.suffix} decimals={stat.decimals} duration={stat.decimals > 0 ? 1500 : 2000} />
               </div>
-              {stat.value === 4.8 && (
-                <div className="text-3xl md:text-4xl font-extrabold text-slate-900 -mt-8 mb-1" style={{ visibility: 'hidden' }}>0</div>
-              )}
               <div className="text-slate-500 font-medium">{stat.label}</div>
             </motion.div>
           ))}
@@ -88,14 +80,14 @@ export function StatsSection() {
 
 const services = [
   { name: 'Plombier', slug: 'plombier', icon: Wrench, color: 'from-blue-500 to-blue-600', count: '542' },
-  { name: 'Electricien', slug: 'electricien', icon: Zap, color: 'from-amber-500 to-amber-600', count: '489' },
+  { name: 'Électricien', slug: 'electricien', icon: Zap, color: 'from-amber-500 to-amber-600', count: '489' },
   { name: 'Serrurier', slug: 'serrurier', icon: Key, color: 'from-slate-600 to-slate-700', count: '312' },
   { name: 'Chauffagiste', slug: 'chauffagiste', icon: Flame, color: 'from-orange-500 to-orange-600', count: '278' },
   { name: 'Peintre', slug: 'peintre-en-batiment', icon: PaintBucket, color: 'from-purple-500 to-purple-600', count: '356' },
   { name: 'Menuisier', slug: 'menuisier', icon: Hammer, color: 'from-amber-700 to-amber-800', count: '234' },
   { name: 'Carreleur', slug: 'carreleur', icon: Sparkles, color: 'from-teal-500 to-teal-600', count: '189' },
   { name: 'Couvreur', slug: 'couvreur', icon: Home, color: 'from-red-500 to-red-600', count: '156' },
-  { name: 'Macon', slug: 'macon', icon: HardHat, color: 'from-stone-500 to-stone-600', count: '267' },
+  { name: 'Maçon', slug: 'macon', icon: HardHat, color: 'from-stone-500 to-stone-600', count: '267' },
   { name: 'Jardinier', slug: 'jardinier', icon: TreeDeciduous, color: 'from-green-500 to-green-600', count: '198' },
 ]
 
@@ -110,10 +102,10 @@ export function ServicesShowcase() {
           className="text-center mb-12"
         >
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-slate-900 mb-4">
-            Tous les corps de metier
+            Tous les corps de métier
           </h2>
           <p className="text-lg text-slate-500 max-w-2xl mx-auto">
-            Trouvez le bon professionnel pour chaque besoin, de l&apos;urgence a la renovation complete.
+            Trouvez le bon professionnel pour chaque besoin, de l&apos;urgence à la rénovation complète.
           </p>
         </motion.div>
 
@@ -166,21 +158,21 @@ const steps = [
   {
     step: '01',
     title: 'Recherchez',
-    description: 'Indiquez le service dont vous avez besoin et votre localisation. Notre moteur trouve les artisans disponibles pres de chez vous.',
+    description: 'Indiquez le service dont vous avez besoin et votre localisation. Notre moteur trouve les artisans disponibles près de chez vous.',
     icon: Search,
     color: 'from-blue-500 to-blue-600',
   },
   {
     step: '02',
     title: 'Comparez',
-    description: 'Consultez les profils detailles, les avis verifies et les tarifs. Choisissez l\'artisan qui correspond a vos attentes.',
+    description: 'Consultez les profils détaillés, les avis vérifiés et les tarifs. Choisissez l\'artisan qui correspond à vos attentes.',
     icon: ClipboardList,
     color: 'from-amber-500 to-amber-600',
   },
   {
     step: '03',
     title: 'Contactez',
-    description: 'Demandez un devis gratuit et sans engagement. L\'artisan vous repond sous 24h avec une proposition detaillee.',
+    description: 'Demandez un devis gratuit et sans engagement. L\'artisan vous répond sous 24h avec une proposition détaillée.',
     icon: CheckCircle,
     color: 'from-emerald-500 to-emerald-600',
   },
@@ -197,10 +189,10 @@ export function HowItWorksSection() {
           className="text-center mb-16"
         >
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-slate-900 mb-4">
-            Comment ca marche ?
+            Comment ça marche ?
           </h2>
           <p className="text-lg text-slate-500 max-w-2xl mx-auto">
-            En 3 etapes simples, trouvez l&apos;artisan ideal pour votre projet.
+            En 3 étapes simples, trouvez l&apos;artisan idéal pour votre projet.
           </p>
         </motion.div>
 
@@ -247,7 +239,7 @@ const testimonials = [
     name: 'Marie L.',
     city: 'Paris',
     rating: 5,
-    text: 'J\'ai trouve un plombier en moins de 2h pour une fuite urgente. Professionnel, rapide et tarif tres correct. Je recommande !',
+    text: 'J\'ai trouvé un plombier en moins de 2h pour une fuite urgente. Professionnel, rapide et tarif très correct. Je recommande !',
     service: 'Plomberie',
     avatar: 'M',
   },
@@ -255,7 +247,7 @@ const testimonials = [
     name: 'Thomas D.',
     city: 'Lyon',
     rating: 5,
-    text: 'Renovation complete de ma salle de bain. L\'artisan etait ponctuel, soigneux et le resultat est magnifique. Merci ServicesArtisans !',
+    text: 'Rénovation complète de ma salle de bain. L\'artisan était ponctuel, soigneux et le résultat est magnifique. Merci ServicesArtisans !',
     service: 'Carrelage',
     avatar: 'T',
   },
@@ -263,7 +255,7 @@ const testimonials = [
     name: 'Sophie R.',
     city: 'Bordeaux',
     rating: 5,
-    text: 'Excellente plateforme pour comparer les artisans. Les avis m\'ont aide a faire le bon choix pour la peinture de mon appartement.',
+    text: 'Excellente plateforme pour comparer les artisans. Les avis m\'ont aidé à faire le bon choix pour la peinture de mon appartement.',
     service: 'Peinture',
     avatar: 'S',
   },
@@ -283,7 +275,7 @@ export function TestimonialsSection() {
             Ils nous font confiance
           </h2>
           <p className="text-lg text-slate-500 max-w-2xl mx-auto">
-            Des milliers de clients satisfaits partout en France.
+            Des milliers de clients satisfaits partout en France
           </p>
         </motion.div>
 
@@ -330,8 +322,8 @@ export function TestimonialsSection() {
 // ─── ARTISAN CTA ─────────────────────────────────────────────────
 
 const artisanBenefits = [
-  { icon: Eye, text: 'Visibilite aupres de milliers de clients' },
-  { icon: TrendingUp, text: 'Recevez des demandes de devis qualifiees' },
+  { icon: Eye, text: 'Visibilité auprès de milliers de clients' },
+  { icon: TrendingUp, text: 'Recevez des demandes de devis qualifiées' },
   { icon: CreditCard, text: 'Inscription gratuite, sans engagement' },
 ]
 
@@ -345,10 +337,10 @@ export function ArtisanCTASection() {
           viewport={{ once: true }}
         >
           <h2 className="font-heading text-3xl md:text-4xl font-bold mb-4">
-            Vous etes artisan ?
+            Vous êtes artisan ?
           </h2>
           <p className="text-xl text-blue-200 mb-8 max-w-2xl mx-auto">
-            Rejoignez notre reseau et developpez votre activite grace a ServicesArtisans.
+            Rejoignez notre réseau et développez votre activité grâce à ServicesArtisans.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-10">

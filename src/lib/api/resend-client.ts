@@ -239,12 +239,12 @@ export async function sendWelcomeEmail(params: {
   <p>Nous sommes ravis de vous accueillir sur ServicesArtisans${isArtisan ? ', la plateforme qui connecte les artisans avec leurs clients' : ''}.</p>
 
   ${isArtisan ? `
-  <p>Prochaines etapes pour demarrer :</p>
+  <p>Prochaines étapes pour démarrer :</p>
   <ul>
-    <li>Completez votre profil professionnel</li>
-    <li>Ajoutez vos photos de realisations</li>
-    <li>Definissez votre zone d'intervention</li>
-    <li>Configurez vos disponibilites</li>
+    <li>Complétez votre profil professionnel</li>
+    <li>Ajoutez vos photos de réalisations</li>
+    <li>Définissez votre zone d'intervention</li>
+    <li>Configurez vos disponibilités</li>
   </ul>
   ` : `
   <p>Vous pouvez maintenant :</p>
@@ -436,10 +436,10 @@ export async function sendQuoteRequestEmail(params: {
 
   <p>Bonjour ${artisanName},</p>
 
-  <p>Vous avez recu une nouvelle demande de devis de <strong>${clientName}</strong>.</p>
+  <p>Vous avez reçu une nouvelle demande de devis de <strong>${clientName}</strong>.</p>
 
   <div style="background: #f8fafc; border-radius: 8px; padding: 20px; margin: 20px 0;">
-    <p style="margin: 0 0 10px 0;"><strong>Service demande :</strong> ${serviceName}</p>
+    <p style="margin: 0 0 10px 0;"><strong>Service demandé :</strong> ${serviceName}</p>
     <p style="margin: 0;"><strong>Description :</strong></p>
     <p style="margin: 10px 0 0 0; white-space: pre-wrap;">${description}</p>
   </div>

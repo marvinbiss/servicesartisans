@@ -59,6 +59,10 @@ module.exports = {
       fontSize: {
         '2xs': ['0.625rem', { lineHeight: '0.875rem' }],
       },
+      letterSpacing: {
+        'tighter': '-0.04em',
+        'display': '-0.02em',
+      },
       boxShadow: {
         'glow': '0 0 20px rgba(51, 102, 255, 0.3)',
         'glow-lg': '0 0 40px rgba(51, 102, 255, 0.4)',

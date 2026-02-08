@@ -330,11 +330,12 @@
 
   /* Premium Section Title */
   .section-title {
-    @apply text-3xl md:text-4xl font-bold text-gray-900 tracking-tight;
+    @apply text-3xl md:text-4xl font-bold text-gray-900;
+    letter-spacing: -0.02em;
   }
 
   .section-subtitle {
-    @apply text-lg text-gray-600 max-w-2xl;
+    @apply text-lg text-gray-600 max-w-2xl leading-relaxed;
   }
 
   /* Trust Badge */

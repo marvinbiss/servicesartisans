@@ -59,10 +59,10 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
             whileTap={{ scale: 0.98 }}
             onClick={() => showPhone ? handleCall() : setShowPhone(true)}
             className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            aria-label={showPhone ? `Appeler ${artisan.phone}` : 'Afficher le numero de telephone'}
+            aria-label={showPhone ? `Appeler ${artisan.phone}` : 'Afficher le numéro de téléphone'}
           >
             <Phone className="w-5 h-5" aria-hidden="true" />
-            {showPhone ? artisan.phone : 'Afficher le telephone'}
+            {showPhone ? artisan.phone : 'Afficher le téléphone'}
           </motion.button>
         )}
 
@@ -102,12 +102,12 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
       <div className="space-y-3 mb-6 pb-6 border-b border-gray-100">
         <div className="flex items-center gap-3 text-sm text-gray-600">
           <Clock className="w-4 h-4 text-gray-400" />
-          <span>Repond en {artisan.response_time || '< 2h'}</span>
+          <span>Répond en {artisan.response_time || '< 2h'}</span>
         </div>
         {artisan.response_rate && (
           <div className="flex items-center gap-3 text-sm text-gray-600">
             <CheckCircle className="w-4 h-4 text-green-500" />
-            <span>Taux de reponse : {artisan.response_rate}%</span>
+            <span>Taux de réponse : {artisan.response_rate}%</span>
           </div>
         )}
         {artisan.emergency_available && (

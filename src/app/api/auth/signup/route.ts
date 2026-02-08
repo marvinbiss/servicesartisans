@@ -100,7 +100,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json(
       createSuccessResponse({
-        message: 'Compte cree avec succes. Verifiez votre email pour activer votre compte.',
+        message: 'Compte créé avec succès. Vérifiez votre email pour activer votre compte.',
         userId: authData.user.id,
         requiresVerification: true,
       }),

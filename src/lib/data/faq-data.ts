@@ -1,18 +1,18 @@
 export const faqCategories = [
   {
-    name: 'General',
+    name: 'Général',
     questions: [
       {
         q: 'Qu\'est-ce que ServicesArtisans ?',
-        a: 'ServicesArtisans est une plateforme gratuite qui met en relation les particuliers avec des artisans qualifies et verifies. Nous couvrons plus de 50 metiers du batiment dans toute la France.',
+        a: 'ServicesArtisans est une plateforme gratuite qui met en relation les particuliers avec des artisans qualifiés et vérifiés. Nous couvrons plus de 50 métiers du bâtiment dans toute la France.',
       },
       {
         q: 'Le service est-il gratuit ?',
-        a: 'Oui, notre service est entierement gratuit pour les particuliers. Vous pouvez demander autant de devis que vous le souhaitez sans aucun engagement.',
+        a: 'Oui, notre service est entièrement gratuit pour les particuliers. Vous pouvez demander autant de devis que vous le souhaitez sans aucun engagement.',
       },
       {
         q: 'Comment fonctionne ServicesArtisans ?',
-        a: 'C\'est simple : 1) Decrivez votre projet, 2) Recevez jusqu\'a 3 devis d\'artisans qualifies, 3) Comparez et choisissez le professionnel qui vous convient.',
+        a: 'C\'est simple : 1) Décrivez votre projet, 2) Recevez jusqu\'à 3 devis d\'artisans qualifiés, 3) Comparez et choisissez le professionnel qui vous convient.',
       },
     ],
   },
@@ -21,19 +21,19 @@ export const faqCategories = [
     questions: [
       {
         q: 'Comment demander un devis ?',
-        a: 'Cliquez sur "Demander un devis", remplissez le formulaire en decrivant votre projet, et nous transmettons votre demande aux artisans qualifies de votre region.',
+        a: 'Cliquez sur "Demander un devis", remplissez le formulaire en décrivant votre projet, et nous transmettons votre demande aux artisans qualifiés de votre région.',
       },
       {
         q: 'Combien de devis vais-je recevoir ?',
-        a: 'Vous recevrez jusqu\'a 3 devis d\'artisans differents, generalement sous 24 a 48 heures.',
+        a: 'Vous recevrez jusqu\'à 3 devis d\'artisans différents, généralement sous 24 à 48 heures.',
       },
       {
-        q: 'Suis-je oblige d\'accepter un devis ?',
-        a: 'Non, vous etes libre de refuser tous les devis. Notre service est sans engagement.',
+        q: 'Suis-je obligé d\'accepter un devis ?',
+        a: 'Non, vous êtes libre de refuser tous les devis. Notre service est sans engagement.',
       },
       {
         q: 'Les devis sont-ils vraiment gratuits ?',
-        a: 'Oui, les devis sont 100% gratuits et sans engagement. Vous ne payez que si vous decidez de faire appel a un artisan.',
+        a: 'Oui, les devis sont 100% gratuits et sans engagement. Vous ne payez que si vous décidez de faire appel à un artisan.',
       },
     ],
   },
@@ -41,16 +41,16 @@ export const faqCategories = [
     name: 'Artisans',
     questions: [
       {
-        q: 'Comment sont selectionnes les artisans ?',
-        a: 'Nous verifions l\'identite, les assurances et les qualifications de chaque artisan. Nous suivons egalement les avis clients pour maintenir un niveau de qualite eleve.',
+        q: 'Comment sont sélectionnés les artisans ?',
+        a: 'Nous vérifions l\'identité, les assurances et les qualifications de chaque artisan. Nous suivons également les avis clients pour maintenir un niveau de qualité élevé.',
       },
       {
-        q: 'Les artisans sont-ils assures ?',
-        a: 'Oui, tous nos artisans partenaires doivent justifier d\'une assurance responsabilite civile professionnelle et d\'une garantie decennale pour les travaux concernes.',
+        q: 'Les artisans sont-ils assurés ?',
+        a: 'Oui, tous nos artisans partenaires doivent justifier d\'une assurance responsabilité civile professionnelle et d\'une garantie décennale pour les travaux concernés.',
       },
       {
         q: 'Puis-je voir les avis sur un artisan ?',
-        a: 'Oui, chaque fiche artisan affiche les avis et notes laisses par les clients precedents.',
+        a: 'Oui, chaque fiche artisan affiche les avis et notes laissés par les clients précédents.',
       },
     ],
   },
@@ -59,32 +59,32 @@ export const faqCategories = [
     questions: [
       {
         q: 'Comment payer l\'artisan ?',
-        a: 'Le paiement se fait directement entre vous et l\'artisan, selon les modalites convenues ensemble (especes, cheque, virement, etc.).',
+        a: 'Le paiement se fait directement entre vous et l\'artisan, selon les modalités convenues ensemble (espèces, chèque, virement, etc.).',
       },
       {
         q: 'Quelles garanties ai-je sur les travaux ?',
-        a: 'Les travaux sont couverts par les garanties legales : garantie de parfait achevement (1 an), garantie biennale (2 ans) et garantie decennale (10 ans) selon la nature des travaux.',
+        a: 'Les travaux sont couverts par les garanties légales : garantie de parfait achèvement (1 an), garantie biennale (2 ans) et garantie décennale (10 ans) selon la nature des travaux.',
       },
       {
         q: 'Que faire en cas de litige ?',
-        a: 'Contactez-nous via notre page Contact. Nous vous accompagnons dans la resolution du litige et pouvons servir de mediateur avec l\'artisan.',
+        a: 'Contactez-nous via notre page Contact. Nous vous accompagnons dans la résolution du litige et pouvons servir de médiateur avec l\'artisan.',
       },
     ],
   },
   {
-    name: 'Compte & Donnees',
+    name: 'Compte & Données',
     questions: [
       {
-        q: 'Dois-je creer un compte ?',
-        a: 'Non, vous pouvez demander un devis sans creer de compte. Cependant, un compte vous permet de suivre vos demandes et de conserver votre historique.',
+        q: 'Dois-je créer un compte ?',
+        a: 'Non, vous pouvez demander un devis sans créer de compte. Cependant, un compte vous permet de suivre vos demandes et de conserver votre historique.',
       },
       {
         q: 'Comment supprimer mon compte ?',
-        a: 'Vous pouvez demander la suppression de votre compte et de vos donnees en nous contactant a dpo@servicesartisans.fr.',
+        a: 'Vous pouvez demander la suppression de votre compte et de vos données en nous contactant à dpo@servicesartisans.fr.',
       },
       {
-        q: 'Mes donnees sont-elles protegees ?',
-        a: 'Oui, nous respectons le RGPD et protegeons vos donnees. Consultez notre politique de confidentialite pour plus de details.',
+        q: 'Mes données sont-elles protégées ?',
+        a: 'Oui, nous respectons le RGPD et protégeons vos données. Consultez notre politique de confidentialité pour plus de détails.',
       },
     ],
   },

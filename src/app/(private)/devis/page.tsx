@@ -190,7 +190,7 @@ export default function DevisPage() {
                     updateField('service', service.slug)
                   }}
                   onClear={() => updateField('service', '')}
-                  placeholder="Rechercher un metier (plombier, electricien...)"
+                  placeholder="Rechercher un métier (plombier, électricien...)"
                   showAllOnFocus={true}
                   maxSuggestions={10}
                 />
@@ -198,7 +198,7 @@ export default function DevisPage() {
 
               {/* Quick selection grid for popular services */}
               <div className="border-t pt-6">
-                <p className="text-sm text-gray-500 mb-4">Ou selectionnez directement :</p>
+                <p className="text-sm text-gray-500 mb-4">Ou sélectionnez directement :</p>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {servicesGrid.map((service, index) => {
                     const Icon = service.icon

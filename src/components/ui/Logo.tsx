@@ -12,10 +12,10 @@ export interface LogoProps {
 }
 
 const sizes = {
-  sm: { icon: 24, text: 'text-lg' },
-  md: { icon: 32, text: 'text-xl' },
-  lg: { icon: 40, text: 'text-2xl' },
-  xl: { icon: 48, text: 'text-3xl' },
+  sm: { icon: 28, text: 'text-lg' },
+  md: { icon: 36, text: 'text-xl' },
+  lg: { icon: 44, text: 'text-2xl' },
+  xl: { icon: 52, text: 'text-3xl' },
 }
 
 export default function Logo({
@@ -45,39 +45,54 @@ export default function Logo({
       <defs>
         <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor="#2563eb" />
-          <stop offset="100%" stopColor="#1d4ed8" />
+          <stop offset="50%" stopColor="#1d4ed8" />
+          <stop offset="100%" stopColor="#1e40af" />
+        </linearGradient>
+        <linearGradient id="logoAccent" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#f59e0b" />
+          <stop offset="100%" stopColor="#d97706" />
         </linearGradient>
       </defs>
 
-      {/* Background rounded square */}
-      <rect x="2" y="2" width="44" height="44" rx="12" fill="url(#logoGradient)" />
+      {/* Background rounded square with subtle shadow */}
+      <rect x="2" y="2" width="44" height="44" rx="14" fill="url(#logoGradient)" />
 
-      {/* House roof */}
+      {/* House roof - refined proportions */}
       <path
-        d="M24 11L10 23H14V35H34V23H38L24 11Z"
+        d="M24 10L9 22.5H13.5V36H34.5V22.5H39L24 10Z"
         fill="white"
         fillOpacity="0.95"
       />
 
-      {/* Wrench in house */}
+      {/* Wrench symbol - cleaner design */}
       <path
-        d="M22 24C22 22.34 23.34 21 25 21C26.1 21 27.06 21.59 27.58 22.47L31 20L32 21L28.58 23.47C28.85 23.94 29 24.46 29 25C29 26.66 27.66 28 26 28C24.9 28 23.94 27.41 23.42 26.53L20 29L19 28L22.42 25.53C22.15 25.06 22 24.54 22 24Z"
+        d="M21.5 24.5C21.5 22.57 23.07 21 25 21C26.38 21 27.56 21.82 28.1 22.99L31.5 20.5L32.5 21.5L29.1 24.01C29.37 24.48 29.5 25.02 29.5 25.5C29.5 27.43 27.93 29 26 29C24.62 29 23.44 28.18 22.9 27.01L19.5 29.5L18.5 28.5L21.9 25.99C21.63 25.52 21.5 24.98 21.5 24.5Z"
         fill="#2563eb"
       />
 
-      {/* Door */}
-      <rect x="21" y="29" width="6" height="6" rx="1" fill="#2563eb" fillOpacity="0.3" />
+      {/* Door - refined */}
+      <rect x="21.5" y="29.5" width="5" height="6.5" rx="1.5" fill="#2563eb" fillOpacity="0.25" />
+
+      {/* Accent dot - amber quality mark */}
+      <circle cx="39" cy="9" r="5" fill="url(#logoAccent)" />
+      <path
+        d="M37.5 9L38.5 10L40.5 8"
+        stroke="white"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   )
 
   const LogoText = () => (
-    <span className={clsx('font-bold tracking-tight', textSize, textColor)}>
+    <span className={clsx('font-heading font-extrabold tracking-tight', textSize, textColor)}>
       Services<span className="text-blue-600">Artisans</span>
     </span>
   )
 
   const content = (
-    <div className={clsx('flex items-center gap-2', className)}>
+    <div className={clsx('flex items-center gap-2.5', className)}>
       {(variant === 'full' || variant === 'icon') && <LogoIcon />}
       {(variant === 'full' || variant === 'text') && <LogoText />}
     </div>

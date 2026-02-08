@@ -13,9 +13,9 @@ import { MetierAutocomplete } from '@/components/ui/MetierAutocomplete'
 import { VilleAutocomplete } from '@/components/ui/VilleAutocomplete'
 
 const benefits = [
-  { icon: Users, title: 'Nouveaux clients', description: 'Recevez des demandes de devis qualifiees' },
-  { icon: Star, title: 'Visibilite', description: 'Apparaissez dans les recherches locales' },
-  { icon: TrendingUp, title: 'Croissance', description: 'Developpez votre activite' },
+  { icon: Users, title: 'Nouveaux clients', description: 'Recevez des demandes de devis qualifiées' },
+  { icon: Star, title: 'Visibilité', description: 'Apparaissez dans les recherches locales' },
+  { icon: TrendingUp, title: 'Croissance', description: 'Développez votre activité' },
 ]
 
 export default function InscriptionArtisanPage() {
@@ -83,10 +83,10 @@ export default function InscriptionArtisanPage() {
             <CheckCircle className="w-8 h-8 text-green-600" />
           </div>
           <h1 className="text-2xl font-bold text-gray-900 mb-4">
-            Inscription recue !
+            Inscription reçue !
           </h1>
           <p className="text-gray-600 mb-8">
-            Merci pour votre inscription. Notre equipe va verifier vos informations et
+            Merci pour votre inscription. Notre équipe va vérifier vos informations et
             vous recevrez un email de confirmation sous 24-48h.
           </p>
           <div className="space-y-4">
@@ -94,7 +94,7 @@ export default function InscriptionArtisanPage() {
               href="/"
               className="block w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
             >
-              Retour a l'accueil
+              Retour à l'accueil
             </Link>
             <Link
               href="/services"
@@ -117,11 +117,11 @@ export default function InscriptionArtisanPage() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <h1 className="text-4xl md:text-5xl font-bold mb-6">
-                Rejoignez le reseau ServicesArtisans
+                Rejoignez le réseau ServicesArtisans
               </h1>
               <p className="text-xl text-blue-100 mb-8">
-                Inscription gratuite. Recevez des demandes de devis qualifiees et
-                developpez votre activite.
+                Inscription gratuite. Recevez des demandes de devis qualifiées et
+                développez votre activité.
               </p>
               <div className="grid grid-cols-3 gap-6">
                 {benefits.map((benefit) => {
@@ -183,7 +183,7 @@ export default function InscriptionArtisanPage() {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Numero SIRET *
+                        Numéro SIRET *
                       </label>
                       <SiretAutocomplete
                         value={formData.siret}
@@ -200,13 +200,13 @@ export default function InscriptionArtisanPage() {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Metier principal *
+                        Métier principal *
                       </label>
                       <MetierAutocomplete
                         value={formData.metier}
                         onSelect={(service) => setFormData(prev => ({ ...prev, metier: service.name }))}
                         onClear={() => setFormData(prev => ({ ...prev, metier: '' }))}
-                        placeholder="Rechercher votre metier..."
+                        placeholder="Rechercher votre métier..."
                         showAllOnFocus={true}
                       />
                     </div>
@@ -216,10 +216,10 @@ export default function InscriptionArtisanPage() {
                 {/* Etape 2 - Contact */}
                 {step === 2 && (
                   <div className="space-y-4">
-                    <h2 className="text-xl font-bold mb-4">Vos coordonnees</h2>
+                    <h2 className="text-xl font-bold mb-4">Vos coordonnées</h2>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Prenom *</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Prénom *</label>
                         <input
                           type="text"
                           value={formData.prenom}
@@ -253,7 +253,7 @@ export default function InscriptionArtisanPage() {
                       </div>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Telephone *</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone *</label>
                       <div className="relative">
                         <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                         <input
@@ -323,22 +323,22 @@ export default function InscriptionArtisanPage() {
                 {/* Etape 4 - Description */}
                 {step === 4 && (
                   <div className="space-y-4">
-                    <h2 className="text-xl font-bold mb-4">Presentez-vous</h2>
+                    <h2 className="text-xl font-bold mb-4">Présentez-vous</h2>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Description de votre activite
+                        Description de votre activité
                       </label>
                       <textarea
                         value={formData.description}
                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                         rows={3}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                        placeholder="Decrivez vos services, specialites..."
+                        placeholder="Décrivez vos services, spécialités..."
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Annees d'experience
+                        Années d'expérience
                       </label>
                       <input
                         type="text"
@@ -364,7 +364,7 @@ export default function InscriptionArtisanPage() {
                       En vous inscrivant, vous acceptez nos{' '}
                       <Link href="/mentions-legales" className="underline hover:text-blue-600">conditions d'utilisation</Link>
                       {' '}et notre{' '}
-                      <Link href="/confidentialite" className="underline hover:text-blue-600">politique de confidentialite</Link>.
+                      <Link href="/confidentialite" className="underline hover:text-blue-600">politique de confidentialité</Link>.
                     </div>
                   </div>
                 )}
@@ -434,9 +434,9 @@ export default function InscriptionArtisanPage() {
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { name: 'Pierre M.', job: 'Plombier a Lyon', jobLink: '/services/plombier/lyon', text: 'Grace a ServicesArtisans, j\'ai double mon chiffre d\'affaires en un an.' },
-              { name: 'Sophie L.', job: 'Electricienne a Paris', jobLink: '/services/electricien/paris', text: 'Une vraie mine d\'or pour trouver de nouveaux clients qualifies.' },
-              { name: 'Marc D.', job: 'Menuisier a Bordeaux', jobLink: '/services/menuisier/bordeaux', text: 'Le meilleur investissement pour mon entreprise. Je recommande !' },
+              { name: 'Pierre M.', job: 'Plombier à Lyon', jobLink: '/services/plombier/lyon', text: 'Grâce à ServicesArtisans, j\'ai doublé mon chiffre d\'affaires en un an.' },
+              { name: 'Sophie L.', job: 'Électricienne à Paris', jobLink: '/services/electricien/paris', text: 'Une vraie mine d\'or pour trouver de nouveaux clients qualifiés.' },
+              { name: 'Marc D.', job: 'Menuisier à Bordeaux', jobLink: '/services/menuisier/bordeaux', text: 'Le meilleur investissement pour mon entreprise. Je recommande !' },
             ].map((t) => (
               <div key={t.name} className="bg-white rounded-xl p-6 shadow-sm">
                 <div className="flex gap-1 mb-4">
@@ -456,7 +456,7 @@ export default function InscriptionArtisanPage() {
       {/* Related links */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8">Explorer le reseau</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-8">Explorer le réseau</h2>
           <div className="grid md:grid-cols-2 gap-8">
             <PopularServicesLinks />
             <PopularCitiesLinks />
@@ -468,7 +468,7 @@ export default function InscriptionArtisanPage() {
               className="bg-gray-50 hover:bg-blue-50 rounded-xl p-6 transition-colors group"
             >
               <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 mb-2">Nos tarifs</h3>
-              <p className="text-gray-600 text-sm">Decouvrez nos offres adaptees a votre activite</p>
+              <p className="text-gray-600 text-sm">Découvrez nos offres adaptées à votre activité</p>
             </Link>
             <Link
               href="/avis"
@@ -481,7 +481,7 @@ export default function InscriptionArtisanPage() {
               href="/comment-ca-marche"
               className="bg-gray-50 hover:bg-blue-50 rounded-xl p-6 transition-colors group"
             >
-              <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 mb-2">Comment ca marche</h3>
+              <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 mb-2">Comment ça marche</h3>
               <p className="text-gray-600 text-sm">Tout savoir sur notre plateforme</p>
             </Link>
           </div>

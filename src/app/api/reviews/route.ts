@@ -299,7 +299,7 @@ export async function POST(request: Request) {
 
     if (existingReview) {
       return NextResponse.json(
-        createErrorResponse(ErrorCode.REVIEW_ALREADY_EXISTS, 'Vous avez deja laisse un avis pour cette reservation'),
+        createErrorResponse(ErrorCode.REVIEW_ALREADY_EXISTS, 'Vous avez déjà laissé un avis pour cette réservation'),
         { status: 409 }
       )
     }

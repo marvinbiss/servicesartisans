@@ -7,8 +7,8 @@ import JsonLd from '@/components/JsonLd'
 import { getHowToSchema, getBreadcrumbSchema } from '@/lib/seo/jsonld'
 
 export const metadata: Metadata = {
-  title: 'Comment ca marche - ServicesArtisans',
-  description: 'Decouvrez comment trouver un artisan qualifie en 3 etapes simples. Service gratuit et sans engagement.',
+  title: 'Comment ça marche - ServicesArtisans',
+  description: 'Découvrez comment trouver un artisan qualifié en 3 étapes simples. Service gratuit et sans engagement.',
   alternates: {
     canonical: 'https://servicesartisans.fr/comment-ca-marche',
   },
@@ -25,33 +25,33 @@ const steps = [
   {
     number: '1',
     icon: Search,
-    title: 'Decrivez votre projet',
-    description: 'Remplissez notre formulaire en quelques minutes. Precisez le type de travaux, votre localisation et vos disponibilites.',
+    title: 'Décrivez votre projet',
+    description: 'Remplissez notre formulaire en quelques minutes. Précisez le type de travaux, votre localisation et vos disponibilités.',
     details: [
       'Formulaire simple et rapide',
-      'Tous types de travaux acceptes',
-      'Precisez votre budget si vous le souhaitez',
+      'Tous types de travaux acceptés',
+      'Précisez votre budget si vous le souhaitez',
     ],
   },
   {
     number: '2',
     icon: Users,
     title: 'Recevez des devis',
-    description: 'Nous transmettons votre demande aux artisans qualifies de votre region. Vous recevez jusqu\'a 3 devis detailles.',
+    description: 'Nous transmettons votre demande aux artisans qualifiés de votre région. Vous recevez jusqu\'à 3 devis détaillés.',
     details: [
-      'Jusqu\'a 3 devis gratuits',
-      'Artisans verifies et assures',
-      'Reponse sous 24-48h',
+      'Jusqu\'à 3 devis gratuits',
+      'Artisans vérifiés et assurés',
+      'Réponse sous 24-48h',
     ],
   },
   {
     number: '3',
     icon: CheckCircle,
     title: 'Choisissez votre artisan',
-    description: 'Comparez les devis, consultez les avis clients et selectionnez l\'artisan qui correspond a vos attentes.',
+    description: 'Comparez les devis, consultez les avis clients et sélectionnez l\'artisan qui correspond à vos attentes.',
     details: [
       'Comparaison facile des offres',
-      'Avis clients verifies',
+      'Avis clients vérifiés',
       'Aucun engagement',
     ],
   },
@@ -60,37 +60,37 @@ const steps = [
 const guarantees = [
   {
     icon: Shield,
-    title: 'Artisans verifies',
-    description: 'Nous verifions l\'identite, les assurances et les qualifications de chaque artisan.',
+    title: 'Artisans vérifiés',
+    description: 'Nous vérifions l\'identité, les assurances et les qualifications de chaque artisan.',
   },
   {
     icon: Star,
     title: '100% gratuit',
-    description: 'Notre service est entierement gratuit pour les particuliers. Pas de frais caches.',
+    description: 'Notre service est entièrement gratuit pour les particuliers. Pas de frais cachés.',
   },
   {
     icon: Clock,
-    title: 'Reponse rapide',
-    description: 'Recevez vos devis sous 24 a 48 heures maximum.',
+    title: 'Réponse rapide',
+    description: 'Recevez vos devis sous 24 à 48 heures maximum.',
   },
   {
     icon: CheckCircle,
     title: 'Sans engagement',
-    description: 'Vous etes libre d\'accepter ou de refuser les devis recus.',
+    description: 'Vous êtes libre d\'accepter ou de refuser les devis reçus.',
   },
 ]
 
 export default function CommentCaMarchePage() {
   // Structured data for HowTo schema
   const howToSchema = getHowToSchema([
-    { name: 'Decrivez votre projet', text: 'Remplissez notre formulaire en quelques minutes. Precisez le type de travaux, votre localisation et vos disponibilites.' },
-    { name: 'Recevez des devis', text: 'Nous transmettons votre demande aux artisans qualifies de votre region. Vous recevez jusqu\'a 3 devis detailles.' },
-    { name: 'Choisissez votre artisan', text: 'Comparez les devis, consultez les avis clients et selectionnez l\'artisan qui correspond a vos attentes.' },
+    { name: 'Décrivez votre projet', text: 'Remplissez notre formulaire en quelques minutes. Précisez le type de travaux, votre localisation et vos disponibilités.' },
+    { name: 'Recevez des devis', text: 'Nous transmettons votre demande aux artisans qualifiés de votre région. Vous recevez jusqu\'à 3 devis détaillés.' },
+    { name: 'Choisissez votre artisan', text: 'Comparez les devis, consultez les avis clients et sélectionnez l\'artisan qui correspond à vos attentes.' },
   ])
 
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
-    { name: 'Comment ca marche', url: '/comment-ca-marche' },
+    { name: 'Comment ça marche', url: '/comment-ca-marche' },
   ])
 
   return (
@@ -102,15 +102,15 @@ export default function CommentCaMarchePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb */}
           <Breadcrumb
-            items={[{ label: 'Comment ca marche' }]}
+            items={[{ label: 'Comment ça marche' }]}
             className="mb-6 text-blue-100 [&_a]:text-blue-200 [&_a:hover]:text-white [&_svg]:text-blue-300"
           />
           <div className="text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Comment ca marche ?
+              Comment ça marche ?
             </h1>
             <p className="text-xl text-blue-100 max-w-2xl mx-auto">
-              Trouvez un artisan qualifie en 3 etapes simples.
+              Trouvez un artisan qualifié en 3 étapes simples.
               Service 100% gratuit et sans engagement.
             </p>
           </div>
@@ -178,7 +178,7 @@ export default function CommentCaMarchePage() {
               Nos garanties
             </h2>
             <p className="text-xl text-gray-600">
-              Un service de qualite pour tous vos projets
+              Un service de qualité pour tous vos projets
             </p>
           </div>
 
@@ -212,9 +212,9 @@ export default function CommentCaMarchePage() {
               href="/faq"
               className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow"
             >
-              <h3 className="font-semibold text-gray-900 mb-2">Questions frequentes</h3>
+              <h3 className="font-semibold text-gray-900 mb-2">Questions fréquentes</h3>
               <p className="text-gray-600 text-sm mb-3">
-                Trouvez les reponses a vos questions sur notre service.
+                Trouvez les réponses à vos questions sur notre service.
               </p>
               <span className="text-blue-600 text-sm font-medium inline-flex items-center gap-1">
                 Voir la FAQ <ArrowRight className="w-4 h-4" />
@@ -224,7 +224,7 @@ export default function CommentCaMarchePage() {
               href="/inscription"
               className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow"
             >
-              <h3 className="font-semibold text-gray-900 mb-2">Creer un compte</h3>
+              <h3 className="font-semibold text-gray-900 mb-2">Créer un compte</h3>
               <p className="text-gray-600 text-sm mb-3">
                 Inscrivez-vous gratuitement pour profiter de tous nos services.
               </p>
@@ -238,7 +238,7 @@ export default function CommentCaMarchePage() {
             >
               <h3 className="font-semibold text-gray-900 mb-2">Nous contacter</h3>
               <p className="text-gray-600 text-sm mb-3">
-                Une question ? Notre equipe est la pour vous aider.
+                Une question ? Notre équipe est là pour vous aider.
               </p>
               <span className="text-blue-600 text-sm font-medium inline-flex items-center gap-1">
                 Contact <ArrowRight className="w-4 h-4" />
@@ -252,7 +252,7 @@ export default function CommentCaMarchePage() {
       <section className="py-20 bg-blue-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
-            Pret a trouver votre artisan ?
+            Prêt à trouver votre artisan ?
           </h2>
           <p className="text-xl text-blue-100 mb-8">
             Demandez vos devis gratuits en quelques clics
@@ -271,7 +271,7 @@ export default function CommentCaMarchePage() {
       <section className="bg-gray-50 py-12 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-xl font-bold text-gray-900 mb-6">
-            Trouvez un artisan pres de chez vous
+            Trouvez un artisan près de chez vous
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
             <PopularServicesLinks />

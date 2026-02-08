@@ -293,16 +293,16 @@ export default function ArtisanResultCard({
               <div className="mt-2 text-xs text-gray-500">
                 {artisan.accepts_new_clients === false ? (
                   <span className="text-amber-600">
-                    Ce professionnel reserve la prise de rendez-vous en ligne aux clients deja
+                    Ce professionnel réserve la prise de rendez-vous en ligne aux clients déjà
                     suivis.
                   </span>
                 ) : hasAnyAvailability && firstAvailableDate ? (
                   <span>
-                    Disponibilites a partir du {firstAvailableDate.dayName},{' '}
+                    Disponibilités à partir du {firstAvailableDate.dayName},{' '}
                     {firstAvailableDate.month} {firstAvailableDate.dayNumber}
                   </span>
                 ) : (
-                  <span>Aucune disponibilite en ligne</span>
+                  <span>Aucune disponibilité en ligne</span>
                 )}
               </div>
             </div>

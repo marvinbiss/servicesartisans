@@ -5,8 +5,8 @@ import Breadcrumb from '@/components/Breadcrumb'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
 
 export const metadata: Metadata = {
-  title: 'Avis Clients Verifies - Temoignages | ServicesArtisans',
-  description: 'Decouvrez les avis verifies de nos clients sur nos artisans qualifies.',
+  title: 'Avis Clients Vérifiés - Témoignages | ServicesArtisans',
+  description: 'Découvrez les avis vérifiés de nos clients sur nos artisans qualifiés.',
 }
 
 const avisRecents = [
@@ -20,7 +20,7 @@ const avisRecents = [
     serviceSlug: 'plombier',
     note: 5,
     date: '2024-01-20',
-    commentaire: 'Intervention rapide et efficace pour une fuite sous l\'evier. Le plombier etait tres professionnel et a resolu le probleme en moins d\'une heure. Je recommande vivement !',
+    commentaire: 'Intervention rapide et efficace pour une fuite sous l\'évier. Le plombier était très professionnel et a résolu le problème en moins d\'une heure. Je recommande vivement !',
     verifie: true,
   },
   {
@@ -28,12 +28,12 @@ const avisRecents = [
     client: 'Marie L.',
     ville: 'Lyon 3e',
     villeSlug: 'lyon',
-    artisan: 'Electricite Plus',
-    service: 'Electricien',
+    artisan: 'Électricité Plus',
+    service: 'Électricien',
     serviceSlug: 'electricien',
     note: 5,
     date: '2024-01-19',
-    commentaire: 'Excellent travail pour la renovation complete de mon tableau electrique. Travail soigne, explications claires et prix conforme au devis.',
+    commentaire: 'Excellent travail pour la rénovation complète de mon tableau électrique. Travail soigné, explications claires et prix conforme au devis.',
     verifie: true,
   },
   {
@@ -46,7 +46,7 @@ const avisRecents = [
     serviceSlug: 'serrurier',
     note: 4,
     date: '2024-01-18',
-    commentaire: 'Intervention rapide suite a une porte claquee. Serrurier competent et honnete. Seul bemol : tarif un peu eleve pour un dimanche.',
+    commentaire: 'Intervention rapide suite à une porte claquée. Serrurier compétent et honnête. Seul bémol : tarif un peu élevé pour un dimanche.',
     verifie: true,
   },
   {
@@ -59,7 +59,7 @@ const avisRecents = [
     serviceSlug: 'chauffagiste',
     note: 5,
     date: '2024-01-17',
-    commentaire: 'Entretien annuel de ma chaudiere realise avec soin. Le technicien a pris le temps de m\'expliquer les points a surveiller. Tres satisfaite !',
+    commentaire: 'Entretien annuel de ma chaudière réalisé avec soin. Le technicien a pris le temps de m\'expliquer les points à surveiller. Très satisfaite !',
     verifie: true,
   },
   {
@@ -72,7 +72,7 @@ const avisRecents = [
     serviceSlug: 'peintre-en-batiment',
     note: 5,
     date: '2024-01-16',
-    commentaire: 'Travail impeccable pour la peinture de mon salon. Finitions parfaites, chantier laisse propre. Je ferai appel a eux pour les autres pieces.',
+    commentaire: 'Travail impeccable pour la peinture de mon salon. Finitions parfaites, chantier laissé propre. Je ferai appel à eux pour les autres pièces.',
     verifie: true,
   },
   {
@@ -85,7 +85,7 @@ const avisRecents = [
     serviceSlug: 'menuisier',
     note: 5,
     date: '2024-01-15',
-    commentaire: 'Fabrication sur mesure d\'une bibliotheque. Le resultat est magnifique, exactement ce que je voulais. Artisan passionne et meticuleux.',
+    commentaire: 'Fabrication sur mesure d\'une bibliothèque. Le résultat est magnifique, exactement ce que je voulais. Artisan passionné et méticuleux.',
     verifie: true,
   },
 ]
@@ -109,11 +109,11 @@ export default function AvisPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <Breadcrumb items={breadcrumbItems} className="mb-4 text-blue-200 [&_a]:text-blue-200 [&_a:hover]:text-white [&_svg]:text-blue-300 [&>span]:text-white" />
           <h1 className="text-4xl font-bold mb-4">
-            Avis clients verifies
+            Avis clients vérifiés
           </h1>
           <p className="text-xl text-blue-100 max-w-3xl">
-            Decouvrez les retours d'experience de nos clients. Tous nos avis sont authentiques
-            et verifies apres chaque intervention.
+            Découvrez les retours d'expérience de nos clients. Tous nos avis sont authentiques
+            et vérifiés après chaque intervention.
           </p>
         </div>
       </div>
@@ -124,7 +124,7 @@ export default function AvisPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div className="text-center">
               <div className="text-4xl font-bold text-blue-600">{stats.totalAvis.toLocaleString()}</div>
-              <p className="text-gray-500 mt-1">Avis verifies</p>
+              <p className="text-gray-500 mt-1">Avis vérifiés</p>
             </div>
             <div className="text-center">
               <div className="text-4xl font-bold text-blue-600 flex items-center justify-center gap-2">
@@ -135,7 +135,7 @@ export default function AvisPage() {
             </div>
             <div className="text-center">
               <div className="text-4xl font-bold text-blue-600">{stats.artisansVerifies.toLocaleString()}</div>
-              <p className="text-gray-500 mt-1">Artisans verifies</p>
+              <p className="text-gray-500 mt-1">Artisans vérifiés</p>
             </div>
             <div className="text-center">
               <div className="text-4xl font-bold text-blue-600">{stats.clientsSatisfaits}%</div>
@@ -151,7 +151,7 @@ export default function AvisPage() {
           <select className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
             <option value="">Tous les services</option>
             <option value="plombier">Plombier</option>
-            <option value="electricien">Electricien</option>
+            <option value="electricien">Électricien</option>
             <option value="serrurier">Serrurier</option>
             <option value="chauffagiste">Chauffagiste</option>
             <option value="peintre">Peintre</option>
@@ -165,9 +165,9 @@ export default function AvisPage() {
           </select>
           <select className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
             <option value="">Toutes les notes</option>
-            <option value="5">5 etoiles</option>
-            <option value="4">4 etoiles et +</option>
-            <option value="3">3 etoiles et +</option>
+            <option value="5">5 étoiles</option>
+            <option value="4">4 étoiles et +</option>
+            <option value="3">3 étoiles et +</option>
           </select>
         </div>
 
@@ -186,7 +186,7 @@ export default function AvisPage() {
                       {avis.verifie && (
                         <span className="flex items-center gap-1 text-green-600 text-sm">
                           <CheckCircle className="w-4 h-4" />
-                          Verifie
+                          Vérifié
                         </span>
                       )}
                     </div>
@@ -259,10 +259,10 @@ export default function AvisPage() {
         {/* CTA */}
         <div className="mt-16 bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl p-8 md:p-12 text-center text-white">
           <h2 className="text-3xl font-bold mb-4">
-            Vous avez fait appel a un artisan ?
+            Vous avez fait appel à un artisan ?
           </h2>
           <p className="text-blue-100 mb-8 max-w-2xl mx-auto">
-            Partagez votre experience et aidez d'autres utilisateurs a trouver le bon professionnel.
+            Partagez votre expérience et aidez d'autres utilisateurs à trouver le bon professionnel.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link

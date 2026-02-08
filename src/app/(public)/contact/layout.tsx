@@ -4,13 +4,13 @@ import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 
 export const metadata: Metadata = {
   title: 'Contact - Nous contacter | ServicesArtisans',
-  description: 'Contactez l\'equipe ServicesArtisans. Questions, support, partenariats. Nous sommes la pour vous aider.',
+  description: 'Contactez l\'équipe ServicesArtisans. Questions, support, partenariats. Nous sommes là pour vous aider.',
   alternates: {
     canonical: 'https://servicesartisans.fr/contact',
   },
   openGraph: {
     title: 'Contact - Nous contacter | ServicesArtisans',
-    description: 'Contactez l\'equipe ServicesArtisans pour toute question ou demande.',
+    description: 'Contactez l\'équipe ServicesArtisans pour toute question ou demande.',
     url: 'https://servicesartisans.fr/contact',
   },
   robots: {

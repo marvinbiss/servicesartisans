@@ -10,19 +10,19 @@ const navigationLinks = [
   { name: 'Services', href: '/services' },
   { name: 'Villes', href: '/villes' },
   { name: 'Recherche', href: '/recherche' },
-  { name: 'Comment ca marche', href: '/comment-ca-marche' },
+  { name: 'Comment ça marche', href: '/comment-ca-marche' },
 ]
 
 // Information links
 const informationLinks = [
-  { name: 'A propos', href: '/a-propos' },
+  { name: 'À propos', href: '/a-propos' },
   { name: 'Contact', href: '/contact' },
   { name: 'FAQ', href: '/faq' },
   { name: 'Blog', href: '/blog' },
   { name: 'Tarifs artisans', href: '/tarifs-artisans' },
   { name: 'CGV', href: '/cgv' },
-  { name: 'Mentions legales', href: '/mentions-legales' },
-  { name: 'Confidentialite', href: '/confidentialite' },
+  { name: 'Mentions légales', href: '/mentions-legales' },
+  { name: 'Confidentialité', href: '/confidentialite' },
 ]
 
 export default function Footer() {
@@ -33,7 +33,7 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-8 bg-gradient-to-r from-primary-600/10 via-primary-500/5 to-transparent rounded-2xl p-8 border border-primary-500/20">
             <div className="text-center lg:text-left">
-              <h3 className="text-2xl font-bold text-white mb-2">Restez informe</h3>
+              <h3 className="text-2xl font-bold text-white mb-2">Restez informé</h3>
               <p className="text-gray-400">Recevez nos conseils et offres exclusives</p>
             </div>
             <NewsletterForm />
@@ -50,8 +50,8 @@ export default function Footer() {
                 <Shield className="w-6 h-6 text-green-400" />
               </div>
               <div>
-                <p className="text-white font-semibold text-sm">Artisans verifies</p>
-                <p className="text-gray-500 text-xs">Qualifications controlees</p>
+                <p className="text-white font-semibold text-sm">Artisans vérifiés</p>
+                <p className="text-gray-500 text-xs">Qualifications contrôlées</p>
               </div>
             </div>
             <div className="flex items-center gap-3 justify-center md:justify-start">
@@ -59,7 +59,7 @@ export default function Footer() {
                 <CreditCard className="w-6 h-6 text-blue-400" />
               </div>
               <div>
-                <p className="text-white font-semibold text-sm">Paiement securise</p>
+                <p className="text-white font-semibold text-sm">Paiement sécurisé</p>
                 <p className="text-gray-500 text-xs">SSL & 3D Secure</p>
               </div>
             </div>
@@ -135,11 +135,11 @@ export default function Footer() {
               </ul>
             </div>
 
-            {/* Par region */}
+            {/* Par région */}
             <div>
               <h4 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider flex items-center gap-2">
                 <Building2 className="w-4 h-4" />
-                Par region
+                Par région
               </h4>
               <ul className="space-y-2 text-sm">
                 {popularRegions.map((region) => (
@@ -154,13 +154,13 @@ export default function Footer() {
                 ))}
                 <li className="pt-2">
                   <Link href="/regions" className="text-primary-400 hover:text-primary-300 flex items-center gap-1 group">
-                    Toutes les regions
+                    Toutes les régions
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </li>
                 <li>
                   <Link href="/departements" className="text-primary-400 hover:text-primary-300 flex items-center gap-1 group">
-                    Tous les departements
+                    Tous les départements
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </li>
@@ -192,21 +192,38 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-10">
           {/* Logo & Description */}
           <div className="col-span-2">
-            <Link href="/" className="flex items-center space-x-3 mb-6 group">
-              <div className="relative">
-                <div className="w-11 h-11 bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-glow transition-all duration-300">
-                  <span className="text-white font-bold text-xl">SA</span>
-                </div>
-                <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-gradient-to-br from-amber-400 to-amber-500 rounded-full border-2 border-slate-900"></div>
-              </div>
-              <div>
-                <span className="text-2xl font-bold text-white">
-                  Services<span className="text-primary-400">Artisans</span>
-                </span>
-              </div>
+            <Link href="/" className="flex items-center gap-2.5 mb-6 group">
+              <svg
+                width="44"
+                height="44"
+                viewBox="0 0 48 48"
+                fill="none"
+                className="flex-shrink-0 group-hover:scale-105 transition-transform duration-300"
+              >
+                <defs>
+                  <linearGradient id="footerLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#3b82f6" />
+                    <stop offset="50%" stopColor="#2563eb" />
+                    <stop offset="100%" stopColor="#1d4ed8" />
+                  </linearGradient>
+                  <linearGradient id="footerAccent" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#f59e0b" />
+                    <stop offset="100%" stopColor="#d97706" />
+                  </linearGradient>
+                </defs>
+                <rect x="2" y="2" width="44" height="44" rx="14" fill="url(#footerLogoGrad)" />
+                <path d="M24 10L9 22.5H13.5V36H34.5V22.5H39L24 10Z" fill="white" fillOpacity="0.95" />
+                <path d="M21.5 24.5C21.5 22.57 23.07 21 25 21C26.38 21 27.56 21.82 28.1 22.99L31.5 20.5L32.5 21.5L29.1 24.01C29.37 24.48 29.5 25.02 29.5 25.5C29.5 27.43 27.93 29 26 29C24.62 29 23.44 28.18 22.9 27.01L19.5 29.5L18.5 28.5L21.9 25.99C21.63 25.52 21.5 24.98 21.5 24.5Z" fill="#2563eb" />
+                <rect x="21.5" y="29.5" width="5" height="6.5" rx="1.5" fill="#2563eb" fillOpacity="0.25" />
+                <circle cx="39" cy="9" r="5" fill="url(#footerAccent)" />
+                <path d="M37.5 9L38.5 10L40.5 8" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              <span className="text-2xl font-heading font-extrabold tracking-tight text-white">
+                Services<span className="text-primary-400">Artisans</span>
+              </span>
             </Link>
             <p className="text-sm leading-relaxed mb-6 text-gray-400">
-              La plateforme pour trouver des artisans près de chez vous.
+              La plateforme de référence pour trouver des artisans qualifiés près de chez vous.
             </p>
             <div className="flex gap-3">
               <a href="https://facebook.com/servicesartisans" target="_blank" rel="noopener noreferrer" className="w-11 h-11 bg-slate-800/50 rounded-xl flex items-center justify-center hover:bg-primary-600 hover:scale-110 transition-all duration-300 group" aria-label="Facebook">
@@ -250,12 +267,12 @@ export default function Footer() {
             <ul className="space-y-3 text-sm">
               <li>
                 <Link href="/a-propos" className="hover:text-white transition-colors duration-200">
-                  A propos
+                  À propos
                 </Link>
               </li>
               <li>
                 <Link href="/carrieres" className="hover:text-white transition-colors duration-200">
-                  Carrieres
+                  Carrières
                 </Link>
               </li>
               <li>
@@ -275,7 +292,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/notre-processus-de-verification" className="hover:text-white transition-colors duration-200">
-                  Processus de verification
+                  Processus de vérification
                 </Link>
               </li>
               <li>
@@ -285,7 +302,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/mediation" className="hover:text-white transition-colors duration-200">
-                  Mediation
+                  Médiation
                 </Link>
               </li>
             </ul>
@@ -297,7 +314,7 @@ export default function Footer() {
             <ul className="space-y-3 text-sm">
               <li>
                 <Link href="/mentions-legales" className="hover:text-white transition-colors duration-200">
-                  Mentions legales
+                  Mentions légales
                 </Link>
               </li>
               <li>
@@ -307,12 +324,12 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/confidentialite" className="hover:text-white transition-colors duration-200">
-                  Confidentialite
+                  Confidentialité
                 </Link>
               </li>
               <li>
                 <Link href="/accessibilite" className="hover:text-white transition-colors duration-200">
-                  Accessibilite
+                  Accessibilité
                 </Link>
               </li>
             </ul>
@@ -339,7 +356,7 @@ export default function Footer() {
                   <Phone className="w-5 h-5 text-primary-400" />
                 </div>
                 <div>
-                  <p className="text-white font-medium mb-0.5">Telephone</p>
+                  <p className="text-white font-medium mb-0.5">Téléphone</p>
                   <a href={`tel:${companyIdentity.phone}`} className="text-sm text-gray-400 hover:text-white transition-colors">{companyIdentity.phone}</a>
                 </div>
               </div>
@@ -364,20 +381,20 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
             <p className="text-gray-500">
-              © {new Date().getFullYear()} <span className="text-gray-400">ServicesArtisans</span>. Tous droits reserves.
+              © {new Date().getFullYear()} <span className="text-gray-400">ServicesArtisans</span>. Tous droits réservés.
             </p>
             <div className="flex flex-wrap justify-center gap-6 text-gray-500">
               <Link href="/mentions-legales" className="hover:text-white transition-colors duration-200">
-                Mentions legales
+                Mentions légales
               </Link>
               <Link href="/confidentialite" className="hover:text-white transition-colors duration-200">
-                Confidentialite
+                Confidentialité
               </Link>
               <Link href="/cgv" className="hover:text-white transition-colors duration-200">
                 CGV
               </Link>
               <Link href="/accessibilite" className="hover:text-white transition-colors duration-200">
-                Accessibilite
+                Accessibilité
               </Link>
               <Link href="/faq" className="hover:text-white transition-colors duration-200">
                 FAQ

@@ -748,15 +748,15 @@ export default function ParametresClientPage() {
                         Supprimer mon compte
                       </h2>
                       <p className="text-gray-600 mb-4">
-                        La suppression de votre compte est irreversible. Toutes vos donnees seront
-                        definitivement effacees apres un delai de 30 jours, pendant lequel vous
+                        La suppression de votre compte est irréversible. Toutes vos données seront
+                        définitivement effacées après un délai de 30 jours, pendant lequel vous
                         pouvez annuler votre demande.
                       </p>
 
                       {deletionStatus?.status === 'scheduled' ? (
                         <div className="rounded-lg bg-red-50 border border-red-200 p-4">
                           <p className="text-sm text-red-700 mb-3">
-                            Votre compte est programme pour suppression le{' '}
+                            Votre compte est programmé pour suppression le{' '}
                             <strong>
                               {new Date(deletionStatus.scheduled_deletion_at).toLocaleDateString('fr-FR')}
                             </strong>.

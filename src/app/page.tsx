@@ -32,27 +32,35 @@ export default function HomePage() {
       <JsonLd data={[getOrganizationSchema(), getWebsiteSchema()]} />
 
       {/* ─── HERO ─────────────────────────────────────────────── */}
-      <section className="relative bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white overflow-hidden">
-        {/* Background pattern */}
-        <div className="absolute inset-0 opacity-10">
+      <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
+        {/* Refined background — layered radial gradients for depth */}
+        <div className="absolute inset-0">
           <div className="absolute inset-0" style={{
-            backgroundImage: 'radial-gradient(circle at 25% 25%, rgba(59,130,246,0.3) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(59,130,246,0.2) 0%, transparent 50%)',
+            background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(37,99,235,0.15) 0%, transparent 60%), radial-gradient(ellipse 60% 50% at 80% 100%, rgba(37,99,235,0.08) 0%, transparent 50%), radial-gradient(ellipse 40% 40% at 20% 80%, rgba(59,130,246,0.06) 0%, transparent 50%)',
+          }} />
+          {/* Subtle grid pattern for depth */}
+          <div className="absolute inset-0 opacity-[0.03]" style={{
+            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+            backgroundSize: '64px 64px',
           }} />
         </div>
 
-        <div className="relative max-w-6xl mx-auto px-4 pt-16 pb-20 md:pt-24 md:pb-28">
-          <div className="text-center mb-10">
-            <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 tracking-tight leading-tight">
-              Trouvez l&apos;artisan ideal,{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">
-                pres de chez vous
+        <div className="relative max-w-6xl mx-auto px-4 pt-20 pb-24 md:pt-28 md:pb-32">
+          <div className="text-center mb-12">
+            <div className="mb-6">
+              <AvailabilityBadge count={2500} />
+            </div>
+            <h1 className="font-heading text-4xl md:text-5xl lg:text-[3.5rem] font-extrabold mb-6 tracking-[-0.02em] leading-[1.1]">
+              Trouvez l&apos;artisan idéal,{' '}
+              <br className="hidden md:block" />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-300 to-cyan-300">
+                près de chez vous
               </span>
             </h1>
-            <p className="text-xl text-blue-200 max-w-2xl mx-auto mb-4">
+            <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
               Comparez les avis, les tarifs et obtenez des devis gratuits
-              aupres d&apos;artisans verifies dans toute la France.
+              auprès d&apos;artisans vérifiés dans toute la France.
             </p>
-            <AvailabilityBadge count={2500} />
           </div>
 
           {/* Search */}

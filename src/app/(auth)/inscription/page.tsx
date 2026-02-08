@@ -37,22 +37,22 @@ export default function InscriptionPage() {
   }
 
   const passwordStrength = getPasswordStrength(formData.password)
-  const strengthLabels = ['Tres faible', 'Faible', 'Moyen', 'Fort', 'Tres fort']
+  const strengthLabels = ['Très faible', 'Faible', 'Moyen', 'Fort', 'Très fort']
   const strengthColors = ['bg-red-500', 'bg-orange-500', 'bg-yellow-500', 'bg-green-400', 'bg-green-600']
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {}
 
     if (!formData.firstName.trim()) {
-      newErrors.firstName = 'Le prenom est requis'
+      newErrors.firstName = 'Le prénom est requis'
     } else if (formData.firstName.length < 2) {
-      newErrors.firstName = 'Le prenom doit contenir au moins 2 caracteres'
+      newErrors.firstName = 'Le prénom doit contenir au moins 2 caractères'
     }
 
     if (!formData.lastName.trim()) {
       newErrors.lastName = 'Le nom est requis'
     } else if (formData.lastName.length < 2) {
-      newErrors.lastName = 'Le nom doit contenir au moins 2 caracteres'
+      newErrors.lastName = 'Le nom doit contenir au moins 2 caractères'
     }
 
     if (!formData.email.trim()) {
@@ -64,7 +64,7 @@ export default function InscriptionPage() {
     if (!formData.password) {
       newErrors.password = 'Le mot de passe est requis'
     } else if (formData.password.length < 8) {
-      newErrors.password = 'Le mot de passe doit contenir au moins 8 caracteres'
+      newErrors.password = 'Le mot de passe doit contenir au moins 8 caractères'
     } else if (!/[A-Z]/.test(formData.password)) {
       newErrors.password = 'Le mot de passe doit contenir au moins une majuscule'
     } else if (!/[a-z]/.test(formData.password)) {
@@ -134,10 +134,10 @@ export default function InscriptionPage() {
             <CheckCircle className="w-10 h-10 text-white" />
           </div>
           <h1 className="text-2xl font-bold text-gray-900 mb-4">
-            Inscription reussie !
+            Inscription réussie !
           </h1>
           <p className="text-gray-600 mb-8">
-            Un email de confirmation a ete envoye a <strong>{formData.email}</strong>.
+            Un email de confirmation a été envoyé à <strong>{formData.email}</strong>.
             Cliquez sur le lien pour activer votre compte.
           </p>
           <Link
@@ -170,20 +170,20 @@ export default function InscriptionPage() {
               Rejoignez ServicesArtisans
             </h2>
             <p className="text-blue-100 text-lg mb-10">
-              Creez votre compte gratuitement et trouvez les meilleurs artisans pour vos projets.
+              Créez votre compte gratuitement et trouvez les meilleurs artisans pour vos projets.
             </p>
             <div className="space-y-4 text-left">
               <div className="flex items-center gap-4 bg-white/10 backdrop-blur-sm rounded-xl p-4">
                 <CheckCircle className="w-6 h-6 text-green-400 flex-shrink-0" />
-                <span>Demandes de devis gratuites et illimitees</span>
+                <span>Demandes de devis gratuites et illimitées</span>
               </div>
               <div className="flex items-center gap-4 bg-white/10 backdrop-blur-sm rounded-xl p-4">
                 <CheckCircle className="w-6 h-6 text-green-400 flex-shrink-0" />
-                <span>Artisans verifies et certifies</span>
+                <span>Artisans vérifiés et certifiés</span>
               </div>
               <div className="flex items-center gap-4 bg-white/10 backdrop-blur-sm rounded-xl p-4">
                 <CheckCircle className="w-6 h-6 text-green-400 flex-shrink-0" />
-                <span>Reservation en ligne simple et rapide</span>
+                <span>Réservation en ligne simple et rapide</span>
               </div>
             </div>
           </div>
@@ -208,7 +208,7 @@ export default function InscriptionPage() {
                 </span>
               </Link>
               <h1 className="text-3xl font-bold text-white mb-2">
-                Creer un compte
+                Créer un compte
               </h1>
               <p className="text-gray-400">
                 Inscrivez-vous gratuitement
@@ -226,7 +226,7 @@ export default function InscriptionPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Prenom
+                    Prénom
                   </label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
@@ -283,7 +283,7 @@ export default function InscriptionPage() {
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                     className={`w-full pl-10 pr-12 py-3 bg-slate-800 border ${errors.password ? 'border-red-500' : 'border-slate-700'} rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
-                    placeholder="8 caracteres minimum"
+                    placeholder="8 caractères minimum"
                   />
                   <button
                     type="button"
@@ -304,7 +304,7 @@ export default function InscriptionPage() {
                       ))}
                     </div>
                     <p className="text-xs text-gray-500">
-                      Force: {passwordStrength > 0 ? strengthLabels[passwordStrength - 1] : 'Tres faible'}
+                      Force: {passwordStrength > 0 ? strengthLabels[passwordStrength - 1] : 'Très faible'}
                     </p>
                   </div>
                 )}
@@ -338,11 +338,11 @@ export default function InscriptionPage() {
                 <span className="text-sm text-gray-400">
                   J'accepte les{' '}
                   <Link href="/cgv" className="text-blue-400 hover:underline">
-                    conditions generales
+                    conditions générales
                   </Link>{' '}
                   et la{' '}
                   <Link href="/confidentialite" className="text-blue-400 hover:underline">
-                    politique de confidentialite
+                    politique de confidentialité
                   </Link>
                 </span>
               </label>
@@ -357,7 +357,7 @@ export default function InscriptionPage() {
                   <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
                   <>
-                    Creer mon compte
+                    Créer mon compte
                     <ArrowRight className="w-5 h-5" />
                   </>
                 )}
@@ -366,7 +366,7 @@ export default function InscriptionPage() {
 
             <div className="mt-8 text-center">
               <p className="text-gray-400">
-                Deja un compte ?{' '}
+                Déjà un compte ?{' '}
                 <Link href="/connexion" className="text-blue-400 hover:text-blue-300 font-medium">
                   Se connecter
                 </Link>
@@ -374,7 +374,7 @@ export default function InscriptionPage() {
             </div>
 
             <p className="mt-6 text-center text-sm text-gray-500">
-              Vous etes artisan ?{' '}
+              Vous êtes artisan ?{' '}
               <Link href="/inscription-artisan" className="text-blue-400 hover:underline">
                 Inscrivez votre entreprise
               </Link>
@@ -385,10 +385,10 @@ export default function InscriptionPage() {
               <p className="text-gray-400 text-sm mb-3">Liens utiles :</p>
               <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
                 <Link href="/comment-ca-marche" className="text-blue-400 hover:text-blue-300">
-                  Comment ca marche ?
+                  Comment ça marche ?
                 </Link>
                 <Link href="/faq" className="text-blue-400 hover:text-blue-300">
-                  Questions frequentes
+                  Questions fréquentes
                 </Link>
                 <Link href="/devis" className="text-blue-400 hover:text-blue-300">
                   Demander un devis
@@ -403,7 +403,7 @@ export default function InscriptionPage() {
       <section className="bg-slate-800/50 py-10 border-t border-slate-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-lg font-semibold text-white mb-6">
-            Decouvrez nos services
+            Découvrez nos services
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
             <PopularServicesLinks className="[&_h3]:text-gray-300 [&_a]:bg-slate-700 [&_a]:text-gray-300 [&_a:hover]:bg-blue-600 [&_a:hover]:text-white" />

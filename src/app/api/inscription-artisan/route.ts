@@ -22,13 +22,13 @@ const artisanSchema = z.object({
   // Step 1 - Company
   entreprise: z.string().min(2, 'Le nom d\'entreprise est requis'),
   siret: z.string().min(14, 'SIRET invalide').max(17),
-  metier: z.string().min(1, 'Le metier est requis'),
+  metier: z.string().min(1, 'Le métier est requis'),
   autreMetier: z.string().optional(),
   // Step 2 - Contact
   nom: z.string().min(2, 'Le nom est requis'),
-  prenom: z.string().min(2, 'Le prenom est requis'),
+  prenom: z.string().min(2, 'Le prénom est requis'),
   email: z.string().email('Email invalide'),
-  telephone: z.string().min(10, 'Telephone invalide'),
+  telephone: z.string().min(10, 'Téléphone invalide'),
   // Step 3 - Location
   adresse: z.string().min(5, 'L\'adresse est requise'),
   codePostal: z.string().min(5, 'Code postal invalide'),
@@ -90,16 +90,16 @@ export async function POST(request: Request) {
       subject: 'Votre inscription sur ServicesArtisans - Confirmation',
       html: `
         <h2>Bonjour ${data.prenom} ${data.nom},</h2>
-        <p>Nous avons bien recu votre demande d'inscription en tant qu'artisan sur ServicesArtisans.</p>
-        <p><strong>Recapitulatif de votre inscription :</strong></p>
+        <p>Nous avons bien reçu votre demande d'inscription en tant qu'artisan sur ServicesArtisans.</p>
+        <p><strong>Récapitulatif de votre inscription :</strong></p>
         <ul>
           <li><strong>Entreprise :</strong> ${data.entreprise}</li>
           <li><strong>SIRET :</strong> ${data.siret}</li>
-          <li><strong>Metier :</strong> ${metierFinal}</li>
+          <li><strong>Métier :</strong> ${metierFinal}</li>
           <li><strong>Zone d'intervention :</strong> ${data.ville} (${data.rayonIntervention} km)</li>
         </ul>
-        <p>Notre equipe va verifier vos informations et vous recevrez une reponse sous 24-48 heures.</p>
-        <p>A bientot sur ServicesArtisans !</p>
+        <p>Notre équipe va vérifier vos informations et vous recevrez une réponse sous 24-48 heures.</p>
+        <p>À bientôt sur ServicesArtisans !</p>
         <hr />
         <p style="color: #666; font-size: 12px;">
           <a href="https://servicesartisans.fr">servicesartisans.fr</a>
@@ -118,7 +118,7 @@ export async function POST(request: Request) {
         <ul>
           <li><strong>Nom :</strong> ${data.entreprise}</li>
           <li><strong>SIRET :</strong> ${data.siret}</li>
-          <li><strong>Metier :</strong> ${metierFinal}</li>
+          <li><strong>Métier :</strong> ${metierFinal}</li>
         </ul>
         <h3>Contact</h3>
         <ul>

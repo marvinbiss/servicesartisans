@@ -12,13 +12,13 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
   const stats = [
     {
       icon: Clock,
-      label: 'Temps de reponse',
+      label: 'Temps de réponse',
       value: artisan.response_time || '< 2h',
       color: 'text-blue-600 bg-blue-50',
     },
     {
       icon: TrendingUp,
-      label: 'Taux de reponse',
+      label: 'Taux de réponse',
       value: artisan.response_rate ? `${artisan.response_rate}%` : '95%',
       color: 'text-green-600 bg-green-50',
     },

@@ -48,11 +48,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL('https://servicesartisans.fr'),
   title: {
-    default: 'ServicesArtisans - Trouvez les meilleurs artisans pres de chez vous',
+    default: 'ServicesArtisans — Trouvez les meilleurs artisans près de chez vous',
     template: '%s | ServicesArtisans',
   },
   description:
-    'Trouvez et comparez les meilleurs artisans de votre region. Plombiers, electriciens, menuisiers et plus. Devis gratuits et avis verifies.',
+    'Trouvez et comparez les meilleurs artisans de votre région. Plombiers, électriciens, menuisiers et plus. Devis gratuits et avis vérifiés.',
   keywords: [
     'artisan',
     'plombier',
@@ -82,16 +82,16 @@ export const metadata: Metadata = {
     locale: 'fr_FR',
     url: 'https://servicesartisans.fr',
     siteName: 'ServicesArtisans',
-    title: 'ServicesArtisans - Trouvez les meilleurs artisans pres de chez vous',
+    title: 'ServicesArtisans — Trouvez les meilleurs artisans près de chez vous',
     description:
-      'Trouvez et comparez les meilleurs artisans de votre region. Plombiers, electriciens, menuisiers et plus.',
+      'Trouvez et comparez les meilleurs artisans de votre région. Plombiers, électriciens, menuisiers et plus.',
     images: [{ url: 'https://servicesartisans.fr/images/og-image.svg', width: 1200, height: 630, alt: 'ServicesArtisans — Trouvez des artisans qualifiés' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ServicesArtisans - Trouvez les meilleurs artisans pres de chez vous',
+    title: 'ServicesArtisans — Trouvez les meilleurs artisans près de chez vous',
     description:
-      'Trouvez et comparez les meilleurs artisans de votre region.',
+      'Trouvez et comparez les meilleurs artisans de votre région.',
   },
   robots: {
     index: true,

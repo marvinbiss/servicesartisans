@@ -51,17 +51,17 @@ export default function ContactPage() {
             <CheckCircle className="w-8 h-8 text-green-600" />
           </div>
           <h1 className="text-2xl font-bold text-gray-900 mb-4">
-            Message envoye !
+            Message envoyé !
           </h1>
           <p className="text-gray-600 mb-6">
-            Nous avons bien recu votre message et nous vous repondrons dans les plus brefs delais.
+            Nous avons bien reçu votre message et nous vous répondrons dans les plus brefs délais.
           </p>
           <div className="space-y-3">
             <Link
               href="/"
               className="block w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
             >
-              Retour a l'accueil
+              Retour à l'accueil
             </Link>
             <Link
               href="/devis"
@@ -90,7 +90,7 @@ export default function ContactPage() {
               Contactez-nous
             </h1>
             <p className="text-xl text-blue-100 max-w-2xl mx-auto">
-              Une question ? Un probleme ? Notre equipe est la pour vous aider.
+              Une question ? Un problème ? Notre équipe est là pour vous aider.
             </p>
           </div>
         </div>
@@ -102,7 +102,7 @@ export default function ContactPage() {
           <div className="lg:col-span-1 space-y-8">
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                Nos coordonnees
+                Nos coordonnées
               </h2>
 
               <div className="space-y-6">
@@ -138,7 +138,7 @@ export default function ContactPage() {
                 <h3 className="font-semibold text-gray-900">Besoin d'aide rapide ?</h3>
               </div>
               <p className="text-gray-600 text-sm mb-4">
-                Consultez notre FAQ pour trouver des reponses aux questions les plus frequentes.
+                Consultez notre FAQ pour trouver des réponses aux questions les plus fréquentes.
               </p>
               <Link
                 href="/faq"
@@ -157,7 +157,7 @@ export default function ContactPage() {
                   className="flex items-center gap-2 text-gray-600 hover:text-blue-600 text-sm"
                 >
                   <ArrowRight className="w-4 h-4" />
-                  Comment ca marche ?
+                  Comment ça marche ?
                 </Link>
                 <Link
                   href="/devis"
@@ -239,9 +239,9 @@ export default function ContactPage() {
                     required
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
-                    <option value="">Selectionnez un sujet</option>
+                    <option value="">Sélectionnez un sujet</option>
                     <option value="devis">Question sur un devis</option>
-                    <option value="artisan">Probleme avec un artisan</option>
+                    <option value="artisan">Problème avec un artisan</option>
                     <option value="inscription">Inscription artisan</option>
                     <option value="partenariat">Partenariat</option>
                     <option value="autre">Autre</option>
@@ -258,7 +258,7 @@ export default function ContactPage() {
                     required
                     rows={6}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Decrivez votre demande..."
+                    placeholder="Décrivez votre demande..."
                   />
                 </div>
 
@@ -289,7 +289,7 @@ export default function ContactPage() {
       <section className="bg-gray-100 py-12 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-xl font-bold text-gray-900 mb-6">
-            Trouvez un artisan pres de chez vous
+            Trouvez un artisan près de chez vous
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
             <PopularServicesLinks />
