@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { MapPin, Phone, Mail, Facebook, Twitter, Linkedin, Instagram, Shield, CreditCard, Award, ArrowRight, Building2 } from 'lucide-react'
 import { popularServices, popularCities, popularRegions } from '@/lib/constants/navigation'
 import NewsletterForm from './NewsletterForm'
+import { companyIdentity } from '@/lib/config/company-identity'
 
 // Navigation links
 const navigationLinks = [
@@ -207,8 +208,7 @@ export default function Footer() {
               </div>
             </Link>
             <p className="text-sm leading-relaxed mb-6 text-gray-400">
-              La plateforme pour trouver des artisans pres de chez vous.
-              <span className="text-white font-medium"> Plus de 4 000 professionnels verifies</span> a votre service.
+              La plateforme pour trouver des artisans près de chez vous.
             </p>
             <div className="flex gap-3">
               <a href="https://facebook.com/servicesartisans" target="_blank" rel="noopener noreferrer" className="w-11 h-11 bg-slate-800/50 rounded-xl flex items-center justify-center hover:bg-primary-600 hover:scale-110 transition-all duration-300 group" aria-label="Facebook">
@@ -328,32 +328,36 @@ export default function Footer() {
         {/* Contact section */}
         <div className="mt-16 pt-10 border-t border-slate-800/50">
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="flex items-center gap-4 p-4 bg-slate-800/30 rounded-xl hover:bg-slate-800/50 transition-colors">
-              <div className="w-12 h-12 bg-primary-500/10 rounded-xl flex items-center justify-center">
-                <MapPin className="w-5 h-5 text-primary-400" />
+            {companyIdentity.address && (
+              <div className="flex items-center gap-4 p-4 bg-slate-800/30 rounded-xl hover:bg-slate-800/50 transition-colors">
+                <div className="w-12 h-12 bg-primary-500/10 rounded-xl flex items-center justify-center">
+                  <MapPin className="w-5 h-5 text-primary-400" />
+                </div>
+                <div>
+                  <p className="text-white font-medium mb-0.5">Adresse</p>
+                  <span className="text-sm text-gray-400">{companyIdentity.address}</span>
+                </div>
               </div>
-              <div>
-                <p className="text-white font-medium mb-0.5">Adresse</p>
-                <span className="text-sm text-gray-400">42 Rue de la Republique, 75011 Paris</span>
+            )}
+            {companyIdentity.phone && (
+              <div className="flex items-center gap-4 p-4 bg-slate-800/30 rounded-xl hover:bg-slate-800/50 transition-colors">
+                <div className="w-12 h-12 bg-primary-500/10 rounded-xl flex items-center justify-center">
+                  <Phone className="w-5 h-5 text-primary-400" />
+                </div>
+                <div>
+                  <p className="text-white font-medium mb-0.5">Telephone</p>
+                  <a href={`tel:${companyIdentity.phone}`} className="text-sm text-gray-400 hover:text-white transition-colors">{companyIdentity.phone}</a>
+                </div>
               </div>
-            </div>
-            <div className="flex items-center gap-4 p-4 bg-slate-800/30 rounded-xl hover:bg-slate-800/50 transition-colors">
-              <div className="w-12 h-12 bg-primary-500/10 rounded-xl flex items-center justify-center">
-                <Phone className="w-5 h-5 text-primary-400" />
-              </div>
-              <div>
-                <p className="text-white font-medium mb-0.5">Telephone</p>
-                <a href="tel:+33184800000" className="text-sm text-gray-400 hover:text-white transition-colors">01 84 80 00 00</a>
-              </div>
-            </div>
+            )}
             <div className="flex items-center gap-4 p-4 bg-slate-800/30 rounded-xl hover:bg-slate-800/50 transition-colors">
               <div className="w-12 h-12 bg-primary-500/10 rounded-xl flex items-center justify-center">
                 <Mail className="w-5 h-5 text-primary-400" />
               </div>
               <div>
                 <p className="text-white font-medium mb-0.5">Email</p>
-                <a href="mailto:contact@servicesartisans.fr" className="text-sm text-gray-400 hover:text-white transition-colors">
-                  contact@servicesartisans.fr
+                <a href={`mailto:${companyIdentity.email}`} className="text-sm text-gray-400 hover:text-white transition-colors">
+                  {companyIdentity.email}
                 </a>
               </div>
             </div>

@@ -1,4 +1,6 @@
 import { Metadata } from 'next'
+import JsonLd from '@/components/JsonLd'
+import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 
 export const metadata: Metadata = {
   title: 'Conditions Générales de Vente - ServicesArtisans',
@@ -8,6 +10,10 @@ export const metadata: Metadata = {
 export default function CGVPage() {
   return (
     <div className="min-h-screen bg-gray-50">
+      <JsonLd data={getBreadcrumbSchema([
+        { name: 'Accueil', url: '/' },
+        { name: 'CGV', url: '/cgv' },
+      ])} />
       {/* Header */}
       <section className="bg-white border-b">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

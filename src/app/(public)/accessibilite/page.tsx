@@ -1,9 +1,15 @@
 import Link from 'next/link'
 import { ChevronRight, Eye, Ear, Hand, Brain, Mail } from 'lucide-react'
+import JsonLd from '@/components/JsonLd'
+import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 
 export default function AccessibilitePage() {
   return (
     <div className="min-h-screen bg-gray-50">
+      <JsonLd data={getBreadcrumbSchema([
+        { name: 'Accueil', url: '/' },
+        { name: 'Accessibilité', url: '/accessibilite' },
+      ])} />
       {/* Hero */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">

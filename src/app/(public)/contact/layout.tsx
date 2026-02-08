@@ -1,4 +1,6 @@
 import { Metadata } from 'next'
+import JsonLd from '@/components/JsonLd'
+import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 
 export const metadata: Metadata = {
   title: 'Contact - Nous contacter | ServicesArtisans',
@@ -25,5 +27,15 @@ export default function ContactLayout({
 }: {
   children: React.ReactNode
 }) {
-  return children
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: 'Accueil', url: '/' },
+    { name: 'Contact', url: '/contact' },
+  ])
+
+  return (
+    <>
+      <JsonLd data={breadcrumbSchema} />
+      {children}
+    </>
+  )
 }

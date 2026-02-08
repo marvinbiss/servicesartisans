@@ -5,8 +5,8 @@
 
 export const brand = {
   name: 'ServicesArtisans',
-  tagline: 'L\'excellence artisanale a portee de clic',
-  description: 'La plateforme de reference pour trouver et reserver les meilleurs artisans pres de chez vous.',
+  tagline: 'Trouvez des artisans pres de chez vous',
+  description: 'Plateforme de mise en relation entre particuliers et artisans qualifies en France.',
 
   // Logo variations
   logo: {
@@ -16,11 +16,9 @@ export const brand = {
     favicon: '/favicon.ico',
   },
 
-  // Contact
+  // Contact — Legal identity: see src/lib/config/company-identity.ts
   contact: {
     email: 'contact@servicesartisans.fr',
-    phone: '01 84 80 00 00',
-    address: '42 Rue de la Republique, 75011 Paris',
   },
 
   // Social

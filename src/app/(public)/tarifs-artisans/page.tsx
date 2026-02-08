@@ -3,6 +3,8 @@ import Link from 'next/link'
 import { Check, X, Star, ArrowRight, Zap, Crown, Building } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
+import JsonLd from '@/components/JsonLd'
+import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 
 export const metadata: Metadata = {
   title: 'Tarifs Artisans - Offres et abonnements | ServicesArtisans',
@@ -108,6 +110,10 @@ const breadcrumbItems = [
 export default function TarifsArtisansPage() {
   return (
     <div className="min-h-screen bg-gray-50">
+      <JsonLd data={getBreadcrumbSchema([
+        { name: 'Accueil', url: '/' },
+        { name: 'Tarifs artisans', url: '/tarifs-artisans' },
+      ])} />
       {/* Hero */}
       <section className="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -116,7 +122,7 @@ export default function TarifsArtisansPage() {
             Developpez votre activite
           </h1>
           <p className="text-xl text-blue-100 max-w-2xl mx-auto">
-            Rejoignez plus de 4 000 artisans et recevez des demandes de devis qualifiees
+            Rejoignez notre réseau d'artisans et recevez des demandes de devis qualifiees
           </p>
         </div>
       </section>

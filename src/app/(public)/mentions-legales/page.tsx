@@ -1,4 +1,7 @@
 import { Metadata } from 'next'
+import JsonLd from '@/components/JsonLd'
+import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { companyIdentity, isCompanyRegistered } from '@/lib/config/company-identity'
 
 export const metadata: Metadata = {
   title: 'Mentions légales - ServicesArtisans',
@@ -6,8 +9,17 @@ export const metadata: Metadata = {
 }
 
 export default function MentionsLegalesPage() {
+  const registered = isCompanyRegistered()
+
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: 'Accueil', url: '/' },
+    { name: 'Mentions légales', url: '/mentions-legales' },
+  ])
+
   return (
     <div className="min-h-screen bg-gray-50">
+      <JsonLd data={breadcrumbSchema} />
+
       {/* Header */}
       <section className="bg-white border-b">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -21,23 +33,85 @@ export default function MentionsLegalesPage() {
       <section className="py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-xl shadow-sm p-8 prose prose-gray max-w-none">
-            <p>
-              Les mentions légales seront publiées lors de l'immatriculation de la société.
-              Site en cours de développement.
-            </p>
+
+            <h2>Éditeur du site</h2>
+            {registered ? (
+              <>
+                <ul>
+                  {companyIdentity.legalName && (
+                    <li><strong>Raison sociale :</strong> {companyIdentity.legalName}</li>
+                  )}
+                  {companyIdentity.formeJuridique && (
+                    <li><strong>Forme juridique :</strong> {companyIdentity.formeJuridique}</li>
+                  )}
+                  {companyIdentity.capitalSocial && (
+                    <li><strong>Capital social :</strong> {companyIdentity.capitalSocial}</li>
+                  )}
+                  {companyIdentity.siret && (
+                    <li><strong>SIRET :</strong> {companyIdentity.siret}</li>
+                  )}
+                  {companyIdentity.rcs && (
+                    <li><strong>RCS :</strong> {companyIdentity.rcs}</li>
+                  )}
+                  {companyIdentity.tvaIntracom && (
+                    <li><strong>TVA intracommunautaire :</strong> {companyIdentity.tvaIntracom}</li>
+                  )}
+                  {companyIdentity.address && (
+                    <li><strong>Siège social :</strong> {companyIdentity.address}</li>
+                  )}
+                  {companyIdentity.phone && (
+                    <li><strong>Téléphone :</strong> {companyIdentity.phone}</li>
+                  )}
+                  {companyIdentity.directeurPublication && (
+                    <li><strong>Directeur de la publication :</strong> {companyIdentity.directeurPublication}</li>
+                  )}
+                  <li><strong>Email :</strong> {companyIdentity.email}</li>
+                </ul>
+              </>
+            ) : (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 not-prose">
+                <p className="text-blue-800 text-sm">
+                  Le site {companyIdentity.name} est en cours de développement.
+                  Les informations légales complètes (dénomination sociale, SIRET, adresse du siège)
+                  seront publiées lors de l'immatriculation de la société.
+                </p>
+                <p className="text-blue-800 text-sm mt-2">
+                  Contact : <strong>{companyIdentity.email}</strong>
+                </p>
+              </div>
+            )}
+
             <h2>Hébergement</h2>
-            <p>
-              Le site est hébergé par :
-            </p>
             <ul>
-              <li><strong>Hébergeur :</strong> Vercel Inc.</li>
-              <li><strong>Adresse :</strong> 340 S Lemon Ave #4133, Walnut, CA 91789, USA</li>
-              <li><strong>Site web :</strong> https://vercel.com</li>
+              <li><strong>Hébergeur :</strong> {companyIdentity.hosting.name}</li>
+              <li><strong>Adresse :</strong> {companyIdentity.hosting.address}</li>
+              <li><strong>Site web :</strong> {companyIdentity.hosting.website}</li>
             </ul>
+
+            <h2>Propriété intellectuelle</h2>
+            <p>
+              L'ensemble du contenu de ce site (textes, images, logos, icônes, mise en page)
+              est protégé par le droit de la propriété intellectuelle. Toute reproduction,
+              représentation ou diffusion, totale ou partielle, du contenu de ce site,
+              par quelque procédé que ce soit, sans l'autorisation expresse de l'éditeur,
+              est interdite et constitue une contrefaçon.
+            </p>
+
+            <h2>Protection des données personnelles</h2>
+            <p>
+              Le traitement des données personnelles collectées sur ce site est décrit
+              dans notre <a href="/confidentialite">politique de confidentialité</a>.
+            </p>
+            <p>
+              Délégué à la protection des données (DPO) : <strong>{companyIdentity.dpoEmail}</strong>
+            </p>
+
             <h2>Contact</h2>
             <p>
-              Pour toute question, vous pouvez nous contacter par email : <strong>contact@servicesartisans.fr</strong>
+              Pour toute question relative aux mentions légales, vous pouvez nous contacter
+              par email : <strong>{companyIdentity.email}</strong>
             </p>
+
           </div>
         </div>
       </section>

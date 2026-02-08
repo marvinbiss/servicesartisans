@@ -55,7 +55,6 @@ export const brand = {
   contact: {
     email: 'contact@servicesartisans.fr',
     support: 'support@servicesartisans.fr',
-    phone: '+33 1 XX XX XX XX',
   },
 
   // Social media
@@ -66,12 +65,7 @@ export const brand = {
     twitter: 'https://twitter.com/servicesartisans',
   },
 
-  // Legal
-  legal: {
-    companyName: 'ServicesArtisans',
-    siret: 'XXX XXX XXX XXXXX',
-    address: 'XX rue Example, 75001 Paris',
-  },
+  // Legal identity: see src/lib/config/company-identity.ts
 } as const
 
 // ===========================================

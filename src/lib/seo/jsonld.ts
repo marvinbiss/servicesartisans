@@ -1,14 +1,20 @@
 import { SITE_URL, SITE_NAME } from './config'
+import { companyIdentity, isCompanyRegistered, getSocialLinks } from '@/lib/config/company-identity'
 
 // Schema.org Organization
 export function getOrganizationSchema() {
+  const socialLinks = getSocialLinks()
+  const registered = isCompanyRegistered()
+
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
+    '@id': `${SITE_URL}#organization`,
     name: SITE_NAME,
     url: SITE_URL,
     logo: `${SITE_URL}/icon.svg`,
     description: 'Plateforme de mise en relation entre particuliers et artisans qualifiés en France.',
+    ...(socialLinks.length > 0 && { sameAs: socialLinks }),
     areaServed: {
       '@type': 'Country',
       name: 'France',
@@ -18,7 +24,17 @@ export function getOrganizationSchema() {
       url: `${SITE_URL}/contact`,
       contactType: 'customer service',
       availableLanguage: 'French',
+      email: companyIdentity.email,
     },
+    ...(registered && {
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: companyIdentity.address,
+        addressCountry: 'FR',
+      },
+      telephone: companyIdentity.phone,
+      foundingDate: companyIdentity.foundingDate,
+    }),
   }
 }
 
@@ -33,7 +49,7 @@ export function getWebsiteSchema() {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: `${SITE_URL}/services/{search_term_string}`,
+        urlTemplate: `${SITE_URL}/recherche?q={search_term_string}`,
       },
       'query-input': 'required name=search_term_string',
     },
