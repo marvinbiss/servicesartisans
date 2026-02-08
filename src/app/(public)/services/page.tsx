@@ -168,7 +168,7 @@ export default function ServicesPage() {
           </h1>
           <p className="text-xl text-slate-300 max-w-2xl mx-auto mb-10">
             Trouvez le professionnel idéal pour tous vos travaux.
-            Artisans vérifiés, devis gratuits, satisfaction garantie.
+            Artisans vérifiés, devis gratuits.
           </p>
 
           {/* Stats */}

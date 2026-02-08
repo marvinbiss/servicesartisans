@@ -1,7 +1,7 @@
 {
   "common": {
     "appName": "ServicesArtisans",
-    "tagline": "Trouvez les meilleurs artisans près de chez vous",
+    "tagline": "Trouvez des artisans près de chez vous",
     "loading": "Chargement...",
     "error": "Une erreur est survenue",
     "success": "Opération réussie",

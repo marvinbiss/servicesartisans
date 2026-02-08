@@ -69,8 +69,8 @@ export default function Footer() {
                 <Award className="w-6 h-6 text-amber-400" />
               </div>
               <div>
-                <p className="text-white font-semibold text-sm">Satisfaction garantie</p>
-                <p className="text-gray-500 text-xs">Artisans qualifiés</p>
+                <p className="text-white font-semibold text-sm">Devis gratuits</p>
+                <p className="text-gray-500 text-xs">Sans engagement</p>
               </div>
             </div>
             <div className="flex items-center gap-3 justify-center md:justify-start">
@@ -78,8 +78,8 @@ export default function Footer() {
                 <Phone className="w-6 h-6 text-purple-400" />
               </div>
               <div>
-                <p className="text-white font-semibold text-sm">Support 7j/7</p>
-                <p className="text-gray-500 text-xs">Assistance dediee</p>
+                <p className="text-white font-semibold text-sm">Support par email</p>
+                <p className="text-gray-500 text-xs">contact@servicesartisans.fr</p>
               </div>
             </div>
           </div>
@@ -207,7 +207,7 @@ export default function Footer() {
               </div>
             </Link>
             <p className="text-sm leading-relaxed mb-6 text-gray-400">
-              La plateforme de reference pour trouver les meilleurs artisans pres de chez vous.
+              La plateforme pour trouver des artisans pres de chez vous.
               <span className="text-white font-medium"> Plus de 4 000 professionnels verifies</span> a votre service.
             </p>
             <div className="flex gap-3">

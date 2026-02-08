@@ -1,11 +1,11 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { Users, Shield, Star, MapPin, Award, Heart, ArrowRight } from 'lucide-react'
+import { Users, Shield, Star, MapPin, Award, ArrowRight } from 'lucide-react'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 export const metadata: Metadata = {
   title: 'À propos - ServicesArtisans',
-  description: 'Découvrez ServicesArtisans, la plateforme de référence pour trouver des artisans qualifiés en France. Notre mission : connecter les particuliers avec les meilleurs professionnels.',
+  description: 'Découvrez ServicesArtisans, la plateforme pour trouver des artisans qualifiés en France. Notre mission : connecter les particuliers avec des professionnels.',
   alternates: {
     canonical: 'https://servicesartisans.fr/a-propos',
   },
@@ -42,7 +42,7 @@ async function getStats() {
       cityCount: uniqueCities
     }
   } catch {
-    return { artisanCount: 4000, reviewCount: 59000, cityCount: 500 }
+    return { artisanCount: 0, reviewCount: 0, cityCount: 0 }
   }
 }
 
@@ -55,7 +55,7 @@ const values = [
   {
     icon: Star,
     title: 'Qualité',
-    description: 'Nous sélectionnons les meilleurs artisans grâce aux avis vérifiés de nos utilisateurs.',
+    description: 'Nous sélectionnons des artisans grâce aux avis vérifiés de nos utilisateurs.',
   },
   {
     icon: Users,
@@ -65,16 +65,10 @@ const values = [
   {
     icon: Award,
     title: 'Excellence',
-    description: 'Nous nous engageons à offrir la meilleure expérience pour trouver votre artisan.',
+    description: 'Nous nous engageons à offrir une expérience de qualité pour trouver votre artisan.',
   },
 ]
 
-const team = [
-  { name: 'Marie Dupont', role: 'Fondatrice & CEO', image: '👩‍💼' },
-  { name: 'Pierre Martin', role: 'Directeur Technique', image: '👨‍💻' },
-  { name: 'Sophie Bernard', role: 'Responsable Artisans', image: '👩‍🔧' },
-  { name: 'Lucas Petit', role: 'Responsable Clients', image: '👨‍💼' },
-]
 
 export default async function AProposPage() {
   const data = await getStats()
@@ -83,7 +77,6 @@ export default async function AProposPage() {
     { value: `${data.artisanCount.toLocaleString('fr-FR')}+`, label: 'Artisans référencés', icon: Users },
     { value: `${data.cityCount}+`, label: 'Villes', icon: MapPin },
     { value: `${Math.floor(data.reviewCount / 1000)}K+`, label: 'Avis Google', icon: Star },
-    { value: '98%', label: 'Clients satisfaits', icon: Heart },
   ]
 
   return (
@@ -95,7 +88,7 @@ export default async function AProposPage() {
             À propos de ServicesArtisans
           </h1>
           <p className="text-xl text-blue-100 max-w-3xl mx-auto">
-            Depuis 2020, nous connectons les particuliers avec les meilleurs artisans de France.
+            Nous connectons les particuliers avec des artisans qualifiés en France.
             Notre mission : rendre la recherche d'un professionnel simple, rapide et fiable.
           </p>
         </div>
@@ -136,10 +129,9 @@ export default async function AProposPage() {
                   et les mauvaises surprises, les particuliers méritaient mieux.
                 </p>
                 <p>
-                  En 2020, nous avons créé cette plateforme avec une ambition : devenir le
-                  réflexe de tous les Français pour leurs travaux. Aujourd'hui, nous sommes
-                  fiers de connecter chaque jour des milliers de personnes avec des artisans
-                  qualifiés et vérifiés.
+                  Nous avons créé cette plateforme avec une ambition : faciliter la recherche
+                  d'artisans pour tous les Français. Notre objectif est de connecter les particuliers
+                  avec des artisans qualifiés et vérifiés.
                 </p>
                 <p>
                   Notre équipe travaille sans relâche pour améliorer l'expérience de nos
@@ -197,32 +189,6 @@ export default async function AProposPage() {
                 </div>
               )
             })}
-          </div>
-        </div>
-      </section>
-
-      {/* L'équipe */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Notre équipe
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Des passionnés au service des artisans et des particuliers
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8" role="list" aria-label="Membres de l'équipe">
-            {team.map((member) => (
-              <div key={member.name} className="text-center" role="listitem">
-                <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4 text-5xl" aria-hidden="true">
-                  {member.image}
-                </div>
-                <h3 className="font-semibold text-gray-900">{member.name}</h3>
-                <p className="text-gray-600 text-sm">{member.role}</p>
-              </div>
-            ))}
           </div>
         </div>
       </section>

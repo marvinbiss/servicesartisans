@@ -12,7 +12,7 @@
 
 export const brand = {
   name: 'ServicesArtisans',
-  tagline: 'Trouvez les meilleurs artisans près de chez vous',
+  tagline: 'Trouvez des artisans près de chez vous',
   shortDescription: 'La plateforme de réservation pour artisans et clients exigeants',
   fullDescription: 'ServicesArtisans connecte les artisans qualifiés avec les clients à la recherche de services de qualité. Réservation en ligne, rappels automatiques, avis vérifiés.',
 
@@ -68,7 +68,7 @@ export const brand = {
 
   // Legal
   legal: {
-    companyName: 'ServicesArtisans SAS',
+    companyName: 'ServicesArtisans',
     siret: 'XXX XXX XXX XXXXX',
     address: 'XX rue Example, 75001 Paris',
   },

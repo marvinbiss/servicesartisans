@@ -57,6 +57,7 @@ export function slugify(text: string): string {
 // Generate SEO-friendly artisan URL
 export function getArtisanUrl(artisan: {
   id: string
+  stable_id?: string
   slug?: string
   specialty?: string
   city?: string
@@ -64,7 +65,7 @@ export function getArtisanUrl(artisan: {
 }): string {
   const serviceSlug = slugify(artisan.specialty || 'artisan')
   const citySlug = slugify(artisan.city || 'france')
-  const artisanSlug = artisan.slug || slugify(artisan.business_name || artisan.id)
+  const artisanSlug = artisan.stable_id || artisan.slug
 
   return `/services/${serviceSlug}/${citySlug}/${artisanSlug}`
 }

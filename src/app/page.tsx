@@ -5,14 +5,14 @@ import { PopularCitiesLinks } from '@/components/InternalLinks'
 import { getOrganizationSchema, getWebsiteSchema } from '@/lib/seo/jsonld'
 
 export const metadata: Metadata = {
-  title: 'ServicesArtisans - Trouvez les meilleurs artisans pres de chez vous',
+  title: 'ServicesArtisans - Trouvez des artisans pres de chez vous',
   description:
-    'Trouvez et comparez les meilleurs artisans de votre region. Plombiers, electriciens, menuisiers et plus. Devis gratuits.',
+    'Trouvez et comparez des artisans de votre region. Plombiers, electriciens, menuisiers et plus. Devis gratuits.',
   alternates: { canonical: 'https://servicesartisans.fr' },
   openGraph: {
-    title: 'ServicesArtisans - Trouvez les meilleurs artisans pres de chez vous',
+    title: 'ServicesArtisans - Trouvez des artisans pres de chez vous',
     description:
-      'Trouvez et comparez les meilleurs artisans de votre region. Devis gratuits.',
+      'Trouvez et comparez des artisans de votre region. Devis gratuits.',
     type: 'website',
     url: 'https://servicesartisans.fr',
   },
@@ -40,7 +40,7 @@ export default function HomePage() {
       <section className="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-20">
         <div className="max-w-5xl mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            Trouvez les meilleurs artisans pres de chez vous
+            Trouvez des artisans pres de chez vous
           </h1>
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
             Comparez les avis, les tarifs et obtenez des devis gratuits

@@ -10,6 +10,7 @@ interface SimilarArtisan {
   id: string
   name: string
   slug: string
+  stable_id?: string
   specialty: string
   city: string
   ratingAverage: number
@@ -93,7 +94,7 @@ export function SimilarArtisans({
 
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
         {artisans.map((artisan) => {
-          const providerUrl = `/services/${serviceSlug}/${locationSlug}/${artisan.slug}`
+          const providerUrl = `/services/${serviceSlug}/${locationSlug}/${artisan.stable_id || artisan.slug}`
 
           return (
             <Link

@@ -42,7 +42,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // TODO: paginate when provider count exceeds Supabase default limit
     const { data: providers, error } = await supabase
       .from('providers')
-      .select('name, slug, specialty, address_city, updated_at')
+      .select('name, slug, stable_id, specialty, address_city, updated_at')
       .eq('is_active', true)
       .eq('noindex', false)
       .order('updated_at', { ascending: false })
@@ -60,14 +60,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const hubs = new Set<string>()
 
     providerEntries = providers
-      .filter((p) => p.name && p.slug && p.specialty && p.address_city)
+      .filter((p) => p.name && p.stable_id && p.specialty && p.address_city)
       .map((p) => {
         const serviceSlug = slugify(p.specialty!)
         const locationSlug = slugify(p.address_city!)
         hubs.add(`${serviceSlug}/${locationSlug}`)
 
         return {
-          url: `${BASE_URL}/services/${serviceSlug}/${locationSlug}/${p.slug}`,
+          url: `${BASE_URL}/services/${serviceSlug}/${locationSlug}/${p.stable_id}`,
           lastModified: p.updated_at ? new Date(p.updated_at) : now,
           changeFrequency: 'weekly' as const,
           priority: 0.7,

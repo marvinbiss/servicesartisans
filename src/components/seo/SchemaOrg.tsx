@@ -1,4 +1,4 @@
-import Script from 'next/script'
+import React from 'react'
 
 // Safely escape JSON for script tags to prevent XSS
 function safeJsonStringify(data: unknown): string {
@@ -184,8 +184,7 @@ export function SchemaOrg({ schema }: SchemaOrgProps) {
   }
 
   return (
-    <Script
-      id="schema-org"
+    <script
       type="application/ld+json"
       dangerouslySetInnerHTML={{ __html: safeJsonStringify(jsonLd) }}
     />

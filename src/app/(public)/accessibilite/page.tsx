@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ChevronRight, Eye, Ear, Hand, Brain, Mail, Phone } from 'lucide-react'
+import { ChevronRight, Eye, Ear, Hand, Brain, Mail } from 'lucide-react'
 
 export default function AccessibilitePage() {
   return (
@@ -33,7 +33,7 @@ export default function AccessibilitePage() {
             </p>
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
               <p className="text-blue-800">
-                <strong>Taux de conformité :</strong> 85% des critères RGAA sont respectés.
+                Audit de conformité en cours.
               </p>
             </div>
           </section>
@@ -147,13 +147,6 @@ export default function AccessibilitePage() {
               >
                 <Mail className="w-5 h-5" />
                 accessibilite@servicesartisans.fr
-              </a>
-              <a
-                href="tel:+33123456789"
-                className="flex items-center gap-2 text-blue-600 hover:underline"
-              >
-                <Phone className="w-5 h-5" />
-                01 23 45 67 89
               </a>
             </div>
           </section>

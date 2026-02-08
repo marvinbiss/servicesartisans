@@ -157,7 +157,7 @@ export default function AdvancedSearch({
 
   const handleSuggestionClick = (suggestion: SearchSuggestion) => {
     if (suggestion.type === 'artisan' && suggestion.id) {
-      router.push(`/artisan/${suggestion.id}`)
+      router.push(`/recherche?q=${encodeURIComponent(suggestion.text)}`)
     } else if (suggestion.type === 'location') {
       setFilters({ ...filters, location: suggestion.text })
       setShowSuggestions(false)

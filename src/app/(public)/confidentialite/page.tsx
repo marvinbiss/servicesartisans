@@ -149,7 +149,7 @@ export default function ConfidentialitePage() {
             </p>
             <ul>
               <li><strong>Email :</strong> dpo@servicesartisans.fr</li>
-              <li><strong>Courrier :</strong> ServicesArtisans SAS - DPO, 123 Avenue des Artisans, 75001 Paris</li>
+              <li><strong>Courrier :</strong> Coordonnées du DPO disponibles sur demande via le formulaire de contact.</li>
             </ul>
             <p>
               Vous pouvez également introduire une réclamation auprès de la CNIL (www.cnil.fr).

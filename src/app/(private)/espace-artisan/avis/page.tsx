@@ -292,7 +292,7 @@ export default function AvisArtisanPage() {
                   <p className="text-green-100 text-sm">
                     Répondez rapidement aux avis de vos clients, même positifs. Cela montre votre professionnalisme
                     et encourage d'autres clients à laisser leur avis. Les artisans qui répondent aux avis
-                    reçoivent en moyenne 35% de demandes en plus !
+                    peuvent recevoir davantage de demandes.
                   </p>
                 </div>
               </div>

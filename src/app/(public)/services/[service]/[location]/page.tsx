@@ -162,13 +162,6 @@ function generateJsonLd(service: Service, location: LocationType, providers: unk
       '@type': 'Organization',
       name: 'ServicesArtisans',
     },
-    aggregateRating: providers.length > 0 ? {
-      '@type': 'AggregateRating',
-      ratingValue: '4.5',
-      reviewCount: providers.length,
-      bestRating: 5,
-      worstRating: 1,
-    } : undefined,
   }
 
   const breadcrumbSchema = getBreadcrumbSchema([

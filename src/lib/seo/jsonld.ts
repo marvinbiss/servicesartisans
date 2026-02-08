@@ -68,11 +68,11 @@ export function getLocalBusinessSchema(artisan: {
     },
     telephone: artisan.phone,
     priceRange: artisan.priceRange || '€€',
-    aggregateRating: artisan.rating
+    aggregateRating: (artisan.rating && artisan.reviewCount && artisan.reviewCount > 0)
       ? {
           '@type': 'AggregateRating',
           ratingValue: artisan.rating,
-          reviewCount: artisan.reviewCount || 0,
+          reviewCount: artisan.reviewCount,
           bestRating: 5,
           worstRating: 1,
         }
@@ -270,11 +270,11 @@ export function getItemListSchema(params: {
         name: item.name,
         url: `${SITE_URL}${item.url}`,
         image: item.image,
-        ...(item.rating && {
+        ...(item.rating && item.reviewCount && item.reviewCount > 0 && {
           aggregateRating: {
             '@type': 'AggregateRating',
             ratingValue: item.rating,
-            reviewCount: item.reviewCount || 0,
+            reviewCount: item.reviewCount,
           },
         }),
       },
@@ -360,11 +360,11 @@ export function getProfessionalServiceSchema(artisan: {
     telephone: artisan.phone,
     email: artisan.email,
     priceRange: artisan.priceRange || '€€',
-    aggregateRating: artisan.rating
+    aggregateRating: (artisan.rating && artisan.reviewCount && artisan.reviewCount > 0)
       ? {
           '@type': 'AggregateRating',
           ratingValue: artisan.rating.toFixed(1),
-          reviewCount: artisan.reviewCount || 0,
+          reviewCount: artisan.reviewCount,
           bestRating: '5',
           worstRating: '1',
         }

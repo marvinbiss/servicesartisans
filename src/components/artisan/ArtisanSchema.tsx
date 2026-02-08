@@ -1,6 +1,4 @@
-'use client'
-
-import Script from 'next/script'
+import React from 'react'
 import { Review, getDisplayName } from './types'
 import type { LegacyArtisan } from '@/types/legacy'
 
@@ -264,10 +262,8 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
 
   return (
     <>
-      <Script
-        id="schema-combined"
+      <script
         type="application/ld+json"
-        strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(combinedSchema, null, 0)
             .replace(/</g, '\\u003c')

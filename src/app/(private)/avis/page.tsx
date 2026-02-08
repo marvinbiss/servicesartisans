@@ -6,7 +6,7 @@ import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalL
 
 export const metadata: Metadata = {
   title: 'Avis Clients Verifies - Temoignages | ServicesArtisans',
-  description: 'Decouvrez les avis verifies de nos clients. Plus de 15 000 temoignages authentiques sur nos artisans qualifies.',
+  description: 'Decouvrez les avis verifies de nos clients sur nos artisans qualifies.',
 }
 
 const avisRecents = [
@@ -91,10 +91,10 @@ const avisRecents = [
 ]
 
 const stats = {
-  totalAvis: 15847,
-  noteMoyenne: 4.7,
-  artisansVerifies: 2340,
-  clientsSatisfaits: 98,
+  totalAvis: 0,
+  noteMoyenne: 0,
+  artisansVerifies: 0,
+  clientsSatisfaits: 0,
 }
 
 const breadcrumbItems = [

@@ -9,14 +9,14 @@ export function TrustBadges({ variant = 'default' }: { variant?: 'default' | 'co
     {
       icon: Shield,
       label: 'Artisans vérifiés',
-      description: 'Identité et qualifications contrôlées',
+      description: 'Processus de vérification en place',
       color: 'text-green-600',
       bgColor: 'bg-green-50',
     },
     {
       icon: BadgeCheck,
       label: 'Avis certifiés',
-      description: '100% avis clients authentiques',
+      description: 'Avis clients collectés après prestation',
       color: 'text-blue-600',
       bgColor: 'bg-blue-50',
     },
@@ -30,7 +30,7 @@ export function TrustBadges({ variant = 'default' }: { variant?: 'default' | 'co
     {
       icon: Clock,
       label: 'Réponse rapide',
-      description: 'Moins de 2h en moyenne',
+      description: 'Demandes transmises rapidement',
       color: 'text-amber-600',
       bgColor: 'bg-amber-50',
     },

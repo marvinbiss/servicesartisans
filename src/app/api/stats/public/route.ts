@@ -50,7 +50,7 @@ export async function GET() {
       artisanCount: artisanCount || 0,
       reviewCount: totalReviews,
       averageRating: averageRating,
-      cityCount: 500, // Approximate based on unique cities
+      cityCount: 0, // TODO: calculate from DB
       updatedAt: new Date().toISOString()
     })
 

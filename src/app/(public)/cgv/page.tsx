@@ -29,7 +29,7 @@ export default function CGVPage() {
             <p>
               Les présentes Conditions Générales de Vente et d'Utilisation (CGVU) régissent
               l'utilisation du site servicesartisans.fr et des services proposés par
-              ServicesArtisans SAS.
+              ServicesArtisans.
             </p>
             <p>
               En utilisant notre plateforme, vous acceptez sans réserve les présentes CGVU.
@@ -124,7 +124,7 @@ export default function CGVPage() {
             <h2>9. Propriété intellectuelle</h2>
             <p>
               L'ensemble des éléments du site (textes, images, logos, base de données) sont
-              la propriété de ServicesArtisans SAS et sont protégés par le droit de la
+              la propriété de ServicesArtisans et sont protégés par le droit de la
               propriété intellectuelle.
             </p>
 
@@ -163,7 +163,7 @@ export default function CGVPage() {
             </p>
             <ul>
               <li>Email : contact@servicesartisans.fr</li>
-              <li>Courrier : ServicesArtisans SAS, 123 Avenue des Artisans, 75001 Paris</li>
+              <li>Courrier : Coordonnées disponibles sur la page mentions légales.</li>
             </ul>
 
           </div>

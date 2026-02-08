@@ -221,7 +221,7 @@ export default async function ServicePage({ params }: PageProps) {
                 return (
                   <Link
                     key={provider.id}
-                    href={`/services/${serviceSlug}/${location?.slug || 'france'}/${provider.slug}`}
+                    href={`/services/${serviceSlug}/${location?.slug || 'france'}/${provider.stable_id || provider.slug}`}
                     className="bg-gray-50 rounded-lg p-4 hover:bg-blue-50 transition-colors group"
                   >
                     <h3 className="font-semibold text-gray-900 group-hover:text-blue-600">

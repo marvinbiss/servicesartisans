@@ -23,6 +23,7 @@ type MapProvider = LegacyProvider & {
   latitude: number
   longitude: number
   slug: string
+  stable_id?: string
 }
 
 export default function CarteAvecListe({
@@ -208,7 +209,7 @@ export default function CarteAvecListe({
                     <p className="text-sm text-gray-600 mb-3">{provider.address_city}</p>
                   )}
                   <Link
-                    href={`/services/${provider.specialty?.toLowerCase() || 'artisan'}/${provider.address_city?.toLowerCase() || 'france'}/${provider.slug}`}
+                    href={`/services/${provider.specialty?.toLowerCase() || 'artisan'}/${provider.address_city?.toLowerCase() || 'france'}/${provider.stable_id || provider.slug}`}
                     className="block w-full py-2 bg-blue-600 text-white text-center rounded-lg text-sm font-semibold hover:bg-blue-700"
                   >
                     Voir le profil
