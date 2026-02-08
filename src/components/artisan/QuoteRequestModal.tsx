@@ -101,7 +101,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
         setServerError(result.error || 'Erreur lors de l\'envoi')
       }
     } catch {
-      setServerError('Erreur de connexion. Reessayez.')
+      setServerError('Erreur de connexion. Réessayez.')
     } finally {
       setIsSubmitting(false)
     }
@@ -141,7 +141,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
               <div>
                 <h2 id="quote-modal-title" className="text-xl font-bold text-gray-900">Demande de devis</h2>
                 <p id="quote-modal-description" className="text-sm text-gray-500">
-                  Envoyer a {displayName}
+                  Envoyer à {displayName}
                 </p>
               </div>
               <motion.button
@@ -175,10 +175,10 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                     <CheckCircle className="w-8 h-8 text-green-600" />
                   </motion.div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    Demande envoyee !
+                    Demande envoyée !
                   </h3>
                   <p className="text-gray-600">
-                    {displayName} vous repondra dans les meilleurs delais.
+                    {displayName} vous répondra dans les meilleurs délais.
                   </p>
                 </motion.div>
               ) : (
@@ -291,13 +291,13 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                   {/* Urgency */}
                   <fieldset>
                     <legend className="block text-sm font-medium text-gray-700 mb-1.5">
-                      Delai souhaite
+                      Délai souhaité
                     </legend>
-                    <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Delai souhaite">
+                    <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Délai souhaité">
                       {[
                         { value: 'urgent', label: 'Urgent', sublabel: '< 48h' },
                         { value: 'normal', label: 'Normal', sublabel: '1-2 sem' },
-                        { value: 'flexible', label: 'Flexible', sublabel: 'Pas presse' },
+                        { value: 'flexible', label: 'Flexible', sublabel: 'Pas pressé' },
                       ].map((option) => (
                         <button
                           key={option.value}
@@ -344,7 +344,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                       <p id="quote-description-error" className="mt-1 text-sm text-red-600" role="alert">{errors.description}</p>
                     )}
                     <p id="quote-description-hint" className="mt-1 text-xs text-gray-500">
-                      {formData.description.length}/500 caracteres
+                      {formData.description.length}/500 caractères
                     </p>
                   </div>
 
@@ -372,8 +372,8 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
 
                   {/* Privacy note */}
                   <p className="text-xs text-gray-500 text-center">
-                    En envoyant ce formulaire, vous acceptez d'etre contacte par {displayName}.
-                    Vos donnees sont protegees conformement a notre politique de confidentialite.
+                    En envoyant ce formulaire, vous acceptez d&apos;être contacté par {displayName}.
+                    Vos données sont protégées conformément à notre politique de confidentialité.
                   </p>
                 </form>
               )}

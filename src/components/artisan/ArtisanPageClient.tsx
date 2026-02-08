@@ -61,6 +61,12 @@ const ArtisanSimilar = dynamic(
   { loading: () => <SectionSkeleton height="h-72" /> }
 )
 
+// Inline quote request form
+const ArtisanQuoteForm = dynamic(
+  () => import('@/components/artisan/ArtisanQuoteForm').then(mod => ({ default: mod.ArtisanQuoteForm })),
+  { loading: () => <SectionSkeleton height="h-80" /> }
+)
+
 // FAQ accordion
 const ArtisanFAQ = dynamic(
   () => import('@/components/artisan/ArtisanFAQ').then(mod => ({ default: mod.ArtisanFAQ })),
@@ -213,6 +219,9 @@ export default function ArtisanPageClient({
               </section>
               <section id="services" aria-label="Services et tarifs">
                 <ArtisanServices artisan={artisan} />
+              </section>
+              <section id="devis" aria-label="Demande de devis">
+                <ArtisanQuoteForm artisan={artisan} />
               </section>
               <section id="reviews" aria-label="Avis clients">
                 <ArtisanReviews artisan={artisan} reviews={reviews} />
