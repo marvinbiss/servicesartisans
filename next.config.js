@@ -55,10 +55,7 @@ const nextConfig = {
     return [
       { source: '/home', destination: '/', permanent: true },
       { source: '/accueil', destination: '/', permanent: true },
-      // Legacy routes → 410 Gone (via redirect to a gone page or 404)
-      { source: '/villes/:path*', destination: '/services', permanent: true },
-      { source: '/regions/:path*', destination: '/services', permanent: true },
-      { source: '/departements/:path*', destination: '/services', permanent: true },
+      // Legacy routes
       { source: '/france', destination: '/services', permanent: true },
       { source: '/carte', destination: '/services', permanent: true },
       { source: '/carte-liste', destination: '/services', permanent: true },
