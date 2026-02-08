@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import JsonLd from '@/components/JsonLd'
+import { PopularCitiesLinks } from '@/components/InternalLinks'
 import { getOrganizationSchema, getWebsiteSchema } from '@/lib/seo/jsonld'
 
 export const metadata: Metadata = {
@@ -71,6 +72,13 @@ export default function HomePage() {
               </Link>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Popular cities */}
+      <section className="py-16 bg-white border-t border-gray-100">
+        <div className="max-w-5xl mx-auto px-4">
+          <PopularCitiesLinks limit={10} showTitle />
         </div>
       </section>
 
