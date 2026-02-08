@@ -150,6 +150,46 @@ export function GeographicNavigation({ className = '' }: { className?: string })
   )
 }
 
+// Composant: Liens croisés service×ville populaires (homepage SEO)
+export function PopularServiceCityLinks({
+  limit = 12,
+  showTitle = true,
+  className = ''
+}: {
+  limit?: number
+  showTitle?: boolean
+  className?: string
+}) {
+  const topCombos = popularServices.slice(0, 4).flatMap(service =>
+    popularCities.slice(0, 3).map(city => ({
+      label: `${service.name} ${city.name}`,
+      href: `/services/${service.slug}/${city.slug}`,
+    }))
+  )
+
+  return (
+    <div className={className}>
+      {showTitle && (
+        <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+          <Wrench className="w-4 h-4 text-blue-500" />
+          Recherches populaires
+        </h3>
+      )}
+      <div className="flex flex-wrap gap-2">
+        {topCombos.slice(0, limit).map((combo) => (
+          <Link
+            key={combo.href}
+            href={combo.href}
+            className="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-full text-sm transition-colors"
+          >
+            {combo.label}
+          </Link>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 // Composant: Matrice service-ville (liens croisés)
 export function ServiceCityMatrix({
   service,

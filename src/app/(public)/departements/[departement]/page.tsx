@@ -72,7 +72,7 @@ export default async function DepartementPage({ params }: PageProps) {
         <section className="mb-16">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Trouver un artisan dans le {dept.name}</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {services.slice(0, 10).map((service) => (
+            {services.map((service) => (
               <Link key={service.slug} href={`/services/${service.slug}/${villesDuDepartement[0]?.slug || slugify(dept.chefLieu)}`} className="bg-white rounded-xl shadow-sm p-4 text-center hover:shadow-md hover:-translate-y-0.5 transition-all group border border-gray-100">
                 <span className="font-medium text-gray-900 group-hover:text-blue-600 block">{service.name}</span>
                 <span className="block text-xs text-gray-500 mt-1">dans le {dept.code}</span>
@@ -105,6 +105,33 @@ export default async function DepartementPage({ params }: PageProps) {
             </div>
           )}
         </section>
+
+        {villesDuDepartement.length > 0 && (
+          <section className="mb-16">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Services par ville dans le {dept.name}</h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {villesDuDepartement.slice(0, 6).map((ville) => (
+                <div key={ville.slug} className="bg-white rounded-xl border border-gray-200 p-5">
+                  <h3 className="font-semibold text-gray-900 mb-3">Artisans à {ville.name}</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {services.slice(0, 6).map((service) => (
+                      <Link
+                        key={`${service.slug}-${ville.slug}`}
+                        href={`/services/${service.slug}/${ville.slug}`}
+                        className="text-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50 px-2 py-1 rounded transition-colors"
+                      >
+                        {service.name}
+                      </Link>
+                    ))}
+                  </div>
+                  <Link href={`/villes/${ville.slug}`} className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
+                    Tous les artisans <ArrowRight className="w-3 h-3" />
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
         <section className="mb-16">
           <h2 className="text-xl font-bold text-gray-900 mb-6">Autres départements en {dept.region}</h2>

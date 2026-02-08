@@ -68,13 +68,16 @@ export function getLocalBusinessSchema(artisan: {
   reviewCount?: number
   services: string[]
   priceRange?: string
+  url?: string
 }) {
+  const canonicalUrl = artisan.url || SITE_URL
   return {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
-    '@id': `${SITE_URL}/artisan/${artisan.name.toLowerCase().replace(/\s+/g, '-')}`,
+    '@id': `${canonicalUrl}#business`,
     name: artisan.name,
     description: artisan.description,
+    url: canonicalUrl,
     address: {
       '@type': 'PostalAddress',
       streetAddress: artisan.address,
@@ -359,13 +362,16 @@ export function getProfessionalServiceSchema(artisan: {
   priceRange?: string
   image?: string
   availableSlots?: { date: string; times: string[] }[]
+  url?: string
 }) {
+  const canonicalUrl = artisan.url || SITE_URL
   return {
     '@context': 'https://schema.org',
     '@type': 'ProfessionalService',
-    '@id': `${SITE_URL}/artisan/${artisan.id}`,
+    '@id': `${canonicalUrl}#professional-service`,
     name: artisan.name,
     description: artisan.description,
+    url: canonicalUrl,
     image: artisan.image || `${SITE_URL}/images/default-artisan.jpg`,
     address: {
       '@type': 'PostalAddress',
@@ -390,7 +396,7 @@ export function getProfessionalServiceSchema(artisan: {
       name: 'Services proposés',
       itemListElement: artisan.services.map((service, index) => ({
         '@type': 'Offer',
-        '@id': `${SITE_URL}/artisan/${artisan.id}#service-${index}`,
+        '@id': `${canonicalUrl}#service-${index}`,
         itemOffered: {
           '@type': 'Service',
           name: service,
@@ -401,7 +407,7 @@ export function getProfessionalServiceSchema(artisan: {
       '@type': 'ReserveAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: `${SITE_URL}/artisan/${artisan.id}#reserver`,
+        urlTemplate: `${canonicalUrl}#reserver`,
         actionPlatform: [
           'http://schema.org/DesktopWebPlatform',
           'http://schema.org/MobileWebPlatform',

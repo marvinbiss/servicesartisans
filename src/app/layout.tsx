@@ -5,6 +5,7 @@ import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { MobileMenuProvider } from '@/contexts/MobileMenuContext'
+import { getOrganizationSchema, getWebsiteSchema } from '@/lib/seo/jsonld'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -178,6 +179,17 @@ export default function RootLayout({
           rel="apple-touch-startup-image"
           href="/splash/apple-splash-1179-2556.png"
           media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+        />
+
+        {/* Global Organization + WebSite schema (E-E-A-T) */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify([getOrganizationSchema(), getWebsiteSchema()])
+              .replace(/</g, '\\u003c')
+              .replace(/>/g, '\\u003e')
+              .replace(/&/g, '\\u0026'),
+          }}
         />
 
         {/* Preconnect for Supabase backend */}

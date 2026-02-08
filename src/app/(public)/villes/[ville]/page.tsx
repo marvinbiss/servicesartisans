@@ -64,7 +64,7 @@ export default async function VillePage({ params }: PageProps) {
         <section className="mb-16">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Trouver un artisan à {ville.name}</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {services.slice(0, 10).map((service) => (
+            {services.map((service) => (
               <Link key={service.slug} href={`/services/${service.slug}/${villeSlug}`} className="bg-white rounded-xl shadow-sm p-4 text-center hover:shadow-md hover:-translate-y-0.5 transition-all group border border-gray-100">
                 <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">{service.name}</h3>
                 <p className="text-sm text-gray-500 mt-1">à {ville.name}</p>

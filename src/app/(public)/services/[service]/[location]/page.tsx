@@ -333,6 +333,26 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         </div>
       </section>
 
+      {/* Trust & Safety Links (E-E-A-T) */}
+      <section className="py-8 bg-white border-t">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+            Confiance &amp; Securite
+          </h2>
+          <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+            <Link href="/notre-processus-de-verification" className="text-blue-600 hover:text-blue-800">
+              Comment nous verifions les artisans
+            </Link>
+            <Link href="/politique-avis" className="text-blue-600 hover:text-blue-800">
+              Notre politique des avis
+            </Link>
+            <Link href="/mediation" className="text-blue-600 hover:text-blue-800">
+              Service de mediation
+            </Link>
+          </nav>
+        </div>
+      </section>
+
       {/* Internal Links Footer */}
       <section className="bg-gray-50 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

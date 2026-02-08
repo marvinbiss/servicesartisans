@@ -81,6 +81,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.5,
   }))
 
+  // Static service × location pages (15 services × 141 villes = 2,115 pages)
+  // These are always pre-rendered via generateStaticParams, so include regardless of DB
+  const serviceLocationEntries: MetadataRoute.Sitemap = services.flatMap(s =>
+    villes.map(v => ({
+      url: `${BASE_URL}/services/${s.slug}/${v.slug}`,
+      lastModified: now,
+      changeFrequency: 'weekly' as const,
+      priority: 0.7,
+    }))
+  )
+
   // Build lookup maps: normalized name → static slug
   const serviceMap = new Map<string, string>()
   for (const s of services) {
@@ -94,7 +105,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Dynamic entries: only providers with noindex=false
   let providerEntries: MetadataRoute.Sitemap = []
-  let hubEntries: MetadataRoute.Sitemap = []
 
   try {
     const { createAdminClient } = await import('@/lib/supabase/admin')
@@ -129,11 +139,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
 
     if (allProviders.length === 0) {
-      return [...staticEntries, ...serviceHubEntries, ...regionEntries, ...deptEntries, ...villeEntries]
+      return [...staticEntries, ...serviceHubEntries, ...serviceLocationEntries, ...regionEntries, ...deptEntries, ...villeEntries]
     }
-
-    // Track unique hub pages (service × location)
-    const hubs = new Set<string>()
 
     providerEntries = allProviders
       .filter((p) => p.name && p.stable_id && p.specialty && p.address_city)
@@ -144,8 +151,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         // Only include providers whose service AND city exist in static data
         if (!serviceSlug || !locationSlug) return acc
 
-        hubs.add(`${serviceSlug}/${locationSlug}`)
-
         acc.push({
           url: `${BASE_URL}/services/${serviceSlug}/${locationSlug}/${p.stable_id}`,
           lastModified: p.updated_at ? new Date(p.updated_at) : now,
@@ -154,18 +159,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         })
         return acc
       }, [])
-
-    // Hub pages for each unique service × location with indexable providers
-    hubEntries = Array.from(hubs).map((hub) => ({
-      url: `${BASE_URL}/services/${hub}`,
-      lastModified: now,
-      changeFrequency: 'weekly' as const,
-      priority: 0.8,
-    }))
   } catch (err) {
     console.error('Sitemap DB error', err)
-    return [...staticEntries, ...serviceHubEntries, ...regionEntries, ...deptEntries, ...villeEntries]
+    return [...staticEntries, ...serviceHubEntries, ...serviceLocationEntries, ...regionEntries, ...deptEntries, ...villeEntries]
   }
 
-  return [...staticEntries, ...serviceHubEntries, ...regionEntries, ...deptEntries, ...villeEntries, ...hubEntries, ...providerEntries]
+  return [...staticEntries, ...serviceHubEntries, ...serviceLocationEntries, ...regionEntries, ...deptEntries, ...villeEntries, ...providerEntries]
 }

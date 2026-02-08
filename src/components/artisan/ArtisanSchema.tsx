@@ -2,7 +2,7 @@ import React from 'react'
 import { Review, getDisplayName } from './types'
 import type { LegacyArtisan } from '@/types/legacy'
 import { slugify, getArtisanUrl } from '@/lib/utils'
-import { companyIdentity } from '@/lib/config/company-identity'
+import { companyIdentity, getSocialLinks } from '@/lib/config/company-identity'
 
 interface ArtisanSchemaProps {
   artisan: LegacyArtisan
@@ -28,10 +28,7 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
       availableLanguage: ['French'],
       url: `${baseUrl}/contact`,
     },
-    sameAs: [
-      'https://www.facebook.com/servicesartisans',
-      'https://www.linkedin.com/company/servicesartisans',
-    ],
+    ...(getSocialLinks().length > 0 && { sameAs: getSocialLinks() }),
   }
 
   const artisanUrl = `${baseUrl}${getArtisanUrl(artisan)}`

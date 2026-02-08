@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import { MapPin, Users, ArrowRight, Shield, Star, Clock } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { SITE_URL } from '@/lib/seo/config'
-import { regions, getRegionBySlug } from '@/lib/data/france'
+import { regions, getRegionBySlug, services as allServices } from '@/lib/data/france'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
 
 export function generateStaticParams() {
@@ -100,6 +100,33 @@ export default async function RegionPage({ params }: PageProps) {
                   ))}
                 </div>
               </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-8">Services par ville en {region.name}</h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {region.departments.flatMap(dept => dept.cities).slice(0, 6).map((city) => (
+              <div key={city.slug} className="bg-white rounded-xl border border-gray-200 p-5">
+                <h3 className="font-semibold text-gray-900 mb-3">Artisans à {city.name}</h3>
+                <div className="flex flex-wrap gap-2">
+                  {allServices.slice(0, 6).map((service) => (
+                    <Link
+                      key={`${service.slug}-${city.slug}`}
+                      href={`/services/${service.slug}/${city.slug}`}
+                      className="text-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50 px-2 py-1 rounded transition-colors"
+                    >
+                      {service.name}
+                    </Link>
+                  ))}
+                </div>
+                <Link href={`/villes/${city.slug}`} className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
+                  Tous les artisans <ArrowRight className="w-3 h-3" />
+                </Link>
+              </div>
             ))}
           </div>
         </div>

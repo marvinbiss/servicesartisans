@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
-import { PopularCitiesLinks, PopularServicesLinks, GeographicNavigation } from '@/components/InternalLinks'
+import { PopularCitiesLinks, PopularServicesLinks, PopularServiceCityLinks, GeographicNavigation } from '@/components/InternalLinks'
 import { getOrganizationSchema, getWebsiteSchema } from '@/lib/seo/jsonld'
 import { HeroSearch } from '@/components/search/HeroSearch'
 import { TrustBadges, AvailabilityBadge } from '@/components/ui/TrustBadges'
@@ -91,9 +91,10 @@ export default function HomePage() {
       {/* ─── POPULAR LINKS (SEO) ──────────────────────────────── */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-12">
+          <div className="grid md:grid-cols-3 gap-12">
             <PopularServicesLinks showTitle limit={8} />
             <PopularCitiesLinks showTitle limit={10} />
+            <PopularServiceCityLinks showTitle limit={12} />
           </div>
         </div>
       </section>
