@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
-import { getProviderByStableId, getServiceBySlug, getLocationBySlug } from '@/lib/supabase'
+import { getProviderByStableId, getProviderBySlug, getServiceBySlug, getLocationBySlug } from '@/lib/supabase'
 import { getArtisanUrl } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/server'
 import ArtisanPageClient from '@/components/artisan/ArtisanPageClient'
@@ -143,11 +143,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { service: serviceSlug, location: locationSlug, publicId } = await params
 
   try {
-    const [provider, service, location] = await Promise.all([
+    const [providerByStableId, service, location] = await Promise.all([
       getProviderByStableId(publicId),
       getServiceBySlug(serviceSlug),
       getLocationBySlug(locationSlug),
     ])
+
+    // Fallback: try slug lookup if stable_id didn't match
+    const provider = providerByStableId || await getProviderBySlug(publicId)
 
     if (!provider) return { title: 'Artisan non trouvé' }
 
@@ -186,14 +189,23 @@ export default async function ProviderPage({ params }: PageProps) {
   let provider: any, service: any, location: any
 
   try {
-    ;[provider, service, location] = await Promise.all([
+    // Try stable_id first, then slug as fallback
+    const [providerByStableId, svc, loc] = await Promise.all([
       getProviderByStableId(publicId),
       getServiceBySlug(serviceSlug),
       getLocationBySlug(locationSlug),
     ])
+    provider = providerByStableId
+    service = svc
+    location = loc
+
+    // Fallback: try slug lookup if stable_id didn't match
+    if (!provider) {
+      provider = await getProviderBySlug(publicId)
+    }
   } catch (error) {
     console.error('Provider page DB error:', error)
-    throw error
+    // Don't throw — show 404 instead of crashing the error boundary
   }
 
   if (!provider) {
