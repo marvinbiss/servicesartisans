@@ -6,11 +6,11 @@ import { useRef, useEffect, useState } from 'react'
 import {
   Users, Star, MapPin, MessageSquare,
   Wrench, Zap, Key, Flame, PaintBucket, Hammer, HardHat, Home, TreeDeciduous, Sparkles,
-  Search, ClipboardList, CheckCircle, ArrowRight,
+  Search, ClipboardList, CheckCircle, ArrowRight, Quote,
   Eye, TrendingUp, CreditCard
 } from 'lucide-react'
 
-// ─── STATS SECTION ───────────────────────────────────────────────
+// ─── ANIMATED COUNTER ─────────────────────────────────────────────
 
 function AnimatedCounter({ target, suffix = '', decimals = 0, duration = 2000 }: { target: number; suffix?: string; decimals?: number; duration?: number }) {
   const [count, setCount] = useState(0)
@@ -40,37 +40,45 @@ function AnimatedCounter({ target, suffix = '', decimals = 0, duration = 2000 }:
   )
 }
 
+// ─── STATS SECTION ───────────────────────────────────────────────
+
 const stats = [
-  { value: 2500, suffix: '+', decimals: 0, label: 'Artisans vérifiés', icon: Users, color: 'from-blue-500 to-blue-600' },
-  { value: 50000, suffix: '+', decimals: 0, label: 'Avis clients', icon: MessageSquare, color: 'from-amber-500 to-amber-600' },
-  { value: 100, suffix: '+', decimals: 0, label: 'Villes couvertes', icon: MapPin, color: 'from-emerald-500 to-emerald-600' },
-  { value: 4.8, suffix: '/5', decimals: 1, label: 'Satisfaction moyenne', icon: Star, color: 'from-purple-500 to-purple-600' },
+  { value: 2500, suffix: '+', decimals: 0, label: 'Artisans vérifiés', icon: Users, color: 'from-blue-500 to-blue-600', accent: 'blue' },
+  { value: 50000, suffix: '+', decimals: 0, label: 'Avis clients', icon: MessageSquare, color: 'from-amber-500 to-amber-600', accent: 'amber' },
+  { value: 100, suffix: '+', decimals: 0, label: 'Villes couvertes', icon: MapPin, color: 'from-emerald-500 to-emerald-600', accent: 'emerald' },
+  { value: 4.8, suffix: '/5', decimals: 1, label: 'Satisfaction moyenne', icon: Star, color: 'from-purple-500 to-purple-600', accent: 'purple' },
 ]
 
 export function StatsSection() {
   return (
-    <section className="py-16 bg-white border-b border-gray-100">
-      <div className="max-w-6xl mx-auto px-4">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-          {stats.map((stat, i) => (
-            <motion.div
-              key={stat.label}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="text-center"
-            >
-              <div className={`inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br ${stat.color} rounded-2xl mb-4 shadow-lg`}>
-                <stat.icon className="w-7 h-7 text-white" />
+    <section className="relative py-1 bg-white">
+      {/* Floating stat bar overlapping hero */}
+      <div className="max-w-5xl mx-auto px-4 -mt-8 relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="bg-white rounded-2xl shadow-[0_8px_40px_-12px_rgba(0,0,0,0.12)] border border-gray-100/80 p-2"
+        >
+          <div className="grid grid-cols-2 lg:grid-cols-4">
+            {stats.map((stat, i) => (
+              <div
+                key={stat.label}
+                className={`relative flex flex-col items-center py-6 px-4 ${
+                  i < stats.length - 1 ? 'lg:border-r lg:border-gray-100' : ''
+                }`}
+              >
+                <div className={`inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br ${stat.color} rounded-xl mb-3 shadow-lg shadow-${stat.accent}-500/20`}>
+                  <stat.icon className="w-6 h-6 text-white" />
+                </div>
+                <div className="font-heading text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-0.5">
+                  <AnimatedCounter target={stat.value} suffix={stat.suffix} decimals={stat.decimals} duration={stat.decimals > 0 ? 1500 : 2000} />
+                </div>
+                <div className="text-sm text-slate-500 font-medium">{stat.label}</div>
               </div>
-              <div className="font-heading text-3xl md:text-4xl font-extrabold text-slate-900 mb-1">
-                <AnimatedCounter target={stat.value} suffix={stat.suffix} decimals={stat.decimals} duration={stat.decimals > 0 ? 1500 : 2000} />
-              </div>
-              <div className="text-slate-500 font-medium">{stat.label}</div>
-            </motion.div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </motion.div>
       </div>
     </section>
   )
@@ -79,32 +87,36 @@ export function StatsSection() {
 // ─── SERVICES SHOWCASE ───────────────────────────────────────────
 
 const services = [
-  { name: 'Plombier', slug: 'plombier', icon: Wrench, color: 'from-blue-500 to-blue-600', count: '542' },
-  { name: 'Électricien', slug: 'electricien', icon: Zap, color: 'from-amber-500 to-amber-600', count: '489' },
-  { name: 'Serrurier', slug: 'serrurier', icon: Key, color: 'from-slate-600 to-slate-700', count: '312' },
-  { name: 'Chauffagiste', slug: 'chauffagiste', icon: Flame, color: 'from-orange-500 to-orange-600', count: '278' },
-  { name: 'Peintre', slug: 'peintre-en-batiment', icon: PaintBucket, color: 'from-purple-500 to-purple-600', count: '356' },
-  { name: 'Menuisier', slug: 'menuisier', icon: Hammer, color: 'from-amber-700 to-amber-800', count: '234' },
-  { name: 'Carreleur', slug: 'carreleur', icon: Sparkles, color: 'from-teal-500 to-teal-600', count: '189' },
-  { name: 'Couvreur', slug: 'couvreur', icon: Home, color: 'from-red-500 to-red-600', count: '156' },
-  { name: 'Maçon', slug: 'macon', icon: HardHat, color: 'from-stone-500 to-stone-600', count: '267' },
-  { name: 'Jardinier', slug: 'jardinier', icon: TreeDeciduous, color: 'from-green-500 to-green-600', count: '198' },
+  { name: 'Plombier', slug: 'plombier', icon: Wrench, color: 'from-blue-500 to-blue-600', bg: 'bg-blue-50', text: 'text-blue-600', count: '542' },
+  { name: 'Électricien', slug: 'electricien', icon: Zap, color: 'from-amber-500 to-amber-600', bg: 'bg-amber-50', text: 'text-amber-600', count: '489' },
+  { name: 'Serrurier', slug: 'serrurier', icon: Key, color: 'from-slate-500 to-slate-600', bg: 'bg-slate-50', text: 'text-slate-600', count: '312' },
+  { name: 'Chauffagiste', slug: 'chauffagiste', icon: Flame, color: 'from-orange-500 to-orange-600', bg: 'bg-orange-50', text: 'text-orange-600', count: '278' },
+  { name: 'Peintre', slug: 'peintre-en-batiment', icon: PaintBucket, color: 'from-purple-500 to-purple-600', bg: 'bg-purple-50', text: 'text-purple-600', count: '356' },
+  { name: 'Menuisier', slug: 'menuisier', icon: Hammer, color: 'from-amber-600 to-amber-700', bg: 'bg-amber-50', text: 'text-amber-700', count: '234' },
+  { name: 'Carreleur', slug: 'carreleur', icon: Sparkles, color: 'from-teal-500 to-teal-600', bg: 'bg-teal-50', text: 'text-teal-600', count: '189' },
+  { name: 'Couvreur', slug: 'couvreur', icon: Home, color: 'from-red-500 to-red-600', bg: 'bg-red-50', text: 'text-red-600', count: '156' },
+  { name: 'Maçon', slug: 'macon', icon: HardHat, color: 'from-stone-500 to-stone-600', bg: 'bg-stone-50', text: 'text-stone-600', count: '267' },
+  { name: 'Jardinier', slug: 'jardinier', icon: TreeDeciduous, color: 'from-green-500 to-green-600', bg: 'bg-green-50', text: 'text-green-600', count: '198' },
 ]
 
 export function ServicesShowcase() {
   return (
-    <section className="py-20 bg-gray-50">
+    <section className="py-24 bg-gray-50/50">
       <div className="max-w-6xl mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          className="text-center mb-14"
         >
-          <h2 className="font-heading text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50 text-blue-600 rounded-full text-sm font-medium mb-5">
+            <Wrench className="w-3.5 h-3.5" />
+            50+ métiers disponibles
+          </div>
+          <h2 className="font-heading text-3xl md:text-[2.5rem] font-bold text-slate-900 mb-4 tracking-tight">
             Tous les corps de métier
           </h2>
-          <p className="text-lg text-slate-500 max-w-2xl mx-auto">
+          <p className="text-lg text-slate-500 max-w-2xl mx-auto leading-relaxed">
             Trouvez le bon professionnel pour chaque besoin, de l&apos;urgence à la rénovation complète.
           </p>
         </motion.div>
@@ -118,19 +130,22 @@ export function ServicesShowcase() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.05 }}
+                transition={{ delay: i * 0.04 }}
               >
                 <Link
                   href={`/services/${service.slug}`}
-                  className="group flex flex-col items-center p-6 bg-white rounded-2xl border border-gray-200 hover:border-blue-300 hover:shadow-lg transition-all duration-300"
+                  className="group relative flex flex-col items-center p-6 bg-white rounded-2xl border border-gray-100 hover:border-transparent hover:shadow-[0_8px_30px_-8px_rgba(0,0,0,0.12)] transition-all duration-500"
                 >
-                  <div className={`w-14 h-14 bg-gradient-to-br ${service.color} rounded-2xl flex items-center justify-center mb-4 shadow-md group-hover:scale-110 transition-transform duration-300`}>
-                    <Icon className="w-7 h-7 text-white" />
+                  {/* Gradient border on hover */}
+                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 blur-xl" />
+
+                  <div className={`w-14 h-14 ${service.bg} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500`}>
+                    <Icon className={`w-7 h-7 ${service.text}`} />
                   </div>
-                  <span className="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors text-center">
+                  <span className="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors duration-300 text-center">
                     {service.name}
                   </span>
-                  <span className="text-xs text-slate-400 mt-1">
+                  <span className="text-xs text-slate-400 mt-1 group-hover:text-slate-500 transition-colors">
                     {service.count} artisans
                   </span>
                 </Link>
@@ -139,14 +154,20 @@ export function ServicesShowcase() {
           })}
         </div>
 
-        <div className="text-center mt-10">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="text-center mt-12"
+        >
           <Link
             href="/services"
-            className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold transition-colors"
+            className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold group transition-colors"
           >
-            Voir tous les services <ArrowRight className="w-4 h-4" />
+            Voir tous les services
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
-        </div>
+        </motion.div>
       </div>
     </section>
   )
@@ -161,6 +182,7 @@ const steps = [
     description: 'Indiquez le service dont vous avez besoin et votre localisation. Notre moteur trouve les artisans disponibles près de chez vous.',
     icon: Search,
     color: 'from-blue-500 to-blue-600',
+    bg: 'bg-blue-50',
   },
   {
     step: '02',
@@ -168,6 +190,7 @@ const steps = [
     description: 'Consultez les profils détaillés, les avis vérifiés et les tarifs. Choisissez l\'artisan qui correspond à vos attentes.',
     icon: ClipboardList,
     color: 'from-amber-500 to-amber-600',
+    bg: 'bg-amber-50',
   },
   {
     step: '03',
@@ -175,12 +198,13 @@ const steps = [
     description: 'Demandez un devis gratuit et sans engagement. L\'artisan vous répond sous 24h avec une proposition détaillée.',
     icon: CheckCircle,
     color: 'from-emerald-500 to-emerald-600',
+    bg: 'bg-emerald-50',
   },
 ]
 
 export function HowItWorksSection() {
   return (
-    <section className="py-20 bg-white">
+    <section className="py-24 bg-white">
       <div className="max-w-6xl mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -188,17 +212,23 @@ export function HowItWorksSection() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="font-heading text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 text-emerald-600 rounded-full text-sm font-medium mb-5">
+            <CheckCircle className="w-3.5 h-3.5" />
+            Simple et rapide
+          </div>
+          <h2 className="font-heading text-3xl md:text-[2.5rem] font-bold text-slate-900 mb-4 tracking-tight">
             Comment ça marche ?
           </h2>
-          <p className="text-lg text-slate-500 max-w-2xl mx-auto">
+          <p className="text-lg text-slate-500 max-w-2xl mx-auto leading-relaxed">
             En 3 étapes simples, trouvez l&apos;artisan idéal pour votre projet.
           </p>
         </motion.div>
 
         <div className="grid md:grid-cols-3 gap-8 relative">
-          {/* Connector line (desktop only) */}
-          <div className="hidden md:block absolute top-20 left-1/6 right-1/6 h-0.5 bg-gradient-to-r from-blue-200 via-amber-200 to-emerald-200" />
+          {/* Connector line (desktop only) — dashed premium style */}
+          <div className="hidden md:block absolute top-24 left-[20%] right-[20%]">
+            <div className="h-px border-t-2 border-dashed border-gray-200" />
+          </div>
 
           {steps.map((item, i) => {
             const Icon = item.icon
@@ -209,15 +239,16 @@ export function HowItWorksSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.15 }}
-                className="relative text-center"
+                className="relative text-center group"
               >
-                {/* Step number circle */}
-                <div className="relative z-10 mx-auto mb-6">
-                  <div className={`w-16 h-16 bg-gradient-to-br ${item.color} rounded-2xl flex items-center justify-center shadow-lg mx-auto`}>
-                    <Icon className="w-8 h-8 text-white" />
+                {/* Step indicator */}
+                <div className="relative z-10 mx-auto mb-8">
+                  <div className={`w-20 h-20 bg-gradient-to-br ${item.color} rounded-3xl flex items-center justify-center shadow-lg mx-auto group-hover:scale-105 transition-transform duration-500`}>
+                    <Icon className="w-9 h-9 text-white" />
                   </div>
-                  <div className="absolute -top-2 -right-2 w-7 h-7 bg-white border-2 border-slate-200 rounded-full flex items-center justify-center text-xs font-bold text-slate-700 shadow-sm">
-                    {item.step}
+                  {/* Step number badge */}
+                  <div className="absolute -top-2 -right-2 w-8 h-8 bg-white border-2 border-gray-200 rounded-full flex items-center justify-center shadow-sm">
+                    <span className="text-xs font-bold text-slate-700">{item.step}</span>
                   </div>
                 </div>
 
@@ -242,6 +273,7 @@ const testimonials = [
     text: 'J\'ai trouvé un plombier en moins de 2h pour une fuite urgente. Professionnel, rapide et tarif très correct. Je recommande !',
     service: 'Plomberie',
     avatar: 'M',
+    gradient: 'from-blue-500 to-cyan-500',
   },
   {
     name: 'Thomas D.',
@@ -250,6 +282,7 @@ const testimonials = [
     text: 'Rénovation complète de ma salle de bain. L\'artisan était ponctuel, soigneux et le résultat est magnifique. Merci ServicesArtisans !',
     service: 'Carrelage',
     avatar: 'T',
+    gradient: 'from-purple-500 to-pink-500',
   },
   {
     name: 'Sophie R.',
@@ -258,23 +291,28 @@ const testimonials = [
     text: 'Excellente plateforme pour comparer les artisans. Les avis m\'ont aidé à faire le bon choix pour la peinture de mon appartement.',
     service: 'Peinture',
     avatar: 'S',
+    gradient: 'from-amber-500 to-orange-500',
   },
 ]
 
 export function TestimonialsSection() {
   return (
-    <section className="py-20 bg-gray-50">
+    <section className="py-24 bg-gray-50/50">
       <div className="max-w-6xl mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          className="text-center mb-14"
         >
-          <h2 className="font-heading text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-amber-50 text-amber-600 rounded-full text-sm font-medium mb-5">
+            <Star className="w-3.5 h-3.5 fill-amber-500" />
+            4.8/5 de satisfaction
+          </div>
+          <h2 className="font-heading text-3xl md:text-[2.5rem] font-bold text-slate-900 mb-4 tracking-tight">
             Ils nous font confiance
           </h2>
-          <p className="text-lg text-slate-500 max-w-2xl mx-auto">
+          <p className="text-lg text-slate-500 max-w-2xl mx-auto leading-relaxed">
             Des milliers de clients satisfaits partout en France
           </p>
         </motion.div>
@@ -287,28 +325,34 @@ export function TestimonialsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition-shadow"
+              className="relative bg-white rounded-2xl p-7 border border-gray-100 hover:shadow-[0_8px_30px_-8px_rgba(0,0,0,0.12)] transition-all duration-500 group"
             >
+              {/* Quote mark */}
+              <Quote className="absolute top-6 right-6 w-8 h-8 text-gray-100 group-hover:text-blue-100 transition-colors duration-500" />
+
               {/* Stars */}
-              <div className="flex gap-0.5 mb-4">
+              <div className="flex gap-0.5 mb-5">
                 {[...Array(t.rating)].map((_, j) => (
-                  <Star key={j} className="w-5 h-5 text-amber-400 fill-amber-400" />
+                  <Star key={j} className="w-4 h-4 text-amber-400 fill-amber-400" />
                 ))}
               </div>
 
               {/* Quote */}
-              <p className="text-slate-600 leading-relaxed mb-6">
+              <p className="text-slate-600 leading-relaxed mb-6 relative z-10">
                 &quot;{t.text}&quot;
               </p>
 
               {/* Author */}
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
+              <div className="flex items-center gap-3 pt-5 border-t border-gray-100">
+                <div className={`w-11 h-11 bg-gradient-to-br ${t.gradient} rounded-full flex items-center justify-center ring-2 ring-white shadow-md`}>
                   <span className="text-white font-bold text-sm">{t.avatar}</span>
                 </div>
-                <div>
-                  <div className="font-semibold text-slate-900 text-sm">{t.name}</div>
-                  <div className="text-xs text-slate-500">{t.service} - {t.city}</div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2">
+                    <span className="font-semibold text-slate-900 text-sm">{t.name}</span>
+                    <CheckCircle className="w-3.5 h-3.5 text-blue-500" />
+                  </div>
+                  <div className="text-xs text-slate-500">{t.service} — {t.city}</div>
                 </div>
               </div>
             </motion.div>
@@ -329,34 +373,54 @@ const artisanBenefits = [
 
 export function ArtisanCTASection() {
   return (
-    <section className="py-20 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white">
-      <div className="max-w-4xl mx-auto px-4 text-center">
+    <section className="relative py-24 overflow-hidden">
+      {/* Premium dark background with gradient mesh */}
+      <div className="absolute inset-0 bg-[#0a0f1e]">
+        <div className="absolute inset-0" style={{
+          background: 'radial-gradient(ellipse 50% 80% at 20% 50%, rgba(37,99,235,0.12) 0%, transparent 60%), radial-gradient(ellipse 50% 60% at 80% 50%, rgba(139,92,246,0.08) 0%, transparent 50%)',
+        }} />
+        {/* Subtle grid */}
+        <div className="absolute inset-0 opacity-[0.03]" style={{
+          backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+          backgroundSize: '48px 48px',
+        }} />
+      </div>
+
+      <div className="relative max-w-4xl mx-auto px-4 text-center text-white">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h2 className="font-heading text-3xl md:text-4xl font-bold mb-4">
-            Vous êtes artisan ?
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-sm text-amber-300 rounded-full text-sm font-medium mb-6 border border-white/10">
+            <Users className="w-3.5 h-3.5" />
+            Rejoignez 2 500+ artisans
+          </div>
+
+          <h2 className="font-heading text-3xl md:text-[2.75rem] font-bold mb-5 tracking-tight leading-tight">
+            Vous êtes artisan ?{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-200 to-amber-300">
+              Développez votre activité
+            </span>
           </h2>
-          <p className="text-xl text-blue-200 mb-8 max-w-2xl mx-auto">
-            Rejoignez notre réseau et développez votre activité grâce à ServicesArtisans.
+          <p className="text-lg text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+            Rejoignez notre réseau et recevez des demandes de devis qualifiées directement sur votre téléphone.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-10">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-5 mb-12">
             {artisanBenefits.map((b, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="flex items-center gap-3 text-blue-100"
+                transition={{ delay: 0.2 + i * 0.1 }}
+                className="flex items-center gap-3"
               >
-                <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <b.icon className="w-5 h-5" />
+                <div className="w-10 h-10 bg-white/[0.08] backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/10">
+                  <b.icon className="w-5 h-5 text-amber-300" />
                 </div>
-                <span className="text-sm text-left">{b.text}</span>
+                <span className="text-sm text-slate-300 text-left">{b.text}</span>
               </motion.div>
             ))}
           </div>
@@ -364,13 +428,13 @@ export function ArtisanCTASection() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/inscription-artisan"
-              className="inline-flex items-center gap-2 bg-white text-blue-700 font-semibold px-8 py-4 rounded-xl hover:bg-blue-50 transition-colors shadow-lg"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 text-slate-900 font-semibold px-8 py-4 rounded-xl hover:shadow-[0_8px_30px_-4px_rgba(245,158,11,0.5)] hover:-translate-y-0.5 transition-all duration-300"
             >
               Inscrire mon entreprise <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
               href="/comment-ca-marche"
-              className="inline-flex items-center gap-2 text-white/80 hover:text-white font-medium px-6 py-4 rounded-xl border border-white/20 hover:border-white/40 transition-all"
+              className="inline-flex items-center gap-2 text-white/70 hover:text-white font-medium px-6 py-4 rounded-xl border border-white/15 hover:border-white/30 hover:bg-white/5 transition-all duration-300"
             >
               En savoir plus
             </Link>

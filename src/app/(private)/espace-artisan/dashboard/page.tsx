@@ -143,7 +143,7 @@ export default function DashboardArtisanPage() {
             <div className="flex items-center gap-4">
               {profile?.is_verified && (
                 <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                  Profil verifie
+                  Profil vérifié
                 </span>
               )}
             </div>

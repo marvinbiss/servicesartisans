@@ -294,10 +294,10 @@ export default function ConnexionPage() {
               <p className="text-gray-400 text-sm mb-3">Liens utiles :</p>
               <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
                 <Link href="/comment-ca-marche" className="text-blue-400 hover:text-blue-300">
-                  Comment ca marche ?
+                  Comment ça marche ?
                 </Link>
                 <Link href="/faq" className="text-blue-400 hover:text-blue-300">
-                  Questions frequentes
+                  Questions fréquentes
                 </Link>
                 <Link href="/contact" className="text-blue-400 hover:text-blue-300">
                   Nous contacter

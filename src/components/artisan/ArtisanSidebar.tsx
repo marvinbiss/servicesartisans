@@ -120,17 +120,17 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
 
       {/* Trust badges */}
       <div className="space-y-2 mb-6 pb-6 border-b border-gray-100">
-        <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Verifications</h4>
+        <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Vérifications</h4>
         {artisan.is_verified && (
           <div className="flex items-center gap-2 text-sm text-gray-600">
             <Shield className="w-4 h-4 text-green-500" />
-            <span>Identite verifiee (SIRET)</span>
+            <span>Identité vérifiée (SIRET)</span>
           </div>
         )}
         {artisan.insurance && artisan.insurance.length > 0 && (
           <div className="flex items-center gap-2 text-sm text-gray-600">
             <FileCheck className="w-4 h-4 text-green-500" />
-            <span>Assurance verifiee</span>
+            <span>Assurance vérifiée</span>
           </div>
         )}
         {artisan.certifications && artisan.certifications.length > 0 && (
@@ -148,7 +148,7 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
           <div>
             <p className="font-semibold text-blue-900 text-sm">Protection Escrow</p>
             <p className="text-xs text-blue-700 mt-1 leading-relaxed">
-              Pour les projets de +500€, securisez votre paiement. Les fonds sont bloques jusqu'a validation des travaux.
+              Pour les projets de +500€, sécurisez votre paiement. Les fonds sont bloqués jusqu&apos;à validation des travaux.
             </p>
           </div>
         </div>

@@ -303,7 +303,7 @@ export default function PaymentForm(props: PaymentFormProps) {
       {/* Security Badge */}
       <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
         <Lock className="w-4 h-4" />
-        Paiement securise par Stripe
+        Paiement sécurisé par Stripe
       </div>
     </div>
   )

@@ -57,17 +57,17 @@ export function TrustBadges({ variant = 'default' }: { variant?: 'default' | 'co
 
   if (variant === 'hero') {
     return (
-      <div className="flex flex-wrap items-center justify-center gap-6 mt-8">
+      <div className="flex flex-wrap items-center justify-center gap-4 mt-8">
         {badges.slice(0, 3).map((badge, i) => (
           <motion.div
             key={i}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5 + i * 0.1 }}
-            className="flex items-center gap-2 text-white/80"
+            className="flex items-center gap-2 px-4 py-2 bg-white/[0.06] backdrop-blur-sm rounded-full border border-white/10"
           >
-            <badge.icon className="w-5 h-5" />
-            <span className="text-sm">{badge.label}</span>
+            <badge.icon className="w-4 h-4 text-white/90" />
+            <span className="text-sm text-white/80">{badge.label}</span>
           </motion.div>
         ))}
       </div>
@@ -156,13 +156,13 @@ export function AvailabilityBadge({ count = 2500 }: { count?: number }) {
     <motion.div
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2"
+      className="inline-flex items-center gap-2.5 bg-white/[0.07] backdrop-blur-sm rounded-full px-5 py-2.5 border border-white/10"
     >
       <span className="relative flex h-2 w-2">
         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-        <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+        <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400"></span>
       </span>
-      <span className="text-sm text-blue-100">
+      <span className="text-sm text-white/80 font-medium">
         +{count.toLocaleString('fr-FR')} artisans disponibles maintenant
       </span>
     </motion.div>

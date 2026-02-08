@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Demander un devis gratuit | ServicesArtisans',
-    description: 'Recevez jusqu\'a 3 devis d\'artisans qualifies. Gratuit et sans engagement.',
+    description: 'Recevez jusqu\'à 3 devis d\'artisans qualifiés. Gratuit et sans engagement.',
     url: 'https://servicesartisans.fr/devis',
   },
   robots: {

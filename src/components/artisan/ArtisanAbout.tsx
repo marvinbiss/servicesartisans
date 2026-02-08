@@ -25,7 +25,7 @@ export function ArtisanAbout({ artisan }: ArtisanAboutProps) {
     >
       <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
         <User className="w-5 h-5 text-blue-600" />
-        A propos
+        À propos
       </h2>
 
       {/* Description */}
@@ -54,7 +54,7 @@ export function ArtisanAbout({ artisan }: ArtisanAboutProps) {
       <div className="mt-6 pt-6 border-t border-gray-100">
         <h3 className="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2">
           <Shield className="w-4 h-4 text-blue-600" />
-          Confiance & Securite
+          Confiance & Sécurité
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -67,8 +67,8 @@ export function ArtisanAbout({ artisan }: ArtisanAboutProps) {
                 <AlertCircle className="w-5 h-5 text-gray-400 flex-shrink-0" />
               )}
               <div>
-                <p className="font-medium text-gray-900 text-sm">Identite verifiee</p>
-                <p className="text-xs text-gray-500">SIRET controle</p>
+                <p className="font-medium text-gray-900 text-sm">Identité vérifiée</p>
+                <p className="text-xs text-gray-500">SIRET contrôlé</p>
               </div>
             </div>
           </div>
@@ -86,7 +86,7 @@ export function ArtisanAbout({ artisan }: ArtisanAboutProps) {
                 <p className="text-xs text-gray-500">
                   {artisan.insurance && artisan.insurance.length > 0
                     ? artisan.insurance[0]
-                    : 'Non renseignee'}
+                    : 'Non renseignée'}
                 </p>
               </div>
             </div>
@@ -105,7 +105,7 @@ export function ArtisanAbout({ artisan }: ArtisanAboutProps) {
                 <p className="text-xs text-gray-500">
                   {artisan.certifications && artisan.certifications.length > 0
                     ? `${artisan.certifications.length} certification(s)`
-                    : 'Non renseignees'}
+                    : 'Non renseignées'}
                 </p>
               </div>
             </div>
@@ -116,7 +116,7 @@ export function ArtisanAbout({ artisan }: ArtisanAboutProps) {
             <div className="flex items-center gap-2">
               <FileCheck className="w-5 h-5 text-blue-600 flex-shrink-0" />
               <div>
-                <p className="font-medium text-gray-900 text-sm">Paiement securise</p>
+                <p className="font-medium text-gray-900 text-sm">Paiement sécurisé</p>
                 <p className="text-xs text-gray-500">Protection Escrow</p>
               </div>
             </div>
@@ -187,7 +187,7 @@ export function ArtisanAbout({ artisan }: ArtisanAboutProps) {
                 <Users className="w-5 h-5 text-gray-500" />
               </div>
               <div>
-                <div className="text-xs text-gray-500">Employes</div>
+                <div className="text-xs text-gray-500">Employés</div>
                 <div className="font-medium text-gray-900">{artisan.employee_count}</div>
               </div>
             </div>
@@ -199,7 +199,7 @@ export function ArtisanAbout({ artisan }: ArtisanAboutProps) {
                 <Calendar className="w-5 h-5 text-gray-500" />
               </div>
               <div>
-                <div className="text-xs text-gray-500">Creation</div>
+                <div className="text-xs text-gray-500">Création</div>
                 <div className="font-medium text-gray-900">
                   {new Date(artisan.creation_date).getFullYear()}
                 </div>
@@ -231,7 +231,7 @@ export function ArtisanAbout({ artisan }: ArtisanAboutProps) {
       {/* Languages */}
       {artisan.languages && artisan.languages.length > 0 && (
         <div className="mt-6 pt-6 border-t border-gray-100">
-          <h3 className="text-sm font-medium text-gray-700 mb-3">Langues parlees</h3>
+          <h3 className="text-sm font-medium text-gray-700 mb-3">Langues parlées</h3>
           <div className="flex flex-wrap gap-2">
             {artisan.languages.map((lang, i) => (
               <span

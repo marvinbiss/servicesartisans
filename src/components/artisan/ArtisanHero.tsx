@@ -66,7 +66,7 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
             {artisan.is_verified && (
               <div
                 className="absolute -bottom-2 -right-2 bg-green-500 text-white p-1.5 rounded-full shadow-lg"
-                aria-label="Artisan verifie"
+                aria-label="Artisan vérifié"
                 role="img"
               >
                 <CheckCircle className="w-5 h-5" aria-hidden="true" />

@@ -21,7 +21,7 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
     name: 'ServicesArtisans',
     url: baseUrl,
     logo: `${baseUrl}/icon.svg`,
-    description: 'Plateforme de mise en relation entre particuliers et artisans qualifies en France',
+    description: 'Plateforme de mise en relation entre particuliers et artisans qualifiés en France',
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'customer service',

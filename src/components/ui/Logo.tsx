@@ -54,26 +54,26 @@ export default function Logo({
         </linearGradient>
       </defs>
 
-      {/* Background rounded square with subtle shadow */}
+      {/* Background rounded square */}
       <rect x="2" y="2" width="44" height="44" rx="14" fill="url(#logoGradient)" />
 
-      {/* House roof - refined proportions */}
+      {/* House roof — clean proportions */}
       <path
         d="M24 10L9 22.5H13.5V36H34.5V22.5H39L24 10Z"
         fill="white"
         fillOpacity="0.95"
       />
 
-      {/* Wrench symbol - cleaner design */}
+      {/* Wrench — simplified, bolder */}
       <path
         d="M21.5 24.5C21.5 22.57 23.07 21 25 21C26.38 21 27.56 21.82 28.1 22.99L31.5 20.5L32.5 21.5L29.1 24.01C29.37 24.48 29.5 25.02 29.5 25.5C29.5 27.43 27.93 29 26 29C24.62 29 23.44 28.18 22.9 27.01L19.5 29.5L18.5 28.5L21.9 25.99C21.63 25.52 21.5 24.98 21.5 24.5Z"
         fill="#2563eb"
       />
 
-      {/* Door - refined */}
+      {/* Door */}
       <rect x="21.5" y="29.5" width="5" height="6.5" rx="1.5" fill="#2563eb" fillOpacity="0.25" />
 
-      {/* Accent dot - amber quality mark */}
+      {/* Amber quality mark */}
       <circle cx="39" cy="9" r="5" fill="url(#logoAccent)" />
       <path
         d="M37.5 9L38.5 10L40.5 8"

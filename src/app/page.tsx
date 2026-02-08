@@ -33,24 +33,31 @@ export default function HomePage() {
 
       {/* ─── HERO ─────────────────────────────────────────────── */}
       <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
-        {/* Refined background — layered radial gradients for depth */}
+        {/* Premium background — gradient mesh with depth layers */}
         <div className="absolute inset-0">
+          {/* Primary gradient mesh */}
           <div className="absolute inset-0" style={{
-            background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(37,99,235,0.15) 0%, transparent 60%), radial-gradient(ellipse 60% 50% at 80% 100%, rgba(37,99,235,0.08) 0%, transparent 50%), radial-gradient(ellipse 40% 40% at 20% 80%, rgba(59,130,246,0.06) 0%, transparent 50%)',
+            background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(37,99,235,0.1) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(59,130,246,0.06) 0%, transparent 50%)',
+          }} />
+          {/* Accent glow */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] opacity-[0.04]" style={{
+            background: 'radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%)',
           }} />
           {/* Subtle grid pattern for depth */}
-          <div className="absolute inset-0 opacity-[0.03]" style={{
+          <div className="absolute inset-0 opacity-[0.025]" style={{
             backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
             backgroundSize: '64px 64px',
           }} />
+          {/* Bottom fade to white (for stats overlap) */}
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent" />
         </div>
 
-        <div className="relative max-w-6xl mx-auto px-4 pt-20 pb-24 md:pt-28 md:pb-32">
+        <div className="relative max-w-6xl mx-auto px-4 pt-20 pb-32 md:pt-28 md:pb-40">
           <div className="text-center mb-12">
             <div className="mb-6">
               <AvailabilityBadge count={2500} />
             </div>
-            <h1 className="font-heading text-4xl md:text-5xl lg:text-[3.5rem] font-extrabold mb-6 tracking-[-0.02em] leading-[1.1]">
+            <h1 className="font-heading text-4xl md:text-5xl lg:text-[3.5rem] font-extrabold mb-6 tracking-[-0.025em] leading-[1.08]">
               Trouvez l&apos;artisan idéal,{' '}
               <br className="hidden md:block" />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-300 to-cyan-300">
@@ -71,7 +78,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ─── STATS ────────────────────────────────────────────── */}
+      {/* ─── STATS (overlaps hero) ───────────────────────────── */}
       <StatsSection />
 
       {/* ─── SERVICES ─────────────────────────────────────────── */}
@@ -84,11 +91,14 @@ export default function HomePage() {
       <TestimonialsSection />
 
       {/* ─── GEOGRAPHIC COVERAGE ──────────────────────────────── */}
-      <section className="py-16 bg-white">
+      <section className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-4">
-          <h2 className="font-heading text-2xl font-bold text-slate-900 mb-6 text-center">
+          <h2 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-2 text-center tracking-tight">
             Artisans partout en France
           </h2>
+          <p className="text-slate-500 text-center mb-8 max-w-lg mx-auto">
+            Trouvez des professionnels dans votre région, département ou ville.
+          </p>
           <GeographicNavigation />
         </div>
       </section>
@@ -97,7 +107,7 @@ export default function HomePage() {
       <ArtisanCTASection />
 
       {/* ─── POPULAR LINKS (SEO) ──────────────────────────────── */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-gray-50/80 border-t border-gray-100">
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-12">
             <PopularServicesLinks showTitle limit={8} />
