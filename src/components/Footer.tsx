@@ -273,6 +273,21 @@ export default function Footer() {
                   Devenir partenaire
                 </Link>
               </li>
+              <li>
+                <Link href="/notre-processus-de-verification" className="hover:text-white transition-colors duration-200">
+                  Processus de verification
+                </Link>
+              </li>
+              <li>
+                <Link href="/politique-avis" className="hover:text-white transition-colors duration-200">
+                  Politique des avis
+                </Link>
+              </li>
+              <li>
+                <Link href="/mediation" className="hover:text-white transition-colors duration-200">
+                  Mediation
+                </Link>
+              </li>
             </ul>
           </div>
 

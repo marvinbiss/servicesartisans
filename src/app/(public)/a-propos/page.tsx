@@ -300,6 +300,52 @@ export default async function AProposPage() {
         </div>
       </section>
 
+      {/* En savoir plus sur nos engagements */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+              En savoir plus sur nos engagements
+            </h2>
+            <div className="grid md:grid-cols-3 gap-6">
+              <Link
+                href="/notre-processus-de-verification"
+                className="bg-gray-50 rounded-xl p-6 border border-gray-100 hover:shadow-md transition-shadow group"
+              >
+                <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                  Processus de vérification
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  Détails sur la vérification SIRET, assurances et suivi continu des artisans.
+                </p>
+              </Link>
+              <Link
+                href="/politique-avis"
+                className="bg-gray-50 rounded-xl p-6 border border-gray-100 hover:shadow-md transition-shadow group"
+              >
+                <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                  Politique d'avis
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  Notre politique de collecte, modération et publication des avis clients.
+                </p>
+              </Link>
+              <Link
+                href="/mediation"
+                className="bg-gray-50 rounded-xl p-6 border border-gray-100 hover:shadow-md transition-shadow group"
+              >
+                <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                  Résolution des litiges
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  Processus de réclamation et médiation en cas de différend.
+                </p>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Contact */}
       <section className="py-16 bg-blue-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

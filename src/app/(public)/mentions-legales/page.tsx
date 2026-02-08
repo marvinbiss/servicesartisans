@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import Link from 'next/link'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { companyIdentity } from '@/lib/config/company-identity'
@@ -112,6 +113,36 @@ export default function MentionsLegalesPage() {
               par email : <strong>{companyIdentity.email}</strong>
             </p>
 
+          </div>
+
+          {/* Cross-links: Confiance et transparence */}
+          <div className="bg-white rounded-xl shadow-sm p-8 mt-8 border border-gray-100">
+            <h2 className="text-xl font-bold text-gray-900 mb-4">Confiance et transparence</h2>
+            <p className="text-gray-600 mb-4">
+              Pour en savoir plus sur nos engagements de transparence et de confiance :
+            </p>
+            <ul className="space-y-2">
+              <li>
+                <Link href="/notre-processus-de-verification" className="text-blue-600 hover:text-blue-800 hover:underline transition-colors">
+                  Notre processus de vérification des artisans
+                </Link>
+              </li>
+              <li>
+                <Link href="/politique-avis" className="text-blue-600 hover:text-blue-800 hover:underline transition-colors">
+                  Politique de gestion des avis
+                </Link>
+              </li>
+              <li>
+                <Link href="/mediation" className="text-blue-600 hover:text-blue-800 hover:underline transition-colors">
+                  Médiation et résolution des litiges
+                </Link>
+              </li>
+              <li>
+                <Link href="/a-propos" className="text-blue-600 hover:text-blue-800 hover:underline transition-colors">
+                  À propos de {companyIdentity.name}
+                </Link>
+              </li>
+            </ul>
           </div>
         </div>
       </section>
