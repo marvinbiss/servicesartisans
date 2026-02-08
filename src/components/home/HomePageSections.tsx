@@ -64,7 +64,7 @@ export function StatsSection() {
               <div className={`inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br ${stat.color} rounded-2xl mb-4 shadow-lg`}>
                 <stat.icon className="w-7 h-7 text-white" />
               </div>
-              <div className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-1">
+              <div className="font-heading text-3xl md:text-4xl font-extrabold text-slate-900 mb-1">
                 {stat.value === 4.8 ? (
                   <AnimatedCounter target={48} suffix="" duration={1500} />
                 ) : (
@@ -109,7 +109,7 @@ export function ServicesShowcase() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-slate-900 mb-4">
             Tous les corps de metier
           </h2>
           <p className="text-lg text-slate-500 max-w-2xl mx-auto">
@@ -196,7 +196,7 @@ export function HowItWorksSection() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-slate-900 mb-4">
             Comment ca marche ?
           </h2>
           <p className="text-lg text-slate-500 max-w-2xl mx-auto">
@@ -229,7 +229,7 @@ export function HowItWorksSection() {
                   </div>
                 </div>
 
-                <h3 className="text-xl font-bold text-slate-900 mb-3">{item.title}</h3>
+                <h3 className="font-heading text-xl font-bold text-slate-900 mb-3">{item.title}</h3>
                 <p className="text-slate-500 leading-relaxed max-w-xs mx-auto">{item.description}</p>
               </motion.div>
             )
@@ -279,7 +279,7 @@ export function TestimonialsSection() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-slate-900 mb-4">
             Ils nous font confiance
           </h2>
           <p className="text-lg text-slate-500 max-w-2xl mx-auto">
@@ -344,7 +344,7 @@ export function ArtisanCTASection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          <h2 className="font-heading text-3xl md:text-4xl font-bold mb-4">
             Vous etes artisan ?
           </h2>
           <p className="text-xl text-blue-200 mb-8 max-w-2xl mx-auto">

@@ -1,9 +1,23 @@
 import type { Metadata, Viewport } from 'next'
 import dynamic from 'next/dynamic'
+import { Inter, Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { MobileMenuProvider } from '@/contexts/MobileMenuContext'
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+})
+
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  variable: '--font-heading',
+  display: 'swap',
+  weight: ['500', '600', '700', '800'],
+})
 
 // Dynamic imports for performance
 const MobileBottomNav = dynamic(() => import('@/components/MobileBottomNav'), {
@@ -103,7 +117,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="fr" className="scroll-smooth">
+    <html lang="fr" className={`scroll-smooth ${inter.variable} ${plusJakarta.variable}`}>
       <head>
         {/* PWA Meta Tags */}
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -165,12 +179,6 @@ export default function RootLayout({
           href="/splash/apple-splash-1179-2556.png"
           media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
         />
-
-        {/* Preconnect for performance - fonts */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
 
         {/* Preconnect for Supabase backend */}
         <link rel="preconnect" href="https://umjmbdbwcsxrvfqktiui.supabase.co" />
