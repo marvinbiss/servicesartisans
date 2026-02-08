@@ -14,6 +14,12 @@ import { services as staticServicesList, villes } from '@/lib/data/france'
 
 // ISR: Revalidate every 30 minutes
 export const revalidate = REVALIDATE.serviceDetail
+export const dynamicParams = false
+
+// Pre-render all 15 service pages at build time
+export function generateStaticParams() {
+  return staticServicesList.map(s => ({ service: s.slug }))
+}
 
 interface PageProps {
   params: Promise<{ service: string }>

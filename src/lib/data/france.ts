@@ -1689,6 +1689,11 @@ export function getDepartementBySlug(slug: string): Departement | undefined {
   return departements.find(d => d.slug === slug)
 }
 
+// Fonction pour obtenir un département par son code
+export function getDepartementByCode(code: string): Departement | undefined {
+  return departements.find(d => d.code === code)
+}
+
 // Fonction pour obtenir toutes les villes d'un département
 export function getVillesByDepartement(departementCode: string): Ville[] {
   return villes.filter(v => v.departementCode === departementCode)
@@ -1725,6 +1730,10 @@ export const regions: Region[] = [
 
 export function getRegionBySlug(slug: string): Region | undefined {
   return regions.find(r => r.slug === slug)
+}
+
+export function getRegionSlugByName(name: string): string | undefined {
+  return regions.find(r => r.name === name)?.slug
 }
 
 // Services disponibles avec icônes Lucide

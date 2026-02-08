@@ -13,7 +13,7 @@ import { popularServices, popularCities } from '@/lib/constants/navigation'
 import Link from 'next/link'
 import { REVALIDATE } from '@/lib/cache'
 import { slugify } from '@/lib/utils'
-import { services as staticServicesList, villes, getVilleBySlug } from '@/lib/data/france'
+import { services as staticServicesList, villes, getVilleBySlug, getDepartementByCode, getRegionSlugByName } from '@/lib/data/france'
 import type { Service, Location as LocationType, Provider } from '@/types'
 
 // Safely escape JSON for script tags to prevent XSS
@@ -313,15 +313,15 @@ export default async function ServiceLocationPage({ params }: PageProps) {
               <div className="space-y-2">
                 {location.region_name && (
                   <Link
-                    href={`/regions/${location.region_name ? slugify(location.region_name) : ''}`}
+                    href={`/regions/${getRegionSlugByName(location.region_name) || slugify(location.region_name)}`}
                     className="block px-3 py-2 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-lg text-sm transition-colors"
                   >
                     Artisans en {location.region_name}
                   </Link>
                 )}
-                {location.department_name && (
+                {location.department_name && location.department_code && (
                   <Link
-                    href={`/departements/${location.department_code}`}
+                    href={`/departements/${getDepartementByCode(location.department_code)?.slug || slugify(location.department_name)}`}
                     className="block px-3 py-2 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-lg text-sm transition-colors"
                   >
                     Artisans dans {location.department_name} ({location.department_code})

@@ -10,6 +10,10 @@ import { getOrganizationSchema, getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { REVALIDATE } from '@/lib/cache'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularCitiesLinks, GeographicNavigation } from '@/components/InternalLinks'
+import { services as staticServicesList } from '@/lib/data/france'
+
+// Set of valid service slugs that have dedicated pages
+const validServiceSlugs = new Set(staticServicesList.map(s => s.slug))
 
 // ISR: Revalidate every hour
 export const revalidate = REVALIDATE.services
@@ -215,26 +219,50 @@ export default function ServicesPage() {
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
                   {category.services.map((service) => {
                     const Icon = service.icon
-                    return (
-                      <Link
-                        key={service.slug}
-                        href={`/services/${service.slug}`}
-                        className="group relative bg-white rounded-2xl border border-gray-100 p-6 hover:border-gray-200 transition-all duration-300 hover:shadow-xl hover:shadow-gray-200/50 hover:-translate-y-1"
-                      >
-                        <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-gray-50 to-transparent rounded-bl-[100px] opacity-0 group-hover:opacity-100 transition-opacity" />
-                        <div className="relative">
-                          <div className={`w-12 h-12 ${colors.bg} rounded-xl flex items-center justify-center mb-4 ${colors.hover} transition-colors`}>
-                            <Icon className={`w-6 h-6 ${colors.icon}`} />
+                    const hasPage = validServiceSlugs.has(service.slug)
+
+                    if (hasPage) {
+                      return (
+                        <Link
+                          key={service.slug}
+                          href={`/services/${service.slug}`}
+                          className="group relative bg-white rounded-2xl border border-gray-100 p-6 hover:border-gray-200 transition-all duration-300 hover:shadow-xl hover:shadow-gray-200/50 hover:-translate-y-1"
+                        >
+                          <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-gray-50 to-transparent rounded-bl-[100px] opacity-0 group-hover:opacity-100 transition-opacity" />
+                          <div className="relative">
+                            <div className={`w-12 h-12 ${colors.bg} rounded-xl flex items-center justify-center mb-4 ${colors.hover} transition-colors`}>
+                              <Icon className={`w-6 h-6 ${colors.icon}`} />
+                            </div>
+                            <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-2">
+                              {service.name}
+                            </h3>
+                            <p className="text-sm text-gray-500 leading-relaxed">
+                              {service.description}
+                            </p>
                           </div>
-                          <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-2">
-                            {service.name}
-                          </h3>
-                          <p className="text-sm text-gray-500 leading-relaxed">
-                            {service.description}
-                          </p>
+                          <ArrowRight className="absolute bottom-6 right-6 w-5 h-5 text-gray-300 group-hover:text-blue-500 group-hover:translate-x-1 transition-all" />
+                        </Link>
+                      )
+                    }
+
+                    return (
+                      <div
+                        key={service.slug}
+                        className="relative bg-white rounded-2xl border border-gray-100 p-6 opacity-75"
+                      >
+                        <div className="absolute top-3 right-3 text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded-full">
+                          Bientôt
                         </div>
-                        <ArrowRight className="absolute bottom-6 right-6 w-5 h-5 text-gray-300 group-hover:text-blue-500 group-hover:translate-x-1 transition-all" />
-                      </Link>
+                        <div className={`w-12 h-12 ${colors.bg} rounded-xl flex items-center justify-center mb-4`}>
+                          <Icon className={`w-6 h-6 ${colors.icon}`} />
+                        </div>
+                        <h3 className="font-semibold text-gray-900 mb-2">
+                          {service.name}
+                        </h3>
+                        <p className="text-sm text-gray-500 leading-relaxed">
+                          {service.description}
+                        </p>
+                      </div>
                     )
                   })}
                 </div>
