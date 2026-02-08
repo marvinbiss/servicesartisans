@@ -10,7 +10,6 @@ const navigationLinks = [
   { name: 'Services', href: '/services' },
   { name: 'Villes', href: '/villes' },
   { name: 'Recherche', href: '/recherche' },
-  { name: 'Devis', href: '/devis' },
   { name: 'Comment ca marche', href: '/comment-ca-marche' },
 ]
 
@@ -20,7 +19,6 @@ const informationLinks = [
   { name: 'Contact', href: '/contact' },
   { name: 'FAQ', href: '/faq' },
   { name: 'Blog', href: '/blog' },
-  { name: 'Avis clients', href: '/avis' },
   { name: 'Tarifs artisans', href: '/tarifs-artisans' },
   { name: 'CGV', href: '/cgv' },
   { name: 'Mentions legales', href: '/mentions-legales' },
@@ -238,8 +236,8 @@ export default function Footer() {
                 </li>
               ))}
               <li>
-                <Link href="/devis" className="inline-flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-amber-500/20 to-amber-600/20 text-amber-400 rounded-lg hover:from-amber-500/30 hover:to-amber-600/30 transition-all mt-2 group">
-                  Demander un devis
+                <Link href="/services" className="inline-flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-amber-500/20 to-amber-600/20 text-amber-400 rounded-lg hover:from-amber-500/30 hover:to-amber-600/30 transition-all mt-2 group">
+                  Voir les services
                   <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </li>
@@ -275,15 +273,6 @@ export default function Footer() {
                   Devenir partenaire
                 </Link>
               </li>
-              <li>
-                <Link href="/urgence" className="text-red-400 hover:text-red-300 flex items-center gap-1 group">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
-                  </span>
-                  Urgences 24h/24
-                </Link>
-              </li>
             </ul>
           </div>
 
@@ -307,18 +296,8 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/cookies" className="hover:text-white transition-colors duration-200">
-                  Politique de cookies
-                </Link>
-              </li>
-              <li>
                 <Link href="/accessibilite" className="hover:text-white transition-colors duration-200">
                   Accessibilite
-                </Link>
-              </li>
-              <li>
-                <Link href="/sitemap" className="hover:text-white transition-colors duration-200">
-                  Plan du site
                 </Link>
               </li>
             </ul>
@@ -385,8 +364,8 @@ export default function Footer() {
               <Link href="/accessibilite" className="hover:text-white transition-colors duration-200">
                 Accessibilite
               </Link>
-              <Link href="/sitemap" className="hover:text-white transition-colors duration-200">
-                Plan du site
+              <Link href="/faq" className="hover:text-white transition-colors duration-200">
+                FAQ
               </Link>
               <Link href="/contact" className="hover:text-white transition-colors duration-200">
                 Contact

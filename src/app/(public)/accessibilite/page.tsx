@@ -1,7 +1,16 @@
+import { Metadata } from 'next'
 import Link from 'next/link'
 import { ChevronRight, Eye, Ear, Hand, Brain, Mail } from 'lucide-react'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+
+export const metadata: Metadata = {
+  title: 'Accessibilité - ServicesArtisans',
+  description: 'Déclaration d\'accessibilité de ServicesArtisans - Notre engagement pour rendre le site accessible à tous.',
+  alternates: {
+    canonical: 'https://servicesartisans.fr/accessibilite',
+  },
+}
 
 export default function AccessibilitePage() {
   return (

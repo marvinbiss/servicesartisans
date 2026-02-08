@@ -6,6 +6,9 @@ import { companyIdentity } from '@/lib/config/company-identity'
 export const metadata: Metadata = {
   title: 'Mentions légales - ServicesArtisans',
   description: 'Mentions légales du site ServicesArtisans.fr - Informations juridiques, éditeur, hébergeur et conditions d\'utilisation.',
+  alternates: {
+    canonical: 'https://servicesartisans.fr/mentions-legales',
+  },
 }
 
 export default function MentionsLegalesPage() {

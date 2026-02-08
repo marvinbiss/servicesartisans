@@ -3,10 +3,13 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(request: NextRequest) {
   try {
+    if (!process.env.REVALIDATE_SECRET) {
+      return NextResponse.json({ error: 'Server misconfiguration' }, { status: 500 })
+    }
+
     const { path, secret } = await request.json()
 
-    // Vérification de sécurité (optionnel)
-    if (secret && secret !== process.env.REVALIDATE_SECRET) {
+    if (!secret || secret !== process.env.REVALIDATE_SECRET) {
       return NextResponse.json({ error: 'Invalid secret' }, { status: 401 })
     }
 
@@ -33,11 +36,14 @@ export async function POST(request: NextRequest) {
 // GET pour revalider plusieurs pages courantes
 export async function GET(request: NextRequest) {
   try {
+    if (!process.env.REVALIDATE_SECRET) {
+      return NextResponse.json({ error: 'Server misconfiguration' }, { status: 500 })
+    }
+
     const searchParams = request.nextUrl.searchParams
     const secret = searchParams.get('secret')
 
-    // Vérification de sécurité (optionnel)
-    if (secret && secret !== process.env.REVALIDATE_SECRET) {
+    if (!secret || secret !== process.env.REVALIDATE_SECRET) {
       return NextResponse.json({ error: 'Invalid secret' }, { status: 401 })
     }
 

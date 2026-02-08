@@ -256,7 +256,7 @@ export async function sendWelcomeEmail(params: {
   `}
 
   <div style="text-align: center; margin: 30px 0;">
-    <a href="${process.env.NEXT_PUBLIC_URL}/dashboard" style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500;">
+    <a href="${process.env.NEXT_PUBLIC_SITE_URL}/dashboard" style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500;">
       Acceder a mon compte
     </a>
   </div>
@@ -379,7 +379,7 @@ export async function sendBookingConfirmationEmail(params: {
   </div>
 
   <div style="text-align: center; margin: 30px 0;">
-    <a href="${process.env.NEXT_PUBLIC_URL}/reservations/${bookingId}" style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500;">
+    <a href="${process.env.NEXT_PUBLIC_SITE_URL}/reservations/${bookingId}" style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500;">
       Voir ma reservation
     </a>
   </div>
@@ -445,7 +445,7 @@ export async function sendQuoteRequestEmail(params: {
   </div>
 
   <div style="text-align: center; margin: 30px 0;">
-    <a href="${process.env.NEXT_PUBLIC_URL}/artisan/devis/${quoteId}" style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500;">
+    <a href="${process.env.NEXT_PUBLIC_SITE_URL}/artisan/devis/${quoteId}" style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 500;">
       Repondre a la demande
     </a>
   </div>

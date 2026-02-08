@@ -5,6 +5,9 @@ import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 export const metadata: Metadata = {
   title: 'Conditions Générales de Vente - ServicesArtisans',
   description: 'Conditions générales de vente et d\'utilisation du service ServicesArtisans.',
+  alternates: {
+    canonical: 'https://servicesartisans.fr/cgv',
+  },
 }
 
 export default function CGVPage() {

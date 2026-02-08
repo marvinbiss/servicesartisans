@@ -5,6 +5,9 @@ import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 export const metadata: Metadata = {
   title: 'Politique de confidentialité - ServicesArtisans',
   description: 'Politique de confidentialité de ServicesArtisans - Comment nous collectons, utilisons et protégeons vos données personnelles.',
+  alternates: {
+    canonical: 'https://servicesartisans.fr/confidentialite',
+  },
 }
 
 export default function ConfidentialitePage() {

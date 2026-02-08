@@ -1,6 +1,16 @@
 import { MetadataRoute } from 'next'
+import { services, villes } from '@/lib/data/france'
 
 const BASE_URL = 'https://servicesartisans.fr'
+
+/** Normalize a string for matching: lowercase, strip diacritics, trim. */
+function normalize(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .trim()
+}
 
 /**
  * Sitemap wave 1 — controlled activation via `noindex` column.
@@ -30,6 +40,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/accessibilite`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
   ]
 
+  // Build lookup maps: normalized name → static slug
+  const serviceMap = new Map<string, string>()
+  for (const s of services) {
+    serviceMap.set(normalize(s.name), s.slug)
+  }
+
+  const villeMap = new Map<string, string>()
+  for (const v of villes) {
+    villeMap.set(normalize(v.name), v.slug)
+  }
+
   // Dynamic entries: only providers with noindex=false
   let providerEntries: MetadataRoute.Sitemap = []
   let hubEntries: MetadataRoute.Sitemap = []
@@ -38,41 +59,60 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const { createAdminClient } = await import('@/lib/supabase/admin')
     const supabase = createAdminClient()
 
-    // Fetch all indexable providers (noindex=false)
-    // TODO: paginate when provider count exceeds Supabase default limit
-    const { data: providers, error } = await supabase
-      .from('providers')
-      .select('name, slug, stable_id, specialty, address_city, updated_at')
-      .eq('is_active', true)
-      .eq('noindex', false)
-      .order('updated_at', { ascending: false })
+    // Fetch all indexable providers with pagination
+    type ProviderRow = {
+      name: string | null
+      slug: string | null
+      stable_id: string | null
+      specialty: string | null
+      address_city: string | null
+      updated_at: string | null
+    }
+    let allProviders: ProviderRow[] = []
+    let from = 0
+    const PAGE_SIZE = 1000
 
-    if (error) {
-      console.error('Sitemap DB error', error)
-      return staticEntries
+    while (true) {
+      const { data, error } = await supabase
+        .from('providers')
+        .select('name, slug, stable_id, specialty, address_city, updated_at')
+        .eq('is_active', true)
+        .eq('noindex', false)
+        .order('updated_at', { ascending: false })
+        .range(from, from + PAGE_SIZE - 1)
+
+      if (error || !data || data.length === 0) break
+      allProviders = allProviders.concat(data)
+      if (data.length < PAGE_SIZE) break
+      from += PAGE_SIZE
     }
 
-    if (!providers || providers.length === 0) {
+    if (allProviders.length === 0) {
       return staticEntries
     }
 
     // Track unique hub pages (service × location)
     const hubs = new Set<string>()
 
-    providerEntries = providers
+    providerEntries = allProviders
       .filter((p) => p.name && p.stable_id && p.specialty && p.address_city)
-      .map((p) => {
-        const serviceSlug = slugify(p.specialty!)
-        const locationSlug = slugify(p.address_city!)
+      .reduce<MetadataRoute.Sitemap>((acc, p) => {
+        const serviceSlug = serviceMap.get(normalize(p.specialty!))
+        const locationSlug = villeMap.get(normalize(p.address_city!))
+
+        // Only include providers whose service AND city exist in static data
+        if (!serviceSlug || !locationSlug) return acc
+
         hubs.add(`${serviceSlug}/${locationSlug}`)
 
-        return {
+        acc.push({
           url: `${BASE_URL}/services/${serviceSlug}/${locationSlug}/${p.stable_id}`,
           lastModified: p.updated_at ? new Date(p.updated_at) : now,
           changeFrequency: 'weekly' as const,
           priority: 0.7,
-        }
-      })
+        })
+        return acc
+      }, [])
 
     // Hub pages for each unique service × location with indexable providers
     hubEntries = Array.from(hubs).map((hub) => ({
@@ -87,14 +127,4 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   return [...staticEntries, ...hubEntries, ...providerEntries]
-}
-
-/** Simple French-safe slugifier */
-function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '')
 }
