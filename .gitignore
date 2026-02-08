@@ -33,3 +33,4 @@ tsconfig.tsbuildinfo
 npm-debug.log*
 .vercel
 .env*.local
+scripts/.collect-progress.json
