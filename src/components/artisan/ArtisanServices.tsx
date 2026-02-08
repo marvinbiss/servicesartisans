@@ -23,7 +23,7 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
 
       {/* Services tags */}
       {artisan.services.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-6" role="list" aria-label="Services proposes">
+        <div className="flex flex-wrap gap-2 mb-6" role="list" aria-label="Services proposés">
           {artisan.services.map((service, i) => (
             <span
               key={i}
@@ -40,6 +40,9 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
       {/* Pricing table */}
       {artisan.service_prices.length > 0 && (
         <div className="space-y-3" role="list" aria-label="Tarifs des services">
+          {artisan.service_prices[0]?.price?.startsWith('À partir') && (
+            <p className="text-xs text-gray-500 italic mb-2">* Tarifs indicatifs, le prix final dépend de la nature exacte de l'intervention. Demandez un devis pour un prix précis.</p>
+          )}
           {artisan.service_prices.map((service, index) => (
             <motion.div
               key={index}
@@ -54,7 +57,7 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
                   {service.name}
                 </h3>
                 {service.description && (
-                  <p className="text-sm text-gray-500 mt-0.5">{service.description}</p>
+                  <p className="text-sm text-gray-500 mt-0.5 leading-relaxed">{service.description}</p>
                 )}
               </div>
 
@@ -88,7 +91,7 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
       {/* Payment methods */}
       {artisan.payment_methods && artisan.payment_methods.length > 0 && (
         <div className="mt-6 pt-6 border-t border-gray-100">
-          <h3 className="text-sm font-medium text-gray-700 mb-3">Moyens de paiement acceptes</h3>
+          <h3 className="text-sm font-medium text-gray-700 mb-3">Moyens de paiement acceptés</h3>
           <div className="flex flex-wrap gap-2" role="list" aria-label="Moyens de paiement">
             {artisan.payment_methods.map((method, i) => (
               <span

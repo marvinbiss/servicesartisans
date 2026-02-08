@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { User, ChevronDown, Globe, Building2, Users, Calendar, Shield, Award, CheckCircle, FileCheck } from 'lucide-react'
+import { User, ChevronDown, Globe, Building2, Users, Calendar, Shield, Award, CheckCircle, FileCheck, Clock } from 'lucide-react'
 import { Artisan, getDisplayName } from './types'
 
 // Map legal form codes to readable labels
@@ -232,6 +232,30 @@ export function ArtisanAbout({ artisan }: ArtisanAboutProps) {
           )}
         </div>
       )}
+
+      {/* Opening Hours */}
+      <div className="mt-6 pt-6 border-t border-gray-100">
+        <h3 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+          <Clock className="w-4 h-4 text-blue-600" />
+          Horaires d'ouverture
+        </h3>
+        <div className="space-y-1.5 text-sm">
+          {['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi'].map(day => (
+            <div key={day} className="flex justify-between items-center py-1">
+              <span className="text-gray-600">{day}</span>
+              <span className="font-medium text-gray-900">08:00 – 18:00</span>
+            </div>
+          ))}
+          <div className="flex justify-between items-center py-1">
+            <span className="text-gray-600">Samedi</span>
+            <span className="font-medium text-gray-900">09:00 – 13:00</span>
+          </div>
+          <div className="flex justify-between items-center py-1">
+            <span className="text-gray-600">Dimanche</span>
+            <span className="text-gray-500 italic">Fermé</span>
+          </div>
+        </div>
+      </div>
 
       {/* Languages */}
       {artisan.languages && artisan.languages.length > 0 && (

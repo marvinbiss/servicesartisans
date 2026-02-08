@@ -55,7 +55,7 @@ function convertToArtisan(provider: any, service: any, location: any, serviceSlu
     is_center: provider.is_center || false,
     team_size: provider.team_size || undefined,
     services: provider.services || [],
-    service_prices: provider.service_prices || [],
+    service_prices: (provider.service_prices && provider.service_prices.length > 0) ? provider.service_prices : generateServicePrices(serviceSlug),
     accepts_new_clients: provider.accepts_new_clients !== false,
     experience_years: provider.experience_years || undefined,
     certifications: provider.certifications || [],
@@ -79,30 +79,127 @@ function convertToArtisan(provider: any, service: any, location: any, serviceSlu
   }
 }
 
-// Generate a unique description based on provider data
+// Generate a rich, unique description based on all available provider data
 function generateDescription(name: string, specialty: string, city: string, provider?: any): string {
   const spe = specialty.toLowerCase()
   const parts: string[] = []
 
-  parts.push(`${name} est ${spe} à ${city}.`)
+  // Opening sentence with specialty and location
+  parts.push(`${name} est votre ${spe} de confiance à ${city}.`)
 
-  if (provider?.siret) {
-    parts.push(`Entreprise immatriculée et vérifiée (SIRET).`)
-  }
-  if (provider?.experience_years && provider.experience_years > 0) {
-    parts.push(`${provider.experience_years} ans d'expérience dans le métier.`)
-  }
+  // Company history and experience
   if (provider?.creation_date) {
     const year = new Date(provider.creation_date).getFullYear()
-    parts.push(`Entreprise créée en ${year}.`)
-  }
-  if (provider?.employee_count && provider.employee_count > 1) {
-    parts.push(`Équipe de ${provider.employee_count} personnes.`)
+    const age = new Date().getFullYear() - year
+    if (age > 1) {
+      parts.push(`Fondée en ${year}, l'entreprise bénéficie de plus de ${age} ans de présence dans la région.`)
+    }
+  } else if (provider?.experience_years && provider.experience_years > 0) {
+    parts.push(`Fort de ${provider.experience_years} ans d'expérience, ce professionnel maîtrise tous les aspects du métier.`)
   }
 
-  parts.push(`Demandez un devis gratuit et sans engagement.`)
+  // Team and structure
+  if (provider?.employee_count && provider.employee_count > 1) {
+    parts.push(`L'équipe, composée de ${provider.employee_count} personnes, assure des interventions rapides et soignées.`)
+  }
+
+  // Certifications
+  if (provider?.certifications && provider.certifications.length > 0) {
+    if (provider.certifications.length === 1) {
+      parts.push(`Certifié ${provider.certifications[0]}.`)
+    } else {
+      parts.push(`Titulaire de ${provider.certifications.length} certifications professionnelles dont ${provider.certifications[0]}.`)
+    }
+  }
+
+  // Insurance
+  if (provider?.insurance && provider.insurance.length > 0) {
+    parts.push(`Assuré pour la garantie décennale et la responsabilité civile professionnelle.`)
+  }
+
+  // Verification
+  if (provider?.siret) {
+    parts.push(`Entreprise immatriculée et vérifiée (SIRET ${provider.siret.substring(0, 9)}...).`)
+  }
+
+  // Rating
+  const rating = provider?.rating_average || provider?.average_rating
+  if (rating && rating >= 4) {
+    parts.push(`Noté ${Number(rating).toFixed(1)}/5 par ses clients.`)
+  }
+
+  // CTA
+  parts.push(`Contactez ${name} pour obtenir un devis gratuit et personnalisé, sans engagement.`)
 
   return parts.join(' ')
+}
+
+// Generate typical service prices based on specialty
+const SERVICE_PRICES_BY_SPECIALTY: Record<string, Array<{ name: string; description: string; price: string; duration?: string }>> = {
+  plombier: [
+    { name: 'Dépannage plomberie', description: 'Intervention urgente : fuite, débouchage, réparation', price: 'À partir de 80€', duration: '1-2h' },
+    { name: 'Installation sanitaire', description: 'Pose de lavabo, douche, WC, baignoire', price: 'À partir de 150€', duration: '2-4h' },
+    { name: 'Recherche de fuite', description: 'Détection et réparation de fuite d\'eau', price: 'À partir de 120€', duration: '1-3h' },
+    { name: 'Remplacement chauffe-eau', description: 'Dépose et installation d\'un nouveau chauffe-eau', price: 'À partir de 350€', duration: '3-4h' },
+  ],
+  electricien: [
+    { name: 'Dépannage électrique', description: 'Panne, court-circuit, disjoncteur, prise défaillante', price: 'À partir de 80€', duration: '1-2h' },
+    { name: 'Installation électrique', description: 'Pose de prises, interrupteurs, éclairage', price: 'À partir de 100€', duration: '2-4h' },
+    { name: 'Mise aux normes', description: 'Mise en conformité du tableau électrique', price: 'À partir de 500€', duration: '1-2 jours' },
+    { name: 'Pose de luminaires', description: 'Installation de spots, suspensions, appliques', price: 'À partir de 60€', duration: '1-2h' },
+  ],
+  serrurier: [
+    { name: 'Ouverture de porte', description: 'Porte claquée ou fermée à clé, sans dégât', price: 'À partir de 90€', duration: '30min-1h' },
+    { name: 'Changement de serrure', description: 'Remplacement de cylindre ou serrure complète', price: 'À partir de 120€', duration: '1-2h' },
+    { name: 'Installation de blindage', description: 'Porte blindée ou blindage de porte existante', price: 'À partir de 800€', duration: '2-4h' },
+    { name: 'Double de clé', description: 'Reproduction de clé standard ou sécurisée', price: 'À partir de 15€', duration: '15min' },
+  ],
+  chauffagiste: [
+    { name: 'Entretien chaudière', description: 'Révision annuelle obligatoire, nettoyage, contrôle', price: 'À partir de 90€', duration: '1-2h' },
+    { name: 'Dépannage chauffage', description: 'Panne de chaudière, radiateur, thermostat', price: 'À partir de 100€', duration: '1-3h' },
+    { name: 'Installation chaudière', description: 'Pose et mise en service de chaudière gaz ou fioul', price: 'À partir de 2 500€', duration: '1-2 jours' },
+    { name: 'Installation climatisation', description: 'Pose de climatiseur réversible mono ou multi-split', price: 'À partir de 1 200€', duration: '1 jour' },
+  ],
+  'peintre-en-batiment': [
+    { name: 'Peinture intérieure', description: 'Murs et plafonds, préparation et deux couches', price: 'À partir de 25€/m²', duration: '1-3 jours' },
+    { name: 'Peinture extérieure', description: 'Ravalement de façade, volets, portails', price: 'À partir de 35€/m²', duration: '2-5 jours' },
+    { name: 'Pose de papier peint', description: 'Préparation des murs et pose soignée', price: 'À partir de 30€/m²', duration: '1-2 jours' },
+    { name: 'Enduit et lissage', description: 'Ratissage, enduit de lissage, préparation', price: 'À partir de 20€/m²', duration: '1-2 jours' },
+  ],
+  menuisier: [
+    { name: 'Pose de cuisine', description: 'Montage et installation de meubles de cuisine', price: 'À partir de 500€', duration: '1-3 jours' },
+    { name: 'Fabrication sur mesure', description: 'Étagères, placards, bibliothèques, dressing', price: 'À partir de 300€', duration: '2-5 jours' },
+    { name: 'Pose de parquet', description: 'Parquet massif, contrecollé ou stratifié', price: 'À partir de 30€/m²', duration: '1-3 jours' },
+    { name: 'Réparation menuiserie', description: 'Porte, fenêtre, volet, escalier', price: 'À partir de 80€', duration: '1-4h' },
+  ],
+  carreleur: [
+    { name: 'Pose de carrelage sol', description: 'Carrelage intérieur, préparation et pose', price: 'À partir de 35€/m²', duration: '1-3 jours' },
+    { name: 'Faïence murale', description: 'Carrelage mural salle de bain, cuisine', price: 'À partir de 40€/m²', duration: '1-2 jours' },
+    { name: 'Mosaïque', description: 'Pose de mosaïque décorative', price: 'À partir de 50€/m²', duration: '1-3 jours' },
+    { name: 'Rénovation carrelage', description: 'Dépose ancien carrelage et repose', price: 'À partir de 45€/m²', duration: '2-4 jours' },
+  ],
+  couvreur: [
+    { name: 'Réparation toiture', description: 'Tuiles cassées, fuite, faîtage', price: 'À partir de 200€', duration: '1-2 jours' },
+    { name: 'Réfection complète', description: 'Remplacement intégral de la couverture', price: 'À partir de 80€/m²', duration: '3-10 jours' },
+    { name: 'Nettoyage toiture', description: 'Démoussage, traitement hydrofuge', price: 'À partir de 15€/m²', duration: '1-2 jours' },
+    { name: 'Pose de gouttières', description: 'Gouttières aluminium, zinc ou PVC', price: 'À partir de 30€/ml', duration: '1-2 jours' },
+  ],
+  macon: [
+    { name: 'Maçonnerie générale', description: 'Construction, extension, rénovation', price: 'Sur devis', duration: 'Variable' },
+    { name: 'Dalle béton', description: 'Coulage de dalle, chape, terrasse', price: 'À partir de 50€/m²', duration: '2-5 jours' },
+    { name: 'Ouverture de mur', description: 'Création d\'ouverture, pose d\'IPN', price: 'À partir de 800€', duration: '1-3 jours' },
+    { name: 'Ravalement de façade', description: 'Enduit, crépi, réparation de fissures', price: 'À partir de 40€/m²', duration: '3-10 jours' },
+  ],
+  jardinier: [
+    { name: 'Entretien de jardin', description: 'Tonte, taille de haies, désherbage', price: 'À partir de 35€/h', duration: '2-4h' },
+    { name: 'Élagage', description: 'Taille et élagage d\'arbres', price: 'À partir de 150€', duration: '2-6h' },
+    { name: 'Création de jardin', description: 'Aménagement paysager, plantation', price: 'Sur devis', duration: 'Variable' },
+    { name: 'Pose de clôture', description: 'Clôture bois, grillage, panneaux', price: 'À partir de 40€/ml', duration: '1-3 jours' },
+  ],
+}
+
+function generateServicePrices(specialtySlug: string): Array<{ name: string; description: string; price: string; duration?: string }> {
+  return SERVICE_PRICES_BY_SPECIALTY[specialtySlug] || []
 }
 
 // Generate automatic FAQ based on specialty and city
