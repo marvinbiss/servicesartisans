@@ -4,9 +4,9 @@ export const SITE_NAME = 'ServicesArtisans'
 // SEO configuration object
 export const defaultSEOConfig = {
   titleTemplate: '%s | ServicesArtisans',
-  defaultTitle: 'ServicesArtisans — 350 000+ artisans vérifiés en France',
+  defaultTitle: 'ServicesArtisans — 350 000+ artisans référencés en France',
   description:
-    'Le plus grand annuaire d\'artisans de France. 350 000+ professionnels vérifiés par SIREN dans 101 départements. Devis gratuits.',
+    'Le plus grand annuaire d\'artisans de France. 350 000+ professionnels référencés dans 101 départements. Devis gratuits.',
   canonical: SITE_URL,
   openGraph: {
     type: 'website',
@@ -70,11 +70,11 @@ export const defaultSEOConfig = {
 export function getServiceSEO(serviceName: string, location?: string) {
   const title = location
     ? `${serviceName} à ${location} — Annuaire & Devis Gratuit`
-    : `${serviceName} en France — 350 000+ artisans vérifiés`
+    : `${serviceName} en France — 350 000+ artisans référencés`
 
   const description = location
-    ? `Trouvez un ${serviceName.toLowerCase()} à ${location} parmi des milliers de professionnels vérifiés par SIREN. Comparez les profils, consultez les coordonnées et demandez un devis gratuit.`
-    : `Annuaire des ${serviceName.toLowerCase()}s en France. Professionnels vérifiés par SIREN dans 101 départements. Recherche gratuite, devis sans engagement.`
+    ? `Trouvez un ${serviceName.toLowerCase()} à ${location} parmi des milliers de professionnels référencés. Comparez les profils, consultez les coordonnées et demandez un devis gratuit.`
+    : `Annuaire des ${serviceName.toLowerCase()}s en France. Professionnels référencés dans 101 départements. Recherche gratuite, devis sans engagement.`
 
   return {
     title,
@@ -90,15 +90,15 @@ export function getServiceSEO(serviceName: string, location?: string) {
 // SEO pour les pages de localisation
 export function getLocationSEO(locationType: 'ville' | 'region' | 'departement', locationName: string) {
   const titles: Record<string, string> = {
-    ville: `Artisans à ${locationName} — Annuaire vérifiés par SIREN`,
+    ville: `Artisans à ${locationName} — Annuaire référencés`,
     region: `Artisans en ${locationName} — Tous les métiers du bâtiment`,
     departement: `Artisans dans le ${locationName} — Annuaire & Devis gratuits`,
   }
 
   const descriptions: Record<string, string> = {
-    ville: `Annuaire complet des artisans à ${locationName}. Des milliers de professionnels vérifiés par SIREN : plombiers, électriciens, menuisiers et plus. 100% gratuit.`,
-    region: `Trouvez un artisan en ${locationName} parmi des milliers de professionnels vérifiés. Tous les corps de métier, tous les départements.`,
-    departement: `Artisans vérifiés par SIREN dans le ${locationName}. Plus de 50 métiers du bâtiment couverts. Recherche gratuite, devis sans engagement.`,
+    ville: `Annuaire complet des artisans à ${locationName}. Des milliers de professionnels référencés : plombiers, électriciens, menuisiers et plus. 100% gratuit.`,
+    region: `Trouvez un artisan en ${locationName} parmi des milliers de professionnels référencés. Tous les corps de métier, tous les départements.`,
+    departement: `Artisans référencés dans le ${locationName}. Plus de 50 métiers du bâtiment couverts. Recherche gratuite, devis sans engagement.`,
   }
 
   return {

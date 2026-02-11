@@ -31,7 +31,7 @@ export const brand = {
   values: [
     {
       name: 'Confiance',
-      description: 'Des artisans vérifiés et des avis authentiques',
+      description: 'Des artisans référencés et des avis clients',
       icon: 'shield-check',
     },
     {

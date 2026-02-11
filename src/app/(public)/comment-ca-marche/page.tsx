@@ -7,8 +7,8 @@ import JsonLd from '@/components/JsonLd'
 import { getHowToSchema, getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 
 export const metadata: Metadata = {
-  title: 'Comment ça marche — Trouvez un artisan parmi 350 000+ professionnels vérifiés | ServicesArtisans',
-  description: 'Recherchez, comparez et contactez un artisan vérifié en 3 étapes. 350 000+ professionnels avec données SIREN vérifiées dans 101 départements. 100% gratuit, sans inscription.',
+  title: 'Comment ça marche — Trouvez un artisan parmi 350 000+ professionnels référencés | ServicesArtisans',
+  description: 'Recherchez, comparez et contactez un artisan en 3 étapes. 350 000+ professionnels référencés dans 101 départements. 100% gratuit, sans inscription.',
   alternates: {
     canonical: 'https://servicesartisans.fr/comment-ca-marche',
   },
@@ -72,7 +72,7 @@ const trustReasons = [
   {
     icon: MapPin,
     title: '350 000+ artisans dans 101 départements',
-    description: 'Le plus grand annuaire d\'artisans vérifiés de France. Trouvez un professionnel près de chez vous, partout en France métropolitaine et outre-mer.',
+    description: 'Le plus grand annuaire d\'artisans référencés de France. Trouvez un professionnel près de chez vous, partout en France métropolitaine et outre-mer.',
   },
   {
     icon: Star,
@@ -105,7 +105,7 @@ const faqs = [
   },
   {
     question: 'Quelle est la différence avec les autres annuaires d\'artisans ?',
-    answer: 'ServicesArtisans se distingue par la vérification systématique des données via l\'API SIREN gouvernementale, l\'absence de faux avis, la gratuité totale sans inscription, et la couverture de 101 départements avec plus de 350 000 artisans référencés.',
+    answer: 'ServicesArtisans se distingue par l\'utilisation des données officielles de l\'API SIREN gouvernementale, l\'absence de faux avis, la gratuité totale sans inscription, et la couverture de 101 départements avec plus de 350 000 artisans référencés.',
   },
   {
     question: 'Comment sont sélectionnés les artisans affichés ?',
@@ -151,10 +151,10 @@ export default function CommentCaMarchePage() {
           />
           <div className="text-center">
             <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
-              Trouvez un artisan v&eacute;rifi&eacute; en 3 &eacute;tapes
+              Trouvez un artisan r&eacute;f&eacute;renc&eacute; en 3 &eacute;tapes
             </h1>
             <p className="text-xl text-slate-400 max-w-3xl mx-auto mb-4">
-              Recherchez, comparez et contactez parmi 350 000+ artisans v&eacute;rifi&eacute;s par les donn&eacute;es officielles SIREN.
+              Recherchez, comparez et contactez parmi 350 000+ artisans r&eacute;f&eacute;renc&eacute;s gr&acirc;ce aux donn&eacute;es officielles SIREN.
               Service 100% gratuit, sans inscription.
             </p>
             <div className="flex flex-wrap justify-center gap-4 mt-8">
@@ -272,7 +272,7 @@ export default function CommentCaMarchePage() {
           <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl p-8 text-white text-center">
             <div>
               <div className="text-3xl md:text-4xl font-bold">350 000+</div>
-              <div className="text-blue-200 text-sm mt-1">Artisans vérifiés</div>
+              <div className="text-blue-200 text-sm mt-1">Artisans référencés</div>
             </div>
             <div>
               <div className="text-3xl md:text-4xl font-bold">101</div>
@@ -348,7 +348,7 @@ export default function CommentCaMarchePage() {
             >
               <h3 className="font-semibold text-gray-900 mb-2">Demander un devis</h3>
               <p className="text-gray-600 text-sm mb-3">
-                Recevez des devis gratuits et sans engagement de la part d&apos;artisans vérifiés.
+                Recevez des devis gratuits et sans engagement de la part d&apos;artisans référencés.
               </p>
               <span className="text-blue-600 text-sm font-medium inline-flex items-center gap-1">
                 Demander un devis <ArrowRight className="w-4 h-4" />
@@ -377,7 +377,7 @@ export default function CommentCaMarchePage() {
             Prêt à trouver votre artisan ?
           </h2>
           <p className="text-xl text-blue-100 mb-8">
-            350 000+ artisans vérifiés vous attendent sur ServicesArtisans
+            350 000+ artisans référencés vous attendent sur ServicesArtisans
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link

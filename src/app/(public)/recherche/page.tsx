@@ -9,7 +9,7 @@ import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalL
 
 export const metadata: Metadata = {
   title: 'Rechercher un artisan — Trouvez le bon professionnel | ServicesArtisans',
-  description: 'Recherchez un artisan qualifié près de chez vous. Comparez les avis, les tarifs et obtenez des devis gratuits. 350 000+ artisans vérifiés par SIREN dans toute la France.',
+  description: 'Recherchez un artisan qualifié près de chez vous. Comparez les avis, les tarifs et obtenez des devis gratuits. 350 000+ artisans référencés dans toute la France.',
   alternates: { canonical: `${SITE_URL}/recherche` },
 }
 
@@ -40,7 +40,7 @@ export default function RecherchePage() {
           <div className="flex flex-wrap justify-center gap-4 mt-8">
             <div className="flex items-center gap-2 bg-white/[0.06] backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
               <Shield className="w-4 h-4 text-green-400" />
-              <span className="text-sm text-white/80">Artisans vérifiés</span>
+              <span className="text-sm text-white/80">Artisans référencés</span>
             </div>
             <div className="flex items-center gap-2 bg-white/[0.06] backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
               <Star className="w-4 h-4 text-amber-400" />

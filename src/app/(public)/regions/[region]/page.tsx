@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return {
     title: `Artisans en ${region.name} — Annuaire & Devis Gratuit | ServicesArtisans`,
-    description: `Trouvez un artisan qualifié en ${region.name}. ${deptCount} départements, ${cityCount} villes couvertes. Plombiers, électriciens, serruriers et plus. Devis gratuits, artisans vérifiés par SIREN.`,
+    description: `Trouvez un artisan qualifié en ${region.name}. ${deptCount} départements, ${cityCount} villes couvertes. Plombiers, électriciens, serruriers et plus. Devis gratuits, artisans référencés.`,
     alternates: { canonical: `${SITE_URL}/regions/${regionSlug}` },
   }
 }
@@ -119,13 +119,13 @@ export default async function RegionPage({ params }: PageProps) {
             {/* Trust badges */}
             <div className="flex flex-wrap gap-3">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Shield className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Artisans vérifiés SIREN</span>
+                <Shield className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Données SIREN officielles</span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Star className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Avis authentiques</span>
+                <Star className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Avis clients</span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Clock className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Devis sous 24h</span>
+                <Clock className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Devis gratuits</span>
               </div>
             </div>
           </div>
@@ -268,14 +268,14 @@ export default async function RegionPage({ params }: PageProps) {
               <h3 className="font-semibold text-slate-900 mb-2">Comment trouver un artisan en {region.name} ?</h3>
               <p className="text-sm text-slate-600 leading-relaxed">
                 Parcourez les {deptCount} départements de la région {region.name} ou sélectionnez directement
-                votre ville. Choisissez le type de service dont vous avez besoin et accédez aux artisans vérifiés disponibles.
+                votre ville. Choisissez le type de service dont vous avez besoin et accédez aux artisans référencés.
               </p>
             </div>
             <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h3 className="font-semibold text-slate-900 mb-2">Les artisans en {region.name} sont-ils vérifiés ?</h3>
+              <h3 className="font-semibold text-slate-900 mb-2">D&apos;où proviennent les données des artisans en {region.name} ?</h3>
               <p className="text-sm text-slate-600 leading-relaxed">
-                Oui, tous les artisans référencés sur ServicesArtisans sont vérifiés via le registre SIREN.
-                Nous vérifions l&apos;immatriculation et les assurances de chaque professionnel.
+                Les artisans référencés sur ServicesArtisans sont répertoriés à partir des données SIREN officielles.
+                Chaque professionnel listé dispose d&apos;un numéro SIREN enregistré auprès des autorités compétentes.
               </p>
             </div>
             <div className="bg-white rounded-xl border border-gray-200 p-6">

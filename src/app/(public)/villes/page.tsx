@@ -3,11 +3,11 @@ import Link from 'next/link'
 import { MapPin, ArrowRight, Building2, Users, ChevronRight } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { SITE_URL } from '@/lib/seo/config'
-import { villes, regions, services } from '@/lib/data/france'
+import { villes, regions, departements, services } from '@/lib/data/france'
 
 export const metadata: Metadata = {
-  title: 'Artisans par ville — 350 000+ professionnels vérifiés | ServicesArtisans',
-  description: 'Trouvez un artisan vérifié par SIREN dans votre ville. Plus de 140 villes couvertes, 350 000+ professionnels qualifiés dans 101 départements. Devis gratuits, sans engagement.',
+  title: 'Artisans par ville — 350 000+ professionnels référencés | ServicesArtisans',
+  description: 'Trouvez un artisan référencé dans votre ville. Plus de 1 000 villes couvertes, 350 000+ professionnels dans 101 départements. Devis gratuits, sans engagement.',
   alternates: { canonical: `${SITE_URL}/villes` },
 }
 
@@ -26,6 +26,23 @@ const sortedRegions = Object.entries(villesByRegion).sort(
 export default function VillesIndexPage() {
   return (
     <div className="min-h-screen bg-gray-50">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        name: 'Artisans par ville en France',
+        description: 'Annuaire de 350 000+ artisans référencés dans plus de 1 000 villes de France.',
+        url: 'https://servicesartisans.fr/villes',
+        numberOfItems: villes.length,
+        isPartOf: { '@type': 'WebSite', name: 'ServicesArtisans', url: 'https://servicesartisans.fr' },
+        breadcrumb: {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://servicesartisans.fr' },
+            { '@type': 'ListItem', position: 2, name: 'Villes' }
+          ]
+        }
+      }) }} />
+
       {/* ─── PREMIUM DARK HERO ──────────────────────────────── */}
       <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
         {/* Background effects */}
@@ -62,7 +79,7 @@ export default function VillesIndexPage() {
               </span>
             </h1>
             <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
-              350 000+ artisans vérifiés par SIREN dans plus de {villes.length} villes de France.
+              350 000+ artisans référencés dans plus de {villes.length} villes de France.
               Trouvez un professionnel qualifié près de chez vous.
             </p>
           </div>
@@ -87,7 +104,7 @@ export default function VillesIndexPage() {
               <Users className="w-5 h-5 text-blue-400" />
               <div className="text-left">
                 <div className="text-xl font-bold text-white">350 000+</div>
-                <div className="text-xs text-slate-400">Artisans vérifiés</div>
+                <div className="text-xs text-slate-400">Artisans référencés</div>
               </div>
             </div>
           </div>
@@ -181,24 +198,12 @@ export default function VillesIndexPage() {
             <div>
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Par département</h3>
               <div className="space-y-2">
-                <Link href="/departements/paris" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
-                  <ChevronRight className="w-3 h-3" />Paris (75)
-                </Link>
-                <Link href="/departements/bouches-du-rhone" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
-                  <ChevronRight className="w-3 h-3" />Bouches-du-Rhône (13)
-                </Link>
-                <Link href="/departements/rhone" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
-                  <ChevronRight className="w-3 h-3" />Rhône (69)
-                </Link>
-                <Link href="/departements/nord" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
-                  <ChevronRight className="w-3 h-3" />Nord (59)
-                </Link>
-                <Link href="/departements/haute-garonne" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
-                  <ChevronRight className="w-3 h-3" />Haute-Garonne (31)
-                </Link>
-                <Link href="/departements/gironde" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
-                  <ChevronRight className="w-3 h-3" />Gironde (33)
-                </Link>
+                {departements.slice(0, 8).map((d) => (
+                  <Link key={d.slug} href={`/departements/${d.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                    <ChevronRight className="w-3 h-3" />
+                    {d.name} ({d.code})
+                  </Link>
+                ))}
               </div>
               <Link href="/departements" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
                 Tous les départements <ArrowRight className="w-4 h-4" />

@@ -50,8 +50,8 @@ export default function Footer() {
                 <Shield className="w-6 h-6 text-green-400" />
               </div>
               <div>
-                <p className="text-white font-semibold text-sm">350 000+ artisans</p>
-                <p className="text-gray-500 text-xs">Vérifiés par SIREN</p>
+                <p className="text-white font-semibold text-sm">350 000+ artisans référencés</p>
+                <p className="text-gray-500 text-xs">Référencés par SIREN</p>
               </div>
             </div>
             <div className="flex items-center gap-3 justify-center md:justify-start">
@@ -223,7 +223,7 @@ export default function Footer() {
               </span>
             </Link>
             <p className="text-sm leading-relaxed mb-6 text-gray-400">
-              Le plus grand annuaire d&apos;artisans vérifiés de France. 350 000+ professionnels
+              Le plus grand annuaire d&apos;artisans référencés de France. 350 000+ professionnels
               référencés via les données SIREN officielles dans 101 départements.
             </p>
             <div className="flex gap-3">

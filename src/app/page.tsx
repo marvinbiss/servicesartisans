@@ -16,14 +16,14 @@ import {
 } from '@/components/home/HomePageSections'
 
 export const metadata: Metadata = {
-  title: 'ServicesArtisans — 350 000+ artisans vérifiés en France',
+  title: 'ServicesArtisans — 350 000+ artisans référencés en France',
   description:
-    'Le plus grand annuaire d\'artisans de France. 350 000+ professionnels vérifiés par SIREN, 101 départements couverts. Comparez les avis, obtenez des devis gratuits. Plombiers, électriciens, menuisiers et plus.',
+    'Le plus grand annuaire d\'artisans de France. 350 000+ professionnels référencés, 101 départements couverts. Comparez les avis, obtenez des devis gratuits. Plombiers, électriciens, menuisiers et plus.',
   alternates: { canonical: 'https://servicesartisans.fr' },
   openGraph: {
-    title: 'ServicesArtisans — 350 000+ artisans vérifiés en France',
+    title: 'ServicesArtisans — 350 000+ artisans référencés en France',
     description:
-      'Le plus grand annuaire d\'artisans de France. 350 000+ professionnels vérifiés par SIREN dans 101 départements. Devis gratuits.',
+      'Le plus grand annuaire d\'artisans de France. 350 000+ professionnels référencés dans 101 départements. Devis gratuits.',
     type: 'website',
     url: 'https://servicesartisans.fr',
   },
@@ -64,12 +64,12 @@ export default function HomePage() {
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-300 to-cyan-300">
                 350 000+
               </span>{' '}
-              artisans vérifiés,
+              artisans référencés,
               <br className="hidden md:block" />
               partout en France
             </h1>
             <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed mb-6">
-              Le plus grand annuaire d&apos;artisans de France. Données SIREN vérifiées,
+              Le plus grand annuaire d&apos;artisans de France. Données issues du registre SIREN,
               101 départements couverts. Comparez et contactez gratuitement.
             </p>
             <Link

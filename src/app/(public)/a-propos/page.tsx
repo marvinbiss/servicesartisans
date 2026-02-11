@@ -9,7 +9,7 @@ import { companyIdentity } from '@/lib/config/company-identity'
 
 export const metadata: Metadata = {
   title: 'À propos — Le plus grand annuaire d\'artisans de France',
-  description: 'ServicesArtisans référence 350 000+ artisans vérifiés par SIREN grâce aux données ouvertes du gouvernement. Annuaire gratuit, transparent et fiable.',
+  description: 'ServicesArtisans référence 350 000+ artisans grâce aux données ouvertes du gouvernement. Annuaire gratuit, transparent et fiable.',
   alternates: {
     canonical: 'https://servicesartisans.fr/a-propos',
   },
@@ -138,7 +138,7 @@ export default async function AProposPage() {
           <p className="text-xl text-slate-400 max-w-3xl mx-auto">
             Nous avons construit le plus grand annuaire d&apos;artisans de France
             en exploitant les donn&eacute;es ouvertes du gouvernement. 350 000+ professionnels
-            v&eacute;rifi&eacute;s par SIREN, accessibles gratuitement.
+            r&eacute;f&eacute;renc&eacute;s, accessibles gratuitement.
           </p>
           </div>
         </div>
@@ -268,7 +268,7 @@ export default async function AProposPage() {
                   <div className="text-3xl font-bold text-blue-600">
                     {stats.artisanCount.toLocaleString('fr-FR')}
                   </div>
-                  <div className="text-gray-600 mt-1">Artisans vérifiés par SIREN</div>
+                  <div className="text-gray-600 mt-1">Artisans référencés</div>
                 </div>
                 <div>
                   <div className="text-3xl font-bold text-blue-600">
@@ -295,7 +295,7 @@ export default async function AProposPage() {
                 <p className="text-gray-600 mb-6">
                   Nous importons les données de l&apos;API Annuaire des Entreprises pour constituer
                   le plus grand répertoire d&apos;artisans de France. Les premiers professionnels
-                  vérifiés par SIREN seront bientôt accessibles.
+                  référencés seront bientôt accessibles.
                 </p>
                 <Link
                   href="/inscription-artisan"

@@ -8,7 +8,7 @@ import DevisForm from '@/components/DevisForm'
 export const metadata: Metadata = {
   title: 'Demander un devis gratuit — ServicesArtisans',
   description:
-    'Décrivez votre projet et recevez jusqu’à 3 devis gratuits d’artisans vérifiés par SIREN. 100 % gratuit, sans engagement.',
+    'Décrivez votre projet et recevez jusqu’à 3 devis gratuits d'artisans référencés. 100 % gratuit, sans engagement.',
   alternates: {
     canonical: 'https://servicesartisans.fr/devis',
   },

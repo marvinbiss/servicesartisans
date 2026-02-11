@@ -9,14 +9,14 @@ export function TrustBadges({ variant = 'default' }: { variant?: 'default' | 'co
     {
       icon: Database,
       label: 'Données SIREN vérifiées',
-      description: 'Chaque artisan vérifié via les registres officiels de l\'État',
+      description: 'Chaque artisan référencé via les registres officiels de l\'État',
       color: 'text-blue-600',
       bgColor: 'bg-blue-50',
     },
     {
       icon: Shield,
       label: '350 000+ artisans',
-      description: 'La plus grande base d\'artisans vérifiés de France',
+      description: 'La plus grande base d\'artisans référencés de France',
       color: 'text-green-600',
       bgColor: 'bg-green-50',
     },
@@ -163,7 +163,7 @@ export function AvailabilityBadge({ count = 350000 }: { count?: number }) {
         <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400"></span>
       </span>
       <span className="text-sm text-white/80 font-medium">
-        {count.toLocaleString('fr-FR')}+ artisans vérifiés dans toute la France
+        {count.toLocaleString('fr-FR')}+ artisans référencés dans toute la France
       </span>
     </motion.div>
   )

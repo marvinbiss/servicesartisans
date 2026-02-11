@@ -10,7 +10,7 @@ import {
 } from 'lucide-react'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useMobileMenu } from '@/contexts/MobileMenuContext'
-import { regions } from '@/lib/data/france'
+import { regions, villes } from '@/lib/data/france'
 import SearchBar from '@/components/SearchBar'
 
 // Reverse geocoding for mobile geolocation
@@ -88,105 +88,44 @@ const serviceCategories = [
   },
 ]
 
-// Villes populaires organisées par région pour le mega menu desktop
-const citiesByRegion = [
-  {
-    region: 'Île-de-France',
-    cities: [
-      { name: 'Paris', slug: 'paris', population: '2.1M' },
-      { name: 'Boulogne-Billancourt', slug: 'boulogne-billancourt', population: '121K' },
-      { name: 'Saint-Denis', slug: 'saint-denis', population: '113K' },
-      { name: 'Versailles', slug: 'versailles', population: '85K' },
-    ]
-  },
-  {
-    region: 'Auvergne-Rhône-Alpes',
-    cities: [
-      { name: 'Lyon', slug: 'lyon', population: '522K' },
-      { name: 'Grenoble', slug: 'grenoble', population: '158K' },
-      { name: 'Saint-Étienne', slug: 'saint-etienne', population: '173K' },
-      { name: 'Annecy', slug: 'annecy', population: '130K' },
-    ]
-  },
-  {
-    region: 'PACA',
-    cities: [
-      { name: 'Marseille', slug: 'marseille', population: '870K' },
-      { name: 'Nice', slug: 'nice', population: '342K' },
-      { name: 'Toulon', slug: 'toulon', population: '178K' },
-      { name: 'Aix-en-Provence', slug: 'aix-en-provence', population: '145K' },
-    ]
-  },
-  {
-    region: 'Occitanie',
-    cities: [
-      { name: 'Toulouse', slug: 'toulouse', population: '493K' },
-      { name: 'Montpellier', slug: 'montpellier', population: '295K' },
-      { name: 'Nîmes', slug: 'nimes', population: '151K' },
-      { name: 'Perpignan', slug: 'perpignan', population: '121K' },
-    ]
-  },
-  {
-    region: 'Nouvelle-Aquitaine',
-    cities: [
-      { name: 'Bordeaux', slug: 'bordeaux', population: '260K' },
-      { name: 'La Rochelle', slug: 'la-rochelle', population: '79K' },
-    ]
-  },
-  {
-    region: 'Hauts-de-France',
-    cities: [
-      { name: 'Lille', slug: 'lille', population: '236K' },
-      { name: 'Amiens', slug: 'amiens', population: '135K' },
-    ]
-  },
-  {
-    region: 'Grand Est',
-    cities: [
-      { name: 'Strasbourg', slug: 'strasbourg', population: '287K' },
-      { name: 'Reims', slug: 'reims', population: '184K' },
-      { name: 'Metz', slug: 'metz', population: '118K' },
-    ]
-  },
-  {
-    region: 'Pays de la Loire',
-    cities: [
-      { name: 'Nantes', slug: 'nantes', population: '320K' },
-      { name: 'Angers', slug: 'angers', population: '155K' },
-    ]
-  },
-  {
-    region: 'Bretagne',
-    cities: [
-      { name: 'Rennes', slug: 'rennes', population: '222K' },
-      { name: 'Brest', slug: 'brest', population: '139K' },
-    ]
-  },
-  {
-    region: 'Normandie',
-    cities: [
-      { name: 'Rouen', slug: 'rouen', population: '113K' },
-      { name: 'Caen', slug: 'caen', population: '106K' },
-      { name: 'Le Havre', slug: 'le-havre', population: '170K' },
-    ]
-  },
+// Format population for display (e.g. '2 104 000' → '2.1M', '519 000' → '519K')
+function formatPop(pop: string): string {
+  const n = parseInt(pop.replace(/\s/g, ''), 10)
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`
+  return `${Math.round(n / 1000)}K`
+}
+
+// Build citiesByRegion dynamically from france.ts villes data
+// Show the top 4 cities (by population) for the 10 largest metropolitan regions
+const megaMenuRegions = [
+  'Île-de-France',
+  'Auvergne-Rhône-Alpes',
+  'Provence-Alpes-Côte d\'Azur',
+  'Occitanie',
+  'Nouvelle-Aquitaine',
+  'Hauts-de-France',
+  'Grand Est',
+  'Pays de la Loire',
+  'Bretagne',
+  'Normandie',
 ]
 
-// Flat list for mobile
-const popularCities = [
-  { name: 'Paris', slug: 'paris' },
-  { name: 'Lyon', slug: 'lyon' },
-  { name: 'Marseille', slug: 'marseille' },
-  { name: 'Toulouse', slug: 'toulouse' },
-  { name: 'Bordeaux', slug: 'bordeaux' },
-  { name: 'Lille', slug: 'lille' },
-  { name: 'Nantes', slug: 'nantes' },
-  { name: 'Strasbourg', slug: 'strasbourg' },
-  { name: 'Nice', slug: 'nice' },
-  { name: 'Montpellier', slug: 'montpellier' },
-  { name: 'Rennes', slug: 'rennes' },
-  { name: 'Grenoble', slug: 'grenoble' },
-]
+const citiesByRegion = megaMenuRegions.map((regionName) => {
+  const regionVilles = villes
+    .filter((v) => v.region === regionName)
+    .sort((a, b) => parseInt(b.population.replace(/\s/g, ''), 10) - parseInt(a.population.replace(/\s/g, ''), 10))
+    .slice(0, 4)
+  return {
+    region: regionName === 'Provence-Alpes-Côte d\'Azur' ? 'PACA' : regionName,
+    cities: regionVilles.map((v) => ({ name: v.name, slug: v.slug, population: formatPop(v.population) })),
+  }
+})
+
+// Flat list of top 12 cities for mobile (sorted by population)
+const popularCities = villes
+  .sort((a, b) => parseInt(b.population.replace(/\s/g, ''), 10) - parseInt(a.population.replace(/\s/g, ''), 10))
+  .slice(0, 12)
+  .map((v) => ({ name: v.name, slug: v.slug }))
 
 // Metropolitan regions (first 13) and DOM-TOM for the regions mega menu
 const metroRegions = regions.slice(0, 13)
@@ -357,7 +296,7 @@ export default function Header() {
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-green-400" />
-              <span className="text-white/90">Artisans vérifiés</span>
+              <span className="text-white/90">Artisans référencés</span>
             </div>
           </div>
           <div className="flex items-center gap-4">
@@ -563,7 +502,7 @@ export default function Header() {
                   <div className="hidden sm:flex items-center gap-3">
                     <div className="flex items-center gap-2 text-sm text-white/80 bg-white/10 px-4 py-2 rounded-lg">
                       <Users className="w-4 h-4 text-amber-400" />
-                      <span>350 000+ artisans</span>
+                      <span>350 000+ artisans référencés</span>
                     </div>
                   </div>
                 </div>
@@ -659,7 +598,7 @@ export default function Header() {
                 <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-blue-900 px-8 py-5 flex items-center justify-between">
                   <div>
                     <h3 className="text-white font-heading font-bold text-lg">Trouvez un artisan par ville</h3>
-                    <p className="text-slate-300 text-sm mt-0.5">Plus de 500 villes couvertes dans toute la France</p>
+                    <p className="text-slate-300 text-sm mt-0.5">Plus de 1 000 villes couvertes dans toute la France</p>
                   </div>
                   <div className="hidden sm:flex items-center gap-3">
                     <Link
@@ -728,7 +667,7 @@ export default function Header() {
                     </Link>
                     <div className="flex items-center gap-2 text-sm text-slate-500">
                       <ShieldCheck className="w-4 h-4 text-green-500" />
-                      Artisans vérifiés dans chaque ville
+                      Artisans référencés dans chaque ville
                     </div>
                   </div>
                 </div>

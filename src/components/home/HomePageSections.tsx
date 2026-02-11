@@ -44,7 +44,7 @@ function AnimatedCounter({ target, suffix = '', decimals = 0, duration = 2000 }:
 // ─── STATS SECTION ───────────────────────────────────────────────
 
 const stats = [
-  { value: 350000, suffix: '+', decimals: 0, label: 'Artisans vérifiés par SIREN', icon: Users, color: 'from-blue-500 to-blue-600', accent: 'blue' },
+  { value: 350000, suffix: '+', decimals: 0, label: 'Artisans référencés', icon: Users, color: 'from-blue-500 to-blue-600', accent: 'blue' },
   { value: 101, suffix: '', decimals: 0, label: 'Départements couverts', icon: MapPin, color: 'from-emerald-500 to-emerald-600', accent: 'emerald' },
   { value: 50, suffix: '+', decimals: 0, label: 'Corps de métier', icon: Wrench, color: 'from-amber-500 to-amber-600', accent: 'amber' },
   { value: 100, suffix: '%', decimals: 0, label: 'Gratuit, sans engagement', icon: Star, color: 'from-purple-500 to-purple-600', accent: 'purple' },
@@ -285,7 +285,7 @@ const testimonials = [
     name: 'Marie L.',
     city: 'Paris 15e',
     rating: 5,
-    text: 'J\'ai trouvé un plombier en moins de 2h pour une fuite urgente. Le fait que les artisans soient vérifiés par SIREN m\'a rassurée. Professionnel et tarif correct.',
+    text: 'J\'ai trouvé un plombier en moins de 2h pour une fuite urgente. Le fait que les artisans soient référencés avec leurs données SIREN m\'a rassurée. Professionnel et tarif correct.',
     service: 'Plomberie',
     avatar: 'M',
     gradient: 'from-blue-500 to-cyan-500',
@@ -600,7 +600,7 @@ export function GuaranteeSection() {
 const advantages = [
   {
     title: 'La plus grande base de France',
-    description: '350 000+ artisans vérifiés, soit plus que PagesJaunes Pro, Habitatpresto et Travaux.com réunis pour les métiers du bâtiment.',
+    description: '350 000+ artisans référencés, soit plus que PagesJaunes Pro, Habitatpresto et Travaux.com réunis pour les métiers du bâtiment.',
     icon: Users,
     highlight: '7x',
     highlightLabel: 'plus que le 2e',

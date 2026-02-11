@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return {
     title: `Artisans en ${dept.name} (${dept.code}) — Annuaire & Devis Gratuit | ServicesArtisans`,
-    description: `Trouvez les meilleurs artisans dans le ${dept.name} (${dept.code}). ${dept.description} ${services.length} corps de métier, artisans vérifiés par SIREN. Devis gratuit.`,
+    description: `Trouvez les meilleurs artisans dans le ${dept.name} (${dept.code}). ${dept.description} ${services.length} corps de métier, artisans référencés. Devis gratuit.`,
     alternates: { canonical: `${SITE_URL}/departements/${deptSlug}` },
   }
 }
@@ -55,7 +55,7 @@ export default async function DepartementPage({ params }: PageProps) {
 
   const collectionPageSchema = getCollectionPageSchema({
     name: `Artisans en ${dept.name} (${dept.code})`,
-    description: `Trouvez les meilleurs artisans dans le ${dept.name} (${dept.code}). ${services.length} corps de métier, artisans vérifiés par SIREN.`,
+    description: `Trouvez les meilleurs artisans dans le ${dept.name} (${dept.code}). ${services.length} corps de métier, artisans référencés.`,
     url: `/departements/${dept.slug}`,
     itemCount: services.length,
   })
@@ -63,7 +63,7 @@ export default async function DepartementPage({ params }: PageProps) {
   const faqSchema = getFAQSchema([
     {
       question: `Combien d'artisans sont disponibles dans le ${dept.name} ?`,
-      answer: `Le ${dept.name} (${dept.code}) fait partie de notre couverture nationale de 350 000+ artisans vérifiés. De nombreux professionnels de tous corps de métier sont disponibles dans les villes du département.`,
+      answer: `Le ${dept.name} (${dept.code}) fait partie de notre couverture nationale de 350 000+ artisans référencés. De nombreux professionnels de tous corps de métier sont disponibles dans les villes du département.`,
     },
     {
       question: `Comment obtenir un devis dans le ${dept.name} ?`,
@@ -121,7 +121,7 @@ export default async function DepartementPage({ params }: PageProps) {
             </div>
 
             <p className="text-lg text-slate-400 max-w-2xl leading-relaxed mb-8">
-              {dept.description} Trouvez des artisans qualifiés et vérifiés par SIREN dans tout le département.
+              {dept.description} Trouvez des artisans qualifiés et référencés dans tout le département.
             </p>
 
             {/* Location info */}
@@ -143,13 +143,13 @@ export default async function DepartementPage({ params }: PageProps) {
             {/* Trust badges */}
             <div className="flex flex-wrap gap-3">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Shield className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Artisans vérifiés SIREN</span>
+                <Shield className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Données SIREN officielles</span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Star className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Avis authentiques</span>
+                <Star className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Avis clients</span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Clock className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Devis sous 24h</span>
+                <Clock className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Devis gratuits</span>
               </div>
             </div>
           </div>
@@ -294,7 +294,7 @@ export default async function DepartementPage({ params }: PageProps) {
             <div className="bg-white rounded-xl border border-gray-200 p-6">
               <h3 className="font-semibold text-slate-900 mb-2">Combien d&apos;artisans sont disponibles dans le {dept.name} ?</h3>
               <p className="text-sm text-slate-600 leading-relaxed">
-                Le {dept.name} ({dept.code}) fait partie de notre couverture nationale de 350 000+ artisans vérifiés.
+                Le {dept.name} ({dept.code}) fait partie de notre couverture nationale de 350 000+ artisans référencés.
                 De nombreux professionnels de tous corps de métier sont disponibles dans les villes du département.
               </p>
             </div>

@@ -8,11 +8,11 @@ import { PopularCitiesLinks } from '@/components/InternalLinks'
 
 export const metadata: Metadata = {
   title: 'Urgence artisan 24h/24 7j/7 — Plombier, Électricien, Serrurier | ServicesArtisans',
-  description: 'Besoin d\'un artisan en urgence ? Plombier, électricien, serrurier disponibles 24h/24 et 7j/7 partout en France. Intervention rapide, devis gratuit, artisans vérifiés.',
+  description: 'Besoin d\'un artisan en urgence ? Plombier, électricien, serrurier disponibles 24h/24 et 7j/7 partout en France. Intervention rapide, devis gratuit, artisans référencés.',
   alternates: { canonical: `${SITE_URL}/urgence` },
   openGraph: {
     title: 'Urgence artisan 24h/24 — Intervention rapide partout en France',
-    description: 'Plombier, électricien, serrurier disponibles 24h/24 et 7j/7. Intervention rapide, devis gratuit, artisans vérifiés.',
+    description: 'Plombier, électricien, serrurier disponibles 24h/24 et 7j/7. Intervention rapide, devis gratuit, artisans référencés.',
     type: 'website',
   },
 }
@@ -419,7 +419,7 @@ export default function UrgencePage() {
             Une urgence ? Ne perdez pas de temps.
           </h2>
           <p className="text-xl text-red-100/80 mb-8">
-            Nos artisans vérifiés sont disponibles 24h/24 et 7j/7 pour intervenir rapidement chez vous.
+            Nos artisans référencés sont disponibles 24h/24 et 7j/7 pour intervenir rapidement chez vous.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a

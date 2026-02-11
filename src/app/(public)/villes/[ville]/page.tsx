@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return {
     title: `Artisans à ${ville.name} (${ville.departementCode}) — Annuaire & Devis Gratuit | ServicesArtisans`,
-    description: `Trouvez les meilleurs artisans à ${ville.name} (${ville.departementCode}). Plombiers, électriciens, serruriers, chauffagistes et plus. ${services.length} corps de métier, artisans vérifiés par SIREN. Devis gratuit.`,
+    description: `Trouvez les meilleurs artisans à ${ville.name} (${ville.departementCode}). Plombiers, électriciens, serruriers, chauffagistes et plus. ${services.length} corps de métier, artisans référencés. Devis gratuit.`,
     alternates: { canonical: `${SITE_URL}/villes/${villeSlug}` },
   }
 }
@@ -122,13 +122,13 @@ export default async function VillePage({ params }: PageProps) {
             {/* Trust badges */}
             <div className="flex flex-wrap gap-3">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Shield className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Artisans vérifiés SIREN</span>
+                <Shield className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Données SIREN officielles</span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Star className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Avis authentiques</span>
+                <Star className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Avis clients</span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Clock className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Devis sous 24h</span>
+                <Clock className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Devis gratuits</span>
               </div>
             </div>
           </div>
@@ -229,14 +229,14 @@ export default async function VillePage({ params }: PageProps) {
               <h3 className="font-semibold text-slate-900 mb-2">Comment trouver un artisan à {ville.name} ?</h3>
               <p className="text-sm text-slate-600 leading-relaxed">
                 Sur ServicesArtisans, sélectionnez le type de service dont vous avez besoin (plombier, électricien, serrurier, etc.)
-                puis choisissez {ville.name} comme localisation. Vous accéderez à la liste des artisans vérifiés disponibles dans votre ville.
+                puis choisissez {ville.name} comme localisation. Vous accéderez à la liste des artisans référencés dans votre ville.
               </p>
             </div>
             <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h3 className="font-semibold text-slate-900 mb-2">Les artisans à {ville.name} sont-ils vérifiés ?</h3>
+              <h3 className="font-semibold text-slate-900 mb-2">D&apos;où proviennent les données des artisans à {ville.name} ?</h3>
               <p className="text-sm text-slate-600 leading-relaxed">
-                Oui, tous les artisans référencés sur notre plateforme sont vérifiés via le registre SIREN.
-                Nous nous assurons que chaque professionnel dispose d&apos;une immatriculation valide et des assurances nécessaires.
+                Les artisans référencés sur notre plateforme sont répertoriés à partir des données SIREN officielles.
+                Chaque professionnel listé dispose d&apos;un numéro SIREN enregistré auprès des autorités compétentes.
               </p>
             </div>
             <div className="bg-white rounded-xl border border-gray-200 p-6">

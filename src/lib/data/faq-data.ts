@@ -4,7 +4,7 @@ export const faqCategories = [
     questions: [
       {
         q: 'Qu\'est-ce que ServicesArtisans ?',
-        a: 'ServicesArtisans est le plus grand annuaire d\'artisans vérifiés de France. Avec plus de 350 000 professionnels référencés dans 101 départements, nos données proviennent directement des registres SIREN officiels de l\'État via l\'API Annuaire des Entreprises. Le service est 100% gratuit.',
+        a: 'ServicesArtisans est le plus grand annuaire d\'artisans de France. Avec plus de 350 000 professionnels référencés dans 101 départements, nos données proviennent directement des registres SIREN officiels de l\'État via l\'API Annuaire des Entreprises. Le service est 100% gratuit.',
       },
       {
         q: 'Le service est-il gratuit ?',

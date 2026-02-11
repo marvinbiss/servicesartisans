@@ -19,14 +19,14 @@ const validServiceSlugs = new Set(staticServicesList.map(s => s.slug))
 export const revalidate = REVALIDATE.services
 
 export const metadata: Metadata = {
-  title: 'Tous les services artisans — 350 000+ professionnels vérifiés',
-  description: 'Annuaire de 350 000+ artisans vérifiés par SIREN : plombier, électricien, serrurier, chauffagiste, peintre, couvreur, menuisier, maçon et 50+ métiers. Devis gratuits dans 101 départements.',
+  title: 'Tous les services artisans — 350 000+ professionnels référencés',
+  description: 'Annuaire de 350 000+ artisans référencés : plombier, électricien, serrurier, chauffagiste, peintre, couvreur, menuisier, maçon et 50+ métiers. Devis gratuits dans 101 départements.',
   alternates: {
     canonical: 'https://servicesartisans.fr/services',
   },
   openGraph: {
-    title: 'Tous les services artisans — 350 000+ professionnels vérifiés',
-    description: '50+ métiers du bâtiment, 350 000+ artisans vérifiés par SIREN dans 101 départements. Trouvez un professionnel qualifié près de chez vous.',
+    title: 'Tous les services artisans — 350 000+ professionnels référencés',
+    description: '50+ métiers du bâtiment, 350 000+ artisans référencés dans 101 départements. Trouvez un professionnel qualifié près de chez vous.',
     url: 'https://servicesartisans.fr/services',
   },
   robots: {
@@ -172,7 +172,7 @@ export default function ServicesPage() {
           </h1>
           <p className="text-xl text-slate-300 max-w-2xl mx-auto mb-10">
             Trouvez le professionnel idéal pour tous vos travaux.
-            Artisans vérifiés, devis gratuits.
+            Artisans référencés, devis gratuits.
           </p>
 
           {/* Stats */}

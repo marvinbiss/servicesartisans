@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const title = `${serviceName} en France — Annuaire & Devis Gratuit 2026`
-  const description = `Trouvez un ${serviceName.toLowerCase()} vérifié par SIREN parmi 350 000+ artisans. Guide des prix, conseils, FAQ et devis gratuit. 101 départements couverts.`
+  const description = `Trouvez un ${serviceName.toLowerCase()} parmi 350 000+ artisans référencés. Guide des prix, conseils, FAQ et devis gratuit. 101 départements couverts.`
 
   return {
     title,
@@ -186,7 +186,7 @@ export default async function ServicePage({ params }: PageProps) {
             <div className="flex items-center gap-2 bg-green-50 px-4 py-2 rounded-full">
               <Shield className="w-5 h-5 text-green-600" />
               <span className="text-gray-900 font-semibold">
-                Artisans vérifiés
+                Artisans référencés
               </span>
             </div>
             <div className="flex items-center gap-2 bg-yellow-50 px-4 py-2 rounded-full">

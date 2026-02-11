@@ -2,7 +2,7 @@ import { ImageResponse } from 'next/og'
 
 export const runtime = 'edge'
 
-export const alt = 'ServicesArtisans — 350 000+ artisans vérifiés en France'
+export const alt = 'ServicesArtisans — 350 000+ artisans référencés en France'
 export const size = {
   width: 1200,
   height: 630,
@@ -106,7 +106,7 @@ export default async function Image() {
               display: 'flex',
             }}
           >
-            350 000+ artisans vérifiés en France
+            350 000+ artisans référencés en France
           </div>
 
           {/* Subtitle */}

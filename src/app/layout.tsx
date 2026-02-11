@@ -49,11 +49,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL('https://servicesartisans.fr'),
   title: {
-    default: 'ServicesArtisans — 350 000+ artisans vérifiés en France',
+    default: 'ServicesArtisans — 350 000+ artisans référencés en France',
     template: '%s | ServicesArtisans',
   },
   description:
-    'Le plus grand annuaire d\'artisans de France. 350 000+ professionnels vérifiés par SIREN dans 101 départements. Plombiers, électriciens, menuisiers, maçons et plus. Devis gratuits.',
+    'Le plus grand annuaire d\'artisans de France. 350 000+ professionnels référencés dans 101 départements. Plombiers, électriciens, menuisiers, maçons et plus. Devis gratuits.',
   keywords: [
     'artisan',
     'plombier',
@@ -66,7 +66,7 @@ export const metadata: Metadata = {
     'chauffagiste',
     'peintre',
     'annuaire artisans',
-    'artisan vérifié',
+    'artisan référencé',
     'trouver artisan',
   ],
   authors: [{ name: 'ServicesArtisans' }],
@@ -86,14 +86,14 @@ export const metadata: Metadata = {
     locale: 'fr_FR',
     url: 'https://servicesartisans.fr',
     siteName: 'ServicesArtisans',
-    title: 'ServicesArtisans — 350 000+ artisans vérifiés en France',
+    title: 'ServicesArtisans — 350 000+ artisans référencés en France',
     description:
-      'Le plus grand annuaire d\'artisans de France. 350 000+ professionnels vérifiés par SIREN. Devis gratuits.',
-    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — 350 000+ artisans vérifiés en France' }],
+      'Le plus grand annuaire d\'artisans de France. 350 000+ professionnels référencés. Devis gratuits.',
+    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — 350 000+ artisans référencés en France' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ServicesArtisans — 350 000+ artisans vérifiés en France',
+    title: 'ServicesArtisans — 350 000+ artisans référencés en France',
     description:
       'Le plus grand annuaire d\'artisans de France. Devis gratuits, données gouvernementales.',
   },
