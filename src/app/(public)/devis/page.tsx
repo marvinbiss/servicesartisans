@@ -6,9 +6,9 @@ import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import DevisForm from '@/components/DevisForm'
 
 export const metadata: Metadata = {
-  title: 'Demander un devis gratuit \u2014 ServicesArtisans',
+  title: 'Demander un devis gratuit — ServicesArtisans',
   description:
-    'D\u00e9crivez votre projet et recevez jusqu\u2019\u00e0 3 devis gratuits d\u2019artisans v\u00e9rifi\u00e9s par SIREN. 100\u00a0% gratuit, sans engagement.',
+    'Décrivez votre projet et recevez jusqu’à 3 devis gratuits d’artisans vérifiés par SIREN. 100 % gratuit, sans engagement.',
   alternates: {
     canonical: 'https://servicesartisans.fr/devis',
   },
@@ -22,65 +22,65 @@ export const metadata: Metadata = {
 }
 
 const trustBadges = [
-  { icon: Shield, label: 'Gratuit', sublabel: 'Aucun frais cach\u00e9' },
-  { icon: Clock, label: 'Sans engagement', sublabel: 'R\u00e9ponse sous 24\u00a0h' },
-  { icon: Users, label: 'Artisans v\u00e9rifi\u00e9s', sublabel: 'SIREN contr\u00f4l\u00e9' },
+  { icon: Shield, label: 'Gratuit', sublabel: 'Aucun frais caché' },
+  { icon: Clock, label: 'Sans engagement', sublabel: 'Réponse sous 24 h' },
+  { icon: Users, label: 'Artisans vérifiés', sublabel: 'SIREN contrôlé' },
 ]
 
 const howSteps = [
   {
     number: '1',
     icon: Search,
-    title: 'D\u00e9crivez votre projet',
+    title: 'Décrivez votre projet',
     description:
-      'S\u00e9lectionnez le type de service, indiquez votre ville et d\u00e9crivez votre besoin en quelques lignes. Formulaire rapide en 2\u00a0minutes.',
+      'Sélectionnez le type de service, indiquez votre ville et décrivez votre besoin en quelques lignes. Formulaire rapide en 2 minutes.',
   },
   {
     number: '2',
     icon: FileText,
     title: 'Recevez vos devis',
     description:
-      'Votre demande est transmise aux artisans qualifi\u00e9s proches de chez vous. Vous recevez jusqu\u2019\u00e0 3 devis d\u00e9taill\u00e9s sous 24 \u00e0 48\u00a0h.',
+      'Votre demande est transmise aux artisans qualifiés proches de chez vous. Vous recevez jusqu’à 3 devis détaillés sous 24 à 48 h.',
   },
   {
     number: '3',
     icon: CheckCircle,
     title: 'Choisissez librement',
     description:
-      'Comparez les tarifs, consultez les profils et choisissez l\u2019artisan qui vous convient. Aucune obligation d\u2019accepter.',
+      'Comparez les tarifs, consultez les profils et choisissez l’artisan qui vous convient. Aucune obligation d’accepter.',
   },
 ]
 
 const faqItems = [
   {
-    question: 'Le service est-il vraiment gratuit\u00a0?',
+    question: 'Le service est-il vraiment gratuit ?',
     answer:
-      'Oui, la demande de devis est 100\u00a0% gratuite et sans aucun engagement. Vous ne payez rien pour recevoir les propositions des artisans. Ce sont les professionnels qui financent le service.',
+      'Oui, la demande de devis est 100 % gratuite et sans aucun engagement. Vous ne payez rien pour recevoir les propositions des artisans. Ce sont les professionnels qui financent le service.',
   },
   {
-    question: 'Combien de devis vais-je recevoir\u00a0?',
+    question: 'Combien de devis vais-je recevoir ?',
     answer:
-      'Vous pouvez recevoir jusqu\u2019\u00e0 3 devis d\u2019artisans diff\u00e9rents, selon la disponibilit\u00e9 dans votre zone g\u00e9ographique. Chaque devis est personnalis\u00e9 en fonction de votre projet.',
+      'Vous pouvez recevoir jusqu’à 3 devis d’artisans différents, selon la disponibilité dans votre zone géographique. Chaque devis est personnalisé en fonction de votre projet.',
   },
   {
-    question: 'En combien de temps suis-je contact\u00e9\u00a0?',
+    question: 'En combien de temps suis-je contacté ?',
     answer:
-      'Les artisans disponibles vous contactent g\u00e9n\u00e9ralement sous 24 \u00e0 48\u00a0h apr\u00e8s l\u2019envoi de votre demande. En cas d\u2019urgence, pr\u00e9cisez-le dans le formulaire pour acc\u00e9l\u00e9rer le traitement.',
+      'Les artisans disponibles vous contactent généralement sous 24 à 48 h après l’envoi de votre demande. En cas d’urgence, précisez-le dans le formulaire pour accélérer le traitement.',
   },
   {
-    question: 'Comment les artisans sont-ils v\u00e9rifi\u00e9s\u00a0?',
+    question: 'Comment les artisans sont-ils vérifiés ?',
     answer:
-      'Tous les artisans r\u00e9f\u00e9renc\u00e9s sur ServicesArtisans sont immatricul\u00e9s au registre SIREN. Nous v\u00e9rifions leur num\u00e9ro d\u2019entreprise et leur activit\u00e9 d\u00e9clar\u00e9e aupr\u00e8s des donn\u00e9es officielles de l\u2019INSEE.',
+      'Tous les artisans référencés sur ServicesArtisans sont immatriculés au registre SIREN. Nous vérifions leur numéro d’entreprise et leur activité déclarée auprès des données officielles de l’INSEE.',
   },
   {
-    question: 'Suis-je oblig\u00e9 d\u2019accepter un devis\u00a0?',
+    question: 'Suis-je obligé d’accepter un devis ?',
     answer:
-      'Non, vous \u00eates enti\u00e8rement libre. Comparez les devis re\u00e7us \u00e0 votre rythme et choisissez celui qui correspond le mieux \u00e0 vos attentes et \u00e0 votre budget. Aucune obligation d\u2019accepter.',
+      'Non, vous êtes entièrement libre. Comparez les devis reçus à votre rythme et choisissez celui qui correspond le mieux à vos attentes et à votre budget. Aucune obligation d’accepter.',
   },
   {
-    question: 'Quelles donn\u00e9es personnelles sont partag\u00e9es\u00a0?',
+    question: 'Quelles données personnelles sont partagées ?',
     answer:
-      'Seuls votre nom, num\u00e9ro de t\u00e9l\u00e9phone et la description de votre projet sont transmis aux artisans s\u00e9lectionn\u00e9s. Votre adresse e-mail reste confidentielle et vos donn\u00e9es ne sont jamais revendues \u00e0 des tiers.',
+      'Seuls votre nom, numéro de téléphone et la description de votre projet sont transmis aux artisans sélectionnés. Votre adresse e-mail reste confidentielle et vos données ne sont jamais revendues à des tiers.',
   },
 ]
 
@@ -129,15 +129,15 @@ export default function DevisPage() {
 
           <div className="text-center max-w-3xl mx-auto">
             <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
-              Recevez <span className="whitespace-nowrap">jusqu&apos;\u00e0</span>{' '}
+              Recevez <span className="whitespace-nowrap">jusqu&apos;à</span>{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-300 to-cyan-300 whitespace-nowrap">
                 3&nbsp;devis gratuits
               </span>{' '}
-              <span className="whitespace-nowrap">d&apos;artisans</span> v\u00e9rifi\u00e9s
+              <span className="whitespace-nowrap">d&apos;artisans</span> vérifiés
             </h1>
             <p className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10">
               Remplissez le formulaire ci-dessous et comparez les offres de professionnels
-              qualifi\u00e9s pr\u00e8s de chez vous. Service 100&nbsp;% gratuit, sans engagement.
+              qualifiés près de chez vous. Service 100&nbsp;% gratuit, sans engagement.
             </p>
 
             {/* Trust badges */}
@@ -172,10 +172,10 @@ export default function DevisPage() {
           <div className="text-center mb-14">
             <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-2">Simple et rapide</p>
             <h2 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-3 tracking-tight">
-              Comment \u00e7a marche&nbsp;?
+              Comment ça marche&nbsp;?
             </h2>
             <p className="text-slate-500 max-w-lg mx-auto">
-              Trois \u00e9tapes suffisent pour recevoir des devis personnalis\u00e9s d&apos;artisans de confiance.
+              Trois étapes suffisent pour recevoir des devis personnalisés d&apos;artisans de confiance.
             </p>
           </div>
 
@@ -216,7 +216,7 @@ export default function DevisPage() {
           <div className="text-center mb-12">
             <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-2">FAQ</p>
             <h2 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-3 tracking-tight">
-              Questions fr\u00e9quentes
+              Questions fréquentes
             </h2>
             <p className="text-slate-500 max-w-lg mx-auto">
               Tout ce que vous devez savoir avant de demander votre devis gratuit.
@@ -247,10 +247,10 @@ export default function DevisPage() {
         <div className="max-w-3xl mx-auto px-4 text-center">
           <Star className="w-8 h-8 text-amber-400 mx-auto mb-4" />
           <h2 className="font-heading text-xl md:text-2xl font-bold text-slate-900 mb-3">
-            Pr\u00eat \u00e0 d\u00e9marrer votre projet&nbsp;?
+            Prêt à démarrer votre projet&nbsp;?
           </h2>
           <p className="text-slate-500 mb-6 max-w-md mx-auto">
-            Comparez gratuitement les devis d&apos;artisans qualifi\u00e9s et trouvez le bon professionnel pour vos travaux.
+            Comparez gratuitement les devis d&apos;artisans qualifiés et trouvez le bon professionnel pour vos travaux.
           </p>
           <a
             href="#formulaire"

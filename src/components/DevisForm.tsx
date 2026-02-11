@@ -36,10 +36,10 @@ const urgencyOptions = [
 ]
 
 const budgetOptions = [
-  { value: 'moins-500', label: 'Moins de 500\u00a0\u20ac' },
-  { value: '500-2000', label: '500\u20112\u00a0000\u00a0\u20ac' },
-  { value: '2000-5000', label: '2\u00a0000\u20115\u00a0000\u00a0\u20ac' },
-  { value: 'plus-5000', label: 'Plus de 5\u00a0000\u00a0\u20ac' },
+  { value: 'moins-500', label: 'Moins de 500 €' },
+  { value: '500-2000', label: '500‑2 000 €' },
+  { value: '2000-5000', label: '2 000‑5 000 €' },
+  { value: 'plus-5000', label: 'Plus de 5 000 €' },
   { value: 'ne-sais-pas', label: 'Je ne sais pas' },
 ]
 
@@ -136,9 +136,9 @@ export default function DevisForm() {
   const validateStep2 = (): boolean => {
     const newErrors: Partial<Record<keyof FormData, string>> = {}
     if (!formData.description || formData.description.length < 20) {
-      newErrors.description = 'Veuillez d\u00e9crire votre projet (20 caract\u00e8res minimum)'
+      newErrors.description = 'Veuillez décrire votre projet (20 caractères minimum)'
     }
-    if (!formData.urgence) newErrors.urgence = 'Veuillez indiquer le d\u00e9lai souhait\u00e9'
+    if (!formData.urgence) newErrors.urgence = 'Veuillez indiquer le délai souhaité'
     if (!formData.budget) newErrors.budget = 'Veuillez indiquer votre budget'
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -148,9 +148,9 @@ export default function DevisForm() {
     const newErrors: Partial<Record<keyof FormData, string>> = {}
     if (!formData.nom.trim()) newErrors.nom = 'Veuillez entrer votre nom'
     if (!formData.telephone.trim()) {
-      newErrors.telephone = 'Veuillez entrer votre num\u00e9ro de t\u00e9l\u00e9phone'
+      newErrors.telephone = 'Veuillez entrer votre numéro de téléphone'
     } else if (!PHONE_REGEX.test(formData.telephone.trim())) {
-      newErrors.telephone = 'Veuillez entrer un num\u00e9ro de t\u00e9l\u00e9phone fran\u00e7ais valide'
+      newErrors.telephone = 'Veuillez entrer un numéro de téléphone français valide'
     }
     if (!formData.email.trim()) {
       newErrors.email = 'Veuillez entrer votre adresse e-mail'
@@ -158,7 +158,7 @@ export default function DevisForm() {
       newErrors.email = 'Veuillez entrer une adresse e-mail valide'
     }
     if (!formData.consentement) {
-      newErrors.consentement = 'Veuillez accepter d\u2019\u00eatre contact\u00e9 par des artisans'
+      newErrors.consentement = 'Veuillez accepter d’être contacté par des artisans'
     }
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -199,7 +199,7 @@ export default function DevisForm() {
 
       if (!res.ok) {
         const body = await res.json().catch(() => null)
-        throw new Error(body?.error || 'Erreur lors de l\u2019envoi')
+        throw new Error(body?.error || 'Erreur lors de l’envoi')
       }
 
       setSubmitted(true)
@@ -219,10 +219,10 @@ export default function DevisForm() {
           <CheckCircle className="w-10 h-10 text-green-600" />
         </div>
         <h3 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-4">
-          Votre demande a bien \u00e9t\u00e9 envoy\u00e9e !
+          Votre demande a bien été envoyée !
         </h3>
         <p className="text-slate-500 text-lg leading-relaxed max-w-md mx-auto">
-          Vous serez contact\u00e9 sous 24h par des artisans qualifi\u00e9s de votre r\u00e9gion.
+          Vous serez contacté sous 24h par des artisans qualifiés de votre région.
         </p>
       </div>
     )
@@ -243,7 +243,7 @@ export default function DevisForm() {
             Quel service recherchez-vous ?
           </h3>
           <p className="text-slate-500 text-sm mb-4">
-            S\u00e9lectionnez un m\u00e9tier et votre localisation.
+            Sélectionnez un métier et votre localisation.
           </p>
 
           {/* Service dropdown */}
@@ -344,16 +344,16 @@ export default function DevisForm() {
       {step === 2 && (
         <div className="space-y-6">
           <h3 className="font-heading text-xl font-bold text-slate-900 mb-1">
-            D\u00e9tails du projet
+            Détails du projet
           </h3>
           <p className="text-slate-500 text-sm mb-4">
-            D\u00e9crivez votre besoin pour recevoir des devis adapt\u00e9s.
+            Décrivez votre besoin pour recevoir des devis adaptés.
           </p>
 
           {/* Description */}
           <div>
             <label htmlFor="description" className="block text-sm font-semibold text-slate-700 mb-2">
-              D\u00e9crivez votre projet <span className="text-red-500">*</span>
+              Décrivez votre projet <span className="text-red-500">*</span>
             </label>
             <textarea
               id="description"
@@ -384,7 +384,7 @@ export default function DevisForm() {
           {/* Urgency */}
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-3">
-              D\u00e9lai souhait\u00e9 <span className="text-red-500">*</span>
+              Délai souhaité <span className="text-red-500">*</span>
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {urgencyOptions.map((opt) => (
@@ -416,7 +416,7 @@ export default function DevisForm() {
           {/* Budget */}
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-3">
-              Budget estim\u00e9 <span className="text-red-500">*</span>
+              Budget estimé <span className="text-red-500">*</span>
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {budgetOptions.map((opt) => (
@@ -451,7 +451,7 @@ export default function DevisForm() {
               onClick={handlePrev}
               className="flex-1 inline-flex items-center justify-center gap-2 border-2 border-gray-200 hover:border-gray-300 text-slate-700 font-semibold px-6 py-3.5 rounded-xl hover:bg-gray-50 transition-all duration-300"
             >
-              <ArrowLeft className="w-5 h-5" /> Pr\u00e9c\u00e9dent
+              <ArrowLeft className="w-5 h-5" /> Précédent
             </button>
             <button
               type="button"
@@ -468,7 +468,7 @@ export default function DevisForm() {
       {step === 3 && (
         <div className="space-y-6">
           <h3 className="font-heading text-xl font-bold text-slate-900 mb-1">
-            Vos coordonn\u00e9es
+            Vos coordonnées
           </h3>
           <p className="text-slate-500 text-sm mb-4">
             Pour que les artisans puissent vous contacter avec leurs devis.
@@ -498,7 +498,7 @@ export default function DevisForm() {
           {/* Phone */}
           <div>
             <label htmlFor="telephone" className="block text-sm font-semibold text-slate-700 mb-2">
-              T\u00e9l\u00e9phone <span className="text-red-500">*</span>
+              Téléphone <span className="text-red-500">*</span>
             </label>
             <input
               id="telephone"
@@ -547,9 +547,9 @@ export default function DevisForm() {
                 className="mt-0.5 w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               />
               <span className="text-sm text-slate-600 leading-relaxed">
-                J&apos;accepte d&apos;\u00eatre contact\u00e9 par des artisans pour recevoir des devis
+                J&apos;accepte d&apos;être contacté par des artisans pour recevoir des devis
                 en lien avec ma demande.{' '}
-                <span className="text-gray-400">Vos donn\u00e9es restent confidentielles.</span>
+                <span className="text-gray-400">Vos données restent confidentielles.</span>
               </span>
             </label>
             {errors.consentement && (
@@ -570,14 +570,14 @@ export default function DevisForm() {
               disabled={submitting}
               className="flex-1 inline-flex items-center justify-center gap-2 border-2 border-gray-200 hover:border-gray-300 text-slate-700 font-semibold px-6 py-3.5 rounded-xl hover:bg-gray-50 transition-all duration-300 disabled:opacity-50"
             >
-              <ArrowLeft className="w-5 h-5" /> Pr\u00e9c\u00e9dent
+              <ArrowLeft className="w-5 h-5" /> Précédent
             </button>
             <button
               type="submit"
               disabled={submitting}
               className="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-70"
             >
-              {submitting ? 'Envoi en cours\u2026' : 'Envoyer ma demande'} {!submitting && <ArrowRight className="w-5 h-5" />}
+              {submitting ? 'Envoi en cours…' : 'Envoyer ma demande'} {!submitting && <ArrowRight className="w-5 h-5" />}
             </button>
           </div>
         </div>
