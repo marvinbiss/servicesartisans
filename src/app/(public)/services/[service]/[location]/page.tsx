@@ -4,6 +4,7 @@ import {
   getServiceBySlug,
   getLocationBySlug,
   getProvidersByServiceAndLocation,
+  hasProvidersByServiceAndLocation,
 } from '@/lib/supabase'
 import ServiceLocationPageClient from './PageClient'
 
@@ -74,9 +75,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   let hasProviders = true
 
   try {
-    const [service, location] = await Promise.all([
+    const [service, location, providersExist] = await Promise.all([
       getServiceBySlug(serviceSlug),
       getLocationBySlug(locationSlug),
+      // Lightweight count-only check — avoids fetching all provider rows
+      hasProvidersByServiceAndLocation(serviceSlug, locationSlug),
     ])
 
     if (service) serviceName = service.name
@@ -86,9 +89,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       departmentCode = location.department_code || ''
     }
 
-    // Check provider count for noindex decision
-    const providers = await getProvidersByServiceAndLocation(serviceSlug, locationSlug)
-    hasProviders = providers && providers.length > 0
+    hasProviders = providersExist
   } catch {
     // DB down — fallback to static data
     const staticSvc = staticServicesList.find(s => s.slug === serviceSlug)

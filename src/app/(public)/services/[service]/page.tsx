@@ -81,15 +81,24 @@ export default async function ServicePage({ params }: PageProps) {
 
   try {
     service = await getServiceBySlug(serviceSlug)
-
-    // Récupérer les villes populaires et les artisans récents
-    ;[topCities, recentProviders] = await Promise.all([
-      getLocationsByService(serviceSlug),
-      getProvidersByService(serviceSlug, 12),
-    ])
   } catch (error) {
-    console.error('Service page DB error:', error)
-    // Continue with fallback data instead of crashing
+    console.error('Service page DB error (service):', error)
+  }
+
+  // Fetch cities and providers independently — failure in one should not block the other
+  const [citiesResult, providersResult] = await Promise.allSettled([
+    getLocationsByService(serviceSlug),
+    getProvidersByService(serviceSlug, 12),
+  ])
+  if (citiesResult.status === 'fulfilled') {
+    topCities = citiesResult.value || []
+  } else {
+    console.error('Service page DB error (locations):', citiesResult.reason)
+  }
+  if (providersResult.status === 'fulfilled') {
+    recentProviders = providersResult.value || []
+  } else {
+    console.error('Service page DB error (providers):', providersResult.reason)
   }
 
   // Fallback to static data if DB failed

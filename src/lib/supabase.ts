@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import { getVilleBySlug as getVilleBySlugImport } from '@/lib/data/france'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -9,6 +10,41 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 function isValidUUID(str: string): boolean {
   const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
   return uuidRegex.test(str)
+}
+
+/**
+ * Retry a function with exponential backoff.
+ * Designed for Supabase free tier where statement_timeout (5-8s) causes
+ * error code 57014 during heavy static generation (2,498 pages).
+ */
+async function retryWithBackoff<T>(
+  fn: () => Promise<T>,
+  label: string,
+  maxRetries = 3,
+  baseDelayMs = 1000,
+): Promise<T> {
+  let lastError: unknown
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return await fn()
+    } catch (err: unknown) {
+      lastError = err
+      const isTimeout =
+        err instanceof Error &&
+        (err.message?.includes('statement timeout') ||
+         err.message?.includes('57014') ||
+         err.message?.includes('canceling statement'))
+      if (!isTimeout || attempt === maxRetries) {
+        throw err
+      }
+      const delay = baseDelayMs * Math.pow(2, attempt) + Math.random() * 500
+      console.warn(
+        `[retryWithBackoff] ${label} timeout (attempt ${attempt + 1}/${maxRetries + 1}), retrying in ${Math.round(delay)}ms...`,
+      )
+      await new Promise((r) => setTimeout(r, delay))
+    }
+  }
+  throw lastError
 }
 
 const PROVIDER_SELECT = `
@@ -74,14 +110,19 @@ export async function getServiceBySlug(slug: string) {
 }
 
 export async function getLocationBySlug(slug: string) {
-  const { data, error } = await supabase
-    .from('locations')
-    .select('*')
-    .eq('slug', slug)
-    .single()
+  return retryWithBackoff(
+    async () => {
+      const { data, error } = await supabase
+        .from('locations')
+        .select('*')
+        .eq('slug', slug)
+        .single()
 
-  if (error) throw error
-  return data
+      if (error) throw error
+      return data
+    },
+    `getLocationBySlug(${slug})`,
+  )
 }
 
 // Lookup by stable_id ONLY — no fallback.
@@ -125,62 +166,112 @@ export async function getProvidersByServiceAndLocation(
   serviceSlug: string,
   locationSlug: string
 ) {
-  const [service, location] = await Promise.all([
-    getServiceBySlug(serviceSlug),
-    getLocationBySlug(locationSlug),
-  ])
+  // Use retry with backoff to handle statement_timeout during static generation
+  return retryWithBackoff(
+    async () => {
+      const [service, location] = await Promise.all([
+        getServiceBySlug(serviceSlug),
+        getLocationBySlug(locationSlug),
+      ])
 
-  if (!service || !location) return []
+      if (!service || !location) return []
 
-  // Primary query: via provider_services join (works when join table is populated)
-  if (isValidUUID(service.id)) {
-    const { data, error } = await supabase
-      .from('providers')
-      .select(`
-        *,
-        provider_services!inner(service_id)
-      `)
-      .eq('provider_services.service_id', service.id)
-      .ilike('address_city', location.name)
-      .eq('is_active', true)
-      .order('is_verified', { ascending: false })
-      .order('name')
+      // Primary query: via provider_services join (works when join table is populated)
+      if (isValidUUID(service.id)) {
+        const { data, error } = await supabase
+          .from('providers')
+          .select(`
+            *,
+            provider_services!inner(service_id)
+          `)
+          .eq('provider_services.service_id', service.id)
+          .ilike('address_city', location.name)
+          .eq('is_active', true)
+          .order('is_verified', { ascending: false })
+          .order('name')
+          .limit(50)
 
-    if (!error && data && data.length > 0) return data
+        if (!error && data && data.length > 0) return data
+      }
+
+      // Fallback: direct query by specialty + city (uses indexed columns)
+      const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
+      if (!specialties || specialties.length === 0) return []
+
+      const { data: fallback, error: fbError } = await supabase
+        .from('providers')
+        .select('*')
+        .in('specialty', specialties)
+        .ilike('address_city', `%${location.name}%`)
+        .eq('is_active', true)
+        .order('is_verified', { ascending: false })
+        .order('name')
+        .limit(50)
+
+      if (fbError) throw fbError
+      return fallback || []
+    },
+    `getProvidersByServiceAndLocation(${serviceSlug}, ${locationSlug})`,
+  )
+}
+
+/**
+ * Lightweight check: does this service+location combo have any providers?
+ * Uses head:true + count:exact to avoid fetching rows — much faster than
+ * getProvidersByServiceAndLocation during static generation.
+ */
+export async function hasProvidersByServiceAndLocation(
+  serviceSlug: string,
+  locationSlug: string,
+): Promise<boolean> {
+  try {
+    return await retryWithBackoff(
+      async () => {
+        const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
+        if (!specialties || specialties.length === 0) return false
+
+        const ville = getVilleBySlugImport(locationSlug)
+        const cityName = ville?.name
+        if (!cityName) return false
+
+        const { count, error } = await supabase
+          .from('providers')
+          .select('id', { count: 'exact', head: true })
+          .in('specialty', specialties)
+          .ilike('address_city', cityName)
+          .eq('is_active', true)
+
+        if (error) throw error
+        return (count ?? 0) > 0
+      },
+      `hasProvidersByServiceAndLocation(${serviceSlug}, ${locationSlug})`,
+    )
+  } catch {
+    // On any failure, conservatively return false (noindex)
+    return false
   }
-
-  // Fallback: direct query by specialty + city (works before join tables are populated)
-  const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
-  if (!specialties || specialties.length === 0) return []
-
-  const { data: fallback, error: fbError } = await supabase
-    .from('providers')
-    .select('*')
-    .in('specialty', specialties)
-    .ilike('address_city', `%${location.name}%`)
-    .eq('is_active', true)
-    .order('is_verified', { ascending: false })
-    .order('name')
-    .limit(50)
-
-  if (fbError) throw fbError
-  return fallback || []
 }
 
 export async function getProvidersByLocation(locationSlug: string) {
-  const location = await getLocationBySlug(locationSlug)
-  if (!location) return []
+  return retryWithBackoff(
+    async () => {
+      const location = await getLocationBySlug(locationSlug)
+      if (!location) return []
 
-  const { data, error } = await supabase
-    .from('providers')
-    .select('*')
-    .ilike('address_city', location.name)
-    .eq('is_active', true)
-    .order('is_verified', { ascending: false })
-    .order('name')
+      const { data, error } = await supabase
+        .from('providers')
+        .select('*')
+        .ilike('address_city', location.name)
+        .eq('is_active', true)
+        .order('is_verified', { ascending: false })
+        .order('name')
+        .limit(100)
 
-  if (error) throw error
-  return data || []
+      if (error) throw error
+      return data || []
+    },
+    `getProvidersByLocation(${locationSlug})`,
+  )
 }
 
 export async function getAllProviders() {
@@ -196,52 +287,60 @@ export async function getAllProviders() {
 }
 
 export async function getProvidersByService(serviceSlug: string, limit?: number) {
-  const service = await getServiceBySlug(serviceSlug)
-  if (!service) return []
-  if (!isValidUUID(service.id)) return []
+  return retryWithBackoff(
+    async () => {
+      const service = await getServiceBySlug(serviceSlug)
+      if (!service) return []
+      if (!isValidUUID(service.id)) return []
 
-  let query = supabase
-    .from('providers')
-    .select(`
-      *,
-      provider_services!inner(service_id),
-      provider_locations(
-        location:locations(name, slug)
-      )
-    `)
-    .eq('provider_services.service_id', service.id)
-    .eq('is_active', true)
-    .order('is_verified', { ascending: false })
+      const effectiveLimit = limit || 50
 
-  if (limit) {
-    query = query.limit(limit)
-  }
+      const { data, error } = await supabase
+        .from('providers')
+        .select(`
+          *,
+          provider_services!inner(service_id),
+          provider_locations(
+            location:locations(name, slug)
+          )
+        `)
+        .eq('provider_services.service_id', service.id)
+        .eq('is_active', true)
+        .order('is_verified', { ascending: false })
+        .limit(effectiveLimit)
 
-  const { data, error } = await query
-  if (error) throw error
-  return data
+      if (error) throw error
+      return data
+    },
+    `getProvidersByService(${serviceSlug})`,
+  )
 }
 
 export async function getLocationsByService(serviceSlug: string) {
-  const service = await getServiceBySlug(serviceSlug)
-  if (!service) return []
-  if (!isValidUUID(service.id)) return []
+  return retryWithBackoff(
+    async () => {
+      const service = await getServiceBySlug(serviceSlug)
+      if (!service) return []
+      if (!isValidUUID(service.id)) return []
 
-  const { data, error } = await supabase
-    .from('locations')
-    .select(`
-      *,
-      provider_locations!inner(
-        provider:providers!inner(
-          provider_services!inner(service_id)
-        )
-      )
-    `)
-    .eq('provider_locations.provider.provider_services.service_id', service.id)
-    .eq('is_active', true)
-    .order('population', { ascending: false })
-    .limit(500000)
+      const { data, error } = await supabase
+        .from('locations')
+        .select(`
+          *,
+          provider_locations!inner(
+            provider:providers!inner(
+              provider_services!inner(service_id)
+            )
+          )
+        `)
+        .eq('provider_locations.provider.provider_services.service_id', service.id)
+        .eq('is_active', true)
+        .order('population', { ascending: false })
+        .limit(100)
 
-  if (error) throw error
-  return data
+      if (error) throw error
+      return data
+    },
+    `getLocationsByService(${serviceSlug})`,
+  )
 }
