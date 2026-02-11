@@ -205,9 +205,10 @@ export function MessageBubble({
           {message.message_type === 'image' && message.file_url && (
             <img
               src={message.file_url}
-              alt="Image"
+              alt="Image partagée"
               className="max-w-full rounded-lg mb-2 cursor-pointer hover:opacity-90"
               onClick={() => window.open(message.file_url, '_blank')}
+              loading="lazy"
             />
           )}
 

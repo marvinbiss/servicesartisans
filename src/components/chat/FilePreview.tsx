@@ -72,6 +72,7 @@ export function FilePreview({ attachment, onClose, isModal = false }: FilePrevie
             alt={attachment.file_name}
             className="max-w-full max-h-48 rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
             onClick={() => window.open(attachment.file_url, '_blank')}
+            loading="lazy"
           />
           <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
             <button

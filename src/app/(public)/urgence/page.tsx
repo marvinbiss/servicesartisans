@@ -139,7 +139,7 @@ export default function UrgencePage() {
               <span className="text-sm font-semibold text-red-100">Disponible 24h/24 — 7j/7</span>
             </div>
           </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
             Urgence artisan ?<br />
             <span className="text-red-300">Intervention immédiate.</span>
           </h1>

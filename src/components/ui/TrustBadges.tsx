@@ -1,36 +1,36 @@
 'use client'
 
-import { Shield, CheckCircle, Star, Clock, BadgeCheck, Lock } from 'lucide-react'
+import { Shield, CheckCircle, Star, BadgeCheck, Database, MapPin } from 'lucide-react'
 import { motion } from 'framer-motion'
 
-// Trust badges comme Doctolib/Airbnb
+// Trust badges comme Checkatrade — spécifiques et vérifiables
 export function TrustBadges({ variant = 'default' }: { variant?: 'default' | 'compact' | 'hero' }) {
   const badges = [
     {
-      icon: Shield,
-      label: 'Artisans vérifiés',
-      description: 'Processus de vérification en place',
-      color: 'text-green-600',
-      bgColor: 'bg-green-50',
-    },
-    {
-      icon: BadgeCheck,
-      label: 'Avis certifiés',
-      description: 'Avis clients collectés après prestation',
+      icon: Database,
+      label: 'Données SIREN vérifiées',
+      description: 'Chaque artisan vérifié via les registres officiels de l\'État',
       color: 'text-blue-600',
       bgColor: 'bg-blue-50',
     },
     {
-      icon: Lock,
-      label: 'Paiement sécurisé',
-      description: 'Transactions protégées SSL',
+      icon: Shield,
+      label: '350 000+ artisans',
+      description: 'La plus grande base d\'artisans vérifiés de France',
+      color: 'text-green-600',
+      bgColor: 'bg-green-50',
+    },
+    {
+      icon: MapPin,
+      label: '101 départements',
+      description: 'Couverture complète de la France métropolitaine et DOM',
       color: 'text-purple-600',
       bgColor: 'bg-purple-50',
     },
     {
-      icon: Clock,
-      label: 'Réponse rapide',
-      description: 'Demandes transmises rapidement',
+      icon: CheckCircle,
+      label: '100% gratuit',
+      description: 'Recherche, comparaison et devis sans aucun frais',
       color: 'text-amber-600',
       bgColor: 'bg-amber-50',
     },
@@ -151,7 +151,7 @@ export function SocialProofCounter({
 }
 
 // Badge "Disponible maintenant" style Doctolib
-export function AvailabilityBadge({ count = 2500 }: { count?: number }) {
+export function AvailabilityBadge({ count = 350000 }: { count?: number }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: -10 }}
@@ -163,7 +163,7 @@ export function AvailabilityBadge({ count = 2500 }: { count?: number }) {
         <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400"></span>
       </span>
       <span className="text-sm text-white/80 font-medium">
-        +{count.toLocaleString('fr-FR')} artisans disponibles maintenant
+        {count.toLocaleString('fr-FR')}+ artisans vérifiés dans toute la France
       </span>
     </motion.div>
   )

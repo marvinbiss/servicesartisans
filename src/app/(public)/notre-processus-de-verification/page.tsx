@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { FileCheck, Shield, Lock, Eye, AlertTriangle, ArrowRight } from 'lucide-react'
+import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { companyIdentity } from '@/lib/config/company-identity'
@@ -59,15 +60,31 @@ export default function NotreProcessusDeVerificationPage() {
       <JsonLd data={breadcrumbSchema} />
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            Notre processus de vérification des artisans
+      <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0" style={{
+            background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(37,99,235,0.1) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(59,130,246,0.06) 0%, transparent 50%)',
+          }} />
+          <div className="absolute inset-0 opacity-[0.025]" style={{
+            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+            backgroundSize: '64px 64px',
+          }} />
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-50 to-transparent" />
+        </div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-28 md:pt-14 md:pb-36">
+          <Breadcrumb
+            items={[{ label: 'Notre processus de v\u00e9rification' }]}
+            className="mb-6 text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
+          />
+          <div className="text-center">
+          <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
+            Notre processus de v&eacute;rification des artisans
           </h1>
-          <p className="text-xl text-blue-100 max-w-3xl mx-auto">
-            Chaque artisan référencé sur {companyIdentity.name} passe par un processus
-            de vérification structuré. Voici les étapes que nous suivons.
+          <p className="text-xl text-slate-400 max-w-3xl mx-auto">
+            Chaque artisan r&eacute;f&eacute;renc&eacute; sur {companyIdentity.name} passe par un processus
+            de v&eacute;rification structur&eacute;. Voici les &eacute;tapes que nous suivons.
           </p>
+          </div>
         </div>
       </section>
 

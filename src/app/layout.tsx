@@ -6,6 +6,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { MobileMenuProvider } from '@/contexts/MobileMenuContext'
 import { getOrganizationSchema, getWebsiteSchema } from '@/lib/seo/jsonld'
+import GoogleAnalytics from '@/components/GoogleAnalytics'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -48,22 +49,25 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL('https://servicesartisans.fr'),
   title: {
-    default: 'ServicesArtisans — Trouvez les meilleurs artisans près de chez vous',
+    default: 'ServicesArtisans — 350 000+ artisans vérifiés en France',
     template: '%s | ServicesArtisans',
   },
   description:
-    'Trouvez et comparez les meilleurs artisans de votre région. Plombiers, électriciens, menuisiers et plus. Devis gratuits et avis vérifiés.',
+    'Le plus grand annuaire d\'artisans de France. 350 000+ professionnels vérifiés par SIREN dans 101 départements. Plombiers, électriciens, menuisiers, maçons et plus. Devis gratuits.',
   keywords: [
     'artisan',
     'plombier',
     'electricien',
     'menuisier',
-    'devis',
+    'devis gratuit',
     'travaux',
     'renovation',
     'serrurier',
     'chauffagiste',
     'peintre',
+    'annuaire artisans',
+    'artisan vérifié',
+    'trouver artisan',
   ],
   authors: [{ name: 'ServicesArtisans' }],
   applicationName: 'ServicesArtisans',
@@ -82,16 +86,16 @@ export const metadata: Metadata = {
     locale: 'fr_FR',
     url: 'https://servicesartisans.fr',
     siteName: 'ServicesArtisans',
-    title: 'ServicesArtisans — Trouvez les meilleurs artisans près de chez vous',
+    title: 'ServicesArtisans — 350 000+ artisans vérifiés en France',
     description:
-      'Trouvez et comparez les meilleurs artisans de votre région. Plombiers, électriciens, menuisiers et plus.',
-    images: [{ url: 'https://servicesartisans.fr/images/og-image.svg', width: 1200, height: 630, alt: 'ServicesArtisans — Trouvez des artisans qualifiés' }],
+      'Le plus grand annuaire d\'artisans de France. 350 000+ professionnels vérifiés par SIREN. Devis gratuits.',
+    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — 350 000+ artisans vérifiés en France' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ServicesArtisans — Trouvez les meilleurs artisans près de chez vous',
+    title: 'ServicesArtisans — 350 000+ artisans vérifiés en France',
     description:
-      'Trouvez et comparez les meilleurs artisans de votre région.',
+      'Le plus grand annuaire d\'artisans de France. Devis gratuits, données gouvernementales.',
   },
   robots: {
     index: true,
@@ -201,6 +205,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
       </head>
       <body className="font-sans bg-gray-50 antialiased">
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
         <MobileMenuProvider>
           {/* Skip to main content for accessibility */}
           <a

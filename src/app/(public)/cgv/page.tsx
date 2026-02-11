@@ -20,11 +20,11 @@ export default function CGVPage() {
       {/* Header */}
       <section className="bg-white border-b">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="font-heading text-3xl font-bold text-gray-900">
             Conditions Générales de Vente et d'Utilisation
           </h1>
           <p className="text-gray-600 mt-2">
-            Dernière mise à jour : Janvier 2024
+            Dernière mise à jour : Janvier 2026
           </p>
         </div>
       </section>

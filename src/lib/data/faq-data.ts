@@ -4,15 +4,19 @@ export const faqCategories = [
     questions: [
       {
         q: 'Qu\'est-ce que ServicesArtisans ?',
-        a: 'ServicesArtisans est une plateforme gratuite qui met en relation les particuliers avec des artisans qualifiés et vérifiés. Nous couvrons plus de 50 métiers du bâtiment dans toute la France.',
+        a: 'ServicesArtisans est le plus grand annuaire d\'artisans vérifiés de France. Avec plus de 350 000 professionnels référencés dans 101 départements, nos données proviennent directement des registres SIREN officiels de l\'État via l\'API Annuaire des Entreprises. Le service est 100% gratuit.',
       },
       {
         q: 'Le service est-il gratuit ?',
-        a: 'Oui, notre service est entièrement gratuit pour les particuliers. Vous pouvez demander autant de devis que vous le souhaitez sans aucun engagement.',
+        a: 'Oui, ServicesArtisans est entièrement gratuit, aussi bien pour les particuliers que pour les artisans. Pas d\'abonnement, pas de commission, pas de frais cachés. Vous pouvez rechercher, comparer et contacter autant d\'artisans que vous le souhaitez.',
       },
       {
         q: 'Comment fonctionne ServicesArtisans ?',
-        a: 'C\'est simple : 1) Décrivez votre projet, 2) Recevez jusqu\'à 3 devis d\'artisans qualifiés, 3) Comparez et choisissez le professionnel qui vous convient.',
+        a: 'C\'est simple : 1) Recherchez un métier et une localisation parmi nos 350 000+ artisans, 2) Comparez les profils et les informations vérifiées, 3) Contactez directement l\'artisan de votre choix pour obtenir un devis gratuit.',
+      },
+      {
+        q: 'D\'où proviennent les données des artisans ?',
+        a: 'Toutes nos données proviennent de l\'API Annuaire des Entreprises du gouvernement français (recherche-entreprises.api.gouv.fr). Chaque artisan est vérifié via son numéro SIREN, garantissant qu\'il s\'agit d\'une entreprise réelle et active.',
       },
     ],
   },
@@ -42,7 +46,7 @@ export const faqCategories = [
     questions: [
       {
         q: 'Comment sont sélectionnés les artisans ?',
-        a: 'Nous vérifions l\'identité, les assurances et les qualifications de chaque artisan. Nous suivons également les avis clients pour maintenir un niveau de qualité élevé.',
+        a: 'Chaque artisan référencé sur ServicesArtisans provient des registres officiels SIREN de l\'État français. Nous vérifions que l\'entreprise est active, que le code NAF correspond bien à un métier du bâtiment, et que le siège social est localisé en France. Cela couvre 13 catégories de métiers dans les 101 départements français.',
       },
       {
         q: 'Les artisans sont-ils assurés ?',

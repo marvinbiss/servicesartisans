@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Wrench, Clock, Euro, CheckCircle } from 'lucide-react'
+import { Wrench, Clock, Euro, CheckCircle, CreditCard } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 
 interface ArtisanServicesProps {
@@ -14,97 +14,110 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.2 }}
-      className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6"
+      className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
     >
-      <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
-        <Wrench className="w-5 h-5 text-blue-600" aria-hidden="true" />
-        Services et Tarifs
-      </h2>
-
-      {/* Services tags */}
-      {artisan.services.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-6" role="list" aria-label="Services proposés">
-          {artisan.services.map((service, i) => (
-            <span
-              key={i}
-              role="listitem"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-100 text-gray-700 text-sm font-medium"
-            >
-              <CheckCircle className="w-3.5 h-3.5 text-green-500" aria-hidden="true" />
-              {service}
-            </span>
-          ))}
-        </div>
-      )}
-
-      {/* Pricing table */}
-      {artisan.service_prices.length > 0 && (
-        <div className="space-y-3" role="list" aria-label="Tarifs des services">
-          {artisan.service_prices[0]?.price?.startsWith('À partir') && (
-            <p className="text-xs text-gray-500 italic mb-2">* Tarifs indicatifs, le prix final dépend de la nature exacte de l'intervention. Demandez un devis pour un prix précis.</p>
-          )}
-          {artisan.service_prices.map((service, index) => (
-            <motion.div
-              key={index}
-              role="listitem"
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3, delay: 0.1 + index * 0.05 }}
-              className="flex items-center justify-between p-4 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors group"
-            >
-              <div className="flex-1 min-w-0">
-                <h3 className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors">
-                  {service.name}
-                </h3>
-                {service.description && (
-                  <p className="text-sm text-gray-500 mt-0.5 leading-relaxed">{service.description}</p>
-                )}
-              </div>
-
-              <div className="flex items-center gap-4 ml-4">
-                {service.duration && (
-                  <div className="flex items-center gap-1 text-sm text-gray-500" aria-label={`Duree: ${service.duration}`}>
-                    <Clock className="w-4 h-4" aria-hidden="true" />
-                    <span>{service.duration}</span>
-                  </div>
-                )}
-                <div className="flex items-center gap-1 text-lg font-bold text-blue-600 whitespace-nowrap" aria-label={`Prix: ${service.price} euros`}>
-                  <Euro className="w-4 h-4" aria-hidden="true" />
-                  <span>{service.price}</span>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      )}
-
-      {/* Hourly rate */}
-      {artisan.hourly_rate && (
-        <div className="mt-6 pt-6 border-t border-gray-100">
-          <div className="flex items-center justify-between p-4 rounded-xl bg-blue-50">
-            <span className="font-medium text-gray-900">Taux horaire</span>
-            <span className="text-xl font-bold text-blue-600">{artisan.hourly_rate}€/h</span>
+      {/* Section header */}
+      <div className="px-6 pt-6 pb-2">
+        <h2 className="text-xl font-semibold text-gray-900 font-heading flex items-center gap-2.5">
+          <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center">
+            <Wrench className="w-4.5 h-4.5 text-blue-600" aria-hidden="true" />
           </div>
-        </div>
-      )}
+          Services et Tarifs
+        </h2>
+      </div>
 
-      {/* Payment methods */}
-      {artisan.payment_methods && artisan.payment_methods.length > 0 && (
-        <div className="mt-6 pt-6 border-t border-gray-100">
-          <h3 className="text-sm font-medium text-gray-700 mb-3">Moyens de paiement acceptés</h3>
-          <div className="flex flex-wrap gap-2" role="list" aria-label="Moyens de paiement">
-            {artisan.payment_methods.map((method, i) => (
+      <div className="px-6 pb-6">
+        {/* Services tags */}
+        {artisan.services.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-6 mt-4" role="list" aria-label="Services propos\u00e9s">
+            {artisan.services.map((service, i) => (
               <span
                 key={i}
                 role="listitem"
-                className="px-3 py-1 rounded-lg bg-gray-100 text-gray-600 text-sm"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gray-50 text-slate-700 text-sm font-medium border border-gray-100 transition-all duration-200 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200"
               >
-                {method}
+                <CheckCircle className="w-3.5 h-3.5 text-green-500 flex-shrink-0" aria-hidden="true" />
+                {service}
               </span>
             ))}
           </div>
-        </div>
-      )}
+        )}
+
+        {/* Pricing table */}
+        {artisan.service_prices.length > 0 && (
+          <div className="space-y-2.5 mt-4" role="list" aria-label="Tarifs des services">
+            {artisan.service_prices[0]?.price?.startsWith('\u00c0 partir') && (
+              <p className="text-xs text-slate-400 italic mb-3">* Tarifs indicatifs, le prix final d&eacute;pend de la nature exacte de l&apos;intervention. Demandez un devis pour un prix pr&eacute;cis.</p>
+            )}
+            {artisan.service_prices.map((service, index) => (
+              <motion.div
+                key={index}
+                role="listitem"
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3, delay: 0.1 + index * 0.05 }}
+                className="flex items-center justify-between p-4 rounded-xl bg-gray-50/80 border border-gray-100 hover:bg-blue-50/50 hover:border-blue-100 transition-all duration-200 group cursor-default"
+              >
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-medium text-gray-900 group-hover:text-blue-700 transition-colors">
+                    {service.name}
+                  </h3>
+                  {service.description && (
+                    <p className="text-sm text-slate-500 mt-0.5 leading-relaxed">{service.description}</p>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-4 ml-4">
+                  {service.duration && (
+                    <div className="hidden sm:flex items-center gap-1 text-sm text-slate-400" aria-label={`Dur\u00e9e : ${service.duration}`}>
+                      <Clock className="w-4 h-4" aria-hidden="true" />
+                      <span>{service.duration}</span>
+                    </div>
+                  )}
+                  <div className="flex items-center gap-1 text-lg font-bold text-blue-600 whitespace-nowrap bg-blue-50 px-3 py-1 rounded-lg group-hover:bg-blue-100 transition-colors" aria-label={`Prix : ${service.price} euros`}>
+                    <Euro className="w-4 h-4" aria-hidden="true" />
+                    <span>{service.price}</span>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
+
+        {/* Hourly rate */}
+        {artisan.hourly_rate && (
+          <div className="mt-6 pt-6 border-t border-gray-100">
+            <div className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100">
+              <div>
+                <span className="font-medium text-gray-900">Taux horaire</span>
+                <p className="text-xs text-slate-500 mt-0.5">Applicable pour les interventions sur mesure</p>
+              </div>
+              <span className="text-2xl font-bold text-blue-600">{artisan.hourly_rate}&euro;/h</span>
+            </div>
+          </div>
+        )}
+
+        {/* Payment methods */}
+        {artisan.payment_methods && artisan.payment_methods.length > 0 && (
+          <div className="mt-6 pt-6 border-t border-gray-100">
+            <h3 className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
+              <CreditCard className="w-4 h-4 text-slate-400" />
+              Moyens de paiement accept&eacute;s
+            </h3>
+            <div className="flex flex-wrap gap-2" role="list" aria-label="Moyens de paiement">
+              {artisan.payment_methods.map((method, i) => (
+                <span
+                  key={i}
+                  role="listitem"
+                  className="px-3 py-1.5 rounded-lg bg-gray-50 border border-gray-100 text-slate-600 text-sm font-medium"
+                >
+                  {method}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </motion.div>
   )
 }

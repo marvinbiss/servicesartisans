@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
 import { PopularCitiesLinks, PopularServicesLinks, PopularServiceCityLinks, GeographicNavigation } from '@/components/InternalLinks'
 import { getOrganizationSchema, getWebsiteSchema } from '@/lib/seo/jsonld'
+import Link from 'next/link'
 import { HeroSearch } from '@/components/search/HeroSearch'
 import { TrustBadges, AvailabilityBadge } from '@/components/ui/TrustBadges'
 import {
@@ -10,17 +11,19 @@ import {
   HowItWorksSection,
   TestimonialsSection,
   ArtisanCTASection,
+  GuaranteeSection,
+  WhyUsSection,
 } from '@/components/home/HomePageSections'
 
 export const metadata: Metadata = {
-  title: 'ServicesArtisans — Trouvez les meilleurs artisans près de chez vous',
+  title: 'ServicesArtisans — 350 000+ artisans vérifiés en France',
   description:
-    'Comparez les avis, les tarifs et obtenez des devis gratuits auprès de 2 500+ artisans vérifiés. Plombiers, électriciens, serruriers et plus dans toute la France.',
+    'Le plus grand annuaire d\'artisans de France. 350 000+ professionnels vérifiés par SIREN, 101 départements couverts. Comparez les avis, obtenez des devis gratuits. Plombiers, électriciens, menuisiers et plus.',
   alternates: { canonical: 'https://servicesartisans.fr' },
   openGraph: {
-    title: 'ServicesArtisans — Trouvez les meilleurs artisans près de chez vous',
+    title: 'ServicesArtisans — 350 000+ artisans vérifiés en France',
     description:
-      'Comparez les avis, les tarifs et obtenez des devis gratuits auprès de 2 500+ artisans vérifiés dans toute la France.',
+      'Le plus grand annuaire d\'artisans de France. 350 000+ professionnels vérifiés par SIREN dans 101 départements. Devis gratuits.',
     type: 'website',
     url: 'https://servicesartisans.fr',
   },
@@ -55,19 +58,26 @@ export default function HomePage() {
         <div className="relative max-w-6xl mx-auto px-4 pt-20 pb-32 md:pt-28 md:pb-40">
           <div className="text-center mb-12">
             <div className="mb-6">
-              <AvailabilityBadge count={2500} />
+              <AvailabilityBadge count={350000} />
             </div>
             <h1 className="font-heading text-4xl md:text-5xl lg:text-[3.5rem] font-extrabold mb-6 tracking-[-0.025em] leading-[1.08]">
-              Trouvez l&apos;artisan idéal,{' '}
-              <br className="hidden md:block" />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-300 to-cyan-300">
-                près de chez vous
-              </span>
+                350 000+
+              </span>{' '}
+              artisans vérifiés,
+              <br className="hidden md:block" />
+              partout en France
             </h1>
-            <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
-              Comparez les avis, les tarifs et obtenez des devis gratuits
-              auprès d&apos;artisans vérifiés dans toute la France.
+            <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed mb-6">
+              Le plus grand annuaire d&apos;artisans de France. Données SIREN vérifiées,
+              101 départements couverts. Comparez et contactez gratuitement.
             </p>
+            <Link
+              href="/devis"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-300"
+            >
+              Demander un devis gratuit
+            </Link>
           </div>
 
           {/* Search */}
@@ -83,6 +93,12 @@ export default function HomePage() {
 
       {/* ─── SERVICES ─────────────────────────────────────────── */}
       <ServicesShowcase />
+
+      {/* ─── GUARANTEE ─────────────────────────────────────────── */}
+      <GuaranteeSection />
+
+      {/* ─── WHY US ──────────────────────────────────────────── */}
+      <WhyUsSection />
 
       {/* ─── HOW IT WORKS ─────────────────────────────────────── */}
       <HowItWorksSection />

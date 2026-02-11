@@ -1,13 +1,13 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, Building2, MapPin, Users, ChevronRight, Shield } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { SITE_URL } from '@/lib/seo/config'
-import { departements } from '@/lib/data/france'
+import { departements, regions, services } from '@/lib/data/france'
 
 export const metadata: Metadata = {
-  title: 'Artisans par département - Trouvez un professionnel | ServicesArtisans',
-  description: 'Trouvez les meilleurs artisans dans votre département. 96 départements couverts. Plombiers, électriciens, serruriers et plus. Devis gratuits.',
+  title: 'Artisans par département — 101 départements couverts | ServicesArtisans',
+  description: 'Annuaire de 350 000+ artisans vérifiés par SIREN dans les 101 départements français. Trouvez un professionnel qualifié près de chez vous. Devis gratuits, sans engagement.',
   alternates: { canonical: `${SITE_URL}/departements` },
 }
 
@@ -17,53 +17,215 @@ const deptsByRegion = departements.reduce((acc, dept) => {
   return acc
 }, {} as Record<string, typeof departements>)
 
+// Sort regions alphabetically
+const sortedRegions = Object.entries(deptsByRegion).sort(
+  (a, b) => a[0].localeCompare(b[0])
+)
+
 export default function DepartementsIndexPage() {
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          <Breadcrumb items={[{ label: 'Départements' }]} />
+      {/* ─── PREMIUM DARK HERO ──────────────────────────────── */}
+      <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
+        {/* Background effects */}
+        <div className="absolute inset-0">
+          <div className="absolute inset-0" style={{
+            background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(37,99,235,0.1) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(59,130,246,0.06) 0%, transparent 50%)',
+          }} />
+          <div className="absolute inset-0 opacity-[0.025]" style={{
+            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+            backgroundSize: '64px 64px',
+          }} />
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-50 to-transparent" />
         </div>
-      </div>
 
-      <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl font-bold mb-4">Artisans par département</h1>
-          <p className="text-xl text-blue-100 max-w-3xl">
-            Trouvez un artisan qualifié dans votre département. 96 départements couverts dans toute la France.
-          </p>
+        <div className="relative max-w-6xl mx-auto px-4 pt-10 pb-28 md:pt-14 md:pb-36">
+          {/* Breadcrumb */}
+          <div className="mb-10">
+            <Breadcrumb
+              items={[{ label: 'Départements' }]}
+              className="text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
+            />
+          </div>
+
+          <div className="text-center max-w-3xl mx-auto">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 mb-6">
+              <Shield className="w-4 h-4 text-blue-400" />
+              <span className="text-sm font-medium text-white/90">Couverture nationale complète</span>
+            </div>
+
+            <h1 className="font-heading text-4xl md:text-5xl lg:text-[3.5rem] font-extrabold mb-6 tracking-[-0.025em] leading-[1.08]">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-300 to-cyan-300">
+                101
+              </span>{' '}
+              départements couverts
+            </h1>
+            <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
+              350 000+ artisans vérifiés par SIREN dans tous les départements français.
+              Recherche gratuite, devis sans engagement.
+            </p>
+          </div>
+
+          {/* Stats badges */}
+          <div className="flex flex-wrap justify-center gap-4 md:gap-6 mt-10">
+            <div className="flex items-center gap-3 px-5 py-3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/10">
+              <Building2 className="w-5 h-5 text-blue-400" />
+              <div className="text-left">
+                <div className="text-xl font-bold text-white">101</div>
+                <div className="text-xs text-slate-400">Départements</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 px-5 py-3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/10">
+              <MapPin className="w-5 h-5 text-blue-400" />
+              <div className="text-left">
+                <div className="text-xl font-bold text-white">18</div>
+                <div className="text-xs text-slate-400">Régions</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 px-5 py-3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/10">
+              <Users className="w-5 h-5 text-blue-400" />
+              <div className="text-left">
+                <div className="text-xl font-bold text-white">350 000+</div>
+                <div className="text-xs text-slate-400">Artisans vérifiés</div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {Object.entries(deptsByRegion).map(([region, regionDepts]) => (
+      {/* ─── DEPARTMENTS BY REGION ──────────────────────────── */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="text-center mb-12">
+          <h2 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-3 tracking-tight">
+            Tous les départements par région
+          </h2>
+          <p className="text-slate-500 max-w-lg mx-auto">
+            Sélectionnez un département pour accéder aux artisans de votre secteur.
+          </p>
+        </div>
+
+        {sortedRegions.map(([region, regionDepts]) => (
           <section key={region} className="mb-12">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">{region}</h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                <Building2 className="w-4 h-4 text-blue-600" />
+              </div>
+              <h3 className="font-heading text-lg font-bold text-slate-900 tracking-tight">{region}</h3>
+              <span className="text-sm text-slate-400 font-medium">({regionDepts.length} départements)</span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
               {regionDepts.map((dept) => (
                 <Link
                   key={dept.slug}
                   href={`/departements/${dept.slug}`}
-                  className="flex items-center gap-3 bg-white rounded-lg border border-gray-200 p-3 hover:border-blue-300 hover:shadow-sm transition-all group"
+                  className="flex items-center gap-3 bg-white rounded-xl border border-gray-200 p-4 hover:border-blue-300 hover:shadow-md hover:-translate-y-0.5 transition-all group"
                 >
-                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 font-bold text-sm flex-shrink-0">
+                  <div className="w-11 h-11 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl flex items-center justify-center text-blue-600 font-bold text-sm flex-shrink-0 group-hover:from-blue-100 group-hover:to-blue-200 transition-colors">
                     {dept.code}
                   </div>
-                  <span className="text-sm font-medium text-gray-900 group-hover:text-blue-600 truncate">{dept.name}</span>
+                  <div className="min-w-0">
+                    <span className="text-sm font-semibold text-slate-800 group-hover:text-blue-600 transition-colors block truncate">{dept.name}</span>
+                    <span className="text-xs text-slate-400">{dept.population} hab.</span>
+                  </div>
                 </Link>
               ))}
             </div>
           </section>
         ))}
-
-        <section className="bg-blue-600 rounded-2xl p-8 text-center text-white mt-8">
-          <h2 className="text-2xl font-bold mb-4">Besoin d&apos;un artisan ?</h2>
-          <p className="text-blue-100 mb-6">Décrivez votre projet et recevez des devis gratuits.</p>
-          <Link href="/services" className="inline-flex items-center gap-2 bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
-            Voir les services <ArrowRight className="w-5 h-5" />
-          </Link>
-        </section>
       </div>
+
+      {/* ─── CTA ────────────────────────────────────────────── */}
+      <section className="relative bg-[#0a0f1e] overflow-hidden">
+        <div className="absolute inset-0" style={{
+          background: 'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(37,99,235,0.12) 0%, transparent 60%)',
+        }} />
+        <div className="relative max-w-4xl mx-auto px-4 py-16 md:py-20 text-center">
+          <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">
+            Besoin d&apos;un artisan ?
+          </h2>
+          <p className="text-slate-400 mb-8 max-w-lg mx-auto">
+            Décrivez votre projet et recevez des devis gratuits de professionnels vérifiés.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link href="/devis" className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-300">
+              Demander un devis gratuit
+            </Link>
+            <Link href="/services" className="inline-flex items-center gap-2 text-slate-300 hover:text-white font-medium transition-colors">
+              Voir les services <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── SEO INTERNAL LINKS ─────────────────────────────── */}
+      <section className="py-16 bg-white border-t border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="font-heading text-xl font-bold text-slate-900 mb-8 tracking-tight">
+            Explorer également
+          </h2>
+          <div className="grid md:grid-cols-3 gap-10">
+            {/* Regions */}
+            <div>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Par région</h3>
+              <div className="space-y-2">
+                {regions.slice(0, 8).map((r) => (
+                  <Link key={r.slug} href={`/regions/${r.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                    <ChevronRight className="w-3 h-3" />
+                    Artisans en {r.name}
+                  </Link>
+                ))}
+              </div>
+              <Link href="/regions" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
+                Toutes les régions <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+
+            {/* Villes */}
+            <div>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Grandes villes</h3>
+              <div className="space-y-2">
+                <Link href="/villes/paris" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                  <ChevronRight className="w-3 h-3" />Artisans à Paris
+                </Link>
+                <Link href="/villes/marseille" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                  <ChevronRight className="w-3 h-3" />Artisans à Marseille
+                </Link>
+                <Link href="/villes/lyon" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                  <ChevronRight className="w-3 h-3" />Artisans à Lyon
+                </Link>
+                <Link href="/villes/toulouse" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                  <ChevronRight className="w-3 h-3" />Artisans à Toulouse
+                </Link>
+                <Link href="/villes/nice" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                  <ChevronRight className="w-3 h-3" />Artisans à Nice
+                </Link>
+                <Link href="/villes/bordeaux" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                  <ChevronRight className="w-3 h-3" />Artisans à Bordeaux
+                </Link>
+              </div>
+              <Link href="/villes" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
+                Toutes les villes <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+
+            {/* Services */}
+            <div>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Services populaires</h3>
+              <div className="space-y-2">
+                {services.slice(0, 8).map((s) => (
+                  <Link key={s.slug} href={`/services/${s.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                    <ChevronRight className="w-3 h-3" />
+                    {s.name}
+                  </Link>
+                ))}
+              </div>
+              <Link href="/services" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
+                Tous les services <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   )
 }

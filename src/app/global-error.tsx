@@ -53,7 +53,7 @@ export default function GlobalError({
               lineHeight: 1.6,
             }}
           >
-            Nous sommes desoles, quelque chose ne s&apos;est pas passe comme prevu.
+            Nous sommes d&eacute;sol&eacute;s, quelque chose ne s&apos;est pas pass&eacute; comme pr&eacute;vu.
           </p>
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
             <button
@@ -69,7 +69,7 @@ export default function GlobalError({
                 cursor: 'pointer',
               }}
             >
-              Reessayer
+              R&eacute;essayer
             </button>
             <a
               href="/"
@@ -86,7 +86,7 @@ export default function GlobalError({
                 backgroundColor: '#fff',
               }}
             >
-              Retour a l&apos;accueil
+              Retour &agrave; l&apos;accueil
             </a>
           </div>
         </div>

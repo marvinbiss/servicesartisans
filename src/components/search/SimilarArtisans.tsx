@@ -109,6 +109,7 @@ export function SimilarArtisans({
                     src={artisan.avatarUrl}
                     alt={artisan.name}
                     className="w-full h-full object-cover"
+                    loading="lazy"
                   />
                 ) : (
                   <span className="text-lg font-medium text-gray-500 dark:text-gray-400">

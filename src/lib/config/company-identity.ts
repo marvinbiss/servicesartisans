@@ -17,9 +17,9 @@
 export const companyIdentity = {
   // Brand (Level 5 — UI copy only)
   name: 'ServicesArtisans' as const,
-  tagline: 'Trouvez des artisans près de chez vous',
+  tagline: 'Le plus grand annuaire d\'artisans vérifiés de France',
   description:
-    'Plateforme de mise en relation entre particuliers et artisans qualifiés en France.',
+    'Plus de 350 000 artisans vérifiés par SIREN dans toute la France. Comparez, contactez et trouvez le bon professionnel en quelques clics.',
   url: process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr',
 
   // Legal identity (Level 1 — from env vars, null until company registration)

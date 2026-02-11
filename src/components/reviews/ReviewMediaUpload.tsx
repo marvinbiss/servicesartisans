@@ -237,6 +237,7 @@ export function ReviewMediaUpload({
                   src={file.url}
                   alt={file.fileName}
                   className="w-full h-32 object-cover"
+                  loading="lazy"
                 />
               ) : (
                 <div className="w-full h-32 flex items-center justify-center bg-gray-200 dark:bg-gray-700">

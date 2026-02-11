@@ -266,6 +266,7 @@ export function ArtisanReviews({ artisan: _artisan, reviews }: ArtisanReviewsPro
                     src={review.photoUrl}
                     alt="Photo du client"
                     className="w-32 h-24 object-cover rounded-lg border border-gray-200"
+                    loading="lazy"
                   />
                 </div>
               )}

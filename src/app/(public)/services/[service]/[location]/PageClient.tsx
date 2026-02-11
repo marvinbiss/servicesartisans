@@ -67,7 +67,7 @@ export default function ServiceLocationPageClient({
           {/* Title & View toggle */}
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-xl md:text-2xl font-bold text-gray-900">
+              <h1 className="font-heading text-xl md:text-2xl font-bold text-gray-900">
                 {service.name} à {location.name}
               </h1>
               <p className="text-gray-500 text-sm flex items-center gap-1 mt-1">

@@ -1,11 +1,12 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { MapPin, Users, Building, ArrowRight, Shield, Star, Clock } from 'lucide-react'
+import { MapPin, Users, Building2, ArrowRight, Shield, Star, Clock, ChevronRight, Wrench, HelpCircle } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
+import JsonLd from '@/components/JsonLd'
+import { getPlaceSchema, getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
-import { villes, getVilleBySlug, services } from '@/lib/data/france'
-import { PopularServicesLinks } from '@/components/InternalLinks'
+import { villes, getVilleBySlug, services, getRegionSlugByName } from '@/lib/data/france'
 
 export function generateStaticParams() {
   return villes.map((ville) => ({ ville: ville.slug }))
@@ -24,8 +25,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!ville) return { title: 'Ville non trouvée' }
 
   return {
-    title: `Artisans à ${ville.name} (${ville.departementCode}) - Devis gratuit | ServicesArtisans`,
-    description: `Trouvez les meilleurs artisans à ${ville.name} (${ville.departementCode}). Plombiers, électriciens, serruriers et plus. Devis gratuit, artisans vérifiés.`,
+    title: `Artisans à ${ville.name} (${ville.departementCode}) — Annuaire & Devis Gratuit | ServicesArtisans`,
+    description: `Trouvez les meilleurs artisans à ${ville.name} (${ville.departementCode}). Plombiers, électriciens, serruriers, chauffagistes et plus. ${services.length} corps de métier, artisans vérifiés par SIREN. Devis gratuit.`,
     alternates: { canonical: `${SITE_URL}/villes/${villeSlug}` },
   }
 }
@@ -35,70 +36,313 @@ export default async function VillePage({ params }: PageProps) {
   const ville = getVilleBySlug(villeSlug)
   if (!ville) notFound()
 
+  // Get other villes in the same departement
+  const nearbyVilles = villes.filter(
+    (v) => v.departementCode === ville.departementCode && v.slug !== ville.slug
+  )
+
+  // Get other villes in the same region
+  const regionVilles = villes.filter(
+    (v) => v.region === ville.region && v.slug !== ville.slug
+  ).slice(0, 8)
+
+  const regionSlug = getRegionSlugByName(ville.region)
+
+  // JSON-LD structured data
+  const placeSchema = getPlaceSchema({
+    name: ville.name,
+    slug: ville.slug,
+    region: ville.region,
+    department: ville.departement,
+    description: `Trouvez les meilleurs artisans à ${ville.name}. Plombiers, électriciens, serruriers et plus.`,
+  })
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: 'Accueil', url: '/' },
+    { name: 'Villes', url: '/villes' },
+    { name: ville.name, url: `/villes/${ville.slug}` },
+  ])
+
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          <Breadcrumb items={[{ label: 'Villes', href: '/villes' }, { label: ville.name }]} />
-        </div>
-      </div>
+      <JsonLd data={[placeSchema, breadcrumbSchema]} />
 
-      <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl font-bold mb-4">Artisans à {ville.name}</h1>
-          <p className="text-xl text-blue-100 max-w-3xl">{ville.description}</p>
-          <div className="flex flex-wrap items-center gap-6 mt-8 text-blue-100">
-            <div className="flex items-center gap-2"><MapPin className="w-5 h-5" /><span>{ville.region}</span></div>
-            <div className="flex items-center gap-2"><Building className="w-5 h-5" /><span>{ville.departement}</span></div>
-            <div className="flex items-center gap-2"><Users className="w-5 h-5" /><span>{ville.population} habitants</span></div>
+      {/* ─── PREMIUM DARK HERO ──────────────────────────────── */}
+      <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
+        {/* Background effects */}
+        <div className="absolute inset-0">
+          <div className="absolute inset-0" style={{
+            background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(37,99,235,0.1) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(59,130,246,0.06) 0%, transparent 50%)',
+          }} />
+          <div className="absolute inset-0 opacity-[0.025]" style={{
+            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+            backgroundSize: '64px 64px',
+          }} />
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-50 to-transparent" />
+        </div>
+
+        <div className="relative max-w-6xl mx-auto px-4 pt-10 pb-28 md:pt-14 md:pb-36">
+          {/* Breadcrumb */}
+          <div className="mb-10">
+            <Breadcrumb
+              items={[
+                { label: 'Villes', href: '/villes' },
+                { label: ville.name },
+              ]}
+              className="text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
+            />
           </div>
-          <div className="flex flex-wrap gap-3 mt-8">
-            <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full"><Shield className="w-4 h-4" /><span className="text-sm font-medium">Artisans vérifiés</span></div>
-            <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full"><Star className="w-4 h-4" /><span className="text-sm font-medium">Avis authentiques</span></div>
-            <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full"><Clock className="w-4 h-4" /><span className="text-sm font-medium">Devis sous 24h</span></div>
+
+          <div className="max-w-3xl">
+            <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
+              Artisans à{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-300 to-cyan-300">
+                {ville.name}
+              </span>
+            </h1>
+            <p className="text-lg text-slate-400 max-w-2xl leading-relaxed mb-8">
+              {ville.description}
+            </p>
+
+            {/* Location info */}
+            <div className="flex flex-wrap gap-4 mb-8 text-sm">
+              <div className="flex items-center gap-2 text-slate-300">
+                <MapPin className="w-4 h-4 text-blue-400" />
+                <span>{ville.region}</span>
+              </div>
+              <div className="flex items-center gap-2 text-slate-300">
+                <Building2 className="w-4 h-4 text-blue-400" />
+                <span>{ville.departement} ({ville.departementCode})</span>
+              </div>
+              <div className="flex items-center gap-2 text-slate-300">
+                <Users className="w-4 h-4 text-blue-400" />
+                <span>{ville.population} habitants</span>
+              </div>
+            </div>
+
+            {/* Trust badges */}
+            <div className="flex flex-wrap gap-3">
+              <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
+                <Shield className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Artisans vérifiés SIREN</span>
+              </div>
+              <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
+                <Star className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Avis authentiques</span>
+              </div>
+              <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
+                <Clock className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Devis sous 24h</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      {/* ─── SERVICES GRID ──────────────────────────────────── */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <section className="mb-16">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Trouver un artisan à {ville.name}</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+              <Wrench className="w-5 h-5 text-blue-600" />
+            </div>
+            <div>
+              <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
+                Trouver un artisan à {ville.name}
+              </h2>
+              <p className="text-sm text-slate-500">{services.length} corps de métier disponibles</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
             {services.map((service) => (
-              <Link key={service.slug} href={`/services/${service.slug}/${villeSlug}`} className="bg-white rounded-xl shadow-sm p-4 text-center hover:shadow-md hover:-translate-y-0.5 transition-all group border border-gray-100">
-                <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">{service.name}</h3>
-                <p className="text-sm text-gray-500 mt-1">à {ville.name}</p>
+              <Link
+                key={service.slug}
+                href={`/services/${service.slug}/${villeSlug}`}
+                className="bg-white rounded-xl shadow-sm p-5 text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group border border-gray-100"
+              >
+                <h3 className="font-semibold text-slate-800 group-hover:text-blue-600 transition-colors text-sm">{service.name}</h3>
+                <p className="text-xs text-slate-400 mt-1.5">à {ville.name}</p>
               </Link>
             ))}
           </div>
         </section>
 
+        {/* ─── QUARTIERS ────────────────────────────────────── */}
         {ville.quartiers && ville.quartiers.length > 0 && (
           <section className="mb-16">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Quartiers desservis à {ville.name}</h2>
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <div className="flex flex-wrap gap-2">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
+                <MapPin className="w-5 h-5 text-emerald-600" />
+              </div>
+              <div>
+                <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
+                  Quartiers desservis à {ville.name}
+                </h2>
+                <p className="text-sm text-slate-500">{ville.quartiers.length} quartiers couverts</p>
+              </div>
+            </div>
+            <div className="bg-white rounded-2xl border border-gray-200 p-6">
+              <div className="flex flex-wrap gap-2.5">
                 {ville.quartiers.map((quartier) => (
-                  <span key={quartier} className="bg-gray-100 text-gray-700 px-4 py-2 rounded-full text-sm">{quartier}</span>
+                  <span key={quartier} className="bg-gray-50 text-slate-700 px-4 py-2 rounded-full text-sm border border-gray-100 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 transition-colors">
+                    {quartier}
+                  </span>
                 ))}
               </div>
             </div>
           </section>
         )}
 
-        <section className="bg-blue-600 rounded-2xl p-8 text-center text-white mb-16">
-          <h2 className="text-2xl font-bold mb-4">Besoin d&apos;un artisan à {ville.name} ?</h2>
-          <p className="text-blue-100 mb-6">Décrivez votre projet et recevez des devis gratuits d&apos;artisans qualifiés.</p>
-          <Link href="/services" className="inline-flex items-center gap-2 bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
-            Voir les services <ArrowRight className="w-5 h-5" />
-          </Link>
-        </section>
+        {/* ─── NEARBY VILLES ────────────────────────────────── */}
+        {nearbyVilles.length > 0 && (
+          <section className="mb-16">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 bg-violet-100 rounded-xl flex items-center justify-center">
+                <Building2 className="w-5 h-5 text-violet-600" />
+              </div>
+              <h2 className="font-heading text-xl font-bold text-slate-900 tracking-tight">
+                Autres villes du {ville.departement}
+              </h2>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+              {nearbyVilles.map((v) => (
+                <Link key={v.slug} href={`/villes/${v.slug}`} className="flex items-center gap-2.5 bg-white rounded-xl border border-gray-200 p-3.5 hover:border-blue-300 hover:shadow-md transition-all group">
+                  <MapPin className="w-4 h-4 text-slate-400 group-hover:text-blue-600 flex-shrink-0 transition-colors" />
+                  <div className="min-w-0">
+                    <span className="block text-sm font-medium text-slate-800 group-hover:text-blue-600 truncate transition-colors">{v.name}</span>
+                    <span className="text-xs text-slate-400">{v.population} hab.</span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
 
-        <section>
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Voir aussi</h2>
-          <PopularServicesLinks showTitle={false} limit={8} />
+        {/* ─── FAQ SECTION ──────────────────────────────────── */}
+        <section className="mb-16">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
+              <HelpCircle className="w-5 h-5 text-amber-600" />
+            </div>
+            <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
+              Questions fréquentes
+            </h2>
+          </div>
+          <div className="space-y-4">
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <h3 className="font-semibold text-slate-900 mb-2">Comment trouver un artisan à {ville.name} ?</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Sur ServicesArtisans, sélectionnez le type de service dont vous avez besoin (plombier, électricien, serrurier, etc.)
+                puis choisissez {ville.name} comme localisation. Vous accéderez à la liste des artisans vérifiés disponibles dans votre ville.
+              </p>
+            </div>
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <h3 className="font-semibold text-slate-900 mb-2">Les artisans à {ville.name} sont-ils vérifiés ?</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Oui, tous les artisans référencés sur notre plateforme sont vérifiés via le registre SIREN.
+                Nous nous assurons que chaque professionnel dispose d&apos;une immatriculation valide et des assurances nécessaires.
+              </p>
+            </div>
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <h3 className="font-semibold text-slate-900 mb-2">Comment obtenir un devis gratuit à {ville.name} ?</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Cliquez sur &laquo; Demander un devis gratuit &raquo;, décrivez votre projet en quelques clics,
+                et recevez jusqu&apos;à 3 devis personnalisés d&apos;artisans qualifiés à {ville.name}. Le service est 100% gratuit et sans engagement.
+              </p>
+            </div>
+          </div>
         </section>
       </div>
+
+      {/* ─── CTA ────────────────────────────────────────────── */}
+      <section className="relative bg-[#0a0f1e] overflow-hidden">
+        <div className="absolute inset-0" style={{
+          background: 'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(37,99,235,0.12) 0%, transparent 60%)',
+        }} />
+        <div className="relative max-w-4xl mx-auto px-4 py-16 md:py-20 text-center">
+          <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">
+            Besoin d&apos;un artisan à {ville.name} ?
+          </h2>
+          <p className="text-slate-400 mb-8 max-w-lg mx-auto">
+            Décrivez votre projet et recevez des devis gratuits d&apos;artisans qualifiés.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link href="/devis" className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-300">
+              Demander un devis gratuit
+            </Link>
+            <Link href="/services" className="inline-flex items-center gap-2 text-slate-300 hover:text-white font-medium transition-colors">
+              Voir les services <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── SEO INTERNAL LINKS ─────────────────────────────── */}
+      <section className="py-16 bg-white border-t border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="font-heading text-xl font-bold text-slate-900 mb-8 tracking-tight">
+            Voir aussi
+          </h2>
+          <div className="grid md:grid-cols-3 gap-10">
+            {/* Services in this city */}
+            <div>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Services à {ville.name}</h3>
+              <div className="space-y-2">
+                {services.slice(0, 6).map((s) => (
+                  <Link key={s.slug} href={`/services/${s.slug}/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                    <ChevronRight className="w-3 h-3" />
+                    {s.name} à {ville.name}
+                  </Link>
+                ))}
+              </div>
+              <Link href="/services" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
+                Tous les services <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+
+            {/* Region cities */}
+            <div>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Villes en {ville.region}</h3>
+              <div className="space-y-2">
+                {regionVilles.slice(0, 6).map((v) => (
+                  <Link key={v.slug} href={`/villes/${v.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                    <ChevronRight className="w-3 h-3" />
+                    Artisans à {v.name}
+                  </Link>
+                ))}
+              </div>
+              <Link href="/villes" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
+                Toutes les villes <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+
+            {/* Geographic navigation */}
+            <div>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Navigation</h3>
+              <div className="space-y-2">
+                {regionSlug && (
+                  <Link href={`/regions/${regionSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                    <ChevronRight className="w-3 h-3" />
+                    Région {ville.region}
+                  </Link>
+                )}
+                <Link href="/departements" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                  <ChevronRight className="w-3 h-3" />
+                  Tous les départements
+                </Link>
+                <Link href="/regions" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                  <ChevronRight className="w-3 h-3" />
+                  Toutes les régions
+                </Link>
+                <Link href="/villes" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                  <ChevronRight className="w-3 h-3" />
+                  Toutes les villes
+                </Link>
+                <Link href="/devis" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                  <ChevronRight className="w-3 h-3" />
+                  Demander un devis
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   )
 }

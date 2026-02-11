@@ -9,7 +9,7 @@ import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalL
 
 export const metadata: Metadata = {
   title: 'Rechercher un artisan — Trouvez le bon professionnel | ServicesArtisans',
-  description: 'Recherchez un artisan qualifié près de chez vous. Comparez les avis, les tarifs et obtenez des devis gratuits. Plus de 2 500 artisans vérifiés dans toute la France.',
+  description: 'Recherchez un artisan qualifié près de chez vous. Comparez les avis, les tarifs et obtenez des devis gratuits. 350 000+ artisans vérifiés par SIREN dans toute la France.',
   alternates: { canonical: `${SITE_URL}/recherche` },
 }
 
@@ -30,7 +30,7 @@ export default function RecherchePage() {
           <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-indigo-500 rounded-full blur-[150px]" />
         </div>
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+          <h1 className="font-heading text-4xl md:text-5xl font-bold mb-4">
             Rechercher un artisan
           </h1>
           <p className="text-xl text-blue-100/80 mb-10 max-w-2xl mx-auto">
@@ -57,7 +57,7 @@ export default function RecherchePage() {
       {/* Browse by Service */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Parcourir par service</h2>
+          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6">Parcourir par service</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {services.map((service) => (
               <Link
@@ -75,7 +75,7 @@ export default function RecherchePage() {
       {/* Browse by City */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Rechercher par ville</h2>
+          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6">Rechercher par ville</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
             {villes.slice(0, 24).map((ville) => (
               <Link
@@ -99,7 +99,7 @@ export default function RecherchePage() {
       {/* Browse by Region */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Rechercher par région</h2>
+          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6">Rechercher par région</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {regions.map((region) => (
               <Link

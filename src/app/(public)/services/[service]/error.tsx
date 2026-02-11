@@ -14,7 +14,7 @@ export default function ServiceDetailError({
         <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-orange-50 flex items-center justify-center">
           <span className="text-2xl text-orange-600">!</span>
         </div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+        <h1 className="font-heading text-2xl font-bold text-gray-900 mb-2">
           Service temporairement indisponible
         </h1>
         <p className="text-gray-500 mb-8">

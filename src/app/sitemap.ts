@@ -1,118 +1,171 @@
-import { MetadataRoute } from 'next'
-import { services, villes, regions, departements } from '@/lib/data/france'
+import type { MetadataRoute } from 'next'
+import { SITE_URL } from '@/lib/seo/config'
+import { services, villes, departements, regions } from '@/lib/data/france'
 
-const BASE_URL = 'https://servicesartisans.fr'
-
-/** Normalize a string for matching: lowercase, strip diacritics, trim. */
-function normalize(text: string): string {
-  return text
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .trim()
-}
-
-/**
- * Sitemap wave 1 — controlled activation via `noindex` column.
- *
- * Only providers with noindex=false are included.
- * Hub pages (service × location) are included if they have at least one
- * indexable provider.
- *
- * Static pages are always included.
- */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date()
 
-  // Static pages (always indexed)
-  const staticEntries: MetadataRoute.Sitemap = [
-    { url: BASE_URL, lastModified: now, changeFrequency: 'daily', priority: 1 },
-    { url: `${BASE_URL}/services`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
-    { url: `${BASE_URL}/faq`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${BASE_URL}/a-propos`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${BASE_URL}/contact`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${BASE_URL}/comment-ca-marche`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${BASE_URL}/tarifs-artisans`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${BASE_URL}/blog`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
-    { url: `${BASE_URL}/mentions-legales`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
-    { url: `${BASE_URL}/confidentialite`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
-    { url: `${BASE_URL}/cgv`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
-    { url: `${BASE_URL}/accessibilite`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
-    { url: `${BASE_URL}/notre-processus-de-verification`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${BASE_URL}/politique-avis`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${BASE_URL}/mediation`, lastModified: now, changeFrequency: 'yearly', priority: 0.4 },
-    { url: `${BASE_URL}/urgence`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
-    { url: `${BASE_URL}/recherche`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
-    // /carrieres, /presse, /partenaires excluded — robots: { index: false }
-    { url: `${BASE_URL}/villes`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
-    { url: `${BASE_URL}/regions`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${BASE_URL}/departements`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${BASE_URL}/blog/comment-choisir-plombier`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${BASE_URL}/blog/renovation-energetique-2024`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${BASE_URL}/blog/urgence-plomberie-que-faire`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${BASE_URL}/blog/tendances-decoration-2024`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+  // Homepage
+  const homepage: MetadataRoute.Sitemap = [
+    {
+      url: SITE_URL,
+      lastModified: now,
+      changeFrequency: 'daily',
+      priority: 1.0,
+    },
   ]
 
-  // Service category hub pages
-  const serviceHubEntries: MetadataRoute.Sitemap = services.map(s => ({
-    url: `${BASE_URL}/services/${s.slug}`,
+  // Static pages
+  const staticPages: MetadataRoute.Sitemap = [
+    { path: '/a-propos', changeFrequency: 'monthly' as const, priority: 0.5 },
+    { path: '/contact', changeFrequency: 'monthly' as const, priority: 0.5 },
+    { path: '/blog', changeFrequency: 'weekly' as const, priority: 0.7 },
+    { path: '/faq', changeFrequency: 'monthly' as const, priority: 0.6 },
+    { path: '/comment-ca-marche', changeFrequency: 'monthly' as const, priority: 0.6 },
+    { path: '/tarifs-artisans', changeFrequency: 'monthly' as const, priority: 0.6 },
+    { path: '/urgence', changeFrequency: 'weekly' as const, priority: 0.9 },
+    { path: '/devis', changeFrequency: 'monthly' as const, priority: 0.8 },
+    { path: '/inscription-artisan', changeFrequency: 'monthly' as const, priority: 0.6 },
+    { path: '/recherche', changeFrequency: 'weekly' as const, priority: 0.8 },
+    { path: '/mentions-legales', changeFrequency: 'yearly' as const, priority: 0.3 },
+    { path: '/confidentialite', changeFrequency: 'yearly' as const, priority: 0.3 },
+    { path: '/cgv', changeFrequency: 'yearly' as const, priority: 0.3 },
+    { path: '/accessibilite', changeFrequency: 'yearly' as const, priority: 0.3 },
+    { path: '/notre-processus-de-verification', changeFrequency: 'monthly' as const, priority: 0.5 },
+    { path: '/politique-avis', changeFrequency: 'monthly' as const, priority: 0.5 },
+    { path: '/mediation', changeFrequency: 'yearly' as const, priority: 0.4 },
+    { path: '/blog/comment-choisir-plombier', changeFrequency: 'monthly' as const, priority: 0.6 },
+    { path: '/blog/renovation-energetique-2026', changeFrequency: 'monthly' as const, priority: 0.6 },
+    { path: '/blog/urgence-plomberie-que-faire', changeFrequency: 'monthly' as const, priority: 0.6 },
+    { path: '/blog/tendances-decoration-2026', changeFrequency: 'monthly' as const, priority: 0.6 },
+  ].map(({ path, changeFrequency, priority }) => ({
+    url: `${SITE_URL}${path}`,
+    lastModified: now,
+    changeFrequency,
+    priority,
+  }))
+
+  // Services index
+  const servicesIndex: MetadataRoute.Sitemap = [
+    {
+      url: `${SITE_URL}/services`,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+  ]
+
+  // Individual service pages (15 services)
+  const servicePages: MetadataRoute.Sitemap = services.map((service) => ({
+    url: `${SITE_URL}/services/${service.slug}`,
     lastModified: now,
     changeFrequency: 'weekly' as const,
-    priority: 0.8,
+    priority: 0.9,
   }))
 
-  // Geographic pages
-  const villeEntries: MetadataRoute.Sitemap = villes.map(v => ({
-    url: `${BASE_URL}/villes/${v.slug}`,
-    lastModified: now,
-    changeFrequency: 'weekly' as const,
-    priority: 0.6,
-  }))
-
-  const regionEntries: MetadataRoute.Sitemap = regions.map(r => ({
-    url: `${BASE_URL}/regions/${r.slug}`,
-    lastModified: now,
-    changeFrequency: 'monthly' as const,
-    priority: 0.5,
-  }))
-
-  const deptEntries: MetadataRoute.Sitemap = departements.map(d => ({
-    url: `${BASE_URL}/departements/${d.slug}`,
-    lastModified: now,
-    changeFrequency: 'monthly' as const,
-    priority: 0.5,
-  }))
-
-  // Static service × location pages (15 services × 141 villes = 2,115 pages)
-  // These are always pre-rendered via generateStaticParams, so include regardless of DB
-  const serviceLocationEntries: MetadataRoute.Sitemap = services.flatMap(s =>
-    villes.map(v => ({
-      url: `${BASE_URL}/services/${s.slug}/${v.slug}`,
+  // Service + city combination pages (15 services x 141 villes = 2,115 pages)
+  const serviceCityPages: MetadataRoute.Sitemap = services.flatMap((service) =>
+    villes.map((ville) => ({
+      url: `${SITE_URL}/services/${service.slug}/${ville.slug}`,
       lastModified: now,
       changeFrequency: 'weekly' as const,
-      priority: 0.7,
+      priority: 0.8,
     }))
   )
 
-  // Build lookup maps: normalized name → static slug
-  const serviceMap = new Map<string, string>()
-  for (const s of services) {
-    serviceMap.set(normalize(s.name), s.slug)
-  }
+  // Villes index
+  const villesIndex: MetadataRoute.Sitemap = [
+    {
+      url: `${SITE_URL}/villes`,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+  ]
 
-  const villeMap = new Map<string, string>()
-  for (const v of villes) {
-    villeMap.set(normalize(v.name), v.slug)
-  }
+  // Individual ville pages (141 villes)
+  const villePages: MetadataRoute.Sitemap = villes.map((ville) => ({
+    url: `${SITE_URL}/villes/${ville.slug}`,
+    lastModified: now,
+    changeFrequency: 'weekly' as const,
+    priority: 0.7,
+  }))
 
-  // Dynamic entries: only providers with noindex=false
+  // Departements index
+  const departementsIndex: MetadataRoute.Sitemap = [
+    {
+      url: `${SITE_URL}/departements`,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+  ]
+
+  // Individual departement pages
+  const departementPages: MetadataRoute.Sitemap = departements.map((dept) => ({
+    url: `${SITE_URL}/departements/${dept.slug}`,
+    lastModified: now,
+    changeFrequency: 'weekly' as const,
+    priority: 0.7,
+  }))
+
+  // Regions index
+  const regionsIndex: MetadataRoute.Sitemap = [
+    {
+      url: `${SITE_URL}/regions`,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+  ]
+
+  // Individual region pages
+  const regionPages: MetadataRoute.Sitemap = regions.map((region) => ({
+    url: `${SITE_URL}/regions/${region.slug}`,
+    lastModified: now,
+    changeFrequency: 'weekly' as const,
+    priority: 0.7,
+  }))
+
+  // Dynamic provider entries from database
   let providerEntries: MetadataRoute.Sitemap = []
 
   try {
     const { createAdminClient } = await import('@/lib/supabase/admin')
     const supabase = createAdminClient()
 
-    // Fetch all indexable providers with pagination
+    const serviceMap = new Map<string, string>()
+    for (const s of services) {
+      serviceMap.set(
+        s.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim(),
+        s.slug
+      )
+    }
+
+    const villeMap = new Map<string, string>()
+    for (const v of villes) {
+      villeMap.set(
+        v.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim(),
+        v.slug
+      )
+    }
+
+    const specialtyToSlug: Record<string, string> = {
+      'plombier': 'plombier',
+      'electricien': 'electricien',
+      'chauffagiste': 'chauffagiste',
+      'menuisier': 'menuisier',
+      'menuisier-metallique': 'menuisier',
+      'carreleur': 'carreleur',
+      'couvreur': 'couvreur',
+      'macon': 'macon',
+      'peintre': 'peintre-en-batiment',
+      'charpentier': 'couvreur',
+      'isolation': 'climaticien',
+      'platrier': 'peintre-en-batiment',
+      'finition': 'peintre-en-batiment',
+    }
+
     type ProviderRow = {
       name: string | null
       slug: string | null
@@ -140,31 +193,43 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       from += PAGE_SIZE
     }
 
-    if (allProviders.length === 0) {
-      return [...staticEntries, ...serviceHubEntries, ...serviceLocationEntries, ...regionEntries, ...deptEntries, ...villeEntries]
-    }
-
     providerEntries = allProviders
-      .filter((p) => p.name && p.stable_id && p.specialty && p.address_city)
+      .filter((p) => p.name && (p.stable_id || p.slug) && p.specialty && p.address_city)
       .reduce<MetadataRoute.Sitemap>((acc, p) => {
-        const serviceSlug = serviceMap.get(normalize(p.specialty!))
-        const locationSlug = villeMap.get(normalize(p.address_city!))
+        const normalizedSpecialty = p.specialty!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
+        const serviceSlug = serviceMap.get(normalizedSpecialty) || specialtyToSlug[p.specialty!.toLowerCase()]
+        const normalizedCity = p.address_city!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
+        const locationSlug = villeMap.get(normalizedCity)
 
-        // Only include providers whose service AND city exist in static data
         if (!serviceSlug || !locationSlug) return acc
 
+        const publicId = p.stable_id || p.slug
+        if (!publicId) return acc
+
         acc.push({
-          url: `${BASE_URL}/services/${serviceSlug}/${locationSlug}/${p.stable_id}`,
+          url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}/${publicId}`,
           lastModified: p.updated_at ? new Date(p.updated_at) : now,
           changeFrequency: 'weekly' as const,
           priority: 0.7,
         })
         return acc
       }, [])
-  } catch (err) {
-    console.error('Sitemap DB error', err)
-    return [...staticEntries, ...serviceHubEntries, ...serviceLocationEntries, ...regionEntries, ...deptEntries, ...villeEntries]
+  } catch {
+    // DB unavailable at build time — return static entries only
   }
 
-  return [...staticEntries, ...serviceHubEntries, ...serviceLocationEntries, ...regionEntries, ...deptEntries, ...villeEntries, ...providerEntries]
+  return [
+    ...homepage,
+    ...staticPages,
+    ...servicesIndex,
+    ...servicePages,
+    ...serviceCityPages,
+    ...villesIndex,
+    ...villePages,
+    ...departementsIndex,
+    ...departementPages,
+    ...regionsIndex,
+    ...regionPages,
+    ...providerEntries,
+  ]
 }

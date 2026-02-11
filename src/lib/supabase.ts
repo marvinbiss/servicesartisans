@@ -108,6 +108,19 @@ export async function getProviderBySlug(slug: string) {
   return data || null
 }
 
+// Reverse mapping: service slug → provider specialties (for fallback queries)
+const SERVICE_TO_SPECIALTIES: Record<string, string[]> = {
+  'plombier': ['plombier'],
+  'electricien': ['electricien'],
+  'chauffagiste': ['chauffagiste'],
+  'menuisier': ['menuisier', 'menuisier-metallique'],
+  'carreleur': ['carreleur'],
+  'couvreur': ['couvreur', 'charpentier'],
+  'macon': ['macon'],
+  'peintre-en-batiment': ['peintre', 'platrier', 'finition'],
+  'climaticien': ['isolation'],
+}
+
 export async function getProvidersByServiceAndLocation(
   serviceSlug: string,
   locationSlug: string
@@ -118,23 +131,40 @@ export async function getProvidersByServiceAndLocation(
   ])
 
   if (!service || !location) return []
-  if (!isValidUUID(service.id)) return []
 
-  // Neutral ordering: verified first, then alphabetical (no premium bias)
-  const { data, error } = await supabase
+  // Primary query: via provider_services join (works when join table is populated)
+  if (isValidUUID(service.id)) {
+    const { data, error } = await supabase
+      .from('providers')
+      .select(`
+        *,
+        provider_services!inner(service_id)
+      `)
+      .eq('provider_services.service_id', service.id)
+      .ilike('address_city', location.name)
+      .eq('is_active', true)
+      .order('is_verified', { ascending: false })
+      .order('name')
+
+    if (!error && data && data.length > 0) return data
+  }
+
+  // Fallback: direct query by specialty + city (works before join tables are populated)
+  const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
+  if (!specialties || specialties.length === 0) return []
+
+  const { data: fallback, error: fbError } = await supabase
     .from('providers')
-    .select(`
-      *,
-      provider_services!inner(service_id)
-    `)
-    .eq('provider_services.service_id', service.id)
-    .ilike('address_city', location.name)
+    .select('*')
+    .in('specialty', specialties)
+    .ilike('address_city', `%${location.name}%`)
     .eq('is_active', true)
     .order('is_verified', { ascending: false })
     .order('name')
+    .limit(50)
 
-  if (error) throw error
-  return data || []
+  if (fbError) throw fbError
+  return fallback || []
 }
 
 export async function getProvidersByLocation(locationSlug: string) {

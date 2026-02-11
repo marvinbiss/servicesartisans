@@ -1,14 +1,15 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { Check, X, Star, ArrowRight, Zap, Crown, Building } from 'lucide-react'
+import { ArrowRight, Euro, TrendingUp, CheckCircle, Search, ChevronDown } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import { tradeContent } from '@/lib/data/trade-content'
 
 export const metadata: Metadata = {
-  title: 'Tarifs Artisans - Offres et abonnements | ServicesArtisans',
-  description: 'Découvrez nos offres pour les artisans. Inscription gratuite, visibilité maximale et demandes de devis qualifiées.',
+  title: 'Tarifs artisans 2026 — Guide complet des prix par métier | ServicesArtisans',
+  description: 'Guide complet des tarifs artisans en 2026 : prix plombier, électricien, peintre, couvreur, maçon et tous les corps de métier. Comparez les prix pour mieux estimer votre budget travaux.',
   alternates: {
     canonical: 'https://servicesartisans.fr/tarifs-artisans',
   },
@@ -21,285 +22,333 @@ export const metadata: Metadata = {
   },
 }
 
-const plans = [
+const tradeFaqs = [
   {
-    name: 'Gratuit',
-    icon: Zap,
-    price: '0',
-    period: '/mois',
-    description: 'Pour démarrer et tester la plateforme',
-    features: [
-      { text: 'Fiche artisan basique', included: true },
-      { text: 'Visibilité dans les recherches', included: true },
-      { text: '5 demandes de devis/mois', included: true },
-      { text: 'Avis clients', included: true },
-      { text: 'Badge vérifié', included: false },
-      { text: 'Mise en avant', included: false },
-      { text: 'Statistiques détaillées', included: false },
-      { text: 'Support prioritaire', included: false },
-    ],
-    cta: 'Créer mon profil',
-    ctaLink: '/inscription-artisan',
-    popular: false,
+    question: 'Comment sont calculés les prix affichés ?',
+    answer: 'Les prix affichés sont des fourchettes moyennes observées en France métropolitaine. Ils incluent la main-d\'oeuvre et varient selon la région, la complexité des travaux, l\'urgence et le niveau de qualification de l\'artisan. Demandez toujours plusieurs devis pour obtenir le meilleur prix.',
   },
   {
-    name: 'Pro',
-    icon: Star,
-    price: '49',
-    period: '/mois',
-    description: 'Pour développer votre activité',
-    features: [
-      { text: 'Fiche artisan complète', included: true },
-      { text: 'Visibilité prioritaire', included: true },
-      { text: 'Demandes de devis illimitées', included: true },
-      { text: 'Avis clients', included: true },
-      { text: 'Badge vérifié', included: true },
-      { text: 'Mise en avant locale', included: true },
-      { text: 'Statistiques détaillées', included: true },
-      { text: 'Support prioritaire', included: false },
-    ],
-    cta: 'Essai gratuit 14 jours',
-    ctaLink: '/inscription-artisan?plan=pro',
-    popular: true,
+    question: 'Pourquoi les prix varient-ils autant d\'un artisan à l\'autre ?',
+    answer: 'Plusieurs facteurs expliquent les écarts de prix : la localisation géographique (les prix sont plus élevés en Île-de-France), l\'expérience et les certifications de l\'artisan, la complexité du chantier, les matériaux utilisés et la période de l\'année (plus cher en haute saison).',
   },
   {
-    name: 'Premium',
-    icon: Crown,
-    price: '99',
-    period: '/mois',
-    description: 'Pour les artisans ambitieux',
-    features: [
-      { text: 'Fiche artisan premium', included: true },
-      { text: 'Visibilité maximale', included: true },
-      { text: 'Demandes de devis illimitées', included: true },
-      { text: 'Avis clients + réponses', included: true },
-      { text: 'Badge vérifié + premium', included: true },
-      { text: 'Mise en avant nationale', included: true },
-      { text: 'Statistiques avancées', included: true },
-      { text: 'Support prioritaire 24/7', included: true },
-    ],
-    cta: 'Essai gratuit 14 jours',
-    ctaLink: '/inscription-artisan?plan=premium',
-    popular: false,
+    question: 'Comment obtenir un devis gratuit pour mes travaux ?',
+    answer: 'Sur ServicesArtisans, vous pouvez demander un devis gratuit en remplissant notre formulaire en ligne. Vous pouvez aussi contacter directement les artisans référencés sur notre plateforme. Nous recommandons de demander au moins 3 devis pour comparer.',
+  },
+  {
+    question: 'Les prix incluent-ils la TVA ?',
+    answer: 'Les prix affichés sont généralement TTC (toutes taxes comprises). Le taux de TVA varie selon le type de travaux : 10% pour la rénovation dans un logement de plus de 2 ans, 5,5% pour les travaux d\'amélioration énergétique (isolation, chauffage), et 20% pour les constructions neuves.',
   },
 ]
 
-const faqs = [
-  {
-    q: 'Puis-je changer d\'offre à tout moment ?',
-    a: 'Oui, vous pouvez upgrader ou downgrader votre abonnement à tout moment. Le changement prend effet immédiatement.',
-  },
-  {
-    q: 'Y a-t-il un engagement ?',
-    a: 'Non, tous nos abonnements sont sans engagement. Vous pouvez résilier à tout moment.',
-  },
-  {
-    q: 'Comment fonctionne l\'essai gratuit ?',
-    a: 'L\'essai gratuit de 14 jours vous donne accès à toutes les fonctionnalités de l\'offre choisie. Aucune carte bancaire requise.',
-  },
-  {
-    q: 'Les demandes de devis sont-elles qualifiées ?',
-    a: 'Oui, nous vérifions chaque demande pour vous envoyer uniquement des projets sérieux correspondant à vos compétences et votre zone d\'intervention.',
-  },
-]
-
-const breadcrumbItems = [
-  { label: 'Tarifs artisans' }
-]
+const tradeEmojis: Record<string, string> = {
+  plombier: '\uD83D\uDD27',
+  electricien: '\u26A1',
+  serrurier: '\uD83D\uDD11',
+  chauffagiste: '\uD83D\uDD25',
+  'peintre-en-batiment': '\uD83C\uDFA8',
+  menuisier: '\uD83E\uDE9A',
+  carreleur: '\uD83E\uDDF1',
+  couvreur: '\uD83C\uDFE0',
+  macon: '\uD83C\uDFD7\uFE0F',
+  jardinier: '\uD83C\uDF33',
+  vitrier: '\uD83E\uDE9F',
+  climaticien: '\u2744\uFE0F',
+  cuisiniste: '\uD83C\uDF73',
+  solier: '\uD83D\uDECB\uFE0F',
+  nettoyage: '\u2728',
+}
 
 export default function TarifsArtisansPage() {
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: 'Accueil', url: '/' },
+    { name: 'Tarifs artisans', url: '/tarifs-artisans' },
+  ])
+
+  const faqSchema = getFAQSchema(tradeFaqs)
+
+  const trades = Object.values(tradeContent)
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <JsonLd data={getBreadcrumbSchema([
-        { name: 'Accueil', url: '/' },
-        { name: 'Tarifs artisans', url: '/tarifs-artisans' },
-      ])} />
-      {/* Hero */}
-      <section className="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <Breadcrumb items={breadcrumbItems} className="mb-6 justify-center text-blue-200 [&_a]:text-blue-200 [&_a:hover]:text-white [&_svg]:text-blue-300 [&>span]:text-white" />
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            Développez votre activité
-          </h1>
-          <p className="text-xl text-blue-100 max-w-2xl mx-auto">
-            Rejoignez notre réseau d'artisans et recevez des demandes de devis qualifiées
-          </p>
-        </div>
-      </section>
+    <>
+      <JsonLd data={[breadcrumbSchema, faqSchema]} />
+      <div className="min-h-screen bg-gray-50">
+        {/* Hero */}
+        <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
+          <div className="absolute inset-0">
+            <div className="absolute inset-0" style={{
+              background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(37,99,235,0.1) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(59,130,246,0.06) 0%, transparent 50%)',
+            }} />
+            <div className="absolute inset-0 opacity-[0.025]" style={{
+              backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+              backgroundSize: '64px 64px',
+            }} />
+            <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-50 to-transparent" />
+          </div>
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-28 md:pt-14 md:pb-36">
+            <Breadcrumb
+              items={[{ label: 'Tarifs artisans' }]}
+              className="mb-6 text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
+            />
+            <div className="text-center">
+              <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
+                Guide des prix artisans 2026
+              </h1>
+              <p className="text-xl text-slate-400 max-w-3xl mx-auto mb-4">
+                Tarifs moyens par corps de m&eacute;tier en France. Comparez les prix de {trades.length} m&eacute;tiers
+                du b&acirc;timent pour estimer votre budget travaux avant de demander un devis.
+              </p>
+              <div className="flex flex-wrap justify-center gap-3 mt-8">
+                <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
+                  <Euro className="w-4 h-4 text-amber-400" />
+                  <span>Prix actualis&eacute;s 2026</span>
+                </div>
+                <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
+                  <TrendingUp className="w-4 h-4 text-amber-400" />
+                  <span>{trades.length} corps de m&eacute;tier</span>
+                </div>
+                <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
+                  <CheckCircle className="w-4 h-4 text-amber-400" />
+                  <span>Donn&eacute;es v&eacute;rifi&eacute;es</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
-      {/* Plans */}
-      <section className="py-20 -mt-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-3 gap-8">
-            {plans.map((plan) => {
-              const Icon = plan.icon
-              return (
-                <div
-                  key={plan.name}
-                  className={`bg-white rounded-2xl border-2 ${
-                    plan.popular ? 'border-blue-600 shadow-xl scale-105' : 'border-gray-200'
-                  } p-8 relative`}
+        {/* Quick navigation */}
+        <section className="py-8 bg-white border-b sticky top-0 z-10">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-wrap gap-2">
+              {trades.map((trade) => (
+                <a
+                  key={trade.slug}
+                  href={`#${trade.slug}`}
+                  className="px-3 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-blue-100 hover:text-blue-700 transition-colors"
                 >
-                  {plan.popular && (
-                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-4 py-1 rounded-full text-sm font-medium">
-                      Le plus populaire
-                    </div>
-                  )}
+                  {trade.name}
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
 
-                  <div className="text-center mb-8">
-                    <div className={`w-16 h-16 ${plan.popular ? 'bg-blue-100' : 'bg-gray-100'} rounded-2xl flex items-center justify-center mx-auto mb-4`} aria-hidden="true">
-                      <Icon className={`w-8 h-8 ${plan.popular ? 'text-blue-600' : 'text-gray-600'}`} />
+        {/* Trade cards */}
+        <section className="py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                Tarifs par corps de métier
+              </h2>
+              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                Prix moyens constatés en France métropolitaine, main-d&apos;oeuvre incluse
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {trades.map((trade) => {
+                const topTasks = trade.commonTasks.slice(0, 3)
+                const emoji = tradeEmojis[trade.slug] || '\uD83D\uDD27'
+
+                return (
+                  <div
+                    key={trade.slug}
+                    id={trade.slug}
+                    className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow scroll-mt-24"
+                  >
+                    {/* Header */}
+                    <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-6">
+                      <div className="flex items-center gap-3 mb-3">
+                        <span className="text-3xl">{emoji}</span>
+                        <h3 className="text-xl font-bold text-gray-900">
+                          {trade.name}
+                        </h3>
+                      </div>
+                      <div className="flex items-baseline gap-1">
+                        <span className="text-3xl font-bold text-blue-600">
+                          {trade.priceRange.min} - {trade.priceRange.max}
+                        </span>
+                        <span className="text-gray-600 text-sm">
+                          {trade.priceRange.unit}
+                        </span>
+                      </div>
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-900">{plan.name}</h3>
-                    <p className="text-gray-600 mt-1">{plan.description}</p>
-                    <div className="mt-4" aria-label={`Prix: ${plan.price} euros par mois`}>
-                      <span className="text-4xl font-bold text-gray-900">{plan.price}€</span>
-                      <span className="text-gray-500">{plan.period}</span>
+
+                    {/* Top tasks */}
+                    <div className="p-6">
+                      <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+                        Prestations courantes
+                      </h4>
+                      <ul className="space-y-2 mb-6">
+                        {topTasks.map((task, i) => (
+                          <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
+                            <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                            <span>{task}</span>
+                          </li>
+                        ))}
+                      </ul>
+
+                      {/* Certifications */}
+                      {trade.certifications.length > 0 && (
+                        <div className="mb-4">
+                          <div className="flex flex-wrap gap-1">
+                            {trade.certifications.slice(0, 2).map((cert, i) => (
+                              <span
+                                key={i}
+                                className="inline-block bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded"
+                              >
+                                {cert}
+                              </span>
+                            ))}
+                            {trade.certifications.length > 2 && (
+                              <span className="inline-block bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded">
+                                +{trade.certifications.length - 2}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* CTA */}
+                      <Link
+                        href={`/services/${trade.slug}`}
+                        className="flex items-center justify-between w-full bg-blue-600 text-white px-4 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm"
+                      >
+                        <span>Voir les tarifs détaillés</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </Link>
                     </div>
                   </div>
-
-                  <ul className="space-y-4 mb-8" aria-label={`Fonctionnalités de l'offre ${plan.name}`}>
-                    {plan.features.map((feature, i) => (
-                      <li key={i} className="flex items-center gap-3">
-                        {feature.included ? (
-                          <Check className="w-5 h-5 text-green-500 flex-shrink-0" aria-hidden="true" />
-                        ) : (
-                          <X className="w-5 h-5 text-gray-300 flex-shrink-0" aria-hidden="true" />
-                        )}
-                        <span className={feature.included ? 'text-gray-700' : 'text-gray-400'}>
-                          {feature.included ? '' : 'Non inclus: '}{feature.text}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <Link
-                    href={plan.ctaLink}
-                    className={`block w-full text-center py-3 rounded-lg font-semibold transition-colors ${
-                      plan.popular
-                        ? 'bg-blue-600 text-white hover:bg-blue-700'
-                        : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
-                    }`}
-                  >
-                    {plan.cta}
-                  </Link>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Enterprise */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-8 md:p-12 text-white flex flex-col md:flex-row items-center gap-8" role="region" aria-labelledby="enterprise-heading">
-            <div className="flex-1">
-              <div className="flex items-center gap-3 mb-4">
-                <Building className="w-8 h-8" aria-hidden="true" />
-                <h3 id="enterprise-heading" className="text-2xl font-bold">Offre Entreprise</h3>
-              </div>
-              <p className="text-gray-300 mb-4">
-                Vous avez plusieurs équipes ou agences ? Contactez-nous pour une offre sur mesure
-                avec des tarifs dégressifs et un accompagnement personnalisé.
-              </p>
-              <ul className="text-gray-300 space-y-2">
-                <li>+ Multi-comptes et multi-agences</li>
-                <li>+ Tableau de bord centralisé</li>
-                <li>+ Account manager dédié</li>
-              </ul>
+                )
+              })}
             </div>
-            <Link
-              href="/contact"
-              className="bg-white text-gray-900 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors flex items-center gap-2"
-            >
-              Nous contacter
-              <ArrowRight className="w-5 h-5" />
-            </Link>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* FAQ */}
-      <section className="py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
-            Questions fréquentes
-          </h2>
-          <div className="space-y-6">
-            {faqs.map((faq, i) => (
-              <div key={i} className="bg-white rounded-xl p-6 shadow-sm">
-                <h3 className="font-semibold text-gray-900 mb-2">{faq.q}</h3>
-                <p className="text-gray-600">{faq.a}</p>
+        {/* How to save money */}
+        <section className="py-16 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                Comment obtenir le meilleur prix ?
+              </h2>
+              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                Nos conseils pour réduire le coût de vos travaux sans sacrifier la qualité
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+              <div className="text-center p-6">
+                <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl font-bold text-blue-600">1</span>
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">Comparez 3 devis minimum</h3>
+                <p className="text-gray-600 text-sm">
+                  Ne vous contentez jamais d&apos;un seul devis. La comparaison permet d&apos;identifier le juste prix et de négocier.
+                </p>
               </div>
-            ))}
+              <div className="text-center p-6">
+                <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl font-bold text-blue-600">2</span>
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">Évitez les urgences</h3>
+                <p className="text-gray-600 text-sm">
+                  Les interventions d&apos;urgence coûtent 50 à 100% plus cher. Anticipez l&apos;entretien et les réparations.
+                </p>
+              </div>
+              <div className="text-center p-6">
+                <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl font-bold text-blue-600">3</span>
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">Profitez des aides</h3>
+                <p className="text-gray-600 text-sm">
+                  MaPrimeRénov&apos;, CEE, éco-PTZ... Les aides peuvent couvrir 30 à 90% du coût des travaux de rénovation énergétique.
+                </p>
+              </div>
+              <div className="text-center p-6">
+                <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl font-bold text-blue-600">4</span>
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">Vérifiez l&apos;artisan</h3>
+                <p className="text-gray-600 text-sm">
+                  Un artisan vérifié avec SIRET, assurance et certifications vous protège contre les malfaçons et les arnaques.
+                </p>
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Related links */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8">Explorer le réseau</h2>
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
-            <PopularServicesLinks />
-            <PopularCitiesLinks />
+        {/* FAQ */}
+        <section className="py-16 bg-gray-50">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                Questions fréquentes sur les tarifs artisans
+              </h2>
+            </div>
+
+            <div className="space-y-4">
+              {tradeFaqs.map((faq, index) => (
+                <details
+                  key={index}
+                  className="bg-white rounded-xl border border-gray-200 group"
+                >
+                  <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
+                    <h3 className="text-lg font-semibold text-gray-900 pr-4">
+                      {faq.question}
+                    </h3>
+                    <ChevronDown className="w-5 h-5 text-gray-400 flex-shrink-0 group-open:rotate-180 transition-transform" />
+                  </summary>
+                  <div className="px-6 pb-6 text-gray-600 leading-relaxed">
+                    {faq.answer}
+                  </div>
+                </details>
+              ))}
+            </div>
           </div>
+        </section>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            <Link
-              href="/inscription-artisan"
-              className="bg-blue-50 hover:bg-blue-100 rounded-xl p-6 transition-colors group"
-            >
-              <h3 className="font-semibold text-blue-700 group-hover:text-blue-800 mb-2">S'inscrire maintenant</h3>
-              <p className="text-blue-600 text-sm">Créez votre profil artisan gratuitement</p>
-            </Link>
-            <Link
-              href="/avis"
-              className="bg-gray-50 hover:bg-gray-100 rounded-xl p-6 transition-colors group"
-            >
-              <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 mb-2">Avis clients</h3>
-              <p className="text-gray-600 text-sm">Ce que disent nos clients de nos artisans</p>
-            </Link>
-            <Link
-              href="/comment-ca-marche"
-              className="bg-gray-50 hover:bg-gray-100 rounded-xl p-6 transition-colors group"
-            >
-              <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 mb-2">Comment ça marche</h3>
-              <p className="text-gray-600 text-sm">Tout savoir sur notre plateforme</p>
-            </Link>
+        {/* CTA */}
+        <section className="py-20 bg-blue-600">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-3xl font-bold text-white mb-4">
+              Obtenez un devis précis pour vos travaux
+            </h2>
+            <p className="text-xl text-blue-100 mb-8">
+              Les prix varient selon votre projet. Demandez un devis gratuit pour connaître le coût exact.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link
+                href="/devis"
+                className="inline-flex items-center gap-2 bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-blue-50 transition-colors text-lg"
+              >
+                Demander un devis gratuit
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+              <Link
+                href="/services"
+                className="inline-flex items-center gap-2 bg-blue-500 text-white px-8 py-4 rounded-xl font-semibold hover:bg-blue-400 transition-colors text-lg border border-blue-400"
+              >
+                <Search className="w-5 h-5" />
+                Trouver un artisan
+              </Link>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* CTA */}
-      <section className="py-16 bg-blue-600">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">
-            Prêt à développer votre activité ?
-          </h2>
-          <p className="text-xl text-blue-100 mb-8">
-            Rejoignez ServicesArtisans et recevez vos premières demandes de devis
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/inscription-artisan"
-              className="inline-flex items-center justify-center gap-2 bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-blue-50 transition-colors text-lg"
-            >
-              Créer mon profil gratuitement
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-            <Link
-              href="/urgence"
-              className="inline-flex items-center justify-center gap-2 bg-blue-700 text-white px-8 py-4 rounded-xl font-semibold hover:bg-blue-800 transition-colors text-lg"
-            >
-              Services d'urgence
-            </Link>
+        {/* Related Links Section */}
+        <section className="bg-gray-50 py-12 border-t">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-xl font-bold text-gray-900 mb-6">
+              Trouvez un artisan près de chez vous
+            </h2>
+            <div className="grid md:grid-cols-2 gap-8">
+              <PopularServicesLinks />
+              <PopularCitiesLinks />
+            </div>
           </div>
-        </div>
-      </section>
-
-      {/* Footer links */}
-    </div>
+        </section>
+      </div>
+    </>
   )
 }

@@ -27,13 +27,13 @@ const informationLinks = [
 
 export default function Footer() {
   return (
-    <footer className="bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 text-gray-400">
+    <footer className="bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 text-gray-400" role="contentinfo">
       {/* Newsletter Section Premium */}
       <div className="border-b border-slate-800/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-8 bg-gradient-to-r from-primary-600/10 via-primary-500/5 to-transparent rounded-2xl p-8 border border-primary-500/20">
             <div className="text-center lg:text-left">
-              <h3 className="text-2xl font-bold text-white mb-2">Restez informé</h3>
+              <h3 className="font-heading text-2xl font-bold text-white mb-2 tracking-tight">Restez informé</h3>
               <p className="text-gray-400">Recevez nos conseils et offres exclusives</p>
             </div>
             <NewsletterForm />
@@ -50,17 +50,17 @@ export default function Footer() {
                 <Shield className="w-6 h-6 text-green-400" />
               </div>
               <div>
-                <p className="text-white font-semibold text-sm">Artisans vérifiés</p>
-                <p className="text-gray-500 text-xs">Qualifications contrôlées</p>
+                <p className="text-white font-semibold text-sm">350 000+ artisans</p>
+                <p className="text-gray-500 text-xs">Vérifiés par SIREN</p>
               </div>
             </div>
             <div className="flex items-center gap-3 justify-center md:justify-start">
               <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center">
-                <CreditCard className="w-6 h-6 text-blue-400" />
+                <Building2 className="w-6 h-6 text-blue-400" />
               </div>
               <div>
-                <p className="text-white font-semibold text-sm">Paiement sécurisé</p>
-                <p className="text-gray-500 text-xs">SSL & 3D Secure</p>
+                <p className="text-white font-semibold text-sm">101 départements</p>
+                <p className="text-gray-500 text-xs">Couverture nationale</p>
               </div>
             </div>
             <div className="flex items-center gap-3 justify-center md:justify-start">
@@ -68,17 +68,17 @@ export default function Footer() {
                 <Award className="w-6 h-6 text-amber-400" />
               </div>
               <div>
-                <p className="text-white font-semibold text-sm">Devis gratuits</p>
+                <p className="text-white font-semibold text-sm">100% gratuit</p>
                 <p className="text-gray-500 text-xs">Sans engagement</p>
               </div>
             </div>
             <div className="flex items-center gap-3 justify-center md:justify-start">
               <div className="w-12 h-12 bg-purple-500/10 rounded-xl flex items-center justify-center">
-                <Phone className="w-6 h-6 text-purple-400" />
+                <CreditCard className="w-6 h-6 text-purple-400" />
               </div>
               <div>
-                <p className="text-white font-semibold text-sm">Support par email</p>
-                <p className="text-gray-500 text-xs">contact@servicesartisans.fr</p>
+                <p className="text-white font-semibold text-sm">Données officielles</p>
+                <p className="text-gray-500 text-xs">API gouvernementale</p>
               </div>
             </div>
           </div>
@@ -223,7 +223,8 @@ export default function Footer() {
               </span>
             </Link>
             <p className="text-sm leading-relaxed mb-6 text-gray-400">
-              La plateforme de référence pour trouver des artisans qualifiés près de chez vous.
+              Le plus grand annuaire d&apos;artisans vérifiés de France. 350 000+ professionnels
+              référencés via les données SIREN officielles dans 101 départements.
             </p>
             <div className="flex gap-3">
               <a href="https://facebook.com/servicesartisans" target="_blank" rel="noopener noreferrer" className="w-11 h-11 bg-slate-800/50 rounded-xl flex items-center justify-center hover:bg-primary-600 hover:scale-110 transition-all duration-300 group" aria-label="Facebook">
@@ -310,7 +311,7 @@ export default function Footer() {
 
           {/* Legal */}
           <div>
-            <h4 className="text-white font-semibold mb-5 text-sm uppercase tracking-wider">Legal</h4>
+            <h4 className="text-white font-semibold mb-5 text-sm uppercase tracking-wider">Juridique</h4>
             <ul className="space-y-3 text-sm">
               <li>
                 <Link href="/mentions-legales" className="hover:text-white transition-colors duration-200">

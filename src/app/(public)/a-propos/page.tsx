@@ -1,14 +1,15 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { Shield, Search, CreditCard, FileCheck, Lock, Eye, ArrowRight } from 'lucide-react'
+import { Shield, Search, CreditCard, Lock, Eye, ArrowRight, Database } from 'lucide-react'
+import Breadcrumb from '@/components/Breadcrumb'
 import { createAdminClient } from '@/lib/supabase/admin'
 import JsonLd from '@/components/JsonLd'
 import { getOrganizationSchema, getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { companyIdentity } from '@/lib/config/company-identity'
 
 export const metadata: Metadata = {
-  title: 'À propos - ServicesArtisans',
-  description: 'Découvrez ServicesArtisans : comment nous vérifions les artisans, notre technologie, notre modèle économique. Transparence totale.',
+  title: 'À propos — Le plus grand annuaire d\'artisans de France',
+  description: 'ServicesArtisans référence 350 000+ artisans vérifiés par SIREN grâce aux données ouvertes du gouvernement. Annuaire gratuit, transparent et fiable.',
   alternates: {
     canonical: 'https://servicesartisans.fr/a-propos',
   },
@@ -51,9 +52,9 @@ async function getStats() {
 
 const verificationSteps = [
   {
-    icon: FileCheck,
-    title: 'Vérification SIRET',
-    description: 'Chaque artisan est vérifié via l\'API SIRENE de l\'INSEE pour confirmer l\'existence et l\'activité de son entreprise.',
+    icon: Database,
+    title: 'Données SIREN officielles',
+    description: 'Chaque artisan provient de l\'API Annuaire des Entreprises du gouvernement. Numéro SIREN, activité et adresse sont issus des données publiques officielles.',
   },
   {
     icon: Shield,
@@ -106,15 +107,32 @@ export default async function AProposPage() {
       <JsonLd data={[orgSchema, breadcrumbSchema]} />
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            À propos de {companyIdentity.name}
+      <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0" style={{
+            background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(37,99,235,0.1) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(59,130,246,0.06) 0%, transparent 50%)',
+          }} />
+          <div className="absolute inset-0 opacity-[0.025]" style={{
+            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+            backgroundSize: '64px 64px',
+          }} />
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-50 to-transparent" />
+        </div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-28 md:pt-14 md:pb-36">
+          <Breadcrumb
+            items={[{ label: '\u00C0 propos' }]}
+            className="mb-6 text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
+          />
+          <div className="text-center">
+          <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
+            Le plus grand annuaire d&apos;artisans de France
           </h1>
-          <p className="text-xl text-blue-100 max-w-3xl mx-auto">
-            Nous construisons une plateforme qui connecte les particuliers
-            avec des artisans qualifiés en France. Voici comment nous travaillons.
+          <p className="text-xl text-slate-400 max-w-3xl mx-auto">
+            Nous avons construit le plus grand annuaire d&apos;artisans de France
+            en exploitant les donn&eacute;es ouvertes du gouvernement. 350 000+ professionnels
+            v&eacute;rifi&eacute;s par SIREN, accessibles gratuitement.
           </p>
+          </div>
         </div>
       </section>
 
@@ -160,23 +178,29 @@ export default async function AProposPage() {
                   <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                     <span className="text-blue-600 text-xs font-bold">1</span>
                   </div>
-                  <p>Plateforme construite avec <strong>Next.js</strong> pour des performances optimales et un référencement naturel de qualité.</p>
+                  <p>Données artisans issues de l&apos;<strong>API Annuaire des Entreprises</strong> du gouvernement (données ouvertes SIREN).</p>
                 </div>
                 <div className="flex items-start gap-3">
                   <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                     <span className="text-blue-600 text-xs font-bold">2</span>
                   </div>
-                  <p>Données hébergées en Europe via <strong>Supabase</strong> (PostgreSQL).</p>
+                  <p>Plateforme construite avec <strong>Next.js</strong> pour des performances optimales et un référencement naturel de qualité.</p>
                 </div>
                 <div className="flex items-start gap-3">
                   <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                     <span className="text-blue-600 text-xs font-bold">3</span>
                   </div>
-                  <p>Paiements sécurisés via <strong>Stripe</strong>, certifié PCI-DSS.</p>
+                  <p>Données hébergées en Europe via <strong>Supabase</strong> (PostgreSQL).</p>
                 </div>
                 <div className="flex items-start gap-3">
                   <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                     <span className="text-blue-600 text-xs font-bold">4</span>
+                  </div>
+                  <p>Paiements sécurisés via <strong>Stripe</strong>, certifié PCI-DSS.</p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span className="text-blue-600 text-xs font-bold">5</span>
                   </div>
                   <p>Monitoring et gestion des erreurs via <strong>Sentry</strong>.</p>
                 </div>
@@ -229,14 +253,14 @@ export default async function AProposPage() {
           {hasArtisans ? (
             <>
               <h2 className="text-3xl font-bold text-gray-900 mb-8">
-                La plateforme en chiffres
+                L&apos;annuaire en chiffres
               </h2>
               <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto">
                 <div>
                   <div className="text-3xl font-bold text-blue-600">
                     {stats.artisanCount.toLocaleString('fr-FR')}
                   </div>
-                  <div className="text-gray-600 mt-1">Artisans référencés</div>
+                  <div className="text-gray-600 mt-1">Artisans vérifiés par SIREN</div>
                 </div>
                 <div>
                   <div className="text-3xl font-bold text-blue-600">
@@ -258,11 +282,12 @@ export default async function AProposPage() {
             <div className="max-w-xl mx-auto">
               <div className="bg-blue-50 border border-blue-200 rounded-2xl p-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-3">
-                  Plateforme en phase de lancement
+                  Annuaire en cours de constitution
                 </h2>
                 <p className="text-gray-600 mb-6">
-                  Nous préparons l'ouverture de {companyIdentity.name}. Les premiers artisans
-                  vérifiés seront bientôt disponibles.
+                  Nous importons les données de l&apos;API Annuaire des Entreprises pour constituer
+                  le plus grand répertoire d&apos;artisans de France. Les premiers professionnels
+                  vérifiés par SIREN seront bientôt accessibles.
                 </p>
                 <Link
                   href="/inscription-artisan"

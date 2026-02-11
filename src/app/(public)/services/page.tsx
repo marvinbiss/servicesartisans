@@ -19,14 +19,14 @@ const validServiceSlugs = new Set(staticServicesList.map(s => s.slug))
 export const revalidate = REVALIDATE.services
 
 export const metadata: Metadata = {
-  title: 'Tous les services artisans - ServicesArtisans',
-  description: 'Découvrez tous nos services : plombier, électricien, serrurier, chauffagiste, peintre, couvreur, menuisier, maçon et bien plus. Trouvez un artisan qualifié près de chez vous.',
+  title: 'Tous les services artisans — 350 000+ professionnels vérifiés',
+  description: 'Annuaire de 350 000+ artisans vérifiés par SIREN : plombier, électricien, serrurier, chauffagiste, peintre, couvreur, menuisier, maçon et 50+ métiers. Devis gratuits dans 101 départements.',
   alternates: {
     canonical: 'https://servicesartisans.fr/services',
   },
   openGraph: {
-    title: 'Tous les services artisans - ServicesArtisans',
-    description: 'Plus de 50 métiers du bâtiment pour tous vos travaux. Trouvez un artisan qualifié près de chez vous.',
+    title: 'Tous les services artisans — 350 000+ professionnels vérifiés',
+    description: '50+ métiers du bâtiment, 350 000+ artisans vérifiés par SIREN dans 101 départements. Trouvez un professionnel qualifié près de chez vous.',
     url: 'https://servicesartisans.fr/services',
   },
   robots: {
@@ -163,7 +163,7 @@ export default function ServicesPage() {
             <span className="text-sm font-medium text-white/90">50+ métiers du bâtiment</span>
           </div>
 
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight">
+          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight">
             Tous nos{' '}
             <span className="bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 bg-clip-text text-transparent">
               services
@@ -210,7 +210,7 @@ export default function ServicesPage() {
                     <CategoryIcon className={`w-7 h-7 ${colors.icon}`} />
                   </div>
                   <div>
-                    <h2 className="text-2xl font-bold text-gray-900">
+                    <h2 className="font-heading text-2xl font-bold text-gray-900 tracking-tight">
                       {category.category}
                     </h2>
                     <p className="text-sm text-gray-500">{category.services.length} services disponibles</p>
@@ -272,7 +272,7 @@ export default function ServicesPage() {
 
           {/* Maillage interne: Villes populaires */}
           <div className="mt-16 pt-12 border-t border-gray-200">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+            <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3 tracking-tight">
               <MapPin className="w-6 h-6 text-blue-600" />
               Trouvez un artisan par ville
             </h2>
@@ -295,7 +295,7 @@ export default function ServicesPage() {
             <span className="text-sm font-medium text-amber-300">Devis gratuit en quelques clics</span>
           </div>
 
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-white mb-4 tracking-tight">
             Vous ne trouvez pas votre métier ?
           </h2>
           <p className="text-xl text-slate-300 mb-10 max-w-xl mx-auto">

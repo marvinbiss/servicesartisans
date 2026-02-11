@@ -23,6 +23,8 @@ const nextConfig = {
     } : false,
   },
 
+  staticPageGenerationTimeout: 180,
+
   experimental: {
     optimizePackageImports: [
       'lucide-react',

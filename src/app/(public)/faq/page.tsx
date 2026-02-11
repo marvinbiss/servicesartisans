@@ -29,20 +29,30 @@ export default function FAQPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero */}
-      <section className="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0" style={{
+            background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(37,99,235,0.1) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(59,130,246,0.06) 0%, transparent 50%)',
+          }} />
+          <div className="absolute inset-0 opacity-[0.025]" style={{
+            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+            backgroundSize: '64px 64px',
+          }} />
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-50 to-transparent" />
+        </div>
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-28 md:pt-14 md:pb-36">
           {/* Breadcrumb */}
           <Breadcrumb
             items={[{ label: 'FAQ' }]}
-            className="mb-6 text-blue-100 [&_a]:text-blue-200 [&_a:hover]:text-white [&_svg]:text-blue-300"
+            className="mb-6 text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
           />
           <div className="text-center">
-            <HelpCircle className="w-16 h-16 mx-auto mb-6 opacity-80" />
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Questions fréquentes
+            <HelpCircle className="w-16 h-16 mx-auto mb-6 opacity-60" />
+            <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-4 tracking-[-0.025em]">
+              Questions fr&eacute;quentes
             </h1>
-            <p className="text-xl text-blue-100 mb-8">
-              Trouvez rapidement les réponses à vos questions
+            <p className="text-xl text-slate-400 mb-8">
+              Trouvez rapidement les r&eacute;ponses &agrave; vos questions
             </p>
 
             {/* Search */}

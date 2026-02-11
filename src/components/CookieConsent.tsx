@@ -124,7 +124,7 @@ export default function CookieConsent() {
         exit={{ y: 100, opacity: 0 }}
         className="fixed bottom-0 left-0 right-0 z-50 p-4 md:p-6"
       >
-        <div className="mx-auto max-w-4xl rounded-2xl bg-white shadow-2xl border border-gray-100">
+        <div className="mx-auto max-w-4xl rounded-2xl bg-white shadow-2xl border border-gray-100" role="dialog" aria-label="Gestion des cookies" aria-modal="false">
           <div className="p-6">
             {/* Header */}
             <div className="flex items-start justify-between gap-4">
@@ -280,7 +280,7 @@ export default function CookieConsent() {
 
             {/* Links */}
             <div className="mt-4 flex gap-4 text-xs text-gray-500">
-              <a href="/politique-confidentialite" className="hover:text-blue-600 hover:underline">
+              <a href="/confidentialite" className="hover:text-blue-600 hover:underline">
                 Politique de confidentialité
               </a>
               <a href="/mentions-legales" className="hover:text-blue-600 hover:underline">

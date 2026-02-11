@@ -14,6 +14,8 @@ import Link from 'next/link'
 import { REVALIDATE } from '@/lib/cache'
 import { slugify } from '@/lib/utils'
 import { services as staticServicesList, villes, getVilleBySlug, getDepartementByCode, getRegionSlugByName } from '@/lib/data/france'
+import { getTradeContent } from '@/lib/data/trade-content'
+import { getFAQSchema } from '@/lib/seo/jsonld'
 import type { Service, Location as LocationType, Provider } from '@/types'
 
 // Safely escape JSON for script tags to prevent XSS
@@ -104,8 +106,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return { title: 'Non trouvé' }
   }
 
-  const title = `${serviceName} ${locationName} (${postalCode || departmentCode}) - Devis gratuit`
-  const description = `Trouvez le meilleur ${serviceName.toLowerCase()} à ${locationName}. Comparez les avis, tarifs et obtenez jusqu'à 3 devis gratuits. Artisans vérifiés et disponibles.`
+  const title = `${serviceName} à ${locationName} (${postalCode || departmentCode}) — Annuaire & Devis Gratuit`
+  const description = `Trouvez un ${serviceName.toLowerCase()} vérifié par SIREN à ${locationName}. Comparez les profils, consultez les coordonnées et demandez un devis gratuit. Artisans vérifiés par l'API gouvernementale.`
   const svcLower = serviceName.toLowerCase()
 
   return {
@@ -215,7 +217,10 @@ export default async function ServiceLocationPage({ params }: PageProps) {
     // Continue with empty providers — page still renders
   }
 
-  const jsonLdSchemas = generateJsonLd(service, location, providers || [], serviceSlug, locationSlug)
+  const trade = getTradeContent(serviceSlug)
+  const baseSchemas = generateJsonLd(service, location, providers || [], serviceSlug, locationSlug)
+  const faqSchema = trade ? getFAQSchema(trade.faq.map(f => ({ question: f.q, answer: f.a }))) : null
+  const jsonLdSchemas: Record<string, unknown>[] = [...baseSchemas, ...(faqSchema ? [faqSchema] : [])]
 
   // Filter out current location and get other services for cross-linking
   const otherServices = popularServices.filter(s => s.slug !== serviceSlug).slice(0, 6)
@@ -238,6 +243,40 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         location={location}
         providers={providers || []}
       />
+
+      {/* Trade pricing context */}
+      {trade && (
+        <section className="py-10 bg-gray-50 border-t">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-xl font-bold text-gray-900 mb-4">
+              Tarifs {service.name.toLowerCase()} à {location.name}
+            </h2>
+            <p className="text-gray-600 mb-4 text-sm">
+              Tarif horaire moyen : <strong>{trade.priceRange.min}–{trade.priceRange.max} {trade.priceRange.unit}</strong>.
+              Les prix peuvent varier selon la complexité des travaux et le professionnel choisi.
+            </p>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
+              {trade.commonTasks.slice(0, 6).map((task, i) => {
+                const [label, price] = task.split(' : ')
+                return (
+                  <div key={i} className="flex items-start justify-between gap-3 p-2.5 bg-white rounded-lg text-sm">
+                    <span className="text-gray-700">{label}</span>
+                    {price && <span className="font-semibold text-amber-700 whitespace-nowrap">{price}</span>}
+                  </div>
+                )
+              })}
+            </div>
+            {trade.emergencyInfo && (
+              <div className="mt-4 p-4 bg-red-50 border border-red-100 rounded-lg">
+                <p className="text-sm text-red-800">
+                  <strong>Urgence {service.name.toLowerCase()} à {location.name} :</strong>{' '}
+                  {trade.averageResponseTime}
+                </p>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* Voir aussi - Cross Links Section */}
       <section className="py-12 bg-white border-t">

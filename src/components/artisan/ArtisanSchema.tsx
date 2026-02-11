@@ -73,8 +73,10 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
     name: displayName,
     description: artisan.description || `${displayName} - ${artisan.specialty} a ${artisan.city}`,
     image: artisan.avatar_url || `${baseUrl}/og-artisan.jpg`,
-    telephone: artisan.phone,
-    email: artisan.email,
+    ...(artisan.phone && artisan.phone.replace(/\D/g, '').length >= 10 && {
+      telephone: artisan.phone,
+    }),
+    ...(artisan.email && { email: artisan.email }),
     url: artisanUrl,
     priceRange: artisan.hourly_rate ? `${artisan.hourly_rate}€ - ${artisan.hourly_rate * 2}€` : '€€',
     parentOrganization: {

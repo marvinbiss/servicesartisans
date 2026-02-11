@@ -86,6 +86,7 @@ export function ReviewPhotoGallery({
                 src={item.thumbnailUrl || item.url}
                 alt={item.caption || 'Photo'}
                 className="w-full h-full object-cover"
+                loading="lazy"
               />
             ) : (
               <div className="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
@@ -123,6 +124,9 @@ export function ReviewPhotoGallery({
           className="fixed inset-0 z-50 bg-black flex flex-col"
           onKeyDown={handleKeyDown}
           tabIndex={0}
+          role="dialog"
+          aria-label="Galerie photo en plein écran"
+          aria-modal="true"
         >
           {/* Header */}
           <div className="flex items-center justify-between p-4 text-white">
@@ -132,6 +136,7 @@ export function ReviewPhotoGallery({
             <button
               onClick={closeLightbox}
               className="p-2 hover:bg-white/10 rounded-full"
+              aria-label="Fermer la galerie"
             >
               <X className="w-6 h-6" />
             </button>
@@ -143,12 +148,14 @@ export function ReviewPhotoGallery({
             <button
               onClick={() => navigate('prev')}
               className="absolute left-4 p-2 bg-white/10 hover:bg-white/20 rounded-full text-white z-10"
+              aria-label="Photo précédente"
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
             <button
               onClick={() => navigate('next')}
               className="absolute right-4 p-2 bg-white/10 hover:bg-white/20 rounded-full text-white z-10"
+              aria-label="Photo suivante"
             >
               <ChevronRight className="w-6 h-6" />
             </button>

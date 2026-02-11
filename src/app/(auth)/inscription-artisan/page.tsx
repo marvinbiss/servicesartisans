@@ -111,28 +111,38 @@ export default function InscriptionArtisanPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero */}
-      <section className="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Breadcrumb items={breadcrumbItems} className="mb-6 text-blue-200 [&_a]:text-blue-200 [&_a:hover]:text-white [&_svg]:text-blue-300 [&>span]:text-white" />
+      <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0" style={{
+            background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(37,99,235,0.1) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(59,130,246,0.06) 0%, transparent 50%)',
+          }} />
+          <div className="absolute inset-0 opacity-[0.025]" style={{
+            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+            backgroundSize: '64px 64px',
+          }} />
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-50 to-transparent" />
+        </div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-28 md:pt-14 md:pb-36">
+          <Breadcrumb items={breadcrumbItems} className="mb-6 text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600 [&>span]:text-white" />
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-6">
-                Rejoignez le réseau ServicesArtisans
+              <h1 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
+                Rejoignez le r&eacute;seau ServicesArtisans
               </h1>
-              <p className="text-xl text-blue-100 mb-8">
-                Inscription gratuite. Recevez des demandes de devis qualifiées et
-                développez votre activité.
+              <p className="text-xl text-slate-400 mb-8">
+                Inscription gratuite. Recevez des demandes de devis qualifi&eacute;es et
+                d&eacute;veloppez votre activit&eacute;.
               </p>
               <div className="grid grid-cols-3 gap-6">
                 {benefits.map((benefit) => {
                   const Icon = benefit.icon
                   return (
                     <div key={benefit.title} className="text-center">
-                      <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mx-auto mb-2">
-                        <Icon className="w-6 h-6" />
+                      <div className="w-12 h-12 bg-white/10 backdrop-blur rounded-xl flex items-center justify-center mx-auto mb-2 border border-white/10">
+                        <Icon className="w-6 h-6 text-amber-400" />
                       </div>
                       <div className="font-semibold">{benefit.title}</div>
-                      <div className="text-sm text-blue-200">{benefit.description}</div>
+                      <div className="text-sm text-slate-400">{benefit.description}</div>
                     </div>
                   )
                 })}

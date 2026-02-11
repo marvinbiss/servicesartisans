@@ -180,6 +180,9 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[100] bg-black/95 flex flex-col"
             onClick={closeLightbox}
+            role="dialog"
+            aria-label="Galerie de réalisations en plein écran"
+            aria-modal="true"
           >
             {/* Header */}
             <div className="flex items-center justify-between p-4 text-white">
@@ -196,6 +199,7 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
                 <button
                   className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
                   onClick={closeLightbox}
+                  aria-label="Fermer la galerie"
                 >
                   <X className="w-6 h-6 text-white" />
                 </button>
@@ -210,6 +214,7 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
                 animate={{ opacity: 1, x: 0 }}
                 className="absolute left-4 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10"
                 onClick={(e) => { e.stopPropagation(); goToPrevious(); }}
+                aria-label="Photo précédente"
               >
                 <ChevronLeft className="w-8 h-8 text-white" />
               </motion.button>
@@ -220,6 +225,7 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
                 animate={{ opacity: 1, x: 0 }}
                 className="absolute right-4 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10"
                 onClick={(e) => { e.stopPropagation(); goToNext(); }}
+                aria-label="Photo suivante"
               >
                 <ChevronRight className="w-8 h-8 text-white" />
               </motion.button>

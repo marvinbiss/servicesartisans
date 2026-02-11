@@ -6,42 +6,14 @@ import {
   Search, Menu, X, ChevronDown, MapPin, Wrench, Zap, Key, Flame,
   PaintBucket, Home, Hammer, HardHat, Wind, TreeDeciduous,
   ShieldCheck, Sparkles, Star, Clock, Phone, ArrowRight, Users, Award,
-  ChefHat, Layers, Brush, Navigation, History
+  ChefHat, Layers, Brush, Navigation, Map, Building2, Globe
 } from 'lucide-react'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useMobileMenu } from '@/contexts/MobileMenuContext'
-import { services as allServices } from '@/lib/data/france'
+import { regions } from '@/lib/data/france'
+import SearchBar from '@/components/SearchBar'
 
-// Simple client-side city autocomplete (no server dependencies)
-interface CitySuggestion {
-  city: string
-  context: string
-  label: string
-  postcode: string
-}
-
-async function searchCities(query: string): Promise<CitySuggestion[]> {
-  if (!query || query.length < 2) return []
-
-  try {
-    const url = `https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(query)}&type=municipality&limit=6&autocomplete=1`
-    const response = await fetch(url)
-
-    if (!response.ok) return []
-
-    const data = await response.json()
-
-    return data.features?.map((f: { properties: { city: string; context: string; label: string; postcode: string } }) => ({
-      city: f.properties.city || f.properties.label,
-      context: f.properties.context,
-      label: f.properties.label,
-      postcode: f.properties.postcode
-    })) || []
-  } catch {
-    return []
-  }
-}
-
+// Reverse geocoding for mobile geolocation
 async function getLocationFromCoords(lon: number, lat: number): Promise<string | null> {
   try {
     const url = `https://api-adresse.data.gouv.fr/reverse/?lon=${lon}&lat=${lat}`
@@ -112,148 +84,144 @@ const serviceCategories = [
     icon: TreeDeciduous,
     services: [
       { name: 'Jardinier', slug: 'jardinier', icon: TreeDeciduous, description: 'Jardin, aménagement' },
-      { name: 'Couvreur', slug: 'couvreur', icon: Home, description: 'Toiture, réparation' },
     ]
   },
 ]
 
-// Villes populaires
-const popularCities = [
-  { name: 'Paris', slug: 'paris', population: '2.1M', region: 'Île-de-France' },
-  { name: 'Lyon', slug: 'lyon', population: '522K', region: 'Auvergne-Rhône-Alpes' },
-  { name: 'Marseille', slug: 'marseille', population: '870K', region: 'PACA' },
-  { name: 'Toulouse', slug: 'toulouse', population: '493K', region: 'Occitanie' },
-  { name: 'Bordeaux', slug: 'bordeaux', population: '260K', region: 'Nouvelle-Aquitaine' },
-  { name: 'Lille', slug: 'lille', population: '236K', region: 'Hauts-de-France' },
-  { name: 'Nantes', slug: 'nantes', population: '320K', region: 'Pays de la Loire' },
-  { name: 'Strasbourg', slug: 'strasbourg', population: '287K', region: 'Grand Est' },
-  { name: 'Nice', slug: 'nice', population: '342K', region: 'PACA' },
-  { name: 'Montpellier', slug: 'montpellier', population: '295K', region: 'Occitanie' },
-  { name: 'Rennes', slug: 'rennes', population: '222K', region: 'Bretagne' },
-  { name: 'Grenoble', slug: 'grenoble', population: '158K', region: 'Auvergne-Rhône-Alpes' },
+// Villes populaires organisées par région pour le mega menu desktop
+const citiesByRegion = [
+  {
+    region: 'Île-de-France',
+    cities: [
+      { name: 'Paris', slug: 'paris', population: '2.1M' },
+      { name: 'Boulogne-Billancourt', slug: 'boulogne-billancourt', population: '121K' },
+      { name: 'Saint-Denis', slug: 'saint-denis', population: '113K' },
+      { name: 'Versailles', slug: 'versailles', population: '85K' },
+    ]
+  },
+  {
+    region: 'Auvergne-Rhône-Alpes',
+    cities: [
+      { name: 'Lyon', slug: 'lyon', population: '522K' },
+      { name: 'Grenoble', slug: 'grenoble', population: '158K' },
+      { name: 'Saint-Étienne', slug: 'saint-etienne', population: '173K' },
+      { name: 'Annecy', slug: 'annecy', population: '130K' },
+    ]
+  },
+  {
+    region: 'PACA',
+    cities: [
+      { name: 'Marseille', slug: 'marseille', population: '870K' },
+      { name: 'Nice', slug: 'nice', population: '342K' },
+      { name: 'Toulon', slug: 'toulon', population: '178K' },
+      { name: 'Aix-en-Provence', slug: 'aix-en-provence', population: '145K' },
+    ]
+  },
+  {
+    region: 'Occitanie',
+    cities: [
+      { name: 'Toulouse', slug: 'toulouse', population: '493K' },
+      { name: 'Montpellier', slug: 'montpellier', population: '295K' },
+      { name: 'Nîmes', slug: 'nimes', population: '151K' },
+      { name: 'Perpignan', slug: 'perpignan', population: '121K' },
+    ]
+  },
+  {
+    region: 'Nouvelle-Aquitaine',
+    cities: [
+      { name: 'Bordeaux', slug: 'bordeaux', population: '260K' },
+      { name: 'La Rochelle', slug: 'la-rochelle', population: '79K' },
+    ]
+  },
+  {
+    region: 'Hauts-de-France',
+    cities: [
+      { name: 'Lille', slug: 'lille', population: '236K' },
+      { name: 'Amiens', slug: 'amiens', population: '135K' },
+    ]
+  },
+  {
+    region: 'Grand Est',
+    cities: [
+      { name: 'Strasbourg', slug: 'strasbourg', population: '287K' },
+      { name: 'Reims', slug: 'reims', population: '184K' },
+      { name: 'Metz', slug: 'metz', population: '118K' },
+    ]
+  },
+  {
+    region: 'Pays de la Loire',
+    cities: [
+      { name: 'Nantes', slug: 'nantes', population: '320K' },
+      { name: 'Angers', slug: 'angers', population: '155K' },
+    ]
+  },
+  {
+    region: 'Bretagne',
+    cities: [
+      { name: 'Rennes', slug: 'rennes', population: '222K' },
+      { name: 'Brest', slug: 'brest', population: '139K' },
+    ]
+  },
+  {
+    region: 'Normandie',
+    cities: [
+      { name: 'Rouen', slug: 'rouen', population: '113K' },
+      { name: 'Caen', slug: 'caen', population: '106K' },
+      { name: 'Le Havre', slug: 'le-havre', population: '170K' },
+    ]
+  },
 ]
 
-// Flat list of services
-const services = serviceCategories.flatMap(cat => cat.services)
+// Flat list for mobile
+const popularCities = [
+  { name: 'Paris', slug: 'paris' },
+  { name: 'Lyon', slug: 'lyon' },
+  { name: 'Marseille', slug: 'marseille' },
+  { name: 'Toulouse', slug: 'toulouse' },
+  { name: 'Bordeaux', slug: 'bordeaux' },
+  { name: 'Lille', slug: 'lille' },
+  { name: 'Nantes', slug: 'nantes' },
+  { name: 'Strasbourg', slug: 'strasbourg' },
+  { name: 'Nice', slug: 'nice' },
+  { name: 'Montpellier', slug: 'montpellier' },
+  { name: 'Rennes', slug: 'rennes' },
+  { name: 'Grenoble', slug: 'grenoble' },
+]
 
-// Normalize text for search
-function normalizeText(text: string): string {
-  return text
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9\s]/g, '')
-}
+// Metropolitan regions (first 13) and DOM-TOM for the regions mega menu
+const metroRegions = regions.slice(0, 13)
+const domTomRegions = regions.slice(13)
 
-// Get recent searches from localStorage
-function getRecentSearches(): Array<{ service: string; location: string }> {
-  if (typeof window === 'undefined') return []
-  try {
-    const stored = localStorage.getItem('recentSearches')
-    return stored ? JSON.parse(stored).slice(0, 5) : []
-  } catch {
-    return []
-  }
-}
-
-// Save search to localStorage
-function saveRecentSearch(service: string, location: string) {
-  if (typeof window === 'undefined' || (!service && !location)) return
-  try {
-    const searches = getRecentSearches()
-    const newSearch = { service, location }
-    const filtered = searches.filter(
-      s => s.service !== service || s.location !== location
-    )
-    const updated = [newSearch, ...filtered].slice(0, 5)
-    localStorage.setItem('recentSearches', JSON.stringify(updated))
-  } catch {
-    // Ignore storage errors
-  }
-}
+type MenuType = 'services' | 'villes' | 'regions' | null
+type MobileAccordion = 'services' | 'villes' | 'regions' | null
 
 export default function Header() {
   const router = useRouter()
   const pathname = usePathname()
   const { isMenuOpen, setIsMenuOpen } = useMobileMenu()
 
-  // Search state
+  // Mobile search state
   const [serviceQuery, setServiceQuery] = useState('')
   const [locationQuery, setLocationQuery] = useState('')
-  const [serviceSuggestions, setServiceSuggestions] = useState<typeof allServices>([])
-  const [locationSuggestions, setLocationSuggestions] = useState<CitySuggestion[]>([])
-  const [showServiceDropdown, setShowServiceDropdown] = useState(false)
-  const [showLocationDropdown, setShowLocationDropdown] = useState(false)
-  const [highlightedServiceIndex, setHighlightedServiceIndex] = useState(-1)
-  const [highlightedLocationIndex, setHighlightedLocationIndex] = useState(-1)
   const [isLocating, setIsLocating] = useState(false)
-  const [recentSearches, setRecentSearches] = useState<Array<{ service: string; location: string }>>([])
 
   const [mounted, setMounted] = useState(false)
-  const [openMenu, setOpenMenu] = useState<'services' | 'villes' | null>(null)
+  const [openMenu, setOpenMenu] = useState<MenuType>(null)
+  const [showMobileSearch, setShowMobileSearch] = useState(false)
+  const [mobileAccordion, setMobileAccordion] = useState<MobileAccordion>(null)
 
-  const serviceInputRef = useRef<HTMLInputElement>(null)
-  const locationInputRef = useRef<HTMLInputElement>(null)
-  const searchContainerRef = useRef<HTMLDivElement>(null)
+  const megaMenuTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Wait for client-side mount
   useEffect(() => {
     setMounted(true)
-    setRecentSearches(getRecentSearches())
   }, [])
-
-  // Filter services based on query
-  useEffect(() => {
-    if (!serviceQuery.trim()) {
-      setServiceSuggestions([])
-      return
-    }
-
-    const normalized = normalizeText(serviceQuery)
-    const filtered = allServices.filter(s =>
-      normalizeText(s.name).includes(normalized) ||
-      normalizeText(s.slug).includes(normalized)
-    ).slice(0, 6)
-
-    setServiceSuggestions(filtered)
-    setHighlightedServiceIndex(-1)
-  }, [serviceQuery])
-
-  // Debounced location search - direct API call
-  useEffect(() => {
-    if (locationQuery.length < 2) {
-      setLocationSuggestions([])
-      return
-    }
-
-    const timer = setTimeout(async () => {
-      const results = await searchCities(locationQuery)
-      setLocationSuggestions(results)
-      setHighlightedLocationIndex(-1)
-    }, 200)
-
-    return () => clearTimeout(timer)
-  }, [locationQuery])
-
-  // Close dropdowns when clicking outside
-  useEffect(() => {
-    if (!mounted) return
-
-    const handleClickOutside = (e: MouseEvent) => {
-      if (searchContainerRef.current && !searchContainerRef.current.contains(e.target as Node)) {
-        setShowServiceDropdown(false)
-        setShowLocationDropdown(false)
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [mounted])
 
   // Close all menus on route change
   useEffect(() => {
     setOpenMenu(null)
     setIsMenuOpen(false)
+    setMobileAccordion(null)
   }, [pathname, setIsMenuOpen])
 
   // Close menu when clicking outside
@@ -271,6 +239,21 @@ export default function Header() {
     return () => document.removeEventListener('click', handleClick, true)
   }, [mounted])
 
+  // Close mega menus on Escape key
+  useEffect(() => {
+    if (!mounted) return
+
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setOpenMenu(null)
+      }
+    }
+
+    document.addEventListener('keydown', handleEscape)
+    return () => document.removeEventListener('keydown', handleEscape)
+  }, [mounted])
+
+  // Mobile search handler
   const handleSearch = useCallback((e?: React.FormEvent) => {
     e?.preventDefault()
     const params = new URLSearchParams()
@@ -278,43 +261,13 @@ export default function Header() {
     if (locationQuery.trim()) params.set('location', locationQuery.trim())
 
     if (params.toString()) {
-      saveRecentSearch(serviceQuery.trim(), locationQuery.trim())
-      setRecentSearches(getRecentSearches())
       router.push(`/recherche?${params.toString()}`)
-      setShowServiceDropdown(false)
-      setShowLocationDropdown(false)
     }
   }, [serviceQuery, locationQuery, router])
 
-  // Handle service selection
-  const selectService = useCallback((service: typeof allServices[0]) => {
-    setServiceQuery(service.name)
-    setShowServiceDropdown(false)
-    setServiceSuggestions([])
-    locationInputRef.current?.focus()
-  }, [])
-
-  // Handle location selection
-  const selectLocation = useCallback((location: CitySuggestion) => {
-    setLocationQuery(location.city)
-    setShowLocationDropdown(false)
-    setLocationSuggestions([])
-    // Auto-submit after location selection
-    setTimeout(() => {
-      const params = new URLSearchParams()
-      if (serviceQuery.trim()) params.set('q', serviceQuery.trim())
-      params.set('location', location.city)
-      saveRecentSearch(serviceQuery.trim(), location.city)
-      setRecentSearches(getRecentSearches())
-      router.push(`/recherche?${params.toString()}`)
-    }, 100)
-  }, [serviceQuery, router])
-
-  // Handle geolocation
+  // Handle geolocation for mobile search
   const handleGeolocation = useCallback(async () => {
-    if (!navigator.geolocation) {
-      return
-    }
+    if (!navigator.geolocation) return
 
     setIsLocating(true)
 
@@ -327,11 +280,6 @@ export default function Header() {
           )
           if (city) {
             setLocationQuery(city)
-            if (serviceQuery.trim()) {
-              setTimeout(() => {
-                handleSearch()
-              }, 100)
-            }
           }
         } catch {
           // Ignore errors
@@ -344,93 +292,49 @@ export default function Header() {
       },
       { timeout: 10000, enableHighAccuracy: true }
     )
-  }, [serviceQuery, handleSearch])
+  }, [])
 
-  // Handle keyboard navigation for service input
-  const handleServiceKeyDown = (e: React.KeyboardEvent) => {
-    const suggestions = serviceSuggestions.length > 0 ? serviceSuggestions : []
-
-    switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault()
-        setHighlightedServiceIndex(prev =>
-          prev < suggestions.length - 1 ? prev + 1 : 0
-        )
-        break
-      case 'ArrowUp':
-        e.preventDefault()
-        setHighlightedServiceIndex(prev =>
-          prev > 0 ? prev - 1 : suggestions.length - 1
-        )
-        break
-      case 'Enter':
-        e.preventDefault()
-        if (highlightedServiceIndex >= 0 && suggestions[highlightedServiceIndex]) {
-          selectService(suggestions[highlightedServiceIndex])
-        } else if (!showServiceDropdown || suggestions.length === 0) {
-          handleSearch()
-        }
-        break
-      case 'Escape':
-        setShowServiceDropdown(false)
-        break
-      case 'Tab':
-        setShowServiceDropdown(false)
-        break
-    }
-  }
-
-  // Handle keyboard navigation for location input
-  const handleLocationKeyDown = (e: React.KeyboardEvent) => {
-    switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault()
-        setHighlightedLocationIndex(prev =>
-          prev < locationSuggestions.length - 1 ? prev + 1 : 0
-        )
-        break
-      case 'ArrowUp':
-        e.preventDefault()
-        setHighlightedLocationIndex(prev =>
-          prev > 0 ? prev - 1 : locationSuggestions.length - 1
-        )
-        break
-      case 'Enter':
-        e.preventDefault()
-        if (highlightedLocationIndex >= 0 && locationSuggestions[highlightedLocationIndex]) {
-          selectLocation(locationSuggestions[highlightedLocationIndex])
-        } else {
-          handleSearch()
-        }
-        break
-      case 'Escape':
-        setShowLocationDropdown(false)
-        break
-    }
-  }
-
-  // Apply recent search
-  const applyRecentSearch = useCallback((search: { service: string; location: string }) => {
-    setServiceQuery(search.service)
-    setLocationQuery(search.location)
-    const params = new URLSearchParams()
-    if (search.service) params.set('q', search.service)
-    if (search.location) params.set('location', search.location)
-    router.push(`/recherche?${params.toString()}`)
-    setShowServiceDropdown(false)
-    setShowLocationDropdown(false)
-  }, [router])
-
-  const toggleMenu = (menu: 'services' | 'villes') => {
+  const toggleMenu = (menu: MenuType) => {
     setOpenMenu(current => current === menu ? null : menu)
   }
 
-  const openMenuOnHover = (menu: 'services' | 'villes') => {
+  const openMenuOnHover = (menu: MenuType) => {
+    if (megaMenuTimeoutRef.current) {
+      clearTimeout(megaMenuTimeoutRef.current)
+      megaMenuTimeoutRef.current = null
+    }
     setOpenMenu(menu)
   }
 
+  const closeMenusWithDelay = () => {
+    megaMenuTimeoutRef.current = setTimeout(() => {
+      setOpenMenu(null)
+    }, 150)
+  }
+
   const closeMenus = () => {
+    if (megaMenuTimeoutRef.current) {
+      clearTimeout(megaMenuTimeoutRef.current)
+      megaMenuTimeoutRef.current = null
+    }
     setOpenMenu(null)
+  }
+
+  const toggleMobileAccordion = (section: MobileAccordion) => {
+    setMobileAccordion(current => current === section ? null : section)
+  }
+
+  // Get category color classes for the services mega menu
+  const getCategoryColors = (color: string) => {
+    const map: Record<string, { text: string; hoverBg: string; iconBg: string; border: string }> = {
+      red: { text: 'text-red-700', hoverBg: 'hover:bg-red-50', iconBg: 'bg-red-100', border: 'border-red-200' },
+      orange: { text: 'text-orange-700', hoverBg: 'hover:bg-orange-50', iconBg: 'bg-orange-100', border: 'border-orange-200' },
+      blue: { text: 'text-blue-700', hoverBg: 'hover:bg-blue-50', iconBg: 'bg-blue-100', border: 'border-blue-200' },
+      green: { text: 'text-green-700', hoverBg: 'hover:bg-green-50', iconBg: 'bg-green-100', border: 'border-green-200' },
+      pink: { text: 'text-pink-700', hoverBg: 'hover:bg-pink-50', iconBg: 'bg-pink-100', border: 'border-pink-200' },
+      emerald: { text: 'text-emerald-700', hoverBg: 'hover:bg-emerald-50', iconBg: 'bg-emerald-100', border: 'border-emerald-200' },
+    }
+    return map[color] || map.blue
   }
 
   return (
@@ -495,415 +399,84 @@ export default function Header() {
             </span>
           </Link>
 
-          {/* Search Bar - Dual Field (Service + Location) - Style Doctolib */}
-          <div ref={searchContainerRef} className="hidden md:flex flex-1 max-w-xl mx-4 lg:mx-8">
-            <form onSubmit={handleSearch} className="relative w-full">
-              <div className="flex items-center bg-white border-2 border-gray-200 rounded-full shadow-sm hover:shadow-md hover:border-gray-300 focus-within:border-blue-500 focus-within:shadow-lg focus-within:ring-4 focus-within:ring-blue-500/10 transition-all">
-
-                {/* Service Input */}
-                <div className="relative flex-[1.2]">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <input
-                    ref={serviceInputRef}
-                    type="text"
-                    placeholder="Service..."
-                    value={serviceQuery}
-                    onChange={(e) => setServiceQuery(e.target.value)}
-                    onFocus={() => setShowServiceDropdown(true)}
-                    onKeyDown={handleServiceKeyDown}
-                    className="w-full h-12 pl-11 pr-2 bg-transparent text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none rounded-l-full"
-                    autoComplete="off"
-                  />
-                </div>
-
-                {/* Separator */}
-                <div className="w-px h-7 bg-gray-200 flex-shrink-0" />
-
-                {/* Location Input */}
-                <div className="relative flex-1">
-                  <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <input
-                    ref={locationInputRef}
-                    type="text"
-                    placeholder="Ville..."
-                    value={locationQuery}
-                    onChange={(e) => {
-                      setLocationQuery(e.target.value)
-                      setShowLocationDropdown(true)
-                    }}
-                    onFocus={() => setShowLocationDropdown(true)}
-                    onKeyDown={handleLocationKeyDown}
-                    className="w-full h-12 pl-9 pr-9 bg-transparent text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none"
-                    autoComplete="off"
-                  />
-
-                  {/* Geolocation Button */}
-                  <button
-                    type="button"
-                    onClick={handleGeolocation}
-                    disabled={isLocating}
-                    className="absolute right-1 top-1/2 -translate-y-1/2 p-2 hover:bg-gray-100 rounded-full transition-colors disabled:opacity-50"
-                    title="Ma position"
-                  >
-                    <Navigation className={`w-4 h-4 ${isLocating ? 'animate-spin text-blue-600' : 'text-gray-400 hover:text-blue-600'}`} />
-                  </button>
-
-                  {/* Location Dropdown - inside the input container */}
-                  {showLocationDropdown && (
-                    <div className="absolute top-full left-0 right-0 w-72 mt-2 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-[9999]">
-                      {locationSuggestions.length > 0 ? (
-                        <div className="p-2 max-h-64 overflow-y-auto">
-                          {locationSuggestions.map((location, idx) => (
-                            <button
-                              key={location.label}
-                              type="button"
-                              onClick={() => selectLocation(location)}
-                              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all ${
-                                idx === highlightedLocationIndex ? 'bg-blue-50 shadow-sm' : 'hover:bg-gray-50'
-                              }`}
-                            >
-                              <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${
-                                idx === highlightedLocationIndex ? 'bg-blue-100' : 'bg-gray-100'
-                              }`}>
-                                <MapPin className={`w-4 h-4 ${idx === highlightedLocationIndex ? 'text-blue-600' : 'text-gray-500'}`} />
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <div className={`text-sm font-medium truncate ${idx === highlightedLocationIndex ? 'text-blue-700' : 'text-gray-900'}`}>
-                                  {location.city}
-                                </div>
-                                <div className="text-xs text-gray-400 truncate">{location.context}</div>
-                              </div>
-                            </button>
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="p-3">
-                          <div className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Villes populaires</div>
-                          <div className="grid grid-cols-2 gap-1">
-                            {popularCities.slice(0, 8).map((city) => (
-                              <button
-                                key={city.slug}
-                                type="button"
-                                onClick={() => {
-                                  setLocationQuery(city.name)
-                                  setShowLocationDropdown(false)
-                                  setTimeout(() => {
-                                    const params = new URLSearchParams()
-                                    if (serviceQuery.trim()) params.set('q', serviceQuery.trim())
-                                    params.set('location', city.name)
-                                    saveRecentSearch(serviceQuery.trim(), city.name)
-                                    setRecentSearches(getRecentSearches())
-                                    router.push(`/recherche?${params.toString()}`)
-                                  }, 100)
-                                }}
-                                className="flex items-center gap-2 px-3 py-2 hover:bg-blue-50 rounded-xl text-left transition-colors"
-                              >
-                                <MapPin className="w-4 h-4 text-blue-600" />
-                                <span className="text-sm text-gray-700">{city.name}</span>
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-
-                {/* Search Button */}
-                <button
-                  type="submit"
-                  className="flex-shrink-0 m-1.5 w-10 h-10 bg-blue-600 hover:bg-blue-700 text-white rounded-full transition-all flex items-center justify-center shadow-md hover:shadow-lg hover:scale-105"
-                  aria-label="Rechercher"
-                >
-                  <Search className="w-4 h-4" />
-                </button>
-              </div>
-
-              {/* Service Dropdown */}
-              {showServiceDropdown && (
-                <div className="absolute top-full left-0 w-72 mt-2 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-[9999]">
-                  {recentSearches.length > 0 && !serviceQuery && (
-                    <div className="p-3 border-b border-gray-100">
-                      <div className="flex items-center gap-2 text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
-                        <History className="w-3 h-3" />
-                        Récent
-                      </div>
-                      {recentSearches.slice(0, 3).map((search, idx) => (
-                        <button
-                          key={idx}
-                          type="button"
-                          onClick={() => applyRecentSearch(search)}
-                          className="w-full flex items-center gap-3 px-3 py-2 hover:bg-blue-50 rounded-xl text-left transition-colors"
-                        >
-                          <Clock className="w-4 h-4 text-gray-300" />
-                          <span className="text-sm text-gray-700 truncate">
-                            {search.service || 'Tous'}{search.location && ` · ${search.location}`}
-                          </span>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-
-                  {serviceSuggestions.length > 0 ? (
-                    <div className="p-2 max-h-64 overflow-y-auto">
-                      {serviceSuggestions.map((service, idx) => (
-                        <button
-                          key={service.slug}
-                          type="button"
-                          onClick={() => selectService(service)}
-                          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all ${
-                            idx === highlightedServiceIndex ? 'bg-blue-50 shadow-sm' : 'hover:bg-gray-50'
-                          }`}
-                        >
-                          <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${
-                            idx === highlightedServiceIndex ? 'bg-blue-100' : 'bg-gray-100'
-                          }`}>
-                            <Wrench className={`w-4 h-4 ${idx === highlightedServiceIndex ? 'text-blue-600' : 'text-gray-500'}`} />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className={`text-sm font-medium truncate ${idx === highlightedServiceIndex ? 'text-blue-700' : 'text-gray-900'}`}>
-                              {service.name}
-                            </div>
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  ) : !serviceQuery && recentSearches.length === 0 && (
-                    <div className="p-3">
-                      <div className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Populaires</div>
-                      <div className="space-y-1">
-                        {services.slice(0, 5).map((service) => {
-                          const Icon = service.icon
-                          return (
-                            <button
-                              key={service.slug}
-                              type="button"
-                              onClick={() => {
-                                setServiceQuery(service.name)
-                                setShowServiceDropdown(false)
-                                locationInputRef.current?.focus()
-                              }}
-                              className="w-full flex items-center gap-3 px-3 py-2 hover:bg-blue-50 rounded-xl text-left transition-colors"
-                            >
-                              <div className="w-8 h-8 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg flex items-center justify-center">
-                                <Icon className="w-4 h-4 text-blue-600" />
-                              </div>
-                              <span className="text-sm text-gray-700">{service.name}</span>
-                            </button>
-                          )
-                        })}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-            </form>
+          {/* Search Bar - Compact SearchBar Component */}
+          <div className="hidden md:flex flex-1 max-w-xl mx-4 lg:mx-8">
+            {mounted ? (
+              <SearchBar size="compact" />
+            ) : (
+              <div className="w-full flex-row rounded-full p-1 gap-1 border border-gray-200 bg-white h-[42px] animate-pulse" />
+            )}
           </div>
 
           {/* Navigation Desktop */}
-          <nav className="hidden lg:flex items-center space-x-1">
-            {/* Services Dropdown */}
+          <nav className="hidden lg:flex items-center space-x-1" aria-label="Navigation principale">
+            {/* Services Dropdown Trigger */}
             <div
               className="relative"
               onMouseEnter={() => openMenuOnHover('services')}
-              onMouseLeave={closeMenus}
+              onMouseLeave={closeMenusWithDelay}
             >
               <button
                 type="button"
                 data-menu-trigger="services"
                 onClick={() => toggleMenu('services')}
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-lg font-medium transition-all ${
+                aria-expanded={openMenu === 'services'}
+                aria-haspopup="true"
+                className={`flex items-center gap-1.5 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
                   openMenu === 'services'
                     ? 'text-blue-600 bg-blue-50'
                     : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
                 }`}
               >
                 Services
-                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${openMenu === 'services' ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${openMenu === 'services' ? 'rotate-180' : ''}`} />
               </button>
-
-              {/* Services Megamenu */}
-              {mounted && openMenu === 'services' && (
-                <div
-                  data-menu-content="services"
-                  className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-[900px] bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden"
-                  style={{ zIndex: 9999 }}
-                >
-                  {/* Header */}
-                  <div className="bg-gradient-to-r from-slate-900 to-blue-900 px-6 py-4 flex items-center justify-between">
-                    <div>
-                      <h3 className="text-white font-semibold text-lg">Nos services artisans</h3>
-                      <p className="text-slate-300 text-sm">Plus de 50 métiers disponibles</p>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-white/80">
-                      <Users className="w-4 h-4 text-amber-400" />
-                      Tous nos artisans
-                    </div>
-                  </div>
-
-                  <div className="p-6">
-                    <div className="grid grid-cols-5 gap-4">
-                      {serviceCategories.map((cat) => {
-                        const CatIcon = cat.icon
-                        const isUrgent = cat.color === 'red'
-                        return (
-                          <div key={cat.category} className="space-y-3">
-                            <div className={`flex items-center gap-2 pb-2 border-b ${isUrgent ? 'border-red-200' : 'border-gray-100'}`}>
-                              <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${isUrgent ? 'bg-red-100' : 'bg-blue-50'}`}>
-                                <CatIcon className={`w-4 h-4 ${isUrgent ? 'text-red-600' : 'text-blue-600'}`} />
-                              </div>
-                              <span className={`font-semibold text-sm ${isUrgent ? 'text-red-700' : 'text-gray-900'}`}>
-                                {cat.category}
-                              </span>
-                            </div>
-                            <div className="space-y-1">
-                              {cat.services.map((service) => {
-                                const Icon = service.icon
-                                return (
-                                  <Link
-                                    key={service.slug}
-                                    href={`/services/${service.slug}`}
-                                    onClick={closeMenus}
-                                    className={`flex items-center gap-2 px-3 py-2.5 rounded-xl transition-colors group/link ${
-                                      isUrgent ? 'hover:bg-red-50' : 'hover:bg-blue-50'
-                                    }`}
-                                  >
-                                    <Icon className={`w-4 h-4 ${isUrgent ? 'text-red-500' : 'text-gray-400 group-hover/link:text-blue-600'}`} />
-                                    <div className="flex-1">
-                                      <div className={`text-sm font-medium ${
-                                        isUrgent ? 'text-gray-900 group-hover/link:text-red-700' : 'text-gray-700 group-hover/link:text-blue-700'
-                                      }`}>
-                                        {service.name}
-                                      </div>
-                                      <div className="text-xs text-gray-500 truncate">{service.description}</div>
-                                    </div>
-                                  </Link>
-                                )
-                              })}
-                            </div>
-                          </div>
-                        )
-                      })}
-                    </div>
-
-                    {/* Footer */}
-                    <div className="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
-                      <Link
-                        href="/services"
-                        onClick={closeMenus}
-                        className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold"
-                      >
-                        Voir tous les services
-                        <ArrowRight className="w-4 h-4" />
-                      </Link>
-                      <Link
-                        href="/urgence"
-                        onClick={closeMenus}
-                        className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 font-medium transition-colors"
-                      >
-                        <Phone className="w-4 h-4" />
-                        Urgence ? Artisan disponible maintenant
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
 
-            {/* Villes Dropdown */}
+            {/* Villes Dropdown Trigger */}
             <div
               className="relative"
               onMouseEnter={() => openMenuOnHover('villes')}
-              onMouseLeave={closeMenus}
+              onMouseLeave={closeMenusWithDelay}
             >
               <button
                 type="button"
                 data-menu-trigger="villes"
                 onClick={() => toggleMenu('villes')}
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-lg font-medium transition-all ${
+                aria-expanded={openMenu === 'villes'}
+                aria-haspopup="true"
+                className={`flex items-center gap-1.5 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
                   openMenu === 'villes'
                     ? 'text-blue-600 bg-blue-50'
                     : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
                 }`}
               >
                 Villes
-                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${openMenu === 'villes' ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${openMenu === 'villes' ? 'rotate-180' : ''}`} />
               </button>
+            </div>
 
-              {/* Villes Megamenu */}
-              {mounted && openMenu === 'villes' && (
-                <div
-                  data-menu-content="villes"
-                  className="absolute top-full right-0 mt-1 w-[700px] bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden"
-                  style={{ zIndex: 9999 }}
-                >
-                  {/* Header */}
-                  <div className="bg-gradient-to-r from-slate-900 to-blue-900 px-6 py-4">
-                    <h3 className="text-white font-semibold text-lg">Trouvez un artisan par ville</h3>
-                    <p className="text-slate-300 text-sm">500+ villes couvertes en France</p>
-                  </div>
-
-                  <div className="p-6">
-                    {/* Quick links */}
-                    <div className="flex gap-3 mb-6">
-                      <Link
-                        href="/regions"
-                        onClick={closeMenus}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors font-medium text-sm"
-                      >
-                        <MapPin className="w-4 h-4" />
-                        Par région
-                      </Link>
-                      <Link
-                        href="/departements"
-                        onClick={closeMenus}
-                        className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium text-sm"
-                      >
-                        <MapPin className="w-4 h-4" />
-                        Par département
-                      </Link>
-                    </div>
-
-                    {/* Popular cities */}
-                    <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                      <Star className="w-4 h-4 text-amber-500" />
-                      Villes populaires
-                    </h4>
-                    <div className="grid grid-cols-4 gap-2">
-                      {popularCities.map((city) => (
-                        <Link
-                          key={city.slug}
-                          href={`/villes/${city.slug}`}
-                          onClick={closeMenus}
-                          className="group/city flex items-center justify-between p-3 bg-gray-50 hover:bg-blue-50 rounded-xl transition-colors"
-                        >
-                          <div>
-                            <div className="font-medium text-gray-900 group-hover/city:text-blue-700">{city.name}</div>
-                            <div className="text-xs text-gray-500">{city.region}</div>
-                          </div>
-                          <div className="text-xs text-gray-400 bg-white px-2 py-0.5 rounded-full">{city.population}</div>
-                        </Link>
-                      ))}
-                    </div>
-
-                    {/* Footer */}
-                    <div className="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
-                      <Link
-                        href="/villes"
-                        onClick={closeMenus}
-                        className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold"
-                      >
-                        Toutes les villes
-                        <ArrowRight className="w-4 h-4" />
-                      </Link>
-                      <div className="flex items-center gap-2 text-sm text-gray-500">
-                        <ShieldCheck className="w-4 h-4 text-green-500" />
-                        Artisans vérifiés dans chaque ville
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
+            {/* Régions Dropdown Trigger */}
+            <div
+              className="relative"
+              onMouseEnter={() => openMenuOnHover('regions')}
+              onMouseLeave={closeMenusWithDelay}
+            >
+              <button
+                type="button"
+                data-menu-trigger="regions"
+                onClick={() => toggleMenu('regions')}
+                aria-expanded={openMenu === 'regions'}
+                aria-haspopup="true"
+                className={`flex items-center gap-1.5 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                  openMenu === 'regions'
+                    ? 'text-blue-600 bg-blue-50'
+                    : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
+                }`}
+              >
+                Régions
+                <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${openMenu === 'regions' ? 'rotate-180' : ''}`} />
+              </button>
             </div>
 
             <Link
@@ -921,6 +494,16 @@ export default function Header() {
             </Link>
           </nav>
 
+          {/* Mobile search toggle button */}
+          <button
+            type="button"
+            onClick={() => setShowMobileSearch(!showMobileSearch)}
+            aria-label={showMobileSearch ? 'Masquer la recherche' : 'Afficher la recherche'}
+            className="lg:hidden flex items-center justify-center w-12 h-12 rounded-xl active:bg-gray-200 hover:bg-gray-100 transition-colors"
+          >
+            <Search className={`w-5 h-5 ${showMobileSearch ? 'text-blue-600' : 'text-gray-700'}`} />
+          </button>
+
           {/* Mobile menu button */}
           <button
             type="button"
@@ -936,10 +519,324 @@ export default function Header() {
             )}
           </button>
         </div>
+      </div>
 
-        {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="lg:hidden py-4 border-t border-gray-100 max-h-[calc(100vh-120px)] overflow-y-auto">
+      {/* ==================== MEGA MENU DROPDOWNS (Full-width) ==================== */}
+      {mounted && openMenu && (
+        <>
+          {/* Backdrop overlay */}
+          <div
+            className="fixed inset-0 bg-black/10 backdrop-blur-[1px] transition-opacity duration-300"
+            style={{ zIndex: 9990 }}
+            onClick={closeMenus}
+            aria-hidden="true"
+          />
+
+          {/* ===== SERVICES MEGA MENU ===== */}
+          {openMenu === 'services' && (
+            <div
+              data-menu-content="services" role="menu" aria-label="Services artisans"
+              className="absolute left-0 right-0 bg-white border-t border-gray-100 shadow-2xl rounded-b-xl"
+              style={{ zIndex: 9995 }}
+              onMouseEnter={() => openMenuOnHover('services')}
+              onMouseLeave={closeMenusWithDelay}
+            >
+              <div className="max-w-7xl mx-auto">
+                {/* Header */}
+                <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-blue-900 px-8 py-5 flex items-center justify-between">
+                  <div>
+                    <h3 className="text-white font-heading font-bold text-lg">Tous nos services artisans</h3>
+                    <p className="text-slate-300 text-sm mt-0.5">15 métiers, des milliers d&apos;artisans qualifiés partout en France</p>
+                  </div>
+                  <div className="hidden sm:flex items-center gap-3">
+                    <div className="flex items-center gap-2 text-sm text-white/80 bg-white/10 px-4 py-2 rounded-lg">
+                      <Users className="w-4 h-4 text-amber-400" />
+                      <span>350 000+ artisans</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Body */}
+                <div className="p-8">
+                  <div className="grid grid-cols-3 xl:grid-cols-6 gap-6">
+                    {serviceCategories.map((cat) => {
+                      const CatIcon = cat.icon
+                      const colors = getCategoryColors(cat.color)
+                      const isUrgent = cat.color === 'red'
+                      return (
+                        <div key={cat.category} className="space-y-3">
+                          {/* Category header */}
+                          <div className={`flex items-center gap-2.5 pb-3 border-b ${colors.border}`}>
+                            <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${colors.iconBg}`}>
+                              <CatIcon className={`w-[18px] h-[18px] ${colors.text}`} />
+                            </div>
+                            <div>
+                              <span className={`font-heading font-bold text-sm ${colors.text}`}>
+                                {cat.category}
+                              </span>
+                              {isUrgent && (
+                                <span className="ml-1.5 inline-flex items-center text-[10px] font-bold text-red-600 bg-red-100 px-1.5 py-0.5 rounded-full uppercase tracking-wider">
+                                  24h/24
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          {/* Service links */}
+                          <div className="space-y-0.5">
+                            {cat.services.map((service) => {
+                              const Icon = service.icon
+                              return (
+                                <Link
+                                  key={`${cat.category}-${service.slug}`}
+                                  href={`/services/${service.slug}`}
+                                  onClick={closeMenus}
+                                  className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all duration-200 group/link ${colors.hoverBg} hover:shadow-sm`}
+                                >
+                                  <Icon className="w-4 h-4 text-slate-400 group-hover/link:text-blue-600 transition-colors duration-200" />
+                                  <div className="flex-1 min-w-0">
+                                    <div className="text-sm font-medium text-slate-700 group-hover/link:text-blue-600 transition-colors duration-200">
+                                      {service.name}
+                                    </div>
+                                    <div className="text-xs text-slate-400 truncate">{service.description}</div>
+                                  </div>
+                                  <ArrowRight className="w-3.5 h-3.5 text-slate-300 opacity-0 -translate-x-1 group-hover/link:opacity-100 group-hover/link:translate-x-0 transition-all duration-200" />
+                                </Link>
+                              )
+                            })}
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+
+                  {/* Footer */}
+                  <div className="mt-8 pt-5 border-t border-gray-100 flex items-center justify-between">
+                    <Link
+                      href="/services"
+                      onClick={closeMenus}
+                      className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold group/cta transition-colors"
+                    >
+                      Voir tous les services
+                      <ArrowRight className="w-4 h-4 group-hover/cta:translate-x-1 transition-transform duration-200" />
+                    </Link>
+                    <Link
+                      href="/urgence"
+                      onClick={closeMenus}
+                      className="flex items-center gap-2 px-5 py-2.5 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 font-semibold transition-all duration-200 hover:shadow-md"
+                    >
+                      <Phone className="w-4 h-4" />
+                      Urgence ? Artisan disponible maintenant
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ===== VILLES MEGA MENU ===== */}
+          {openMenu === 'villes' && (
+            <div
+              data-menu-content="villes" role="menu" aria-label="Villes"
+              className="absolute left-0 right-0 bg-white border-t border-gray-100 shadow-2xl rounded-b-xl"
+              style={{ zIndex: 9995 }}
+              onMouseEnter={() => openMenuOnHover('villes')}
+              onMouseLeave={closeMenusWithDelay}
+            >
+              <div className="max-w-7xl mx-auto">
+                {/* Header */}
+                <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-blue-900 px-8 py-5 flex items-center justify-between">
+                  <div>
+                    <h3 className="text-white font-heading font-bold text-lg">Trouvez un artisan par ville</h3>
+                    <p className="text-slate-300 text-sm mt-0.5">Plus de 500 villes couvertes dans toute la France</p>
+                  </div>
+                  <div className="hidden sm:flex items-center gap-3">
+                    <Link
+                      href="/regions"
+                      onClick={closeMenus}
+                      className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors text-sm font-medium"
+                    >
+                      <Map className="w-4 h-4" />
+                      Voir par région
+                    </Link>
+                    <Link
+                      href="/departements"
+                      onClick={closeMenus}
+                      className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors text-sm font-medium"
+                    >
+                      <MapPin className="w-4 h-4" />
+                      Par département
+                    </Link>
+                  </div>
+                </div>
+
+                {/* Body */}
+                <div className="p-8">
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                    {citiesByRegion.map((group) => (
+                      <div key={group.region}>
+                        {/* Region label */}
+                        <div className="flex items-center gap-2 mb-3 pb-2 border-b border-gray-100">
+                          <Globe className="w-4 h-4 text-blue-500" />
+                          <span className="font-heading font-bold text-xs text-slate-500 uppercase tracking-wider">{group.region}</span>
+                        </div>
+                        {/* Cities */}
+                        <div className="space-y-0.5">
+                          {group.cities.map((city) => (
+                            <Link
+                              key={city.slug}
+                              href={`/villes/${city.slug}`}
+                              onClick={closeMenus}
+                              className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-blue-50 transition-all duration-200 group/city"
+                            >
+                              <div className="flex items-center gap-2.5">
+                                <MapPin className="w-3.5 h-3.5 text-slate-300 group-hover/city:text-blue-500 transition-colors" />
+                                <span className="text-sm font-medium text-slate-700 group-hover/city:text-blue-600 transition-colors">
+                                  {city.name}
+                                </span>
+                              </div>
+                              <span className="text-[11px] text-slate-400 bg-slate-50 group-hover/city:bg-blue-100 group-hover/city:text-blue-600 px-2 py-0.5 rounded-full transition-colors">
+                                {city.population}
+                              </span>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Footer */}
+                  <div className="mt-8 pt-5 border-t border-gray-100 flex items-center justify-between">
+                    <Link
+                      href="/villes"
+                      onClick={closeMenus}
+                      className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold group/cta transition-colors"
+                    >
+                      Voir toutes les villes
+                      <ArrowRight className="w-4 h-4 group-hover/cta:translate-x-1 transition-transform duration-200" />
+                    </Link>
+                    <div className="flex items-center gap-2 text-sm text-slate-500">
+                      <ShieldCheck className="w-4 h-4 text-green-500" />
+                      Artisans vérifiés dans chaque ville
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ===== RÉGIONS MEGA MENU ===== */}
+          {openMenu === 'regions' && (
+            <div
+              data-menu-content="regions" role="menu" aria-label="Régions"
+              className="absolute left-0 right-0 bg-white border-t border-gray-100 shadow-2xl rounded-b-xl"
+              style={{ zIndex: 9995 }}
+              onMouseEnter={() => openMenuOnHover('regions')}
+              onMouseLeave={closeMenusWithDelay}
+            >
+              <div className="max-w-7xl mx-auto">
+                {/* Header */}
+                <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-blue-900 px-8 py-5 flex items-center justify-between">
+                  <div>
+                    <h3 className="text-white font-heading font-bold text-lg">Régions de France</h3>
+                    <p className="text-slate-300 text-sm mt-0.5">18 régions, 101 départements couverts</p>
+                  </div>
+                  <div className="hidden sm:flex items-center gap-3">
+                    <Link
+                      href="/departements"
+                      onClick={closeMenus}
+                      className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors text-sm font-medium"
+                    >
+                      <MapPin className="w-4 h-4" />
+                      Tous les départements
+                    </Link>
+                  </div>
+                </div>
+
+                {/* Body */}
+                <div className="p-8">
+                  {/* Metropolitan France */}
+                  <div className="mb-6">
+                    <div className="flex items-center gap-2 mb-4">
+                      <Map className="w-4 h-4 text-blue-600" />
+                      <h4 className="font-heading font-bold text-sm text-slate-900 uppercase tracking-wider">France métropolitaine</h4>
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+                      {metroRegions.map((region) => (
+                        <Link
+                          key={region.slug}
+                          href={`/regions/${region.slug}`}
+                          onClick={closeMenus}
+                          className="group/region flex items-start gap-3 p-4 bg-slate-50/80 hover:bg-blue-50 rounded-xl border border-transparent hover:border-blue-200 transition-all duration-200 hover:shadow-md"
+                        >
+                          <div className="w-10 h-10 rounded-xl bg-white group-hover/region:bg-blue-100 border border-slate-200 group-hover/region:border-blue-300 flex items-center justify-center flex-shrink-0 transition-all duration-200 shadow-sm">
+                            <Map className="w-5 h-5 text-slate-400 group-hover/region:text-blue-600 transition-colors" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="text-sm font-semibold text-slate-800 group-hover/region:text-blue-700 transition-colors truncate">
+                              {region.name}
+                            </div>
+                            <div className="text-xs text-slate-400 mt-0.5">
+                              {region.departments.length} département{region.departments.length > 1 ? 's' : ''}
+                            </div>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* DOM-TOM */}
+                  {domTomRegions.length > 0 && (
+                    <div>
+                      <div className="flex items-center gap-2 mb-4">
+                        <Globe className="w-4 h-4 text-emerald-600" />
+                        <h4 className="font-heading font-bold text-sm text-slate-900 uppercase tracking-wider">Outre-mer</h4>
+                      </div>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                        {domTomRegions.map((region) => (
+                          <Link
+                            key={region.slug}
+                            href={`/regions/${region.slug}`}
+                            onClick={closeMenus}
+                            className="group/region flex items-center gap-3 p-3 bg-emerald-50/50 hover:bg-emerald-50 rounded-xl border border-transparent hover:border-emerald-200 transition-all duration-200"
+                          >
+                            <Globe className="w-4 h-4 text-emerald-400 group-hover/region:text-emerald-600 transition-colors flex-shrink-0" />
+                            <div className="min-w-0">
+                              <div className="text-sm font-medium text-slate-700 group-hover/region:text-emerald-700 transition-colors truncate">
+                                {region.name}
+                              </div>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Footer */}
+                  <div className="mt-8 pt-5 border-t border-gray-100 flex items-center justify-between">
+                    <Link
+                      href="/regions"
+                      onClick={closeMenus}
+                      className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold group/cta transition-colors"
+                    >
+                      Voir toutes les régions
+                      <ArrowRight className="w-4 h-4 group-hover/cta:translate-x-1 transition-transform duration-200" />
+                    </Link>
+                    <div className="flex items-center gap-2 text-sm text-slate-500">
+                      <Star className="w-4 h-4 text-amber-500" />
+                      Couverture nationale complète
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+      )}
+
+      {/* ==================== MOBILE MENU ==================== */}
+      {isMenuOpen && (
+        <div className="lg:hidden border-t border-gray-100 max-h-[calc(100vh-120px)] overflow-y-auto bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
             {/* Search Mobile - Dual Field */}
             <form onSubmit={handleSearch} className="mb-4">
               <div className="flex items-center bg-white border-2 border-gray-200 rounded-2xl overflow-hidden focus-within:border-blue-500 transition-colors">
@@ -991,54 +888,175 @@ export default function Header() {
               </div>
             </form>
 
-            <nav className="space-y-4">
-              {/* Services Mobile */}
-              <div>
-                <div className="font-semibold text-gray-900 mb-3 px-1">Services populaires</div>
-                <div className="grid grid-cols-2 gap-2">
-                  {services.slice(0, 6).map((service) => {
-                    const Icon = service.icon
-                    return (
-                      <Link
-                        key={service.slug}
-                        href={`/services/${service.slug}`}
-                        className="flex items-center gap-2 p-3 bg-gray-50 rounded-xl hover:bg-blue-50 transition-colors"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        <Icon className="w-5 h-5 text-blue-600" />
-                        <span className="text-sm font-medium text-gray-700">{service.name}</span>
-                      </Link>
-                    )
-                  })}
-                </div>
-                <Link
-                  href="/services"
-                  className="text-blue-600 text-sm font-medium mt-3 block px-1"
-                  onClick={() => setIsMenuOpen(false)}
+            <nav className="space-y-2" aria-label="Menu mobile">
+              {/* ===== Services Accordion ===== */}
+              <div className="rounded-xl border border-gray-100 overflow-hidden">
+                <button
+                  type="button"
+                  onClick={() => toggleMobileAccordion('services')}
+                  className={`w-full flex items-center justify-between px-4 py-3.5 transition-colors ${
+                    mobileAccordion === 'services' ? 'bg-blue-50' : 'bg-gray-50 hover:bg-gray-100'
+                  }`}
                 >
-                  Tous les services →
-                </Link>
+                  <div className="flex items-center gap-3">
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                      mobileAccordion === 'services' ? 'bg-blue-100' : 'bg-white'
+                    }`}>
+                      <Wrench className={`w-4 h-4 ${mobileAccordion === 'services' ? 'text-blue-600' : 'text-slate-500'}`} />
+                    </div>
+                    <span className={`font-semibold text-sm ${mobileAccordion === 'services' ? 'text-blue-700' : 'text-slate-900'}`}>
+                      Services
+                    </span>
+                  </div>
+                  <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${
+                    mobileAccordion === 'services' ? 'rotate-180 text-blue-500' : ''
+                  }`} />
+                </button>
+
+                {mobileAccordion === 'services' && (
+                  <div className="px-4 pb-4 pt-2 bg-white">
+                    {serviceCategories.map((cat) => (
+                      <div key={cat.category} className="mb-3 last:mb-0">
+                        <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-1">
+                          {cat.category}
+                        </div>
+                        <div className="grid grid-cols-2 gap-1.5">
+                          {cat.services.map((service) => {
+                            const Icon = service.icon
+                            return (
+                              <Link
+                                key={`mob-${cat.category}-${service.slug}`}
+                                href={`/services/${service.slug}`}
+                                className="flex items-center gap-2 p-2.5 bg-gray-50 rounded-lg hover:bg-blue-50 transition-colors"
+                                onClick={() => { setIsMenuOpen(false); setMobileAccordion(null) }}
+                              >
+                                <Icon className="w-4 h-4 text-blue-600" />
+                                <span className="text-sm font-medium text-slate-700">{service.name}</span>
+                              </Link>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    ))}
+                    <Link
+                      href="/services"
+                      className="flex items-center gap-2 text-blue-600 text-sm font-semibold mt-3 px-1"
+                      onClick={() => { setIsMenuOpen(false); setMobileAccordion(null) }}
+                    >
+                      Voir tous les services
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
+                )}
               </div>
 
-              {/* Villes Mobile */}
-              <div className="pt-4 border-t border-gray-100">
-                <div className="font-semibold text-gray-900 mb-3 px-1">Villes populaires</div>
-                <div className="flex flex-wrap gap-2">
-                  {popularCities.slice(0, 8).map((city) => (
+              {/* ===== Villes Accordion ===== */}
+              <div className="rounded-xl border border-gray-100 overflow-hidden">
+                <button
+                  type="button"
+                  onClick={() => toggleMobileAccordion('villes')}
+                  className={`w-full flex items-center justify-between px-4 py-3.5 transition-colors ${
+                    mobileAccordion === 'villes' ? 'bg-blue-50' : 'bg-gray-50 hover:bg-gray-100'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                      mobileAccordion === 'villes' ? 'bg-blue-100' : 'bg-white'
+                    }`}>
+                      <Building2 className={`w-4 h-4 ${mobileAccordion === 'villes' ? 'text-blue-600' : 'text-slate-500'}`} />
+                    </div>
+                    <span className={`font-semibold text-sm ${mobileAccordion === 'villes' ? 'text-blue-700' : 'text-slate-900'}`}>
+                      Villes
+                    </span>
+                  </div>
+                  <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${
+                    mobileAccordion === 'villes' ? 'rotate-180 text-blue-500' : ''
+                  }`} />
+                </button>
+
+                {mobileAccordion === 'villes' && (
+                  <div className="px-4 pb-4 pt-2 bg-white">
+                    <div className="flex flex-wrap gap-2">
+                      {popularCities.map((city) => (
+                        <Link
+                          key={city.slug}
+                          href={`/villes/${city.slug}`}
+                          className="inline-flex items-center gap-1.5 text-sm bg-gray-100 hover:bg-blue-100 text-slate-700 hover:text-blue-700 px-3 py-2 rounded-lg font-medium transition-colors"
+                          onClick={() => { setIsMenuOpen(false); setMobileAccordion(null) }}
+                        >
+                          <MapPin className="w-3 h-3" />
+                          {city.name}
+                        </Link>
+                      ))}
+                    </div>
                     <Link
-                      key={city.slug}
-                      href={`/villes/${city.slug}`}
-                      className="text-sm bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 px-3 py-1.5 rounded-full transition-colors"
-                      onClick={() => setIsMenuOpen(false)}
+                      href="/villes"
+                      className="flex items-center gap-2 text-blue-600 text-sm font-semibold mt-3 px-1"
+                      onClick={() => { setIsMenuOpen(false); setMobileAccordion(null) }}
                     >
-                      {city.name}
+                      Voir toutes les villes
+                      <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
-                  ))}
-                </div>
+                  </div>
+                )}
+              </div>
+
+              {/* ===== Régions Accordion ===== */}
+              <div className="rounded-xl border border-gray-100 overflow-hidden">
+                <button
+                  type="button"
+                  onClick={() => toggleMobileAccordion('regions')}
+                  className={`w-full flex items-center justify-between px-4 py-3.5 transition-colors ${
+                    mobileAccordion === 'regions' ? 'bg-blue-50' : 'bg-gray-50 hover:bg-gray-100'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                      mobileAccordion === 'regions' ? 'bg-blue-100' : 'bg-white'
+                    }`}>
+                      <Map className={`w-4 h-4 ${mobileAccordion === 'regions' ? 'text-blue-600' : 'text-slate-500'}`} />
+                    </div>
+                    <span className={`font-semibold text-sm ${mobileAccordion === 'regions' ? 'text-blue-700' : 'text-slate-900'}`}>
+                      Régions
+                    </span>
+                  </div>
+                  <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${
+                    mobileAccordion === 'regions' ? 'rotate-180 text-blue-500' : ''
+                  }`} />
+                </button>
+
+                {mobileAccordion === 'regions' && (
+                  <div className="px-4 pb-4 pt-2 bg-white">
+                    <div className="grid grid-cols-2 gap-1.5">
+                      {regions.map((region) => (
+                        <Link
+                          key={region.slug}
+                          href={`/regions/${region.slug}`}
+                          className="flex items-center gap-2 p-2.5 bg-gray-50 rounded-lg hover:bg-blue-50 transition-colors"
+                          onClick={() => { setIsMenuOpen(false); setMobileAccordion(null) }}
+                        >
+                          <Map className="w-3.5 h-3.5 text-slate-400" />
+                          <div className="min-w-0">
+                            <div className="text-sm font-medium text-slate-700 truncate">{region.name}</div>
+                            <div className="text-[11px] text-slate-400">{region.departments.length} dép.</div>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                    <Link
+                      href="/regions"
+                      className="flex items-center gap-2 text-blue-600 text-sm font-semibold mt-3 px-1"
+                      onClick={() => { setIsMenuOpen(false); setMobileAccordion(null) }}
+                    >
+                      Voir toutes les régions
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
+                )}
               </div>
 
               {/* CTAs */}
-              <div className="pt-4 border-t border-gray-100 space-y-3">
+              <div className="pt-3 space-y-3">
                 <Link
                   href="/urgence"
                   className="flex items-center justify-center gap-2 w-full py-3.5 bg-red-600 text-white rounded-xl font-semibold"
@@ -1066,8 +1084,8 @@ export default function Header() {
               </div>
             </nav>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </header>
   )
 }

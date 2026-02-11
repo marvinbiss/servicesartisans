@@ -1,52 +1,15 @@
-import { MetadataRoute } from 'next'
+import type { MetadataRoute } from 'next'
+import { SITE_URL } from '@/lib/seo/config'
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = 'https://servicesartisans.fr'
-
   return {
     rules: [
       {
         userAgent: '*',
-        allow: [
-          '/',
-          '/services/',
-          '/faq',
-          '/tarifs-artisans',
-          '/a-propos',
-          '/contact',
-          '/blog/',
-          '/notre-processus-de-verification',
-          '/politique-avis',
-          '/mediation',
-          '/mentions-legales',
-          '/confidentialite',
-          '/cgv',
-          '/accessibilite',
-          '/comment-ca-marche',
-          '/carrieres',
-          '/presse',
-          '/partenaires',
-          '/villes/',
-          '/regions/',
-          '/departements/',
-        ],
-        disallow: [
-          '/api/',
-          '/espace-client/',
-          '/espace-artisan/',
-          '/admin/',
-          '/_next/',
-          '/auth/',
-          '/connexion',
-          '/inscription',
-          '/inscription-artisan',
-          '/mot-de-passe-oublie',
-          '/booking/',
-          '/avis/',
-          '/devis',
-        ],
+        allow: '/',
+        disallow: ['/admin/', '/api/', '/auth/', '/espace-client/', '/espace-artisan/', '/booking/'],
       },
     ],
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: `${SITE_URL}/sitemap.xml`,
   }
 }

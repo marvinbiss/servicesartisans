@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
-import Link from 'next/link'
-import { ChevronRight, Eye, Ear, Hand, Brain, Mail } from 'lucide-react'
+import { Eye, Ear, Hand, Brain, Mail } from 'lucide-react'
+import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 
@@ -20,22 +20,31 @@ export default function AccessibilitePage() {
         { name: 'Accessibilité', url: '/accessibilite' },
       ])} />
       {/* Hero */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="flex items-center gap-2 text-blue-200 mb-4">
-            <Link href="/" className="hover:text-white">Accueil</Link>
-            <ChevronRight className="w-4 h-4" />
-            <span>Accessibilité</span>
-          </div>
-          <h1 className="text-4xl font-bold mb-4">
-            Déclaration d'accessibilité
+      <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0" style={{
+            background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(37,99,235,0.1) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(59,130,246,0.06) 0%, transparent 50%)',
+          }} />
+          <div className="absolute inset-0 opacity-[0.025]" style={{
+            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+            backgroundSize: '64px 64px',
+          }} />
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-50 to-transparent" />
+        </div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-28 md:pt-14 md:pb-36">
+          <Breadcrumb
+            items={[{ label: 'Accessibilit\u00e9' }]}
+            className="mb-6 text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
+          />
+          <h1 className="font-heading text-4xl font-extrabold mb-4 tracking-[-0.025em]">
+            D&eacute;claration d&apos;accessibilit&eacute;
           </h1>
-          <p className="text-xl text-blue-100 max-w-3xl">
-            ServicesArtisans s'engage à rendre son site web accessible à tous,
-            conformément au Référentiel Général d'Amélioration de l'Accessibilité (RGAA).
+          <p className="text-xl text-slate-400 max-w-3xl">
+            ServicesArtisans s&apos;engage &agrave; rendre son site web accessible &agrave; tous,
+            conform&eacute;ment au R&eacute;f&eacute;rentiel G&eacute;n&eacute;ral d&apos;Am&eacute;lioration de l&apos;Accessibilit&eacute; (RGAA).
           </p>
         </div>
-      </div>
+      </section>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="bg-white rounded-xl shadow-sm p-8 space-y-8">

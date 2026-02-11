@@ -24,11 +24,11 @@ import type { LegacyArtisan } from '@/types/legacy'
 function SectionSkeleton({ height = 'h-64' }: { height?: string }) {
   return (
     <div className={`bg-white rounded-2xl shadow-sm border border-gray-100 p-6 ${height} animate-pulse`}>
-      <div className="h-6 w-40 bg-gray-200 rounded mb-4" />
+      <div className="h-6 w-40 bg-gray-200 rounded-lg mb-4" />
       <div className="space-y-3">
-        <div className="h-4 bg-gray-200 rounded w-full" />
-        <div className="h-4 bg-gray-200 rounded w-3/4" />
-        <div className="h-4 bg-gray-200 rounded w-1/2" />
+        <div className="h-4 bg-gray-200 rounded-lg w-full" />
+        <div className="h-4 bg-gray-200 rounded-lg w-3/4" />
+        <div className="h-4 bg-gray-200 rounded-lg w-1/2" />
       </div>
     </div>
   )
@@ -73,6 +73,18 @@ const ArtisanFAQ = dynamic(
   { loading: () => <SectionSkeleton height="h-64" /> }
 )
 
+// Business verification card
+const ArtisanBusinessCard = dynamic(
+  () => import('@/components/artisan/ArtisanBusinessCard').then(mod => ({ default: mod.ArtisanBusinessCard })),
+  { loading: () => <SectionSkeleton height="h-64" /> }
+)
+
+// Contact card (sticky sidebar on desktop, section on mobile)
+const ArtisanContactCard = dynamic(
+  () => import('@/components/artisan/ArtisanContactCard').then(mod => ({ default: mod.ArtisanContactCard })),
+  { loading: () => <SectionSkeleton height="h-72" /> }
+)
+
 interface ArtisanPageClientProps {
   initialArtisan: LegacyArtisan | null
   initialReviews: Review[]
@@ -93,7 +105,7 @@ export default function ArtisanPageClient({
       try {
         await navigator.share({
           title: getDisplayName(artisan),
-          text: `${artisan.specialty} à ${artisan.city}`,
+          text: `${artisan.specialty} \u00e0 ${artisan.city}`,
           url: window.location.href,
         })
       } catch {
@@ -114,14 +126,14 @@ export default function ArtisanPageClient({
           className="text-center p-8"
         >
           <AlertCircle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Artisan non trouvé</h1>
-          <p className="text-gray-600 mb-6">Cet artisan n'existe pas ou n'est plus disponible.</p>
+          <h1 className="text-2xl font-bold text-gray-900 font-heading mb-2">Artisan non trouv&eacute;</h1>
+          <p className="text-slate-600 mb-6">Cet artisan n&apos;existe pas ou n&apos;est plus disponible.</p>
           <Link
             href="/recherche"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors shadow-md shadow-blue-500/20"
           >
             <ArrowLeft className="w-5 h-5" />
-            Retour a la recherche
+            Retour &agrave; la recherche
           </Link>
         </motion.div>
       </div>
@@ -151,41 +163,43 @@ export default function ArtisanPageClient({
         </a>
       </nav>
 
-      <div className="min-h-screen bg-gray-50 pb-24 md:pb-8">
+      <div className="min-h-screen bg-gray-50/80 pb-24 md:pb-8">
         {/* Header */}
-        <header className="bg-white border-b border-gray-100 sticky top-0 z-40">
-          <div className="max-w-7xl mx-auto px-4 py-4">
+        <header className="bg-white/95 backdrop-blur-lg border-b border-gray-100 sticky top-0 z-40 shadow-sm">
+          <div className="max-w-7xl mx-auto px-4 py-3.5">
             <div className="flex items-center justify-between">
               <Link
                 href="/recherche"
-                className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg p-1"
-                aria-label="Retour à la recherche"
+                className="inline-flex items-center gap-2 text-slate-600 hover:text-gray-900 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg px-2 py-1.5 -ml-2 hover:bg-gray-50"
+                aria-label="Retour \u00e0 la recherche"
               >
                 <ArrowLeft className="w-5 h-5" aria-hidden="true" />
-                <span className="hidden sm:inline">Retour</span>
+                <span className="hidden sm:inline font-medium text-sm">Retour</span>
               </Link>
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={handleShare}
-                  className="p-2.5 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  className="p-2.5 rounded-full bg-gray-50 hover:bg-gray-100 border border-gray-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                   aria-label="Partager cette page"
                 >
-                  <Share2 className="w-5 h-5 text-gray-600" aria-hidden="true" />
+                  <Share2 className="w-4.5 h-4.5 text-slate-600" aria-hidden="true" />
                 </motion.button>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setIsFavorite(!isFavorite)}
-                  className={`p-2.5 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-                    isFavorite ? 'bg-red-100 text-red-500' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  className={`p-2.5 rounded-full border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                    isFavorite
+                      ? 'bg-red-50 text-red-500 border-red-200 hover:bg-red-100'
+                      : 'bg-gray-50 text-slate-600 border-gray-100 hover:bg-gray-100'
                   }`}
                   aria-label={isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'}
                   aria-pressed={isFavorite}
                 >
-                  <Heart className={`w-5 h-5 ${isFavorite ? 'fill-current' : ''}`} aria-hidden="true" />
+                  <Heart className={`w-4.5 h-4.5 ${isFavorite ? 'fill-current' : ''}`} aria-hidden="true" />
                 </motion.button>
               </div>
             </div>
@@ -200,7 +214,7 @@ export default function ArtisanPageClient({
           </nav>
 
           {/* Photo Grid - Airbnb style (full width) */}
-          <section className="mb-6" aria-label="Galerie photos">
+          <section className="mb-8" aria-label="Galerie photos">
             <ArtisanPhotoGrid artisan={artisan} />
           </section>
 
@@ -214,8 +228,15 @@ export default function ArtisanPageClient({
               <section aria-label="Statistiques">
                 <ArtisanStats artisan={artisan} />
               </section>
-              <section aria-label="À propos">
+              <section aria-label="\u00c0 propos">
                 <ArtisanAbout artisan={artisan} />
+              </section>
+              <section aria-label="Fiche entreprise">
+                <ArtisanBusinessCard artisan={artisan} />
+              </section>
+              {/* Mobile-only contact section (hidden on desktop where sidebar is visible) */}
+              <section className="lg:hidden" aria-label="Contacter cet artisan">
+                <ArtisanContactCard artisan={artisan} />
               </section>
               <section id="services" aria-label="Services et tarifs">
                 <ArtisanServices artisan={artisan} />
@@ -226,7 +247,7 @@ export default function ArtisanPageClient({
               <section id="reviews" aria-label="Avis clients">
                 <ArtisanReviews artisan={artisan} reviews={reviews} />
               </section>
-              <section aria-label="Questions fréquentes">
+              <section aria-label="Questions fr\u00e9quentes">
                 <ArtisanFAQ artisan={artisan} />
               </section>
               <section aria-label="Localisation">
@@ -239,7 +260,10 @@ export default function ArtisanPageClient({
 
             {/* Right column - Sticky sidebar */}
             <aside id="contact-sidebar" className="hidden lg:block" aria-label="Informations de contact">
-              <ArtisanSidebar artisan={artisan} />
+              <div className="space-y-6 sticky top-20">
+                <ArtisanSidebar artisan={artisan} />
+                <ArtisanContactCard artisan={artisan} />
+              </div>
             </aside>
           </div>
         </main>

@@ -86,6 +86,7 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
           <img
             src={src!}
             alt={alt || name || 'Avatar'}
+            loading="lazy"
             className={clsx(
               'rounded-full object-cover',
               sizes[size]

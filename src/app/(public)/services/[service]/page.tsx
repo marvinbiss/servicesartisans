@@ -1,16 +1,17 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { MapPin, ArrowRight, Users, Star, Shield } from 'lucide-react'
+import { MapPin, ArrowRight, Users, Star, Shield, ChevronDown, BadgeCheck, Euro, Clock, Wrench } from 'lucide-react'
 import { getServiceBySlug, getLocationsByService, getProvidersByService } from '@/lib/supabase'
 import JsonLd from '@/components/JsonLd'
-import { getServiceSchema, getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { getServiceSchema, getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { REVALIDATE } from '@/lib/cache'
 import { SITE_URL } from '@/lib/seo/config'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularCitiesLinks } from '@/components/InternalLinks'
 import { popularServices } from '@/lib/constants/navigation'
 import { services as staticServicesList, villes } from '@/lib/data/france'
+import { getTradeContent } from '@/lib/data/trade-content'
 
 // ISR: Revalidate every 30 minutes
 export const revalidate = REVALIDATE.serviceDetail
@@ -43,8 +44,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     serviceName = staticSvc.name
   }
 
-  const title = `${serviceName} - Trouvez un ${serviceName.toLowerCase()} près de chez vous`
-  const description = `Comparez les meilleurs ${serviceName.toLowerCase()}s de France. Consultez les avis, obtenez des devis gratuits. Plus de 500 villes couvertes.`
+  const title = `${serviceName} en France — Annuaire & Devis Gratuit 2026`
+  const description = `Trouvez un ${serviceName.toLowerCase()} vérifié par SIREN parmi 350 000+ artisans. Guide des prix, conseils, FAQ et devis gratuit. 101 départements couverts.`
 
   return {
     title,
@@ -111,6 +112,9 @@ export default async function ServicePage({ params }: PageProps) {
     return acc
   }, {} as Record<string, typeof topCities>) || {}
 
+  // Trade-specific rich content (prices, FAQ, tips, certifications)
+  const trade = getTradeContent(serviceSlug)
+
   // JSON-LD structured data
   const serviceSchema = getServiceSchema({
     name: service.name,
@@ -124,10 +128,14 @@ export default async function ServicePage({ params }: PageProps) {
     { name: service.name, url: `/services/${serviceSlug}` },
   ])
 
+  const faqSchema = trade
+    ? getFAQSchema(trade.faq.map(f => ({ question: f.q, answer: f.a })))
+    : null
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* JSON-LD */}
-      <JsonLd data={[serviceSchema, breadcrumbSchema]} />
+      <JsonLd data={faqSchema ? [serviceSchema, breadcrumbSchema, faqSchema] : [serviceSchema, breadcrumbSchema]} />
 
       {/* Breadcrumb */}
       <div className="bg-white border-b">
@@ -144,7 +152,7 @@ export default async function ServicePage({ params }: PageProps) {
       {/* Hero */}
       <section className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="font-heading text-3xl md:text-4xl font-bold text-gray-900 mb-4 tracking-tight">
             {service.name} en France
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl">
@@ -178,6 +186,22 @@ export default async function ServicePage({ params }: PageProps) {
                 Qualité vérifiée
               </span>
             </div>
+            {trade && (
+              <>
+                <div className="flex items-center gap-2 bg-amber-50 px-4 py-2 rounded-full">
+                  <Euro className="w-5 h-5 text-amber-600" />
+                  <span className="text-gray-900 font-semibold">
+                    {trade.priceRange.min}–{trade.priceRange.max} {trade.priceRange.unit}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 bg-purple-50 px-4 py-2 rounded-full">
+                  <Clock className="w-5 h-5 text-purple-600" />
+                  <span className="text-gray-900 font-semibold">
+                    {trade.averageResponseTime.split(',')[0]}
+                  </span>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </section>
@@ -185,7 +209,7 @@ export default async function ServicePage({ params }: PageProps) {
       {/* Search by city */}
       <section className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 tracking-tight">
             Trouver un {service.name.toLowerCase()} par ville
           </h2>
 
@@ -249,7 +273,7 @@ export default async function ServicePage({ params }: PageProps) {
       {recentProviders && recentProviders.length > 0 && (
         <section className="py-12 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 tracking-tight">
               {service.name}s récemment ajoutés
             </h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -278,42 +302,173 @@ export default async function ServicePage({ params }: PageProps) {
         </section>
       )}
 
-      {/* SEO Content */}
-      <section className="py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white rounded-xl p-8 shadow-sm">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              Comment trouver un bon {service.name.toLowerCase()} ?
-            </h2>
-            <div className="prose prose-gray max-w-none">
-              <p>
-                Trouver un {service.name.toLowerCase()} de confiance peut sembler compliqué.
-                ServicesArtisans vous simplifie la tâche en répertoriant les meilleurs
-                professionnels de votre région.
+      {/* Price Guide — unique per trade */}
+      {trade && (
+        <section className="py-12">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-white rounded-xl p-8 shadow-sm">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2 bg-amber-100 rounded-lg">
+                  <Euro className="w-6 h-6 text-amber-600" />
+                </div>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Tarifs {service.name.toLowerCase()} — Guide des prix 2026
+                </h2>
+              </div>
+              <p className="text-gray-600 mb-6">
+                Tarif horaire moyen : <strong className="text-gray-900">{trade.priceRange.min}–{trade.priceRange.max} {trade.priceRange.unit}</strong>.
+                Voici les prix constatés pour les prestations les plus demandées :
               </p>
-              <h3>Les critères pour choisir votre {service.name.toLowerCase()}</h3>
-              <ul>
-                <li>
-                  <strong>Les avis clients</strong> : Consultez les retours d&apos;expérience
-                  des autres clients pour vous faire une idée de la qualité du travail.
-                </li>
-                <li>
-                  <strong>Les certifications</strong> : Vérifiez que l&apos;artisan dispose
-                  des qualifications nécessaires pour réaliser vos travaux.
-                </li>
-                <li>
-                  <strong>La proximité</strong> : Un artisan proche de chez vous pourra
-                  intervenir plus rapidement et les frais de déplacement seront réduits.
-                </li>
-                <li>
-                  <strong>Le devis détaillé</strong> : Demandez toujours un devis écrit
-                  avant de vous engager.
-                </li>
-              </ul>
+              <div className="grid md:grid-cols-2 gap-3">
+                {trade.commonTasks.map((task, i) => {
+                  const [label, price] = task.split(' : ')
+                  return (
+                    <div key={i} className="flex items-start justify-between gap-4 p-3 bg-gray-50 rounded-lg">
+                      <span className="text-gray-700 text-sm">{label}</span>
+                      {price && (
+                        <span className="text-sm font-semibold text-amber-700 whitespace-nowrap">{price}</span>
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
+              <p className="text-xs text-gray-500 mt-4">
+                * Prix indicatifs constatés en France métropolitaine. Les tarifs varient selon la région, la complexité des travaux et le professionnel.
+              </p>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
+
+      {/* Tips + Certifications */}
+      {trade && (
+        <section className="py-12 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid lg:grid-cols-3 gap-8">
+              {/* Conseils pratiques */}
+              <div className="lg:col-span-2">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="p-2 bg-blue-100 rounded-lg">
+                    <Shield className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-gray-900">
+                    Conseils pour choisir votre {service.name.toLowerCase()}
+                  </h2>
+                </div>
+                <div className="space-y-4">
+                  {trade.tips.map((tip, i) => (
+                    <div key={i} className="flex gap-3 p-4 bg-blue-50 rounded-lg">
+                      <BadgeCheck className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                      <p className="text-gray-700 text-sm leading-relaxed">{tip}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Certifications + Urgence */}
+              <div className="space-y-6">
+                <div className="bg-gray-50 rounded-xl p-6">
+                  <div className="flex items-center gap-2 mb-4">
+                    <BadgeCheck className="w-5 h-5 text-green-600" />
+                    <h3 className="font-semibold text-gray-900">Certifications à vérifier</h3>
+                  </div>
+                  <ul className="space-y-2">
+                    {trade.certifications.map((cert, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
+                        <span className="text-green-500 mt-1">✓</span>
+                        {cert}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {trade.emergencyInfo && (
+                  <div className="bg-red-50 border border-red-100 rounded-xl p-6">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Clock className="w-5 h-5 text-red-600" />
+                      <h3 className="font-semibold text-red-900">Urgence {service.name.toLowerCase()}</h3>
+                    </div>
+                    <p className="text-sm text-red-800 leading-relaxed">{trade.emergencyInfo}</p>
+                  </div>
+                )}
+
+                <div className="bg-blue-50 rounded-xl p-6">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Wrench className="w-5 h-5 text-blue-600" />
+                    <h3 className="font-semibold text-gray-900">Délai d&apos;intervention</h3>
+                  </div>
+                  <p className="text-sm text-gray-700">{trade.averageResponseTime}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* FAQ — rich content for SEO */}
+      {trade && trade.faq.length > 0 && (
+        <section className="py-12">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center gap-3 mb-8">
+              <h2 className="text-2xl font-bold text-gray-900">
+                Questions fréquentes — {service.name}
+              </h2>
+            </div>
+            <div className="space-y-4">
+              {trade.faq.map((item, i) => (
+                <details key={i} className="group bg-white rounded-xl shadow-sm border border-gray-100">
+                  <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
+                    <h3 className="font-semibold text-gray-900 pr-4">{item.q}</h3>
+                    <ChevronDown className="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform flex-shrink-0" />
+                  </summary>
+                  <div className="px-6 pb-6 pt-0">
+                    <p className="text-gray-600 leading-relaxed">{item.a}</p>
+                  </div>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Generic SEO Content — fallback when no trade content */}
+      {!trade && (
+        <section className="py-12">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-white rounded-xl p-8 shadow-sm">
+              <h2 className="font-heading text-2xl font-bold text-gray-900 mb-4 tracking-tight">
+                Comment trouver un bon {service.name.toLowerCase()} ?
+              </h2>
+              <div className="prose prose-gray max-w-none">
+                <p>
+                  Trouver un {service.name.toLowerCase()} de confiance peut sembler compliqué.
+                  ServicesArtisans vous simplifie la tâche en répertoriant les meilleurs
+                  professionnels de votre région.
+                </p>
+                <h3>Les critères pour choisir votre {service.name.toLowerCase()}</h3>
+                <ul>
+                  <li>
+                    <strong>Les avis clients</strong> : Consultez les retours d&apos;expérience
+                    des autres clients pour vous faire une idée de la qualité du travail.
+                  </li>
+                  <li>
+                    <strong>Les certifications</strong> : Vérifiez que l&apos;artisan dispose
+                    des qualifications nécessaires pour réaliser vos travaux.
+                  </li>
+                  <li>
+                    <strong>La proximité</strong> : Un artisan proche de chez vous pourra
+                    intervenir plus rapidement et les frais de déplacement seront réduits.
+                  </li>
+                  <li>
+                    <strong>Le devis détaillé</strong> : Demandez toujours un devis écrit
+                    avant de vous engager.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* CTA */}
       <section className="py-12 bg-blue-600">
@@ -337,7 +492,7 @@ export default async function ServicePage({ params }: PageProps) {
       {/* Voir aussi - Autres services */}
       <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Voir aussi</h2>
+          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 tracking-tight">Voir aussi</h2>
           <div className="grid md:grid-cols-2 gap-8">
             <div>
               <h3 className="font-semibold text-gray-900 mb-4">Autres services artisanaux</h3>

@@ -55,6 +55,7 @@ export default function NewsletterForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Votre email"
+          aria-label="Adresse email pour la newsletter"
           required
           disabled={isLoading}
           className="w-full px-5 py-3.5 bg-slate-800/50 border border-slate-700 rounded-xl text-white placeholder:text-gray-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all disabled:opacity-50"
@@ -64,6 +65,7 @@ export default function NewsletterForm() {
       <button
         type="submit"
         disabled={isLoading}
+        aria-label="S'inscrire à la newsletter"
         className="px-6 py-3.5 bg-gradient-to-r from-primary-600 to-primary-500 text-white font-semibold rounded-xl hover:from-primary-500 hover:to-primary-400 transition-all duration-300 shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/30 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
       >
         {isLoading ? (

@@ -1,8 +1,12 @@
 import { ImageResponse } from 'next/og'
 
 export const runtime = 'edge'
-export const alt = 'ServicesArtisans - Trouvez des artisans près de chez vous'
-export const size = { width: 1200, height: 630 }
+
+export const alt = 'ServicesArtisans — 350 000+ artisans vérifiés en France'
+export const size = {
+  width: 1200,
+  height: 630,
+}
 export const contentType = 'image/png'
 
 export default async function Image() {
@@ -10,116 +14,124 @@ export default async function Image() {
     (
       <div
         style={{
-          height: '100%',
           width: '100%',
+          height: '100%',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+          background: '#0a0f1e',
           fontFamily: 'system-ui, sans-serif',
         }}
       >
-        {/* Logo/Brand */}
+        {/* Background gradient overlay */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background:
+              'radial-gradient(ellipse at 30% 20%, rgba(37, 99, 235, 0.3) 0%, transparent 50%), radial-gradient(ellipse at 70% 80%, rgba(245, 158, 11, 0.15) 0%, transparent 50%)',
+            display: 'flex',
+          }}
+        />
+
+        {/* Content */}
         <div
           style={{
             display: 'flex',
+            flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            marginBottom: 40,
+            zIndex: 1,
           }}
         >
+          {/* Logo area */}
           <div
             style={{
-              width: 80,
-              height: 80,
-              borderRadius: 20,
-              background: 'rgba(255,255,255,0.2)',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
-              marginRight: 20,
+              gap: 16,
+              marginBottom: 40,
             }}
           >
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="white">
-              <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
-            </svg>
+            {/* House icon */}
+            <div
+              style={{
+                width: 72,
+                height: 72,
+                borderRadius: 16,
+                background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <svg
+                width="44"
+                height="44"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+              </svg>
+            </div>
+            <span
+              style={{
+                fontSize: 52,
+                fontWeight: 800,
+                color: 'white',
+                letterSpacing: -1,
+              }}
+            >
+              Services
+              <span style={{ color: '#f59e0b' }}>Artisans</span>
+            </span>
           </div>
-          <span
+
+          {/* Main tagline */}
+          <div
             style={{
-              fontSize: 64,
+              fontSize: 36,
               fontWeight: 700,
               color: 'white',
-              letterSpacing: -2,
+              marginBottom: 16,
+              display: 'flex',
             }}
           >
-            ServicesArtisans
-          </span>
-        </div>
+            350 000+ artisans vérifiés en France
+          </div>
 
-        {/* Tagline */}
-        <div
-          style={{
-            fontSize: 32,
-            color: 'rgba(255,255,255,0.9)',
-            marginBottom: 30,
-            textAlign: 'center',
-            maxWidth: 800,
-          }}
-        >
-          Trouvez des artisans près de chez vous
-        </div>
+          {/* Subtitle */}
+          <div
+            style={{
+              fontSize: 24,
+              fontWeight: 500,
+              color: 'rgba(255, 255, 255, 0.7)',
+              display: 'flex',
+            }}
+          >
+            Le plus grand annuaire d&apos;artisans de France
+          </div>
 
-        {/* Stats */}
-        <div
-          style={{
-            display: 'flex',
-            gap: 40,
-            marginTop: 20,
-          }}
-        >
+          {/* Bottom accent bar */}
           <div
             style={{
+              width: 120,
+              height: 4,
+              borderRadius: 2,
+              background: 'linear-gradient(90deg, #2563eb, #f59e0b)',
+              marginTop: 40,
               display: 'flex',
-              alignItems: 'center',
-              gap: 8,
-              background: 'rgba(255,255,255,0.15)',
-              padding: '12px 24px',
-              borderRadius: 50,
-              color: 'white',
-              fontSize: 20,
             }}
-          >
-            Artisans vérifiés
-          </div>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 8,
-              background: 'rgba(255,255,255,0.15)',
-              padding: '12px 24px',
-              borderRadius: 50,
-              color: 'white',
-              fontSize: 20,
-            }}
-          >
-            Devis gratuits
-          </div>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 8,
-              background: 'rgba(255,255,255,0.15)',
-              padding: '12px 24px',
-              borderRadius: 50,
-              color: 'white',
-              fontSize: 20,
-            }}
-          >
-            Avis clients
-          </div>
+          />
         </div>
       </div>
     ),

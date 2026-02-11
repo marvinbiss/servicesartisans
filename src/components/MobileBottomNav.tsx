@@ -68,7 +68,7 @@ export default function MobileBottomNav() {
   }
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-gray-200/80 z-50 md:hidden shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
+    <nav className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-gray-200/80 z-50 md:hidden shadow-[0_-4px_20px_rgba(0,0,0,0.08)]" aria-label="Navigation mobile">
       <div className="flex items-center justify-around px-1 pb-safe">
         {navItems.map((item) => {
           const active = isActive(item)
@@ -78,6 +78,7 @@ export default function MobileBottomNav() {
             <Link
               key={item.href}
               href={item.href}
+              aria-current={active ? 'page' : undefined}
               className={`flex flex-col items-center justify-center min-w-[60px] min-h-[56px] px-2 py-2 rounded-xl transition-all duration-300 touch-manipulation active:scale-95 ${
                 item.urgent
                   ? 'text-red-600'

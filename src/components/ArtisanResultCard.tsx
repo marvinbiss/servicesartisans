@@ -132,7 +132,10 @@ export default function ArtisanResultCard({
             {artisan.avatar_url ? (
               <img
                 src={artisan.avatar_url}
-                alt={displayName || 'Artisan'}
+                alt={`Photo de ${displayName || 'Artisan'}`}
+                width={64}
+                height={64}
+                loading="lazy"
                 className="w-16 h-16 rounded-full object-cover"
               />
             ) : artisan.is_center ? (

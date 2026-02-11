@@ -32,7 +32,7 @@ export default function MentionsLegalesPage() {
       {/* Header */}
       <section className="bg-white border-b">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="font-heading text-3xl font-bold text-gray-900">
             Mentions légales
           </h1>
         </div>

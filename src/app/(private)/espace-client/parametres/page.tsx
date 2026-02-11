@@ -263,9 +263,9 @@ export default function ParametresClientPage() {
   const tabs = [
     { id: 'profile', label: 'Profil', icon: User },
     { id: 'notifications', label: 'Notifications', icon: Bell },
-    { id: 'privacy', label: 'Confidentialite', icon: Shield },
+    { id: 'privacy', label: 'Confidentialité', icon: Shield },
     { id: 'display', label: 'Affichage', icon: Palette },
-    { id: 'data', label: 'Mes donnees', icon: Download },
+    { id: 'data', label: 'Mes données', icon: Download },
   ]
 
   if (isLoading) {
@@ -294,7 +294,7 @@ export default function ParametresClientPage() {
                 <ArrowLeft className="w-5 h-5" />
               </Link>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Parametres</h1>
+                <h1 className="text-2xl font-bold text-gray-900">Paramètres</h1>
                 <p className="text-gray-600">Gerez vos informations et preferences</p>
               </div>
             </div>
@@ -474,8 +474,8 @@ export default function ParametresClientPage() {
                       </h2>
                       <div className="space-y-4">
                         <ToggleSetting
-                          label="Confirmation de reservation"
-                          description="Recevez un email de confirmation pour chaque reservation"
+                          label="Confirmation de réservation"
+                          description="Recevez un email de confirmation pour chaque réservation"
                           checked={notifications.email_booking_confirmation}
                           onChange={(checked) =>
                             setNotifications({ ...notifications, email_booking_confirmation: checked })
@@ -530,7 +530,7 @@ export default function ParametresClientPage() {
                           {notifications.push_enabled && (
                             <>
                               <ToggleSetting
-                                label="Mises a jour de reservation"
+                                label="Mises à jour de réservation"
                                 description="Confirmations, modifications et rappels"
                                 checked={notifications.push_booking_updates}
                                 onChange={(checked) =>
@@ -601,7 +601,7 @@ export default function ParametresClientPage() {
                 {activeTab === 'privacy' && (
                   <div className="bg-white rounded-xl shadow-sm p-6 space-y-6">
                     <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                      Parametres de confidentialite
+                      Paramètres de confidentialité
                     </h2>
                     <div className="space-y-4">
                       <ToggleSetting
@@ -644,7 +644,7 @@ export default function ParametresClientPage() {
                 {activeTab === 'display' && (
                   <div className="bg-white rounded-xl shadow-sm p-6 space-y-6">
                     <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                      Preferences d'affichage
+                      Préférences d&apos;affichage
                     </h2>
 
                     <div>
@@ -717,11 +717,11 @@ export default function ParametresClientPage() {
                     <div className="bg-white rounded-xl shadow-sm p-6">
                       <h2 className="text-lg font-semibold text-gray-900 mb-2 flex items-center gap-2">
                         <Download className="w-5 h-5" />
-                        Exporter mes donnees
+                        Exporter mes données
                       </h2>
                       <p className="text-gray-600 mb-4">
-                        Telechargez une copie de toutes vos donnees personnelles conformement au RGPD.
-                        Le fichier contient votre profil, vos reservations, avis et messages.
+                        Téléchargez une copie de toutes vos données personnelles conformément au RGPD.
+                        Le fichier contient votre profil, vos réservations, avis et messages.
                       </p>
                       <button
                         onClick={requestDataExport}
@@ -736,7 +736,7 @@ export default function ParametresClientPage() {
                         ) : (
                           <>
                             <Download className="w-4 h-4" />
-                            Telecharger mes donnees
+                            Télécharger mes données
                           </>
                         )}
                       </button>
@@ -798,8 +798,8 @@ export default function ParametresClientPage() {
               Supprimer votre compte
             </h2>
             <p className="text-gray-600 mb-6">
-              Cette action est irreversible. Votre compte sera supprime dans 30 jours,
-              vous pouvez annuler pendant cette periode.
+              Cette action est irréversible. Votre compte sera supprimé dans 30 jours,
+              vous pouvez annuler pendant cette période.
             </p>
 
             <div className="space-y-4">

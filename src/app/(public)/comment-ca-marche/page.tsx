@@ -1,14 +1,14 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { Search, Users, CheckCircle, ArrowRight, Shield, Star, Clock } from 'lucide-react'
+import { Search, CheckCircle, ArrowRight, Shield, Star, FileText, Phone, MapPin, ChevronDown } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
 import JsonLd from '@/components/JsonLd'
-import { getHowToSchema, getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { getHowToSchema, getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 
 export const metadata: Metadata = {
-  title: 'Comment ça marche - ServicesArtisans',
-  description: 'Découvrez comment trouver un artisan qualifié en 3 étapes simples. Service gratuit et sans engagement.',
+  title: 'Comment ça marche — Trouvez un artisan parmi 350 000+ professionnels vérifiés | ServicesArtisans',
+  description: 'Recherchez, comparez et contactez un artisan vérifié en 3 étapes. 350 000+ professionnels avec données SIREN vérifiées dans 101 départements. 100% gratuit, sans inscription.',
   alternates: {
     canonical: 'https://servicesartisans.fr/comment-ca-marche',
   },
@@ -25,67 +25,99 @@ const steps = [
   {
     number: '1',
     icon: Search,
-    title: 'Décrivez votre projet',
-    description: 'Remplissez notre formulaire en quelques minutes. Précisez le type de travaux, votre localisation et vos disponibilités.',
+    title: 'Recherchez',
+    description: 'Trouvez le bon professionnel en quelques secondes parmi notre base de 350 000+ artisans. Recherchez par type de service et par ville dans les 101 départements français.',
     details: [
-      'Formulaire simple et rapide',
-      'Tous types de travaux acceptés',
-      'Précisez votre budget si vous le souhaitez',
+      '350 000+ artisans référencés en France',
+      'Recherche par métier : plombier, électricien, couvreur...',
+      'Filtrage par ville et département',
+      'Résultats instantanés et à jour',
     ],
+    gradient: 'from-blue-500 to-blue-700',
   },
   {
     number: '2',
-    icon: Users,
-    title: 'Recevez des devis',
-    description: 'Nous transmettons votre demande aux artisans qualifiés de votre région. Vous recevez jusqu\'à 3 devis détaillés.',
+    icon: CheckCircle,
+    title: 'Comparez',
+    description: 'Consultez les profils détaillés des artisans avec leurs données officielles vérifiées. Comparez les entreprises en toute transparence grâce aux données SIREN gouvernementales.',
     details: [
-      'Jusqu\'à 3 devis gratuits',
-      'Artisans vérifiés et assurés',
-      'Réponse sous 24-48h',
+      'Profils vérifiés avec numéro SIRET',
+      'Données issues de l\'API gouvernementale SIREN',
+      'Certifications et qualifications affichées',
+      'Informations sur l\'entreprise (date de création, statut)',
     ],
+    gradient: 'from-emerald-500 to-emerald-700',
   },
   {
     number: '3',
-    icon: CheckCircle,
-    title: 'Choisissez votre artisan',
-    description: 'Comparez les devis, consultez les avis clients et sélectionnez l\'artisan qui correspond à vos attentes.',
+    icon: Phone,
+    title: 'Contactez',
+    description: 'Contactez directement les artisans qui vous intéressent. Demandez des devis, appelez-les ou consultez leurs coordonnées complètes sans intermédiaire.',
     details: [
-      'Comparaison facile des offres',
-      'Avis clients vérifiés',
-      'Aucun engagement',
+      'Contact direct sans intermédiaire',
+      'Demande de devis en ligne gratuite',
+      'Coordonnées et informations vérifiées',
+      'Aucune commission, aucun frais caché',
     ],
+    gradient: 'from-purple-500 to-purple-700',
   },
 ]
 
-const guarantees = [
+const trustReasons = [
   {
     icon: Shield,
-    title: 'Artisans vérifiés',
-    description: 'Nous vérifions l\'identité, les assurances et les qualifications de chaque artisan.',
+    title: 'Données SIREN vérifiées',
+    description: 'Chaque artisan est vérifié par l\'API officielle SIREN de l\'État. Numéro SIRET, statut d\'activité, date de création : des données fiables et à jour.',
+  },
+  {
+    icon: MapPin,
+    title: '350 000+ artisans dans 101 départements',
+    description: 'Le plus grand annuaire d\'artisans vérifiés de France. Trouvez un professionnel près de chez vous, partout en France métropolitaine et outre-mer.',
   },
   {
     icon: Star,
-    title: '100% gratuit',
-    description: 'Notre service est entièrement gratuit pour les particuliers. Pas de frais cachés.',
+    title: '100% gratuit, sans inscription',
+    description: 'Accédez à toutes les informations sans créer de compte. Pas de frais cachés, pas d\'abonnement, pas de commission sur les travaux.',
   },
   {
-    icon: Clock,
-    title: 'Réponse rapide',
-    description: 'Recevez vos devis sous 24 à 48 heures maximum.',
+    icon: FileText,
+    title: 'Pas de faux avis, uniquement des données officielles',
+    description: 'Contrairement aux sites avec des avis manipulables, nous affichons uniquement des données vérifiables issues des registres officiels de l\'État français.',
+  },
+]
+
+const faqs = [
+  {
+    question: 'Est-ce que ServicesArtisans est vraiment gratuit ?',
+    answer: 'Oui, ServicesArtisans est 100% gratuit pour les particuliers. Vous pouvez rechercher des artisans, consulter leurs profils et les contacter sans aucun frais ni inscription. Nous ne prenons aucune commission sur les travaux.',
   },
   {
-    icon: CheckCircle,
-    title: 'Sans engagement',
-    description: 'Vous êtes libre d\'accepter ou de refuser les devis reçus.',
+    question: 'D\'où viennent les données des artisans ?',
+    answer: 'Les données proviennent de l\'API SIREN de l\'INSEE, la base de données officielle du gouvernement français qui recense toutes les entreprises. Chaque artisan est identifié par son numéro SIRET, ce qui garantit la fiabilité des informations.',
+  },
+  {
+    question: 'Comment savoir si un artisan est toujours en activité ?',
+    answer: 'Les données SIREN incluent le statut d\'activité de l\'entreprise. Nous affichons uniquement les entreprises dont le statut est actif. Les informations sont régulièrement mises à jour grâce à l\'API gouvernementale.',
+  },
+  {
+    question: 'Puis-je demander un devis directement sur le site ?',
+    answer: 'Oui, vous pouvez remplir notre formulaire de demande de devis gratuit. Votre demande sera transmise aux artisans correspondant à votre besoin et à votre localisation. Vous recevrez des devis détaillés sans engagement.',
+  },
+  {
+    question: 'Quelle est la différence avec les autres annuaires d\'artisans ?',
+    answer: 'ServicesArtisans se distingue par la vérification systématique des données via l\'API SIREN gouvernementale, l\'absence de faux avis, la gratuité totale sans inscription, et la couverture de 101 départements avec plus de 350 000 artisans référencés.',
+  },
+  {
+    question: 'Comment sont sélectionnés les artisans affichés ?',
+    answer: 'Nous n\'effectuons pas de sélection subjective. Tous les artisans présents sur ServicesArtisans sont des entreprises inscrites aux registres officiels avec un code APE correspondant à une activité artisanale. La transparence est notre priorité.',
   },
 ]
 
 export default function CommentCaMarchePage() {
-  // Structured data for HowTo schema
   const howToSchema = getHowToSchema([
-    { name: 'Décrivez votre projet', text: 'Remplissez notre formulaire en quelques minutes. Précisez le type de travaux, votre localisation et vos disponibilités.' },
-    { name: 'Recevez des devis', text: 'Nous transmettons votre demande aux artisans qualifiés de votre région. Vous recevez jusqu\'à 3 devis détaillés.' },
-    { name: 'Choisissez votre artisan', text: 'Comparez les devis, consultez les avis clients et sélectionnez l\'artisan qui correspond à vos attentes.' },
+    { name: 'Recherchez', text: 'Trouvez le bon professionnel parmi 350 000+ artisans. Recherchez par type de service et par ville dans les 101 départements français.' },
+    { name: 'Comparez', text: 'Consultez les profils détaillés avec données SIREN vérifiées. Comparez les entreprises en toute transparence grâce aux données gouvernementales.' },
+    { name: 'Contactez', text: 'Contactez directement les artisans. Demandez des devis, appelez-les ou consultez leurs coordonnées complètes sans intermédiaire.' },
   ])
 
   const breadcrumbSchema = getBreadcrumbSchema([
@@ -93,26 +125,54 @@ export default function CommentCaMarchePage() {
     { name: 'Comment ça marche', url: '/comment-ca-marche' },
   ])
 
+  const faqSchema = getFAQSchema(faqs)
+
   return (
     <>
-      <JsonLd data={[howToSchema, breadcrumbSchema]} />
+      <JsonLd data={[howToSchema, breadcrumbSchema, faqSchema]} />
     <div className="min-h-screen bg-gray-50">
       {/* Hero */}
-      <section className="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0" style={{
+            background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(37,99,235,0.1) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(59,130,246,0.06) 0%, transparent 50%)',
+          }} />
+          <div className="absolute inset-0 opacity-[0.025]" style={{
+            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+            backgroundSize: '64px 64px',
+          }} />
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-50 to-transparent" />
+        </div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-28 md:pt-14 md:pb-36">
           {/* Breadcrumb */}
           <Breadcrumb
             items={[{ label: 'Comment ça marche' }]}
-            className="mb-6 text-blue-100 [&_a]:text-blue-200 [&_a:hover]:text-white [&_svg]:text-blue-300"
+            className="mb-6 text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
           />
           <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Comment ça marche ?
+            <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
+              Trouvez un artisan v&eacute;rifi&eacute; en 3 &eacute;tapes
             </h1>
-            <p className="text-xl text-blue-100 max-w-2xl mx-auto">
-              Trouvez un artisan qualifié en 3 étapes simples.
-              Service 100% gratuit et sans engagement.
+            <p className="text-xl text-slate-400 max-w-3xl mx-auto mb-4">
+              Recherchez, comparez et contactez parmi 350 000+ artisans v&eacute;rifi&eacute;s par les donn&eacute;es officielles SIREN.
+              Service 100% gratuit, sans inscription.
             </p>
+            <div className="flex flex-wrap justify-center gap-4 mt-8">
+              <Link
+                href="/services"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-300"
+              >
+                <Search className="w-5 h-5" />
+                Parcourir les services
+              </Link>
+              <Link
+                href="/devis"
+                className="inline-flex items-center gap-2 text-slate-300 hover:text-white font-medium px-6 py-3 transition-colors"
+              >
+                <FileText className="w-5 h-5" />
+                Demander un devis gratuit
+              </Link>
+            </div>
           </div>
         </div>
       </section>
@@ -120,6 +180,15 @@ export default function CommentCaMarchePage() {
       {/* Steps */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Comment trouver un artisan sur ServicesArtisans ?
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Un processus simple et transparent pour accéder aux meilleurs professionnels de votre région
+            </p>
+          </div>
+
           <div className="space-y-16">
             {steps.map((step, index) => {
               const Icon = step.icon
@@ -131,7 +200,7 @@ export default function CommentCaMarchePage() {
                 >
                   {/* Image/Icon */}
                   <div className="flex-1 w-full">
-                    <div className={`bg-gradient-to-br ${index === 0 ? 'from-blue-500 to-blue-700' : index === 1 ? 'from-green-500 to-green-700' : 'from-purple-500 to-purple-700'} rounded-2xl p-12 text-white text-center`}>
+                    <div className={`bg-gradient-to-br ${step.gradient} rounded-2xl p-12 text-white text-center`}>
                       <div className="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6">
                         <Icon className="w-12 h-12" />
                       </div>
@@ -147,9 +216,9 @@ export default function CommentCaMarchePage() {
                       <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 font-bold text-xl">
                         {step.number}
                       </div>
-                      <h2 className="text-2xl font-bold text-gray-900">
+                      <h3 className="text-2xl font-bold text-gray-900">
                         {step.title}
-                      </h2>
+                      </h3>
                     </div>
                     <p className="text-lg text-gray-600 mb-6">
                       {step.description}
@@ -170,78 +239,131 @@ export default function CommentCaMarchePage() {
         </div>
       </section>
 
-      {/* Guarantees */}
+      {/* Pourquoi nous faire confiance */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Nos garanties
+              Pourquoi nous faire confiance ?
             </h2>
-            <p className="text-xl text-gray-600">
-              Un service de qualité pour tous vos projets
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              ServicesArtisans s&apos;appuie sur les données officielles de l&apos;État pour vous garantir des informations fiables
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {guarantees.map((item) => {
+            {trustReasons.map((item) => {
               const Icon = item.icon
               return (
-                <div key={item.title} className="text-center">
+                <div key={item.title} className="text-center p-6 rounded-xl bg-gray-50 hover:bg-blue-50 transition-colors">
                   <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
                     <Icon className="w-8 h-8 text-blue-600" />
                   </div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">
                     {item.title}
                   </h3>
-                  <p className="text-gray-600">{item.description}</p>
+                  <p className="text-gray-600 text-sm">{item.description}</p>
                 </div>
               )
             })}
+          </div>
+
+          {/* Stats bar */}
+          <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl p-8 text-white text-center">
+            <div>
+              <div className="text-3xl md:text-4xl font-bold">350 000+</div>
+              <div className="text-blue-200 text-sm mt-1">Artisans vérifiés</div>
+            </div>
+            <div>
+              <div className="text-3xl md:text-4xl font-bold">101</div>
+              <div className="text-blue-200 text-sm mt-1">Départements couverts</div>
+            </div>
+            <div>
+              <div className="text-3xl md:text-4xl font-bold">100%</div>
+              <div className="text-blue-200 text-sm mt-1">Gratuit</div>
+            </div>
+            <div>
+              <div className="text-3xl md:text-4xl font-bold">0</div>
+              <div className="text-blue-200 text-sm mt-1">Faux avis</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Questions fréquentes
+            </h2>
+            <p className="text-xl text-gray-600">
+              Tout ce que vous devez savoir sur ServicesArtisans
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            {faqs.map((faq, index) => (
+              <details
+                key={index}
+                className="bg-white rounded-xl border border-gray-200 group"
+              >
+                <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
+                  <h3 className="text-lg font-semibold text-gray-900 pr-4">
+                    {faq.question}
+                  </h3>
+                  <ChevronDown className="w-5 h-5 text-gray-400 flex-shrink-0 group-open:rotate-180 transition-transform" />
+                </summary>
+                <div className="px-6 pb-6 text-gray-600 leading-relaxed">
+                  {faq.answer}
+                </div>
+              </details>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Contextual Links */}
-      <section className="py-12 bg-gray-100">
+      <section className="py-12 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-xl font-bold text-gray-900 mb-6">
             En savoir plus
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
             <Link
-              href="/faq"
-              className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow"
+              href="/services"
+              className="bg-gray-50 p-6 rounded-xl hover:bg-blue-50 transition-colors border border-gray-200"
             >
-              <h3 className="font-semibold text-gray-900 mb-2">Questions fréquentes</h3>
+              <h3 className="font-semibold text-gray-900 mb-2">Tous les services</h3>
               <p className="text-gray-600 text-sm mb-3">
-                Trouvez les réponses à vos questions sur notre service.
+                Parcourez tous les métiers d&apos;artisans disponibles sur ServicesArtisans.
               </p>
               <span className="text-blue-600 text-sm font-medium inline-flex items-center gap-1">
-                Voir la FAQ <ArrowRight className="w-4 h-4" />
+                Voir les services <ArrowRight className="w-4 h-4" />
               </span>
             </Link>
             <Link
-              href="/inscription"
-              className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow"
+              href="/devis"
+              className="bg-gray-50 p-6 rounded-xl hover:bg-blue-50 transition-colors border border-gray-200"
             >
-              <h3 className="font-semibold text-gray-900 mb-2">Créer un compte</h3>
+              <h3 className="font-semibold text-gray-900 mb-2">Demander un devis</h3>
               <p className="text-gray-600 text-sm mb-3">
-                Inscrivez-vous gratuitement pour profiter de tous nos services.
+                Recevez des devis gratuits et sans engagement de la part d&apos;artisans vérifiés.
               </p>
               <span className="text-blue-600 text-sm font-medium inline-flex items-center gap-1">
-                S'inscrire <ArrowRight className="w-4 h-4" />
+                Demander un devis <ArrowRight className="w-4 h-4" />
               </span>
             </Link>
             <Link
-              href="/contact"
-              className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow"
+              href="/tarifs-artisans"
+              className="bg-gray-50 p-6 rounded-xl hover:bg-blue-50 transition-colors border border-gray-200"
             >
-              <h3 className="font-semibold text-gray-900 mb-2">Nous contacter</h3>
+              <h3 className="font-semibold text-gray-900 mb-2">Guide des prix</h3>
               <p className="text-gray-600 text-sm mb-3">
-                Une question ? Notre équipe est là pour vous aider.
+                Consultez les tarifs moyens par métier pour estimer votre budget travaux.
               </p>
               <span className="text-blue-600 text-sm font-medium inline-flex items-center gap-1">
-                Contact <ArrowRight className="w-4 h-4" />
+                Voir les tarifs <ArrowRight className="w-4 h-4" />
               </span>
             </Link>
           </div>
@@ -255,15 +377,24 @@ export default function CommentCaMarchePage() {
             Prêt à trouver votre artisan ?
           </h2>
           <p className="text-xl text-blue-100 mb-8">
-            Demandez vos devis gratuits en quelques clics
+            350 000+ artisans vérifiés vous attendent sur ServicesArtisans
           </p>
-          <Link
-            href="/devis"
-            className="inline-flex items-center gap-2 bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-blue-50 transition-colors text-lg"
-          >
-            Demander un devis gratuit
-            <ArrowRight className="w-5 h-5" />
-          </Link>
+          <div className="flex flex-wrap justify-center gap-4">
+            <Link
+              href="/services"
+              className="inline-flex items-center gap-2 bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-blue-50 transition-colors text-lg"
+            >
+              Trouver un artisan
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+            <Link
+              href="/devis"
+              className="inline-flex items-center gap-2 bg-blue-500 text-white px-8 py-4 rounded-xl font-semibold hover:bg-blue-400 transition-colors text-lg border border-blue-400"
+            >
+              Demander un devis gratuit
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+          </div>
         </div>
       </section>
 

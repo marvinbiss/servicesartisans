@@ -176,6 +176,7 @@ export function ChatWindow({
               src={otherUserAvatar}
               alt={otherUserName}
               className="w-10 h-10 rounded-full object-cover"
+              loading="lazy"
             />
           ) : (
             <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">

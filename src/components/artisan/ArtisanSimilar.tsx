@@ -137,6 +137,7 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSi
                         alt=""
                         className="w-full h-full object-cover rounded-xl"
                         aria-hidden="true"
+                        loading="lazy"
                       />
                     ) : (
                       <span aria-hidden="true">{item.name.charAt(0).toUpperCase()}</span>

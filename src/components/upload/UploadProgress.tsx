@@ -160,6 +160,7 @@ export function FilePreview({ files, onRemove }: FilePreviewProps) {
                   src={file.thumbnailUrl || file.url}
                   alt={file.fileName}
                   className="w-full h-full object-cover"
+                  loading="lazy"
                 />
               )}
             </div>
