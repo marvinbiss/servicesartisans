@@ -20,7 +20,6 @@ import type {
   SpecialtyMatchMode,
 } from '@/types/algorithm'
 import {
-  DEFAULT_ALGORITHM_CONFIG,
   MATCHING_STRATEGY_META,
   SPECIALTY_MATCH_META,
 } from '@/types/algorithm'
