@@ -146,13 +146,13 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
       })),
     },
 
-    ...(artisan.intervention_zone && {
+    ...(artisan.intervention_zone && artisan.latitude && artisan.longitude && {
       areaServed: {
         '@type': 'GeoCircle',
         geoMidpoint: {
           '@type': 'GeoCoordinates',
-          latitude: artisan.latitude || 48.8566,
-          longitude: artisan.longitude || 2.3522,
+          latitude: artisan.latitude,
+          longitude: artisan.longitude,
         },
         geoRadius: parseInt(artisan.intervention_zone) * 1000 || 20000,
       },
@@ -189,22 +189,6 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
     }),
     paymentAccepted: artisan.payment_methods?.join(', ') || 'Cash, Credit Card',
     currenciesAccepted: 'EUR',
-
-    // Default opening hours (Mon-Fri 8-18, Sat 9-13)
-    openingHoursSpecification: [
-      {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-        opens: '08:00',
-        closes: '18:00',
-      },
-      {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: 'Saturday',
-        opens: '09:00',
-        closes: '13:00',
-      },
-    ],
   }
 
   // FAQPage Schema

@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { Star, MapPin, CheckCircle, Shield, Zap, Users, Clock, Award, Phone } from 'lucide-react'
+import { Star, MapPin, CheckCircle, Zap, Users, Clock, Award, Phone } from 'lucide-react'
 import { getDisplayName } from './types'
 import type { LegacyArtisan } from '@/types/legacy'
 import {
@@ -94,12 +94,6 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
                 <span role="listitem" className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 text-red-700 text-xs font-semibold border border-red-200">
                   <Zap className="w-3.5 h-3.5" aria-hidden="true" />
                   Urgences 24/7
-                </span>
-              )}
-              {(artisan.response_rate || 0) >= 90 && (
-                <span role="listitem" className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold border border-blue-200">
-                  <Shield className="w-3.5 h-3.5" aria-hidden="true" />
-                  Top Pro
                 </span>
               )}
             </div>

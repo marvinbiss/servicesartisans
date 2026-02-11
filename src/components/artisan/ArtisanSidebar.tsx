@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Phone, Mail, MessageCircle, CheckCircle, Zap, Clock, Shield, FileCheck, Award, Lock } from 'lucide-react'
+import { Phone, Mail, MessageCircle, Zap, Shield, FileCheck, Award, Lock } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 import { QuoteRequestModal } from './QuoteRequestModal'
 
@@ -106,30 +106,16 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
         </div>
 
         {/* Quick info */}
-        <div className="space-y-3 mb-6 pb-6 border-b border-gray-100">
-          <div className="flex items-center gap-3 text-sm text-slate-600">
-            <div className="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
-              <Clock className="w-3.5 h-3.5 text-blue-500" />
-            </div>
-            <span>R&eacute;pond en {artisan.response_time || '< 2h'}</span>
-          </div>
-          {artisan.response_rate && (
-            <div className="flex items-center gap-3 text-sm text-slate-600">
-              <div className="w-7 h-7 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0">
-                <CheckCircle className="w-3.5 h-3.5 text-green-500" />
-              </div>
-              <span>Taux de r&eacute;ponse : {artisan.response_rate}%</span>
-            </div>
-          )}
-          {artisan.emergency_available && (
+        {artisan.emergency_available && (
+          <div className="mb-6 pb-6 border-b border-gray-100">
             <div className="flex items-center gap-3 text-sm text-red-600">
               <div className="w-7 h-7 rounded-lg bg-red-50 flex items-center justify-center flex-shrink-0">
                 <Zap className="w-3.5 h-3.5 text-red-500" />
               </div>
               <span className="font-medium">Urgences 24h/24</span>
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Trust badges */}
         <div className="space-y-2.5 mb-6 pb-6 border-b border-gray-100">

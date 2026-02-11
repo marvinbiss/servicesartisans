@@ -237,6 +237,51 @@ function generateFAQ(name: string, specialty: string, city: string, provider?: a
   return faq
 }
 
+// Fetch similar artisans (same specialty, same department)
+async function getSimilarArtisans(providerId: string, specialty: string, postalCode?: string) {
+  try {
+    const supabase = await createClient()
+    const deptCode = postalCode && postalCode.length >= 2 ? postalCode.substring(0, 2) : null
+
+    let query = supabase
+      .from('providers')
+      .select('id, stable_id, slug, name, business_name, specialty, rating_average, review_count, address_city, hourly_rate, is_verified, is_premium, avatar_url')
+      .eq('is_active', true)
+      .neq('id', providerId)
+      .order('rating_average', { ascending: false, nullsFirst: false })
+      .limit(8)
+
+    // Try to match specialty
+    if (specialty) {
+      query = query.ilike('specialty', `%${specialty}%`)
+    }
+
+    // Prefer same department
+    if (deptCode) {
+      query = query.like('address_postal_code', `${deptCode}%`)
+    }
+
+    const { data } = await query
+
+    return (data || []).map((p: any) => ({
+      id: p.id,
+      stable_id: p.stable_id || undefined,
+      slug: p.slug || undefined,
+      name: p.name || p.business_name || 'Artisan',
+      specialty: p.specialty || specialty,
+      rating: p.rating_average || 0,
+      reviews: p.review_count || 0,
+      city: p.address_city || '',
+      hourly_rate: p.hourly_rate || undefined,
+      is_verified: p.is_verified || false,
+      is_premium: p.is_premium || false,
+      avatar_url: p.avatar_url || undefined,
+    }))
+  } catch {
+    return []
+  }
+}
+
 // Fetch reviews for provider (only real reviews from database)
 async function getProviderReviews(providerId: string, serviceName?: string): Promise<Review[]> {
   try {
@@ -373,8 +418,11 @@ export default async function ProviderPage({ params }: PageProps) {
   // Convert to Artisan format
   const artisan = convertToArtisan(provider, service, location, serviceSlug)
 
-  // Fetch reviews (only real reviews from database)
-  const reviews = await getProviderReviews(provider.id, service?.name || artisan.specialty)
+  // Fetch reviews and similar artisans in parallel
+  const [reviews, similarArtisans] = await Promise.all([
+    getProviderReviews(provider.id, service?.name || artisan.specialty),
+    getSimilarArtisans(provider.id, artisan.specialty, artisan.postal_code),
+  ])
 
   return (
     <>
@@ -394,6 +442,7 @@ export default async function ProviderPage({ params }: PageProps) {
         initialArtisan={artisan}
         initialReviews={reviews}
         artisanId={provider.id}
+        similarArtisans={similarArtisans}
       />
 
       {/* Internal Links — Maillage interne (SEO) */}

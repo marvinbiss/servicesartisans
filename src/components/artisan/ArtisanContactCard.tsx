@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Phone, Mail, ExternalLink, FileText, Clock, Shield, Star } from 'lucide-react'
+import { Phone, Mail, ExternalLink, FileText, Shield, Star } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 
 interface ArtisanContactCardProps {
@@ -36,8 +36,7 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
       <div className="h-1 bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500" />
 
       <div className="p-6">
-        <h3 className="text-lg font-semibold text-gray-900 font-heading mb-1">Contacter cet artisan</h3>
-        <p className="text-sm text-slate-500 mb-4">R&eacute;ponse rapide garantie</p>
+        <h3 className="text-lg font-semibold text-gray-900 font-heading mb-4">Contacter cet artisan</h3>
 
         {/* Availability + rating row */}
         <div className="flex items-center gap-3 mb-5 flex-wrap">
@@ -48,12 +47,6 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
             </span>
             <span className="text-xs font-semibold text-green-700">Disponible</span>
           </div>
-          {artisan.response_time && (
-            <div className="flex items-center gap-1.5 text-xs text-slate-500">
-              <Clock className="w-3.5 h-3.5" aria-hidden="true" />
-              <span>R&eacute;pond en {artisan.response_time}</span>
-            </div>
-          )}
           {artisan.average_rating > 0 && (
             <div className="flex items-center gap-1 text-xs text-slate-500">
               <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" aria-hidden="true" />

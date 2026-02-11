@@ -85,16 +85,33 @@ const ArtisanContactCard = dynamic(
   { loading: () => <SectionSkeleton height="h-72" /> }
 )
 
+interface SimilarArtisan {
+  id: string
+  stable_id?: string
+  slug?: string
+  name: string
+  specialty: string
+  rating: number
+  reviews: number
+  city: string
+  hourly_rate?: number
+  is_verified?: boolean
+  is_premium?: boolean
+  avatar_url?: string
+}
+
 interface ArtisanPageClientProps {
   initialArtisan: LegacyArtisan | null
   initialReviews: Review[]
   artisanId: string
+  similarArtisans?: SimilarArtisan[]
 }
 
 export default function ArtisanPageClient({
   initialArtisan,
   initialReviews,
   artisanId: _artisanId,
+  similarArtisans,
 }: ArtisanPageClientProps) {
   const [artisan, _setArtisan] = useState<LegacyArtisan | null>(initialArtisan)
   const [reviews, _setReviews] = useState<Review[]>(initialReviews)
@@ -254,7 +271,7 @@ export default function ArtisanPageClient({
                 <ArtisanMap artisan={artisan} />
               </section>
               <section aria-label="Artisans similaires">
-                <ArtisanSimilar artisan={artisan} />
+                <ArtisanSimilar artisan={artisan} similarArtisans={similarArtisans} />
               </section>
             </div>
 

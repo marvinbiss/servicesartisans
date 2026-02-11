@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Clock, TrendingUp, Calendar, MessageCircle, Shield, Award } from 'lucide-react'
+import { Calendar, MessageCircle, Shield, Award } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 
 interface ArtisanStatsProps {
@@ -10,14 +10,8 @@ interface ArtisanStatsProps {
 
 export function ArtisanStats({ artisan }: ArtisanStatsProps) {
   // Only show stats that have real data
-  const stats: { icon: typeof Clock; label: string; value: string; color: string; bgColor: string }[] = []
+  const stats: { icon: typeof Calendar; label: string; value: string; color: string; bgColor: string }[] = []
 
-  if (artisan.response_time) {
-    stats.push({ icon: Clock, label: 'Temps de r\u00e9ponse', value: artisan.response_time, color: 'text-blue-600', bgColor: 'bg-blue-50 border-blue-100' })
-  }
-  if (artisan.response_rate) {
-    stats.push({ icon: TrendingUp, label: 'Taux de r\u00e9ponse', value: `${artisan.response_rate}%`, color: 'text-green-600', bgColor: 'bg-green-50 border-green-100' })
-  }
   if (artisan.experience_years && artisan.experience_years > 0) {
     stats.push({ icon: Calendar, label: 'Exp\u00e9rience', value: `${artisan.experience_years} ans`, color: 'text-purple-600', bgColor: 'bg-purple-50 border-purple-100' })
   }
