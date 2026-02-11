@@ -217,11 +217,15 @@ export default function Header() {
     setMounted(true)
   }, [])
 
-  // Close all menus on route change
+  // Close all menus on actual route change (not on re-renders)
+  const prevPathnameRef = useRef(pathname)
   useEffect(() => {
-    setOpenMenu(null)
-    setIsMenuOpen(false)
-    setMobileAccordion(null)
+    if (prevPathnameRef.current !== pathname) {
+      prevPathnameRef.current = pathname
+      setOpenMenu(null)
+      setIsMenuOpen(false)
+      setMobileAccordion(null)
+    }
   }, [pathname, setIsMenuOpen])
 
   // Close menu when clicking outside
