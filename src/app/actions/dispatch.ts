@@ -2,34 +2,49 @@
 
 import { createAdminClient } from '@/lib/supabase/admin'
 
+export interface DispatchOptions {
+  serviceName?: string
+  city?: string
+  postalCode?: string
+  urgency?: string
+  latitude?: number
+  longitude?: number
+  sourceTable?: 'devis_requests' | 'leads'
+}
+
 /**
- * Dispatch a lead to one eligible artisan via round-robin.
+ * Dispatch a lead to eligible artisans using the configurable algorithm.
+ * Reads strategy/weights/quotas from algorithm_config.
  * Uses service_role (bypasses RLS) — server-only.
  *
- * Returns the assigned provider_id, or null if no eligible artisan found.
+ * Returns array of assigned provider IDs (up to max_artisans_per_lead).
  */
 export async function dispatchLead(
   leadId: string,
-  serviceName?: string,
-  city?: string
-): Promise<string | null> {
+  opts?: DispatchOptions
+): Promise<string[]> {
   try {
     const supabase = createAdminClient()
 
     const { data, error } = await supabase.rpc('dispatch_lead', {
       p_lead_id: leadId,
-      p_service_name: serviceName || null,
-      p_city: city || null,
+      p_service_name: opts?.serviceName || null,
+      p_city: opts?.city || null,
+      p_postal_code: opts?.postalCode || null,
+      p_urgency: opts?.urgency || 'normal',
+      p_latitude: opts?.latitude || null,
+      p_longitude: opts?.longitude || null,
+      p_source_table: opts?.sourceTable || 'devis_requests',
     })
 
     if (error) {
       console.error('Dispatch error:', error)
-      return null
+      return []
     }
 
-    return data as string | null
+    return (data as string[]) || []
   } catch (err) {
     console.error('Dispatch action error:', err)
-    return null
+    return []
   }
 }

@@ -8,6 +8,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { verifyAdmin, logAdminAction } from '@/lib/admin-auth'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logLeadEvent } from '@/lib/dashboard/events'
+import { dispatchLead } from '@/app/actions/dispatch'
 
 export const dynamic = 'force-dynamic'
 
@@ -22,15 +23,19 @@ export async function GET(request: NextRequest) {
     const limit = 20
     const offset = (page - 1) * limit
 
-    // Recent assignments with lead + provider info
+    // Recent assignments with provider info
     const { data: assignments, error: assignError } = await supabase
       .from('lead_assignments')
       .select(`
         id,
+        lead_id,
         status,
         assigned_at,
         viewed_at,
-        lead:devis_requests (id, service_name, city, urgency, status, created_at),
+        source_table,
+        score,
+        distance_km,
+        position,
         provider:providers (id, name, specialty, address_city)
       `)
       .order('assigned_at', { ascending: false })
@@ -103,7 +108,7 @@ export async function POST(request: NextRequest) {
       // Get current assignment
       const { data: current } = await supabase
         .from('lead_assignments')
-        .select('lead_id, provider_id')
+        .select('lead_id, provider_id, source_table')
         .eq('id', assignmentId)
         .single()
 
@@ -139,35 +144,27 @@ export async function POST(request: NextRequest) {
         { from: current.provider_id, to: newProviderId }
       )
     } else if (action === 'replay') {
-      // Re-dispatch: call dispatch_lead function
-      const { data: current } = await supabase
+      // Re-dispatch using configurable algorithm
+      const { data: currentReplay } = await supabase
         .from('lead_assignments')
-        .select('lead_id, lead:devis_requests(service_name, city)')
+        .select('lead_id, source_table')
         .eq('id', assignmentId)
         .single()
 
-      if (!current) {
+      if (!currentReplay) {
         return NextResponse.json({ error: 'Assignment non trouvé' }, { status: 404 })
       }
 
-      const lead = current.lead as any
-      const { data: result, error: dispatchError } = await supabase
-        .rpc('dispatch_lead', {
-          p_lead_id: current.lead_id,
-          p_service_name: lead?.service_name || '',
-          p_city: lead?.city || '',
-        })
-
-      if (dispatchError) {
-        return NextResponse.json({ error: dispatchError.message }, { status: 500 })
-      }
+      const result = await dispatchLead(currentReplay.lead_id, {
+        sourceTable: (currentReplay.source_table as 'devis_requests' | 'leads') || 'devis_requests',
+      })
 
       await logAdminAction(
         auth.admin.id,
         'dispatch_replay',
         'lead_assignment',
         assignmentId,
-        { newAssignmentId: result }
+        { newAssignments: result }
       )
     } else {
       return NextResponse.json({ error: 'Action invalide' }, { status: 400 })

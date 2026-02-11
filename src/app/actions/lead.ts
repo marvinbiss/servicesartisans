@@ -79,8 +79,14 @@ export async function submitLead(
       return { success: false, error: 'Erreur lors de l\'envoi. Reessayez.' }
     }
 
-    // Dispatch lead to one eligible artisan (fire-and-forget, non-blocking)
-    dispatchLead(inserted.id, data.serviceName, data.city).catch((err) =>
+    // Dispatch lead to eligible artisans (fire-and-forget, non-blocking)
+    dispatchLead(inserted.id, {
+      serviceName: data.serviceName,
+      city: data.city,
+      postalCode: data.postalCode,
+      urgency: data.urgency,
+      sourceTable: 'devis_requests',
+    }).catch((err) =>
       console.error('Dispatch failed (non-blocking):', err)
     )
 

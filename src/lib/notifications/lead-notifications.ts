@@ -68,12 +68,38 @@ export async function processLeadEvent(event: LeadEventPayload): Promise<void> {
 
   const supabase = createAdminClient()
 
-  // Resolve lead details
-  const { data: lead } = await supabase
+  // Resolve lead details (try devis_requests first, then leads table)
+  let lead: LeadData & { client_email?: string; client_phone?: string; client_id?: string | null } | null = null
+
+  const { data: devisLead } = await supabase
     .from('devis_requests')
     .select('id, service_name, city, postal_code, client_name, client_email, client_phone, client_id')
     .eq('id', event.lead_id)
     .single()
+
+  if (devisLead) {
+    lead = devisLead
+  } else {
+    // Fallback: try the leads table
+    const { data: newLead } = await supabase
+      .from('leads')
+      .select('id, first_name, last_name, email, phone, project_city, project_postal_code, client_user_id')
+      .eq('id', event.lead_id)
+      .single()
+
+    if (newLead) {
+      lead = {
+        id: newLead.id,
+        service_name: (event.metadata.serviceName as string) || 'Service',
+        city: newLead.project_city,
+        postal_code: newLead.project_postal_code,
+        client_name: [newLead.first_name, newLead.last_name].filter(Boolean).join(' '),
+        client_email: newLead.email,
+        client_phone: newLead.phone,
+        client_id: newLead.client_user_id,
+      }
+    }
+  }
 
   if (!lead) return
 

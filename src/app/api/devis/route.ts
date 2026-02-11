@@ -9,6 +9,7 @@ import { createClient } from '@supabase/supabase-js'
 import { createClient as createServerClient } from '@/lib/supabase/server'
 import { getResendClient } from '@/lib/api/resend-client'
 import { z } from 'zod'
+import { dispatchLead } from '@/app/actions/dispatch'
 
 export const dynamic = 'force-dynamic'
 
@@ -127,6 +128,23 @@ export async function POST(request: Request) {
     if (dbError) {
       logger.error('Database error', dbError)
       // Continue even if DB fails - we'll still send emails
+    }
+
+    // Dispatch to eligible artisans (fire-and-forget, non-blocking)
+    if (lead) {
+      const urgencyMap: Record<string, string> = {
+        urgent: 'urgent',
+        semaine: 'normal',
+        mois: 'normal',
+        flexible: 'flexible',
+      }
+      dispatchLead(lead.id, {
+        serviceName: serviceNames[data.service] || data.service,
+        city: data.ville,
+        postalCode: data.codePostal,
+        urgency: urgencyMap[data.urgency] || 'normal',
+        sourceTable: 'leads',
+      }).catch((err) => console.error('Dispatch failed (non-blocking):', err))
     }
 
     // Send confirmation email to client
