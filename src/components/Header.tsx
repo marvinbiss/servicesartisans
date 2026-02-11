@@ -229,11 +229,18 @@ export default function Header() {
     }
   }, [pathname])
 
-  // Close menu when clicking outside
+  // Track openMenu in a ref so the document click handler always sees the
+  // current value without needing to be re-registered on every state change.
+  const openMenuRef = useRef(openMenu)
+  openMenuRef.current = openMenu
+
+  // Close desktop mega menus when clicking outside.  Only runs when a
+  // desktop mega menu is actually open to avoid interfering with mobile.
   useEffect(() => {
     if (!mounted) return
 
     const handleClick = (e: MouseEvent) => {
+      if (!openMenuRef.current) return          // no mega menu open → skip
       const target = e.target as HTMLElement
       if (!target.closest('[data-menu-trigger]') && !target.closest('[data-menu-content]')) {
         setOpenMenu(null)
@@ -314,7 +321,7 @@ export default function Header() {
   const closeMenusWithDelay = () => {
     megaMenuTimeoutRef.current = setTimeout(() => {
       setOpenMenu(null)
-    }, 150)
+    }, 400)
   }
 
   const closeMenus = () => {
@@ -840,7 +847,7 @@ export default function Header() {
 
       {/* ==================== MOBILE MENU ==================== */}
       {isMenuOpen && (
-        <div className="lg:hidden border-t border-gray-100 max-h-[calc(100vh-120px)] overflow-y-auto bg-white">
+        <div data-menu-content="mobile-menu" className="lg:hidden border-t border-gray-100 max-h-[calc(100vh-120px)] overflow-y-auto bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
             {/* Search Mobile - Dual Field */}
             <form onSubmit={handleSearch} className="mb-4">
