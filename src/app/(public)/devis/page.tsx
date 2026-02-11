@@ -129,11 +129,11 @@ export default function DevisPage() {
 
           <div className="text-center max-w-3xl mx-auto">
             <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
-              Recevez jusqu&apos;\u00e0{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-300 to-cyan-300">
+              Recevez <span className="whitespace-nowrap">jusqu&apos;\u00e0</span>{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-300 to-cyan-300 whitespace-nowrap">
                 3&nbsp;devis gratuits
               </span>{' '}
-              d&apos;artisans v\u00e9rifi\u00e9s
+              <span className="whitespace-nowrap">d&apos;artisans</span> v\u00e9rifi\u00e9s
             </h1>
             <p className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10">
               Remplissez le formulaire ci-dessous et comparez les offres de professionnels
