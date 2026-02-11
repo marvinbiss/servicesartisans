@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { Shield, Clock, Users, Search, FileText, CheckCircle, ChevronDown } from 'lucide-react'
+import { Shield, Clock, Users, Search, FileText, CheckCircle, ChevronDown, Star, ArrowUp } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
@@ -8,7 +8,7 @@ import DevisForm from '@/components/DevisForm'
 export const metadata: Metadata = {
   title: 'Demander un devis gratuit \u2014 ServicesArtisans',
   description:
-    'D\u00e9crivez votre projet et recevez jusqu\u2019\u00e0 3 devis gratuits d\u2019artisans v\u00e9rifi\u00e9s par SIREN. 100% gratuit, sans engagement.',
+    'D\u00e9crivez votre projet et recevez jusqu\u2019\u00e0 3 devis gratuits d\u2019artisans v\u00e9rifi\u00e9s par SIREN. 100\u00a0% gratuit, sans engagement.',
   alternates: {
     canonical: 'https://servicesartisans.fr/devis',
   },
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 
 const trustBadges = [
   { icon: Shield, label: 'Gratuit', sublabel: 'Aucun frais cach\u00e9' },
-  { icon: Clock, label: 'Sans engagement', sublabel: 'Lib\u00e9rez-vous \u00e0 tout moment' },
+  { icon: Clock, label: 'Sans engagement', sublabel: 'R\u00e9ponse sous 24\u00a0h' },
   { icon: Users, label: 'Artisans v\u00e9rifi\u00e9s', sublabel: 'SIREN contr\u00f4l\u00e9' },
 ]
 
@@ -33,54 +33,54 @@ const howSteps = [
     icon: Search,
     title: 'D\u00e9crivez votre projet',
     description:
-      'Indiquez le service recherch\u00e9, votre ville et les d\u00e9tails de votre besoin. Cela ne prend que 2 minutes.',
+      'S\u00e9lectionnez le type de service, indiquez votre ville et d\u00e9crivez votre besoin en quelques lignes. Formulaire rapide en 2\u00a0minutes.',
   },
   {
     number: '2',
     icon: FileText,
-    title: 'Recevez des devis',
+    title: 'Recevez vos devis',
     description:
-      'Nous transmettons votre demande aux artisans qualifi\u00e9s de votre r\u00e9gion. Recevez jusqu\u2019\u00e0 3 devis d\u00e9taill\u00e9s.',
+      'Votre demande est transmise aux artisans qualifi\u00e9s proches de chez vous. Vous recevez jusqu\u2019\u00e0 3 devis d\u00e9taill\u00e9s sous 24 \u00e0 48\u00a0h.',
   },
   {
     number: '3',
     icon: CheckCircle,
-    title: 'Choisissez votre artisan',
+    title: 'Choisissez librement',
     description:
-      'Comparez les offres, consultez les profils et s\u00e9lectionnez l\u2019artisan qui correspond \u00e0 vos attentes.',
+      'Comparez les tarifs, consultez les profils et choisissez l\u2019artisan qui vous convient. Aucune obligation d\u2019accepter.',
   },
 ]
 
 const faqItems = [
   {
-    question: 'Est-ce vraiment gratuit ?',
+    question: 'Le service est-il vraiment gratuit\u00a0?',
     answer:
-      'Oui, demander un devis est 100% gratuit et sans aucun engagement. Vous ne payez rien pour recevoir des propositions d\u2019artisans.',
+      'Oui, la demande de devis est 100\u00a0% gratuite et sans aucun engagement. Vous ne payez rien pour recevoir les propositions des artisans. Ce sont les professionnels qui financent le service.',
   },
   {
-    question: 'Combien de devis vais-je recevoir ?',
+    question: 'Combien de devis vais-je recevoir\u00a0?',
     answer:
-      'Vous pouvez recevoir jusqu\u2019\u00e0 3 devis d\u2019artisans diff\u00e9rents, en fonction de la disponibilit\u00e9 dans votre r\u00e9gion.',
+      'Vous pouvez recevoir jusqu\u2019\u00e0 3 devis d\u2019artisans diff\u00e9rents, selon la disponibilit\u00e9 dans votre zone g\u00e9ographique. Chaque devis est personnalis\u00e9 en fonction de votre projet.',
   },
   {
-    question: 'En combien de temps suis-je contact\u00e9 ?',
+    question: 'En combien de temps suis-je contact\u00e9\u00a0?',
     answer:
-      'Les artisans vous contactent g\u00e9n\u00e9ralement sous 24 \u00e0 48h apr\u00e8s votre demande.',
+      'Les artisans disponibles vous contactent g\u00e9n\u00e9ralement sous 24 \u00e0 48\u00a0h apr\u00e8s l\u2019envoi de votre demande. En cas d\u2019urgence, pr\u00e9cisez-le dans le formulaire pour acc\u00e9l\u00e9rer le traitement.',
   },
   {
-    question: 'Les artisans sont-ils v\u00e9rifi\u00e9s ?',
+    question: 'Comment les artisans sont-ils v\u00e9rifi\u00e9s\u00a0?',
     answer:
-      'Oui, tous les artisans de notre r\u00e9seau sont r\u00e9f\u00e9renc\u00e9s gr\u00e2ce aux donn\u00e9es officielles du registre SIREN. Leur activit\u00e9 et leur immatriculation sont contr\u00f4l\u00e9es.',
+      'Tous les artisans r\u00e9f\u00e9renc\u00e9s sur ServicesArtisans sont immatricul\u00e9s au registre SIREN. Nous v\u00e9rifions leur num\u00e9ro d\u2019entreprise et leur activit\u00e9 d\u00e9clar\u00e9e aupr\u00e8s des donn\u00e9es officielles de l\u2019INSEE.',
   },
   {
-    question: 'Suis-je oblig\u00e9 d\u2019accepter un devis ?',
+    question: 'Suis-je oblig\u00e9 d\u2019accepter un devis\u00a0?',
     answer:
-      'Non, vous \u00eates libre de comparer les devis re\u00e7us et de choisir celui qui vous convient. Il n\u2019y a aucune obligation d\u2019accepter une proposition.',
+      'Non, vous \u00eates enti\u00e8rement libre. Comparez les devis re\u00e7us \u00e0 votre rythme et choisissez celui qui correspond le mieux \u00e0 vos attentes et \u00e0 votre budget. Aucune obligation d\u2019accepter.',
   },
   {
-    question: 'Quelles donn\u00e9es personnelles sont partag\u00e9es ?',
+    question: 'Quelles donn\u00e9es personnelles sont partag\u00e9es\u00a0?',
     answer:
-      'Seuls votre nom, t\u00e9l\u00e9phone et description du projet sont transmis aux artisans s\u00e9lectionn\u00e9s. Vos donn\u00e9es ne sont jamais revendues.',
+      'Seuls votre nom, num\u00e9ro de t\u00e9l\u00e9phone et la description de votre projet sont transmis aux artisans s\u00e9lectionn\u00e9s. Votre adresse e-mail reste confidentielle et vos donn\u00e9es ne sont jamais revendues \u00e0 des tiers.',
   },
 ]
 
@@ -131,13 +131,13 @@ export default function DevisPage() {
             <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
               Recevez jusqu&apos;\u00e0{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-300 to-cyan-300">
-                3 devis gratuits
+                3&nbsp;devis gratuits
               </span>{' '}
               d&apos;artisans v\u00e9rifi\u00e9s
             </h1>
             <p className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10">
-              D\u00e9crivez votre projet en quelques clics et recevez des devis personnalis\u00e9s
-              d&apos;artisans qualifi\u00e9s pr\u00e8s de chez vous. 100% gratuit, sans engagement.
+              Remplissez le formulaire ci-dessous et comparez les offres de professionnels
+              qualifi\u00e9s pr\u00e8s de chez vous. Service 100&nbsp;% gratuit, sans engagement.
             </p>
 
             {/* Trust badges */}
@@ -162,7 +162,7 @@ export default function DevisPage() {
       </section>
 
       {/* ─── FORM ─────────────────────────────────────────────── */}
-      <section className="relative -mt-16 z-10 px-4 pb-20">
+      <section id="formulaire" className="relative -mt-16 z-10 px-4 pb-20">
         <DevisForm />
       </section>
 
@@ -170,11 +170,12 @@ export default function DevisPage() {
       <section className="py-20 bg-white">
         <div className="max-w-5xl mx-auto px-4">
           <div className="text-center mb-14">
+            <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-2">Simple et rapide</p>
             <h2 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-3 tracking-tight">
-              Comment \u00e7a marche ?
+              Comment \u00e7a marche&nbsp;?
             </h2>
             <p className="text-slate-500 max-w-lg mx-auto">
-              En 3 \u00e9tapes simples, recevez des devis d&apos;artisans qualifi\u00e9s.
+              Trois \u00e9tapes suffisent pour recevoir des devis personnalis\u00e9s d&apos;artisans de confiance.
             </p>
           </div>
 
@@ -213,11 +214,12 @@ export default function DevisPage() {
       <section className="py-20 bg-gray-50">
         <div className="max-w-3xl mx-auto px-4">
           <div className="text-center mb-12">
+            <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-2">FAQ</p>
             <h2 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-3 tracking-tight">
-              Questions fr\u00e9quentes sur les devis
+              Questions fr\u00e9quentes
             </h2>
             <p className="text-slate-500 max-w-lg mx-auto">
-              Tout ce que vous devez savoir avant de demander un devis.
+              Tout ce que vous devez savoir avant de demander votre devis gratuit.
             </p>
           </div>
 
@@ -243,17 +245,19 @@ export default function DevisPage() {
       {/* ─── BOTTOM CTA ───────────────────────────────────────── */}
       <section className="py-16 bg-white border-t border-gray-100">
         <div className="max-w-3xl mx-auto px-4 text-center">
+          <Star className="w-8 h-8 text-amber-400 mx-auto mb-4" />
           <h2 className="font-heading text-xl md:text-2xl font-bold text-slate-900 mb-3">
-            Pr\u00eat \u00e0 d\u00e9marrer votre projet ?
+            Pr\u00eat \u00e0 d\u00e9marrer votre projet&nbsp;?
           </h2>
           <p className="text-slate-500 mb-6 max-w-md mx-auto">
-            Remontez en haut de la page et remplissez le formulaire pour recevoir vos devis gratuits.
+            Comparez gratuitement les devis d&apos;artisans qualifi\u00e9s et trouvez le bon professionnel pour vos travaux.
           </p>
           <a
-            href="/devis"
+            href="#formulaire"
             className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
           >
-            Demander un devis gratuit
+            <ArrowUp className="w-5 h-5" />
+            Remplir le formulaire
           </a>
         </div>
       </section>
