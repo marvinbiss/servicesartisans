@@ -10,13 +10,25 @@ interface ArtisanMapProps {
 
 export function ArtisanMap({ artisan }: ArtisanMapProps) {
   const hasCoordinates = artisan.latitude && artisan.longitude
+  const hasCity = !!artisan.city
   const hasAddress = artisan.address && artisan.address.length > 0
   const hasZones = artisan.intervention_zones && artisan.intervention_zones.length > 0
   const hasRadius = !!artisan.intervention_zone
 
-  // Hide entire section when there's no useful location data
-  if (!hasCoordinates && !hasAddress && !hasZones && !hasRadius) {
+  // Hide entire section when there's no useful location data at all
+  if (!hasCoordinates && !hasCity && !hasAddress && !hasZones && !hasRadius) {
     return null
+  }
+
+  // Build map URL: use coordinates if available, otherwise geocode by city name
+  let mapSrc: string | null = null
+  if (hasCoordinates) {
+    mapSrc = `https://www.openstreetmap.org/export/embed.html?bbox=${artisan.longitude! - 0.08},${artisan.latitude! - 0.05},${artisan.longitude! + 0.08},${artisan.latitude! + 0.05}&layer=mapnik&marker=${artisan.latitude},${artisan.longitude}`
+  } else if (hasCity) {
+    const query = artisan.postal_code
+      ? `${artisan.city}, ${artisan.postal_code}, France`
+      : `${artisan.city}, France`
+    mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent(query)}&t=&z=13&ie=UTF8&iwloc=&output=embed`
   }
 
   return (
@@ -28,20 +40,22 @@ export function ArtisanMap({ artisan }: ArtisanMapProps) {
     >
       <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
         <MapPin className="w-5 h-5 text-blue-600" aria-hidden="true" />
-        Zone d'intervention
+        Zone d&apos;intervention
       </h2>
 
-      {/* Map — only show when coordinates are available */}
-      {hasCoordinates && (
+      {/* Map */}
+      {mapSrc && (
         <div className="rounded-xl overflow-hidden bg-gray-100 mb-4" style={{ height: '280px' }}>
           <iframe
             width="100%"
             height="100%"
             style={{ border: 0 }}
             loading="lazy"
-            src={`https://www.openstreetmap.org/export/embed.html?bbox=${artisan.longitude! - 0.08},${artisan.latitude! - 0.05},${artisan.longitude! + 0.08},${artisan.latitude! + 0.05}&layer=mapnik&marker=${artisan.latitude},${artisan.longitude}`}
-            title={`Carte de localisation de l'artisan à ${artisan.city}`}
-            aria-label={`Carte interactive montrant la zone d'intervention autour de ${artisan.city}`}
+            referrerPolicy="no-referrer-when-downgrade"
+            src={mapSrc}
+            title={`Carte de localisation de l'artisan \u00e0 ${artisan.city}`}
+            aria-label={`Carte montrant la zone d'intervention autour de ${artisan.city}`}
+            allowFullScreen
           />
         </div>
       )}
@@ -55,6 +69,14 @@ export function ArtisanMap({ artisan }: ArtisanMapProps) {
             <p className="text-gray-500">{artisan.postal_code} {artisan.city}</p>
           </div>
         </address>
+      )}
+
+      {/* City display when no address */}
+      {!artisan.address && hasCity && (
+        <div className="flex items-center gap-3 p-4 rounded-xl bg-gray-50 mb-4">
+          <MapPin className="w-5 h-5 text-gray-400" aria-hidden="true" />
+          <span className="text-gray-700">{artisan.city}{artisan.postal_code ? ` (${artisan.postal_code})` : ''}</span>
+        </div>
       )}
 
       {/* Intervention zones */}
@@ -81,7 +103,7 @@ export function ArtisanMap({ artisan }: ArtisanMapProps) {
         <div className="mt-4 pt-4 border-t border-gray-100">
           <div className="flex items-center gap-2 text-gray-600">
             <Navigation className="w-4 h-4" aria-hidden="true" />
-            <span>Rayon d'intervention : <strong>{artisan.intervention_zone}</strong></span>
+            <span>Rayon d&apos;intervention : <strong>{artisan.intervention_zone}</strong></span>
           </div>
         </div>
       )}

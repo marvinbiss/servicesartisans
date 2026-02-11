@@ -262,7 +262,6 @@ export default function ArtisanPageClient({
             <aside id="contact-sidebar" className="hidden lg:block" aria-label="Informations de contact">
               <div className="space-y-6 sticky top-20">
                 <ArtisanSidebar artisan={artisan} />
-                <ArtisanContactCard artisan={artisan} />
               </div>
             </aside>
           </div>
