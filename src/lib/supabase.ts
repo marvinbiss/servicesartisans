@@ -13,33 +13,60 @@ function isValidUUID(str: string): boolean {
 }
 
 /**
+ * Race a promise against a timeout. If the promise doesn't resolve within
+ * the given ms, rejects with a TimeoutError. Prevents Supabase queries from
+ * hanging indefinitely during static generation (the "upstream request timeout"
+ * scenario where the HTTP connection hangs without ever throwing).
+ */
+function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(
+      () => reject(new Error(`[withTimeout] ${label} timed out after ${ms}ms`)),
+      ms,
+    )
+    promise.then(
+      (val) => { clearTimeout(timer); resolve(val) },
+      (err) => { clearTimeout(timer); reject(err) },
+    )
+  })
+}
+
+/** Per-query timeout (seconds). Keep well below staticPageGenerationTimeout. */
+const QUERY_TIMEOUT_MS = 8_000
+
+/**
  * Retry a function with exponential backoff.
  * Designed for Supabase free tier where statement_timeout (5-8s) causes
  * error code 57014 during heavy static generation (2,498 pages).
+ * Each attempt is also guarded by withTimeout to prevent hanging queries.
  */
 async function retryWithBackoff<T>(
   fn: () => Promise<T>,
   label: string,
-  maxRetries = 3,
-  baseDelayMs = 1000,
+  maxRetries = 2,
+  baseDelayMs = 800,
 ): Promise<T> {
   let lastError: unknown
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {
-      return await fn()
+      return await withTimeout(fn(), QUERY_TIMEOUT_MS, label)
     } catch (err: unknown) {
       lastError = err
-      const isTimeout =
+      const isRetryable =
         err instanceof Error &&
         (err.message?.includes('statement timeout') ||
          err.message?.includes('57014') ||
-         err.message?.includes('canceling statement'))
-      if (!isTimeout || attempt === maxRetries) {
+         err.message?.includes('canceling statement') ||
+         err.message?.includes('timed out') ||
+         err.message?.includes('upstream request timeout') ||
+         err.message?.includes('ECONNRESET') ||
+         err.message?.includes('fetch failed'))
+      if (!isRetryable || attempt === maxRetries) {
         throw err
       }
-      const delay = baseDelayMs * Math.pow(2, attempt) + Math.random() * 500
+      const delay = baseDelayMs * Math.pow(2, attempt) + Math.random() * 300
       console.warn(
-        `[retryWithBackoff] ${label} timeout (attempt ${attempt + 1}/${maxRetries + 1}), retrying in ${Math.round(delay)}ms...`,
+        `[retryWithBackoff] ${label} failed (attempt ${attempt + 1}/${maxRetries + 1}), retrying in ${Math.round(delay)}ms...`,
       )
       await new Promise((r) => setTimeout(r, delay))
     }
@@ -58,14 +85,20 @@ const PROVIDER_SELECT = `
 `
 
 export async function getServices() {
-  const { data, error } = await supabase
-    .from('services')
-    .select('*')
-    .eq('is_active', true)
-    .order('name')
+  return withTimeout(
+    (async () => {
+      const { data, error } = await supabase
+        .from('services')
+        .select('*')
+        .eq('is_active', true)
+        .order('name')
 
-  if (error) throw error
-  return data
+      if (error) throw error
+      return data
+    })(),
+    QUERY_TIMEOUT_MS,
+    'getServices',
+  )
 }
 
 // Services statiques en fallback
@@ -90,17 +123,24 @@ const staticServices: Record<string, { id: string; name: string; slug: string; d
 
 export async function getServiceBySlug(slug: string) {
   try {
-    const { data, error } = await supabase
-      .from('services')
-      .select('*')
-      .eq('slug', slug)
-      .single()
+    const data = await withTimeout(
+      (async () => {
+        const { data, error } = await supabase
+          .from('services')
+          .select('*')
+          .eq('slug', slug)
+          .single()
 
-    if (error || !data) {
-      const staticService = staticServices[slug]
-      if (staticService) return staticService
-      throw error || new Error('Service not found')
-    }
+        if (error || !data) {
+          const staticService = staticServices[slug]
+          if (staticService) return staticService
+          throw error || new Error('Service not found')
+        }
+        return data
+      })(),
+      QUERY_TIMEOUT_MS,
+      `getServiceBySlug(${slug})`,
+    )
     return data
   } catch (error) {
     const staticService = staticServices[slug]
@@ -127,26 +167,38 @@ export async function getLocationBySlug(slug: string) {
 
 // Lookup by stable_id ONLY — no fallback.
 export async function getProviderByStableId(stableId: string) {
-  const { data } = await supabase
-    .from('providers')
-    .select(PROVIDER_SELECT)
-    .eq('stable_id', stableId)
-    .eq('is_active', true)
-    .single()
+  return withTimeout(
+    (async () => {
+      const { data } = await supabase
+        .from('providers')
+        .select(PROVIDER_SELECT)
+        .eq('stable_id', stableId)
+        .eq('is_active', true)
+        .single()
 
-  return data || null
+      return data || null
+    })(),
+    QUERY_TIMEOUT_MS,
+    `getProviderByStableId(${stableId})`,
+  )
 }
 
 // Legacy — still used by non-slice code paths. Will be removed in a future PR.
 export async function getProviderBySlug(slug: string) {
-  const { data } = await supabase
-    .from('providers')
-    .select(PROVIDER_SELECT)
-    .eq('slug', slug)
-    .eq('is_active', true)
-    .single()
+  return withTimeout(
+    (async () => {
+      const { data } = await supabase
+        .from('providers')
+        .select(PROVIDER_SELECT)
+        .eq('slug', slug)
+        .eq('is_active', true)
+        .single()
 
-  return data || null
+      return data || null
+    })(),
+    QUERY_TIMEOUT_MS,
+    `getProviderBySlug(${slug})`,
+  )
 }
 
 // Reverse mapping: service slug → provider specialties (for fallback queries)
@@ -275,15 +327,21 @@ export async function getProvidersByLocation(locationSlug: string) {
 }
 
 export async function getAllProviders() {
-  const { data, error } = await supabase
-    .from('providers')
-    .select('*')
-    .eq('is_active', true)
-    .order('is_verified', { ascending: false })
-    .order('name')
+  return withTimeout(
+    (async () => {
+      const { data, error } = await supabase
+        .from('providers')
+        .select('*')
+        .eq('is_active', true)
+        .order('is_verified', { ascending: false })
+        .order('name')
 
-  if (error) throw error
-  return data || []
+      if (error) throw error
+      return data || []
+    })(),
+    QUERY_TIMEOUT_MS,
+    'getAllProviders',
+  )
 }
 
 export async function getProvidersByService(serviceSlug: string, limit?: number) {

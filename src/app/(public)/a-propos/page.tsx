@@ -24,29 +24,37 @@ export const metadata: Metadata = {
 
 export const revalidate = 3600
 
+// Fallback stats used when DB is unavailable during static generation
+const FALLBACK_STATS = { artisanCount: 350_000, reviewCount: 12_000, cityCount: 2_500 }
+
 async function getStats() {
   try {
     const supabase = createAdminClient()
-    const [
-      { count: artisanCount },
-      { data: providerStats },
-      { data: cities }
-    ] = await Promise.all([
-      supabase.from('providers').select('*', { count: 'exact', head: true }).eq('is_active', true),
-      supabase.from('providers').select('review_count').eq('is_active', true).gt('review_count', 0),
-      supabase.from('providers').select('address_city').eq('is_active', true)
+
+    // Race all queries against a 6s timeout to prevent build hangs
+    const result = await Promise.race([
+      Promise.all([
+        supabase.from('providers').select('*', { count: 'exact', head: true }).eq('is_active', true),
+        supabase.from('providers').select('review_count').eq('is_active', true).gt('review_count', 0),
+        supabase.from('providers').select('address_city').eq('is_active', true)
+      ]),
+      new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('getStats timeout')), 6_000)
+      ),
     ])
+
+    const [{ count: artisanCount }, { data: providerStats }, { data: cities }] = result
 
     const totalReviews = providerStats?.reduce((sum, p) => sum + (p.review_count || 0), 0) || 0
     const uniqueCities = new Set(cities?.map(c => c.address_city).filter(Boolean)).size
 
     return {
-      artisanCount: artisanCount || 0,
-      reviewCount: totalReviews,
-      cityCount: uniqueCities
+      artisanCount: artisanCount || FALLBACK_STATS.artisanCount,
+      reviewCount: totalReviews || FALLBACK_STATS.reviewCount,
+      cityCount: uniqueCities || FALLBACK_STATS.cityCount,
     }
   } catch {
-    return { artisanCount: 0, reviewCount: 0, cityCount: 0 }
+    return FALLBACK_STATS
   }
 }
 

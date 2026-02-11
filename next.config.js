@@ -23,7 +23,7 @@ const nextConfig = {
     } : false,
   },
 
-  staticPageGenerationTimeout: 180,
+  staticPageGenerationTimeout: 600,
 
   experimental: {
     optimizePackageImports: [
