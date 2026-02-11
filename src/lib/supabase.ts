@@ -6,6 +6,13 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
+/**
+ * Detect if we're inside `next build` (static generation phase).
+ * During build, skip heavy DB queries to avoid overwhelming Supabase free tier.
+ * Pages use ISR (revalidate) so they'll get fresh data on first visit.
+ */
+const IS_BUILD = process.env.NEXT_PHASE === 'phase-production-build'
+
 // Helper to check if a string is a valid UUID
 function isValidUUID(str: string): boolean {
   const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
@@ -85,6 +92,7 @@ const PROVIDER_SELECT = `
 `
 
 export async function getServices() {
+  if (IS_BUILD) return Object.values(staticServices) // Use static data during build
   return withTimeout(
     (async () => {
       const { data, error } = await supabase
@@ -122,6 +130,13 @@ const staticServices: Record<string, { id: string; name: string; slug: string; d
 }
 
 export async function getServiceBySlug(slug: string) {
+  // During build, use static data only — no DB hit
+  if (IS_BUILD) {
+    const staticService = staticServices[slug]
+    if (staticService) return staticService
+    throw new Error(`Service not found: ${slug}`)
+  }
+
   try {
     const data = await withTimeout(
       (async () => {
@@ -150,6 +165,7 @@ export async function getServiceBySlug(slug: string) {
 }
 
 export async function getLocationBySlug(slug: string) {
+  if (IS_BUILD) return null // Use static france.ts fallback during build
   return retryWithBackoff(
     async () => {
       const { data, error } = await supabase
@@ -218,6 +234,7 @@ export async function getProvidersByServiceAndLocation(
   serviceSlug: string,
   locationSlug: string
 ) {
+  if (IS_BUILD) return [] // Skip during build — ISR will populate on first visit
   // Use retry with backoff to handle statement_timeout during static generation
   return retryWithBackoff(
     async () => {
@@ -276,6 +293,7 @@ export async function hasProvidersByServiceAndLocation(
   serviceSlug: string,
   locationSlug: string,
 ): Promise<boolean> {
+  if (IS_BUILD) return false // Conservative: noindex during build, ISR will update
   try {
     return await retryWithBackoff(
       async () => {
@@ -305,6 +323,7 @@ export async function hasProvidersByServiceAndLocation(
 }
 
 export async function getProvidersByLocation(locationSlug: string) {
+  if (IS_BUILD) return [] // Skip during build
   return retryWithBackoff(
     async () => {
       const location = await getLocationBySlug(locationSlug)
@@ -327,6 +346,7 @@ export async function getProvidersByLocation(locationSlug: string) {
 }
 
 export async function getAllProviders() {
+  if (IS_BUILD) return [] // Skip during build
   return withTimeout(
     (async () => {
       const { data, error } = await supabase
@@ -345,6 +365,7 @@ export async function getAllProviders() {
 }
 
 export async function getProvidersByService(serviceSlug: string, limit?: number) {
+  if (IS_BUILD) return [] // Skip during build
   return retryWithBackoff(
     async () => {
       const service = await getServiceBySlug(serviceSlug)
@@ -375,6 +396,7 @@ export async function getProvidersByService(serviceSlug: string, limit?: number)
 }
 
 export async function getLocationsByService(serviceSlug: string) {
+  if (IS_BUILD) return [] // Skip during build
   return retryWithBackoff(
     async () => {
       const service = await getServiceBySlug(serviceSlug)
