@@ -56,7 +56,7 @@ function convertToArtisan(provider: any, service: any, location: any, serviceSlu
     team_size: provider.team_size || undefined,
     services: provider.services || [],
     service_prices: (provider.service_prices && provider.service_prices.length > 0) ? provider.service_prices : generateServicePrices(serviceSlug),
-    accepts_new_clients: provider.accepts_new_clients !== false,
+    accepts_new_clients: provider.accepts_new_clients === true ? true : undefined,
     experience_years: provider.experience_years || undefined,
     certifications: provider.certifications || [],
     insurance: provider.insurance || [],

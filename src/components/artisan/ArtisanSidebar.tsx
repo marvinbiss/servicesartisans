@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Phone, Mail, MessageCircle, Zap, Shield, FileCheck, Award, Lock } from 'lucide-react'
+import { Phone, Mail, MessageCircle, Zap, Shield, FileCheck, Award } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 import { QuoteRequestModal } from './QuoteRequestModal'
 
@@ -38,7 +38,7 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
 
       <div className="p-6">
         {/* Status */}
-        {artisan.accepts_new_clients !== false && (
+        {artisan.accepts_new_clients === true && (
           <div className="flex items-center gap-2 text-green-600 mb-4 pb-4 border-b border-gray-100">
             <span className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
@@ -138,21 +138,6 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
               <span>{artisan.certifications.length} certification(s)</span>
             </div>
           )}
-        </div>
-
-        {/* Escrow Notice */}
-        <div className="p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100 mb-6">
-          <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-              <Lock className="w-4 h-4 text-blue-600" />
-            </div>
-            <div>
-              <p className="font-semibold text-blue-900 text-sm">Protection Escrow</p>
-              <p className="text-xs text-blue-700/80 mt-1 leading-relaxed">
-                Pour les projets de +500&euro;, s&eacute;curisez votre paiement. Les fonds sont bloqu&eacute;s jusqu&apos;&agrave; validation des travaux.
-              </p>
-            </div>
-          </div>
         </div>
 
         {/* SIRET */}

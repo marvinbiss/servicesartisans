@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { User, ChevronDown, Globe, Building2, Users, Calendar, Shield, Award, CheckCircle, FileCheck } from 'lucide-react'
+import { User, ChevronDown, Globe, Building2, Users, Calendar, Shield, Award, CheckCircle } from 'lucide-react'
 import { Artisan, getDisplayName } from './types'
 
 // Map legal form codes to readable labels
@@ -132,18 +132,6 @@ export function ArtisanAbout({ artisan }: ArtisanAboutProps) {
             </div>
           )}
 
-          {/* Escrow Available */}
-          <div className="p-3.5 rounded-xl border bg-blue-50/80 border-blue-200 transition-all duration-200 hover:bg-blue-50 hover:shadow-sm">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
-                <FileCheck className="w-4 h-4 text-blue-600" />
-              </div>
-              <div>
-                <p className="font-medium text-gray-900 text-sm">Paiement s&eacute;curis&eacute;</p>
-                <p className="text-xs text-slate-500">Protection Escrow</p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 

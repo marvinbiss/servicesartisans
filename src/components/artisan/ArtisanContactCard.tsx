@@ -40,13 +40,15 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
 
         {/* Availability + rating row */}
         <div className="flex items-center gap-3 mb-5 flex-wrap">
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-50 border border-green-200">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
-            </span>
-            <span className="text-xs font-semibold text-green-700">Disponible</span>
-          </div>
+          {artisan.accepts_new_clients === true && (
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-50 border border-green-200">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
+              </span>
+              <span className="text-xs font-semibold text-green-700">Disponible</span>
+            </div>
+          )}
           {artisan.average_rating > 0 && (
             <div className="flex items-center gap-1 text-xs text-slate-500">
               <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" aria-hidden="true" />
