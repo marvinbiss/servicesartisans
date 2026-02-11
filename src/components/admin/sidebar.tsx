@@ -22,6 +22,7 @@ import {
   Wrench,
   BookOpen,
   Gauge,
+  Sliders,
 } from 'lucide-react'
 
 const nav = [
@@ -29,6 +30,7 @@ const nav = [
   { name: 'Système', href: '/admin/systeme', icon: Gauge },
   { name: 'Leads', href: '/admin/leads', icon: FileText },
   { name: 'Dispatch', href: '/admin/dispatch', icon: ArrowRight },
+  { name: 'Algorithme', href: '/admin/algorithme', icon: Sliders },
   { name: 'Outils', href: '/admin/outils', icon: Wrench },
   { name: 'Journal', href: '/admin/journal', icon: BookOpen },
   { name: 'Utilisateurs', href: '/admin/utilisateurs', icon: Users },
