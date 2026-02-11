@@ -1,4 +1,7 @@
-/** @type {import('next').NextConfig} */
+// phase === 'phase-production-build' during `next build`
+/** @type {(phase: string) => import('next').NextConfig} */
+module.exports = (phase) => {
+
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
@@ -69,7 +72,9 @@ const nextConfig = {
 
   env: {
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr',
+    NEXT_PHASE: phase,
   },
 }
 
-module.exports = nextConfig
+return nextConfig
+}
