@@ -27,14 +27,14 @@ const informationLinks = [
 
 export default function Footer() {
   return (
-    <footer className="bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 text-gray-400" role="contentinfo">
+    <footer className="bg-gradient-to-b from-gray-900 via-gray-900 to-gray-950 text-gray-400" role="contentinfo">
       {/* Newsletter Section Premium */}
-      <div className="border-b border-slate-800/50">
+      <div className="border-b border-gray-800/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-8 bg-gradient-to-r from-primary-600/10 via-primary-500/5 to-transparent rounded-2xl p-8 border border-primary-500/20">
+          <div className="relative flex flex-col lg:flex-row items-center justify-between gap-8 bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-8 overflow-hidden">
             <div className="text-center lg:text-left">
               <h3 className="font-heading text-2xl font-bold text-white mb-2 tracking-tight">Restez informé</h3>
-              <p className="text-gray-400">Recevez nos conseils et offres exclusives</p>
+              <p className="text-blue-100">Recevez nos conseils et offres exclusives</p>
             </div>
             <NewsletterForm />
           </div>
@@ -42,20 +42,20 @@ export default function Footer() {
       </div>
 
       {/* Trust Badges Premium */}
-      <div className="border-b border-slate-800/50">
+      <div className="border-b border-gray-800/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div className="flex items-center gap-3 justify-center md:justify-start">
-              <div className="w-12 h-12 bg-green-500/10 rounded-xl flex items-center justify-center">
-                <Shield className="w-6 h-6 text-green-400" />
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
+            <div className="flex items-center gap-3 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-4">
+              <div className="w-12 h-12 bg-emerald-500/15 rounded-xl flex items-center justify-center flex-shrink-0">
+                <Shield className="w-6 h-6 text-emerald-400" />
               </div>
               <div>
-                <p className="text-white font-semibold text-sm">350 000+ artisans référencés</p>
+                <p className="text-white font-semibold text-sm">350 000+ artisans</p>
                 <p className="text-gray-500 text-xs">Référencés par SIREN</p>
               </div>
             </div>
-            <div className="flex items-center gap-3 justify-center md:justify-start">
-              <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center">
+            <div className="flex items-center gap-3 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-4">
+              <div className="w-12 h-12 bg-blue-500/15 rounded-xl flex items-center justify-center flex-shrink-0">
                 <Building2 className="w-6 h-6 text-blue-400" />
               </div>
               <div>
@@ -63,8 +63,8 @@ export default function Footer() {
                 <p className="text-gray-500 text-xs">Couverture nationale</p>
               </div>
             </div>
-            <div className="flex items-center gap-3 justify-center md:justify-start">
-              <div className="w-12 h-12 bg-amber-500/10 rounded-xl flex items-center justify-center">
+            <div className="flex items-center gap-3 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-4">
+              <div className="w-12 h-12 bg-amber-500/15 rounded-xl flex items-center justify-center flex-shrink-0">
                 <Award className="w-6 h-6 text-amber-400" />
               </div>
               <div>
@@ -72,8 +72,8 @@ export default function Footer() {
                 <p className="text-gray-500 text-xs">Sans engagement</p>
               </div>
             </div>
-            <div className="flex items-center gap-3 justify-center md:justify-start">
-              <div className="w-12 h-12 bg-purple-500/10 rounded-xl flex items-center justify-center">
+            <div className="flex items-center gap-3 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-4">
+              <div className="w-12 h-12 bg-purple-500/15 rounded-xl flex items-center justify-center flex-shrink-0">
                 <CreditCard className="w-6 h-6 text-purple-400" />
               </div>
               <div>
@@ -86,9 +86,9 @@ export default function Footer() {
       </div>
 
       {/* SEO Internal Links Section */}
-      <div className="border-b border-slate-800/50">
+      <div className="border-b border-gray-800/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12">
             {/* Services populaires */}
             <div>
               <h4 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">Services populaires</h4>
@@ -97,7 +97,7 @@ export default function Footer() {
                   <li key={service.slug}>
                     <Link
                       href={`/services/${service.slug}`}
-                      className="hover:text-white transition-colors duration-200 hover:translate-x-1 inline-block"
+                      className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block"
                     >
                       {service.name}
                     </Link>
@@ -120,7 +120,7 @@ export default function Footer() {
                   <li key={city.slug}>
                     <Link
                       href={`/villes/${city.slug}`}
-                      className="hover:text-white transition-colors duration-200 hover:translate-x-1 inline-block"
+                      className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block"
                     >
                       {city.name}
                     </Link>
@@ -146,7 +146,7 @@ export default function Footer() {
                   <li key={region.slug}>
                     <Link
                       href={`/regions/${region.slug}`}
-                      className="hover:text-white transition-colors duration-200 hover:translate-x-1 inline-block"
+                      className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block"
                     >
                       {region.name}
                     </Link>
@@ -175,7 +175,7 @@ export default function Footer() {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="hover:text-white transition-colors duration-200 hover:translate-x-1 inline-block"
+                      className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block"
                     >
                       {link.name}
                     </Link>
@@ -248,7 +248,7 @@ export default function Footer() {
             <ul className="space-y-3 text-sm">
               {informationLinks.slice(0, 6).map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="hover:text-white transition-colors duration-200">
+                  <Link href={link.href} className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block">
                     {link.name}
                   </Link>
                 </li>
@@ -267,42 +267,42 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-5 text-sm uppercase tracking-wider">Entreprise</h4>
             <ul className="space-y-3 text-sm">
               <li>
-                <Link href="/a-propos" className="hover:text-white transition-colors duration-200">
+                <Link href="/a-propos" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block">
                   À propos
                 </Link>
               </li>
               <li>
-                <Link href="/carrieres" className="hover:text-white transition-colors duration-200">
+                <Link href="/carrieres" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block">
                   Carrières
                 </Link>
               </li>
               <li>
-                <Link href="/presse" className="hover:text-white transition-colors duration-200">
+                <Link href="/presse" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block">
                   Presse
                 </Link>
               </li>
               <li>
-                <Link href="/partenaires" className="hover:text-white transition-colors duration-200">
+                <Link href="/partenaires" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block">
                   Partenaires
                 </Link>
               </li>
               <li>
-                <Link href="/inscription-artisan" className="hover:text-white transition-colors duration-200">
+                <Link href="/inscription-artisan" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block">
                   Devenir partenaire
                 </Link>
               </li>
               <li>
-                <Link href="/notre-processus-de-verification" className="hover:text-white transition-colors duration-200">
+                <Link href="/notre-processus-de-verification" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block">
                   Processus de vérification
                 </Link>
               </li>
               <li>
-                <Link href="/politique-avis" className="hover:text-white transition-colors duration-200">
+                <Link href="/politique-avis" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block">
                   Politique des avis
                 </Link>
               </li>
               <li>
-                <Link href="/mediation" className="hover:text-white transition-colors duration-200">
+                <Link href="/mediation" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block">
                   Médiation
                 </Link>
               </li>
@@ -314,22 +314,22 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-5 text-sm uppercase tracking-wider">Juridique</h4>
             <ul className="space-y-3 text-sm">
               <li>
-                <Link href="/mentions-legales" className="hover:text-white transition-colors duration-200">
+                <Link href="/mentions-legales" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block">
                   Mentions légales
                 </Link>
               </li>
               <li>
-                <Link href="/cgv" className="hover:text-white transition-colors duration-200">
+                <Link href="/cgv" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block">
                   CGV
                 </Link>
               </li>
               <li>
-                <Link href="/confidentialite" className="hover:text-white transition-colors duration-200">
+                <Link href="/confidentialite" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block">
                   Confidentialité
                 </Link>
               </li>
               <li>
-                <Link href="/accessibilite" className="hover:text-white transition-colors duration-200">
+                <Link href="/accessibilite" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block">
                   Accessibilité
                 </Link>
               </li>
@@ -338,7 +338,7 @@ export default function Footer() {
         </div>
 
         {/* Contact section */}
-        <div className="mt-16 pt-10 border-t border-slate-800/50">
+        <div className="mt-16 pt-10 border-t border-gray-800">
           <div className="grid md:grid-cols-3 gap-8">
             {companyIdentity.address && (
               <div className="flex items-center gap-4 p-4 bg-slate-800/30 rounded-xl hover:bg-slate-800/50 transition-colors">
@@ -378,13 +378,13 @@ export default function Footer() {
       </div>
 
       {/* Bottom Bar Premium */}
-      <div className="border-t border-slate-800/50 bg-slate-950/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="border-t border-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
-            <p className="text-gray-500">
+            <p className="text-sm text-gray-500">
               © {new Date().getFullYear()} <span className="text-gray-400">ServicesArtisans</span>. Tous droits réservés.
             </p>
-            <div className="flex flex-wrap justify-center gap-6 text-gray-500">
+            <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-500">
               <Link href="/mentions-legales" className="hover:text-white transition-colors duration-200">
                 Mentions légales
               </Link>

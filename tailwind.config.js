@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'class',
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -50,6 +51,20 @@ module.exports = {
           900: '#064E3B',
           950: '#022C22',
         },
+        // Warm Neutrals - Premium warm gray replacement
+        warm: {
+          50: '#FEFDFB',
+          100: '#FAF8F5',
+          200: '#F0ECE6',
+          300: '#E8E4DF',
+          400: '#D4CFC8',
+          500: '#B5AFA6',
+          600: '#8A847C',
+          700: '#5E5952',
+          800: '#3D3935',
+          900: '#1F1C1A',
+          950: '#0D0B0A',
+        },
       },
       fontFamily: {
         sans: ['var(--font-inter)', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
@@ -66,14 +81,18 @@ module.exports = {
       boxShadow: {
         'glow': '0 0 20px rgba(51, 102, 255, 0.3)',
         'glow-lg': '0 0 40px rgba(51, 102, 255, 0.4)',
-        'glow-amber': '0 0 20px rgba(245, 158, 11, 0.3)',
+        'glow-amber': '0 0 30px rgba(245, 158, 11, 0.15)',
         'glow-gold': '0 0 30px rgba(245, 158, 11, 0.4)',
+        'glow-blue': '0 0 30px rgba(59, 130, 246, 0.15)',
+        'glow-emerald': '0 0 30px rgba(16, 185, 129, 0.15)',
         'soft': '0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)',
-        'soft-lg': '0 10px 40px -10px rgba(0, 0, 0, 0.1), 0 2px 10px -2px rgba(0, 0, 0, 0.04)',
+        'soft-lg': '0 10px 40px -10px rgba(0, 0, 0, 0.08)',
         'premium': '0 25px 50px -12px rgba(0, 0, 0, 0.15), 0 12px 24px -8px rgba(0, 0, 0, 0.1)',
-        'premium-lg': '0 35px 60px -15px rgba(0, 0, 0, 0.2), 0 20px 40px -10px rgba(0, 0, 0, 0.1)',
+        'premium-lg': '0 25px 60px -15px rgba(0, 0, 0, 0.15)',
         'glass': '0 8px 32px rgba(0, 0, 0, 0.08)',
+        'glass-lg': '0 8px 32px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.15)',
         'inner-glow': 'inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
+        'card-hover': '0 25px 50px -12px rgba(0, 0, 0, 0.12)',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
@@ -86,6 +105,8 @@ module.exports = {
         'gradient-dark': 'linear-gradient(180deg, #0F172A 0%, #1E293B 100%)',
         'gradient-glass': 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
         'gradient-shine': 'linear-gradient(110deg, transparent 25%, rgba(255,255,255,0.1) 50%, transparent 75%)',
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        'hero-pattern': 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.03\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-out',
@@ -100,7 +121,8 @@ module.exports = {
         'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
         'bounce-subtle': 'bounceSubtle 2s infinite',
         'shimmer': 'shimmer 2s linear infinite',
-        'float': 'float 3s ease-in-out infinite',
+        'float': 'float 6s ease-in-out infinite',
+        'gradient-x': 'gradient-x 8s ease infinite',
         'glow-pulse': 'glowPulse 2s ease-in-out infinite',
       },
       keyframes: {
@@ -157,6 +179,14 @@ module.exports = {
           '0%, 100%': { boxShadow: '0 0 20px rgba(245, 158, 11, 0.4)' },
           '50%': { boxShadow: '0 0 40px rgba(245, 158, 11, 0.6)' },
         },
+        'gradient-x': {
+          '0%, 100%': { 'background-size': '200% 200%', 'background-position': 'left center' },
+          '50%': { 'background-size': '200% 200%', 'background-position': 'right center' },
+        },
+        counter: {
+          from: { '--num': '0' },
+          to: { '--num': 'var(--target)' },
+        },
       },
       borderRadius: {
         '4xl': '2rem',
@@ -168,6 +198,7 @@ module.exports = {
       transitionTimingFunction: {
         'premium': 'cubic-bezier(0.16, 1, 0.3, 1)',
         'bounce-in': 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+        'bounce-sm': 'cubic-bezier(0.34, 1.56, 0.64, 1)',
         'smooth': 'cubic-bezier(0.4, 0, 0.2, 1)',
       },
       backdropBlur: {

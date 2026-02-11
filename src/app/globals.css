@@ -993,3 +993,79 @@ img {
 :focus:not(:focus-visible) {
   outline: none;
 }
+
+/* ===========================================
+   Premium Design System 2026
+   =========================================== */
+@layer utilities {
+  /* Animated gradient text (utility variant) */
+  .text-gradient-util {
+    @apply bg-clip-text text-transparent bg-gradient-to-r;
+  }
+
+  /* Glass morphism card */
+  .glass {
+    @apply backdrop-blur-xl bg-white/10 border border-white/20;
+  }
+
+  .glass-dark {
+    @apply backdrop-blur-xl bg-black/20 border border-white/10;
+  }
+
+  /* Card lift hover effect */
+  .card-lift {
+    @apply transition-all duration-300 ease-premium hover:-translate-y-1 hover:shadow-card-hover;
+  }
+
+  /* Shimmer effect for loading/premium elements (utility variant) */
+  .shimmer-util {
+    @apply bg-gradient-shine bg-[length:200%_100%] animate-shimmer;
+  }
+
+  /* Warm background override */
+  .bg-warm-base {
+    background-color: #FEFDFB;
+  }
+
+  /* Number counter animation */
+  @property --num {
+    syntax: '<integer>';
+    initial-value: 0;
+    inherits: false;
+  }
+
+  .counter-animate {
+    animation: counter 2s ease-out forwards;
+    counter-reset: num var(--num);
+  }
+
+  /* Scrollbar styling */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: theme('colors.warm.300') transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: theme('colors.warm.300');
+    border-radius: 20px;
+  }
+}
+
+/* Dark mode base */
+@layer base {
+  .dark {
+    color-scheme: dark;
+  }
+
+  .dark body {
+    @apply bg-gray-950 text-gray-100;
+  }
+}

@@ -37,15 +37,15 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-      className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      className="bg-[#FEFDFB] rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden hover:shadow-lg hover:border-gray-200 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
       role="banner"
       aria-label={`Profil de ${displayName}`}
     >
       {/* Premium gradient accent bar */}
-      <div className="h-1.5 bg-gradient-to-r from-blue-500 via-blue-600 to-indigo-600" />
+      <div className="h-1.5 bg-gradient-to-r from-blue-500 via-blue-400 to-indigo-600" />
 
       <div className="p-6 md:p-8">
         <div className="flex flex-col md:flex-row gap-6">
@@ -99,7 +99,7 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
             </div>
 
             {/* Name & Specialty */}
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 font-heading mb-1.5 tracking-tight">
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 font-heading mb-1.5 tracking-tight transition-all duration-300 hover:bg-gradient-to-r hover:from-blue-700 hover:via-blue-600 hover:to-indigo-600 hover:bg-clip-text hover:text-transparent cursor-default">
               {displayName}
             </h1>
             <p className="text-lg text-slate-600 mb-3 font-medium">{artisan.specialty}</p>
@@ -153,7 +153,7 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
                   </div>
                 )}
                 {artisan.review_count > 0 && (
-                  <a href="#reviews" className="text-slate-600 hover:text-blue-600 transition-colors" aria-label={`${artisan.review_count} avis clients`}>
+                  <a href="#reviews" className="text-slate-600 hover:text-blue-700 transition-colors duration-200" aria-label={`${artisan.review_count} avis clients`}>
                     ({artisan.review_count} avis)
                   </a>
                 )}

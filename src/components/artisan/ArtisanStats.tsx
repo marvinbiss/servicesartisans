@@ -33,7 +33,7 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.1 }}
-      className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
+      className="bg-[#FEFDFB] rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden hover:-translate-y-1 hover:shadow-lg hover:border-gray-200 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
     >
       {/* Section header */}
       <div className="px-6 pt-6 pb-2">
@@ -52,16 +52,16 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
             <motion.div
               key={stat.label}
               role="listitem"
-              initial={{ opacity: 0, scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3, delay: 0.1 + index * 0.05 }}
-              className={`text-center p-4 rounded-xl border ${stat.bgColor} transition-all duration-200 hover:scale-[1.02] hover:shadow-sm`}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.1 + index * 0.08 }}
+              className={`text-center p-4 rounded-xl border ${stat.bgColor} transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-105 hover:shadow-md cursor-default`}
             >
-              <div className={`w-10 h-10 rounded-xl ${stat.color} bg-white/80 flex items-center justify-center mx-auto mb-2.5 shadow-sm`} aria-hidden="true">
+              <div className={`w-12 h-12 rounded-xl ${stat.color} bg-white/80 flex items-center justify-center mx-auto mb-2.5 shadow-sm`} aria-hidden="true">
                 <stat.icon className="w-5 h-5" />
               </div>
-              <div className="text-xl font-bold text-gray-900" aria-label={`${stat.label}: ${stat.value}`}>{stat.value}</div>
-              <div className="text-xs text-slate-500 mt-1 font-medium" aria-hidden="true">{stat.label}</div>
+              <div className="text-2xl font-bold text-gray-900" aria-label={`${stat.label}: ${stat.value}`}>{stat.value}</div>
+              <div className="text-sm text-slate-500 mt-1 font-medium" aria-hidden="true">{stat.label}</div>
             </motion.div>
           ))}
         </div>
@@ -76,7 +76,7 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
               <span
                 key={i}
                 role="listitem"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 text-sm font-medium border border-blue-100 transition-colors hover:bg-blue-100"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 text-sm font-medium border border-blue-100 transition-all duration-200 hover:bg-blue-100 hover:scale-[1.03] hover:shadow-sm"
               >
                 <Shield className="w-4 h-4" aria-hidden="true" />
                 {cert}
@@ -86,7 +86,7 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
               <span
                 key={i}
                 role="listitem"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-50 text-green-700 text-sm font-medium border border-green-100 transition-colors hover:bg-green-100"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-50 text-green-700 text-sm font-medium border border-green-100 transition-all duration-200 hover:bg-green-100 hover:scale-[1.03] hover:shadow-sm"
               >
                 <Shield className="w-4 h-4" aria-hidden="true" />
                 {ins}

@@ -14,7 +14,7 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.2 }}
-      className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
+      className="bg-[#FEFDFB] rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden hover:-translate-y-1 hover:shadow-lg hover:border-gray-200 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
     >
       {/* Section header */}
       <div className="px-6 pt-6 pb-2">
@@ -34,7 +34,7 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
               <span
                 key={i}
                 role="listitem"
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gray-50 text-slate-700 text-sm font-medium border border-gray-100 transition-all duration-200 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gray-50 text-slate-700 text-sm font-medium border border-gray-100 transition-all duration-200 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 hover:scale-[1.04] hover:shadow-sm cursor-default"
               >
                 <CheckCircle className="w-3.5 h-3.5 text-green-500 flex-shrink-0" aria-hidden="true" />
                 {service}
@@ -56,7 +56,7 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.3, delay: 0.1 + index * 0.05 }}
-                className="flex items-center justify-between p-4 rounded-xl bg-gray-50/80 border border-gray-100 hover:bg-blue-50/50 hover:border-blue-100 transition-all duration-200 group cursor-default"
+                className="flex items-center justify-between p-4 rounded-xl bg-gray-50/80 border border-gray-100 hover:bg-blue-50/50 hover:border-blue-100 hover:scale-[1.01] transition-all duration-200 group cursor-default"
               >
                 <div className="flex-1 min-w-0">
                   <h3 className="font-medium text-gray-900 group-hover:text-blue-700 transition-colors">
@@ -109,7 +109,7 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
                 <span
                   key={i}
                   role="listitem"
-                  className="px-3 py-1.5 rounded-lg bg-gray-50 border border-gray-100 text-slate-600 text-sm font-medium"
+                  className="px-3 py-1.5 rounded-lg bg-gray-50 border border-gray-100 text-slate-600 text-sm font-medium transition-all duration-200 hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700"
                 >
                   {method}
                 </span>

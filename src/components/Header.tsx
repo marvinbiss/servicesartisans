@@ -9,6 +9,7 @@ import {
   ChefHat, Layers, Brush, Navigation, Map, Building2, Globe
 } from 'lucide-react'
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useMobileMenu } from '@/contexts/MobileMenuContext'
 import { regions, villes } from '@/lib/data/france'
 import SearchBar from '@/components/SearchBar'
@@ -145,6 +146,7 @@ export default function Header() {
   const [isLocating, setIsLocating] = useState(false)
 
   const [mounted, setMounted] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
   const [openMenu, setOpenMenu] = useState<MenuType>(null)
   const [showMobileSearch, setShowMobileSearch] = useState(false)
   const [mobileAccordion, setMobileAccordion] = useState<MobileAccordion>(null)
@@ -155,6 +157,21 @@ export default function Header() {
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  // Scroll listener for floating navbar effect
+  useEffect(() => {
+    if (!mounted) return
+
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50)
+    }
+
+    // Check initial scroll position
+    handleScroll()
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [mounted])
 
   // Close desktop mega menus on route change.
   // Mobile menu is closed by individual link onClick handlers — no need
@@ -289,7 +306,11 @@ export default function Header() {
   }
 
   return (
-    <header className="bg-white border-b border-gray-200 sticky top-0 z-[9999] shadow-sm">
+    <header className={`sticky top-0 z-[9999] transition-all duration-300 ${
+      scrolled
+        ? 'bg-white/95 backdrop-blur-xl shadow-md border-b border-gray-100/50'
+        : 'bg-white border-b border-gray-200 shadow-sm'
+    }`}>
       {/* Top bar premium */}
       <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-blue-900 text-white py-2">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between text-sm">
@@ -319,35 +340,41 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 group flex-shrink-0">
-            <svg
-              width="36"
-              height="36"
-              viewBox="0 0 48 48"
-              fill="none"
-              className="flex-shrink-0 group-hover:scale-105 transition-transform duration-300"
+          <Link href="/" className="flex items-center gap-2.5 flex-shrink-0">
+            <motion.div
+              className="flex items-center gap-2.5"
+              whileHover={{ scale: 1.02 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 17 }}
             >
-              <defs>
-                <linearGradient id="headerLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#2563eb" />
-                  <stop offset="50%" stopColor="#1d4ed8" />
-                  <stop offset="100%" stopColor="#1e40af" />
-                </linearGradient>
-                <linearGradient id="headerAccent" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#f59e0b" />
-                  <stop offset="100%" stopColor="#d97706" />
-                </linearGradient>
-              </defs>
-              <rect x="2" y="2" width="44" height="44" rx="14" fill="url(#headerLogoGrad)" />
-              <path d="M24 10L9 22.5H13.5V36H34.5V22.5H39L24 10Z" fill="white" fillOpacity="0.95" />
-              <path d="M21.5 24.5C21.5 22.57 23.07 21 25 21C26.38 21 27.56 21.82 28.1 22.99L31.5 20.5L32.5 21.5L29.1 24.01C29.37 24.48 29.5 25.02 29.5 25.5C29.5 27.43 27.93 29 26 29C24.62 29 23.44 28.18 22.9 27.01L19.5 29.5L18.5 28.5L21.9 25.99C21.63 25.52 21.5 24.98 21.5 24.5Z" fill="#2563eb" />
-              <rect x="21.5" y="29.5" width="5" height="6.5" rx="1.5" fill="#2563eb" fillOpacity="0.25" />
-              <circle cx="39" cy="9" r="5" fill="url(#headerAccent)" />
-              <path d="M37.5 9L38.5 10L40.5 8" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            <span className="hidden sm:inline text-xl font-heading font-extrabold tracking-tight text-gray-900">
-              Services<span className="text-blue-600">Artisans</span>
-            </span>
+              <svg
+                width="36"
+                height="36"
+                viewBox="0 0 48 48"
+                fill="none"
+                className="flex-shrink-0"
+              >
+                <defs>
+                  <linearGradient id="headerLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#2563eb" />
+                    <stop offset="50%" stopColor="#1d4ed8" />
+                    <stop offset="100%" stopColor="#1e40af" />
+                  </linearGradient>
+                  <linearGradient id="headerAccent" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#f59e0b" />
+                    <stop offset="100%" stopColor="#d97706" />
+                  </linearGradient>
+                </defs>
+                <rect x="2" y="2" width="44" height="44" rx="14" fill="url(#headerLogoGrad)" />
+                <path d="M24 10L9 22.5H13.5V36H34.5V22.5H39L24 10Z" fill="white" fillOpacity="0.95" />
+                <path d="M21.5 24.5C21.5 22.57 23.07 21 25 21C26.38 21 27.56 21.82 28.1 22.99L31.5 20.5L32.5 21.5L29.1 24.01C29.37 24.48 29.5 25.02 29.5 25.5C29.5 27.43 27.93 29 26 29C24.62 29 23.44 28.18 22.9 27.01L19.5 29.5L18.5 28.5L21.9 25.99C21.63 25.52 21.5 24.98 21.5 24.5Z" fill="#2563eb" />
+                <rect x="21.5" y="29.5" width="5" height="6.5" rx="1.5" fill="#2563eb" fillOpacity="0.25" />
+                <circle cx="39" cy="9" r="5" fill="url(#headerAccent)" />
+                <path d="M37.5 9L38.5 10L40.5 8" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              <span className="hidden sm:inline text-xl font-heading font-extrabold tracking-tight text-gray-900">
+                Services<span className="text-blue-600">Artisans</span>
+              </span>
+            </motion.div>
           </Link>
 
           {/* Search Bar - Compact SearchBar Component */}
@@ -373,10 +400,10 @@ export default function Header() {
                 onClick={() => toggleMenu('services')}
                 aria-expanded={openMenu === 'services'}
                 aria-haspopup="true"
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                className={`relative flex items-center gap-1.5 px-4 py-2 rounded-lg font-medium transition-all duration-200 after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:h-0.5 after:bg-blue-600 after:transition-all after:duration-300 after:rounded-full ${
                   openMenu === 'services'
-                    ? 'text-blue-600 bg-blue-50'
-                    : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
+                    ? 'text-blue-600 bg-blue-50 after:w-full'
+                    : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50 after:w-0 hover:after:w-full'
                 }`}
               >
                 Services
@@ -396,10 +423,10 @@ export default function Header() {
                 onClick={() => toggleMenu('villes')}
                 aria-expanded={openMenu === 'villes'}
                 aria-haspopup="true"
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                className={`relative flex items-center gap-1.5 px-4 py-2 rounded-lg font-medium transition-all duration-200 after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:h-0.5 after:bg-blue-600 after:transition-all after:duration-300 after:rounded-full ${
                   openMenu === 'villes'
-                    ? 'text-blue-600 bg-blue-50'
-                    : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
+                    ? 'text-blue-600 bg-blue-50 after:w-full'
+                    : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50 after:w-0 hover:after:w-full'
                 }`}
               >
                 Villes
@@ -419,10 +446,10 @@ export default function Header() {
                 onClick={() => toggleMenu('regions')}
                 aria-expanded={openMenu === 'regions'}
                 aria-haspopup="true"
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                className={`relative flex items-center gap-1.5 px-4 py-2 rounded-lg font-medium transition-all duration-200 after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:h-0.5 after:bg-blue-600 after:transition-all after:duration-300 after:rounded-full ${
                   openMenu === 'regions'
-                    ? 'text-blue-600 bg-blue-50'
-                    : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
+                    ? 'text-blue-600 bg-blue-50 after:w-full'
+                    : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50 after:w-0 hover:after:w-full'
                 }`}
               >
                 Régions
@@ -432,14 +459,14 @@ export default function Header() {
 
             <Link
               href="/connexion"
-              className="text-gray-700 hover:text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+              className="relative text-gray-700 hover:text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-50 transition-colors after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-0 hover:after:w-full after:h-0.5 after:bg-blue-600 after:transition-all after:duration-300 after:rounded-full"
             >
               Connexion
             </Link>
 
             <Link
               href="/devis"
-              className="ml-2 px-6 py-2.5 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-300"
+              className="ml-2 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-semibold rounded-xl shadow-md shadow-amber-500/20 hover:shadow-lg hover:shadow-amber-500/30 hover:-translate-y-0.5 transition-all duration-200"
             >
               Devis gratuit
             </Link>
@@ -785,8 +812,16 @@ export default function Header() {
       )}
 
       {/* ==================== MOBILE MENU ==================== */}
+      <AnimatePresence>
       {isMenuOpen && (
-        <div data-menu-content="mobile-menu" className="lg:hidden border-t border-gray-100 max-h-[calc(100vh-120px)] overflow-y-auto bg-white">
+        <motion.div
+          data-menu-content="mobile-menu"
+          className="lg:hidden border-t border-gray-100 max-h-[calc(100vh-120px)] overflow-y-auto bg-white"
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: 'auto' }}
+          exit={{ opacity: 0, height: 0 }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
+        >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
             {/* Search Mobile - Dual Field */}
             <form onSubmit={handleSearch} className="mb-4">
@@ -1026,7 +1061,7 @@ export default function Header() {
                   </Link>
                   <Link
                     href="/devis"
-                    className="flex-1 py-3 bg-gradient-to-r from-amber-500 to-amber-400 text-white rounded-xl font-semibold text-center shadow-lg shadow-amber-500/25"
+                    className="flex-1 py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-xl font-semibold text-center shadow-md shadow-amber-500/20"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Devis gratuit
@@ -1035,8 +1070,9 @@ export default function Header() {
               </div>
             </nav>
           </div>
-        </div>
+        </motion.div>
       )}
+      </AnimatePresence>
     </header>
   )
 }
