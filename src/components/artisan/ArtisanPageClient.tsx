@@ -230,10 +230,12 @@ export default function ArtisanPageClient({
             <ArtisanBreadcrumb artisan={artisan} />
           </nav>
 
-          {/* Photo Grid - Airbnb style (full width) */}
-          <section className="mb-8" aria-label="Galerie photos">
-            <ArtisanPhotoGrid artisan={artisan} />
-          </section>
+          {/* Photo Grid - Airbnb style (full width, only if portfolio exists) */}
+          {artisan.portfolio && artisan.portfolio.length > 0 && (
+            <section className="mb-8" aria-label="Galerie photos">
+              <ArtisanPhotoGrid artisan={artisan} />
+            </section>
+          )}
 
           {/* Grid layout */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

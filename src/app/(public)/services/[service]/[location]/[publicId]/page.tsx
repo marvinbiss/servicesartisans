@@ -73,7 +73,7 @@ function convertToArtisan(provider: any, service: any, location: any, serviceSlu
     website: provider.website || undefined,
     latitude: provider.latitude || undefined,
     longitude: provider.longitude || undefined,
-    faq: (provider.faq && provider.faq.length > 0) ? provider.faq : generateFAQ(name, specialty, city, provider),
+    faq: (provider.faq && provider.faq.length > 0) ? provider.faq : undefined,
     // Legacy fields — undefined at runtime (columns dropped), kept for sub-component compat
     // Will be removed when each sub-component migrates to v2 Artisan type
   }
@@ -200,41 +200,6 @@ const SERVICE_PRICES_BY_SPECIALTY: Record<string, Array<{ name: string; descript
 
 function generateServicePrices(specialtySlug: string): Array<{ name: string; description: string; price: string; duration?: string }> {
   return SERVICE_PRICES_BY_SPECIALTY[specialtySlug] || []
-}
-
-// Generate automatic FAQ based on specialty and city
-function generateFAQ(name: string, specialty: string, city: string, provider?: any): Array<{ question: string; answer: string }> {
-  const spe = specialty.toLowerCase()
-  const faq: Array<{ question: string; answer: string }> = []
-
-  faq.push({
-    question: `Comment contacter ${name} ?`,
-    answer: `Vous pouvez contacter ${name} directement via notre plateforme en demandant un devis gratuit. Votre demande sera transmise rapidement et vous recevrez une réponse dans les meilleurs délais.`,
-  })
-
-  faq.push({
-    question: `Quels sont les services proposés par ce ${spe} à ${city} ?`,
-    answer: `${name} propose des services de ${spe} à ${city} et ses environs. Consultez la section "Services et tarifs" sur cette page pour découvrir l'ensemble des prestations disponibles.`,
-  })
-
-  faq.push({
-    question: `Comment obtenir un devis gratuit ?`,
-    answer: `Pour obtenir un devis gratuit et sans engagement, cliquez sur le bouton "Demander un devis" sur cette page. Décrivez votre projet et ${name} vous répondra avec une estimation personnalisée.`,
-  })
-
-  if (provider?.is_verified || provider?.siret) {
-    faq.push({
-      question: `${name} est-il un artisan vérifié ?`,
-      answer: `Oui, ${name} est un professionnel vérifié sur ServicesArtisans. Son numéro SIRET a été contrôlé et son activité est bien enregistrée auprès des autorités compétentes.`,
-    })
-  }
-
-  faq.push({
-    question: `Quelle est la zone d'intervention de ${name} ?`,
-    answer: `${name} intervient principalement à ${city} et dans les communes environnantes. Pour savoir si votre localité est couverte, n'hésitez pas à demander un devis en précisant votre adresse.`,
-  })
-
-  return faq
 }
 
 // Fetch similar artisans (same specialty, same department)
