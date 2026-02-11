@@ -217,16 +217,17 @@ export default function Header() {
     setMounted(true)
   }, [])
 
-  // Close all menus on actual route change (not on re-renders)
+  // Close desktop mega menus on route change.
+  // Mobile menu is closed by individual link onClick handlers — no need
+  // to force-close here (doing so caused the menu to snap shut on open).
   const prevPathnameRef = useRef(pathname)
   useEffect(() => {
     if (prevPathnameRef.current !== pathname) {
       prevPathnameRef.current = pathname
       setOpenMenu(null)
-      setIsMenuOpen(false)
       setMobileAccordion(null)
     }
-  }, [pathname, setIsMenuOpen])
+  }, [pathname])
 
   // Close menu when clicking outside
   useEffect(() => {

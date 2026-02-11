@@ -29,9 +29,10 @@ const initialFormData: FormData = {
 }
 
 const urgencyOptions = [
-  { value: 'pas-urgent', label: 'Pas urgent' },
-  { value: 'sous-1-semaine', label: 'Sous 1 semaine' },
-  { value: 'urgent-24-48h', label: 'Urgent (24-48h)' },
+  { value: 'flexible', label: 'Pas urgent' },
+  { value: 'mois', label: 'Ce mois-ci' },
+  { value: 'semaine', label: 'Cette semaine' },
+  { value: 'urgent', label: 'Urgent (sous 24h)' },
 ]
 
 const budgetOptions = [
@@ -97,8 +98,11 @@ export default function DevisForm() {
   const [formData, setFormData] = useState<FormData>(initialFormData)
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({})
   const [submitted, setSubmitted] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
   const [villeQuery, setVilleQuery] = useState('')
   const [showVilleSuggestions, setShowVilleSuggestions] = useState(false)
+  const [selectedVillePostal, setSelectedVillePostal] = useState('')
 
   const updateField = useCallback(
     <K extends keyof FormData>(field: K, value: FormData[K]) => {
@@ -169,10 +173,41 @@ export default function DevisForm() {
     if (step > 1) setStep(step - 1)
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (validateStep3()) {
+    if (!validateStep3()) return
+
+    setSubmitting(true)
+    setSubmitError(null)
+
+    try {
+      const res = await fetch('/api/devis', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          service: formData.service,
+          urgency: formData.urgence,
+          description: formData.description,
+          codePostal: selectedVillePostal,
+          ville: formData.ville,
+          nom: formData.nom,
+          email: formData.email,
+          telephone: formData.telephone,
+        }),
+      })
+
+      if (!res.ok) {
+        const body = await res.json().catch(() => null)
+        throw new Error(body?.error || 'Erreur lors de l\u2019envoi')
+      }
+
       setSubmitted(true)
+    } catch (err) {
+      setSubmitError(
+        err instanceof Error ? err.message : 'Une erreur est survenue. Veuillez réessayer.'
+      )
+    } finally {
+      setSubmitting(false)
     }
   }
 
@@ -275,6 +310,7 @@ export default function DevisForm() {
                           e.preventDefault()
                           updateField('ville', v.name)
                           setVilleQuery(v.name)
+                          setSelectedVillePostal(v.codePostal)
                           setShowVilleSuggestions(false)
                         }}
                       >
@@ -520,19 +556,27 @@ export default function DevisForm() {
             )}
           </div>
 
+          {submitError && (
+            <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-sm text-red-700">
+              {submitError}
+            </div>
+          )}
+
           <div className="flex gap-3">
             <button
               type="button"
               onClick={handlePrev}
-              className="flex-1 inline-flex items-center justify-center gap-2 border-2 border-gray-200 hover:border-gray-300 text-slate-700 font-semibold px-6 py-3.5 rounded-xl hover:bg-gray-50 transition-all duration-300"
+              disabled={submitting}
+              className="flex-1 inline-flex items-center justify-center gap-2 border-2 border-gray-200 hover:border-gray-300 text-slate-700 font-semibold px-6 py-3.5 rounded-xl hover:bg-gray-50 transition-all duration-300 disabled:opacity-50"
             >
               <ArrowLeft className="w-5 h-5" /> Pr\u00e9c\u00e9dent
             </button>
             <button
               type="submit"
-              className="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
+              disabled={submitting}
+              className="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-70"
             >
-              Envoyer ma demande <ArrowRight className="w-5 h-5" />
+              {submitting ? 'Envoi en cours\u2026' : 'Envoyer ma demande'} {!submitting && <ArrowRight className="w-5 h-5" />}
             </button>
           </div>
         </div>
