@@ -1742,7 +1742,7 @@ export const services = [
   { slug: 'electricien', name: 'Électricien', icon: 'Zap', color: 'from-amber-500 to-amber-600' },
   { slug: 'serrurier', name: 'Serrurier', icon: 'Key', color: 'from-slate-600 to-slate-700' },
   { slug: 'chauffagiste', name: 'Chauffagiste', icon: 'Flame', color: 'from-orange-500 to-orange-600' },
-  { slug: 'peintre-en-batiment', name: 'Peintre', icon: 'PaintBucket', color: 'from-purple-500 to-purple-600' },
+  { slug: 'peintre-en-batiment', name: 'Peintre en b\u00e2timent', icon: 'PaintBucket', color: 'from-purple-500 to-purple-600' },
   { slug: 'menuisier', name: 'Menuisier', icon: 'Hammer', color: 'from-amber-600 to-amber-700' },
   { slug: 'carreleur', name: 'Carreleur', icon: 'Grid3X3', color: 'from-teal-500 to-teal-600' },
   { slug: 'couvreur', name: 'Couvreur', icon: 'Home', color: 'from-red-500 to-red-600' },
@@ -1751,6 +1751,6 @@ export const services = [
   { slug: 'vitrier', name: 'Vitrier', icon: 'Square', color: 'from-sky-500 to-sky-600' },
   { slug: 'climaticien', name: 'Climaticien', icon: 'Wind', color: 'from-cyan-500 to-cyan-600' },
   { slug: 'cuisiniste', name: 'Cuisiniste', icon: 'ChefHat', color: 'from-rose-500 to-rose-600' },
-  { slug: 'solier', name: 'Solier', icon: 'Layers', color: 'from-indigo-500 to-indigo-600' },
-  { slug: 'nettoyage', name: 'Nettoyage', icon: 'Sparkles', color: 'from-emerald-500 to-emerald-600' },
+  { slug: 'solier', name: 'Solier-moquettiste', icon: 'Layers', color: 'from-indigo-500 to-indigo-600' },
+  { slug: 'nettoyage', name: 'Nettoyage professionnel', icon: 'Sparkles', color: 'from-emerald-500 to-emerald-600' },
 ]

@@ -187,6 +187,7 @@ export default function DevisForm() {
         body: JSON.stringify({
           service: formData.service,
           urgency: formData.urgence,
+          budget: formData.budget,
           description: formData.description,
           codePostal: selectedVillePostal,
           ville: formData.ville,
@@ -375,7 +376,7 @@ export default function DevisForm() {
                   formData.description.length >= 20 ? 'text-green-600' : 'text-gray-400'
                 }`}
               >
-                {formData.description.length}/20 min.
+                {formData.description.length}/20 caract.
               </span>
             </div>
           </div>

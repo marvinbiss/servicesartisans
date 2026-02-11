@@ -18,25 +18,33 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
 const devisSchema = z.object({
-  service: z.string().min(1, 'Veuillez sélectionner un service'),
-  urgency: z.string().min(1, 'Veuillez sélectionner l\'urgence'),
+  service: z.string().min(1, 'Veuillez s\u00e9lectionner un service'),
+  urgency: z.string().min(1, 'Veuillez s\u00e9lectionner l\'urgence'),
+  budget: z.string().optional(),
   description: z.string().optional(),
   codePostal: z.string().optional(),
   ville: z.string().optional(),
   nom: z.string().min(2, 'Le nom est requis'),
   email: z.string().email('Email invalide'),
-  telephone: z.string().min(10, 'Numéro de téléphone invalide'),
+  telephone: z.string().min(10, 'Num\u00e9ro de t\u00e9l\u00e9phone invalide'),
 })
 
 const serviceNames: Record<string, string> = {
   plombier: 'Plombier',
-  electricien: 'Électricien',
+  electricien: '\u00c9lectricien',
   serrurier: 'Serrurier',
   chauffagiste: 'Chauffagiste',
-  'peintre-en-batiment': 'Peintre en bâtiment',
+  'peintre-en-batiment': 'Peintre en b\u00e2timent',
   couvreur: 'Couvreur',
   menuisier: 'Menuisier',
-  macon: 'Maçon',
+  macon: 'Ma\u00e7on',
+  carreleur: 'Carreleur',
+  jardinier: 'Jardinier-paysagiste',
+  vitrier: 'Vitrier',
+  climaticien: 'Climaticien',
+  cuisiniste: 'Cuisiniste',
+  solier: 'Solier-moquettiste',
+  nettoyage: 'Nettoyage professionnel',
 }
 
 const urgencyLabels: Record<string, string> = {
@@ -44,6 +52,14 @@ const urgencyLabels: Record<string, string> = {
   semaine: 'Cette semaine',
   mois: 'Ce mois-ci',
   flexible: 'Flexible',
+}
+
+const budgetRanges: Record<string, { min: number | null; max: number | null }> = {
+  'moins-500': { min: null, max: 500 },
+  '500-2000': { min: 500, max: 2000 },
+  '2000-5000': { min: 2000, max: 5000 },
+  'plus-5000': { min: 5000, max: null },
+  'ne-sais-pas': { min: null, max: null },
 }
 
 export async function POST(request: Request) {
@@ -65,35 +81,45 @@ export async function POST(request: Request) {
       const { data: { user } } = await serverSupabase.auth.getUser()
       clientId = user?.id ?? null
     } catch {
-      // Anonymous submission — no session cookie
+      // Anonymous submission \u2014 no session cookie
     }
 
     // Validate input
     const validation = devisSchema.safeParse(body)
     if (!validation.success) {
       return NextResponse.json(
-        { error: 'Données invalides', details: validation.error.flatten() },
+        { error: 'Donn\u00e9es invalides', details: validation.error.flatten() },
         { status: 400 }
       )
     }
 
     const data = validation.data
 
-    // Store in database
-    const { data: devis, error: dbError } = await supabase
-      .from('devis_requests')
+    // Parse budget range
+    const budget = data.budget ? budgetRanges[data.budget] : null
+
+    // Split name into first/last
+    const nameParts = data.nom.trim().split(/\s+/)
+    const firstName = nameParts[0]
+    const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : ''
+
+    // Store in leads table
+    const { data: lead, error: dbError } = await supabase
+      .from('leads')
       .insert({
-        client_id: clientId,
-        service: data.service,
-        urgency: data.urgency,
+        client_user_id: clientId,
+        first_name: firstName,
+        last_name: lastName,
+        email: data.email,
+        phone: data.telephone,
         description: data.description || null,
-        postal_code: data.codePostal || null,
-        city: data.ville || null,
-        client_name: data.nom,
-        client_email: data.email,
-        client_phone: data.telephone,
-        status: 'pending',
-        created_at: new Date().toISOString(),
+        budget_min: budget?.min ?? null,
+        budget_max: budget?.max ?? null,
+        timeline: data.urgency,
+        project_city: data.ville || null,
+        project_postal_code: data.codePostal || null,
+        status: 'new',
+        source: 'devis_form',
       })
       .select()
       .single()
@@ -110,16 +136,16 @@ export async function POST(request: Request) {
       subject: 'Votre demande de devis - ServicesArtisans',
       html: `
         <h2>Bonjour ${data.nom},</h2>
-        <p>Nous avons bien reçu votre demande de devis. Voici le récapitulatif :</p>
+        <p>Nous avons bien re\u00e7u votre demande de devis. Voici le r\u00e9capitulatif :</p>
         <ul>
           <li><strong>Service :</strong> ${serviceNames[data.service] || data.service}</li>
-          <li><strong>Urgence :</strong> ${urgencyLabels[data.urgency] || data.urgency}</li>
+          <li><strong>D\u00e9lai :</strong> ${urgencyLabels[data.urgency] || data.urgency}</li>
           ${data.ville ? `<li><strong>Ville :</strong> ${data.ville}</li>` : ''}
           ${data.description ? `<li><strong>Description :</strong> ${data.description}</li>` : ''}
         </ul>
         <p><strong>Que se passe-t-il maintenant ?</strong></p>
-        <p>Nous allons transmettre votre demande aux artisans disponibles dans votre région. Vous recevrez jusqu'à 3 devis gratuits sous 24h.</p>
-        <p>Cordialement,<br />L'équipe ServicesArtisans</p>
+        <p>Nous allons transmettre votre demande aux artisans disponibles dans votre r\u00e9gion. Vous recevrez jusqu\u2019\u00e0 3 devis gratuits sous 24h.</p>
+        <p>Cordialement,<br />L\u2019\u00e9quipe ServicesArtisans</p>
         <p style="color: #666; font-size: 12px;">
           <a href="https://servicesartisans.fr">servicesartisans.fr</a>
         </p>
@@ -137,24 +163,25 @@ export async function POST(request: Request) {
         <ul>
           <li><strong>Nom :</strong> ${data.nom}</li>
           <li><strong>Email :</strong> ${data.email}</li>
-          <li><strong>Téléphone :</strong> ${data.telephone}</li>
+          <li><strong>T\u00e9l\u00e9phone :</strong> ${data.telephone}</li>
         </ul>
         <h3>Demande</h3>
         <ul>
           <li><strong>Service :</strong> ${serviceNames[data.service] || data.service}</li>
-          <li><strong>Urgence :</strong> ${urgencyLabels[data.urgency] || data.urgency}</li>
-          <li><strong>Ville :</strong> ${data.ville || 'Non précisé'}</li>
-          <li><strong>Code postal :</strong> ${data.codePostal || 'Non précisé'}</li>
-          <li><strong>Description :</strong> ${data.description || 'Non précisé'}</li>
+          <li><strong>D\u00e9lai :</strong> ${urgencyLabels[data.urgency] || data.urgency}</li>
+          <li><strong>Ville :</strong> ${data.ville || 'Non pr\u00e9cis\u00e9'}</li>
+          <li><strong>Code postal :</strong> ${data.codePostal || 'Non pr\u00e9cis\u00e9'}</li>
+          <li><strong>Budget :</strong> ${data.budget || 'Non pr\u00e9cis\u00e9'}</li>
+          <li><strong>Description :</strong> ${data.description || 'Non pr\u00e9cis\u00e9'}</li>
         </ul>
-        ${devis ? `<p>ID: ${devis.id}</p>` : ''}
+        ${lead ? `<p>ID: ${lead.id}</p>` : ''}
       `,
     })
 
     return NextResponse.json({
       success: true,
-      message: 'Demande de devis envoyée avec succès',
-      id: devis?.id,
+      message: 'Demande de devis envoy\u00e9e avec succ\u00e8s',
+      id: lead?.id,
     })
   } catch (error) {
     logger.error('Devis API error', error)
