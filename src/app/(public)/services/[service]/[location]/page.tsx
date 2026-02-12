@@ -151,19 +151,15 @@ function generateJsonLd(service: Service, location: LocationType, _providers: un
     name: `${service.name} à ${location.name}`,
     description: `Trouvez les meilleurs ${service.name.toLowerCase()}s à ${location.name}`,
     areaServed: {
-      '@type': 'Place',
+      '@type': 'City',
       name: location.name,
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: location.name,
-        postalCode: location.postal_code,
-        addressRegion: location.region_name,
-        addressCountry: 'FR',
+      containedInPlace: {
+        '@type': 'AdministrativeArea',
+        name: location.department_name || '',
       },
     },
     provider: {
-      '@type': 'Organization',
-      name: 'ServicesArtisans',
+      '@id': 'https://servicesartisans.fr#organization',
     },
   }
 
@@ -386,6 +382,90 @@ export default async function ServiceLocationPage({ params }: PageProps) {
           </div>
         </section>
       )}
+
+      {/* Articles utiles — liens contextuels vers le blog */}
+      <section className="py-10 bg-gray-50 border-t">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-xl font-bold text-gray-900 mb-5 flex items-center gap-2">
+            <svg className="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+            Guides et conseils
+          </h2>
+          <div className="grid sm:grid-cols-2 gap-4">
+            {serviceSlug === 'plombier' ? (
+              <>
+                <Link
+                  href="/blog/comment-choisir-plombier"
+                  className="flex items-start gap-3 p-4 bg-white rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-sm transition-all group"
+                >
+                  <span className="text-2xl shrink-0" aria-hidden="true">&#128295;</span>
+                  <div>
+                    <span className="font-semibold text-gray-900 group-hover:text-blue-700 transition-colors">Comment choisir son plombier ?</span>
+                    <p className="text-sm text-gray-500 mt-1">Les critères essentiels pour trouver un plombier fiable et compétent.</p>
+                  </div>
+                </Link>
+                <Link
+                  href="/blog/urgence-plomberie-que-faire"
+                  className="flex items-start gap-3 p-4 bg-white rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-sm transition-all group"
+                >
+                  <span className="text-2xl shrink-0" aria-hidden="true">&#128680;</span>
+                  <div>
+                    <span className="font-semibold text-gray-900 group-hover:text-blue-700 transition-colors">Urgence plomberie : que faire ?</span>
+                    <p className="text-sm text-gray-500 mt-1">Les bons réflexes en cas de fuite ou de dégât des eaux.</p>
+                  </div>
+                </Link>
+              </>
+            ) : ['peintre-en-batiment', 'macon', 'couvreur', 'carreleur', 'menuisier'].includes(serviceSlug) ? (
+              <>
+                <Link
+                  href="/blog/renovation-energetique-2026"
+                  className="flex items-start gap-3 p-4 bg-white rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-sm transition-all group"
+                >
+                  <span className="text-2xl shrink-0" aria-hidden="true">&#127969;</span>
+                  <div>
+                    <span className="font-semibold text-gray-900 group-hover:text-blue-700 transition-colors">Rénovation énergétique 2026 : aides et conseils</span>
+                    <p className="text-sm text-gray-500 mt-1">Découvrez les aides disponibles et les travaux prioritaires pour votre logement.</p>
+                  </div>
+                </Link>
+                <Link
+                  href="/blog/tendances-decoration-2026"
+                  className="flex items-start gap-3 p-4 bg-white rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-sm transition-all group"
+                >
+                  <span className="text-2xl shrink-0" aria-hidden="true">&#127912;</span>
+                  <div>
+                    <span className="font-semibold text-gray-900 group-hover:text-blue-700 transition-colors">Tendances décoration 2026</span>
+                    <p className="text-sm text-gray-500 mt-1">Les styles et matériaux qui font la tendance cette année.</p>
+                  </div>
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/blog/tendances-decoration-2026"
+                  className="flex items-start gap-3 p-4 bg-white rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-sm transition-all group"
+                >
+                  <span className="text-2xl shrink-0" aria-hidden="true">&#127912;</span>
+                  <div>
+                    <span className="font-semibold text-gray-900 group-hover:text-blue-700 transition-colors">Tendances décoration 2026</span>
+                    <p className="text-sm text-gray-500 mt-1">Les styles et matériaux qui font la tendance cette année.</p>
+                  </div>
+                </Link>
+                <Link
+                  href="/blog/renovation-energetique-2026"
+                  className="flex items-start gap-3 p-4 bg-white rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-sm transition-all group"
+                >
+                  <span className="text-2xl shrink-0" aria-hidden="true">&#127969;</span>
+                  <div>
+                    <span className="font-semibold text-gray-900 group-hover:text-blue-700 transition-colors">Rénovation énergétique 2026 : aides et conseils</span>
+                    <p className="text-sm text-gray-500 mt-1">Découvrez les aides disponibles et les travaux prioritaires pour votre logement.</p>
+                  </div>
+                </Link>
+              </>
+            )}
+          </div>
+        </div>
+      </section>
 
       {/* Voir aussi - Cross Links Section */}
       <section className="py-12 bg-white border-t">

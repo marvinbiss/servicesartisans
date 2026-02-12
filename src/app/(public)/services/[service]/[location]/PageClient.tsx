@@ -161,7 +161,7 @@ export default function ServiceLocationPageClient({
         {/* Map */}
         {(viewMode === 'split' || viewMode === 'map') && (
           <div
-            className={`${
+            className={`min-h-[400px] ${
               viewMode === 'split'
                 ? 'hidden md:block md:w-1/2 lg:w-3/5'
                 : 'w-full'

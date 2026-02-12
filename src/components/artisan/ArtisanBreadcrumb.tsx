@@ -14,25 +14,14 @@ export function ArtisanBreadcrumb({ artisan }: ArtisanBreadcrumbProps) {
   // Use provided slugs or generate them
   const specialtySlug = artisan.specialty_slug || slugify(artisan.specialty)
   const citySlug = artisan.city_slug || slugify(artisan.city)
-  const regionSlug = artisan.region ? slugify(artisan.region) : null
-  const departmentSlug = artisan.department_code || (artisan.department ? slugify(artisan.department) : null)
 
-  // Build breadcrumb with full geographic hierarchy
-  // Structure: Accueil > Service > Région > Département > Ville > Artisan
+  // Build breadcrumb with 5 levels for SEO clarity
+  // Structure: Accueil > Services > {Service} > {Ville} > {Nom artisan}
   const items: Array<{ label: string; href?: string; icon?: typeof Home }> = [
     { label: 'Accueil', href: '/', icon: Home },
+    { label: 'Services', href: '/services' },
     { label: artisan.specialty, href: `/services/${specialtySlug}` },
   ]
-
-  // Add region if available
-  if (artisan.region && regionSlug) {
-    items.push({ label: artisan.region, href: `/regions/${regionSlug}` })
-  }
-
-  // Add department if available
-  if (artisan.department && departmentSlug) {
-    items.push({ label: artisan.department, href: `/departements/${departmentSlug}` })
-  }
 
   // Add city with service+city URL structure
   if (artisan.city && citySlug) {

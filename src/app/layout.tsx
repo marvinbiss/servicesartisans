@@ -104,6 +104,13 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  alternates: {
+    canonical: 'https://servicesartisans.fr',
+    languages: {
+      'fr-FR': 'https://servicesartisans.fr',
+      'x-default': 'https://servicesartisans.fr',
+    },
+  },
   manifest: '/manifest.json',
   icons: {
     icon: [

@@ -205,22 +205,17 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
     })),
   } : null
 
-  // BreadcrumbList Schema with full geographic hierarchy
+  // BreadcrumbList Schema — 5 levels matching visible breadcrumb
+  // Structure: Accueil > Services > {Service} > {Ville} > {Nom artisan}
+  const specialtySlug = slugify(artisan.specialty)
+  const citySlug = slugify(artisan.city)
   const breadcrumbItems = [
     { name: 'Accueil', item: baseUrl },
-    { name: artisan.specialty, item: `${baseUrl}/services/${slugify(artisan.specialty)}` },
+    { name: 'Services', item: `${baseUrl}/services` },
+    { name: artisan.specialty, item: `${baseUrl}/services/${specialtySlug}` },
+    { name: artisan.city, item: `${baseUrl}/services/${specialtySlug}/${citySlug}` },
+    { name: displayName, item: '' },
   ]
-
-  if (artisan.region) {
-    breadcrumbItems.push({ name: artisan.region, item: `${baseUrl}/regions/${slugify(artisan.region)}` })
-  }
-
-  if (artisan.department) {
-    breadcrumbItems.push({ name: artisan.department, item: `${baseUrl}/departements/${slugify(artisan.department)}` })
-  }
-
-  breadcrumbItems.push({ name: artisan.city, item: `${baseUrl}/villes/${slugify(artisan.city)}` })
-  breadcrumbItems.push({ name: displayName, item: '' })
 
   const breadcrumbSchema = {
     '@context': 'https://schema.org',

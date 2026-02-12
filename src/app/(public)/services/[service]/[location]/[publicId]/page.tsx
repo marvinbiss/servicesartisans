@@ -411,6 +411,21 @@ export default async function ProviderPage({ params }: PageProps) {
         similarArtisans={similarArtisans}
       />
 
+      {/* Lien retour vers le listing service+location (maillage bidirectionnel) */}
+      <section className="py-6 bg-white border-t">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Link
+            href={`/services/${serviceSlug}/${locationSlug}`}
+            className="inline-flex items-center gap-2 px-5 py-3 bg-gray-50 hover:bg-blue-50 border border-gray-200 hover:border-blue-200 rounded-xl text-sm font-medium text-gray-700 hover:text-blue-700 transition-all"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+            Voir tous les {(service?.name || artisan.specialty).toLowerCase()}s à {artisan.city}
+          </Link>
+        </div>
+      </section>
+
       {/* Internal Links — Maillage interne (SEO) */}
       <ArtisanInternalLinks
         serviceSlug={serviceSlug}
