@@ -1,5 +1,6 @@
 'use client'
 
+import 'leaflet/dist/leaflet.css'
 import { useState, useEffect, useRef } from 'react'
 import dynamic from 'next/dynamic'
 import { Loader2, Star, MapPin, Phone, Award } from 'lucide-react'

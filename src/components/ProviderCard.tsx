@@ -91,15 +91,20 @@ export default function ProviderCard({
         )}
       </div>
 
-      {/* Adresse */}
+      {/* Adresse + SIREN trust signal */}
       {provider.address_street && (
-        <div className="flex items-start gap-2 text-sm text-gray-600 mb-3">
+        <div className="flex items-start gap-2 text-sm text-gray-600 mb-1">
           <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0 text-gray-400" />
           <span>
             {provider.address_street}, {provider.address_postal_code}{' '}
             {provider.address_city}
           </span>
         </div>
+      )}
+      {provider.siret && (
+        <p className="text-xs text-gray-400 mb-3 ml-6">
+          SIREN {provider.siret.slice(0, 9)}
+        </p>
       )}
 
       {/* Infos */}

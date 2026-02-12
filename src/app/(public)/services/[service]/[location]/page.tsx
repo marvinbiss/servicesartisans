@@ -4,19 +4,20 @@ import {
   getServiceBySlug,
   getLocationBySlug,
   getProvidersByServiceAndLocation,
-  hasProvidersByServiceAndLocation,
+  getProviderCountByServiceAndLocation,
 } from '@/lib/supabase'
 import ServiceLocationPageClient from './PageClient'
 
-import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getItemListSchema } from '@/lib/seo/jsonld'
 import { PopularServicesLinks } from '@/components/InternalLinks'
 import { popularServices, popularCities } from '@/lib/constants/navigation'
 import Link from 'next/link'
 import { REVALIDATE } from '@/lib/cache'
-import { slugify } from '@/lib/utils'
+import { slugify, getArtisanUrl } from '@/lib/utils'
 import { services as staticServicesList, villes, getVilleBySlug, getDepartementByCode, getRegionSlugByName } from '@/lib/data/france'
 import { getTradeContent } from '@/lib/data/trade-content'
 import { getFAQSchema } from '@/lib/seo/jsonld'
+import { generateLocationContent } from '@/lib/seo/location-content'
 import type { Service, Location as LocationType, Provider } from '@/types'
 
 // Safely escape JSON for script tags to prevent XSS
@@ -70,26 +71,26 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   let serviceName = ''
   let locationName = ''
-  let postalCode = ''
   let departmentCode = ''
-  let hasProviders = true
+  let departmentName = ''
+  let providerCount = 0
 
   try {
-    const [service, location, providersExist] = await Promise.all([
+    const [service, location, count] = await Promise.all([
       getServiceBySlug(serviceSlug),
       getLocationBySlug(locationSlug),
       // Lightweight count-only check — avoids fetching all provider rows
-      hasProvidersByServiceAndLocation(serviceSlug, locationSlug),
+      getProviderCountByServiceAndLocation(serviceSlug, locationSlug),
     ])
 
     if (service) serviceName = service.name
     if (location) {
       locationName = location.name
-      postalCode = location.postal_code || ''
       departmentCode = location.department_code || ''
+      departmentName = location.department_name || ''
     }
 
-    hasProviders = providersExist
+    providerCount = count
   } catch {
     // DB down — fallback to static data
     const staticSvc = staticServicesList.find(s => s.slug === serviceSlug)
@@ -97,19 +98,28 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     if (staticSvc) serviceName = staticSvc.name
     if (ville) {
       locationName = ville.name
-      postalCode = ville.codePostal
       departmentCode = ville.departementCode
+      departmentName = ville.departement
     }
-    hasProviders = false // conservative: noindex when DB is down
+    providerCount = 0 // conservative: noindex when DB is down
   }
 
   if (!serviceName || !locationName) {
     return { title: 'Non trouvé' }
   }
 
-  const title = `${serviceName} à ${locationName} (${postalCode || departmentCode}) — Annuaire & Devis Gratuit`
-  const description = `Trouvez un ${serviceName.toLowerCase()} référencé par SIREN à ${locationName}. Comparez les profils, consultez les coordonnées et demandez un devis gratuit. Artisans référencés par l'API gouvernementale.`
+  const hasProviders = providerCount > 0
   const svcLower = serviceName.toLowerCase()
+
+  // Task 4: Title under 60 chars — no postal code, include artisan count
+  const title = hasProviders
+    ? `${serviceName} à ${locationName} — ${providerCount} artisans | ServicesArtisans`
+    : `${serviceName} à ${locationName} — Devis Gratuit | ServicesArtisans`
+
+  // Task 3: Unique meta descriptions with provider count and department
+  const description = hasProviders
+    ? `Comparez ${providerCount} ${svcLower}s référencés par SIREN à ${locationName} (${departmentName || departmentCode}). Consultez les profils, coordonnées et demandez un devis gratuit.`
+    : `Trouvez un ${svcLower} référencé par SIREN à ${locationName} (${departmentName || departmentCode}). Comparez les profils et demandez un devis gratuit.`
 
   return {
     title,
@@ -117,7 +127,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     ...(hasProviders ? {} : { robots: { index: false, follow: true } }),
     keywords: [
       `${svcLower} ${locationName}`,
-      `${svcLower} ${postalCode}`,
+      `${svcLower} ${departmentCode}`,
       `${svcLower} pas cher ${locationName}`,
       `${svcLower} urgence ${locationName}`,
       `devis ${svcLower} ${locationName}`,
@@ -221,7 +231,34 @@ export default async function ServiceLocationPage({ params }: PageProps) {
   const trade = getTradeContent(serviceSlug)
   const baseSchemas = generateJsonLd(service, location, providers || [], serviceSlug, locationSlug)
   const faqSchema = trade ? getFAQSchema(trade.faq.map(f => ({ question: f.q, answer: f.a }))) : null
-  const jsonLdSchemas: Record<string, unknown>[] = [...baseSchemas, ...(faqSchema ? [faqSchema] : [])]
+
+  // Generate unique SEO content per service+location combo (doorway-page mitigation)
+  const ville = getVilleBySlug(locationSlug)
+  const locationContent = ville
+    ? generateLocationContent(serviceSlug, service.name, ville, providers.length)
+    : null
+
+  // Task 2: ItemList JSON-LD for provider listings
+  const itemListSchema = providers.length > 0
+    ? getItemListSchema({
+        name: `${service.name} à ${location.name}`,
+        description: `Liste des ${service.name.toLowerCase()}s référencés à ${location.name}`,
+        url: `/services/${serviceSlug}/${locationSlug}`,
+        items: providers.slice(0, 20).map((p, i) => ({
+          name: p.name,
+          url: getArtisanUrl({ stable_id: p.stable_id, slug: p.slug, specialty: p.specialty, city: p.address_city }),
+          position: i + 1,
+          rating: p.rating_average,
+          reviewCount: p.review_count,
+        })),
+      })
+    : null
+
+  const jsonLdSchemas: Record<string, unknown>[] = [
+    ...baseSchemas,
+    ...(faqSchema ? [faqSchema] : []),
+    ...(itemListSchema ? [itemListSchema] : []),
+  ]
 
   // Filter out current location and get other services for cross-linking
   const otherServices = popularServices.filter(s => s.slug !== serviceSlug).slice(0, 6)
@@ -243,6 +280,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         service={service}
         location={location}
         providers={providers || []}
+        locationContent={locationContent}
       />
 
       {/* Trade pricing context */}
@@ -275,6 +313,35 @@ export default async function ServiceLocationPage({ params }: PageProps) {
                 </p>
               </div>
             )}
+          </div>
+        </section>
+      )}
+
+      {/* Task 1: Visible FAQ accordion — renders trade-specific FAQ above cross-links */}
+      {trade && trade.faq.length > 0 && (
+        <section className="py-10 bg-white border-t">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-xl font-bold text-gray-900 mb-6">
+              Questions fréquentes — {service.name.toLowerCase()} à {location.name}
+            </h2>
+            <div className="space-y-4">
+              {trade.faq.map((item, i) => (
+                <details
+                  key={i}
+                  className="group bg-gray-50 rounded-xl border border-gray-100 overflow-hidden"
+                >
+                  <summary className="flex items-center justify-between cursor-pointer px-6 py-5 text-left hover:bg-gray-100 transition-colors [&::-webkit-details-marker]:hidden">
+                    <span className="font-semibold text-slate-900 pr-4">{item.q}</span>
+                    <svg className="w-5 h-5 text-gray-400 shrink-0 group-open:rotate-180 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </summary>
+                  <div className="px-6 pb-5 text-slate-500 leading-relaxed text-sm">
+                    {item.a}
+                  </div>
+                </details>
+              ))}
+            </div>
           </div>
         </section>
       )}

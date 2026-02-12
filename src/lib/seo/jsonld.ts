@@ -12,7 +12,7 @@ export function getOrganizationSchema() {
     '@id': `${SITE_URL}#organization`,
     name: SITE_NAME,
     url: SITE_URL,
-    logo: `${SITE_URL}/icon.svg`,
+    logo: `${SITE_URL}/icons/icon-512x512.png`,
     description: 'Le plus grand annuaire d\'artisans de France. 350 000+ professionnels référencés dans 101 départements.',
     ...(socialLinks.length > 0 && { sameAs: socialLinks }),
     areaServed: {
@@ -45,6 +45,7 @@ export function getWebsiteSchema() {
     '@type': 'WebSite',
     name: SITE_NAME,
     url: SITE_URL,
+    publisher: { '@id': `${SITE_URL}#organization` },
     potentialAction: {
       '@type': 'SearchAction',
       target: {

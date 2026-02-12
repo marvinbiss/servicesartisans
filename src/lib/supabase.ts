@@ -322,6 +322,43 @@ export async function hasProvidersByServiceAndLocation(
   }
 }
 
+/**
+ * Return the count of providers for a service+location combo.
+ * Uses head:true + count:exact to avoid fetching rows — lightweight.
+ * Returns 0 during build or on failure.
+ */
+export async function getProviderCountByServiceAndLocation(
+  serviceSlug: string,
+  locationSlug: string,
+): Promise<number> {
+  if (IS_BUILD) return 0
+  try {
+    return await retryWithBackoff(
+      async () => {
+        const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
+        if (!specialties || specialties.length === 0) return 0
+
+        const ville = getVilleBySlugImport(locationSlug)
+        const cityName = ville?.name
+        if (!cityName) return 0
+
+        const { count, error } = await supabase
+          .from('providers')
+          .select('id', { count: 'exact', head: true })
+          .in('specialty', specialties)
+          .ilike('address_city', cityName)
+          .eq('is_active', true)
+
+        if (error) throw error
+        return count ?? 0
+      },
+      `getProviderCountByServiceAndLocation(${serviceSlug}, ${locationSlug})`,
+    )
+  } catch {
+    return 0
+  }
+}
+
 export async function getProvidersByLocation(locationSlug: string) {
   if (IS_BUILD) return [] // Skip during build
   return retryWithBackoff(

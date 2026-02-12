@@ -168,10 +168,10 @@ export function HeroSection() {
               variants={itemVariants}
               className="font-heading text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tighter leading-[1.05] mb-6"
             >
-              <span className="text-white">Trouvez l&apos;artisan</span>
+              <span className="text-white">L&apos;annuaire des artisans</span>
               <br />
               <span className="bg-gradient-to-r from-amber-400 to-amber-300 bg-clip-text text-transparent">
-                id&eacute;al pr&egrave;s de chez vous
+                qualifi&eacute;s en France
               </span>
             </motion.h1>
 
@@ -180,7 +180,7 @@ export function HeroSection() {
               variants={itemVariants}
               className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10"
             >
-              Comparez les profils, consultez les avis et obtenez des devis gratuits.
+              Trouvez l&apos;artisan id&eacute;al pr&egrave;s de chez vous. Comparez les profils et obtenez des devis gratuits.
             </motion.p>
 
             {/* ── SEARCH FORM ─────────────────────────────────── */}

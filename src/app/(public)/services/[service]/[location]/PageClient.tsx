@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { MapPin, List, Map as MapIcon } from 'lucide-react'
 import { Provider, Service, Location } from '@/types'
+import type { LocationContent } from '@/lib/seo/location-content'
 import ProviderList from '@/components/ProviderList'
 import Breadcrumb from '@/components/Breadcrumb'
 
@@ -24,12 +25,14 @@ interface ServiceLocationPageClientProps {
   service: Service
   location: Location
   providers: Provider[]
+  locationContent: LocationContent | null
 }
 
 export default function ServiceLocationPageClient({
   service,
   location,
   providers,
+  locationContent,
 }: ServiceLocationPageClientProps) {
   const [selectedProvider, setSelectedProvider] = useState<Provider | null>(null)
   const [viewMode, setViewMode] = useState<'split' | 'list' | 'map'>('split')
@@ -196,8 +199,39 @@ export default function ServiceLocationPageClient({
         )}
       </div>
 
-      {/* SEO Content - Hidden on mobile in map view */}
-      {viewMode !== 'map' && (
+      {/* SEO Content - Unique per service+location combination */}
+      {viewMode !== 'map' && locationContent && (
+        <section className="py-12 bg-white border-t">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="prose prose-gray max-w-none">
+              <h2>
+                Trouver un {service.name.toLowerCase()} à {location.name}
+              </h2>
+              <p>{locationContent.introText}</p>
+
+              <h3>Tarifs et prix d&apos;un {service.name.toLowerCase()} à {location.name}</h3>
+              <p>{locationContent.pricingNote}</p>
+
+              <h3>Conseils pour vos travaux à {location.name}</h3>
+              <ul>
+                {locationContent.localTips.map((tip, i) => (
+                  <li key={i}>{tip}</li>
+                ))}
+              </ul>
+
+              <h3>
+                Zones d&apos;intervention à {location.name}
+              </h3>
+              <p>{locationContent.quartierText}</p>
+
+              <p>{locationContent.conclusion}</p>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Fallback SEO content when locationContent is not available */}
+      {viewMode !== 'map' && !locationContent && (
         <section className="py-12 bg-white border-t">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="prose prose-gray max-w-none">
@@ -208,27 +242,6 @@ export default function ServiceLocationPageClient({
                 Vous recherchez un {service.name.toLowerCase()} à {location.name} (
                 {location.postal_code}) ? ServicesArtisans vous propose une sélection de{' '}
                 {providers.length} professionnels qualifiés dans votre ville.
-              </p>
-              <p>
-                Comparez les {service.name.toLowerCase()}s de {location.name}, consultez
-                leurs avis clients et demandez des devis gratuits pour vos travaux.
-              </p>
-
-              <h3>Pourquoi choisir un {service.name.toLowerCase()} local ?</h3>
-              <ul>
-                <li>Intervention rapide en cas d&apos;urgence</li>
-                <li>Connaissance des spécificités locales</li>
-                <li>Frais de déplacement réduits</li>
-                <li>Service de proximité et réactivité</li>
-              </ul>
-
-              <h3>
-                Les quartiers de {location.name} où nous intervenons
-              </h3>
-              <p>
-                Nos {service.name.toLowerCase()}s interviennent dans toute la ville de{' '}
-                {location.name} et ses environs, y compris{' '}
-                {location.department_name && `dans tout le département ${location.department_name}`}.
               </p>
             </div>
           </div>
