@@ -264,7 +264,7 @@ export function HeroSection() {
               />
               <AnimatedHeadingLine
                 text="qualifiés en France"
-                className="bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient-x block"
+                className="text-amber-400 block"
               />
             </motion.div>
 
