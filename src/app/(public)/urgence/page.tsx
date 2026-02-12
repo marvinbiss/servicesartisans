@@ -53,7 +53,7 @@ const urgencyServices = [
       'Odeur de brûlé électrique',
       'Fil dénudé dangereux',
     ],
-    description: 'Dépannage électrique en urgence 24h/24. Nos électriciens certifiés interviennent rapidement pour sécuriser votre installation électrique.',
+    description: 'Dépannage électrique en urgence 24h/24. Nos électriciens qualifiés interviennent rapidement pour sécuriser votre installation électrique.',
     responseTime: '< 45 min',
   },
   {
@@ -91,7 +91,7 @@ const urgencyServices = [
       'Ballon d\'eau chaude HS',
       'Problème de thermostat',
     ],
-    description: 'Dépannage chauffage en urgence : chaudière en panne, fuite de gaz, radiateurs défaillants. Intervention rapide par des chauffagistes certifiés.',
+    description: 'Dépannage chauffage en urgence : chaudière en panne, fuite de gaz, radiateurs défaillants. Intervention rapide par des chauffagistes qualifiés.',
     responseTime: '< 45 min',
   },
 ]
@@ -107,7 +107,7 @@ const emergencySteps = [
   {
     step: 2,
     title: 'Artisan dépêché',
-    description: 'Un artisan disponible et vérifié est immédiatement envoyé à votre adresse.',
+    description: 'Un artisan disponible et référencé est immédiatement envoyé à votre adresse.',
   },
   {
     step: 3,
@@ -144,7 +144,7 @@ export default function UrgencePage() {
             <span className="text-red-300">Intervention immédiate.</span>
           </h1>
           <p className="text-xl text-red-100/80 max-w-2xl mb-10">
-            Plombier, électricien, serrurier, chauffagiste — un artisan vérifié intervient
+            Plombier, électricien, serrurier, chauffagiste — un artisan référencé intervient
             chez vous en moins de 30 minutes, jour et nuit.
           </p>
 
@@ -170,15 +170,15 @@ export default function UrgencePage() {
           <div className="flex flex-wrap gap-4">
             <div className="flex items-center gap-2 bg-white/[0.06] backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
               <Shield className="w-4 h-4 text-green-400" />
-              <span className="text-sm text-white/80">Artisans vérifiés</span>
+              <span className="text-sm text-white/80">Artisans référencés</span>
             </div>
             <div className="flex items-center gap-2 bg-white/[0.06] backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
               <Clock className="w-4 h-4 text-amber-400" />
               <span className="text-sm text-white/80">Intervention &lt; 30 min</span>
             </div>
             <div className="flex items-center gap-2 bg-white/[0.06] backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
-              <Star className="w-4 h-4 text-amber-400" />
-              <span className="text-sm text-white/80">4.8/5 satisfaction</span>
+              <Clock className="w-4 h-4 text-amber-400" />
+              <span className="text-sm text-white/80">Disponible 24h/24</span>
             </div>
             <div className="flex items-center gap-2 bg-white/[0.06] backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
               <CheckCircle className="w-4 h-4 text-green-400" />
@@ -381,15 +381,15 @@ export default function UrgencePage() {
               <div className="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center mx-auto mb-4">
                 <Shield className="w-7 h-7 text-green-600" />
               </div>
-              <h3 className="font-bold text-gray-900 mb-2">Artisans vérifiés</h3>
-              <p className="text-sm text-gray-600">Identité, SIRET et assurance vérifiés avant toute mise en relation.</p>
+              <h3 className="font-bold text-gray-900 mb-2">Artisans référencés</h3>
+              <p className="text-sm text-gray-600">Identité, SIRET et assurance contrôlés avant toute mise en relation.</p>
             </div>
             <div className="text-center p-6 bg-gray-50 rounded-2xl">
               <div className="w-14 h-14 bg-amber-100 rounded-xl flex items-center justify-center mx-auto mb-4">
                 <Star className="w-7 h-7 text-amber-600" />
               </div>
               <h3 className="font-bold text-gray-900 mb-2">Avis authentiques</h3>
-              <p className="text-sm text-gray-600">Tous les avis sont vérifiés et publiés par de vrais clients.</p>
+              <p className="text-sm text-gray-600">Tous les avis sont authentiques et publiés par de vrais clients.</p>
             </div>
             <div className="text-center p-6 bg-gray-50 rounded-2xl">
               <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-4">

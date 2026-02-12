@@ -457,7 +457,7 @@ export default function AdminArtisanDetailPage() {
         onClose={() => setVerifyModal(false)}
         onConfirm={handleVerify}
         title="Vérifier l'artisan"
-        message={`Confirmez-vous la vérification de ${artisan.company_name || artisan.full_name} ? Le badge vérifié sera affiché sur son profil.`}
+        message={`Confirmez-vous la vérification de ${artisan.company_name || artisan.full_name} ? Le badge référencé sera affiché sur son profil.`}
         confirmText="Vérifier"
         variant="success"
       />

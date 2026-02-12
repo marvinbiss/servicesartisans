@@ -27,7 +27,7 @@ const plans = [
       'Support email',
     ],
     notIncluded: [
-      'Badge vérifié',
+      'Badge référencé',
       'Position prioritaire',
       'Statistiques avancées',
     ],
@@ -42,7 +42,7 @@ const plans = [
       'Profil complet',
       '30 demandes/mois',
       'Messagerie prioritaire',
-      'Badge vérifié',
+      'Badge référencé',
       'Statistiques de base',
       'Support prioritaire',
     ],

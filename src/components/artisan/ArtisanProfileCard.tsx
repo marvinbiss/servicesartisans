@@ -246,7 +246,7 @@ export function ArtisanProfileCard({
               {isVerified && (
                 <div className="flex items-center gap-1 text-xs text-green-700 bg-green-50 px-2 py-1 rounded-full">
                   <Shield className="w-3 h-3" />
-                  Identité vérifiée
+                  Identité contrôlée
                 </div>
               )}
               {badges.slice(0, 2).map((badge, i) => (

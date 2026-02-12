@@ -12,11 +12,11 @@ export const faqCategories = [
       },
       {
         q: 'Comment fonctionne ServicesArtisans ?',
-        a: 'C\'est simple : 1) Recherchez un métier et une localisation parmi nos 350 000+ artisans, 2) Comparez les profils et les informations vérifiées, 3) Contactez directement l\'artisan de votre choix pour obtenir un devis gratuit.',
+        a: 'C\'est simple : 1) Recherchez un métier et une localisation parmi nos 350 000+ artisans, 2) Comparez les profils et les informations officielles, 3) Contactez directement l\'artisan de votre choix pour obtenir un devis gratuit.',
       },
       {
         q: 'D\'où proviennent les données des artisans ?',
-        a: 'Toutes nos données proviennent de l\'API Annuaire des Entreprises du gouvernement français (recherche-entreprises.api.gouv.fr). Chaque artisan est vérifié via son numéro SIREN, garantissant qu\'il s\'agit d\'une entreprise réelle et active.',
+        a: 'Toutes nos données proviennent de l\'API Annuaire des Entreprises du gouvernement français (recherche-entreprises.api.gouv.fr). Chaque artisan est référencé via son numéro SIREN, garantissant qu\'il s\'agit d\'une entreprise réelle et active.',
       },
     ],
   },
@@ -46,7 +46,7 @@ export const faqCategories = [
     questions: [
       {
         q: 'Comment sont sélectionnés les artisans ?',
-        a: 'Chaque artisan référencé sur ServicesArtisans provient des registres officiels SIREN de l\'État français. Nous vérifions que l\'entreprise est active, que le code NAF correspond bien à un métier du bâtiment, et que le siège social est localisé en France. Cela couvre 13 catégories de métiers dans les 101 départements français.',
+        a: 'Chaque artisan référencé sur ServicesArtisans provient des registres officiels SIREN de l\'État français. Nous contrôlons que l\'entreprise est active, que le code NAF correspond bien à un métier du bâtiment, et que le siège social est localisé en France. Cela couvre 13 catégories de métiers dans les 101 départements français.',
       },
       {
         q: 'Les artisans sont-ils assurés ?',

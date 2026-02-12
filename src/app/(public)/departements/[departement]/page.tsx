@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { MapPin, Building2, Users, ArrowRight, Shield, Star, Clock, ChevronRight, Wrench, HelpCircle } from 'lucide-react'
+import { MapPin, Building2, Users, ArrowRight, Shield, Clock, ChevronRight, Wrench, HelpCircle, Map } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL } from '@/lib/seo/config'
@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return {
     title: `Artisans en ${dept.name} (${dept.code}) — Annuaire & Devis Gratuit | ServicesArtisans`,
-    description: `Trouvez les meilleurs artisans dans le ${dept.name} (${dept.code}). ${dept.description} ${services.length} corps de métier, artisans référencés. Devis gratuit.`,
+    description: `Trouvez des artisans qualifiés dans le ${dept.name} (${dept.code}). ${dept.description} ${services.length} corps de métier, artisans référencés. Devis gratuit.`,
     alternates: { canonical: `${SITE_URL}/departements/${deptSlug}` },
   }
 }
@@ -55,7 +55,7 @@ export default async function DepartementPage({ params }: PageProps) {
 
   const collectionPageSchema = getCollectionPageSchema({
     name: `Artisans en ${dept.name} (${dept.code})`,
-    description: `Trouvez les meilleurs artisans dans le ${dept.name} (${dept.code}). ${services.length} corps de métier, artisans référencés.`,
+    description: `Trouvez des artisans qualifiés dans le ${dept.name} (${dept.code}). ${services.length} corps de métier, artisans référencés.`,
     url: `/departements/${dept.slug}`,
     itemCount: services.length,
   })
@@ -83,7 +83,7 @@ export default async function DepartementPage({ params }: PageProps) {
         {/* Background effects */}
         <div className="absolute inset-0">
           <div className="absolute inset-0" style={{
-            background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(37,99,235,0.1) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(59,130,246,0.06) 0%, transparent 50%)',
+            background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(79,70,229,0.20) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(99,102,241,0.12) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(129,140,248,0.08) 0%, transparent 50%)',
           }} />
           <div className="absolute inset-0 opacity-[0.025]" style={{
             backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
@@ -97,6 +97,7 @@ export default async function DepartementPage({ params }: PageProps) {
           <div className="mb-10">
             <Breadcrumb
               items={[
+                ...(regionSlug ? [{ label: dept.region, href: `/regions/${regionSlug}` }] : []),
                 { label: 'Départements', href: '/departements' },
                 { label: `${dept.name} (${dept.code})` },
               ]}
@@ -105,14 +106,19 @@ export default async function DepartementPage({ params }: PageProps) {
           </div>
 
           <div className="max-w-3xl">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-500/15 backdrop-blur-sm rounded-full border border-indigo-400/25 mb-5">
+              <Map className="w-4 h-4 text-indigo-400" />
+              <span className="text-sm font-medium text-indigo-200">Département</span>
+            </div>
+
             <div className="flex items-center gap-4 mb-6">
-              <div className="w-16 h-16 bg-white/10 backdrop-blur rounded-2xl flex items-center justify-center border border-white/10">
-                <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">{dept.code}</span>
+              <div className="w-16 h-16 bg-indigo-500/15 backdrop-blur rounded-2xl flex items-center justify-center border border-indigo-400/20">
+                <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-blue-300">{dept.code}</span>
               </div>
               <div>
                 <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-[-0.025em] leading-[1.1]">
                   Artisans en{' '}
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-300 to-cyan-300">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-indigo-300 to-blue-300">
                     {dept.name}
                   </span>
                 </h1>
@@ -127,15 +133,15 @@ export default async function DepartementPage({ params }: PageProps) {
             {/* Location info */}
             <div className="flex flex-wrap gap-4 mb-8 text-sm">
               <div className="flex items-center gap-2 text-slate-300">
-                <Building2 className="w-4 h-4 text-blue-400" />
+                <Building2 className="w-4 h-4 text-indigo-400" />
                 <span>Chef-lieu : {dept.chefLieu}</span>
               </div>
               <div className="flex items-center gap-2 text-slate-300">
-                <Users className="w-4 h-4 text-blue-400" />
+                <Users className="w-4 h-4 text-indigo-400" />
                 <span>{dept.population} habitants</span>
               </div>
               <div className="flex items-center gap-2 text-slate-300">
-                <MapPin className="w-4 h-4 text-blue-400" />
+                <MapPin className="w-4 h-4 text-indigo-400" />
                 <span>{dept.villes.length} villes principales</span>
               </div>
             </div>
@@ -144,9 +150,6 @@ export default async function DepartementPage({ params }: PageProps) {
             <div className="flex flex-wrap gap-3">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
                 <Shield className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Données SIREN officielles</span>
-              </div>
-              <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Star className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Avis clients</span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
                 <Clock className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Devis gratuits</span>
@@ -160,8 +163,8 @@ export default async function DepartementPage({ params }: PageProps) {
         {/* ─── SERVICES ─────────────────────────────────────── */}
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
-              <Wrench className="w-5 h-5 text-blue-600" />
+            <div className="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center">
+              <Wrench className="w-5 h-5 text-indigo-600" />
             </div>
             <div>
               <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
@@ -177,7 +180,7 @@ export default async function DepartementPage({ params }: PageProps) {
                 href={`/services/${service.slug}/${villesDuDepartement[0]?.slug || slugify(dept.chefLieu)}`}
                 className="bg-white rounded-xl shadow-sm p-5 text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group border border-gray-100"
               >
-                <span className="font-semibold text-slate-800 group-hover:text-blue-600 transition-colors block text-sm">{service.name}</span>
+                <span className="font-semibold text-slate-800 group-hover:text-indigo-600 transition-colors block text-sm">{service.name}</span>
                 <span className="block text-xs text-slate-400 mt-1.5">dans le {dept.code}</span>
               </Link>
             ))}
@@ -200,13 +203,13 @@ export default async function DepartementPage({ params }: PageProps) {
           {villesDuDepartement.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
               {villesDuDepartement.map((ville) => (
-                <Link key={ville.slug} href={`/villes/${ville.slug}`} className="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md hover:border-blue-300 hover:-translate-y-0.5 transition-all group">
+                <Link key={ville.slug} href={`/villes/${ville.slug}`} className="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md hover:border-indigo-300 hover:-translate-y-0.5 transition-all group">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg flex items-center justify-center group-hover:from-blue-100 group-hover:to-blue-200 transition-colors">
-                      <MapPin className="w-5 h-5 text-blue-600" />
+                    <div className="w-10 h-10 bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-lg flex items-center justify-center group-hover:from-indigo-100 group-hover:to-indigo-200 transition-colors">
+                      <MapPin className="w-5 h-5 text-indigo-600" />
                     </div>
                     <div className="min-w-0">
-                      <div className="font-semibold text-slate-800 group-hover:text-blue-600 transition-colors text-sm truncate">{ville.name}</div>
+                      <div className="font-semibold text-slate-800 group-hover:text-indigo-600 transition-colors text-sm truncate">{ville.name}</div>
                       <div className="text-xs text-slate-400">{ville.population} hab.</div>
                     </div>
                   </div>
@@ -319,7 +322,7 @@ export default async function DepartementPage({ params }: PageProps) {
       {/* ─── CTA ────────────────────────────────────────────── */}
       <section className="relative bg-[#0a0f1e] overflow-hidden">
         <div className="absolute inset-0" style={{
-          background: 'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(37,99,235,0.12) 0%, transparent 60%)',
+          background: 'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(79,70,229,0.12) 0%, transparent 60%)',
         }} />
         <div className="relative max-w-4xl mx-auto px-4 py-16 md:py-20 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">
@@ -351,7 +354,7 @@ export default async function DepartementPage({ params }: PageProps) {
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Services populaires</h3>
               <div className="space-y-2">
                 {services.slice(0, 8).map((s) => (
-                  <Link key={s.slug} href={`/services/${s.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                  <Link key={s.slug} href={`/services/${s.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {s.name}
                   </Link>
@@ -367,13 +370,13 @@ export default async function DepartementPage({ params }: PageProps) {
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Région {dept.region}</h3>
               <div className="space-y-2">
                 {regionSlug && (
-                  <Link href={`/regions/${regionSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                  <Link href={`/regions/${regionSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     Artisans en {dept.region}
                   </Link>
                 )}
                 {siblingDepts.slice(0, 5).map((d) => (
-                  <Link key={d.slug} href={`/departements/${d.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                  <Link key={d.slug} href={`/departements/${d.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {d.name} ({d.code})
                   </Link>
@@ -388,19 +391,19 @@ export default async function DepartementPage({ params }: PageProps) {
             <div>
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Navigation</h3>
               <div className="space-y-2">
-                <Link href="/villes" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                <Link href="/villes" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />Toutes les villes
                 </Link>
-                <Link href="/regions" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                <Link href="/regions" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />Toutes les régions
                 </Link>
-                <Link href="/departements" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                <Link href="/departements" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />Tous les départements
                 </Link>
-                <Link href="/devis" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                <Link href="/devis" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />Demander un devis
                 </Link>
-                <Link href="/comment-ca-marche" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                <Link href="/comment-ca-marche" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />Comment ça marche
                 </Link>
               </div>

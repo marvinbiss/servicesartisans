@@ -297,7 +297,7 @@ export default function EditUserPage() {
                       />
                     </button>
                     <span className="text-sm text-gray-600">
-                      {formData.is_verified ? 'Vérifié' : 'Non vérifié'}
+                      {formData.is_verified ? 'Référencé' : 'Non référencé'}
                     </span>
                   </div>
                 </div>

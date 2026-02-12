@@ -113,7 +113,7 @@ export default function Logo({
 export function Tagline({ className }: { className?: string }) {
   return (
     <p className={clsx('text-gray-600 dark:text-gray-400', className)}>
-      Trouvez les meilleurs artisans près de chez vous
+      Trouvez des artisans qualifiés près de chez vous
     </p>
   )
 }

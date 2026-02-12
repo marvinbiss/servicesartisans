@@ -24,19 +24,19 @@ const EMAIL_TEMPLATES: EmailTemplate[] = [
   {
     id: 'welcome',
     name: 'Bienvenue',
-    subject: 'Bienvenue sur Services Artisans',
+    subject: 'Bienvenue sur ServicesArtisans',
     description: 'Email envoyé après inscription',
     variables: ['{{user_name}}', '{{verify_link}}'],
     content: `Bonjour {{user_name}},
 
-Bienvenue sur Services Artisans ! Nous sommes ravis de vous compter parmi nous.
+Bienvenue sur ServicesArtisans ! Nous sommes ravis de vous compter parmi nous.
 
 Pour commencer, veuillez vérifier votre email en cliquant sur le lien ci-dessous :
 {{verify_link}}
 
 Si vous avez des questions, n'hésitez pas à nous contacter.
 
-L'équipe Services Artisans`,
+L'équipe ServicesArtisans`,
   },
   {
     id: 'password_reset',
@@ -55,7 +55,7 @@ Ce lien expire dans {{expiry_time}}.
 
 Si vous n'êtes pas à l'origine de cette demande, ignorez cet email.
 
-L'équipe Services Artisans`,
+L'équipe ServicesArtisans`,
   },
   {
     id: 'booking_confirmation',
@@ -75,7 +75,7 @@ Détails :
 
 L'artisan vous contactera pour confirmer les derniers détails.
 
-L'équipe Services Artisans`,
+L'équipe ServicesArtisans`,
   },
   {
     id: 'quote_request',
@@ -94,7 +94,7 @@ Description : {{description}}
 Connectez-vous à votre tableau de bord pour répondre :
 {{dashboard_link}}
 
-L'équipe Services Artisans`,
+L'équipe ServicesArtisans`,
   },
   {
     id: 'review_notification',
@@ -111,7 +111,7 @@ Commentaire : {{review_text}}
 
 Continuez votre excellent travail !
 
-L'équipe Services Artisans`,
+L'équipe ServicesArtisans`,
   },
 ]
 

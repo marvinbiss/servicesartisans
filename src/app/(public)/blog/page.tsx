@@ -89,7 +89,7 @@ const articles = [
   },
   {
     slug: 'trouver-artisan-verifie-siren',
-    title: 'Trouver un artisan vérifié : pourquoi le SIREN compte',
+    title: 'Trouver un artisan référencé : pourquoi le SIREN compte',
     excerpt: 'Numéro SIREN, assurance décennale, qualifications... Les vérifications indispensables avant de faire appel à un artisan.',
     category: 'Conseils',
     date: '2026-02-03',

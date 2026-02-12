@@ -67,8 +67,10 @@ export default function VillesIndexPage() {
           </div>
 
           <div className="text-center max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/15 backdrop-blur-sm rounded-full border border-blue-400/25 mb-6">
               <MapPin className="w-4 h-4 text-blue-400" />
+              <span className="text-sm font-medium text-blue-200">Villes</span>
+              <span className="w-1 h-1 rounded-full bg-blue-400/50" />
               <span className="text-sm font-medium text-white/90">{villes.length}+ villes couvertes</span>
             </div>
 
@@ -158,7 +160,7 @@ export default function VillesIndexPage() {
             Besoin d&apos;un artisan ?
           </h2>
           <p className="text-slate-400 mb-8 max-w-lg mx-auto">
-            Décrivez votre projet et recevez des devis gratuits de professionnels vérifiés.
+            Décrivez votre projet et recevez des devis gratuits de professionnels référencés.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/devis" className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-300">
@@ -183,7 +185,7 @@ export default function VillesIndexPage() {
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Par région</h3>
               <div className="space-y-2">
                 {regions.slice(0, 8).map((r) => (
-                  <Link key={r.slug} href={`/regions/${r.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                  <Link key={r.slug} href={`/regions/${r.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     Artisans en {r.name}
                   </Link>
@@ -199,7 +201,7 @@ export default function VillesIndexPage() {
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Par département</h3>
               <div className="space-y-2">
                 {departements.slice(0, 8).map((d) => (
-                  <Link key={d.slug} href={`/departements/${d.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                  <Link key={d.slug} href={`/departements/${d.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {d.name} ({d.code})
                   </Link>
@@ -215,7 +217,7 @@ export default function VillesIndexPage() {
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Services populaires</h3>
               <div className="space-y-2">
                 {services.slice(0, 8).map((s) => (
-                  <Link key={s.slug} href={`/services/${s.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                  <Link key={s.slug} href={`/services/${s.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {s.name}
                   </Link>

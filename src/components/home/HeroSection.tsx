@@ -23,7 +23,7 @@ function AnimatedNumber({ value, suffix = '', duration = 2 }: { value: number; s
     if (!isInView) return
     const controls = animate(motionValue, value, {
       duration,
-      ease: [0.22, 1, 0.36, 1],
+      ease: [0.16, 1, 0.3, 1],
     })
     return controls.stop
   }, [isInView, motionValue, value, duration])
@@ -33,34 +33,6 @@ function AnimatedNumber({ value, suffix = '', duration = 2 }: { value: number; s
       <motion.span>{rounded}</motion.span>
       {suffix}
     </span>
-  )
-}
-
-// ── Floating particles ────────────────────────────────────────────────
-function FloatingParticles() {
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-      {Array.from({ length: 20 }).map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute w-1 h-1 rounded-full bg-white/20"
-          style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-          }}
-          animate={{
-            y: [0, -30, 0],
-            opacity: [0.1, 0.4, 0.1],
-          }}
-          transition={{
-            duration: 4 + Math.random() * 4,
-            repeat: Infinity,
-            delay: Math.random() * 4,
-            ease: 'easeInOut',
-          }}
-        />
-      ))}
-    </div>
   )
 }
 
@@ -92,7 +64,7 @@ const itemVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const },
   },
 }
 
@@ -120,7 +92,7 @@ export function HeroSection() {
       {/* ── HERO SECTION ────────────────────────────────────── */}
       <section
         className="relative bg-[#0a0f1e] text-white overflow-hidden"
-        style={{ minHeight: '88vh' }}
+        style={{ minHeight: '70vh' }}
       >
         {/* Background layers */}
         <div className="absolute inset-0" aria-hidden="true">
@@ -167,8 +139,6 @@ export function HeroSection() {
               backgroundSize: '64px 64px',
             }}
           />
-          {/* Floating particles */}
-          <FloatingParticles />
           {/* Bottom fade for trust bar overlap */}
           <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white/[0.03] to-transparent" />
         </div>
@@ -185,7 +155,6 @@ export function HeroSection() {
             <motion.div variants={itemVariants} className="mb-8">
               <div className="inline-flex items-center gap-2.5 bg-white/[0.07] backdrop-blur-sm rounded-full px-5 py-2.5 border border-white/10">
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400" />
                 </span>
                 <span className="text-sm text-white/80 font-medium">
@@ -327,7 +296,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="bg-white rounded-2xl shadow-xl p-6 md:p-8"
         >
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-4">
@@ -377,10 +346,10 @@ export function HeroSection() {
               </div>
               <div>
                 <div className="font-semibold text-slate-900 text-sm">
-                  Avis clients v&eacute;rifi&eacute;s
+                  50+ corps de m&eacute;tier
                 </div>
                 <div className="text-xs text-slate-500">
-                  Retours authentiques
+                  Tous les m&eacute;tiers du b&acirc;timent
                 </div>
               </div>
             </div>

@@ -56,11 +56,12 @@ function convertToArtisan(provider: any, service: any, location: any, serviceSlu
     team_size: provider.team_size || undefined,
     services: provider.services || [],
     service_prices: (provider.service_prices && provider.service_prices.length > 0) ? provider.service_prices : generateServicePrices(serviceSlug),
+    prices_are_estimated: !(provider.service_prices && provider.service_prices.length > 0),
     accepts_new_clients: provider.accepts_new_clients === true ? true : undefined,
     experience_years: provider.experience_years || undefined,
     certifications: provider.certifications || [],
     insurance: provider.insurance || [],
-    payment_methods: provider.payment_methods || ['Carte bancaire', 'Espèces', 'Chèque'],
+    payment_methods: provider.payment_methods || [],
     languages: provider.languages || ['Français'],
     emergency_available: provider.emergency_available || false,
     member_since: provider.created_at ? new Date(provider.created_at).getFullYear().toString() : undefined,
@@ -85,7 +86,7 @@ function generateDescription(name: string, specialty: string, city: string, prov
   const parts: string[] = []
 
   // Opening sentence with specialty and location
-  parts.push(`${name} est votre ${spe} de confiance à ${city}.`)
+  parts.push(`${name} est un professionnel spécialisé en ${spe} à ${city}.`)
 
   // Company history and experience
   if (provider?.creation_date) {
@@ -119,7 +120,7 @@ function generateDescription(name: string, specialty: string, city: string, prov
 
   // Verification
   if (provider?.siret) {
-    parts.push(`Entreprise immatriculée et vérifiée (SIRET ${provider.siret.substring(0, 9)}...).`)
+    parts.push(`Entreprise immatriculée et référencée (SIRET ${provider.siret.substring(0, 9)}...).`)
   }
 
   // Rating
@@ -429,7 +430,7 @@ export default async function ProviderPage({ params }: PageProps) {
           </h2>
           <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
             <Link href="/notre-processus-de-verification" className="text-blue-600 hover:text-blue-800">
-              Comment nous vérifions les artisans
+              Comment nous référençons les artisans
             </Link>
             <Link href="/politique-avis" className="text-blue-600 hover:text-blue-800">
               Notre politique des avis

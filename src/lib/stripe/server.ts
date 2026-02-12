@@ -51,7 +51,7 @@ export const PLANS = {
       'Profil complet',
       '30 demandes/mois',
       'Messagerie prioritaire',
-      'Badge vérifié',
+      'Badge référencé',
       'Statistiques de base',
       'Support prioritaire',
     ],

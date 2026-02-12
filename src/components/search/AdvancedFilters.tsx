@@ -272,7 +272,7 @@ export function AdvancedFilters({
           {/* Verified only toggle */}
           <div className="p-4 flex items-center justify-between">
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Artisans vérifiés uniquement
+              Artisans référencés uniquement
             </span>
             <button
               onClick={() => handleChange('verified', !values.verified)}

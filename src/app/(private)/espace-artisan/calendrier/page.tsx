@@ -455,7 +455,7 @@ export default function CalendrierPage() {
             <div className="flex items-center gap-4">
               {profile?.is_verified && (
                 <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                  Profil vérifié
+                  Profil référencé
                 </span>
               )}
               <span className="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-medium capitalize">

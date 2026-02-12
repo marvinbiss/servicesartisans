@@ -72,11 +72,11 @@ const verificationSteps = [
   {
     icon: Lock,
     title: 'Garantie décennale',
-    description: 'Pour les métiers du bâtiment concernés, la garantie décennale est vérifiée avant toute mise en ligne.',
+    description: 'Pour les métiers du bâtiment concernés, la garantie décennale est contrôlée avant toute mise en ligne.',
   },
   {
     icon: Eye,
-    title: 'Avis vérifiés',
+    title: 'Avis authentiques',
     description: 'Seuls les clients ayant fait appel à un artisan via la plateforme peuvent laisser un avis.',
   },
 ]
@@ -144,12 +144,12 @@ export default async function AProposPage() {
         </div>
       </section>
 
-      {/* Comment nous vérifions les artisans */}
+      {/* Comment nous référençons les artisans */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Comment nous vérifions les artisans
+              Comment nous référençons les artisans
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Chaque artisan référencé sur la plateforme passe par un processus
@@ -281,7 +281,7 @@ export default async function AProposPage() {
                     <div className="text-3xl font-bold text-blue-600">
                       {stats.reviewCount.toLocaleString('fr-FR')}
                     </div>
-                    <div className="text-gray-600 mt-1">Avis vérifiés</div>
+                    <div className="text-gray-600 mt-1">Avis authentiques</div>
                   </div>
                 )}
               </div>

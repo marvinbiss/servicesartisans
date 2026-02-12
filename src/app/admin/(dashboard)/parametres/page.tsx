@@ -30,7 +30,7 @@ interface PlatformSettings {
 }
 
 const DEFAULT_SETTINGS: PlatformSettings = {
-  siteName: 'Services Artisans',
+  siteName: 'ServicesArtisans',
   contactEmail: 'contact@servicesartisans.fr',
   supportEmail: 'support@servicesartisans.fr',
   maintenanceMode: false,

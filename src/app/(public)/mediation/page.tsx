@@ -161,7 +161,7 @@ export default function MediationPage() {
                 Notre processus de vérification
               </h3>
               <p className="text-gray-600 text-sm">
-                Comment nous vérifions les artisans avant leur référencement sur la plateforme.
+                Comment nous référençons les artisans avant leur référencement sur la plateforme.
               </p>
             </Link>
             <Link

@@ -179,7 +179,7 @@ export default function InscriptionPage() {
               </div>
               <div className="flex items-center gap-4 bg-white/10 backdrop-blur-sm rounded-xl p-4">
                 <CheckCircle className="w-6 h-6 text-green-400 flex-shrink-0" />
-                <span>Artisans vérifiés et certifiés</span>
+                <span>Artisans référencés et qualifiés</span>
               </div>
               <div className="flex items-center gap-4 bg-white/10 backdrop-blur-sm rounded-xl p-4">
                 <CheckCircle className="w-6 h-6 text-green-400 flex-shrink-0" />

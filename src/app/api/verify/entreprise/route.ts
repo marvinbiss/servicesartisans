@@ -228,7 +228,7 @@ export async function POST(request: NextRequest) {
       await supabase
         .from('providers')
         .update({
-          // Données vérifiées
+          // Données contrôlées
           siret_verified: true,
           siret_verified_at: new Date().toISOString(),
           company_name: entreprise.nom,

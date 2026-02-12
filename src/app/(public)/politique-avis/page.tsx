@@ -26,7 +26,7 @@ const sections = [
     title: 'Qui peut laisser un avis',
     content: [
       'Seuls les utilisateurs ayant fait appel à un artisan via la plateforme peuvent déposer un avis. Cette restriction vise à garantir que les avis publiés correspondent à des expériences réelles.',
-      'Pour publier un avis, l\'utilisateur doit disposer d\'un compte vérifié et avoir une demande de devis ou une prestation associée à l\'artisan concerné.',
+      'Pour publier un avis, l\'utilisateur doit disposer d\'un compte confirmé et avoir une demande de devis ou une prestation associée à l\'artisan concerné.',
     ],
   },
   {
@@ -156,7 +156,7 @@ export default function PolitiqueAvisPage() {
                 Notre processus de vérification
               </h3>
               <p className="text-gray-600 text-sm">
-                Comment nous vérifions les artisans avant leur référencement sur la plateforme.
+                Comment nous référençons les artisans avant leur référencement sur la plateforme.
               </p>
             </Link>
             <Link

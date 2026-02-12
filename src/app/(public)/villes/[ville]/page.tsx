@@ -1,12 +1,12 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { MapPin, Users, Building2, ArrowRight, Shield, Star, Clock, ChevronRight, Wrench, HelpCircle } from 'lucide-react'
+import { MapPin, Users, Building2, ArrowRight, Shield, Clock, ChevronRight, Wrench, HelpCircle } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getPlaceSchema, getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { getPlaceSchema, getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
-import { villes, getVilleBySlug, services, getRegionSlugByName } from '@/lib/data/france'
+import { villes, getVilleBySlug, services, getRegionSlugByName, getDepartementByCode } from '@/lib/data/france'
 
 export function generateStaticParams() {
   return villes.map((ville) => ({ ville: ville.slug }))
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return {
     title: `Artisans à ${ville.name} (${ville.departementCode}) — Annuaire & Devis Gratuit | ServicesArtisans`,
-    description: `Trouvez les meilleurs artisans à ${ville.name} (${ville.departementCode}). Plombiers, électriciens, serruriers, chauffagistes et plus. ${services.length} corps de métier, artisans référencés. Devis gratuit.`,
+    description: `Trouvez des artisans qualifiés à ${ville.name} (${ville.departementCode}). Plombiers, électriciens, serruriers, chauffagistes et plus. ${services.length} corps de métier, artisans référencés. Devis gratuit.`,
     alternates: { canonical: `${SITE_URL}/villes/${villeSlug}` },
   }
 }
@@ -47,6 +47,8 @@ export default async function VillePage({ params }: PageProps) {
   ).slice(0, 8)
 
   const regionSlug = getRegionSlugByName(ville.region)
+  const dept = getDepartementByCode(ville.departementCode)
+  const deptSlug = dept?.slug
 
   // JSON-LD structured data
   const placeSchema = getPlaceSchema({
@@ -54,7 +56,7 @@ export default async function VillePage({ params }: PageProps) {
     slug: ville.slug,
     region: ville.region,
     department: ville.departement,
-    description: `Trouvez les meilleurs artisans à ${ville.name}. Plombiers, électriciens, serruriers et plus.`,
+    description: `Trouvez des artisans qualifiés à ${ville.name}. Plombiers, électriciens, serruriers et plus.`,
   })
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
@@ -62,9 +64,24 @@ export default async function VillePage({ params }: PageProps) {
     { name: ville.name, url: `/villes/${ville.slug}` },
   ])
 
+  const faqSchema = getFAQSchema([
+    {
+      question: `Comment trouver un artisan à ${ville.name} ?`,
+      answer: `Sur ServicesArtisans, sélectionnez le type de service dont vous avez besoin (plombier, électricien, serrurier, etc.) puis choisissez ${ville.name} comme localisation. Vous accéderez à la liste des artisans référencés dans votre ville.`,
+    },
+    {
+      question: `D'où proviennent les données des artisans à ${ville.name} ?`,
+      answer: `Les artisans référencés sur notre plateforme sont répertoriés à partir des données SIREN officielles. Chaque professionnel listé dispose d'un numéro SIREN enregistré auprès des autorités compétentes.`,
+    },
+    {
+      question: `Comment obtenir un devis gratuit à ${ville.name} ?`,
+      answer: `Cliquez sur "Demander un devis gratuit", décrivez votre projet en quelques clics, et recevez jusqu'à 3 devis personnalisés d'artisans qualifiés à ${ville.name}. Le service est 100% gratuit et sans engagement.`,
+    },
+  ])
+
   return (
     <div className="min-h-screen bg-gray-50">
-      <JsonLd data={[placeSchema, breadcrumbSchema]} />
+      <JsonLd data={[placeSchema, breadcrumbSchema, faqSchema]} />
 
       {/* ─── PREMIUM DARK HERO ──────────────────────────────── */}
       <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
@@ -85,7 +102,8 @@ export default async function VillePage({ params }: PageProps) {
           <div className="mb-10">
             <Breadcrumb
               items={[
-                { label: 'Villes', href: '/villes' },
+                ...(regionSlug ? [{ label: ville.region, href: `/regions/${regionSlug}` }] : []),
+                ...(deptSlug ? [{ label: `${ville.departement} (${ville.departementCode})`, href: `/departements/${deptSlug}` }] : []),
                 { label: ville.name },
               ]}
               className="text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
@@ -93,6 +111,11 @@ export default async function VillePage({ params }: PageProps) {
           </div>
 
           <div className="max-w-3xl">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/15 backdrop-blur-sm rounded-full border border-blue-400/25 mb-5">
+              <MapPin className="w-4 h-4 text-blue-400" />
+              <span className="text-sm font-medium text-blue-200">Ville</span>
+            </div>
+
             <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
               Artisans à{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-300 to-cyan-300">
@@ -123,9 +146,6 @@ export default async function VillePage({ params }: PageProps) {
             <div className="flex flex-wrap gap-3">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
                 <Shield className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Données SIREN officielles</span>
-              </div>
-              <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Star className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Avis clients</span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
                 <Clock className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Devis gratuits</span>
@@ -285,7 +305,7 @@ export default async function VillePage({ params }: PageProps) {
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Services à {ville.name}</h3>
               <div className="space-y-2">
                 {services.slice(0, 6).map((s) => (
-                  <Link key={s.slug} href={`/services/${s.slug}/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                  <Link key={s.slug} href={`/services/${s.slug}/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {s.name} à {ville.name}
                   </Link>
@@ -301,7 +321,7 @@ export default async function VillePage({ params }: PageProps) {
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Villes en {ville.region}</h3>
               <div className="space-y-2">
                 {regionVilles.slice(0, 6).map((v) => (
-                  <Link key={v.slug} href={`/villes/${v.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                  <Link key={v.slug} href={`/villes/${v.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     Artisans à {v.name}
                   </Link>
@@ -317,24 +337,24 @@ export default async function VillePage({ params }: PageProps) {
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Navigation</h3>
               <div className="space-y-2">
                 {regionSlug && (
-                  <Link href={`/regions/${regionSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                  <Link href={`/regions/${regionSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     Région {ville.region}
                   </Link>
                 )}
-                <Link href="/departements" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                <Link href="/departements" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />
                   Tous les départements
                 </Link>
-                <Link href="/regions" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                <Link href="/regions" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />
                   Toutes les régions
                 </Link>
-                <Link href="/villes" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                <Link href="/villes" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />
                   Toutes les villes
                 </Link>
-                <Link href="/devis" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
+                <Link href="/devis" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />
                   Demander un devis
                 </Link>

@@ -17,7 +17,7 @@
 export const companyIdentity = {
   // Brand (Level 5 — UI copy only)
   name: 'ServicesArtisans' as const,
-  tagline: 'Le plus grand annuaire d\'artisans référencés de France',
+  tagline: 'Trouvez des artisans qualifiés près de chez vous',
   description:
     'Plus de 350 000 artisans référencés dans toute la France. Comparez, contactez et trouvez le bon professionnel en quelques clics.',
   url: process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr',
@@ -60,6 +60,18 @@ export const companyIdentity = {
   // Platform status
   status: (process.env.COMPANY_STATUS as 'pre-launch' | 'launched') || 'pre-launch',
 }
+
+/**
+ * Centralized marketing statistics — Single Source of Truth.
+ * Import this in any component that displays platform numbers.
+ */
+export const marketingStats = {
+  artisanCount: '350 000+',
+  artisanCountShort: '350K+',
+  cityCount: '1 000+',
+  serviceCount: '15',
+  responseTime: '24h',
+} as const
 
 /** True when SIRET, legal name, and address are all filled. */
 export function isCompanyRegistered(): boolean {

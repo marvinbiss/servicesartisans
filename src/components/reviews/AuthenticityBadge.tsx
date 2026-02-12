@@ -22,7 +22,7 @@ const getAuthenticityLevel = (score: number) => {
 const AUTHENTICITY_CONFIG = {
   high: {
     icon: ShieldCheck,
-    label: 'Avis vérifié',
+    label: 'Avis authentique',
     color: 'text-green-600',
     bgColor: 'bg-green-50',
     borderColor: 'border-green-200',
@@ -36,7 +36,7 @@ const AUTHENTICITY_CONFIG = {
   },
   low: {
     icon: HelpCircle,
-    label: 'Non vérifié',
+    label: 'Non référencé',
     color: 'text-gray-500',
     bgColor: 'bg-gray-50',
     borderColor: 'border-gray-200',
@@ -108,7 +108,7 @@ export function AuthenticityBadge({
     >
       <Icon className={cn(sizeConfig.icon, config.color)} />
       <span className={cn(sizeConfig.text, config.color, 'font-medium')}>
-        {isVerifiedPurchase ? 'Achat vérifié' : config.label}
+        {isVerifiedPurchase ? 'Achat confirmé' : config.label}
       </span>
       {showScore && !isVerifiedPurchase && (
         <span className={cn(sizeConfig.text, 'text-gray-400')}>
@@ -179,7 +179,7 @@ export function AuthenticityDetails({
         <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg mb-3">
           <div className="flex items-center gap-2 text-green-700 dark:text-green-400 text-sm font-medium mb-1">
             <ShieldCheck className="w-4 h-4" />
-            Achat vérifié
+            Achat confirmé
           </div>
           {bookingDate && (
             <p className="text-sm text-green-600 dark:text-green-500">

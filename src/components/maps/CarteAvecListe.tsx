@@ -6,7 +6,7 @@ import { Star, Award } from 'lucide-react'
 import Link from 'next/link'
 import ProviderCard from '@/components/ProviderCard'
 import type { LegacyProvider } from '@/types/legacy'
-import { slugify, getArtisanUrl } from '@/lib/utils'
+import { getArtisanUrl } from '@/lib/utils'
 
 const MapContainer = dynamic(() => import('react-leaflet').then((mod) => mod.MapContainer), { ssr: false })
 const TileLayer = dynamic(() => import('react-leaflet').then((mod) => mod.TileLayer), { ssr: false })
@@ -125,8 +125,6 @@ export default function CarteAvecListe({
     }
   }, [providers])
 
-  // slugify imported from '@/lib/utils' (canonical implementation)
-
   if (!mapReady || loading) {
     return (
       <div className="h-screen bg-gray-50 flex items-center justify-center">
@@ -141,9 +139,7 @@ export default function CarteAvecListe({
         <div className="p-4 space-y-4">
           {providers.map((provider) => {
             const isHovered = hoveredId === provider.id
-            const serviceSlug = slugify(provider.specialty || 'artisan')
-            const locationSlug = slugify(provider.address_city || 'france')
-            
+
             return (
               <div
                 key={provider.id}
@@ -153,8 +149,6 @@ export default function CarteAvecListe({
               >
                 <ProviderCard
                   provider={provider}
-                  serviceSlug={serviceSlug}
-                  locationSlug={locationSlug}
                   isHovered={isHovered}
                 />
               </div>

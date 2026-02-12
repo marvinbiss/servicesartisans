@@ -87,11 +87,11 @@ const BADGE_CONFIG: Record<BadgeType, {
   verified_expert: {
     icon: Shield,
     label: 'Verified Expert',
-    labelFr: 'Expert Vérifié',
+    labelFr: 'Expert Qualifié',
     color: 'text-green-600',
     bgColor: 'bg-green-50',
     borderColor: 'border-green-300',
-    description: 'Qualifications vérifiées',
+    description: 'Qualifications contrôlées',
   },
   eco_friendly: {
     icon: Leaf,

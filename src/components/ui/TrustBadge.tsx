@@ -242,7 +242,7 @@ export function SiretVerificationStatus({
     return (
       <span className="inline-flex items-center gap-1 text-gray-500 text-sm">
         <AlertTriangle className="w-4 h-4" />
-        SIRET non vérifié
+        SIRET non contrôlé
       </span>
     )
   }
@@ -255,7 +255,7 @@ export function SiretVerificationStatus({
     <div className="flex items-center gap-2">
       <span className="inline-flex items-center gap-1 text-green-600 text-sm">
         <CheckCircle className="w-4 h-4" />
-        SIRET vérifié
+        SIRET contrôlé
       </span>
       {dateVerif && (
         <span className="text-xs text-gray-400">le {dateVerif}</span>

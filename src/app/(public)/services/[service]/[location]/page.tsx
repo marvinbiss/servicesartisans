@@ -108,7 +108,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const title = `${serviceName} à ${locationName} (${postalCode || departmentCode}) — Annuaire & Devis Gratuit`
-  const description = `Trouvez un ${serviceName.toLowerCase()} vérifié par SIREN à ${locationName}. Comparez les profils, consultez les coordonnées et demandez un devis gratuit. Artisans vérifiés par l'API gouvernementale.`
+  const description = `Trouvez un ${serviceName.toLowerCase()} référencé par SIREN à ${locationName}. Comparez les profils, consultez les coordonnées et demandez un devis gratuit. Artisans référencés par l'API gouvernementale.`
   const svcLower = serviceName.toLowerCase()
 
   return {
@@ -381,7 +381,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
           </h2>
           <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
             <Link href="/notre-processus-de-verification" className="text-blue-600 hover:text-blue-800">
-              Comment nous vérifions les artisans
+              Comment nous référençons les artisans
             </Link>
             <Link href="/politique-avis" className="text-blue-600 hover:text-blue-800">
               Notre politique des avis

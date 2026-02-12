@@ -202,8 +202,8 @@ export default function GeographicMap({
                     <span
                       className="inline-flex items-center justify-center w-5 h-5 rounded-full flex-shrink-0"
                       style={{ backgroundColor: '#1877f2' }}
-                      aria-label="Artisan vérifié"
-                      title="Artisan vérifié"
+                      aria-label="Artisan référencé"
+                      title="Artisan référencé"
                     >
                       <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>

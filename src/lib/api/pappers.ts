@@ -633,14 +633,14 @@ export function getBadgeConfiance(entreprise: EntrepriseComplete): {
   if (badges.entrepriseSaine) {
     return {
       niveau: 'bronze',
-      label: 'Entreprise vérifiée',
+      label: 'Entreprise référencée',
       description: 'Situation légale conforme',
     }
   }
 
   return {
     niveau: 'none',
-    label: 'Non vérifié',
+    label: 'Non référencé',
     description: 'Informations insuffisantes',
   }
 }

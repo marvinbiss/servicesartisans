@@ -314,7 +314,7 @@ export function getPlaceSchema(city: {
     '@type': 'City',
     name: city.name,
     url: `${SITE_URL}/villes/${city.slug}`,
-    description: city.description || `Trouvez les meilleurs artisans à ${city.name}`,
+    description: city.description || `Trouvez des artisans qualifiés à ${city.name}`,
     containedInPlace: city.region
       ? {
           '@type': 'AdministrativeArea',

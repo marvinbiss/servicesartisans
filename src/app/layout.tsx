@@ -33,6 +33,9 @@ const CapacitorInit = dynamic(
   () => import('@/components/CapacitorInit').then(mod => ({ default: mod.CapacitorInit })),
   { ssr: false }
 )
+const CookieConsent = dynamic(() => import('@/components/CookieConsent'), {
+  ssr: false,
+})
 
 // Viewport configuration - Primary brand color
 export const viewport: Viewport = {
@@ -220,6 +223,7 @@ export default function RootLayout({
           <MobileBottomNav />
           <ServiceWorkerRegistration />
           <CapacitorInit />
+          <CookieConsent />
         </MobileMenuProvider>
       </body>
     </html>

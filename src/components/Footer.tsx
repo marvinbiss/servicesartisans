@@ -223,8 +223,7 @@ export default function Footer() {
               </span>
             </Link>
             <p className="text-sm leading-relaxed mb-6 text-gray-400">
-              Le plus grand annuaire d&apos;artisans référencés de France. 350 000+ professionnels
-              référencés via les données SIREN officielles dans 101 départements.
+              {companyIdentity.description}
             </p>
             <div className="flex gap-3">
               <a href="https://facebook.com/servicesartisans" target="_blank" rel="noopener noreferrer" className="w-11 h-11 bg-slate-800/50 rounded-xl flex items-center justify-center hover:bg-primary-600 hover:scale-110 transition-all duration-300 group" aria-label="Facebook">

@@ -40,7 +40,7 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className="bg-[#FEFDFB] rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden hover:shadow-lg hover:border-gray-200 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+      className="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
       role="banner"
       aria-label={`Profil de ${displayName}`}
     >
@@ -51,8 +51,8 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
         <div className="flex flex-col md:flex-row gap-6">
           {/* Avatar */}
           <div className="flex-shrink-0">
-            <div className="relative group">
-              <div className="w-24 h-24 md:w-32 md:h-32 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-3xl md:text-4xl font-bold shadow-lg shadow-blue-500/20 overflow-hidden ring-4 ring-white transition-shadow duration-300 group-hover:shadow-xl group-hover:shadow-blue-500/30">
+            <div className="relative">
+              <div className="w-24 h-24 md:w-32 md:h-32 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-3xl md:text-4xl font-bold shadow-lg shadow-blue-500/20 overflow-hidden ring-4 ring-white">
                 {artisan.avatar_url ? (
                   <Image
                     src={artisan.avatar_url}
@@ -99,7 +99,7 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
             </div>
 
             {/* Name & Specialty */}
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 font-heading mb-1.5 tracking-tight transition-all duration-300 hover:bg-gradient-to-r hover:from-blue-700 hover:via-blue-600 hover:to-indigo-600 hover:bg-clip-text hover:text-transparent cursor-default">
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 font-heading mb-1.5 tracking-tight">
               {displayName}
             </h1>
             <p className="text-lg text-slate-600 mb-3 font-medium">{artisan.specialty}</p>

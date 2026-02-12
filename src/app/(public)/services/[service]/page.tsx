@@ -192,7 +192,7 @@ export default async function ServicePage({ params }: PageProps) {
             <div className="flex items-center gap-2 bg-yellow-50 px-4 py-2 rounded-full">
               <Star className="w-5 h-5 text-yellow-600" />
               <span className="text-gray-900 font-semibold">
-                Qualité vérifiée
+                Qualité contrôlée
               </span>
             </div>
             {trade && (

@@ -39,9 +39,9 @@ const steps = [
     number: '2',
     icon: CheckCircle,
     title: 'Comparez',
-    description: 'Consultez les profils détaillés des artisans avec leurs données officielles vérifiées. Comparez les entreprises en toute transparence grâce aux données SIREN gouvernementales.',
+    description: 'Consultez les profils détaillés des artisans avec leurs données officielles. Comparez les entreprises en toute transparence grâce aux données SIREN gouvernementales.',
     details: [
-      'Profils vérifiés avec numéro SIRET',
+      'Profils référencés avec numéro SIRET',
       'Données issues de l\'API gouvernementale SIREN',
       'Certifications et qualifications affichées',
       'Informations sur l\'entreprise (date de création, statut)',
@@ -56,7 +56,7 @@ const steps = [
     details: [
       'Contact direct sans intermédiaire',
       'Demande de devis en ligne gratuite',
-      'Coordonnées et informations vérifiées',
+      'Coordonnées et informations officielles',
       'Aucune commission, aucun frais caché',
     ],
     gradient: 'from-purple-500 to-purple-700',
@@ -66,8 +66,8 @@ const steps = [
 const trustReasons = [
   {
     icon: Shield,
-    title: 'Données SIREN vérifiées',
-    description: 'Chaque artisan est vérifié par l\'API officielle SIREN de l\'État. Numéro SIRET, statut d\'activité, date de création : des données fiables et à jour.',
+    title: 'Données SIREN officielles',
+    description: 'Chaque artisan est référencé via l\'API officielle SIREN de l\'État. Numéro SIRET, statut d\'activité, date de création : des données fiables et à jour.',
   },
   {
     icon: MapPin,
@@ -116,7 +116,7 @@ const faqs = [
 export default function CommentCaMarchePage() {
   const howToSchema = getHowToSchema([
     { name: 'Recherchez', text: 'Trouvez le bon professionnel parmi 350 000+ artisans. Recherchez par type de service et par ville dans les 101 départements français.' },
-    { name: 'Comparez', text: 'Consultez les profils détaillés avec données SIREN vérifiées. Comparez les entreprises en toute transparence grâce aux données gouvernementales.' },
+    { name: 'Comparez', text: 'Consultez les profils détaillés avec données SIREN officielles. Comparez les entreprises en toute transparence grâce aux données gouvernementales.' },
     { name: 'Contactez', text: 'Contactez directement les artisans. Demandez des devis, appelez-les ou consultez leurs coordonnées complètes sans intermédiaire.' },
   ])
 

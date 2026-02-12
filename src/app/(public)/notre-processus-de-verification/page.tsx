@@ -25,7 +25,7 @@ const verificationSteps = [
   {
     icon: FileCheck,
     title: 'Vérification SIRET via l\'API SIRENE',
-    description: 'Chaque artisan souhaitant être référencé doit fournir son numéro SIRET. Nous vérifions l\'existence et l\'activité de l\'entreprise auprès de l\'API SIRENE de l\'INSEE, le répertoire officiel des entreprises françaises. Cette vérification permet de confirmer que l\'entreprise est bien immatriculée et en activité.',
+    description: 'Chaque artisan souhaitant être référencé doit fournir son numéro SIRET. Nous contrôlons l\'existence et l\'activité de l\'entreprise auprès de l\'API SIRENE de l\'INSEE, le répertoire officiel des entreprises françaises. Cette vérification permet de confirmer que l\'entreprise est bien immatriculée et en activité.',
   },
   {
     icon: Shield,

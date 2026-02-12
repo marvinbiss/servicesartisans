@@ -62,7 +62,7 @@ function getReviewEmailTemplate(data: {
               <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 25px 0;">
 
               <p style="color: #999; font-size: 12px; text-align: center;">
-                ServicesArtisans - Trouvez les meilleurs artisans près de chez vous
+                ServicesArtisans - Trouvez des artisans qualifiés près de chez vous
               </p>
             </div>
           </div>

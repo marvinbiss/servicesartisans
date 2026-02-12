@@ -68,7 +68,7 @@ export async function verifyEntreprise(siret: string): Promise<VerificationResul
       siretExists: false,
       entreprise: null,
       sante: { saine: false, score: 0, raisons: ['SIRET invalide'] },
-      badge: { niveau: 'none', label: 'Non vérifié', description: 'SIRET invalide' },
+      badge: { niveau: 'none', label: 'Non référencé', description: 'SIRET invalide' },
       verifiedAt: new Date().toISOString(),
       sources: [],
     }
@@ -103,7 +103,7 @@ export async function verifyEntreprise(siret: string): Promise<VerificationResul
       siretExists: false,
       entreprise: null,
       sante: { saine: false, score: 0, raisons: ['Entreprise non trouvée'] },
-      badge: { niveau: 'none', label: 'Non vérifié', description: 'Entreprise introuvable' },
+      badge: { niveau: 'none', label: 'Non référencé', description: 'Entreprise introuvable' },
       verifiedAt: new Date().toISOString(),
       sources,
     }
@@ -115,13 +115,13 @@ export async function verifyEntreprise(siret: string): Promise<VerificationResul
     : {
         saine: sireneData?.actif || false,
         score: sireneData?.actif ? 70 : 0,
-        raisons: sireneData?.actif ? ['Vérifié via SIRENE'] : ['Établissement fermé'],
+        raisons: sireneData?.actif ? ['Contrôlé via SIRENE'] : ['Établissement fermé'],
       }
 
   // Step 5: Calculate trust badge
   const badge = entreprise
     ? getBadgeConfiance(entreprise)
-    : { niveau: 'none' as const, label: 'Non vérifié', description: 'Données insuffisantes' }
+    : { niveau: 'none' as const, label: 'Non référencé', description: 'Données insuffisantes' }
 
   // Step 6: Geocode address if available
   let geolocation: VerificationResult['geolocation'] = undefined
@@ -300,7 +300,7 @@ export function calculateTrustScore(verification: VerificationResult): {
 
   // SIRET verified
   factors.push({
-    name: 'SIRET vérifié',
+    name: 'SIRET contrôlé',
     points: 20,
     met: verification.siretExists,
   })
@@ -404,7 +404,7 @@ export function getVerificationSummary(verification: VerificationResult): {
   if (verification.sante.score >= 80) {
     return {
       status: 'verified',
-      title: 'Entreprise vérifiée',
+      title: 'Entreprise référencée',
       description: 'Toutes les vérifications ont été passées avec succès',
       details: [
         `Score de santé: ${verification.sante.score}/100`,
@@ -415,7 +415,7 @@ export function getVerificationSummary(verification: VerificationResult): {
 
   return {
     status: 'verified',
-    title: 'Entreprise vérifiée',
+    title: 'Entreprise référencée',
     description: 'Entreprise active mais avec quelques points d\'attention',
     details: verification.sante.raisons,
   }

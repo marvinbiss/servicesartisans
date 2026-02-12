@@ -153,8 +153,6 @@ export default function ServiceLocationPageClient({
           >
             <ProviderList
               providers={providers}
-              serviceSlug={service.slug}
-              locationSlug={location.slug}
               onProviderHover={setSelectedProvider}
             />
           </div>

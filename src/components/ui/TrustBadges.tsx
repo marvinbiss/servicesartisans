@@ -8,7 +8,7 @@ export function TrustBadges({ variant = 'default' }: { variant?: 'default' | 'co
   const badges = [
     {
       icon: Database,
-      label: 'Données SIREN vérifiées',
+      label: 'Données SIREN officielles',
       description: 'Chaque artisan référencé via les registres officiels de l\'État',
       color: 'text-blue-600',
       bgColor: 'bg-blue-50',
@@ -169,7 +169,7 @@ export function AvailabilityBadge({ count = 350000 }: { count?: number }) {
   )
 }
 
-// Badge vérifié pour les profils
+// Badge référencé pour les profils
 export function VerifiedBadge({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
   const sizes = {
     sm: 'w-4 h-4',
@@ -178,7 +178,7 @@ export function VerifiedBadge({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
   }
 
   return (
-    <div className="inline-flex items-center gap-1" title="Profil vérifié">
+    <div className="inline-flex items-center gap-1" title="Profil référencé">
       <BadgeCheck className={`${sizes[size]} text-blue-500`} />
     </div>
   )

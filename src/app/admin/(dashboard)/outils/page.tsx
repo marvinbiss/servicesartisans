@@ -170,7 +170,7 @@ export default function AdminToolsPage() {
                   <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                     providerInfo.is_verified ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
                   }`}>
-                    {providerInfo.is_verified ? 'Vérifié' : 'Non vérifié'}
+                    {providerInfo.is_verified ? 'Référencé' : 'Non référencé'}
                   </span>
                 </div>
               </div>

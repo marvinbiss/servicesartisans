@@ -62,7 +62,7 @@ export default function MapTooltip({ provider, position }: MapTooltipProps) {
             {provider.is_verified && (
               <div
                 className="p-1 rounded-full"
-                title="Vérifié"
+                title="Référencé"
                 style={{ backgroundColor: '#1877f2' }}
               >
                 <svg className="w-3 h-3 text-white" viewBox="0 0 24 24" fill="currentColor">

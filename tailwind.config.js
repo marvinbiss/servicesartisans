@@ -9,7 +9,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Primary - Deep Ocean Blue (Trust, Professionalism) - Aligned with brand-config
+        // Primary - Blue (Trust, CTAs, links, primary actions)
         primary: {
           50: '#eff6ff',
           100: '#dbeafe',
@@ -23,13 +23,13 @@ module.exports = {
           900: '#1e3a8a',
           950: '#172554',
         },
-        // Secondary - Warm Amber (Energy, Artisanat)
+        // Secondary - Amber (highlights, stars, badges)
         secondary: {
           50: '#FFFBEB',
-          100: '#FFF3C6',
-          200: '#FFE588',
-          300: '#FFD24A',
-          400: '#FFBE20',
+          100: '#FEF3C7',
+          200: '#FDE68A',
+          300: '#FCD34D',
+          400: '#FBBF24',
           500: '#F59E0B',
           600: '#D97706',
           700: '#B45309',
@@ -37,7 +37,7 @@ module.exports = {
           900: '#78350F',
           950: '#451A03',
         },
-        // Accent - Emerald (Success, Quality)
+        // Success - Green (verified badges, success states)
         accent: {
           50: '#ECFDF5',
           100: '#D1FAE5',
@@ -50,20 +50,6 @@ module.exports = {
           800: '#065F46',
           900: '#064E3B',
           950: '#022C22',
-        },
-        // Warm Neutrals - Premium warm gray replacement
-        warm: {
-          50: '#FEFDFB',
-          100: '#FAF8F5',
-          200: '#F0ECE6',
-          300: '#E8E4DF',
-          400: '#D4CFC8',
-          500: '#B5AFA6',
-          600: '#8A847C',
-          700: '#5E5952',
-          800: '#3D3935',
-          900: '#1F1C1A',
-          950: '#0D0B0A',
         },
       },
       fontFamily: {

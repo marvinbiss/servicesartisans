@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Calendar, MessageCircle, Shield, Award } from 'lucide-react'
+import { Calendar, MessageCircle, Award } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 
 interface ArtisanStatsProps {
@@ -33,13 +33,13 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.1 }}
-      className="bg-[#FEFDFB] rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden hover:-translate-y-1 hover:shadow-lg hover:border-gray-200 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+      className="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
     >
       {/* Section header */}
       <div className="px-6 pt-6 pb-2">
-        <h2 className="text-lg font-semibold text-gray-900 font-heading flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
-            <Award className="w-4 h-4 text-blue-600" aria-hidden="true" />
+        <h2 className="text-xl font-semibold text-gray-900 font-heading flex items-center gap-2.5">
+          <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center">
+            <Award className="w-4.5 h-4.5 text-blue-600" aria-hidden="true" />
           </div>
           Statistiques
         </h2>
@@ -55,7 +55,7 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.1 + index * 0.08 }}
-              className={`text-center p-4 rounded-xl border ${stat.bgColor} transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-105 hover:shadow-md cursor-default`}
+              className={`text-center p-4 rounded-xl border ${stat.bgColor}`}
             >
               <div className={`w-12 h-12 rounded-xl ${stat.color} bg-white/80 flex items-center justify-center mx-auto mb-2.5 shadow-sm`} aria-hidden="true">
                 <stat.icon className="w-5 h-5" />
@@ -67,34 +67,6 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
         </div>
       </div>
 
-      {/* Trust indicators */}
-      {((artisan.certifications?.length ?? 0) > 0 || (artisan.insurance?.length ?? 0) > 0) && (
-        <div className="px-6 pb-6 pt-2 border-t border-gray-100">
-          <h3 className="sr-only">Certifications et assurances</h3>
-          <div className="flex flex-wrap gap-2 pt-4" role="list" aria-label="Certifications et assurances">
-            {artisan.certifications?.map((cert, i) => (
-              <span
-                key={i}
-                role="listitem"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 text-sm font-medium border border-blue-100 transition-all duration-200 hover:bg-blue-100 hover:scale-[1.03] hover:shadow-sm"
-              >
-                <Shield className="w-4 h-4" aria-hidden="true" />
-                {cert}
-              </span>
-            ))}
-            {artisan.insurance?.map((ins, i) => (
-              <span
-                key={i}
-                role="listitem"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-50 text-green-700 text-sm font-medium border border-green-100 transition-all duration-200 hover:bg-green-100 hover:scale-[1.03] hover:shadow-sm"
-              >
-                <Shield className="w-4 h-4" aria-hidden="true" />
-                {ins}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
     </motion.div>
   )
 }

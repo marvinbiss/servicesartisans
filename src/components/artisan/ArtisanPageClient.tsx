@@ -113,8 +113,8 @@ export default function ArtisanPageClient({
   artisanId: _artisanId,
   similarArtisans,
 }: ArtisanPageClientProps) {
-  const [artisan, _setArtisan] = useState<LegacyArtisan | null>(initialArtisan)
-  const [reviews, _setReviews] = useState<Review[]>(initialReviews)
+  const artisan = initialArtisan
+  const reviews = initialReviews
   const [isFavorite, setIsFavorite] = useState(false)
 
   const handleShare = async () => {

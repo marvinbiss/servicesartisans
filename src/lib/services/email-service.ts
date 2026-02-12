@@ -101,7 +101,7 @@ export const emailTemplates = {
               </a>
             </div>
             <div class="footer">
-              <p>ServicesArtisans - La plateforme des artisans de confiance</p>
+              <p>ServicesArtisans - Trouvez des artisans qualifiés près de chez vous</p>
             </div>
           </div>
         </body>
@@ -161,7 +161,7 @@ export const emailTemplates = {
               </a>
             </div>
             <div class="footer">
-              <p>ServicesArtisans - La plateforme des artisans de confiance</p>
+              <p>ServicesArtisans - Trouvez des artisans qualifiés près de chez vous</p>
             </div>
           </div>
         </body>

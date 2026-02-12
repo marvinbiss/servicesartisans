@@ -67,6 +67,7 @@ export interface Artisan {
   website?: string
   latitude?: number
   longitude?: number
+  prices_are_estimated?: boolean
   // GUARD: Do NOT add is_premium, hourly_rate, response_time, etc. here.
   // Legacy fields live in src/types/legacy/ (LegacyArtisan).
 }

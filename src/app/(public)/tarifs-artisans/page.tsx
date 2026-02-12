@@ -271,7 +271,7 @@ export default function TarifsArtisansPage() {
                 </div>
                 <h3 className="font-semibold text-gray-900 mb-2">Vérifiez l&apos;artisan</h3>
                 <p className="text-gray-600 text-sm">
-                  Un artisan vérifié avec SIRET, assurance et certifications vous protège contre les malfaçons et les arnaques.
+                  Un artisan référencé avec SIRET, assurance et certifications vous protège contre les malfaçons et les arnaques.
                 </p>
               </div>
             </div>

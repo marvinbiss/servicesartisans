@@ -17,19 +17,19 @@ interface VerifiedBadgeProps {
 const badgeConfig = {
   identity: {
     icon: Shield,
-    label: 'Identité vérifiée',
+    label: 'Identité contrôlée',
     className: 'verified-badge-identity',
     color: 'text-blue-600',
   },
   insurance: {
     icon: FileCheck,
-    label: 'Assurance vérifiée',
+    label: 'Assurance contrôlée',
     className: 'verified-badge-insurance',
     color: 'text-green-600',
   },
   certification: {
     icon: Award,
-    label: 'Certifié',
+    label: 'Qualifié',
     className: 'verified-badge-certification',
     color: 'text-purple-600',
   },
@@ -41,13 +41,13 @@ const badgeConfig = {
   },
   enterprise: {
     icon: Building2,
-    label: 'Entreprise vérifiée',
+    label: 'Entreprise référencée',
     className: 'verified-badge-enterprise',
     color: 'text-slate-600',
   },
   review: {
     icon: CheckCircle,
-    label: 'Avis vérifié',
+    label: 'Avis authentique',
     className: 'verified-badge-identity',
     color: 'text-blue-600',
   },
@@ -135,9 +135,9 @@ interface VerificationLevelBadgeProps {
 }
 
 const levelConfig = {
-  none: { label: 'Non vérifié', className: 'bg-gray-100 text-gray-600 border-gray-200', icon: null },
+  none: { label: 'Non référencé', className: 'bg-gray-100 text-gray-600 border-gray-200', icon: null },
   basic: { label: 'Vérifié', className: 'bg-blue-100 text-blue-700 border-blue-200', icon: CheckCircle },
-  standard: { label: 'Vérifié+', className: 'bg-green-100 text-green-700 border-green-200', icon: Shield },
+  standard: { label: 'Référencé+', className: 'bg-green-100 text-green-700 border-green-200', icon: Shield },
   premium: { label: 'Premium', className: 'bg-amber-100 text-amber-700 border-amber-200', icon: Star },
   enterprise: { label: 'Entreprise', className: 'bg-slate-100 text-slate-700 border-slate-200', icon: Building2 },
 }
@@ -189,10 +189,10 @@ export function VerifiedReviewBadge({
         sizeConf.text,
         className
       )}
-      title="Cet avis provient d'un client qui a effectué une réservation vérifiée"
+      title="Cet avis provient d'un client qui a effectué une réservation confirmée"
     >
       <CheckCircle size={sizeConf.icon} />
-      <span>Avis vérifié</span>
+      <span>Avis authentique</span>
     </span>
   )
 }

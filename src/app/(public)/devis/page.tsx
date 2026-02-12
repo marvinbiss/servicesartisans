@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 const trustBadges = [
   { icon: Shield, label: 'Gratuit', sublabel: 'Aucun frais caché' },
   { icon: Clock, label: 'Sans engagement', sublabel: 'Réponse sous 24 h' },
-  { icon: Users, label: 'Artisans vérifiés', sublabel: 'SIREN contrôlé' },
+  { icon: Users, label: 'Artisans référencés', sublabel: 'SIREN contrôlé' },
 ]
 
 const howSteps = [
@@ -68,9 +68,9 @@ const faqItems = [
       'Les artisans disponibles vous contactent généralement sous 24 à 48 h après l’envoi de votre demande. En cas d’urgence, précisez-le dans le formulaire pour accélérer le traitement.',
   },
   {
-    question: 'Comment les artisans sont-ils vérifiés ?',
+    question: 'Comment les artisans sont-ils référencés ?',
     answer:
-      'Tous les artisans référencés sur ServicesArtisans sont immatriculés au registre SIREN. Nous vérifions leur numéro d’entreprise et leur activité déclarée auprès des données officielles de l’INSEE.',
+      'Tous les artisans référencés sur ServicesArtisans sont immatriculés au registre SIREN. Nous contrôlons leur numéro d’entreprise et leur activité déclarée auprès des données officielles de l’INSEE.',
   },
   {
     question: 'Suis-je obligé d’accepter un devis ?',
@@ -133,7 +133,7 @@ export default function DevisPage() {
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-300 to-cyan-300 whitespace-nowrap">
                 3&nbsp;devis gratuits
               </span>{' '}
-              <span className="whitespace-nowrap">d&apos;artisans</span> vérifiés
+              <span className="whitespace-nowrap">d&apos;artisans</span> référencés
             </h1>
             <p className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10">
               Remplissez le formulaire ci-dessous et comparez les offres de professionnels

@@ -9,8 +9,6 @@ import { ProviderListSkeleton } from '@/components/ui/Skeleton'
 
 interface ProviderListProps {
   providers: Provider[]
-  serviceSlug: string
-  locationSlug: string
   onProviderHover?: (provider: Provider | null) => void
   isLoading?: boolean
 }
@@ -24,8 +22,6 @@ interface FilterState {
 
 export default function ProviderList({
   providers,
-  serviceSlug,
-  locationSlug,
   onProviderHover,
   isLoading = false,
 }: ProviderListProps) {
@@ -107,8 +103,6 @@ export default function ProviderList({
               >
                 <ProviderCard
                   provider={provider}
-                  serviceSlug={serviceSlug}
-                  locationSlug={locationSlug}
                   isHovered={hoveredId === provider.id}
                 />
               </li>

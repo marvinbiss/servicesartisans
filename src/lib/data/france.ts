@@ -529,7 +529,7 @@ export const villes: Ville[] = [
     departementCode: '92',
     population: '94 000',
     codePostal: '92600',
-    description: 'Asnières-sur-Seine (Hauts-de-Seine, Île-de-France) est une ville importante de 94 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Gennevilliers, Clichy, Bois-Colombes.',
+    description: 'Asnières-sur-Seine (Hauts-de-Seine, Île-de-France) est une ville importante de 94 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Gennevilliers, Clichy, Bois-Colombes.',
     quartiers: ['Centre-ville', 'Gennevilliers', 'Clichy', 'Bois-Colombes', 'Levallois-Perret', 'Villeneuve-la-Garenne', 'Colombes'],
   },
   {
@@ -782,7 +782,7 @@ export const villes: Ville[] = [
     departementCode: '972',
     population: '76 000',
     codePostal: '97200',
-    description: 'Fort-de-France (Martinique, Martinique) est une ville importante de 76 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Schœlcher, Saint-Joseph, Case-Pilote.',
+    description: 'Fort-de-France (Martinique, Martinique) est une ville importante de 76 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Schœlcher, Saint-Joseph, Case-Pilote.',
     quartiers: ['Centre-ville', 'Schœlcher', 'Saint-Joseph', 'Case-Pilote', 'Gros-Morne', 'Le Lamentin', 'Le Carbet'],
   },
   {
@@ -870,7 +870,7 @@ export const villes: Ville[] = [
     departementCode: '92',
     population: '68 000',
     codePostal: '92130',
-    description: 'Issy-les-Moulineaux (Hauts-de-Seine, Île-de-France) est une ville importante de 68 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Vanves, Boulogne-Billancourt, Malakoff.',
+    description: 'Issy-les-Moulineaux (Hauts-de-Seine, Île-de-France) est une ville importante de 68 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Vanves, Boulogne-Billancourt, Malakoff.',
     quartiers: ['Centre-ville', 'Vanves', 'Boulogne-Billancourt', 'Malakoff', 'Châtillon', 'Clamart', 'Meudon'],
   },
   {
@@ -914,7 +914,7 @@ export const villes: Ville[] = [
     departementCode: '91',
     population: '67 000',
     codePostal: '91000',
-    description: 'Artisans vérifiés à Évry-Courcouronnes et ses environs. Cette ville importante francilienne de 67 000 habitants en Essonne compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Ris-Orangis, Lisses, Bondoufle.',
+    description: 'Artisans référencés à Évry-Courcouronnes et ses environs. Cette ville importante francilienne de 67 000 habitants en Essonne compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Ris-Orangis, Lisses, Bondoufle.',
     quartiers: ['Centre-ville', 'Ris-Orangis', 'Lisses', 'Bondoufle', 'Corbeil-Essonnes', 'Soisy-sur-Seine', 'Fleury-Mérogis'],
   },
   {
@@ -958,7 +958,7 @@ export const villes: Ville[] = [
     departementCode: '92',
     population: '64 000',
     codePostal: '92110',
-    description: 'Artisans vérifiés à Clichy et ses environs. Cette ville importante francilienne de 64 000 habitants en Hauts-de-Seine compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Levallois-Perret, Asnières-sur-Seine, Bois-Colombes.',
+    description: 'Artisans référencés à Clichy et ses environs. Cette ville importante francilienne de 64 000 habitants en Hauts-de-Seine compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Levallois-Perret, Asnières-sur-Seine, Bois-Colombes.',
     quartiers: ['Centre-ville', 'Levallois-Perret', 'Asnières-sur-Seine', 'Bois-Colombes', 'Gennevilliers', 'Neuilly-sur-Seine', 'Courbevoie'],
   },
   {
@@ -1398,7 +1398,7 @@ export const villes: Ville[] = [
     departementCode: '78',
     population: '53 000',
     codePostal: '78500',
-    description: 'Artisans vérifiés à Sartrouville et ses environs. Cette ville importante francilienne de 53 000 habitants en Yvelines compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Houilles, Maisons-Laffitte, Carrières-sur-Seine.',
+    description: 'Artisans référencés à Sartrouville et ses environs. Cette ville importante francilienne de 53 000 habitants en Yvelines compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Houilles, Maisons-Laffitte, Carrières-sur-Seine.',
     quartiers: ['Centre-ville', 'Houilles', 'Maisons-Laffitte', 'Carrières-sur-Seine', 'Montesson', 'Le Mesnil-le-Roi', 'Chatou'],
   },
   {
@@ -1431,7 +1431,7 @@ export const villes: Ville[] = [
     departementCode: '91',
     population: '52 000',
     codePostal: '91300',
-    description: 'Massy (Essonne, Île-de-France) est une ville importante de 52 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Champlan, Verrières-le-Buisson, Palaiseau.',
+    description: 'Massy (Essonne, Île-de-France) est une ville importante de 52 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Champlan, Verrières-le-Buisson, Palaiseau.',
     quartiers: ['Centre-ville', 'Champlan', 'Verrières-le-Buisson', 'Palaiseau', 'Igny', 'Chilly-Mazarin', 'Villebon-sur-Yvette'],
   },
   {
@@ -1453,7 +1453,7 @@ export const villes: Ville[] = [
     departementCode: '971',
     population: '51 000',
     codePostal: '97139',
-    description: 'Les Abymes (Guadeloupe, Guadeloupe) est une ville importante de 51 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Le Gosier, Pointe-à-Pitre, Morne-à-l\'Eau.',
+    description: 'Les Abymes (Guadeloupe, Guadeloupe) est une ville importante de 51 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Le Gosier, Pointe-à-Pitre, Morne-à-l\'Eau.',
     quartiers: ['Centre-ville', 'Le Gosier', 'Pointe-à-Pitre', 'Morne-à-l\'Eau', 'Baie-Mahault', 'Sainte-Anne', 'Petit-Canal'],
   },
   {
@@ -1629,7 +1629,7 @@ export const villes: Ville[] = [
     departementCode: '93',
     population: '47 000',
     codePostal: '93110',
-    description: 'Artisans vérifiés à Rosny-sous-Bois et ses environs. Cette ville dynamique francilienne de 47 000 habitants en Seine-Saint-Denis compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Neuilly-Plaisance, Villemomble, Noisy-le-Sec.',
+    description: 'Artisans référencés à Rosny-sous-Bois et ses environs. Cette ville dynamique francilienne de 47 000 habitants en Seine-Saint-Denis compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Neuilly-Plaisance, Villemomble, Noisy-le-Sec.',
     quartiers: ['Centre-ville', 'Neuilly-Plaisance', 'Villemomble', 'Noisy-le-Sec', 'Montreuil', 'Bondy', 'Le Raincy'],
   },
   {
@@ -1651,7 +1651,7 @@ export const villes: Ville[] = [
     departementCode: '19',
     population: '47 000',
     codePostal: '19100',
-    description: 'Artisans vérifiés à Brive-la-Gaillarde et ses environs. Cette ville dynamique néo-aquitaine de 47 000 habitants en Corrèze compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Ussac, Cosnac, Saint-Pantaléon-de-Larche.',
+    description: 'Artisans référencés à Brive-la-Gaillarde et ses environs. Cette ville dynamique néo-aquitaine de 47 000 habitants en Corrèze compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Ussac, Cosnac, Saint-Pantaléon-de-Larche.',
     quartiers: ['Centre-ville', 'Ussac', 'Cosnac', 'Saint-Pantaléon-de-Larche', 'Malemort', 'Varetz', 'Donzenac'],
   },
   {
@@ -1739,7 +1739,7 @@ export const villes: Ville[] = [
     departementCode: '94',
     population: '46 000',
     codePostal: '94600',
-    description: 'Artisans vérifiés à Choisy-le-Roi et ses environs. Cette ville dynamique francilienne de 46 000 habitants en Val-de-Marne compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Thiais, Orly, Valenton.',
+    description: 'Artisans référencés à Choisy-le-Roi et ses environs. Cette ville dynamique francilienne de 46 000 habitants en Val-de-Marne compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Thiais, Orly, Valenton.',
     quartiers: ['Centre-ville', 'Thiais', 'Orly', 'Valenton', 'Créteil', 'Vitry-sur-Seine', 'Villeneuve-Saint-Georges'],
   },
   {
@@ -1783,7 +1783,7 @@ export const villes: Ville[] = [
     departementCode: '94',
     population: '46 000',
     codePostal: '94140',
-    description: 'Artisans vérifiés à Alfortville et ses environs. Cette ville dynamique francilienne de 46 000 habitants en Val-de-Marne compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Maisons-Alfort, Vitry-sur-Seine, Créteil.',
+    description: 'Artisans référencés à Alfortville et ses environs. Cette ville dynamique francilienne de 46 000 habitants en Val-de-Marne compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Maisons-Alfort, Vitry-sur-Seine, Créteil.',
     quartiers: ['Centre-ville', 'Maisons-Alfort', 'Vitry-sur-Seine', 'Créteil', 'Saint-Maurice', 'Ivry-sur-Seine', 'Charenton-le-Pont'],
   },
   {
@@ -1805,7 +1805,7 @@ export const villes: Ville[] = [
     departementCode: '34',
     population: '45 000',
     codePostal: '34200',
-    description: 'Artisans vérifiés à Sète et ses environs. Cette ville dynamique occitane de 45 000 habitants en Hérault compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Mèze, Loupian, Marseillan.',
+    description: 'Artisans référencés à Sète et ses environs. Cette ville dynamique occitane de 45 000 habitants en Hérault compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Mèze, Loupian, Marseillan.',
     quartiers: ['Centre-ville', 'Mèze', 'Loupian', 'Marseillan', 'Balaruc-les-Bains', 'Balaruc-le-Vieux', 'Pomérols'],
   },
   {
@@ -1882,7 +1882,7 @@ export const villes: Ville[] = [
     departementCode: '92',
     population: '44 000',
     codePostal: '92800',
-    description: 'Artisans vérifiés à Puteaux et ses environs. Cette ville dynamique francilienne de 44 000 habitants en Hauts-de-Seine compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Suresnes, Neuilly-sur-Seine, Courbevoie.',
+    description: 'Artisans référencés à Puteaux et ses environs. Cette ville dynamique francilienne de 44 000 habitants en Hauts-de-Seine compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Suresnes, Neuilly-sur-Seine, Courbevoie.',
     quartiers: ['Centre-ville', 'Suresnes', 'Neuilly-sur-Seine', 'Courbevoie', 'La Garenne-Colombes', 'Nanterre', 'Levallois-Perret'],
   },
   {
@@ -1948,7 +1948,7 @@ export const villes: Ville[] = [
     departementCode: '93',
     population: '43 000',
     codePostal: '93170',
-    description: 'Artisans vérifiés à Bagnolet et ses environs. Cette ville dynamique francilienne de 43 000 habitants en Seine-Saint-Denis compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Les Lilas, Montreuil, Romainville.',
+    description: 'Artisans référencés à Bagnolet et ses environs. Cette ville dynamique francilienne de 43 000 habitants en Seine-Saint-Denis compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Les Lilas, Montreuil, Romainville.',
     quartiers: ['Centre-ville', 'Les Lilas', 'Montreuil', 'Romainville', 'Le Pré-Saint-Gervais', 'Noisy-le-Sec', 'Pantin'],
   },
   {
@@ -2025,7 +2025,7 @@ export const villes: Ville[] = [
     departementCode: '81',
     population: '43 000',
     codePostal: '81100',
-    description: 'Castres (Tarn, Occitanie) est une ville dynamique de 43 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Saïx, Roquecourbe, Viviers-lès-Montagnes.',
+    description: 'Castres (Tarn, Occitanie) est une ville dynamique de 43 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Saïx, Roquecourbe, Viviers-lès-Montagnes.',
     quartiers: ['Centre-ville', 'Saïx', 'Roquecourbe', 'Viviers-lès-Montagnes', 'Sémalens', 'Payrin-Augmontel', 'Soual'],
   },
   {
@@ -2091,7 +2091,7 @@ export const villes: Ville[] = [
     departementCode: '93',
     population: '41 000',
     codePostal: '93420',
-    description: 'Artisans vérifiés à Villepinte et ses environs. Cette ville dynamique francilienne de 41 000 habitants en Seine-Saint-Denis compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Sevran, Tremblay-en-France, Aulnay-sous-Bois.',
+    description: 'Artisans référencés à Villepinte et ses environs. Cette ville dynamique francilienne de 41 000 habitants en Seine-Saint-Denis compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Sevran, Tremblay-en-France, Aulnay-sous-Bois.',
     quartiers: ['Centre-ville', 'Sevran', 'Tremblay-en-France', 'Aulnay-sous-Bois', 'Livry-Gargan', 'Vaujours', 'Coubron'],
   },
   {
@@ -2135,7 +2135,7 @@ export const villes: Ville[] = [
     departementCode: '31',
     population: '41 000',
     codePostal: '31770',
-    description: 'Colomiers (Haute-Garonne, Occitanie) est une ville dynamique de 41 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Tournefeuille, Cornebarrieu, Blagnac.',
+    description: 'Colomiers (Haute-Garonne, Occitanie) est une ville dynamique de 41 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Tournefeuille, Cornebarrieu, Blagnac.',
     quartiers: ['Centre-ville', 'Tournefeuille', 'Cornebarrieu', 'Blagnac', 'Pibrac', 'La Salvetat-Saint-Gilles', 'Plaisance-du-Touch'],
   },
   {
@@ -2146,7 +2146,7 @@ export const villes: Ville[] = [
     departementCode: '59',
     population: '41 000',
     codePostal: '59150',
-    description: 'Wattrelos (Nord, Hauts-de-France) est une ville dynamique de 41 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Roubaix, Leers, Tourcoing.',
+    description: 'Wattrelos (Nord, Hauts-de-France) est une ville dynamique de 41 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Roubaix, Leers, Tourcoing.',
     quartiers: ['Centre-ville', 'Roubaix', 'Leers', 'Tourcoing', 'Lys-lez-Lannoy', 'Mouvaux', 'Toufflers'],
   },
   {
@@ -2179,7 +2179,7 @@ export const villes: Ville[] = [
     departementCode: '26',
     population: '41 000',
     codePostal: '26200',
-    description: 'Artisans vérifiés à Montélimar et ses environs. Cette ville dynamique rhônalpine de 41 000 habitants en Drôme compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Montboucher-sur-Jabron, Châteauneuf-du-Rhône, Malataverne.',
+    description: 'Artisans référencés à Montélimar et ses environs. Cette ville dynamique rhônalpine de 41 000 habitants en Drôme compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Montboucher-sur-Jabron, Châteauneuf-du-Rhône, Malataverne.',
     quartiers: ['Centre-ville', 'Montboucher-sur-Jabron', 'Châteauneuf-du-Rhône', 'Malataverne', 'Donzère', 'Grane', 'Pierrelatte'],
   },
   {
@@ -2245,7 +2245,7 @@ export const villes: Ville[] = [
     departementCode: '974',
     population: '39 000',
     codePostal: '97480',
-    description: 'Saint-Joseph (La Réunion, La Réunion) est une ville dynamique de 39 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Petite-Île, Saint-Philippe, Le Tampon.',
+    description: 'Saint-Joseph (La Réunion, La Réunion) est une ville dynamique de 39 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Petite-Île, Saint-Philippe, Le Tampon.',
     quartiers: ['Centre-ville', 'Petite-Île', 'Saint-Philippe', 'Le Tampon', 'Saint-Pierre', 'La Plaine-des-Palmistes', 'Sainte-Rose'],
   },
   {
@@ -2289,7 +2289,7 @@ export const villes: Ville[] = [
     departementCode: '37',
     population: '38 000',
     codePostal: '37300',
-    description: 'Joué-lès-Tours (Indre-et-Loire, Centre-Val de Loire) est une ville dynamique de 38 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Ballan-Miré, Chambray-lès-Tours, La Riche.',
+    description: 'Joué-lès-Tours (Indre-et-Loire, Centre-Val de Loire) est une ville dynamique de 38 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Ballan-Miré, Chambray-lès-Tours, La Riche.',
     quartiers: ['Centre-ville', 'Ballan-Miré', 'Chambray-lès-Tours', 'La Riche', 'Saint-Avertin', 'Montbazon', 'Tours'],
   },
   {
@@ -2300,7 +2300,7 @@ export const villes: Ville[] = [
     departementCode: '93',
     population: '38 000',
     codePostal: '93290',
-    description: 'Artisans vérifiés à Tremblay-en-France et ses environs. Cette ville dynamique francilienne de 38 000 habitants en Seine-Saint-Denis compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Villepinte, Sevran, Vaujours.',
+    description: 'Artisans référencés à Tremblay-en-France et ses environs. Cette ville dynamique francilienne de 38 000 habitants en Seine-Saint-Denis compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Villepinte, Sevran, Vaujours.',
     quartiers: ['Centre-ville', 'Villepinte', 'Sevran', 'Vaujours', 'Aulnay-sous-Bois', 'Livry-Gargan', 'Coubron'],
   },
   {
@@ -2399,7 +2399,7 @@ export const villes: Ville[] = [
     departementCode: '91',
     population: '37 000',
     codePostal: '91120',
-    description: 'Palaiseau (Essonne, Île-de-France) est une ville dynamique de 37 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Villebon-sur-Yvette, Igny, Massy.',
+    description: 'Palaiseau (Essonne, Île-de-France) est une ville dynamique de 37 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Villebon-sur-Yvette, Igny, Massy.',
     quartiers: ['Centre-ville', 'Villebon-sur-Yvette', 'Igny', 'Massy', 'Orsay', 'Champlan', 'Saulx-les-Chartreux'],
   },
   {
@@ -2454,7 +2454,7 @@ export const villes: Ville[] = [
     departementCode: '78',
     population: '37 000',
     codePostal: '78700',
-    description: 'Artisans vérifiés à Conflans-Sainte-Honorine et ses environs. Cette ville dynamique francilienne de 37 000 habitants en Yvelines compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Achères, Maurecourt, Andrésy.',
+    description: 'Artisans référencés à Conflans-Sainte-Honorine et ses environs. Cette ville dynamique francilienne de 37 000 habitants en Yvelines compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Achères, Maurecourt, Andrésy.',
     quartiers: ['Centre-ville', 'Achères', 'Maurecourt', 'Andrésy', 'Chanteloup-les-Vignes', 'Maisons-Laffitte', 'Triel-sur-Seine'],
   },
   {
@@ -2465,7 +2465,7 @@ export const villes: Ville[] = [
     departementCode: '13',
     population: '37 000',
     codePostal: '13127',
-    description: 'Artisans vérifiés à Vitrolles et ses environs. Cette ville dynamique provençale de 37 000 habitants en Bouches-du-Rhône compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Saint-Victoret, Marignane, Rognac.',
+    description: 'Artisans référencés à Vitrolles et ses environs. Cette ville dynamique provençale de 37 000 habitants en Bouches-du-Rhône compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Saint-Victoret, Marignane, Rognac.',
     quartiers: ['Centre-ville', 'Saint-Victoret', 'Marignane', 'Rognac', 'Cabriès', 'Les Pennes-Mirabeau', 'Gignac-la-Nerthe'],
   },
   {
@@ -2564,7 +2564,7 @@ export const villes: Ville[] = [
     departementCode: '94',
     population: '36 000',
     codePostal: '94190',
-    description: 'Artisans vérifiés à Villeneuve-Saint-Georges et ses environs. Cette ville dynamique francilienne de 36 000 habitants en Val-de-Marne compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Valenton, Ablon-sur-Seine, Villeneuve-le-Roi.',
+    description: 'Artisans référencés à Villeneuve-Saint-Georges et ses environs. Cette ville dynamique francilienne de 36 000 habitants en Val-de-Marne compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Valenton, Ablon-sur-Seine, Villeneuve-le-Roi.',
     quartiers: ['Centre-ville', 'Valenton', 'Ablon-sur-Seine', 'Villeneuve-le-Roi', 'Limeil-Brévannes', 'Orly', 'Choisy-le-Roi'],
   },
   {
@@ -2619,7 +2619,7 @@ export const villes: Ville[] = [
     departementCode: '91',
     population: '35 000',
     codePostal: '91700',
-    description: 'Sainte-Geneviève-des-Bois (Essonne, Île-de-France) est une ville dynamique de 35 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Saint-Michel-sur-Orge, Villemoisson-sur-Orge, Morsang-sur-Orge.',
+    description: 'Sainte-Geneviève-des-Bois (Essonne, Île-de-France) est une ville dynamique de 35 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Saint-Michel-sur-Orge, Villemoisson-sur-Orge, Morsang-sur-Orge.',
     quartiers: ['Centre-ville', 'Saint-Michel-sur-Orge', 'Villemoisson-sur-Orge', 'Morsang-sur-Orge', 'Villiers-sur-Orge', 'Longpont-sur-Orge', 'Épinay-sur-Orge'],
   },
   {
@@ -2718,7 +2718,7 @@ export const villes: Ville[] = [
     departementCode: '78',
     population: '34 000',
     codePostal: '78800',
-    description: 'Houilles (Yvelines, Île-de-France) est une ville dynamique de 34 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Sartrouville, Carrières-sur-Seine, Maisons-Laffitte.',
+    description: 'Houilles (Yvelines, Île-de-France) est une ville dynamique de 34 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Sartrouville, Carrières-sur-Seine, Maisons-Laffitte.',
     quartiers: ['Centre-ville', 'Sartrouville', 'Carrières-sur-Seine', 'Maisons-Laffitte', 'Montesson', 'Chatou', 'Le Mesnil-le-Roi'],
   },
   {
@@ -2817,7 +2817,7 @@ export const villes: Ville[] = [
     departementCode: '33',
     population: '33 000',
     codePostal: '33160',
-    description: 'Saint-Médard-en-Jalles (Gironde, Nouvelle-Aquitaine) est une ville dynamique de 33 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Martignas-sur-Jalle, Saint-Aubin-de-Médoc, Le Haillan.',
+    description: 'Saint-Médard-en-Jalles (Gironde, Nouvelle-Aquitaine) est une ville dynamique de 33 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Martignas-sur-Jalle, Saint-Aubin-de-Médoc, Le Haillan.',
     quartiers: ['Centre-ville', 'Martignas-sur-Jalle', 'Saint-Aubin-de-Médoc', 'Le Haillan', 'Le Taillan-Médoc', 'Mérignac', 'Saint-Jean-d\'Illac'],
   },
   {
@@ -2861,7 +2861,7 @@ export const villes: Ville[] = [
     departementCode: '73',
     population: '32 000',
     codePostal: '73100',
-    description: 'Aix-les-Bains (Savoie, Auvergne-Rhône-Alpes) est une ville dynamique de 32 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Tresserve, Mouxy, Grésy-sur-Aix.',
+    description: 'Aix-les-Bains (Savoie, Auvergne-Rhône-Alpes) est une ville dynamique de 32 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Tresserve, Mouxy, Grésy-sur-Aix.',
     quartiers: ['Centre-ville', 'Tresserve', 'Mouxy', 'Grésy-sur-Aix', 'Drumettaz-Clarafond', 'Viviers-du-Lac', 'Brison-Saint-Innocent'],
   },
   {
@@ -2916,7 +2916,7 @@ export const villes: Ville[] = [
     departementCode: '33',
     population: '32 000',
     codePostal: '33130',
-    description: 'Bègles (Gironde, Nouvelle-Aquitaine) est une ville dynamique de 32 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Villenave-d\'Ornon, Talence, Floirac.',
+    description: 'Bègles (Gironde, Nouvelle-Aquitaine) est une ville dynamique de 32 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Villenave-d\'Ornon, Talence, Floirac.',
     quartiers: ['Centre-ville', 'Villenave-d\'Ornon', 'Talence', 'Floirac', 'Bouliac', 'Latresne', 'Carignan-de-Bordeaux'],
   },
   {
@@ -2927,7 +2927,7 @@ export const villes: Ville[] = [
     departementCode: '78',
     population: '32 000',
     codePostal: '78370',
-    description: 'Artisans vérifiés à Plaisir et ses environs. Cette ville dynamique francilienne de 32 000 habitants en Yvelines compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Les Clayes-sous-Bois, Neauphle-le-Château, Jouars-Pontchartrain.',
+    description: 'Artisans référencés à Plaisir et ses environs. Cette ville dynamique francilienne de 32 000 habitants en Yvelines compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Les Clayes-sous-Bois, Neauphle-le-Château, Jouars-Pontchartrain.',
     quartiers: ['Centre-ville', 'Les Clayes-sous-Bois', 'Neauphle-le-Château', 'Jouars-Pontchartrain', 'Élancourt', 'Villiers-Saint-Frédéric', 'Maurepas'],
   },
   {
@@ -2949,7 +2949,7 @@ export const villes: Ville[] = [
     departementCode: '38',
     population: '32 000',
     codePostal: '38200',
-    description: 'Vienne (Isère, Auvergne-Rhône-Alpes) est une ville dynamique de 32 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Pont-Évêque, Jardin, Serpaize.',
+    description: 'Vienne (Isère, Auvergne-Rhône-Alpes) est une ville dynamique de 32 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Pont-Évêque, Jardin, Serpaize.',
     quartiers: ['Centre-ville', 'Pont-Évêque', 'Jardin', 'Serpaize', 'Seyssuel', 'Reventin-Vaugris', 'Chuzelles'],
   },
   {
@@ -3015,7 +3015,7 @@ export const villes: Ville[] = [
     departementCode: '95',
     population: '31 000',
     codePostal: '95190',
-    description: 'Goussainville (Val-d\'Oise, Île-de-France) est une ville dynamique de 31 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Le Thillay, Fontenay-en-Parisis, Louvres.',
+    description: 'Goussainville (Val-d\'Oise, Île-de-France) est une ville dynamique de 31 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Le Thillay, Fontenay-en-Parisis, Louvres.',
     quartiers: ['Centre-ville', 'Le Thillay', 'Fontenay-en-Parisis', 'Louvres', 'Roissy-en-France', 'Gonesse', 'Puiseux-en-France'],
   },
   {
@@ -3037,7 +3037,7 @@ export const villes: Ville[] = [
     departementCode: '94',
     population: '31 000',
     codePostal: '94240',
-    description: 'L\'Haÿ-les-Roses (Val-de-Marne, Île-de-France) est une ville dynamique de 31 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Chevilly-Larue, Cachan, Villejuif.',
+    description: 'L\'Haÿ-les-Roses (Val-de-Marne, Île-de-France) est une ville dynamique de 31 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Chevilly-Larue, Cachan, Villejuif.',
     quartiers: ['Centre-ville', 'Chevilly-Larue', 'Cachan', 'Villejuif', 'Fresnes', 'Arcueil', 'Rungis'],
   },
   {
@@ -3147,7 +3147,7 @@ export const villes: Ville[] = [
     departementCode: '78',
     population: '31 000',
     codePostal: '78400',
-    description: 'Artisans vérifiés à Chatou et ses environs. Cette ville dynamique francilienne de 31 000 habitants en Yvelines compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Le Vésinet, Croissy-sur-Seine, Montesson.',
+    description: 'Artisans référencés à Chatou et ses environs. Cette ville dynamique francilienne de 31 000 habitants en Yvelines compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Le Vésinet, Croissy-sur-Seine, Montesson.',
     quartiers: ['Centre-ville', 'Le Vésinet', 'Croissy-sur-Seine', 'Montesson', 'Carrières-sur-Seine', 'Le Port-Marly', 'Le Pecq'],
   },
   {
@@ -3257,7 +3257,7 @@ export const villes: Ville[] = [
     departementCode: '69',
     population: '30 000',
     codePostal: '69150',
-    description: 'Décines-Charpieu (Rhône, Auvergne-Rhône-Alpes) est une ville active de 30 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Vaulx-en-Velin, Meyzieu, Chassieu.',
+    description: 'Décines-Charpieu (Rhône, Auvergne-Rhône-Alpes) est une ville active de 30 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Vaulx-en-Velin, Meyzieu, Chassieu.',
     quartiers: ['Centre-ville', 'Vaulx-en-Velin', 'Meyzieu', 'Chassieu', 'Villeurbanne', 'Bron', 'Jonage'],
   },
   {
@@ -3345,7 +3345,7 @@ export const villes: Ville[] = [
     departementCode: '95',
     population: '29 000',
     codePostal: '95120',
-    description: 'Ermont (Val-d\'Oise, Île-de-France) est une ville active de 29 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Eaubonne, Sannois, Le Plessis-Bouchard.',
+    description: 'Ermont (Val-d\'Oise, Île-de-France) est une ville active de 29 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Eaubonne, Sannois, Le Plessis-Bouchard.',
     quartiers: ['Centre-ville', 'Eaubonne', 'Sannois', 'Le Plessis-Bouchard', 'Franconville', 'Margency', 'Saint-Gratien'],
   },
   {
@@ -3356,7 +3356,7 @@ export const villes: Ville[] = [
     departementCode: '93',
     population: '29 000',
     codePostal: '93390',
-    description: 'Clichy-sous-Bois (Seine-Saint-Denis, Île-de-France) est une ville active de 29 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Livry-Gargan, Montfermeil, Le Raincy.',
+    description: 'Clichy-sous-Bois (Seine-Saint-Denis, Île-de-France) est une ville active de 29 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Livry-Gargan, Montfermeil, Le Raincy.',
     quartiers: ['Centre-ville', 'Livry-Gargan', 'Montfermeil', 'Le Raincy', 'Coubron', 'Les Pavillons-sous-Bois', 'Gagny'],
   },
   {
@@ -3389,7 +3389,7 @@ export const villes: Ville[] = [
     departementCode: '76',
     population: '29 000',
     codePostal: '76300',
-    description: 'Sotteville-lès-Rouen (Seine-Maritime, Normandie) est une ville active de 29 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Amfreville-la-Mi-Voie, Le Petit-Quevilly, Saint-Étienne-du-Rouvray.',
+    description: 'Sotteville-lès-Rouen (Seine-Maritime, Normandie) est une ville active de 29 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Amfreville-la-Mi-Voie, Le Petit-Quevilly, Saint-Étienne-du-Rouvray.',
     quartiers: ['Centre-ville', 'Amfreville-la-Mi-Voie', 'Le Petit-Quevilly', 'Saint-Étienne-du-Rouvray', 'Rouen', 'Bonsecours', 'Le Mesnil-Esnard'],
   },
   {
@@ -3433,7 +3433,7 @@ export const villes: Ville[] = [
     departementCode: '987',
     population: '29 000',
     codePostal: '98703',
-    description: 'Artisans vérifiés à Punaauia et ses environs. Cette ville active française de 29 000 habitants en Polynésie française compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Faaa, Pirae, Papeete.',
+    description: 'Artisans référencés à Punaauia et ses environs. Cette ville active française de 29 000 habitants en Polynésie française compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Faaa, Pirae, Papeete.',
     quartiers: ['Centre-ville', 'Faaa', 'Pirae', 'Papeete', 'Paea', 'Mahina', 'Papara'],
   },
   {
@@ -3477,7 +3477,7 @@ export const villes: Ville[] = [
     departementCode: '44',
     population: '29 000',
     codePostal: '44230',
-    description: 'Saint-Sébastien-sur-Loire (Loire-Atlantique, Pays de la Loire) est une ville active de 29 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Basse-Goulaine, Rezé, Nantes.',
+    description: 'Saint-Sébastien-sur-Loire (Loire-Atlantique, Pays de la Loire) est une ville active de 29 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Basse-Goulaine, Rezé, Nantes.',
     quartiers: ['Centre-ville', 'Basse-Goulaine', 'Rezé', 'Nantes', 'Sainte-Luce-sur-Loire', 'Vertou', 'Haute-Goulaine'],
   },
   {
@@ -3488,7 +3488,7 @@ export const villes: Ville[] = [
     departementCode: '44',
     population: '29 000',
     codePostal: '44700',
-    description: 'Orvault (Loire-Atlantique, Pays de la Loire) est une ville active de 29 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Treillières, Sautron, La Chapelle-sur-Erdre.',
+    description: 'Orvault (Loire-Atlantique, Pays de la Loire) est une ville active de 29 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Treillières, Sautron, La Chapelle-sur-Erdre.',
     quartiers: ['Centre-ville', 'Treillières', 'Sautron', 'La Chapelle-sur-Erdre', 'Saint-Herblain', 'Nantes', 'Vigneux-de-Bretagne'],
   },
   {
@@ -3576,7 +3576,7 @@ export const villes: Ville[] = [
     departementCode: '973',
     population: '28 000',
     codePostal: '97354',
-    description: 'Remire-Montjoly (Guyane, Guyane) est une ville active de 28 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Cayenne, Matoury.',
+    description: 'Remire-Montjoly (Guyane, Guyane) est une ville active de 28 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Cayenne, Matoury.',
     quartiers: ['Centre-ville', 'Cayenne', 'Matoury'],
   },
   {
@@ -3587,7 +3587,7 @@ export const villes: Ville[] = [
     departementCode: '95',
     population: '28 000',
     codePostal: '95500',
-    description: 'Artisans vérifiés à Gonesse et ses environs. Cette ville active francilienne de 28 000 habitants en Val-d\'Oise compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Le Thillay, Arnouville, Garges-lès-Gonesse.',
+    description: 'Artisans référencés à Gonesse et ses environs. Cette ville active francilienne de 28 000 habitants en Val-d\'Oise compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Le Thillay, Arnouville, Garges-lès-Gonesse.',
     quartiers: ['Centre-ville', 'Le Thillay', 'Arnouville', 'Garges-lès-Gonesse', 'Goussainville', 'Roissy-en-France', 'Villiers-le-Bel'],
   },
   {
@@ -3598,7 +3598,7 @@ export const villes: Ville[] = [
     departementCode: '988',
     population: '28 000',
     codePostal: '98889',
-    description: 'Païta (Nouvelle-Calédonie, Nouvelle-Calédonie) est une ville active de 28 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Dumbéa, Bouloupari.',
+    description: 'Païta (Nouvelle-Calédonie, Nouvelle-Calédonie) est une ville active de 28 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Dumbéa, Bouloupari.',
     quartiers: ['Centre-ville', 'Dumbéa', 'Bouloupari'],
   },
   {
@@ -3708,7 +3708,7 @@ export const villes: Ville[] = [
     departementCode: '59',
     population: '27 000',
     codePostal: '59130',
-    description: 'Lambersart (Nord, Hauts-de-France) est une ville active de 27 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Saint-André-lez-Lille, Lompret, Lille.',
+    description: 'Lambersart (Nord, Hauts-de-France) est une ville active de 27 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Saint-André-lez-Lille, Lompret, Lille.',
     quartiers: ['Centre-ville', 'Saint-André-lez-Lille', 'Lompret', 'Lille', 'Marquette-lez-Lille', 'La Madeleine', 'Verlinghem'],
   },
   {
@@ -3807,7 +3807,7 @@ export const villes: Ville[] = [
     departementCode: '987',
     population: '27 000',
     codePostal: '98714',
-    description: 'Artisans vérifiés à Papeete et ses environs. Cette ville active française de 27 000 habitants en Polynésie française compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Faaa, Pirae, Punaauia.',
+    description: 'Artisans référencés à Papeete et ses environs. Cette ville active française de 27 000 habitants en Polynésie française compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Faaa, Pirae, Punaauia.',
     quartiers: ['Centre-ville', 'Faaa', 'Pirae', 'Punaauia', 'Mahina', 'Paea', 'Hitiaa O Te Ra'],
   },
   {
@@ -3851,7 +3851,7 @@ export const villes: Ville[] = [
     departementCode: '49',
     population: '26 000',
     codePostal: '49400',
-    description: 'Saumur (Maine-et-Loire, Pays de la Loire) est une ville active de 26 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Vivy, Allonnes, Bellevigne-les-Châteaux.',
+    description: 'Saumur (Maine-et-Loire, Pays de la Loire) est une ville active de 26 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Vivy, Allonnes, Bellevigne-les-Châteaux.',
     quartiers: ['Centre-ville', 'Vivy', 'Allonnes', 'Bellevigne-les-Châteaux', 'Brain-sur-Allonnes', 'Gennes-Val-de-Loire', 'Longué-Jumelles'],
   },
   {
@@ -3862,7 +3862,7 @@ export const villes: Ville[] = [
     departementCode: '44',
     population: '26 000',
     codePostal: '44120',
-    description: 'Vertou (Loire-Atlantique, Pays de la Loire) est une ville active de 26 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Les Sorinières, Château-Thébaud, La Haie-Fouassière.',
+    description: 'Vertou (Loire-Atlantique, Pays de la Loire) est une ville active de 26 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Les Sorinières, Château-Thébaud, La Haie-Fouassière.',
     quartiers: ['Centre-ville', 'Les Sorinières', 'Château-Thébaud', 'La Haie-Fouassière', 'Haute-Goulaine', 'Saint-Sébastien-sur-Loire', 'Le Bignon'],
   },
   {
@@ -3873,7 +3873,7 @@ export const villes: Ville[] = [
     departementCode: '15',
     population: '26 000',
     codePostal: '15000',
-    description: 'Aurillac (Cantal, Auvergne-Rhône-Alpes) est une ville active de 26 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Naucelles, Arpajon-sur-Cère, Ytrac.',
+    description: 'Aurillac (Cantal, Auvergne-Rhône-Alpes) est une ville active de 26 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Naucelles, Arpajon-sur-Cère, Ytrac.',
     quartiers: ['Centre-ville', 'Naucelles', 'Arpajon-sur-Cère', 'Ytrac', 'Jussac'],
   },
   {
@@ -3884,7 +3884,7 @@ export const villes: Ville[] = [
     departementCode: '95',
     population: '26 000',
     codePostal: '95600',
-    description: 'Eaubonne (Val-d\'Oise, Île-de-France) est une ville active de 26 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Margency, Ermont, Soisy-sous-Montmorency.',
+    description: 'Eaubonne (Val-d\'Oise, Île-de-France) est une ville active de 26 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Margency, Ermont, Soisy-sous-Montmorency.',
     quartiers: ['Centre-ville', 'Margency', 'Ermont', 'Soisy-sous-Montmorency', 'Saint-Gratien', 'Andilly', 'Montlignon'],
   },
   {
@@ -3917,7 +3917,7 @@ export const villes: Ville[] = [
     departementCode: '31',
     population: '26 000',
     codePostal: '31600',
-    description: 'Muret (Haute-Garonne, Occitanie) est une ville active de 26 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Le Fauga, Eaunes, Labastidette.',
+    description: 'Muret (Haute-Garonne, Occitanie) est une ville active de 26 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Le Fauga, Eaunes, Labastidette.',
     quartiers: ['Centre-ville', 'Le Fauga', 'Eaunes', 'Labastidette', 'Lherm', 'Seysses', 'Saubens'],
   },
   {
@@ -3961,7 +3961,7 @@ export const villes: Ville[] = [
     departementCode: '93',
     population: '26 000',
     codePostal: '93320',
-    description: 'Les Pavillons-sous-Bois (Seine-Saint-Denis, Île-de-France) est une ville active de 26 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Bondy, Le Raincy, Villemomble.',
+    description: 'Les Pavillons-sous-Bois (Seine-Saint-Denis, Île-de-France) est une ville active de 26 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Bondy, Le Raincy, Villemomble.',
     quartiers: ['Centre-ville', 'Bondy', 'Le Raincy', 'Villemomble', 'Livry-Gargan', 'Clichy-sous-Bois', 'Rosny-sous-Bois'],
   },
   {
@@ -3983,7 +3983,7 @@ export const villes: Ville[] = [
     departementCode: '76',
     population: '26 000',
     codePostal: '76120',
-    description: 'Le Grand-Quevilly (Seine-Maritime, Normandie) est une ville active de 26 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Le Petit-Quevilly, Canteleu, Petit-Couronne.',
+    description: 'Le Grand-Quevilly (Seine-Maritime, Normandie) est une ville active de 26 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Le Petit-Quevilly, Canteleu, Petit-Couronne.',
     quartiers: ['Centre-ville', 'Le Petit-Quevilly', 'Canteleu', 'Petit-Couronne', 'Sotteville-lès-Rouen', 'Saint-Étienne-du-Rouvray', 'Rouen'],
   },
   {
@@ -4038,7 +4038,7 @@ export const villes: Ville[] = [
     departementCode: '95',
     population: '26 000',
     codePostal: '95310',
-    description: 'Saint-Ouen-l\'Aumône (Val-d\'Oise, Île-de-France) est une ville active de 26 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Pontoise, Méry-sur-Oise, Éragny.',
+    description: 'Saint-Ouen-l\'Aumône (Val-d\'Oise, Île-de-France) est une ville active de 26 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Pontoise, Méry-sur-Oise, Éragny.',
     quartiers: ['Centre-ville', 'Pontoise', 'Méry-sur-Oise', 'Éragny', 'Ennery', 'Pierrelaye', 'Herblay-sur-Seine'],
   },
   {
@@ -4049,7 +4049,7 @@ export const villes: Ville[] = [
     departementCode: '974',
     population: '26 000',
     codePostal: '97441',
-    description: 'Sainte-Suzanne (La Réunion, La Réunion) est une ville active de 26 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Saint-André, Sainte-Marie, Bras-Panon.',
+    description: 'Sainte-Suzanne (La Réunion, La Réunion) est une ville active de 26 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Saint-André, Sainte-Marie, Bras-Panon.',
     quartiers: ['Centre-ville', 'Saint-André', 'Sainte-Marie', 'Bras-Panon', 'Salazie', 'Saint-Denis', 'Saint-Benoît'],
   },
   {
@@ -4060,7 +4060,7 @@ export const villes: Ville[] = [
     departementCode: '61',
     population: '25 000',
     codePostal: '61000',
-    description: 'Artisans vérifiés à Alençon et ses environs. Cette ville active normande de 25 000 habitants en Orne compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Damigny, Saint-Germain-du-Corbéis, Condé-sur-Sarthe.',
+    description: 'Artisans référencés à Alençon et ses environs. Cette ville active normande de 25 000 habitants en Orne compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Damigny, Saint-Germain-du-Corbéis, Condé-sur-Sarthe.',
     quartiers: ['Centre-ville', 'Damigny', 'Saint-Germain-du-Corbéis', 'Condé-sur-Sarthe', 'Sées'],
   },
   {
@@ -4137,7 +4137,7 @@ export const villes: Ville[] = [
     departementCode: '18',
     population: '25 000',
     codePostal: '18100',
-    description: 'Vierzon (Cher, Centre-Val de Loire) est une ville active de 25 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Méreau, Foëcy, Vignoux-sur-Barangeon.',
+    description: 'Vierzon (Cher, Centre-Val de Loire) est une ville active de 25 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Méreau, Foëcy, Vignoux-sur-Barangeon.',
     quartiers: ['Centre-ville', 'Méreau', 'Foëcy', 'Vignoux-sur-Barangeon', 'Mehun-sur-Yèvre', 'Saint-Martin-d\'Auxigny'],
   },
   {
@@ -4170,7 +4170,7 @@ export const villes: Ville[] = [
     departementCode: '973',
     population: '25 000',
     codePostal: '97310',
-    description: 'Kourou (Guyane, Guyane) est une ville active de 25 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide.',
+    description: 'Kourou (Guyane, Guyane) est une ville active de 25 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide.',
     quartiers: ['Centre-ville'],
   },
   {
@@ -4280,7 +4280,7 @@ export const villes: Ville[] = [
     departementCode: '49',
     population: '24 000',
     codePostal: '49110',
-    description: 'Beaupréau-en-Mauges (Maine-et-Loire, Pays de la Loire) est une ville active de 24 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Montrevault-sur-Èvre, Bégrolles-en-Mauges, Le May-sur-Èvre.',
+    description: 'Beaupréau-en-Mauges (Maine-et-Loire, Pays de la Loire) est une ville active de 24 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Montrevault-sur-Èvre, Bégrolles-en-Mauges, Le May-sur-Èvre.',
     quartiers: ['Centre-ville', 'Montrevault-sur-Èvre', 'Bégrolles-en-Mauges', 'Le May-sur-Èvre', 'Saint-Léger-sous-Cholet', 'La Séguinière', 'Sèvremoine'],
   },
   {
@@ -4324,7 +4324,7 @@ export const villes: Ville[] = [
     departementCode: '39',
     population: '24 000',
     codePostal: '39100',
-    description: 'Artisans vérifiés à Dole et ses environs. Cette ville active bourguignonne de 24 000 habitants en Jura compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Foucherans, Damparis, Tavaux.',
+    description: 'Artisans référencés à Dole et ses environs. Cette ville active bourguignonne de 24 000 habitants en Jura compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Foucherans, Damparis, Tavaux.',
     quartiers: ['Centre-ville', 'Foucherans', 'Damparis', 'Tavaux'],
   },
   {
@@ -4533,7 +4533,7 @@ export const villes: Ville[] = [
     departementCode: '59',
     population: '23 000',
     codePostal: '59120',
-    description: 'Loos (Nord, Hauts-de-France) est une ville active de 23 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Emmerin, Haubourdin, Wattignies.',
+    description: 'Loos (Nord, Hauts-de-France) est une ville active de 23 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Emmerin, Haubourdin, Wattignies.',
     quartiers: ['Centre-ville', 'Emmerin', 'Haubourdin', 'Wattignies', 'Sequedin', 'Lille', 'Faches-Thumesnil'],
   },
   {
@@ -4566,7 +4566,7 @@ export const villes: Ville[] = [
     departementCode: '01',
     population: '22 000',
     codePostal: '01100',
-    description: 'Artisans vérifiés à Oyonnax et ses environs. Cette ville active rhônalpine de 22 000 habitants en Ain compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Bellignat, Arbent, Dortan.',
+    description: 'Artisans référencés à Oyonnax et ses environs. Cette ville active rhônalpine de 22 000 habitants en Ain compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Bellignat, Arbent, Dortan.',
     quartiers: ['Centre-ville', 'Bellignat', 'Arbent', 'Dortan', 'Izernore', 'Montréal-la-Cluse', 'Nantua'],
   },
   {
@@ -4577,7 +4577,7 @@ export const villes: Ville[] = [
     departementCode: '95',
     population: '22 000',
     codePostal: '95370',
-    description: 'Montigny-lès-Cormeilles (Val-d\'Oise, Île-de-France) est une ville active de 22 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Beauchamp, Franconville, La Frette-sur-Seine.',
+    description: 'Montigny-lès-Cormeilles (Val-d\'Oise, Île-de-France) est une ville active de 22 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Beauchamp, Franconville, La Frette-sur-Seine.',
     quartiers: ['Centre-ville', 'Beauchamp', 'Franconville', 'La Frette-sur-Seine', 'Cormeilles-en-Parisis', 'Herblay-sur-Seine', 'Le Plessis-Bouchard'],
   },
   {
@@ -4676,7 +4676,7 @@ export const villes: Ville[] = [
     departementCode: '94',
     population: '22 000',
     codePostal: '94110',
-    description: 'Arcueil (Val-de-Marne, Île-de-France) est une ville active de 22 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Gentilly, Cachan, Le Kremlin-Bicêtre.',
+    description: 'Arcueil (Val-de-Marne, Île-de-France) est une ville active de 22 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Gentilly, Cachan, Le Kremlin-Bicêtre.',
     quartiers: ['Centre-ville', 'Gentilly', 'Cachan', 'Le Kremlin-Bicêtre', 'Villejuif', 'L\'Haÿ-les-Roses', 'Ivry-sur-Seine'],
   },
   {
@@ -4720,7 +4720,7 @@ export const villes: Ville[] = [
     departementCode: '12',
     population: '22 000',
     codePostal: '12100',
-    description: 'Artisans vérifiés à Millau et ses environs. Cette ville active occitane de 22 000 habitants en Aveyron compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que La Cavalerie, Sévérac d\'Aveyron.',
+    description: 'Artisans référencés à Millau et ses environs. Cette ville active occitane de 22 000 habitants en Aveyron compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que La Cavalerie, Sévérac d\'Aveyron.',
     quartiers: ['Centre-ville', 'La Cavalerie', 'Sévérac d\'Aveyron'],
   },
   {
@@ -4731,7 +4731,7 @@ export const villes: Ville[] = [
     departementCode: '38',
     population: '22 000',
     codePostal: '38600',
-    description: 'Artisans vérifiés à Fontaine et ses environs. Cette ville active rhônalpine de 22 000 habitants en Isère compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Seyssinet-Pariset, Sassenage, Grenoble.',
+    description: 'Artisans référencés à Fontaine et ses environs. Cette ville active rhônalpine de 22 000 habitants en Isère compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Seyssinet-Pariset, Sassenage, Grenoble.',
     quartiers: ['Centre-ville', 'Seyssinet-Pariset', 'Sassenage', 'Grenoble', 'Saint-Martin-le-Vinoux', 'Seyssins', 'Saint-Égrève'],
   },
   {
@@ -4797,7 +4797,7 @@ export const villes: Ville[] = [
     departementCode: '38',
     population: '22 000',
     codePostal: '38500',
-    description: 'Voiron (Isère, Auvergne-Rhône-Alpes) est une ville active de 22 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Coublevie, Saint-Étienne-de-Crossey, Chirens.',
+    description: 'Voiron (Isère, Auvergne-Rhône-Alpes) est une ville active de 22 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Coublevie, Saint-Étienne-de-Crossey, Chirens.',
     quartiers: ['Centre-ville', 'Coublevie', 'Saint-Étienne-de-Crossey', 'Chirens', 'Saint-Jean-de-Moirans', 'La Buisse', 'Moirans'],
   },
   {
@@ -4808,7 +4808,7 @@ export const villes: Ville[] = [
     departementCode: '45',
     population: '22 000',
     codePostal: '45400',
-    description: 'Artisans vérifiés à Fleury-les-Aubrais et ses environs. Cette ville active du Centre de 22 000 habitants en Loiret compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Saran, Semoy, Saint-Jean-de-Braye.',
+    description: 'Artisans référencés à Fleury-les-Aubrais et ses environs. Cette ville active du Centre de 22 000 habitants en Loiret compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Saran, Semoy, Saint-Jean-de-Braye.',
     quartiers: ['Centre-ville', 'Saran', 'Semoy', 'Saint-Jean-de-Braye', 'Saint-Jean-de-la-Ruelle', 'Saint-Jean-le-Blanc', 'Boigny-sur-Bionne'],
   },
   {
@@ -5006,7 +5006,7 @@ export const villes: Ville[] = [
     departementCode: '85',
     population: '21 000',
     codePostal: '85600',
-    description: 'Artisans vérifiés à Montaigu-Vendée et ses environs. Cette ville active ligérienne de 21 000 habitants en Vendée compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Treize-Septiers, La Boissière-de-Montaigu, Cugand-la-Bernardière.',
+    description: 'Artisans référencés à Montaigu-Vendée et ses environs. Cette ville active ligérienne de 21 000 habitants en Vendée compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Treize-Septiers, La Boissière-de-Montaigu, Cugand-la-Bernardière.',
     quartiers: ['Centre-ville', 'Treize-Septiers', 'La Boissière-de-Montaigu', 'Cugand-la-Bernardière', 'L\'Herbergement', 'La Bruffière', 'Les Brouzils'],
   },
   {
@@ -5050,7 +5050,7 @@ export const villes: Ville[] = [
     departementCode: '94',
     population: '21 000',
     codePostal: '94160',
-    description: 'Saint-Mandé (Val-de-Marne, Île-de-France) est une ville active de 21 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Vincennes, Charenton-le-Pont, Saint-Maurice.',
+    description: 'Saint-Mandé (Val-de-Marne, Île-de-France) est une ville active de 21 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Vincennes, Charenton-le-Pont, Saint-Maurice.',
     quartiers: ['Centre-ville', 'Vincennes', 'Charenton-le-Pont', 'Saint-Maurice', 'Ivry-sur-Seine', 'Fontenay-sous-Bois', 'Joinville-le-Pont'],
   },
   {
@@ -5072,7 +5072,7 @@ export const villes: Ville[] = [
     departementCode: '94',
     population: '21 000',
     codePostal: '94290',
-    description: 'Artisans vérifiés à Villeneuve-le-Roi et ses environs. Cette ville active francilienne de 21 000 habitants en Val-de-Marne compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Orly, Ablon-sur-Seine, Villeneuve-Saint-Georges.',
+    description: 'Artisans référencés à Villeneuve-le-Roi et ses environs. Cette ville active francilienne de 21 000 habitants en Val-de-Marne compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Orly, Ablon-sur-Seine, Villeneuve-Saint-Georges.',
     quartiers: ['Centre-ville', 'Orly', 'Ablon-sur-Seine', 'Villeneuve-Saint-Georges', 'Thiais', 'Choisy-le-Roi', 'Valenton'],
   },
   {
@@ -5149,7 +5149,7 @@ export const villes: Ville[] = [
     departementCode: '59',
     population: '21 000',
     codePostal: '59210',
-    description: 'Coudekerque-Branche (Nord, Hauts-de-France) est une ville active de 21 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Cappelle-la-Grande, Téteghem-Coudekerque-Village, Dunkerque.',
+    description: 'Coudekerque-Branche (Nord, Hauts-de-France) est une ville active de 21 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Cappelle-la-Grande, Téteghem-Coudekerque-Village, Dunkerque.',
     quartiers: ['Centre-ville', 'Cappelle-la-Grande', 'Téteghem-Coudekerque-Village', 'Dunkerque', 'Leffrinckoucke', 'Armbouts-Cappel', 'Bergues'],
   },
   {
@@ -5171,7 +5171,7 @@ export const villes: Ville[] = [
     departementCode: '59',
     population: '21 000',
     codePostal: '59250',
-    description: 'Halluin (Nord, Hauts-de-France) est une ville active de 21 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Neuville-en-Ferrain, Roncq, Bousbecque.',
+    description: 'Halluin (Nord, Hauts-de-France) est une ville active de 21 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Neuville-en-Ferrain, Roncq, Bousbecque.',
     quartiers: ['Centre-ville', 'Neuville-en-Ferrain', 'Roncq', 'Bousbecque', 'Wervicq-Sud', 'Linselles', 'Tourcoing'],
   },
   {
@@ -5237,7 +5237,7 @@ export const villes: Ville[] = [
     departementCode: '59',
     population: '21 000',
     codePostal: '59170',
-    description: 'Croix (Nord, Hauts-de-France) est une ville active de 21 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Wasquehal, Roubaix, Mouvaux.',
+    description: 'Croix (Nord, Hauts-de-France) est une ville active de 21 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Wasquehal, Roubaix, Mouvaux.',
     quartiers: ['Centre-ville', 'Wasquehal', 'Roubaix', 'Mouvaux', 'Hem', 'Marcq-en-Barœul', 'Villeneuve-d\'Ascq'],
   },
   {
@@ -5281,7 +5281,7 @@ export const villes: Ville[] = [
     departementCode: '57',
     population: '20 000',
     codePostal: '57600',
-    description: 'Forbach (Moselle, Grand Est) est une ville active de 20 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Œting, Stiring-Wendel, Schœneck.',
+    description: 'Forbach (Moselle, Grand Est) est une ville active de 20 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Œting, Stiring-Wendel, Schœneck.',
     quartiers: ['Centre-ville', 'Œting', 'Stiring-Wendel', 'Schœneck', 'Petite-Rosselle', 'Morsbach', 'Behren-lès-Forbach'],
   },
   {
@@ -5314,7 +5314,7 @@ export const villes: Ville[] = [
     departementCode: '91',
     population: '20 000',
     codePostal: '91380',
-    description: 'Artisans vérifiés à Chilly-Mazarin et ses environs. Cette ville active francilienne de 20 000 habitants en Essonne compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Longjumeau, Morangis, Champlan.',
+    description: 'Artisans référencés à Chilly-Mazarin et ses environs. Cette ville active francilienne de 20 000 habitants en Essonne compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Longjumeau, Morangis, Champlan.',
     quartiers: ['Centre-ville', 'Longjumeau', 'Morangis', 'Champlan', 'Wissous', 'Savigny-sur-Orge', 'Épinay-sur-Orge'],
   },
   {
@@ -5380,7 +5380,7 @@ export const villes: Ville[] = [
     departementCode: '76',
     population: '20 000',
     codePostal: '76130',
-    description: 'Mont-Saint-Aignan (Seine-Maritime, Normandie) est une ville active de 20 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Déville-lès-Rouen, Bois-Guillaume, Notre-Dame-de-Bondeville.',
+    description: 'Mont-Saint-Aignan (Seine-Maritime, Normandie) est une ville active de 20 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Déville-lès-Rouen, Bois-Guillaume, Notre-Dame-de-Bondeville.',
     quartiers: ['Centre-ville', 'Déville-lès-Rouen', 'Bois-Guillaume', 'Notre-Dame-de-Bondeville', 'Rouen', 'Bihorel', 'Maromme'],
   },
   {
@@ -5446,7 +5446,7 @@ export const villes: Ville[] = [
     departementCode: '79',
     population: '20 000',
     codePostal: '79300',
-    description: 'Artisans vérifiés à Bressuire et ses environs. Cette commune néo-aquitaine de 20 000 habitants en Deux-Sèvres compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Courlay, Argentonnay, Nueil-les-Aubiers.',
+    description: 'Artisans référencés à Bressuire et ses environs. Cette commune néo-aquitaine de 20 000 habitants en Deux-Sèvres compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Courlay, Argentonnay, Nueil-les-Aubiers.',
     quartiers: ['Centre-ville', 'Courlay', 'Argentonnay', 'Nueil-les-Aubiers', 'La Chapelle-Saint-Laurent', 'Cerizay', 'La Forêt-sur-Sèvre'],
   },
   {
@@ -5578,7 +5578,7 @@ export const villes: Ville[] = [
     departementCode: '84',
     population: '20 000',
     codePostal: '84120',
-    description: 'Artisans vérifiés à Pertuis et ses environs. Cette commune provençale de 20 000 habitants en Vaucluse compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que La Tour-d\'Aigues, Villelaure, Cadenet.',
+    description: 'Artisans référencés à Pertuis et ses environs. Cette commune provençale de 20 000 habitants en Vaucluse compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que La Tour-d\'Aigues, Villelaure, Cadenet.',
     quartiers: ['Centre-ville', 'La Tour-d\'Aigues', 'Villelaure', 'Cadenet', 'Lauris', 'Apt'],
   },
   {
@@ -5589,7 +5589,7 @@ export const villes: Ville[] = [
     departementCode: '77',
     population: '20 000',
     codePostal: '77350',
-    description: 'Artisans vérifiés à Le Mée-sur-Seine et ses environs. Cette commune francilienne de 20 000 habitants en Seine-et-Marne compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Melun, Vert-Saint-Denis, Dammarie-les-Lys.',
+    description: 'Artisans référencés à Le Mée-sur-Seine et ses environs. Cette commune francilienne de 20 000 habitants en Seine-et-Marne compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Melun, Vert-Saint-Denis, Dammarie-les-Lys.',
     quartiers: ['Centre-ville', 'Melun', 'Vert-Saint-Denis', 'Dammarie-les-Lys', 'La Rochette', 'Cesson', 'Rubelles'],
   },
   {
@@ -5611,7 +5611,7 @@ export const villes: Ville[] = [
     departementCode: '50',
     population: '19 000',
     codePostal: '50000',
-    description: 'Artisans vérifiés à Saint-Lô et ses environs. Cette commune normande de 19 000 habitants en Manche compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Agneaux, Condé-sur-Vire, Bourgvallées.',
+    description: 'Artisans référencés à Saint-Lô et ses environs. Cette commune normande de 19 000 habitants en Manche compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Agneaux, Condé-sur-Vire, Bourgvallées.',
     quartiers: ['Centre-ville', 'Agneaux', 'Condé-sur-Vire', 'Bourgvallées', 'Saint-Jean-d\'Elle', 'Marigny-Le-Lozon', 'Saint-Amand-Villages'],
   },
   {
@@ -5842,7 +5842,7 @@ export const villes: Ville[] = [
     departementCode: '67',
     population: '19 000',
     codePostal: '67800',
-    description: 'Artisans vérifiés à Bischheim et ses environs. Cette commune du Grand Est de 19 000 habitants en Bas-Rhin compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Hœnheim, Schiltigheim, Souffelweyersheim.',
+    description: 'Artisans référencés à Bischheim et ses environs. Cette commune du Grand Est de 19 000 habitants en Bas-Rhin compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Hœnheim, Schiltigheim, Souffelweyersheim.',
     quartiers: ['Centre-ville', 'Hœnheim', 'Schiltigheim', 'Souffelweyersheim', 'Reichstett', 'Mundolsheim', 'Mittelhausbergen'],
   },
   {
@@ -5853,7 +5853,7 @@ export const villes: Ville[] = [
     departementCode: '43',
     population: '19 000',
     codePostal: '43000',
-    description: 'Le Puy-en-Velay (Haute-Loire, Auvergne-Rhône-Alpes) est une commune de 19 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Brives-Charensac, Vals-près-le-Puy, Chadrac.',
+    description: 'Le Puy-en-Velay (Haute-Loire, Auvergne-Rhône-Alpes) est une commune de 19 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Brives-Charensac, Vals-près-le-Puy, Chadrac.',
     quartiers: ['Centre-ville', 'Brives-Charensac', 'Vals-près-le-Puy', 'Chadrac', 'Espaly-Saint-Marcel', 'Coubon', 'Polignac'],
   },
   {
@@ -5897,7 +5897,7 @@ export const villes: Ville[] = [
     departementCode: '94',
     population: '19 000',
     codePostal: '94360',
-    description: 'Artisans vérifiés à Bry-sur-Marne et ses environs. Cette commune francilienne de 19 000 habitants en Val-de-Marne compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Le Perreux-sur-Marne, Villiers-sur-Marne, Champigny-sur-Marne.',
+    description: 'Artisans référencés à Bry-sur-Marne et ses environs. Cette commune francilienne de 19 000 habitants en Val-de-Marne compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Le Perreux-sur-Marne, Villiers-sur-Marne, Champigny-sur-Marne.',
     quartiers: ['Centre-ville', 'Le Perreux-sur-Marne', 'Villiers-sur-Marne', 'Champigny-sur-Marne', 'Nogent-sur-Marne', 'Fontenay-sous-Bois', 'Joinville-le-Pont'],
   },
   {
@@ -5974,7 +5974,7 @@ export const villes: Ville[] = [
     departementCode: '54',
     population: '18 000',
     codePostal: '54300',
-    description: 'Artisans vérifiés à Lunéville et ses environs. Cette commune du Grand Est de 18 000 habitants en Meurthe-et-Moselle compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Chanteheux, Blainville-sur-l\'Eau, Damelevières.',
+    description: 'Artisans référencés à Lunéville et ses environs. Cette commune du Grand Est de 18 000 habitants en Meurthe-et-Moselle compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Chanteheux, Blainville-sur-l\'Eau, Damelevières.',
     quartiers: ['Centre-ville', 'Chanteheux', 'Blainville-sur-l\'Eau', 'Damelevières', 'Dombasle-sur-Meurthe', 'Rosières-aux-Salines', 'Varangéville'],
   },
   {
@@ -5996,7 +5996,7 @@ export const villes: Ville[] = [
     departementCode: '30',
     population: '18 000',
     codePostal: '30200',
-    description: 'Artisans vérifiés à Bagnols-sur-Cèze et ses environs. Cette commune occitane de 18 000 habitants en Gard compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Laudun-l\'Ardoise, Pont-Saint-Esprit, Saint-Victor-la-Coste.',
+    description: 'Artisans référencés à Bagnols-sur-Cèze et ses environs. Cette commune occitane de 18 000 habitants en Gard compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Laudun-l\'Ardoise, Pont-Saint-Esprit, Saint-Victor-la-Coste.',
     quartiers: ['Centre-ville', 'Laudun-l\'Ardoise', 'Pont-Saint-Esprit', 'Saint-Victor-la-Coste', 'Saint-Laurent-des-Arbres', 'Saint-Geniès-de-Comolas', 'Roquemaure'],
   },
   {
@@ -6117,7 +6117,7 @@ export const villes: Ville[] = [
     departementCode: '78',
     population: '18 000',
     codePostal: '78520',
-    description: 'Artisans vérifiés à Limay et ses environs. Cette commune francilienne de 18 000 habitants en Yvelines compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Mantes-la-Ville, Porcheville, Mantes-la-Jolie.',
+    description: 'Artisans référencés à Limay et ses environs. Cette commune francilienne de 18 000 habitants en Yvelines compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Mantes-la-Ville, Porcheville, Mantes-la-Jolie.',
     quartiers: ['Centre-ville', 'Mantes-la-Ville', 'Porcheville', 'Mantes-la-Jolie', 'Issou', 'Guerville', 'Buchelay'],
   },
   {
@@ -6139,7 +6139,7 @@ export const villes: Ville[] = [
     departementCode: '83',
     population: '18 000',
     codePostal: '83170',
-    description: 'Brignoles (Var, Provence-Alpes-Côte d\'Azur) est une commune de 18 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Forcalqueiret, Garéoult, Le Val.',
+    description: 'Brignoles (Var, Provence-Alpes-Côte d\'Azur) est une commune de 18 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Forcalqueiret, Garéoult, Le Val.',
     quartiers: ['Centre-ville', 'Forcalqueiret', 'Garéoult', 'Le Val', 'Sainte-Anastasie-sur-Issole', 'Rocbaron', 'La Roquebrussanne'],
   },
   {
@@ -6172,7 +6172,7 @@ export const villes: Ville[] = [
     departementCode: '31',
     population: '18 000',
     codePostal: '31130',
-    description: 'Balma (Haute-Garonne, Occitanie) est une commune de 18 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Flourens, Quint-Fonsegrives, Montrabé.',
+    description: 'Balma (Haute-Garonne, Occitanie) est une commune de 18 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Flourens, Quint-Fonsegrives, Montrabé.',
     quartiers: ['Centre-ville', 'Flourens', 'Quint-Fonsegrives', 'Montrabé', 'L\'Union', 'Toulouse', 'Saint-Jean'],
   },
   {
@@ -6183,7 +6183,7 @@ export const villes: Ville[] = [
     departementCode: '92',
     population: '18 000',
     codePostal: '92380',
-    description: 'Garches (Hauts-de-Seine, Île-de-France) est une commune de 18 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Saint-Cloud, Vaucresson, Rueil-Malmaison.',
+    description: 'Garches (Hauts-de-Seine, Île-de-France) est une commune de 18 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Saint-Cloud, Vaucresson, Rueil-Malmaison.',
     quartiers: ['Centre-ville', 'Saint-Cloud', 'Vaucresson', 'Rueil-Malmaison', 'Ville-d\'Avray', 'Sèvres', 'Suresnes'],
   },
   {
@@ -6216,7 +6216,7 @@ export const villes: Ville[] = [
     departementCode: '49',
     population: '18 000',
     codePostal: '49500',
-    description: 'Artisans vérifiés à Segré-en-Anjou Bleu et ses environs. Cette commune ligérienne de 18 000 habitants en Maine-et-Loire compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Le Lion-d\'Angers, Erdre-en-Anjou, Ombrée d\'Anjou.',
+    description: 'Artisans référencés à Segré-en-Anjou Bleu et ses environs. Cette commune ligérienne de 18 000 habitants en Maine-et-Loire compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Le Lion-d\'Angers, Erdre-en-Anjou, Ombrée d\'Anjou.',
     quartiers: ['Centre-ville', 'Le Lion-d\'Angers', 'Erdre-en-Anjou', 'Ombrée d\'Anjou', 'Candé', 'Longuenée-en-Anjou', 'Saint-Clément-de-la-Place'],
   },
   {
@@ -6282,7 +6282,7 @@ export const villes: Ville[] = [
     departementCode: '62',
     population: '17 000',
     codePostal: '62210',
-    description: 'Avion (Pas-de-Calais, Hauts-de-France) est une commune de 17 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Éleu-dit-Leauwette, Vimy, Méricourt.',
+    description: 'Avion (Pas-de-Calais, Hauts-de-France) est une commune de 17 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Éleu-dit-Leauwette, Vimy, Méricourt.',
     quartiers: ['Centre-ville', 'Éleu-dit-Leauwette', 'Vimy', 'Méricourt', 'Sallaumines', 'Givenchy-en-Gohelle', 'Lens'],
   },
   {
@@ -6293,7 +6293,7 @@ export const villes: Ville[] = [
     departementCode: '57',
     population: '17 000',
     codePostal: '57970',
-    description: 'Artisans vérifiés à Yutz et ses environs. Cette commune du Grand Est de 17 000 habitants en Moselle compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Manom, Basse-Ham, Thionville.',
+    description: 'Artisans référencés à Yutz et ses environs. Cette commune du Grand Est de 17 000 habitants en Moselle compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Manom, Basse-Ham, Thionville.',
     quartiers: ['Centre-ville', 'Manom', 'Basse-Ham', 'Thionville', 'Bertrange', 'Terville', 'Florange'],
   },
   {
@@ -6304,7 +6304,7 @@ export const villes: Ville[] = [
     departementCode: '34',
     population: '17 000',
     codePostal: '34970',
-    description: 'Lattes (Hérault, Occitanie) est une commune de 17 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Pérols, Palavas-les-Flots, Montpellier.',
+    description: 'Lattes (Hérault, Occitanie) est une commune de 17 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Pérols, Palavas-les-Flots, Montpellier.',
     quartiers: ['Centre-ville', 'Pérols', 'Palavas-les-Flots', 'Montpellier', 'Saint-Jean-de-Védas', 'Villeneuve-lès-Maguelone', 'Castelnau-le-Lez'],
   },
   {
@@ -6315,7 +6315,7 @@ export const villes: Ville[] = [
     departementCode: '47',
     population: '17 000',
     codePostal: '47200',
-    description: 'Marmande (Lot-et-Garonne, Nouvelle-Aquitaine) est une commune de 17 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Sainte-Bazeille, Miramont-de-Guyenne, Tonneins.',
+    description: 'Marmande (Lot-et-Garonne, Nouvelle-Aquitaine) est une commune de 17 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Sainte-Bazeille, Miramont-de-Guyenne, Tonneins.',
     quartiers: ['Centre-ville', 'Sainte-Bazeille', 'Miramont-de-Guyenne', 'Tonneins', 'Casteljaloux', 'Clairac'],
   },
   {
@@ -6326,7 +6326,7 @@ export const villes: Ville[] = [
     departementCode: '94',
     population: '17 000',
     codePostal: '94470',
-    description: 'Boissy-Saint-Léger (Val-de-Marne, Île-de-France) est une commune de 17 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Marolles-en-Brie, Limeil-Brévannes, Villecresnes.',
+    description: 'Boissy-Saint-Léger (Val-de-Marne, Île-de-France) est une commune de 17 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Marolles-en-Brie, Limeil-Brévannes, Villecresnes.',
     quartiers: ['Centre-ville', 'Marolles-en-Brie', 'Limeil-Brévannes', 'Villecresnes', 'Sucy-en-Brie', 'Bonneuil-sur-Marne', 'Santeny'],
   },
   {
@@ -6348,7 +6348,7 @@ export const villes: Ville[] = [
     departementCode: '45',
     population: '17 000',
     codePostal: '45770',
-    description: 'Saran (Loiret, Centre-Val de Loire) est une commune de 17 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Fleury-les-Aubrais, Saint-Jean-de-la-Ruelle, Ormes.',
+    description: 'Saran (Loiret, Centre-Val de Loire) est une commune de 17 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Fleury-les-Aubrais, Saint-Jean-de-la-Ruelle, Ormes.',
     quartiers: ['Centre-ville', 'Fleury-les-Aubrais', 'Saint-Jean-de-la-Ruelle', 'Ormes', 'Ingré', 'Gidy', 'Semoy'],
   },
   {
@@ -6370,7 +6370,7 @@ export const villes: Ville[] = [
     departementCode: '07',
     population: '17 000',
     codePostal: '07100',
-    description: 'Artisans vérifiés à Annonay et ses environs. Cette commune rhônalpine de 17 000 habitants en Ardèche compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Boulieu-lès-Annonay, Roiffieux, Davézieux.',
+    description: 'Artisans référencés à Annonay et ses environs. Cette commune rhônalpine de 17 000 habitants en Ardèche compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Boulieu-lès-Annonay, Roiffieux, Davézieux.',
     quartiers: ['Centre-ville', 'Boulieu-lès-Annonay', 'Roiffieux', 'Davézieux', 'Vernosc-lès-Annonay', 'Peaugres', 'Sarras'],
   },
   {
@@ -6392,7 +6392,7 @@ export const villes: Ville[] = [
     departementCode: '78',
     population: '17 000',
     codePostal: '78220',
-    description: 'Artisans vérifiés à Viroflay et ses environs. Cette commune francilienne de 17 000 habitants en Yvelines compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Vélizy-Villacoublay, Versailles, Jouy-en-Josas.',
+    description: 'Artisans référencés à Viroflay et ses environs. Cette commune francilienne de 17 000 habitants en Yvelines compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Vélizy-Villacoublay, Versailles, Jouy-en-Josas.',
     quartiers: ['Centre-ville', 'Vélizy-Villacoublay', 'Versailles', 'Jouy-en-Josas', 'Buc', 'Le Chesnay-Rocquencourt', 'La Celle-Saint-Cloud'],
   },
   {
@@ -6469,7 +6469,7 @@ export const villes: Ville[] = [
     departementCode: '44',
     population: '17 000',
     codePostal: '44500',
-    description: 'Artisans vérifiés à La Baule-Escoublac et ses environs. Cette commune ligérienne de 17 000 habitants en Loire-Atlantique compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Pornichet, Saint-André-des-Eaux, Le Pouliguen.',
+    description: 'Artisans référencés à La Baule-Escoublac et ses environs. Cette commune ligérienne de 17 000 habitants en Loire-Atlantique compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Pornichet, Saint-André-des-Eaux, Le Pouliguen.',
     quartiers: ['Centre-ville', 'Pornichet', 'Saint-André-des-Eaux', 'Le Pouliguen', 'Guérande', 'Batz-sur-Mer', 'Saint-Nazaire'],
   },
   {
@@ -6546,7 +6546,7 @@ export const villes: Ville[] = [
     departementCode: '01',
     population: '17 000',
     codePostal: '01200',
-    description: 'Artisans vérifiés à Valserhône et ses environs. Cette commune rhônalpine de 17 000 habitants en Ain compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Collonges, Péron, Nantua.',
+    description: 'Artisans référencés à Valserhône et ses environs. Cette commune rhônalpine de 17 000 habitants en Ain compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Collonges, Péron, Nantua.',
     quartiers: ['Centre-ville', 'Collonges', 'Péron', 'Nantua', 'Saint-Jean-de-Gonville', 'Montréal-la-Cluse', 'Bellignat'],
   },
   {
@@ -6590,7 +6590,7 @@ export const villes: Ville[] = [
     departementCode: '78',
     population: '17 000',
     codePostal: '78390',
-    description: 'Artisans vérifiés à Bois-d\'Arcy et ses environs. Cette commune francilienne de 17 000 habitants en Yvelines compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Fontenay-le-Fleury, Villepreux, Les Clayes-sous-Bois.',
+    description: 'Artisans référencés à Bois-d\'Arcy et ses environs. Cette commune francilienne de 17 000 habitants en Yvelines compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Fontenay-le-Fleury, Villepreux, Les Clayes-sous-Bois.',
     quartiers: ['Centre-ville', 'Fontenay-le-Fleury', 'Villepreux', 'Les Clayes-sous-Bois', 'Montigny-le-Bretonneux', 'Saint-Cyr-l\'École', 'Trappes'],
   },
   {
@@ -6766,7 +6766,7 @@ export const villes: Ville[] = [
     departementCode: '81',
     population: '16 000',
     codePostal: '81600',
-    description: 'Gaillac (Tarn, Occitanie) est une commune de 16 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Brens, Lagrave, Lisle-sur-Tarn.',
+    description: 'Gaillac (Tarn, Occitanie) est une commune de 16 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Brens, Lagrave, Lisle-sur-Tarn.',
     quartiers: ['Centre-ville', 'Brens', 'Lagrave', 'Lisle-sur-Tarn', 'Marssac-sur-Tarn', 'Rabastens', 'Le Sequestre'],
   },
   {
@@ -6799,7 +6799,7 @@ export const villes: Ville[] = [
     departementCode: '95',
     population: '16 000',
     codePostal: '95490',
-    description: 'Artisans vérifiés à Vauréal et ses environs. Cette commune francilienne de 16 000 habitants en Val-d\'Oise compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Cergy, Jouy-le-Moutier, Courdimanche.',
+    description: 'Artisans référencés à Vauréal et ses environs. Cette commune francilienne de 16 000 habitants en Val-d\'Oise compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Cergy, Jouy-le-Moutier, Courdimanche.',
     quartiers: ['Centre-ville', 'Cergy', 'Jouy-le-Moutier', 'Courdimanche', 'Neuville-sur-Oise', 'Menucourt', 'Osny'],
   },
   {
@@ -6810,7 +6810,7 @@ export const villes: Ville[] = [
     departementCode: '59',
     population: '16 000',
     codePostal: '59450',
-    description: 'Sin-le-Noble (Nord, Hauts-de-France) est une commune de 16 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Dechy, Douai, Waziers.',
+    description: 'Sin-le-Noble (Nord, Hauts-de-France) est une commune de 16 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Dechy, Douai, Waziers.',
     quartiers: ['Centre-ville', 'Dechy', 'Douai', 'Waziers', 'Guesnain', 'Lallaing', 'Montigny-en-Ostrevent'],
   },
   {
@@ -6887,7 +6887,7 @@ export const villes: Ville[] = [
     departementCode: '28',
     population: '16 000',
     codePostal: '28110',
-    description: 'Lucé (Eure-et-Loir, Centre-Val de Loire) est une commune de 16 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Luisant, Mainvilliers, Le Coudray.',
+    description: 'Lucé (Eure-et-Loir, Centre-Val de Loire) est une commune de 16 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Luisant, Mainvilliers, Le Coudray.',
     quartiers: ['Centre-ville', 'Luisant', 'Mainvilliers', 'Le Coudray', 'Chartres', 'Lèves', 'Champhol'],
   },
   {
@@ -6931,7 +6931,7 @@ export const villes: Ville[] = [
     departementCode: '976',
     population: '16 000',
     codePostal: '97660',
-    description: 'Artisans vérifiés à Dembeni et ses environs. Cette commune mahoraise de 16 000 habitants en Mayotte compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Ouangani, Sada, Mamoudzou.',
+    description: 'Artisans référencés à Dembeni et ses environs. Cette commune mahoraise de 16 000 habitants en Mayotte compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Ouangani, Sada, Mamoudzou.',
     quartiers: ['Centre-ville', 'Ouangani', 'Sada', 'Mamoudzou', 'Chiconi', 'Chirongui', 'Tsingoni'],
   },
   {
@@ -6953,7 +6953,7 @@ export const villes: Ville[] = [
     departementCode: '57',
     population: '16 000',
     codePostal: '57700',
-    description: 'Hayange (Moselle, Grand Est) est une commune de 16 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Nilvange, Serémange-Erzange, Knutange.',
+    description: 'Hayange (Moselle, Grand Est) est une commune de 16 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Nilvange, Serémange-Erzange, Knutange.',
     quartiers: ['Centre-ville', 'Nilvange', 'Serémange-Erzange', 'Knutange', 'Algrange', 'Neufchef', 'Florange'],
   },
   {
@@ -6986,7 +6986,7 @@ export const villes: Ville[] = [
     departementCode: '54',
     population: '16 000',
     codePostal: '54200',
-    description: 'Artisans vérifiés à Toul et ses environs. Cette commune du Grand Est de 16 000 habitants en Meurthe-et-Moselle compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Dommartin-lès-Toul, Écrouves, Gondreville.',
+    description: 'Artisans référencés à Toul et ses environs. Cette commune du Grand Est de 16 000 habitants en Meurthe-et-Moselle compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Dommartin-lès-Toul, Écrouves, Gondreville.',
     quartiers: ['Centre-ville', 'Dommartin-lès-Toul', 'Écrouves', 'Gondreville', 'Foug', 'Bois-de-Haye', 'Liverdun'],
   },
   {
@@ -7085,7 +7085,7 @@ export const villes: Ville[] = [
     departementCode: '77',
     population: '16 000',
     codePostal: '77300',
-    description: 'Fontainebleau (Seine-et-Marne, Île-de-France) est une commune de 16 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Avon, Bois-le-Roi, Samois-sur-Seine.',
+    description: 'Fontainebleau (Seine-et-Marne, Île-de-France) est une commune de 16 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Avon, Bois-le-Roi, Samois-sur-Seine.',
     quartiers: ['Centre-ville', 'Avon', 'Bois-le-Roi', 'Samois-sur-Seine', 'Samoreau', 'Vulaines-sur-Seine', 'Thomery'],
   },
   {
@@ -7162,7 +7162,7 @@ export const villes: Ville[] = [
     departementCode: '83',
     population: '15 000',
     codePostal: '83380',
-    description: 'Artisans vérifiés à Roquebrune-sur-Argens et ses environs. Cette commune provençale de 15 000 habitants en Var compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Puget-sur-Argens, Le Muy, Sainte-Maxime.',
+    description: 'Artisans référencés à Roquebrune-sur-Argens et ses environs. Cette commune provençale de 15 000 habitants en Var compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Puget-sur-Argens, Le Muy, Sainte-Maxime.',
     quartiers: ['Centre-ville', 'Puget-sur-Argens', 'Le Muy', 'Sainte-Maxime', 'Fréjus', 'La Motte', 'Bagnols-en-Forêt'],
   },
   {
@@ -7228,7 +7228,7 @@ export const villes: Ville[] = [
     departementCode: '29',
     population: '15 000',
     codePostal: '29600',
-    description: 'Artisans vérifiés à Morlaix et ses environs. Cette commune bretonne de 15 000 habitants en Finistère compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Saint-Martin-des-Champs, Taulé, Plouigneau.',
+    description: 'Artisans référencés à Morlaix et ses environs. Cette commune bretonne de 15 000 habitants en Finistère compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Saint-Martin-des-Champs, Taulé, Plouigneau.',
     quartiers: ['Centre-ville', 'Saint-Martin-des-Champs', 'Taulé', 'Plouigneau', 'Plourin-lès-Morlaix', 'Plougasnou', 'Lanmeur'],
   },
   {
@@ -7239,7 +7239,7 @@ export const villes: Ville[] = [
     departementCode: '31',
     population: '15 000',
     codePostal: '31520',
-    description: 'Ramonville-Saint-Agne (Haute-Garonne, Occitanie) est une commune de 15 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Auzeville-Tolosane, Labège, Castanet-Tolosan.',
+    description: 'Ramonville-Saint-Agne (Haute-Garonne, Occitanie) est une commune de 15 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Auzeville-Tolosane, Labège, Castanet-Tolosan.',
     quartiers: ['Centre-ville', 'Auzeville-Tolosane', 'Labège', 'Castanet-Tolosan', 'Saint-Orens-de-Gameville', 'Péchabou', 'Quint-Fonsegrives'],
   },
   {
@@ -7349,7 +7349,7 @@ export const villes: Ville[] = [
     departementCode: '971',
     population: '15 000',
     codePostal: '97110',
-    description: 'Pointe-à-Pitre (Guadeloupe, Guadeloupe) est une commune de 15 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Les Abymes, Baie-Mahault, Le Gosier.',
+    description: 'Pointe-à-Pitre (Guadeloupe, Guadeloupe) est une commune de 15 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Les Abymes, Baie-Mahault, Le Gosier.',
     quartiers: ['Centre-ville', 'Les Abymes', 'Baie-Mahault', 'Le Gosier', 'Morne-à-l\'Eau', 'Lamentin', 'Petit-Bourg'],
   },
   {
@@ -7371,7 +7371,7 @@ export const villes: Ville[] = [
     departementCode: '37',
     population: '15 000',
     codePostal: '37550',
-    description: 'Saint-Avertin (Indre-et-Loire, Centre-Val de Loire) est une commune de 15 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Chambray-lès-Tours, Larçay, Saint-Pierre-des-Corps.',
+    description: 'Saint-Avertin (Indre-et-Loire, Centre-Val de Loire) est une commune de 15 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Chambray-lès-Tours, Larçay, Saint-Pierre-des-Corps.',
     quartiers: ['Centre-ville', 'Chambray-lès-Tours', 'Larçay', 'Saint-Pierre-des-Corps', 'La Ville-aux-Dames', 'Tours', 'Véretz'],
   },
   {
@@ -7437,7 +7437,7 @@ export const villes: Ville[] = [
     departementCode: '45',
     population: '15 000',
     codePostal: '45200',
-    description: 'Artisans vérifiés à Montargis et ses environs. Cette commune du Centre de 15 000 habitants en Loiret compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Châlette-sur-Loing, Amilly, Villemandeur.',
+    description: 'Artisans référencés à Montargis et ses environs. Cette commune du Centre de 15 000 habitants en Loiret compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Châlette-sur-Loing, Amilly, Villemandeur.',
     quartiers: ['Centre-ville', 'Châlette-sur-Loing', 'Amilly', 'Villemandeur', 'Pannes', 'Corquilleroy', 'Cepoy'],
   },
   {
@@ -7514,7 +7514,7 @@ export const villes: Ville[] = [
     departementCode: '30',
     population: '15 000',
     codePostal: '30800',
-    description: 'Artisans vérifiés à Saint-Gilles et ses environs. Cette commune occitane de 15 000 habitants en Gard compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Générac, Beauvoisin, Vauvert.',
+    description: 'Artisans référencés à Saint-Gilles et ses environs. Cette commune occitane de 15 000 habitants en Gard compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Générac, Beauvoisin, Vauvert.',
     quartiers: ['Centre-ville', 'Générac', 'Beauvoisin', 'Vauvert', 'Bellegarde', 'Fourques', 'Garons'],
   },
   {
@@ -7547,7 +7547,7 @@ export const villes: Ville[] = [
     departementCode: '31',
     population: '15 000',
     codePostal: '31650',
-    description: 'Artisans vérifiés à Saint-Orens-de-Gameville et ses environs. Cette commune occitane de 15 000 habitants en Haute-Garonne compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Labège, Quint-Fonsegrives, Escalquens.',
+    description: 'Artisans référencés à Saint-Orens-de-Gameville et ses environs. Cette commune occitane de 15 000 habitants en Haute-Garonne compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Labège, Quint-Fonsegrives, Escalquens.',
     quartiers: ['Centre-ville', 'Labège', 'Quint-Fonsegrives', 'Escalquens', 'Auzeville-Tolosane', 'Ramonville-Saint-Agne', 'Flourens'],
   },
   {
@@ -7580,7 +7580,7 @@ export const villes: Ville[] = [
     departementCode: '55',
     population: '15 000',
     codePostal: '55000',
-    description: 'Artisans vérifiés à Bar-le-Duc et ses environs. Cette commune du Grand Est de 15 000 habitants en Meuse compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Fains-Véel, Ligny-en-Barrois, Revigny-sur-Ornain.',
+    description: 'Artisans référencés à Bar-le-Duc et ses environs. Cette commune du Grand Est de 15 000 habitants en Meuse compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Fains-Véel, Ligny-en-Barrois, Revigny-sur-Ornain.',
     quartiers: ['Centre-ville', 'Fains-Véel', 'Ligny-en-Barrois', 'Revigny-sur-Ornain', 'Ancerville'],
   },
   {
@@ -7646,7 +7646,7 @@ export const villes: Ville[] = [
     departementCode: '40',
     population: '14 000',
     codePostal: '40990',
-    description: 'Artisans vérifiés à Saint-Paul-lès-Dax et ses environs. Cette commune néo-aquitaine de 14 000 habitants en Landes compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Mées, Dax, Magescq.',
+    description: 'Artisans référencés à Saint-Paul-lès-Dax et ses environs. Cette commune néo-aquitaine de 14 000 habitants en Landes compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Mées, Dax, Magescq.',
     quartiers: ['Centre-ville', 'Mées', 'Dax', 'Magescq', 'Saint-Vincent-de-Paul', 'Narrosse', 'Saint-Geours-de-Maremne'],
   },
   {
@@ -7657,7 +7657,7 @@ export const villes: Ville[] = [
     departementCode: '974',
     population: '14 000',
     codePostal: '97427',
-    description: 'Artisans vérifiés à L\'Étang-Salé et ses environs. Cette commune réunionnaise de 14 000 habitants en La Réunion compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Les Avirons, Saint-Leu, Saint-Louis.',
+    description: 'Artisans référencés à L\'Étang-Salé et ses environs. Cette commune réunionnaise de 14 000 habitants en La Réunion compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Les Avirons, Saint-Leu, Saint-Louis.',
     quartiers: ['Centre-ville', 'Les Avirons', 'Saint-Leu', 'Saint-Louis', 'Les Trois-Bassins', 'Entre-Deux', 'Cilaos'],
   },
   {
@@ -7668,7 +7668,7 @@ export const villes: Ville[] = [
     departementCode: '01',
     population: '14 000',
     codePostal: '01630',
-    description: 'Saint-Genis-Pouilly (Ain, Auvergne-Rhône-Alpes) est une commune de 14 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Prévessin-Moëns, Chevry, Sergy.',
+    description: 'Saint-Genis-Pouilly (Ain, Auvergne-Rhône-Alpes) est une commune de 14 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Prévessin-Moëns, Chevry, Sergy.',
     quartiers: ['Centre-ville', 'Prévessin-Moëns', 'Chevry', 'Sergy', 'Ornex', 'Ségny', 'Crozet'],
   },
   {
@@ -7679,7 +7679,7 @@ export const villes: Ville[] = [
     departementCode: '61',
     population: '14 000',
     codePostal: '61100',
-    description: 'Artisans vérifiés à Flers et ses environs. Cette commune normande de 14 000 habitants en Orne compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Saint-Georges-des-Groseillers, Athis-Val de Rouvre, Tinchebray-Bocage.',
+    description: 'Artisans référencés à Flers et ses environs. Cette commune normande de 14 000 habitants en Orne compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Saint-Georges-des-Groseillers, Athis-Val de Rouvre, Tinchebray-Bocage.',
     quartiers: ['Centre-ville', 'Saint-Georges-des-Groseillers', 'Athis-Val de Rouvre', 'Tinchebray-Bocage', 'Domfront en Poiraie', 'Putanges-le-Lac', 'Bagnoles de l\'Orne Normandie'],
   },
   {
@@ -7789,7 +7789,7 @@ export const villes: Ville[] = [
     departementCode: '60',
     population: '14 000',
     codePostal: '60160',
-    description: 'Artisans vérifiés à Montataire et ses environs. Cette commune nordiste de 14 000 habitants en Oise compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Nogent-sur-Oise, Laigneville, Creil.',
+    description: 'Artisans référencés à Montataire et ses environs. Cette commune nordiste de 14 000 habitants en Oise compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Nogent-sur-Oise, Laigneville, Creil.',
     quartiers: ['Centre-ville', 'Nogent-sur-Oise', 'Laigneville', 'Creil', 'Saint-Maximin', 'Saint-Leu-d\'Esserent', 'Monchy-Saint-Éloi'],
   },
   {
@@ -7800,7 +7800,7 @@ export const villes: Ville[] = [
     departementCode: '21',
     population: '14 000',
     codePostal: '21300',
-    description: 'Chenôve (Côte-d\'Or, Bourgogne-Franche-Comté) est une commune de 14 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Marsannay-la-Côte, Perrigny-lès-Dijon, Longvic.',
+    description: 'Chenôve (Côte-d\'Or, Bourgogne-Franche-Comté) est une commune de 14 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Marsannay-la-Côte, Perrigny-lès-Dijon, Longvic.',
     quartiers: ['Centre-ville', 'Marsannay-la-Côte', 'Perrigny-lès-Dijon', 'Longvic', 'Dijon', 'Talant', 'Plombières-lès-Dijon'],
   },
   {
@@ -7844,7 +7844,7 @@ export const villes: Ville[] = [
     departementCode: '13',
     population: '14 000',
     codePostal: '13310',
-    description: 'Saint-Martin-de-Crau (Bouches-du-Rhône, Provence-Alpes-Côte d\'Azur) est une commune de 14 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Istres, Mouriès, Miramas.',
+    description: 'Saint-Martin-de-Crau (Bouches-du-Rhône, Provence-Alpes-Côte d\'Azur) est une commune de 14 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Istres, Mouriès, Miramas.',
     quartiers: ['Centre-ville', 'Istres', 'Mouriès', 'Miramas', 'Maussane-les-Alpilles', 'Paradou', 'Grans'],
   },
   {
@@ -7954,7 +7954,7 @@ export const villes: Ville[] = [
     departementCode: '84',
     population: '14 000',
     codePostal: '84500',
-    description: 'Artisans vérifiés à Bollène et ses environs. Cette commune provençale de 14 000 habitants en Vaucluse compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Mondragon, Lapalud, Mornas.',
+    description: 'Artisans référencés à Bollène et ses environs. Cette commune provençale de 14 000 habitants en Vaucluse compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Mondragon, Lapalud, Mornas.',
     quartiers: ['Centre-ville', 'Mondragon', 'Lapalud', 'Mornas', 'Piolenc', 'Sainte-Cécile-les-Vignes', 'Sérignan-du-Comtat'],
   },
   {
@@ -7976,7 +7976,7 @@ export const villes: Ville[] = [
     departementCode: '69',
     population: '14 000',
     codePostal: '69220',
-    description: 'Artisans vérifiés à Belleville-en-Beaujolais et ses environs. Cette commune rhônalpine de 14 000 habitants en Rhône compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Saint-Georges-de-Reneins, Villié-Morgon, Saint-Étienne-des-Oullières.',
+    description: 'Artisans référencés à Belleville-en-Beaujolais et ses environs. Cette commune rhônalpine de 14 000 habitants en Rhône compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Saint-Georges-de-Reneins, Villié-Morgon, Saint-Étienne-des-Oullières.',
     quartiers: ['Centre-ville', 'Saint-Georges-de-Reneins', 'Villié-Morgon', 'Saint-Étienne-des-Oullières', 'Arnas', 'Beaujeu', 'Gleizé'],
   },
   {
@@ -8009,7 +8009,7 @@ export const villes: Ville[] = [
     departementCode: '971',
     population: '14 000',
     codePostal: '97118',
-    description: 'Saint-François (Guadeloupe, Guadeloupe) est une commune de 14 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Le Moule, Sainte-Anne, Le Gosier.',
+    description: 'Saint-François (Guadeloupe, Guadeloupe) est une commune de 14 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Le Moule, Sainte-Anne, Le Gosier.',
     quartiers: ['Centre-ville', 'Le Moule', 'Sainte-Anne', 'Le Gosier', 'Petit-Canal'],
   },
   {
@@ -8042,7 +8042,7 @@ export const villes: Ville[] = [
     departementCode: '60',
     population: '14 000',
     codePostal: '60110',
-    description: 'Méru (Oise, Hauts-de-France) est une commune de 14 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Andeville, Bornel, Sainte-Geneviève.',
+    description: 'Méru (Oise, Hauts-de-France) est une commune de 14 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Andeville, Bornel, Sainte-Geneviève.',
     quartiers: ['Centre-ville', 'Andeville', 'Bornel', 'Sainte-Geneviève', 'Noailles', 'Neuilly-en-Thelle', 'Chambly'],
   },
   {
@@ -8163,7 +8163,7 @@ export const villes: Ville[] = [
     departementCode: '77',
     population: '14 000',
     codePostal: '77210',
-    description: 'Artisans vérifiés à Avon et ses environs. Cette commune francilienne de 14 000 habitants en Seine-et-Marne compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Thomery, Samoreau, Vulaines-sur-Seine.',
+    description: 'Artisans référencés à Avon et ses environs. Cette commune francilienne de 14 000 habitants en Seine-et-Marne compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Thomery, Samoreau, Vulaines-sur-Seine.',
     quartiers: ['Centre-ville', 'Thomery', 'Samoreau', 'Vulaines-sur-Seine', 'Fontainebleau', 'Samois-sur-Seine', 'Héricy'],
   },
   {
@@ -8174,7 +8174,7 @@ export const villes: Ville[] = [
     departementCode: '01',
     population: '14 000',
     codePostal: '01170',
-    description: 'Artisans vérifiés à Gex et ses environs. Cette commune rhônalpine de 14 000 habitants en Ain compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Échenevex, Cessy, Divonne-les-Bains.',
+    description: 'Artisans référencés à Gex et ses environs. Cette commune rhônalpine de 14 000 habitants en Ain compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Échenevex, Cessy, Divonne-les-Bains.',
     quartiers: ['Centre-ville', 'Échenevex', 'Cessy', 'Divonne-les-Bains', 'Ségny', 'Versonnex', 'Chevry'],
   },
   {
@@ -8185,7 +8185,7 @@ export const villes: Ville[] = [
     departementCode: '64',
     population: '14 000',
     codePostal: '64140',
-    description: 'Artisans vérifiés à Lons et ses environs. Cette commune néo-aquitaine de 14 000 habitants en Pyrénées-Atlantiques compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Billère, Lescar, Pau.',
+    description: 'Artisans référencés à Lons et ses environs. Cette commune néo-aquitaine de 14 000 habitants en Pyrénées-Atlantiques compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Billère, Lescar, Pau.',
     quartiers: ['Centre-ville', 'Billère', 'Lescar', 'Pau', 'Artiguelouve', 'Jurançon', 'Montardon'],
   },
   {
@@ -8295,7 +8295,7 @@ export const villes: Ville[] = [
     departementCode: '59',
     population: '13 000',
     codePostal: '59420',
-    description: 'Mouvaux (Nord, Hauts-de-France) est une commune de 13 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Tourcoing, Bondues, Croix.',
+    description: 'Mouvaux (Nord, Hauts-de-France) est une commune de 13 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Tourcoing, Bondues, Croix.',
     quartiers: ['Centre-ville', 'Tourcoing', 'Bondues', 'Croix', 'Wasquehal', 'Roubaix', 'Marcq-en-Barœul'],
   },
   {
@@ -8317,7 +8317,7 @@ export const villes: Ville[] = [
     departementCode: '77',
     population: '13 000',
     codePostal: '77410',
-    description: 'Artisans vérifiés à Claye-Souilly et ses environs. Cette commune francilienne de 13 000 habitants en Seine-et-Marne compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Annet-sur-Marne, Villevaudé, Villeparisis.',
+    description: 'Artisans référencés à Claye-Souilly et ses environs. Cette commune francilienne de 13 000 habitants en Seine-et-Marne compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Annet-sur-Marne, Villevaudé, Villeparisis.',
     quartiers: ['Centre-ville', 'Annet-sur-Marne', 'Villevaudé', 'Villeparisis', 'Thorigny-sur-Marne', 'Pomponne', 'Courtry'],
   },
   {
@@ -8339,7 +8339,7 @@ export const villes: Ville[] = [
     departementCode: '34',
     population: '13 000',
     codePostal: '34430',
-    description: 'Artisans vérifiés à Saint-Jean-de-Védas et ses environs. Cette commune occitane de 13 000 habitants en Hérault compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Lavérune, Saussan, Montpellier.',
+    description: 'Artisans référencés à Saint-Jean-de-Védas et ses environs. Cette commune occitane de 13 000 habitants en Hérault compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Lavérune, Saussan, Montpellier.',
     quartiers: ['Centre-ville', 'Lavérune', 'Saussan', 'Montpellier', 'Lattes', 'Juvignac', 'Fabrègues'],
   },
   {
@@ -8460,7 +8460,7 @@ export const villes: Ville[] = [
     departementCode: '71',
     population: '13 000',
     codePostal: '71400',
-    description: 'Autun (Saône-et-Loire, Bourgogne-Franche-Comté) est une commune de 13 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Épinac, Le Creusot, Le Breuil.',
+    description: 'Autun (Saône-et-Loire, Bourgogne-Franche-Comté) est une commune de 13 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Épinac, Le Creusot, Le Breuil.',
     quartiers: ['Centre-ville', 'Épinac', 'Le Creusot', 'Le Breuil', 'Torcy'],
   },
   {
@@ -8493,7 +8493,7 @@ export const villes: Ville[] = [
     departementCode: '62',
     population: '13 000',
     codePostal: '62230',
-    description: 'Outreau (Pas-de-Calais, Hauts-de-France) est une commune de 13 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Saint-Léonard, Équihen-Plage, Le Portel.',
+    description: 'Outreau (Pas-de-Calais, Hauts-de-France) est une commune de 13 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Saint-Léonard, Équihen-Plage, Le Portel.',
     quartiers: ['Centre-ville', 'Saint-Léonard', 'Équihen-Plage', 'Le Portel', 'Saint-Étienne-au-Mont', 'Boulogne-sur-Mer', 'Saint-Martin-Boulogne'],
   },
   {
@@ -8504,7 +8504,7 @@ export const villes: Ville[] = [
     departementCode: '81',
     population: '13 000',
     codePostal: '81300',
-    description: 'Artisans vérifiés à Graulhet et ses environs. Cette commune occitane de 13 000 habitants en Tarn compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Labastide-Saint-Georges, Lagrave, Brens.',
+    description: 'Artisans référencés à Graulhet et ses environs. Cette commune occitane de 13 000 habitants en Tarn compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Labastide-Saint-Georges, Lagrave, Brens.',
     quartiers: ['Centre-ville', 'Labastide-Saint-Georges', 'Lagrave', 'Brens', 'Réalmont', 'Lavaur', 'Marssac-sur-Tarn'],
   },
   {
@@ -8548,7 +8548,7 @@ export const villes: Ville[] = [
     departementCode: '13',
     population: '13 000',
     codePostal: '13390',
-    description: 'Artisans vérifiés à Auriol et ses environs. Cette commune provençale de 13 000 habitants en Bouches-du-Rhône compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que La Bouilladisse, Roquevaire, La Destrousse.',
+    description: 'Artisans référencés à Auriol et ses environs. Cette commune provençale de 13 000 habitants en Bouches-du-Rhône compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que La Bouilladisse, Roquevaire, La Destrousse.',
     quartiers: ['Centre-ville', 'La Bouilladisse', 'Roquevaire', 'La Destrousse', 'Gémenos', 'Peypin', 'Belcodène'],
   },
   {
@@ -8581,7 +8581,7 @@ export const villes: Ville[] = [
     departementCode: '35',
     population: '13 000',
     codePostal: '35830',
-    description: 'Artisans vérifiés à Betton et ses environs. Cette commune bretonne de 13 000 habitants en Ille-et-Vilaine compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Saint-Grégoire, Chevaigné, Melesse.',
+    description: 'Artisans référencés à Betton et ses environs. Cette commune bretonne de 13 000 habitants en Ille-et-Vilaine compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Saint-Grégoire, Chevaigné, Melesse.',
     quartiers: ['Centre-ville', 'Saint-Grégoire', 'Chevaigné', 'Melesse', 'Thorigné-Fouillard', 'Montgermont', 'La Chapelle-des-Fougeretz'],
   },
   {
@@ -8647,7 +8647,7 @@ export const villes: Ville[] = [
     departementCode: '03',
     population: '13 000',
     codePostal: '03400',
-    description: 'Artisans vérifiés à Yzeure et ses environs. Cette commune rhônalpine de 13 000 habitants en Allier compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Moulins, Avermes, Dompierre-sur-Besbre.',
+    description: 'Artisans référencés à Yzeure et ses environs. Cette commune rhônalpine de 13 000 habitants en Allier compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Moulins, Avermes, Dompierre-sur-Besbre.',
     quartiers: ['Centre-ville', 'Moulins', 'Avermes', 'Dompierre-sur-Besbre'],
   },
   {
@@ -8669,7 +8669,7 @@ export const villes: Ville[] = [
     departementCode: '53',
     population: '13 000',
     codePostal: '53100',
-    description: 'Mayenne (Mayenne, Pays de la Loire) est une commune de 13 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Ambrières-les-Vallées, Montsûrs, Lassay-les-Châteaux.',
+    description: 'Mayenne (Mayenne, Pays de la Loire) est une commune de 13 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Ambrières-les-Vallées, Montsûrs, Lassay-les-Châteaux.',
     quartiers: ['Centre-ville', 'Ambrières-les-Vallées', 'Montsûrs', 'Lassay-les-Châteaux', 'Gorron', 'Andouillé', 'Louverné'],
   },
   {
@@ -8713,7 +8713,7 @@ export const villes: Ville[] = [
     departementCode: '44',
     population: '13 000',
     codePostal: '44380',
-    description: 'Artisans vérifiés à Pornichet et ses environs. Cette commune ligérienne de 13 000 habitants en Loire-Atlantique compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que La Baule-Escoublac, Saint-Nazaire, Saint-André-des-Eaux.',
+    description: 'Artisans référencés à Pornichet et ses environs. Cette commune ligérienne de 13 000 habitants en Loire-Atlantique compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que La Baule-Escoublac, Saint-Nazaire, Saint-André-des-Eaux.',
     quartiers: ['Centre-ville', 'La Baule-Escoublac', 'Saint-Nazaire', 'Saint-André-des-Eaux', 'Le Pouliguen', 'Trignac', 'Guérande'],
   },
   {
@@ -8746,7 +8746,7 @@ export const villes: Ville[] = [
     departementCode: '78',
     population: '13 000',
     codePostal: '78410',
-    description: 'Aubergenville (Yvelines, Île-de-France) est une commune de 13 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Flins-sur-Seine, Épône, Bouafle.',
+    description: 'Aubergenville (Yvelines, Île-de-France) est une commune de 13 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Flins-sur-Seine, Épône, Bouafle.',
     quartiers: ['Centre-ville', 'Flins-sur-Seine', 'Épône', 'Bouafle', 'Juziers', 'Gargenville', 'Mézières-sur-Seine'],
   },
   {
@@ -8757,7 +8757,7 @@ export const villes: Ville[] = [
     departementCode: '37',
     population: '13 000',
     codePostal: '37170',
-    description: 'Chambray-lès-Tours (Indre-et-Loire, Centre-Val de Loire) est une commune de 13 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Saint-Avertin, Larçay, Joué-lès-Tours.',
+    description: 'Chambray-lès-Tours (Indre-et-Loire, Centre-Val de Loire) est une commune de 13 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Saint-Avertin, Larçay, Joué-lès-Tours.',
     quartiers: ['Centre-ville', 'Saint-Avertin', 'Larçay', 'Joué-lès-Tours', 'Veigné', 'Montbazon', 'Saint-Pierre-des-Corps'],
   },
   {
@@ -8768,7 +8768,7 @@ export const villes: Ville[] = [
     departementCode: '33',
     population: '13 000',
     codePostal: '33510',
-    description: 'Andernos-les-Bains (Gironde, Nouvelle-Aquitaine) est une commune de 13 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Arès, Lège-Cap-Ferret, Lanton.',
+    description: 'Andernos-les-Bains (Gironde, Nouvelle-Aquitaine) est une commune de 13 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Arès, Lège-Cap-Ferret, Lanton.',
     quartiers: ['Centre-ville', 'Arès', 'Lège-Cap-Ferret', 'Lanton', 'Audenge', 'Le Porge', 'Arcachon'],
   },
   {
@@ -8790,7 +8790,7 @@ export const villes: Ville[] = [
     departementCode: '34',
     population: '13 000',
     codePostal: '34140',
-    description: 'Artisans vérifiés à Mèze et ses environs. Cette commune occitane de 13 000 habitants en Hérault compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Loupian, Pinet, Pomérols.',
+    description: 'Artisans référencés à Mèze et ses environs. Cette commune occitane de 13 000 habitants en Hérault compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Loupian, Pinet, Pomérols.',
     quartiers: ['Centre-ville', 'Loupian', 'Pinet', 'Pomérols', 'Villeveyrac', 'Sète', 'Montagnac'],
   },
   {
@@ -8823,7 +8823,7 @@ export const villes: Ville[] = [
     departementCode: '31',
     population: '13 000',
     codePostal: '31240',
-    description: 'Artisans vérifiés à L\'Union et ses environs. Cette commune occitane de 13 000 habitants en Haute-Garonne compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Saint-Jean, Launaguet, Saint-Geniès-Bellevue.',
+    description: 'Artisans référencés à L\'Union et ses environs. Cette commune occitane de 13 000 habitants en Haute-Garonne compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Saint-Jean, Launaguet, Saint-Geniès-Bellevue.',
     quartiers: ['Centre-ville', 'Saint-Jean', 'Launaguet', 'Saint-Geniès-Bellevue', 'Rouffiac-Tolosan', 'Montrabé', 'Balma'],
   },
   {
@@ -8834,7 +8834,7 @@ export const villes: Ville[] = [
     departementCode: '33',
     population: '13 000',
     codePostal: '33240',
-    description: 'Saint-André-de-Cubzac (Gironde, Nouvelle-Aquitaine) est une commune de 13 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Cubzac-les-Ponts, La Lande-de-Fronsac, Val de Virvée.',
+    description: 'Saint-André-de-Cubzac (Gironde, Nouvelle-Aquitaine) est une commune de 13 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Cubzac-les-Ponts, La Lande-de-Fronsac, Val de Virvée.',
     quartiers: ['Centre-ville', 'Cubzac-les-Ponts', 'La Lande-de-Fronsac', 'Val de Virvée', 'Peujard', 'Ambarès-et-Lagrave', 'Saint-Loubès'],
   },
   {
@@ -8911,7 +8911,7 @@ export const villes: Ville[] = [
     departementCode: '83',
     population: '13 000',
     codePostal: '83210',
-    description: 'Artisans vérifiés à Solliès-Pont et ses environs. Cette commune provençale de 13 000 habitants en Var compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que La Crau, La Farlède, Solliès-Ville.',
+    description: 'Artisans référencés à Solliès-Pont et ses environs. Cette commune provençale de 13 000 habitants en Var compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que La Crau, La Farlède, Solliès-Ville.',
     quartiers: ['Centre-ville', 'La Crau', 'La Farlède', 'Solliès-Ville', 'Cuers', 'Solliès-Toucas', 'La Valette-du-Var'],
   },
   {
@@ -8922,7 +8922,7 @@ export const villes: Ville[] = [
     departementCode: '50',
     population: '13 000',
     codePostal: '50400',
-    description: 'Artisans vérifiés à Granville et ses environs. Cette commune normande de 13 000 habitants en Manche compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Donville-les-Bains, Bréhal, Saint-Pair-sur-Mer.',
+    description: 'Artisans référencés à Granville et ses environs. Cette commune normande de 13 000 habitants en Manche compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Donville-les-Bains, Bréhal, Saint-Pair-sur-Mer.',
     quartiers: ['Centre-ville', 'Donville-les-Bains', 'Bréhal', 'Saint-Pair-sur-Mer', 'Jullouville', 'Agon-Coutainville'],
   },
   {
@@ -8955,7 +8955,7 @@ export const villes: Ville[] = [
     departementCode: '56',
     population: '12 000',
     codePostal: '56890',
-    description: 'Artisans vérifiés à Saint-Avé et ses environs. Cette commune bretonne de 12 000 habitants en Morbihan compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Meucon, Monterblanc, Vannes.',
+    description: 'Artisans référencés à Saint-Avé et ses environs. Cette commune bretonne de 12 000 habitants en Morbihan compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Meucon, Monterblanc, Vannes.',
     quartiers: ['Centre-ville', 'Meucon', 'Monterblanc', 'Vannes', 'Saint-Nolff', 'Plescop', 'Locqueltas'],
   },
   {
@@ -9098,7 +9098,7 @@ export const villes: Ville[] = [
     departementCode: '44',
     population: '12 000',
     codePostal: '44110',
-    description: 'Artisans vérifiés à Châteaubriant et ses environs. Cette commune ligérienne de 12 000 habitants en Loire-Atlantique compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Rougé, Erbray, Abbaretz.',
+    description: 'Artisans référencés à Châteaubriant et ses environs. Cette commune ligérienne de 12 000 habitants en Loire-Atlantique compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Rougé, Erbray, Abbaretz.',
     quartiers: ['Centre-ville', 'Rougé', 'Erbray', 'Abbaretz', 'Derval', 'Nozay', 'Riaillé'],
   },
   {
@@ -9109,7 +9109,7 @@ export const villes: Ville[] = [
     departementCode: '57',
     population: '12 000',
     codePostal: '57150',
-    description: 'Creutzwald (Moselle, Grand Est) est une commune de 12 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Falck, Ham-sous-Varsberg, Porcelette.',
+    description: 'Creutzwald (Moselle, Grand Est) est une commune de 12 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Falck, Ham-sous-Varsberg, Porcelette.',
     quartiers: ['Centre-ville', 'Falck', 'Ham-sous-Varsberg', 'Porcelette', 'Carling', 'L\'Hôpital', 'Saint-Avold'],
   },
   {
@@ -9175,7 +9175,7 @@ export const villes: Ville[] = [
     departementCode: '59',
     population: '12 000',
     codePostal: '59590',
-    description: 'Artisans vérifiés à Raismes et ses environs. Cette commune nordiste de 12 000 habitants en Nord compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Beuvrages, Bruay-sur-l\'Escaut, Petite-Forêt.',
+    description: 'Artisans référencés à Raismes et ses environs. Cette commune nordiste de 12 000 habitants en Nord compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Beuvrages, Bruay-sur-l\'Escaut, Petite-Forêt.',
     quartiers: ['Centre-ville', 'Beuvrages', 'Bruay-sur-l\'Escaut', 'Petite-Forêt', 'Anzin', 'Saint-Amand-les-Eaux', 'Escautpont'],
   },
   {
@@ -9186,7 +9186,7 @@ export const villes: Ville[] = [
     departementCode: '57',
     population: '12 000',
     codePostal: '57400',
-    description: 'Artisans vérifiés à Sarrebourg et ses environs. Cette commune du Grand Est de 12 000 habitants en Moselle compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Réding, Phalsbourg, Dabo.',
+    description: 'Artisans référencés à Sarrebourg et ses environs. Cette commune du Grand Est de 12 000 habitants en Moselle compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Réding, Phalsbourg, Dabo.',
     quartiers: ['Centre-ville', 'Réding', 'Phalsbourg', 'Dabo'],
   },
   {
@@ -9230,7 +9230,7 @@ export const villes: Ville[] = [
     departementCode: '01',
     population: '12 000',
     codePostal: '01210',
-    description: 'Artisans vérifiés à Ferney-Voltaire et ses environs. Cette commune rhônalpine de 12 000 habitants en Ain compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Prévessin-Moëns, Ornex, Versonnex.',
+    description: 'Artisans référencés à Ferney-Voltaire et ses environs. Cette commune rhônalpine de 12 000 habitants en Ain compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Prévessin-Moëns, Ornex, Versonnex.',
     quartiers: ['Centre-ville', 'Prévessin-Moëns', 'Ornex', 'Versonnex', 'Saint-Genis-Pouilly', 'Ségny', 'Chevry'],
   },
   {
@@ -9252,7 +9252,7 @@ export const villes: Ville[] = [
     departementCode: '12',
     population: '12 000',
     codePostal: '12000',
-    description: 'Onet-le-Château (Aveyron, Occitanie) est une commune de 12 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Rodez, Olemps, Le Monastère.',
+    description: 'Onet-le-Château (Aveyron, Occitanie) est une commune de 12 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Rodez, Olemps, Le Monastère.',
     quartiers: ['Centre-ville', 'Rodez', 'Olemps', 'Le Monastère', 'Sébazac-Concourès', 'Druelle Balsac', 'Salles-la-Source'],
   },
   {
@@ -9351,7 +9351,7 @@ export const villes: Ville[] = [
     departementCode: '59',
     population: '12 000',
     codePostal: '59770',
-    description: 'Marly (Nord, Hauts-de-France) est une commune de 12 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Aulnoy-lez-Valenciennes, Saultain, Valenciennes.',
+    description: 'Marly (Nord, Hauts-de-France) est une commune de 12 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Aulnoy-lez-Valenciennes, Saultain, Valenciennes.',
     quartiers: ['Centre-ville', 'Aulnoy-lez-Valenciennes', 'Saultain', 'Valenciennes', 'Saint-Saulve', 'Anzin', 'Préseau'],
   },
   {
@@ -9384,7 +9384,7 @@ export const villes: Ville[] = [
     departementCode: '06',
     population: '12 000',
     codePostal: '06560',
-    description: 'Valbonne (Alpes-Maritimes, Provence-Alpes-Côte d\'Azur) est une commune de 12 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Opio, Mougins, Biot.',
+    description: 'Valbonne (Alpes-Maritimes, Provence-Alpes-Côte d\'Azur) est une commune de 12 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Opio, Mougins, Biot.',
     quartiers: ['Centre-ville', 'Opio', 'Mougins', 'Biot', 'Mouans-Sartoux', 'Roquefort-les-Pins', 'Châteauneuf-Grasse'],
   },
   {
@@ -9406,7 +9406,7 @@ export const villes: Ville[] = [
     departementCode: '06',
     population: '12 000',
     codePostal: '06240',
-    description: 'Beausoleil (Alpes-Maritimes, Provence-Alpes-Côte d\'Azur) est une commune de 12 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que La Turbie, Cap-d\'Ail, Roquebrune-Cap-Martin.',
+    description: 'Beausoleil (Alpes-Maritimes, Provence-Alpes-Côte d\'Azur) est une commune de 12 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que La Turbie, Cap-d\'Ail, Roquebrune-Cap-Martin.',
     quartiers: ['Centre-ville', 'La Turbie', 'Cap-d\'Ail', 'Roquebrune-Cap-Martin', 'Èze', 'Peille', 'La Trinité'],
   },
   {
@@ -9428,7 +9428,7 @@ export const villes: Ville[] = [
     departementCode: '77',
     population: '12 000',
     codePostal: '77230',
-    description: 'Artisans vérifiés à Dammartin-en-Goële et ses environs. Cette commune francilienne de 12 000 habitants en Seine-et-Marne compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Longperrier, Saint-Mard, Juilly.',
+    description: 'Artisans référencés à Dammartin-en-Goële et ses environs. Cette commune francilienne de 12 000 habitants en Seine-et-Marne compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Longperrier, Saint-Mard, Juilly.',
     quartiers: ['Centre-ville', 'Longperrier', 'Saint-Mard', 'Juilly', 'Othis', 'Moussy-le-Neuf', 'Saint-Pathus'],
   },
   {
@@ -9450,7 +9450,7 @@ export const villes: Ville[] = [
     departementCode: '21',
     population: '12 000',
     codePostal: '21240',
-    description: 'Artisans vérifiés à Talant et ses environs. Cette commune bourguignonne de 12 000 habitants en Côte-d\'Or compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Fontaine-lès-Dijon, Dijon, Plombières-lès-Dijon.',
+    description: 'Artisans référencés à Talant et ses environs. Cette commune bourguignonne de 12 000 habitants en Côte-d\'Or compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Fontaine-lès-Dijon, Dijon, Plombières-lès-Dijon.',
     quartiers: ['Centre-ville', 'Fontaine-lès-Dijon', 'Dijon', 'Plombières-lès-Dijon', 'Chenôve', 'Marsannay-la-Côte', 'Saint-Apollinaire'],
   },
   {
@@ -9461,7 +9461,7 @@ export const villes: Ville[] = [
     departementCode: '972',
     population: '12 000',
     codePostal: '97215',
-    description: 'Artisans vérifiés à Rivière-Salée et ses environs. Cette commune martiniquaise de 12 000 habitants en Martinique compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Sainte-Luce, Saint-Esprit, Ducos.',
+    description: 'Artisans référencés à Rivière-Salée et ses environs. Cette commune martiniquaise de 12 000 habitants en Martinique compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Sainte-Luce, Saint-Esprit, Ducos.',
     quartiers: ['Centre-ville', 'Sainte-Luce', 'Saint-Esprit', 'Ducos', 'Rivière-Pilote', 'Le Diamant', 'Les Trois-Îlets'],
   },
   {
@@ -9483,7 +9483,7 @@ export const villes: Ville[] = [
     departementCode: '987',
     population: '12 000',
     codePostal: '98712',
-    description: 'Papara (Polynésie française, Polynésie française) est une commune de 12 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Paea, Punaauia, Teva I Uta.',
+    description: 'Papara (Polynésie française, Polynésie française) est une commune de 12 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Paea, Punaauia, Teva I Uta.',
     quartiers: ['Centre-ville', 'Paea', 'Punaauia', 'Teva I Uta', 'Faaa', 'Pirae', 'Mahina'],
   },
   {
@@ -9494,7 +9494,7 @@ export const villes: Ville[] = [
     departementCode: '67',
     population: '12 000',
     codePostal: '67800',
-    description: 'Artisans vérifiés à Hœnheim et ses environs. Cette commune du Grand Est de 12 000 habitants en Bas-Rhin compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Souffelweyersheim, Bischheim, Schiltigheim.',
+    description: 'Artisans référencés à Hœnheim et ses environs. Cette commune du Grand Est de 12 000 habitants en Bas-Rhin compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Souffelweyersheim, Bischheim, Schiltigheim.',
     quartiers: ['Centre-ville', 'Souffelweyersheim', 'Bischheim', 'Schiltigheim', 'Reichstett', 'Mundolsheim', 'Mittelhausbergen'],
   },
   {
@@ -9505,7 +9505,7 @@ export const villes: Ville[] = [
     departementCode: '38',
     population: '12 000',
     codePostal: '38170',
-    description: 'Artisans vérifiés à Seyssinet-Pariset et ses environs. Cette commune rhônalpine de 12 000 habitants en Isère compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Seyssins, Fontaine, Grenoble.',
+    description: 'Artisans référencés à Seyssinet-Pariset et ses environs. Cette commune rhônalpine de 12 000 habitants en Isère compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Seyssins, Fontaine, Grenoble.',
     quartiers: ['Centre-ville', 'Seyssins', 'Fontaine', 'Grenoble', 'Échirolles', 'Sassenage', 'Le Pont-de-Claix'],
   },
   {
@@ -9527,7 +9527,7 @@ export const villes: Ville[] = [
     departementCode: '35',
     population: '12 000',
     codePostal: '35740',
-    description: 'Pacé (Ille-et-Vilaine, Bretagne) est une commune de 12 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que La Chapelle-des-Fougeretz, Montgermont, Vezin-le-Coquet.',
+    description: 'Pacé (Ille-et-Vilaine, Bretagne) est une commune de 12 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que La Chapelle-des-Fougeretz, Montgermont, Vezin-le-Coquet.',
     quartiers: ['Centre-ville', 'La Chapelle-des-Fougeretz', 'Montgermont', 'Vezin-le-Coquet', 'L\'Hermitage', 'Saint-Gilles', 'Gévezé'],
   },
   {
@@ -9560,7 +9560,7 @@ export const villes: Ville[] = [
     departementCode: '30',
     population: '12 000',
     codePostal: '30600',
-    description: 'Vauvert (Gard, Occitanie) est une commune de 12 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Le Cailar, Beauvoisin, Saint-Laurent-d\'Aigouze.',
+    description: 'Vauvert (Gard, Occitanie) est une commune de 12 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Le Cailar, Beauvoisin, Saint-Laurent-d\'Aigouze.',
     quartiers: ['Centre-ville', 'Le Cailar', 'Beauvoisin', 'Saint-Laurent-d\'Aigouze', 'Saint-Gilles', 'Aimargues', 'Générac'],
   },
   {
@@ -9626,7 +9626,7 @@ export const villes: Ville[] = [
     departementCode: '13',
     population: '12 000',
     codePostal: '13380',
-    description: 'Artisans vérifiés à Plan-de-Cuques et ses environs. Cette commune provençale de 12 000 habitants en Bouches-du-Rhône compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Allauch, Mimet, Simiane-Collongue.',
+    description: 'Artisans référencés à Plan-de-Cuques et ses environs. Cette commune provençale de 12 000 habitants en Bouches-du-Rhône compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Allauch, Mimet, Simiane-Collongue.',
     quartiers: ['Centre-ville', 'Allauch', 'Mimet', 'Simiane-Collongue', 'Cadolive', 'Saint-Savournin', 'Septèmes-les-Vallons'],
   },
   {
@@ -9758,7 +9758,7 @@ export const villes: Ville[] = [
     departementCode: '57',
     population: '12 000',
     codePostal: '57280',
-    description: 'Maizières-lès-Metz (Moselle, Grand Est) est une commune de 12 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Talange, Hagondange, Marange-Silvange.',
+    description: 'Maizières-lès-Metz (Moselle, Grand Est) est une commune de 12 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Talange, Hagondange, Marange-Silvange.',
     quartiers: ['Centre-ville', 'Talange', 'Hagondange', 'Marange-Silvange', 'Amnéville', 'Woippy', 'Ennery'],
   },
   {
@@ -9802,7 +9802,7 @@ export const villes: Ville[] = [
     departementCode: '44',
     population: '11 000',
     codePostal: '44160',
-    description: 'Pontchâteau (Loire-Atlantique, Pays de la Loire) est une commune de 11 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Drefféac, Sainte-Anne-sur-Brivet, Crossac.',
+    description: 'Pontchâteau (Loire-Atlantique, Pays de la Loire) est une commune de 11 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Drefféac, Sainte-Anne-sur-Brivet, Crossac.',
     quartiers: ['Centre-ville', 'Drefféac', 'Sainte-Anne-sur-Brivet', 'Crossac', 'Besné', 'Sainte-Reine-de-Bretagne', 'Campbon'],
   },
   {
@@ -9824,7 +9824,7 @@ export const villes: Ville[] = [
     departementCode: '67',
     population: '11 000',
     codePostal: '67700',
-    description: 'Artisans vérifiés à Saverne et ses environs. Cette commune du Grand Est de 11 000 habitants en Bas-Rhin compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Marmoutier, Dettwiller, Bouxwiller.',
+    description: 'Artisans référencés à Saverne et ses environs. Cette commune du Grand Est de 11 000 habitants en Bas-Rhin compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Marmoutier, Dettwiller, Bouxwiller.',
     quartiers: ['Centre-ville', 'Marmoutier', 'Dettwiller', 'Bouxwiller', 'Wasselonne', 'Hochfelden', 'Ingwiller'],
   },
   {
@@ -9857,7 +9857,7 @@ export const villes: Ville[] = [
     departementCode: '976',
     population: '11 000',
     codePostal: '97615',
-    description: 'Artisans vérifiés à Pamandzi et ses environs. Cette commune mahoraise de 11 000 habitants en Mayotte compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Dzaoudzi, Mamoudzou, Koungou.',
+    description: 'Artisans référencés à Pamandzi et ses environs. Cette commune mahoraise de 11 000 habitants en Mayotte compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Dzaoudzi, Mamoudzou, Koungou.',
     quartiers: ['Centre-ville', 'Dzaoudzi', 'Mamoudzou', 'Koungou', 'Dembeni', 'Ouangani', 'Tsingoni'],
   },
   {
@@ -9923,7 +9923,7 @@ export const villes: Ville[] = [
     departementCode: '87',
     population: '11 000',
     codePostal: '87200',
-    description: 'Saint-Junien (Haute-Vienne, Nouvelle-Aquitaine) est une commune de 11 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Rochechouart, Oradour-sur-Glane, Veyrac.',
+    description: 'Saint-Junien (Haute-Vienne, Nouvelle-Aquitaine) est une commune de 11 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Rochechouart, Oradour-sur-Glane, Veyrac.',
     quartiers: ['Centre-ville', 'Rochechouart', 'Oradour-sur-Glane', 'Veyrac', 'Verneuil-sur-Vienne', 'Saint-Gence', 'Séreilhac'],
   },
   {
@@ -9934,7 +9934,7 @@ export const villes: Ville[] = [
     departementCode: '91',
     population: '11 000',
     codePostal: '91410',
-    description: 'Dourdan (Essonne, Île-de-France) est une commune de 11 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Saint-Chéron, Forges-les-Bains, Breuillet.',
+    description: 'Dourdan (Essonne, Île-de-France) est une commune de 11 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Saint-Chéron, Forges-les-Bains, Breuillet.',
     quartiers: ['Centre-ville', 'Saint-Chéron', 'Forges-les-Bains', 'Breuillet', 'Étréchy', 'Limours', 'Briis-sous-Forges'],
   },
   {
@@ -9978,7 +9978,7 @@ export const villes: Ville[] = [
     departementCode: '87',
     population: '11 000',
     codePostal: '87350',
-    description: 'Panazol (Haute-Vienne, Nouvelle-Aquitaine) est une commune de 11 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Le Palais-sur-Vienne, Feytiat, Saint-Just-le-Martel.',
+    description: 'Panazol (Haute-Vienne, Nouvelle-Aquitaine) est une commune de 11 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Le Palais-sur-Vienne, Feytiat, Saint-Just-le-Martel.',
     quartiers: ['Centre-ville', 'Le Palais-sur-Vienne', 'Feytiat', 'Saint-Just-le-Martel', 'Rilhac-Rancon', 'Limoges', 'Saint-Priest-Taurion'],
   },
   {
@@ -10011,7 +10011,7 @@ export const villes: Ville[] = [
     departementCode: '83',
     population: '11 000',
     codePostal: '83340',
-    description: 'Le Luc (Var, Provence-Alpes-Côte d\'Azur) est une commune de 11 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Le Cannet-des-Maures, Flassans-sur-Issole, Gonfaron.',
+    description: 'Le Luc (Var, Provence-Alpes-Côte d\'Azur) est une commune de 11 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Le Cannet-des-Maures, Flassans-sur-Issole, Gonfaron.',
     quartiers: ['Centre-ville', 'Le Cannet-des-Maures', 'Flassans-sur-Issole', 'Gonfaron', 'Cabasse', 'Le Thoronet', 'Pignans'],
   },
   {
@@ -10033,7 +10033,7 @@ export const villes: Ville[] = [
     departementCode: '12',
     population: '11 000',
     codePostal: '12200',
-    description: 'Artisans vérifiés à Villefranche-de-Rouergue et ses environs. Cette commune occitane de 11 000 habitants en Aveyron compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Rignac, Capdenac-Gare.',
+    description: 'Artisans référencés à Villefranche-de-Rouergue et ses environs. Cette commune occitane de 11 000 habitants en Aveyron compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Rignac, Capdenac-Gare.',
     quartiers: ['Centre-ville', 'Rignac', 'Capdenac-Gare'],
   },
   {
@@ -10099,7 +10099,7 @@ export const villes: Ville[] = [
     departementCode: '69',
     population: '11 000',
     codePostal: '69680',
-    description: 'Chassieu (Rhône, Auvergne-Rhône-Alpes) est une commune de 11 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Bron, Saint-Priest, Genas.',
+    description: 'Chassieu (Rhône, Auvergne-Rhône-Alpes) est une commune de 11 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Bron, Saint-Priest, Genas.',
     quartiers: ['Centre-ville', 'Bron', 'Saint-Priest', 'Genas', 'Décines-Charpieu', 'Vaulx-en-Velin', 'Meyzieu'],
   },
   {
@@ -10231,7 +10231,7 @@ export const villes: Ville[] = [
     departementCode: '45',
     population: '11 000',
     codePostal: '45380',
-    description: 'La Chapelle-Saint-Mesmin (Loiret, Centre-Val de Loire) est une commune de 11 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Saint-Pryvé-Saint-Mesmin, Saint-Jean-de-la-Ruelle, Saint-Hilaire-Saint-Mesmin.',
+    description: 'La Chapelle-Saint-Mesmin (Loiret, Centre-Val de Loire) est une commune de 11 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Saint-Pryvé-Saint-Mesmin, Saint-Jean-de-la-Ruelle, Saint-Hilaire-Saint-Mesmin.',
     quartiers: ['Centre-ville', 'Saint-Pryvé-Saint-Mesmin', 'Saint-Jean-de-la-Ruelle', 'Saint-Hilaire-Saint-Mesmin', 'Ingré', 'Chaingy', 'Olivet'],
   },
   {
@@ -10253,7 +10253,7 @@ export const villes: Ville[] = [
     departementCode: '78',
     population: '11 000',
     codePostal: '78290',
-    description: 'Artisans vérifiés à Croissy-sur-Seine et ses environs. Cette commune francilienne de 11 000 habitants en Yvelines compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Le Vésinet, Le Port-Marly, Bougival.',
+    description: 'Artisans référencés à Croissy-sur-Seine et ses environs. Cette commune francilienne de 11 000 habitants en Yvelines compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Le Vésinet, Le Port-Marly, Bougival.',
     quartiers: ['Centre-ville', 'Le Vésinet', 'Le Port-Marly', 'Bougival', 'Chatou', 'Le Pecq', 'Louveciennes'],
   },
   {
@@ -10297,7 +10297,7 @@ export const villes: Ville[] = [
     departementCode: '94',
     population: '11 000',
     codePostal: '94490',
-    description: 'Ormesson-sur-Marne (Val-de-Marne, Île-de-France) est une commune de 11 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Chennevières-sur-Marne, Noiseau, Sucy-en-Brie.',
+    description: 'Ormesson-sur-Marne (Val-de-Marne, Île-de-France) est une commune de 11 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Chennevières-sur-Marne, Noiseau, Sucy-en-Brie.',
     quartiers: ['Centre-ville', 'Chennevières-sur-Marne', 'Noiseau', 'Sucy-en-Brie', 'Champigny-sur-Marne', 'Saint-Maur-des-Fossés', 'Bonneuil-sur-Marne'],
   },
   {
@@ -10341,7 +10341,7 @@ export const villes: Ville[] = [
     departementCode: '973',
     population: '11 000',
     codePostal: '97318',
-    description: 'Mana (Guyane, Guyane) est une commune de 11 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide.',
+    description: 'Mana (Guyane, Guyane) est une commune de 11 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide.',
     quartiers: ['Centre-ville'],
   },
   {
@@ -10363,7 +10363,7 @@ export const villes: Ville[] = [
     departementCode: '57',
     population: '11 000',
     codePostal: '57350',
-    description: 'Artisans vérifiés à Stiring-Wendel et ses environs. Cette commune du Grand Est de 11 000 habitants en Moselle compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Schœneck, Forbach, Spicheren.',
+    description: 'Artisans référencés à Stiring-Wendel et ses environs. Cette commune du Grand Est de 11 000 habitants en Moselle compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Schœneck, Forbach, Spicheren.',
     quartiers: ['Centre-ville', 'Schœneck', 'Forbach', 'Spicheren', 'Œting', 'Behren-lès-Forbach', 'Petite-Rosselle'],
   },
   {
@@ -10374,7 +10374,7 @@ export const villes: Ville[] = [
     departementCode: '37',
     population: '11 000',
     codePostal: '37230',
-    description: 'Artisans vérifiés à Fondettes et ses environs. Cette commune du Centre de 11 000 habitants en Indre-et-Loire compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Saint-Cyr-sur-Loire, La Membrolle-sur-Choisille, La Riche.',
+    description: 'Artisans référencés à Fondettes et ses environs. Cette commune du Centre de 11 000 habitants en Indre-et-Loire compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Saint-Cyr-sur-Loire, La Membrolle-sur-Choisille, La Riche.',
     quartiers: ['Centre-ville', 'Saint-Cyr-sur-Loire', 'La Membrolle-sur-Choisille', 'La Riche', 'Luynes', 'Mettray', 'Tours'],
   },
   {
@@ -10396,7 +10396,7 @@ export const villes: Ville[] = [
     departementCode: '59',
     population: '11 000',
     codePostal: '59880',
-    description: 'Artisans vérifiés à Saint-Saulve et ses environs. Cette commune nordiste de 11 000 habitants en Nord compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Onnaing, Bruay-sur-l\'Escaut, Marly.',
+    description: 'Artisans référencés à Saint-Saulve et ses environs. Cette commune nordiste de 11 000 habitants en Nord compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Onnaing, Bruay-sur-l\'Escaut, Marly.',
     quartiers: ['Centre-ville', 'Onnaing', 'Bruay-sur-l\'Escaut', 'Marly', 'Anzin', 'Valenciennes', 'Beuvrages'],
   },
   {
@@ -10451,7 +10451,7 @@ export const villes: Ville[] = [
     departementCode: '64',
     population: '11 000',
     codePostal: '64300',
-    description: 'Artisans vérifiés à Orthez et ses environs. Cette commune néo-aquitaine de 11 000 habitants en Pyrénées-Atlantiques compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Salies-de-Béarn, Mourenx, Artix.',
+    description: 'Artisans référencés à Orthez et ses environs. Cette commune néo-aquitaine de 11 000 habitants en Pyrénées-Atlantiques compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Salies-de-Béarn, Mourenx, Artix.',
     quartiers: ['Centre-ville', 'Salies-de-Béarn', 'Mourenx', 'Artix'],
   },
   {
@@ -10484,7 +10484,7 @@ export const villes: Ville[] = [
     departementCode: '34',
     population: '11 000',
     codePostal: '34750',
-    description: 'Villeneuve-lès-Maguelone (Hérault, Occitanie) est une commune de 11 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Mireval, Vic-la-Gardiole, Palavas-les-Flots.',
+    description: 'Villeneuve-lès-Maguelone (Hérault, Occitanie) est une commune de 11 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Mireval, Vic-la-Gardiole, Palavas-les-Flots.',
     quartiers: ['Centre-ville', 'Mireval', 'Vic-la-Gardiole', 'Palavas-les-Flots', 'Lattes', 'Saint-Jean-de-Védas', 'Fabrègues'],
   },
   {
@@ -10495,7 +10495,7 @@ export const villes: Ville[] = [
     departementCode: '78',
     population: '11 000',
     codePostal: '78570',
-    description: 'Chanteloup-les-Vignes (Yvelines, Île-de-France) est une commune de 11 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Andrésy, Triel-sur-Seine, Maurecourt.',
+    description: 'Chanteloup-les-Vignes (Yvelines, Île-de-France) est une commune de 11 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Andrésy, Triel-sur-Seine, Maurecourt.',
     quartiers: ['Centre-ville', 'Andrésy', 'Triel-sur-Seine', 'Maurecourt', 'Carrières-sous-Poissy', 'Vernouillet', 'Verneuil-sur-Seine'],
   },
   {
@@ -10517,7 +10517,7 @@ export const villes: Ville[] = [
     departementCode: '59',
     population: '11 000',
     codePostal: '59112',
-    description: 'Artisans vérifiés à Annœullin et ses environs. Cette commune nordiste de 11 000 habitants en Nord compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Provin, Allennes-les-Marais, Bauvin.',
+    description: 'Artisans référencés à Annœullin et ses environs. Cette commune nordiste de 11 000 habitants en Nord compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Provin, Allennes-les-Marais, Bauvin.',
     quartiers: ['Centre-ville', 'Provin', 'Allennes-les-Marais', 'Bauvin', 'Sainghin-en-Weppes', 'Gondecourt', 'Wavrin'],
   },
   {
@@ -10627,7 +10627,7 @@ export const villes: Ville[] = [
     departementCode: '987',
     population: '11 000',
     codePostal: '98730',
-    description: 'Bora-Bora (Polynésie française, Polynésie française) est une commune de 11 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide.',
+    description: 'Bora-Bora (Polynésie française, Polynésie française) est une commune de 11 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide.',
     quartiers: ['Centre-ville'],
   },
   {
@@ -10638,7 +10638,7 @@ export const villes: Ville[] = [
     departementCode: '72',
     population: '11 000',
     codePostal: '72700',
-    description: 'Artisans vérifiés à Allonnes et ses environs. Cette commune ligérienne de 11 000 habitants en Sarthe compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Saint-Georges-du-Bois, Spay, Rouillon.',
+    description: 'Artisans référencés à Allonnes et ses environs. Cette commune ligérienne de 11 000 habitants en Sarthe compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Saint-Georges-du-Bois, Spay, Rouillon.',
     quartiers: ['Centre-ville', 'Saint-Georges-du-Bois', 'Spay', 'Rouillon', 'Le Mans', 'Arnage', 'Moncé-en-Belin'],
   },
   {
@@ -10682,7 +10682,7 @@ export const villes: Ville[] = [
     departementCode: '64',
     population: '11 000',
     codePostal: '64400',
-    description: 'Oloron-Sainte-Marie (Pyrénées-Atlantiques, Nouvelle-Aquitaine) est une commune de 11 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Arudy, Monein, Gan.',
+    description: 'Oloron-Sainte-Marie (Pyrénées-Atlantiques, Nouvelle-Aquitaine) est une commune de 11 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Arudy, Monein, Gan.',
     quartiers: ['Centre-ville', 'Arudy', 'Monein', 'Gan', 'Jurançon', 'Artiguelouve', 'Gelos'],
   },
   {
@@ -10737,7 +10737,7 @@ export const villes: Ville[] = [
     departementCode: '977',
     population: '11 000',
     codePostal: '97133',
-    description: 'Saint-Barthélemy (Saint-Barthélemy, Saint-Barthélemy) est une commune de 11 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide.',
+    description: 'Saint-Barthélemy (Saint-Barthélemy, Saint-Barthélemy) est une commune de 11 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide.',
     quartiers: ['Centre-ville'],
   },
   {
@@ -10803,7 +10803,7 @@ export const villes: Ville[] = [
     departementCode: '76',
     population: '11 000',
     codePostal: '76170',
-    description: 'Port-Jérôme-sur-Seine (Seine-Maritime, Normandie) est une commune de 11 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que La Frénaye, Lillebonne, Gruchet-le-Valasse.',
+    description: 'Port-Jérôme-sur-Seine (Seine-Maritime, Normandie) est une commune de 11 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que La Frénaye, Lillebonne, Gruchet-le-Valasse.',
     quartiers: ['Centre-ville', 'La Frénaye', 'Lillebonne', 'Gruchet-le-Valasse', 'Rives-en-Seine', 'Bolbec', 'Arelaune-en-Seine'],
   },
   {
@@ -10869,7 +10869,7 @@ export const villes: Ville[] = [
     departementCode: '60',
     population: '11 000',
     codePostal: '60600',
-    description: 'Artisans vérifiés à Clermont et ses environs. Cette commune nordiste de 11 000 habitants en Oise compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Breuil-le-Vert, Fitz-James, Agnetz.',
+    description: 'Artisans référencés à Clermont et ses environs. Cette commune nordiste de 11 000 habitants en Oise compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Breuil-le-Vert, Fitz-James, Agnetz.',
     quartiers: ['Centre-ville', 'Breuil-le-Vert', 'Fitz-James', 'Agnetz', 'Breuil-le-Sec', 'Rantigny', 'Liancourt'],
   },
   {
@@ -11001,7 +11001,7 @@ export const villes: Ville[] = [
     departementCode: '26',
     population: '10 000',
     codePostal: '26800',
-    description: 'Artisans vérifiés à Portes-lès-Valence et ses environs. Cette commune rhônalpine de 10 000 habitants en Drôme compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Étoile-sur-Rhône, Beaumont-lès-Valence, Valence.',
+    description: 'Artisans référencés à Portes-lès-Valence et ses environs. Cette commune rhônalpine de 10 000 habitants en Drôme compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Étoile-sur-Rhône, Beaumont-lès-Valence, Valence.',
     quartiers: ['Centre-ville', 'Étoile-sur-Rhône', 'Beaumont-lès-Valence', 'Valence', 'Malissard', 'Montmeyran', 'Bourg-lès-Valence'],
   },
   {
@@ -11023,7 +11023,7 @@ export const villes: Ville[] = [
     departementCode: '34',
     population: '10 000',
     codePostal: '34980',
-    description: 'Saint-Gély-du-Fesc (Hérault, Occitanie) est une commune de 10 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Combaillaux, Saint-Clément-de-Rivière, Les Matelles.',
+    description: 'Saint-Gély-du-Fesc (Hérault, Occitanie) est une commune de 10 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Combaillaux, Saint-Clément-de-Rivière, Les Matelles.',
     quartiers: ['Centre-ville', 'Combaillaux', 'Saint-Clément-de-Rivière', 'Les Matelles', 'Grabels', 'Prades-le-Lez', 'Montferrier-sur-Lez'],
   },
   {
@@ -11078,7 +11078,7 @@ export const villes: Ville[] = [
     departementCode: '31',
     population: '10 000',
     codePostal: '31190',
-    description: 'Auterive (Haute-Garonne, Occitanie) est une commune de 10 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Miremont, Cintegabelle, Venerque.',
+    description: 'Auterive (Haute-Garonne, Occitanie) est une commune de 10 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Miremont, Cintegabelle, Venerque.',
     quartiers: ['Centre-ville', 'Miremont', 'Cintegabelle', 'Venerque', 'Vernet', 'Lagardelle-sur-Lèze', 'Nailloux'],
   },
   {
@@ -11122,7 +11122,7 @@ export const villes: Ville[] = [
     departementCode: '01',
     population: '10 000',
     codePostal: '01700',
-    description: 'Artisans vérifiés à Miribel et ses environs. Cette commune rhônalpine de 10 000 habitants en Ain compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Neyron, Saint-Maurice-de-Beynost, Beynost.',
+    description: 'Artisans référencés à Miribel et ses environs. Cette commune rhônalpine de 10 000 habitants en Ain compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Neyron, Saint-Maurice-de-Beynost, Beynost.',
     quartiers: ['Centre-ville', 'Neyron', 'Saint-Maurice-de-Beynost', 'Beynost', 'Mionnay', 'La Boisse', 'Montluel'],
   },
   {
@@ -11177,7 +11177,7 @@ export const villes: Ville[] = [
     departementCode: '13',
     population: '10 000',
     codePostal: '13710',
-    description: 'Artisans vérifiés à Fuveau et ses environs. Cette commune provençale de 10 000 habitants en Bouches-du-Rhône compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Gréasque, Châteauneuf-le-Rouge, Belcodène.',
+    description: 'Artisans référencés à Fuveau et ses environs. Cette commune provençale de 10 000 habitants en Bouches-du-Rhône compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Gréasque, Châteauneuf-le-Rouge, Belcodène.',
     quartiers: ['Centre-ville', 'Gréasque', 'Châteauneuf-le-Rouge', 'Belcodène', 'Gardanne', 'Meyreuil', 'Peynier'],
   },
   {
@@ -11188,7 +11188,7 @@ export const villes: Ville[] = [
     departementCode: '63',
     population: '10 000',
     codePostal: '63360',
-    description: 'Gerzat (Puy-de-Dôme, Auvergne-Rhône-Alpes) est une commune de 10 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Saint-Beauzire, Cébazat, Aulnat.',
+    description: 'Gerzat (Puy-de-Dôme, Auvergne-Rhône-Alpes) est une commune de 10 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Saint-Beauzire, Cébazat, Aulnat.',
     quartiers: ['Centre-ville', 'Saint-Beauzire', 'Cébazat', 'Aulnat', 'Châteaugay', 'Clermont-Ferrand', 'Lempdes'],
   },
   {
@@ -11243,7 +11243,7 @@ export const villes: Ville[] = [
     departementCode: '987',
     population: '10 000',
     codePostal: '98701',
-    description: 'Arue (Polynésie française, Polynésie française) est une commune de 10 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide.',
+    description: 'Arue (Polynésie française, Polynésie française) est une commune de 10 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide.',
     quartiers: ['Centre-ville'],
   },
   {
@@ -11287,7 +11287,7 @@ export const villes: Ville[] = [
     departementCode: '69',
     population: '10 000',
     codePostal: '69320',
-    description: 'Feyzin (Rhône, Auvergne-Rhône-Alpes) est une commune de 10 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Saint-Fons, Irigny, Vénissieux.',
+    description: 'Feyzin (Rhône, Auvergne-Rhône-Alpes) est une commune de 10 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Saint-Fons, Irigny, Vénissieux.',
     quartiers: ['Centre-ville', 'Saint-Fons', 'Irigny', 'Vénissieux', 'Solaize', 'Saint-Symphorien-d\'Ozon', 'Corbas'],
   },
   {
@@ -11320,7 +11320,7 @@ export const villes: Ville[] = [
     departementCode: '86',
     population: '10 000',
     codePostal: '86180',
-    description: 'Buxerolles (Vienne, Nouvelle-Aquitaine) est une commune de 10 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Poitiers, Chasseneuil-du-Poitou, Migné-Auxances.',
+    description: 'Buxerolles (Vienne, Nouvelle-Aquitaine) est une commune de 10 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Poitiers, Chasseneuil-du-Poitou, Migné-Auxances.',
     quartiers: ['Centre-ville', 'Poitiers', 'Chasseneuil-du-Poitou', 'Migné-Auxances', 'Montamisé', 'Saint-Benoît', 'Mignaloux-Beauvoir'],
   },
   {
@@ -11331,7 +11331,7 @@ export const villes: Ville[] = [
     departementCode: '976',
     population: '10 000',
     codePostal: '97660',
-    description: 'Bandrele (Mayotte, Mayotte) est une commune de 10 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Chirongui, Kani-Kéli, Bouéni.',
+    description: 'Bandrele (Mayotte, Mayotte) est une commune de 10 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Chirongui, Kani-Kéli, Bouéni.',
     quartiers: ['Centre-ville', 'Chirongui', 'Kani-Kéli', 'Bouéni', 'Dembeni', 'Sada', 'Ouangani'],
   },
   {
@@ -11353,7 +11353,7 @@ export const villes: Ville[] = [
     departementCode: '13',
     population: '10 000',
     codePostal: '13480',
-    description: 'Artisans vérifiés à Cabriès et ses environs. Cette commune provençale de 10 000 habitants en Bouches-du-Rhône compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Bouc-Bel-Air, Les Pennes-Mirabeau, Vitrolles.',
+    description: 'Artisans référencés à Cabriès et ses environs. Cette commune provençale de 10 000 habitants en Bouches-du-Rhône compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Bouc-Bel-Air, Les Pennes-Mirabeau, Vitrolles.',
     quartiers: ['Centre-ville', 'Bouc-Bel-Air', 'Les Pennes-Mirabeau', 'Vitrolles', 'Septèmes-les-Vallons', 'Simiane-Collongue', 'Saint-Victoret'],
   },
   {
@@ -11375,7 +11375,7 @@ export const villes: Ville[] = [
     departementCode: '83',
     population: '10 000',
     codePostal: '83330',
-    description: 'Le Beausset (Var, Provence-Alpes-Côte d\'Azur) est une commune de 10 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Évenos, Le Castellet, Ollioules.',
+    description: 'Le Beausset (Var, Provence-Alpes-Côte d\'Azur) est une commune de 10 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Évenos, Le Castellet, Ollioules.',
     quartiers: ['Centre-ville', 'Évenos', 'Le Castellet', 'Ollioules', 'Sanary-sur-Mer', 'Signes', 'La Cadière-d\'Azur'],
   },
   {
@@ -11496,7 +11496,7 @@ export const villes: Ville[] = [
     departementCode: '84',
     population: '10 000',
     codePostal: '84400',
-    description: 'Apt (Vaucluse, Provence-Alpes-Côte d\'Azur) est une commune de 10 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Gargas, Saint-Saturnin-lès-Apt, Lauris.',
+    description: 'Apt (Vaucluse, Provence-Alpes-Côte d\'Azur) est une commune de 10 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Gargas, Saint-Saturnin-lès-Apt, Lauris.',
     quartiers: ['Centre-ville', 'Gargas', 'Saint-Saturnin-lès-Apt', 'Lauris', 'Cadenet', 'Villelaure', 'Mérindol'],
   },
   {
@@ -11507,7 +11507,7 @@ export const villes: Ville[] = [
     departementCode: '79',
     population: '10 000',
     codePostal: '79200',
-    description: 'Artisans vérifiés à Parthenay et ses environs. Cette commune néo-aquitaine de 10 000 habitants en Deux-Sèvres compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Pompaire, Châtillon-sur-Thouet, La Chapelle-Saint-Laurent.',
+    description: 'Artisans référencés à Parthenay et ses environs. Cette commune néo-aquitaine de 10 000 habitants en Deux-Sèvres compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Pompaire, Châtillon-sur-Thouet, La Chapelle-Saint-Laurent.',
     quartiers: ['Centre-ville', 'Pompaire', 'Châtillon-sur-Thouet', 'La Chapelle-Saint-Laurent', 'Airvault'],
   },
   {
@@ -11529,7 +11529,7 @@ export const villes: Ville[] = [
     departementCode: '83',
     population: '10 000',
     codePostal: '83490',
-    description: 'Artisans vérifiés à Le Muy et ses environs. Cette commune provençale de 10 000 habitants en Var compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que La Motte, Roquebrune-sur-Argens, Les Arcs.',
+    description: 'Artisans référencés à Le Muy et ses environs. Cette commune provençale de 10 000 habitants en Var compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que La Motte, Roquebrune-sur-Argens, Les Arcs.',
     quartiers: ['Centre-ville', 'La Motte', 'Roquebrune-sur-Argens', 'Les Arcs', 'Puget-sur-Argens', 'Trans-en-Provence', 'Callas'],
   },
   {
@@ -11562,7 +11562,7 @@ export const villes: Ville[] = [
     departementCode: '40',
     population: '10 000',
     codePostal: '40280',
-    description: 'Artisans vérifiés à Saint-Pierre-du-Mont et ses environs. Cette commune néo-aquitaine de 10 000 habitants en Landes compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Mont-de-Marsan, Grenade-sur-l\'Adour, Saint-Sever.',
+    description: 'Artisans référencés à Saint-Pierre-du-Mont et ses environs. Cette commune néo-aquitaine de 10 000 habitants en Landes compte de nombreux professionnels pour la plomberie, l’électricité, la menuiserie, la peinture et tous vos travaux, ainsi que Mont-de-Marsan, Grenade-sur-l\'Adour, Saint-Sever.',
     quartiers: ['Centre-ville', 'Mont-de-Marsan', 'Grenade-sur-l\'Adour', 'Saint-Sever', 'Villeneuve-de-Marsan', 'Tartas'],
   },
   {
@@ -11639,7 +11639,7 @@ export const villes: Ville[] = [
     departementCode: '69',
     population: '10 000',
     codePostal: '69520',
-    description: 'Grigny-sur-Rhône (Rhône, Auvergne-Rhône-Alpes) est une commune de 10 000 habitants où nos artisans certifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Ternay, Millery, Montagny.',
+    description: 'Grigny-sur-Rhône (Rhône, Auvergne-Rhône-Alpes) est une commune de 10 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide, ainsi que Ternay, Millery, Montagny.',
     quartiers: ['Centre-ville', 'Ternay', 'Millery', 'Montagny', 'Sérézin-du-Rhône', 'Givors', 'Communay'],
   },
   {

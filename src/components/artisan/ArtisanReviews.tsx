@@ -304,7 +304,7 @@ export function ArtisanReviews({ artisan: _artisan, reviews }: ArtisanReviewsPro
       {filteredReviews.length > 0 && (
         <p className="mt-4 text-center text-sm text-gray-500">
           {displayedReviews.length} sur {filteredReviews.length} avis affichés
-          {filter !== 'all' && ` (filtre: ${filter === 'verified' ? 'vérifiés' : filter === 'photo' ? 'avec photo' : filter + ' étoiles'})`}
+          {filter !== 'all' && ` (filtre: ${filter === 'verified' ? 'référencés' : filter === 'photo' ? 'avec photo' : filter + ' étoiles'})`}
         </p>
       )}
     </motion.div>

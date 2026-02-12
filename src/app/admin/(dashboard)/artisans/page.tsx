@@ -159,7 +159,7 @@ export default function AdminProvidersPage() {
 
       if (response.ok && data.success) {
         // Show success toast
-        const actionText = action === 'verify' ? 'vérifié' : action === 'suspend' ? 'suspendu' : 'réactivé'
+        const actionText = action === 'verify' ? 'référencé' : action === 'suspend' ? 'suspendu' : 'réactivé'
         setToast({ message: `Artisan ${actionText} avec succès!`, type: 'success' })
 
         // Update local state immediately for better UX

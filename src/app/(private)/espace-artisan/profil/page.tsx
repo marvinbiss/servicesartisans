@@ -257,7 +257,7 @@ export default function ProfilArtisanPage() {
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-sm">
                   <Shield className="w-4 h-4 text-green-500" />
-                  <span>Profil vérifié</span>
+                  <span>Profil référencé</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <Shield className="w-4 h-4 text-green-500" />

@@ -5,8 +5,8 @@ import Breadcrumb from '@/components/Breadcrumb'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
 
 export const metadata: Metadata = {
-  title: 'Avis Clients Vérifiés - Témoignages | ServicesArtisans',
-  description: 'Découvrez les avis vérifiés de nos clients sur nos artisans qualifiés.',
+  title: 'Avis Clients Authentiques - Témoignages | ServicesArtisans',
+  description: 'Découvrez les avis authentiques de nos clients sur nos artisans qualifiés.',
 }
 
 const avisRecents = [
@@ -109,11 +109,11 @@ export default function AvisPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <Breadcrumb items={breadcrumbItems} className="mb-4 text-blue-200 [&_a]:text-blue-200 [&_a:hover]:text-white [&_svg]:text-blue-300 [&>span]:text-white" />
           <h1 className="text-4xl font-bold mb-4">
-            Avis clients vérifiés
+            Avis clients authentiques
           </h1>
           <p className="text-xl text-blue-100 max-w-3xl">
             Découvrez les retours d'expérience de nos clients. Tous nos avis sont authentiques
-            et vérifiés après chaque intervention.
+            et recueillis après chaque intervention.
           </p>
         </div>
       </div>
@@ -124,7 +124,7 @@ export default function AvisPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div className="text-center">
               <div className="text-4xl font-bold text-blue-600">{stats.totalAvis.toLocaleString()}</div>
-              <p className="text-gray-500 mt-1">Avis vérifiés</p>
+              <p className="text-gray-500 mt-1">Avis authentiques</p>
             </div>
             <div className="text-center">
               <div className="text-4xl font-bold text-blue-600 flex items-center justify-center gap-2">
@@ -135,7 +135,7 @@ export default function AvisPage() {
             </div>
             <div className="text-center">
               <div className="text-4xl font-bold text-blue-600">{stats.artisansVerifies.toLocaleString()}</div>
-              <p className="text-gray-500 mt-1">Artisans vérifiés</p>
+              <p className="text-gray-500 mt-1">Artisans référencés</p>
             </div>
             <div className="text-center">
               <div className="text-4xl font-bold text-blue-600">{stats.clientsSatisfaits}%</div>

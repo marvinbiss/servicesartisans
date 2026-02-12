@@ -25,7 +25,7 @@ export const dynamic = 'force-dynamic'
 
 // Default settings
 const DEFAULT_SETTINGS = {
-  siteName: 'Services Artisans',
+  siteName: 'ServicesArtisans',
   contactEmail: 'contact@servicesartisans.fr',
   supportEmail: 'support@servicesartisans.fr',
   maintenanceMode: false,

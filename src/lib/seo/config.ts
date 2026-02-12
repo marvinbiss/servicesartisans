@@ -18,7 +18,7 @@ export const defaultSEOConfig = {
         url: `${SITE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
-        alt: 'ServicesArtisans - Trouvez les meilleurs artisans',
+        alt: 'ServicesArtisans - Trouvez des artisans qualifiés près de chez vous',
       },
     ],
   },
@@ -115,8 +115,8 @@ export function getLocationSEO(locationType: 'ville' | 'region' | 'departement',
 export function getArtisanSEO(artisanName: string, service: string, location: string, rating?: number) {
   const title = `${artisanName} — ${service} à ${location}`
   const description = rating
-    ? `${artisanName}, ${service.toLowerCase()} à ${location}. Note : ${rating}/5. Entreprise vérifiée par SIREN. Consultez le profil et demandez un devis gratuit.`
-    : `${artisanName}, ${service.toLowerCase()} à ${location}. Entreprise vérifiée par SIREN. Coordonnées, profil et devis gratuit.`
+    ? `${artisanName}, ${service.toLowerCase()} à ${location}. Note : ${rating}/5. Entreprise référencée par SIREN. Consultez le profil et demandez un devis gratuit.`
+    : `${artisanName}, ${service.toLowerCase()} à ${location}. Entreprise référencée par SIREN. Coordonnées, profil et devis gratuit.`
 
   return {
     title,
