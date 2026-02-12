@@ -1,11 +1,10 @@
 'use client'
 
-import { useState, useEffect, useRef, useCallback } from 'react'
-import { useRouter } from 'next/navigation'
+import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { motion, useMotionValue, useTransform, animate, useInView, type Variants } from 'framer-motion'
-import { Search, MapPin } from 'lucide-react'
 import { services, villes, departements } from '@/lib/data/france'
+import { HeroSearch } from '@/components/search/HeroSearch'
 
 // ── Animated counter component ────────────────────────────────────────
 function AnimatedNumber({ value, suffix = '', duration = 2 }: { value: number; suffix?: string; duration?: number }) {
@@ -131,30 +130,6 @@ function AnimatedHeadingLine({ text, className }: { text: string; className?: st
 
 // ── Main Hero Component ───────────────────────────────────────────────
 export function HeroSection() {
-  const router = useRouter()
-  const [serviceQuery, setServiceQuery] = useState('')
-  const [locationQuery, setLocationQuery] = useState('')
-  const serviceInputRef = useRef<HTMLInputElement>(null)
-  const locationInputRef = useRef<HTMLInputElement>(null)
-  const [shimmerDone, setShimmerDone] = useState(false)
-
-  // Trigger shimmer on the search button after a delay, then stop
-  useEffect(() => {
-    const timer = setTimeout(() => setShimmerDone(true), 3000)
-    return () => clearTimeout(timer)
-  }, [])
-
-  const handleSubmit = useCallback(
-    (e?: React.FormEvent) => {
-      e?.preventDefault()
-      const params = new URLSearchParams()
-      if (serviceQuery.trim()) params.set('service', serviceQuery.trim())
-      if (locationQuery.trim()) params.set('ville', locationQuery.trim())
-      router.push(`/recherche?${params.toString()}`)
-    },
-    [serviceQuery, locationQuery, router]
-  )
-
   return (
     <>
       {/* ── HERO SECTION ────────────────────────────────────── */}
@@ -283,73 +258,7 @@ export function HeroSection() {
               variants={itemVariants}
               className="w-full max-w-3xl mx-auto mb-8"
             >
-              <form
-                onSubmit={handleSubmit}
-                role="search"
-                aria-label="Rechercher un artisan"
-                className="group bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl p-2 transition-shadow duration-500 focus-within:shadow-[0_0_30px_rgba(245,158,11,0.12)] focus-within:border-amber-500/30"
-              >
-                <div className="flex flex-col md:flex-row items-stretch">
-                  {/* Service input */}
-                  <div className="flex-1 flex items-center gap-3 px-4 py-3">
-                    <Search className="w-5 h-5 text-white/50 flex-shrink-0" />
-                    <input
-                      ref={serviceInputRef}
-                      type="text"
-                      value={serviceQuery}
-                      onChange={(e) => setServiceQuery(e.target.value)}
-                      placeholder="Quel service ? (plombier, électricien...)"
-                      aria-label="Type de service recherché"
-                      autoComplete="off"
-                      className="w-full bg-transparent text-white placeholder:text-gray-400 focus:outline-none text-base transition-colors duration-300"
-                    />
-                  </div>
-
-                  {/* Divider */}
-                  <div className="hidden md:block w-px bg-white/15 my-2" />
-                  <div className="block md:hidden h-px bg-white/15 mx-4" />
-
-                  {/* Location input */}
-                  <div className="flex-1 flex items-center gap-3 px-4 py-3">
-                    <MapPin className="w-5 h-5 text-white/50 flex-shrink-0" />
-                    <input
-                      ref={locationInputRef}
-                      type="text"
-                      value={locationQuery}
-                      onChange={(e) => setLocationQuery(e.target.value)}
-                      placeholder="Ville ou code postal"
-                      aria-label="Ville ou code postal"
-                      autoComplete="off"
-                      className="w-full bg-transparent text-white placeholder:text-gray-400 focus:outline-none text-base transition-colors duration-300"
-                    />
-                  </div>
-
-                  {/* Submit button with shimmer */}
-                  <div className="p-1.5">
-                    <motion.button
-                      type="submit"
-                      whileHover={{ scale: 1.03 }}
-                      whileTap={{ scale: 0.97 }}
-                      aria-label="Rechercher un artisan"
-                      className="relative w-full md:w-auto bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold rounded-xl px-8 py-4 transition-all duration-200 shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 flex items-center justify-center gap-2 whitespace-nowrap overflow-hidden"
-                    >
-                      {/* Shimmer overlay */}
-                      {!shimmerDone && (
-                        <span
-                          className="absolute inset-0 pointer-events-none"
-                          style={{
-                            background: 'linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.35) 50%, transparent 70%)',
-                            animation: 'heroShimmer 1.5s ease-in-out 0.8s 2 forwards',
-                          }}
-                          aria-hidden="true"
-                        />
-                      )}
-                      <Search className="w-5 h-5 relative z-10" />
-                      <span className="relative z-10">Rechercher</span>
-                    </motion.button>
-                  </div>
-                </div>
-              </form>
+              <HeroSearch />
             </motion.div>
 
             {/* ── FILTER CHIPS ────────────────────────────────── */}
