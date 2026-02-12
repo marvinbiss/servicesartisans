@@ -1,7 +1,5 @@
 import { Metadata } from 'next'
-import JsonLd from '@/components/JsonLd'
 import { PopularCitiesLinks, PopularServicesLinks, PopularServiceCityLinks, GeographicNavigation } from '@/components/InternalLinks'
-import { getOrganizationSchema, getWebsiteSchema } from '@/lib/seo/jsonld'
 import { HeroSection } from '@/components/home/HeroSection'
 import {
   ServicesShowcase,
@@ -28,7 +26,12 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <div className="min-h-screen">
-      <JsonLd data={[getOrganizationSchema(), getWebsiteSchema()]} />
+      {/* Organization + WebSite JSON-LD already injected globally in layout.tsx */}
+
+      {/* Server-rendered H1 for SEO — visually hidden, HeroSection shows the animated version */}
+      <h1 className="sr-only">
+        L&apos;annuaire des artisans qualifi&eacute;s en France
+      </h1>
 
       {/* ─── HERO + TRUST BAR ────────────────────────────────── */}
       <HeroSection />

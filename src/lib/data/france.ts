@@ -25227,6 +25227,39 @@ export function getVillesByDepartement(departementCode: string): Ville[] {
   return villes.filter(v => v.departementCode === departementCode)
 }
 
+/** Parse population string like '156 000' into a number (156000) */
+function parsePopulation(pop: string): number {
+  return parseInt(pop.replace(/\s/g, ''), 10) || 0
+}
+
+/**
+ * Retourne les villes proches (même département, puis même région) d'une ville donnée.
+ * Triées par population décroissante pour un maillage interne SEO optimal.
+ */
+export function getNearbyCities(villeSlug: string, limit: number = 5): Ville[] {
+  const ville = getVilleBySlug(villeSlug)
+  if (!ville) return []
+
+  // 1. Villes du même département (hors ville actuelle), triées par population
+  const sameDept = villes
+    .filter(v => v.departementCode === ville.departementCode && v.slug !== villeSlug)
+    .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
+
+  if (sameDept.length >= limit) {
+    return sameDept.slice(0, limit)
+  }
+
+  // 2. Compléter avec des villes de la même région (autres départements)
+  const sameDeptSlugs = new Set(sameDept.map(v => v.slug))
+  sameDeptSlugs.add(villeSlug)
+
+  const sameRegion = villes
+    .filter(v => v.region === ville.region && !sameDeptSlugs.has(v.slug))
+    .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
+
+  return [...sameDept, ...sameRegion].slice(0, limit)
+}
+
 // Régions françaises
 export interface Region {
   slug: string

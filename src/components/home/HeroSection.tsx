@@ -163,9 +163,11 @@ export function HeroSection() {
               </div>
             </motion.div>
 
-            {/* H1 heading */}
-            <motion.h1
+            {/* Visual heading — the real H1 is server-rendered in page.tsx */}
+            <motion.div
               variants={itemVariants}
+              aria-hidden="true"
+              role="presentation"
               className="font-heading text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tighter leading-[1.05] mb-6"
             >
               <span className="text-white">L&apos;annuaire des artisans</span>
@@ -173,7 +175,7 @@ export function HeroSection() {
               <span className="bg-gradient-to-r from-amber-400 to-amber-300 bg-clip-text text-transparent">
                 qualifi&eacute;s en France
               </span>
-            </motion.h1>
+            </motion.div>
 
             {/* Subtitle */}
             <motion.p

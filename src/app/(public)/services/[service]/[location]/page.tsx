@@ -10,11 +10,11 @@ import ServiceLocationPageClient from './PageClient'
 
 import { getBreadcrumbSchema, getItemListSchema } from '@/lib/seo/jsonld'
 import { PopularServicesLinks } from '@/components/InternalLinks'
-import { popularServices, popularCities } from '@/lib/constants/navigation'
+import { popularServices } from '@/lib/constants/navigation'
 import Link from 'next/link'
 import { REVALIDATE } from '@/lib/cache'
 import { slugify, getArtisanUrl } from '@/lib/utils'
-import { services as staticServicesList, villes, getVilleBySlug, getDepartementByCode, getRegionSlugByName } from '@/lib/data/france'
+import { services as staticServicesList, villes, getVilleBySlug, getDepartementByCode, getRegionSlugByName, getNearbyCities } from '@/lib/data/france'
 import { getTradeContent } from '@/lib/data/trade-content'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import { generateLocationContent } from '@/lib/seo/location-content'
@@ -262,7 +262,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
 
   // Filter out current location and get other services for cross-linking
   const otherServices = popularServices.filter(s => s.slug !== serviceSlug).slice(0, 6)
-  const nearbyCities = popularCities.filter(c => c.slug !== locationSlug).slice(0, 8)
+  const nearbyCities = getNearbyCities(locationSlug, 8)
 
   return (
     <>
@@ -280,8 +280,56 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         service={service}
         location={location}
         providers={providers || []}
-        locationContent={locationContent}
       />
+
+      {/* SEO Content - Server-rendered for Googlebot (unique per service+location) */}
+      {locationContent && (
+        <section className="py-12 bg-white border-t">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="prose prose-gray max-w-none">
+              <h2>
+                Trouver un {service.name.toLowerCase()} à {location.name}
+              </h2>
+              <p>{locationContent.introText}</p>
+
+              <h3>Tarifs et prix d&apos;un {service.name.toLowerCase()} à {location.name}</h3>
+              <p>{locationContent.pricingNote}</p>
+
+              <h3>Conseils pour vos travaux à {location.name}</h3>
+              <ul>
+                {locationContent.localTips.map((tip, i) => (
+                  <li key={i}>{tip}</li>
+                ))}
+              </ul>
+
+              <h3>
+                Zones d&apos;intervention à {location.name}
+              </h3>
+              <p>{locationContent.quartierText}</p>
+
+              <p>{locationContent.conclusion}</p>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Fallback SEO content when locationContent is not available */}
+      {!locationContent && (
+        <section className="py-12 bg-white border-t">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="prose prose-gray max-w-none">
+              <h2>
+                Trouver un {service.name.toLowerCase()} à {location.name}
+              </h2>
+              <p>
+                Vous recherchez un {service.name.toLowerCase()} à {location.name} (
+                {location.postal_code}) ? ServicesArtisans vous propose une sélection de{' '}
+                {providers.length} professionnels qualifiés dans votre ville.
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Trade pricing context */}
       {trade && (
@@ -364,7 +412,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
                     href={`/services/${s.slug}/${locationSlug}`}
                     className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-full text-sm transition-colors"
                   >
-                    {s.name}
+                    {s.name} à {location.name}
                   </Link>
                 ))}
               </div>
@@ -376,33 +424,21 @@ export default async function ServiceLocationPage({ params }: PageProps) {
               </Link>
             </div>
 
-            {/* Ce service dans d'autres villes */}
+            {/* Ce service dans les villes proches */}
             <div>
               <h3 className="font-semibold text-gray-900 mb-4">
-                {service.name} dans d&apos;autres villes
+                {service.name} près de {location.name}
               </h3>
               <div className="flex flex-wrap gap-2">
-                {nearbyCities.length > 0 ? (
-                  nearbyCities.map((city) => (
-                    <Link
-                      key={city.slug}
-                      href={`/services/${serviceSlug}/${city.slug}`}
-                      className="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-full text-sm transition-colors"
-                    >
-                      {city.name}
-                    </Link>
-                  ))
-                ) : (
-                  popularCities.slice(0, 6).map((city) => (
-                    <Link
-                      key={city.slug}
-                      href={`/services/${serviceSlug}/${city.slug}`}
-                      className="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-full text-sm transition-colors"
-                    >
-                      {city.name}
-                    </Link>
-                  ))
-                )}
+                {nearbyCities.map((city) => (
+                  <Link
+                    key={city.slug}
+                    href={`/services/${serviceSlug}/${city.slug}`}
+                    className="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-full text-sm transition-colors"
+                  >
+                    {service.name} à {city.name}
+                  </Link>
+                ))}
               </div>
               <Link
                 href={`/services/${serviceSlug}`}

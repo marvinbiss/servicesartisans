@@ -286,7 +286,7 @@ function getCityContext(ville: Ville): 'coastal' | 'mountain' | 'urban' | 'rural
 }
 
 // ---------------------------------------------------------------------------
-// Intro text templates — varied by hash to avoid repetition
+// Intro text templates — 15 varied structures to avoid repetition
 // ---------------------------------------------------------------------------
 
 function generateIntroText(
@@ -300,17 +300,54 @@ function generateIntroText(
   const region = ville.region
   const svcLower = serviceName.toLowerCase()
   const hash = hashCode(`${serviceSlug}-${ville.slug}`)
+  const count = providerCount > 0 ? providerCount : 'les'
+  const countSpace = providerCount > 0 ? providerCount + ' ' : ''
 
   const templates = [
-    `Vous recherchez un ${svcLower} qualifié à ${ville.name} ? Située dans le département ${dep} en région ${region}, ${ville.name} compte ${pop} habitants et bénéficie d'un réseau dense de professionnels du bâtiment. ServicesArtisans référence ${providerCount > 0 ? providerCount : 'les'} ${svcLower}s intervenant à ${ville.name} et dans ses environs, tous identifiés par leur numéro SIREN via l'API officielle du gouvernement. ${ville.description}`,
+    // 1 — Question directe
+    `Vous recherchez un ${svcLower} qualifié à ${ville.name} ? Située dans le département ${dep} en région ${region}, ${ville.name} compte ${pop} habitants et bénéficie d'un réseau dense de professionnels du bâtiment. ServicesArtisans référence ${count} ${svcLower}s intervenant à ${ville.name} et dans ses environs, tous identifiés par leur numéro SIREN via l'API officielle du gouvernement. ${ville.description}`,
 
-    `À ${ville.name} (${ville.codePostal}), commune de ${pop} habitants du département ${dep}, trouver un ${svcLower} de confiance est essentiel pour vos travaux. Notre annuaire recense ${providerCount > 0 ? providerCount : 'les'} professionnels référencés dans votre secteur géographique, en région ${region}. Chaque ${svcLower} listé sur ServicesArtisans est identifié par son numéro SIREN, garantissant une activité déclarée et vérifiable. ${ville.description}`,
+    // 2 — Ouverture par le code postal
+    `À ${ville.name} (${ville.codePostal}), commune de ${pop} habitants du département ${dep}, trouver un ${svcLower} de confiance est essentiel pour vos travaux. Notre annuaire recense ${count} professionnels référencés dans votre secteur géographique, en région ${region}. Chaque ${svcLower} listé sur ServicesArtisans est identifié par son numéro SIREN, garantissant une activité déclarée et vérifiable. ${ville.description}`,
 
-    `${ville.name}, ville de ${pop} habitants dans le ${dep} (${region}), dispose de nombreux artisans qualifiés pour répondre à vos besoins en ${svcLower === serviceName.toLowerCase() ? svcLower : svcLower}. ServicesArtisans vous permet de comparer ${providerCount > 0 ? providerCount : 'les'} ${svcLower}s référencés à ${ville.name} (${ville.codePostal}), de consulter leurs coordonnées et de les contacter directement pour un devis gratuit. ${ville.description}`,
+    // 3 — Ouverture par le nom de ville
+    `${ville.name}, ville de ${pop} habitants dans le ${dep} (${region}), dispose de nombreux artisans qualifiés pour répondre à vos besoins en ${svcLower}. ServicesArtisans vous permet de comparer ${count} ${svcLower}s référencés à ${ville.name} (${ville.codePostal}), de consulter leurs coordonnées et de les contacter directement pour un devis gratuit. ${ville.description}`,
 
-    `Besoin d'un ${svcLower} à ${ville.name} ? Notre annuaire couvre l'ensemble du département ${dep} en ${region} et référence ${providerCount > 0 ? providerCount : 'les'} professionnels qualifiés dans votre commune de ${pop} habitants. Tous les artisans listés sont identifiés via l'API Sirene du gouvernement, un gage de transparence pour les habitants de ${ville.name} (${ville.codePostal}). ${ville.description}`,
+    // 4 — "Besoin de..."
+    `Besoin d'un ${svcLower} à ${ville.name} ? Notre annuaire couvre l'ensemble du département ${dep} en ${region} et référence ${count} professionnels qualifiés dans votre commune de ${pop} habitants. Tous les artisans listés sont identifiés via l'API Sirene du gouvernement, un gage de transparence pour les habitants de ${ville.name} (${ville.codePostal}). ${ville.description}`,
 
-    `Les habitants de ${ville.name} (${pop} habitants, ${dep}, ${region}) peuvent compter sur ServicesArtisans pour trouver un ${svcLower} référencé et qualifié. Notre plateforme recense ${providerCount > 0 ? providerCount : 'les'} professionnels exerçant à ${ville.name} et dans les communes voisines du ${ville.departementCode}. Chaque profil est vérifié via le registre SIREN, vous assurant de contacter des artisans en règle. ${ville.description}`,
+    // 5 — Ouverture par les habitants
+    `Les habitants de ${ville.name} (${pop} habitants, ${dep}, ${region}) peuvent compter sur ServicesArtisans pour trouver un ${svcLower} référencé et qualifié. Notre plateforme recense ${count} professionnels exerçant à ${ville.name} et dans les communes voisines du ${ville.departementCode}. Chaque profil est vérifié via le registre SIREN, vous assurant de contacter des artisans en règle. ${ville.description}`,
+
+    // 6 — Ouverture par le département
+    `${ville.name}, commune du département ${dep} en ${region}, rassemble ${pop} habitants qui peuvent avoir besoin d'un ${svcLower} pour leurs projets de construction, rénovation ou dépannage. ServicesArtisans met à votre disposition un annuaire de ${countSpace}professionnels vérifiés par SIREN, intervenant à ${ville.name} (${ville.codePostal}) et ses alentours. ${ville.description}`,
+
+    // 7 — Ouverture par le métier
+    `Le métier de ${svcLower} requiert un savoir-faire spécifique, et à ${ville.name} (${pop} habitants, ${dep}), les professionnels du secteur ne manquent pas. ServicesArtisans vous aide à identifier ${count} ${svcLower}s référencés dans votre commune et en ${region}, chacun vérifié par son numéro SIREN auprès des données officielles de l'État. ${ville.description}`,
+
+    // 8 — Recommandation directe
+    `Pour vos travaux de ${svcLower} à ${ville.name}, faites confiance aux professionnels référencés sur ServicesArtisans. Notre annuaire recense ${countSpace}artisans identifiés par SIREN dans le ${dep} (${ville.departementCode}), en région ${region}. Avec ${pop} habitants, ${ville.name} dispose d'un tissu artisanal dynamique pour répondre à toutes vos demandes. ${ville.description}`,
+
+    // 9 — Fait sur la population
+    `Avec ses ${pop} habitants, ${ville.name} est une commune du ${dep} où la demande en services de ${svcLower} reste constante tout au long de l'année. En ${region}, ServicesArtisans référence ${count} professionnels intervenant à ${ville.name} (${ville.codePostal}) et dans les communes environnantes, tous identifiés par leur numéro SIREN. ${ville.description}`,
+
+    // 10 — Perspective travaux
+    `Que ce soit pour un dépannage urgent ou un projet planifié, trouver un ${svcLower} fiable à ${ville.name} (${ville.codePostal}) est une priorité pour de nombreux habitants. ServicesArtisans répertorie ${countSpace}professionnels du ${dep} en ${region}, vérifiés via l'API Sirene du gouvernement, pour vous permettre de comparer et de choisir en toute confiance. ${ville.description}`,
+
+    // 11 — Ancrage régional
+    `En ${region}, et plus particulièrement à ${ville.name} (${pop} habitants, ${dep}), les services d'un ${svcLower} qualifié sont indispensables pour maintenir et valoriser votre habitat. Notre annuaire met en relation les habitants du ${ville.departementCode} avec ${count} professionnels référencés par SIREN, garantissant leur existence légale et leur activité déclarée. ${ville.description}`,
+
+    // 12 — Comparaison et devis
+    `Comparer les ${svcLower}s à ${ville.name} n'a jamais été aussi simple. ServicesArtisans référence ${countSpace}professionnels vérifiés dans le ${dep} (${region}), pour cette commune de ${pop} habitants. Consultez les coordonnées de chaque artisan identifié par SIREN et demandez plusieurs devis gratuits pour votre projet à ${ville.name} (${ville.codePostal}). ${ville.description}`,
+
+    // 13 — Qualité et confiance
+    `La qualité des travaux de ${svcLower} dépend avant tout du choix du professionnel. À ${ville.name}, commune de ${pop} habitants dans le ${dep} (${region}), ServicesArtisans vous propose un annuaire de ${countSpace}artisans référencés et vérifiés par leur numéro SIREN, pour vous aider à sélectionner le bon prestataire en toute sérénité. ${ville.description}`,
+
+    // 14 — Proximité géographique
+    `Trouver un ${svcLower} près de chez vous à ${ville.name} (${ville.codePostal}) est essentiel pour bénéficier d'une intervention rapide et de tarifs compétitifs. Notre annuaire couvre tout le département ${dep} en ${region} et référence ${count} professionnels prêts à intervenir dans votre commune de ${pop} habitants et ses environs. ${ville.description}`,
+
+    // 15 — Ouverture par un conseil
+    `Avant de choisir un ${svcLower} à ${ville.name}, prenez le temps de comparer les profils des ${countSpace}professionnels référencés sur ServicesArtisans. Dans le ${dep} (${region}), chaque artisan est identifié par son numéro SIREN via les données officielles du gouvernement, un critère de fiabilité essentiel pour les ${pop} habitants de ${ville.name} (${ville.codePostal}). ${ville.description}`,
   ]
 
   return templates[hash % templates.length]
@@ -420,7 +457,7 @@ function generateQuartierText(
 }
 
 // ---------------------------------------------------------------------------
-// Conclusion / CTA
+// Conclusion / CTA — 10 varied templates
 // ---------------------------------------------------------------------------
 
 function generateConclusion(
@@ -432,6 +469,7 @@ function generateConclusion(
   const svcLower = serviceName.toLowerCase()
   const trade = getTradeContent(serviceSlug)
   const hash = hashCode(`${serviceSlug}-${ville.slug}-cta`)
+  const countSpace = providerCount > 0 ? providerCount + ' ' : ''
 
   const urgencyLine = trade?.emergencyInfo
     ? ` En cas d'urgence, certains ${svcLower}s de ${ville.name} proposent une intervention rapide : ${trade.averageResponseTime.toLowerCase()}.`
@@ -443,11 +481,35 @@ function generateConclusion(
       : ''
 
   const templates = [
-    `Ne perdez plus de temps à chercher un ${svcLower} fiable à ${ville.name}. Consultez les ${providerCount > 0 ? providerCount : ''} profils référencés sur ServicesArtisans, comparez les coordonnées et contactez directement le professionnel de votre choix dans le ${ville.departement} (${ville.departementCode}).${urgencyLine}${certLine}`,
+    // 1 — Appel à l'action direct
+    `Ne perdez plus de temps à chercher un ${svcLower} fiable à ${ville.name}. Consultez les ${countSpace}profils référencés sur ServicesArtisans, comparez les coordonnées et contactez directement le professionnel de votre choix dans le ${ville.departement} (${ville.departementCode}).${urgencyLine}${certLine}`,
 
-    `ServicesArtisans simplifie votre recherche de ${svcLower} à ${ville.name} (${ville.codePostal}). Parcourez notre annuaire de ${providerCount > 0 ? providerCount + ' ' : ''}professionnels référencés en ${ville.region}, consultez leurs informations et demandez vos devis gratuitement.${urgencyLine}${certLine}`,
+    // 2 — Simplicité de la démarche
+    `ServicesArtisans simplifie votre recherche de ${svcLower} à ${ville.name} (${ville.codePostal}). Parcourez notre annuaire de ${countSpace}professionnels référencés en ${ville.region}, consultez leurs informations et demandez vos devis gratuitement.${urgencyLine}${certLine}`,
 
-    `Trouvez le ${svcLower} qu'il vous faut à ${ville.name} en quelques clics. Notre annuaire de ${providerCount > 0 ? providerCount + ' ' : ''}professionnels du ${ville.departement} vous permet de comparer et de contacter les artisans référencés par SIREN dans votre secteur.${urgencyLine}${certLine}`,
+    // 3 — En quelques clics
+    `Trouvez le ${svcLower} qu'il vous faut à ${ville.name} en quelques clics. Notre annuaire de ${countSpace}professionnels du ${ville.departement} vous permet de comparer et de contacter les artisans référencés par SIREN dans votre secteur.${urgencyLine}${certLine}`,
+
+    // 4 — Confiance et transparence
+    `Faites le bon choix pour vos travaux à ${ville.name} (${ville.codePostal}). Les ${countSpace}${svcLower}s référencés sur ServicesArtisans dans le ${ville.departement} sont tous identifiés par SIREN, un gage de sérieux et de transparence pour les habitants de ${ville.name}.${urgencyLine}${certLine}`,
+
+    // 5 — Recommandation d'action
+    `N'attendez plus pour lancer votre projet : consultez dès maintenant les ${countSpace}${svcLower}s disponibles à ${ville.name} et dans le ${ville.departementCode}. ServicesArtisans vous donne accès aux coordonnées de professionnels vérifiés en ${ville.region}, pour des devis rapides et sans engagement.${urgencyLine}${certLine}`,
+
+    // 6 — Résumé des avantages
+    `Annuaire vérifié, données SIREN officielles, accès gratuit : ServicesArtisans réunit toutes les conditions pour vous aider à trouver un ${svcLower} de confiance à ${ville.name} (${ville.codePostal}). Comparez les ${countSpace}professionnels du ${ville.departement} et contactez celui qui correspond à votre besoin.${urgencyLine}${certLine}`,
+
+    // 7 — Proximité et réactivité
+    `À ${ville.name}, un ${svcLower} qualifié n'est qu'à quelques clics. Parcourez les ${countSpace}profils référencés dans le ${ville.departement} (${ville.region}) sur ServicesArtisans et trouvez le professionnel idéal pour votre projet, qu'il s'agisse d'un dépannage ou de travaux planifiés.${urgencyLine}${certLine}`,
+
+    // 8 — Gratuit et sans engagement
+    `Votre recherche de ${svcLower} à ${ville.name} commence ici. Accédez gratuitement à notre annuaire de ${countSpace}professionnels du ${ville.departement}, vérifiés par leur numéro SIREN, et demandez vos devis sans engagement auprès des artisans de ${ville.name} (${ville.codePostal}).${urgencyLine}${certLine}`,
+
+    // 9 — Question finale
+    `Prêt à trouver votre ${svcLower} à ${ville.name} ? ServicesArtisans met à votre disposition ${countSpace}professionnels référencés dans le ${ville.departement} (${ville.departementCode}), en ${ville.region}. Comparez les profils, vérifiez les qualifications et lancez votre projet en toute sérénité.${urgencyLine}${certLine}`,
+
+    // 10 — Mise en avant locale
+    `Les ${countSpace}${svcLower}s de ${ville.name} référencés sur ServicesArtisans sont prêts à intervenir dans votre commune et dans tout le ${ville.departement}. Profitez d'un annuaire fiable, basé sur les données SIREN du gouvernement, pour choisir le bon professionnel en ${ville.region}.${urgencyLine}${certLine}`,
   ]
 
   return templates[hash % templates.length]
