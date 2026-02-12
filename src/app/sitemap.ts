@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { SITE_URL } from '@/lib/seo/config'
 import { services, villes, departements, regions } from '@/lib/data/france'
+import { articleSlugs } from '@/lib/data/blog/articles'
 
 // Provider batch size — well under the 50,000 URL sitemap limit
 const PROVIDER_BATCH_SIZE = 40_000
@@ -80,15 +81,18 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       { path: '/notre-processus-de-verification', changeFrequency: 'monthly' as const, priority: 0.5 },
       { path: '/politique-avis', changeFrequency: 'monthly' as const, priority: 0.5 },
       { path: '/mediation', changeFrequency: 'yearly' as const, priority: 0.4 },
-      { path: '/blog/comment-choisir-plombier', changeFrequency: 'monthly' as const, priority: 0.6 },
-      { path: '/blog/renovation-energetique-2026', changeFrequency: 'monthly' as const, priority: 0.6 },
-      { path: '/blog/urgence-plomberie-que-faire', changeFrequency: 'monthly' as const, priority: 0.6 },
-      { path: '/blog/tendances-decoration-2026', changeFrequency: 'monthly' as const, priority: 0.6 },
     ].map(({ path, changeFrequency, priority }) => ({
       url: `${SITE_URL}${path}`,
       lastModified: STATIC_LAST_MODIFIED,
       changeFrequency,
       priority,
+    }))
+
+    const blogArticlePages: MetadataRoute.Sitemap = articleSlugs.map((slug) => ({
+      url: `${SITE_URL}/blog/${slug}`,
+      lastModified: STATIC_LAST_MODIFIED,
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
     }))
 
     const servicesIndex: MetadataRoute.Sitemap = [
@@ -107,7 +111,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       priority: 0.9,
     }))
 
-    return [...homepage, ...staticPages, ...servicesIndex, ...servicePages]
+    return [...homepage, ...staticPages, ...blogArticlePages, ...servicesIndex, ...servicePages]
   }
 
   // ── Service + city combination pages ────────────────────────────────

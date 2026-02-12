@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { motion, useMotionValue, useTransform, animate, useInView } from 'framer-motion'
+import { motion, useMotionValue, useTransform, animate, useInView, type Variants } from 'framer-motion'
 import { Search, MapPin } from 'lucide-react'
 import { services, villes, departements } from '@/lib/data/france'
 
@@ -49,7 +49,7 @@ const chipServices = [
 ]
 
 // ── Stagger animation variants ────────────────────────────────────────
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: {},
   visible: {
     transition: {
@@ -59,13 +59,74 @@ const containerVariants = {
   },
 }
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 24 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const },
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
   },
+}
+
+// ── Word-by-word stagger variants for heading ─────────────────────────
+const headingContainerVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.3,
+    },
+  },
+}
+
+const wordVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 20,
+    filter: 'blur(8px)',
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: 'blur(0px)',
+    transition: {
+      duration: 0.5,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
+}
+
+// ── Subtitle fade-in after heading completes ──────────────────────────
+const subtitleVariants: Variants = {
+  hidden: { opacity: 0, y: 16 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.7,
+      ease: [0.16, 1, 0.3, 1],
+      delay: 1.2,
+    },
+  },
+}
+
+// ── Heading line component with word-by-word reveal ───────────────────
+function AnimatedHeadingLine({ text, className }: { text: string; className?: string }) {
+  const words = text.split(' ')
+  return (
+    <span className={className}>
+      {words.map((word, i) => (
+        <motion.span
+          key={i}
+          variants={wordVariants}
+          className="inline-block"
+          style={{ marginRight: '0.3em' }}
+        >
+          {word}
+        </motion.span>
+      ))}
+    </span>
+  )
 }
 
 // ── Main Hero Component ───────────────────────────────────────────────
@@ -75,6 +136,13 @@ export function HeroSection() {
   const [locationQuery, setLocationQuery] = useState('')
   const serviceInputRef = useRef<HTMLInputElement>(null)
   const locationInputRef = useRef<HTMLInputElement>(null)
+  const [shimmerDone, setShimmerDone] = useState(false)
+
+  // Trigger shimmer on the search button after a delay, then stop
+  useEffect(() => {
+    const timer = setTimeout(() => setShimmerDone(true), 3000)
+    return () => clearTimeout(timer)
+  }, [])
 
   const handleSubmit = useCallback(
     (e?: React.FormEvent) => {
@@ -96,30 +164,37 @@ export function HeroSection() {
       >
         {/* Background layers */}
         <div className="absolute inset-0" aria-hidden="true">
-          {/* Primary gradient mesh */}
+          {/* Animated mesh gradient */}
           <div
             className="absolute inset-0"
             style={{
-              background:
-                'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(37,99,235,0.1) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(59,130,246,0.06) 0%, transparent 50%)',
+              background: [
+                'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%)',
+                'radial-gradient(ellipse 60% 60% at 80% 110%, rgba(37,99,235,0.1) 0%, transparent 50%)',
+                'radial-gradient(ellipse 50% 40% at 10% 90%, rgba(59,130,246,0.06) 0%, transparent 50%)',
+              ].join(', '),
+              backgroundSize: '200% 200%, 200% 200%, 200% 200%',
+              animation: 'meshGradient 20s ease-in-out infinite',
             }}
           />
-          {/* Amber accent blob */}
+          {/* Amber accent blob - animated float */}
           <div
             className="absolute top-1/3 right-1/4 w-[600px] h-[400px] opacity-[0.07]"
             style={{
               background:
                 'radial-gradient(circle, rgba(245,158,11,0.6) 0%, transparent 70%)',
               filter: 'blur(80px)',
+              animation: 'blobFloat 18s ease-in-out infinite',
             }}
           />
-          {/* Blue accent blob */}
+          {/* Blue accent blob - animated float with offset timing */}
           <div
             className="absolute bottom-1/4 left-1/4 w-[500px] h-[500px] opacity-[0.06]"
             style={{
               background:
                 'radial-gradient(circle, rgba(59,130,246,0.6) 0%, transparent 70%)',
               filter: 'blur(80px)',
+              animation: 'blobFloat 22s ease-in-out infinite reverse',
             }}
           />
           {/* Center glow */}
@@ -130,12 +205,22 @@ export function HeroSection() {
                 'radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%)',
             }}
           />
-          {/* Grid pattern overlay */}
+          {/* Subtle amber mesh accent */}
           <div
-            className="absolute inset-0 opacity-[0.025]"
+            className="absolute inset-0 opacity-[0.03]"
+            style={{
+              background:
+                'radial-gradient(ellipse 40% 40% at 70% 30%, rgba(245,158,11,0.5) 0%, transparent 70%)',
+              animation: 'meshGradient 25s ease-in-out infinite reverse',
+              backgroundSize: '200% 200%',
+            }}
+          />
+          {/* Grid pattern overlay - more subtle */}
+          <div
+            className="absolute inset-0 opacity-[0.02]"
             style={{
               backgroundImage:
-                'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+                'linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)',
               backgroundSize: '64px 64px',
             }}
           />
@@ -155,6 +240,7 @@ export function HeroSection() {
             <motion.div variants={itemVariants} className="mb-8">
               <div className="inline-flex items-center gap-2.5 bg-white/[0.07] backdrop-blur-sm rounded-full px-5 py-2.5 border border-white/10">
                 <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400" />
                 </span>
                 <span className="text-sm text-white/80 font-medium">
@@ -163,23 +249,30 @@ export function HeroSection() {
               </div>
             </motion.div>
 
-            {/* Visual heading — the real H1 is server-rendered in page.tsx */}
+            {/* Visual heading with word-by-word stagger — the real H1 is server-rendered in page.tsx */}
             <motion.div
-              variants={itemVariants}
+              variants={headingContainerVariants}
+              initial="hidden"
+              animate="visible"
               aria-hidden="true"
               role="presentation"
-              className="font-heading text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tighter leading-[1.05] mb-6"
+              className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tighter leading-[1.05] mb-6"
             >
-              <span className="text-white">L&apos;annuaire des artisans</span>
-              <br />
-              <span className="bg-gradient-to-r from-amber-400 to-amber-300 bg-clip-text text-transparent">
-                qualifi&eacute;s en France
-              </span>
+              <AnimatedHeadingLine
+                text="L'annuaire des artisans"
+                className="text-white block"
+              />
+              <AnimatedHeadingLine
+                text="qualifi\u00e9s en France"
+                className="bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient-x block"
+              />
             </motion.div>
 
-            {/* Subtitle */}
+            {/* Subtitle — fades in after heading stagger completes */}
             <motion.p
-              variants={itemVariants}
+              variants={subtitleVariants}
+              initial="hidden"
+              animate="visible"
               className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10"
             >
               Trouvez l&apos;artisan id&eacute;al pr&egrave;s de chez vous. Comparez les profils et obtenez des devis gratuits.
@@ -194,7 +287,7 @@ export function HeroSection() {
                 onSubmit={handleSubmit}
                 role="search"
                 aria-label="Rechercher un artisan"
-                className="bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl p-2"
+                className="group bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl p-2 transition-shadow duration-500 focus-within:shadow-[0_0_30px_rgba(245,158,11,0.12)] focus-within:border-amber-500/30"
               >
                 <div className="flex flex-col md:flex-row items-stretch">
                   {/* Service input */}
@@ -208,7 +301,7 @@ export function HeroSection() {
                       placeholder="Quel service ? (plombier, &eacute;lectricien...)"
                       aria-label="Type de service recherch&eacute;"
                       autoComplete="off"
-                      className="w-full bg-transparent text-white placeholder:text-gray-400 focus:outline-none text-base"
+                      className="w-full bg-transparent text-white placeholder:text-gray-400 focus:outline-none text-base transition-colors duration-300"
                     />
                   </div>
 
@@ -227,21 +320,32 @@ export function HeroSection() {
                       placeholder="Ville ou code postal"
                       aria-label="Ville ou code postal"
                       autoComplete="off"
-                      className="w-full bg-transparent text-white placeholder:text-gray-400 focus:outline-none text-base"
+                      className="w-full bg-transparent text-white placeholder:text-gray-400 focus:outline-none text-base transition-colors duration-300"
                     />
                   </div>
 
-                  {/* Submit button */}
+                  {/* Submit button with shimmer */}
                   <div className="p-1.5">
                     <motion.button
                       type="submit"
                       whileHover={{ scale: 1.03 }}
                       whileTap={{ scale: 0.97 }}
                       aria-label="Rechercher un artisan"
-                      className="w-full md:w-auto bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold rounded-xl px-8 py-4 transition-all duration-200 shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 flex items-center justify-center gap-2 whitespace-nowrap"
+                      className="relative w-full md:w-auto bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold rounded-xl px-8 py-4 transition-all duration-200 shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 flex items-center justify-center gap-2 whitespace-nowrap overflow-hidden"
                     >
-                      <Search className="w-5 h-5" />
-                      <span>Rechercher</span>
+                      {/* Shimmer overlay */}
+                      {!shimmerDone && (
+                        <span
+                          className="absolute inset-0 pointer-events-none"
+                          style={{
+                            background: 'linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.35) 50%, transparent 70%)',
+                            animation: 'heroShimmer 1.5s ease-in-out 0.8s 2 forwards',
+                          }}
+                          aria-hidden="true"
+                        />
+                      )}
+                      <Search className="w-5 h-5 relative z-10" />
+                      <span className="relative z-10">Rechercher</span>
                     </motion.button>
                   </div>
                 </div>
@@ -258,7 +362,7 @@ export function HeroSection() {
                 <Link
                   key={svc.slug}
                   href={`/services/${svc.slug}`}
-                  className="bg-white/5 border border-white/10 text-white/70 hover:bg-white/10 hover:text-white rounded-full px-4 py-2 text-sm transition-all duration-200"
+                  className="bg-white/5 border border-white/10 text-white/70 hover:bg-white/10 hover:text-white hover:border-white/20 rounded-full px-4 py-2 text-sm transition-all duration-200"
                 >
                   {svc.name}
                 </Link>

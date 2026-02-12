@@ -139,7 +139,7 @@ export default function VillesIndexPage() {
                 <Link
                   key={ville.slug}
                   href={`/villes/${ville.slug}`}
-                  className="flex items-center gap-2.5 bg-white rounded-xl border border-gray-200 px-3.5 py-3 hover:border-blue-300 hover:shadow-md hover:-translate-y-0.5 transition-all group"
+                  className="flex items-center gap-2.5 bg-white rounded-xl border border-gray-200 px-3.5 py-3.5 hover:border-blue-300 hover:shadow-md hover:-translate-y-0.5 transition-all group"
                 >
                   <MapPin className="w-4 h-4 text-slate-400 group-hover:text-blue-600 flex-shrink-0 transition-colors" />
                   <span className="text-sm font-medium text-slate-800 group-hover:text-blue-600 truncate transition-colors">{ville.name}</span>

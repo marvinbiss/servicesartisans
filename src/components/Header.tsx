@@ -13,6 +13,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useMobileMenu } from '@/contexts/MobileMenuContext'
 import { regions, villes } from '@/lib/data/france'
 import SearchBar from '@/components/SearchBar'
+import { cn } from '@/lib/utils'
 
 // Reverse geocoding for mobile geolocation
 async function getLocationFromCoords(lon: number, lat: number): Promise<string | null> {
@@ -148,7 +149,6 @@ export default function Header() {
   const [mounted, setMounted] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [openMenu, setOpenMenu] = useState<MenuType>(null)
-  const [showMobileSearch, setShowMobileSearch] = useState(false)
   const [mobileAccordion, setMobileAccordion] = useState<MobileAccordion>(null)
 
   const megaMenuTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -306,13 +306,19 @@ export default function Header() {
   }
 
   return (
-    <header className={`sticky top-0 z-[9999] transition-all duration-300 ${
+    <>
+    <header className={cn(
+      'fixed top-0 left-0 right-0 z-[9999] transition-all duration-300',
       scrolled
-        ? 'bg-white/95 backdrop-blur-xl shadow-md border-b border-gray-100/50'
-        : 'bg-white border-b border-gray-200 shadow-sm'
-    }`}>
+        ? 'bg-white/80 backdrop-blur-xl shadow-lg shadow-gray-900/5 border-b border-gray-200/50'
+        : 'bg-white/95 backdrop-blur-sm border-b border-gray-100/80'
+    )}>
       {/* Top bar premium */}
-      <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-blue-900 text-white py-2">
+      <div className={cn(
+        'transition-all duration-300 overflow-hidden',
+        scrolled ? 'max-h-0 opacity-0 py-0' : 'max-h-12 opacity-100 py-2',
+        'bg-gradient-to-r from-slate-900 via-slate-800 to-blue-900 text-white'
+      )}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between text-sm">
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
@@ -321,11 +327,11 @@ export default function Header() {
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <Link href="/inscription-artisan" className="text-amber-400 hover:text-amber-300 font-medium flex items-center gap-1">
+            <Link href="/inscription-artisan" className="text-amber-400 hover:text-amber-300 font-medium flex items-center gap-1 transition-colors duration-200">
               <Award className="w-4 h-4" />
               <span className="hidden sm:inline">Espace Pro</span>
             </Link>
-            <Link href="/urgence" className="flex items-center gap-2 bg-red-500/20 px-3 py-1 rounded-full hover:bg-red-500/30 transition-colors">
+            <Link href="/urgence" className="flex items-center gap-2 bg-red-500/20 px-3 py-1 rounded-full hover:bg-red-500/30 transition-colors duration-200">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
@@ -338,9 +344,12 @@ export default function Header() {
 
       {/* Main header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className={cn(
+          'flex justify-between items-center transition-all duration-300',
+          scrolled ? 'h-14' : 'h-16'
+        )}>
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 flex-shrink-0">
+          <Link href="/" className="flex items-center gap-2.5 flex-shrink-0 group/logo">
             <motion.div
               className="flex items-center gap-2.5"
               whileHover={{ scale: 1.02 }}
@@ -371,8 +380,8 @@ export default function Header() {
                 <circle cx="39" cy="9" r="5" fill="url(#headerAccent)" />
                 <path d="M37.5 9L38.5 10L40.5 8" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-              <span className="hidden sm:inline text-xl font-heading font-extrabold tracking-tight text-gray-900">
-                Services<span className="text-blue-600">Artisans</span>
+              <span className="hidden sm:inline text-xl font-heading font-extrabold tracking-tight text-gray-900 group-hover/logo:text-gray-700 transition-colors duration-200">
+                Services<span className="text-blue-600 group-hover/logo:text-blue-500 transition-colors duration-200">Artisans</span>
               </span>
             </motion.div>
           </Link>
@@ -387,7 +396,7 @@ export default function Header() {
           </div>
 
           {/* Navigation Desktop */}
-          <nav className="hidden lg:flex items-center space-x-1" aria-label="Navigation principale">
+          <nav className="hidden lg:flex items-center space-x-0.5" aria-label="Navigation principale">
             {/* Services Dropdown Trigger */}
             <div
               className="relative"
@@ -400,14 +409,16 @@ export default function Header() {
                 onClick={() => toggleMenu('services')}
                 aria-expanded={openMenu === 'services'}
                 aria-haspopup="true"
-                className={`relative flex items-center gap-1.5 px-4 py-2 rounded-lg font-medium transition-all duration-200 after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:h-0.5 after:bg-blue-600 after:transition-all after:duration-300 after:rounded-full ${
+                className={cn(
+                  'relative flex items-center gap-1.5 px-4 py-2 rounded-xl font-medium text-[0.9rem] transition-all duration-200',
+                  'after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-blue-600 after:transition-all after:duration-300 after:rounded-full',
                   openMenu === 'services'
-                    ? 'text-blue-600 bg-blue-50 after:w-full'
-                    : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50 after:w-0 hover:after:w-full'
-                }`}
+                    ? 'text-blue-600 bg-blue-50/80 after:w-[60%]'
+                    : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50/80 after:w-0 hover:after:w-[60%]'
+                )}
               >
                 Services
-                <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${openMenu === 'services' ? 'rotate-180' : ''}`} />
+                <ChevronDown className={cn('w-4 h-4 transition-transform duration-300', openMenu === 'services' && 'rotate-180')} />
               </button>
             </div>
 
@@ -423,14 +434,16 @@ export default function Header() {
                 onClick={() => toggleMenu('villes')}
                 aria-expanded={openMenu === 'villes'}
                 aria-haspopup="true"
-                className={`relative flex items-center gap-1.5 px-4 py-2 rounded-lg font-medium transition-all duration-200 after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:h-0.5 after:bg-blue-600 after:transition-all after:duration-300 after:rounded-full ${
+                className={cn(
+                  'relative flex items-center gap-1.5 px-4 py-2 rounded-xl font-medium text-[0.9rem] transition-all duration-200',
+                  'after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-blue-600 after:transition-all after:duration-300 after:rounded-full',
                   openMenu === 'villes'
-                    ? 'text-blue-600 bg-blue-50 after:w-full'
-                    : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50 after:w-0 hover:after:w-full'
-                }`}
+                    ? 'text-blue-600 bg-blue-50/80 after:w-[60%]'
+                    : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50/80 after:w-0 hover:after:w-[60%]'
+                )}
               >
                 Villes
-                <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${openMenu === 'villes' ? 'rotate-180' : ''}`} />
+                <ChevronDown className={cn('w-4 h-4 transition-transform duration-300', openMenu === 'villes' && 'rotate-180')} />
               </button>
             </div>
 
@@ -446,41 +459,33 @@ export default function Header() {
                 onClick={() => toggleMenu('regions')}
                 aria-expanded={openMenu === 'regions'}
                 aria-haspopup="true"
-                className={`relative flex items-center gap-1.5 px-4 py-2 rounded-lg font-medium transition-all duration-200 after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:h-0.5 after:bg-blue-600 after:transition-all after:duration-300 after:rounded-full ${
+                className={cn(
+                  'relative flex items-center gap-1.5 px-4 py-2 rounded-xl font-medium text-[0.9rem] transition-all duration-200',
+                  'after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-blue-600 after:transition-all after:duration-300 after:rounded-full',
                   openMenu === 'regions'
-                    ? 'text-blue-600 bg-blue-50 after:w-full'
-                    : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50 after:w-0 hover:after:w-full'
-                }`}
+                    ? 'text-blue-600 bg-blue-50/80 after:w-[60%]'
+                    : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50/80 after:w-0 hover:after:w-[60%]'
+                )}
               >
                 Régions
-                <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${openMenu === 'regions' ? 'rotate-180' : ''}`} />
+                <ChevronDown className={cn('w-4 h-4 transition-transform duration-300', openMenu === 'regions' && 'rotate-180')} />
               </button>
             </div>
 
             <Link
               href="/connexion"
-              className="relative text-gray-700 hover:text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-50 transition-colors after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-0 hover:after:w-full after:h-0.5 after:bg-blue-600 after:transition-all after:duration-300 after:rounded-full"
+              className="relative text-gray-600 hover:text-blue-600 px-4 py-2 rounded-xl font-medium text-[0.9rem] hover:bg-gray-50/80 transition-all duration-200 after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:w-0 hover:after:w-[60%] after:h-[2px] after:bg-blue-600 after:transition-all after:duration-300 after:rounded-full"
             >
               Connexion
             </Link>
 
             <Link
               href="/devis"
-              className="ml-2 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-semibold rounded-xl shadow-md shadow-amber-500/20 hover:shadow-lg hover:shadow-amber-500/30 hover:-translate-y-0.5 transition-all duration-200"
+              className="ml-3 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-semibold rounded-xl shadow-md shadow-amber-500/20 hover:shadow-lg hover:shadow-amber-500/30 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
             >
               Devis gratuit
             </Link>
           </nav>
-
-          {/* Mobile search toggle button */}
-          <button
-            type="button"
-            onClick={() => setShowMobileSearch(!showMobileSearch)}
-            aria-label={showMobileSearch ? 'Masquer la recherche' : 'Afficher la recherche'}
-            className="lg:hidden flex items-center justify-center w-12 h-12 rounded-xl active:bg-gray-200 hover:bg-gray-100 transition-colors"
-          >
-            <Search className={`w-5 h-5 ${showMobileSearch ? 'text-blue-600' : 'text-gray-700'}`} />
-          </button>
 
           {/* Mobile menu button */}
           <button
@@ -816,16 +821,22 @@ export default function Header() {
       {isMenuOpen && (
         <motion.div
           data-menu-content="mobile-menu"
-          className="lg:hidden border-t border-gray-100 max-h-[calc(100vh-120px)] overflow-y-auto bg-white"
+          className="lg:hidden border-t border-gray-100/50 max-h-[calc(100vh-120px)] overflow-y-auto bg-white/95 backdrop-blur-xl"
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
           exit={{ opacity: 0, height: 0 }}
-          transition={{ duration: 0.3, ease: 'easeInOut' }}
+          transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
             {/* Search Mobile - Dual Field */}
-            <form onSubmit={handleSearch} className="mb-4">
-              <div className="flex items-center bg-white border-2 border-gray-200 rounded-2xl overflow-hidden focus-within:border-blue-500 transition-colors">
+            <motion.form
+              onSubmit={handleSearch}
+              className="mb-4"
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.05, duration: 0.25 }}
+            >
+              <div className="flex items-center bg-white border-2 border-gray-200 rounded-2xl overflow-hidden focus-within:border-blue-500 focus-within:shadow-lg focus-within:shadow-blue-500/10 transition-all duration-200">
                 {/* Service Input Mobile */}
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -872,17 +883,23 @@ export default function Header() {
                   <Search className="w-4 h-4" />
                 </button>
               </div>
-            </form>
+            </motion.form>
 
             <nav className="space-y-2" aria-label="Menu mobile">
               {/* ===== Services Accordion ===== */}
-              <div className="rounded-xl border border-gray-100 overflow-hidden">
+              <motion.div
+                className="rounded-xl border border-gray-100 overflow-hidden"
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1, duration: 0.25 }}
+              >
                 <button
                   type="button"
                   onClick={() => toggleMobileAccordion('services')}
-                  className={`w-full flex items-center justify-between px-4 py-3.5 transition-colors ${
+                  className={cn(
+                    'w-full flex items-center justify-between px-4 py-3.5 transition-colors',
                     mobileAccordion === 'services' ? 'bg-blue-50' : 'bg-gray-50 hover:bg-gray-100'
-                  }`}
+                  )}
                 >
                   <div className="flex items-center gap-3">
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
@@ -934,16 +951,22 @@ export default function Header() {
                     </Link>
                   </div>
                 )}
-              </div>
+              </motion.div>
 
               {/* ===== Villes Accordion ===== */}
-              <div className="rounded-xl border border-gray-100 overflow-hidden">
+              <motion.div
+                className="rounded-xl border border-gray-100 overflow-hidden"
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15, duration: 0.25 }}
+              >
                 <button
                   type="button"
                   onClick={() => toggleMobileAccordion('villes')}
-                  className={`w-full flex items-center justify-between px-4 py-3.5 transition-colors ${
+                  className={cn(
+                    'w-full flex items-center justify-between px-4 py-3.5 transition-colors',
                     mobileAccordion === 'villes' ? 'bg-blue-50' : 'bg-gray-50 hover:bg-gray-100'
-                  }`}
+                  )}
                 >
                   <div className="flex items-center gap-3">
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
@@ -985,16 +1008,22 @@ export default function Header() {
                     </Link>
                   </div>
                 )}
-              </div>
+              </motion.div>
 
               {/* ===== Régions Accordion ===== */}
-              <div className="rounded-xl border border-gray-100 overflow-hidden">
+              <motion.div
+                className="rounded-xl border border-gray-100 overflow-hidden"
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2, duration: 0.25 }}
+              >
                 <button
                   type="button"
                   onClick={() => toggleMobileAccordion('regions')}
-                  className={`w-full flex items-center justify-between px-4 py-3.5 transition-colors ${
+                  className={cn(
+                    'w-full flex items-center justify-between px-4 py-3.5 transition-colors',
                     mobileAccordion === 'regions' ? 'bg-blue-50' : 'bg-gray-50 hover:bg-gray-100'
-                  }`}
+                  )}
                 >
                   <div className="flex items-center gap-3">
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
@@ -1039,13 +1068,18 @@ export default function Header() {
                     </Link>
                   </div>
                 )}
-              </div>
+              </motion.div>
 
               {/* CTAs */}
-              <div className="pt-3 space-y-3">
+              <motion.div
+                className="pt-3 space-y-3"
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25, duration: 0.25 }}
+              >
                 <Link
                   href="/urgence"
-                  className="flex items-center justify-center gap-2 w-full py-3.5 bg-red-600 text-white rounded-xl font-semibold"
+                  className="flex items-center justify-center gap-2 w-full py-3.5 bg-red-600 hover:bg-red-700 text-white rounded-xl font-semibold transition-colors duration-200 shadow-lg shadow-red-600/20"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   <Phone className="w-5 h-5" />
@@ -1054,25 +1088,28 @@ export default function Header() {
                 <div className="flex gap-3">
                   <Link
                     href="/connexion"
-                    className="flex-1 py-3 border-2 border-gray-200 text-gray-700 rounded-xl font-medium text-center hover:bg-gray-50"
+                    className="flex-1 py-3 border-2 border-gray-200 text-gray-700 rounded-xl font-medium text-center hover:bg-gray-50 hover:border-gray-300 transition-all duration-200"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Connexion
                   </Link>
                   <Link
                     href="/devis"
-                    className="flex-1 py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-xl font-semibold text-center shadow-md shadow-amber-500/20"
+                    className="flex-1 py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white rounded-xl font-semibold text-center shadow-md shadow-amber-500/20 transition-all duration-200"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Devis gratuit
                   </Link>
                 </div>
-              </div>
+              </motion.div>
             </nav>
           </div>
         </motion.div>
       )}
       </AnimatePresence>
     </header>
+    {/* Spacer to offset fixed header height (top bar ~40px + nav 64px) */}
+    <div className="h-[104px]" aria-hidden="true" />
+    </>
   )
 }

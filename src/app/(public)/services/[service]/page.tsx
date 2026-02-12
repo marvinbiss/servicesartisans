@@ -260,7 +260,7 @@ export default async function ServicePage({ params }: PageProps) {
                         <Link
                           key={city.id}
                           href={`/services/${serviceSlug}/${city.slug}`}
-                          className="text-sm bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 px-3 py-1.5 rounded-full transition-colors"
+                          className="text-sm bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 px-4 py-2.5 rounded-full transition-colors"
                         >
                           {city.name}
                         </Link>
@@ -513,7 +513,7 @@ export default async function ServicePage({ params }: PageProps) {
                     <Link
                       key={s.slug}
                       href={`/services/${s.slug}`}
-                      className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-full text-sm transition-colors"
+                      className="inline-flex items-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-full text-sm transition-colors"
                     >
                       {s.name}
                     </Link>

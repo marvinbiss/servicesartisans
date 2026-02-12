@@ -48,7 +48,7 @@ export default function NewsletterForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex w-full max-w-md gap-3">
+    <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row w-full max-w-md gap-3">
       <div className="flex-1">
         <input
           type="email"
@@ -66,7 +66,7 @@ export default function NewsletterForm() {
         type="submit"
         disabled={isLoading}
         aria-label="S'inscrire à la newsletter"
-        className="px-6 py-3.5 bg-gradient-to-r from-primary-600 to-primary-500 text-white font-semibold rounded-xl hover:from-primary-500 hover:to-primary-400 transition-all duration-300 shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/30 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+        className="w-full sm:w-auto px-6 py-3.5 bg-gradient-to-r from-primary-600 to-primary-500 text-white font-semibold rounded-xl hover:from-primary-500 hover:to-primary-400 transition-all duration-300 shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/30 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
       >
         {isLoading ? (
           <Loader2 className="w-5 h-5 animate-spin" />

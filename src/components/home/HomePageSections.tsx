@@ -89,10 +89,10 @@ export function ServicesShowcase() {
                 <motion.div key={service.slug} variants={staggerItem}>
                   <Link
                     href={`/services/${service.slug}`}
-                    className="group relative flex items-center gap-6 p-8 bg-white rounded-2xl border border-gray-100/80 hover:-translate-y-1 hover:shadow-card-hover transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                    className="group relative flex items-center gap-6 p-8 bg-white/90 backdrop-blur-sm rounded-2xl border border-gray-100/80 hover:border-amber-200/50 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:scale-[1.01] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
                   >
-                    <div className={`w-16 h-16 ${service.bg} rounded-2xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]`}>
-                      <Icon className={`w-8 h-8 ${service.text}`} />
+                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 bg-gradient-to-br ${service.color} shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]`}>
+                      <Icon className="w-8 h-8 text-white" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
@@ -105,7 +105,7 @@ export function ServicesShowcase() {
                       </div>
                       <p className="text-slate-600 text-sm leading-relaxed">{service.desc}</p>
                     </div>
-                    <ArrowRight className="w-5 h-5 text-slate-300 group-hover:text-blue-500 group-hover:translate-x-1 transition-all duration-300 shrink-0" />
+                    <ArrowRight className="w-5 h-5 text-slate-300 group-hover:text-blue-500 group-hover:translate-x-1.5 transition-all duration-300 shrink-0" />
                   </Link>
                 </motion.div>
               )
@@ -120,16 +120,16 @@ export function ServicesShowcase() {
                 <motion.div key={service.slug} variants={staggerItem}>
                   <Link
                     href={`/services/${service.slug}`}
-                    className="group relative flex flex-col items-center p-6 bg-white rounded-2xl border border-gray-100/80 hover:-translate-y-1 hover:shadow-card-hover transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                    className="group relative flex flex-col items-center p-6 bg-white/90 backdrop-blur-sm rounded-2xl border border-gray-100/80 hover:border-amber-200/50 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:scale-[1.01] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
                   >
-                    <div className={`w-14 h-14 ${service.bg} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]`}>
-                      <Icon className={`w-7 h-7 ${service.text}`} />
+                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-4 bg-gradient-to-br ${service.color} shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]`}>
+                      <Icon className="w-7 h-7 text-white" />
                     </div>
                     <span className="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors duration-300 text-center mb-1">
                       {service.name}
                     </span>
                     <span className="text-xs text-slate-400 mb-3">{service.count} artisans</span>
-                    <ArrowRight className="w-4 h-4 text-slate-200 group-hover:text-blue-400 transition-colors duration-300" />
+                    <ArrowRight className="w-4 h-4 text-slate-200 group-hover:text-blue-400 group-hover:translate-x-1 transition-all duration-300" />
                   </Link>
                 </motion.div>
               )
@@ -144,10 +144,10 @@ export function ServicesShowcase() {
                 <motion.div key={service.slug} variants={staggerItem}>
                   <Link
                     href={`/services/${service.slug}`}
-                    className="group flex items-center gap-4 p-4 bg-white rounded-2xl border border-gray-100/80 hover:-translate-y-1 hover:shadow-card-hover transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                    className="group flex items-center gap-4 p-4 bg-white/90 backdrop-blur-sm rounded-2xl border border-gray-100/80 hover:border-amber-200/50 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:scale-[1.01] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
                   >
-                    <div className={`w-11 h-11 ${service.bg} rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300`}>
-                      <Icon className={`w-5 h-5 ${service.text}`} />
+                    <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 bg-gradient-to-br ${service.color} shadow-md group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
+                      <Icon className="w-5 h-5 text-white" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <span className="font-semibold text-sm text-slate-900 group-hover:text-blue-600 transition-colors duration-300 block">
@@ -155,7 +155,7 @@ export function ServicesShowcase() {
                       </span>
                       <span className="text-xs text-slate-400">{service.count}</span>
                     </div>
-                    <ArrowRight className="w-4 h-4 text-slate-200 group-hover:text-blue-400 group-hover:translate-x-0.5 transition-all duration-300 shrink-0" />
+                    <ArrowRight className="w-4 h-4 text-slate-200 opacity-40 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-blue-400 transition-all duration-300 shrink-0" />
                   </Link>
                 </motion.div>
               )
@@ -293,7 +293,7 @@ export function HowItWorksSection() {
         >
           <Link
             href="/devis"
-            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
           >
             Demander un devis gratuit <ArrowRight className="w-5 h-5" />
           </Link>
@@ -377,13 +377,13 @@ export function ArtisanCTASection() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/inscription-artisan"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 text-slate-900 font-semibold px-8 py-4 rounded-xl hover:shadow-[0_8px_30px_-4px_rgba(245,158,11,0.5)] hover:-translate-y-1 transition-all duration-300"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 text-slate-900 font-bold px-8 py-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-[0_8px_30px_-4px_rgba(245,158,11,0.5)] hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
             >
               Inscrire mon entreprise <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
               href="/comment-ca-marche"
-              className="inline-flex items-center gap-2 text-white/70 hover:text-white font-medium px-6 py-4 rounded-xl border border-white/15 hover:border-white/30 hover:bg-white/5 hover:-translate-y-1 transition-all duration-300"
+              className="inline-flex items-center gap-2 text-white/70 hover:text-white font-medium px-6 py-4 rounded-xl border border-white/15 hover:border-white/30 hover:bg-white/5 hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
             >
               En savoir plus
             </Link>
@@ -468,10 +468,10 @@ export function TrustSection() {
               <motion.div
                 key={item.title}
                 variants={staggerItem}
-                className="relative bg-gradient-to-b from-slate-50 to-white rounded-2xl p-6 border border-gray-100/80"
+                className="group relative bg-gradient-to-b from-slate-50/90 to-white/90 backdrop-blur-sm rounded-2xl p-6 border border-gray-100/80 hover:border-amber-200/50 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:scale-[1.01] transition-all duration-300 ease-out"
               >
-                <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center mb-4">
-                  <Icon className="w-6 h-6 text-blue-600" />
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
+                  <Icon className="w-6 h-6 text-white" />
                 </div>
                 <div className="font-heading text-2xl font-extrabold text-slate-900 mb-0.5">
                   {item.stat}

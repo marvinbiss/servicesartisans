@@ -52,7 +52,7 @@ export default function ServiceLocationPageClient({
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Breadcrumb & Header */}
-      <div className="bg-white border-b sticky top-16 z-40">
+      <div className="bg-white border-b md:sticky md:top-[60px] z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           {/* Breadcrumb */}
           <Breadcrumb
@@ -141,13 +141,12 @@ export default function ServiceLocationPageClient({
 
       {/* Main content - Zillow style split view */}
       <div
-        className="flex"
-        style={{ height: 'calc(100vh - 180px)' }}
+        className="flex flex-col md:flex-row md:h-[calc(100vh-180px)]"
       >
         {/* Provider List */}
         {(viewMode === 'split' || viewMode === 'list') && (
           <div
-            className={`bg-white border-r border-gray-200 overflow-hidden ${
+            className={`bg-white border-r border-gray-200 max-h-[60vh] overflow-y-auto md:max-h-none md:overflow-hidden ${
               viewMode === 'split' ? 'w-full md:w-1/2 lg:w-2/5' : 'w-full'
             }`}
           >
