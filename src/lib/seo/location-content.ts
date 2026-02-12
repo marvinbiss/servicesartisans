@@ -196,7 +196,7 @@ const SEASONAL_TIPS: Record<string, SeasonalTips> = {
     mountain:
       "Dans les chalets et maisons de montagne, une cuisine en bois massif (chêne, noyer) s'harmonise avec l'architecture locale. Un cuisiniste artisan local maîtrise ces finitions traditionnelles.",
     urban:
-      "En appartement, l'optimisation de l'espace est primordiale. Un cuisiniste expérimenté peut concevoir une cuisine fonctionnelle même dans moins de 6 m\u00B2 grâce au mobilier sur mesure.",
+      "En appartement, l'optimisation de l'espace est primordiale. Un cuisiniste expérimenté peut concevoir une cuisine fonctionnelle même dans moins de 6 m² grâce au mobilier sur mesure.",
     rural:
       "Pour les grandes cuisines de maison, l'îlot central est un atout majeur. Prévoyez au minimum 90 cm de passage autour de l'îlot pour une circulation confortable.",
     default:
@@ -224,7 +224,7 @@ const SEASONAL_TIPS: Record<string, SeasonalTips> = {
     rural:
       "Pour les grandes propriétés, le nettoyage de fin de chantier après des travaux de rénovation nécessite une entreprise équipée : aspirateur industriel, autolaveuse, nettoyeur haute pression.",
     default:
-      "Pour un résultat professionnel, demandez toujours un devis après visite sur site. Le prix au m\u00B2 varie selon l'état des lieux et le type de nettoyage requis.",
+      "Pour un résultat professionnel, demandez toujours un devis après visite sur site. Le prix au m² varie selon l'état des lieux et le type de nettoyage requis.",
   },
 }
 

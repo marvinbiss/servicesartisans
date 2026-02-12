@@ -25303,7 +25303,7 @@ export const services = [
   { slug: 'electricien', name: 'Électricien', icon: 'Zap', color: 'from-amber-500 to-amber-600' },
   { slug: 'serrurier', name: 'Serrurier', icon: 'Key', color: 'from-slate-600 to-slate-700' },
   { slug: 'chauffagiste', name: 'Chauffagiste', icon: 'Flame', color: 'from-orange-500 to-orange-600' },
-  { slug: 'peintre-en-batiment', name: 'Peintre en b\u00e2timent', icon: 'PaintBucket', color: 'from-purple-500 to-purple-600' },
+  { slug: 'peintre-en-batiment', name: 'Peintre en bâtiment', icon: 'PaintBucket', color: 'from-purple-500 to-purple-600' },
   { slug: 'menuisier', name: 'Menuisier', icon: 'Hammer', color: 'from-amber-600 to-amber-700' },
   { slug: 'carreleur', name: 'Carreleur', icon: 'Grid3X3', color: 'from-teal-500 to-teal-600' },
   { slug: 'couvreur', name: 'Couvreur', icon: 'Home', color: 'from-red-500 to-red-600' },

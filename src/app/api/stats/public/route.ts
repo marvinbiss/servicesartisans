@@ -5,6 +5,7 @@
 
 import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { villes } from '@/lib/data/france'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 60 // Cache for 1 minute (updated more frequently)
@@ -50,7 +51,7 @@ export async function GET() {
       artisanCount: artisanCount || 0,
       reviewCount: totalReviews,
       averageRating: averageRating,
-      cityCount: 0, // TODO: calculate from DB
+      cityCount: villes.length,
       updatedAt: new Date().toISOString()
     })
 

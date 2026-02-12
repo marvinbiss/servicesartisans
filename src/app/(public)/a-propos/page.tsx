@@ -20,6 +20,12 @@ export const metadata: Metadata = {
     'max-image-preview': 'large',
     'max-video-preview': -1,
   },
+  openGraph: {
+    title: 'À propos — Le plus grand annuaire d\'artisans de France',
+    description: 'ServicesArtisans référence 350 000+ artisans grâce aux données ouvertes du gouvernement. Annuaire gratuit, transparent et fiable.',
+    url: 'https://servicesartisans.fr/a-propos',
+    type: 'website',
+  },
 }
 
 export const revalidate = 3600
@@ -128,7 +134,7 @@ export default async function AProposPage() {
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-28 md:pt-14 md:pb-36">
           <Breadcrumb
-            items={[{ label: '\u00C0 propos' }]}
+            items={[{ label: 'À propos' }]}
             className="mb-6 text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
           />
           <div className="text-center">

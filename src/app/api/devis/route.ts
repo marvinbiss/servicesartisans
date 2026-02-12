@@ -35,7 +35,7 @@ const serviceNames: Record<string, string> = {
   electricien: 'Électricien',
   serrurier: 'Serrurier',
   chauffagiste: 'Chauffagiste',
-  'peintre-en-batiment': 'Peintre en b\u00e2timent',
+  'peintre-en-batiment': 'Peintre en bâtiment',
   couvreur: 'Couvreur',
   menuisier: 'Menuisier',
   macon: 'Maçon',

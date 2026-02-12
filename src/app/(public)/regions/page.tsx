@@ -9,6 +9,12 @@ export const metadata: Metadata = {
   title: 'Artisans par région — 18 régions, 350 000+ professionnels | ServicesArtisans',
   description: 'Explorez 350 000+ artisans référencés dans les 18 régions de France. Tous les corps de métier du bâtiment. Recherche gratuite, devis sans engagement.',
   alternates: { canonical: `${SITE_URL}/regions` },
+  openGraph: {
+    title: 'Artisans par région — 18 régions, 350 000+ professionnels | ServicesArtisans',
+    description: 'Explorez 350 000+ artisans référencés dans les 18 régions de France. Tous les corps de métier du bâtiment.',
+    url: `${SITE_URL}/regions`,
+    type: 'website',
+  },
 }
 
 export default function RegionsIndexPage() {

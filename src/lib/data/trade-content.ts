@@ -87,7 +87,7 @@ export const tradeContent: Record<string, TradeContent> = {
       'Pose d\'une prise électrique supplémentaire : 60 à 150 \u20AC',
       'Remplacement d\'un interrupteur différentiel : 150 à 350 \u20AC',
       'Installation d\'un interphone ou visiophone : 300 à 1 200 \u20AC',
-      'Réfection complète de l\'électricité d\'un appartement (60 m\u00B2) : 5 000 à 10 000 \u20AC',
+      'Réfection complète de l\'électricité d\'un appartement (60 m²) : 5 000 à 10 000 \u20AC',
     ],
     tips: [
       'Assurez-vous que l\'électricien respecte la norme NF C 15-100, obligatoire pour toute installation électrique en France. Demandez un certificat de conformité Consuel à la fin des travaux.',
@@ -187,7 +187,7 @@ export const tradeContent: Record<string, TradeContent> = {
       'Installation d\'une pompe à chaleur air-eau : 8 000 à 15 000 \u20AC',
       'Désembouage d\'un circuit de chauffage : 400 à 900 \u20AC',
       'Remplacement de radiateurs : 300 à 800 \u20AC par radiateur (fourniture + pose)',
-      'Installation d\'un plancher chauffant : 50 à 100 \u20AC/m\u00B2',
+      'Installation d\'un plancher chauffant : 50 à 100 \u20AC/m²',
     ],
     tips: [
       'L\'entretien annuel de votre chaudière est obligatoire par la loi (décret du 9 juin 2009). Prévoyez-le à l\'automne, avant la saison de chauffe, pour éviter les pannes en plein hiver.',
@@ -233,15 +233,15 @@ export const tradeContent: Record<string, TradeContent> = {
     priceRange: {
       min: 25,
       max: 45,
-      unit: '\u20AC/m\u00B2',
+      unit: '\u20AC/m²',
     },
     commonTasks: [
-      'Peinture d\'une pièce (murs + plafond, 12 m\u00B2) : 400 à 800 \u20AC',
-      'Ravalement de façade (enduit + peinture) : 40 à 100 \u20AC/m\u00B2',
-      'Pose de papier peint : 15 à 35 \u20AC/m\u00B2 (hors fourniture)',
-      'Laquage de boiseries et portes : 30 à 60 \u20AC/m\u00B2',
+      'Peinture d\'une pièce (murs + plafond, 12 m²) : 400 à 800 \u20AC',
+      'Ravalement de façade (enduit + peinture) : 40 à 100 \u20AC/m²',
+      'Pose de papier peint : 15 à 35 \u20AC/m² (hors fourniture)',
+      'Laquage de boiseries et portes : 30 à 60 \u20AC/m²',
       'Traitement et peinture de volets : 50 à 120 \u20AC par volet',
-      'Peinture de plafond seul : 18 à 35 \u20AC/m\u00B2',
+      'Peinture de plafond seul : 18 à 35 \u20AC/m²',
     ],
     tips: [
       'Un bon peintre commence toujours par une préparation minutieuse des surfaces : lessivage, ponçage, rebouchage des fissures et application d\'une sous-couche. Cette étape représente 60 % du travail et garantit un résultat durable.',
@@ -253,7 +253,7 @@ export const tradeContent: Record<string, TradeContent> = {
     faq: [
       {
         q: 'Combien coûte la peinture d\'un appartement complet ?',
-        a: 'Pour un appartement de 60 m\u00B2, comptez entre 2 500 et 5 000 \u20AC pour la peinture de toutes les pièces (murs et plafonds), fournitures incluses. Le prix varie selon l\'état des murs (plus de préparation = plus cher), le nombre de couleurs et la qualité de la peinture choisie. Demandez au moins 3 devis pour comparer.',
+        a: 'Pour un appartement de 60 m², comptez entre 2 500 et 5 000 \u20AC pour la peinture de toutes les pièces (murs et plafonds), fournitures incluses. Le prix varie selon l\'état des murs (plus de préparation = plus cher), le nombre de couleurs et la qualité de la peinture choisie. Demandez au moins 3 devis pour comparer.',
       },
       {
         q: 'Faut-il vider entièrement la pièce avant les travaux de peinture ?',
@@ -265,7 +265,7 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'Combien de temps faut-il pour peindre un appartement ?',
-        a: 'Pour un appartement de 60 m\u00B2, comptez 5 à 8 jours de travail incluant la préparation, l\'application de 2 couches et les finitions. Le délai peut être plus long si les murs nécessitent d\'importants travaux de préparation (rebouchage, enduit, ponçage).',
+        a: 'Pour un appartement de 60 m², comptez 5 à 8 jours de travail incluant la préparation, l\'application de 2 couches et les finitions. Le délai peut être plus long si les murs nécessitent d\'importants travaux de préparation (rebouchage, enduit, ponçage).',
       },
     ],
     certifications: [
@@ -290,14 +290,14 @@ export const tradeContent: Record<string, TradeContent> = {
       'Pose d\'une porte intérieure : 150 à 400 \u20AC (hors fourniture)',
       'Installation d\'une cuisine aménagée : 1 500 à 5 000 \u20AC (pose uniquement)',
       'Création d\'un escalier sur mesure : 3 000 à 10 000 \u20AC',
-      'Pose de parquet massif ou contrecollé : 30 à 70 \u20AC/m\u00B2 (pose uniquement)',
+      'Pose de parquet massif ou contrecollé : 30 à 70 \u20AC/m² (pose uniquement)',
     ],
     tips: [
       'Distinguez le menuisier d\'agencement (placards, cuisines, dressings sur mesure) du menuisier poseur (fenêtres, portes, parquet). Choisissez le spécialiste adapté à votre projet pour un résultat optimal.',
       'Pour le remplacement de fenêtres, un menuisier certifié RGE est indispensable pour bénéficier de MaPrimeRenov\' et des CEE. La pose doit respecter le DTU 36.5 pour garantir l\'étanchéité.',
       'Demandez à voir des réalisations précédentes du menuisier, surtout pour du mobilier sur mesure. Les photos de chantiers terminés sont un bon indicateur de la qualité du travail.',
       'Vérifiez que le devis précise l\'essence de bois utilisée (chêne, hêtre, sapin, bois exotique) et son origine. Le label PEFC ou FSC garantit un bois issu de forêts gérées durablement.',
-      'Pour des fenêtres ou des volets, comparez les performances thermiques (coefficient Uw en W/m\u00B2.K) et pas uniquement le prix. Un bon vitrage isolant se rentabilise en économies de chauffage.',
+      'Pour des fenêtres ou des volets, comparez les performances thermiques (coefficient Uw en W/m².K) et pas uniquement le prix. Un bon vitrage isolant se rentabilise en économies de chauffage.',
     ],
     faq: [
       {
@@ -328,15 +328,15 @@ export const tradeContent: Record<string, TradeContent> = {
     priceRange: {
       min: 35,
       max: 65,
-      unit: '\u20AC/m\u00B2',
+      unit: '\u20AC/m²',
     },
     commonTasks: [
-      'Pose de carrelage au sol (format standard) : 35 à 55 \u20AC/m\u00B2 (pose uniquement)',
-      'Pose de carrelage grand format (60x60 et plus) : 50 à 75 \u20AC/m\u00B2',
-      'Pose de faïence murale (salle de bain) : 40 à 65 \u20AC/m\u00B2',
-      'Pose de mosaïque : 60 à 100 \u20AC/m\u00B2',
-      'Carrelage d\'une terrasse extérieure : 45 à 80 \u20AC/m\u00B2',
-      'Dépose d\'ancien carrelage + repose : 15 à 30 \u20AC/m\u00B2 supplémentaires',
+      'Pose de carrelage au sol (format standard) : 35 à 55 \u20AC/m² (pose uniquement)',
+      'Pose de carrelage grand format (60x60 et plus) : 50 à 75 \u20AC/m²',
+      'Pose de faïence murale (salle de bain) : 40 à 65 \u20AC/m²',
+      'Pose de mosaïque : 60 à 100 \u20AC/m²',
+      'Carrelage d\'une terrasse extérieure : 45 à 80 \u20AC/m²',
+      'Dépose d\'ancien carrelage + repose : 15 à 30 \u20AC/m² supplémentaires',
     ],
     tips: [
       'Le prix de la pose dépend fortement du format des carreaux : les grands formats (60x60, 80x80) et les poses en diagonale ou en décalé coûtent 20 à 40 % plus cher que la pose droite en format standard.',
@@ -348,7 +348,7 @@ export const tradeContent: Record<string, TradeContent> = {
     faq: [
       {
         q: 'Combien de temps faut-il pour carreler une salle de bain ?',
-        a: 'Pour une salle de bain standard de 5 à 8 m\u00B2 (sol + murs), comptez 3 à 5 jours de travail incluant la préparation, la pose de l\'étanchéité, le carrelage et les joints. Ajoutez 1 à 2 jours si l\'ancien carrelage doit être déposé. Le séchage des joints nécessite 24h supplémentaires avant utilisation.',
+        a: 'Pour une salle de bain standard de 5 à 8 m² (sol + murs), comptez 3 à 5 jours de travail incluant la préparation, la pose de l\'étanchéité, le carrelage et les joints. Ajoutez 1 à 2 jours si l\'ancien carrelage doit être déposé. Le séchage des joints nécessite 24h supplémentaires avant utilisation.',
       },
       {
         q: 'Puis-je poser du carrelage sur un ancien carrelage ?',
@@ -372,14 +372,14 @@ export const tradeContent: Record<string, TradeContent> = {
     priceRange: {
       min: 50,
       max: 90,
-      unit: '\u20AC/m\u00B2',
+      unit: '\u20AC/m²',
     },
     commonTasks: [
       'Réparation de fuite de toiture : 200 à 800 \u20AC',
-      'Remplacement de tuiles cassées : 40 à 80 \u20AC/m\u00B2',
-      'Réfection complète de toiture (100 m\u00B2) : 8 000 à 18 000 \u20AC',
+      'Remplacement de tuiles cassées : 40 à 80 \u20AC/m²',
+      'Réfection complète de toiture (100 m²) : 8 000 à 18 000 \u20AC',
       'Pose de gouttière en zinc : 40 à 80 \u20AC/ml',
-      'Nettoyage et démoussage de toiture : 15 à 30 \u20AC/m\u00B2',
+      'Nettoyage et démoussage de toiture : 15 à 30 \u20AC/m²',
       'Installation de fenêtre de toit (Velux) : 500 à 1 500 \u20AC (hors fourniture)',
     ],
     tips: [
@@ -392,7 +392,7 @@ export const tradeContent: Record<string, TradeContent> = {
     faq: [
       {
         q: 'Combien coûte une réfection complète de toiture ?',
-        a: 'Pour une maison de 100 m\u00B2 de toiture, comptez entre 8 000 et 18 000 \u20AC selon le matériau (tuiles terre cuite : 50-80 \u20AC/m\u00B2, ardoise : 80-120 \u20AC/m\u00B2, zinc : 60-100 \u20AC/m\u00B2) et la complexité (pente, cheminée, lucarnes). Ce prix inclut la dépose, la fourniture et la pose. L\'échafaudage représente 10 à 15 % du budget.',
+        a: 'Pour une maison de 100 m² de toiture, comptez entre 8 000 et 18 000 \u20AC selon le matériau (tuiles terre cuite : 50-80 \u20AC/m², ardoise : 80-120 \u20AC/m², zinc : 60-100 \u20AC/m²) et la complexité (pente, cheminée, lucarnes). Ce prix inclut la dépose, la fourniture et la pose. L\'échafaudage représente 10 à 15 % du budget.',
       },
       {
         q: 'Faut-il un permis de construire pour refaire sa toiture ?',
@@ -400,7 +400,7 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'À quelle fréquence faut-il démousser sa toiture ?',
-        a: 'Un démoussage est recommandé tous les 3 à 5 ans, selon l\'exposition et l\'environnement (plus fréquent près d\'arbres ou en zone humide). Le démoussage coûte entre 15 et 30 \u20AC/m\u00B2 et prolonge la durée de vie de votre couverture. Évitez le nettoyeur haute pression, qui endommage les tuiles.',
+        a: 'Un démoussage est recommandé tous les 3 à 5 ans, selon l\'exposition et l\'environnement (plus fréquent près d\'arbres ou en zone humide). Le démoussage coûte entre 15 et 30 \u20AC/m² et prolonge la durée de vie de votre couverture. Évitez le nettoyeur haute pression, qui endommage les tuiles.',
       },
       {
         q: 'Ma toiture fuit après une tempête, que faire en urgence ?',
@@ -425,10 +425,10 @@ export const tradeContent: Record<string, TradeContent> = {
       unit: '\u20AC/h',
     },
     commonTasks: [
-      'Construction d\'un mur en parpaings : 50 à 80 \u20AC/m\u00B2',
-      'Coulée d\'une dalle béton (garage, terrasse) : 60 à 120 \u20AC/m\u00B2',
+      'Construction d\'un mur en parpaings : 50 à 80 \u20AC/m²',
+      'Coulée d\'une dalle béton (garage, terrasse) : 60 à 120 \u20AC/m²',
       'Ouverture d\'un mur porteur (avec IPN) : 2 500 à 6 000 \u20AC',
-      'Construction d\'une extension : 1 200 à 2 000 \u20AC/m\u00B2',
+      'Construction d\'une extension : 1 200 à 2 000 \u20AC/m²',
       'Réparation de fissures structurelles : 50 à 200 \u20AC/ml',
       'Montage d\'un mur de clôture : 100 à 250 \u20AC/ml',
     ],
@@ -436,13 +436,13 @@ export const tradeContent: Record<string, TradeContent> = {
       'Pour toute ouverture dans un mur porteur, exigez une étude structurelle réalisée par un bureau d\'études agréé. Le maçon doit suivre les préconisations de l\'ingénieur et poser une poutre (IPN) dimensionnée pour reprendre les charges.',
       'Vérifiez les références du maçon sur des chantiers similaires au vôtre. Un maçon spécialisé en neuf n\'a pas forcément l\'expérience de la rénovation, et inversement.',
       'Les travaux de maçonnerie sont soumis à la garantie décennale obligatoire. Demandez une copie de l\'attestation d\'assurance avant le début du chantier et vérifiez qu\'elle couvre le type de travaux prévus.',
-      'Pour une extension ou une construction, une déclaration préalable ou un permis de construire est obligatoire selon la surface. En dessous de 20 m\u00B2, une déclaration suffit ; au-delà, le permis est requis (seuil porté à 40 m\u00B2 en zone PLU).',
-      'Privilégiez les périodes de printemps et d\'automne pour les travaux de maçonnerie : le béton et le mortier nécessitent des températures comprises entre 5 et 30\u00B0C pour une prise optimale.',
+      'Pour une extension ou une construction, une déclaration préalable ou un permis de construire est obligatoire selon la surface. En dessous de 20 m², une déclaration suffit ; au-delà, le permis est requis (seuil porté à 40 m² en zone PLU).',
+      'Privilégiez les périodes de printemps et d\'automne pour les travaux de maçonnerie : le béton et le mortier nécessitent des températures comprises entre 5 et 30°C pour une prise optimale.',
     ],
     faq: [
       {
         q: 'Combien coûte la construction d\'une extension de maison ?',
-        a: 'Le prix d\'une extension en maçonnerie traditionnelle varie de 1 200 à 2 000 \u20AC/m\u00B2 selon les finitions, la complexité de la structure et la région. Une extension de 20 m\u00B2 coûte ainsi entre 24 000 et 40 000 \u20AC. Ce prix comprend les fondations, les murs, la toiture et le clos couvert, mais pas les finitions intérieures.',
+        a: 'Le prix d\'une extension en maçonnerie traditionnelle varie de 1 200 à 2 000 \u20AC/m² selon les finitions, la complexité de la structure et la région. Une extension de 20 m² coûte ainsi entre 24 000 et 40 000 \u20AC. Ce prix comprend les fondations, les murs, la toiture et le clos couvert, mais pas les finitions intérieures.',
       },
       {
         q: 'Peut-on abattre un mur porteur soi-même ?',
@@ -470,11 +470,11 @@ export const tradeContent: Record<string, TradeContent> = {
       unit: '\u20AC/h',
     },
     commonTasks: [
-      'Tonte de pelouse (jardin de 200 m\u00B2) : 30 à 60 \u20AC',
+      'Tonte de pelouse (jardin de 200 m²) : 30 à 60 \u20AC',
       'Taille de haie : 15 à 25 \u20AC/ml',
       'Élagage d\'arbre (hauteur moyenne) : 200 à 600 \u20AC par arbre',
-      'Création de jardin (plantations + engazonnement) : 20 à 50 \u20AC/m\u00B2',
-      'Entretien mensuel d\'un jardin (200 m\u00B2) : 100 à 200 \u20AC/mois',
+      'Création de jardin (plantations + engazonnement) : 20 à 50 \u20AC/m²',
+      'Entretien mensuel d\'un jardin (200 m²) : 100 à 200 \u20AC/mois',
       'Abattage d\'arbre avec dessouchage : 400 à 1 500 \u20AC selon la taille',
     ],
     tips: [
@@ -498,7 +498,7 @@ export const tradeContent: Record<string, TradeContent> = {
         a: 'La taille principale se fait en fin d\'hiver (février-mars), avant la reprise de végétation. Une seconde taille d\'entretien est recommandée en fin d\'été (septembre). Attention : la taille est interdite du 15 mars au 31 juillet dans les zones agricoles pour protéger la nidification des oiseaux (arrêté du 24 avril 2015).',
       },
       {
-        q: 'Quel budget pour l\'entretien annuel d\'un jardin de 500 m\u00B2 ?',
+        q: 'Quel budget pour l\'entretien annuel d\'un jardin de 500 m² ?',
         a: 'Comptez entre 1 500 et 3 500 \u20AC par an pour un entretien complet comprenant la tonte bimensuelle (avril à octobre), 2 tailles de haie, le désherbage des massifs et le ramassage des feuilles à l\'automne. Ce budget peut être réduit de 50 % grâce au crédit d\'impôt si le jardinier est agréé SAP.',
       },
     ],
@@ -520,24 +520,24 @@ export const tradeContent: Record<string, TradeContent> = {
       unit: '\u20AC/intervention',
     },
     commonTasks: [
-      'Remplacement d\'un simple vitrage : 60 à 150 \u20AC/m\u00B2 (fourniture + pose)',
-      'Pose de double vitrage : 150 à 350 \u20AC/m\u00B2',
+      'Remplacement d\'un simple vitrage : 60 à 150 \u20AC/m² (fourniture + pose)',
+      'Pose de double vitrage : 150 à 350 \u20AC/m²',
       'Remplacement d\'une vitre cassée (standard) : 80 à 200 \u20AC',
-      'Survitrage d\'une fenêtre existante : 80 à 150 \u20AC/m\u00B2',
-      'Pose d\'une crédence en verre (cuisine) : 200 à 500 \u20AC/m\u00B2',
+      'Survitrage d\'une fenêtre existante : 80 à 150 \u20AC/m²',
+      'Pose d\'une crédence en verre (cuisine) : 200 à 500 \u20AC/m²',
       'Installation d\'une paroi de douche en verre : 400 à 1 200 \u20AC',
     ],
     tips: [
       'En cas de vitre cassée, sécurisez la zone avec du carton ou du ruban adhésif en attendant le vitrier. Ne tentez pas de retirer les morceaux de verre à mains nues.',
       'Privilégiez le double vitrage 4/16/4 pour un bon rapport qualité-prix en isolation thermique. Le triple vitrage n\'est justifié que dans les régions très froides.',
-      'Demandez au vitrier de vous fournir le coefficient d\'isolation (Ug) du vitrage proposé. Plus ce chiffre est bas, meilleure est l\'isolation : Ug < 1,1 W/m\u00B2.K pour du bon double vitrage.',
+      'Demandez au vitrier de vous fournir le coefficient d\'isolation (Ug) du vitrage proposé. Plus ce chiffre est bas, meilleure est l\'isolation : Ug < 1,1 W/m².K pour du bon double vitrage.',
       'Pour une crédence ou une paroi de douche, exigez du verre sécurit (trempé) conforme à la norme EN 12150 : en cas de casse, il se fragmente en petits morceaux non coupants.',
       'Un vitrier d\'urgence peut intervenir pour sécuriser une vitrine commerciale ou une baie vitrée cassée. Vérifiez que le professionnel propose un service de mise en sécurité provisoire.',
     ],
     faq: [
       {
         q: 'Combien coûte le remplacement d\'une vitre cassée ?',
-        a: 'Le remplacement d\'une vitre simple coûte entre 80 et 200 \u20AC pour une fenêtre standard (environ 1 m\u00B2). Pour du double vitrage, comptez 150 à 350 \u20AC/m\u00B2 fourniture et pose comprises. Les tarifs augmentent pour les grandes dimensions, les formes spéciales et les interventions en urgence (+50 à 100 %).',
+        a: 'Le remplacement d\'une vitre simple coûte entre 80 et 200 \u20AC pour une fenêtre standard (environ 1 m²). Pour du double vitrage, comptez 150 à 350 \u20AC/m² fourniture et pose comprises. Les tarifs augmentent pour les grandes dimensions, les formes spéciales et les interventions en urgence (+50 à 100 %).',
       },
       {
         q: 'Mon assurance couvre-t-elle le remplacement d\'une vitre ?',
@@ -545,7 +545,7 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'Double ou triple vitrage : lequel choisir ?',
-        a: 'Le double vitrage 4/16/4 avec gaz argon (Ug \u2248 1,1 W/m\u00B2.K) suffit dans la majorité des cas en France métropolitaine. Le triple vitrage (Ug \u2248 0,6 W/m\u00B2.K) est recommandé uniquement pour les façades nord en climat continental ou montagnard. Il est plus lourd et plus cher (+40 à 60 %) pour un gain d\'isolation modeste en climat tempéré.',
+        a: 'Le double vitrage 4/16/4 avec gaz argon (Ug \u2248 1,1 W/m².K) suffit dans la majorité des cas en France métropolitaine. Le triple vitrage (Ug \u2248 0,6 W/m².K) est recommandé uniquement pour les façades nord en climat continental ou montagnard. Il est plus lourd et plus cher (+40 à 60 %) pour un gain d\'isolation modeste en climat tempéré.',
       },
     ],
     emergencyInfo:
@@ -584,11 +584,11 @@ export const tradeContent: Record<string, TradeContent> = {
     faq: [
       {
         q: 'Combien coûte l\'installation d\'une climatisation ?',
-        a: 'Un split mural standard (2,5 kW, pour une pièce de 25 m\u00B2) coûte entre 1 500 et 3 000 \u20AC pose comprise. Un système multi-split (3 unités intérieures) revient à 4 000 à 8 000 \u20AC. La climatisation gainable (invisible, conduits dans les faux plafonds) coûte 5 000 à 12 000 \u20AC. Les modèles réversibles (chaud/froid) sont plus économiques à l\'usage.',
+        a: 'Un split mural standard (2,5 kW, pour une pièce de 25 m²) coûte entre 1 500 et 3 000 \u20AC pose comprise. Un système multi-split (3 unités intérieures) revient à 4 000 à 8 000 \u20AC. La climatisation gainable (invisible, conduits dans les faux plafonds) coûte 5 000 à 12 000 \u20AC. Les modèles réversibles (chaud/froid) sont plus économiques à l\'usage.',
       },
       {
         q: 'La climatisation réversible est-elle économique pour le chauffage ?',
-        a: 'Oui, une pompe à chaleur air-air réversible consomme 3 à 4 fois moins d\'électricité qu\'un radiateur électrique classique grâce à son COP (Coefficient de Performance). Pour un appartement de 60 m\u00B2, l\'économie est de 300 à 600 \u20AC par an sur la facture de chauffage. L\'investissement est amorti en 3 à 5 ans.',
+        a: 'Oui, une pompe à chaleur air-air réversible consomme 3 à 4 fois moins d\'électricité qu\'un radiateur électrique classique grâce à son COP (Coefficient de Performance). Pour un appartement de 60 m², l\'économie est de 300 à 600 \u20AC par an sur la facture de chauffage. L\'investissement est amorti en 3 à 5 ans.',
       },
       {
         q: 'Faut-il une autorisation pour installer une climatisation ?',
@@ -658,18 +658,18 @@ export const tradeContent: Record<string, TradeContent> = {
     priceRange: {
       min: 25,
       max: 60,
-      unit: '\u20AC/m\u00B2',
+      unit: '\u20AC/m²',
     },
     commonTasks: [
-      'Pose de parquet flottant : 20 à 35 \u20AC/m\u00B2 (pose uniquement)',
-      'Pose de parquet massif collé : 35 à 60 \u20AC/m\u00B2',
-      'Pose de sol PVC/vinyle en lames ou dalles : 15 à 30 \u20AC/m\u00B2',
-      'Pose de moquette : 10 à 25 \u20AC/m\u00B2',
-      'Ragréage du sol (mise à niveau) : 15 à 30 \u20AC/m\u00B2',
-      'Pose de sol souple linoléum : 20 à 40 \u20AC/m\u00B2',
+      'Pose de parquet flottant : 20 à 35 \u20AC/m² (pose uniquement)',
+      'Pose de parquet massif collé : 35 à 60 \u20AC/m²',
+      'Pose de sol PVC/vinyle en lames ou dalles : 15 à 30 \u20AC/m²',
+      'Pose de moquette : 10 à 25 \u20AC/m²',
+      'Ragréage du sol (mise à niveau) : 15 à 30 \u20AC/m²',
+      'Pose de sol souple linoléum : 20 à 40 \u20AC/m²',
     ],
     tips: [
-      'Le ragréage (mise à niveau du support) est souvent indispensable avant la pose d\'un revêtement de sol. Un sol mal préparé est la première cause de désordres. Ce poste peut représenter 15 à 30 \u20AC/m\u00B2 supplémentaires.',
+      'Le ragréage (mise à niveau du support) est souvent indispensable avant la pose d\'un revêtement de sol. Un sol mal préparé est la première cause de désordres. Ce poste peut représenter 15 à 30 \u20AC/m² supplémentaires.',
       'Le parquet contrecollé offre le meilleur compromis entre esthétique (couche d\'usure en bois noble) et stabilité (pas de retrait ni gonflement). Il est compatible avec le chauffage au sol.',
       'Les sols PVC/vinyle nouvelle génération (LVT - Luxury Vinyl Tiles) offrent un rendu très réaliste (imitation bois, pierre) avec une grande résistance à l\'eau et à l\'usure, idéaux pour les salles de bain et cuisines.',
       'Demandez au solier le classement UPEC du revêtement proposé et vérifiez qu\'il correspond à l\'usage de la pièce : U3 P3 minimum pour une entrée ou un couloir, U2 P2 suffisant pour une chambre.',
@@ -678,7 +678,7 @@ export const tradeContent: Record<string, TradeContent> = {
     faq: [
       {
         q: 'Parquet massif, contrecollé ou stratifié : lequel choisir ?',
-        a: 'Le parquet massif (30-80 \u20AC/m\u00B2) est le plus noble et durable (ponçable plusieurs fois), mais sensible à l\'humidité. Le contrecollé (25-60 \u20AC/m\u00B2) offre le meilleur compromis qualité-prix et convient au chauffage au sol. Le stratifié (10-25 \u20AC/m\u00B2) est le moins cher mais ne peut pas être poncé et a une durée de vie limitée (10-15 ans).',
+        a: 'Le parquet massif (30-80 \u20AC/m²) est le plus noble et durable (ponçable plusieurs fois), mais sensible à l\'humidité. Le contrecollé (25-60 \u20AC/m²) offre le meilleur compromis qualité-prix et convient au chauffage au sol. Le stratifié (10-25 \u20AC/m²) est le moins cher mais ne peut pas être poncé et a une durée de vie limitée (10-15 ans).',
       },
       {
         q: 'Peut-on poser du parquet sur du carrelage existant ?',
@@ -686,7 +686,7 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'Quel sol choisir pour une salle de bain ?',
-        a: 'Les meilleurs choix sont le sol PVC/vinyle (étanche, antidérapant, 15-30 \u20AC/m\u00B2), le parquet teck ou bambou (naturellement résistant à l\'eau, 40-70 \u20AC/m\u00B2) ou le sol souple linoléum (écologique, antibactérien, 20-40 \u20AC/m\u00B2). Évitez le stratifié classique qui gonfle au contact de l\'eau. Le carrelage reste la solution la plus durable.',
+        a: 'Les meilleurs choix sont le sol PVC/vinyle (étanche, antidérapant, 15-30 \u20AC/m²), le parquet teck ou bambou (naturellement résistant à l\'eau, 40-70 \u20AC/m²) ou le sol souple linoléum (écologique, antibactérien, 20-40 \u20AC/m²). Évitez le stratifié classique qui gonfle au contact de l\'eau. Le carrelage reste la solution la plus durable.',
       },
     ],
     certifications: [
@@ -706,12 +706,12 @@ export const tradeContent: Record<string, TradeContent> = {
       unit: '\u20AC/h',
     },
     commonTasks: [
-      'Nettoyage de fin de chantier (appartement 60 m\u00B2) : 400 à 800 \u20AC',
+      'Nettoyage de fin de chantier (appartement 60 m²) : 400 à 800 \u20AC',
       'Nettoyage de copropriété (parties communes) : 200 à 500 \u20AC/mois',
-      'Nettoyage de vitres (logement) : 5 à 10 \u20AC/m\u00B2',
+      'Nettoyage de vitres (logement) : 5 à 10 \u20AC/m²',
       'Remise en état après sinistre : 500 à 2 000 \u20AC',
-      'Nettoyage de façade (kärcher professionnel) : 10 à 25 \u20AC/m\u00B2',
-      'Débarras et nettoyage de locaux : 30 à 50 \u20AC/m\u00B2',
+      'Nettoyage de façade (kärcher professionnel) : 10 à 25 \u20AC/m²',
+      'Débarras et nettoyage de locaux : 30 à 50 \u20AC/m²',
     ],
     tips: [
       'Pour un nettoyage de fin de chantier, exigez un cahier des charges précis : lessivage des murs, décapage des sols, nettoyage des vitres (intérieur + extérieur), dégraissage de la cuisine et nettoyage des sanitaires.',
@@ -723,7 +723,7 @@ export const tradeContent: Record<string, TradeContent> = {
     faq: [
       {
         q: 'Combien coûte un nettoyage de fin de chantier ?',
-        a: 'Pour un appartement de 60 m\u00B2, comptez 400 à 800 \u20AC selon l\'état des lieux et l\'étendue des travaux réalisés. Pour une maison de 120 m\u00B2, le budget est de 700 à 1 500 \u20AC. Ce tarif inclut le lessivage des murs, le décapage et lustrage des sols, le nettoyage des vitres et la désinfection des sanitaires.',
+        a: 'Pour un appartement de 60 m², comptez 400 à 800 \u20AC selon l\'état des lieux et l\'étendue des travaux réalisés. Pour une maison de 120 m², le budget est de 700 à 1 500 \u20AC. Ce tarif inclut le lessivage des murs, le décapage et lustrage des sols, le nettoyage des vitres et la désinfection des sanitaires.',
       },
       {
         q: 'Puis-je bénéficier d\'un crédit d\'impôt pour le nettoyage ?',

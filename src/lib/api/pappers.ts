@@ -19,7 +19,7 @@ import { apiLogger } from '../utils/logger'
 const PAPPERS_API_BASE = 'https://api.pappers.fr/v2'
 
 // API Key from environment
-const PAPPERS_API_KEY = process.env.PAPPERS_API_KEY || '19e3be1ba8175d5beb6cd9712e10b7e6d2ff6b4d9a3cfea7'
+const PAPPERS_API_KEY = process.env.PAPPERS_API_KEY
 
 // Circuit breaker for Pappers API
 const circuitBreaker = new CircuitBreaker({

@@ -19,6 +19,12 @@ export const metadata: Metadata = {
     'max-image-preview': 'large',
     'max-video-preview': -1,
   },
+  openGraph: {
+    title: 'Demander un devis gratuit — ServicesArtisans',
+    description: "Décrivez votre projet et recevez jusqu'à 3 devis gratuits d'artisans référencés. 100 % gratuit, sans engagement.",
+    url: 'https://servicesartisans.fr/devis',
+    type: 'website',
+  },
 }
 
 const trustBadges = [
