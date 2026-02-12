@@ -16,21 +16,20 @@ export interface BlogArticleMeta {
 }
 
 /** Map category to a default emoji for the blog listing grid */
-const categoryEmoji: Record<string, string> = {
-  'Conseils': '💡',
-  'Guides': '📖',
+export const categoryEmoji: Record<string, string> = {
   'Tarifs': '💰',
-  'Aides & Subventions': '🏛️',
-  'Inspiration': '✨',
-  'DIY': '🎨',
-  'Securite': '🚨',
-  'Sécurité': '🚨',
-  'Energie': '🔥',
-  'Énergie': '🔥',
-  'Réglementation': '⚖️',
-  'Projets': '🏗️',
+  'Conseils': '💡',
   'Fiches métier': '👷',
-  'Saisonnier': '🗓️',
+  'Guides': '📋',
+  'Réglementation': '⚖️',
+  'Aides & Subventions': '🏛️',
+  'Saisonnier': '🌿',
+  'Sécurité': '🔒',
+  'Securite': '🔒',
+  'Énergie': '⚡',
+  'Energie': '⚡',
+  'DIY': '🔧',
+  'Inspiration': '✨',
 }
 
 /** Emojis assigned to the original 27 articles (preserve exact existing ones) */

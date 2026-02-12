@@ -30,13 +30,16 @@ function safeJsonStringify(data: unknown): string {
 
 // ISR: revalidate every 60s — stale cache served on DB outage
 export const revalidate = REVALIDATE.serviceLocation
-// Hard 404 for slugs not in generateStaticParams
-export const dynamicParams = false
+// Allow on-demand ISR for cities not pre-rendered at build time
+export const dynamicParams = true
 
-// 15 services × 141 villes = 2,115 pre-rendered paths
+// Pre-render top 200 cities only (15 × 200 = 3,000 pages)
+// Remaining 2,000+ cities are generated on-demand via ISR
+const TOP_CITIES_COUNT = 200
 export function generateStaticParams() {
+  const topCities = villes.slice(0, TOP_CITIES_COUNT)
   return staticServicesList.flatMap(s =>
-    villes.map(v => ({ service: s.slug, location: v.slug }))
+    topCities.map(v => ({ service: s.slug, location: v.slug }))
   )
 }
 
@@ -273,30 +276,32 @@ export default async function ServiceLocationPage({ params }: PageProps) {
 
       {/* SEO Content - Server-rendered for Googlebot (unique per service+location) */}
       {locationContent && (
-        <section className="py-12 bg-white border-t">
+        <section className="py-12 bg-gray-50 border-t">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="prose prose-gray max-w-none">
-              <h2>
-                Trouver un {service.name.toLowerCase()} à {location.name}
-              </h2>
-              <p>{locationContent.introText}</p>
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+              <div className="prose prose-gray max-w-none">
+                <h2 className="border-l-4 border-amber-500 pl-4 !mt-0">
+                  Trouver un {service.name.toLowerCase()} à {location.name}
+                </h2>
+                <p>{locationContent.introText}</p>
 
-              <h3>Tarifs et prix d&apos;un {service.name.toLowerCase()} à {location.name}</h3>
-              <p>{locationContent.pricingNote}</p>
+                <h3>Tarifs et prix d&apos;un {service.name.toLowerCase()} à {location.name}</h3>
+                <p>{locationContent.pricingNote}</p>
 
-              <h3>Conseils pour vos travaux à {location.name}</h3>
-              <ul>
-                {locationContent.localTips.map((tip, i) => (
-                  <li key={i}>{tip}</li>
-                ))}
-              </ul>
+                <h3>Conseils pour vos travaux à {location.name}</h3>
+                <ul>
+                  {locationContent.localTips.map((tip, i) => (
+                    <li key={i}>{tip}</li>
+                  ))}
+                </ul>
 
-              <h3>
-                Zones d&apos;intervention à {location.name}
-              </h3>
-              <p>{locationContent.quartierText}</p>
+                <h3>
+                  Zones d&apos;intervention à {location.name}
+                </h3>
+                <p>{locationContent.quartierText}</p>
 
-              <p>{locationContent.conclusion}</p>
+                <p>{locationContent.conclusion}</p>
+              </div>
             </div>
           </div>
         </section>
@@ -304,17 +309,19 @@ export default async function ServiceLocationPage({ params }: PageProps) {
 
       {/* Fallback SEO content when locationContent is not available */}
       {!locationContent && (
-        <section className="py-12 bg-white border-t">
+        <section className="py-12 bg-gray-50 border-t">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="prose prose-gray max-w-none">
-              <h2>
-                Trouver un {service.name.toLowerCase()} à {location.name}
-              </h2>
-              <p>
-                Vous recherchez un {service.name.toLowerCase()} à {location.name} (
-                {location.postal_code}) ? ServicesArtisans vous propose une sélection de{' '}
-                {providers.length} professionnels qualifiés dans votre ville.
-              </p>
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+              <div className="prose prose-gray max-w-none">
+                <h2 className="border-l-4 border-amber-500 pl-4 !mt-0">
+                  Trouver un {service.name.toLowerCase()} à {location.name}
+                </h2>
+                <p>
+                  Vous recherchez un {service.name.toLowerCase()} à {location.name} (
+                  {location.postal_code}) ? ServicesArtisans vous propose une sélection de{' '}
+                  {providers.length} professionnels qualifiés dans votre ville.
+                </p>
+              </div>
             </div>
           </div>
         </section>
@@ -322,71 +329,75 @@ export default async function ServiceLocationPage({ params }: PageProps) {
 
       {/* Trade pricing context */}
       {trade && (
-        <section className="py-10 bg-gray-50 border-t">
+        <section className="py-12 bg-gray-50 border-t">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">
-              Tarifs {service.name.toLowerCase()} à {location.name}
-            </h2>
-            <p className="text-gray-600 mb-4 text-sm">
-              Tarif horaire moyen : <strong>{trade.priceRange.min}–{trade.priceRange.max} {trade.priceRange.unit}</strong>.
-              Les prix peuvent varier selon la complexité des travaux et le professionnel choisi.
-            </p>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
-              {trade.commonTasks.slice(0, 6).map((task, i) => {
-                const [label, price] = task.split(' : ')
-                return (
-                  <div key={i} className="flex items-start justify-between gap-3 p-2.5 bg-white rounded-lg text-sm">
-                    <span className="text-gray-700">{label}</span>
-                    {price && <span className="font-semibold text-amber-700 whitespace-nowrap">{price}</span>}
-                  </div>
-                )
-              })}
-            </div>
-            {trade.emergencyInfo && (
-              <div className="mt-4 p-4 bg-red-50 border border-red-100 rounded-lg">
-                <p className="text-sm text-red-800">
-                  <strong>Urgence {service.name.toLowerCase()} à {location.name} :</strong>{' '}
-                  {trade.averageResponseTime}
-                </p>
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+              <h2 className="text-xl font-bold text-gray-900 mb-1 border-l-4 border-amber-500 pl-4">
+                Tarifs {service.name.toLowerCase()} à {location.name}
+              </h2>
+              <p className="text-gray-600 mb-6 text-sm pl-[calc(1rem+4px)]">
+                Tarif horaire moyen : <strong className="text-gray-900">{trade.priceRange.min}–{trade.priceRange.max} {trade.priceRange.unit}</strong>.
+                Les prix peuvent varier selon la complexité des travaux et le professionnel choisi.
+              </p>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {trade.commonTasks.slice(0, 6).map((task, i) => {
+                  const [label, price] = task.split(' : ')
+                  return (
+                    <div key={i} className="flex items-start justify-between gap-3 p-3 bg-gray-50 rounded-xl text-sm border border-gray-100">
+                      <span className="text-gray-700">{label}</span>
+                      {price && <span className="font-semibold text-amber-700 whitespace-nowrap">{price}</span>}
+                    </div>
+                  )
+                })}
               </div>
-            )}
+              {trade.emergencyInfo && (
+                <div className="mt-6 p-4 bg-red-50 border border-red-100 rounded-xl">
+                  <p className="text-sm text-red-800">
+                    <strong>Urgence {service.name.toLowerCase()} à {location.name} :</strong>{' '}
+                    {trade.averageResponseTime}
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         </section>
       )}
 
-      {/* Task 1: Visible FAQ accordion — renders trade-specific FAQ above cross-links */}
+      {/* FAQ accordion — premium card style */}
       {trade && trade.faq.length > 0 && (
-        <section className="py-10 bg-white border-t">
+        <section className="py-12 bg-white border-t">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">
-              Questions fréquentes — {service.name.toLowerCase()} à {location.name}
-            </h2>
-            <div className="space-y-4">
-              {trade.faq.map((item, i) => (
-                <details
-                  key={i}
-                  className="group bg-gray-50 rounded-xl border border-gray-100 overflow-hidden"
-                >
-                  <summary className="flex items-center justify-between cursor-pointer px-6 py-5 text-left hover:bg-gray-100 transition-colors [&::-webkit-details-marker]:hidden">
-                    <span className="font-semibold text-slate-900 pr-4">{item.q}</span>
-                    <svg className="w-5 h-5 text-gray-400 shrink-0 group-open:rotate-180 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </summary>
-                  <div className="px-6 pb-5 text-slate-500 leading-relaxed text-sm">
-                    {item.a}
-                  </div>
-                </details>
-              ))}
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+              <h2 className="text-xl font-bold text-gray-900 mb-6 border-l-4 border-amber-500 pl-4">
+                Questions fréquentes — {service.name.toLowerCase()} à {location.name}
+              </h2>
+              <div className="space-y-3">
+                {trade.faq.map((item, i) => (
+                  <details
+                    key={i}
+                    className="group bg-gray-50 rounded-xl border border-gray-100 overflow-hidden transition-shadow duration-300 hover:shadow-sm"
+                  >
+                    <summary className="flex items-center justify-between cursor-pointer px-6 py-5 text-left hover:bg-gray-100/80 transition-colors duration-200 [&::-webkit-details-marker]:hidden list-none">
+                      <span className="font-semibold text-slate-900 pr-4">{item.q}</span>
+                      <svg className="w-5 h-5 text-amber-500 shrink-0 group-open:rotate-180 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </summary>
+                    <div className="px-6 pb-5 text-slate-600 leading-relaxed text-sm animate-fade-in">
+                      {item.a}
+                    </div>
+                  </details>
+                ))}
+              </div>
             </div>
           </div>
         </section>
       )}
 
       {/* Articles utiles — liens contextuels vers le blog */}
-      <section className="py-10 bg-gray-50 border-t">
+      <section className="py-12 bg-gray-50 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-5 flex items-center gap-2">
+          <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2 border-l-4 border-amber-500 pl-4">
             <svg className="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
             </svg>
@@ -470,11 +481,11 @@ export default async function ServiceLocationPage({ params }: PageProps) {
       {/* Voir aussi - Cross Links Section */}
       <section className="py-12 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Voir aussi</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-8 border-l-4 border-amber-500 pl-4">Voir aussi</h2>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Autres services dans cette ville */}
-            <div>
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
               <h3 className="font-semibold text-gray-900 mb-4">
                 Autres artisans à {location.name}
               </h3>
@@ -483,22 +494,23 @@ export default async function ServiceLocationPage({ params }: PageProps) {
                   <Link
                     key={s.slug}
                     href={`/services/${s.slug}/${locationSlug}`}
-                    className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-full text-sm transition-colors"
+                    className="inline-flex items-center gap-2 px-3.5 py-2 bg-gray-50 hover:bg-amber-50 text-gray-700 hover:text-amber-800 rounded-full text-sm font-medium border border-gray-100 hover:border-amber-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
                   >
-                    {s.name} à {location.name}
+                    {s.name}
                   </Link>
                 ))}
               </div>
               <Link
                 href={`/villes/${locationSlug}`}
-                className="inline-block mt-3 text-blue-600 hover:text-blue-700 text-sm font-medium"
+                className="inline-flex items-center gap-1 mt-4 text-blue-600 hover:text-blue-700 text-sm font-medium group"
               >
-                Tous les artisans à {location.name} →
+                Tous les artisans à {location.name}
+                <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
               </Link>
             </div>
 
             {/* Ce service dans les villes proches */}
-            <div>
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
               <h3 className="font-semibold text-gray-900 mb-4">
                 {service.name} près de {location.name}
               </h3>
@@ -507,22 +519,23 @@ export default async function ServiceLocationPage({ params }: PageProps) {
                   <Link
                     key={city.slug}
                     href={`/services/${serviceSlug}/${city.slug}`}
-                    className="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-full text-sm transition-colors"
+                    className="inline-flex items-center gap-1 px-3.5 py-2 bg-gray-50 hover:bg-blue-50 text-gray-700 hover:text-blue-700 rounded-full text-sm font-medium border border-gray-100 hover:border-blue-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
                   >
-                    {service.name} à {city.name}
+                    {city.name}
                   </Link>
                 ))}
               </div>
               <Link
                 href={`/services/${serviceSlug}`}
-                className="inline-block mt-3 text-blue-600 hover:text-blue-700 text-sm font-medium"
+                className="inline-flex items-center gap-1 mt-4 text-blue-600 hover:text-blue-700 text-sm font-medium group"
               >
-                Voir toutes les villes →
+                Voir toutes les villes
+                <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
               </Link>
             </div>
 
             {/* Navigation régionale */}
-            <div>
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
               <h3 className="font-semibold text-gray-900 mb-4">
                 Explorer par zone
               </h3>
@@ -530,16 +543,18 @@ export default async function ServiceLocationPage({ params }: PageProps) {
                 {location.region_name && (
                   <Link
                     href={`/regions/${getRegionSlugByName(location.region_name) || slugify(location.region_name)}`}
-                    className="block px-3 py-2 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-lg text-sm transition-colors"
+                    className="flex items-center gap-2 px-4 py-3 bg-gray-50 hover:bg-blue-50 text-gray-700 hover:text-blue-700 rounded-xl text-sm font-medium border border-gray-100 hover:border-blue-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
                   >
+                    <svg className="w-4 h-4 shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                     Artisans en {location.region_name}
                   </Link>
                 )}
                 {location.department_name && location.department_code && (
                   <Link
                     href={`/departements/${getDepartementByCode(location.department_code)?.slug || slugify(location.department_name)}`}
-                    className="block px-3 py-2 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-lg text-sm transition-colors"
+                    className="flex items-center gap-2 px-4 py-3 bg-gray-50 hover:bg-blue-50 text-gray-700 hover:text-blue-700 rounded-xl text-sm font-medium border border-gray-100 hover:border-blue-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
                   >
+                    <svg className="w-4 h-4 shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                     Artisans dans {location.department_name} ({location.department_code})
                   </Link>
                 )}

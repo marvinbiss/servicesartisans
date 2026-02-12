@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { MapPin, Phone, Star, Clock, Users } from 'lucide-react'
+import { MapPin, Phone, Star, Clock, Users, ChevronRight } from 'lucide-react'
 import { Provider } from '@/types'
 import { getArtisanUrl } from '@/lib/utils'
 
@@ -22,12 +22,22 @@ export default function ProviderCard({
 
   return (
     <div
-      className={`group/card relative overflow-hidden rounded-2xl border bg-white/80 backdrop-blur-sm p-6 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] before:absolute before:inset-x-0 before:top-0 before:h-[3px] before:bg-gradient-to-r before:from-amber-400 before:via-amber-500 before:to-orange-500 before:opacity-60 before:transition-opacity before:duration-300 ${
+      className={`group/card relative overflow-hidden rounded-2xl border bg-white/80 backdrop-blur-sm p-6 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] active:scale-[0.98] active:bg-gray-50 before:absolute before:inset-x-0 before:top-0 before:h-[3px] before:bg-gradient-to-r before:from-amber-400 before:via-amber-500 before:to-orange-500 before:opacity-60 before:transition-opacity before:duration-300 ${
         isHovered
           ? '-translate-y-1.5 scale-[1.02] border-amber-200 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.12),0_4px_6px_-2px_rgba(0,0,0,0.05)] before:opacity-100'
           : 'border-gray-100 shadow-sm hover:-translate-y-1 hover:scale-[1.02] hover:border-amber-200 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.12),0_4px_6px_-2px_rgba(0,0,0,0.05)] hover:before:opacity-100'
       }`}
     >
+      {/* Mobile: full-card tappable overlay link */}
+      <Link
+        href={providerUrl}
+        className="absolute inset-0 z-10 md:hidden"
+        aria-label={`Voir le profil de ${provider.name}`}
+      />
+      {/* Mobile: right arrow indicator */}
+      <div className="absolute right-4 top-1/2 -translate-y-1/2 md:hidden z-0">
+        <ChevronRight className="w-5 h-5 text-gray-300" />
+      </div>
       {/* Avatar, Nom et vérification */}
       <div className="flex items-start gap-4 mb-2">
         {/* Avatar / Initials */}
@@ -129,17 +139,17 @@ export default function ProviderCard({
       </div>
 
       {/* Boutons */}
-      <div className="flex gap-3">
+      <div className="flex gap-3 relative z-20">
         <Link
           href={`${providerUrl}#devis`}
-          className="flex-1 py-3 text-center bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-xl font-bold shadow-md shadow-amber-500/25 hover:from-amber-600 hover:to-amber-700 hover:shadow-lg hover:shadow-amber-500/35 hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 transition-all duration-200"
+          className="flex-1 py-3 min-h-[48px] flex items-center justify-center text-center bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-xl font-bold shadow-md shadow-amber-500/25 hover:from-amber-600 hover:to-amber-700 hover:shadow-lg hover:shadow-amber-500/35 hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 transition-all duration-200"
         >
           Demander un devis
         </Link>
         {provider.phone && (
           <a
             href={`tel:${provider.phone}`}
-            className="group flex-1 flex items-center justify-center gap-2 py-3 border-2 border-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 hover:border-gray-300 hover:shadow-sm hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 transition-all duration-200"
+            className="group flex-1 flex items-center justify-center gap-2 py-3 min-h-[48px] border-2 border-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 hover:border-gray-300 hover:shadow-sm hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 transition-all duration-200"
           >
             <Phone className="w-5 h-5" />
             Appeler

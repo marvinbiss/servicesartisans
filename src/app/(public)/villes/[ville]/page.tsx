@@ -8,11 +8,13 @@ import { getPlaceSchema, getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jso
 import { SITE_URL } from '@/lib/seo/config'
 import { villes, getVilleBySlug, services, getRegionSlugByName, getDepartementByCode } from '@/lib/data/france'
 
+// Pre-render top 200 cities, rest generated on-demand via ISR
+const TOP_CITIES_COUNT = 200
 export function generateStaticParams() {
-  return villes.map((ville) => ({ ville: ville.slug }))
+  return villes.slice(0, TOP_CITIES_COUNT).map((ville) => ({ ville: ville.slug }))
 }
 
-export const dynamicParams = false
+export const dynamicParams = true
 export const revalidate = 86400
 
 interface PageProps {

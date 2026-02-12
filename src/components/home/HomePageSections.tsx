@@ -112,12 +112,12 @@ export function ServicesShowcase() {
             })}
           </div>
 
-          {/* Row 2: 4 medium cards */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {/* Row 2: 4 medium cards — horizontal scroll on mobile, grid on desktop */}
+          <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 -mx-4 px-4 pb-2 md:grid md:grid-cols-4 md:overflow-visible md:mx-0 md:px-0 md:pb-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             {medium.map((service) => {
               const Icon = service.icon
               return (
-                <motion.div key={service.slug} variants={staggerItem}>
+                <motion.div key={service.slug} variants={staggerItem} className="snap-start flex-shrink-0 w-[75vw] sm:w-[45vw] md:w-auto">
                   <Link
                     href={`/services/${service.slug}`}
                     className="group relative flex flex-col items-center p-6 bg-white/90 backdrop-blur-sm rounded-2xl border border-gray-100/80 hover:border-amber-200/50 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:scale-[1.01] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"

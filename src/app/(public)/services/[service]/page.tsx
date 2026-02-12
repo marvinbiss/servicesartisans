@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { MapPin, ArrowRight, Users, Star, Shield, ChevronDown, BadgeCheck, Euro, Clock, Wrench } from 'lucide-react'
+import { MapPin, ArrowRight, Star, Shield, ChevronDown, BadgeCheck, Euro, Clock, Wrench } from 'lucide-react'
 import { getServiceBySlug, getLocationsByService, getProvidersByService } from '@/lib/supabase'
 import JsonLd from '@/components/JsonLd'
 import { getServiceSchema, getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
@@ -158,59 +158,83 @@ export default async function ServicePage({ params }: PageProps) {
         </div>
       </div>
 
-      {/* Hero */}
-      <section className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <h1 className="font-heading text-3xl md:text-4xl font-bold text-gray-900 mb-4 tracking-tight">
+      {/* Hero — Premium gradient */}
+      <section className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-hidden">
+        {/* Ambient glow */}
+        <div className="absolute inset-0" style={{
+          background: 'radial-gradient(ellipse 60% 50% at 50% 100%, rgba(245,158,11,0.10) 0%, transparent 60%), radial-gradient(ellipse 40% 40% at 80% 20%, rgba(59,130,246,0.06) 0%, transparent 50%)',
+        }} />
+        <div className="absolute inset-0 opacity-[0.03]" style={{
+          backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+          backgroundSize: '48px 48px',
+        }} />
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
+          <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 tracking-tight">
             {service.name} en France
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl">
+          <p className="text-lg md:text-xl text-slate-400 max-w-3xl leading-relaxed">
             {service.description ||
               `Trouvez les meilleurs ${service.name.toLowerCase()}s près de chez vous. Comparez les avis, les tarifs et obtenez des devis gratuits.`}
           </p>
 
-          {/* Stats - Style Doctolib */}
-          <div className="flex flex-wrap gap-4 mt-8">
-            <div className="flex items-center gap-2 bg-blue-50 px-4 py-2 rounded-full">
-              <Users className="w-5 h-5 text-blue-600" />
-              <span className="text-gray-900 font-semibold">
-                {recentProviders?.length || 0}+ artisans
+          {/* Stats — Large gradient numbers */}
+          <div className="flex flex-wrap gap-6 md:gap-10 mt-10">
+            <div className="flex flex-col">
+              <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-amber-500">
+                {recentProviders?.length || 0}+
               </span>
+              <span className="text-sm text-slate-400 mt-1">artisans référencés</span>
             </div>
-            <div className="flex items-center gap-2 bg-blue-50 px-4 py-2 rounded-full">
-              <MapPin className="w-5 h-5 text-blue-600" />
-              <span className="text-gray-900 font-semibold">
-                {topCities?.length || 0}+ villes
+            <div className="flex flex-col">
+              <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-blue-500">
+                {topCities?.length || 0}+
               </span>
+              <span className="text-sm text-slate-400 mt-1">villes couvertes</span>
             </div>
-            <div className="flex items-center gap-2 bg-green-50 px-4 py-2 rounded-full">
-              <Shield className="w-5 h-5 text-green-600" />
-              <span className="text-gray-900 font-semibold">
-                Artisans référencés
+            <div className="flex flex-col">
+              <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-emerald-500">
+                100%
               </span>
-            </div>
-            <div className="flex items-center gap-2 bg-yellow-50 px-4 py-2 rounded-full">
-              <Star className="w-5 h-5 text-yellow-600" />
-              <span className="text-gray-900 font-semibold">
-                Qualité contrôlée
-              </span>
+              <span className="text-sm text-slate-400 mt-1">données SIREN</span>
             </div>
             {trade && (
-              <>
-                <div className="flex items-center gap-2 bg-amber-50 px-4 py-2 rounded-full">
-                  <Euro className="w-5 h-5 text-amber-600" />
-                  <span className="text-gray-900 font-semibold">
-                    {trade.priceRange.min}–{trade.priceRange.max} {trade.priceRange.unit}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 bg-purple-50 px-4 py-2 rounded-full">
-                  <Clock className="w-5 h-5 text-purple-600" />
-                  <span className="text-gray-900 font-semibold">
-                    {trade.averageResponseTime.split(',')[0]}
-                  </span>
-                </div>
-              </>
+              <div className="flex flex-col">
+                <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-purple-500">
+                  {trade.priceRange.min}–{trade.priceRange.max}
+                </span>
+                <span className="text-sm text-slate-400 mt-1">{trade.priceRange.unit}</span>
+              </div>
             )}
+          </div>
+
+          {/* Badges row */}
+          <div className="flex flex-wrap gap-3 mt-8">
+            <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/10 px-4 py-2 rounded-full">
+              <Shield className="w-4 h-4 text-emerald-400" />
+              <span className="text-sm text-slate-300 font-medium">Artisans vérifiés</span>
+            </div>
+            <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/10 px-4 py-2 rounded-full">
+              <Star className="w-4 h-4 text-amber-400" />
+              <span className="text-sm text-slate-300 font-medium">Qualité contrôlée</span>
+            </div>
+            {trade && (
+              <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/10 px-4 py-2 rounded-full">
+                <Clock className="w-4 h-4 text-purple-400" />
+                <span className="text-sm text-slate-300 font-medium">{trade.averageResponseTime.split(',')[0]}</span>
+              </div>
+            )}
+          </div>
+
+          {/* CTA */}
+          <div className="mt-10">
+            <Link
+              href="/devis"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-[0_8px_30px_-4px_rgba(245,158,11,0.5)] hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
+            >
+              Demander un devis gratuit
+              <ArrowRight className="w-5 h-5" />
+            </Link>
           </div>
         </div>
       </section>
@@ -480,17 +504,20 @@ export default async function ServicePage({ params }: PageProps) {
       )}
 
       {/* CTA */}
-      <section className="py-12 bg-blue-600">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl font-bold text-white mb-4">
+      <section className="relative py-16 overflow-hidden bg-gradient-to-br from-[#0a0f1e] via-[#111827] to-[#0a0f1e]">
+        <div className="absolute inset-0" style={{
+          background: 'radial-gradient(ellipse 50% 60% at 50% 50%, rgba(245,158,11,0.06) 0%, transparent 60%)',
+        }} />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4">
             Vous êtes {service.name.toLowerCase()} ?
           </h2>
-          <p className="text-blue-100 mb-6">
-            Inscrivez-vous gratuitement et recevez des demandes de devis
+          <p className="text-slate-400 mb-8 max-w-xl mx-auto">
+            Inscrivez-vous gratuitement et recevez des demandes de devis qualifiées
           </p>
           <Link
             href="/inscription-artisan"
-            className="inline-flex items-center gap-2 bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 text-slate-900 font-bold px-8 py-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-[0_8px_30px_-4px_rgba(245,158,11,0.5)] hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
           >
             Créer mon profil
             <ArrowRight className="w-5 h-5" />

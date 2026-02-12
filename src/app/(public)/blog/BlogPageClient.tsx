@@ -127,51 +127,81 @@ export default function BlogPageClient({ articles, categories }: BlogPageClientP
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {visibleArticles.map((article) => (
-              <Link
-                key={article.slug}
-                href={`/blog/${article.slug}`}
-                className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow group"
-              >
-                {/* Image */}
-                <div className="h-48 bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center text-6xl">
-                  {article.image}
-                </div>
+            {visibleArticles.map((article, index) => {
+              // Category color mapping for pill badges
+              const categoryColors: Record<string, string> = {
+                'Guides pratiques': 'bg-blue-100 text-blue-700',
+                'Tendances': 'bg-purple-100 text-purple-700',
+                'Rénovation': 'bg-emerald-100 text-emerald-700',
+                'Conseils': 'bg-amber-100 text-amber-700',
+                'Actualités': 'bg-rose-100 text-rose-700',
+                'Énergie': 'bg-green-100 text-green-700',
+                'Décoration': 'bg-pink-100 text-pink-700',
+                'Budget': 'bg-orange-100 text-orange-700',
+              }
+              const badgeColor = categoryColors[article.category] || 'bg-blue-100 text-blue-700'
+              const isFeatured = index === 0 && selectedCategory === 'Tous'
 
-                {/* Content */}
-                <div className="p-6">
-                  <div className="flex items-center gap-4 text-sm text-gray-500 mb-3">
-                    <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-medium">
+              return (
+                <Link
+                  key={article.slug}
+                  href={`/blog/${article.slug}`}
+                  className={`bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group ${
+                    isFeatured ? 'md:col-span-2 lg:col-span-3' : ''
+                  }`}
+                >
+                  {/* Image */}
+                  <div className={`relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center overflow-hidden ${
+                    isFeatured ? 'h-64 md:h-80' : 'h-48'
+                  }`}>
+                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(245,158,11,0.08),transparent_70%)]" />
+                    <div className="absolute inset-0 opacity-[0.03]" style={{
+                      backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+                      backgroundSize: '40px 40px',
+                    }} />
+                    <span className={`relative z-10 ${isFeatured ? 'text-7xl' : 'text-5xl'}`}>{article.image}</span>
+                    {/* Category badge overlay */}
+                    <span className={`absolute top-4 left-4 z-10 ${badgeColor} px-3 py-1 rounded-full text-xs font-semibold`}>
                       {article.category}
                     </span>
-                    <span className="flex items-center gap-1">
-                      <Clock className="w-4 h-4" />
-                      {article.readTime}
-                    </span>
                   </div>
-                  <h2 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
-                    {article.title}
-                  </h2>
-                  <p className="text-gray-600 text-sm mb-4">
-                    {article.excerpt}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <span className="flex items-center gap-1 text-sm text-gray-500">
-                      <Calendar className="w-4 h-4" />
-                      {new Date(article.date).toLocaleDateString('fr-FR', {
-                        day: 'numeric',
-                        month: 'short',
-                        year: 'numeric',
-                      })}
-                    </span>
-                    <span className="text-blue-600 font-medium text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
-                      Lire
-                      <ArrowRight className="w-4 h-4" />
-                    </span>
+
+                  {/* Content */}
+                  <div className="p-6">
+                    <h2 className={`font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors duration-200 ${
+                      isFeatured ? 'text-2xl md:text-3xl font-heading' : 'text-lg'
+                    }`}>
+                      {article.title}
+                    </h2>
+                    <p className={`text-gray-600 mb-4 ${isFeatured ? 'text-base max-w-3xl' : 'text-sm'}`}>
+                      {article.excerpt}
+                    </p>
+
+                    {/* Bottom bar — date, read time, and CTA */}
+                    <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                      <div className="flex items-center gap-4 text-sm text-gray-500">
+                        <span className="flex items-center gap-1.5">
+                          <Calendar className="w-3.5 h-3.5" />
+                          {new Date(article.date).toLocaleDateString('fr-FR', {
+                            day: 'numeric',
+                            month: 'short',
+                            year: 'numeric',
+                          })}
+                        </span>
+                        <span className="flex items-center gap-1.5">
+                          <Clock className="w-3.5 h-3.5" />
+                          {article.readTime}
+                        </span>
+                      </div>
+                      <span className="text-blue-600 font-semibold text-sm flex items-center gap-1 group-hover:gap-2 transition-all duration-200">
+                        Lire
+                        <ArrowRight className="w-4 h-4" />
+                      </span>
+                    </div>
                   </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              )
+            })}
           </div>
 
           {/* Load more */}

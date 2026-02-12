@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
-import { MapPin, List, Map as MapIcon } from 'lucide-react'
+import { MapPin, List, Map as MapIcon, Search } from 'lucide-react'
 import { Provider, Service, Location } from '@/types'
 import ProviderList from '@/components/ProviderList'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -34,6 +34,8 @@ export default function ServiceLocationPageClient({
   const [selectedProvider, setSelectedProvider] = useState<Provider | null>(null)
   const [viewMode, setViewMode] = useState<'split' | 'list' | 'map'>('split')
   const [_isMobile, setIsMobile] = useState(false)
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
+  const [sortOrder, setSortOrder] = useState<'default' | 'name' | 'rating'>('default')
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768)
@@ -138,6 +140,70 @@ export default function ServiceLocationPageClient({
           </div>
         </div>
       </div>
+
+      {/* Mobile sticky search/filter bar */}
+      <div className="sticky top-0 z-30 bg-white/95 backdrop-blur-sm py-2 px-4 border-b border-gray-100 flex items-center gap-2 md:hidden">
+        <button
+          type="button"
+          onClick={() => setMobileSearchOpen(!mobileSearchOpen)}
+          className="flex items-center gap-2 flex-1 px-3 py-2.5 bg-gray-100 rounded-xl text-sm text-gray-500 min-h-[44px] active:bg-gray-200 transition-colors"
+        >
+          <Search className="w-4 h-4" />
+          <span>Rechercher un artisan...</span>
+        </button>
+        <select
+          value={sortOrder}
+          onChange={(e) => setSortOrder(e.target.value as 'default' | 'name' | 'rating')}
+          className="px-3 py-2.5 bg-gray-100 rounded-xl text-sm text-gray-700 font-medium min-h-[44px] border-0 focus:ring-2 focus:ring-blue-500"
+          aria-label="Trier les r\u00e9sultats"
+        >
+          <option value="default">Trier</option>
+          <option value="name">Nom A-Z</option>
+          <option value="rating">Avis</option>
+        </select>
+        <div className="flex items-center gap-1 bg-gray-100 rounded-xl p-1">
+          <button
+            type="button"
+            onClick={() => setViewMode('list')}
+            className={`p-2 rounded-lg transition-colors min-h-[40px] min-w-[40px] flex items-center justify-center ${
+              viewMode !== 'map' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500'
+            }`}
+            aria-label="Vue liste"
+          >
+            <List className="w-4 h-4" />
+          </button>
+          <button
+            type="button"
+            onClick={() => setViewMode('map')}
+            className={`p-2 rounded-lg transition-colors min-h-[40px] min-w-[40px] flex items-center justify-center ${
+              viewMode === 'map' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500'
+            }`}
+            aria-label="Vue carte"
+          >
+            <MapIcon className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+      {mobileSearchOpen && (
+        <div className="bg-white border-b border-gray-100 px-4 py-3 md:hidden">
+          <div className="flex items-center gap-2 bg-gray-50 rounded-xl px-3 py-2 border border-gray-200 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20 transition-all">
+            <Search className="w-4 h-4 text-gray-400 flex-shrink-0" />
+            <input
+              type="text"
+              placeholder="Nom, sp\u00e9cialit\u00e9, adresse..."
+              className="w-full bg-transparent text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none min-h-[40px]"
+              autoFocus
+            />
+            <button
+              type="button"
+              onClick={() => setMobileSearchOpen(false)}
+              className="text-xs text-blue-600 font-semibold whitespace-nowrap px-2 py-1"
+            >
+              Fermer
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Main content - Zillow style split view */}
       <div
