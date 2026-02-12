@@ -125,19 +125,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title,
     description,
     ...(hasProviders ? {} : { robots: { index: false, follow: true } }),
-    keywords: [
-      `${svcLower} ${locationName}`,
-      `${svcLower} ${departmentCode}`,
-      `${svcLower} pas cher ${locationName}`,
-      `${svcLower} urgence ${locationName}`,
-      `devis ${svcLower} ${locationName}`,
-      `tarif ${svcLower} ${locationName}`,
-    ],
     openGraph: {
       title,
       description,
       type: 'website',
       locale: 'fr_FR',
+      images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: title }],
     },
     twitter: {
       card: 'summary_large_image',

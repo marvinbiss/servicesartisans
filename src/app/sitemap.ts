@@ -46,15 +46,17 @@ export async function generateSitemaps() {
   return sitemaps
 }
 
+// Fixed date for static content — prevents crawl budget waste on every deploy
+const STATIC_LAST_MODIFIED = new Date('2026-02-10')
+
 export default async function sitemap({ id }: { id: string }): Promise<MetadataRoute.Sitemap> {
-  const now = new Date()
 
   // ── Static pages + services ─────────────────────────────────────────
   if (id === 'static') {
     const homepage: MetadataRoute.Sitemap = [
       {
         url: SITE_URL,
-        lastModified: now,
+        lastModified: STATIC_LAST_MODIFIED,
         changeFrequency: 'daily',
         priority: 1.0,
       },
@@ -84,7 +86,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       { path: '/blog/tendances-decoration-2026', changeFrequency: 'monthly' as const, priority: 0.6 },
     ].map(({ path, changeFrequency, priority }) => ({
       url: `${SITE_URL}${path}`,
-      lastModified: now,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency,
       priority,
     }))
@@ -92,7 +94,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const servicesIndex: MetadataRoute.Sitemap = [
       {
         url: `${SITE_URL}/services`,
-        lastModified: now,
+        lastModified: STATIC_LAST_MODIFIED,
         changeFrequency: 'weekly',
         priority: 0.9,
       },
@@ -100,7 +102,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
     const servicePages: MetadataRoute.Sitemap = services.map((service) => ({
       url: `${SITE_URL}/services/${service.slug}`,
-      lastModified: now,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'weekly' as const,
       priority: 0.9,
     }))
@@ -113,7 +115,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     return services.flatMap((service) =>
       villes.map((ville) => ({
         url: `${SITE_URL}/services/${service.slug}/${ville.slug}`,
-        lastModified: now,
+        lastModified: STATIC_LAST_MODIFIED,
         changeFrequency: 'weekly' as const,
         priority: 0.8,
       }))
@@ -125,7 +127,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const villesIndex: MetadataRoute.Sitemap = [
       {
         url: `${SITE_URL}/villes`,
-        lastModified: now,
+        lastModified: STATIC_LAST_MODIFIED,
         changeFrequency: 'weekly',
         priority: 0.8,
       },
@@ -133,7 +135,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
     const villePages: MetadataRoute.Sitemap = villes.map((ville) => ({
       url: `${SITE_URL}/villes/${ville.slug}`,
-      lastModified: now,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'weekly' as const,
       priority: 0.7,
     }))
@@ -146,7 +148,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const departementsIndex: MetadataRoute.Sitemap = [
       {
         url: `${SITE_URL}/departements`,
-        lastModified: now,
+        lastModified: STATIC_LAST_MODIFIED,
         changeFrequency: 'weekly',
         priority: 0.8,
       },
@@ -154,7 +156,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
     const departementPages: MetadataRoute.Sitemap = departements.map((dept) => ({
       url: `${SITE_URL}/departements/${dept.slug}`,
-      lastModified: now,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'weekly' as const,
       priority: 0.7,
     }))
@@ -162,7 +164,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const regionsIndex: MetadataRoute.Sitemap = [
       {
         url: `${SITE_URL}/regions`,
-        lastModified: now,
+        lastModified: STATIC_LAST_MODIFIED,
         changeFrequency: 'weekly',
         priority: 0.8,
       },
@@ -170,7 +172,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
     const regionPages: MetadataRoute.Sitemap = regions.map((region) => ({
       url: `${SITE_URL}/regions/${region.slug}`,
-      lastModified: now,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'weekly' as const,
       priority: 0.7,
     }))
@@ -263,7 +265,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
           acc.push({
             url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}/${publicId}`,
-            lastModified: p.updated_at ? new Date(p.updated_at) : now,
+            lastModified: p.updated_at ? new Date(p.updated_at) : STATIC_LAST_MODIFIED,
             changeFrequency: 'weekly' as const,
             priority: 0.7,
           })
