@@ -39,13 +39,13 @@ function AnimatedNumber({ value, suffix = '', duration = 2 }: { value: number; s
 // ── Filter chips for popular services ─────────────────────────────────
 const chipServices = [
   { name: 'Plombier', slug: 'plombier' },
-  { name: '\u00c9lectricien', slug: 'electricien' },
+  { name: 'Électricien', slug: 'electricien' },
   { name: 'Serrurier', slug: 'serrurier' },
   { name: 'Peintre', slug: 'peintre-en-batiment' },
   { name: 'Menuisier', slug: 'menuisier' },
   { name: 'Chauffagiste', slug: 'chauffagiste' },
   { name: 'Couvreur', slug: 'couvreur' },
-  { name: 'Ma\u00e7on', slug: 'macon' },
+  { name: 'Maçon', slug: 'macon' },
 ]
 
 // ── Stagger animation variants ────────────────────────────────────────
@@ -244,7 +244,7 @@ export function HeroSection() {
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400" />
                 </span>
                 <span className="text-sm text-white/80 font-medium">
-                  350 000+ artisans r&eacute;f&eacute;renc&eacute;s en France
+                  350 000+ artisans référencés en France
                 </span>
               </div>
             </motion.div>
@@ -263,7 +263,7 @@ export function HeroSection() {
                 className="text-white block"
               />
               <AnimatedHeadingLine
-                text="qualifi\u00e9s en France"
+                text="qualifiés en France"
                 className="bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient-x block"
               />
             </motion.div>
@@ -275,7 +275,7 @@ export function HeroSection() {
               animate="visible"
               className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10"
             >
-              Trouvez l&apos;artisan id&eacute;al pr&egrave;s de chez vous. Comparez les profils et obtenez des devis gratuits.
+              Trouvez l&#39;artisan idéal près de chez vous. Comparez les profils et obtenez des devis gratuits.
             </motion.p>
 
             {/* ── SEARCH FORM ─────────────────────────────────── */}
@@ -298,8 +298,8 @@ export function HeroSection() {
                       type="text"
                       value={serviceQuery}
                       onChange={(e) => setServiceQuery(e.target.value)}
-                      placeholder="Quel service ? (plombier, &eacute;lectricien...)"
-                      aria-label="Type de service recherch&eacute;"
+                      placeholder="Quel service ? (plombier, électricien...)"
+                      aria-label="Type de service recherché"
                       autoComplete="off"
                       className="w-full bg-transparent text-white placeholder:text-gray-400 focus:outline-none text-base transition-colors duration-300"
                     />
@@ -377,8 +377,8 @@ export function HeroSection() {
               {[
                 { value: 350000, suffix: '+', label: 'artisans' },
                 { value: villes.length, suffix: '', label: 'villes' },
-                { value: departements.length, suffix: '', label: 'd\u00e9partements' },
-                { value: services.length, suffix: '', label: 'm\u00e9tiers' },
+                { value: departements.length, suffix: '', label: 'départements' },
+                { value: services.length, suffix: '', label: 'métiers' },
               ].map((stat) => (
                 <div key={stat.label} className="text-center">
                   <div className="text-3xl md:text-4xl font-extrabold text-white tracking-tight font-heading">
@@ -425,10 +425,10 @@ export function HeroSection() {
               </div>
               <div>
                 <div className="font-semibold text-slate-900 text-sm">
-                  Donn&eacute;es SIREN officielles
+                  Données SIREN officielles
                 </div>
                 <div className="text-xs text-slate-500">
-                  Registres de l&apos;&Eacute;tat v&eacute;rifi&eacute;s
+                  Registres de l&#39;État vérifiés
                 </div>
               </div>
             </div>
@@ -452,10 +452,10 @@ export function HeroSection() {
               </div>
               <div>
                 <div className="font-semibold text-slate-900 text-sm">
-                  50+ corps de m&eacute;tier
+                  50+ corps de métier
                 </div>
                 <div className="text-xs text-slate-500">
-                  Tous les m&eacute;tiers du b&acirc;timent
+                  Tous les métiers du bâtiment
                 </div>
               </div>
             </div>
