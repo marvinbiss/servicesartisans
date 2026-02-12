@@ -53,7 +53,7 @@ export function ArtisanMap({ artisan }: ArtisanMapProps) {
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
             src={mapSrc}
-            title={`Carte de localisation de l'artisan \u00e0 ${artisan.city}`}
+            title={`Carte de localisation de l'artisan à ${artisan.city}`}
             aria-label={`Carte montrant la zone d'intervention autour de ${artisan.city}`}
             allowFullScreen
           />

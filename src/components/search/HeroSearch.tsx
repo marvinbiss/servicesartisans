@@ -159,8 +159,8 @@ const fallbackCities = [
 // ── Popular cities for empty state ──────────────────────────────────
 const popularCities = [
   { name: 'Paris', slug: 'paris', departement: 'Paris (75)', pop: '2.1M' },
-  { name: 'Marseille', slug: 'marseille', departement: 'Bouches-du-Rh\u00f4ne (13)', pop: '870k' },
-  { name: 'Lyon', slug: 'lyon', departement: 'Rh\u00f4ne (69)', pop: '522k' },
+  { name: 'Marseille', slug: 'marseille', departement: 'Bouches-du-Rhône (13)', pop: '870k' },
+  { name: 'Lyon', slug: 'lyon', departement: 'Rhône (69)', pop: '522k' },
   { name: 'Toulouse', slug: 'toulouse', departement: 'Haute-Garonne (31)', pop: '493k' },
   { name: 'Nice', slug: 'nice', departement: 'Alpes-Maritimes (06)', pop: '342k' },
   { name: 'Nantes', slug: 'nantes', departement: 'Loire-Atlantique (44)', pop: '320k' },
@@ -518,11 +518,11 @@ export function HeroSearch() {
                     <div className="p-2" ref={serviceListRef}>
                       <div className="flex items-center gap-2 px-3 py-2 text-xs text-slate-500 font-medium">
                         <TrendingUp className="w-3 h-3" />
-                        {query ? `R\u00e9sultats pour \u00ab\u202f${query}\u202f\u00bb` : 'Services populaires'}
+                        {query ? `Résultats pour « ${query} »` : 'Services populaires'}
                       </div>
                       {filteredServices.length === 0 && (
                         <div className="px-3 py-6 text-center text-slate-400 text-sm">
-                          Aucun service trouv\u00e9. Essayez un autre terme.
+                          Aucun service trouvé. Essayez un autre terme.
                         </div>
                       )}
                       {filteredServices.map((service, idx) => {
@@ -574,15 +574,15 @@ export function HeroSearch() {
                     {/* Keyboard hint */}
                     <div className="hidden md:flex items-center gap-3 px-4 py-2.5 bg-slate-50 border-t border-slate-100 text-xs text-slate-400">
                       <span className="flex items-center gap-1">
-                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-[10px]">Fl\u00e8ches</kbd>
+                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-[10px]">Flèches</kbd>
                         naviguer
                       </span>
                       <span className="flex items-center gap-1">
-                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-[10px]">Entr\u00e9e</kbd>
+                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-[10px]">Entrée</kbd>
                         valider
                       </span>
                       <span className="flex items-center gap-1">
-                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-[10px]">\u00c9chap</kbd>
+                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-[10px]">Échap</kbd>
                         fermer
                       </span>
                     </div>
@@ -605,7 +605,7 @@ export function HeroSearch() {
                 }}
               >
                 <label className="block text-xs font-semibold text-slate-500 mb-1 tracking-wide uppercase">
-                  O\u00f9 ?
+                  Où ?
                 </label>
                 <div className="flex items-center gap-3">
                   <MapPin className={`w-5 h-5 flex-shrink-0 transition-colors duration-200 ${
@@ -686,7 +686,7 @@ export function HeroSearch() {
                       <div className="p-2">
                         <div className="flex items-center gap-2 px-3 py-2 text-xs text-slate-500 font-medium">
                           <Clock className="w-3 h-3" />
-                          Recherches r\u00e9centes
+                          Recherches récentes
                         </div>
                         {recentSearches.map((cityName, idx) => {
                           const isHighlighted = idx === highlightedCityIndex
@@ -719,7 +719,7 @@ export function HeroSearch() {
                                 type="button"
                                 onClick={(e) => handleRemoveRecent(cityName, e)}
                                 className="flex-shrink-0 w-6 h-6 rounded-full hover:bg-slate-200 flex items-center justify-center transition-colors opacity-0 group-hover:opacity-100"
-                                aria-label={`Supprimer ${cityName} des recherches r\u00e9centes`}
+                                aria-label={`Supprimer ${cityName} des recherches récentes`}
                               >
                                 <X className="w-3 h-3 text-slate-400" />
                               </button>
@@ -733,7 +733,7 @@ export function HeroSearch() {
                     {filteredCities.length > 0 && (
                       <div className="p-2" ref={cityListRef}>
                         <div className="px-3 py-2 text-xs text-slate-500 font-medium">
-                          {filteredCities.length} ville{filteredCities.length > 1 ? 's' : ''} trouv\u00e9e{filteredCities.length > 1 ? 's' : ''}
+                          {filteredCities.length} ville{filteredCities.length > 1 ? 's' : ''} trouvée{filteredCities.length > 1 ? 's' : ''}
                         </div>
                         {filteredCities.map((city, idx) => {
                           const isHighlighted = idx === highlightedCityIndex
@@ -782,7 +782,7 @@ export function HeroSearch() {
                       <div className="p-4">
                         <div className="text-center py-3">
                           <div className="text-sm text-slate-500 mb-1">
-                            Aucune ville trouv\u00e9e pour <span className="font-semibold text-slate-700">&laquo;&thinsp;{location}&thinsp;&raquo;</span>
+                            Aucune ville trouvée pour <span className="font-semibold text-slate-700">&laquo;&thinsp;{location}&thinsp;&raquo;</span>
                           </div>
                           <div className="text-xs text-slate-400 mb-4">
                             Nous ne couvrons pas encore cette ville. Essayez une ville voisine.
@@ -845,11 +845,11 @@ export function HeroSearch() {
                     {/* Keyboard hint */}
                     <div className="hidden md:flex items-center gap-3 px-4 py-2.5 bg-slate-50 border-t border-slate-100 text-xs text-slate-400">
                       <span className="flex items-center gap-1">
-                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-[10px]">Fl\u00e8ches</kbd>
+                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-[10px]">Flèches</kbd>
                         naviguer
                       </span>
                       <span className="flex items-center gap-1">
-                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-[10px]">Entr\u00e9e</kbd>
+                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-[10px]">Entrée</kbd>
                         valider
                       </span>
                     </div>

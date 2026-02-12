@@ -155,7 +155,7 @@ export default function ServiceLocationPageClient({
           value={sortOrder}
           onChange={(e) => setSortOrder(e.target.value as 'default' | 'name' | 'rating')}
           className="px-3 py-2.5 bg-gray-100 rounded-xl text-sm text-gray-700 font-medium min-h-[44px] border-0 focus:ring-2 focus:ring-blue-500"
-          aria-label="Trier les r\u00e9sultats"
+          aria-label="Trier les résultats"
         >
           <option value="default">Trier</option>
           <option value="name">Nom A-Z</option>
@@ -190,7 +190,7 @@ export default function ServiceLocationPageClient({
             <Search className="w-4 h-4 text-gray-400 flex-shrink-0" />
             <input
               type="text"
-              placeholder="Nom, sp\u00e9cialit\u00e9, adresse..."
+              placeholder="Nom, spécialité, adresse..."
               className="w-full bg-transparent text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none min-h-[40px]"
               autoFocus
             />

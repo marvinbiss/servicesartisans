@@ -34,7 +34,7 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
       <div className="px-6 pb-6">
         {/* Services tags */}
         {artisan.services.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-6 mt-4" role="list" aria-label="Services propos\u00e9s">
+          <div className="flex flex-wrap gap-2 mb-6 mt-4" role="list" aria-label="Services proposés">
             {artisan.services.map((service, i) => (
               <span
                 key={i}
@@ -51,7 +51,7 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
         {/* Pricing table */}
         {artisan.service_prices.length > 0 && (
           <div className="space-y-2.5 mt-4" role="list" aria-label="Tarifs des services">
-            {artisan.service_prices[0]?.price?.startsWith('\u00c0 partir') && (
+            {artisan.service_prices[0]?.price?.startsWith('À partir') && (
               <p className="text-xs text-slate-400 italic mb-3">* Tarifs indicatifs, le prix final d&eacute;pend de la nature exacte de l&apos;intervention. Demandez un devis pour un prix pr&eacute;cis.</p>
             )}
             {artisan.service_prices.map((service, index) => (
@@ -74,7 +74,7 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
 
                 <div className="flex items-center gap-4 ml-4">
                   {service.duration && (
-                    <div className="hidden sm:flex items-center gap-1 text-sm text-slate-400" aria-label={`Dur\u00e9e : ${service.duration}`}>
+                    <div className="hidden sm:flex items-center gap-1 text-sm text-slate-400" aria-label={`Durée : ${service.duration}`}>
                       <Clock className="w-4 h-4" aria-hidden="true" />
                       <span>{service.duration}</span>
                     </div>

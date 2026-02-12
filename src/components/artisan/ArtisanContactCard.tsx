@@ -85,7 +85,7 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
             <a
               href={`mailto:${artisan.email}`}
               className="w-full py-3 px-4 rounded-xl border-2 border-gray-200 text-slate-700 font-medium flex items-center justify-center gap-2.5 hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 group"
-              aria-label={`Envoyer un email \u00e0 ${artisan.email}`}
+              aria-label={`Envoyer un email à ${artisan.email}`}
             >
               <Mail className="w-5 h-5 text-slate-400 transition-colors group-hover:text-slate-600" aria-hidden="true" />
               Envoyer un email

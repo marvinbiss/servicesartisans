@@ -66,10 +66,10 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
               whileTap={{ scale: 0.98 }}
               onClick={() => showPhone ? handleCall() : setShowPhone(true)}
               className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:from-blue-700 hover:to-blue-800 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-              aria-label={showPhone ? `Appeler ${artisan.phone}` : 'Afficher le num\u00e9ro de t\u00e9l\u00e9phone'}
+              aria-label={showPhone ? `Appeler ${artisan.phone}` : 'Afficher le numéro de téléphone'}
             >
               <Phone className="w-5 h-5" aria-hidden="true" />
-              {showPhone ? artisan.phone : 'Afficher le t\u00e9l\u00e9phone'}
+              {showPhone ? artisan.phone : 'Afficher le téléphone'}
             </motion.button>
           )}
 
@@ -97,7 +97,7 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
               whileTap={{ scale: 0.98 }}
               onClick={handleEmail}
               className="w-full py-3 px-4 rounded-xl border-2 border-gray-200 text-slate-700 font-medium flex items-center justify-center gap-2 hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-              aria-label={`Envoyer un email \u00e0 ${artisan.email}`}
+              aria-label={`Envoyer un email à ${artisan.email}`}
             >
               <Mail className="w-5 h-5 text-slate-400" aria-hidden="true" />
               Envoyer un email

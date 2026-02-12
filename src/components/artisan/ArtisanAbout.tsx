@@ -13,7 +13,7 @@ export function ArtisanAbout({ artisan }: ArtisanAboutProps) {
   const [expanded, setExpanded] = useState(false)
   const displayName = getDisplayName(artisan)
 
-  const description = artisan.description || `${displayName} est un professionnel qualifi\u00e9 sp\u00e9cialis\u00e9 en ${artisan.specialty} \u00e0 ${artisan.city}.`
+  const description = artisan.description || `${displayName} est un professionnel qualifié spécialisé en ${artisan.specialty} à ${artisan.city}.`
   const isLong = description.length > 300
 
   return (

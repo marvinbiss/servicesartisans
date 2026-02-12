@@ -122,7 +122,7 @@ export default function ArtisanPageClient({
       try {
         await navigator.share({
           title: getDisplayName(artisan),
-          text: `${artisan.specialty} \u00e0 ${artisan.city}`,
+          text: `${artisan.specialty} à ${artisan.city}`,
           url: window.location.href,
         })
       } catch {
@@ -188,7 +188,7 @@ export default function ArtisanPageClient({
               <Link
                 href="/recherche"
                 className="inline-flex items-center gap-2 text-slate-600 hover:text-gray-900 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg px-2 py-1.5 -ml-2 hover:bg-gray-50"
-                aria-label="Retour \u00e0 la recherche"
+                aria-label="Retour à la recherche"
               >
                 <ArrowLeft className="w-5 h-5" aria-hidden="true" />
                 <span className="hidden sm:inline font-medium text-sm">Retour</span>
@@ -247,7 +247,7 @@ export default function ArtisanPageClient({
               <section aria-label="Statistiques">
                 <ArtisanStats artisan={artisan} />
               </section>
-              <section aria-label="\u00c0 propos">
+              <section aria-label="À propos">
                 <ArtisanAbout artisan={artisan} />
               </section>
               <section aria-label="Fiche entreprise">
@@ -266,7 +266,7 @@ export default function ArtisanPageClient({
               <section id="reviews" aria-label="Avis clients">
                 <ArtisanReviews artisan={artisan} reviews={reviews} />
               </section>
-              <section aria-label="Questions fr\u00e9quentes">
+              <section aria-label="Questions fréquentes">
                 <ArtisanFAQ artisan={artisan} />
               </section>
               <section aria-label="Localisation">

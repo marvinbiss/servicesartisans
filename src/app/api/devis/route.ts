@@ -19,26 +19,26 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
 const devisSchema = z.object({
-  service: z.string().min(1, 'Veuillez s\u00e9lectionner un service'),
-  urgency: z.string().min(1, 'Veuillez s\u00e9lectionner l\'urgence'),
+  service: z.string().min(1, 'Veuillez sélectionner un service'),
+  urgency: z.string().min(1, 'Veuillez sélectionner l\'urgence'),
   budget: z.string().optional(),
   description: z.string().optional(),
   codePostal: z.string().optional(),
   ville: z.string().optional(),
   nom: z.string().min(2, 'Le nom est requis'),
   email: z.string().email('Email invalide'),
-  telephone: z.string().min(10, 'Num\u00e9ro de t\u00e9l\u00e9phone invalide'),
+  telephone: z.string().min(10, 'Numéro de téléphone invalide'),
 })
 
 const serviceNames: Record<string, string> = {
   plombier: 'Plombier',
-  electricien: '\u00c9lectricien',
+  electricien: 'Électricien',
   serrurier: 'Serrurier',
   chauffagiste: 'Chauffagiste',
   'peintre-en-batiment': 'Peintre en b\u00e2timent',
   couvreur: 'Couvreur',
   menuisier: 'Menuisier',
-  macon: 'Ma\u00e7on',
+  macon: 'Maçon',
   carreleur: 'Carreleur',
   jardinier: 'Jardinier-paysagiste',
   vitrier: 'Vitrier',
@@ -89,7 +89,7 @@ export async function POST(request: Request) {
     const validation = devisSchema.safeParse(body)
     if (!validation.success) {
       return NextResponse.json(
-        { error: 'Donn\u00e9es invalides', details: validation.error.flatten() },
+        { error: 'Données invalides', details: validation.error.flatten() },
         { status: 400 }
       )
     }
@@ -154,16 +154,16 @@ export async function POST(request: Request) {
       subject: 'Votre demande de devis - ServicesArtisans',
       html: `
         <h2>Bonjour ${data.nom},</h2>
-        <p>Nous avons bien re\u00e7u votre demande de devis. Voici le r\u00e9capitulatif :</p>
+        <p>Nous avons bien reçu votre demande de devis. Voici le récapitulatif :</p>
         <ul>
           <li><strong>Service :</strong> ${serviceNames[data.service] || data.service}</li>
-          <li><strong>D\u00e9lai :</strong> ${urgencyLabels[data.urgency] || data.urgency}</li>
+          <li><strong>Délai :</strong> ${urgencyLabels[data.urgency] || data.urgency}</li>
           ${data.ville ? `<li><strong>Ville :</strong> ${data.ville}</li>` : ''}
           ${data.description ? `<li><strong>Description :</strong> ${data.description}</li>` : ''}
         </ul>
         <p><strong>Que se passe-t-il maintenant ?</strong></p>
-        <p>Nous allons transmettre votre demande aux artisans disponibles dans votre r\u00e9gion. Vous recevrez jusqu\u2019\u00e0 3 devis gratuits sous 24h.</p>
-        <p>Cordialement,<br />L\u2019\u00e9quipe ServicesArtisans</p>
+        <p>Nous allons transmettre votre demande aux artisans disponibles dans votre région. Vous recevrez jusqu\u2019à 3 devis gratuits sous 24h.</p>
+        <p>Cordialement,<br />L\u2019équipe ServicesArtisans</p>
         <p style="color: #666; font-size: 12px;">
           <a href="https://servicesartisans.fr">servicesartisans.fr</a>
         </p>
@@ -181,16 +181,16 @@ export async function POST(request: Request) {
         <ul>
           <li><strong>Nom :</strong> ${data.nom}</li>
           <li><strong>Email :</strong> ${data.email}</li>
-          <li><strong>T\u00e9l\u00e9phone :</strong> ${data.telephone}</li>
+          <li><strong>Téléphone :</strong> ${data.telephone}</li>
         </ul>
         <h3>Demande</h3>
         <ul>
           <li><strong>Service :</strong> ${serviceNames[data.service] || data.service}</li>
-          <li><strong>D\u00e9lai :</strong> ${urgencyLabels[data.urgency] || data.urgency}</li>
-          <li><strong>Ville :</strong> ${data.ville || 'Non pr\u00e9cis\u00e9'}</li>
-          <li><strong>Code postal :</strong> ${data.codePostal || 'Non pr\u00e9cis\u00e9'}</li>
-          <li><strong>Budget :</strong> ${data.budget || 'Non pr\u00e9cis\u00e9'}</li>
-          <li><strong>Description :</strong> ${data.description || 'Non pr\u00e9cis\u00e9'}</li>
+          <li><strong>Délai :</strong> ${urgencyLabels[data.urgency] || data.urgency}</li>
+          <li><strong>Ville :</strong> ${data.ville || 'Non précisé'}</li>
+          <li><strong>Code postal :</strong> ${data.codePostal || 'Non précisé'}</li>
+          <li><strong>Budget :</strong> ${data.budget || 'Non précisé'}</li>
+          <li><strong>Description :</strong> ${data.description || 'Non précisé'}</li>
         </ul>
         ${lead ? `<p>ID: ${lead.id}</p>` : ''}
       `,
@@ -198,7 +198,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message: 'Demande de devis envoy\u00e9e avec succ\u00e8s',
+      message: 'Demande de devis envoyée avec succès',
       id: lead?.id,
     })
   } catch (error) {

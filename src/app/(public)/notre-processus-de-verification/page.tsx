@@ -73,7 +73,7 @@ export default function NotreProcessusDeVerificationPage() {
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-28 md:pt-14 md:pb-36">
           <Breadcrumb
-            items={[{ label: 'Notre processus de v\u00e9rification' }]}
+            items={[{ label: 'Notre processus de vérification' }]}
             className="mb-6 text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
           />
           <div className="text-center">

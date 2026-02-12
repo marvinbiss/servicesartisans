@@ -17,7 +17,7 @@ export default function MobileBottomNav() {
   const pathname = usePathname()
   const { isMenuOpen } = useMobileMenu()
 
-  // Ne pas afficher dans les espaces connect\u00e9s (ils ont leur propre nav)
+  // Ne pas afficher dans les espaces connectés (ils ont leur propre nav)
   const hideOnPages = ['/espace-client', '/espace-artisan', '/admin']
   const shouldHide = hideOnPages.some(page => pathname.startsWith(page))
 

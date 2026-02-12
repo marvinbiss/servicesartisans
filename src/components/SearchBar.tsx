@@ -92,8 +92,8 @@ function HighlightedText({ text, query }: { text: string; query: string }) {
 // ── Popular cities for empty state ──────────────────────────────────
 const popularCities: { name: string; slug: string; departement: string; pop: string }[] = [
   { name: 'Paris', slug: 'paris', departement: 'Paris (75)', pop: '2.1M' },
-  { name: 'Lyon', slug: 'lyon', departement: 'Rh\u00f4ne (69)', pop: '522k' },
-  { name: 'Marseille', slug: 'marseille', departement: 'Bouches-du-Rh\u00f4ne (13)', pop: '870k' },
+  { name: 'Lyon', slug: 'lyon', departement: 'Rhône (69)', pop: '522k' },
+  { name: 'Marseille', slug: 'marseille', departement: 'Bouches-du-Rhône (13)', pop: '870k' },
   { name: 'Toulouse', slug: 'toulouse', departement: 'Haute-Garonne (31)', pop: '493k' },
   { name: 'Bordeaux', slug: 'bordeaux', departement: 'Gironde (33)', pop: '260k' },
   { name: 'Lille', slug: 'lille', departement: 'Nord (59)', pop: '236k' },
@@ -470,7 +470,7 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
                 {hasTypedCity && filteredCities.length > 0 && (
                   <>
                     <div className={`text-gray-400 font-medium ${isLarge ? 'px-3 py-2 text-xs' : 'px-2.5 py-1.5 text-[11px]'}`}>
-                      {filteredCities.length} ville{filteredCities.length > 1 ? 's' : ''} trouv{filteredCities.length > 1 ? '\u00e9es' : '\u00e9e'}
+                      {filteredCities.length} ville{filteredCities.length > 1 ? 's' : ''} trouv{filteredCities.length > 1 ? 'ées' : 'ée'}
                     </div>
                     {filteredCities.map((city, idx) => {
                       const isHighlighted = idx === highlightedCityIndex
