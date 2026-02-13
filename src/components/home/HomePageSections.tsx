@@ -1,14 +1,16 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import {
   Users,
   Wrench, Zap, Key, Flame, PaintBucket, Hammer, HardHat, Home, TreeDeciduous, Sparkles,
-  Search, ClipboardList, CheckCircle, ArrowRight,
+  Search, ClipboardList, CheckCircle, ArrowRight, Star,
   TrendingUp,
   Database, Shield, FileCheck, Banknote, Globe, BadgeCheck
 } from 'lucide-react'
+import { getServiceImage, testimonialImages, beforeAfterPairs } from '@/lib/data/images'
 
 // ─── ANIMATION VARIANTS ────────────────────────────────────────
 
@@ -105,7 +107,15 @@ export function ServicesShowcase() {
                       </div>
                       <p className="text-slate-600 text-sm leading-relaxed">{service.desc}</p>
                     </div>
-                    <ArrowRight className="w-5 h-5 text-slate-300 group-hover:text-blue-500 group-hover:translate-x-1.5 transition-all duration-300 shrink-0" />
+                    <div className="relative w-24 h-24 rounded-xl overflow-hidden shrink-0 hidden md:block">
+                      <Image
+                        src={getServiceImage(service.slug).src}
+                        alt={getServiceImage(service.slug).alt}
+                        fill
+                        className="object-cover group-hover:scale-110 transition-transform duration-500"
+                        sizes="96px"
+                      />
+                    </div>
                   </Link>
                 </motion.div>
               )
@@ -498,6 +508,133 @@ export function TrustSection() {
               Source : <strong className="text-slate-900">API Annuaire des Entreprises</strong> — données ouvertes du gouvernement français
             </span>
           </div>
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
+// ─── TESTIMONIALS SECTION ────────────────────────────────────────
+
+export function TestimonialsSection() {
+  return (
+    <section className="py-20 md:py-28 bg-slate-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-100px' }}
+          variants={sectionReveal}
+          className="text-center mb-14"
+        >
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-amber-50 text-amber-600 rounded-full text-sm font-medium mb-5">
+            <Star className="w-3.5 h-3.5" />
+            Avis clients
+          </div>
+          <h2 className="font-heading text-3xl md:text-[2.5rem] font-bold text-slate-900 mb-4 tracking-tight">
+            <span className="inline-block w-2 h-2 rounded-full bg-amber-400 mr-3 mb-1" />
+            Ils nous font confiance
+          </h2>
+          <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+            Des milliers de particuliers trouvent chaque jour l&apos;artisan idéal sur ServicesArtisans.
+          </p>
+        </motion.div>
+
+        <motion.div
+          className="grid md:grid-cols-3 gap-8"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={staggerContainer}
+        >
+          {testimonialImages.map((t, i) => (
+            <motion.div
+              key={i}
+              variants={staggerItem}
+              className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+            >
+              <div className="flex items-center gap-4 mb-4">
+                <div className="relative w-14 h-14 rounded-full overflow-hidden shrink-0">
+                  <Image src={t.src} alt={t.alt} fill className="object-cover" sizes="56px" />
+                </div>
+                <div>
+                  <div className="font-semibold text-slate-900">{t.name}</div>
+                  <div className="text-sm text-slate-500">{t.ville}</div>
+                </div>
+              </div>
+              <div className="flex gap-0.5 mb-3">
+                {Array.from({ length: t.note }).map((_, j) => (
+                  <Star key={j} className="w-4 h-4 text-amber-400 fill-amber-400" />
+                ))}
+              </div>
+              <p className="text-slate-600 leading-relaxed">{t.text}</p>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
+// ─── BEFORE/AFTER SHOWCASE ───────────────────────────────────────
+
+export function BeforeAfterShowcase() {
+  return (
+    <section className="py-20 md:py-28 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-100px' }}
+          variants={sectionReveal}
+          className="text-center mb-14"
+        >
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50 text-blue-600 rounded-full text-sm font-medium mb-5">
+            <Sparkles className="w-3.5 h-3.5" />
+            Réalisations
+          </div>
+          <h2 className="font-heading text-3xl md:text-[2.5rem] font-bold text-slate-900 mb-4 tracking-tight">
+            <span className="inline-block w-2 h-2 rounded-full bg-blue-400 mr-3 mb-1" />
+            Avant / Après
+          </h2>
+          <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+            Découvrez les transformations réalisées par nos artisans référencés.
+          </p>
+        </motion.div>
+
+        <motion.div
+          className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={staggerContainer}
+        >
+          {beforeAfterPairs.slice(0, 6).map((pair, i) => (
+            <motion.div
+              key={i}
+              variants={staggerItem}
+              className="group relative bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+            >
+              <div className="grid grid-cols-2 h-48">
+                <div className="relative">
+                  <Image src={pair.before} alt={`Avant — ${pair.alt}`} fill className="object-cover" sizes="(max-width: 768px) 50vw, 25vw" />
+                  <div className="absolute top-2 left-2 bg-red-500/90 text-white text-xs font-bold px-2 py-1 rounded">
+                    AVANT
+                  </div>
+                </div>
+                <div className="relative">
+                  <Image src={pair.after} alt={`Après — ${pair.alt}`} fill className="object-cover" sizes="(max-width: 768px) 50vw, 25vw" />
+                  <div className="absolute top-2 right-2 bg-emerald-500/90 text-white text-xs font-bold px-2 py-1 rounded">
+                    APRÈS
+                  </div>
+                </div>
+              </div>
+              <div className="p-4">
+                <span className="text-sm font-semibold text-slate-900">{pair.category}</span>
+                <span className="text-xs text-slate-500 ml-2">{pair.alt}</span>
+              </div>
+            </motion.div>
+          ))}
         </motion.div>
       </div>
     </section>

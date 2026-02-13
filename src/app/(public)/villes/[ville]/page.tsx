@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { MapPin, Users, Building2, ArrowRight, Shield, Clock, ChevronRight, Wrench, HelpCircle } from 'lucide-react'
@@ -7,6 +8,7 @@ import JsonLd from '@/components/JsonLd'
 import { getPlaceSchema, getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { villes, getVilleBySlug, services, getRegionSlugByName, getDepartementByCode } from '@/lib/data/france'
+import { getCityImage } from '@/lib/data/images'
 
 // Pre-render top 200 cities, rest generated on-demand via ISR
 const TOP_CITIES_COUNT = 200
@@ -89,6 +91,16 @@ export default async function VillePage({ params }: PageProps) {
       <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
         {/* Background effects */}
         <div className="absolute inset-0">
+            {getCityImage(villeSlug) && (
+              <Image
+                src={getCityImage(villeSlug)!.src}
+                alt={getCityImage(villeSlug)!.alt}
+                fill
+                className="object-cover opacity-15"
+                sizes="100vw"
+              />
+            )}
+            <div className="absolute inset-0 bg-[#0a0f1e]/80" />
           <div className="absolute inset-0" style={{
             background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(37,99,235,0.1) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(59,130,246,0.06) 0%, transparent 50%)',
           }} />

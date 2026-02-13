@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { MapPin, ArrowRight, Star, Shield, ChevronDown, BadgeCheck, Euro, Clock, Wrench } from 'lucide-react'
@@ -12,6 +13,7 @@ import { PopularCitiesLinks } from '@/components/InternalLinks'
 import { popularServices } from '@/lib/constants/navigation'
 import { services as staticServicesList, villes } from '@/lib/data/france'
 import { getTradeContent } from '@/lib/data/trade-content'
+import { getServiceImage } from '@/lib/data/images'
 
 // ISR: Revalidate every 30 minutes
 export const revalidate = REVALIDATE.serviceDetail
@@ -160,6 +162,16 @@ export default async function ServicePage({ params }: PageProps) {
 
       {/* Hero — Premium gradient */}
       <section className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-hidden">
+        {/* Service photo background */}
+        <Image
+          src={getServiceImage(serviceSlug).src}
+          alt={getServiceImage(serviceSlug).alt}
+          fill
+          className="object-cover opacity-15"
+          sizes="100vw"
+          priority
+        />
+        <div className="absolute inset-0 bg-gray-900/75" />
         {/* Ambient glow */}
         <div className="absolute inset-0" style={{
           background: 'radial-gradient(ellipse 60% 50% at 50% 100%, rgba(245,158,11,0.10) 0%, transparent 60%), radial-gradient(ellipse 40% 40% at 80% 20%, rgba(59,130,246,0.06) 0%, transparent 50%)',

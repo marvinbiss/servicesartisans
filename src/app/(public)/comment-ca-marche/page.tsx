@@ -1,6 +1,8 @@
 import { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { Search, CheckCircle, ArrowRight, Shield, Star, FileText, Phone, MapPin, ChevronDown } from 'lucide-react'
+import { pageImages } from '@/lib/data/images'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
 import JsonLd from '@/components/JsonLd'
@@ -200,12 +202,26 @@ export default function CommentCaMarchePage() {
                 >
                   {/* Image/Icon */}
                   <div className="flex-1 w-full">
-                    <div className={`bg-gradient-to-br ${step.gradient} rounded-2xl p-12 text-white text-center`}>
-                      <div className="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <Icon className="w-12 h-12" />
-                      </div>
-                      <div className="text-6xl font-bold opacity-50">
-                        {step.number}
+                    <div className={`relative bg-gradient-to-br ${step.gradient} rounded-2xl p-12 text-white text-center overflow-hidden`}>
+                      {pageImages.howItWorks[index] && (
+                        <>
+                          <Image
+                            src={pageImages.howItWorks[index].src}
+                            alt={pageImages.howItWorks[index].alt}
+                            fill
+                            className="object-cover opacity-30"
+                            sizes="(max-width: 1024px) 100vw, 50vw"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-br from-black/40 to-transparent" />
+                        </>
+                      )}
+                      <div className="relative z-10">
+                        <div className="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                          <Icon className="w-12 h-12" />
+                        </div>
+                        <div className="text-6xl font-bold opacity-50">
+                          {step.number}
+                        </div>
                       </div>
                     </div>
                   </div>

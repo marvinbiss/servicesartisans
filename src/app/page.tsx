@@ -6,6 +6,8 @@ import {
   HowItWorksSection,
   ArtisanCTASection,
   TrustSection,
+  TestimonialsSection,
+  BeforeAfterShowcase,
 } from '@/components/home/HomePageSections'
 import { GeographicSectionWrapper } from '@/components/home/GeographicSectionWrapper'
 import { ScrollReveal, StaggerGrid, StaggerItem, SectionDivider } from '@/components/ui'
@@ -47,6 +49,20 @@ export default function HomePage() {
       {/* ─── HOW IT WORKS ─────────────────────────────────────── */}
       <ScrollReveal direction="up" delay={0.05}>
         <HowItWorksSection />
+      </ScrollReveal>
+
+      <SectionDivider />
+
+      {/* ─── TESTIMONIALS ──────────────────────────────────────── */}
+      <ScrollReveal direction="up">
+        <TestimonialsSection />
+      </ScrollReveal>
+
+      <SectionDivider />
+
+      {/* ─── BEFORE / AFTER ─────────────────────────────────────── */}
+      <ScrollReveal direction="up">
+        <BeforeAfterShowcase />
       </ScrollReveal>
 
       <SectionDivider />

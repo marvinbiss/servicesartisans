@@ -1,6 +1,8 @@
 import { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { Shield, Search, CreditCard, Lock, Eye, ArrowRight, Database } from 'lucide-react'
+import { pageImages } from '@/lib/data/images'
 import Breadcrumb from '@/components/Breadcrumb'
 import { createAdminClient } from '@/lib/supabase/admin'
 import JsonLd from '@/components/JsonLd'
@@ -185,7 +187,17 @@ export default async function AProposPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Technologie */}
-            <div className="bg-white rounded-2xl shadow-sm p-8">
+            <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+              <div className="relative h-48 w-full">
+                <Image
+                  src={pageImages.about[0].src}
+                  alt={pageImages.about[0].alt}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+              </div>
+              <div className="p-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Notre technologie</h2>
               <div className="space-y-4 text-gray-600">
                 <div className="flex items-start gap-3">
@@ -219,10 +231,22 @@ export default async function AProposPage() {
                   <p>Monitoring et gestion des erreurs via <strong>Sentry</strong>.</p>
                 </div>
               </div>
+              </div>
             </div>
 
             {/* Modèle économique */}
-            <div className="bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl p-8 text-white">
+            <div className="bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl overflow-hidden text-white">
+              <div className="relative h-48 w-full">
+                <Image
+                  src={pageImages.about[1].src}
+                  alt={pageImages.about[1].alt}
+                  fill
+                  className="object-cover opacity-40"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-blue-600/60 to-blue-700/90" />
+              </div>
+              <div className="p-8">
               <h2 className="text-2xl font-bold mb-6">Notre modèle économique</h2>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
@@ -255,6 +279,7 @@ export default async function AProposPage() {
                   Voir les tarifs artisans
                   <ArrowRight className="w-4 h-4" />
                 </Link>
+              </div>
               </div>
             </div>
           </div>

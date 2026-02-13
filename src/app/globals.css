@@ -499,3 +499,331 @@ img {
   }
 }
 
+/* ===========================================
+   BLOG ARTICLE - Premium Reading Experience
+   =========================================== */
+
+/* Article body — base typography */
+.article-body {
+  font-size: 1.0625rem; /* 17px — optimal for long-form reading */
+  line-height: 1.8;
+  color: #374151; /* gray-700 */
+}
+
+@media (min-width: 640px) {
+  .article-body {
+    font-size: 1.125rem; /* 18px on larger screens */
+    line-height: 1.85;
+  }
+}
+
+/* Intro paragraph — larger, bolder opening */
+.article-intro {
+  font-size: 1.1875rem;
+  line-height: 1.75;
+  color: #1f2937; /* gray-800 */
+  font-weight: 450;
+  margin-bottom: 1rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+@media (min-width: 640px) {
+  .article-intro {
+    font-size: 1.25rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+    padding-bottom: 2.5rem;
+  }
+}
+
+/* Regular paragraphs */
+.article-paragraph {
+  margin-bottom: 1.25rem;
+  color: #4b5563; /* gray-600 */
+}
+
+.article-paragraph:last-child {
+  margin-bottom: 0;
+}
+
+/* Section separator — visual break between major sections */
+.article-section {
+  position: relative;
+  padding-top: 2rem;
+  margin-top: 2rem;
+}
+
+.article-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #e5e7eb 15%,
+    #d1d5db 50%,
+    #e5e7eb 85%,
+    transparent 100%
+  );
+}
+
+@media (min-width: 640px) {
+  .article-section {
+    padding-top: 2.5rem;
+    margin-top: 2.5rem;
+  }
+}
+
+/* H2 headings — bold, anchored, with amber accent bar */
+.article-h2 {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-family: var(--font-heading), 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #111827; /* gray-900 */
+  margin-bottom: 1.25rem;
+  scroll-margin-top: 5rem;
+  letter-spacing: -0.01em;
+}
+
+@media (min-width: 640px) {
+  .article-h2 {
+    font-size: 1.625rem;
+    gap: 0.875rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* Amber accent bar next to H2 */
+.article-h2-bar {
+  display: block;
+  flex-shrink: 0;
+  width: 4px;
+  min-height: 1.6em;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #f59e0b 0%, #d97706 100%);
+  margin-top: 0.15em;
+}
+
+/* H3 headings — slightly smaller, no amber bar */
+.article-h3 {
+  font-family: var(--font-heading), 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #1f2937; /* gray-800 */
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  scroll-margin-top: 5rem;
+  letter-spacing: -0.005em;
+}
+
+@media (min-width: 640px) {
+  .article-h3 {
+    font-size: 1.375rem;
+    margin-top: 2.25rem;
+    margin-bottom: 1.125rem;
+  }
+}
+
+/* Lists — unordered and ordered */
+.article-list {
+  margin-top: 0.5rem;
+  margin-bottom: 1.25rem;
+  padding-left: 0;
+  list-style: none;
+}
+
+.article-list li {
+  position: relative;
+  padding-left: 1.75rem;
+  margin-bottom: 0.625rem;
+  color: #4b5563; /* gray-600 */
+  line-height: 1.75;
+}
+
+.article-list-unordered li::before {
+  content: '';
+  position: absolute;
+  left: 0.375rem;
+  top: 0.75em;
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: #f59e0b; /* amber-500 */
+}
+
+.article-list-ordered {
+  counter-reset: article-list-counter;
+}
+
+.article-list-ordered li {
+  counter-increment: article-list-counter;
+}
+
+.article-list-ordered li::before {
+  content: counter(article-list-counter) '.';
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-weight: 600;
+  color: #f59e0b; /* amber-500 */
+  font-size: 0.9375rem;
+}
+
+/* Callout boxes — shared base */
+.article-callout {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: 0.75rem;
+  border-left-width: 4px;
+  border-left-style: solid;
+}
+
+.article-callout-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 0.8125rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 0.625rem;
+}
+
+.article-callout-content {
+  color: #374151;
+  line-height: 1.75;
+  font-size: inherit;
+}
+
+.article-callout-content p {
+  margin-bottom: 0.5rem;
+}
+
+.article-callout-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Table — responsive with horizontal scroll */
+.article-table-wrapper {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+}
+
+.article-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+
+.article-table thead {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+.article-table th {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: white;
+  white-space: nowrap;
+  font-size: 0.875rem;
+}
+
+.article-table th:first-child {
+  border-top-left-radius: 0.75rem;
+}
+
+.article-table th:last-child {
+  border-top-right-radius: 0.75rem;
+}
+
+.article-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #f3f4f6;
+  color: #374151;
+}
+
+.article-table tbody tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+.article-table tbody tr:hover {
+  background-color: #fffbeb;
+}
+
+.article-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Blockquote */
+.article-blockquote {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.5rem;
+  border-left: 4px solid #d1d5db;
+  background-color: #f9fafb;
+  border-radius: 0 0.5rem 0.5rem 0;
+  font-style: italic;
+  color: #4b5563; /* gray-600 */
+  line-height: 1.75;
+}
+
+/* FAQ accordion */
+.article-faq {
+  margin-top: 2.5rem;
+  margin-bottom: 2rem;
+}
+
+.article-faq-item {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+.article-faq-item:hover {
+  border-color: #fbbf24;
+}
+
+.article-faq-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  background-color: #fafafa;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-weight: 500;
+  color: #111827;
+  font-size: 1rem;
+  line-height: 1.5;
+  transition: background-color 0.2s ease;
+}
+
+.article-faq-button:hover {
+  background-color: #f5f5f5;
+}
+
+.article-faq-answer {
+  padding: 0 1.25rem 1rem;
+  color: #4b5563;
+  line-height: 1.75;
+  font-size: inherit;
+}
+

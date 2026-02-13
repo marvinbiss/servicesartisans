@@ -2,8 +2,10 @@
 
 import { useEffect, useRef } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { motion, useMotionValue, useTransform, animate, useInView, type Variants } from 'framer-motion'
 import { services, villes, departements } from '@/lib/data/france'
+import { heroImage } from '@/lib/data/images'
 import { HeroSearch } from '@/components/search/HeroSearch'
 
 // ── Animated counter component ────────────────────────────────────────
@@ -139,6 +141,19 @@ export function HeroSection() {
       >
         {/* Background layers */}
         <div className="absolute inset-0" aria-hidden="true">
+          {/* Background photo */}
+          <Image
+            src={heroImage.src}
+            alt={heroImage.alt}
+            fill
+            className="object-cover opacity-20"
+            priority
+            sizes="100vw"
+            placeholder="blur"
+            blurDataURL={heroImage.blurDataURL}
+          />
+          {/* Dark overlay for text readability */}
+          <div className="absolute inset-0 bg-[#0a0f1e]/70" />
           {/* Animated mesh gradient */}
           <div
             className="absolute inset-0"

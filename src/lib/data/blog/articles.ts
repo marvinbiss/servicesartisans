@@ -15,6 +15,10 @@ export interface BlogArticle {
   readTime: string
   category: string
   tags: string[]
+  authorBio?: string
+  updatedDate?: string
+  keyTakeaways?: string[]
+  faq?: { question: string; answer: string }[]
 }
 
 /** Every blog article keyed by slug */
