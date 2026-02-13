@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
+import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { Calendar, User, Clock, ArrowLeft, Facebook, Twitter, Linkedin, Tag, ChevronRight } from 'lucide-react'
 import { SITE_URL } from '@/lib/seo/config'
@@ -7,6 +8,7 @@ import { getBlogArticleSchema } from '@/lib/seo/blog-schema'
 import { allArticles, articleSlugs } from '@/lib/data/blog/articles'
 import { categoryEmoji } from '@/lib/data/blog/articles-index'
 import { getRelatedServiceLinks, getRelatedArticleSlugs } from '@/lib/seo/internal-links'
+import { getBlogImage } from '@/lib/data/images'
 import JsonLd from '@/components/JsonLd'
 import { ReadingProgress } from '@/components/ReadingProgress'
 import { TableOfContents } from '@/components/TableOfContents'
@@ -652,16 +654,29 @@ export default async function BlogArticlePage({ params }: PageProps) {
           </div>
         </div>
 
-        {/* Article Hero Image Area */}
-        <div className="relative w-full aspect-[2/1] rounded-2xl overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex flex-col items-center justify-center mb-8 sm:mb-12">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(245,158,11,0.08),transparent_70%)]" />
-          <div className="absolute inset-0 opacity-[0.03]" style={{
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-            backgroundSize: '48px 48px',
-          }} />
-          <span className="text-7xl mb-4 relative z-10">{categoryEmoji[article.category] || '📝'}</span>
-          <span className="text-sm font-medium text-gray-400 uppercase tracking-wider relative z-10">{article.category}</span>
-        </div>
+        {/* Article Hero Image */}
+        {(() => {
+          const blogImage = getBlogImage(slug, article.category)
+          return (
+            <div className="relative w-full aspect-[2/1] rounded-2xl overflow-hidden mb-8 sm:mb-12">
+              <Image
+                src={blogImage.src}
+                alt={blogImage.alt}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 896px, 896px"
+                priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+              <div className="absolute bottom-5 left-6 right-6 flex items-center gap-3">
+                <span className="text-3xl">{categoryEmoji[article.category] || '📝'}</span>
+                <span className="text-sm font-semibold text-amber-300 uppercase tracking-wider">
+                  {article.category}
+                </span>
+              </div>
+            </div>
+          )
+        })()}
 
         {/* Content — optimal reading width */}
         <div className="max-w-3xl mx-auto">
