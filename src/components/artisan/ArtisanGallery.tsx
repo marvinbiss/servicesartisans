@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useCallback, useEffect } from 'react'
+import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight, Camera, ZoomIn, Play, Layers } from 'lucide-react'
 import { Artisan, PortfolioItem } from './types'
@@ -99,11 +100,13 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
             className="col-span-2 row-span-2 relative cursor-pointer group"
             onClick={() => openLightbox(0)}
           >
-            <img
+            <Image
               src={getThumbnail(photos[0])}
               alt={photos[0].title}
-              className="w-full h-full object-cover"
-              loading="lazy"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 50vw, 40vw"
+              unoptimized
             />
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
               {photos[0].mediaType === 'video' ? (
@@ -129,11 +132,13 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
               className="relative cursor-pointer group overflow-hidden"
               onClick={() => openLightbox(index + 1)}
             >
-              <img
+              <Image
                 src={getThumbnail(photo)}
                 alt={photo.title}
-                className="w-full h-full object-cover"
-                loading="lazy"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 25vw, 20vw"
+                unoptimized
               />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
                 {photo.mediaType === 'video' ? (
@@ -285,10 +290,13 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
                   }`}
                   onClick={(e) => { e.stopPropagation(); setCurrentIndex(index); }}
                 >
-                  <img
+                  <Image
                     src={getThumbnail(photo)}
                     alt={photo.title}
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
+                    sizes="64px"
+                    unoptimized
                   />
                   {photo.mediaType === 'video' && (
                     <div className="absolute inset-0 flex items-center justify-center bg-black/30">

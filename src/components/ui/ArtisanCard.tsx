@@ -70,6 +70,7 @@ export function ArtisanCard({
                 alt={name}
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-500"
+                sizes="(max-width: 768px) 100vw, 192px"
               />
             ) : (
               <div className="w-full h-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
@@ -167,7 +168,7 @@ export function ArtisanCard({
       >
         <div className="relative w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
           {imageUrl ? (
-            <Image src={imageUrl} alt={name} fill className="object-cover" />
+            <Image src={imageUrl} alt={name} fill className="object-cover" sizes="48px" />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
               <span className="font-bold text-white">{name.charAt(0)}</span>
@@ -208,6 +209,7 @@ export function ArtisanCard({
               alt={name}
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-500"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
             />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 flex items-center justify-center">

@@ -2,6 +2,8 @@ import type { MetadataRoute } from 'next'
 import { SITE_URL } from '@/lib/seo/config'
 import { services, villes, departements, regions } from '@/lib/data/france'
 import { articleSlugs } from '@/lib/data/blog/articles'
+import { allArticles } from '@/lib/data/blog/articles'
+import { getBlogImage, getServiceImage, getCityImage } from '@/lib/data/images'
 
 // Provider batch size — well under the 50,000 URL sitemap limit
 const PROVIDER_BATCH_SIZE = 40_000
@@ -88,12 +90,17 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       priority,
     }))
 
-    const blogArticlePages: MetadataRoute.Sitemap = articleSlugs.map((slug) => ({
-      url: `${SITE_URL}/blog/${slug}`,
-      lastModified: STATIC_LAST_MODIFIED,
-      changeFrequency: 'monthly' as const,
-      priority: 0.6,
-    }))
+    const blogArticlePages: MetadataRoute.Sitemap = articleSlugs.map((slug) => {
+      const article = allArticles[slug]
+      const blogImage = article ? getBlogImage(slug, article.category) : null
+      return {
+        url: `${SITE_URL}/blog/${slug}`,
+        lastModified: STATIC_LAST_MODIFIED,
+        changeFrequency: 'monthly' as const,
+        priority: 0.6,
+        ...(blogImage ? { images: [blogImage.src] } : {}),
+      }
+    })
 
     const servicesIndex: MetadataRoute.Sitemap = [
       {
@@ -104,12 +111,16 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       },
     ]
 
-    const servicePages: MetadataRoute.Sitemap = services.map((service) => ({
-      url: `${SITE_URL}/services/${service.slug}`,
-      lastModified: STATIC_LAST_MODIFIED,
-      changeFrequency: 'weekly' as const,
-      priority: 0.9,
-    }))
+    const servicePages: MetadataRoute.Sitemap = services.map((service) => {
+      const serviceImage = getServiceImage(service.slug)
+      return {
+        url: `${SITE_URL}/services/${service.slug}`,
+        lastModified: STATIC_LAST_MODIFIED,
+        changeFrequency: 'weekly' as const,
+        priority: 0.9,
+        images: [serviceImage.src],
+      }
+    })
 
     return [...homepage, ...staticPages, ...blogArticlePages, ...servicesIndex, ...servicePages]
   }
@@ -137,12 +148,16 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       },
     ]
 
-    const villePages: MetadataRoute.Sitemap = villes.map((ville) => ({
-      url: `${SITE_URL}/villes/${ville.slug}`,
-      lastModified: STATIC_LAST_MODIFIED,
-      changeFrequency: 'weekly' as const,
-      priority: 0.7,
-    }))
+    const villePages: MetadataRoute.Sitemap = villes.map((ville) => {
+      const cityImage = getCityImage(ville.slug)
+      return {
+        url: `${SITE_URL}/villes/${ville.slug}`,
+        lastModified: STATIC_LAST_MODIFIED,
+        changeFrequency: 'weekly' as const,
+        priority: 0.7,
+        ...(cityImage ? { images: [cityImage.src] } : {}),
+      }
+    })
 
     return [...villesIndex, ...villePages]
   }

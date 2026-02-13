@@ -8,7 +8,7 @@ import { getBlogArticleSchema } from '@/lib/seo/blog-schema'
 import { allArticles, articleSlugs } from '@/lib/data/blog/articles'
 import { categoryEmoji } from '@/lib/data/blog/articles-index'
 import { getRelatedServiceLinks, getRelatedArticleSlugs } from '@/lib/seo/internal-links'
-import { getBlogImage } from '@/lib/data/images'
+import { getBlogImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import JsonLd from '@/components/JsonLd'
 import { ReadingProgress } from '@/components/ReadingProgress'
 import { TableOfContents } from '@/components/TableOfContents'
@@ -38,6 +38,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const article = allArticles[slug]
   if (!article) return { title: 'Article non trouvé' }
 
+  const blogImage = getBlogImage(slug, article.category)
+
   return {
     title: `${article.title} | Blog ServicesArtisans`,
     description: article.excerpt,
@@ -53,6 +55,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       section: article.category,
       tags: article.tags,
       url: `${SITE_URL}/blog/${slug}`,
+      images: [{ url: blogImage.src, width: 1200, height: 630, alt: blogImage.alt }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: article.title,
+      description: article.excerpt,
+      images: [blogImage.src],
     },
   }
 }
@@ -666,6 +675,8 @@ export default async function BlogArticlePage({ params }: PageProps) {
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 896px, 896px"
                 priority
+                placeholder="blur"
+                blurDataURL={BLUR_PLACEHOLDER}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
               <div className="absolute bottom-5 left-6 right-6 flex items-center gap-3">

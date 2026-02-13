@@ -99,6 +99,7 @@ export function ArtisanProfileCard({
               alt=""
               fill
               className="object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
               onError={() => setImageError(true)}
             />
           )}
@@ -137,6 +138,7 @@ export function ArtisanProfileCard({
                     alt={name}
                     fill
                     className="object-cover"
+                    sizes="96px"
                     onError={() => setImageError(true)}
                   />
                 ) : (
@@ -304,6 +306,7 @@ export function ArtisanProfileCard({
                 alt={name}
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-500"
+                sizes="(max-width: 640px) 100vw, 224px"
                 onError={() => setImageError(true)}
               />
             ) : (
@@ -442,6 +445,7 @@ export function ArtisanProfileCard({
               alt={name}
               fill
               className="object-cover"
+              sizes="48px"
               onError={() => setImageError(true)}
             />
           ) : (
@@ -486,6 +490,7 @@ export function ArtisanProfileCard({
               alt={name}
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-500"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
               onError={() => setImageError(true)}
             />
           ) : (

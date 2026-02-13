@@ -98,6 +98,7 @@ export default async function VillePage({ params }: PageProps) {
                 fill
                 className="object-cover opacity-15"
                 sizes="100vw"
+                priority
               />
             )}
             <div className="absolute inset-0 bg-[#0a0f1e]/80" />

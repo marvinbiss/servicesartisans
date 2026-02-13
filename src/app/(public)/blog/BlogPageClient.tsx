@@ -2,8 +2,10 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Calendar, Clock, ArrowRight, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
+import { getBlogImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 
 export interface BlogArticleMeta {
   slug: string
@@ -151,15 +153,21 @@ export default function BlogPageClient({ articles, categories }: BlogPageClientP
                   }`}
                 >
                   {/* Image */}
-                  <div className={`relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center overflow-hidden ${
+                  <div className={`relative overflow-hidden ${
                     isFeatured ? 'h-64 md:h-80' : 'h-48'
                   }`}>
-                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(245,158,11,0.08),transparent_70%)]" />
-                    <div className="absolute inset-0 opacity-[0.03]" style={{
-                      backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-                      backgroundSize: '40px 40px',
-                    }} />
-                    <span className={`relative z-10 ${isFeatured ? 'text-7xl' : 'text-5xl'}`}>{article.image}</span>
+                    <Image
+                      src={getBlogImage(article.slug, article.category).src}
+                      alt={getBlogImage(article.slug, article.category).alt}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      sizes={isFeatured
+                        ? '(max-width: 768px) 100vw, (max-width: 1200px) 66vw, 100vw'
+                        : '(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw'}
+                      placeholder="blur"
+                      blurDataURL={BLUR_PLACEHOLDER}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
                     {/* Category badge overlay */}
                     <span className={`absolute top-4 left-4 z-10 ${badgeColor} px-3 py-1 rounded-full text-xs font-semibold`}>
                       {article.category}
