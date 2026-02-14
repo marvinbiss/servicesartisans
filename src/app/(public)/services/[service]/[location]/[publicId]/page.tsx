@@ -317,6 +317,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const ratingText = provider.rating_average ? `Note ${provider.rating_average}/5. ` : ''
     const description = `${displayName}, ${serviceName.toLowerCase()} à ${cityName}. ${ratingText}Devis gratuit. Artisan professionnel.`
 
+    const ogImage = provider.avatar_url || 'https://servicesartisans.fr/opengraph-image'
+    const ogAlt = `${displayName} - ${serviceName} à ${cityName}`
+
     return {
       title,
       description,
@@ -327,7 +330,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         description,
         type: 'profile',
         locale: 'fr_FR',
-        images: provider.avatar_url ? [provider.avatar_url] : undefined,
+        url: `https://servicesartisans.fr/services/${serviceSlug}/${locationSlug}/${publicId}`,
+        images: [{ url: ogImage, width: 1200, height: 630, alt: ogAlt }],
+      },
+      twitter: {
+        card: 'summary_large_image' as const,
+        title,
+        description,
+        images: [ogImage],
       },
       alternates: {
         canonical: `https://servicesartisans.fr/services/${serviceSlug}/${locationSlug}/${publicId}`,

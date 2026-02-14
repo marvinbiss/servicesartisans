@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Search, CheckCircle, ArrowRight, Shield, Star, FileText, Phone, MapPin, ChevronDown } from 'lucide-react'
-import { pageImages } from '@/lib/data/images'
+import { pageImages, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
 import JsonLd from '@/components/JsonLd'
@@ -224,6 +224,8 @@ export default function CommentCaMarchePage() {
                             fill
                             className="object-cover opacity-30"
                             sizes="(max-width: 1024px) 100vw, 50vw"
+                            placeholder="blur"
+                            blurDataURL={BLUR_PLACEHOLDER}
                           />
                           <div className="absolute inset-0 bg-gradient-to-br from-black/40 to-transparent" />
                         </>

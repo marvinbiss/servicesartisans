@@ -14,6 +14,7 @@ import { popularServices } from '@/lib/constants/navigation'
 import Link from 'next/link'
 import { REVALIDATE } from '@/lib/cache'
 import { slugify, getArtisanUrl } from '@/lib/utils'
+import { getServiceImage } from '@/lib/data/images'
 import { services as staticServicesList, villes, getVilleBySlug, getDepartementByCode, getRegionSlugByName, getNearbyCities } from '@/lib/data/france'
 import { getTradeContent } from '@/lib/data/trade-content'
 import { getFAQSchema } from '@/lib/seo/jsonld'
@@ -153,6 +154,7 @@ function generateJsonLd(service: Service, location: LocationType, _providers: un
     '@type': 'Service',
     name: `${service.name} à ${location.name}`,
     description: `Trouvez les meilleurs ${service.name.toLowerCase()}s à ${location.name}`,
+    image: getServiceImage(serviceSlug).src,
     areaServed: {
       '@type': 'City',
       name: location.name,

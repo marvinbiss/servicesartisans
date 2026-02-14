@@ -84,7 +84,7 @@ export function ReviewPhotoGallery({
             {item.type === 'photo' ? (
               <img
                 src={item.thumbnailUrl || item.url}
-                alt={item.caption || 'Photo'}
+                alt={item.caption || `Photo d'avis client ${index + 1}`}
                 className="w-full h-full object-cover"
                 loading="lazy"
               />
@@ -165,7 +165,7 @@ export function ReviewPhotoGallery({
               {media[currentIndex].type === 'photo' ? (
                 <img
                   src={media[currentIndex].url}
-                  alt={media[currentIndex].caption || 'Photo'}
+                  alt={media[currentIndex].caption || `Photo d'avis client ${currentIndex + 1}`}
                   className="max-w-full max-h-[70vh] object-contain"
                 />
               ) : (

@@ -70,6 +70,7 @@ export function getLocalBusinessSchema(artisan: {
   services: string[]
   priceRange?: string
   url?: string
+  image?: string
 }) {
   const canonicalUrl = artisan.url || SITE_URL
   return {
@@ -79,6 +80,7 @@ export function getLocalBusinessSchema(artisan: {
     name: artisan.name,
     description: artisan.description,
     url: canonicalUrl,
+    ...(artisan.image ? { image: artisan.image } : {}),
     address: {
       '@type': 'PostalAddress',
       streetAddress: artisan.address,
