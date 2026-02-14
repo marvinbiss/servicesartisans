@@ -26,13 +26,13 @@ export interface AdminUser {
 
 export interface AuditLog {
   id: string
-  admin_id: string
-  admin_email?: string
+  user_id: string
   action: string
-  entity_type: 'user' | 'provider' | 'review' | 'payment' | 'service' | 'settings' | 'booking' | 'cms_page'
-  entity_id?: string
-  old_data?: Record<string, unknown>
-  new_data?: Record<string, unknown>
+  resource_type: 'user' | 'provider' | 'review' | 'payment' | 'service' | 'settings' | 'booking' | 'cms_page'
+  resource_id?: string
+  old_value?: Record<string, unknown>
+  new_value?: Record<string, unknown>
+  metadata?: Record<string, unknown>
   ip_address?: string
   user_agent?: string
   created_at: string
@@ -141,8 +141,8 @@ export interface SubscriptionRecord {
 // Booking types for admin
 export interface AdminBooking {
   id: string
-  artisan_id: string
-  artisan_name?: string
+  provider_id: string
+  provider_name?: string
   client_email: string
   client_name?: string
   service: string

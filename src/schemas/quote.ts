@@ -26,7 +26,7 @@ export const quoteRequestSchema = z.object({
     .string()
     .min(10, 'La description doit contenir au moins 10 caractères')
     .max(2000, 'Description trop longue'),
-  urgency: z.enum(['normal', 'urgent', 'very_urgent']).optional().default('normal'),
+  urgency: z.enum(['normal', 'urgent', 'tres_urgent']).optional().default('normal'),
   city: z.string().max(100).optional(),
   postal_code: z.string().regex(/^\d{5}$/, 'Code postal invalide').optional(),
   budget_min: z.number().int().positive().optional(),
@@ -35,7 +35,7 @@ export const quoteRequestSchema = z.object({
 })
 
 export const quoteUpdateSchema = z.object({
-  status: z.enum(['read', 'responded', 'converted', 'cancelled']),
+  status: z.enum(['pending', 'accepted', 'refused', 'expired']),
   estimated_amount: z.number().int().positive().optional(),
   internal_notes: z.string().max(1000).optional(),
 })

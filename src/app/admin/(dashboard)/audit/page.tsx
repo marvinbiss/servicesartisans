@@ -16,12 +16,13 @@ import type { LeadEventType } from '@/types/leads'
 
 interface AuditLog {
   id: string
-  admin_id: string
+  user_id: string
   action: string
-  entity_type: string
-  entity_id: string | null
-  old_data: Record<string, unknown> | null
-  new_data: Record<string, unknown> | null
+  resource_type: string
+  resource_id: string | null
+  old_value: Record<string, unknown> | null
+  new_value: Record<string, unknown> | null
+  metadata: Record<string, unknown> | null
   ip_address: string | null
   user_agent: string | null
   created_at: string
@@ -446,19 +447,19 @@ export default function AdminAuditPage() {
                               <p className="text-xs text-gray-400 font-mono mt-0.5">{log.action}</p>
                             </td>
                             <td className="px-4 py-3">
-                              <p className="text-sm text-gray-700 capitalize">{log.entity_type}</p>
-                              {log.entity_id && (
-                                <p className="text-xs text-gray-400 font-mono">{log.entity_id.slice(0, 8)}</p>
+                              <p className="text-sm text-gray-700 capitalize">{log.resource_type}</p>
+                              {log.resource_id && (
+                                <p className="text-xs text-gray-400 font-mono">{log.resource_id.slice(0, 8)}</p>
                               )}
                             </td>
                             <td className="px-4 py-3">
-                              {log.new_data && Object.keys(log.new_data).length > 0 && (
+                              {log.new_value && Object.keys(log.new_value).length > 0 && (
                                 <details className="text-xs">
                                   <summary className="cursor-pointer text-blue-600 hover:text-blue-700">
                                     Données
                                   </summary>
                                   <pre className="mt-2 p-2 bg-gray-50 rounded text-gray-600 overflow-x-auto max-w-xs text-xs">
-                                    {JSON.stringify(log.new_data, null, 2)}
+                                    {JSON.stringify(log.new_value, null, 2)}
                                   </pre>
                                 </details>
                               )}
