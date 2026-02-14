@@ -201,7 +201,7 @@ export function ReviewPhotoGallery({
               >
                 <img
                   src={item.thumbnailUrl || item.url}
-                  alt=""
+                  alt={`Miniature photo ${index + 1}`}
                   className="w-full h-full object-cover"
                 />
               </button>

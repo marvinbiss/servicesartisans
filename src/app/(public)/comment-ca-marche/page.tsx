@@ -21,6 +21,19 @@ export const metadata: Metadata = {
     'max-image-preview': 'large',
     'max-video-preview': -1,
   },
+  openGraph: {
+    title: 'Comment ça marche — Trouvez un artisan | ServicesArtisans',
+    description: 'Recherchez, comparez et contactez un artisan en 3 étapes. 100% gratuit, sans inscription.',
+    url: 'https://servicesartisans.fr/comment-ca-marche',
+    type: 'website',
+    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — Comment ça marche' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Comment ça marche — Trouvez un artisan | ServicesArtisans',
+    description: 'Recherchez, comparez et contactez un artisan en 3 étapes. 100% gratuit.',
+    images: ['https://servicesartisans.fr/opengraph-image'],
+  },
 }
 
 const steps = [

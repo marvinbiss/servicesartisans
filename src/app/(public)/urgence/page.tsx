@@ -14,6 +14,13 @@ export const metadata: Metadata = {
     title: 'Urgence artisan 24h/24 — Intervention rapide partout en France',
     description: 'Plombier, électricien, serrurier disponibles 24h/24 et 7j/7. Intervention rapide, devis gratuit, artisans référencés.',
     type: 'website',
+    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — Urgence artisan' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Urgence artisan 24h/24 — Intervention rapide partout en France',
+    description: 'Plombier, électricien, serrurier disponibles 24h/24 et 7j/7. Intervention rapide, devis gratuit.',
+    images: ['https://servicesartisans.fr/opengraph-image'],
   },
 }
 

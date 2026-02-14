@@ -3,7 +3,7 @@ import { SITE_URL } from '@/lib/seo/config'
 import { services, villes, departements, regions } from '@/lib/data/france'
 import { articleSlugs } from '@/lib/data/blog/articles'
 import { allArticles } from '@/lib/data/blog/articles'
-import { getBlogImage, getServiceImage, getCityImage } from '@/lib/data/images'
+import { getBlogImage, getServiceImage, getCityImage, heroImage } from '@/lib/data/images'
 
 // Provider batch size — well under the 50,000 URL sitemap limit
 const PROVIDER_BATCH_SIZE = 40_000
@@ -180,6 +180,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'weekly' as const,
       priority: 0.7,
+      images: [heroImage.src],
     }))
 
     const regionsIndex: MetadataRoute.Sitemap = [
@@ -196,6 +197,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'weekly' as const,
       priority: 0.7,
+      images: [heroImage.src],
     }))
 
     return [...departementsIndex, ...departementPages, ...regionsIndex, ...regionPages]

@@ -134,9 +134,8 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSi
                     {item.avatar_url ? (
                       <img
                         src={item.avatar_url}
-                        alt=""
+                        alt={`Photo de ${item.name}`}
                         className="w-full h-full object-cover rounded-xl"
-                        aria-hidden="true"
                         loading="lazy"
                       />
                     ) : (

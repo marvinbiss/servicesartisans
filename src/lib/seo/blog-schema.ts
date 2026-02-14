@@ -77,7 +77,7 @@ export function getBlogArticleSchema(article: {
   date: string
   category: string
   tags: string[]
-}, slug: string): Record<string, unknown>[] {
+}, slug: string, imageUrl?: string): Record<string, unknown>[] {
   const faqs = extractFAQFromContent(article.content)
 
   const schemas: Record<string, unknown>[] = []
@@ -88,6 +88,7 @@ export function getBlogArticleSchema(article: {
     '@type': 'Article',
     headline: article.title,
     description: article.excerpt,
+    ...(imageUrl ? { image: imageUrl } : {}),
     author: {
       '@type': article.author === 'ServicesArtisans' ? 'Organization' : 'Person',
       name: article.author,

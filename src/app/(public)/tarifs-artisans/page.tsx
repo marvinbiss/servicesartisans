@@ -20,6 +20,19 @@ export const metadata: Metadata = {
     'max-image-preview': 'large',
     'max-video-preview': -1,
   },
+  openGraph: {
+    title: 'Tarifs artisans 2026 — Guide complet des prix | ServicesArtisans',
+    description: 'Prix plombier, électricien, peintre, couvreur, maçon et tous les corps de métier. Comparez les prix.',
+    url: 'https://servicesartisans.fr/tarifs-artisans',
+    type: 'website',
+    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — Tarifs artisans' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Tarifs artisans 2026 — Guide complet des prix | ServicesArtisans',
+    description: 'Prix plombier, électricien, peintre, couvreur et tous les corps de métier.',
+    images: ['https://servicesartisans.fr/opengraph-image'],
+  },
 }
 
 const tradeFaqs = [

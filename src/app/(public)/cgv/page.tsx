@@ -8,6 +8,18 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://servicesartisans.fr/cgv',
   },
+  openGraph: {
+    title: 'Conditions Générales de Vente - ServicesArtisans',
+    description: 'Conditions générales de vente et d\'utilisation du service ServicesArtisans.',
+    url: 'https://servicesartisans.fr/cgv',
+    type: 'website',
+    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — CGV' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Conditions Générales de Vente - ServicesArtisans',
+    images: ['https://servicesartisans.fr/opengraph-image'],
+  },
 }
 
 export default function CGVPage() {

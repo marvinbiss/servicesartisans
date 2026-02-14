@@ -27,6 +27,13 @@ export const metadata: Metadata = {
     description: 'ServicesArtisans référence 350 000+ artisans grâce aux données ouvertes du gouvernement. Annuaire gratuit, transparent et fiable.',
     url: 'https://servicesartisans.fr/a-propos',
     type: 'website',
+    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — Annuaire des artisans en France' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'À propos — Le plus grand annuaire d\'artisans de France',
+    description: 'ServicesArtisans référence 350 000+ artisans grâce aux données ouvertes du gouvernement.',
+    images: ['https://servicesartisans.fr/opengraph-image'],
   },
 }
 

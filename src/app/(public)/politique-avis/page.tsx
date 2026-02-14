@@ -18,6 +18,18 @@ export const metadata: Metadata = {
     'max-image-preview': 'large',
     'max-video-preview': -1,
   },
+  openGraph: {
+    title: 'Politique de gestion des avis - ServicesArtisans',
+    description: 'Qui peut publier un avis, processus de modération, droit de réponse des artisans et calcul des notes.',
+    url: 'https://servicesartisans.fr/politique-avis',
+    type: 'website',
+    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — Politique avis' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Politique de gestion des avis - ServicesArtisans',
+    images: ['https://servicesartisans.fr/opengraph-image'],
+  },
 }
 
 const sections = [

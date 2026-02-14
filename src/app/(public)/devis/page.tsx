@@ -24,6 +24,13 @@ export const metadata: Metadata = {
     description: "Décrivez votre projet et recevez jusqu'à 3 devis gratuits d'artisans référencés. 100 % gratuit, sans engagement.",
     url: 'https://servicesartisans.fr/devis',
     type: 'website',
+    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — Devis gratuit' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Demander un devis gratuit — ServicesArtisans',
+    description: "Décrivez votre projet et recevez jusqu'à 3 devis gratuits d'artisans référencés.",
+    images: ['https://servicesartisans.fr/opengraph-image'],
   },
 }
 

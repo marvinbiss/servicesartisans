@@ -15,6 +15,18 @@ export const metadata: Metadata = {
     follow: true,
     googleBot: { index: true, follow: true },
   },
+  openGraph: {
+    title: 'Mentions légales - ServicesArtisans',
+    description: 'Informations juridiques, éditeur, hébergeur et conditions d\'utilisation.',
+    url: 'https://servicesartisans.fr/mentions-legales',
+    type: 'website',
+    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — Mentions légales' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Mentions légales - ServicesArtisans',
+    images: ['https://servicesartisans.fr/opengraph-image'],
+  },
 }
 
 export default function MentionsLegalesPage() {

@@ -19,6 +19,18 @@ export const metadata: Metadata = {
     'max-image-preview': 'large',
     'max-video-preview': -1,
   },
+  openGraph: {
+    title: 'Notre processus de vérification des artisans - ServicesArtisans',
+    description: 'Contrôle SIRET via l\'API SIRENE, assurance RC professionnelle, garantie décennale et suivi continu.',
+    url: 'https://servicesartisans.fr/notre-processus-de-verification',
+    type: 'website',
+    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — Vérification artisans' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Notre processus de vérification des artisans - ServicesArtisans',
+    images: ['https://servicesartisans.fr/opengraph-image'],
+  },
 }
 
 const verificationSteps = [

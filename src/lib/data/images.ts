@@ -497,7 +497,7 @@ const slugKeywords: [RegExp, string, 'service' | 'topic'][] = [
   [/vitr|fenêtre|fenetre|vitrage/, 'vitrier', 'service'],
   [/isol/, 'isolation-thermique', 'service'],
   [/domotiq/, 'domotique', 'service'],
-  [/nettoyag/, 'plaquiste', 'service'],
+  [/nettoyag/, 'entretien', 'topic'],
   [/facade|ravalement/, 'facade', 'service'],
   // Topics → photo spécifique
   [/terrasse/, 'terrasse', 'topic'],

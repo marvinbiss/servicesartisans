@@ -18,6 +18,18 @@ export const metadata: Metadata = {
     'max-image-preview': 'large',
     'max-video-preview': -1,
   },
+  openGraph: {
+    title: 'Médiation et résolution des litiges - ServicesArtisans',
+    description: 'Processus de médiation : réclamation, médiation interne et externe, résolution amiable des litiges.',
+    url: 'https://servicesartisans.fr/mediation',
+    type: 'website',
+    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — Médiation' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Médiation et résolution des litiges - ServicesArtisans',
+    images: ['https://servicesartisans.fr/opengraph-image'],
+  },
 }
 
 const steps = [

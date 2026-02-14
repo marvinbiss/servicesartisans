@@ -13,6 +13,13 @@ export const metadata: Metadata = {
     description: 'Conseils, guides et actualités sur l\'artisanat et les travaux de rénovation.',
     url: 'https://servicesartisans.fr/blog',
     type: 'website',
+    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — Blog artisanat et travaux' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Blog Artisanat & Travaux | ServicesArtisans',
+    description: 'Conseils, guides et actualités sur l\'artisanat et les travaux de rénovation.',
+    images: ['https://servicesartisans.fr/opengraph-image'],
   },
 }
 

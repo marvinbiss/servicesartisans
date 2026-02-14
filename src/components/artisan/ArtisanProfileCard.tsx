@@ -96,7 +96,7 @@ export function ArtisanProfileCard({
           {coverUrl && !imageError && (
             <Image
               src={coverUrl}
-              alt=""
+              alt={`Photo de couverture de ${companyName || name}`}
               fill
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 50vw"

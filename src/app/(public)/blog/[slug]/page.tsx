@@ -544,7 +544,8 @@ export default async function BlogArticlePage({ params }: PageProps) {
     notFound()
   }
 
-  const schemas = getBlogArticleSchema(article, slug)
+  const blogImageForSchema = getBlogImage(slug, article.category)
+  const schemas = getBlogArticleSchema(article, slug, blogImageForSchema.src)
   const serviceLinks = getRelatedServiceLinks(slug, article.category, article.tags)
   const relatedArticles = getRelatedArticleSlugs(
     slug,

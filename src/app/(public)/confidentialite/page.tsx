@@ -8,6 +8,18 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://servicesartisans.fr/confidentialite',
   },
+  openGraph: {
+    title: 'Politique de confidentialité - ServicesArtisans',
+    description: 'Comment nous collectons, utilisons et protégeons vos données personnelles.',
+    url: 'https://servicesartisans.fr/confidentialite',
+    type: 'website',
+    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — Confidentialité' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Politique de confidentialité - ServicesArtisans',
+    images: ['https://servicesartisans.fr/opengraph-image'],
+  },
 }
 
 export default function ConfidentialitePage() {
