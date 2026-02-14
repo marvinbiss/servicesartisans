@@ -106,6 +106,7 @@ async function getAccessToken(): Promise<string> {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
     body: 'grant_type=client_credentials',
+    signal: AbortSignal.timeout(10000),
   })
 
   if (!response.ok) {
@@ -162,6 +163,7 @@ async function sireneRequest<T>(
             'Authorization': `Bearer ${token}`,
             'Accept': 'application/json',
           },
+          signal: AbortSignal.timeout(10000),
         })
 
         const duration = Date.now() - start

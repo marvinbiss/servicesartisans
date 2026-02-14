@@ -11,10 +11,12 @@ import { z } from 'zod'
 
 export const dynamic = 'force-dynamic'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+}
 
 const getResend = () => getResendClient()
 
@@ -57,7 +59,7 @@ export async function POST(request: Request) {
     const metierFinal = data.metier === 'Autre' ? data.autreMetier : data.metier
 
     // Store in database
-    const { error: dbError } = await supabase
+    const { error: dbError } = await getSupabase()
       .from('artisan_applications')
       .insert({
         entreprise: data.entreprise,
@@ -83,66 +85,73 @@ export async function POST(request: Request) {
       // Continue even if DB fails - we'll send email notification
     }
 
-    // Send confirmation email to artisan
-    await getResend().emails.send({
-      from: process.env.FROM_EMAIL || 'noreply@servicesartisans.fr',
-      to: data.email,
-      subject: 'Votre inscription sur ServicesArtisans - Confirmation',
-      html: `
-        <h2>Bonjour ${data.prenom} ${data.nom},</h2>
-        <p>Nous avons bien reçu votre demande d'inscription en tant qu'artisan sur ServicesArtisans.</p>
-        <p><strong>Récapitulatif de votre inscription :</strong></p>
-        <ul>
-          <li><strong>Entreprise :</strong> ${data.entreprise}</li>
-          <li><strong>SIRET :</strong> ${data.siret}</li>
-          <li><strong>Métier :</strong> ${metierFinal}</li>
-          <li><strong>Zone d'intervention :</strong> ${data.ville} (${data.rayonIntervention} km)</li>
-        </ul>
-        <p>Notre équipe va vérifier vos informations et vous recevrez une réponse sous 24-48 heures.</p>
-        <p>À bientôt sur ServicesArtisans !</p>
-        <hr />
-        <p style="color: #666; font-size: 12px;">
-          <a href="https://servicesartisans.fr">servicesartisans.fr</a>
-        </p>
-      `,
-    })
+    // Send both emails in parallel (neither should crash the signup)
+    const emailResults = await Promise.allSettled([
+      getResend().emails.send({
+        from: process.env.FROM_EMAIL || 'noreply@servicesartisans.fr',
+        to: data.email,
+        subject: 'Votre inscription sur ServicesArtisans - Confirmation',
+        html: `
+          <h2>Bonjour ${data.prenom} ${data.nom},</h2>
+          <p>Nous avons bien reçu votre demande d'inscription en tant qu'artisan sur ServicesArtisans.</p>
+          <p><strong>Récapitulatif de votre inscription :</strong></p>
+          <ul>
+            <li><strong>Entreprise :</strong> ${data.entreprise}</li>
+            <li><strong>SIRET :</strong> ${data.siret}</li>
+            <li><strong>Métier :</strong> ${metierFinal}</li>
+            <li><strong>Zone d'intervention :</strong> ${data.ville} (${data.rayonIntervention} km)</li>
+          </ul>
+          <p>Notre équipe va vérifier vos informations et vous recevrez une réponse sous 24-48 heures.</p>
+          <p>À bientôt sur ServicesArtisans !</p>
+          <hr />
+          <p style="color: #666; font-size: 12px;">
+            <a href="https://servicesartisans.fr">servicesartisans.fr</a>
+          </p>
+        `,
+      }),
+      getResend().emails.send({
+        from: process.env.FROM_EMAIL || 'noreply@servicesartisans.fr',
+        to: 'artisans@servicesartisans.fr',
+        subject: `[Nouvelle inscription] ${data.entreprise} - ${metierFinal}`,
+        html: `
+          <h2>Nouvelle demande d'inscription artisan</h2>
+          <h3>Entreprise</h3>
+          <ul>
+            <li><strong>Nom :</strong> ${data.entreprise}</li>
+            <li><strong>SIRET :</strong> ${data.siret}</li>
+            <li><strong>Métier :</strong> ${metierFinal}</li>
+          </ul>
+          <h3>Contact</h3>
+          <ul>
+            <li><strong>Nom :</strong> ${data.prenom} ${data.nom}</li>
+            <li><strong>Email :</strong> ${data.email}</li>
+            <li><strong>Téléphone :</strong> ${data.telephone}</li>
+          </ul>
+          <h3>Localisation</h3>
+          <ul>
+            <li><strong>Adresse :</strong> ${data.adresse}</li>
+            <li><strong>Ville :</strong> ${data.codePostal} ${data.ville}</li>
+            <li><strong>Rayon d'intervention :</strong> ${data.rayonIntervention} km</li>
+          </ul>
+          ${data.description ? `<h3>Description</h3><p>${data.description}</p>` : ''}
+          ${data.experience ? `<p><strong>Expérience :</strong> ${data.experience}</p>` : ''}
+          ${data.certifications ? `<p><strong>Certifications :</strong> ${data.certifications}</p>` : ''}
+          <hr />
+          <p><a href="https://servicesartisans.fr/admin">Accéder au dashboard admin</a></p>
+        `,
+      }),
+    ])
 
-    // Send notification to admin
-    await getResend().emails.send({
-      from: process.env.FROM_EMAIL || 'noreply@servicesartisans.fr',
-      to: 'artisans@servicesartisans.fr',
-      subject: `[Nouvelle inscription] ${data.entreprise} - ${metierFinal}`,
-      html: `
-        <h2>Nouvelle demande d'inscription artisan</h2>
-        <h3>Entreprise</h3>
-        <ul>
-          <li><strong>Nom :</strong> ${data.entreprise}</li>
-          <li><strong>SIRET :</strong> ${data.siret}</li>
-          <li><strong>Métier :</strong> ${metierFinal}</li>
-        </ul>
-        <h3>Contact</h3>
-        <ul>
-          <li><strong>Nom :</strong> ${data.prenom} ${data.nom}</li>
-          <li><strong>Email :</strong> ${data.email}</li>
-          <li><strong>Telephone :</strong> ${data.telephone}</li>
-        </ul>
-        <h3>Localisation</h3>
-        <ul>
-          <li><strong>Adresse :</strong> ${data.adresse}</li>
-          <li><strong>Ville :</strong> ${data.codePostal} ${data.ville}</li>
-          <li><strong>Rayon d'intervention :</strong> ${data.rayonIntervention} km</li>
-        </ul>
-        ${data.description ? `<h3>Description</h3><p>${data.description}</p>` : ''}
-        ${data.experience ? `<p><strong>Experience :</strong> ${data.experience}</p>` : ''}
-        ${data.certifications ? `<p><strong>Certifications :</strong> ${data.certifications}</p>` : ''}
-        <hr />
-        <p><a href="https://servicesartisans.fr/admin">Acceder au dashboard admin</a></p>
-      `,
+    // Log any email failures
+    emailResults.forEach((result, i) => {
+      if (result.status === 'rejected') {
+        logger.error(`Email ${i} failed:`, result.reason)
+      }
     })
 
     return NextResponse.json({
       success: true,
-      message: 'Inscription enregistree avec succes',
+      message: 'Inscription enregistrée avec succès',
     })
   } catch (error) {
     logger.error('Artisan registration API error', error)

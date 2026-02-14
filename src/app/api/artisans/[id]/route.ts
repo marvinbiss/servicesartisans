@@ -207,14 +207,20 @@ export async function GET(
     if (provider && !providerError) {
       source = 'provider'
 
-      // Récupérer TOUS les avis réels pour ce provider (pas de filtre is_visible)
-      const { data: providerReviews } = await supabase
-        .from('reviews')
-        .select('*')
-        .eq('provider_id', provider.id)
-        // REMOVED: .eq('is_visible', true) to show ALL real reviews
-        .order('created_at', { ascending: false })
-        .limit(100) // Increased limit to show more reviews
+      // Parallelize reviews + FAQ queries (both only need provider.id)
+      const [{ data: providerReviews }, { data: faqData }] = await Promise.all([
+        supabase
+          .from('reviews')
+          .select('*')
+          .eq('provider_id', provider.id)
+          .order('created_at', { ascending: false })
+          .limit(100),
+        supabase
+          .from('provider_faq')
+          .select('*')
+          .eq('provider_id', provider.id)
+          .order('sort_order', { ascending: true }),
+      ])
 
       // Calculer la note moyenne
       let averageRating = 0
@@ -264,13 +270,6 @@ export async function GET(
           imageUrl: item.image_url || '',
           category: item.category || 'Travaux',
         }))
-
-      // Récupérer la FAQ réelle (filtrer les FAQ de démo/template)
-      const { data: faqData } = await supabase
-        .from('provider_faq')
-        .select('*')
-        .eq('provider_id', provider.id)
-        .order('sort_order', { ascending: true })
 
       // Questions de démo courantes à filtrer
       const demoFaqPatterns = [

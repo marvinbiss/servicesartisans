@@ -64,19 +64,19 @@ export async function GET(request: Request) {
       return await getLegacyStats(supabase, user, profile)
     }
 
-    // Get unread messages count (not in RPC)
-    const { count: unreadMessages } = await supabase
-      .from('messages')
-      .select('*', { count: 'exact', head: true })
-      .eq('receiver_id', user.id)
-      .eq('is_read', false)
-
-    // Get recent demandes (not in RPC)
-    const { data: recentDemandes } = await supabase
-      .from('devis_requests')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(5)
+    // Parallelize independent queries
+    const [{ count: unreadMessages }, { data: recentDemandes }] = await Promise.all([
+      supabase
+        .from('messages')
+        .select('*', { count: 'exact', head: true })
+        .eq('receiver_id', user.id)
+        .eq('is_read', false),
+      supabase
+        .from('devis_requests')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(5),
+    ])
 
     // Transform bookingsByDay to include day names
     const dayNames = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']
@@ -159,24 +159,27 @@ async function getLegacyStats(
   user: { id: string },
   profile: Record<string, unknown>
 ) {
-  // Get devis sent by this artisan
-  const { data: devis } = await supabase
-    .from('devis')
-    .select('*, request:devis_requests(*)')
-    .eq('artisan_id', user.id)
-
-  // Get reviews for this artisan
-  const { data: reviews } = await supabase
-    .from('reviews')
-    .select('*')
-    .eq('artisan_id', user.id)
-
-  // Get unread messages count
-  const { count: unreadMessages } = await supabase
-    .from('messages')
-    .select('*', { count: 'exact', head: true })
-    .eq('receiver_id', user.id)
-    .eq('is_read', false)
+  // Parallelize all independent queries
+  const [{ data: devis }, { data: reviews }, { count: unreadMessages }, { data: recentDemandes }] = await Promise.all([
+    supabase
+      .from('devis')
+      .select('*, request:devis_requests(*)')
+      .eq('artisan_id', user.id),
+    supabase
+      .from('reviews')
+      .select('*')
+      .eq('artisan_id', user.id),
+    supabase
+      .from('messages')
+      .select('*', { count: 'exact', head: true })
+      .eq('receiver_id', user.id)
+      .eq('is_read', false),
+    supabase
+      .from('devis_requests')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(5),
+  ])
 
   // Calculate stats with division-by-zero protection
   const totalDevis = devis?.length || 0
@@ -227,13 +230,6 @@ async function getLegacyStats(
     bookingsByMonth: [],
     topServices: [],
   }
-
-  // Get recent demandes
-  const { data: recentDemandes } = await supabase
-    .from('devis_requests')
-    .select('*')
-    .order('created_at', { ascending: false })
-    .limit(5)
 
   return NextResponse.json({
     stats,

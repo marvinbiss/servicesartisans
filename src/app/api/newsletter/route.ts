@@ -11,10 +11,12 @@ import { z } from 'zod'
 
 export const dynamic = 'force-dynamic'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+}
 
 const getResend = () => getResendClient()
 
@@ -36,6 +38,7 @@ export async function POST(request: Request) {
     }
 
     const { email } = validation.data
+    const supabase = getSupabase()
 
     // Check if already subscribed
     const { data: existing } = await supabase
@@ -47,7 +50,7 @@ export async function POST(request: Request) {
     if (existing) {
       return NextResponse.json({
         success: true,
-        message: 'Vous etes deja inscrit a notre newsletter',
+        message: 'Vous êtes déjà inscrit à notre newsletter',
       })
     }
 
@@ -65,33 +68,37 @@ export async function POST(request: Request) {
       // Continue even if DB fails
     }
 
-    // Send welcome email
-    await getResend().emails.send({
-      from: process.env.FROM_EMAIL || 'noreply@servicesartisans.fr',
-      to: email,
-      subject: 'Bienvenue dans la newsletter ServicesArtisans !',
-      html: `
-        <h2>Bienvenue !</h2>
-        <p>Merci de vous etre inscrit a notre newsletter.</p>
-        <p>Vous recevrez regulierement nos meilleurs articles et conseils pour vos projets de travaux :</p>
-        <ul>
-          <li>Guides pratiques</li>
-          <li>Conseils d'experts</li>
-          <li>Tendances deco</li>
-          <li>Aides et subventions</li>
-        </ul>
-        <p>A bientot sur ServicesArtisans !</p>
-        <hr />
-        <p style="color: #666; font-size: 12px;">
-          Pour vous desinscrire, repondez simplement a cet email.<br />
-          <a href="https://servicesartisans.fr">servicesartisans.fr</a>
-        </p>
-      `,
-    })
+    // Send welcome email (non-blocking — don't crash signup if email fails)
+    try {
+      await getResend().emails.send({
+        from: process.env.FROM_EMAIL || 'noreply@servicesartisans.fr',
+        to: email,
+        subject: 'Bienvenue dans la newsletter ServicesArtisans !',
+        html: `
+          <h2>Bienvenue !</h2>
+          <p>Merci de vous être inscrit à notre newsletter.</p>
+          <p>Vous recevrez régulièrement nos meilleurs articles et conseils pour vos projets de travaux :</p>
+          <ul>
+            <li>Guides pratiques</li>
+            <li>Conseils d'experts</li>
+            <li>Tendances déco</li>
+            <li>Aides et subventions</li>
+          </ul>
+          <p>À bientôt sur ServicesArtisans !</p>
+          <hr />
+          <p style="color: #666; font-size: 12px;">
+            Pour vous désinscrire, répondez simplement à cet email.<br />
+            <a href="https://servicesartisans.fr">servicesartisans.fr</a>
+          </p>
+        `,
+      })
+    } catch (emailError) {
+      logger.error('Newsletter welcome email failed', emailError)
+    }
 
     return NextResponse.json({
       success: true,
-      message: 'Inscription reussie !',
+      message: 'Inscription réussie !',
     })
   } catch (error) {
     logger.error('Newsletter API error', error)

@@ -156,6 +156,7 @@ async function pappersRequest<T>(
 
           const response = await fetch(url.toString(), {
             headers: { 'Accept': 'application/json' },
+            signal: AbortSignal.timeout(10000),
           })
 
           const duration = Date.now() - start

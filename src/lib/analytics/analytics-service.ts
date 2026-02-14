@@ -157,7 +157,7 @@ export class AnalyticsService {
     ] = await Promise.all([
       supabase.from('profiles').select('id', { count: 'exact', head: true }),
       supabase.from('providers').select('id', { count: 'exact', head: true }),
-      supabase.from('bookings').select('id, total_price, status, created_at'),
+      supabase.from('bookings').select('id, total_price, status, created_at').limit(10000),
       supabase
         .from('bookings')
         .select('id', { count: 'exact', head: true })
@@ -249,14 +249,15 @@ export class AnalyticsService {
 
     const [bookingsResult, reviewsResult, quotesResult, eventsResult] =
       await Promise.all([
-        supabase.from('bookings').select('*').eq('provider_id', providerId),
-        supabase.from('reviews').select('rating').eq('provider_id', providerId),
-        supabase.from('quotes').select('*').eq('provider_id', providerId),
+        supabase.from('bookings').select('*').eq('provider_id', providerId).limit(1000),
+        supabase.from('reviews').select('rating').eq('provider_id', providerId).limit(1000),
+        supabase.from('quotes').select('*').eq('provider_id', providerId).limit(1000),
         supabase
           .from('analytics_events')
           .select('*')
           .eq('provider_id', providerId)
-          .eq('event_type', 'profile_view'),
+          .eq('event_type', 'profile_view')
+          .limit(10000),
       ])
 
     const bookings = bookingsResult.data || []

@@ -99,25 +99,29 @@ export async function POST(request: Request) {
       )
     }
 
-    // Send confirmation email to user (with sanitized content)
-    await getResend().emails.send({
-      from: process.env.FROM_EMAIL || 'noreply@servicesartisans.fr',
-      to: email,
-      subject: 'Votre message a bien été reçu - ServicesArtisans',
-      html: `
-        <h2>Bonjour ${safeNom},</h2>
-        <p>Nous avons bien reçu votre message et nous vous répondrons dans les plus brefs délais.</p>
-        <p><strong>Sujet:</strong> ${safeSujet}</p>
-        <hr />
-        <p><strong>Votre message:</strong></p>
-        <p>${safeMessage}</p>
-        <hr />
-        <p>Cordialement,<br />L'équipe ServicesArtisans</p>
-        <p style="color: #666; font-size: 12px;">
-          <a href="https://servicesartisans.fr">servicesartisans.fr</a>
-        </p>
-      `,
-    })
+    // Send confirmation email to user (non-critical — don't fail if this errors)
+    try {
+      await getResend().emails.send({
+        from: process.env.FROM_EMAIL || 'noreply@servicesartisans.fr',
+        to: email,
+        subject: 'Votre message a bien été reçu - ServicesArtisans',
+        html: `
+          <h2>Bonjour ${safeNom},</h2>
+          <p>Nous avons bien reçu votre message et nous vous répondrons dans les plus brefs délais.</p>
+          <p><strong>Sujet:</strong> ${safeSujet}</p>
+          <hr />
+          <p><strong>Votre message:</strong></p>
+          <p>${safeMessage}</p>
+          <hr />
+          <p>Cordialement,<br />L'équipe ServicesArtisans</p>
+          <p style="color: #666; font-size: 12px;">
+            <a href="https://servicesartisans.fr">servicesartisans.fr</a>
+          </p>
+        `,
+      })
+    } catch (confirmError) {
+      logger.error('Confirmation email failed', confirmError)
+    }
 
     return NextResponse.json({
       success: true,
