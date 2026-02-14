@@ -35,3 +35,4 @@ npm-debug.log*
 .env*.local
 scripts/.collect-progress.json
 scripts/.enrich-phone-progress.json
+scripts/.enrich-data/
