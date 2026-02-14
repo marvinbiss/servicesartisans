@@ -46,7 +46,13 @@ export async function GET(
       .eq('id', params.id)
       .single()
 
-    if (error) throw error
+    if (error) {
+      logger.warn('Service detail query failed', { code: error.code, message: error.message })
+      return NextResponse.json(
+        { success: false, error: { message: 'Service introuvable' } },
+        { status: 404 }
+      )
+    }
 
     return NextResponse.json({ success: true, service })
   } catch (error) {
@@ -106,7 +112,13 @@ export async function PATCH(
       .select()
       .single()
 
-    if (error) throw error
+    if (error) {
+      logger.error('Service update failed', { code: error.code, message: error.message })
+      return NextResponse.json(
+        { success: false, error: { message: 'Impossible de mettre à jour le service' } },
+        { status: 500 }
+      )
+    }
 
     // Log d'audit
     await logAdminAction(authResult.admin.id, 'service.update', 'service', params.id, result.data)
@@ -155,7 +167,13 @@ export async function DELETE(
       .update({ is_active: false })
       .eq('id', params.id)
 
-    if (error) throw error
+    if (error) {
+      logger.error('Service delete failed', { code: error.code, message: error.message })
+      return NextResponse.json(
+        { success: false, error: { message: 'Impossible de désactiver le service' } },
+        { status: 500 }
+      )
+    }
 
     return NextResponse.json({
       success: true,

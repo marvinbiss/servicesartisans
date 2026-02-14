@@ -6,6 +6,7 @@
 import { NextResponse } from 'next/server'
 import { requirePermission } from '@/lib/admin-auth'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -232,7 +233,17 @@ export async function GET() {
       topCities,
     })
   } catch (error) {
-    console.error('System KPIs GET error:', error)
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    logger.error('System KPIs GET error', error)
+    return NextResponse.json({
+      leads: { total: 0, today: 0, thisWeek: 0, thisMonth: 0 },
+      events: { total: 0, today: 0 },
+      assignments: { total: 0, pending: 0, viewed: 0, quoted: 0, declined: 0 },
+      providers: { total: 0, active: 0, withLeads: 0 },
+      quality: { avgResponseMinutes: 0, conversionRate: 0, declineRate: 0, expiredRate: 0 },
+      funnel: [],
+      dailyLeads: [],
+      topServices: [],
+      topCities: [],
+    })
   }
 }

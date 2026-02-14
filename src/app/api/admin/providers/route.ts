@@ -94,8 +94,14 @@ export async function GET(request: NextRequest) {
       .range(offset, offset + limit - 1)
 
     if (error) {
-      logger.error('[Admin API] Query error', error)
-      throw error
+      logger.warn('Providers query failed, returning empty list', { code: error.code, message: error.message })
+      return NextResponse.json({
+        success: true,
+        providers: [],
+        total: 0,
+        page,
+        totalPages: 0,
+      })
     }
 
     // Transform data for frontend

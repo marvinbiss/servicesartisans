@@ -9,6 +9,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { sanitizeSearchQuery, isValidUuid } from '@/lib/sanitize'
+import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
 const updateProviderSchema = z.object({
@@ -217,7 +218,7 @@ export async function GET(
     response.headers.set('Pragma', 'no-cache')
     return response
   } catch (error) {
-    console.error('Admin provider GET error:', error)
+    logger.error('Admin provider GET error', error)
     return NextResponse.json({ success: false, error: 'Erreur lors de la récupération du profil' }, { status: 500 })
   }
 }
@@ -269,7 +270,7 @@ export async function PATCH(
       .single()
 
     if (error) {
-      console.error('Database update failed:', { code: error.code, message: error.message, details: error.details, hint: error.hint })
+      logger.error('Database update failed', { code: error.code, message: error.message })
       return NextResponse.json({ success: false, error: 'Erreur lors de la mise à jour' }, { status: 500 })
     }
 
@@ -289,7 +290,7 @@ export async function PATCH(
           }
         }
       } catch (servicesError) {
-        console.error('Services update failed (main update succeeded):', servicesError)
+        logger.warn('Services update failed (main update succeeded)')
       }
     }
 
@@ -318,7 +319,7 @@ export async function PATCH(
           }
         }
       } catch (zonesError) {
-        console.error('Zones update failed (main update succeeded):', zonesError)
+        logger.warn('Zones update failed (main update succeeded)')
       }
     }
 
@@ -326,7 +327,7 @@ export async function PATCH(
     try {
       await logAdminAction(authResult.admin.id, 'provider.update', 'provider', providerId, updateData)
     } catch (auditError) {
-      console.error('Audit log failed:', auditError)
+      logger.warn('Audit log failed')
     }
 
     return NextResponse.json(
@@ -335,7 +336,7 @@ export async function PATCH(
     )
   } catch (error) {
     const err = error as Error
-    console.error('Unexpected PATCH error:', { message: err.message, stack: err.stack })
+    logger.error('Unexpected PATCH error', { message: err.message })
     return NextResponse.json({ success: false, error: 'Erreur inattendue lors de la mise à jour' }, { status: 500 })
   }
 }
@@ -366,20 +367,20 @@ export async function DELETE(
       .eq('id', providerId)
 
     if (error) {
-      console.error('Database delete failed:', error)
+      logger.error('Database delete failed', error)
       return NextResponse.json({ success: false, error: 'Erreur lors de la suppression' }, { status: 500 })
     }
 
     try {
       await logAdminAction(authResult.admin.id, 'provider.delete', 'provider', providerId)
     } catch (auditError) {
-      console.error('Audit log failed:', auditError)
+      logger.warn('Audit log failed')
     }
 
     return NextResponse.json({ success: true, message: 'Artisan supprimé' })
   } catch (error) {
     const err = error as Error
-    console.error('Unexpected DELETE error:', { message: err.message, stack: err.stack })
+    logger.error('Unexpected DELETE error', { message: err.message })
     return NextResponse.json({ success: false, error: 'Erreur lors de la suppression' }, { status: 500 })
   }
 }

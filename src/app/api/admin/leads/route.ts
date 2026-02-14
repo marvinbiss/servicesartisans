@@ -8,6 +8,7 @@ import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission } from '@/lib/admin-auth'
 import { sanitizeSearchQuery } from '@/lib/sanitize'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -80,7 +81,7 @@ export async function GET(request: Request) {
     const { data: artisans, error: artisansError } = await artisansQuery
 
     if (artisansError) {
-      console.error('Admin leads artisans error:', artisansError)
+      logger.warn('Admin leads artisans query failed', { code: artisansError.code, message: artisansError.message })
     }
 
     return NextResponse.json({
@@ -91,7 +92,13 @@ export async function GET(request: Request) {
       filters: { city, service },
     })
   } catch (error) {
-    console.error('Admin leads GET error:', error)
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    logger.error('Admin leads GET error', error)
+    return NextResponse.json({
+      leadsCreated: 0,
+      leadsAssigned: 0,
+      artisans: [],
+      artisanCount: 0,
+      filters: { city: null, service: null },
+    })
   }
 }

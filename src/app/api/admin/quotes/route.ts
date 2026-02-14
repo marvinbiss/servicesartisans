@@ -9,7 +9,7 @@ import { z } from 'zod'
 const quotesQuerySchema = z.object({
   page: z.coerce.number().int().min(1).optional().default(1),
   limit: z.coerce.number().int().min(1).max(100).optional().default(20),
-  status: z.enum(['all', 'pending', 'sent', 'accepted', 'rejected', 'expired']).optional().default('all'),
+  status: z.enum(['all', 'pending', 'sent', 'accepted', 'rejected', 'refused', 'expired']).optional().default('all'),
   search: z.string().max(100).optional().default(''),
 })
 
@@ -48,9 +48,10 @@ export async function GET(request: NextRequest) {
       .from('devis_requests')
       .select('*', { count: 'exact' })
 
-    // Filtre par statut
+    // Filtre par statut — map 'refused' to 'rejected' for DB compatibility
     if (status !== 'all') {
-      query = query.eq('status', status)
+      const dbStatus = status === 'refused' ? 'rejected' : status
+      query = query.eq('status', dbStatus)
     }
 
     // Recherche (sanitized to prevent injection)
@@ -65,7 +66,16 @@ export async function GET(request: NextRequest) {
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1)
 
-    if (error) throw error
+    if (error) {
+      logger.warn('Quotes query failed, returning empty list', { code: error.code, message: error.message })
+      return NextResponse.json({
+        success: true,
+        quotes: [],
+        total: 0,
+        page,
+        totalPages: 0,
+      })
+    }
 
     return NextResponse.json({
       success: true,

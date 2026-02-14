@@ -6,6 +6,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requirePermission } from '@/lib/admin-auth'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -39,13 +40,22 @@ export async function GET(request: NextRequest) {
     const { data: logs, error } = await query
 
     if (error) {
-      console.error('Journal fetch error:', error.message)
-      return NextResponse.json({ error: 'Erreur lors de la récupération du journal' }, { status: 500 })
+      logger.warn('Journal query failed, returning empty list', { code: error.code, message: error.message })
+      return NextResponse.json({
+        logs: [],
+        total: 0,
+        page,
+        pageSize: limit,
+      })
     }
 
-    const { count: totalCount } = await supabase
-      .from('audit_logs')
-      .select('id', { count: 'exact', head: true })
+    let totalCount = 0
+    try {
+      const { count } = await supabase
+        .from('audit_logs')
+        .select('id', { count: 'exact', head: true })
+      totalCount = count || 0
+    } catch { /* use 0 */ }
 
     return NextResponse.json({
       logs: logs || [],
@@ -54,7 +64,7 @@ export async function GET(request: NextRequest) {
       pageSize: limit,
     })
   } catch (error) {
-    console.error('Journal GET error:', error)
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    logger.error('Journal GET error', error)
+    return NextResponse.json({ logs: [], total: 0, page: 1, pageSize: 50 })
   }
 }

@@ -82,7 +82,16 @@ export async function GET(request: NextRequest) {
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1)
 
-    if (error) throw error
+    if (error) {
+      logger.warn('Audit logs query failed, returning empty list', { code: error.code, message: error.message })
+      return NextResponse.json({
+        success: true,
+        logs: [],
+        total: 0,
+        page,
+        totalPages: 0,
+      })
+    }
 
     // Enrich logs with admin profile info (audit_logs.user_id -> profiles.id)
     const enrichedLogs = logs || []

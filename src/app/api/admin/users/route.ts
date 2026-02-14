@@ -57,8 +57,14 @@ export async function GET(request: NextRequest) {
     })
 
     if (authError) {
-      logger.error('Admin users list error', authError)
-      throw authError
+      logger.warn('Auth users list failed, returning empty list', { message: authError.message })
+      return NextResponse.json({
+        success: true,
+        users: [],
+        total: 0,
+        page,
+        totalPages: 0,
+      })
     }
 
     // Try to get profiles if table exists

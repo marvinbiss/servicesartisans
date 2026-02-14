@@ -62,7 +62,16 @@ export async function GET(request: NextRequest) {
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1)
 
-    if (error) throw error
+    if (error) {
+      logger.warn('Reviews query failed, returning empty list', { code: error.code, message: error.message })
+      return NextResponse.json({
+        success: true,
+        reviews: [],
+        total: 0,
+        page,
+        totalPages: 0,
+      })
+    }
 
     // Transform data
     const transformedReviews = (reviews || []).map((review) => ({

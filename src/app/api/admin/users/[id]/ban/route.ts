@@ -59,7 +59,13 @@ export async function POST(
       .select()
       .single()
 
-    if (error) throw error
+    if (error) {
+      logger.error('User ban/unban failed', { code: error.code, message: error.message })
+      return NextResponse.json(
+        { success: false, error: { message: 'Impossible de modifier le statut de l\'utilisateur' } },
+        { status: 500 }
+      )
+    }
 
     // Si c'est un artisan, désactiver/réactiver également le provider
     if (data?.user_type === 'artisan') {

@@ -8,7 +8,7 @@ import { z } from 'zod'
 const messagesQuerySchema = z.object({
   page: z.coerce.number().int().min(1).optional().default(1),
   limit: z.coerce.number().int().min(1).max(100).optional().default(20),
-  status: z.enum(['all', 'active', 'archived', 'closed']).optional().default('all'),
+  status: z.enum(['all', 'active', 'archived', 'closed', 'blocked']).optional().default('all'),
 })
 
 export const dynamic = 'force-dynamic'

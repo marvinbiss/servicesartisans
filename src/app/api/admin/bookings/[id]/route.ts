@@ -52,7 +52,13 @@ export async function GET(
       .eq('id', params.id)
       .single()
 
-    if (error) throw error
+    if (error) {
+      logger.warn('Booking detail query failed', { code: error.code, message: error.message })
+      return NextResponse.json(
+        { success: false, error: { message: 'Réservation introuvable ou table inexistante' } },
+        { status: 404 }
+      )
+    }
 
     return NextResponse.json({ success: true, booking })
   } catch (error) {
@@ -103,7 +109,13 @@ export async function PATCH(
       .select()
       .single()
 
-    if (error) throw error
+    if (error) {
+      logger.error('Booking update failed', { code: error.code, message: error.message })
+      return NextResponse.json(
+        { success: false, error: { message: 'Impossible de mettre à jour la réservation' } },
+        { status: 500 }
+      )
+    }
 
     // Log d'audit
     await logAdminAction(authResult.admin.id, 'booking.update', 'booking', params.id, result.data)
@@ -153,7 +165,13 @@ export async function DELETE(
       })
       .eq('id', params.id)
 
-    if (error) throw error
+    if (error) {
+      logger.error('Booking cancel failed', { code: error.code, message: error.message })
+      return NextResponse.json(
+        { success: false, error: { message: 'Impossible d\'annuler la réservation' } },
+        { status: 500 }
+      )
+    }
 
     // Log d'audit
     await logAdminAction(authResult.admin.id, 'booking.cancel', 'booking', params.id)

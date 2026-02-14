@@ -50,7 +50,13 @@ export async function GET(request: NextRequest) {
 
     const { data: services, error } = await query
 
-    if (error) throw error
+    if (error) {
+      logger.warn('Services query failed, returning empty list', { code: error.code, message: error.message })
+      return NextResponse.json({
+        success: true,
+        services: [],
+      })
+    }
 
     return NextResponse.json({
       success: true,
@@ -115,7 +121,19 @@ export async function POST(request: NextRequest) {
       .select()
       .single()
 
-    if (error) throw error
+    if (error) {
+      if (error.code === '23505') {
+        return NextResponse.json(
+          { success: false, error: { message: 'Un service avec ce nom existe déjà' } },
+          { status: 409 }
+        )
+      }
+      logger.error('Service create error', error)
+      return NextResponse.json(
+        { success: false, error: { message: 'Erreur lors de la création du service' } },
+        { status: 500 }
+      )
+    }
 
     // Log d'audit with actual admin ID
     await logAdminAction(

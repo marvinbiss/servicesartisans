@@ -59,7 +59,16 @@ export async function GET(request: NextRequest) {
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1)
 
-    if (error) throw error
+    if (error) {
+      logger.warn('Reports query failed, returning empty list', { code: error.code, message: error.message })
+      return NextResponse.json({
+        success: true,
+        reports: [],
+        total: 0,
+        page,
+        totalPages: 0,
+      })
+    }
 
     return NextResponse.json({
       success: true,

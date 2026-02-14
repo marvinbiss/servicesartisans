@@ -8,6 +8,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { logger } from '@/lib/logger'
 import { DEFAULT_ALGORITHM_CONFIG } from '@/types/algorithm'
 
 const algorithmConfigSchema = z.object({
@@ -125,7 +126,7 @@ export async function PATCH(request: NextRequest) {
         .single()
 
       if (error) {
-        console.error('Algorithm config insert error:', error.message)
+        logger.error('Algorithm config insert error', { message: error.message })
         return NextResponse.json({ error: 'Erreur lors de la sauvegarde de la configuration' }, { status: 500 })
       }
 
@@ -149,7 +150,7 @@ export async function PATCH(request: NextRequest) {
       .single()
 
     if (error) {
-      console.error('Algorithm config update error:', error.message)
+      logger.error('Algorithm config update error', { message: error.message })
       return NextResponse.json({ error: 'Erreur lors de la mise à jour de la configuration' }, { status: 500 })
     }
 
@@ -163,7 +164,7 @@ export async function PATCH(request: NextRequest) {
 
     return NextResponse.json({ config: data, action: 'updated' })
   } catch (error) {
-    console.error('Algorithm config PATCH error:', error)
+    logger.error('Algorithm config PATCH error', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

@@ -57,7 +57,13 @@ export async function POST(
       .select()
       .single()
 
-    if (error) throw error
+    if (error) {
+      logger.error('Report resolve failed', { code: error.code, message: error.message })
+      return NextResponse.json(
+        { success: false, error: { message: 'Impossible de traiter le signalement' } },
+        { status: 500 }
+      )
+    }
 
     // Log d'audit
     await logAdminAction(

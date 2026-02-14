@@ -9,6 +9,7 @@ import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logLeadEvent } from '@/lib/dashboard/events'
 import { dispatchLead } from '@/app/actions/dispatch'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -43,7 +44,13 @@ export async function GET(request: NextRequest) {
       .range(offset, offset + limit - 1)
 
     if (assignError) {
-      return NextResponse.json({ error: assignError.message }, { status: 500 })
+      logger.warn('Dispatch assignments query failed', { code: assignError.code, message: assignError.message })
+      return NextResponse.json({
+        assignments: [],
+        stats: { pending: 0, viewed: 0, quoted: 0, total: 0 },
+        page,
+        pageSize: limit,
+      })
     }
 
     // Queue stats
@@ -78,8 +85,13 @@ export async function GET(request: NextRequest) {
       pageSize: limit,
     })
   } catch (error) {
-    console.error('Dispatch GET error:', error)
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    logger.error('Dispatch GET error', error)
+    return NextResponse.json({
+      assignments: [],
+      stats: { pending: 0, viewed: 0, quoted: 0, total: 0 },
+      page: 1,
+      pageSize: 20,
+    })
   }
 }
 
@@ -174,7 +186,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true, action })
   } catch (error) {
-    console.error('Dispatch POST error:', error)
+    logger.error('Dispatch POST error', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

@@ -54,7 +54,13 @@ export async function PATCH(
       .select()
       .single()
 
-    if (error) throw error
+    if (error) {
+      logger.error('Review moderation failed', { code: error.code, message: error.message })
+      return NextResponse.json(
+        { success: false, error: { message: 'Impossible de modérer l\'avis' } },
+        { status: 500 }
+      )
+    }
 
     // Log the moderation action
     await logAdminAction(
