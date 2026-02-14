@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import {
   Users,
   Briefcase,
@@ -20,6 +20,7 @@ import {
 } from 'lucide-react'
 import { ErrorBanner } from '@/components/admin/ErrorBanner'
 import { ConfirmationModal } from '@/components/admin/ConfirmationModal'
+import { useAdminFetch, adminMutate } from '@/hooks/admin/useAdminFetch'
 
 interface PlatformStats {
   totalUsers: number
@@ -52,33 +53,20 @@ interface Report {
   reporter: string
 }
 
+interface StatsResponse {
+  stats: PlatformStats
+  recentActivity: RecentActivity[]
+  pendingReports: Report[]
+}
+
 export default function AdminDashboard() {
-  const [stats, setStats] = useState<PlatformStats | null>(null)
-  const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([])
-  const [pendingReports, setPendingReports] = useState<Report[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const { data, isLoading, error, mutate } = useAdminFetch<StatsResponse>('/api/admin/stats')
+
+  const stats = data?.stats ?? null
+  const recentActivity = data?.recentActivity ?? []
+  const pendingReports = data?.pendingReports ?? []
+
   const [activeTab, setActiveTab] = useState<'overview' | 'users' | 'reports' | 'reviews'>('overview')
-
-  useEffect(() => {
-    fetchDashboardData()
-  }, [])
-
-  const fetchDashboardData = async () => {
-    try {
-      setError(null)
-      const response = await fetch('/api/admin/stats')
-      if (!response.ok) throw new Error(`Erreur ${response.status}`)
-      const data = await response.json()
-      setStats(data.stats)
-      setRecentActivity(data.recentActivity || [])
-      setPendingReports(data.pendingReports || [])
-    } catch {
-      setError('Erreur lors du chargement du tableau de bord')
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const [reportActionModal, setReportActionModal] = useState<{
     open: boolean
@@ -89,17 +77,14 @@ export default function AdminDashboard() {
 
   const confirmReportAction = async () => {
     try {
-      setError(null)
-      const response = await fetch('/api/admin/reports', {
+      await adminMutate('/api/admin/reports', {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ reportId: reportActionModal.reportId, action: reportActionModal.action }),
+        body: { reportId: reportActionModal.reportId, action: reportActionModal.action },
       })
-      if (!response.ok) throw new Error('Erreur lors de la mise à jour du signalement')
       setReportActionModal({ open: false, reportId: '', action: 'resolve', label: '' })
-      fetchDashboardData()
+      mutate()
     } catch {
-      setError('Erreur lors de la mise à jour du signalement')
+      // Error is handled by SWR's error state on next revalidation
     }
   }
 
@@ -156,7 +141,7 @@ export default function AdminDashboard() {
     amber: 'bg-amber-100 text-amber-600',
   }
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center" role="status" aria-busy="true">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
@@ -217,9 +202,9 @@ export default function AdminDashboard() {
 
         {error && (
           <ErrorBanner
-            message={error}
-            onDismiss={() => setError(null)}
-            onRetry={fetchDashboardData}
+            message={error.message}
+            onDismiss={() => mutate()}
+            onRetry={() => mutate()}
           />
         )}
 

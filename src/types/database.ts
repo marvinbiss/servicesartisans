@@ -20,7 +20,6 @@ export interface Database {
           phone: string | null
           user_type: 'client' | 'artisan'
           // Artisan specific
-          company_name: string | null
           siret: string | null
           description: string | null
           address: string | null
@@ -43,7 +42,6 @@ export interface Database {
           avatar_url?: string | null
           phone?: string | null
           user_type?: 'client' | 'artisan'
-          company_name?: string | null
           siret?: string | null
           description?: string | null
           address?: string | null
@@ -61,7 +59,6 @@ export interface Database {
           avatar_url?: string | null
           phone?: string | null
           user_type?: 'client' | 'artisan'
-          company_name?: string | null
           siret?: string | null
           description?: string | null
           address?: string | null
@@ -140,54 +137,57 @@ export interface Database {
           status?: 'pending' | 'sent' | 'accepted' | 'refused' | 'completed'
         }
       }
-      devis: {
+      quotes: {
         Row: {
           id: string
           created_at: string
           request_id: string
-          artisan_id: string
+          provider_id: string
           amount: number
           description: string
           valid_until: string
-          status: 'pending' | 'accepted' | 'refused'
+          status: 'pending' | 'accepted' | 'refused' | 'expired'
         }
         Insert: {
           request_id: string
-          artisan_id: string
+          provider_id: string
           amount: number
           description: string
           valid_until: string
-          status?: 'pending' | 'accepted' | 'refused'
+          status?: 'pending' | 'accepted' | 'refused' | 'expired'
         }
         Update: {
-          status?: 'pending' | 'accepted' | 'refused'
+          status?: 'pending' | 'accepted' | 'refused' | 'expired'
         }
       }
       reviews: {
         Row: {
           id: string
           created_at: string
-          client_id: string
+          booking_id: string
           artisan_id: string
-          devis_id: string | null
+          client_name: string
+          client_email: string
           rating: number
           comment: string | null
-          response: string | null
-          is_verified: boolean
+          would_recommend: boolean | null
+          status: 'published' | 'pending_review' | 'hidden' | 'flagged'
+          artisan_response: string | null
         }
         Insert: {
-          client_id: string
+          booking_id: string
           artisan_id: string
-          devis_id?: string | null
+          client_name: string
+          client_email: string
           rating: number
           comment?: string | null
-          is_verified?: boolean
+          would_recommend?: boolean | null
         }
         Update: {
           rating?: number
           comment?: string | null
-          response?: string | null
-          is_verified?: boolean
+          artisan_response?: string | null
+          status?: 'published' | 'pending_review' | 'hidden' | 'flagged'
         }
       }
       messages: {

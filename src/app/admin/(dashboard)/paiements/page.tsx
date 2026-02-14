@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   CreditCard,
@@ -18,6 +18,7 @@ import { SubscriptionBadge, PaymentStatusBadge } from '@/components/admin/Status
 import { RefundModal } from '@/components/admin/RefundModal'
 import { ConfirmationModal } from '@/components/admin/ConfirmationModal'
 import { ErrorBanner } from '@/components/admin/ErrorBanner'
+import { useAdminFetch, adminMutate } from '@/hooks/admin/useAdminFetch'
 
 interface Stats {
   totalRevenue: number
@@ -47,13 +48,18 @@ interface Subscription {
   created: string
 }
 
+interface StatsResponse {
+  stats: Stats
+}
+
+interface SubscriptionsResponse {
+  subscriptions: Subscription[]
+}
+
 export default function AdminPaymentsPage() {
   const router = useRouter()
-  const [stats, setStats] = useState<Stats | null>(null)
-  const [subscriptions, setSubscriptions] = useState<Subscription[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [filter, setFilter] = useState<'all' | 'active' | 'canceled' | 'past_due'>('all')
+  const [mutationError, setMutationError] = useState<string | null>(null)
 
   // Modal states
   const [refundModal, setRefundModal] = useState<{ open: boolean; paymentId: string; amount: number }>({
@@ -67,61 +73,47 @@ export default function AdminPaymentsPage() {
     userName: '',
   })
 
-  useEffect(() => {
-    fetchData()
-  }, [filter])
+  const { data: statsData, error: statsError, mutate: mutateStats } = useAdminFetch<StatsResponse>(
+    '/api/admin/payments?type=overview'
+  )
 
-  const fetchData = async () => {
-    try {
-      setLoading(true)
-      setError(null)
+  const { data: subsData, isLoading, error: subsError, mutate: mutateSubs } = useAdminFetch<SubscriptionsResponse>(
+    `/api/admin/payments?type=subscriptions&status=${filter}`
+  )
 
-      // Fetch stats
-      const statsRes = await fetch('/api/admin/payments?type=overview')
-      if (!statsRes.ok) throw new Error(`Erreur ${statsRes.status}`)
-      const statsData = await statsRes.json()
-      setStats(statsData.stats)
+  const stats = statsData?.stats || null
+  const subscriptions = subsData?.subscriptions || []
+  const error = statsError || subsError || (mutationError ? new Error(mutationError) : undefined)
 
-      // Fetch subscriptions
-      const subsRes = await fetch(`/api/admin/payments?type=subscriptions&status=${filter}`)
-      if (!subsRes.ok) throw new Error(`Erreur ${subsRes.status}`)
-      const subsData = await subsRes.json()
-      setSubscriptions(subsData.subscriptions || [])
-    } catch {
-      setError('Erreur lors du chargement des données de paiement')
-    } finally {
-      setLoading(false)
-    }
+  const revalidateAll = () => {
+    mutateStats()
+    mutateSubs()
   }
 
   const handleRefund = async (amount: number, reason: string) => {
     try {
-      setError(null)
-      const response = await fetch(`/api/admin/payments/${refundModal.paymentId}/refund`, {
+      setMutationError(null)
+      await adminMutate(`/api/admin/payments/${refundModal.paymentId}/refund`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount, reason }),
+        body: { amount, reason },
       })
-      if (!response.ok) throw new Error('Erreur lors du remboursement')
-      fetchData()
+      revalidateAll()
     } catch {
-      setError('Erreur lors du remboursement')
+      setMutationError('Erreur lors du remboursement')
     }
   }
 
   const handleCancelSubscription = async () => {
     try {
-      setError(null)
-      const response = await fetch(`/api/admin/subscriptions/${cancelModal.subId}/cancel`, {
+      setMutationError(null)
+      await adminMutate(`/api/admin/subscriptions/${cancelModal.subId}/cancel`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'cancel', immediately: false }),
+        body: { action: 'cancel', immediately: false },
       })
-      if (!response.ok) throw new Error('Erreur lors de l\'annulation')
       setCancelModal({ open: false, subId: '', userName: '' })
-      fetchData()
+      revalidateAll()
     } catch {
-      setError('Erreur lors de l\'annulation de l\'abonnement')
+      setMutationError('Erreur lors de l\'annulation de l\'abonnement')
     }
   }
 
@@ -163,7 +155,7 @@ export default function AdminPaymentsPage() {
             <p className="text-gray-500 mt-1">Revenus, abonnements et remboursements</p>
           </div>
           <button
-            onClick={fetchData}
+            onClick={revalidateAll}
             className="flex items-center gap-2 px-4 py-2 text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
           >
             <RefreshCw className="w-4 h-4" />
@@ -172,7 +164,7 @@ export default function AdminPaymentsPage() {
         </div>
 
         {/* Error Banner */}
-        {error && <ErrorBanner message={error} onDismiss={() => setError(null)} onRetry={fetchData} />}
+        {error && <ErrorBanner message={error.message} onDismiss={mutationError ? () => setMutationError(null) : undefined} onRetry={revalidateAll} />}
 
         {/* Stats */}
         {stats && (
@@ -250,7 +242,7 @@ export default function AdminPaymentsPage() {
             </div>
           </div>
 
-          {loading ? (
+          {isLoading ? (
             <div className="p-8 text-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
             </div>

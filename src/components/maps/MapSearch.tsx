@@ -6,7 +6,7 @@ import dynamic from 'next/dynamic'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Search, Filter, MapPin, Star, Phone, ChevronDown, ChevronUp,
-  Loader2, Navigation, Layers, X, Shield, Award, Zap, Heart, ExternalLink,
+  Loader2, Navigation, Layers, X, Shield, Zap, Heart, ExternalLink,
   List, Map as MapIcon
 } from 'lucide-react'
 import Link from 'next/link'
@@ -59,7 +59,6 @@ interface Provider {
   services: string[]
   specialty?: string
   is_verified: boolean
-  is_premium: boolean
   hourly_rate_min?: number
   avatar_url?: string
 }
@@ -68,7 +67,6 @@ interface Filters {
   service: string
   minRating: number
   verified: boolean
-  premium: boolean
   emergency: boolean
 }
 
@@ -133,7 +131,6 @@ export default function MapSearch() {
     service: '',
     minRating: 0,
     verified: false,
-    premium: false,
     emergency: false
   })
 
@@ -146,7 +143,6 @@ export default function MapSearch() {
       filters.service,
       filters.minRating > 0,
       filters.verified,
-      filters.premium,
       filters.emergency
     ].filter(Boolean).length
   }, [filters])
@@ -179,7 +175,6 @@ export default function MapSearch() {
         ...(filters.service && { service: filters.service }),
         ...(filters.minRating > 0 && { minRating: filters.minRating.toString() }),
         ...(filters.verified && { verified: 'true' }),
-        ...(filters.premium && { premium: 'true' }),
       })
 
       const response = await fetch(`/api/search/map?${params}`)
@@ -247,11 +242,10 @@ export default function MapSearch() {
 
     const isHighlighted = isHovered || isSelected
     const size = isHighlighted ? 48 : 38
-    const zIndex = isHighlighted ? 1000 : provider.is_premium ? 500 : 1
+    const zIndex = isHighlighted ? 1000 : 1
 
     let bgColor = '#3b82f6' // blue default
-    if (provider.is_premium) bgColor = '#f59e0b' // amber
-    else if (provider.is_verified) bgColor = '#22c55e' // green
+    if (provider.is_verified) bgColor = '#22c55e' // green
 
     // World-class: pulse animation for selected
     const pulseAnimation = isSelected ? `
@@ -282,31 +276,6 @@ export default function MapSearch() {
           cursor: pointer;
           position: relative;
         ">
-          ${provider.is_premium ? `
-            <div style="
-              position: absolute;
-              top: -8px;
-              right: -8px;
-              width: 18px;
-              height: 18px;
-              background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-              border: 2px solid white;
-              border-radius: 50%;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-              transform: rotate(45deg);
-              z-index: 10;
-            ">
-              <span style="
-                transform: rotate(-45deg);
-                color: white;
-                font-size: 10px;
-                font-weight: bold;
-              ">★</span>
-            </div>
-          ` : ''}
           <span style="
             transform: rotate(45deg);
             color: white;
@@ -489,18 +458,6 @@ export default function MapSearch() {
                     </button>
 
                     <button
-                      onClick={() => setFilters(f => ({ ...f, premium: !f.premium }))}
-                      className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
-                        filters.premium
-                          ? 'bg-amber-100 text-amber-700 border border-amber-300'
-                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                      }`}
-                    >
-                      <Award className="w-4 h-4" />
-                      Premium
-                    </button>
-
-                    <button
                       onClick={() => setFilters(f => ({ ...f, emergency: !f.emergency }))}
                       className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
                         filters.emergency
@@ -519,7 +476,6 @@ export default function MapSearch() {
                           service: '',
                           minRating: 0,
                           verified: false,
-                          premium: false,
                           emergency: false
                         })}
                         className="text-sm text-gray-500 hover:text-gray-700 underline"
@@ -595,11 +551,6 @@ export default function MapSearch() {
                             </span>
                           )}
                         </div>
-                        {provider.is_premium && (
-                          <div className="absolute -top-1 -right-1 bg-amber-500 text-white p-1 rounded-full">
-                            <Award className="w-3 h-3" />
-                          </div>
-                        )}
                       </div>
 
                       {/* Info */}
@@ -755,17 +706,8 @@ export default function MapSearch() {
                   >
                     <Popup className="custom-popup" maxWidth={340} minWidth={300}>
                       <div className="p-2">
-                        {/* Premium Badge - World Class */}
-                        {provider.is_premium && (
-                          <div className="flex items-center gap-1.5 text-amber-700 text-xs font-bold mb-3 bg-gradient-to-r from-amber-100 to-yellow-100 w-fit px-3 py-1.5 rounded-full border border-amber-200 shadow-sm">
-                            <Award className="w-3.5 h-3.5" />
-                            <span>ARTISAN PREMIUM</span>
-                          </div>
-                        )}
-
                         <div className="flex gap-3">
-                          {/* Avatar with premium ring */}
-                          <div className={`relative flex-shrink-0 ${provider.is_premium ? 'ring-2 ring-amber-400 ring-offset-2' : ''} rounded-xl`}>
+                          <div className="relative flex-shrink-0 rounded-xl">
                             <div className="w-20 h-20 bg-gradient-to-br from-gray-200 to-gray-300 rounded-xl flex items-center justify-center overflow-hidden">
                               {provider.avatar_url ? (
                                 <img src={provider.avatar_url} alt={provider.name} className="w-full h-full object-cover" loading="lazy" />

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState } from 'react'
 import {
   Loader2,
   AlertCircle,
@@ -10,6 +10,7 @@ import {
   ChevronRight,
   RefreshCw,
 } from 'lucide-react'
+import { useAdminFetch } from '@/hooks/admin/useAdminFetch'
 
 interface AuditLog {
   id: string
@@ -45,37 +46,21 @@ const actionLabels: Record<string, string> = {
   'update_settings': 'Modification param\u00e8tres',
 }
 
+interface JournalResponse {
+  logs: AuditLog[]
+  total: number
+}
+
 export default function AdminJournalPage() {
-  const [logs, setLogs] = useState<AuditLog[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [page, setPage] = useState(1)
-  const [total, setTotal] = useState(0)
   const pageSize = 50
 
-  const fetchJournal = useCallback(async () => {
-    setLoading(true)
-    setError(null)
-    try {
-      const res = await fetch(`/api/admin/journal?page=${page}`)
-      if (res.ok) {
-        const data = await res.json()
-        setLogs(data.logs || [])
-        setTotal(data.total || 0)
-      } else {
-        const err = await res.json()
-        setError(err.error || 'Erreur')
-      }
-    } catch {
-      setError('Erreur de connexion')
-    } finally {
-      setLoading(false)
-    }
-  }, [page])
+  const { data, isLoading, error, mutate } = useAdminFetch<JournalResponse>(
+    `/api/admin/journal?page=${page}`
+  )
 
-  useEffect(() => {
-    fetchJournal()
-  }, [fetchJournal])
+  const logs = data?.logs || []
+  const total = data?.total || 0
 
   const totalPages = Math.max(1, Math.ceil(total / pageSize))
 
@@ -102,7 +87,7 @@ export default function AdminJournalPage() {
             </p>
           </div>
           <button
-            onClick={fetchJournal}
+            onClick={() => mutate()}
             className="text-sm text-blue-600 hover:underline flex items-center gap-1"
           >
             <RefreshCw className="w-3 h-3" /> Rafraîchir
@@ -112,11 +97,11 @@ export default function AdminJournalPage() {
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-center gap-3">
             <AlertCircle className="w-5 h-5 text-red-500" />
-            <p className="text-red-700">{error}</p>
+            <p className="text-red-700">{error.message}</p>
           </div>
         )}
 
-        {loading ? (
+        {isLoading ? (
           <div className="flex justify-center py-16">
             <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
           </div>

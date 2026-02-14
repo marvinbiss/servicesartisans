@@ -53,25 +53,18 @@ export async function GET(request: NextRequest) {
       })
     }
 
-    // Queue stats
-    const { count: pendingCount } = await supabase
-      .from('lead_assignments')
-      .select('id', { count: 'exact', head: true })
-      .eq('status', 'pending')
-
-    const { count: viewedCount } = await supabase
-      .from('lead_assignments')
-      .select('id', { count: 'exact', head: true })
-      .eq('status', 'viewed')
-
-    const { count: quotedCount } = await supabase
-      .from('lead_assignments')
-      .select('id', { count: 'exact', head: true })
-      .eq('status', 'quoted')
-
-    const { count: totalCount } = await supabase
-      .from('lead_assignments')
-      .select('id', { count: 'exact', head: true })
+    // Queue stats - fetch all counts in parallel
+    const [
+      { count: pendingCount },
+      { count: viewedCount },
+      { count: quotedCount },
+      { count: totalCount },
+    ] = await Promise.all([
+      supabase.from('lead_assignments').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
+      supabase.from('lead_assignments').select('id', { count: 'exact', head: true }).eq('status', 'viewed'),
+      supabase.from('lead_assignments').select('id', { count: 'exact', head: true }).eq('status', 'quoted'),
+      supabase.from('lead_assignments').select('id', { count: 'exact', head: true }),
+    ])
 
     return NextResponse.json({
       assignments: assignments || [],

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState } from 'react'
 import {
   FileText,
   Users,
@@ -19,6 +19,7 @@ import {
 import { StatCard } from '@/components/dashboard/StatCard'
 import { Pagination } from '@/components/dashboard/Pagination'
 import { URGENCY_META, STATUS_META } from '@/types/leads'
+import { useAdminFetch, adminMutate } from '@/hooks/admin/useAdminFetch'
 
 interface ArtisanRow {
   id: string
@@ -53,84 +54,76 @@ interface AssignmentRow {
 
 type ViewTab = 'leads' | 'artisans'
 
-export default function AdminLeadsPage() {
-  const [leads, setLeads] = useState<LeadRow[]>([])
-  const [assignments, setAssignments] = useState<AssignmentRow[]>([])
-  const [artisans, setArtisans] = useState<ArtisanRow[]>([])
-  const [providerNames, setProviderNames] = useState<Record<string, string>>({})
-  const [stats, setStats] = useState({ totalLeads: 0, pendingAssignments: 0, dispatchedToday: 0 })
-  const [pagination, setPagination] = useState({ page: 1, pageSize: 20, total: 0, totalPages: 1 })
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+interface LeadsResponse {
+  leads: LeadRow[]
+  assignments: AssignmentRow[]
+  providerNames: Record<string, string>
+  stats: { totalLeads: number; pendingAssignments: number; dispatchedToday: number }
+  pagination: { page: number; pageSize: number; total: number; totalPages: number }
+}
 
+interface ArtisansResponse {
+  artisans: ArtisanRow[]
+}
+
+export default function AdminLeadsPage() {
   const [city, setCity] = useState('')
   const [service, setService] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
   const [urgencyFilter, setUrgencyFilter] = useState('')
   const [tab, setTab] = useState<ViewTab>('leads')
   const [page, setPage] = useState(1)
+  const [mutationError, setMutationError] = useState<string | null>(null)
 
   // Dispatch state
   const [dispatchLeadId, setDispatchLeadId] = useState<string | null>(null)
   const [dispatchLoading, setDispatchLoading] = useState(false)
 
-  const fetchData = useCallback(async () => {
-    setLoading(true)
-    setError(null)
-    try {
-      const params = new URLSearchParams({ page: String(page), pageSize: '20' })
-      if (city) params.set('city', city)
-      if (service) params.set('service', service)
-      if (searchQuery) params.set('search', searchQuery)
-      if (urgencyFilter) params.set('urgency', urgencyFilter)
+  // Build leads URL
+  const leadsParams = new URLSearchParams({ page: String(page), pageSize: '20' })
+  if (city) leadsParams.set('city', city)
+  if (service) leadsParams.set('service', service)
+  if (searchQuery) leadsParams.set('search', searchQuery)
+  if (urgencyFilter) leadsParams.set('urgency', urgencyFilter)
 
-      // Fetch leads from the existing admin endpoint
-      const [leadsRes, artisansRes] = await Promise.all([
-        fetch(`/api/admin/leads?${params}`),
-        fetch(`/api/admin/leads?city=${encodeURIComponent(city)}&service=${encodeURIComponent(service)}`),
-      ])
+  const { data: leadsData, isLoading, error: leadsError, mutate: mutateLeads } = useAdminFetch<LeadsResponse>(
+    `/api/admin/leads?${leadsParams}`
+  )
 
-      if (leadsRes.ok) {
-        const leadsData = await leadsRes.json()
-        setLeads(leadsData.leads || [])
-        setAssignments(leadsData.assignments || [])
-        setProviderNames(leadsData.providerNames || {})
-        if (leadsData.stats) setStats(leadsData.stats)
-        if (leadsData.pagination) setPagination(leadsData.pagination)
-      }
+  // Build artisans URL
+  const artisansParams = new URLSearchParams()
+  if (city) artisansParams.set('city', city)
+  if (service) artisansParams.set('service', service)
 
-      if (artisansRes.ok) {
-        const artData = await artisansRes.json()
-        setArtisans(artData.artisans || [])
-      }
-    } catch {
-      setError('Erreur de connexion')
-    } finally {
-      setLoading(false)
-    }
-  }, [page, city, service, searchQuery, urgencyFilter])
+  const { data: artisansData, mutate: mutateArtisans } = useAdminFetch<ArtisansResponse>(
+    `/api/admin/leads?${artisansParams}`
+  )
 
-  useEffect(() => {
-    fetchData()
-  }, [fetchData])
+  const leads = leadsData?.leads || []
+  const assignments = leadsData?.assignments || []
+  const providerNames = leadsData?.providerNames || {}
+  const stats = leadsData?.stats || { totalLeads: 0, pendingAssignments: 0, dispatchedToday: 0 }
+  const pagination = leadsData?.pagination || { page: 1, pageSize: 20, total: 0, totalPages: 1 }
+  const artisans = artisansData?.artisans || []
+  const error = leadsError || (mutationError ? new Error(mutationError) : undefined)
+
+  const revalidateAll = () => {
+    mutateLeads()
+    mutateArtisans()
+  }
 
   const handleDispatch = async (leadId: string) => {
     setDispatchLeadId(leadId)
     setDispatchLoading(true)
     try {
-      const res = await fetch('/api/admin/leads', {
+      setMutationError(null)
+      await adminMutate('/api/admin/leads', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ leadId }),
+        body: { leadId },
       })
-      if (res.ok) {
-        fetchData()
-      } else {
-        const data = await res.json()
-        setError(data.error || 'Erreur de dispatch')
-      }
-    } catch {
-      setError('Erreur de connexion')
+      revalidateAll()
+    } catch (err) {
+      setMutationError(err instanceof Error ? err.message : 'Erreur de dispatch')
     } finally {
       setDispatchLoading(false)
       setDispatchLeadId(null)
@@ -149,7 +142,7 @@ export default function AdminLeadsPage() {
             <p className="text-gray-500 mt-1">Gestion des leads et dispatch</p>
           </div>
           <button
-            onClick={fetchData}
+            onClick={revalidateAll}
             className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 border border-gray-200 rounded-lg hover:bg-white transition-colors"
           >
             <RefreshCw className="w-4 h-4" />
@@ -242,7 +235,7 @@ export default function AdminLeadsPage() {
               </select>
             </div>
             <button
-              onClick={() => { fetchData(); setPage(1) }}
+              onClick={() => { revalidateAll(); setPage(1) }}
               className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
             >
               <Search className="w-4 h-4" />
@@ -254,7 +247,7 @@ export default function AdminLeadsPage() {
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-center gap-3">
             <AlertCircle className="w-5 h-5 text-red-500" />
-            <p className="text-red-700 text-sm">{error}</p>
+            <p className="text-red-700 text-sm">{error.message}</p>
           </div>
         )}
 
@@ -280,7 +273,7 @@ export default function AdminLeadsPage() {
           </button>
         </div>
 
-        {loading ? (
+        {isLoading ? (
           <div className="flex justify-center py-16">
             <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
           </div>

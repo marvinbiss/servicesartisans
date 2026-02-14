@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   Search,
@@ -19,6 +19,7 @@ import {
 } from 'lucide-react'
 import { ConfirmationModal } from '@/components/admin/ConfirmationModal'
 import { Toast } from '@/components/admin/Toast'
+import { useAdminFetch, adminMutate } from '@/hooks/admin/useAdminFetch'
 
 interface Provider {
   id: string
@@ -39,15 +40,18 @@ interface Provider {
   siret?: string
 }
 
+interface ProvidersResponse {
+  success: boolean
+  providers: Provider[]
+  totalPages: number
+  total: number
+}
+
 export default function AdminProvidersPage() {
   const router = useRouter()
-  const [providers, setProviders] = useState<Provider[]>([])
-  const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState<'all' | 'verified' | 'pending' | 'suspended'>('all')
   const [page, setPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
-  const [total, setTotal] = useState(0)
 
   // Action states
   const [actionLoading, setActionLoading] = useState<string | null>(null)
@@ -64,60 +68,22 @@ export default function AdminProvidersPage() {
     return () => clearTimeout(timer)
   }, [search])
 
-  const fetchProviders = useCallback(async (forceRefresh = false) => {
-    try {
-      setLoading(true)
-
-      // Clear providers immediately when force refreshing for better UX feedback
-      if (forceRefresh) {
-        setProviders([])
-      }
-
-      const params = new URLSearchParams({
-        page: String(page),
-        limit: '20',
-        filter,
-        search: searchDebounce,
-        _t: String(Date.now()), // Cache buster - ensures fresh data from server
-      })
-
-      // Disable cache to always get fresh data
-      const response = await fetch(`/api/admin/providers?${params}`, {
-        method: 'GET',
-        headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache',
-          'Expires': '0',
-        },
-        cache: 'no-store',
-        next: { revalidate: 0 },
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        if (data.success) {
-          setProviders(data.providers || [])
-          setTotalPages(data.totalPages || 1)
-          setTotal(data.total || 0)
-        } else {
-          console.error('API returned error:', data.error)
-          setToast({ message: data.error || 'Erreur lors du chargement', type: 'error' })
-        }
-      } else {
-        console.error('Failed to fetch providers:', response.status)
-        setToast({ message: 'Erreur de connexion au serveur', type: 'error' })
-      }
-    } catch (error) {
-      console.error('Failed to fetch providers:', error)
-      setToast({ message: 'Erreur de connexion', type: 'error' })
-    } finally {
-      setLoading(false)
-    }
+  const url = useMemo(() => {
+    const params = new URLSearchParams({
+      page: String(page),
+      limit: '20',
+      filter,
+      search: searchDebounce,
+    })
+    return `/api/admin/providers?${params}`
   }, [page, filter, searchDebounce])
 
-  useEffect(() => {
-    fetchProviders()
-  }, [fetchProviders])
+  const { data, isLoading, mutate } = useAdminFetch<ProvidersResponse>(url)
+
+  const providers = data?.providers ?? []
+  const totalPages = data?.totalPages ?? 1
+  const total = data?.total ?? 0
+  const loading = isLoading
 
   const handleAction = async (providerId: string, action: 'verify' | 'suspend' | 'activate') => {
     // Prevent double-click
@@ -141,52 +107,25 @@ export default function AdminProvidersPage() {
       if (action === 'suspend') updates.is_active = false
       if (action === 'activate') updates.is_active = true
 
-      const response = await fetch(`/api/admin/providers/${providerId}`, {
+      await adminMutate(`/api/admin/providers/${providerId}`, {
         method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          'Cache-Control': 'no-cache',
-        },
-        body: JSON.stringify(updates),
-        cache: 'no-store',
+        body: updates,
       })
 
-      const data = await response.json()
+      const actionText = action === 'verify' ? 'référencé' : action === 'suspend' ? 'suspendu' : 'réactivé'
+      setToast({ message: `Artisan ${actionText} avec succ\u00e8s !`, type: 'success' })
 
-      if (response.ok && data.success) {
-        // Show success toast
-        const actionText = action === 'verify' ? 'référencé' : action === 'suspend' ? 'suspendu' : 'réactivé'
-        setToast({ message: `Artisan ${actionText} avec succ\u00e8s !`, type: 'success' })
-
-        // Update local state immediately for better UX
-        setProviders(prev => prev.map(p => {
-          if (p.id === providerId) {
-            return {
-              ...p,
-              is_verified: action === 'verify' ? true : p.is_verified,
-              is_active: action === 'suspend' ? false : action === 'activate' ? true : p.is_active,
-            }
-          }
-          return p
-        }))
-
-        // Small delay to ensure database consistency, then force refresh
-        await new Promise(resolve => setTimeout(resolve, 300))
-        await fetchProviders(true)
-      } else {
-        console.error('Action failed:', data.error || data.message)
-        setToast({ message: `Erreur: ${data.error || data.message || 'Action échouée'}`, type: 'error' })
-      }
-    } catch (error) {
-      console.error('Action failed:', error)
-      setToast({ message: 'Erreur de connexion au serveur', type: 'error' })
+      mutate()
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Action échouée'
+      setToast({ message: `Erreur: ${message}`, type: 'error' })
     } finally {
       setActionLoading(null)
     }
   }
 
   const handleRefresh = () => {
-    fetchProviders(true)
+    mutate()
   }
 
   const getStatusBadge = (provider: Provider) => {
@@ -265,8 +204,6 @@ export default function AdminProvidersPage() {
                   key={f}
                   onClick={() => {
                     if (filter !== f) {
-                      // Clear current data to force visual refresh
-                      setProviders([])
                       setFilter(f)
                       setPage(1) // Reset to first page on filter change
                     }

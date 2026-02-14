@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import {
   Flag,
   ChevronLeft,
@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import { ReportStatusBadge, StatusBadge } from '@/components/admin/StatusBadge'
 import { ErrorBanner } from '@/components/admin/ErrorBanner'
+import { useAdminFetch, adminMutate } from '@/hooks/admin/useAdminFetch'
 
 interface Report {
   id: string
@@ -23,10 +24,16 @@ interface Report {
   reason: 'spam' | 'inappropriate' | 'fake' | 'harassment' | 'other'
   description: string | null
   status: 'pending' | 'under_review' | 'resolved' | 'dismissed'
-  resolved_by: string | null
-  resolution_notes: string | null
+  reviewed_by: string | null
+  resolution: string | null
   created_at: string
-  resolved_at: string | null
+  reviewed_at: string | null
+}
+
+interface ReportsResponse {
+  reports: Report[]
+  totalPages: number
+  total: number
 }
 
 const REASON_LABELS: Record<string, string> = {
@@ -45,14 +52,10 @@ const TARGET_TYPE_LABELS: Record<string, string> = {
 }
 
 export default function AdminSignalementsPage() {
-  const [reports, setReports] = useState<Report[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [status, setStatus] = useState<'all' | 'pending' | 'under_review' | 'resolved' | 'dismissed'>('pending')
   const [targetType, setTargetType] = useState<'all' | 'provider' | 'review' | 'user' | 'message'>('all')
   const [page, setPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
-  const [total, setTotal] = useState(0)
+  const [actionError, setActionError] = useState<string | null>(null)
 
   const [actionModal, setActionModal] = useState<{
     open: boolean
@@ -65,53 +68,32 @@ export default function AdminSignalementsPage() {
   })
   const [resolutionNotes, setResolutionNotes] = useState('')
 
-  useEffect(() => {
-    fetchReports()
-  }, [page, status, targetType])
+  const url = `/api/admin/reports?page=${page}&limit=20&status=${status}&targetType=${targetType}`
+  const { data, isLoading, error, mutate } = useAdminFetch<ReportsResponse>(url)
 
-  const fetchReports = async () => {
-    try {
-      setLoading(true)
-      setError(null)
-      const params = new URLSearchParams({
-        page: String(page),
-        limit: '20',
-        status,
-        targetType,
-      })
-      const response = await fetch(`/api/admin/reports?${params}`)
-      if (!response.ok) throw new Error(`Erreur ${response.status}`)
-      const data = await response.json()
-      setReports(data.reports || [])
-      setTotalPages(data.totalPages || 1)
-      setTotal(data.total || 0)
-    } catch {
-      setError('Erreur lors du chargement des signalements')
-      setReports([])
-    } finally {
-      setLoading(false)
-    }
-  }
+  const reports = data?.reports || []
+  const totalPages = data?.totalPages || 1
+  const total = data?.total || 0
 
   const handleAction = async () => {
     try {
-      setError(null)
-      const response = await fetch(`/api/admin/reports/${actionModal.reportId}/resolve`, {
+      setActionError(null)
+      await adminMutate(`/api/admin/reports/${actionModal.reportId}/resolve`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: {
           action: actionModal.action,
           resolution_notes: resolutionNotes,
-        }),
+        },
       })
-      if (!response.ok) throw new Error('Erreur lors du traitement du signalement')
       setActionModal({ open: false, reportId: '', action: 'resolve' })
       setResolutionNotes('')
-      fetchReports()
+      mutate()
     } catch {
-      setError('Erreur lors du traitement du signalement')
+      setActionError('Erreur lors du traitement du signalement')
     }
   }
+
+  const displayError = actionError || (error ? error.message : null)
 
   const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString('fr-FR', {
@@ -186,11 +168,11 @@ export default function AdminSignalementsPage() {
         </div>
 
         {/* Error Banner */}
-        {error && <ErrorBanner message={error} onDismiss={() => setError(null)} onRetry={fetchReports} />}
+        {displayError && <ErrorBanner message={displayError} onDismiss={() => setActionError(null)} onRetry={() => mutate()} />}
 
         {/* Reports List */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          {loading ? (
+          {isLoading ? (
             <div className="p-8 text-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
             </div>
@@ -238,9 +220,9 @@ export default function AdminSignalementsPage() {
                           </p>
                         )}
 
-                        {report.resolution_notes && (
+                        {report.resolution && (
                           <div className="mt-2 p-2 bg-gray-100 rounded text-sm text-gray-600">
-                            <strong>Résolution:</strong> {report.resolution_notes}
+                            <strong>Résolution:</strong> {report.resolution}
                           </div>
                         )}
                       </div>
@@ -321,7 +303,7 @@ export default function AdminSignalementsPage() {
                   rows={3}
                   maxLength={2000}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
-                  placeholder="D\u00e9crivez les actions prises..."
+                  placeholder="Décrivez les actions prises..."
                 />
               </div>
 

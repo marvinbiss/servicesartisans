@@ -165,34 +165,38 @@ export async function verifyAdmin(): Promise<AdminAuthResult> {
       }
     }
 
-    // Check admin role in profiles table
+    // Check admin role in profiles table — single query for performance
     const adminSupabase = createAdminClient()
     let role: AdminRole | null = null
     let isAdmin = false
+    let profileError: { message: string; code?: string } | null = null
 
-    // Query profiles — only select columns that are guaranteed to exist
-    // The 'role' column may not exist on all deployments, so we query 'is_admin' first
-    const { data: profile, error: profileError } = await adminSupabase
+    // Try to get is_admin + role in one query (saves ~100ms per request)
+    const { data: profile, error: combinedError } = await adminSupabase
       .from('profiles')
-      .select('is_admin')
+      .select('is_admin, role')
       .eq('id', user.id)
       .single()
 
-    if (!profileError && profile) {
+    if (!combinedError && profile) {
       isAdmin = profile.is_admin === true
-    }
-
-    // Try to get role column separately (may not exist on all deployments)
-    if (!profileError) {
-      const { data: roleData } = await adminSupabase
+      if (profile.role) {
+        role = profile.role as AdminRole
+      }
+    } else if (combinedError && combinedError.message?.includes('column')) {
+      // 'role' column may not exist — fall back to is_admin only
+      const { data: fallbackProfile, error: fallbackError } = await adminSupabase
         .from('profiles')
-        .select('role')
+        .select('is_admin')
         .eq('id', user.id)
         .single()
 
-      if (roleData && roleData.role) {
-        role = roleData.role as AdminRole
+      if (!fallbackError && fallbackProfile) {
+        isAdmin = fallbackProfile.is_admin === true
       }
+      profileError = fallbackError
+    } else {
+      profileError = combinedError
     }
 
     // Deny access if profile couldn't be read at all

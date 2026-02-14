@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import {
   MessageSquare,
   ChevronLeft,
@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import { StatusBadge } from '@/components/admin/StatusBadge'
 import { ErrorBanner } from '@/components/admin/ErrorBanner'
+import { useAdminFetch } from '@/hooks/admin/useAdminFetch'
 
 interface Conversation {
   id: string
@@ -35,41 +36,29 @@ interface Conversation {
   }
 }
 
+interface MessagesResponse {
+  conversations: Conversation[]
+  totalPages: number
+  total: number
+}
+
 export default function AdminMessagesPage() {
-  const [conversations, setConversations] = useState<Conversation[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [status, setStatus] = useState<'all' | 'active' | 'archived' | 'blocked'>('all')
   const [page, setPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
-  const [total, setTotal] = useState(0)
 
-  useEffect(() => {
-    fetchConversations()
-  }, [page, status])
+  const params = new URLSearchParams({
+    page: String(page),
+    limit: '20',
+    status,
+  })
 
-  const fetchConversations = async () => {
-    try {
-      setLoading(true)
-      setError(null)
-      const params = new URLSearchParams({
-        page: String(page),
-        limit: '20',
-        status,
-      })
-      const response = await fetch(`/api/admin/messages?${params}`)
-      if (!response.ok) throw new Error(`Erreur ${response.status}`)
-      const data = await response.json()
-      setConversations(data.conversations || [])
-      setTotalPages(data.totalPages || 1)
-      setTotal(data.total || 0)
-    } catch {
-      setError('Erreur lors du chargement des conversations')
-      setConversations([])
-    } finally {
-      setLoading(false)
-    }
-  }
+  const { data, isLoading, error, mutate } = useAdminFetch<MessagesResponse>(
+    `/api/admin/messages?${params}`
+  )
+
+  const conversations = data?.conversations || []
+  const totalPages = data?.totalPages || 1
+  const total = data?.total || 0
 
   const formatDate = (date: string | null) => {
     if (!date) return '-'
@@ -126,11 +115,11 @@ export default function AdminMessagesPage() {
         </div>
 
         {/* Error Banner */}
-        {error && <ErrorBanner message={error} onDismiss={() => setError(null)} onRetry={fetchConversations} />}
+        {error && <ErrorBanner message={error.message} onRetry={() => mutate()} />}
 
         {/* Conversations List */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          {loading ? (
+          {isLoading ? (
             <div className="p-8 text-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
             </div>

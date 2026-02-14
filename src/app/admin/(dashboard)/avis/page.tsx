@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import {
   Star,
   Flag,
@@ -14,6 +14,7 @@ import {
 } from 'lucide-react'
 import { ConfirmationModal } from '@/components/admin/ConfirmationModal'
 import { ErrorBanner } from '@/components/admin/ErrorBanner'
+import { useAdminFetch, adminMutate } from '@/hooks/admin/useAdminFetch'
 
 interface Review {
   id: string
@@ -30,39 +31,21 @@ interface Review {
   created_at: string
 }
 
+interface ReviewsResponse {
+  reviews: Review[]
+  totalPages: number
+}
+
 export default function AdminReviewsPage() {
-  const [reviews, setReviews] = useState<Review[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [filter, setFilter] = useState<'all' | 'pending' | 'flagged' | 'approved' | 'rejected'>('pending')
   const [page, setPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
+  const [actionError, setActionError] = useState<string | null>(null)
 
-  useEffect(() => {
-    fetchReviews()
-  }, [page, filter])
+  const url = `/api/admin/reviews?page=${page}&limit=20&filter=${filter}`
+  const { data, isLoading, error, mutate } = useAdminFetch<ReviewsResponse>(url)
 
-  const fetchReviews = async () => {
-    try {
-      setLoading(true)
-      setError(null)
-      const params = new URLSearchParams({
-        page: String(page),
-        limit: '20',
-        filter,
-      })
-      const response = await fetch(`/api/admin/reviews?${params}`)
-      if (!response.ok) throw new Error(`Erreur ${response.status}`)
-      const data = await response.json()
-      setReviews(data.reviews || [])
-      setTotalPages(data.totalPages || 1)
-    } catch {
-      setError('Erreur lors du chargement des avis')
-      setReviews([])
-    } finally {
-      setLoading(false)
-    }
-  }
+  const reviews = data?.reviews || []
+  const totalPages = data?.totalPages || 1
 
   const [moderationModal, setModerationModal] = useState<{
     open: boolean
@@ -72,20 +55,18 @@ export default function AdminReviewsPage() {
 
   const confirmModeration = async () => {
     try {
-      setError(null)
-      const response = await fetch(`/api/admin/reviews/${moderationModal.reviewId}`, {
+      setActionError(null)
+      await adminMutate(`/api/admin/reviews/${moderationModal.reviewId}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: {
           moderation_status: moderationModal.status,
           is_visible: moderationModal.status === 'approved',
-        }),
+        },
       })
-      if (!response.ok) throw new Error('Erreur lors de la modération')
       setModerationModal({ open: false, reviewId: '', status: 'approved' })
-      fetchReviews()
+      mutate()
     } catch {
-      setError('Erreur lors de la modération de l\'avis')
+      setActionError('Erreur lors de la modération de l\'avis')
     }
   }
 
@@ -98,24 +79,24 @@ export default function AdminReviewsPage() {
     setModerationModal({ open: false, reviewId: '', status: 'approved' })
     ;(async () => {
       try {
-        setError(null)
-        const response = await fetch(`/api/admin/reviews/${reviewId}`, {
+        setActionError(null)
+        await adminMutate(`/api/admin/reviews/${reviewId}`, {
           method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
+          body: {
             moderation_status: status,
             is_visible: true,
-          }),
+          },
         })
-        if (!response.ok) throw new Error('Erreur lors de la modération')
-        fetchReviews()
+        mutate()
       } catch {
-        setError('Erreur lors de la modération de l\'avis')
+        setActionError('Erreur lors de la modération de l\'avis')
       }
     })()
   }
 
   const displayReviews = reviews
+
+  const displayError = actionError || (error ? error.message : null)
 
   const getStatusBadge = (review: Review) => {
     if (review.is_flagged) {
@@ -175,11 +156,11 @@ export default function AdminReviewsPage() {
         </div>
 
         {/* Error Banner */}
-        {error && <ErrorBanner message={error} onDismiss={() => setError(null)} onRetry={fetchReviews} />}
+        {displayError && <ErrorBanner message={displayError} onDismiss={() => setActionError(null)} onRetry={() => mutate()} />}
 
         {/* Reviews List */}
         <div className="space-y-4">
-          {loading ? (
+          {isLoading ? (
             <div className="bg-white rounded-xl shadow-sm p-8 text-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
             </div>

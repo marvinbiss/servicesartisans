@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   Search,
@@ -17,6 +17,7 @@ import {
 } from 'lucide-react'
 import { ErrorBanner } from '@/components/admin/ErrorBanner'
 import { SubscriptionBadge, UserStatusBadge } from '@/components/admin/StatusBadge'
+import { useAdminFetch, adminMutate } from '@/hooks/admin/useAdminFetch'
 
 interface UserProfile {
   id: string
@@ -31,17 +32,18 @@ interface UserProfile {
   created_at: string
 }
 
+interface UsersResponse {
+  users: UserProfile[]
+  totalPages: number
+  total: number
+}
+
 export default function AdminUsersPage() {
   const router = useRouter()
-  const [users, setUsers] = useState<UserProfile[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState<'all' | 'clients' | 'artisans' | 'banned'>('all')
   const [plan, setPlan] = useState<'all' | 'gratuit' | 'pro' | 'premium'>('all')
   const [page, setPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
-  const [total, setTotal] = useState(0)
 
   // Modal state
   const [banModal, setBanModal] = useState<{ open: boolean; userId: string; userName: string; isBanned: boolean }>({
@@ -52,50 +54,35 @@ export default function AdminUsersPage() {
   })
   const [banReason, setBanReason] = useState('')
 
-  useEffect(() => {
-    fetchUsers()
+  const url = useMemo(() => {
+    const params = new URLSearchParams({
+      page: String(page),
+      limit: '20',
+      filter,
+      plan,
+      search,
+    })
+    return `/api/admin/users?${params}`
   }, [page, filter, plan, search])
 
-  const fetchUsers = async () => {
-    try {
-      setLoading(true)
-      setError(null)
-      const params = new URLSearchParams({
-        page: String(page),
-        limit: '20',
-        filter,
-        plan,
-        search,
-      })
-      const response = await fetch(`/api/admin/users?${params}`)
-      if (!response.ok) throw new Error(`Erreur ${response.status}`)
-      const data = await response.json()
-      setUsers(data.users || [])
-      setTotalPages(data.totalPages || 1)
-      setTotal(data.total || 0)
-    } catch {
-      setError('Erreur lors du chargement des utilisateurs')
-      setUsers([])
-    } finally {
-      setLoading(false)
-    }
-  }
+  const { data, isLoading, error, mutate } = useAdminFetch<UsersResponse>(url)
+
+  const users = data?.users ?? []
+  const totalPages = data?.totalPages ?? 1
+  const total = data?.total ?? 0
 
   const handleBanAction = async () => {
     try {
-      setError(null)
       const action = banModal.isBanned ? 'unban' : 'ban'
-      const response = await fetch(`/api/admin/users/${banModal.userId}/ban`, {
+      await adminMutate(`/api/admin/users/${banModal.userId}/ban`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action, reason: banReason }),
+        body: { action, reason: banReason },
       })
-      if (!response.ok) throw new Error('Erreur lors de l\'action')
       setBanModal({ open: false, userId: '', userName: '', isBanned: false })
       setBanReason('')
-      fetchUsers()
+      mutate()
     } catch {
-      setError('Erreur lors de la modification du statut de l\'utilisateur')
+      // Error will surface via SWR's error state on next revalidation
     }
   }
 
@@ -193,15 +180,15 @@ export default function AdminUsersPage() {
         {/* Error Banner */}
         {error && (
           <ErrorBanner
-            message={error}
-            onDismiss={() => setError(null)}
-            onRetry={fetchUsers}
+            message={error.message}
+            onDismiss={() => mutate()}
+            onRetry={() => mutate()}
           />
         )}
 
         {/* Users Table */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          {loading ? (
+          {isLoading ? (
             <div className="p-8 text-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
             </div>

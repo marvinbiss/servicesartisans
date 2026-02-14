@@ -33,26 +33,16 @@ export async function GET() {
       averageRating: 0,
     }
 
-    // Try to fetch real data, fall back to defaults
-    let usersCount = 0
-    let artisansCount = 0
-    let bookingsCount = 0
+    // Fetch all counts in parallel, gracefully handling individual failures
+    const [usersResult, artisansResult, bookingsResult] = await Promise.allSettled([
+      supabase.from('profiles').select('id', { count: 'exact', head: true }),
+      supabase.from('providers').select('id', { count: 'exact', head: true }).eq('is_active', true),
+      supabase.from('bookings').select('id', { count: 'exact', head: true }),
+    ])
 
-    try {
-      const { count } = await supabase.from('profiles').select('id', { count: 'exact', head: true })
-      usersCount = count || 0
-    } catch { /* use default */ }
-
-    // Count providers (artisans) from the providers table instead of profiles.is_artisan
-    try {
-      const { count } = await supabase.from('providers').select('id', { count: 'exact', head: true }).eq('is_active', true)
-      artisansCount = count || 0
-    } catch { /* use default */ }
-
-    try {
-      const { count } = await supabase.from('bookings').select('id', { count: 'exact', head: true })
-      bookingsCount = count || 0
-    } catch { /* use default */ }
+    const usersCount = usersResult.status === 'fulfilled' ? (usersResult.value.count || 0) : 0
+    const artisansCount = artisansResult.status === 'fulfilled' ? (artisansResult.value.count || 0) : 0
+    const bookingsCount = bookingsResult.status === 'fulfilled' ? (bookingsResult.value.count || 0) : 0
 
     // Mock recent activity for demo
     const recentActivity = [

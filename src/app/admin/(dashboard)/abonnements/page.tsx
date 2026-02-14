@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import {
   CreditCard,
   TrendingUp,
@@ -13,6 +13,7 @@ import {
   Calendar,
 } from 'lucide-react'
 import { ErrorBanner } from '@/components/admin/ErrorBanner'
+import { useAdminFetch } from '@/hooks/admin/useAdminFetch'
 
 interface Subscription {
   id: string
@@ -36,41 +37,29 @@ interface SubscriptionStats {
   churnRate: number
 }
 
+interface SubscriptionsResponse {
+  subscriptions: Subscription[]
+  stats: SubscriptionStats | null
+  totalPages: number
+}
+
 export default function AdminSubscriptionsPage() {
-  const [subscriptions, setSubscriptions] = useState<Subscription[]>([])
-  const [stats, setStats] = useState<SubscriptionStats | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [filter, setFilter] = useState<'all' | 'active' | 'canceled' | 'past_due'>('all')
   const [page, setPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
 
-  useEffect(() => {
-    fetchData()
-  }, [page, filter])
+  const params = new URLSearchParams({
+    page: String(page),
+    limit: '20',
+    filter,
+  })
 
-  const fetchData = async () => {
-    try {
-      setLoading(true)
-      setError(null)
-      const params = new URLSearchParams({
-        page: String(page),
-        limit: '20',
-        filter,
-      })
-      const response = await fetch(`/api/admin/subscriptions?${params}`)
-      if (!response.ok) throw new Error(`Erreur ${response.status}`)
-      const data = await response.json()
-      setSubscriptions(data.subscriptions || [])
-      setStats(data.stats || null)
-      setTotalPages(data.totalPages || 1)
-    } catch {
-      setError('Erreur lors du chargement des abonnements')
-      setSubscriptions([])
-    } finally {
-      setLoading(false)
-    }
-  }
+  const { data, isLoading, error, mutate } = useAdminFetch<SubscriptionsResponse>(
+    `/api/admin/subscriptions?${params}`
+  )
+
+  const subscriptions = data?.subscriptions || []
+  const stats = data?.stats || null
+  const totalPages = data?.totalPages || 1
 
   const emptyStats: SubscriptionStats = {
     totalRevenue: 0,
@@ -127,7 +116,7 @@ export default function AdminSubscriptionsPage() {
         </div>
 
         {/* Error Banner */}
-        {error && <ErrorBanner message={error} onDismiss={() => setError(null)} onRetry={fetchData} />}
+        {error && <ErrorBanner message={error.message} onRetry={() => mutate()} />}
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -206,7 +195,7 @@ export default function AdminSubscriptionsPage() {
 
         {/* Subscriptions Table */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          {loading ? (
+          {isLoading ? (
             <div className="p-8 text-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
             </div>

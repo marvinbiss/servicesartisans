@@ -47,10 +47,10 @@ export interface UserReport {
   reason: 'spam' | 'inappropriate' | 'fake' | 'harassment' | 'other'
   description?: string
   status: 'pending' | 'under_review' | 'resolved' | 'dismissed'
-  resolved_by?: string
-  resolution_notes?: string
+  reviewed_by?: string
+  resolution?: string
   created_at: string
-  resolved_at?: string
+  reviewed_at?: string
 }
 
 export interface GdprRequest {

@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { Star, MapPin, CheckCircle, Zap, Users, Clock, Award, Phone, CalendarCheck } from 'lucide-react'
+import { Star, MapPin, CheckCircle, Zap, Users, Clock, Phone, CalendarCheck } from 'lucide-react'
 import { getDisplayName } from './types'
 import type { LegacyArtisan } from '@/types/legacy'
 import {
@@ -19,7 +19,7 @@ const BLUR_DATA_URL = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA
 
 // Determine verification level based on artisan data
 function getVerificationLevel(artisan: LegacyArtisan): 'none' | 'basic' | 'standard' | 'premium' | 'enterprise' {
-  if (artisan.is_premium && artisan.is_verified && artisan.insurance && artisan.insurance.length > 0) {
+  if (artisan.is_verified && artisan.insurance && artisan.insurance.length > 0 && artisan.certifications && artisan.certifications.length > 0) {
     return 'premium'
   }
   if (artisan.is_verified && artisan.insurance && artisan.insurance.length > 0) {
@@ -83,12 +83,6 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
           <div className="flex-1 min-w-0">
             {/* Top Badges Row */}
             <div className="flex flex-wrap gap-2 mb-3" role="list" aria-label="Badges et certifications">
-              {artisan.is_premium && (
-                <span role="listitem" className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 text-white text-xs font-semibold shadow-sm shadow-amber-400/30">
-                  <Award className="w-3.5 h-3.5" aria-hidden="true" />
-                  Premium
-                </span>
-              )}
               <VerificationLevelBadge level={verificationLevel} size="sm" />
               {artisan.emergency_available && (
                 <span role="listitem" className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 text-red-700 text-xs font-semibold border border-red-200">

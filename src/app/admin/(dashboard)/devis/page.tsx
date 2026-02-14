@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import {
   Search,
   FileText,
@@ -12,6 +12,7 @@ import {
 } from 'lucide-react'
 import { StatusBadge } from '@/components/admin/StatusBadge'
 import { ErrorBanner } from '@/components/admin/ErrorBanner'
+import { useAdminFetch } from '@/hooks/admin/useAdminFetch'
 
 interface Quote {
   id: string
@@ -25,43 +26,23 @@ interface Quote {
   created_at: string
 }
 
+interface QuotesResponse {
+  quotes: Quote[]
+  totalPages: number
+  total: number
+}
+
 export default function AdminDevisPage() {
-  const [quotes, setQuotes] = useState<Quote[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [search, setSearch] = useState('')
   const [status, setStatus] = useState<'all' | 'pending' | 'sent' | 'accepted' | 'refused' | 'expired'>('all')
   const [page, setPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
-  const [total, setTotal] = useState(0)
 
-  useEffect(() => {
-    fetchQuotes()
-  }, [page, status, search])
+  const url = `/api/admin/quotes?page=${page}&limit=20&status=${status}&search=${encodeURIComponent(search)}`
+  const { data, isLoading, error, mutate } = useAdminFetch<QuotesResponse>(url)
 
-  const fetchQuotes = async () => {
-    try {
-      setLoading(true)
-      setError(null)
-      const params = new URLSearchParams({
-        page: String(page),
-        limit: '20',
-        status,
-        search,
-      })
-      const response = await fetch(`/api/admin/quotes?${params}`)
-      if (!response.ok) throw new Error(`Erreur ${response.status}`)
-      const data = await response.json()
-      setQuotes(data.quotes || [])
-      setTotalPages(data.totalPages || 1)
-      setTotal(data.total || 0)
-    } catch {
-      setError('Erreur lors du chargement des devis')
-      setQuotes([])
-    } finally {
-      setLoading(false)
-    }
-  }
+  const quotes = data?.quotes || []
+  const totalPages = data?.totalPages || 1
+  const total = data?.total || 0
 
   const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString('fr-FR', {
@@ -153,11 +134,11 @@ export default function AdminDevisPage() {
         </div>
 
         {/* Error Banner */}
-        {error && <ErrorBanner message={error} onDismiss={() => setError(null)} onRetry={fetchQuotes} />}
+        {error && <ErrorBanner message={error.message} onDismiss={() => {}} onRetry={() => mutate()} />}
 
         {/* Quotes List */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          {loading ? (
+          {isLoading ? (
             <div className="p-8 text-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
             </div>

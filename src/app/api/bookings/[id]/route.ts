@@ -101,7 +101,7 @@ export async function GET(
     if (slot?.artisan_id) {
       const { data: artisanData } = await adminSupabase
         .from('profiles')
-        .select('id, full_name, company_name, phone, email, address, city, avatar_url')
+        .select('id, full_name, phone, email, avatar_url')
         .eq('id', slot.artisan_id)
         .single()
       artisan = artisanData
@@ -128,12 +128,9 @@ export async function GET(
         endTime: slot?.end_time,
         slotId: slot?.id,
         artisanId: artisan?.id || slot?.artisan_id,
-        artisanName: artisan?.company_name || artisan?.full_name || 'Artisan',
+        artisanName: artisan?.full_name || 'Artisan',
         artisanPhone: artisan?.phone,
         artisanEmail: artisan?.email,
-        artisanAddress: artisan?.address
-          ? `${artisan.address}${artisan.city ? ', ' + artisan.city : ''}`
-          : null,
         artisanAvatar: artisan?.avatar_url,
         // Legacy format for backward compatibility
         client_name: booking.client_name,

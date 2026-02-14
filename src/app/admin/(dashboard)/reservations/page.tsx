@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import {
   Search,
   Calendar,
@@ -14,6 +14,7 @@ import {
 import { BookingStatusBadge, PaymentStatusBadge } from '@/components/admin/StatusBadge'
 import { ConfirmationModal } from '@/components/admin/ConfirmationModal'
 import { ErrorBanner } from '@/components/admin/ErrorBanner'
+import { useAdminFetch, adminMutate } from '@/hooks/admin/useAdminFetch'
 
 interface Booking {
   id: string
@@ -34,62 +35,44 @@ interface Booking {
   }
 }
 
+interface BookingsResponse {
+  bookings: Booking[]
+  totalPages: number
+  total: number
+}
+
 export default function AdminReservationsPage() {
-  const [bookings, setBookings] = useState<Booking[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [search, setSearch] = useState('')
   const [status, setStatus] = useState<'all' | 'pending' | 'confirmed' | 'completed' | 'cancelled'>('all')
   const [page, setPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
-  const [total, setTotal] = useState(0)
+  const [actionError, setActionError] = useState<string | null>(null)
 
   const [cancelModal, setCancelModal] = useState<{ open: boolean; bookingId: string }>({
     open: false,
     bookingId: '',
   })
 
-  useEffect(() => {
-    fetchBookings()
-  }, [page, status, search])
+  const url = `/api/admin/bookings?page=${page}&limit=20&status=${status}&search=${encodeURIComponent(search)}`
+  const { data, isLoading, error, mutate } = useAdminFetch<BookingsResponse>(url)
 
-  const fetchBookings = async () => {
-    try {
-      setLoading(true)
-      setError(null)
-      const params = new URLSearchParams({
-        page: String(page),
-        limit: '20',
-        status,
-        search,
-      })
-      const response = await fetch(`/api/admin/bookings?${params}`)
-      if (!response.ok) throw new Error(`Erreur ${response.status}`)
-      const data = await response.json()
-      setBookings(data.bookings || [])
-      setTotalPages(data.totalPages || 1)
-      setTotal(data.total || 0)
-    } catch {
-      setError('Erreur lors du chargement des réservations')
-      setBookings([])
-    } finally {
-      setLoading(false)
-    }
-  }
+  const bookings = data?.bookings || []
+  const totalPages = data?.totalPages || 1
+  const total = data?.total || 0
 
   const handleCancel = async () => {
     try {
-      setError(null)
-      const response = await fetch(`/api/admin/bookings/${cancelModal.bookingId}`, {
+      setActionError(null)
+      await adminMutate(`/api/admin/bookings/${cancelModal.bookingId}`, {
         method: 'DELETE',
       })
-      if (!response.ok) throw new Error('Erreur lors de l\'annulation')
       setCancelModal({ open: false, bookingId: '' })
-      fetchBookings()
+      mutate()
     } catch {
-      setError('Erreur lors de l\'annulation de la réservation')
+      setActionError('Erreur lors de l\'annulation de la réservation')
     }
   }
+
+  const displayError = actionError || (error ? error.message : null)
 
   const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString('fr-FR', {
@@ -159,11 +142,11 @@ export default function AdminReservationsPage() {
         </div>
 
         {/* Error Banner */}
-        {error && <ErrorBanner message={error} onDismiss={() => setError(null)} onRetry={fetchBookings} />}
+        {displayError && <ErrorBanner message={displayError} onDismiss={() => setActionError(null)} onRetry={() => mutate()} />}
 
         {/* Bookings Table */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          {loading ? (
+          {isLoading ? (
             <div className="p-8 text-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
             </div>

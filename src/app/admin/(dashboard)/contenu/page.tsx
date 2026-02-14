@@ -1,10 +1,11 @@
 'use client'
 
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Plus, Search, FileEdit, ChevronLeft, ChevronRight } from 'lucide-react'
 import { ErrorBanner } from '@/components/admin/ErrorBanner'
+import { useAdminFetch } from '@/hooks/admin/useAdminFetch'
 import type { CmsPage } from '@/types/cms'
 
 type CMSPageListItem = Pick<CmsPage, 'id' | 'title' | 'slug' | 'page_type' | 'status' | 'updated_at' | 'is_active'>
@@ -71,10 +72,6 @@ const typeBadge = (type: string) => {
 
 export default function AdminContenuPage() {
   const router = useRouter()
-  const [pages, setPages] = useState<CMSPageListItem[]>([])
-  const [total, setTotal] = useState(0)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
   const [pageType, setPageType] = useState('')
   const [status, setStatus] = useState('')
@@ -92,40 +89,21 @@ export default function AdminContenuPage() {
     }, 300)
   }
 
-  const fetchPages = useCallback(async () => {
-    try {
-      setLoading(true)
-      setError(null)
-      const params = new URLSearchParams({
-        page: String(currentPage),
-        pageSize: String(pageSize),
-      })
-      if (pageType) params.set('page_type', pageType)
-      if (status) params.set('status', status)
-      if (search) params.set('search', search)
+  // Build URL dynamically from state
+  const params = new URLSearchParams({
+    page: String(currentPage),
+    pageSize: String(pageSize),
+  })
+  if (pageType) params.set('page_type', pageType)
+  if (status) params.set('status', status)
+  if (search) params.set('search', search)
 
-      const response = await fetch(`/api/admin/cms?${params}`, {
-        credentials: 'include',
-      })
-      if (!response.ok) {
-        const json = await response.json().catch(() => null)
-        throw new Error(json?.error?.message || `Erreur ${response.status}`)
-      }
-      const data: CMSResponse = await response.json()
-      setPages(data.data || [])
-      setTotal(data.pagination?.total || 0)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur lors du chargement des pages')
-      setPages([])
-      setTotal(0)
-    } finally {
-      setLoading(false)
-    }
-  }, [currentPage, pageType, status, search])
+  const { data, isLoading, error, mutate } = useAdminFetch<CMSResponse>(
+    `/api/admin/cms?${params}`
+  )
 
-  useEffect(() => {
-    fetchPages()
-  }, [fetchPages])
+  const pages = data?.data || []
+  const total = data?.pagination?.total || 0
 
   // Cleanup debounce timer on unmount
   useEffect(() => {
@@ -212,7 +190,7 @@ export default function AdminContenuPage() {
 
         {/* Data Table */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          {loading ? (
+          {isLoading ? (
             <div className="p-8 text-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
               <p className="mt-4 text-gray-500">Chargement...</p>
@@ -220,9 +198,8 @@ export default function AdminContenuPage() {
           ) : error ? (
             <div className="p-8">
               <ErrorBanner
-                message={error}
-                onDismiss={() => setError(null)}
-                onRetry={fetchPages}
+                message={error.message}
+                onRetry={() => mutate()}
               />
             </div>
           ) : pages.length === 0 ? (

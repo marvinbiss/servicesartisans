@@ -6,19 +6,19 @@ import { createClient } from '@/lib/supabase/client'
 export interface Provider {
   id: string
   user_id: string
-  business_name: string
+  name: string
+  slug: string
   siret: string
   description: string | null
   phone: string | null
-  address: string | null
-  city: string | null
-  postal_code: string | null
-  service_area_km: number
-  services: string[]
-  hourly_rate: number | null
+  address_city: string | null
+  address_postal_code: string | null
+  intervention_radius_km: number | null
+  services_offered: string[]
+  hourly_rate_min: number | null
+  hourly_rate_max: number | null
   is_verified: boolean
-  is_premium: boolean
-  rating: number
+  rating_average: number
   review_count: number
   created_at: string
   updated_at: string

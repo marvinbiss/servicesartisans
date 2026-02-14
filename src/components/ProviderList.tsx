@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Provider } from '@/types'
-import type { LegacyProvider } from '@/types/legacy'
+
 import ProviderCard from './ProviderCard'
 import SearchFilters from './SearchFilters'
 import { ProviderListSkeleton } from '@/components/ui/Skeleton'
@@ -33,29 +33,21 @@ export default function ProviderList({
   })
   const [hoveredId, setHoveredId] = useState<string | null>(null)
 
-  // Apply filters (cast to LegacyProvider for legacy premium filter — will be removed)
+  // Apply filters
   const filteredProviders = providers.filter((provider) => {
-    const lp = provider as LegacyProvider
     if (filters.verified && !provider.is_verified) return false
-    if (filters.premium && !lp.is_premium) return false
-    // Rating filter would need actual rating data
     return true
   })
 
-  // Apply sorting (legacy premium sort — will be replaced by neutral ordering)
+  // Apply sorting
   const sortedProviders = [...filteredProviders].sort((a, b) => {
     switch (filters.sortBy) {
       case 'name':
         return a.name.localeCompare(b.name)
       case 'rating':
-        // Would need actual rating data
         return 0
       case 'relevance':
       default: {
-        // Legacy premium sort — undefined at runtime (column dropped)
-        const aLp = a as LegacyProvider
-        const bLp = b as LegacyProvider
-        if (aLp.is_premium !== bLp.is_premium) return aLp.is_premium ? -1 : 1
         if (a.is_verified !== b.is_verified) return a.is_verified ? -1 : 1
         return 0
       }

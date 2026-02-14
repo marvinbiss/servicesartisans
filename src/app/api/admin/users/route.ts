@@ -67,15 +67,19 @@ export async function GET(request: NextRequest) {
       })
     }
 
-    // Try to get profiles if table exists
+    // Try to get profiles only for the returned users (avoid fetching entire table)
     const profilesMap = new Map<string, Record<string, unknown>>()
     try {
-      const { data: profiles } = await supabase
-        .from('profiles')
-        .select('*')
+      const userIds = authUsers.users.map(u => u.id)
+      if (userIds.length > 0) {
+        const { data: profiles } = await supabase
+          .from('profiles')
+          .select('*')
+          .in('id', userIds)
 
-      if (profiles) {
-        profiles.forEach(p => profilesMap.set(p.id, p))
+        if (profiles) {
+          profiles.forEach(p => profilesMap.set(p.id, p))
+        }
       }
     } catch {
       // profiles table doesn't exist, continue without it

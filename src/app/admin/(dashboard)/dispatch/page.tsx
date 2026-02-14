@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState } from 'react'
 import {
   Loader2,
   AlertCircle,
@@ -15,6 +15,7 @@ import { StatCard } from '@/components/dashboard/StatCard'
 import { StatusTabs } from '@/components/dashboard/StatusTabs'
 import { Pagination } from '@/components/dashboard/Pagination'
 import { STATUS_META } from '@/types/leads'
+import { useAdminFetch, adminMutate } from '@/hooks/admin/useAdminFetch'
 
 interface DispatchAssignment {
   id: string
@@ -53,53 +54,31 @@ interface DispatchData {
 type StatusFilter = 'all' | 'pending' | 'viewed' | 'quoted' | 'declined'
 
 export default function AdminDispatchPage() {
-  const [data, setData] = useState<DispatchData | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [page, setPage] = useState(1)
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all')
   const [actionLoading, setActionLoading] = useState<string | null>(null)
+  const [mutationError, setMutationError] = useState<string | null>(null)
 
-  const fetchData = useCallback(async () => {
-    setLoading(true)
-    setError(null)
-    try {
-      const params = new URLSearchParams({ page: String(page) })
-      if (statusFilter !== 'all') params.set('status', statusFilter)
-      const res = await fetch(`/api/admin/dispatch?${params}`)
-      if (res.ok) {
-        setData(await res.json())
-      } else {
-        const err = await res.json()
-        setError(err.error || 'Erreur')
-      }
-    } catch {
-      setError('Erreur de connexion')
-    } finally {
-      setLoading(false)
-    }
-  }, [page, statusFilter])
+  const params = new URLSearchParams({ page: String(page) })
+  if (statusFilter !== 'all') params.set('status', statusFilter)
 
-  useEffect(() => {
-    fetchData()
-  }, [fetchData])
+  const { data, isLoading, error: fetchError, mutate } = useAdminFetch<DispatchData>(
+    `/api/admin/dispatch?${params}`
+  )
+
+  const error = fetchError || (mutationError ? new Error(mutationError) : undefined)
 
   const handleReplay = async (assignmentId: string) => {
     setActionLoading(assignmentId)
     try {
-      const res = await fetch('/api/admin/dispatch', {
+      setMutationError(null)
+      await adminMutate('/api/admin/dispatch', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'replay', assignmentId }),
+        body: { action: 'replay', assignmentId },
       })
-      if (res.ok) {
-        fetchData()
-      } else {
-        const err = await res.json()
-        setError(err.error || 'Erreur')
-      }
-    } catch {
-      setError('Erreur')
+      mutate()
+    } catch (err) {
+      setMutationError(err instanceof Error ? err.message : 'Erreur')
     } finally {
       setActionLoading(null)
     }
@@ -126,7 +105,7 @@ export default function AdminDispatchPage() {
             <p className="text-gray-500 mt-1">Suivi des assignations en temps réel</p>
           </div>
           <button
-            onClick={fetchData}
+            onClick={() => mutate()}
             className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 border border-gray-200 rounded-lg hover:bg-white transition-colors"
           >
             <RefreshCw className="w-4 h-4" />
@@ -165,7 +144,7 @@ export default function AdminDispatchPage() {
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-center gap-3">
             <AlertCircle className="w-5 h-5 text-red-500" />
-            <p className="text-red-700 text-sm">{error}</p>
+            <p className="text-red-700 text-sm">{error.message}</p>
           </div>
         )}
 
@@ -178,7 +157,7 @@ export default function AdminDispatchPage() {
           />
         </div>
 
-        {loading ? (
+        {isLoading ? (
           <div className="flex justify-center py-16">
             <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
           </div>

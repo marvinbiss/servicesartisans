@@ -13,6 +13,16 @@ import { dispatchLead } from '@/app/actions/dispatch'
 
 export const dynamic = 'force-dynamic'
 
+/** Escape HTML special chars to prevent XSS in email templates */
+function htmlEscape(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
 const getResend = () => getResendClient()
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -144,13 +154,13 @@ export async function POST(request: Request) {
       to: data.email,
       subject: 'Votre demande de devis - ServicesArtisans',
       html: `
-        <h2>Bonjour ${data.nom},</h2>
+        <h2>Bonjour ${htmlEscape(data.nom)},</h2>
         <p>Nous avons bien reçu votre demande de devis. Voici le récapitulatif :</p>
         <ul>
-          <li><strong>Service :</strong> ${serviceNames[data.service] || data.service}</li>
-          <li><strong>Délai :</strong> ${urgencyLabels[data.urgency] || data.urgency}</li>
-          ${data.ville ? `<li><strong>Ville :</strong> ${data.ville}</li>` : ''}
-          ${data.description ? `<li><strong>Description :</strong> ${data.description}</li>` : ''}
+          <li><strong>Service :</strong> ${htmlEscape(serviceNames[data.service] || data.service)}</li>
+          <li><strong>Délai :</strong> ${htmlEscape(urgencyLabels[data.urgency] || data.urgency)}</li>
+          ${data.ville ? `<li><strong>Ville :</strong> ${htmlEscape(data.ville)}</li>` : ''}
+          ${data.description ? `<li><strong>Description :</strong> ${htmlEscape(data.description)}</li>` : ''}
         </ul>
         <p><strong>Que se passe-t-il maintenant ?</strong></p>
         <p>Nous allons transmettre votre demande aux artisans disponibles dans votre région. Vous recevrez jusqu\u2019à 3 devis gratuits sous 24h.</p>
@@ -170,18 +180,18 @@ export async function POST(request: Request) {
         <h2>Nouvelle demande de devis</h2>
         <h3>Client</h3>
         <ul>
-          <li><strong>Nom :</strong> ${data.nom}</li>
-          <li><strong>Email :</strong> ${data.email}</li>
-          <li><strong>Téléphone :</strong> ${data.telephone}</li>
+          <li><strong>Nom :</strong> ${htmlEscape(data.nom)}</li>
+          <li><strong>Email :</strong> ${htmlEscape(data.email)}</li>
+          <li><strong>Téléphone :</strong> ${htmlEscape(data.telephone)}</li>
         </ul>
         <h3>Demande</h3>
         <ul>
-          <li><strong>Service :</strong> ${serviceNames[data.service] || data.service}</li>
-          <li><strong>Délai :</strong> ${urgencyLabels[data.urgency] || data.urgency}</li>
-          <li><strong>Ville :</strong> ${data.ville || 'Non précisé'}</li>
-          <li><strong>Code postal :</strong> ${data.codePostal || 'Non précisé'}</li>
-          <li><strong>Budget :</strong> ${data.budget || 'Non précisé'}</li>
-          <li><strong>Description :</strong> ${data.description || 'Non précisé'}</li>
+          <li><strong>Service :</strong> ${htmlEscape(serviceNames[data.service] || data.service)}</li>
+          <li><strong>Délai :</strong> ${htmlEscape(urgencyLabels[data.urgency] || data.urgency)}</li>
+          <li><strong>Ville :</strong> ${htmlEscape(data.ville || 'Non précisé')}</li>
+          <li><strong>Code postal :</strong> ${htmlEscape(data.codePostal || 'Non précisé')}</li>
+          <li><strong>Budget :</strong> ${htmlEscape(data.budget || 'Non précisé')}</li>
+          <li><strong>Description :</strong> ${htmlEscape(data.description || 'Non précisé')}</li>
         </ul>
         ${lead ? `<p>ID: ${lead.id}</p>` : ''}
       `,
