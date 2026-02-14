@@ -5,13 +5,14 @@ import Breadcrumb from '@/components/Breadcrumb'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import { SITE_URL } from '@/lib/seo/config'
 import { tradeContent } from '@/lib/data/trade-content'
 
 export const metadata: Metadata = {
   title: 'Tarifs artisans 2026 — Guide complet des prix par métier | ServicesArtisans',
   description: 'Guide complet des tarifs artisans en 2026 : prix plombier, électricien, peintre, couvreur, maçon et tous les corps de métier. Comparez les prix pour mieux estimer votre budget travaux.',
   alternates: {
-    canonical: 'https://servicesartisans.fr/tarifs-artisans',
+    canonical: `${SITE_URL}/tarifs-artisans`,
   },
   robots: {
     index: true,
@@ -23,15 +24,15 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Tarifs artisans 2026 — Guide complet des prix | ServicesArtisans',
     description: 'Prix plombier, électricien, peintre, couvreur, maçon et tous les corps de métier. Comparez les prix.',
-    url: 'https://servicesartisans.fr/tarifs-artisans',
+    url: `${SITE_URL}/tarifs-artisans`,
     type: 'website',
-    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — Tarifs artisans' }],
+    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Tarifs artisans' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Tarifs artisans 2026 — Guide complet des prix | ServicesArtisans',
     description: 'Prix plombier, électricien, peintre, couvreur et tous les corps de métier.',
-    images: ['https://servicesartisans.fr/opengraph-image'],
+    images: [`${SITE_URL}/opengraph-image`],
   },
 }
 

@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     description: 'Explorez 350 000+ artisans référencés dans les 18 régions de France. Tous les corps de métier du bâtiment.',
     url: `${SITE_URL}/regions`,
     type: 'website',
-    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — Artisans par région' }],
+    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Artisans par région' }],
   },
 }
 
@@ -28,13 +28,13 @@ export default function RegionsIndexPage() {
         '@type': 'CollectionPage',
         name: 'Artisans par région en France',
         description: 'Annuaire de 350 000+ artisans référencés dans les 18 régions françaises.',
-        url: 'https://servicesartisans.fr/regions',
+        url: `${SITE_URL}/regions`,
         numberOfItems: regions.length,
-        isPartOf: { '@type': 'WebSite', name: 'ServicesArtisans', url: 'https://servicesartisans.fr' },
+        isPartOf: { '@type': 'WebSite', name: 'ServicesArtisans', url: SITE_URL },
         breadcrumb: {
           '@type': 'BreadcrumbList',
           itemListElement: [
-            { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://servicesartisans.fr' },
+            { '@type': 'ListItem', position: 1, name: 'Accueil', item: SITE_URL },
             { '@type': 'ListItem', position: 2, name: 'Régions' }
           ]
         }

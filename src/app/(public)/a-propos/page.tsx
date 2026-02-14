@@ -7,13 +7,14 @@ import Breadcrumb from '@/components/Breadcrumb'
 import { createAdminClient } from '@/lib/supabase/admin'
 import JsonLd from '@/components/JsonLd'
 import { getOrganizationSchema, getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { SITE_URL } from '@/lib/seo/config'
 import { companyIdentity } from '@/lib/config/company-identity'
 
 export const metadata: Metadata = {
   title: 'À propos — Le plus grand annuaire d\'artisans de France',
   description: 'ServicesArtisans référence 350 000+ artisans grâce aux données ouvertes du gouvernement. Annuaire gratuit, transparent et fiable.',
   alternates: {
-    canonical: 'https://servicesartisans.fr/a-propos',
+    canonical: `${SITE_URL}/a-propos`,
   },
   robots: {
     index: true,
@@ -25,15 +26,15 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'À propos — Le plus grand annuaire d\'artisans de France',
     description: 'ServicesArtisans référence 350 000+ artisans grâce aux données ouvertes du gouvernement. Annuaire gratuit, transparent et fiable.',
-    url: 'https://servicesartisans.fr/a-propos',
+    url: `${SITE_URL}/a-propos`,
     type: 'website',
-    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — Annuaire des artisans en France' }],
+    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Annuaire des artisans en France' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'À propos — Le plus grand annuaire d\'artisans de France',
     description: 'ServicesArtisans référence 350 000+ artisans grâce aux données ouvertes du gouvernement.',
-    images: ['https://servicesartisans.fr/opengraph-image'],
+    images: [`${SITE_URL}/opengraph-image`],
   },
 }
 

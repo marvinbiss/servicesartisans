@@ -7,6 +7,7 @@ import {
 } from 'lucide-react'
 import JsonLd from '@/components/JsonLd'
 import { getOrganizationSchema, getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { SITE_URL } from '@/lib/seo/config'
 import { REVALIDATE } from '@/lib/cache'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularCitiesLinks, GeographicNavigation } from '@/components/InternalLinks'
@@ -22,13 +23,13 @@ export const metadata: Metadata = {
   title: 'Tous les services artisans — 350 000+ professionnels référencés',
   description: 'Annuaire de 350 000+ artisans référencés : plombier, électricien, serrurier, chauffagiste, peintre, couvreur, menuisier, maçon et 50+ métiers. Devis gratuits dans 101 départements.',
   alternates: {
-    canonical: 'https://servicesartisans.fr/services',
+    canonical: `${SITE_URL}/services`,
   },
   openGraph: {
     title: 'Tous les services artisans — 350 000+ professionnels référencés',
     description: '50+ métiers du bâtiment, 350 000+ artisans référencés dans 101 départements. Trouvez un professionnel qualifié près de chez vous.',
-    url: 'https://servicesartisans.fr/services',
-    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — Tous les services artisans' }],
+    url: `${SITE_URL}/services`,
+    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Tous les services artisans' }],
   },
   robots: {
     index: true,

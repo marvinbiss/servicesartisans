@@ -4,13 +4,14 @@ import { MessageSquare, Shield, UserCheck, Trash2, Calculator, ArrowRight } from
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { SITE_URL } from '@/lib/seo/config'
 import { companyIdentity } from '@/lib/config/company-identity'
 
 export const metadata: Metadata = {
   title: 'Politique de gestion des avis - ServicesArtisans',
   description: 'Notre politique de gestion des avis : qui peut publier un avis, processus de modération, droit de réponse des artisans et calcul des notes sur ServicesArtisans.',
   alternates: {
-    canonical: 'https://servicesartisans.fr/politique-avis',
+    canonical: `${SITE_URL}/politique-avis`,
   },
   robots: {
     index: true,
@@ -22,14 +23,14 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Politique de gestion des avis - ServicesArtisans',
     description: 'Qui peut publier un avis, processus de modération, droit de réponse des artisans et calcul des notes.',
-    url: 'https://servicesartisans.fr/politique-avis',
+    url: `${SITE_URL}/politique-avis`,
     type: 'website',
-    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — Politique avis' }],
+    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Politique avis' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Politique de gestion des avis - ServicesArtisans',
-    images: ['https://servicesartisans.fr/opengraph-image'],
+    images: [`${SITE_URL}/opengraph-image`],
   },
 }
 

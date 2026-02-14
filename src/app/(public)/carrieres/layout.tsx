@@ -1,9 +1,10 @@
 import { Metadata } from 'next'
+import { SITE_URL } from '@/lib/seo/config'
 
 export const metadata: Metadata = {
   title: 'Carrières | ServicesArtisans',
   description: 'Rejoignez l\'équipe ServicesArtisans. Découvrez nos offres d\'emploi.',
-  alternates: { canonical: 'https://servicesartisans.fr/carrieres' },
+  alternates: { canonical: `${SITE_URL}/carrieres` },
   robots: { index: false, follow: true },
 }
 

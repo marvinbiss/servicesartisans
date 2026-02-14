@@ -2,12 +2,13 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
+import { SITE_URL } from '@/lib/seo/config'
 
 export const metadata: Metadata = {
   title: 'Carrières — Rejoignez l\'équipe ServicesArtisans',
   description: 'Découvrez les opportunités de carrière chez ServicesArtisans. Rejoignez une équipe passionnée qui construit le plus grand annuaire d\'artisans de France.',
   alternates: {
-    canonical: 'https://servicesartisans.fr/carrieres',
+    canonical: `${SITE_URL}/carrieres`,
   },
   // robots inherited from layout.tsx (noindex for pre-launch)
 }

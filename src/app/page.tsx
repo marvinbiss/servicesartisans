@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { SITE_URL } from '@/lib/seo/config'
 import { PopularCitiesLinks, PopularServicesLinks, PopularServiceCityLinks, GeographicNavigation } from '@/components/InternalLinks'
 import { HeroSection } from '@/components/home/HeroSection'
 import {
@@ -16,21 +17,21 @@ export const metadata: Metadata = {
   title: 'ServicesArtisans — 350 000+ artisans référencés en France',
   description:
     'Le plus grand annuaire d\'artisans de France. 350 000+ professionnels référencés, 101 départements couverts. Comparez les avis, obtenez des devis gratuits. Plombiers, électriciens, menuisiers et plus.',
-  alternates: { canonical: 'https://servicesartisans.fr' },
+  alternates: { canonical: SITE_URL },
   openGraph: {
     title: 'ServicesArtisans — 350 000+ artisans référencés en France',
     description:
       'Le plus grand annuaire d\'artisans de France. 350 000+ professionnels référencés dans 101 départements. Devis gratuits.',
     type: 'website',
-    url: 'https://servicesartisans.fr',
-    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — Annuaire des artisans en France' }],
+    url: SITE_URL,
+    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Annuaire des artisans en France' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'ServicesArtisans — 350 000+ artisans référencés en France',
     description:
       'Le plus grand annuaire d\'artisans de France. 350 000+ professionnels référencés dans 101 départements. Devis gratuits.',
-    images: ['https://servicesartisans.fr/opengraph-image'],
+    images: [`${SITE_URL}/opengraph-image`],
   },
 }
 

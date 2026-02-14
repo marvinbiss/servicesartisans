@@ -1,15 +1,16 @@
 import { Metadata } from 'next'
+import { SITE_URL } from '@/lib/seo/config'
 
 export const metadata: Metadata = {
   title: 'Demander un devis gratuit | ServicesArtisans',
   description: 'Demandez un devis gratuit et recevez jusqu\'à 3 propositions d\'artisans qualifiés près de chez vous. Service 100% gratuit et sans engagement.',
   alternates: {
-    canonical: 'https://servicesartisans.fr/devis',
+    canonical: `${SITE_URL}/devis`,
   },
   openGraph: {
     title: 'Demander un devis gratuit | ServicesArtisans',
     description: 'Recevez jusqu\'à 3 devis d\'artisans qualifiés. Gratuit et sans engagement.',
-    url: 'https://servicesartisans.fr/devis',
+    url: `${SITE_URL}/devis`,
   },
   robots: {
     index: true,

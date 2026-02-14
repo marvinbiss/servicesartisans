@@ -3,6 +3,7 @@ import { Shield, Clock, Users, Search, FileText, CheckCircle, ChevronDown, Star,
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import { SITE_URL } from '@/lib/seo/config'
 import DevisForm from '@/components/DevisForm'
 
 export const metadata: Metadata = {
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
   description:
     "Décrivez votre projet et recevez jusqu'à 3 devis gratuits d'artisans référencés. 100 % gratuit, sans engagement.",
   alternates: {
-    canonical: 'https://servicesartisans.fr/devis',
+    canonical: `${SITE_URL}/devis`,
   },
   robots: {
     index: true,
@@ -22,15 +23,15 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Demander un devis gratuit — ServicesArtisans',
     description: "Décrivez votre projet et recevez jusqu'à 3 devis gratuits d'artisans référencés. 100 % gratuit, sans engagement.",
-    url: 'https://servicesartisans.fr/devis',
+    url: `${SITE_URL}/devis`,
     type: 'website',
-    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — Devis gratuit' }],
+    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Devis gratuit' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Demander un devis gratuit — ServicesArtisans',
     description: "Décrivez votre projet et recevez jusqu'à 3 devis gratuits d'artisans référencés.",
-    images: ['https://servicesartisans.fr/opengraph-image'],
+    images: [`${SITE_URL}/opengraph-image`],
   },
 }
 

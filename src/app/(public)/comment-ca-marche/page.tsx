@@ -7,12 +7,13 @@ import Breadcrumb from '@/components/Breadcrumb'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
 import JsonLd from '@/components/JsonLd'
 import { getHowToSchema, getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import { SITE_URL } from '@/lib/seo/config'
 
 export const metadata: Metadata = {
   title: 'Comment ça marche — Trouvez un artisan parmi 350 000+ professionnels référencés | ServicesArtisans',
   description: 'Recherchez, comparez et contactez un artisan en 3 étapes. 350 000+ professionnels référencés dans 101 départements. 100% gratuit, sans inscription.',
   alternates: {
-    canonical: 'https://servicesartisans.fr/comment-ca-marche',
+    canonical: `${SITE_URL}/comment-ca-marche`,
   },
   robots: {
     index: true,
@@ -24,15 +25,15 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Comment ça marche — Trouvez un artisan | ServicesArtisans',
     description: 'Recherchez, comparez et contactez un artisan en 3 étapes. 100% gratuit, sans inscription.',
-    url: 'https://servicesartisans.fr/comment-ca-marche',
+    url: `${SITE_URL}/comment-ca-marche`,
     type: 'website',
-    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — Comment ça marche' }],
+    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Comment ça marche' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Comment ça marche — Trouvez un artisan | ServicesArtisans',
     description: 'Recherchez, comparez et contactez un artisan en 3 étapes. 100% gratuit.',
-    images: ['https://servicesartisans.fr/opengraph-image'],
+    images: [`${SITE_URL}/opengraph-image`],
   },
 }
 

@@ -4,13 +4,14 @@ import { FileCheck, Shield, Lock, Eye, AlertTriangle, ArrowRight } from 'lucide-
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { SITE_URL } from '@/lib/seo/config'
 import { companyIdentity } from '@/lib/config/company-identity'
 
 export const metadata: Metadata = {
   title: 'Notre processus de vérification des artisans - ServicesArtisans',
   description: 'Découvrez comment ServicesArtisans vérifie chaque artisan : contrôle SIRET via l\'API SIRENE, assurance RC professionnelle, garantie décennale et suivi continu.',
   alternates: {
-    canonical: 'https://servicesartisans.fr/notre-processus-de-verification',
+    canonical: `${SITE_URL}/notre-processus-de-verification`,
   },
   robots: {
     index: true,
@@ -22,14 +23,14 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Notre processus de vérification des artisans - ServicesArtisans',
     description: 'Contrôle SIRET via l\'API SIRENE, assurance RC professionnelle, garantie décennale et suivi continu.',
-    url: 'https://servicesartisans.fr/notre-processus-de-verification',
+    url: `${SITE_URL}/notre-processus-de-verification`,
     type: 'website',
-    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — Vérification artisans' }],
+    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Vérification artisans' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Notre processus de vérification des artisans - ServicesArtisans',
-    images: ['https://servicesartisans.fr/opengraph-image'],
+    images: [`${SITE_URL}/opengraph-image`],
   },
 }
 

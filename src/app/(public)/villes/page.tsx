@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     description: 'Trouvez un artisan référencé dans votre ville. Plus de 1 000 villes couvertes, 350 000+ professionnels dans 101 départements.',
     url: `${SITE_URL}/villes`,
     type: 'website',
-    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — Artisans par ville' }],
+    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Artisans par ville' }],
   },
 }
 
@@ -38,13 +38,13 @@ export default function VillesIndexPage() {
         '@type': 'CollectionPage',
         name: 'Artisans par ville en France',
         description: 'Annuaire de 350 000+ artisans référencés dans plus de 1 000 villes de France.',
-        url: 'https://servicesartisans.fr/villes',
+        url: `${SITE_URL}/villes`,
         numberOfItems: villes.length,
-        isPartOf: { '@type': 'WebSite', name: 'ServicesArtisans', url: 'https://servicesartisans.fr' },
+        isPartOf: { '@type': 'WebSite', name: 'ServicesArtisans', url: SITE_URL },
         breadcrumb: {
           '@type': 'BreadcrumbList',
           itemListElement: [
-            { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://servicesartisans.fr' },
+            { '@type': 'ListItem', position: 1, name: 'Accueil', item: SITE_URL },
             { '@type': 'ListItem', position: 2, name: 'Villes' }
           ]
         }

@@ -18,13 +18,13 @@ export const metadata: Metadata = {
     description: 'Comparez les avis, les tarifs et obtenez des devis gratuits. 350 000+ artisans référencés.',
     url: `${SITE_URL}/recherche`,
     type: 'website',
-    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — Recherche artisan' }],
+    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Recherche artisan' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Rechercher un artisan | ServicesArtisans',
     description: 'Comparez les avis, les tarifs et obtenez des devis gratuits.',
-    images: ['https://servicesartisans.fr/opengraph-image'],
+    images: [`${SITE_URL}/opengraph-image`],
   },
 }
 

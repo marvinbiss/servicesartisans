@@ -2,24 +2,25 @@ import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
 import Breadcrumb from '@/components/Breadcrumb'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { SITE_URL } from '@/lib/seo/config'
 
 export const metadata: Metadata = {
   title: 'Conditions Générales de Vente - ServicesArtisans',
   description: 'Conditions générales de vente et d\'utilisation du service ServicesArtisans.',
   alternates: {
-    canonical: 'https://servicesartisans.fr/cgv',
+    canonical: `${SITE_URL}/cgv`,
   },
   openGraph: {
     title: 'Conditions Générales de Vente - ServicesArtisans',
     description: 'Conditions générales de vente et d\'utilisation du service ServicesArtisans.',
-    url: 'https://servicesartisans.fr/cgv',
+    url: `${SITE_URL}/cgv`,
     type: 'website',
-    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — CGV' }],
+    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — CGV' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Conditions Générales de Vente - ServicesArtisans',
-    images: ['https://servicesartisans.fr/opengraph-image'],
+    images: [`${SITE_URL}/opengraph-image`],
   },
 }
 

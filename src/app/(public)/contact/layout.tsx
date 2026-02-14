@@ -1,17 +1,18 @@
 import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { SITE_URL } from '@/lib/seo/config'
 
 export const metadata: Metadata = {
   title: 'Contact - Nous contacter | ServicesArtisans',
   description: 'Contactez l\'équipe ServicesArtisans. Questions, support, partenariats. Nous sommes là pour vous aider.',
   alternates: {
-    canonical: 'https://servicesartisans.fr/contact',
+    canonical: `${SITE_URL}/contact`,
   },
   openGraph: {
     title: 'Contact - Nous contacter | ServicesArtisans',
     description: 'Contactez l\'équipe ServicesArtisans pour toute question ou demande.',
-    url: 'https://servicesartisans.fr/contact',
+    url: `${SITE_URL}/contact`,
   },
   robots: {
     index: true,

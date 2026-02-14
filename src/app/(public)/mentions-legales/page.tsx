@@ -3,13 +3,14 @@ import Link from 'next/link'
 import JsonLd from '@/components/JsonLd'
 import Breadcrumb from '@/components/Breadcrumb'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { SITE_URL } from '@/lib/seo/config'
 import { companyIdentity } from '@/lib/config/company-identity'
 
 export const metadata: Metadata = {
   title: 'Mentions légales - ServicesArtisans',
   description: 'Mentions légales du site ServicesArtisans.fr - Informations juridiques, éditeur, hébergeur et conditions d\'utilisation.',
   alternates: {
-    canonical: 'https://servicesartisans.fr/mentions-legales',
+    canonical: `${SITE_URL}/mentions-legales`,
   },
   robots: {
     index: true,
@@ -19,14 +20,14 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Mentions légales - ServicesArtisans',
     description: 'Informations juridiques, éditeur, hébergeur et conditions d\'utilisation.',
-    url: 'https://servicesartisans.fr/mentions-legales',
+    url: `${SITE_URL}/mentions-legales`,
     type: 'website',
-    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — Mentions légales' }],
+    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Mentions légales' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Mentions légales - ServicesArtisans',
-    images: ['https://servicesartisans.fr/opengraph-image'],
+    images: [`${SITE_URL}/opengraph-image`],
   },
 }
 

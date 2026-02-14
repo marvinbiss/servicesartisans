@@ -6,6 +6,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { MobileMenuProvider } from '@/contexts/MobileMenuContext'
 import { getOrganizationSchema, getWebsiteSchema } from '@/lib/seo/jsonld'
+import { SITE_URL } from '@/lib/seo/config'
 import GoogleAnalytics from '@/components/GoogleAnalytics'
 
 const inter = Inter({
@@ -50,7 +51,7 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://servicesartisans.fr'),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: 'ServicesArtisans — 350 000+ artisans référencés en France',
     template: '%s | ServicesArtisans',
@@ -87,12 +88,12 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'fr_FR',
-    url: 'https://servicesartisans.fr',
+    url: SITE_URL,
     siteName: 'ServicesArtisans',
     title: 'ServicesArtisans — 350 000+ artisans référencés en France',
     description:
       'Le plus grand annuaire d\'artisans de France. 350 000+ professionnels référencés. Devis gratuits.',
-    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — 350 000+ artisans référencés en France' }],
+    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — 350 000+ artisans référencés en France' }],
   },
   twitter: {
     card: 'summary_large_image',
@@ -108,10 +109,10 @@ export const metadata: Metadata = {
     'max-video-preview': -1,
   },
   alternates: {
-    canonical: 'https://servicesartisans.fr',
+    canonical: SITE_URL,
     languages: {
-      'fr-FR': 'https://servicesartisans.fr',
-      'x-default': 'https://servicesartisans.fr',
+      'fr-FR': SITE_URL,
+      'x-default': SITE_URL,
     },
   },
   manifest: '/manifest.json',

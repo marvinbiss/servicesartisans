@@ -3,24 +3,25 @@ import { Eye, Ear, Hand, Brain, Mail } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { SITE_URL } from '@/lib/seo/config'
 
 export const metadata: Metadata = {
   title: 'Accessibilité - ServicesArtisans',
   description: 'Déclaration d\'accessibilité de ServicesArtisans - Notre engagement pour rendre le site accessible à tous.',
   alternates: {
-    canonical: 'https://servicesartisans.fr/accessibilite',
+    canonical: `${SITE_URL}/accessibilite`,
   },
   openGraph: {
     title: 'Accessibilité - ServicesArtisans',
     description: 'Notre engagement pour rendre le site accessible à tous.',
-    url: 'https://servicesartisans.fr/accessibilite',
+    url: `${SITE_URL}/accessibilite`,
     type: 'website',
-    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — Accessibilité' }],
+    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Accessibilité' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Accessibilité - ServicesArtisans',
-    images: ['https://servicesartisans.fr/opengraph-image'],
+    images: [`${SITE_URL}/opengraph-image`],
   },
 }
 

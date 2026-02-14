@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
+import { SITE_URL } from '@/lib/seo/config'
 import { faqCategories } from '@/lib/data/faq-data'
 import FAQPageClient from './FAQPageClient'
 
@@ -7,20 +8,20 @@ export const metadata: Metadata = {
   title: 'Questions fréquentes (FAQ) | ServicesArtisans',
   description: 'Retrouvez les réponses aux questions les plus fréquentes sur ServicesArtisans : inscription, devis, fonctionnement de l\'annuaire d\'artisans.',
   alternates: {
-    canonical: 'https://servicesartisans.fr/faq',
+    canonical: `${SITE_URL}/faq`,
   },
   openGraph: {
     title: 'Questions fréquentes (FAQ) | ServicesArtisans',
     description: 'Retrouvez les réponses aux questions fréquentes sur ServicesArtisans.',
-    url: 'https://servicesartisans.fr/faq',
+    url: `${SITE_URL}/faq`,
     type: 'website',
-    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — FAQ' }],
+    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — FAQ' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Questions fréquentes (FAQ) | ServicesArtisans',
     description: 'Retrouvez les réponses aux questions fréquentes sur ServicesArtisans.',
-    images: ['https://servicesartisans.fr/opengraph-image'],
+    images: [`${SITE_URL}/opengraph-image`],
   },
 }
 

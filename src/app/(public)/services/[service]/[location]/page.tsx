@@ -18,6 +18,7 @@ import { getServiceImage } from '@/lib/data/images'
 import { services as staticServicesList, villes, getVilleBySlug, getDepartementByCode, getRegionSlugByName, getNearbyCities, getVillesByDepartement } from '@/lib/data/france'
 import { getTradeContent } from '@/lib/data/trade-content'
 import { getFAQSchema } from '@/lib/seo/jsonld'
+import { SITE_URL } from '@/lib/seo/config'
 import { generateLocationContent } from '@/lib/seo/location-content'
 import type { Service, Location as LocationType, Provider } from '@/types'
 
@@ -143,7 +144,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       images: [getServiceImage(serviceSlug).src],
     },
     alternates: {
-      canonical: `https://servicesartisans.fr/services/${serviceSlug}/${locationSlug}`,
+      canonical: `${SITE_URL}/services/${serviceSlug}/${locationSlug}`,
     },
   }
 }
@@ -165,7 +166,7 @@ function generateJsonLd(service: Service, location: LocationType, _providers: un
       },
     },
     provider: {
-      '@id': 'https://servicesartisans.fr#organization',
+      '@id': `${SITE_URL}#organization`,
     },
   }
 

@@ -41,14 +41,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       type: 'website',
       images: [cityImage
         ? { url: cityImage.src, width: 1200, height: 630, alt: cityImage.alt }
-        : { url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: `Artisans à ${ville.name}` }
+        : { url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: `Artisans à ${ville.name}` }
       ],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: [cityImage ? cityImage.src : 'https://servicesartisans.fr/opengraph-image'],
+      images: [cityImage ? cityImage.src : `${SITE_URL}/opengraph-image`],
     },
     alternates: { canonical: `${SITE_URL}/villes/${villeSlug}` },
   }

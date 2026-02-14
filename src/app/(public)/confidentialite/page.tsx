@@ -2,24 +2,25 @@ import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
 import Breadcrumb from '@/components/Breadcrumb'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { SITE_URL } from '@/lib/seo/config'
 
 export const metadata: Metadata = {
   title: 'Politique de confidentialité - ServicesArtisans',
   description: 'Politique de confidentialité de ServicesArtisans - Comment nous collectons, utilisons et protégeons vos données personnelles.',
   alternates: {
-    canonical: 'https://servicesartisans.fr/confidentialite',
+    canonical: `${SITE_URL}/confidentialite`,
   },
   openGraph: {
     title: 'Politique de confidentialité - ServicesArtisans',
     description: 'Comment nous collectons, utilisons et protégeons vos données personnelles.',
-    url: 'https://servicesartisans.fr/confidentialite',
+    url: `${SITE_URL}/confidentialite`,
     type: 'website',
-    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — Confidentialité' }],
+    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Confidentialité' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Politique de confidentialité - ServicesArtisans',
-    images: ['https://servicesartisans.fr/opengraph-image'],
+    images: [`${SITE_URL}/opengraph-image`],
   },
 }
 

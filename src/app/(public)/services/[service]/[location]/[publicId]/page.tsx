@@ -9,6 +9,7 @@ import ArtisanInternalLinks from '@/components/artisan/ArtisanInternalLinks'
 import { Review } from '@/components/artisan'
 import type { LegacyArtisan } from '@/types/legacy'
 import { getServiceImage } from '@/lib/data/images'
+import { SITE_URL } from '@/lib/seo/config'
 
 export const revalidate = 300
 
@@ -333,7 +334,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         description,
         type: 'profile',
         locale: 'fr_FR',
-        url: `https://servicesartisans.fr/services/${serviceSlug}/${locationSlug}/${publicId}`,
+        url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}/${publicId}`,
         images: provider.avatar_url
           ? [{ url: provider.avatar_url, alt: ogAlt }]
           : [{ url: serviceImage.src, width: 1200, height: 630, alt: ogAlt }],
@@ -345,7 +346,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         images: [ogImage],
       },
       alternates: {
-        canonical: `https://servicesartisans.fr/services/${serviceSlug}/${locationSlug}/${publicId}`,
+        canonical: `${SITE_URL}/services/${serviceSlug}/${locationSlug}/${publicId}`,
       },
     }
   } catch {

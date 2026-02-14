@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     description: 'Annuaire de 350 000+ artisans référencés dans les 101 départements français. Trouvez un professionnel qualifié près de chez vous.',
     url: `${SITE_URL}/departements`,
     type: 'website',
-    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — Artisans par département' }],
+    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Artisans par département' }],
   },
 }
 
@@ -37,13 +37,13 @@ export default function DepartementsIndexPage() {
         '@type': 'CollectionPage',
         name: 'Artisans par département en France',
         description: 'Annuaire de 350 000+ artisans référencés dans les 101 départements français.',
-        url: 'https://servicesartisans.fr/departements',
+        url: `${SITE_URL}/departements`,
         numberOfItems: departements.length,
-        isPartOf: { '@type': 'WebSite', name: 'ServicesArtisans', url: 'https://servicesartisans.fr' },
+        isPartOf: { '@type': 'WebSite', name: 'ServicesArtisans', url: SITE_URL },
         breadcrumb: {
           '@type': 'BreadcrumbList',
           itemListElement: [
-            { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://servicesartisans.fr' },
+            { '@type': 'ListItem', position: 1, name: 'Accueil', item: SITE_URL },
             { '@type': 'ListItem', position: 2, name: 'Départements' }
           ]
         }

@@ -1,15 +1,16 @@
 import { Metadata } from 'next'
+import { SITE_URL } from '@/lib/seo/config'
 
 export const metadata: Metadata = {
   title: 'Blog — Conseils et actualités travaux | ServicesArtisans',
   description: 'Conseils pratiques, guides et actualités pour tous vos projets de travaux. Rénovation, décoration, entretien maison.',
   alternates: {
-    canonical: 'https://servicesartisans.fr/blog',
+    canonical: `${SITE_URL}/blog`,
   },
   openGraph: {
     title: 'Blog — Conseils et actualités travaux | ServicesArtisans',
     description: 'Conseils pratiques, guides et actualités pour tous vos projets de travaux.',
-    url: 'https://servicesartisans.fr/blog',
+    url: `${SITE_URL}/blog`,
   },
   robots: {
     index: true,

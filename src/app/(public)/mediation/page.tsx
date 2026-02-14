@@ -4,13 +4,14 @@ import { MessageCircle, Users, Scale, Clock, Mail, ArrowRight } from 'lucide-rea
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { SITE_URL } from '@/lib/seo/config'
 import { companyIdentity } from '@/lib/config/company-identity'
 
 export const metadata: Metadata = {
   title: 'Médiation et résolution des litiges - ServicesArtisans',
   description: 'Processus de médiation de ServicesArtisans : réclamation, médiation interne et externe, délais de traitement. Résolution amiable des litiges.',
   alternates: {
-    canonical: 'https://servicesartisans.fr/mediation',
+    canonical: `${SITE_URL}/mediation`,
   },
   robots: {
     index: true,
@@ -22,14 +23,14 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Médiation et résolution des litiges - ServicesArtisans',
     description: 'Processus de médiation : réclamation, médiation interne et externe, résolution amiable des litiges.',
-    url: 'https://servicesartisans.fr/mediation',
+    url: `${SITE_URL}/mediation`,
     type: 'website',
-    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — Médiation' }],
+    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Médiation' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Médiation et résolution des litiges - ServicesArtisans',
-    images: ['https://servicesartisans.fr/opengraph-image'],
+    images: [`${SITE_URL}/opengraph-image`],
   },
 }
 
