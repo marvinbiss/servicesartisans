@@ -48,8 +48,8 @@ describe('client_id on lead creation — devis API route', () => {
     expect(source).toContain('serverSupabase.auth.getUser()')
   })
 
-  it('includes client_user_id in INSERT payload', () => {
-    expect(source).toContain('client_user_id: clientId')
+  it('includes client_id in INSERT payload', () => {
+    expect(source).toContain('client_id: clientId')
   })
 
   it('handles anonymous submissions gracefully (try/catch)', () => {

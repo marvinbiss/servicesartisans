@@ -55,13 +55,6 @@ const urgencyLabels: Record<string, string> = {
   flexible: 'Flexible',
 }
 
-const budgetRanges: Record<string, { min: number | null; max: number | null }> = {
-  'moins-500': { min: null, max: 500 },
-  '500-2000': { min: 500, max: 2000 },
-  '2000-5000': { min: 2000, max: 5000 },
-  'plus-5000': { min: 5000, max: null },
-  'ne-sais-pas': { min: null, max: null },
-}
 
 export async function POST(request: Request) {
   try {
@@ -96,31 +89,29 @@ export async function POST(request: Request) {
 
     const data = validation.data
 
-    // Parse budget range
-    const budget = data.budget ? budgetRanges[data.budget] : null
+    // Map urgency to devis_requests CHECK values
+    const urgencyDbMap: Record<string, string> = {
+      urgent: 'urgent',
+      semaine: 'normal',
+      mois: 'normal',
+      flexible: 'normal',
+    }
 
-    // Split name into first/last
-    const nameParts = data.nom.trim().split(/\s+/)
-    const firstName = nameParts[0]
-    const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : ''
-
-    // Store in leads table
+    // Store in devis_requests table
     const { data: lead, error: dbError } = await supabase
-      .from('leads')
+      .from('devis_requests')
       .insert({
-        client_user_id: clientId,
-        first_name: firstName,
-        last_name: lastName,
-        email: data.email,
-        phone: data.telephone,
-        description: data.description || null,
-        budget_min: budget?.min ?? null,
-        budget_max: budget?.max ?? null,
-        timeline: data.urgency,
-        project_city: data.ville || null,
-        project_postal_code: data.codePostal || null,
-        status: 'new',
-        source: 'devis_form',
+        client_id: clientId,
+        client_name: data.nom,
+        client_email: data.email,
+        client_phone: data.telephone,
+        service_name: serviceNames[data.service] || data.service,
+        description: data.description || 'Demande de devis',
+        budget: data.budget || null,
+        urgency: urgencyDbMap[data.urgency] || 'normal',
+        city: data.ville || null,
+        postal_code: data.codePostal || '',
+        status: 'pending',
       })
       .select()
       .single()
@@ -143,8 +134,8 @@ export async function POST(request: Request) {
         city: data.ville,
         postalCode: data.codePostal,
         urgency: urgencyMap[data.urgency] || 'normal',
-        sourceTable: 'leads',
-      }).catch((err) => console.error('Dispatch failed (non-blocking):', err))
+        sourceTable: 'devis_requests',
+      }).catch((err) => logger.error('Dispatch failed (non-blocking)', err))
     }
 
     // Send confirmation email to client

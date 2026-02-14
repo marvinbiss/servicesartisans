@@ -169,7 +169,7 @@ async function getSimilarArtisans(providerId: string, specialty: string, postalC
 
     let query = supabase
       .from('providers')
-      .select('id, stable_id, slug, name, business_name, specialty, rating_average, review_count, address_city, hourly_rate, is_verified, is_premium, avatar_url')
+      .select('id, stable_id, slug, name, specialty, rating_average, review_count, address_city, hourly_rate_min, hourly_rate_max, is_verified, avatar_url')
       .eq('is_active', true)
       .neq('id', providerId)
       .order('rating_average', { ascending: false, nullsFirst: false })
@@ -191,14 +191,13 @@ async function getSimilarArtisans(providerId: string, specialty: string, postalC
       id: p.id,
       stable_id: p.stable_id || undefined,
       slug: p.slug || undefined,
-      name: p.name || p.business_name || 'Artisan',
+      name: p.name || 'Artisan',
       specialty: p.specialty || specialty,
       rating: p.rating_average || 0,
       reviews: p.review_count || 0,
       city: p.address_city || '',
-      hourly_rate: p.hourly_rate || undefined,
+      hourly_rate: p.hourly_rate_min || undefined,
       is_verified: p.is_verified || false,
-      is_premium: p.is_premium || false,
       avatar_url: p.avatar_url || undefined,
     }))
   } catch {

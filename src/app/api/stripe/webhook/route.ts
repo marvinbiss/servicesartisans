@@ -289,7 +289,7 @@ async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
 
   const { data: profile } = await getSupabaseAdmin()
     .from('profiles')
-    .select('id, email, first_name, last_name, business_name')
+    .select('id, email, full_name')
     .eq('stripe_customer_id', customerId)
     .single()
 
@@ -304,10 +304,7 @@ async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
     .eq('id', profile.id)
 
   // Send email notification about failed payment
-  const displayName = profile.business_name ||
-    (profile.first_name && profile.last_name
-      ? `${profile.first_name} ${profile.last_name}`
-      : 'Client')
+  const displayName = profile.full_name || 'Client'
 
   await sendPaymentFailedNotification({
     bookingId: invoice.id || 'payment',
