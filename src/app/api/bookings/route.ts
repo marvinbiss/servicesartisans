@@ -125,7 +125,7 @@ export async function GET(request: Request) {
           end_time
         )
       `)
-      .eq('artisan_id', artisanId)
+      .eq('provider_id', artisanId)
       .order('created_at', { ascending: false })
 
     if (error) {
@@ -221,7 +221,7 @@ export async function POST(request: Request) {
     // Fetch artisan details for email notification
     const { data: artisan } = await supabase
       .from('profiles')
-      .select('first_name, last_name, email, business_name')
+      .select('full_name, email')
       .eq('id', artisanId)
       .single()
 
@@ -235,10 +235,7 @@ export async function POST(request: Request) {
     })
 
     // Determine artisan display name
-    const artisanDisplayName = artisan?.business_name ||
-      (artisan?.first_name && artisan?.last_name
-        ? `${artisan.first_name} ${artisan.last_name}`
-        : 'Artisan')
+    const artisanDisplayName = artisan?.full_name || 'Artisan'
 
     // Send confirmation notifications (email + SMS, non-blocking)
     const notificationPayload: NotificationPayload = {

@@ -214,7 +214,7 @@ async function collectUserData(userId: string) {
     getSupabaseAdmin()
       .from('bookings')
       .select('*')
-      .or(`client_email.eq.${userId},artisan_id.eq.${userId}`),
+      .or(`client_id.eq.${userId},provider_id.eq.${userId}`),
 
     // Reviews written
     getSupabaseAdmin()

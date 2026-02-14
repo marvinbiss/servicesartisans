@@ -5,6 +5,7 @@
 
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { createClient as createServerClient } from '@/lib/supabase/server'
 import { getVapidPublicKey } from '@/lib/notifications/push'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
@@ -29,10 +30,12 @@ const unsubscribeSchema = z.object({
   message: 'endpoint or userId required',
 })
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+function getSupabaseAdmin() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+}
 
 // GET /api/push/subscribe - Get VAPID public key
 export const dynamic = 'force-dynamic'
@@ -53,19 +56,32 @@ export async function GET() {
 // POST /api/push/subscribe - Subscribe to push notifications
 export async function POST(request: Request) {
   try {
+    // Auth check: verify caller is the user they claim to be
+    const serverSupabase = await createServerClient()
+    const { data: { user } } = await serverSupabase.auth.getUser()
+    if (!user) {
+      return NextResponse.json({ error: 'Authentification requise' }, { status: 401 })
+    }
+
     const body = await request.json()
     const result = subscribePostSchema.safeParse(body)
     if (!result.success) {
-      return NextResponse.json({ error: 'Invalid request', details: result.error.flatten() }, { status: 400 })
+      return NextResponse.json({ error: 'Requête invalide', details: result.error.flatten() }, { status: 400 })
     }
     const { userId, subscription } = result.data
+
+    // Verify userId matches authenticated user
+    if (userId !== user.id) {
+      return NextResponse.json({ error: 'Non autorisé' }, { status: 403 })
+    }
+
     const { endpoint, keys } = subscription
 
     // Get user agent
     const userAgent = request.headers.get('user-agent') || ''
 
     // Upsert subscription
-    const { error } = await supabase
+    const { error } = await getSupabaseAdmin()
       .from('push_subscriptions')
       .upsert(
         {
@@ -95,6 +111,13 @@ export async function POST(request: Request) {
 // DELETE /api/push/subscribe - Unsubscribe from push notifications
 export async function DELETE(request: Request) {
   try {
+    // Auth check
+    const serverSupabase = await createServerClient()
+    const { data: { user } } = await serverSupabase.auth.getUser()
+    if (!user) {
+      return NextResponse.json({ error: 'Authentification requise' }, { status: 401 })
+    }
+
     const { searchParams } = new URL(request.url)
     const queryParams = {
       endpoint: searchParams.get('endpoint') || undefined,
@@ -102,11 +125,16 @@ export async function DELETE(request: Request) {
     }
     const result = unsubscribeSchema.safeParse(queryParams)
     if (!result.success) {
-      return NextResponse.json({ error: 'Invalid request', details: result.error.flatten() }, { status: 400 })
+      return NextResponse.json({ error: 'Requête invalide', details: result.error.flatten() }, { status: 400 })
     }
     const { endpoint, userId } = result.data
 
-    const query = supabase.from('push_subscriptions')
+    // Verify userId matches authenticated user if provided
+    if (userId && userId !== user.id) {
+      return NextResponse.json({ error: 'Non autorisé' }, { status: 403 })
+    }
+
+    const query = getSupabaseAdmin().from('push_subscriptions')
 
     if (endpoint) {
       // Delete specific subscription

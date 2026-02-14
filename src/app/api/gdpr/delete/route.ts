@@ -99,7 +99,7 @@ export async function POST(request: Request) {
     const { data: pendingBookings } = await getSupabaseAdmin()
       .from('bookings')
       .select('id')
-      .eq('artisan_id', user.id)
+      .eq('provider_id', user.id)
       .in('status', ['pending', 'confirmed'])
       .gte('date', new Date().toISOString().split('T')[0])
 

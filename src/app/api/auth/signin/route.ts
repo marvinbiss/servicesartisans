@@ -98,7 +98,7 @@ export async function POST(request: Request) {
     // Get user profile (may not exist yet)
     const { data: profile } = await supabase
       .from('profiles')
-      .select('role, user_type, artisan_id, first_name, last_name')
+      .select('role, user_type, full_name')
       .eq('id', data.user.id)
       .single()
 
@@ -112,12 +112,10 @@ export async function POST(request: Request) {
         user: {
           id: data.user.id,
           email: data.user.email,
-          firstName: profile?.first_name || data.user.user_metadata?.first_name,
-          lastName: profile?.last_name || data.user.user_metadata?.last_name,
+          fullName: profile?.full_name || data.user.user_metadata?.full_name || `${data.user.user_metadata?.first_name || ''} ${data.user.user_metadata?.last_name || ''}`.trim() || null,
           role: profile?.role || 'user',
           userType: profile?.user_type || 'client',
           isArtisan,
-          artisanId: profile?.artisan_id,
         },
         session: {
           accessToken: data.session.access_token,

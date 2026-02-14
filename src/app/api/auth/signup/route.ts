@@ -81,12 +81,9 @@ export async function POST(request: Request) {
     const { error: profileError } = await supabase.from('profiles').insert({
       id: authData.user.id,
       email: email.toLowerCase(),
-      first_name: firstName,
-      last_name: lastName,
-      phone: phone || null,
+      full_name: `${firstName} ${lastName}`.trim(),
+      phone_e164: phone || null,
       role: 'user',
-      user_type: 'client', // Explicitement défini comme client
-      is_artisan: false,
       created_at: new Date().toISOString(),
     })
 

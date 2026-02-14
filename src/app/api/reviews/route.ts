@@ -18,11 +18,8 @@ interface BookingSlot {
 }
 
 interface ArtisanProfile {
-  full_name: string | null
-  company_name: string | null
-  business_name: string | null
-  first_name: string | null
-  last_name: string | null
+  id: string
+  name: string | null
 }
 
 interface BookingWithRelations {
@@ -47,10 +44,10 @@ interface Review {
   artisan_responded_at: string | null
 }
 
-// Initialize Supabase client
+// Initialize Supabase client (anon key only — RLS enforced)
 function getSupabaseClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
   if (!supabaseUrl || !supabaseKey) {
     throw new Error('Supabase configuration missing')
@@ -65,12 +62,7 @@ function getArtisanDisplayName(artisan: ArtisanProfile | ArtisanProfile[] | null
 
   const profile = Array.isArray(artisan) ? artisan[0] : artisan
 
-  return profile?.company_name ||
-    profile?.business_name ||
-    profile?.full_name ||
-    (profile?.first_name && profile?.last_name
-      ? `${profile.first_name} ${profile.last_name}`
-      : 'Artisan')
+  return profile?.name || 'Artisan'
 }
 
 // Helper to get slot date
@@ -123,7 +115,7 @@ export async function GET(request: Request) {
           service_description,
           artisan_id,
           slot:availability_slots(date),
-          artisan:profiles!bookings_artisan_id_fkey(full_name, company_name, business_name, first_name, last_name)
+          artisan:providers!bookings_provider_id_fkey(id, name)
         `)
         .eq('id', bookingId)
         .single()
