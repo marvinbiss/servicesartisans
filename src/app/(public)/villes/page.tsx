@@ -81,9 +81,9 @@ export default function VillesIndexPage() {
               <span className="text-sm font-medium text-white/90">{villes.length}+ villes couvertes</span>
             </div>
 
-            <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 tracking-tight">
+            <h1 className="font-heading text-4xl md:text-5xl lg:text-[3.5rem] font-extrabold mb-6 tracking-[-0.025em] leading-[1.08]">
               Artisans par{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-300 to-blue-300">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-300 to-cyan-300">
                 ville
               </span>
             </h1>
@@ -146,7 +146,7 @@ export default function VillesIndexPage() {
                 <Link
                   key={ville.slug}
                   href={`/villes/${ville.slug}`}
-                  className="flex items-center gap-2.5 bg-white rounded-xl border border-gray-200 px-3.5 py-3.5 hover:border-blue-300 hover:shadow-md transition-all group"
+                  className="flex items-center gap-2.5 bg-white rounded-xl border border-gray-200 px-3.5 py-3.5 hover:border-blue-300 hover:shadow-md hover:-translate-y-0.5 transition-all group"
                 >
                   <MapPin className="w-4 h-4 text-slate-400 group-hover:text-blue-600 flex-shrink-0 transition-colors" />
                   <span className="text-sm font-medium text-slate-800 group-hover:text-blue-600 truncate transition-colors">{ville.name}</span>
@@ -170,7 +170,7 @@ export default function VillesIndexPage() {
             Décrivez votre projet et recevez des devis gratuits de professionnels référencés.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/devis" className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white font-semibold px-8 py-3.5 rounded-full shadow-sm hover:shadow-md transition-all duration-200">
+            <Link href="/devis" className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-300">
               Demander un devis gratuit
             </Link>
             <Link href="/services" className="inline-flex items-center gap-2 text-slate-300 hover:text-white font-medium transition-colors">

@@ -24,8 +24,8 @@ export function TrustBadges({ variant = 'default' }: { variant?: 'default' | 'co
       icon: MapPin,
       label: '101 départements',
       description: 'Couverture complète de la France métropolitaine et DOM',
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-50',
+      color: 'text-purple-600',
+      bgColor: 'bg-purple-50',
     },
     {
       icon: CheckCircle,
@@ -102,7 +102,7 @@ export function CertificationBadge() {
     <motion.div
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
-      className="inline-flex items-center gap-3 bg-green-50 border border-green-200 rounded-full px-4 py-2"
+      className="inline-flex items-center gap-3 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-full px-4 py-2"
     >
       <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
         <CheckCircle className="w-5 h-5 text-white" />
@@ -134,7 +134,7 @@ export function SocialProofCounter({
       viewport={{ once: true }}
       className="text-center"
     >
-      <div className="inline-flex items-center justify-center w-14 h-14 bg-blue-600 rounded-2xl mb-4 shadow-md">
+      <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl mb-4 shadow-lg shadow-blue-500/30">
         <Icon className="w-7 h-7 text-white" />
       </div>
       <motion.div

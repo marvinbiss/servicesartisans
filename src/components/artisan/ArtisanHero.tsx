@@ -45,14 +45,14 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
       aria-label={`Profil de ${displayName}`}
     >
       {/* Premium gradient accent bar */}
-      <div className="h-1.5 bg-blue-600" />
+      <div className="h-1.5 bg-gradient-to-r from-blue-500 via-blue-400 to-indigo-600" />
 
       <div className="p-6 md:p-8">
         <div className="flex flex-col md:flex-row gap-6">
           {/* Avatar */}
           <div className="flex-shrink-0">
             <div className="relative">
-              <div className="w-24 h-24 md:w-32 md:h-32 rounded-2xl bg-blue-600 flex items-center justify-center text-white text-3xl md:text-4xl font-bold shadow-lg overflow-hidden ring-4 ring-white">
+              <div className="w-24 h-24 md:w-32 md:h-32 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-3xl md:text-4xl font-bold shadow-lg shadow-blue-500/20 overflow-hidden ring-4 ring-white">
                 {artisan.avatar_url ? (
                   <Image
                     src={artisan.avatar_url}
@@ -69,7 +69,7 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
               </div>
               {artisan.is_verified && (
                 <div
-                  className="absolute -bottom-1.5 -right-1.5 bg-green-500 text-white p-1.5 rounded-full shadow-lg ring-2 ring-white"
+                  className="absolute -bottom-1.5 -right-1.5 bg-gradient-to-br from-green-400 to-green-600 text-white p-1.5 rounded-full shadow-lg ring-2 ring-white"
                   aria-label="Artisan v&eacute;rifi&eacute;"
                   role="img"
                 >
@@ -84,7 +84,7 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
             {/* Top Badges Row */}
             <div className="flex flex-wrap gap-2 mb-3" role="list" aria-label="Badges et certifications">
               {artisan.is_premium && (
-                <span role="listitem" className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500 text-white text-xs font-semibold">
+                <span role="listitem" className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 text-white text-xs font-semibold shadow-sm shadow-amber-400/30">
                   <Award className="w-3.5 h-3.5" aria-hidden="true" />
                   Premium
                 </span>
@@ -124,7 +124,7 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
                 className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium mb-4 transition-colors group/phone"
                 aria-label={`Appeler au ${artisan.phone}`}
               >
-                <Phone className="w-4 h-4 transition-colors" />
+                <Phone className="w-4 h-4 transition-transform group-hover/phone:scale-110" />
                 <span>{artisan.phone}</span>
               </a>
             )}
@@ -183,7 +183,7 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
 
               {artisan.updated_at && (
                 <div className="flex items-center gap-1.5 text-sm text-slate-500">
-                  <Clock className="w-4 h-4 text-blue-500" />
+                  <Clock className="w-4 h-4 text-emerald-500" />
                   <span>Mis &agrave; jour {new Date(artisan.updated_at).toLocaleDateString('fr-FR', { month: 'short', year: 'numeric' })}</span>
                 </div>
               )}
@@ -193,14 +193,15 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
             {(artisan.review_count > 0 || artisan.member_since || artisan.accepts_new_clients) && (
               <div className="flex items-center gap-3 flex-wrap mt-3">
                 {artisan.review_count > 0 && (
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-medium border border-blue-100">
-                    <Star className="w-3 h-3 fill-blue-500 text-blue-500" aria-hidden="true" />
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-medium border border-emerald-100">
+                    <Star className="w-3 h-3 fill-emerald-500 text-emerald-500" aria-hidden="true" />
                     {artisan.review_count} avis client{artisan.review_count > 1 ? 's' : ''} re&ccedil;u{artisan.review_count > 1 ? 's' : ''}
                   </span>
                 )}
                 {artisan.accepts_new_clients === true && (
                   <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-medium border border-blue-100">
                     <span className="relative flex h-1.5 w-1.5">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
                       <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-blue-500" />
                     </span>
                     Profil actif

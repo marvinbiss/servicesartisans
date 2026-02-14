@@ -152,9 +152,9 @@ export function BookingCalendar({
   ) || []
 
   return (
-    <div className={`bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden ${className}`}>
+    <div className={`bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden ${className}`}>
       {/* Header */}
-      <div className="bg-blue-600 text-white p-5">
+      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-5">
         <h3 className="text-lg font-bold mb-1">Réserver un créneau</h3>
         <p className="text-blue-100 text-sm">
           {serviceName} • {serviceDuration} min
@@ -257,7 +257,7 @@ export function BookingCalendar({
                       relative p-3 rounded-xl text-center transition-all
                       ${isPast ? 'opacity-40 cursor-not-allowed' : ''}
                       ${!hasSlots && !isPast ? 'opacity-50 cursor-not-allowed' : ''}
-                      ${isSelected ? 'bg-blue-600 text-white shadow-md' : ''}
+                      ${isSelected ? 'bg-blue-600 text-white shadow-lg' : ''}
                       ${!isSelected && hasSlots && !isPast ? 'hover:bg-blue-50 cursor-pointer' : ''}
                       ${isToday(date) && !isSelected ? 'ring-2 ring-blue-500' : ''}
                     `}
@@ -344,7 +344,7 @@ export function BookingCalendar({
                         py-2.5 px-3 rounded-lg text-sm font-medium transition-all
                         ${!slot.available ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : ''}
                         ${slot.available && selectedTime !== slot.time ? 'bg-green-50 text-green-700 hover:bg-green-100' : ''}
-                        ${selectedTime === slot.time ? 'bg-blue-600 text-white shadow-md' : ''}
+                        ${selectedTime === slot.time ? 'bg-blue-600 text-white shadow-lg' : ''}
                       `}
                     >
                       {slot.time}
@@ -371,7 +371,7 @@ export function BookingCalendar({
                         py-2.5 px-3 rounded-lg text-sm font-medium transition-all
                         ${!slot.available ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : ''}
                         ${slot.available && selectedTime !== slot.time ? 'bg-green-50 text-green-700 hover:bg-green-100' : ''}
-                        ${selectedTime === slot.time ? 'bg-blue-600 text-white shadow-md' : ''}
+                        ${selectedTime === slot.time ? 'bg-blue-600 text-white shadow-lg' : ''}
                       `}
                     >
                       {slot.time}

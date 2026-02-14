@@ -56,7 +56,7 @@ export function AvailabilityFilter({
             className={cn(
               'w-full flex items-center gap-3 p-3 rounded-lg border transition-all',
               isSelected
-                ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20'
                 : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
             )}
           >
@@ -64,7 +64,7 @@ export function AvailabilityFilter({
               className={cn(
                 'w-10 h-10 rounded-full flex items-center justify-center',
                 isSelected
-                  ? 'bg-blue-500 text-white'
+                  ? 'bg-purple-500 text-white'
                   : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
               )}
             >
@@ -76,7 +76,7 @@ export function AvailabilityFilter({
                 className={cn(
                   'font-medium',
                   isSelected
-                    ? 'text-blue-700 dark:text-blue-300'
+                    ? 'text-purple-700 dark:text-purple-300'
                     : 'text-gray-900 dark:text-white'
                 )}
               >
@@ -88,7 +88,7 @@ export function AvailabilityFilter({
             </div>
 
             {isSelected && (
-              <Check className="w-5 h-5 text-blue-500" />
+              <Check className="w-5 h-5 text-purple-500" />
             )}
           </button>
         )

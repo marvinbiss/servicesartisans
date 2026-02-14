@@ -14,7 +14,7 @@ export interface BadgeProps {
 
 const variantStyles = {
   primary: 'bg-blue-100 text-blue-700 border-blue-200',
-  secondary: 'bg-blue-100 text-blue-700 border-blue-200',
+  secondary: 'bg-violet-100 text-violet-700 border-violet-200',
   success: 'bg-green-100 text-green-700 border-green-200',
   warning: 'bg-amber-100 text-amber-700 border-amber-200',
   error: 'bg-red-100 text-red-700 border-red-200',
@@ -23,7 +23,7 @@ const variantStyles = {
 
 const dotColors = {
   primary: 'bg-blue-500',
-  secondary: 'bg-blue-500',
+  secondary: 'bg-violet-500',
   success: 'bg-green-500',
   warning: 'bg-amber-500',
   error: 'bg-red-500',

@@ -214,7 +214,7 @@ export default function DevisForm() {
 
   if (submitted) {
     return (
-      <div className="bg-white rounded-2xl shadow-md p-8 md:p-12 max-w-2xl mx-auto text-center">
+      <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 max-w-2xl mx-auto text-center">
         <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 animate-[bounce_0.6s_ease-in-out]">
           <CheckCircle className="w-10 h-10 text-green-600" />
         </div>
@@ -232,7 +232,7 @@ export default function DevisForm() {
     <form
       onSubmit={handleSubmit}
       noValidate
-      className="bg-white rounded-2xl shadow-md p-6 md:p-10 max-w-2xl mx-auto"
+      className="bg-white rounded-2xl shadow-xl p-6 md:p-10 max-w-2xl mx-auto"
     >
       <StepIndicator currentStep={step} />
 
@@ -333,7 +333,7 @@ export default function DevisForm() {
           <button
             type="button"
             onClick={handleNext}
-            className="w-full inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3.5 rounded-full transition-colors duration-200"
+            className="w-full inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
           >
             Suivant <ArrowRight className="w-5 h-5" />
           </button>
@@ -456,7 +456,7 @@ export default function DevisForm() {
             <button
               type="button"
               onClick={handleNext}
-              className="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3.5 rounded-full transition-colors duration-200"
+              className="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
             >
               Suivant <ArrowRight className="w-5 h-5" />
             </button>
@@ -575,7 +575,7 @@ export default function DevisForm() {
             <button
               type="submit"
               disabled={submitting}
-              className="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3.5 rounded-full transition-colors duration-200 disabled:opacity-70"
+              className="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-70"
             >
               {submitting ? 'Envoi en cours…' : 'Envoyer ma demande'} {!submitting && <ArrowRight className="w-5 h-5" />}
             </button>

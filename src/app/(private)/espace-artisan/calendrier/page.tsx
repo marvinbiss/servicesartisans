@@ -379,7 +379,7 @@ export default function CalendrierPage() {
         </div>
 
         {/* Header */}
-        <div className="bg-blue-600 text-white">
+        <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <h1 className="text-2xl font-bold">Espace Artisan</h1>
             <p className="text-blue-100">Calendrier des disponibilités</p>
@@ -421,7 +421,7 @@ export default function CalendrierPage() {
             </div>
             <Link
               href="/espace-artisan/abonnement"
-              className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white px-8 py-3 rounded-lg font-semibold transition-all"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-8 py-3 rounded-lg font-semibold hover:from-yellow-600 hover:to-orange-600 transition-all"
             >
               Passer à Pro ou Premium
               <ChevronRight className="w-5 h-5" />
@@ -445,7 +445,7 @@ export default function CalendrierPage() {
       </div>
 
       {/* Header */}
-      <div className="bg-blue-600 text-white">
+      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex items-center justify-between">
             <div>

@@ -113,7 +113,7 @@ export default function ProfilArtisanPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-blue-600 text-white">
+      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <h1 className="text-2xl font-bold">Mon profil public</h1>
           <p className="text-blue-100">Gérez les informations visibles sur votre page artisan</p>

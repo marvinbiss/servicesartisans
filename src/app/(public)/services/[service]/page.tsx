@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { MapPin, ArrowRight, Star, Shield, ChevronDown, BadgeCheck, Clock, Wrench } from 'lucide-react'
+import { MapPin, ArrowRight, Star, Shield, ChevronDown, BadgeCheck, Euro, Clock, Wrench } from 'lucide-react'
 import { getServiceBySlug, getLocationsByService, getProvidersByService } from '@/lib/supabase'
 import JsonLd from '@/components/JsonLd'
 import { getServiceSchema, getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
@@ -15,7 +15,6 @@ import { popularServices } from '@/lib/constants/navigation'
 import { services as staticServicesList, villes, departements, getVillesByDepartement } from '@/lib/data/france'
 import { getTradeContent } from '@/lib/data/trade-content'
 import { getServiceImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
-import { ScrollReveal } from '@/components/ui/ScrollReveal'
 
 // ISR: Revalidate every 30 minutes
 export const revalidate = REVALIDATE.serviceDetail
@@ -222,13 +221,16 @@ export default async function ServicePage({ params }: PageProps) {
           blurDataURL={BLUR_PLACEHOLDER}
         />
         <div className="absolute inset-0 bg-gray-900/75" />
-        {/* Subtle grid overlay */}
+        {/* Ambient glow */}
+        <div className="absolute inset-0" style={{
+          background: 'radial-gradient(ellipse 60% 50% at 50% 100%, rgba(245,158,11,0.10) 0%, transparent 60%), radial-gradient(ellipse 40% 40% at 80% 20%, rgba(59,130,246,0.06) 0%, transparent 50%)',
+        }} />
         <div className="absolute inset-0 opacity-[0.03]" style={{
           backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
           backgroundSize: '48px 48px',
         }} />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
           <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 tracking-tight">
             {h1Text}
           </h1>
@@ -240,26 +242,26 @@ export default async function ServicePage({ params }: PageProps) {
           {/* Stats — Large gradient numbers */}
           <div className="flex flex-wrap gap-6 md:gap-10 mt-10">
             <div className="flex flex-col">
-              <span className="font-heading text-3xl md:text-4xl font-extrabold text-amber-400">
+              <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-amber-500">
                 {recentProviders?.length || 0}+
               </span>
               <span className="text-sm text-slate-400 mt-1">artisans référencés</span>
             </div>
             <div className="flex flex-col">
-              <span className="font-heading text-3xl md:text-4xl font-extrabold text-blue-400">
+              <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-blue-500">
                 {topCities?.length || 0}+
               </span>
               <span className="text-sm text-slate-400 mt-1">villes couvertes</span>
             </div>
             <div className="flex flex-col">
-              <span className="font-heading text-3xl md:text-4xl font-extrabold text-white">
+              <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-emerald-500">
                 100%
               </span>
               <span className="text-sm text-slate-400 mt-1">données SIREN</span>
             </div>
             {trade && (
               <div className="flex flex-col">
-                <span className="font-heading text-3xl md:text-4xl font-extrabold text-white">
+                <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-purple-500">
                   {trade.priceRange.min}–{trade.priceRange.max}
                 </span>
                 <span className="text-sm text-slate-400 mt-1">{trade.priceRange.unit}</span>
@@ -269,17 +271,17 @@ export default async function ServicePage({ params }: PageProps) {
 
           {/* Badges row */}
           <div className="flex flex-wrap gap-3 mt-8">
-            <div className="flex items-center gap-2 bg-white/[0.08] border border-white/10 px-4 py-2 rounded-full">
-              <Shield className="w-4 h-4 text-slate-400" />
+            <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/10 px-4 py-2 rounded-full">
+              <Shield className="w-4 h-4 text-emerald-400" />
               <span className="text-sm text-slate-300 font-medium">Artisans vérifiés</span>
             </div>
-            <div className="flex items-center gap-2 bg-white/[0.08] border border-white/10 px-4 py-2 rounded-full">
-              <Star className="w-4 h-4 text-slate-400" />
+            <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/10 px-4 py-2 rounded-full">
+              <Star className="w-4 h-4 text-amber-400" />
               <span className="text-sm text-slate-300 font-medium">Qualité contrôlée</span>
             </div>
             {trade && (
-              <div className="flex items-center gap-2 bg-white/[0.08] border border-white/10 px-4 py-2 rounded-full">
-                <Clock className="w-4 h-4 text-slate-400" />
+              <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/10 px-4 py-2 rounded-full">
+                <Clock className="w-4 h-4 text-purple-400" />
                 <span className="text-sm text-slate-300 font-medium">{trade.averageResponseTime.split(',')[0]}</span>
               </div>
             )}
@@ -289,7 +291,7 @@ export default async function ServicePage({ params }: PageProps) {
           <div className="mt-10">
             <Link
               href="/devis"
-              className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white font-bold px-8 py-4 rounded-full transition-colors"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-[0_8px_30px_-4px_rgba(245,158,11,0.5)] hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
             >
               Demander un devis gratuit
               <ArrowRight className="w-5 h-5" />
@@ -299,21 +301,11 @@ export default async function ServicePage({ params }: PageProps) {
       </section>
 
       {/* Search by city */}
-      <section className="py-16 bg-white">
+      <section className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <ScrollReveal>
-            <div className="mb-8">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="h-px w-6 bg-amber-400" />
-                <span className="text-xs font-semibold uppercase tracking-widest text-blue-600">
-                  Par ville
-                </span>
-              </div>
-              <h2 className="font-heading text-2xl font-bold text-gray-900 tracking-tight">
-                Trouver un {service.name.toLowerCase()} par ville
-              </h2>
-            </div>
-          </ScrollReveal>
+          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 tracking-tight">
+            Trouver un {service.name.toLowerCase()} par ville
+          </h2>
 
           {/* Popular cities grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 mb-8">
@@ -371,28 +363,18 @@ export default async function ServicePage({ params }: PageProps) {
         </div>
       </section>
 
-      <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
-
       {/* Par département — SEO internal links to service+ville pages */}
-      <section className="py-16 bg-slate-50/50">
+      <section className="py-12 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-8">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="h-px w-6 bg-amber-400" />
-              <span className="text-xs font-semibold uppercase tracking-widest text-blue-600">
-                Par département
-              </span>
-            </div>
-            <h2 className="font-heading text-2xl font-bold text-gray-900 tracking-tight">
-              {service.name} par département
-            </h2>
-          </div>
+          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-8 tracking-tight">
+            {service.name} par département
+          </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {departements.slice(0, 30).map((dept) => {
               const deptVilles = getVillesByDepartement(dept.code)
               if (deptVilles.length === 0) return null
               return (
-                <div key={dept.code} className="bg-slate-50 rounded-2xl p-5">
+                <div key={dept.code} className="bg-gray-50 rounded-xl p-5">
                   <h3 className="font-semibold text-gray-900 mb-3 text-sm">
                     <Link href={`/departements/${dept.slug}`} className="hover:text-blue-600 transition-colors">
                       {dept.name} ({dept.code})
@@ -424,11 +406,9 @@ export default async function ServicePage({ params }: PageProps) {
         </div>
       </section>
 
-      <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
-
       {/* Recent providers */}
       {recentProviders && recentProviders.length > 0 && (
-        <section className="py-16 bg-white">
+        <section className="py-12 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 tracking-tight">
               {service.name}s récemment ajoutés
@@ -459,15 +439,15 @@ export default async function ServicePage({ params }: PageProps) {
         </section>
       )}
 
-      <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
-
       {/* Price Guide — unique per trade */}
       {trade && (
-        <section className="py-16 bg-slate-50/50">
+        <section className="py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <ScrollReveal>
-            <div className="bg-white rounded-2xl p-8 border border-slate-200">
+            <div className="bg-white rounded-xl p-8 shadow-sm">
               <div className="flex items-center gap-3 mb-6">
+                <div className="p-2 bg-amber-100 rounded-lg">
+                  <Euro className="w-6 h-6 text-amber-600" />
+                </div>
                 <h2 className="text-2xl font-bold text-gray-900">
                   Tarifs {service.name.toLowerCase()} — Guide des prix 2026
                 </h2>
@@ -493,30 +473,29 @@ export default async function ServicePage({ params }: PageProps) {
                 * Prix indicatifs constatés en France métropolitaine. Les tarifs varient selon la région, la complexité des travaux et le professionnel.
               </p>
             </div>
-            </ScrollReveal>
           </div>
         </section>
       )}
 
-      <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
-
       {/* Tips + Certifications */}
       {trade && (
-        <section className="py-16 bg-white">
+        <section className="py-12 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <ScrollReveal>
             <div className="grid lg:grid-cols-3 gap-8">
               {/* Conseils pratiques */}
               <div className="lg:col-span-2">
                 <div className="flex items-center gap-3 mb-6">
+                  <div className="p-2 bg-blue-100 rounded-lg">
+                    <Shield className="w-6 h-6 text-blue-600" />
+                  </div>
                   <h2 className="text-2xl font-bold text-gray-900">
                     Conseils pour choisir votre {service.name.toLowerCase()}
                   </h2>
                 </div>
                 <div className="space-y-4">
                   {trade.tips.map((tip, i) => (
-                    <div key={i} className="flex gap-3 p-4 border border-slate-100 rounded-2xl">
-                      <BadgeCheck className="w-5 h-5 text-slate-500 mt-0.5 flex-shrink-0" />
+                    <div key={i} className="flex gap-3 p-4 bg-blue-50 rounded-lg">
+                      <BadgeCheck className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
                       <p className="text-gray-700 text-sm leading-relaxed">{tip}</p>
                     </div>
                   ))}
@@ -525,15 +504,15 @@ export default async function ServicePage({ params }: PageProps) {
 
               {/* Certifications + Urgence */}
               <div className="space-y-6">
-                <div className="bg-slate-50 rounded-2xl p-6">
+                <div className="bg-gray-50 rounded-xl p-6">
                   <div className="flex items-center gap-2 mb-4">
-                    <BadgeCheck className="w-5 h-5 text-slate-600" />
+                    <BadgeCheck className="w-5 h-5 text-green-600" />
                     <h3 className="font-semibold text-gray-900">Certifications à vérifier</h3>
                   </div>
                   <ul className="space-y-2">
                     {trade.certifications.map((cert, i) => (
                       <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
-                        <span className="text-slate-500 mt-1">✓</span>
+                        <span className="text-green-500 mt-1">✓</span>
                         {cert}
                       </li>
                     ))}
@@ -550,27 +529,23 @@ export default async function ServicePage({ params }: PageProps) {
                   </div>
                 )}
 
-                <div className="bg-slate-50 rounded-2xl p-6">
+                <div className="bg-blue-50 rounded-xl p-6">
                   <div className="flex items-center gap-2 mb-3">
-                    <Wrench className="w-5 h-5 text-slate-600" />
+                    <Wrench className="w-5 h-5 text-blue-600" />
                     <h3 className="font-semibold text-gray-900">Délai d&apos;intervention</h3>
                   </div>
                   <p className="text-sm text-gray-700">{trade.averageResponseTime}</p>
                 </div>
               </div>
             </div>
-            </ScrollReveal>
           </div>
         </section>
       )}
 
-      <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
-
       {/* FAQ — rich content for SEO */}
       {trade && trade.faq.length > 0 && (
-        <section className="py-16 bg-slate-50/50">
+        <section className="py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <ScrollReveal>
             <div className="flex items-center gap-3 mb-8">
               <h2 className="text-2xl font-bold text-gray-900">
                 Questions fréquentes — {service.name}
@@ -578,7 +553,7 @@ export default async function ServicePage({ params }: PageProps) {
             </div>
             <div className="space-y-4">
               {trade.faq.map((item, i) => (
-                <details key={i} className="group bg-white rounded-2xl border border-slate-200">
+                <details key={i} className="group bg-white rounded-xl shadow-sm border border-gray-100">
                   <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
                     <h3 className="font-semibold text-gray-900 pr-4">{item.q}</h3>
                     <ChevronDown className="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform flex-shrink-0" />
@@ -589,16 +564,15 @@ export default async function ServicePage({ params }: PageProps) {
                 </details>
               ))}
             </div>
-            </ScrollReveal>
           </div>
         </section>
       )}
 
       {/* Generic SEO Content — fallback when no trade content */}
       {!trade && (
-        <section className="py-16 bg-slate-50/50">
+        <section className="py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-2xl p-8 border border-slate-200">
+            <div className="bg-white rounded-xl p-8 shadow-sm">
               <h2 className="font-heading text-2xl font-bold text-gray-900 mb-4 tracking-tight">
                 Comment trouver un bon {service.name.toLowerCase()} ?
               </h2>
@@ -634,23 +608,24 @@ export default async function ServicePage({ params }: PageProps) {
       )}
 
       {/* CTA */}
-      <section className="py-16 bg-slate-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <ScrollReveal>
-            <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4">
-              Vous êtes {service.name.toLowerCase()} ?
-            </h2>
-            <p className="text-slate-400 mb-8 max-w-xl mx-auto">
-              Inscrivez-vous gratuitement et recevez des demandes de devis qualifiées
-            </p>
-            <Link
-              href="/inscription-artisan"
-              className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white font-bold px-8 py-4 rounded-full transition-colors"
-            >
-              Créer mon profil
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-          </ScrollReveal>
+      <section className="relative py-16 overflow-hidden bg-gradient-to-br from-[#0a0f1e] via-[#111827] to-[#0a0f1e]">
+        <div className="absolute inset-0" style={{
+          background: 'radial-gradient(ellipse 50% 60% at 50% 50%, rgba(245,158,11,0.06) 0%, transparent 60%)',
+        }} />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4">
+            Vous êtes {service.name.toLowerCase()} ?
+          </h2>
+          <p className="text-slate-400 mb-8 max-w-xl mx-auto">
+            Inscrivez-vous gratuitement et recevez des demandes de devis qualifiées
+          </p>
+          <Link
+            href="/inscription-artisan"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 text-slate-900 font-bold px-8 py-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-[0_8px_30px_-4px_rgba(245,158,11,0.5)] hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
+          >
+            Créer mon profil
+            <ArrowRight className="w-5 h-5" />
+          </Link>
         </div>
       </section>
 
@@ -666,10 +641,8 @@ export default async function ServicePage({ params }: PageProps) {
         </div>
       </section>
 
-      <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
-
       {/* Trust & Safety Links (E-E-A-T) */}
-      <section className="py-8 bg-white">
+      <section className="py-8 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
             Confiance &amp; Sécurité
@@ -688,10 +661,8 @@ export default async function ServicePage({ params }: PageProps) {
         </div>
       </section>
 
-      <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
-
       {/* Voir aussi - Autres services */}
-      <section className="py-16 bg-white">
+      <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 tracking-tight">Voir aussi</h2>
           <div className="grid md:grid-cols-2 gap-8">

@@ -41,7 +41,7 @@ export function PagePreview({ isOpen, onClose, title, contentHtml, structuredDat
         />
 
         {/* Modal */}
-        <div className="relative bg-white rounded-xl shadow-lg max-w-4xl w-full my-8">
+        <div className="relative bg-white rounded-xl shadow-xl max-w-4xl w-full my-8">
           {/* Header */}
           <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
             <div className="flex items-center gap-2">

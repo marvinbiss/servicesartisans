@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { verifyResendSignature } from '@/lib/prospection/webhook-security'
-import { addSuppression } from '@/lib/email/suppression'
 
 export const dynamic = 'force-dynamic'
 
@@ -81,31 +80,6 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       logger.error('Resend webhook DB update error', error)
-    }
-
-    // Add to suppression list for bounces and complaints
-    if (eventType === 'email.bounced') {
-      const recipientEmail = data.to?.[0] || data.email_to
-      if (recipientEmail) {
-        await addSuppression({
-          email: recipientEmail,
-          reason: 'hard_bounce',
-          source: 'resend_webhook',
-          errorMessage: data.bounce?.message || 'Bounced'
-        })
-      }
-    }
-
-    if (eventType === 'email.complained') {
-      const recipientEmail = data.to?.[0] || data.email_to
-      if (recipientEmail) {
-        await addSuppression({
-          email: recipientEmail,
-          reason: 'complaint',
-          source: 'resend_webhook',
-          errorMessage: data.complaint?.message || 'Spam complaint'
-        })
-      }
     }
 
     return new NextResponse('OK', { status: 200 })

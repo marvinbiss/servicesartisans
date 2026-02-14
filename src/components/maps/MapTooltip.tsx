@@ -36,7 +36,7 @@ export default function MapTooltip({ provider, position }: MapTooltipProps) {
         top: position.y - 60
       }}
     >
-      <div className="bg-white rounded-xl shadow-lg p-3 min-w-[250px] max-w-[300px] border border-gray-100">
+      <div className="bg-white rounded-xl shadow-2xl p-3 min-w-[250px] max-w-[300px] border border-gray-100">
         {/* Header */}
         <div className="flex items-start justify-between gap-2 mb-2">
           <div className="flex-1 min-w-0">

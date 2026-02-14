@@ -23,7 +23,7 @@ interface FilePreviewProps {
 
 const FILE_ICONS: Record<string, React.ReactNode> = {
   'image': <FileImage className="w-8 h-8 text-blue-500" />,
-  'video': <FileVideo className="w-8 h-8 text-blue-500" />,
+  'video': <FileVideo className="w-8 h-8 text-purple-500" />,
   'audio': <FileAudio className="w-8 h-8 text-green-500" />,
   'application/pdf': <FileText className="w-8 h-8 text-red-500" />,
   'default': <File className="w-8 h-8 text-gray-500" />,

@@ -195,7 +195,7 @@ export default function ArtisanLeadsInbox() {
             title="Taux réponse"
             value={`${statusCounts.all > 0 ? Math.round(((statusCounts.quoted + statusCounts.viewed) / statusCounts.all) * 100) : 0}%`}
             icon={<Eye className="w-5 h-5" />}
-            color="blue"
+            color="indigo"
           />
         </div>
 

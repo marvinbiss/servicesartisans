@@ -92,7 +92,7 @@ export function RefundModal({
         />
 
         {/* Modal */}
-        <div role="dialog" aria-modal="true" aria-labelledby="refund-modal-title" className="relative bg-white rounded-xl shadow-lg max-w-md w-full">
+        <div role="dialog" aria-modal="true" aria-labelledby="refund-modal-title" className="relative bg-white rounded-xl shadow-xl max-w-md w-full">
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-gray-100">
             <div className="flex items-center gap-3">

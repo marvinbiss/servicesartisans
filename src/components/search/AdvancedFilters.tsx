@@ -204,7 +204,7 @@ export function AdvancedFilters({
               className="w-full flex items-center justify-between p-4"
             >
               <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-blue-500" />
+                <Clock className="w-4 h-4 text-purple-500" />
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Disponibilité</span>
               </div>
               {expandedSections.has('availability') ? (

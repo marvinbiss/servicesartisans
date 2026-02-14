@@ -73,7 +73,7 @@ const allServices = [
   {
     category: 'Gros œuvre & Maçonnerie',
     icon: HardHat,
-    color: 'amber',
+    color: 'orange',
     services: [
       { name: 'Maçon', slug: 'macon', icon: HardHat, description: 'Construction, rénovation, extension' },
       { name: 'Couvreur', slug: 'couvreur', icon: Home, description: 'Toiture, zinguerie, étanchéité' },
@@ -84,7 +84,7 @@ const allServices = [
   {
     category: 'Menuiserie & Agencement',
     icon: Hammer,
-    color: 'blue',
+    color: 'violet',
     services: [
       { name: 'Menuisier', slug: 'menuisier', icon: Hammer, description: 'Fenêtres, portes, escaliers, placards' },
       { name: 'Charpentier', slug: 'charpentier', icon: Home, description: 'Charpente bois, ossature' },
@@ -94,7 +94,7 @@ const allServices = [
   {
     category: 'Finitions',
     icon: PaintBucket,
-    color: 'blue',
+    color: 'pink',
     services: [
       { name: 'Peintre', slug: 'peintre-en-batiment', icon: PaintBucket, description: 'Peinture intérieure et extérieure' },
       { name: 'Plaquiste', slug: 'plaquiste', icon: Hammer, description: 'Cloisons, plafonds, isolation' },
@@ -105,7 +105,7 @@ const allServices = [
   {
     category: 'Extérieur & Jardin',
     icon: TreeDeciduous,
-    color: 'blue',
+    color: 'emerald',
     services: [
       { name: 'Jardinier', slug: 'jardinier', icon: TreeDeciduous, description: 'Création et entretien jardins' },
       { name: 'Pisciniste', slug: 'pisciniste', icon: Droplets, description: 'Construction et entretien piscines' },
@@ -128,6 +128,10 @@ const colorClasses: Record<string, { bg: string; icon: string; hover: string }> 
   blue: { bg: 'bg-blue-50', icon: 'text-blue-600', hover: 'group-hover:bg-blue-100' },
   amber: { bg: 'bg-amber-50', icon: 'text-amber-600', hover: 'group-hover:bg-amber-100' },
   green: { bg: 'bg-green-50', icon: 'text-green-600', hover: 'group-hover:bg-green-100' },
+  orange: { bg: 'bg-orange-50', icon: 'text-orange-600', hover: 'group-hover:bg-orange-100' },
+  violet: { bg: 'bg-violet-50', icon: 'text-violet-600', hover: 'group-hover:bg-violet-100' },
+  pink: { bg: 'bg-pink-50', icon: 'text-pink-600', hover: 'group-hover:bg-pink-100' },
+  emerald: { bg: 'bg-emerald-50', icon: 'text-emerald-600', hover: 'group-hover:bg-emerald-100' },
   slate: { bg: 'bg-slate-50', icon: 'text-slate-600', hover: 'group-hover:bg-slate-100' },
 }
 
@@ -146,7 +150,13 @@ export default function ServicesPage() {
       <JsonLd data={[breadcrumbSchema, organizationSchema]} />
 
       {/* Premium Hero */}
-      <section className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 text-white py-24 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 text-white py-20 overflow-hidden">
+        {/* Background decoration */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl" />
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-blue-500/5 to-violet-500/5 rounded-full blur-3xl" />
+        </div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           {/* Trust badge */}
@@ -189,7 +199,7 @@ export default function ServicesPage() {
       </section>
 
       {/* Services Grid */}
-      <section className="py-24">
+      <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {allServices.map((category) => {
             const CategoryIcon = category.icon
@@ -218,8 +228,9 @@ export default function ServicesPage() {
                         <Link
                           key={service.slug}
                           href={`/services/${service.slug}`}
-                          className="group relative bg-white rounded-2xl border border-gray-100 p-6 hover:border-gray-200 transition-all duration-300 hover:shadow-md"
+                          className="group relative bg-white rounded-2xl border border-gray-100 p-6 hover:border-gray-200 transition-all duration-300 hover:shadow-xl hover:shadow-gray-200/50 hover:-translate-y-1"
                         >
+                          <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-gray-50 to-transparent rounded-bl-[100px] opacity-0 group-hover:opacity-100 transition-opacity" />
                           <div className="relative">
                             <div className={`w-12 h-12 ${colors.bg} rounded-xl flex items-center justify-center mb-4 ${colors.hover} transition-colors`}>
                               <Icon className={`w-6 h-6 ${colors.icon}`} />
@@ -273,8 +284,12 @@ export default function ServicesPage() {
       </section>
 
       {/* Premium CTA */}
-      <section className="relative py-24 overflow-hidden">
+      <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900" />
+        <div className="absolute inset-0">
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-amber-500/20 rounded-full blur-3xl" />
+        </div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500/20 backdrop-blur-sm rounded-full border border-amber-500/30 mb-6">
@@ -290,7 +305,7 @@ export default function ServicesPage() {
           </p>
           <Link
             href="/contact"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-full shadow-sm hover:shadow-md transition-all duration-200"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold rounded-xl hover:from-amber-600 hover:via-amber-500 hover:to-amber-600 transition-all shadow-xl shadow-amber-500/30 hover:shadow-amber-500/40 hover:-translate-y-0.5"
           >
             Nous contacter
             <ArrowRight className="w-5 h-5" />

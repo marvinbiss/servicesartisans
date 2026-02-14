@@ -89,10 +89,10 @@ export function ArtisanProfileCard({
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="group relative bg-white rounded-2xl overflow-hidden border border-slate-200/60 shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300"
+        className="group relative bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500"
       >
         {/* Cover Image */}
-        <div className="relative h-48 bg-blue-600">
+        <div className="relative h-48 bg-gradient-to-br from-blue-500 to-indigo-600">
           {coverUrl && !imageError && (
             <Image
               src={coverUrl}
@@ -103,11 +103,11 @@ export function ArtisanProfileCard({
               onError={() => setImageError(true)}
             />
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
           {/* Premium Badge */}
           {isPremium && (
-            <div className="absolute top-4 left-4 bg-amber-500 text-white text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-md">
+            <div className="absolute top-4 left-4 bg-gradient-to-r from-amber-500 to-amber-600 text-white text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
               <Award className="w-3.5 h-3.5" />
               Premium
             </div>
@@ -119,7 +119,7 @@ export function ArtisanProfileCard({
               e.preventDefault()
               setIsFavorite(!isFavorite)
             }}
-            className="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md transition-transform"
+            className="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
           >
             <Heart
               className={`w-5 h-5 transition-colors ${
@@ -131,7 +131,7 @@ export function ArtisanProfileCard({
           {/* Profile Image */}
           <div className="absolute -bottom-12 left-6">
             <div className="relative">
-              <div className="w-24 h-24 rounded-2xl overflow-hidden border-4 border-white shadow-md bg-white">
+              <div className="w-24 h-24 rounded-2xl overflow-hidden border-4 border-white shadow-xl bg-white">
                 {imageUrl && !imageError ? (
                   <Image
                     src={imageUrl}
@@ -142,7 +142,7 @@ export function ArtisanProfileCard({
                     onError={() => setImageError(true)}
                   />
                 ) : (
-                  <div className="w-full h-full bg-blue-600 flex items-center justify-center">
+                  <div className="w-full h-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
                     <span className="text-3xl font-bold text-white">{name.charAt(0)}</span>
                   </div>
                 )}
@@ -158,17 +158,17 @@ export function ArtisanProfileCard({
           {/* Availability */}
           <div className="absolute bottom-4 right-4">
             {isAvailableNow ? (
-              <div className="bg-green-500 text-white text-xs font-medium px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-md">
+              <div className="bg-green-500 text-white text-xs font-medium px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
                 <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
                 Disponible maintenant
               </div>
             ) : isAvailableToday ? (
-              <div className="bg-blue-500 text-white text-xs font-medium px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-md">
+              <div className="bg-blue-500 text-white text-xs font-medium px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
                 <Clock className="w-3 h-3" />
                 Dispo aujourd'hui
               </div>
             ) : nextSlot ? (
-              <div className="bg-white text-slate-700 text-xs font-medium px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-md">
+              <div className="bg-white/90 backdrop-blur-sm text-slate-700 text-xs font-medium px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
                 <Calendar className="w-3 h-3" />
                 {nextSlot}
               </div>
@@ -269,7 +269,7 @@ export function ArtisanProfileCard({
               <a
                 href={`tel:${phone}`}
                 onClick={(e) => e.stopPropagation()}
-                className="flex-1 flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white py-3 rounded-full font-semibold transition-colors"
+                className="flex-1 flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white py-3 rounded-xl font-semibold transition-colors"
               >
                 <Phone className="w-4 h-4" />
                 Appeler
@@ -277,7 +277,7 @@ export function ArtisanProfileCard({
             )}
             <Link
               href={`${href}#reserver`}
-              className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-full font-semibold transition-colors"
+              className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition-colors"
             >
               <Calendar className="w-4 h-4" />
               Réserver
@@ -295,7 +295,7 @@ export function ArtisanProfileCard({
         initial={{ opacity: 0, x: -20 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
-        className="group bg-white rounded-2xl border border-slate-200/60 overflow-hidden shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300"
+        className="group bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl hover:border-blue-200 transition-all duration-300"
       >
         <Link href={href} className="flex flex-col sm:flex-row">
           {/* Image */}
@@ -305,12 +305,12 @@ export function ArtisanProfileCard({
                 src={imageUrl}
                 alt={name}
                 fill
-                className="object-cover transition-transform duration-500"
+                className="object-cover group-hover:scale-105 transition-transform duration-500"
                 sizes="(max-width: 640px) 100vw, 224px"
                 onError={() => setImageError(true)}
               />
             ) : (
-              <div className="w-full h-full bg-blue-600 flex items-center justify-center">
+              <div className="w-full h-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
                 <span className="text-5xl font-bold text-white/90">{name.charAt(0)}</span>
               </div>
             )}
@@ -318,12 +318,12 @@ export function ArtisanProfileCard({
             {/* Badges overlay */}
             <div className="absolute top-3 left-3 flex flex-col gap-2">
               {isPremium && (
-                <div className="bg-amber-500 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-md">
+                <div className="bg-gradient-to-r from-amber-500 to-amber-600 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-lg">
                   ⭐ Premium
                 </div>
               )}
               {isAvailableNow && (
-                <div className="bg-green-500 text-white text-xs font-medium px-2.5 py-1 rounded-full flex items-center gap-1 shadow-md">
+                <div className="bg-green-500 text-white text-xs font-medium px-2.5 py-1 rounded-full flex items-center gap-1 shadow-lg">
                   <Zap className="w-3 h-3" />
                   Dispo
                 </div>
@@ -336,7 +336,7 @@ export function ArtisanProfileCard({
                 e.preventDefault()
                 setIsFavorite(!isFavorite)
               }}
-              className="absolute top-3 right-3 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center shadow-md transition-transform"
+              className="absolute top-3 right-3 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
             >
               <Heart
                 className={`w-4 h-4 ${isFavorite ? 'text-red-500 fill-red-500' : 'text-slate-600'}`}
@@ -409,13 +409,13 @@ export function ArtisanProfileCard({
                 <a
                   href={`tel:${phone}`}
                   onClick={(e) => e.stopPropagation()}
-                  className="flex-1 flex items-center justify-center gap-1 bg-green-500 text-white py-2.5 rounded-full font-medium text-sm"
+                  className="flex-1 flex items-center justify-center gap-1 bg-green-500 text-white py-2.5 rounded-lg font-medium text-sm"
                 >
                   <Phone className="w-4 h-4" />
                   Appeler
                 </a>
               )}
-              <span className="flex-1 flex items-center justify-center gap-1 bg-blue-600 text-white py-2.5 rounded-full font-medium text-sm">
+              <span className="flex-1 flex items-center justify-center gap-1 bg-blue-600 text-white py-2.5 rounded-lg font-medium text-sm">
                 <Calendar className="w-4 h-4" />
                 Réserver
               </span>
@@ -424,7 +424,7 @@ export function ArtisanProfileCard({
 
           {/* Desktop CTA */}
           <div className="hidden sm:flex items-center pr-5">
-            <ChevronRight className="w-6 h-6 text-slate-400 group-hover:text-blue-500 transition-all" />
+            <ChevronRight className="w-6 h-6 text-slate-400 group-hover:text-blue-500 group-hover:translate-x-1 transition-all" />
           </div>
         </Link>
       </motion.article>
@@ -449,7 +449,7 @@ export function ArtisanProfileCard({
               onError={() => setImageError(true)}
             />
           ) : (
-            <div className="w-full h-full bg-blue-600 flex items-center justify-center">
+            <div className="w-full h-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
               <span className="font-bold text-white">{name.charAt(0)}</span>
             </div>
           )}
@@ -489,21 +489,21 @@ export function ArtisanProfileCard({
               src={imageUrl}
               alt={name}
               fill
-              className="object-cover transition-transform duration-500"
+              className="object-cover group-hover:scale-105 transition-transform duration-500"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
               onError={() => setImageError(true)}
             />
           ) : (
-            <div className="w-full h-full bg-blue-600 flex items-center justify-center">
+            <div className="w-full h-full bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 flex items-center justify-center">
               <span className="text-5xl font-bold text-white/90">{name.charAt(0)}</span>
             </div>
           )}
 
           {/* Overlays */}
-          <div className="absolute inset-0 " />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
           {isPremium && (
-            <div className="absolute top-3 left-3 bg-amber-500 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-md">
+            <div className="absolute top-3 left-3 bg-gradient-to-r from-amber-500 to-amber-600 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-lg">
               ⭐ Premium
             </div>
           )}
@@ -513,7 +513,7 @@ export function ArtisanProfileCard({
               e.preventDefault()
               setIsFavorite(!isFavorite)
             }}
-            className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md transition-transform"
+            className="absolute top-3 right-3 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
           >
             <Heart
               className={`w-4 h-4 ${isFavorite ? 'text-red-500 fill-red-500' : 'text-slate-600'}`}
@@ -521,12 +521,12 @@ export function ArtisanProfileCard({
           </button>
 
           {isAvailableNow ? (
-            <div className="absolute bottom-3 left-3 bg-green-500 text-white text-xs font-medium px-2.5 py-1 rounded-full flex items-center gap-1 shadow-md">
+            <div className="absolute bottom-3 left-3 bg-green-500 text-white text-xs font-medium px-2.5 py-1 rounded-full flex items-center gap-1 shadow-lg">
               <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
               Disponible
             </div>
           ) : nextSlot ? (
-            <div className="absolute bottom-3 left-3 bg-white text-slate-700 text-xs font-medium px-2.5 py-1 rounded-full shadow-md">
+            <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm text-slate-700 text-xs font-medium px-2.5 py-1 rounded-full shadow-lg">
               📅 {nextSlot}
             </div>
           ) : null}

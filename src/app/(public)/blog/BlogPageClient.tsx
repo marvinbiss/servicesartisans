@@ -149,7 +149,7 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex items-center gap-2">
               <span className="text-sm text-slate-500">Filtré par :</span>
-              <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">{activeTag}</span>
+              <span className="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-sm font-medium">{activeTag}</span>
               <button
                 onClick={handleClearTag}
                 className="text-sm text-slate-400 hover:text-slate-600 transition-colors"
@@ -169,13 +169,13 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
               // Category color mapping for pill badges
               const categoryColors: Record<string, string> = {
                 'Guides pratiques': 'bg-blue-100 text-blue-700',
-                'Tendances': 'bg-blue-100 text-blue-700',
-                'Rénovation': 'bg-blue-100 text-blue-700',
+                'Tendances': 'bg-purple-100 text-purple-700',
+                'Rénovation': 'bg-emerald-100 text-emerald-700',
                 'Conseils': 'bg-amber-100 text-amber-700',
-                'Actualités': 'bg-red-100 text-red-700',
+                'Actualités': 'bg-rose-100 text-rose-700',
                 'Énergie': 'bg-green-100 text-green-700',
-                'Décoration': 'bg-blue-100 text-blue-700',
-                'Budget': 'bg-amber-100 text-amber-700',
+                'Décoration': 'bg-pink-100 text-pink-700',
+                'Budget': 'bg-orange-100 text-orange-700',
               }
               const badgeColor = categoryColors[article.category] || 'bg-blue-100 text-blue-700'
               const isFeatured = index === 0 && selectedCategory === 'Tous' && !activeTag
@@ -184,7 +184,7 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
                 <Link
                   key={article.slug}
                   href={`/blog/${article.slug}`}
-                  className={`bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-md transition-all duration-300 group ${
+                  className={`bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group ${
                     isFeatured ? 'md:col-span-2 lg:col-span-3' : ''
                   }`}
                 >
@@ -196,14 +196,14 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
                       src={getBlogImage(article.slug, article.category).src}
                       alt={getBlogImage(article.slug, article.category).alt}
                       fill
-                      className="object-cover"
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
                       sizes={isFeatured
                         ? '(max-width: 768px) 100vw, (max-width: 1200px) 66vw, 100vw'
                         : '(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw'}
                       placeholder="blur"
                       blurDataURL={BLUR_PLACEHOLDER}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
                     {/* Category badge overlay */}
                     <span className={`absolute top-4 left-4 z-10 ${badgeColor} px-3 py-1 rounded-full text-xs font-semibold`}>
                       {article.category}
@@ -253,7 +253,7 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
             <div className="text-center mt-12">
               <button
                 onClick={handleLoadMore}
-                className="bg-white border border-gray-300 text-gray-700 px-8 py-3 rounded-full font-medium hover:bg-gray-50 transition-colors"
+                className="bg-white border border-gray-300 text-gray-700 px-8 py-3 rounded-lg font-medium hover:bg-gray-50 transition-colors"
               >
                 Voir plus d&apos;articles
               </button>
@@ -285,12 +285,12 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Votre email"
                   required
-                  className="flex-1 px-4 py-3 rounded-full focus:ring-2 focus:ring-blue-300"
+                  className="flex-1 px-4 py-3 rounded-lg focus:ring-2 focus:ring-blue-300"
                 />
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full sm:w-auto bg-white text-blue-600 px-6 py-3 rounded-full font-semibold hover:bg-blue-50 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {isLoading ? (
                     <Loader2 className="w-5 h-5 animate-spin" />

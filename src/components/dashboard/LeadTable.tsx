@@ -42,7 +42,7 @@ export function LeadTable({ assignments, basePath, showProvider, providerNames }
   return (
     <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[700px]">
+        <table className="w-full">
           <thead>
             <tr className="border-b border-gray-100 bg-gray-50/50">
               <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">

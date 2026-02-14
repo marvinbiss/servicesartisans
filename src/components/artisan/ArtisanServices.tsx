@@ -83,10 +83,10 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
             ))}
           </div>
         ) : (
-          <div className="bg-blue-50 rounded-xl border border-blue-200 p-6 text-center mt-4">
+          <div className="bg-emerald-50 rounded-xl border border-emerald-200 p-6 text-center mt-4">
             <p className="text-slate-700 font-medium mb-2">Tarifs sur devis personnalis&eacute;</p>
             <p className="text-sm text-slate-500 mb-4">Cet artisan propose des tarifs adapt&eacute;s &agrave; chaque projet. Demandez un devis gratuit pour conna&icirc;tre ses prix.</p>
-            <a href="#devis" className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-2.5 rounded-full font-medium hover:bg-blue-700 transition-colors">
+            <a href="#devis" className="inline-flex items-center gap-2 bg-emerald-600 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-emerald-700 transition-colors">
               Demander un devis gratuit
             </a>
           </div>
@@ -95,7 +95,7 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
         {/* Hourly rate */}
         {(artisan.hourly_rate_min || artisan.hourly_rate_max) && (
           <div className="mt-6 pt-6 border-t border-gray-100">
-            <div className="flex items-center justify-between p-4 rounded-xl bg-blue-50 border border-blue-100">
+            <div className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100">
               <div>
                 <span className="font-medium text-gray-900">Taux horaire</span>
                 <p className="text-xs text-slate-500 mt-0.5">Applicable pour les interventions sur mesure</p>

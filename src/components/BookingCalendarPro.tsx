@@ -247,10 +247,10 @@ export default function BookingCalendarPro({
     if (!recommendation) return null
 
     const badges: Record<string, { icon: React.ComponentType<{ className?: string }>; text: string; color: string }> = {
-      popular: { icon: TrendingUp, text: 'Populaire', color: 'bg-amber-100 text-amber-700' },
+      popular: { icon: TrendingUp, text: 'Populaire', color: 'bg-orange-100 text-orange-700' },
       recommended: { icon: Sparkles, text: 'Recommandé', color: 'bg-blue-100 text-blue-700' },
       last_minute: { icon: Clock, text: 'Dernière minute', color: 'bg-green-100 text-green-700' },
-      best_value: { icon: Star, text: 'Meilleur choix', color: 'bg-blue-100 text-blue-700' },
+      best_value: { icon: Star, text: 'Meilleur choix', color: 'bg-purple-100 text-purple-700' },
     }
 
     const badge = recommendation.badge ? badges[recommendation.badge] : null
@@ -268,8 +268,8 @@ export default function BookingCalendarPro({
   // Confirmation screen
   if (step === 'confirmation') {
     return (
-      <div className="bg-white rounded-xl shadow-md p-8 text-center">
-        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+      <div className="bg-white rounded-xl shadow-lg p-8 text-center">
+        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce">
           <Check className="w-8 h-8 text-green-600" />
         </div>
         <h3 className="text-2xl font-bold text-gray-900 mb-2">
@@ -332,7 +332,7 @@ export default function BookingCalendarPro({
   // Payment screen
   if (step === 'payment' && bookingResult) {
     return (
-      <div className="bg-white rounded-xl shadow-md p-6">
+      <div className="bg-white rounded-xl shadow-lg p-6">
         <div className="text-center mb-6">
           <CreditCard className="w-12 h-12 text-blue-600 mx-auto mb-3" />
           <h3 className="text-xl font-bold text-gray-900">Paiement de l'acompte</h3>
@@ -386,9 +386,9 @@ export default function BookingCalendarPro({
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-md overflow-hidden">
+    <div className="bg-white rounded-xl shadow-lg overflow-hidden">
       {/* Header */}
-      <div className="bg-blue-600 text-white p-6">
+      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6">
         <h3 className="text-lg font-semibold mb-1">Réserver un rendez-vous</h3>
         <p className="text-blue-100 text-sm">{artisanName} - {serviceName}</p>
         {servicePrice && (
@@ -574,7 +574,7 @@ export default function BookingCalendarPro({
           {selectedSlot && (
             <button
               onClick={() => setStep('form')}
-              className="w-full mt-6 bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors shadow-sm hover:shadow-md"
+              className="w-full mt-6 bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors shadow-lg hover:shadow-xl"
             >
               Continuer
             </button>

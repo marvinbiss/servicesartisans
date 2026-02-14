@@ -45,7 +45,7 @@ export function ProviderCard({ provider, showContact = false }: ProviderCardProp
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md hover:border-gray-300 transition-all duration-300">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
       <div className="p-6">
         <div className="flex items-start gap-4">
           {/* Avatar */}

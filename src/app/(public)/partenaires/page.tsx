@@ -38,7 +38,7 @@ export default function PartenairesPage() {
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="bg-white rounded-xl shadow-sm p-8 text-center max-w-2xl mx-auto">
           <h2 className="font-heading text-2xl font-bold text-gray-900 mb-4">
             Programme partenaires en cours de développement

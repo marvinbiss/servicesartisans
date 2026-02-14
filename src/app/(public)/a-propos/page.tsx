@@ -245,7 +245,7 @@ export default async function AProposPage() {
             </div>
 
             {/* Modèle économique */}
-            <div className="bg-blue-600 rounded-2xl overflow-hidden text-white">
+            <div className="bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl overflow-hidden text-white">
               <div className="relative h-48 w-full">
                 <Image
                   src={pageImages.about[1].src}

@@ -261,7 +261,7 @@ export function MetierAutocomplete({
           <div className="absolute left-3 top-1/2 -translate-y-1/2">
             {selectedService ? (
               <div className={`
-                p-1 rounded-lg ${selectedService.color}
+                p-1 rounded-lg bg-gradient-to-br ${selectedService.color}
               `}>
                 {(() => {
                   const IconComponent = getIcon(selectedService.icon)
@@ -296,7 +296,7 @@ export function MetierAutocomplete({
           className="
             absolute z-50 w-full mt-2
             bg-white border border-gray-200 rounded-xl
-            shadow-lg max-h-80 overflow-y-auto
+            shadow-xl max-h-80 overflow-y-auto
             animate-in fade-in slide-in-from-top-2 duration-200
           "
           role="listbox"
@@ -331,9 +331,9 @@ export function MetierAutocomplete({
                 role="option"
                 aria-selected={index === highlightedIndex}
               >
-                {/* Icon background */}
+                {/* Icon with gradient background */}
                 <div className={`
-                  p-2 rounded-lg ${service.color}
+                  p-2 rounded-lg bg-gradient-to-br ${service.color}
                   shadow-sm
                 `}>
                   <IconComponent className="w-5 h-5 text-white" />
@@ -349,7 +349,7 @@ export function MetierAutocomplete({
                       {service.name}
                     </span>
                     {isPopular && !query && (
-                      <span className="px-1.5 py-0.5 text-xs font-medium bg-amber-100 text-amber-700 rounded-full">
+                      <span className="px-1.5 py-0.5 text-[10px] font-medium bg-amber-100 text-amber-700 rounded-full">
                         Populaire
                       </span>
                     )}

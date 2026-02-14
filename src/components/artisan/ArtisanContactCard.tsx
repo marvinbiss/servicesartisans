@@ -31,9 +31,9 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
   const hasWebsite = !!artisan.website
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
       {/* Header accent */}
-      <div className="h-1 bg-blue-600" />
+      <div className="h-1 bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500" />
 
       <div className="p-6">
         <h3 className="text-lg font-semibold text-gray-900 font-heading mb-4">Contacter cet artisan</h3>
@@ -43,6 +43,7 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
           {artisan.accepts_new_clients === true && (
             <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-50 border border-green-200">
               <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
               </span>
               <span className="text-xs font-semibold text-green-700">Disponible</span>
@@ -61,19 +62,19 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
           {/* Primary CTA: Demander un devis */}
           <Link
             href="#devis"
-            className="w-full py-3.5 px-4 rounded-full bg-blue-600 text-white font-semibold flex items-center justify-center gap-2.5 hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 group"
+            className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold flex items-center justify-center gap-2.5 shadow-lg shadow-green-500/25 hover:shadow-green-500/40 hover:from-green-700 hover:to-emerald-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 group"
           >
-            <FileText className="w-5 h-5 transition-transform" aria-hidden="true" />
+            <FileText className="w-5 h-5 transition-transform group-hover:scale-110" aria-hidden="true" />
             Demander un devis gratuit
           </Link>
 
           {hasPhone && (
             <a
               href={`tel:${artisan.phone!.replace(/\s/g, '')}`}
-              className="w-full py-3.5 px-4 rounded-full bg-blue-600 text-white font-semibold flex items-center justify-center gap-2.5 shadow-md hover:bg-blue-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 group"
+              className="w-full py-3.5 px-4 rounded-xl bg-blue-600 text-white font-semibold flex items-center justify-center gap-2.5 shadow-md shadow-blue-500/20 hover:bg-blue-700 hover:shadow-blue-500/30 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 group"
               aria-label={`Appeler le ${formatFrenchPhone(artisan.phone!)}`}
             >
-              <Phone className="w-5 h-5 transition-transform" aria-hidden="true" />
+              <Phone className="w-5 h-5 transition-transform group-hover:scale-110" aria-hidden="true" />
               <span>Appeler</span>
               <span className="text-blue-200 font-normal">&middot;</span>
               <span className="text-blue-100 font-normal text-sm">{formatFrenchPhone(artisan.phone!)}</span>
@@ -83,7 +84,7 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
           {hasEmail && (
             <a
               href={`mailto:${artisan.email}`}
-              className="w-full py-3 px-4 rounded-full border-2 border-gray-200 text-slate-700 font-medium flex items-center justify-center gap-2.5 hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 group"
+              className="w-full py-3 px-4 rounded-xl border-2 border-gray-200 text-slate-700 font-medium flex items-center justify-center gap-2.5 hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 group"
               aria-label={`Envoyer un email à ${artisan.email}`}
             >
               <Mail className="w-5 h-5 text-slate-400 transition-colors group-hover:text-slate-600" aria-hidden="true" />
@@ -96,7 +97,7 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
               href={artisan.website!.startsWith('http') ? artisan.website! : `https://${artisan.website}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full py-3 px-4 rounded-full border-2 border-gray-200 text-slate-700 font-medium flex items-center justify-center gap-2.5 hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 group"
+              className="w-full py-3 px-4 rounded-xl border-2 border-gray-200 text-slate-700 font-medium flex items-center justify-center gap-2.5 hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 group"
               aria-label="Voir le site web de l'artisan"
             >
               <ExternalLink className="w-5 h-5 text-slate-400 transition-colors group-hover:text-slate-600" aria-hidden="true" />

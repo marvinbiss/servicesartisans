@@ -91,6 +91,7 @@
     --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
     --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
     --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --shadow-primary: 0 4px 14px 0 rgba(37, 99, 235, 0.3);
 
     /* Transitions */
     --transition-fast: 150ms ease;
@@ -136,15 +137,15 @@
   }
 
   .verified-badge-certification {
-    @apply bg-blue-100 text-blue-700 border border-blue-200;
+    @apply bg-purple-100 text-purple-700 border border-purple-200;
   }
 
   .verified-badge-premium {
-    @apply bg-amber-100 text-amber-800 border border-amber-300;
+    @apply bg-gradient-to-r from-amber-100 to-yellow-100 text-amber-800 border border-amber-300;
   }
 
   .verified-badge-enterprise {
-    @apply bg-slate-100 text-slate-800 border border-slate-300;
+    @apply bg-gradient-to-r from-slate-100 to-gray-100 text-slate-800 border border-slate-300;
   }
 
   /* Trust Score Indicator (used in VerifiedBadge.tsx) */
@@ -198,6 +199,43 @@
     @apply bg-red-100 text-red-700;
   }
 
+  /* ===========================================
+     Premium Card & Button System
+     =========================================== */
+
+  .card-premium {
+    @apply bg-white/90 backdrop-blur-sm border border-gray-100 rounded-2xl
+           shadow-sm hover:shadow-xl hover:border-amber-200/50
+           transition-all duration-300 ease-out;
+  }
+
+  .card-premium:hover {
+    @apply -translate-y-1 scale-[1.01];
+  }
+
+  .btn-premium-primary {
+    @apply inline-flex items-center justify-center gap-2
+           bg-gradient-to-r from-amber-500 to-amber-600
+           text-white font-bold rounded-xl
+           shadow-md shadow-amber-500/25
+           hover:from-amber-600 hover:to-amber-700
+           hover:shadow-lg hover:shadow-amber-500/35
+           hover:scale-[1.02] hover:-translate-y-0.5
+           active:scale-[0.98] active:translate-y-0
+           transition-all duration-200;
+  }
+
+  .btn-premium-secondary {
+    @apply inline-flex items-center justify-center gap-2
+           bg-gradient-to-r from-blue-600 to-blue-700
+           text-white font-bold rounded-xl
+           shadow-md shadow-blue-500/25
+           hover:from-blue-700 hover:to-blue-800
+           hover:shadow-lg hover:shadow-blue-500/35
+           hover:scale-[1.02] hover:-translate-y-0.5
+           active:scale-[0.98] active:translate-y-0
+           transition-all duration-200;
+  }
 }
 
 /* Custom marker styles for Leaflet */
@@ -279,6 +317,10 @@
     transition: transform 100ms ease;
   }
 
+  .card-premium:active {
+    transform: scale(0.98);
+    transition-duration: 100ms;
+  }
 }
 
 /* Better mobile input styling */
@@ -381,6 +423,49 @@ img {
 
   html {
     scroll-behavior: auto;
+  }
+}
+
+/* ===========================================
+   HERO SECTION - Premium Animations
+   =========================================== */
+
+/* Animated mesh gradient background */
+@keyframes meshGradient {
+  0%, 100% {
+    background-position: 0% 50%, 100% 50%, 50% 100%;
+  }
+  25% {
+    background-position: 50% 0%, 0% 100%, 100% 0%;
+  }
+  50% {
+    background-position: 100% 50%, 50% 0%, 0% 50%;
+  }
+  75% {
+    background-position: 50% 100%, 100% 0%, 50% 50%;
+  }
+}
+
+/* Shimmer sweep effect for the search button */
+@keyframes heroShimmer {
+  0% {
+    transform: translateX(-100%) skewX(-15deg);
+  }
+  100% {
+    transform: translateX(200%) skewX(-15deg);
+  }
+}
+
+/* Subtle floating animation for background blobs */
+@keyframes blobFloat {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(30px, -20px) scale(1.05);
+  }
+  66% {
+    transform: translate(-20px, 15px) scale(0.95);
   }
 }
 

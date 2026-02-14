@@ -10,7 +10,6 @@ import { createClient as createServerClient } from '@/lib/supabase/server'
 import { getResendClient } from '@/lib/api/resend-client'
 import { z } from 'zod'
 import { dispatchLead } from '@/app/actions/dispatch'
-import { escapeHtml } from '@/lib/utils/html'
 
 export const dynamic = 'force-dynamic'
 
@@ -148,70 +147,53 @@ export async function POST(request: Request) {
       }).catch((err) => console.error('Dispatch failed (non-blocking):', err))
     }
 
-    // Escape user-provided variables for HTML
-    const safeNom = escapeHtml(data.nom)
-    const safeVille = data.ville ? escapeHtml(data.ville) : ''
-    const safeDescription = data.description ? escapeHtml(data.description) : ''
-    const safeServiceName = escapeHtml(serviceNames[data.service] || data.service)
-    const safeUrgencyLabel = escapeHtml(urgencyLabels[data.urgency] || data.urgency)
-
     // Send confirmation email to client
     await getResend().emails.send({
-      from: process.env.FROM_EMAIL || 'ServicesArtisans <noreply@servicesartisans.fr>',
+      from: process.env.FROM_EMAIL || 'noreply@servicesartisans.fr',
       to: data.email,
       subject: 'Votre demande de devis - ServicesArtisans',
       html: `
-        <h2>Bonjour ${safeNom},</h2>
-        <p>Nous avons bien re\u00e7u votre demande de devis. Voici le r\u00e9capitulatif :</p>
+        <h2>Bonjour ${data.nom},</h2>
+        <p>Nous avons bien reçu votre demande de devis. Voici le récapitulatif :</p>
         <ul>
-          <li><strong>Service :</strong> ${safeServiceName}</li>
-          <li><strong>D\u00e9lai :</strong> ${safeUrgencyLabel}</li>
-          ${safeVille ? `<li><strong>Ville :</strong> ${safeVille}</li>` : ''}
-          ${safeDescription ? `<li><strong>Description :</strong> ${safeDescription}</li>` : ''}
+          <li><strong>Service :</strong> ${serviceNames[data.service] || data.service}</li>
+          <li><strong>Délai :</strong> ${urgencyLabels[data.urgency] || data.urgency}</li>
+          ${data.ville ? `<li><strong>Ville :</strong> ${data.ville}</li>` : ''}
+          ${data.description ? `<li><strong>Description :</strong> ${data.description}</li>` : ''}
         </ul>
         <p><strong>Que se passe-t-il maintenant ?</strong></p>
-        <p>Nous allons transmettre votre demande aux artisans disponibles dans votre r\u00e9gion. Vous recevrez jusqu\u2019\u00e0 3 devis gratuits sous 24h.</p>
-        <p>Cordialement,<br />L\u2019\u00e9quipe ServicesArtisans</p>
-        <p style="color: #999; font-size: 12px; text-align: center; margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
-          ServicesArtisans \u2014 La plateforme des artisans qualifi\u00e9s<br>
-          contact@servicesartisans.fr<br>
-          <a href="https://servicesartisans.fr/confidentialite" style="color: #999;">Politique de confidentialit\u00e9</a>
+        <p>Nous allons transmettre votre demande aux artisans disponibles dans votre région. Vous recevrez jusqu\u2019à 3 devis gratuits sous 24h.</p>
+        <p>Cordialement,<br />L\u2019équipe ServicesArtisans</p>
+        <p style="color: #666; font-size: 12px;">
+          <a href="https://servicesartisans.fr">servicesartisans.fr</a>
         </p>
       `,
-      text: `Bonjour ${data.nom},\n\nNous avons bien re\u00e7u votre demande de devis. Voici le r\u00e9capitulatif :\n\nService : ${serviceNames[data.service] || data.service}\nD\u00e9lai : ${urgencyLabels[data.urgency] || data.urgency}${data.ville ? `\nVille : ${data.ville}` : ''}${data.description ? `\nDescription : ${data.description}` : ''}\n\nQue se passe-t-il maintenant ?\nNous allons transmettre votre demande aux artisans disponibles dans votre r\u00e9gion. Vous recevrez jusqu'\u00e0 3 devis gratuits sous 24h.\n\nCordialement,\nL'\u00e9quipe ServicesArtisans\n\nServicesArtisans \u2014 La plateforme des artisans qualifi\u00e9s\ncontact@servicesartisans.fr\nPolitique de confidentialit\u00e9 : https://servicesartisans.fr/confidentialite`,
     })
-
-    // Escape user-provided variables for admin notification
-    const safeEmail = escapeHtml(data.email)
-    const safeTelephone = escapeHtml(data.telephone)
-    const safeCodePostal = data.codePostal ? escapeHtml(data.codePostal) : ''
-    const safeBudget = data.budget ? escapeHtml(data.budget) : ''
 
     // Send notification to admin
     await getResend().emails.send({
-      from: process.env.FROM_EMAIL || 'ServicesArtisans <noreply@servicesartisans.fr>',
+      from: process.env.FROM_EMAIL || 'noreply@servicesartisans.fr',
       to: 'contact@servicesartisans.fr',
       subject: `[Nouveau Devis] ${serviceNames[data.service] || data.service} - ${data.ville || 'France'}`,
       html: `
         <h2>Nouvelle demande de devis</h2>
         <h3>Client</h3>
         <ul>
-          <li><strong>Nom :</strong> ${safeNom}</li>
-          <li><strong>Email :</strong> ${safeEmail}</li>
-          <li><strong>T\u00e9l\u00e9phone :</strong> ${safeTelephone}</li>
+          <li><strong>Nom :</strong> ${data.nom}</li>
+          <li><strong>Email :</strong> ${data.email}</li>
+          <li><strong>Téléphone :</strong> ${data.telephone}</li>
         </ul>
         <h3>Demande</h3>
         <ul>
-          <li><strong>Service :</strong> ${safeServiceName}</li>
-          <li><strong>D\u00e9lai :</strong> ${safeUrgencyLabel}</li>
-          <li><strong>Ville :</strong> ${safeVille || 'Non pr\u00e9cis\u00e9'}</li>
-          <li><strong>Code postal :</strong> ${safeCodePostal || 'Non pr\u00e9cis\u00e9'}</li>
-          <li><strong>Budget :</strong> ${safeBudget || 'Non pr\u00e9cis\u00e9'}</li>
-          <li><strong>Description :</strong> ${safeDescription || 'Non pr\u00e9cis\u00e9'}</li>
+          <li><strong>Service :</strong> ${serviceNames[data.service] || data.service}</li>
+          <li><strong>Délai :</strong> ${urgencyLabels[data.urgency] || data.urgency}</li>
+          <li><strong>Ville :</strong> ${data.ville || 'Non précisé'}</li>
+          <li><strong>Code postal :</strong> ${data.codePostal || 'Non précisé'}</li>
+          <li><strong>Budget :</strong> ${data.budget || 'Non précisé'}</li>
+          <li><strong>Description :</strong> ${data.description || 'Non précisé'}</li>
         </ul>
-        ${lead ? `<p>ID: ${escapeHtml(lead.id)}</p>` : ''}
+        ${lead ? `<p>ID: ${lead.id}</p>` : ''}
       `,
-      text: `Nouvelle demande de devis\n\nClient\nNom : ${data.nom}\nEmail : ${data.email}\nT\u00e9l\u00e9phone : ${data.telephone}\n\nDemande\nService : ${serviceNames[data.service] || data.service}\nD\u00e9lai : ${urgencyLabels[data.urgency] || data.urgency}\nVille : ${data.ville || 'Non pr\u00e9cis\u00e9'}\nCode postal : ${data.codePostal || 'Non pr\u00e9cis\u00e9'}\nBudget : ${data.budget || 'Non pr\u00e9cis\u00e9'}\nDescription : ${data.description || 'Non pr\u00e9cis\u00e9'}${lead ? `\nID: ${lead.id}` : ''}`,
     })
 
     return NextResponse.json({

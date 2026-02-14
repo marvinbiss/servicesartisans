@@ -13,7 +13,7 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
   const stats: { icon: typeof Calendar; label: string; value: string; color: string; bgColor: string }[] = []
 
   if (artisan.experience_years && artisan.experience_years > 0) {
-    stats.push({ icon: Calendar, label: 'Expérience', value: `${artisan.experience_years} ans`, color: 'text-blue-600', bgColor: 'bg-blue-50 border-blue-100' })
+    stats.push({ icon: Calendar, label: 'Expérience', value: `${artisan.experience_years} ans`, color: 'text-purple-600', bgColor: 'bg-purple-50 border-purple-100' })
   }
   if (artisan.member_since) {
     stats.push({ icon: MessageCircle, label: 'Membre depuis', value: artisan.member_since, color: 'text-amber-600', bgColor: 'bg-amber-50 border-amber-100' })
@@ -21,7 +21,7 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
   if (artisan.creation_date) {
     const year = new Date(artisan.creation_date).getFullYear()
     if (!artisan.member_since) {
-      stats.push({ icon: Calendar, label: 'Entreprise créée', value: year.toString(), color: 'text-blue-600', bgColor: 'bg-blue-50 border-blue-100' })
+      stats.push({ icon: Calendar, label: 'Entreprise créée', value: year.toString(), color: 'text-purple-600', bgColor: 'bg-purple-50 border-purple-100' })
     }
   }
 

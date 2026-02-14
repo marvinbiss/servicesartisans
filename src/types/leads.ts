@@ -156,15 +156,15 @@ export interface TimelineEntry {
 
 export const EVENT_TYPE_META: Record<LeadEventType, { label: string; color: string; icon: string }> = {
   created: { label: 'Lead créé', color: 'blue', icon: 'Plus' },
-  dispatched: { label: 'Dispatché', color: 'blue', icon: 'Send' },
+  dispatched: { label: 'Dispatché', color: 'indigo', icon: 'Send' },
   viewed: { label: 'Consulté', color: 'yellow', icon: 'Eye' },
   quoted: { label: 'Devis envoyé', color: 'green', icon: 'FileText' },
   declined: { label: 'Décliné', color: 'gray', icon: 'X' },
-  accepted: { label: 'Accepté', color: 'green', icon: 'Check' },
+  accepted: { label: 'Accepté', color: 'emerald', icon: 'Check' },
   refused: { label: 'Refusé', color: 'red', icon: 'XCircle' },
   completed: { label: 'Terminé', color: 'green', icon: 'CheckCircle' },
-  expired: { label: 'Expiré', color: 'amber', icon: 'Clock' },
-  reassigned: { label: 'Réassigné', color: 'slate', icon: 'RefreshCw' },
+  expired: { label: 'Expiré', color: 'orange', icon: 'Clock' },
+  reassigned: { label: 'Réassigné', color: 'purple', icon: 'RefreshCw' },
 }
 
 export const URGENCY_META: Record<string, { label: string; cls: string }> = {
@@ -178,8 +178,8 @@ export const STATUS_META: Record<string, { label: string; cls: string }> = {
   viewed: { label: 'Consulté', cls: 'bg-yellow-100 text-yellow-700' },
   quoted: { label: 'Devis envoyé', cls: 'bg-green-100 text-green-700' },
   declined: { label: 'Décliné', cls: 'bg-gray-100 text-gray-600' },
-  accepted: { label: 'Accepté', cls: 'bg-green-100 text-green-700' },
+  accepted: { label: 'Accepté', cls: 'bg-emerald-100 text-emerald-700' },
   refused: { label: 'Refusé', cls: 'bg-red-100 text-red-700' },
   completed: { label: 'Terminé', cls: 'bg-green-100 text-green-800' },
-  expired: { label: 'Expiré', cls: 'bg-amber-100 text-amber-700' },
+  expired: { label: 'Expiré', cls: 'bg-orange-100 text-orange-700' },
 }

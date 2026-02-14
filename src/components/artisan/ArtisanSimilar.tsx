@@ -82,20 +82,24 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSi
 
         {/* Navigation buttons */}
         <div className="flex gap-2" role="group" aria-label="Navigation du carrousel">
-          <button
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
             onClick={() => scroll('left')}
             className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
             aria-label="Voir les artisans precedents"
           >
             <ChevronLeft className="w-5 h-5 text-gray-600" aria-hidden="true" />
-          </button>
-          <button
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
             onClick={() => scroll('right')}
             className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
             aria-label="Voir les artisans suivants"
           >
             <ChevronRight className="w-5 h-5 text-gray-600" aria-hidden="true" />
-          </button>
+          </motion.button>
         </div>
       </div>
 
@@ -120,12 +124,13 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSi
               href={getArtisanUrl({ stable_id: item.stable_id, slug: item.slug, specialty: item.specialty, city: item.city })}
               aria-label={`Voir le profil de ${item.name}, ${item.specialty} a ${item.city}, note ${item.rating} sur 5`}
             >
-              <article
-                className="w-72 bg-white rounded-xl border border-gray-100 p-4 transition-all cursor-pointer hover:shadow-md"
+              <motion.article
+                whileHover={{ y: -4, boxShadow: '0 12px 24px -8px rgba(0,0,0,0.15)' }}
+                className="w-72 bg-white rounded-xl border border-gray-100 p-4 transition-all cursor-pointer"
               >
                 {/* Header */}
                 <div className="flex items-start gap-3 mb-3">
-                  <div className="w-14 h-14 rounded-xl bg-blue-600 flex items-center justify-center text-white text-xl font-bold flex-shrink-0 overflow-hidden">
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-xl font-bold flex-shrink-0 overflow-hidden">
                     {item.avatar_url ? (
                       <img
                         src={item.avatar_url}
@@ -179,7 +184,7 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSi
                     <span className="font-bold text-blue-600">{item.hourly_rate}€/h</span>
                   </div>
                 )}
-              </article>
+              </motion.article>
             </Link>
           </motion.div>
         ))}

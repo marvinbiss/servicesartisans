@@ -251,7 +251,7 @@ export default function AdminServicesPage() {
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex min-h-screen items-center justify-center p-4">
             <div className="fixed inset-0 bg-black/50" onClick={() => setEditModal({ open: false, service: null })} />
-            <div role="dialog" aria-modal="true" aria-labelledby="edit-service-title" className="relative bg-white rounded-xl shadow-lg max-w-md w-full p-6">
+            <div role="dialog" aria-modal="true" aria-labelledby="edit-service-title" className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6">
               <h3 id="edit-service-title" className="text-lg font-semibold text-gray-900 mb-4">
                 {editModal.service ? 'Modifier le service' : 'Nouveau service'}
               </h3>

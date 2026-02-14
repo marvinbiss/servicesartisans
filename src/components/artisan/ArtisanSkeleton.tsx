@@ -180,7 +180,7 @@ export function ArtisanHeroSkeleton() {
 
 export function ArtisanSidebarSkeleton() {
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-24">
+    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 sticky top-24">
       <Shimmer className="w-40 h-4 rounded mb-4" />
       <Shimmer className="w-24 h-10 rounded mb-6" />
       <div className="space-y-3 mb-6">

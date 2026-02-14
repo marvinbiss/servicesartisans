@@ -22,7 +22,6 @@ import { getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { generateLocationContent, hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import type { Service, Location as LocationType, Provider } from '@/types'
-import { ScrollReveal } from '@/components/ui/ScrollReveal'
 
 // Safely escape JSON for script tags to prevent XSS
 function safeJsonStringify(data: unknown): string {
@@ -358,14 +357,11 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         h1Text={h1Text}
       />
 
-      <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
-
       {/* SEO Content - Server-rendered for Googlebot (unique per service+location) */}
       {locationContent && (
-        <section className="py-16 bg-slate-50/50">
+        <section className="py-12 bg-gray-50 border-t">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <ScrollReveal>
-            <div className="bg-white rounded-2xl border border-slate-200/60 p-8">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
               <div className="prose prose-gray max-w-none">
                 <h2 className="border-l-4 border-amber-500 pl-4 !mt-0">
                   Trouver un {service.name.toLowerCase()} à {location.name}
@@ -392,7 +388,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
                 {ville && getQuartiersByVille(locationSlug).length > 0 && (
                   <div className="not-prose flex flex-wrap gap-2 mt-4">
                     {getQuartiersByVille(locationSlug).slice(0, 10).map(({ name, slug }) => (
-                      <Link key={slug} href={`/villes/${locationSlug}/${slug}`} className="text-sm bg-slate-50 text-slate-700 px-3 py-1.5 rounded-full hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                      <Link key={slug} href={`/villes/${locationSlug}/${slug}`} className="text-sm bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full hover:bg-blue-100 transition-colors">
                         {name}
                       </Link>
                     ))}
@@ -402,16 +398,15 @@ export default async function ServiceLocationPage({ params }: PageProps) {
                 <p>{locationContent.conclusion}</p>
               </div>
             </div>
-            </ScrollReveal>
           </div>
         </section>
       )}
 
       {/* Fallback SEO content when locationContent is not available */}
       {!locationContent && (
-        <section className="py-16 bg-slate-50/50">
+        <section className="py-12 bg-gray-50 border-t">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-2xl border border-slate-200/60 p-8">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
               <div className="prose prose-gray max-w-none">
                 <h2 className="border-l-4 border-amber-500 pl-4 !mt-0">
                   Trouver un {service.name.toLowerCase()} à {location.name}
@@ -447,23 +442,20 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         </section>
       )}
 
-      <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
-
       {/* Trade expertise section */}
       {trade && (
-        <section className="py-16 bg-white">
+        <section className="py-12 border-t">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <ScrollReveal>
             <h2 className="text-xl font-bold text-gray-900 mb-1 border-l-4 border-amber-500 pl-4">
               Pourquoi faire appel à un {service.name.toLowerCase()} professionnel à {location.name} ?
             </h2>
             <div className="mt-6 space-y-4">
               {trade.certifications && trade.certifications.length > 0 && (
-                <div className="bg-white border border-slate-200 rounded-2xl p-4">
-                  <h3 className="font-semibold text-slate-900 mb-2">Certifications et garanties</h3>
+                <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4">
+                  <h3 className="font-semibold text-emerald-900 mb-2">Certifications et garanties</h3>
                   <div className="flex flex-wrap gap-2">
                     {trade.certifications.map((cert, i) => (
-                      <span key={i} className="text-sm bg-slate-100 text-slate-600 px-3 py-1 rounded-full">
+                      <span key={i} className="text-sm bg-white text-emerald-700 px-3 py-1 rounded-full border border-emerald-200">
                         {cert}
                       </span>
                     ))}
@@ -471,12 +463,12 @@ export default async function ServiceLocationPage({ params }: PageProps) {
                 </div>
               )}
               {trade.tips && trade.tips.length > 0 && (
-                <div className="bg-white border border-slate-200 rounded-2xl p-4">
-                  <h3 className="font-semibold text-slate-900 mb-2">Conseils d&apos;expert</h3>
+                <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
+                  <h3 className="font-semibold text-blue-900 mb-2">Conseils d&apos;expert</h3>
                   <ul className="space-y-1">
                     {trade.tips.slice(0, 3).map((tip, i) => (
-                      <li key={i} className="text-sm text-slate-700 flex items-start gap-2">
-                        <span className="text-slate-400 mt-0.5">•</span>
+                      <li key={i} className="text-sm text-blue-800 flex items-start gap-2">
+                        <span className="text-blue-400 mt-0.5">•</span>
                         {tip}
                       </li>
                     ))}
@@ -484,19 +476,15 @@ export default async function ServiceLocationPage({ params }: PageProps) {
                 </div>
               )}
             </div>
-            </ScrollReveal>
           </div>
         </section>
       )}
 
-      <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
-
       {/* Trade pricing context */}
       {trade && (
-        <section className="py-16 bg-slate-50/50">
+        <section className="py-12 bg-gray-50 border-t">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <ScrollReveal>
-            <div className="bg-white rounded-2xl border border-slate-200/60 p-8">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
               <h2 className="text-xl font-bold text-gray-900 mb-1 border-l-4 border-amber-500 pl-4">
                 Tarifs {service.name.toLowerCase()} à {location.name}
               </h2>
@@ -515,7 +503,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
                       })
                     : price
                   return (
-                    <div key={i} className="flex items-start justify-between gap-3 p-3 bg-slate-50 rounded-2xl text-sm border border-slate-100">
+                    <div key={i} className="flex items-start justify-between gap-3 p-3 bg-gray-50 rounded-xl text-sm border border-gray-100">
                       <span className="text-gray-700">{label}</span>
                       {adjustedPrice && <span className="font-semibold text-amber-700 whitespace-nowrap">{adjustedPrice}</span>}
                     </div>
@@ -523,7 +511,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
                 })}
               </div>
               {trade.emergencyInfo && (
-                <div className="mt-6 p-4 bg-red-50 border border-red-100 rounded-2xl">
+                <div className="mt-6 p-4 bg-red-50 border border-red-100 rounded-xl">
                   <p className="text-sm text-red-800">
                     <strong>Urgence {service.name.toLowerCase()} à {location.name} :</strong>{' '}
                     {trade.averageResponseTime}
@@ -538,19 +526,15 @@ export default async function ServiceLocationPage({ params }: PageProps) {
                 <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
               </Link>
             </div>
-            </ScrollReveal>
           </div>
         </section>
       )}
 
-      <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
-
       {/* FAQ accordion — premium card style (trade FAQ hash-selected + location-specific) */}
       {combinedFaq.length > 0 && (
-        <section className="py-16 bg-white">
+        <section className="py-12 bg-white border-t">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <ScrollReveal>
-            <div className="bg-white rounded-2xl border border-slate-200/60 p-8">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
               <h2 className="text-xl font-bold text-gray-900 mb-6 border-l-4 border-amber-500 pl-4">
                 Questions fréquentes — {service.name.toLowerCase()} à {location.name}
               </h2>
@@ -558,30 +542,27 @@ export default async function ServiceLocationPage({ params }: PageProps) {
                 {combinedFaq.map((item, i) => (
                   <details
                     key={i}
-                    className="group bg-white rounded-2xl border border-slate-200 overflow-hidden"
+                    className="group bg-gray-50 rounded-xl border border-gray-100 overflow-hidden transition-shadow duration-300 hover:shadow-sm"
                   >
-                    <summary className="flex items-center justify-between cursor-pointer px-6 py-5 text-left hover:bg-slate-50 transition-colors [&::-webkit-details-marker]:hidden list-none">
+                    <summary className="flex items-center justify-between cursor-pointer px-6 py-5 text-left hover:bg-gray-100/80 transition-colors duration-200 [&::-webkit-details-marker]:hidden list-none">
                       <span className="font-semibold text-slate-900 pr-4">{item.question}</span>
-                      <svg className="w-5 h-5 text-slate-400 shrink-0 group-open:rotate-180 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <svg className="w-5 h-5 text-amber-500 shrink-0 group-open:rotate-180 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                       </svg>
                     </summary>
-                    <div className="px-6 pb-5 text-slate-600 leading-relaxed text-sm">
+                    <div className="px-6 pb-5 text-slate-600 leading-relaxed text-sm animate-fade-in">
                       {item.answer}
                     </div>
                   </details>
                 ))}
               </div>
             </div>
-            </ScrollReveal>
           </div>
         </section>
       )}
 
-      <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
-
       {/* Articles utiles — liens contextuels vers le blog */}
-      <section className="py-16 bg-slate-50/50">
+      <section className="py-12 bg-gray-50 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2 border-l-4 border-amber-500 pl-4">
             <svg className="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -594,7 +575,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
               <>
                 <Link
                   href="/blog/comment-choisir-plombier"
-                  className="flex items-start gap-3 p-4 bg-white rounded-2xl border border-slate-200 hover:border-blue-200 transition-colors group"
+                  className="flex items-start gap-3 p-4 bg-white rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-sm transition-all group"
                 >
                   <span className="text-2xl shrink-0" aria-hidden="true">&#128295;</span>
                   <div>
@@ -604,7 +585,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
                 </Link>
                 <Link
                   href="/blog/urgence-plomberie-que-faire"
-                  className="flex items-start gap-3 p-4 bg-white rounded-2xl border border-slate-200 hover:border-blue-200 transition-colors group"
+                  className="flex items-start gap-3 p-4 bg-white rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-sm transition-all group"
                 >
                   <span className="text-2xl shrink-0" aria-hidden="true">&#128680;</span>
                   <div>
@@ -617,7 +598,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
               <>
                 <Link
                   href="/blog/renovation-energetique-2026"
-                  className="flex items-start gap-3 p-4 bg-white rounded-2xl border border-slate-200 hover:border-blue-200 transition-colors group"
+                  className="flex items-start gap-3 p-4 bg-white rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-sm transition-all group"
                 >
                   <span className="text-2xl shrink-0" aria-hidden="true">&#127969;</span>
                   <div>
@@ -627,7 +608,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
                 </Link>
                 <Link
                   href="/blog/tendances-decoration-2026"
-                  className="flex items-start gap-3 p-4 bg-white rounded-2xl border border-slate-200 hover:border-blue-200 transition-colors group"
+                  className="flex items-start gap-3 p-4 bg-white rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-sm transition-all group"
                 >
                   <span className="text-2xl shrink-0" aria-hidden="true">&#127912;</span>
                   <div>
@@ -640,7 +621,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
               <>
                 <Link
                   href="/blog/tendances-decoration-2026"
-                  className="flex items-start gap-3 p-4 bg-white rounded-2xl border border-slate-200 hover:border-blue-200 transition-colors group"
+                  className="flex items-start gap-3 p-4 bg-white rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-sm transition-all group"
                 >
                   <span className="text-2xl shrink-0" aria-hidden="true">&#127912;</span>
                   <div>
@@ -650,7 +631,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
                 </Link>
                 <Link
                   href="/blog/renovation-energetique-2026"
-                  className="flex items-start gap-3 p-4 bg-white rounded-2xl border border-slate-200 hover:border-blue-200 transition-colors group"
+                  className="flex items-start gap-3 p-4 bg-white rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-sm transition-all group"
                 >
                   <span className="text-2xl shrink-0" aria-hidden="true">&#127969;</span>
                   <div>
@@ -664,16 +645,14 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         </div>
       </section>
 
-      <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
-
       {/* Voir aussi - Cross Links Section */}
-      <section className="py-16 bg-white">
+      <section className="py-12 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-8 border-l-4 border-amber-500 pl-4">Voir aussi</h2>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Autres services dans cette ville */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-6">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
               <h3 className="font-semibold text-gray-900 mb-4">
                 Autres artisans à {location.name}
               </h3>
@@ -682,7 +661,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
                   <Link
                     key={s.slug}
                     href={`/services/${s.slug}/${locationSlug}`}
-                    className="inline-flex items-center gap-2 px-3.5 py-2 bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-blue-600 rounded-full text-sm font-medium border border-slate-100 hover:border-blue-200 transition-colors"
+                    className="inline-flex items-center gap-2 px-3.5 py-2 bg-gray-50 hover:bg-amber-50 text-gray-700 hover:text-amber-800 rounded-full text-sm font-medium border border-gray-100 hover:border-amber-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
                   >
                     {s.name}
                   </Link>
@@ -698,7 +677,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
             </div>
 
             {/* Ce service dans les villes proches */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-6">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
               <h3 className="font-semibold text-gray-900 mb-4">
                 {service.name} près de {location.name}
               </h3>
@@ -707,7 +686,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
                   <Link
                     key={city.slug}
                     href={`/services/${serviceSlug}/${city.slug}`}
-                    className="inline-flex items-center gap-1 px-3.5 py-2 bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-blue-600 rounded-full text-sm font-medium border border-slate-100 hover:border-blue-200 transition-colors"
+                    className="inline-flex items-center gap-1 px-3.5 py-2 bg-gray-50 hover:bg-blue-50 text-gray-700 hover:text-blue-700 rounded-full text-sm font-medium border border-gray-100 hover:border-blue-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
                   >
                     {city.name}
                   </Link>
@@ -723,7 +702,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
             </div>
 
             {/* Navigation régionale */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-6">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
               <h3 className="font-semibold text-gray-900 mb-4">
                 Explorer par zone
               </h3>
@@ -731,7 +710,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
                 {location.region_name && (
                   <Link
                     href={`/regions/${getRegionSlugByName(location.region_name) || slugify(location.region_name)}`}
-                    className="flex items-center gap-2 px-4 py-3 bg-gray-50 hover:bg-blue-50 text-gray-700 hover:text-blue-700 rounded-xl text-sm font-medium border border-gray-100 hover:border-blue-200 transition-colors"
+                    className="flex items-center gap-2 px-4 py-3 bg-gray-50 hover:bg-blue-50 text-gray-700 hover:text-blue-700 rounded-xl text-sm font-medium border border-gray-100 hover:border-blue-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
                   >
                     <svg className="w-4 h-4 shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                     Artisans en {location.region_name}
@@ -740,7 +719,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
                 {location.department_name && location.department_code && (
                   <Link
                     href={`/departements/${getDepartementByCode(location.department_code)?.slug || slugify(location.department_name)}`}
-                    className="flex items-center gap-2 px-4 py-3 bg-gray-50 hover:bg-blue-50 text-gray-700 hover:text-blue-700 rounded-xl text-sm font-medium border border-gray-100 hover:border-blue-200 transition-colors"
+                    className="flex items-center gap-2 px-4 py-3 bg-gray-50 hover:bg-blue-50 text-gray-700 hover:text-blue-700 rounded-xl text-sm font-medium border border-gray-100 hover:border-blue-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
                   >
                     <svg className="w-4 h-4 shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                     Artisans dans {location.department_name} ({location.department_code})
@@ -753,18 +732,18 @@ export default async function ServiceLocationPage({ params }: PageProps) {
               <Link
                 key={`cross-${s.slug}`}
                 href={`/services/${s.slug}/${locationSlug}`}
-                className="flex items-center justify-between p-4 bg-white rounded-2xl border border-slate-200 hover:border-blue-200 transition-colors group"
+                className="flex items-center justify-between p-4 bg-amber-50 rounded-xl border border-amber-100 hover:border-amber-200 transition-all group"
               >
-                <span className="text-sm text-slate-700 font-medium">
+                <span className="text-sm text-amber-800 font-medium">
                   Besoin d&apos;un {s.name.toLowerCase()} à {location.name} ?
                 </span>
-                <svg className="w-4 h-4 text-slate-400 shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                <svg className="w-4 h-4 text-amber-600 group-hover:translate-x-0.5 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
               </Link>
             ))}
 
             {/* Villes du département */}
             {deptCities.length > 3 && (
-              <div className="bg-white rounded-2xl border border-slate-200 p-6 md:col-span-2 lg:col-span-3">
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:col-span-2 lg:col-span-3">
                 <h3 className="font-semibold text-gray-900 mb-4">
                   {service.name} dans {location.department_name ? `le ${location.department_name}` : 'le département'}
                 </h3>
@@ -773,7 +752,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
                     <Link
                       key={city.slug}
                       href={`/services/${serviceSlug}/${city.slug}`}
-                      className="inline-flex items-center gap-1 px-3 py-1.5 bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-600 rounded-full text-sm border border-slate-100 hover:border-blue-200 transition-colors"
+                      className="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-50 hover:bg-blue-50 text-gray-600 hover:text-blue-600 rounded-full text-sm border border-gray-100 hover:border-blue-200 transition-colors"
                     >
                       {city.name}
                     </Link>
@@ -785,10 +764,8 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         </div>
       </section>
 
-      <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
-
       {/* Trust & Safety Links (E-E-A-T) */}
-      <section className="py-8 bg-white">
+      <section className="py-8 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
             Confiance &amp; Sécurité
@@ -807,10 +784,8 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         </div>
       </section>
 
-      <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
-
       {/* Editorial credibility signal */}
-      <section className="py-6 bg-slate-50/50">
+      <section className="py-6 bg-gray-50 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-xs text-gray-400 leading-relaxed max-w-3xl">
             Les artisans référencés sur cette page sont des entreprises immatriculées vérifiées via l&apos;API SIRENE de l&apos;INSEE.
@@ -821,7 +796,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
       </section>
 
       {/* Internal Links Footer */}
-      <section className="bg-gray-50 py-16">
+      <section className="bg-gray-50 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <PopularServicesLinks showTitle={true} limit={8} />
         </div>

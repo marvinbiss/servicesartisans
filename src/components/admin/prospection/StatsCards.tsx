@@ -48,7 +48,7 @@ export function StatsCards({ stats, loading }: StatsCardsProps) {
       name: 'Coût total',
       value: `${(stats?.total_cost || 0).toFixed(2)} €`,
       icon: DollarSign,
-      color: 'text-red-600 bg-red-100',
+      color: 'text-rose-600 bg-rose-100',
     },
   ]
 

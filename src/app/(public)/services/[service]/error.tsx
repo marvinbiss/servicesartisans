@@ -11,8 +11,8 @@ export default function ServiceDetailError({
   return (
     <div className="min-h-[60vh] flex items-center justify-center px-4">
       <div className="text-center max-w-md">
-        <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-amber-50 flex items-center justify-center">
-          <span className="text-2xl text-amber-600">!</span>
+        <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-orange-50 flex items-center justify-center">
+          <span className="text-2xl text-orange-600">!</span>
         </div>
         <h1 className="font-heading text-2xl font-bold text-gray-900 mb-2">
           Service temporairement indisponible

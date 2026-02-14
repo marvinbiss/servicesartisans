@@ -25,15 +25,15 @@ interface LeadEvent {
 
 const EVENT_CONFIG: Record<string, { label: string; icon: typeof Clock; color: string }> = {
   created: { label: 'Lead créé', icon: ArrowRight, color: 'text-blue-600 bg-blue-100' },
-  dispatched: { label: 'Assigné', icon: ArrowRight, color: 'text-blue-600 bg-blue-100' },
+  dispatched: { label: 'Assigné', icon: ArrowRight, color: 'text-indigo-600 bg-indigo-100' },
   viewed: { label: 'Consulté', icon: Eye, color: 'text-yellow-600 bg-yellow-100' },
   quoted: { label: 'Devis envoyé', icon: Send, color: 'text-green-600 bg-green-100' },
   declined: { label: 'Décliné', icon: X, color: 'text-gray-600 bg-gray-100' },
   accepted: { label: 'Accepté', icon: CheckCircle, color: 'text-green-700 bg-green-100' },
   refused: { label: 'Refusé', icon: X, color: 'text-red-600 bg-red-100' },
   completed: { label: 'Terminé', icon: CheckCircle, color: 'text-green-800 bg-green-200' },
-  expired: { label: 'Expiré', icon: Clock, color: 'text-amber-600 bg-amber-100' },
-  reassigned: { label: 'Réassigné', icon: RefreshCw, color: 'text-blue-600 bg-blue-100' },
+  expired: { label: 'Expiré', icon: Clock, color: 'text-orange-600 bg-orange-100' },
+  reassigned: { label: 'Réassigné', icon: RefreshCw, color: 'text-purple-600 bg-purple-100' },
 }
 
 export default function LeadHistoryPage() {

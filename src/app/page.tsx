@@ -56,7 +56,7 @@ export default function HomePage() {
       <SectionDivider />
 
       {/* ─── HOW IT WORKS ─────────────────────────────────────── */}
-      <ScrollReveal direction="up" delay={50}>
+      <ScrollReveal direction="up" delay={0.05}>
         <HowItWorksSection />
       </ScrollReveal>
 
@@ -84,8 +84,8 @@ export default function HomePage() {
       <SectionDivider />
 
       {/* ─── GEOGRAPHIC COVERAGE ──────────────────────────────── */}
-      <section className="py-24 md:py-28 bg-slate-50/50">
-        <div className="max-w-7xl mx-auto px-4">
+      <section className="py-20 md:py-28 bg-white">
+        <div className="max-w-6xl mx-auto px-4">
           <GeographicSectionWrapper>
             <ScrollReveal direction="up">
               <div className="text-center mb-10">
@@ -117,7 +117,7 @@ export default function HomePage() {
 
       {/* ─── POPULAR LINKS (SEO) ──────────────────────────────── */}
       <section className="py-16 bg-slate-50 border-t border-slate-100">
-        <div className="max-w-7xl mx-auto px-4">
+        <div className="max-w-6xl mx-auto px-4">
           <StaggerGrid className="grid md:grid-cols-3 gap-12" staggerDelay={0.15}>
             <StaggerItem>
               <PopularServicesLinks showTitle limit={8} />

@@ -359,13 +359,13 @@ function CalloutIcon({ calloutType }: { calloutType: CalloutBlock['calloutType']
   switch (calloutType) {
     case 'tip':
       return (
-        <svg className="w-5 h-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <svg className="w-5 h-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
         </svg>
       )
     case 'warning':
       return (
-        <svg className="w-5 h-5 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <svg className="w-5 h-5 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
         </svg>
       )
@@ -399,15 +399,15 @@ function CalloutIcon({ calloutType }: { calloutType: CalloutBlock['calloutType']
 function getCalloutStyles(calloutType: CalloutBlock['calloutType']): { bg: string; border: string; headerColor: string } {
   switch (calloutType) {
     case 'tip':
-      return { bg: 'bg-blue-50', border: 'border-blue-400', headerColor: 'text-blue-700' }
+      return { bg: 'bg-emerald-50', border: 'border-emerald-400', headerColor: 'text-emerald-700' }
     case 'warning':
-      return { bg: 'bg-amber-50', border: 'border-amber-400', headerColor: 'text-amber-700' }
+      return { bg: 'bg-orange-50', border: 'border-orange-400', headerColor: 'text-orange-700' }
     case 'info':
       return { bg: 'bg-blue-50', border: 'border-blue-400', headerColor: 'text-blue-700' }
     case 'takeaway':
       return { bg: 'bg-amber-50', border: 'border-amber-400', headerColor: 'text-amber-700' }
     case 'budget':
-      return { bg: 'bg-amber-50', border: 'border-amber-400', headerColor: 'text-amber-700' }
+      return { bg: 'bg-gradient-to-r from-amber-50 to-orange-50', border: 'border-amber-400', headerColor: 'text-amber-700' }
     case 'expert':
       return { bg: 'bg-slate-50', border: 'border-slate-400', headerColor: 'text-slate-700' }
   }
@@ -512,6 +512,26 @@ function renderCalloutContent(block: CalloutBlock) {
       ))}
     </div>
   )
+}
+
+/* ─── Author avatar color helper ──────────────────────── */
+
+function getAuthorGradient(name: string): string {
+  const gradients = [
+    'from-blue-500 to-blue-600',
+    'from-emerald-500 to-emerald-600',
+    'from-purple-500 to-purple-600',
+    'from-amber-500 to-amber-600',
+    'from-rose-500 to-rose-600',
+    'from-cyan-500 to-cyan-600',
+    'from-indigo-500 to-indigo-600',
+    'from-teal-500 to-teal-600',
+  ]
+  let hash = 0
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash)
+  }
+  return gradients[Math.abs(hash) % gradients.length]
 }
 
 /* ─── Page ────────────────────────────────────────────── */
@@ -620,7 +640,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
         </div>
 
         {/* Title */}
-        <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 max-w-3xl mx-auto leading-tight tracking-tight">
+        <h1 className="font-heading text-3xl md:text-4xl lg:text-[2.75rem] font-bold text-gray-900 mb-6 max-w-3xl mx-auto leading-tight tracking-tight">
           {article.title}
         </h1>
 
@@ -643,7 +663,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
             {article.readTime} de lecture
           </div>
           {article.updatedDate && (
-            <div className="flex items-center gap-2 text-blue-600">
+            <div className="flex items-center gap-2 text-emerald-600">
               <Clock className="w-4 h-4" />
               Mis à jour le {new Date(article.updatedDate).toLocaleDateString('fr-FR', {
                 day: 'numeric',
@@ -805,7 +825,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
 
           {/* Services associes */}
           {serviceLinks.length > 0 && (
-            <div className="mt-14 p-6 sm:p-8 bg-amber-50 border border-amber-100/80 rounded-2xl">
+            <div className="mt-14 p-6 sm:p-8 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-100/80 rounded-2xl">
               <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                 <span className="w-1.5 h-6 bg-amber-500 rounded-full" />
                 Services associés
@@ -838,7 +858,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
                   <Link
                     key={relSlug}
                     href={`/blog/${relSlug}`}
-                    className="group p-5 bg-white border border-gray-200 rounded-2xl hover:border-amber-200 hover:shadow-md transition-shadow duration-200"
+                    className="group p-5 bg-white border border-gray-200 rounded-2xl hover:border-amber-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
                   >
                     <span className="text-sm font-semibold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2">{relTitle}</span>
                   </Link>
@@ -872,7 +892,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Partager sur Facebook"
-                className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors duration-200"
+                className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 hover:scale-110 transition-all duration-200"
               >
                 <Facebook className="w-5 h-5" />
               </a>
@@ -881,7 +901,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Partager sur Twitter"
-                className="w-10 h-10 bg-sky-500 text-white rounded-full flex items-center justify-center hover:bg-sky-600 transition-colors duration-200"
+                className="w-10 h-10 bg-sky-500 text-white rounded-full flex items-center justify-center hover:bg-sky-600 hover:scale-110 transition-all duration-200"
               >
                 <Twitter className="w-5 h-5" />
               </a>
@@ -890,7 +910,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Partager sur LinkedIn"
-                className="w-10 h-10 bg-blue-700 text-white rounded-full flex items-center justify-center hover:bg-blue-800 transition-colors duration-200"
+                className="w-10 h-10 bg-blue-700 text-white rounded-full flex items-center justify-center hover:bg-blue-800 hover:scale-110 transition-all duration-200"
               >
                 <Linkedin className="w-5 h-5" />
               </a>
@@ -900,7 +920,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
           {/* Author Box */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mt-10">
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center">
+              <div className={`w-16 h-16 bg-gradient-to-br ${getAuthorGradient(article.author)} rounded-full flex items-center justify-center shadow-md`}>
                 <User className="w-8 h-8 text-white" />
               </div>
               <div>
@@ -947,8 +967,11 @@ export default async function BlogArticlePage({ params }: PageProps) {
       </section>
 
       {/* CTA */}
-      <div className="py-16 bg-slate-900">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div className="relative py-16 overflow-hidden bg-gradient-to-br from-[#0a0f1e] via-[#111827] to-[#0a0f1e]">
+        <div className="absolute inset-0" style={{
+          background: 'radial-gradient(ellipse 50% 60% at 50% 50%, rgba(245,158,11,0.06) 0%, transparent 60%)',
+        }} />
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4">
             Besoin d&apos;un artisan ?
           </h2>
@@ -957,7 +980,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
           </p>
           <Link
             href="/devis"
-            className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white font-semibold px-8 py-4 rounded-full shadow-sm hover:shadow-md transition-all duration-200"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 text-slate-900 font-bold px-8 py-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-[0_8px_30px_-4px_rgba(245,158,11,0.5)] hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
           >
             Demander un devis gratuit
             <ChevronRight className="w-5 h-5" />

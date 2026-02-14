@@ -80,7 +80,7 @@ export function SimilarArtisans({
     <div className={cn('bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700', className)}>
       <div className="p-4 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center gap-2">
-          <Sparkles className="w-5 h-5 text-blue-500" />
+          <Sparkles className="w-5 h-5 text-purple-500" />
           <h3 className="font-semibold text-gray-900 dark:text-white">
             Artisans similaires
           </h3>

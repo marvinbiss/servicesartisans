@@ -81,7 +81,7 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
           <Camera className="w-5 h-5 text-blue-600" />
           Réalisations ({photos.length})
           {stats.videos > 0 && (
-            <span className="ml-2 text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">
+            <span className="ml-2 text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">
               {stats.videos} vidéo{stats.videos > 1 ? 's' : ''}
             </span>
           )}
@@ -95,7 +95,8 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
         {/* Airbnb-style photo grid */}
         <div className="grid grid-cols-4 grid-rows-2 gap-2 h-80 rounded-xl overflow-hidden">
           {/* Main hero image */}
-          <div
+          <motion.div
+            whileHover={{ scale: 1.02 }}
             className="col-span-2 row-span-2 relative cursor-pointer group"
             onClick={() => openLightbox(0)}
           >
@@ -121,12 +122,13 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
                 <ZoomIn className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
               )}
             </div>
-          </div>
+          </motion.div>
 
           {/* Secondary images */}
           {photos.slice(1, 5).map((photo, index) => (
-            <div
+            <motion.div
               key={photo.id}
+              whileHover={{ scale: 1.05 }}
               className="relative cursor-pointer group overflow-hidden"
               onClick={() => openLightbox(index + 1)}
             >
@@ -156,19 +158,21 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
                   </span>
                 </div>
               )}
-            </div>
+            </motion.div>
           ))}
         </div>
 
         {/* View all button */}
         {photos.length > 5 && (
-          <button
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             onClick={() => openLightbox(0)}
             className="mt-4 w-full py-3 px-4 rounded-xl border border-gray-200 text-gray-700 font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
           >
             <Camera className="w-5 h-5" />
             Voir toutes les réalisations
-          </button>
+          </motion.button>
         )}
       </motion.div>
 
@@ -275,8 +279,10 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
             {/* Thumbnail strip */}
             <div className="p-4 flex justify-center gap-2 overflow-x-auto">
               {photos.map((photo, index) => (
-                <button
+                <motion.button
                   key={photo.id}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
                   className={`flex-shrink-0 w-16 h-12 rounded-lg overflow-hidden transition-all relative ${
                     index === currentIndex
                       ? 'ring-2 ring-white opacity-100'
@@ -302,7 +308,7 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
                       <Layers className="w-4 h-4 text-white" />
                     </div>
                   )}
-                </button>
+                </motion.button>
               ))}
             </div>
           </motion.div>

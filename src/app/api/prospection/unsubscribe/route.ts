@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
-import { addSuppression } from '@/lib/email/suppression'
 import crypto from 'crypto'
 
 export const dynamic = 'force-dynamic'
@@ -106,30 +105,19 @@ export async function GET(request: NextRequest) {
     const supabase = createAdminClient()
 
     // Marquer le contact comme opted_out
-    const { data: contactData, error } = await supabase
+    const { error } = await supabase
       .from('prospection_contacts')
       .update({
         consent_status: 'opted_out',
         opted_out_at: new Date().toISOString(),
       })
       .eq('id', payload.cid)
-      .select('email')
-      .single()
 
     if (error) {
       logger.error('Unsubscribe error', error)
       return new NextResponse(unsubscribePage('Erreur technique', false), {
         status: 500,
         headers: securityHeaders,
-      })
-    }
-
-    // Add to suppression list to prevent future sends
-    if (contactData?.email) {
-      await addSuppression({
-        email: contactData.email,
-        reason: 'unsubscribe',
-        source: 'unsubscribe_api'
       })
     }
 

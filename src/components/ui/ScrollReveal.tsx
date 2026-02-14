@@ -1,105 +1,61 @@
 'use client'
 
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { motion, useInView, useReducedMotion } from 'framer-motion'
+import { useRef, ReactNode } from 'react'
 
 interface ScrollRevealProps {
   children: ReactNode
   className?: string
-  delay?: number // delay in ms (0, 100, 200, 300...)
+  delay?: number
   direction?: 'up' | 'down' | 'left' | 'right' | 'none'
-  duration?: number // ms
-  once?: boolean // animate only once (default true)
+  duration?: number
+  distance?: number
+  /** Whether the element should be a section (for semantic HTML) */
+  as?: 'div' | 'section'
 }
 
 export function ScrollReveal({
   children,
-  className = '',
+  className,
   delay = 0,
   direction = 'up',
-  duration = 600,
-  once = true,
+  duration = 0.6,
+  distance = 40,
+  as = 'div',
 }: ScrollRevealProps) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [isVisible, setIsVisible] = useState(false)
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, margin: '-100px' })
+  const prefersReducedMotion = useReducedMotion()
 
-  useEffect(() => {
-    const element = ref.current
-    if (!element) return
-
-    // Respect prefers-reduced-motion
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (prefersReducedMotion) {
-      setIsVisible(true)
-      return
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true)
-          if (once) observer.unobserve(element)
-        } else if (!once) {
-          setIsVisible(false)
-        }
-      },
-      { threshold: 0.1, rootMargin: '0px 0px -60px 0px' }
-    )
-
-    observer.observe(element)
-    return () => observer.disconnect()
-  }, [once])
-
-  const getTransform = () => {
-    if (direction === 'up') return 'translateY(24px)'
-    if (direction === 'down') return 'translateY(-24px)'
-    if (direction === 'left') return 'translateX(24px)'
-    if (direction === 'right') return 'translateX(-24px)'
-    return 'none'
+  const directions = {
+    up: { y: distance },
+    down: { y: -distance },
+    left: { x: distance },
+    right: { x: -distance },
+    none: {},
   }
 
+  // Respect user's reduced motion preference
+  if (prefersReducedMotion) {
+    const Component = as === 'section' ? 'section' : 'div'
+    return <Component className={className}>{children}</Component>
+  }
+
+  const MotionComponent = as === 'section' ? motion.section : motion.div
+
   return (
-    <div
+    <MotionComponent
       ref={ref}
-      className={className}
-      style={{
-        opacity: isVisible ? 1 : 0,
-        transform: isVisible ? 'none' : getTransform(),
-        transition: `opacity ${duration}ms ease-out ${delay}ms, transform ${duration}ms ease-out ${delay}ms`,
+      initial={{ opacity: 0, ...directions[direction] }}
+      animate={isInView ? { opacity: 1, x: 0, y: 0 } : {}}
+      transition={{
+        duration,
+        delay,
+        ease: [0.25, 0.46, 0.45, 0.94],
       }}
+      className={className}
     >
       {children}
-    </div>
-  )
-}
-
-// Staggered children wrapper - each child gets incrementing delay
-interface StaggerProps {
-  children: ReactNode[]
-  className?: string
-  staggerDelay?: number // ms between each child
-  direction?: 'up' | 'down' | 'left' | 'right' | 'none'
-  duration?: number
-}
-
-export function ScrollStagger({
-  children,
-  className = '',
-  staggerDelay = 100,
-  direction = 'up',
-  duration = 500,
-}: StaggerProps) {
-  return (
-    <div className={className}>
-      {children.map((child, index) => (
-        <ScrollReveal
-          key={index}
-          delay={index * staggerDelay}
-          direction={direction}
-          duration={duration}
-        >
-          {child}
-        </ScrollReveal>
-      ))}
-    </div>
+    </MotionComponent>
   )
 }

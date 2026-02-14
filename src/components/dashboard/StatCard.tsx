@@ -8,7 +8,7 @@ interface StatCardProps {
   subtitle?: string
   trend?: { value: number; isPositive: boolean }
   icon: React.ReactNode
-  color?: 'blue' | 'green' | 'yellow' | 'red' | 'gray'
+  color?: 'blue' | 'green' | 'yellow' | 'red' | 'indigo' | 'purple' | 'gray'
 }
 
 const colorMap = {
@@ -16,6 +16,8 @@ const colorMap = {
   green: 'bg-green-50 text-green-600',
   yellow: 'bg-yellow-50 text-yellow-600',
   red: 'bg-red-50 text-red-600',
+  indigo: 'bg-indigo-50 text-indigo-600',
+  purple: 'bg-purple-50 text-purple-600',
   gray: 'bg-gray-50 text-gray-600',
 }
 

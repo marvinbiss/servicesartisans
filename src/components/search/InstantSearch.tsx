@@ -226,7 +226,7 @@ export function InstantSearch({
                         'w-8 h-8 rounded-full flex items-center justify-center',
                         suggestion.type === 'service' && 'bg-blue-100 text-blue-600',
                         suggestion.type === 'location' && 'bg-green-100 text-green-600',
-                        suggestion.type === 'artisan' && 'bg-blue-100 text-blue-600',
+                        suggestion.type === 'artisan' && 'bg-purple-100 text-purple-600',
                         suggestion.type === 'recent' && 'bg-gray-100 text-gray-600'
                       )}
                     >

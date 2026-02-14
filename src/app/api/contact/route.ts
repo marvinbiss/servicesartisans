@@ -7,13 +7,20 @@ import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { Resend } from 'resend'
 import { z } from 'zod'
-import { escapeHtml } from '@/lib/utils/html'
 
-/**
- * Escape HTML and convert newlines to <br /> for message display.
- */
-function escapeHtmlWithBreaks(str: string): string {
-  return escapeHtml(str).replace(/\n/g, '<br />')
+// HTML escape function to prevent XSS
+function escapeHtml(text: string): string {
+  const htmlEntities: Record<string, string> = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+    '/': '&#x2F;',
+    '`': '&#x60;',
+    '=': '&#x3D;'
+  }
+  return text.replace(/[&<>"'`=/]/g, (char) => htmlEntities[char])
 }
 
 export const dynamic = 'force-dynamic'
@@ -61,17 +68,14 @@ export async function POST(request: Request) {
     const safeNom = escapeHtml(nom)
     const safeEmail = escapeHtml(email)
     const safeSujet = escapeHtml(sujetTexte[sujet] || sujet)
-    const safeMessage = escapeHtmlWithBreaks(message)
+    const safeMessage = escapeHtml(message).replace(/\n/g, '<br />')
 
     // Send email to support team
     const { error: sendError } = await getResend().emails.send({
-      from: process.env.FROM_EMAIL || 'ServicesArtisans <noreply@servicesartisans.fr>',
+      from: process.env.FROM_EMAIL || 'contact@servicesartisans.fr',
       to: 'contact@servicesartisans.fr',
       reply_to: email,
       subject: `[Contact] ${safeSujet} - ${safeNom}`,
-      headers: {
-        'List-Unsubscribe': '<mailto:unsubscribe@servicesartisans.fr>'
-      },
       html: `
         <h2>Nouveau message de contact</h2>
         <p><strong>Nom:</strong> ${safeNom}</p>
@@ -82,10 +86,9 @@ export async function POST(request: Request) {
         <p>${safeMessage}</p>
         <hr />
         <p style="color: #666; font-size: 12px;">
-          Message envoy\u00e9 depuis le formulaire de contact de ServicesArtisans
+          Message envoyé depuis le formulaire de contact de ServicesArtisans
         </p>
       `,
-      text: `Nouveau message de contact\n\nNom: ${nom}\nEmail: ${email}\nSujet: ${sujetTexte[sujet] || sujet}\n\nMessage:\n${message}\n\nMessage envoy\u00e9 depuis le formulaire de contact de ServicesArtisans`,
     })
 
     if (sendError) {
@@ -98,28 +101,22 @@ export async function POST(request: Request) {
 
     // Send confirmation email to user (with sanitized content)
     await getResend().emails.send({
-      from: process.env.FROM_EMAIL || 'ServicesArtisans <noreply@servicesartisans.fr>',
+      from: process.env.FROM_EMAIL || 'noreply@servicesartisans.fr',
       to: email,
-      headers: {
-        'List-Unsubscribe': '<mailto:unsubscribe@servicesartisans.fr>'
-      },
-      subject: 'Votre message a bien \u00e9t\u00e9 re\u00e7u - ServicesArtisans',
+      subject: 'Votre message a bien été reçu - ServicesArtisans',
       html: `
         <h2>Bonjour ${safeNom},</h2>
-        <p>Nous avons bien re\u00e7u votre message et nous vous r\u00e9pondrons dans les plus brefs d\u00e9lais.</p>
+        <p>Nous avons bien reçu votre message et nous vous répondrons dans les plus brefs délais.</p>
         <p><strong>Sujet:</strong> ${safeSujet}</p>
         <hr />
         <p><strong>Votre message:</strong></p>
         <p>${safeMessage}</p>
         <hr />
-        <p>Cordialement,<br />L'\u00e9quipe ServicesArtisans</p>
-        <p style="color: #999; font-size: 12px; text-align: center; margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
-          ServicesArtisans \u2014 La plateforme des artisans qualifi\u00e9s<br>
-          contact@servicesartisans.fr<br>
-          <a href="https://servicesartisans.fr/confidentialite" style="color: #999;">Politique de confidentialit\u00e9</a>
+        <p>Cordialement,<br />L'équipe ServicesArtisans</p>
+        <p style="color: #666; font-size: 12px;">
+          <a href="https://servicesartisans.fr">servicesartisans.fr</a>
         </p>
       `,
-      text: `Bonjour ${nom},\n\nNous avons bien re\u00e7u votre message et nous vous r\u00e9pondrons dans les plus brefs d\u00e9lais.\n\nSujet: ${sujetTexte[sujet] || sujet}\n\nVotre message:\n${message}\n\nCordialement,\nL'\u00e9quipe ServicesArtisans\n\nServicesArtisans \u2014 La plateforme des artisans qualifi\u00e9s\ncontact@servicesartisans.fr\nPolitique de confidentialit\u00e9 : https://servicesartisans.fr/confidentialite`,
     })
 
     return NextResponse.json({

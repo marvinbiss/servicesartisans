@@ -22,10 +22,10 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
     ref
   ) => {
     const variants = {
-      default: 'bg-white rounded-2xl border border-slate-200/60 shadow-sm',
-      outlined: 'bg-white border border-slate-200/60 rounded-2xl',
-      elevated: 'bg-white rounded-2xl border border-slate-200/60 shadow-sm',
-      premium: 'bg-white rounded-2xl border border-slate-200/60 shadow-sm',
+      default: 'bg-white border border-gray-200 rounded-2xl shadow-sm',
+      outlined: 'bg-transparent border-2 border-gray-200 rounded-2xl',
+      elevated: 'bg-white rounded-2xl shadow-[0_4px_20px_-2px_rgba(0,0,0,0.06),0_12px_40px_-4px_rgba(0,0,0,0.08)]',
+      premium: 'bg-gradient-to-br from-white via-white to-blue-50/50 border border-blue-100/50 rounded-2xl shadow-[0_4px_20px_-2px_rgba(37,99,235,0.08),0_12px_40px_-4px_rgba(37,99,235,0.06)]',
     }
 
     const paddings = {
@@ -41,8 +41,8 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
         className={clsx(
           variants[variant],
           paddings[padding],
-          'transition-shadow duration-200',
-          hover && 'hover:shadow-md cursor-pointer',
+          'transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]',
+          hover && 'hover:shadow-[0_12px_40px_-8px_rgba(0,0,0,0.12),0_20px_60px_-12px_rgba(0,0,0,0.15)] hover:-translate-y-1 cursor-pointer',
           className
         )}
         {...props}

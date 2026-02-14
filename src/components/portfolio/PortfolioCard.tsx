@@ -52,8 +52,8 @@ export default function PortfolioCard({
       className={clsx(
         'group relative bg-white rounded-2xl overflow-hidden border border-gray-200',
         'transition-all duration-300',
-        isDragging && 'shadow-lg scale-105 rotate-2',
-        onClick && 'cursor-pointer hover:shadow-md'
+        isDragging && 'shadow-2xl scale-105 rotate-2',
+        onClick && 'cursor-pointer hover:shadow-lg hover:-translate-y-1'
       )}
     >
       {/* Image container */}

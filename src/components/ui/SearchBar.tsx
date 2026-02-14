@@ -317,8 +317,8 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
     <div ref={containerRef} className={`relative ${className}`}>
       <form onSubmit={handleSubmit}>
         <div className={`
-          ${isHero ? 'bg-white/95 backdrop-blur-xl rounded-2xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] p-4 md:p-5 border border-white/20' : ''}
-          ${variant === 'page' ? 'bg-white rounded-2xl shadow-md p-4 border border-gray-100' : ''}
+          ${isHero ? 'bg-white/95 backdrop-blur-xl rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] p-4 md:p-5 border border-white/20' : ''}
+          ${variant === 'page' ? 'bg-white rounded-2xl shadow-xl p-4 border border-gray-100' : ''}
         `}>
           <div className="flex flex-col md:flex-row gap-3">
             {/* Service field */}
@@ -350,7 +350,7 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
 
               {/* Service suggestions dropdown */}
               {showServiceSuggestions && (
-                <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden z-50">
+                <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50">
                   {/* Recent searches */}
                   {recentSearches.length > 0 && !query && (
                     <div className="p-3 border-b border-gray-100">
@@ -415,7 +415,7 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
                             onClick={() => selectService(service)}
                             className="flex items-center gap-2 px-3 py-2.5 hover:bg-blue-50 rounded-xl text-left transition-colors"
                           >
-                            <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
+                            <div className="w-8 h-8 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg flex items-center justify-center">
                               <Wrench className="w-4 h-4 text-blue-600" />
                             </div>
                             <span className="text-sm font-medium text-gray-700">{service.name}</span>
@@ -463,7 +463,7 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
 
               {/* Location suggestions dropdown */}
               {showLocationSuggestions && (
-                <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden z-50">
+                <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50">
                   {locationSuggestions.length > 0 ? (
                     <div className="p-2 max-h-64 overflow-y-auto">
                       {locationSuggestions.map((loc, idx) => (
@@ -541,8 +541,9 @@ export function SearchBar({ variant = 'hero', className = '', onSearch }: Search
             {/* Submit button */}
             <button
               type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-full font-semibold transition-colors duration-200 flex items-center justify-center gap-2"
+              className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 rounded-xl font-semibold transition-all shadow-lg shadow-blue-600/30 hover:shadow-xl hover:shadow-blue-600/40 hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 group"
             >
+              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
               <span className="relative">Rechercher</span>
               <ArrowRight className="w-5 h-5 relative group-hover:translate-x-0.5 transition-transform" />
             </button>

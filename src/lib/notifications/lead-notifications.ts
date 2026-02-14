@@ -1,5 +1,5 @@
 /**
- * Lead Event -> Notification Processor (server-side only)
+ * Lead Event → Notification Processor (server-side only)
  *
  * Maps lead_events to transactional notifications (email + in-app).
  * Idempotent: uses notification_deliveries to prevent duplicates.
@@ -9,11 +9,9 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { sendEmail } from '@/lib/api/resend-client'
 import type { LeadEventType } from '@/lib/dashboard/events'
-import { escapeHtml } from '@/lib/utils/html'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
 const SITE_NAME = 'ServicesArtisans'
-const DEFAULT_FROM = 'ServicesArtisans <noreply@servicesartisans.fr>'
 
 // ============================================================
 // Types
@@ -42,11 +40,10 @@ interface NotificationSpec {
   link: string
   emailSubject: string
   emailHtml: string
-  emailText: string
 }
 
 // ============================================================
-// Event -> Notification mapping
+// Event → Notification mapping
 // ============================================================
 
 const EVENT_CONFIG: Record<string, {
@@ -184,13 +181,8 @@ async function deliverNotification(
     if (channel === 'email' && target.email) {
       await sendEmail({
         to: target.email,
-        from: DEFAULT_FROM,
         subject: spec.emailSubject,
         html: spec.emailHtml,
-        text: spec.emailText,
-        headers: {
-          'List-Unsubscribe': `<mailto:unsubscribe@servicesartisans.fr?subject=unsubscribe>`,
-        },
         tags: [
           { name: 'type', value: spec.type },
           { name: 'event_id', value: eventId },
@@ -241,84 +233,74 @@ function buildNotificationSpec(
   lead: LeadData,
   target: NotificationTarget,
 ): NotificationSpec | null {
-  const safeServiceName = escapeHtml(lead.service_name)
-  const safeClientName = escapeHtml(lead.client_name)
-  const safeTargetName = escapeHtml(target.name)
-
-  const rawLocation = lead.city
+  const location = lead.city
     ? `${lead.city}${lead.postal_code ? ` (${lead.postal_code})` : ''}`
     : lead.postal_code || ''
-  const safeLocation = escapeHtml(rawLocation)
 
   switch (event.event_type) {
     case 'created':
       return {
         type: 'lead_created',
         title: 'Demande bien reçue',
-        message: `Votre demande pour "${lead.service_name}" \u00e0 ${rawLocation} a \u00e9t\u00e9 enregistr\u00e9e. Nous recherchons les meilleurs artisans.`,
+        message: `Votre demande pour "${lead.service_name}" à ${location} a été enregistrée. Nous recherchons les meilleurs artisans.`,
         link: '/espace-client/mes-demandes',
-        emailSubject: `Demande re\u00e7ue \u2013 ${lead.service_name}`,
+        emailSubject: `Demande reçue – ${lead.service_name}`,
         emailHtml: emailTemplate({
-          heading: 'Demande enregistr\u00e9e',
+          heading: 'Demande enregistrée',
           color: '#2563eb',
-          greeting: `Bonjour ${safeTargetName}`,
-          body: `Votre demande de devis pour <strong>${safeServiceName}</strong> \u00e0 ${safeLocation} a bien \u00e9t\u00e9 enregistr\u00e9e. Nous allons contacter les artisans qualifi\u00e9s de votre zone.`,
+          greeting: `Bonjour ${target.name}`,
+          body: `Votre demande de devis pour <strong>${lead.service_name}</strong> à ${location} a bien été enregistrée. Nous allons contacter les artisans qualifiés de votre zone.`,
           ctaUrl: `${SITE_URL}/espace-client/mes-demandes`,
           ctaLabel: 'Suivre ma demande',
-          footer: 'Vous recevrez une notification d\u00e8s qu\'un artisan vous enverra un devis.',
+          footer: 'Vous recevrez une notification dès qu\'un artisan vous enverra un devis.',
         }),
-        emailText: `Bonjour ${target.name},\n\nVotre demande de devis pour ${lead.service_name} \u00e0 ${rawLocation} a bien \u00e9t\u00e9 enregistr\u00e9e. Nous allons contacter les artisans qualifi\u00e9s de votre zone.\n\nSuivre ma demande : ${SITE_URL}/espace-client/mes-demandes\n\nVous recevrez une notification d\u00e8s qu'un artisan vous enverra un devis.\n\n${SITE_NAME} \u2014 La plateforme des artisans qualifi\u00e9s\ncontact@servicesartisans.fr`,
       }
 
     case 'dispatched':
       return {
         type: 'lead_dispatched',
-        title: 'Nouveau lead re\u00e7u',
-        message: `Demande de ${lead.client_name} pour "${lead.service_name}" \u00e0 ${rawLocation}.`,
+        title: 'Nouveau lead reçu',
+        message: `Demande de ${lead.client_name} pour "${lead.service_name}" à ${location}.`,
         link: '/espace-artisan/leads',
-        emailSubject: `Nouveau lead \u2013 ${lead.service_name} \u00e0 ${rawLocation}`,
+        emailSubject: `Nouveau lead – ${lead.service_name} à ${location}`,
         emailHtml: emailTemplate({
           heading: 'Nouveau lead disponible',
           color: '#059669',
-          greeting: `Bonjour ${safeTargetName}`,
-          body: `Vous avez re\u00e7u une nouvelle demande de <strong>${safeClientName}</strong> pour <strong>${safeServiceName}</strong> \u00e0 ${safeLocation}. Consultez-la et envoyez votre devis.`,
+          greeting: `Bonjour ${target.name}`,
+          body: `Vous avez reçu une nouvelle demande de <strong>${lead.client_name}</strong> pour <strong>${lead.service_name}</strong> à ${location}. Consultez-la et envoyez votre devis.`,
           ctaUrl: `${SITE_URL}/espace-artisan/leads`,
           ctaLabel: 'Voir le lead',
-          footer: 'R\u00e9pondez rapidement pour maximiser vos chances.',
+          footer: 'Répondez rapidement pour maximiser vos chances.',
         }),
-        emailText: `Bonjour ${target.name},\n\nVous avez re\u00e7u une nouvelle demande de ${lead.client_name} pour ${lead.service_name} \u00e0 ${rawLocation}. Consultez-la et envoyez votre devis.\n\nVoir le lead : ${SITE_URL}/espace-artisan/leads\n\nR\u00e9pondez rapidement pour maximiser vos chances.\n\n${SITE_NAME} \u2014 La plateforme des artisans qualifi\u00e9s\ncontact@servicesartisans.fr`,
       }
 
     case 'viewed':
       return {
         type: 'lead_viewed',
-        title: 'Un artisan a consult\u00e9 votre demande',
+        title: 'Un artisan a consulté votre demande',
         message: `Un artisan a pris connaissance de votre demande pour "${lead.service_name}".`,
         link: `/espace-client/mes-demandes/${lead.id}`,
         emailSubject: '',
         emailHtml: '',
-        emailText: '',
       }
 
     case 'quoted': {
-      const rawAmount = event.metadata.amount ? ` \u2013 ${event.metadata.amount} \u20ac` : ''
-      const safeAmount = event.metadata.amount ? escapeHtml(String(event.metadata.amount)) : ''
+      const amount = event.metadata.amount ? ` – ${event.metadata.amount} €` : ''
       return {
         type: 'quote_received',
-        title: 'Nouveau devis re\u00e7u',
-        message: `Un artisan vous a envoy\u00e9 un devis pour "${lead.service_name}"${rawAmount}.`,
+        title: 'Nouveau devis reçu',
+        message: `Un artisan vous a envoyé un devis pour "${lead.service_name}"${amount}.`,
         link: `/espace-client/mes-demandes/${lead.id}`,
-        emailSubject: `Devis re\u00e7u \u2013 ${lead.service_name}`,
+        emailSubject: `Devis reçu – ${lead.service_name}`,
         emailHtml: emailTemplate({
-          heading: 'Vous avez re\u00e7u un devis',
+          heading: 'Vous avez reçu un devis',
           color: '#059669',
-          greeting: `Bonjour ${safeTargetName}`,
-          body: `Un artisan vous a envoy\u00e9 un devis pour <strong>${safeServiceName}</strong> \u00e0 ${safeLocation}${safeAmount ? `.<br><br>Montant propos\u00e9 : <strong>${safeAmount} \u20ac</strong>` : ''}.`,
+          greeting: `Bonjour ${target.name}`,
+          body: `Un artisan vous a envoyé un devis pour <strong>${lead.service_name}</strong> à ${location}${amount ? `.<br><br>Montant proposé : <strong>${event.metadata.amount} €</strong>` : ''}.`,
           ctaUrl: `${SITE_URL}/espace-client/mes-demandes/${lead.id}`,
           ctaLabel: 'Voir le devis',
-          footer: 'Consultez le d\u00e9tail et comparez les offres re\u00e7ues.',
+          footer: 'Consultez le détail et comparez les offres reçues.',
         }),
-        emailText: `Bonjour ${target.name},\n\nUn artisan vous a envoy\u00e9 un devis pour ${lead.service_name} \u00e0 ${rawLocation}${rawAmount}.\n\nVoir le devis : ${SITE_URL}/espace-client/mes-demandes/${lead.id}\n\nConsultez le d\u00e9tail et comparez les offres re\u00e7ues.\n\n${SITE_NAME} \u2014 La plateforme des artisans qualifi\u00e9s\ncontact@servicesartisans.fr`,
       }
     }
 
@@ -326,76 +308,72 @@ function buildNotificationSpec(
       if (target.role === 'client') {
         return {
           type: 'lead_closed',
-          title: 'Mission termin\u00e9e',
-          message: `La mission pour "${lead.service_name}" est termin\u00e9e. Merci de votre confiance !`,
+          title: 'Mission terminée',
+          message: `La mission pour "${lead.service_name}" est terminée. Merci de votre confiance !`,
           link: `/espace-client/mes-demandes/${lead.id}`,
-          emailSubject: `Mission termin\u00e9e \u2013 ${lead.service_name}`,
+          emailSubject: `Mission terminée – ${lead.service_name}`,
           emailHtml: emailTemplate({
-            heading: 'Mission termin\u00e9e',
+            heading: 'Mission terminée',
             color: '#059669',
-            greeting: `Bonjour ${safeTargetName}`,
-            body: `La mission pour <strong>${safeServiceName}</strong> \u00e0 ${safeLocation} est termin\u00e9e. Merci de votre confiance !`,
+            greeting: `Bonjour ${target.name}`,
+            body: `La mission pour <strong>${lead.service_name}</strong> à ${location} est terminée. Merci de votre confiance !`,
             ctaUrl: `${SITE_URL}/espace-client/mes-demandes/${lead.id}`,
-            ctaLabel: 'Voir le d\u00e9tail',
-            footer: 'N\'h\u00e9sitez pas \u00e0 laisser un avis pour aider d\'autres clients.',
+            ctaLabel: 'Voir le détail',
+            footer: 'N\'hésitez pas à laisser un avis pour aider d\'autres clients.',
           }),
-          emailText: `Bonjour ${target.name},\n\nLa mission pour ${lead.service_name} \u00e0 ${rawLocation} est termin\u00e9e. Merci de votre confiance !\n\nVoir le d\u00e9tail : ${SITE_URL}/espace-client/mes-demandes/${lead.id}\n\nN'h\u00e9sitez pas \u00e0 laisser un avis pour aider d'autres clients.\n\n${SITE_NAME} \u2014 La plateforme des artisans qualifi\u00e9s\ncontact@servicesartisans.fr`,
         }
       }
       return {
         type: 'lead_closed',
-        title: 'Mission termin\u00e9e',
-        message: `La mission "${lead.service_name}" pour ${lead.client_name} est termin\u00e9e.`,
+        title: 'Mission terminée',
+        message: `La mission "${lead.service_name}" pour ${lead.client_name} est terminée.`,
         link: '/espace-artisan/leads',
-        emailSubject: `Mission termin\u00e9e \u2013 ${lead.service_name}`,
+        emailSubject: `Mission terminée – ${lead.service_name}`,
         emailHtml: emailTemplate({
-          heading: 'Mission termin\u00e9e',
+          heading: 'Mission terminée',
           color: '#059669',
-          greeting: `Bonjour ${safeTargetName}`,
-          body: `La mission <strong>${safeServiceName}</strong> pour ${safeClientName} est termin\u00e9e. Bravo !`,
+          greeting: `Bonjour ${target.name}`,
+          body: `La mission <strong>${lead.service_name}</strong> pour ${lead.client_name} est terminée. Bravo !`,
           ctaUrl: `${SITE_URL}/espace-artisan/leads`,
           ctaLabel: 'Voir mes leads',
           footer: '',
         }),
-        emailText: `Bonjour ${target.name},\n\nLa mission ${lead.service_name} pour ${lead.client_name} est termin\u00e9e. Bravo !\n\nVoir mes leads : ${SITE_URL}/espace-artisan/leads\n\n${SITE_NAME} \u2014 La plateforme des artisans qualifi\u00e9s\ncontact@servicesartisans.fr`,
       }
 
     case 'expired':
       if (target.role === 'client') {
         return {
           type: 'lead_closed',
-          title: 'Demande expir\u00e9e',
-          message: `Votre demande pour "${lead.service_name}" a expir\u00e9 sans r\u00e9ponse.`,
+          title: 'Demande expirée',
+          message: `Votre demande pour "${lead.service_name}" a expiré sans réponse.`,
           link: `/espace-client/mes-demandes/${lead.id}`,
-          emailSubject: `Demande expir\u00e9e \u2013 ${lead.service_name}`,
+          emailSubject: `Demande expirée – ${lead.service_name}`,
           emailHtml: emailTemplate({
-            heading: 'Demande expir\u00e9e',
+            heading: 'Demande expirée',
             color: '#d97706',
-            greeting: `Bonjour ${safeTargetName}`,
-            body: `Votre demande pour <strong>${safeServiceName}</strong> \u00e0 ${safeLocation} a expir\u00e9. Vous pouvez en cr\u00e9er une nouvelle \u00e0 tout moment.`,
+            greeting: `Bonjour ${target.name}`,
+            body: `Votre demande pour <strong>${lead.service_name}</strong> à ${location} a expiré. Vous pouvez en créer une nouvelle à tout moment.`,
             ctaUrl: `${SITE_URL}/espace-client/mes-demandes`,
             ctaLabel: 'Mes demandes',
             footer: '',
           }),
-          emailText: `Bonjour ${target.name},\n\nVotre demande pour ${lead.service_name} \u00e0 ${rawLocation} a expir\u00e9. Vous pouvez en cr\u00e9er une nouvelle \u00e0 tout moment.\n\nMes demandes : ${SITE_URL}/espace-client/mes-demandes\n\n${SITE_NAME} \u2014 La plateforme des artisans qualifi\u00e9s\ncontact@servicesartisans.fr`,
         }
       }
       return {
         type: 'lead_closed',
-        title: 'Lead expir\u00e9',
-        message: `Le lead "${lead.service_name}" de ${lead.client_name} a expir\u00e9.`,
+        title: 'Lead expiré',
+        message: `Le lead "${lead.service_name}" de ${lead.client_name} a expiré.`,
         link: '/espace-artisan/leads',
-        emailSubject: `Lead expir\u00e9 \u2013 ${lead.service_name}`,
+        emailSubject: `Lead expiré – ${lead.service_name}`,
         emailHtml: emailTemplate({
-          heading: 'Lead expir\u00e9',
+          heading: 'Lead expiré',
           color: '#d97706',
-          greeting: `Bonjour ${safeTargetName}`,
-          body: `Le lead <strong>${safeServiceName}</strong> de ${safeClientName} a expir\u00e9.`,
+          greeting: `Bonjour ${target.name}`,
+          body: `Le lead <strong>${lead.service_name}</strong> de ${lead.client_name} a expiré.`,
           ctaUrl: `${SITE_URL}/espace-artisan/leads`,
           ctaLabel: 'Voir mes leads',
           footer: '',
         }),
-        emailText: `Bonjour ${target.name},\n\nLe lead ${lead.service_name} de ${lead.client_name} a expir\u00e9.\n\nVoir mes leads : ${SITE_URL}/espace-artisan/leads\n\n${SITE_NAME} \u2014 La plateforme des artisans qualifi\u00e9s\ncontact@servicesartisans.fr`,
       }
 
     default:
@@ -432,11 +410,7 @@ function emailTemplate(opts: {
       </div>
       ${opts.footer ? `<p style="color: #888; font-size: 13px; line-height: 1.5;">${opts.footer}</p>` : ''}
       <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;">
-      <p style="color: #999; font-size: 12px; text-align: center; margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
-        ${SITE_NAME} \u2014 La plateforme des artisans qualifi\u00e9s<br>
-        contact@servicesartisans.fr<br>
-        <a href="https://servicesartisans.fr/confidentialite" style="color: #999;">Politique de confidentialit\u00e9</a>
-      </p>
+      <p style="color: #aaa; font-size: 12px; text-align: center;">${SITE_NAME} – La plateforme des artisans qualifiés</p>
     </div>
   </div>
 </body>

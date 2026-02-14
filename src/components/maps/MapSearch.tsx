@@ -548,7 +548,7 @@ export default function MapSearch() {
               className="bg-white border-r overflow-hidden hidden md:flex flex-col"
             >
               {/* Results Header */}
-              <div className="p-4 border-b bg-gray-50 flex items-center justify-between">
+              <div className="p-4 border-b bg-gradient-to-r from-gray-50 to-white flex items-center justify-between">
                 <div>
                   <p className="font-semibold text-gray-900">
                     {providers.length} artisans
@@ -586,7 +586,7 @@ export default function MapSearch() {
                     <div className="flex gap-4">
                       {/* Avatar */}
                       <div className="relative flex-shrink-0">
-                        <div className="w-20 h-20 bg-gray-200 rounded-xl flex items-center justify-center overflow-hidden">
+                        <div className="w-20 h-20 bg-gradient-to-br from-gray-200 to-gray-300 rounded-xl flex items-center justify-center overflow-hidden">
                           {provider.avatar_url ? (
                             <img src={provider.avatar_url} alt={provider.name} className="w-full h-full object-cover" loading="lazy" />
                           ) : (
@@ -757,7 +757,7 @@ export default function MapSearch() {
                       <div className="p-2">
                         {/* Premium Badge - World Class */}
                         {provider.is_premium && (
-                          <div className="flex items-center gap-1.5 text-amber-700 text-xs font-bold mb-3 bg-amber-100 w-fit px-3 py-1.5 rounded-full border border-amber-200 shadow-sm">
+                          <div className="flex items-center gap-1.5 text-amber-700 text-xs font-bold mb-3 bg-gradient-to-r from-amber-100 to-yellow-100 w-fit px-3 py-1.5 rounded-full border border-amber-200 shadow-sm">
                             <Award className="w-3.5 h-3.5" />
                             <span>ARTISAN PREMIUM</span>
                           </div>
@@ -766,7 +766,7 @@ export default function MapSearch() {
                         <div className="flex gap-3">
                           {/* Avatar with premium ring */}
                           <div className={`relative flex-shrink-0 ${provider.is_premium ? 'ring-2 ring-amber-400 ring-offset-2' : ''} rounded-xl`}>
-                            <div className="w-20 h-20 bg-gray-200 rounded-xl flex items-center justify-center overflow-hidden">
+                            <div className="w-20 h-20 bg-gradient-to-br from-gray-200 to-gray-300 rounded-xl flex items-center justify-center overflow-hidden">
                               {provider.avatar_url ? (
                                 <img src={provider.avatar_url} alt={provider.name} className="w-full h-full object-cover" loading="lazy" />
                               ) : (
@@ -820,14 +820,14 @@ export default function MapSearch() {
                         <div className="flex gap-2 mt-4">
                           <Link
                             href={getArtisanUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city })}
-                            className="flex-1 text-center py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-all shadow-md hover:shadow-lg"
+                            className="flex-1 text-center py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-semibold rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all shadow-md hover:shadow-lg transform hover:scale-[1.02]"
                           >
                             Voir le profil
                           </Link>
                           {provider.phone && (
                             <a
                               href={`tel:${provider.phone}`}
-                              className="px-4 py-2.5 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg flex items-center gap-1.5 transition-all shadow-md hover:shadow-lg"
+                              className="px-4 py-2.5 bg-gradient-to-r from-green-600 to-green-700 text-white text-sm font-semibold rounded-lg hover:from-green-700 hover:to-green-800 flex items-center gap-1.5 transition-all shadow-md hover:shadow-lg transform hover:scale-[1.02]"
                               title="Appeler maintenant"
                             >
                               <Phone className="w-4 h-4" />
@@ -883,7 +883,7 @@ export default function MapSearch() {
             <button
               onClick={getUserLocation}
               disabled={geolocation.loading}
-              className={`p-3 bg-white rounded-xl shadow-md transition-colors disabled:opacity-50 ${
+              className={`p-3 bg-white rounded-xl shadow-lg transition-colors disabled:opacity-50 ${
                 geolocation.error ? 'border-2 border-red-400' : 'hover:bg-gray-50'
               } ${userLocation ? 'bg-blue-50 border-2 border-blue-400' : ''}`}
               title={geolocation.error || (userLocation ? 'Position détectée' : 'Ma position')}
@@ -899,7 +899,7 @@ export default function MapSearch() {
             <div className="relative">
               <button
                 onClick={() => setShowStylePicker(!showStylePicker)}
-                className="p-3 bg-white rounded-xl shadow-md hover:bg-gray-50 transition-colors"
+                className="p-3 bg-white rounded-xl shadow-lg hover:bg-gray-50 transition-colors"
                 title="Style de carte"
               >
                 <Layers className="w-5 h-5 text-gray-700" />
@@ -911,7 +911,7 @@ export default function MapSearch() {
                     initial={{ opacity: 0, x: 10 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: 10 }}
-                    className="absolute right-full mr-2 top-0 bg-white rounded-xl shadow-md p-2 min-w-[120px]"
+                    className="absolute right-full mr-2 top-0 bg-white rounded-xl shadow-lg p-2 min-w-[120px]"
                   >
                     {(['street', 'light', 'dark'] as const).map((style) => (
                       <button
@@ -942,7 +942,7 @@ export default function MapSearch() {
                 exit={{ opacity: 0 }}
                 className="absolute top-4 left-1/2 -translate-x-1/2 z-20"
               >
-                <div className="bg-white px-4 py-2 rounded-full shadow-md flex items-center gap-2">
+                <div className="bg-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2">
                   <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
                   <span className="text-sm font-medium">Recherche...</span>
                 </div>
@@ -959,7 +959,7 @@ export default function MapSearch() {
                 exit={{ opacity: 0, y: 20 }}
                 className="absolute bottom-24 left-4 right-4 md:left-auto md:right-4 md:w-80 z-20"
               >
-                <div className="bg-white rounded-2xl shadow-md p-4">
+                <div className="bg-white rounded-2xl shadow-2xl p-4">
                   <div className="flex gap-3">
                     <div className="w-16 h-16 bg-gray-200 rounded-xl flex items-center justify-center">
                       <span className="text-2xl font-bold text-gray-400">
@@ -984,7 +984,7 @@ export default function MapSearch() {
           <div className="md:hidden absolute bottom-4 left-4 right-4 z-20">
             <button
               onClick={() => setMobileDrawerOpen(!mobileDrawerOpen)}
-              className="w-full bg-white shadow-md rounded-2xl py-4 px-6 flex items-center justify-between"
+              className="w-full bg-white shadow-lg rounded-2xl py-4 px-6 flex items-center justify-between"
             >
               <div>
                 <span className="font-bold text-lg">{providers.length}</span>
@@ -1008,7 +1008,7 @@ export default function MapSearch() {
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 25 }}
-            className="md:hidden fixed inset-x-0 bottom-0 h-[70vh] bg-white rounded-t-3xl shadow-lg z-40"
+            className="md:hidden fixed inset-x-0 bottom-0 h-[70vh] bg-white rounded-t-3xl shadow-2xl z-40"
           >
             <div className="p-4 border-b">
               <div className="w-12 h-1 bg-gray-300 rounded-full mx-auto mb-4" />

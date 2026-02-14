@@ -32,7 +32,7 @@ const urgencyServices = [
     slug: 'plombier',
     icon: Wrench,
     color: 'blue',
-    bgColor: 'bg-blue-600',
+    bgGradient: 'from-blue-500 to-blue-600',
     lightBg: 'bg-blue-50',
     lightText: 'text-blue-700',
     problems: [
@@ -51,7 +51,7 @@ const urgencyServices = [
     slug: 'electricien',
     icon: Zap,
     color: 'amber',
-    bgColor: 'bg-amber-600',
+    bgGradient: 'from-amber-500 to-amber-600',
     lightBg: 'bg-amber-50',
     lightText: 'text-amber-700',
     problems: [
@@ -70,7 +70,7 @@ const urgencyServices = [
     slug: 'serrurier',
     icon: Key,
     color: 'green',
-    bgColor: 'bg-green-600',
+    bgGradient: 'from-green-500 to-green-600',
     lightBg: 'bg-green-50',
     lightText: 'text-green-700',
     problems: [
@@ -89,7 +89,7 @@ const urgencyServices = [
     slug: 'chauffagiste',
     icon: AlertTriangle,
     color: 'red',
-    bgColor: 'bg-red-600',
+    bgGradient: 'from-red-500 to-red-600',
     lightBg: 'bg-red-50',
     lightText: 'text-red-700',
     problems: [
@@ -136,7 +136,7 @@ export default function UrgencePage() {
       </div>
 
       {/* Hero — Dark Emergency */}
-      <section className="relative bg-red-600 text-white py-24 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-red-900 via-red-800 to-slate-900 text-white py-20 overflow-hidden">
         {/* Animated pulse background */}
         <div className="absolute inset-0 opacity-20">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-red-500 rounded-full blur-[150px] animate-pulse" />
@@ -161,14 +161,14 @@ export default function UrgencePage() {
           <div className="flex flex-col sm:flex-row gap-4 mb-12">
             <a
               href={PHONE_TEL}
-              className="inline-flex items-center justify-center gap-3 bg-red-500 hover:bg-red-400 text-white px-8 py-4 rounded-full font-bold text-lg transition-all"
+              className="inline-flex items-center justify-center gap-3 bg-red-500 hover:bg-red-400 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg shadow-red-500/30 hover:shadow-red-400/40 transition-all"
             >
               <Phone className="w-6 h-6" />
               Appeler maintenant
             </a>
             <Link
               href="/services"
-              className="inline-flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all"
+              className="inline-flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all"
             >
               Demander un devis gratuit
               <ArrowRight className="w-5 h-5" />
@@ -219,9 +219,9 @@ export default function UrgencePage() {
               return (
                 <div
                   key={service.slug}
-                  className="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-md transition-all group"
+                  className="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-xl hover:border-gray-300 transition-all group"
                 >
-                  <div className={`${service.bgColor} p-6 text-white`}>
+                  <div className={`bg-gradient-to-r ${service.bgGradient} p-6 text-white`}>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
@@ -427,7 +427,7 @@ export default function UrgencePage() {
       </section>
 
       {/* Final CTA */}
-      <section className="relative bg-red-600 text-white py-16 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-red-900 via-red-800 to-slate-900 text-white py-16 overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-red-500 rounded-full blur-[120px]" />
         </div>
@@ -441,14 +441,14 @@ export default function UrgencePage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href={PHONE_TEL}
-              className="inline-flex items-center justify-center gap-3 bg-red-500 hover:bg-red-400 text-white px-8 py-4 rounded-full font-bold text-lg transition-all"
+              className="inline-flex items-center justify-center gap-3 bg-red-500 hover:bg-red-400 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg shadow-red-500/30 transition-all"
             >
               <Phone className="w-6 h-6" />
               Appeler maintenant
             </a>
             <Link
               href="/services"
-              className="inline-flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all"
+              className="inline-flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all"
             >
               Voir tous les services
               <ArrowRight className="w-5 h-5" />
@@ -458,7 +458,7 @@ export default function UrgencePage() {
       </section>
 
       {/* SEO Links */}
-      <section className="py-16 bg-white">
+      <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-xl font-bold text-gray-900 mb-6">Voir aussi</h2>
           <div className="grid md:grid-cols-3 gap-8">

@@ -99,7 +99,7 @@ export default function ReviewPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-violet-600" />
       </div>
     )
   }
@@ -115,7 +115,7 @@ export default function ReviewPage() {
           <p className="text-gray-600 mb-6">{error}</p>
           <a
             href="/"
-            className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
+            className="inline-block bg-violet-600 text-white px-6 py-3 rounded-lg hover:bg-violet-700 transition"
           >
             Retour à l'accueil
           </a>
@@ -139,7 +139,7 @@ export default function ReviewPage() {
           </p>
           <a
             href="/"
-            className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
+            className="inline-block bg-violet-600 text-white px-6 py-3 rounded-lg hover:bg-violet-700 transition"
           >
             Découvrir d'autres artisans
           </a>
@@ -164,8 +164,8 @@ export default function ReviewPage() {
         {/* Booking info card */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-              <span className="text-blue-600 font-bold text-lg">
+            <div className="w-12 h-12 bg-violet-100 rounded-full flex items-center justify-center">
+              <span className="text-violet-600 font-bold text-lg">
                 {bookingInfo?.artisanName.charAt(0)}
               </span>
             </div>
@@ -195,7 +195,7 @@ export default function ReviewPage() {
                   onClick={() => setRating(star)}
                   onMouseEnter={() => setHoveredRating(star)}
                   onMouseLeave={() => setHoveredRating(0)}
-                  className="p-1 transition-transform focus:outline-none"
+                  className="p-1 transition-transform hover:scale-110 focus:outline-none"
                 >
                   <Star
                     className={`w-10 h-10 transition-colors ${
@@ -259,7 +259,7 @@ export default function ReviewPage() {
               onChange={(e) => setComment(e.target.value)}
               rows={4}
               placeholder="Partagez votre expérience..."
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent resize-none"
             />
             <p className="text-xs text-gray-500 mt-1">
               {comment.length}/500 caractères
@@ -277,7 +277,7 @@ export default function ReviewPage() {
           <button
             type="submit"
             disabled={submitting || rating === 0}
-            className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full bg-violet-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-violet-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {submitting ? (
               <>

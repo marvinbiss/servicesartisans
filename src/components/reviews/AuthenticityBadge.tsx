@@ -218,7 +218,7 @@ export function AuthenticityDetails({
             )}
             {flags.review_velocity && (
               <li className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                <span className="w-1.5 h-1.5 rounded-full bg-orange-500" />
                 Fréquence de publication élevée
               </li>
             )}

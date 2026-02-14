@@ -117,7 +117,7 @@ export default function ConnexionPage() {
 
             <div className="text-center mb-8">
               <Link href="/" className="inline-flex items-center space-x-3 mb-6">
-                <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
                   <span className="text-white font-bold text-xl">SA</span>
                 </div>
                 <span className="text-2xl font-bold text-white">
@@ -138,7 +138,7 @@ export default function ConnexionPage() {
                 onClick={() => setUserType('particulier')}
                 className={`flex-1 py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 ${
                   userType === 'particulier'
-                    ? 'bg-blue-600 text-white shadow-lg'
+                    ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg'
                     : 'text-gray-400 hover:text-white'
                 }`}
               >
@@ -149,7 +149,7 @@ export default function ConnexionPage() {
                 onClick={() => setUserType('artisan')}
                 className={`flex-1 py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 ${
                   userType === 'artisan'
-                    ? 'bg-amber-500 text-white'
+                    ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-lg'
                     : 'text-gray-400 hover:text-white'
                 }`}
               >
@@ -227,8 +227,8 @@ export default function ConnexionPage() {
                 disabled={isLoading}
                 className={`w-full py-3.5 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed ${
                   userType === 'artisan'
-                    ? 'bg-amber-500 hover:bg-amber-600 text-white'
-                    : 'bg-blue-600 hover:bg-blue-700 text-white'
+                    ? 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-amber-500/30'
+                    : 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-blue-600/30'
                 }`}
               >
                 {isLoading ? (
@@ -308,9 +308,14 @@ export default function ConnexionPage() {
         </div>
 
         {/* Right - Image */}
-        <div className="hidden lg:flex flex-1 bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 items-center justify-center p-12 relative overflow-hidden">
+        <div className="hidden lg:flex flex-1 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 items-center justify-center p-12 relative overflow-hidden">
+          {/* Background pattern */}
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl translate-x-1/2 -translate-y-1/2" />
+            <div className="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl -translate-x-1/2 translate-y-1/2" />
+          </div>
           <div className="max-w-md text-white text-center relative z-10">
-            <div className="w-24 h-24 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-lg">
+            <div className="w-24 h-24 bg-white/20 backdrop-blur-sm rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl">
               <Wrench className="w-12 h-12" />
             </div>
             <h2 className="text-4xl font-bold mb-6">
@@ -338,7 +343,7 @@ export default function ConnexionPage() {
       </div>
 
       {/* Related Links Section */}
-      <section className="bg-slate-800/50 py-16 border-t border-slate-700">
+      <section className="bg-slate-800/50 py-10 border-t border-slate-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-lg font-semibold text-white mb-6">
             Explorez nos services
