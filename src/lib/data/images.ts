@@ -272,8 +272,8 @@ export const cityImages: Record<string, { src: string; alt: string }> = {
     alt: 'Vue du Vieux-Port de Marseille',
   },
   lyon: {
-    src: unsplash('photo-1537015125382-74e1f1c99ac4', 800, 500),
-    alt: 'Vue panoramique de Lyon',
+    src: unsplash('photo-1669275555278-986814008b68', 800, 500),
+    alt: 'Panorama de Lyon avec la colline de Fourvière',
   },
   toulouse: {
     src: unsplash('photo-1572804131749-220f83b2f9bf', 800, 500),
