@@ -6,7 +6,7 @@
  * page, eliminating the doorway-pages risk of near-identical content.
  */
 
-import type { Ville } from '@/lib/data/france'
+import type { Ville, Departement, Region } from '@/lib/data/france'
 import { getTradeContent } from '@/lib/data/trade-content'
 
 // ---------------------------------------------------------------------------
@@ -540,4 +540,372 @@ export function generateLocationContent(
     quartierText: generateQuartierText(serviceName, ville),
     conclusion: generateConclusion(serviceSlug, serviceName, ville, providerCount),
   }
+}
+
+// ---------------------------------------------------------------------------
+// Quartier page content — programmatic SEO with unique building profiles
+// ---------------------------------------------------------------------------
+
+type BuildingEra = 'pre-1950' | '1950-1980' | '1980-2000' | 'post-2000' | 'haussmannien' | 'mixte'
+type UrbanDensity = 'dense' | 'residentiel' | 'periurbain'
+
+export interface QuartierProfile {
+  era: BuildingEra
+  eraLabel: string
+  density: UrbanDensity
+  densityLabel: string
+  commonIssues: string[]
+  topServiceSlugs: string[]
+  architecturalNote: string
+}
+
+export interface QuartierContent {
+  profile: QuartierProfile
+  intro: string
+  batimentContext: string
+  servicesDemandes: string
+  conseils: string
+  proximite: string
+  faqItems: { question: string; answer: string }[]
+}
+
+const ERAS: { key: BuildingEra; label: string }[] = [
+  { key: 'pre-1950', label: 'Bâti ancien (avant 1950)' },
+  { key: '1950-1980', label: 'Construction d\'après-guerre (1950–1980)' },
+  { key: '1980-2000', label: 'Construction moderne (1980–2000)' },
+  { key: 'post-2000', label: 'Construction récente (après 2000)' },
+  { key: 'haussmannien', label: 'Architecture haussmannienne' },
+  { key: 'mixte', label: 'Bâti mixte (plusieurs époques)' },
+]
+
+const DENSITIES: { key: UrbanDensity; label: string }[] = [
+  { key: 'dense', label: 'Zone urbaine dense' },
+  { key: 'residentiel', label: 'Quartier résidentiel' },
+  { key: 'periurbain', label: 'Zone périurbaine' },
+]
+
+const SERVICE_PRIORITY: Record<BuildingEra, string[]> = {
+  'pre-1950': ['plombier', 'electricien', 'macon', 'couvreur', 'peintre-en-batiment', 'menuisier', 'chauffagiste', 'serrurier', 'carreleur', 'climaticien', 'vitrier', 'terrassier', 'paysagiste', 'facade', 'domoticien'],
+  '1950-1980': ['electricien', 'chauffagiste', 'plombier', 'peintre-en-batiment', 'climaticien', 'menuisier', 'carreleur', 'macon', 'couvreur', 'serrurier', 'vitrier', 'facade', 'terrassier', 'paysagiste', 'domoticien'],
+  '1980-2000': ['peintre-en-batiment', 'menuisier', 'chauffagiste', 'climaticien', 'plombier', 'electricien', 'carreleur', 'serrurier', 'couvreur', 'macon', 'vitrier', 'facade', 'terrassier', 'paysagiste', 'domoticien'],
+  'post-2000': ['climaticien', 'domoticien', 'serrurier', 'plombier', 'electricien', 'peintre-en-batiment', 'menuisier', 'carreleur', 'chauffagiste', 'vitrier', 'couvreur', 'macon', 'facade', 'terrassier', 'paysagiste'],
+  'haussmannien': ['peintre-en-batiment', 'plombier', 'electricien', 'menuisier', 'macon', 'serrurier', 'chauffagiste', 'carreleur', 'couvreur', 'vitrier', 'climaticien', 'facade', 'terrassier', 'paysagiste', 'domoticien'],
+  'mixte': ['plombier', 'electricien', 'serrurier', 'chauffagiste', 'peintre-en-batiment', 'menuisier', 'climaticien', 'carreleur', 'couvreur', 'macon', 'vitrier', 'facade', 'terrassier', 'paysagiste', 'domoticien'],
+}
+
+const ERA_ISSUES: Record<BuildingEra, string[]> = {
+  'pre-1950': [
+    'Canalisations en plomb ou fonte à remplacer',
+    'Installation électrique non conforme aux normes NF C 15-100',
+    'Isolation thermique inexistante ou dégradée',
+    'Charpente et toiture nécessitant un traitement ou une réfection',
+    'Humidité et remontées capillaires dans les murs',
+  ],
+  '1950-1980': [
+    'Présence potentielle d\'amiante (dalles, flocages, canalisations)',
+    'Isolation thermique très insuffisante (pas de RT à l\'époque)',
+    'Chauffage collectif vieillissant (fioul ou gaz)',
+    'Fenêtres simple vitrage à remplacer',
+    'Colonnes montantes eau et électricité à rénover',
+  ],
+  '1980-2000': [
+    'Menuiseries PVC première génération à remplacer',
+    'Chaudière gaz arrivant en fin de vie',
+    'Isolation conforme RT 1982 mais insuffisante aujourd\'hui',
+    'Revêtements et finitions à rafraîchir',
+    'Salle de bain et cuisine à moderniser',
+  ],
+  'post-2000': [
+    'Entretien préventif de la VMC double flux',
+    'Installation de climatisation réversible',
+    'Ajout de domotique et équipements connectés',
+    'Personnalisation et optimisation de l\'espace intérieur',
+    'Entretien courant des équipements modernes',
+  ],
+  'haussmannien': [
+    'Restauration de moulures, corniches et rosaces',
+    'Rénovation du parquet massif (point de Hongrie, Versailles)',
+    'Mise aux normes électriques sans dénaturer le cachet',
+    'Restauration de cheminées en marbre et boiseries',
+    'Plomberie à moderniser dans un bâti classé ou protégé',
+  ],
+  'mixte': [
+    'Diagnostic différencié selon l\'époque de chaque bâtiment',
+    'Coordination des travaux sur bâti hétérogène',
+    'Choix de matériaux compatibles avec l\'existant',
+    'Rénovation progressive adaptée à chaque lot',
+    'Harmonisation esthétique entre ancien et moderne',
+  ],
+}
+
+const ERA_ARCH_NOTES: Record<BuildingEra, string[]> = {
+  'pre-1950': [
+    'Murs porteurs en pierre ou brique, planchers bois, absence fréquente de fondations profondes. Ce type de bâti requiert des artisans expérimentés en rénovation du patrimoine ancien.',
+    'Construction traditionnelle avec matériaux locaux et hauteurs sous plafond généreuses. L\'absence d\'isolation d\'origine rend la rénovation énergétique prioritaire.',
+    'Bâti d\'avant-guerre caractérisé par des murs épais, des escaliers en pierre et des réseaux (eau, gaz, électricité) souvent d\'origine.',
+  ],
+  '1950-1980': [
+    'Immeubles en béton armé de la reconstruction, conçus pour loger rapidement. Les matériaux de l\'époque (amiante, peintures au plomb) nécessitent un diagnostic avant travaux.',
+    'Logements fonctionnels avec isolation minimale et chauffage souvent collectif. La priorité est à la performance énergétique et au confort thermique.',
+    'Construction standardisée des Trente Glorieuses, avec des surfaces correctes mais des finitions et équipements aujourd\'hui obsolètes.',
+  ],
+  '1980-2000': [
+    'Construction conforme aux premières réglementations thermiques (RT 1982/1988). Double vitrage première génération et matériaux industriels (PVC, béton cellulaire).',
+    'Bâti globalement sain mais nécessitant des mises à jour esthétiques et énergétiques pour atteindre les standards actuels de confort.',
+    'Logements bien conçus pour l\'époque, avec des équipements (chaudière, menuiseries) arrivant en fin de cycle de vie après 25-40 ans.',
+  ],
+  'post-2000': [
+    'Construction aux normes RT 2000/2005/2012, avec VMC, double vitrage performant et isolation conforme. Les travaux portent essentiellement sur la personnalisation.',
+    'Bâti récent et bien isolé, équipements modernes. Les interventions concernent principalement l\'aménagement intérieur et la domotique.',
+    'Logements livrés aux normes actuelles avec des garanties constructeur. Les besoins se concentrent sur l\'optimisation et la décoration.',
+  ],
+  'haussmannien': [
+    'Pierre de taille, façades ornementées, balcons en fer forgé, hauteur sous plafond de 3 mètres ou plus. Chaque intervention doit respecter le patrimoine.',
+    'Parquet massif point de Hongrie, moulures au plafond, cheminées en marbre, portes à double battant. Un patrimoine qui impose des artisans qualifiés en restauration.',
+    'Cage d\'escalier monumentale, balcons filants et ornements en stuc. La rénovation requiert un savoir-faire artisanal respectueux du style d\'origine.',
+  ],
+  'mixte': [
+    'Quartier mêlant constructions de différentes époques, du XIXᵉ siècle aux résidences récentes. Chaque bâtiment nécessite une approche de rénovation adaptée.',
+    'Cohabitation d\'immeubles anciens et de résidences modernes. Les artisans du secteur doivent maîtriser des techniques variées.',
+    'Tissu urbain évolutif mêlant patrimoine ancien et constructions neuves. La diversité architecturale impose des diagnostics au cas par cas.',
+  ],
+}
+
+// 12 intro templates — each interpolates era/density/arch info for unique content
+type IntroFn = (q: string, v: string, dep: string, code: string, pop: string, era: string, arch: string, density: string) => string
+const QUARTIER_INTROS: IntroFn[] = [
+  (q, v, dep, code, pop, era, arch, density) =>
+    `Le quartier ${q} à ${v} (${code}) se caractérise par un ${era.toLowerCase()} en ${density.toLowerCase()}. ${arch} Avec ${pop} habitants, ${v} dans le ${dep} dispose d'artisans qualifiés pour ce type de bâti.`,
+  (q, v, dep, code, pop, era, arch, density) =>
+    `Vous habitez ${q} à ${v} ? Ce quartier en ${density.toLowerCase()} est composé de ${era.toLowerCase()}. ${arch} Notre annuaire référence les artisans du ${dep} (${code}) qualifiés pour intervenir sur ce patrimoine, au service des ${pop} habitants.`,
+  (q, v, dep, code, pop, era, arch, density) =>
+    `${q}, quartier de ${v} dans le ${dep} (${code}), présente un profil immobilier de type ${era.toLowerCase()}. ${arch} En ${density.toLowerCase()}, les besoins en artisanat sont spécifiques et nos professionnels référencés connaissent les particularités de ${v} (${pop} hab.).`,
+  (q, v, dep, code, pop, era, arch, density) =>
+    `Dans le quartier ${q} à ${v}, le parc immobilier relève du ${era.toLowerCase()}. ${arch} En ${density.toLowerCase()} dans le ${dep} (${code}), ce secteur de ${v} (${pop} hab.) bénéficie d'artisans formés aux techniques adaptées à cette construction.`,
+  (q, v, dep, code, pop, era, arch, density) =>
+    `Trouver un artisan compétent à ${q} (${v}) demande de connaître le bâti local. En ${density.toLowerCase()}, le quartier est composé de ${era.toLowerCase()}. ${arch} Les ${pop} habitants de ${v} (${dep}, ${code}) peuvent compter sur des professionnels adaptés.`,
+  (q, v, dep, code, pop, era, arch, density) =>
+    `Le secteur de ${q} à ${v} (${dep}, ${code}) offre un cadre de ${density.toLowerCase()} marqué par du ${era.toLowerCase()}. ${arch} Pour les ${pop} habitants, notre plateforme identifie les artisans dont l'expertise correspond aux caractéristiques du quartier.`,
+  (q, v, dep, code, pop, era, arch, density) =>
+    `À ${q}, dans la commune de ${v} (${code}), le bâti dominant est de type ${era.toLowerCase()} en contexte de ${density.toLowerCase()}. ${arch} Le ${dep} compte de nombreux artisans dont le savoir-faire correspond aux besoins des ${pop} habitants de ${v}.`,
+  (q, v, dep, code, pop, era, arch, density) =>
+    `Besoin de travaux à ${q} ? Ce secteur de ${v} (${dep}, ${code}) se distingue par son ${era.toLowerCase()} en ${density.toLowerCase()}. ${arch} Comparez les artisans qualifiés parmi les professionnels desservant les ${pop} habitants de la commune.`,
+  (q, v, dep, code, pop, era, arch, density) =>
+    `Le quartier ${q} de ${v} (${dep}, ${code}) est un secteur en ${density.toLowerCase()} où prédomine le ${era.toLowerCase()}. ${arch} Nous référençons des artisans maîtrisant les techniques adaptées aux constructions de ce quartier pour les ${pop} habitants.`,
+  (q, v, dep, code, pop, era, arch, density) =>
+    `Résider à ${q} dans ${v} (${code}), c'est vivre en ${density.toLowerCase()} dans du ${era.toLowerCase()}. ${arch} Le ${dep} regorge d'artisans compétents pour ce type d'habitat. ${v} et ses ${pop} habitants sont couverts par notre réseau de professionnels.`,
+  (q, v, dep, code, pop, era, arch, density) =>
+    `${q} est un quartier de ${v} dans le ${dep} (${code}), en ${density.toLowerCase()}. Le parc immobilier y est marqué par du ${era.toLowerCase()}. ${arch} Pour des travaux adaptés, les ${pop} habitants de la commune peuvent compter sur nos artisans référencés.`,
+  (q, v, dep, code, pop, era, arch, density) =>
+    `Votre projet concerne ${q} à ${v} ? Ce secteur en ${density.toLowerCase()} du ${dep} (${code}) est caractérisé par un parc de ${era.toLowerCase()}. ${arch} Parmi les professionnels intervenant auprès des ${pop} habitants, trouvez l'artisan adapté à votre chantier.`,
+]
+
+// Building context by era — 3 templates each
+const BATIMENT_CONTEXTS: Record<BuildingEra, ((q: string, v: string) => string)[]> = {
+  'pre-1950': [
+    (q, v) => `Dans le quartier ${q}, le bâti ancien impose des contraintes spécifiques. Les canalisations d'origine (plomb, fonte) doivent souvent être remplacées pour des raisons sanitaires. L'installation électrique, conçue pour des usages limités, nécessite une mise aux normes complète. Les artisans de ${v} spécialisés en rénovation du patrimoine ancien maîtrisent ces interventions.`,
+    (q, v) => `Le quartier ${q} à ${v} abrite un patrimoine d'avant 1950 qui demande une expertise particulière. Murs porteurs en pierre, planchers bois et charpentes anciennes requièrent des artisans formés aux techniques traditionnelles. La rénovation énergétique doit préserver le caractère architectural tout en améliorant le confort.`,
+    (q, v) => `À ${q}, le parc immobilier ancien présente des défis que seuls des artisans expérimentés peuvent relever. Problèmes d'humidité, réseaux vétustes, isolation inexistante : chaque chantier à ${v} nécessite un diagnostic approfondi. Nos artisans référencés connaissent les pathologies du bâti ancien et proposent des solutions durables.`,
+  ],
+  '1950-1980': [
+    (q, v) => `Le parc immobilier du quartier ${q} à ${v} date principalement de la période 1950-1980. Ces constructions des Trente Glorieuses présentent des caractéristiques communes : béton armé, isolation minimale, et potentielle présence d'amiante. Avant tout travaux, un diagnostic est recommandé. Les artisans qualifiés de ${v} connaissent ces problématiques.`,
+    (q, v) => `À ${q}, les logements construits entre 1950 et 1980 arrivent à un âge où la rénovation devient incontournable. Remplacement du chauffage vieillissant, isolation par l'extérieur et changement des fenêtres simple vitrage sont les chantiers prioritaires. Les artisans de ${v} spécialisés en rénovation énergétique vous accompagnent avec des solutions éligibles aux aides de l'État.`,
+    (q, v) => `Dans le quartier ${q} à ${v}, le bâti des années 1950-1980 nécessite une attention particulière. Les colonnes montantes approchent leur fin de vie, les matériaux d'époque peuvent contenir des substances interdites, et les performances thermiques sont en dessous des standards actuels. Une rénovation globale planifiée avec des artisans compétents permet de transformer ces logements.`,
+  ],
+  '1980-2000': [
+    (q, v) => `Le quartier ${q} à ${v} comporte un parc construit entre 1980 et 2000, marqué par les premières réglementations thermiques. Ces logements, globalement sains, arrivent à un stade où les équipements d'origine (chaudière, menuiseries, revêtements) nécessitent un remplacement. C'est l'occasion d'opter pour des solutions plus performantes avec des artisans qualifiés.`,
+    (q, v) => `À ${q}, les constructions des années 1980-2000 offrent un bon compromis entre confort et coût de rénovation. Les travaux courants : rafraîchissement des peintures, remplacement de la chaudière par une pompe à chaleur, modernisation de la cuisine ou salle de bain. Les artisans de ${v} interviennent régulièrement sur ce type de bâti.`,
+    (q, v) => `Dans le quartier ${q}, les logements 1980-2000 à ${v} présentent un potentiel de valorisation intéressant. En remplaçant les menuiseries vieillissantes, en optimisant le chauffage et en modernisant les espaces intérieurs, vous améliorez significativement confort et valeur de votre bien. Nos artisans proposent des devis adaptés.`,
+  ],
+  'post-2000': [
+    (q, v) => `Le quartier ${q} à ${v} bénéficie de constructions récentes, conformes aux normes RT 2000/2005/2012. Ces logements bien isolés nécessitent essentiellement des travaux de personnalisation : climatisation réversible, domotique, aménagement sur mesure. Les artisans de ${v} spécialisés en équipements modernes sont les mieux placés.`,
+    (q, v) => `À ${q}, le bâti récent de ${v} offre un excellent confort de base. Les interventions les plus demandées : personnalisation de l'intérieur (dressing, verrière), équipements connectés (thermostat intelligent, volets automatisés), entretien courant. Nos artisans référencés interviennent avec le soin exigé par ces logements modernes.`,
+    (q, v) => `Dans le quartier ${q} à ${v}, les résidences post-2000 sont conçues pour le confort moderne mais peuvent gagner en fonctionnalité. Borne de recharge, panneau solaire, pergola bioclimatique : les possibilités sont nombreuses. Consultez les artisans qualifiés de ${v} pour des devis personnalisés.`,
+  ],
+  'haussmannien': [
+    (q, v) => `Le quartier ${q} à ${v} abrite un patrimoine haussmannien d'exception exigeant des artisans maîtrisant la restauration. Parquet en point de Hongrie, moulures, cheminées en marbre : chaque élément raconte l'histoire du bâtiment. La rénovation doit préserver ce cachet tout en intégrant le confort moderne. Seuls des artisans expérimentés à ${v} peuvent relever ce défi.`,
+    (q, v) => `À ${q}, les immeubles haussmanniens de ${v} constituent un patrimoine prestigieux. Leur rénovation requiert un savoir-faire spécifique : restauration de gypseries, réfection de parquets massifs, mise aux normes sans dénaturer les volumes. Les artisans spécialisés connaissent les contraintes réglementaires (ABF, PLU) et les techniques respectueuses de ce style.`,
+    (q, v) => `Dans le quartier ${q} de ${v}, le style haussmannien impose ses exigences. Hauteurs sous plafond de trois mètres, façades en pierre de taille, ferronneries d'art : chaque intervention doit sublimer le patrimoine existant. Nos artisans référencés allient expertise technique et sensibilité architecturale.`,
+  ],
+  'mixte': [
+    (q, v) => `Le quartier ${q} à ${v} présente un tissu urbain varié, mêlant constructions de différentes époques. Cette diversité implique des besoins de rénovation tout aussi variés : mise aux normes du bâti ancien, rénovation énergétique d'après-guerre, modernisation des résidences 1980-2000. Les artisans polyvalents de ${v} sont habitués à adapter leurs techniques.`,
+    (q, v) => `À ${q}, la cohabitation de bâtiments anciens et récents à ${v} crée un quartier dynamique où chaque projet est unique. Que votre logement date du XXᵉ siècle ou des années 2000, les artisans locaux savent adapter leur approche. Un diagnostic précis permettra de définir les travaux prioritaires.`,
+    (q, v) => `Dans le quartier ${q} de ${v}, le bâti mixte reflète l'évolution urbaine de la commune. Chaque époque apporte ses spécificités et contraintes. Les artisans intervenant dans ce secteur maîtrisent aussi bien la rénovation du bâti ancien que les techniques modernes. Notre annuaire identifie les professionnels dont le savoir-faire couvre ces besoins.`,
+  ],
+}
+
+// Tips by era — 2 templates each
+const ERA_TIPS: Record<BuildingEra, ((q: string, v: string) => string)[]> = {
+  'pre-1950': [
+    (q, v) => `Pour votre logement ancien à ${q}, privilégiez un diagnostic complet avant d'engager des travaux. Vérifiez canalisations (plomb), installation électrique et charpente. À ${v}, les artisans spécialisés en bâti ancien vous conseillent sur les priorités et les aides disponibles (MaPrimeRénov', éco-PTZ). Demandez toujours plusieurs devis.`,
+    (q, v) => `Dans un bâtiment ancien à ${q}, respectez l'ordre logique : gros œuvre (toiture, murs) d'abord, puis réseaux (électricité, plomberie, chauffage), enfin finitions (peinture, sols). À ${v}, les artisans expérimentés planifient pour éviter de reprendre des travaux déjà réalisés. Cette approche vous fait gagner du temps et de l'argent.`,
+  ],
+  '1950-1980': [
+    (q, v) => `Avant tout chantier dans un logement 1950-1980 à ${q}, faites réaliser un diagnostic amiante et un DPE. Ces documents orienteront vos travaux prioritaires. À ${v}, les artisans certifiés savent manipuler les matériaux amiantés en sécurité. La rénovation énergétique ouvre droit à des aides substantielles.`,
+    (q, v) => `Pour un logement d'après-guerre à ${q}, la priorité est la performance énergétique. Isolation par l'extérieur, remplacement des fenêtres et chauffage performant peuvent diviser par deux votre facture. Les artisans RGE de ${v} vous permettent de bénéficier des aides financières. Faites un audit énergétique pour définir le plan optimal.`,
+  ],
+  '1980-2000': [
+    (q, v) => `Dans un logement 1980-2000 à ${q}, les travaux les plus rentables : remplacement de la chaudière (pompe à chaleur ou condensation) et changement des menuiseries vieillissantes. À ${v}, ces interventions améliorent sensiblement le confort tout en réduisant les charges. Profitez-en pour moderniser la ventilation (VMC hygroréglable).`,
+    (q, v) => `Votre logement des années 1980-2000 à ${q} a besoin d'une mise au goût du jour. Cuisine, salle de bain, revêtements : ces espaces se rénovent efficacement avec des artisans compétents à ${v}. Astuce : coordonnez plomberie et électricité avec la rénovation des pièces d'eau pour optimiser le budget.`,
+  ],
+  'post-2000': [
+    (q, v) => `Votre logement récent à ${q} est aux normes mais peut gagner en confort. Pensez à la climatisation réversible, la domotique pour optimiser votre consommation, ou un aménagement sur mesure (dressing, verrière). Les artisans de ${v} spécialisés en finitions haut de gamme sauront valoriser votre intérieur.`,
+    (q, v) => `Dans un logement post-2000 à ${q}, les travaux sont liés à l'évolution de vos besoins : bureau, borne de recharge, agrandissement. À ${v}, les artisans intervenant sur le bâti récent connaissent les matériaux et techniques actuels. Vérifiez les garanties constructeur encore en cours avant certains travaux.`,
+  ],
+  'haussmannien': [
+    (q, v) => `Pour rénover un appartement haussmannien à ${q}, choisissez des artisans expérimentés en restauration. Parquet ancien, moulures, cheminées exigent un savoir-faire spécifique. À ${v}, vérifiez si votre immeuble est en secteur protégé (ABF) : certains travaux de façade nécessitent une autorisation préalable.`,
+    (q, v) => `Un haussmannien à ${q} offre des volumes exceptionnels. Les artisans de ${v} peuvent moderniser électricité et plomberie de manière invisible, installer une cuisine contemporaine dans le respect des proportions, et restaurer les éléments de décor (parquet, moulures, cheminées) qui font le charme de ces logements.`,
+  ],
+  'mixte': [
+    (q, v) => `Dans un quartier au bâti mixte comme ${q}, commencez par identifier l'époque de construction pour cibler les travaux pertinents. Un artisan polyvalent de ${v} vous orientera vers les interventions prioritaires après un état des lieux. Les techniques varient considérablement entre bâtiment ancien et résidence récente.`,
+    (q, v) => `À ${q}, la diversité du bâti implique de choisir des artisans adaptés à votre situation. Que vous habitiez un immeuble ancien ou une résidence moderne à ${v}, demandez un diagnostic précis avant d'engager des travaux. Les devis doivent être établis après visite sur site pour prendre en compte les particularités de votre construction.`,
+  ],
+}
+
+// 15 FAQ templates — 4 selected per page via hash
+const FAQ_POOL: { q: (n: string, v: string) => string; a: (n: string, v: string, dep: string, code: string, era: string, issues: string[]) => string }[] = [
+  {
+    q: (n, v) => `Quels artisans interviennent à ${n}, ${v} ?`,
+    a: (n, v, dep, code) => `Notre annuaire référence des artisans dans 15 corps de métier intervenant dans le quartier ${n} à ${v} (${code}) : plombiers, électriciens, serruriers, chauffagistes, peintres, menuisiers, couvreurs, maçons et plus. Tous sont identifiés à partir des données SIREN du ${dep}.`,
+  },
+  {
+    q: (n) => `Comment obtenir un devis gratuit à ${n} ?`,
+    a: (n, v) => `Sélectionnez le service souhaité, indiquez ${v} comme localisation, et décrivez votre projet. Vous recevrez jusqu'à 3 propositions d'artisans qualifiés intervenant à ${n}. Service 100% gratuit et sans engagement.`,
+  },
+  {
+    q: (_n, v) => `Combien coûte un artisan à ${v} ?`,
+    a: (_n, v, _dep, code) => `Les tarifs varient selon le corps de métier, la complexité et l'urgence. À ${v} (${code}), comptez en moyenne 50–90 €/h selon la spécialité. Demandez plusieurs devis pour comparer les prix et prestations.`,
+  },
+  {
+    q: (n) => `Quel est le délai d'intervention moyen à ${n} ?`,
+    a: (n, v) => `Pour une urgence (fuite, panne, serrure bloquée), les artisans de ${v} interviennent sous 1 à 4 heures à ${n}. Pour des travaux planifiés, comptez 1 à 3 semaines selon la disponibilité et l'ampleur du chantier.`,
+  },
+  {
+    q: (n, v) => `Les artisans à ${n}, ${v} sont-ils vérifiés ?`,
+    a: (n, v, dep) => `Les artisans référencés à ${n} (${v}) sont identifiés via les données officielles du registre SIREN. Nous vérifions l'existence légale de l'entreprise, son activité dans le ${dep}, et sa spécialité déclarée. Les avis clients complètent cette vérification.`,
+  },
+  {
+    q: (n) => `Quels sont les travaux les plus courants à ${n} ?`,
+    a: (n, v, _dep, _code, era, issues) => `À ${n} (${v}), le bâti de type ${era.toLowerCase()} génère des besoins spécifiques : ${issues.slice(0, 3).join(', ').toLowerCase()}. Les artisans locaux connaissent ces problématiques et proposent des solutions adaptées.`,
+  },
+  {
+    q: (n, v) => `Comment choisir le bon artisan à ${n}, ${v} ?`,
+    a: (n, v, _dep, _code, era) => `Pour bien choisir un artisan à ${n}, vérifiez que sa spécialité correspond à votre besoin. Le bâti de ${v} étant de type ${era.toLowerCase()}, privilégiez un professionnel expérimenté sur cette construction. Comparez au moins 3 devis, vérifiez les assurances (décennale, RC pro), et consultez les avis.`,
+  },
+  {
+    q: () => `Les devis sont-ils vraiment gratuits et sans engagement ?`,
+    a: (_n, v) => `Oui, les devis demandés via notre plateforme sont entièrement gratuits et sans engagement. Vous pouvez recevoir jusqu'à 3 propositions d'artisans de ${v}, les comparer, et choisir librement. Aucun frais caché, aucune obligation.`,
+  },
+  {
+    q: (n) => `Un artisan peut-il intervenir en urgence à ${n} ?`,
+    a: (n, v) => `Oui, plusieurs artisans de ${v} proposent des interventions d'urgence à ${n} : fuite d'eau, panne électrique, porte claquée, panne de chauffage. Service disponible 7j/7. Les tarifs d'urgence incluent un supplément pour la disponibilité immédiate.`,
+  },
+  {
+    q: (n) => `Quelles garanties pour les travaux à ${n} ?`,
+    a: (n, v) => `Les artisans professionnels à ${v} sont couverts par l'assurance décennale et la RC professionnelle. Pour les travaux à ${n}, exigez une attestation d'assurance à jour. La garantie de parfait achèvement (1 an) et la garantie biennale (2 ans) complètent votre protection.`,
+  },
+  {
+    q: (n, v) => `Faut-il un permis pour rénover à ${n}, ${v} ?`,
+    a: (n, v, dep) => `Cela dépend de la nature des travaux. À ${n} (${v}), les travaux intérieurs ne nécessitent généralement pas d'autorisation. En revanche, modification de façade, extension ou changement de destination requiert une déclaration préalable auprès de la mairie. Consultez le PLU du ${dep}.`,
+  },
+  {
+    q: (_n, v) => `Comment comparer efficacement les artisans à ${v} ?`,
+    a: (_n, v) => `Demandez au minimum 3 devis détaillés pour le même périmètre de travaux à ${v}. Vérifiez que chaque devis précise : nature des travaux, matériaux, délais, prix HT et TTC, conditions de paiement. Consultez les avis clients et vérifiez les certifications (RGE, Qualibat).`,
+  },
+  {
+    q: (_n, v) => `Quelles aides financières pour rénover à ${v} ?`,
+    a: (_n, v, dep, code) => `Les habitants de ${v} (${code}) peuvent bénéficier de : MaPrimeRénov', éco-PTZ, CEE (Certificats d'Économies d'Énergie), et parfois des aides locales du ${dep}. Pour en bénéficier, les travaux doivent être réalisés par un artisan certifié RGE. Demandez un audit énergétique.`,
+  },
+  {
+    q: (n) => `Le bâti à ${n} nécessite-t-il des artisans spécialisés ?`,
+    a: (n, v, _dep, _code, era, issues) => `Le quartier ${n} à ${v} est composé de ${era.toLowerCase()}, ce qui implique des compétences spécifiques. Les problématiques courantes (${issues.slice(0, 2).join(', ').toLowerCase()}) demandent des artisans formés. Privilégiez des professionnels expérimentés sur des chantiers similaires.`,
+  },
+  {
+    q: () => `Comment vérifier un artisan avant de l'engager ?`,
+    a: (_n, v) => `Avant d'engager un artisan à ${v} : vérifiez son inscription au registre des métiers (SIRET actif), ses assurances (décennale, RC pro), sa certification RGE si nécessaire. Demandez des références de chantiers similaires. Méfiez-vous des devis anormalement bas.`,
+  },
+]
+
+// 6 proximity templates — each references era for uniqueness
+const PROXIMITY_TEMPLATES: ((q: string, v: string, era: string) => string)[] = [
+  (q, v, era) => `Faire appel à un artisan proche de ${q} offre des avantages concrets : temps de déplacement réduit, connaissance du ${era.toLowerCase()}, réactivité en cas d'urgence, et suivi facilité. Un professionnel de ${v} connaît les réglementations locales et les fournisseurs du secteur.`,
+  (q, v, era) => `Choisir un artisan intervenant à ${q} vous garantit un service adapté au ${era.toLowerCase()} du quartier. Moins de frais de déplacement, meilleure connaissance du bâti local, délais plus courts : la proximité est un critère de qualité. Les artisans de ${v} s'engagent sur des délais réalistes.`,
+  (q, v) => `Un artisan basé à ${v} et intervenant à ${q} offre une réactivité précieuse. En cas d'urgence, il peut être sur place en moins d'une heure. Sa connaissance du quartier (accès, stationnement, bâtiments) lui permet d'intervenir efficacement. La proximité facilite aussi le suivi de chantier.`,
+  (q, v, era) => `La proximité d'un artisan est un atout majeur à ${q}. Un professionnel de ${v} habitué au ${era.toLowerCase()} anticipe les difficultés et connaît les bonnes pratiques locales. Le bouche-à-oreille fonctionne : un artisan local qui fait du bon travail est recommandé par vos voisins.`,
+  (q, v, era) => `Privilégier un artisan local pour vos travaux à ${q}, c'est aussi soutenir l'économie de proximité. Les professionnels de ${v} investissent dans la connaissance du ${era.toLowerCase()}, travaillent avec des fournisseurs locaux et s'engagent sur la qualité. Résultat : interventions soignées et tarifs compétitifs.`,
+  (q, v) => `Les artisans de ${v} intervenant à ${q} combinent expertise technique et connaissance du terrain. Ils savent quels matériaux conviennent, connaissent les contraintes d'accès et peuvent mobiliser leur réseau local (autres corps de métier, fournisseurs). Cette proximité se traduit par des chantiers mieux coordonnés.`,
+]
+
+function getQuartierProfile(ville: Ville, quartierName: string): QuartierProfile {
+  const seed = Math.abs(hashCode(`${ville.slug}-${quartierName}`))
+  const seed2 = Math.abs(hashCode(`density-${ville.slug}-${quartierName}`))
+  const seed3 = Math.abs(hashCode(`arch-${ville.slug}-${quartierName}`))
+
+  const era = ERAS[seed % ERAS.length]
+  const density = DENSITIES[seed2 % DENSITIES.length]
+  const archNotes = ERA_ARCH_NOTES[era.key]
+  const archNote = archNotes[seed3 % archNotes.length]
+  const issues = ERA_ISSUES[era.key]
+  const topSlugs = SERVICE_PRIORITY[era.key]
+
+  return {
+    era: era.key,
+    eraLabel: era.label,
+    density: density.key,
+    densityLabel: density.label,
+    commonIssues: issues,
+    topServiceSlugs: topSlugs,
+    architecturalNote: archNote,
+  }
+}
+
+export function generateQuartierContent(ville: Ville, quartierName: string): QuartierContent {
+  const seed = Math.abs(hashCode(`${ville.slug}-${quartierName}`))
+  const profile = getQuartierProfile(ville, quartierName)
+
+  // Intro — 12 templates × era/density/arch data = unique per profile
+  const introFn = QUARTIER_INTROS[seed % QUARTIER_INTROS.length]
+  const intro = introFn(quartierName, ville.name, ville.departement, ville.departementCode, ville.population, profile.eraLabel, profile.architecturalNote, profile.densityLabel)
+
+  // Building context — by era
+  const ctxTemplates = BATIMENT_CONTEXTS[profile.era]
+  const batimentContext = ctxTemplates[Math.abs(hashCode(`ctx-${ville.slug}-${quartierName}`)) % ctxTemplates.length](quartierName, ville.name)
+
+  // Services pricing — top 5 for this era
+  const multiplier = getRegionalMultiplier(ville.region)
+  const pricingLines = profile.topServiceSlugs.slice(0, 5).map(slug => {
+    const t = getTradeContent(slug)
+    if (!t) return null
+    const min = Math.round(t.priceRange.min * multiplier)
+    const max = Math.round(t.priceRange.max * multiplier)
+    return `${t.name} : ${min}–${max} ${t.priceRange.unit}`
+  }).filter(Boolean)
+
+  const servicesDemandes = `Dans le quartier ${quartierName} à ${ville.name}, les services les plus sollicités pour le ${profile.eraLabel.toLowerCase()} sont : ${pricingLines.join(' · ')}. Ces tarifs indicatifs pour la région ${ville.region} varient selon la complexité, l'urgence et les matériaux. Comparez plusieurs devis.`
+
+  // Tips — by era
+  const tipTemplates = ERA_TIPS[profile.era]
+  const conseils = tipTemplates[Math.abs(hashCode(`tips-${ville.slug}-${quartierName}`)) % tipTemplates.length](quartierName, ville.name)
+
+  // Proximity
+  const proxFn = PROXIMITY_TEMPLATES[Math.abs(hashCode(`prox-${ville.slug}-${quartierName}`)) % PROXIMITY_TEMPLATES.length]
+  const proximite = proxFn(quartierName, ville.name, profile.eraLabel)
+
+  // FAQ — select 4 from pool of 15 via hash
+  const faqIndices: number[] = []
+  let faqSeed = Math.abs(hashCode(`faq-${ville.slug}-${quartierName}`))
+  while (faqIndices.length < 4) {
+    const idx = faqSeed % FAQ_POOL.length
+    if (!faqIndices.includes(idx)) faqIndices.push(idx)
+    faqSeed = Math.abs(hashCode(`faq${faqSeed}-${faqIndices.length}`))
+  }
+  const faqItems = faqIndices.map(idx => {
+    const f = FAQ_POOL[idx]
+    return {
+      question: f.q(quartierName, ville.name),
+      answer: f.a(quartierName, ville.name, ville.departement, ville.departementCode, profile.eraLabel, profile.commonIssues),
+    }
+  })
+
+  return { profile, intro, batimentContext, servicesDemandes, conseils, proximite, faqItems }
 }

@@ -25297,6 +25297,27 @@ export function getRegionSlugByName(name: string): string | undefined {
   return regions.find(r => r.name === name)?.slug
 }
 
+// Inline slugify pour éviter dépendance circulaire avec utils.ts
+function toQuartierSlug(text: string): string {
+  return text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+}
+
+/** Retourne les quartiers d'une ville avec slug généré */
+export function getQuartiersByVille(villeSlug: string): { name: string; slug: string }[] {
+  const ville = getVilleBySlug(villeSlug)
+  if (!ville) return []
+  return ville.quartiers.map(q => ({ name: q, slug: toQuartierSlug(q) }))
+}
+
+/** Retrouve ville + quartier par slugs */
+export function getQuartierBySlug(villeSlug: string, qSlug: string): { ville: Ville; quartierName: string } | null {
+  const ville = getVilleBySlug(villeSlug)
+  if (!ville) return null
+  const match = ville.quartiers.find(name => toQuartierSlug(name) === qSlug)
+  if (!match) return null
+  return { ville, quartierName: match }
+}
+
 // Services disponibles avec icônes Lucide
 export const services = [
   { slug: 'plombier', name: 'Plombier', icon: 'Wrench', color: 'from-blue-500 to-blue-600' },

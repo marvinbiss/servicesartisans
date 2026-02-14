@@ -70,6 +70,11 @@ const INSTANCE_ID = (() => {
   return idx >= 0 ? args[idx + 1] : null
 })()
 
+const ENRICH_MODE = (() => {
+  const idx = args.indexOf('--mode')
+  return idx >= 0 ? args[idx + 1] : 'phone'  // 'phone' = only missing phone, 'website' = only missing website, 'all' = any missing
+})()
+
 // Override progress file for multi-instance runs
 if (INSTANCE_ID) {
   PROGRESS_FILE = path.join(DATA_DIR, `enrich-by-name-progress-${INSTANCE_ID}.json`)
@@ -453,25 +458,46 @@ let pool: PgPool
 function createPool(): PgPool {
   return new PgPool({
     connectionString: PG_URL,
-    max: 15,
+    max: 5,
     idleTimeoutMillis: 30000,
-    connectionTimeoutMillis: 10000,
-    options: '-c statement_timeout=120000',
+    connectionTimeoutMillis: 30000,
+    options: '-c statement_timeout=600000',
     keepAlive: true,
     keepAliveInitialDelayMillis: 10000,
   })
 }
 
+function getWhereClause(): string {
+  if (ENRICH_MODE === 'phone') return 'phone IS NULL'
+  if (ENRICH_MODE === 'website') return 'website IS NULL'
+  return '(phone IS NULL OR website IS NULL OR rating_average IS NULL)'
+}
+
+async function dbQueryRetry(text: string, params: any[], retries = 3): Promise<any> {
+  for (let i = 0; i < retries; i++) {
+    try {
+      return await pool.query(text, params)
+    } catch (e: any) {
+      if (i === retries - 1) throw e
+      console.log(`  ⚠ DB query retry ${i + 1}/${retries}: ${e.message}`)
+      // Recreate pool on connection errors
+      if (e.code === '57014' || e.message.includes('Connection terminated') || e.message.includes('timeout')) {
+        try { await pool.end() } catch {}
+        pool = createPool()
+      }
+      await sleep(3000 * (i + 1))
+    }
+  }
+}
+
 async function loadArtisansBatch(dept: string, offset: number, limit: number): Promise<Artisan[]> {
-  const result = await pool.query(
+  const result = await dbQueryRetry(
     `SELECT id, name, address_city, address_department, address_postal_code,
             specialty, phone, website, rating_average, review_count
      FROM providers
      WHERE address_department = $1
-       AND (phone IS NULL OR website IS NULL OR rating_average IS NULL)
-     ORDER BY (CASE WHEN phone IS NULL THEN 0 ELSE 1 END),
-              (CASE WHEN website IS NULL THEN 0 ELSE 1 END),
-              id
+       AND ${getWhereClause()}
+     ORDER BY id
      LIMIT $2 OFFSET $3`,
     [dept, limit, offset]
   )
@@ -479,10 +505,10 @@ async function loadArtisansBatch(dept: string, offset: number, limit: number): P
 }
 
 async function countArtisansToEnrich(dept: string): Promise<number> {
-  const result = await pool.query(
+  const result = await dbQueryRetry(
     `SELECT COUNT(*) as c FROM providers
      WHERE address_department = $1
-       AND (phone IS NULL OR website IS NULL OR rating_average IS NULL)`,
+       AND ${getWhereClause()}`,
     [dept]
   )
   return parseInt(result.rows[0].c)
@@ -517,7 +543,7 @@ async function updateArtisan(id: string, data: EnrichResult): Promise<{ phone: b
   if (sets.length === 0) return { phone: false, website: false, rating: false }
 
   params.push(id)
-  await pool.query(`UPDATE providers SET ${sets.join(', ')} WHERE id = $${pi}`, params)
+  await dbQueryRetry(`UPDATE providers SET ${sets.join(', ')} WHERE id = $${pi}`, params)
 
   return updated
 }
@@ -639,7 +665,8 @@ async function main() {
   console.log()
   console.log('════════════════════════════════════════════════════════════')
   console.log(`  MEGA ENRICHMENT — Recherche par nom sur Google${INSTANCE_ID ? ` [Instance ${INSTANCE_ID}]` : ''}`)
-  console.log(`  Workers: ${INITIAL_WORKERS} → max ${MAX_WORKERS}`)
+  console.log(`  Workers: ${INITIAL_WORKERS} → max ${MAX_WORKERS} | Mode: ${ENRICH_MODE}`)
+  console.log(`  Filter: ${getWhereClause()}`)
   console.log('════════════════════════════════════════════════════════════')
   console.log()
 
@@ -653,11 +680,16 @@ async function main() {
     Object.assign(stats, progress.stats)
   }
 
-  // Count total artisans to process
-  const countRes = await pool.query(
-    `SELECT COUNT(*) as c FROM providers WHERE phone IS NULL OR website IS NULL OR rating_average IS NULL`
-  )
-  stats.artisansTotal = parseInt(countRes.rows[0].c)
+  // Count total artisans to process (with timeout protection)
+  try {
+    const countRes = await pool.query(
+      `SELECT COUNT(*) as c FROM providers WHERE ${getWhereClause()}`
+    )
+    stats.artisansTotal = parseInt(countRes.rows[0].c)
+  } catch (e: any) {
+    console.log(`  ⚠ Count query failed (${e.message}), using estimate`)
+    stats.artisansTotal = 688000 // approximate
+  }
   console.log(`  ${fmt(stats.artisansTotal)} artisans à enrichir au total`)
 
   // Filter departments

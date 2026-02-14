@@ -15,7 +15,7 @@ import Link from 'next/link'
 import { REVALIDATE } from '@/lib/cache'
 import { slugify, getArtisanUrl } from '@/lib/utils'
 import { getServiceImage } from '@/lib/data/images'
-import { services as staticServicesList, villes, getVilleBySlug, getDepartementByCode, getRegionSlugByName, getNearbyCities, getVillesByDepartement } from '@/lib/data/france'
+import { services as staticServicesList, villes, getVilleBySlug, getDepartementByCode, getRegionSlugByName, getNearbyCities, getVillesByDepartement, getQuartiersByVille } from '@/lib/data/france'
 import { getTradeContent } from '@/lib/data/trade-content'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
@@ -307,6 +307,15 @@ export default async function ServiceLocationPage({ params }: PageProps) {
                   Zones d&apos;intervention à {location.name}
                 </h3>
                 <p>{locationContent.quartierText}</p>
+                {ville && getQuartiersByVille(locationSlug).length > 0 && (
+                  <div className="not-prose flex flex-wrap gap-2 mt-4">
+                    {getQuartiersByVille(locationSlug).slice(0, 10).map(({ name, slug }) => (
+                      <Link key={slug} href={`/villes/${locationSlug}/${slug}`} className="text-sm bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full hover:bg-blue-100 transition-colors">
+                        {name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
 
                 <p>{locationContent.conclusion}</p>
               </div>

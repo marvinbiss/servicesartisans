@@ -7,7 +7,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getPlaceSchema, getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
-import { villes, getVilleBySlug, services, getRegionSlugByName, getDepartementByCode } from '@/lib/data/france'
+import { villes, getVilleBySlug, services, getRegionSlugByName, getDepartementByCode, getQuartiersByVille } from '@/lib/data/france'
 import { getCityImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 
 // Pre-render top 200 cities, rest generated on-demand via ISR
@@ -237,10 +237,10 @@ export default async function VillePage({ params }: PageProps) {
             </div>
             <div className="bg-white rounded-2xl border border-gray-200 p-6">
               <div className="flex flex-wrap gap-2.5">
-                {ville.quartiers.map((quartier) => (
-                  <span key={quartier} className="bg-gray-50 text-slate-700 px-4 py-2 rounded-full text-sm border border-gray-100 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 transition-colors">
-                    {quartier}
-                  </span>
+                {getQuartiersByVille(villeSlug).map(({ name, slug }) => (
+                  <Link key={slug} href={`/villes/${villeSlug}/${slug}`} className="bg-gray-50 text-slate-700 px-4 py-2 rounded-full text-sm border border-gray-100 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 transition-colors">
+                    {name}
+                  </Link>
                 ))}
               </div>
             </div>

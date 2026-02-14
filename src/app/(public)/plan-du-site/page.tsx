@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { services, villes, departements, regions } from '@/lib/data/france'
+import { services, villes, departements, regions, getQuartiersByVille } from '@/lib/data/france'
 import { SITE_URL } from '@/lib/seo/config'
 import Breadcrumb from '@/components/Breadcrumb'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
@@ -176,6 +176,40 @@ export default function PlanDuSitePage() {
                 Tarifs {trade.name.toLowerCase()}
               </Link>
             ))}
+          </div>
+        </section>
+
+        {/* Quartiers des grandes villes */}
+        <section className="mb-12">
+          <h2 className="text-xl font-bold text-gray-900 mb-4 border-l-4 border-amber-500 pl-4">
+            Quartiers des grandes villes
+          </h2>
+          <div className="space-y-6">
+            {villes.slice(0, 20).map(v => {
+              const quartiers = getQuartiersByVille(v.slug)
+              if (quartiers.length === 0) return null
+              return (
+                <div key={v.slug}>
+                  <h3 className="font-semibold text-gray-900 mb-2">
+                    <Link href={`/villes/${v.slug}`} className="hover:text-blue-600 transition-colors">
+                      {v.name}
+                    </Link>
+                    {' '}({quartiers.length} quartiers)
+                  </h3>
+                  <div className="flex flex-wrap gap-x-4 gap-y-1 ml-4">
+                    {quartiers.map(q => (
+                      <Link
+                        key={q.slug}
+                        href={`/villes/${v.slug}/${q.slug}`}
+                        className="text-sm text-gray-600 hover:text-blue-600"
+                      >
+                        {q.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )
+            })}
           </div>
         </section>
 

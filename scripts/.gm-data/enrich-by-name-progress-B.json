@@ -1,18 +1,1 @@
-{
-  "completedDepts": [],
-  "lastArtisanIndex": {
-    "13": 250
-  },
-  "stats": {
-    "artisansProcessed": 250,
-    "artisansTotal": 737332,
-    "newPhones": 190,
-    "newWebsites": 188,
-    "newRatings": 0,
-    "noResults": 0,
-    "errors": 30,
-    "apiCredits": 1780,
-    "activeWorkers": 10,
-    "maxWorkers": 10
-  }
-}
+{"completedDepts":[],"lastArtisanIndex":{},"stats":{"artisansProcessed":0,"artisansTotal":0,"newPhones":0,"newWebsites":0,"newRatings":0,"noResults":0,"errors":0,"apiCredits":0,"activeWorkers":1,"maxWorkers":10}}

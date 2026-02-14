@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { SITE_URL } from '@/lib/seo/config'
-import { services, villes, departements, regions } from '@/lib/data/france'
+import { services, villes, departements, regions, getQuartiersByVille } from '@/lib/data/france'
 import { tradeContent } from '@/lib/data/trade-content'
 import { articleSlugs } from '@/lib/data/blog/articles'
 import { allArticles } from '@/lib/data/blog/articles'
@@ -19,6 +19,7 @@ export async function generateSitemaps() {
     { id: 'service-cities' },   // service + city combination pages
     { id: 'cities' },           // villes index + individual city pages
     { id: 'geo' },              // departements + regions (index + individual)
+    { id: 'quartiers' },        // quartier pages within cities
   ]
 
   // Determine how many provider batches we need
@@ -231,6 +232,18 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     }))
 
     return [...departementsIndex, ...departementPages, ...regionsIndex, ...regionPages]
+  }
+
+  // ── Quartier pages ─────────────────────────────────────────────────
+  if (id === 'quartiers') {
+    return villes.flatMap(ville =>
+      getQuartiersByVille(ville.slug).map(q => ({
+        url: `${SITE_URL}/villes/${ville.slug}/${q.slug}`,
+        lastModified: STATIC_LAST_MODIFIED,
+        changeFrequency: 'weekly' as const,
+        priority: 0.6,
+      }))
+    )
   }
 
   // ── Provider pages (batched) ────────────────────────────────────────
