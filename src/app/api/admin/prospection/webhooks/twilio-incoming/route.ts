@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     // Vérifier la signature
     const signature = request.headers.get('x-twilio-signature') || ''
     if (!verifyTwilioSignature(signature, request.url, params)) {
-      return NextResponse.json({ error: 'Invalid signature' }, { status: 403 })
+      return NextResponse.json({ error: 'Signature invalide' }, { status: 403 })
     }
 
     const from = params.From?.replace('whatsapp:', '') || ''

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { isValidUuid } from '@/lib/sanitize'
 import { z } from 'zod'
 
 // POST request schema
@@ -21,6 +22,13 @@ export async function POST(
     const authResult = await requirePermission('users', 'delete')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
+    }
+
+    if (!isValidUuid(params.userId)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
     }
 
     const supabase = createAdminClient()

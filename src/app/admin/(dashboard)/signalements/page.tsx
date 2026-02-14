@@ -12,6 +12,7 @@ import {
   Calendar,
 } from 'lucide-react'
 import { ReportStatusBadge, StatusBadge } from '@/components/admin/StatusBadge'
+import { ErrorBanner } from '@/components/admin/ErrorBanner'
 
 interface Report {
   id: string
@@ -46,6 +47,7 @@ const TARGET_TYPE_LABELS: Record<string, string> = {
 export default function AdminSignalementsPage() {
   const [reports, setReports] = useState<Report[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [status, setStatus] = useState<'all' | 'pending' | 'under_review' | 'resolved' | 'dismissed'>('pending')
   const [targetType, setTargetType] = useState<'all' | 'provider' | 'review' | 'user' | 'message'>('all')
   const [page, setPage] = useState(1)
@@ -70,6 +72,7 @@ export default function AdminSignalementsPage() {
   const fetchReports = async () => {
     try {
       setLoading(true)
+      setError(null)
       const params = new URLSearchParams({
         page: String(page),
         limit: '20',
@@ -77,14 +80,14 @@ export default function AdminSignalementsPage() {
         targetType,
       })
       const response = await fetch(`/api/admin/reports?${params}`)
-      if (response.ok) {
-        const data = await response.json()
-        setReports(data.reports || [])
-        setTotalPages(data.totalPages || 1)
-        setTotal(data.total || 0)
-      }
-    } catch (error) {
-      console.error('Failed to fetch reports:', error)
+      if (!response.ok) throw new Error(`Erreur ${response.status}`)
+      const data = await response.json()
+      setReports(data.reports || [])
+      setTotalPages(data.totalPages || 1)
+      setTotal(data.total || 0)
+    } catch {
+      setError('Erreur lors du chargement des signalements')
+      setReports([])
     } finally {
       setLoading(false)
     }
@@ -92,7 +95,8 @@ export default function AdminSignalementsPage() {
 
   const handleAction = async () => {
     try {
-      await fetch(`/api/admin/reports/${actionModal.reportId}/resolve`, {
+      setError(null)
+      const response = await fetch(`/api/admin/reports/${actionModal.reportId}/resolve`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -100,11 +104,12 @@ export default function AdminSignalementsPage() {
           resolution_notes: resolutionNotes,
         }),
       })
+      if (!response.ok) throw new Error('Erreur lors du traitement du signalement')
       setActionModal({ open: false, reportId: '', action: 'resolve' })
       setResolutionNotes('')
       fetchReports()
-    } catch (error) {
-      console.error('Action failed:', error)
+    } catch {
+      setError('Erreur lors du traitement du signalement')
     }
   }
 
@@ -168,6 +173,7 @@ export default function AdminSignalementsPage() {
                 setTargetType(e.target.value as typeof targetType)
                 setPage(1)
               }}
+              aria-label="Filtrer par type de cible"
               className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             >
               <option value="all">Tous les types</option>
@@ -178,6 +184,9 @@ export default function AdminSignalementsPage() {
             </select>
           </div>
         </div>
+
+        {/* Error Banner */}
+        {error && <ErrorBanner message={error} onDismiss={() => setError(null)} onRetry={fetchReports} />}
 
         {/* Reports List */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
@@ -297,8 +306,8 @@ export default function AdminSignalementsPage() {
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex min-h-screen items-center justify-center p-4">
             <div className="fixed inset-0 bg-black/50" onClick={() => setActionModal({ open: false, reportId: '', action: 'resolve' })} />
-            <div className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            <div role="dialog" aria-modal="true" aria-labelledby="action-modal-title" className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6">
+              <h3 id="action-modal-title" className="text-lg font-semibold text-gray-900 mb-4">
                 {actionModal.action === 'resolve' ? 'Résoudre le signalement' : 'Rejeter le signalement'}
               </h3>
 
@@ -310,8 +319,9 @@ export default function AdminSignalementsPage() {
                   value={resolutionNotes}
                   onChange={(e) => setResolutionNotes(e.target.value)}
                   rows={3}
+                  maxLength={2000}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
-                  placeholder="Décrivez les actions prises..."
+                  placeholder="D\u00e9crivez les actions prises..."
                 />
               </div>
 

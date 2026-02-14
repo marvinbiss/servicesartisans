@@ -142,7 +142,7 @@ export default function AdminLeadsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Leads — Vue globale</h1>
@@ -181,7 +181,7 @@ export default function AdminLeadsPage() {
             title="Artisans actifs"
             value={artisans.length}
             icon={<Users className="w-5 h-5" />}
-            color="indigo"
+            color="blue"
           />
         </div>
 
@@ -232,6 +232,7 @@ export default function AdminLeadsPage() {
               <select
                 value={urgencyFilter}
                 onChange={(e) => setUrgencyFilter(e.target.value)}
+                aria-label="Filtrer par urgence"
                 className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Toutes</option>
@@ -289,16 +290,16 @@ export default function AdminLeadsPage() {
             {tab === 'leads' && (
               <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                 <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
+                  <table className="w-full min-w-[800px] text-sm" aria-label="Liste des leads">
                     <thead>
                       <tr className="border-b border-gray-100 bg-gray-50/50">
-                        <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Service</th>
-                        <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Lieu</th>
-                        <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Client</th>
-                        <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Urgence</th>
-                        <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Assignations</th>
-                        <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Date</th>
-                        <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Actions</th>
+                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Service</th>
+                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Lieu</th>
+                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Client</th>
+                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Urgence</th>
+                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Assignations</th>
+                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Date</th>
+                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Actions</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
@@ -382,14 +383,14 @@ export default function AdminLeadsPage() {
             {tab === 'artisans' && (
               <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                 <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
+                  <table className="w-full min-w-[600px] text-sm" aria-label="Liste des artisans pour le dispatch">
                     <thead>
                       <tr className="border-b border-gray-100 bg-gray-50/50">
-                        <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Nom</th>
-                        <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Métier</th>
-                        <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Ville</th>
-                        <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Vérifié</th>
-                        <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Dernier lead</th>
+                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Nom</th>
+                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Métier</th>
+                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Ville</th>
+                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Vérifié</th>
+                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Dernier lead</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">

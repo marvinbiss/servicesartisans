@@ -16,9 +16,9 @@ import {
   Briefcase,
   Loader2,
   RefreshCw,
-  AlertCircle,
-  Check,
 } from 'lucide-react'
+import { ConfirmationModal } from '@/components/admin/ConfirmationModal'
+import { Toast } from '@/components/admin/Toast'
 
 interface Provider {
   id: string
@@ -39,24 +39,6 @@ interface Provider {
   siret?: string
 }
 
-// Toast notification component
-function Toast({ message, type, onClose }: { message: string; type: 'success' | 'error'; onClose: () => void }) {
-  useEffect(() => {
-    const timer = setTimeout(onClose, 4000)
-    return () => clearTimeout(timer)
-  }, [onClose])
-
-  return (
-    <div className={`fixed bottom-4 right-4 z-50 flex items-center gap-2 px-4 py-3 rounded-lg shadow-lg ${
-      type === 'success' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'
-    }`}>
-      {type === 'success' ? <Check className="w-5 h-5" /> : <AlertCircle className="w-5 h-5" />}
-      <span>{message}</span>
-      <button onClick={onClose} className="ml-2 hover:opacity-80">&times;</button>
-    </div>
-  )
-}
-
 export default function AdminProvidersPage() {
   const router = useRouter()
   const [providers, setProviders] = useState<Provider[]>([])
@@ -70,6 +52,10 @@ export default function AdminProvidersPage() {
   // Action states
   const [actionLoading, setActionLoading] = useState<string | null>(null)
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
+  const [suspendModal, setSuspendModal] = useState<{ open: boolean; providerId: string }>({
+    open: false,
+    providerId: '',
+  })
 
   // Debounce search
   const [searchDebounce, setSearchDebounce] = useState('')
@@ -137,6 +123,16 @@ export default function AdminProvidersPage() {
     // Prevent double-click
     if (actionLoading) return
 
+    // Confirmation for destructive actions via modal
+    if (action === 'suspend') {
+      setSuspendModal({ open: true, providerId })
+      return
+    }
+
+    await executeAction(providerId, action)
+  }
+
+  const executeAction = async (providerId: string, action: 'verify' | 'suspend' | 'activate') => {
     try {
       setActionLoading(providerId)
 
@@ -160,7 +156,7 @@ export default function AdminProvidersPage() {
       if (response.ok && data.success) {
         // Show success toast
         const actionText = action === 'verify' ? 'référencé' : action === 'suspend' ? 'suspendu' : 'réactivé'
-        setToast({ message: `Artisan ${actionText} avec succès!`, type: 'success' })
+        setToast({ message: `Artisan ${actionText} avec succ\u00e8s !`, type: 'success' })
 
         // Update local state immediately for better UX
         setProviders(prev => prev.map(p => {
@@ -203,29 +199,33 @@ export default function AdminProvidersPage() {
     return <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">Vérifié</span>
   }
 
+  const planLabels: Record<string, string> = {
+    'free': 'Gratuit',
+    'basic': 'Basique',
+    'premium': 'Premium',
+    'pro': 'Pro',
+  }
+
   const getSubscriptionBadge = (type: string) => {
     const colors: Record<string, string> = {
-      premium: 'bg-violet-100 text-violet-700',
+      premium: 'bg-blue-100 text-blue-700',
       basic: 'bg-blue-100 text-blue-700',
       free: 'bg-gray-100 text-gray-700',
     }
     return (
       <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[type] || colors.free}`}>
-        {type.charAt(0).toUpperCase() + type.slice(1)}
+        {planLabels[type] || type.charAt(0).toUpperCase() + type.slice(1)}
       </span>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50" aria-label="Gestion des artisans">
       {/* Toast notification */}
-      {toast && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
-        />
-      )}
+      <Toast
+        toast={toast}
+        onClose={() => setToast(null)}
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center justify-between mb-8">
@@ -253,6 +253,7 @@ export default function AdminProvidersPage() {
               <input
                 type="text"
                 placeholder="Rechercher par nom, email, ville, SIRET..."
+                aria-label="Rechercher un artisan"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -321,28 +322,28 @@ export default function AdminProvidersPage() {
               )}
 
               <div className="overflow-x-auto relative">
-                <table className="w-full">
+                <table className="w-full min-w-[900px]" aria-label="Liste des artisans">
                   <thead className="bg-gray-50 border-b border-gray-100">
                     <tr>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Artisan
                       </th>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Service
                       </th>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Localisation
                       </th>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Statut
                       </th>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Avis
                       </th>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Abonnement
                       </th>
-                      <th className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Actions
                       </th>
                     </tr>
@@ -358,7 +359,7 @@ export default function AdminProvidersPage() {
                             <div className="flex items-center gap-2">
                               <p className="font-medium text-gray-900">{provider.company_name}</p>
                               {provider.source === 'sirene-open' && (
-                                <span className="px-1.5 py-0.5 bg-indigo-100 text-indigo-700 rounded text-xs">SIRENE</span>
+                                <span className="px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded text-xs">SIRENE</span>
                               )}
                             </div>
                             {provider.email ? (
@@ -408,6 +409,7 @@ export default function AdminProvidersPage() {
                               onClick={() => router.push(`/admin/artisans/${provider.id}`)}
                               className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                               title="Voir le profil"
+                              aria-label="Voir le profil"
                             >
                               <Eye className="w-5 h-5" />
                             </button>
@@ -417,6 +419,7 @@ export default function AdminProvidersPage() {
                               onClick={() => router.push(`/admin/artisans/${provider.id}/edit`)}
                               className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
                               title="Modifier"
+                              aria-label="Modifier"
                             >
                               <Edit2 className="w-5 h-5" />
                             </button>
@@ -428,6 +431,7 @@ export default function AdminProvidersPage() {
                                 disabled={actionLoading === provider.id}
                                 className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors disabled:opacity-50"
                                 title="Vérifier cet artisan"
+                                aria-label="Vérifier cet artisan"
                               >
                                 {actionLoading === provider.id ? (
                                   <Loader2 className="w-5 h-5 animate-spin" />
@@ -444,6 +448,7 @@ export default function AdminProvidersPage() {
                                 disabled={actionLoading === provider.id}
                                 className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
                                 title="Suspendre"
+                                aria-label="Suspendre"
                               >
                                 {actionLoading === provider.id ? (
                                   <Loader2 className="w-5 h-5 animate-spin" />
@@ -457,6 +462,7 @@ export default function AdminProvidersPage() {
                                 disabled={actionLoading === provider.id}
                                 className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors disabled:opacity-50"
                                 title="Réactiver"
+                                aria-label="Réactiver"
                               >
                                 {actionLoading === provider.id ? (
                                   <Loader2 className="w-5 h-5 animate-spin" />
@@ -482,6 +488,7 @@ export default function AdminProvidersPage() {
                   <button
                     onClick={() => setPage(Math.max(1, page - 1))}
                     disabled={page === 1 || loading}
+                    aria-label="Page précédente"
                     className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
                   >
                     <ChevronLeft className="w-5 h-5" />
@@ -489,6 +496,7 @@ export default function AdminProvidersPage() {
                   <button
                     onClick={() => setPage(Math.min(totalPages, page + 1))}
                     disabled={page === totalPages || loading}
+                    aria-label="Page suivante"
                     className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
                   >
                     <ChevronRight className="w-5 h-5" />
@@ -499,6 +507,20 @@ export default function AdminProvidersPage() {
           )}
         </div>
       </div>
+
+      {/* Suspend Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={suspendModal.open}
+        onClose={() => setSuspendModal({ open: false, providerId: '' })}
+        onConfirm={async () => {
+          setSuspendModal({ open: false, providerId: '' })
+          await executeAction(suspendModal.providerId, 'suspend')
+        }}
+        title="Suspendre l'artisan"
+        message="\u00cates-vous s\u00fbr de vouloir suspendre cet artisan ? Il ne sera plus visible sur la plateforme."
+        confirmText="Suspendre"
+        variant="danger"
+      />
     </div>
   )
 }

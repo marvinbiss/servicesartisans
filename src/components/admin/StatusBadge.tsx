@@ -16,7 +16,7 @@ const variantClasses: Record<BadgeVariant, string> = {
   error: 'bg-red-100 text-red-700',
   info: 'bg-blue-100 text-blue-700',
   default: 'bg-gray-100 text-gray-700',
-  purple: 'bg-violet-100 text-violet-700',
+  purple: 'bg-blue-100 text-blue-700',
 }
 
 export function StatusBadge({ variant = 'default', children, className }: StatusBadgeProps) {

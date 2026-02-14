@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui'
+import { ConfirmationModal } from '@/components/admin/ConfirmationModal'
 
 interface AdminProviderActionsProps {
   providerId: string
@@ -12,8 +13,11 @@ interface AdminProviderActionsProps {
 export function AdminProviderActions({ providerId, isActive }: AdminProviderActionsProps) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
+  const [toggleModal, setToggleModal] = useState(false)
+  const [deleteModal, setDeleteModal] = useState(false)
 
   const toggleActive = async () => {
+    setToggleModal(false)
     setIsLoading(true)
     try {
       await fetch(`/api/admin/providers/${providerId}`, {
@@ -28,8 +32,7 @@ export function AdminProviderActions({ providerId, isActive }: AdminProviderActi
   }
 
   const deleteProvider = async () => {
-    if (!confirm('Supprimer cet artisan ?')) return
-
+    setDeleteModal(false)
     setIsLoading(true)
     try {
       await fetch(`/api/admin/providers/${providerId}`, {
@@ -42,24 +45,46 @@ export function AdminProviderActions({ providerId, isActive }: AdminProviderActi
   }
 
   return (
-    <div className="flex gap-2">
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={toggleActive}
-        disabled={isLoading}
-      >
-        {isActive ? 'Désactiver' : 'Activer'}
-      </Button>
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={deleteProvider}
-        disabled={isLoading}
-        className="text-red-600"
-      >
-        Supprimer
-      </Button>
-    </div>
+    <>
+      <div className="flex gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setToggleModal(true)}
+          disabled={isLoading}
+        >
+          {isActive ? 'Désactiver' : 'Activer'}
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setDeleteModal(true)}
+          disabled={isLoading}
+          className="text-red-600"
+        >
+          Supprimer
+        </Button>
+      </div>
+
+      <ConfirmationModal
+        isOpen={toggleModal}
+        onClose={() => setToggleModal(false)}
+        onConfirm={toggleActive}
+        title={isActive ? 'Désactiver l\'artisan' : 'Activer l\'artisan'}
+        message={`Êtes-vous sûr de vouloir ${isActive ? 'désactiver' : 'activer'} cet artisan ?`}
+        confirmText={isActive ? 'Désactiver' : 'Activer'}
+        variant={isActive ? 'warning' : 'success'}
+      />
+
+      <ConfirmationModal
+        isOpen={deleteModal}
+        onClose={() => setDeleteModal(false)}
+        onConfirm={deleteProvider}
+        title="Supprimer l'artisan"
+        message="Êtes-vous sûr de vouloir supprimer cet artisan ? Cette action est irréversible."
+        confirmText="Supprimer"
+        variant="danger"
+      />
+    </>
   )
 }

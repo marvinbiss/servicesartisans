@@ -95,9 +95,9 @@ export default function CreateTemplatePage() {
     <div>
       <div className="mb-6">
         <Link href="/admin/prospection/templates" className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2">
-          <ArrowLeft className="w-4 h-4" /> Retour aux templates
+          <ArrowLeft className="w-4 h-4" /> Retour aux modèles
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900">Nouveau template</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Nouveau modèle</h1>
       </div>
 
       <ProspectionNav />
@@ -114,7 +114,7 @@ export default function CreateTemplatePage() {
         {/* Formulaire */}
         <div className="lg:col-span-2 bg-white rounded-lg border p-6 space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1">Nom du template</label>
+            <label className="block text-sm font-medium mb-1">Nom du modèle</label>
             <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm" placeholder="Ex: Invitation artisan plombier" />
           </div>
 

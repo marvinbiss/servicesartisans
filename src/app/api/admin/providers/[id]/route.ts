@@ -8,9 +8,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
+import { sanitizeSearchQuery, isValidUuid } from '@/lib/sanitize'
 import { z } from 'zod'
 
-// PATCH request schema
 const updateProviderSchema = z.object({
   company_name: z.string().max(200).optional(),
   full_name: z.string().max(200).optional(),
@@ -34,29 +34,97 @@ const updateProviderSchema = z.object({
 
 export const dynamic = 'force-dynamic'
 
-// Conditional logger - only logs in development to prevent sensitive data exposure
-const log = (level: string, message: string, data?: unknown) => {
-  if (process.env.NODE_ENV === 'development') {
-    // Sanitize sensitive data before logging
-    const sanitizedData = data ? sanitizeForLogging(data) : undefined
-    console.log(`[${new Date().toISOString()}] [${level}] ${message}`, sanitizedData ? JSON.stringify(sanitizedData, null, 2) : '')
-  }
+/** Strip HTML tags from text inputs */
+const stripTags = (val: string | null | undefined): string | null =>
+  val ? val.replace(/<[^>]*>/g, '').trim() : null
+
+const NO_CACHE_HEADERS = {
+  'Cache-Control': 'no-store, no-cache, must-revalidate',
+  'Pragma': 'no-cache',
 }
 
-// Remove sensitive fields from logging
-function sanitizeForLogging(data: unknown): unknown {
-  if (typeof data !== 'object' || data === null) return data
-
-  const sensitiveFields = ['password', 'token', 'secret', 'apiKey', 'email', 'phone', 'siret', 'siren']
-  const sanitized = { ...data as Record<string, unknown> }
-
-  for (const field of sensitiveFields) {
-    if (field in sanitized) {
-      sanitized[field] = '[REDACTED]'
-    }
+/** Map frontend form fields to database column names and sanitize values */
+function buildUpdateData(body: Record<string, unknown>): Record<string, unknown> {
+  const data: Record<string, unknown> = {
+    updated_at: new Date().toISOString(),
   }
 
-  return sanitized
+  // Name: prefer company_name, fall back to full_name
+  if (body.company_name && typeof body.company_name === 'string' && body.company_name.trim()) {
+    data.name = stripTags(body.company_name as string)
+  } else if (body.full_name && typeof body.full_name === 'string' && (body.full_name as string).trim()) {
+    data.name = stripTags(body.full_name as string)
+  }
+
+  // Direct nullable fields (no sanitization needed)
+  const directFields: [string, string][] = [
+    ['phone', 'phone'],
+    ['email', 'email'],
+    ['siret', 'siret'],
+    ['postal_code', 'address_postal_code'],
+    ['website', 'website'],
+    ['legal_form', 'legal_form'],
+  ]
+  for (const [src, dest] of directFields) {
+    if (body[src] !== undefined) data[dest] = body[src] || null
+  }
+
+  // Text fields that need HTML stripping
+  const textFields: [string, string][] = [
+    ['description', 'meta_description'],
+    ['address', 'address_street'],
+    ['city', 'address_city'],
+    ['department', 'address_department'],
+    ['region', 'address_region'],
+  ]
+  for (const [src, dest] of textFields) {
+    if (body[src] !== undefined) data[dest] = stripTags(body[src] as string)
+  }
+
+  // Boolean fields
+  if (body.is_verified !== undefined) {
+    data.is_verified = Boolean(body.is_verified)
+    if (body.is_verified) data.verification_date = new Date().toISOString()
+  }
+  if (body.is_featured !== undefined) data.is_premium = Boolean(body.is_featured)
+  if (body.is_active !== undefined) data.is_active = Boolean(body.is_active)
+
+  return data
+}
+
+/**
+ * Find an existing record by name (ilike) or create a new one.
+ * Returns the ID, or null on failure.
+ */
+async function findOrCreateRecord(
+  supabase: ReturnType<typeof createAdminClient>,
+  table: 'services' | 'locations',
+  name: string,
+  extraMatch?: Record<string, unknown>,
+  extraInsert?: Record<string, unknown>,
+): Promise<string | null> {
+  const sanitizedName = sanitizeSearchQuery(name.trim())
+  let query = supabase.from(table).select('id').ilike('name', sanitizedName)
+  if (extraMatch) {
+    for (const [k, v] of Object.entries(extraMatch)) {
+      query = query.eq(k, v)
+    }
+  }
+  const { data: existing } = await query.single()
+  if (existing?.id) return existing.id
+
+  // Create new record
+  const insertData: Record<string, unknown> = {
+    name: name.trim(),
+    is_active: true,
+    ...extraInsert,
+  }
+  if (table === 'services') {
+    insertData.slug = name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+  }
+  const { data: created, error } = await supabase.from(table).insert(insertData).select('id').single()
+  if (error) return null
+  return created?.id ?? null
 }
 
 // GET - Récupérer un provider complet
@@ -65,110 +133,92 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    // Verify admin with providers:read permission
     const authResult = await requirePermission('providers', 'read')
-    if (!authResult.success || !authResult.admin) {
-      return authResult.error
+    if (!authResult.success || !authResult.admin) return authResult.error
+
+    const providerId = params.id
+    if (!isValidUuid(providerId)) {
+      return NextResponse.json(
+        { success: false, error: 'Identifiant invalide' },
+        { status: 400 }
+      )
     }
 
     const supabase = createAdminClient()
-    const providerId = params.id
 
     const { data: provider, error } = await supabase
       .from('providers')
       .select(`
         *,
         provider_services (
-          id,
-          is_primary,
-          service:services (
-            id,
-            name,
-            slug
-          )
+          id, is_primary,
+          service:services ( id, name, slug )
         ),
         provider_locations (
-          id,
-          is_primary,
-          radius_km,
-          location:locations (
-            id,
-            name,
-            postal_code,
-            department_name
-          )
+          id, is_primary, radius_km,
+          location:locations ( id, name, postal_code, department_name )
         )
       `)
-      .eq('id', providerId)
+      .eq('id', params.id)
       .single()
 
     if (error || !provider) {
-      return NextResponse.json(
-        { success: false, error: 'Provider non trouvé' },
-        { status: 404 }
-      )
+      return NextResponse.json({ success: false, error: 'Provider non trouvé' }, { status: 404 })
     }
 
-    // Transformer pour le frontend
     const services = provider.provider_services?.map((ps: { service: { name: string } }) => ps.service?.name).filter(Boolean) || []
     const zones = provider.provider_locations?.map((pl: { location: { name: string; postal_code: string } }) =>
       pl.location ? `${pl.location.name} (${pl.location.postal_code})` : null
     ).filter(Boolean) || []
 
-    const transformedProvider = {
-      id: provider.id,
-      user_id: provider.user_id || null,
-      email: provider.email || '',
-      full_name: provider.name,
-      company_name: provider.name,
-      phone: provider.phone || '',
-      siret: provider.siret || '',
-      siren: provider.siren || '',
-      description: provider.meta_description || '',
-      services,
-      zones,
-      address: provider.address_street || '',
-      city: provider.address_city || '',
-      postal_code: provider.address_postal_code || '',
-      department: provider.address_department || '',
-      region: provider.address_region || '',
-      latitude: provider.latitude,
-      longitude: provider.longitude,
-      hourly_rate: null, // Not stored in providers table - prices are in provider_services
-      is_verified: provider.is_verified || false,
-      is_featured: provider.is_premium || false,
-      is_active: provider.is_active !== false,
-      rating: provider.rating_average || null,
-      reviews_count: provider.review_count || 0,
-      subscription_plan: provider.is_premium ? 'premium' : 'gratuit',
-      source: provider.source || 'manual',
-      source_id: provider.source_id || null,
-      website: provider.website || '',
-      legal_form: provider.legal_form || '',
-      creation_date: provider.creation_date || '',
-      employee_count: provider.employee_count || null,
-      created_at: provider.created_at,
-      updated_at: provider.updated_at,
-      slug: provider.slug,
-      _provider_services: provider.provider_services,
-      _provider_locations: provider.provider_locations,
-    }
-
     const response = NextResponse.json({
       success: true,
-      provider: transformedProvider,
+      provider: {
+        id: provider.id,
+        user_id: provider.user_id || null,
+        email: provider.email || '',
+        full_name: provider.name,
+        company_name: provider.name,
+        phone: provider.phone || '',
+        siret: provider.siret || '',
+        siren: provider.siren || '',
+        description: provider.meta_description || '',
+        services,
+        zones,
+        address: provider.address_street || '',
+        city: provider.address_city || '',
+        postal_code: provider.address_postal_code || '',
+        department: provider.address_department || '',
+        region: provider.address_region || '',
+        latitude: provider.latitude,
+        longitude: provider.longitude,
+        hourly_rate: null,
+        is_verified: provider.is_verified || false,
+        is_featured: provider.is_premium || false,
+        is_active: provider.is_active !== false,
+        rating: provider.rating_average || null,
+        reviews_count: provider.review_count || 0,
+        subscription_plan: provider.is_premium ? 'premium' : 'gratuit',
+        source: provider.source || 'manual',
+        source_id: provider.source_id || null,
+        website: provider.website || '',
+        legal_form: provider.legal_form || '',
+        creation_date: provider.creation_date || '',
+        employee_count: provider.employee_count || null,
+        created_at: provider.created_at,
+        updated_at: provider.updated_at,
+        slug: provider.slug,
+        _provider_services: provider.provider_services,
+        _provider_locations: provider.provider_locations,
+      },
     })
 
     response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate')
     response.headers.set('Pragma', 'no-cache')
-
     return response
   } catch (error) {
-    log('ERROR', 'Admin provider GET error', error)
-    return NextResponse.json(
-      { success: false, error: `Erreur serveur: ${(error as Error).message}` },
-      { status: 500 }
-    )
+    console.error('Admin provider GET error:', error)
+    return NextResponse.json({ success: false, error: 'Erreur lors de la récupération du profil' }, { status: 500 })
   }
 }
 
@@ -178,93 +228,39 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   const providerId = params.id
-  log('INFO', `PATCH /api/admin/providers/${providerId} started`)
 
   try {
-    // Step 1: Verify admin authentication
-    log('INFO', 'Step 1: Verifying admin permission')
     const authResult = await requirePermission('providers', 'write')
-    if (!authResult.success || !authResult.admin) {
-      log('ERROR', 'Auth failed', authResult)
-      return authResult.error
-    }
-    log('INFO', 'Auth successful', { adminId: authResult.admin.id })
+    if (!authResult.success || !authResult.admin) return authResult.error
 
-    // Step 2: Create Supabase client
-    log('INFO', 'Step 2: Creating Supabase admin client')
-    let supabase
-    try {
-      supabase = createAdminClient()
-      log('INFO', 'Supabase client created')
-    } catch (clientError) {
-      log('ERROR', 'Failed to create Supabase client', clientError)
+    if (!isValidUuid(providerId)) {
       return NextResponse.json(
-        { success: false, error: `Erreur client Supabase: ${(clientError as Error).message}` },
-        { status: 500 }
+        { success: false, error: 'Identifiant invalide' },
+        { status: 400 }
       )
     }
 
-    // Step 3: Parse request body
-    log('INFO', 'Step 3: Parsing request body')
-    let body
+    const supabase = createAdminClient()
+
+    // Parse and validate request body
+    let body: Record<string, unknown>
     try {
       body = await request.json()
-      log('INFO', 'Body parsed', { keys: Object.keys(body) })
-    } catch (parseError) {
-      log('ERROR', 'JSON parse error', parseError)
-      return NextResponse.json(
-        { success: false, error: 'JSON invalide dans le body' },
-        { status: 400 }
-      )
+    } catch {
+      return NextResponse.json({ success: false, error: 'JSON invalide dans le body' }, { status: 400 })
     }
 
-    // Validate request body
     const validationResult = updateProviderSchema.safeParse(body)
     if (!validationResult.success) {
-      log('ERROR', 'Validation failed', validationResult.error.flatten())
       return NextResponse.json(
-        { success: false, error: 'Validation error', details: validationResult.error.flatten() },
+        { success: false, error: 'Erreur de validation', details: validationResult.error.flatten() },
         { status: 400 }
       )
     }
 
-    // Step 4: Build update data
-    log('INFO', 'Step 4: Building update data')
-    const updateData: Record<string, unknown> = {
-      updated_at: new Date().toISOString(),
-    }
+    // Build and execute update
+    const updateData = buildUpdateData(body)
 
-    // Map frontend fields to database fields
-    if (body.company_name?.trim()) updateData.name = body.company_name.trim()
-    else if (body.full_name?.trim()) updateData.name = body.full_name.trim()
-
-    if (body.phone !== undefined) updateData.phone = body.phone || null
-    if (body.email !== undefined) updateData.email = body.email || null
-    if (body.siret !== undefined) updateData.siret = body.siret || null
-    if (body.description !== undefined) updateData.meta_description = body.description || null
-    if (body.address !== undefined) updateData.address_street = body.address || null
-    if (body.city !== undefined) updateData.address_city = body.city || null
-    if (body.postal_code !== undefined) updateData.address_postal_code = body.postal_code || null
-    if (body.department !== undefined) updateData.address_department = body.department || null
-    if (body.region !== undefined) updateData.address_region = body.region || null
-    // Note: hourly_rate is not a column in providers table - prices are in provider_services
-    if (body.website !== undefined) updateData.website = body.website || null
-    if (body.legal_form !== undefined) updateData.legal_form = body.legal_form || null
-
-    // Boolean fields
-    if (body.is_verified !== undefined) {
-      updateData.is_verified = Boolean(body.is_verified)
-      if (body.is_verified) {
-        updateData.verification_date = new Date().toISOString()
-      }
-    }
-    if (body.is_featured !== undefined) updateData.is_premium = Boolean(body.is_featured)
-    if (body.is_active !== undefined) updateData.is_active = Boolean(body.is_active)
-
-    log('INFO', 'Update data built', { fields: Object.keys(updateData) })
-
-    // Step 5: Execute update
-    log('INFO', 'Step 5: Executing database update')
     const { data, error } = await supabase
       .from('providers')
       .update(updateData)
@@ -273,184 +269,74 @@ export async function PATCH(
       .single()
 
     if (error) {
-      log('ERROR', 'Database update failed', {
-        code: error.code,
-        message: error.message,
-        details: error.details,
-        hint: error.hint
-      })
-      return NextResponse.json({
-        success: false,
-        error: `Erreur DB: ${error.message}`,
-        code: error.code,
-        hint: error.hint,
-        details: error.details
-      }, { status: 500 })
+      console.error('Database update failed:', { code: error.code, message: error.message, details: error.details, hint: error.hint })
+      return NextResponse.json({ success: false, error: 'Erreur lors de la mise à jour' }, { status: 500 })
     }
 
-    log('INFO', 'Update successful', { providerId: data?.id })
-
-    // Step 6: Update services if provided
+    // Update services if provided
     if (body.services && Array.isArray(body.services)) {
-      log('INFO', 'Step 6: Updating services', { services: body.services })
       try {
-        // Delete existing provider_services
-        await supabase
-          .from('provider_services')
-          .delete()
-          .eq('provider_id', providerId)
-
-        // For each service name, find or create the service and link it
+        await supabase.from('provider_services').delete().eq('provider_id', providerId)
         for (const serviceName of body.services) {
           if (!serviceName || typeof serviceName !== 'string') continue
-
-          // Try to find existing service by name
-          const { data: existingService } = await supabase
-            .from('services')
-            .select('id')
-            .ilike('name', serviceName.trim())
-            .single()
-
-          let serviceId = existingService?.id
-
-          // If not found, create new service
-          if (!serviceId) {
-            const slug = serviceName.trim().toLowerCase()
-              .replace(/[^a-z0-9]+/g, '-')
-              .replace(/^-|-$/g, '')
-
-            const { data: newService, error: createError } = await supabase
-              .from('services')
-              .insert({
-                name: serviceName.trim(),
-                slug: slug,
-                is_active: true,
-              })
-              .select('id')
-              .single()
-
-            if (createError) {
-              log('WARN', `Failed to create service: ${serviceName}`, createError)
-              continue
-            }
-            serviceId = newService?.id
-          }
-
-          // Link provider to service
+          const serviceId = await findOrCreateRecord(supabase, 'services', serviceName)
           if (serviceId) {
-            await supabase
-              .from('provider_services')
-              .insert({
-                provider_id: providerId,
-                service_id: serviceId,
-                is_primary: body.services.indexOf(serviceName) === 0,
-              })
+            await supabase.from('provider_services').insert({
+              provider_id: providerId,
+              service_id: serviceId,
+              is_primary: (body.services as string[]).indexOf(serviceName) === 0,
+            })
           }
         }
-        log('INFO', 'Services updated successfully')
       } catch (servicesError) {
-        log('WARN', 'Services update failed but main update succeeded', servicesError)
+        console.error('Services update failed (main update succeeded):', servicesError)
       }
     }
 
-    // Step 6b: Update zones/locations if provided
+    // Update zones/locations if provided
     if (body.zones && Array.isArray(body.zones)) {
-      log('INFO', 'Step 6b: Updating zones', { zones: body.zones })
       try {
-        // Delete existing provider_locations
-        await supabase
-          .from('provider_locations')
-          .delete()
-          .eq('provider_id', providerId)
-
-        // For each zone, find or create the location and link it
+        await supabase.from('provider_locations').delete().eq('provider_id', providerId)
         for (const zone of body.zones) {
           if (!zone || typeof zone !== 'string') continue
-
-          // Parse zone format: "City Name (postal_code)" or just "City Name"
           const match = zone.match(/^(.+?)(?:\s*\((\d{5})\))?$/)
           if (!match) continue
 
           const locationName = match[1].trim()
           const postalCode = match[2] || null
+          const extraMatch = postalCode ? { postal_code: postalCode } : undefined
+          const extraInsert = postalCode ? { postal_code: postalCode } : undefined
 
-          // Try to find existing location
-          let locationQuery = supabase
-            .from('locations')
-            .select('id')
-            .ilike('name', locationName)
-
-          if (postalCode) {
-            locationQuery = locationQuery.eq('postal_code', postalCode)
-          }
-
-          const { data: existingLocation } = await locationQuery.single()
-          let locationId = existingLocation?.id
-
-          // If not found, create new location
-          if (!locationId) {
-            const { data: newLocation, error: createError } = await supabase
-              .from('locations')
-              .insert({
-                name: locationName,
-                postal_code: postalCode,
-                is_active: true,
-              })
-              .select('id')
-              .single()
-
-            if (createError) {
-              log('WARN', `Failed to create location: ${zone}`, createError)
-              continue
-            }
-            locationId = newLocation?.id
-          }
-
-          // Link provider to location
+          const locationId = await findOrCreateRecord(supabase, 'locations', locationName, extraMatch, extraInsert)
           if (locationId) {
-            await supabase
-              .from('provider_locations')
-              .insert({
-                provider_id: providerId,
-                location_id: locationId,
-                is_primary: body.zones.indexOf(zone) === 0,
-                radius_km: 20, // Default radius
-              })
+            await supabase.from('provider_locations').insert({
+              provider_id: providerId,
+              location_id: locationId,
+              is_primary: (body.zones as string[]).indexOf(zone) === 0,
+              radius_km: 20,
+            })
           }
         }
-        log('INFO', 'Zones updated successfully')
       } catch (zonesError) {
-        log('WARN', 'Zones update failed but main update succeeded', zonesError)
+        console.error('Zones update failed (main update succeeded):', zonesError)
       }
     }
 
-    // Step 7: Log audit action
+    // Audit log
     try {
       await logAdminAction(authResult.admin.id, 'provider.update', 'provider', providerId, updateData)
     } catch (auditError) {
-      log('WARN', 'Audit log failed but update succeeded', auditError)
+      console.error('Audit log failed:', auditError)
     }
 
-    // Step 8: Return success
-    return NextResponse.json({
-      success: true,
-      data,
-      message: 'Artisan mis à jour avec succès'
-    }, {
-      headers: {
-        'Cache-Control': 'no-store, no-cache, must-revalidate',
-        'Pragma': 'no-cache'
-      }
-    })
-
+    return NextResponse.json(
+      { success: true, data, message: 'Artisan mis à jour avec succès' },
+      { headers: NO_CACHE_HEADERS }
+    )
   } catch (error) {
     const err = error as Error
-    log('ERROR', 'Unexpected error', { message: err.message, stack: err.stack })
-    return NextResponse.json({
-      success: false,
-      error: `Erreur inattendue: ${err.message}`,
-      stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
-    }, { status: 500 })
+    console.error('Unexpected PATCH error:', { message: err.message, stack: err.stack })
+    return NextResponse.json({ success: false, error: 'Erreur inattendue lors de la mise à jour' }, { status: 500 })
   }
 }
 
@@ -460,53 +346,40 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   const providerId = params.id
-  log('INFO', `DELETE /api/admin/providers/${providerId} started`)
 
   try {
-    // Verify admin with providers:delete permission
     const authResult = await requirePermission('providers', 'delete')
-    if (!authResult.success || !authResult.admin) {
-      log('ERROR', 'Auth failed for DELETE', authResult)
-      return authResult.error
+    if (!authResult.success || !authResult.admin) return authResult.error
+
+    if (!isValidUuid(providerId)) {
+      return NextResponse.json(
+        { success: false, error: 'Identifiant invalide' },
+        { status: 400 }
+      )
     }
 
     const supabase = createAdminClient()
 
     const { error } = await supabase
       .from('providers')
-      .update({
-        is_active: false,
-        updated_at: new Date().toISOString(),
-      })
+      .update({ is_active: false, updated_at: new Date().toISOString() })
       .eq('id', providerId)
 
     if (error) {
-      log('ERROR', 'Database delete failed', error)
-      return NextResponse.json(
-        { success: false, error: `Erreur DB: ${error.message}` },
-        { status: 500 }
-      )
+      console.error('Database delete failed:', error)
+      return NextResponse.json({ success: false, error: 'Erreur lors de la suppression' }, { status: 500 })
     }
 
-    // Log d'audit
     try {
       await logAdminAction(authResult.admin.id, 'provider.delete', 'provider', providerId)
     } catch (auditError) {
-      log('WARN', 'Audit log failed but delete succeeded', auditError)
+      console.error('Audit log failed:', auditError)
     }
 
-    log('INFO', 'DELETE successful', { providerId })
-
-    return NextResponse.json({
-      success: true,
-      message: 'Artisan supprimé'
-    })
+    return NextResponse.json({ success: true, message: 'Artisan supprimé' })
   } catch (error) {
     const err = error as Error
-    log('ERROR', 'Unexpected DELETE error', { message: err.message, stack: err.stack })
-    return NextResponse.json(
-      { success: false, error: `Erreur de suppression: ${err.message}` },
-      { status: 500 }
-    )
+    console.error('Unexpected DELETE error:', { message: err.message, stack: err.stack })
+    return NextResponse.json({ success: false, error: 'Erreur lors de la suppression' }, { status: 500 })
   }
 }

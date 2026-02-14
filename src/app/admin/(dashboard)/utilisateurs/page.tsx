@@ -15,8 +15,8 @@ import {
   User,
   Shield,
 } from 'lucide-react'
+import { ErrorBanner } from '@/components/admin/ErrorBanner'
 import { SubscriptionBadge, UserStatusBadge } from '@/components/admin/StatusBadge'
-import { ConfirmationModal } from '@/components/admin/ConfirmationModal'
 
 interface UserProfile {
   id: string
@@ -35,6 +35,7 @@ export default function AdminUsersPage() {
   const router = useRouter()
   const [users, setUsers] = useState<UserProfile[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState<'all' | 'clients' | 'artisans' | 'banned'>('all')
   const [plan, setPlan] = useState<'all' | 'gratuit' | 'pro' | 'premium'>('all')
@@ -58,6 +59,7 @@ export default function AdminUsersPage() {
   const fetchUsers = async () => {
     try {
       setLoading(true)
+      setError(null)
       const params = new URLSearchParams({
         page: String(page),
         limit: '20',
@@ -66,14 +68,14 @@ export default function AdminUsersPage() {
         search,
       })
       const response = await fetch(`/api/admin/users?${params}`)
-      if (response.ok) {
-        const data = await response.json()
-        setUsers(data.users || [])
-        setTotalPages(data.totalPages || 1)
-        setTotal(data.total || 0)
-      }
-    } catch (error) {
-      console.error('Failed to fetch users:', error)
+      if (!response.ok) throw new Error(`Erreur ${response.status}`)
+      const data = await response.json()
+      setUsers(data.users || [])
+      setTotalPages(data.totalPages || 1)
+      setTotal(data.total || 0)
+    } catch {
+      setError('Erreur lors du chargement des utilisateurs')
+      setUsers([])
     } finally {
       setLoading(false)
     }
@@ -81,17 +83,19 @@ export default function AdminUsersPage() {
 
   const handleBanAction = async () => {
     try {
+      setError(null)
       const action = banModal.isBanned ? 'unban' : 'ban'
-      await fetch(`/api/admin/users/${banModal.userId}/ban`, {
+      const response = await fetch(`/api/admin/users/${banModal.userId}/ban`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action, reason: banReason }),
       })
+      if (!response.ok) throw new Error('Erreur lors de l\'action')
       setBanModal({ open: false, userId: '', userName: '', isBanned: false })
       setBanReason('')
       fetchUsers()
-    } catch (error) {
-      console.error('Ban action failed:', error)
+    } catch {
+      setError('Erreur lors de la modification du statut de l\'utilisateur')
     }
   }
 
@@ -136,6 +140,7 @@ export default function AdminUsersPage() {
               <input
                 type="text"
                 placeholder="Rechercher par nom, email, téléphone..."
+                aria-label="Rechercher un utilisateur"
                 value={search}
                 onChange={(e) => {
                   setSearch(e.target.value)
@@ -174,6 +179,7 @@ export default function AdminUsersPage() {
                 setPlan(e.target.value as typeof plan)
                 setPage(1)
               }}
+              aria-label="Filtrer par plan d'abonnement"
               className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="all">Tous les plans</option>
@@ -183,6 +189,15 @@ export default function AdminUsersPage() {
             </select>
           </div>
         </div>
+
+        {/* Error Banner */}
+        {error && (
+          <ErrorBanner
+            message={error}
+            onDismiss={() => setError(null)}
+            onRetry={fetchUsers}
+          />
+        )}
 
         {/* Users Table */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
@@ -198,25 +213,25 @@ export default function AdminUsersPage() {
           ) : (
             <>
               <div className="overflow-x-auto">
-                <table className="w-full">
+                <table className="w-full min-w-[800px]" aria-label="Liste des utilisateurs">
                   <thead className="bg-gray-50 border-b border-gray-100">
                     <tr>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Utilisateur
                       </th>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Type
                       </th>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Statut
                       </th>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Plan
                       </th>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Inscription
                       </th>
-                      <th className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Actions
                       </th>
                     </tr>
@@ -313,6 +328,7 @@ export default function AdminUsersPage() {
                   <button
                     onClick={() => setPage(Math.max(1, page - 1))}
                     disabled={page === 1}
+                    aria-label="Page précédente"
                     className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
                   >
                     <ChevronLeft className="w-5 h-5" />
@@ -320,6 +336,7 @@ export default function AdminUsersPage() {
                   <button
                     onClick={() => setPage(Math.min(totalPages, page + 1))}
                     disabled={page === totalPages}
+                    aria-label="Page suivante"
                     className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
                   >
                     <ChevronRight className="w-5 h-5" />
@@ -332,22 +349,65 @@ export default function AdminUsersPage() {
       </div>
 
       {/* Ban Modal */}
-      <ConfirmationModal
-        isOpen={banModal.open}
-        onClose={() => {
-          setBanModal({ open: false, userId: '', userName: '', isBanned: false })
-          setBanReason('')
-        }}
-        onConfirm={handleBanAction}
-        title={banModal.isBanned ? 'Débannir utilisateur' : 'Bannir utilisateur'}
-        message={
-          banModal.isBanned
-            ? `Êtes-vous sûr de vouloir débannir ${banModal.userName} ?`
-            : `Êtes-vous sûr de vouloir bannir ${banModal.userName} ? L'utilisateur ne pourra plus accéder à la plateforme.`
-        }
-        confirmText={banModal.isBanned ? 'Débannir' : 'Bannir'}
-        variant={banModal.isBanned ? 'success' : 'danger'}
-      />
+      {banModal.open && (
+        <div className="fixed inset-0 z-50 overflow-y-auto">
+          <div className="flex min-h-screen items-center justify-center p-4">
+            <div className="fixed inset-0 bg-black/50" onClick={() => {
+              setBanModal({ open: false, userId: '', userName: '', isBanned: false })
+              setBanReason('')
+            }} />
+            <div role="dialog" aria-modal="true" aria-labelledby="ban-modal-title" className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6">
+              <h3 id="ban-modal-title" className="text-lg font-semibold text-gray-900 mb-2">
+                {banModal.isBanned ? 'D\u00e9bannir utilisateur' : 'Bannir utilisateur'}
+              </h3>
+              <p className="text-gray-600 mb-4">
+                {banModal.isBanned
+                  ? `\u00cates-vous s\u00fbr de vouloir d\u00e9bannir ${banModal.userName} ?`
+                  : `\u00cates-vous s\u00fbr de vouloir bannir ${banModal.userName} ? L\u2019utilisateur ne pourra plus acc\u00e9der \u00e0 la plateforme.`
+                }
+              </p>
+
+              {!banModal.isBanned && (
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Raison du bannissement
+                  </label>
+                  <textarea
+                    value={banReason}
+                    onChange={(e) => setBanReason(e.target.value)}
+                    rows={3}
+                    maxLength={500}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
+                    placeholder="Indiquez la raison du bannissement..."
+                  />
+                </div>
+              )}
+
+              <div className="flex gap-3 justify-end">
+                <button
+                  onClick={() => {
+                    setBanModal({ open: false, userId: '', userName: '', isBanned: false })
+                    setBanReason('')
+                  }}
+                  className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                >
+                  Annuler
+                </button>
+                <button
+                  onClick={handleBanAction}
+                  className={`px-4 py-2 text-white rounded-lg transition-colors ${
+                    banModal.isBanned
+                      ? 'bg-green-600 hover:bg-green-700'
+                      : 'bg-red-600 hover:bg-red-700'
+                  }`}
+                >
+                  {banModal.isBanned ? 'D\u00e9bannir' : 'Bannir'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

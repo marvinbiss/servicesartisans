@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { requirePermission } from '@/lib/admin-auth'
+import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import DOMPurify from 'isomorphic-dompurify'
 import { z } from 'zod'
 
 const createSchema = z.object({
@@ -73,9 +74,17 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Sanitize template content before storing
+    const sanitizedData = { ...parsed.data }
+    // Strip HTML from text-only fields
+    if (sanitizedData.name) sanitizedData.name = sanitizedData.name.replace(/<[^>]*>/g, '').trim()
+    if (sanitizedData.subject) sanitizedData.subject = sanitizedData.subject.replace(/<[^>]*>/g, '').trim()
+    // Sanitize HTML body (allow safe HTML tags only)
+    if (sanitizedData.html_body) sanitizedData.html_body = DOMPurify.sanitize(sanitizedData.html_body)
+
     const { data, error } = await supabase
       .from('prospection_templates')
-      .insert({ ...parsed.data, created_by: authResult.admin.id })
+      .insert({ ...sanitizedData, created_by: authResult.admin.id })
       .select()
       .single()
 
@@ -83,6 +92,12 @@ export async function POST(request: NextRequest) {
       logger.error('Create template error', error)
       return NextResponse.json({ success: false, error: { message: 'Erreur lors de la création' } }, { status: 500 })
     }
+
+    await logAdminAction(authResult.admin.id, 'template.create', 'prospection_template', data.id, {
+      name: sanitizedData.name,
+      channel: sanitizedData.channel,
+      audience_type: sanitizedData.audience_type,
+    })
 
     return NextResponse.json({ success: true, data }, { status: 201 })
   } catch (error) {

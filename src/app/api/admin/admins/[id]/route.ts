@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { DEFAULT_PERMISSIONS, type AdminRole } from '@/types/admin'
-import { verifyAdmin, logAdminAction } from '@/lib/admin-auth'
+import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { isValidUuid } from '@/lib/sanitize'
 import { z } from 'zod'
 
 // PATCH request schema
@@ -18,8 +19,8 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    // Verify admin authentication
-    const authResult = await verifyAdmin()
+    // Verify admin with settings:read permission (admin management)
+    const authResult = await requirePermission('settings', 'read')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
     }
@@ -29,6 +30,13 @@ export async function GET(
       return NextResponse.json(
         { success: false, error: { code: 'FORBIDDEN', message: 'Réservé aux super admins' } },
         { status: 403 }
+      )
+    }
+
+    if (!isValidUuid(params.id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
       )
     }
 
@@ -57,8 +65,8 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    // Verify admin authentication
-    const authResult = await verifyAdmin()
+    // Verify admin with settings:write permission (admin management)
+    const authResult = await requirePermission('settings', 'write')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
     }
@@ -71,12 +79,19 @@ export async function PATCH(
       )
     }
 
+    if (!isValidUuid(params.id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
+    }
+
     const supabase = createAdminClient()
     const body = await request.json()
     const result = updateAdminSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
+        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -125,8 +140,8 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    // Verify admin authentication
-    const authResult = await verifyAdmin()
+    // Verify admin with settings:write permission (admin management)
+    const authResult = await requirePermission('settings', 'write')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
     }
@@ -136,6 +151,13 @@ export async function DELETE(
       return NextResponse.json(
         { success: false, error: { code: 'FORBIDDEN', message: 'Seuls les super admins peuvent supprimer des administrateurs' } },
         { status: 403 }
+      )
+    }
+
+    if (!isValidUuid(params.id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
       )
     }
 

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { requirePermission } from '@/lib/admin-auth'
+import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
@@ -185,6 +185,9 @@ export async function POST(request: Request) {
         { status: 500 }
       )
     }
+
+    // Log d'audit
+    await logAdminAction(auth.admin!.id, 'cms_page.create', 'cms_page', page.id, { slug: validated.slug, page_type: validated.page_type })
 
     return NextResponse.json({ success: true, data: page }, { status: 201 })
   } catch (error) {

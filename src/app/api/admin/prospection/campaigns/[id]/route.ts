@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { requirePermission } from '@/lib/admin-auth'
+import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { isValidUuid } from '@/lib/sanitize'
 import { z } from 'zod'
 
 const updateSchema = z.object({
@@ -32,6 +33,13 @@ export async function GET(
     if (!authResult.success) return authResult.error
 
     const { id } = await params
+    if (!isValidUuid(id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
+    }
+
     const supabase = createAdminClient()
 
     const { data, error } = await supabase
@@ -57,9 +65,16 @@ export async function PATCH(
 ) {
   try {
     const authResult = await requirePermission('prospection', 'write')
-    if (!authResult.success) return authResult.error
+    if (!authResult.success || !authResult.admin) return authResult.error
 
     const { id } = await params
+    if (!isValidUuid(id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
+    }
+
     const body = await request.json()
     const parsed = updateSchema.safeParse(body)
 
@@ -70,25 +85,34 @@ export async function PATCH(
       )
     }
 
+    // Strip HTML tags from text fields before storing
+    const sanitizedData = { ...parsed.data }
+    if (sanitizedData.name) sanitizedData.name = sanitizedData.name.replace(/<[^>]*>/g, '').trim()
+    if (sanitizedData.description) sanitizedData.description = sanitizedData.description.replace(/<[^>]*>/g, '').trim()
+
     const supabase = createAdminClient()
 
     const { data, error } = await supabase
       .from('prospection_campaigns')
-      .update(parsed.data)
+      .update(sanitizedData)
       .eq('id', id)
       .select()
       .single()
 
     if (error) {
       if (error.code === 'PGRST116') {
-        return NextResponse.json({ success: false, error: { message: 'Resource not found' } }, { status: 404 })
+        return NextResponse.json({ success: false, error: { message: 'Ressource introuvable' } }, { status: 404 })
       }
       logger.error('Update campaign error', error)
       return NextResponse.json({ success: false, error: { message: 'Erreur lors de la mise à jour' } }, { status: 500 })
     }
     if (!data) {
-      return NextResponse.json({ success: false, error: { message: 'Resource not found' } }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Ressource introuvable' } }, { status: 404 })
     }
+
+    await logAdminAction(authResult.admin.id, 'campaign.update', 'prospection_campaign', id, {
+      updated_fields: Object.keys(parsed.data),
+    })
 
     return NextResponse.json({ success: true, data })
   } catch (error) {
@@ -103,9 +127,16 @@ export async function DELETE(
 ) {
   try {
     const authResult = await requirePermission('prospection', 'write')
-    if (!authResult.success) return authResult.error
+    if (!authResult.success || !authResult.admin) return authResult.error
 
     const { id } = await params
+    if (!isValidUuid(id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
+    }
+
     const supabase = createAdminClient()
 
     // Ne supprimer que les campagnes en draft
@@ -131,6 +162,8 @@ export async function DELETE(
       logger.error('Delete campaign error', error)
       return NextResponse.json({ success: false, error: { message: 'Erreur lors de la suppression' } }, { status: 500 })
     }
+
+    await logAdminAction(authResult.admin.id, 'campaign.delete', 'prospection_campaign', id)
 
     return NextResponse.json({ success: true })
   } catch (error) {

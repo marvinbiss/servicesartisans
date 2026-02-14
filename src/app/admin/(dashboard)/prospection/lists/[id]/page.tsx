@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { ProspectionNav } from '@/components/admin/prospection/ProspectionNav'
 import { ContactTypeBadge } from '@/components/admin/prospection/StatsCards'
 import { ArrowLeft, Trash2, Save, UserPlus, AlertCircle, X } from 'lucide-react'
+import { ConfirmationModal } from '@/components/admin/ConfirmationModal'
 import type { ProspectionList, ProspectionContact } from '@/types/prospection'
 
 interface MemberRow {
@@ -39,6 +40,13 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
   // Delete confirmation
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [deleting, setDeleting] = useState(false)
+
+  // Remove member confirmation
+  const [removeMemberModal, setRemoveMemberModal] = useState<{ open: boolean; contactId: string; contactName: string }>({
+    open: false,
+    contactId: '',
+    contactName: '',
+  })
 
   const fetchList = useCallback(async (signal?: AbortSignal) => {
     setError(null)
@@ -224,6 +232,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
               type="text"
               value={editName}
               onChange={(e) => setEditName(e.target.value)}
+              aria-label="Nom de la liste"
               className="text-2xl font-bold text-gray-900 border rounded-lg px-2 py-1 w-full max-w-md"
             />
             <textarea
@@ -231,6 +240,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
               onChange={(e) => setEditDesc(e.target.value)}
               rows={2}
               placeholder="Description..."
+              aria-label="Description de la liste"
               className="w-full max-w-md px-3 py-2 border rounded-lg text-sm"
             />
             <div className="flex gap-2">
@@ -259,7 +269,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
               {list.name}
             </h1>
             <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-              list.list_type === 'static' ? 'bg-gray-100 text-gray-700' : 'bg-purple-100 text-purple-700'
+              list.list_type === 'static' ? 'bg-gray-100 text-gray-700' : 'bg-blue-100 text-blue-700'
             }`}>
               {list.list_type === 'static' ? 'Statique' : 'Dynamique'}
             </span>
@@ -278,7 +288,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
         <div className="mb-4 flex items-center gap-2 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
           <AlertCircle className="w-4 h-4 flex-shrink-0" />
           {actionError}
-          <button onClick={() => setActionError(null)} className="ml-auto">
+          <button onClick={() => setActionError(null)} aria-label="Fermer le message d'erreur" className="ml-auto">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -337,8 +347,8 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
 
       {/* Dynamic filter info */}
       {list.list_type === 'dynamic' && list.filter_criteria && (
-        <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-4">
-          <h3 className="text-sm font-medium text-purple-700 mb-2">Crit&egrave;res de filtrage dynamique</h3>
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+          <h3 className="text-sm font-medium text-blue-700 mb-2">Crit&egrave;res de filtrage dynamique</h3>
           <div className="flex flex-wrap gap-2">
             {list.filter_criteria.contact_type && (
               <span className="text-xs px-2 py-1 bg-white rounded border">
@@ -375,15 +385,16 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
           <p className="text-sm text-gray-500 mb-3">{totalMembers.toLocaleString('fr-FR')} membres</p>
 
           <div className="bg-white rounded-lg border overflow-hidden">
-            <table className="w-full text-sm">
+            <div className="overflow-x-auto">
+            <table className="w-full min-w-[700px] text-sm" aria-label="Membres de la liste">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">Nom</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">Type</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">Email</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">T&eacute;l&eacute;phone</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">Ajout&eacute; le</th>
-                  <th className="text-right px-4 py-3 font-medium text-gray-500">Actions</th>
+                  <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Nom</th>
+                  <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Type</th>
+                  <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Email</th>
+                  <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">T&eacute;l&eacute;phone</th>
+                  <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Ajout&eacute; le</th>
+                  <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y">
@@ -419,9 +430,14 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
                       </td>
                       <td className="px-4 py-3 text-right">
                         <button
-                          onClick={() => handleRemoveMember(member.contact_id)}
+                          onClick={() => setRemoveMemberModal({
+                            open: true,
+                            contactId: member.contact_id,
+                            contactName: member.contact?.contact_name || member.contact?.company_name || 'ce contact',
+                          })}
                           className="text-red-500 hover:text-red-700 text-xs"
                           title="Retirer de la liste"
+                          aria-label={`Retirer ${member.contact?.contact_name || member.contact?.company_name || 'ce contact'} de la liste`}
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
@@ -431,6 +447,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
                 )}
               </tbody>
             </table>
+            </div>
           </div>
 
           {/* Pagination */}
@@ -455,6 +472,16 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
           )}
         </>
       )}
+
+      <ConfirmationModal
+        isOpen={removeMemberModal.open}
+        onClose={() => setRemoveMemberModal({ open: false, contactId: '', contactName: '' })}
+        onConfirm={() => { setRemoveMemberModal({ open: false, contactId: '', contactName: '' }); handleRemoveMember(removeMemberModal.contactId) }}
+        title="Retirer le contact"
+        message={`Êtes-vous sûr de vouloir retirer « ${removeMemberModal.contactName} » de la liste ?`}
+        confirmText="Retirer"
+        variant="warning"
+      />
     </div>
   )
 }

@@ -5,7 +5,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { verifyAdmin, logAdminAction } from '@/lib/admin-auth'
+import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logLeadEvent } from '@/lib/dashboard/events'
 import { dispatchLead } from '@/app/actions/dispatch'
@@ -13,7 +13,8 @@ import { dispatchLead } from '@/app/actions/dispatch'
 export const dynamic = 'force-dynamic'
 
 export async function GET(request: NextRequest) {
-  const auth = await verifyAdmin()
+  // Verify admin with services:read permission
+  const auth = await requirePermission('services', 'read')
   if (!auth.success || !auth.admin) return auth.error!
 
   try {
@@ -83,7 +84,8 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const auth = await verifyAdmin()
+  // Verify admin with services:write permission
+  const auth = await requirePermission('services', 'write')
   if (!auth.success || !auth.admin) return auth.error!
 
   try {

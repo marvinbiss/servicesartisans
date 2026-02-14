@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { DEFAULT_PERMISSIONS, type AdminRole } from '@/types/admin'
-import { verifyAdmin, logAdminAction } from '@/lib/admin-auth'
+import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
@@ -21,8 +21,8 @@ export const dynamic = 'force-dynamic'
 
 export async function GET(request: NextRequest) {
   try {
-    // Verify admin authentication
-    const authResult = await verifyAdmin()
+    // Verify admin with settings:read permission (admin management)
+    const authResult = await requirePermission('settings', 'read')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
     }
@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
     const result = adminsQuerySchema.safeParse(queryParams)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Invalid parameters', details: result.error.flatten() } },
+        { success: false, error: { message: 'Paramètres invalides', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -78,8 +78,8 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    // Verify admin authentication
-    const authResult = await verifyAdmin()
+    // Verify admin with settings:write permission (admin management)
+    const authResult = await requirePermission('settings', 'write')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
     }
@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
     const result = createAdminSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
+        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
         { status: 400 }
       )
     }

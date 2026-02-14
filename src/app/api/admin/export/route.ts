@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { verifyAdmin } from '@/lib/admin-auth'
+import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
@@ -15,8 +15,8 @@ export const dynamic = 'force-dynamic'
 // GET /api/admin/export?type=providers|quotes|reviews&format=json|csv
 export async function GET(request: NextRequest) {
   try {
-    // Verify admin authentication
-    const authResult = await verifyAdmin()
+    // Verify admin with settings:read permission (data export)
+    const authResult = await requirePermission('settings', 'read')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
     }
@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
     const result = exportQuerySchema.safeParse(queryParams)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Invalid parameters', details: result.error.flatten() } },
+        { success: false, error: { message: 'Paramètres invalides', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -73,6 +73,9 @@ export async function GET(request: NextRequest) {
           { status: 400 }
         )
     }
+
+    // Log d'audit pour l'export de données
+    await logAdminAction(authResult.admin.id, 'data.export', 'settings', type, { format, recordCount: data.length })
 
     if (format === 'csv') {
       if (data.length === 0) {

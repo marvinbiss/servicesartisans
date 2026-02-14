@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { requirePermission } from '@/lib/admin-auth'
+import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { isValidUuid } from '@/lib/sanitize'
+import DOMPurify from 'isomorphic-dompurify'
 import { z } from 'zod'
 
 const updateSchema = z.object({
@@ -27,6 +29,13 @@ export async function GET(
     if (!authResult.success) return authResult.error
 
     const { id } = await params
+    if (!isValidUuid(id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
+    }
+
     const supabase = createAdminClient()
 
     const { data, error } = await supabase
@@ -52,9 +61,16 @@ export async function PATCH(
 ) {
   try {
     const authResult = await requirePermission('prospection', 'write')
-    if (!authResult.success) return authResult.error
+    if (!authResult.success || !authResult.admin) return authResult.error
 
     const { id } = await params
+    if (!isValidUuid(id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
+    }
+
     const body = await request.json()
     const parsed = updateSchema.safeParse(body)
 
@@ -65,25 +81,35 @@ export async function PATCH(
       )
     }
 
+    // Sanitize template content before storing
+    const sanitizedData = { ...parsed.data }
+    if (sanitizedData.name) sanitizedData.name = sanitizedData.name.replace(/<[^>]*>/g, '').trim()
+    if (sanitizedData.subject) sanitizedData.subject = sanitizedData.subject.replace(/<[^>]*>/g, '').trim()
+    if (sanitizedData.html_body) sanitizedData.html_body = DOMPurify.sanitize(sanitizedData.html_body)
+
     const supabase = createAdminClient()
 
     const { data, error } = await supabase
       .from('prospection_templates')
-      .update(parsed.data)
+      .update(sanitizedData)
       .eq('id', id)
       .select()
       .single()
 
     if (error) {
       if (error.code === 'PGRST116') {
-        return NextResponse.json({ success: false, error: { message: 'Resource not found' } }, { status: 404 })
+        return NextResponse.json({ success: false, error: { message: 'Ressource introuvable' } }, { status: 404 })
       }
       logger.error('Update template error', error)
       return NextResponse.json({ success: false, error: { message: 'Erreur lors de la mise à jour' } }, { status: 500 })
     }
     if (!data) {
-      return NextResponse.json({ success: false, error: { message: 'Resource not found' } }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Ressource introuvable' } }, { status: 404 })
     }
+
+    await logAdminAction(authResult.admin.id, 'template.update', 'prospection_template', id, {
+      updated_fields: Object.keys(parsed.data),
+    })
 
     return NextResponse.json({ success: true, data })
   } catch (error) {
@@ -98,9 +124,16 @@ export async function DELETE(
 ) {
   try {
     const authResult = await requirePermission('prospection', 'write')
-    if (!authResult.success) return authResult.error
+    if (!authResult.success || !authResult.admin) return authResult.error
 
     const { id } = await params
+    if (!isValidUuid(id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
+    }
+
     const supabase = createAdminClient()
 
     const { error } = await supabase
@@ -112,6 +145,8 @@ export async function DELETE(
       logger.error('Delete template error', error)
       return NextResponse.json({ success: false, error: { message: 'Erreur lors de la suppression' } }, { status: 500 })
     }
+
+    await logAdminAction(authResult.admin.id, 'template.delete', 'prospection_template', id)
 
     return NextResponse.json({ success: true })
   } catch (error) {

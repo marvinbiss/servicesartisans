@@ -113,14 +113,14 @@ export default function AdminAlgorithmePage() {
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Configuration Algorithmique</h1>
             <p className="text-gray-500 mt-1">
-              Parametres de distribution des leads et scoring des artisans
+              Paramètres de distribution des leads et scoring des artisans
             </p>
           </div>
           <div className="flex items-center gap-3">
             {saveSuccess && (
               <span className="flex items-center gap-1 text-green-600 text-sm">
                 <CheckCircle className="w-4 h-4" />
-                Enregistre
+                Enregistré
               </span>
             )}
             {hasChanges && (
@@ -152,7 +152,7 @@ export default function AdminAlgorithmePage() {
 
         <div className="space-y-6">
           {/* === STRATEGIE DE DISTRIBUTION === */}
-          <Section icon={Target} title="Strategie de distribution">
+          <Section icon={Target} title="Stratégie de distribution">
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -187,34 +187,34 @@ export default function AdminAlgorithmePage() {
                 value={config.max_artisans_per_lead}
                 onChange={(v) => update('max_artisans_per_lead', v)}
                 min={1} max={20}
-                description="Nombre maximum d'artisans qui recoivent chaque lead"
+                description="Nombre maximum d'artisans qui reçoivent chaque lead"
               />
 
               <NumberField
-                label="Rayon geographique (km)"
+                label="Rayon géographique (km)"
                 value={config.geo_radius_km}
                 onChange={(v) => update('geo_radius_km', v)}
                 min={1} max={500}
-                description="Rayon par defaut si l'artisan n'a pas de rayon specifique"
+                description="Rayon par défaut si l'artisan n'a pas de rayon spécifique"
               />
 
               <ToggleField
-                label="Meme departement obligatoire"
+                label="Même département obligatoire"
                 value={config.require_same_department}
                 onChange={(v) => update('require_same_department', v)}
-                description="L'artisan doit etre dans le meme departement que le chantier"
+                description="L'artisan doit être dans le même département que le chantier"
               />
 
               <ToggleField
-                label="Correspondance specialite obligatoire"
+                label="Correspondance spécialité obligatoire"
                 value={config.require_specialty_match}
                 onChange={(v) => update('require_specialty_match', v)}
-                description="L'artisan doit proposer le service demande"
+                description="L'artisan doit proposer le service demandé"
               />
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Mode de correspondance specialite
+                  Mode de correspondance spécialité
                 </label>
                 <div className="flex gap-2">
                   {(Object.keys(SPECIALTY_MATCH_META) as SpecialtyMatchMode[]).map((key) => {
@@ -239,10 +239,10 @@ export default function AdminAlgorithmePage() {
               </div>
 
               <ToggleField
-                label="Preferer les artisans claimed"
+                label="Préférer les artisans revendiqués"
                 value={config.prefer_claimed}
                 onChange={(v) => update('prefer_claimed', v)}
-                description="Priorite aux artisans qui ont revendique leur profil"
+                description="Priorité aux artisans qui ont revendiqué leur profil"
               />
             </div>
           </Section>
@@ -267,16 +267,16 @@ export default function AdminAlgorithmePage() {
                 color="blue"
               />
               <WeightSlider
-                label="Artisan verifie"
+                label="Artisan vérifié"
                 value={config.weight_verified}
                 onChange={(v) => update('weight_verified', v)}
                 color="green"
               />
               <WeightSlider
-                label="Proximite geographique"
+                label="Proximité géographique"
                 value={config.weight_proximity}
                 onChange={(v) => update('weight_proximity', v)}
-                color="indigo"
+                color="blue"
               />
               <WeightSlider
                 label="Qualité des données"
@@ -295,54 +295,54 @@ export default function AdminAlgorithmePage() {
                 value={config.daily_lead_quota}
                 onChange={(v) => update('daily_lead_quota', v)}
                 min={0} max={1000}
-                description="Max leads par artisan par jour (0 = illimite)"
+                description="Max leads par artisan par jour (0 = illimité)"
               />
               <NumberField
                 label="Quota mensuel"
                 value={config.monthly_lead_quota}
                 onChange={(v) => update('monthly_lead_quota', v)}
                 min={0} max={10000}
-                description="Max leads par artisan par mois (0 = illimite)"
+                description="Max leads par artisan par mois (0 = illimité)"
               />
               <NumberField
                 label="Cooldown (minutes)"
                 value={config.cooldown_minutes}
                 onChange={(v) => update('cooldown_minutes', v)}
                 min={0} max={1440}
-                description="Temps minimum entre deux leads pour un meme artisan"
+                description="Temps minimum entre deux leads pour un même artisan"
               />
             </div>
           </Section>
 
           {/* === EXPIRATION === */}
-          <Section icon={Clock} title="Expiration et reassignation">
+          <Section icon={Clock} title="Expiration et réassignation">
             <div className="space-y-4">
               <NumberField
                 label="Expiration lead (heures)"
                 value={config.lead_expiry_hours}
                 onChange={(v) => update('lead_expiry_hours', v)}
                 min={1} max={720}
-                description="Duree avant qu'un lead non-vu expire"
+                description="Durée avant qu'un lead non-vu expire"
               />
               <NumberField
                 label="Expiration devis (heures)"
                 value={config.quote_expiry_hours}
                 onChange={(v) => update('quote_expiry_hours', v)}
                 min={1} max={720}
-                description="Duree avant qu'une demande de devis expire"
+                description="Durée avant qu'une demande de devis expire"
               />
               <NumberField
-                label="Auto-reassignation (heures)"
+                label="Auto-réassignation (heures)"
                 value={config.auto_reassign_hours}
                 onChange={(v) => update('auto_reassign_hours', v)}
                 min={1} max={720}
-                description="Delai avant reassignation automatique a un autre artisan"
+                description="Délai avant réassignation automatique à un autre artisan"
               />
             </div>
           </Section>
 
           {/* === FILTRES === */}
-          <Section icon={MapPin} title="Filtres d'eligibilite">
+          <Section icon={MapPin} title="Filtres d'éligibilité">
             <div className="space-y-4">
               <NumberField
                 label="Note minimum"
@@ -352,17 +352,17 @@ export default function AdminAlgorithmePage() {
                 description="Note Google minimum pour recevoir des leads (0 = pas de filtre)"
               />
               <ToggleField
-                label="Verifie obligatoire pour urgent"
+                label="Vérifié obligatoire pour urgent"
                 value={config.require_verified_urgent}
                 onChange={(v) => update('require_verified_urgent', v)}
-                description="Seuls les artisans verifies recoivent les leads urgents/emergency"
+                description="Seuls les artisans vérifiés reçoivent les leads urgents"
               />
               <NumberField
                 label="Exclure inactifs (jours)"
                 value={config.exclude_inactive_days}
                 onChange={(v) => update('exclude_inactive_days', v)}
                 min={0} max={365}
-                description="Exclure les artisans sans activite depuis N jours (0 = desactive)"
+                description="Exclure les artisans sans activité depuis N jours (0 = désactivé)"
               />
             </div>
           </Section>
@@ -403,7 +403,7 @@ export default function AdminAlgorithmePage() {
           {/* Metadata */}
           {config.updated_at && (
             <div className="text-xs text-gray-400 text-center pt-4">
-              Derniere modification : {new Date(config.updated_at).toLocaleString('fr-FR')}
+              Dernière modification : {new Date(config.updated_at).toLocaleString('fr-FR')}
             </div>
           )}
         </div>
@@ -453,6 +453,7 @@ function NumberField({ label, value, onChange, min, max, step, description }: {
           min={min}
           max={max}
           step={step || 1}
+          aria-label={label}
           className="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-right"
         />
       </div>
@@ -475,6 +476,9 @@ function ToggleField({ label, value, onChange, description }: {
       <div className="ml-4">
         <button
           onClick={() => onChange(!value)}
+          role="switch"
+          aria-checked={value}
+          aria-label={label}
           className={`relative w-12 h-6 rounded-full transition-colors ${
             value ? 'bg-blue-600' : 'bg-gray-300'
           }`}
@@ -494,8 +498,6 @@ const SLIDER_COLORS: Record<string, string> = {
   yellow: 'bg-yellow-500',
   blue: 'bg-blue-500',
   green: 'bg-green-500',
-  indigo: 'bg-indigo-500',
-  purple: 'bg-purple-500',
 }
 
 function WeightSlider({ label, value, onChange, color }: {
@@ -524,6 +526,7 @@ function WeightSlider({ label, value, onChange, color }: {
             max={100}
             value={value}
             onChange={(e) => onChange(parseInt(e.target.value))}
+            aria-label={`${label} (curseur)`}
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
           />
         </div>
@@ -533,6 +536,7 @@ function WeightSlider({ label, value, onChange, color }: {
           max={100}
           value={value}
           onChange={(e) => onChange(parseInt(e.target.value) || 0)}
+          aria-label={`${label} (valeur)`}
           className="w-16 px-2 py-1 text-sm border border-gray-300 rounded-lg text-center"
         />
       </div>
@@ -543,7 +547,7 @@ function WeightSlider({ label, value, onChange, color }: {
 const MULTIPLIER_COLORS: Record<string, { bg: string; text: string; border: string }> = {
   gray: { bg: 'bg-gray-50', text: 'text-gray-700', border: 'border-gray-200' },
   blue: { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200' },
-  orange: { bg: 'bg-orange-50', text: 'text-orange-700', border: 'border-orange-200' },
+  orange: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200' },
   red: { bg: 'bg-red-50', text: 'text-red-700', border: 'border-red-200' },
 }
 
@@ -564,6 +568,7 @@ function MultiplierCard({ label, value, onChange, color }: {
         min={0.5}
         max={5}
         step={0.25}
+        aria-label={`Multiplicateur ${label}`}
         className="w-20 mx-auto px-2 py-1 text-center text-lg font-bold border border-gray-300 rounded-lg"
       />
       <p className="text-xs text-gray-400 mt-1">x multiplicateur</p>

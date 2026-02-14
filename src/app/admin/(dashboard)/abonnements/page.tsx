@@ -12,6 +12,7 @@ import {
   RefreshCw,
   Calendar,
 } from 'lucide-react'
+import { ErrorBanner } from '@/components/admin/ErrorBanner'
 
 interface Subscription {
   id: string
@@ -39,6 +40,7 @@ export default function AdminSubscriptionsPage() {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([])
   const [stats, setStats] = useState<SubscriptionStats | null>(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [filter, setFilter] = useState<'all' | 'active' | 'canceled' | 'past_due'>('all')
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
@@ -50,85 +52,53 @@ export default function AdminSubscriptionsPage() {
   const fetchData = async () => {
     try {
       setLoading(true)
+      setError(null)
       const params = new URLSearchParams({
         page: String(page),
         limit: '20',
         filter,
       })
       const response = await fetch(`/api/admin/subscriptions?${params}`)
-      if (response.ok) {
-        const data = await response.json()
-        setSubscriptions(data.subscriptions || [])
-        setStats(data.stats || null)
-        setTotalPages(data.totalPages || 1)
-      }
-    } catch (error) {
-      console.error('Failed to fetch subscriptions:', error)
+      if (!response.ok) throw new Error(`Erreur ${response.status}`)
+      const data = await response.json()
+      setSubscriptions(data.subscriptions || [])
+      setStats(data.stats || null)
+      setTotalPages(data.totalPages || 1)
+    } catch {
+      setError('Erreur lors du chargement des abonnements')
+      setSubscriptions([])
     } finally {
       setLoading(false)
     }
   }
 
-  // Mock data
-  const mockStats: SubscriptionStats = {
-    totalRevenue: 45680,
-    activeSubscriptions: 234,
-    premiumCount: 89,
-    basicCount: 145,
-    freeCount: 1560,
-    churnRate: 2.3,
+  const emptyStats: SubscriptionStats = {
+    totalRevenue: 0,
+    activeSubscriptions: 0,
+    premiumCount: 0,
+    basicCount: 0,
+    freeCount: 0,
+    churnRate: 0,
   }
 
-  const mockSubscriptions: Subscription[] = [
-    {
-      id: 'sub_1',
-      provider_id: 'p1',
-      provider_name: 'Plomberie Pro Paris',
-      plan: 'premium',
-      status: 'active',
-      current_period_start: '2024-03-01',
-      current_period_end: '2024-04-01',
-      amount: 4900,
-      payment_method: '**** 4242',
-      created_at: '2024-01-15',
-    },
-    {
-      id: 'sub_2',
-      provider_id: 'p2',
-      provider_name: 'Électricité Express',
-      plan: 'basic',
-      status: 'active',
-      current_period_start: '2024-03-01',
-      current_period_end: '2024-04-01',
-      amount: 1900,
-      payment_method: '**** 5555',
-      created_at: '2024-02-20',
-    },
-    {
-      id: 'sub_3',
-      provider_id: 'p3',
-      provider_name: 'Serrurerie 24/7',
-      plan: 'basic',
-      status: 'past_due',
-      current_period_start: '2024-02-15',
-      current_period_end: '2024-03-15',
-      amount: 1900,
-      created_at: '2024-01-10',
-    },
-  ]
+  const displayStats = stats || emptyStats
 
-  const displayStats = stats || mockStats
-  const displaySubscriptions = subscriptions.length > 0 ? subscriptions : mockSubscriptions
+  const planLabels: Record<string, string> = {
+    'free': 'Gratuit',
+    'basic': 'Basique',
+    'premium': 'Premium',
+    'pro': 'Pro',
+  }
 
   const getPlanBadge = (plan: string) => {
     const colors: Record<string, string> = {
-      premium: 'bg-violet-100 text-violet-700',
+      premium: 'bg-blue-100 text-blue-700',
       basic: 'bg-blue-100 text-blue-700',
       free: 'bg-gray-100 text-gray-700',
     }
     return (
       <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[plan] || colors.free}`}>
-        {plan.charAt(0).toUpperCase() + plan.slice(1)}
+        {planLabels[plan] || plan.charAt(0).toUpperCase() + plan.slice(1)}
       </span>
     )
   }
@@ -155,6 +125,9 @@ export default function AdminSubscriptionsPage() {
           <h1 className="text-2xl font-bold text-gray-900">Gestion des Abonnements</h1>
           <p className="text-gray-500 mt-1">Suivi des abonnements et revenus de la plateforme</p>
         </div>
+
+        {/* Error Banner */}
+        {error && <ErrorBanner message={error} onDismiss={() => setError(null)} onRetry={fetchData} />}
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -183,18 +156,18 @@ export default function AdminSubscriptionsPage() {
 
           <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
             <div className="flex items-center justify-between mb-4">
-              <div className="p-3 rounded-lg bg-violet-100 text-violet-600">
+              <div className="p-3 rounded-lg bg-blue-100 text-blue-600">
                 <CreditCard className="w-6 h-6" />
               </div>
             </div>
             <div className="flex items-center gap-4">
               <div>
-                <p className="text-xl font-bold text-violet-600">{displayStats.premiumCount}</p>
+                <p className="text-xl font-bold text-blue-600">{displayStats.premiumCount}</p>
                 <p className="text-xs text-gray-500">Premium</p>
               </div>
               <div>
                 <p className="text-xl font-bold text-blue-600">{displayStats.basicCount}</p>
-                <p className="text-xs text-gray-500">Basic</p>
+                <p className="text-xs text-gray-500">Basique</p>
               </div>
             </div>
           </div>
@@ -240,31 +213,38 @@ export default function AdminSubscriptionsPage() {
           ) : (
             <>
               <div className="overflow-x-auto">
-                <table className="w-full">
+                <table className="w-full min-w-[800px]" aria-label="Liste des abonnements">
                   <thead className="bg-gray-50 border-b border-gray-100">
                     <tr>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Artisan
                       </th>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Plan
                       </th>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Statut
                       </th>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Période
                       </th>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Montant
                       </th>
-                      <th className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Actions
                       </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100">
-                    {displaySubscriptions.map((sub) => (
+                    {subscriptions.length === 0 ? (
+                      <tr>
+                        <td colSpan={6} className="px-6 py-12 text-center text-gray-400">
+                          <CreditCard className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+                          Aucun abonnement disponible
+                        </td>
+                      </tr>
+                    ) : subscriptions.map((sub) => (
                       <tr key={sub.id} className="hover:bg-gray-50">
                         <td className="px-6 py-4">
                           <p className="font-medium text-gray-900">{sub.provider_name}</p>
@@ -300,6 +280,7 @@ export default function AdminSubscriptionsPage() {
                       </tr>
                     ))}
                   </tbody>
+
                 </table>
               </div>
 

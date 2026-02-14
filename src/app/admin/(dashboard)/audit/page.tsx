@@ -53,6 +53,18 @@ const ENTITY_TYPES = [
   { value: 'report', label: 'Signalements' },
 ]
 
+const eventTypeLabels: Record<string, string> = {
+  'created': 'Cr\u00e9\u00e9',
+  'dispatched': 'Distribu\u00e9',
+  'viewed': 'Consult\u00e9',
+  'quoted': 'Devis envoy\u00e9',
+  'declined': 'Refus\u00e9',
+  'accepted': 'Accept\u00e9',
+  'completed': 'Termin\u00e9',
+  'cancelled': 'Annul\u00e9',
+  'expired': 'Expir\u00e9',
+}
+
 type AuditTab = 'audit_logs' | 'lead_events'
 
 export default function AdminAuditPage() {
@@ -157,7 +169,7 @@ export default function AdminAuditPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-gray-900">Audit & Événements</h1>
           <p className="text-gray-500 mt-1">Traçabilité complète — append-only</p>
@@ -175,13 +187,13 @@ export default function AdminAuditPage() {
             title="Logs admin"
             value={logsTotal}
             icon={<Shield className="w-5 h-5" />}
-            color="indigo"
+            color="blue"
           />
           <StatCard
             title="Types d'événements"
             value={Object.keys(eventTypeCounts).length}
             icon={<FileText className="w-5 h-5" />}
-            color="purple"
+            color="blue"
           />
           <StatCard
             title="Immutabilité"
@@ -236,7 +248,7 @@ export default function AdminAuditPage() {
                       eventTypeFilter === type ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                     }`}
                   >
-                    {type} ({count})
+                    {eventTypeLabels[type] || type} ({count})
                   </button>
                 ))}
               </div>
@@ -249,14 +261,14 @@ export default function AdminAuditPage() {
             ) : (
               <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                 <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
+                  <table className="w-full min-w-[700px] text-sm" aria-label="Événements des leads">
                     <thead>
                       <tr className="border-b border-gray-100 bg-gray-50/50">
-                        <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Date</th>
-                        <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Type</th>
-                        <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Lead ID</th>
-                        <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Provider ID</th>
-                        <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Metadata</th>
+                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Date</th>
+                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Type</th>
+                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">ID du lead</th>
+                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">ID de l&apos;artisan</th>
+                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">M\u00e9tadonn\u00e9es</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
@@ -276,15 +288,15 @@ export default function AdminAuditPage() {
                             <td className="px-4 py-3">
                               <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                                 e.event_type === 'created' ? 'bg-blue-100 text-blue-700' :
-                                e.event_type === 'dispatched' ? 'bg-indigo-100 text-indigo-700' :
+                                e.event_type === 'dispatched' ? 'bg-blue-100 text-blue-700' :
                                 e.event_type === 'viewed' ? 'bg-yellow-100 text-yellow-700' :
                                 e.event_type === 'quoted' ? 'bg-green-100 text-green-700' :
                                 e.event_type === 'declined' ? 'bg-gray-100 text-gray-600' :
-                                e.event_type === 'accepted' ? 'bg-emerald-100 text-emerald-700' :
+                                e.event_type === 'accepted' ? 'bg-blue-100 text-blue-700' :
                                 e.event_type === 'completed' ? 'bg-green-100 text-green-800' :
                                 'bg-gray-100 text-gray-600'
                               }`}>
-                                {e.event_type}
+                                {eventTypeLabels[e.event_type] || e.event_type}
                               </span>
                             </td>
                             <td className="px-4 py-3 font-mono text-xs text-gray-600">
@@ -299,7 +311,7 @@ export default function AdminAuditPage() {
                                   <summary className="cursor-pointer text-blue-600 hover:text-blue-700">
                                     {Object.keys(e.metadata).length} champ(s)
                                   </summary>
-                                  <pre className="mt-2 p-2 bg-gray-50 rounded text-gray-600 overflow-x-auto max-w-xs text-[10px]">
+                                  <pre className="mt-2 p-2 bg-gray-50 rounded text-gray-600 overflow-x-auto max-w-xs text-xs">
                                     {JSON.stringify(e.metadata, null, 2)}
                                   </pre>
                                 </details>
@@ -351,6 +363,7 @@ export default function AdminAuditPage() {
                   <select
                     value={entityType}
                     onChange={(e) => { setEntityType(e.target.value); setLogsPage(1) }}
+                    aria-label="Filtrer par type d'entité"
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
                   >
                     {ENTITY_TYPES.map((type) => (
@@ -403,14 +416,14 @@ export default function AdminAuditPage() {
               ) : (
                 <>
                   <div className="overflow-x-auto">
-                    <table className="w-full text-sm">
+                    <table className="w-full min-w-[700px] text-sm" aria-label="Logs d'audit administrateur">
                       <thead>
                         <tr className="border-b border-gray-100 bg-gray-50/50">
-                          <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Date</th>
-                          <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Admin</th>
-                          <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Action</th>
-                          <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Entité</th>
-                          <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Détails</th>
+                          <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Date</th>
+                          <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Admin</th>
+                          <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Action</th>
+                          <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Entité</th>
+                          <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Détails</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-100">
@@ -444,7 +457,7 @@ export default function AdminAuditPage() {
                                   <summary className="cursor-pointer text-blue-600 hover:text-blue-700">
                                     Données
                                   </summary>
-                                  <pre className="mt-2 p-2 bg-gray-50 rounded text-gray-600 overflow-x-auto max-w-xs text-[10px]">
+                                  <pre className="mt-2 p-2 bg-gray-50 rounded text-gray-600 overflow-x-auto max-w-xs text-xs">
                                     {JSON.stringify(log.new_data, null, 2)}
                                   </pre>
                                 </details>

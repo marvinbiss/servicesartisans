@@ -4,13 +4,14 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { verifyAdmin } from '@/lib/admin-auth'
+import { requirePermission } from '@/lib/admin-auth'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET(request: NextRequest) {
-  const auth = await verifyAdmin()
+  // Verify admin with audit:read permission
+  const auth = await requirePermission('audit', 'read')
   if (!auth.success || !auth.admin) return auth.error!
 
   try {
@@ -38,7 +39,8 @@ export async function GET(request: NextRequest) {
     const { data: logs, error } = await query
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 })
+      console.error('Journal fetch error:', error.message)
+      return NextResponse.json({ error: 'Erreur lors de la récupération du journal' }, { status: 500 })
     }
 
     const { count: totalCount } = await supabase

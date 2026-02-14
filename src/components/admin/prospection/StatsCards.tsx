@@ -28,7 +28,7 @@ export function StatsCards({ stats, loading }: StatsCardsProps) {
       name: 'Messages envoyés',
       value: stats?.total_messages_sent || 0,
       icon: MessageSquare,
-      color: 'text-purple-600 bg-purple-100',
+      color: 'text-blue-600 bg-blue-100',
       detail: stats ? `Email: ${stats.messages_by_channel.email}, SMS: ${stats.messages_by_channel.sms}, WA: ${stats.messages_by_channel.whatsapp}` : '',
     },
     {
@@ -41,7 +41,7 @@ export function StatsCards({ stats, loading }: StatsCardsProps) {
       name: 'Taux de réponse',
       value: `${(stats?.overall_reply_rate || 0).toFixed(1)}%`,
       icon: Inbox,
-      color: 'text-indigo-600 bg-indigo-100',
+      color: 'text-blue-600 bg-blue-100',
       detail: `${stats?.open_conversations || 0} conversations ouvertes`,
     },
     {
@@ -108,7 +108,7 @@ export function CampaignStatusBadge({ status }: { status: string }) {
     scheduled: 'bg-blue-100 text-blue-700',
     sending: 'bg-green-100 text-green-700',
     paused: 'bg-yellow-100 text-yellow-700',
-    completed: 'bg-emerald-100 text-emerald-700',
+    completed: 'bg-blue-100 text-blue-700',
     cancelled: 'bg-red-100 text-red-700',
   }
 
@@ -133,7 +133,7 @@ export function ContactTypeBadge({ type }: { type: string }) {
   const styles: Record<string, string> = {
     artisan: 'bg-blue-100 text-blue-700',
     client: 'bg-green-100 text-green-700',
-    mairie: 'bg-purple-100 text-purple-700',
+    mairie: 'bg-blue-100 text-blue-700',
   }
 
   const labels: Record<string, string> = {

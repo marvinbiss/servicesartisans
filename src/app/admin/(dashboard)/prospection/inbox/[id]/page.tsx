@@ -119,7 +119,7 @@ export default function ConversationDetailPage({ params }: { params: Promise<{ i
     <div>
       <div className="mb-6">
         <Link href="/admin/prospection/inbox" className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2">
-          <ArrowLeft className="w-4 h-4" /> Retour à l&apos;inbox
+          <ArrowLeft className="w-4 h-4" /> Retour à la boîte de réception
         </Link>
         <div className="flex items-center gap-3">
           <h1 className="text-2xl font-bold text-gray-900">
@@ -138,7 +138,7 @@ export default function ConversationDetailPage({ params }: { params: Promise<{ i
         <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-sm text-red-700">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{error}</span>
-          <button onClick={() => setError(null)} className="ml-auto text-red-500 hover:text-red-700">&times;</button>
+          <button onClick={() => setError(null)} aria-label="Fermer le message d'erreur" className="ml-auto text-red-500 hover:text-red-700">&times;</button>
         </div>
       )}
 
@@ -156,7 +156,7 @@ export default function ConversationDetailPage({ params }: { params: Promise<{ i
                 <div className={`max-w-[70%] rounded-lg px-4 py-2 ${
                   msg.direction === 'outbound'
                     ? msg.sender_type === 'ai'
-                      ? 'bg-purple-100 text-purple-900'
+                      ? 'bg-blue-100 text-blue-900'
                       : 'bg-blue-100 text-blue-900'
                     : 'bg-gray-100 text-gray-900'
                 }`}>
@@ -181,6 +181,7 @@ export default function ConversationDetailPage({ params }: { params: Promise<{ i
             value={replyText}
             onChange={(e) => setReplyText(e.target.value)}
             placeholder="Tapez votre réponse..."
+            aria-label="Réponse au contact"
             rows={3}
             className={`w-full px-3 py-2 border rounded-lg text-sm mb-1 ${replyText.length > MAX_REPLY_LENGTH ? 'border-red-300 bg-red-50' : ''}`}
           />
@@ -193,7 +194,7 @@ export default function ConversationDetailPage({ params }: { params: Promise<{ i
             <button
               onClick={handleAIGenerate}
               disabled={generating}
-              className="flex items-center gap-2 px-4 py-2 text-sm border rounded-lg hover:bg-purple-50 text-purple-600 disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 text-sm border rounded-lg hover:bg-blue-50 text-blue-600 disabled:opacity-50"
             >
               <Sparkles className="w-4 h-4" /> {generating ? 'Génération...' : 'Générer avec IA'}
             </button>

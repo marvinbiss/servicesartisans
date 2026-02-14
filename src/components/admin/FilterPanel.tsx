@@ -38,7 +38,7 @@ export function FilterPanel({
   )
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4" role="search" aria-label="Filtres">
       <div className="flex flex-col lg:flex-row gap-4">
         {filters.map((filter) => (
           <div key={filter.key} className="flex-shrink-0">
@@ -75,6 +75,7 @@ export function FilterPanel({
               <select
                 value={(values[filter.key] as string) || 'all'}
                 onChange={(e) => onChange(filter.key, e.target.value)}
+                aria-label={filter.label}
                 className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               >
                 {filter.options.map((option) => (

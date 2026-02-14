@@ -64,6 +64,7 @@ export default function AdminArtisanDetailPage() {
 
   const [artisan, setArtisan] = useState<ArtisanProfile | null>(null)
   const [loading, setLoading] = useState(true)
+  const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null)
 
   // Modal states
   const [verifyModal, setVerifyModal] = useState(false)
@@ -73,6 +74,13 @@ export default function AdminArtisanDetailPage() {
   useEffect(() => {
     fetchArtisan()
   }, [artisanId])
+
+  useEffect(() => {
+    if (toast) {
+      const t = setTimeout(() => setToast(null), 4000)
+      return () => clearTimeout(t)
+    }
+  }, [toast])
 
   const fetchArtisan = async () => {
     try {
@@ -112,11 +120,11 @@ export default function AdminArtisanDetailPage() {
         setVerifyModal(false)
         await fetchArtisan()
       } else {
-        alert(`Erreur: ${data.error || 'Vérification échouée'}`)
+        setToast({ type: 'error', message: data.error || 'Vérification échouée' })
       }
     } catch (error) {
       console.error('Verify failed:', error)
-      alert('Erreur de connexion')
+      setToast({ type: 'error', message: 'Erreur de connexion' })
     }
   }
 
@@ -134,11 +142,11 @@ export default function AdminArtisanDetailPage() {
         setSuspendModal(false)
         await fetchArtisan()
       } else {
-        alert(`Erreur: ${data.error || 'Action échouée'}`)
+        setToast({ type: 'error', message: data.error || 'Action échouée' })
       }
     } catch (error) {
       console.error('Suspend failed:', error)
-      alert('Erreur de connexion')
+      setToast({ type: 'error', message: 'Erreur de connexion' })
     }
   }
 
@@ -153,11 +161,11 @@ export default function AdminArtisanDetailPage() {
       if (response.ok && data.success) {
         router.push('/admin/artisans')
       } else {
-        alert(`Erreur: ${data.error || 'Suppression échouée'}`)
+        setToast({ type: 'error', message: data.error || 'Suppression échouée' })
       }
     } catch (error) {
       console.error('Delete failed:', error)
-      alert('Erreur de connexion')
+      setToast({ type: 'error', message: 'Erreur de connexion' })
     }
   }
 
@@ -450,6 +458,17 @@ export default function AdminArtisanDetailPage() {
           </div>
         </div>
       </div>
+
+      {toast && (
+        <div role="status" aria-live="polite" className={`fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg ${
+          toast.type === 'success' ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-red-50 text-red-800 border border-red-200'
+        }`}>
+          <div className="flex items-center gap-2">
+            <span className="text-sm">{toast.message}</span>
+            <button onClick={() => setToast(null)} className="text-current opacity-50 hover:opacity-100" aria-label="Fermer">×</button>
+          </div>
+        </div>
+      )}
 
       {/* Verify Modal */}
       <ConfirmationModal

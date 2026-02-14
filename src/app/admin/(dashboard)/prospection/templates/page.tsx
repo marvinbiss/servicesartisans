@@ -38,13 +38,13 @@ export default function TemplatesPage() {
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Prospection</h1>
-          <p className="text-gray-500 mt-1">Templates de messages</p>
+          <p className="text-gray-500 mt-1">Modèles de messages</p>
         </div>
         <Link
           href="/admin/prospection/templates/create"
           className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700"
         >
-          <Plus className="w-4 h-4" /> Nouveau template
+          <Plus className="w-4 h-4" /> Nouveau modèle
         </Link>
       </div>
 
@@ -70,7 +70,7 @@ export default function TemplatesPage() {
         ) : templates.length === 0 ? (
           <div className="col-span-3 text-center py-12 text-gray-400">
             <FileText className="w-12 h-12 mx-auto mb-3 opacity-50" />
-            <p>Aucun template. Créez votre premier template de message.</p>
+            <p>Aucun modèle. Créez votre premier modèle de message.</p>
           </div>
         ) : (
           templates.map((tmpl) => (

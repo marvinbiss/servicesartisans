@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { isValidUuid } from '@/lib/sanitize'
 import { z } from 'zod'
 
 // PATCH request schema
@@ -28,6 +29,13 @@ export async function GET(
     const authResult = await requirePermission('services', 'read')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
+    }
+
+    if (!isValidUuid(params.id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
     }
 
     const supabase = createAdminClient()
@@ -62,20 +70,36 @@ export async function PATCH(
       return authResult.error
     }
 
+    if (!isValidUuid(params.id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
+    }
+
     const supabase = createAdminClient()
     const body = await request.json()
     const result = updateServiceSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
+        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
         { status: 400 }
       )
+    }
+
+    // Strip HTML tags from text fields before storing
+    const sanitizedData = { ...result.data }
+    const textFields = ['name', 'description', 'meta_title', 'meta_description'] as const
+    for (const field of textFields) {
+      if (typeof sanitizedData[field] === 'string') {
+        sanitizedData[field] = (sanitizedData[field] as string).replace(/<[^>]*>/g, '').trim()
+      }
     }
 
     const { data, error } = await supabase
       .from('services')
       .update({
-        ...result.data,
+        ...sanitizedData,
         updated_at: new Date().toISOString(),
       })
       .eq('id', params.id)
@@ -83,6 +107,9 @@ export async function PATCH(
       .single()
 
     if (error) throw error
+
+    // Log d'audit
+    await logAdminAction(authResult.admin.id, 'service.update', 'service', params.id, result.data)
 
     return NextResponse.json({
       success: true,
@@ -108,6 +135,13 @@ export async function DELETE(
     const authResult = await requirePermission('services', 'delete')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
+    }
+
+    if (!isValidUuid(params.id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
     }
 
     const supabase = createAdminClient()

@@ -42,7 +42,7 @@ export default function ProspectionDashboard() {
     <div>
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Prospection</h1>
-        <p className="text-gray-500 mt-1">Dashboard de prospection multi-canal</p>
+        <p className="text-gray-500 mt-1">Tableau de bord de prospection multi-canal</p>
       </div>
 
       <ProspectionNav />

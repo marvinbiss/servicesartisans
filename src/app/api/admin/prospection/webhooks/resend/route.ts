@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (!verifyResendSignature(rawBody, svixHeaders)) {
-      logger.warn('Invalid Resend webhook signature')
+      logger.warn('Signature webhook Resend invalide')
       return new NextResponse('OK', { status: 200 })
     }
 

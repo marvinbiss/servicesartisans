@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { verifyAdmin } from '@/lib/admin-auth'
+import { requirePermission } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
@@ -17,8 +17,8 @@ export const dynamic = 'force-dynamic'
 // GET - Liste des signalements
 export async function GET(request: NextRequest) {
   try {
-    // Verify admin authentication
-    const authResult = await verifyAdmin()
+    // Verify admin with reviews:read permission
+    const authResult = await requirePermission('reviews', 'read')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
     }
@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
     const result = reportsQuerySchema.safeParse(queryParams)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Invalid parameters', details: result.error.flatten() } },
+        { success: false, error: { message: 'Paramètres invalides', details: result.error.flatten() } },
         { status: 400 }
       )
     }

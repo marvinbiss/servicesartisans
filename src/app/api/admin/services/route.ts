@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
+import { sanitizeSearchQuery } from '@/lib/sanitize'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
@@ -41,7 +42,10 @@ export async function GET(request: NextRequest) {
     }
 
     if (search) {
-      query = query.ilike('name', `%${search}%`)
+      const sanitized = sanitizeSearchQuery(search)
+      if (sanitized) {
+        query = query.ilike('name', `%${sanitized}%`)
+      }
     }
 
     const { data: services, error } = await query
@@ -75,11 +79,17 @@ export async function POST(request: NextRequest) {
     const result = createServiceSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
+        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
         { status: 400 }
       )
     }
-    const { name, description, icon, parent_id, meta_title, meta_description } = result.data
+    const { name: rawName, description: rawDescription, icon, parent_id, meta_title: rawMetaTitle, meta_description: rawMetaDescription } = result.data
+
+    // Strip HTML tags from text fields
+    const name = rawName.replace(/<[^>]*>/g, '').trim()
+    const description = rawDescription?.replace(/<[^>]*>/g, '').trim()
+    const meta_title = rawMetaTitle?.replace(/<[^>]*>/g, '').trim()
+    const meta_description = rawMetaDescription?.replace(/<[^>]*>/g, '').trim()
 
     // Générer le slug
     const slug = name

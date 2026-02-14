@@ -48,6 +48,8 @@ export default function AdminParametresPage() {
   const [loading, setLoading] = useState(true)
   const [saveSuccess, setSaveSuccess] = useState(false)
   const [resetModal, setResetModal] = useState(false)
+  const [statsResetModal, setStatsResetModal] = useState(false)
+  const [clearCacheModal, setClearCacheModal] = useState(false)
 
   const [settings, setSettings] = useState<PlatformSettings>(DEFAULT_SETTINGS)
   const [originalSettings, setOriginalSettings] = useState<PlatformSettings>(DEFAULT_SETTINGS)
@@ -111,18 +113,21 @@ export default function AdminParametresPage() {
           key: 'siteName',
           type: 'text',
           description: 'Le nom affiché sur le site',
+          maxLength: 200,
         },
         {
           label: 'Email de contact',
           key: 'contactEmail',
           type: 'email',
           description: 'Email principal de contact',
+          maxLength: 254,
         },
         {
           label: 'Email support',
           key: 'supportEmail',
           type: 'email',
           description: 'Email pour le support client',
+          maxLength: 254,
         },
       ],
     },
@@ -171,12 +176,17 @@ export default function AdminParametresPage() {
           key: 'maxQuotesPerDay',
           type: 'number',
           description: 'Nombre maximum de demandes de devis par utilisateur par jour',
+          min: 1,
+          max: 100,
         },
         {
           label: 'Commission (%)',
           key: 'commissionRate',
           type: 'number',
           description: 'Taux de commission prélevé sur les transactions',
+          min: 0,
+          max: 100,
+          step: 0.1,
         },
       ],
     },
@@ -262,7 +272,7 @@ export default function AdminParametresPage() {
               <Mail className="w-5 h-5 text-green-600" />
             </div>
             <div>
-              <p className="font-medium text-gray-900">Templates Email</p>
+              <p className="font-medium text-gray-900">Modèles d&apos;email</p>
               <p className="text-sm text-gray-500">Personnaliser les emails</p>
             </div>
           </button>
@@ -271,8 +281,8 @@ export default function AdminParametresPage() {
             onClick={() => router.push('/admin/audit')}
             className="flex items-center gap-3 p-4 bg-white rounded-xl shadow-sm border border-gray-100 hover:border-blue-200 hover:shadow-md transition-all text-left"
           >
-            <div className="p-2 bg-violet-100 rounded-lg">
-              <Settings className="w-5 h-5 text-violet-600" />
+            <div className="p-2 bg-blue-100 rounded-lg">
+              <Settings className="w-5 h-5 text-blue-600" />
             </div>
             <div>
               <p className="font-medium text-gray-900">Logs d&apos;audit</p>
@@ -305,6 +315,9 @@ export default function AdminParametresPage() {
                               ...settings,
                               [field.key]: !settings[field.key as keyof PlatformSettings],
                             })}
+                            role="switch"
+                            aria-checked={!!settings[field.key as keyof PlatformSettings]}
+                            aria-label={field.label}
                             className={`relative w-12 h-6 rounded-full transition-colors ${
                               settings[field.key as keyof PlatformSettings]
                                 ? ('warning' in field && field.warning) ? 'bg-red-600' : 'bg-blue-600'
@@ -323,8 +336,12 @@ export default function AdminParametresPage() {
                             value={settings[field.key as keyof PlatformSettings] as number}
                             onChange={(e) => setSettings({
                               ...settings,
-                              [field.key]: parseInt(e.target.value) || 0,
+                              [field.key]: parseFloat(e.target.value) || 0,
                             })}
+                            aria-label={field.label}
+                            {...('min' in field ? { min: field.min } : {})}
+                            {...('max' in field ? { max: field.max } : {})}
+                            {...('step' in field ? { step: field.step } : {})}
                             className="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-right"
                           />
                         ) : (
@@ -335,6 +352,8 @@ export default function AdminParametresPage() {
                               ...settings,
                               [field.key]: e.target.value,
                             })}
+                            aria-label={field.label}
+                            {...('maxLength' in field ? { maxLength: field.maxLength } : {})}
                             className="w-64 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                           />
                         )}
@@ -360,7 +379,10 @@ export default function AdminParametresPage() {
                   Remettre à zéro toutes les statistiques de la plateforme. Cette action est irréversible.
                 </p>
               </div>
-              <button className="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200">
+              <button
+                onClick={() => setStatsResetModal(true)}
+                className="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200"
+              >
                 Réinitialiser
               </button>
             </div>
@@ -371,7 +393,10 @@ export default function AdminParametresPage() {
                   Supprimer tous les fichiers en cache. Peut ralentir temporairement le site.
                 </p>
               </div>
-              <button className="px-4 py-2 bg-amber-100 text-amber-700 rounded-lg hover:bg-amber-200">
+              <button
+                onClick={() => setClearCacheModal(true)}
+                className="px-4 py-2 bg-amber-100 text-amber-700 rounded-lg hover:bg-amber-200"
+              >
                 Vider le cache
               </button>
             </div>
@@ -387,6 +412,28 @@ export default function AdminParametresPage() {
         title="Réinitialiser les modifications"
         message="Voulez-vous annuler toutes les modifications non enregistrées ?"
         confirmText="Réinitialiser"
+        variant="warning"
+      />
+
+      {/* Stats Reset Modal */}
+      <ConfirmationModal
+        isOpen={statsResetModal}
+        onClose={() => setStatsResetModal(false)}
+        onConfirm={() => { setStatsResetModal(false); /* reset stats */ }}
+        title="Réinitialiser les statistiques"
+        message="Êtes-vous sûr de vouloir réinitialiser toutes les statistiques ? Cette action est irréversible."
+        confirmText="Réinitialiser"
+        variant="danger"
+      />
+
+      {/* Clear Cache Modal */}
+      <ConfirmationModal
+        isOpen={clearCacheModal}
+        onClose={() => setClearCacheModal(false)}
+        onConfirm={() => { setClearCacheModal(false); /* clear cache */ }}
+        title="Vider le cache"
+        message="Êtes-vous sûr de vouloir vider le cache ? Cela peut ralentir temporairement le site."
+        confirmText="Vider le cache"
         variant="warning"
       />
     </div>

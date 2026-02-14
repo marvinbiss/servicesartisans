@@ -131,7 +131,8 @@ export function RolePermissionsEditor({
       </div>
 
       <div className="border border-gray-200 rounded-lg overflow-hidden">
-        <table className="w-full">
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[600px]">
           <thead className="bg-gray-50">
             <tr>
               <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase">
@@ -220,6 +221,7 @@ export function RolePermissionsEditor({
             })}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   )

@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { verifyAdmin, logAdminAction } from '@/lib/admin-auth'
+import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
-import { z } from 'zod'
-
-const userIdSchema = z.string().uuid('ID utilisateur invalide')
+import { isValidUuid } from '@/lib/sanitize'
 
 export const dynamic = 'force-dynamic'
 
@@ -15,22 +13,21 @@ export async function POST(
 ) {
   try {
     // Validate userId parameter
-    const idValidation = userIdSchema.safeParse(params.userId)
-    if (!idValidation.success) {
+    if (!isValidUuid(params.userId)) {
       return NextResponse.json(
-        { success: false, error: { message: 'ID utilisateur invalide', details: idValidation.error.flatten() } },
+        { success: false, error: { message: 'Identifiant invalide' } },
         { status: 400 }
       )
     }
 
-    // Verify admin authentication
-    const authResult = await verifyAdmin()
+    // Verify admin with users:read permission (GDPR export)
+    const authResult = await requirePermission('users', 'read')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
     }
 
     const supabase = createAdminClient()
-    const userId = idValidation.data
+    const userId = params.userId
 
     // Récupérer toutes les données de l'utilisateur
     const [

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { isValidUuid } from '@/lib/sanitize'
 import { z } from 'zod'
 
 // PATCH request schema
@@ -24,12 +25,19 @@ export async function PATCH(
       return authResult.error
     }
 
+    if (!isValidUuid(params.id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
+    }
+
     const supabase = createAdminClient()
     const body = await request.json()
     const result = moderateReviewSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
+        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
         { status: 400 }
       )
     }

@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { requirePermission } from '@/lib/admin-auth'
+import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { isValidUuid } from '@/lib/sanitize'
 import { z } from 'zod'
 
 const updateSchema = z.object({
@@ -20,6 +21,13 @@ export async function GET(
     if (!authResult.success) return authResult.error
 
     const { id } = await params
+    if (!isValidUuid(id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
+    }
+
     const supabase = createAdminClient()
 
     const { data: conversation, error: convError } = await supabase
@@ -58,9 +66,16 @@ export async function PATCH(
 ) {
   try {
     const authResult = await requirePermission('prospection', 'write')
-    if (!authResult.success) return authResult.error
+    if (!authResult.success || !authResult.admin) return authResult.error
 
     const { id } = await params
+    if (!isValidUuid(id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
+    }
+
     const body = await request.json()
     const parsed = updateSchema.safeParse(body)
 
@@ -82,14 +97,19 @@ export async function PATCH(
 
     if (error) {
       if (error.code === 'PGRST116') {
-        return NextResponse.json({ success: false, error: { message: 'Resource not found' } }, { status: 404 })
+        return NextResponse.json({ success: false, error: { message: 'Ressource introuvable' } }, { status: 404 })
       }
       logger.error('Update conversation error', error)
       return NextResponse.json({ success: false, error: { message: 'Erreur lors de la mise à jour' } }, { status: 500 })
     }
     if (!data) {
-      return NextResponse.json({ success: false, error: { message: 'Resource not found' } }, { status: 404 })
+      return NextResponse.json({ success: false, error: { message: 'Ressource introuvable' } }, { status: 404 })
     }
+
+    await logAdminAction(authResult.admin.id, 'conversation.update', 'prospection_conversation', id, {
+      updated_fields: Object.keys(parsed.data),
+      status: parsed.data.status,
+    })
 
     return NextResponse.json({ success: true, data })
   } catch (error) {

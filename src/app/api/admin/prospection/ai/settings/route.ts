@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { requirePermission } from '@/lib/admin-auth'
+import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
@@ -84,6 +84,10 @@ export async function PATCH(request: NextRequest) {
       logger.error('Update AI settings error', error)
       return NextResponse.json({ success: false, error: { message: 'Erreur lors de la mise à jour' } }, { status: 500 })
     }
+
+    await logAdminAction(authResult.admin.id, 'ai_settings.update', 'prospection_ai_settings', existing.id, {
+      updated_fields: Object.keys(parsed.data),
+    })
 
     return NextResponse.json({ success: true, data })
   } catch (error) {

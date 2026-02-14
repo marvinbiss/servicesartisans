@@ -219,6 +219,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
                     }}
                     className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
                     title="Supprimer"
+                    aria-label="Supprimer cet élément"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -343,6 +344,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
                     }}
                     className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
                     title="Supprimer"
+                    aria-label="Supprimer cet élément"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -406,6 +408,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
                   update('certifications', updated)
                 }}
                 className="text-blue-400 hover:text-blue-700 ml-0.5"
+                aria-label={`Retirer la certification ${cert}`}
               >
                 &times;
               </button>
@@ -443,6 +446,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
               }
             }}
             disabled={certifications.length >= STRUCTURED_LIMITS.certifications}
+            aria-label="Ajouter la certification"
             className={`px-3 py-2 text-white text-sm rounded-lg transition-colors ${
               certifications.length >= STRUCTURED_LIMITS.certifications
                 ? 'bg-gray-400 cursor-not-allowed'
@@ -567,6 +571,7 @@ function FaqFields({ data, update }: FaqFieldsProps) {
                     }}
                     className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
                     title="Supprimer"
+                    aria-label="Supprimer cet élément"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>

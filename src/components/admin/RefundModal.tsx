@@ -92,7 +92,7 @@ export function RefundModal({
         />
 
         {/* Modal */}
-        <div className="relative bg-white rounded-xl shadow-xl max-w-md w-full">
+        <div role="dialog" aria-modal="true" aria-labelledby="refund-modal-title" className="relative bg-white rounded-xl shadow-xl max-w-md w-full">
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-gray-100">
             <div className="flex items-center gap-3">
@@ -100,11 +100,11 @@ export function RefundModal({
                 <CreditCard className="w-5 h-5 text-amber-600" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-gray-900">Remboursement</h3>
+                <h3 id="refund-modal-title" className="text-lg font-semibold text-gray-900">Remboursement</h3>
                 <p className="text-sm text-gray-500">ID: {paymentId.slice(0, 20)}...</p>
               </div>
             </div>
-            <button onClick={handleClose} className="text-gray-400 hover:text-gray-600">
+            <button onClick={handleClose} className="text-gray-400 hover:text-gray-600" aria-label="Fermer la boîte de dialogue">
               <X className="w-5 h-5" />
             </button>
           </div>

@@ -5,8 +5,8 @@ import { verifyTwilioSignature } from '@/lib/prospection/webhook-security'
 import { z } from 'zod'
 
 const webhookSchema = z.object({
-  MessageSid: z.string().min(1, 'MessageSid is required'),
-  MessageStatus: z.string().min(1, 'MessageStatus is required'),
+  MessageSid: z.string().min(1, 'MessageSid requis'),
+  MessageStatus: z.string().min(1, 'MessageStatus requis'),
   ErrorCode: z.string().optional(),
   ErrorMessage: z.string().optional(),
 }).passthrough()
@@ -27,13 +27,13 @@ export async function POST(request: NextRequest) {
     const signature = request.headers.get('x-twilio-signature') || ''
     const url = request.url
     if (!verifyTwilioSignature(signature, url, params)) {
-      logger.warn('Invalid Twilio webhook signature')
-      return NextResponse.json({ error: 'Invalid signature' }, { status: 403 })
+      logger.warn('Signature webhook Twilio invalide')
+      return NextResponse.json({ error: 'Signature invalide' }, { status: 403 })
     }
 
     const validated = webhookSchema.safeParse(params)
     if (!validated.success) {
-      return NextResponse.json({ error: 'Missing or invalid params', details: validated.error.flatten() }, { status: 400 })
+      return NextResponse.json({ error: 'Paramètres manquants ou invalides', details: validated.error.flatten() }, { status: 400 })
     }
 
     const messageSid = validated.data.MessageSid

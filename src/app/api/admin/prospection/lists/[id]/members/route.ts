@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { requirePermission } from '@/lib/admin-auth'
+import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { isValidUuid } from '@/lib/sanitize'
 import { z } from 'zod'
 
 const addMembersSchema = z.object({
@@ -19,6 +20,13 @@ export async function GET(
     if (!authResult.success) return authResult.error
 
     const { id } = await params
+    if (!isValidUuid(id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
+    }
+
     const supabase = createAdminClient()
     const rawPage = parseInt(request.nextUrl.searchParams.get('page') || '1')
     const rawLimit = parseInt(request.nextUrl.searchParams.get('limit') || '20')
@@ -55,9 +63,16 @@ export async function POST(
 ) {
   try {
     const authResult = await requirePermission('prospection', 'write')
-    if (!authResult.success) return authResult.error
+    if (!authResult.success || !authResult.admin) return authResult.error
 
     const { id } = await params
+    if (!isValidUuid(id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
+    }
+
     const body = await request.json()
     const parsed = addMembersSchema.safeParse(body)
 
@@ -83,6 +98,10 @@ export async function POST(
       return NextResponse.json({ success: false, error: { message: 'Erreur lors de la création' } }, { status: 500 })
     }
 
+    await logAdminAction(authResult.admin.id, 'list.add_members', 'prospection_list', id, {
+      member_count: members.length,
+    })
+
     return NextResponse.json({ success: true, data: { added: members.length } })
   } catch (error) {
     logger.error('Members POST error', error as Error)
@@ -96,9 +115,16 @@ export async function DELETE(
 ) {
   try {
     const authResult = await requirePermission('prospection', 'write')
-    if (!authResult.success) return authResult.error
+    if (!authResult.success || !authResult.admin) return authResult.error
 
     const { id } = await params
+    if (!isValidUuid(id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
+    }
+
     const body = await request.json()
 
     const bodySchema = z.object({
@@ -124,6 +150,10 @@ export async function DELETE(
       logger.error('Remove members error', error)
       return NextResponse.json({ success: false, error: { message: 'Erreur lors de la suppression' } }, { status: 500 })
     }
+
+    await logAdminAction(authResult.admin.id, 'list.remove_members', 'prospection_list', id, {
+      member_count: parsed.data.contact_ids.length,
+    })
 
     return NextResponse.json({ success: true })
   } catch (error) {

@@ -84,12 +84,6 @@ function createMockQueryBuilder(overrides: {
     count = null,
   } = overrides
 
-  const chainResult = {
-    data: selectData,
-    error: selectError,
-    count,
-  }
-
   const builder: Record<string, unknown> = {
     select: vi.fn().mockReturnThis(),
     insert: vi.fn().mockReturnThis(),
@@ -140,6 +134,7 @@ vi.mock('@/lib/admin-auth', () => ({
   requirePermission: vi.fn(() => Promise.resolve(mockAuthResult)),
   verifyAdmin: vi.fn(() => Promise.resolve(mockAuthResult)),
   hasPermission: vi.fn(() => true),
+  logAdminAction: vi.fn(() => Promise.resolve()),
 }))
 
 // ============================================

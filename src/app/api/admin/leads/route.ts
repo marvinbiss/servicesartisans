@@ -1,25 +1,31 @@
 /**
  * Admin Leads API
- * GET: Lead counts + active artisans for a city × métier
+ * GET: Lead counts + active artisans for a city x metier
  * Uses service_role (bypasses RLS)
  */
 
 import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { verifyAdmin } from '@/lib/admin-auth'
+import { requirePermission } from '@/lib/admin-auth'
+import { sanitizeSearchQuery } from '@/lib/sanitize'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
   try {
-    const auth = await verifyAdmin()
+    // Verify admin with services:read permission
+    const auth = await requirePermission('services', 'read')
     if (!auth.success || !auth.admin) return auth.error!
 
     const supabase = createAdminClient()
     const { searchParams } = new URL(request.url)
 
-    const city = searchParams.get('city') || null
-    const service = searchParams.get('service') || null
+    const cityRaw = searchParams.get('city') || null
+    const serviceRaw = searchParams.get('service') || null
+
+    // Sanitize search inputs to prevent ILIKE injection
+    const city = cityRaw ? sanitizeSearchQuery(cityRaw) : null
+    const service = serviceRaw ? sanitizeSearchQuery(serviceRaw) : null
 
     // 1. Count leads created (optionally filtered by city/service)
     let leadsQuery = supabase

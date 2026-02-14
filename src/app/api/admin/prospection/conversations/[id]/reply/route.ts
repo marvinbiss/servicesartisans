@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { requirePermission } from '@/lib/admin-auth'
+import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { sendWhatsAppReply } from '@/lib/prospection/channels/whatsapp'
 import { sendProspectionSMS } from '@/lib/prospection/channels/sms'
 import { sendProspectionEmail } from '@/lib/prospection/channels/email'
+import { sanitizeHtml, isValidUuid } from '@/lib/sanitize'
 import { z } from 'zod'
 
 const replySchema = z.object({
@@ -20,9 +21,16 @@ export async function POST(
 ) {
   try {
     const authResult = await requirePermission('prospection', 'write')
-    if (!authResult.success) return authResult.error
+    if (!authResult.success || !authResult.admin) return authResult.error
 
     const { id } = await params
+    if (!isValidUuid(id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
+    }
+
     const body = await request.json()
     const parsed = replySchema.safeParse(body)
 
@@ -63,10 +71,12 @@ export async function POST(
         break
       case 'email':
         if (contact.email) {
+          // Sanitize content to prevent XSS in HTML email
+          const safeContent = sanitizeHtml(parsed.data.content).replace(/\n/g, '<br>')
           const result = await sendProspectionEmail({
             to: contact.email,
             subject: 'Re: ServicesArtisans',
-            html: `<p>${parsed.data.content.replace(/\n/g, '<br>')}</p>`,
+            html: `<p>${safeContent}</p>`,
           })
           externalId = result.id
         }
@@ -95,6 +105,11 @@ export async function POST(
       .from('prospection_conversations')
       .update({ last_message_at: new Date().toISOString() })
       .eq('id', id)
+
+    await logAdminAction(authResult.admin.id, 'conversation.reply', 'prospection_conversation', id, {
+      channel: conversation.channel,
+      sender_type: parsed.data.sender_type,
+    })
 
     return NextResponse.json({ success: true, data: msg })
   } catch (error) {

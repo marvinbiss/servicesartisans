@@ -15,9 +15,9 @@ import {
   Euro,
   Loader2,
   AlertCircle,
-  CheckCircle,
   X,
 } from 'lucide-react'
+import { Toast } from '@/components/admin/Toast'
 
 interface ArtisanData {
   id: string
@@ -68,26 +68,6 @@ const DAYS = [
   { key: 'sunday', label: 'Dimanche' },
 ]
 
-// Toast component
-function Toast({ message, type, onClose }: { message: string; type: 'success' | 'error'; onClose: () => void }) {
-  useEffect(() => {
-    const timer = setTimeout(onClose, 5000)
-    return () => clearTimeout(timer)
-  }, [onClose])
-
-  return (
-    <div className={`fixed bottom-4 right-4 z-50 flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg max-w-md ${
-      type === 'success' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'
-    }`}>
-      {type === 'success' ? <CheckCircle className="w-5 h-5 flex-shrink-0" /> : <AlertCircle className="w-5 h-5 flex-shrink-0" />}
-      <span className="flex-1">{message}</span>
-      <button onClick={onClose} className="hover:opacity-80 flex-shrink-0">
-        <X className="w-4 h-4" />
-      </button>
-    </div>
-  )
-}
-
 export default function EditArtisanPage() {
   const router = useRouter()
   const params = useParams()
@@ -123,9 +103,56 @@ export default function EditArtisanPage() {
   // Track if form has changes
   const [hasChanges, setHasChanges] = useState(false)
 
+  // Inline field validation errors
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
+
   // Input states for services and zones
   const [newService, setNewService] = useState('')
   const [newZone, setNewZone] = useState('')
+
+  // Field validation
+  function validateField(name: string, value: string): string | null {
+    switch (name) {
+      case 'full_name':
+        return !value.trim() ? 'Le nom est requis' : null
+      case 'phone':
+        return value && !/^(\+33|0)[1-9][\d\s.-]{7,13}$/.test(value.replace(/\s/g, ''))
+          ? 'Numéro de téléphone invalide' : null
+      case 'siret':
+        return value && !/^\d{14}$/.test(value.replace(/\s/g, ''))
+          ? 'Le SIRET doit contenir 14 chiffres' : null
+      case 'postal_code':
+        return value && !/^\d{5}$/.test(value)
+          ? 'Le code postal doit contenir 5 chiffres' : null
+      case 'website':
+        if (!value) return null
+        try { new URL(value); return null } catch { return 'URL invalide' }
+      case 'hourly_rate':
+        const rate = Number(value)
+        return value && (isNaN(rate) || rate < 0 || rate > 9999)
+          ? 'Le tarif doit être entre 0 et 9999' : null
+      default:
+        return null
+    }
+  }
+
+  function handleBlur(name: string, value: string) {
+    const error = validateField(name, value)
+    setFieldErrors(prev => {
+      if (error) return { ...prev, [name]: error }
+      const { [name]: _, ...rest } = prev
+      return rest
+    })
+  }
+
+  function clearFieldError(name: string) {
+    if (fieldErrors[name]) {
+      setFieldErrors(prev => {
+        const { [name]: _, ...rest } = prev
+        return rest
+      })
+    }
+  }
 
   const fetchArtisan = useCallback(async () => {
     try {
@@ -189,6 +216,26 @@ export default function EditArtisanPage() {
   const handleSave = async () => {
     if (saving) return
 
+    // Validate all fields before saving
+    const fieldsToValidate: [string, string][] = [
+      ['full_name', formData.full_name],
+      ['phone', formData.phone],
+      ['siret', formData.siret],
+      ['postal_code', formData.postal_code],
+      ['website', formData.website],
+      ['hourly_rate', formData.hourly_rate],
+    ]
+    const errors: Record<string, string> = {}
+    for (const [name, value] of fieldsToValidate) {
+      const error = validateField(name, value)
+      if (error) errors[name] = error
+    }
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors)
+      setToast({ message: 'Veuillez corriger les erreurs dans le formulaire', type: 'error' })
+      return
+    }
+
     try {
       setSaving(true)
 
@@ -211,7 +258,7 @@ export default function EditArtisanPage() {
       const data = await response.json()
 
       if (response.ok && data.success) {
-        setToast({ message: 'Artisan mis à jour avec succès!', type: 'success' })
+        setToast({ message: 'Artisan mis \u00e0 jour avec succ\u00e8s !', type: 'success' })
         setHasChanges(false)
 
         // Redirect after a short delay with full page reload to clear cache
@@ -310,13 +357,10 @@ export default function EditArtisanPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Toast notification */}
-      {toast && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
-        />
-      )}
+      <Toast
+        toast={toast}
+        onClose={() => setToast(null)}
+      />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
@@ -362,37 +406,46 @@ export default function EditArtisanPage() {
             <div className="grid gap-4">
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="full_name" className="block text-sm font-medium text-gray-700 mb-1">
                     Nom complet
                   </label>
                   <input
+                    id="full_name"
                     type="text"
                     value={formData.full_name}
-                    onChange={(e) => updateFormData({ full_name: e.target.value })}
+                    onChange={(e) => { updateFormData({ full_name: e.target.value }); clearFieldError('full_name') }}
+                    onBlur={(e) => handleBlur('full_name', e.target.value)}
                     placeholder="Jean Dupont"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    maxLength={200}
+                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 ${fieldErrors.full_name ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'}`}
                   />
+                  {fieldErrors.full_name && (
+                    <p className="mt-1 text-xs text-red-600">{fieldErrors.full_name}</p>
+                  )}
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="company_name" className="block text-sm font-medium text-gray-700 mb-1">
                     Nom de l&apos;entreprise
                   </label>
                   <input
+                    id="company_name"
                     type="text"
                     value={formData.company_name}
                     onChange={(e) => updateFormData({ company_name: e.target.value })}
                     placeholder="Entreprise Dupont SARL"
+                    maxLength={200}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
               </div>
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                     <Mail className="w-4 h-4 inline mr-1" />
                     Email
                   </label>
                   <input
+                    id="email"
                     type="email"
                     value={formData.email}
                     onChange={(e) => updateFormData({ email: e.target.value })}
@@ -401,54 +454,74 @@ export default function EditArtisanPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
                     <Phone className="w-4 h-4 inline mr-1" />
                     Téléphone
                   </label>
                   <input
+                    id="phone"
                     type="tel"
                     value={formData.phone}
-                    onChange={(e) => updateFormData({ phone: e.target.value })}
+                    onChange={(e) => { updateFormData({ phone: e.target.value }); clearFieldError('phone') }}
+                    onBlur={(e) => handleBlur('phone', e.target.value)}
                     placeholder="01 23 45 67 89"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    maxLength={20}
+                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 ${fieldErrors.phone ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'}`}
                   />
+                  {fieldErrors.phone && (
+                    <p className="mt-1 text-xs text-red-600">{fieldErrors.phone}</p>
+                  )}
                 </div>
               </div>
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="siret" className="block text-sm font-medium text-gray-700 mb-1">
                     SIRET
                   </label>
                   <input
+                    id="siret"
                     type="text"
                     value={formData.siret}
-                    onChange={(e) => updateFormData({ siret: e.target.value })}
+                    onChange={(e) => { updateFormData({ siret: e.target.value }); clearFieldError('siret') }}
+                    onBlur={(e) => handleBlur('siret', e.target.value)}
                     placeholder="12345678901234"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono"
+                    maxLength={14}
+                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 font-mono ${fieldErrors.siret ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'}`}
                   />
+                  {fieldErrors.siret && (
+                    <p className="mt-1 text-xs text-red-600">{fieldErrors.siret}</p>
+                  )}
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="website" className="block text-sm font-medium text-gray-700 mb-1">
                     Site web
                   </label>
                   <input
+                    id="website"
                     type="url"
                     value={formData.website}
-                    onChange={(e) => updateFormData({ website: e.target.value })}
+                    onChange={(e) => { updateFormData({ website: e.target.value }); clearFieldError('website') }}
+                    onBlur={(e) => handleBlur('website', e.target.value)}
                     placeholder="https://www.entreprise.fr"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    maxLength={2048}
+                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 ${fieldErrors.website ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'}`}
                   />
+                  {fieldErrors.website && (
+                    <p className="mt-1 text-xs text-red-600">{fieldErrors.website}</p>
+                  )}
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
                   Description
                 </label>
                 <textarea
+                  id="description"
                   value={formData.description}
                   onChange={(e) => updateFormData({ description: e.target.value })}
                   rows={4}
                   placeholder="Décrivez l'entreprise, ses services, son expertise..."
+                  maxLength={5000}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
@@ -463,51 +536,63 @@ export default function EditArtisanPage() {
             </h2>
             <div className="grid gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
                   Adresse complète
                 </label>
                 <input
+                  id="address"
                   type="text"
                   value={formData.address}
                   onChange={(e) => updateFormData({ address: e.target.value })}
                   placeholder="123 rue de la République"
+                  maxLength={500}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
               <div className="grid md:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="postal_code" className="block text-sm font-medium text-gray-700 mb-1">
                     Code postal
                   </label>
                   <input
+                    id="postal_code"
                     type="text"
                     value={formData.postal_code}
-                    onChange={(e) => updateFormData({ postal_code: e.target.value })}
+                    onChange={(e) => { updateFormData({ postal_code: e.target.value }); clearFieldError('postal_code') }}
+                    onBlur={(e) => handleBlur('postal_code', e.target.value)}
                     placeholder="75001"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    maxLength={10}
+                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 ${fieldErrors.postal_code ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'}`}
                   />
+                  {fieldErrors.postal_code && (
+                    <p className="mt-1 text-xs text-red-600">{fieldErrors.postal_code}</p>
+                  )}
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
                     Ville
                   </label>
                   <input
+                    id="city"
                     type="text"
                     value={formData.city}
                     onChange={(e) => updateFormData({ city: e.target.value })}
                     placeholder="Paris"
+                    maxLength={200}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="department" className="block text-sm font-medium text-gray-700 mb-1">
                     Département
                   </label>
                   <input
+                    id="department"
                     type="text"
                     value={formData.department}
                     onChange={(e) => updateFormData({ department: e.target.value })}
                     placeholder="75"
+                    maxLength={100}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -614,16 +699,23 @@ export default function EditArtisanPage() {
             <div className="grid gap-4">
               <div className="grid md:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="hourly_rate" className="block text-sm font-medium text-gray-700 mb-1">
                     Taux horaire (€)
                   </label>
                   <input
+                    id="hourly_rate"
                     type="number"
                     value={formData.hourly_rate}
-                    onChange={(e) => updateFormData({ hourly_rate: e.target.value })}
+                    onChange={(e) => { updateFormData({ hourly_rate: e.target.value }); clearFieldError('hourly_rate') }}
+                    onBlur={(e) => handleBlur('hourly_rate', e.target.value)}
                     placeholder="50"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    min={0}
+                    max={9999}
+                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 ${fieldErrors.hourly_rate ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'}`}
                   />
+                  {fieldErrors.hourly_rate && (
+                    <p className="mt-1 text-xs text-red-600">{fieldErrors.hourly_rate}</p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -632,6 +724,9 @@ export default function EditArtisanPage() {
                   <button
                     type="button"
                     onClick={() => updateFormData({ is_verified: !formData.is_verified })}
+                    role="switch"
+                    aria-checked={formData.is_verified}
+                    aria-label="Vérifié"
                     className={`relative w-14 h-7 rounded-full transition-colors ${
                       formData.is_verified ? 'bg-green-600' : 'bg-gray-300'
                     }`}
@@ -650,6 +745,9 @@ export default function EditArtisanPage() {
                   <button
                     type="button"
                     onClick={() => updateFormData({ is_featured: !formData.is_featured })}
+                    role="switch"
+                    aria-checked={formData.is_featured}
+                    aria-label="Mis en avant"
                     className={`relative w-14 h-7 rounded-full transition-colors ${
                       formData.is_featured ? 'bg-amber-500' : 'bg-gray-300'
                     }`}

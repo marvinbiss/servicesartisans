@@ -40,6 +40,7 @@ export default function AdminRgpdPage() {
   const [searchEmail, setSearchEmail] = useState('')
   const [foundUser, setFoundUser] = useState<{ id: string; email: string; full_name: string | null } | null>(null)
   const [searching, setSearching] = useState(false)
+  const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null)
 
   // Modal
   const [deleteModal, setDeleteModal] = useState<{ open: boolean; userId: string; userName: string }>({
@@ -52,6 +53,13 @@ export default function AdminRgpdPage() {
   useEffect(() => {
     fetchRequests()
   }, [page, status])
+
+  useEffect(() => {
+    if (toast) {
+      const t = setTimeout(() => setToast(null), 4000)
+      return () => clearTimeout(t)
+    }
+  }, [toast])
 
   const fetchRequests = async () => {
     try {
@@ -86,7 +94,7 @@ export default function AdminRgpdPage() {
           setFoundUser(data.users[0])
         } else {
           setFoundUser(null)
-          alert('Utilisateur non trouvé')
+          setToast({ type: 'error', message: 'Utilisateur non trouvé' })
         }
       }
     } catch (error) {
@@ -178,6 +186,7 @@ export default function AdminRgpdPage() {
               <input
                 type="email"
                 placeholder="Rechercher un utilisateur par email..."
+                aria-label="Rechercher un utilisateur par email"
                 value={searchEmail}
                 onChange={(e) => setSearchEmail(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && searchUser()}
@@ -340,6 +349,17 @@ export default function AdminRgpdPage() {
           )}
         </div>
       </div>
+
+      {toast && (
+        <div role="status" aria-live="polite" className={`fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg ${
+          toast.type === 'success' ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-red-50 text-red-800 border border-red-200'
+        }`}>
+          <div className="flex items-center gap-2">
+            <span className="text-sm">{toast.message}</span>
+            <button onClick={() => setToast(null)} className="text-current opacity-50 hover:opacity-100" aria-label="Fermer">×</button>
+          </div>
+        </div>
+      )}
 
       {/* Delete Modal */}
       <ConfirmationModal

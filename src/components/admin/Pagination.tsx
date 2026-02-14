@@ -68,7 +68,7 @@ export function Pagination({
   }
 
   return (
-    <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
+    <nav className="px-6 py-4 border-t border-gray-100 flex items-center justify-between" aria-label="Pagination">
       <div className="flex items-center gap-4">
         {showTotal && (
           <p className="text-sm text-gray-500">
@@ -85,6 +85,7 @@ export function Pagination({
           <select
             value={pageSize}
             onChange={(e) => onPageSizeChange(Number(e.target.value))}
+            aria-label="Nombre d'éléments par page"
             className="text-sm border border-gray-300 rounded px-2 py-1"
           >
             {pageSizeOptions.map((size) => (
@@ -103,6 +104,7 @@ export function Pagination({
           disabled={!canGoPrev}
           className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
           title="Première page"
+          aria-label="Première page"
         >
           <ChevronsLeft className="w-4 h-4" />
         </button>
@@ -113,6 +115,7 @@ export function Pagination({
           disabled={!canGoPrev}
           className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
           title="Page précédente"
+          aria-label="Page précédente"
         >
           <ChevronLeft className="w-4 h-4" />
         </button>
@@ -128,6 +131,8 @@ export function Pagination({
               <button
                 key={pageNum}
                 onClick={() => onPageChange(pageNum)}
+                aria-label={`Page ${pageNum}`}
+                aria-current={page === pageNum ? 'page' : undefined}
                 className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors ${
                   page === pageNum
                     ? 'bg-blue-600 text-white'
@@ -146,6 +151,7 @@ export function Pagination({
           disabled={!canGoNext}
           className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
           title="Page suivante"
+          aria-label="Page suivante"
         >
           <ChevronRight className="w-4 h-4" />
         </button>
@@ -156,10 +162,11 @@ export function Pagination({
           disabled={!canGoNext}
           className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
           title="Dernière page"
+          aria-label="Dernière page"
         >
           <ChevronsRight className="w-4 h-4" />
         </button>
       </div>
-    </div>
+    </nav>
   )
 }

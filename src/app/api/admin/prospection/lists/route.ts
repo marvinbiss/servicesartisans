@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { requirePermission } from '@/lib/admin-auth'
+import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
@@ -57,9 +57,14 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Strip HTML tags from text fields before storing
+    const sanitizedData = { ...parsed.data }
+    if (sanitizedData.name) sanitizedData.name = sanitizedData.name.replace(/<[^>]*>/g, '').trim()
+    if (sanitizedData.description) sanitizedData.description = sanitizedData.description.replace(/<[^>]*>/g, '').trim()
+
     const { data, error } = await supabase
       .from('prospection_lists')
-      .insert({ ...parsed.data, created_by: authResult.admin.id })
+      .insert({ ...sanitizedData, created_by: authResult.admin.id })
       .select()
       .single()
 
@@ -67,6 +72,11 @@ export async function POST(request: NextRequest) {
       logger.error('Create list error', error)
       return NextResponse.json({ success: false, error: { message: 'Erreur lors de la création' } }, { status: 500 })
     }
+
+    await logAdminAction(authResult.admin.id, 'list.create', 'prospection_list', data.id, {
+      name: sanitizedData.name,
+      list_type: sanitizedData.list_type,
+    })
 
     return NextResponse.json({ success: true, data }, { status: 201 })
   } catch (error) {

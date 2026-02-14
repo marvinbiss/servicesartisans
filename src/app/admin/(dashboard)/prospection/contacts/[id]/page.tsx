@@ -215,11 +215,11 @@ export default function ContactDetailPage({ params }: { params: Promise<{ id: st
         <div className="mb-4 flex items-center gap-2 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
           <AlertCircle className="w-4 h-4 flex-shrink-0" />
           {actionError}
-          <button onClick={() => setActionError(null)} className="ml-auto"><X className="w-4 h-4" /></button>
+          <button onClick={() => setActionError(null)} aria-label="Fermer le message d'erreur" className="ml-auto"><X className="w-4 h-4" /></button>
         </div>
       )}
       {successMsg && (
-        <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">
+        <div role="status" aria-live="polite" className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">
           {successMsg}
         </div>
       )}
@@ -266,7 +266,7 @@ export default function ContactDetailPage({ params }: { params: Promise<{ id: st
                   <label className="block text-xs font-medium text-gray-500 mb-1">Adresse</label>
                   <input type="text" value={editFields.address} onChange={(e) => setEditFields(f => ({ ...f, address: e.target.value }))} className="w-full px-3 py-2 border rounded-lg text-sm" />
                 </div>
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
                     <label className="block text-xs font-medium text-gray-500 mb-1">Code postal</label>
                     <input type="text" value={editFields.postal_code} onChange={(e) => setEditFields(f => ({ ...f, postal_code: e.target.value }))} className="w-full px-3 py-2 border rounded-lg text-sm" />
@@ -391,11 +391,24 @@ export default function ContactDetailPage({ params }: { params: Promise<{ id: st
                     <div className="flex items-center justify-between mb-1">
                       <span className="font-medium text-gray-700 capitalize">{msg.channel}</span>
                       <span className={`text-xs px-2 py-0.5 rounded-full ${
-                        msg.status === 'delivered' ? 'bg-green-100 text-green-700'
-                          : msg.status === 'failed' ? 'bg-red-100 text-red-700'
+                        msg.status === 'delivered' || msg.status === 'read' || msg.status === 'replied' ? 'bg-green-100 text-green-700'
+                          : msg.status === 'failed' || msg.status === 'bounced' ? 'bg-red-100 text-red-700'
+                          : msg.status === 'sent' ? 'bg-blue-100 text-blue-700'
+                          : msg.status === 'queued' || msg.status === 'sending' ? 'bg-yellow-100 text-yellow-700'
+                          : msg.status === 'opted_out' || msg.status === 'cancelled' ? 'bg-gray-100 text-gray-600'
                           : 'bg-gray-100 text-gray-700'
                       }`}>
-                        {msg.status}
+                        {msg.status === 'delivered' ? 'Livré'
+                          : msg.status === 'failed' ? 'Échoué'
+                          : msg.status === 'sent' ? 'Envoyé'
+                          : msg.status === 'queued' ? 'En file d\u2019attente'
+                          : msg.status === 'sending' ? 'En cours d\u2019envoi'
+                          : msg.status === 'read' ? 'Lu'
+                          : msg.status === 'replied' ? 'Répondu'
+                          : msg.status === 'bounced' ? 'Rejeté'
+                          : msg.status === 'opted_out' ? 'Désinscrit'
+                          : msg.status === 'cancelled' ? 'Annulé'
+                          : msg.status}
                       </span>
                     </div>
                     <p className="text-gray-600 line-clamp-2">{msg.rendered_body || '-'}</p>

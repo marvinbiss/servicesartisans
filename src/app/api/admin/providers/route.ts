@@ -59,7 +59,7 @@ export async function GET(request: NextRequest) {
     const result = providersQuerySchema.safeParse(queryParams)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Invalid parameters', details: result.error.flatten() } },
+        { success: false, error: { message: 'Paramètres invalides', details: result.error.flatten() } },
         { status: 400 }
       )
     }

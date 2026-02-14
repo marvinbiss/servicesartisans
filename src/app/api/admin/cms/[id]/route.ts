@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { requirePermission } from '@/lib/admin-auth'
+import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { invalidateCache } from '@/lib/cache'
@@ -144,6 +144,9 @@ export async function PUT(
       )
     }
 
+    // Log d'audit
+    await logAdminAction(auth.admin!.id, 'cms_page.update', 'cms_page', id, { slug: page.slug, page_type: page.page_type })
+
     // Revalidate cached paths if the page is published
     if (page.status === 'published') {
       revalidatePagePaths(page)
@@ -202,6 +205,9 @@ export async function DELETE(
         { status: error ? 500 : 404 }
       )
     }
+
+    // Log d'audit
+    await logAdminAction(auth.admin!.id, 'cms_page.delete', 'cms_page', id, { slug: page.slug })
 
     // Revalidate public paths so the page disappears from the site
     if (page.status === 'published') {

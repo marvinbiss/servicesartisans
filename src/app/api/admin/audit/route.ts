@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission } from '@/lib/admin-auth'
+import { sanitizeSearchQuery } from '@/lib/sanitize'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
@@ -41,7 +42,7 @@ export async function GET(request: NextRequest) {
     const result = auditQuerySchema.safeParse(queryParams)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Invalid parameters', details: result.error.flatten() } },
+        { success: false, error: { message: 'Paramètres invalides', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -61,7 +62,10 @@ export async function GET(request: NextRequest) {
 
     // Filtres
     if (action !== 'all') {
-      query = query.ilike('action', `%${action}%`)
+      const sanitizedAction = sanitizeSearchQuery(action)
+      if (sanitizedAction) {
+        query = query.ilike('action', `%${sanitizedAction}%`)
+      }
     }
 
     if (entityType !== 'all') {

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { requirePermission } from '@/lib/admin-auth'
+import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { invalidateCache } from '@/lib/cache'
@@ -95,6 +95,9 @@ export async function POST(
         { status: 500 }
       )
     }
+
+    // Log d'audit
+    await logAdminAction(auth.admin!.id, 'cms_page.restore', 'cms_page', id, { version_id, title: version.title })
 
     // Revalidate cached paths if the page is published
     if (page.status === 'published') {

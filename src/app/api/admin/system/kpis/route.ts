@@ -4,14 +4,15 @@
  */
 
 import { NextResponse } from 'next/server'
-import { verifyAdmin } from '@/lib/admin-auth'
+import { requirePermission } from '@/lib/admin-auth'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
   try {
-    const auth = await verifyAdmin()
+    // Verify admin with settings:read permission (system KPIs)
+    const auth = await requirePermission('settings', 'read')
     if (!auth.success || !auth.admin) return auth.error!
 
     const adminClient = createAdminClient()

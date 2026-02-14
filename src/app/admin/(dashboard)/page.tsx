@@ -6,8 +6,6 @@ import {
   Briefcase,
   Calendar,
   DollarSign,
-  TrendingUp,
-  TrendingDown,
   AlertTriangle,
   Shield,
   Star,
@@ -20,6 +18,8 @@ import {
   CheckCircle,
   XCircle,
 } from 'lucide-react'
+import { ErrorBanner } from '@/components/admin/ErrorBanner'
+import { ConfirmationModal } from '@/components/admin/ConfirmationModal'
 
 interface PlatformStats {
   totalUsers: number
@@ -57,6 +57,7 @@ export default function AdminDashboard() {
   const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([])
   const [pendingReports, setPendingReports] = useState<Report[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<'overview' | 'users' | 'reports' | 'reviews'>('overview')
 
   useEffect(() => {
@@ -65,78 +66,85 @@ export default function AdminDashboard() {
 
   const fetchDashboardData = async () => {
     try {
+      setError(null)
       const response = await fetch('/api/admin/stats')
-      if (response.ok) {
-        const data = await response.json()
-        setStats(data.stats)
-        setRecentActivity(data.recentActivity || [])
-        setPendingReports(data.pendingReports || [])
-      }
-    } catch (error) {
-      console.error('Failed to fetch admin data:', error)
+      if (!response.ok) throw new Error(`Erreur ${response.status}`)
+      const data = await response.json()
+      setStats(data.stats)
+      setRecentActivity(data.recentActivity || [])
+      setPendingReports(data.pendingReports || [])
+    } catch {
+      setError('Erreur lors du chargement du tableau de bord')
     } finally {
       setLoading(false)
     }
   }
 
-  const handleReportAction = async (reportId: string, action: 'resolve' | 'dismiss') => {
+  const [reportActionModal, setReportActionModal] = useState<{
+    open: boolean
+    reportId: string
+    action: 'resolve' | 'dismiss'
+    label: string
+  }>({ open: false, reportId: '', action: 'resolve', label: '' })
+
+  const confirmReportAction = async () => {
     try {
-      await fetch('/api/admin/reports', {
+      setError(null)
+      const response = await fetch('/api/admin/reports', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ reportId, action }),
+        body: JSON.stringify({ reportId: reportActionModal.reportId, action: reportActionModal.action }),
       })
+      if (!response.ok) throw new Error('Erreur lors de la mise à jour du signalement')
+      setReportActionModal({ open: false, reportId: '', action: 'resolve', label: '' })
       fetchDashboardData()
-    } catch (error) {
-      console.error('Failed to update report:', error)
+    } catch {
+      setError('Erreur lors de la mise à jour du signalement')
     }
   }
 
-  // Mock data for demo
-  const mockStats: PlatformStats = {
-    totalUsers: 15420,
-    totalArtisans: 2340,
-    totalBookings: 45230,
-    totalRevenue: 1250000,
-    newUsersToday: 47,
-    newBookingsToday: 156,
-    activeUsers7d: 4520,
-    pendingReports: 12,
-    averageRating: 4.7,
+  const handleReportAction = (reportId: string, action: 'resolve' | 'dismiss') => {
+    const actionLabel = action === 'resolve' ? 'résoudre' : 'rejeter'
+    setReportActionModal({ open: true, reportId, action, label: actionLabel })
   }
 
-  const displayStats = stats || mockStats
+  // Valeurs par défaut si les données ne sont pas encore chargées
+  const defaultStats: PlatformStats = {
+    totalUsers: 0,
+    totalArtisans: 0,
+    totalBookings: 0,
+    totalRevenue: 0,
+    newUsersToday: 0,
+    newBookingsToday: 0,
+    activeUsers7d: 0,
+    pendingReports: 0,
+    averageRating: 0,
+  }
+
+  const displayStats = stats || defaultStats
 
   const statCards = [
     {
       label: 'Utilisateurs total',
       value: displayStats.totalUsers.toLocaleString(),
-      change: '+12%',
-      trend: 'up',
       icon: Users,
       color: 'blue',
     },
     {
       label: 'Artisans actifs',
       value: displayStats.totalArtisans.toLocaleString(),
-      change: '+8%',
-      trend: 'up',
       icon: Briefcase,
-      color: 'violet',
+      color: 'blue',
     },
     {
       label: 'Réservations',
       value: displayStats.totalBookings.toLocaleString(),
-      change: '+23%',
-      trend: 'up',
       icon: Calendar,
       color: 'green',
     },
     {
       label: 'Revenus (€)',
       value: (displayStats.totalRevenue / 100).toLocaleString('fr-FR'),
-      change: '+15%',
-      trend: 'up',
       icon: DollarSign,
       color: 'amber',
     },
@@ -144,21 +152,21 @@ export default function AdminDashboard() {
 
   const colorClasses: Record<string, string> = {
     blue: 'bg-blue-100 text-blue-600',
-    violet: 'bg-violet-100 text-violet-600',
     green: 'bg-green-100 text-green-600',
     amber: 'bg-amber-100 text-amber-600',
   }
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center" role="status" aria-busy="true">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <span className="sr-only">Chargement du tableau de bord...</span>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50" aria-label="Tableau de bord administration">
       {/* Header */}
       <header className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -166,7 +174,7 @@ export default function AdminDashboard() {
             <div className="flex items-center gap-3">
               <Shield className="w-8 h-8 text-blue-600" />
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Admin Dashboard</h1>
+                <h1 className="text-xl font-bold text-gray-900">Tableau de bord</h1>
                 <p className="text-sm text-gray-500">ServicesArtisans</p>
               </div>
             </div>
@@ -185,7 +193,7 @@ export default function AdminDashboard() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Tabs */}
-        <div className="flex gap-1 mb-8 bg-gray-100 rounded-lg p-1 w-fit">
+        <div className="flex gap-1 mb-8 bg-gray-100 rounded-lg p-1 w-fit overflow-x-auto max-w-full">
           {[
             { id: 'overview', label: 'Vue d\'ensemble', icon: BarChart3 },
             { id: 'users', label: 'Utilisateurs', icon: Users },
@@ -207,6 +215,14 @@ export default function AdminDashboard() {
           ))}
         </div>
 
+        {error && (
+          <ErrorBanner
+            message={error}
+            onDismiss={() => setError(null)}
+            onRetry={fetchDashboardData}
+          />
+        )}
+
         {activeTab === 'overview' && (
           <>
             {/* Stats Grid */}
@@ -219,16 +235,6 @@ export default function AdminDashboard() {
                   <div className="flex items-center justify-between mb-4">
                     <div className={`p-3 rounded-lg ${colorClasses[stat.color]}`}>
                       <stat.icon className="w-6 h-6" />
-                    </div>
-                    <div className={`flex items-center gap-1 text-sm font-medium ${
-                      stat.trend === 'up' ? 'text-green-600' : 'text-red-600'
-                    }`}>
-                      {stat.trend === 'up' ? (
-                        <TrendingUp className="w-4 h-4" />
-                      ) : (
-                        <TrendingDown className="w-4 h-4" />
-                      )}
-                      {stat.change}
                     </div>
                   </div>
                   <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
@@ -316,12 +322,12 @@ export default function AdminDashboard() {
                 <h3 className="font-semibold text-gray-900">Activité récente</h3>
               </div>
               <div className="divide-y divide-gray-100">
-                {(recentActivity.length > 0 ? recentActivity : [
-                  { id: '1', type: 'booking', action: 'Nouvelle réservation', details: 'Jean D. a réservé chez Plomberie Pro', timestamp: 'Il y a 5 min', status: 'confirmed' },
-                  { id: '2', type: 'review', action: 'Nouvel avis', details: 'Marie L. a laissé 5 étoiles', timestamp: 'Il y a 12 min' },
-                  { id: '3', type: 'user', action: 'Nouvel artisan', details: 'Électricité Express a rejoint la plateforme', timestamp: 'Il y a 23 min' },
-                  { id: '4', type: 'report', action: 'Nouveau signalement', details: 'Avis signalé pour contenu inapproprié', timestamp: 'Il y a 45 min', status: 'pending' },
-                ]).map((activity) => (
+                {recentActivity.length === 0 ? (
+                  <div className="p-8 text-center text-gray-500">
+                    <Activity className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                    <p>Aucune activité récente</p>
+                  </div>
+                ) : recentActivity.map((activity) => (
                   <div key={activity.id} className="p-4 flex items-center gap-4 hover:bg-gray-50">
                     <div className={`p-2 rounded-lg ${
                       activity.type === 'booking' ? 'bg-green-100 text-green-600' :
@@ -346,7 +352,9 @@ export default function AdminDashboard() {
                           activity.status === 'pending' ? 'bg-amber-100 text-amber-700' :
                           'bg-gray-100 text-gray-700'
                         }`}>
-                          {activity.status}
+                          {activity.status === 'confirmed' ? 'Confirmé' :
+                           activity.status === 'pending' ? 'En attente' :
+                           activity.status}
                         </span>
                       )}
                     </div>
@@ -369,18 +377,19 @@ export default function AdminDashboard() {
               </div>
             </div>
             <div className="divide-y divide-gray-100">
-              {(pendingReports.length > 0 ? pendingReports : [
-                { id: '1', targetType: 'review', reason: 'spam', description: 'Avis promotionnel non sollicité', status: 'pending', createdAt: '2024-01-15', reporter: 'user123' },
-                { id: '2', targetType: 'user', reason: 'fake', description: 'Profil suspect avec faux avis', status: 'pending', createdAt: '2024-01-14', reporter: 'user456' },
-                { id: '3', targetType: 'artisan', reason: 'inappropriate', description: 'Comportement non professionnel signalé', status: 'pending', createdAt: '2024-01-14', reporter: 'user789' },
-              ]).map((report) => (
+              {pendingReports.length === 0 ? (
+                <div className="p-8 text-center text-gray-500">
+                  <AlertTriangle className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                  <p>Aucun signalement en attente</p>
+                </div>
+              ) : pendingReports.map((report) => (
                 <div key={report.id} className="p-4">
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-4">
                       <div className={`p-2 rounded-lg ${
-                        report.reason === 'spam' ? 'bg-orange-100 text-orange-600' :
+                        report.reason === 'spam' ? 'bg-amber-100 text-amber-600' :
                         report.reason === 'fake' ? 'bg-red-100 text-red-600' :
-                        report.reason === 'inappropriate' ? 'bg-purple-100 text-purple-600' :
+                        report.reason === 'inappropriate' ? 'bg-blue-100 text-blue-600' :
                         'bg-gray-100 text-gray-600'
                       }`}>
                         <AlertTriangle className="w-5 h-5" />
@@ -413,7 +422,7 @@ export default function AdminDashboard() {
                       >
                         <XCircle className="w-5 h-5" />
                       </button>
-                      <button className="p-2 text-gray-400 hover:bg-gray-50 rounded-lg">
+                      <button className="p-2 text-gray-400 hover:bg-gray-50 rounded-lg" aria-label="Voir le détail du signalement">
                         <Eye className="w-5 h-5" />
                       </button>
                     </div>
@@ -434,6 +443,7 @@ export default function AdminDashboard() {
                   <input
                     type="text"
                     placeholder="Rechercher..."
+                    aria-label="Rechercher un utilisateur"
                     className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
@@ -460,6 +470,17 @@ export default function AdminDashboard() {
           </div>
         )}
       </div>
+
+      {/* Report Action Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={reportActionModal.open}
+        onClose={() => setReportActionModal({ open: false, reportId: '', action: 'resolve', label: '' })}
+        onConfirm={confirmReportAction}
+        title={reportActionModal.action === 'resolve' ? 'Résoudre le signalement' : 'Rejeter le signalement'}
+        message={`Êtes-vous sûr de vouloir ${reportActionModal.label} ce signalement ?`}
+        confirmText={reportActionModal.action === 'resolve' ? 'Résoudre' : 'Rejeter'}
+        variant={reportActionModal.action === 'resolve' ? 'success' : 'warning'}
+      />
     </div>
   )
 }

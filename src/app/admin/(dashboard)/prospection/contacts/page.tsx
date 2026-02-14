@@ -97,7 +97,7 @@ export default function ContactsPage() {
         </div>
         <div className="flex gap-2">
           <button onClick={() => setShowSyncConfirm(true)} disabled={syncing} className="flex items-center gap-2 px-4 py-2 text-sm border rounded-lg hover:bg-gray-50 disabled:opacity-50">
-            <Users className="w-4 h-4" /> {syncing ? 'Sync...' : 'Sync artisans'}
+            <Users className="w-4 h-4" /> {syncing ? 'Synchronisation...' : 'Synchroniser les artisans'}
           </button>
           <Link href="/admin/prospection/contacts/import" className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700">
             <Upload className="w-4 h-4" /> Importer CSV
@@ -133,12 +133,14 @@ export default function ContactsPage() {
             placeholder="Rechercher par nom, email, ville..."
             value={search}
             onChange={(e) => handleSearchChange(e.target.value)}
+            aria-label="Rechercher par nom, email, ville"
             className="w-full pl-10 pr-4 py-2 border rounded-lg text-sm"
           />
         </div>
         <select
           value={typeFilter}
           onChange={(e) => { setTypeFilter(e.target.value); setPage(1) }}
+          aria-label="Filtrer par type de contact"
           className="border rounded-lg px-3 py-2 text-sm"
         >
           <option value="all">Tous les types</option>
@@ -153,15 +155,16 @@ export default function ContactsPage() {
 
       {/* Table */}
       <div className="bg-white rounded-lg border overflow-hidden">
-        <table className="w-full text-sm">
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[700px] text-sm" aria-label="Liste des contacts de prospection">
           <thead className="bg-gray-50">
             <tr>
-              <th className="text-left px-4 py-3 font-medium text-gray-500">Nom</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-500">Type</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-500">Email</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-500">Téléphone</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-500">Ville</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-500">Source</th>
+              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Nom</th>
+              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Type</th>
+              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Email</th>
+              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Téléphone</th>
+              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Ville</th>
+              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Source</th>
             </tr>
           </thead>
           <tbody className="divide-y">
@@ -201,6 +204,7 @@ export default function ContactsPage() {
             )}
           </tbody>
         </table>
+        </div>
       </div>
 
       {/* Pagination */}

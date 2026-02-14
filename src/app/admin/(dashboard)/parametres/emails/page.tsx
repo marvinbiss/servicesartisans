@@ -194,7 +194,7 @@ export default function EmailTemplatesPage() {
               <ChevronLeft className="w-4 h-4" />
               Retour aux paramètres
             </button>
-            <h1 className="text-2xl font-bold text-gray-900">Templates Email</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Modèles d&apos;email</h1>
             <p className="text-gray-500 mt-1">Personnalisez les emails envoyés par la plateforme</p>
           </div>
           {saved && (
@@ -232,6 +232,7 @@ export default function EmailTemplatesPage() {
                         : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
                     }`}
                     title="Prévisualiser"
+                    aria-label={`Prévisualiser le modèle ${template.name}`}
                   >
                     <Eye className="w-5 h-5" />
                   </button>
@@ -243,6 +244,7 @@ export default function EmailTemplatesPage() {
                         : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
                     }`}
                     title="Modifier"
+                    aria-label={`Modifier le modèle ${template.name}`}
                   >
                     <Edit2 className="w-5 h-5" />
                   </button>

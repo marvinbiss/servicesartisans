@@ -3,7 +3,8 @@
  * Ensures only admin users can access admin endpoints
  */
 
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
+import { headers } from 'next/headers'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
@@ -29,6 +30,120 @@ export interface AdminAuthResult {
   success: boolean
   admin?: AdminUser
   error?: NextResponse
+}
+
+/**
+ * Validate request origin for CSRF protection.
+ * Returns true if the origin matches the expected domain, or if no origin header is present.
+ * Returns false if the origin is present but doesn't match.
+ */
+export function validateOrigin(request: NextRequest): boolean {
+  const origin = request.headers.get('origin') || request.headers.get('referer')
+  const secFetchSite = request.headers.get('sec-fetch-site')
+
+  // Block cross-site requests identified by Sec-Fetch-Site header
+  if (secFetchSite === 'cross-site') {
+    return false
+  }
+
+  // If no origin header, allow (same-origin browser requests, API clients, curl)
+  if (!origin) {
+    return true
+  }
+
+  const allowedUrls = [
+    process.env.NEXT_PUBLIC_SITE_URL,
+    process.env.NEXTAUTH_URL,
+  ].filter(Boolean) as string[]
+
+  // If no allowed URLs are configured, allow all (development mode)
+  if (allowedUrls.length === 0) {
+    return true
+  }
+
+  // Compare origin against allowed URLs
+  try {
+    const originHost = new URL(origin).origin
+    return allowedUrls.some(url => {
+      try {
+        return new URL(url).origin === originHost
+      } catch {
+        return false
+      }
+    })
+  } catch {
+    // Malformed origin header — reject
+    return false
+  }
+}
+
+/**
+ * Validate CSRF using headers() from next/headers (no request object needed).
+ * Used internally by requirePermission() so all admin routes are protected.
+ */
+async function validateCsrf(): Promise<NextResponse | null> {
+  try {
+    const headersList = await headers()
+    const origin = headersList.get('origin') || headersList.get('referer')
+    const secFetchSite = headersList.get('sec-fetch-site')
+
+    // Block cross-site requests identified by Sec-Fetch-Site header
+    if (secFetchSite === 'cross-site') {
+      logger.warn('CSRF blocked: cross-site request detected via Sec-Fetch-Site')
+      return NextResponse.json(
+        { success: false, error: { code: 'CSRF_REJECTED', message: 'Origine de la requête non autorisée' } },
+        { status: 403 }
+      )
+    }
+
+    // If no origin header, allow (same-origin browser requests, API clients, curl)
+    if (!origin) {
+      return null
+    }
+
+    const allowedUrls = [
+      process.env.NEXT_PUBLIC_SITE_URL,
+      process.env.NEXTAUTH_URL,
+    ].filter(Boolean) as string[]
+
+    // If no allowed URLs are configured, allow all (development mode)
+    if (allowedUrls.length === 0) {
+      return null
+    }
+
+    // Compare origin against allowed URLs
+    let originHost: string
+    try {
+      originHost = new URL(origin).origin
+    } catch {
+      logger.warn('CSRF blocked: malformed origin header', { origin })
+      return NextResponse.json(
+        { success: false, error: { code: 'CSRF_REJECTED', message: 'Origine de la requête non autorisée' } },
+        { status: 403 }
+      )
+    }
+
+    const isAllowed = allowedUrls.some(url => {
+      try {
+        return new URL(url).origin === originHost
+      } catch {
+        return false
+      }
+    })
+
+    if (!isAllowed) {
+      logger.warn('CSRF blocked: origin mismatch', { origin: originHost, allowed: allowedUrls })
+      return NextResponse.json(
+        { success: false, error: { code: 'CSRF_REJECTED', message: 'Origine de la requête non autorisée' } },
+        { status: 403 }
+      )
+    }
+
+    return null
+  } catch {
+    // If headers() fails (e.g., outside request context), allow
+    return null
+  }
 }
 
 /**
@@ -149,6 +264,12 @@ export async function requirePermission(
   resource: keyof AdminPermissions,
   action: string
 ): Promise<AdminAuthResult> {
+  // CSRF validation — block cross-origin requests
+  const csrfError = await validateCsrf()
+  if (csrfError) {
+    return { success: false, error: csrfError }
+  }
+
   const authResult = await verifyAdmin()
 
   if (!authResult.success || !authResult.admin) {

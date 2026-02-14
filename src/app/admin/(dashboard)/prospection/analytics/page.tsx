@@ -42,7 +42,7 @@ export default function AnalyticsPage() {
     <div>
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Prospection</h1>
-        <p className="text-gray-500 mt-1">Analytics et statistiques</p>
+        <p className="text-gray-500 mt-1">Statistiques et analyses</p>
       </div>
 
       <ProspectionNav />
@@ -62,16 +62,17 @@ export default function AnalyticsPage() {
         <div className="px-4 py-3 border-b bg-gray-50">
           <h2 className="font-semibold">Détail par canal</h2>
         </div>
-        <table className="w-full text-sm">
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[700px] text-sm" aria-label="Détail des performances par canal">
           <thead>
             <tr className="border-b">
-              <th className="text-left px-4 py-3 font-medium text-gray-500">Canal</th>
-              <th className="text-right px-4 py-3 font-medium text-gray-500">Envoyés</th>
-              <th className="text-right px-4 py-3 font-medium text-gray-500">Livrés</th>
-              <th className="text-right px-4 py-3 font-medium text-gray-500">Réponses</th>
-              <th className="text-right px-4 py-3 font-medium text-gray-500">Échecs</th>
-              <th className="text-right px-4 py-3 font-medium text-gray-500">Taux livraison</th>
-              <th className="text-right px-4 py-3 font-medium text-gray-500">Taux réponse</th>
+              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Canal</th>
+              <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">Envoyés</th>
+              <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">Livrés</th>
+              <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">Réponses</th>
+              <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">Échecs</th>
+              <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">Taux livraison</th>
+              <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">Taux réponse</th>
             </tr>
           </thead>
           <tbody className="divide-y">
@@ -95,6 +96,7 @@ export default function AnalyticsPage() {
             )}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   )

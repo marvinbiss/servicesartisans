@@ -9,6 +9,8 @@ export interface Column<T> {
   sortable?: boolean
   width?: string
   render?: (item: T) => ReactNode
+  /** Accessible label for screen readers when header is ambiguous */
+  ariaLabel?: string
 }
 
 interface DataTableProps<T> {
@@ -22,6 +24,8 @@ interface DataTableProps<T> {
   onSort?: (key: string) => void
   onRowClick?: (item: T) => void
   rowKey: (item: T) => string
+  /** Accessible label for the table (e.g., "Liste des artisans") */
+  ariaLabel?: string
 }
 
 export function DataTable<T>({
@@ -35,11 +39,13 @@ export function DataTable<T>({
   onSort,
   onRowClick,
   rowKey,
+  ariaLabel,
 }: DataTableProps<T>) {
   if (loading) {
     return (
-      <div className="p-8 text-center">
+      <div className="p-8 text-center" role="status" aria-busy="true">
         <Loader2 className="w-8 h-8 animate-spin mx-auto text-blue-600" />
+        <span className="sr-only">Chargement des données...</span>
       </div>
     )
   }
@@ -55,17 +61,19 @@ export function DataTable<T>({
 
   return (
     <div className="overflow-x-auto">
-      <table className="w-full">
+      <table className="w-full min-w-[800px]" aria-label={ariaLabel}>
         <thead className="bg-gray-50 border-b border-gray-100">
           <tr>
             {columns.map((column) => (
               <th
                 key={column.key}
+                scope="col"
                 className={`text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider ${
                   column.sortable ? 'cursor-pointer hover:bg-gray-100' : ''
                 }`}
                 style={{ width: column.width }}
                 onClick={() => column.sortable && onSort?.(column.key)}
+                aria-sort={column.sortable && sortKey === column.key ? (sortOrder === 'asc' ? 'ascending' : 'descending') : undefined}
               >
                 <div className="flex items-center gap-1">
                   {column.header}

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { requirePermission } from '@/lib/admin-auth'
+import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
@@ -92,7 +92,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const authResult = await requirePermission('prospection', 'write')
-    if (!authResult.success) return authResult.error
+    if (!authResult.success || !authResult.admin) return authResult.error
 
     const supabase = createAdminClient()
     const body = await request.json()
@@ -112,9 +112,18 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Strip HTML tags from text fields before storing
+    const sanitizedData = { ...parsed.data }
+    const textFields = ['contact_name', 'company_name', 'address', 'city', 'region'] as const
+    for (const field of textFields) {
+      if (typeof sanitizedData[field] === 'string') {
+        sanitizedData[field] = (sanitizedData[field] as string).replace(/<[^>]*>/g, '').trim()
+      }
+    }
+
     const { data, error } = await supabase
       .from('prospection_contacts')
-      .insert({ ...parsed.data, source: 'manual' })
+      .insert({ ...sanitizedData, source: 'manual' })
       .select()
       .single()
 
@@ -128,6 +137,12 @@ export async function POST(request: NextRequest) {
       logger.error('Create contact error', error)
       return NextResponse.json({ success: false, error: { message: 'Erreur lors de la création' } }, { status: 500 })
     }
+
+    await logAdminAction(authResult.admin.id, 'contact.create', 'prospection_contact', data.id, {
+      contact_type: sanitizedData.contact_type,
+      email: sanitizedData.email,
+      contact_name: sanitizedData.contact_name,
+    })
 
     return NextResponse.json({ success: true, data }, { status: 201 })
   } catch (error) {

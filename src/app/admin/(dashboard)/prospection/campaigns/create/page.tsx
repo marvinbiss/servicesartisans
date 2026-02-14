@@ -77,7 +77,7 @@ export default function CreateCampaignPage() {
       return
     }
     if (!templateId) {
-      setError('Veuillez sélectionner un template')
+      setError('Veuillez sélectionner un modèle')
       return
     }
     if (!listId) {
@@ -170,7 +170,7 @@ export default function CreateCampaignPage() {
             </div>
             <div>
               <label className="block text-sm font-medium mb-2">Canal</label>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {(['email', 'sms', 'whatsapp'] as const).map((ch) => (
                   <button
                     key={ch}
@@ -185,7 +185,7 @@ export default function CreateCampaignPage() {
             </div>
             <div>
               <label className="block text-sm font-medium mb-2">Audience</label>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {(['artisan', 'client', 'mairie'] as const).map((type) => (
                   <button
                     key={type}
@@ -203,9 +203,9 @@ export default function CreateCampaignPage() {
         {/* Step 2: Template */}
         {step === 2 && (
           <div className="space-y-4">
-            <h3 className="text-lg font-medium">Choisir un template</h3>
+            <h3 className="text-lg font-medium">Choisir un modèle</h3>
             {filteredTemplates.length === 0 ? (
-              <p className="text-gray-400 py-4">Aucun template disponible pour ce canal. Créez-en un d&apos;abord.</p>
+              <p className="text-gray-400 py-4">Aucun modèle disponible pour ce canal. Créez-en un d&apos;abord.</p>
             ) : (
               <div className="space-y-2">
                 {filteredTemplates.map((tmpl) => (
@@ -268,7 +268,7 @@ export default function CreateCampaignPage() {
             </label>
             {aiAutoReply && (
               <div>
-                <label className="block text-sm font-medium mb-2">Provider IA</label>
+                <label className="block text-sm font-medium mb-2">Fournisseur IA</label>
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     onClick={() => setAiProvider('claude')}
@@ -298,9 +298,9 @@ export default function CreateCampaignPage() {
               <div className="flex justify-between"><span className="text-gray-500">Nom</span><span className="font-medium">{name}</span></div>
               <div className="flex justify-between"><span className="text-gray-500">Canal</span><span className="font-medium capitalize">{channel}</span></div>
               <div className="flex justify-between"><span className="text-gray-500">Audience</span><span className="font-medium capitalize">{audienceType}s</span></div>
-              <div className="flex justify-between"><span className="text-gray-500">Template</span><span className="font-medium">{selectedTemplate?.name || 'Aucun'}</span></div>
+              <div className="flex justify-between"><span className="text-gray-500">Modèle</span><span className="font-medium">{selectedTemplate?.name || 'Aucun'}</span></div>
               <div className="flex justify-between"><span className="text-gray-500">Liste</span><span className="font-medium">{selectedList?.name || 'Aucune'} ({selectedList?.contact_count || 0} contacts)</span></div>
-              <div className="flex justify-between"><span className="text-gray-500">IA auto-reply</span><span className="font-medium">{aiAutoReply ? `Oui (${aiProvider})` : 'Non'}</span></div>
+              <div className="flex justify-between"><span className="text-gray-500">Réponse IA auto</span><span className="font-medium">{aiAutoReply ? `Oui (${aiProvider})` : 'Non'}</span></div>
             </div>
             <div>
               <label className="block text-sm font-medium mb-2">Planification (optionnel)</label>

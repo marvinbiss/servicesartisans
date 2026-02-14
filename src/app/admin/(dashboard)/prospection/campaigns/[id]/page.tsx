@@ -18,6 +18,7 @@ import {
   DollarSign,
   BarChart3,
 } from 'lucide-react'
+import { ConfirmationModal } from '@/components/admin/ConfirmationModal'
 import type { ProspectionCampaign, CampaignStats } from '@/types/prospection'
 
 export default function CampaignDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -30,6 +31,7 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
   const [actionError, setActionError] = useState<string | null>(null)
   const [actionLoading, setActionLoading] = useState<string | null>(null)
   const [successMsg, setSuccessMsg] = useState<string | null>(null)
+  const [confirmModal, setConfirmModal] = useState<{ action: 'send' | 'pause'; open: boolean }>({ action: 'send', open: false })
 
   const fetchCampaign = useCallback(async () => {
     setError(null)
@@ -74,6 +76,10 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
     if (campaign) fetchStats()
   }, [campaign, fetchStats])
 
+  const confirmAction = (action: 'send' | 'pause') => {
+    setConfirmModal({ action, open: true })
+  }
+
   const handleAction = async (action: 'send' | 'pause' | 'resume') => {
     setActionLoading(action)
     setActionError(null)
@@ -117,7 +123,7 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
         <ProspectionNav />
         <div className="animate-pulse space-y-4">
           <div className="h-8 bg-gray-200 rounded w-1/3" />
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {Array.from({ length: 6 }).map((_, i) => (
               <div key={i} className="h-24 bg-gray-100 rounded-lg" />
             ))}
@@ -153,8 +159,8 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
   const statCards = [
     { label: 'Destinataires', value: campaign.total_recipients, icon: Users, color: 'text-blue-600 bg-blue-100' },
     { label: 'Envoy\u00e9s', value: campaign.sent_count, icon: Send, color: 'text-green-600 bg-green-100' },
-    { label: 'Livr\u00e9s', value: campaign.delivered_count, icon: CheckCircle, color: 'text-emerald-600 bg-emerald-100' },
-    { label: 'R\u00e9ponses', value: campaign.replied_count, icon: MessageSquare, color: 'text-purple-600 bg-purple-100' },
+    { label: 'Livr\u00e9s', value: campaign.delivered_count, icon: CheckCircle, color: 'text-blue-600 bg-blue-100' },
+    { label: 'R\u00e9ponses', value: campaign.replied_count, icon: MessageSquare, color: 'text-blue-600 bg-blue-100' },
     { label: '\u00c9checs', value: campaign.failed_count, icon: XCircle, color: 'text-red-600 bg-red-100' },
     { label: 'Co\u00fbt', value: `${campaign.actual_cost.toFixed(2)} \u20ac`, icon: DollarSign, color: 'text-amber-600 bg-amber-100' },
   ]
@@ -182,11 +188,11 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
         <div className="mb-4 flex items-center gap-2 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
           <AlertCircle className="w-4 h-4 flex-shrink-0" />
           {actionError}
-          <button onClick={() => setActionError(null)} className="ml-auto"><X className="w-4 h-4" /></button>
+          <button onClick={() => setActionError(null)} aria-label="Fermer le message d'erreur" className="ml-auto"><X className="w-4 h-4" /></button>
         </div>
       )}
       {successMsg && (
-        <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">
+        <div role="status" aria-live="polite" className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">
           {successMsg}
         </div>
       )}
@@ -203,7 +209,7 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
               Modifier
             </Link>
             <button
-              onClick={() => handleAction('send')}
+              onClick={() => confirmAction('send')}
               disabled={actionLoading === 'send'}
               className="flex items-center gap-1 px-4 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
             >
@@ -213,7 +219,7 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
         )}
         {campaign.status === 'sending' && (
           <button
-            onClick={() => handleAction('pause')}
+            onClick={() => confirmAction('pause')}
             disabled={actionLoading === 'pause'}
             className="flex items-center gap-1 px-4 py-2 text-sm bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 disabled:opacity-50"
           >
@@ -277,7 +283,7 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Template info */}
         <div className="bg-white rounded-lg border p-4">
-          <h3 className="text-sm font-medium text-gray-700 mb-3">Template</h3>
+          <h3 className="text-sm font-medium text-gray-700 mb-3">Modèle</h3>
           {campaign.template ? (
             <div>
               <Link
@@ -289,7 +295,7 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
               <p className="text-xs text-gray-400 mt-1 capitalize">{campaign.template.channel}</p>
             </div>
           ) : (
-            <p className="text-sm text-gray-400">Aucun template associ&eacute;</p>
+            <p className="text-sm text-gray-400">Aucun modèle associé</p>
           )}
         </div>
 
@@ -384,6 +390,18 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
           </div>
         </div>
       </div>
+
+      <ConfirmationModal
+        isOpen={confirmModal.open}
+        onClose={() => setConfirmModal((prev) => ({ ...prev, open: false }))}
+        onConfirm={() => { setConfirmModal((prev) => ({ ...prev, open: false })); handleAction(confirmModal.action) }}
+        title={confirmModal.action === 'send' ? 'Lancer la campagne' : 'Mettre en pause la campagne'}
+        message={confirmModal.action === 'send'
+          ? 'Êtes-vous sûr de vouloir lancer cette campagne ? Les messages seront envoyés aux destinataires.'
+          : 'Êtes-vous sûr de vouloir mettre en pause cette campagne ?'}
+        confirmText={confirmModal.action === 'send' ? 'Lancer' : 'Mettre en pause'}
+        variant={confirmModal.action === 'send' ? 'warning' : 'info'}
+      />
     </div>
   )
 }

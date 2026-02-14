@@ -17,6 +17,7 @@ import {
 import { SubscriptionBadge, PaymentStatusBadge } from '@/components/admin/StatusBadge'
 import { RefundModal } from '@/components/admin/RefundModal'
 import { ConfirmationModal } from '@/components/admin/ConfirmationModal'
+import { ErrorBanner } from '@/components/admin/ErrorBanner'
 
 interface Stats {
   totalRevenue: number
@@ -51,6 +52,7 @@ export default function AdminPaymentsPage() {
   const [stats, setStats] = useState<Stats | null>(null)
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [filter, setFilter] = useState<'all' | 'active' | 'canceled' | 'past_due'>('all')
 
   // Modal states
@@ -72,44 +74,55 @@ export default function AdminPaymentsPage() {
   const fetchData = async () => {
     try {
       setLoading(true)
+      setError(null)
 
       // Fetch stats
       const statsRes = await fetch('/api/admin/payments?type=overview')
-      if (statsRes.ok) {
-        const data = await statsRes.json()
-        setStats(data.stats)
-      }
+      if (!statsRes.ok) throw new Error(`Erreur ${statsRes.status}`)
+      const statsData = await statsRes.json()
+      setStats(statsData.stats)
 
       // Fetch subscriptions
       const subsRes = await fetch(`/api/admin/payments?type=subscriptions&status=${filter}`)
-      if (subsRes.ok) {
-        const data = await subsRes.json()
-        setSubscriptions(data.subscriptions || [])
-      }
-    } catch (error) {
-      console.error('Failed to fetch payments data:', error)
+      if (!subsRes.ok) throw new Error(`Erreur ${subsRes.status}`)
+      const subsData = await subsRes.json()
+      setSubscriptions(subsData.subscriptions || [])
+    } catch {
+      setError('Erreur lors du chargement des données de paiement')
     } finally {
       setLoading(false)
     }
   }
 
   const handleRefund = async (amount: number, reason: string) => {
-    await fetch(`/api/admin/payments/${refundModal.paymentId}/refund`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ amount, reason }),
-    })
-    fetchData()
+    try {
+      setError(null)
+      const response = await fetch(`/api/admin/payments/${refundModal.paymentId}/refund`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount, reason }),
+      })
+      if (!response.ok) throw new Error('Erreur lors du remboursement')
+      fetchData()
+    } catch {
+      setError('Erreur lors du remboursement')
+    }
   }
 
   const handleCancelSubscription = async () => {
-    await fetch(`/api/admin/subscriptions/${cancelModal.subId}/cancel`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'cancel', immediately: false }),
-    })
-    setCancelModal({ open: false, subId: '', userName: '' })
-    fetchData()
+    try {
+      setError(null)
+      const response = await fetch(`/api/admin/subscriptions/${cancelModal.subId}/cancel`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'cancel', immediately: false }),
+      })
+      if (!response.ok) throw new Error('Erreur lors de l\'annulation')
+      setCancelModal({ open: false, subId: '', userName: '' })
+      fetchData()
+    } catch {
+      setError('Erreur lors de l\'annulation de l\'abonnement')
+    }
   }
 
   const formatAmount = (amount: number) => {
@@ -158,6 +171,9 @@ export default function AdminPaymentsPage() {
           </button>
         </div>
 
+        {/* Error Banner */}
+        {error && <ErrorBanner message={error} onDismiss={() => setError(null)} onRetry={fetchData} />}
+
         {/* Stats */}
         {stats && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -199,8 +215,8 @@ export default function AdminPaymentsPage() {
 
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
               <div className="flex items-center justify-between mb-4">
-                <div className="p-3 bg-violet-100 rounded-lg">
-                  <Users className="w-6 h-6 text-violet-600" />
+                <div className="p-3 bg-blue-100 rounded-lg">
+                  <Users className="w-6 h-6 text-blue-600" />
                 </div>
               </div>
               <p className="text-2xl font-bold text-gray-900">{stats.activeSubscriptions}</p>
@@ -245,25 +261,25 @@ export default function AdminPaymentsPage() {
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="w-full min-w-[800px]" aria-label="Liste des abonnements">
                 <thead className="bg-gray-50 border-b border-gray-100">
                   <tr>
-                    <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
+                    <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
                       Client
                     </th>
-                    <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
+                    <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
                       Plan
                     </th>
-                    <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
+                    <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
                       Statut
                     </th>
-                    <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
+                    <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
                       Montant
                     </th>
-                    <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
+                    <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
                       Période
                     </th>
-                    <th className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase">
+                    <th scope="col" className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase">
                       Actions
                     </th>
                   </tr>

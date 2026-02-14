@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { requirePermission } from '@/lib/admin-auth'
+import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { importContacts, parseCSV, suggestColumnMapping } from '@/lib/prospection/import-service'
 import type { ContactType, ColumnMapping } from '@/types/prospection'
@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic'
 export async function POST(request: NextRequest) {
   try {
     const authResult = await requirePermission('prospection', 'write')
-    if (!authResult.success) return authResult.error
+    if (!authResult.success || !authResult.admin) return authResult.error
 
     const formData = await request.formData()
     const file = formData.get('file') as File | null
@@ -19,6 +19,26 @@ export async function POST(request: NextRequest) {
     if (!file) {
       return NextResponse.json(
         { success: false, error: { message: 'Fichier requis' } },
+        { status: 400 }
+      )
+    }
+
+    // Validate file size (max 10MB)
+    const MAX_FILE_SIZE = 10 * 1024 * 1024
+    if (file.size > MAX_FILE_SIZE) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Le fichier dépasse la taille maximale autorisée (10 Mo)' } },
+        { status: 400 }
+      )
+    }
+
+    // Validate file type (only CSV/TSV allowed)
+    const allowedTypes = ['text/csv', 'text/tab-separated-values', 'application/vnd.ms-excel', 'text/plain']
+    const allowedExtensions = ['.csv', '.tsv', '.txt']
+    const fileExtension = file.name ? '.' + file.name.split('.').pop()?.toLowerCase() : ''
+    if (!allowedTypes.includes(file.type) && !allowedExtensions.includes(fileExtension)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Type de fichier non autorisé. Formats acceptés : CSV, TSV, TXT' } },
         { status: 400 }
       )
     }
@@ -60,6 +80,12 @@ export async function POST(request: NextRequest) {
     }
 
     const result = await importContacts(content, mapping, contactType, file.name)
+
+    await logAdminAction(authResult.admin.id, 'contact.import', 'prospection_contact', 'bulk', {
+      file_name: file.name,
+      contact_type: contactType,
+      result,
+    })
 
     return NextResponse.json({
       success: true,

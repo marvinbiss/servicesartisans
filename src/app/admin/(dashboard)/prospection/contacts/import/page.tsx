@@ -184,7 +184,7 @@ export default function ImportPage() {
         <div className="bg-white rounded-lg border p-6">
           <p className="text-sm text-gray-500 mb-4">{totalRows} lignes détectées. Mappez les colonnes :</p>
 
-          <div className="grid grid-cols-2 gap-3 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
             {headers.map((h) => (
               <div key={h} className="flex items-center gap-2">
                 <span className="text-sm font-medium w-1/2 truncate">{h}</span>
@@ -192,6 +192,7 @@ export default function ImportPage() {
                 <select
                   value={mapping[h] || ''}
                   onChange={(e) => setMapping(prev => ({ ...prev, [h]: (e.target.value || null) as ColumnMapping[string] }))}
+                  aria-label={`Correspondance pour la colonne ${h}`}
                   className="flex-1 px-2 py-1.5 border rounded text-sm"
                 >
                   {fieldOptions.map((opt) => (
@@ -206,10 +207,10 @@ export default function ImportPage() {
           {previewRows.length > 0 && (
             <div className="mb-6 overflow-x-auto">
               <p className="text-sm font-medium mb-2">Aperçu (5 premières lignes)</p>
-              <table className="text-xs border">
+              <table className="text-xs border min-w-[500px]" aria-label="Aperçu des données importées">
                 <thead>
                   <tr className="bg-gray-50">
-                    {headers.map(h => <th key={h} className="px-2 py-1 border text-left">{h}</th>)}
+                    {headers.map(h => <th scope="col" key={h} className="px-2 py-1 border text-left">{h}</th>)}
                   </tr>
                 </thead>
                 <tbody>

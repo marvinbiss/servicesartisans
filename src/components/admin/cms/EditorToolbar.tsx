@@ -45,6 +45,7 @@ function ToolbarButton({ onClick, isActive, disabled, title, children }: Toolbar
       onClick={onClick}
       disabled={disabled}
       title={title}
+      aria-label={title}
       className={`p-1.5 rounded transition-colors ${
         isActive
           ? 'bg-blue-100 text-blue-700'
@@ -133,7 +134,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
 
   return (
     <>
-    <div className="flex flex-wrap items-center gap-1 border-b border-gray-200 bg-gray-50 p-2">
+    <div role="toolbar" aria-label="Barre d'outils de l'éditeur" className="flex flex-wrap items-center gap-1 border-b border-gray-200 bg-gray-50 p-2">
       {/* Text formatting */}
       <ToolbarButton
         onClick={() => editor.chain().focus().toggleBold().run()}

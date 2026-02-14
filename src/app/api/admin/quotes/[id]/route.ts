@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { verifyAdmin, logAdminAction } from '@/lib/admin-auth'
+import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { isValidUuid } from '@/lib/sanitize'
 import { z } from 'zod'
 
 // PATCH request schema
@@ -19,10 +20,17 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    // Verify admin authentication
-    const authResult = await verifyAdmin()
+    // Verify admin with services:read permission
+    const authResult = await requirePermission('services', 'read')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
+    }
+
+    if (!isValidUuid(params.id)) {
+      return NextResponse.json(
+        { success: false, error: 'Identifiant invalide' },
+        { status: 400 }
+      )
     }
 
     const supabase = createAdminClient()
@@ -50,10 +58,17 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    // Verify admin authentication
-    const authResult = await verifyAdmin()
+    // Verify admin with services:write permission
+    const authResult = await requirePermission('services', 'write')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
+    }
+
+    if (!isValidUuid(params.id)) {
+      return NextResponse.json(
+        { success: false, error: 'Identifiant invalide' },
+        { status: 400 }
+      )
     }
 
     const supabase = createAdminClient()
@@ -61,7 +76,7 @@ export async function PATCH(
     const result = updateQuoteSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
+        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -104,10 +119,17 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    // Verify admin authentication
-    const authResult = await verifyAdmin()
+    // Verify admin with services:delete permission
+    const authResult = await requirePermission('services', 'delete')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
+    }
+
+    if (!isValidUuid(params.id)) {
+      return NextResponse.json(
+        { success: false, error: 'Identifiant invalide' },
+        { status: 400 }
+      )
     }
 
     const supabase = createAdminClient()

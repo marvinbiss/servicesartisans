@@ -286,6 +286,9 @@ export default function EditUserPage() {
                     <button
                       type="button"
                       onClick={() => setFormData({ ...formData, is_verified: !formData.is_verified })}
+                      role="switch"
+                      aria-checked={formData.is_verified}
+                      aria-label="Statut de vérification"
                       className={`relative w-12 h-6 rounded-full transition-colors ${
                         formData.is_verified ? 'bg-green-600' : 'bg-gray-300'
                       }`}

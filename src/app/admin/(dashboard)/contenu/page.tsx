@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Plus, Search, FileEdit, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ErrorBanner } from '@/components/admin/ErrorBanner'
 import type { CmsPage } from '@/types/cms'
 
 type CMSPageListItem = Pick<CmsPage, 'id' | 'title' | 'slug' | 'page_type' | 'status' | 'updated_at' | 'is_active'>
@@ -54,15 +55,15 @@ const typeBadge = (type: string) => {
     case 'static':
       return { label: 'Statique', classes: 'bg-blue-100 text-blue-800' }
     case 'blog':
-      return { label: 'Blog', classes: 'bg-purple-100 text-purple-800' }
+      return { label: 'Blog', classes: 'bg-blue-100 text-blue-800' }
     case 'service':
       return { label: 'Service', classes: 'bg-green-100 text-green-800' }
     case 'location':
-      return { label: 'Localisation', classes: 'bg-orange-100 text-orange-800' }
+      return { label: 'Localisation', classes: 'bg-amber-100 text-amber-800' }
     case 'homepage':
       return { label: 'Accueil', classes: 'bg-red-100 text-red-800' }
     case 'faq':
-      return { label: 'FAQ', classes: 'bg-teal-100 text-teal-800' }
+      return { label: 'FAQ', classes: 'bg-blue-100 text-blue-800' }
     default:
       return { label: type, classes: 'bg-gray-100 text-gray-600' }
   }
@@ -217,14 +218,12 @@ export default function AdminContenuPage() {
               <p className="mt-4 text-gray-500">Chargement...</p>
             </div>
           ) : error ? (
-            <div className="p-8 text-center">
-              <p className="text-red-600 font-medium">{error}</p>
-              <button
-                onClick={fetchPages}
-                className="mt-3 text-sm text-blue-600 hover:text-blue-800 font-medium"
-              >
-                Réessayer
-              </button>
+            <div className="p-8">
+              <ErrorBanner
+                message={error}
+                onDismiss={() => setError(null)}
+                onRetry={fetchPages}
+              />
             </div>
           ) : pages.length === 0 ? (
             <div className="p-8 text-center text-gray-500">
@@ -234,22 +233,22 @@ export default function AdminContenuPage() {
           ) : (
             <>
               <div className="overflow-x-auto">
-                <table className="w-full">
+                <table className="w-full min-w-[700px]" aria-label="Liste des pages CMS">
                   <thead>
                     <tr className="border-b border-gray-200 bg-gray-50">
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Titre
                       </th>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Type
                       </th>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Statut
                       </th>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Dernière modification
                       </th>
-                      <th className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Actions
                       </th>
                     </tr>
@@ -262,7 +261,15 @@ export default function AdminContenuPage() {
                         <tr
                           key={page.id}
                           onClick={() => router.push(`/admin/contenu/${page.id}`)}
-                          className="hover:bg-gray-50 cursor-pointer transition-colors"
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              e.preventDefault()
+                              router.push(`/admin/contenu/${page.id}`)
+                            }
+                          }}
+                          tabIndex={0}
+                          role="link"
+                          className="cursor-pointer hover:bg-gray-50 focus:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset transition-colors"
                         >
                           <td className="px-6 py-4">
                             <div>

@@ -86,14 +86,15 @@ export default function ListsPage() {
 
       {/* Table */}
       <div className="bg-white rounded-lg border overflow-hidden">
-        <table className="w-full text-sm">
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[600px] text-sm" aria-label="Liste des listes de contacts">
           <thead className="bg-gray-50">
             <tr>
-              <th className="text-left px-4 py-3 font-medium text-gray-500">Nom</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-500">Type</th>
-              <th className="text-right px-4 py-3 font-medium text-gray-500">Contacts</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-500">Description</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-500">Cr&eacute;&eacute;e le</th>
+              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Nom</th>
+              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Type</th>
+              <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">Contacts</th>
+              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Description</th>
+              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Cr&eacute;&eacute;e le</th>
             </tr>
           </thead>
           <tbody className="divide-y">
@@ -124,7 +125,7 @@ export default function ListsPage() {
                   </td>
                   <td className="px-4 py-3">
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      list.list_type === 'static' ? 'bg-gray-100 text-gray-700' : 'bg-purple-100 text-purple-700'
+                      list.list_type === 'static' ? 'bg-gray-100 text-gray-700' : 'bg-blue-100 text-blue-700'
                     }`}>
                       {list.list_type === 'static' ? 'Statique' : 'Dynamique'}
                     </span>
@@ -139,6 +140,7 @@ export default function ListsPage() {
             )}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   )

@@ -48,7 +48,7 @@ export default function InboxPage() {
     <div>
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Prospection</h1>
-        <p className="text-gray-500 mt-1">Inbox - Conversations avec les contacts</p>
+        <p className="text-gray-500 mt-1">Boîte de réception - Conversations avec les contacts</p>
       </div>
 
       <ProspectionNav />

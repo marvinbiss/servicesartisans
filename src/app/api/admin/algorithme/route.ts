@@ -6,7 +6,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
-import { verifyAdmin, logAdminAction } from '@/lib/admin-auth'
+import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { DEFAULT_ALGORITHM_CONFIG } from '@/types/algorithm'
 
@@ -38,7 +38,8 @@ const algorithmConfigSchema = z.object({
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
-  const auth = await verifyAdmin()
+  // Verify admin with settings:read permission
+  const auth = await requirePermission('settings', 'read')
   if (!auth.success || !auth.admin) return auth.error!
 
   try {
@@ -79,7 +80,8 @@ export async function GET() {
 }
 
 export async function PATCH(request: NextRequest) {
-  const auth = await verifyAdmin()
+  // Verify admin with settings:write permission
+  const auth = await requirePermission('settings', 'write')
   if (!auth.success || !auth.admin) return auth.error!
 
   try {
@@ -123,7 +125,8 @@ export async function PATCH(request: NextRequest) {
         .single()
 
       if (error) {
-        return NextResponse.json({ error: error.message }, { status: 500 })
+        console.error('Algorithm config insert error:', error.message)
+        return NextResponse.json({ error: 'Erreur lors de la sauvegarde de la configuration' }, { status: 500 })
       }
 
       await logAdminAction(
@@ -146,7 +149,8 @@ export async function PATCH(request: NextRequest) {
       .single()
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 })
+      console.error('Algorithm config update error:', error.message)
+      return NextResponse.json({ error: 'Erreur lors de la mise à jour de la configuration' }, { status: 500 })
     }
 
     await logAdminAction(

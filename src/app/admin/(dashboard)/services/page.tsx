@@ -8,6 +8,7 @@ import {
   Trash2,
   Grid,
 } from 'lucide-react'
+import { ErrorBanner } from '@/components/admin/ErrorBanner'
 import { StatusBadge } from '@/components/admin/StatusBadge'
 import { ConfirmationModal } from '@/components/admin/ConfirmationModal'
 
@@ -25,6 +26,7 @@ interface Service {
 export default function AdminServicesPage() {
   const [services, setServices] = useState<Service[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [search, setSearch] = useState('')
   const [showInactive, setShowInactive] = useState(false)
 
@@ -47,6 +49,7 @@ export default function AdminServicesPage() {
   const fetchServices = async () => {
     try {
       setLoading(true)
+      setError(null)
       const params = new URLSearchParams({
         search,
         includeInactive: String(showInactive),
@@ -55,9 +58,12 @@ export default function AdminServicesPage() {
       if (response.ok) {
         const data = await response.json()
         setServices(data.services || [])
+      } else {
+        setError('Erreur lors du chargement des services')
       }
-    } catch (error) {
-      console.error('Failed to fetch services:', error)
+    } catch (err) {
+      console.error('Failed to fetch services:', err)
+      setError('Erreur de connexion au serveur')
     } finally {
       setLoading(false)
     }
@@ -71,29 +77,40 @@ export default function AdminServicesPage() {
         : `/api/admin/services/${editModal.service?.id}`
       const method = isNew ? 'POST' : 'PATCH'
 
-      await fetch(url, {
+      const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       })
 
+      if (!response.ok) {
+        setError(isNew ? 'Erreur lors de la création du service' : 'Erreur lors de la modification du service')
+      }
+
       setEditModal({ open: false, service: null })
       setFormData({ name: '', description: '', icon: '' })
       fetchServices()
-    } catch (error) {
-      console.error('Failed to save service:', error)
+    } catch (err) {
+      console.error('Failed to save service:', err)
+      setError('Erreur de connexion au serveur')
     }
   }
 
   const handleDelete = async () => {
     try {
-      await fetch(`/api/admin/services/${deleteModal.serviceId}`, {
+      const response = await fetch(`/api/admin/services/${deleteModal.serviceId}`, {
         method: 'DELETE',
       })
+
+      if (!response.ok) {
+        setError('Erreur lors de la suppression du service')
+      }
+
       setDeleteModal({ open: false, serviceId: '', serviceName: '' })
       fetchServices()
-    } catch (error) {
-      console.error('Failed to delete service:', error)
+    } catch (err) {
+      console.error('Failed to delete service:', err)
+      setError('Erreur de connexion au serveur')
     }
   }
 
@@ -136,6 +153,7 @@ export default function AdminServicesPage() {
               <input
                 type="text"
                 placeholder="Rechercher un service..."
+                aria-label="Rechercher un service"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
@@ -152,6 +170,15 @@ export default function AdminServicesPage() {
             </label>
           </div>
         </div>
+
+        {/* Error banner */}
+        {error && (
+          <ErrorBanner
+            message={error}
+            onDismiss={() => setError(null)}
+            onRetry={fetchServices}
+          />
+        )}
 
         {/* Services Grid */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
@@ -224,8 +251,8 @@ export default function AdminServicesPage() {
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex min-h-screen items-center justify-center p-4">
             <div className="fixed inset-0 bg-black/50" onClick={() => setEditModal({ open: false, service: null })} />
-            <div className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            <div role="dialog" aria-modal="true" aria-labelledby="edit-service-title" className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6">
+              <h3 id="edit-service-title" className="text-lg font-semibold text-gray-900 mb-4">
                 {editModal.service ? 'Modifier le service' : 'Nouveau service'}
               </h3>
 
@@ -236,6 +263,7 @@ export default function AdminServicesPage() {
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    maxLength={200}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                     placeholder="Ex: Plomberie"
                   />
@@ -246,6 +274,7 @@ export default function AdminServicesPage() {
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     rows={3}
+                    maxLength={2000}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
                     placeholder="Description du service..."
                   />
@@ -256,6 +285,7 @@ export default function AdminServicesPage() {
                     type="text"
                     value={formData.icon}
                     onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
+                    maxLength={100}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                     placeholder="Ex: 🔧"
                   />

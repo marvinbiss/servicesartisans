@@ -171,12 +171,12 @@ describe('Dashboard V2 — X-Robots-Tag + Cache-Control', () => {
 })
 
 describe('Dashboard V2 — Admin Auth on /api/admin/leads', () => {
-  it('/api/admin/leads/route.ts calls verifyAdmin()', () => {
+  it('/api/admin/leads/route.ts calls requirePermission()', () => {
     const content = readFileSync(
       join(process.cwd(), 'src/app/api/admin/leads/route.ts'),
       'utf-8'
     )
-    expect(content).toContain('verifyAdmin')
+    expect(content).toContain('requirePermission')
   })
 })
 

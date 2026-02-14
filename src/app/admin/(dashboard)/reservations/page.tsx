@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import { BookingStatusBadge, PaymentStatusBadge } from '@/components/admin/StatusBadge'
 import { ConfirmationModal } from '@/components/admin/ConfirmationModal'
+import { ErrorBanner } from '@/components/admin/ErrorBanner'
 
 interface Booking {
   id: string
@@ -36,6 +37,7 @@ interface Booking {
 export default function AdminReservationsPage() {
   const [bookings, setBookings] = useState<Booking[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [search, setSearch] = useState('')
   const [status, setStatus] = useState<'all' | 'pending' | 'confirmed' | 'completed' | 'cancelled'>('all')
   const [page, setPage] = useState(1)
@@ -54,6 +56,7 @@ export default function AdminReservationsPage() {
   const fetchBookings = async () => {
     try {
       setLoading(true)
+      setError(null)
       const params = new URLSearchParams({
         page: String(page),
         limit: '20',
@@ -61,14 +64,14 @@ export default function AdminReservationsPage() {
         search,
       })
       const response = await fetch(`/api/admin/bookings?${params}`)
-      if (response.ok) {
-        const data = await response.json()
-        setBookings(data.bookings || [])
-        setTotalPages(data.totalPages || 1)
-        setTotal(data.total || 0)
-      }
-    } catch (error) {
-      console.error('Failed to fetch bookings:', error)
+      if (!response.ok) throw new Error(`Erreur ${response.status}`)
+      const data = await response.json()
+      setBookings(data.bookings || [])
+      setTotalPages(data.totalPages || 1)
+      setTotal(data.total || 0)
+    } catch {
+      setError('Erreur lors du chargement des réservations')
+      setBookings([])
     } finally {
       setLoading(false)
     }
@@ -76,13 +79,15 @@ export default function AdminReservationsPage() {
 
   const handleCancel = async () => {
     try {
-      await fetch(`/api/admin/bookings/${cancelModal.bookingId}`, {
+      setError(null)
+      const response = await fetch(`/api/admin/bookings/${cancelModal.bookingId}`, {
         method: 'DELETE',
       })
+      if (!response.ok) throw new Error('Erreur lors de l\'annulation')
       setCancelModal({ open: false, bookingId: '' })
       fetchBookings()
-    } catch (error) {
-      console.error('Cancel failed:', error)
+    } catch {
+      setError('Erreur lors de l\'annulation de la réservation')
     }
   }
 
@@ -120,6 +125,7 @@ export default function AdminReservationsPage() {
               <input
                 type="text"
                 placeholder="Rechercher par email, service..."
+                aria-label="Rechercher une réservation"
                 value={search}
                 onChange={(e) => {
                   setSearch(e.target.value)
@@ -152,6 +158,9 @@ export default function AdminReservationsPage() {
           </div>
         </div>
 
+        {/* Error Banner */}
+        {error && <ErrorBanner message={error} onDismiss={() => setError(null)} onRetry={fetchBookings} />}
+
         {/* Bookings Table */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           {loading ? (
@@ -166,28 +175,28 @@ export default function AdminReservationsPage() {
           ) : (
             <>
               <div className="overflow-x-auto">
-                <table className="w-full">
+                <table className="w-full min-w-[900px]" aria-label="Liste des réservations">
                   <thead className="bg-gray-50 border-b border-gray-100">
                     <tr>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
+                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
                         Date & Heure
                       </th>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
+                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
                         Client
                       </th>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
+                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
                         Artisan
                       </th>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
+                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
                         Service
                       </th>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
+                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
                         Statut
                       </th>
-                      <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
+                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
                         Paiement
                       </th>
-                      <th className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase">
+                      <th scope="col" className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase">
                         Actions
                       </th>
                     </tr>

@@ -11,6 +11,7 @@ import {
   AlertCircle,
 } from 'lucide-react'
 import { StatusBadge } from '@/components/admin/StatusBadge'
+import { ErrorBanner } from '@/components/admin/ErrorBanner'
 
 interface Quote {
   id: string
@@ -27,6 +28,7 @@ interface Quote {
 export default function AdminDevisPage() {
   const [quotes, setQuotes] = useState<Quote[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [search, setSearch] = useState('')
   const [status, setStatus] = useState<'all' | 'pending' | 'sent' | 'accepted' | 'refused' | 'expired'>('all')
   const [page, setPage] = useState(1)
@@ -40,6 +42,7 @@ export default function AdminDevisPage() {
   const fetchQuotes = async () => {
     try {
       setLoading(true)
+      setError(null)
       const params = new URLSearchParams({
         page: String(page),
         limit: '20',
@@ -47,14 +50,14 @@ export default function AdminDevisPage() {
         search,
       })
       const response = await fetch(`/api/admin/quotes?${params}`)
-      if (response.ok) {
-        const data = await response.json()
-        setQuotes(data.quotes || [])
-        setTotalPages(data.totalPages || 1)
-        setTotal(data.total || 0)
-      }
-    } catch (error) {
-      console.error('Failed to fetch quotes:', error)
+      if (!response.ok) throw new Error(`Erreur ${response.status}`)
+      const data = await response.json()
+      setQuotes(data.quotes || [])
+      setTotalPages(data.totalPages || 1)
+      setTotal(data.total || 0)
+    } catch {
+      setError('Erreur lors du chargement des devis')
+      setQuotes([])
     } finally {
       setLoading(false)
     }
@@ -115,6 +118,7 @@ export default function AdminDevisPage() {
               <input
                 type="text"
                 placeholder="Rechercher par service, code postal..."
+                aria-label="Rechercher un devis"
                 value={search}
                 onChange={(e) => {
                   setSearch(e.target.value)
@@ -147,6 +151,9 @@ export default function AdminDevisPage() {
             </div>
           </div>
         </div>
+
+        {/* Error Banner */}
+        {error && <ErrorBanner message={error} onDismiss={() => setError(null)} onRetry={fetchQuotes} />}
 
         {/* Quotes List */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">

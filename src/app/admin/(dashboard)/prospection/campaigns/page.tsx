@@ -78,16 +78,17 @@ export default function CampaignsPage() {
       </div>
 
       <div className="bg-white rounded-lg border overflow-hidden">
-        <table className="w-full text-sm">
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[800px] text-sm" aria-label="Liste des campagnes de prospection">
           <thead className="bg-gray-50">
             <tr>
-              <th className="text-left px-4 py-3 font-medium text-gray-500">Campagne</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-500">Canal</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-500">Statut</th>
-              <th className="text-right px-4 py-3 font-medium text-gray-500">Envoyés</th>
-              <th className="text-right px-4 py-3 font-medium text-gray-500">Livrés</th>
-              <th className="text-right px-4 py-3 font-medium text-gray-500">Réponses</th>
-              <th className="text-right px-4 py-3 font-medium text-gray-500">Coût</th>
+              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Campagne</th>
+              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Canal</th>
+              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Statut</th>
+              <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">Envoyés</th>
+              <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">Livrés</th>
+              <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">Réponses</th>
+              <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">Coût</th>
             </tr>
           </thead>
           <tbody className="divide-y">
@@ -130,6 +131,7 @@ export default function CampaignsPage() {
             )}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   )

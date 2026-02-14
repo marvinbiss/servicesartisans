@@ -155,9 +155,9 @@ export default function SettingsPage() {
               <Bot className="w-5 h-5" /> Configuration IA
             </h2>
 
-            <div className="grid grid-cols-2 gap-4 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
               <div>
-                <label className="block text-sm font-medium mb-1">Provider par défaut</label>
+                <label className="block text-sm font-medium mb-1">Fournisseur par défaut</label>
                 <select
                   value={settings.default_provider}
                   onChange={(e) => updateField('default_provider', e.target.value)}
@@ -226,7 +226,7 @@ export default function SettingsPage() {
           {/* Config Claude */}
           <div className="bg-white rounded-lg border p-6">
             <h2 className="text-lg font-semibold mb-4">Claude (Anthropic)</h2>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium mb-1">Modèle</label>
                 <input type="text" value={settings.claude_model} onChange={(e) => updateField('claude_model', e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm" />
@@ -265,7 +265,7 @@ export default function SettingsPage() {
           {/* Config OpenAI */}
           <div className="bg-white rounded-lg border p-6">
             <h2 className="text-lg font-semibold mb-4">GPT-4o (OpenAI)</h2>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium mb-1">Modèle</label>
                 <input type="text" value={settings.openai_model} onChange={(e) => updateField('openai_model', e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm" />

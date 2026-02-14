@@ -151,6 +151,8 @@ export function DateRangePicker({
     <div className="relative" ref={containerRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
+        aria-label="Sélectionner une période"
+        aria-expanded={isOpen}
         className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm"
       >
         <Calendar className="w-4 h-4 text-gray-400" />
@@ -164,6 +166,7 @@ export function DateRangePicker({
               handleClear()
             }}
             className="ml-1 text-gray-400 hover:text-gray-600"
+            aria-label="Effacer la période sélectionnée"
           >
             <X className="w-4 h-4" />
           </button>
@@ -196,6 +199,7 @@ export function DateRangePicker({
                 <button
                   onClick={() => setCurrentMonth(new Date(currentMonth.setMonth(currentMonth.getMonth() - 1)))}
                   className="p-1 hover:bg-gray-100 rounded"
+                  aria-label="Mois précédent"
                 >
                   <ChevronLeft className="w-5 h-5 text-gray-600" />
                 </button>
@@ -205,6 +209,7 @@ export function DateRangePicker({
                 <button
                   onClick={() => setCurrentMonth(new Date(currentMonth.setMonth(currentMonth.getMonth() + 1)))}
                   className="p-1 hover:bg-gray-100 rounded"
+                  aria-label="Mois suivant"
                 >
                   <ChevronRight className="w-5 h-5 text-gray-600" />
                 </button>

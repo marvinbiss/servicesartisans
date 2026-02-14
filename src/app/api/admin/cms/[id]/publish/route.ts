@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { requirePermission } from '@/lib/admin-auth'
+import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { invalidateCache } from '@/lib/cache'
@@ -69,6 +69,9 @@ export async function POST(
       )
     }
 
+    // Log d'audit
+    await logAdminAction(auth.admin!.id, 'cms_page.publish', 'cms_page', id, { slug: page.slug })
+
     // Revalidate cached paths + invalidate in-memory cache
     revalidatePagePaths(page)
     invalidateCache(/^cms:/)
@@ -128,6 +131,9 @@ export async function DELETE(
         { status: error ? 500 : 404 }
       )
     }
+
+    // Log d'audit
+    await logAdminAction(auth.admin!.id, 'cms_page.unpublish', 'cms_page', id, { slug: page.slug })
 
     // Revalidate cached paths using data from before the update
     if (currentPage) {

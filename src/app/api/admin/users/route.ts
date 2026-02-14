@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { requirePermission } from '@/lib/admin-auth'
+import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
     const result = usersQuerySchema.safeParse(queryParams)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Invalid parameters', details: result.error.flatten() } },
+        { success: false, error: { message: 'Paramètres invalides', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -145,7 +145,7 @@ export async function POST(request: NextRequest) {
     const result = createUserSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
+        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -188,6 +188,11 @@ export async function POST(request: NextRequest) {
       } catch {
         // profiles table doesn't exist, that's OK
       }
+    }
+
+    // Log d'audit
+    if (authData.user) {
+      await logAdminAction(authResult.admin.id, 'user.create', 'user', authData.user.id, { email, user_type })
     }
 
     return NextResponse.json({

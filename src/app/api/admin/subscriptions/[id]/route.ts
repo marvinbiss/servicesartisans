@@ -3,6 +3,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { getSubscription, changeSubscriptionPlan, PRICE_IDS } from '@/lib/stripe-admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { isValidUuid } from '@/lib/sanitize'
 import { z } from 'zod'
 
 // PATCH request schema
@@ -23,6 +24,13 @@ export async function GET(
     const authResult = await requirePermission('payments', 'read')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
+    }
+
+    if (!isValidUuid(params.id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
     }
 
     const subscription = await getSubscription(params.id)
@@ -52,12 +60,19 @@ export async function PATCH(
       return authResult.error
     }
 
+    if (!isValidUuid(params.id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
+    }
+
     const supabase = createAdminClient()
     const body = await request.json()
     const validation = changeSubscriptionSchema.safeParse(body)
     if (!validation.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Validation error', details: validation.error.flatten() } },
+        { success: false, error: { message: 'Erreur de validation', details: validation.error.flatten() } },
         { status: 400 }
       )
     }

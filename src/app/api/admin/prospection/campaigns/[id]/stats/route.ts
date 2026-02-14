@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requirePermission } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { isValidUuid } from '@/lib/sanitize'
 import { getCampaignStats } from '@/lib/prospection/analytics'
 import { getQueueStats } from '@/lib/prospection/message-queue'
 
@@ -15,6 +16,12 @@ export async function GET(
     if (!authResult.success) return authResult.error
 
     const { id } = await params
+    if (!isValidUuid(id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
+    }
 
     const [stats, queueStats] = await Promise.all([
       getCampaignStats(id),

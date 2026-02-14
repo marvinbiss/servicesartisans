@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { requirePermission } from '@/lib/admin-auth'
+import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
+import { isValidUuid } from '@/lib/sanitize'
 import { resumeCampaign } from '@/lib/prospection/message-queue'
 
 export const dynamic = 'force-dynamic'
@@ -12,9 +13,15 @@ export async function POST(
 ) {
   try {
     const authResult = await requirePermission('prospection', 'send')
-    if (!authResult.success) return authResult.error
+    if (!authResult.success || !authResult.admin) return authResult.error
 
     const { id } = await params
+    if (!isValidUuid(id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
+    }
 
     const supabase = createAdminClient()
     const { data: campaign } = await supabase.from('prospection_campaigns').select('id, status').eq('id', id).single()
@@ -30,6 +37,8 @@ export async function POST(
     }
 
     await resumeCampaign(id)
+
+    await logAdminAction(authResult.admin.id, 'campaign.resume', 'prospection_campaign', id)
 
     return NextResponse.json({ success: true })
   } catch (error) {

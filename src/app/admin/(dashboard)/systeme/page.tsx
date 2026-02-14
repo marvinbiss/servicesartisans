@@ -95,7 +95,7 @@ export default function SystemDashboardPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
             <div className="flex items-center gap-3">
@@ -103,7 +103,7 @@ export default function SystemDashboardPage() {
                 <Gauge className="w-6 h-6 text-blue-600" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Dashboard Système</h1>
+                <h1 className="text-2xl font-bold text-gray-900">Tableau de bord système</h1>
                 <p className="text-gray-500 text-sm mt-0.5">KPIs internes, qualité, monitoring</p>
               </div>
             </div>
@@ -115,6 +115,7 @@ export default function SystemDashboardPage() {
             <button
               onClick={fetchData}
               className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 border border-gray-200 rounded-lg hover:bg-white transition-colors"
+              aria-label="Actualiser les données"
             >
               <RefreshCw className="w-4 h-4" />
             </button>
@@ -150,7 +151,7 @@ export default function SystemDashboardPage() {
             title="Ce mois"
             value={data.leads.thisMonth}
             icon={<BarChart3 className="w-5 h-5" />}
-            color="indigo"
+            color="blue"
           />
         </div>
 
@@ -177,7 +178,7 @@ export default function SystemDashboardPage() {
             title="Vues"
             value={data.assignments.viewed}
             icon={<Eye className="w-5 h-5" />}
-            color="purple"
+            color="blue"
           />
           <StatCard
             title="Devis"
@@ -246,7 +247,7 @@ export default function SystemDashboardPage() {
             title="Avec leads"
             value={data.providers.withLeads}
             icon={<Inbox className="w-5 h-5" />}
-            color="indigo"
+            color="blue"
           />
         </div>
 
@@ -261,7 +262,7 @@ export default function SystemDashboardPage() {
             <div className="flex items-end gap-1.5 h-40">
               {data.dailyLeads.map((d) => (
                 <div key={d.date} className="flex-1 flex flex-col items-center gap-1 min-w-0">
-                  <span className="text-[10px] font-semibold text-gray-700 tabular-nums">
+                  <span className="text-xs font-semibold text-gray-700 tabular-nums">
                     {d.count > 0 ? d.count : ''}
                   </span>
                   <div className="w-full bg-gray-100 rounded-t overflow-hidden" style={{ height: '100%' }}>
@@ -274,7 +275,7 @@ export default function SystemDashboardPage() {
                       }}
                     />
                   </div>
-                  <span className="text-[9px] text-gray-400 truncate w-full text-center">{d.label}</span>
+                  <span className="text-xs text-gray-400 truncate w-full text-center">{d.label}</span>
                 </div>
               ))}
             </div>
@@ -327,7 +328,7 @@ export default function SystemDashboardPage() {
                     <span className="text-sm font-semibold text-gray-900 tabular-nums">{c.count}</span>
                     <div className="w-20 h-1.5 bg-gray-100 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-indigo-500 rounded-full"
+                        className="h-full bg-blue-500 rounded-full"
                         style={{ width: `${(c.count / maxCity) * 100}%` }}
                       />
                     </div>

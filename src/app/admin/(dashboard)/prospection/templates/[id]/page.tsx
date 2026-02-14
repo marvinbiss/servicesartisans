@@ -61,10 +61,10 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
         setBody(t.body)
         setAiPrompt(t.ai_system_prompt || '')
       } else {
-        setError(data.error?.message || 'Template non trouv\u00e9')
+        setError(data.error?.message || 'Modèle non trouvé')
       }
     } catch {
-      setError('Impossible de charger le template')
+      setError('Impossible de charger le modèle')
     } finally {
       setLoading(false)
     }
@@ -125,13 +125,13 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
       const data = await res.json()
       if (data.success) {
         setTemplate(data.data)
-        setSuccessMsg('Template mis \u00e0 jour avec succ\u00e8s')
+        setSuccessMsg('Modèle mis à jour avec succès')
         setTimeout(() => setSuccessMsg(null), 3000)
       } else {
         setActionError(data.error?.message || 'Erreur')
       }
     } catch {
-      setActionError('Impossible de sauvegarder le template')
+      setActionError('Impossible de sauvegarder le modèle')
     } finally {
       setSaving(false)
     }
@@ -158,7 +158,7 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
         setDeleting(false)
       }
     } catch {
-      setActionError('Impossible de supprimer le template')
+      setActionError('Impossible de supprimer le modèle')
       setDeleting(false)
     }
   }
@@ -181,14 +181,14 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
       <div>
         <div className="mb-6">
           <Link href="/admin/prospection/templates" className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2">
-            <ArrowLeft className="w-4 h-4" /> Retour aux templates
+            <ArrowLeft className="w-4 h-4" /> Retour aux modèles
           </Link>
           <h1 className="text-2xl font-bold text-gray-900">Prospection</h1>
         </div>
         <ProspectionNav />
         <div className="flex items-center gap-2 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
           <AlertCircle className="w-4 h-4 flex-shrink-0" />
-          {error || 'Template non trouv\u00e9'}
+          {error || 'Modèle non trouvé'}
         </div>
       </div>
     )
@@ -198,9 +198,9 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
     <div>
       <div className="mb-6">
         <Link href="/admin/prospection/templates" className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-2">
-          <ArrowLeft className="w-4 h-4" /> Retour aux templates
+          <ArrowLeft className="w-4 h-4" /> Retour aux modèles
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900">Modifier le template</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Modifier le modèle</h1>
       </div>
 
       <ProspectionNav />
@@ -210,11 +210,11 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
         <div className="mb-4 flex items-center gap-2 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
           <AlertCircle className="w-4 h-4 flex-shrink-0" />
           {actionError}
-          <button onClick={() => setActionError(null)} className="ml-auto"><X className="w-4 h-4" /></button>
+          <button onClick={() => setActionError(null)} aria-label="Fermer le message d'erreur" className="ml-auto"><X className="w-4 h-4" /></button>
         </div>
       )}
       {successMsg && (
-        <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">
+        <div role="status" aria-live="polite" className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">
           {successMsg}
         </div>
       )}
@@ -223,7 +223,7 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
         {/* Form */}
         <div className="lg:col-span-2 bg-white rounded-lg border p-6 space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1">Nom du template</label>
+            <label className="block text-sm font-medium mb-1">Nom du modèle</label>
             <input
               type="text"
               value={name}
@@ -322,7 +322,7 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
           {showDeleteConfirm && (
             <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
               <p className="text-sm text-red-700 mb-3">
-                Voulez-vous vraiment supprimer le template &laquo; {template.name} &raquo; ?
+                Voulez-vous vraiment supprimer le modèle &laquo; {template.name} &raquo; ?
               </p>
               <div className="flex gap-2">
                 <button

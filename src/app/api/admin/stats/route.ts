@@ -6,7 +6,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { logger } from '@/lib/logger'
-import { verifyAdmin } from '@/lib/admin-auth'
+import { requirePermission } from '@/lib/admin-auth'
 
 export const dynamic = 'force-dynamic'
 
@@ -15,8 +15,8 @@ const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
 export async function GET() {
   try {
-    // Verify admin authentication
-    const authResult = await verifyAdmin()
+    // Verify admin with settings:read permission (dashboard stats)
+    const authResult = await requirePermission('settings', 'read')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
     }
@@ -101,7 +101,7 @@ export async function GET() {
   } catch (error) {
     logger.error('Admin stats error:', error)
     return NextResponse.json(
-      { error: 'Failed to fetch admin stats' },
+      { error: 'Échec de la récupération des statistiques' },
       { status: 500 }
     )
   }

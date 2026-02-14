@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { isValidUuid } from '@/lib/sanitize'
 import { z } from 'zod'
 
 // PATCH request schema
@@ -31,6 +32,13 @@ export async function GET(
     const authResult = await requirePermission('users', 'read')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
+    }
+
+    if (!isValidUuid(params.id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
     }
 
     const supabase = createAdminClient()
@@ -141,13 +149,20 @@ export async function PATCH(
       return authResult.error
     }
 
+    if (!isValidUuid(params.id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
+    }
+
     const supabase = createAdminClient()
     const userId = params.id
     const body = await request.json()
     const result = updateUserSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
+        { success: false, error: { message: 'Erreur de validation', details: result.error.flatten() } },
         { status: 400 }
       )
     }
@@ -227,6 +242,13 @@ export async function DELETE(
     const authResult = await requirePermission('users', 'delete')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
+    }
+
+    if (!isValidUuid(params.id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
     }
 
     const supabase = createAdminClient()

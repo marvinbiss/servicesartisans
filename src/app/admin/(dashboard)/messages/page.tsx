@@ -12,6 +12,7 @@ import {
   Ban,
 } from 'lucide-react'
 import { StatusBadge } from '@/components/admin/StatusBadge'
+import { ErrorBanner } from '@/components/admin/ErrorBanner'
 
 interface Conversation {
   id: string
@@ -37,6 +38,7 @@ interface Conversation {
 export default function AdminMessagesPage() {
   const [conversations, setConversations] = useState<Conversation[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [status, setStatus] = useState<'all' | 'active' | 'archived' | 'blocked'>('all')
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
@@ -49,20 +51,21 @@ export default function AdminMessagesPage() {
   const fetchConversations = async () => {
     try {
       setLoading(true)
+      setError(null)
       const params = new URLSearchParams({
         page: String(page),
         limit: '20',
         status,
       })
       const response = await fetch(`/api/admin/messages?${params}`)
-      if (response.ok) {
-        const data = await response.json()
-        setConversations(data.conversations || [])
-        setTotalPages(data.totalPages || 1)
-        setTotal(data.total || 0)
-      }
-    } catch (error) {
-      console.error('Failed to fetch conversations:', error)
+      if (!response.ok) throw new Error(`Erreur ${response.status}`)
+      const data = await response.json()
+      setConversations(data.conversations || [])
+      setTotalPages(data.totalPages || 1)
+      setTotal(data.total || 0)
+    } catch {
+      setError('Erreur lors du chargement des conversations')
+      setConversations([])
     } finally {
       setLoading(false)
     }
@@ -121,6 +124,9 @@ export default function AdminMessagesPage() {
             ))}
           </div>
         </div>
+
+        {/* Error Banner */}
+        {error && <ErrorBanner message={error} onDismiss={() => setError(null)} onRetry={fetchConversations} />}
 
         {/* Conversations List */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
@@ -200,12 +206,14 @@ export default function AdminMessagesPage() {
                             <button
                               className="p-2 text-gray-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg"
                               title="Archiver"
+                              aria-label="Archiver la conversation"
                             >
                               <Archive className="w-5 h-5" />
                             </button>
                             <button
                               className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg"
                               title="Bloquer"
+                              aria-label="Bloquer la conversation"
                             >
                               <Ban className="w-5 h-5" />
                             </button>
@@ -225,6 +233,7 @@ export default function AdminMessagesPage() {
                     onClick={() => setPage(Math.max(1, page - 1))}
                     disabled={page === 1}
                     className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 hover:bg-gray-50"
+                    aria-label="Page précédente"
                   >
                     <ChevronLeft className="w-5 h-5" />
                   </button>
@@ -232,6 +241,7 @@ export default function AdminMessagesPage() {
                     onClick={() => setPage(Math.min(totalPages, page + 1))}
                     disabled={page === totalPages}
                     className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 hover:bg-gray-50"
+                    aria-label="Page suivante"
                   >
                     <ChevronRight className="w-5 h-5" />
                   </button>

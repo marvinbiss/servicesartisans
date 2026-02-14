@@ -11,6 +11,7 @@ import {
   Search,
   Shield,
 } from 'lucide-react'
+import { ConfirmationModal } from '@/components/admin/ConfirmationModal'
 
 export default function AdminToolsPage() {
   const [providerId, setProviderId] = useState('')
@@ -23,6 +24,12 @@ export default function AdminToolsPage() {
     is_active: boolean
     is_verified: boolean
   } | null>(null)
+
+  // Dispatch replay
+  const [assignmentId, setAssignmentId] = useState('')
+
+  // Confirmation modal for disable action
+  const [disableModal, setDisableModal] = useState(false)
 
   const lookupProvider = async () => {
     if (!providerId.trim()) return
@@ -82,12 +89,10 @@ export default function AdminToolsPage() {
   }
 
   const replayDispatch = async () => {
+    if (!assignmentId.trim()) return
+
     setError(null)
     setSuccess(null)
-
-    const assignmentId = prompt('ID de l\'assignation à rejouer :')
-    if (!assignmentId?.trim()) return
-
     setLoading(true)
     try {
       const res = await fetch('/api/admin/dispatch', {
@@ -97,6 +102,7 @@ export default function AdminToolsPage() {
       })
       if (res.ok) {
         setSuccess('Dispatch rejoué avec succès')
+        setAssignmentId('')
         setTimeout(() => setSuccess(null), 3000)
       } else {
         const data = await res.json()
@@ -111,7 +117,7 @@ export default function AdminToolsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Outils Admin</h1>
         <p className="text-gray-500 mb-8">Gestion des artisans et dispatch</p>
 
@@ -142,6 +148,7 @@ export default function AdminToolsPage() {
               value={providerId}
               onChange={(e) => setProviderId(e.target.value)}
               placeholder="UUID de l'artisan"
+              aria-label="UUID de l'artisan"
               className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
             />
             <button
@@ -177,7 +184,7 @@ export default function AdminToolsPage() {
               <div className="flex gap-3">
                 {providerInfo.is_active ? (
                   <button
-                    onClick={() => toggleProvider('disable')}
+                    onClick={() => setDisableModal(true)}
                     disabled={loading}
                     className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 disabled:opacity-50"
                   >
@@ -208,16 +215,39 @@ export default function AdminToolsPage() {
           <p className="text-sm text-gray-500 mb-4">
             Relance le round-robin pour une assignation existante. Un nouvel artisan sera sélectionné automatiquement.
           </p>
-          <button
-            onClick={replayDispatch}
-            disabled={loading}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
-          >
-            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
-            Replay dispatch
-          </button>
+          <div className="flex gap-3">
+            <input
+              type="text"
+              value={assignmentId}
+              onChange={(e) => setAssignmentId(e.target.value)}
+              placeholder="ID de l'assignation à rejouer"
+              aria-label="ID de l'assignation à rejouer"
+              onKeyDown={(e) => e.key === 'Enter' && replayDispatch()}
+              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+            />
+            <button
+              onClick={replayDispatch}
+              disabled={loading || !assignmentId.trim()}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
+            >
+              {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
+              Relancer la répartition
+            </button>
+          </div>
         </div>
       </div>
+
+      {providerInfo && (
+        <ConfirmationModal
+          isOpen={disableModal}
+          onClose={() => setDisableModal(false)}
+          onConfirm={() => { setDisableModal(false); toggleProvider('disable') }}
+          title="Désactiver l'artisan"
+          message={`Êtes-vous sûr de vouloir désactiver l'artisan « ${providerInfo.name} » ?`}
+          confirmText="Désactiver"
+          variant="warning"
+        />
+      )}
     </div>
   )
 }

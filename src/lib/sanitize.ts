@@ -137,6 +137,15 @@ export function sanitizeUuid(input: string): string | null {
 }
 
 /**
+ * Validate UUID format (any version)
+ */
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
+export function isValidUuid(value: string): boolean {
+  return UUID_REGEX.test(value)
+}
+
+/**
  * Sanitize SIRET number
  */
 export function sanitizeSiret(input: string): string {

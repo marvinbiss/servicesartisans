@@ -12,6 +12,8 @@ import {
   User,
   Calendar,
 } from 'lucide-react'
+import { ConfirmationModal } from '@/components/admin/ConfirmationModal'
+import { ErrorBanner } from '@/components/admin/ErrorBanner'
 
 interface Review {
   id: string
@@ -31,6 +33,7 @@ interface Review {
 export default function AdminReviewsPage() {
   const [reviews, setReviews] = useState<Review[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [filter, setFilter] = useState<'all' | 'pending' | 'flagged' | 'approved' | 'rejected'>('pending')
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
@@ -42,85 +45,77 @@ export default function AdminReviewsPage() {
   const fetchReviews = async () => {
     try {
       setLoading(true)
+      setError(null)
       const params = new URLSearchParams({
         page: String(page),
         limit: '20',
         filter,
       })
       const response = await fetch(`/api/admin/reviews?${params}`)
-      if (response.ok) {
-        const data = await response.json()
-        setReviews(data.reviews || [])
-        setTotalPages(data.totalPages || 1)
-      }
-    } catch (error) {
-      console.error('Failed to fetch reviews:', error)
+      if (!response.ok) throw new Error(`Erreur ${response.status}`)
+      const data = await response.json()
+      setReviews(data.reviews || [])
+      setTotalPages(data.totalPages || 1)
+    } catch {
+      setError('Erreur lors du chargement des avis')
+      setReviews([])
     } finally {
       setLoading(false)
     }
   }
 
-  const handleModeration = async (reviewId: string, status: 'approved' | 'rejected') => {
+  const [moderationModal, setModerationModal] = useState<{
+    open: boolean
+    reviewId: string
+    status: 'approved' | 'rejected'
+  }>({ open: false, reviewId: '', status: 'approved' })
+
+  const confirmModeration = async () => {
     try {
-      await fetch(`/api/admin/reviews/${reviewId}`, {
+      setError(null)
+      const response = await fetch(`/api/admin/reviews/${moderationModal.reviewId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          moderation_status: status,
-          is_visible: status === 'approved',
+          moderation_status: moderationModal.status,
+          is_visible: moderationModal.status === 'approved',
         }),
       })
+      if (!response.ok) throw new Error('Erreur lors de la modération')
+      setModerationModal({ open: false, reviewId: '', status: 'approved' })
       fetchReviews()
-    } catch (error) {
-      console.error('Moderation failed:', error)
+    } catch {
+      setError('Erreur lors de la modération de l\'avis')
     }
   }
 
-  // Mock data
-  const mockReviews: Review[] = [
-    {
-      id: '1',
-      author_name: 'Marie Dupont',
-      author_email: 'marie.dupont@email.fr',
-      provider_name: 'Plomberie Pro Paris',
-      provider_id: 'p1',
-      rating: 5,
-      comment: 'Excellent travail ! Intervention rapide et efficace. Je recommande vivement.',
-      moderation_status: 'pending',
-      is_visible: false,
-      is_flagged: false,
-      created_at: '2024-03-15T10:30:00Z',
-    },
-    {
-      id: '2',
-      author_name: 'Jean Martin',
-      author_email: 'jean.martin@email.fr',
-      provider_name: 'Électricité Express',
-      provider_id: 'p2',
-      rating: 2,
-      comment: 'Service décevant. Retard de 2 heures et travail bâclé.',
-      response: 'Nous sommes désolés pour cette expérience...',
-      moderation_status: 'pending',
-      is_visible: false,
-      is_flagged: true,
-      created_at: '2024-03-14T15:45:00Z',
-    },
-    {
-      id: '3',
-      author_name: 'Sophie Bernard',
-      author_email: 'sophie.b@email.fr',
-      provider_name: 'Serrurerie 24/7',
-      provider_id: 'p3',
-      rating: 4,
-      comment: 'Bon service, prix correct. Petit retard mais travail soigné.',
-      moderation_status: 'approved',
-      is_visible: true,
-      is_flagged: false,
-      created_at: '2024-03-13T09:15:00Z',
-    },
-  ]
+  const handleModeration = (reviewId: string, status: 'approved' | 'rejected') => {
+    if (status === 'rejected') {
+      setModerationModal({ open: true, reviewId, status })
+      return
+    }
+    // Approve directly
+    setModerationModal({ open: false, reviewId: '', status: 'approved' })
+    ;(async () => {
+      try {
+        setError(null)
+        const response = await fetch(`/api/admin/reviews/${reviewId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            moderation_status: status,
+            is_visible: true,
+          }),
+        })
+        if (!response.ok) throw new Error('Erreur lors de la modération')
+        fetchReviews()
+      } catch {
+        setError('Erreur lors de la modération de l\'avis')
+      }
+    })()
+  }
 
-  const displayReviews = reviews.length > 0 ? reviews : mockReviews
+  const displayReviews = reviews
 
   const getStatusBadge = (review: Review) => {
     if (review.is_flagged) {
@@ -178,6 +173,9 @@ export default function AdminReviewsPage() {
             ))}
           </div>
         </div>
+
+        {/* Error Banner */}
+        {error && <ErrorBanner message={error} onDismiss={() => setError(null)} onRetry={fetchReviews} />}
 
         {/* Reviews List */}
         <div className="space-y-4">
@@ -276,6 +274,17 @@ export default function AdminReviewsPage() {
           </div>
         )}
       </div>
+
+      {/* Reject Review Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={moderationModal.open}
+        onClose={() => setModerationModal({ open: false, reviewId: '', status: 'approved' })}
+        onConfirm={confirmModeration}
+        title="Rejeter l'avis"
+        message="Êtes-vous sûr de vouloir rejeter cet avis ? Il ne sera plus visible publiquement."
+        confirmText="Rejeter"
+        variant="danger"
+      />
     </div>
   )
 }

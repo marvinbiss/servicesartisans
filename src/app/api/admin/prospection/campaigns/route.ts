@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { requirePermission } from '@/lib/admin-auth'
+import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
@@ -102,11 +102,16 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Strip HTML tags from text fields before storing
+    const sanitizedData = { ...parsed.data }
+    if (sanitizedData.name) sanitizedData.name = sanitizedData.name.replace(/<[^>]*>/g, '').trim()
+    if (sanitizedData.description) sanitizedData.description = sanitizedData.description.replace(/<[^>]*>/g, '').trim()
+
     const { data, error } = await supabase
       .from('prospection_campaigns')
       .insert({
-        ...parsed.data,
-        status: parsed.data.scheduled_at ? 'scheduled' : 'draft',
+        ...sanitizedData,
+        status: sanitizedData.scheduled_at ? 'scheduled' : 'draft',
         created_by: authResult.admin.id,
       })
       .select()
@@ -116,6 +121,12 @@ export async function POST(request: NextRequest) {
       logger.error('Create campaign error', error)
       return NextResponse.json({ success: false, error: { message: 'Erreur lors de la création' } }, { status: 500 })
     }
+
+    await logAdminAction(authResult.admin.id, 'campaign.create', 'prospection_campaign', data.id, {
+      name: sanitizedData.name,
+      channel: sanitizedData.channel,
+      audience_type: sanitizedData.audience_type,
+    })
 
     return NextResponse.json({ success: true, data }, { status: 201 })
   } catch (error) {

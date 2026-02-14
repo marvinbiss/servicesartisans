@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
+import { isValidUuid } from '@/lib/sanitize'
 import { z } from 'zod'
 
 const updateSchema = z.object({
@@ -29,6 +30,13 @@ export async function GET(
     if (!authResult.success) return authResult.error
 
     const { id } = await params
+    if (!isValidUuid(id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
+    }
+
     const supabase = createAdminClient()
 
     const { data, error } = await supabase
@@ -57,9 +65,16 @@ export async function PATCH(
 ) {
   try {
     const authResult = await requirePermission('prospection', 'write')
-    if (!authResult.success) return authResult.error
+    if (!authResult.success || !authResult.admin) return authResult.error
 
     const { id } = await params
+    if (!isValidUuid(id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
+    }
+
     const body = await request.json()
     const parsed = updateSchema.safeParse(body)
 
@@ -70,10 +85,19 @@ export async function PATCH(
       )
     }
 
+    // Strip HTML tags from text fields before storing
+    const sanitizedData = { ...parsed.data }
+    const textFields = ['contact_name', 'company_name', 'address', 'city', 'region'] as const
+    for (const field of textFields) {
+      if (typeof sanitizedData[field] === 'string') {
+        sanitizedData[field] = (sanitizedData[field] as string).replace(/<[^>]*>/g, '').trim()
+      }
+    }
+
     const supabase = createAdminClient()
     const { data, error } = await supabase
       .from('prospection_contacts')
-      .update(parsed.data)
+      .update(sanitizedData)
       .eq('id', id)
       .select()
       .single()
@@ -82,6 +106,10 @@ export async function PATCH(
       logger.error('Update contact error', error)
       return NextResponse.json({ success: false, error: { message: 'Erreur lors de la mise à jour' } }, { status: 500 })
     }
+
+    await logAdminAction(authResult.admin.id, 'contact.update', 'prospection_contact', id, {
+      updated_fields: Object.keys(parsed.data),
+    })
 
     return NextResponse.json({ success: true, data })
   } catch (error) {
@@ -99,6 +127,13 @@ export async function DELETE(
     if (!authResult.success || !authResult.admin) return authResult.error
 
     const { id } = await params
+    if (!isValidUuid(id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Identifiant invalide' } },
+        { status: 400 }
+      )
+    }
+
     const supabase = createAdminClient()
     const gdpr = request.nextUrl.searchParams.get('gdpr') === 'true'
 
@@ -122,6 +157,9 @@ export async function DELETE(
         logger.error('Soft delete contact error', error)
         return NextResponse.json({ success: false, error: { message: 'Erreur lors de la suppression' } }, { status: 500 })
       }
+      await logAdminAction(authResult.admin.id, 'contact.delete', 'prospection_contact', id, {
+        method: 'soft_delete',
+      })
     }
 
     return NextResponse.json({ success: true })

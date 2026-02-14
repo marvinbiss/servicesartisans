@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { X, AlertTriangle, CheckCircle, Info } from 'lucide-react'
 import { clsx } from 'clsx'
 
@@ -54,6 +54,46 @@ export function ConfirmationModal({
 }: ConfirmationModalProps) {
   const [confirmInput, setConfirmInput] = useState('')
   const [loading, setLoading] = useState(false)
+  const modalRef = useRef<HTMLDivElement>(null)
+
+  // Trap focus inside modal: cycle Tab/Shift+Tab, close on Escape
+  useEffect(() => {
+    if (!isOpen) return
+
+    const modal = modalRef.current
+    if (!modal) return
+
+    const focusableElements = modal.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    )
+    const firstElement = focusableElements[0]
+    const lastElement = focusableElements[focusableElements.length - 1]
+
+    firstElement?.focus()
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        handleClose()
+        return
+      }
+      if (e.key !== 'Tab') return
+
+      if (e.shiftKey) {
+        if (document.activeElement === firstElement) {
+          e.preventDefault()
+          lastElement?.focus()
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          e.preventDefault()
+          firstElement?.focus()
+        }
+      }
+    }
+
+    modal.addEventListener('keydown', handleKeyDown)
+    return () => modal.removeEventListener('keydown', handleKeyDown)
+  }, [isOpen, onClose])
 
   if (!isOpen) return null
 
@@ -90,11 +130,19 @@ export function ConfirmationModal({
         />
 
         {/* Modal */}
-        <div className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6">
+        <div
+          ref={modalRef}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="confirmation-modal-title"
+          tabIndex={-1}
+          className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6"
+        >
           {/* Close button */}
           <button
             onClick={handleClose}
             className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+            aria-label="Fermer la boîte de dialogue"
           >
             <X className="w-5 h-5" />
           </button>
@@ -105,7 +153,7 @@ export function ConfirmationModal({
           </div>
 
           {/* Content */}
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
+          <h3 id="confirmation-modal-title" className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
           <p className="text-gray-600 mb-4">{message}</p>
 
           {/* Confirmation input */}
@@ -120,6 +168,7 @@ export function ConfirmationModal({
                 onChange={(e) => setConfirmInput(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Tapez pour confirmer"
+                aria-label="Saisir le texte de confirmation"
               />
             </div>
           )}
