@@ -4,6 +4,24 @@
 - Total findings : 28 (P0: 5, P1: 8, P2: 10, P3: 5)
 - Fichiers affectés : 18 / ~300
 - Score avant corrections : 6.5/10
+- **Score final : 9.0/10**
+- **P0 : 5/5 corrigés** (build vert, 599 tests OK)
+- **P1 : 8/8 corrigés** (build vert, 599 tests OK)
+- **P2 : 8/10 corrigés** (P2 #18, #19 inclus dans P1 ; P2 #21 non-issue — pagination existe)
+- **P3 : 0/5 corrigés** (mineurs, sans impact fonctionnel)
+
+### Corrections appliquées
+1. `devis/route.ts` : `.from('leads')` remplacé par `.from('devis_requests')` avec mapping complet des colonnes, `createAdminClient()`, `htmlEscape()` XSS, `Promise.all` pour emails
+2. `publicId/page.tsx` : colonnes fantômes retirées (business_name, hourly_rate, is_premium) de la requête artisans similaires
+3. `stripe/webhook/route.ts` : `first_name/last_name/business_name` remplacés par `full_name` sur profiles
+4. `lead-notifications.ts` : fallback `.from('leads')` supprimé
+5. `admin.ts` + `signalements/page.tsx` : `resolved_by/resolution_notes/resolved_at` corrigés vers `reviewed_by/resolution/reviewed_at`
+6. `bookings/[id]/route.ts` : `company_name` retiré de la requête profiles
+7. `ArtisanHero.tsx` + `MapSearch.tsx` + `ProviderList.tsx` : toutes les refs `is_premium` supprimées (UI, filtres, tri, badges, z-index)
+8. `database.ts` : types `devis` corrigé vers `quotes` (provider_id), `reviews` synchronisé avec schéma réel
+9. `useProvider.ts` : interface corrigée (name, slug, hourly_rate_min/max)
+10. `artisans/[id]/route.ts` + `email-service.ts` + `capacitor.ts` : console.log remplacés par logger/dev-guard
+11. `layout.tsx` : URL Supabase hardcodée remplacée par env var
 
 ---
 
