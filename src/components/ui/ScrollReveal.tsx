@@ -1,7 +1,6 @@
 'use client'
 
-import { motion, useInView, useReducedMotion } from 'framer-motion'
-import { useRef, ReactNode } from 'react'
+import { useRef, useEffect, useState, ReactNode } from 'react'
 
 interface ScrollRevealProps {
   children: ReactNode
@@ -23,39 +22,65 @@ export function ScrollReveal({
   distance = 40,
   as = 'div',
 }: ScrollRevealProps) {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '-100px' })
-  const prefersReducedMotion = useReducedMotion()
+  const ref = useRef<HTMLDivElement | null>(null)
+  const [isVisible, setIsVisible] = useState(false)
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
 
-  const directions = {
-    up: { y: distance },
-    down: { y: -distance },
-    left: { x: distance },
-    right: { x: -distance },
-    none: {},
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    setPrefersReducedMotion(mq.matches)
+
+    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
+
+  useEffect(() => {
+    if (prefersReducedMotion) {
+      setIsVisible(true)
+      return
+    }
+
+    const el = ref.current
+    if (!el) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true)
+          observer.unobserve(el)
+        }
+      },
+      { rootMargin: '-100px' }
+    )
+
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [prefersReducedMotion])
+
+  const directions: Record<string, string> = {
+    up: `translateY(${distance}px)`,
+    down: `translateY(-${distance}px)`,
+    left: `translateX(${distance}px)`,
+    right: `translateX(-${distance}px)`,
+    none: 'none',
   }
 
-  // Respect user's reduced motion preference
-  if (prefersReducedMotion) {
-    const Component = as === 'section' ? 'section' : 'div'
-    return <Component className={className}>{children}</Component>
-  }
-
-  const MotionComponent = as === 'section' ? motion.section : motion.div
+  const Component = as === 'section' ? 'section' : 'div'
 
   return (
-    <MotionComponent
-      ref={ref}
-      initial={{ opacity: 0, ...directions[direction] }}
-      animate={isInView ? { opacity: 1, x: 0, y: 0 } : {}}
-      transition={{
-        duration,
-        delay,
-        ease: [0.25, 0.46, 0.45, 0.94],
-      }}
+    <Component
+      ref={ref as React.RefObject<HTMLDivElement>}
       className={className}
+      style={{
+        opacity: isVisible ? 1 : 0,
+        transform: isVisible ? 'none' : directions[direction],
+        transition: prefersReducedMotion
+          ? 'none'
+          : `opacity ${duration}s ease-out ${delay}s, transform ${duration}s ease-out ${delay}s`,
+      }}
     >
       {children}
-    </MotionComponent>
+    </Component>
   )
 }
