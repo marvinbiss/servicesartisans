@@ -224,7 +224,7 @@ export default function TarifsArtisansPage() {
 
                       {/* CTA */}
                       <Link
-                        href={`/services/${trade.slug}`}
+                        href={`/tarifs-artisans/${trade.slug}`}
                         className="flex items-center justify-between w-full bg-blue-600 text-white px-4 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm"
                       >
                         <span>Voir les tarifs détaillés</span>

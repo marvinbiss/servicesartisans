@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { SITE_URL } from '@/lib/seo/config'
 import { services, villes, departements, regions } from '@/lib/data/france'
+import { tradeContent } from '@/lib/data/trade-content'
 import { articleSlugs } from '@/lib/data/blog/articles'
 import { allArticles } from '@/lib/data/blog/articles'
 import { getBlogImage, getServiceImage, getCityImage, heroImage, getDepartmentImage, getRegionImage, pageImages, ambianceImages } from '@/lib/data/images'
@@ -91,6 +92,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       { path: '/notre-processus-de-verification', changeFrequency: 'monthly' as const, priority: 0.5 },
       { path: '/politique-avis', changeFrequency: 'monthly' as const, priority: 0.5 },
       { path: '/mediation', changeFrequency: 'yearly' as const, priority: 0.4 },
+      { path: '/plan-du-site', changeFrequency: 'weekly' as const, priority: 0.7 },
     ].map(({ path, changeFrequency, priority }) => ({
       url: `${SITE_URL}${path}`,
       lastModified: STATIC_LAST_MODIFIED,
@@ -131,7 +133,26 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       }
     })
 
-    return [...homepage, ...staticPages, ...blogArticlePages, ...servicesIndex, ...servicePages]
+    // Urgence sub-pages (services with emergencyInfo)
+    const emergencySlugs = Object.keys(tradeContent).filter((s) => tradeContent[s].emergencyInfo)
+    const urgencePages: MetadataRoute.Sitemap = emergencySlugs.map((slug) => ({
+      url: `${SITE_URL}/urgence/${slug}`,
+      lastModified: STATIC_LAST_MODIFIED,
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+      images: [getServiceImage(slug).src],
+    }))
+
+    // Tarifs per-service pages
+    const tarifsPages: MetadataRoute.Sitemap = Object.keys(tradeContent).map((slug) => ({
+      url: `${SITE_URL}/tarifs-artisans/${slug}`,
+      lastModified: STATIC_LAST_MODIFIED,
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+      images: [getServiceImage(slug).src],
+    }))
+
+    return [...homepage, ...staticPages, ...blogArticlePages, ...servicesIndex, ...servicePages, ...urgencePages, ...tarifsPages]
   }
 
   // ── Service + city combination pages ────────────────────────────────

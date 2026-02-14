@@ -15,7 +15,7 @@ import Link from 'next/link'
 import { REVALIDATE } from '@/lib/cache'
 import { slugify, getArtisanUrl } from '@/lib/utils'
 import { getServiceImage } from '@/lib/data/images'
-import { services as staticServicesList, villes, getVilleBySlug, getDepartementByCode, getRegionSlugByName, getNearbyCities } from '@/lib/data/france'
+import { services as staticServicesList, villes, getVilleBySlug, getDepartementByCode, getRegionSlugByName, getNearbyCities, getVillesByDepartement } from '@/lib/data/france'
 import { getTradeContent } from '@/lib/data/trade-content'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import { generateLocationContent } from '@/lib/seo/location-content'
@@ -258,7 +258,10 @@ export default async function ServiceLocationPage({ params }: PageProps) {
 
   // Filter out current location and get other services for cross-linking
   const otherServices = popularServices.filter(s => s.slug !== serviceSlug).slice(0, 6)
-  const nearbyCities = getNearbyCities(locationSlug, 8)
+  const nearbyCities = getNearbyCities(locationSlug, 12)
+  const deptCities = location.department_code
+    ? getVillesByDepartement(location.department_code).filter(v => v.slug !== locationSlug).slice(0, 10)
+    : []
 
   return (
     <>
@@ -564,6 +567,39 @@ export default async function ServiceLocationPage({ params }: PageProps) {
                 )}
               </div>
             </div>
+            {/* Cross-service callouts */}
+            {otherServices.slice(0, 3).map((s) => (
+              <Link
+                key={`cross-${s.slug}`}
+                href={`/services/${s.slug}/${locationSlug}`}
+                className="flex items-center justify-between p-4 bg-amber-50 rounded-xl border border-amber-100 hover:border-amber-200 transition-all group"
+              >
+                <span className="text-sm text-amber-800 font-medium">
+                  Besoin d&apos;un {s.name.toLowerCase()} à {location.name} ?
+                </span>
+                <svg className="w-4 h-4 text-amber-600 group-hover:translate-x-0.5 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+              </Link>
+            ))}
+
+            {/* Villes du département */}
+            {deptCities.length > 3 && (
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:col-span-2 lg:col-span-3">
+                <h3 className="font-semibold text-gray-900 mb-4">
+                  {service.name} dans {location.department_name ? `le ${location.department_name}` : 'le département'}
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {deptCities.map((city) => (
+                    <Link
+                      key={city.slug}
+                      href={`/services/${serviceSlug}/${city.slug}`}
+                      className="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-50 hover:bg-blue-50 text-gray-600 hover:text-blue-600 rounded-full text-sm border border-gray-100 hover:border-blue-200 transition-colors"
+                    >
+                      {city.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>

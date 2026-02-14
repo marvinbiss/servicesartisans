@@ -20,6 +20,11 @@ export async function POST(request: NextRequest) {
     // Revalider le chemin
     revalidatePath(path, 'page')
 
+    // Notifier IndexNow (fire-and-forget)
+    import('@/lib/seo/indexnow')
+      .then(({ submitToIndexNow }) => submitToIndexNow([path]))
+      .catch(() => {})
+
     return NextResponse.json({
       revalidated: true,
       path,

@@ -342,7 +342,7 @@ export default async function VillePage({ params }: PageProps) {
             <div>
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Services à {ville.name}</h3>
               <div className="space-y-2">
-                {services.slice(0, 6).map((s) => (
+                {services.slice(0, 10).map((s) => (
                   <Link key={s.slug} href={`/services/${s.slug}/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {s.name} à {ville.name}
@@ -358,7 +358,7 @@ export default async function VillePage({ params }: PageProps) {
             <div>
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Villes en {ville.region}</h3>
               <div className="space-y-2">
-                {regionVilles.slice(0, 6).map((v) => (
+                {regionVilles.slice(0, 10).map((v) => (
                   <Link key={v.slug} href={`/villes/${v.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     Artisans à {v.name}

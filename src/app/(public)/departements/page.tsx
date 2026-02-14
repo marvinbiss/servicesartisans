@@ -14,6 +14,7 @@ export const metadata: Metadata = {
     description: 'Annuaire de 350 000+ artisans référencés dans les 101 départements français. Trouvez un professionnel qualifié près de chez vous.',
     url: `${SITE_URL}/departements`,
     type: 'website',
+    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — Artisans par département' }],
   },
 }
 

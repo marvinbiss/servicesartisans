@@ -11,7 +11,7 @@ import { SITE_URL } from '@/lib/seo/config'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularCitiesLinks } from '@/components/InternalLinks'
 import { popularServices } from '@/lib/constants/navigation'
-import { services as staticServicesList, villes } from '@/lib/data/france'
+import { services as staticServicesList, villes, departements, getVillesByDepartement } from '@/lib/data/france'
 import { getTradeContent } from '@/lib/data/trade-content'
 import { getServiceImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 
@@ -323,6 +323,49 @@ export default async function ServicePage({ params }: PageProps) {
                 ))}
             </div>
           )}
+        </div>
+      </section>
+
+      {/* Par département — SEO internal links to service+ville pages */}
+      <section className="py-12 border-t">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-8 tracking-tight">
+            {service.name} par département
+          </h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {departements.slice(0, 30).map((dept) => {
+              const deptVilles = getVillesByDepartement(dept.code)
+              if (deptVilles.length === 0) return null
+              return (
+                <div key={dept.code} className="bg-gray-50 rounded-xl p-5">
+                  <h3 className="font-semibold text-gray-900 mb-3 text-sm">
+                    <Link href={`/departements/${dept.slug}`} className="hover:text-blue-600 transition-colors">
+                      {dept.name} ({dept.code})
+                    </Link>
+                  </h3>
+                  <div className="flex flex-wrap gap-1.5">
+                    {deptVilles.slice(0, 5).map((ville) => (
+                      <Link
+                        key={ville.slug}
+                        href={`/services/${serviceSlug}/${ville.slug}`}
+                        className="text-xs text-gray-600 hover:text-blue-600 px-2.5 py-1 bg-white rounded-full border border-gray-200 hover:border-blue-200 transition-colors"
+                      >
+                        {ville.name}
+                      </Link>
+                    ))}
+                    {deptVilles.length > 5 && (
+                      <Link
+                        href={`/departements/${dept.slug}`}
+                        className="text-xs text-blue-600 px-2.5 py-1"
+                      >
+                        +{deptVilles.length - 5} villes
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
         </div>
       </section>
 

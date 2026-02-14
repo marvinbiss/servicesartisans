@@ -14,6 +14,7 @@ export const metadata: Metadata = {
     description: 'Trouvez un artisan référencé dans votre ville. Plus de 1 000 villes couvertes, 350 000+ professionnels dans 101 départements.',
     url: `${SITE_URL}/villes`,
     type: 'website',
+    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — Artisans par ville' }],
   },
 }
 

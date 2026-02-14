@@ -527,6 +527,9 @@ export default function Footer() {
               <Link href="/contact" className="hover:text-white transition-colors duration-200 py-1.5">
                 Contact
               </Link>
+              <Link href="/plan-du-site" className="hover:text-white transition-colors duration-200 py-1.5">
+                Plan du site
+              </Link>
             </div>
           </div>
         </div>

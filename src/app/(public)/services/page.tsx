@@ -28,6 +28,7 @@ export const metadata: Metadata = {
     title: 'Tous les services artisans — 350 000+ professionnels référencés',
     description: '50+ métiers du bâtiment, 350 000+ artisans référencés dans 101 départements. Trouvez un professionnel qualifié près de chez vous.',
     url: 'https://servicesartisans.fr/services',
+    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — Tous les services artisans' }],
   },
   robots: {
     index: true,
