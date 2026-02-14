@@ -6,7 +6,7 @@
  * page, eliminating the doorway-pages risk of near-identical content.
  */
 
-import type { Ville, Departement, Region } from '@/lib/data/france'
+import type { Ville, Region } from '@/lib/data/france'
 import { getTradeContent } from '@/lib/data/trade-content'
 
 // ---------------------------------------------------------------------------
