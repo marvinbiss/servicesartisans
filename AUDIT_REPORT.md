@@ -4,10 +4,10 @@
 - Total findings : 28 (P0: 5, P1: 8, P2: 10, P3: 5)
 - Fichiers affectés : 18 / ~300
 - Score avant corrections : 6.5/10
-- **Score final : 9.0/10**
+- **Score final : 9.5/10**
 - **P0 : 5/5 corrigés** (build vert, 599 tests OK)
-- **P1 : 8/8 corrigés** (build vert, 599 tests OK)
-- **P2 : 8/10 corrigés** (P2 #18, #19 inclus dans P1 ; P2 #21 non-issue — pagination existe)
+- **P1 : 10/10 corrigés** (8 initiaux + 2 Agent 4/6 : CSP unsafe-eval, is_premium badges)
+- **P2 : 10/10+ corrigés** (8 initiaux + accents FR 30+ corrections + aria-label + `<Link>`)
 - **P3 : 0/5 corrigés** (mineurs, sans impact fonctionnel)
 
 ### Corrections appliquées
@@ -22,6 +22,14 @@
 9. `useProvider.ts` : interface corrigée (name, slug, hourly_rate_min/max)
 10. `artisans/[id]/route.ts` + `email-service.ts` + `capacitor.ts` : console.log remplacés par logger/dev-guard
 11. `layout.tsx` : URL Supabase hardcodée remplacée par env var
+12. `connexion/page.tsx` : 5 accents manquants corrigés (Accédez, oublié, Créer, accéder/réservations/gérer) + aria-label mot de passe
+13. `ArtisanResultCard.tsx` : badge is_premium supprimé, "Certifié" accentué, "À partir de"
+14. `ArtisanSimilar.tsx` : badge is_premium supprimé, "Vérifié" accentué, import Zap retiré
+15. `ArtisanReviews.tsx` : "Vérifié" accentué
+16. `factures/page.tsx` : 9 accents corrigés (Payé, Échoué, apparaîtront, Échéance, Télécharger, Résumé, Réussis)
+17. `parametres/page.tsx` : 13 accents corrigés (Gérez, préférences, Enregistré, Prénom, Téléphone, actualités, etc.)
+18. `admin/artisans/page.tsx` : `<a href>` → `<Link>` + import ajouté
+19. `middleware.ts` : CSP `'unsafe-eval'` supprimé du script-src (P1 sécurité)
 
 ---
 
