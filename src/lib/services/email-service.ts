@@ -24,9 +24,10 @@ export async function sendEmail(options: EmailOptions): Promise<{ success: boole
   const resendApiKey = process.env.RESEND_API_KEY
 
   if (!resendApiKey) {
-    console.log('[Email Service] No RESEND_API_KEY configured')
-    console.log('[Email Service] Would send to:', options.to)
-    console.log('[Email Service] Subject:', options.template.subject)
+    // Dev mode: log email details when API key not configured
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[Email Service] No RESEND_API_KEY — would send to:', options.to, 'Subject:', options.template.subject)
+    }
     return { success: true, id: 'dev-mode' }
   }
 

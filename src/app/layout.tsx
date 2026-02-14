@@ -141,8 +141,8 @@ export default function RootLayout({
         />
 
         {/* Preconnect for Supabase backend */}
-        <link rel="preconnect" href="https://umjmbdbwcsxrvfqktiui.supabase.co" />
-        <link rel="dns-prefetch" href="https://umjmbdbwcsxrvfqktiui.supabase.co" />
+        <link rel="preconnect" href={process.env.NEXT_PUBLIC_SUPABASE_URL || ''} />
+        <link rel="dns-prefetch" href={process.env.NEXT_PUBLIC_SUPABASE_URL || ''} />
 
         {/* Preconnect for images - Unsplash */}
         <link rel="preconnect" href="https://images.unsplash.com" />

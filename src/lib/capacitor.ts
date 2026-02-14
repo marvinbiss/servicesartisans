@@ -44,7 +44,7 @@ export const initPushNotifications = async () => {
 
     // Écouter l'enregistrement
     PushNotifications.addListener('registration', (token) => {
-      console.log('Push registration success, token:', token.value)
+      if (process.env.NODE_ENV === 'development') console.log('Push registration success, token:', token.value)
       // Envoyer le token au backend pour l'associer à l'utilisateur
       return token.value
     })
@@ -56,12 +56,12 @@ export const initPushNotifications = async () => {
 
     // Notification reçue en foreground
     PushNotifications.addListener('pushNotificationReceived', (notification) => {
-      console.log('Push notification received:', notification)
+      if (process.env.NODE_ENV === 'development') console.log('Push notification received:', notification)
     })
 
     // Notification cliquée
     PushNotifications.addListener('pushNotificationActionPerformed', (notification) => {
-      console.log('Push notification action:', notification)
+      if (process.env.NODE_ENV === 'development') console.log('Push notification action:', notification)
     })
   }
 

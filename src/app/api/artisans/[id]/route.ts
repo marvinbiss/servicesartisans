@@ -144,7 +144,7 @@ export async function GET(
     const supabase = createAdminClient()
     const artisanId = idValidation.data
 
-    console.log(`[API] Fetching artisan: ${artisanId} at ${new Date().toISOString()}`)
+    logger.debug(`Fetching artisan: ${artisanId}`)
 
     let artisan: ArtisanDetails | null = null
     let reviews: Review[] = []
@@ -168,7 +168,7 @@ export async function GET(
 
     // If not found or inactive, return early
     if (!simpleProvider || simpleError) {
-      console.log(`[API] Provider not found: ${artisanId}`, simpleError)
+      logger.debug(`Provider not found: ${artisanId}`, { code: simpleError?.code })
     }
 
     // Now get full data with relations (if tables exist)
@@ -200,7 +200,7 @@ export async function GET(
         }
       } catch {
         // Use simple provider if relations fail
-        console.log(`[API] Using simple provider data for: ${artisanId}`)
+        logger.debug(`Using simple provider data for: ${artisanId}`)
       }
     }
 
