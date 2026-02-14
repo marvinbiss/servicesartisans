@@ -82,13 +82,14 @@ export function getBlogArticleSchema(article: {
 
   const schemas: Record<string, unknown>[] = []
 
-  // Article schema
+  // Article schema — image always present (Google requires it for rich results)
+  const articleImage = imageUrl || `${SITE_URL}/opengraph-image`
   schemas.push({
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: article.title,
     description: article.excerpt,
-    ...(imageUrl ? { image: imageUrl } : {}),
+    image: articleImage,
     author: {
       '@type': article.author === 'ServicesArtisans' ? 'Organization' : 'Person',
       name: article.author,

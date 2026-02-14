@@ -3,7 +3,7 @@ import { SITE_URL } from '@/lib/seo/config'
 import { services, villes, departements, regions } from '@/lib/data/france'
 import { articleSlugs } from '@/lib/data/blog/articles'
 import { allArticles } from '@/lib/data/blog/articles'
-import { getBlogImage, getServiceImage, getCityImage, heroImage } from '@/lib/data/images'
+import { getBlogImage, getServiceImage, getCityImage, heroImage, getDepartmentImage, getRegionImage, pageImages, ambianceImages } from '@/lib/data/images'
 
 // Provider batch size — well under the 50,000 URL sitemap limit
 const PROVIDER_BATCH_SIZE = 40_000
@@ -65,7 +65,15 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       },
     ]
 
-    const ogFallback = `${SITE_URL}/opengraph-image`
+    const ogFallback = heroImage.src
+    // Page-specific images where a relevant photo exists
+    const staticPageImages: Record<string, string> = {
+      '/a-propos': pageImages.about[0].src,
+      '/comment-ca-marche': pageImages.howItWorks[0].src,
+      '/notre-processus-de-verification': pageImages.verification[0].src,
+      '/urgence': ambianceImages.ctaBg,
+      '/devis': ambianceImages.renovation,
+    }
     const staticPages: MetadataRoute.Sitemap = [
       { path: '/a-propos', changeFrequency: 'monthly' as const, priority: 0.5 },
       { path: '/contact', changeFrequency: 'monthly' as const, priority: 0.5 },
@@ -88,7 +96,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       lastModified: STATIC_LAST_MODIFIED,
       changeFrequency,
       priority,
-      images: [ogFallback],
+      images: [staticPageImages[path] || ogFallback],
     }))
 
     const blogArticlePages: MetadataRoute.Sitemap = articleSlugs.map((slug) => {
@@ -181,7 +189,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'weekly' as const,
       priority: 0.7,
-      images: [heroImage.src],
+      images: [getDepartmentImage(dept.code).src],
     }))
 
     const regionsIndex: MetadataRoute.Sitemap = [
@@ -198,7 +206,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'weekly' as const,
       priority: 0.7,
-      images: [heroImage.src],
+      images: [getRegionImage(region.slug).src],
     }))
 
     return [...departementsIndex, ...departementPages, ...regionsIndex, ...regionPages]

@@ -7,6 +7,7 @@ import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { regions, getRegionBySlug, services as allServices } from '@/lib/data/france'
+import { getRegionImage } from '@/lib/data/images'
 
 export function generateStaticParams() {
   return regions.map((region) => ({ region: region.slug }))
@@ -30,6 +31,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const title = `Artisans en ${region.name} — Annuaire & Devis Gratuit | ServicesArtisans`
   const description = `Trouvez un artisan qualifié en ${region.name}. ${deptCount} départements, ${cityCount} villes couvertes. Plombiers, électriciens, serruriers et plus. Devis gratuits, artisans référencés.`
 
+  const regionImage = getRegionImage(regionSlug)
+
   return {
     title,
     description,
@@ -39,13 +42,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description,
       type: 'website',
       url: `${SITE_URL}/regions/${regionSlug}`,
-      images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: `Artisans en ${region.name}` }],
+      images: [{ url: regionImage.src, width: 1200, height: 630, alt: `Artisans en ${region.name}` }],
     },
     twitter: {
       card: 'summary_large_image' as const,
       title,
       description,
-      images: ['https://servicesartisans.fr/opengraph-image'],
+      images: [regionImage.src],
     },
   }
 }

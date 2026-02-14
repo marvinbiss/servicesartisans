@@ -379,7 +379,7 @@ export function getProfessionalServiceSchema(artisan: {
     name: artisan.name,
     description: artisan.description,
     url: canonicalUrl,
-    image: artisan.image || `${SITE_URL}/images/default-artisan.jpg`,
+    image: artisan.image || `${SITE_URL}/opengraph-image`,
     address: {
       '@type': 'PostalAddress',
       addressLocality: artisan.city,

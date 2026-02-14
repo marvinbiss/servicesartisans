@@ -350,6 +350,57 @@ export function getCityImage(slug: string) {
   return cityImages[slug] || null
 }
 
+// ── DÉPARTEMENT → image via chef-lieu ────────────────────────────
+const deptCodeToCitySlug: Record<string, string> = {
+  '75': 'paris',
+  '13': 'marseille',
+  '69': 'lyon',
+  '31': 'toulouse',
+  '06': 'nice',
+  '44': 'nantes',
+  '67': 'strasbourg',
+  '34': 'montpellier',
+  '33': 'bordeaux',
+  '59': 'lille',
+  '35': 'rennes',
+  '51': 'reims',
+  '42': 'saint-etienne',
+  '83': 'toulon',
+  '38': 'grenoble',
+  '21': 'dijon',
+  '49': 'angers',
+  '72': 'le-mans',
+  '29': 'brest',
+}
+
+/** Image d'un département (chef-lieu → cityImage, sinon hero) */
+export function getDepartmentImage(deptCode: string): { src: string; alt: string } {
+  const citySlug = deptCodeToCitySlug[deptCode]
+  if (citySlug && cityImages[citySlug]) return cityImages[citySlug]
+  return heroImage
+}
+
+// ── RÉGION → image via ville principale ──────────────────────────
+const regionSlugToCitySlug: Record<string, string> = {
+  'ile-de-france': 'paris',
+  'provence-alpes-cote-dazur': 'marseille',
+  'auvergne-rhone-alpes': 'lyon',
+  'occitanie': 'toulouse',
+  'nouvelle-aquitaine': 'bordeaux',
+  'pays-de-la-loire': 'nantes',
+  'grand-est': 'strasbourg',
+  'hauts-de-france': 'lille',
+  'bretagne': 'rennes',
+  'bourgogne-franche-comte': 'dijon',
+}
+
+/** Image d'une région (capitale → cityImage, sinon hero) */
+export function getRegionImage(regionSlug: string): { src: string; alt: string } {
+  const citySlug = regionSlugToCitySlug[regionSlug]
+  if (citySlug && cityImages[citySlug]) return cityImages[citySlug]
+  return heroImage
+}
+
 // ── 7. PAGES STATIQUES ───────────────────────────────────────────
 export const pageImages = {
   howItWorks: [

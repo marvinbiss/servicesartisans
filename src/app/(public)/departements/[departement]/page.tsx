@@ -8,6 +8,7 @@ import { SITE_URL } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { departements, getDepartementBySlug, getVillesByDepartement, services, getRegionSlugByName } from '@/lib/data/france'
 import { slugify } from '@/lib/utils'
+import { getDepartmentImage } from '@/lib/data/images'
 
 export function generateStaticParams() {
   return departements.map((dept) => ({ departement: dept.slug }))
@@ -28,6 +29,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const title = `Artisans en ${dept.name} (${dept.code}) — Annuaire & Devis Gratuit | ServicesArtisans`
   const description = `Trouvez des artisans qualifiés dans le ${dept.name} (${dept.code}). ${dept.description} ${services.length} corps de métier, artisans référencés. Devis gratuit.`
 
+  const deptImage = getDepartmentImage(dept.code)
+
   return {
     title,
     description,
@@ -37,13 +40,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description,
       type: 'website',
       url: `${SITE_URL}/departements/${deptSlug}`,
-      images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: `Artisans en ${dept.name}` }],
+      images: [{ url: deptImage.src, width: 1200, height: 630, alt: `Artisans en ${dept.name}` }],
     },
     twitter: {
       card: 'summary_large_image' as const,
       title,
       description,
-      images: ['https://servicesartisans.fr/opengraph-image'],
+      images: [deptImage.src],
     },
   }
 }
