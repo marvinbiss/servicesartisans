@@ -81,7 +81,7 @@ export default function FacturesPage() {
         return (
           <span className="flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full">
             <CheckCircle className="w-3 h-3" />
-            Paye
+            Payé
           </span>
         )
       case 'pending':
@@ -96,7 +96,7 @@ export default function FacturesPage() {
         return (
           <span className="flex items-center gap-1 px-2 py-1 bg-red-100 text-red-700 text-xs rounded-full">
             <XCircle className="w-3 h-3" />
-            Echoue
+            Échoué
           </span>
         )
       default:
@@ -177,7 +177,7 @@ export default function FacturesPage() {
                   Aucun paiement
                 </h3>
                 <p className="text-gray-600">
-                  Vos paiements apparaitront ici apres vos reservations.
+                  Vos paiements apparaîtront ici après vos réservations.
                 </p>
               </div>
             ) : (
@@ -233,7 +233,7 @@ export default function FacturesPage() {
                   Aucune facture
                 </h3>
                 <p className="text-gray-600">
-                  Vos factures apparaitront ici.
+                  Vos factures apparaîtront ici.
                 </p>
               </div>
             ) : (
@@ -257,7 +257,7 @@ export default function FacturesPage() {
                         <div className="flex items-center gap-4 mt-1 text-sm text-gray-500">
                           <span>{formatDate(invoice.date)}</span>
                           {invoice.dueDate && (
-                            <span>Echeance: {formatDate(invoice.dueDate)}</span>
+                            <span>Échéance : {formatDate(invoice.dueDate)}</span>
                           )}
                         </div>
                       </div>
@@ -276,7 +276,7 @@ export default function FacturesPage() {
                             target="_blank"
                             rel="noopener noreferrer"
                             className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                            title="Telecharger PDF"
+                            title="Télécharger PDF"
                           >
                             <Download className="w-5 h-5" />
                           </a>
@@ -304,7 +304,7 @@ export default function FacturesPage() {
         {/* Summary */}
         {payments.length > 0 && (
           <div className="mt-8 bg-white rounded-xl p-6 shadow-sm">
-            <h3 className="font-semibold text-gray-900 mb-4">Resume</h3>
+            <h3 className="font-semibold text-gray-900 mb-4">Résumé</h3>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               <div className="text-center p-4 bg-gray-50 rounded-lg">
                 <div className="text-2xl font-bold text-gray-900">{payments.length}</div>
@@ -314,7 +314,7 @@ export default function FacturesPage() {
                 <div className="text-2xl font-bold text-green-600">
                   {payments.filter((p) => p.status === 'succeeded' || p.status === 'paid').length}
                 </div>
-                <div className="text-sm text-gray-600">Reussis</div>
+                <div className="text-sm text-gray-600">Réussis</div>
               </div>
               <div className="text-center p-4 bg-blue-50 rounded-lg">
                 <div className="text-2xl font-bold text-blue-600">
@@ -324,7 +324,7 @@ export default function FacturesPage() {
                       .reduce((sum, p) => sum + p.amount, 0)
                   )}
                 </div>
-                <div className="text-sm text-gray-600">Total paye</div>
+                <div className="text-sm text-gray-600">Total payé</div>
               </div>
               <div className="text-center p-4 bg-yellow-50 rounded-lg">
                 <div className="text-2xl font-bold text-yellow-600">

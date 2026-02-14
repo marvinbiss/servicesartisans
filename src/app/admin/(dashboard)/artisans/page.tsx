@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useMemo } from 'react'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import {
   Search,
@@ -241,12 +242,12 @@ export default function AdminProvidersPage() {
                   : 'Commencez par importer des artisans depuis SIRENE'}
               </p>
               {filter === 'all' && !search && (
-                <a
+                <Link
                   href="/admin/import"
                   className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                 >
                   Importer des artisans
-                </a>
+                </Link>
               )}
             </div>
           ) : (

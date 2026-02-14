@@ -128,7 +128,7 @@ export default function ConnexionPage() {
                 Connexion
               </h1>
               <p className="text-gray-400">
-                Accedez a votre espace personnel
+                Accédez à votre espace personnel
               </p>
             </div>
 
@@ -201,6 +201,7 @@ export default function ConnexionPage() {
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300"
+                    aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
                   >
                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
@@ -218,7 +219,7 @@ export default function ConnexionPage() {
                   <span className="text-sm text-gray-400">Se souvenir de moi</span>
                 </label>
                 <Link href="/mot-de-passe-oublie" className="text-sm text-blue-400 hover:text-blue-300">
-                  Mot de passe oublie ?
+                  Mot de passe oublié ?
                 </Link>
               </div>
 
@@ -249,7 +250,7 @@ export default function ConnexionPage() {
                   href={userType === 'artisan' ? '/inscription-artisan' : '/inscription'}
                   className={`font-medium ${userType === 'artisan' ? 'text-amber-400 hover:text-amber-300' : 'text-blue-400 hover:text-blue-300'}`}
                 >
-                  Creer un compte
+                  Créer un compte
                 </Link>
               </p>
             </div>
@@ -322,7 +323,7 @@ export default function ConnexionPage() {
               Bienvenue sur ServicesArtisans
             </h2>
             <p className="text-blue-100 text-lg mb-8">
-              Connectez-vous pour acceder a votre espace personnel, suivre vos reservations et gerer votre compte.
+              Connectez-vous pour accéder à votre espace personnel, suivre vos réservations et gérer votre compte.
             </p>
             <div className="grid grid-cols-3 gap-4 text-center">
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">

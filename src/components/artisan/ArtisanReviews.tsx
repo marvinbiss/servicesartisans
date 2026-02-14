@@ -236,7 +236,7 @@ export function ArtisanReviews({ artisan: _artisan, reviews }: ArtisanReviewsPro
                       {review.verified && (
                         <span className="inline-flex items-center gap-1 text-xs text-green-600 bg-green-50 px-1.5 py-0.5 rounded-full">
                           <CheckCircle className="w-3 h-3" />
-                          Verifie
+                          Vérifié
                         </span>
                       )}
                     </div>

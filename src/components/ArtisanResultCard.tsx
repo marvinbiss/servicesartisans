@@ -189,7 +189,7 @@ export default function ArtisanResultCard({
                 {/* Hourly Rate & Intervention Zone */}
                 <div className="mt-1 flex items-center gap-3 text-sm text-gray-500">
                   {artisan.hourly_rate && (
-                    <span>A partir de {artisan.hourly_rate}€/h</span>
+                    <span>À partir de {artisan.hourly_rate}€/h</span>
                   )}
                   {artisan.intervention_zone && (
                     <span>Zone: {artisan.intervention_zone}</span>
@@ -201,12 +201,7 @@ export default function ArtisanResultCard({
                   {artisan.is_verified && (
                     <span className="inline-flex items-center gap-1 text-xs text-green-700 bg-green-50 px-2 py-0.5 rounded">
                       <CheckCircle className="w-3 h-3" />
-                      Certifie
-                    </span>
-                  )}
-                  {artisan.is_premium && (
-                    <span className="text-xs text-amber-700 bg-amber-50 px-2 py-0.5 rounded">
-                      Premium
+                      Certifié
                     </span>
                   )}
                   {artisan.is_center && (

@@ -295,12 +295,12 @@ export default function ParametresClientPage() {
               </Link>
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">Paramètres</h1>
-                <p className="text-gray-600">Gerez vos informations et preferences</p>
+                <p className="text-gray-600">Gérez vos informations et préférences</p>
               </div>
             </div>
             {saveSuccess && (
               <span className="text-sm text-green-600 bg-green-50 px-3 py-1 rounded-full">
-                Enregistre
+                Enregistré
               </span>
             )}
           </div>
@@ -361,7 +361,7 @@ export default function ParametresClientPage() {
                         <div className="grid md:grid-cols-2 gap-6">
                           <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                              Prenom
+                              Prénom
                             </label>
                             <input
                               type="text"
@@ -397,7 +397,7 @@ export default function ParametresClientPage() {
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-2">
                             <Phone className="w-4 h-4 inline mr-2" />
-                            Telephone
+                            Téléphone
                           </label>
                           <input
                             type="tel"
@@ -498,8 +498,8 @@ export default function ParametresClientPage() {
                           }
                         />
                         <ToggleSetting
-                          label="Offres et actualites"
-                          description="Promotions et nouveautes des artisans"
+                          label="Offres et actualités"
+                          description="Promotions et nouveautés des artisans"
                           checked={notifications.email_marketing}
                           onChange={(checked) =>
                             setNotifications({ ...notifications, email_marketing: checked })
@@ -516,13 +516,13 @@ export default function ParametresClientPage() {
                       </h2>
                       {!pushNotifications.isSupported ? (
                         <p className="text-sm text-gray-500">
-                          Les notifications push ne sont pas supportees par votre navigateur.
+                          Les notifications push ne sont pas supportées par votre navigateur.
                         </p>
                       ) : (
                         <div className="space-y-4">
                           <ToggleSetting
                             label="Activer les notifications push"
-                            description="Recevez des notifications en temps reel"
+                            description="Recevez des notifications en temps réel"
                             checked={notifications.push_enabled}
                             onChange={handlePushToggle}
                             loading={pushNotifications.isLoading}
@@ -547,7 +547,7 @@ export default function ParametresClientPage() {
                               />
                               <ToggleSetting
                                 label="Promotions"
-                                description="Offres speciales et reductions"
+                                description="Offres spéciales et réductions"
                                 checked={notifications.push_promotions}
                                 onChange={(checked) =>
                                   setNotifications({ ...notifications, push_promotions: checked })
@@ -659,16 +659,16 @@ export default function ParametresClientPage() {
                         }
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                       >
-                        <option value="fr">Francais</option>
+                        <option value="fr">Français</option>
                         <option value="en">English</option>
-                        <option value="es">Espanol</option>
+                        <option value="es">Español</option>
                         <option value="de">Deutsch</option>
                       </select>
                     </div>
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Theme
+                        Thème
                       </label>
                       <div className="grid grid-cols-3 gap-3">
                         {(['light', 'dark', 'system'] as const).map((theme) => (
@@ -685,7 +685,7 @@ export default function ParametresClientPage() {
                               {theme === 'light' ? '☀️' : theme === 'dark' ? '🌙' : '💻'}
                             </div>
                             <div className="text-sm font-medium">
-                              {theme === 'light' ? 'Clair' : theme === 'dark' ? 'Sombre' : 'Systeme'}
+                              {theme === 'light' ? 'Clair' : theme === 'dark' ? 'Sombre' : 'Système'}
                             </div>
                           </button>
                         ))}
@@ -694,7 +694,7 @@ export default function ParametresClientPage() {
 
                     <ToggleSetting
                       label="Mode compact"
-                      description="Affichage plus condense des listes"
+                      description="Affichage plus condensé des listes"
                       checked={display.compact_mode}
                       onChange={(checked) =>
                         setDisplay({ ...display, compact_mode: checked })
@@ -812,7 +812,7 @@ export default function ParametresClientPage() {
                   onChange={(e) => setDeleteReason(e.target.value)}
                   className="w-full rounded-lg border border-gray-300 px-4 py-2"
                   rows={2}
-                  placeholder="Votre retour nous aide a nous ameliorer..."
+                  placeholder="Votre retour nous aide à nous améliorer..."
                 />
               </div>
 
