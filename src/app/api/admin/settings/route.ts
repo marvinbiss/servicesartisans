@@ -88,35 +88,49 @@ export async function PATCH(request: NextRequest) {
     const updates = result.data
 
     // Fetch current settings for audit
-    const { data: currentSettings } = await supabase
-      .from('platform_settings')
-      .select('*')
-      .single()
-
-    // Upsert settings
-    const { data: settings, error } = await supabase
-      .from('platform_settings')
-      .upsert({
-        id: currentSettings?.id || 1,
-        data: {
-          ...(currentSettings?.data || DEFAULT_SETTINGS),
-          ...updates,
-        },
-        updated_at: new Date().toISOString(),
-        updated_by: authResult.admin.id,
-      })
-      .select()
-      .single()
-
-    if (error) {
-      logger.error('Settings update error', error)
-      return NextResponse.json({ error: 'Erreur lors de la mise à jour des paramètres' }, { status: 500 })
+    let currentSettings: Record<string, unknown> | null = null
+    try {
+      const { data } = await supabase
+        .from('platform_settings')
+        .select('*')
+        .single()
+      currentSettings = data
+    } catch {
+      // Table may not exist yet
     }
 
-    // Log audit
-    await logAdminAction(authResult.admin.id, 'settings_updated', 'settings', '1', updates)
+    // Upsert settings
+    try {
+      const { data: settings, error } = await supabase
+        .from('platform_settings')
+        .upsert({
+          id: (currentSettings?.id as number) || 1,
+          data: {
+            ...((currentSettings?.data as Record<string, unknown>) || DEFAULT_SETTINGS),
+            ...updates,
+          },
+          updated_at: new Date().toISOString(),
+          updated_by: authResult.admin.id,
+        })
+        .select()
+        .single()
 
-    return NextResponse.json({ settings: settings?.data })
+      if (error) {
+        logger.error('Settings update error', error)
+        return NextResponse.json({ error: 'Erreur lors de la mise à jour des paramètres. La table platform_settings n\'existe peut-être pas encore.' }, { status: 500 })
+      }
+
+      // Log audit
+      await logAdminAction(authResult.admin.id, 'settings_updated', 'settings', '1', updates)
+
+      return NextResponse.json({ settings: settings?.data })
+    } catch {
+      // platform_settings table may not exist yet
+      logger.error('Settings table not found — platform_settings may not be created yet')
+      return NextResponse.json({
+        error: 'La table platform_settings n\'existe pas encore. Veuillez exécuter la migration correspondante.',
+      }, { status: 500 })
+    }
   } catch (error) {
     logger.error('Settings update error', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })

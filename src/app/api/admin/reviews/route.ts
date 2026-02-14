@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
       .from('reviews')
       .select(`
         *,
-        provider:providers(id, company_name)
+        provider:providers(id, name)
       `, { count: 'exact' })
 
     // Apply filters
@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
       id: review.id,
       author_name: review.author_name || 'Anonyme',
       author_email: review.author_email || '',
-      provider_name: review.provider?.company_name || 'Inconnu',
+      provider_name: review.provider?.name || 'Inconnu',
       provider_id: review.provider_id,
       rating: review.rating,
       comment: review.comment,

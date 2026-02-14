@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createAdminClient } from '@/lib/supabase/admin'
-import { cancelSubscription, reactivateSubscription } from '@/lib/stripe-admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { isValidUuid } from '@/lib/sanitize'
@@ -33,7 +31,6 @@ export async function POST(
       )
     }
 
-    const supabase = createAdminClient()
     const body = await request.json()
     const result = cancelSubscriptionSchema.safeParse(body)
     if (!result.success) {
@@ -44,31 +41,22 @@ export async function POST(
     }
     const { action, immediately } = result.data
 
+    // Try Stripe operations via dynamic import to handle missing STRIPE_SECRET_KEY
     let stripeResult
-    if (action === 'cancel') {
-      stripeResult = await cancelSubscription(params.id, immediately)
-
-      // Mettre à jour le profil si annulation immédiate
-      if (immediately) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('id')
-          .eq('stripe_subscription_id', params.id)
-          .single()
-
-        if (profile) {
-          await supabase
-            .from('profiles')
-            .update({
-              subscription_status: 'canceled',
-              subscription_plan: 'gratuit',
-              updated_at: new Date().toISOString(),
-            })
-            .eq('id', profile.id)
-        }
+    try {
+      if (action === 'cancel') {
+        const { cancelSubscription } = await import('@/lib/stripe-admin')
+        stripeResult = await cancelSubscription(params.id, immediately)
+      } else {
+        const { reactivateSubscription } = await import('@/lib/stripe-admin')
+        stripeResult = await reactivateSubscription(params.id)
       }
-    } else {
-      stripeResult = await reactivateSubscription(params.id)
+    } catch (stripeError) {
+      logger.error('Stripe subscription operation failed', stripeError)
+      return NextResponse.json(
+        { success: false, error: { message: 'Stripe non configuré ou erreur lors de l\'opération' } },
+        { status: 503 }
+      )
     }
 
     // Log d'audit

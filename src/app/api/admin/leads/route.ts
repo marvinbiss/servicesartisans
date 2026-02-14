@@ -38,15 +38,33 @@ export async function GET(request: Request) {
     const { count: leadsCreated } = await leadsQuery
 
     // 2. Count leads assigned (via lead_assignments)
-    // Join with devis_requests to filter by city/service
-    let assignedQuery = supabase
-      .from('lead_assignments')
-      .select('id, lead:devis_requests!inner(city, service_name)', { count: 'exact', head: true })
+    let leadsAssigned: number | null = 0
+    try {
+      // Try join with devis_requests (works if FK exists)
+      let assignedQuery = supabase
+        .from('lead_assignments')
+        .select('id, lead:devis_requests!inner(city, service_name)', { count: 'exact', head: true })
 
-    if (city) assignedQuery = assignedQuery.ilike('lead.city', `%${city}%`)
-    if (service) assignedQuery = assignedQuery.ilike('lead.service_name', `%${service}%`)
+      if (city) assignedQuery = assignedQuery.ilike('lead.city', `%${city}%`)
+      if (service) assignedQuery = assignedQuery.ilike('lead.service_name', `%${service}%`)
 
-    const { count: leadsAssigned } = await assignedQuery
+      const { count, error: assignedError } = await assignedQuery
+      if (assignedError) {
+        // FK may not exist (migration 202 removes it); fall back to simple count
+        const { count: fallbackCount } = await supabase
+          .from('lead_assignments')
+          .select('id', { count: 'exact', head: true })
+        leadsAssigned = fallbackCount
+      } else {
+        leadsAssigned = count
+      }
+    } catch {
+      // Fallback: count all assignments without join
+      const { count: fallbackCount } = await supabase
+        .from('lead_assignments')
+        .select('id', { count: 'exact', head: true })
+      leadsAssigned = fallbackCount
+    }
 
     // 3. Active artisans list (optionally filtered by city/service)
     let artisansQuery = supabase

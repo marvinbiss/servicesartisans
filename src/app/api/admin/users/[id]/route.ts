@@ -10,7 +10,7 @@ const updateUserSchema = z.object({
   full_name: z.string().max(100).optional(),
   phone: z.string().max(20).optional(),
   user_type: z.enum(['client', 'artisan']).optional(),
-  company_name: z.string().max(100).optional(),
+  name: z.string().max(100).optional(),
   siret: z.string().max(20).optional(),
   description: z.string().max(1000).optional(),
   address: z.string().max(200).optional(),
@@ -88,7 +88,7 @@ export async function GET(
       const { count } = await supabase
         .from('bookings')
         .select('*', { count: 'exact', head: true })
-        .or(`artisan_id.eq.${userId},client_email.eq.${user.email}`)
+        .or(`provider_id.eq.${userId},client_email.eq.${user.email}`)
       bookingsCount = count || 0
     } catch {
       // bookings table doesn't exist
@@ -188,7 +188,6 @@ export async function PATCH(
         'full_name',
         'phone',
         'user_type',
-        'company_name',
         'siret',
         'description',
         'address',

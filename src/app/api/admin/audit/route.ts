@@ -52,13 +52,7 @@ export async function GET(request: NextRequest) {
 
     let query = supabase
       .from('audit_logs')
-      .select(`
-        *,
-        admin:user_id (
-          email,
-          full_name
-        )
-      `, { count: 'exact' })
+      .select('*', { count: 'exact' })
 
     // Filtres
     if (action !== 'all') {
@@ -90,9 +84,34 @@ export async function GET(request: NextRequest) {
 
     if (error) throw error
 
+    // Enrich logs with admin profile info (audit_logs.user_id -> profiles.id)
+    const enrichedLogs = logs || []
+    const userIds = Array.from(new Set(enrichedLogs.map(l => l.user_id).filter(Boolean)))
+    const profilesMap = new Map<string, { email: string; full_name: string | null }>()
+
+    if (userIds.length > 0) {
+      try {
+        const { data: profiles } = await supabase
+          .from('profiles')
+          .select('id, email, full_name')
+          .in('id', userIds)
+
+        if (profiles) {
+          profiles.forEach(p => profilesMap.set(p.id, { email: p.email, full_name: p.full_name }))
+        }
+      } catch {
+        // profiles table may not exist, continue without enrichment
+      }
+    }
+
+    const logsWithAdmin = enrichedLogs.map(log => ({
+      ...log,
+      admin: log.user_id ? profilesMap.get(log.user_id) || null : null,
+    }))
+
     return NextResponse.json({
       success: true,
-      logs: logs || [],
+      logs: logsWithAdmin,
       total: count || 0,
       page,
       totalPages: Math.ceil((count || 0) / limit),

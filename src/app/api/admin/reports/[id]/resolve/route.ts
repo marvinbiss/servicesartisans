@@ -49,9 +49,9 @@ export async function POST(
       .from('user_reports')
       .update({
         status: newStatus,
-        resolved_by: authResult.admin.id,
-        resolution_notes,
-        resolved_at: new Date().toISOString(),
+        reviewed_by: authResult.admin.id,
+        resolution: resolution_notes || null,
+        reviewed_at: new Date().toISOString(),
       })
       .eq('id', params.id)
       .select()

@@ -48,11 +48,10 @@ export async function GET(request: NextRequest) {
       .from('bookings')
       .select(`
         *,
-        profiles:artisan_id (
+        provider:providers!provider_id (
           id,
-          full_name,
-          email,
-          company_name
+          name,
+          email
         )
       `, { count: 'exact' })
 

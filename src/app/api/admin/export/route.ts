@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
       case 'providers': {
         const { data: providers } = await supabase
           .from('providers')
-          .select('id, slug, company_name, city, phone, email, plan, is_active, created_at')
+          .select('id, slug, name, address_city, phone, email, is_active, created_at')
           .order('created_at', { ascending: false })
         data = providers || []
         filename = 'providers'

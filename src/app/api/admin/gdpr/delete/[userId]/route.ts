@@ -47,7 +47,6 @@ export async function POST(
       email: `deleted_${userId.slice(0, 8)}@anonymized.local`,
       full_name: 'Utilisateur supprimé',
       phone: null,
-      company_name: null,
       siret: null,
       description: null,
       address: null,

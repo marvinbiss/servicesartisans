@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { processRefund } from '@/lib/stripe-admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { isValidUuid } from '@/lib/sanitize'
@@ -43,12 +42,22 @@ export async function POST(
     }
     const { amount, reason } = result.data
 
-    // Traiter le remboursement via Stripe
-    const refund = await processRefund(
-      paymentIntentId,
-      amount, // undefined = remboursement total
-      reason as 'duplicate' | 'fraudulent' | 'requested_by_customer'
-    )
+    // Traiter le remboursement via Stripe (dynamic import to handle missing STRIPE_SECRET_KEY)
+    let refund
+    try {
+      const { processRefund } = await import('@/lib/stripe-admin')
+      refund = await processRefund(
+        paymentIntentId,
+        amount, // undefined = remboursement total
+        reason as 'duplicate' | 'fraudulent' | 'requested_by_customer'
+      )
+    } catch (stripeError) {
+      logger.error('Stripe refund failed', stripeError)
+      return NextResponse.json(
+        { success: false, error: { message: 'Stripe non configuré ou erreur lors du remboursement' } },
+        { status: 503 }
+      )
+    }
 
     // Enregistrer dans les logs d'audit
     await logAdminAction(

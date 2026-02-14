@@ -28,7 +28,6 @@ const SELECT_COLUMNS = `
   siret,
   is_verified,
   is_active,
-  is_premium,
   source,
   created_at,
   provider_services (
@@ -115,7 +114,7 @@ export async function GET(request: NextRequest) {
         service_type: firstService?.name || 'Artisan',
         is_verified: p.is_verified,
         is_active: p.is_active,
-        subscription_type: p.is_premium ? 'premium' : 'free',
+        subscription_type: 'free',
         rating_average: 0,
         review_count: 0,
         created_at: p.created_at,

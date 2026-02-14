@@ -1,17 +1,26 @@
 import Stripe from 'stripe'
 import { logger } from '@/lib/logger'
 
-// Initialiser Stripe avec la clé secrète
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2023-10-16',
-})
+// Lazy Stripe initialization — avoids crash when STRIPE_SECRET_KEY is not set
+let _stripe: Stripe | null = null
+function getStripe(): Stripe {
+  if (!_stripe) {
+    const key = process.env.STRIPE_SECRET_KEY
+    if (!key) {
+      throw new Error('STRIPE_SECRET_KEY non configuré')
+    }
+    _stripe = new Stripe(key, { apiVersion: '2023-10-16' })
+  }
+  return _stripe
+}
+
 
 /**
  * Récupérer l'historique des paiements d'un client
  */
 export async function getCustomerPayments(customerId: string, limit = 10) {
   try {
-    const paymentIntents = await stripe.paymentIntents.list({
+    const paymentIntents = await getStripe().paymentIntents.list({
       customer: customerId,
       limit,
     })
@@ -36,7 +45,7 @@ export async function getCustomerPayments(customerId: string, limit = 10) {
  */
 export async function getSubscription(subscriptionId: string) {
   try {
-    const subscription = await stripe.subscriptions.retrieve(subscriptionId, {
+    const subscription = await getStripe().subscriptions.retrieve(subscriptionId, {
       expand: ['default_payment_method', 'latest_invoice'],
     })
 
@@ -81,7 +90,7 @@ export async function processRefund(
       refundParams.amount = amount
     }
 
-    const refund = await stripe.refunds.create(refundParams)
+    const refund = await getStripe().refunds.create(refundParams)
 
     return {
       id: refund.id,
@@ -107,7 +116,7 @@ export async function cancelSubscription(
   try {
     if (immediately) {
       // Annulation immédiate
-      const subscription = await stripe.subscriptions.cancel(subscriptionId)
+      const subscription = await getStripe().subscriptions.cancel(subscriptionId)
       return {
         id: subscription.id,
         status: subscription.status,
@@ -115,7 +124,7 @@ export async function cancelSubscription(
       }
     } else {
       // Annulation à la fin de la période
-      const subscription = await stripe.subscriptions.update(subscriptionId, {
+      const subscription = await getStripe().subscriptions.update(subscriptionId, {
         cancel_at_period_end: true,
       })
       return {
@@ -136,7 +145,7 @@ export async function cancelSubscription(
  */
 export async function reactivateSubscription(subscriptionId: string) {
   try {
-    const subscription = await stripe.subscriptions.update(subscriptionId, {
+    const subscription = await getStripe().subscriptions.update(subscriptionId, {
       cancel_at_period_end: false,
     })
     return {
@@ -160,11 +169,11 @@ export async function changeSubscriptionPlan(
 ) {
   try {
     // Récupérer l'abonnement actuel
-    const subscription = await stripe.subscriptions.retrieve(subscriptionId)
+    const subscription = await getStripe().subscriptions.retrieve(subscriptionId)
     const subscriptionItemId = subscription.items.data[0].id
 
     // Mettre à jour avec le nouveau prix
-    const updatedSubscription = await stripe.subscriptions.update(subscriptionId, {
+    const updatedSubscription = await getStripe().subscriptions.update(subscriptionId, {
       items: [
         {
           id: subscriptionItemId,
@@ -196,7 +205,7 @@ export async function createManualCharge(
   metadata?: Record<string, string>
 ) {
   try {
-    const paymentIntent = await stripe.paymentIntents.create({
+    const paymentIntent = await getStripe().paymentIntents.create({
       amount,
       currency: 'eur',
       customer: customerId,
@@ -226,7 +235,7 @@ export async function createManualCharge(
  */
 export async function getCustomerInvoices(customerId: string, limit = 10) {
   try {
-    const invoices = await stripe.invoices.list({
+    const invoices = await getStripe().invoices.list({
       customer: customerId,
       limit,
     })
@@ -274,7 +283,7 @@ export async function listAllSubscriptions(
       params.status = status
     }
 
-    const subscriptions = await stripe.subscriptions.list(params)
+    const subscriptions = await getStripe().subscriptions.list(params)
 
     return {
       data: subscriptions.data.map((sub) => ({
@@ -310,11 +319,11 @@ export async function getRevenueStats(days = 30) {
     const startDate = now - days * 24 * 60 * 60
 
     const [charges, refunds] = await Promise.all([
-      stripe.charges.list({
+      getStripe().charges.list({
         created: { gte: startDate },
         limit: 100,
       }),
-      stripe.refunds.list({
+      getStripe().refunds.list({
         created: { gte: startDate },
         limit: 100,
       }),

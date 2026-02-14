@@ -170,25 +170,36 @@ export async function verifyAdmin(): Promise<AdminAuthResult> {
     let role: AdminRole | null = null
     let isAdmin = false
 
-    // Try profiles table first
+    // Query profiles — only select columns that are guaranteed to exist
+    // The 'role' column may not exist on all deployments, so we query 'is_admin' first
     const { data: profile, error: profileError } = await adminSupabase
       .from('profiles')
-      .select('role, is_admin')
+      .select('is_admin')
       .eq('id', user.id)
       .single()
 
     if (!profileError && profile) {
-      role = profile.role as AdminRole | null
       isAdmin = profile.is_admin === true
     }
 
-    // Fallback: check email whitelist ONLY if profile was found and verified
-    // SECURITY FIX: Ne jamais accorder super_admin si le profil n'est pas accessible
+    // Try to get role column separately (may not exist on all deployments)
+    if (!profileError) {
+      const { data: roleData } = await adminSupabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single()
+
+      if (roleData && roleData.role) {
+        role = roleData.role as AdminRole
+      }
+    }
+
+    // Deny access if profile couldn't be read at all
     if (profileError) {
       logger.error('Profile access failed - denying admin access for security', {
         userId: user.id,
         email: user.email,
-        error: profileError
       })
       return {
         success: false,
@@ -202,7 +213,7 @@ export async function verifyAdmin(): Promise<AdminAuthResult> {
     // Whitelist check ONLY with valid profile
     if (!isAdmin && !role && user.email && ADMIN_EMAILS.includes(user.email) && profile) {
       isAdmin = true
-      role = profile.role as AdminRole || 'viewer' // Use least privilege when profile.role is NULL
+      role = 'viewer' // Use least privilege for whitelist-only admins
     }
 
     // Verify admin access
@@ -221,7 +232,8 @@ export async function verifyAdmin(): Promise<AdminAuthResult> {
       }
     }
 
-    const adminRole: AdminRole = role && validRoles.includes(role) ? role : 'viewer'
+    // If user has is_admin=true but no role column, grant super_admin
+    const adminRole: AdminRole = role && validRoles.includes(role) ? role : (isAdmin ? 'super_admin' : 'viewer')
 
     return {
       success: true,

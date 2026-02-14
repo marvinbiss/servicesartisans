@@ -4,14 +4,11 @@
  */
 
 import { NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { requirePermission } from '@/lib/admin-auth'
 
 export const dynamic = 'force-dynamic'
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
 export async function GET() {
   try {
@@ -21,52 +18,40 @@ export async function GET() {
       return authResult.error
     }
 
-    // Verify Supabase config
-    if (!supabaseUrl || !supabaseServiceKey) {
-      return NextResponse.json(
-        { error: 'Configuration serveur manquante' },
-        { status: 500 }
-      )
-    }
+    const supabase = createAdminClient()
 
-    const supabase = createClient(supabaseUrl, supabaseServiceKey)
-
-    // Get date ranges (available for future use)
-    const now = new Date()
-    void now
-
-    // Since tables might not exist, return mock data directly
-    // In production, you would have proper tables and this would work
+    // Fallback values used when tables/columns don't exist
     const mockStats = {
-      totalUsers: 15420,
-      totalArtisans: 2340,
-      totalBookings: 45230,
-      totalRevenue: 1250000,
-      newUsersToday: 47,
-      newBookingsToday: 156,
-      activeUsers7d: 4520,
-      pendingReports: 12,
-      averageRating: 4.7,
+      totalUsers: 0,
+      totalArtisans: 0,
+      totalBookings: 0,
+      totalRevenue: 0,
+      newUsersToday: 0,
+      newBookingsToday: 0,
+      activeUsers7d: 0,
+      pendingReports: 0,
+      averageRating: 0,
     }
 
-    // Try to fetch real data, fall back to mock
-    let usersResult = { count: 0 }
-    let artisansResult = { count: 0 }
-    let bookingsResult = { count: 0 }
+    // Try to fetch real data, fall back to defaults
+    let usersCount = 0
+    let artisansCount = 0
+    let bookingsCount = 0
 
     try {
-      const { count: usersCount } = await supabase.from('profiles').select('id', { count: 'exact', head: true })
-      usersResult = { count: usersCount || 0 }
+      const { count } = await supabase.from('profiles').select('id', { count: 'exact', head: true })
+      usersCount = count || 0
+    } catch { /* use default */ }
+
+    // Count providers (artisans) from the providers table instead of profiles.is_artisan
+    try {
+      const { count } = await supabase.from('providers').select('id', { count: 'exact', head: true }).eq('is_active', true)
+      artisansCount = count || 0
     } catch { /* use default */ }
 
     try {
-      const { count: artisansCount } = await supabase.from('profiles').select('id', { count: 'exact', head: true }).eq('is_artisan', true)
-      artisansResult = { count: artisansCount || 0 }
-    } catch { /* use default */ }
-
-    try {
-      const { count: bookingsCount } = await supabase.from('bookings').select('id', { count: 'exact', head: true })
-      bookingsResult = { count: bookingsCount || 0 }
+      const { count } = await supabase.from('bookings').select('id', { count: 'exact', head: true })
+      bookingsCount = count || 0
     } catch { /* use default */ }
 
     // Mock recent activity for demo
@@ -85,9 +70,9 @@ export async function GET() {
 
     return NextResponse.json({
       stats: {
-        totalUsers: usersResult.count || mockStats.totalUsers,
-        totalArtisans: artisansResult.count || mockStats.totalArtisans,
-        totalBookings: bookingsResult.count || mockStats.totalBookings,
+        totalUsers: usersCount || mockStats.totalUsers,
+        totalArtisans: artisansCount || mockStats.totalArtisans,
+        totalBookings: bookingsCount || mockStats.totalBookings,
         totalRevenue: mockStats.totalRevenue,
         newUsersToday: mockStats.newUsersToday,
         newBookingsToday: mockStats.newBookingsToday,
@@ -106,4 +91,3 @@ export async function GET() {
     )
   }
 }
-

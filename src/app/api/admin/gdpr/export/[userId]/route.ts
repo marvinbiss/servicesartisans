@@ -37,7 +37,7 @@ export async function POST(
       { data: conversations },
     ] = await Promise.all([
       supabase.from('profiles').select('*').eq('id', userId).single(),
-      supabase.from('bookings').select('*').or(`artisan_id.eq.${userId},client_email.eq.${userId}`),
+      supabase.from('bookings').select('*').or(`provider_id.eq.${userId},client_email.eq.${userId}`),
       supabase.from('reviews').select('*').eq('client_id', userId),
       supabase.from('conversations').select('*').or(`client_id.eq.${userId},provider_id.eq.${userId}`),
     ])

@@ -86,7 +86,7 @@ function buildUpdateData(body: Record<string, unknown>): Record<string, unknown>
     data.is_verified = Boolean(body.is_verified)
     if (body.is_verified) data.verification_date = new Date().toISOString()
   }
-  if (body.is_featured !== undefined) data.is_premium = Boolean(body.is_featured)
+  // is_premium column was dropped; is_featured is no longer stored
   if (body.is_active !== undefined) data.is_active = Boolean(body.is_active)
 
   return data
@@ -194,11 +194,11 @@ export async function GET(
         longitude: provider.longitude,
         hourly_rate: null,
         is_verified: provider.is_verified || false,
-        is_featured: provider.is_premium || false,
+        is_featured: false,
         is_active: provider.is_active !== false,
         rating: provider.rating_average || null,
         reviews_count: provider.review_count || 0,
-        subscription_plan: provider.is_premium ? 'premium' : 'gratuit',
+        subscription_plan: 'gratuit',
         source: provider.source || 'manual',
         source_id: provider.source_id || null,
         website: provider.website || '',

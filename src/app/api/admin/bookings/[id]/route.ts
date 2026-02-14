@@ -42,11 +42,10 @@ export async function GET(
       .from('bookings')
       .select(`
         *,
-        profiles:artisan_id (
+        provider:providers!provider_id (
           id,
-          full_name,
+          name,
           email,
-          company_name,
           phone
         )
       `)
