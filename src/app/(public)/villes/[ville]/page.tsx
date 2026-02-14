@@ -112,10 +112,10 @@ export default async function VillePage({ params }: PageProps) {
       <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
         {/* Background effects */}
         <div className="absolute inset-0">
-            {getCityImage(villeSlug) && (
+            {cityImage && (
               <Image
-                src={getCityImage(villeSlug)!.src}
-                alt={getCityImage(villeSlug)!.alt}
+                src={cityImage.src}
+                alt={cityImage.alt}
                 fill
                 className="object-cover opacity-15"
                 sizes="100vw"
