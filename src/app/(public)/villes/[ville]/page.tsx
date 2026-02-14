@@ -2,13 +2,14 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { MapPin, Users, Building2, ArrowRight, Shield, Clock, ChevronRight, Wrench, HelpCircle } from 'lucide-react'
+import { MapPin, Users, Building2, ArrowRight, Shield, Clock, ChevronRight, Wrench, HelpCircle, Thermometer, Home, TrendingUp, AlertTriangle } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getPlaceSchema, getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { villes, getVilleBySlug, services, getRegionSlugByName, getDepartementByCode, getQuartiersByVille } from '@/lib/data/france'
 import { getCityImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
+import { generateVilleContent } from '@/lib/seo/location-content'
 
 // Pre-render top 200 cities, rest generated on-demand via ISR
 const TOP_CITIES_COUNT = 200
@@ -29,8 +30,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!ville) return { title: 'Ville non trouvée' }
 
   const cityImage = getCityImage(villeSlug)
-  const title = `Artisans à ${ville.name} (${ville.departementCode}) — Annuaire & Devis Gratuit | ServicesArtisans`
-  const description = `Trouvez des artisans qualifiés à ${ville.name} (${ville.departementCode}). Plombiers, électriciens, serruriers, chauffagistes et plus. ${services.length} corps de métier, artisans référencés. Devis gratuit.`
+  const metaContent = generateVilleContent(ville)
+  const title = `Artisans à ${ville.name} (${ville.departementCode}) — ${metaContent.profile.climateLabel} | ServicesArtisans`
+  const description = `Trouvez des artisans qualifiés à ${ville.name} (${ville.departementCode}), ${metaContent.profile.citySizeLabel.toLowerCase()} en climat ${metaContent.profile.climateLabel.toLowerCase()}. ${services.length} corps de métier, devis gratuits. ${ville.departement}.`
 
   return {
     title,
@@ -73,6 +75,15 @@ export default async function VillePage({ params }: PageProps) {
   const dept = getDepartementByCode(ville.departementCode)
   const deptSlug = dept?.slug
 
+  // Generate unique SEO content
+  const content = generateVilleContent(ville)
+  const topServiceSlugsSet = new Set(content.profile.topServiceSlugs.slice(0, 5))
+  const orderedServices = [...services].sort((a, b) => {
+    const aIdx = content.profile.topServiceSlugs.indexOf(a.slug)
+    const bIdx = content.profile.topServiceSlugs.indexOf(b.slug)
+    return (aIdx === -1 ? 999 : aIdx) - (bIdx === -1 ? 999 : bIdx)
+  })
+
   // JSON-LD structured data
   const cityImage = getCityImage(ville.slug)
   const placeSchema = getPlaceSchema({
@@ -89,20 +100,7 @@ export default async function VillePage({ params }: PageProps) {
     { name: ville.name, url: `/villes/${ville.slug}` },
   ])
 
-  const faqSchema = getFAQSchema([
-    {
-      question: `Comment trouver un artisan à ${ville.name} ?`,
-      answer: `Sur ServicesArtisans, sélectionnez le type de service dont vous avez besoin (plombier, électricien, serrurier, etc.) puis choisissez ${ville.name} comme localisation. Vous accéderez à la liste des artisans référencés dans votre ville.`,
-    },
-    {
-      question: `D'où proviennent les données des artisans à ${ville.name} ?`,
-      answer: `Les artisans référencés sur notre plateforme sont répertoriés à partir des données SIREN officielles. Chaque professionnel listé dispose d'un numéro SIREN enregistré auprès des autorités compétentes.`,
-    },
-    {
-      question: `Comment obtenir un devis gratuit à ${ville.name} ?`,
-      answer: `Cliquez sur "Demander un devis gratuit", décrivez votre projet en quelques clics, et recevez jusqu'à 3 devis personnalisés d'artisans qualifiés à ${ville.name}. Le service est 100% gratuit et sans engagement.`,
-    },
-  ])
+  const faqSchema = getFAQSchema(content.faqItems)
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -149,9 +147,15 @@ export default async function VillePage({ params }: PageProps) {
           </div>
 
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/15 backdrop-blur-sm rounded-full border border-blue-400/25 mb-5">
-              <MapPin className="w-4 h-4 text-blue-400" />
-              <span className="text-sm font-medium text-blue-200">Ville</span>
+            <div className="flex flex-wrap gap-2 mb-5">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/15 backdrop-blur-sm rounded-full border border-blue-400/25">
+                <MapPin className="w-4 h-4 text-blue-400" />
+                <span className="text-sm font-medium text-blue-200">{content.profile.citySizeLabel}</span>
+              </div>
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/15 backdrop-blur-sm rounded-full border border-emerald-400/25">
+                <Thermometer className="w-4 h-4 text-emerald-400" />
+                <span className="text-sm font-medium text-emerald-200">{content.profile.climateLabel}</span>
+              </div>
             </div>
 
             <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
@@ -161,7 +165,7 @@ export default async function VillePage({ params }: PageProps) {
               </span>
             </h1>
             <p className="text-lg text-slate-400 max-w-2xl leading-relaxed mb-8">
-              {ville.description}
+              {content.intro}
             </p>
 
             {/* Location info */}
@@ -208,12 +212,15 @@ export default async function VillePage({ params }: PageProps) {
             </div>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {services.map((service) => (
+            {orderedServices.map((service) => (
               <Link
                 key={service.slug}
                 href={`/services/${service.slug}/${villeSlug}`}
-                className="bg-white rounded-xl shadow-sm p-5 text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group border border-gray-100"
+                className={`bg-white rounded-xl shadow-sm p-5 text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group ${topServiceSlugsSet.has(service.slug) ? 'border-2 border-indigo-200' : 'border border-gray-100'}`}
               >
+                {topServiceSlugsSet.has(service.slug) && (
+                  <span className="inline-block text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full mb-2">Prioritaire</span>
+                )}
                 <h3 className="font-semibold text-slate-800 group-hover:text-blue-600 transition-colors text-sm">{service.name}</h3>
                 <p className="text-xs text-slate-400 mt-1.5">à {ville.name}</p>
               </Link>
@@ -246,6 +253,92 @@ export default async function VillePage({ params }: PageProps) {
             </div>
           </section>
         )}
+
+        {/* ─── PROFIL DE LA VILLE ─────────────────────────────── */}
+        <section className="mb-16">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center">
+              <Home className="w-5 h-5 text-indigo-600" />
+            </div>
+            <div>
+              <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
+                Profil de {ville.name}
+              </h2>
+              <p className="text-sm text-slate-500">{content.profile.citySizeLabel} · {content.profile.climateLabel}</p>
+            </div>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div className="bg-white rounded-xl border border-gray-200 p-5">
+              <div className="flex items-center gap-2 mb-2">
+                <Thermometer className="w-4 h-4 text-blue-500" />
+                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Climat</span>
+              </div>
+              <p className="font-bold text-slate-900">{content.profile.climateLabel}</p>
+            </div>
+            <div className="bg-white rounded-xl border border-gray-200 p-5">
+              <div className="flex items-center gap-2 mb-2">
+                <Home className="w-4 h-4 text-emerald-500" />
+                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Habitat</span>
+              </div>
+              <p className="font-bold text-slate-900">{content.profile.citySizeLabel}</p>
+            </div>
+            <div className="bg-white rounded-xl border border-gray-200 p-5">
+              <div className="flex items-center gap-2 mb-2">
+                <Users className="w-4 h-4 text-violet-500" />
+                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Population</span>
+              </div>
+              <p className="font-bold text-slate-900">{ville.population} hab.</p>
+            </div>
+            <div className="bg-white rounded-xl border border-gray-200 p-5">
+              <div className="flex items-center gap-2 mb-2">
+                <Building2 className="w-4 h-4 text-amber-500" />
+                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Département</span>
+              </div>
+              <p className="font-bold text-slate-900">{ville.departement} ({ville.departementCode})</p>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl border border-gray-200 p-6 mb-4">
+            <h3 className="font-semibold text-slate-900 mb-3">Habitat à {ville.name}</h3>
+            <p className="text-sm text-slate-600 leading-relaxed">{content.profile.habitatDescription}</p>
+          </div>
+
+          <div className="bg-white rounded-xl border border-gray-200 p-6 mb-4">
+            <h3 className="font-semibold text-slate-900 mb-3">Contexte urbain</h3>
+            <p className="text-sm text-slate-600 leading-relaxed">{content.contexteUrbain}</p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-3">
+            {content.profile.climaticIssues.slice(0, 4).map((issue, i) => (
+              <div key={i} className="flex items-start gap-2 bg-amber-50 rounded-lg border border-amber-100 p-3">
+                <AlertTriangle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
+                <span className="text-sm text-amber-800">{issue}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ─── CONTENU SEO : SERVICES & CONSEILS ─────────────── */}
+        <section className="mb-16">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center">
+              <TrendingUp className="w-5 h-5 text-teal-600" />
+            </div>
+            <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
+              Artisanat à {ville.name}
+            </h2>
+          </div>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <h3 className="font-semibold text-slate-900 mb-3">Services prioritaires</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">{content.servicesPrioritaires}</p>
+            </div>
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <h3 className="font-semibold text-slate-900 mb-3">Conseils pour {ville.name}</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">{content.conseilsVille}</p>
+            </div>
+          </div>
+        </section>
 
         {/* ─── NEARBY VILLES ────────────────────────────────── */}
         {nearbyVilles.length > 0 && (
@@ -283,27 +376,12 @@ export default async function VillePage({ params }: PageProps) {
             </h2>
           </div>
           <div className="space-y-4">
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h3 className="font-semibold text-slate-900 mb-2">Comment trouver un artisan à {ville.name} ?</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Sur ServicesArtisans, sélectionnez le type de service dont vous avez besoin (plombier, électricien, serrurier, etc.)
-                puis choisissez {ville.name} comme localisation. Vous accéderez à la liste des artisans référencés dans votre ville.
-              </p>
-            </div>
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h3 className="font-semibold text-slate-900 mb-2">D&apos;où proviennent les données des artisans à {ville.name} ?</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Les artisans référencés sur notre plateforme sont répertoriés à partir des données SIREN officielles.
-                Chaque professionnel listé dispose d&apos;un numéro SIREN enregistré auprès des autorités compétentes.
-              </p>
-            </div>
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h3 className="font-semibold text-slate-900 mb-2">Comment obtenir un devis gratuit à {ville.name} ?</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Cliquez sur &laquo; Demander un devis gratuit &raquo;, décrivez votre projet en quelques clics,
-                et recevez jusqu&apos;à 3 devis personnalisés d&apos;artisans qualifiés à {ville.name}. Le service est 100% gratuit et sans engagement.
-              </p>
-            </div>
+            {content.faqItems.map((faq, i) => (
+              <div key={i} className="bg-white rounded-xl border border-gray-200 p-6">
+                <h3 className="font-semibold text-slate-900 mb-2">{faq.question}</h3>
+                <p className="text-sm text-slate-600 leading-relaxed">{faq.answer}</p>
+              </div>
+            ))}
           </div>
         </section>
       </div>

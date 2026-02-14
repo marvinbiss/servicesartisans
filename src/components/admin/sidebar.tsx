@@ -24,6 +24,7 @@ import {
   Gauge,
   Sliders,
   Megaphone,
+  FileEdit,
 } from 'lucide-react'
 
 const nav = [
@@ -41,6 +42,7 @@ const nav = [
   { name: 'Avis', href: '/admin/avis', icon: Star },
   { name: 'Paiements', href: '/admin/paiements', icon: CreditCard },
   { name: 'Services', href: '/admin/services', icon: Grid },
+  { name: 'Contenu', href: '/admin/contenu', icon: FileEdit },
   { name: 'Messages', href: '/admin/messages', icon: MessageSquare },
   { name: 'Signalements', href: '/admin/signalements', icon: Flag },
   { name: 'Audit', href: '/admin/audit', icon: Shield },

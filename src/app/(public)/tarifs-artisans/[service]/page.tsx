@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowRight, CheckCircle, Euro, Shield, ChevronDown, TrendingUp, Clock } from 'lucide-react'
+import { ArrowRight, CheckCircle, Euro, Shield, ChevronDown, TrendingUp, Clock, MapPin } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
@@ -10,6 +10,17 @@ import { villes } from '@/lib/data/france'
 import { getServiceImage } from '@/lib/data/images'
 
 const tradeSlugs = getTradesSlugs()
+
+const REGIONAL_PRICING = [
+  { region: 'Île-de-France', multiplier: 1.25, label: 'Paris et banlieue' },
+  { region: 'PACA', multiplier: 1.10, label: 'Côte d\'Azur et Provence' },
+  { region: 'Auvergne-Rhône-Alpes', multiplier: 1.10, label: 'Lyon, Grenoble, Annecy' },
+  { region: 'Occitanie', multiplier: 1.05, label: 'Toulouse, Montpellier' },
+  { region: 'Nouvelle-Aquitaine', multiplier: 1.00, label: 'Bordeaux, Limoges' },
+  { region: 'Hauts-de-France', multiplier: 0.95, label: 'Lille, Amiens' },
+  { region: 'Grand Est', multiplier: 0.95, label: 'Strasbourg, Metz' },
+  { region: 'Bretagne', multiplier: 1.00, label: 'Rennes, Brest' },
+]
 
 export function generateStaticParams() {
   return tradeSlugs.map((service) => ({ service }))
@@ -141,6 +152,56 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
                 <span className="text-gray-800">{task}</span>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Variation régionale des tarifs */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h3 className="text-2xl font-bold text-gray-900 mb-2 text-center">
+            Variation des tarifs par région
+          </h3>
+          <p className="text-gray-500 text-sm text-center mb-8">
+            Les prix {trade.name.toLowerCase()} varient selon la région. Voici une estimation ajustée.
+          </p>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {REGIONAL_PRICING.map((r) => {
+              const adjustedMin = Math.round(trade.priceRange.min * r.multiplier)
+              const adjustedMax = Math.round(trade.priceRange.max * r.multiplier)
+              const accentColor =
+                r.multiplier > 1.0
+                  ? 'border-amber-200 bg-amber-50'
+                  : r.multiplier < 1.0
+                    ? 'border-green-200 bg-green-50'
+                    : 'border-gray-200 bg-gray-50'
+              const badgeColor =
+                r.multiplier > 1.0
+                  ? 'bg-amber-100 text-amber-700'
+                  : r.multiplier < 1.0
+                    ? 'bg-green-100 text-green-700'
+                    : 'bg-gray-100 text-gray-600'
+              const sign = r.multiplier > 1.0 ? '+' : r.multiplier < 1.0 ? '' : ''
+              const pct = Math.round((r.multiplier - 1) * 100)
+              return (
+                <div
+                  key={r.region}
+                  className={`rounded-xl border shadow-sm p-4 ${accentColor}`}
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    <MapPin className="w-4 h-4 text-gray-500 flex-shrink-0" />
+                    <span className="font-semibold text-gray-900 text-sm">{r.region}</span>
+                  </div>
+                  <p className="text-xs text-gray-500 mb-3">{r.label}</p>
+                  <div className="text-lg font-bold text-gray-900">
+                    {adjustedMin} — {adjustedMax} <span className="text-sm font-normal text-gray-500">{trade.priceRange.unit}</span>
+                  </div>
+                  <span className={`inline-block mt-2 text-xs font-medium px-2 py-0.5 rounded-full ${badgeColor}`}>
+                    {pct === 0 ? 'Moyenne nationale' : `${sign}${pct} % vs moyenne`}
+                  </span>
+                </div>
+              )
+            })}
           </div>
         </div>
       </section>

@@ -11,6 +11,7 @@ import ServiceLocationPageClient from './PageClient'
 import { getBreadcrumbSchema, getItemListSchema } from '@/lib/seo/jsonld'
 import { PopularServicesLinks } from '@/components/InternalLinks'
 import { popularServices } from '@/lib/constants/navigation'
+import Breadcrumb from '@/components/Breadcrumb'
 import Link from 'next/link'
 import { REVALIDATE } from '@/lib/cache'
 import { slugify, getArtisanUrl } from '@/lib/utils'
@@ -19,7 +20,7 @@ import { services as staticServicesList, villes, getVilleBySlug, getDepartementB
 import { getTradeContent } from '@/lib/data/trade-content'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
-import { generateLocationContent } from '@/lib/seo/location-content'
+import { generateLocationContent, hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import type { Service, Location as LocationType, Provider } from '@/types'
 
 // Safely escape JSON for script tags to prevent XSS
@@ -116,15 +117,32 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const hasProviders = providerCount > 0
   const svcLower = serviceName.toLowerCase()
 
-  // Task 4: Title under 60 chars — no postal code, include artisan count
-  const title = hasProviders
-    ? `${serviceName} à ${locationName} — ${providerCount} artisans | ServicesArtisans`
-    : `${serviceName} à ${locationName} — Devis Gratuit | ServicesArtisans`
+  // Varied title patterns to avoid repetitive SERP appearance
+  const titleHash = Math.abs(hashCode(`title-${serviceSlug}-${locationSlug}`))
 
-  // Task 3: Unique meta descriptions with provider count and department
+  const titleTemplates = hasProviders
+    ? [
+        `${serviceName} à ${locationName} — ${providerCount} artisans | ServicesArtisans`,
+        `${providerCount} ${svcLower}s à ${locationName} — Devis Gratuit | ServicesArtisans`,
+        `${serviceName} ${locationName} : ${providerCount} pros référencés | ServicesArtisans`,
+        `Trouver un ${svcLower} à ${locationName} (${providerCount} référencés) | ServicesArtisans`,
+        `${serviceName} à ${locationName} — Comparez ${providerCount} artisans | ServicesArtisans`,
+      ]
+    : [
+        `${serviceName} à ${locationName} — Devis Gratuit | ServicesArtisans`,
+        `${svcLower} à ${locationName} : Devis en ligne gratuit | ServicesArtisans`,
+        `Trouver un ${svcLower} à ${locationName} — Artisans vérifiés | ServicesArtisans`,
+        `${serviceName} ${locationName} — Artisans qualifiés | ServicesArtisans`,
+        `Devis ${svcLower} à ${locationName} — Gratuit | ServicesArtisans`,
+      ]
+  const title = titleTemplates[titleHash % titleTemplates.length]
+
+  // Unique meta descriptions with provider count, department and regional context
+  const metaVille = getVilleBySlug(locationSlug)
+  const metaRegion = metaVille?.region || ''
   const description = hasProviders
-    ? `Comparez ${providerCount} ${svcLower}s référencés par SIREN à ${locationName} (${departmentName || departmentCode}). Consultez les profils, coordonnées et demandez un devis gratuit.`
-    : `Trouvez un ${svcLower} référencé par SIREN à ${locationName} (${departmentName || departmentCode}). Comparez les profils et demandez un devis gratuit.`
+    ? `Comparez ${providerCount} ${svcLower}s référencés par SIREN à ${locationName} (${departmentName || departmentCode}). Devis gratuit en ${metaRegion || 'France'}.`
+    : `Trouvez un ${svcLower} qualifié à ${locationName} (${departmentName || departmentCode}), ${metaRegion}. Artisans vérifiés SIREN, devis gratuit.`
 
   return {
     title,
@@ -226,13 +244,27 @@ export default async function ServiceLocationPage({ params }: PageProps) {
 
   const trade = getTradeContent(serviceSlug)
   const baseSchemas = generateJsonLd(service, location, providers || [], serviceSlug, locationSlug)
-  const faqSchema = trade ? getFAQSchema(trade.faq.map(f => ({ question: f.q, answer: f.a }))) : null
 
   // Generate unique SEO content per service+location combo (doorway-page mitigation)
   const ville = getVilleBySlug(locationSlug)
   const locationContent = ville
     ? generateLocationContent(serviceSlug, service.name, ville, providers.length)
     : null
+
+  // Regional pricing multiplier for localized tariffs
+  const pricingMultiplier = ville ? getRegionalMultiplier(ville.region) : 1.0
+
+  // FAQ: combine 2 trade FAQ (hash-selected) + 4 location-specific FAQ
+  const combinedFaq: { question: string; answer: string }[] = []
+  if (trade && trade.faq.length > 0) {
+    const tradeFaqHash = Math.abs(hashCode(`trade-faq-${serviceSlug}-${locationSlug}`))
+    const idx1 = tradeFaqHash % trade.faq.length
+    const idx2 = (tradeFaqHash + 3) % trade.faq.length
+    combinedFaq.push({ question: trade.faq[idx1].q, answer: trade.faq[idx1].a })
+    if (idx2 !== idx1) combinedFaq.push({ question: trade.faq[idx2].q, answer: trade.faq[idx2].a })
+  }
+  if (locationContent) combinedFaq.push(...locationContent.faqItems)
+  const faqSchema = combinedFaq.length > 0 ? getFAQSchema(combinedFaq) : null
 
   // Task 2: ItemList JSON-LD for provider listings
   const itemListSchema = providers.length > 0
@@ -275,6 +307,17 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         />
       ))}
 
+      {/* Visual breadcrumb for navigation and SEO */}
+      <div className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 py-3">
+          <Breadcrumb items={[
+            { label: 'Services', href: '/services' },
+            { label: service.name, href: `/services/${serviceSlug}` },
+            { label: location.name },
+          ]} />
+        </div>
+      </div>
+
       {/* Page Content */}
       <ServiceLocationPageClient
         service={service}
@@ -302,6 +345,9 @@ export default async function ServiceLocationPage({ params }: PageProps) {
                     <li key={i}>{tip}</li>
                   ))}
                 </ul>
+
+                <h3>Contexte local : {locationContent.climateLabel}</h3>
+                <p>{locationContent.climateTip}</p>
 
                 <h3>
                   Zones d&apos;intervention à {location.name}
@@ -344,6 +390,44 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         </section>
       )}
 
+      {/* Trade expertise section */}
+      {trade && (
+        <section className="py-12 border-t">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-xl font-bold text-gray-900 mb-1 border-l-4 border-amber-500 pl-4">
+              Pourquoi faire appel à un {service.name.toLowerCase()} professionnel à {location.name} ?
+            </h2>
+            <div className="mt-6 space-y-4">
+              {trade.certifications && trade.certifications.length > 0 && (
+                <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4">
+                  <h3 className="font-semibold text-emerald-900 mb-2">Certifications et garanties</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {trade.certifications.map((cert, i) => (
+                      <span key={i} className="text-sm bg-white text-emerald-700 px-3 py-1 rounded-full border border-emerald-200">
+                        {cert}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {trade.tips && trade.tips.length > 0 && (
+                <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
+                  <h3 className="font-semibold text-blue-900 mb-2">Conseils d&apos;expert</h3>
+                  <ul className="space-y-1">
+                    {trade.tips.slice(0, 3).map((tip, i) => (
+                      <li key={i} className="text-sm text-blue-800 flex items-start gap-2">
+                        <span className="text-blue-400 mt-0.5">•</span>
+                        {tip}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Trade pricing context */}
       {trade && (
         <section className="py-12 bg-gray-50 border-t">
@@ -353,16 +437,23 @@ export default async function ServiceLocationPage({ params }: PageProps) {
                 Tarifs {service.name.toLowerCase()} à {location.name}
               </h2>
               <p className="text-gray-600 mb-6 text-sm pl-[calc(1rem+4px)]">
-                Tarif horaire moyen : <strong className="text-gray-900">{trade.priceRange.min}–{trade.priceRange.max} {trade.priceRange.unit}</strong>.
-                Les prix peuvent varier selon la complexité des travaux et le professionnel choisi.
+                Tarif horaire moyen à {location.name} : <strong className="text-gray-900">{Math.round(trade.priceRange.min * pricingMultiplier)}–{Math.round(trade.priceRange.max * pricingMultiplier)} {trade.priceRange.unit}</strong>.
+                {pricingMultiplier !== 1.0 && ' Tarifs ajustés à la zone géographique.'}
+                {pricingMultiplier === 1.0 && ' Les prix peuvent varier selon la complexité des travaux et le professionnel choisi.'}
               </p>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {trade.commonTasks.slice(0, 6).map((task, i) => {
                   const [label, price] = task.split(' : ')
+                  const adjustedPrice = price && pricingMultiplier !== 1.0
+                    ? price.replace(/\d[\d\s]*/g, (m) => {
+                        const n = parseInt(m.replace(/\s/g, ''), 10)
+                        return isNaN(n) ? m : String(Math.round(n * pricingMultiplier))
+                      })
+                    : price
                   return (
                     <div key={i} className="flex items-start justify-between gap-3 p-3 bg-gray-50 rounded-xl text-sm border border-gray-100">
                       <span className="text-gray-700">{label}</span>
-                      {price && <span className="font-semibold text-amber-700 whitespace-nowrap">{price}</span>}
+                      {adjustedPrice && <span className="font-semibold text-amber-700 whitespace-nowrap">{adjustedPrice}</span>}
                     </div>
                   )
                 })}
@@ -380,8 +471,8 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         </section>
       )}
 
-      {/* FAQ accordion — premium card style */}
-      {trade && trade.faq.length > 0 && (
+      {/* FAQ accordion — premium card style (trade FAQ hash-selected + location-specific) */}
+      {combinedFaq.length > 0 && (
         <section className="py-12 bg-white border-t">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
@@ -389,19 +480,19 @@ export default async function ServiceLocationPage({ params }: PageProps) {
                 Questions fréquentes — {service.name.toLowerCase()} à {location.name}
               </h2>
               <div className="space-y-3">
-                {trade.faq.map((item, i) => (
+                {combinedFaq.map((item, i) => (
                   <details
                     key={i}
                     className="group bg-gray-50 rounded-xl border border-gray-100 overflow-hidden transition-shadow duration-300 hover:shadow-sm"
                   >
                     <summary className="flex items-center justify-between cursor-pointer px-6 py-5 text-left hover:bg-gray-100/80 transition-colors duration-200 [&::-webkit-details-marker]:hidden list-none">
-                      <span className="font-semibold text-slate-900 pr-4">{item.q}</span>
+                      <span className="font-semibold text-slate-900 pr-4">{item.question}</span>
                       <svg className="w-5 h-5 text-amber-500 shrink-0 group-open:rotate-180 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                       </svg>
                     </summary>
                     <div className="px-6 pb-5 text-slate-600 leading-relaxed text-sm animate-fade-in">
-                      {item.a}
+                      {item.answer}
                     </div>
                   </details>
                 ))}

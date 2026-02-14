@@ -11,6 +11,7 @@ export interface AdminPermissions {
   settings: { read: boolean; write: boolean }
   audit: { read: boolean }
   prospection: { read: boolean; write: boolean; send: boolean; ai: boolean }
+  content: { read: boolean; write: boolean; delete: boolean; publish: boolean }
 }
 
 export interface AdminUser {
@@ -205,6 +206,7 @@ export const DEFAULT_PERMISSIONS: Record<AdminRole, AdminPermissions> = {
     settings: { read: true, write: true },
     audit: { read: true },
     prospection: { read: true, write: true, send: true, ai: true },
+    content: { read: true, write: true, delete: true, publish: true },
   },
   admin: {
     users: { read: true, write: true, delete: false },
@@ -215,6 +217,7 @@ export const DEFAULT_PERMISSIONS: Record<AdminRole, AdminPermissions> = {
     settings: { read: true, write: false },
     audit: { read: true },
     prospection: { read: true, write: true, send: true, ai: true },
+    content: { read: true, write: true, delete: false, publish: true },
   },
   moderator: {
     users: { read: true, write: false, delete: false },
@@ -225,6 +228,7 @@ export const DEFAULT_PERMISSIONS: Record<AdminRole, AdminPermissions> = {
     settings: { read: false, write: false },
     audit: { read: false },
     prospection: { read: true, write: false, send: false, ai: false },
+    content: { read: true, write: true, delete: false, publish: false },
   },
   viewer: {
     users: { read: true, write: false, delete: false },
@@ -235,6 +239,7 @@ export const DEFAULT_PERMISSIONS: Record<AdminRole, AdminPermissions> = {
     settings: { read: false, write: false },
     audit: { read: false },
     prospection: { read: false, write: false, send: false, ai: false },
+    content: { read: true, write: false, delete: false, publish: false },
   },
 }
 

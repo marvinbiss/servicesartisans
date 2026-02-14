@@ -61,6 +61,22 @@ export const tradeContent: Record<string, TradeContent> = {
         q: 'Le plombier doit-il fournir une facture ?',
         a: 'Oui, c\'est obligatoire pour toute prestation supérieure à 25 \u20AC. La facture doit mentionner le détail des travaux, le prix unitaire des pièces, le taux horaire de la main-d\'oeuvre et la TVA appliquée (10 % pour la rénovation, 20 % pour le neuf). Conservez-la précieusement pour la garantie.',
       },
+      {
+        q: 'Que faire en cas de fuite d\'eau la nuit ?',
+        a: 'Coupez immédiatement l\'arrivée d\'eau au compteur général, généralement situé dans la cave ou à l\'extérieur du logement. Placez des récipients sous la fuite et épongez l\'eau stagnante pour limiter les dégâts. Contactez ensuite un plombier d\'urgence disponible 24h/24 ; les majorations nocturnes varient de 50 à 100 % du tarif de base.',
+      },
+      {
+        q: 'Comment déboucher un évier naturellement ?',
+        a: 'Versez un mélange de bicarbonate de soude (6 cuillères à soupe) et de vinaigre blanc (25 cl) dans la canalisation, laissez agir 30 minutes puis rincez à l\'eau bouillante. Si le bouchon persiste, utilisez une ventouse ou un furet manuel. Si ces méthodes échouent, faites appel à un plombier qui pourra utiliser un furet électrique ou un hydrocurage.',
+      },
+      {
+        q: 'Quel est le coût d\'un remplacement de chauffe-eau ?',
+        a: 'Le remplacement d\'un chauffe-eau électrique de 200 litres coûte entre 800 et 1 500 \u20AC (fourniture + pose), tandis qu\'un chauffe-eau thermodynamique revient à 2 500 à 4 500 \u20AC. Le prix dépend du type (électrique, gaz, thermodynamique, solaire), de la capacité et de l\'accessibilité de l\'installation. Un chauffe-eau thermodynamique permet d\'économiser jusqu\'à 70 % sur la facture d\'eau chaude.',
+      },
+      {
+        q: 'Quelle est la durée de vie d\'une installation de plomberie ?',
+        a: 'Les canalisations en cuivre durent 50 à 80 ans, celles en PER (polyéthylène réticulé) environ 50 ans, tandis que les tuyaux en plomb (interdits depuis 1995) doivent être remplacés. Un chauffe-eau a une durée de vie de 10 à 15 ans et les robinetteries de 15 à 20 ans. Un entretien régulier (détartrage, vérification des joints) prolonge significativement la durée de vie de l\'installation.',
+      },
     ],
     emergencyInfo:
       'En cas de fuite d\'eau importante ou de canalisation bouchée, un plombier d\'urgence peut intervenir 24h/24 et 7j/7. Coupez immédiatement l\'arrivée d\'eau au compteur général et contactez un professionnel. Les tarifs d\'urgence sont majorés de 50 à 100 % par rapport à une intervention en journée.',
@@ -108,6 +124,26 @@ export const tradeContent: Record<string, TradeContent> = {
       {
         q: 'Qu\'est-ce que le certificat Consuel et est-il obligatoire ?',
         a: 'Le Consuel (Comité National pour la Sécurité des Usagers de l\'Électricité) délivre une attestation de conformité électrique. Il est obligatoire pour toute nouvelle installation ou rénovation complète avant la mise sous tension par Enedis. Le coût est d\'environ 120 à 180 \u20AC selon le type d\'installation.',
+      },
+      {
+        q: 'Comment savoir si mon installation électrique est aux normes ?',
+        a: 'Faites réaliser un diagnostic électrique par un électricien certifié ou un diagnostiqueur agréé. Ce contrôle vérifie la conformité à la norme NF C 15-100 : présence d\'un disjoncteur différentiel 30 mA, mise à la terre, protection des circuits et état des prises. Ce diagnostic est obligatoire pour la vente d\'un logement de plus de 15 ans et coûte entre 100 et 200 \u20AC.',
+      },
+      {
+        q: 'Quand faut-il refaire le tableau électrique ?',
+        a: 'Le remplacement du tableau est nécessaire si votre installation a plus de 25 ans, si le tableau comporte encore des fusibles à broche, s\'il n\'y a pas de disjoncteur différentiel 30 mA ou si vous ajoutez des équipements énergivores (borne de recharge, pompe à chaleur). Le coût d\'un tableau neuf aux normes est de 800 à 2 500 \u20AC selon le nombre de circuits.',
+      },
+      {
+        q: 'Les travaux électriques nécessitent-ils une mise aux normes complète ?',
+        a: 'Non, la mise aux normes complète n\'est obligatoire que pour une construction neuve ou une rénovation totale. Pour des travaux partiels, seuls les circuits concernés doivent respecter la norme NF C 15-100 en vigueur. Toutefois, l\'électricien doit s\'assurer que les travaux ne créent pas de danger sur le reste de l\'installation.',
+      },
+      {
+        q: 'Combien de prises électriques faut-il par pièce ?',
+        a: 'La norme NF C 15-100 impose un minimum de 5 prises dans un séjour de moins de 28 m² (7 au-delà), 3 prises dans une chambre, 6 prises dans une cuisine (dont 4 au-dessus du plan de travail) et 1 prise dans les toilettes. Chaque prise doit être alimentée par un circuit protégé par un disjoncteur adapté (16 A ou 20 A).',
+      },
+      {
+        q: 'Peut-on faire soi-même des travaux électriques dans son logement ?',
+        a: 'Légalement, un particulier peut réaliser des travaux électriques dans son propre logement, mais il engage sa responsabilité en cas d\'accident ou d\'incendie. L\'attestation Consuel sera exigée pour le raccordement au réseau. Pour des raisons de sécurité et d\'assurance, il est vivement recommandé de confier les travaux à un électricien qualifié, surtout pour le tableau et les circuits principaux.',
       },
     ],
     emergencyInfo:
@@ -162,6 +198,22 @@ export const tradeContent: Record<string, TradeContent> = {
         q: 'Comment éviter les arnaques aux serruriers ?',
         a: 'Vérifiez le SIRET de l\'entreprise, recherchez des avis en ligne et privilégiez le bouche-à-oreille. Refusez toute intervention sans devis préalable écrit. Un serrurier honnête accepte toujours de détailler ses tarifs. En cas de doute, contactez la DGCCRF (Direction Générale de la Concurrence) au 0809 540 550.',
       },
+      {
+        q: 'Mon assurance couvre-t-elle un changement de serrure après un cambriolage ?',
+        a: 'Oui, la garantie vol de votre assurance habitation prend généralement en charge le remplacement de la serrure et la réparation de la porte après un cambriolage. Vous devez déposer plainte au commissariat, déclarer le sinistre sous 2 jours ouvrés et conserver la facture du serrurier. Le remboursement se fait sur présentation de ces justificatifs, souvent sans franchise.',
+      },
+      {
+        q: 'Combien de temps faut-il pour ouvrir une porte claquée ?',
+        a: 'Un serrurier expérimenté ouvre une porte claquée (non verrouillée à clé) en 5 à 15 minutes sans abîmer la serrure, grâce à des outils spécialisés (crochet, by-pass, radio). Pour une porte verrouillée ou blindée, l\'intervention peut prendre 30 minutes à 1 heure. Si le cylindre doit être percé, le remplacement de la serrure sera nécessaire.',
+      },
+      {
+        q: 'Quelle est la différence entre une serrure 3 points et 5 points ?',
+        a: 'Une serrure 3 points verrouille la porte en trois endroits (haut, milieu, bas) et offre un niveau de sécurité correct pour un appartement. La serrure 5 points ajoute deux points latéraux pour une résistance accrue à l\'effraction, recommandée pour les maisons et les rez-de-chaussée. Les assureurs exigent souvent un minimum de 3 points avec certification A2P pour les logements.',
+      },
+      {
+        q: 'Peut-on changer une serrure de porte d\'entrée en copropriété ?',
+        a: 'Vous pouvez librement changer le cylindre (barillet) de votre porte d\'entrée privative sans autorisation. En revanche, modifier la serrure de la porte d\'entrée de l\'immeuble nécessite l\'accord du syndic de copropriété. Si vous êtes locataire, vous pouvez changer la serrure à vos frais mais devez remettre l\'ancienne en quittant le logement.',
+      },
     ],
     emergencyInfo:
       'En cas de porte claquée ou de serrure cassée, un serrurier d\'urgence intervient généralement sous 30 minutes à 1 heure en zone urbaine. Attention aux majorations : +50 % en soirée (après 19h), +75 à 100 % la nuit (après 22h), le dimanche et les jours fériés. Exigez toujours un devis écrit avant le début de l\'intervention.',
@@ -212,6 +264,22 @@ export const tradeContent: Record<string, TradeContent> = {
       {
         q: 'Ma chaudière est en panne en plein hiver, que faire ?',
         a: 'Vérifiez d\'abord les éléments simples : thermostat, pression du circuit (entre 1 et 1,5 bar), disjoncteur dédié. Si le problème persiste, appelez un chauffagiste en urgence. La plupart interviennent sous 4 à 12 heures. Si vous avez un contrat d\'entretien, le dépannage est souvent inclus ou prioritaire.',
+      },
+      {
+        q: 'L\'entretien annuel de la chaudière est-il vraiment obligatoire ?',
+        a: 'Oui, l\'entretien annuel est obligatoire depuis le décret du 9 juin 2009 pour toutes les chaudières (gaz, fioul, bois) d\'une puissance de 4 à 400 kW. Le chauffagiste vérifie la combustion, nettoie les composants et mesure les émissions de CO. Il remet une attestation d\'entretien, exigée par l\'assurance en cas de sinistre. Le coût est de 100 à 200 \u20AC.',
+      },
+      {
+        q: 'Comment purger correctement ses radiateurs ?',
+        a: 'La purge des radiateurs doit se faire chaque année avant la saison de chauffe. Ouvrez la vis de purge en haut du radiateur avec une clé spéciale, laissez l\'air s\'échapper jusqu\'à ce que de l\'eau coule, puis refermez. Commencez par le radiateur le plus proche de la chaudière. Après la purge, vérifiez la pression du circuit (1 à 1,5 bar) et ajoutez de l\'eau si nécessaire.',
+      },
+      {
+        q: 'Quel est le coût d\'un plancher chauffant ?',
+        a: 'L\'installation d\'un plancher chauffant hydraulique coûte entre 50 et 100 \u20AC/m² (pose uniquement) et entre 70 et 120 \u20AC/m² pour un système électrique. Pour une maison de 100 m², le budget total (fourniture + pose) est de 8 000 à 15 000 \u20AC. Le plancher chauffant offre un confort supérieur aux radiateurs et permet des économies d\'énergie de 10 à 15 %.',
+      },
+      {
+        q: 'Faut-il un contrat d\'entretien pour sa chaudière ?',
+        a: 'Le contrat d\'entretien n\'est pas obligatoire mais vivement recommandé. Il coûte entre 120 et 250 \u20AC par an et inclut la visite annuelle obligatoire, le dépannage prioritaire (souvent sous 24h) et parfois les pièces d\'usure. Sans contrat, une intervention d\'urgence coûte 150 à 350 \u20AC avec des délais plus longs, surtout en plein hiver.',
       },
     ],
     emergencyInfo:
@@ -267,6 +335,22 @@ export const tradeContent: Record<string, TradeContent> = {
         q: 'Combien de temps faut-il pour peindre un appartement ?',
         a: 'Pour un appartement de 60 m², comptez 5 à 8 jours de travail incluant la préparation, l\'application de 2 couches et les finitions. Le délai peut être plus long si les murs nécessitent d\'importants travaux de préparation (rebouchage, enduit, ponçage).',
       },
+      {
+        q: 'Comment bien préparer les murs avant de peindre ?',
+        a: 'La préparation comprend le lessivage à la lessive Saint-Marc pour dégraisser, le rebouchage des trous et fissures à l\'enduit, le ponçage au papier de verre grain 120, et l\'application d\'une sous-couche d\'accrochage. Sur un mur neuf en plâtre, une sous-couche spéciale est indispensable pour éviter que la peinture ne cloque. Cette étape représente 60 % du temps total des travaux.',
+      },
+      {
+        q: 'Quelle peinture choisir pour une salle de bain ?',
+        a: 'Optez pour une peinture acrylique spéciale pièces humides, résistante à l\'humidité et aux moisissures (classe 1 ou 2 selon la norme ISO 11998). Les marques professionnelles comme Tollens, Sikkens ou Zolpan proposent des gammes dédiées. Comptez 30 à 50 \u20AC le litre en qualité professionnelle. Évitez les peintures glycéro dans les pièces de vie en raison de leurs émanations de COV.',
+      },
+      {
+        q: 'La peinture de façade nécessite-t-elle une autorisation ?',
+        a: 'Oui, un ravalement de façade nécessite une déclaration préalable de travaux en mairie si vous modifiez l\'aspect extérieur (couleur, enduit). En zone protégée (ABF), l\'accord de l\'Architecte des Bâtiments de France est requis, ce qui peut limiter le choix des couleurs. Certaines communes imposent un ravalement tous les 10 ans (Paris, par exemple) et peuvent émettre un arrêté si la façade est dégradée.',
+      },
+      {
+        q: 'Combien de couches de peinture faut-il appliquer ?',
+        a: 'Deux couches de peinture de finition sont le minimum pour un résultat homogène et durable. Sur un support neuf ou un changement de couleur radical (clair vers foncé), une sous-couche plus deux couches de finition sont nécessaires. Chaque couche doit sécher complètement (4 à 6 heures pour une acrylique) avant l\'application de la suivante.',
+      },
     ],
     certifications: [
       'Qualibat (qualification 6111 pour la peinture)',
@@ -311,6 +395,26 @@ export const tradeContent: Record<string, TradeContent> = {
       {
         q: 'Faut-il un permis de construire pour changer les fenêtres ?',
         a: 'Non, mais une déclaration préalable de travaux en mairie est obligatoire si vous modifiez l\'aspect extérieur de la façade (forme, couleur, matériau des fenêtres). En zone protégée (ABF, sites classés), l\'accord de l\'Architecte des Bâtiments de France est nécessaire. Les délais d\'instruction sont de 1 à 2 mois.',
+      },
+      {
+        q: 'Combien coûte un dressing ou placard sur mesure ?',
+        a: 'Un placard sur mesure avec portes coulissantes coûte entre 800 et 3 000 \u20AC selon les dimensions, le matériau (mélaminé, bois massif, laqué) et les aménagements intérieurs (tiroirs, penderies, étagères). Un dressing complet avec éclairage intégré peut atteindre 5 000 à 8 000 \u20AC. Le sur-mesure permet d\'exploiter chaque centimètre, notamment sous les combles ou dans les espaces atypiques.',
+      },
+      {
+        q: 'Quelle est la durée de vie des fenêtres en PVC ?',
+        a: 'Les fenêtres PVC de qualité ont une durée de vie de 25 à 35 ans sans entretien particulier, hormis un nettoyage régulier au savon doux. Les fenêtres en bois durent aussi longtemps mais nécessitent un entretien (lasure ou peinture) tous les 5 à 7 ans. Les fenêtres aluminium ont la meilleure longévité, jusqu\'à 40 ans, grâce à leur résistance à la corrosion.',
+      },
+      {
+        q: 'Un menuisier peut-il fabriquer un escalier sur mesure ?',
+        a: 'Oui, c\'est même l\'une des spécialités du menuisier d\'agencement. Un escalier sur mesure en bois coûte entre 3 000 et 10 000 \u20AC selon l\'essence (hêtre, chêne, frêne), la forme (droit, tournant, hélicoïdal) et les finitions (vitrification, peinture, garde-corps). La fabrication et la pose prennent 2 à 4 semaines. Un escalier sur mesure optimise l\'espace et s\'adapte parfaitement à la configuration du logement.',
+      },
+      {
+        q: 'Comment entretenir ses menuiseries en bois ?',
+        a: 'Les menuiseries extérieures en bois doivent être protégées par une lasure ou une peinture microporeuse tous les 5 à 7 ans. Poncez légèrement la surface, dépoussiérez et appliquez deux couches de lasure au pinceau. Pour les menuiseries intérieures (portes, placards), un nettoyage à l\'eau savonneuse suffit. Si le bois est abîmé, un menuisier peut le décaper, le traiter et le remettre en état.',
+      },
+      {
+        q: 'Quelles aides existent pour le remplacement de fenêtres ?',
+        a: 'MaPrimeRenov\' finance jusqu\'à 100 \u20AC par fenêtre (simple vers double vitrage) pour les ménages modestes. Les CEE (Certificats d\'Économies d\'Énergie) ajoutent 30 à 80 \u20AC par fenêtre. L\'éco-prêt à taux zéro permet de financer jusqu\'à 7 000 \u20AC de remplacement de fenêtres sans intérêts. Le menuisier doit être certifié RGE pour que vous puissiez bénéficier de ces aides.',
       },
     ],
     certifications: [
@@ -357,6 +461,26 @@ export const tradeContent: Record<string, TradeContent> = {
       {
         q: 'Quel carrelage choisir pour un sol de cuisine ?',
         a: 'Pour une cuisine, privilégiez un carrelage grès cérame classement UPEC U3 P3 E2 C1 minimum : résistant à l\'usure, aux chocs, à l\'eau et aux produits ménagers. Les formats 30x60 ou 60x60 en finition mate ou satinée sont les plus pratiques. Évitez les finitions très brillantes (glissantes) et les couleurs trop claires (salissantes).',
+      },
+      {
+        q: 'Quel est le coût de la pose de carrelage au m² ?',
+        a: 'La pose de carrelage au sol coûte entre 35 et 55 \u20AC/m² en format standard (30x30 à 45x45), 50 à 75 \u20AC/m² pour du grand format (60x60 et plus) et 60 à 100 \u20AC/m² pour de la mosaïque. La pose murale (faïence) revient à 40 à 65 \u20AC/m². Ces prix s\'entendent hors fourniture du carrelage. Ajoutez 15 à 30 \u20AC/m² si l\'ancien revêtement doit être déposé.',
+      },
+      {
+        q: 'Faut-il une étanchéité sous le carrelage de salle de bain ?',
+        a: 'Oui, l\'étanchéité sous carrelage (système SPEC) est indispensable dans les zones de projection d\'eau (douche, contour de baignoire) conformément au DTU 52.1. Le carreleur applique une membrane ou un produit liquide d\'étanchéité avant la pose du carrelage. Ce poste supplémentaire coûte 20 à 40 \u20AC/m² mais évite les infiltrations d\'eau et les dégâts des eaux chez le voisin du dessous.',
+      },
+      {
+        q: 'Comment choisir entre carrelage et grès cérame ?',
+        a: 'Le grès cérame est en réalité un type de carrelage, fabriqué par pressage à haute température. Il est plus dense, plus résistant et moins poreux que la faïence ou le carrelage classique en terre cuite. Le grès cérame pleine masse est le plus solide (teinté dans la masse, les éclats sont invisibles). Pour un usage courant en intérieur, le grès cérame émaillé offre le meilleur rapport qualité-prix.',
+      },
+      {
+        q: 'Quel carrelage choisir pour une terrasse extérieure ?',
+        a: 'Pour une terrasse, choisissez un carrelage antidérapant classé R11 minimum (R12 en bord de piscine), résistant au gel (norme ISO 10545-12) et de faible porosité. Le grès cérame pleine masse ou le carrelage en pierre naturelle sont les mieux adaptés. Prévoyez une pente de 1 à 2 % pour l\'évacuation de l\'eau. Le budget est de 45 à 80 \u20AC/m² pour la pose.',
+      },
+      {
+        q: 'Combien de temps faut-il attendre avant de marcher sur un carrelage neuf ?',
+        a: 'Il faut attendre 24 heures minimum après la pose avant de marcher sur le carrelage, le temps que la colle sèche. Les joints doivent être réalisés 24 à 48 heures après la pose et nécessitent à leur tour 24 heures de séchage. Au total, comptez 3 à 4 jours avant de pouvoir utiliser normalement la pièce. Évitez de poser des meubles lourds pendant au moins une semaine.',
       },
     ],
     certifications: [
@@ -406,6 +530,22 @@ export const tradeContent: Record<string, TradeContent> = {
         q: 'Ma toiture fuit après une tempête, que faire en urgence ?',
         a: 'Placez des récipients sous les fuites et contactez un couvreur d\'urgence. Prenez des photos des dégâts pour votre assurance et déclarez le sinistre sous 5 jours (2 jours pour une catastrophe naturelle). En attendant le couvreur, vous pouvez bâcher temporairement la zone depuis l\'intérieur des combles, sans monter sur le toit.',
       },
+      {
+        q: 'Quelle est la durée de vie d\'une toiture selon le matériau ?',
+        a: 'Les tuiles en terre cuite durent 50 à 100 ans, l\'ardoise naturelle 75 à 150 ans, le zinc 50 à 80 ans et les tuiles béton 30 à 50 ans. Le shingle (bitume) a la durée de vie la plus courte : 20 à 30 ans. Ces durées supposent un entretien régulier (démoussage, remplacement des éléments cassés, vérification des solins et faîtages).',
+      },
+      {
+        q: 'Combien coûte l\'installation d\'une fenêtre de toit (Velux) ?',
+        a: 'L\'installation d\'une fenêtre de toit standard (78x98 cm) coûte entre 500 et 1 500 \u20AC pour la pose seule, auxquels s\'ajoute le prix de la fenêtre (300 à 1 200 \u20AC selon le modèle). Une fenêtre motorisée avec stores intégrés peut atteindre 2 500 \u20AC. Le couvreur doit assurer une parfaite étanchéité avec un kit de raccordement adapté à la couverture.',
+      },
+      {
+        q: 'L\'isolation de toiture est-elle éligible aux aides de l\'État ?',
+        a: 'Oui, l\'isolation de la toiture par l\'intérieur ou l\'extérieur (sarking) est éligible à MaPrimeRenov\' (jusqu\'à 25 \u20AC/m² pour les ménages modestes), aux CEE et à l\'éco-prêt à taux zéro. Le couvreur doit être certifié RGE. L\'isolation de toiture est l\'un des travaux les plus rentables : elle réduit les déperditions thermiques de 25 à 30 % et se rentabilise en 4 à 6 ans.',
+      },
+      {
+        q: 'Comment savoir si ma charpente a besoin d\'un traitement ?',
+        a: 'Inspectez les bois de charpente à la recherche de sciure au sol (signe de vrillettes ou capricornes), de trous de sortie d\'insectes, de champignons (mérule) ou de bois qui s\'effrite au contact. Un diagnostic par un professionnel est recommandé tous les 10 ans. Le traitement préventif ou curatif coûte entre 20 et 50 \u20AC/m² et protège la charpente pour 10 à 20 ans.',
+      },
     ],
     certifications: [
       'Qualibat (qualification 3111 pour couverture en tuiles)',
@@ -451,6 +591,26 @@ export const tradeContent: Record<string, TradeContent> = {
       {
         q: 'Quelles sont les fondations nécessaires pour un mur de clôture ?',
         a: 'Un mur de clôture en parpaings nécessite une semelle de fondation en béton armé d\'au moins 30 cm de profondeur et 40 cm de largeur, hors gel (50 à 80 cm selon la région). Le maçon doit respecter les règles d\'urbanisme locales (hauteur maximale, retrait par rapport à la limite de propriété).',
+      },
+      {
+        q: 'Combien coûte la construction d\'un garage en parpaings ?',
+        a: 'La construction d\'un garage simple (environ 20 m²) en parpaings coûte entre 15 000 et 25 000 \u20AC, comprenant les fondations, les murs, la dalle, la toiture et la porte de garage. Un garage double (40 m²) revient à 25 000 à 45 000 \u20AC. Un permis de construire est nécessaire pour une surface supérieure à 20 m², une déclaration préalable en dessous.',
+      },
+      {
+        q: 'Les fissures sur ma maison sont-elles dangereuses ?',
+        a: 'Les microfissures (moins de 0,2 mm) sont généralement superficielles et sans danger. Les fissures de 0,2 à 2 mm doivent être surveillées et réparées pour éviter les infiltrations d\'eau. Les fissures supérieures à 2 mm ou en escalier le long des joints de parpaings peuvent indiquer un problème structurel et nécessitent l\'intervention urgente d\'un maçon et éventuellement d\'un bureau d\'études.',
+      },
+      {
+        q: 'Quelle est la meilleure période pour réaliser des travaux de maçonnerie ?',
+        a: 'Le printemps (avril-juin) et l\'automne (septembre-octobre) sont les périodes idéales. Le béton et le mortier nécessitent des températures entre 5 et 30 °C pour une prise optimale. En hiver, le gel peut compromettre la solidité du béton, et en plein été, la chaleur excessive accélère le séchage et provoque des fissures. Si les travaux doivent se faire en hiver, le maçon utilisera des adjuvants antigel.',
+      },
+      {
+        q: 'Faut-il un permis de construire pour une extension de maison ?',
+        a: 'En zone couverte par un PLU (Plan Local d\'Urbanisme), une déclaration préalable suffit pour une extension de moins de 40 m². Au-delà, un permis de construire est obligatoire. Hors PLU, le seuil est de 20 m². De plus, si la surface totale de la maison après extension dépasse 150 m², le recours à un architecte est obligatoire.',
+      },
+      {
+        q: 'Combien coûte une dalle béton pour une terrasse ?',
+        a: 'Une dalle béton de 15 cm d\'épaisseur pour terrasse coûte entre 60 et 120 \u20AC/m², comprenant le terrassement, le ferraillage, le coffrage et le coulage du béton. Pour une terrasse de 30 m², le budget total est de 1 800 à 3 600 \u20AC. Le béton décoratif (désactivé, ciré ou imprimé) est plus cher : 80 à 180 \u20AC/m², mais ne nécessite pas de revêtement supplémentaire.',
       },
     ],
     certifications: [
@@ -501,6 +661,22 @@ export const tradeContent: Record<string, TradeContent> = {
         q: 'Quel budget pour l\'entretien annuel d\'un jardin de 500 m² ?',
         a: 'Comptez entre 1 500 et 3 500 \u20AC par an pour un entretien complet comprenant la tonte bimensuelle (avril à octobre), 2 tailles de haie, le désherbage des massifs et le ramassage des feuilles à l\'automne. Ce budget peut être réduit de 50 % grâce au crédit d\'impôt si le jardinier est agréé SAP.',
       },
+      {
+        q: 'Combien coûte l\'élagage d\'un grand arbre ?',
+        a: 'L\'élagage d\'un arbre de taille moyenne (8 à 15 m) coûte entre 200 et 600 \u20AC, et entre 500 et 1 500 \u20AC pour un grand arbre (plus de 15 m). Le prix dépend de la hauteur, de l\'accessibilité et du volume de branches à couper. L\'abattage avec dessouchage est plus cher : 400 à 2 500 \u20AC selon la taille. Faites appel à un élagueur-grimpeur certifié CS pour les arbres de grande hauteur.',
+      },
+      {
+        q: 'Quand et comment scarifier sa pelouse ?',
+        a: 'La scarification se fait idéalement au printemps (mars-avril) et éventuellement à l\'automne (septembre). Elle consiste à griffer le sol pour retirer la mousse et le feutrage qui étouffent le gazon. Après scarification, semez du gazon de regarnissage et apportez un engrais adapté. Un jardinier professionnel facture la scarification entre 0,15 et 0,30 \u20AC/m².',
+      },
+      {
+        q: 'Faut-il une autorisation pour abattre un arbre dans son jardin ?',
+        a: 'En règle générale, vous pouvez abattre un arbre sur votre propriété sans autorisation. Cependant, une autorisation est nécessaire si l\'arbre est classé (Espace Boisé Classé au PLU), s\'il est situé en zone protégée (périmètre ABF) ou si un arrêté municipal interdit l\'abattage. Renseignez-vous auprès de votre mairie avant toute intervention. En copropriété, l\'accord du syndic est requis.',
+      },
+      {
+        q: 'Comment créer un système d\'arrosage automatique ?',
+        a: 'L\'installation d\'un arrosage automatique enterré coûte entre 8 et 15 \u20AC/m² pour un jardin de 200 à 500 m², incluant les tuyaux, les asperseurs, le programmateur et la main-d\'oeuvre. Un système goutte-à-goutte pour les massifs et haies est moins cher (3 à 8 \u20AC/m²). Le jardinier-paysagiste dimensionne l\'installation en fonction de la pression d\'eau, du débit disponible et des besoins des plantations.',
+      },
     ],
     certifications: [
       'CS Taille et soins des arbres (pour l\'élagage)',
@@ -546,6 +722,26 @@ export const tradeContent: Record<string, TradeContent> = {
       {
         q: 'Double ou triple vitrage : lequel choisir ?',
         a: 'Le double vitrage 4/16/4 avec gaz argon (Ug \u2248 1,1 W/m².K) suffit dans la majorité des cas en France métropolitaine. Le triple vitrage (Ug \u2248 0,6 W/m².K) est recommandé uniquement pour les façades nord en climat continental ou montagnard. Il est plus lourd et plus cher (+40 à 60 %) pour un gain d\'isolation modeste en climat tempéré.',
+      },
+      {
+        q: 'Peut-on remplacer un simple vitrage par du double vitrage sans changer la fenêtre ?',
+        a: 'Oui, grâce au survitrage ou au remplacement du vitrage seul (si le châssis est en bon état et assez profond pour accueillir un double vitrage). Le survitrage consiste à fixer un second vitrage sur la fenêtre existante (80 à 150 \u20AC/m²). Le remplacement du vitrage dans le châssis existant coûte 150 à 300 \u20AC/m². Ces solutions sont moins performantes qu\'un remplacement complet mais beaucoup moins chères.',
+      },
+      {
+        q: 'Combien de temps faut-il pour remplacer une vitre cassée ?',
+        a: 'Le remplacement d\'une vitre standard prend 30 minutes à 1 heure sur place. Cependant, si le vitrage est sur mesure (grande dimension, forme spéciale, double vitrage à commander), le vitrier posera d\'abord un panneau provisoire et reviendra sous 24 à 72 heures avec le vitrage définitif. Pour les urgences, la mise en sécurité provisoire est réalisée en moins d\'une heure.',
+      },
+      {
+        q: 'Qu\'est-ce que le verre sécurit (trempé) et quand est-il obligatoire ?',
+        a: 'Le verre trempé est chauffé à 700 °C puis refroidi brusquement, ce qui le rend 5 fois plus résistant qu\'un verre ordinaire. En cas de casse, il se fragmente en petits morceaux non coupants. Il est obligatoire pour les portes vitrées, les parois de douche, les garde-corps en verre et les baies vitrées dont le bord inférieur est à moins de 90 cm du sol (norme NF DTU 39).',
+      },
+      {
+        q: 'Comment améliorer l\'isolation de mes vitrages sans tout changer ?',
+        a: 'Plusieurs solutions existent : le film isolant thermique à coller sur le vitrage (10 à 30 \u20AC/m², gain de 30 % sur les déperditions), le survitrage (80 à 150 \u20AC/m²), ou le remplacement des joints d\'étanchéité des fenêtres (5 à 15 \u20AC/ml). Un vitrier peut aussi remplacer le vitrage seul sans changer le châssis, si celui-ci est en bon état.',
+      },
+      {
+        q: 'Quel type de verre choisir pour une crédence de cuisine ?',
+        a: 'La crédence en verre doit être en verre trempé sécurit (obligatoire derrière une plaque de cuisson) de 6 mm d\'épaisseur minimum. Elle peut être laquée dans la couleur de votre choix, imprimée avec un motif ou en verre dépoli. Comptez 200 à 500 \u20AC/m² pose comprise. L\'avantage principal est l\'absence de joints : le nettoyage est simple et l\'hygiène optimale.',
       },
     ],
     emergencyInfo:
@@ -593,6 +789,26 @@ export const tradeContent: Record<string, TradeContent> = {
       {
         q: 'Faut-il une autorisation pour installer une climatisation ?',
         a: 'L\'unité extérieure ne nécessite pas de permis de construire, mais une déclaration préalable peut être exigée dans certaines communes (vérifiez le PLU). En copropriété, l\'accord de l\'assemblée générale est généralement requis. Respectez les réglementations sur le bruit (émergence < 5 dB(A) le jour, < 3 dB(A) la nuit).',
+      },
+      {
+        q: 'À quelle fréquence faut-il entretenir sa climatisation ?',
+        a: 'L\'entretien annuel est obligatoire pour les systèmes contenant plus de 2 kg de fluide frigorigène. Nettoyez les filtres intérieurs tous les 2 à 4 semaines en période d\'utilisation (un filtre encrassé réduit les performances de 20 à 30 %). L\'entretien professionnel comprend la vérification du circuit frigorifique, le nettoyage des échangeurs et le contrôle de l\'étanchéité. Le coût est de 100 à 200 \u20AC par an.',
+      },
+      {
+        q: 'Quelle puissance de climatisation pour ma pièce ?',
+        a: 'En règle générale, comptez 100 watts par m² pour une pièce standard (hauteur sous plafond de 2,50 m, isolation correcte). Ainsi, une pièce de 25 m² nécessite environ 2 500 watts (2,5 kW). Ce calcul doit être affiné par un bilan thermique tenant compte de l\'exposition, de la surface vitrée, de l\'isolation et du nombre d\'occupants. Un surdimensionnement entraîne des cycles courts et une surconsommation.',
+      },
+      {
+        q: 'La climatisation réversible remplace-t-elle un chauffage classique ?',
+        a: 'Dans le sud de la France et les régions tempérées, une pompe à chaleur air-air réversible peut constituer le chauffage principal. En revanche, dans les régions au climat continental ou montagnard (températures inférieures à -7 °C), elle doit être complétée par un chauffage d\'appoint car son rendement baisse fortement par grand froid. Un modèle Inverter maintient de bonnes performances jusqu\'à -15 °C.',
+      },
+      {
+        q: 'Climatisation split ou gainable : quelle différence ?',
+        a: 'Le split mural est l\'option la plus simple et la moins chère (1 500 à 3 000 \u20AC par unité), idéale pour climatiser une ou deux pièces. La climatisation gainable distribue l\'air via des gaines dans les faux plafonds : elle est invisible, silencieuse et climatise tout le logement de manière homogène, mais coûte plus cher (5 000 à 12 000 \u20AC) et nécessite un faux plafond ou des combles accessibles.',
+      },
+      {
+        q: 'Quel est l\'impact de la climatisation sur la facture d\'électricité ?',
+        a: 'Un split de 2,5 kW consomme environ 800 à 1 200 kWh par saison (juin à septembre), soit 150 à 250 \u20AC sur la facture d\'électricité. Les modèles Inverter de classe A+++ consomment 30 à 40 % de moins que les modèles classiques. Réglez le thermostat sur 25-26 °C plutôt que 20 °C : chaque degré en moins augmente la consommation de 7 %.',
       },
     ],
     emergencyInfo:
@@ -643,6 +859,26 @@ export const tradeContent: Record<string, TradeContent> = {
         q: 'Quel plan de travail choisir ?',
         a: 'Le stratifié est le plus abordable (50-150 \u20AC/ml) et disponible en nombreux décors. Le bois massif (150-300 \u20AC/ml) est chaleureux mais demande un entretien régulier. Le quartz (250-500 \u20AC/ml) est très résistant et sans entretien. Le granit (300-600 \u20AC/ml) est indestructible. La céramique (400-800 \u20AC/ml) résiste à tout (chaleur, rayures, taches).',
       },
+      {
+        q: 'Faut-il prévoir des travaux de plomberie et d\'électricité avec la cuisine ?',
+        a: 'Oui, la rénovation d\'une cuisine implique presque toujours des travaux de plomberie (déplacement de l\'évier, raccordement du lave-vaisselle) et d\'électricité (ajout de prises, circuit dédié pour le four et la plaque). Un bon cuisiniste coordonne ces corps de métier. Prévoyez 500 à 2 000 \u20AC supplémentaires pour la plomberie et 300 à 1 500 \u20AC pour l\'électricité.',
+      },
+      {
+        q: 'Comment bien agencer une petite cuisine ?',
+        a: 'Dans une cuisine de moins de 8 m², privilégiez un agencement en L ou en I pour optimiser l\'espace. Utilisez des meubles hauts jusqu\'au plafond, des tiroirs plutôt que des placards bas (accès plus facile), et un plan de travail escamotable si nécessaire. Un cuisiniste expérimenté peut rendre une cuisine de 5 m² parfaitement fonctionnelle grâce à des solutions sur mesure.',
+      },
+      {
+        q: 'Quelle est la différence entre une cuisine en kit et une cuisine sur mesure ?',
+        a: 'La cuisine en kit (grande surface de bricolage) coûte 1 000 à 4 000 \u20AC pour 5 ml mais propose des dimensions standardisées qui laissent parfois des espaces vides. La cuisine sur mesure (cuisiniste professionnel) coûte 3 000 à 15 000 \u20AC mais s\'adapte parfaitement à votre pièce, avec des matériaux de meilleure qualité et un suivi de chantier complet incluant la pose.',
+      },
+      {
+        q: 'Les cuisinistes proposent-ils un service après-vente ?',
+        a: 'Les cuisinistes sérieux offrent une garantie de 2 à 10 ans sur les meubles et un service après-vente incluant le réglage des portes et tiroirs après installation (le bois travaille les premiers mois). Vérifiez les conditions de garantie avant de signer : certaines enseignes incluent un ajustement gratuit à 6 mois. En cas de problème, le cuisiniste est votre interlocuteur unique, contrairement à une cuisine en kit.',
+      },
+      {
+        q: 'Quels sont les délais pour une cuisine sur mesure ?',
+        a: 'Comptez 2 à 3 semaines pour la conception (prise de mesures, plan 3D, choix des matériaux), 4 à 8 semaines pour la fabrication des meubles, et 3 à 7 jours pour la pose complète. Au total, prévoyez 2 à 3 mois entre la commande et l\'installation. Les cuisines haut de gamme ou importées peuvent nécessiter 3 à 4 mois de fabrication.',
+      },
     ],
     certifications: [
       'Qualibat',
@@ -688,6 +924,26 @@ export const tradeContent: Record<string, TradeContent> = {
         q: 'Quel sol choisir pour une salle de bain ?',
         a: 'Les meilleurs choix sont le sol PVC/vinyle (étanche, antidérapant, 15-30 \u20AC/m²), le parquet teck ou bambou (naturellement résistant à l\'eau, 40-70 \u20AC/m²) ou le sol souple linoléum (écologique, antibactérien, 20-40 \u20AC/m²). Évitez le stratifié classique qui gonfle au contact de l\'eau. Le carrelage reste la solution la plus durable.',
       },
+      {
+        q: 'Qu\'est-ce que le ragréage et quand est-il nécessaire ?',
+        a: 'Le ragréage est une chape fine (3 à 10 mm) coulée sur le sol existant pour le lisser et le mettre à niveau avant la pose d\'un revêtement. Il est nécessaire quand le sol présente des irrégularités supérieures à 2 mm sous la règle de 2 m. Le coût est de 15 à 30 \u20AC/m². Le solier utilise un ragréage autolissant qui se met à niveau seul et sèche en 4 à 24 heures.',
+      },
+      {
+        q: 'Le parquet est-il compatible avec le chauffage au sol ?',
+        a: 'Oui, mais uniquement certains types : le parquet contrecollé (épaisseur totale de 12 à 15 mm) et le stratifié sont compatibles, en pose flottante. Le parquet massif est déconseillé car il se dilate trop. La résistance thermique totale (parquet + sous-couche) ne doit pas dépasser 0,15 m².K/W. Un solier expérimenté saura vous orienter vers le bon produit et la bonne épaisseur.',
+      },
+      {
+        q: 'Combien coûte la pose de parquet dans un appartement ?',
+        a: 'Pour un appartement de 60 m², la pose de parquet flottant coûte entre 1 200 et 2 100 \u20AC (pose seule, 20 à 35 \u20AC/m²), le parquet contrecollé collé entre 2 100 et 3 600 \u20AC (35 à 60 \u20AC/m²), et le parquet massif entre 3 000 et 4 800 \u20AC (50 à 80 \u20AC/m²). Ajoutez le ragréage si nécessaire (15 à 30 \u20AC/m²) et la sous-couche isolante (3 à 8 \u20AC/m²).',
+      },
+      {
+        q: 'Pose collée ou pose flottante : quelle différence ?',
+        a: 'La pose flottante (les lames s\'emboîtent sans fixation au sol) est plus rapide, moins chère (20 à 35 \u20AC/m²) et permet de démonter le parquet. La pose collée (les lames sont collées directement au sol) offre un meilleur confort acoustique, une meilleure stabilité et est obligatoire pour le parquet massif et le chauffage au sol. Elle coûte 35 à 60 \u20AC/m² et nécessite un sol parfaitement préparé.',
+      },
+      {
+        q: 'Quelle sous-couche choisir sous un parquet flottant ?',
+        a: 'La sous-couche en mousse polyéthylène (2 à 4 \u20AC/m²) est l\'option économique de base. La sous-couche en liège (5 à 10 \u20AC/m²) offre la meilleure isolation phonique et thermique. La sous-couche en fibre de bois (4 à 8 \u20AC/m²) est le choix écologique. Pour un sol sur vide sanitaire ou en rez-de-chaussée, ajoutez un pare-vapeur pour protéger le parquet de l\'humidité.',
+      },
     ],
     certifications: [
       'Qualibat (qualification 6411 pour revêtements de sol souples)',
@@ -732,6 +988,26 @@ export const tradeContent: Record<string, TradeContent> = {
       {
         q: 'Comment choisir une entreprise de nettoyage fiable ?',
         a: 'Vérifiez le SIRET, l\'inscription au registre du commerce (Kbis), l\'attestation URSSAF à jour et l\'assurance RC professionnelle. Demandez des références clients et consultez les avis en ligne. Une entreprise sérieuse propose un devis gratuit après visite sur site et ne demande jamais de paiement en espèces.',
+      },
+      {
+        q: 'Quelle est la différence entre un nettoyage classique et un nettoyage de fin de chantier ?',
+        a: 'Le nettoyage de fin de chantier est bien plus intensif qu\'un ménage classique. Il comprend le décapage des sols (résidus de colle, ciment, peinture), le lessivage des murs et plafonds, le nettoyage des menuiseries et vitrages, et la désinfection complète des sanitaires. Le tarif est 2 à 3 fois plus élevé qu\'un ménage standard car il nécessite des produits et des équipements professionnels spécifiques.',
+      },
+      {
+        q: 'Combien coûte le nettoyage des parties communes d\'un immeuble ?',
+        a: 'Le nettoyage hebdomadaire des parties communes (hall, escalier, paliers) d\'un petit immeuble de 10 à 20 lots coûte entre 200 et 500 \u20AC par mois. Ce tarif inclut le balayage, le lavage des sols, le nettoyage des vitres d\'entrée et la sortie des poubelles. Un contrat annuel est plus économique que des interventions ponctuelles et permet de répartir les charges entre copropriétaires.',
+      },
+      {
+        q: 'Le nettoyage après un dégât des eaux est-il couvert par l\'assurance ?',
+        a: 'Oui, la plupart des contrats d\'assurance habitation couvrent les frais de remise en état après un dégât des eaux, y compris le nettoyage et l\'assèchement. Déclarez le sinistre sous 5 jours ouvrés, prenez des photos des dégâts et conservez toutes les factures. L\'expert de l\'assurance validera la prise en charge. Certains contrats incluent un service d\'assistance avec envoi direct d\'une entreprise de nettoyage.',
+      },
+      {
+        q: 'Peut-on nettoyer une façade soi-même ou faut-il un professionnel ?',
+        a: 'Le nettoyage d\'une façade de plain-pied peut se faire soi-même avec un nettoyeur haute pression (attention à ne pas dépasser 100 bars pour ne pas abîmer l\'enduit). Au-delà du premier étage, faites appel à un professionnel équipé (nacelle, échafaudage) pour des raisons de sécurité. Le nettoyage professionnel de façade coûte 10 à 25 \u20AC/m² et peut inclure un traitement hydrofuge de protection.',
+      },
+      {
+        q: 'Quels produits sont utilisés pour un nettoyage professionnel écologique ?',
+        a: 'Les entreprises labellisées Écolabel Européen utilisent des produits biodégradables à base de tensioactifs végétaux, sans phosphates ni solvants chlorés. Les techniques de nettoyage vapeur (150 °C) permettent de désinfecter sans produit chimique. Le microfibre professionnelle réduit la consommation d\'eau de 90 %. Ces solutions écologiques sont particulièrement adaptées aux crèches, écoles et logements avec enfants en bas âge.',
       },
     ],
     certifications: [

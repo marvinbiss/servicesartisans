@@ -302,7 +302,7 @@ function extractFAQFromBlocks(blocks: ParsedBlock[]): { question: string; answer
         if (next.type === 'list') answerParts.push(next.items.join('. '))
       }
       if (answerParts.length > 0) {
-        faqs.push({ question, answer: answerParts.join(' ').slice(0, 500) })
+        faqs.push({ question, answer: answerParts.join(' ') })
       }
     }
   }

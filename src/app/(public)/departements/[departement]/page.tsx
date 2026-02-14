@@ -9,6 +9,8 @@ import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/li
 import { departements, getDepartementBySlug, getVillesByDepartement, services, getRegionSlugByName } from '@/lib/data/france'
 import { slugify } from '@/lib/utils'
 import { getDepartmentImage } from '@/lib/data/images'
+import { generateDepartementContent } from '@/lib/seo/location-content'
+import { Thermometer, Home, TrendingUp, AlertTriangle } from 'lucide-react'
 
 export function generateStaticParams() {
   return departements.map((dept) => ({ departement: dept.slug }))
@@ -26,8 +28,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const dept = getDepartementBySlug(deptSlug)
   if (!dept) return { title: 'Département non trouvé' }
 
-  const title = `Artisans en ${dept.name} (${dept.code}) — Annuaire & Devis Gratuit | ServicesArtisans`
-  const description = `Trouvez des artisans qualifiés dans le ${dept.name} (${dept.code}). ${dept.description} ${services.length} corps de métier, artisans référencés. Devis gratuit.`
+  const metaContent = generateDepartementContent(dept)
+  const title = `Artisans en ${dept.name} (${dept.code}) — ${metaContent.profile.climateLabel} | ServicesArtisans`
+  const description = `Trouvez des artisans qualifiés dans le ${dept.name} (${dept.code}). ${metaContent.profile.climateLabel}, ${metaContent.profile.housingLabel.toLowerCase()}. ${services.length} corps de métier. Devis gratuit.`
 
   const deptImage = getDepartmentImage(dept.code)
 
@@ -57,6 +60,7 @@ export default async function DepartementPage({ params }: PageProps) {
   if (!dept) notFound()
 
   const villesDuDepartement = getVillesByDepartement(dept.code)
+  const content = generateDepartementContent(dept)
 
   // Other departments in the same region
   const siblingDepts = departements.filter(
@@ -64,6 +68,14 @@ export default async function DepartementPage({ params }: PageProps) {
   )
 
   const regionSlug = getRegionSlugByName(dept.region)
+
+  // Reorder services by profile priority
+  const topServiceSlugsSet = new Set(content.profile.topServiceSlugs.slice(0, 5))
+  const orderedServices = [...services].sort((a, b) => {
+    const ai = content.profile.topServiceSlugs.indexOf(a.slug)
+    const bi = content.profile.topServiceSlugs.indexOf(b.slug)
+    return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi)
+  })
 
   // JSON-LD structured data
   const breadcrumbSchema = getBreadcrumbSchema([
@@ -79,20 +91,7 @@ export default async function DepartementPage({ params }: PageProps) {
     itemCount: services.length,
   })
 
-  const faqSchema = getFAQSchema([
-    {
-      question: `Combien d'artisans sont disponibles dans le ${dept.name} ?`,
-      answer: `Le ${dept.name} (${dept.code}) fait partie de notre couverture nationale de 350 000+ artisans référencés. De nombreux professionnels de tous corps de métier sont disponibles dans les villes du département.`,
-    },
-    {
-      question: `Comment obtenir un devis dans le ${dept.name} ?`,
-      answer: `Sélectionnez le service souhaité, indiquez votre ville dans le ${dept.name}, et recevez jusqu'à 3 devis gratuits de professionnels qualifiés. Le service est 100% gratuit et sans engagement.`,
-    },
-    {
-      question: `Quels services sont disponibles dans le ${dept.name} ?`,
-      answer: `Tous les corps de métier du bâtiment sont représentés : plomberie, électricité, serrurerie, chauffage, peinture, menuiserie, couverture, maçonnerie, jardinage et bien d'autres encore.`,
-    },
-  ])
+  const faqSchema = getFAQSchema(content.faqItems)
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -125,9 +124,19 @@ export default async function DepartementPage({ params }: PageProps) {
           </div>
 
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-500/15 backdrop-blur-sm rounded-full border border-indigo-400/25 mb-5">
-              <Map className="w-4 h-4 text-indigo-400" />
-              <span className="text-sm font-medium text-indigo-200">Département</span>
+            <div className="flex flex-wrap gap-3 mb-5">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-500/15 backdrop-blur-sm rounded-full border border-indigo-400/25">
+                <Map className="w-4 h-4 text-indigo-400" />
+                <span className="text-sm font-medium text-indigo-200">Département</span>
+              </div>
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500/15 backdrop-blur-sm rounded-full border border-cyan-400/25">
+                <Thermometer className="w-4 h-4 text-cyan-400" />
+                <span className="text-sm font-medium text-cyan-200">{content.profile.climateLabel}</span>
+              </div>
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/15 backdrop-blur-sm rounded-full border border-emerald-400/25">
+                <Home className="w-4 h-4 text-emerald-400" />
+                <span className="text-sm font-medium text-emerald-200">{content.profile.housingLabel}</span>
+              </div>
             </div>
 
             <div className="flex items-center gap-4 mb-6">
@@ -146,7 +155,7 @@ export default async function DepartementPage({ params }: PageProps) {
             </div>
 
             <p className="text-lg text-slate-400 max-w-2xl leading-relaxed mb-8">
-              {dept.description} Trouvez des artisans qualifiés et référencés dans tout le département.
+              {content.profile.climateLabel}, {content.profile.economyLabel.toLowerCase()}, {content.profile.housingLabel.toLowerCase()}. {services.length} corps de métier disponibles dans le département.
             </p>
 
             {/* Location info */}
@@ -193,16 +202,92 @@ export default async function DepartementPage({ params }: PageProps) {
             </div>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {services.map((service) => (
+            {orderedServices.map((service) => (
               <Link
                 key={service.slug}
                 href={`/services/${service.slug}/${villesDuDepartement[0]?.slug || slugify(dept.chefLieu)}`}
-                className="bg-white rounded-xl shadow-sm p-5 text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group border border-gray-100"
+                className={`bg-white rounded-xl shadow-sm p-5 text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group ${topServiceSlugsSet.has(service.slug) ? 'border-2 border-indigo-200' : 'border border-gray-100'}`}
               >
+                {topServiceSlugsSet.has(service.slug) && (
+                  <span className="inline-block text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full mb-2">Prioritaire</span>
+                )}
                 <span className="font-semibold text-slate-800 group-hover:text-indigo-600 transition-colors block text-sm">{service.name}</span>
                 <span className="block text-xs text-slate-400 mt-1.5">dans le {dept.code}</span>
               </Link>
             ))}
+          </div>
+        </section>
+
+        {/* ─── PROFIL DU DÉPARTEMENT ────────────────────────── */}
+        <section className="mb-16">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-10 h-10 bg-cyan-100 rounded-xl flex items-center justify-center">
+              <Thermometer className="w-5 h-5 text-cyan-600" />
+            </div>
+            <div>
+              <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
+                Profil du {dept.name}
+              </h2>
+              <p className="text-sm text-slate-500">{content.profile.climateLabel} · {content.profile.economyLabel}</p>
+            </div>
+          </div>
+          <div className="bg-white rounded-2xl border border-gray-200 p-8">
+            <p className="text-slate-700 leading-relaxed mb-6">{content.intro}</p>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+              <div className="bg-cyan-50 rounded-xl p-4">
+                <div className="text-xs font-semibold text-cyan-700 uppercase tracking-wider mb-1">Climat</div>
+                <div className="text-sm text-slate-800 font-medium">{content.profile.climateLabel}</div>
+              </div>
+              <div className="bg-emerald-50 rounded-xl p-4">
+                <div className="text-xs font-semibold text-emerald-700 uppercase tracking-wider mb-1">Habitat</div>
+                <div className="text-sm text-slate-800 font-medium">{content.profile.housingLabel}</div>
+              </div>
+              <div className="bg-violet-50 rounded-xl p-4">
+                <div className="text-xs font-semibold text-violet-700 uppercase tracking-wider mb-1">Économie</div>
+                <div className="text-sm text-slate-800 font-medium">{content.profile.economyLabel}</div>
+              </div>
+              <div className="bg-amber-50 rounded-xl p-4">
+                <div className="text-xs font-semibold text-amber-700 uppercase tracking-wider mb-1">Population</div>
+                <div className="text-sm text-slate-800 font-medium">{dept.population} habitants</div>
+              </div>
+            </div>
+            <div className="mb-6">
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-3 flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 text-amber-500" />
+                Problématiques courantes
+              </h3>
+              <div className="grid sm:grid-cols-2 gap-2">
+                {content.profile.climaticIssues.map((issue, i) => (
+                  <div key={i} className="flex items-start gap-2 text-sm text-slate-600">
+                    <span className="text-amber-500 mt-0.5">•</span>
+                    {issue}
+                  </div>
+                ))}
+              </div>
+            </div>
+            <p className="text-slate-700 leading-relaxed">{content.contexteHabitat}</p>
+          </div>
+        </section>
+
+        {/* ─── CONTENU SEO ────────────────────────────────────── */}
+        <section className="mb-16">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+              <TrendingUp className="w-5 h-5 text-blue-600" />
+            </div>
+            <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
+              Artisanat dans le {dept.name}
+            </h2>
+          </div>
+          <div className="space-y-6">
+            <div className="bg-white rounded-2xl border border-gray-200 p-8">
+              <h3 className="font-heading text-lg font-bold text-slate-900 mb-4">Services prioritaires</h3>
+              <p className="text-slate-700 leading-relaxed">{content.servicesPrioritaires}</p>
+            </div>
+            <div className="bg-white rounded-2xl border border-gray-200 p-8">
+              <h3 className="font-heading text-lg font-bold text-slate-900 mb-4">Conseils pour vos travaux</h3>
+              <p className="text-slate-700 leading-relaxed">{content.conseilsDepartement}</p>
+            </div>
           </div>
         </section>
 
@@ -313,27 +398,12 @@ export default async function DepartementPage({ params }: PageProps) {
             </h2>
           </div>
           <div className="space-y-4">
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h3 className="font-semibold text-slate-900 mb-2">Combien d&apos;artisans sont disponibles dans le {dept.name} ?</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Le {dept.name} ({dept.code}) fait partie de notre couverture nationale de 350 000+ artisans référencés.
-                De nombreux professionnels de tous corps de métier sont disponibles dans les villes du département.
-              </p>
-            </div>
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h3 className="font-semibold text-slate-900 mb-2">Comment obtenir un devis dans le {dept.name} ?</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Sélectionnez le service souhaité, indiquez votre ville dans le {dept.name}, et recevez jusqu&apos;à 3 devis
-                gratuits de professionnels qualifiés. Le service est 100% gratuit et sans engagement.
-              </p>
-            </div>
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h3 className="font-semibold text-slate-900 mb-2">Quels services sont disponibles dans le {dept.name} ?</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Tous les corps de métier du bâtiment sont représentés : plomberie, électricité, serrurerie, chauffage,
-                peinture, menuiserie, couverture, maçonnerie, jardinage et bien d&apos;autres encore.
-              </p>
-            </div>
+            {content.faqItems.map((faq, i) => (
+              <div key={i} className="bg-white rounded-xl border border-gray-200 p-6">
+                <h3 className="font-semibold text-slate-900 mb-2">{faq.question}</h3>
+                <p className="text-sm text-slate-600 leading-relaxed">{faq.answer}</p>
+              </div>
+            ))}
           </div>
         </section>
       </div>

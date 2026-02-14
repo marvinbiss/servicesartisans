@@ -8,6 +8,8 @@ import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/li
 import { SITE_URL } from '@/lib/seo/config'
 import { regions, getRegionBySlug, services as allServices } from '@/lib/data/france'
 import { getRegionImage } from '@/lib/data/images'
+import { generateRegionContent } from '@/lib/seo/location-content'
+import { Thermometer, TrendingUp, AlertTriangle, Mountain } from 'lucide-react'
 
 export function generateStaticParams() {
   return regions.map((region) => ({ region: region.slug }))
@@ -25,11 +27,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const region = getRegionBySlug(regionSlug)
   if (!region) return { title: 'Région non trouvée' }
 
+  const metaContent = generateRegionContent(region)
   const deptCount = region.departments.length
   const cityCount = region.departments.reduce((acc, d) => acc + d.cities.length, 0)
 
-  const title = `Artisans en ${region.name} — Annuaire & Devis Gratuit | ServicesArtisans`
-  const description = `Trouvez un artisan qualifié en ${region.name}. ${deptCount} départements, ${cityCount} villes couvertes. Plombiers, électriciens, serruriers et plus. Devis gratuits, artisans référencés.`
+  const title = `Artisans en ${region.name} — ${metaContent.profile.climateLabel} | ServicesArtisans`
+  const description = `Trouvez un artisan en ${region.name}. ${metaContent.profile.climateLabel}, ${metaContent.profile.geoLabel.toLowerCase()}. ${deptCount} départements, ${cityCount} villes. Devis gratuits.`
 
   const regionImage = getRegionImage(regionSlug)
 
@@ -58,9 +61,18 @@ export default async function RegionPage({ params }: PageProps) {
   const region = getRegionBySlug(regionSlug)
   if (!region) notFound()
 
+  const content = generateRegionContent(region)
   const deptCount = region.departments.length
   const cityCount = region.departments.reduce((acc, d) => acc + d.cities.length, 0)
   const allCities = region.departments.flatMap(dept => dept.cities)
+
+  // Reorder services by climate-based priority
+  const topServiceSlugsSet = new Set(content.profile.topServiceSlugs.slice(0, 5))
+  const orderedServices = [...allServices].sort((a, b) => {
+    const ai = content.profile.topServiceSlugs.indexOf(a.slug)
+    const bi = content.profile.topServiceSlugs.indexOf(b.slug)
+    return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi)
+  })
 
   // Other regions
   const otherRegions = regions.filter(r => r.slug !== regionSlug)
@@ -78,20 +90,7 @@ export default async function RegionPage({ params }: PageProps) {
     itemCount: cityCount,
   })
 
-  const faqSchema = getFAQSchema([
-    {
-      question: `Comment trouver un artisan en ${region.name} ?`,
-      answer: `Parcourez les ${deptCount} départements de la région ${region.name} ou sélectionnez directement votre ville. Choisissez le type de service dont vous avez besoin et accédez aux artisans référencés.`,
-    },
-    {
-      question: `D'où proviennent les données des artisans en ${region.name} ?`,
-      answer: `Les artisans référencés sur ServicesArtisans sont répertoriés à partir des données SIREN officielles. Chaque professionnel listé dispose d'un numéro SIREN enregistré auprès des autorités compétentes.`,
-    },
-    {
-      question: `Combien coûte un devis en ${region.name} ?`,
-      answer: `Les devis sont 100% gratuits et sans engagement. Décrivez votre projet et recevez jusqu'à 3 devis personnalisés d'artisans qualifiés de votre région.`,
-    },
-  ])
+  const faqSchema = getFAQSchema(content.faqItems)
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -124,9 +123,19 @@ export default async function RegionPage({ params }: PageProps) {
           </div>
 
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-slate-500/15 backdrop-blur-sm rounded-full border border-slate-400/25 mb-5">
-              <Globe className="w-4 h-4 text-slate-300" />
-              <span className="text-sm font-medium text-slate-200">Région</span>
+            <div className="flex flex-wrap gap-3 mb-5">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-slate-500/15 backdrop-blur-sm rounded-full border border-slate-400/25">
+                <Globe className="w-4 h-4 text-slate-300" />
+                <span className="text-sm font-medium text-slate-200">Région</span>
+              </div>
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500/15 backdrop-blur-sm rounded-full border border-cyan-400/25">
+                <Thermometer className="w-4 h-4 text-cyan-400" />
+                <span className="text-sm font-medium text-cyan-200">{content.profile.climateLabel}</span>
+              </div>
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/15 backdrop-blur-sm rounded-full border border-emerald-400/25">
+                <Mountain className="w-4 h-4 text-emerald-400" />
+                <span className="text-sm font-medium text-emerald-200">{content.profile.geoLabel}</span>
+              </div>
             </div>
 
             <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
@@ -136,7 +145,7 @@ export default async function RegionPage({ params }: PageProps) {
               </span>
             </h1>
             <p className="text-lg text-slate-400 max-w-2xl leading-relaxed mb-8">
-              {region.description}
+              {content.profile.climateLabel}, {content.profile.geoLabel.toLowerCase()}, {content.profile.economyLabel.toLowerCase()}. {allServices.length} corps de métier disponibles.
             </p>
 
             {/* Stats badges */}
@@ -172,12 +181,12 @@ export default async function RegionPage({ params }: PageProps) {
       <section className="py-6 bg-white border-b border-gray-100 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-center gap-3">
-            <span className="text-sm text-slate-500 font-medium">Recherche rapide :</span>
-            {allServices.slice(0, 6).map((service) => (
+            <span className="text-sm text-slate-500 font-medium">Services prioritaires :</span>
+            {orderedServices.slice(0, 8).map((service) => (
               <Link
                 key={service.slug}
                 href={`/services/${service.slug}`}
-                className="px-4 py-2 bg-gray-50 hover:bg-slate-100 text-slate-700 hover:text-slate-900 rounded-full text-sm font-medium transition-colors border border-gray-200 hover:border-slate-300"
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors border ${topServiceSlugsSet.has(service.slug) ? 'bg-indigo-50 text-indigo-700 border-indigo-200 hover:bg-indigo-100' : 'bg-gray-50 text-slate-700 border-gray-200 hover:bg-slate-100'}`}
               >
                 {service.name} en {region.name}
               </Link>
@@ -187,6 +196,79 @@ export default async function RegionPage({ params }: PageProps) {
       </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        {/* ─── PROFIL RÉGIONAL ──────────────────────────────── */}
+        <section className="mb-16">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-10 h-10 bg-cyan-100 rounded-xl flex items-center justify-center">
+              <Thermometer className="w-5 h-5 text-cyan-600" />
+            </div>
+            <div>
+              <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
+                Profil de la région {region.name}
+              </h2>
+              <p className="text-sm text-slate-500">{content.profile.climateLabel} · {content.profile.geoLabel}</p>
+            </div>
+          </div>
+          <div className="bg-white rounded-2xl border border-gray-200 p-8">
+            <p className="text-slate-700 leading-relaxed mb-6">{content.intro}</p>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+              <div className="bg-cyan-50 rounded-xl p-4">
+                <div className="text-xs font-semibold text-cyan-700 uppercase tracking-wider mb-1">Climat</div>
+                <div className="text-sm text-slate-800 font-medium">{content.profile.climateLabel}</div>
+              </div>
+              <div className="bg-emerald-50 rounded-xl p-4">
+                <div className="text-xs font-semibold text-emerald-700 uppercase tracking-wider mb-1">Géographie</div>
+                <div className="text-sm text-slate-800 font-medium">{content.profile.geoLabel}</div>
+              </div>
+              <div className="bg-violet-50 rounded-xl p-4">
+                <div className="text-xs font-semibold text-violet-700 uppercase tracking-wider mb-1">Économie</div>
+                <div className="text-sm text-slate-800 font-medium">{content.profile.economyLabel}</div>
+              </div>
+              <div className="bg-amber-50 rounded-xl p-4">
+                <div className="text-xs font-semibold text-amber-700 uppercase tracking-wider mb-1">Couverture</div>
+                <div className="text-sm text-slate-800 font-medium">{deptCount} dép. · {cityCount} villes</div>
+              </div>
+            </div>
+            <div className="mb-6">
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-3 flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 text-amber-500" />
+                Caractéristiques du territoire
+              </h3>
+              <div className="grid sm:grid-cols-2 gap-2">
+                {content.profile.keyFacts.map((fact, i) => (
+                  <div key={i} className="flex items-start gap-2 text-sm text-slate-600">
+                    <span className="text-amber-500 mt-0.5">•</span>
+                    {fact}
+                  </div>
+                ))}
+              </div>
+            </div>
+            <p className="text-slate-700 leading-relaxed">{content.contexteRegional}</p>
+          </div>
+        </section>
+
+        {/* ─── CONTENU SEO ────────────────────────────────────── */}
+        <section className="mb-16">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+              <TrendingUp className="w-5 h-5 text-blue-600" />
+            </div>
+            <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
+              Artisanat en {region.name}
+            </h2>
+          </div>
+          <div className="space-y-6">
+            <div className="bg-white rounded-2xl border border-gray-200 p-8">
+              <h3 className="font-heading text-lg font-bold text-slate-900 mb-4">Services prioritaires</h3>
+              <p className="text-slate-700 leading-relaxed">{content.servicesPrioritaires}</p>
+            </div>
+            <div className="bg-white rounded-2xl border border-gray-200 p-8">
+              <h3 className="font-heading text-lg font-bold text-slate-900 mb-4">Conseils pour vos travaux</h3>
+              <p className="text-slate-700 leading-relaxed">{content.conseilsRegion}</p>
+            </div>
+          </div>
+        </section>
+
         {/* ─── DEPARTMENTS ──────────────────────────────────── */}
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-8">
@@ -300,27 +382,12 @@ export default async function RegionPage({ params }: PageProps) {
             </h2>
           </div>
           <div className="space-y-4">
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h3 className="font-semibold text-slate-900 mb-2">Comment trouver un artisan en {region.name} ?</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Parcourez les {deptCount} départements de la région {region.name} ou sélectionnez directement
-                votre ville. Choisissez le type de service dont vous avez besoin et accédez aux artisans référencés.
-              </p>
-            </div>
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h3 className="font-semibold text-slate-900 mb-2">D&apos;où proviennent les données des artisans en {region.name} ?</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Les artisans référencés sur ServicesArtisans sont répertoriés à partir des données SIREN officielles.
-                Chaque professionnel listé dispose d&apos;un numéro SIREN enregistré auprès des autorités compétentes.
-              </p>
-            </div>
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h3 className="font-semibold text-slate-900 mb-2">Combien coûte un devis en {region.name} ?</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Les devis sont 100% gratuits et sans engagement. Décrivez votre projet et recevez jusqu&apos;à 3 devis
-                personnalisés d&apos;artisans qualifiés de votre région.
-              </p>
-            </div>
+            {content.faqItems.map((faq, i) => (
+              <div key={i} className="bg-white rounded-xl border border-gray-200 p-6">
+                <h3 className="font-semibold text-slate-900 mb-2">{faq.question}</h3>
+                <p className="text-sm text-slate-600 leading-relaxed">{faq.answer}</p>
+              </div>
+            ))}
           </div>
         </section>
       </div>

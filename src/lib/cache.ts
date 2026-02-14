@@ -8,6 +8,7 @@ export const CACHE_TTL = {
   reviews: 600, // 10 minutes
   locations: 86400, // 24 hours
   stats: 1800, // 30 minutes
+  cms: 300, // 5 minutes
 } as const
 
 // ISR Revalidation times (in seconds)
@@ -19,6 +20,7 @@ export const REVALIDATE = {
   locations: 86400, // 24 hours
   blog: 3600, // 1 hour
   staticPages: 86400, // 24 hours
+  cms: 300, // 5 minutes
 } as const
 
 /**
