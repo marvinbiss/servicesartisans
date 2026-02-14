@@ -33,7 +33,7 @@ export default function CGVPage() {
       ])} />
       {/* Header */}
       <section className="bg-white border-b">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <Breadcrumb items={[{ label: 'CGV' }]} className="mb-4" />
           <h1 className="font-heading text-3xl font-bold text-gray-900">
             Conditions Générales de Vente et d'Utilisation
@@ -45,7 +45,7 @@ export default function CGVPage() {
       </section>
 
       {/* Content */}
-      <section className="py-12">
+      <section className="py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-xl shadow-sm p-8 prose prose-gray max-w-none">
 

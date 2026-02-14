@@ -14,16 +14,16 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 
 // ── Services ─────────────────────────────────────────────────────────
 const services = [
-  { name: 'Plombier', slug: 'plombier', icon: 'Wrench', color: 'from-blue-500 to-blue-600', searches: '15k/mois', urgent: true },
-  { name: 'Électricien', slug: 'electricien', icon: 'Zap', color: 'from-amber-500 to-amber-600', searches: '12k/mois', urgent: true },
-  { name: 'Serrurier', slug: 'serrurier', icon: 'Key', color: 'from-slate-600 to-slate-700', searches: '9k/mois', urgent: true },
-  { name: 'Chauffagiste', slug: 'chauffagiste', icon: 'Flame', color: 'from-orange-500 to-orange-600', searches: '7k/mois', urgent: false },
-  { name: 'Peintre', slug: 'peintre-en-batiment', icon: 'PaintBucket', color: 'from-purple-500 to-purple-600', searches: '6k/mois', urgent: false },
-  { name: 'Menuisier', slug: 'menuisier', icon: 'Hammer', color: 'from-amber-600 to-amber-700', searches: '5k/mois', urgent: false },
-  { name: 'Carreleur', slug: 'carreleur', icon: 'Grid3X3', color: 'from-teal-500 to-teal-600', searches: '4k/mois', urgent: false },
-  { name: 'Couvreur', slug: 'couvreur', icon: 'Home', color: 'from-red-500 to-red-600', searches: '4k/mois', urgent: false },
-  { name: 'Maçon', slug: 'macon', icon: 'Wrench', color: 'from-stone-500 to-stone-600', searches: '3k/mois', urgent: false },
-  { name: 'Jardinier', slug: 'jardinier', icon: 'TreeDeciduous', color: 'from-green-500 to-green-600', searches: '3k/mois', urgent: false },
+  { name: 'Plombier', slug: 'plombier', icon: 'Wrench', color: 'bg-blue-600', searches: '15k/mois', urgent: true },
+  { name: 'Électricien', slug: 'electricien', icon: 'Zap', color: 'bg-amber-500', searches: '12k/mois', urgent: true },
+  { name: 'Serrurier', slug: 'serrurier', icon: 'Key', color: 'bg-slate-600', searches: '9k/mois', urgent: true },
+  { name: 'Chauffagiste', slug: 'chauffagiste', icon: 'Flame', color: 'bg-amber-500', searches: '7k/mois', urgent: false },
+  { name: 'Peintre', slug: 'peintre-en-batiment', icon: 'PaintBucket', color: 'bg-blue-600', searches: '6k/mois', urgent: false },
+  { name: 'Menuisier', slug: 'menuisier', icon: 'Hammer', color: 'bg-amber-600', searches: '5k/mois', urgent: false },
+  { name: 'Carreleur', slug: 'carreleur', icon: 'Grid3X3', color: 'bg-blue-600', searches: '4k/mois', urgent: false },
+  { name: 'Couvreur', slug: 'couvreur', icon: 'Home', color: 'bg-red-500', searches: '4k/mois', urgent: false },
+  { name: 'Maçon', slug: 'macon', icon: 'Wrench', color: 'bg-stone-500', searches: '3k/mois', urgent: false },
+  { name: 'Jardinier', slug: 'jardinier', icon: 'TreeDeciduous', color: 'bg-green-500', searches: '3k/mois', urgent: false },
 ]
 
 // ── Normalize text (strip accents, lowercase) ───────────────────────
@@ -430,7 +430,7 @@ export function HeroSearch() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className="bg-white rounded-2xl shadow-2xl shadow-slate-900/10 overflow-visible relative"
+        className="bg-white rounded-2xl shadow-md overflow-visible relative"
       >
         <form onSubmit={handleSubmit} role="search" aria-label="Rechercher un artisan">
           <div className="flex flex-col md:flex-row">
@@ -494,12 +494,12 @@ export function HeroSearch() {
                     animate="animate"
                     exit="exit"
                     transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                    className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-slate-200/80 z-50 overflow-hidden max-h-[420px] overflow-y-auto"
+                    className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-lg border border-slate-200/80 z-50 overflow-hidden max-h-[420px] overflow-y-auto"
                     role="listbox"
                     aria-label="Services disponibles"
                   >
                     {/* Urgence Banner */}
-                    <div className="p-3 bg-gradient-to-r from-red-500 to-orange-500 text-white">
+                    <div className="p-3 bg-red-500 text-white">
                       <div className="flex items-center gap-2">
                         <Zap className="w-4 h-4" />
                         <span className="font-medium text-sm">Urgence 24h/24 ?</span>
@@ -543,8 +543,8 @@ export function HeroSearch() {
                                 : 'hover:bg-blue-50/60'
                             }`}
                           >
-                            <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${service.color} flex items-center justify-center shadow-sm transition-transform duration-150 ${
-                              isHighlighted ? 'scale-110' : 'group-hover:scale-105'
+                            <div className={`w-10 h-10 rounded-lg ${service.color} flex items-center justify-center shadow-sm transition-transform duration-150 ${
+                              isHighlighted ? '' : ''
                             }`}>
                               <IconComponent className="w-5 h-5 text-white" />
                             </div>
@@ -574,15 +574,15 @@ export function HeroSearch() {
                     {/* Keyboard hint */}
                     <div className="hidden md:flex items-center gap-3 px-4 py-2.5 bg-slate-50 border-t border-slate-100 text-xs text-slate-400">
                       <span className="flex items-center gap-1">
-                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-[10px]">Flèches</kbd>
+                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-xs">Flèches</kbd>
                         naviguer
                       </span>
                       <span className="flex items-center gap-1">
-                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-[10px]">Entrée</kbd>
+                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-xs">Entrée</kbd>
                         valider
                       </span>
                       <span className="flex items-center gap-1">
-                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-[10px]">Échap</kbd>
+                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-xs">Échap</kbd>
                         fermer
                       </span>
                     </div>
@@ -651,7 +651,7 @@ export function HeroSearch() {
                     animate="animate"
                     exit="exit"
                     transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                    className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-slate-200/80 z-50 overflow-hidden max-h-[460px] overflow-y-auto"
+                    className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-lg border border-slate-200/80 z-50 overflow-hidden max-h-[460px] overflow-y-auto"
                     role="listbox"
                     aria-label="Villes disponibles"
                   >
@@ -832,7 +832,7 @@ export function HeroSearch() {
                                   <span className={`font-medium transition-colors ${
                                     isHighlighted ? 'text-blue-700' : 'text-slate-900'
                                   }`}>{city.name}</span>
-                                  <div className="text-[11px] text-slate-400">{city.departement}</div>
+                                  <div className="text-xs text-slate-400">{city.departement}</div>
                                 </div>
                                 <span className="text-xs text-slate-400">{city.pop}</span>
                               </button>
@@ -845,11 +845,11 @@ export function HeroSearch() {
                     {/* Keyboard hint */}
                     <div className="hidden md:flex items-center gap-3 px-4 py-2.5 bg-slate-50 border-t border-slate-100 text-xs text-slate-400">
                       <span className="flex items-center gap-1">
-                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-[10px]">Flèches</kbd>
+                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-xs">Flèches</kbd>
                         naviguer
                       </span>
                       <span className="flex items-center gap-1">
-                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-[10px]">Entrée</kbd>
+                        <kbd className="px-1.5 py-0.5 bg-white rounded border border-slate-200 font-mono text-xs">Entrée</kbd>
                         valider
                       </span>
                     </div>
@@ -860,16 +860,14 @@ export function HeroSearch() {
 
             {/* ── SUBMIT BUTTON ──────────────────────────────────── */}
             <div className="p-3 md:p-2 md:pr-3 flex items-center">
-              <motion.button
+              <button
                 type="submit"
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
                 aria-label="Rechercher"
-                className="w-full md:w-auto bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-200 shadow-lg shadow-blue-600/30 hover:shadow-xl hover:shadow-blue-600/40 flex items-center justify-center gap-2 min-h-[48px]"
+                className="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-full font-semibold transition-colors duration-200 flex items-center justify-center gap-2 min-h-[48px]"
               >
                 <Search className="w-5 h-5" />
                 <span className="md:hidden lg:inline">Rechercher</span>
-              </motion.button>
+              </button>
             </div>
           </div>
         </form>

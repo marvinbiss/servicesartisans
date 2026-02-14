@@ -97,7 +97,7 @@ export default function AvisRecusPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+      <div className="bg-blue-600 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center gap-4">
             <Link href="/espace-artisan/dashboard" className="text-white/80 hover:text-white">
@@ -284,7 +284,7 @@ export default function AvisRecusPage() {
             </div>
 
             {/* Tips */}
-            <div className="bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl p-6 text-white">
+            <div className="bg-blue-600 rounded-xl p-6 text-white">
               <div className="flex items-start gap-4">
                 <ThumbsUp className="w-8 h-8 flex-shrink-0" />
                 <div>

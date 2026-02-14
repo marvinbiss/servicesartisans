@@ -208,9 +208,9 @@ describe('getRatingColor', () => {
     expect(getRatingColor(3.5)).toBe('text-yellow-500')
   })
 
-  it('should return orange-500 for average ratings', () => {
-    expect(getRatingColor(3.2)).toBe('text-orange-500')
-    expect(getRatingColor(3)).toBe('text-orange-500')
+  it('should return amber-500 for average ratings', () => {
+    expect(getRatingColor(3.2)).toBe('text-amber-500')
+    expect(getRatingColor(3)).toBe('text-amber-500')
   })
 
   it('should return red-500 for poor ratings', () => {

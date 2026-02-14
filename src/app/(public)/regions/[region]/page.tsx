@@ -151,13 +151,13 @@ export default async function RegionPage({ params }: PageProps) {
                 <Globe className="w-4 h-4 text-slate-300" />
                 <span className="text-sm font-medium text-slate-200">Région</span>
               </div>
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500/15 backdrop-blur-sm rounded-full border border-cyan-400/25">
-                <Thermometer className="w-4 h-4 text-cyan-400" />
-                <span className="text-sm font-medium text-cyan-200">{content.profile.climateLabel}</span>
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/15 backdrop-blur-sm rounded-full border border-blue-400/25">
+                <Thermometer className="w-4 h-4 text-blue-400" />
+                <span className="text-sm font-medium text-blue-200">{content.profile.climateLabel}</span>
               </div>
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/15 backdrop-blur-sm rounded-full border border-emerald-400/25">
-                <Mountain className="w-4 h-4 text-emerald-400" />
-                <span className="text-sm font-medium text-emerald-200">{content.profile.geoLabel}</span>
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/15 backdrop-blur-sm rounded-full border border-blue-400/25">
+                <Mountain className="w-4 h-4 text-blue-400" />
+                <span className="text-sm font-medium text-blue-200">{content.profile.geoLabel}</span>
               </div>
             </div>
 
@@ -218,7 +218,7 @@ export default async function RegionPage({ params }: PageProps) {
               <Link
                 key={service.slug}
                 href={`/services/${service.slug}`}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors border ${topServiceSlugsSet.has(service.slug) ? 'bg-indigo-50 text-indigo-700 border-indigo-200 hover:bg-indigo-100' : 'bg-gray-50 text-slate-700 border-gray-200 hover:bg-slate-100'}`}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors border ${topServiceSlugsSet.has(service.slug) ? 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100' : 'bg-gray-50 text-slate-700 border-gray-200 hover:bg-slate-100'}`}
               >
                 {service.name} en {region.name}
               </Link>
@@ -231,8 +231,8 @@ export default async function RegionPage({ params }: PageProps) {
         {/* ─── PROFIL RÉGIONAL ──────────────────────────────── */}
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 bg-cyan-100 rounded-xl flex items-center justify-center">
-              <Thermometer className="w-5 h-5 text-cyan-600" />
+            <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+              <Thermometer className="w-5 h-5 text-blue-600" />
             </div>
             <div>
               <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
@@ -244,16 +244,16 @@ export default async function RegionPage({ params }: PageProps) {
           <div className="bg-white rounded-2xl border border-gray-200 p-8">
             <p className="text-slate-700 leading-relaxed mb-6">{content.intro}</p>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-              <div className="bg-cyan-50 rounded-xl p-4">
-                <div className="text-xs font-semibold text-cyan-700 uppercase tracking-wider mb-1">Climat</div>
+              <div className="bg-blue-50 rounded-xl p-4">
+                <div className="text-xs font-semibold text-blue-700 uppercase tracking-wider mb-1">Climat</div>
                 <div className="text-sm text-slate-800 font-medium">{content.profile.climateLabel}</div>
               </div>
-              <div className="bg-emerald-50 rounded-xl p-4">
-                <div className="text-xs font-semibold text-emerald-700 uppercase tracking-wider mb-1">Géographie</div>
+              <div className="bg-blue-50 rounded-xl p-4">
+                <div className="text-xs font-semibold text-blue-700 uppercase tracking-wider mb-1">Géographie</div>
                 <div className="text-sm text-slate-800 font-medium">{content.profile.geoLabel}</div>
               </div>
-              <div className="bg-violet-50 rounded-xl p-4">
-                <div className="text-xs font-semibold text-violet-700 uppercase tracking-wider mb-1">Économie</div>
+              <div className="bg-blue-50 rounded-xl p-4">
+                <div className="text-xs font-semibold text-blue-700 uppercase tracking-wider mb-1">Économie</div>
                 <div className="text-sm text-slate-800 font-medium">{content.profile.economyLabel}</div>
               </div>
               <div className="bg-amber-50 rounded-xl p-4">
@@ -319,11 +319,11 @@ export default async function RegionPage({ params }: PageProps) {
               <Link
                 key={dept.code}
                 href={`/departements/${dept.slug}`}
-                className="bg-white rounded-2xl border border-gray-200 p-6 hover:shadow-lg hover:border-slate-400 hover:-translate-y-0.5 transition-all duration-300 group"
+                className="bg-white rounded-2xl border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200 group"
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-11 h-11 bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl flex items-center justify-center group-hover:from-slate-100 group-hover:to-slate-200 transition-colors">
+                    <div className="w-11 h-11 bg-slate-50 rounded-xl flex items-center justify-center group-hover:bg-slate-100 transition-colors">
                       <span className="text-slate-700 font-bold text-sm">{dept.code}</span>
                     </div>
                     <div>
@@ -331,7 +331,7 @@ export default async function RegionPage({ params }: PageProps) {
                       <span className="text-xs text-slate-400">{dept.cities.length} ville{dept.cities.length > 1 ? 's' : ''}</span>
                     </div>
                   </div>
-                  <ArrowRight className="w-5 h-5 text-slate-300 group-hover:text-slate-600 group-hover:translate-x-0.5 transition-all" />
+                  <ArrowRight className="w-5 h-5 text-slate-300 group-hover:text-slate-600 transition-colors" />
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   {dept.cities.slice(0, 4).map((city) => (
@@ -351,8 +351,8 @@ export default async function RegionPage({ params }: PageProps) {
         {/* ─── SERVICES BY CITY ─────────────────────────────── */}
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
-              <Wrench className="w-5 h-5 text-emerald-600" />
+            <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+              <Wrench className="w-5 h-5 text-blue-600" />
             </div>
             <div>
               <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
@@ -387,8 +387,8 @@ export default async function RegionPage({ params }: PageProps) {
         {/* ─── OTHER REGIONS ────────────────────────────────── */}
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 bg-violet-100 rounded-xl flex items-center justify-center">
-              <Globe className="w-5 h-5 text-violet-600" />
+            <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+              <Globe className="w-5 h-5 text-blue-600" />
             </div>
             <h2 className="font-heading text-xl font-bold text-slate-900 tracking-tight">
               Autres régions
@@ -437,7 +437,7 @@ export default async function RegionPage({ params }: PageProps) {
             Recevez jusqu&apos;à 3 devis gratuits de professionnels qualifiés.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/devis" className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-300">
+            <Link href="/devis" className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white font-semibold px-8 py-3.5 rounded-full shadow-sm hover:shadow-md transition-all duration-200">
               Demander un devis gratuit
             </Link>
             <Link href="/services" className="inline-flex items-center gap-2 text-slate-300 hover:text-white font-medium transition-colors">

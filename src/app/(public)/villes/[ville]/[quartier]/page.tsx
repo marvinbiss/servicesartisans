@@ -171,10 +171,10 @@ export default async function QuartierPage({ params }: PageProps) {
 
           <div className="max-w-3xl">
             <div className="flex flex-wrap gap-3 mb-5">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/15 backdrop-blur-sm rounded-full border border-emerald-400/25">
-                <MapPin className="w-4 h-4 text-emerald-400" />
-                <span className="text-sm font-medium text-emerald-200">Quartier</span>
-                <span className="w-1 h-1 rounded-full bg-emerald-400/50" />
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/15 backdrop-blur-sm rounded-full border border-blue-400/25">
+                <MapPin className="w-4 h-4 text-blue-400" />
+                <span className="text-sm font-medium text-blue-200">Quartier</span>
+                <span className="w-1 h-1 rounded-full bg-blue-400/50" />
                 <span className="text-sm font-medium text-white/90">{ville.name}</span>
               </div>
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/15">
@@ -204,15 +204,15 @@ export default async function QuartierPage({ params }: PageProps) {
 
             <div className="flex flex-wrap gap-4 mb-8 text-sm">
               <div className="flex items-center gap-2 text-slate-300">
-                <MapPin className="w-4 h-4 text-emerald-400" />
+                <MapPin className="w-4 h-4 text-blue-400" />
                 <span>{ville.name} ({ville.codePostal})</span>
               </div>
               <div className="flex items-center gap-2 text-slate-300">
-                <Building2 className="w-4 h-4 text-emerald-400" />
+                <Building2 className="w-4 h-4 text-blue-400" />
                 <span>{ville.departement} ({ville.departementCode})</span>
               </div>
               <div className="flex items-center gap-2 text-slate-300">
-                <Users className="w-4 h-4 text-emerald-400" />
+                <Users className="w-4 h-4 text-blue-400" />
                 <span>{ville.population} habitants</span>
               </div>
             </div>
@@ -233,8 +233,8 @@ export default async function QuartierPage({ params }: PageProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
-              <Building2 className="w-5 h-5 text-emerald-600" />
+            <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+              <Building2 className="w-5 h-5 text-blue-600" />
             </div>
             <div>
               <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
@@ -264,8 +264,8 @@ export default async function QuartierPage({ params }: PageProps) {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 bg-violet-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <Users className="w-4 h-4 text-violet-600" />
+                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <Users className="w-4 h-4 text-blue-600" />
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-slate-900">Population</p>
@@ -279,7 +279,7 @@ export default async function QuartierPage({ params }: PageProps) {
               <ul className="grid sm:grid-cols-2 gap-2">
                 {content.profile.commonIssues.map((issue, i) => (
                   <li key={i} className="flex items-start gap-2 text-sm text-slate-600">
-                    <Wrench className="w-3.5 h-3.5 text-emerald-500 mt-0.5 flex-shrink-0" />
+                    <Wrench className="w-3.5 h-3.5 text-blue-500 mt-0.5 flex-shrink-0" />
                     {issue}
                   </li>
                 ))}
@@ -294,8 +294,8 @@ export default async function QuartierPage({ params }: PageProps) {
         {/* ─── SERVICES GRID (ordered by profile) ─────────────── */}
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
-              <Wrench className="w-5 h-5 text-emerald-600" />
+            <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+              <Wrench className="w-5 h-5 text-blue-600" />
             </div>
             <div>
               <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
@@ -309,12 +309,12 @@ export default async function QuartierPage({ params }: PageProps) {
               <Link
                 key={service.slug}
                 href={`/services/${service.slug}/${villeSlug}`}
-                className={`rounded-xl shadow-sm p-5 text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group ${topServiceSlugs.has(service.slug) ? 'bg-emerald-50 border-2 border-emerald-200' : 'bg-white border border-gray-100'}`}
+                className={`rounded-xl shadow-sm p-5 text-center hover:shadow-md transition-shadow duration-200 group ${topServiceSlugs.has(service.slug) ? 'bg-blue-50 border-2 border-blue-200' : 'bg-white border border-gray-100'}`}
               >
-                <h3 className="font-semibold text-slate-800 group-hover:text-emerald-600 transition-colors text-sm">{service.name}</h3>
+                <h3 className="font-semibold text-slate-800 group-hover:text-blue-600 transition-colors text-sm">{service.name}</h3>
                 <p className="text-xs text-slate-400 mt-1.5">à {quartierName}</p>
                 {topServiceSlugs.has(service.slug) && (
-                  <span className="inline-block mt-2 text-[10px] font-semibold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">Prioritaire</span>
+                  <span className="inline-block mt-2 text-xs font-semibold text-blue-700 bg-blue-100 px-2 py-0.5 rounded-full">Prioritaire</span>
                 )}
               </Link>
             ))}
@@ -366,8 +366,8 @@ export default async function QuartierPage({ params }: PageProps) {
         {quartiers.length > 0 && (
           <section className="mb-16">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
-                <MapPin className="w-5 h-5 text-emerald-600" />
+              <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+                <MapPin className="w-5 h-5 text-blue-600" />
               </div>
               <div>
                 <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
@@ -382,7 +382,7 @@ export default async function QuartierPage({ params }: PageProps) {
                   <Link
                     key={slug}
                     href={`/villes/${villeSlug}/${slug}`}
-                    className="bg-gray-50 text-slate-700 px-4 py-2 rounded-full text-sm border border-gray-100 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 transition-colors"
+                    className="bg-gray-50 text-slate-700 px-4 py-2 rounded-full text-sm border border-gray-100 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 transition-colors"
                   >
                     {name}
                   </Link>
@@ -396,8 +396,8 @@ export default async function QuartierPage({ params }: PageProps) {
         {nearbyVilles.length > 0 && (
           <section className="mb-16">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-violet-100 rounded-xl flex items-center justify-center">
-                <Building2 className="w-5 h-5 text-violet-600" />
+              <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+                <Building2 className="w-5 h-5 text-blue-600" />
               </div>
               <h2 className="font-heading text-xl font-bold text-slate-900 tracking-tight">
                 Villes proches de {ville.name}
@@ -405,10 +405,10 @@ export default async function QuartierPage({ params }: PageProps) {
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
               {nearbyVilles.map((v) => (
-                <Link key={v.slug} href={`/villes/${v.slug}`} className="flex items-center gap-2.5 bg-white rounded-xl border border-gray-200 p-3.5 hover:border-emerald-300 hover:shadow-md transition-all group">
-                  <MapPin className="w-4 h-4 text-slate-400 group-hover:text-emerald-600 flex-shrink-0 transition-colors" />
+                <Link key={v.slug} href={`/villes/${v.slug}`} className="flex items-center gap-2.5 bg-white rounded-xl border border-gray-200 p-3.5 hover:border-blue-300 hover:shadow-md transition-all group">
+                  <MapPin className="w-4 h-4 text-slate-400 group-hover:text-blue-600 flex-shrink-0 transition-colors" />
                   <div className="min-w-0">
-                    <span className="block text-sm font-medium text-slate-800 group-hover:text-emerald-600 truncate transition-colors">{v.name}</span>
+                    <span className="block text-sm font-medium text-slate-800 group-hover:text-blue-600 truncate transition-colors">{v.name}</span>
                     <span className="text-xs text-slate-400">{v.population} hab.</span>
                   </div>
                 </Link>
@@ -451,7 +451,7 @@ export default async function QuartierPage({ params }: PageProps) {
             Décrivez votre projet et recevez des devis gratuits d&apos;artisans qualifiés à {ville.name}.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/devis" className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-300">
+            <Link href="/devis" className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white font-semibold px-8 py-3.5 rounded-full shadow-sm hover:shadow-md transition-all duration-200">
               Demander un devis gratuit
             </Link>
             <Link href="/services" className="inline-flex items-center gap-2 text-slate-300 hover:text-white font-medium transition-colors">
@@ -472,7 +472,7 @@ export default async function QuartierPage({ params }: PageProps) {
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Services à {ville.name}</h3>
               <div className="space-y-2">
                 {services.slice(0, 10).map((s) => (
-                  <Link key={s.slug} href={`/services/${s.slug}/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
+                  <Link key={s.slug} href={`/services/${s.slug}/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {s.name} à {ville.name}
                   </Link>
@@ -484,13 +484,13 @@ export default async function QuartierPage({ params }: PageProps) {
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Villes en {ville.region}</h3>
               <div className="space-y-2">
                 {regionVilles.map((v) => (
-                  <Link key={v.slug} href={`/villes/${v.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
+                  <Link key={v.slug} href={`/villes/${v.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     Artisans à {v.name}
                   </Link>
                 ))}
               </div>
-              <Link href="/villes" className="inline-flex items-center gap-1 text-emerald-600 hover:text-emerald-700 text-sm font-medium mt-3">
+              <Link href="/villes" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
                 Toutes les villes <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -498,27 +498,27 @@ export default async function QuartierPage({ params }: PageProps) {
             <div>
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Navigation</h3>
               <div className="space-y-2">
-                <Link href={`/villes/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
+                <Link href={`/villes/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />
                   Artisans à {ville.name}
                 </Link>
                 {regionSlug && (
-                  <Link href={`/regions/${regionSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
+                  <Link href={`/regions/${regionSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     Région {ville.region}
                   </Link>
                 )}
                 {deptSlug && (
-                  <Link href={`/departements/${deptSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
+                  <Link href={`/departements/${deptSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {ville.departement} ({ville.departementCode})
                   </Link>
                 )}
-                <Link href="/services" className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
+                <Link href="/services" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />
                   Tous les services
                 </Link>
-                <Link href="/devis" className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
+                <Link href="/devis" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />
                   Demander un devis
                 </Link>

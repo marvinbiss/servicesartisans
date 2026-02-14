@@ -188,7 +188,7 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
       {/* Price range overview */}
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-8 text-center mb-12">
+          <div className="bg-blue-50 rounded-2xl p-8 text-center mb-12">
             <h2 className="text-lg font-semibold text-gray-700 mb-2">Tarif horaire moyen</h2>
             <div className="flex items-baseline justify-center gap-2">
               <span className="text-5xl font-bold text-blue-600">
@@ -370,7 +370,7 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
             </p>
             <Link
               href={`/urgence/${service}`}
-              className="inline-flex items-center gap-2 bg-red-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-red-700 transition-colors"
+              className="inline-flex items-center gap-2 bg-red-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-red-700 transition-colors"
             >
               {trade.name} urgence 24h/24
               <ArrowRight className="w-4 h-4" />
@@ -406,7 +406,7 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
       </section>
 
       {/* CTA */}
-      <section className="py-20 bg-blue-600">
+      <section className="py-24 bg-blue-600">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
             Obtenez un devis précis pour votre projet
@@ -417,14 +417,14 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
           <div className="flex flex-wrap justify-center gap-4">
             <Link
               href="/devis"
-              className="inline-flex items-center gap-2 bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-blue-50 transition-colors text-lg"
+              className="inline-flex items-center gap-2 bg-white text-blue-600 px-8 py-4 rounded-full font-semibold hover:bg-blue-50 transition-colors text-lg"
             >
               Demander un devis gratuit
               <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
               href={`/services/${service}`}
-              className="inline-flex items-center gap-2 bg-blue-500 text-white px-8 py-4 rounded-xl font-semibold hover:bg-blue-400 transition-colors text-lg border border-blue-400"
+              className="inline-flex items-center gap-2 bg-blue-500 text-white px-8 py-4 rounded-full font-semibold hover:bg-blue-400 transition-colors text-lg border border-blue-400"
             >
               Trouver un {trade.name.toLowerCase()}
               <ArrowRight className="w-5 h-5" />
@@ -466,7 +466,7 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
       </section>
 
       {/* Voir aussi */}
-      <section className="py-12 bg-white border-t">
+      <section className="py-16 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-xl font-bold text-gray-900 mb-6">Voir aussi</h2>
           <div className="grid md:grid-cols-3 gap-6">

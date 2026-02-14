@@ -226,7 +226,7 @@ export function SiretAutocomplete({
 
       {/* Company Preview Card */}
       {showCompanyPreview && isValid && extendedInfo && (
-        <div className="mt-3 p-4 bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-xl animate-in slide-in-from-top-2 duration-300">
+        <div className="mt-3 p-4 bg-green-50 border border-green-200 rounded-xl animate-in slide-in-from-top-2 duration-300">
           <div className="flex items-start gap-3">
             <div className="p-2 bg-green-100 rounded-lg">
               <Building2 className="w-5 h-5 text-green-600" />

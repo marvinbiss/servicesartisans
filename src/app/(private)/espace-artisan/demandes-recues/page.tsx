@@ -144,7 +144,7 @@ export default function DemandesRecuesPage() {
       </div>
 
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+      <div className="bg-blue-600 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center gap-4">
             <Link href="/espace-artisan/dashboard" className="text-white/80 hover:text-white">
@@ -309,7 +309,7 @@ export default function DemandesRecuesPage() {
                               {statusInfo.label}
                             </span>
                             {demande.urgency === 'urgent' && (
-                              <span className="px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-700">
+                              <span className="px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700">
                                 Urgent
                               </span>
                             )}

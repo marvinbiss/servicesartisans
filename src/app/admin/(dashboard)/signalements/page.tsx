@@ -306,7 +306,7 @@ export default function AdminSignalementsPage() {
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex min-h-screen items-center justify-center p-4">
             <div className="fixed inset-0 bg-black/50" onClick={() => setActionModal({ open: false, reportId: '', action: 'resolve' })} />
-            <div role="dialog" aria-modal="true" aria-labelledby="action-modal-title" className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6">
+            <div role="dialog" aria-modal="true" aria-labelledby="action-modal-title" className="relative bg-white rounded-xl shadow-lg max-w-md w-full p-6">
               <h3 id="action-modal-title" className="text-lg font-semibold text-gray-900 mb-4">
                 {actionModal.action === 'resolve' ? 'Résoudre le signalement' : 'Rejeter le signalement'}
               </h3>

@@ -133,7 +133,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.2 }}
-            className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
+            className="bg-white rounded-2xl shadow-lg w-full max-w-lg max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
@@ -144,15 +144,13 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                   Envoyer à {displayName}
                 </p>
               </div>
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
+              <button
                 onClick={onClose}
                 className="p-2 rounded-full hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
                 aria-label="Fermer le formulaire"
               >
                 <X className="w-5 h-5 text-gray-500" aria-hidden="true" />
-              </motion.button>
+              </button>
             </div>
 
             {/* Content */}
@@ -206,7 +204,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                         aria-required="true"
                         aria-invalid={!!errors.name}
                         aria-describedby={errors.name ? 'quote-name-error' : undefined}
-                        className={`w-full pl-10 pr-4 py-3 rounded-xl border ${
+                        className={`w-full pl-10 pr-4 py-3 rounded-full border ${
                           errors.name ? 'border-red-300 bg-red-50' : 'border-gray-200'
                         } focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors`}
                       />
@@ -233,7 +231,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                         aria-required="true"
                         aria-invalid={!!errors.email}
                         aria-describedby={errors.email ? 'quote-email-error' : undefined}
-                        className={`w-full pl-10 pr-4 py-3 rounded-xl border ${
+                        className={`w-full pl-10 pr-4 py-3 rounded-full border ${
                           errors.email ? 'border-red-300 bg-red-50' : 'border-gray-200'
                         } focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors`}
                       />
@@ -260,7 +258,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                         aria-required="true"
                         aria-invalid={!!errors.phone}
                         aria-describedby={errors.phone ? 'quote-phone-error' : undefined}
-                        className={`w-full pl-10 pr-4 py-3 rounded-xl border ${
+                        className={`w-full pl-10 pr-4 py-3 rounded-full border ${
                           errors.phone ? 'border-red-300 bg-red-50' : 'border-gray-200'
                         } focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors`}
                       />
@@ -283,7 +281,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                         value={formData.address}
                         onChange={(e) => handleChange('address', e.target.value)}
                         placeholder="12 rue de la Paix, 75001 Paris"
-                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                        className="w-full pl-10 pr-4 py-3 rounded-full border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
                       />
                     </div>
                   </div>
@@ -305,7 +303,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                           role="radio"
                           aria-checked={formData.urgency === option.value}
                           onClick={() => handleChange('urgency', option.value)}
-                          className={`p-3 rounded-xl border-2 text-center transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 ${
+                          className={`p-3 rounded-full border-2 text-center transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 ${
                             formData.urgency === option.value
                               ? 'border-blue-500 bg-blue-50 text-blue-700'
                               : 'border-gray-200 hover:border-gray-300'
@@ -335,7 +333,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                         aria-required="true"
                         aria-invalid={!!errors.description}
                         aria-describedby={errors.description ? 'quote-description-error' : 'quote-description-hint'}
-                        className={`w-full pl-10 pr-4 py-3 rounded-xl border ${
+                        className={`w-full pl-10 pr-4 py-3 rounded-full border ${
                           errors.description ? 'border-red-300 bg-red-50' : 'border-gray-200'
                         } focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none`}
                       />
@@ -349,12 +347,10 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                   </div>
 
                   {/* Submit */}
-                  <motion.button
+                  <button
                     type="submit"
                     disabled={isSubmitting}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-green-600 to-green-700 text-white font-semibold flex items-center justify-center gap-2 shadow-lg shadow-green-500/25 hover:shadow-green-500/40 transition-shadow disabled:opacity-70 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                    className="w-full py-4 px-6 rounded-full bg-green-600 hover:bg-green-700 text-white font-semibold flex items-center justify-center gap-2 transition-shadow disabled:opacity-70 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
                     aria-busy={isSubmitting}
                   >
                     {isSubmitting ? (
@@ -368,7 +364,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                         <span>Envoyer ma demande</span>
                       </>
                     )}
-                  </motion.button>
+                  </button>
 
                   {/* Privacy note */}
                   <p className="text-xs text-gray-500 text-center">

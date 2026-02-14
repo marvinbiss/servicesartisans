@@ -5,7 +5,7 @@ import { useRouter, usePathname } from 'next/navigation'
 import {
   Search, Menu, X, ChevronDown, MapPin, Wrench, Zap, Key, Flame,
   PaintBucket, Home, Hammer, HardHat, Wind, TreeDeciduous,
-  ShieldCheck, Sparkles, Star, Clock, Phone, ArrowRight, Users, Award,
+  ShieldCheck, Sparkles, Star, Clock, Phone, ArrowRight, Users,
   ChefHat, Layers, Brush, Navigation, Map, Building2, Globe
 } from 'lucide-react'
 import { useState, useEffect, useRef, useCallback } from 'react'
@@ -44,7 +44,7 @@ const serviceCategories = [
   },
   {
     category: 'Chauffage & Clim',
-    color: 'orange',
+    color: 'amber',
     icon: Flame,
     services: [
       { name: 'Chauffagiste', slug: 'chauffagiste', icon: Flame, description: 'Chaudière, pompe à chaleur' },
@@ -73,7 +73,7 @@ const serviceCategories = [
   },
   {
     category: 'Aménagement',
-    color: 'pink',
+    color: 'blue',
     icon: ChefHat,
     services: [
       { name: 'Cuisiniste', slug: 'cuisiniste', icon: ChefHat, description: 'Cuisines sur mesure' },
@@ -82,7 +82,7 @@ const serviceCategories = [
   },
   {
     category: 'Extérieur',
-    color: 'emerald',
+    color: 'blue',
     icon: TreeDeciduous,
     services: [
       { name: 'Jardinier', slug: 'jardinier', icon: TreeDeciduous, description: 'Jardin, aménagement' },
@@ -292,56 +292,22 @@ export default function Header() {
     setMobileAccordion(current => current === section ? null : section)
   }
 
-  // Get category color classes for the services mega menu
-  const getCategoryColors = (color: string) => {
-    const map: Record<string, { text: string; hoverBg: string; iconBg: string; border: string }> = {
-      red: { text: 'text-red-700', hoverBg: 'hover:bg-red-50', iconBg: 'bg-red-100', border: 'border-red-200' },
-      orange: { text: 'text-orange-700', hoverBg: 'hover:bg-orange-50', iconBg: 'bg-orange-100', border: 'border-orange-200' },
-      blue: { text: 'text-blue-700', hoverBg: 'hover:bg-blue-50', iconBg: 'bg-blue-100', border: 'border-blue-200' },
-      green: { text: 'text-green-700', hoverBg: 'hover:bg-green-50', iconBg: 'bg-green-100', border: 'border-green-200' },
-      pink: { text: 'text-pink-700', hoverBg: 'hover:bg-pink-50', iconBg: 'bg-pink-100', border: 'border-pink-200' },
-      emerald: { text: 'text-emerald-700', hoverBg: 'hover:bg-emerald-50', iconBg: 'bg-emerald-100', border: 'border-emerald-200' },
-    }
-    return map[color] || map.blue
-  }
+  // Get category color classes for the services mega menu (unified blue)
+  const getCategoryColors = () => ({
+    text: 'text-slate-700',
+    hoverBg: 'hover:bg-blue-50',
+    iconBg: 'bg-blue-50',
+    border: 'border-slate-200',
+  })
 
   return (
     <>
     <header className={cn(
-      'fixed top-0 left-0 right-0 z-[9999] transition-all duration-300',
+      'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
       scrolled
-        ? 'bg-white/80 backdrop-blur-xl shadow-lg shadow-gray-900/5 border-b border-gray-200/50'
+        ? 'bg-white/80 backdrop-blur-xl shadow-sm border-b border-gray-200/50'
         : 'bg-white/95 backdrop-blur-sm border-b border-gray-100/80'
     )}>
-      {/* Top bar premium */}
-      <div className={cn(
-        'transition-all duration-300 overflow-hidden',
-        scrolled ? 'max-h-0 opacity-0 py-0' : 'max-h-12 opacity-100 py-2',
-        'bg-gradient-to-r from-slate-900 via-slate-800 to-blue-900 text-white'
-      )}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between text-sm">
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-green-400" />
-              <span className="text-white/90">Artisans référencés</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-4">
-            <Link href="/inscription-artisan" className="text-amber-400 hover:text-amber-300 font-medium flex items-center gap-1 transition-colors duration-200">
-              <Award className="w-4 h-4" />
-              <span className="hidden sm:inline">Espace Pro</span>
-            </Link>
-            <Link href="/urgence" className="flex items-center gap-2 bg-red-500/20 px-3 py-1 rounded-full hover:bg-red-500/30 transition-colors duration-200">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
-              </span>
-              <span className="text-red-300 font-medium">Urgences 24h</span>
-            </Link>
-          </div>
-        </div>
-      </div>
-
       {/* Main header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className={cn(
@@ -350,11 +316,7 @@ export default function Header() {
         )}>
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 flex-shrink-0 group/logo">
-            <motion.div
-              className="flex items-center gap-2.5"
-              whileHover={{ scale: 1.02 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-            >
+            <div className="flex items-center gap-2.5">
               <svg
                 width="36"
                 height="36"
@@ -383,7 +345,7 @@ export default function Header() {
               <span className="hidden sm:inline text-xl font-heading font-extrabold tracking-tight text-gray-900 group-hover/logo:text-gray-700 transition-colors duration-200">
                 Services<span className="text-blue-600 group-hover/logo:text-blue-500 transition-colors duration-200">Artisans</span>
               </span>
-            </motion.div>
+            </div>
           </Link>
 
           {/* Search Bar - Compact SearchBar Component */}
@@ -410,7 +372,7 @@ export default function Header() {
                 aria-expanded={openMenu === 'services'}
                 aria-haspopup="true"
                 className={cn(
-                  'relative flex items-center gap-1.5 px-4 py-2 rounded-xl font-medium text-[0.9rem] transition-all duration-200',
+                  'relative flex items-center gap-1.5 px-4 py-2 rounded-xl font-medium text-sm transition-all duration-200',
                   'after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-blue-600 after:transition-all after:duration-300 after:rounded-full',
                   openMenu === 'services'
                     ? 'text-blue-600 bg-blue-50/80 after:w-[60%]'
@@ -435,7 +397,7 @@ export default function Header() {
                 aria-expanded={openMenu === 'villes'}
                 aria-haspopup="true"
                 className={cn(
-                  'relative flex items-center gap-1.5 px-4 py-2 rounded-xl font-medium text-[0.9rem] transition-all duration-200',
+                  'relative flex items-center gap-1.5 px-4 py-2 rounded-xl font-medium text-sm transition-all duration-200',
                   'after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-blue-600 after:transition-all after:duration-300 after:rounded-full',
                   openMenu === 'villes'
                     ? 'text-blue-600 bg-blue-50/80 after:w-[60%]'
@@ -460,7 +422,7 @@ export default function Header() {
                 aria-expanded={openMenu === 'regions'}
                 aria-haspopup="true"
                 className={cn(
-                  'relative flex items-center gap-1.5 px-4 py-2 rounded-xl font-medium text-[0.9rem] transition-all duration-200',
+                  'relative flex items-center gap-1.5 px-4 py-2 rounded-xl font-medium text-sm transition-all duration-200',
                   'after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-blue-600 after:transition-all after:duration-300 after:rounded-full',
                   openMenu === 'regions'
                     ? 'text-blue-600 bg-blue-50/80 after:w-[60%]'
@@ -473,15 +435,8 @@ export default function Header() {
             </div>
 
             <Link
-              href="/connexion"
-              className="relative text-gray-600 hover:text-blue-600 px-4 py-2 rounded-xl font-medium text-[0.9rem] hover:bg-gray-50/80 transition-all duration-200 after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:w-0 hover:after:w-[60%] after:h-[2px] after:bg-blue-600 after:transition-all after:duration-300 after:rounded-full"
-            >
-              Connexion
-            </Link>
-
-            <Link
               href="/devis"
-              className="ml-3 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-semibold rounded-xl shadow-md shadow-amber-500/20 hover:shadow-lg hover:shadow-amber-500/30 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
+              className="ml-3 px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-full shadow-sm hover:shadow-md transition-shadow"
             >
               Devis gratuit
             </Link>
@@ -510,7 +465,7 @@ export default function Header() {
           {/* Backdrop overlay */}
           <div
             className="fixed inset-0 bg-black/10 backdrop-blur-[1px] transition-opacity duration-300"
-            style={{ zIndex: 9990 }}
+            style={{ zIndex: 40 }}
             onClick={closeMenus}
             aria-hidden="true"
           />
@@ -519,21 +474,21 @@ export default function Header() {
           {openMenu === 'services' && (
             <div
               data-menu-content="services" role="menu" aria-label="Services artisans"
-              className="absolute left-0 right-0 bg-white border-t border-gray-100 shadow-2xl rounded-b-xl"
-              style={{ zIndex: 9995 }}
+              className="absolute left-0 right-0 bg-white border-t border-gray-100 shadow-lg rounded-b-xl"
+              style={{ zIndex: 45 }}
               onMouseEnter={() => openMenuOnHover('services')}
               onMouseLeave={closeMenusWithDelay}
             >
               <div className="max-w-7xl mx-auto">
                 {/* Header */}
-                <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-blue-900 px-8 py-5 flex items-center justify-between">
+                <div className="bg-slate-50 border-b border-slate-100 px-8 py-5 flex items-center justify-between">
                   <div>
-                    <h3 className="text-white font-heading font-bold text-lg">Tous nos services artisans</h3>
-                    <p className="text-slate-300 text-sm mt-0.5">15 métiers, des milliers d&apos;artisans qualifiés partout en France</p>
+                    <h3 className="text-slate-900 font-heading font-bold text-lg">Tous nos services artisans</h3>
+                    <p className="text-slate-500 text-sm mt-0.5">15 métiers, des milliers d&apos;artisans qualifiés partout en France</p>
                   </div>
                   <div className="hidden sm:flex items-center gap-3">
-                    <div className="flex items-center gap-2 text-sm text-white/80 bg-white/10 px-4 py-2 rounded-lg">
-                      <Users className="w-4 h-4 text-amber-400" />
+                    <div className="flex items-center gap-2 text-sm text-slate-600 bg-white px-4 py-2 rounded-lg border border-slate-200">
+                      <Users className="w-4 h-4 text-amber-500" />
                       <span>350 000+ artisans référencés</span>
                     </div>
                   </div>
@@ -544,7 +499,7 @@ export default function Header() {
                   <div className="grid grid-cols-3 xl:grid-cols-6 gap-6">
                     {serviceCategories.map((cat) => {
                       const CatIcon = cat.icon
-                      const colors = getCategoryColors(cat.color)
+                      const colors = getCategoryColors()
                       const isUrgent = cat.color === 'red'
                       return (
                         <div key={cat.category} className="space-y-3">
@@ -558,7 +513,7 @@ export default function Header() {
                                 {cat.category}
                               </span>
                               {isUrgent && (
-                                <span className="ml-1.5 inline-flex items-center text-[10px] font-bold text-red-600 bg-red-100 px-1.5 py-0.5 rounded-full uppercase tracking-wider">
+                                <span className="ml-1.5 inline-flex items-center text-xs font-bold text-red-600 bg-red-100 px-1.5 py-0.5 rounded-full uppercase tracking-wider">
                                   24h/24
                                 </span>
                               )}
@@ -620,23 +575,23 @@ export default function Header() {
           {openMenu === 'villes' && (
             <div
               data-menu-content="villes" role="menu" aria-label="Villes"
-              className="absolute left-0 right-0 bg-white border-t border-gray-100 shadow-2xl rounded-b-xl"
-              style={{ zIndex: 9995 }}
+              className="absolute left-0 right-0 bg-white border-t border-gray-100 shadow-lg rounded-b-xl"
+              style={{ zIndex: 45 }}
               onMouseEnter={() => openMenuOnHover('villes')}
               onMouseLeave={closeMenusWithDelay}
             >
               <div className="max-w-7xl mx-auto">
                 {/* Header */}
-                <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-blue-900 px-8 py-5 flex items-center justify-between">
+                <div className="bg-slate-50 border-b border-slate-100 px-8 py-5 flex items-center justify-between">
                   <div>
-                    <h3 className="text-white font-heading font-bold text-lg">Trouvez un artisan par ville</h3>
-                    <p className="text-slate-300 text-sm mt-0.5">Plus de 1 000 villes couvertes dans toute la France</p>
+                    <h3 className="text-slate-900 font-heading font-bold text-lg">Trouvez un artisan par ville</h3>
+                    <p className="text-slate-500 text-sm mt-0.5">Plus de 1 000 villes couvertes dans toute la France</p>
                   </div>
                   <div className="hidden sm:flex items-center gap-3">
                     <Link
                       href="/regions"
                       onClick={closeMenus}
-                      className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors text-sm font-medium"
+                      className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-slate-100 text-slate-700 rounded-lg transition-colors text-sm font-medium border border-slate-200"
                     >
                       <Map className="w-4 h-4" />
                       Voir par région
@@ -644,7 +599,7 @@ export default function Header() {
                     <Link
                       href="/departements"
                       onClick={closeMenus}
-                      className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors text-sm font-medium"
+                      className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-slate-100 text-slate-700 rounded-lg transition-colors text-sm font-medium border border-slate-200"
                     >
                       <MapPin className="w-4 h-4" />
                       Par département
@@ -677,7 +632,7 @@ export default function Header() {
                                   {city.name}
                                 </span>
                               </div>
-                              <span className="text-[11px] text-slate-400 bg-slate-50 group-hover/city:bg-blue-100 group-hover/city:text-blue-600 px-2 py-0.5 rounded-full transition-colors">
+                              <span className="text-xs text-slate-400 bg-slate-50 group-hover/city:bg-blue-100 group-hover/city:text-blue-600 px-2 py-0.5 rounded-full transition-colors">
                                 {city.population}
                               </span>
                             </Link>
@@ -711,23 +666,23 @@ export default function Header() {
           {openMenu === 'regions' && (
             <div
               data-menu-content="regions" role="menu" aria-label="Régions"
-              className="absolute left-0 right-0 bg-white border-t border-gray-100 shadow-2xl rounded-b-xl"
-              style={{ zIndex: 9995 }}
+              className="absolute left-0 right-0 bg-white border-t border-gray-100 shadow-lg rounded-b-xl"
+              style={{ zIndex: 45 }}
               onMouseEnter={() => openMenuOnHover('regions')}
               onMouseLeave={closeMenusWithDelay}
             >
               <div className="max-w-7xl mx-auto">
                 {/* Header */}
-                <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-blue-900 px-8 py-5 flex items-center justify-between">
+                <div className="bg-slate-50 border-b border-slate-100 px-8 py-5 flex items-center justify-between">
                   <div>
-                    <h3 className="text-white font-heading font-bold text-lg">Régions de France</h3>
-                    <p className="text-slate-300 text-sm mt-0.5">18 régions, 101 départements couverts</p>
+                    <h3 className="text-slate-900 font-heading font-bold text-lg">Régions de France</h3>
+                    <p className="text-slate-500 text-sm mt-0.5">18 régions, 101 départements couverts</p>
                   </div>
                   <div className="hidden sm:flex items-center gap-3">
                     <Link
                       href="/departements"
                       onClick={closeMenus}
-                      className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors text-sm font-medium"
+                      className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-slate-100 text-slate-700 rounded-lg transition-colors text-sm font-medium border border-slate-200"
                     >
                       <MapPin className="w-4 h-4" />
                       Tous les départements
@@ -771,7 +726,7 @@ export default function Header() {
                   {domTomRegions.length > 0 && (
                     <div>
                       <div className="flex items-center gap-2 mb-4">
-                        <Globe className="w-4 h-4 text-emerald-600" />
+                        <Globe className="w-4 h-4 text-blue-600" />
                         <h4 className="font-heading font-bold text-sm text-slate-900 uppercase tracking-wider">Outre-mer</h4>
                       </div>
                       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
@@ -780,11 +735,11 @@ export default function Header() {
                             key={region.slug}
                             href={`/regions/${region.slug}`}
                             onClick={closeMenus}
-                            className="group/region flex items-center gap-3 p-3 bg-emerald-50/50 hover:bg-emerald-50 rounded-xl border border-transparent hover:border-emerald-200 transition-all duration-200"
+                            className="group/region flex items-center gap-3 p-3 bg-blue-50/50 hover:bg-blue-50 rounded-xl border border-transparent hover:border-blue-200 transition-all duration-200"
                           >
-                            <Globe className="w-4 h-4 text-emerald-400 group-hover/region:text-emerald-600 transition-colors flex-shrink-0" />
+                            <Globe className="w-4 h-4 text-blue-400 group-hover/region:text-blue-600 transition-colors flex-shrink-0" />
                             <div className="min-w-0">
-                              <div className="text-sm font-medium text-slate-700 group-hover/region:text-emerald-700 transition-colors truncate">
+                              <div className="text-sm font-medium text-slate-700 group-hover/region:text-blue-700 transition-colors truncate">
                                 {region.name}
                               </div>
                             </div>
@@ -829,14 +784,11 @@ export default function Header() {
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
             {/* Search Mobile - Dual Field */}
-            <motion.form
+            <form
               onSubmit={handleSearch}
               className="mb-4"
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.05, duration: 0.25 }}
             >
-              <div className="flex items-center bg-white border-2 border-gray-200 rounded-2xl overflow-hidden focus-within:border-blue-500 focus-within:shadow-lg focus-within:shadow-blue-500/10 transition-all duration-200">
+              <div className="flex items-center bg-white border-2 border-gray-200 rounded-2xl overflow-hidden focus-within:border-blue-500 focus-within:shadow-lg transition-all duration-200">
                 {/* Service Input Mobile */}
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -883,16 +835,11 @@ export default function Header() {
                   <Search className="w-4 h-4" />
                 </button>
               </div>
-            </motion.form>
+            </form>
 
             <nav className="space-y-2" aria-label="Menu mobile">
               {/* ===== Services Accordion ===== */}
-              <motion.div
-                className="rounded-xl border border-gray-100 overflow-hidden"
-                initial={{ opacity: 0, y: -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1, duration: 0.25 }}
-              >
+              <div className="rounded-xl border border-gray-100 overflow-hidden">
                 <button
                   type="button"
                   onClick={() => toggleMobileAccordion('services')}
@@ -951,15 +898,10 @@ export default function Header() {
                     </Link>
                   </div>
                 )}
-              </motion.div>
+              </div>
 
               {/* ===== Villes Accordion ===== */}
-              <motion.div
-                className="rounded-xl border border-gray-100 overflow-hidden"
-                initial={{ opacity: 0, y: -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.15, duration: 0.25 }}
-              >
+              <div className="rounded-xl border border-gray-100 overflow-hidden">
                 <button
                   type="button"
                   onClick={() => toggleMobileAccordion('villes')}
@@ -1008,15 +950,10 @@ export default function Header() {
                     </Link>
                   </div>
                 )}
-              </motion.div>
+              </div>
 
               {/* ===== Régions Accordion ===== */}
-              <motion.div
-                className="rounded-xl border border-gray-100 overflow-hidden"
-                initial={{ opacity: 0, y: -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2, duration: 0.25 }}
-              >
+              <div className="rounded-xl border border-gray-100 overflow-hidden">
                 <button
                   type="button"
                   onClick={() => toggleMobileAccordion('regions')}
@@ -1053,7 +990,7 @@ export default function Header() {
                           <Map className="w-3.5 h-3.5 text-slate-400" />
                           <div className="min-w-0">
                             <div className="text-sm font-medium text-slate-700 truncate">{region.name}</div>
-                            <div className="text-[11px] text-slate-400">{region.departments.length} dép.</div>
+                            <div className="text-xs text-slate-400">{region.departments.length} dép.</div>
                           </div>
                         </Link>
                       ))}
@@ -1068,18 +1005,13 @@ export default function Header() {
                     </Link>
                   </div>
                 )}
-              </motion.div>
+              </div>
 
               {/* CTAs */}
-              <motion.div
-                className="pt-3 space-y-3"
-                initial={{ opacity: 0, y: -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.25, duration: 0.25 }}
-              >
+              <div className="pt-3 space-y-3">
                 <Link
                   href="/urgence"
-                  className="flex items-center justify-center gap-2 w-full py-3.5 bg-red-600 hover:bg-red-700 text-white rounded-xl font-semibold transition-colors duration-200 shadow-lg shadow-red-600/20"
+                  className="flex items-center justify-center gap-2 w-full py-3.5 bg-red-600 hover:bg-red-700 text-white rounded-xl font-semibold transition-colors duration-200"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   <Phone className="w-5 h-5" />
@@ -1095,21 +1027,21 @@ export default function Header() {
                   </Link>
                   <Link
                     href="/devis"
-                    className="flex-1 py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white rounded-xl font-semibold text-center shadow-md shadow-amber-500/20 transition-all duration-200"
+                    className="flex-1 py-3 bg-amber-500 hover:bg-amber-600 text-white rounded-xl font-semibold text-center shadow-md transition-all duration-200"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Devis gratuit
                   </Link>
                 </div>
-              </motion.div>
+              </div>
             </nav>
           </div>
         </motion.div>
       )}
       </AnimatePresence>
     </header>
-    {/* Spacer to offset fixed header height (top bar ~40px + nav 64px) */}
-    <div className="h-[104px]" aria-hidden="true" />
+    {/* Spacer to offset fixed header height */}
+    <div className="h-16" aria-hidden="true" />
     </>
   )
 }

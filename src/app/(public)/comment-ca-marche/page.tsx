@@ -49,7 +49,7 @@ const steps = [
       'Filtrage par ville et département',
       'Résultats instantanés et à jour',
     ],
-    gradient: 'from-blue-500 to-blue-700',
+    bgColor: 'bg-blue-600',
   },
   {
     number: '2',
@@ -62,7 +62,7 @@ const steps = [
       'Certifications et qualifications affichées',
       'Informations sur l\'entreprise (date de création, statut)',
     ],
-    gradient: 'from-emerald-500 to-emerald-700',
+    bgColor: 'bg-blue-600',
   },
   {
     number: '3',
@@ -75,7 +75,7 @@ const steps = [
       'Coordonnées et informations officielles',
       'Aucune commission, aucun frais caché',
     ],
-    gradient: 'from-purple-500 to-purple-700',
+    bgColor: 'bg-blue-600',
   },
 ]
 
@@ -176,7 +176,7 @@ export default function CommentCaMarchePage() {
             <div className="flex flex-wrap justify-center gap-4 mt-8">
               <Link
                 href="/services"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-300"
+                className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white font-semibold px-8 py-3.5 rounded-full shadow-sm hover:shadow-md transition-all duration-200"
               >
                 <Search className="w-5 h-5" />
                 Parcourir les services
@@ -194,7 +194,7 @@ export default function CommentCaMarchePage() {
       </section>
 
       {/* Steps */}
-      <section className="py-20">
+      <section className="py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
@@ -216,7 +216,7 @@ export default function CommentCaMarchePage() {
                 >
                   {/* Image/Icon */}
                   <div className="flex-1 w-full">
-                    <div className={`relative bg-gradient-to-br ${step.gradient} rounded-2xl p-12 text-white text-center overflow-hidden`}>
+                    <div className={`relative ${step.bgColor} rounded-2xl p-12 text-white text-center overflow-hidden`}>
                       {pageImages.howItWorks[index] && (
                         <>
                           <Image
@@ -272,7 +272,7 @@ export default function CommentCaMarchePage() {
       </section>
 
       {/* Pourquoi nous faire confiance */}
-      <section className="py-20 bg-white">
+      <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
@@ -301,7 +301,7 @@ export default function CommentCaMarchePage() {
           </div>
 
           {/* Stats bar */}
-          <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl p-8 text-white text-center">
+          <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 bg-blue-600 rounded-2xl p-8 text-white text-center">
             <div>
               <div className="text-3xl md:text-4xl font-bold">350 000+</div>
               <div className="text-blue-200 text-sm mt-1">Artisans référencés</div>
@@ -323,7 +323,7 @@ export default function CommentCaMarchePage() {
       </section>
 
       {/* FAQ */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-24 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
@@ -356,7 +356,7 @@ export default function CommentCaMarchePage() {
       </section>
 
       {/* Contextual Links */}
-      <section className="py-12 bg-white border-t">
+      <section className="py-16 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-xl font-bold text-gray-900 mb-6">
             En savoir plus
@@ -403,7 +403,7 @@ export default function CommentCaMarchePage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 bg-blue-600">
+      <section className="py-24 bg-blue-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
             Prêt à trouver votre artisan ?
@@ -431,7 +431,7 @@ export default function CommentCaMarchePage() {
       </section>
 
       {/* Related Links Section */}
-      <section className="bg-gray-50 py-12 border-t">
+      <section className="bg-gray-50 py-16 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-xl font-bold text-gray-900 mb-6">
             Trouvez un artisan près de chez vous

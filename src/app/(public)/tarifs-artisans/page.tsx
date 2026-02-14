@@ -168,10 +168,10 @@ export default function TarifsArtisansPage() {
                   <div
                     key={trade.slug}
                     id={trade.slug}
-                    className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow scroll-mt-24"
+                    className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition-shadow scroll-mt-24"
                   >
                     {/* Header */}
-                    <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-6">
+                    <div className="bg-blue-50 p-6">
                       <div className="flex items-center gap-3 mb-3">
                         <span className="text-3xl">{emoji}</span>
                         <h3 className="text-xl font-bold text-gray-900">
@@ -226,7 +226,7 @@ export default function TarifsArtisansPage() {
                       {/* CTA */}
                       <Link
                         href={`/tarifs-artisans/${trade.slug}`}
-                        className="flex items-center justify-between w-full bg-blue-600 text-white px-4 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm"
+                        className="flex items-center justify-between w-full bg-blue-600 text-white px-4 py-3 rounded-full font-medium hover:bg-blue-700 transition-colors text-sm"
                       >
                         <span>Voir les tarifs détaillés</span>
                         <ArrowRight className="w-4 h-4" />
@@ -323,7 +323,7 @@ export default function TarifsArtisansPage() {
         </section>
 
         {/* CTA */}
-        <section className="py-20 bg-blue-600">
+        <section className="py-24 bg-blue-600">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl font-bold text-white mb-4">
               Obtenez un devis précis pour vos travaux
@@ -334,14 +334,14 @@ export default function TarifsArtisansPage() {
             <div className="flex flex-wrap justify-center gap-4">
               <Link
                 href="/devis"
-                className="inline-flex items-center gap-2 bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-blue-50 transition-colors text-lg"
+                className="inline-flex items-center gap-2 bg-white text-blue-600 px-8 py-4 rounded-full font-semibold hover:bg-blue-50 transition-colors text-lg"
               >
                 Demander un devis gratuit
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <Link
                 href="/services"
-                className="inline-flex items-center gap-2 bg-blue-500 text-white px-8 py-4 rounded-xl font-semibold hover:bg-blue-400 transition-colors text-lg border border-blue-400"
+                className="inline-flex items-center gap-2 bg-blue-500 text-white px-8 py-4 rounded-full font-semibold hover:bg-blue-400 transition-colors text-lg border border-blue-400"
               >
                 <Search className="w-5 h-5" />
                 Trouver un artisan
@@ -351,7 +351,7 @@ export default function TarifsArtisansPage() {
         </section>
 
         {/* Related Links Section */}
-        <section className="bg-gray-50 py-12 border-t">
+        <section className="bg-gray-50 py-16 border-t">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-xl font-bold text-gray-900 mb-6">
               Trouvez un artisan près de chez vous

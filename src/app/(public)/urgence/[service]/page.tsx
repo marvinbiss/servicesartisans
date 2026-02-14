@@ -71,9 +71,9 @@ const emergencyMeta: Record<string, { gradient: string; lightBg: string; lightTe
     ],
   },
   vitrier: {
-    gradient: 'from-cyan-600 to-cyan-800',
-    lightBg: 'bg-cyan-50',
-    lightText: 'text-cyan-700',
+    gradient: 'from-blue-600 to-blue-800',
+    lightBg: 'bg-blue-50',
+    lightText: 'text-blue-700',
     problems: [
       'Vitre cassée',
       'Baie vitrée brisée',
@@ -84,9 +84,9 @@ const emergencyMeta: Record<string, { gradient: string; lightBg: string; lightTe
     ],
   },
   climaticien: {
-    gradient: 'from-indigo-600 to-indigo-800',
-    lightBg: 'bg-indigo-50',
-    lightText: 'text-indigo-700',
+    gradient: 'from-blue-600 to-blue-800',
+    lightBg: 'bg-blue-50',
+    lightText: 'text-blue-700',
     problems: [
       'Panne de climatisation',
       'Climatisation qui ne refroidit plus',
@@ -217,7 +217,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
       </div>
 
       {/* Hero */}
-      <section className={`relative bg-gradient-to-br ${meta.gradient} text-white py-16 md:py-20 overflow-hidden`}>
+      <section className={`relative bg-red-600 text-white py-16 md:py-20 overflow-hidden`}>
         <div className="absolute inset-0 opacity-20">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-white rounded-full blur-[150px] animate-pulse" />
         </div>
@@ -248,14 +248,14 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
           <div className="flex flex-col sm:flex-row gap-4 mb-8">
             <a
               href={PHONE_TEL}
-              className="inline-flex items-center justify-center gap-3 bg-white text-gray-900 px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all"
+              className="inline-flex items-center justify-center gap-3 bg-white text-gray-900 px-8 py-4 rounded-xl font-bold text-lg shadow-sm hover:shadow-md transition-all"
             >
               <Phone className="w-6 h-6" />
               Appeler maintenant
             </a>
             <Link
               href={`/services/${service}`}
-              className="inline-flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all"
+              className="inline-flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all"
             >
               Trouver un {trade.name.toLowerCase()}
               <ArrowRight className="w-5 h-5" />
@@ -453,7 +453,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
       </section>
 
       {/* Voir aussi */}
-      <section className="py-12 bg-gray-50 border-t">
+      <section className="py-16 bg-gray-50 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-xl font-bold text-gray-900 mb-6">Voir aussi</h2>
           <div className="grid md:grid-cols-3 gap-6">
@@ -524,7 +524,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
       </section>
 
       {/* Final CTA */}
-      <section className={`bg-gradient-to-br ${meta.gradient} text-white py-16 overflow-hidden`}>
+      <section className={`bg-red-600 text-white py-16 overflow-hidden`}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">
             Besoin d&apos;un {trade.name.toLowerCase()} en urgence ?
@@ -534,7 +534,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
           </p>
           <a
             href={PHONE_TEL}
-            className="inline-flex items-center justify-center gap-3 bg-white text-gray-900 px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all"
+            className="inline-flex items-center justify-center gap-3 bg-white text-gray-900 px-8 py-4 rounded-xl font-bold text-lg shadow-sm hover:shadow-md transition-all"
           >
             <Phone className="w-6 h-6" />
             Appeler maintenant

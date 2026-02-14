@@ -157,7 +157,7 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
   return (
     <div className="space-y-6">
       {/* Stats summary */}
-      <div className="bg-gradient-to-r from-violet-50 to-indigo-50 rounded-xl p-6">
+      <div className="bg-blue-50 rounded-xl p-6">
         <div className="flex flex-col md:flex-row md:items-center gap-6">
           {/* Average rating */}
           <div className="text-center md:text-left">
@@ -225,7 +225,7 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
           {filterRating && (
             <button
               onClick={() => setFilterRating(null)}
-              className="text-xs text-violet-600 hover:text-violet-700"
+              className="text-xs text-blue-600 hover:text-blue-700"
             >
               Effacer
             </button>
@@ -235,7 +235,7 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-          className="text-sm border border-gray-300 rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+          className="text-sm border border-gray-300 rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         >
           <option value="recent">Plus récents</option>
           <option value="helpful">Plus utiles</option>
@@ -254,8 +254,8 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
             {/* Header */}
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-violet-100 rounded-full flex items-center justify-center">
-                  <User className="w-5 h-5 text-violet-600" />
+                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                  <User className="w-5 h-5 text-blue-600" />
                 </div>
                 <div>
                   <p className="font-medium text-gray-900">{review.client_name}</p>
@@ -279,8 +279,8 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
 
             {/* Artisan response */}
             {review.artisan_response && (
-              <div className="bg-violet-50 rounded-lg p-4 mb-4">
-                <p className="text-xs font-medium text-violet-700 mb-1">
+              <div className="bg-blue-50 rounded-lg p-4 mb-4">
+                <p className="text-xs font-medium text-blue-700 mb-1">
                   Réponse de {artisanName || "l'artisan"}
                 </p>
                 <p className="text-sm text-gray-700">{review.artisan_response}</p>
@@ -299,8 +299,8 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
                 disabled={votedReviews.has(review.id)}
                 className={`flex items-center gap-1.5 text-sm transition ${
                   votedReviews.has(review.id)
-                    ? 'text-violet-600'
-                    : 'text-gray-500 hover:text-violet-600'
+                    ? 'text-blue-600'
+                    : 'text-gray-500 hover:text-blue-600'
                 }`}
               >
                 <ThumbsUp className="w-4 h-4" />
@@ -317,7 +317,7 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
       {filteredReviews.length > 5 && !showAll && (
         <button
           onClick={() => setShowAll(true)}
-          className="w-full flex items-center justify-center gap-2 py-3 text-violet-600 hover:text-violet-700 font-medium"
+          className="w-full flex items-center justify-center gap-2 py-3 text-blue-600 hover:text-blue-700 font-medium"
         >
           <span>Voir tous les avis ({filteredReviews.length})</span>
           <ChevronDown className="w-4 h-4" />

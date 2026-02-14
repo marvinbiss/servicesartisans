@@ -59,7 +59,7 @@ export default function AccessibilitePage() {
         </div>
       </section>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="bg-white rounded-xl shadow-sm p-8 space-y-8">
           {/* État de conformité */}
           <section>

@@ -60,9 +60,12 @@ export { AdresseAutocomplete } from './AdresseAutocomplete'
 export { SiretAutocomplete } from './SiretAutocomplete'
 export { MetierAutocomplete } from './MetierAutocomplete'
 
-// Scroll-triggered animations (Framer Motion)
-export { ScrollReveal } from './ScrollReveal'
+// Scroll-triggered animations (native IntersectionObserver)
+export { ScrollReveal, ScrollStagger } from './ScrollReveal'
 export { StaggerGrid, StaggerItem } from './StaggerGrid'
 
-// Layout
+// Layout & Decorative
 export { SectionDivider } from './SectionDivider'
+export { HeroAccent } from './HeroAccent'
+export { TrustBar } from './TrustBar'
+export { NumberCounter } from './NumberCounter'

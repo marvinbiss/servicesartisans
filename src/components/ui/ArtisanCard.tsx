@@ -59,7 +59,7 @@ export function ArtisanCard({
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="group bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl transition-all duration-300"
+        className="group bg-white rounded-2xl border border-slate-200/60 overflow-hidden shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300"
       >
         <Link href={href} className="flex flex-col md:flex-row">
           {/* Image */}
@@ -69,11 +69,11 @@ export function ArtisanCard({
                 src={imageUrl}
                 alt={name}
                 fill
-                className="object-cover group-hover:scale-105 transition-transform duration-500"
+                className="object-cover transition-transform duration-500"
                 sizes="(max-width: 768px) 100vw, 192px"
               />
             ) : (
-              <div className="w-full h-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+              <div className="w-full h-full bg-blue-600 flex items-center justify-center">
                 <span className="text-4xl font-bold text-white">
                   {name.charAt(0)}
                 </span>
@@ -82,7 +82,7 @@ export function ArtisanCard({
 
             {/* Badge premium */}
             {isPremium && (
-              <div className="absolute top-3 left-3 bg-gradient-to-r from-amber-500 to-amber-600 text-white text-xs font-semibold px-2.5 py-1 rounded-full">
+              <div className="absolute top-3 left-3 bg-amber-500 text-white text-xs font-semibold px-2.5 py-1 rounded-full">
                 Premium
               </div>
             )}
@@ -170,7 +170,7 @@ export function ArtisanCard({
           {imageUrl ? (
             <Image src={imageUrl} alt={name} fill className="object-cover" sizes="48px" />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+            <div className="w-full h-full bg-blue-600 flex items-center justify-center">
               <span className="font-bold text-white">{name.charAt(0)}</span>
             </div>
           )}
@@ -208,11 +208,11 @@ export function ArtisanCard({
               src={imageUrl}
               alt={name}
               fill
-              className="object-cover group-hover:scale-105 transition-transform duration-500"
+              className="object-cover transition-transform duration-500"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 flex items-center justify-center">
+            <div className="w-full h-full bg-blue-600 flex items-center justify-center">
               <span className="text-6xl font-bold text-white/90">
                 {name.charAt(0)}
               </span>
@@ -227,7 +227,7 @@ export function ArtisanCard({
             <motion.div
               initial={{ x: -10, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              className="absolute top-3 left-3 bg-gradient-to-r from-amber-500 to-amber-600 text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-lg"
+              className="absolute top-3 left-3 bg-amber-500 text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-sm"
             >
               <span className="flex items-center gap-1">
                 <Star className="w-3 h-3 fill-white" />
@@ -242,7 +242,7 @@ export function ArtisanCard({
               e.preventDefault()
               setIsFavorite(!isFavorite)
             }}
-            className="absolute top-3 right-3 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
+            className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-lg transition-transform"
           >
             <Heart
               className={`w-4 h-4 transition-colors ${

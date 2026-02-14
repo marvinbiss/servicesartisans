@@ -150,7 +150,7 @@ export default function ArtisanSettingsPage() {
               {data?.provider?.is_verified ? (
                 <span className="text-green-600 font-medium">Oui</span>
               ) : (
-                <span className="text-orange-600 font-medium">En attente</span>
+                <span className="text-amber-600 font-medium">En attente</span>
               )}
             </div>
           </div>

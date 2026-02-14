@@ -40,7 +40,7 @@ export default function PlanDuSitePage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <h1 className="font-heading text-3xl font-bold text-gray-900 mb-2">Plan du site</h1>
         <p className="text-gray-500 mb-10">
           Retrouvez l&apos;ensemble des pages de ServicesArtisans pour trouver votre artisan.

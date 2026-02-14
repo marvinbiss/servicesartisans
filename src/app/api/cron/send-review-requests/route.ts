@@ -9,6 +9,7 @@ import { createClient } from '@supabase/supabase-js'
 import { sendEmail } from '@/lib/notifications/email'
 import { sendReviewRequestSMS, type SMSData } from '@/lib/notifications/sms'
 import { logger } from '@/lib/logger'
+import { escapeHtml } from '@/lib/utils/html'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -24,8 +25,12 @@ function getReviewEmailTemplate(data: {
   serviceName: string
   reviewUrl: string
 }) {
+  const safeClientName = escapeHtml(data.clientName)
+  const safeArtisanName = escapeHtml(data.artisanName)
+  const safeServiceName = escapeHtml(data.serviceName)
+
   return {
-    subject: `Comment s'est passé votre RDV avec ${data.artisanName}?`,
+    subject: `Comment s'est pass\u00e9 votre RDV avec ${data.artisanName} ?`,
     html: `
       <!DOCTYPE html>
       <html>
@@ -40,18 +45,18 @@ function getReviewEmailTemplate(data: {
             </div>
             <div style="background: white; padding: 30px; border-radius: 0 0 12px 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
               <p style="color: #333; font-size: 16px; margin-bottom: 20px;">
-                Bonjour <strong>${data.clientName}</strong>,
+                Bonjour <strong>${safeClientName}</strong>,
               </p>
               <p style="color: #666; font-size: 15px; line-height: 1.6;">
-                Comment s'est passé votre rendez-vous avec <strong>${data.artisanName}</strong> pour <strong>${data.serviceName}</strong> ?
+                Comment s'est pass\u00e9 votre rendez-vous avec <strong>${safeArtisanName}</strong> pour <strong>${safeServiceName}</strong> ?
               </p>
               <p style="color: #666; font-size: 15px; line-height: 1.6;">
-                Votre avis aide d'autres personnes à trouver les meilleurs artisans et permet à ${data.artisanName} de s'améliorer.
+                Votre avis aide d'autres personnes \u00e0 trouver les meilleurs artisans et permet \u00e0 ${safeArtisanName} de s'am\u00e9liorer.
               </p>
 
               <div style="text-align: center; margin: 30px 0;">
                 <a href="${data.reviewUrl}" style="display: inline-block; background: #8b5cf6; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 500; font-size: 16px;">
-                  ⭐ Laisser un avis
+                  Laisser un avis
                 </a>
               </div>
 
@@ -61,27 +66,29 @@ function getReviewEmailTemplate(data: {
 
               <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 25px 0;">
 
-              <p style="color: #999; font-size: 12px; text-align: center;">
-                ServicesArtisans - Trouvez des artisans qualifiés près de chez vous
+              <p style="color: #999; font-size: 12px; text-align: center; margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+                ServicesArtisans \u2014 La plateforme des artisans qualifi\u00e9s<br>
+                contact@servicesartisans.fr<br>
+                <a href="https://servicesartisans.fr/confidentialite" style="color: #999;">Politique de confidentialit\u00e9</a>
               </p>
             </div>
           </div>
         </body>
       </html>
     `,
-    text: `
-Bonjour ${data.clientName},
+    text: `Bonjour ${data.clientName},
 
-Comment s'est passé votre rendez-vous avec ${data.artisanName} pour ${data.serviceName} ?
+Comment s'est pass\u00e9 votre rendez-vous avec ${data.artisanName} pour ${data.serviceName} ?
 
-Votre avis aide d'autres personnes à trouver les meilleurs artisans.
+Votre avis aide d'autres personnes \u00e0 trouver les meilleurs artisans.
 
-Laisser un avis: ${data.reviewUrl}
+Laisser un avis : ${data.reviewUrl}
 
 Cela ne prend que 30 secondes.
 
-ServicesArtisans
-    `,
+ServicesArtisans \u2014 La plateforme des artisans qualifi\u00e9s
+contact@servicesartisans.fr
+Politique de confidentialit\u00e9 : https://servicesartisans.fr/confidentialite`,
   }
 }
 

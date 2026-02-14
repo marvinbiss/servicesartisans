@@ -201,7 +201,7 @@ export default function StatistiquesPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+      <div className="bg-blue-600 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex items-center gap-4">
             <Link
@@ -281,7 +281,7 @@ export default function StatistiquesPage() {
 
           <div className="bg-white rounded-xl shadow-sm p-6">
             <div className="flex items-center justify-between mb-4">
-              <Clock className="w-8 h-8 text-purple-600" />
+              <Clock className="w-8 h-8 text-blue-600" />
             </div>
             <div className="text-3xl font-bold text-gray-900">{stats!.upcomingBookings}</div>
             <div className="text-sm text-gray-500">RDV à venir</div>
@@ -344,7 +344,7 @@ export default function StatistiquesPage() {
           {/* Top services */}
           <div className="bg-white rounded-xl shadow-sm p-6">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <PieChart className="w-5 h-5 text-purple-600" />
+              <PieChart className="w-5 h-5 text-blue-600" />
               Services les plus demandés
             </h3>
             {stats!.topServices.length === 0 ? (
@@ -362,7 +362,7 @@ export default function StatistiquesPage() {
                       </div>
                       <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-purple-500 rounded-full"
+                          className="h-full bg-blue-500 rounded-full"
                           style={{ width: `${width}%` }}
                         />
                       </div>

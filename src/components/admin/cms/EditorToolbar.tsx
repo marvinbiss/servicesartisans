@@ -338,7 +338,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
         onClick={() => setUrlModal(null)}
       >
         <div
-          className="absolute left-1/2 top-24 -translate-x-1/2 w-96 bg-white rounded-lg shadow-xl border border-gray-200 p-4"
+          className="absolute left-1/2 top-24 -translate-x-1/2 w-96 bg-white rounded-lg shadow-lg border border-gray-200 p-4"
           onClick={(e) => e.stopPropagation()}
         >
           <label className="block text-sm font-medium text-gray-700 mb-2">

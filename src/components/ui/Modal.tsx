@@ -122,7 +122,7 @@ export function Modal({
       >
         <div
           className={clsx(
-            'relative w-full bg-white rounded-2xl shadow-2xl',
+            'relative w-full bg-white rounded-2xl shadow-lg',
             'animate-scale-in',
             sizes[size]
           )}

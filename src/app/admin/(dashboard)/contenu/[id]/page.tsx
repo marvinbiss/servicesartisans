@@ -772,7 +772,7 @@ export default function AdminEditContenuPage() {
               className="fixed inset-0 bg-black/50"
               onClick={() => setShowDeleteConfirm(false)}
             />
-            <div className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6">
+            <div className="relative bg-white rounded-xl shadow-lg max-w-md w-full p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 Supprimer la page
               </h3>

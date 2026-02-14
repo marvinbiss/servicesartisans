@@ -31,7 +31,7 @@ const badgeConfig = {
     icon: Award,
     label: 'Qualifié',
     className: 'verified-badge-certification',
-    color: 'text-purple-600',
+    color: 'text-blue-600',
   },
   premium: {
     icon: Star,
@@ -248,7 +248,7 @@ const escrowStatusConfig = {
   work_completed: { label: 'Travaux terminés', className: 'bg-blue-100 text-blue-700' },
   released: { label: 'Libéré', className: 'escrow-completed' },
   disputed: { label: 'Litige', className: 'escrow-disputed' },
-  refunded: { label: 'Remboursé', className: 'bg-purple-100 text-purple-700' },
+  refunded: { label: 'Remboursé', className: 'bg-blue-100 text-blue-700' },
 }
 
 export function EscrowStatusBadge({

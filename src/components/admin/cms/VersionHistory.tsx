@@ -118,7 +118,7 @@ export function VersionHistory({ pageId, onClose, onRestore }: VersionHistoryPro
         />
 
         {/* Modal */}
-        <div className="relative bg-white rounded-xl shadow-xl max-w-lg w-full my-8">
+        <div className="relative bg-white rounded-xl shadow-lg max-w-lg w-full my-8">
           {/* Header */}
           <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
             <div className="flex items-center gap-2">
@@ -244,7 +244,7 @@ export function VersionHistory({ pageId, onClose, onRestore }: VersionHistoryPro
               className="fixed inset-0 bg-black/50"
               onClick={() => setConfirmRestore(null)}
             />
-            <div className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6">
+            <div className="relative bg-white rounded-xl shadow-lg max-w-md w-full p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 Restaurer cette version ?
               </h3>

@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { MapPin, Users, Building2, ArrowRight, Shield, Clock, ChevronRight, Wrench, HelpCircle, Thermometer, Home, TrendingUp, AlertTriangle } from 'lucide-react'
+import { MapPin, Users, Building2, ArrowRight, Shield, Clock, ChevronRight, Thermometer, Home, AlertTriangle } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getPlaceSchema, getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
@@ -10,6 +10,7 @@ import { SITE_URL } from '@/lib/seo/config'
 import { villes, getVilleBySlug, services, getRegionSlugByName, getDepartementByCode, getQuartiersByVille } from '@/lib/data/france'
 import { getCityImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { generateVilleContent, hashCode } from '@/lib/seo/location-content'
+import { ScrollReveal } from '@/components/ui/ScrollReveal'
 
 // Pre-render top 200 cities, rest generated on-demand via ISR
 const TOP_CITIES_COUNT = 200
@@ -101,7 +102,6 @@ export default async function VillePage({ params }: PageProps) {
 
   // Generate unique SEO content
   const content = generateVilleContent(ville)
-  const topServiceSlugsSet = new Set(content.profile.topServiceSlugs.slice(0, 5))
   const orderedServices = [...services].sort((a, b) => {
     const aIdx = content.profile.topServiceSlugs.indexOf(a.slug)
     const bIdx = content.profile.topServiceSlugs.indexOf(b.slug)
@@ -147,10 +147,7 @@ export default async function VillePage({ params }: PageProps) {
               />
             )}
             <div className="absolute inset-0 bg-[#0a0f1e]/80" />
-          <div className="absolute inset-0" style={{
-            background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(37,99,235,0.1) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(59,130,246,0.06) 0%, transparent 50%)',
-          }} />
-          <div className="absolute inset-0 opacity-[0.025]" style={{
+          <div className="absolute inset-0 opacity-[0.03]" style={{
             backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
             backgroundSize: '64px 64px',
           }} />
@@ -172,13 +169,13 @@ export default async function VillePage({ params }: PageProps) {
 
           <div className="max-w-3xl">
             <div className="flex flex-wrap gap-2 mb-5">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/15 backdrop-blur-sm rounded-full border border-blue-400/25">
-                <MapPin className="w-4 h-4 text-blue-400" />
-                <span className="text-sm font-medium text-blue-200">{content.profile.citySizeLabel}</span>
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/[0.08] rounded-full border border-white/10">
+                <MapPin className="w-4 h-4 text-slate-400" />
+                <span className="text-sm font-medium text-slate-300">{content.profile.citySizeLabel}</span>
               </div>
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/15 backdrop-blur-sm rounded-full border border-emerald-400/25">
-                <Thermometer className="w-4 h-4 text-emerald-400" />
-                <span className="text-sm font-medium text-emerald-200">{content.profile.climateLabel}</span>
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/[0.08] rounded-full border border-white/10">
+                <Thermometer className="w-4 h-4 text-slate-400" />
+                <span className="text-sm font-medium text-slate-300">{content.profile.climateLabel}</span>
               </div>
             </div>
 
@@ -219,11 +216,11 @@ export default async function VillePage({ params }: PageProps) {
 
             {/* Trust badges */}
             <div className="flex flex-wrap gap-3">
-              <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Shield className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Données SIREN officielles</span>
+              <div className="flex items-center gap-2 bg-white/[0.08] px-4 py-2 rounded-full border border-white/10">
+                <Shield className="w-4 h-4 text-slate-400" /><span className="text-sm font-medium text-slate-300">Données SIREN officielles</span>
               </div>
-              <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Clock className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Devis gratuits</span>
+              <div className="flex items-center gap-2 bg-white/[0.08] px-4 py-2 rounded-full border border-white/10">
+                <Clock className="w-4 h-4 text-slate-400" /><span className="text-sm font-medium text-slate-300">Devis gratuits</span>
               </div>
             </div>
           </div>
@@ -233,41 +230,41 @@ export default async function VillePage({ params }: PageProps) {
       {/* ─── SERVICES GRID ──────────────────────────────────── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <section className="mb-16">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
-              <Wrench className="w-5 h-5 text-blue-600" />
-            </div>
-            <div>
+          <ScrollReveal>
+            <div className="mb-8">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="h-px w-6 bg-amber-400" />
+                <span className="text-xs font-semibold uppercase tracking-widest text-blue-600">
+                  Services disponibles
+                </span>
+              </div>
               <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
                 Trouver un artisan à {ville.name}
               </h2>
-              <p className="text-sm text-slate-500">{services.length} corps de métier disponibles</p>
+              <p className="text-sm text-slate-500 mt-1">{services.length} corps de métier disponibles</p>
             </div>
-          </div>
+          </ScrollReveal>
+          <ScrollReveal delay={200}>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
             {orderedServices.map((service) => (
               <Link
                 key={service.slug}
                 href={`/services/${service.slug}/${villeSlug}`}
-                className={`bg-white rounded-xl shadow-sm p-5 text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group ${topServiceSlugsSet.has(service.slug) ? 'border-2 border-indigo-200' : 'border border-gray-100'}`}
+                className="bg-white rounded-2xl p-5 text-center border border-slate-200 hover:border-blue-200 transition-colors group"
               >
-                {topServiceSlugsSet.has(service.slug) && (
-                  <span className="inline-block text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full mb-2">Prioritaire</span>
-                )}
                 <h3 className="font-semibold text-slate-800 group-hover:text-blue-600 transition-colors text-sm">{service.name}</h3>
                 <p className="text-xs text-slate-400 mt-1.5">à {ville.name}</p>
               </Link>
             ))}
           </div>
+          </ScrollReveal>
         </section>
 
         {/* ─── QUARTIERS ────────────────────────────────────── */}
         {ville.quartiers && ville.quartiers.length > 0 && (
+          <ScrollReveal>
           <section className="mb-16">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
-                <MapPin className="w-5 h-5 text-emerald-600" />
-              </div>
               <div>
                 <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
                   Quartiers desservis à {ville.name}
@@ -275,25 +272,32 @@ export default async function VillePage({ params }: PageProps) {
                 <p className="text-sm text-slate-500">{ville.quartiers.length} quartiers couverts</p>
               </div>
             </div>
-            <div className="bg-white rounded-2xl border border-gray-200 p-6">
+            <div className="bg-white rounded-2xl border border-slate-200 p-6">
               <div className="flex flex-wrap gap-2.5">
                 {getQuartiersByVille(villeSlug).map(({ name, slug }) => (
-                  <Link key={slug} href={`/villes/${villeSlug}/${slug}`} className="bg-gray-50 text-slate-700 px-4 py-2 rounded-full text-sm border border-gray-100 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 transition-colors">
+                  <Link key={slug} href={`/villes/${villeSlug}/${slug}`} className="bg-slate-50 text-slate-700 px-4 py-2 rounded-full text-sm hover:bg-blue-50 hover:text-blue-600 transition-colors">
                     {name}
                   </Link>
                 ))}
               </div>
             </div>
           </section>
+          </ScrollReveal>
         )}
 
+        <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent mb-16" />
+
         {/* ─── PROFIL DE LA VILLE ─────────────────────────────── */}
+        <ScrollReveal>
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center">
-              <Home className="w-5 h-5 text-indigo-600" />
-            </div>
             <div>
+              <div className="flex items-center gap-3 mb-3">
+                <div className="h-px w-6 bg-amber-400" />
+                <span className="text-xs font-semibold uppercase tracking-widest text-blue-600">
+                  Profil local
+                </span>
+              </div>
               <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
                 Profil de {ville.name}
               </h2>
@@ -301,28 +305,28 @@ export default async function VillePage({ params }: PageProps) {
             </div>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div className="bg-white rounded-xl border border-gray-200 p-5">
+            <div className="bg-white rounded-2xl border border-slate-200 p-5">
               <div className="flex items-center gap-2 mb-2">
                 <Thermometer className="w-4 h-4 text-blue-500" />
                 <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Climat</span>
               </div>
               <p className="font-bold text-slate-900">{content.profile.climateLabel}</p>
             </div>
-            <div className="bg-white rounded-xl border border-gray-200 p-5">
+            <div className="bg-white rounded-2xl border border-slate-200 p-5">
               <div className="flex items-center gap-2 mb-2">
-                <Home className="w-4 h-4 text-emerald-500" />
+                <Home className="w-4 h-4 text-blue-500" />
                 <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Habitat</span>
               </div>
               <p className="font-bold text-slate-900">{content.profile.citySizeLabel}</p>
             </div>
-            <div className="bg-white rounded-xl border border-gray-200 p-5">
+            <div className="bg-white rounded-2xl border border-slate-200 p-5">
               <div className="flex items-center gap-2 mb-2">
-                <Users className="w-4 h-4 text-violet-500" />
+                <Users className="w-4 h-4 text-slate-500" />
                 <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Population</span>
               </div>
               <p className="font-bold text-slate-900">{ville.population} hab.</p>
             </div>
-            <div className="bg-white rounded-xl border border-gray-200 p-5">
+            <div className="bg-white rounded-2xl border border-slate-200 p-5">
               <div className="flex items-center gap-2 mb-2">
                 <Building2 className="w-4 h-4 text-amber-500" />
                 <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Département</span>
@@ -331,12 +335,12 @@ export default async function VillePage({ params }: PageProps) {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl border border-gray-200 p-6 mb-4">
+          <div className="bg-white rounded-2xl border border-slate-200 p-6 mb-4">
             <h3 className="font-semibold text-slate-900 mb-3">Habitat à {ville.name}</h3>
             <p className="text-sm text-slate-600 leading-relaxed">{content.profile.habitatDescription}</p>
           </div>
 
-          <div className="bg-white rounded-xl border border-gray-200 p-6 mb-4">
+          <div className="bg-white rounded-2xl border border-slate-200 p-6 mb-4">
             <h3 className="font-semibold text-slate-900 mb-3">Contexte urbain</h3>
             <p className="text-sm text-slate-600 leading-relaxed">{content.contexteUrbain}</p>
           </div>
@@ -350,23 +354,29 @@ export default async function VillePage({ params }: PageProps) {
             ))}
           </div>
         </section>
+        </ScrollReveal>
+
+        <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent mb-16" />
 
         {/* ─── CONTENU SEO : SERVICES & CONSEILS ─────────────── */}
         <section className="mb-16">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center">
-              <TrendingUp className="w-5 h-5 text-teal-600" />
+          <div className="mb-6">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="h-px w-6 bg-amber-400" />
+              <span className="text-xs font-semibold uppercase tracking-widest text-blue-600">
+                Guide local
+              </span>
             </div>
             <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
               Artisanat à {ville.name}
             </h2>
           </div>
           <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
+            <div className="bg-white rounded-2xl border border-slate-200 p-6">
               <h3 className="font-semibold text-slate-900 mb-3">Services prioritaires</h3>
               <p className="text-sm text-slate-600 leading-relaxed">{content.servicesPrioritaires}</p>
             </div>
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
+            <div className="bg-white rounded-2xl border border-slate-200 p-6">
               <h3 className="font-semibold text-slate-900 mb-3">Conseils pour {ville.name}</h3>
               <p className="text-sm text-slate-600 leading-relaxed">{content.conseilsVille}</p>
             </div>
@@ -377,16 +387,13 @@ export default async function VillePage({ params }: PageProps) {
         {nearbyVilles.length > 0 && (
           <section className="mb-16">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-violet-100 rounded-xl flex items-center justify-center">
-                <Building2 className="w-5 h-5 text-violet-600" />
-              </div>
               <h2 className="font-heading text-xl font-bold text-slate-900 tracking-tight">
                 Autres villes du {ville.departement}
               </h2>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
               {nearbyVilles.map((v) => (
-                <Link key={v.slug} href={`/villes/${v.slug}`} className="flex items-center gap-2.5 bg-white rounded-xl border border-gray-200 p-3.5 hover:border-blue-300 hover:shadow-md transition-all group">
+                <Link key={v.slug} href={`/villes/${v.slug}`} className="flex items-center gap-2.5 bg-white rounded-2xl border border-slate-200 p-3.5 hover:border-blue-200 transition-colors group">
                   <MapPin className="w-4 h-4 text-slate-400 group-hover:text-blue-600 flex-shrink-0 transition-colors" />
                   <div className="min-w-0">
                     <span className="block text-sm font-medium text-slate-800 group-hover:text-blue-600 truncate transition-colors">{v.name}</span>
@@ -398,11 +405,17 @@ export default async function VillePage({ params }: PageProps) {
           </section>
         )}
 
+        <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent mb-16" />
+
         {/* ─── FAQ SECTION ──────────────────────────────────── */}
+        <ScrollReveal>
         <section className="mb-16">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
-              <HelpCircle className="w-5 h-5 text-amber-600" />
+          <div className="mb-8">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="h-px w-6 bg-amber-400" />
+              <span className="text-xs font-semibold uppercase tracking-widest text-blue-600">
+                FAQ
+              </span>
             </div>
             <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
               Questions fréquentes
@@ -410,40 +423,42 @@ export default async function VillePage({ params }: PageProps) {
           </div>
           <div className="space-y-4">
             {content.faqItems.map((faq, i) => (
-              <div key={i} className="bg-white rounded-xl border border-gray-200 p-6">
+              <div key={i} className="bg-white rounded-2xl border border-slate-200 p-6">
                 <h3 className="font-semibold text-slate-900 mb-2">{faq.question}</h3>
                 <p className="text-sm text-slate-600 leading-relaxed">{faq.answer}</p>
               </div>
             ))}
           </div>
         </section>
+        </ScrollReveal>
       </div>
 
       {/* ─── CTA ────────────────────────────────────────────── */}
-      <section className="relative bg-[#0a0f1e] overflow-hidden">
-        <div className="absolute inset-0" style={{
-          background: 'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(37,99,235,0.12) 0%, transparent 60%)',
-        }} />
-        <div className="relative max-w-4xl mx-auto px-4 py-16 md:py-20 text-center">
-          <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">
-            Besoin d&apos;un artisan à {ville.name} ?
-          </h2>
-          <p className="text-slate-400 mb-8 max-w-lg mx-auto">
-            Décrivez votre projet et recevez des devis gratuits d&apos;artisans qualifiés.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/devis" className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-300">
-              Demander un devis gratuit
-            </Link>
-            <Link href="/services" className="inline-flex items-center gap-2 text-slate-300 hover:text-white font-medium transition-colors">
-              Voir les services <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
+      <section className="bg-slate-900">
+        <div className="max-w-4xl mx-auto px-4 py-16 md:py-20 text-center">
+          <ScrollReveal>
+            <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">
+              Besoin d&apos;un artisan à {ville.name} ?
+            </h2>
+            <p className="text-slate-400 mb-8 max-w-lg mx-auto">
+              Décrivez votre projet et recevez des devis gratuits d&apos;artisans qualifiés.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link href="/devis" className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white font-semibold px-8 py-3.5 rounded-full transition-colors">
+                Demander un devis gratuit
+              </Link>
+              <Link href="/services" className="inline-flex items-center gap-2 text-slate-300 hover:text-white font-medium transition-colors">
+                Voir les services <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </ScrollReveal>
         </div>
       </section>
 
+      <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
+
       {/* ─── SEO INTERNAL LINKS ─────────────────────────────── */}
-      <section className="py-16 bg-white border-t border-gray-100">
+      <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-xl font-bold text-slate-900 mb-8 tracking-tight">
             Voir aussi
@@ -525,10 +540,12 @@ export default async function VillePage({ params }: PageProps) {
           </div>
         </section>
 
+      <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
+
       {/* Confiance & Sécurité */}
-      <section className="py-8 border-t">
+      <section className="py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">Confiance & Sécurité</h2>
+          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Confiance & Sécurité</h2>
           <div className="flex flex-wrap gap-4">
             <Link href="/notre-processus-de-verification" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
               Processus de vérification

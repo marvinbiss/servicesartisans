@@ -124,7 +124,7 @@ export default function ArtisanResultCard({
   const firstAvailableDate = localAvailability.find((day) => day.slots.length > 0)
 
   return (
-    <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+    <div className="bg-white rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 overflow-hidden">
       <div className="p-4 sm:p-6">
         <div className="flex gap-4">
           {/* Avatar / Logo */}
@@ -143,7 +143,7 @@ export default function ArtisanResultCard({
                 <Building2 className="w-8 h-8 text-blue-600" />
               </div>
             ) : (
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white text-xl font-bold">
+              <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center text-white text-xl font-bold">
                 {displayName?.charAt(0) || 'A'}
               </div>
             )}

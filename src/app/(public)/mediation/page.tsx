@@ -140,7 +140,7 @@ export default function MediationPage() {
       {/* Contact */}
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 text-center">
+          <div className="bg-blue-50 rounded-2xl p-8 text-center">
             <div className="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
               <Mail className="w-7 h-7 text-white" />
             </div>

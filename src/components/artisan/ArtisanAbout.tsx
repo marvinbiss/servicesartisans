@@ -39,7 +39,7 @@ export function ArtisanAbout({ artisan }: ArtisanAboutProps) {
             <div
               id="about-description"
               aria-expanded={isLong ? expanded : undefined}
-              className={`text-slate-600 leading-relaxed text-[0.95rem] ${!expanded && isLong ? 'line-clamp-4' : ''}`}
+              className={`text-slate-600 leading-relaxed text-base ${!expanded && isLong ? 'line-clamp-4' : ''}`}
             >
               {description}
             </div>
@@ -65,14 +65,14 @@ export function ArtisanAbout({ artisan }: ArtisanAboutProps) {
       {artisan.certifications && artisan.certifications.length > 0 && (
         <div className="mx-6 mt-6 pt-6 border-t border-gray-100">
           <h3 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
-            <Award className="w-4 h-4 text-purple-600" />
+            <Award className="w-4 h-4 text-blue-600" />
             Certifications &amp; Qualifications
           </h3>
           <div className="flex flex-wrap gap-2">
             {artisan.certifications.map((cert, i) => (
               <span
                 key={i}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-50 text-purple-700 text-sm border border-purple-200 font-medium"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 text-sm border border-blue-200 font-medium"
               >
                 <CheckCircle className="w-3.5 h-3.5" />
                 {cert}

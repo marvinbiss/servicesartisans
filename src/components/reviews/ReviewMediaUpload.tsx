@@ -191,8 +191,8 @@ export function ReviewMediaUpload({
                 </div>
               )}
               {acceptedTypes.includes('video') && (
-                <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-full">
-                  <Video className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-full">
+                  <Video className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                 </div>
               )}
             </div>

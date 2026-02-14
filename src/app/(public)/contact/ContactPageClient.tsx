@@ -46,7 +46,7 @@ export default function ContactPageClient() {
   if (isSubmitted) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">
+        <div className="max-w-md w-full bg-white rounded-2xl shadow-md p-8 text-center">
           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <CheckCircle className="w-8 h-8 text-green-600" />
           </div>
@@ -196,7 +196,7 @@ export default function ContactPageClient() {
 
           {/* Contact Form */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-2xl shadow-lg p-8">
+            <div className="bg-white rounded-2xl shadow-sm p-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">
                 Envoyez-nous un message
               </h2>
@@ -296,7 +296,7 @@ export default function ContactPageClient() {
       </div>
 
       {/* Related Links Section */}
-      <section className="bg-gray-100 py-12 border-t">
+      <section className="bg-gray-100 py-16 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-xl font-bold text-gray-900 mb-6">
             Trouvez un artisan près de chez vous

@@ -128,7 +128,7 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
   return (
     <div className="bg-white rounded-2xl shadow-sm border-2 border-green-100 overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-green-600 to-green-700 px-6 py-5">
+      <div className="bg-green-600 hover:bg-green-700 px-6 py-5">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-xl font-bold text-white">Demande de devis gratuit</h2>
@@ -235,7 +235,7 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
                       aria-required="true"
                       aria-invalid={!!errors.description}
                       aria-describedby={errors.description ? 'inline-desc-error' : 'inline-desc-hint'}
-                      className={`w-full pl-10 pr-4 py-3 rounded-xl border ${
+                      className={`w-full pl-10 pr-4 py-3 rounded-full border ${
                         errors.description ? 'border-red-300 bg-red-50' : 'border-gray-200'
                       } focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors resize-none`}
                     />
@@ -266,7 +266,7 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
                         role="radio"
                         aria-checked={formData.urgency === option.value}
                         onClick={() => handleChange('urgency', option.value)}
-                        className={`p-3 rounded-xl border-2 text-center transition-all focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-1 ${
+                        className={`p-3 rounded-full border-2 text-center transition-all focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-1 ${
                           formData.urgency === option.value
                             ? 'border-green-500 bg-green-50 text-green-700'
                             : 'border-gray-200 hover:border-gray-300'
@@ -280,15 +280,13 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
                 </fieldset>
 
                 {/* Continue button */}
-                <motion.button
+                <button
                   type="submit"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-green-600 to-green-700 text-white font-semibold flex items-center justify-center gap-2 shadow-lg shadow-green-500/25 hover:shadow-green-500/40 transition-shadow focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                  className="w-full py-3.5 px-6 rounded-full bg-green-600 hover:bg-green-700 text-white font-semibold flex items-center justify-center gap-2 transition-shadow focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
                 >
                   Continuer
                   <ArrowRight className="w-5 h-5" aria-hidden="true" />
-                </motion.button>
+                </button>
               </form>
             </motion.div>
           ) : (
@@ -323,7 +321,7 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
                       aria-required="true"
                       aria-invalid={!!errors.name}
                       aria-describedby={errors.name ? 'inline-name-error' : undefined}
-                      className={`w-full pl-10 pr-4 py-3 rounded-xl border ${
+                      className={`w-full pl-10 pr-4 py-3 rounded-full border ${
                         errors.name ? 'border-red-300 bg-red-50' : 'border-gray-200'
                       } focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors`}
                     />
@@ -350,7 +348,7 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
                       aria-required="true"
                       aria-invalid={!!errors.email}
                       aria-describedby={errors.email ? 'inline-email-error' : undefined}
-                      className={`w-full pl-10 pr-4 py-3 rounded-xl border ${
+                      className={`w-full pl-10 pr-4 py-3 rounded-full border ${
                         errors.email ? 'border-red-300 bg-red-50' : 'border-gray-200'
                       } focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors`}
                     />
@@ -377,7 +375,7 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
                       aria-required="true"
                       aria-invalid={!!errors.phone}
                       aria-describedby={errors.phone ? 'inline-phone-error' : undefined}
-                      className={`w-full pl-10 pr-4 py-3 rounded-xl border ${
+                      className={`w-full pl-10 pr-4 py-3 rounded-full border ${
                         errors.phone ? 'border-red-300 bg-red-50' : 'border-gray-200'
                       } focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors`}
                     />
@@ -400,7 +398,7 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
                       value={formData.address}
                       onChange={(e) => handleChange('address', e.target.value)}
                       placeholder="12 rue de la Paix, 75001 Paris"
-                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+                      className="w-full pl-10 pr-4 py-3 rounded-full border border-gray-200 focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
                     />
                   </div>
                 </div>
@@ -410,18 +408,16 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
                   <button
                     type="button"
                     onClick={() => { setStep(1); setErrors({}) }}
-                    className="py-3.5 px-4 rounded-xl border-2 border-gray-200 text-gray-700 font-medium flex items-center gap-2 hover:border-gray-300 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                    className="py-3.5 px-4 rounded-full border-2 border-gray-200 text-gray-700 font-medium flex items-center gap-2 hover:border-gray-300 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
                   >
                     <ArrowLeft className="w-4 h-4" aria-hidden="true" />
                     Retour
                   </button>
 
-                  <motion.button
+                  <button
                     type="submit"
                     disabled={isSubmitting}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="flex-1 py-3.5 px-6 rounded-xl bg-gradient-to-r from-green-600 to-green-700 text-white font-semibold flex items-center justify-center gap-2 shadow-lg shadow-green-500/25 hover:shadow-green-500/40 transition-shadow disabled:opacity-70 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                    className="flex-1 py-3.5 px-6 rounded-full bg-green-600 hover:bg-green-700 text-white font-semibold flex items-center justify-center gap-2 transition-shadow disabled:opacity-70 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
                     aria-busy={isSubmitting}
                   >
                     {isSubmitting ? (
@@ -435,7 +431,7 @@ export function ArtisanQuoteForm({ artisan }: ArtisanQuoteFormProps) {
                         <span>Envoyer ma demande</span>
                       </>
                     )}
-                  </motion.button>
+                  </button>
                 </div>
 
                 {/* Privacy + trust */}

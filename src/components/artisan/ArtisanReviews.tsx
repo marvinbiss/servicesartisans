@@ -173,9 +173,9 @@ export function ArtisanReviews({ artisan: _artisan, reviews }: ArtisanReviewsPro
         <button
           onClick={() => handleFilterChange('photo')}
           aria-pressed={filter === 'photo'}
-          className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-1 ${
+          className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 ${
             filter === 'photo'
-              ? 'bg-purple-600 text-white'
+              ? 'bg-blue-600 text-white'
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
         >
@@ -227,7 +227,7 @@ export function ArtisanReviews({ artisan: _artisan, reviews }: ArtisanReviewsPro
             >
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-semibold shadow-sm">
+                  <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold shadow-sm">
                     {review.author.charAt(0).toUpperCase()}
                   </div>
                   <div>
@@ -289,15 +289,13 @@ export function ArtisanReviews({ artisan: _artisan, reviews }: ArtisanReviewsPro
 
       {/* Load more button */}
       {hasMore && (
-        <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
+        <button
           onClick={handleLoadMore}
           className="mt-6 w-full py-3.5 px-4 rounded-xl border-2 border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 hover:border-gray-300 transition-all flex items-center justify-center gap-2"
         >
           Voir plus d'avis ({filteredReviews.length - displayCount} restants)
           <ChevronDown className="w-4 h-4" />
-        </motion.button>
+        </button>
       )}
 
       {/* Shown count */}

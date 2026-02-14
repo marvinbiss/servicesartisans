@@ -247,7 +247,7 @@ export function GeographicDistribution({ data }: GeographicHeatmapProps) {
             <div className="w-24 text-sm font-medium text-gray-700 truncate">{item.city}</div>
             <div className="flex-1 h-6 bg-gray-100 rounded-full overflow-hidden">
               <div
-                className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-all"
+                className="h-full bg-blue-600 rounded-full transition-all"
                 style={{ width: `${(item.bookings / maxBookings) * 100}%` }}
               />
             </div>

@@ -73,7 +73,7 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
               src={gridPhotos[0]?.imageUrl}
               alt={gridPhotos[0]?.title || 'Photo principale'}
               fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              className="object-cover transition-transform duration-300"
               placeholder="blur"
               blurDataURL={BLUR_DATA_URL}
               sizes="(max-width: 768px) 50vw, 33vw"
@@ -92,7 +92,7 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
                 src={gridPhotos[1].imageUrl}
                 alt={gridPhotos[1].title}
                 fill
-                className="object-cover transition-transform duration-300 hover:scale-110"
+                className="object-cover transition-transform duration-300"
                 placeholder="blur"
                 blurDataURL={BLUR_DATA_URL}
                 sizes="(max-width: 768px) 25vw, 16vw"
@@ -110,7 +110,7 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
                 src={gridPhotos[2].imageUrl}
                 alt={gridPhotos[2].title}
                 fill
-                className="object-cover transition-transform duration-300 hover:scale-110"
+                className="object-cover transition-transform duration-300"
                 placeholder="blur"
                 blurDataURL={BLUR_DATA_URL}
                 sizes="(max-width: 768px) 25vw, 16vw"
@@ -129,7 +129,7 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
                 src={gridPhotos[3].imageUrl}
                 alt={gridPhotos[3].title}
                 fill
-                className="object-cover transition-transform duration-300 hover:scale-110"
+                className="object-cover transition-transform duration-300"
                 placeholder="blur"
                 blurDataURL={BLUR_DATA_URL}
                 sizes="(max-width: 768px) 25vw, 16vw"
@@ -147,7 +147,7 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
                 src={gridPhotos[4].imageUrl}
                 alt={gridPhotos[4].title}
                 fill
-                className="object-cover transition-transform duration-300 hover:scale-110"
+                className="object-cover transition-transform duration-300"
                 placeholder="blur"
                 blurDataURL={BLUR_DATA_URL}
                 sizes="(max-width: 768px) 25vw, 16vw"
@@ -167,16 +167,14 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
         </div>
 
         {/* Show all photos button */}
-        <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
+        <button
           onClick={() => openLightbox(0)}
           className="absolute bottom-4 right-4 px-4 py-2 bg-white rounded-lg font-medium text-sm text-gray-900 shadow-lg flex items-center gap-2 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           aria-label={`Voir les ${photos.length} photos en plein ecran`}
         >
           <Grid3X3 className="w-4 h-4" aria-hidden="true" />
           Voir les {photos.length} photos
-        </motion.button>
+        </button>
       </motion.div>
 
       {/* Lightbox Modal */}
@@ -270,10 +268,8 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
             {/* Thumbnail strip */}
             <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 px-4 overflow-x-auto py-2">
               {photos.map((photo, index) => (
-                <motion.button
+                <button
                   key={photo.id}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
                   className={`relative flex-shrink-0 w-16 h-12 rounded-lg overflow-hidden transition-all ${
                     index === currentIndex
                       ? 'ring-2 ring-white opacity-100'
@@ -288,7 +284,7 @@ export function ArtisanPhotoGrid({ artisan }: ArtisanPhotoGridProps) {
                     className="object-cover"
                     sizes="64px"
                   />
-                </motion.button>
+                </button>
               ))}
             </div>
           </motion.div>

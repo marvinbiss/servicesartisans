@@ -13,13 +13,13 @@ interface FunnelChartProps {
 
 const stageColors: Record<string, string> = {
   created: 'bg-blue-500',
-  dispatched: 'bg-indigo-500',
+  dispatched: 'bg-blue-500',
   viewed: 'bg-yellow-500',
   quoted: 'bg-green-500',
-  accepted: 'bg-emerald-500',
+  accepted: 'bg-blue-500',
   completed: 'bg-green-700',
   declined: 'bg-gray-400',
-  expired: 'bg-orange-400',
+  expired: 'bg-amber-400',
 }
 
 const stageLabels: Record<string, string> = {

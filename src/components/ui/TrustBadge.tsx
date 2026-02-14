@@ -32,22 +32,22 @@ export function TrustBadge({
 
   const styles = {
     gold: {
-      bg: 'bg-gradient-to-r from-amber-100 to-yellow-100',
+      bg: 'bg-amber-100',
       border: 'border-amber-300',
       text: 'text-amber-800',
       icon: 'text-amber-600'
     },
     silver: {
-      bg: 'bg-gradient-to-r from-slate-100 to-gray-100',
+      bg: 'bg-gray-100',
       border: 'border-slate-300',
       text: 'text-slate-700',
       icon: 'text-slate-500'
     },
     bronze: {
-      bg: 'bg-gradient-to-r from-orange-50 to-amber-50',
-      border: 'border-orange-200',
-      text: 'text-orange-700',
-      icon: 'text-orange-500'
+      bg: 'bg-amber-50',
+      border: 'border-amber-200',
+      text: 'text-amber-700',
+      icon: 'text-amber-500'
     },
     none: {
       bg: 'bg-gray-50',

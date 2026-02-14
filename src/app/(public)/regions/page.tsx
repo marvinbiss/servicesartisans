@@ -71,7 +71,7 @@ export default function RegionsIndexPage() {
               <span className="text-sm font-medium text-white/90">France métropolitaine et outre-mer</span>
             </div>
 
-            <h1 className="font-heading text-4xl md:text-5xl lg:text-[3.5rem] font-extrabold mb-6 tracking-[-0.025em] leading-[1.08]">
+            <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 tracking-tight">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-300 via-slate-200 to-white">
                 {regions.length} régions
               </span>
@@ -130,7 +130,7 @@ export default function RegionsIndexPage() {
               <Link
                 key={region.slug}
                 href={`/regions/${region.slug}`}
-                className="bg-white rounded-2xl border border-gray-200 p-6 hover:shadow-lg hover:border-slate-400 hover:-translate-y-0.5 transition-all duration-300 group"
+                className="bg-white rounded-2xl border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200 group"
               >
                 <div className="flex items-start justify-between mb-4">
                   <div>
@@ -139,7 +139,7 @@ export default function RegionsIndexPage() {
                     </h3>
                   </div>
                   <div className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center group-hover:bg-slate-100 transition-colors flex-shrink-0">
-                    <ArrowRight className="w-5 h-5 text-slate-600 group-hover:translate-x-0.5 transition-transform" />
+                    <ArrowRight className="w-5 h-5 text-slate-600 transition-colors" />
                   </div>
                 </div>
 
@@ -188,7 +188,7 @@ export default function RegionsIndexPage() {
             Décrivez votre projet et recevez des devis gratuits de professionnels référencés.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/devis" className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-300">
+            <Link href="/devis" className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white font-semibold px-8 py-3.5 rounded-full shadow-sm hover:shadow-md transition-all duration-200">
               Demander un devis gratuit
             </Link>
             <Link href="/services" className="inline-flex items-center gap-2 text-slate-300 hover:text-white font-medium transition-colors">

@@ -147,7 +147,7 @@ export default function ArtisanPageClient({
           <p className="text-slate-600 mb-6">Cet artisan n&apos;existe pas ou n&apos;est plus disponible.</p>
           <Link
             href="/recherche"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors shadow-md shadow-blue-500/20"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors shadow-md"
           >
             <ArrowLeft className="w-5 h-5" />
             Retour &agrave; la recherche
@@ -195,18 +195,14 @@ export default function ArtisanPageClient({
               </Link>
 
               <div className="flex items-center gap-2">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                <button
                   onClick={handleShare}
                   className="p-2.5 rounded-full bg-gray-50 hover:bg-gray-100 border border-gray-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                   aria-label="Partager cette page"
                 >
                   <Share2 className="w-4.5 h-4.5 text-slate-600" aria-hidden="true" />
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                </button>
+                <button
                   onClick={() => setIsFavorite(!isFavorite)}
                   className={`p-2.5 rounded-full border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
                     isFavorite
@@ -217,7 +213,7 @@ export default function ArtisanPageClient({
                   aria-pressed={isFavorite}
                 >
                   <Heart className={`w-4.5 h-4.5 ${isFavorite ? 'fill-current' : ''}`} aria-hidden="true" />
-                </motion.button>
+                </button>
               </div>
             </div>
           </div>

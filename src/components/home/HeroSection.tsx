@@ -1,133 +1,20 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
-import Link from 'next/link'
 import Image from 'next/image'
-import { motion, useMotionValue, useTransform, animate, useInView, type Variants } from 'framer-motion'
-import { services, villes, departements } from '@/lib/data/france'
+import Link from 'next/link'
+import { motion, type Variants } from 'framer-motion'
 import { heroImage } from '@/lib/data/images'
 import { HeroSearch } from '@/components/search/HeroSearch'
+import { HeroAccent } from '@/components/ui/HeroAccent'
 
-// ── Animated counter component ────────────────────────────────────────
-function AnimatedNumber({ value, suffix = '', duration = 2 }: { value: number; suffix?: string; duration?: number }) {
-  const ref = useRef<HTMLSpanElement>(null)
-  const isInView = useInView(ref, { once: true, margin: '-50px' })
-  const motionValue = useMotionValue(0)
-  const rounded = useTransform(motionValue, (v) => {
-    if (v >= 1000) {
-      return Math.round(v).toLocaleString('fr-FR')
-    }
-    return Math.round(v).toString()
-  })
-
-  useEffect(() => {
-    if (!isInView) return
-    const controls = animate(motionValue, value, {
-      duration,
-      ease: [0.16, 1, 0.3, 1],
-    })
-    return controls.stop
-  }, [isInView, motionValue, value, duration])
-
-  return (
-    <span ref={ref}>
-      <motion.span>{rounded}</motion.span>
-      {suffix}
-    </span>
-  )
-}
-
-// ── Filter chips for popular services ─────────────────────────────────
-const chipServices = [
-  { name: 'Plombier', slug: 'plombier' },
-  { name: 'Électricien', slug: 'electricien' },
-  { name: 'Serrurier', slug: 'serrurier' },
-  { name: 'Peintre', slug: 'peintre-en-batiment' },
-  { name: 'Menuisier', slug: 'menuisier' },
-  { name: 'Chauffagiste', slug: 'chauffagiste' },
-  { name: 'Couvreur', slug: 'couvreur' },
-  { name: 'Maçon', slug: 'macon' },
-]
-
-// ── Stagger animation variants ────────────────────────────────────────
-const containerVariants: Variants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.1,
-    },
-  },
-}
-
-const itemVariants: Variants = {
+// ── Simple fade-in-up variants ───────────────────────────────────────
+const fadeInUp: Variants = {
   hidden: { opacity: 0, y: 24 },
-  visible: {
+  visible: (delay: number = 0) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
-  },
-}
-
-// ── Word-by-word stagger variants for heading ─────────────────────────
-const headingContainerVariants: Variants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.08,
-      delayChildren: 0.3,
-    },
-  },
-}
-
-const wordVariants: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 20,
-    filter: 'blur(8px)',
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    filter: 'blur(0px)',
-    transition: {
-      duration: 0.5,
-      ease: [0.16, 1, 0.3, 1],
-    },
-  },
-}
-
-// ── Subtitle fade-in after heading completes ──────────────────────────
-const subtitleVariants: Variants = {
-  hidden: { opacity: 0, y: 16 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.7,
-      ease: [0.16, 1, 0.3, 1],
-      delay: 1.2,
-    },
-  },
-}
-
-// ── Heading line component with word-by-word reveal ───────────────────
-function AnimatedHeadingLine({ text, className }: { text: string; className?: string }) {
-  const words = text.split(' ')
-  return (
-    <span className={className}>
-      {words.map((word, i) => (
-        <motion.span
-          key={i}
-          variants={wordVariants}
-          className="inline-block"
-          style={{ marginRight: '0.3em' }}
-        >
-          {word}
-        </motion.span>
-      ))}
-    </span>
-  )
+    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1], delay },
+  }),
 }
 
 // ── Main Hero Component ───────────────────────────────────────────────
@@ -135,284 +22,130 @@ export function HeroSection() {
   return (
     <>
       {/* ── HERO SECTION ────────────────────────────────────── */}
-      <section
-        className="relative bg-[#0a0f1e] text-white overflow-hidden"
-        style={{ minHeight: '70vh' }}
-      >
-        {/* Background layers */}
+      <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
+        {/* Background layers — simplified to 2 subtle gradients */}
         <div className="absolute inset-0" aria-hidden="true">
           {/* Background photo */}
           <Image
             src={heroImage.src}
             alt={heroImage.alt}
             fill
-            className="object-cover opacity-20"
+            className="object-cover opacity-15"
             priority
             sizes="100vw"
             placeholder="blur"
             blurDataURL={heroImage.blurDataURL}
           />
-          {/* Dark overlay for text readability */}
-          <div className="absolute inset-0 bg-[#0a0f1e]/70" />
-          {/* Animated mesh gradient */}
+          {/* Dark overlay */}
+          <div className="absolute inset-0 bg-[#0a0f1e]/75" />
+          {/* Gradient 1: blue glow top-center */}
           <div
             className="absolute inset-0"
             style={{
-              background: [
-                'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%)',
-                'radial-gradient(ellipse 60% 60% at 80% 110%, rgba(37,99,235,0.1) 0%, transparent 50%)',
-                'radial-gradient(ellipse 50% 40% at 10% 90%, rgba(59,130,246,0.06) 0%, transparent 50%)',
-              ].join(', '),
-              backgroundSize: '200% 200%, 200% 200%, 200% 200%',
-              animation: 'meshGradient 20s ease-in-out infinite',
+              background:
+                'radial-gradient(ellipse 70% 50% at 50% -5%, rgba(37,99,235,0.15) 0%, transparent 60%)',
             }}
           />
-          {/* Amber accent blob - animated float */}
+          {/* Gradient 2: slate fade bottom */}
           <div
-            className="absolute top-1/3 right-1/4 w-[600px] h-[400px] opacity-[0.07]"
+            className="absolute inset-0"
             style={{
               background:
-                'radial-gradient(circle, rgba(245,158,11,0.6) 0%, transparent 70%)',
-              filter: 'blur(80px)',
-              animation: 'blobFloat 18s ease-in-out infinite',
+                'radial-gradient(ellipse 80% 50% at 50% 110%, rgba(30,41,59,0.4) 0%, transparent 60%)',
             }}
           />
-          {/* Blue accent blob - animated float with offset timing */}
-          <div
-            className="absolute bottom-1/4 left-1/4 w-[500px] h-[500px] opacity-[0.06]"
-            style={{
-              background:
-                'radial-gradient(circle, rgba(59,130,246,0.6) 0%, transparent 70%)',
-              filter: 'blur(80px)',
-              animation: 'blobFloat 22s ease-in-out infinite reverse',
-            }}
-          />
-          {/* Center glow */}
-          <div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] opacity-[0.04]"
-            style={{
-              background:
-                'radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%)',
-            }}
-          />
-          {/* Subtle amber mesh accent */}
-          <div
-            className="absolute inset-0 opacity-[0.03]"
-            style={{
-              background:
-                'radial-gradient(ellipse 40% 40% at 70% 30%, rgba(245,158,11,0.5) 0%, transparent 70%)',
-              animation: 'meshGradient 25s ease-in-out infinite reverse',
-              backgroundSize: '200% 200%',
-            }}
-          />
-          {/* Grid pattern overlay - more subtle */}
-          <div
-            className="absolute inset-0 opacity-[0.02]"
-            style={{
-              backgroundImage:
-                'linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)',
-              backgroundSize: '64px 64px',
-            }}
-          />
-          {/* Bottom fade for trust bar overlap */}
-          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white/[0.03] to-transparent" />
         </div>
 
+        {/* Decorative corner accents */}
+        <HeroAccent />
+
         {/* Hero content */}
-        <div className="relative max-w-6xl mx-auto px-4 pt-24 pb-20 md:pt-32 md:pb-28 flex flex-col items-center">
+        <div className="relative max-w-6xl mx-auto px-4 py-24 md:py-32 lg:py-40 flex flex-col items-center">
+          {/* Heading — single fade-in-up for the whole block */}
           <motion.div
-            variants={containerVariants}
+            variants={fadeInUp}
+            custom={0}
             initial="hidden"
             animate="visible"
-            className="text-center w-full"
+            aria-hidden="true"
+            role="presentation"
+            className="text-center mb-6"
           >
-            {/* Animated badge */}
-            <motion.div variants={itemVariants} className="mb-8">
-              <div className="inline-flex items-center gap-2.5 bg-white/[0.07] backdrop-blur-sm rounded-full px-5 py-2.5 border border-white/10">
-                <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400" />
-                </span>
-                <span className="text-sm text-white/80 font-medium">
-                  350 000+ artisans référencés en France
-                </span>
-              </div>
-            </motion.div>
+            <span className="font-heading text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.05] text-white block">
+              L&apos;annuaire des artisans
+            </span>
+            <span className="font-heading text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.05] text-amber-400 block">
+              qualifi&eacute;s en France
+            </span>
+          </motion.div>
 
-            {/* Visual heading with word-by-word stagger — the real H1 is server-rendered in page.tsx */}
-            <motion.div
-              variants={headingContainerVariants}
-              initial="hidden"
-              animate="visible"
-              aria-hidden="true"
-              role="presentation"
-              className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tighter leading-[1.05] mb-6"
-            >
-              <AnimatedHeadingLine
-                text="L'annuaire des artisans"
-                className="text-white block"
-              />
-              <AnimatedHeadingLine
-                text="qualifiés en France"
-                className="text-amber-400 block"
-              />
-            </motion.div>
+          {/* Subtitle */}
+          <motion.p
+            variants={fadeInUp}
+            custom={0.15}
+            initial="hidden"
+            animate="visible"
+            className="text-lg md:text-xl text-slate-300 font-normal max-w-2xl mx-auto mt-2 mb-10 text-center leading-relaxed"
+          >
+            Trouvez l&apos;artisan id&eacute;al pr&egrave;s de chez vous. Comparez les profils et obtenez des devis gratuits.
+          </motion.p>
 
-            {/* Subtitle — fades in after heading stagger completes */}
-            <motion.p
-              variants={subtitleVariants}
-              initial="hidden"
-              animate="visible"
-              className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10"
-            >
-              Trouvez l&#39;artisan idéal près de chez vous. Comparez les profils et obtenez des devis gratuits.
-            </motion.p>
+          {/* ── SEARCH FORM ─────────────────────────────────── */}
+          <motion.div
+            variants={fadeInUp}
+            custom={0.25}
+            initial="hidden"
+            animate="visible"
+            className="w-full max-w-3xl mx-auto mb-10"
+          >
+            <HeroSearch />
+          </motion.div>
 
-            {/* ── SEARCH FORM ─────────────────────────────────── */}
-            <motion.div
-              variants={itemVariants}
-              className="w-full max-w-3xl mx-auto mb-8"
+          {/* ── CTA BUTTONS ─────────────────────────────────── */}
+          <motion.div
+            variants={fadeInUp}
+            custom={0.35}
+            initial="hidden"
+            animate="visible"
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12"
+          >
+            <Link
+              href="/devis"
+              className="bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-full px-8 py-4 text-lg shadow-sm hover:shadow-md transition-all"
             >
-              <HeroSearch />
-            </motion.div>
+              Demander un devis gratuit
+            </Link>
+            <Link
+              href="/comment-ca-marche"
+              className="bg-white/10 hover:bg-white/20 text-white font-medium rounded-full px-8 py-4 text-lg border border-white/20 backdrop-blur-sm transition-all"
+            >
+              Comment &ccedil;a marche
+            </Link>
+          </motion.div>
 
-            {/* ── FILTER CHIPS ────────────────────────────────── */}
-            <motion.div
-              variants={itemVariants}
-              className="flex flex-wrap items-center justify-center gap-2.5 mb-14"
-            >
-              <span className="text-sm text-white/50 mr-1">Populaire :</span>
-              {chipServices.map((svc) => (
-                <Link
-                  key={svc.slug}
-                  href={`/services/${svc.slug}`}
-                  className="bg-white/5 border border-white/10 text-white/70 hover:bg-white/10 hover:text-white hover:border-white/20 rounded-full px-4 py-2 text-sm transition-all duration-200"
-                >
-                  {svc.name}
-                </Link>
-              ))}
-            </motion.div>
-
-            {/* ── ANIMATED STATS ROW ──────────────────────────── */}
-            <motion.div
-              variants={itemVariants}
-              className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 max-w-3xl mx-auto"
-            >
-              {[
-                { value: 350000, suffix: '+', label: 'artisans' },
-                { value: villes.length, suffix: '', label: 'villes' },
-                { value: departements.length, suffix: '', label: 'départements' },
-                { value: services.length, suffix: '', label: 'métiers' },
-              ].map((stat) => (
-                <div key={stat.label} className="text-center">
-                  <div className="text-3xl md:text-4xl font-extrabold text-white tracking-tight font-heading">
-                    <AnimatedNumber
-                      value={stat.value}
-                      suffix={stat.suffix}
-                      duration={2.2}
-                    />
-                  </div>
-                  <div className="text-sm text-white/50 mt-1">{stat.label}</div>
-                </div>
-              ))}
-            </motion.div>
+          {/* ── TRUST INDICATORS ─────────────────────────────── */}
+          <motion.div
+            variants={fadeInUp}
+            custom={0.45}
+            initial="hidden"
+            animate="visible"
+            className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-slate-400"
+          >
+            <span className="flex items-center gap-1.5">
+              <svg className="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              350 000+ artisans
+            </span>
+            <span className="flex items-center gap-1.5">
+              <svg className="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              Devis gratuit
+            </span>
+            <span className="flex items-center gap-1.5">
+              <svg className="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              Partout en France
+            </span>
           </motion.div>
         </div>
       </section>
-
-      {/* ── FLOATING TRUST BAR ──────────────────────────────── */}
-      <div className="relative z-10 max-w-4xl mx-auto px-4 -mt-12">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="bg-white rounded-2xl shadow-xl p-6 md:p-8"
-        >
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-4">
-            <div className="flex items-center gap-3 justify-center md:justify-start">
-              <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
-                <svg
-                  className="w-5 h-5 text-blue-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"
-                  />
-                </svg>
-              </div>
-              <div>
-                <div className="font-semibold text-slate-900 text-sm">
-                  Données SIREN officielles
-                </div>
-                <div className="text-xs text-slate-500">
-                  Registres de l&#39;État vérifiés
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 justify-center">
-              <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center flex-shrink-0">
-                <svg
-                  className="w-5 h-5 text-amber-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
-                  />
-                </svg>
-              </div>
-              <div>
-                <div className="font-semibold text-slate-900 text-sm">
-                  50+ corps de métier
-                </div>
-                <div className="text-xs text-slate-500">
-                  Tous les métiers du bâtiment
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 justify-center md:justify-end">
-              <div className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center flex-shrink-0">
-                <svg
-                  className="w-5 h-5 text-green-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              </div>
-              <div>
-                <div className="font-semibold text-slate-900 text-sm">
-                  100% gratuit, sans engagement
-                </div>
-                <div className="text-xs text-slate-500">
-                  Recherche et devis offerts
-                </div>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      </div>
     </>
   )
 }

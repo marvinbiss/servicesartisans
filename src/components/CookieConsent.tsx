@@ -124,7 +124,7 @@ export default function CookieConsent() {
         exit={{ y: 100, opacity: 0 }}
         className="fixed bottom-0 left-0 right-0 z-50 p-4 md:p-6"
       >
-        <div className="mx-auto max-w-4xl rounded-2xl bg-white shadow-2xl border border-gray-100" role="dialog" aria-label="Gestion des cookies" aria-modal="false">
+        <div className="mx-auto max-w-4xl rounded-2xl bg-white shadow-lg border border-gray-100" role="dialog" aria-label="Gestion des cookies" aria-modal="false">
           <div className="p-6">
             {/* Header */}
             <div className="flex items-start justify-between gap-4">

@@ -144,7 +144,7 @@ export default function ArtisanLeadStatsPage() {
             title="Taux conversion"
             value={`${stats.conversionRate}%`}
             icon={<Check className="w-5 h-5" />}
-            color="indigo"
+            color="blue"
           />
           <StatCard
             title="Temps réponse"
@@ -164,7 +164,7 @@ export default function ArtisanLeadStatsPage() {
                 { label: 'Consultés', value: stats.viewed, color: 'bg-yellow-500', icon: <TrendingUp className="w-4 h-4 text-yellow-500" /> },
                 { label: 'Devis envoyé', value: stats.quoted, color: 'bg-green-500', icon: <Send className="w-4 h-4 text-green-500" /> },
                 { label: 'Déclinés', value: stats.declined, color: 'bg-gray-400', icon: <X className="w-4 h-4 text-gray-400" /> },
-                { label: 'Acceptés', value: stats.accepted, color: 'bg-emerald-500', icon: <Check className="w-4 h-4 text-emerald-500" /> },
+                { label: 'Acceptés', value: stats.accepted, color: 'bg-blue-500', icon: <Check className="w-4 h-4 text-blue-500" /> },
                 { label: 'Terminés', value: stats.completed, color: 'bg-green-700', icon: <CheckCircle className="w-4 h-4 text-green-700" /> },
               ].map((item) => (
                 <div key={item.label} className="flex items-center gap-3">

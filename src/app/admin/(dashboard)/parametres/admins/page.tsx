@@ -270,7 +270,7 @@ export default function AdminsManagementPage() {
       {/* Add Admin Modal */}
       {addModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div role="dialog" aria-modal="true" aria-labelledby="add-admin-title" className="bg-white rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
+          <div role="dialog" aria-modal="true" aria-labelledby="add-admin-title" className="bg-white rounded-xl shadow-lg max-w-md w-full mx-4 p-6">
             <h3 id="add-admin-title" className="text-lg font-semibold text-gray-900 mb-4">Ajouter un administrateur</h3>
             <div className="space-y-4">
               <div>

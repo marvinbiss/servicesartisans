@@ -282,7 +282,7 @@ export default function AdminAlgorithmePage() {
                 label="Qualité des données"
                 value={config.weight_data_quality}
                 onChange={(v) => update('weight_data_quality', v)}
-                color="purple"
+                color="blue"
               />
             </div>
           </Section>
@@ -389,7 +389,7 @@ export default function AdminAlgorithmePage() {
                 label="Haute"
                 value={config.urgency_high_multiplier}
                 onChange={(v) => update('urgency_high_multiplier', v)}
-                color="orange"
+                color="amber"
               />
               <MultiplierCard
                 label="Urgence"
@@ -547,7 +547,7 @@ function WeightSlider({ label, value, onChange, color }: {
 const MULTIPLIER_COLORS: Record<string, { bg: string; text: string; border: string }> = {
   gray: { bg: 'bg-gray-50', text: 'text-gray-700', border: 'border-gray-200' },
   blue: { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200' },
-  orange: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200' },
+  amber: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200' },
   red: { bg: 'bg-red-50', text: 'text-red-700', border: 'border-red-200' },
 }
 

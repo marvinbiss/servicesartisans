@@ -261,7 +261,7 @@ export function QuickSiteLinks({ className = '' }: { className?: string }) {
 // Composant: Footer de maillage interne pour les pages
 export function InternalLinksFooter({ className = '' }: { className?: string }) {
   return (
-    <section className={`bg-gray-50 py-12 ${className}`}>
+    <section className={`bg-gray-50 py-16 ${className}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-3 gap-8">
           <PopularServicesLinks />

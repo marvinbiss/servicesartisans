@@ -338,7 +338,7 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
 
             {/* Service Dropdown List */}
             {showServiceDropdown && (
-              <div className={`absolute top-full left-0 mt-1 bg-white rounded-xl shadow-2xl border border-gray-200 z-50 overflow-hidden ${
+              <div className={`absolute top-full left-0 mt-1 bg-white rounded-xl shadow-lg border border-gray-200 z-50 overflow-hidden ${
                 isLarge ? 'right-0 p-2' : 'w-64 p-1.5'
               }`}>
                 {/* Inline filter */}
@@ -428,13 +428,13 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
 
             {/* City Suggestions Dropdown */}
             {showCityDropdown && (
-              <div className={`absolute top-full left-0 mt-1 bg-white rounded-xl shadow-2xl border border-gray-200 z-50 max-h-72 overflow-y-auto ${
+              <div className={`absolute top-full left-0 mt-1 bg-white rounded-xl shadow-lg border border-gray-200 z-50 max-h-72 overflow-y-auto ${
                 isLarge ? 'right-0 p-2' : 'w-72 right-0 p-1.5'
               }`}>
                 {/* Popular cities (empty input state) */}
                 {!hasTypedCity && (
                   <>
-                    <div className={`text-gray-400 font-medium ${isLarge ? 'px-3 py-2 text-xs' : 'px-2.5 py-1.5 text-[11px]'}`}>
+                    <div className={`text-gray-400 font-medium ${isLarge ? 'px-3 py-2 text-xs' : 'px-2.5 py-1.5 text-xs'}`}>
                       Villes populaires
                     </div>
                     {popularCities.map((city, idx) => {
@@ -455,11 +455,11 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
                             <span className={`font-medium transition-colors ${isHighlighted ? 'text-blue-700' : 'text-gray-900'} ${isLarge ? 'text-base' : 'text-sm'}`}>
                               {city.name}
                             </span>
-                            <div className={`text-gray-400 ${isLarge ? 'text-xs' : 'text-[11px]'}`}>
+                            <div className={`text-gray-400 ${isLarge ? 'text-xs' : 'text-xs'}`}>
                               {city.departement}
                             </div>
                           </div>
-                          <span className={`text-gray-400 ${isLarge ? 'text-xs' : 'text-[11px]'}`}>{city.pop}</span>
+                          <span className={`text-gray-400 ${isLarge ? 'text-xs' : 'text-xs'}`}>{city.pop}</span>
                         </button>
                       )
                     })}
@@ -469,7 +469,7 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
                 {/* Search results with text highlighting */}
                 {hasTypedCity && filteredCities.length > 0 && (
                   <>
-                    <div className={`text-gray-400 font-medium ${isLarge ? 'px-3 py-2 text-xs' : 'px-2.5 py-1.5 text-[11px]'}`}>
+                    <div className={`text-gray-400 font-medium ${isLarge ? 'px-3 py-2 text-xs' : 'px-2.5 py-1.5 text-xs'}`}>
                       {filteredCities.length} ville{filteredCities.length > 1 ? 's' : ''} trouv{filteredCities.length > 1 ? 'ées' : 'ée'}
                     </div>
                     {filteredCities.map((city, idx) => {
@@ -489,13 +489,13 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
                           <div className="flex-1 text-left min-w-0">
                             <div className={`font-medium transition-colors truncate ${isHighlighted ? 'text-blue-700' : 'text-gray-900'} ${isLarge ? 'text-base' : 'text-sm'}`}>
                               <HighlightedText text={city.name} query={cityQuery} />
-                              <span className={`font-normal ml-1 ${isLarge ? 'text-xs' : 'text-[11px]'} text-gray-400`}>({city.departementCode})</span>
+                              <span className={`font-normal ml-1 ${isLarge ? 'text-xs' : 'text-xs'} text-gray-400`}>({city.departementCode})</span>
                             </div>
-                            <div className={`text-gray-500 truncate ${isLarge ? 'text-xs' : 'text-[11px]'}`}>
+                            <div className={`text-gray-500 truncate ${isLarge ? 'text-xs' : 'text-xs'}`}>
                               {city.departement} &middot; {formatPopulation(city.population)}
                             </div>
                           </div>
-                          <span className={`text-gray-400 bg-gray-100 rounded-full flex-shrink-0 ${isLarge ? 'text-xs px-2 py-0.5' : 'text-[10px] px-1.5 py-0.5'}`}>
+                          <span className={`text-gray-400 bg-gray-100 rounded-full flex-shrink-0 ${isLarge ? 'text-xs px-2 py-0.5' : 'text-xs px-1.5 py-0.5'}`}>
                             {city.codePostal}
                           </span>
                         </button>
@@ -510,7 +510,7 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
                     <div className={`text-gray-500 mb-1 ${isLarge ? 'text-sm' : 'text-xs'}`}>
                       Aucune ville trouv&eacute;e pour <span className="font-semibold text-gray-700">&laquo;&thinsp;{cityQuery}&thinsp;&raquo;</span>
                     </div>
-                    <div className={`text-gray-400 mb-3 ${isLarge ? 'text-xs' : 'text-[11px]'}`}>
+                    <div className={`text-gray-400 mb-3 ${isLarge ? 'text-xs' : 'text-xs'}`}>
                       Essayez une ville voisine :
                     </div>
                     <div className="flex flex-wrap items-center justify-center gap-1.5">
@@ -520,7 +520,7 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
                           type="button"
                           onClick={() => handleSelectCity(fc.name)}
                           className={`inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-full transition-colors font-medium ${
-                            isLarge ? 'text-xs px-2.5 py-1' : 'text-[11px] px-2 py-0.5'
+                            isLarge ? 'text-xs px-2.5 py-1' : 'text-xs px-2 py-0.5'
                           }`}
                         >
                           <MapPin className="w-3 h-3" />
@@ -541,7 +541,7 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
               bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-all flex items-center justify-center gap-2 flex-shrink-0
               ${isLarge
                 ? 'rounded-xl px-8 py-4 text-base shadow-md hover:shadow-lg'
-                : 'rounded-full w-9 h-9 m-0.5 shadow-sm hover:shadow-md hover:scale-105'
+                : 'rounded-full w-9 h-9 m-0.5 shadow-sm hover:shadow-md'
               }
             `}
           >

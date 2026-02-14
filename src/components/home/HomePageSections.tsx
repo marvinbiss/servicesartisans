@@ -2,7 +2,6 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { motion } from 'framer-motion'
 import {
   Users,
   Wrench, Zap, Key, Flame, PaintBucket, Hammer, HardHat, Home, TreeDeciduous, Sparkles,
@@ -11,39 +10,21 @@ import {
   Database, Shield, FileCheck, Banknote, Globe, BadgeCheck
 } from 'lucide-react'
 import { getServiceImage, testimonialImages, beforeAfterPairs, BLUR_PLACEHOLDER } from '@/lib/data/images'
-
-// ─── ANIMATION VARIANTS ────────────────────────────────────────
-
-const premiumEase: [number, number, number, number] = [0.16, 1, 0.3, 1]
-
-const sectionReveal = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: premiumEase } },
-}
-
-const staggerContainer = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.08 } },
-}
-
-const staggerItem = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: premiumEase } },
-}
+import { ScrollReveal } from '@/components/ui/ScrollReveal'
 
 // ─── SERVICES SHOWCASE → BENTO GRID ─────────────────────────────
 
 const services = [
-  { name: 'Plombier', slug: 'plombier', icon: Wrench, color: 'from-blue-500 to-blue-600', bg: 'bg-blue-50', text: 'text-blue-600', count: '35 200+', desc: 'Fuite, robinetterie, chauffe-eau, canalisation' },
-  { name: 'Électricien', slug: 'electricien', icon: Zap, color: 'from-amber-500 to-amber-600', bg: 'bg-amber-50', text: 'text-amber-600', count: '32 400+', desc: 'Installation, dépannage, mise aux normes' },
-  { name: 'Serrurier', slug: 'serrurier', icon: Key, color: 'from-slate-500 to-slate-600', bg: 'bg-slate-100', text: 'text-slate-600', count: '8 500+', desc: 'Ouverture, blindage, serrures' },
-  { name: 'Chauffagiste', slug: 'chauffagiste', icon: Flame, color: 'from-blue-600 to-indigo-600', bg: 'bg-blue-50', text: 'text-blue-600', count: '28 100+', desc: 'Chaudière, pompe à chaleur, radiateur' },
-  { name: 'Peintre', slug: 'peintre-en-batiment', icon: PaintBucket, color: 'from-slate-500 to-slate-600', bg: 'bg-slate-100', text: 'text-slate-600', count: '26 800+', desc: 'Intérieur, extérieur, ravalement' },
-  { name: 'Menuisier', slug: 'menuisier', icon: Hammer, color: 'from-amber-500 to-amber-600', bg: 'bg-amber-50', text: 'text-amber-600', count: '24 300+', desc: 'Fenêtres, portes, agencement' },
-  { name: 'Carreleur', slug: 'carreleur', icon: Sparkles, color: 'from-blue-500 to-indigo-500', bg: 'bg-blue-50', text: 'text-blue-600', count: '18 600+', desc: 'Sol, mur, salle de bain' },
-  { name: 'Couvreur', slug: 'couvreur', icon: Home, color: 'from-indigo-500 to-indigo-600', bg: 'bg-indigo-50', text: 'text-indigo-600', count: '15 400+', desc: 'Toiture, zinguerie, charpente' },
-  { name: 'Maçon', slug: 'macon', icon: HardHat, color: 'from-slate-600 to-slate-700', bg: 'bg-slate-100', text: 'text-slate-600', count: '30 200+', desc: 'Gros œuvre, extension, rénovation' },
-  { name: 'Jardinier', slug: 'jardinier', icon: TreeDeciduous, color: 'from-blue-500 to-blue-600', bg: 'bg-blue-50', text: 'text-blue-600', count: '22 100+', desc: 'Entretien, élagage, aménagement' },
+  { name: 'Plombier', slug: 'plombier', icon: Wrench, color: 'bg-blue-600', bg: 'bg-blue-50', text: 'text-blue-600', count: '35 200+', desc: 'Fuite, robinetterie, chauffe-eau, canalisation' },
+  { name: 'Électricien', slug: 'electricien', icon: Zap, color: 'bg-amber-500', bg: 'bg-amber-50', text: 'text-amber-600', count: '32 400+', desc: 'Installation, dépannage, mise aux normes' },
+  { name: 'Serrurier', slug: 'serrurier', icon: Key, color: 'bg-slate-600', bg: 'bg-slate-100', text: 'text-slate-600', count: '8 500+', desc: 'Ouverture, blindage, serrures' },
+  { name: 'Chauffagiste', slug: 'chauffagiste', icon: Flame, color: 'bg-blue-600', bg: 'bg-blue-50', text: 'text-blue-600', count: '28 100+', desc: 'Chaudière, pompe à chaleur, radiateur' },
+  { name: 'Peintre', slug: 'peintre-en-batiment', icon: PaintBucket, color: 'bg-slate-600', bg: 'bg-slate-100', text: 'text-slate-600', count: '26 800+', desc: 'Intérieur, extérieur, ravalement' },
+  { name: 'Menuisier', slug: 'menuisier', icon: Hammer, color: 'bg-amber-500', bg: 'bg-amber-50', text: 'text-amber-600', count: '24 300+', desc: 'Fenêtres, portes, agencement' },
+  { name: 'Carreleur', slug: 'carreleur', icon: Sparkles, color: 'bg-blue-600', bg: 'bg-blue-50', text: 'text-blue-600', count: '18 600+', desc: 'Sol, mur, salle de bain' },
+  { name: 'Couvreur', slug: 'couvreur', icon: Home, color: 'bg-blue-600', bg: 'bg-blue-50', text: 'text-blue-600', count: '15 400+', desc: 'Toiture, zinguerie, charpente' },
+  { name: 'Maçon', slug: 'macon', icon: HardHat, color: 'bg-slate-600', bg: 'bg-slate-100', text: 'text-slate-600', count: '30 200+', desc: 'Gros œuvre, extension, rénovation' },
+  { name: 'Jardinier', slug: 'jardinier', icon: TreeDeciduous, color: 'bg-blue-600', bg: 'bg-blue-50', text: 'text-blue-600', count: '22 100+', desc: 'Entretien, élagage, aménagement' },
 ]
 
 export function ServicesShowcase() {
@@ -53,47 +34,37 @@ export function ServicesShowcase() {
   const compact = services.slice(6)
 
   return (
-    <section className="py-20 md:py-28 bg-slate-50">
+    <section className="py-24 md:py-28 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
-          variants={sectionReveal}
-          className="text-center mb-14"
-        >
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50 text-blue-600 rounded-full text-sm font-medium mb-5">
-            <Wrench className="w-3.5 h-3.5" />
-            50+ métiers disponibles
+        <ScrollReveal className="text-center mb-14">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="h-px w-8 bg-amber-400" />
+            <span className="text-xs font-semibold uppercase tracking-widest text-blue-600">
+              Nos services
+            </span>
+            <div className="h-px w-8 bg-amber-400" />
           </div>
-          <h2 className="font-heading text-3xl md:text-[2.5rem] font-bold text-slate-900 mb-4 tracking-tight">
-            <span className="inline-block w-2 h-2 rounded-full bg-amber-400 mr-3 mb-1" />
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-slate-900 mb-4 tracking-tight">
             Tous les corps de métier
           </h2>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
             Trouvez le bon professionnel pour chaque besoin, de l&apos;urgence à la rénovation complète.
           </p>
-        </motion.div>
+        </ScrollReveal>
 
         {/* Bento grid */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={staggerContainer}
-          className="space-y-4"
-        >
+        <ScrollReveal delay={200} className="space-y-4">
           {/* Row 1: 2 featured large cards */}
           <div className="grid md:grid-cols-2 gap-4">
-            {featured.map((service) => {
+            {featured.map((service, index) => {
               const Icon = service.icon
               return (
-                <motion.div key={service.slug} variants={staggerItem}>
+                <ScrollReveal key={service.slug} delay={index * 100}>
                   <Link
                     href={`/services/${service.slug}`}
-                    className="group relative flex items-center gap-6 p-8 bg-white/90 backdrop-blur-sm rounded-2xl border border-gray-100/80 hover:border-amber-200/50 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:scale-[1.01] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                    className="group relative flex items-center gap-6 p-8 bg-white rounded-2xl border border-slate-200/60 shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300"
                   >
-                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 bg-gradient-to-br ${service.color} shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]`}>
+                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 ${service.color} shadow-sm transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]`}>
                       <Icon className="w-8 h-8 text-white" />
                     </div>
                     <div className="flex-1 min-w-0">
@@ -112,53 +83,53 @@ export function ServicesShowcase() {
                         src={getServiceImage(service.slug).src}
                         alt={getServiceImage(service.slug).alt}
                         fill
-                        className="object-cover group-hover:scale-110 transition-transform duration-500"
+                        className="object-cover transition-transform duration-500"
                         sizes="96px"
                         placeholder="blur"
                         blurDataURL={BLUR_PLACEHOLDER}
                       />
                     </div>
                   </Link>
-                </motion.div>
+                </ScrollReveal>
               )
             })}
           </div>
 
           {/* Row 2: 4 medium cards — horizontal scroll on mobile, grid on desktop */}
           <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 -mx-4 px-4 pb-2 md:grid md:grid-cols-4 md:overflow-visible md:mx-0 md:px-0 md:pb-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-            {medium.map((service) => {
+            {medium.map((service, index) => {
               const Icon = service.icon
               return (
-                <motion.div key={service.slug} variants={staggerItem} className="snap-start flex-shrink-0 w-[75vw] sm:w-[45vw] md:w-auto">
+                <ScrollReveal key={service.slug} delay={index * 100} className="snap-start flex-shrink-0 w-[75vw] sm:w-[45vw] md:w-auto">
                   <Link
                     href={`/services/${service.slug}`}
-                    className="group relative flex flex-col items-center p-6 bg-white/90 backdrop-blur-sm rounded-2xl border border-gray-100/80 hover:border-amber-200/50 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:scale-[1.01] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                    className="group relative flex flex-col items-center p-6 bg-white rounded-2xl border border-slate-200/60 shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300"
                   >
-                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-4 bg-gradient-to-br ${service.color} shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]`}>
+                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-4 ${service.color} shadow-sm transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]`}>
                       <Icon className="w-7 h-7 text-white" />
                     </div>
                     <span className="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors duration-300 text-center mb-1">
                       {service.name}
                     </span>
                     <span className="text-xs text-slate-400 mb-3">{service.count} artisans</span>
-                    <ArrowRight className="w-4 h-4 text-slate-200 group-hover:text-blue-400 group-hover:translate-x-1 transition-all duration-300" />
+                    <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-blue-500 transition-colors duration-200" />
                   </Link>
-                </motion.div>
+                </ScrollReveal>
               )
             })}
           </div>
 
           {/* Row 3: remaining compact cards in a row */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {compact.map((service) => {
+            {compact.map((service, index) => {
               const Icon = service.icon
               return (
-                <motion.div key={service.slug} variants={staggerItem}>
+                <ScrollReveal key={service.slug} delay={index * 100}>
                   <Link
                     href={`/services/${service.slug}`}
-                    className="group flex items-center gap-4 p-4 bg-white/90 backdrop-blur-sm rounded-2xl border border-gray-100/80 hover:border-amber-200/50 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:scale-[1.01] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                    className="group flex items-center gap-4 p-4 bg-white rounded-2xl border border-slate-200/60 shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300"
                   >
-                    <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 bg-gradient-to-br ${service.color} shadow-md group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
+                    <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${service.color} shadow-sm transition-all duration-300`}>
                       <Icon className="w-5 h-5 text-white" />
                     </div>
                     <div className="flex-1 min-w-0">
@@ -167,29 +138,23 @@ export function ServicesShowcase() {
                       </span>
                       <span className="text-xs text-slate-400">{service.count}</span>
                     </div>
-                    <ArrowRight className="w-4 h-4 text-slate-200 opacity-40 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-blue-400 transition-all duration-300 shrink-0" />
+                    <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-blue-500 transition-colors duration-200 shrink-0" />
                   </Link>
-                </motion.div>
+                </ScrollReveal>
               )
             })}
           </div>
-        </motion.div>
+        </ScrollReveal>
 
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={sectionReveal}
-          className="text-center mt-12"
-        >
+        <ScrollReveal delay={300} className="text-center mt-12">
           <Link
             href="/services"
             className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold group transition-colors"
           >
             Voir tous les services
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="w-4 h-4 transition-colors" />
           </Link>
-        </motion.div>
+        </ScrollReveal>
       </div>
     </section>
   )
@@ -203,83 +168,73 @@ const steps = [
     title: 'Recherchez',
     description: 'Indiquez le service dont vous avez besoin et votre localisation. Notre moteur trouve les artisans disponibles près de chez vous.',
     icon: Search,
-    color: 'from-blue-500 to-blue-600',
+    color: 'bg-blue-600',
     bg: 'bg-blue-50',
-    gradient: 'from-blue-500/20 to-blue-600/20',
+    tint: 'text-blue-200',
   },
   {
     step: '2',
     title: 'Comparez',
     description: 'Consultez les profils détaillés, les informations officielles et les tarifs. Choisissez l\'artisan qui correspond à vos attentes.',
     icon: ClipboardList,
-    color: 'from-amber-500 to-amber-600',
+    color: 'bg-amber-500',
     bg: 'bg-amber-50',
-    gradient: 'from-amber-500/20 to-amber-600/20',
+    tint: 'text-amber-200',
   },
   {
     step: '3',
     title: 'Contactez',
     description: 'Demandez un devis gratuit et sans engagement. L\'artisan vous répond sous 24h avec une proposition détaillée.',
     icon: CheckCircle,
-    color: 'from-emerald-500 to-emerald-600',
-    bg: 'bg-emerald-50',
-    gradient: 'from-emerald-500/20 to-emerald-600/20',
+    color: 'bg-blue-600',
+    bg: 'bg-blue-50',
+    tint: 'text-blue-200',
   },
 ]
 
 export function HowItWorksSection() {
   return (
-    <section className="py-20 md:py-28 bg-white">
+    <section className="py-24 md:py-28 bg-slate-50/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
-          variants={sectionReveal}
-          className="text-center mb-16"
-        >
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 text-emerald-600 rounded-full text-sm font-medium mb-5">
-            <CheckCircle className="w-3.5 h-3.5" />
-            Simple et rapide
+        <ScrollReveal className="text-center mb-16">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="h-px w-8 bg-amber-400" />
+            <span className="text-xs font-semibold uppercase tracking-widest text-blue-600">
+              Comment ça marche
+            </span>
+            <div className="h-px w-8 bg-amber-400" />
           </div>
-          <h2 className="font-heading text-3xl md:text-[2.5rem] font-bold text-slate-900 mb-4 tracking-tight">
-            <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 mr-3 mb-1" />
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-slate-900 mb-4 tracking-tight">
             Comment ça marche ?
           </h2>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
             En 3 étapes simples, trouvez l&apos;artisan idéal pour votre projet.
           </p>
-        </motion.div>
+        </ScrollReveal>
 
-        <motion.div
-          className="grid md:grid-cols-3 gap-8 relative"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={staggerContainer}
-        >
+        <div className="grid md:grid-cols-3 gap-8 relative">
           {/* Connector line (desktop only) */}
           <div className="hidden md:block absolute top-[5.5rem] left-[20%] right-[20%] z-0">
-            <div className="h-0.5 bg-gradient-to-r from-blue-200 via-amber-200 to-emerald-200 rounded-full" />
+            <div className="h-0.5 bg-gradient-to-r from-blue-200 via-amber-200 to-blue-200 rounded-full" />
           </div>
 
-          {steps.map((item) => {
+          {steps.map((item, index) => {
             const Icon = item.icon
             return (
-              <motion.div
+              <ScrollReveal
                 key={item.step}
-                variants={staggerItem}
+                delay={index * 150}
                 className="relative text-center"
               >
                 {/* Large step number background */}
                 <div className="relative z-10 mx-auto mb-8">
                   <div className="relative">
                     {/* Background number */}
-                    <span className={`absolute -top-4 -left-2 font-heading text-[5rem] font-extrabold text-transparent bg-clip-text bg-gradient-to-br ${item.gradient} select-none leading-none opacity-60`}>
+                    <span className={`absolute -top-4 -left-2 font-heading text-7xl font-extrabold ${item.tint} select-none leading-none opacity-60`}>
                       {item.step}
                     </span>
                     {/* Icon */}
-                    <div className={`relative w-20 h-20 bg-gradient-to-br ${item.color} rounded-3xl flex items-center justify-center shadow-lg mx-auto`}>
+                    <div className={`relative w-20 h-20 ${item.color} rounded-2xl flex items-center justify-center shadow-sm mx-auto`}>
                       <Icon className="w-9 h-9 text-white" />
                     </div>
                   </div>
@@ -291,25 +246,19 @@ export function HowItWorksSection() {
 
                 <h3 className="font-heading text-xl font-bold text-slate-900 mb-3">{item.title}</h3>
                 <p className="text-slate-600 leading-relaxed max-w-xs mx-auto">{item.description}</p>
-              </motion.div>
+              </ScrollReveal>
             )
           })}
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={sectionReveal}
-          className="text-center mt-14"
-        >
+        <ScrollReveal delay={400} className="text-center mt-14">
           <Link
             href="/devis"
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
+            className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white font-semibold px-8 py-3.5 rounded-full shadow-sm hover:shadow-md transition-all duration-200"
           >
             Demander un devis gratuit <ArrowRight className="w-5 h-5" />
           </Link>
-        </motion.div>
+        </ScrollReveal>
       </div>
     </section>
   )
@@ -325,9 +274,9 @@ const artisanBenefits = [
 
 export function ArtisanCTASection() {
   return (
-    <section className="relative py-20 md:py-28 overflow-hidden">
+    <section className="relative py-24 md:py-28 overflow-hidden">
       {/* Premium dark background with radial accents */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#0a0f1e] via-[#111827] to-[#0a0f1e]">
+      <div className="absolute inset-0 bg-[#0a0f1e]">
         <div className="absolute inset-0" style={{
           background: 'radial-gradient(ellipse 50% 80% at 20% 50%, rgba(245,158,11,0.08) 0%, transparent 60%), radial-gradient(ellipse 50% 60% at 80% 50%, rgba(59,130,246,0.06) 0%, transparent 50%)',
         }} />
@@ -336,25 +285,16 @@ export function ArtisanCTASection() {
           backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
           backgroundSize: '48px 48px',
         }} />
-        {/* Floating decorative elements */}
-        <div className="absolute top-20 left-10 w-72 h-72 bg-amber-500/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-10 right-20 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-500/3 rounded-full blur-3xl" />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
-          variants={sectionReveal}
-        >
+        <ScrollReveal>
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-sm text-amber-300 rounded-full text-sm font-medium mb-6 border border-white/10">
             <Users className="w-3.5 h-3.5" />
             Rejoignez 350 000+ artisans référencés
           </div>
 
-          <h2 className="font-heading text-3xl md:text-[2.75rem] lg:text-5xl font-bold mb-5 tracking-tight leading-tight">
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold mb-5 tracking-tight leading-tight">
             Vous êtes artisan ?{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-200 to-amber-400">
               Rendez-vous visible
@@ -365,42 +305,38 @@ export function ArtisanCTASection() {
             Réclamez votre profil et recevez des demandes de devis qualifiées.
           </p>
 
-          <motion.div
-            className="flex flex-col sm:flex-row items-center justify-center gap-5 mb-12"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-          >
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-5 mb-12">
             {artisanBenefits.map((b, i) => (
-              <motion.div
+              <ScrollReveal
                 key={i}
-                variants={staggerItem}
-                className="flex items-center gap-3"
+                delay={i * 100}
+                direction="none"
               >
-                <div className="w-10 h-10 bg-white/[0.08] backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/10">
-                  <b.icon className="w-5 h-5 text-amber-300" />
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-white/[0.08] backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/10">
+                    <b.icon className="w-5 h-5 text-amber-300" />
+                  </div>
+                  <span className="text-sm text-slate-300 text-left">{b.text}</span>
                 </div>
-                <span className="text-sm text-slate-300 text-left">{b.text}</span>
-              </motion.div>
+              </ScrollReveal>
             ))}
-          </motion.div>
+          </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/inscription-artisan"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 text-slate-900 font-bold px-8 py-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-[0_8px_30px_-4px_rgba(245,158,11,0.5)] hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
+              className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white font-semibold px-8 py-4 rounded-full shadow-sm hover:shadow-md transition-all duration-200"
             >
               Inscrire mon entreprise <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
               href="/comment-ca-marche"
-              className="inline-flex items-center gap-2 text-white/70 hover:text-white font-medium px-6 py-4 rounded-xl border border-white/15 hover:border-white/30 hover:bg-white/5 hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
+              className="inline-flex items-center gap-2 text-white/70 hover:text-white font-medium px-6 py-4 rounded-full border border-white/15 hover:border-white/30 hover:bg-white/5 transition-colors duration-200"
             >
               En savoir plus
             </Link>
           </div>
-        </motion.div>
+        </ScrollReveal>
       </div>
     </section>
   )
@@ -441,21 +377,17 @@ const trustPoints = [
 
 export function TrustSection() {
   return (
-    <section className="py-20 md:py-28 bg-white">
+    <section className="py-24 md:py-28 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
-          variants={sectionReveal}
-          className="text-center mb-16"
-        >
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50 text-blue-600 rounded-full text-sm font-medium mb-5">
-            <Shield className="w-3.5 h-3.5" />
-            Pourquoi ServicesArtisans ?
+        <ScrollReveal className="text-center mb-16">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="h-px w-8 bg-amber-400" />
+            <span className="text-xs font-semibold uppercase tracking-widest text-blue-600">
+              Pourquoi nous choisir
+            </span>
+            <div className="h-px w-8 bg-amber-400" />
           </div>
-          <h2 className="font-heading text-3xl md:text-[2.5rem] font-bold text-slate-900 mb-4 tracking-tight">
-            <span className="inline-block w-2 h-2 rounded-full bg-blue-400 mr-3 mb-1" />
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-slate-900 mb-4 tracking-tight">
             Des données que vous pouvez{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-400">
               vérifier
@@ -465,24 +397,18 @@ export function TrustSection() {
             Contrairement aux annuaires classiques, nos données proviennent directement
             des registres officiels de l&apos;État français. Transparence et fiabilité garanties.
           </p>
-        </motion.div>
+        </ScrollReveal>
 
-        <motion.div
-          className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={staggerContainer}
-        >
-          {trustPoints.map((item) => {
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {trustPoints.map((item, index) => {
             const Icon = item.icon
             return (
-              <motion.div
+              <ScrollReveal
                 key={item.title}
-                variants={staggerItem}
-                className="group relative bg-gradient-to-b from-slate-50/90 to-white/90 backdrop-blur-sm rounded-2xl p-6 border border-gray-100/80 hover:border-amber-200/50 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:scale-[1.01] transition-all duration-300 ease-out"
+                delay={index * 100}
+                className="group relative bg-white rounded-2xl p-6 border border-slate-200/60 shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300"
               >
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
+                <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mb-4">
                   <Icon className="w-6 h-6 text-white" />
                 </div>
                 <div className="font-heading text-2xl font-extrabold text-slate-900 mb-0.5">
@@ -491,26 +417,20 @@ export function TrustSection() {
                 <div className="text-xs text-blue-600 font-medium mb-3">{item.statLabel}</div>
                 <h3 className="font-heading text-lg font-bold text-slate-900 mb-2">{item.title}</h3>
                 <p className="text-sm text-slate-600 leading-relaxed">{item.description}</p>
-              </motion.div>
+              </ScrollReveal>
             )
           })}
-        </motion.div>
+        </div>
 
         {/* Source attribution */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={sectionReveal}
-          className="mt-10 text-center"
-        >
+        <ScrollReveal delay={400} className="mt-10 text-center">
           <div className="inline-flex items-center gap-3 px-5 py-3 bg-slate-50 rounded-full border border-slate-100">
             <BadgeCheck className="w-5 h-5 text-blue-500" />
             <span className="text-sm text-slate-600">
               Source : <strong className="text-slate-900">API Annuaire des Entreprises</strong> — données ouvertes du gouvernement français
             </span>
           </div>
-        </motion.div>
+        </ScrollReveal>
       </div>
     </section>
   )
@@ -520,40 +440,30 @@ export function TrustSection() {
 
 export function TestimonialsSection() {
   return (
-    <section className="py-20 md:py-28 bg-slate-50">
+    <section className="py-24 md:py-28 bg-slate-50/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
-          variants={sectionReveal}
-          className="text-center mb-14"
-        >
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-amber-50 text-amber-600 rounded-full text-sm font-medium mb-5">
-            <Star className="w-3.5 h-3.5" />
-            Avis clients
+        <ScrollReveal className="text-center mb-14">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="h-px w-8 bg-amber-400" />
+            <span className="text-xs font-semibold uppercase tracking-widest text-blue-600">
+              Témoignages
+            </span>
+            <div className="h-px w-8 bg-amber-400" />
           </div>
-          <h2 className="font-heading text-3xl md:text-[2.5rem] font-bold text-slate-900 mb-4 tracking-tight">
-            <span className="inline-block w-2 h-2 rounded-full bg-amber-400 mr-3 mb-1" />
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-slate-900 mb-4 tracking-tight">
             Ils nous font confiance
           </h2>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
             Des milliers de particuliers trouvent chaque jour l&apos;artisan idéal sur ServicesArtisans.
           </p>
-        </motion.div>
+        </ScrollReveal>
 
-        <motion.div
-          className="grid md:grid-cols-3 gap-8"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={staggerContainer}
-        >
+        <div className="grid md:grid-cols-3 gap-8">
           {testimonialImages.map((t, i) => (
-            <motion.div
+            <ScrollReveal
               key={i}
-              variants={staggerItem}
-              className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+              delay={i * 100}
+              className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200/60 hover:shadow-md transition-shadow duration-200"
             >
               <div className="flex items-center gap-4 mb-4">
                 <div className="relative w-14 h-14 rounded-full overflow-hidden shrink-0">
@@ -570,9 +480,9 @@ export function TestimonialsSection() {
                 ))}
               </div>
               <p className="text-slate-600 leading-relaxed">{t.text}</p>
-            </motion.div>
+            </ScrollReveal>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   )
@@ -582,40 +492,30 @@ export function TestimonialsSection() {
 
 export function BeforeAfterShowcase() {
   return (
-    <section className="py-20 md:py-28 bg-white">
+    <section className="py-24 md:py-28 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
-          variants={sectionReveal}
-          className="text-center mb-14"
-        >
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50 text-blue-600 rounded-full text-sm font-medium mb-5">
-            <Sparkles className="w-3.5 h-3.5" />
-            Réalisations
+        <ScrollReveal className="text-center mb-14">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="h-px w-8 bg-amber-400" />
+            <span className="text-xs font-semibold uppercase tracking-widest text-blue-600">
+              Réalisations
+            </span>
+            <div className="h-px w-8 bg-amber-400" />
           </div>
-          <h2 className="font-heading text-3xl md:text-[2.5rem] font-bold text-slate-900 mb-4 tracking-tight">
-            <span className="inline-block w-2 h-2 rounded-full bg-blue-400 mr-3 mb-1" />
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-slate-900 mb-4 tracking-tight">
             Avant / Après
           </h2>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
             Découvrez les transformations réalisées par nos artisans référencés.
           </p>
-        </motion.div>
+        </ScrollReveal>
 
-        <motion.div
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={staggerContainer}
-        >
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {beforeAfterPairs.slice(0, 6).map((pair, i) => (
-            <motion.div
+            <ScrollReveal
               key={i}
-              variants={staggerItem}
-              className="group relative bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+              delay={i * 100}
+              className="group relative bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200/60 hover:shadow-md transition-shadow duration-200"
             >
               <div className="grid grid-cols-2 h-48">
                 <div className="relative">
@@ -626,7 +526,7 @@ export function BeforeAfterShowcase() {
                 </div>
                 <div className="relative">
                   <Image src={pair.after} alt={`Après — ${pair.alt}`} fill className="object-cover" sizes="(max-width: 768px) 50vw, 25vw" placeholder="blur" blurDataURL={BLUR_PLACEHOLDER} />
-                  <div className="absolute top-2 right-2 bg-emerald-500/90 text-white text-xs font-bold px-2 py-1 rounded">
+                  <div className="absolute top-2 right-2 bg-blue-500/90 text-white text-xs font-bold px-2 py-1 rounded">
                     APRÈS
                   </div>
                 </div>
@@ -635,9 +535,9 @@ export function BeforeAfterShowcase() {
                 <span className="text-sm font-semibold text-slate-900">{pair.category}</span>
                 <span className="text-xs text-slate-500 ml-2">{pair.alt}</span>
               </div>
-            </motion.div>
+            </ScrollReveal>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   )

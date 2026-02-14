@@ -56,9 +56,9 @@ const STATUS_COLORS: Record<string, string> = {
   en_attente: 'bg-yellow-100 text-yellow-700',
   en_traitement: 'bg-blue-100 text-blue-700',
   devis_recus: 'bg-green-100 text-green-700',
-  accepte: 'bg-emerald-100 text-emerald-700',
+  accepte: 'bg-blue-100 text-blue-700',
   termine: 'bg-green-100 text-green-800',
-  expire: 'bg-orange-100 text-orange-700',
+  expire: 'bg-amber-100 text-amber-700',
   refuse: 'bg-red-100 text-red-700',
 }
 

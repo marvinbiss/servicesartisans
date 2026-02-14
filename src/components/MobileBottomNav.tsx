@@ -37,12 +37,12 @@ export default function MobileBottomNav() {
               key={href}
               href={href}
               aria-current={isActive ? 'page' : undefined}
-              className={`flex flex-col items-center justify-center gap-0.5 w-full h-full transition-colors touch-manipulation active:scale-95 ${
+              className={`flex flex-col items-center justify-center gap-0.5 w-full h-full transition-colors touch-manipulation ${
                 isActive ? 'text-amber-600' : 'text-gray-500'
               }`}
             >
               <Icon className={`w-5 h-5 ${isActive ? 'stroke-[2.5]' : 'stroke-[1.5]'}`} />
-              <span className={`text-[10px] ${isActive ? 'font-semibold' : 'font-medium'}`}>{label}</span>
+              <span className={`text-xs ${isActive ? 'font-semibold' : 'font-medium'}`}>{label}</span>
             </Link>
           )
         })}

@@ -146,7 +146,7 @@ export default function AbonnementArtisanPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+      <div className="bg-blue-600 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center gap-4">
             <Link href="/espace-artisan/dashboard" className="text-white/80 hover:text-white">
@@ -214,7 +214,7 @@ export default function AbonnementArtisanPage() {
           {/* Content */}
           <div className="lg:col-span-3 space-y-8">
             {/* Current plan */}
-            <div className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-xl p-6 text-white">
+            <div className="bg-blue-600 rounded-xl p-6 text-white">
               <div className="flex items-center justify-between">
                 <div>
                   <div className="flex items-center gap-2 mb-2">
@@ -286,7 +286,7 @@ export default function AbonnementArtisanPage() {
                         onClick={() => openUpgradeModal(plan.id)}
                         className={`w-full py-3 rounded-lg font-medium transition-colors ${
                           plan.id === 'premium'
-                            ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white hover:from-yellow-600 hover:to-orange-600'
+                            ? 'bg-amber-500 hover:bg-amber-600 text-white'
                             : 'bg-blue-600 text-white hover:bg-blue-700'
                         }`}
                       >
@@ -313,7 +313,7 @@ export default function AbonnementArtisanPage() {
               </h2>
               <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-8 bg-gradient-to-r from-blue-600 to-blue-800 rounded flex items-center justify-center text-white text-xs font-bold">
+                  <div className="w-12 h-8 bg-blue-600 rounded flex items-center justify-center text-white text-xs font-bold">
                     VISA
                   </div>
                   <div>

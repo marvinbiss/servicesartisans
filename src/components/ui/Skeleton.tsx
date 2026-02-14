@@ -74,7 +74,7 @@ export function PageSkeleton() {
   return (
     <div className="min-h-screen">
       {/* Hero skeleton */}
-      <div className="bg-gradient-to-r from-gray-200 to-gray-300 py-16">
+      <div className="bg-gray-200 py-16">
         <div className="max-w-7xl mx-auto px-4">
           <Skeleton className="h-10 w-96 mb-4 bg-gray-300" />
           <Skeleton className="h-6 w-72 bg-gray-300" />

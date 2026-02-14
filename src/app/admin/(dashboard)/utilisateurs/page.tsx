@@ -356,7 +356,7 @@ export default function AdminUsersPage() {
               setBanModal({ open: false, userId: '', userName: '', isBanned: false })
               setBanReason('')
             }} />
-            <div role="dialog" aria-modal="true" aria-labelledby="ban-modal-title" className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6">
+            <div role="dialog" aria-modal="true" aria-labelledby="ban-modal-title" className="relative bg-white rounded-xl shadow-lg max-w-md w-full p-6">
               <h3 id="ban-modal-title" className="text-lg font-semibold text-gray-900 mb-2">
                 {banModal.isBanned ? 'D\u00e9bannir utilisateur' : 'Bannir utilisateur'}
               </h3>

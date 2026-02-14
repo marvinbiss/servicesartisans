@@ -145,7 +145,7 @@ export default function DevisPage() {
           <div className="text-center max-w-3xl mx-auto">
             <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
               Recevez <span className="whitespace-nowrap">jusqu&apos;à</span>{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-300 to-cyan-300 whitespace-nowrap">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-300 to-blue-300 whitespace-nowrap">
                 3&nbsp;devis gratuits
               </span>{' '}
               <span className="whitespace-nowrap">d&apos;artisans</span> référencés
@@ -182,7 +182,7 @@ export default function DevisPage() {
       </section>
 
       {/* ─── HOW IT WORKS ─────────────────────────────────────── */}
-      <section className="py-20 bg-white">
+      <section className="py-24 bg-white">
         <div className="max-w-5xl mx-auto px-4">
           <div className="text-center mb-14">
             <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-2">Simple et rapide</p>
@@ -205,7 +205,7 @@ export default function DevisPage() {
               return (
                 <div key={item.number} className="relative text-center">
                   <div className="relative z-10 mx-auto mb-6">
-                    <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg mx-auto">
+                    <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center shadow-md mx-auto">
                       <Icon className="w-8 h-8 text-white" />
                     </div>
                     <div className="absolute -top-2 -right-2 w-7 h-7 bg-white border-2 border-gray-200 rounded-full flex items-center justify-center shadow-sm">
@@ -226,7 +226,7 @@ export default function DevisPage() {
       </section>
 
       {/* ─── FAQ ──────────────────────────────────────────────── */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-24 bg-gray-50">
         <div className="max-w-3xl mx-auto px-4">
           <div className="text-center mb-12">
             <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-2">FAQ</p>
@@ -269,7 +269,7 @@ export default function DevisPage() {
           </p>
           <a
             href="#formulaire"
-            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
+            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3.5 rounded-full transition-colors duration-200"
           >
             <ArrowUp className="w-5 h-5" />
             Remplir le formulaire

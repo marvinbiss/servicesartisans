@@ -70,10 +70,10 @@ export function ArtisanBusinessCard({ artisan }: ArtisanBusinessCardProps) {
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
       {/* Header with verification badge */}
-      <div className="px-6 py-5 bg-gradient-to-r from-slate-50 via-blue-50/30 to-slate-50 border-b border-gray-100">
+      <div className="px-6 py-5 bg-slate-50 border-b border-gray-100">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-sm shadow-blue-500/20">
+            <div className="w-11 h-11 rounded-xl bg-blue-600 flex items-center justify-center shadow-sm">
               <Shield className="w-5 h-5 text-white" aria-hidden="true" />
             </div>
             <div>
@@ -112,7 +112,7 @@ export function ArtisanBusinessCard({ artisan }: ArtisanBusinessCardProps) {
           {artisan.legal_form && (
             <div className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50/80 border border-slate-100 transition-colors hover:bg-slate-100/80">
               <div className="w-9 h-9 rounded-lg bg-white flex items-center justify-center shadow-sm flex-shrink-0">
-                <Scale className="w-4 h-4 text-purple-600" aria-hidden="true" />
+                <Scale className="w-4 h-4 text-blue-600" aria-hidden="true" />
               </div>
               <div className="min-w-0">
                 <dt className="text-xs font-medium text-slate-500 uppercase tracking-wide">Forme juridique</dt>
@@ -164,7 +164,7 @@ export function ArtisanBusinessCard({ artisan }: ArtisanBusinessCardProps) {
               {isValidPhone(artisan.phone) && (
                 <a
                   href={`tel:${artisan.phone.replace(/\s/g, '')}`}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition-all duration-200 shadow-sm shadow-blue-500/20 hover:shadow-md hover:shadow-blue-500/25 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                   aria-label={`Appeler le ${formatFrenchPhone(artisan.phone)}`}
                 >
                   <Phone className="w-4 h-4" aria-hidden="true" />
