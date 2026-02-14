@@ -2,6 +2,8 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight, MapPin, Shield, Star, Clock } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
+import JsonLd from '@/components/JsonLd'
+import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { HeroSearch } from '@/components/search/HeroSearch'
 import { SITE_URL } from '@/lib/seo/config'
 import { services, villes, regions } from '@/lib/data/france'
@@ -29,6 +31,10 @@ export const metadata: Metadata = {
 export default function RecherchePage() {
   return (
     <div className="min-h-screen bg-gray-50">
+      <JsonLd data={getBreadcrumbSchema([
+        { name: 'Accueil', url: '/' },
+        { name: 'Recherche', url: '/recherche' },
+      ])} />
       {/* Breadcrumb */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">

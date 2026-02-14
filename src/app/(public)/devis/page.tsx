@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import { Shield, Clock, Users, Search, FileText, CheckCircle, ChevronDown, Star, ArrowUp } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import DevisForm from '@/components/DevisForm'
 
 export const metadata: Metadata = {
@@ -106,6 +106,7 @@ export default function DevisPage() {
             { name: 'Accueil', url: '/' },
             { name: 'Demander un devis', url: '/devis' },
           ]),
+          getFAQSchema(faqItems.map(item => ({ question: item.question, answer: item.answer }))),
         ]}
       />
 

@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
+import Breadcrumb from '@/components/Breadcrumb'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 
 export const metadata: Metadata = {
@@ -32,6 +33,7 @@ export default function ConfidentialitePage() {
       {/* Header */}
       <section className="bg-white border-b">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <Breadcrumb items={[{ label: 'Confidentialité' }]} className="mb-4" />
           <h1 className="font-heading text-3xl font-bold text-gray-900">
             Politique de confidentialité
           </h1>

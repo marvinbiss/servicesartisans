@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://servicesartisans.fr/carrieres',
   },
-  robots: { index: true, follow: true },
+  // robots inherited from layout.tsx (noindex for pre-launch)
 }
 
 export default function CarrieresPage() {

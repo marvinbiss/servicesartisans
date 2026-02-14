@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { MessageCircle, Users, Scale, Clock, Mail, ArrowRight } from 'lucide-react'
+import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { companyIdentity } from '@/lib/config/company-identity'
@@ -90,6 +91,12 @@ export default function MediationPage() {
           <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-50 to-transparent" />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-28 md:pt-14 md:pb-36 text-center">
+          <div className="mb-10">
+            <Breadcrumb
+              items={[{ label: 'Médiation' }]}
+              className="text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
+            />
+          </div>
           <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
             M&eacute;diation et r&eacute;solution des litiges
           </h1>
