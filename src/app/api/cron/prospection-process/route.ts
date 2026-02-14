@@ -31,7 +31,6 @@ export async function GET(request: Request) {
       .from('prospection_campaigns')
       .select('id, name, batch_size')
       .eq('status', 'sending')
-      .order('started_at', { ascending: true })
 
     if (error) {
       logger.error('[Cron] Error fetching active campaigns', error)
