@@ -1,5 +1,5 @@
 /**
- * Banque d'images centralisée — 150+ photos stratégiques
+ * Banque d'images centralisée — 99 photos uniques
  * Source : Unsplash (licence gratuite, usage commercial autorisé)
  *
  * RÈGLE D'OR : ZÉRO doublon. Chaque ID Unsplash n'apparaît qu'UNE SEULE fois
@@ -7,14 +7,14 @@
  *
  * Organisation :
  * - Hero homepage (1)
- * - Services / métiers (25 uniques)
+ * - Services / métiers (25 uniques + 1 défaut)
  * - Artisans confiance (3 visages)
  * - Témoignages clients (3)
  * - Avant/Après (10 paires = 20, tous uniques)
  * - Villes top 20 (20 uniques)
  * - Pages statiques (7)
  * - Ambiance (3)
- * - Blog (dynamique via getBlogImage)
+ * - Blog (12 topics + 3 catégories + 1 défaut)
  */
 
 // ── Helper ───────────────────────────────────────────────────────
@@ -35,110 +35,110 @@ export const heroImage = {
 // ── 2. IMAGES PAR SERVICE (métier) ───────────────────────────────
 export const serviceImages: Record<string, { src: string; alt: string }> = {
   plombier: {
-    src: unsplash('photo-1585704032915-c3400ca199e7'),
+    src: unsplash('photo-1621905252507-b35492cc74b4'),
     alt: 'Plombier professionnel réparant une canalisation',
   },
   electricien: {
-    src: unsplash('photo-1621905251189-08b45d6a269e'),
+    src: unsplash('photo-1636218685495-8f6545aadb71'),
     alt: 'Électricien installant un tableau électrique',
   },
   serrurier: {
-    src: unsplash('photo-1654944932733-bca31b703dd7'),
-    alt: 'Clés insérées dans la serrure d\'une porte en bois',
+    src: unsplash('photo-1575908539614-ff89490f4a78'),
+    alt: 'Serrurier professionnel taillant des clés dans son atelier',
   },
   chauffagiste: {
-    src: unsplash('photo-1586657730293-81043373803d'),
+    src: unsplash('photo-1572537842835-08c65286efef'),
     alt: 'Thermostat mural réglé par un chauffagiste professionnel',
   },
   'peintre-en-batiment': {
-    src: unsplash('photo-1562259949-e8e7689d7828'),
-    alt: 'Peintre en bâtiment appliquant de la peinture sur un mur',
+    src: unsplash('photo-1593189094075-3dad030bfcab'),
+    alt: 'Peintre en bâtiment appliquant de la peinture au rouleau',
   },
   menuisier: {
-    src: unsplash('photo-1600585152220-90363fe7e115'),
+    src: unsplash('photo-1678184098226-114d9295540e'),
     alt: 'Menuisier travaillant le bois dans son atelier',
   },
   carreleur: {
-    src: unsplash('photo-1584622650111-993a426fbf0a'),
+    src: unsplash('photo-1590880265945-6b43effeb599'),
     alt: 'Carreleur posant du carrelage dans une salle de bain',
   },
   couvreur: {
-    src: unsplash('photo-1563993356056-b23a9cd265ad'),
+    src: unsplash('photo-1604732998734-9f9529104a77'),
     alt: 'Tuiles de toiture en terre cuite sous un ciel bleu',
   },
   macon: {
-    src: unsplash('photo-1513467535987-fd81bc7d62f8'),
+    src: unsplash('photo-1534759844553-c2f76b04e35f'),
     alt: 'Maçon construisant un mur en briques',
   },
   jardinier: {
-    src: unsplash('photo-1416879595882-3373a0480b5b'),
+    src: unsplash('photo-1626075218494-89e92b375502'),
     alt: 'Jardinier entretenant un beau jardin paysager',
   },
   climaticien: {
-    src: unsplash('photo-1621274147744-cfb5694bb233'),
+    src: unsplash('photo-1588090272888-033e92b141b1'),
     alt: 'Technicien installant une climatisation murale',
   },
   'installateur-de-cuisine': {
-    src: unsplash('photo-1556909114-f6e7ad7d3136'),
+    src: unsplash('photo-1556912167-f556f1f39fdf'),
     alt: 'Cuisine moderne installée par un professionnel',
   },
   'installateur-de-salle-de-bain': {
-    src: unsplash('photo-1552321554-5fefe8c9ef14'),
+    src: unsplash('photo-1758548157466-7c454382035a'),
     alt: 'Salle de bain rénovée avec vasque moderne',
   },
   vitrier: {
-    src: unsplash('photo-1497366216548-37526070297c'),
+    src: unsplash('photo-1557749575-2ad9647f820d'),
     alt: 'Baie vitrée lumineuse posée par un vitrier',
   },
   'poseur-de-parquet': {
-    src: unsplash('photo-1558618666-fcd25c85f82e'),
+    src: unsplash('photo-1571091374875-3e354ceb6ed3'),
     alt: 'Artisan posant un parquet en bois massif',
   },
   facade: {
-    src: unsplash('photo-1486406146926-c627a92ad1ab'),
+    src: unsplash('photo-1597758011002-9a3e9537dd8b'),
     alt: 'Façade d\'immeuble en cours de ravalement',
   },
   charpentier: {
-    src: unsplash('photo-1541123603104-512919d6a96c'),
+    src: unsplash('photo-1569370029765-33aaab1f4851'),
     alt: 'Charpentier assemblant une structure en bois',
   },
   demolition: {
-    src: unsplash('photo-1589939705384-5185137a7f0f'),
+    src: unsplash('photo-1754808682731-5d4430b38e11'),
     alt: 'Travaux de démolition sur un chantier',
   },
   terrassement: {
-    src: unsplash('photo-1581094794329-c8112a89af12'),
+    src: unsplash('photo-1567238563567-b99d8ac66e9b'),
     alt: 'Engin de terrassement nivelant un terrain',
   },
   'isolation-thermique': {
-    src: unsplash('photo-1607400201889-565b1ee75f8e'),
+    src: unsplash('photo-1631277190979-1704e8c7d574'),
     alt: 'Artisan posant de l\'isolation thermique en laine de roche',
   },
   domotique: {
-    src: unsplash('photo-1558002038-1055907df827'),
+    src: unsplash('photo-1545259741-2ea3ebf61fa3'),
     alt: 'Installation domotique dans une maison connectée',
   },
   paysagiste: {
-    src: unsplash('photo-1585320806297-9794b3e4eeae'),
+    src: unsplash('photo-1595387426256-cc153122a6f1'),
     alt: 'Jardin paysager aménagé par un professionnel',
   },
   pisciniste: {
-    src: unsplash('photo-1576013551627-0cc20b96c2a7'),
+    src: unsplash('photo-1650519876461-c516be8be76c'),
     alt: 'Piscine construite par un artisan pisciniste',
   },
   'alarme-securite': {
-    src: unsplash('photo-1585060544812-6b45742d762f'),
+    src: unsplash('photo-1528312635006-8ea0bc49ec63'),
     alt: 'Caméra de surveillance et système de sécurité résidentiel',
   },
   plaquiste: {
-    src: unsplash('photo-1581578731548-c64695cc6952'),
+    src: unsplash('photo-1559126698-1906840f3c95'),
     alt: 'Plaquiste posant des plaques de plâtre sur une ossature',
   },
 }
 
 // Image par défaut pour les services non listés
 export const defaultServiceImage = {
-  src: unsplash('photo-1503387762-592deb58ef4e'),
+  src: unsplash('photo-1575839127400-6b9e36bf97f8'),
   alt: 'Artisan professionnel au travail',
 }
 
@@ -150,19 +150,19 @@ export function getServiceImage(slug: string) {
 // ── 3. VISAGES ARTISANS (confiance) ──────────────────────────────
 export const artisanFaces = [
   {
-    src: unsplash('photo-1560250097-0b93528c311a', 400, 400),
+    src: unsplash('photo-1580810734868-7ea4e9130c01', 400, 400),
     alt: 'Portrait d\'un artisan professionnel souriant',
     name: 'Thomas M.',
     metier: 'Plombier · Paris',
   },
   {
-    src: unsplash('photo-1507003211169-0a1dd7228f2d', 400, 400),
+    src: unsplash('photo-1616179283726-e96f7aa16a56', 400, 400),
     alt: 'Portrait d\'un artisan expérimenté',
     name: 'Marc D.',
     metier: 'Électricien · Lyon',
   },
   {
-    src: unsplash('photo-1472099645785-5658abf4ff4e', 400, 400),
+    src: unsplash('photo-1630670401138-9a5c91abad18', 400, 400),
     alt: 'Portrait d\'un artisan qualifié',
     name: 'Pierre L.',
     metier: 'Menuisier · Marseille',
@@ -172,7 +172,7 @@ export const artisanFaces = [
 // ── 4. TÉMOIGNAGES CLIENTS ───────────────────────────────────────
 export const testimonialImages = [
   {
-    src: unsplash('photo-1438761681033-6461ffad8d80', 400, 400),
+    src: unsplash('photo-1527694194835-f9a07834b609', 400, 400),
     alt: 'Cliente satisfaite après rénovation',
     name: 'Sophie R.',
     text: 'J\'ai trouvé un excellent plombier en 5 minutes. Travail impeccable !',
@@ -180,7 +180,7 @@ export const testimonialImages = [
     note: 5,
   },
   {
-    src: unsplash('photo-1500648767791-00dcc994a43e', 400, 400),
+    src: unsplash('photo-1565288692954-a8d2b8f930fb', 400, 400),
     alt: 'Client satisfait après travaux',
     name: 'Jean-Pierre V.',
     text: 'Devis reçu en 24h, chantier terminé dans les temps. Je recommande.',
@@ -188,7 +188,7 @@ export const testimonialImages = [
     note: 5,
   },
   {
-    src: unsplash('photo-1494790108377-be9c29b29330', 400, 400),
+    src: unsplash('photo-1590304786889-677d013ff31f', 400, 400),
     alt: 'Cliente satisfaite des travaux réalisés',
     name: 'Marie C.',
     text: 'Rénovation complète de ma salle de bain. Résultat magnifique.',
@@ -200,62 +200,62 @@ export const testimonialImages = [
 // ── 5. AVANT / APRÈS (aucun chevauchement avec les services) ────
 export const beforeAfterPairs = [
   {
-    before: unsplash('photo-1584622781564-1d987f7333c1'),
-    after: unsplash('photo-1620626011761-996317b8d101'),
+    before: unsplash('photo-1539062680227-66125f17d777'),
+    after: unsplash('photo-1576698483491-8c43f0862543'),
     alt: 'Rénovation salle de bain',
     category: 'Salle de bain',
   },
   {
-    before: unsplash('photo-1556909114-44e3e70034e2'),
-    after: unsplash('photo-1600489000022-c2086d79f9d4'),
+    before: unsplash('photo-1600331574095-4a20d3d8dd77'),
+    after: unsplash('photo-1572534382965-ef9f328c8db4'),
     alt: 'Rénovation cuisine',
     category: 'Cuisine',
   },
   {
-    before: unsplash('photo-1523413651479-597eb2da0ad6'),
-    after: unsplash('photo-1502672260266-1c1ef2d93688'),
+    before: unsplash('photo-1544830826-4bc6706df845'),
+    after: unsplash('photo-1583847268964-b28dc8f51f92'),
     alt: 'Rénovation salon peinture',
     category: 'Peinture intérieure',
   },
   {
-    before: unsplash('photo-1568605114967-8130f3a36994'),
-    after: unsplash('photo-1545324418-cc1a3fa10c00'),
+    before: unsplash('photo-1635151833290-1951891641cc'),
+    after: unsplash('photo-1684346605835-69888f742522'),
     alt: 'Ravalement façade',
     category: 'Façade',
   },
   {
-    before: unsplash('photo-1558036117-15d82a90b9b1'),
-    after: unsplash('photo-1600210492486-724fe5c67fb0'),
+    before: unsplash('photo-1504979128236-23f86972356c'),
+    after: unsplash('photo-1560185008-b033106af5c3'),
     alt: 'Rénovation parquet',
     category: 'Parquet',
   },
   {
-    before: unsplash('photo-1599629954294-5f3aae4bfa13'),
-    after: unsplash('photo-1598902108854-d1446536e3be'),
+    before: unsplash('photo-1561120699-89a04702dba4'),
+    after: unsplash('photo-1587538445896-d1f222cb0653'),
     alt: 'Aménagement jardin',
     category: 'Jardin',
   },
   {
-    before: unsplash('photo-1598228723793-52759bba239c'),
-    after: unsplash('photo-1570129477492-45c003edd2be'),
+    before: unsplash('photo-1609588959666-3cb46cabe3f7'),
+    after: unsplash('photo-1603206225819-e04c4b395a16'),
     alt: 'Réfection toiture',
     category: 'Toiture',
   },
   {
-    before: unsplash('photo-1590274853856-f22d5ee3d228'),
-    after: unsplash('photo-1600596542815-ffad4c1539a9'),
+    before: unsplash('photo-1543168988-54f6d5bee655'),
+    after: unsplash('photo-1612296350203-7d4718f6ac65'),
     alt: 'Extension maison maçonnerie',
     category: 'Maçonnerie',
   },
   {
-    before: unsplash('photo-1635322966219-b75ed372eb01'),
-    after: unsplash('photo-1600607687939-ce8a6c25118c'),
+    before: unsplash('photo-1553969536-e9b839932f42'),
+    after: unsplash('photo-1558442074-3c19857bc1dc'),
     alt: 'Isolation et rénovation énergétique',
     category: 'Isolation',
   },
   {
-    before: unsplash('photo-1607472586893-edb57bdc0e39'),
-    after: unsplash('photo-1600573472550-8090b5e0745e'),
+    before: unsplash('photo-1593817122715-bbe051a66bf8'),
+    after: unsplash('photo-1595514534785-44a24a4d9467'),
     alt: 'Rénovation plomberie salle d\'eau',
     category: 'Plomberie',
   },
@@ -264,83 +264,83 @@ export const beforeAfterPairs = [
 // ── 6. IMAGES DES TOP 20 VILLES ──────────────────────────────────
 export const cityImages: Record<string, { src: string; alt: string }> = {
   paris: {
-    src: unsplash('photo-1502602898657-3e91760cbb34', 800, 500),
+    src: unsplash('photo-1511739001486-6bfe10ce785f', 800, 500),
     alt: 'Vue de Paris avec la Tour Eiffel',
   },
   marseille: {
-    src: unsplash('photo-1564760055775-d63b17a55c44', 800, 500),
+    src: unsplash('photo-1566837942683-90c2eabc56ff', 800, 500),
     alt: 'Vue du Vieux-Port de Marseille',
   },
   lyon: {
-    src: unsplash('photo-1524484485831-a92ffc0de03f', 800, 500),
+    src: unsplash('photo-1537015125382-74e1f1c99ac4', 800, 500),
     alt: 'Vue panoramique de Lyon',
   },
   toulouse: {
-    src: unsplash('photo-1579888944880-d98341245702', 800, 500),
+    src: unsplash('photo-1572804131749-220f83b2f9bf', 800, 500),
     alt: 'Place du Capitole à Toulouse',
   },
   nice: {
-    src: unsplash('photo-1491166617655-0723a0999cfc', 800, 500),
+    src: unsplash('photo-1551799142-93484f2d0284', 800, 500),
     alt: 'Promenade des Anglais à Nice',
   },
   nantes: {
-    src: unsplash('photo-1597225764524-beb6e071d9ff', 800, 500),
+    src: unsplash('photo-1571509703616-67fe3742764c', 800, 500),
     alt: 'Château des ducs de Bretagne à Nantes',
   },
   strasbourg: {
-    src: unsplash('photo-1531973819741-e27a5ae2cc7b', 800, 500),
+    src: unsplash('photo-1563783615689-36214e990fca', 800, 500),
     alt: 'Petite France à Strasbourg',
   },
   montpellier: {
-    src: unsplash('photo-1573455494060-c5595004fb6c', 800, 500),
+    src: unsplash('photo-1625776043024-dc0a8f0ef4db', 800, 500),
     alt: 'Place de la Comédie à Montpellier',
   },
   bordeaux: {
-    src: unsplash('photo-1559592413-7cec4d0cae2b', 800, 500),
+    src: unsplash('photo-1493564738392-d148cfbd6eda', 800, 500),
     alt: 'Miroir d\'eau de Bordeaux',
   },
   lille: {
-    src: unsplash('photo-1693230408791-7bf43876eb87', 800, 500),
+    src: unsplash('photo-1596031837679-e1444bd4b830', 800, 500),
     alt: 'Grand Place de Lille',
   },
   rennes: {
-    src: unsplash('photo-1608037521277-154cd1b89191', 800, 500),
+    src: unsplash('photo-1585202648376-6a4c03278e73', 800, 500),
     alt: 'Maisons à colombages du centre historique de Rennes',
   },
   reims: {
-    src: unsplash('photo-1632854270303-f5fdb97b697f', 800, 500),
+    src: unsplash('photo-1551566521-1974ad1792c5', 800, 500),
     alt: 'Cathédrale Notre-Dame de Reims',
   },
   'saint-etienne': {
-    src: unsplash('photo-1506905925346-21bda4d32df4', 800, 500),
+    src: unsplash('photo-1574620469420-5420ce0496e6', 800, 500),
     alt: 'Vue panoramique de Saint-Étienne',
   },
   toulon: {
-    src: unsplash('photo-1507525428034-b723cf961d3e', 800, 500),
+    src: unsplash('photo-1574008313813-8f5de140a03b', 800, 500),
     alt: 'Port et rade de Toulon',
   },
   grenoble: {
-    src: unsplash('photo-1519681393784-d120267933ba', 800, 500),
+    src: unsplash('photo-1488235742400-36898425c618', 800, 500),
     alt: 'Grenoble et les Alpes enneigées',
   },
   dijon: {
-    src: unsplash('photo-1625853365848-c5736cb28b1b', 800, 500),
+    src: unsplash('photo-1526835157776-71ce36cd7583', 800, 500),
     alt: 'Centre historique de Dijon',
   },
   angers: {
-    src: unsplash('photo-1568605117036-5fe5e7bab0b7', 800, 500),
+    src: unsplash('photo-1588278183316-7c7a88cc683d', 800, 500),
     alt: 'Château d\'Angers',
   },
   'le-mans': {
-    src: unsplash('photo-1599946347371-68eb71b16afc', 800, 500),
+    src: unsplash('photo-1627674410470-dc8642afc616', 800, 500),
     alt: 'Cité Plantagenêt au Mans',
   },
   'aix-en-provence': {
-    src: unsplash('photo-1530122037265-a5f1f91d3b99', 800, 500),
+    src: unsplash('photo-1593715857983-5531aa640471', 800, 500),
     alt: 'Cours Mirabeau à Aix-en-Provence',
   },
   brest: {
-    src: unsplash('photo-1559827260-dc66d52bef19', 800, 500),
+    src: unsplash('photo-1589923793264-46f9d00db0fc', 800, 500),
     alt: 'Port de Brest et rade',
   },
 }
@@ -354,11 +354,11 @@ export function getCityImage(slug: string) {
 export const pageImages = {
   howItWorks: [
     {
-      src: unsplash('photo-1423666639041-f56000c27a9a'),
+      src: unsplash('photo-1544717305-f9c88f2897bc'),
       alt: 'Personne recherchant un artisan sur ordinateur',
     },
     {
-      src: unsplash('photo-1551836022-d5d88e9218df'),
+      src: unsplash('photo-1548967136-609936a3088b'),
       alt: 'Comparaison de profils d\'artisans sur écran',
     },
     {
@@ -368,21 +368,21 @@ export const pageImages = {
   ],
   about: [
     {
-      src: unsplash('photo-1522071820081-009f0129c71c', 800, 500),
+      src: unsplash('photo-1582151767854-e00a6b3151c6', 800, 500),
       alt: 'Équipe de développement de ServicesArtisans',
     },
     {
-      src: unsplash('photo-1517048676732-d65bc937f952', 800, 500),
+      src: unsplash('photo-1632856692518-b694374ee5ec', 800, 500),
       alt: 'Réunion d\'équipe autour de la mission ServicesArtisans',
     },
   ],
   verification: [
     {
-      src: unsplash('photo-1450101499163-c8848c66ca85', 800, 500),
+      src: unsplash('photo-1551590192-8070a16d9f67', 800, 500),
       alt: 'Processus de vérification SIREN des artisans',
     },
     {
-      src: unsplash('photo-1554224155-6726b3ff858f', 800, 500),
+      src: unsplash('photo-1599583863916-e06c29087f51', 800, 500),
       alt: 'Contrôle qualité et certification des professionnels',
     },
   ],
@@ -390,9 +390,9 @@ export const pageImages = {
 
 // ── 8. IMAGES D'AMBIANCE ─────────────────────────────────────────
 export const ambianceImages = {
-  trustBg: unsplash('photo-1541888946425-d81bb19240f5', 1200, 600),
-  ctaBg: unsplash('photo-1590479773265-7464e5d48118', 1200, 600),
-  renovation: unsplash('photo-1600585154340-be6161a56a0c', 1200, 600),
+  trustBg: unsplash('photo-1590880795696-20c7dfadacde', 1200, 600),
+  ctaBg: unsplash('photo-1570570665905-346e1b6be193', 1200, 600),
+  renovation: unsplash('photo-1634586621169-93e12e0bd604', 1200, 600),
 }
 
 // ── 9. BLOG — Images par article ─────────────────────────────────
@@ -404,7 +404,7 @@ export const ambianceImages = {
 /** Photos de topics non-métier (IDs uniques, non utilisés ailleurs) */
 const blogTopicImages: Record<string, { src: string; alt: string }> = {
   renovation: {
-    src: unsplash('photo-1600566753376-12c8ab7fb75b', 1200, 630),
+    src: unsplash('photo-1765277789186-04b71a9afd40', 1200, 630),
     alt: 'Travaux de rénovation intérieure en cours',
   },
   budget: {
@@ -412,43 +412,43 @@ const blogTopicImages: Record<string, { src: string; alt: string }> = {
     alt: 'Calculatrice et plans de devis pour travaux',
   },
   entretien: {
-    src: unsplash('photo-1605276374104-dee2a0ed3cd6', 1200, 630),
+    src: unsplash('photo-1564943300036-461e6e152355', 1200, 630),
     alt: 'Entretien et maintenance d\'une maison',
   },
   reglementation: {
-    src: unsplash('photo-1589829545856-d10d557cf95f', 1200, 630),
+    src: unsplash('photo-1554224155-cfa08c2a758f', 1200, 630),
     alt: 'Documents administratifs et réglementaires',
   },
   aides: {
-    src: unsplash('photo-1579621970563-9ae2e01a9d4d', 1200, 630),
+    src: unsplash('photo-1608747912887-563d7e155d30', 1200, 630),
     alt: 'Aides financières et subventions pour la rénovation',
   },
   securite: {
-    src: unsplash('photo-1557862921-37829c790f19', 1200, 630),
+    src: unsplash('photo-1592924271903-1e4b1a1ae20f', 1200, 630),
     alt: 'Sécurité et protection du domicile',
   },
   energie: {
-    src: unsplash('photo-1509391366360-2e959784a276', 1200, 630),
+    src: unsplash('photo-1655300283247-6b1924b1d152', 1200, 630),
     alt: 'Panneaux solaires et économies d\'énergie',
   },
   terrasse: {
-    src: unsplash('photo-1600210491892-06f2f2ae1cfe', 1200, 630),
+    src: unsplash('photo-1474547385661-ef98b8799dce', 1200, 630),
     alt: 'Terrasse extérieure aménagée',
   },
   extension: {
-    src: unsplash('photo-1600607688969-a5bfcd646154', 1200, 630),
+    src: unsplash('photo-1600768577091-3442c3f53179', 1200, 630),
     alt: 'Extension de maison en construction',
   },
   sdb: {
-    src: unsplash('photo-1600566752355-35792bedcfea', 1200, 630),
+    src: unsplash('photo-1595428774752-c87f23e7fcee', 1200, 630),
     alt: 'Salle de bain moderne rénovée',
   },
   domotique: {
-    src: unsplash('photo-1585060544812-6b45742d762f', 1200, 630),
+    src: unsplash('photo-1614801502766-e2562eb626d5', 1200, 630),
     alt: 'Maison connectée et automatisation',
   },
   hiver: {
-    src: unsplash('photo-1516912481808-3406841bd33c', 1200, 630),
+    src: unsplash('photo-1452088366481-4690b645efff', 1200, 630),
     alt: 'Maison sous la neige en hiver',
   },
 }
@@ -466,7 +466,7 @@ const blogCategoryFallbacks: Record<string, { src: string; alt: string }> = {
   Guides: blogTopicImages.renovation,
   Conseils: blogTopicImages.entretien,
   'Fiches métier': {
-    src: unsplash('photo-1572981779307-38b8cabb2407', 1200, 630),
+    src: unsplash('photo-1633419946251-6d8b5dd33170', 1200, 630),
     alt: 'Artisan au travail dans son atelier',
   },
   Inspiration: {
@@ -474,7 +474,7 @@ const blogCategoryFallbacks: Record<string, { src: string; alt: string }> = {
     alt: 'Intérieur moderne et inspirant',
   },
   DIY: {
-    src: unsplash('photo-1581578731548-c64695cc6952', 1200, 630),
+    src: unsplash('photo-1586187543416-b1e5669978b3', 1200, 630),
     alt: 'Outils de bricolage et de construction',
   },
 }
@@ -515,7 +515,7 @@ const slugKeywords: [RegExp, string, 'service' | 'topic'][] = [
 ]
 
 const defaultBlogImage = {
-  src: unsplash('photo-1600566753376-12c8ab7fb75b', 1200, 630),
+  src: unsplash('photo-1600585154340-be6161a56a0c', 1200, 630),
   alt: 'Travaux de rénovation et d\'aménagement',
 }
 
