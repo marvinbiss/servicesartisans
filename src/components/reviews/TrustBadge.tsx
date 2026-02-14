@@ -46,7 +46,7 @@ const BADGE_CONFIG: Record<BadgeType, {
     color: 'text-gray-500',
     bgColor: 'bg-gray-100',
     borderColor: 'border-gray-300',
-    description: '25+ avis, 4.0+ note, 90%+ réponse',
+    description: '25+ avis, 4.0+ note, 90%+ réponse, 1+ an sur la plateforme',
   },
   gold: {
     icon: Award,
@@ -55,7 +55,7 @@ const BADGE_CONFIG: Record<BadgeType, {
     color: 'text-yellow-600',
     bgColor: 'bg-yellow-50',
     borderColor: 'border-yellow-300',
-    description: '50+ avis, 4.5+ note, 95%+ réponse',
+    description: '50+ avis, 4.5+ note, 95%+ réponse, 3+ ans sur la plateforme',
   },
   platinum: {
     icon: Award,
@@ -64,7 +64,7 @@ const BADGE_CONFIG: Record<BadgeType, {
     color: 'text-purple-600',
     bgColor: 'bg-purple-50',
     borderColor: 'border-purple-300',
-    description: '100+ avis, 4.8+ note, 98%+ réponse',
+    description: '100+ avis, 4.8+ note, 98%+ réponse, 5+ ans sur la plateforme',
   },
   top_rated: {
     icon: Star,

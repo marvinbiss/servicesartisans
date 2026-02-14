@@ -5,9 +5,35 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import { z } from 'zod'
 import { verifyAdmin, logAdminAction } from '@/lib/admin-auth'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { DEFAULT_ALGORITHM_CONFIG } from '@/types/algorithm'
+
+const algorithmConfigSchema = z.object({
+  matching_strategy: z.enum(['scored', 'round_robin', 'geographic']).optional(),
+  max_artisans_per_lead: z.number().int().min(1).max(20).optional(),
+  geo_radius_km: z.number().int().min(1).max(500).optional(),
+  weight_rating: z.number().int().min(0).max(100).optional(),
+  weight_reviews: z.number().int().min(0).max(100).optional(),
+  weight_verified: z.number().int().min(0).max(100).optional(),
+  weight_proximity: z.number().int().min(0).max(100).optional(),
+  weight_data_quality: z.number().int().min(0).max(100).optional(),
+  cooldown_minutes: z.number().int().min(0).max(1440).optional(),
+  daily_lead_quota: z.number().int().min(0).max(1000).optional(),
+  monthly_lead_quota: z.number().int().min(0).max(30000).optional(),
+  exclude_inactive_days: z.number().int().min(0).max(365).optional(),
+  min_rating: z.number().min(0).max(5).optional(),
+  require_verified_urgent: z.boolean().optional(),
+  specialty_match_mode: z.enum(['exact', 'fuzzy', 'category']).optional(),
+  urgency_low_multiplier: z.number().positive().max(10).optional(),
+  urgency_medium_multiplier: z.number().positive().max(10).optional(),
+  urgency_high_multiplier: z.number().positive().max(10).optional(),
+  urgency_emergency_multiplier: z.number().positive().max(10).optional(),
+  prefer_claimed: z.boolean().optional(),
+  lead_expiry_hours: z.number().int().min(1).max(168).optional(),
+  auto_reassign_hours: z.number().int().min(1).max(168).optional(),
+}).strict()
 
 export const dynamic = 'force-dynamic'
 
@@ -60,8 +86,22 @@ export async function PATCH(request: NextRequest) {
     const body = await request.json()
     const supabase = createAdminClient()
 
-    // Supprimer les champs non-modifiables
-    const { id, created_at, ...updates } = body as Record<string, unknown>
+    // Supprimer les champs non-modifiables avant validation
+    const { id, created_at, updated_at, singleton, ...fieldsToValidate } = body as Record<string, unknown>
+
+    // Valider avec Zod
+    const parsed = algorithmConfigSchema.safeParse(fieldsToValidate)
+    if (!parsed.success) {
+      return NextResponse.json(
+        {
+          error: 'Données invalides',
+          details: parsed.error.flatten().fieldErrors,
+        },
+        { status: 400 }
+      )
+    }
+
+    const updates: Record<string, unknown> = { ...parsed.data }
 
     // Ajouter le metadata
     updates.updated_by = auth.admin.id

@@ -251,8 +251,8 @@ export async function POST(request: NextRequest) {
             updatedAt: new Date().toISOString()
           },
 
-          // Badge de confiance
-          trust_badge: badge.niveau,
+          // NOTE: trust_badge column was dropped in v2 (100_v2_schema_cleanup.sql).
+          // Badge data is preserved in pappers_data.badgeNiveau above.
 
           updated_at: new Date().toISOString()
         })

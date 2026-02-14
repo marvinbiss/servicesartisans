@@ -7,7 +7,6 @@ import {
   MapPin,
   Euro,
   Clock,
-  Award,
   ChevronDown,
   ChevronUp,
   RotateCcw,
@@ -23,7 +22,6 @@ export interface FilterValues {
   minPrice?: number
   radius?: number
   availability?: 'today' | 'tomorrow' | 'this_week' | 'any'
-  trustBadge?: 'bronze' | 'silver' | 'gold' | 'platinum' | 'any'
   verified?: boolean
   sortBy?: 'relevance' | 'rating' | 'distance' | 'price_low' | 'price_high'
 }
@@ -221,50 +219,6 @@ export function AdvancedFilters({
                   value={values.availability || 'any'}
                   onChange={(availability) => handleChange('availability', availability === 'any' ? undefined : availability)}
                 />
-              </div>
-            )}
-          </div>
-
-          {/* Trust badge filter */}
-          <div className="border-b border-gray-200 dark:border-gray-700">
-            <button
-              onClick={() => toggleSection('trust')}
-              className="w-full flex items-center justify-between p-4"
-            >
-              <div className="flex items-center gap-2">
-                <Award className="w-4 h-4 text-yellow-600" />
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Badge de confiance</span>
-              </div>
-              {expandedSections.has('trust') ? (
-                <ChevronUp className="w-4 h-4 text-gray-400" />
-              ) : (
-                <ChevronDown className="w-4 h-4 text-gray-400" />
-              )}
-            </button>
-            {expandedSections.has('trust') && (
-              <div className="px-4 pb-4">
-                <div className="flex flex-wrap gap-2">
-                  {[
-                    { value: 'any', label: 'Tous' },
-                    { value: 'bronze', label: 'Bronze+' },
-                    { value: 'silver', label: 'Argent+' },
-                    { value: 'gold', label: 'Or+' },
-                    { value: 'platinum', label: 'Platine' },
-                  ].map((badge) => (
-                    <button
-                      key={badge.value}
-                      onClick={() => handleChange('trustBadge', badge.value === 'any' ? undefined : badge.value as any)}
-                      className={cn(
-                        'px-3 py-2 rounded-lg text-sm font-medium transition-colors',
-                        (values.trustBadge || 'any') === badge.value
-                          ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
-                          : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-                      )}
-                    >
-                      {badge.label}
-                    </button>
-                  ))}
-                </div>
               </div>
             )}
           </div>

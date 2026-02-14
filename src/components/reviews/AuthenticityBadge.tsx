@@ -4,7 +4,7 @@ import { BadgeCheck, ShieldCheck, AlertTriangle, HelpCircle } from 'lucide-react
 import { cn } from '@/lib/utils'
 
 interface AuthenticityBadgeProps {
-  score: number // 0-100
+  score?: number | null // 0-100
   isVerifiedPurchase?: boolean
   bookingDate?: string
   size?: 'sm' | 'md' | 'lg'
@@ -76,8 +76,12 @@ export function AuthenticityBadge({
   showScore = false,
   className,
 }: AuthenticityBadgeProps) {
+  // If no authenticity data is available, don't render anything
+  if (score == null && !isVerifiedPurchase) return null
+
   // If verified purchase, show highest trust level
-  const level = isVerifiedPurchase ? 'high' : getAuthenticityLevel(score)
+  const effectiveScore = score ?? 0
+  const level = isVerifiedPurchase ? 'high' : getAuthenticityLevel(effectiveScore)
   const config = AUTHENTICITY_CONFIG[level]
   const sizeConfig = SIZE_CONFIG[size]
   const Icon = config.icon
@@ -103,7 +107,7 @@ export function AuthenticityBadge({
       title={
         isVerifiedPurchase && bookingDate
           ? `Prestation réalisée le ${formatDate(bookingDate)}`
-          : `Score d'authenticité: ${score}%`
+          : `Score d'authenticité: ${effectiveScore}%`
       }
     >
       <Icon className={cn(sizeConfig.icon, config.color)} />
@@ -112,7 +116,7 @@ export function AuthenticityBadge({
       </span>
       {showScore && !isVerifiedPurchase && (
         <span className={cn(sizeConfig.text, 'text-gray-400')}>
-          ({score}%)
+          ({effectiveScore}%)
         </span>
       )}
     </div>
@@ -167,7 +171,7 @@ export function AuthenticityDetails({
           <div
             className={cn(
               'h-full rounded-full transition-all',
-              score >= 70 ? 'bg-green-500' : score >= 50 ? 'bg-yellow-500' : 'bg-red-500'
+              score >= 90 ? 'bg-green-500' : score >= 70 ? 'bg-blue-500' : score >= 50 ? 'bg-gray-400' : 'bg-yellow-500'
             )}
             style={{ width: `${score}%` }}
           />

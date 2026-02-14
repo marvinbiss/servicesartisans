@@ -1,0 +1,158 @@
+/**
+ * Cron: Recalculate Data Quality Scores
+ * Runs daily at 04:00 UTC (see vercel.json)
+ *
+ * Recalculates data_quality_score for providers whose data has changed
+ * since their last score calculation. Uses batch SQL updates for efficiency.
+ */
+
+import { NextResponse } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
+import { logger } from '@/lib/logger'
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+)
+
+export const dynamic = 'force-dynamic'
+
+const BATCH_SIZE = 500
+
+/**
+ * Calculate data quality score for a provider record (0-100).
+ * Mirrors the formula in scripts/lib/data-quality.ts.
+ */
+function calculateQualityScore(provider: Record<string, unknown>): {
+  score: number
+  flags: string[]
+} {
+  let score = 0
+  const flags: string[] = []
+
+  // Identity (30 points)
+  if (provider.name) score += 10; else flags.push('missing_name')
+  if (provider.siren) score += 10; else flags.push('missing_siren')
+  if (provider.siret) score += 10; else flags.push('missing_siret')
+
+  // Address (25 points)
+  if (provider.address_street) score += 5; else flags.push('missing_street')
+  if (provider.address_city) score += 5; else flags.push('missing_city')
+  if (provider.address_postal_code) score += 5; else flags.push('missing_postal_code')
+  if (provider.address_department) score += 5; else flags.push('missing_department')
+  if (provider.latitude && provider.longitude) score += 5; else flags.push('missing_gps')
+
+  // Contact (15 points)
+  if (provider.phone) score += 10; else flags.push('missing_phone')
+  if (provider.email) score += 5; else flags.push('missing_email')
+
+  // Business info (20 points)
+  if (provider.code_naf) score += 5; else flags.push('missing_naf')
+  if (provider.creation_date) score += 5; else flags.push('missing_creation_date')
+  if (provider.legal_form) score += 5; else flags.push('missing_legal_form')
+  if (provider.specialty) score += 5; else flags.push('missing_specialty')
+
+  // Extras (10 points)
+  if (provider.website) score += 3
+  if (provider.description) score += 4
+  if (provider.employee_count) score += 3
+
+  return { score: Math.min(100, score), flags }
+}
+
+export async function GET(request: Request) {
+  try {
+    // Verify cron secret
+    const authHeader = request.headers.get('authorization')
+    const cronSecret = process.env.CRON_SECRET
+
+    if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
+      logger.warn('[Cron] Unauthorized access attempt to recalculate-quality')
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    logger.info('[Cron] Starting data quality score recalculation')
+
+    let totalUpdated = 0
+    let totalErrors = 0
+    let offset = 0
+    let hasMore = true
+
+    while (hasMore) {
+      // Fetch providers that need recalculation:
+      // - updated_at is more recent than their data_quality_score last calc
+      // - or data_quality_score is 0/null (never calculated)
+      // - only active artisan providers
+      const { data: providers, error } = await supabase
+        .from('providers')
+        .select('*')
+        .eq('is_artisan', true)
+        .eq('is_active', true)
+        .or('data_quality_score.is.null,data_quality_score.eq.0,updated_at.gt.derniere_maj_api')
+        .range(offset, offset + BATCH_SIZE - 1)
+        .order('id')
+
+      if (error) {
+        logger.error('[Cron] Error fetching providers for quality recalc:', error)
+        totalErrors++
+        break
+      }
+
+      if (!providers || providers.length === 0) {
+        hasMore = false
+        break
+      }
+
+      // Process batch
+      for (const provider of providers) {
+        const { score, flags } = calculateQualityScore(provider)
+
+        // Skip if score hasn't changed
+        if (
+          provider.data_quality_score === score &&
+          JSON.stringify(provider.data_quality_flags) === JSON.stringify(flags)
+        ) {
+          continue
+        }
+
+        const { error: updateError } = await supabase
+          .from('providers')
+          .update({
+            data_quality_score: score,
+            data_quality_flags: flags,
+          })
+          .eq('id', provider.id)
+
+        if (updateError) {
+          totalErrors++
+          logger.error(`[Cron] Error updating quality score for provider ${provider.id}:`, updateError)
+        } else {
+          totalUpdated++
+        }
+      }
+
+      if (providers.length < BATCH_SIZE) {
+        hasMore = false
+      } else {
+        offset += BATCH_SIZE
+      }
+    }
+
+    logger.info(
+      `[Cron] Data quality recalculation complete: ${totalUpdated} updated, ${totalErrors} errors`
+    )
+
+    return NextResponse.json({
+      success: true,
+      message: 'Data quality scores recalculated',
+      updated: totalUpdated,
+      errors: totalErrors,
+    })
+  } catch (error) {
+    logger.error('[Cron] Error in recalculate-quality:', error)
+    return NextResponse.json(
+      { error: 'Failed to recalculate quality scores' },
+      { status: 500 }
+    )
+  }
+}

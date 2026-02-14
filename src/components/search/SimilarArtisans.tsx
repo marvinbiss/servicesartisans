@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Star, MapPin, Sparkles, ChevronRight, Loader2 } from 'lucide-react'
 import { cn, getArtisanUrl } from '@/lib/utils'
-import { TrustBadge } from '@/components/reviews/TrustBadge'
 
 interface SimilarArtisan {
   id: string
@@ -15,7 +14,6 @@ interface SimilarArtisan {
   city: string
   ratingAverage: number
   reviewCount: number
-  trustBadge: 'none' | 'bronze' | 'silver' | 'gold' | 'platinum'
   avatarUrl?: string
   similarityScore: number
   factors: {
@@ -124,9 +122,6 @@ export function SimilarArtisans({
                   <span className="font-medium text-gray-900 dark:text-white truncate">
                     {artisan.name}
                   </span>
-                  {artisan.trustBadge !== 'none' && (
-                    <TrustBadge badge={artisan.trustBadge} size="sm" showLabel={false} />
-                  )}
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                   <span>{artisan.specialty}</span>

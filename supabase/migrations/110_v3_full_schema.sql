@@ -2,6 +2,23 @@
 -- Migration 110 : Schéma 10/10 — ServicesArtisans
 -- 2026-02-09
 -- =============================================================================
+-- STATUS: ASPIRATIONAL / NOT USED BY ACTIVE CODE (as of 2026-02-14)
+--
+-- This migration creates the `app` schema as a future-state target.
+-- The active application code uses the `public` schema exclusively:
+--   - dispatch.ts calls public.dispatch_lead (202_configurable_dispatch.sql)
+--   - Admin dashboard reads public.algorithm_config (201_algorithm_config.sql)
+--   - All Supabase client queries target public.providers, public.services, etc.
+--
+-- None of the following app-schema functions are called from TypeScript:
+--   - app.distribute_lead
+--   - app.compute_trust_score
+--   - app.refresh_stats
+--   - app.reserve_quota / app.consume_quota / app.release_quota
+--
+-- DO NOT DELETE this migration — it is a historical record and may serve
+-- as the target schema for a future public→app migration.
+-- =============================================================================
 -- Crée le schéma `app` avec :
 --   - profiles, artisans, services, cities
 --   - artisan_services (N:N + rayon), artisan_zones

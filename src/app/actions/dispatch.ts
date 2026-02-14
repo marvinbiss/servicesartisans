@@ -14,7 +14,15 @@ export interface DispatchOptions {
 
 /**
  * Dispatch a lead to eligible artisans using the configurable algorithm.
- * Reads strategy/weights/quotas from algorithm_config.
+ *
+ * ACTIVE SCHEMA: public (NOT app)
+ * - Calls `public.dispatch_lead` from migration 202_configurable_dispatch.sql
+ * - Reads config from `public.algorithm_config` (201_algorithm_config.sql)
+ * - Writes to `public.lead_assignments` and `public.providers`
+ *
+ * The v3 `app.distribute_lead` function (110_v3_full_schema.sql) is NOT used
+ * by any active code path. It is an aspirational/future schema.
+ *
  * Uses service_role (bypasses RLS) — server-only.
  *
  * Returns array of assigned provider IDs (up to max_artisans_per_lead).
@@ -32,8 +40,8 @@ export async function dispatchLead(
       p_city: opts?.city || null,
       p_postal_code: opts?.postalCode || null,
       p_urgency: opts?.urgency || 'normal',
-      p_latitude: opts?.latitude || null,
-      p_longitude: opts?.longitude || null,
+      p_latitude: opts?.latitude ?? null,
+      p_longitude: opts?.longitude ?? null,
       p_source_table: opts?.sourceTable || 'devis_requests',
     })
 
