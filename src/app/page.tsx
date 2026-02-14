@@ -23,6 +23,14 @@ export const metadata: Metadata = {
       'Le plus grand annuaire d\'artisans de France. 350 000+ professionnels référencés dans 101 départements. Devis gratuits.',
     type: 'website',
     url: 'https://servicesartisans.fr',
+    images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: 'ServicesArtisans — Annuaire des artisans en France' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'ServicesArtisans — 350 000+ artisans référencés en France',
+    description:
+      'Le plus grand annuaire d\'artisans de France. 350 000+ professionnels référencés dans 101 départements. Devis gratuits.',
+    images: ['https://servicesartisans.fr/opengraph-image'],
   },
 }
 

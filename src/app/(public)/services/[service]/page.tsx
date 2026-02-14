@@ -49,6 +49,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const title = `${serviceName} en France — Annuaire & Devis Gratuit 2026`
   const description = `Trouvez un ${serviceName.toLowerCase()} parmi 350 000+ artisans référencés. Guide des prix, conseils, FAQ et devis gratuit. 101 départements couverts.`
 
+  const serviceImage = getServiceImage(serviceSlug)
+
   return {
     title,
     description,
@@ -56,6 +58,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       type: 'website',
+      images: [{ url: serviceImage.src, width: 1200, height: 630, alt: serviceImage.alt }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [serviceImage.src],
     },
     alternates: {
       canonical: `${SITE_URL}/services/${serviceSlug}`,

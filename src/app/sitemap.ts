@@ -127,14 +127,16 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
   // ── Service + city combination pages ────────────────────────────────
   if (id === 'service-cities') {
-    return services.flatMap((service) =>
-      villes.map((ville) => ({
+    return services.flatMap((service) => {
+      const serviceImage = getServiceImage(service.slug)
+      return villes.map((ville) => ({
         url: `${SITE_URL}/services/${service.slug}/${ville.slug}`,
         lastModified: STATIC_LAST_MODIFIED,
         changeFrequency: 'weekly' as const,
         priority: 0.8,
+        images: [serviceImage.src],
       }))
-    )
+    })
   }
 
   // ── City pages ──────────────────────────────────────────────────────

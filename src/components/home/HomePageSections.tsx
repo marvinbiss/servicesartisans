@@ -10,7 +10,7 @@ import {
   TrendingUp,
   Database, Shield, FileCheck, Banknote, Globe, BadgeCheck
 } from 'lucide-react'
-import { getServiceImage, testimonialImages, beforeAfterPairs } from '@/lib/data/images'
+import { getServiceImage, testimonialImages, beforeAfterPairs, BLUR_PLACEHOLDER } from '@/lib/data/images'
 
 // ─── ANIMATION VARIANTS ────────────────────────────────────────
 
@@ -114,6 +114,8 @@ export function ServicesShowcase() {
                         fill
                         className="object-cover group-hover:scale-110 transition-transform duration-500"
                         sizes="96px"
+                        placeholder="blur"
+                        blurDataURL={BLUR_PLACEHOLDER}
                       />
                     </div>
                   </Link>
@@ -555,7 +557,7 @@ export function TestimonialsSection() {
             >
               <div className="flex items-center gap-4 mb-4">
                 <div className="relative w-14 h-14 rounded-full overflow-hidden shrink-0">
-                  <Image src={t.src} alt={t.alt} fill className="object-cover" sizes="56px" />
+                  <Image src={t.src} alt={t.alt} fill className="object-cover" sizes="56px" placeholder="blur" blurDataURL={BLUR_PLACEHOLDER} />
                 </div>
                 <div>
                   <div className="font-semibold text-slate-900">{t.name}</div>
@@ -617,13 +619,13 @@ export function BeforeAfterShowcase() {
             >
               <div className="grid grid-cols-2 h-48">
                 <div className="relative">
-                  <Image src={pair.before} alt={`Avant — ${pair.alt}`} fill className="object-cover" sizes="(max-width: 768px) 50vw, 25vw" />
+                  <Image src={pair.before} alt={`Avant — ${pair.alt}`} fill className="object-cover" sizes="(max-width: 768px) 50vw, 25vw" placeholder="blur" blurDataURL={BLUR_PLACEHOLDER} />
                   <div className="absolute top-2 left-2 bg-red-500/90 text-white text-xs font-bold px-2 py-1 rounded">
                     AVANT
                   </div>
                 </div>
                 <div className="relative">
-                  <Image src={pair.after} alt={`Après — ${pair.alt}`} fill className="object-cover" sizes="(max-width: 768px) 50vw, 25vw" />
+                  <Image src={pair.after} alt={`Après — ${pair.alt}`} fill className="object-cover" sizes="(max-width: 768px) 50vw, 25vw" placeholder="blur" blurDataURL={BLUR_PLACEHOLDER} />
                   <div className="absolute top-2 right-2 bg-emerald-500/90 text-white text-xs font-bold px-2 py-1 rounded">
                     APRÈS
                   </div>

@@ -28,9 +28,25 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const ville = getVilleBySlug(villeSlug)
   if (!ville) return { title: 'Ville non trouvée' }
 
+  const cityImage = getCityImage(villeSlug)
+  const title = `Artisans à ${ville.name} (${ville.departementCode}) — Annuaire & Devis Gratuit | ServicesArtisans`
+  const description = `Trouvez des artisans qualifiés à ${ville.name} (${ville.departementCode}). Plombiers, électriciens, serruriers, chauffagistes et plus. ${services.length} corps de métier, artisans référencés. Devis gratuit.`
+
   return {
-    title: `Artisans à ${ville.name} (${ville.departementCode}) — Annuaire & Devis Gratuit | ServicesArtisans`,
-    description: `Trouvez des artisans qualifiés à ${ville.name} (${ville.departementCode}). Plombiers, électriciens, serruriers, chauffagistes et plus. ${services.length} corps de métier, artisans référencés. Devis gratuit.`,
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: 'website',
+      ...(cityImage ? { images: [{ url: cityImage.src, width: 1200, height: 630, alt: cityImage.alt }] } : {}),
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      ...(cityImage ? { images: [cityImage.src] } : {}),
+    },
     alternates: { canonical: `${SITE_URL}/villes/${villeSlug}` },
   }
 }
