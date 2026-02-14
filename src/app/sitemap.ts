@@ -65,6 +65,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       },
     ]
 
+    const ogFallback = `${SITE_URL}/opengraph-image`
     const staticPages: MetadataRoute.Sitemap = [
       { path: '/a-propos', changeFrequency: 'monthly' as const, priority: 0.5 },
       { path: '/contact', changeFrequency: 'monthly' as const, priority: 0.5 },
@@ -74,7 +75,6 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       { path: '/tarifs-artisans', changeFrequency: 'monthly' as const, priority: 0.6 },
       { path: '/urgence', changeFrequency: 'weekly' as const, priority: 0.9 },
       { path: '/devis', changeFrequency: 'monthly' as const, priority: 0.8 },
-      { path: '/inscription-artisan', changeFrequency: 'monthly' as const, priority: 0.6 },
       { path: '/recherche', changeFrequency: 'weekly' as const, priority: 0.8 },
       { path: '/mentions-legales', changeFrequency: 'yearly' as const, priority: 0.3 },
       { path: '/confidentialite', changeFrequency: 'yearly' as const, priority: 0.3 },
@@ -88,6 +88,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       lastModified: STATIC_LAST_MODIFIED,
       changeFrequency,
       priority,
+      images: [ogFallback],
     }))
 
     const blogArticlePages: MetadataRoute.Sitemap = articleSlugs.map((slug) => {
@@ -273,27 +274,28 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         from += PAGE_SIZE
       }
 
-      return allProviders
+      const providerEntries: MetadataRoute.Sitemap = allProviders
         .filter((p) => p.name && (p.stable_id || p.slug) && p.specialty && p.address_city)
-        .reduce<MetadataRoute.Sitemap>((acc, p) => {
+        .map((p) => {
           const normalizedSpecialty = p.specialty!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
           const serviceSlug = serviceMap.get(normalizedSpecialty) || specialtyToSlug[p.specialty!.toLowerCase()]
           const normalizedCity = p.address_city!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
           const locationSlug = villeMap.get(normalizedCity)
-
-          if (!serviceSlug || !locationSlug) return acc
-
           const publicId = p.stable_id || p.slug
-          if (!publicId) return acc
 
-          acc.push({
+          if (!serviceSlug || !locationSlug || !publicId) return null
+
+          return {
             url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}/${publicId}`,
             lastModified: p.updated_at ? new Date(p.updated_at) : STATIC_LAST_MODIFIED,
             changeFrequency: 'weekly' as const,
             priority: 0.7,
-          })
-          return acc
-        }, [])
+            images: [getServiceImage(serviceSlug).src],
+          }
+        })
+        .filter((entry): entry is NonNullable<typeof entry> => entry !== null)
+
+      return providerEntries
     } catch {
       // DB unavailable at build time — return empty
       return []

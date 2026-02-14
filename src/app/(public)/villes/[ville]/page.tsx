@@ -74,12 +74,14 @@ export default async function VillePage({ params }: PageProps) {
   const deptSlug = dept?.slug
 
   // JSON-LD structured data
+  const cityImage = getCityImage(ville.slug)
   const placeSchema = getPlaceSchema({
     name: ville.name,
     slug: ville.slug,
     region: ville.region,
     department: ville.departement,
     description: `Trouvez des artisans qualifiés à ${ville.name}. Plombiers, électriciens, serruriers et plus.`,
+    image: cityImage?.src,
   })
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },

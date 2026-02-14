@@ -13,7 +13,7 @@ import { PopularCitiesLinks } from '@/components/InternalLinks'
 import { popularServices } from '@/lib/constants/navigation'
 import { services as staticServicesList, villes } from '@/lib/data/france'
 import { getTradeContent } from '@/lib/data/trade-content'
-import { getServiceImage } from '@/lib/data/images'
+import { getServiceImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 
 // ISR: Revalidate every 30 minutes
 export const revalidate = REVALIDATE.serviceDetail
@@ -180,6 +180,8 @@ export default async function ServicePage({ params }: PageProps) {
           className="object-cover opacity-15"
           sizes="100vw"
           priority
+          placeholder="blur"
+          blurDataURL={BLUR_PLACEHOLDER}
         />
         <div className="absolute inset-0 bg-gray-900/75" />
         {/* Ambient glow */}

@@ -123,7 +123,7 @@ GRANT EXECUTE ON FUNCTION public.claim_queued_messages(uuid, int) TO service_rol
 DO $$ BEGIN
   ALTER TABLE public.prospection_messages
     ADD CONSTRAINT uq_campaign_contact UNIQUE (campaign_id, contact_id, created_at);
-EXCEPTION WHEN duplicate_object THEN NULL;
+EXCEPTION WHEN duplicate_table OR duplicate_object THEN NULL;
 END $$;
 
 

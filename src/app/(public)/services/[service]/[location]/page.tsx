@@ -134,12 +134,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description,
       type: 'website',
       locale: 'fr_FR',
-      images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: title }],
+      images: [{ url: getServiceImage(serviceSlug).src, width: 1200, height: 630, alt: title }],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
+      images: [getServiceImage(serviceSlug).src],
     },
     alternates: {
       canonical: `https://servicesartisans.fr/services/${serviceSlug}/${locationSlug}`,
@@ -242,6 +243,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
           name: p.name,
           url: getArtisanUrl({ stable_id: p.stable_id, slug: p.slug, specialty: p.specialty, city: p.address_city }),
           position: i + 1,
+          image: getServiceImage(serviceSlug).src,
           rating: p.rating_average,
           reviewCount: p.review_count,
         })),

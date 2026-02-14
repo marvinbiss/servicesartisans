@@ -313,12 +313,14 @@ export function getPlaceSchema(city: {
   region?: string
   department?: string
   description?: string
+  image?: string
 }) {
   return {
     '@context': 'https://schema.org',
     '@type': 'City',
     name: city.name,
     url: `${SITE_URL}/villes/${city.slug}`,
+    ...(city.image ? { image: city.image } : {}),
     description: city.description || `Trouvez des artisans qualifiés à ${city.name}`,
     containedInPlace: city.region
       ? {

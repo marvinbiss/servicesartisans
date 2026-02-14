@@ -8,6 +8,7 @@ import ArtisanPageClient from '@/components/artisan/ArtisanPageClient'
 import ArtisanInternalLinks from '@/components/artisan/ArtisanInternalLinks'
 import { Review } from '@/components/artisan'
 import type { LegacyArtisan } from '@/types/legacy'
+import { getServiceImage } from '@/lib/data/images'
 
 export const revalidate = 300
 
@@ -317,8 +318,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const ratingText = provider.rating_average ? `Note ${provider.rating_average}/5. ` : ''
     const description = `${displayName}, ${serviceName.toLowerCase()} à ${cityName}. ${ratingText}Devis gratuit. Artisan professionnel.`
 
-    const ogImage = provider.avatar_url || 'https://servicesartisans.fr/opengraph-image'
+    const serviceImage = getServiceImage(serviceSlug)
     const ogAlt = `${displayName} - ${serviceName} à ${cityName}`
+    // Use avatar if available, otherwise fall back to service-specific image (not generic OG)
+    const ogImage = provider.avatar_url || serviceImage.src
 
     return {
       title,
@@ -331,7 +334,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         type: 'profile',
         locale: 'fr_FR',
         url: `https://servicesartisans.fr/services/${serviceSlug}/${locationSlug}/${publicId}`,
-        images: [{ url: ogImage, width: 1200, height: 630, alt: ogAlt }],
+        images: provider.avatar_url
+          ? [{ url: provider.avatar_url, alt: ogAlt }]
+          : [{ url: serviceImage.src, width: 1200, height: 630, alt: ogAlt }],
       },
       twitter: {
         card: 'summary_large_image' as const,

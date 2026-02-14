@@ -106,12 +106,34 @@ const PJ_TRADE_SLUGS: Record<string, { label: string; slugs: string[] }> = {
   charpentiers:    { label: 'Charpentiers',    slugs: ['charpentiers', 'charpente'] },
   couvreurs:       { label: 'Couvreurs',       slugs: ['couvreurs', 'couverture-toiture'] },
   macons:          { label: 'Maçons',          slugs: ['macons', 'maconnerie'] },
+  // ── Mots-clés bonus (Phase 2) ──
+  climatisation:   { label: 'Climatisation',   slugs: ['climatisation', 'pompes-a-chaleur'] },
+  paysagistes:     { label: 'Paysagistes',     slugs: ['paysagistes', 'amenagement-de-jardins'] },
+  terrassement:    { label: 'Terrassement',    slugs: ['terrassement', 'entreprises-de-terrassement'] },
+  vitriers:        { label: 'Vitriers',        slugs: ['vitriers', 'vitrerie-miroiterie'] },
+  renovation:      { label: 'Rénovation',      slugs: ['renovation-immobiliere', 'entreprises-de-renovation-du-batiment'] },
+  depannage:       { label: 'Dépannage',       slugs: ['depannage-electricite', 'depannage-plomberie'] },
+  sdb:             { label: 'Salles de bain',  slugs: ['salles-de-bains-installations-equipements', 'salle-de-bains'] },
+  etancheite:      { label: 'Étanchéité',      slugs: ['etancheite-des-batiments', 'etancheite'] },
+  demolition:      { label: 'Démolition',      slugs: ['entreprises-de-demolition', 'demolition'] },
+  assainissement:  { label: 'Assainissement',  slugs: ['assainissement', 'vidange-de-fosses-septiques'] },
+  domotique:       { label: 'Domotique',       slugs: ['domotique', 'alarmes-et-surveillance'] },
+  ramonage:        { label: 'Ramonage',        slugs: ['ramonage', 'ramoneurs'] },
+  parquets:        { label: 'Parquets',        slugs: ['parquets-pose', 'pose-de-parquets'] },
+  stores:          { label: 'Stores/Volets',   slugs: ['stores-et-rideaux-metalliques', 'volets-roulants'] },
+  portails:        { label: 'Portails',        slugs: ['portails-automatiques', 'portails'] },
 }
 
 const TRADE_ORDER = [
   'plombiers', 'electriciens', 'chauffagistes', 'couvreurs',
   'menuisiers', 'macons', 'peintres', 'carreleurs',
   'charpentiers', 'platriers', 'serruriers', 'isolation', 'finition',
+]
+
+const BONUS_TRADES = [
+  'climatisation', 'paysagistes', 'terrassement', 'vitriers', 'renovation',
+  'depannage', 'sdb', 'etancheite', 'demolition', 'assainissement',
+  'domotique', 'ramonage', 'parquets', 'stores', 'portails',
 ]
 
 // ============================================
@@ -554,7 +576,11 @@ async function phaseMatch(args: { dept?: string }) {
       const normalizedPJName = normalizeName(listing.name)
       if (normalizedPJName.length < 2) { matched.add(listing.pjId); continue }
 
-      // Query candidates
+      // Query candidates — address_city contains INSEE codes (not names),
+      // so we match by department + name similarity only
+      const nameWords = normalizedPJName.split(/\s+/).filter(w => w.length >= 3)
+      const searchTerm = nameWords.slice(0, 2).join(' ') || normalizedPJName
+
       let query = supabase
         .from('providers')
         .select('id, name, address_city, phone')
@@ -562,12 +588,9 @@ async function phaseMatch(args: { dept?: string }) {
         .eq('source', 'annuaire_entreprises')
         .eq('is_active', true)
         .eq('address_department', deptCode)
+        .ilike('name', `%${searchTerm.replace(/'/g, "''")}%`)
 
-      if (listing.city) {
-        query = query.ilike('address_city', `%${listing.city.replace(/'/g, "''")}%`)
-      }
-
-      const { data: candidates, error } = await query.limit(100)
+      const { data: candidates, error } = await query.limit(50)
 
       if (error) {
         console.log(`      ⚠ DB error: ${error.message}`)
