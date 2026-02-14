@@ -1,0 +1,93 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { createAdminClient } from '@/lib/supabase/admin'
+import { requirePermission } from '@/lib/admin-auth'
+import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+const updateSchema = z.object({
+  default_provider: z.enum(['claude', 'openai']).optional(),
+  claude_model: z.string().max(100).optional(),
+  claude_max_tokens: z.number().int().min(1).max(8000).optional(),
+  claude_temperature: z.number().min(0).max(2).optional(),
+  openai_model: z.string().max(100).optional(),
+  openai_max_tokens: z.number().int().min(1).max(8000).optional(),
+  openai_temperature: z.number().min(0).max(2).optional(),
+  auto_reply_enabled: z.boolean().optional(),
+  max_auto_replies: z.number().int().min(1).max(50).optional(),
+  escalation_keywords: z.array(z.string().max(50)).max(50).optional(),
+  artisan_system_prompt: z.string().max(5000).optional(),
+  client_system_prompt: z.string().max(5000).optional(),
+  mairie_system_prompt: z.string().max(5000).optional(),
+}).strict()
+
+export const dynamic = 'force-dynamic'
+
+export async function GET() {
+  try {
+    const authResult = await requirePermission('prospection', 'read')
+    if (!authResult.success) return authResult.error
+
+    const supabase = createAdminClient()
+    const { data, error } = await supabase
+      .from('prospection_ai_settings')
+      .select('*')
+      .limit(1)
+      .single()
+
+    if (error) {
+      logger.error('Get AI settings error', error)
+      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la récupération des données' } }, { status: 500 })
+    }
+
+    return NextResponse.json({ success: true, data })
+  } catch (error) {
+    logger.error('AI settings GET error', error as Error)
+    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+  }
+}
+
+export async function PATCH(request: NextRequest) {
+  try {
+    const authResult = await requirePermission('prospection', 'ai')
+    if (!authResult.success || !authResult.admin) return authResult.error
+
+    const supabase = createAdminClient()
+    const body = await request.json()
+    const parsed = updateSchema.safeParse(body)
+
+    if (!parsed.success) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Données invalides', details: parsed.error.flatten() } },
+        { status: 400 }
+      )
+    }
+
+    // Récupérer l'ID du settings existant
+    const { data: existing } = await supabase
+      .from('prospection_ai_settings')
+      .select('id')
+      .limit(1)
+      .single()
+
+    if (!existing) {
+      return NextResponse.json({ success: false, error: { message: 'Settings non trouvés' } }, { status: 404 })
+    }
+
+    const { data, error } = await supabase
+      .from('prospection_ai_settings')
+      .update({ ...parsed.data, updated_by: authResult.admin.id })
+      .eq('id', existing.id)
+      .select()
+      .single()
+
+    if (error) {
+      logger.error('Update AI settings error', error)
+      return NextResponse.json({ success: false, error: { message: 'Erreur lors de la mise à jour' } }, { status: 500 })
+    }
+
+    return NextResponse.json({ success: true, data })
+  } catch (error) {
+    logger.error('AI settings PATCH error', error as Error)
+    return NextResponse.json({ success: false, error: { message: 'Erreur serveur' } }, { status: 500 })
+  }
+}

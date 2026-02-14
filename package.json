@@ -22,6 +22,7 @@
     "mobile:run:ios": "npx cap run ios"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.74.0",
     "@capacitor/android": "^8.0.2",
     "@capacitor/camera": "^8.0.0",
     "@capacitor/cli": "^8.0.2",
@@ -51,6 +52,7 @@
     "lucide-react": "^0.294.0",
     "next": "^14.2.35",
     "next-intl": "^3.4.0",
+    "openai": "^6.21.0",
     "otplib": "^13.2.1",
     "playwright": "^1.58.2",
     "qrcode": "^1.5.4",
@@ -65,6 +67,7 @@
     "twilio": "^4.23.0",
     "uuid": "^13.0.0",
     "web-push": "^3.6.0",
+    "xlsx": "^0.18.5",
     "zod": "^4.3.6"
   },
   "devDependencies": {

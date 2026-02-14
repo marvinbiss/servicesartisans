@@ -14,7 +14,7 @@ const adminsQuerySchema = z.object({
 // POST request schema
 const createAdminSchema = z.object({
   email: z.string().email().max(255),
-  role: z.enum(['super_admin', 'admin', 'moderator', 'support']),
+  role: z.enum(['super_admin', 'admin', 'moderator', 'viewer']),
 })
 
 export const dynamic = 'force-dynamic'

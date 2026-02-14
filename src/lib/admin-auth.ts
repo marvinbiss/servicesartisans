@@ -7,58 +7,22 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
+import { type AdminRole, type AdminPermissions, DEFAULT_PERMISSIONS } from '@/types/admin'
+
+// Re-export types so existing imports from '@/lib/admin-auth' continue to work
+export type { AdminRole, AdminPermissions } from '@/types/admin'
+export { DEFAULT_PERMISSIONS } from '@/types/admin'
 
 // Admin email whitelist from environment variable (fallback when profiles table doesn't exist)
 // Set ADMIN_EMAILS in .env.local as comma-separated list: admin1@example.com,admin2@example.com
 const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || '').split(',').filter(email => email.trim().length > 0)
 
-export type AdminRole = 'super_admin' | 'admin' | 'moderator'
-
+/** Lightweight admin user for auth results (subset of full AdminUser from types/admin) */
 export interface AdminUser {
   id: string
   email: string
   role: AdminRole
   permissions: AdminPermissions
-}
-
-export interface AdminPermissions {
-  users: { read: boolean; write: boolean; delete: boolean }
-  providers: { read: boolean; write: boolean; delete: boolean; verify: boolean }
-  reviews: { read: boolean; write: boolean; delete: boolean }
-  payments: { read: boolean; refund: boolean; cancel: boolean }
-  services: { read: boolean; write: boolean; delete: boolean }
-  settings: { read: boolean; write: boolean }
-  audit: { read: boolean }
-}
-
-const DEFAULT_PERMISSIONS: Record<AdminRole, AdminPermissions> = {
-  super_admin: {
-    users: { read: true, write: true, delete: true },
-    providers: { read: true, write: true, delete: true, verify: true },
-    reviews: { read: true, write: true, delete: true },
-    payments: { read: true, refund: true, cancel: true },
-    services: { read: true, write: true, delete: true },
-    settings: { read: true, write: true },
-    audit: { read: true },
-  },
-  admin: {
-    users: { read: true, write: true, delete: false },
-    providers: { read: true, write: true, delete: false, verify: true },
-    reviews: { read: true, write: true, delete: true },
-    payments: { read: true, refund: true, cancel: false },
-    services: { read: true, write: true, delete: false },
-    settings: { read: true, write: false },
-    audit: { read: true },
-  },
-  moderator: {
-    users: { read: true, write: false, delete: false },
-    providers: { read: true, write: false, delete: false, verify: false },
-    reviews: { read: true, write: true, delete: true },
-    payments: { read: false, refund: false, cancel: false },
-    services: { read: true, write: false, delete: false },
-    settings: { read: false, write: false },
-    audit: { read: true },
-  },
 }
 
 export interface AdminAuthResult {
@@ -123,11 +87,11 @@ export async function verifyAdmin(): Promise<AdminAuthResult> {
     // Whitelist check ONLY with valid profile
     if (!isAdmin && !role && user.email && ADMIN_EMAILS.includes(user.email) && profile) {
       isAdmin = true
-      role = profile.role as AdminRole || 'admin' // Use profile role, not super_admin by default
+      role = profile.role as AdminRole || 'viewer' // Use least privilege when profile.role is NULL
     }
 
     // Verify admin access
-    const validRoles: AdminRole[] = ['super_admin', 'admin', 'moderator']
+    const validRoles: AdminRole[] = ['super_admin', 'admin', 'moderator', 'viewer']
 
     if (!isAdmin && (!role || !validRoles.includes(role))) {
       // Log unauthorized access attempt
@@ -142,7 +106,7 @@ export async function verifyAdmin(): Promise<AdminAuthResult> {
       }
     }
 
-    const adminRole: AdminRole = role && validRoles.includes(role) ? role : 'super_admin'
+    const adminRole: AdminRole = role && validRoles.includes(role) ? role : 'viewer'
 
     return {
       success: true,

@@ -7,7 +7,7 @@ import { z } from 'zod'
 
 // PATCH request schema
 const updateAdminSchema = z.object({
-  role: z.enum(['super_admin', 'admin', 'moderator', 'support']).optional(),
+  role: z.enum(['super_admin', 'admin', 'moderator', 'viewer']).optional(),
   permissions: z.record(z.string(), z.record(z.string(), z.boolean())).optional(),
 })
 

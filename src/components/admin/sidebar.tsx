@@ -23,6 +23,7 @@ import {
   BookOpen,
   Gauge,
   Sliders,
+  Megaphone,
 } from 'lucide-react'
 
 const nav = [
@@ -44,6 +45,7 @@ const nav = [
   { name: 'Signalements', href: '/admin/signalements', icon: Flag },
   { name: 'Audit', href: '/admin/audit', icon: Shield },
   { name: 'RGPD', href: '/admin/rgpd', icon: Lock },
+  { name: 'Prospection', href: '/admin/prospection', icon: Megaphone },
   { name: 'Import SIRENE', href: '/admin/import', icon: Database },
   { name: 'Paramètres', href: '/admin/parametres', icon: Settings },
 ]
