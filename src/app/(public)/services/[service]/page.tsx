@@ -140,6 +140,7 @@ export default async function ServicePage({ params }: PageProps) {
     name: service.name,
     description: service.description || `Services de ${service.name.toLowerCase()} en France`,
     category: service.category || service.name,
+    image: getServiceImage(serviceSlug).src,
   })
 
   const breadcrumbSchema = getBreadcrumbSchema([

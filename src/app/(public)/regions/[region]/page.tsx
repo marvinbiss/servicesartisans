@@ -27,10 +27,26 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const deptCount = region.departments.length
   const cityCount = region.departments.reduce((acc, d) => acc + d.cities.length, 0)
 
+  const title = `Artisans en ${region.name} — Annuaire & Devis Gratuit | ServicesArtisans`
+  const description = `Trouvez un artisan qualifié en ${region.name}. ${deptCount} départements, ${cityCount} villes couvertes. Plombiers, électriciens, serruriers et plus. Devis gratuits, artisans référencés.`
+
   return {
-    title: `Artisans en ${region.name} — Annuaire & Devis Gratuit | ServicesArtisans`,
-    description: `Trouvez un artisan qualifié en ${region.name}. ${deptCount} départements, ${cityCount} villes couvertes. Plombiers, électriciens, serruriers et plus. Devis gratuits, artisans référencés.`,
+    title,
+    description,
     alternates: { canonical: `${SITE_URL}/regions/${regionSlug}` },
+    openGraph: {
+      title,
+      description,
+      type: 'website',
+      url: `${SITE_URL}/regions/${regionSlug}`,
+      images: [{ url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: `Artisans en ${region.name}` }],
+    },
+    twitter: {
+      card: 'summary_large_image' as const,
+      title,
+      description,
+      images: ['https://servicesartisans.fr/opengraph-image'],
+    },
   }
 }
 

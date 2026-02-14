@@ -157,7 +157,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         lastModified: STATIC_LAST_MODIFIED,
         changeFrequency: 'weekly' as const,
         priority: 0.7,
-        ...(cityImage ? { images: [cityImage.src] } : {}),
+        images: [cityImage ? cityImage.src : heroImage.src],
       }
     })
 

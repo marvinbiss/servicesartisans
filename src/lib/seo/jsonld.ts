@@ -114,12 +114,14 @@ export function getServiceSchema(service: {
   provider?: string
   areaServed?: string
   category?: string
+  image?: string
 }) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Service',
     name: service.name,
     description: service.description,
+    ...(service.image ? { image: service.image } : {}),
     provider: service.provider
       ? {
           '@type': 'Organization',

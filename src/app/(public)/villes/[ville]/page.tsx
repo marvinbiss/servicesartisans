@@ -8,7 +8,7 @@ import JsonLd from '@/components/JsonLd'
 import { getPlaceSchema, getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { villes, getVilleBySlug, services, getRegionSlugByName, getDepartementByCode } from '@/lib/data/france'
-import { getCityImage } from '@/lib/data/images'
+import { getCityImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 
 // Pre-render top 200 cities, rest generated on-demand via ISR
 const TOP_CITIES_COUNT = 200
@@ -39,13 +39,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       type: 'website',
-      ...(cityImage ? { images: [{ url: cityImage.src, width: 1200, height: 630, alt: cityImage.alt }] } : {}),
+      images: [cityImage
+        ? { url: cityImage.src, width: 1200, height: 630, alt: cityImage.alt }
+        : { url: 'https://servicesartisans.fr/opengraph-image', width: 1200, height: 630, alt: `Artisans à ${ville.name}` }
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      ...(cityImage ? { images: [cityImage.src] } : {}),
+      images: [cityImage ? cityImage.src : 'https://servicesartisans.fr/opengraph-image'],
     },
     alternates: { canonical: `${SITE_URL}/villes/${villeSlug}` },
   }
@@ -115,6 +118,8 @@ export default async function VillePage({ params }: PageProps) {
                 className="object-cover opacity-15"
                 sizes="100vw"
                 priority
+                placeholder="blur"
+                blurDataURL={BLUR_PLACEHOLDER}
               />
             )}
             <div className="absolute inset-0 bg-[#0a0f1e]/80" />

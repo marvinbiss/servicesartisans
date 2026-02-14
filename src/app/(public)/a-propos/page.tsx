@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Shield, Search, CreditCard, Lock, Eye, ArrowRight, Database } from 'lucide-react'
-import { pageImages } from '@/lib/data/images'
+import { pageImages, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import Breadcrumb from '@/components/Breadcrumb'
 import { createAdminClient } from '@/lib/supabase/admin'
 import JsonLd from '@/components/JsonLd'
@@ -202,6 +202,8 @@ export default async function AProposPage() {
                   fill
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 50vw"
+                  placeholder="blur"
+                  blurDataURL={BLUR_PLACEHOLDER}
                 />
               </div>
               <div className="p-8">
@@ -250,6 +252,8 @@ export default async function AProposPage() {
                   fill
                   className="object-cover opacity-40"
                   sizes="(max-width: 1024px) 100vw, 50vw"
+                  placeholder="blur"
+                  blurDataURL={BLUR_PLACEHOLDER}
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-blue-600/60 to-blue-700/90" />
               </div>
