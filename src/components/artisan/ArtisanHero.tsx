@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { Star, MapPin, CheckCircle, Zap, Users, Clock, Award, Phone } from 'lucide-react'
+import { Star, MapPin, CheckCircle, Zap, Users, Clock, Award, Phone, CalendarCheck } from 'lucide-react'
 import { getDisplayName } from './types'
 import type { LegacyArtisan } from '@/types/legacy'
 import {
@@ -101,6 +101,7 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
             {/* Name & Specialty */}
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900 font-heading mb-1.5 tracking-tight">
               {displayName}
+              <span className="sr-only"> &mdash; {artisan.specialty} &agrave; {artisan.city}</span>
             </h1>
             <p className="text-lg text-slate-600 mb-3 font-medium">{artisan.specialty}</p>
 
@@ -108,10 +109,10 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
             <div className="flex items-center gap-2 text-slate-500 mb-4">
               <MapPin className="w-4 h-4 flex-shrink-0 text-slate-400" />
               <span className="font-medium">{artisan.city} ({artisan.postal_code})</span>
-              {artisan.intervention_zone && (
+              {artisan.intervention_radius_km && (
                 <>
                   <span className="text-slate-300" aria-hidden="true">&bull;</span>
-                  <span className="text-slate-400">Zone : {artisan.intervention_zone}</span>
+                  <span className="text-slate-400">Rayon : {artisan.intervention_radius_km} km</span>
                 </>
               )}
             </div>
@@ -172,7 +173,42 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
                   <span>&Eacute;quipe de {artisan.team_size}</span>
                 </div>
               )}
+
+              {artisan.member_since && (
+                <div className="flex items-center gap-1.5 text-slate-600">
+                  <CalendarCheck className="w-4 h-4 text-slate-400" aria-hidden="true" />
+                  <span>Inscrit depuis {artisan.member_since}</span>
+                </div>
+              )}
+
+              {artisan.updated_at && (
+                <div className="flex items-center gap-1.5 text-sm text-slate-500">
+                  <Clock className="w-4 h-4 text-emerald-500" />
+                  <span>Mis &agrave; jour {new Date(artisan.updated_at).toLocaleDateString('fr-FR', { month: 'short', year: 'numeric' })}</span>
+                </div>
+              )}
             </div>
+
+            {/* Freshness / activity indicator */}
+            {(artisan.review_count > 0 || artisan.member_since || artisan.accepts_new_clients) && (
+              <div className="flex items-center gap-3 flex-wrap mt-3">
+                {artisan.review_count > 0 && (
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-medium border border-emerald-100">
+                    <Star className="w-3 h-3 fill-emerald-500 text-emerald-500" aria-hidden="true" />
+                    {artisan.review_count} avis client{artisan.review_count > 1 ? 's' : ''} re&ccedil;u{artisan.review_count > 1 ? 's' : ''}
+                  </span>
+                )}
+                {artisan.accepts_new_clients === true && (
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-medium border border-blue-100">
+                    <span className="relative flex h-1.5 w-1.5">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
+                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-blue-500" />
+                    </span>
+                    Profil actif
+                  </span>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>

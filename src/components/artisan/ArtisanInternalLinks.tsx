@@ -110,7 +110,7 @@ export default function ArtisanInternalLinks({
             </Link>
           </div>
 
-          {/* Column 3: Geographic navigation */}
+          {/* Column 3: Geographic navigation + cross-links */}
           <div>
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <Compass className="w-4 h-4 text-blue-600" />
@@ -145,6 +145,20 @@ export default function ArtisanInternalLinks({
               >
                 {serviceName} en France
               </Link>
+              <Link
+                href={`/tarifs-artisans/${serviceSlug}`}
+                className="block px-3 py-2 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-lg text-sm transition-colors"
+              >
+                Tarifs {serviceName} en France
+              </Link>
+              {['plombier', 'electricien', 'serrurier', 'chauffagiste', 'vitrier', 'couvreur'].includes(serviceSlug) && (
+                <Link
+                  href={`/urgence/${serviceSlug}`}
+                  className="block px-3 py-2 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-lg text-sm transition-colors"
+                >
+                  Urgence {serviceName}
+                </Link>
+              )}
             </div>
           </div>
         </div>

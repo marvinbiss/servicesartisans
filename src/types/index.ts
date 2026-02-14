@@ -61,6 +61,25 @@ export interface Provider {
   rating_average?: number
   review_count?: number
   experience_years?: number
+  avatar_url?: string
+  certifications?: string[]
+  insurance?: string[]
+  payment_methods?: string[]
+  languages?: string[]
+  emergency_available?: boolean
+  available_24h?: boolean
+  hourly_rate_min?: number
+  hourly_rate_max?: number
+  phone_secondary?: string
+  opening_hours?: Record<string, { ouvert: boolean; debut: string; fin: string }>
+  accepts_new_clients?: boolean
+  free_quote?: boolean
+  intervention_radius_km?: number
+  service_prices?: Array<{ name: string; description?: string; price: string; duration?: string }>
+  faq?: Array<{ question: string; answer: string }>
+  team_size?: number
+  services_offered?: string[]
+  bio?: string
   // GUARD: Do NOT add is_premium, trust_badge, trust_score here.
   // Legacy fields live in src/types/legacy/ (LegacyProvider).
   // Relations

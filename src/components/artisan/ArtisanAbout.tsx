@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { User, ChevronDown, Shield, Award, CheckCircle } from 'lucide-react'
-import { Artisan, getDisplayName } from './types'
+import { Artisan } from './types'
 
 interface ArtisanAboutProps {
   artisan: Artisan
@@ -11,9 +11,8 @@ interface ArtisanAboutProps {
 
 export function ArtisanAbout({ artisan }: ArtisanAboutProps) {
   const [expanded, setExpanded] = useState(false)
-  const displayName = getDisplayName(artisan)
 
-  const description = artisan.description || `${displayName} est un professionnel qualifié spécialisé en ${artisan.specialty} à ${artisan.city}.`
+  const description = artisan.description || ''
   const isLong = description.length > 300
 
   return (
@@ -34,31 +33,33 @@ export function ArtisanAbout({ artisan }: ArtisanAboutProps) {
       </div>
 
       {/* Description */}
-      <div className="px-6">
-        <div className="relative">
-          <div
-            id="about-description"
-            aria-expanded={isLong ? expanded : undefined}
-            className={`text-slate-600 leading-relaxed text-[0.95rem] ${!expanded && isLong ? 'line-clamp-4' : ''}`}
-          >
-            {description}
+      {description ? (
+        <div className="px-6">
+          <div className="relative">
+            <div
+              id="about-description"
+              aria-expanded={isLong ? expanded : undefined}
+              className={`text-slate-600 leading-relaxed text-[0.95rem] ${!expanded && isLong ? 'line-clamp-4' : ''}`}
+            >
+              {description}
+            </div>
+            {isLong && !expanded && (
+              <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-white to-transparent pointer-events-none" />
+            )}
           </div>
-          {isLong && !expanded && (
-            <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-white to-transparent pointer-events-none" />
+          {isLong && (
+            <button
+              onClick={() => setExpanded(!expanded)}
+              aria-expanded={expanded}
+              aria-controls="about-description"
+              className="mt-2 text-blue-600 font-medium text-sm flex items-center gap-1 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded transition-colors"
+            >
+              {expanded ? 'Voir moins' : 'Voir plus'}
+              <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`} aria-hidden="true" />
+            </button>
           )}
         </div>
-        {isLong && (
-          <button
-            onClick={() => setExpanded(!expanded)}
-            aria-expanded={expanded}
-            aria-controls="about-description"
-            className="mt-2 text-blue-600 font-medium text-sm flex items-center gap-1 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded transition-colors"
-          >
-            {expanded ? 'Voir moins' : 'Voir plus'}
-            <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`} aria-hidden="true" />
-          </button>
-        )}
-      </div>
+      ) : null}
 
       {/* Certifications List */}
       {artisan.certifications && artisan.certifications.length > 0 && (

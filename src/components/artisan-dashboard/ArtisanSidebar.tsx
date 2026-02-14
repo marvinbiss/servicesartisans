@@ -9,9 +9,10 @@ interface ArtisanSidebarProps {
   activePage?: 'dashboard' | 'leads' | 'demandes-recues' | 'calendrier' | 'messages' | 'portfolio' | 'statistiques' | 'avis-recus' | 'profil' | 'abonnement'
   newDemandesCount?: number
   unreadMessagesCount?: number
+  publicUrl?: string | null
 }
 
-export default function ArtisanSidebar({ activePage = 'dashboard', newDemandesCount = 0, unreadMessagesCount = 0 }: ArtisanSidebarProps) {
+export default function ArtisanSidebar({ activePage = 'dashboard', newDemandesCount = 0, unreadMessagesCount = 0, publicUrl }: ArtisanSidebarProps) {
   return (
     <div className="lg:col-span-1">
       <nav className="bg-white rounded-xl shadow-sm p-4 space-y-1">
@@ -116,15 +117,17 @@ export default function ArtisanSidebar({ activePage = 'dashboard', newDemandesCo
       </nav>
 
       {/* Voir mon profil public */}
-      <div className="bg-white rounded-xl shadow-sm p-4 mt-4">
-        <Link
-          href="/services/plombier/paris/martin-plomberie-paris"
-          className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
-        >
-          <ExternalLink className="w-4 h-4" />
-          Voir mon profil public
-        </Link>
-      </div>
+      {publicUrl && (
+        <div className="bg-white rounded-xl shadow-sm p-4 mt-4">
+          <Link
+            href={publicUrl}
+            className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
+          >
+            <ExternalLink className="w-4 h-4" />
+            Voir mon profil public
+          </Link>
+        </div>
+      )}
 
       {/* Quick links */}
       <div className="mt-4">

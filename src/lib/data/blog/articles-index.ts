@@ -10,6 +10,7 @@ export interface BlogArticleMeta {
   title: string
   excerpt: string
   category: string
+  tags: string[]
   date: string
   readTime: string
   image: string
@@ -85,6 +86,7 @@ export const allArticlesMeta: BlogArticleMeta[] = Object.entries(allArticles)
     title: a.title,
     excerpt: a.excerpt,
     category: normalizeCategory(a.category),
+    tags: a.tags || [],
     date: a.date,
     readTime: a.readTime,
     image: getEmoji(slug, a.category),

@@ -371,7 +371,7 @@ export async function GET(
         certifications: provider.certifications || [],
         insurance: provider.insurance || [],
         payment_methods: provider.payment_methods || [],
-        languages: provider.languages || ['Français'],
+        languages: provider.languages || [],
         emergency_available: provider.emergency_available || false,
         member_since: provider.created_at
           ? new Date(provider.created_at).getFullYear().toString()
@@ -522,7 +522,7 @@ export async function GET(
           certifications: profile.certifications || [],
           insurance: profile.insurance || [],
           payment_methods: profile.payment_methods || [],
-          languages: profile.languages || ['Français'],
+          languages: profile.languages || [],
           emergency_available: profile.emergency_available || false,
           member_since: profile.created_at
             ? new Date(profile.created_at).getFullYear().toString()

@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 import { ArrowRight, CheckCircle, Euro, Shield, ChevronDown, TrendingUp, Clock, MapPin } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
@@ -66,6 +67,7 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
     description,
     alternates: { canonical: `${SITE_URL}/tarifs-artisans/${service}` },
     openGraph: {
+      locale: 'fr_FR',
       title,
       description,
       url: `${SITE_URL}/tarifs-artisans/${service}`,
@@ -86,7 +88,7 @@ const topCities = villes.slice(0, 6)
 export default async function TarifsServicePage({ params }: { params: Promise<{ service: string }> }) {
   const { service } = await params
   const trade = tradeContent[service]
-  if (!trade) return null
+  if (!trade) notFound()
 
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },

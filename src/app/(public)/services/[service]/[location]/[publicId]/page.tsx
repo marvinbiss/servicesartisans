@@ -10,6 +10,9 @@ import { Review } from '@/components/artisan'
 import type { LegacyArtisan } from '@/types/legacy'
 import { getServiceImage } from '@/lib/data/images'
 import { SITE_URL } from '@/lib/seo/config'
+import { hashCode } from '@/lib/seo/location-content'
+import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import JsonLd from '@/components/JsonLd'
 
 export const revalidate = 300
 
@@ -31,7 +34,7 @@ function convertToArtisan(provider: any, service: any, location: any, serviceSlu
   const existingDesc = provider.description || provider.bio
   const description = (existingDesc && existingDesc.length > 50)
     ? existingDesc
-    : generateDescription(name, specialty, city || 'votre région', provider)
+    : generateDescription(name, specialty, city || 'votre région', provider, serviceSlug)
 
   return {
     id: provider.id,
@@ -51,21 +54,29 @@ function convertToArtisan(provider: any, service: any, location: any, serviceSlu
     specialty_slug: serviceSlug,
     city_slug: location?.slug || undefined,
     description: description,
+    bio: provider.bio || undefined,
     average_rating: provider.rating_average || provider.average_rating || null,
     review_count: provider.review_count || 0,
     is_verified: provider.is_verified || false,
     is_center: provider.is_center || false,
     team_size: provider.team_size || undefined,
-    services: provider.services || [],
-    service_prices: (provider.service_prices && provider.service_prices.length > 0) ? provider.service_prices : generateServicePrices(serviceSlug),
-    prices_are_estimated: !(provider.service_prices && provider.service_prices.length > 0),
+    services: provider.services_offered || [],
+    service_prices: (provider.service_prices && provider.service_prices.length > 0) ? provider.service_prices : [],
+    prices_are_estimated: false,
     accepts_new_clients: provider.accepts_new_clients === true ? true : undefined,
+    free_quote: provider.free_quote === true ? true : undefined,
     experience_years: provider.experience_years || undefined,
     certifications: provider.certifications || [],
     insurance: provider.insurance || [],
     payment_methods: provider.payment_methods || [],
-    languages: provider.languages || ['Français'],
+    languages: provider.languages || [],
     emergency_available: provider.emergency_available || false,
+    available_24h: provider.available_24h || false,
+    hourly_rate_min: provider.hourly_rate_min != null ? Number(provider.hourly_rate_min) : undefined,
+    hourly_rate_max: provider.hourly_rate_max != null ? Number(provider.hourly_rate_max) : undefined,
+    phone_secondary: provider.phone_secondary || undefined,
+    opening_hours: provider.opening_hours && Object.keys(provider.opening_hours).length > 0 ? provider.opening_hours : undefined,
+    intervention_radius_km: provider.intervention_radius_km || undefined,
     member_since: provider.created_at ? new Date(provider.created_at).getFullYear().toString() : undefined,
     siret: provider.siret || undefined,
     legal_form: provider.legal_form || undefined,
@@ -77,18 +88,28 @@ function convertToArtisan(provider: any, service: any, location: any, serviceSlu
     latitude: provider.latitude || undefined,
     longitude: provider.longitude || undefined,
     faq: (provider.faq && provider.faq.length > 0) ? provider.faq : undefined,
+    updated_at: provider.updated_at || undefined,
     // Legacy fields — undefined at runtime (columns dropped), kept for sub-component compat
     // Will be removed when each sub-component migrates to v2 Artisan type
   }
 }
 
 // Generate a rich, unique description based on all available provider data
-function generateDescription(name: string, specialty: string, city: string, provider?: any): string {
+function generateDescription(name: string, specialty: string, city: string, provider?: any, serviceSlug?: string): string {
   const spe = specialty.toLowerCase()
   const parts: string[] = []
 
-  // Opening sentence with specialty and location
-  parts.push(`${name} est un professionnel spécialisé en ${spe} à ${city}.`)
+  // Hash-varied intro templates to reduce duplicate content across similar profiles
+  const introKey = `desc-${provider?.stable_id || provider?.slug || provider?.id || name}-${serviceSlug || spe}`
+  const introHash = hashCode(introKey)
+  const introTemplates = [
+    `${name} est un professionnel spécialisé en ${spe} à ${city}.`,
+    `Basé à ${city}, ${name} intervient en ${spe} pour les particuliers et professionnels.`,
+    `${name} propose ses services de ${spe} à ${city} et ses environs.`,
+    `Professionnel en ${spe}, ${name} exerce à ${city} auprès d'une clientèle locale.`,
+    `À ${city}, ${name} met son expertise en ${spe} au service de vos projets.`,
+  ]
+  parts.push(introTemplates[introHash % introTemplates.length])
 
   // Company history and experience
   if (provider?.creation_date) {
@@ -134,75 +155,10 @@ function generateDescription(name: string, specialty: string, city: string, prov
   // CTA
   parts.push(`Contactez ${name} pour obtenir un devis gratuit et personnalisé, sans engagement.`)
 
+  // Freshness / E-E-A-T: signal that content is data-derived
+  parts.push('Informations basées sur les données professionnelles déclarées.')
+
   return parts.join(' ')
-}
-
-// Generate typical service prices based on specialty
-const SERVICE_PRICES_BY_SPECIALTY: Record<string, Array<{ name: string; description: string; price: string; duration?: string }>> = {
-  plombier: [
-    { name: 'Dépannage plomberie', description: 'Intervention urgente : fuite, débouchage, réparation', price: 'À partir de 80€', duration: '1-2h' },
-    { name: 'Installation sanitaire', description: 'Pose de lavabo, douche, WC, baignoire', price: 'À partir de 150€', duration: '2-4h' },
-    { name: 'Recherche de fuite', description: 'Détection et réparation de fuite d\'eau', price: 'À partir de 120€', duration: '1-3h' },
-    { name: 'Remplacement chauffe-eau', description: 'Dépose et installation d\'un nouveau chauffe-eau', price: 'À partir de 350€', duration: '3-4h' },
-  ],
-  electricien: [
-    { name: 'Dépannage électrique', description: 'Panne, court-circuit, disjoncteur, prise défaillante', price: 'À partir de 80€', duration: '1-2h' },
-    { name: 'Installation électrique', description: 'Pose de prises, interrupteurs, éclairage', price: 'À partir de 100€', duration: '2-4h' },
-    { name: 'Mise aux normes', description: 'Mise en conformité du tableau électrique', price: 'À partir de 500€', duration: '1-2 jours' },
-    { name: 'Pose de luminaires', description: 'Installation de spots, suspensions, appliques', price: 'À partir de 60€', duration: '1-2h' },
-  ],
-  serrurier: [
-    { name: 'Ouverture de porte', description: 'Porte claquée ou fermée à clé, sans dégât', price: 'À partir de 90€', duration: '30min-1h' },
-    { name: 'Changement de serrure', description: 'Remplacement de cylindre ou serrure complète', price: 'À partir de 120€', duration: '1-2h' },
-    { name: 'Installation de blindage', description: 'Porte blindée ou blindage de porte existante', price: 'À partir de 800€', duration: '2-4h' },
-    { name: 'Double de clé', description: 'Reproduction de clé standard ou sécurisée', price: 'À partir de 15€', duration: '15min' },
-  ],
-  chauffagiste: [
-    { name: 'Entretien chaudière', description: 'Révision annuelle obligatoire, nettoyage, contrôle', price: 'À partir de 90€', duration: '1-2h' },
-    { name: 'Dépannage chauffage', description: 'Panne de chaudière, radiateur, thermostat', price: 'À partir de 100€', duration: '1-3h' },
-    { name: 'Installation chaudière', description: 'Pose et mise en service de chaudière gaz ou fioul', price: 'À partir de 2 500€', duration: '1-2 jours' },
-    { name: 'Installation climatisation', description: 'Pose de climatiseur réversible mono ou multi-split', price: 'À partir de 1 200€', duration: '1 jour' },
-  ],
-  'peintre-en-batiment': [
-    { name: 'Peinture intérieure', description: 'Murs et plafonds, préparation et deux couches', price: 'À partir de 25€/m²', duration: '1-3 jours' },
-    { name: 'Peinture extérieure', description: 'Ravalement de façade, volets, portails', price: 'À partir de 35€/m²', duration: '2-5 jours' },
-    { name: 'Pose de papier peint', description: 'Préparation des murs et pose soignée', price: 'À partir de 30€/m²', duration: '1-2 jours' },
-    { name: 'Enduit et lissage', description: 'Ratissage, enduit de lissage, préparation', price: 'À partir de 20€/m²', duration: '1-2 jours' },
-  ],
-  menuisier: [
-    { name: 'Pose de cuisine', description: 'Montage et installation de meubles de cuisine', price: 'À partir de 500€', duration: '1-3 jours' },
-    { name: 'Fabrication sur mesure', description: 'Étagères, placards, bibliothèques, dressing', price: 'À partir de 300€', duration: '2-5 jours' },
-    { name: 'Pose de parquet', description: 'Parquet massif, contrecollé ou stratifié', price: 'À partir de 30€/m²', duration: '1-3 jours' },
-    { name: 'Réparation menuiserie', description: 'Porte, fenêtre, volet, escalier', price: 'À partir de 80€', duration: '1-4h' },
-  ],
-  carreleur: [
-    { name: 'Pose de carrelage sol', description: 'Carrelage intérieur, préparation et pose', price: 'À partir de 35€/m²', duration: '1-3 jours' },
-    { name: 'Faïence murale', description: 'Carrelage mural salle de bain, cuisine', price: 'À partir de 40€/m²', duration: '1-2 jours' },
-    { name: 'Mosaïque', description: 'Pose de mosaïque décorative', price: 'À partir de 50€/m²', duration: '1-3 jours' },
-    { name: 'Rénovation carrelage', description: 'Dépose ancien carrelage et repose', price: 'À partir de 45€/m²', duration: '2-4 jours' },
-  ],
-  couvreur: [
-    { name: 'Réparation toiture', description: 'Tuiles cassées, fuite, faîtage', price: 'À partir de 200€', duration: '1-2 jours' },
-    { name: 'Réfection complète', description: 'Remplacement intégral de la couverture', price: 'À partir de 80€/m²', duration: '3-10 jours' },
-    { name: 'Nettoyage toiture', description: 'Démoussage, traitement hydrofuge', price: 'À partir de 15€/m²', duration: '1-2 jours' },
-    { name: 'Pose de gouttières', description: 'Gouttières aluminium, zinc ou PVC', price: 'À partir de 30€/ml', duration: '1-2 jours' },
-  ],
-  macon: [
-    { name: 'Maçonnerie générale', description: 'Construction, extension, rénovation', price: 'Sur devis', duration: 'Variable' },
-    { name: 'Dalle béton', description: 'Coulage de dalle, chape, terrasse', price: 'À partir de 50€/m²', duration: '2-5 jours' },
-    { name: 'Ouverture de mur', description: 'Création d\'ouverture, pose d\'IPN', price: 'À partir de 800€', duration: '1-3 jours' },
-    { name: 'Ravalement de façade', description: 'Enduit, crépi, réparation de fissures', price: 'À partir de 40€/m²', duration: '3-10 jours' },
-  ],
-  jardinier: [
-    { name: 'Entretien de jardin', description: 'Tonte, taille de haies, désherbage', price: 'À partir de 35€/h', duration: '2-4h' },
-    { name: 'Élagage', description: 'Taille et élagage d\'arbres', price: 'À partir de 150€', duration: '2-6h' },
-    { name: 'Création de jardin', description: 'Aménagement paysager, plantation', price: 'Sur devis', duration: 'Variable' },
-    { name: 'Pose de clôture', description: 'Clôture bois, grillage, panneaux', price: 'À partir de 40€/ml', duration: '1-3 jours' },
-  ],
-}
-
-function generateServicePrices(specialtySlug: string): Array<{ name: string; description: string; price: string; duration?: string }> {
-  return SERVICE_PRICES_BY_SPECIALTY[specialtySlug] || []
 }
 
 // Fetch similar artisans (same specialty, same department)
@@ -266,7 +222,7 @@ async function getProviderReviews(providerId: string, serviceName?: string): Pro
         has_media
       `)
       .eq('provider_id', providerId)
-      // REMOVED: .eq('status', 'published') to show ALL real reviews
+      .or('status.eq.published,status.is.null')
       .order('created_at', { ascending: false })
       .limit(100) // Increased limit to show more reviews
 
@@ -296,6 +252,11 @@ async function getProviderReviews(providerId: string, serviceName?: string): Pro
   }
 }
 
+function truncateTitle(title: string, maxLen = 55): string {
+  if (title.length <= maxLen) return title
+  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '\u2026'
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { service: serviceSlug, location: locationSlug, publicId } = await params
 
@@ -315,9 +276,31 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const cityName = location?.name || provider.address_city || ''
     const serviceName = service?.name || 'Artisan'
 
-    const title = `${displayName} - ${serviceName} à ${cityName}`
-    const ratingText = provider.rating_average ? `Note ${provider.rating_average}/5. ` : ''
-    const description = `${displayName}, ${serviceName.toLowerCase()} à ${cityName}. ${ratingText}Devis gratuit. Artisan professionnel.`
+    const title = truncateTitle(`${displayName} - ${serviceName} à ${cityName}`)
+
+    const descParts: string[] = []
+    descParts.push(`${displayName}, ${serviceName.toLowerCase()} à ${cityName}`)
+    if (provider.experience_years) descParts.push(`${provider.experience_years} ans d'expérience`)
+    if (provider.review_count && provider.review_count > 0) {
+      descParts.push(`${provider.review_count} avis${provider.rating_average ? ` (${Number(provider.rating_average).toFixed(1)}/5)` : ''}`)
+    }
+    if (provider.certifications?.length) descParts.push(`${provider.certifications.length} certification${provider.certifications.length > 1 ? 's' : ''}`)
+    if (provider.siret) descParts.push('SIRET vérifié')
+    descParts.push('Devis gratuit')
+    const rawDesc = descParts.join(' \u00b7 ') + '.'
+    const description = rawDesc.length > 155 ? rawDesc.slice(0, 154).replace(/\s+\S*$/, '') + '\u2026' : rawDesc
+
+    // Quality score for indexing decision — profile needs >= 3 signals to be indexed
+    const qualityScore = [
+      provider.siret ? 1 : 0,                                              // Has SIRET
+      provider.description && provider.description.length > 50 ? 1 : 0,    // Has real description
+      (provider.review_count || 0) > 0 ? 1 : 0,                            // Has reviews
+      provider.certifications?.length > 0 ? 1 : 0,                         // Has certifications
+      provider.portfolio_images?.length > 0 ? 1 : 0,                       // Has portfolio
+      provider.is_verified ? 1 : 0,                                         // Is verified
+    ].reduce((sum: number, v: number) => sum + v, 0)
+
+    const shouldNoindex = provider.noindex || qualityScore < 3
 
     const serviceImage = getServiceImage(serviceSlug)
     const ogAlt = `${displayName} - ${serviceName} à ${cityName}`
@@ -327,8 +310,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {
       title,
       description,
-      // Wave-based indexing: noindex until explicitly activated
-      robots: provider.noindex ? { index: false, follow: false } : undefined,
+      // Quality-gated indexing: thin profiles (< 3 quality signals) get noindex, follow: true preserves link equity
+      robots: shouldNoindex ? { index: false, follow: true } : undefined,
       openGraph: {
         title,
         description,
@@ -350,7 +333,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       },
     }
   } catch {
-    return { title: 'Artisan non trouvé', robots: { index: false, follow: false } }
+    return { title: 'Artisan non trouvé', robots: { index: false, follow: true } }
   }
 }
 
@@ -420,6 +403,15 @@ export default async function ProviderPage({ params }: PageProps) {
       )}
       <link rel="dns-prefetch" href="//umjmbdbwcsxrvfqktiui.supabase.co" />
 
+      {/* Server-rendered BreadcrumbList JSON-LD for immediate crawlability */}
+      <JsonLd data={getBreadcrumbSchema([
+        { name: 'Accueil', url: '/' },
+        { name: 'Services', url: '/services' },
+        { name: service?.name || artisan.specialty, url: `/services/${serviceSlug}` },
+        { name: artisan.city, url: `/services/${serviceSlug}/${locationSlug}` },
+        { name: artisan.business_name || 'Artisan', url: `/services/${serviceSlug}/${locationSlug}/${publicId}` },
+      ])} />
+
       <ArtisanPageClient
         initialArtisan={artisan}
         initialReviews={reviews}
@@ -452,6 +444,18 @@ export default async function ProviderPage({ params }: PageProps) {
         departmentName={location?.department_name}
         departmentCode={location?.department_code}
       />
+
+      {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
+      <section className="mb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
+            <h3 className="text-sm font-semibold text-slate-700 mb-2">Informations sur ce profil</h3>
+            <p className="text-xs text-slate-500 leading-relaxed">
+              Les informations de ce profil sont fournies par l&apos;artisan et vérifiées via l&apos;API SIRENE (INSEE). Les tarifs affichés, lorsqu&apos;ils sont renseignés, sont indicatifs et propres à cet artisan. Les avis sont collectés auprès de clients ayant fait appel à ses services. ServicesArtisans est un annuaire indépendant — nous facilitons la mise en relation mais ne garantissons pas les prestations.
+            </p>
+          </div>
+        </div>
+      </section>
 
       {/* Trust & Safety Links (E-E-A-T) */}
       <section className="py-8 bg-gray-50 border-t">

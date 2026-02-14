@@ -86,7 +86,7 @@ export const tradeContent: Record<string, TradeContent> = {
       'PG (Professionnel du Gaz)',
       'QualiPAC (pour les pompes à chaleur)',
     ],
-    averageResponseTime: 'Sous 2 heures en urgence, 24 à 48h pour un rendez-vous standard',
+    averageResponseTime: 'Intervention rapide, selon disponibilité',
   },
 
   electricien: {
@@ -155,7 +155,7 @@ export const tradeContent: Record<string, TradeContent> = {
       'Habilitation électrique (B1, B2, BR)',
       'Qualibat',
     ],
-    averageResponseTime: 'Sous 3 heures en urgence, 24 à 72h pour un rendez-vous standard',
+    averageResponseTime: 'Intervention rapide, selon disponibilité',
   },
 
   serrurier: {
@@ -222,7 +222,7 @@ export const tradeContent: Record<string, TradeContent> = {
       'Qualibat',
       'Certification Qualisr (Qualification Serrurerie)',
     ],
-    averageResponseTime: 'Sous 30 minutes en urgence en zone urbaine, 1 à 2h en zone rurale',
+    averageResponseTime: 'Intervention rapide, selon disponibilité',
   },
 
   chauffagiste: {
@@ -292,7 +292,7 @@ export const tradeContent: Record<string, TradeContent> = {
       'Qualifioul (installations fioul)',
       'QualiSol (chauffe-eau solaire)',
     ],
-    averageResponseTime: 'Sous 4 heures en urgence, 48 à 72h pour un rendez-vous standard',
+    averageResponseTime: 'Intervention rapide, selon disponibilité',
   },
 
   'peintre-en-batiment': {
@@ -357,7 +357,7 @@ export const tradeContent: Record<string, TradeContent> = {
       'RGE (si travaux d\'isolation thermique par l\'extérieur)',
       'OPPBTP (Organisation Professionnelle de Prévention du Bâtiment)',
     ],
-    averageResponseTime: '48 à 72h pour un devis, début des travaux sous 1 à 3 semaines',
+    averageResponseTime: 'Intervention rapide, selon disponibilité',
   },
 
   menuisier: {
@@ -423,7 +423,7 @@ export const tradeContent: Record<string, TradeContent> = {
       'Certification QB (Qualité Bois)',
       'FCBA (Institut Technologique Forêt Cellulose Bois-construction Ameublement)',
     ],
-    averageResponseTime: '48 à 72h pour un devis, début des travaux sous 2 à 4 semaines',
+    averageResponseTime: 'Intervention rapide, selon disponibilité',
   },
 
   carreleur: {
@@ -487,7 +487,7 @@ export const tradeContent: Record<string, TradeContent> = {
       'Qualibat (qualification 6321 pour carrelage et revêtements)',
       'CSTB (Centre Scientifique et Technique du Bâtiment)',
     ],
-    averageResponseTime: '48 à 72h pour un devis, début des travaux sous 2 à 4 semaines',
+    averageResponseTime: 'Intervention rapide, selon disponibilité',
   },
 
   couvreur: {
@@ -553,7 +553,7 @@ export const tradeContent: Record<string, TradeContent> = {
       'Compagnons du Devoir (formation d\'excellence)',
       'Certification Qualit\'EnR',
     ],
-    averageResponseTime: 'Sous 24h en urgence (fuite), 1 à 2 semaines pour un devis standard',
+    averageResponseTime: 'Intervention rapide, selon disponibilité',
   },
 
   macon: {
@@ -618,7 +618,7 @@ export const tradeContent: Record<string, TradeContent> = {
       'RGE (si travaux d\'isolation par l\'extérieur)',
       'NF DTU 20.1 (norme de référence pour la maçonnerie)',
     ],
-    averageResponseTime: '3 à 5 jours pour un devis, début des travaux sous 3 à 6 semaines',
+    averageResponseTime: 'Intervention rapide, selon disponibilité',
   },
 
   jardinier: {
@@ -684,7 +684,7 @@ export const tradeContent: Record<string, TradeContent> = {
       'Certiphyto (utilisation de produits phytosanitaires)',
       'CAPA Travaux Paysagers',
     ],
-    averageResponseTime: '24 à 48h pour un devis, début des travaux sous 1 à 2 semaines',
+    averageResponseTime: 'Intervention rapide, selon disponibilité',
   },
 
   vitrier: {
@@ -751,7 +751,7 @@ export const tradeContent: Record<string, TradeContent> = {
       'Certification Cekal (performance des vitrages isolants)',
       'NF DTU 39 (norme de référence pour la vitrerie)',
     ],
-    averageResponseTime: 'Sous 2 heures en urgence, 24 à 48h pour un rendez-vous standard',
+    averageResponseTime: 'Intervention rapide, selon disponibilité',
   },
 
   climaticien: {
@@ -820,7 +820,7 @@ export const tradeContent: Record<string, TradeContent> = {
       'QualiPAC (pompes à chaleur)',
       'Qualifroid',
     ],
-    averageResponseTime: 'Sous 6 heures en urgence (canicule), 48 à 72h pour un devis standard',
+    averageResponseTime: 'Intervention rapide, selon disponibilité',
   },
 
   cuisiniste: {
@@ -885,7 +885,7 @@ export const tradeContent: Record<string, TradeContent> = {
       'Label Cuisine Qualité (AFNOR)',
       'Garantie Meubles de France',
     ],
-    averageResponseTime: '48 à 72h pour un premier rendez-vous, 4 à 8 semaines pour la livraison',
+    averageResponseTime: 'Intervention rapide, selon disponibilité',
   },
 
   solier: {
@@ -950,7 +950,7 @@ export const tradeContent: Record<string, TradeContent> = {
       'Qualibat (qualification 6421 pour parquets)',
       'Certification UPEC (Union Professionnelle de l\'Expertise en Construction)',
     ],
-    averageResponseTime: '48 à 72h pour un devis, début des travaux sous 1 à 3 semaines',
+    averageResponseTime: 'Intervention rapide, selon disponibilité',
   },
 
   nettoyage: {
@@ -1016,7 +1016,7 @@ export const tradeContent: Record<string, TradeContent> = {
       'ISO 14001 (management environnemental)',
       'Écolabel Européen (utilisation de produits écologiques)',
     ],
-    averageResponseTime: '24 à 48h pour un devis, intervention sous 3 à 5 jours',
+    averageResponseTime: 'Intervention rapide, selon disponibilité',
   },
 }
 

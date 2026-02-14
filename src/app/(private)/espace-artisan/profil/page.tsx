@@ -1,165 +1,90 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Link from 'next/link'
-import { FileText, MessageSquare, Star, Settings, TrendingUp, Euro, ArrowLeft, Camera, MapPin, Phone, Mail, Globe, Clock, Shield, Award, Plus, X, ExternalLink, Search, Loader2 } from 'lucide-react'
-import Breadcrumb from '@/components/Breadcrumb'
-import { QuickSiteLinks } from '@/components/InternalLinks'
-import LogoutButton from '@/components/LogoutButton'
+import { Loader2, Building2, Phone, MapPin, FileText, Euro, Award, Clock, Settings2, Camera, HelpCircle } from 'lucide-react'
+import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
+import { IdentiteSection } from '@/components/artisan-dashboard/profil/IdentiteSection'
+import { ContactSection } from '@/components/artisan-dashboard/profil/ContactSection'
+import { LocalisationSection } from '@/components/artisan-dashboard/profil/LocalisationSection'
+import { PresentationSection } from '@/components/artisan-dashboard/profil/PresentationSection'
+import { ServicesTarifsSection } from '@/components/artisan-dashboard/profil/ServicesTarifsSection'
+import { QualificationsSection } from '@/components/artisan-dashboard/profil/QualificationsSection'
+import { DisponibiliteSection } from '@/components/artisan-dashboard/profil/DisponibiliteSection'
+import { PreferencesSection } from '@/components/artisan-dashboard/profil/PreferencesSection'
+import { FaqSection } from '@/components/artisan-dashboard/profil/FaqSection'
+import { AvatarSection } from '@/components/artisan-dashboard/profil/AvatarSection'
+import { getArtisanUrl } from '@/lib/utils'
 
-interface Profile {
-  id: string
-  email: string
-  full_name: string | null
-  company_name: string | null
-  siret: string | null
-  phone: string | null
-  address: string | null
-  city: string | null
-  postal_code: string | null
-  description: string | null
-  services: string[] | null
-  zones: string[] | null
-  is_verified: boolean
-  subscription_plan: string
-}
+type TabId = 'identite' | 'contact' | 'localisation' | 'presentation' | 'services' | 'qualifications' | 'disponibilite' | 'faq' | 'preferences' | 'avatar'
+
+const TABS = [
+  { id: 'identite' as const, label: 'Identité', icon: Building2 },
+  { id: 'contact' as const, label: 'Contact', icon: Phone },
+  { id: 'localisation' as const, label: 'Localisation', icon: MapPin },
+  { id: 'presentation' as const, label: 'Présentation', icon: FileText },
+  { id: 'services' as const, label: 'Services & Tarifs', icon: Euro },
+  { id: 'qualifications' as const, label: 'Qualifications', icon: Award },
+  { id: 'disponibilite' as const, label: 'Disponibilité', icon: Clock },
+  { id: 'faq' as const, label: 'FAQ', icon: HelpCircle },
+  { id: 'preferences' as const, label: 'Préférences', icon: Settings2 },
+  { id: 'avatar' as const, label: 'Photo de profil', icon: Camera },
+]
 
 export default function ProfilArtisanPage() {
+  const [provider, setProvider] = useState<Record<string, unknown> | null>(null)
   const [loading, setLoading] = useState(true)
-  const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState<string | null>(null)
-  const [_profile, setProfile] = useState<Profile | null>(null)
+  const [activeTab, setActiveTab] = useState<TabId>('identite')
 
-  const [formData, setFormData] = useState({
-    entreprise: '',
-    siret: '',
-    nom: '',
-    email: '',
-    telephone: '',
-    mobile: '',
-    adresse: '',
-    codePostal: '',
-    ville: '',
-    siteWeb: '',
-    description: '',
-  })
-
-  const [horaires, setHoraires] = useState({
-    lundi: { ouvert: true, debut: '08:00', fin: '18:00' },
-    mardi: { ouvert: true, debut: '08:00', fin: '18:00' },
-    mercredi: { ouvert: true, debut: '08:00', fin: '18:00' },
-    jeudi: { ouvert: true, debut: '08:00', fin: '18:00' },
-    vendredi: { ouvert: true, debut: '08:00', fin: '18:00' },
-    samedi: { ouvert: true, debut: '09:00', fin: '12:00' },
-    dimanche: { ouvert: false, debut: '', fin: '' },
-  })
-
-  const [services, setServices] = useState<string[]>([])
-  const [zones, setZones] = useState<string[]>([])
-  const [newService, setNewService] = useState('')
-  const [newZone, setNewZone] = useState('')
-
-  // Fetch profile on mount
   useEffect(() => {
-    fetchProfile()
+    fetch('/api/artisan/provider')
+      .then(res => res.json())
+      .then(data => {
+        if (data.error) throw new Error(data.error)
+        setProvider(data.provider)
+      })
+      .catch(err => setError(err instanceof Error ? err.message : 'Erreur de chargement'))
+      .finally(() => setLoading(false))
   }, [])
 
-  const fetchProfile = async () => {
-    try {
-      setLoading(true)
-      const response = await fetch('/api/artisan/profile')
-      const data = await response.json()
+  const handleSaved = (updated: Record<string, unknown>) => {
+    setProvider(updated)
+  }
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Erreur lors du chargement')
-      }
-
-      const p = data.profile as Profile
-      setProfile(p)
-      setFormData({
-        entreprise: p.company_name || '',
-        siret: p.siret || '',
-        nom: p.full_name || '',
-        email: p.email || '',
-        telephone: p.phone || '',
-        mobile: '',
-        adresse: p.address || '',
-        codePostal: p.postal_code || '',
-        ville: p.city || '',
-        siteWeb: '',
-        description: p.description || '',
-      })
-      setServices(p.services || [])
-      setZones(p.zones || [])
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur de chargement')
-    } finally {
-      setLoading(false)
+  const handleTabKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
+    let newIndex: number | null = null
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+      e.preventDefault()
+      newIndex = (index + 1) % TABS.length
+    } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+      e.preventDefault()
+      newIndex = (index - 1 + TABS.length) % TABS.length
+    } else if (e.key === 'Home') {
+      e.preventDefault()
+      newIndex = 0
+    } else if (e.key === 'End') {
+      e.preventDefault()
+      newIndex = TABS.length - 1
+    }
+    if (newIndex !== null) {
+      setActiveTab(TABS[newIndex].id)
+      const tabEl = document.getElementById(`tab-${TABS[newIndex].id}`)
+      tabEl?.focus()
     }
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError(null)
-    setSuccess(null)
-    setSaving(true)
+  // Build public URL from provider data using the shared utility
+  const publicUrl = provider ? getArtisanUrl({
+    stable_id: provider.stable_id as string | null,
+    slug: provider.slug as string | null,
+    specialty: provider.specialty as string | null,
+    city: provider.address_city as string | null,
+  }) : null
 
-    try {
-      const response = await fetch('/api/artisan/profile', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          company_name: formData.entreprise,
-          siret: formData.siret,
-          full_name: formData.nom,
-          phone: formData.telephone,
-          address: formData.adresse,
-          city: formData.ville,
-          postal_code: formData.codePostal,
-          description: formData.description,
-          services,
-          zones,
-        }),
-      })
+  // Only show the link if we have an identifier
+  const showPublicUrl = provider && (provider.stable_id || provider.slug) ? publicUrl : null
 
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Erreur lors de la sauvegarde')
-      }
-
-      setSuccess('Profil mis à jour avec succès')
-      setTimeout(() => setSuccess(null), 3000)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur de sauvegarde')
-    } finally {
-      setSaving(false)
-    }
-  }
-
-  const addService = () => {
-    if (newService.trim()) {
-      setServices([...services, newService.trim()])
-      setNewService('')
-    }
-  }
-
-  const removeService = (index: number) => {
-    setServices(services.filter((_, i) => i !== index))
-  }
-
-  const addZone = () => {
-    if (newZone.trim()) {
-      setZones([...zones, newZone.trim()])
-      setNewZone('')
-    }
-  }
-
-  const removeZone = (index: number) => {
-    setZones(zones.filter((_, i) => i !== index))
-  }
-
+  // Loading state
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -171,30 +96,27 @@ export default function ProfilArtisanPage() {
     )
   }
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Breadcrumb */}
-      <div className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          <Breadcrumb items={[
-            { label: 'Espace Artisan', href: '/espace-artisan' },
-            { label: 'Mon profil' }
-          ]} />
+  // No provider found
+  if (error || !provider) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center max-w-md">
+          <div className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-lg">
+            <h2 className="font-semibold mb-2">Profil introuvable</h2>
+            <p className="text-sm">{error || 'Aucun profil artisan associé à votre compte. Contactez le support.'}</p>
+          </div>
         </div>
       </div>
+    )
+  }
 
+  return (
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center gap-4">
-            <Link href="/espace-artisan/dashboard" className="text-white/80 hover:text-white">
-              <ArrowLeft className="w-5 h-5" />
-            </Link>
-            <div>
-              <h1 className="text-2xl font-bold">Mon profil</h1>
-              <p className="text-blue-100">Gérez les informations de votre entreprise</p>
-            </div>
-          </div>
+          <h1 className="text-2xl font-bold">Mon profil public</h1>
+          <p className="text-blue-100">Gérez les informations visibles sur votre page artisan</p>
         </div>
       </div>
 
@@ -202,425 +124,50 @@ export default function ProfilArtisanPage() {
         <div className="grid lg:grid-cols-4 gap-8">
           {/* Sidebar */}
           <div className="lg:col-span-1">
-            <nav className="bg-white rounded-xl shadow-sm p-4 space-y-1">
-              <Link
-                href="/espace-artisan/dashboard"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <TrendingUp className="w-5 h-5" />
-                Tableau de bord
-              </Link>
-              <Link
-                href="/espace-artisan/demandes-recues"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <FileText className="w-5 h-5" />
-                Demandes
-              </Link>
-              <Link
-                href="/espace-artisan/messages"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <MessageSquare className="w-5 h-5" />
-                Messages
-              </Link>
-              <Link
-                href="/espace-artisan/avis-recus"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <Star className="w-5 h-5" />
-                Avis reçus
-              </Link>
-              <Link
-                href="/espace-artisan/profil"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-50 text-blue-600 font-medium"
-              >
-                <Settings className="w-5 h-5" />
-                Mon profil
-              </Link>
-              <Link
-                href="/espace-artisan/abonnement"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <Euro className="w-5 h-5" />
-                Abonnement
-              </Link>
-              <LogoutButton />
+            <ArtisanSidebar activePage="profil" publicUrl={showPublicUrl} />
+
+            {/* Tab navigation */}
+            <nav className="bg-white rounded-xl shadow-sm p-4 mt-4 space-y-1" aria-label="Sections du profil" role="tablist" aria-orientation="vertical">
+              {TABS.map((tab, index) => (
+                <button
+                  key={tab.id}
+                  role="tab"
+                  aria-selected={activeTab === tab.id}
+                  aria-controls={`tabpanel-${tab.id}`}
+                  id={`tab-${tab.id}`}
+                  tabIndex={activeTab === tab.id ? 0 : -1}
+                  onClick={() => setActiveTab(tab.id)}
+                  onKeyDown={(e) => handleTabKeyDown(e, index)}
+                  className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-colors ${
+                    activeTab === tab.id
+                      ? 'bg-blue-50 text-blue-600 font-medium'
+                      : 'text-gray-600 hover:bg-gray-50'
+                  }`}
+                >
+                  <tab.icon className="w-4 h-4" />
+                  {tab.label}
+                </button>
+              ))}
             </nav>
-
-            {/* Certifications */}
-            <div className="bg-white rounded-xl shadow-sm p-4 mt-6">
-              <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <Award className="w-5 h-5 text-yellow-500" />
-                Certifications
-              </h3>
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-sm">
-                  <Shield className="w-4 h-4 text-green-500" />
-                  <span>Profil référencé</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <Shield className="w-4 h-4 text-green-500" />
-                  <span>Assurance RC Pro</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <Shield className="w-4 h-4 text-green-500" />
-                  <span>Garantie décennale</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Voir mon profil public */}
-            <div className="bg-white rounded-xl shadow-sm p-4 mt-4">
-              <Link
-                href="/services/plombier/paris/martin-plomberie-paris"
-                className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
-              >
-                <ExternalLink className="w-4 h-4" />
-                Voir mon profil public
-              </Link>
-            </div>
-
-            {/* Quick links */}
-            <div className="mt-4">
-              <QuickSiteLinks />
-            </div>
-
-            {/* Additional links */}
-            <div className="bg-white rounded-xl shadow-sm p-4 mt-4">
-              <h4 className="font-medium text-gray-900 mb-3">Liens utiles</h4>
-              <div className="space-y-2 text-sm">
-                <Link href="/services" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 py-1">
-                  <Search className="w-4 h-4" />
-                  Parcourir les services
-                </Link>
-                <Link href="/recherche" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 py-1">
-                  <Search className="w-4 h-4" />
-                  Rechercher un artisan
-                </Link>
-              </div>
-            </div>
           </div>
 
           {/* Content */}
-          <div className="lg:col-span-3 space-y-8">
-            {/* Photo */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Photo de profil</h2>
-              <div className="flex items-center gap-6">
-                <div className="relative">
-                  <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center">
-                    <span className="text-3xl font-bold text-blue-600">MP</span>
-                  </div>
-                  <button className="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 transition-colors">
-                    <Camera className="w-4 h-4" />
-                  </button>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600 mb-2">
-                    Ajoutez une photo de profil professionnelle pour inspirer confiance.
-                  </p>
-                  <button className="text-blue-600 text-sm font-medium hover:underline">
-                    Changer la photo
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Informations entreprise */}
-            <form onSubmit={handleSubmit}>
-              <div className="bg-white rounded-xl shadow-sm p-6 space-y-6">
-                <h2 className="text-lg font-semibold text-gray-900">Informations entreprise</h2>
-
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Nom de l'entreprise
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.entreprise}
-                      onChange={(e) => setFormData({ ...formData, entreprise: e.target.value })}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      N° SIRET
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.siret}
-                      onChange={(e) => setFormData({ ...formData, siret: e.target.value })}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      <Mail className="w-4 h-4 inline mr-2" />
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      <Globe className="w-4 h-4 inline mr-2" />
-                      Site web
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.siteWeb}
-                      onChange={(e) => setFormData({ ...formData, siteWeb: e.target.value })}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      <Phone className="w-4 h-4 inline mr-2" />
-                      Téléphone fixe
-                    </label>
-                    <input
-                      type="tel"
-                      value={formData.telephone}
-                      onChange={(e) => setFormData({ ...formData, telephone: e.target.value })}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      <Phone className="w-4 h-4 inline mr-2" />
-                      Mobile
-                    </label>
-                    <input
-                      type="tel"
-                      value={formData.mobile}
-                      onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    <MapPin className="w-4 h-4 inline mr-2" />
-                    Adresse
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.adresse}
-                    onChange={(e) => setFormData({ ...formData, adresse: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Code postal
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.codePostal}
-                      onChange={(e) => setFormData({ ...formData, codePostal: e.target.value })}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Ville
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.ville}
-                      onChange={(e) => setFormData({ ...formData, ville: e.target.value })}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Description
-                  </label>
-                  <textarea
-                    value={formData.description}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    rows={4}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  />
-                  <p className="text-sm text-gray-500 mt-1">
-                    Décrivez votre entreprise et vos services pour attirer plus de clients.
-                  </p>
-                </div>
-              </div>
-
-              {/* Services */}
-              <div className="bg-white rounded-xl shadow-sm p-6 mt-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Services proposés</h2>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {services.map((service, index) => (
-                    <span
-                      key={index}
-                      className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm flex items-center gap-2"
-                    >
-                      {service}
-                      <button
-                        type="button"
-                        onClick={() => removeService(index)}
-                        className="hover:text-blue-900"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
-                    </span>
-                  ))}
-                </div>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={newService}
-                    onChange={(e) => setNewService(e.target.value)}
-                    placeholder="Ajouter un service"
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  />
-                  <button
-                    type="button"
-                    onClick={addService}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-                  >
-                    <Plus className="w-5 h-5" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Zones d'intervention */}
-              <div className="bg-white rounded-xl shadow-sm p-6 mt-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Zones d'intervention</h2>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {zones.map((zone, index) => (
-                    <span
-                      key={index}
-                      className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm flex items-center gap-2"
-                    >
-                      <MapPin className="w-4 h-4" />
-                      {zone}
-                      <button
-                        type="button"
-                        onClick={() => removeZone(index)}
-                        className="hover:text-green-900"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
-                    </span>
-                  ))}
-                </div>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={newZone}
-                    onChange={(e) => setNewZone(e.target.value)}
-                    placeholder="Ajouter une zone (ex: Paris 75)"
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  />
-                  <button
-                    type="button"
-                    onClick={addZone}
-                    className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
-                  >
-                    <Plus className="w-5 h-5" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Horaires */}
-              <div className="bg-white rounded-xl shadow-sm p-6 mt-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                  <Clock className="w-5 h-5" />
-                  Horaires d'ouverture
-                </h2>
-                <div className="space-y-3">
-                  {Object.entries(horaires).map(([jour, data]) => (
-                    <div key={jour} className="flex items-center gap-4">
-                      <span className="w-24 text-gray-700 capitalize">{jour}</span>
-                      <label className="flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          checked={data.ouvert}
-                          onChange={(e) =>
-                            setHoraires({
-                              ...horaires,
-                              [jour]: { ...data, ouvert: e.target.checked },
-                            })
-                          }
-                          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                        />
-                        <span className="text-sm text-gray-600">Ouvert</span>
-                      </label>
-                      {data.ouvert && (
-                        <>
-                          <input
-                            type="time"
-                            value={data.debut}
-                            onChange={(e) =>
-                              setHoraires({
-                                ...horaires,
-                                [jour]: { ...data, debut: e.target.value },
-                              })
-                            }
-                            className="px-3 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                          />
-                          <span className="text-gray-500">à</span>
-                          <input
-                            type="time"
-                            value={data.fin}
-                            onChange={(e) =>
-                              setHoraires({
-                                ...horaires,
-                                [jour]: { ...data, fin: e.target.value },
-                              })
-                            }
-                            className="px-3 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                          />
-                        </>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Error/Success messages */}
-              {error && (
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-                  {error}
-                </div>
-              )}
-              {success && (
-                <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
-                  {success}
-                </div>
-              )}
-
-              <div className="mt-6">
-                <button
-                  type="submit"
-                  disabled={saving}
-                  className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                >
-                  {saving && <Loader2 className="w-4 h-4 animate-spin" />}
-                  {saving ? 'Enregistrement...' : 'Enregistrer les modifications'}
-                </button>
-              </div>
-            </form>
+          <div
+            className="lg:col-span-3"
+            role="tabpanel"
+            id={`tabpanel-${activeTab}`}
+            aria-labelledby={`tab-${activeTab}`}
+          >
+            {activeTab === 'identite' && <IdentiteSection provider={provider} onSaved={handleSaved} />}
+            {activeTab === 'contact' && <ContactSection provider={provider} onSaved={handleSaved} />}
+            {activeTab === 'localisation' && <LocalisationSection provider={provider} onSaved={handleSaved} />}
+            {activeTab === 'presentation' && <PresentationSection provider={provider} onSaved={handleSaved} />}
+            {activeTab === 'services' && <ServicesTarifsSection provider={provider} onSaved={handleSaved} />}
+            {activeTab === 'qualifications' && <QualificationsSection provider={provider} onSaved={handleSaved} />}
+            {activeTab === 'disponibilite' && <DisponibiliteSection provider={provider} onSaved={handleSaved} />}
+            {activeTab === 'faq' && <FaqSection provider={provider} onSaved={handleSaved} />}
+            {activeTab === 'preferences' && <PreferencesSection provider={provider} onSaved={handleSaved} />}
+            {activeTab === 'avatar' && <AvatarSection provider={provider} onSaved={handleSaved} />}
           </div>
         </div>
       </div>

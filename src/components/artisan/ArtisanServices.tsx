@@ -24,17 +24,12 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
           </div>
           Services et Tarifs
         </h2>
-        {artisan.prices_are_estimated && (
-          <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mt-3 italic">
-            Prix moyens du march&eacute; &mdash; demandez un devis pour les tarifs de cet artisan
-          </p>
-        )}
       </div>
 
       <div className="px-6 pb-6">
         {/* Services tags */}
         {artisan.services.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-6 mt-4" role="list" aria-label="Services proposés">
+          <div className="flex flex-wrap gap-2 mb-6 mt-4" role="list" aria-label="Services propos&#233;s">
             {artisan.services.map((service, i) => (
               <span
                 key={i}
@@ -48,10 +43,10 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
           </div>
         )}
 
-        {/* Pricing table */}
-        {artisan.service_prices.length > 0 && (
+        {/* Pricing table — only show real prices from the artisan */}
+        {artisan.service_prices.length > 0 ? (
           <div className="space-y-2.5 mt-4" role="list" aria-label="Tarifs des services">
-            {artisan.service_prices[0]?.price?.startsWith('À partir') && (
+            {artisan.service_prices[0]?.price?.startsWith('\u00c0 partir') && (
               <p className="text-xs text-slate-400 italic mb-3">* Tarifs indicatifs, le prix final d&eacute;pend de la nature exacte de l&apos;intervention. Demandez un devis pour un prix pr&eacute;cis.</p>
             )}
             {artisan.service_prices.map((service, index) => (
@@ -74,7 +69,7 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
 
                 <div className="flex items-center gap-4 ml-4">
                   {service.duration && (
-                    <div className="hidden sm:flex items-center gap-1 text-sm text-slate-400" aria-label={`Durée : ${service.duration}`}>
+                    <div className="hidden sm:flex items-center gap-1 text-sm text-slate-400" aria-label={`Dur\u00e9e : ${service.duration}`}>
                       <Clock className="w-4 h-4" aria-hidden="true" />
                       <span>{service.duration}</span>
                     </div>
@@ -87,17 +82,32 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
               </motion.div>
             ))}
           </div>
+        ) : (
+          <div className="bg-emerald-50 rounded-xl border border-emerald-200 p-6 text-center mt-4">
+            <p className="text-slate-700 font-medium mb-2">Tarifs sur devis personnalis&eacute;</p>
+            <p className="text-sm text-slate-500 mb-4">Cet artisan propose des tarifs adapt&eacute;s &agrave; chaque projet. Demandez un devis gratuit pour conna&icirc;tre ses prix.</p>
+            <a href="#devis" className="inline-flex items-center gap-2 bg-emerald-600 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-emerald-700 transition-colors">
+              Demander un devis gratuit
+            </a>
+          </div>
         )}
 
         {/* Hourly rate */}
-        {artisan.hourly_rate && (
+        {(artisan.hourly_rate_min || artisan.hourly_rate_max) && (
           <div className="mt-6 pt-6 border-t border-gray-100">
             <div className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100">
               <div>
                 <span className="font-medium text-gray-900">Taux horaire</span>
                 <p className="text-xs text-slate-500 mt-0.5">Applicable pour les interventions sur mesure</p>
               </div>
-              <span className="text-2xl font-bold text-blue-600">{artisan.hourly_rate}&euro;/h</span>
+              <span className="text-2xl font-bold text-blue-600">
+                {artisan.hourly_rate_min && artisan.hourly_rate_max
+                  ? `${artisan.hourly_rate_min}€ - ${artisan.hourly_rate_max}€/h`
+                  : artisan.hourly_rate_min
+                    ? `À partir de ${artisan.hourly_rate_min}€/h`
+                    : `Jusqu'à ${artisan.hourly_rate_max}€/h`
+                }
+              </span>
             </div>
           </div>
         )}

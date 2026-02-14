@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   description: 'Besoin d\'un artisan en urgence ? Plombier, électricien, serrurier disponibles 24h/24 et 7j/7 partout en France. Intervention rapide, devis gratuit, artisans référencés.',
   alternates: { canonical: `${SITE_URL}/urgence` },
   openGraph: {
+    locale: 'fr_FR',
     title: 'Urgence artisan 24h/24 — Intervention rapide partout en France',
     description: 'Plombier, électricien, serrurier disponibles 24h/24 et 7j/7. Intervention rapide, devis gratuit, artisans référencés.',
     url: `${SITE_URL}/urgence`,

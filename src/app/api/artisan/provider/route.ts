@@ -1,0 +1,214 @@
+/**
+ * Artisan Provider API
+ * GET: Fetch artisan's provider data
+ * PUT: Update artisan's provider data
+ */
+
+import { NextResponse } from 'next/server'
+import { createClient } from '@/lib/supabase/server'
+import { logger } from '@/lib/logger'
+import { providerArtisanUpdateSchema } from '@/schemas/provider'
+import DOMPurify from 'isomorphic-dompurify'
+
+export const dynamic = 'force-dynamic'
+
+export async function GET() {
+  try {
+    const supabase = await createClient()
+
+    // Auth check
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+
+    if (authError || !user) {
+      return NextResponse.json(
+        { error: 'Non authentifié' },
+        { status: 401 }
+      )
+    }
+
+    // Verify user is an artisan
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('user_type')
+      .eq('id', user.id)
+      .single()
+
+    if (profileError || !profile) {
+      return NextResponse.json(
+        { error: 'Profil introuvable' },
+        { status: 404 }
+      )
+    }
+
+    if (profile.user_type !== 'artisan') {
+      return NextResponse.json(
+        { error: 'Accès réservé aux artisans' },
+        { status: 403 }
+      )
+    }
+
+    // Fetch provider by user_id
+    const { data: provider, error: providerError } = await supabase
+      .from('providers')
+      .select('*')
+      .eq('user_id', user.id)
+      .single()
+
+    if (providerError || !provider) {
+      return NextResponse.json(
+        { error: 'Aucun profil artisan trouvé. Contactez le support.' },
+        { status: 404 }
+      )
+    }
+
+    return NextResponse.json({ provider })
+  } catch (error) {
+    logger.error('Provider GET error:', error)
+    return NextResponse.json(
+      { error: 'Erreur serveur' },
+      { status: 500 }
+    )
+  }
+}
+
+export async function PUT(request: Request) {
+  try {
+    const supabase = await createClient()
+
+    // Auth check
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+
+    if (authError || !user) {
+      return NextResponse.json(
+        { error: 'Non authentifié' },
+        { status: 401 }
+      )
+    }
+
+    // Verify user is an artisan
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('user_type')
+      .eq('id', user.id)
+      .single()
+
+    if (profileError || !profile) {
+      return NextResponse.json(
+        { error: 'Profil introuvable' },
+        { status: 404 }
+      )
+    }
+
+    if (profile.user_type !== 'artisan') {
+      return NextResponse.json(
+        { error: 'Accès réservé aux artisans' },
+        { status: 403 }
+      )
+    }
+
+    // Get provider by user_id (need provider.id for update)
+    const { data: provider, error: providerError } = await supabase
+      .from('providers')
+      .select('id')
+      .eq('user_id', user.id)
+      .single()
+
+    if (providerError || !provider) {
+      return NextResponse.json(
+        { error: 'Aucun profil artisan trouvé. Contactez le support.' },
+        { status: 404 }
+      )
+    }
+
+    // Parse + validate body
+    const body = await request.json()
+    const result = providerArtisanUpdateSchema.safeParse(body)
+
+    if (!result.success) {
+      return NextResponse.json(
+        { error: 'Erreur de validation', details: result.error.flatten() },
+        { status: 400 }
+      )
+    }
+
+    const validated = result.data
+
+    // Sanitize text fields
+    const updateData: Record<string, unknown> = {}
+
+    for (const [key, value] of Object.entries(validated)) {
+      if (value === undefined) continue
+
+      if (key === 'description' || key === 'bio') {
+        // Strip all HTML tags from description and bio
+        updateData[key] = typeof value === 'string'
+          ? DOMPurify.sanitize(value, { ALLOWED_TAGS: [] })
+          : value
+      } else if (key === 'name') {
+        // Trim name
+        updateData[key] = typeof value === 'string' ? value.trim() : value
+      } else if (typeof value === 'string') {
+        // Trim all other string fields
+        updateData[key] = value.trim()
+      } else {
+        updateData[key] = value
+      }
+    }
+
+    // Update providers table
+    const { data: updated, error: updateError } = await supabase
+      .from('providers')
+      .update({
+        ...updateData,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', provider.id)
+      .select()
+      .single()
+
+    if (updateError) {
+      logger.error('Error updating provider:', updateError)
+      return NextResponse.json(
+        { error: 'Erreur lors de la mise à jour du profil artisan' },
+        { status: 500 }
+      )
+    }
+
+    // Sync overlapping fields to profiles (best-effort, fire and forget)
+    const profileData: Record<string, unknown> = {}
+
+    if (updateData.name !== undefined) profileData.full_name = updateData.name
+    if (updateData.phone !== undefined) profileData.phone = updateData.phone
+    if (updateData.email !== undefined) profileData.email = updateData.email
+    if (updateData.address_city !== undefined) profileData.city = updateData.address_city
+    if (updateData.address_postal_code !== undefined) profileData.postal_code = updateData.address_postal_code
+    if (updateData.address_street !== undefined) profileData.address = updateData.address_street
+    if (updateData.siret !== undefined) profileData.siret = updateData.siret
+
+    if (Object.keys(profileData).length > 0) {
+      supabase
+        .from('profiles')
+        .update({
+          ...profileData,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', user.id)
+        .then(({ error: syncError }) => {
+          if (syncError) {
+            logger.error('Error syncing provider data to profile:', syncError)
+          }
+        })
+    }
+
+    return NextResponse.json({
+      success: true,
+      provider: updated,
+    })
+  } catch (error) {
+    logger.error('Provider PUT error:', error)
+    return NextResponse.json(
+      { error: 'Erreur serveur' },
+      { status: 500 }
+    )
+  }
+}

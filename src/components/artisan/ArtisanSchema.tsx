@@ -50,14 +50,19 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
       name: artisan.city,
       ...(artisan.region && { containedInPlace: { '@type': 'AdministrativeArea', name: artisan.region } }),
     },
-    ...(service.price && {
-      offers: {
-        '@type': 'Offer',
-        price: service.price.replace(/[^0-9]/g, '') || '0',
-        priceCurrency: 'EUR',
-        availability: artisan.accepts_new_clients ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
-      },
-    }),
+    ...(() => {
+      if (!service.price) return {}
+      const numericPrice = service.price.replace(/[^0-9]/g, '')
+      if (!numericPrice || numericPrice === '0' || /devis/i.test(service.price)) return {}
+      return {
+        offers: {
+          '@type': 'Offer',
+          price: numericPrice,
+          priceCurrency: 'EUR',
+          availability: artisan.accepts_new_clients ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+        },
+      }
+    })(),
     ...(service.duration && {
       estimatedDuration: service.duration,
     }),
@@ -71,14 +76,18 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
     '@type': 'LocalBusiness',
     '@id': `${artisanUrl}#business`,
     name: displayName,
-    description: artisan.description || `${displayName} - ${artisan.specialty} a ${artisan.city}`,
-    image: artisan.avatar_url || `${baseUrl}/og-artisan.jpg`,
+    description: artisan.description || `${displayName} - ${artisan.specialty} à ${artisan.city}`,
+    image: artisan.avatar_url || artisan.portfolio?.[0]?.imageUrl || `${baseUrl}/opengraph-image`,
     ...(artisan.phone && artisan.phone.replace(/\D/g, '').length >= 10 && {
       telephone: artisan.phone,
     }),
     ...(artisan.email && { email: artisan.email }),
     url: artisanUrl,
-    priceRange: artisan.hourly_rate ? `${artisan.hourly_rate}€ - ${artisan.hourly_rate * 2}€` : '€€',
+    ...(artisan.hourly_rate_min && artisan.hourly_rate_max
+      ? { priceRange: `${artisan.hourly_rate_min}€ - ${artisan.hourly_rate_max}€` }
+      : artisan.hourly_rate_min
+        ? { priceRange: `À partir de ${artisan.hourly_rate_min}€` }
+        : {}),
     parentOrganization: {
       '@type': 'Organization',
       '@id': `${baseUrl}#organization`,
@@ -110,7 +119,7 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
       worstRating: 1,
     } : undefined,
 
-    review: reviews.slice(0, 5).map(r => ({
+    review: reviews.filter(r => r.comment && r.comment.trim().length > 0).slice(0, 5).map(r => ({
       '@type': 'Review',
       author: {
         '@type': 'Person',
@@ -126,27 +135,34 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
       reviewBody: r.comment,
     })),
 
-    hasOfferCatalog: {
-      '@type': 'OfferCatalog',
-      name: 'Services',
-      itemListElement: artisan.service_prices.map((s, _i) => ({
-        '@type': 'Offer',
-        itemOffered: {
-          '@type': 'Service',
-          name: s.name,
-          description: s.description,
-        },
-        ...(s.price && {
-          priceSpecification: {
-            '@type': 'PriceSpecification',
-            price: s.price.replace(/[^0-9]/g, '') || '0',
-            priceCurrency: 'EUR',
+    ...(artisan.service_prices.length > 0 && {
+      hasOfferCatalog: {
+        '@type': 'OfferCatalog',
+        name: 'Services',
+        itemListElement: artisan.service_prices.map((s, _i) => ({
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: s.name,
+            description: s.description,
           },
-        }),
-      })),
-    },
+          ...(() => {
+            if (!s.price) return {}
+            const numericPrice = s.price.replace(/[^0-9]/g, '')
+            if (!numericPrice || numericPrice === '0' || /devis/i.test(s.price)) return {}
+            return {
+              priceSpecification: {
+                '@type': 'PriceSpecification',
+                price: numericPrice,
+                priceCurrency: 'EUR',
+              },
+            }
+          })(),
+        })),
+      },
+    }),
 
-    ...(artisan.intervention_zone && artisan.latitude && artisan.longitude && {
+    ...(artisan.intervention_radius_km && artisan.latitude && artisan.longitude && {
       areaServed: {
         '@type': 'GeoCircle',
         geoMidpoint: {
@@ -154,7 +170,7 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
           latitude: artisan.latitude,
           longitude: artisan.longitude,
         },
-        geoRadius: parseInt(artisan.intervention_zone) * 1000 || 20000,
+        geoRadius: artisan.intervention_radius_km * 1000,
       },
     }),
 
@@ -171,9 +187,7 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
     }),
 
     // Additional SEO-friendly properties
-    ...(artisan.experience_years && {
-      foundingDate: new Date(new Date().getFullYear() - artisan.experience_years, 0, 1).toISOString().split('T')[0],
-    }),
+    ...(artisan.creation_date ? { foundingDate: artisan.creation_date } : {}),
     ...(artisan.employee_count && {
       numberOfEmployees: {
         '@type': 'QuantitativeValue',
@@ -187,7 +201,7 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
         name: cert,
       })),
     }),
-    paymentAccepted: artisan.payment_methods?.join(', ') || 'Cash, Credit Card',
+    ...(artisan.payment_methods?.length ? { paymentAccepted: artisan.payment_methods.join(', ') } : {}),
     currenciesAccepted: 'EUR',
   }
 
@@ -236,6 +250,9 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
     ...(artisan.member_since && {
       dateCreated: `${artisan.member_since}-01-01`,
     }),
+    ...(artisan.updated_at ? {
+      dateModified: new Date(artisan.updated_at).toISOString(),
+    } : {}),
   }
 
   // Combined schema graph for better SEO (single JSON-LD with @graph)

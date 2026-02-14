@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 import { Phone, Clock, Shield, CheckCircle, ArrowRight, AlertTriangle, MapPin } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
@@ -101,6 +102,11 @@ export function generateStaticParams() {
   return emergencySlugs.map((service) => ({ service }))
 }
 
+function truncateTitle(title: string, maxLen = 55): string {
+  if (title.length <= maxLen) return title
+  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ service: string }> }): Promise<Metadata> {
   const { service } = await params
   const trade = tradeContent[service]
@@ -114,7 +120,7 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
     `Dépannage ${trade.name.toLowerCase()} urgent partout en France`,
     `${trade.name} urgence — ${trade.averageResponseTime}`,
   ]
-  const title = titleTemplates[titleHash % titleTemplates.length]
+  const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
   const descHash = Math.abs(hashCode(`urgence-desc-${service}`))
   const tradeLower = trade.name.toLowerCase()
@@ -133,6 +139,7 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
     description,
     alternates: { canonical: `${SITE_URL}/urgence/${service}` },
     openGraph: {
+      locale: 'fr_FR',
       title,
       description,
       url: `${SITE_URL}/urgence/${service}`,
@@ -153,7 +160,7 @@ const topCities = villes.slice(0, 20)
 export default async function UrgenceServicePage({ params }: { params: Promise<{ service: string }> }) {
   const { service } = await params
   const trade = tradeContent[service]
-  if (!trade) return null
+  if (!trade) notFound()
 
   const meta = emergencyMeta[service] || emergencyMeta.plombier
   const otherEmergencies = emergencySlugs.filter((s) => s !== service)
@@ -480,6 +487,18 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
                 <Link href="/notre-processus-de-verification" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Processus de vérification</Link>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
+      <section className="mb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
+            <h3 className="text-sm font-semibold text-slate-700 mb-2">Information importante</h3>
+            <p className="text-xs text-slate-500 leading-relaxed">
+              Les délais d&apos;intervention sont des estimations basées sur la disponibilité habituelle des artisans et peuvent varier. ServicesArtisans est un annuaire — nous mettons en relation mais ne réalisons pas les interventions. En cas d&apos;urgence vitale, appelez le 18 (pompiers) ou le 112.
+            </p>
           </div>
         </div>
       </section>

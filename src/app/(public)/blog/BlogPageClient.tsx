@@ -12,6 +12,7 @@ export interface BlogArticleMeta {
   title: string
   excerpt: string
   category: string
+  tags: string[]
   date: string
   readTime: string
   image: string
@@ -20,21 +21,30 @@ export interface BlogArticleMeta {
 interface BlogPageClientProps {
   articles: BlogArticleMeta[]
   categories: string[]
+  initialTag?: string
 }
 
 const ARTICLES_PER_PAGE = 24
 
-export default function BlogPageClient({ articles, categories }: BlogPageClientProps) {
+export default function BlogPageClient({ articles, categories, initialTag }: BlogPageClientProps) {
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isSubscribed, setIsSubscribed] = useState(false)
   const [error, setError] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('Tous')
+  const [activeTag, setActiveTag] = useState(initialTag || '')
   const [visibleCount, setVisibleCount] = useState(ARTICLES_PER_PAGE)
 
-  const filteredArticles = selectedCategory === 'Tous'
+  const categoryFiltered = selectedCategory === 'Tous'
     ? articles
     : articles.filter(a => a.category === selectedCategory)
+
+  const filteredArticles = activeTag
+    ? categoryFiltered.filter(a =>
+        a.tags?.some(t => t.toLowerCase() === activeTag.toLowerCase()) ||
+        a.category.toLowerCase() === activeTag.toLowerCase()
+      )
+    : categoryFiltered
 
   const visibleArticles = filteredArticles.slice(0, visibleCount)
   const hasMore = visibleCount < filteredArticles.length
@@ -45,7 +55,15 @@ export default function BlogPageClient({ articles, categories }: BlogPageClientP
 
   const handleCategoryChange = (cat: string) => {
     setSelectedCategory(cat)
+    setActiveTag('')
     setVisibleCount(ARTICLES_PER_PAGE)
+  }
+
+  const handleClearTag = () => {
+    setActiveTag('')
+    setVisibleCount(ARTICLES_PER_PAGE)
+    // Update URL without the tag param
+    window.history.replaceState(null, '', '/blog')
   }
 
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
@@ -125,6 +143,24 @@ export default function BlogPageClient({ articles, categories }: BlogPageClientP
         </div>
       </section>
 
+      {/* Active tag filter indicator */}
+      {activeTag && (
+        <div className="bg-white border-b">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-slate-500">Filtré par :</span>
+              <span className="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-sm font-medium">{activeTag}</span>
+              <button
+                onClick={handleClearTag}
+                className="text-sm text-slate-400 hover:text-slate-600 transition-colors"
+              >
+                &times; Effacer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Articles */}
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -142,7 +178,7 @@ export default function BlogPageClient({ articles, categories }: BlogPageClientP
                 'Budget': 'bg-orange-100 text-orange-700',
               }
               const badgeColor = categoryColors[article.category] || 'bg-blue-100 text-blue-700'
-              const isFeatured = index === 0 && selectedCategory === 'Tous'
+              const isFeatured = index === 0 && selectedCategory === 'Tous' && !activeTag
 
               return (
                 <Link

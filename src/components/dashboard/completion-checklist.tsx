@@ -9,8 +9,8 @@ interface Provider {
   phone?: string
   email?: string
   address_street?: string
-  city?: string
-  postal_code?: string
+  address_city?: string
+  address_postal_code?: string
   logo?: string
   certifications?: string[]
   hourly_rate_min?: number
@@ -27,7 +27,7 @@ export function CompletionChecklist({ provider }: CompletionChecklistProps) {
     { label: 'Description (50+ car.)', done: (provider.description?.length || 0) >= 50 },
     { label: 'Téléphone', done: !!provider.phone },
     { label: 'Email', done: !!provider.email },
-    { label: 'Adresse complète', done: !!provider.address_street && !!provider.city && !!provider.postal_code },
+    { label: 'Adresse complète', done: !!provider.address_street && !!provider.address_city && !!provider.address_postal_code },
     { label: 'Logo', done: !!provider.logo },
     { label: 'Certifications', done: (provider.certifications?.length || 0) > 0 },
     { label: 'Tarifs', done: !!provider.hourly_rate_min },

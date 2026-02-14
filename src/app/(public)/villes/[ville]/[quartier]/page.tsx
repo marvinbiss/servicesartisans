@@ -60,10 +60,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
+  // Parse population — remove spaces (e.g. "2 161 568" → 2161568)
+  const pop = parseInt(ville.population.replace(/\s/g, ''), 10) || 0
+
   return {
     title,
     description,
+    ...(pop < 10000 ? { robots: { index: false, follow: true } } : {}),
     openGraph: {
+      locale: 'fr_FR',
       title,
       description,
       type: 'website',
@@ -114,7 +119,7 @@ export default async function QuartierPage({ params }: PageProps) {
   const collectionSchema = getCollectionPageSchema({
     name: `Artisans à ${quartierName}, ${ville.name}`,
     description: `Annuaire d'artisans qualifiés dans le quartier ${quartierName} à ${ville.name}. ${services.length} corps de métier disponibles.`,
-    url: `${SITE_URL}/villes/${villeSlug}/${quartierSlug}`,
+    url: `/villes/${villeSlug}/${quartierSlug}`,
     itemCount: services.length,
   })
   const faqSchema = getFAQSchema(content.faqItems)

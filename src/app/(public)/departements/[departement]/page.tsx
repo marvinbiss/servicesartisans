@@ -62,6 +62,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description,
     alternates: { canonical: `${SITE_URL}/departements/${deptSlug}` },
     openGraph: {
+      locale: 'fr_FR',
       title,
       description,
       type: 'website',
@@ -535,11 +536,13 @@ export default async function DepartementPage({ params }: PageProps) {
 
         {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
         <section className="mb-8">
-          <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
-            <h3 className="text-sm font-semibold text-slate-700 mb-2">Méthodologie éditoriale</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">
-              Les profils climatiques et économiques sont des estimations basées sur les caractéristiques régionales. Les données démographiques proviennent de l&apos;INSEE. ServicesArtisans est un annuaire indépendant — nous ne réalisons pas de travaux.
-            </p>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
+              <h3 className="text-sm font-semibold text-slate-700 mb-2">Méthodologie éditoriale</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Les profils climatiques et économiques sont des estimations basées sur les caractéristiques régionales. Les données démographiques proviennent de l&apos;INSEE. ServicesArtisans est un annuaire indépendant — nous ne réalisons pas de travaux.
+              </p>
+            </div>
           </div>
         </section>
 

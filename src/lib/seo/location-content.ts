@@ -98,7 +98,7 @@ const SEASONAL_TIPS: Record<string, SeasonalTips> = {
     coastal:
       "Les façades en bord de mer subissent une usure accélérée due aux embruns salins. Un ravalement avec une peinture spéciale façade marine est recommandé tous les 8 à 10 ans.",
     mountain:
-      "En montagne, les écarts de température importants imposent l'utilisation de peintures extérieures élastiques capables de résister aux cycles gel-dégel répétés.",
+      "En montagne, les écarts de température importants nécessitent l'utilisation de peintures extérieures élastiques capables de résister aux cycles gel-dégel répétés.",
     urban:
       "En centre-ville, le ravalement de façade est souvent obligatoire tous les 10 ans (arrêté municipal). Renseignez-vous en mairie sur les délais et les couleurs autorisées.",
     rural:
@@ -180,7 +180,7 @@ const SEASONAL_TIPS: Record<string, SeasonalTips> = {
   },
   climaticien: {
     coastal:
-      "Le climat méditerranéen impose une climatisation performante de mai à septembre. En bord de mer, l'unité extérieure doit être protégée de la corrosion saline avec un traitement anticorrosion spécifique.",
+      "Le climat méditerranéen rend nécessaire une climatisation performante de mai à septembre. En bord de mer, l'unité extérieure doit être protégée de la corrosion saline avec un traitement anticorrosion spécifique.",
     mountain:
       "En montagne, la climatisation réversible (pompe à chaleur air-air) est idéale : elle rafraîchit en été et chauffe efficacement en mi-saison, réduisant la facture énergétique globale.",
     urban:
@@ -625,7 +625,7 @@ const SVC_LOCATION_FAQ_POOL: { q: (p: SvcLocFaqParams) => string; a: (p: SvcLocF
 const CLIMATE_SERVICE_TIPS: Record<ClimateZone, ((svc: string, name: string) => string)[]> = {
   'oceanique': [
     (svc, name) => `Le climat océanique de ${name} soumet le bâti à une humidité persistante. Un ${svc} intervenant régulièrement dans la zone connaît ces contraintes et adapte ses matériaux et techniques pour garantir la durabilité de ses interventions.`,
-    (svc, name) => `À ${name}, l'air marin et les précipitations fréquentes imposent des choix de matériaux adaptés. Votre ${svc} doit privilégier des solutions résistantes à l'humidité pour un résultat durable.`,
+    (svc, name) => `À ${name}, l'air marin et les précipitations fréquentes exigent des choix de matériaux adaptés. Votre ${svc} doit privilégier des solutions résistantes à l'humidité pour un résultat durable.`,
     (svc, name) => `Les façades et installations extérieures à ${name} subissent l'usure du climat océanique. Les ${svc}s expérimentés dans la zone sélectionnent des matériaux anticorrosion et des traitements hydrofuges spécifiques.`,
     (svc, name) => `L'humidité récurrente à ${name} nécessite une attention particulière lors des travaux. Un ${svc} local sait que la ventilation et l'étanchéité sont les priorités dans un environnement océanique.`,
     (svc, name) => `Le vent et la pluie à ${name} accélèrent le vieillissement du bâti. Un ${svc} qualifié tiendra compte de ces facteurs climatiques dans ses recommandations et son choix de matériaux.`,
@@ -633,7 +633,7 @@ const CLIMATE_SERVICE_TIPS: Record<ClimateZone, ((svc: string, name: string) => 
   'continental': [
     (svc, name) => `À ${name}, les hivers rigoureux et les étés chauds créent d'importants écarts thermiques. Un ${svc} compétent dimensionne ses interventions en tenant compte de ces contraintes continentales pour éviter les désordres liés aux dilatations.`,
     (svc, name) => `Le climat continental de ${name} soumet les installations à des cycles gel-dégel répétés. Les ${svc}s locaux maîtrisent les techniques de protection adaptées à ces conditions exigeantes.`,
-    (svc, name) => `Les températures négatives hivernales à ${name} imposent des précautions spécifiques. Un ${svc} expérimenté prévoit l'isolation et la protection antigel adaptées au climat continental.`,
+    (svc, name) => `Les températures négatives hivernales à ${name} requièrent des précautions spécifiques. Un ${svc} expérimenté prévoit l'isolation et la protection antigel adaptées au climat continental.`,
     (svc, name) => `En été comme en hiver, le bâti à ${name} est soumis à rude épreuve. Votre ${svc} doit anticiper les contraintes thermiques propres au climat continental pour garantir la pérennité de ses travaux.`,
     (svc, name) => `Le gel prolongé à ${name} peut endommager les installations mal protégées. Un ${svc} connaissant la région sait quels matériaux et techniques résistent aux hivers continentaux.`,
   ],
@@ -641,7 +641,7 @@ const CLIMATE_SERVICE_TIPS: Record<ClimateZone, ((svc: string, name: string) => 
     (svc, name) => `À ${name}, le soleil intense et les épisodes de pluies violentes alternent tout au long de l'année. Un ${svc} local adapte ses interventions à ce climat méditerranéen pour assurer leur longévité.`,
     (svc, name) => `La chaleur estivale à ${name} et les orages d'automne sollicitent fortement le bâti. Les ${svc}s expérimentés en zone méditerranéenne choisissent des matériaux résistants aux UV et aux intempéries.`,
     (svc, name) => `Le retrait des argiles en période de sécheresse à ${name} peut affecter les fondations. Un ${svc} qualifié prend en compte ces mouvements de terrain typiques du climat méditerranéen.`,
-    (svc, name) => `Les températures élevées à ${name} imposent des contraintes spécifiques sur les matériaux. Votre ${svc} doit sélectionner des produits résistants à la chaleur et aux rayons UV pour des travaux durables.`,
+    (svc, name) => `Les températures élevées à ${name} engendrent des contraintes spécifiques sur les matériaux. Votre ${svc} doit sélectionner des produits résistants à la chaleur et aux rayons UV pour des travaux durables.`,
     (svc, name) => `Les épisodes cévenols à ${name} peuvent causer des infiltrations soudaines. Un ${svc} local anticipe ces risques en privilégiant l'étanchéité renforcée dans ses interventions.`,
   ],
   'montagnard': [
@@ -656,14 +656,14 @@ const CLIMATE_SERVICE_TIPS: Record<ClimateZone, ((svc: string, name: string) => 
     (svc, name) => `À ${name}, les précipitations régulières mais modérées sollicitent le bâti de manière continue. Les ${svc}s locaux connaissent l'importance des traitements préventifs dans ce climat tempéré humide.`,
     (svc, name) => `Le climat tempéré de ${name} favorise la condensation dans les logements mal ventilés. Un ${svc} compétent intègre la gestion de l'humidité dans chacune de ses interventions.`,
     (svc, name) => `Les hivers frais et les étés doux à ${name} créent un environnement favorable aux moisissures. Votre ${svc} doit veiller à la ventilation et à l'étanchéité pour préserver la salubrité du logement.`,
-    (svc, name) => `À ${name}, le climat semi-océanique préserve relativement le bâti mais impose un entretien régulier. Un ${svc} professionnel recommandera un calendrier d'entretien adapté à ces conditions.`,
+    (svc, name) => `À ${name}, le climat semi-océanique préserve relativement le bâti mais demande un entretien régulier. Un ${svc} professionnel recommandera un calendrier d'entretien adapté à ces conditions.`,
   ],
   'tropical': [
     (svc, name) => `Le climat tropical de ${name} soumet le bâti à une humidité constante et des températures élevées. Un ${svc} expérimenté en zone tropicale sélectionne des matériaux résistants aux moisissures et à la corrosion.`,
-    (svc, name) => `À ${name}, les risques cycloniques imposent des normes de construction renforcées. Les ${svc}s locaux maîtrisent les techniques paracycloniques pour garantir la résistance des installations.`,
+    (svc, name) => `À ${name}, les risques cycloniques exigent des normes de construction renforcées. Les ${svc}s locaux maîtrisent les techniques paracycloniques pour garantir la résistance des installations.`,
     (svc, name) => `L'air salin et l'humidité permanente à ${name} accélèrent la dégradation des matériaux. Un ${svc} connaissant le climat tropical choisit des produits spécifiquement conçus pour résister à ces conditions.`,
     (svc, name) => `Les termites et insectes xylophages sont un fléau à ${name}. Votre ${svc} doit intégrer la protection contre ces nuisibles dans ses interventions, notamment pour les structures en bois.`,
-    (svc, name) => `La chaleur et l'humidité constantes à ${name} imposent une climatisation performante. Un ${svc} local sait dimensionner les installations pour ce climat exigeant.`,
+    (svc, name) => `La chaleur et l'humidité constantes à ${name} rendent indispensable une climatisation performante. Un ${svc} local sait dimensionner les installations pour ce climat exigeant.`,
   ],
 }
 
@@ -1235,6 +1235,86 @@ const REGION_CLIMATE: Record<string, ClimateZone> = {
   'Mayotte': 'tropical',
 }
 
+// Department-level climate overrides (when different from regional default)
+const DEPT_CLIMATE_OVERRIDES: Record<string, ClimateZone> = {
+  // PACA — coast vs mountains
+  '04': 'montagnard',    // Alpes-de-Haute-Provence
+  '05': 'montagnard',    // Hautes-Alpes
+  '06': 'mediterraneen', // Alpes-Maritimes (coast)
+  '13': 'mediterraneen', // Bouches-du-Rhône
+  '83': 'mediterraneen', // Var
+  '84': 'mediterraneen', // Vaucluse
+  // Auvergne-Rhône-Alpes — mountain vs plain
+  '01': 'semi-oceanique', // Ain
+  '03': 'semi-oceanique', // Allier
+  '07': 'mediterraneen',  // Ardèche (south)
+  '15': 'montagnard',     // Cantal
+  '26': 'mediterraneen',  // Drôme
+  '38': 'continental',    // Isère
+  '42': 'continental',    // Loire
+  '43': 'montagnard',     // Haute-Loire
+  '63': 'montagnard',     // Puy-de-Dôme
+  '69': 'continental',    // Rhône
+  '73': 'montagnard',     // Savoie
+  '74': 'montagnard',     // Haute-Savoie
+  // Occitanie — Mediterranean coast vs mountains vs Atlantic
+  '09': 'montagnard',     // Ariège
+  '11': 'mediterraneen',  // Aude
+  '12': 'semi-oceanique', // Aveyron
+  '30': 'mediterraneen',  // Gard
+  '31': 'semi-oceanique', // Haute-Garonne
+  '32': 'semi-oceanique', // Gers
+  '34': 'mediterraneen',  // Hérault
+  '46': 'semi-oceanique', // Lot
+  '48': 'montagnard',     // Lozère
+  '65': 'montagnard',     // Hautes-Pyrénées
+  '66': 'mediterraneen',  // Pyrénées-Orientales
+  '81': 'semi-oceanique', // Tarn
+  '82': 'semi-oceanique', // Tarn-et-Garonne
+  // Nouvelle-Aquitaine — Atlantic coast vs inland
+  '16': 'oceanique',      // Charente
+  '17': 'oceanique',      // Charente-Maritime
+  '19': 'semi-oceanique', // Corrèze
+  '23': 'semi-oceanique', // Creuse
+  '24': 'semi-oceanique', // Dordogne
+  '33': 'oceanique',      // Gironde
+  '40': 'oceanique',      // Landes
+  '47': 'semi-oceanique', // Lot-et-Garonne
+  '64': 'oceanique',      // Pyrénées-Atlantiques
+  '79': 'oceanique',      // Deux-Sèvres
+  '86': 'semi-oceanique', // Vienne
+  '87': 'semi-oceanique', // Haute-Vienne
+  // Grand Est — continental variations
+  '08': 'continental',    // Ardennes
+  '10': 'continental',    // Aube
+  '51': 'continental',    // Marne
+  '52': 'continental',    // Haute-Marne
+  '54': 'continental',    // Meurthe-et-Moselle
+  '55': 'continental',    // Meuse
+  '57': 'continental',    // Moselle
+  '67': 'continental',    // Bas-Rhin
+  '68': 'continental',    // Haut-Rhin (could be semi-montagnard)
+  '88': 'montagnard',     // Vosges
+  // Bourgogne-Franche-Comté
+  '21': 'continental',    // Côte-d'Or
+  '25': 'montagnard',     // Doubs (Jura)
+  '39': 'montagnard',     // Jura
+  '58': 'continental',    // Nièvre
+  '70': 'continental',    // Haute-Saône
+  '71': 'continental',    // Saône-et-Loire
+  '89': 'continental',    // Yonne
+  '90': 'continental',    // Territoire de Belfort
+  // Corse
+  '2A': 'mediterraneen',  // Corse-du-Sud
+  '2B': 'mediterraneen',  // Haute-Corse
+  // DOM-TOM
+  '971': 'tropical',      // Guadeloupe
+  '972': 'tropical',      // Martinique
+  '973': 'tropical',      // Guyane
+  '974': 'tropical',      // Réunion
+  '976': 'tropical',      // Mayotte
+}
+
 const DEPT_SERVICE_PRIORITY: Record<ClimateZone, string[]> = {
   'oceanique': ['couvreur', 'peintre-en-batiment', 'plombier', 'chauffagiste', 'menuisier', 'electricien', 'macon', 'facade', 'serrurier', 'climaticien', 'carreleur', 'vitrier', 'terrassier', 'paysagiste', 'domoticien'],
   'continental': ['chauffagiste', 'plombier', 'electricien', 'couvreur', 'menuisier', 'macon', 'peintre-en-batiment', 'climaticien', 'serrurier', 'facade', 'carreleur', 'vitrier', 'terrassier', 'paysagiste', 'domoticien'],
@@ -1326,7 +1406,7 @@ const HOUSING_DESCRIPTIONS: Record<HousingStock, string[]> = {
   'mixte-urbain': [
     'Le département présente un parc immobilier hétérogène : immeubles anciens en centre-ville, logements collectifs d\'après-guerre en première couronne, et pavillons modernes en périphérie. Chaque type exige un savoir-faire adapté.',
     'La diversité du parc immobilier reflète plusieurs siècles d\'urbanisation. Du bâti historique aux résidences récentes, les artisans locaux doivent maîtriser des techniques variées, de la restauration patrimoniale à l\'installation domotique.',
-    'En zone urbaine dense, le département mêle constructions de toutes époques. Cette diversité impose aux artisans une polyvalence technique : rénovation de moulures anciennes, isolation de murs en béton, ou finitions haut de gamme dans le neuf.',
+    'En zone urbaine dense, le département mêle constructions de toutes époques. Cette diversité exige des artisans une polyvalence technique : rénovation de moulures anciennes, isolation de murs en béton, ou finitions haut de gamme dans le neuf.',
   ],
   'rural-traditionnel': [
     'L\'habitat rural domine le paysage du département : longères, corps de ferme, maisons de caractère en matériaux locaux. Ces constructions nécessitent des artisans connaissant les techniques anciennes (enduits à la chaux, charpentes traditionnelles).',
@@ -1362,7 +1442,7 @@ const DEPT_INTROS: DeptIntroFn[] = [
 const DEPT_TIPS: Record<ClimateZone, ((name: string, code: string) => string)[]> = {
   'oceanique': [
     (name, code) => `Dans le ${name} (${code}), l'humidité est l'ennemi principal du bâti. Privilégiez une VMC performante et des traitements anti-humidité réguliers. Les façades exposées à l'ouest subissent davantage d'intempéries — un ravalement tous les 10-15 ans est recommandé.`,
-    (name) => `Le climat océanique du ${name} impose un entretien régulier des toitures (démoussage annuel), des gouttières (nettoyage biannuel) et des menuiseries. Investir dans des matériaux résistants à l'humidité réduit les coûts de maintenance à long terme.`,
+    (name) => `Le climat océanique du ${name} appelle un entretien régulier des toitures (démoussage annuel), des gouttières (nettoyage biannuel) et des menuiseries. Investir dans des matériaux résistants à l'humidité réduit les coûts de maintenance à long terme.`,
     (name, code) => `Les vents marins dans le ${name} (${code}) chargent l'air de sel et d'humidité, accélérant la corrosion des métaux et le ternissement des façades. Optez pour des menuiseries aluminium laquées ou PVC, plus résistantes que le bois brut dans ce contexte.`,
     (name) => `L'isolation par l'extérieur (ITE) est particulièrement recommandée dans le ${name} en climat océanique : elle protège les murs des infiltrations tout en réduisant les ponts thermiques. Les artisans locaux maîtrisent la pose de bardages ventilés adaptés.`,
     (name, code) => `Dans le ${name} (${code}), les remontées capillaires dans les maisons anciennes sont fréquentes. Un diagnostic humidité avant travaux est essentiel : injection de résine hydrophobe, drainage périphérique ou cuvelage selon la gravité. Consultez un professionnel qualifié.`,
@@ -1371,7 +1451,7 @@ const DEPT_TIPS: Record<ClimateZone, ((name: string, code: string) => string)[]>
     (name, code) => `Le climat continental du ${name} (${code}) impose des contraintes thermiques majeures. L'isolation des combles et murs est le premier investissement rentable — les économies de chauffage remboursent l'investissement en 5-8 ans. Protégez les canalisations extérieures contre le gel.`,
     (name) => `Dans le ${name}, les écarts de température entre été et hiver sollicitent les matériaux. Vérifiez joints de dilatation, enduits de façade et chauffage avant chaque hiver. Un entretien de chaudière annuel est obligatoire.`,
     (name, code) => `Les gelées tardives dans le ${name} (${code}) peuvent endommager les canalisations extérieures et les compteurs d'eau. Avant l'hiver, purgez les circuits non chauffés et isolez les tuyaux exposés avec des manchons calorifuges.`,
-    (name) => `L'amplitude thermique annuelle du ${name} (parfois 40°C entre hiver et été) impose le choix de matériaux à faible coefficient de dilatation. Les revêtements de sol, enduits et joints doivent absorber ces variations sans fissurer.`,
+    (name) => `L'amplitude thermique annuelle du ${name} (parfois 40°C entre hiver et été) commande le choix de matériaux à faible coefficient de dilatation. Les revêtements de sol, enduits et joints doivent absorber ces variations sans fissurer.`,
     (name, code) => `Dans le ${name} (${code}), la pompe à chaleur air-eau est le système de chauffage le plus recommandé : performante par grand froid grâce aux modèles basse température, elle permet des économies de 50-70% par rapport au fioul. Vérifiez le COP à -15°C avant d'investir.`,
   ],
   'mediterraneen': [
@@ -1383,14 +1463,14 @@ const DEPT_TIPS: Record<ClimateZone, ((name: string, code: string) => string)[]>
   ],
   'montagnard': [
     (name, code) => `En montagne dans le ${name} (${code}), la surcharge de neige dimensionne la charpente et l'isolation doit être renforcée (R > 7 en combles). Planifiez vos travaux entre mai et octobre. Le bois de charpente doit être traité contre l'humidité.`,
-    (name) => `Le ${name} en altitude impose des contraintes spécifiques : matériaux résistants au gel, isolation thermique renforcée, chaudière performante. Les artisans locaux maîtrisent les normes de construction en zone montagne et les aides spécifiques.`,
+    (name) => `Le ${name} en altitude présente des contraintes spécifiques : matériaux résistants au gel, isolation thermique renforcée, chaudière performante. Les artisans locaux maîtrisent les normes de construction en zone montagne et les aides spécifiques.`,
     (name, code) => `Dans le ${name} (${code}), le déneigement des toitures est une obligation de sécurité au-delà de 40 cm d'accumulation. Prévoyez des crochets pare-neige et des gouttières chauffantes pour éviter les dégâts liés aux redoux brutaux.`,
     (name) => `Le triple vitrage est rentable dans le ${name} en zone montagnarde : le surcoût de 15-20% par rapport au double vitrage est amorti en 6-8 ans par les économies de chauffage. Associez-le à des volets bois pour une isolation maximale.`,
     (name, code) => `Les fondations dans le ${name} (${code}) doivent descendre sous la profondeur de gel (80 cm à 1,20 m selon l'altitude). Un vide sanitaire ventilé protège la dalle contre l'humidité du sol. Choisissez un artisan habitué aux normes montagne.`,
   ],
   'semi-oceanique': [
     (name, code) => `Le climat tempéré du ${name} (${code}) facilite les travaux toute l'année, avec une attention particulière en hiver pour le chauffage et la ventilation. L'humidité modérée nécessite une VMC efficace. Les artisans connaissent les spécificités locales.`,
-    (name) => `Dans le ${name}, le climat semi-océanique offre des conditions favorables à la plupart des chantiers. Les périodes de gel imposent de reporter la maçonnerie extérieure. Profitez du printemps et de l'automne pour les ravalements.`,
+    (name) => `Dans le ${name}, le climat semi-océanique offre des conditions favorables à la plupart des chantiers. Les périodes de gel obligent à reporter la maçonnerie extérieure. Profitez du printemps et de l'automne pour les ravalements.`,
     (name, code) => `L'humidité modérée du ${name} (${code}) favorise le développement de mousses sur les toitures et façades nord. Un traitement préventif biannuel au printemps et à l'automne évite les dégradations coûteuses à long terme.`,
     (name) => `Dans le ${name}, la VMC hygroréglable de type B est le meilleur compromis : elle adapte le débit aux besoins réels de chaque pièce, réduisant les déperditions thermiques de 10-15% par rapport à une VMC autoréglable.`,
     (name, code) => `Le ${name} (${code}) bénéficie de conditions idéales pour la rénovation énergétique globale : isolation + ventilation + chauffage. Les aides MaPrimeRénov' en rénovation d'ampleur couvrent jusqu'à 90% des travaux pour les ménages modestes.`,
@@ -1451,11 +1531,8 @@ function getDeptHousing(code: string): HousingStock {
 }
 
 function getDepartementProfile(dept: import('@/lib/data/france').Departement): DepartementProfile {
-  const climateKey = REGION_CLIMATE[dept.region] || 'semi-oceanique'
-  const climate = CLIMATES.find(c => c.key === climateKey) || CLIMATES[4]
-
-  const mountainDepts = ['73', '74', '05', '38', '09', '65', '04']
-  const finalClimate = mountainDepts.includes(dept.code) ? (CLIMATES.find(c => c.key === 'montagnard') || climate) : climate
+  const climateKey = DEPT_CLIMATE_OVERRIDES[dept.code] || REGION_CLIMATE[dept.region] || 'semi-oceanique'
+  const finalClimate = CLIMATES.find(c => c.key === climateKey) || CLIMATES[4]
 
   const economyKey = getDeptEconomy(dept.code)
   const economy = ECONOMIES.find(e => e.key === economyKey) || ECONOMIES[4]
@@ -1617,7 +1694,7 @@ const GEO_FACTS: Record<GeoType, string[]> = {
     'La protection du patrimoine naturel influence les choix architecturaux',
   ],
   'mixte-geo': [
-    'La diversité géographique impose une grande variété de techniques',
+    'La diversité géographique requiert une grande variété de techniques',
     'Les artisans s\'adaptent aux contraintes de chaque zone',
     'Le parc immobilier reflète la variété des terrains et des climats',
     'Les matériaux locaux varient selon les territoires',
@@ -1649,7 +1726,7 @@ const REGION_CONTEXTS: Record<RegionalEconomy, ((name: string, deptCount: number
   ],
   'tourisme-patrimoine': [
     (name, deptCount, cityCount) => `La région ${name}, destination touristique majeure, conjugue patrimoine exceptionnel et exigences d'accueil. Les ${deptCount} départements et ${cityCount} villes abritent des artisans rompus à la restauration patrimoniale.`,
-    (name, deptCount, cityCount) => `En ${name}, tourisme et patrimoine imposent un niveau d'exigence élevé. Les ${deptCount} départements (${cityCount} villes) concentrent des artisans habitués aux contraintes patrimoniales.`,
+    (name, deptCount, cityCount) => `En ${name}, tourisme et patrimoine appellent un niveau d'exigence élevé. Les ${deptCount} départements (${cityCount} villes) concentrent des artisans habitués aux contraintes patrimoniales.`,
     (name, deptCount, cityCount) => `L'attractivité touristique de ${name} soutient une forte demande en artisanat de qualité sur ses ${deptCount} départements et ${cityCount} villes.`,
     (name, deptCount, cityCount) => `Les résidences secondaires en ${name} représentent un marché important pour les artisans locaux. Sur ${deptCount} départements et ${cityCount} villes, la rénovation haut de gamme et l'entretien saisonnier alimentent l'activité tout au long de l'année.`,
     (name, deptCount, cityCount) => `Le classement au patrimoine de nombreux sites en ${name} impose des contraintes spécifiques : matériaux d'origine, techniques traditionnelles, validation par les ABF. Les artisans des ${deptCount} départements (${cityCount} villes) maîtrisent ces exigences.`,
@@ -1678,7 +1755,7 @@ const REGION_INTROS: RegionIntroFn[] = [
   (name, deptCount, cityCount, climate, geo) =>
     `${name} : ${deptCount} départements, ${cityCount} villes, et un patrimoine bâti façonné par le ${climate.toLowerCase()} et la ${geo.toLowerCase()}. Les artisans régionaux maîtrisent les techniques adaptées.`,
   (name, deptCount, cityCount, climate, geo, economy) =>
-    `Région de ${geo.toLowerCase()}, ${name} compte ${deptCount} départements et ${cityCount} villes. Le ${climate.toLowerCase()} impose ses contraintes, et l'${economy.toLowerCase()} maintient une demande soutenue.`,
+    `Région de ${geo.toLowerCase()}, ${name} compte ${deptCount} départements et ${cityCount} villes. Le ${climate.toLowerCase()} dicte ses contraintes, et l'${economy.toLowerCase()} maintient une demande soutenue.`,
   (name, deptCount, cityCount, climate, geo, economy) =>
     `Le patrimoine bâti de ${name} reflète son ${climate.toLowerCase()} et sa ${geo.toLowerCase()}. Nos ${cityCount} villes, réparties sur ${deptCount} départements, donnent accès à des artisans formés aux spécificités locales. L'${economy.toLowerCase()} garantit un vivier de professionnels.`,
   (name, deptCount, cityCount, climate, geo, economy) =>
@@ -1689,14 +1766,14 @@ const REGION_INTROS: RegionIntroFn[] = [
 
 const REGION_TIPS: Record<ClimateZone, ((name: string) => string)[]> = {
   'oceanique': [
-    (name) => `En ${name}, planifiez les travaux extérieurs entre avril et octobre. L'humidité océanique impose des matériaux résistants : menuiseries aluminium ou PVC, peintures microporeuses, enduits hydrofuges. Les artisans régionaux connaissent les produits adaptés.`,
+    (name) => `En ${name}, planifiez les travaux extérieurs entre avril et octobre. L'humidité océanique exige des matériaux résistants : menuiseries aluminium ou PVC, peintures microporeuses, enduits hydrofuges. Les artisans régionaux connaissent les produits adaptés.`,
     (name) => `Pour protéger votre habitation en ${name}, investissez dans la ventilation et les traitements anti-humidité. Faites inspecter votre toiture après chaque hiver. Un démoussage régulier et un contrôle des gouttières avant les pluies sont recommandés.`,
     (name) => `Les murs en pierre des maisons anciennes en ${name} nécessitent des enduits à la chaux, respirants, plutôt que du ciment qui piège l'humidité. Un artisan spécialisé en rénovation patrimoniale saura choisir le bon mortier.`,
     (name) => `Le bardage bois est très répandu en ${name} mais exige un entretien régulier : lasure tous les 3-5 ans ou choix de bois autoclavé classe 3. Le bardage composite ou fibrociment offre une alternative sans entretien.`,
     (name) => `En ${name}, l'installation d'une pompe à chaleur air-eau est particulièrement rentable : les hivers doux garantissent un COP élevé toute l'année. Les économies atteignent 60-70% par rapport au chauffage électrique.`,
   ],
   'continental': [
-    (name) => `Les hivers rigoureux de ${name} imposent une isolation performante (R ≥ 6 en combles). Faites vérifier votre chauffage et protégez les canalisations extérieures. Planifiez les chantiers extérieurs entre mars et novembre.`,
+    (name) => `Les hivers rigoureux de ${name} nécessitent une isolation performante (R ≥ 6 en combles). Faites vérifier votre chauffage et protégez les canalisations extérieures. Planifiez les chantiers extérieurs entre mars et novembre.`,
     (name) => `En ${name}, les écarts de température sollicitent les matériaux. Privilégiez les revêtements extérieurs souples et le double vitrage à isolation renforcée. Les artisans maîtrisent ces techniques d'adaptation au climat continental.`,
     (name) => `Le chauffage représente le premier poste de dépense en ${name}. Avant de changer de chaudière, faites réaliser un audit énergétique : l'isolation des combles (15-25 €/m²) offre le meilleur retour sur investissement.`,
     (name) => `Les caves et sous-sols en ${name} sont exposés au gel et à l'humidité. Un cuvelage étanche associé à une ventilation mécanique protège vos fondations et valorise cet espace habitable de 800 à 1 200 €/m².`,
@@ -1717,7 +1794,7 @@ const REGION_TIPS: Record<ClimateZone, ((name: string) => string)[]> = {
     (name) => `Les accès aux chantiers en ${name} peuvent être difficiles en hiver. Prévoyez les livraisons de matériaux lourds avant les premières neiges et réservez les artisans dès le printemps — les carnets se remplissent vite en zone montagne.`,
   ],
   'semi-oceanique': [
-    (name) => `Le climat tempéré de ${name} permet des travaux quasiment toute l'année, avec une pause en décembre-janvier pour l'extérieur. L'humidité modérée impose une bonne ventilation. Profitez du printemps et de l'automne pour les ravalements.`,
+    (name) => `Le climat tempéré de ${name} permet des travaux quasiment toute l'année, avec une pause en décembre-janvier pour l'extérieur. L'humidité modérée justifie une bonne ventilation. Profitez du printemps et de l'automne pour les ravalements.`,
     (name) => `En ${name}, l'équilibre entre isolation et ventilation est crucial. Installez une VMC hygroréglable et aérez quotidiennement. Préférez une approche globale plutôt que des interventions ponctuelles.`,
     (name) => `Le ravalement de façade en ${name} est recommandé tous les 10-15 ans. Profitez-en pour ajouter une isolation par l'extérieur : le surcoût de 30-40% est couvert en partie par les aides et s'amortit en 8-12 ans.`,
     (name) => `En ${name}, les maisons à colombages et les constructions en tuffeau nécessitent des artisans formés aux techniques patrimoniales. Évitez les enduits ciment sur les murs anciens : la chaux est indispensable pour laisser respirer le bâti.`,
@@ -1725,7 +1802,7 @@ const REGION_TIPS: Record<ClimateZone, ((name: string) => string)[]> = {
   ],
   'tropical': [
     (name) => `En ${name}, la construction doit résister aux cyclones et à l'humidité. Privilégiez les structures béton armé, les menuiseries aluminium anticorrosion et les peintures fongicides. Climatisation à entretenir trimestriellement.`,
-    (name) => `Le climat tropical de ${name} impose un entretien fréquent. Traitez les bois contre les termites, vérifiez l'étanchéité avant les pluies, et protégez les métaux contre la corrosion saline.`,
+    (name) => `Le climat tropical de ${name} demande un entretien fréquent. Traitez les bois contre les termites, vérifiez l'étanchéité avant les pluies, et protégez les métaux contre la corrosion saline.`,
     (name) => `L'isolation thermique en ${name} vise le confort d'été : toiture ventilée avec sous-face réfléchissante, murs en parpaings isolés par l'extérieur. La casquette solaire au-dessus des fenêtres réduit la chaleur intérieure de 3 à 5°C.`,
     (name) => `Les chauffe-eau solaires sont particulièrement rentables en ${name} avec un ensoleillement quasi permanent. L'installation couvre 80-100% des besoins en eau chaude et se rentabilise en 4-6 ans.`,
     (name) => `En ${name}, faites vérifier votre installation électrique tous les 5 ans : l'humidité et la salinité accélèrent la corrosion des connexions. Un tableau électrique aux normes NF C 15-100 avec protection différentielle 30 mA est impératif.`,
@@ -1979,7 +2056,7 @@ const VILLE_TIPS: Record<ClimateZone, ((name: string) => string)[]> = {
   ],
   'continental': [
     (name) => `À ${name}, les écarts de température entre été et hiver sollicitent fortement les façades et les joints. Prévoyez un contrôle de chaudière avant l'hiver et vérifiez l'isolation des combles pour réduire votre facture énergétique.`,
-    (name) => `Le climat continental de ${name} impose une vigilance particulière sur les canalisations en période de gel. Pensez à purger les circuits extérieurs et à calorifuger les tuyaux exposés avant les premières gelées.`,
+    (name) => `Le climat continental de ${name} commande une vigilance particulière sur les canalisations en période de gel. Pensez à purger les circuits extérieurs et à calorifuger les tuyaux exposés avant les premières gelées.`,
     (name) => `À ${name}, les dallages extérieurs souffrent des cycles gel-dégel. Privilégiez des matériaux résistants au gel (grès cérame, pierre naturelle) et prévoyez des joints souples pour absorber les dilatations thermiques.`,
     (name) => `En hiver à ${name}, la consommation de chauffage peut représenter jusqu'à 70% de la facture énergétique. L'isolation des combles perdus est le premier investissement à réaliser pour un retour rapide.`,
     (name) => `Les étés chauds et les hivers froids à ${name} sollicitent les volets roulants et les fermetures. Faites réviser les mécanismes chaque automne et graissez les rails pour éviter les blocages en plein hiver.`,
@@ -2006,7 +2083,7 @@ const VILLE_TIPS: Record<ClimateZone, ((name: string) => string)[]> = {
     (name) => `À ${name}, les peintures extérieures tiennent généralement 10 à 12 ans grâce au climat tempéré. Profitez du printemps pour inspecter les boiseries, volets et portails et planifier les retouches nécessaires.`,
   ],
   'tropical': [
-    (name) => `À ${name}, le climat tropical impose des matériaux résistants à l'humidité et aux termites. Privilégiez les traitements préventifs du bois et une ventilation naturelle efficace pour limiter la climatisation.`,
+    (name) => `À ${name}, le climat tropical nécessite des matériaux résistants à l'humidité et aux termites. Privilégiez les traitements préventifs du bois et une ventilation naturelle efficace pour limiter la climatisation.`,
     (name) => `En climat tropical à ${name}, les cyclones nécessitent des menuiseries renforcées et une toiture solidement ancrée. Faites vérifier les fixations de votre charpente avant chaque saison cyclonique.`,
     (name) => `À ${name}, la climatisation fonctionne souvent en continu. Un entretien trimestriel des filtres et un contrôle annuel du circuit frigorifique par un professionnel certifié prolongent la durée de vie de l'appareil.`,
     (name) => `L'air salin à ${name} corrode rapidement les installations électriques extérieures. Faites vérifier les coffrets et les protections différentielles chaque année par un électricien pour garantir votre sécurité.`,

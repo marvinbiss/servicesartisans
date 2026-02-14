@@ -89,7 +89,7 @@ export function getLocalBusinessSchema(artisan: {
       addressCountry: 'FR',
     },
     telephone: artisan.phone,
-    priceRange: artisan.priceRange || '€€',
+    ...(artisan.priceRange ? { priceRange: artisan.priceRange } : {}),
     aggregateRating: (artisan.rating && artisan.reviewCount && artisan.reviewCount > 0)
       ? {
           '@type': 'AggregateRating',
@@ -388,7 +388,7 @@ export function getProfessionalServiceSchema(artisan: {
     },
     telephone: artisan.phone,
     email: artisan.email,
-    priceRange: artisan.priceRange || '€€',
+    ...(artisan.priceRange ? { priceRange: artisan.priceRange } : {}),
     aggregateRating: (artisan.rating && artisan.reviewCount && artisan.reviewCount > 0)
       ? {
           '@type': 'AggregateRating',

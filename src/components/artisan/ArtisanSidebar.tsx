@@ -48,12 +48,17 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
           </div>
         )}
 
-        {/* Price */}
-        {artisan.hourly_rate && (
+        {/* Price range */}
+        {(artisan.hourly_rate_min || artisan.hourly_rate_max) && (
           <div className="mb-6">
-            <div className="text-sm text-slate-500">&Agrave; partir de</div>
+            <div className="text-sm text-slate-500">Taux horaire</div>
             <div className="text-3xl font-bold text-gray-900 tracking-tight">
-              {artisan.hourly_rate}&euro;<span className="text-lg text-slate-400 font-normal">/heure</span>
+              {artisan.hourly_rate_min && artisan.hourly_rate_max
+                ? <>{artisan.hourly_rate_min}&euro; - {artisan.hourly_rate_max}&euro;<span className="text-lg text-slate-400 font-normal">/heure</span></>
+                : artisan.hourly_rate_min
+                  ? <>À partir de {artisan.hourly_rate_min}&euro;<span className="text-lg text-slate-400 font-normal">/heure</span></>
+                  : <>Jusqu&apos;à {artisan.hourly_rate_max}&euro;<span className="text-lg text-slate-400 font-normal">/heure</span></>
+              }
             </div>
           </div>
         )}
@@ -174,9 +179,16 @@ export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
         aria-label="Actions rapides"
       >
         {/* Price hint */}
-        {artisan.hourly_rate && (
+        {(artisan.hourly_rate_min || artisan.hourly_rate_max) && (
           <div className="flex items-baseline gap-1 mb-2.5">
-            <span className="text-lg font-bold text-gray-900">{artisan.hourly_rate}&euro;</span>
+            <span className="text-lg font-bold text-gray-900">
+              {artisan.hourly_rate_min && artisan.hourly_rate_max
+                ? `${artisan.hourly_rate_min}€ - ${artisan.hourly_rate_max}€`
+                : artisan.hourly_rate_min
+                  ? `À partir de ${artisan.hourly_rate_min}€`
+                  : `Jusqu'à ${artisan.hourly_rate_max}€`
+              }
+            </span>
             <span className="text-sm text-slate-500">/heure</span>
           </div>
         )}

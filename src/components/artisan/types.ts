@@ -63,11 +63,20 @@ export interface Artisan {
   creation_date?: string
   employee_count?: number
   phone?: string
+  phone_secondary?: string
   email?: string
   website?: string
   latitude?: number
   longitude?: number
   prices_are_estimated?: boolean
+  available_24h?: boolean
+  hourly_rate_min?: number
+  hourly_rate_max?: number
+  opening_hours?: Record<string, { ouvert: boolean; debut: string; fin: string }>
+  free_quote?: boolean
+  intervention_radius_km?: number
+  bio?: string
+  updated_at?: string
   // GUARD: Do NOT add is_premium, hourly_rate, response_time, etc. here.
   // Legacy fields live in src/types/legacy/ (LegacyArtisan).
 }

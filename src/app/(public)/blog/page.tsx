@@ -25,7 +25,12 @@ export const metadata: Metadata = {
   },
 }
 
-export default function BlogPage() {
+interface PageProps {
+  searchParams: Promise<{ tag?: string }>
+}
+
+export default async function BlogPage({ searchParams }: PageProps) {
+  const { tag } = await searchParams
   const collectionSchema = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
@@ -48,7 +53,7 @@ export default function BlogPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
       />
-      <BlogPageClient articles={allArticlesMeta} categories={allCategories} />
+      <BlogPageClient articles={allArticlesMeta} categories={allCategories} initialTag={tag} />
     </>
   )
 }

@@ -80,6 +80,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title,
     description,
     openGraph: {
+      locale: 'fr_FR',
       title,
       description,
       type: 'website',
