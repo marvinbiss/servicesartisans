@@ -6,11 +6,11 @@ import { SITE_URL } from '@/lib/seo/config'
 import { villes, regions, departements, services } from '@/lib/data/france'
 
 export const metadata: Metadata = {
-  title: 'Artisans par ville — 350 000+ professionnels référencés | ServicesArtisans',
+  title: 'Artisans par ville — 350 000+ professionnels',
   description: 'Trouvez un artisan référencé dans votre ville. Plus de 1 000 villes couvertes, 350 000+ professionnels dans 101 départements. Devis gratuits, sans engagement.',
   alternates: { canonical: `${SITE_URL}/villes` },
   openGraph: {
-    title: 'Artisans par ville — 350 000+ professionnels référencés | ServicesArtisans',
+    title: 'Artisans par ville — 350 000+ professionnels',
     description: 'Trouvez un artisan référencé dans votre ville. Plus de 1 000 villes couvertes, 350 000+ professionnels dans 101 départements.',
     url: `${SITE_URL}/villes`,
     type: 'website',

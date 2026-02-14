@@ -6,6 +6,7 @@ import { MapPin, ArrowRight, Star, Shield, ChevronDown, BadgeCheck, Euro, Clock,
 import { getServiceBySlug, getLocationsByService, getProvidersByService } from '@/lib/supabase'
 import JsonLd from '@/components/JsonLd'
 import { getServiceSchema, getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import { hashCode } from '@/lib/seo/location-content'
 import { REVALIDATE } from '@/lib/cache'
 import { SITE_URL } from '@/lib/seo/config'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -28,6 +29,11 @@ interface PageProps {
   params: Promise<{ service: string }>
 }
 
+function truncateTitle(title: string, maxLen = 55): string {
+  if (title.length <= maxLen) return title
+  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { service: serviceSlug } = await params
 
@@ -46,8 +52,27 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     serviceName = staticSvc.name
   }
 
-  const title = `${serviceName} en France — Annuaire & Devis Gratuit 2026`
-  const description = `Trouvez un ${serviceName.toLowerCase()} parmi 350 000+ artisans référencés. Guide des prix, conseils, FAQ et devis gratuit. 101 départements couverts.`
+  const svcLower = serviceName.toLowerCase()
+
+  const titleHash = Math.abs(hashCode(`hub-title-${serviceSlug}`))
+  const titleTemplates = [
+    `${serviceName} en France — Annuaire & Devis Gratuit 2026`,
+    `Trouver un ${svcLower} : annuaire et devis gratuit 2026`,
+    `${serviceName} — Comparez les artisans en France`,
+    `Annuaire ${svcLower} France : devis gratuit 2026`,
+    `${serviceName} en France — Artisans qualifiés`,
+  ]
+  const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
+
+  const descHash = Math.abs(hashCode(`hub-desc-${serviceSlug}`))
+  const descTemplates = [
+    `Trouvez un ${svcLower} parmi 350 000+ artisans référencés. Guide des prix, conseils, FAQ et devis gratuit. 101 départements couverts.`,
+    `Comparez les ${svcLower}s en France : tarifs, avis, certifications. Devis gratuit et sans engagement. 101 départements.`,
+    `Annuaire de ${svcLower}s vérifiés par SIREN en France. Prix, FAQ et conseils d'experts. Devis gratuit.`,
+    `Besoin d'un ${svcLower} ? Consultez notre annuaire national : tarifs indicatifs, artisans référencés, devis gratuit en ligne.`,
+    `Guide complet du ${svcLower} en France : prix 2026, conseils, certifications requises. Comparez et demandez un devis.`,
+  ]
+  const description = descTemplates[descHash % descTemplates.length]
 
   const serviceImage = getServiceImage(serviceSlug)
 
@@ -135,6 +160,17 @@ export default async function ServicePage({ params }: PageProps) {
   // Trade-specific rich content (prices, FAQ, tips, certifications)
   const trade = getTradeContent(serviceSlug)
 
+  // H1 variation for SEO
+  const h1Hash = Math.abs(hashCode(`hub-h1-${serviceSlug}`))
+  const h1Templates = [
+    `${service.name} en France`,
+    `Trouver un ${service.name.toLowerCase()} en France`,
+    `${service.name} — Annuaire national`,
+    `Artisans ${service.name.toLowerCase()} en France`,
+    `${service.name} : comparez les professionnels`,
+  ]
+  const h1Text = h1Templates[h1Hash % h1Templates.length]
+
   // JSON-LD structured data
   const serviceSchema = getServiceSchema({
     name: service.name,
@@ -195,7 +231,7 @@ export default async function ServicePage({ params }: PageProps) {
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
           <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 tracking-tight">
-            {service.name} en France
+            {h1Text}
           </h1>
           <p className="text-lg md:text-xl text-slate-400 max-w-3xl leading-relaxed">
             {service.description ||
@@ -589,6 +625,26 @@ export default async function ServicePage({ params }: PageProps) {
             Créer mon profil
             <ArrowRight className="w-5 h-5" />
           </Link>
+        </div>
+      </section>
+
+      {/* Trust & Safety Links (E-E-A-T) */}
+      <section className="py-8 bg-white border-t">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+            Confiance &amp; Sécurité
+          </h2>
+          <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+            <Link href="/notre-processus-de-verification" className="text-blue-600 hover:text-blue-800">
+              Comment nous référençons les artisans
+            </Link>
+            <Link href="/politique-avis" className="text-blue-600 hover:text-blue-800">
+              Notre politique des avis
+            </Link>
+            <Link href="/mediation" className="text-blue-600 hover:text-blue-800">
+              Service de médiation
+            </Link>
+          </nav>
         </div>
       </section>
 

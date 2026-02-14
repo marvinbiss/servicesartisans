@@ -10,11 +10,11 @@ import { services, villes, regions } from '@/lib/data/france'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
 
 export const metadata: Metadata = {
-  title: 'Rechercher un artisan — Trouvez le bon professionnel | ServicesArtisans',
+  title: 'Rechercher un artisan — Trouvez le bon professionnel',
   description: 'Recherchez un artisan qualifié près de chez vous. Comparez les avis, les tarifs et obtenez des devis gratuits. 350 000+ artisans référencés dans toute la France.',
   alternates: { canonical: `${SITE_URL}/recherche` },
   openGraph: {
-    title: 'Rechercher un artisan — Trouvez le bon professionnel | ServicesArtisans',
+    title: 'Rechercher un artisan — Trouvez le bon professionnel',
     description: 'Comparez les avis, les tarifs et obtenez des devis gratuits. 350 000+ artisans référencés.',
     url: `${SITE_URL}/recherche`,
     type: 'website',
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Rechercher un artisan | ServicesArtisans',
+    title: 'Rechercher un artisan',
     description: 'Comparez les avis, les tarifs et obtenez des devis gratuits.',
     images: [`${SITE_URL}/opengraph-image`],
   },

@@ -5,9 +5,10 @@ import { SITE_URL } from '@/lib/seo/config'
 import Breadcrumb from '@/components/Breadcrumb'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { tradeContent } from '@/lib/data/trade-content'
+import { allArticlesMeta } from '@/lib/data/blog/articles-index'
 
 export const metadata: Metadata = {
-  title: 'Plan du site — ServicesArtisans',
+  title: 'Plan du site',
   description: 'Plan du site complet de ServicesArtisans. Accédez à tous nos services, villes, départements et régions.',
   alternates: { canonical: `${SITE_URL}/plan-du-site` },
 }
@@ -213,6 +214,24 @@ export default function PlanDuSitePage() {
           </div>
         </section>
 
+        {/* Blog articles */}
+        <section className="mb-12">
+          <h2 className="text-xl font-bold text-gray-900 mb-4 border-l-4 border-amber-500 pl-4">
+            Articles du blog ({allArticlesMeta.length})
+          </h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {allArticlesMeta.map(article => (
+              <Link
+                key={article.slug}
+                href={`/blog/${article.slug}`}
+                className="text-sm text-blue-600 hover:text-blue-800 py-1"
+              >
+                {article.title}
+              </Link>
+            ))}
+          </div>
+        </section>
+
         {/* Pages utiles */}
         <section className="mb-12">
           <h2 className="text-xl font-bold text-gray-900 mb-4 border-l-4 border-amber-500 pl-4">
@@ -235,6 +254,7 @@ export default function PlanDuSitePage() {
               { href: '/cgv', label: 'CGV' },
               { href: '/accessibilite', label: 'Accessibilité' },
               { href: '/mediation', label: 'Médiation' },
+              { href: '/politique-avis', label: 'Politique d\'avis' },
             ].map(p => (
               <Link
                 key={p.href}

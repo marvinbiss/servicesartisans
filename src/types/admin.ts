@@ -29,7 +29,7 @@ export interface AuditLog {
   admin_id: string
   admin_email?: string
   action: string
-  entity_type: 'user' | 'provider' | 'review' | 'payment' | 'service' | 'settings' | 'booking'
+  entity_type: 'user' | 'provider' | 'review' | 'payment' | 'service' | 'settings' | 'booking' | 'cms_page'
   entity_id?: string
   old_data?: Record<string, unknown>
   new_data?: Record<string, unknown>

@@ -5,7 +5,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
 
 export const metadata: Metadata = {
-  title: 'Avis Clients Authentiques - Témoignages | ServicesArtisans',
+  title: 'Avis Clients Authentiques - Témoignages',
   description: 'Découvrez les avis authentiques de nos clients sur nos artisans qualifiés.',
 }
 

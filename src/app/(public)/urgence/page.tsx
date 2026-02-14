@@ -2,12 +2,12 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { Phone, Zap, Shield, Clock, MapPin, ArrowRight, Star, CheckCircle, AlertTriangle, Wrench, Key } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, PHONE_TEL } from '@/lib/seo/config'
 import { villes } from '@/lib/data/france'
 import { PopularCitiesLinks } from '@/components/InternalLinks'
 
 export const metadata: Metadata = {
-  title: 'Urgence artisan 24h/24 7j/7 — Plombier, Électricien, Serrurier | ServicesArtisans',
+  title: 'Urgence artisan 24h/24 — Plombier, Serrurier',
   description: 'Besoin d\'un artisan en urgence ? Plombier, électricien, serrurier disponibles 24h/24 et 7j/7 partout en France. Intervention rapide, devis gratuit, artisans référencés.',
   alternates: { canonical: `${SITE_URL}/urgence` },
   openGraph: {
@@ -159,7 +159,7 @@ export default function UrgencePage() {
           {/* Emergency CTAs */}
           <div className="flex flex-col sm:flex-row gap-4 mb-12">
             <a
-              href="tel:+33176340000"
+              href={PHONE_TEL}
               className="inline-flex items-center justify-center gap-3 bg-red-500 hover:bg-red-400 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg shadow-red-500/30 hover:shadow-red-400/40 transition-all"
             >
               <Phone className="w-6 h-6" />
@@ -439,7 +439,7 @@ export default function UrgencePage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="tel:+33176340000"
+              href={PHONE_TEL}
               className="inline-flex items-center justify-center gap-3 bg-red-500 hover:bg-red-400 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg shadow-red-500/30 transition-all"
             >
               <Phone className="w-6 h-6" />

@@ -5,6 +5,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
+import { hashCode } from '@/lib/seo/location-content'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { villes } from '@/lib/data/france'
 import { getServiceImage } from '@/lib/data/images'
@@ -31,8 +32,28 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
   const trade = tradeContent[service]
   if (!trade) return {}
 
-  const title = `Tarifs ${trade.name.toLowerCase()} 2026 — Prix détaillés et devis | ServicesArtisans`
-  const description = `Guide complet des tarifs ${trade.name.toLowerCase()} en 2026 : ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}. ${trade.commonTasks[0]}. Comparez les prix, demandez un devis gratuit.`
+  const tradeLower = trade.name.toLowerCase()
+
+  const titleHash = Math.abs(hashCode(`tarif-title-${service}`))
+  const titleTemplates = [
+    `Tarifs ${tradeLower} 2026 : prix et devis`,
+    `Prix ${tradeLower} 2026 — Guide complet`,
+    `Combien coûte un ${tradeLower} en 2026 ?`,
+    `Tarifs ${tradeLower} : prix horaire et devis`,
+    `Guide des prix ${tradeLower} 2026`,
+  ]
+  const title = titleTemplates[titleHash % titleTemplates.length]
+
+  const descHash = Math.abs(hashCode(`tarif-desc-${service}`))
+  const descTemplates = [
+    `Tarifs ${tradeLower} 2026 : ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}. Prix détaillés par prestation, comparatif régional. Devis gratuit.`,
+    `Prix ${tradeLower} en 2026 : de ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}. Grille tarifaire complète et devis en ligne.`,
+    `Combien coûte un ${tradeLower} ? ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit} en 2026. Tarifs par région et devis gratuit.`,
+    `Guide des tarifs ${tradeLower} 2026 : ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}. Comparez les prix et demandez un devis.`,
+    `Tarifs ${tradeLower} : de ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}. Prix par prestation, variations régionales. Devis gratuit.`,
+  ]
+  const description = descTemplates[descHash % descTemplates.length]
+
   const serviceImage = getServiceImage(service)
 
   return {
@@ -72,11 +93,34 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
     trade.faq.map((f) => ({ question: f.q, answer: f.a }))
   )
 
+  const serviceSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: `${trade.name} en France`,
+    description: `Guide des tarifs ${trade.name.toLowerCase()} 2026. Prix horaire, tarifs par prestation et variations régionales.`,
+    provider: {
+      '@type': 'Organization',
+      name: 'ServicesArtisans',
+      url: SITE_URL,
+    },
+    areaServed: {
+      '@type': 'Country',
+      name: 'France',
+    },
+    offers: {
+      '@type': 'AggregateOffer',
+      priceCurrency: 'EUR',
+      lowPrice: trade.priceRange.min,
+      highPrice: trade.priceRange.max,
+      offerCount: trade.commonTasks.length,
+    },
+  }
+
   const otherTrades = tradeSlugs.filter((s) => s !== service).slice(0, 8)
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <JsonLd data={[breadcrumbSchema, faqSchema]} />
+      <JsonLd data={[breadcrumbSchema, faqSchema, serviceSchema]} />
 
       {/* Hero */}
       <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
@@ -100,7 +144,18 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
           />
           <div className="text-center">
             <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
-              Tarifs {trade.name.toLowerCase()} 2026
+              {(() => {
+                const h1Hash = Math.abs(hashCode(`tarif-h1-${service}`))
+                const tradeLower = trade.name.toLowerCase()
+                const h1Templates = [
+                  `Tarifs ${tradeLower} 2026`,
+                  `Prix ${tradeLower} : guide complet 2026`,
+                  `Combien coûte un ${tradeLower} ?`,
+                  `Guide des tarifs ${tradeLower} en 2026`,
+                  `Tarifs et prix d'un ${tradeLower}`,
+                ]
+                return h1Templates[h1Hash % h1Templates.length]
+              })()}
             </h1>
             <p className="text-xl text-slate-400 max-w-3xl mx-auto mb-4">
               Guide complet des prix {trade.name.toLowerCase()} en France.
@@ -369,6 +424,26 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
               <ArrowRight className="w-5 h-5" />
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* Trust & Safety Links (E-E-A-T) */}
+      <section className="py-8 bg-white border-t">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+            Confiance &amp; Sécurité
+          </h2>
+          <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+            <Link href="/notre-processus-de-verification" className="text-blue-600 hover:text-blue-800">
+              Comment nous référençons les artisans
+            </Link>
+            <Link href="/politique-avis" className="text-blue-600 hover:text-blue-800">
+              Notre politique des avis
+            </Link>
+            <Link href="/mediation" className="text-blue-600 hover:text-blue-800">
+              Service de médiation
+            </Link>
+          </nav>
         </div>
       </section>
 

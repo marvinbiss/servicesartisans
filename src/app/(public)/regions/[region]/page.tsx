@@ -8,7 +8,7 @@ import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/li
 import { SITE_URL } from '@/lib/seo/config'
 import { regions, getRegionBySlug, services as allServices } from '@/lib/data/france'
 import { getRegionImage } from '@/lib/data/images'
-import { generateRegionContent } from '@/lib/seo/location-content'
+import { generateRegionContent, hashCode } from '@/lib/seo/location-content'
 import { Thermometer, TrendingUp, AlertTriangle, Mountain } from 'lucide-react'
 
 export function generateStaticParams() {
@@ -31,8 +31,25 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const deptCount = region.departments.length
   const cityCount = region.departments.reduce((acc, d) => acc + d.cities.length, 0)
 
-  const title = `Artisans en ${region.name} — ${metaContent.profile.climateLabel} | ServicesArtisans`
-  const description = `Trouvez un artisan en ${region.name}. ${metaContent.profile.climateLabel}, ${metaContent.profile.geoLabel.toLowerCase()}. ${deptCount} départements, ${cityCount} villes. Devis gratuits.`
+  const titleHash = Math.abs(hashCode(`title-region-${region.slug}`))
+  const titleTemplates = [
+    `Artisans en ${region.name}`,
+    `Trouver un artisan en ${region.name}`,
+    `${region.name} : ${deptCount} départements couverts`,
+    `Artisans qualifiés en ${region.name}`,
+    `${region.name} — Artisans par département`,
+  ]
+  const title = titleTemplates[titleHash % titleTemplates.length]
+
+  const descHash = Math.abs(hashCode(`desc-region-${region.slug}`))
+  const descTemplates = [
+    `Trouvez un artisan en ${region.name}. ${metaContent.profile.climateLabel}, ${deptCount} départements, ${cityCount} villes. Devis gratuits.`,
+    `${region.name} : annuaire d'artisans référencés SIREN. ${metaContent.profile.geoLabel}, ${metaContent.profile.climateLabel.toLowerCase()}. Comparez les devis.`,
+    `Artisans en ${region.name} : ${cityCount} villes couvertes, ${allServices.length} corps de métier. ${metaContent.profile.economyLabel}. Devis gratuit.`,
+    `Tous les artisans de ${region.name}. ${deptCount} départements, ${metaContent.profile.geoLabel.toLowerCase()}. Comparez gratuitement.`,
+    `${region.name} — ${deptCount} dép., ${cityCount} villes. ${metaContent.profile.climateLabel}, artisans qualifiés. Devis gratuits en ligne.`,
+  ]
+  const description = descTemplates[descHash % descTemplates.length]
 
   const regionImage = getRegionImage(regionSlug)
 
@@ -138,12 +155,21 @@ export default async function RegionPage({ params }: PageProps) {
               </div>
             </div>
 
-            <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
-              Artisans en{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-300 via-slate-200 to-white">
-                {region.name}
-              </span>
-            </h1>
+            {(() => {
+              const h1Hash = Math.abs(hashCode(`h1-region-${region.slug}`))
+              const h1Templates = [
+                `Artisans en ${region.name}`,
+                `Trouver un artisan en ${region.name}`,
+                `${region.name} : artisans par département`,
+                `Artisans qualifiés en ${region.name}`,
+                `Tous les artisans de ${region.name}`,
+              ]
+              return (
+                <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
+                  {h1Templates[h1Hash % h1Templates.length]}
+                </h1>
+              )
+            })()}
             <p className="text-lg text-slate-400 max-w-2xl leading-relaxed mb-8">
               {content.profile.climateLabel}, {content.profile.geoLabel.toLowerCase()}, {content.profile.economyLabel.toLowerCase()}. {allServices.length} corps de métier disponibles.
             </p>
@@ -469,6 +495,27 @@ export default async function RegionPage({ params }: PageProps) {
                 Toutes les villes <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Confiance & Sécurité */}
+      <section className="py-8 border-t">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-lg font-bold text-gray-900 mb-4">Confiance & Sécurité</h2>
+          <div className="flex flex-wrap gap-4">
+            <Link href="/notre-processus-de-verification" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
+              Processus de vérification
+            </Link>
+            <Link href="/politique-avis" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
+              Politique d&apos;avis
+            </Link>
+            <Link href="/mediation" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
+              Médiation
+            </Link>
+            <Link href="/cgv" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
+              CGV
+            </Link>
           </div>
         </div>
       </section>

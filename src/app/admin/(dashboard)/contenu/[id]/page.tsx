@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
 import {
@@ -19,37 +19,8 @@ import { StructuredFieldsEditor } from '@/components/admin/cms/StructuredFieldsE
 import { SEOPanel } from '@/components/admin/cms/SEOPanel'
 import { PagePreview } from '@/components/admin/cms/PagePreview'
 import { VersionHistory } from '@/components/admin/cms/VersionHistory'
-
-interface CMSPageData {
-  id: string
-  title: string
-  slug: string
-  page_type: string
-  status: string
-  content_html: string
-  content_json: Record<string, unknown>
-  structured_data: Record<string, unknown>
-  meta_title: string
-  meta_description: string
-  author: string
-  category: string
-  tags: string[]
-  excerpt: string
-  featured_image: string
-  updated_at: string
-  created_at: string
-}
-
-const PAGE_TYPE_OPTIONS = [
-  { value: 'static', label: 'Statique' },
-  { value: 'blog', label: 'Blog' },
-  { value: 'service', label: 'Service' },
-  { value: 'location', label: 'Localisation' },
-  { value: 'homepage', label: 'Accueil' },
-  { value: 'faq', label: 'FAQ' },
-]
-
-const BLOG_CATEGORIES = ['Tarifs', 'Conseils', 'Guides', 'Projets', 'Réglementation']
+import { PAGE_TYPE_OPTIONS, BLOG_CATEGORIES, FIELD_LIMITS, buildPayload } from '@/components/admin/cms/shared'
+import type { CmsPage } from '@/types/cms'
 
 export default function AdminEditContenuPage() {
   const router = useRouter()
@@ -66,26 +37,39 @@ export default function AdminEditContenuPage() {
   const [showPreview, setShowPreview] = useState(false)
   const [showVersions, setShowVersions] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const toastTimeoutRef = useRef<NodeJS.Timeout>()
 
   // Form fields
   const [title, setTitle] = useState('')
   const [slug, setSlug] = useState('')
+  const [slugError, setSlugError] = useState('')
   const [pageType, setPageType] = useState('static')
   const [status, setStatus] = useState('draft')
   const [content, setContent] = useState('')
   const [contentJson, setContentJson] = useState<Record<string, unknown>>({})
   const [structuredData, setStructuredData] = useState<Record<string, unknown>>({})
 
+  // Service/location fields
+  const [serviceSlug, setServiceSlug] = useState('')
+  const [locationSlug, setLocationSlug] = useState('')
+
   // Blog-specific fields
   const [author, setAuthor] = useState('')
+  const [authorBio, setAuthorBio] = useState('')
   const [category, setCategory] = useState('')
   const [tags, setTags] = useState('')
   const [excerpt, setExcerpt] = useState('')
   const [featuredImage, setFeaturedImage] = useState('')
+  const [readTime, setReadTime] = useState('')
 
   // SEO fields
   const [seoTitle, setSeoTitle] = useState('')
   const [seoDescription, setSeoDescription] = useState('')
+  const [ogImageUrl, setOgImageUrl] = useState('')
+  const [canonicalUrl, setCanonicalUrl] = useState('')
+
+  // Sort order
+  const [sortOrder, setSortOrder] = useState(0)
 
   // Unsaved changes warning
   useEffect(() => {
@@ -99,10 +83,28 @@ export default function AdminEditContenuPage() {
     return () => window.removeEventListener('beforeunload', handler)
   }, [isDirty])
 
+  // Escape key handler for modals
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        if (showDeleteConfirm) setShowDeleteConfirm(false)
+        else if (showPreview) setShowPreview(false)
+        else if (showVersions) setShowVersions(false)
+      }
+    }
+    document.addEventListener('keydown', handleEscape)
+    return () => document.removeEventListener('keydown', handleEscape)
+  }, [showDeleteConfirm, showPreview, showVersions])
+
   const showToast = (message: string, type: 'success' | 'error') => {
+    clearTimeout(toastTimeoutRef.current)
     setToast({ message, type })
-    setTimeout(() => setToast(null), 3000)
+    toastTimeoutRef.current = setTimeout(() => setToast(null), 3000)
   }
+
+  useEffect(() => {
+    return () => clearTimeout(toastTimeoutRef.current)
+  }, [])
 
   const fetchPage = useCallback(async () => {
     try {
@@ -120,7 +122,7 @@ export default function AdminEditContenuPage() {
         return
       }
       const json = await response.json()
-      const data: CMSPageData = json.data || json
+      const data: CmsPage = json.data || json
 
       setTitle(data.title || '')
       setSlug(data.slug || '')
@@ -131,11 +133,18 @@ export default function AdminEditContenuPage() {
       setStructuredData(data.structured_data || {})
       setSeoTitle(data.meta_title || '')
       setSeoDescription(data.meta_description || '')
+      setOgImageUrl(data.og_image_url || '')
+      setCanonicalUrl(data.canonical_url || '')
       setAuthor(data.author || '')
+      setAuthorBio(data.author_bio || '')
       setCategory(data.category || '')
       setTags(Array.isArray(data.tags) ? data.tags.join(', ') : '')
       setExcerpt(data.excerpt || '')
+      setReadTime(data.read_time || '')
       setFeaturedImage(data.featured_image || '')
+      setServiceSlug(data.service_slug || '')
+      setLocationSlug(data.location_slug || '')
+      setSortOrder(data.sort_order ?? 0)
       setIsDirty(false)
     } catch (err) {
       console.error('Erreur:', err)
@@ -152,42 +161,48 @@ export default function AdminEditContenuPage() {
   const usesRichTextEditor = pageType === 'static' || pageType === 'blog'
   const usesStructuredEditor = pageType === 'service' || pageType === 'faq' || pageType === 'homepage'
 
-  const buildPayload = () => {
-    const payload: Record<string, unknown> = {
-      title,
+  const getPayload = () => {
+    return buildPayload({
       slug,
-      page_type: pageType,
-      meta_title: seoTitle,
-      meta_description: seoDescription,
-    }
-
-    if (usesRichTextEditor) {
-      payload.content_html = content
-      payload.content_json = contentJson
-    } else {
-      payload.structured_data = structuredData
-    }
-
-    if (pageType === 'blog') {
-      payload.author = author
-      payload.category = category
-      payload.tags = tags.split(',').map((t) => t.trim()).filter(Boolean)
-      payload.excerpt = excerpt
-      payload.featured_image = featuredImage
-    }
-
-    return payload
+      pageType,
+      title,
+      contentJson: usesRichTextEditor ? contentJson : null,
+      contentHtml: usesRichTextEditor ? content : '',
+      structuredData: usesStructuredEditor ? structuredData : null,
+      metaTitle: seoTitle,
+      metaDescription: seoDescription,
+      ogImageUrl,
+      canonicalUrl,
+      excerpt,
+      author,
+      authorBio,
+      category,
+      tags: tags.split(',').map((t) => t.trim()).filter(Boolean),
+      readTime,
+      featuredImage,
+      serviceSlug,
+      locationSlug,
+      sortOrder,
+    })
   }
 
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     if (!title.trim()) {
       showToast('Le titre est requis', 'error')
+      return
+    }
+    if (pageType === 'service' && !serviceSlug.trim()) {
+      showToast('Le slug de service est requis pour les pages de type service', 'error')
+      return
+    }
+    if (pageType === 'location' && (!serviceSlug.trim() || !locationSlug.trim())) {
+      showToast('Les slugs de service et localisation sont requis pour les pages de type localisation', 'error')
       return
     }
 
     try {
       setSaving(true)
-      const payload = buildPayload()
+      const payload = getPayload()
 
       const response = await fetch(`/api/admin/cms/${id}`, {
         method: 'PUT',
@@ -201,7 +216,7 @@ export default function AdminEditContenuPage() {
         showToast('Page enregistrée', 'success')
       } else {
         const err = await response.json().catch(() => ({}))
-        showToast(err.error || 'Erreur lors de la sauvegarde', 'error')
+        showToast(err.error?.message || 'Erreur lors de la sauvegarde', 'error')
       }
     } catch (err) {
       console.error('Erreur:', err)
@@ -209,11 +224,56 @@ export default function AdminEditContenuPage() {
     } finally {
       setSaving(false)
     }
-  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, title, pageType, serviceSlug, locationSlug, slug, content, contentJson, structuredData, seoTitle, seoDescription, ogImageUrl, canonicalUrl, excerpt, author, authorBio, category, tags, readTime, featuredImage, sortOrder])
+
+  // Ctrl+S / Cmd+S keyboard shortcut
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault()
+        if (!saving && !loading) {
+          handleSave()
+        }
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [handleSave, saving, loading])
 
   const handlePublish = async () => {
+    if (!title.trim()) {
+      showToast('Le titre est requis', 'error')
+      return
+    }
+    if (pageType === 'service' && !serviceSlug.trim()) {
+      showToast('Le slug de service est requis pour les pages de type service', 'error')
+      return
+    }
+    if (pageType === 'location' && (!serviceSlug.trim() || !locationSlug.trim())) {
+      showToast('Les slugs de service et localisation sont requis pour les pages de type localisation', 'error')
+      return
+    }
+
     try {
       setSaving(true)
+
+      // Save unsaved changes before publishing
+      if (isDirty) {
+        const payload = getPayload()
+        const saveRes = await fetch(`/api/admin/cms/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify(payload),
+        })
+        if (!saveRes.ok) {
+          showToast('Erreur lors de la sauvegarde avant publication', 'error')
+          return
+        }
+        setIsDirty(false)
+      }
+
       const response = await fetch(`/api/admin/cms/${id}/publish`, {
         method: 'POST',
         credentials: 'include',
@@ -221,10 +281,10 @@ export default function AdminEditContenuPage() {
 
       if (response.ok) {
         setStatus('published')
-        setIsDirty(false)
         showToast('Page publiée', 'success')
       } else {
-        showToast('Erreur lors de la publication', 'error')
+        const err = await response.json().catch(() => ({}))
+        showToast(err?.error?.message || 'Erreur lors de la publication', 'error')
       }
     } catch (err) {
       console.error('Erreur:', err)
@@ -310,13 +370,21 @@ export default function AdminEditContenuPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-600 text-lg font-medium">{error}</p>
-          <Link
-            href="/admin/contenu"
-            className="mt-4 inline-flex items-center gap-2 text-blue-600 hover:text-blue-800"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Retour à la liste
-          </Link>
+          <div className="mt-4 flex items-center justify-center gap-4">
+            <button
+              onClick={fetchPage}
+              className="text-blue-600 hover:text-blue-800 font-medium"
+            >
+              Réessayer
+            </button>
+            <Link
+              href="/admin/contenu"
+              className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-700"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Retour à la liste
+            </Link>
+          </div>
         </div>
       </div>
     )
@@ -329,6 +397,8 @@ export default function AdminEditContenuPage() {
       {/* Toast */}
       {toast && (
         <div
+          role="status"
+          aria-live="polite"
           className={`fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg text-white transition-all ${
             toast.type === 'success' ? 'bg-green-600' : 'bg-red-600'
           }`}
@@ -370,28 +440,28 @@ export default function AdminEditContenuPage() {
             </button>
             <button
               onClick={handleSave}
-              disabled={saving}
+              disabled={saving || !!slugError}
               className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
-              <Save className="w-4 h-4" />
+              {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
               Enregistrer
             </button>
             {status === 'draft' ? (
               <button
                 onClick={handlePublish}
-                disabled={saving}
+                disabled={saving || !!slugError}
                 className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 transition-colors"
               >
-                <Upload className="w-4 h-4" />
+                {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
                 Publier
               </button>
             ) : status === 'published' ? (
               <button
                 onClick={handleUnpublish}
-                disabled={saving}
+                disabled={saving || !!slugError}
                 className="flex items-center gap-2 px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 disabled:opacity-50 transition-colors"
               >
-                <ArrowDownCircle className="w-4 h-4" />
+                {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowDownCircle className="w-4 h-4" />}
                 Dépublier
               </button>
             ) : null}
@@ -410,6 +480,7 @@ export default function AdminEditContenuPage() {
                 value={title}
                 onChange={(e) => { setTitle(e.target.value); setIsDirty(true) }}
                 placeholder="Titre de la page"
+                maxLength={FIELD_LIMITS.title}
                 className="w-full px-4 py-3 text-lg border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
@@ -422,12 +493,57 @@ export default function AdminEditContenuPage() {
                 <input
                   type="text"
                   value={slug}
-                  onChange={(e) => { setSlug(e.target.value); setIsDirty(true) }}
+                  onChange={(e) => {
+                    const newSlug = e.target.value
+                    setSlug(newSlug)
+                    setIsDirty(true)
+                    const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
+                    if (newSlug && !SLUG_RE.test(newSlug)) {
+                      setSlugError('Lettres minuscules, chiffres et tirets uniquement')
+                    } else {
+                      setSlugError('')
+                    }
+                  }}
                   placeholder="slug-de-la-page"
+                  maxLength={FIELD_LIMITS.slug}
                   className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                 />
               </div>
+              {slugError && <p className="mt-1 text-xs text-red-600">{slugError}</p>}
             </div>
+
+            {/* Service/Location slug fields */}
+            {(pageType === 'service' || pageType === 'location') && (
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4">
+                <h3 className="font-medium text-gray-900">Champs {pageType === 'location' ? 'localisation' : 'service'}</h3>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Slug du service</label>
+                  <input
+                    type="text"
+                    value={serviceSlug}
+                    onChange={(e) => { setServiceSlug(e.target.value); setIsDirty(true) }}
+                    placeholder="plombier"
+                    maxLength={FIELD_LIMITS.slug}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                  />
+                  <p className="mt-1 text-xs text-gray-500">Lettres minuscules, chiffres et tirets uniquement</p>
+                </div>
+                {pageType === 'location' && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Slug de la localisation</label>
+                    <input
+                      type="text"
+                      value={locationSlug}
+                      onChange={(e) => { setLocationSlug(e.target.value); setIsDirty(true) }}
+                      placeholder="paris"
+                      maxLength={FIELD_LIMITS.slug}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                    />
+                    <p className="mt-1 text-xs text-gray-500">Lettres minuscules, chiffres et tirets uniquement</p>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Blog-specific fields */}
             {pageType === 'blog' && (
@@ -442,6 +558,7 @@ export default function AdminEditContenuPage() {
                       value={author}
                       onChange={(e) => { setAuthor(e.target.value); setIsDirty(true) }}
                       placeholder="Nom de l'auteur"
+                      maxLength={FIELD_LIMITS.author}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
@@ -464,15 +581,42 @@ export default function AdminEditContenuPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Tags (séparés par des virgules)
+                    Biographie de l&apos;auteur
                   </label>
-                  <input
-                    type="text"
-                    value={tags}
-                    onChange={(e) => { setTags(e.target.value); setIsDirty(true) }}
-                    placeholder="rénovation, plomberie, conseils"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  <textarea
+                    value={authorBio}
+                    onChange={(e) => { setAuthorBio(e.target.value); setIsDirty(true) }}
+                    rows={2}
+                    maxLength={FIELD_LIMITS.authorBio}
+                    placeholder="Courte biographie de l'auteur..."
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
                   />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Tags (séparés par des virgules)
+                    </label>
+                    <input
+                      type="text"
+                      value={tags}
+                      onChange={(e) => { setTags(e.target.value); setIsDirty(true) }}
+                      placeholder="rénovation, plomberie, conseils"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Temps de lecture</label>
+                    <input
+                      type="text"
+                      value={readTime}
+                      onChange={(e) => { setReadTime(e.target.value); setIsDirty(true) }}
+                      placeholder="5 min"
+                      maxLength={FIELD_LIMITS.readTime}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    />
+                  </div>
                 </div>
 
                 <div>
@@ -481,6 +625,7 @@ export default function AdminEditContenuPage() {
                     value={excerpt}
                     onChange={(e) => { setExcerpt(e.target.value); setIsDirty(true) }}
                     rows={3}
+                    maxLength={FIELD_LIMITS.excerpt}
                     placeholder="Court résumé de l'article..."
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
                   />
@@ -493,6 +638,7 @@ export default function AdminEditContenuPage() {
                     value={featuredImage}
                     onChange={(e) => { setFeaturedImage(e.target.value); setIsDirty(true) }}
                     placeholder="https://example.com/image.jpg"
+                    maxLength={FIELD_LIMITS.featuredImage}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -548,6 +694,16 @@ export default function AdminEditContenuPage() {
                 </div>
 
                 <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Ordre de tri</label>
+                  <input
+                    type="number"
+                    value={sortOrder}
+                    onChange={(e) => { setSortOrder(parseInt(e.target.value, 10) || 0); setIsDirty(true) }}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+
+                <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Statut</label>
                   <span
                     className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${sb.classes}`}
@@ -566,6 +722,33 @@ export default function AdminEditContenuPage() {
               onSeoDescriptionChange={(v) => { setSeoDescription(v); setIsDirty(true) }}
             />
 
+            {/* Additional SEO fields */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4">
+              <h3 className="font-medium text-gray-900">SEO avancé</h3>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Image Open Graph (URL)</label>
+                <input
+                  type="url"
+                  value={ogImageUrl}
+                  onChange={(e) => { setOgImageUrl(e.target.value); setIsDirty(true) }}
+                  placeholder="https://example.com/og-image.jpg"
+                  maxLength={FIELD_LIMITS.ogImageUrl}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">URL canonique</label>
+                <input
+                  type="url"
+                  value={canonicalUrl}
+                  onChange={(e) => { setCanonicalUrl(e.target.value); setIsDirty(true) }}
+                  placeholder="https://servicesartisans.com/page"
+                  maxLength={FIELD_LIMITS.canonicalUrl}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                />
+              </div>
+            </div>
+
             {/* Danger zone */}
             <div className="bg-white rounded-xl shadow-sm border border-red-200 p-6">
               <h3 className="font-medium text-red-600 mb-4">Zone de danger</h3>
@@ -583,7 +766,7 @@ export default function AdminEditContenuPage() {
 
       {/* Delete confirmation modal */}
       {showDeleteConfirm && (
-        <div className="fixed inset-0 z-50 overflow-y-auto">
+        <div role="dialog" aria-modal="true" aria-label="Confirmer la suppression" className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex min-h-screen items-center justify-center p-4">
             <div
               className="fixed inset-0 bg-black/50"
@@ -618,12 +801,17 @@ export default function AdminEditContenuPage() {
       )}
 
       {/* Preview modal */}
-      {showPreview && (
-        <PagePreview
-          pageId={id}
-          onClose={() => setShowPreview(false)}
-        />
-      )}
+      <PagePreview
+        isOpen={showPreview}
+        onClose={() => setShowPreview(false)}
+        title={title}
+        contentHtml={content}
+        structuredData={usesStructuredEditor ? structuredData : null}
+        author={pageType === 'blog' ? author : null}
+        excerpt={pageType === 'blog' ? excerpt : null}
+        featuredImage={pageType === 'blog' ? featuredImage : null}
+        readTime={pageType === 'blog' ? readTime : null}
+      />
 
       {/* Version history modal */}
       {showVersions && (

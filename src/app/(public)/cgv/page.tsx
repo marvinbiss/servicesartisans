@@ -5,13 +5,13 @@ import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 
 export const metadata: Metadata = {
-  title: 'Conditions Générales de Vente - ServicesArtisans',
+  title: 'Conditions Générales de Vente',
   description: 'Conditions générales de vente et d\'utilisation du service ServicesArtisans.',
   alternates: {
     canonical: `${SITE_URL}/cgv`,
   },
   openGraph: {
-    title: 'Conditions Générales de Vente - ServicesArtisans',
+    title: 'Conditions Générales de Vente',
     description: 'Conditions générales de vente et d\'utilisation du service ServicesArtisans.',
     url: `${SITE_URL}/cgv`,
     type: 'website',
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Conditions Générales de Vente - ServicesArtisans',
+    title: 'Conditions Générales de Vente',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }

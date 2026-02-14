@@ -4,8 +4,9 @@ import { Phone, Clock, Shield, CheckCircle, ArrowRight, AlertTriangle, MapPin } 
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
-import { SITE_URL } from '@/lib/seo/config'
+import { SITE_URL, PHONE_TEL } from '@/lib/seo/config'
 import { tradeContent } from '@/lib/data/trade-content'
+import { hashCode } from '@/lib/seo/location-content'
 import { villes, services } from '@/lib/data/france'
 import { getServiceImage } from '@/lib/data/images'
 
@@ -105,8 +106,26 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
   const trade = tradeContent[service]
   if (!trade) return {}
 
-  const title = `${trade.name} urgence 24h/24 — Intervention immédiate | ServicesArtisans`
-  const description = `Besoin d'un ${trade.name.toLowerCase()} en urgence ? Intervention 24h/24 et 7j/7 partout en France. ${trade.averageResponseTime}. Devis gratuit, artisans référencés.`
+  const titleHash = Math.abs(hashCode(`urgence-title-${service}`))
+  const titleTemplates = [
+    `${trade.name} urgence 24h/24 — Intervention immédiate`,
+    `Urgence ${trade.name.toLowerCase()} : intervention rapide 7j/7`,
+    `${trade.name} d'urgence — Dépannage 24h/24`,
+    `Dépannage ${trade.name.toLowerCase()} urgent partout en France`,
+    `${trade.name} urgence — ${trade.averageResponseTime}`,
+  ]
+  const title = titleTemplates[titleHash % titleTemplates.length]
+
+  const descHash = Math.abs(hashCode(`urgence-desc-${service}`))
+  const tradeLower = trade.name.toLowerCase()
+  const descTemplates = [
+    `Besoin d'un ${tradeLower} en urgence ? Intervention 24h/24, 7j/7 partout en France. ${trade.averageResponseTime}. Artisans référencés.`,
+    `${trade.name} urgence : dépannage immédiat jour et nuit. ${trade.averageResponseTime}. Devis gratuit, artisans vérifiés SIREN.`,
+    `Urgence ${tradeLower} ? Trouvez un professionnel disponible 24h/24. Intervention rapide, artisans qualifiés, devis gratuit.`,
+    `Dépannage ${tradeLower} en urgence, 7j/7. Artisans référencés par SIREN, intervention sous ${trade.averageResponseTime}. Gratuit.`,
+    `${trade.name} d'urgence 24h/24 : artisans disponibles partout en France. Devis immédiat, intervention ${trade.averageResponseTime}.`,
+  ]
+  const description = descTemplates[descHash % descTemplates.length]
   const serviceImage = getServiceImage(service)
 
   return {
@@ -129,7 +148,7 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
   }
 }
 
-const topCities = villes.slice(0, 8)
+const topCities = villes.slice(0, 20)
 
 export default async function UrgenceServicePage({ params }: { params: Promise<{ service: string }> }) {
   const { service } = await params
@@ -145,9 +164,20 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
     { name: `${trade.name} urgence`, url: `/urgence/${service}` },
   ])
 
-  const faqSchema = getFAQSchema(
-    trade.faq.map((f) => ({ question: f.q, answer: f.a }))
-  )
+  const tradeLowerFaq = trade.name.toLowerCase()
+  const emergencyFaqItems = [
+    { question: `Combien coûte un ${tradeLowerFaq} en urgence la nuit ?`, answer: `Les interventions d'urgence de nuit (après 20h) sont majorées de 50 à 100% par rapport aux tarifs de journée. Pour un ${tradeLowerFaq}, comptez environ ${Math.round((trade.priceRange?.min || 60) * 1.5)} à ${Math.round((trade.priceRange?.max || 90) * 2)} €/h en urgence nocturne. Demandez toujours un devis avant intervention.` },
+    { question: `Quel est le délai d'intervention d'un ${tradeLowerFaq} en urgence ?`, answer: `${trade.averageResponseTime}. Les artisans d'urgence sont disponibles 24h/24 et 7j/7, y compris les jours fériés. Le délai varie selon votre localisation et la disponibilité des professionnels.` },
+    { question: `Que faire en attendant le ${tradeLowerFaq} d'urgence ?`, answer: `En attendant l'arrivée du professionnel : sécurisez la zone, coupez l'arrivée d'eau ou le disjoncteur si nécessaire, et ne tentez pas de réparation vous-même. Protégez vos biens des dégâts éventuels.` },
+    { question: `Un ${tradeLowerFaq} d'urgence est-il assuré ?`, answer: `Tout ${tradeLowerFaq} professionnel doit disposer d'une assurance responsabilité civile professionnelle et d'une garantie décennale. Exigez une attestation avant le début des travaux, même en urgence.` },
+  ]
+
+  const allFaqItems = [
+    ...emergencyFaqItems.map((f) => ({ question: f.question, answer: f.answer })),
+    ...trade.faq.map((f) => ({ question: f.q, answer: f.a })),
+  ]
+
+  const faqSchema = getFAQSchema(allFaqItems)
 
   // Related services for cross-linking
   const relatedServices = services.filter((s) => s.slug !== service).slice(0, 4)
@@ -192,7 +222,17 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
             </div>
           </div>
           <h1 className="font-heading text-4xl md:text-5xl font-bold mb-6 leading-tight">
-            {trade.name} urgence<br />
+            {(() => {
+              const h1Hash = Math.abs(hashCode(`urgence-h1-${service}`))
+              const h1Templates = [
+                `${trade.name} urgence`,
+                `Urgence ${trade.name.toLowerCase()} 24h/24`,
+                `Dépannage ${trade.name.toLowerCase()} urgent`,
+                `${trade.name} d'urgence — 7j/7`,
+                `Intervention ${trade.name.toLowerCase()} en urgence`,
+              ]
+              return h1Templates[h1Hash % h1Templates.length]
+            })()}<br />
             <span className="opacity-80">Intervention immédiate.</span>
           </h1>
           <p className="text-xl opacity-90 max-w-2xl mb-8">
@@ -200,7 +240,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
           </p>
           <div className="flex flex-col sm:flex-row gap-4 mb-8">
             <a
-              href="tel:+33176340000"
+              href={PHONE_TEL}
               className="inline-flex items-center justify-center gap-3 bg-white text-gray-900 px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all"
             >
               <Phone className="w-6 h-6" />
@@ -239,7 +279,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
               Urgences {trade.name.toLowerCase()} les plus courantes
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Nos {trade.name.toLowerCase()}s d&apos;urgence interviennent rapidement pour tous ces problèmes.
+              Les {trade.name.toLowerCase()}s d&apos;urgence référencés interviennent rapidement pour tous ces problèmes.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -347,14 +387,14 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
             Questions fréquentes — {trade.name} urgence
           </h2>
           <div className="space-y-4">
-            {trade.faq.map((item, i) => (
+            {allFaqItems.map((item, i) => (
               <details key={i} className="bg-gray-50 rounded-xl border border-gray-200 group">
                 <summary className="flex items-center justify-between p-5 cursor-pointer list-none">
-                  <h3 className="text-base font-semibold text-gray-900 pr-4">{item.q}</h3>
+                  <h3 className="text-base font-semibold text-gray-900 pr-4">{item.question}</h3>
                   <ArrowRight className="w-4 h-4 text-gray-400 flex-shrink-0 group-open:rotate-90 transition-transform" />
                 </summary>
                 <div className="px-5 pb-5 text-gray-600 text-sm leading-relaxed">
-                  {item.a}
+                  {item.answer}
                 </div>
               </details>
             ))}
@@ -444,6 +484,26 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
         </div>
       </section>
 
+      {/* Trust & Safety Links (E-E-A-T) */}
+      <section className="py-8 bg-white border-t">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+            Confiance &amp; Sécurité
+          </h2>
+          <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+            <Link href="/notre-processus-de-verification" className="text-blue-600 hover:text-blue-800">
+              Comment nous référençons les artisans
+            </Link>
+            <Link href="/politique-avis" className="text-blue-600 hover:text-blue-800">
+              Notre politique des avis
+            </Link>
+            <Link href="/mediation" className="text-blue-600 hover:text-blue-800">
+              Service de médiation
+            </Link>
+          </nav>
+        </div>
+      </section>
+
       {/* Final CTA */}
       <section className={`bg-gradient-to-br ${meta.gradient} text-white py-16 overflow-hidden`}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -451,10 +511,10 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
             Besoin d&apos;un {trade.name.toLowerCase()} en urgence ?
           </h2>
           <p className="text-xl opacity-90 mb-8">
-            Nos {trade.name.toLowerCase()}s référencés sont disponibles 24h/24 et 7j/7.
+            Les {trade.name.toLowerCase()}s référencés sur ServicesArtisans sont disponibles 24h/24 et 7j/7.
           </p>
           <a
-            href="tel:+33176340000"
+            href={PHONE_TEL}
             className="inline-flex items-center justify-center gap-3 bg-white text-gray-900 px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all"
           >
             <Phone className="w-6 h-6" />

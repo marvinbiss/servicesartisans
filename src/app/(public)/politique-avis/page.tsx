@@ -8,7 +8,7 @@ import { SITE_URL } from '@/lib/seo/config'
 import { companyIdentity } from '@/lib/config/company-identity'
 
 export const metadata: Metadata = {
-  title: 'Politique de gestion des avis - ServicesArtisans',
+  title: 'Politique de gestion des avis',
   description: 'Notre politique de gestion des avis : qui peut publier un avis, processus de modération, droit de réponse des artisans et calcul des notes sur ServicesArtisans.',
   alternates: {
     canonical: `${SITE_URL}/politique-avis`,
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     'max-video-preview': -1,
   },
   openGraph: {
-    title: 'Politique de gestion des avis - ServicesArtisans',
+    title: 'Politique de gestion des avis',
     description: 'Qui peut publier un avis, processus de modération, droit de réponse des artisans et calcul des notes.',
     url: `${SITE_URL}/politique-avis`,
     type: 'website',
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Politique de gestion des avis - ServicesArtisans',
+    title: 'Politique de gestion des avis',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }

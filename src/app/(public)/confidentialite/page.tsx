@@ -5,13 +5,13 @@ import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 
 export const metadata: Metadata = {
-  title: 'Politique de confidentialité - ServicesArtisans',
+  title: 'Politique de confidentialité',
   description: 'Politique de confidentialité de ServicesArtisans - Comment nous collectons, utilisons et protégeons vos données personnelles.',
   alternates: {
     canonical: `${SITE_URL}/confidentialite`,
   },
   openGraph: {
-    title: 'Politique de confidentialité - ServicesArtisans',
+    title: 'Politique de confidentialité',
     description: 'Comment nous collectons, utilisons et protégeons vos données personnelles.',
     url: `${SITE_URL}/confidentialite`,
     type: 'website',
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Politique de confidentialité - ServicesArtisans',
+    title: 'Politique de confidentialité',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }

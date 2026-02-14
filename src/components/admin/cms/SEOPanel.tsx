@@ -20,8 +20,11 @@ export function SEOPanel({
 
   const titleLength = seoTitle.length
   const descriptionLength = seoDescription.length
+  // Google recommended display length (soft warning)
   const titleMax = 60
   const descriptionMax = 160
+  // Note: HTML maxLength is set to 70/170 (hard limit matching DB CHECK + Zod schema)
+  // Users are warned at 60/160 but can enter up to 70/170
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
@@ -70,7 +73,7 @@ export function SEOPanel({
               onChange={(e) => onSeoTitleChange(e.target.value)}
               placeholder="Titre pour les moteurs de recherche"
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-              maxLength={80}
+              maxLength={70}
             />
             {titleLength > titleMax && (
               <p className="mt-1 text-xs text-red-600">
@@ -99,7 +102,7 @@ export function SEOPanel({
               placeholder="Description pour les moteurs de recherche"
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm resize-none"
-              maxLength={200}
+              maxLength={170}
             />
             {descriptionLength > descriptionMax && (
               <p className="mt-1 text-xs text-red-600">

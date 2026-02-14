@@ -59,14 +59,13 @@ DO $$ BEGIN
 EXCEPTION WHEN duplicate_object THEN NULL;
 END $$;
 
--- P1: Type-specific field constraints — location pages need both slugs,
--- service pages must not have location_slug, other types have neither.
+-- P1: Type-specific field constraints — see updated definition below (lines ~155-162)
+-- (first definition removed to avoid dead code; the constraint is dropped and recreated below)
+
+-- P2: Slug length constraint (matches Zod schema: max 200)
 DO $$ BEGIN
-  ALTER TABLE cms_pages ADD CONSTRAINT cms_pages_type_slugs_check CHECK (
-    (page_type = 'location' AND service_slug IS NOT NULL AND location_slug IS NOT NULL) OR
-    (page_type = 'service' AND location_slug IS NULL) OR
-    (page_type IN ('static', 'blog', 'homepage', 'faq') AND service_slug IS NULL AND location_slug IS NULL)
-  );
+  ALTER TABLE cms_pages ADD CONSTRAINT cms_pages_slug_length
+    CHECK (length(slug) <= 200);
 EXCEPTION WHEN duplicate_object THEN NULL;
 END $$;
 
@@ -74,6 +73,131 @@ END $$;
 DO $$ BEGIN
   ALTER TABLE cms_pages ADD CONSTRAINT cms_pages_title_length
     CHECK (length(title) <= 500);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+
+-- P2: Meta title length constraint (matches Zod schema: max 70)
+DO $$ BEGIN
+  ALTER TABLE cms_pages ADD CONSTRAINT cms_pages_meta_title_length
+    CHECK (meta_title IS NULL OR length(meta_title) <= 70);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+
+-- P2: Meta description length constraint (matches Zod schema: max 170)
+DO $$ BEGIN
+  ALTER TABLE cms_pages ADD CONSTRAINT cms_pages_meta_description_length
+    CHECK (meta_description IS NULL OR length(meta_description) <= 170);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+
+-- P1: published_at symmetry — drafts/archived must not have published_at
+DO $$ BEGIN
+  ALTER TABLE cms_pages ADD CONSTRAINT cms_pages_published_at_symmetry
+    CHECK (status = 'published' OR published_at IS NULL);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+
+-- P1: URL column length constraints
+DO $$ BEGIN
+  ALTER TABLE cms_pages ADD CONSTRAINT cms_pages_og_image_url_length
+    CHECK (og_image_url IS NULL OR length(og_image_url) <= 2048);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+
+DO $$ BEGIN
+  ALTER TABLE cms_pages ADD CONSTRAINT cms_pages_canonical_url_length
+    CHECK (canonical_url IS NULL OR length(canonical_url) <= 2048);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+
+DO $$ BEGIN
+  ALTER TABLE cms_pages ADD CONSTRAINT cms_pages_featured_image_length
+    CHECK (featured_image IS NULL OR length(featured_image) <= 2048);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+
+-- P1: Text field length constraints
+DO $$ BEGIN
+  ALTER TABLE cms_pages ADD CONSTRAINT cms_pages_excerpt_length
+    CHECK (excerpt IS NULL OR length(excerpt) <= 1000);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+
+DO $$ BEGIN
+  ALTER TABLE cms_pages ADD CONSTRAINT cms_pages_author_length
+    CHECK (author IS NULL OR length(author) <= 200);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+
+DO $$ BEGIN
+  ALTER TABLE cms_pages ADD CONSTRAINT cms_pages_category_length
+    CHECK (category IS NULL OR length(category) <= 200);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+
+-- P1: service_slug / location_slug format validation (same as slug)
+DO $$ BEGIN
+  ALTER TABLE cms_pages ADD CONSTRAINT cms_pages_service_slug_format
+    CHECK (service_slug IS NULL OR service_slug ~ '^[a-z0-9]+(?:-[a-z0-9]+)*$');
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+
+DO $$ BEGIN
+  ALTER TABLE cms_pages ADD CONSTRAINT cms_pages_location_slug_format
+    CHECK (location_slug IS NULL OR location_slug ~ '^[a-z0-9]+(?:-[a-z0-9]+)*$');
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+
+-- P1: Service pages must have service_slug
+-- Drop old constraint first (it allowed service_slug IS NULL for service pages)
+DO $$ BEGIN
+  ALTER TABLE cms_pages DROP CONSTRAINT IF EXISTS cms_pages_type_slugs_check;
+  ALTER TABLE cms_pages ADD CONSTRAINT cms_pages_type_slugs_check CHECK (
+    (page_type = 'location' AND service_slug IS NOT NULL AND location_slug IS NOT NULL) OR
+    (page_type = 'service' AND service_slug IS NOT NULL AND location_slug IS NULL) OR
+    (page_type IN ('static', 'blog', 'homepage', 'faq') AND service_slug IS NULL AND location_slug IS NULL)
+  );
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+
+-- P2: content_html length constraint (matches Zod schema: max 500000)
+DO $$ BEGIN
+  ALTER TABLE cms_pages ADD CONSTRAINT cms_pages_content_html_length
+    CHECK (content_html IS NULL OR length(content_html) <= 500000);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+
+-- P2: Tags array bounds
+DO $$ BEGIN
+  ALTER TABLE cms_pages ADD CONSTRAINT cms_pages_tags_length
+    CHECK (array_length(tags, 1) IS NULL OR array_length(tags, 1) <= 50);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+
+-- P2: Ensure tags is never NULL (TypeScript types it as non-nullable string[])
+DO $$ BEGIN
+  ALTER TABLE cms_pages ALTER COLUMN tags SET NOT NULL;
+EXCEPTION WHEN others THEN NULL;
+END $$;
+
+-- P0: Published pages must have content
+DO $$ BEGIN
+  ALTER TABLE cms_pages ADD CONSTRAINT cms_pages_published_has_content
+    CHECK (status != 'published' OR content_json IS NOT NULL OR content_html IS NOT NULL OR structured_data IS NOT NULL);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+
+-- P1: author_bio length constraint
+DO $$ BEGIN
+  ALTER TABLE cms_pages ADD CONSTRAINT cms_pages_author_bio_length
+    CHECK (author_bio IS NULL OR length(author_bio) <= 2000);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+
+-- P1: read_time length constraint
+DO $$ BEGIN
+  ALTER TABLE cms_pages ADD CONSTRAINT cms_pages_read_time_length
+    CHECK (read_time IS NULL OR length(read_time) <= 50);
 EXCEPTION WHEN duplicate_object THEN NULL;
 END $$;
 
@@ -130,6 +254,27 @@ DO $$ BEGIN
 EXCEPTION WHEN duplicate_object THEN NULL;
 END $$;
 
+-- P1: version_number must be positive
+DO $$ BEGIN
+  ALTER TABLE cms_page_versions ADD CONSTRAINT cms_page_versions_number_positive
+    CHECK (version_number > 0);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+
+-- P1: change_summary length constraint
+DO $$ BEGIN
+  ALTER TABLE cms_page_versions ADD CONSTRAINT cms_page_versions_summary_length
+    CHECK (change_summary IS NULL OR length(change_summary) <= 500);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+
+-- P0: status CHECK on cms_page_versions
+DO $$ BEGIN
+  ALTER TABLE cms_page_versions ADD CONSTRAINT cms_page_versions_status_check
+    CHECK (status IN ('draft', 'published', 'archived'));
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+
 -- ============================================================
 -- 3. TRIGGER: auto-version on update
 --    Fires when content_json, content_html, structured_data,
@@ -140,6 +285,11 @@ RETURNS TRIGGER AS $$
 DECLARE
   next_version integer;
 BEGIN
+  -- Lock existing versions for this page to prevent race conditions
+  -- on concurrent edits computing the same next version_number.
+  PERFORM 1 FROM cms_page_versions
+    WHERE page_id = OLD.id FOR UPDATE;
+
   SELECT COALESCE(MAX(version_number), 0) + 1
     INTO next_version
     FROM cms_page_versions WHERE page_id = OLD.id;

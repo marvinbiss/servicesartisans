@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { requirePermission } from '@/lib/admin-auth'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
+import { UUID_RE } from '@/lib/cms-utils'
 
 export const dynamic = 'force-dynamic'
 
@@ -16,6 +17,13 @@ export async function GET(
     if (!auth.success) return auth.error!
 
     const { id } = await params
+    if (!UUID_RE.test(id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'ID invalide' } },
+        { status: 400 }
+      )
+    }
+
     const supabase = createAdminClient()
 
     // Verify page exists

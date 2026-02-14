@@ -6,13 +6,13 @@ import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 
 export const metadata: Metadata = {
-  title: 'Accessibilité - ServicesArtisans',
+  title: 'Accessibilité',
   description: 'Déclaration d\'accessibilité de ServicesArtisans - Notre engagement pour rendre le site accessible à tous.',
   alternates: {
     canonical: `${SITE_URL}/accessibilite`,
   },
   openGraph: {
-    title: 'Accessibilité - ServicesArtisans',
+    title: 'Accessibilité',
     description: 'Notre engagement pour rendre le site accessible à tous.',
     url: `${SITE_URL}/accessibilite`,
     type: 'website',
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Accessibilité - ServicesArtisans',
+    title: 'Accessibilité',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }

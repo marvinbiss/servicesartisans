@@ -9,7 +9,7 @@ import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/li
 import { SITE_URL } from '@/lib/seo/config'
 import { villes, services, getQuartierBySlug, getQuartiersByVille, getNearbyCities, getRegionSlugByName, getDepartementByCode } from '@/lib/data/france'
 import { getCityImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
-import { generateQuartierContent } from '@/lib/seo/location-content'
+import { generateQuartierContent, hashCode } from '@/lib/seo/location-content'
 
 // Pre-render top 50 cities × their quartiers (~400 pages)
 const TOP_CITIES = 50
@@ -26,6 +26,11 @@ interface PageProps {
   params: Promise<{ ville: string; quartier: string }>
 }
 
+function truncateTitle(title: string, maxLen = 55): string {
+  if (title.length <= maxLen) return title
+  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { ville: villeSlug, quartier: quartierSlug } = await params
   const result = getQuartierBySlug(villeSlug, quartierSlug)
@@ -34,8 +39,26 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { ville, quartierName } = result
   const metaContent = generateQuartierContent(ville, quartierName)
   const cityImage = getCityImage(villeSlug)
-  const title = `Artisans à ${quartierName}, ${ville.name} (${ville.departementCode}) — Devis Gratuit | ServicesArtisans`
-  const description = `Trouvez un artisan qualifié dans le quartier ${quartierName} à ${ville.name}. ${metaContent.profile.eraLabel}, ${services.length} corps de métier. Devis gratuits. ${ville.departement} (${ville.departementCode}).`
+
+  const titleHash = Math.abs(hashCode(`title-quartier-${villeSlug}-${quartierSlug}`))
+  const titleTemplates = [
+    `Artisans à ${quartierName}, ${ville.name}`,
+    `${quartierName} (${ville.name}) — Artisans`,
+    `Trouver un artisan à ${quartierName}`,
+    `${quartierName}, ${ville.name} : devis gratuit`,
+    `Artisans qualifiés — ${quartierName}`,
+  ]
+  const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
+
+  const descHash = Math.abs(hashCode(`desc-quartier-${villeSlug}-${quartierSlug}`))
+  const descTemplates = [
+    `Trouvez un artisan qualifié à ${quartierName}, ${ville.name}. ${metaContent.profile.eraLabel}, ${services.length} corps de métier. Devis gratuits.`,
+    `${quartierName} à ${ville.name} (${ville.departementCode}) : artisans référencés SIREN. ${metaContent.profile.eraLabel}. Comparez les devis.`,
+    `Artisans à ${quartierName}, ${ville.name}. ${metaContent.profile.densityLabel}, ${metaContent.profile.eraLabel.toLowerCase()}. Devis gratuit en ligne.`,
+    `${services.length} métiers à ${quartierName} (${ville.name}). ${ville.departement}, ${metaContent.profile.eraLabel.toLowerCase()}. Devis gratuit.`,
+    `Tous les artisans de ${quartierName}, ${ville.name} (${ville.departementCode}). ${metaContent.profile.eraLabel}. Comparez gratuitement.`,
+  ]
+  const description = descTemplates[descHash % descTemplates.length]
 
   return {
     title,
@@ -155,13 +178,21 @@ export default async function QuartierPage({ params }: PageProps) {
               </div>
             </div>
 
-            <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
-              Artisans à{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-emerald-300 to-teal-300">
-                {quartierName}
-              </span>
-              , {ville.name}
-            </h1>
+            {(() => {
+              const h1Hash = Math.abs(hashCode(`h1-quartier-${ville.slug}-${quartierSlug}`))
+              const h1Templates = [
+                `Artisans à ${quartierName}, ${ville.name}`,
+                `Trouver un artisan à ${quartierName} (${ville.name})`,
+                `${quartierName}, ${ville.name} : artisans qualifiés`,
+                `Artisans dans le quartier ${quartierName} à ${ville.name}`,
+                `${ville.name} ${quartierName} — artisans de confiance`,
+              ]
+              return (
+                <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
+                  {h1Templates[h1Hash % h1Templates.length]}
+                </h1>
+              )
+            })()}
             <p className="text-lg text-slate-400 max-w-2xl leading-relaxed mb-8">
               {services.length} corps de métier disponibles dans le quartier {quartierName}. {content.profile.eraLabel} en {content.profile.densityLabel.toLowerCase()}. Devis gratuits.
             </p>
@@ -249,6 +280,9 @@ export default async function QuartierPage({ params }: PageProps) {
                 ))}
               </ul>
             </div>
+            <p className="text-xs text-gray-400 mt-3 italic">
+              * Profil estimé à partir des caractéristiques urbaines de la ville. Les données réelles peuvent varier selon les constructions du quartier.
+            </p>
           </div>
         </section>
 
@@ -308,6 +342,19 @@ export default async function QuartierPage({ params }: PageProps) {
             Pourquoi choisir un artisan proche de {quartierName} ?
           </h3>
           <p className="text-slate-600 leading-relaxed">{content.proximite}</p>
+        </section>
+
+        {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
+        <section className="mb-16">
+          <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
+            <h3 className="text-sm font-semibold text-slate-700 mb-2">Méthodologie éditoriale</h3>
+            <p className="text-xs text-slate-500 leading-relaxed">
+              Les informations de cette page sont compilées à partir de données publiques (INSEE, base SIRENE, cadastre).
+              Le profil de bâti est estimé selon les caractéristiques urbaines de {ville.name} et peut varier d&apos;un immeuble à l&apos;autre.
+              Les tarifs sont indicatifs et basés sur des moyennes régionales ({ville.region}).
+              ServicesArtisans est un annuaire indépendant — nous ne réalisons pas de travaux et ne garantissons pas les prestations des artisans référencés.
+            </p>
+          </div>
         </section>
 
         {/* ─── OTHER QUARTIERS ─────────────────────────────── */}
@@ -472,6 +519,27 @@ export default async function QuartierPage({ params }: PageProps) {
                 </Link>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Confiance & Sécurité */}
+      <section className="py-8 border-t">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-lg font-bold text-gray-900 mb-4">Confiance & Sécurité</h2>
+          <div className="flex flex-wrap gap-4">
+            <Link href="/notre-processus-de-verification" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
+              Processus de vérification
+            </Link>
+            <Link href="/politique-avis" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
+              Politique d&apos;avis
+            </Link>
+            <Link href="/mediation" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
+              Médiation
+            </Link>
+            <Link href="/cgv" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
+              CGV
+            </Link>
           </div>
         </div>
       </section>

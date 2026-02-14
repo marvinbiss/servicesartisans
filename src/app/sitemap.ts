@@ -107,7 +107,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       const blogImage = article ? getBlogImage(slug, article.category) : null
       return {
         url: `${SITE_URL}/blog/${slug}`,
-        lastModified: STATIC_LAST_MODIFIED,
+        lastModified: article ? new Date(article.updatedDate || article.date) : STATIC_LAST_MODIFIED,
         changeFrequency: 'monthly' as const,
         priority: 0.6,
         ...(blogImage ? { images: [blogImage.src] } : {}),
@@ -236,14 +236,17 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
   // ── Quartier pages ─────────────────────────────────────────────────
   if (id === 'quartiers') {
-    return villes.flatMap(ville =>
-      getQuartiersByVille(ville.slug).map(q => ({
+    return villes.flatMap(ville => {
+      const cityImage = getCityImage(ville.slug)
+      const images = cityImage ? [cityImage.src] : []
+      return getQuartiersByVille(ville.slug).map(q => ({
         url: `${SITE_URL}/villes/${ville.slug}/${q.slug}`,
         lastModified: STATIC_LAST_MODIFIED,
         changeFrequency: 'weekly' as const,
         priority: 0.6,
+        ...(images.length > 0 ? { images } : {}),
       }))
-    )
+    })
   }
 
   // ── Provider pages (batched) ────────────────────────────────────────

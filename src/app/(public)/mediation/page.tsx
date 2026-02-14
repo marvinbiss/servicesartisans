@@ -8,7 +8,7 @@ import { SITE_URL } from '@/lib/seo/config'
 import { companyIdentity } from '@/lib/config/company-identity'
 
 export const metadata: Metadata = {
-  title: 'Médiation et résolution des litiges - ServicesArtisans',
+  title: 'Médiation et résolution des litiges',
   description: 'Processus de médiation de ServicesArtisans : réclamation, médiation interne et externe, délais de traitement. Résolution amiable des litiges.',
   alternates: {
     canonical: `${SITE_URL}/mediation`,
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     'max-video-preview': -1,
   },
   openGraph: {
-    title: 'Médiation et résolution des litiges - ServicesArtisans',
+    title: 'Médiation et résolution des litiges',
     description: 'Processus de médiation : réclamation, médiation interne et externe, résolution amiable des litiges.',
     url: `${SITE_URL}/mediation`,
     type: 'website',
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Médiation et résolution des litiges - ServicesArtisans',
+    title: 'Médiation et résolution des litiges',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }

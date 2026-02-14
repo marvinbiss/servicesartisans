@@ -4,6 +4,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 import DOMPurify from 'isomorphic-dompurify'
+import { createPageSchema, sanitizeTextFields } from '@/lib/cms-utils'
 
 export const dynamic = 'force-dynamic'
 
@@ -14,28 +15,10 @@ const listQuerySchema = z.object({
   pageSize: z.coerce.number().int().min(1).max(100).optional().default(20),
   page_type: z.enum(['static', 'blog', 'service', 'location', 'homepage', 'faq']).optional(),
   status: z.enum(['draft', 'published', 'archived']).optional(),
-  search: z.string().optional(),
+  search: z.string().max(200).optional(),
   sortBy: z.enum(['updated_at', 'created_at', 'title', 'status', 'page_type', 'published_at']).optional().default('updated_at'),
   sortOrder: z.enum(['asc', 'desc']).optional().default('desc'),
-})
-
-const createPageSchema = z.object({
-  slug: z.string().min(1).max(200).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Le slug doit contenir uniquement des lettres minuscules, chiffres et tirets'),
-  page_type: z.enum(['static', 'blog', 'service', 'location', 'homepage', 'faq']),
-  title: z.string().min(1).max(500),
-  content_json: z.record(z.string(), z.unknown()).nullable().optional(),
-  content_html: z.string().nullable().optional(),
-  structured_data: z.record(z.string(), z.unknown()).nullable().optional(),
-  meta_title: z.string().max(70).nullable().optional(),
-  meta_description: z.string().max(170).nullable().optional(),
-  og_image_url: z.string().url().nullable().optional(),
-  excerpt: z.string().nullable().optional(),
-  author: z.string().nullable().optional(),
-  category: z.string().nullable().optional(),
-  tags: z.array(z.string()).optional(),
-  featured_image: z.string().nullable().optional(),
-  service_slug: z.string().nullable().optional(),
-  location_slug: z.string().nullable().optional(),
+  show_inactive: z.enum(['true', 'false']).optional(),
 })
 
 // --- GET: List CMS pages ---
@@ -54,6 +37,7 @@ export async function GET(request: Request) {
       search: searchParams.get('search') || undefined,
       sortBy: searchParams.get('sortBy') || 'updated_at',
       sortOrder: searchParams.get('sortOrder') || 'desc',
+      show_inactive: searchParams.get('show_inactive') || undefined,
     }
 
     const parsed = listQuerySchema.safeParse(queryParams)
@@ -64,7 +48,7 @@ export async function GET(request: Request) {
       )
     }
 
-    const { page, pageSize, page_type, status, search, sortBy, sortOrder } = parsed.data
+    const { page, pageSize, page_type, status, search, sortBy, sortOrder, show_inactive } = parsed.data
     const offset = (page - 1) * pageSize
 
     const supabase = createAdminClient()
@@ -83,6 +67,12 @@ export async function GET(request: Request) {
     if (search) {
       const escapedSearch = search.replace(/%/g, '\\%').replace(/_/g, '\\_')
       query = query.ilike('title', `%${escapedSearch}%`)
+    }
+
+    // By default, only show active pages unless explicitly requested
+    const showInactive = show_inactive === 'true'
+    if (!showInactive) {
+      query = query.eq('is_active', true)
     }
 
     // Sorting and pagination
@@ -151,6 +141,23 @@ export async function POST(request: Request) {
     // Sanitize HTML content
     if (validated.content_html) {
       validated.content_html = DOMPurify.sanitize(validated.content_html)
+    }
+
+    // Strip HTML from text-only fields
+    sanitizeTextFields(validated)
+
+    // Guard against oversized JSON payloads
+    if (validated.content_json && JSON.stringify(validated.content_json).length > 500000) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Le contenu JSON dépasse la taille maximale autorisée' } },
+        { status: 400 }
+      )
+    }
+    if (validated.structured_data && JSON.stringify(validated.structured_data).length > 100000) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Les données structurées dépassent la taille maximale autorisée' } },
+        { status: 400 }
+      )
     }
 
     const supabase = createAdminClient()

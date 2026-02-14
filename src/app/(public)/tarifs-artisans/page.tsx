@@ -9,7 +9,7 @@ import { SITE_URL } from '@/lib/seo/config'
 import { tradeContent } from '@/lib/data/trade-content'
 
 export const metadata: Metadata = {
-  title: 'Tarifs artisans 2026 — Guide complet des prix par métier | ServicesArtisans',
+  title: 'Tarifs artisans 2026 — Guide complet des prix',
   description: 'Guide complet des tarifs artisans en 2026 : prix plombier, électricien, peintre, couvreur, maçon et tous les corps de métier. Comparez les prix pour mieux estimer votre budget travaux.',
   alternates: {
     canonical: `${SITE_URL}/tarifs-artisans`,
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     'max-video-preview': -1,
   },
   openGraph: {
-    title: 'Tarifs artisans 2026 — Guide complet des prix | ServicesArtisans',
+    title: 'Tarifs artisans 2026 — Guide complet des prix',
     description: 'Prix plombier, électricien, peintre, couvreur, maçon et tous les corps de métier. Comparez les prix.',
     url: `${SITE_URL}/tarifs-artisans`,
     type: 'website',
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Tarifs artisans 2026 — Guide complet des prix | ServicesArtisans',
+    title: 'Tarifs artisans 2026 — Guide complet des prix',
     description: 'Prix plombier, électricien, peintre, couvreur et tous les corps de métier.',
     images: [`${SITE_URL}/opengraph-image`],
   },

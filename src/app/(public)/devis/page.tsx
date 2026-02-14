@@ -7,7 +7,7 @@ import { SITE_URL } from '@/lib/seo/config'
 import DevisForm from '@/components/DevisForm'
 
 export const metadata: Metadata = {
-  title: 'Demander un devis gratuit — ServicesArtisans',
+  title: 'Demander un devis gratuit',
   description:
     "Décrivez votre projet et recevez jusqu'à 3 devis gratuits d'artisans référencés. 100 % gratuit, sans engagement.",
   alternates: {
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     'max-video-preview': -1,
   },
   openGraph: {
-    title: 'Demander un devis gratuit — ServicesArtisans',
+    title: 'Demander un devis gratuit',
     description: "Décrivez votre projet et recevez jusqu'à 3 devis gratuits d'artisans référencés. 100 % gratuit, sans engagement.",
     url: `${SITE_URL}/devis`,
     type: 'website',
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Demander un devis gratuit — ServicesArtisans',
+    title: 'Demander un devis gratuit',
     description: "Décrivez votre projet et recevez jusqu'à 3 devis gratuits d'artisans référencés.",
     images: [`${SITE_URL}/opengraph-image`],
   },

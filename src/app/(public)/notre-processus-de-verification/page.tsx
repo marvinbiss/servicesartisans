@@ -8,7 +8,7 @@ import { SITE_URL } from '@/lib/seo/config'
 import { companyIdentity } from '@/lib/config/company-identity'
 
 export const metadata: Metadata = {
-  title: 'Notre processus de vérification des artisans - ServicesArtisans',
+  title: 'Notre processus de vérification des artisans',
   description: 'Découvrez comment ServicesArtisans vérifie chaque artisan : contrôle SIRET via l\'API SIRENE, assurance RC professionnelle, garantie décennale et suivi continu.',
   alternates: {
     canonical: `${SITE_URL}/notre-processus-de-verification`,
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     'max-video-preview': -1,
   },
   openGraph: {
-    title: 'Notre processus de vérification des artisans - ServicesArtisans',
+    title: 'Notre processus de vérification des artisans',
     description: 'Contrôle SIRET via l\'API SIRENE, assurance RC professionnelle, garantie décennale et suivi continu.',
     url: `${SITE_URL}/notre-processus-de-verification`,
     type: 'website',
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Notre processus de vérification des artisans - ServicesArtisans',
+    title: 'Notre processus de vérification des artisans',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }

@@ -75,6 +75,7 @@ export function getBlogArticleSchema(article: {
   content: string[]
   author: string
   date: string
+  updatedDate?: string
   category: string
   tags: string[]
 }, slug: string, imageUrl?: string): Record<string, unknown>[] {
@@ -101,7 +102,7 @@ export function getBlogArticleSchema(article: {
       '@id': `${SITE_URL}#organization`,
     },
     datePublished: article.date,
-    dateModified: article.date,
+    dateModified: article.updatedDate || article.date,
     mainEntityOfPage: {
       '@type': 'WebPage',
       '@id': `${SITE_URL}/blog/${slug}`,

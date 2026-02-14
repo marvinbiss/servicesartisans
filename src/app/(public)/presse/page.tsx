@@ -4,7 +4,7 @@ import { ArrowRight } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 
 export const metadata: Metadata = {
-  title: 'Espace presse | ServicesArtisans',
+  title: 'Espace presse',
   description: 'Espace presse de ServicesArtisans. Communiqués, kit média et contacts presse du plus grand annuaire d\'artisans de France.',
   robots: { index: false, follow: true },
 }

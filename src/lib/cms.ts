@@ -1,16 +1,20 @@
 import { createAdminClient } from '@/lib/supabase/admin'
-import { getCachedData } from '@/lib/cache'
-import type { CmsPage } from '@/types/cms'
+import { getCachedData, CACHE_TTL } from '@/lib/cache'
+import { logger } from '@/lib/logger'
+import type { CmsPage, CmsPageType } from '@/types/cms'
 
 /**
  * Fetch published CMS content for a given slug + type.
  * Returns null if no published record exists (caller uses hardcoded fallback).
+ * Does NOT cache null results — only successful fetches are cached.
  */
 export async function getPageContent(
   slug: string,
-  pageType: string,
+  pageType: CmsPageType,
   options?: { serviceSlug?: string; locationSlug?: string }
 ): Promise<CmsPage | null> {
+  if (!slug) return null
+
   const cacheKey = `cms:${pageType}:${slug}:${options?.serviceSlug ?? ''}:${options?.locationSlug ?? ''}`
 
   return getCachedData(cacheKey, async () => {
@@ -34,10 +38,11 @@ export async function getPageContent(
       const { data, error } = await query.single()
       if (error || !data) return null
       return data as CmsPage
-    } catch {
+    } catch (err) {
+      logger.error('[CMS] getPageContent error', err as Error)
       return null
     }
-  }, 300)
+  }, CACHE_TTL.cms, { skipNull: true })
 }
 
 /**
@@ -47,7 +52,7 @@ export async function getCmsBlogArticles(): Promise<CmsPage[]> {
   return getCachedData('cms:blog:all', async () => {
     try {
       const supabase = createAdminClient()
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from('cms_pages')
         .select('*')
         .eq('page_type', 'blog')
@@ -55,11 +60,16 @@ export async function getCmsBlogArticles(): Promise<CmsPage[]> {
         .eq('is_active', true)
         .order('published_at', { ascending: false })
 
+      if (error) {
+        logger.error('[CMS] getCmsBlogArticles error', error)
+        return []
+      }
       return (data || []) as CmsPage[]
-    } catch {
+    } catch (err) {
+      logger.error('[CMS] getCmsBlogArticles error', err as Error)
       return []
     }
-  }, 300)
+  }, CACHE_TTL.cms, { skipNull: true })
 }
 
 /**

@@ -5,7 +5,6 @@ import dynamic from 'next/dynamic'
 import { MapPin, List, Map as MapIcon, Search } from 'lucide-react'
 import { Provider, Service, Location } from '@/types'
 import ProviderList from '@/components/ProviderList'
-import Breadcrumb from '@/components/Breadcrumb'
 
 // Import GeographicMap (world-class version) dynamically to avoid SSR issues with Leaflet
 const GeographicMap = dynamic(() => import('@/components/maps/GeographicMap'), {
@@ -24,12 +23,14 @@ interface ServiceLocationPageClientProps {
   service: Service
   location: Location
   providers: Provider[]
+  h1Text?: string
 }
 
 export default function ServiceLocationPageClient({
   service,
   location,
   providers,
+  h1Text,
 }: ServiceLocationPageClientProps) {
   const [selectedProvider, setSelectedProvider] = useState<Provider | null>(null)
   const [viewMode, setViewMode] = useState<'split' | 'list' | 'map'>('split')
@@ -56,21 +57,11 @@ export default function ServiceLocationPageClient({
       {/* Breadcrumb & Header */}
       <div className="bg-white border-b md:sticky md:top-[60px] z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          {/* Breadcrumb */}
-          <Breadcrumb
-            items={[
-              { label: 'Services', href: '/services' },
-              { label: service.name, href: `/services/${service.slug}` },
-              { label: location.name },
-            ]}
-            className="mb-2"
-          />
-
           {/* Title & View toggle */}
           <div className="flex items-center justify-between">
             <div>
               <h1 className="font-heading text-xl md:text-2xl font-bold text-gray-900">
-                {service.name} à {location.name}
+                {h1Text || `${service.name} à ${location.name}`}
               </h1>
               <p className="text-gray-500 text-sm flex items-center gap-1 mt-1">
                 <MapPin className="w-4 h-4" />

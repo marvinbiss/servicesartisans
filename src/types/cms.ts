@@ -45,7 +45,7 @@ export interface CmsPageVersion {
   structured_data: Record<string, unknown> | null
   meta_title: string | null
   meta_description: string | null
-  status: string
+  status: CmsStatus
   created_by: string | null
   created_at: string
   change_summary: string | null
@@ -86,18 +86,21 @@ export interface CmsPageCreateInput {
   meta_title?: string | null
   meta_description?: string | null
   og_image_url?: string | null
+  canonical_url?: string | null
   excerpt?: string | null
   author?: string | null
+  author_bio?: string | null
   category?: string | null
   tags?: string[]
+  read_time?: string | null
   featured_image?: string | null
   service_slug?: string | null
   location_slug?: string | null
+  sort_order?: number
 }
 
-export interface CmsPageUpdateInput extends Partial<CmsPageCreateInput> {
-  status?: CmsStatus
-}
+// Note: status is NOT included — use the /publish endpoint to change status
+export type CmsPageUpdateInput = Partial<CmsPageCreateInput>
 
 export interface CmsPageListParams {
   page?: number
@@ -105,6 +108,6 @@ export interface CmsPageListParams {
   page_type?: CmsPageType
   status?: CmsStatus
   search?: string
-  sortBy?: 'title' | 'updated_at' | 'published_at' | 'created_at'
+  sortBy?: 'title' | 'updated_at' | 'published_at' | 'created_at' | 'status' | 'page_type'
   sortOrder?: 'asc' | 'desc'
 }

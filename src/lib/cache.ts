@@ -24,12 +24,14 @@ export const REVALIDATE = {
 } as const
 
 /**
- * Get cached data or fetch new data
+ * Get cached data or fetch new data.
+ * When skipNull is true, null/empty results are NOT cached (prevents caching DB errors).
  */
 export async function getCachedData<T>(
   key: string,
   fetcher: () => Promise<T>,
-  ttl: number = 300
+  ttl: number = 300,
+  options?: { skipNull?: boolean }
 ): Promise<T> {
   const cached = cache.get(key)
 
@@ -38,7 +40,12 @@ export async function getCachedData<T>(
   }
 
   const data = await fetcher()
-  cache.set(key, { data, expiry: Date.now() + ttl * 1000 })
+
+  // Don't cache null/empty results if skipNull is set
+  const shouldSkip = options?.skipNull && (data === null || data === undefined || (Array.isArray(data) && data.length === 0))
+  if (!shouldSkip) {
+    cache.set(key, { data, expiry: Date.now() + ttl * 1000 })
+  }
 
   return data
 }

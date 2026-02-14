@@ -9,7 +9,7 @@ import { getPlaceSchema, getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jso
 import { SITE_URL } from '@/lib/seo/config'
 import { villes, getVilleBySlug, services, getRegionSlugByName, getDepartementByCode, getQuartiersByVille } from '@/lib/data/france'
 import { getCityImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
-import { generateVilleContent } from '@/lib/seo/location-content'
+import { generateVilleContent, hashCode } from '@/lib/seo/location-content'
 
 // Pre-render top 200 cities, rest generated on-demand via ISR
 const TOP_CITIES_COUNT = 200
@@ -31,8 +31,26 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const cityImage = getCityImage(villeSlug)
   const metaContent = generateVilleContent(ville)
-  const title = `Artisans à ${ville.name} (${ville.departementCode}) — ${metaContent.profile.climateLabel} | ServicesArtisans`
-  const description = `Trouvez des artisans qualifiés à ${ville.name} (${ville.departementCode}), ${metaContent.profile.citySizeLabel.toLowerCase()} en climat ${metaContent.profile.climateLabel.toLowerCase()}. ${services.length} corps de métier, devis gratuits. ${ville.departement}.`
+
+  const titleHash = Math.abs(hashCode(`title-ville-${ville.slug}`))
+  const titleTemplates = [
+    `Artisans à ${ville.name} (${ville.departementCode})`,
+    `Trouver un artisan à ${ville.name}`,
+    `${ville.name} : ${services.length} corps de métier`,
+    `Artisans qualifiés à ${ville.name}`,
+    `${ville.name} — Artisans référencés SIREN`,
+  ]
+  const title = titleTemplates[titleHash % titleTemplates.length]
+
+  const descHash = Math.abs(hashCode(`desc-ville-${ville.slug}`))
+  const descTemplates = [
+    `Trouvez des artisans qualifiés à ${ville.name} (${ville.departementCode}). ${metaContent.profile.climateLabel}, ${services.length} corps de métier. Devis gratuits.`,
+    `${ville.name}, ${ville.departement} : artisans référencés SIREN. ${metaContent.profile.citySizeLabel}, climat ${metaContent.profile.climateLabel.toLowerCase()}. Devis gratuit.`,
+    `Annuaire de ${services.length} métiers à ${ville.name} (${ville.departementCode}), ${ville.region}. ${metaContent.profile.climateLabel}. Comparez les devis.`,
+    `Artisans à ${ville.name} : plombier, électricien, serrurier et plus. ${ville.population} hab., ${ville.departement}. Devis gratuits en ligne.`,
+    `Tous les artisans de ${ville.name} (${ville.departementCode}). ${metaContent.profile.citySizeLabel} en ${ville.region}. ${services.length} spécialités, devis gratuit.`,
+  ]
+  const description = descTemplates[descHash % descTemplates.length]
 
   return {
     title,
@@ -158,12 +176,21 @@ export default async function VillePage({ params }: PageProps) {
               </div>
             </div>
 
-            <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
-              Artisans à{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-300 to-cyan-300">
-                {ville.name}
-              </span>
-            </h1>
+            {(() => {
+              const h1Hash = Math.abs(hashCode(`h1-ville-${ville.slug}`))
+              const h1Templates = [
+                `Artisans à ${ville.name}`,
+                `Trouver un artisan à ${ville.name} (${ville.departementCode})`,
+                `${ville.name} : artisans qualifiés pour vos travaux`,
+                `Artisans à ${ville.name}, ${ville.departement}`,
+                `${services.length} corps de métier à ${ville.name}`,
+              ]
+              return (
+                <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
+                  {h1Templates[h1Hash % h1Templates.length]}
+                </h1>
+              )
+            })()}
             <p className="text-lg text-slate-400 max-w-2xl leading-relaxed mb-8">
               {content.intro}
             </p>
@@ -476,6 +503,27 @@ export default async function VillePage({ params }: PageProps) {
                 </Link>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Confiance & Sécurité */}
+      <section className="py-8 border-t">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-lg font-bold text-gray-900 mb-4">Confiance & Sécurité</h2>
+          <div className="flex flex-wrap gap-4">
+            <Link href="/notre-processus-de-verification" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
+              Processus de vérification
+            </Link>
+            <Link href="/politique-avis" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
+              Politique d&apos;avis
+            </Link>
+            <Link href="/mediation" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
+              Médiation
+            </Link>
+            <Link href="/cgv" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
+              CGV
+            </Link>
           </div>
         </div>
       </section>

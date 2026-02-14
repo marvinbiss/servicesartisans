@@ -5,13 +5,13 @@ import { faqCategories } from '@/lib/data/faq-data'
 import FAQPageClient from './FAQPageClient'
 
 export const metadata: Metadata = {
-  title: 'Questions fréquentes (FAQ) | ServicesArtisans',
+  title: 'Questions fréquentes (FAQ)',
   description: 'Retrouvez les réponses aux questions les plus fréquentes sur ServicesArtisans : inscription, devis, fonctionnement de l\'annuaire d\'artisans.',
   alternates: {
     canonical: `${SITE_URL}/faq`,
   },
   openGraph: {
-    title: 'Questions fréquentes (FAQ) | ServicesArtisans',
+    title: 'Questions fréquentes (FAQ)',
     description: 'Retrouvez les réponses aux questions fréquentes sur ServicesArtisans.',
     url: `${SITE_URL}/faq`,
     type: 'website',
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Questions fréquentes (FAQ) | ServicesArtisans',
+    title: 'Questions fréquentes (FAQ)',
     description: 'Retrouvez les réponses aux questions fréquentes sur ServicesArtisans.',
     images: [`${SITE_URL}/opengraph-image`],
   },

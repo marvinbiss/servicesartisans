@@ -3,13 +3,13 @@ import { SITE_URL } from '@/lib/seo/config'
 import ContactPageClient from './ContactPageClient'
 
 export const metadata: Metadata = {
-  title: 'Contactez-nous | ServicesArtisans',
+  title: 'Contactez-nous',
   description: 'Contactez l\'équipe ServicesArtisans pour toute question sur notre annuaire d\'artisans. Formulaire de contact, email et assistance rapide.',
   alternates: {
     canonical: `${SITE_URL}/contact`,
   },
   openGraph: {
-    title: 'Contactez-nous | ServicesArtisans',
+    title: 'Contactez-nous',
     description: 'Contactez l\'équipe ServicesArtisans pour toute question sur notre annuaire d\'artisans.',
     url: `${SITE_URL}/contact`,
     type: 'website',
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Contactez-nous | ServicesArtisans',
+    title: 'Contactez-nous',
     description: 'Contactez l\'équipe ServicesArtisans pour toute question sur notre annuaire d\'artisans.',
     images: [`${SITE_URL}/opengraph-image`],
   },

@@ -72,6 +72,12 @@ interface PageProps {
   }>
 }
 
+/** Truncate title to ~55 chars to leave room for " | ServicesArtisans" suffix (total ~75, Google shows ~60 of page title) */
+function truncateTitle(title: string, maxLen = 55): string {
+  if (title.length <= maxLen) return title
+  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '\u2026'
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { service: serviceSlug, location: locationSlug } = await params
 
@@ -122,32 +128,46 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const titleTemplates = hasProviders
     ? [
-        `${serviceName} à ${locationName} — ${providerCount} artisans | ServicesArtisans`,
-        `${providerCount} ${svcLower}s à ${locationName} — Devis Gratuit | ServicesArtisans`,
-        `${serviceName} ${locationName} : ${providerCount} pros référencés | ServicesArtisans`,
-        `Trouver un ${svcLower} à ${locationName} (${providerCount} référencés) | ServicesArtisans`,
-        `${serviceName} à ${locationName} — Comparez ${providerCount} artisans | ServicesArtisans`,
+        `${serviceName} à ${locationName} — ${providerCount} artisans`,
+        `${providerCount} ${svcLower}s à ${locationName} — Devis Gratuit`,
+        `${serviceName} ${locationName} : ${providerCount} pros référencés`,
+        `Trouver un ${svcLower} à ${locationName} (${providerCount} pros)`,
+        `${serviceName} à ${locationName} — Comparez ${providerCount} pros`,
       ]
     : [
-        `${serviceName} à ${locationName} — Devis Gratuit | ServicesArtisans`,
-        `${svcLower} à ${locationName} : Devis en ligne gratuit | ServicesArtisans`,
-        `Trouver un ${svcLower} à ${locationName} — Artisans vérifiés | ServicesArtisans`,
-        `${serviceName} ${locationName} — Artisans qualifiés | ServicesArtisans`,
-        `Devis ${svcLower} à ${locationName} — Gratuit | ServicesArtisans`,
+        `${serviceName} à ${locationName} — Devis Gratuit`,
+        `${svcLower} à ${locationName} : Devis en ligne gratuit`,
+        `Trouver un ${svcLower} à ${locationName} — Pros vérifiés`,
+        `${serviceName} ${locationName} — Artisans qualifiés`,
+        `Devis ${svcLower} à ${locationName} — Gratuit`,
       ]
-  const title = titleTemplates[titleHash % titleTemplates.length]
+  const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
   // Unique meta descriptions with provider count, department and regional context
   const metaVille = getVilleBySlug(locationSlug)
   const metaRegion = metaVille?.region || ''
-  const description = hasProviders
-    ? `Comparez ${providerCount} ${svcLower}s référencés par SIREN à ${locationName} (${departmentName || departmentCode}). Devis gratuit en ${metaRegion || 'France'}.`
-    : `Trouvez un ${svcLower} qualifié à ${locationName} (${departmentName || departmentCode}), ${metaRegion}. Artisans vérifiés SIREN, devis gratuit.`
+  const descHash = Math.abs(hashCode(`desc-${serviceSlug}-${locationSlug}`))
+  const descTemplates = hasProviders
+    ? [
+        `Comparez ${providerCount} ${svcLower}s référencés par SIREN à ${locationName} (${departmentName || departmentCode}). Devis gratuit en ${metaRegion || 'France'}.`,
+        `${providerCount} ${svcLower}s vérifiés à ${locationName}, ${departmentName || departmentCode}. Comparez les profils et demandez un devis gratuit.`,
+        `Trouvez le meilleur ${svcLower} à ${locationName} parmi ${providerCount} professionnels référencés. ${metaRegion || 'France'}, devis gratuit.`,
+        `${locationName} (${departmentCode}) : ${providerCount} ${svcLower}s référencés SIREN. Tarifs, avis et devis gratuit en ${metaRegion || 'France'}.`,
+        `Besoin d'un ${svcLower} à ${locationName} ? ${providerCount} artisans vérifiés dans le ${departmentName || departmentCode}. Comparez et obtenez un devis.`,
+      ]
+    : [
+        `Trouvez un ${svcLower} qualifié à ${locationName} (${departmentName || departmentCode}), ${metaRegion}. Artisans vérifiés SIREN, devis gratuit.`,
+        `${svcLower} à ${locationName} (${departmentCode}) : artisans référencés en ${metaRegion || 'France'}. Devis gratuit et sans engagement.`,
+        `Besoin d'un ${svcLower} à ${locationName}, ${departmentName || departmentCode} ? Consultez notre annuaire d'artisans vérifiés. Devis gratuit.`,
+        `Annuaire ${svcLower} à ${locationName} en ${metaRegion || 'France'}. Professionnels vérifiés SIREN, devis gratuit et immédiat.`,
+        `${locationName}, ${metaRegion} : trouvez un ${svcLower} de confiance. Artisans référencés par SIREN. Demandez votre devis.`,
+      ]
+  const description = descTemplates[descHash % descTemplates.length]
 
   return {
     title,
     description,
-    ...(hasProviders ? {} : { robots: { index: false, follow: true } }),
+    ...(providerCount > 2 ? {} : { robots: { index: false, follow: true } }),
     openGraph: {
       title,
       description,
@@ -296,6 +316,17 @@ export default async function ServiceLocationPage({ params }: PageProps) {
     ? getVillesByDepartement(location.department_code).filter(v => v.slug !== locationSlug).slice(0, 10)
     : []
 
+  // Varied H1 text per service+location combo
+  const h1Hash = Math.abs(hashCode(`h1-${serviceSlug}-${locationSlug}`))
+  const h1Templates = [
+    `${service.name} à ${location.name}`,
+    `${service.name} à ${location.name} — Artisans vérifiés`,
+    `Trouvez un ${service.name.toLowerCase()} à ${location.name}`,
+    `${service.name} à ${location.name} : pros référencés`,
+    `Les meilleurs ${service.name.toLowerCase()}s à ${location.name}`,
+  ]
+  const h1Text = h1Templates[h1Hash % h1Templates.length]
+
   return (
     <>
       {/* JSON-LD Structured Data */}
@@ -323,6 +354,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         service={service}
         location={location}
         providers={providers || []}
+        h1Text={h1Text}
       />
 
       {/* SEO Content - Server-rendered for Googlebot (unique per service+location) */}
@@ -383,7 +415,27 @@ export default async function ServiceLocationPage({ params }: PageProps) {
                   Vous recherchez un {service.name.toLowerCase()} à {location.name} (
                   {location.postal_code}) ? ServicesArtisans vous propose une sélection de{' '}
                   {providers.length} professionnels qualifiés dans votre ville.
+                  {location.department_name && ` Notre annuaire couvre l'ensemble du département ${location.department_name} (${location.department_code}).`}
                 </p>
+                {trade && (
+                  <>
+                    <h3>Tarifs indicatifs à {location.name}</h3>
+                    <p>
+                      Le tarif horaire moyen d&apos;un {service.name.toLowerCase()} à {location.name} se situe
+                      entre <strong>{Math.round(trade.priceRange.min * pricingMultiplier)} et {Math.round(trade.priceRange.max * pricingMultiplier)} {trade.priceRange.unit}</strong>.
+                      Les prix varient selon la complexité des travaux et le professionnel choisi.
+                    </p>
+                    {trade.certifications && trade.certifications.length > 0 && (
+                      <>
+                        <h3>Certifications à vérifier</h3>
+                        <p>
+                          Avant de choisir un {service.name.toLowerCase()}, vérifiez qu&apos;il dispose
+                          des certifications suivantes : {trade.certifications.slice(0, 3).join(', ')}.
+                        </p>
+                      </>
+                    )}
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -466,6 +518,13 @@ export default async function ServiceLocationPage({ params }: PageProps) {
                   </p>
                 </div>
               )}
+              <Link
+                href={`/tarifs-artisans/${serviceSlug}`}
+                className="inline-flex items-center gap-2 mt-6 text-blue-600 hover:text-blue-800 text-sm font-medium group"
+              >
+                Voir tous les tarifs {service.name.toLowerCase()} en France
+                <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+              </Link>
             </div>
           </div>
         </section>
@@ -722,6 +781,17 @@ export default async function ServiceLocationPage({ params }: PageProps) {
               Service de médiation
             </Link>
           </nav>
+        </div>
+      </section>
+
+      {/* Editorial credibility signal */}
+      <section className="py-6 bg-gray-50 border-t">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-xs text-gray-400 leading-relaxed max-w-3xl">
+            Les artisans référencés sur cette page sont des entreprises immatriculées vérifiées via l&apos;API SIRENE de l&apos;INSEE.
+            Les tarifs affichés sont indicatifs et basés sur les moyennes du marché en {location.region_name || 'France'}.
+            ServicesArtisans est un annuaire indépendant — nous ne réalisons pas de travaux et ne percevons aucune commission.
+          </p>
         </div>
       </section>
 

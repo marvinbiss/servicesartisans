@@ -58,21 +58,6 @@ export const metadata: Metadata = {
   },
   description:
     'Le plus grand annuaire d\'artisans de France. 350 000+ professionnels référencés dans 101 départements. Plombiers, électriciens, menuisiers, maçons et plus. Devis gratuits.',
-  keywords: [
-    'artisan',
-    'plombier',
-    'electricien',
-    'menuisier',
-    'devis gratuit',
-    'travaux',
-    'renovation',
-    'serrurier',
-    'chauffagiste',
-    'peintre',
-    'annuaire artisans',
-    'artisan référencé',
-    'trouver artisan',
-  ],
   authors: [{ name: 'ServicesArtisans' }],
   applicationName: 'ServicesArtisans',
   appleWebApp: {
@@ -137,21 +122,12 @@ export default function RootLayout({
   return (
     <html lang="fr" className={`scroll-smooth ${inter.variable} ${plusJakarta.variable}`}>
       <head>
-        {/* PWA Meta Tags */}
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="ServicesArtisans" />
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="theme-color" content="#2563eb" media="(prefers-color-scheme: light)" />
-        <meta name="theme-color" content="#1d4ed8" media="(prefers-color-scheme: dark)" />
+        {/* PWA Meta Tags (apple-mobile-web-app, mobile-web-app-capable, theme-color handled by metadata/viewport exports) */}
         <meta name="msapplication-TileColor" content="#2563eb" />
         <meta name="msapplication-tap-highlight" content="no" />
 
-        {/* Favicon */}
-        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        {/* Additional icon size (180px apple-touch-icon + icon.svg handled by metadata.icons export) */}
         <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png" />
-        <link rel="manifest" href="/manifest.json" />
 
         {/* Global Organization + WebSite schema (E-E-A-T) */}
         <script

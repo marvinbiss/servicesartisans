@@ -1,9 +1,12 @@
 import { NextResponse } from 'next/server'
-import { revalidatePath } from 'next/cache'
 import { requirePermission } from '@/lib/admin-auth'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
+import { invalidateCache } from '@/lib/cache'
+import { revalidatePagePaths } from '@/lib/cms-revalidate'
 import { z } from 'zod'
+import DOMPurify from 'isomorphic-dompurify'
+import { UUID_RE } from '@/lib/cms-utils'
 
 export const dynamic = 'force-dynamic'
 
@@ -24,6 +27,12 @@ export async function POST(
     if (!auth.success) return auth.error!
 
     const { id } = await params
+    if (!UUID_RE.test(id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'ID invalide' } },
+        { status: 400 }
+      )
+    }
 
     let body: unknown
     try {
@@ -61,12 +70,13 @@ export async function POST(
       )
     }
 
-    // Update the page with the version's content
+    // Update the page with the version's content (sanitize HTML)
+    const sanitizedHtml = version.content_html ? DOMPurify.sanitize(version.content_html) : version.content_html
     const { data: page, error: updateError } = await supabase
       .from('cms_pages')
       .update({
         content_json: version.content_json,
-        content_html: version.content_html,
+        content_html: sanitizedHtml,
         structured_data: version.structured_data,
         title: version.title,
         meta_title: version.meta_title,
@@ -88,19 +98,11 @@ export async function POST(
 
     // Revalidate cached paths if the page is published
     if (page.status === 'published') {
-      switch (page.page_type) {
-        case 'static': revalidatePath(`/${page.slug}`); break
-        case 'blog': revalidatePath(`/blog/${page.slug}`); revalidatePath('/blog'); break
-        case 'service': revalidatePath(`/services/${page.slug}`); break
-        case 'location':
-          if (page.service_slug && page.location_slug) {
-            revalidatePath(`/services/${page.service_slug}/${page.location_slug}`)
-          }
-          break
-        case 'homepage': revalidatePath('/'); break
-        case 'faq': revalidatePath('/faq'); break
-      }
+      revalidatePagePaths(page)
     }
+
+    // Invalidate in-memory cache
+    invalidateCache(/^cms:/)
 
     return NextResponse.json({ success: true, data: page })
   } catch (error) {

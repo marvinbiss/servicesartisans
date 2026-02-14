@@ -4,19 +4,13 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Plus, Search, FileEdit, ChevronLeft, ChevronRight } from 'lucide-react'
+import type { CmsPage } from '@/types/cms'
 
-interface CMSPage {
-  id: string
-  title: string
-  slug: string
-  page_type: string
-  status: string
-  updated_at: string
-}
+type CMSPageListItem = Pick<CmsPage, 'id' | 'title' | 'slug' | 'page_type' | 'status' | 'updated_at' | 'is_active'>
 
 interface CMSResponse {
   success: boolean
-  data: CMSPage[]
+  data: CMSPageListItem[]
   pagination: {
     page: number
     pageSize: number
@@ -76,9 +70,10 @@ const typeBadge = (type: string) => {
 
 export default function AdminContenuPage() {
   const router = useRouter()
-  const [pages, setPages] = useState<CMSPage[]>([])
+  const [pages, setPages] = useState<CMSPageListItem[]>([])
   const [total, setTotal] = useState(0)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
   const [pageType, setPageType] = useState('')
   const [status, setStatus] = useState('')
@@ -99,6 +94,7 @@ export default function AdminContenuPage() {
   const fetchPages = useCallback(async () => {
     try {
       setLoading(true)
+      setError(null)
       const params = new URLSearchParams({
         page: String(currentPage),
         pageSize: String(pageSize),
@@ -110,13 +106,17 @@ export default function AdminContenuPage() {
       const response = await fetch(`/api/admin/cms?${params}`, {
         credentials: 'include',
       })
-      if (response.ok) {
-        const data: CMSResponse = await response.json()
-        setPages(data.data || [])
-        setTotal(data.pagination?.total || 0)
+      if (!response.ok) {
+        const json = await response.json().catch(() => null)
+        throw new Error(json?.error?.message || `Erreur ${response.status}`)
       }
-    } catch (error) {
-      console.error('Erreur lors du chargement des pages:', error)
+      const data: CMSResponse = await response.json()
+      setPages(data.data || [])
+      setTotal(data.pagination?.total || 0)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erreur lors du chargement des pages')
+      setPages([])
+      setTotal(0)
     } finally {
       setLoading(false)
     }
@@ -125,6 +125,11 @@ export default function AdminContenuPage() {
   useEffect(() => {
     fetchPages()
   }, [fetchPages])
+
+  // Cleanup debounce timer on unmount
+  useEffect(() => {
+    return () => clearTimeout(debounceRef.current)
+  }, [])
 
   useEffect(() => {
     setCurrentPage(1)
@@ -182,14 +187,17 @@ export default function AdminContenuPage() {
               <input
                 type="text"
                 placeholder="Rechercher une page..."
+                aria-label="Rechercher une page"
                 value={searchInput}
                 onChange={(e) => handleSearchChange(e.target.value)}
+                maxLength={200}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value)}
+              aria-label="Filtrer par statut"
               className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-700"
             >
               {STATUS_OPTIONS.map((opt) => (
@@ -207,6 +215,16 @@ export default function AdminContenuPage() {
             <div className="p-8 text-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
               <p className="mt-4 text-gray-500">Chargement...</p>
+            </div>
+          ) : error ? (
+            <div className="p-8 text-center">
+              <p className="text-red-600 font-medium">{error}</p>
+              <button
+                onClick={fetchPages}
+                className="mt-3 text-sm text-blue-600 hover:text-blue-800 font-medium"
+              >
+                Réessayer
+              </button>
             </div>
           ) : pages.length === 0 ? (
             <div className="p-8 text-center text-gray-500">
@@ -248,7 +266,12 @@ export default function AdminContenuPage() {
                         >
                           <td className="px-6 py-4">
                             <div>
-                              <p className="font-medium text-gray-900">{page.title}</p>
+                              <p className="font-medium text-gray-900">
+                                {page.title}
+                                {!page.is_active && (
+                                  <span className="ml-2 text-xs text-red-500">(supprimée)</span>
+                                )}
+                              </p>
                               <p className="text-sm text-gray-500">/{page.slug}</p>
                             </div>
                           </td>

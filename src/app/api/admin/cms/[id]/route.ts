@@ -1,33 +1,13 @@
 import { NextResponse } from 'next/server'
-import { revalidatePath } from 'next/cache'
 import { requirePermission } from '@/lib/admin-auth'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
-import { z } from 'zod'
+import { invalidateCache } from '@/lib/cache'
+import { revalidatePagePaths } from '@/lib/cms-revalidate'
 import DOMPurify from 'isomorphic-dompurify'
+import { UUID_RE, updatePageSchema, sanitizeTextFields } from '@/lib/cms-utils'
 
 export const dynamic = 'force-dynamic'
-
-// --- Schema ---
-
-const updatePageSchema = z.object({
-  slug: z.string().min(1).max(200).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Le slug doit contenir uniquement des lettres minuscules, chiffres et tirets').optional(),
-  page_type: z.enum(['static', 'blog', 'service', 'location', 'homepage', 'faq']).optional(),
-  title: z.string().min(1).max(500).optional(),
-  content_json: z.record(z.string(), z.unknown()).nullable().optional(),
-  content_html: z.string().nullable().optional(),
-  structured_data: z.record(z.string(), z.unknown()).nullable().optional(),
-  meta_title: z.string().max(70).nullable().optional(),
-  meta_description: z.string().max(170).nullable().optional(),
-  og_image_url: z.string().url().nullable().optional(),
-  excerpt: z.string().nullable().optional(),
-  author: z.string().nullable().optional(),
-  category: z.string().nullable().optional(),
-  tags: z.array(z.string()).optional(),
-  featured_image: z.string().nullable().optional(),
-  service_slug: z.string().nullable().optional(),
-  location_slug: z.string().nullable().optional(),
-})
 
 // --- GET: Single page by ID ---
 
@@ -40,6 +20,13 @@ export async function GET(
     if (!auth.success) return auth.error!
 
     const { id } = await params
+    if (!UUID_RE.test(id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'ID invalide' } },
+        { status: 400 }
+      )
+    }
+
     const supabase = createAdminClient()
 
     const { data: page, error } = await supabase
@@ -76,6 +63,12 @@ export async function PUT(
     if (!auth.success) return auth.error!
 
     const { id } = await params
+    if (!UUID_RE.test(id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'ID invalide' } },
+        { status: 400 }
+      )
+    }
 
     let body: unknown
     try {
@@ -102,7 +95,35 @@ export async function PUT(
       validated.content_html = DOMPurify.sanitize(validated.content_html)
     }
 
+    // Strip HTML from text-only fields
+    sanitizeTextFields(validated)
+
+    // Guard against oversized JSON payloads
+    if (validated.content_json && JSON.stringify(validated.content_json).length > 500000) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Le contenu JSON dépasse la taille maximale autorisée' } },
+        { status: 400 }
+      )
+    }
+    if (validated.structured_data && JSON.stringify(validated.structured_data).length > 100000) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Les données structurées dépassent la taille maximale autorisée' } },
+        { status: 400 }
+      )
+    }
+
     const supabase = createAdminClient()
+
+    // Fetch old slug/type before update for stale-path revalidation
+    let oldPage: { slug: string; page_type: string; service_slug: string | null; location_slug: string | null; status: string } | null = null
+    if (validated.slug || validated.page_type) {
+      const { data } = await supabase
+        .from('cms_pages')
+        .select('slug, page_type, service_slug, location_slug, status')
+        .eq('id', id)
+        .single()
+      oldPage = data
+    }
 
     const { data: page, error } = await supabase
       .from('cms_pages')
@@ -125,19 +146,13 @@ export async function PUT(
 
     // Revalidate cached paths if the page is published
     if (page.status === 'published') {
-      switch (page.page_type) {
-        case 'static': revalidatePath(`/${page.slug}`); break
-        case 'blog': revalidatePath(`/blog/${page.slug}`); revalidatePath('/blog'); break
-        case 'service': revalidatePath(`/services/${page.slug}`); break
-        case 'location':
-          if (page.service_slug && page.location_slug) {
-            revalidatePath(`/services/${page.service_slug}/${page.location_slug}`)
-          }
-          break
-        case 'homepage': revalidatePath('/'); break
-        case 'faq': revalidatePath('/faq'); break
+      revalidatePagePaths(page)
+      // Also revalidate old path if slug/type changed
+      if (oldPage && oldPage.status === 'published' && (oldPage.slug !== page.slug || oldPage.page_type !== page.page_type)) {
+        revalidatePagePaths(oldPage)
       }
     }
+    invalidateCache(/^cms:/)
 
     return NextResponse.json({ success: true, data: page })
   } catch (error) {
@@ -160,6 +175,13 @@ export async function DELETE(
     if (!auth.success) return auth.error!
 
     const { id } = await params
+    if (!UUID_RE.test(id)) {
+      return NextResponse.json(
+        { success: false, error: { message: 'ID invalide' } },
+        { status: 400 }
+      )
+    }
+
     const supabase = createAdminClient()
 
     const { data: page, error } = await supabase
@@ -180,6 +202,12 @@ export async function DELETE(
         { status: error ? 500 : 404 }
       )
     }
+
+    // Revalidate public paths so the page disappears from the site
+    if (page.status === 'published') {
+      revalidatePagePaths(page)
+    }
+    invalidateCache(/^cms:/)
 
     return NextResponse.json({ success: true, data: page })
   } catch (error) {

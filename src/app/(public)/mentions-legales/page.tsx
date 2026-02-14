@@ -5,9 +5,11 @@ import Breadcrumb from '@/components/Breadcrumb'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { companyIdentity } from '@/lib/config/company-identity'
+import { getPageContent } from '@/lib/cms'
+import { CmsContent } from '@/components/CmsContent'
 
 export const metadata: Metadata = {
-  title: 'Mentions légales - ServicesArtisans',
+  title: 'Mentions légales',
   description: 'Mentions légales du site ServicesArtisans.fr - Informations juridiques, éditeur, hébergeur et conditions d\'utilisation.',
   alternates: {
     canonical: `${SITE_URL}/mentions-legales`,
@@ -18,7 +20,7 @@ export const metadata: Metadata = {
     googleBot: { index: true, follow: true },
   },
   openGraph: {
-    title: 'Mentions légales - ServicesArtisans',
+    title: 'Mentions légales',
     description: 'Informations juridiques, éditeur, hébergeur et conditions d\'utilisation.',
     url: `${SITE_URL}/mentions-legales`,
     type: 'website',
@@ -26,12 +28,48 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Mentions légales - ServicesArtisans',
+    title: 'Mentions légales',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }
 
-export default function MentionsLegalesPage() {
+export default async function MentionsLegalesPage() {
+  const cmsPage = await getPageContent('mentions-legales', 'static')
+
+  // If CMS content exists, render it instead of hardcoded content
+  if (cmsPage?.content_html) {
+    const breadcrumbSchema = getBreadcrumbSchema([
+      { name: 'Accueil', url: '/' },
+      { name: 'Mentions légales', url: '/mentions-legales' },
+    ])
+
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <JsonLd data={breadcrumbSchema} />
+
+        {/* Header */}
+        <section className="bg-white border-b">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <Breadcrumb items={[{ label: 'Mentions légales' }]} className="mb-4" />
+            <h1 className="font-heading text-3xl font-bold text-gray-900">
+              {cmsPage.title}
+            </h1>
+          </div>
+        </section>
+
+        {/* CMS Content */}
+        <section className="py-12">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-white rounded-xl shadow-sm p-8">
+              <CmsContent html={cmsPage.content_html} />
+            </div>
+          </div>
+        </section>
+      </div>
+    )
+  }
+
+  // Fallback to hardcoded content
   const isPreLaunch = companyIdentity.status === 'pre-launch'
 
   const breadcrumbSchema = getBreadcrumbSchema([

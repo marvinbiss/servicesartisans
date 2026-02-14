@@ -1,47 +1,38 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { Eye, X, Loader2 } from 'lucide-react'
+import { useEffect } from 'react'
+import { Eye, X } from 'lucide-react'
 import DOMPurify from 'isomorphic-dompurify'
 
 interface PagePreviewProps {
-  pageId: string
+  isOpen: boolean
   onClose: () => void
-}
-
-interface PreviewData {
   title: string
-  content: string
+  contentHtml: string | null
+  structuredData: Record<string, unknown> | null
+  author?: string | null
+  excerpt?: string | null
+  featuredImage?: string | null
+  readTime?: string | null
 }
 
-export function PagePreview({ pageId, onClose }: PagePreviewProps) {
-  const [loading, setLoading] = useState(true)
-  const [data, setData] = useState<PreviewData | null>(null)
-  const [error, setError] = useState<string | null>(null)
-
+export function PagePreview({ isOpen, onClose, title, contentHtml, structuredData, author, excerpt, featuredImage, readTime }: PagePreviewProps) {
+  // Escape key handler
   useEffect(() => {
-    const fetchPreview = async () => {
-      try {
-        setLoading(true)
-        const res = await fetch(`/api/admin/cms/${pageId}`, {
-          credentials: 'include',
-        })
-        if (!res.ok) throw new Error('Erreur lors du chargement')
-        const json = await res.json()
-        const page = json.data || json
-        setData({ title: page.title || '', content: page.content_html || '' })
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Erreur inconnue')
-      } finally {
-        setLoading(false)
-      }
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
     }
+    document.addEventListener('keydown', handleEscape)
+    return () => document.removeEventListener('keydown', handleEscape)
+  }, [onClose])
 
-    fetchPreview()
-  }, [pageId])
+  if (!isOpen) return null
+
+  const hasContent = contentHtml && contentHtml.trim().length > 0
+  const hasStructuredData = structuredData && Object.keys(structuredData).length > 0
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
+    <div role="dialog" aria-modal="true" aria-label="Aperçu de la page" className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex min-h-screen items-start justify-center p-4">
         {/* Backdrop */}
         <div
@@ -59,6 +50,7 @@ export function PagePreview({ pageId, onClose }: PagePreviewProps) {
             </div>
             <button
               onClick={onClose}
+              aria-label="Fermer"
               className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
             >
               <X className="w-5 h-5" />
@@ -67,35 +59,60 @@ export function PagePreview({ pageId, onClose }: PagePreviewProps) {
 
           {/* Content */}
           <div className="p-6">
-            {loading ? (
-              <div className="flex items-center justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
-              </div>
-            ) : error ? (
-              <div className="text-center py-12">
-                <p className="text-red-600">{error}</p>
-              </div>
-            ) : data ? (
-              <>
-                {/* Page title */}
-                <h1 className="text-3xl font-bold text-gray-900 mb-6">{data.title}</h1>
+            {/* Page title */}
+            <h1 className="text-3xl font-bold text-gray-900 mb-4">{title}</h1>
 
-                {/* Rendered HTML */}
-                {data.content ? (
-                  <div
-                    className="prose prose-gray max-w-none"
-                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data.content) }}
-                  />
-                ) : (
-                  <div className="text-center py-12">
-                    <Eye className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                    <p className="text-gray-500">
-                      Aucun contenu à afficher. Commencez à rédiger dans l&apos;éditeur.
-                    </p>
-                  </div>
-                )}
-              </>
-            ) : null}
+            {/* Blog metadata */}
+            {(author || readTime) && (
+              <p className="text-sm text-gray-500 mb-4">
+                {author && <>Par {author}</>}
+                {author && readTime && <> &middot; </>}
+                {readTime && <>{readTime}</>}
+              </p>
+            )}
+
+            {/* Featured image */}
+            {featuredImage && (
+              <div className="mb-6">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={featuredImage}
+                  alt={title}
+                  className="w-full max-h-[300px] object-cover rounded-lg"
+                />
+              </div>
+            )}
+
+            {/* Excerpt */}
+            {excerpt && (
+              <p className="text-gray-500 italic mb-6 text-base leading-relaxed border-l-4 border-gray-200 pl-4">
+                {excerpt}
+              </p>
+            )}
+
+            {/* Rendered HTML */}
+            {hasContent ? (
+              <div
+                className="prose prose-gray max-w-none"
+                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(contentHtml) }}
+              />
+            ) : hasStructuredData ? (
+              <div className="space-y-4">
+                <p className="text-sm text-gray-500 italic mb-4">
+                  Aucun contenu HTML. Résumé des données structurées :
+                </p>
+                <pre className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-sm text-gray-700 overflow-auto max-h-96 whitespace-pre-wrap">
+                  {JSON.stringify(structuredData, null, 2)}
+                </pre>
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <Eye className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                <p className="text-gray-500">
+                  Aucun contenu à afficher. Commencez à rédiger dans l&apos;éditeur.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>

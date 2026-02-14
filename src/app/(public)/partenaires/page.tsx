@@ -4,7 +4,7 @@ import { ArrowRight } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 
 export const metadata: Metadata = {
-  title: 'Nos partenaires | ServicesArtisans',
+  title: 'Nos partenaires',
   description: 'Programme partenaires de ServicesArtisans. Découvrez comment devenir partenaire du plus grand annuaire d\'artisans de France.',
   robots: { index: false, follow: true },
 }

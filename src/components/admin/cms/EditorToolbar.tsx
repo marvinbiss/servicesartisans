@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { type Editor } from '@tiptap/react'
 import {
   Bold,
@@ -60,32 +60,64 @@ function ToolbarSeparator() {
   return <div className="w-px h-6 bg-gray-300 mx-1" />
 }
 
+function isSafeUrl(url: string): boolean {
+  try {
+    const parsed = new URL(url)
+    return ['http:', 'https:', 'mailto:'].includes(parsed.protocol)
+  } catch {
+    return false
+  }
+}
+
 export function EditorToolbar({ editor }: EditorToolbarProps) {
-  const setLink = useCallback(() => {
+  const [urlModal, setUrlModal] = useState<{ type: 'link' | 'image'; value: string } | null>(null)
+  const urlInputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (urlModal) {
+      setTimeout(() => urlInputRef.current?.focus(), 50)
+    }
+  }, [urlModal])
+
+  const openLinkModal = useCallback(() => {
     if (!editor) return
-
     const previousUrl = editor.getAttributes('link').href as string | undefined
-    const url = window.prompt('URL du lien :', previousUrl || 'https://')
+    setUrlModal({ type: 'link', value: previousUrl || 'https://' })
+  }, [editor])
 
-    if (url === null) return
+  const openImageModal = useCallback(() => {
+    if (!editor) return
+    setUrlModal({ type: 'image', value: 'https://' })
+  }, [editor])
 
-    if (url === '') {
+  const handleUrlSubmit = useCallback(() => {
+    if (!editor || !urlModal) return
+
+    const url = urlModal.value.trim()
+
+    if (urlModal.type === 'link' && url === '') {
       editor.chain().focus().extendMarkRange('link').unsetLink().run()
+      setUrlModal(null)
       return
     }
 
-    editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run()
-  }, [editor])
+    if (!url) {
+      setUrlModal(null)
+      return
+    }
 
-  const addImage = useCallback(() => {
-    if (!editor) return
+    if (!isSafeUrl(url)) {
+      return
+    }
 
-    const url = window.prompt("URL de l'image :", 'https://')
-
-    if (url) {
+    if (urlModal.type === 'link') {
+      editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run()
+    } else {
       editor.chain().focus().setImage({ src: url }).run()
     }
-  }, [editor])
+
+    setUrlModal(null)
+  }, [editor, urlModal])
 
   const insertTable = useCallback(() => {
     if (!editor) return
@@ -100,6 +132,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
   if (!editor) return null
 
   return (
+    <>
     <div className="flex flex-wrap items-center gap-1 border-b border-gray-200 bg-gray-50 p-2">
       {/* Text formatting */}
       <ToolbarButton
@@ -238,7 +271,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
 
       {/* Insert elements */}
       <ToolbarButton
-        onClick={setLink}
+        onClick={openLinkModal}
         isActive={editor.isActive('link')}
         title="Lien"
       >
@@ -246,7 +279,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
       </ToolbarButton>
 
       <ToolbarButton
-        onClick={addImage}
+        onClick={openImageModal}
         title="Image"
       >
         <ImageIcon className="w-4 h-4" />
@@ -294,5 +327,71 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
         <Redo className="w-4 h-4" />
       </ToolbarButton>
     </div>
+
+    {urlModal && (
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={urlModal.type === 'link' ? 'Saisir l\'URL du lien' : 'Saisir l\'URL de l\'image'}
+        className="fixed inset-0 z-50"
+        onClick={() => setUrlModal(null)}
+      >
+        <div
+          className="absolute left-1/2 top-24 -translate-x-1/2 w-96 bg-white rounded-lg shadow-xl border border-gray-200 p-4"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            {urlModal.type === 'link' ? 'URL du lien' : "URL de l'image"}
+          </label>
+          <input
+            ref={urlInputRef}
+            type="url"
+            value={urlModal.value}
+            onChange={(e) => setUrlModal({ ...urlModal, value: e.target.value })}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault()
+                handleUrlSubmit()
+              } else if (e.key === 'Escape') {
+                e.preventDefault()
+                setUrlModal(null)
+              }
+            }}
+            className={`w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+              urlModal.value.trim() && !isSafeUrl(urlModal.value.trim())
+                ? 'border-red-300 bg-red-50'
+                : 'border-gray-300'
+            }`}
+            placeholder="https://example.com"
+          />
+          {urlModal.value.trim() && !isSafeUrl(urlModal.value.trim()) && (
+            <p className="mt-1 text-xs text-red-600">
+              URL invalide. Seuls http://, https:// et mailto: sont acceptés.
+            </p>
+          )}
+          <div className="flex justify-end gap-2 mt-3">
+            <button
+              type="button"
+              onClick={() => setUrlModal(null)}
+              className="px-3 py-1.5 text-sm text-gray-600 hover:text-gray-800 rounded-md hover:bg-gray-100 transition-colors"
+            >
+              Annuler
+            </button>
+            <button
+              type="button"
+              onClick={handleUrlSubmit}
+              disabled={urlModal.type === 'link'
+                ? (urlModal.value.trim() !== '' && !isSafeUrl(urlModal.value.trim()))
+                : (!urlModal.value.trim() || !isSafeUrl(urlModal.value.trim()))
+              }
+              className="px-3 py-1.5 text-sm text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Insérer
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+    </>
   )
 }

@@ -10,7 +10,7 @@ import { getHowToSchema, getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jso
 import { SITE_URL } from '@/lib/seo/config'
 
 export const metadata: Metadata = {
-  title: 'Comment ça marche — Trouvez un artisan parmi 350 000+ professionnels référencés | ServicesArtisans',
+  title: 'Comment ça marche — Trouvez un artisan',
   description: 'Recherchez, comparez et contactez un artisan en 3 étapes. 350 000+ professionnels référencés dans 101 départements. 100% gratuit, sans inscription.',
   alternates: {
     canonical: `${SITE_URL}/comment-ca-marche`,
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     'max-video-preview': -1,
   },
   openGraph: {
-    title: 'Comment ça marche — Trouvez un artisan | ServicesArtisans',
+    title: 'Comment ça marche — Trouvez un artisan',
     description: 'Recherchez, comparez et contactez un artisan en 3 étapes. 100% gratuit, sans inscription.',
     url: `${SITE_URL}/comment-ca-marche`,
     type: 'website',
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Comment ça marche — Trouvez un artisan | ServicesArtisans',
+    title: 'Comment ça marche — Trouvez un artisan',
     description: 'Recherchez, comparez et contactez un artisan en 3 étapes. 100% gratuit.',
     images: [`${SITE_URL}/opengraph-image`],
   },

@@ -9,7 +9,7 @@ import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/li
 import { departements, getDepartementBySlug, getVillesByDepartement, services, getRegionSlugByName } from '@/lib/data/france'
 import { slugify } from '@/lib/utils'
 import { getDepartmentImage } from '@/lib/data/images'
-import { generateDepartementContent } from '@/lib/seo/location-content'
+import { generateDepartementContent, hashCode } from '@/lib/seo/location-content'
 import { Thermometer, Home, TrendingUp, AlertTriangle } from 'lucide-react'
 
 export function generateStaticParams() {
@@ -29,8 +29,26 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!dept) return { title: 'Département non trouvé' }
 
   const metaContent = generateDepartementContent(dept)
-  const title = `Artisans en ${dept.name} (${dept.code}) — ${metaContent.profile.climateLabel} | ServicesArtisans`
-  const description = `Trouvez des artisans qualifiés dans le ${dept.name} (${dept.code}). ${metaContent.profile.climateLabel}, ${metaContent.profile.housingLabel.toLowerCase()}. ${services.length} corps de métier. Devis gratuit.`
+
+  const titleHash = Math.abs(hashCode(`title-dept-${dept.slug}`))
+  const titleTemplates = [
+    `Artisans en ${dept.name} (${dept.code})`,
+    `Trouver un artisan dans le ${dept.code}`,
+    `${dept.name} : artisans qualifiés par ville`,
+    `Artisans du ${dept.name} — Devis gratuit`,
+    `${dept.name} (${dept.code}), ${dept.region}`,
+  ]
+  const title = titleTemplates[titleHash % titleTemplates.length]
+
+  const descHash = Math.abs(hashCode(`desc-dept-${dept.slug}`))
+  const descTemplates = [
+    `Trouvez des artisans qualifiés dans le ${dept.name} (${dept.code}). ${metaContent.profile.climateLabel}, ${services.length} corps de métier. Devis gratuit.`,
+    `${dept.name} : annuaire d'artisans référencés SIREN. ${metaContent.profile.housingLabel}, ${metaContent.profile.climateLabel.toLowerCase()}. Comparez les devis.`,
+    `Artisans en ${dept.name} (${dept.code}), ${dept.region}. ${dept.population} hab., chef-lieu ${dept.chefLieu}. Devis gratuits en ligne.`,
+    `${services.length} corps de métier dans le ${dept.name}. ${metaContent.profile.economyLabel}, ${metaContent.profile.housingLabel.toLowerCase()}. Devis gratuit.`,
+    `Tous les artisans du ${dept.name} (${dept.code}). ${metaContent.profile.climateLabel}, ${metaContent.profile.economyLabel.toLowerCase()}. Comparez gratuitement.`,
+  ]
+  const description = descTemplates[descHash % descTemplates.length]
 
   const deptImage = getDepartmentImage(dept.code)
 
@@ -144,12 +162,21 @@ export default async function DepartementPage({ params }: PageProps) {
                 <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-blue-300">{dept.code}</span>
               </div>
               <div>
-                <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-[-0.025em] leading-[1.1]">
-                  Artisans en{' '}
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-indigo-300 to-blue-300">
-                    {dept.name}
-                  </span>
-                </h1>
+                {(() => {
+                  const h1Hash = Math.abs(hashCode(`h1-dept-${dept.slug}`))
+                  const h1Templates = [
+                    `Artisans dans le ${dept.name}`,
+                    `Trouver un artisan en ${dept.name} (${dept.code})`,
+                    `${dept.name} : artisans qualifiés par ville`,
+                    `Artisans du ${dept.code} — ${dept.name}`,
+                    `Tous les artisans en ${dept.name}, ${dept.region}`,
+                  ]
+                  return (
+                    <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-[-0.025em] leading-[1.1]">
+                      {h1Templates[h1Hash % h1Templates.length]}
+                    </h1>
+                  )
+                })()}
                 <p className="text-slate-400 mt-1">{dept.region}</p>
               </div>
             </div>
@@ -497,6 +524,27 @@ export default async function DepartementPage({ params }: PageProps) {
                 </Link>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Confiance & Sécurité */}
+      <section className="py-8 border-t">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-lg font-bold text-gray-900 mb-4">Confiance & Sécurité</h2>
+          <div className="flex flex-wrap gap-4">
+            <Link href="/notre-processus-de-verification" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
+              Processus de vérification
+            </Link>
+            <Link href="/politique-avis" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
+              Politique d&apos;avis
+            </Link>
+            <Link href="/mediation" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
+              Médiation
+            </Link>
+            <Link href="/cgv" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
+              CGV
+            </Link>
           </div>
         </div>
       </section>
