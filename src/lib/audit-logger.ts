@@ -81,16 +81,18 @@ export async function logAuditEvent(params: AuditLogParams): Promise<void> {
     const userAgent = headersList.get('user-agent') || 'unknown'
 
     await supabase.from('audit_logs').insert({
-      admin_id: params.adminId,
-      admin_email: params.adminEmail,
+      user_id: params.adminId,
       action: params.action,
-      entity_type: params.entityType,
-      entity_id: params.entityId,
-      old_data: params.oldData,
-      new_data: params.newData,
-      metadata: params.metadata,
-      ip_address: ipAddress,
-      user_agent: userAgent,
+      resource_type: params.entityType,
+      resource_id: params.entityId,
+      old_value: params.oldData,
+      new_value: params.newData,
+      metadata: {
+        ...params.metadata,
+        admin_email: params.adminEmail,
+        ip_address: ipAddress,
+        user_agent: userAgent,
+      },
       created_at: new Date().toISOString(),
     })
   } catch (error) {

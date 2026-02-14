@@ -699,12 +699,34 @@ class ChatService {
     file: File,
     conversationId: string
   ): Promise<{ url: string; thumbnailUrl?: string } | null> {
-    const fileExt = file.name.split('.').pop()
+    // Validate file size (10 MB max)
+    const MAX_FILE_SIZE = 10 * 1024 * 1024
+    if (file.size > MAX_FILE_SIZE) {
+      logger.error('File too large', { size: file.size, max: MAX_FILE_SIZE })
+      return null
+    }
+
+    // Validate MIME type
+    const ALLOWED_TYPES = [
+      'image/jpeg', 'image/png', 'image/gif', 'image/webp',
+      'application/pdf',
+      'text/plain', 'text/csv',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    ]
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      logger.error('File type not allowed', { type: file.type })
+      return null
+    }
+
+    // Sanitize filename: keep only alphanumeric, dots, hyphens
+    const safeName = file.name.replace(/[^a-zA-Z0-9.\-]/g, '_')
+    const fileExt = safeName.split('.').pop()
     const fileName = `${conversationId}/${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
 
     const { data, error } = await this.supabase.storage
       .from('chat-attachments')
-      .upload(fileName, file)
+      .upload(fileName, file, { contentType: file.type })
 
     if (error) {
       logger.error('Error uploading attachment', error)

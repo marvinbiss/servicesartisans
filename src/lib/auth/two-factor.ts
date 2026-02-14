@@ -393,16 +393,16 @@ export class TwoFactorAuthService {
   private hashCode(code: string): string {
     return crypto
       .createHash('sha256')
-      .update(code + process.env.TWO_FACTOR_SALT || 'default-salt')
+      .update(code + (process.env.TWO_FACTOR_SALT || 'default-salt'))
       .digest('hex')
   }
 
   private encryptSecret(secret: string): string {
     const algorithm = 'aes-256-gcm'
-    const key = Buffer.from(
-      process.env.TWO_FACTOR_ENCRYPTION_KEY || crypto.randomBytes(32).toString('hex'),
-      'hex'
-    )
+    if (!process.env.TWO_FACTOR_ENCRYPTION_KEY) {
+      throw new Error('TWO_FACTOR_ENCRYPTION_KEY environment variable is required')
+    }
+    const key = Buffer.from(process.env.TWO_FACTOR_ENCRYPTION_KEY, 'hex')
     const iv = crypto.randomBytes(16)
 
     const cipher = crypto.createCipheriv(algorithm, key, iv)
@@ -416,10 +416,10 @@ export class TwoFactorAuthService {
 
   private decryptSecret(encryptedSecret: string): string {
     const algorithm = 'aes-256-gcm'
-    const key = Buffer.from(
-      process.env.TWO_FACTOR_ENCRYPTION_KEY || crypto.randomBytes(32).toString('hex'),
-      'hex'
-    )
+    if (!process.env.TWO_FACTOR_ENCRYPTION_KEY) {
+      throw new Error('TWO_FACTOR_ENCRYPTION_KEY environment variable is required')
+    }
+    const key = Buffer.from(process.env.TWO_FACTOR_ENCRYPTION_KEY, 'hex')
 
     const [ivHex, authTagHex, encrypted] = encryptedSecret.split(':')
     const iv = Buffer.from(ivHex, 'hex')
