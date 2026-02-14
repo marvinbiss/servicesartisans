@@ -22,6 +22,11 @@ interface PageProps {
   params: Promise<{ region: string }>
 }
 
+function truncateTitle(title: string, maxLen = 55): string {
+  if (title.length <= maxLen) return title
+  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { region: regionSlug } = await params
   const region = getRegionBySlug(regionSlug)
@@ -39,7 +44,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     `Artisans qualifiés en ${region.name}`,
     `${region.name} — Artisans par département`,
   ]
-  const title = titleTemplates[titleHash % titleTemplates.length]
+  const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
   const descHash = Math.abs(hashCode(`desc-region-${region.slug}`))
   const descTemplates = [
@@ -498,6 +503,16 @@ export default async function RegionPage({ params }: PageProps) {
           </div>
         </div>
       </section>
+
+        {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
+        <section className="mb-8">
+          <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
+            <h3 className="text-sm font-semibold text-slate-700 mb-2">Méthodologie éditoriale</h3>
+            <p className="text-xs text-slate-500 leading-relaxed">
+              Les profils géographiques et économiques sont des estimations régionales. Les données proviennent de sources publiques (INSEE, base SIRENE). ServicesArtisans est un annuaire indépendant — nous ne réalisons pas de travaux et ne garantissons pas les prestations.
+            </p>
+          </div>
+        </section>
 
       {/* Confiance & Sécurité */}
       <section className="py-8 border-t">

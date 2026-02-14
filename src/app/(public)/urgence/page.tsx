@@ -42,8 +42,8 @@ const urgencyServices = [
       'WC bouché',
       'Rupture de tuyau',
     ],
-    description: 'Intervention rapide pour toutes urgences de plomberie : fuites d\'eau, dégâts des eaux, canalisations bouchées. Nos plombiers interviennent en moins de 30 minutes.',
-    responseTime: '< 30 min',
+    description: 'Intervention rapide pour toutes urgences de plomberie : fuites d\'eau, dégâts des eaux, canalisations bouchées. Nos plombiers interviennent rapidement, selon disponibilité.',
+    responseTime: 'Intervention rapide',
   },
   {
     name: 'Électricien urgence',
@@ -62,7 +62,7 @@ const urgencyServices = [
       'Fil dénudé dangereux',
     ],
     description: 'Dépannage électrique en urgence 24h/24. Nos électriciens qualifiés interviennent rapidement pour sécuriser votre installation électrique.',
-    responseTime: '< 45 min',
+    responseTime: 'Intervention rapide',
   },
   {
     name: 'Serrurier urgence',
@@ -81,7 +81,7 @@ const urgencyServices = [
       'Porte blindée bloquée',
     ],
     description: 'Ouverture de porte et dépannage serrurerie en urgence. Nos serruriers interviennent sans dégâts, 24h/24 et 7j/7.',
-    responseTime: '< 20 min',
+    responseTime: 'Intervention rapide',
   },
   {
     name: 'Chauffagiste urgence',
@@ -100,7 +100,7 @@ const urgencyServices = [
       'Problème de thermostat',
     ],
     description: 'Dépannage chauffage en urgence : chaudière en panne, fuite de gaz, radiateurs défaillants. Intervention rapide par des chauffagistes qualifiés.',
-    responseTime: '< 45 min',
+    responseTime: 'Intervention rapide',
   },
 ]
 
@@ -153,7 +153,7 @@ export default function UrgencePage() {
           </h1>
           <p className="text-xl text-red-100/80 max-w-2xl mb-10">
             Plombier, électricien, serrurier, chauffagiste — un artisan référencé intervient
-            chez vous en moins de 30 minutes, jour et nuit.
+            chez vous rapidement, jour et nuit, selon disponibilité.
           </p>
 
           {/* Emergency CTAs */}
@@ -182,7 +182,7 @@ export default function UrgencePage() {
             </div>
             <div className="flex items-center gap-2 bg-white/[0.06] backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
               <Clock className="w-4 h-4 text-amber-400" />
-              <span className="text-sm text-white/80">Intervention &lt; 30 min</span>
+              <span className="text-sm text-white/80">Intervention rapide</span>
             </div>
             <div className="flex items-center gap-2 bg-white/[0.06] backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
               <Clock className="w-4 h-4 text-amber-400" />
@@ -419,7 +419,7 @@ export default function UrgencePage() {
                 <Clock className="w-7 h-7 text-red-600" />
               </div>
               <h3 className="font-bold text-gray-900 mb-2">Intervention rapide</h3>
-              <p className="text-sm text-gray-600">Un artisan disponible intervient chez vous en moins de 30 minutes.</p>
+              <p className="text-sm text-gray-600">Un artisan disponible intervient chez vous rapidement, selon disponibilité.</p>
             </div>
           </div>
         </div>
@@ -482,6 +482,18 @@ export default function UrgencePage() {
                 <Link href="/blog/urgence-plomberie-que-faire" className="block text-sm text-gray-600 hover:text-red-600 py-1 transition-colors">Urgence plomberie : que faire ?</Link>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
+      <section className="mb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
+            <h3 className="text-sm font-semibold text-slate-700 mb-2">Information importante</h3>
+            <p className="text-xs text-slate-500 leading-relaxed">
+              Les délais d&apos;intervention sont des estimations basées sur la disponibilité habituelle des artisans et peuvent varier. ServicesArtisans est un annuaire — nous mettons en relation mais ne réalisons pas les interventions. En cas d&apos;urgence vitale, appelez le 18 (pompiers) ou le 112.
+            </p>
           </div>
         </div>
       </section>

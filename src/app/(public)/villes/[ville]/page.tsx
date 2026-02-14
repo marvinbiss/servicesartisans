@@ -24,6 +24,11 @@ interface PageProps {
   params: Promise<{ ville: string }>
 }
 
+function truncateTitle(title: string, maxLen = 55): string {
+  if (title.length <= maxLen) return title
+  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { ville: villeSlug } = await params
   const ville = getVilleBySlug(villeSlug)
@@ -40,7 +45,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     `Artisans qualifiés à ${ville.name}`,
     `${ville.name} — Artisans référencés SIREN`,
   ]
-  const title = titleTemplates[titleHash % titleTemplates.length]
+  const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
   const descHash = Math.abs(hashCode(`desc-ville-${ville.slug}`))
   const descTemplates = [
@@ -506,6 +511,18 @@ export default async function VillePage({ params }: PageProps) {
           </div>
         </div>
       </section>
+
+        {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
+        <section className="mb-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
+              <h3 className="text-sm font-semibold text-slate-700 mb-2">Méthodologie éditoriale</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Les données de cette page sont issues de sources publiques (INSEE, base SIRENE). Les profils climatiques et économiques sont des estimations régionales. ServicesArtisans est un annuaire indépendant — nous ne réalisons pas de travaux et ne garantissons pas les prestations des artisans référencés.
+              </p>
+            </div>
+          </div>
+        </section>
 
       {/* Confiance & Sécurité */}
       <section className="py-8 border-t">

@@ -628,6 +628,18 @@ export default async function ServicePage({ params }: PageProps) {
         </div>
       </section>
 
+      {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
+      <section className="mb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
+            <h3 className="text-sm font-semibold text-slate-700 mb-2">Méthodologie éditoriale</h3>
+            <p className="text-xs text-slate-500 leading-relaxed">
+              Les tarifs et informations présentés sont indicatifs, basés sur des moyennes nationales et régionales. Les artisans sont référencés via leur numéro SIREN. ServicesArtisans est un annuaire indépendant — nous ne réalisons pas de travaux et ne garantissons pas les prestations.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Trust & Safety Links (E-E-A-T) */}
       <section className="py-8 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -27,6 +27,11 @@ export function generateStaticParams() {
   return tradeSlugs.map((service) => ({ service }))
 }
 
+function truncateTitle(title: string, maxLen = 55): string {
+  if (title.length <= maxLen) return title
+  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ service: string }> }): Promise<Metadata> {
   const { service } = await params
   const trade = tradeContent[service]
@@ -42,7 +47,7 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
     `Tarifs ${tradeLower} : prix horaire et devis`,
     `Guide des prix ${tradeLower} 2026`,
   ]
-  const title = titleTemplates[titleHash % titleTemplates.length]
+  const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
   const descHash = Math.abs(hashCode(`tarif-desc-${service}`))
   const descTemplates = [
@@ -112,7 +117,6 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
       priceCurrency: 'EUR',
       lowPrice: trade.priceRange.min,
       highPrice: trade.priceRange.max,
-      offerCount: trade.commonTasks.length,
     },
   }
 
@@ -423,6 +427,18 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
               Trouver un {trade.name.toLowerCase()}
               <ArrowRight className="w-5 h-5" />
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
+      <section className="mb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
+            <h3 className="text-sm font-semibold text-slate-700 mb-2">Méthodologie tarifaire</h3>
+            <p className="text-xs text-slate-500 leading-relaxed">
+              Les prix affichés sont des fourchettes indicatives basées sur des moyennes constatées en France. Ils varient selon la région, la complexité du chantier, les matériaux et l&apos;urgence. Seul un devis personnalisé fait foi. ServicesArtisans est un annuaire indépendant.
+            </p>
           </div>
         </div>
       </section>
