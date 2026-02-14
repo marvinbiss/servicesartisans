@@ -28,6 +28,10 @@
     {
       "path": "/api/cron/send-reports",
       "schedule": "0 8 * * 1"
+    },
+    {
+      "path": "/api/cron/prospection-process",
+      "schedule": "*/2 * * * *"
     }
   ]
 }
