@@ -1,18 +1,18 @@
 {
   "completedDepts": [],
   "lastArtisanIndex": {
-    "06": 200
+    "06": 3550
   },
   "stats": {
-    "artisansProcessed": 200,
-    "artisansTotal": 740885,
-    "newPhones": 60,
-    "newWebsites": 194,
+    "artisansProcessed": 1350,
+    "artisansTotal": 739332,
+    "newPhones": 1200,
+    "newWebsites": 1194,
     "newRatings": 0,
     "noResults": 0,
-    "errors": 3,
-    "apiCredits": 1005,
-    "activeWorkers": 1,
-    "maxWorkers": 1
+    "errors": 90,
+    "apiCredits": 8065,
+    "activeWorkers": 20,
+    "maxWorkers": 20
   }
 }
