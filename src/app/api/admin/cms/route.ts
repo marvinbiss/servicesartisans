@@ -3,8 +3,6 @@ import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
-import DOMPurify from 'isomorphic-dompurify'
-import { createPageSchema, sanitizeTextFields } from '@/lib/cms-utils'
 
 export const dynamic = 'force-dynamic'
 
@@ -123,6 +121,12 @@ export async function POST(request: Request) {
   try {
     const auth = await requirePermission('content', 'write')
     if (!auth.success) return auth.error!
+
+    // Lazy imports — only needed for POST, avoids crashing GET if deps are missing
+    const [{ default: DOMPurify }, { createPageSchema, sanitizeTextFields }] = await Promise.all([
+      import('isomorphic-dompurify'),
+      import('@/lib/cms-utils'),
+    ])
 
     let body: unknown
     try {

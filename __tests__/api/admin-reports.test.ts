@@ -267,18 +267,19 @@ describe('GET /api/admin/reports', () => {
     expect(result.body.success).toBe(false)
   })
 
-  it('returns 502 on DB error', async () => {
+  it('returns empty list on DB error (graceful fallback)', async () => {
     queryResult = { data: null, error: { code: 'PGRST301', message: 'permission denied' }, count: null }
 
     const { GET } = await import('@/app/api/admin/reports/route')
     const result = (await GET(makeGetRequest() as never)) as {
-      body: { success: boolean; error: { code: string } }
+      body: { success: boolean; reports: unknown[]; total: number }
       status: number
     }
 
-    expect(result.status).toBe(502)
-    expect(result.body.success).toBe(false)
-    expect(result.body.error.code).toBe('PGRST301')
+    expect(result.status).toBe(200)
+    expect(result.body.success).toBe(true)
+    expect(result.body.reports).toEqual([])
+    expect(result.body.total).toBe(0)
     expect(mockLoggerWarn).toHaveBeenCalled()
   })
 

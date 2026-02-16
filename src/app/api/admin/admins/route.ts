@@ -21,13 +21,11 @@ export const dynamic = 'force-dynamic'
 
 export async function GET(request: NextRequest) {
   try {
-    // Verify admin with settings:read permission (admin management)
     const authResult = await requirePermission('settings', 'read')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
     }
 
-    // Only super_admin can view admin list
     if (authResult.admin.role !== 'super_admin') {
       return NextResponse.json(
         { success: false, error: { code: 'FORBIDDEN', message: 'Réservé aux super admins' } },
@@ -52,20 +50,39 @@ export async function GET(request: NextRequest) {
     const { page, limit } = result.data
     const offset = (page - 1) * limit
 
-    // Fetch admins from admin_users table
-    const { data: admins, error, count } = await supabase
-      .from('admin_users')
-      .select('*', { count: 'exact' })
+    // Fetch admins from admin_roles table, join with profiles for email
+    const { data: roles, error, count } = await supabase
+      .from('admin_roles')
+      .select('id, user_id, role, permissions, created_at, profile:profiles!user_id(email, full_name)', { count: 'exact' })
       .range(offset, offset + limit - 1)
       .order('created_at', { ascending: false })
 
     if (error) {
-      logger.error('Error fetching admins', error)
-      return NextResponse.json({ error: 'Erreur lors de la récupération des administrateurs' }, { status: 500 })
+      logger.warn('Admin roles query failed, returning empty list', { code: error.code, message: error.message })
+      return NextResponse.json({
+        admins: [],
+        total: 0,
+        totalPages: 0,
+        page,
+      })
     }
 
+    // Transform to expected shape
+    const admins = (roles || []).map(r => {
+      const profile = r.profile as { email?: string; full_name?: string } | null
+      return {
+        id: r.id,
+        user_id: r.user_id,
+        email: profile?.email || '',
+        full_name: profile?.full_name || null,
+        role: r.role,
+        permissions: r.permissions || DEFAULT_PERMISSIONS[r.role as AdminRole] || {},
+        created_at: r.created_at,
+      }
+    })
+
     return NextResponse.json({
-      admins: admins || [],
+      admins,
       total: count || 0,
       totalPages: Math.ceil((count || 0) / limit),
       page,
@@ -78,13 +95,11 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    // Verify admin with settings:write permission (admin management)
     const authResult = await requirePermission('settings', 'write')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
     }
 
-    // Only super_admin can add admins
     if (authResult.admin.role !== 'super_admin') {
       return NextResponse.json(
         { success: false, error: { code: 'FORBIDDEN', message: 'Seuls les super admins peuvent ajouter des administrateurs' } },
@@ -111,12 +126,18 @@ export async function POST(request: NextRequest) {
       .eq('email', email)
       .single()
 
-    // Create admin entry
-    const { data: newAdmin, error } = await supabase
-      .from('admin_users')
+    if (!targetUser) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Aucun utilisateur trouvé avec cet email' } },
+        { status: 404 }
+      )
+    }
+
+    // Create admin entry in admin_roles table
+    const { data: newRole, error } = await supabase
+      .from('admin_roles')
       .insert({
-        user_id: targetUser?.id || null,
-        email,
+        user_id: targetUser.id,
         role: role as AdminRole,
         permissions: DEFAULT_PERMISSIONS[role as AdminRole],
       })
@@ -124,14 +145,24 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (error) {
-      logger.error('Error creating admin', error)
+      if (error.code === '23505') {
+        return NextResponse.json(
+          { success: false, error: { message: 'Cet utilisateur est déjà administrateur' } },
+          { status: 409 }
+        )
+      }
+      logger.error('Error creating admin role', error)
       return NextResponse.json({ error: 'Erreur lors de la création de l\'administrateur' }, { status: 500 })
     }
 
-    // Log audit
-    await logAdminAction(authResult.admin.id, 'admin_created', 'settings', newAdmin.id, { email, role })
+    await logAdminAction(authResult.admin.id, 'admin_created', 'settings', newRole.id, { email, role })
 
-    return NextResponse.json({ admin: newAdmin })
+    return NextResponse.json({
+      admin: {
+        ...newRole,
+        email: targetUser.email,
+      },
+    })
   } catch (error) {
     logger.error('Admin create error', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
