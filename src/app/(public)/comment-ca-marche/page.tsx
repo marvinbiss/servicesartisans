@@ -8,6 +8,8 @@ import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalL
 import JsonLd from '@/components/JsonLd'
 import { getHowToSchema, getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
+import { getPageContent } from '@/lib/cms'
+import { CmsContent } from '@/components/CmsContent'
 
 export const metadata: Metadata = {
   title: 'Comment ça marche — Trouvez un artisan',
@@ -129,7 +131,35 @@ const faqs = [
   },
 ]
 
-export default function CommentCaMarchePage() {
+export default async function CommentCaMarchePage() {
+  const cmsPage = await getPageContent('comment-ca-marche', 'static')
+
+  if (cmsPage?.content_html) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <JsonLd data={getBreadcrumbSchema([
+          { name: 'Accueil', url: '/' },
+          { name: 'Comment ça marche', url: '/comment-ca-marche' },
+        ])} />
+        <section className="bg-white border-b">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <Breadcrumb items={[{ label: 'Comment ça marche' }]} className="mb-4" />
+            <h1 className="font-heading text-3xl font-bold text-gray-900">
+              {cmsPage.title}
+            </h1>
+          </div>
+        </section>
+        <section className="py-12">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-white rounded-xl shadow-sm p-8">
+              <CmsContent html={cmsPage.content_html} />
+            </div>
+          </div>
+        </section>
+      </div>
+    )
+  }
+
   const howToSchema = getHowToSchema([
     { name: 'Recherchez', text: 'Trouvez le bon professionnel parmi 350 000+ artisans. Recherchez par type de service et par ville dans les 101 départements français.' },
     { name: 'Comparez', text: 'Consultez les profils détaillés avec données SIREN officielles. Comparez les entreprises en toute transparence grâce aux données gouvernementales.' },

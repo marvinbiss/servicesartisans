@@ -2,7 +2,11 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
+import JsonLd from '@/components/JsonLd'
+import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
+import { getPageContent } from '@/lib/cms'
+import { CmsContent } from '@/components/CmsContent'
 
 export const metadata: Metadata = {
   title: 'Carrières — Rejoignez notre équipe',
@@ -13,7 +17,35 @@ export const metadata: Metadata = {
   // robots inherited from layout.tsx (noindex for pre-launch)
 }
 
-export default function CarrieresPage() {
+export default async function CarrieresPage() {
+  const cmsPage = await getPageContent('carrieres', 'static')
+
+  if (cmsPage?.content_html) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <JsonLd data={getBreadcrumbSchema([
+          { name: 'Accueil', url: '/' },
+          { name: 'Carrières', url: '/carrieres' },
+        ])} />
+        <section className="bg-white border-b">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <Breadcrumb items={[{ label: 'Carrières' }]} className="mb-4" />
+            <h1 className="font-heading text-3xl font-bold text-gray-900">
+              {cmsPage.title}
+            </h1>
+          </div>
+        </section>
+        <section className="py-12">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-white rounded-xl shadow-sm p-8">
+              <CmsContent html={cmsPage.content_html} />
+            </div>
+          </div>
+        </section>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero */}

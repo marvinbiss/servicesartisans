@@ -12,6 +12,8 @@ import {
 } from '@/components/home/HomePageSections'
 import { GeographicSectionWrapper } from '@/components/home/GeographicSectionWrapper'
 import { ScrollReveal, StaggerGrid, StaggerItem, SectionDivider } from '@/components/ui'
+import { getPageContent } from '@/lib/cms'
+import { CmsContent } from '@/components/CmsContent'
 
 export const metadata: Metadata = {
   title: 'ServicesArtisans — 350 000+ artisans référencés en France',
@@ -35,7 +37,24 @@ export const metadata: Metadata = {
   },
 }
 
-export default function HomePage() {
+export default async function HomePage() {
+  const cmsPage = await getPageContent('homepage', 'homepage')
+
+  if (cmsPage?.content_html) {
+    return (
+      <div className="min-h-screen">
+        <h1 className="sr-only">
+          {cmsPage.title || "L'annuaire des artisans qualifiés en France"}
+        </h1>
+        <section className="py-12">
+          <div className="max-w-6xl mx-auto px-4">
+            <CmsContent html={cmsPage.content_html} />
+          </div>
+        </section>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen">
       {/* Organization + WebSite JSON-LD already injected globally in layout.tsx */}

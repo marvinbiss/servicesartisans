@@ -15,6 +15,8 @@ import { popularServices } from '@/lib/constants/navigation'
 import { services as staticServicesList, villes, departements, getVillesByDepartement } from '@/lib/data/france'
 import { getTradeContent } from '@/lib/data/trade-content'
 import { getServiceImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
+import { getPageContent, getTradeContentOverride } from '@/lib/cms'
+import { CmsContent } from '@/components/CmsContent'
 
 // ISR: Revalidate every 30 minutes
 export const revalidate = REVALIDATE.serviceDetail
@@ -112,6 +114,27 @@ function getStaticCities() {
 export default async function ServicePage({ params }: PageProps) {
   const { service: serviceSlug } = await params
 
+  // Full CMS page override
+  const cmsPage = await getPageContent(serviceSlug, 'service', { serviceSlug })
+  if (cmsPage?.content_html) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <section className="bg-white border-b">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <h1 className="font-heading text-3xl font-bold text-gray-900">
+              {cmsPage.title}
+            </h1>
+          </div>
+        </section>
+        <section className="py-12">
+          <div className="max-w-6xl mx-auto px-4">
+            <CmsContent html={cmsPage.content_html} />
+          </div>
+        </section>
+      </div>
+    )
+  }
+
   let service: { name: string; slug: string; description?: string; category?: string } | null = null
   let topCities: any[] = []
   let recentProviders: any[] = []
@@ -159,7 +182,11 @@ export default async function ServicePage({ params }: PageProps) {
   }, {} as Record<string, typeof topCities>) || {}
 
   // Trade-specific rich content (prices, FAQ, tips, certifications)
-  const trade = getTradeContent(serviceSlug)
+  const tradeBase = getTradeContent(serviceSlug)
+  const cmsTradeOverride = await getTradeContentOverride(serviceSlug)
+  const trade = tradeBase && cmsTradeOverride
+    ? { ...tradeBase, ...cmsTradeOverride } as typeof tradeBase
+    : tradeBase
 
   // H1 variation for SEO
   const h1Hash = Math.abs(hashCode(`hub-h1-${serviceSlug}`))

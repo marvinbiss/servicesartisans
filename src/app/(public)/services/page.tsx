@@ -12,6 +12,8 @@ import { REVALIDATE } from '@/lib/cache'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularCitiesLinks, GeographicNavigation } from '@/components/InternalLinks'
 import { services as staticServicesList } from '@/lib/data/france'
+import { getPageContent } from '@/lib/cms'
+import { CmsContent } from '@/components/CmsContent'
 
 // Set of valid service slugs that have dedicated pages
 const validServiceSlugs = new Set(staticServicesList.map(s => s.slug))
@@ -135,7 +137,28 @@ const colorClasses: Record<string, { bg: string; icon: string; hover: string }> 
   slate: { bg: 'bg-slate-50', icon: 'text-slate-600', hover: 'group-hover:bg-slate-100' },
 }
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  const cmsPage = await getPageContent('services', 'static')
+
+  if (cmsPage?.content_html) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <section className="bg-white border-b">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <h1 className="font-heading text-3xl font-bold text-gray-900">
+              {cmsPage.title}
+            </h1>
+          </div>
+        </section>
+        <section className="py-12">
+          <div className="max-w-6xl mx-auto px-4">
+            <CmsContent html={cmsPage.content_html} />
+          </div>
+        </section>
+      </div>
+    )
+  }
+
   // JSON-LD structured data
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
