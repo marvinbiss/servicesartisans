@@ -187,7 +187,7 @@ export default function BookingCalendar({
         </p>
         <div className="bg-gray-50 rounded-lg p-4 mb-6 text-left">
           <div className="flex items-center gap-3 mb-3">
-            <Calendar className="w-5 h-5 text-blue-600" />
+            <Calendar className="w-5 h-5 text-primary-600" />
             <span className="font-medium text-gray-900">
               {selectedDate?.toLocaleDateString('fr-FR', {
                 weekday: 'long',
@@ -197,13 +197,13 @@ export default function BookingCalendar({
             </span>
           </div>
           <div className="flex items-center gap-3 mb-3">
-            <Clock className="w-5 h-5 text-blue-600" />
+            <Clock className="w-5 h-5 text-primary-600" />
             <span className="font-medium text-gray-900">
               {selectedSlot?.start} - {selectedSlot?.end}
             </span>
           </div>
           <div className="flex items-center gap-3">
-            <User className="w-5 h-5 text-blue-600" />
+            <User className="w-5 h-5 text-primary-600" />
             <span className="font-medium text-gray-900">
               {serviceName}
             </span>
@@ -219,7 +219,7 @@ export default function BookingCalendar({
             setSelectedSlot(null)
             setFormData({ clientName: '', clientPhone: '', clientEmail: '', message: '' })
           }}
-          className="text-blue-600 hover:underline"
+          className="text-primary-600 hover:underline"
         >
           Faire une autre réservation
         </button>
@@ -230,9 +230,9 @@ export default function BookingCalendar({
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6">
+      <div className="bg-gradient-to-r from-primary-600 to-primary-700 text-white p-6">
         <h3 className="text-lg font-semibold mb-1">Réserver un rendez-vous</h3>
-        <p className="text-blue-100 text-sm">{artisanName} - {serviceName}</p>
+        <p className="text-primary-100 text-sm">{artisanName} - {serviceName}</p>
       </div>
 
       {step === 'calendar' && (
@@ -288,11 +288,11 @@ export default function BookingCalendar({
                   disabled={!available || past}
                   className={`aspect-square rounded-lg text-sm font-medium transition-all ${
                     selected
-                      ? 'bg-blue-600 text-white'
+                      ? 'bg-primary-600 text-white'
                       : available && !past
                       ? 'bg-green-50 text-green-700 hover:bg-green-100 border border-green-200'
                       : isToday(date)
-                      ? 'bg-blue-50 text-blue-600'
+                      ? 'bg-primary-50 text-primary-600'
                       : past
                       ? 'text-gray-300 cursor-not-allowed'
                       : 'text-gray-400 cursor-not-allowed'
@@ -341,8 +341,8 @@ export default function BookingCalendar({
                     onClick={() => setSelectedSlot(slot)}
                     className={`flex items-center justify-center gap-2 p-3 rounded-lg border-2 transition-all ${
                       selectedSlot?.id === slot.id
-                        ? 'border-blue-500 bg-blue-50 text-blue-700'
-                        : 'border-gray-200 hover:border-blue-300 hover:bg-blue-50'
+                        ? 'border-primary-500 bg-primary-50 text-primary-700'
+                        : 'border-gray-200 hover:border-primary-300 hover:bg-primary-50'
                     }`}
                   >
                     <Clock className="w-4 h-4" />
@@ -357,7 +357,7 @@ export default function BookingCalendar({
           {selectedSlot && (
             <button
               onClick={() => setStep('form')}
-              className="w-full mt-6 bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+              className="w-full mt-6 bg-primary-600 text-white py-3 rounded-lg font-medium hover:bg-primary-700 transition-colors"
             >
               Continuer
             </button>
@@ -376,8 +376,8 @@ export default function BookingCalendar({
           )}
 
           {/* Selected slot summary */}
-          <div className="bg-blue-50 rounded-lg p-4 mb-6">
-            <div className="flex items-center gap-3 text-blue-700">
+          <div className="bg-primary-50 rounded-lg p-4 mb-6">
+            <div className="flex items-center gap-3 text-primary-700">
               <Calendar className="w-5 h-5" />
               <span className="font-medium">
                 {selectedDate?.toLocaleDateString('fr-FR', {
@@ -406,7 +406,7 @@ export default function BookingCalendar({
                   required
                   value={formData.clientName}
                   onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   placeholder="Jean Dupont"
                 />
               </div>
@@ -423,7 +423,7 @@ export default function BookingCalendar({
                   required
                   value={formData.clientPhone}
                   onChange={(e) => setFormData({ ...formData, clientPhone: e.target.value })}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   placeholder="06 12 34 56 78"
                 />
               </div>
@@ -440,7 +440,7 @@ export default function BookingCalendar({
                   required
                   value={formData.clientEmail}
                   onChange={(e) => setFormData({ ...formData, clientEmail: e.target.value })}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   placeholder="jean@exemple.fr"
                 />
               </div>
@@ -455,7 +455,7 @@ export default function BookingCalendar({
                 <textarea
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   rows={3}
                   placeholder="Décrivez brièvement votre besoin..."
                 />
@@ -481,7 +481,7 @@ export default function BookingCalendar({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex-1 bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 bg-primary-600 text-white py-3 rounded-lg font-medium hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? 'Confirmation...' : 'Confirmer le RDV'}
             </button>

@@ -134,7 +134,7 @@ export default function AdminProvidersPage() {
       return <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs font-medium">Suspendu</span>
     }
     if (!provider.is_verified) {
-      return <span className="px-2 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-medium">En attente</span>
+      return <span className="px-2 py-1 bg-secondary-100 text-secondary-700 rounded-full text-xs font-medium">En attente</span>
     }
     return <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">Vérifié</span>
   }
@@ -148,8 +148,8 @@ export default function AdminProvidersPage() {
 
   const getSubscriptionBadge = (type: string) => {
     const colors: Record<string, string> = {
-      premium: 'bg-blue-100 text-blue-700',
-      basic: 'bg-blue-100 text-blue-700',
+      premium: 'bg-primary-100 text-primary-700',
+      basic: 'bg-primary-100 text-primary-700',
       free: 'bg-gray-100 text-gray-700',
     }
     return (
@@ -196,7 +196,7 @@ export default function AdminProvidersPage() {
                 aria-label="Rechercher un artisan"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
             </div>
             <div className="flex gap-2 flex-wrap">
@@ -212,7 +212,7 @@ export default function AdminProvidersPage() {
                   disabled={loading}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                     filter === f
-                      ? 'bg-blue-600 text-white'
+                      ? 'bg-primary-600 text-white'
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   } ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
@@ -229,7 +229,7 @@ export default function AdminProvidersPage() {
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           {loading && providers.length === 0 ? (
             <div className="p-12 text-center">
-              <Loader2 className="w-8 h-8 text-blue-600 mx-auto animate-spin" />
+              <Loader2 className="w-8 h-8 text-primary-600 mx-auto animate-spin" />
               <p className="text-gray-500 mt-4">Chargement des artisans...</p>
             </div>
           ) : providers.length === 0 ? (
@@ -244,7 +244,7 @@ export default function AdminProvidersPage() {
               {filter === 'all' && !search && (
                 <Link
                   href="/admin/import"
-                  className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                  className="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
                 >
                   Importer des artisans
                 </Link>
@@ -255,7 +255,7 @@ export default function AdminProvidersPage() {
               {/* Loading overlay */}
               {loading && (
                 <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-10">
-                  <Loader2 className="w-6 h-6 text-blue-600 animate-spin" />
+                  <Loader2 className="w-6 h-6 text-primary-600 animate-spin" />
                 </div>
               )}
 
@@ -297,7 +297,7 @@ export default function AdminProvidersPage() {
                             <div className="flex items-center gap-2">
                               <p className="font-medium text-gray-900">{provider.company_name}</p>
                               {provider.source === 'sirene-open' && (
-                                <span className="px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded text-xs">SIRENE</span>
+                                <span className="px-1.5 py-0.5 bg-primary-100 text-primary-700 rounded text-xs">SIRENE</span>
                               )}
                             </div>
                             {provider.email ? (
@@ -331,7 +331,7 @@ export default function AdminProvidersPage() {
                         <td className="px-6 py-4">
                           {provider.review_count > 0 ? (
                             <div className="flex items-center gap-1">
-                              <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                              <Star className="w-4 h-4 fill-secondary-400 text-secondary-400" />
                               <span className="font-medium">{provider.rating_average}</span>
                               <span className="text-gray-500 text-sm">({provider.review_count})</span>
                             </div>
@@ -345,7 +345,7 @@ export default function AdminProvidersPage() {
                             {/* View button */}
                             <button
                               onClick={() => router.push(`/admin/artisans/${provider.id}`)}
-                              className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                              className="p-2 text-gray-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
                               title="Voir le profil"
                               aria-label="Voir le profil"
                             >

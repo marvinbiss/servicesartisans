@@ -15,7 +15,7 @@ import type { AdminRole, AdminUser } from '@/types/admin'
 
 const ROLE_LABELS: Record<AdminRole, { label: string; color: string }> = {
   super_admin: { label: 'Super Admin', color: 'bg-red-100 text-red-700' },
-  admin: { label: 'Admin', color: 'bg-blue-100 text-blue-700' },
+  admin: { label: 'Admin', color: 'bg-primary-100 text-primary-700' },
   moderator: { label: 'Modérateur', color: 'bg-green-100 text-green-700' },
   viewer: { label: 'Lecteur', color: 'bg-gray-100 text-gray-700' },
 }
@@ -134,7 +134,7 @@ export default function AdminsManagementPage() {
           </div>
           <button
             onClick={() => setAddModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
           >
             <UserPlus className="w-5 h-5" />
             Ajouter un admin
@@ -168,7 +168,7 @@ export default function AdminsManagementPage() {
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           {loading ? (
             <div className="p-8 text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto"></div>
             </div>
           ) : admins.length === 0 ? (
             <div className="p-8 text-center text-gray-500">
@@ -281,7 +281,7 @@ export default function AdminsManagementPage() {
                   onChange={(e) => setNewAdmin({ ...newAdmin, email: e.target.value })}
                   maxLength={254}
                   placeholder="admin@example.com"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                 />
               </div>
               <div>
@@ -289,7 +289,7 @@ export default function AdminsManagementPage() {
                 <select
                   value={newAdmin.role}
                   onChange={(e) => setNewAdmin({ ...newAdmin, role: e.target.value as AdminRole })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                 >
                   {Object.entries(ROLE_LABELS).map(([role, { label }]) => (
                     <option key={role} value={role}>{label}</option>
@@ -307,7 +307,7 @@ export default function AdminsManagementPage() {
               <button
                 onClick={handleAddAdmin}
                 disabled={adding || !newAdmin.email}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50"
               >
                 {adding ? 'Ajout...' : 'Ajouter'}
               </button>

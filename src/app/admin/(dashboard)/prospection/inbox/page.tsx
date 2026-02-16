@@ -9,7 +9,7 @@ import type { ProspectionConversation } from '@/types/prospection'
 
 const statusLabels: Record<string, { label: string; color: string }> = {
   open: { label: 'Ouvert', color: 'bg-green-100 text-green-700' },
-  ai_handling: { label: 'IA en cours', color: 'bg-blue-100 text-blue-700' },
+  ai_handling: { label: 'IA en cours', color: 'bg-primary-100 text-primary-700' },
   human_required: { label: 'Humain requis', color: 'bg-red-100 text-red-700' },
   resolved: { label: 'Résolu', color: 'bg-gray-100 text-gray-700' },
   archived: { label: 'Archivé', color: 'bg-gray-100 text-gray-500' },
@@ -66,7 +66,7 @@ export default function InboxPage() {
           <button
             key={s}
             onClick={() => setStatusFilter(s)}
-            className={`px-3 py-1.5 text-sm rounded-lg border ${statusFilter === s ? 'bg-blue-50 border-blue-200 text-blue-700' : 'hover:bg-gray-50'}`}
+            className={`px-3 py-1.5 text-sm rounded-lg border ${statusFilter === s ? 'bg-primary-50 border-primary-200 text-primary-700' : 'hover:bg-gray-50'}`}
           >
             {s === 'all' ? 'Toutes' : statusLabels[s]?.label || s}
           </button>
@@ -98,8 +98,8 @@ export default function InboxPage() {
               >
                 <div className="flex items-center justify-between mb-1">
                   <div className="flex items-center gap-3">
-                    <div className={`p-1.5 rounded-full ${conv.status === 'ai_handling' ? 'bg-blue-100' : 'bg-gray-100'}`}>
-                      {conv.status === 'ai_handling' ? <Bot className="w-4 h-4 text-blue-600" /> : <User className="w-4 h-4 text-gray-500" />}
+                    <div className={`p-1.5 rounded-full ${conv.status === 'ai_handling' ? 'bg-primary-100' : 'bg-gray-100'}`}>
+                      {conv.status === 'ai_handling' ? <Bot className="w-4 h-4 text-primary-600" /> : <User className="w-4 h-4 text-gray-500" />}
                     </div>
                     <div>
                       <span className="font-medium text-gray-900">

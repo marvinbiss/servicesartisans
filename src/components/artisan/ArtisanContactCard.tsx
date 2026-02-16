@@ -51,7 +51,7 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
           )}
           {artisan.average_rating > 0 && (
             <div className="flex items-center gap-1 text-xs text-slate-500">
-              <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" aria-hidden="true" />
+              <Star className="w-3.5 h-3.5 text-secondary-500 fill-secondary-500" aria-hidden="true" />
               <span className="font-semibold text-gray-900">{artisan.average_rating.toFixed(1)}</span>
             </div>
           )}
@@ -71,13 +71,13 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
           {hasPhone && (
             <a
               href={`tel:${artisan.phone!.replace(/\s/g, '')}`}
-              className="w-full py-3.5 px-4 rounded-xl bg-blue-600 text-white font-semibold flex items-center justify-center gap-2.5 shadow-md shadow-blue-500/20 hover:bg-blue-700 hover:shadow-blue-500/30 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 group"
+              className="w-full py-3.5 px-4 rounded-xl bg-primary-600 text-white font-semibold flex items-center justify-center gap-2.5 shadow-md shadow-primary-500/20 hover:bg-primary-700 hover:shadow-primary-500/30 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 group"
               aria-label={`Appeler le ${formatFrenchPhone(artisan.phone!)}`}
             >
               <Phone className="w-5 h-5 transition-transform group-hover:scale-110" aria-hidden="true" />
               <span>Appeler</span>
-              <span className="text-blue-200 font-normal">&middot;</span>
-              <span className="text-blue-100 font-normal text-sm">{formatFrenchPhone(artisan.phone!)}</span>
+              <span className="text-primary-200 font-normal">&middot;</span>
+              <span className="text-primary-100 font-normal text-sm">{formatFrenchPhone(artisan.phone!)}</span>
             </a>
           )}
 

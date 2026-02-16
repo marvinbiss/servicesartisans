@@ -157,7 +157,7 @@ export default function ReviewsSection({ artisanId, artisanName }: ReviewsSectio
   return (
     <div className="space-y-6">
       {/* Stats summary */}
-      <div className="bg-gradient-to-r from-violet-50 to-indigo-50 rounded-xl p-6">
+      <div className="bg-gradient-to-r from-violet-50 to-primary-50 rounded-xl p-6">
         <div className="flex flex-col md:flex-row md:items-center gap-6">
           {/* Average rating */}
           <div className="text-center md:text-left">

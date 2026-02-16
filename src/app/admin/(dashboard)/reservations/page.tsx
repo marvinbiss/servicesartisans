@@ -114,7 +114,7 @@ export default function AdminReservationsPage() {
                   setSearch(e.target.value)
                   setPage(1)
                 }}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
               />
             </div>
             <div className="flex gap-2 flex-wrap">
@@ -127,7 +127,7 @@ export default function AdminReservationsPage() {
                   }}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                     status === s
-                      ? 'bg-blue-600 text-white'
+                      ? 'bg-primary-600 text-white'
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
                 >
@@ -148,7 +148,7 @@ export default function AdminReservationsPage() {
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           {isLoading ? (
             <div className="p-8 text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto"></div>
             </div>
           ) : bookings.length === 0 ? (
             <div className="p-8 text-center text-gray-500">

@@ -41,11 +41,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variants = {
       primary: [
-        'bg-blue-600 text-white',
-        'hover:bg-blue-700',
-        'focus-visible:ring-blue-500',
-        'shadow-[0_4px_14px_0_rgba(37,99,235,0.25)]',
-        'hover:shadow-[0_8px_25px_0_rgba(37,99,235,0.35)]',
+        'bg-primary-600 text-white',
+        'hover:bg-primary-700',
+        'focus-visible:ring-primary-500',
+        'shadow-[0_4px_14px_0_rgba(54,65,128,0.25)]',
+        'hover:shadow-[0_8px_25px_0_rgba(54,65,128,0.35)]',
         'hover:-translate-y-[2px]',
       ],
       secondary: [
@@ -57,9 +57,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         'hover:-translate-y-[2px]',
       ],
       outline: [
-        'bg-transparent border-2 border-blue-600 text-blue-600',
-        'hover:bg-blue-50 hover:border-blue-700 hover:text-blue-700',
-        'focus-visible:ring-blue-500',
+        'bg-transparent border-2 border-primary-600 text-primary-600',
+        'hover:bg-primary-50 hover:border-primary-700 hover:text-primary-700',
+        'focus-visible:ring-primary-500',
       ],
       ghost: [
         'bg-transparent text-gray-700',
@@ -75,11 +75,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         'hover:-translate-y-[2px]',
       ],
       premium: [
-        'bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold',
-        'hover:from-amber-600 hover:via-amber-500 hover:to-amber-600',
-        'focus-visible:ring-amber-500',
-        'shadow-[0_4px_20px_0_rgba(245,158,11,0.35)]',
-        'hover:shadow-[0_10px_35px_0_rgba(245,158,11,0.45)]',
+        'bg-gradient-to-r from-secondary-500 via-secondary-400 to-secondary-500 text-white font-semibold',
+        'hover:from-secondary-600 hover:via-secondary-500 hover:to-secondary-600',
+        'focus-visible:ring-secondary-500',
+        'shadow-[0_4px_20px_0_rgba(198,122,60,0.35)]',
+        'hover:shadow-[0_10px_35px_0_rgba(198,122,60,0.45)]',
         'hover:-translate-y-[3px]',
         'relative overflow-hidden',
         'before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:translate-x-[-200%] hover:before:translate-x-[200%] before:transition-transform before:duration-700',

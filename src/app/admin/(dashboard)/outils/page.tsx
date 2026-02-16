@@ -149,7 +149,7 @@ export default function AdminToolsPage() {
               onChange={(e) => setProviderId(e.target.value)}
               placeholder="UUID de l'artisan"
               aria-label="UUID de l'artisan"
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
             />
             <button
               onClick={lookupProvider}
@@ -175,7 +175,7 @@ export default function AdminToolsPage() {
                     {providerInfo.is_active ? 'Actif' : 'Inactif'}
                   </span>
                   <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                    providerInfo.is_verified ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
+                    providerInfo.is_verified ? 'bg-primary-100 text-primary-700' : 'bg-gray-100 text-gray-600'
                   }`}>
                     {providerInfo.is_verified ? 'Référencé' : 'Non référencé'}
                   </span>
@@ -223,12 +223,12 @@ export default function AdminToolsPage() {
               placeholder="ID de l'assignation à rejouer"
               aria-label="ID de l'assignation à rejouer"
               onKeyDown={(e) => e.key === 'Enter' && replayDispatch()}
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
             />
             <button
               onClick={replayDispatch}
               disabled={loading || !assignmentId.trim()}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 disabled:opacity-50"
             >
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
               Relancer la répartition

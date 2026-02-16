@@ -135,7 +135,7 @@ export function Pagination({
                 aria-current={page === pageNum ? 'page' : undefined}
                 className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors ${
                   page === pageNum
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-primary-600 text-white'
                     : 'hover:bg-gray-100 text-gray-600'
                 }`}
               >

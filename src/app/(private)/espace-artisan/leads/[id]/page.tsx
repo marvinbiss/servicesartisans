@@ -157,7 +157,7 @@ export default function LeadDetailPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto" />
+          <Loader2 className="w-8 h-8 animate-spin text-primary-600 mx-auto" />
           <p className="text-sm text-gray-500 mt-2">Chargement...</p>
         </div>
       </div>
@@ -170,7 +170,7 @@ export default function LeadDetailPage() {
         <div className="bg-white rounded-xl border border-red-200 p-8 max-w-md text-center">
           <AlertCircle className="w-8 h-8 text-red-500 mx-auto mb-3" />
           <p className="text-red-700 font-medium">{error}</p>
-          <Link href="/espace-artisan/leads" className="text-blue-600 hover:underline text-sm mt-4 block">
+          <Link href="/espace-artisan/leads" className="text-primary-600 hover:underline text-sm mt-4 block">
             Retour aux leads
           </Link>
         </div>
@@ -311,7 +311,7 @@ export default function LeadDetailPage() {
                         step="0.01"
                         value={quoteAmount}
                         onChange={(e) => setQuoteAmount(e.target.value)}
-                        className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                         placeholder="ex: 350.00"
                       />
                     </div>
@@ -323,7 +323,7 @@ export default function LeadDetailPage() {
                         value={quoteDesc}
                         onChange={(e) => setQuoteDesc(e.target.value)}
                         rows={4}
-                        className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                         placeholder="Détails de l'intervention, matériaux, délais..."
                       />
                     </div>
@@ -331,7 +331,7 @@ export default function LeadDetailPage() {
                       <button
                         onClick={handleQuoteSubmit}
                         disabled={actionLoading === 'quote'}
-                        className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50 transition-colors"
+                        className="flex items-center gap-2 px-5 py-2.5 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 disabled:opacity-50 transition-colors"
                       >
                         {actionLoading === 'quote' ? (
                           <Loader2 className="w-4 h-4 animate-spin" />
@@ -362,7 +362,7 @@ export default function LeadDetailPage() {
                     )}
                     <button
                       onClick={() => setShowQuoteForm(true)}
-                      className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+                      className="flex items-center gap-2 px-5 py-2.5 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 transition-colors"
                     >
                       <FileText className="w-4 h-4" />
                       Envoyer un devis

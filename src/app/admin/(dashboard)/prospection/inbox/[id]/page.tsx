@@ -156,8 +156,8 @@ export default function ConversationDetailPage({ params }: { params: Promise<{ i
                 <div className={`max-w-[70%] rounded-lg px-4 py-2 ${
                   msg.direction === 'outbound'
                     ? msg.sender_type === 'ai'
-                      ? 'bg-blue-100 text-blue-900'
-                      : 'bg-blue-100 text-blue-900'
+                      ? 'bg-primary-100 text-primary-900'
+                      : 'bg-primary-100 text-primary-900'
                     : 'bg-gray-100 text-gray-900'
                 }`}>
                   <div className="flex items-center gap-1.5 mb-1 text-xs opacity-60">
@@ -194,14 +194,14 @@ export default function ConversationDetailPage({ params }: { params: Promise<{ i
             <button
               onClick={handleAIGenerate}
               disabled={generating}
-              className="flex items-center gap-2 px-4 py-2 text-sm border rounded-lg hover:bg-blue-50 text-blue-600 disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 text-sm border rounded-lg hover:bg-primary-50 text-primary-600 disabled:opacity-50"
             >
               <Sparkles className="w-4 h-4" /> {generating ? 'Génération...' : 'Générer avec IA'}
             </button>
             <button
               onClick={handleReply}
               disabled={sending || !replyText.trim() || replyText.length > MAX_REPLY_LENGTH}
-              className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 ml-auto"
+              className="flex items-center gap-2 px-4 py-2 text-sm bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 ml-auto"
             >
               <Send className="w-4 h-4" /> {sending ? 'Envoi...' : 'Envoyer'}
             </button>

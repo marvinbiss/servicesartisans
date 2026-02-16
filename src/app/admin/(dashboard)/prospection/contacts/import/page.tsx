@@ -163,7 +163,7 @@ export default function ImportPage() {
                 type="file"
                 accept=".csv,.txt"
                 onChange={(e) => handleFileChange(e.target.files?.[0] || null)}
-                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700"
+                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary-50 file:text-primary-700"
               />
               <p className="text-xs text-gray-400 mt-2">CSV avec séparateur ; ou , (encodage UTF-8) — max 50 Mo</p>
             </div>
@@ -172,7 +172,7 @@ export default function ImportPage() {
           <button
             onClick={handleUpload}
             disabled={!file || loading}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg text-sm hover:bg-primary-700 disabled:opacity-50"
           >
             {loading ? 'Analyse...' : 'Analyser le fichier'} <ArrowRight className="w-4 h-4" />
           </button>
@@ -265,7 +265,7 @@ export default function ImportPage() {
 
           <button
             onClick={() => router.push('/admin/prospection/contacts')}
-            className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700"
+            className="w-full px-4 py-2 bg-primary-600 text-white rounded-lg text-sm hover:bg-primary-700"
           >
             Voir les contacts
           </button>

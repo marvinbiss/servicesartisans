@@ -138,7 +138,7 @@ export default function AdminServicesPage() {
           </div>
           <button
             onClick={() => openEditModal(null)}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
           >
             <Plus className="w-5 h-5" />
             Nouveau service
@@ -156,7 +156,7 @@ export default function AdminServicesPage() {
                 aria-label="Rechercher un service"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
               />
             </div>
             <label className="flex items-center gap-2 cursor-pointer">
@@ -164,7 +164,7 @@ export default function AdminServicesPage() {
                 type="checkbox"
                 checked={showInactive}
                 onChange={(e) => setShowInactive(e.target.checked)}
-                className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="w-4 h-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
               />
               <span className="text-sm text-gray-600">Afficher les inactifs</span>
             </label>
@@ -184,7 +184,7 @@ export default function AdminServicesPage() {
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           {loading ? (
             <div className="p-8 text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto"></div>
             </div>
           ) : services.length === 0 ? (
             <div className="p-8 text-center text-gray-500">
@@ -222,7 +222,7 @@ export default function AdminServicesPage() {
                   <div className="flex items-center gap-2 mt-4">
                     <button
                       onClick={() => openEditModal(service)}
-                      className="flex items-center gap-1 px-3 py-1.5 text-sm text-blue-600 hover:bg-blue-50 rounded-lg"
+                      className="flex items-center gap-1 px-3 py-1.5 text-sm text-primary-600 hover:bg-primary-50 rounded-lg"
                     >
                       <Edit2 className="w-4 h-4" />
                       Modifier
@@ -264,7 +264,7 @@ export default function AdminServicesPage() {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     maxLength={200}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                     placeholder="Ex: Plomberie"
                   />
                 </div>
@@ -275,7 +275,7 @@ export default function AdminServicesPage() {
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     rows={3}
                     maxLength={2000}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 resize-none"
                     placeholder="Description du service..."
                   />
                 </div>
@@ -286,7 +286,7 @@ export default function AdminServicesPage() {
                     value={formData.icon}
                     onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
                     maxLength={100}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                     placeholder="Ex: 🔧"
                   />
                 </div>
@@ -302,7 +302,7 @@ export default function AdminServicesPage() {
                 <button
                   onClick={handleSave}
                   disabled={!formData.name}
-                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                  className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50"
                 >
                   {editModal.service ? 'Enregistrer' : 'Créer'}
                 </button>

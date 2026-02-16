@@ -78,7 +78,7 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
         className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6"
       >
         <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
-          <Camera className="w-5 h-5 text-blue-600" />
+          <Camera className="w-5 h-5 text-primary-600" />
           Réalisations ({photos.length})
           {stats.videos > 0 && (
             <span className="ml-2 text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">
@@ -86,7 +86,7 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
             </span>
           )}
           {stats.beforeAfter > 0 && (
-            <span className="ml-1 text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">
+            <span className="ml-1 text-xs bg-secondary-100 text-secondary-700 px-2 py-0.5 rounded-full">
               {stats.beforeAfter} avant/après
             </span>
           )}

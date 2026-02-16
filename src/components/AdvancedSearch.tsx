@@ -239,12 +239,12 @@ export default function AdvancedSearch({
             <button
               onClick={() => setShowFilterPanel(!showFilterPanel)}
               className={`relative p-3 rounded-lg transition-colors ${
-                showFilterPanel ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100 text-gray-600'
+                showFilterPanel ? 'bg-primary-100 text-primary-600' : 'hover:bg-gray-100 text-gray-600'
               }`}
             >
               <Sliders className="w-5 h-5" />
               {activeFiltersCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-blue-600 text-white text-xs rounded-full flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary-600 text-white text-xs rounded-full flex items-center justify-center">
                   {activeFiltersCount}
                 </span>
               )}
@@ -254,7 +254,7 @@ export default function AdvancedSearch({
           {/* Search Button */}
           <button
             onClick={handleSearch}
-            className={`bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors ${
+            className={`bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors ${
               variant === 'hero' ? 'px-8 py-3' : 'px-6 py-2'
             }`}
           >
@@ -309,8 +309,8 @@ export default function AdvancedSearch({
                         <TrendingUp className="w-4 h-4 text-gray-400" />
                       )}
                       {suggestion.type === 'artisan' && (
-                        <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                          <span className="text-blue-600 font-medium text-sm">
+                        <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
+                          <span className="text-primary-600 font-medium text-sm">
                             {suggestion.text.charAt(0)}
                           </span>
                         </div>
@@ -364,7 +364,7 @@ export default function AdvancedSearch({
                       }
                       className={`px-3 py-1.5 rounded-full text-sm transition-colors ${
                         filters.service === service
-                          ? 'bg-blue-600 text-white'
+                          ? 'bg-primary-600 text-white'
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}
                     >
@@ -418,7 +418,7 @@ export default function AdvancedSearch({
                         availability: e.target.value as any || undefined,
                       })
                     }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                   >
                     <option value="">Toutes</option>
                     <option value="today">Aujourd'hui</option>
@@ -434,7 +434,7 @@ export default function AdvancedSearch({
                   <select
                     value={filters.sortBy || 'relevance'}
                     onChange={(e) => setFilters({ ...filters, sortBy: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                   >
                     {sortOptions.map((option) => (
                       <option key={option.value} value={option.value}>
@@ -458,7 +458,7 @@ export default function AdvancedSearch({
                     setShowFilterPanel(false)
                     handleSearch()
                   }}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium"
+                  className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 text-sm font-medium"
                 >
                   Appliquer
                 </button>

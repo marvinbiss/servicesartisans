@@ -55,7 +55,7 @@ export default function MotDePasseOubliePage() {
           </p>
           <Link
             href="/connexion"
-            className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center gap-2 bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
             Retour à la connexion
@@ -71,11 +71,11 @@ export default function MotDePasseOubliePage() {
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="text-center mb-8">
             <Link href="/" className="inline-flex items-center space-x-2 mb-6">
-              <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-xl">SA</span>
               </div>
               <span className="text-2xl font-bold text-gray-900">
-                Services<span className="text-blue-600">Artisans</span>
+                Services<span className="text-primary-600">Artisans</span>
               </span>
             </Link>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
@@ -106,7 +106,7 @@ export default function MotDePasseOubliePage() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   disabled={isLoading}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:opacity-50"
                   placeholder="votre@email.com"
                 />
               </div>
@@ -115,7 +115,7 @@ export default function MotDePasseOubliePage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-primary-600 text-white py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? (
                 <>
@@ -144,7 +144,7 @@ export default function MotDePasseOubliePage() {
 
         <p className="mt-6 text-center text-sm text-gray-500">
           Vous n'avez pas de compte ?{' '}
-          <Link href="/inscription" className="text-blue-600 hover:underline">
+          <Link href="/inscription" className="text-primary-600 hover:underline">
             Créer un compte
           </Link>
         </p>

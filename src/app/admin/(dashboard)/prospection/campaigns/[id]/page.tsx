@@ -157,12 +157,12 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
     : 0
 
   const statCards = [
-    { label: 'Destinataires', value: campaign.total_recipients, icon: Users, color: 'text-blue-600 bg-blue-100' },
+    { label: 'Destinataires', value: campaign.total_recipients, icon: Users, color: 'text-primary-600 bg-primary-100' },
     { label: 'Envoy\u00e9s', value: campaign.sent_count, icon: Send, color: 'text-green-600 bg-green-100' },
-    { label: 'Livr\u00e9s', value: campaign.delivered_count, icon: CheckCircle, color: 'text-blue-600 bg-blue-100' },
-    { label: 'R\u00e9ponses', value: campaign.replied_count, icon: MessageSquare, color: 'text-blue-600 bg-blue-100' },
+    { label: 'Livr\u00e9s', value: campaign.delivered_count, icon: CheckCircle, color: 'text-primary-600 bg-primary-100' },
+    { label: 'R\u00e9ponses', value: campaign.replied_count, icon: MessageSquare, color: 'text-primary-600 bg-primary-100' },
     { label: '\u00c9checs', value: campaign.failed_count, icon: XCircle, color: 'text-red-600 bg-red-100' },
-    { label: 'Co\u00fbt', value: `${campaign.actual_cost.toFixed(2)} \u20ac`, icon: DollarSign, color: 'text-amber-600 bg-amber-100' },
+    { label: 'Co\u00fbt', value: `${campaign.actual_cost.toFixed(2)} \u20ac`, icon: DollarSign, color: 'text-secondary-600 bg-secondary-100' },
   ]
 
   return (
@@ -273,7 +273,7 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
           </div>
           <div className="w-full bg-gray-200 rounded-full h-3">
             <div
-              className="bg-blue-600 h-3 rounded-full transition-all"
+              className="bg-primary-600 h-3 rounded-full transition-all"
               style={{ width: `${sentPercent}%` }}
             />
           </div>
@@ -288,7 +288,7 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
             <div>
               <Link
                 href={`/admin/prospection/templates/${campaign.template.id}`}
-                className="text-blue-600 hover:underline font-medium text-sm"
+                className="text-primary-600 hover:underline font-medium text-sm"
               >
                 {campaign.template.name}
               </Link>
@@ -306,7 +306,7 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
             <div>
               <Link
                 href={`/admin/prospection/lists/${campaign.list.id}`}
-                className="text-blue-600 hover:underline font-medium text-sm"
+                className="text-primary-600 hover:underline font-medium text-sm"
               >
                 {campaign.list.name}
               </Link>

@@ -89,7 +89,7 @@ export function DisponibiliteSection({ provider, onSaved }: DisponibiliteSection
         <div>
           <span className="block text-sm font-medium text-gray-700 mb-3">Horaires d&apos;ouverture</span>
           {isUsingDefaults && !isDirty && (
-            <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 px-3 py-2 rounded-lg mb-3">
+            <p className="text-xs text-secondary-600 bg-secondary-50 border border-secondary-200 px-3 py-2 rounded-lg mb-3">
               Horaires par d&eacute;faut. Modifiez et enregistrez pour personnaliser.
             </p>
           )}
@@ -107,7 +107,7 @@ export function DisponibiliteSection({ provider, onSaved }: DisponibiliteSection
                         type="checkbox"
                         checked={day.ouvert}
                         onChange={(e) => updateDay(key, 'ouvert', e.target.checked)}
-                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
                       />
                       <span className="text-sm text-gray-600">Ouvert</span>
                     </label>
@@ -122,7 +122,7 @@ export function DisponibiliteSection({ provider, onSaved }: DisponibiliteSection
                           value={day.debut}
                           onChange={(e) => updateDay(key, 'debut', e.target.value)}
                           aria-label={`Heure d'ouverture ${label}`}
-                          className={`px-3 py-1.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm ${
+                          className={`px-3 py-1.5 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm ${
                             timeError ? 'border-red-400 bg-red-50' : 'border-gray-300'
                           }`}
                         />
@@ -136,7 +136,7 @@ export function DisponibiliteSection({ provider, onSaved }: DisponibiliteSection
                           value={day.fin}
                           onChange={(e) => updateDay(key, 'fin', e.target.value)}
                           aria-label={`Heure de fermeture ${label}`}
-                          className={`px-3 py-1.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm ${
+                          className={`px-3 py-1.5 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm ${
                             timeError ? 'border-red-400 bg-red-50' : 'border-gray-300'
                           }`}
                         />
@@ -167,7 +167,7 @@ export function DisponibiliteSection({ provider, onSaved }: DisponibiliteSection
               aria-checked={emergencyAvailable}
               onClick={() => setField('emergency_available', !emergencyAvailable)}
               className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                emergencyAvailable ? 'bg-blue-600' : 'bg-gray-300'
+                emergencyAvailable ? 'bg-primary-600' : 'bg-gray-300'
               }`}
             >
               <span
@@ -189,7 +189,7 @@ export function DisponibiliteSection({ provider, onSaved }: DisponibiliteSection
               aria-checked={available24h}
               onClick={() => setField('available_24h', !available24h)}
               className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                available24h ? 'bg-blue-600' : 'bg-gray-300'
+                available24h ? 'bg-primary-600' : 'bg-gray-300'
               }`}
             >
               <span
@@ -211,7 +211,7 @@ export function DisponibiliteSection({ provider, onSaved }: DisponibiliteSection
               aria-checked={acceptsNewClients}
               onClick={() => setField('accepts_new_clients', !acceptsNewClients)}
               className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                acceptsNewClients ? 'bg-blue-600' : 'bg-gray-300'
+                acceptsNewClients ? 'bg-primary-600' : 'bg-gray-300'
               }`}
             >
               <span

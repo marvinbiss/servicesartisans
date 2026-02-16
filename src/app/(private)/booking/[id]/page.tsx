@@ -190,7 +190,7 @@ export default function BookingPage() {
         )
       case 'completed':
         return (
-          <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
+          <span className="inline-flex items-center gap-1 px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-sm font-medium">
             <Check className="w-4 h-4" />
             Terminé
           </span>
@@ -203,7 +203,7 @@ export default function BookingPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
       </div>
     )
   }
@@ -223,7 +223,7 @@ export default function BookingPage() {
           </p>
           <Link
             href="/"
-            className="text-blue-600 hover:underline"
+            className="text-primary-600 hover:underline"
           >
             Retour à l'accueil
           </Link>
@@ -235,10 +235,10 @@ export default function BookingPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+      <div className="bg-gradient-to-r from-primary-600 to-primary-800 text-white">
         <div className="max-w-3xl mx-auto px-4 py-8">
           <h1 className="text-2xl font-bold mb-2">Ma réservation</h1>
-          <p className="text-blue-100">
+          <p className="text-primary-100">
             Gérez votre rendez-vous avec {booking.artisan.company_name || booking.artisan.full_name}
           </p>
         </div>
@@ -270,8 +270,8 @@ export default function BookingPage() {
 
           <div className="space-y-4">
             <div className="flex items-start gap-4">
-              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <Calendar className="w-5 h-5 text-blue-600" />
+              <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <Calendar className="w-5 h-5 text-primary-600" />
               </div>
               <div>
                 <p className="text-sm text-gray-500">Date</p>
@@ -282,8 +282,8 @@ export default function BookingPage() {
             </div>
 
             <div className="flex items-start gap-4">
-              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <Clock className="w-5 h-5 text-blue-600" />
+              <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <Clock className="w-5 h-5 text-primary-600" />
               </div>
               <div>
                 <p className="text-sm text-gray-500">Horaire</p>
@@ -294,8 +294,8 @@ export default function BookingPage() {
             </div>
 
             <div className="flex items-start gap-4">
-              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <User className="w-5 h-5 text-blue-600" />
+              <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <User className="w-5 h-5 text-primary-600" />
               </div>
               <div>
                 <p className="text-sm text-gray-500">Artisan</p>
@@ -306,8 +306,8 @@ export default function BookingPage() {
             </div>
 
             <div className="flex items-start gap-4">
-              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <MapPin className="w-5 h-5 text-blue-600" />
+              <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <MapPin className="w-5 h-5 text-primary-600" />
               </div>
               <div>
                 <p className="text-sm text-gray-500">Service</p>
@@ -357,7 +357,7 @@ export default function BookingPage() {
                 className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  <RefreshCw className="w-5 h-5 text-blue-600" />
+                  <RefreshCw className="w-5 h-5 text-primary-600" />
                   <div className="text-left">
                     <p className="font-medium text-gray-900">Reporter le rendez-vous</p>
                     <p className="text-sm text-gray-500">Choisir un autre créneau</p>
@@ -391,7 +391,7 @@ export default function BookingPage() {
           {booking.artisan.phone && (
             <a
               href={`tel:${booking.artisan.phone}`}
-              className="text-blue-600 hover:underline font-medium"
+              className="text-primary-600 hover:underline font-medium"
             >
               Contacter l'artisan
             </a>
@@ -437,7 +437,7 @@ export default function BookingPage() {
             <div className="p-6 overflow-y-auto max-h-[50vh]">
               {isLoadingSlots ? (
                 <div className="flex items-center justify-center py-8">
-                  <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+                  <Loader2 className="w-6 h-6 animate-spin text-primary-600" />
                 </div>
               ) : availableSlots.length === 0 ? (
                 <p className="text-center text-gray-500 py-8">
@@ -451,8 +451,8 @@ export default function BookingPage() {
                       onClick={() => setSelectedNewSlot(slot.id)}
                       className={`w-full p-4 rounded-lg border-2 text-left transition-colors ${
                         selectedNewSlot === slot.id
-                          ? 'border-blue-500 bg-blue-50'
-                          : 'border-gray-200 hover:border-blue-300'
+                          ? 'border-primary-500 bg-primary-50'
+                          : 'border-gray-200 hover:border-primary-300'
                       }`}
                     >
                       <div className="font-medium text-gray-900 capitalize">
@@ -482,7 +482,7 @@ export default function BookingPage() {
                 <button
                   onClick={handleReschedule}
                   disabled={!selectedNewSlot || isRescheduling}
-                  className="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="flex-1 bg-primary-600 text-white px-4 py-3 rounded-lg font-medium hover:bg-primary-700 disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {isRescheduling && <Loader2 className="w-4 h-4 animate-spin" />}
                   Confirmer

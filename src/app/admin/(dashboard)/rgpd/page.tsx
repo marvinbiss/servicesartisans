@@ -190,13 +190,13 @@ export default function AdminRgpdPage() {
                 value={searchEmail}
                 onChange={(e) => setSearchEmail(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && searchUser()}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
               />
             </div>
             <button
               onClick={searchUser}
               disabled={searching || !searchEmail}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+              className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50"
             >
               {searching ? 'Recherche...' : 'Rechercher'}
             </button>
@@ -218,7 +218,7 @@ export default function AdminRgpdPage() {
                   <button
                     onClick={() => handleExport(foundUser.id)}
                     disabled={exportingUser === foundUser.id}
-                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                    className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50"
                   >
                     <Download className="w-4 h-4" />
                     {exportingUser === foundUser.id ? 'Export...' : 'Exporter'}
@@ -241,11 +241,11 @@ export default function AdminRgpdPage() {
         </div>
 
         {/* Warning */}
-        <div className="flex items-start gap-3 p-4 bg-amber-50 border border-amber-200 rounded-lg mb-6">
-          <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+        <div className="flex items-start gap-3 p-4 bg-secondary-50 border border-secondary-200 rounded-lg mb-6">
+          <AlertTriangle className="w-5 h-5 text-secondary-600 flex-shrink-0 mt-0.5" />
           <div>
-            <p className="font-medium text-amber-800">Attention</p>
-            <p className="text-sm text-amber-700">
+            <p className="font-medium text-secondary-800">Attention</p>
+            <p className="text-sm text-secondary-700">
               La suppression des données est irréversible. Assurez-vous d&apos;avoir effectué un export avant toute suppression.
               Les données seront anonymisées conformément au RGPD.
             </p>
@@ -267,7 +267,7 @@ export default function AdminRgpdPage() {
                     }}
                     className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                       status === s
-                        ? 'bg-blue-600 text-white'
+                        ? 'bg-primary-600 text-white'
                         : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                     }`}
                   >
@@ -282,7 +282,7 @@ export default function AdminRgpdPage() {
 
           {loading ? (
             <div className="p-8 text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto"></div>
             </div>
           ) : requests.length === 0 ? (
             <div className="p-8 text-center text-gray-500">
@@ -297,10 +297,10 @@ export default function AdminRgpdPage() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
                         <div className={`p-2 rounded-lg ${
-                          request.request_type === 'export' ? 'bg-blue-100' : 'bg-red-100'
+                          request.request_type === 'export' ? 'bg-primary-100' : 'bg-red-100'
                         }`}>
                           {request.request_type === 'export' ? (
-                            <Download className={`w-5 h-5 text-blue-600`} />
+                            <Download className={`w-5 h-5 text-primary-600`} />
                           ) : (
                             <Trash2 className={`w-5 h-5 text-red-600`} />
                           )}

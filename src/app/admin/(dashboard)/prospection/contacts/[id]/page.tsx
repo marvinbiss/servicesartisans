@@ -304,7 +304,7 @@ export default function ContactDetailPage({ params }: { params: Promise<{ id: st
                   <button
                     onClick={handleSaveEdit}
                     disabled={savingEdit}
-                    className="flex items-center gap-1 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                    className="flex items-center gap-1 px-4 py-2 text-sm bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50"
                   >
                     <Save className="w-4 h-4" /> {savingEdit ? 'Sauvegarde...' : 'Sauvegarder'}
                   </button>
@@ -393,7 +393,7 @@ export default function ContactDetailPage({ params }: { params: Promise<{ id: st
                       <span className={`text-xs px-2 py-0.5 rounded-full ${
                         msg.status === 'delivered' || msg.status === 'read' || msg.status === 'replied' ? 'bg-green-100 text-green-700'
                           : msg.status === 'failed' || msg.status === 'bounced' ? 'bg-red-100 text-red-700'
-                          : msg.status === 'sent' ? 'bg-blue-100 text-blue-700'
+                          : msg.status === 'sent' ? 'bg-primary-100 text-primary-700'
                           : msg.status === 'queued' || msg.status === 'sending' ? 'bg-yellow-100 text-yellow-700'
                           : msg.status === 'opted_out' || msg.status === 'cancelled' ? 'bg-gray-100 text-gray-600'
                           : 'bg-gray-100 text-gray-700'
@@ -462,7 +462,7 @@ export default function ContactDetailPage({ params }: { params: Promise<{ id: st
                   <Link
                     key={list.id}
                     href={`/admin/prospection/lists/${list.id}`}
-                    className="block text-sm text-blue-600 hover:underline py-1"
+                    className="block text-sm text-primary-600 hover:underline py-1"
                   >
                     {list.name}
                     <span className="text-xs text-gray-400 ml-2">({list.contact_count})</span>

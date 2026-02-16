@@ -54,7 +54,7 @@ type StatusFilter = 'all' | 'en_attente' | 'en_traitement' | 'devis_recus' | 'te
 
 const STATUS_COLORS: Record<string, string> = {
   en_attente: 'bg-yellow-100 text-yellow-700',
-  en_traitement: 'bg-blue-100 text-blue-700',
+  en_traitement: 'bg-primary-100 text-primary-700',
   devis_recus: 'bg-green-100 text-green-700',
   accepte: 'bg-emerald-100 text-emerald-700',
   termine: 'bg-green-100 text-green-800',
@@ -217,7 +217,7 @@ export default function MesDemandesPage() {
                   placeholder="Rechercher..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9 pr-4 py-2 w-full sm:w-56 text-sm border border-gray-200 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="pl-9 pr-4 py-2 w-full sm:w-56 text-sm border border-gray-200 rounded-lg bg-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 />
               </div>
             </div>
@@ -231,7 +231,7 @@ export default function MesDemandesPage() {
 
             {loading ? (
               <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-                <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto" />
+                <Loader2 className="w-8 h-8 animate-spin text-primary-600 mx-auto" />
                 <p className="text-sm text-gray-500 mt-2">Chargement...</p>
               </div>
             ) : filtered.length === 0 ? (
@@ -257,13 +257,13 @@ export default function MesDemandesPage() {
                       <Link
                         key={lead.id}
                         href={`/espace-client/mes-demandes/${lead.id}`}
-                        className="block bg-white rounded-xl border border-gray-100 transition-all hover:shadow-md hover:border-blue-200 group"
+                        className="block bg-white rounded-xl border border-gray-100 transition-all hover:shadow-md hover:border-primary-200 group"
                       >
                         <div className="p-5">
                           <div className="flex items-start justify-between gap-4">
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2 mb-2 flex-wrap">
-                                <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                                <h3 className="font-semibold text-gray-900 group-hover:text-primary-600 transition-colors">
                                   {lead.service_name}
                                 </h3>
                                 <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${urg.cls}`}>
@@ -297,7 +297,7 @@ export default function MesDemandesPage() {
                               </div>
                             </div>
 
-                            <ChevronRight className="w-5 h-5 text-gray-300 group-hover:text-blue-500 flex-shrink-0 mt-1 transition-colors" />
+                            <ChevronRight className="w-5 h-5 text-gray-300 group-hover:text-primary-500 flex-shrink-0 mt-1 transition-colors" />
                           </div>
                         </div>
                       </Link>

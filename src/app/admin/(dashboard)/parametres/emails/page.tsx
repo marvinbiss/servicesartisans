@@ -247,8 +247,8 @@ export default function EmailTemplatesPage() {
               {/* Header */}
               <div className="px-6 py-4 flex items-center justify-between border-b border-gray-100">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-blue-100 rounded-lg">
-                    <Mail className="w-5 h-5 text-blue-600" />
+                  <div className="p-2 bg-primary-100 rounded-lg">
+                    <Mail className="w-5 h-5 text-primary-600" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900">{template.name}</h3>
@@ -260,7 +260,7 @@ export default function EmailTemplatesPage() {
                     onClick={() => handlePreview(template)}
                     className={`p-2 rounded-lg transition-colors ${
                       previewId === template.id
-                        ? 'bg-blue-100 text-blue-600'
+                        ? 'bg-primary-100 text-primary-600'
                         : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
                     }`}
                     title="Prévisualiser"
@@ -272,7 +272,7 @@ export default function EmailTemplatesPage() {
                     onClick={() => handleEdit(template)}
                     className={`p-2 rounded-lg transition-colors ${
                       editingId === template.id
-                        ? 'bg-blue-100 text-blue-600'
+                        ? 'bg-primary-100 text-primary-600'
                         : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
                     }`}
                     title="Modifier"
@@ -294,7 +294,7 @@ export default function EmailTemplatesPage() {
                       type="text"
                       value={editSubject}
                       onChange={(e) => setEditSubject(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                     />
                   </div>
                   <div>
@@ -305,7 +305,7 @@ export default function EmailTemplatesPage() {
                       value={editContent}
                       onChange={(e) => setEditContent(e.target.value)}
                       rows={10}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 font-mono text-sm"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 font-mono text-sm"
                     />
                   </div>
                   <div>
@@ -331,7 +331,7 @@ export default function EmailTemplatesPage() {
                     <button
                       onClick={handleSave}
                       disabled={saving}
-                      className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                      className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50"
                     >
                       <Save className="w-4 h-4" />
                       {saving ? 'Enregistrement...' : 'Enregistrer'}
@@ -366,9 +366,9 @@ export default function EmailTemplatesPage() {
         </div>
 
         {/* Info */}
-        <div className="mt-8 bg-blue-50 border border-blue-200 rounded-xl p-4">
-          <h3 className="font-medium text-blue-900 mb-2">À propos des templates</h3>
-          <p className="text-sm text-blue-700">
+        <div className="mt-8 bg-primary-50 border border-primary-200 rounded-xl p-4">
+          <h3 className="font-medium text-primary-900 mb-2">À propos des templates</h3>
+          <p className="text-sm text-primary-700">
             Les modifications apportées aux templates seront appliquées à tous les futurs emails.
             Les variables entre doubles accolades (ex: {"{{user_name}}"}) seront automatiquement
             remplacées par les valeurs réelles lors de l&apos;envoi.

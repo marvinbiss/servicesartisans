@@ -138,7 +138,7 @@ export default function AdminSignalementsPage() {
                   }}
                   className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                     status === s
-                      ? 'bg-blue-600 text-white'
+                      ? 'bg-primary-600 text-white'
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
                 >
@@ -156,7 +156,7 @@ export default function AdminSignalementsPage() {
                 setPage(1)
               }}
               aria-label="Filtrer par type de cible"
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
             >
               <option value="all">Tous les types</option>
               <option value="provider">Artisans</option>
@@ -174,7 +174,7 @@ export default function AdminSignalementsPage() {
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           {isLoading ? (
             <div className="p-8 text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto"></div>
             </div>
           ) : reports.length === 0 ? (
             <div className="p-8 text-center text-gray-500">
@@ -192,7 +192,7 @@ export default function AdminSignalementsPage() {
                           <AlertTriangle className={`w-5 h-5 ${
                             report.reason === 'harassment' || report.reason === 'inappropriate'
                               ? 'text-red-500'
-                              : 'text-amber-500'
+                              : 'text-secondary-500'
                           }`} />
                           {getReasonBadge(report.reason)}
                           <ReportStatusBadge status={report.status} />
@@ -302,7 +302,7 @@ export default function AdminSignalementsPage() {
                   onChange={(e) => setResolutionNotes(e.target.value)}
                   rows={3}
                   maxLength={2000}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 resize-none"
                   placeholder="Décrivez les actions prises..."
                 />
               </div>

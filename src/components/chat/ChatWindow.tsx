@@ -161,7 +161,7 @@ export function ChatWindow({
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-96">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600" />
       </div>
     )
   }
@@ -179,8 +179,8 @@ export function ChatWindow({
               loading="lazy"
             />
           ) : (
-            <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
-              <span className="text-blue-600 dark:text-blue-300 font-medium">
+            <div className="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center">
+              <span className="text-primary-600 dark:text-primary-300 font-medium">
                 {otherUserName.charAt(0).toUpperCase()}
               </span>
             </div>
@@ -221,7 +221,7 @@ export function ChatWindow({
                   className={cn(
                     'max-w-[70%] rounded-2xl px-4 py-2',
                     isOwn
-                      ? 'bg-blue-600 text-white rounded-br-md'
+                      ? 'bg-primary-600 text-white rounded-br-md'
                       : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-bl-md'
                   )}
                 >
@@ -235,16 +235,16 @@ export function ChatWindow({
                     <span
                       className={cn(
                         'text-xs',
-                        isOwn ? 'text-blue-200' : 'text-gray-400'
+                        isOwn ? 'text-primary-200' : 'text-gray-400'
                       )}
                     >
                       {formatTime(message.created_at)}
                     </span>
                     {isOwn && (
                       message.read_at ? (
-                        <CheckCheck className="w-3 h-3 text-blue-200" />
+                        <CheckCheck className="w-3 h-3 text-primary-200" />
                       ) : (
-                        <Check className="w-3 h-3 text-blue-200" />
+                        <Check className="w-3 h-3 text-primary-200" />
                       )
                     )}
                   </div>

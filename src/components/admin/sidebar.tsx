@@ -114,7 +114,7 @@ export function AdminSidebar() {
                 className={clsx(
                   'flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors',
                   isActive(item.href)
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-primary-600 text-white'
                     : 'text-gray-400 hover:bg-gray-800 hover:text-white'
                 )}
               >

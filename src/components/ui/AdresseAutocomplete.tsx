@@ -158,7 +158,7 @@ export function AdresseAutocomplete({
           className={`
             w-full pl-10 pr-12 py-3
             bg-white border border-gray-200 rounded-xl
-            focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20
+            focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20
             placeholder:text-gray-400 text-gray-900
             disabled:bg-gray-100 disabled:cursor-not-allowed
             transition-all
@@ -209,7 +209,7 @@ export function AdresseAutocomplete({
                 flex items-start gap-3
                 transition-colors
                 ${index === highlightedIndex
-                  ? 'bg-blue-50 text-blue-900'
+                  ? 'bg-primary-50 text-primary-900'
                   : 'hover:bg-gray-50 text-gray-900'
                 }
                 ${index === 0 ? 'rounded-t-xl' : ''}
@@ -219,7 +219,7 @@ export function AdresseAutocomplete({
               aria-selected={index === highlightedIndex}
             >
               <span className={`mt-0.5 flex-shrink-0 ${
-                index === highlightedIndex ? 'text-blue-600' : 'text-gray-400'
+                index === highlightedIndex ? 'text-primary-600' : 'text-gray-400'
               }`}>
                 {getTypeIcon(suggestion.type)}
               </span>

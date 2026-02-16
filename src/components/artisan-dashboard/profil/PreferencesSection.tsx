@@ -74,7 +74,7 @@ export function PreferencesSection({ provider, onSaved }: PreferencesSectionProp
                   type="checkbox"
                   checked={paymentMethods.includes(method)}
                   onChange={() => togglePayment(method)}
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
                 />
                 <span className="text-sm text-gray-700">{method}</span>
               </label>
@@ -92,13 +92,13 @@ export function PreferencesSection({ provider, onSaved }: PreferencesSectionProp
             {languages.map((lang, index) => (
               <span
                 key={index}
-                className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm flex items-center gap-2"
+                className="bg-primary-100 text-primary-700 px-3 py-1 rounded-full text-sm flex items-center gap-2"
               >
                 {lang}
                 <button
                   type="button"
                   onClick={() => removeLanguage(index)}
-                  className="hover:text-blue-900"
+                  className="hover:text-primary-900"
                   aria-label={`Supprimer ${lang}`}
                 >
                   <X className="w-3.5 h-3.5" />
@@ -119,13 +119,13 @@ export function PreferencesSection({ provider, onSaved }: PreferencesSectionProp
               onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addLanguage() } }}
               placeholder="Ex: Français, Anglais, Arabe..."
               maxLength={50}
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             />
             <button
               type="button"
               onClick={addLanguage}
               disabled={languages.length >= 10}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+              className="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50"
             >
               <Plus className="w-5 h-5" />
             </button>

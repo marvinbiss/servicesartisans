@@ -77,7 +77,7 @@ export function SavedSearches({
         {onCreateNew && (
           <button
             onClick={onCreateNew}
-            className="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700"
+            className="flex items-center gap-1 text-sm text-primary-600 hover:text-primary-700"
           >
             <Plus className="w-4 h-4" />
             Nouvelle alerte
@@ -94,7 +94,7 @@ export function SavedSearches({
           {onCreateNew && (
             <button
               onClick={onCreateNew}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
             >
               Créer une alerte
             </button>
@@ -119,7 +119,7 @@ export function SavedSearches({
                         {search.name}
                       </span>
                       {search.newResultsCount > 0 && (
-                        <span className="px-1.5 py-0.5 text-xs font-medium bg-blue-100 text-blue-600 rounded-full">
+                        <span className="px-1.5 py-0.5 text-xs font-medium bg-primary-100 text-primary-600 rounded-full">
                           +{search.newResultsCount}
                         </span>
                       )}
@@ -164,7 +164,7 @@ export function SavedSearches({
                             className={cn(
                               'flex items-center gap-2 px-2 py-1 rounded text-sm',
                               search.frequency === option.value
-                                ? 'bg-blue-100 text-blue-700'
+                                ? 'bg-primary-100 text-primary-700'
                                 : 'hover:bg-gray-100 dark:hover:bg-gray-600'
                             )}
                           >
@@ -188,7 +188,7 @@ export function SavedSearches({
                           className={cn(
                             'p-2 rounded-lg transition-colors',
                             search.frequency !== 'never'
-                              ? 'text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20'
+                              ? 'text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20'
                               : 'text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
                           )}
                           title="Modifier les alertes"

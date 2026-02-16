@@ -68,7 +68,7 @@ export default function ArtisanLeadStatsPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto" />
+          <Loader2 className="w-8 h-8 animate-spin text-primary-600 mx-auto" />
           <p className="text-sm text-gray-500 mt-2">Chargement des statistiques...</p>
         </div>
       </div>
@@ -121,7 +121,7 @@ export default function ArtisanLeadStatsPage() {
         </Link>
 
         <div className="flex items-center gap-3 mb-6">
-          <BarChart3 className="w-6 h-6 text-blue-600" />
+          <BarChart3 className="w-6 h-6 text-primary-600" />
           <h1 className="text-2xl font-bold text-gray-900">Statistiques Leads</h1>
         </div>
 
@@ -160,7 +160,7 @@ export default function ArtisanLeadStatsPage() {
             <h3 className="text-sm font-semibold text-gray-900 mb-4">Répartition par statut</h3>
             <div className="space-y-3">
               {[
-                { label: 'En attente', value: stats.pending, color: 'bg-blue-500', icon: <Clock className="w-4 h-4 text-blue-500" /> },
+                { label: 'En attente', value: stats.pending, color: 'bg-primary-500', icon: <Clock className="w-4 h-4 text-primary-500" /> },
                 { label: 'Consultés', value: stats.viewed, color: 'bg-yellow-500', icon: <TrendingUp className="w-4 h-4 text-yellow-500" /> },
                 { label: 'Devis envoyé', value: stats.quoted, color: 'bg-green-500', icon: <Send className="w-4 h-4 text-green-500" /> },
                 { label: 'Déclinés', value: stats.declined, color: 'bg-gray-400', icon: <X className="w-4 h-4 text-gray-400" /> },
@@ -195,7 +195,7 @@ export default function ArtisanLeadStatsPage() {
                 <span className="text-xs font-semibold text-gray-900 tabular-nums">{m.count}</span>
                 <div className="w-full bg-gray-100 rounded-t-md overflow-hidden" style={{ height: '100%' }}>
                   <div
-                    className="w-full bg-blue-500 rounded-t-md transition-all duration-500"
+                    className="w-full bg-primary-500 rounded-t-md transition-all duration-500"
                     style={{
                       height: `${(m.count / maxMonthly) * 100}%`,
                       minHeight: m.count > 0 ? '4px' : '0px',

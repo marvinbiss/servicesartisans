@@ -139,9 +139,9 @@ export function MessageInput({
       {/* Reply/Edit banner */}
       {(replyTo || editingMessage) && (
         <div className="flex items-center gap-3 px-4 py-2 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-          <MessageSquare className="w-4 h-4 text-blue-600" />
+          <MessageSquare className="w-4 h-4 text-primary-600" />
           <div className="flex-1 min-w-0">
-            <div className="text-xs text-blue-600 font-medium">
+            <div className="text-xs text-primary-600 font-medium">
               {editingMessage ? 'Modification du message' : 'Réponse à'}
             </div>
             <p className="text-sm text-gray-600 dark:text-gray-300 truncate">
@@ -240,7 +240,7 @@ export function MessageInput({
               className={cn(
                 'p-2 rounded-full transition-colors',
                 showQuickReplies
-                  ? 'text-blue-600 bg-blue-50 dark:bg-blue-900/30'
+                  ? 'text-primary-600 bg-primary-50 dark:bg-primary-900/30'
                   : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
               )}
               title="Réponses rapides"
@@ -258,7 +258,7 @@ export function MessageInput({
               className={cn(
                 'p-2 rounded-full transition-colors',
                 showEmojiPicker
-                  ? 'text-blue-600 bg-blue-50 dark:bg-blue-900/30'
+                  ? 'text-primary-600 bg-primary-50 dark:bg-primary-900/30'
                   : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
               )}
               title="Ajouter un emoji"

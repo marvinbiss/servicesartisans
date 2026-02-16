@@ -92,7 +92,7 @@ export default function PortfolioCard({
 
         {/* Featured badge */}
         {item.is_featured && (
-          <div className="absolute top-3 right-3 p-1.5 bg-amber-500 rounded-lg">
+          <div className="absolute top-3 right-3 p-1.5 bg-secondary-500 rounded-lg">
             <Star className="w-4 h-4 text-white" fill="currentColor" />
           </div>
         )}
@@ -176,7 +176,7 @@ export default function PortfolioCard({
                         }}
                         className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50"
                       >
-                        <Star className={clsx('w-4 h-4', item.is_featured && 'text-amber-500')} />
+                        <Star className={clsx('w-4 h-4', item.is_featured && 'text-secondary-500')} />
                         {item.is_featured ? 'Retirer des favoris' : 'Mettre en avant'}
                       </button>
                     )}

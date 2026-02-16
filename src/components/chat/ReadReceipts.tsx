@@ -28,7 +28,7 @@ export function ReadReceipts({ receipts, isOwn, className }: ReadReceiptsProps) 
     <div
       className={cn(
         'flex items-center gap-1 text-xs',
-        hasBeenRead ? 'text-blue-400' : 'text-gray-400',
+        hasBeenRead ? 'text-primary-400' : 'text-gray-400',
         className
       )}
       title={

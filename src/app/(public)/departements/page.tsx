@@ -73,15 +73,15 @@ export default function DepartementsIndexPage() {
           </div>
 
           <div className="text-center max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-500/15 backdrop-blur-sm rounded-full border border-indigo-400/25 mb-6">
-              <Map className="w-4 h-4 text-indigo-400" />
-              <span className="text-sm font-medium text-indigo-200">Départements</span>
-              <span className="w-1 h-1 rounded-full bg-indigo-400/50" />
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-500/15 backdrop-blur-sm rounded-full border border-primary-400/25 mb-6">
+              <Map className="w-4 h-4 text-primary-400" />
+              <span className="text-sm font-medium text-primary-200">Départements</span>
+              <span className="w-1 h-1 rounded-full bg-primary-400/50" />
               <span className="text-sm font-medium text-white/90">Couverture nationale complète</span>
             </div>
 
-            <h1 className="font-heading text-4xl md:text-5xl lg:text-[3.5rem] font-extrabold mb-6 tracking-[-0.025em] leading-[1.08]">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-indigo-300 to-blue-300">
+            <h1 className="font-heading text-4xl md:text-5xl lg:text-[3.5rem] mb-6 leading-[1.08]">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 via-primary-300 to-primary-300">
                 101
               </span>{' '}
               départements couverts
@@ -95,21 +95,21 @@ export default function DepartementsIndexPage() {
           {/* Stats badges */}
           <div className="flex flex-wrap justify-center gap-4 md:gap-6 mt-10">
             <div className="flex items-center gap-3 px-5 py-3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/10">
-              <Building2 className="w-5 h-5 text-indigo-400" />
+              <Building2 className="w-5 h-5 text-primary-400" />
               <div className="text-left">
                 <div className="text-xl font-bold text-white">101</div>
                 <div className="text-xs text-slate-400">Départements</div>
               </div>
             </div>
             <div className="flex items-center gap-3 px-5 py-3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/10">
-              <MapPin className="w-5 h-5 text-indigo-400" />
+              <MapPin className="w-5 h-5 text-primary-400" />
               <div className="text-left">
                 <div className="text-xl font-bold text-white">18</div>
                 <div className="text-xs text-slate-400">Régions</div>
               </div>
             </div>
             <div className="flex items-center gap-3 px-5 py-3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/10">
-              <Users className="w-5 h-5 text-indigo-400" />
+              <Users className="w-5 h-5 text-primary-400" />
               <div className="text-left">
                 <div className="text-xl font-bold text-white">350 000+</div>
                 <div className="text-xs text-slate-400">Artisans référencés</div>
@@ -122,7 +122,7 @@ export default function DepartementsIndexPage() {
       {/* ─── DEPARTMENTS BY REGION ──────────────────────────── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center mb-12">
-          <h2 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-3 tracking-tight">
+          <h2 className="font-heading text-2xl md:text-3xl text-slate-900 mb-3">
             Tous les départements par région
           </h2>
           <p className="text-slate-500 max-w-lg mx-auto">
@@ -133,10 +133,10 @@ export default function DepartementsIndexPage() {
         {sortedRegions.map(([region, regionDepts]) => (
           <section key={region} className="mb-12">
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
-                <Building2 className="w-4 h-4 text-indigo-600" />
+              <div className="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center">
+                <Building2 className="w-4 h-4 text-primary-700" />
               </div>
-              <h3 className="font-heading text-lg font-bold text-slate-900 tracking-tight">{region}</h3>
+              <h3 className="font-heading text-lg text-slate-900">{region}</h3>
               <span className="text-sm text-slate-400 font-medium">({regionDepts.length} départements)</span>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
@@ -144,13 +144,13 @@ export default function DepartementsIndexPage() {
                 <Link
                   key={dept.slug}
                   href={`/departements/${dept.slug}`}
-                  className="flex items-center gap-3 bg-white rounded-xl border border-gray-200 p-4 hover:border-indigo-300 hover:shadow-md hover:-translate-y-0.5 transition-all group"
+                  className="flex items-center gap-3 bg-white rounded-xl border border-gray-200 p-4 hover:border-primary-300 hover:shadow-md hover:-translate-y-0.5 transition-all group"
                 >
-                  <div className="w-11 h-11 bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-xl flex items-center justify-center text-indigo-600 font-bold text-sm flex-shrink-0 group-hover:from-indigo-100 group-hover:to-indigo-200 transition-colors">
+                  <div className="w-11 h-11 bg-gradient-to-br from-primary-50 to-primary-100 rounded-xl flex items-center justify-center text-primary-700 font-bold text-sm flex-shrink-0 group-hover:from-primary-100 group-hover:to-primary-200 transition-colors">
                     {dept.code}
                   </div>
                   <div className="min-w-0">
-                    <span className="text-sm font-semibold text-slate-800 group-hover:text-indigo-600 transition-colors block truncate">{dept.name}</span>
+                    <span className="text-sm font-semibold text-slate-800 group-hover:text-primary-700 transition-colors block truncate">{dept.name}</span>
                     <span className="text-xs text-slate-400">{dept.population} hab.</span>
                   </div>
                 </Link>
@@ -166,14 +166,14 @@ export default function DepartementsIndexPage() {
           background: 'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(79,70,229,0.12) 0%, transparent 60%)',
         }} />
         <div className="relative max-w-4xl mx-auto px-4 py-16 md:py-20 text-center">
-          <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">
+          <h2 className="font-heading text-2xl md:text-3xl text-white mb-4">
             Besoin d&apos;un artisan ?
           </h2>
           <p className="text-slate-400 mb-8 max-w-lg mx-auto">
             Décrivez votre projet et recevez des devis gratuits de professionnels référencés.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/devis" className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-300">
+            <Link href="/devis" className="inline-flex items-center gap-2 bg-gradient-to-r from-secondary-500 via-secondary-400 to-secondary-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-secondary-500/25 hover:shadow-xl hover:shadow-secondary-500/35 hover:-translate-y-0.5 transition-all duration-300">
               Demander un devis gratuit
             </Link>
             <Link href="/services" className="inline-flex items-center gap-2 text-slate-300 hover:text-white font-medium transition-colors">
@@ -186,7 +186,7 @@ export default function DepartementsIndexPage() {
       {/* ─── SEO INTERNAL LINKS ─────────────────────────────── */}
       <section className="py-16 bg-white border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-xl font-bold text-slate-900 mb-8 tracking-tight">
+          <h2 className="font-heading text-xl text-slate-900 mb-8">
             Explorer également
           </h2>
           <div className="grid md:grid-cols-3 gap-10">
@@ -195,13 +195,13 @@ export default function DepartementsIndexPage() {
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Par région</h3>
               <div className="space-y-2">
                 {regions.slice(0, 8).map((r) => (
-                  <Link key={r.slug} href={`/regions/${r.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
+                  <Link key={r.slug} href={`/regions/${r.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-primary-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     Artisans en {r.name}
                   </Link>
                 ))}
               </div>
-              <Link href="/regions" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
+              <Link href="/regions" className="inline-flex items-center gap-1 text-primary-600 hover:text-primary-700 text-sm font-medium mt-3">
                 Toutes les régions <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -211,13 +211,13 @@ export default function DepartementsIndexPage() {
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Grandes villes</h3>
               <div className="space-y-2">
                 {villes.slice(0, 12).map((v) => (
-                  <Link key={v.slug} href={`/villes/${v.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
+                  <Link key={v.slug} href={`/villes/${v.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-primary-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     Artisans à {v.name}
                   </Link>
                 ))}
               </div>
-              <Link href="/villes" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
+              <Link href="/villes" className="inline-flex items-center gap-1 text-primary-600 hover:text-primary-700 text-sm font-medium mt-3">
                 Toutes les villes <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -227,13 +227,13 @@ export default function DepartementsIndexPage() {
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Services populaires</h3>
               <div className="space-y-2">
                 {services.slice(0, 8).map((s) => (
-                  <Link key={s.slug} href={`/services/${s.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
+                  <Link key={s.slug} href={`/services/${s.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-primary-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {s.name}
                   </Link>
                 ))}
               </div>
-              <Link href="/services" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
+              <Link href="/services" className="inline-flex items-center gap-1 text-primary-600 hover:text-primary-700 text-sm font-medium mt-3">
                 Tous les services <ArrowRight className="w-4 h-4" />
               </Link>
             </div>

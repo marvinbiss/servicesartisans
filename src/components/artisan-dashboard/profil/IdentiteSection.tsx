@@ -44,7 +44,7 @@ export function IdentiteSection({ provider, onSaved }: IdentiteSectionProps) {
               onChange={(e) => setField('name', e.target.value)}
               minLength={2}
               maxLength={100}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             />
           </div>
           <div>
@@ -58,7 +58,7 @@ export function IdentiteSection({ provider, onSaved }: IdentiteSectionProps) {
               onChange={(e) => setField('legal_form', e.target.value)}
               maxLength={100}
               placeholder="Ex: SARL, SAS, Auto-entrepreneur..."
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             />
           </div>
         </div>
@@ -80,7 +80,7 @@ export function IdentiteSection({ provider, onSaved }: IdentiteSectionProps) {
               readOnly={isVerified}
               aria-describedby="siret-help"
               aria-readonly={isVerified}
-              className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+              className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 ${
                 isVerified ? 'bg-gray-100 cursor-not-allowed' : ''
               }`}
             />
@@ -98,7 +98,7 @@ export function IdentiteSection({ provider, onSaved }: IdentiteSectionProps) {
               value={(formData.creation_date as string) || ''}
               onChange={(e) => setField('creation_date', e.target.value)}
               maxLength={20}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             />
           </div>
         </div>
@@ -115,7 +115,7 @@ export function IdentiteSection({ provider, onSaved }: IdentiteSectionProps) {
               onChange={(e) => setField('employee_count', e.target.value ? parseInt(e.target.value, 10) : null)}
               min={0}
               max={10000}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             />
           </div>
           <div>
@@ -129,7 +129,7 @@ export function IdentiteSection({ provider, onSaved }: IdentiteSectionProps) {
               onChange={(e) => setField('experience_years', e.target.value ? parseInt(e.target.value, 10) : null)}
               min={0}
               max={100}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             />
           </div>
         </div>
@@ -147,7 +147,7 @@ export function IdentiteSection({ provider, onSaved }: IdentiteSectionProps) {
               min={1}
               max={1000}
               placeholder="Ex : 3"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             />
             <p className="text-xs text-gray-500 mt-1">Nombre de personnes dans votre entreprise</p>
           </div>

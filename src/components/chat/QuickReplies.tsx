@@ -56,7 +56,7 @@ export function QuickReplies({ templates, onSelect, onClose }: QuickRepliesProps
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Rechercher..."
-            className="w-full pl-9 pr-3 py-2 text-sm bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full pl-9 pr-3 py-2 text-sm bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
           />
         </div>
 
@@ -68,7 +68,7 @@ export function QuickReplies({ templates, onSelect, onClose }: QuickRepliesProps
               className={cn(
                 'px-2 py-1 text-xs rounded-full transition-colors',
                 !selectedCategory
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-primary-600 text-white'
                   : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
               )}
             >
@@ -81,7 +81,7 @@ export function QuickReplies({ templates, onSelect, onClose }: QuickRepliesProps
                 className={cn(
                   'px-2 py-1 text-xs rounded-full transition-colors capitalize',
                   selectedCategory === cat
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-primary-600 text-white'
                     : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                 )}
               >

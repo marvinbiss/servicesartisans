@@ -33,9 +33,9 @@ export function ProviderCard({ provider, showContact = false }: ProviderCardProp
             key={star}
             className={`w-4 h-4 ${
               star <= rating
-                ? 'fill-amber-400 text-amber-400'
+                ? 'fill-secondary-400 text-secondary-400'
                 : star - 0.5 <= rating
-                ? 'fill-amber-400/50 text-amber-400'
+                ? 'fill-secondary-400/50 text-secondary-400'
                 : 'text-gray-300'
             }`}
           />
@@ -69,17 +69,17 @@ export function ProviderCard({ provider, showContact = false }: ProviderCardProp
             <div className="flex items-center gap-2">
               <Link
                 href={`/artisan/${provider.slug}`}
-                className="font-semibold text-gray-900 hover:text-blue-600 transition-colors truncate"
+                className="font-semibold text-gray-900 hover:text-primary-600 transition-colors truncate"
               >
                 {provider.company_name}
               </Link>
               {provider.is_verified && (
-                <CheckCircle className="w-5 h-5 text-blue-600 flex-shrink-0" />
+                <CheckCircle className="w-5 h-5 text-primary-600 flex-shrink-0" />
               )}
             </div>
 
             {provider.service_type && (
-              <p className="text-sm text-blue-600 font-medium mt-0.5">
+              <p className="text-sm text-primary-600 font-medium mt-0.5">
                 {provider.service_type}
               </p>
             )}
@@ -116,7 +116,7 @@ export function ProviderCard({ provider, showContact = false }: ProviderCardProp
             </span>
           )}
           {provider.response_time && (
-            <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
+            <span className="inline-flex items-center gap-1 px-2 py-1 bg-primary-100 text-primary-700 rounded-full text-xs font-medium">
               Répond en {provider.response_time}
             </span>
           )}
@@ -126,7 +126,7 @@ export function ProviderCard({ provider, showContact = false }: ProviderCardProp
         <div className="flex items-center gap-3 mt-4 pt-4 border-t border-gray-100">
           <Link
             href={`/artisan/${provider.slug}`}
-            className="flex-1 text-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+            className="flex-1 text-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-sm font-medium"
           >
             Voir le profil
           </Link>

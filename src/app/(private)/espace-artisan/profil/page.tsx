@@ -89,7 +89,7 @@ export default function ProfilArtisanPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
+          <Loader2 className="w-8 h-8 animate-spin text-primary-600 mx-auto mb-4" />
           <p className="text-gray-600">Chargement du profil...</p>
         </div>
       </div>
@@ -113,10 +113,10 @@ export default function ProfilArtisanPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+      <div className="bg-gradient-to-r from-primary-600 to-primary-800 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <h1 className="text-2xl font-bold">Mon profil public</h1>
-          <p className="text-blue-100">Gérez les informations visibles sur votre page artisan</p>
+          <p className="text-primary-100">Gérez les informations visibles sur votre page artisan</p>
         </div>
       </div>
 
@@ -140,7 +140,7 @@ export default function ProfilArtisanPage() {
                   onKeyDown={(e) => handleTabKeyDown(e, index)}
                   className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-colors ${
                     activeTab === tab.id
-                      ? 'bg-blue-50 text-blue-600 font-medium'
+                      ? 'bg-primary-50 text-primary-600 font-medium'
                       : 'text-gray-600 hover:bg-gray-50'
                   }`}
                 >

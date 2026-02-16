@@ -38,7 +38,7 @@ export function PopularServicesLinks({
     <div className={className}>
       {showTitle && (
         <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-          <Star className="w-4 h-4 text-amber-500" />
+          <Star className="w-4 h-4 text-secondary-500" />
           Services populaires
         </h3>
       )}
@@ -49,7 +49,7 @@ export function PopularServicesLinks({
             <Link
               key={service.slug}
               href={`/services/${service.slug}`}
-              className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-full text-sm transition-colors"
+              className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-100 hover:bg-primary-100 text-gray-700 hover:text-primary-700 rounded-full text-sm transition-colors"
             >
               <Icon className="w-3.5 h-3.5" />
               {service.name}
@@ -59,7 +59,7 @@ export function PopularServicesLinks({
       </div>
       <Link
         href="/services"
-        className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3"
+        className="inline-flex items-center gap-1 text-primary-600 hover:text-primary-700 text-sm font-medium mt-3"
       >
         Tous les services <ArrowRight className="w-4 h-4" />
       </Link>
@@ -81,7 +81,7 @@ export function PopularCitiesLinks({
     <div className={className}>
       {showTitle && (
         <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-          <MapPin className="w-4 h-4 text-blue-500" />
+          <MapPin className="w-4 h-4 text-primary-500" />
           Villes populaires
         </h3>
       )}
@@ -90,7 +90,7 @@ export function PopularCitiesLinks({
           <Link
             key={city.slug}
             href={`/villes/${city.slug}`}
-            className="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-full text-sm transition-colors"
+            className="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-100 hover:bg-primary-100 text-gray-700 hover:text-primary-700 rounded-full text-sm transition-colors"
           >
             {city.name}
           </Link>
@@ -98,7 +98,7 @@ export function PopularCitiesLinks({
       </div>
       <Link
         href="/villes"
-        className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3"
+        className="inline-flex items-center gap-1 text-primary-600 hover:text-primary-700 text-sm font-medium mt-3"
       >
         Toutes les villes <ArrowRight className="w-4 h-4" />
       </Link>
@@ -112,19 +112,19 @@ export function GeographicNavigation({ className = '' }: { className?: string })
     <div className={`grid grid-cols-1 md:grid-cols-3 gap-4 ${className}`}>
       <Link
         href="/regions"
-        className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-xl hover:border-blue-300 hover:shadow-md transition-all group"
+        className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-xl hover:border-primary-300 hover:shadow-md transition-all group"
       >
-        <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition-colors">
-          <Building2 className="w-5 h-5 text-blue-600" />
+        <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center group-hover:bg-primary-200 transition-colors">
+          <Building2 className="w-5 h-5 text-primary-600" />
         </div>
         <div>
-          <div className="font-semibold text-gray-900 group-hover:text-blue-600">Par région</div>
+          <div className="font-semibold text-gray-900 group-hover:text-primary-600">Par région</div>
           <div className="text-sm text-gray-500">13 régions</div>
         </div>
       </Link>
       <Link
         href="/departements"
-        className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-xl hover:border-blue-300 hover:shadow-md transition-all group"
+        className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-xl hover:border-primary-300 hover:shadow-md transition-all group"
       >
         <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition-colors">
           <MapPin className="w-5 h-5 text-green-600" />
@@ -136,13 +136,13 @@ export function GeographicNavigation({ className = '' }: { className?: string })
       </Link>
       <Link
         href="/villes"
-        className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-xl hover:border-blue-300 hover:shadow-md transition-all group"
+        className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-xl hover:border-primary-300 hover:shadow-md transition-all group"
       >
-        <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center group-hover:bg-amber-200 transition-colors">
-          <Users className="w-5 h-5 text-amber-600" />
+        <div className="w-10 h-10 bg-secondary-100 rounded-lg flex items-center justify-center group-hover:bg-secondary-200 transition-colors">
+          <Users className="w-5 h-5 text-secondary-600" />
         </div>
         <div>
-          <div className="font-semibold text-gray-900 group-hover:text-amber-600">Par ville</div>
+          <div className="font-semibold text-gray-900 group-hover:text-secondary-600">Par ville</div>
           <div className="text-sm text-gray-500">500+ villes</div>
         </div>
       </Link>
@@ -171,7 +171,7 @@ export function PopularServiceCityLinks({
     <div className={className}>
       {showTitle && (
         <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-          <Wrench className="w-4 h-4 text-blue-500" />
+          <Wrench className="w-4 h-4 text-primary-500" />
           Recherches populaires
         </h3>
       )}
@@ -180,7 +180,7 @@ export function PopularServiceCityLinks({
           <Link
             key={combo.href}
             href={combo.href}
-            className="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-full text-sm transition-colors"
+            className="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-100 hover:bg-primary-100 text-gray-700 hover:text-primary-700 rounded-full text-sm transition-colors"
           >
             {combo.label}
           </Link>
@@ -213,7 +213,7 @@ export function ServiceCityMatrix({
           <Link
             key={city.slug}
             href={`/services/${service}/${city.slug}`}
-            className="px-3 py-2 bg-gray-50 hover:bg-blue-50 text-gray-700 hover:text-blue-700 rounded-lg text-sm transition-colors"
+            className="px-3 py-2 bg-gray-50 hover:bg-primary-50 text-gray-700 hover:text-primary-700 rounded-lg text-sm transition-colors"
           >
             {serviceData.name} {city.name}
           </Link>
@@ -229,28 +229,28 @@ export function QuickSiteLinks({ className = '' }: { className?: string }) {
     <div className={`bg-gray-50 rounded-xl p-4 ${className}`}>
       <h4 className="font-medium text-gray-900 mb-3">Naviguer sur le site</h4>
       <div className="grid grid-cols-2 gap-2 text-sm">
-        <Link href="/" className="text-gray-600 hover:text-blue-600 py-1">
+        <Link href="/" className="text-gray-600 hover:text-primary-600 py-1">
           Accueil
         </Link>
-        <Link href="/services" className="text-gray-600 hover:text-blue-600 py-1">
+        <Link href="/services" className="text-gray-600 hover:text-primary-600 py-1">
           Tous les services
         </Link>
-        <Link href="/villes" className="text-gray-600 hover:text-blue-600 py-1">
+        <Link href="/villes" className="text-gray-600 hover:text-primary-600 py-1">
           Toutes les villes
         </Link>
-        <Link href="/regions" className="text-gray-600 hover:text-blue-600 py-1">
+        <Link href="/regions" className="text-gray-600 hover:text-primary-600 py-1">
           Par région
         </Link>
-        <Link href="/recherche" className="text-gray-600 hover:text-blue-600 py-1">
+        <Link href="/recherche" className="text-gray-600 hover:text-primary-600 py-1">
           Rechercher
         </Link>
-        <Link href="/devis" className="text-gray-600 hover:text-blue-600 py-1">
+        <Link href="/devis" className="text-gray-600 hover:text-primary-600 py-1">
           Demander un devis
         </Link>
-        <Link href="/comment-ca-marche" className="text-gray-600 hover:text-blue-600 py-1">
+        <Link href="/comment-ca-marche" className="text-gray-600 hover:text-primary-600 py-1">
           Comment ça marche
         </Link>
-        <Link href="/contact" className="text-gray-600 hover:text-blue-600 py-1">
+        <Link href="/contact" className="text-gray-600 hover:text-primary-600 py-1">
           Contact
         </Link>
       </div>
@@ -276,7 +276,7 @@ export function InternalLinksFooter({ className = '' }: { className?: string }) 
                 <Link
                   key={region.slug}
                   href={`/regions/${region.slug}`}
-                  className="block text-gray-600 hover:text-blue-600 text-sm py-1 transition-colors"
+                  className="block text-gray-600 hover:text-primary-600 text-sm py-1 transition-colors"
                 >
                   {region.name}
                 </Link>
@@ -284,7 +284,7 @@ export function InternalLinksFooter({ className = '' }: { className?: string }) 
             </div>
             <Link
               href="/regions"
-              className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3"
+              className="inline-flex items-center gap-1 text-primary-600 hover:text-primary-700 text-sm font-medium mt-3"
             >
               Toutes les régions <ArrowRight className="w-4 h-4" />
             </Link>

@@ -148,7 +148,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={onClose}
-                className="p-2 rounded-full hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="p-2 rounded-full hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500"
                 aria-label="Fermer le formulaire"
               >
                 <X className="w-5 h-5 text-gray-500" aria-hidden="true" />
@@ -208,7 +208,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                         aria-describedby={errors.name ? 'quote-name-error' : undefined}
                         className={`w-full pl-10 pr-4 py-3 rounded-xl border ${
                           errors.name ? 'border-red-300 bg-red-50' : 'border-gray-200'
-                        } focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors`}
+                        } focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors`}
                       />
                     </div>
                     {errors.name && (
@@ -235,7 +235,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                         aria-describedby={errors.email ? 'quote-email-error' : undefined}
                         className={`w-full pl-10 pr-4 py-3 rounded-xl border ${
                           errors.email ? 'border-red-300 bg-red-50' : 'border-gray-200'
-                        } focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors`}
+                        } focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors`}
                       />
                     </div>
                     {errors.email && (
@@ -262,7 +262,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                         aria-describedby={errors.phone ? 'quote-phone-error' : undefined}
                         className={`w-full pl-10 pr-4 py-3 rounded-xl border ${
                           errors.phone ? 'border-red-300 bg-red-50' : 'border-gray-200'
-                        } focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors`}
+                        } focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors`}
                       />
                     </div>
                     {errors.phone && (
@@ -283,7 +283,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                         value={formData.address}
                         onChange={(e) => handleChange('address', e.target.value)}
                         placeholder="12 rue de la Paix, 75001 Paris"
-                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors"
                       />
                     </div>
                   </div>
@@ -305,9 +305,9 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                           role="radio"
                           aria-checked={formData.urgency === option.value}
                           onClick={() => handleChange('urgency', option.value)}
-                          className={`p-3 rounded-xl border-2 text-center transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 ${
+                          className={`p-3 rounded-xl border-2 text-center transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 ${
                             formData.urgency === option.value
-                              ? 'border-blue-500 bg-blue-50 text-blue-700'
+                              ? 'border-primary-500 bg-primary-50 text-primary-700'
                               : 'border-gray-200 hover:border-gray-300'
                           }`}
                         >
@@ -337,7 +337,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                         aria-describedby={errors.description ? 'quote-description-error' : 'quote-description-hint'}
                         className={`w-full pl-10 pr-4 py-3 rounded-xl border ${
                           errors.description ? 'border-red-300 bg-red-50' : 'border-gray-200'
-                        } focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none`}
+                        } focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors resize-none`}
                       />
                     </div>
                     {errors.description && (

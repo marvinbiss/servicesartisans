@@ -40,7 +40,7 @@ const targetLabels: Record<string, string> = {
 }
 
 const reasonColors: Record<string, string> = {
-  spam: 'bg-amber-100 text-amber-600',
+  spam: 'bg-secondary-100 text-secondary-600',
   fake: 'bg-red-100 text-red-600',
   inappropriate: 'bg-orange-100 text-orange-600',
   harassment: 'bg-red-100 text-red-600',
@@ -126,7 +126,7 @@ export function PendingReports({ reports, loading, onMutate }: PendingReportsPro
           </div>
           <Link
             href="/admin/signalements"
-            className="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 transition-colors"
+            className="flex items-center gap-1 text-sm text-primary-600 hover:text-primary-700 transition-colors"
           >
             Voir tout
             <ArrowRight className="w-3.5 h-3.5" />
@@ -215,7 +215,7 @@ export function PendingReports({ reports, loading, onMutate }: PendingReportsPro
             placeholder="Décrivez la raison de votre décision..."
             maxLength={1000}
             rows={3}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
           />
         </div>
       </ConfirmationModal>

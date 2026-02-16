@@ -22,7 +22,7 @@ interface FilePreviewProps {
 }
 
 const FILE_ICONS: Record<string, React.ReactNode> = {
-  'image': <FileImage className="w-8 h-8 text-blue-500" />,
+  'image': <FileImage className="w-8 h-8 text-primary-500" />,
   'video': <FileVideo className="w-8 h-8 text-purple-500" />,
   'audio': <FileAudio className="w-8 h-8 text-green-500" />,
   'application/pdf': <FileText className="w-8 h-8 text-red-500" />,
@@ -232,7 +232,7 @@ export function FilePreview({ attachment, onClose, isModal = false }: FilePrevie
             <p className="text-gray-400">{formatFileSize(attachment.file_size)}</p>
             <button
               onClick={handleDownload}
-              className="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg flex items-center gap-2 mx-auto"
+              className="mt-4 px-4 py-2 bg-primary-600 hover:bg-primary-700 rounded-lg flex items-center gap-2 mx-auto"
             >
               <Download className="w-5 h-5" />
               Télécharger

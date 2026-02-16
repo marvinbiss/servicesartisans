@@ -22,7 +22,7 @@ export default function Error({
         <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
           <AlertTriangle className="w-10 h-10 text-red-600" />
         </div>
-        <h1 className="font-heading text-3xl font-bold text-gray-900 mb-4 tracking-tight">
+        <h1 className="font-heading text-3xl text-gray-900 mb-4">
           Oups ! Une erreur est survenue
         </h1>
         <p className="text-gray-600 mb-8">
@@ -32,7 +32,7 @@ export default function Error({
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <button
             onClick={() => reset()}
-            className="inline-flex items-center justify-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors"
           >
             <RefreshCw className="w-5 h-5" />
             Réessayer

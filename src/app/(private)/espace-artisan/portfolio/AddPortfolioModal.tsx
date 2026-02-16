@@ -205,10 +205,10 @@ export default function AddPortfolioModal({
                   setMediaType('image')
                   setStep('upload')
                 }}
-                className="w-full flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-colors text-left"
+                className="w-full flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-primary-500 hover:bg-primary-50 transition-colors text-left"
               >
-                <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                  <ImageIcon className="w-6 h-6 text-blue-600" />
+                <div className="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center">
+                  <ImageIcon className="w-6 h-6 text-primary-600" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900">Image</h3>
@@ -223,7 +223,7 @@ export default function AddPortfolioModal({
                   setMediaType('video')
                   setStep('upload')
                 }}
-                className="w-full flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-colors text-left"
+                className="w-full flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-primary-500 hover:bg-primary-50 transition-colors text-left"
               >
                 <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
                   <Video className="w-6 h-6 text-purple-600" />
@@ -241,10 +241,10 @@ export default function AddPortfolioModal({
                   setMediaType('before_after')
                   setStep('upload')
                 }}
-                className="w-full flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-colors text-left"
+                className="w-full flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-primary-500 hover:bg-primary-50 transition-colors text-left"
               >
-                <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
-                  <Layers className="w-6 h-6 text-amber-600" />
+                <div className="w-12 h-12 bg-secondary-100 rounded-xl flex items-center justify-center">
+                  <Layers className="w-6 h-6 text-secondary-600" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900">Avant / Après</h3>
@@ -359,7 +359,7 @@ export default function AddPortfolioModal({
               )}
 
               {uploading && (
-                <div className="flex items-center justify-center gap-2 text-blue-600">
+                <div className="flex items-center justify-center gap-2 text-primary-600">
                   <Loader2 className="w-5 h-5 animate-spin" />
                   <span>Upload en cours...</span>
                 </div>
@@ -393,7 +393,7 @@ export default function AddPortfolioModal({
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Ex: Rénovation salle de bain"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                   maxLength={100}
                 />
               </div>
@@ -407,7 +407,7 @@ export default function AddPortfolioModal({
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Décrivez les travaux réalisés..."
                   rows={4}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 resize-none"
                   maxLength={500}
                 />
                 <p className="text-xs text-gray-500 mt-1 text-right">
@@ -422,7 +422,7 @@ export default function AddPortfolioModal({
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                 >
                   <option value="">Sélectionner une catégorie</option>
                   {PORTFOLIO_CATEGORIES.map((cat) => (

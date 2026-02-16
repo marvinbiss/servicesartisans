@@ -41,7 +41,7 @@ export function Pagination({ page, totalPages, onPageChange }: PaginationProps) 
               onClick={() => onPageChange(pageNum)}
               className={`w-9 h-9 text-sm rounded-lg transition-colors ${
                 pageNum === page
-                  ? 'bg-blue-600 text-white font-medium'
+                  ? 'bg-primary-600 text-white font-medium'
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >

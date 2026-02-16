@@ -234,7 +234,7 @@ export function VilleAutocomplete({
           className={`
             w-full pl-10 pr-20 py-3
             bg-white border border-gray-200 rounded-xl
-            focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20
+            focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20
             placeholder:text-gray-400 text-gray-900
             disabled:bg-gray-100 disabled:cursor-not-allowed
             transition-all
@@ -271,14 +271,14 @@ export function VilleAutocomplete({
               type="button"
               onClick={handleGeolocation}
               disabled={isLocating || disabled}
-              className="p-1.5 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50"
+              className="p-1.5 hover:bg-primary-50 rounded-lg transition-colors disabled:opacity-50"
               aria-label="Utiliser ma position"
               title="Utiliser ma position"
             >
               {isLocating ? (
-                <Loader2 className="w-4 h-4 text-blue-600 animate-spin" />
+                <Loader2 className="w-4 h-4 text-primary-600 animate-spin" />
               ) : (
-                <Navigation className="w-4 h-4 text-blue-600" />
+                <Navigation className="w-4 h-4 text-primary-600" />
               )}
             </button>
           )}
@@ -306,7 +306,7 @@ export function VilleAutocomplete({
                   flex items-center gap-3
                   transition-colors
                   ${index === highlightedIndex
-                    ? 'bg-blue-50 text-blue-900'
+                    ? 'bg-primary-50 text-primary-900'
                     : 'hover:bg-gray-50 text-gray-900'
                   }
                   ${index === 0 ? 'rounded-t-xl' : ''}
@@ -316,7 +316,7 @@ export function VilleAutocomplete({
                 aria-selected={index === highlightedIndex}
               >
                 <MapPin className={`w-4 h-4 flex-shrink-0 ${
-                  index === highlightedIndex ? 'text-blue-600' : 'text-gray-400'
+                  index === highlightedIndex ? 'text-primary-600' : 'text-gray-400'
                 }`} />
                 <div className="flex-1 min-w-0">
                   <div className="font-medium truncate">
@@ -343,9 +343,9 @@ export function VilleAutocomplete({
                       setIsOpen(false)
                       onSelect(city.name, city.postcode)
                     }}
-                    className="flex items-center gap-2 px-3 py-2 hover:bg-blue-50 rounded-lg text-left transition-colors"
+                    className="flex items-center gap-2 px-3 py-2 hover:bg-primary-50 rounded-lg text-left transition-colors"
                   >
-                    <MapPin className="w-4 h-4 text-blue-600" />
+                    <MapPin className="w-4 h-4 text-primary-600" />
                     <span className="text-sm text-gray-700">{city.name}</span>
                   </button>
                 ))}

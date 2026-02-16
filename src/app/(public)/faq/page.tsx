@@ -1,8 +1,12 @@
 import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
+import Breadcrumb from '@/components/Breadcrumb'
+import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { faqCategories } from '@/lib/data/faq-data'
 import FAQPageClient from './FAQPageClient'
+import { getPageContent } from '@/lib/cms'
+import { CmsContent } from '@/components/CmsContent'
 
 export const metadata: Metadata = {
   title: 'Questions fréquentes (FAQ)',
@@ -41,7 +45,51 @@ const faqJsonLd = {
   ),
 }
 
-export default function FAQPage() {
+export default async function FAQPage() {
+  const cmsPage = await getPageContent('faq', 'faq')
+
+  if (cmsPage?.content_html) {
+    // Build JSON-LD from CMS structured_data if available, else from hardcoded
+    const faqItems = cmsPage.structured_data
+      ? (cmsPage.structured_data as { categories?: Array<{ categoryName: string; items: Array<{ question: string; answer: string }> }> }).categories?.flatMap(c =>
+          c.items.map(item => ({
+            '@type': 'Question' as const,
+            name: item.question,
+            acceptedAnswer: { '@type': 'Answer' as const, text: item.answer },
+          }))
+        ) ?? []
+      : faqJsonLd.mainEntity
+
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <JsonLd data={{
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: faqItems,
+        }} />
+        <JsonLd data={getBreadcrumbSchema([
+          { name: 'Accueil', url: '/' },
+          { name: 'FAQ', url: '/faq' },
+        ])} />
+        <section className="bg-white border-b">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <Breadcrumb items={[{ label: 'FAQ' }]} className="mb-4" />
+            <h1 className="font-heading text-3xl font-bold text-gray-900">
+              {cmsPage.title}
+            </h1>
+          </div>
+        </section>
+        <section className="py-12">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-white rounded-xl shadow-sm p-8">
+              <CmsContent html={cmsPage.content_html} />
+            </div>
+          </div>
+        </section>
+      </div>
+    )
+  }
+
   return (
     <>
       <JsonLd data={faqJsonLd} />

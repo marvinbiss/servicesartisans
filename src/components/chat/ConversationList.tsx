@@ -114,7 +114,7 @@ export function ConversationList({
                   onClick={() => onSelect(conversation)}
                   className={cn(
                     'w-full flex items-center gap-3 p-4 text-left hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors',
-                    selectedId === conversation.id && 'bg-blue-50 dark:bg-blue-900/20'
+                    selectedId === conversation.id && 'bg-primary-50 dark:bg-primary-900/20'
                   )}
                 >
                   {/* Avatar */}
@@ -127,15 +127,15 @@ export function ConversationList({
                         loading="lazy"
                       />
                     ) : (
-                      <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
-                        <span className="text-blue-600 dark:text-blue-300 font-medium text-lg">
+                      <div className="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center">
+                        <span className="text-primary-600 dark:text-primary-300 font-medium text-lg">
                           {name?.charAt(0).toUpperCase()}
                         </span>
                       </div>
                     )}
                     {/* Unread badge */}
                     {conversation.unread_count > 0 && (
-                      <span className="absolute -top-1 -right-1 w-5 h-5 bg-blue-600 text-white text-xs rounded-full flex items-center justify-center">
+                      <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary-600 text-white text-xs rounded-full flex items-center justify-center">
                         {conversation.unread_count > 9 ? '9+' : conversation.unread_count}
                       </span>
                     )}

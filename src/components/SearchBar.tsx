@@ -83,7 +83,7 @@ function HighlightedText({ text, query }: { text: string; query: string }) {
   return (
     <>
       {before}
-      <span className="font-bold text-blue-600">{match}</span>
+      <span className="font-bold text-primary-600">{match}</span>
       {after}
     </>
   )
@@ -304,7 +304,7 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
             flex bg-white
             ${isLarge
               ? 'flex-col sm:flex-row rounded-2xl p-2 gap-2 shadow-lg'
-              : 'flex-row rounded-full p-1 gap-1 shadow-sm border border-gray-200 hover:shadow-md hover:border-gray-300 focus-within:border-blue-400 focus-within:shadow-md focus-within:ring-2 focus-within:ring-blue-100 transition-all'
+              : 'flex-row rounded-full p-1 gap-1 shadow-sm border border-gray-200 hover:shadow-md hover:border-gray-300 focus-within:border-secondary-400 focus-within:shadow-md focus-within:ring-2 focus-within:ring-secondary-100 transition-all'
             }
           `}
         >
@@ -351,7 +351,7 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
                     onKeyDown={handleServiceKeyDown}
                     placeholder="Filtrer..."
                     autoComplete="off"
-                    className={`w-full bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-100 text-gray-900 placeholder:text-gray-400 ${
+                    className={`w-full bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-secondary-400 focus:ring-1 focus:ring-secondary-100 text-gray-900 placeholder:text-gray-400 ${
                       isLarge ? 'px-3 py-2 text-sm' : 'px-2.5 py-1.5 text-xs'
                     }`}
                   />
@@ -373,9 +373,9 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
                         className={`
                           w-full text-left rounded-lg transition-all duration-100
                           ${isHighlighted
-                            ? 'bg-blue-50 text-blue-700 font-medium'
+                            ? 'bg-primary-50 text-primary-700 font-medium'
                             : serviceSlug === service.slug
-                              ? 'bg-blue-50/50 text-blue-600'
+                              ? 'bg-primary-50/50 text-primary-600'
                               : 'text-gray-700 hover:bg-gray-50'
                           }
                           ${isLarge ? 'px-4 py-3 text-base' : 'px-3 py-2 text-sm'}
@@ -419,7 +419,7 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
                 className={`
                   w-full transition-all outline-none text-gray-900 placeholder:text-gray-400
                   ${isLarge
-                    ? 'rounded-xl pl-11 pr-4 py-4 text-base border border-gray-200 bg-gray-50 focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-100'
+                    ? 'rounded-xl pl-11 pr-4 py-4 text-base border border-gray-200 bg-gray-50 focus:bg-white focus:border-secondary-400 focus:ring-2 focus:ring-secondary-100'
                     : 'rounded-none pl-9 pr-3 py-2 text-sm bg-transparent'
                   }
                 `}
@@ -447,12 +447,12 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
                           onMouseEnter={() => setHighlightedCityIndex(idx)}
                           className={`
                             w-full flex items-center justify-between rounded-lg transition-all duration-100
-                            ${isHighlighted ? 'bg-blue-50' : 'hover:bg-gray-50'}
+                            ${isHighlighted ? 'bg-primary-50' : 'hover:bg-gray-50'}
                             ${isLarge ? 'px-3 py-2.5' : 'px-2.5 py-2'}
                           `}
                         >
                           <div className="text-left">
-                            <span className={`font-medium transition-colors ${isHighlighted ? 'text-blue-700' : 'text-gray-900'} ${isLarge ? 'text-base' : 'text-sm'}`}>
+                            <span className={`font-medium transition-colors ${isHighlighted ? 'text-primary-700' : 'text-gray-900'} ${isLarge ? 'text-base' : 'text-sm'}`}>
                               {city.name}
                             </span>
                             <div className={`text-gray-400 ${isLarge ? 'text-xs' : 'text-[11px]'}`}>
@@ -482,12 +482,12 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
                           onMouseEnter={() => setHighlightedCityIndex(idx)}
                           className={`
                             w-full flex items-center gap-2 rounded-lg transition-all duration-100
-                            ${isHighlighted ? 'bg-blue-50' : 'hover:bg-gray-50'}
+                            ${isHighlighted ? 'bg-primary-50' : 'hover:bg-gray-50'}
                             ${isLarge ? 'px-3 py-2.5' : 'px-2.5 py-2'}
                           `}
                         >
                           <div className="flex-1 text-left min-w-0">
-                            <div className={`font-medium transition-colors truncate ${isHighlighted ? 'text-blue-700' : 'text-gray-900'} ${isLarge ? 'text-base' : 'text-sm'}`}>
+                            <div className={`font-medium transition-colors truncate ${isHighlighted ? 'text-primary-700' : 'text-gray-900'} ${isLarge ? 'text-base' : 'text-sm'}`}>
                               <HighlightedText text={city.name} query={cityQuery} />
                               <span className={`font-normal ml-1 ${isLarge ? 'text-xs' : 'text-[11px]'} text-gray-400`}>({city.departementCode})</span>
                             </div>
@@ -519,7 +519,7 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
                           key={fc.name}
                           type="button"
                           onClick={() => handleSelectCity(fc.name)}
-                          className={`inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-full transition-colors font-medium ${
+                          className={`inline-flex items-center gap-1 text-primary-600 hover:text-primary-700 bg-primary-50 hover:bg-primary-100 rounded-full transition-colors font-medium ${
                             isLarge ? 'text-xs px-2.5 py-1' : 'text-[11px] px-2 py-0.5'
                           }`}
                         >
@@ -538,7 +538,7 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
           <button
             type="submit"
             className={`
-              bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-all flex items-center justify-center gap-2 flex-shrink-0
+              bg-primary-600 hover:bg-primary-700 text-white font-semibold transition-all flex items-center justify-center gap-2 flex-shrink-0
               ${isLarge
                 ? 'rounded-xl px-8 py-4 text-base shadow-md hover:shadow-lg'
                 : 'rounded-full w-9 h-9 m-0.5 shadow-sm hover:shadow-md hover:scale-105'

@@ -105,13 +105,13 @@ export default function AvisPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+      <div className="bg-gradient-to-r from-primary-600 to-primary-800 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <Breadcrumb items={breadcrumbItems} className="mb-4 text-blue-200 [&_a]:text-blue-200 [&_a:hover]:text-white [&_svg]:text-blue-300 [&>span]:text-white" />
+          <Breadcrumb items={breadcrumbItems} className="mb-4 text-primary-200 [&_a]:text-primary-200 [&_a:hover]:text-white [&_svg]:text-primary-300 [&>span]:text-white" />
           <h1 className="text-4xl font-bold mb-4">
             Avis clients authentiques
           </h1>
-          <p className="text-xl text-blue-100 max-w-3xl">
+          <p className="text-xl text-primary-100 max-w-3xl">
             Découvrez les retours d'expérience de nos clients. Tous nos avis sont authentiques
             et recueillis après chaque intervention.
           </p>
@@ -123,22 +123,22 @@ export default function AvisPage() {
         <div className="bg-white rounded-xl shadow-lg p-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div className="text-center">
-              <div className="text-4xl font-bold text-blue-600">{stats.totalAvis.toLocaleString()}</div>
+              <div className="text-4xl font-bold text-primary-600">{stats.totalAvis.toLocaleString()}</div>
               <p className="text-gray-500 mt-1">Avis authentiques</p>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-blue-600 flex items-center justify-center gap-2">
+              <div className="text-4xl font-bold text-primary-600 flex items-center justify-center gap-2">
                 {stats.noteMoyenne}
                 <Star className="w-8 h-8 text-yellow-400 fill-current" />
               </div>
               <p className="text-gray-500 mt-1">Note moyenne</p>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-blue-600">{stats.artisansVerifies.toLocaleString()}</div>
+              <div className="text-4xl font-bold text-primary-600">{stats.artisansVerifies.toLocaleString()}</div>
               <p className="text-gray-500 mt-1">Artisans référencés</p>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-blue-600">{stats.clientsSatisfaits}%</div>
+              <div className="text-4xl font-bold text-primary-600">{stats.clientsSatisfaits}%</div>
               <p className="text-gray-500 mt-1">Clients satisfaits</p>
             </div>
           </div>
@@ -148,7 +148,7 @@ export default function AvisPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Filters */}
         <div className="flex flex-wrap gap-4 mb-8">
-          <select className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+          <select className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500">
             <option value="">Tous les services</option>
             <option value="plombier">Plombier</option>
             <option value="electricien">Électricien</option>
@@ -156,14 +156,14 @@ export default function AvisPage() {
             <option value="chauffagiste">Chauffagiste</option>
             <option value="peintre">Peintre</option>
           </select>
-          <select className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+          <select className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500">
             <option value="">Toutes les villes</option>
             <option value="paris">Paris</option>
             <option value="lyon">Lyon</option>
             <option value="marseille">Marseille</option>
             <option value="toulouse">Toulouse</option>
           </select>
-          <select className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+          <select className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500">
             <option value="">Toutes les notes</option>
             <option value="5">5 étoiles</option>
             <option value="4">4 étoiles et +</option>
@@ -177,7 +177,7 @@ export default function AvisPage() {
             <div key={avis.id} className="bg-white rounded-xl shadow-sm p-6">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-semibold">
+                  <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center text-primary-600 font-semibold">
                     {avis.client.charAt(0)}
                   </div>
                   <div>
@@ -191,7 +191,7 @@ export default function AvisPage() {
                       )}
                     </div>
                     <div className="flex items-center gap-3 text-sm text-gray-500">
-                      <Link href={`/villes/${avis.villeSlug}`} className="flex items-center gap-1 hover:text-blue-600">
+                      <Link href={`/villes/${avis.villeSlug}`} className="flex items-center gap-1 hover:text-primary-600">
                         <MapPin className="w-3 h-3" />
                         {avis.ville}
                       </Link>
@@ -217,7 +217,7 @@ export default function AvisPage() {
               <div className="mb-4">
                 <Link
                   href={`/services/${avis.serviceSlug}`}
-                  className="text-sm text-blue-600 hover:underline"
+                  className="text-sm text-primary-600 hover:underline"
                 >
                   {avis.service}
                 </Link>
@@ -231,7 +231,7 @@ export default function AvisPage() {
               </div>
 
               <div className="flex items-center gap-4 mt-4 pt-4 border-t">
-                <button className="flex items-center gap-2 text-gray-500 hover:text-blue-600 transition-colors">
+                <button className="flex items-center gap-2 text-gray-500 hover:text-primary-600 transition-colors">
                   <ThumbsUp className="w-4 h-4" />
                   <span className="text-sm">Utile</span>
                 </button>
@@ -257,23 +257,23 @@ export default function AvisPage() {
         </section>
 
         {/* CTA */}
-        <div className="mt-16 bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl p-8 md:p-12 text-center text-white">
+        <div className="mt-16 bg-gradient-to-r from-primary-600 to-primary-800 rounded-2xl p-8 md:p-12 text-center text-white">
           <h2 className="text-3xl font-bold mb-4">
             Vous avez fait appel à un artisan ?
           </h2>
-          <p className="text-blue-100 mb-8 max-w-2xl mx-auto">
+          <p className="text-primary-100 mb-8 max-w-2xl mx-auto">
             Partagez votre expérience et aidez d'autres utilisateurs à trouver le bon professionnel.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/espace-client/avis"
-              className="inline-flex items-center justify-center gap-2 bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
+              className="inline-flex items-center justify-center gap-2 bg-white text-primary-600 px-8 py-4 rounded-lg font-semibold hover:bg-primary-50 transition-colors"
             >
               Laisser un avis
             </Link>
             <Link
               href="/services"
-              className="inline-flex items-center justify-center gap-2 bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-800 transition-colors"
+              className="inline-flex items-center justify-center gap-2 bg-primary-700 text-white px-8 py-4 rounded-lg font-semibold hover:bg-primary-800 transition-colors"
             >
               Trouver un artisan
             </Link>

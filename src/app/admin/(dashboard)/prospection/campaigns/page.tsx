@@ -49,7 +49,7 @@ export default function CampaignsPage() {
         </div>
         <Link
           href="/admin/prospection/campaigns/create"
-          className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          className="flex items-center gap-2 px-4 py-2 text-sm bg-primary-600 text-white rounded-lg hover:bg-primary-700"
         >
           <Plus className="w-4 h-4" /> Nouvelle campagne
         </Link>
@@ -70,7 +70,7 @@ export default function CampaignsPage() {
           <button
             key={s}
             onClick={() => setStatusFilter(s)}
-            className={`px-3 py-1.5 text-sm rounded-lg border ${statusFilter === s ? 'bg-blue-50 border-blue-200 text-blue-700' : 'hover:bg-gray-50'}`}
+            className={`px-3 py-1.5 text-sm rounded-lg border ${statusFilter === s ? 'bg-primary-50 border-primary-200 text-primary-700' : 'hover:bg-gray-50'}`}
           >
             {s === 'all' ? 'Toutes' : s === 'draft' ? 'Brouillons' : s === 'sending' ? 'En cours' : s === 'paused' ? 'En pause' : 'Terminées'}
           </button>
@@ -110,7 +110,7 @@ export default function CampaignsPage() {
               campaigns.map((camp) => (
                 <tr key={camp.id} className="hover:bg-gray-50">
                   <td className="px-4 py-3">
-                    <Link href={`/admin/prospection/campaigns/${camp.id}`} className="font-medium text-blue-600 hover:underline">
+                    <Link href={`/admin/prospection/campaigns/${camp.id}`} className="font-medium text-primary-600 hover:underline">
                       {camp.name}
                     </Link>
                     <div className="text-xs text-gray-400 capitalize">{camp.audience_type}</div>

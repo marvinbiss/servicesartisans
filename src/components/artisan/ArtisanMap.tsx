@@ -39,7 +39,7 @@ export function ArtisanMap({ artisan }: ArtisanMapProps) {
       className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6"
     >
       <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
-        <MapPin className="w-5 h-5 text-blue-600" aria-hidden="true" />
+        <MapPin className="w-5 h-5 text-primary-600" aria-hidden="true" />
         Zone d&apos;intervention
       </h2>
 
@@ -88,7 +88,7 @@ export function ArtisanMap({ artisan }: ArtisanMapProps) {
               <span
                 key={i}
                 role="listitem"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 text-sm"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary-50 text-primary-700 text-sm"
               >
                 <MapPin className="w-3.5 h-3.5" aria-hidden="true" />
                 {zone}

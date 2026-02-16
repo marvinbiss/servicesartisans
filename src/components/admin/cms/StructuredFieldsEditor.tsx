@@ -102,7 +102,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
               onChange={(e) =>
                 update('priceRange', { ...priceRange, min: Number(e.target.value) })
               }
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
               placeholder="0"
               min={0}
             />
@@ -115,7 +115,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
               onChange={(e) =>
                 update('priceRange', { ...priceRange, max: Number(e.target.value) })
               }
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
               placeholder="0"
               min={0}
             />
@@ -128,7 +128,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
               onChange={(e) =>
                 update('priceRange', { ...priceRange, unit: e.target.value })
               }
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
               placeholder="EUR"
             />
           </div>
@@ -172,7 +172,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
                           [index]: { ...prev[index], name: true },
                         }))
                       }
-                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm ${
+                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm ${
                         nameEmpty ? 'border-red-400' : 'border-gray-300'
                       }`}
                       placeholder="Nom de la tâche"
@@ -189,7 +189,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
                       updated[index] = { ...task, priceMin: Number(e.target.value) }
                       update('commonTasks', updated)
                     }}
-                    className="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                    className="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
                     placeholder="Min"
                     min={0}
                   />
@@ -201,7 +201,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
                       updated[index] = { ...task, priceMax: Number(e.target.value) }
                       update('commonTasks', updated)
                     }}
-                    className="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                    className="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
                     placeholder="Max"
                     min={0}
                   />
@@ -240,7 +240,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
           className={`mt-2 flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg transition-colors ${
             commonTasks.length >= STRUCTURED_LIMITS.commonTasks
               ? 'text-gray-400 cursor-not-allowed'
-              : 'text-blue-600 hover:text-blue-800 hover:bg-blue-50'
+              : 'text-primary-600 hover:text-primary-800 hover:bg-primary-50'
           }`}
         >
           <Plus className="w-4 h-4" />
@@ -263,7 +263,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
                   updated[index] = e.target.value
                   update('tips', updated)
                 }}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
                 placeholder="Conseil..."
               />
               <button
@@ -287,7 +287,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
           className={`mt-2 flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg transition-colors ${
             tips.length >= STRUCTURED_LIMITS.tips
               ? 'text-gray-400 cursor-not-allowed'
-              : 'text-blue-600 hover:text-blue-800 hover:bg-blue-50'
+              : 'text-primary-600 hover:text-primary-800 hover:bg-primary-50'
           }`}
         >
           <Plus className="w-4 h-4" />
@@ -322,7 +322,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
                           [index]: { ...prev[index], question: true },
                         }))
                       }
-                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-white ${
+                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm bg-white ${
                         questionEmpty ? 'border-red-400' : 'border-gray-300'
                       }`}
                       placeholder="Question"
@@ -363,7 +363,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
                     }))
                   }
                   rows={2}
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm resize-none bg-white ${
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm resize-none bg-white ${
                     answerEmpty ? 'border-red-400' : 'border-gray-300'
                   }`}
                   placeholder="Réponse"
@@ -382,7 +382,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
           className={`mt-2 flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg transition-colors ${
             faq.length >= STRUCTURED_LIMITS.faqItems
               ? 'text-gray-400 cursor-not-allowed'
-              : 'text-blue-600 hover:text-blue-800 hover:bg-blue-50'
+              : 'text-primary-600 hover:text-primary-800 hover:bg-primary-50'
           }`}
         >
           <Plus className="w-4 h-4" />
@@ -398,7 +398,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
           {certifications.map((cert, index) => (
             <span
               key={index}
-              className="inline-flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-700 text-sm rounded-full"
+              className="inline-flex items-center gap-1 px-3 py-1 bg-primary-50 text-primary-700 text-sm rounded-full"
             >
               {cert}
               <button
@@ -407,7 +407,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
                   const updated = certifications.filter((_, i) => i !== index)
                   update('certifications', updated)
                 }}
-                className="text-blue-400 hover:text-blue-700 ml-0.5"
+                className="text-primary-400 hover:text-primary-700 ml-0.5"
                 aria-label={`Retirer la certification ${cert}`}
               >
                 &times;
@@ -420,7 +420,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
             type="text"
             ref={certInputRef}
             placeholder="Nouvelle certification..."
-            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault()
@@ -450,7 +450,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
             className={`px-3 py-2 text-white text-sm rounded-lg transition-colors ${
               certifications.length >= STRUCTURED_LIMITS.certifications
                 ? 'bg-gray-400 cursor-not-allowed'
-                : 'bg-blue-600 hover:bg-blue-700'
+                : 'bg-primary-600 hover:bg-primary-700'
             }`}
           >
             <Plus className="w-4 h-4" />
@@ -474,7 +474,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
           type="text"
           value={data.averageResponseTime || ''}
           onChange={(e) => update('averageResponseTime', e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
           placeholder="Ex: 30 minutes"
         />
       </div>
@@ -486,7 +486,7 @@ function ServiceFields({ data, update }: ServiceFieldsProps) {
           value={data.emergencyInfo || ''}
           onChange={(e) => update('emergencyInfo', e.target.value)}
           rows={3}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm resize-y"
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm resize-y"
           placeholder="Ex: Service disponible 24h/24, 7j/7"
         />
       </div>
@@ -517,7 +517,7 @@ function FaqFields({ data, update }: FaqFieldsProps) {
           type="text"
           value={categoryName}
           onChange={(e) => update('categoryName', e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
           placeholder="Ex: Questions générales, Tarification..."
         />
       </div>
@@ -549,7 +549,7 @@ function FaqFields({ data, update }: FaqFieldsProps) {
                           [index]: { ...prev[index], question: true },
                         }))
                       }
-                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-white ${
+                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm bg-white ${
                         questionEmpty ? 'border-red-400' : 'border-gray-300'
                       }`}
                       placeholder="Question"
@@ -590,7 +590,7 @@ function FaqFields({ data, update }: FaqFieldsProps) {
                     }))
                   }
                   rows={4}
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm resize-y bg-white ${
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm resize-y bg-white ${
                     answerEmpty ? 'border-red-400' : 'border-gray-300'
                   }`}
                   placeholder="Réponse (texte enrichi supporté)"
@@ -609,7 +609,7 @@ function FaqFields({ data, update }: FaqFieldsProps) {
           className={`mt-2 flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg transition-colors ${
             items.length >= STRUCTURED_LIMITS.faqItems
               ? 'text-gray-400 cursor-not-allowed'
-              : 'text-blue-600 hover:text-blue-800 hover:bg-blue-50'
+              : 'text-primary-600 hover:text-primary-800 hover:bg-primary-50'
           }`}
         >
           <Plus className="w-4 h-4" />
@@ -645,7 +645,7 @@ function HomepageFields({ data, update }: HomepageFieldsProps) {
           type="text"
           value={data.heroTitle || ''}
           onChange={(e) => update('heroTitle', e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
           placeholder="Titre principal de la page d'accueil"
         />
       </div>
@@ -656,7 +656,7 @@ function HomepageFields({ data, update }: HomepageFieldsProps) {
           value={data.heroSubtitle || ''}
           onChange={(e) => update('heroSubtitle', e.target.value)}
           rows={2}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm resize-none"
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm resize-none"
           placeholder="Sous-titre ou accroche"
         />
       </div>
@@ -668,7 +668,7 @@ function HomepageFields({ data, update }: HomepageFieldsProps) {
             type="text"
             value={data.heroCtaText || ''}
             onChange={(e) => update('heroCtaText', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
             placeholder="Ex: Demander un devis"
           />
         </div>
@@ -678,7 +678,7 @@ function HomepageFields({ data, update }: HomepageFieldsProps) {
             type="text"
             value={data.heroCtaUrl || ''}
             onChange={(e) => update('heroCtaUrl', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
             placeholder="/devis"
           />
         </div>
@@ -703,7 +703,7 @@ function HomepageFields({ data, update }: HomepageFieldsProps) {
                         updated[index] = { ...section, id: e.target.value }
                         update('sections', updated)
                       }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-white"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm bg-white"
                       placeholder="Ex: services, temoignages"
                     />
                   </div>
@@ -717,7 +717,7 @@ function HomepageFields({ data, update }: HomepageFieldsProps) {
                         updated[index] = { ...section, title: e.target.value }
                         update('sections', updated)
                       }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-white"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm bg-white"
                       placeholder="Titre de la section"
                     />
                   </div>
@@ -731,7 +731,7 @@ function HomepageFields({ data, update }: HomepageFieldsProps) {
                         updated[index] = { ...section, subtitle: e.target.value || undefined }
                         update('sections', updated)
                       }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-white"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm bg-white"
                       placeholder="Sous-titre de la section"
                     />
                   </div>
@@ -760,7 +760,7 @@ function HomepageFields({ data, update }: HomepageFieldsProps) {
           className={`mt-2 flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg transition-colors ${
             sections.length >= STRUCTURED_LIMITS.homepageSections
               ? 'text-gray-400 cursor-not-allowed'
-              : 'text-blue-600 hover:text-blue-800 hover:bg-blue-50'
+              : 'text-primary-600 hover:text-primary-800 hover:bg-primary-50'
           }`}
         >
           <Plus className="w-4 h-4" />

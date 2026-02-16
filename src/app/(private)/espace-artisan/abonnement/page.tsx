@@ -131,7 +131,7 @@ export default function AbonnementArtisanPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
+          <Loader2 className="w-8 h-8 animate-spin text-primary-600 mx-auto mb-4" />
           <p className="text-gray-600">Chargement...</p>
         </div>
       </div>
@@ -146,7 +146,7 @@ export default function AbonnementArtisanPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+      <div className="bg-gradient-to-r from-primary-600 to-primary-800 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center gap-4">
             <Link href="/espace-artisan/dashboard" className="text-white/80 hover:text-white">
@@ -154,7 +154,7 @@ export default function AbonnementArtisanPage() {
             </Link>
             <div>
               <h1 className="text-2xl font-bold">Abonnement</h1>
-              <p className="text-blue-100">Gérez votre abonnement et facturation</p>
+              <p className="text-primary-100">Gérez votre abonnement et facturation</p>
             </div>
           </div>
         </div>
@@ -202,7 +202,7 @@ export default function AbonnementArtisanPage() {
               </Link>
               <Link
                 href="/espace-artisan/abonnement"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-50 text-blue-600 font-medium"
+                className="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary-50 text-primary-600 font-medium"
               >
                 <Euro className="w-5 h-5" />
                 Abonnement
@@ -214,21 +214,21 @@ export default function AbonnementArtisanPage() {
           {/* Content */}
           <div className="lg:col-span-3 space-y-8">
             {/* Current plan */}
-            <div className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-xl p-6 text-white">
+            <div className="bg-gradient-to-r from-primary-600 to-primary-800 rounded-xl p-6 text-white">
               <div className="flex items-center justify-between">
                 <div>
                   <div className="flex items-center gap-2 mb-2">
                     <Crown className="w-6 h-6 text-yellow-400" />
-                    <span className="text-sm font-medium text-blue-200">Abonnement actuel</span>
+                    <span className="text-sm font-medium text-primary-200">Abonnement actuel</span>
                   </div>
                   <h2 className="text-2xl font-bold mb-1 capitalize">{currentPlan}</h2>
-                  <p className="text-blue-200">
+                  <p className="text-primary-200">
                     {currentPlanInfo?.price || 0}€/mois
                     {periodEndDate && ` • Renouvelé le ${periodEndDate}`}
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm text-blue-200 mb-2">Devis envoyés ce mois</p>
+                  <p className="text-sm text-primary-200 mb-2">Devis envoyés ce mois</p>
                   <div className="text-3xl font-bold">
                     {subscription?.devisUsed || 0}/{subscription?.devisLimit === 9999 ? '∞' : subscription?.devisLimit || 5}
                   </div>
@@ -244,11 +244,11 @@ export default function AbonnementArtisanPage() {
                   <div
                     key={plan.id}
                     className={`bg-white rounded-xl shadow-sm p-6 relative ${
-                      plan.popular ? 'ring-2 ring-blue-600' : ''
-                    } ${currentPlan === plan.id ? 'bg-blue-50' : ''}`}
+                      plan.popular ? 'ring-2 ring-primary-600' : ''
+                    } ${currentPlan === plan.id ? 'bg-primary-50' : ''}`}
                   >
                     {plan.popular && (
-                      <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-xs px-3 py-1 rounded-full">
+                      <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary-600 text-white text-xs px-3 py-1 rounded-full">
                         Populaire
                       </span>
                     )}
@@ -287,7 +287,7 @@ export default function AbonnementArtisanPage() {
                         className={`w-full py-3 rounded-lg font-medium transition-colors ${
                           plan.id === 'premium'
                             ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white hover:from-yellow-600 hover:to-orange-600'
-                            : 'bg-blue-600 text-white hover:bg-blue-700'
+                            : 'bg-primary-600 text-white hover:bg-primary-700'
                         }`}
                       >
                         {plan.price > plans.find(p => p.id === currentPlan)!.price ? (
@@ -313,7 +313,7 @@ export default function AbonnementArtisanPage() {
               </h2>
               <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-8 bg-gradient-to-r from-blue-600 to-blue-800 rounded flex items-center justify-center text-white text-xs font-bold">
+                  <div className="w-12 h-8 bg-gradient-to-r from-primary-600 to-primary-800 rounded flex items-center justify-center text-white text-xs font-bold">
                     VISA
                   </div>
                   <div>
@@ -321,7 +321,7 @@ export default function AbonnementArtisanPage() {
                     <p className="text-sm text-gray-500">Expire 12/25</p>
                   </div>
                 </div>
-                <button className="text-blue-600 text-sm font-medium hover:underline">
+                <button className="text-primary-600 text-sm font-medium hover:underline">
                   Modifier
                 </button>
               </div>
@@ -357,7 +357,7 @@ export default function AbonnementArtisanPage() {
                           {facture.status === 'paid' ? 'Payé' : facture.status === 'pending' ? 'En attente' : 'Échoué'}
                         </span>
                         {facture.url && (
-                          <a href={facture.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-700">
+                          <a href={facture.url} target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:text-primary-700">
                             <Download className="w-5 h-5" />
                           </a>
                         )}
@@ -400,7 +400,7 @@ export default function AbonnementArtisanPage() {
               <button
                 onClick={handleUpgrade}
                 disabled={upgrading}
-                className="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                className="flex-1 bg-primary-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {upgrading && <Loader2 className="w-4 h-4 animate-spin" />}
                 {upgrading ? 'Redirection...' : 'Continuer vers le paiement'}

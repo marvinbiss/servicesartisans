@@ -153,7 +153,7 @@ export default function AdminUserDetailPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
       </div>
     )
   }
@@ -203,7 +203,7 @@ export default function AdminUserDetailPage() {
                   <button
                     onClick={handleSave}
                     disabled={saving}
-                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                    className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50"
                   >
                     <Save className="w-4 h-4" />
                     {saving ? 'Enregistrement...' : 'Enregistrer'}
@@ -212,7 +212,7 @@ export default function AdminUserDetailPage() {
               ) : (
                 <button
                   onClick={() => setEditMode(true)}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                  className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
                 >
                   Modifier
                 </button>
@@ -236,7 +236,7 @@ export default function AdminUserDetailPage() {
                     type="text"
                     value={formData.full_name || ''}
                     onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                   />
                 ) : (
                   <p className="flex items-center gap-2 text-gray-900">
@@ -265,7 +265,7 @@ export default function AdminUserDetailPage() {
                     type="tel"
                     value={formData.phone || ''}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                   />
                 ) : (
                   <p className="flex items-center gap-2 text-gray-900">
@@ -283,7 +283,7 @@ export default function AdminUserDetailPage() {
                   <select
                     value={formData.user_type || 'client'}
                     onChange={(e) => setFormData({ ...formData, user_type: e.target.value as 'client' | 'artisan' })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                   >
                     <option value="client">Client</option>
                     <option value="artisan">Artisan</option>
@@ -310,7 +310,7 @@ export default function AdminUserDetailPage() {
                       type="text"
                       value={formData.company_name || ''}
                       onChange={(e) => setFormData({ ...formData, company_name: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                     />
                   ) : (
                     <p className="flex items-center gap-2 text-gray-900">
@@ -329,7 +329,7 @@ export default function AdminUserDetailPage() {
                       type="text"
                       value={formData.siret || ''}
                       onChange={(e) => setFormData({ ...formData, siret: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                     />
                   ) : (
                     <p className="text-gray-900">{user.siret || '-'}</p>
@@ -347,21 +347,21 @@ export default function AdminUserDetailPage() {
                         placeholder="Adresse"
                         value={formData.address || ''}
                         onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                        className="md:col-span-3 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="md:col-span-3 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                       />
                       <input
                         type="text"
                         placeholder="Code postal"
                         value={formData.postal_code || ''}
                         onChange={(e) => setFormData({ ...formData, postal_code: e.target.value })}
-                        className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                       />
                       <input
                         type="text"
                         placeholder="Ville"
                         value={formData.city || ''}
                         onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                        className="md:col-span-2 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="md:col-span-2 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                       />
                     </div>
                   ) : (
@@ -381,7 +381,7 @@ export default function AdminUserDetailPage() {
                       value={formData.description || ''}
                       onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                       rows={3}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 resize-none"
                     />
                   ) : (
                     <p className="text-gray-900">{user.description || '-'}</p>
@@ -402,7 +402,7 @@ export default function AdminUserDetailPage() {
                   <select
                     value={formData.subscription_plan || 'gratuit'}
                     onChange={(e) => setFormData({ ...formData, subscription_plan: e.target.value as 'gratuit' | 'pro' | 'premium' })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                   >
                     <option value="gratuit">Gratuit</option>
                     <option value="pro">Pro</option>
@@ -437,12 +437,12 @@ export default function AdminUserDetailPage() {
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="bg-gray-50 rounded-lg p-4 text-center">
-                  <Calendar className="w-6 h-6 mx-auto mb-2 text-blue-600" />
+                  <Calendar className="w-6 h-6 mx-auto mb-2 text-primary-600" />
                   <p className="text-2xl font-bold text-gray-900">{user.stats.bookings}</p>
                   <p className="text-sm text-gray-500">Réservations</p>
                 </div>
                 <div className="bg-gray-50 rounded-lg p-4 text-center">
-                  <Star className="w-6 h-6 mx-auto mb-2 text-amber-500" />
+                  <Star className="w-6 h-6 mx-auto mb-2 text-secondary-500" />
                   <p className="text-2xl font-bold text-gray-900">{user.stats.reviews}</p>
                   <p className="text-sm text-gray-500">Avis donnés</p>
                 </div>

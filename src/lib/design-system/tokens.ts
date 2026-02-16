@@ -5,19 +5,19 @@
  */
 
 export const colors = {
-  // Primary brand colors
+  // Primary brand colors — Marine Profond
   primary: {
-    50: '#eff6ff',
-    100: '#dbeafe',
-    200: '#bfdbfe',
-    300: '#93c5fd',
-    400: '#60a5fa',
-    500: '#3b82f6', // Main brand color
-    600: '#2563eb',
-    700: '#1d4ed8',
-    800: '#1e40af',
-    900: '#1e3a8a',
-    950: '#172554',
+    50: '#f0f1f8',
+    100: '#dde0f0',
+    200: '#bcc2e2',
+    300: '#96a0d1',
+    400: '#6b78bb',
+    500: '#4a5899', // Main brand color
+    600: '#364180',
+    700: '#2b3468',
+    800: '#212853',
+    900: '#1a2044',
+    950: '#0e1229',
   },
 
   // Secondary accent colors
@@ -48,18 +48,18 @@ export const colors = {
     900: '#14532d',
   },
 
-  // Warning/Pending
+  // Secondary — Cuivre (also used for warnings)
   warning: {
-    50: '#fffbeb',
-    100: '#fef3c7',
-    200: '#fde68a',
-    300: '#fcd34d',
-    400: '#fbbf24',
-    500: '#f59e0b',
-    600: '#d97706',
-    700: '#b45309',
-    800: '#92400e',
-    900: '#78350f',
+    50: '#fdf6f0',
+    100: '#faeadb',
+    200: '#f4d2b5',
+    300: '#edb585',
+    400: '#d4924f',
+    500: '#c67a3c',
+    600: '#b4652a',
+    700: '#8f4e22',
+    800: '#733f1e',
+    900: '#5f351b',
   },
 
   // Error/Danger
@@ -94,7 +94,8 @@ export const colors = {
 
 export const typography = {
   fontFamily: {
-    sans: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    sans: "'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+    heading: "'DM Serif Display', Georgia, 'Times New Roman', serif",
     mono: "'JetBrains Mono', 'Fira Code', Consolas, monospace",
   },
 

@@ -68,7 +68,7 @@ export function FaqSection({ provider, onSaved }: FaqSectionProps) {
             type="button"
             onClick={addFaq}
             disabled={faqAtMax}
-            className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1 disabled:opacity-50"
+            className="text-sm text-primary-600 hover:text-primary-700 font-medium flex items-center gap-1 disabled:opacity-50"
           >
             <Plus className="w-4 h-4" />
             {faqAtMax ? 'Limite atteinte' : 'Ajouter une question'}
@@ -110,12 +110,12 @@ export function FaqSection({ provider, onSaved }: FaqSectionProps) {
                       maxLength={200}
                       minLength={MIN_QUESTION_LENGTH}
                       placeholder="Ex : Quels sont vos d&eacute;lais d'intervention ?"
-                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm ${
-                        questionTooShort ? 'border-amber-300' : 'border-gray-300'
+                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm ${
+                        questionTooShort ? 'border-secondary-300' : 'border-gray-300'
                       }`}
                     />
                     {questionTooShort && (
-                      <p className="text-xs text-amber-600 mt-0.5">{MIN_QUESTION_LENGTH} caract&egrave;res minimum</p>
+                      <p className="text-xs text-secondary-600 mt-0.5">{MIN_QUESTION_LENGTH} caract&egrave;res minimum</p>
                     )}
                   </div>
                   <div>
@@ -130,12 +130,12 @@ export function FaqSection({ provider, onSaved }: FaqSectionProps) {
                       minLength={MIN_ANSWER_LENGTH}
                       rows={3}
                       placeholder="Votre r&eacute;ponse d&eacute;taill&eacute;e..."
-                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm resize-y ${
-                        answerTooShort ? 'border-amber-300' : 'border-gray-300'
+                      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm resize-y ${
+                        answerTooShort ? 'border-secondary-300' : 'border-gray-300'
                       }`}
                     />
                     {answerTooShort && (
-                      <p className="text-xs text-amber-600 mt-0.5">{MIN_ANSWER_LENGTH} caract&egrave;res minimum</p>
+                      <p className="text-xs text-secondary-600 mt-0.5">{MIN_ANSWER_LENGTH} caract&egrave;res minimum</p>
                     )}
                   </div>
                 </div>

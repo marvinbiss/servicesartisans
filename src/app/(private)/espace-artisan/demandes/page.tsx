@@ -36,7 +36,7 @@ const statusConfig: Record<string, { label: string; color: string }> = {
   sent: { label: 'Devis envoyé', color: 'bg-yellow-100 text-yellow-700' },
   accepted: { label: 'Accepté', color: 'bg-green-100 text-green-700' },
   refused: { label: 'Refusé', color: 'bg-gray-100 text-gray-700' },
-  completed: { label: 'Terminé', color: 'bg-blue-100 text-blue-700' },
+  completed: { label: 'Terminé', color: 'bg-primary-100 text-primary-700' },
 }
 
 export default function DemandesArtisanPage() {
@@ -144,7 +144,7 @@ export default function DemandesArtisanPage() {
       </div>
 
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+      <div className="bg-gradient-to-r from-primary-600 to-primary-800 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center gap-4">
             <Link href="/espace-artisan" className="text-white/80 hover:text-white">
@@ -152,7 +152,7 @@ export default function DemandesArtisanPage() {
             </Link>
             <div>
               <h1 className="text-2xl font-bold">Demandes de devis</h1>
-              <p className="text-blue-100">Gérez vos demandes entrantes</p>
+              <p className="text-primary-100">Gérez vos demandes entrantes</p>
             </div>
           </div>
         </div>
@@ -172,7 +172,7 @@ export default function DemandesArtisanPage() {
               </Link>
               <Link
                 href="/espace-artisan/demandes"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-50 text-blue-600 font-medium"
+                className="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary-50 text-primary-600 font-medium"
               >
                 <FileText className="w-5 h-5" />
                 Demandes
@@ -215,7 +215,7 @@ export default function DemandesArtisanPage() {
             <div className="bg-white rounded-xl shadow-sm p-4 mt-4">
               <Link
                 href="/services/plombier/paris/martin-plomberie-paris"
-                className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
+                className="flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium"
               >
                 <ExternalLink className="w-4 h-4" />
                 Voir mon profil public
@@ -231,11 +231,11 @@ export default function DemandesArtisanPage() {
             <div className="bg-white rounded-xl shadow-sm p-4 mt-4">
               <h4 className="font-medium text-gray-900 mb-3">Liens utiles</h4>
               <div className="space-y-2 text-sm">
-                <Link href="/services" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 py-1">
+                <Link href="/services" className="flex items-center gap-2 text-gray-600 hover:text-primary-600 py-1">
                   <Search className="w-4 h-4" />
                   Parcourir les services
                 </Link>
-                <Link href="/recherche" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 py-1">
+                <Link href="/recherche" className="flex items-center gap-2 text-gray-600 hover:text-primary-600 py-1">
                   <Search className="w-4 h-4" />
                   Rechercher un artisan
                 </Link>
@@ -253,7 +253,7 @@ export default function DemandesArtisanPage() {
                   <button
                     onClick={() => setFilterStatus('all')}
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      filterStatus === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      filterStatus === 'all' ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
                     Toutes ({stats?.total || 0})
@@ -261,7 +261,7 @@ export default function DemandesArtisanPage() {
                   <button
                     onClick={() => setFilterStatus('pending')}
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      filterStatus === 'pending' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      filterStatus === 'pending' ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
                     Nouvelles ({stats?.nouveau || 0})
@@ -269,7 +269,7 @@ export default function DemandesArtisanPage() {
                   <button
                     onClick={() => setFilterStatus('sent')}
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      filterStatus === 'sent' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      filterStatus === 'sent' ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
                     Devis envoyés ({stats?.devis_envoye || 0})
@@ -277,7 +277,7 @@ export default function DemandesArtisanPage() {
                   <button
                     onClick={() => setFilterStatus('accepted')}
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      filterStatus === 'accepted' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      filterStatus === 'accepted' ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
                     Acceptées ({stats?.accepte || 0})
@@ -289,7 +289,7 @@ export default function DemandesArtisanPage() {
             {/* Demandes list */}
             {loading ? (
               <div className="bg-white rounded-xl shadow-sm p-12 text-center">
-                <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
+                <Loader2 className="w-8 h-8 animate-spin text-primary-600 mx-auto mb-4" />
                 <p className="text-gray-600">Chargement des demandes...</p>
               </div>
             ) : (
@@ -331,7 +331,7 @@ export default function DemandesArtisanPage() {
                               {new Date(demande.created_at).toLocaleDateString('fr-FR')}
                             </span>
                             {demande.budget && (
-                              <span className="font-medium text-blue-600">
+                              <span className="font-medium text-primary-600">
                                 Budget : {demande.budget}
                               </span>
                             )}
@@ -342,7 +342,7 @@ export default function DemandesArtisanPage() {
                             <>
                               <button
                                 onClick={() => openDevisModal(demande)}
-                                className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                                className="flex items-center gap-2 bg-primary-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-primary-700 transition-colors"
                               >
                                 <Send className="w-4 h-4" />
                                 Envoyer devis
@@ -368,7 +368,7 @@ export default function DemandesArtisanPage() {
                             <span className="text-green-600 font-medium">Mission confirmée</span>
                           )}
                           {demande.status === 'completed' && (
-                            <span className="text-blue-600 font-medium">Terminée</span>
+                            <span className="text-primary-600 font-medium">Terminée</span>
                           )}
                           <ChevronRight className="w-5 h-5 text-gray-400" />
                         </div>
@@ -426,7 +426,7 @@ export default function DemandesArtisanPage() {
                   value={devisForm.amount}
                   onChange={(e) => setDevisForm({ ...devisForm, amount: e.target.value })}
                   placeholder="Ex: 250.00"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary-500"
                   required
                 />
               </div>
@@ -440,7 +440,7 @@ export default function DemandesArtisanPage() {
                   onChange={(e) => setDevisForm({ ...devisForm, description: e.target.value })}
                   rows={3}
                   placeholder="Détaillez les prestations incluses..."
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary-500"
                 />
               </div>
 
@@ -451,7 +451,7 @@ export default function DemandesArtisanPage() {
                 <select
                   value={devisForm.validity_days}
                   onChange={(e) => setDevisForm({ ...devisForm, validity_days: parseInt(e.target.value) })}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary-500"
                 >
                   <option value={7}>7 jours</option>
                   <option value={15}>15 jours</option>
@@ -471,7 +471,7 @@ export default function DemandesArtisanPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="flex-1 bg-primary-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
                   <Send className="w-4 h-4" />
@@ -518,13 +518,13 @@ export default function DemandesArtisanPage() {
                   <p className="font-medium text-gray-900">{selectedDemande.client_name}</p>
                   <p className="flex items-center gap-2 text-gray-600">
                     <Mail className="w-4 h-4" />
-                    <a href={`mailto:${selectedDemande.client_email}`} className="text-blue-600 hover:underline">
+                    <a href={`mailto:${selectedDemande.client_email}`} className="text-primary-600 hover:underline">
                       {selectedDemande.client_email}
                     </a>
                   </p>
                   <p className="flex items-center gap-2 text-gray-600">
                     <Phone className="w-4 h-4" />
-                    <a href={`tel:${selectedDemande.client_phone}`} className="text-blue-600 hover:underline">
+                    <a href={`tel:${selectedDemande.client_phone}`} className="text-primary-600 hover:underline">
                       {selectedDemande.client_phone}
                     </a>
                   </p>
@@ -565,7 +565,7 @@ export default function DemandesArtisanPage() {
                       setShowDetailModal(false)
                       openDevisModal(selectedDemande)
                     }}
-                    className="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+                    className="flex-1 bg-primary-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors flex items-center justify-center gap-2"
                   >
                     <Send className="w-4 h-4" />
                     Envoyer un devis

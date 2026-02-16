@@ -335,7 +335,7 @@ function renderInlineMarkdown(text: string): React.ReactNode[] {
         <a
           key={match.index}
           href={match[4]}
-          className="text-amber-600 hover:underline"
+          className="text-secondary-600 hover:underline"
         >
           {match[3]}
         </a>
@@ -371,19 +371,19 @@ function CalloutIcon({ calloutType }: { calloutType: CalloutBlock['calloutType']
       )
     case 'info':
       return (
-        <svg className="w-5 h-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <svg className="w-5 h-5 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       )
     case 'takeaway':
       return (
-        <svg className="w-5 h-5 text-amber-500" fill="currentColor" viewBox="0 0 24 24">
+        <svg className="w-5 h-5 text-secondary-500" fill="currentColor" viewBox="0 0 24 24">
           <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
         </svg>
       )
     case 'budget':
       return (
-        <svg className="w-5 h-5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <svg className="w-5 h-5 text-secondary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M14.121 15.536c-1.171 1.952-3.07 1.952-4.242 0-1.172-1.953-1.172-5.119 0-7.072 1.171-1.952 3.07-1.952 4.242 0M8 10.5h4m-4 3h4m9-1.5a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       )
@@ -403,11 +403,11 @@ function getCalloutStyles(calloutType: CalloutBlock['calloutType']): { bg: strin
     case 'warning':
       return { bg: 'bg-orange-50', border: 'border-orange-400', headerColor: 'text-orange-700' }
     case 'info':
-      return { bg: 'bg-blue-50', border: 'border-blue-400', headerColor: 'text-blue-700' }
+      return { bg: 'bg-primary-50', border: 'border-primary-400', headerColor: 'text-primary-700' }
     case 'takeaway':
-      return { bg: 'bg-amber-50', border: 'border-amber-400', headerColor: 'text-amber-700' }
+      return { bg: 'bg-secondary-50', border: 'border-secondary-400', headerColor: 'text-secondary-700' }
     case 'budget':
-      return { bg: 'bg-gradient-to-r from-amber-50 to-orange-50', border: 'border-amber-400', headerColor: 'text-amber-700' }
+      return { bg: 'bg-gradient-to-r from-secondary-50 to-orange-50', border: 'border-secondary-400', headerColor: 'text-secondary-700' }
     case 'expert':
       return { bg: 'bg-slate-50', border: 'border-slate-400', headerColor: 'text-slate-700' }
   }
@@ -518,13 +518,13 @@ function renderCalloutContent(block: CalloutBlock) {
 
 function getAuthorGradient(name: string): string {
   const gradients = [
-    'from-blue-500 to-blue-600',
+    'from-primary-500 to-primary-600',
     'from-emerald-500 to-emerald-600',
     'from-purple-500 to-purple-600',
-    'from-amber-500 to-amber-600',
+    'from-secondary-500 to-secondary-600',
     'from-rose-500 to-rose-600',
     'from-cyan-500 to-cyan-600',
-    'from-indigo-500 to-indigo-600',
+    'from-primary-500 to-primary-700',
     'from-teal-500 to-teal-600',
   ]
   let hash = 0
@@ -634,13 +634,13 @@ export default async function BlogArticlePage({ params }: PageProps) {
       <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         {/* Category */}
         <div className="max-w-3xl mx-auto mb-4">
-          <Link href={`/blog?tag=${encodeURIComponent(article.category.toLowerCase())}`} className="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-sm font-medium hover:bg-amber-200 transition-colors">
+          <Link href={`/blog?tag=${encodeURIComponent(article.category.toLowerCase())}`} className="bg-secondary-100 text-secondary-700 px-3 py-1 rounded-full text-sm font-medium hover:bg-secondary-200 transition-colors">
             {article.category}
           </Link>
         </div>
 
         {/* Title */}
-        <h1 className="font-heading text-3xl md:text-4xl lg:text-[2.75rem] font-bold text-gray-900 mb-6 max-w-3xl mx-auto leading-tight tracking-tight">
+        <h1 className="font-heading text-3xl md:text-4xl lg:text-[2.75rem] text-gray-900 mb-6 max-w-3xl mx-auto leading-tight">
           {article.title}
         </h1>
 
@@ -692,7 +692,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
               <div className="absolute bottom-5 left-6 right-6 flex items-center gap-3">
                 <span className="text-3xl">{categoryEmoji[article.category] || '📝'}</span>
-                <span className="text-sm font-semibold text-amber-300 uppercase tracking-wider">
+                <span className="text-sm font-semibold text-secondary-300 uppercase tracking-wider">
                   {article.category}
                 </span>
               </div>
@@ -825,9 +825,9 @@ export default async function BlogArticlePage({ params }: PageProps) {
 
           {/* Services associes */}
           {serviceLinks.length > 0 && (
-            <div className="mt-14 p-6 sm:p-8 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-100/80 rounded-2xl">
+            <div className="mt-14 p-6 sm:p-8 bg-gradient-to-r from-secondary-50 to-orange-50 border border-secondary-100/80 rounded-2xl">
               <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <span className="w-1.5 h-6 bg-amber-500 rounded-full" />
+                <span className="w-1.5 h-6 bg-secondary-500 rounded-full" />
                 Services associés
               </h3>
               <ul className="space-y-3">
@@ -835,9 +835,9 @@ export default async function BlogArticlePage({ params }: PageProps) {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-medium group transition-colors"
+                      className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-800 font-medium group transition-colors"
                     >
-                      <ChevronRight className="w-4 h-4 text-amber-500 group-hover:translate-x-0.5 transition-transform" />
+                      <ChevronRight className="w-4 h-4 text-secondary-500 group-hover:translate-x-0.5 transition-transform" />
                       {link.text}
                     </Link>
                   </li>
@@ -850,7 +850,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
           {relatedArticles.length > 0 && (
             <div className="mt-12">
               <h3 className="text-lg font-bold text-gray-900 mb-5 flex items-center gap-2">
-                <span className="w-1.5 h-6 bg-blue-500 rounded-full" />
+                <span className="w-1.5 h-6 bg-primary-500 rounded-full" />
                 Articles connexes
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -858,9 +858,9 @@ export default async function BlogArticlePage({ params }: PageProps) {
                   <Link
                     key={relSlug}
                     href={`/blog/${relSlug}`}
-                    className="group p-5 bg-white border border-gray-200 rounded-2xl hover:border-amber-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+                    className="group p-5 bg-white border border-gray-200 rounded-2xl hover:border-secondary-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
                   >
-                    <span className="text-sm font-semibold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2">{relTitle}</span>
+                    <span className="text-sm font-semibold text-gray-900 group-hover:text-primary-600 transition-colors line-clamp-2">{relTitle}</span>
                   </Link>
                 ))}
               </div>
@@ -875,7 +875,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
                 <Link
                   key={tag}
                   href={`/blog?tag=${encodeURIComponent(tag.toLowerCase())}`}
-                  className="bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full text-sm font-medium hover:bg-amber-50 hover:text-amber-700 hover:border-amber-200 transition-colors"
+                  className="bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full text-sm font-medium hover:bg-secondary-50 hover:text-secondary-700 hover:border-secondary-200 transition-colors"
                 >
                   {tag}
                 </Link>
@@ -892,7 +892,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Partager sur Facebook"
-                className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 hover:scale-110 transition-all duration-200"
+                className="w-10 h-10 bg-primary-600 text-white rounded-full flex items-center justify-center hover:bg-primary-700 hover:scale-110 transition-all duration-200"
               >
                 <Facebook className="w-5 h-5" />
               </a>
@@ -910,7 +910,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Partager sur LinkedIn"
-                className="w-10 h-10 bg-blue-700 text-white rounded-full flex items-center justify-center hover:bg-blue-800 hover:scale-110 transition-all duration-200"
+                className="w-10 h-10 bg-primary-700 text-white rounded-full flex items-center justify-center hover:bg-primary-800 hover:scale-110 transition-all duration-200"
               >
                 <Linkedin className="w-5 h-5" />
               </a>
@@ -953,13 +953,13 @@ export default async function BlogArticlePage({ params }: PageProps) {
             Confiance &amp; Sécurité
           </h2>
           <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-            <Link href="/notre-processus-de-verification" className="text-blue-600 hover:text-blue-800">
+            <Link href="/notre-processus-de-verification" className="text-primary-600 hover:text-primary-800">
               Comment nous référençons les artisans
             </Link>
-            <Link href="/politique-avis" className="text-blue-600 hover:text-blue-800">
+            <Link href="/politique-avis" className="text-primary-600 hover:text-primary-800">
               Notre politique des avis
             </Link>
-            <Link href="/mediation" className="text-blue-600 hover:text-blue-800">
+            <Link href="/mediation" className="text-primary-600 hover:text-primary-800">
               Service de médiation
             </Link>
           </nav>
@@ -969,10 +969,10 @@ export default async function BlogArticlePage({ params }: PageProps) {
       {/* CTA */}
       <div className="relative py-16 overflow-hidden bg-gradient-to-br from-[#0a0f1e] via-[#111827] to-[#0a0f1e]">
         <div className="absolute inset-0" style={{
-          background: 'radial-gradient(ellipse 50% 60% at 50% 50%, rgba(245,158,11,0.06) 0%, transparent 60%)',
+          background: 'radial-gradient(ellipse 50% 60% at 50% 50%, rgba(198,122,60,0.06) 0%, transparent 60%)',
         }} />
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4">
+          <h2 className="font-heading text-2xl md:text-3xl text-white mb-4">
             Besoin d&apos;un artisan ?
           </h2>
           <p className="text-slate-400 mb-8 max-w-xl mx-auto">
@@ -980,7 +980,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
           </p>
           <Link
             href="/devis"
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 text-slate-900 font-bold px-8 py-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-[0_8px_30px_-4px_rgba(245,158,11,0.5)] hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-secondary-400 via-secondary-300 to-secondary-400 text-slate-900 font-bold px-8 py-4 rounded-xl shadow-lg shadow-secondary-500/25 hover:shadow-[0_8px_30px_-4px_rgba(198,122,60,0.5)] hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
           >
             Demander un devis gratuit
             <ChevronRight className="w-5 h-5" />

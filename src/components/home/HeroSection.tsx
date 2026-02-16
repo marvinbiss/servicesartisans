@@ -136,7 +136,7 @@ export function HeroSection() {
     <>
       {/* ── HERO SECTION ────────────────────────────────────── */}
       <section
-        className="relative bg-[#0a0f1e] text-white overflow-hidden"
+        className="relative bg-[#0d1221] text-white overflow-hidden"
         style={{ minHeight: '70vh' }}
       >
         {/* Background layers */}
@@ -153,15 +153,15 @@ export function HeroSection() {
             blurDataURL={heroImage.blurDataURL}
           />
           {/* Dark overlay for text readability */}
-          <div className="absolute inset-0 bg-[#0a0f1e]/70" />
+          <div className="absolute inset-0 bg-[#0d1221]/70" />
           {/* Animated mesh gradient */}
           <div
             className="absolute inset-0"
             style={{
               background: [
-                'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%)',
-                'radial-gradient(ellipse 60% 60% at 80% 110%, rgba(37,99,235,0.1) 0%, transparent 50%)',
-                'radial-gradient(ellipse 50% 40% at 10% 90%, rgba(59,130,246,0.06) 0%, transparent 50%)',
+                'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(54,65,128,0.22) 0%, transparent 60%)',
+                'radial-gradient(ellipse 60% 60% at 80% 110%, rgba(54,65,128,0.12) 0%, transparent 50%)',
+                'radial-gradient(ellipse 50% 40% at 10% 90%, rgba(74,88,153,0.08) 0%, transparent 50%)',
               ].join(', '),
               backgroundSize: '200% 200%, 200% 200%, 200% 200%',
               animation: 'meshGradient 20s ease-in-out infinite',
@@ -172,7 +172,7 @@ export function HeroSection() {
             className="absolute top-1/3 right-1/4 w-[600px] h-[400px] opacity-[0.07]"
             style={{
               background:
-                'radial-gradient(circle, rgba(245,158,11,0.6) 0%, transparent 70%)',
+                'radial-gradient(circle, rgba(198,122,60,0.6) 0%, transparent 70%)',
               filter: 'blur(80px)',
               animation: 'blobFloat 18s ease-in-out infinite',
             }}
@@ -182,7 +182,7 @@ export function HeroSection() {
             className="absolute bottom-1/4 left-1/4 w-[500px] h-[500px] opacity-[0.06]"
             style={{
               background:
-                'radial-gradient(circle, rgba(59,130,246,0.6) 0%, transparent 70%)',
+                'radial-gradient(circle, rgba(74,88,153,0.6) 0%, transparent 70%)',
               filter: 'blur(80px)',
               animation: 'blobFloat 22s ease-in-out infinite reverse',
             }}
@@ -200,7 +200,7 @@ export function HeroSection() {
             className="absolute inset-0 opacity-[0.03]"
             style={{
               background:
-                'radial-gradient(ellipse 40% 40% at 70% 30%, rgba(245,158,11,0.5) 0%, transparent 70%)',
+                'radial-gradient(ellipse 40% 40% at 70% 30%, rgba(198,122,60,0.5) 0%, transparent 70%)',
               animation: 'meshGradient 25s ease-in-out infinite reverse',
               backgroundSize: '200% 200%',
             }}
@@ -246,7 +246,7 @@ export function HeroSection() {
               animate="visible"
               aria-hidden="true"
               role="presentation"
-              className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tighter leading-[1.05] mb-6"
+              className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] mb-6"
             >
               <AnimatedHeadingLine
                 text="L'annuaire des artisans"
@@ -254,7 +254,7 @@ export function HeroSection() {
               />
               <AnimatedHeadingLine
                 text="qualifiés en France"
-                className="text-amber-400 block"
+                className="text-secondary-400 block"
               />
             </motion.div>
 
@@ -305,7 +305,7 @@ export function HeroSection() {
                 { value: services.length, suffix: '', label: 'métiers' },
               ].map((stat) => (
                 <div key={stat.label} className="text-center">
-                  <div className="text-3xl md:text-4xl font-extrabold text-white tracking-tight font-heading">
+                  <div className="text-3xl md:text-4xl text-secondary-300 font-heading">
                     <AnimatedNumber
                       value={stat.value}
                       suffix={stat.suffix}
@@ -331,9 +331,9 @@ export function HeroSection() {
         >
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-4">
             <div className="flex items-center gap-3 justify-center md:justify-start">
-              <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center flex-shrink-0">
                 <svg
-                  className="w-5 h-5 text-blue-600"
+                  className="w-5 h-5 text-primary-600"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth={2}
@@ -358,9 +358,9 @@ export function HeroSection() {
             </div>
 
             <div className="flex items-center gap-3 justify-center">
-              <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-secondary-50 flex items-center justify-center flex-shrink-0">
                 <svg
-                  className="w-5 h-5 text-amber-600"
+                  className="w-5 h-5 text-secondary-600"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth={2}

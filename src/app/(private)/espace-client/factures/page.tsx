@@ -111,7 +111,7 @@ export default function FacturesPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"></div>
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary-600 border-t-transparent"></div>
       </div>
     )
   }
@@ -147,7 +147,7 @@ export default function FacturesPage() {
             onClick={() => setActiveTab('payments')}
             className={`flex-1 py-2.5 rounded-lg font-medium transition-all ${
               activeTab === 'payments'
-                ? 'bg-white text-blue-600 shadow'
+                ? 'bg-white text-primary-600 shadow'
                 : 'text-gray-600 hover:text-gray-900'
             }`}
           >
@@ -158,7 +158,7 @@ export default function FacturesPage() {
             onClick={() => setActiveTab('invoices')}
             className={`flex-1 py-2.5 rounded-lg font-medium transition-all ${
               activeTab === 'invoices'
-                ? 'bg-white text-blue-600 shadow'
+                ? 'bg-white text-primary-600 shadow'
                 : 'text-gray-600 hover:text-gray-900'
             }`}
           >
@@ -191,8 +191,8 @@ export default function FacturesPage() {
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                        <Euro className="w-6 h-6 text-blue-600" />
+                      <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center">
+                        <Euro className="w-6 h-6 text-primary-600" />
                       </div>
                       <div>
                         <h3 className="font-semibold text-gray-900">
@@ -275,7 +275,7 @@ export default function FacturesPage() {
                             href={invoice.pdfUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                            className="p-2 text-gray-600 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
                             title="Télécharger PDF"
                           >
                             <Download className="w-5 h-5" />
@@ -286,7 +286,7 @@ export default function FacturesPage() {
                             href={invoice.invoiceUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                            className="p-2 text-gray-600 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
                             title="Voir en ligne"
                           >
                             <ExternalLink className="w-5 h-5" />
@@ -316,8 +316,8 @@ export default function FacturesPage() {
                 </div>
                 <div className="text-sm text-gray-600">Réussis</div>
               </div>
-              <div className="text-center p-4 bg-blue-50 rounded-lg">
-                <div className="text-2xl font-bold text-blue-600">
+              <div className="text-center p-4 bg-primary-50 rounded-lg">
+                <div className="text-2xl font-bold text-primary-600">
                   {formatPrice(
                     payments
                       .filter((p) => p.status === 'succeeded' || p.status === 'paid')

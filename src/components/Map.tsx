@@ -11,7 +11,7 @@ const createDivIcon = (isPremium: boolean) => {
   return L.divIcon({
     className: 'custom-marker',
     html: `
-      <div class="w-8 h-8 ${isPremium ? 'bg-yellow-500' : 'bg-blue-600'} rounded-full border-2 border-white shadow-lg flex items-center justify-center">
+      <div class="w-8 h-8 ${isPremium ? 'bg-yellow-500' : 'bg-primary-600'} rounded-full border-2 border-white shadow-lg flex items-center justify-center">
         <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
           <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
         </svg>
@@ -99,7 +99,7 @@ export default function Map({
               {provider.phone && (
                 <a
                   href={`tel:${provider.phone}`}
-                  className="text-sm text-blue-600 hover:underline mt-1 block"
+                  className="text-sm text-primary-600 hover:underline mt-1 block"
                 >
                   {provider.phone}
                 </a>

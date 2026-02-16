@@ -44,7 +44,7 @@ export function PresentationSection({ provider, onSaved }: PresentationSectionPr
             onChange={(e) => setField('specialty', e.target.value || null)}
             maxLength={200}
             placeholder="Ex: Plombier, Électricien, Menuisier..."
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
           />
         </div>
 
@@ -59,13 +59,13 @@ export function PresentationSection({ provider, onSaved }: PresentationSectionPr
             rows={6}
             maxLength={5000}
             placeholder="Décrivez votre entreprise, vos services et ce qui vous distingue..."
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
           />
           <div className="flex justify-between items-center mt-1">
             <p className="text-xs text-gray-500">
               Si vous ne renseignez pas de description, elle sera générée automatiquement à partir de vos informations.
             </p>
-            <span className={`text-xs ${descriptionLength > 4500 ? 'text-amber-600' : 'text-gray-400'}`}>
+            <span className={`text-xs ${descriptionLength > 4500 ? 'text-secondary-600' : 'text-gray-400'}`}>
               {descriptionLength} / 5 000
             </span>
           </div>
@@ -82,10 +82,10 @@ export function PresentationSection({ provider, onSaved }: PresentationSectionPr
             rows={4}
             maxLength={5000}
             placeholder="Parlez de votre parcours, vos valeurs, votre engagement..."
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
           />
           <div className="flex justify-end mt-1">
-            <span className={`text-xs ${bioLength > 4500 ? 'text-amber-600' : 'text-gray-400'}`}>
+            <span className={`text-xs ${bioLength > 4500 ? 'text-secondary-600' : 'text-gray-400'}`}>
               {bioLength} / 5 000
             </span>
           </div>

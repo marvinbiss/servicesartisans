@@ -113,7 +113,7 @@ export function AvatarSection({ provider, onSaved }: AvatarSectionProps) {
   return (
     <div className="bg-white rounded-xl shadow-sm p-6" aria-busy={uploading || deleting}>
       <h2 className="text-lg font-semibold text-gray-900 mb-6 flex items-center gap-2">
-        <Camera className="w-5 h-5 text-blue-600" />
+        <Camera className="w-5 h-5 text-primary-600" />
         Photo de profil
       </h2>
 
@@ -126,8 +126,8 @@ export function AvatarSection({ provider, onSaved }: AvatarSectionProps) {
               className="w-24 h-24 rounded-full object-cover"
             />
           ) : (
-            <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center" role="img" aria-label="Aucune photo de profil">
-              <span className="text-3xl font-bold text-blue-600">{initials}</span>
+            <div className="w-24 h-24 bg-primary-100 rounded-full flex items-center justify-center" role="img" aria-label="Aucune photo de profil">
+              <span className="text-3xl font-bold text-primary-600">{initials}</span>
             </div>
           )}
           {(uploading || deleting) && (
@@ -158,7 +158,7 @@ export function AvatarSection({ provider, onSaved }: AvatarSectionProps) {
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={uploading || deleting}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              className="bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             >
               {uploading ? (
                 <>

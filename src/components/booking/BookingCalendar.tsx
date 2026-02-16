@@ -154,9 +154,9 @@ export function BookingCalendar({
   return (
     <div className={`bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden ${className}`}>
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-5">
+      <div className="bg-gradient-to-r from-primary-600 to-primary-700 text-white p-5">
         <h3 className="text-lg font-bold mb-1">Réserver un créneau</h3>
-        <p className="text-blue-100 text-sm">
+        <p className="text-primary-100 text-sm">
           {serviceName} • {serviceDuration} min
           {servicePrice && ` • ${servicePrice}€`}
         </p>
@@ -180,7 +180,7 @@ export function BookingCalendar({
               key={label}
               className={`flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium transition-colors ${
                 isCurrent
-                  ? 'text-blue-600 bg-blue-50'
+                  ? 'text-primary-600 bg-primary-50'
                   : isActive
                   ? 'text-green-600'
                   : 'text-slate-400'
@@ -191,7 +191,7 @@ export function BookingCalendar({
                   isActive && !isCurrent
                     ? 'bg-green-500 text-white'
                     : isCurrent
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-primary-600 text-white'
                     : 'bg-slate-200'
                 }`}
               >
@@ -257,9 +257,9 @@ export function BookingCalendar({
                       relative p-3 rounded-xl text-center transition-all
                       ${isPast ? 'opacity-40 cursor-not-allowed' : ''}
                       ${!hasSlots && !isPast ? 'opacity-50 cursor-not-allowed' : ''}
-                      ${isSelected ? 'bg-blue-600 text-white shadow-lg' : ''}
-                      ${!isSelected && hasSlots && !isPast ? 'hover:bg-blue-50 cursor-pointer' : ''}
-                      ${isToday(date) && !isSelected ? 'ring-2 ring-blue-500' : ''}
+                      ${isSelected ? 'bg-primary-600 text-white shadow-lg' : ''}
+                      ${!isSelected && hasSlots && !isPast ? 'hover:bg-primary-50 cursor-pointer' : ''}
+                      ${isToday(date) && !isSelected ? 'ring-2 ring-primary-500' : ''}
                     `}
                   >
                     <div className="text-xs font-medium mb-1">
@@ -269,7 +269,7 @@ export function BookingCalendar({
                     {hasSlots && !isPast && (
                       <div
                         className={`text-xs mt-1 ${
-                          isSelected ? 'text-blue-100' : 'text-green-600'
+                          isSelected ? 'text-primary-100' : 'text-green-600'
                         }`}
                       >
                         {availableSlots} dispo
@@ -292,7 +292,7 @@ export function BookingCalendar({
               >
                 <button
                   onClick={() => setStep('time')}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition-colors"
+                  className="w-full bg-primary-600 hover:bg-primary-700 text-white py-3 rounded-xl font-semibold transition-colors"
                 >
                   Choisir l'heure →
                 </button>
@@ -344,7 +344,7 @@ export function BookingCalendar({
                         py-2.5 px-3 rounded-lg text-sm font-medium transition-all
                         ${!slot.available ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : ''}
                         ${slot.available && selectedTime !== slot.time ? 'bg-green-50 text-green-700 hover:bg-green-100' : ''}
-                        ${selectedTime === slot.time ? 'bg-blue-600 text-white shadow-lg' : ''}
+                        ${selectedTime === slot.time ? 'bg-primary-600 text-white shadow-lg' : ''}
                       `}
                     >
                       {slot.time}
@@ -371,7 +371,7 @@ export function BookingCalendar({
                         py-2.5 px-3 rounded-lg text-sm font-medium transition-all
                         ${!slot.available ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : ''}
                         ${slot.available && selectedTime !== slot.time ? 'bg-green-50 text-green-700 hover:bg-green-100' : ''}
-                        ${selectedTime === slot.time ? 'bg-blue-600 text-white shadow-lg' : ''}
+                        ${selectedTime === slot.time ? 'bg-primary-600 text-white shadow-lg' : ''}
                       `}
                     >
                       {slot.time}
@@ -390,7 +390,7 @@ export function BookingCalendar({
                 <button
                   onClick={handleConfirm}
                   disabled={isLoading}
-                  className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white py-3 rounded-xl font-semibold transition-colors flex items-center justify-center gap-2"
+                  className="w-full bg-primary-600 hover:bg-primary-700 disabled:bg-primary-400 text-white py-3 rounded-xl font-semibold transition-colors flex items-center justify-center gap-2"
                 >
                   {isLoading ? (
                     <>

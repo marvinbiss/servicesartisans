@@ -75,7 +75,7 @@ export function AdvancedFilters({
             Filtres avancés
           </span>
           {activeFiltersCount > 0 && (
-            <span className="px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-600 rounded-full">
+            <span className="px-2 py-0.5 text-xs font-medium bg-primary-100 text-primary-600 rounded-full">
               {activeFiltersCount}
             </span>
           )}
@@ -143,7 +143,7 @@ export function AdvancedFilters({
                 className="w-full flex items-center justify-between p-4"
               >
                 <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-blue-500" />
+                  <MapPin className="w-4 h-4 text-primary-500" />
                   <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                     Distance ({values.radius || 25} km)
                   </span>
@@ -232,7 +232,7 @@ export function AdvancedFilters({
               onClick={() => handleChange('verified', !values.verified)}
               className={cn(
                 'relative w-11 h-6 rounded-full transition-colors',
-                values.verified ? 'bg-blue-600' : 'bg-gray-300 dark:bg-gray-600'
+                values.verified ? 'bg-primary-600' : 'bg-gray-300 dark:bg-gray-600'
               )}
             >
               <span

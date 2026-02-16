@@ -102,7 +102,7 @@ export function MessageSearch({ conversationId, onResultClick, onClose }: Messag
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Rechercher dans la conversation..."
-            className="w-full pl-9 pr-3 py-2 bg-gray-100 dark:bg-gray-800 border-none rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+            className="w-full pl-9 pr-3 py-2 bg-gray-100 dark:bg-gray-800 border-none rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
             autoFocus
           />
           {isSearching && (
@@ -157,7 +157,7 @@ export function MessageSearch({ conversationId, onResultClick, onClose }: Messag
               className={cn(
                 'w-full px-4 py-2 text-left transition-colors',
                 index === currentIndex
-                  ? 'bg-blue-50 dark:bg-blue-900/30'
+                  ? 'bg-primary-50 dark:bg-primary-900/30'
                   : 'hover:bg-gray-50 dark:hover:bg-gray-800'
               )}
             >

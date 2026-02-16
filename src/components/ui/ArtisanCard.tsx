@@ -73,7 +73,7 @@ export function ArtisanCard({
                 sizes="(max-width: 768px) 100vw, 192px"
               />
             ) : (
-              <div className="w-full h-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+              <div className="w-full h-full bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center">
                 <span className="text-4xl font-bold text-white">
                   {name.charAt(0)}
                 </span>
@@ -82,7 +82,7 @@ export function ArtisanCard({
 
             {/* Badge premium */}
             {isPremium && (
-              <div className="absolute top-3 left-3 bg-gradient-to-r from-amber-500 to-amber-600 text-white text-xs font-semibold px-2.5 py-1 rounded-full">
+              <div className="absolute top-3 left-3 bg-gradient-to-r from-secondary-500 to-secondary-600 text-white text-xs font-semibold px-2.5 py-1 rounded-full">
                 Premium
               </div>
             )}
@@ -101,11 +101,11 @@ export function ArtisanCard({
             <div className="flex items-start justify-between mb-2">
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="font-semibold text-lg text-slate-900 group-hover:text-blue-600 transition-colors">
+                  <h3 className="font-semibold text-lg text-slate-900 group-hover:text-primary-600 transition-colors">
                     {name}
                   </h3>
                   {isVerified && (
-                    <BadgeCheck className="w-5 h-5 text-blue-500" />
+                    <BadgeCheck className="w-5 h-5 text-primary-500" />
                   )}
                 </div>
                 <p className="text-slate-600">{profession}</p>
@@ -113,7 +113,7 @@ export function ArtisanCard({
 
               {/* Rating */}
               <div className="flex items-center gap-1">
-                <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
+                <Star className="w-5 h-5 text-secondary-400 fill-secondary-400" />
                 <span className="font-semibold text-slate-900">{rating.toFixed(1)}</span>
                 <span className="text-slate-500">({reviewCount})</span>
               </div>
@@ -170,7 +170,7 @@ export function ArtisanCard({
           {imageUrl ? (
             <Image src={imageUrl} alt={name} fill className="object-cover" sizes="48px" />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+            <div className="w-full h-full bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center">
               <span className="font-bold text-white">{name.charAt(0)}</span>
             </div>
           )}
@@ -178,12 +178,12 @@ export function ArtisanCard({
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1">
             <h4 className="font-medium text-slate-900 truncate">{name}</h4>
-            {isVerified && <BadgeCheck className="w-4 h-4 text-blue-500 flex-shrink-0" />}
+            {isVerified && <BadgeCheck className="w-4 h-4 text-primary-500 flex-shrink-0" />}
           </div>
           <p className="text-sm text-slate-500 truncate">{profession}</p>
         </div>
         <div className="flex items-center gap-1 flex-shrink-0">
-          <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+          <Star className="w-4 h-4 text-secondary-400 fill-secondary-400" />
           <span className="font-medium text-sm">{rating.toFixed(1)}</span>
         </div>
       </Link>
@@ -212,7 +212,7 @@ export function ArtisanCard({
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 flex items-center justify-center">
+            <div className="w-full h-full bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700 flex items-center justify-center">
               <span className="text-6xl font-bold text-white/90">
                 {name.charAt(0)}
               </span>
@@ -227,7 +227,7 @@ export function ArtisanCard({
             <motion.div
               initial={{ x: -10, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              className="absolute top-3 left-3 bg-gradient-to-r from-amber-500 to-amber-600 text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-lg"
+              className="absolute top-3 left-3 bg-gradient-to-r from-secondary-500 to-secondary-600 text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow-lg"
             >
               <span className="flex items-center gap-1">
                 <Star className="w-3 h-3 fill-white" />
@@ -270,15 +270,15 @@ export function ArtisanCard({
           {/* Header */}
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-1.5">
-              <h3 className="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
+              <h3 className="font-semibold text-slate-900 group-hover:text-primary-600 transition-colors">
                 {name}
               </h3>
               {isVerified && (
-                <BadgeCheck className="w-4 h-4 text-blue-500" />
+                <BadgeCheck className="w-4 h-4 text-primary-500" />
               )}
             </div>
             <div className="flex items-center gap-1">
-              <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+              <Star className="w-4 h-4 text-secondary-400 fill-secondary-400" />
               <span className="font-medium text-sm text-slate-900">{rating.toFixed(1)}</span>
               <span className="text-slate-500 text-sm">({reviewCount})</span>
             </div>

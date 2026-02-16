@@ -148,7 +148,7 @@ export default async function VillePage({ params }: PageProps) {
             )}
             <div className="absolute inset-0 bg-[#0a0f1e]/80" />
           <div className="absolute inset-0" style={{
-            background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(37,99,235,0.1) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(59,130,246,0.06) 0%, transparent 50%)',
+            background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(54,65,128,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(54,65,128,0.1) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(54,65,128,0.06) 0%, transparent 50%)',
           }} />
           <div className="absolute inset-0 opacity-[0.025]" style={{
             backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
@@ -172,9 +172,9 @@ export default async function VillePage({ params }: PageProps) {
 
           <div className="max-w-3xl">
             <div className="flex flex-wrap gap-2 mb-5">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/15 backdrop-blur-sm rounded-full border border-blue-400/25">
-                <MapPin className="w-4 h-4 text-blue-400" />
-                <span className="text-sm font-medium text-blue-200">{content.profile.citySizeLabel}</span>
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-500/15 backdrop-blur-sm rounded-full border border-primary-400/25">
+                <MapPin className="w-4 h-4 text-primary-400" />
+                <span className="text-sm font-medium text-primary-200">{content.profile.citySizeLabel}</span>
               </div>
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/15 backdrop-blur-sm rounded-full border border-emerald-400/25">
                 <Thermometer className="w-4 h-4 text-emerald-400" />
@@ -192,7 +192,7 @@ export default async function VillePage({ params }: PageProps) {
                 `${services.length} corps de métier à ${ville.name}`,
               ]
               return (
-                <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
+                <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl mb-5 leading-[1.1]">
                   {h1Templates[h1Hash % h1Templates.length]}
                 </h1>
               )
@@ -204,15 +204,15 @@ export default async function VillePage({ params }: PageProps) {
             {/* Location info */}
             <div className="flex flex-wrap gap-4 mb-8 text-sm">
               <div className="flex items-center gap-2 text-slate-300">
-                <MapPin className="w-4 h-4 text-blue-400" />
+                <MapPin className="w-4 h-4 text-primary-400" />
                 <span>{ville.region}</span>
               </div>
               <div className="flex items-center gap-2 text-slate-300">
-                <Building2 className="w-4 h-4 text-blue-400" />
+                <Building2 className="w-4 h-4 text-primary-400" />
                 <span>{ville.departement} ({ville.departementCode})</span>
               </div>
               <div className="flex items-center gap-2 text-slate-300">
-                <Users className="w-4 h-4 text-blue-400" />
+                <Users className="w-4 h-4 text-primary-400" />
                 <span>{ville.population} habitants</span>
               </div>
             </div>
@@ -220,10 +220,10 @@ export default async function VillePage({ params }: PageProps) {
             {/* Trust badges */}
             <div className="flex flex-wrap gap-3">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Shield className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Données SIREN officielles</span>
+                <Shield className="w-4 h-4 text-secondary-400" /><span className="text-sm font-medium">Données SIREN officielles</span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Clock className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Devis gratuits</span>
+                <Clock className="w-4 h-4 text-secondary-400" /><span className="text-sm font-medium">Devis gratuits</span>
               </div>
             </div>
           </div>
@@ -234,11 +234,11 @@ export default async function VillePage({ params }: PageProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
-              <Wrench className="w-5 h-5 text-blue-600" />
+            <div className="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center">
+              <Wrench className="w-5 h-5 text-primary-600" />
             </div>
             <div>
-              <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
+              <h2 className="font-heading text-2xl text-slate-900">
                 Trouver un artisan à {ville.name}
               </h2>
               <p className="text-sm text-slate-500">{services.length} corps de métier disponibles</p>
@@ -249,12 +249,12 @@ export default async function VillePage({ params }: PageProps) {
               <Link
                 key={service.slug}
                 href={`/services/${service.slug}/${villeSlug}`}
-                className={`bg-white rounded-xl shadow-sm p-5 text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group ${topServiceSlugsSet.has(service.slug) ? 'border-2 border-indigo-200' : 'border border-gray-100'}`}
+                className={`bg-white rounded-xl shadow-sm p-5 text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group ${topServiceSlugsSet.has(service.slug) ? 'border-2 border-primary-200' : 'border border-gray-100'}`}
               >
                 {topServiceSlugsSet.has(service.slug) && (
-                  <span className="inline-block text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full mb-2">Prioritaire</span>
+                  <span className="inline-block text-[10px] font-bold text-primary-700 bg-primary-50 px-2 py-0.5 rounded-full mb-2">Prioritaire</span>
                 )}
-                <h3 className="font-semibold text-slate-800 group-hover:text-blue-600 transition-colors text-sm">{service.name}</h3>
+                <h3 className="font-semibold text-slate-800 group-hover:text-primary-600 transition-colors text-sm">{service.name}</h3>
                 <p className="text-xs text-slate-400 mt-1.5">à {ville.name}</p>
               </Link>
             ))}
@@ -269,7 +269,7 @@ export default async function VillePage({ params }: PageProps) {
                 <MapPin className="w-5 h-5 text-emerald-600" />
               </div>
               <div>
-                <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
+                <h2 className="font-heading text-2xl text-slate-900">
                   Quartiers desservis à {ville.name}
                 </h2>
                 <p className="text-sm text-slate-500">{ville.quartiers.length} quartiers couverts</p>
@@ -290,11 +290,11 @@ export default async function VillePage({ params }: PageProps) {
         {/* ─── PROFIL DE LA VILLE ─────────────────────────────── */}
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center">
-              <Home className="w-5 h-5 text-indigo-600" />
+            <div className="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center">
+              <Home className="w-5 h-5 text-primary-700" />
             </div>
             <div>
-              <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
+              <h2 className="font-heading text-2xl text-slate-900">
                 Profil de {ville.name}
               </h2>
               <p className="text-sm text-slate-500">{content.profile.citySizeLabel} · {content.profile.climateLabel}</p>
@@ -303,7 +303,7 @@ export default async function VillePage({ params }: PageProps) {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <div className="bg-white rounded-xl border border-gray-200 p-5">
               <div className="flex items-center gap-2 mb-2">
-                <Thermometer className="w-4 h-4 text-blue-500" />
+                <Thermometer className="w-4 h-4 text-primary-500" />
                 <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Climat</span>
               </div>
               <p className="font-bold text-slate-900">{content.profile.climateLabel}</p>
@@ -324,7 +324,7 @@ export default async function VillePage({ params }: PageProps) {
             </div>
             <div className="bg-white rounded-xl border border-gray-200 p-5">
               <div className="flex items-center gap-2 mb-2">
-                <Building2 className="w-4 h-4 text-amber-500" />
+                <Building2 className="w-4 h-4 text-secondary-500" />
                 <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Département</span>
               </div>
               <p className="font-bold text-slate-900">{ville.departement} ({ville.departementCode})</p>
@@ -343,9 +343,9 @@ export default async function VillePage({ params }: PageProps) {
 
           <div className="grid sm:grid-cols-2 gap-3">
             {content.profile.climaticIssues.slice(0, 4).map((issue, i) => (
-              <div key={i} className="flex items-start gap-2 bg-amber-50 rounded-lg border border-amber-100 p-3">
-                <AlertTriangle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
-                <span className="text-sm text-amber-800">{issue}</span>
+              <div key={i} className="flex items-start gap-2 bg-secondary-50 rounded-lg border border-secondary-100 p-3">
+                <AlertTriangle className="w-4 h-4 text-secondary-500 mt-0.5 flex-shrink-0" />
+                <span className="text-sm text-secondary-800">{issue}</span>
               </div>
             ))}
           </div>
@@ -357,7 +357,7 @@ export default async function VillePage({ params }: PageProps) {
             <div className="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center">
               <TrendingUp className="w-5 h-5 text-teal-600" />
             </div>
-            <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
+            <h2 className="font-heading text-2xl text-slate-900">
               Artisanat à {ville.name}
             </h2>
           </div>
@@ -380,16 +380,16 @@ export default async function VillePage({ params }: PageProps) {
               <div className="w-10 h-10 bg-violet-100 rounded-xl flex items-center justify-center">
                 <Building2 className="w-5 h-5 text-violet-600" />
               </div>
-              <h2 className="font-heading text-xl font-bold text-slate-900 tracking-tight">
+              <h2 className="font-heading text-xl text-slate-900">
                 Autres villes du {ville.departement}
               </h2>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
               {nearbyVilles.map((v) => (
-                <Link key={v.slug} href={`/villes/${v.slug}`} className="flex items-center gap-2.5 bg-white rounded-xl border border-gray-200 p-3.5 hover:border-blue-300 hover:shadow-md transition-all group">
-                  <MapPin className="w-4 h-4 text-slate-400 group-hover:text-blue-600 flex-shrink-0 transition-colors" />
+                <Link key={v.slug} href={`/villes/${v.slug}`} className="flex items-center gap-2.5 bg-white rounded-xl border border-gray-200 p-3.5 hover:border-primary-300 hover:shadow-md transition-all group">
+                  <MapPin className="w-4 h-4 text-slate-400 group-hover:text-primary-600 flex-shrink-0 transition-colors" />
                   <div className="min-w-0">
-                    <span className="block text-sm font-medium text-slate-800 group-hover:text-blue-600 truncate transition-colors">{v.name}</span>
+                    <span className="block text-sm font-medium text-slate-800 group-hover:text-primary-600 truncate transition-colors">{v.name}</span>
                     <span className="text-xs text-slate-400">{v.population} hab.</span>
                   </div>
                 </Link>
@@ -401,10 +401,10 @@ export default async function VillePage({ params }: PageProps) {
         {/* ─── FAQ SECTION ──────────────────────────────────── */}
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
-              <HelpCircle className="w-5 h-5 text-amber-600" />
+            <div className="w-10 h-10 bg-secondary-100 rounded-xl flex items-center justify-center">
+              <HelpCircle className="w-5 h-5 text-secondary-600" />
             </div>
-            <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
+            <h2 className="font-heading text-2xl text-slate-900">
               Questions fréquentes
             </h2>
           </div>
@@ -422,17 +422,17 @@ export default async function VillePage({ params }: PageProps) {
       {/* ─── CTA ────────────────────────────────────────────── */}
       <section className="relative bg-[#0a0f1e] overflow-hidden">
         <div className="absolute inset-0" style={{
-          background: 'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(37,99,235,0.12) 0%, transparent 60%)',
+          background: 'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(54,65,128,0.12) 0%, transparent 60%)',
         }} />
         <div className="relative max-w-4xl mx-auto px-4 py-16 md:py-20 text-center">
-          <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">
+          <h2 className="font-heading text-2xl md:text-3xl text-white mb-4">
             Besoin d&apos;un artisan à {ville.name} ?
           </h2>
           <p className="text-slate-400 mb-8 max-w-lg mx-auto">
             Décrivez votre projet et recevez des devis gratuits d&apos;artisans qualifiés.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/devis" className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-300">
+            <Link href="/devis" className="inline-flex items-center gap-2 bg-gradient-to-r from-secondary-500 via-secondary-400 to-secondary-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-secondary-500/25 hover:shadow-xl hover:shadow-secondary-500/35 hover:-translate-y-0.5 transition-all duration-300">
               Demander un devis gratuit
             </Link>
             <Link href="/services" className="inline-flex items-center gap-2 text-slate-300 hover:text-white font-medium transition-colors">
@@ -445,7 +445,7 @@ export default async function VillePage({ params }: PageProps) {
       {/* ─── SEO INTERNAL LINKS ─────────────────────────────── */}
       <section className="py-16 bg-white border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-xl font-bold text-slate-900 mb-8 tracking-tight">
+          <h2 className="font-heading text-xl text-slate-900 mb-8">
             Voir aussi
           </h2>
           <div className="grid md:grid-cols-3 gap-10">
@@ -454,13 +454,13 @@ export default async function VillePage({ params }: PageProps) {
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Services à {ville.name}</h3>
               <div className="space-y-2">
                 {services.slice(0, 10).map((s) => (
-                  <Link key={s.slug} href={`/services/${s.slug}/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
+                  <Link key={s.slug} href={`/services/${s.slug}/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-primary-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {s.name} à {ville.name}
                   </Link>
                 ))}
               </div>
-              <Link href="/services" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
+              <Link href="/services" className="inline-flex items-center gap-1 text-primary-600 hover:text-primary-700 text-sm font-medium mt-3">
                 Tous les services <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -470,13 +470,13 @@ export default async function VillePage({ params }: PageProps) {
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Villes en {ville.region}</h3>
               <div className="space-y-2">
                 {regionVilles.slice(0, 10).map((v) => (
-                  <Link key={v.slug} href={`/villes/${v.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
+                  <Link key={v.slug} href={`/villes/${v.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-primary-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     Artisans à {v.name}
                   </Link>
                 ))}
               </div>
-              <Link href="/villes" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
+              <Link href="/villes" className="inline-flex items-center gap-1 text-primary-600 hover:text-primary-700 text-sm font-medium mt-3">
                 Toutes les villes <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -486,24 +486,24 @@ export default async function VillePage({ params }: PageProps) {
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Navigation</h3>
               <div className="space-y-2">
                 {regionSlug && (
-                  <Link href={`/regions/${regionSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
+                  <Link href={`/regions/${regionSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-primary-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     Région {ville.region}
                   </Link>
                 )}
-                <Link href="/departements" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
+                <Link href="/departements" className="flex items-center gap-2 text-sm text-slate-600 hover:text-primary-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />
                   Tous les départements
                 </Link>
-                <Link href="/regions" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
+                <Link href="/regions" className="flex items-center gap-2 text-sm text-slate-600 hover:text-primary-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />
                   Toutes les régions
                 </Link>
-                <Link href="/villes" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
+                <Link href="/villes" className="flex items-center gap-2 text-sm text-slate-600 hover:text-primary-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />
                   Toutes les villes
                 </Link>
-                <Link href="/devis" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
+                <Link href="/devis" className="flex items-center gap-2 text-sm text-slate-600 hover:text-primary-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />
                   Demander un devis
                 </Link>
@@ -530,16 +530,16 @@ export default async function VillePage({ params }: PageProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-lg font-bold text-gray-900 mb-4">Confiance & Sécurité</h2>
           <div className="flex flex-wrap gap-4">
-            <Link href="/notre-processus-de-verification" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
+            <Link href="/notre-processus-de-verification" className="text-sm text-primary-600 hover:text-primary-800 flex items-center gap-1.5">
               Processus de vérification
             </Link>
-            <Link href="/politique-avis" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
+            <Link href="/politique-avis" className="text-sm text-primary-600 hover:text-primary-800 flex items-center gap-1.5">
               Politique d&apos;avis
             </Link>
-            <Link href="/mediation" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
+            <Link href="/mediation" className="text-sm text-primary-600 hover:text-primary-800 flex items-center gap-1.5">
               Médiation
             </Link>
-            <Link href="/cgv" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
+            <Link href="/cgv" className="text-sm text-primary-600 hover:text-primary-800 flex items-center gap-1.5">
               CGV
             </Link>
           </div>

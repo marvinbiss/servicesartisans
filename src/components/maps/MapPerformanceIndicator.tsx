@@ -49,7 +49,7 @@ export default function MapPerformanceIndicator({
           className="absolute top-20 right-4 z-20 bg-white rounded-xl shadow-lg p-3 min-w-[200px]"
         >
           <div className="flex items-center gap-2 mb-2">
-            <Zap className="w-4 h-4 text-blue-600" />
+            <Zap className="w-4 h-4 text-primary-600" />
             <span className="text-sm font-semibold text-gray-900">Performance</span>
           </div>
 
@@ -92,7 +92,7 @@ export default function MapPerformanceIndicator({
             {resultsCount !== undefined && (
               <div className="flex items-center justify-between text-xs">
                 <span className="text-gray-600">Résultats</span>
-                <span className="font-medium text-blue-600">{resultsCount}</span>
+                <span className="font-medium text-primary-600">{resultsCount}</span>
               </div>
             )}
           </div>

@@ -147,7 +147,7 @@ export default function PortfolioPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
+          <Loader2 className="w-8 h-8 animate-spin text-primary-600 mx-auto mb-4" />
           <p className="text-gray-600">Chargement...</p>
         </div>
       </div>
@@ -166,7 +166,7 @@ export default function PortfolioPage() {
               setLoading(true)
               fetchPortfolio()
             }}
-            className="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+            className="bg-primary-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-700 transition-colors"
           >
             Réessayer
           </button>
@@ -190,12 +190,12 @@ export default function PortfolioPage() {
       </div>
 
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+      <div className="bg-gradient-to-r from-primary-600 to-primary-800 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold">Mon Portfolio</h1>
-              <p className="text-blue-100">
+              <p className="text-primary-100">
                 Gérez vos réalisations et mettez en valeur votre travail
               </p>
             </div>
@@ -203,7 +203,7 @@ export default function PortfolioPage() {
               variant="primary"
               leftIcon={<Plus className="w-5 h-5" />}
               onClick={() => setShowAddModal(true)}
-              className="bg-white text-blue-600 hover:bg-blue-50"
+              className="bg-white text-primary-600 hover:bg-primary-50"
             >
               Ajouter
             </Button>
@@ -225,7 +225,7 @@ export default function PortfolioPage() {
               </Link>
               <Link
                 href="/espace-artisan/portfolio"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-50 text-blue-600 font-medium"
+                className="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary-50 text-primary-600 font-medium"
               >
                 <ImageIcon className="w-5 h-5" />
                 Portfolio
@@ -297,7 +297,7 @@ export default function PortfolioPage() {
                 </div>
                 <div className="flex justify-between text-gray-600">
                   <span>Mis en avant</span>
-                  <span className="font-medium text-amber-600">{stats.featured}</span>
+                  <span className="font-medium text-secondary-600">{stats.featured}</span>
                 </div>
               </div>
             </div>
@@ -312,7 +312,7 @@ export default function PortfolioPage() {
                 onClick={() => setFilter('all')}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   filter === 'all'
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-primary-600 text-white'
                     : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
                 }`}
               >
@@ -322,7 +322,7 @@ export default function PortfolioPage() {
                 onClick={() => setFilter('image')}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
                   filter === 'image'
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-primary-600 text-white'
                     : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
                 }`}
               >
@@ -333,7 +333,7 @@ export default function PortfolioPage() {
                 onClick={() => setFilter('video')}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
                   filter === 'video'
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-primary-600 text-white'
                     : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
                 }`}
               >
@@ -344,7 +344,7 @@ export default function PortfolioPage() {
                 onClick={() => setFilter('before_after')}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
                   filter === 'before_after'
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-primary-600 text-white'
                     : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
                 }`}
               >

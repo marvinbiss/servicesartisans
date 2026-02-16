@@ -14,12 +14,12 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 
 // ── Services ─────────────────────────────────────────────────────────
 const services = [
-  { name: 'Plombier', slug: 'plombier', icon: 'Wrench', color: 'from-blue-500 to-blue-600', searches: '15k/mois', urgent: true },
-  { name: 'Électricien', slug: 'electricien', icon: 'Zap', color: 'from-amber-500 to-amber-600', searches: '12k/mois', urgent: true },
+  { name: 'Plombier', slug: 'plombier', icon: 'Wrench', color: 'from-primary-500 to-primary-600', searches: '15k/mois', urgent: true },
+  { name: 'Électricien', slug: 'electricien', icon: 'Zap', color: 'from-secondary-500 to-secondary-600', searches: '12k/mois', urgent: true },
   { name: 'Serrurier', slug: 'serrurier', icon: 'Key', color: 'from-slate-600 to-slate-700', searches: '9k/mois', urgent: true },
   { name: 'Chauffagiste', slug: 'chauffagiste', icon: 'Flame', color: 'from-orange-500 to-orange-600', searches: '7k/mois', urgent: false },
   { name: 'Peintre', slug: 'peintre-en-batiment', icon: 'PaintBucket', color: 'from-purple-500 to-purple-600', searches: '6k/mois', urgent: false },
-  { name: 'Menuisier', slug: 'menuisier', icon: 'Hammer', color: 'from-amber-600 to-amber-700', searches: '5k/mois', urgent: false },
+  { name: 'Menuisier', slug: 'menuisier', icon: 'Hammer', color: 'from-secondary-600 to-secondary-700', searches: '5k/mois', urgent: false },
   { name: 'Carreleur', slug: 'carreleur', icon: 'Grid3X3', color: 'from-teal-500 to-teal-600', searches: '4k/mois', urgent: false },
   { name: 'Couvreur', slug: 'couvreur', icon: 'Home', color: 'from-red-500 to-red-600', searches: '4k/mois', urgent: false },
   { name: 'Maçon', slug: 'macon', icon: 'Wrench', color: 'from-stone-500 to-stone-600', searches: '3k/mois', urgent: false },
@@ -107,7 +107,7 @@ function HighlightedText({ text, query }: { text: string; query: string }) {
   return (
     <>
       {before}
-      <span className="font-bold text-blue-600">{match}</span>
+      <span className="font-bold text-primary-600">{match}</span>
       {after}
     </>
   )
@@ -439,7 +439,7 @@ export function HeroSearch() {
               <div
                 className={`p-4 md:p-5 cursor-text border-b md:border-b-0 md:border-r transition-all duration-200 ${
                   activeField === 'service'
-                    ? 'bg-slate-50 border-blue-200'
+                    ? 'bg-slate-50 border-primary-200'
                     : 'hover:bg-slate-50/50 border-slate-200'
                 }`}
                 onClick={() => {
@@ -452,7 +452,7 @@ export function HeroSearch() {
                 </label>
                 <div className="flex items-center gap-3">
                   <Search className={`w-5 h-5 flex-shrink-0 transition-colors duration-200 ${
-                    activeField === 'service' ? 'text-blue-500' : 'text-slate-400'
+                    activeField === 'service' ? 'text-primary-500' : 'text-slate-400'
                   }`} />
                   <input
                     ref={serviceInputRef}
@@ -539,8 +539,8 @@ export function HeroSearch() {
                             onMouseEnter={() => setHighlightedServiceIndex(idx)}
                             className={`w-full flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-150 group min-h-[48px] ${
                               isHighlighted
-                                ? 'bg-blue-50 shadow-sm'
-                                : 'hover:bg-blue-50/60'
+                                ? 'bg-primary-50 shadow-sm'
+                                : 'hover:bg-primary-50/60'
                             }`}
                           >
                             <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${service.color} flex items-center justify-center shadow-sm transition-transform duration-150 ${
@@ -550,7 +550,7 @@ export function HeroSearch() {
                             </div>
                             <div className="flex-1 text-left">
                               <div className={`font-medium transition-colors duration-150 ${
-                                isHighlighted ? 'text-blue-700' : 'text-slate-900 group-hover:text-blue-600'
+                                isHighlighted ? 'text-primary-700' : 'text-slate-900 group-hover:text-primary-600'
                               }`}>
                                 {service.name}
                               </div>
@@ -564,7 +564,7 @@ export function HeroSearch() {
                               </span>
                             )}
                             <ChevronRight className={`w-4 h-4 transition-all duration-150 ${
-                              isHighlighted ? 'text-blue-400 translate-x-0.5' : 'text-slate-300'
+                              isHighlighted ? 'text-primary-400 translate-x-0.5' : 'text-slate-300'
                             }`} />
                           </button>
                         )
@@ -596,7 +596,7 @@ export function HeroSearch() {
               <div
                 className={`p-4 md:p-5 cursor-text transition-all duration-200 ${
                   activeField === 'location'
-                    ? 'bg-slate-50 border-blue-200'
+                    ? 'bg-slate-50 border-primary-200'
                     : 'hover:bg-slate-50/50'
                 }`}
                 onClick={() => {
@@ -609,7 +609,7 @@ export function HeroSearch() {
                 </label>
                 <div className="flex items-center gap-3">
                   <MapPin className={`w-5 h-5 flex-shrink-0 transition-colors duration-200 ${
-                    activeField === 'location' ? 'text-blue-500' : 'text-slate-400'
+                    activeField === 'location' ? 'text-primary-500' : 'text-slate-400'
                   }`} />
                   <input
                     ref={locationInputRef}
@@ -660,15 +660,15 @@ export function HeroSearch() {
                       type="button"
                       onClick={handleGeolocate}
                       disabled={isLocating}
-                      className="w-full flex items-center gap-3 p-4 hover:bg-blue-50 border-b border-slate-100 transition-all duration-150 min-h-[56px]"
+                      className="w-full flex items-center gap-3 p-4 hover:bg-primary-50 border-b border-slate-100 transition-all duration-150 min-h-[56px]"
                     >
                       <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
-                        isLocating ? 'bg-blue-200' : 'bg-blue-100'
+                        isLocating ? 'bg-primary-200' : 'bg-primary-100'
                       }`}>
                         {isLocating ? (
-                          <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+                          <div className="w-5 h-5 border-2 border-primary-500 border-t-transparent rounded-full animate-spin" />
                         ) : (
-                          <Navigation className="w-5 h-5 text-blue-600" />
+                          <Navigation className="w-5 h-5 text-primary-600" />
                         )}
                       </div>
                       <div className="text-left">
@@ -701,17 +701,17 @@ export function HeroSearch() {
                               onMouseEnter={() => setHighlightedCityIndex(idx)}
                               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-150 group min-h-[44px] ${
                                 isHighlighted
-                                  ? 'bg-blue-50 shadow-sm'
-                                  : 'hover:bg-blue-50/60'
+                                  ? 'bg-primary-50 shadow-sm'
+                                  : 'hover:bg-primary-50/60'
                               }`}
                             >
                               <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
-                                isHighlighted ? 'bg-blue-100' : 'bg-slate-100'
+                                isHighlighted ? 'bg-primary-100' : 'bg-slate-100'
                               }`}>
-                                <Clock className={`w-4 h-4 ${isHighlighted ? 'text-blue-600' : 'text-slate-400'}`} />
+                                <Clock className={`w-4 h-4 ${isHighlighted ? 'text-primary-600' : 'text-slate-400'}`} />
                               </div>
                               <span className={`flex-1 text-left font-medium transition-colors ${
-                                isHighlighted ? 'text-blue-700' : 'text-slate-900'
+                                isHighlighted ? 'text-primary-700' : 'text-slate-900'
                               }`}>
                                 {cityName}
                               </span>
@@ -748,18 +748,18 @@ export function HeroSearch() {
                               onMouseEnter={() => setHighlightedCityIndex(idx)}
                               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-150 min-h-[48px] ${
                                 isHighlighted
-                                  ? 'bg-blue-50 shadow-sm'
-                                  : 'hover:bg-blue-50/60'
+                                  ? 'bg-primary-50 shadow-sm'
+                                  : 'hover:bg-primary-50/60'
                               }`}
                             >
                               <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors flex-shrink-0 ${
-                                isHighlighted ? 'bg-blue-100' : 'bg-slate-100'
+                                isHighlighted ? 'bg-primary-100' : 'bg-slate-100'
                               }`}>
-                                <MapPin className={`w-4 h-4 ${isHighlighted ? 'text-blue-600' : 'text-slate-400'}`} />
+                                <MapPin className={`w-4 h-4 ${isHighlighted ? 'text-primary-600' : 'text-slate-400'}`} />
                               </div>
                               <div className="flex-1 text-left min-w-0">
                                 <div className={`font-medium transition-colors truncate ${
-                                  isHighlighted ? 'text-blue-700' : 'text-slate-900'
+                                  isHighlighted ? 'text-primary-700' : 'text-slate-900'
                                 }`}>
                                   <HighlightedText text={city.name} query={location} />
                                   <span className="text-slate-400 font-normal ml-1">({city.departementCode})</span>
@@ -793,7 +793,7 @@ export function HeroSearch() {
                                 key={fc.name}
                                 type="button"
                                 onClick={() => selectCity(fc.name)}
-                                className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-full transition-colors font-medium min-h-[36px]"
+                                className="inline-flex items-center gap-1 text-sm text-primary-600 hover:text-primary-700 bg-primary-50 hover:bg-primary-100 px-3 py-1.5 rounded-full transition-colors font-medium min-h-[36px]"
                               >
                                 <MapPin className="w-3 h-3" />
                                 {fc.name} ({fc.dept})
@@ -824,13 +824,13 @@ export function HeroSearch() {
                                 onMouseEnter={() => setHighlightedCityIndex(idx)}
                                 className={`flex items-center justify-between px-3 py-2.5 rounded-lg transition-all duration-150 min-h-[44px] ${
                                   isHighlighted
-                                    ? 'bg-blue-50 shadow-sm'
-                                    : 'hover:bg-blue-50/60'
+                                    ? 'bg-primary-50 shadow-sm'
+                                    : 'hover:bg-primary-50/60'
                                 }`}
                               >
                                 <div className="text-left">
                                   <span className={`font-medium transition-colors ${
-                                    isHighlighted ? 'text-blue-700' : 'text-slate-900'
+                                    isHighlighted ? 'text-primary-700' : 'text-slate-900'
                                   }`}>{city.name}</span>
                                   <div className="text-[11px] text-slate-400">{city.departement}</div>
                                 </div>
@@ -865,7 +865,7 @@ export function HeroSearch() {
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 aria-label="Rechercher"
-                className="w-full md:w-auto bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-200 shadow-lg shadow-blue-600/30 hover:shadow-xl hover:shadow-blue-600/40 flex items-center justify-center gap-2 min-h-[48px]"
+                className="w-full md:w-auto bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-200 shadow-lg shadow-primary-600/30 hover:shadow-xl hover:shadow-primary-600/40 flex items-center justify-center gap-2 min-h-[48px]"
               >
                 <Search className="w-5 h-5" />
                 <span className="md:hidden lg:inline">Rechercher</span>

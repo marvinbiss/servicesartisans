@@ -104,7 +104,7 @@ export default function AdminDashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
-              <Shield className="w-8 h-8 text-blue-600" />
+              <Shield className="w-8 h-8 text-primary-600" />
               <div>
                 <h1 className="text-xl font-bold text-gray-900">Tableau de bord</h1>
                 <p className="text-sm text-gray-500">Vue d&apos;ensemble de la plateforme</p>
@@ -139,7 +139,7 @@ export default function AdminDashboard() {
           {/* Today */}
           <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
             <div className="flex items-center gap-3 mb-4">
-              <Activity className="w-5 h-5 text-blue-600" />
+              <Activity className="w-5 h-5 text-primary-600" />
               <h3 className="font-semibold text-gray-900">Aujourd&apos;hui</h3>
             </div>
             {isLoading ? (
@@ -169,7 +169,7 @@ export default function AdminDashboard() {
           {/* Quality */}
           <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
             <div className="flex items-center gap-3 mb-4">
-              <Star className="w-5 h-5 text-amber-500" />
+              <Star className="w-5 h-5 text-secondary-500" />
               <h3 className="font-semibold text-gray-900">Qualité</h3>
             </div>
             {isLoading ? (
@@ -188,7 +188,7 @@ export default function AdminDashboard() {
                       key={star}
                       className={`w-5 h-5 ${
                         star <= Math.round(data?.stats?.averageRating ?? 0)
-                          ? 'fill-amber-400 text-amber-400'
+                          ? 'fill-secondary-400 text-secondary-400'
                           : 'text-gray-300'
                       }`}
                     />

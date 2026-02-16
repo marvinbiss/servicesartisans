@@ -348,7 +348,7 @@ export default function CalendrierPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
       </div>
     )
   }
@@ -379,10 +379,10 @@ export default function CalendrierPage() {
         </div>
 
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+        <div className="bg-gradient-to-r from-primary-600 to-primary-800 text-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <h1 className="text-2xl font-bold">Espace Artisan</h1>
-            <p className="text-blue-100">Calendrier des disponibilités</p>
+            <p className="text-primary-100">Calendrier des disponibilités</p>
           </div>
         </div>
 
@@ -445,12 +445,12 @@ export default function CalendrierPage() {
       </div>
 
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+      <div className="bg-gradient-to-r from-primary-600 to-primary-800 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold">Espace Artisan</h1>
-              <p className="text-blue-100">{profile?.company_name || profile?.full_name}</p>
+              <p className="text-primary-100">{profile?.company_name || profile?.full_name}</p>
             </div>
             <div className="flex items-center gap-4">
               {profile?.is_verified && (
@@ -480,7 +480,7 @@ export default function CalendrierPage() {
               </Link>
               <Link
                 href="/espace-artisan/calendrier"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-50 text-blue-600 font-medium"
+                className="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary-50 text-primary-600 font-medium"
               >
                 <Calendar className="w-5 h-5" />
                 Calendrier
@@ -527,7 +527,7 @@ export default function CalendrierPage() {
             <div className="bg-white rounded-xl shadow-sm p-4 mt-4">
               <Link
                 href="/services/plombier/paris/martin-plomberie-paris"
-                className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
+                className="flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium"
               >
                 <ExternalLink className="w-4 h-4" />
                 Voir mon profil public
@@ -543,11 +543,11 @@ export default function CalendrierPage() {
             <div className="bg-white rounded-xl shadow-sm p-4 mt-4">
               <h4 className="font-medium text-gray-900 mb-3">Liens utiles</h4>
               <div className="space-y-2 text-sm">
-                <Link href="/services" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 py-1">
+                <Link href="/services" className="flex items-center gap-2 text-gray-600 hover:text-primary-600 py-1">
                   <Search className="w-4 h-4" />
                   Parcourir les services
                 </Link>
-                <Link href="/recherche" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 py-1">
+                <Link href="/recherche" className="flex items-center gap-2 text-gray-600 hover:text-primary-600 py-1">
                   <Search className="w-4 h-4" />
                   Rechercher un artisan
                 </Link>
@@ -624,14 +624,14 @@ export default function CalendrierPage() {
                       disabled={past}
                       className={`aspect-square p-1 rounded-lg border-2 transition-all ${
                         selectedDate?.toDateString() === date.toDateString()
-                          ? 'border-blue-500 bg-blue-50'
+                          ? 'border-primary-500 bg-primary-50'
                           : isToday(date)
-                          ? 'border-blue-300 bg-blue-50'
+                          ? 'border-primary-300 bg-primary-50'
                           : 'border-transparent hover:bg-gray-50'
                       } ${past ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer'}`}
                     >
                       <div className={`text-sm font-medium ${
-                        isToday(date) ? 'text-blue-600' : 'text-gray-900'
+                        isToday(date) ? 'text-primary-600' : 'text-gray-900'
                       }`}>
                         {date.getDate()}
                       </div>
@@ -677,7 +677,7 @@ export default function CalendrierPage() {
                   </h3>
                   <button
                     onClick={() => setShowSlotModal(true)}
-                    className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                    className="flex items-center gap-2 bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700"
                   >
                     <Plus className="w-4 h-4" />
                     Ajouter un créneau
@@ -711,7 +711,7 @@ export default function CalendrierPage() {
                               {' - '}
                               {slot.booking.service}
                               {slot.booking.phone && (
-                                <span className="ml-2 text-blue-600">{slot.booking.phone}</span>
+                                <span className="ml-2 text-primary-600">{slot.booking.phone}</span>
                               )}
                             </div>
                           )}
@@ -731,7 +731,7 @@ export default function CalendrierPage() {
                           </>
                         ) : (
                           <>
-                            <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
+                            <span className="bg-primary-100 text-primary-700 px-3 py-1 rounded-full text-sm font-medium">
                               Réservé
                             </span>
                             <button className="p-2 text-gray-400 hover:text-gray-600 rounded-lg">
@@ -763,8 +763,8 @@ export default function CalendrierPage() {
                       className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
                     >
                       <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                          <Calendar className="w-6 h-6 text-blue-600" />
+                        <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center">
+                          <Calendar className="w-6 h-6 text-primary-600" />
                         </div>
                         <div>
                           <div className="font-medium text-gray-900">
@@ -795,7 +795,7 @@ export default function CalendrierPage() {
             {/* Quick Stats */}
             <div className="grid grid-cols-3 gap-4">
               <div className="bg-white rounded-xl shadow-sm p-6 text-center">
-                <div className="text-3xl font-bold text-blue-600">{stats.monthlyBookings}</div>
+                <div className="text-3xl font-bold text-primary-600">{stats.monthlyBookings}</div>
                 <div className="text-sm text-gray-500">RDV ce mois</div>
               </div>
               <div className="bg-white rounded-xl shadow-sm p-6 text-center">
@@ -842,7 +842,7 @@ export default function CalendrierPage() {
                     type="time"
                     value={newSlotStart}
                     onChange={(e) => setNewSlotStart(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                     required
                   />
                 </div>
@@ -854,7 +854,7 @@ export default function CalendrierPage() {
                     type="time"
                     value={newSlotEnd}
                     onChange={(e) => setNewSlotEnd(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                     required
                   />
                 </div>
@@ -882,7 +882,7 @@ export default function CalendrierPage() {
                 <button
                   type="submit"
                   disabled={isSaving}
-                  className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="flex-1 bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {isSaving && <Loader2 className="w-4 h-4 animate-spin" />}
                   Ajouter
@@ -967,7 +967,7 @@ export default function CalendrierPage() {
               <button
                 onClick={handleSaveSettings}
                 disabled={isSaving}
-                className="w-full bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 font-medium disabled:opacity-50 flex items-center justify-center gap-2"
+                className="w-full bg-primary-600 text-white px-4 py-3 rounded-lg hover:bg-primary-700 font-medium disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {isSaving && <Loader2 className="w-4 h-4 animate-spin" />}
                 Enregistrer les paramètres

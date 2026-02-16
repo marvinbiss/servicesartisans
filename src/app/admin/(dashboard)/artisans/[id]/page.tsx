@@ -180,7 +180,7 @@ export default function AdminArtisanDetailPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
       </div>
     )
   }
@@ -194,7 +194,7 @@ export default function AdminArtisanDetailPage() {
       return <span className="px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm font-medium">Suspendu</span>
     }
     if (!artisan.is_verified) {
-      return <span className="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-sm font-medium">En attente de vérification</span>
+      return <span className="px-3 py-1 bg-secondary-100 text-secondary-700 rounded-full text-sm font-medium">En attente de vérification</span>
     }
     return <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">Vérifié</span>
   }
@@ -219,7 +219,7 @@ export default function AdminArtisanDetailPage() {
                   {artisan.company_name || artisan.full_name || 'Sans nom'}
                 </h1>
                 {artisan.is_featured && (
-                  <span className="px-2 py-1 bg-amber-100 text-amber-700 rounded text-xs font-medium">
+                  <span className="px-2 py-1 bg-secondary-100 text-secondary-700 rounded text-xs font-medium">
                     Mis en avant
                   </span>
                 )}
@@ -230,7 +230,7 @@ export default function AdminArtisanDetailPage() {
                 <SubscriptionBadge plan={artisan.subscription_plan} />
                 {artisan.rating && artisan.reviews_count > 0 && (
                   <div className="flex items-center gap-1 text-sm">
-                    <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                    <Star className="w-4 h-4 fill-secondary-400 text-secondary-400" />
                     <span className="font-medium">{artisan.rating.toFixed(1)}</span>
                     <span className="text-gray-500">({artisan.reviews_count} avis)</span>
                   </div>
@@ -250,7 +250,7 @@ export default function AdminArtisanDetailPage() {
               </a>
               <button
                 onClick={() => router.push(`/admin/artisans/${artisanId}/edit`)}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
               >
                 <Edit2 className="w-4 h-4" />
                 Modifier
@@ -318,7 +318,7 @@ export default function AdminArtisanDetailPage() {
                   {artisan.services.map((service) => (
                     <span
                       key={service}
-                      className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm"
+                      className="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-sm"
                     >
                       {service}
                     </span>
@@ -378,7 +378,7 @@ export default function AdminArtisanDetailPage() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-gray-500">Taux de réponse</span>
-                  <span className="font-semibold text-blue-600">
+                  <span className="font-semibold text-primary-600">
                     {artisan.stats?.response_rate || 0}%
                   </span>
                 </div>
@@ -430,7 +430,7 @@ export default function AdminArtisanDetailPage() {
                   onClick={() => setSuspendModal(true)}
                   className={`w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg ${
                     artisan.is_active
-                      ? 'bg-amber-100 text-amber-700 hover:bg-amber-200'
+                      ? 'bg-secondary-100 text-secondary-700 hover:bg-secondary-200'
                       : 'bg-green-100 text-green-700 hover:bg-green-200'
                   }`}
                 >

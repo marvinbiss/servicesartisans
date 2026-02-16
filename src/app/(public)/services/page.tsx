@@ -125,8 +125,8 @@ const allServices = [
 ]
 
 const colorClasses: Record<string, { bg: string; icon: string; hover: string }> = {
-  blue: { bg: 'bg-blue-50', icon: 'text-blue-600', hover: 'group-hover:bg-blue-100' },
-  amber: { bg: 'bg-amber-50', icon: 'text-amber-600', hover: 'group-hover:bg-amber-100' },
+  blue: { bg: 'bg-primary-50', icon: 'text-primary-600', hover: 'group-hover:bg-primary-100' },
+  amber: { bg: 'bg-secondary-50', icon: 'text-secondary-600', hover: 'group-hover:bg-secondary-100' },
   green: { bg: 'bg-green-50', icon: 'text-green-600', hover: 'group-hover:bg-green-100' },
   orange: { bg: 'bg-orange-50', icon: 'text-orange-600', hover: 'group-hover:bg-orange-100' },
   violet: { bg: 'bg-violet-50', icon: 'text-violet-600', hover: 'group-hover:bg-violet-100' },
@@ -150,24 +150,24 @@ export default function ServicesPage() {
       <JsonLd data={[breadcrumbSchema, organizationSchema]} />
 
       {/* Premium Hero */}
-      <section className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 text-white py-20 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-primary-900 text-white py-20 overflow-hidden">
         {/* Background decoration */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl" />
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-blue-500/5 to-violet-500/5 rounded-full blur-3xl" />
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary-500/10 rounded-full blur-3xl" />
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-secondary-500/10 rounded-full blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-primary-500/5 to-violet-500/5 rounded-full blur-3xl" />
         </div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           {/* Trust badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 mb-6">
-            <Award className="w-4 h-4 text-amber-400" />
+            <Award className="w-4 h-4 text-secondary-400" />
             <span className="text-sm font-medium text-white/90">50+ métiers du bâtiment</span>
           </div>
 
-          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight">
+          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl mb-6">
             Tous nos{' '}
-            <span className="bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-secondary-400 via-secondary-300 to-secondary-400 bg-clip-text text-transparent">
               services
             </span>{' '}
             artisans
@@ -180,7 +180,7 @@ export default function ServicesPage() {
           {/* Stats */}
           <div className="flex flex-wrap justify-center gap-8">
             <div className="flex items-center gap-3 px-5 py-3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/10">
-              <TrendingUp className="w-5 h-5 text-amber-400" />
+              <TrendingUp className="w-5 h-5 text-secondary-400" />
               <div className="text-left">
                 <div className="text-2xl font-bold text-white">2h</div>
                 <div className="text-xs text-slate-400">Temps de réponse</div>
@@ -212,7 +212,7 @@ export default function ServicesPage() {
                     <CategoryIcon className={`w-7 h-7 ${colors.icon}`} />
                   </div>
                   <div>
-                    <h2 className="font-heading text-2xl font-bold text-gray-900 tracking-tight">
+                    <h2 className="font-heading text-2xl text-gray-900">
                       {category.category}
                     </h2>
                     <p className="text-sm text-gray-500">{category.services.length} services disponibles</p>
@@ -235,14 +235,14 @@ export default function ServicesPage() {
                             <div className={`w-12 h-12 ${colors.bg} rounded-xl flex items-center justify-center mb-4 ${colors.hover} transition-colors`}>
                               <Icon className={`w-6 h-6 ${colors.icon}`} />
                             </div>
-                            <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-2">
+                            <h3 className="font-semibold text-gray-900 group-hover:text-primary-600 transition-colors mb-2">
                               {service.name}
                             </h3>
                             <p className="text-sm text-gray-500 leading-relaxed">
                               {service.description}
                             </p>
                           </div>
-                          <ArrowRight className="absolute bottom-6 right-6 w-5 h-5 text-gray-300 group-hover:text-blue-500 group-hover:translate-x-1 transition-all" />
+                          <ArrowRight className="absolute bottom-6 right-6 w-5 h-5 text-gray-300 group-hover:text-primary-500 group-hover:translate-x-1 transition-all" />
                         </Link>
                       )
                     }
@@ -274,8 +274,8 @@ export default function ServicesPage() {
 
           {/* Maillage interne: Villes populaires */}
           <div className="mt-16 pt-12 border-t border-gray-200">
-            <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3 tracking-tight">
-              <MapPin className="w-6 h-6 text-blue-600" />
+            <h2 className="font-heading text-2xl text-gray-900 mb-6 flex items-center gap-3">
+              <MapPin className="w-6 h-6 text-primary-600" />
               Trouvez un artisan par ville
             </h2>
             <PopularCitiesLinks showTitle={false} limit={10} />
@@ -285,19 +285,19 @@ export default function ServicesPage() {
 
       {/* Premium CTA */}
       <section className="relative py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900" />
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-primary-900 to-slate-900" />
         <div className="absolute inset-0">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-amber-500/20 rounded-full blur-3xl" />
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary-500/20 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary-500/20 rounded-full blur-3xl" />
         </div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500/20 backdrop-blur-sm rounded-full border border-amber-500/30 mb-6">
-            <Sparkles className="w-4 h-4 text-amber-400" />
-            <span className="text-sm font-medium text-amber-300">Devis gratuit en quelques clics</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-secondary-500/20 backdrop-blur-sm rounded-full border border-secondary-500/30 mb-6">
+            <Sparkles className="w-4 h-4 text-secondary-400" />
+            <span className="text-sm font-medium text-secondary-300">Devis gratuit en quelques clics</span>
           </div>
 
-          <h2 className="font-heading text-3xl md:text-4xl font-bold text-white mb-4 tracking-tight">
+          <h2 className="font-heading text-3xl md:text-4xl text-white mb-4">
             Vous ne trouvez pas votre métier ?
           </h2>
           <p className="text-xl text-slate-300 mb-10 max-w-xl mx-auto">
@@ -305,7 +305,7 @@ export default function ServicesPage() {
           </p>
           <Link
             href="/contact"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold rounded-xl hover:from-amber-600 hover:via-amber-500 hover:to-amber-600 transition-all shadow-xl shadow-amber-500/30 hover:shadow-amber-500/40 hover:-translate-y-0.5"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-secondary-500 via-secondary-400 to-secondary-500 text-white font-semibold rounded-xl hover:from-secondary-600 hover:via-secondary-500 hover:to-secondary-600 transition-all shadow-xl shadow-secondary-500/30 hover:shadow-secondary-500/40 hover:-translate-y-0.5"
           >
             Nous contacter
             <ArrowRight className="w-5 h-5" />

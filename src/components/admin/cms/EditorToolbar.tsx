@@ -48,7 +48,7 @@ function ToolbarButton({ onClick, isActive, disabled, title, children }: Toolbar
       aria-label={title}
       className={`p-1.5 rounded transition-colors ${
         isActive
-          ? 'bg-blue-100 text-blue-700'
+          ? 'bg-primary-100 text-primary-700'
           : 'text-gray-600 hover:bg-gray-200 hover:text-gray-900'
       } ${disabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer'}`}
     >
@@ -358,7 +358,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
                 setUrlModal(null)
               }
             }}
-            className={`w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+            className={`w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 ${
               urlModal.value.trim() && !isSafeUrl(urlModal.value.trim())
                 ? 'border-red-300 bg-red-50'
                 : 'border-gray-300'
@@ -385,7 +385,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
                 ? (urlModal.value.trim() !== '' && !isSafeUrl(urlModal.value.trim()))
                 : (!urlModal.value.trim() || !isSafeUrl(urlModal.value.trim()))
               }
-              className="px-3 py-1.5 text-sm text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-3 py-1.5 text-sm text-white bg-primary-600 rounded-md hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Insérer
             </button>

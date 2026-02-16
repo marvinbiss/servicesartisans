@@ -87,7 +87,7 @@ export default function AvisRecusPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
+          <Loader2 className="w-8 h-8 animate-spin text-primary-600 mx-auto mb-4" />
           <p className="text-gray-600">Chargement des avis...</p>
         </div>
       </div>
@@ -97,7 +97,7 @@ export default function AvisRecusPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
+      <div className="bg-gradient-to-r from-primary-600 to-primary-800 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center gap-4">
             <Link href="/espace-artisan/dashboard" className="text-white/80 hover:text-white">
@@ -105,7 +105,7 @@ export default function AvisRecusPage() {
             </Link>
             <div>
               <h1 className="text-2xl font-bold">Avis reçus</h1>
-              <p className="text-blue-100">Consultez et répondez aux avis de vos clients</p>
+              <p className="text-primary-100">Consultez et répondez aux avis de vos clients</p>
             </div>
           </div>
         </div>
@@ -137,11 +137,11 @@ export default function AvisRecusPage() {
               >
                 <MessageSquare className="w-5 h-5" />
                 Messages
-                <span className="ml-auto bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full">5</span>
+                <span className="ml-auto bg-primary-600 text-white text-xs px-2 py-0.5 rounded-full">5</span>
               </Link>
               <Link
                 href="/espace-artisan/avis-recus"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-50 text-blue-600 font-medium"
+                className="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary-50 text-primary-600 font-medium"
               >
                 <Star className="w-5 h-5" />
                 Avis reçus
@@ -230,7 +230,7 @@ export default function AvisRecusPage() {
                       {!item.reponse && (
                         <button
                           onClick={() => setReplyingTo(item.id)}
-                          className="flex items-center gap-2 text-blue-600 text-sm hover:underline"
+                          className="flex items-center gap-2 text-primary-600 text-sm hover:underline"
                         >
                           <MessageCircle className="w-4 h-4" />
                           Répondre
@@ -258,13 +258,13 @@ export default function AvisRecusPage() {
                           value={replyText}
                           onChange={(e) => setReplyText(e.target.value)}
                           placeholder="Écrivez votre réponse..."
-                          className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 mb-2"
+                          className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 mb-2"
                           rows={3}
                         />
                         <button
                           onClick={() => handleReply(item.id)}
                           disabled={submitting || !replyText.trim()}
-                          className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center gap-2"
+                          className="bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-700 transition-colors disabled:opacity-50 flex items-center gap-2"
                         >
                           {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
                           Envoyer
@@ -273,8 +273,8 @@ export default function AvisRecusPage() {
                     )}
 
                     {item.reponse && (
-                      <div className="bg-blue-50 rounded-lg p-4 ml-4">
-                        <p className="text-sm text-blue-600 font-medium mb-1">Votre réponse :</p>
+                      <div className="bg-primary-50 rounded-lg p-4 ml-4">
+                        <p className="text-sm text-primary-600 font-medium mb-1">Votre réponse :</p>
                         <p className="text-gray-700 text-sm">{item.reponse}</p>
                       </div>
                     )}

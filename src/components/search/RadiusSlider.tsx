@@ -38,7 +38,7 @@ export function RadiusSlider({
             className={cn(
               'px-3 py-1.5 rounded-full text-sm font-medium transition-colors',
               value === preset
-                ? 'bg-blue-600 text-white'
+                ? 'bg-primary-600 text-white'
                 : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
             )}
           >
@@ -51,7 +51,7 @@ export function RadiusSlider({
       <div className="space-y-2">
         <div className="flex items-center justify-between text-sm">
           <span className="text-gray-500 dark:text-gray-400">{min} km</span>
-          <div className="flex items-center gap-1 font-medium text-blue-600">
+          <div className="flex items-center gap-1 font-medium text-primary-600">
             <MapPin className="w-4 h-4" />
             {value} km
           </div>
@@ -64,7 +64,7 @@ export function RadiusSlider({
 
           {/* Filled track */}
           <div
-            className="absolute inset-y-0 left-0 bg-blue-600 rounded-full"
+            className="absolute inset-y-0 left-0 bg-primary-600 rounded-full"
             style={{ width: `${percentage}%` }}
           />
 
@@ -86,7 +86,7 @@ export function RadiusSlider({
           {/* Thumb */}
           <div
             className={cn(
-              'absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-white border-2 border-blue-600 rounded-full shadow transition-transform',
+              'absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-white border-2 border-primary-600 rounded-full shadow transition-transform',
               isDragging && 'scale-125'
             )}
             style={{ left: `calc(${percentage}% - 8px)` }}
@@ -98,7 +98,7 @@ export function RadiusSlider({
           <div className="relative">
             <div
               className={cn(
-                'rounded-full bg-blue-100 dark:bg-blue-900/30 border border-blue-300 dark:border-blue-700 transition-all',
+                'rounded-full bg-primary-100 dark:bg-primary-900/30 border border-primary-300 dark:border-primary-700 transition-all',
               )}
               style={{
                 width: `${Math.min(150, value * 1.5)}px`,
@@ -106,7 +106,7 @@ export function RadiusSlider({
               }}
             />
             <div className="absolute inset-0 flex items-center justify-center">
-              <MapPin className="w-6 h-6 text-blue-600" />
+              <MapPin className="w-6 h-6 text-primary-600" />
             </div>
           </div>
         </div>

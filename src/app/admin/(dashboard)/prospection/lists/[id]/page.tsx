@@ -247,7 +247,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
               <button
                 onClick={handleSaveEdit}
                 disabled={savingEdit || !editName.trim()}
-                className="flex items-center gap-1 px-3 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                className="flex items-center gap-1 px-3 py-1.5 text-sm bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50"
               >
                 <Save className="w-3 h-3" /> {savingEdit ? 'Sauvegarde...' : 'Sauvegarder'}
               </button>
@@ -262,14 +262,14 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
         ) : (
           <div className="flex items-center gap-3">
             <h1
-              className="text-2xl font-bold text-gray-900 cursor-pointer hover:text-blue-600"
+              className="text-2xl font-bold text-gray-900 cursor-pointer hover:text-primary-600"
               onClick={() => setEditingName(true)}
               title="Cliquer pour modifier"
             >
               {list.name}
             </h1>
             <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-              list.list_type === 'static' ? 'bg-gray-100 text-gray-700' : 'bg-blue-100 text-blue-700'
+              list.list_type === 'static' ? 'bg-gray-100 text-gray-700' : 'bg-primary-100 text-primary-700'
             }`}>
               {list.list_type === 'static' ? 'Statique' : 'Dynamique'}
             </span>
@@ -347,8 +347,8 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
 
       {/* Dynamic filter info */}
       {list.list_type === 'dynamic' && list.filter_criteria && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-          <h3 className="text-sm font-medium text-blue-700 mb-2">Crit&egrave;res de filtrage dynamique</h3>
+        <div className="bg-primary-50 border border-primary-200 rounded-lg p-4 mb-4">
+          <h3 className="text-sm font-medium text-primary-700 mb-2">Crit&egrave;res de filtrage dynamique</h3>
           <div className="flex flex-wrap gap-2">
             {list.filter_criteria.contact_type && (
               <span className="text-xs px-2 py-1 bg-white rounded border">
@@ -416,7 +416,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
                   members.map((member) => (
                     <tr key={member.contact_id} className="hover:bg-gray-50">
                       <td className="px-4 py-3">
-                        <Link href={`/admin/prospection/contacts/${member.contact_id}`} className="font-medium text-blue-600 hover:underline">
+                        <Link href={`/admin/prospection/contacts/${member.contact_id}`} className="font-medium text-primary-600 hover:underline">
                           {member.contact?.contact_name || member.contact?.company_name || '-'}
                         </Link>
                       </td>

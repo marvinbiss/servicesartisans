@@ -241,9 +241,9 @@ export function DateRangePicker({
                       onClick={() => handleDateClick(date)}
                       className={`w-8 h-8 rounded text-sm transition-colors ${
                         selected
-                          ? 'bg-blue-600 text-white'
+                          ? 'bg-primary-600 text-white'
                           : inRange
-                          ? 'bg-blue-100 text-blue-700'
+                          ? 'bg-primary-100 text-primary-700'
                           : today
                           ? 'bg-gray-100 text-gray-900 font-medium'
                           : 'text-gray-700 hover:bg-gray-100'

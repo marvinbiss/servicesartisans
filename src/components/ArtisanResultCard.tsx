@@ -139,11 +139,11 @@ export default function ArtisanResultCard({
                 className="w-16 h-16 rounded-full object-cover"
               />
             ) : artisan.is_center ? (
-              <div className="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center">
-                <Building2 className="w-8 h-8 text-blue-600" />
+              <div className="w-16 h-16 bg-primary-100 rounded-lg flex items-center justify-center">
+                <Building2 className="w-8 h-8 text-primary-600" />
               </div>
             ) : (
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white text-xl font-bold">
+              <div className="w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex items-center justify-center text-white text-xl font-bold">
                 {displayName?.charAt(0) || 'A'}
               </div>
             )}
@@ -157,7 +157,7 @@ export default function ArtisanResultCard({
                 <div className="flex items-center gap-2 flex-wrap">
                   <Link
                     href={getArtisanUrl(artisan)}
-                    className="text-lg font-semibold text-blue-600 hover:underline"
+                    className="text-lg font-semibold text-primary-600 hover:underline"
                   >
                     {displayName}
                   </Link>
@@ -205,7 +205,7 @@ export default function ArtisanResultCard({
                     </span>
                   )}
                   {artisan.is_center && (
-                    <span className="inline-flex items-center gap-1 text-xs text-blue-700 bg-blue-50 px-2 py-0.5 rounded">
+                    <span className="inline-flex items-center gap-1 text-xs text-primary-700 bg-primary-50 px-2 py-0.5 rounded">
                       <Wrench className="w-3 h-3" />
                       Entreprise
                     </span>
@@ -261,7 +261,7 @@ export default function ArtisanResultCard({
                             <button
                               key={slotIndex}
                               onClick={() => handleSlotClick(day.date, slot.time)}
-                              className="w-full py-1.5 text-xs font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 rounded transition-colors"
+                              className="w-full py-1.5 text-xs font-medium text-primary-600 bg-primary-50 hover:bg-primary-100 rounded transition-colors"
                             >
                               {slot.time}
                             </button>
@@ -281,7 +281,7 @@ export default function ArtisanResultCard({
                   {/* Loading state */}
                   {isLoadingMore && (
                     <div className="flex-shrink-0 w-[72px] flex items-center justify-center">
-                      <div className="h-5 w-5 animate-spin rounded-full border-2 border-blue-600 border-t-transparent"></div>
+                      <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary-600 border-t-transparent"></div>
                     </div>
                   )}
                 </div>
@@ -290,7 +290,7 @@ export default function ArtisanResultCard({
               {/* Availability Note */}
               <div className="mt-2 text-xs text-gray-500">
                 {artisan.accepts_new_clients === false ? (
-                  <span className="text-amber-600">
+                  <span className="text-secondary-600">
                     Ce professionnel réserve la prise de rendez-vous en ligne aux clients déjà
                     suivis.
                   </span>

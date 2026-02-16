@@ -71,7 +71,7 @@ export default function RegionsIndexPage() {
               <span className="text-sm font-medium text-white/90">France métropolitaine et outre-mer</span>
             </div>
 
-            <h1 className="font-heading text-4xl md:text-5xl lg:text-[3.5rem] font-extrabold mb-6 tracking-[-0.025em] leading-[1.08]">
+            <h1 className="font-heading text-4xl md:text-5xl lg:text-[3.5rem] mb-6 leading-[1.08]">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-300 via-slate-200 to-white">
                 {regions.length} régions
               </span>
@@ -113,7 +113,7 @@ export default function RegionsIndexPage() {
       {/* ─── REGIONS GRID ───────────────────────────────────── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center mb-12">
-          <h2 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-3 tracking-tight">
+          <h2 className="font-heading text-2xl md:text-3xl text-slate-900 mb-3">
             Choisissez votre région
           </h2>
           <p className="text-slate-500 max-w-lg mx-auto">
@@ -134,7 +134,7 @@ export default function RegionsIndexPage() {
               >
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <h3 className="font-heading text-lg font-bold text-slate-900 group-hover:text-slate-700 transition-colors tracking-tight">
+                    <h3 className="font-heading text-lg text-slate-900 group-hover:text-slate-700 transition-colors">
                       {region.name}
                     </h3>
                   </div>
@@ -181,14 +181,14 @@ export default function RegionsIndexPage() {
           background: 'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(51,65,85,0.15) 0%, transparent 60%)',
         }} />
         <div className="relative max-w-4xl mx-auto px-4 py-16 md:py-20 text-center">
-          <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">
+          <h2 className="font-heading text-2xl md:text-3xl text-white mb-4">
             Besoin d&apos;un artisan ?
           </h2>
           <p className="text-slate-400 mb-8 max-w-lg mx-auto">
             Décrivez votre projet et recevez des devis gratuits de professionnels référencés.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/devis" className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-300">
+            <Link href="/devis" className="inline-flex items-center gap-2 bg-gradient-to-r from-secondary-500 via-secondary-400 to-secondary-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-secondary-500/25 hover:shadow-xl hover:shadow-secondary-500/35 hover:-translate-y-0.5 transition-all duration-300">
               Demander un devis gratuit
             </Link>
             <Link href="/services" className="inline-flex items-center gap-2 text-slate-300 hover:text-white font-medium transition-colors">
@@ -201,7 +201,7 @@ export default function RegionsIndexPage() {
       {/* ─── SEO INTERNAL LINKS ─────────────────────────────── */}
       <section className="py-16 bg-white border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-xl font-bold text-slate-900 mb-8 tracking-tight">
+          <h2 className="font-heading text-xl text-slate-900 mb-8">
             Explorer également
           </h2>
           <div className="grid md:grid-cols-3 gap-10">
@@ -210,13 +210,13 @@ export default function RegionsIndexPage() {
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Départements populaires</h3>
               <div className="space-y-2">
                 {departements.slice(0, 8).map((d) => (
-                  <Link key={d.slug} href={`/departements/${d.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
+                  <Link key={d.slug} href={`/departements/${d.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-primary-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {d.name} ({d.code})
                   </Link>
                 ))}
               </div>
-              <Link href="/departements" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
+              <Link href="/departements" className="inline-flex items-center gap-1 text-primary-600 hover:text-primary-700 text-sm font-medium mt-3">
                 Tous les départements <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -226,13 +226,13 @@ export default function RegionsIndexPage() {
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Grandes villes</h3>
               <div className="space-y-2">
                 {villes.slice(0, 12).map((v) => (
-                  <Link key={v.slug} href={`/villes/${v.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
+                  <Link key={v.slug} href={`/villes/${v.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-primary-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     Artisans à {v.name}
                   </Link>
                 ))}
               </div>
-              <Link href="/villes" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
+              <Link href="/villes" className="inline-flex items-center gap-1 text-primary-600 hover:text-primary-700 text-sm font-medium mt-3">
                 Toutes les villes <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -242,13 +242,13 @@ export default function RegionsIndexPage() {
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Services populaires</h3>
               <div className="space-y-2">
                 {services.slice(0, 8).map((s) => (
-                  <Link key={s.slug} href={`/services/${s.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
+                  <Link key={s.slug} href={`/services/${s.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-primary-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {s.name}
                   </Link>
                 ))}
               </div>
-              <Link href="/services" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
+              <Link href="/services" className="inline-flex items-center gap-1 text-primary-600 hover:text-primary-700 text-sm font-medium mt-3">
                 Tous les services <ArrowRight className="w-4 h-4" />
               </Link>
             </div>

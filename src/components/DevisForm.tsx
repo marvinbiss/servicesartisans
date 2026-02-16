@@ -59,9 +59,9 @@ function StepIndicator({ currentStep }: { currentStep: number }) {
               <div
                 className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
                   isCompleted
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-primary-600 text-white'
                     : isActive
-                    ? 'bg-blue-600 text-white ring-4 ring-blue-100'
+                    ? 'bg-primary-600 text-white ring-4 ring-primary-100'
                     : 'bg-gray-200 text-gray-500'
                 }`}
               >
@@ -73,7 +73,7 @@ function StepIndicator({ currentStep }: { currentStep: number }) {
               </div>
               <span
                 className={`mt-2 text-xs font-medium ${
-                  isActive ? 'text-blue-600' : isCompleted ? 'text-blue-600' : 'text-gray-400'
+                  isActive ? 'text-primary-600' : isCompleted ? 'text-primary-600' : 'text-gray-400'
                 }`}
               >
                 {label}
@@ -82,7 +82,7 @@ function StepIndicator({ currentStep }: { currentStep: number }) {
             {i < stepLabels.length - 1 && (
               <div
                 className={`w-16 sm:w-24 h-0.5 mx-2 mb-5 transition-all duration-300 ${
-                  isCompleted ? 'bg-blue-600' : 'bg-gray-200'
+                  isCompleted ? 'bg-primary-600' : 'bg-gray-200'
                 }`}
               />
             )}
@@ -258,7 +258,7 @@ export default function DevisForm() {
                 onChange={(e) => updateField('service', e.target.value)}
                 className={`w-full appearance-none rounded-xl border ${
                   errors.service ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
-                } bg-white px-4 py-3 pr-10 text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
+                } bg-white px-4 py-3 pr-10 text-slate-900 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 transition-all`}
               >
                 <option value="">Choisissez un service...</option>
                 {services.map((s) => (
@@ -298,7 +298,7 @@ export default function DevisForm() {
                 }}
                 className={`w-full rounded-xl border ${
                   errors.ville ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
-                } bg-white px-4 py-3 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
+                } bg-white px-4 py-3 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 transition-all`}
               />
               {showVilleSuggestions && filteredVilles.length > 0 && (
                 <ul className="absolute z-20 mt-1 w-full bg-white border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-auto">
@@ -306,7 +306,7 @@ export default function DevisForm() {
                     <li key={v.slug}>
                       <button
                         type="button"
-                        className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors text-sm"
+                        className="w-full text-left px-4 py-3 hover:bg-primary-50 transition-colors text-sm"
                         onMouseDown={(e) => {
                           e.preventDefault()
                           updateField('ville', v.name)
@@ -333,7 +333,7 @@ export default function DevisForm() {
           <button
             type="button"
             onClick={handleNext}
-            className="w-full inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
+            className="w-full inline-flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-primary-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
           >
             Suivant <ArrowRight className="w-5 h-5" />
           </button>
@@ -363,7 +363,7 @@ export default function DevisForm() {
               onChange={(e) => updateField('description', e.target.value)}
               className={`w-full rounded-xl border ${
                 errors.description ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
-              } bg-white px-4 py-3 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all resize-none`}
+              } bg-white px-4 py-3 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 transition-all resize-none`}
             />
             <div className="flex justify-between mt-1">
               {errors.description ? (
@@ -392,7 +392,7 @@ export default function DevisForm() {
                   key={opt.value}
                   className={`relative flex items-center justify-center px-4 py-3 rounded-xl border-2 cursor-pointer transition-all duration-200 text-sm font-medium ${
                     formData.urgence === opt.value
-                      ? 'border-blue-600 bg-blue-50 text-blue-700'
+                      ? 'border-primary-600 bg-primary-50 text-primary-700'
                       : 'border-gray-200 hover:border-gray-300 text-slate-700'
                   }`}
                 >
@@ -424,7 +424,7 @@ export default function DevisForm() {
                   key={opt.value}
                   className={`relative flex items-center justify-center px-4 py-3 rounded-xl border-2 cursor-pointer transition-all duration-200 text-sm font-medium text-center ${
                     formData.budget === opt.value
-                      ? 'border-blue-600 bg-blue-50 text-blue-700'
+                      ? 'border-primary-600 bg-primary-50 text-primary-700'
                       : 'border-gray-200 hover:border-gray-300 text-slate-700'
                   }`}
                 >
@@ -456,7 +456,7 @@ export default function DevisForm() {
             <button
               type="button"
               onClick={handleNext}
-              className="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
+              className="flex-1 inline-flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-primary-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
             >
               Suivant <ArrowRight className="w-5 h-5" />
             </button>
@@ -488,7 +488,7 @@ export default function DevisForm() {
               onChange={(e) => updateField('nom', e.target.value)}
               className={`w-full rounded-xl border ${
                 errors.nom ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
-              } bg-white px-4 py-3 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
+              } bg-white px-4 py-3 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 transition-all`}
             />
             {errors.nom && (
               <p className="mt-1.5 text-sm text-red-600">{errors.nom}</p>
@@ -509,7 +509,7 @@ export default function DevisForm() {
               onChange={(e) => updateField('telephone', e.target.value)}
               className={`w-full rounded-xl border ${
                 errors.telephone ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
-              } bg-white px-4 py-3 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
+              } bg-white px-4 py-3 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 transition-all`}
             />
             {errors.telephone && (
               <p className="mt-1.5 text-sm text-red-600">{errors.telephone}</p>
@@ -530,7 +530,7 @@ export default function DevisForm() {
               onChange={(e) => updateField('email', e.target.value)}
               className={`w-full rounded-xl border ${
                 errors.email ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
-              } bg-white px-4 py-3 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
+              } bg-white px-4 py-3 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 transition-all`}
             />
             {errors.email && (
               <p className="mt-1.5 text-sm text-red-600">{errors.email}</p>
@@ -544,7 +544,7 @@ export default function DevisForm() {
                 type="checkbox"
                 checked={formData.consentement}
                 onChange={(e) => updateField('consentement', e.target.checked)}
-                className="mt-0.5 w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="mt-0.5 w-5 h-5 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
               />
               <span className="text-sm text-slate-600 leading-relaxed">
                 J&apos;accepte d&apos;être contacté par des artisans pour recevoir des devis
@@ -575,7 +575,7 @@ export default function DevisForm() {
             <button
               type="submit"
               disabled={submitting}
-              className="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-70"
+              className="flex-1 inline-flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-primary-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-70"
             >
               {submitting ? 'Envoi en cours…' : 'Envoyer ma demande'} {!submitting && <ArrowRight className="w-5 h-5" />}
             </button>

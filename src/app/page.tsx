@@ -1,5 +1,7 @@
 import { Metadata } from 'next'
 import { SITE_URL } from '@/lib/seo/config'
+import { getPageContent } from '@/lib/cms'
+import { CmsContent } from '@/components/CmsContent'
 import { PopularCitiesLinks, PopularServicesLinks, PopularServiceCityLinks, GeographicNavigation } from '@/components/InternalLinks'
 import { HeroSection } from '@/components/home/HeroSection'
 import {
@@ -35,7 +37,21 @@ export const metadata: Metadata = {
   },
 }
 
-export default function HomePage() {
+export default async function HomePage() {
+  const cmsPage = await getPageContent('homepage', 'homepage')
+
+  if (cmsPage?.content_html) {
+    return (
+      <div className="min-h-screen">
+        <section className="py-12">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <CmsContent html={cmsPage.content_html} />
+          </div>
+        </section>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen">
       {/* Organization + WebSite JSON-LD already injected globally in layout.tsx */}
@@ -89,11 +105,11 @@ export default function HomePage() {
           <GeographicSectionWrapper>
             <ScrollReveal direction="up">
               <div className="text-center mb-10">
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50 text-blue-600 rounded-full text-sm font-medium mb-5">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-primary-50 text-primary-600 rounded-full text-sm font-medium mb-5">
                   <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" /></svg>
                   Couverture nationale
                 </div>
-                <h2 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-2 text-center tracking-tight">
+                <h2 className="font-heading text-2xl md:text-3xl text-slate-900 mb-2 text-center">
                   Artisans partout en France
                 </h2>
                 <p className="text-slate-500 text-center max-w-lg mx-auto">

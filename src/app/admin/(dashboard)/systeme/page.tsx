@@ -68,7 +68,7 @@ export default function SystemDashboardPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto" />
+          <Loader2 className="w-8 h-8 animate-spin text-primary-600 mx-auto" />
           <p className="text-sm text-gray-500 mt-2">Chargement du dashboard système...</p>
         </div>
       </div>
@@ -81,7 +81,7 @@ export default function SystemDashboardPage() {
         <div className="bg-white rounded-xl border border-red-200 p-8 max-w-md text-center">
           <AlertCircle className="w-8 h-8 text-red-500 mx-auto mb-3" />
           <p className="text-red-700">{error || 'Erreur'}</p>
-          <button onClick={fetchData} className="text-blue-600 hover:underline text-sm mt-3">
+          <button onClick={fetchData} className="text-primary-600 hover:underline text-sm mt-3">
             Réessayer
           </button>
         </div>
@@ -99,8 +99,8 @@ export default function SystemDashboardPage() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <Gauge className="w-6 h-6 text-blue-600" />
+              <div className="p-2 bg-primary-100 rounded-lg">
+                <Gauge className="w-6 h-6 text-primary-600" />
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">Tableau de bord système</h1>
@@ -267,7 +267,7 @@ export default function SystemDashboardPage() {
                   </span>
                   <div className="w-full bg-gray-100 rounded-t overflow-hidden" style={{ height: '100%' }}>
                     <div
-                      className="w-full bg-blue-500 rounded-t transition-all duration-500"
+                      className="w-full bg-primary-500 rounded-t transition-all duration-500"
                       style={{
                         height: `${(d.count / maxDaily) * 100}%`,
                         minHeight: d.count > 0 ? '4px' : '0px',
@@ -302,7 +302,7 @@ export default function SystemDashboardPage() {
                     <span className="text-sm font-semibold text-gray-900 tabular-nums">{s.count}</span>
                     <div className="w-20 h-1.5 bg-gray-100 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-blue-500 rounded-full"
+                        className="h-full bg-primary-500 rounded-full"
                         style={{ width: `${(s.count / maxService) * 100}%` }}
                       />
                     </div>
@@ -328,7 +328,7 @@ export default function SystemDashboardPage() {
                     <span className="text-sm font-semibold text-gray-900 tabular-nums">{c.count}</span>
                     <div className="w-20 h-1.5 bg-gray-100 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-blue-500 rounded-full"
+                        className="h-full bg-primary-500 rounded-full"
                         style={{ width: `${(c.count / maxCity) * 100}%` }}
                       />
                     </div>
@@ -349,9 +349,9 @@ export default function SystemDashboardPage() {
               Événements
             </h3>
             <div className="grid grid-cols-2 gap-4">
-              <div className="p-3 bg-blue-50 rounded-lg text-center">
-                <p className="text-2xl font-bold text-blue-700 tabular-nums">{data.events.total}</p>
-                <p className="text-xs text-blue-500 mt-1">Total événements</p>
+              <div className="p-3 bg-primary-50 rounded-lg text-center">
+                <p className="text-2xl font-bold text-primary-700 tabular-nums">{data.events.total}</p>
+                <p className="text-xs text-primary-500 mt-1">Total événements</p>
               </div>
               <div className="p-3 bg-yellow-50 rounded-lg text-center">
                 <p className="text-2xl font-bold text-yellow-700 tabular-nums">{data.events.today}</p>
