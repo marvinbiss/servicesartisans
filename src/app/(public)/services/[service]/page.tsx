@@ -15,8 +15,6 @@ import { popularServices } from '@/lib/constants/navigation'
 import { services as staticServicesList, villes, departements, getVillesByDepartement } from '@/lib/data/france'
 import { getTradeContent } from '@/lib/data/trade-content'
 import { getServiceImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
-import { getPageContent, getTradeContentOverride } from '@/lib/cms'
-import { CmsContent } from '@/components/CmsContent'
 
 // ISR: Revalidate every 30 minutes
 export const revalidate = REVALIDATE.serviceDetail
