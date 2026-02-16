@@ -180,7 +180,7 @@ export function MessageBubble({
             className={cn(
               'text-xs px-3 py-1.5 mb-1 rounded-t-lg border-l-2',
               isOwn
-                ? 'bg-primary-500/20 border-primary-300 text-primary-100'
+                ? 'bg-blue-500/20 border-blue-300 text-blue-100'
                 : 'bg-gray-200 dark:bg-gray-700 border-gray-400 text-gray-600 dark:text-gray-300'
             )}
           >
@@ -196,7 +196,7 @@ export function MessageBubble({
           className={cn(
             'rounded-2xl px-4 py-2',
             isOwn
-              ? 'bg-primary-600 text-white rounded-br-md'
+              ? 'bg-blue-600 text-white rounded-br-md'
               : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-bl-md',
             replyToMessage && 'rounded-t-none'
           )}
@@ -219,7 +219,7 @@ export function MessageBubble({
               rel="noopener noreferrer"
               className={cn(
                 'flex items-center gap-2 px-3 py-2 rounded-lg mb-2',
-                isOwn ? 'bg-primary-500' : 'bg-gray-200 dark:bg-gray-700'
+                isOwn ? 'bg-blue-500' : 'bg-gray-200 dark:bg-gray-700'
               )}
             >
               <span className="text-sm">📎 Fichier joint</span>
@@ -248,7 +248,7 @@ export function MessageBubble({
               <span
                 className={cn(
                   'text-xs',
-                  isOwn ? 'text-primary-200' : 'text-gray-400'
+                  isOwn ? 'text-blue-200' : 'text-gray-400'
                 )}
               >
                 modifié
@@ -257,16 +257,16 @@ export function MessageBubble({
             <span
               className={cn(
                 'text-xs',
-                isOwn ? 'text-primary-200' : 'text-gray-400'
+                isOwn ? 'text-blue-200' : 'text-gray-400'
               )}
             >
               {formatTime(message.created_at)}
             </span>
             {isOwn && (
               message.read_at ? (
-                <CheckCheck className="w-3 h-3 text-primary-200" />
+                <CheckCheck className="w-3 h-3 text-blue-200" />
               ) : (
-                <Check className="w-3 h-3 text-primary-200" />
+                <Check className="w-3 h-3 text-blue-200" />
               )
             )}
           </div>
@@ -288,7 +288,7 @@ export function MessageBubble({
                 className={cn(
                   'flex items-center gap-1 px-2 py-0.5 rounded-full text-xs transition-colors',
                   reaction.hasCurrentUser
-                    ? 'bg-primary-100 dark:bg-primary-900 text-primary-600 dark:text-primary-300'
+                    ? 'bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300'
                     : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                 )}
               >

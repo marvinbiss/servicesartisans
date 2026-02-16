@@ -98,7 +98,7 @@ export default function AdminAlgorithmePage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
       </div>
     )
   }
@@ -135,7 +135,7 @@ export default function AdminAlgorithmePage() {
             <button
               onClick={handleSave}
               disabled={saving || !hasChanges}
-              className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Save className="w-4 h-4" />
               {saving ? 'Enregistrement...' : 'Enregistrer'}
@@ -168,11 +168,11 @@ export default function AdminAlgorithmePage() {
                         onClick={() => update('matching_strategy', key)}
                         className={`p-4 rounded-xl border-2 text-left transition-all ${
                           selected
-                            ? 'border-primary-500 bg-primary-50'
+                            ? 'border-blue-500 bg-blue-50'
                             : 'border-gray-200 hover:border-gray-300'
                         }`}
                       >
-                        <p className={`font-medium ${selected ? 'text-primary-700' : 'text-gray-900'}`}>
+                        <p className={`font-medium ${selected ? 'text-blue-700' : 'text-gray-900'}`}>
                           {meta.label}
                         </p>
                         <p className="text-xs text-gray-500 mt-1">{meta.description}</p>
@@ -226,7 +226,7 @@ export default function AdminAlgorithmePage() {
                         onClick={() => update('specialty_match_mode', key)}
                         className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                           selected
-                            ? 'bg-primary-600 text-white'
+                            ? 'bg-blue-600 text-white'
                             : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                         }`}
                         title={meta.description}
@@ -251,7 +251,7 @@ export default function AdminAlgorithmePage() {
           <Section icon={Sliders} title="Poids du scoring">
             <p className="text-sm text-gray-500 mb-4">
               Ajustez les poids relatifs du score composite.
-              Total actuel : <span className={`font-bold ${totalWeight === 100 ? 'text-green-600' : 'text-secondary-600'}`}>{totalWeight}</span>/100
+              Total actuel : <span className={`font-bold ${totalWeight === 100 ? 'text-green-600' : 'text-amber-600'}`}>{totalWeight}</span>/100
             </p>
             <div className="space-y-4">
               <WeightSlider
@@ -454,7 +454,7 @@ function NumberField({ label, value, onChange, min, max, step, description }: {
           max={max}
           step={step || 1}
           aria-label={label}
-          className="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 text-right"
+          className="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-right"
         />
       </div>
     </div>
@@ -480,7 +480,7 @@ function ToggleField({ label, value, onChange, description }: {
           aria-checked={value}
           aria-label={label}
           className={`relative w-12 h-6 rounded-full transition-colors ${
-            value ? 'bg-primary-600' : 'bg-gray-300'
+            value ? 'bg-blue-600' : 'bg-gray-300'
           }`}
         >
           <span
@@ -496,7 +496,7 @@ function ToggleField({ label, value, onChange, description }: {
 
 const SLIDER_COLORS: Record<string, string> = {
   yellow: 'bg-yellow-500',
-  blue: 'bg-primary-500',
+  blue: 'bg-blue-500',
   green: 'bg-green-500',
 }
 
@@ -516,7 +516,7 @@ function WeightSlider({ label, value, onChange, color }: {
         <div className="flex-1 relative">
           <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
             <div
-              className={`h-full rounded-full transition-all ${SLIDER_COLORS[color] || 'bg-primary-500'}`}
+              className={`h-full rounded-full transition-all ${SLIDER_COLORS[color] || 'bg-blue-500'}`}
               style={{ width: `${value}%` }}
             />
           </div>
@@ -546,8 +546,8 @@ function WeightSlider({ label, value, onChange, color }: {
 
 const MULTIPLIER_COLORS: Record<string, { bg: string; text: string; border: string }> = {
   gray: { bg: 'bg-gray-50', text: 'text-gray-700', border: 'border-gray-200' },
-  blue: { bg: 'bg-primary-50', text: 'text-primary-700', border: 'border-primary-200' },
-  orange: { bg: 'bg-secondary-50', text: 'text-secondary-700', border: 'border-secondary-200' },
+  blue: { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200' },
+  orange: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200' },
   red: { bg: 'bg-red-50', text: 'text-red-700', border: 'border-red-200' },
 }
 

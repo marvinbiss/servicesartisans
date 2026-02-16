@@ -55,7 +55,7 @@ export default function ListsPage() {
         </div>
         <Link
           href="/admin/prospection/lists/create"
-          className="flex items-center gap-2 px-4 py-2 text-sm bg-primary-600 text-white rounded-lg hover:bg-primary-700"
+          className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700"
         >
           <Plus className="w-4 h-4" /> Nouvelle liste
         </Link>
@@ -69,7 +69,7 @@ export default function ListsPage() {
           <button
             key={t}
             onClick={() => setTypeFilter(t)}
-            className={`px-3 py-1.5 text-sm rounded-lg border ${typeFilter === t ? 'bg-primary-50 border-primary-200 text-primary-700' : 'hover:bg-gray-50'}`}
+            className={`px-3 py-1.5 text-sm rounded-lg border ${typeFilter === t ? 'bg-blue-50 border-blue-200 text-blue-700' : 'hover:bg-gray-50'}`}
           >
             {t === 'all' ? 'Toutes' : t === 'static' ? 'Statiques' : 'Dynamiques'}
           </button>
@@ -119,13 +119,13 @@ export default function ListsPage() {
               filteredLists.map((list) => (
                 <tr key={list.id} className="hover:bg-gray-50">
                   <td className="px-4 py-3">
-                    <Link href={`/admin/prospection/lists/${list.id}`} className="font-medium text-primary-600 hover:underline">
+                    <Link href={`/admin/prospection/lists/${list.id}`} className="font-medium text-blue-600 hover:underline">
                       {list.name}
                     </Link>
                   </td>
                   <td className="px-4 py-3">
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      list.list_type === 'static' ? 'bg-gray-100 text-gray-700' : 'bg-primary-100 text-primary-700'
+                      list.list_type === 'static' ? 'bg-gray-100 text-gray-700' : 'bg-blue-100 text-blue-700'
                     }`}>
                       {list.list_type === 'static' ? 'Statique' : 'Dynamique'}
                     </span>

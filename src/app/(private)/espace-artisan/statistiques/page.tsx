@@ -193,7 +193,7 @@ export default function StatistiquesPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
       </div>
     )
   }
@@ -201,7 +201,7 @@ export default function StatistiquesPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-gradient-to-r from-primary-600 to-primary-800 text-white">
+      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex items-center gap-4">
             <Link
@@ -212,7 +212,7 @@ export default function StatistiquesPage() {
             </Link>
             <div>
               <h1 className="text-2xl font-bold">Statistiques</h1>
-              <p className="text-primary-100">Analysez les performances de votre activité</p>
+              <p className="text-blue-100">Analysez les performances de votre activité</p>
             </div>
           </div>
         </div>
@@ -231,7 +231,7 @@ export default function StatistiquesPage() {
               onClick={() => setPeriod(p.id as any)}
               className={`px-4 py-2 rounded-lg font-medium ${
                 period === p.id
-                  ? 'bg-primary-600 text-white'
+                  ? 'bg-blue-600 text-white'
                   : 'bg-white text-gray-600 hover:bg-gray-50'
               }`}
             >
@@ -244,7 +244,7 @@ export default function StatistiquesPage() {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <div className="bg-white rounded-xl shadow-sm p-6">
             <div className="flex items-center justify-between mb-4">
-              <Calendar className="w-8 h-8 text-primary-600" />
+              <Calendar className="w-8 h-8 text-blue-600" />
               <span className={`flex items-center text-sm font-medium ${
                 stats!.totalBookingsChange >= 0 ? 'text-green-600' : 'text-red-600'
               }`}>
@@ -292,7 +292,7 @@ export default function StatistiquesPage() {
           {/* Bookings by day chart */}
           <div className="bg-white rounded-xl shadow-sm p-6">
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <BarChart3 className="w-5 h-5 text-primary-600" />
+              <BarChart3 className="w-5 h-5 text-blue-600" />
               Réservations par jour
             </h3>
             <div className="flex items-end justify-between h-40">
@@ -303,7 +303,7 @@ export default function StatistiquesPage() {
                   <div key={day.day} className="flex flex-col items-center gap-2">
                     <div className="text-xs text-gray-600">{day.count}</div>
                     <div
-                      className="w-10 bg-primary-500 rounded-t transition-all"
+                      className="w-10 bg-blue-500 rounded-t transition-all"
                       style={{ height: `${Math.max(height, 4)}%` }}
                     />
                     <div className="text-xs text-gray-500">{day.day}</div>

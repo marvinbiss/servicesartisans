@@ -357,7 +357,7 @@ export default function AdminEditContenuPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-primary-600 mx-auto" />
+          <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto" />
           <p className="mt-4 text-gray-500">Chargement de la page...</p>
         </div>
       </div>
@@ -373,7 +373,7 @@ export default function AdminEditContenuPage() {
           <div className="mt-4 flex items-center justify-center gap-4">
             <button
               onClick={fetchPage}
-              className="text-primary-600 hover:text-primary-800 font-medium"
+              className="text-blue-600 hover:text-blue-800 font-medium"
             >
               Réessayer
             </button>
@@ -441,7 +441,7 @@ export default function AdminEditContenuPage() {
             <button
               onClick={handleSave}
               disabled={saving || !!slugError}
-              className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
               Enregistrer
@@ -481,7 +481,7 @@ export default function AdminEditContenuPage() {
                 onChange={(e) => { setTitle(e.target.value); setIsDirty(true) }}
                 placeholder="Titre de la page"
                 maxLength={FIELD_LIMITS.title}
-                className="w-full px-4 py-3 text-lg border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                className="w-full px-4 py-3 text-lg border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
 
@@ -506,7 +506,7 @@ export default function AdminEditContenuPage() {
                   }}
                   placeholder="slug-de-la-page"
                   maxLength={FIELD_LIMITS.slug}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                 />
               </div>
               {slugError && <p className="mt-1 text-xs text-red-600">{slugError}</p>}
@@ -524,7 +524,7 @@ export default function AdminEditContenuPage() {
                     onChange={(e) => { setServiceSlug(e.target.value); setIsDirty(true) }}
                     placeholder="plombier"
                     maxLength={FIELD_LIMITS.slug}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                   />
                   <p className="mt-1 text-xs text-gray-500">Lettres minuscules, chiffres et tirets uniquement</p>
                 </div>
@@ -537,7 +537,7 @@ export default function AdminEditContenuPage() {
                       onChange={(e) => { setLocationSlug(e.target.value); setIsDirty(true) }}
                       placeholder="paris"
                       maxLength={FIELD_LIMITS.slug}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                     />
                     <p className="mt-1 text-xs text-gray-500">Lettres minuscules, chiffres et tirets uniquement</p>
                   </div>
@@ -559,7 +559,7 @@ export default function AdminEditContenuPage() {
                       onChange={(e) => { setAuthor(e.target.value); setIsDirty(true) }}
                       placeholder="Nom de l'auteur"
                       maxLength={FIELD_LIMITS.author}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
                   <div>
@@ -567,7 +567,7 @@ export default function AdminEditContenuPage() {
                     <select
                       value={category}
                       onChange={(e) => { setCategory(e.target.value); setIsDirty(true) }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
                     >
                       <option value="">Sélectionner...</option>
                       {BLOG_CATEGORIES.map((cat) => (
@@ -589,7 +589,7 @@ export default function AdminEditContenuPage() {
                     rows={2}
                     maxLength={FIELD_LIMITS.authorBio}
                     placeholder="Courte biographie de l'auteur..."
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 resize-none"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
                   />
                 </div>
 
@@ -603,7 +603,7 @@ export default function AdminEditContenuPage() {
                       value={tags}
                       onChange={(e) => { setTags(e.target.value); setIsDirty(true) }}
                       placeholder="rénovation, plomberie, conseils"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
                   <div>
@@ -614,7 +614,7 @@ export default function AdminEditContenuPage() {
                       onChange={(e) => { setReadTime(e.target.value); setIsDirty(true) }}
                       placeholder="5 min"
                       maxLength={FIELD_LIMITS.readTime}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
                 </div>
@@ -627,7 +627,7 @@ export default function AdminEditContenuPage() {
                     rows={3}
                     maxLength={FIELD_LIMITS.excerpt}
                     placeholder="Court résumé de l'article..."
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 resize-none"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
                   />
                 </div>
 
@@ -639,7 +639,7 @@ export default function AdminEditContenuPage() {
                     onChange={(e) => { setFeaturedImage(e.target.value); setIsDirty(true) }}
                     placeholder="https://example.com/image.jpg"
                     maxLength={FIELD_LIMITS.featuredImage}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
               </div>
@@ -683,7 +683,7 @@ export default function AdminEditContenuPage() {
                   <select
                     value={pageType}
                     onChange={(e) => { setPageType(e.target.value); setIsDirty(true) }}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
                   >
                     {PAGE_TYPE_OPTIONS.map((opt) => (
                       <option key={opt.value} value={opt.value}>
@@ -699,7 +699,7 @@ export default function AdminEditContenuPage() {
                     type="number"
                     value={sortOrder}
                     onChange={(e) => { setSortOrder(parseInt(e.target.value, 10) || 0); setIsDirty(true) }}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
 
@@ -733,7 +733,7 @@ export default function AdminEditContenuPage() {
                   onChange={(e) => { setOgImageUrl(e.target.value); setIsDirty(true) }}
                   placeholder="https://example.com/og-image.jpg"
                   maxLength={FIELD_LIMITS.ogImageUrl}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                 />
               </div>
               <div>
@@ -744,7 +744,7 @@ export default function AdminEditContenuPage() {
                   onChange={(e) => { setCanonicalUrl(e.target.value); setIsDirty(true) }}
                   placeholder="https://servicesartisans.com/page"
                   maxLength={FIELD_LIMITS.canonicalUrl}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                 />
               </div>
             </div>

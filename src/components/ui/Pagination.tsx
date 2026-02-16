@@ -87,7 +87,7 @@ export function Pagination({
               className={clsx(
                 'min-w-[40px] h-10 flex items-center justify-center rounded-lg text-sm font-medium transition-colors',
                 page === currentPage
-                  ? 'bg-primary-600 text-white'
+                  ? 'bg-blue-600 text-white'
                   : 'text-gray-600 hover:bg-gray-100'
               )}
               aria-current={page === currentPage ? 'page' : undefined}

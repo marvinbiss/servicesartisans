@@ -111,7 +111,7 @@ export default function AdminUsersPage() {
           </div>
           <button
             onClick={() => router.push('/admin/utilisateurs/nouveau')}
-            className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
             <UserPlus className="w-5 h-5" />
             Nouvel utilisateur
@@ -133,7 +133,7 @@ export default function AdminUsersPage() {
                   setSearch(e.target.value)
                   setPage(1)
                 }}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
 
@@ -148,7 +148,7 @@ export default function AdminUsersPage() {
                   }}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                     filter === f
-                      ? 'bg-primary-600 text-white'
+                      ? 'bg-blue-600 text-white'
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
                 >
@@ -167,7 +167,7 @@ export default function AdminUsersPage() {
                 setPage(1)
               }}
               aria-label="Filtrer par plan d'abonnement"
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="all">Tous les plans</option>
               <option value="gratuit">Gratuit</option>
@@ -190,7 +190,7 @@ export default function AdminUsersPage() {
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           {isLoading ? (
             <div className="p-8 text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
             </div>
           ) : users.length === 0 ? (
             <div className="p-8 text-center text-gray-500">
@@ -246,7 +246,7 @@ export default function AdminUsersPage() {
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2">
                             {user.user_type === 'artisan' ? (
-                              <Shield className="w-4 h-4 text-primary-500" />
+                              <Shield className="w-4 h-4 text-blue-500" />
                             ) : (
                               <User className="w-4 h-4 text-gray-400" />
                             )}
@@ -266,7 +266,7 @@ export default function AdminUsersPage() {
                           <div className="flex items-center justify-end gap-2">
                             <button
                               onClick={() => router.push(`/admin/utilisateurs/${user.id}`)}
-                              className="p-2 text-gray-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg"
+                              className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg"
                               title="Voir le profil"
                             >
                               <Eye className="w-5 h-5" />
@@ -364,7 +364,7 @@ export default function AdminUsersPage() {
                     onChange={(e) => setBanReason(e.target.value)}
                     rows={3}
                     maxLength={500}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 resize-none"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
                     placeholder="Indiquez la raison du bannissement..."
                   />
                 </div>

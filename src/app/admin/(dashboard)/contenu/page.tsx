@@ -54,17 +54,17 @@ const statusBadge = (status: string) => {
 const typeBadge = (type: string) => {
   switch (type) {
     case 'static':
-      return { label: 'Statique', classes: 'bg-primary-100 text-primary-800' }
+      return { label: 'Statique', classes: 'bg-blue-100 text-blue-800' }
     case 'blog':
-      return { label: 'Blog', classes: 'bg-primary-100 text-primary-800' }
+      return { label: 'Blog', classes: 'bg-blue-100 text-blue-800' }
     case 'service':
       return { label: 'Service', classes: 'bg-green-100 text-green-800' }
     case 'location':
-      return { label: 'Localisation', classes: 'bg-secondary-100 text-secondary-800' }
+      return { label: 'Localisation', classes: 'bg-amber-100 text-amber-800' }
     case 'homepage':
       return { label: 'Accueil', classes: 'bg-red-100 text-red-800' }
     case 'faq':
-      return { label: 'FAQ', classes: 'bg-primary-100 text-primary-800' }
+      return { label: 'FAQ', classes: 'bg-blue-100 text-blue-800' }
     default:
       return { label: type, classes: 'bg-gray-100 text-gray-600' }
   }
@@ -134,7 +134,7 @@ export default function AdminContenuPage() {
           </div>
           <Link
             href="/admin/contenu/nouveau"
-            className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
             <Plus className="w-5 h-5" />
             Nouvelle page
@@ -149,7 +149,7 @@ export default function AdminContenuPage() {
               onClick={() => setPageType(pt.value)}
               className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
                 pageType === pt.value
-                  ? 'bg-primary-600 text-white'
+                  ? 'bg-blue-600 text-white'
                   : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
               }`}
             >
@@ -170,14 +170,14 @@ export default function AdminContenuPage() {
                 value={searchInput}
                 onChange={(e) => handleSearchChange(e.target.value)}
                 maxLength={200}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value)}
               aria-label="Filtrer par statut"
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white text-gray-700"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-700"
             >
               {STATUS_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value}>
@@ -192,7 +192,7 @@ export default function AdminContenuPage() {
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           {isLoading ? (
             <div className="p-8 text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
               <p className="mt-4 text-gray-500">Chargement...</p>
             </div>
           ) : error ? (
@@ -246,7 +246,7 @@ export default function AdminContenuPage() {
                           }}
                           tabIndex={0}
                           role="link"
-                          className="cursor-pointer hover:bg-gray-50 focus:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-inset transition-colors"
+                          className="cursor-pointer hover:bg-gray-50 focus:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset transition-colors"
                         >
                           <td className="px-6 py-4">
                             <div>
@@ -280,7 +280,7 @@ export default function AdminContenuPage() {
                             <Link
                               href={`/admin/contenu/${page.id}`}
                               onClick={(e) => e.stopPropagation()}
-                              className="text-primary-600 hover:text-primary-800 text-sm font-medium"
+                              className="text-blue-600 hover:text-blue-800 text-sm font-medium"
                             >
                               Modifier
                             </Link>

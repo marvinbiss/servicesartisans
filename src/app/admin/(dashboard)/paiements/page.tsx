@@ -139,7 +139,7 @@ export default function AdminPaymentsPage() {
       case 'canceled':
         return <XCircle className="w-4 h-4 text-red-500" />
       case 'past_due':
-        return <Clock className="w-4 h-4 text-secondary-500" />
+        return <Clock className="w-4 h-4 text-amber-500" />
       default:
         return <Clock className="w-4 h-4 text-gray-400" />
     }
@@ -185,8 +185,8 @@ export default function AdminPaymentsPage() {
 
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
               <div className="flex items-center justify-between mb-4">
-                <div className="p-3 bg-primary-100 rounded-lg">
-                  <CreditCard className="w-6 h-6 text-primary-600" />
+                <div className="p-3 bg-blue-100 rounded-lg">
+                  <CreditCard className="w-6 h-6 text-blue-600" />
                 </div>
                 <span className="text-sm text-gray-500">{stats.chargesCount} paiements</span>
               </div>
@@ -207,8 +207,8 @@ export default function AdminPaymentsPage() {
 
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
               <div className="flex items-center justify-between mb-4">
-                <div className="p-3 bg-primary-100 rounded-lg">
-                  <Users className="w-6 h-6 text-primary-600" />
+                <div className="p-3 bg-blue-100 rounded-lg">
+                  <Users className="w-6 h-6 text-blue-600" />
                 </div>
               </div>
               <p className="text-2xl font-bold text-gray-900">{stats.activeSubscriptions}</p>
@@ -229,7 +229,7 @@ export default function AdminPaymentsPage() {
                     onClick={() => setFilter(f)}
                     className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                       filter === f
-                        ? 'bg-primary-600 text-white'
+                        ? 'bg-blue-600 text-white'
                         : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                     }`}
                   >
@@ -244,7 +244,7 @@ export default function AdminPaymentsPage() {
 
           {isLoading ? (
             <div className="p-8 text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
             </div>
           ) : subscriptions.length === 0 ? (
             <div className="p-8 text-center text-gray-500">
@@ -297,7 +297,7 @@ export default function AdminPaymentsPage() {
                           {getStatusIcon(sub.status)}
                           <PaymentStatusBadge status={sub.status} />
                           {sub.cancelAtPeriodEnd && (
-                            <span className="text-xs text-secondary-600">(fin de période)</span>
+                            <span className="text-xs text-amber-600">(fin de période)</span>
                           )}
                         </div>
                       </td>
@@ -314,7 +314,7 @@ export default function AdminPaymentsPage() {
                           {sub.userId && (
                             <button
                               onClick={() => router.push(`/admin/utilisateurs/${sub.userId}`)}
-                              className="p-2 text-gray-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg"
+                              className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg"
                               title="Voir l'utilisateur"
                             >
                               <ChevronRight className="w-5 h-5" />

@@ -44,7 +44,7 @@ export default function MapTooltip({ provider, position }: MapTooltipProps) {
               {provider.name}
             </h4>
             {provider.specialty && (
-              <p className="text-xs text-primary-600 font-medium mt-0.5">
+              <p className="text-xs text-blue-600 font-medium mt-0.5">
                 {provider.specialty}
               </p>
             )}
@@ -56,14 +56,14 @@ export default function MapTooltip({ provider, position }: MapTooltipProps) {
                 title="Premium"
                 style={{ background: 'linear-gradient(90deg, #fde68a 0%, #fff7d1 100%)' }}
               >
-                <Award className="w-3 h-3 text-secondary-700" />
+                <Award className="w-3 h-3 text-amber-700" />
               </div>
             )}
             {provider.is_verified && (
               <div
                 className="p-1 rounded-full"
                 title="Référencé"
-                style={{ backgroundColor: '#364180' }}
+                style={{ backgroundColor: '#1877f2' }}
               >
                 <svg className="w-3 h-3 text-white" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
@@ -81,8 +81,8 @@ export default function MapTooltip({ provider, position }: MapTooltipProps) {
           {/* Rating */}
           {provider.rating_average && (
             <div className="flex items-center gap-1.5">
-              <div className="flex items-center gap-1 bg-secondary-50 px-2 py-0.5 rounded-full">
-                <Star className="w-3 h-3 text-secondary-400 fill-secondary-400" />
+              <div className="flex items-center gap-1 bg-amber-50 px-2 py-0.5 rounded-full">
+                <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
                 <span className="font-bold text-gray-900 text-xs">
                   {provider.rating_average.toFixed(1)}
                 </span>

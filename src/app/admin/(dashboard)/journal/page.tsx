@@ -66,9 +66,9 @@ export default function AdminJournalPage() {
 
   const actionColor = (action: string) => {
     if (action.includes('create') || action.includes('insert')) return 'text-green-700 bg-green-100'
-    if (action.includes('update') || action.includes('edit')) return 'text-primary-700 bg-primary-100'
+    if (action.includes('update') || action.includes('edit')) return 'text-blue-700 bg-blue-100'
     if (action.includes('delete') || action.includes('remove')) return 'text-red-700 bg-red-100'
-    if (action.includes('dispatch') || action.includes('assign')) return 'text-primary-700 bg-primary-100'
+    if (action.includes('dispatch') || action.includes('assign')) return 'text-blue-700 bg-blue-100'
     if (action.includes('verify') || action.includes('approve')) return 'text-green-700 bg-green-100'
     return 'text-gray-700 bg-gray-100'
   }
@@ -88,7 +88,7 @@ export default function AdminJournalPage() {
           </div>
           <button
             onClick={() => mutate()}
-            className="text-sm text-primary-600 hover:underline flex items-center gap-1"
+            className="text-sm text-blue-600 hover:underline flex items-center gap-1"
           >
             <RefreshCw className="w-3 h-3" /> Rafraîchir
           </button>
@@ -103,7 +103,7 @@ export default function AdminJournalPage() {
 
         {isLoading ? (
           <div className="flex justify-center py-16">
-            <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
+            <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
           </div>
         ) : logs.length === 0 ? (
           <div className="bg-white rounded-xl shadow-sm p-12 text-center">

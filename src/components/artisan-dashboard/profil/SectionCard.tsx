@@ -18,7 +18,7 @@ export function SectionCard({ title, icon: Icon, children, onSave, saving, isDir
   return (
     <div className="bg-white rounded-xl shadow-sm p-6">
       <h2 className="text-lg font-semibold text-gray-900 mb-6 flex items-center gap-2">
-        <Icon className="w-5 h-5 text-primary-600" />
+        <Icon className="w-5 h-5 text-blue-600" />
         {title}
       </h2>
 
@@ -43,13 +43,13 @@ export function SectionCard({ title, icon: Icon, children, onSave, saving, isDir
           onClick={onSave}
           disabled={saving || !isDirty}
           aria-busy={saving}
-          className="bg-primary-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+          className="bg-blue-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
         >
           {saving && <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />}
           {saving ? 'Enregistrement...' : 'Enregistrer'}
         </button>
         {isDirty && !saving && (
-          <span className="text-sm text-secondary-600" role="status" aria-live="polite">
+          <span className="text-sm text-amber-600" role="status" aria-live="polite">
             Modifications non sauvegardées
           </span>
         )}

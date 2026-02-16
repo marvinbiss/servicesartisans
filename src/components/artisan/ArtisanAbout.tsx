@@ -25,8 +25,8 @@ export function ArtisanAbout({ artisan }: ArtisanAboutProps) {
       {/* Section header */}
       <div className="px-6 pt-6 pb-0">
         <h2 className="text-xl font-semibold text-gray-900 font-heading mb-5 flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-lg bg-primary-50 flex items-center justify-center">
-            <User className="w-4.5 h-4.5 text-primary-600" />
+          <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center">
+            <User className="w-4.5 h-4.5 text-blue-600" />
           </div>
           &Agrave; propos
         </h2>
@@ -52,7 +52,7 @@ export function ArtisanAbout({ artisan }: ArtisanAboutProps) {
               onClick={() => setExpanded(!expanded)}
               aria-expanded={expanded}
               aria-controls="about-description"
-              className="mt-2 text-primary-600 font-medium text-sm flex items-center gap-1 hover:text-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded transition-colors"
+              className="mt-2 text-blue-600 font-medium text-sm flex items-center gap-1 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded transition-colors"
             >
               {expanded ? 'Voir moins' : 'Voir plus'}
               <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`} aria-hidden="true" />

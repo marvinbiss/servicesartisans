@@ -223,7 +223,7 @@ export default async function ServicePage({ params }: PageProps) {
         <div className="absolute inset-0 bg-gray-900/75" />
         {/* Ambient glow */}
         <div className="absolute inset-0" style={{
-          background: 'radial-gradient(ellipse 60% 50% at 50% 100%, rgba(198,122,60,0.10) 0%, transparent 60%), radial-gradient(ellipse 40% 40% at 80% 20%, rgba(54,65,128,0.06) 0%, transparent 50%)',
+          background: 'radial-gradient(ellipse 60% 50% at 50% 100%, rgba(245,158,11,0.10) 0%, transparent 60%), radial-gradient(ellipse 40% 40% at 80% 20%, rgba(59,130,246,0.06) 0%, transparent 50%)',
         }} />
         <div className="absolute inset-0 opacity-[0.03]" style={{
           backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
@@ -231,7 +231,7 @@ export default async function ServicePage({ params }: PageProps) {
         }} />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
-          <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl text-white mb-4">
+          <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 tracking-tight">
             {h1Text}
           </h1>
           <p className="text-lg md:text-xl text-slate-400 max-w-3xl leading-relaxed">
@@ -242,26 +242,26 @@ export default async function ServicePage({ params }: PageProps) {
           {/* Stats — Large gradient numbers */}
           <div className="flex flex-wrap gap-6 md:gap-10 mt-10">
             <div className="flex flex-col">
-              <span className="font-heading text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-secondary-300 to-secondary-500">
+              <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-amber-500">
                 {recentProviders?.length || 0}+
               </span>
               <span className="text-sm text-slate-400 mt-1">artisans référencés</span>
             </div>
             <div className="flex flex-col">
-              <span className="font-heading text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-primary-300 to-primary-500">
+              <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-blue-500">
                 {topCities?.length || 0}+
               </span>
               <span className="text-sm text-slate-400 mt-1">villes couvertes</span>
             </div>
             <div className="flex flex-col">
-              <span className="font-heading text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-emerald-500">
+              <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-emerald-500">
                 100%
               </span>
               <span className="text-sm text-slate-400 mt-1">données SIREN</span>
             </div>
             {trade && (
               <div className="flex flex-col">
-                <span className="font-heading text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-purple-500">
+                <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-purple-500">
                   {trade.priceRange.min}–{trade.priceRange.max}
                 </span>
                 <span className="text-sm text-slate-400 mt-1">{trade.priceRange.unit}</span>
@@ -276,7 +276,7 @@ export default async function ServicePage({ params }: PageProps) {
               <span className="text-sm text-slate-300 font-medium">Artisans vérifiés</span>
             </div>
             <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/10 px-4 py-2 rounded-full">
-              <Star className="w-4 h-4 text-secondary-400" />
+              <Star className="w-4 h-4 text-amber-400" />
               <span className="text-sm text-slate-300 font-medium">Qualité contrôlée</span>
             </div>
             {trade && (
@@ -291,7 +291,7 @@ export default async function ServicePage({ params }: PageProps) {
           <div className="mt-10">
             <Link
               href="/devis"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-secondary-500 to-secondary-600 hover:from-secondary-600 hover:to-secondary-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-secondary-500/25 hover:shadow-[0_8px_30px_-4px_rgba(198,122,60,0.5)] hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-[0_8px_30px_-4px_rgba(245,158,11,0.5)] hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
             >
               Demander un devis gratuit
               <ArrowRight className="w-5 h-5" />
@@ -303,7 +303,7 @@ export default async function ServicePage({ params }: PageProps) {
       {/* Search by city */}
       <section className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl text-gray-900 mb-6">
+          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 tracking-tight">
             Trouver un {service.name.toLowerCase()} par ville
           </h2>
 
@@ -313,11 +313,11 @@ export default async function ServicePage({ params }: PageProps) {
               <Link
                 key={city.id}
                 href={`/services/${serviceSlug}/${city.slug}`}
-                className="bg-white rounded-lg border border-gray-200 p-4 hover:border-primary-300 hover:shadow-md transition-all group"
+                className="bg-white rounded-lg border border-gray-200 p-4 hover:border-blue-300 hover:shadow-md transition-all group"
               >
                 <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-gray-400 group-hover:text-primary-600" />
-                  <span className="font-medium text-gray-900 group-hover:text-primary-600 truncate">
+                  <MapPin className="w-4 h-4 text-gray-400 group-hover:text-blue-600" />
+                  <span className="font-medium text-gray-900 group-hover:text-blue-600 truncate">
                     {city.name}
                   </span>
                 </div>
@@ -345,7 +345,7 @@ export default async function ServicePage({ params }: PageProps) {
                         <Link
                           key={city.id}
                           href={`/services/${serviceSlug}/${city.slug}`}
-                          className="text-sm bg-gray-100 hover:bg-primary-100 text-gray-700 hover:text-primary-700 px-4 py-2.5 rounded-full transition-colors"
+                          className="text-sm bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 px-4 py-2.5 rounded-full transition-colors"
                         >
                           {city.name}
                         </Link>
@@ -366,7 +366,7 @@ export default async function ServicePage({ params }: PageProps) {
       {/* Par département — SEO internal links to service+ville pages */}
       <section className="py-12 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl text-gray-900 mb-8">
+          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-8 tracking-tight">
             {service.name} par département
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -376,7 +376,7 @@ export default async function ServicePage({ params }: PageProps) {
               return (
                 <div key={dept.code} className="bg-gray-50 rounded-xl p-5">
                   <h3 className="font-semibold text-gray-900 mb-3 text-sm">
-                    <Link href={`/departements/${dept.slug}`} className="hover:text-primary-600 transition-colors">
+                    <Link href={`/departements/${dept.slug}`} className="hover:text-blue-600 transition-colors">
                       {dept.name} ({dept.code})
                     </Link>
                   </h3>
@@ -385,7 +385,7 @@ export default async function ServicePage({ params }: PageProps) {
                       <Link
                         key={ville.slug}
                         href={`/services/${serviceSlug}/${ville.slug}`}
-                        className="text-xs text-gray-600 hover:text-primary-600 px-2.5 py-1 bg-white rounded-full border border-gray-200 hover:border-primary-200 transition-colors"
+                        className="text-xs text-gray-600 hover:text-blue-600 px-2.5 py-1 bg-white rounded-full border border-gray-200 hover:border-blue-200 transition-colors"
                       >
                         {ville.name}
                       </Link>
@@ -393,7 +393,7 @@ export default async function ServicePage({ params }: PageProps) {
                     {deptVilles.length > 5 && (
                       <Link
                         href={`/departements/${dept.slug}`}
-                        className="text-xs text-primary-600 px-2.5 py-1"
+                        className="text-xs text-blue-600 px-2.5 py-1"
                       >
                         +{deptVilles.length - 5} villes
                       </Link>
@@ -410,7 +410,7 @@ export default async function ServicePage({ params }: PageProps) {
       {recentProviders && recentProviders.length > 0 && (
         <section className="py-12 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-heading text-2xl text-gray-900 mb-6">
+            <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 tracking-tight">
               {service.name}s récemment ajoutés
             </h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -420,9 +420,9 @@ export default async function ServicePage({ params }: PageProps) {
                   <Link
                     key={provider.id}
                     href={`/services/${serviceSlug}/${location?.slug || 'france'}/${provider.stable_id || provider.slug}`}
-                    className="bg-gray-50 rounded-lg p-4 hover:bg-primary-50 transition-colors group"
+                    className="bg-gray-50 rounded-lg p-4 hover:bg-blue-50 transition-colors group"
                   >
-                    <h3 className="font-semibold text-gray-900 group-hover:text-primary-600">
+                    <h3 className="font-semibold text-gray-900 group-hover:text-blue-600">
                       {provider.name}
                     </h3>
                     {provider.address_city && (
@@ -445,8 +445,8 @@ export default async function ServicePage({ params }: PageProps) {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-white rounded-xl p-8 shadow-sm">
               <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-secondary-100 rounded-lg">
-                  <Euro className="w-6 h-6 text-secondary-600" />
+                <div className="p-2 bg-amber-100 rounded-lg">
+                  <Euro className="w-6 h-6 text-amber-600" />
                 </div>
                 <h2 className="text-2xl font-bold text-gray-900">
                   Tarifs {service.name.toLowerCase()} — Guide des prix 2026
@@ -463,7 +463,7 @@ export default async function ServicePage({ params }: PageProps) {
                     <div key={i} className="flex items-start justify-between gap-4 p-3 bg-gray-50 rounded-lg">
                       <span className="text-gray-700 text-sm">{label}</span>
                       {price && (
-                        <span className="text-sm font-semibold text-secondary-700 whitespace-nowrap">{price}</span>
+                        <span className="text-sm font-semibold text-amber-700 whitespace-nowrap">{price}</span>
                       )}
                     </div>
                   )
@@ -485,8 +485,8 @@ export default async function ServicePage({ params }: PageProps) {
               {/* Conseils pratiques */}
               <div className="lg:col-span-2">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 bg-primary-100 rounded-lg">
-                    <Shield className="w-6 h-6 text-primary-600" />
+                  <div className="p-2 bg-blue-100 rounded-lg">
+                    <Shield className="w-6 h-6 text-blue-600" />
                   </div>
                   <h2 className="text-2xl font-bold text-gray-900">
                     Conseils pour choisir votre {service.name.toLowerCase()}
@@ -494,8 +494,8 @@ export default async function ServicePage({ params }: PageProps) {
                 </div>
                 <div className="space-y-4">
                   {trade.tips.map((tip, i) => (
-                    <div key={i} className="flex gap-3 p-4 bg-primary-50 rounded-lg">
-                      <BadgeCheck className="w-5 h-5 text-primary-600 mt-0.5 flex-shrink-0" />
+                    <div key={i} className="flex gap-3 p-4 bg-blue-50 rounded-lg">
+                      <BadgeCheck className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
                       <p className="text-gray-700 text-sm leading-relaxed">{tip}</p>
                     </div>
                   ))}
@@ -529,9 +529,9 @@ export default async function ServicePage({ params }: PageProps) {
                   </div>
                 )}
 
-                <div className="bg-primary-50 rounded-xl p-6">
+                <div className="bg-blue-50 rounded-xl p-6">
                   <div className="flex items-center gap-2 mb-3">
-                    <Wrench className="w-5 h-5 text-primary-600" />
+                    <Wrench className="w-5 h-5 text-blue-600" />
                     <h3 className="font-semibold text-gray-900">Délai d&apos;intervention</h3>
                   </div>
                   <p className="text-sm text-gray-700">{trade.averageResponseTime}</p>
@@ -573,7 +573,7 @@ export default async function ServicePage({ params }: PageProps) {
         <section className="py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-white rounded-xl p-8 shadow-sm">
-              <h2 className="font-heading text-2xl text-gray-900 mb-4">
+              <h2 className="font-heading text-2xl font-bold text-gray-900 mb-4 tracking-tight">
                 Comment trouver un bon {service.name.toLowerCase()} ?
               </h2>
               <div className="prose prose-gray max-w-none">
@@ -610,10 +610,10 @@ export default async function ServicePage({ params }: PageProps) {
       {/* CTA */}
       <section className="relative py-16 overflow-hidden bg-gradient-to-br from-[#0a0f1e] via-[#111827] to-[#0a0f1e]">
         <div className="absolute inset-0" style={{
-          background: 'radial-gradient(ellipse 50% 60% at 50% 50%, rgba(198,122,60,0.06) 0%, transparent 60%)',
+          background: 'radial-gradient(ellipse 50% 60% at 50% 50%, rgba(245,158,11,0.06) 0%, transparent 60%)',
         }} />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-heading text-2xl md:text-3xl text-white mb-4">
+          <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4">
             Vous êtes {service.name.toLowerCase()} ?
           </h2>
           <p className="text-slate-400 mb-8 max-w-xl mx-auto">
@@ -621,7 +621,7 @@ export default async function ServicePage({ params }: PageProps) {
           </p>
           <Link
             href="/inscription-artisan"
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-secondary-400 via-secondary-300 to-secondary-400 text-slate-900 font-bold px-8 py-4 rounded-xl shadow-lg shadow-secondary-500/25 hover:shadow-[0_8px_30px_-4px_rgba(198,122,60,0.5)] hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 text-slate-900 font-bold px-8 py-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-[0_8px_30px_-4px_rgba(245,158,11,0.5)] hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
           >
             Créer mon profil
             <ArrowRight className="w-5 h-5" />
@@ -648,13 +648,13 @@ export default async function ServicePage({ params }: PageProps) {
             Confiance &amp; Sécurité
           </h2>
           <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-            <Link href="/notre-processus-de-verification" className="text-primary-600 hover:text-primary-800">
+            <Link href="/notre-processus-de-verification" className="text-blue-600 hover:text-blue-800">
               Comment nous référençons les artisans
             </Link>
-            <Link href="/politique-avis" className="text-primary-600 hover:text-primary-800">
+            <Link href="/politique-avis" className="text-blue-600 hover:text-blue-800">
               Notre politique des avis
             </Link>
-            <Link href="/mediation" className="text-primary-600 hover:text-primary-800">
+            <Link href="/mediation" className="text-blue-600 hover:text-blue-800">
               Service de médiation
             </Link>
           </nav>
@@ -664,7 +664,7 @@ export default async function ServicePage({ params }: PageProps) {
       {/* Voir aussi - Autres services */}
       <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl text-gray-900 mb-6">Voir aussi</h2>
+          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 tracking-tight">Voir aussi</h2>
           <div className="grid md:grid-cols-2 gap-8">
             <div>
               <h3 className="font-semibold text-gray-900 mb-4">Autres services artisanaux</h3>
@@ -676,7 +676,7 @@ export default async function ServicePage({ params }: PageProps) {
                     <Link
                       key={s.slug}
                       href={`/services/${s.slug}`}
-                      className="inline-flex items-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-primary-100 text-gray-700 hover:text-primary-700 rounded-full text-sm transition-colors"
+                      className="inline-flex items-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-full text-sm transition-colors"
                     >
                       {s.name}
                     </Link>

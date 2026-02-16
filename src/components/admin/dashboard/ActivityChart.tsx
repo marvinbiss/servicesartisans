@@ -85,16 +85,16 @@ export const ActivityChart = memo(function ActivityChart({ data, loading }: Acti
           <AreaChart data={data} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
             <defs>
               <linearGradient id="fillBookings" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#4a5899" stopOpacity={0.25} />
-                <stop offset="95%" stopColor="#4a5899" stopOpacity={0} />
+                <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.25} />
+                <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
               </linearGradient>
               <linearGradient id="fillUsers" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#10b981" stopOpacity={0.25} />
                 <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
               </linearGradient>
               <linearGradient id="fillReviews" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#c67a3c" stopOpacity={0.25} />
-                <stop offset="95%" stopColor="#c67a3c" stopOpacity={0} />
+                <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.25} />
+                <stop offset="95%" stopColor="#f59e0b" stopOpacity={0} />
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
@@ -129,7 +129,7 @@ export const ActivityChart = memo(function ActivityChart({ data, loading }: Acti
               type="monotone"
               dataKey="bookings"
               name="Réservations"
-              stroke="#4a5899"
+              stroke="#3b82f6"
               fill="url(#fillBookings)"
               strokeWidth={2}
               dot={false}
@@ -149,7 +149,7 @@ export const ActivityChart = memo(function ActivityChart({ data, loading }: Acti
               type="monotone"
               dataKey="reviews"
               name="Avis"
-              stroke="#c67a3c"
+              stroke="#f59e0b"
               fill="url(#fillReviews)"
               strokeWidth={2}
               dot={false}

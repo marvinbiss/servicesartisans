@@ -184,11 +184,11 @@ export default function MessagesClientPage() {
               </Link>
               <Link
                 href="/espace-client/messages"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary-50 text-primary-600 font-medium"
+                className="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-50 text-blue-600 font-medium"
               >
                 <MessageSquare className="w-5 h-5" />
                 Messages
-                <span className="ml-auto bg-primary-600 text-white text-xs px-2 py-0.5 rounded-full">2</span>
+                <span className="ml-auto bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full">2</span>
               </Link>
               <Link
                 href="/espace-client/avis-donnes"
@@ -214,7 +214,7 @@ export default function MessagesClientPage() {
             {loading ? (
               <div className="bg-white rounded-xl shadow-sm p-12 text-center h-[600px] flex items-center justify-center">
                 <div>
-                  <Loader2 className="w-8 h-8 animate-spin text-primary-600 mx-auto mb-4" />
+                  <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
                   <p className="text-gray-600">Chargement des messages...</p>
                 </div>
               </div>
@@ -226,7 +226,7 @@ export default function MessagesClientPage() {
                   <p className="text-gray-500 mb-4">Vos conversations avec les artisans apparaîtront ici.</p>
                   <Link
                     href="/recherche"
-                    className="inline-block bg-primary-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-700 transition-colors"
+                    className="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
                   >
                     Trouver un artisan
                   </Link>
@@ -244,7 +244,7 @@ export default function MessagesClientPage() {
                         placeholder="Rechercher..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
+                        className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
                   </div>
@@ -259,10 +259,10 @@ export default function MessagesClientPage() {
                           key={conv.id}
                           onClick={() => setSelectedConversation(conv)}
                           className={`w-full p-4 flex items-start gap-3 hover:bg-gray-50 transition-colors ${
-                            selectedConversation?.id === conv.id ? 'bg-primary-50' : ''
+                            selectedConversation?.id === conv.id ? 'bg-blue-50' : ''
                           }`}
                         >
-                          <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center text-primary-600 font-semibold">
+                          <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-semibold">
                             {getAvatar(conv.partner)}
                           </div>
                           <div className="flex-1 min-w-0 text-left">
@@ -270,11 +270,11 @@ export default function MessagesClientPage() {
                               <span className="font-medium text-gray-900 truncate">{getDisplayName(conv.partner)}</span>
                               <span className="text-xs text-gray-500">{formatTime(conv.lastMessage.created_at)}</span>
                             </div>
-                            {conv.service && <p className="text-xs text-primary-600">{conv.service}</p>}
+                            {conv.service && <p className="text-xs text-blue-600">{conv.service}</p>}
                             <p className="text-sm text-gray-500 truncate">{conv.lastMessage.content}</p>
                           </div>
                           {conv.unreadCount > 0 && (
-                            <span className="bg-primary-600 text-white text-xs px-2 py-0.5 rounded-full">
+                            <span className="bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full">
                               {conv.unreadCount}
                             </span>
                           )}
@@ -289,13 +289,13 @@ export default function MessagesClientPage() {
                     <>
                       {/* Chat header */}
                       <div className="p-4 border-b flex items-center gap-3">
-                        <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center text-primary-600 font-semibold">
+                        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-semibold">
                           {getAvatar(selectedConversation.partner)}
                         </div>
                         <div>
                           <h3 className="font-semibold text-gray-900">{getDisplayName(selectedConversation.partner)}</h3>
                           {selectedConversation.service && (
-                            <span className="text-sm text-primary-600">{selectedConversation.service}</span>
+                            <span className="text-sm text-blue-600">{selectedConversation.service}</span>
                           )}
                         </div>
                       </div>
@@ -312,14 +312,14 @@ export default function MessagesClientPage() {
                               <div
                                 className={`max-w-[70%] rounded-2xl px-4 py-2 ${
                                   isOwnMessage
-                                    ? 'bg-primary-600 text-white'
+                                    ? 'bg-blue-600 text-white'
                                     : 'bg-gray-100 text-gray-900'
                                 }`}
                               >
                                 <p>{message.content}</p>
                                 <span
                                   className={`text-xs ${
-                                    isOwnMessage ? 'text-primary-200' : 'text-gray-500'
+                                    isOwnMessage ? 'text-blue-200' : 'text-gray-500'
                                   }`}
                                 >
                                   {formatTime(message.created_at)}
@@ -339,13 +339,13 @@ export default function MessagesClientPage() {
                             value={newMessage}
                             onChange={(e) => setNewMessage(e.target.value)}
                             placeholder="Écrivez votre message..."
-                            className="flex-1 px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500"
+                            className="flex-1 px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500"
                             disabled={sendingMessage}
                           />
                           <button
                             type="submit"
                             disabled={sendingMessage || !newMessage.trim()}
-                            className="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50"
+                            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
                           >
                             {sendingMessage ? (
                               <Loader2 className="w-5 h-5 animate-spin" />

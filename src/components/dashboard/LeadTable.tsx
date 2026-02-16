@@ -79,7 +79,7 @@ export function LeadTable({ assignments, basePath, showProvider, providerNames }
                   <td className="px-4 py-3">
                     <Link
                       href={`${basePath}/${a.id}`}
-                      className="font-medium text-gray-900 hover:text-primary-600 transition-colors"
+                      className="font-medium text-gray-900 hover:text-blue-600 transition-colors"
                     >
                       {lead.service_name}
                     </Link>
@@ -117,7 +117,7 @@ export function LeadTable({ assignments, basePath, showProvider, providerNames }
                   </td>
                   <td className="px-4 py-3">
                     <Link href={`${basePath}/${a.id}`}>
-                      <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-primary-500 transition-colors" />
+                      <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors" />
                     </Link>
                   </td>
                 </tr>

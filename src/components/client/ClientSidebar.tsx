@@ -17,7 +17,7 @@ export default function ClientSidebar({ activePage = 'mes-demandes', unreadMessa
         <Link
           href="/espace-client/mes-demandes"
           className={`flex items-center gap-3 px-4 py-3 rounded-lg ${
-            activePage === 'mes-demandes' ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-700 hover:bg-gray-50'
+            activePage === 'mes-demandes' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700 hover:bg-gray-50'
           }`}
         >
           <FileText className="w-5 h-5" />
@@ -26,19 +26,19 @@ export default function ClientSidebar({ activePage = 'mes-demandes', unreadMessa
         <Link
           href="/espace-client/messages"
           className={`flex items-center gap-3 px-4 py-3 rounded-lg ${
-            activePage === 'messages' ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-700 hover:bg-gray-50'
+            activePage === 'messages' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700 hover:bg-gray-50'
           }`}
         >
           <MessageSquare className="w-5 h-5" />
           Messages
           {unreadMessagesCount > 0 && (
-            <span className="ml-auto bg-primary-600 text-white text-xs px-2 py-0.5 rounded-full">{unreadMessagesCount}</span>
+            <span className="ml-auto bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full">{unreadMessagesCount}</span>
           )}
         </Link>
         <Link
           href="/espace-client/avis-donnes"
           className={`flex items-center gap-3 px-4 py-3 rounded-lg ${
-            activePage === 'avis-donnes' ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-700 hover:bg-gray-50'
+            activePage === 'avis-donnes' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700 hover:bg-gray-50'
           }`}
         >
           <Star className="w-5 h-5" />
@@ -47,7 +47,7 @@ export default function ClientSidebar({ activePage = 'mes-demandes', unreadMessa
         <Link
           href="/espace-client/parametres"
           className={`flex items-center gap-3 px-4 py-3 rounded-lg ${
-            activePage === 'parametres' ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-700 hover:bg-gray-50'
+            activePage === 'parametres' ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700 hover:bg-gray-50'
           }`}
         >
           <Settings className="w-5 h-5" />

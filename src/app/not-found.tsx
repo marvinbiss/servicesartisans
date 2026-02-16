@@ -7,11 +7,11 @@ export default function NotFound() {
       <div className="max-w-md w-full text-center">
         {/* 404 Illustration */}
         <div className="mb-8">
-          <div className="text-9xl font-bold text-primary-600 opacity-20">404</div>
+          <div className="text-9xl font-bold text-blue-600 opacity-20">404</div>
           <div className="text-6xl -mt-20 mb-4">🔧</div>
         </div>
 
-        <h1 className="font-heading text-3xl text-gray-900 mb-4">
+        <h1 className="font-heading text-3xl font-bold text-gray-900 mb-4 tracking-tight">
           Page introuvable
         </h1>
         <p className="text-gray-600 mb-8">
@@ -22,7 +22,7 @@ export default function NotFound() {
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             href="/"
-            className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors"
+            className="inline-flex items-center justify-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
           >
             <Home className="w-5 h-5" />
             Retour à l'accueil
@@ -42,16 +42,16 @@ export default function NotFound() {
             Vous cherchez peut-être :
           </p>
           <div className="flex flex-wrap justify-center gap-2">
-            <Link href="/services/plombier" className="text-sm bg-gray-100 hover:bg-primary-100 text-gray-700 hover:text-primary-700 px-3 py-1.5 rounded-full transition-colors">
+            <Link href="/services/plombier" className="text-sm bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 px-3 py-1.5 rounded-full transition-colors">
               Plombier
             </Link>
-            <Link href="/services/electricien" className="text-sm bg-gray-100 hover:bg-primary-100 text-gray-700 hover:text-primary-700 px-3 py-1.5 rounded-full transition-colors">
+            <Link href="/services/electricien" className="text-sm bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 px-3 py-1.5 rounded-full transition-colors">
               Électricien
             </Link>
-            <Link href="/services/serrurier" className="text-sm bg-gray-100 hover:bg-primary-100 text-gray-700 hover:text-primary-700 px-3 py-1.5 rounded-full transition-colors">
+            <Link href="/services/serrurier" className="text-sm bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 px-3 py-1.5 rounded-full transition-colors">
               Serrurier
             </Link>
-            <Link href="/devis" className="text-sm bg-gray-100 hover:bg-primary-100 text-gray-700 hover:text-primary-700 px-3 py-1.5 rounded-full transition-colors">
+            <Link href="/devis" className="text-sm bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 px-3 py-1.5 rounded-full transition-colors">
               Demande de devis
             </Link>
           </div>

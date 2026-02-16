@@ -327,7 +327,7 @@ export default function Header() {
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <Link href="/inscription-artisan" className="text-secondary-400 hover:text-secondary-300 font-medium flex items-center gap-1 transition-colors duration-200">
+            <Link href="/inscription-artisan" className="text-amber-400 hover:text-amber-300 font-medium flex items-center gap-1 transition-colors duration-200">
               <Award className="w-4 h-4" />
               <span className="hidden sm:inline">Espace Pro</span>
             </Link>
@@ -364,24 +364,24 @@ export default function Header() {
               >
                 <defs>
                   <linearGradient id="headerLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#364180" />
-                    <stop offset="50%" stopColor="#2b3468" />
-                    <stop offset="100%" stopColor="#212853" />
+                    <stop offset="0%" stopColor="#2563eb" />
+                    <stop offset="50%" stopColor="#1d4ed8" />
+                    <stop offset="100%" stopColor="#1e40af" />
                   </linearGradient>
                   <linearGradient id="headerAccent" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#c67a3c" />
-                    <stop offset="100%" stopColor="#b4652a" />
+                    <stop offset="0%" stopColor="#f59e0b" />
+                    <stop offset="100%" stopColor="#d97706" />
                   </linearGradient>
                 </defs>
                 <rect x="2" y="2" width="44" height="44" rx="14" fill="url(#headerLogoGrad)" />
                 <path d="M24 10L9 22.5H13.5V36H34.5V22.5H39L24 10Z" fill="white" fillOpacity="0.95" />
-                <path d="M21.5 24.5C21.5 22.57 23.07 21 25 21C26.38 21 27.56 21.82 28.1 22.99L31.5 20.5L32.5 21.5L29.1 24.01C29.37 24.48 29.5 25.02 29.5 25.5C29.5 27.43 27.93 29 26 29C24.62 29 23.44 28.18 22.9 27.01L19.5 29.5L18.5 28.5L21.9 25.99C21.63 25.52 21.5 24.98 21.5 24.5Z" fill="#364180" />
-                <rect x="21.5" y="29.5" width="5" height="6.5" rx="1.5" fill="#364180" fillOpacity="0.25" />
+                <path d="M21.5 24.5C21.5 22.57 23.07 21 25 21C26.38 21 27.56 21.82 28.1 22.99L31.5 20.5L32.5 21.5L29.1 24.01C29.37 24.48 29.5 25.02 29.5 25.5C29.5 27.43 27.93 29 26 29C24.62 29 23.44 28.18 22.9 27.01L19.5 29.5L18.5 28.5L21.9 25.99C21.63 25.52 21.5 24.98 21.5 24.5Z" fill="#2563eb" />
+                <rect x="21.5" y="29.5" width="5" height="6.5" rx="1.5" fill="#2563eb" fillOpacity="0.25" />
                 <circle cx="39" cy="9" r="5" fill="url(#headerAccent)" />
                 <path d="M37.5 9L38.5 10L40.5 8" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-              <span className="hidden sm:inline text-xl font-heading tracking-normal text-gray-900 group-hover/logo:text-gray-700 transition-colors duration-200">
-                Services<span className="text-primary-600 group-hover/logo:text-primary-500 transition-colors duration-200">Artisans</span>
+              <span className="hidden sm:inline text-xl font-heading font-extrabold tracking-tight text-gray-900 group-hover/logo:text-gray-700 transition-colors duration-200">
+                Services<span className="text-blue-600 group-hover/logo:text-blue-500 transition-colors duration-200">Artisans</span>
               </span>
             </motion.div>
           </Link>
@@ -481,7 +481,7 @@ export default function Header() {
 
             <Link
               href="/devis"
-              className="ml-3 px-5 py-2.5 bg-gradient-to-r from-secondary-500 to-secondary-600 hover:from-secondary-600 hover:to-secondary-700 text-white font-semibold rounded-xl shadow-md shadow-secondary-500/20 hover:shadow-lg hover:shadow-secondary-500/30 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
+              className="ml-3 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-semibold rounded-xl shadow-md shadow-amber-500/20 hover:shadow-lg hover:shadow-amber-500/30 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
             >
               Devis gratuit
             </Link>
@@ -528,12 +528,12 @@ export default function Header() {
                 {/* Header */}
                 <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-blue-900 px-8 py-5 flex items-center justify-between">
                   <div>
-                    <h3 className="text-white font-heading text-lg">Tous nos services artisans</h3>
+                    <h3 className="text-white font-heading font-bold text-lg">Tous nos services artisans</h3>
                     <p className="text-slate-300 text-sm mt-0.5">15 métiers, des milliers d&apos;artisans qualifiés partout en France</p>
                   </div>
                   <div className="hidden sm:flex items-center gap-3">
                     <div className="flex items-center gap-2 text-sm text-white/80 bg-white/10 px-4 py-2 rounded-lg">
-                      <Users className="w-4 h-4 text-secondary-400" />
+                      <Users className="w-4 h-4 text-amber-400" />
                       <span>350 000+ artisans référencés</span>
                     </div>
                   </div>
@@ -554,7 +554,7 @@ export default function Header() {
                               <CatIcon className={`w-[18px] h-[18px] ${colors.text}`} />
                             </div>
                             <div>
-                              <span className={`font-heading text-sm ${colors.text}`}>
+                              <span className={`font-heading font-bold text-sm ${colors.text}`}>
                                 {cat.category}
                               </span>
                               {isUrgent && (
@@ -629,7 +629,7 @@ export default function Header() {
                 {/* Header */}
                 <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-blue-900 px-8 py-5 flex items-center justify-between">
                   <div>
-                    <h3 className="text-white font-heading text-lg">Trouvez un artisan par ville</h3>
+                    <h3 className="text-white font-heading font-bold text-lg">Trouvez un artisan par ville</h3>
                     <p className="text-slate-300 text-sm mt-0.5">Plus de 1 000 villes couvertes dans toute la France</p>
                   </div>
                   <div className="hidden sm:flex items-center gap-3">
@@ -660,7 +660,7 @@ export default function Header() {
                         {/* Region label */}
                         <div className="flex items-center gap-2 mb-3 pb-2 border-b border-gray-100">
                           <Globe className="w-4 h-4 text-blue-500" />
-                          <span className="font-heading text-xs text-slate-500 uppercase tracking-wider">{group.region}</span>
+                          <span className="font-heading font-bold text-xs text-slate-500 uppercase tracking-wider">{group.region}</span>
                         </div>
                         {/* Cities */}
                         <div className="space-y-0.5">
@@ -720,7 +720,7 @@ export default function Header() {
                 {/* Header */}
                 <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-blue-900 px-8 py-5 flex items-center justify-between">
                   <div>
-                    <h3 className="text-white font-heading text-lg">Régions de France</h3>
+                    <h3 className="text-white font-heading font-bold text-lg">Régions de France</h3>
                     <p className="text-slate-300 text-sm mt-0.5">18 régions, 101 départements couverts</p>
                   </div>
                   <div className="hidden sm:flex items-center gap-3">
@@ -741,7 +741,7 @@ export default function Header() {
                   <div className="mb-6">
                     <div className="flex items-center gap-2 mb-4">
                       <Map className="w-4 h-4 text-blue-600" />
-                      <h4 className="font-heading text-sm text-slate-900 uppercase tracking-wider">France métropolitaine</h4>
+                      <h4 className="font-heading font-bold text-sm text-slate-900 uppercase tracking-wider">France métropolitaine</h4>
                     </div>
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
                       {metroRegions.map((region) => (
@@ -772,7 +772,7 @@ export default function Header() {
                     <div>
                       <div className="flex items-center gap-2 mb-4">
                         <Globe className="w-4 h-4 text-emerald-600" />
-                        <h4 className="font-heading text-sm text-slate-900 uppercase tracking-wider">Outre-mer</h4>
+                        <h4 className="font-heading font-bold text-sm text-slate-900 uppercase tracking-wider">Outre-mer</h4>
                       </div>
                       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
                         {domTomRegions.map((region) => (
@@ -1095,7 +1095,7 @@ export default function Header() {
                   </Link>
                   <Link
                     href="/devis"
-                    className="flex-1 py-3 bg-gradient-to-r from-secondary-500 to-secondary-600 hover:from-secondary-600 hover:to-secondary-700 text-white rounded-xl font-semibold text-center shadow-md shadow-secondary-500/20 transition-all duration-200"
+                    className="flex-1 py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white rounded-xl font-semibold text-center shadow-md shadow-amber-500/20 transition-all duration-200"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Devis gratuit

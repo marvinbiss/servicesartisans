@@ -96,8 +96,8 @@ export function RefundModal({
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-gray-100">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-secondary-100 rounded-full flex items-center justify-center">
-                <CreditCard className="w-5 h-5 text-secondary-600" />
+              <div className="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center">
+                <CreditCard className="w-5 h-5 text-amber-600" />
               </div>
               <div>
                 <h3 id="refund-modal-title" className="text-lg font-semibold text-gray-900">Remboursement</h3>
@@ -130,7 +130,7 @@ export function RefundModal({
                     value="full"
                     checked={refundType === 'full'}
                     onChange={() => setRefundType('full')}
-                    className="w-4 h-4 text-primary-600"
+                    className="w-4 h-4 text-blue-600"
                   />
                   <span className="text-sm text-gray-700">Remboursement total</span>
                 </label>
@@ -141,7 +141,7 @@ export function RefundModal({
                     value="partial"
                     checked={refundType === 'partial'}
                     onChange={() => setRefundType('partial')}
-                    className="w-4 h-4 text-primary-600"
+                    className="w-4 h-4 text-blue-600"
                   />
                   <span className="text-sm text-gray-700">Remboursement partiel</span>
                 </label>
@@ -161,7 +161,7 @@ export function RefundModal({
                     onChange={(e) => setAmount(parseInt(e.target.value) || 0)}
                     max={maxAmount}
                     min={1}
-                    className="w-full pl-4 pr-12 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    className="w-full pl-4 pr-12 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                   <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 text-sm">
                     = {formatAmount(amount)}
@@ -178,7 +178,7 @@ export function RefundModal({
               <select
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 {REFUND_REASONS.map((r) => (
                   <option key={r.value} value={r.value}>
@@ -199,16 +199,16 @@ export function RefundModal({
                   onChange={(e) => setCustomReason(e.target.value)}
                   rows={2}
                   required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
                   placeholder="Décrivez le motif..."
                 />
               </div>
             )}
 
             {/* Warning */}
-            <div className="flex items-start gap-3 p-3 bg-secondary-50 rounded-lg">
-              <AlertTriangle className="w-5 h-5 text-secondary-600 flex-shrink-0 mt-0.5" />
-              <p className="text-sm text-secondary-700">
+            <div className="flex items-start gap-3 p-3 bg-amber-50 rounded-lg">
+              <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+              <p className="text-sm text-amber-700">
                 Cette action est irréversible. Le remboursement sera traité via Stripe et peut prendre 5-10 jours ouvrés pour apparaître sur le compte du client.
               </p>
             </div>
@@ -233,7 +233,7 @@ export function RefundModal({
               <button
                 type="submit"
                 disabled={loading || (reason === 'other' && !customReason)}
-                className="flex-1 px-4 py-2 bg-secondary-600 text-white rounded-lg hover:bg-secondary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">

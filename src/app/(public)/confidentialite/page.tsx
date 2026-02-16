@@ -3,8 +3,6 @@ import JsonLd from '@/components/JsonLd'
 import Breadcrumb from '@/components/Breadcrumb'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
-import { getPageContent } from '@/lib/cms'
-import { CmsContent } from '@/components/CmsContent'
 
 export const metadata: Metadata = {
   title: 'Politique de confidentialité',
@@ -26,35 +24,7 @@ export const metadata: Metadata = {
   },
 }
 
-export default async function ConfidentialitePage() {
-  const cmsPage = await getPageContent('confidentialite', 'static')
-
-  if (cmsPage?.content_html) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <JsonLd data={getBreadcrumbSchema([
-          { name: 'Accueil', url: '/' },
-          { name: 'Confidentialité', url: '/confidentialite' },
-        ])} />
-        <section className="bg-white border-b">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <Breadcrumb items={[{ label: 'Confidentialité' }]} className="mb-4" />
-            <h1 className="font-heading text-3xl font-bold text-gray-900">
-              {cmsPage.title}
-            </h1>
-          </div>
-        </section>
-        <section className="py-12">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-xl shadow-sm p-8">
-              <CmsContent html={cmsPage.content_html} />
-            </div>
-          </div>
-        </section>
-      </div>
-    )
-  }
-
+export default function ConfidentialitePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <JsonLd data={getBreadcrumbSchema([

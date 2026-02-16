@@ -27,8 +27,8 @@ const variantConfig: Record<ModalVariant, { icon: typeof AlertTriangle; colors: 
   },
   warning: {
     icon: AlertTriangle,
-    colors: 'bg-secondary-100 text-secondary-600',
-    buttonColors: 'bg-secondary-600 hover:bg-secondary-700 text-white',
+    colors: 'bg-amber-100 text-amber-600',
+    buttonColors: 'bg-amber-600 hover:bg-amber-700 text-white',
   },
   success: {
     icon: CheckCircle,
@@ -37,8 +37,8 @@ const variantConfig: Record<ModalVariant, { icon: typeof AlertTriangle; colors: 
   },
   info: {
     icon: Info,
-    colors: 'bg-primary-100 text-primary-600',
-    buttonColors: 'bg-primary-600 hover:bg-primary-700 text-white',
+    colors: 'bg-blue-100 text-blue-600',
+    buttonColors: 'bg-blue-600 hover:bg-blue-700 text-white',
   },
 }
 
@@ -171,7 +171,7 @@ export function ConfirmationModal({
                 type="text"
                 value={confirmInput}
                 onChange={(e) => setConfirmInput(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Tapez pour confirmer"
                 aria-label="Saisir le texte de confirmation"
               />

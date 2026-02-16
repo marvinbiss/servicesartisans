@@ -10,8 +10,8 @@ export function TrustBadges({ variant = 'default' }: { variant?: 'default' | 'co
       icon: Database,
       label: 'Données SIREN officielles',
       description: 'Chaque artisan référencé via les registres officiels de l\'État',
-      color: 'text-primary-600',
-      bgColor: 'bg-primary-50',
+      color: 'text-blue-600',
+      bgColor: 'bg-blue-50',
     },
     {
       icon: Shield,
@@ -31,8 +31,8 @@ export function TrustBadges({ variant = 'default' }: { variant?: 'default' | 'co
       icon: CheckCircle,
       label: '100% gratuit',
       description: 'Recherche, comparaison et devis sans aucun frais',
-      color: 'text-secondary-600',
-      bgColor: 'bg-secondary-50',
+      color: 'text-amber-600',
+      bgColor: 'bg-amber-50',
     },
   ]
 
@@ -134,7 +134,7 @@ export function SocialProofCounter({
       viewport={{ once: true }}
       className="text-center"
     >
-      <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl mb-4 shadow-lg shadow-primary-500/30">
+      <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl mb-4 shadow-lg shadow-blue-500/30">
         <Icon className="w-7 h-7 text-white" />
       </div>
       <motion.div
@@ -179,7 +179,7 @@ export function VerifiedBadge({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
 
   return (
     <div className="inline-flex items-center gap-1" title="Profil référencé">
-      <BadgeCheck className={`${sizes[size]} text-primary-500`} />
+      <BadgeCheck className={`${sizes[size]} text-blue-500`} />
     </div>
   )
 }
@@ -204,7 +204,7 @@ export function RatingStars({
 
   return (
     <div className="inline-flex items-center gap-1">
-      <Star className={`${sizes[size].star} text-secondary-400 fill-secondary-400`} />
+      <Star className={`${sizes[size].star} text-amber-400 fill-amber-400`} />
       <span className={`font-semibold text-slate-900 ${sizes[size].text}`}>
         {rating.toFixed(1)}
       </span>

@@ -119,7 +119,7 @@ export default function CancellationModal({
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               placeholder="Indiquez la raison de votre annulation..."
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               rows={3}
             />
           </div>

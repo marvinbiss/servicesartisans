@@ -189,7 +189,7 @@ export default function AdminLeadsPage() {
                   type="text"
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
-                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent w-40"
+                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent w-40"
                   placeholder="Paris"
                 />
               </div>
@@ -202,7 +202,7 @@ export default function AdminLeadsPage() {
                   type="text"
                   value={service}
                   onChange={(e) => setService(e.target.value)}
-                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent w-40"
+                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent w-40"
                   placeholder="Plombier"
                 />
               </div>
@@ -215,7 +215,7 @@ export default function AdminLeadsPage() {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent w-48"
+                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent w-48"
                   placeholder="Nom, service..."
                 />
               </div>
@@ -226,7 +226,7 @@ export default function AdminLeadsPage() {
                 value={urgencyFilter}
                 onChange={(e) => setUrgencyFilter(e.target.value)}
                 aria-label="Filtrer par urgence"
-                className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
+                className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">Toutes</option>
                 <option value="normal">Normal</option>
@@ -236,7 +236,7 @@ export default function AdminLeadsPage() {
             </div>
             <button
               onClick={() => { revalidateAll(); setPage(1) }}
-              className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
             >
               <Search className="w-4 h-4" />
               Filtrer
@@ -256,7 +256,7 @@ export default function AdminLeadsPage() {
           <button
             onClick={() => setTab('leads')}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              tab === 'leads' ? 'bg-primary-600 text-white' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+              tab === 'leads' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
             }`}
           >
             <FileText className="w-4 h-4 inline mr-1.5" />
@@ -265,7 +265,7 @@ export default function AdminLeadsPage() {
           <button
             onClick={() => setTab('artisans')}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              tab === 'artisans' ? 'bg-primary-600 text-white' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+              tab === 'artisans' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
             }`}
           >
             <Users className="w-4 h-4 inline mr-1.5" />
@@ -275,7 +275,7 @@ export default function AdminLeadsPage() {
 
         {isLoading ? (
           <div className="flex justify-center py-16">
-            <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
+            <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
           </div>
         ) : (
           <>
@@ -350,7 +350,7 @@ export default function AdminLeadsPage() {
                                 <button
                                   onClick={() => handleDispatch(lead.id)}
                                   disabled={dispatchLoading && dispatchLeadId === lead.id}
-                                  className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-primary-600 bg-primary-50 rounded-lg hover:bg-primary-100 disabled:opacity-50 transition-colors"
+                                  className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 disabled:opacity-50 transition-colors"
                                 >
                                   {dispatchLoading && dispatchLeadId === lead.id ? (
                                     <Loader2 className="w-3 h-3 animate-spin" />

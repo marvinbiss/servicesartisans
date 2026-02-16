@@ -95,13 +95,13 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
             {servicesOffered.map((service, index) => (
               <span
                 key={index}
-                className="bg-primary-100 text-primary-700 px-3 py-1 rounded-full text-sm flex items-center gap-2"
+                className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm flex items-center gap-2"
               >
                 {service}
                 <button
                   type="button"
                   onClick={() => removeService(index)}
-                  className="hover:text-primary-900"
+                  className="hover:text-blue-900"
                   aria-label={`Supprimer ${service}`}
                 >
                   <X className="w-3.5 h-3.5" />
@@ -119,20 +119,20 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
               placeholder={servicesAtMax ? 'Limite atteinte' : 'Ajouter un service'}
               maxLength={100}
               disabled={servicesAtMax}
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:bg-gray-100 disabled:text-gray-400"
+              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:text-gray-400"
             />
             <button
               type="button"
               onClick={addService}
               disabled={servicesAtMax}
-              className="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50"
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
               aria-label="Ajouter un service"
             >
               <Plus className="w-5 h-5" />
             </button>
           </div>
           {servicesAtMax && (
-            <p className="text-xs text-secondary-600 mt-1">Limite de {MAX_SERVICES} services atteinte.</p>
+            <p className="text-xs text-amber-600 mt-1">Limite de {MAX_SERVICES} services atteinte.</p>
           )}
         </div>
 
@@ -154,7 +154,7 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
                   max={9999}
                   step={0.5}
                   placeholder="30"
-                  className="w-full px-4 py-3 pr-14 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  className="w-full px-4 py-3 pr-14 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
                 <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm">&euro;/h</span>
               </div>
@@ -173,7 +173,7 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
                   max={9999}
                   step={0.5}
                   placeholder="60"
-                  className="w-full px-4 py-3 pr-14 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  className="w-full px-4 py-3 pr-14 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
                 <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm">&euro;/h</span>
               </div>
@@ -192,7 +192,7 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
               type="button"
               onClick={addServicePrice}
               disabled={pricesAtMax}
-              className="text-sm text-primary-600 hover:text-primary-700 font-medium flex items-center gap-1 disabled:opacity-50"
+              className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1 disabled:opacity-50"
             >
               <Plus className="w-4 h-4" />
               {pricesAtMax ? 'Limite atteinte' : 'Ajouter un tarif'}
@@ -209,7 +209,7 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
             {servicePrices.map((item, index) => {
               const incomplete = hasEmptyRequired(item)
               return (
-                <div key={index} className={`border rounded-lg p-4 relative ${incomplete ? 'border-secondary-300 bg-secondary-50/30' : 'border-gray-200'}`}>
+                <div key={index} className={`border rounded-lg p-4 relative ${incomplete ? 'border-amber-300 bg-amber-50/30' : 'border-gray-200'}`}>
                   <button
                     type="button"
                     onClick={() => removeServicePrice(index)}
@@ -230,12 +230,12 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
                         onChange={(e) => updateServicePrice(index, 'name', e.target.value)}
                         maxLength={200}
                         placeholder="Ex: D\u00e9bouchage canalisation"
-                        className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm ${
-                          item.name.trim() === '' && servicePrices.length > 0 ? 'border-secondary-300' : 'border-gray-300'
+                        className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm ${
+                          item.name.trim() === '' && servicePrices.length > 0 ? 'border-amber-300' : 'border-gray-300'
                         }`}
                       />
                       {item.name.trim() === '' && (
-                        <p className="text-xs text-secondary-600 mt-0.5">Le nom est requis</p>
+                        <p className="text-xs text-amber-600 mt-0.5">Le nom est requis</p>
                       )}
                     </div>
                     <div>
@@ -249,12 +249,12 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
                         onChange={(e) => updateServicePrice(index, 'price', e.target.value)}
                         maxLength={100}
                         placeholder="Ex: 80 \u20ac ou \u00c0 partir de 50 \u20ac"
-                        className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm ${
-                          item.price.trim() === '' && servicePrices.length > 0 ? 'border-secondary-300' : 'border-gray-300'
+                        className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm ${
+                          item.price.trim() === '' && servicePrices.length > 0 ? 'border-amber-300' : 'border-gray-300'
                         }`}
                       />
                       {item.price.trim() === '' && (
-                        <p className="text-xs text-secondary-600 mt-0.5">Le prix est requis</p>
+                        <p className="text-xs text-amber-600 mt-0.5">Le prix est requis</p>
                       )}
                     </div>
                     <div>
@@ -268,7 +268,7 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
                         onChange={(e) => updateServicePrice(index, 'description', e.target.value)}
                         maxLength={500}
                         placeholder="D\u00e9tails optionnels"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                       />
                     </div>
                     <div>
@@ -282,7 +282,7 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
                         onChange={(e) => updateServicePrice(index, 'duration', e.target.value)}
                         maxLength={50}
                         placeholder="Ex: 1h, 2-3h"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                       />
                     </div>
                   </div>
@@ -304,7 +304,7 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
             aria-checked={freeQuote}
             onClick={() => setField('free_quote', !freeQuote)}
             className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-              freeQuote ? 'bg-primary-600' : 'bg-gray-300'
+              freeQuote ? 'bg-blue-600' : 'bg-gray-300'
             }`}
           >
             <span

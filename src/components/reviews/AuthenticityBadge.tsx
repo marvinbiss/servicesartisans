@@ -30,9 +30,9 @@ const AUTHENTICITY_CONFIG = {
   medium: {
     icon: BadgeCheck,
     label: 'Probablement authentique',
-    color: 'text-primary-600',
-    bgColor: 'bg-primary-50',
-    borderColor: 'border-primary-200',
+    color: 'text-blue-600',
+    bgColor: 'bg-blue-50',
+    borderColor: 'border-blue-200',
   },
   low: {
     icon: HelpCircle,
@@ -171,7 +171,7 @@ export function AuthenticityDetails({
           <div
             className={cn(
               'h-full rounded-full transition-all',
-              score >= 90 ? 'bg-green-500' : score >= 70 ? 'bg-primary-500' : score >= 50 ? 'bg-gray-400' : 'bg-yellow-500'
+              score >= 90 ? 'bg-green-500' : score >= 70 ? 'bg-blue-500' : score >= 50 ? 'bg-gray-400' : 'bg-yellow-500'
             )}
             style={{ width: `${score}%` }}
           />
@@ -212,7 +212,7 @@ export function AuthenticityDetails({
             )}
             {flags.ip_match && (
               <li className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary-500" />
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
                 IP correspondant à d'autres avis
               </li>
             )}

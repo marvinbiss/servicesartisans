@@ -20,15 +20,15 @@ const icons: Record<ToastTypeEnum, typeof CheckCircle> = {
 const styles: Record<ToastTypeEnum, string> = {
   success: 'bg-green-50 border-green-200 text-green-800',
   error: 'bg-red-50 border-red-200 text-red-800',
-  warning: 'bg-secondary-50 border-secondary-200 text-secondary-800',
-  info: 'bg-primary-50 border-primary-200 text-primary-800',
+  warning: 'bg-amber-50 border-amber-200 text-amber-800',
+  info: 'bg-blue-50 border-blue-200 text-blue-800',
 }
 
 const iconStyles: Record<ToastTypeEnum, string> = {
   success: 'text-green-500',
   error: 'text-red-500',
-  warning: 'text-secondary-500',
-  info: 'text-primary-500',
+  warning: 'text-amber-500',
+  info: 'text-blue-500',
 }
 
 export function Toast({ toast, onDismiss }: ToastProps) {

@@ -25335,42 +25335,4 @@ export const services = [
   { slug: 'cuisiniste', name: 'Cuisiniste', icon: 'ChefHat', color: 'from-rose-500 to-rose-600' },
   { slug: 'solier', name: 'Solier-moquettiste', icon: 'Layers', color: 'from-indigo-500 to-indigo-600' },
   { slug: 'nettoyage', name: 'Nettoyage professionnel', icon: 'Sparkles', color: 'from-emerald-500 to-emerald-600' },
-  // ── Bâtiment / Gros œuvre ──
-  { slug: 'terrassier', name: 'Terrassier', icon: 'Shovel', color: 'from-yellow-600 to-yellow-700' },
-  { slug: 'charpentier', name: 'Charpentier', icon: 'LayoutGrid', color: 'from-amber-700 to-amber-800' },
-  { slug: 'zingueur', name: 'Zingueur', icon: 'Droplets', color: 'from-zinc-500 to-zinc-600' },
-  { slug: 'etancheiste', name: 'Étanchéiste', icon: 'ShieldCheck', color: 'from-blue-600 to-blue-700' },
-  { slug: 'facadier', name: 'Façadier', icon: 'Building', color: 'from-orange-600 to-orange-700' },
-  { slug: 'platrier', name: 'Plâtrier', icon: 'Ruler', color: 'from-neutral-500 to-neutral-600' },
-  { slug: 'metallier', name: 'Métallier', icon: 'Scissors', color: 'from-gray-600 to-gray-700' },
-  { slug: 'ferronnier', name: 'Ferronnier', icon: 'Anvil', color: 'from-stone-600 to-stone-700' },
-  // ── Finitions / Aménagement intérieur ──
-  { slug: 'poseur-de-parquet', name: 'Poseur de parquet', icon: 'Layers', color: 'from-amber-500 to-amber-600' },
-  { slug: 'miroitier', name: 'Miroitier', icon: 'Maximize', color: 'from-sky-400 to-sky-500' },
-  { slug: 'storiste', name: 'Storiste', icon: 'SunDim', color: 'from-yellow-500 to-yellow-600' },
-  { slug: 'salle-de-bain', name: 'Salle de bain', icon: 'Bath', color: 'from-blue-400 to-blue-500' },
-  { slug: 'architecte-interieur', name: 'Architecte d\'intérieur', icon: 'Palette', color: 'from-fuchsia-500 to-fuchsia-600' },
-  { slug: 'decorateur', name: 'Décorateur', icon: 'PaintBrush', color: 'from-pink-500 to-pink-600' },
-  { slug: 'domoticien', name: 'Domoticien', icon: 'Cpu', color: 'from-violet-500 to-violet-600' },
-  // ── Énergie / Transition écologique ──
-  { slug: 'pompe-a-chaleur', name: 'Pompe à chaleur', icon: 'Thermometer', color: 'from-red-400 to-red-500' },
-  { slug: 'panneaux-solaires', name: 'Panneaux solaires', icon: 'Sun', color: 'from-yellow-400 to-yellow-500' },
-  { slug: 'isolation-thermique', name: 'Isolation thermique', icon: 'ThermometerSnowflake', color: 'from-blue-300 to-blue-400' },
-  { slug: 'renovation-energetique', name: 'Rénovation énergétique', icon: 'Leaf', color: 'from-lime-500 to-lime-600' },
-  { slug: 'borne-recharge', name: 'Borne de recharge', icon: 'PlugZap', color: 'from-green-400 to-green-500' },
-  { slug: 'ramoneur', name: 'Ramoneur', icon: 'Flame', color: 'from-gray-700 to-gray-800' },
-  // ── Extérieur / Jardin ──
-  { slug: 'paysagiste', name: 'Paysagiste', icon: 'Trees', color: 'from-green-600 to-green-700' },
-  { slug: 'pisciniste', name: 'Pisciniste', icon: 'Waves', color: 'from-cyan-400 to-cyan-500' },
-  // ── Sécurité / Technique ──
-  { slug: 'alarme-securite', name: 'Alarme et sécurité', icon: 'ShieldAlert', color: 'from-red-600 to-red-700' },
-  { slug: 'antenniste', name: 'Antenniste', icon: 'Radio', color: 'from-indigo-400 to-indigo-500' },
-  { slug: 'ascensoriste', name: 'Ascensoriste', icon: 'ArrowUpDown', color: 'from-slate-500 to-slate-600' },
-  // ── Diagnostics / Conseil ──
-  { slug: 'diagnostiqueur', name: 'Diagnostiqueur', icon: 'ClipboardCheck', color: 'from-teal-600 to-teal-700' },
-  { slug: 'geometre', name: 'Géomètre', icon: 'Map', color: 'from-emerald-600 to-emerald-700' },
-  // ── Services spécialisés ──
-  { slug: 'desinsectisation', name: 'Désinsectisation', icon: 'Bug', color: 'from-lime-600 to-lime-700' },
-  { slug: 'deratisation', name: 'Dératisation', icon: 'Rat', color: 'from-orange-700 to-orange-800' },
-  { slug: 'demenageur', name: 'Déménageur', icon: 'Truck', color: 'from-blue-700 to-blue-800' },
 ]

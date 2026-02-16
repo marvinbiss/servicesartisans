@@ -39,7 +39,7 @@ export function SEOPanel({
           <Search className="w-5 h-5 text-gray-500" />
           <span className="font-medium text-gray-900">Référencement (SEO)</span>
           {!seoTitle && !seoDescription && (
-            <span className="text-xs text-secondary-600 bg-secondary-50 px-2 py-0.5 rounded-full">
+            <span className="text-xs text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">
               Non renseigné
             </span>
           )}
@@ -73,7 +73,7 @@ export function SEOPanel({
               value={seoTitle}
               onChange={(e) => onSeoTitleChange(e.target.value)}
               placeholder="Titre pour les moteurs de recherche"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               maxLength={70}
             />
             {titleLength > titleMax && (
@@ -102,7 +102,7 @@ export function SEOPanel({
               onChange={(e) => onSeoDescriptionChange(e.target.value)}
               placeholder="Description pour les moteurs de recherche"
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm resize-none"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm resize-none"
               maxLength={170}
             />
             {descriptionLength > descriptionMax && (

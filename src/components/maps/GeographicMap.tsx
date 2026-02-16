@@ -98,7 +98,7 @@ export default function GeographicMap({
 
     const size = isHighlighted ? 40 : 32
     const isVerified = provider?.is_verified ?? false
-    const color = isVerified ? '#364180' : '#6b7280'
+    const color = isVerified ? '#2563eb' : '#6b7280'
 
     return _L.divIcon({
       className: 'custom-marker',
@@ -184,7 +184,7 @@ export default function GeographicMap({
                   {provider.is_verified && (
                     <span
                       className="inline-flex items-center justify-center w-5 h-5 rounded-full flex-shrink-0"
-                      style={{ backgroundColor: '#364180' }}
+                      style={{ backgroundColor: '#1877f2' }}
                       aria-label="Artisan référencé"
                       title="Artisan référencé"
                     >
@@ -197,14 +197,14 @@ export default function GeographicMap({
 
                 {/* Specialty */}
                 {provider.specialty && (
-                  <p className="text-sm text-primary-600 font-medium mb-2">{provider.specialty}</p>
+                  <p className="text-sm text-blue-600 font-medium mb-2">{provider.specialty}</p>
                 )}
 
                 {/* Rating */}
                 {provider.rating_average && provider.rating_average > 0 && provider.review_count && provider.review_count > 0 && (
                   <div className="flex items-start justify-between gap-3 mb-2">
                     <div className="flex items-center gap-1">
-                      <Star className="w-4 h-4 text-secondary-400 fill-secondary-400" />
+                      <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
                       <span className="font-bold text-gray-900 text-sm">{provider.rating_average.toFixed(1)}</span>
                     </div>
                     <div className="text-xs text-gray-500">{provider.review_count} avis</div>
@@ -236,7 +236,7 @@ export default function GeographicMap({
                   )}
                   <Link
                     href={getArtisanUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city })}
-                    className="flex-1 text-center px-3 py-2 bg-gradient-to-r from-primary-600 to-primary-700 text-white rounded-lg text-sm font-semibold hover:from-primary-700 hover:to-primary-800 transition-all shadow-md hover:shadow-lg transform hover:scale-[1.02]"
+                    className="flex-1 text-center px-3 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg text-sm font-semibold hover:from-blue-700 hover:to-blue-800 transition-all shadow-md hover:shadow-lg transform hover:scale-[1.02]"
                   >
                     Voir le profil
                   </Link>

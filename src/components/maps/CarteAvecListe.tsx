@@ -94,7 +94,7 @@ export default function CarteAvecListe({
     // Marker color now based on is_verified instead.
     const isVerified = provider.is_verified ?? false
     const size = isHovered ? 42 : 36
-    const color = isVerified ? '#364180' : '#6b7280'
+    const color = isVerified ? '#2563eb' : '#6b7280'
 
     return L.divIcon({
       className: '',
@@ -128,7 +128,7 @@ export default function CarteAvecListe({
   if (!mapReady || loading) {
     return (
       <div className="h-screen bg-gray-50 flex items-center justify-center">
-        <div className="w-16 h-16 border-4 border-primary-600 border-t-transparent rounded-full animate-spin" />
+        <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
       </div>
     )
   }
@@ -177,7 +177,7 @@ export default function CarteAvecListe({
                     {provider.rating_average && provider.review_count && provider.review_count > 0 && (
                       <div className="text-right">
                         <div className="flex items-center gap-1 justify-end">
-                          <Star className="w-4 h-4 text-secondary-400 fill-secondary-400" />
+                          <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
                           <span className="font-bold">{provider.rating_average.toFixed(1)}</span>
                         </div>
                         <div className="text-xs text-gray-500">{provider.review_count} avis</div>
@@ -189,7 +189,7 @@ export default function CarteAvecListe({
                   )}
                   <Link
                     href={getArtisanUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city })}
-                    className="block w-full py-2 bg-primary-600 text-white text-center rounded-lg text-sm font-semibold hover:bg-primary-700"
+                    className="block w-full py-2 bg-blue-600 text-white text-center rounded-lg text-sm font-semibold hover:bg-blue-700"
                   >
                     Voir le profil
                   </Link>

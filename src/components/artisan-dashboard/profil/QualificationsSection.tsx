@@ -93,7 +93,7 @@ export function QualificationsSection({ provider, onSaved }: QualificationsSecti
                   key={suggestion}
                   type="button"
                   onClick={() => addCertification(suggestion)}
-                  className="text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full hover:bg-primary-50 hover:text-primary-600 transition-colors"
+                  className="text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full hover:bg-blue-50 hover:text-blue-600 transition-colors"
                 >
                   + {suggestion}
                 </button>
@@ -131,20 +131,20 @@ export function QualificationsSection({ provider, onSaved }: QualificationsSecti
               placeholder={certsAtMax ? 'Limite atteinte' : 'Ajouter une certification'}
               maxLength={100}
               disabled={certsAtMax}
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:bg-gray-100 disabled:text-gray-400"
+              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:text-gray-400"
             />
             <button
               type="button"
               onClick={() => addCertification()}
               disabled={certsAtMax}
-              className="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50"
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
               aria-label="Ajouter une certification"
             >
               <Plus className="w-5 h-5" />
             </button>
           </div>
           {certsAtMax && (
-            <p className="text-xs text-secondary-600 mt-1">Limite de {MAX_CERTIFICATIONS} certifications atteinte.</p>
+            <p className="text-xs text-amber-600 mt-1">Limite de {MAX_CERTIFICATIONS} certifications atteinte.</p>
           )}
         </div>
 
@@ -165,7 +165,7 @@ export function QualificationsSection({ provider, onSaved }: QualificationsSecti
                   key={suggestion}
                   type="button"
                   onClick={() => addInsurance(suggestion)}
-                  className="text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full hover:bg-primary-50 hover:text-primary-600 transition-colors"
+                  className="text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full hover:bg-blue-50 hover:text-blue-600 transition-colors"
                 >
                   + {suggestion}
                 </button>
@@ -178,13 +178,13 @@ export function QualificationsSection({ provider, onSaved }: QualificationsSecti
             {insurance.map((ins, index) => (
               <span
                 key={index}
-                className="bg-secondary-100 text-secondary-700 px-3 py-1 rounded-full text-sm flex items-center gap-2"
+                className="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-sm flex items-center gap-2"
               >
                 {ins}
                 <button
                   type="button"
                   onClick={() => removeInsurance(index)}
-                  className="hover:text-secondary-900"
+                  className="hover:text-amber-900"
                   aria-label={`Supprimer ${ins}`}
                 >
                   <X className="w-3.5 h-3.5" />
@@ -203,20 +203,20 @@ export function QualificationsSection({ provider, onSaved }: QualificationsSecti
               placeholder={insAtMax ? 'Limite atteinte' : 'Ajouter une assurance'}
               maxLength={100}
               disabled={insAtMax}
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:bg-gray-100 disabled:text-gray-400"
+              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:text-gray-400"
             />
             <button
               type="button"
               onClick={() => addInsurance()}
               disabled={insAtMax}
-              className="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50"
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
               aria-label="Ajouter une assurance"
             >
               <Plus className="w-5 h-5" />
             </button>
           </div>
           {insAtMax && (
-            <p className="text-xs text-secondary-600 mt-1">Limite de {MAX_INSURANCE} assurances atteinte.</p>
+            <p className="text-xs text-amber-600 mt-1">Limite de {MAX_INSURANCE} assurances atteinte.</p>
           )}
         </div>
       </div>

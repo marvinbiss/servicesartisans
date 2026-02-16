@@ -29,12 +29,12 @@ export function ArtisanReviews({ artisan: _artisan, reviews }: ArtisanReviewsPro
         className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6"
       >
         <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
-          <Star className="w-5 h-5 text-secondary-500 fill-secondary-500" />
+          <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
           Avis clients
         </h2>
         <div className="text-center py-8">
-          <div className="w-16 h-16 rounded-full bg-secondary-50 flex items-center justify-center mx-auto mb-4">
-            <Star className="w-8 h-8 text-secondary-400" />
+          <div className="w-16 h-16 rounded-full bg-amber-50 flex items-center justify-center mx-auto mb-4">
+            <Star className="w-8 h-8 text-amber-400" />
           </div>
           <p className="text-gray-900 font-medium mb-1">Pas encore d'avis</p>
           <p className="text-gray-500 text-sm">Soyez le premier à donner votre avis sur cet artisan.</p>
@@ -88,7 +88,7 @@ export function ArtisanReviews({ artisan: _artisan, reviews }: ArtisanReviewsPro
       className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6"
     >
       <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
-        <Star className="w-5 h-5 text-secondary-500 fill-secondary-500" />
+        <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
         Avis clients ({reviews.length})
       </h2>
 
@@ -105,7 +105,7 @@ export function ArtisanReviews({ artisan: _artisan, reviews }: ArtisanReviewsPro
                 key={star}
                 className={`w-5 h-5 ${
                   star <= Math.round(reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length)
-                    ? 'text-secondary-500 fill-secondary-500'
+                    ? 'text-amber-500 fill-amber-500'
                     : 'text-gray-300'
                 }`}
               />
@@ -122,19 +122,19 @@ export function ArtisanReviews({ artisan: _artisan, reviews }: ArtisanReviewsPro
               onClick={() => handleFilterChange(rating.toString() as FilterType)}
               aria-pressed={filter === rating.toString()}
               aria-label={`Filtrer les avis ${rating} étoiles (${count} avis)`}
-              className={`w-full flex items-center gap-3 p-1 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-secondary-500 focus:ring-offset-1 ${
-                filter === rating.toString() ? 'bg-secondary-50' : 'hover:bg-gray-50'
+              className={`w-full flex items-center gap-3 p-1 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-1 ${
+                filter === rating.toString() ? 'bg-amber-50' : 'hover:bg-gray-50'
               }`}
             >
               <span className="text-sm text-gray-600 w-6" aria-hidden="true">{rating}</span>
-              <Star className="w-4 h-4 text-secondary-500 fill-secondary-500" aria-hidden="true" />
+              <Star className="w-4 h-4 text-amber-500 fill-amber-500" aria-hidden="true" />
               <div className="flex-1 h-2.5 bg-gray-100 rounded-full overflow-hidden" role="progressbar" aria-valuenow={percentage} aria-valuemin={0} aria-valuemax={100}>
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${percentage}%` }}
                   transition={{ duration: 0.5, delay: 0.2 }}
                   className={`h-full rounded-full ${
-                    filter === rating.toString() ? 'bg-secondary-600' : 'bg-secondary-500'
+                    filter === rating.toString() ? 'bg-amber-600' : 'bg-amber-500'
                   }`}
                 />
               </div>
@@ -150,9 +150,9 @@ export function ArtisanReviews({ artisan: _artisan, reviews }: ArtisanReviewsPro
         <button
           onClick={() => handleFilterChange('all')}
           aria-pressed={filter === 'all'}
-          className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 ${
+          className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 ${
             filter === 'all'
-              ? 'bg-primary-600 text-white'
+              ? 'bg-blue-600 text-white'
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
         >
@@ -191,7 +191,7 @@ export function ArtisanReviews({ artisan: _artisan, reviews }: ArtisanReviewsPro
           id="reviews-sort"
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value as 'recent' | 'rating')}
-          className="px-3 py-1.5 rounded-lg border border-gray-200 text-sm text-gray-600 bg-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+          className="px-3 py-1.5 rounded-lg border border-gray-200 text-sm text-gray-600 bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         >
           <option value="recent">Plus récents</option>
           <option value="rating">Meilleures notes</option>
@@ -205,7 +205,7 @@ export function ArtisanReviews({ artisan: _artisan, reviews }: ArtisanReviewsPro
           <p>Aucun avis ne correspond à ce filtre</p>
           <button
             onClick={() => handleFilterChange('all')}
-            className="mt-2 text-primary-600 hover:underline text-sm"
+            className="mt-2 text-blue-600 hover:underline text-sm"
           >
             Voir tous les avis
           </button>
@@ -227,7 +227,7 @@ export function ArtisanReviews({ artisan: _artisan, reviews }: ArtisanReviewsPro
             >
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center text-white font-semibold shadow-sm">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-semibold shadow-sm">
                     {review.author.charAt(0).toUpperCase()}
                   </div>
                   <div>
@@ -249,7 +249,7 @@ export function ArtisanReviews({ artisan: _artisan, reviews }: ArtisanReviewsPro
                       key={star}
                       className={`w-4 h-4 ${
                         star <= review.rating
-                          ? 'text-secondary-500 fill-secondary-500'
+                          ? 'text-amber-500 fill-amber-500'
                           : 'text-gray-200'
                       }`}
                     />

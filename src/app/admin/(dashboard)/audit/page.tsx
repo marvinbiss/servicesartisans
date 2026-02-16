@@ -210,7 +210,7 @@ export default function AdminAuditPage() {
           <button
             onClick={() => setActiveTab('lead_events')}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              activeTab === 'lead_events' ? 'bg-primary-600 text-white' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+              activeTab === 'lead_events' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
             }`}
           >
             <Activity className="w-4 h-4 inline mr-1.5" />
@@ -219,7 +219,7 @@ export default function AdminAuditPage() {
           <button
             onClick={() => setActiveTab('audit_logs')}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              activeTab === 'audit_logs' ? 'bg-primary-600 text-white' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+              activeTab === 'audit_logs' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
             }`}
           >
             <Shield className="w-4 h-4 inline mr-1.5" />
@@ -236,7 +236,7 @@ export default function AdminAuditPage() {
                 <button
                   onClick={() => { setEventTypeFilter(''); setEventsPage(1) }}
                   className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-                    !eventTypeFilter ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    !eventTypeFilter ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
                 >
                   Tous ({totalEventsAll})
@@ -246,7 +246,7 @@ export default function AdminAuditPage() {
                     key={type}
                     onClick={() => { setEventTypeFilter(type); setEventsPage(1) }}
                     className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-                      eventTypeFilter === type ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      eventTypeFilter === type ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                     }`}
                   >
                     {eventTypeLabels[type] || type} ({count})
@@ -257,7 +257,7 @@ export default function AdminAuditPage() {
 
             {eventsLoading ? (
               <div className="flex justify-center py-16">
-                <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
+                <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
               </div>
             ) : (
               <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
@@ -288,12 +288,12 @@ export default function AdminAuditPage() {
                             </td>
                             <td className="px-4 py-3">
                               <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                                e.event_type === 'created' ? 'bg-primary-100 text-primary-700' :
-                                e.event_type === 'dispatched' ? 'bg-primary-100 text-primary-700' :
+                                e.event_type === 'created' ? 'bg-blue-100 text-blue-700' :
+                                e.event_type === 'dispatched' ? 'bg-blue-100 text-blue-700' :
                                 e.event_type === 'viewed' ? 'bg-yellow-100 text-yellow-700' :
                                 e.event_type === 'quoted' ? 'bg-green-100 text-green-700' :
                                 e.event_type === 'declined' ? 'bg-gray-100 text-gray-600' :
-                                e.event_type === 'accepted' ? 'bg-primary-100 text-primary-700' :
+                                e.event_type === 'accepted' ? 'bg-blue-100 text-blue-700' :
                                 e.event_type === 'completed' ? 'bg-green-100 text-green-800' :
                                 'bg-gray-100 text-gray-600'
                               }`}>
@@ -309,7 +309,7 @@ export default function AdminAuditPage() {
                             <td className="px-4 py-3">
                               {Object.keys(e.metadata).length > 0 && (
                                 <details className="text-xs">
-                                  <summary className="cursor-pointer text-primary-600 hover:text-primary-700">
+                                  <summary className="cursor-pointer text-blue-600 hover:text-blue-700">
                                     {Object.keys(e.metadata).length} champ(s)
                                   </summary>
                                   <pre className="mt-2 p-2 bg-gray-50 rounded text-gray-600 overflow-x-auto max-w-xs text-xs">
@@ -365,7 +365,7 @@ export default function AdminAuditPage() {
                     value={entityType}
                     onChange={(e) => { setEntityType(e.target.value); setLogsPage(1) }}
                     aria-label="Filtrer par type d'entité"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
                   >
                     {ENTITY_TYPES.map((type) => (
                       <option key={type.value} value={type.value}>{type.label}</option>
@@ -379,7 +379,7 @@ export default function AdminAuditPage() {
                     value={action}
                     onChange={(e) => { setAction(e.target.value); setLogsPage(1) }}
                     placeholder="ban, refund..."
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div>
@@ -388,7 +388,7 @@ export default function AdminAuditPage() {
                     type="date"
                     value={dateFrom}
                     onChange={(e) => { setDateFrom(e.target.value); setLogsPage(1) }}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div>
@@ -397,7 +397,7 @@ export default function AdminAuditPage() {
                     type="date"
                     value={dateTo}
                     onChange={(e) => { setDateTo(e.target.value); setLogsPage(1) }}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
               </div>
@@ -407,7 +407,7 @@ export default function AdminAuditPage() {
             <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
               {logsLoading ? (
                 <div className="p-16 text-center">
-                  <Loader2 className="w-8 h-8 animate-spin text-primary-600 mx-auto" />
+                  <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto" />
                 </div>
               ) : logs.length === 0 ? (
                 <div className="p-16 text-center text-gray-500">
@@ -455,7 +455,7 @@ export default function AdminAuditPage() {
                             <td className="px-4 py-3">
                               {log.new_value && Object.keys(log.new_value).length > 0 && (
                                 <details className="text-xs">
-                                  <summary className="cursor-pointer text-primary-600 hover:text-primary-700">
+                                  <summary className="cursor-pointer text-blue-600 hover:text-blue-700">
                                     Données
                                   </summary>
                                   <pre className="mt-2 p-2 bg-gray-50 rounded text-gray-600 overflow-x-auto max-w-xs text-xs">

@@ -229,7 +229,7 @@ export default function AdminParametresPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     )
   }
@@ -262,7 +262,7 @@ export default function AdminParametresPage() {
             <button
               onClick={handleSave}
               disabled={saving || !hasChanges}
-              className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Save className="w-4 h-4" />
               {saving ? 'Enregistrement...' : 'Enregistrer'}
@@ -288,10 +288,10 @@ export default function AdminParametresPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
           <button
             onClick={() => router.push('/admin/parametres/admins')}
-            className="flex items-center gap-3 p-4 bg-white rounded-xl shadow-sm border border-gray-100 hover:border-primary-200 hover:shadow-md transition-all text-left"
+            className="flex items-center gap-3 p-4 bg-white rounded-xl shadow-sm border border-gray-100 hover:border-blue-200 hover:shadow-md transition-all text-left"
           >
-            <div className="p-2 bg-primary-100 rounded-lg">
-              <Shield className="w-5 h-5 text-primary-600" />
+            <div className="p-2 bg-blue-100 rounded-lg">
+              <Shield className="w-5 h-5 text-blue-600" />
             </div>
             <div>
               <p className="font-medium text-gray-900">Administrateurs</p>
@@ -301,7 +301,7 @@ export default function AdminParametresPage() {
 
           <button
             onClick={() => router.push('/admin/parametres/emails')}
-            className="flex items-center gap-3 p-4 bg-white rounded-xl shadow-sm border border-gray-100 hover:border-primary-200 hover:shadow-md transition-all text-left"
+            className="flex items-center gap-3 p-4 bg-white rounded-xl shadow-sm border border-gray-100 hover:border-blue-200 hover:shadow-md transition-all text-left"
           >
             <div className="p-2 bg-green-100 rounded-lg">
               <Mail className="w-5 h-5 text-green-600" />
@@ -314,10 +314,10 @@ export default function AdminParametresPage() {
 
           <button
             onClick={() => router.push('/admin/audit')}
-            className="flex items-center gap-3 p-4 bg-white rounded-xl shadow-sm border border-gray-100 hover:border-primary-200 hover:shadow-md transition-all text-left"
+            className="flex items-center gap-3 p-4 bg-white rounded-xl shadow-sm border border-gray-100 hover:border-blue-200 hover:shadow-md transition-all text-left"
           >
-            <div className="p-2 bg-primary-100 rounded-lg">
-              <Settings className="w-5 h-5 text-primary-600" />
+            <div className="p-2 bg-blue-100 rounded-lg">
+              <Settings className="w-5 h-5 text-blue-600" />
             </div>
             <div>
               <p className="font-medium text-gray-900">Logs d&apos;audit</p>
@@ -355,7 +355,7 @@ export default function AdminParametresPage() {
                             aria-label={field.label}
                             className={`relative w-12 h-6 rounded-full transition-colors ${
                               settings[field.key as keyof PlatformSettings]
-                                ? ('warning' in field && field.warning) ? 'bg-red-600' : 'bg-primary-600'
+                                ? ('warning' in field && field.warning) ? 'bg-red-600' : 'bg-blue-600'
                                 : 'bg-gray-300'
                             }`}
                           >
@@ -377,7 +377,7 @@ export default function AdminParametresPage() {
                             {...('min' in field ? { min: field.min } : {})}
                             {...('max' in field ? { max: field.max } : {})}
                             {...('step' in field ? { step: field.step } : {})}
-                            className="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 text-right"
+                            className="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-right"
                           />
                         ) : (
                           <input
@@ -389,7 +389,7 @@ export default function AdminParametresPage() {
                             })}
                             aria-label={field.label}
                             {...('maxLength' in field ? { maxLength: field.maxLength } : {})}
-                            className="w-64 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                            className="w-64 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                           />
                         )}
                       </div>
@@ -430,7 +430,7 @@ export default function AdminParametresPage() {
               </div>
               <button
                 onClick={() => setClearCacheModal(true)}
-                className="px-4 py-2 bg-secondary-100 text-secondary-700 rounded-lg hover:bg-secondary-200"
+                className="px-4 py-2 bg-amber-100 text-amber-700 rounded-lg hover:bg-amber-200"
               >
                 Vider le cache
               </button>

@@ -119,7 +119,7 @@ export default function DevisPage() {
             className="absolute inset-0"
             style={{
               background:
-                'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(54,65,128,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(54,65,128,0.1) 0%, transparent 50%)',
+                'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(37,99,235,0.1) 0%, transparent 50%)',
             }}
           />
           <div
@@ -143,9 +143,9 @@ export default function DevisPage() {
           </div>
 
           <div className="text-center max-w-3xl mx-auto">
-            <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl mb-5 leading-[1.1]">
+            <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
               Recevez <span className="whitespace-nowrap">jusqu&apos;à</span>{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 via-primary-300 to-cyan-300 whitespace-nowrap">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-300 to-cyan-300 whitespace-nowrap">
                 3&nbsp;devis gratuits
               </span>{' '}
               <span className="whitespace-nowrap">d&apos;artisans</span> référencés
@@ -162,7 +162,7 @@ export default function DevisPage() {
                 return (
                   <div key={badge.label} className="flex items-center gap-3">
                     <div className="w-11 h-11 bg-white/[0.08] backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/10">
-                      <Icon className="w-5 h-5 text-primary-400" />
+                      <Icon className="w-5 h-5 text-blue-400" />
                     </div>
                     <div className="text-left">
                       <div className="text-sm font-semibold text-white">{badge.label}</div>
@@ -185,8 +185,8 @@ export default function DevisPage() {
       <section className="py-20 bg-white">
         <div className="max-w-5xl mx-auto px-4">
           <div className="text-center mb-14">
-            <p className="text-sm font-semibold text-primary-600 uppercase tracking-wider mb-2">Simple et rapide</p>
-            <h2 className="font-heading text-2xl md:text-3xl text-slate-900 mb-3">
+            <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-2">Simple et rapide</p>
+            <h2 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-3 tracking-tight">
               Comment ça marche&nbsp;?
             </h2>
             <p className="text-slate-500 max-w-lg mx-auto">
@@ -205,14 +205,14 @@ export default function DevisPage() {
               return (
                 <div key={item.number} className="relative text-center">
                   <div className="relative z-10 mx-auto mb-6">
-                    <div className="w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center shadow-lg mx-auto">
+                    <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg mx-auto">
                       <Icon className="w-8 h-8 text-white" />
                     </div>
                     <div className="absolute -top-2 -right-2 w-7 h-7 bg-white border-2 border-gray-200 rounded-full flex items-center justify-center shadow-sm">
                       <span className="text-xs font-bold text-slate-700">{item.number}</span>
                     </div>
                   </div>
-                  <h3 className="font-heading text-lg text-slate-900 mb-2">
+                  <h3 className="font-heading text-lg font-bold text-slate-900 mb-2">
                     {item.title}
                   </h3>
                   <p className="text-slate-500 text-sm leading-relaxed max-w-xs mx-auto">
@@ -229,8 +229,8 @@ export default function DevisPage() {
       <section className="py-20 bg-gray-50">
         <div className="max-w-3xl mx-auto px-4">
           <div className="text-center mb-12">
-            <p className="text-sm font-semibold text-primary-600 uppercase tracking-wider mb-2">FAQ</p>
-            <h2 className="font-heading text-2xl md:text-3xl text-slate-900 mb-3">
+            <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-2">FAQ</p>
+            <h2 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-3 tracking-tight">
               Questions fréquentes
             </h2>
             <p className="text-slate-500 max-w-lg mx-auto">
@@ -260,8 +260,8 @@ export default function DevisPage() {
       {/* ─── BOTTOM CTA ───────────────────────────────────────── */}
       <section className="py-16 bg-white border-t border-gray-100">
         <div className="max-w-3xl mx-auto px-4 text-center">
-          <Star className="w-8 h-8 text-secondary-400 mx-auto mb-4" />
-          <h2 className="font-heading text-xl md:text-2xl text-slate-900 mb-3">
+          <Star className="w-8 h-8 text-amber-400 mx-auto mb-4" />
+          <h2 className="font-heading text-xl md:text-2xl font-bold text-slate-900 mb-3">
             Prêt à démarrer votre projet&nbsp;?
           </h2>
           <p className="text-slate-500 mb-6 max-w-md mx-auto">
@@ -269,7 +269,7 @@ export default function DevisPage() {
           </p>
           <a
             href="#formulaire"
-            className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-primary-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
+            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
           >
             <ArrowUp className="w-5 h-5" />
             Remplir le formulaire

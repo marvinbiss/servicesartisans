@@ -28,18 +28,18 @@ function formatRelativeTime(iso: string): string {
 
 const typeConfig: Record<string, { icon: typeof Calendar; bg: string }> = {
   booking: { icon: Calendar, bg: 'bg-green-100 text-green-600' },
-  review: { icon: Star, bg: 'bg-secondary-100 text-secondary-600' },
+  review: { icon: Star, bg: 'bg-amber-100 text-amber-600' },
   report: { icon: AlertTriangle, bg: 'bg-red-100 text-red-600' },
-  user: { icon: Users, bg: 'bg-primary-100 text-primary-600' },
+  user: { icon: Users, bg: 'bg-blue-100 text-blue-600' },
 }
 
 const statusLabels: Record<string, { label: string; classes: string }> = {
   confirmed: { label: 'Confirmé', classes: 'bg-green-100 text-green-700' },
-  pending: { label: 'En attente', classes: 'bg-secondary-100 text-secondary-700' },
-  completed: { label: 'Terminé', classes: 'bg-primary-100 text-primary-700' },
+  pending: { label: 'En attente', classes: 'bg-amber-100 text-amber-700' },
+  completed: { label: 'Terminé', classes: 'bg-blue-100 text-blue-700' },
   published: { label: 'Publié', classes: 'bg-green-100 text-green-700' },
   cancelled: { label: 'Annulé', classes: 'bg-red-100 text-red-700' },
-  in_progress: { label: 'En cours', classes: 'bg-primary-100 text-primary-700' },
+  in_progress: { label: 'En cours', classes: 'bg-blue-100 text-blue-700' },
 }
 
 function SkeletonRow() {
@@ -62,7 +62,7 @@ export function RecentActivity({ activity, loading }: RecentActivityProps) {
         <h3 className="font-semibold text-gray-900">Activité récente</h3>
         <Link
           href="/admin/journal"
-          className="flex items-center gap-1 text-sm text-primary-600 hover:text-primary-700 transition-colors"
+          className="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 transition-colors"
         >
           Voir tout
           <ArrowRight className="w-3.5 h-3.5" />

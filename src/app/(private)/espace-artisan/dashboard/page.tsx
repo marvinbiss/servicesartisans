@@ -81,7 +81,7 @@ export default function DashboardArtisanPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-primary-600 mx-auto mb-4" />
+          <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
           <p className="text-gray-600">Chargement...</p>
         </div>
       </div>
@@ -101,13 +101,13 @@ export default function DashboardArtisanPage() {
                 setLoading(true)
                 fetchDashboardData()
               }}
-              className="bg-primary-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-700 transition-colors"
+              className="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
             >
               Réessayer
             </button>
             <Link
               href="/inscription-artisan"
-              className="text-primary-600 hover:underline text-sm"
+              className="text-blue-600 hover:underline text-sm"
             >
               S'inscrire en tant qu'artisan
             </Link>
@@ -133,12 +133,12 @@ export default function DashboardArtisanPage() {
       </div>
 
       {/* Header */}
-      <div className="bg-gradient-to-r from-primary-600 to-primary-800 text-white">
+      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold">Tableau de bord</h1>
-              <p className="text-primary-100">{displayName}{displayCity && ` - ${displayCity}`}</p>
+              <p className="text-blue-100">{displayName}{displayCity && ` - ${displayCity}`}</p>
             </div>
             <div className="flex items-center gap-4">
               {profile?.is_verified && (
@@ -158,7 +158,7 @@ export default function DashboardArtisanPage() {
             <nav className="bg-white rounded-xl shadow-sm p-4 space-y-1">
               <Link
                 href="/espace-artisan/dashboard"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary-50 text-primary-600 font-medium"
+                className="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-50 text-blue-600 font-medium"
               >
                 <TrendingUp className="w-5 h-5" />
                 Tableau de bord
@@ -185,7 +185,7 @@ export default function DashboardArtisanPage() {
               >
                 <MessageSquare className="w-5 h-5" />
                 Messages
-                <span className="ml-auto bg-primary-600 text-white text-xs px-2 py-0.5 rounded-full">5</span>
+                <span className="ml-auto bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full">5</span>
               </Link>
               <Link
                 href="/espace-artisan/portfolio"
@@ -229,7 +229,7 @@ export default function DashboardArtisanPage() {
             <div className="bg-white rounded-xl shadow-sm p-4 mt-4">
               <Link
                 href="/services/plombier/paris/martin-plomberie-paris"
-                className="flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium"
+                className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
               >
                 <ExternalLink className="w-4 h-4" />
                 Voir mon profil public
@@ -245,11 +245,11 @@ export default function DashboardArtisanPage() {
             <div className="bg-white rounded-xl shadow-sm p-4 mt-4">
               <h4 className="font-medium text-gray-900 mb-3">Liens utiles</h4>
               <div className="space-y-2 text-sm">
-                <Link href="/services" className="flex items-center gap-2 text-gray-600 hover:text-primary-600 py-1">
+                <Link href="/services" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 py-1">
                   <Search className="w-4 h-4" />
                   Parcourir les services
                 </Link>
-                <Link href="/recherche" className="flex items-center gap-2 text-gray-600 hover:text-primary-600 py-1">
+                <Link href="/recherche" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 py-1">
                   <Search className="w-4 h-4" />
                   Rechercher un artisan
                 </Link>
@@ -266,7 +266,7 @@ export default function DashboardArtisanPage() {
                 return (
                   <div key={stat.label} className="bg-white rounded-xl shadow-sm p-6">
                     <div className="flex items-center justify-between mb-2">
-                      <Icon className="w-8 h-8 text-primary-600" />
+                      <Icon className="w-8 h-8 text-blue-600" />
                       <span className="text-green-600 text-sm font-medium">{stat.change}</span>
                     </div>
                     <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
@@ -282,7 +282,7 @@ export default function DashboardArtisanPage() {
                 <h2 className="text-lg font-semibold text-gray-900">
                   Dernières demandes
                 </h2>
-                <Link href="/espace-artisan/demandes-recues" className="text-primary-600 hover:underline text-sm">
+                <Link href="/espace-artisan/demandes-recues" className="text-blue-600 hover:underline text-sm">
                   Voir tout
                 </Link>
               </div>
@@ -312,7 +312,7 @@ export default function DashboardArtisanPage() {
                             </span>
                           </div>
                           {demande.budget && (
-                            <div className="mt-2 text-sm font-medium text-primary-600">
+                            <div className="mt-2 text-sm font-medium text-blue-600">
                               Budget : {demande.budget}
                             </div>
                           )}

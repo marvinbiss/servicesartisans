@@ -15,7 +15,7 @@ const sizes = {
 }
 
 const colors = {
-  primary: 'border-primary-600',
+  primary: 'border-blue-600',
   white: 'border-white',
   gray: 'border-gray-600',
 }
@@ -29,7 +29,7 @@ export function Loading({ size = 'md', variant = 'spinner', className, color = '
       xl: 'w-4 h-4',
     }
     const dotColors = {
-      primary: 'bg-primary-600',
+      primary: 'bg-blue-600',
       white: 'bg-white',
       gray: 'bg-gray-600',
     }
@@ -46,8 +46,8 @@ export function Loading({ size = 'md', variant = 'spinner', className, color = '
   if (variant === 'pulse') {
     return (
       <div className={clsx(sizes[size], 'relative', className)} role="status" aria-label="Chargement">
-        <div className={clsx('absolute inset-0 rounded-full bg-primary-600/30 animate-ping')} />
-        <div className={clsx('absolute inset-2 rounded-full bg-primary-600')} />
+        <div className={clsx('absolute inset-0 rounded-full bg-blue-600/30 animate-ping')} />
+        <div className={clsx('absolute inset-2 rounded-full bg-blue-600')} />
         <span className="sr-only">Chargement...</span>
       </div>
     )
@@ -85,7 +85,7 @@ export function LoadingOverlay({ message }: { message?: string }) {
   return (
     <div className="fixed inset-0 bg-white/90 backdrop-blur-md z-50 flex flex-col items-center justify-center gap-4">
       <div className="relative">
-        <div className="absolute inset-0 rounded-full bg-primary-600/20 animate-ping" />
+        <div className="absolute inset-0 rounded-full bg-blue-600/20 animate-ping" />
         <Loading size="xl" />
       </div>
       {message && (

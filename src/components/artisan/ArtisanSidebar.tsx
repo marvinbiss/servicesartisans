@@ -34,7 +34,7 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
       className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden"
     >
       {/* Gradient accent bar */}
-      <div className="h-1.5 bg-gradient-to-r from-primary-500 via-primary-600 to-primary-700" />
+      <div className="h-1.5 bg-gradient-to-r from-blue-500 via-blue-600 to-indigo-600" />
 
       <div className="p-6">
         {/* Status */}
@@ -70,7 +70,7 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => showPhone ? handleCall() : setShowPhone(true)}
-              className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-primary-600 to-primary-700 text-white font-semibold flex items-center justify-center gap-2 shadow-lg shadow-primary-500/25 hover:shadow-primary-500/40 hover:from-primary-700 hover:to-primary-800 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+              className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:from-blue-700 hover:to-blue-800 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
               aria-label={showPhone ? `Appeler ${artisan.phone}` : 'Afficher le numéro de téléphone'}
             >
               <Phone className="w-5 h-5" aria-hidden="true" />
@@ -197,7 +197,7 @@ export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={handleCall}
-              className="flex-1 py-3.5 px-4 rounded-xl bg-primary-600 text-white font-semibold flex items-center justify-center gap-2 shadow-md shadow-primary-500/20 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+              className="flex-1 py-3.5 px-4 rounded-xl bg-blue-600 text-white font-semibold flex items-center justify-center gap-2 shadow-md shadow-blue-500/20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
               aria-label={`Appeler l'artisan au ${artisan.phone}`}
             >
               <Phone className="w-5 h-5" aria-hidden="true" />

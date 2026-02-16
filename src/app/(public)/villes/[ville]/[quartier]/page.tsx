@@ -178,7 +178,7 @@ export default async function QuartierPage({ params }: PageProps) {
                 <span className="text-sm font-medium text-white/90">{ville.name}</span>
               </div>
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/15">
-                <Building2 className="w-4 h-4 text-secondary-400" />
+                <Building2 className="w-4 h-4 text-amber-400" />
                 <span className="text-sm font-medium text-white/80">{content.profile.eraLabel}</span>
               </div>
             </div>
@@ -193,7 +193,7 @@ export default async function QuartierPage({ params }: PageProps) {
                 `${ville.name} ${quartierName} — artisans de confiance`,
               ]
               return (
-                <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl mb-5 leading-[1.1]">
+                <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
                   {h1Templates[h1Hash % h1Templates.length]}
                 </h1>
               )
@@ -219,10 +219,10 @@ export default async function QuartierPage({ params }: PageProps) {
 
             <div className="flex flex-wrap gap-3">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Shield className="w-4 h-4 text-secondary-400" /><span className="text-sm font-medium">Données SIREN officielles</span>
+                <Shield className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Données SIREN officielles</span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Clock className="w-4 h-4 text-secondary-400" /><span className="text-sm font-medium">Devis gratuits</span>
+                <Clock className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Devis gratuits</span>
               </div>
             </div>
           </div>
@@ -237,7 +237,7 @@ export default async function QuartierPage({ params }: PageProps) {
               <Building2 className="w-5 h-5 text-emerald-600" />
             </div>
             <div>
-              <h2 className="font-heading text-2xl text-slate-900">
+              <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
                 Caractéristiques du quartier {quartierName}
               </h2>
               <p className="text-sm text-slate-500">{content.profile.eraLabel} · {content.profile.densityLabel}</p>
@@ -246,8 +246,8 @@ export default async function QuartierPage({ params }: PageProps) {
           <div className="bg-white rounded-2xl border border-gray-200 p-6">
             <div className="grid md:grid-cols-3 gap-6 mb-6">
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 bg-secondary-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <Building2 className="w-4 h-4 text-secondary-600" />
+                <div className="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <Building2 className="w-4 h-4 text-amber-600" />
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-slate-900">Type de bâti</p>
@@ -255,8 +255,8 @@ export default async function QuartierPage({ params }: PageProps) {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <MapPin className="w-4 h-4 text-primary-600" />
+                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <MapPin className="w-4 h-4 text-blue-600" />
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-slate-900">Densité urbaine</p>
@@ -298,7 +298,7 @@ export default async function QuartierPage({ params }: PageProps) {
               <Wrench className="w-5 h-5 text-emerald-600" />
             </div>
             <div>
-              <h2 className="font-heading text-2xl text-slate-900">
+              <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
                 Services recommandés à {quartierName}
               </h2>
               <p className="text-sm text-slate-500">{services.length} corps de métier · classés par pertinence pour ce bâti</p>
@@ -323,27 +323,27 @@ export default async function QuartierPage({ params }: PageProps) {
 
         {/* ─── SEO CONTENT (5 unique sections per profile) ──── */}
         <section className="mb-16 prose prose-slate max-w-none">
-          <h2 className="font-heading text-2xl text-slate-900">
+          <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
             Trouver un artisan dans le quartier {quartierName}
           </h2>
           <p className="text-slate-600 leading-relaxed">{content.intro}</p>
 
-          <h3 className="font-heading text-xl text-slate-900 mt-8">
+          <h3 className="font-heading text-xl font-bold text-slate-900 tracking-tight mt-8">
             Le bâti à {quartierName} : ce qu&apos;il faut savoir
           </h3>
           <p className="text-slate-600 leading-relaxed">{content.batimentContext}</p>
 
-          <h3 className="font-heading text-xl text-slate-900 mt-8">
+          <h3 className="font-heading text-xl font-bold text-slate-900 tracking-tight mt-8">
             Services les plus demandés à {quartierName}
           </h3>
           <p className="text-slate-600 leading-relaxed">{content.servicesDemandes}</p>
 
-          <h3 className="font-heading text-xl text-slate-900 mt-8">
+          <h3 className="font-heading text-xl font-bold text-slate-900 tracking-tight mt-8">
             Conseils pour vos travaux à {quartierName}
           </h3>
           <p className="text-slate-600 leading-relaxed">{content.conseils}</p>
 
-          <h3 className="font-heading text-xl text-slate-900 mt-8">
+          <h3 className="font-heading text-xl font-bold text-slate-900 tracking-tight mt-8">
             Pourquoi choisir un artisan proche de {quartierName} ?
           </h3>
           <p className="text-slate-600 leading-relaxed">{content.proximite}</p>
@@ -370,7 +370,7 @@ export default async function QuartierPage({ params }: PageProps) {
                 <MapPin className="w-5 h-5 text-emerald-600" />
               </div>
               <div>
-                <h2 className="font-heading text-2xl text-slate-900">
+                <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
                   Autres quartiers à {ville.name}
                 </h2>
                 <p className="text-sm text-slate-500">{quartiers.length} autres quartiers</p>
@@ -399,7 +399,7 @@ export default async function QuartierPage({ params }: PageProps) {
               <div className="w-10 h-10 bg-violet-100 rounded-xl flex items-center justify-center">
                 <Building2 className="w-5 h-5 text-violet-600" />
               </div>
-              <h2 className="font-heading text-xl text-slate-900">
+              <h2 className="font-heading text-xl font-bold text-slate-900 tracking-tight">
                 Villes proches de {ville.name}
               </h2>
             </div>
@@ -420,10 +420,10 @@ export default async function QuartierPage({ params }: PageProps) {
         {/* ─── FAQ SECTION ──────────────────────────────────── */}
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 bg-secondary-100 rounded-xl flex items-center justify-center">
-              <HelpCircle className="w-5 h-5 text-secondary-600" />
+            <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
+              <HelpCircle className="w-5 h-5 text-amber-600" />
             </div>
-            <h2 className="font-heading text-2xl text-slate-900">
+            <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
               Questions fréquentes
             </h2>
           </div>
@@ -444,14 +444,14 @@ export default async function QuartierPage({ params }: PageProps) {
           background: 'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(16,185,129,0.12) 0%, transparent 60%)',
         }} />
         <div className="relative max-w-4xl mx-auto px-4 py-16 md:py-20 text-center">
-          <h2 className="font-heading text-2xl md:text-3xl text-white mb-4">
+          <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">
             Besoin d&apos;un artisan à {quartierName} ?
           </h2>
           <p className="text-slate-400 mb-8 max-w-lg mx-auto">
             Décrivez votre projet et recevez des devis gratuits d&apos;artisans qualifiés à {ville.name}.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/devis" className="inline-flex items-center gap-2 bg-gradient-to-r from-secondary-500 via-secondary-400 to-secondary-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-secondary-500/25 hover:shadow-xl hover:shadow-secondary-500/35 hover:-translate-y-0.5 transition-all duration-300">
+            <Link href="/devis" className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-300">
               Demander un devis gratuit
             </Link>
             <Link href="/services" className="inline-flex items-center gap-2 text-slate-300 hover:text-white font-medium transition-colors">
@@ -464,7 +464,7 @@ export default async function QuartierPage({ params }: PageProps) {
       {/* ─── SEO INTERNAL LINKS ─────────────────────────────── */}
       <section className="py-16 bg-white border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-xl text-slate-900 mb-8">
+          <h2 className="font-heading text-xl font-bold text-slate-900 mb-8 tracking-tight">
             Voir aussi
           </h2>
           <div className="grid md:grid-cols-3 gap-10">
@@ -533,16 +533,16 @@ export default async function QuartierPage({ params }: PageProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-lg font-bold text-gray-900 mb-4">Confiance & Sécurité</h2>
           <div className="flex flex-wrap gap-4">
-            <Link href="/notre-processus-de-verification" className="text-sm text-primary-600 hover:text-primary-800 flex items-center gap-1.5">
+            <Link href="/notre-processus-de-verification" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
               Processus de vérification
             </Link>
-            <Link href="/politique-avis" className="text-sm text-primary-600 hover:text-primary-800 flex items-center gap-1.5">
+            <Link href="/politique-avis" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
               Politique d&apos;avis
             </Link>
-            <Link href="/mediation" className="text-sm text-primary-600 hover:text-primary-800 flex items-center gap-1.5">
+            <Link href="/mediation" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
               Médiation
             </Link>
-            <Link href="/cgv" className="text-sm text-primary-600 hover:text-primary-800 flex items-center gap-1.5">
+            <Link href="/cgv" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
               CGV
             </Link>
           </div>

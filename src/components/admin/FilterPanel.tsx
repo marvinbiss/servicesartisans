@@ -59,7 +59,7 @@ export function FilterPanel({
                       }}
                       className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
                         isSelected
-                          ? 'bg-primary-600 text-white'
+                          ? 'bg-blue-600 text-white'
                           : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                       }`}
                     >
@@ -76,7 +76,7 @@ export function FilterPanel({
                 value={(values[filter.key] as string) || 'all'}
                 onChange={(e) => onChange(filter.key, e.target.value)}
                 aria-label={filter.label}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               >
                 {filter.options.map((option) => (
                   <option key={option.value} value={option.value}>
@@ -121,7 +121,7 @@ export function QuickFilters({ options, value, onChange }: QuickFiltersProps) {
           onClick={() => onChange(option.value)}
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
             value === option.value
-              ? 'bg-primary-600 text-white'
+              ? 'bg-blue-600 text-white'
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
         >

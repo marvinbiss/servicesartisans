@@ -271,7 +271,7 @@ export default function ParametresClientPage() {
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-50">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary-600 border-t-transparent"></div>
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"></div>
       </div>
     )
   }
@@ -318,7 +318,7 @@ export default function ParametresClientPage() {
                   onClick={() => setActiveTab(tab.id as any)}
                   className={`flex items-center gap-3 px-4 py-3 rounded-lg w-full transition-colors ${
                     activeTab === tab.id
-                      ? 'bg-primary-50 text-primary-600 font-medium'
+                      ? 'bg-blue-50 text-blue-600 font-medium'
                       : 'text-gray-700 hover:bg-gray-50'
                   }`}
                 >
@@ -367,7 +367,7 @@ export default function ParametresClientPage() {
                               type="text"
                               value={formData.prenom}
                               onChange={(e) => setFormData({ ...formData, prenom: e.target.value })}
-                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                             />
                           </div>
                           <div>
@@ -378,7 +378,7 @@ export default function ParametresClientPage() {
                               type="text"
                               value={formData.nom}
                               onChange={(e) => setFormData({ ...formData, nom: e.target.value })}
-                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                             />
                           </div>
                         </div>
@@ -391,7 +391,7 @@ export default function ParametresClientPage() {
                             type="email"
                             value={formData.email}
                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                           />
                         </div>
                         <div>
@@ -403,13 +403,13 @@ export default function ParametresClientPage() {
                             type="tel"
                             value={formData.telephone}
                             onChange={(e) => setFormData({ ...formData, telephone: e.target.value })}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                           />
                         </div>
                         <button
                           type="submit"
                           disabled={isSaving}
-                          className="bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors disabled:opacity-50"
+                          className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50"
                         >
                           {isSaving ? 'Enregistrement...' : 'Enregistrer les modifications'}
                         </button>
@@ -428,7 +428,7 @@ export default function ParametresClientPage() {
                           </label>
                           <input
                             type="password"
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                             placeholder="********"
                           />
                         </div>
@@ -439,7 +439,7 @@ export default function ParametresClientPage() {
                             </label>
                             <input
                               type="password"
-                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                               placeholder="********"
                             />
                           </div>
@@ -449,14 +449,14 @@ export default function ParametresClientPage() {
                             </label>
                             <input
                               type="password"
-                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                               placeholder="********"
                             />
                           </div>
                         </div>
                         <button
                           type="submit"
-                          className="bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors"
+                          className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
                         >
                           Modifier le mot de passe
                         </button>
@@ -590,7 +590,7 @@ export default function ParametresClientPage() {
                     <button
                       onClick={savePreferences}
                       disabled={isSaving}
-                      className="bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors disabled:opacity-50"
+                      className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50"
                     >
                       {isSaving ? 'Enregistrement...' : 'Enregistrer'}
                     </button>
@@ -633,7 +633,7 @@ export default function ParametresClientPage() {
                     <button
                       onClick={savePreferences}
                       disabled={isSaving}
-                      className="bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors disabled:opacity-50"
+                      className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50"
                     >
                       {isSaving ? 'Enregistrement...' : 'Enregistrer'}
                     </button>
@@ -657,7 +657,7 @@ export default function ParametresClientPage() {
                         onChange={(e) =>
                           setDisplay({ ...display, language: e.target.value })
                         }
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                       >
                         <option value="fr">Français</option>
                         <option value="en">English</option>
@@ -677,7 +677,7 @@ export default function ParametresClientPage() {
                             onClick={() => setDisplay({ ...display, theme })}
                             className={`rounded-lg border-2 p-4 text-center transition-all ${
                               display.theme === theme
-                                ? 'border-primary-500 bg-primary-50'
+                                ? 'border-blue-500 bg-blue-50'
                                 : 'border-gray-200 hover:border-gray-300'
                             }`}
                           >
@@ -704,7 +704,7 @@ export default function ParametresClientPage() {
                     <button
                       onClick={savePreferences}
                       disabled={isSaving}
-                      className="bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors disabled:opacity-50"
+                      className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50"
                     >
                       {isSaving ? 'Enregistrement...' : 'Enregistrer'}
                     </button>
@@ -726,7 +726,7 @@ export default function ParametresClientPage() {
                       <button
                         onClick={requestDataExport}
                         disabled={isExporting}
-                        className="flex items-center gap-2 bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors disabled:opacity-50"
+                        className="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50"
                       >
                         {isExporting ? (
                           <>
@@ -892,10 +892,10 @@ function ToggleSetting({
           disabled={loading}
           className="peer sr-only"
         />
-        <div className="peer h-6 w-11 rounded-full bg-gray-300 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:bg-primary-600 peer-checked:after:translate-x-full peer-disabled:opacity-50"></div>
+        <div className="peer h-6 w-11 rounded-full bg-gray-300 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-disabled:opacity-50"></div>
         {loading && (
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-600 border-t-transparent"></div>
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-600 border-t-transparent"></div>
           </div>
         )}
       </label>

@@ -125,7 +125,7 @@ export function SiretAutocomplete({
   // Get status icon
   const getStatusIcon = () => {
     if (isLoading || loadingExtended) {
-      return <Loader2 className="w-5 h-5 text-primary-500 animate-spin" />
+      return <Loader2 className="w-5 h-5 text-blue-500 animate-spin" />
     }
     if (rawSiret.length === 14) {
       if (isValid === true) {
@@ -136,7 +136,7 @@ export function SiretAutocomplete({
       }
     }
     if (rawSiret.length > 0 && rawSiret.length < 14) {
-      return <AlertCircle className="w-5 h-5 text-secondary-500" />
+      return <AlertCircle className="w-5 h-5 text-amber-500" />
     }
     return <Search className="w-5 h-5 text-gray-400" />
   }
@@ -147,7 +147,7 @@ export function SiretAutocomplete({
       if (isValid === true) return 'border-green-500 focus-within:ring-green-500/20'
       if (isValid === false) return 'border-red-500 focus-within:ring-red-500/20'
     }
-    if (isFocused) return 'border-primary-500 focus-within:ring-primary-500/20'
+    if (isFocused) return 'border-blue-500 focus-within:ring-blue-500/20'
     return 'border-gray-200'
   }
 

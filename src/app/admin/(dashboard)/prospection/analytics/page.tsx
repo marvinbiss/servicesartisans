@@ -84,7 +84,7 @@ export default function AnalyticsPage() {
                 <td className="px-4 py-3 text-right">{ch.replied.toLocaleString('fr-FR')}</td>
                 <td className="px-4 py-3 text-right text-red-500">{ch.failed.toLocaleString('fr-FR')}</td>
                 <td className="px-4 py-3 text-right text-green-600">{ch.delivery_rate.toFixed(1)}%</td>
-                <td className="px-4 py-3 text-right text-primary-600">{ch.reply_rate.toFixed(1)}%</td>
+                <td className="px-4 py-3 text-right text-blue-600">{ch.reply_rate.toFixed(1)}%</td>
               </tr>
             ))}
             {channels.length === 0 && !loading && (

@@ -29,7 +29,7 @@ export function RichTextEditor({ value, onChange, placeholder }: RichTextEditorP
       }),
       Link.configure({
         openOnClick: false,
-        HTMLAttributes: { class: 'text-primary-600 underline' },
+        HTMLAttributes: { class: 'text-blue-600 underline' },
         validate: href => /^https?:\/\/|^mailto:/.test(href),
       }),
       Image.configure({

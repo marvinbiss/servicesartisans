@@ -66,7 +66,7 @@ export function SimilarArtisans({
     return (
       <div className={cn('bg-white dark:bg-gray-800 rounded-xl p-6', className)}>
         <div className="flex items-center justify-center py-8">
-          <Loader2 className="w-6 h-6 text-primary-600 animate-spin" />
+          <Loader2 className="w-6 h-6 text-blue-600 animate-spin" />
         </div>
       </div>
     )
@@ -153,7 +153,7 @@ export function SimilarArtisans({
       <div className="p-4 border-t border-gray-200 dark:border-gray-700">
         <Link
           href={`/services/${serviceSlug}/${locationSlug}`}
-          className="flex items-center justify-center gap-2 text-sm font-medium text-primary-600 hover:text-primary-700"
+          className="flex items-center justify-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-700"
         >
           Voir tous les artisans
           <ChevronRight className="w-4 h-4" />

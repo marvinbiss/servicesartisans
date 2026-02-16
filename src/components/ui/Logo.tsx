@@ -44,13 +44,13 @@ export default function Logo({
     >
       <defs>
         <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#364180" />
-          <stop offset="50%" stopColor="#2b3468" />
-          <stop offset="100%" stopColor="#212853" />
+          <stop offset="0%" stopColor="#2563eb" />
+          <stop offset="50%" stopColor="#1d4ed8" />
+          <stop offset="100%" stopColor="#1e40af" />
         </linearGradient>
         <linearGradient id="logoAccent" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#c67a3c" />
-          <stop offset="100%" stopColor="#b4652a" />
+          <stop offset="0%" stopColor="#f59e0b" />
+          <stop offset="100%" stopColor="#d97706" />
         </linearGradient>
       </defs>
 
@@ -67,11 +67,11 @@ export default function Logo({
       {/* Wrench — simplified, bolder */}
       <path
         d="M21.5 24.5C21.5 22.57 23.07 21 25 21C26.38 21 27.56 21.82 28.1 22.99L31.5 20.5L32.5 21.5L29.1 24.01C29.37 24.48 29.5 25.02 29.5 25.5C29.5 27.43 27.93 29 26 29C24.62 29 23.44 28.18 22.9 27.01L19.5 29.5L18.5 28.5L21.9 25.99C21.63 25.52 21.5 24.98 21.5 24.5Z"
-        fill="#364180"
+        fill="#2563eb"
       />
 
       {/* Door */}
-      <rect x="21.5" y="29.5" width="5" height="6.5" rx="1.5" fill="#364180" fillOpacity="0.25" />
+      <rect x="21.5" y="29.5" width="5" height="6.5" rx="1.5" fill="#2563eb" fillOpacity="0.25" />
 
       {/* Amber quality mark */}
       <circle cx="39" cy="9" r="5" fill="url(#logoAccent)" />
@@ -86,8 +86,8 @@ export default function Logo({
   )
 
   const LogoText = () => (
-    <span className={clsx('font-heading tracking-normal', textSize, textColor)}>
-      Services<span className="text-primary-600">Artisans</span>
+    <span className={clsx('font-heading font-extrabold tracking-tight', textSize, textColor)}>
+      Services<span className="text-blue-600">Artisans</span>
     </span>
   )
 
@@ -100,7 +100,7 @@ export default function Logo({
 
   if (href) {
     return (
-      <Link href={href} className="focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 rounded">
+      <Link href={href} className="focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded">
         {content}
       </Link>
     )

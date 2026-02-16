@@ -147,7 +147,7 @@ export default function ArtisanPageClient({
           <p className="text-slate-600 mb-6">Cet artisan n&apos;existe pas ou n&apos;est plus disponible.</p>
           <Link
             href="/recherche"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-xl font-medium hover:bg-primary-700 transition-colors shadow-md shadow-primary-500/20"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors shadow-md shadow-blue-500/20"
           >
             <ArrowLeft className="w-5 h-5" />
             Retour &agrave; la recherche
@@ -168,13 +168,13 @@ export default function ArtisanPageClient({
       <nav aria-label="Liens rapides" className="sr-only focus-within:not-sr-only">
         <a
           href="#main-content"
-          className="absolute top-4 left-4 z-50 bg-primary-600 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-white"
+          className="absolute top-4 left-4 z-50 bg-blue-600 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-white"
         >
           Aller au contenu principal
         </a>
         <a
           href="#contact-sidebar"
-          className="absolute top-4 left-4 z-50 bg-primary-600 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-white"
+          className="absolute top-4 left-4 z-50 bg-blue-600 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-white"
         >
           Aller aux informations de contact
         </a>
@@ -187,7 +187,7 @@ export default function ArtisanPageClient({
             <div className="flex items-center justify-between">
               <Link
                 href="/recherche"
-                className="inline-flex items-center gap-2 text-slate-600 hover:text-gray-900 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-lg px-2 py-1.5 -ml-2 hover:bg-gray-50"
+                className="inline-flex items-center gap-2 text-slate-600 hover:text-gray-900 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg px-2 py-1.5 -ml-2 hover:bg-gray-50"
                 aria-label="Retour à la recherche"
               >
                 <ArrowLeft className="w-5 h-5" aria-hidden="true" />
@@ -199,7 +199,7 @@ export default function ArtisanPageClient({
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={handleShare}
-                  className="p-2.5 rounded-full bg-gray-50 hover:bg-gray-100 border border-gray-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                  className="p-2.5 rounded-full bg-gray-50 hover:bg-gray-100 border border-gray-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                   aria-label="Partager cette page"
                 >
                   <Share2 className="w-4.5 h-4.5 text-slate-600" aria-hidden="true" />
@@ -208,7 +208,7 @@ export default function ArtisanPageClient({
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setIsFavorite(!isFavorite)}
-                  className={`p-2.5 rounded-full border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
+                  className={`p-2.5 rounded-full border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
                     isFavorite
                       ? 'bg-red-50 text-red-500 border-red-200 hover:bg-red-100'
                       : 'bg-gray-50 text-slate-600 border-gray-100 hover:bg-gray-100'

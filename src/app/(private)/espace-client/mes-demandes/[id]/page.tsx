@@ -86,7 +86,7 @@ export default function LeadDetailPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-primary-600 mx-auto" />
+          <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto" />
           <p className="text-sm text-gray-500 mt-2">Chargement...</p>
         </div>
       </div>
@@ -99,7 +99,7 @@ export default function LeadDetailPage() {
         <div className="bg-white rounded-xl border border-red-200 p-8 max-w-md text-center">
           <AlertCircle className="w-8 h-8 text-red-500 mx-auto mb-3" />
           <p className="text-red-700 font-medium">{error}</p>
-          <Link href="/espace-client/mes-demandes" className="text-primary-600 hover:underline text-sm mt-4 block">
+          <Link href="/espace-client/mes-demandes" className="text-blue-600 hover:underline text-sm mt-4 block">
             Retour à mes demandes
           </Link>
         </div>
@@ -214,9 +214,9 @@ export default function LeadDetailPage() {
                 )}
 
                 {/* Contact CTA */}
-                <div className="bg-primary-50 rounded-xl border border-primary-100 p-6">
+                <div className="bg-blue-50 rounded-xl border border-blue-100 p-6">
                   <h2 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
-                    <MessageSquare className="w-5 h-5 text-primary-500" />
+                    <MessageSquare className="w-5 h-5 text-blue-500" />
                     Besoin d&apos;aide ?
                   </h2>
                   <p className="text-sm text-gray-600 mb-4">
@@ -224,7 +224,7 @@ export default function LeadDetailPage() {
                   </p>
                   <Link
                     href="/espace-client/messages"
-                    className="inline-flex items-center gap-2 px-4 py-2.5 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 transition-colors"
+                    className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
                   >
                     <MessageSquare className="w-4 h-4" />
                     Ouvrir la messagerie

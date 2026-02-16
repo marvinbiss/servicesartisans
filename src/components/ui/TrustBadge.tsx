@@ -32,10 +32,10 @@ export function TrustBadge({
 
   const styles = {
     gold: {
-      bg: 'bg-gradient-to-r from-secondary-100 to-yellow-100',
-      border: 'border-secondary-300',
-      text: 'text-secondary-800',
-      icon: 'text-secondary-600'
+      bg: 'bg-gradient-to-r from-amber-100 to-yellow-100',
+      border: 'border-amber-300',
+      text: 'text-amber-800',
+      icon: 'text-amber-600'
     },
     silver: {
       bg: 'bg-gradient-to-r from-slate-100 to-gray-100',
@@ -44,7 +44,7 @@ export function TrustBadge({
       icon: 'text-slate-500'
     },
     bronze: {
-      bg: 'bg-gradient-to-r from-orange-50 to-secondary-50',
+      bg: 'bg-gradient-to-r from-orange-50 to-amber-50',
       border: 'border-orange-200',
       text: 'text-orange-700',
       icon: 'text-orange-500'

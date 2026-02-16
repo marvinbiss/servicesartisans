@@ -31,9 +31,9 @@ const defaultIcons = {
 }
 
 const iconColors = {
-  search: 'text-primary-500 bg-primary-50',
+  search: 'text-blue-500 bg-blue-50',
   inbox: 'text-gray-500 bg-gray-50',
-  notFound: 'text-secondary-500 bg-secondary-50',
+  notFound: 'text-amber-500 bg-amber-50',
   error: 'text-red-500 bg-red-50',
 }
 
@@ -74,14 +74,14 @@ export function EmptyState({
             action.href ? (
               <Link
                 href={action.href}
-                className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-primary-700 transition-colors shadow-lg shadow-primary-500/25"
+                className="inline-flex items-center justify-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/25"
               >
                 {action.label}
               </Link>
             ) : (
               <button
                 onClick={action.onClick}
-                className="inline-flex items-center justify-center gap-2 bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-primary-700 transition-colors shadow-lg shadow-primary-500/25"
+                className="inline-flex items-center justify-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/25"
               >
                 {action.label}
               </button>

@@ -50,7 +50,7 @@ export function CompletionChecklist({ provider }: CompletionChecklistProps) {
           <div
             className={clsx(
               'h-full rounded-full transition-all duration-500',
-              percentage === 100 ? 'bg-green-500' : 'bg-primary-500'
+              percentage === 100 ? 'bg-green-500' : 'bg-blue-500'
             )}
             style={{ width: `${percentage}%` }}
           />
@@ -82,8 +82,8 @@ export function CompletionChecklist({ provider }: CompletionChecklistProps) {
       )}
 
       {!provider.is_verified && percentage >= 80 && (
-        <div className="mt-4 p-3 bg-primary-50 rounded-lg text-center">
-          <p className="text-sm text-primary-700">
+        <div className="mt-4 p-3 bg-blue-50 rounded-lg text-center">
+          <p className="text-sm text-blue-700">
             Demandez la vérification de votre profil pour obtenir le badge ✓
           </p>
         </div>

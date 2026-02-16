@@ -22,10 +22,10 @@ export default function ProviderCard({
 
   return (
     <div
-      className={`group/card relative overflow-hidden rounded-2xl border bg-white/80 backdrop-blur-sm p-6 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] active:scale-[0.98] active:bg-gray-50 before:absolute before:inset-x-0 before:top-0 before:h-[3px] before:bg-gradient-to-r before:from-secondary-400 before:via-secondary-500 before:to-secondary-600 before:opacity-60 before:transition-opacity before:duration-300 ${
+      className={`group/card relative overflow-hidden rounded-2xl border bg-white/80 backdrop-blur-sm p-6 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] active:scale-[0.98] active:bg-gray-50 before:absolute before:inset-x-0 before:top-0 before:h-[3px] before:bg-gradient-to-r before:from-amber-400 before:via-amber-500 before:to-orange-500 before:opacity-60 before:transition-opacity before:duration-300 ${
         isHovered
-          ? '-translate-y-1.5 scale-[1.02] border-secondary-200 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.12),0_4px_6px_-2px_rgba(0,0,0,0.05)] before:opacity-100'
-          : 'border-gray-100 shadow-sm hover:-translate-y-1 hover:scale-[1.02] hover:border-secondary-200 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.12),0_4px_6px_-2px_rgba(0,0,0,0.05)] hover:before:opacity-100'
+          ? '-translate-y-1.5 scale-[1.02] border-amber-200 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.12),0_4px_6px_-2px_rgba(0,0,0,0.05)] before:opacity-100'
+          : 'border-gray-100 shadow-sm hover:-translate-y-1 hover:scale-[1.02] hover:border-amber-200 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.12),0_4px_6px_-2px_rgba(0,0,0,0.05)] hover:before:opacity-100'
       }`}
     >
       {/* Mobile: full-card tappable overlay link */}
@@ -51,7 +51,7 @@ export default function ProviderCard({
               className="w-12 h-12 rounded-full object-cover shadow-sm"
             />
           ) : (
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center text-white text-lg font-bold shadow-sm">
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-lg font-bold shadow-sm">
               {provider.name.charAt(0).toUpperCase()}
             </div>
           )}
@@ -61,14 +61,14 @@ export default function ProviderCard({
           <div className="flex items-center gap-2">
             <Link
               href={providerUrl}
-              className="text-xl font-bold text-gray-900 hover:text-primary-700 transition-colors duration-200"
+              className="text-xl font-bold text-gray-900 hover:text-blue-700 transition-colors duration-200"
             >
               {provider.name}
             </Link>
             {provider.is_verified && (
               <span
                 className="relative inline-flex items-center justify-center w-5 h-5 rounded-full overflow-hidden"
-                style={{ backgroundColor: '#364180' }}
+                style={{ backgroundColor: '#1877f2' }}
                 aria-label="Artisan référencé"
                 title="Artisan référencé"
               >
@@ -91,7 +91,7 @@ export default function ProviderCard({
         {ratingValue && typeof reviewCount === 'number' && reviewCount > 0 && (
           <div className="text-right flex-shrink-0">
             <div className="flex items-center gap-1.5 justify-end">
-              <Star className="w-6 h-6 text-secondary-500 fill-secondary-500 transition-transform duration-300 group-hover/card:scale-110 group-hover/card:animate-[pulseGlow_1.5s_ease-in-out_infinite]" />
+              <Star className="w-6 h-6 text-amber-500 fill-amber-500 transition-transform duration-300 group-hover/card:scale-110 group-hover/card:animate-[pulseGlow_1.5s_ease-in-out_infinite]" />
               <span className="text-xl font-bold text-gray-900">
                 {ratingValue}
               </span>
@@ -142,7 +142,7 @@ export default function ProviderCard({
       <div className="flex gap-3 relative z-20">
         <Link
           href={`${providerUrl}#devis`}
-          className="flex-1 py-3 min-h-[48px] flex items-center justify-center text-center bg-gradient-to-r from-secondary-500 to-secondary-600 text-white rounded-xl font-bold shadow-md shadow-secondary-500/25 hover:from-secondary-600 hover:to-secondary-700 hover:shadow-lg hover:shadow-secondary-500/35 hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 transition-all duration-200"
+          className="flex-1 py-3 min-h-[48px] flex items-center justify-center text-center bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-xl font-bold shadow-md shadow-amber-500/25 hover:from-amber-600 hover:to-amber-700 hover:shadow-lg hover:shadow-amber-500/35 hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 transition-all duration-200"
         >
           Demander un devis
         </Link>

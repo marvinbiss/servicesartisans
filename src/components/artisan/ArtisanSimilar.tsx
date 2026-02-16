@@ -39,7 +39,7 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSi
     return (
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
         <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2 mb-4">
-          <Users className="w-5 h-5 text-primary-600" aria-hidden="true" />
+          <Users className="w-5 h-5 text-blue-600" aria-hidden="true" />
           Artisans similaires
         </h2>
         <p className="text-gray-600 mb-4">
@@ -47,7 +47,7 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSi
         </p>
         <Link
           href={hubUrl}
-          className="text-primary-600 hover:text-primary-800 font-medium"
+          className="text-blue-600 hover:text-blue-800 font-medium"
         >
           Voir tous les {_artisan.specialty?.toLowerCase() || 'artisans'} à {_artisan.city} →
         </Link>
@@ -76,7 +76,7 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSi
     >
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
-          <Users className="w-5 h-5 text-primary-600" aria-hidden="true" />
+          <Users className="w-5 h-5 text-blue-600" aria-hidden="true" />
           Artisans similaires
         </h2>
 
@@ -86,7 +86,7 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSi
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => scroll('left')}
-            className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
             aria-label="Voir les artisans precedents"
           >
             <ChevronLeft className="w-5 h-5 text-gray-600" aria-hidden="true" />
@@ -95,7 +95,7 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSi
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => scroll('right')}
-            className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
             aria-label="Voir les artisans suivants"
           >
             <ChevronRight className="w-5 h-5 text-gray-600" aria-hidden="true" />
@@ -130,7 +130,7 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSi
               >
                 {/* Header */}
                 <div className="flex items-start gap-3 mb-3">
-                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center text-white text-xl font-bold flex-shrink-0 overflow-hidden">
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-xl font-bold flex-shrink-0 overflow-hidden">
                     {item.avatar_url ? (
                       <img
                         src={item.avatar_url}
@@ -161,7 +161,7 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSi
                 {/* Info */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1" aria-label={`Note: ${item.rating} sur 5, ${item.reviews} avis`}>
-                    <Star className="w-4 h-4 text-secondary-500 fill-secondary-500" aria-hidden="true" />
+                    <Star className="w-4 h-4 text-amber-500 fill-amber-500" aria-hidden="true" />
                     <span className="font-semibold text-gray-900">{item.rating}</span>
                     <span className="text-gray-500 text-sm">({item.reviews})</span>
                   </div>
@@ -175,7 +175,7 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSi
                 {item.hourly_rate && (
                   <div className="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between">
                     <span className="text-sm text-gray-500">À partir de</span>
-                    <span className="font-bold text-primary-600">{item.hourly_rate}€/h</span>
+                    <span className="font-bold text-blue-600">{item.hourly_rate}€/h</span>
                   </div>
                 )}
               </motion.article>

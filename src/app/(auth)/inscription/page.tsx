@@ -142,7 +142,7 @@ export default function InscriptionPage() {
           </p>
           <Link
             href="/connexion"
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-600 to-primary-700 text-white px-8 py-3 rounded-xl font-semibold hover:from-primary-700 hover:to-primary-800 transition-all shadow-lg"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg"
           >
             Se connecter
             <ArrowRight className="w-5 h-5" />
@@ -156,7 +156,7 @@ export default function InscriptionPage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex flex-col">
       <div className="flex flex-1">
         {/* Left - Image */}
-        <div className="hidden lg:flex flex-1 bg-gradient-to-br from-primary-600 via-primary-700 to-primary-900 items-center justify-center p-12 relative overflow-hidden">
+        <div className="hidden lg:flex flex-1 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 items-center justify-center p-12 relative overflow-hidden">
           {/* Background pattern */}
           <div className="absolute inset-0 opacity-10">
             <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
@@ -169,7 +169,7 @@ export default function InscriptionPage() {
             <h2 className="text-4xl font-bold mb-6">
               Rejoignez ServicesArtisans
             </h2>
-            <p className="text-primary-100 text-lg mb-10">
+            <p className="text-blue-100 text-lg mb-10">
               Créez votre compte gratuitement et trouvez les meilleurs artisans pour vos projets.
             </p>
             <div className="space-y-4 text-left">
@@ -200,11 +200,11 @@ export default function InscriptionPage() {
 
             <div className="text-center mb-8">
               <Link href="/" className="inline-flex items-center space-x-3 mb-6">
-                <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center shadow-lg">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
                   <span className="text-white font-bold text-xl">SA</span>
                 </div>
                 <span className="text-2xl font-bold text-white">
-                  Services<span className="text-primary-400">Artisans</span>
+                  Services<span className="text-blue-400">Artisans</span>
                 </span>
               </Link>
               <h1 className="text-3xl font-bold text-white mb-2">
@@ -234,7 +234,7 @@ export default function InscriptionPage() {
                       type="text"
                       value={formData.firstName}
                       onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                      className={`w-full pl-10 pr-4 py-3 bg-slate-800 border ${errors.firstName ? 'border-red-500' : 'border-slate-700'} rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all`}
+                      className={`w-full pl-10 pr-4 py-3 bg-slate-800 border ${errors.firstName ? 'border-red-500' : 'border-slate-700'} rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
                       placeholder="Jean"
                     />
                   </div>
@@ -248,7 +248,7 @@ export default function InscriptionPage() {
                     type="text"
                     value={formData.lastName}
                     onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                    className={`w-full px-4 py-3 bg-slate-800 border ${errors.lastName ? 'border-red-500' : 'border-slate-700'} rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all`}
+                    className={`w-full px-4 py-3 bg-slate-800 border ${errors.lastName ? 'border-red-500' : 'border-slate-700'} rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
                     placeholder="Dupont"
                   />
                   {errors.lastName && <p className="mt-1 text-sm text-red-400">{errors.lastName}</p>}
@@ -265,7 +265,7 @@ export default function InscriptionPage() {
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className={`w-full pl-10 pr-4 py-3 bg-slate-800 border ${errors.email ? 'border-red-500' : 'border-slate-700'} rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all`}
+                    className={`w-full pl-10 pr-4 py-3 bg-slate-800 border ${errors.email ? 'border-red-500' : 'border-slate-700'} rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
                     placeholder="jean.dupont@email.com"
                   />
                 </div>
@@ -282,7 +282,7 @@ export default function InscriptionPage() {
                     type={showPassword ? 'text' : 'password'}
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    className={`w-full pl-10 pr-12 py-3 bg-slate-800 border ${errors.password ? 'border-red-500' : 'border-slate-700'} rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all`}
+                    className={`w-full pl-10 pr-12 py-3 bg-slate-800 border ${errors.password ? 'border-red-500' : 'border-slate-700'} rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
                     placeholder="8 caractères minimum"
                   />
                   <button
@@ -321,7 +321,7 @@ export default function InscriptionPage() {
                     type={showPassword ? 'text' : 'password'}
                     value={formData.confirmPassword}
                     onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                    className={`w-full pl-10 pr-4 py-3 bg-slate-800 border ${errors.confirmPassword ? 'border-red-500' : 'border-slate-700'} rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all`}
+                    className={`w-full pl-10 pr-4 py-3 bg-slate-800 border ${errors.confirmPassword ? 'border-red-500' : 'border-slate-700'} rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
                     placeholder="Confirmez votre mot de passe"
                   />
                 </div>
@@ -333,15 +333,15 @@ export default function InscriptionPage() {
                   type="checkbox"
                   checked={acceptTerms}
                   onChange={(e) => setAcceptTerms(e.target.checked)}
-                  className="mt-1 rounded bg-slate-800 border-slate-700 text-primary-600 focus:ring-primary-500"
+                  className="mt-1 rounded bg-slate-800 border-slate-700 text-blue-600 focus:ring-blue-500"
                 />
                 <span className="text-sm text-gray-400">
                   J'accepte les{' '}
-                  <Link href="/cgv" className="text-primary-400 hover:underline">
+                  <Link href="/cgv" className="text-blue-400 hover:underline">
                     conditions générales
                   </Link>{' '}
                   et la{' '}
-                  <Link href="/confidentialite" className="text-primary-400 hover:underline">
+                  <Link href="/confidentialite" className="text-blue-400 hover:underline">
                     politique de confidentialité
                   </Link>
                 </span>
@@ -351,7 +351,7 @@ export default function InscriptionPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-gradient-to-r from-primary-600 to-primary-700 text-white py-3.5 rounded-xl font-semibold hover:from-primary-700 hover:to-primary-800 transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary-600/30 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-3.5 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800 transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-600/30 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
@@ -367,7 +367,7 @@ export default function InscriptionPage() {
             <div className="mt-8 text-center">
               <p className="text-gray-400">
                 Déjà un compte ?{' '}
-                <Link href="/connexion" className="text-primary-400 hover:text-primary-300 font-medium">
+                <Link href="/connexion" className="text-blue-400 hover:text-blue-300 font-medium">
                   Se connecter
                 </Link>
               </p>
@@ -375,7 +375,7 @@ export default function InscriptionPage() {
 
             <p className="mt-6 text-center text-sm text-gray-500">
               Vous êtes artisan ?{' '}
-              <Link href="/inscription-artisan" className="text-primary-400 hover:underline">
+              <Link href="/inscription-artisan" className="text-blue-400 hover:underline">
                 Inscrivez votre entreprise
               </Link>
             </p>
@@ -384,13 +384,13 @@ export default function InscriptionPage() {
             <div className="mt-8 pt-8 border-t border-slate-700">
               <p className="text-gray-400 text-sm mb-3">Liens utiles :</p>
               <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
-                <Link href="/comment-ca-marche" className="text-primary-400 hover:text-primary-300">
+                <Link href="/comment-ca-marche" className="text-blue-400 hover:text-blue-300">
                   Comment ça marche ?
                 </Link>
-                <Link href="/faq" className="text-primary-400 hover:text-primary-300">
+                <Link href="/faq" className="text-blue-400 hover:text-blue-300">
                   Questions fréquentes
                 </Link>
-                <Link href="/devis" className="text-primary-400 hover:text-primary-300">
+                <Link href="/devis" className="text-blue-400 hover:text-blue-300">
                   Demander un devis
                 </Link>
               </div>
@@ -406,8 +406,8 @@ export default function InscriptionPage() {
             Découvrez nos services
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
-            <PopularServicesLinks className="[&_h3]:text-gray-300 [&_a]:bg-slate-700 [&_a]:text-gray-300 [&_a:hover]:bg-primary-600 [&_a:hover]:text-white" />
-            <PopularCitiesLinks className="[&_h3]:text-gray-300 [&_a]:bg-slate-700 [&_a]:text-gray-300 [&_a:hover]:bg-primary-600 [&_a:hover]:text-white" />
+            <PopularServicesLinks className="[&_h3]:text-gray-300 [&_a]:bg-slate-700 [&_a]:text-gray-300 [&_a:hover]:bg-blue-600 [&_a:hover]:text-white" />
+            <PopularCitiesLinks className="[&_h3]:text-gray-300 [&_a]:bg-slate-700 [&_a]:text-gray-300 [&_a:hover]:bg-blue-600 [&_a:hover]:text-white" />
           </div>
         </div>
       </section>

@@ -45,14 +45,14 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
       aria-label={`Profil de ${displayName}`}
     >
       {/* Premium gradient accent bar */}
-      <div className="h-1.5 bg-gradient-to-r from-primary-500 via-primary-400 to-primary-700" />
+      <div className="h-1.5 bg-gradient-to-r from-blue-500 via-blue-400 to-indigo-600" />
 
       <div className="p-6 md:p-8">
         <div className="flex flex-col md:flex-row gap-6">
           {/* Avatar */}
           <div className="flex-shrink-0">
             <div className="relative">
-              <div className="w-24 h-24 md:w-32 md:h-32 rounded-2xl bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center text-white text-3xl md:text-4xl font-bold shadow-lg shadow-primary-500/20 overflow-hidden ring-4 ring-white">
+              <div className="w-24 h-24 md:w-32 md:h-32 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-3xl md:text-4xl font-bold shadow-lg shadow-blue-500/20 overflow-hidden ring-4 ring-white">
                 {artisan.avatar_url ? (
                   <Image
                     src={artisan.avatar_url}
@@ -93,7 +93,7 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
             </div>
 
             {/* Name & Specialty */}
-            <h1 className="text-2xl md:text-3xl text-gray-900 font-heading mb-1.5">
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 font-heading mb-1.5 tracking-tight">
               {displayName}
               <span className="sr-only"> &mdash; {artisan.specialty} &agrave; {artisan.city}</span>
             </h1>
@@ -115,7 +115,7 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
             {artisan.phone && (
               <a
                 href={`tel:${artisan.phone.replace(/\s/g, '')}`}
-                className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium mb-4 transition-colors group/phone"
+                className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium mb-4 transition-colors group/phone"
                 aria-label={`Appeler au ${artisan.phone}`}
               >
                 <Phone className="w-4 h-4 transition-transform group-hover/phone:scale-110" />
@@ -140,15 +140,15 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
             <div className="flex items-center gap-4 flex-wrap">
               <div className="flex items-center gap-2" role="group" aria-label="Note moyenne">
                 {artisan.average_rating !== null && artisan.average_rating > 0 && (
-                  <div className="flex items-center gap-1.5 bg-secondary-50 px-3 py-1.5 rounded-lg border border-secondary-100">
-                    <Star className="w-5 h-5 text-secondary-500 fill-secondary-500" aria-hidden="true" />
+                  <div className="flex items-center gap-1.5 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-100">
+                    <Star className="w-5 h-5 text-amber-500 fill-amber-500" aria-hidden="true" />
                     <span className="font-bold text-gray-900" aria-label={`Note de ${artisan.average_rating.toFixed(1)} sur 5`}>
                       {artisan.average_rating.toFixed(1)}
                     </span>
                   </div>
                 )}
                 {artisan.review_count > 0 && (
-                  <a href="#reviews" className="text-slate-600 hover:text-primary-700 transition-colors duration-200" aria-label={`${artisan.review_count} avis clients`}>
+                  <a href="#reviews" className="text-slate-600 hover:text-blue-700 transition-colors duration-200" aria-label={`${artisan.review_count} avis clients`}>
                     ({artisan.review_count} avis)
                   </a>
                 )}
@@ -193,10 +193,10 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
                   </span>
                 )}
                 {artisan.accepts_new_clients === true && (
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary-50 text-primary-700 text-xs font-medium border border-primary-100">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-medium border border-blue-100">
                     <span className="relative flex h-1.5 w-1.5">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-75" />
-                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary-500" />
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
+                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-blue-500" />
                     </span>
                     Profil actif
                   </span>

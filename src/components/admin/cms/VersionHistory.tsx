@@ -102,7 +102,7 @@ export function VersionHistory({ pageId, onClose, onRestore }: VersionHistoryPro
       case 'draft':
         return { text: 'Brouillon', className: 'bg-gray-100 text-gray-700' }
       case 'archived':
-        return { text: 'Archivé', className: 'bg-secondary-100 text-secondary-700' }
+        return { text: 'Archivé', className: 'bg-amber-100 text-amber-700' }
       default:
         return { text: status, className: 'bg-gray-100 text-gray-700' }
     }
@@ -145,14 +145,14 @@ export function VersionHistory({ pageId, onClose, onRestore }: VersionHistoryPro
           <div className="p-6">
             {loading ? (
               <div className="flex items-center justify-center py-8">
-                <Loader2 className="w-6 h-6 animate-spin text-primary-600" />
+                <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
               </div>
             ) : error ? (
               <div>
                 <p className="text-sm text-red-600">{error}</p>
                 <button
                   onClick={fetchVersions}
-                  className="mt-2 text-sm text-primary-600 hover:text-primary-800"
+                  className="mt-2 text-sm text-blue-600 hover:text-blue-800"
                 >
                   Réessayer
                 </button>
@@ -177,7 +177,7 @@ export function VersionHistory({ pageId, onClose, onRestore }: VersionHistoryPro
                         <div
                           className={`absolute left-1.5 top-2 w-3 h-3 rounded-full border-2 ${
                             isLatest
-                              ? 'bg-primary-600 border-primary-600'
+                              ? 'bg-blue-600 border-blue-600'
                               : 'bg-white border-gray-300'
                           }`}
                         />
@@ -194,7 +194,7 @@ export function VersionHistory({ pageId, onClose, onRestore }: VersionHistoryPro
                                 {badge.text}
                               </span>
                               {isLatest && (
-                                <span className="text-xs text-primary-600 font-medium">
+                                <span className="text-xs text-blue-600 font-medium">
                                   Actuelle
                                 </span>
                               )}
@@ -214,7 +214,7 @@ export function VersionHistory({ pageId, onClose, onRestore }: VersionHistoryPro
                               type="button"
                               onClick={() => setConfirmRestore(version.id)}
                               disabled={restoringId === version.id}
-                              className="flex-shrink-0 flex items-center gap-1 px-2.5 py-1 text-xs text-primary-600 hover:text-primary-800 hover:bg-primary-50 rounded-lg transition-colors disabled:opacity-50"
+                              className="flex-shrink-0 flex items-center gap-1 px-2.5 py-1 text-xs text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50"
                               title="Restaurer cette version"
                             >
                               {restoringId === version.id ? (
@@ -260,7 +260,7 @@ export function VersionHistory({ pageId, onClose, onRestore }: VersionHistoryPro
                 </button>
                 <button
                   onClick={() => handleRestore(confirmRestore)}
-                  className="flex-1 px-4 py-2 bg-secondary-500 text-white rounded-lg hover:bg-secondary-600 transition-colors"
+                  className="flex-1 px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors"
                 >
                   Restaurer
                 </button>

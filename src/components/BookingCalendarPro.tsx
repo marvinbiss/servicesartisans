@@ -248,7 +248,7 @@ export default function BookingCalendarPro({
 
     const badges: Record<string, { icon: React.ComponentType<{ className?: string }>; text: string; color: string }> = {
       popular: { icon: TrendingUp, text: 'Populaire', color: 'bg-orange-100 text-orange-700' },
-      recommended: { icon: Sparkles, text: 'Recommandé', color: 'bg-primary-100 text-primary-700' },
+      recommended: { icon: Sparkles, text: 'Recommandé', color: 'bg-blue-100 text-blue-700' },
       last_minute: { icon: Clock, text: 'Dernière minute', color: 'bg-green-100 text-green-700' },
       best_value: { icon: Star, text: 'Meilleur choix', color: 'bg-purple-100 text-purple-700' },
     }
@@ -280,7 +280,7 @@ export default function BookingCalendarPro({
         </p>
         <div className="bg-gray-50 rounded-lg p-4 mb-6 text-left">
           <div className="flex items-center gap-3 mb-3">
-            <Calendar className="w-5 h-5 text-primary-600" />
+            <Calendar className="w-5 h-5 text-blue-600" />
             <span className="font-medium text-gray-900 capitalize">
               {selectedDate?.toLocaleDateString('fr-FR', {
                 weekday: 'long',
@@ -290,13 +290,13 @@ export default function BookingCalendarPro({
             </span>
           </div>
           <div className="flex items-center gap-3 mb-3">
-            <Clock className="w-5 h-5 text-primary-600" />
+            <Clock className="w-5 h-5 text-blue-600" />
             <span className="font-medium text-gray-900">
               {selectedSlot?.startTime} - {selectedSlot?.endTime}
             </span>
           </div>
           <div className="flex items-center gap-3">
-            <User className="w-5 h-5 text-primary-600" />
+            <User className="w-5 h-5 text-blue-600" />
             <span className="font-medium text-gray-900">{serviceName}</span>
           </div>
         </div>
@@ -307,7 +307,7 @@ export default function BookingCalendarPro({
         {bookingResult && (
           <a
             href={`/booking/${bookingResult.bookingId}`}
-            className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-700 transition-colors mb-4"
+            className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors mb-4"
           >
             Gérer ma réservation
           </a>
@@ -321,7 +321,7 @@ export default function BookingCalendarPro({
             setFormData({ clientName: '', clientPhone: '', clientEmail: '', message: '' })
             setBookingResult(null)
           }}
-          className="block w-full text-primary-600 hover:underline mt-4"
+          className="block w-full text-blue-600 hover:underline mt-4"
         >
           Faire une autre réservation
         </button>
@@ -334,7 +334,7 @@ export default function BookingCalendarPro({
     return (
       <div className="bg-white rounded-xl shadow-lg p-6">
         <div className="text-center mb-6">
-          <CreditCard className="w-12 h-12 text-primary-600 mx-auto mb-3" />
+          <CreditCard className="w-12 h-12 text-blue-600 mx-auto mb-3" />
           <h3 className="text-xl font-bold text-gray-900">Paiement de l'acompte</h3>
           <p className="text-gray-600">Sécurisez votre réservation</p>
         </div>
@@ -350,7 +350,7 @@ export default function BookingCalendarPro({
           </div>
           <div className="flex justify-between pt-2 border-t mt-2">
             <span className="font-semibold">Acompte ({depositPercentage}%)</span>
-            <span className="font-bold text-primary-600">{depositAmount}EUR</span>
+            <span className="font-bold text-blue-600">{depositAmount}EUR</span>
           </div>
         </div>
 
@@ -369,7 +369,7 @@ export default function BookingCalendarPro({
               window.location.href = data.url
             }
           }}
-          className="w-full bg-primary-600 text-white py-4 rounded-lg font-semibold hover:bg-primary-700 flex items-center justify-center gap-2"
+          className="w-full bg-blue-600 text-white py-4 rounded-lg font-semibold hover:bg-blue-700 flex items-center justify-center gap-2"
         >
           <CreditCard className="w-5 h-5" />
           Payer {depositAmount}EUR
@@ -388,11 +388,11 @@ export default function BookingCalendarPro({
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-primary-600 to-primary-700 text-white p-6">
+      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6">
         <h3 className="text-lg font-semibold mb-1">Réserver un rendez-vous</h3>
-        <p className="text-primary-100 text-sm">{artisanName} - {serviceName}</p>
+        <p className="text-blue-100 text-sm">{artisanName} - {serviceName}</p>
         {servicePrice && (
-          <p className="text-primary-200 text-sm mt-1">À partir de {servicePrice}EUR</p>
+          <p className="text-blue-200 text-sm mt-1">À partir de {servicePrice}EUR</p>
         )}
       </div>
 
@@ -408,8 +408,8 @@ export default function BookingCalendarPro({
 
           {/* Recommended slots */}
           {recommendedSlots.length > 0 && !selectedDate && (
-            <div className="mb-6 p-4 bg-primary-50 rounded-lg">
-              <h4 className="font-medium text-primary-900 mb-3 flex items-center gap-2">
+            <div className="mb-6 p-4 bg-blue-50 rounded-lg">
+              <h4 className="font-medium text-blue-900 mb-3 flex items-center gap-2">
                 <Sparkles className="w-4 h-4" />
                 Créneaux recommandés
               </h4>
@@ -423,7 +423,7 @@ export default function BookingCalendarPro({
                       const slot = slots[rec.date]?.find((s) => s.id === rec.slotId)
                       if (slot) setSelectedSlot(slot)
                     }}
-                    className="p-3 bg-white rounded-lg border-2 border-primary-200 hover:border-primary-400 transition-colors text-left"
+                    className="p-3 bg-white rounded-lg border-2 border-blue-200 hover:border-blue-400 transition-colors text-left"
                   >
                     <div className="text-sm font-medium text-gray-900 capitalize">
                       {new Date(rec.date).toLocaleDateString('fr-FR', {
@@ -432,11 +432,11 @@ export default function BookingCalendarPro({
                         month: 'short',
                       })}
                     </div>
-                    <div className="text-primary-600 font-semibold">
+                    <div className="text-blue-600 font-semibold">
                       {rec.startTime}
                     </div>
                     {rec.badge && (
-                      <span className="text-xs text-primary-500">{rec.badgeText}</span>
+                      <span className="text-xs text-blue-500">{rec.badgeText}</span>
                     )}
                   </button>
                 ))}
@@ -499,13 +499,13 @@ export default function BookingCalendarPro({
                   aria-selected={selected}
                   aria-disabled={!available || past}
                   aria-label={`${date.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })}${available ? ', disponible' : ', indisponible'}`}
-                  className={`aspect-square rounded-lg text-sm font-medium transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
+                  className={`aspect-square rounded-lg text-sm font-medium transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
                     selected
-                      ? 'bg-primary-600 text-white shadow-lg scale-105'
+                      ? 'bg-blue-600 text-white shadow-lg scale-105'
                       : available && !past
                       ? 'bg-green-50 text-green-700 hover:bg-green-100 border border-green-200'
                       : isToday(date)
-                      ? 'bg-primary-50 text-primary-600'
+                      ? 'bg-blue-50 text-blue-600'
                       : past
                       ? 'text-gray-300 cursor-not-allowed'
                       : 'text-gray-400 cursor-not-allowed'
@@ -548,10 +548,10 @@ export default function BookingCalendarPro({
                     key={slot.id}
                     onClick={() => handleSlotSelect(slot)}
                     aria-pressed={selectedSlot?.id === slot.id}
-                    className={`flex flex-col items-center justify-center gap-1 p-3 rounded-lg border-2 transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 ${
+                    className={`flex flex-col items-center justify-center gap-1 p-3 rounded-lg border-2 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                       selectedSlot?.id === slot.id
-                        ? 'border-primary-500 bg-primary-50 text-primary-700 shadow-md'
-                        : 'border-gray-200 hover:border-primary-300 hover:bg-primary-50'
+                        ? 'border-blue-500 bg-blue-50 text-blue-700 shadow-md'
+                        : 'border-gray-200 hover:border-blue-300 hover:bg-blue-50'
                     }`}
                   >
                     <div className="flex items-center gap-2">
@@ -574,7 +574,7 @@ export default function BookingCalendarPro({
           {selectedSlot && (
             <button
               onClick={() => setStep('form')}
-              className="w-full mt-6 bg-primary-600 text-white py-3 rounded-lg font-medium hover:bg-primary-700 transition-colors shadow-lg hover:shadow-xl"
+              className="w-full mt-6 bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors shadow-lg hover:shadow-xl"
             >
               Continuer
             </button>
@@ -593,8 +593,8 @@ export default function BookingCalendarPro({
           )}
 
           {/* Selected slot summary */}
-          <div className="bg-primary-50 rounded-lg p-4 mb-6">
-            <div className="flex items-center gap-3 text-primary-700 flex-wrap">
+          <div className="bg-blue-50 rounded-lg p-4 mb-6">
+            <div className="flex items-center gap-3 text-blue-700 flex-wrap">
               <Calendar className="w-5 h-5 flex-shrink-0" />
               <span className="font-medium capitalize">
                 {selectedDate?.toLocaleDateString('fr-FR', {
@@ -603,7 +603,7 @@ export default function BookingCalendarPro({
                   month: 'long',
                 })}
               </span>
-              <span className="text-primary-400">-</span>
+              <span className="text-blue-400">-</span>
               <Clock className="w-5 h-5 flex-shrink-0" />
               <span className="font-medium">
                 {selectedSlot?.startTime} - {selectedSlot?.endTime}
@@ -625,7 +625,7 @@ export default function BookingCalendarPro({
                   autoComplete="name"
                   value={formData.clientName}
                   onChange={(e) => handleFormChange('clientName', e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Jean Dupont"
                 />
               </div>
@@ -644,7 +644,7 @@ export default function BookingCalendarPro({
                   autoComplete="tel"
                   value={formData.clientPhone}
                   onChange={(e) => handleFormChange('clientPhone', e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="06 12 34 56 78"
                 />
               </div>
@@ -663,7 +663,7 @@ export default function BookingCalendarPro({
                   autoComplete="email"
                   value={formData.clientEmail}
                   onChange={(e) => handleFormChange('clientEmail', e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="jean@exemple.fr"
                 />
               </div>
@@ -679,7 +679,7 @@ export default function BookingCalendarPro({
                   id="message"
                   value={formData.message}
                   onChange={(e) => handleFormChange('message', e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   rows={3}
                   placeholder="Décrivez brièvement votre besoin..."
                 />
@@ -696,8 +696,8 @@ export default function BookingCalendarPro({
 
           {/* Deposit notice */}
           {requireDeposit && servicePrice && (
-            <div className="mt-4 p-3 bg-primary-50 rounded-lg">
-              <p className="text-sm text-primary-700">
+            <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+              <p className="text-sm text-blue-700">
                 <strong>Acompte requis:</strong> {depositAmount}EUR ({depositPercentage}% du prix) sera demandé après confirmation.
               </p>
             </div>
@@ -714,7 +714,7 @@ export default function BookingCalendarPro({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex-1 bg-primary-600 text-white py-3 rounded-lg font-medium hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+              className="flex-1 bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
             >
               {isSubmitting ? (
                 <>

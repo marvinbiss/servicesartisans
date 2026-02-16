@@ -73,7 +73,7 @@ export function ProviderDetail({ provider, showQuoteForm = true }: ProviderDetai
             key={star}
             className={`w-5 h-5 ${
               star <= rating
-                ? 'fill-secondary-400 text-secondary-400'
+                ? 'fill-amber-400 text-amber-400'
                 : 'text-gray-300'
             }`}
           />
@@ -121,7 +121,7 @@ export function ProviderDetail({ provider, showQuoteForm = true }: ProviderDetai
                   {provider.company_name}
                 </h1>
                 {provider.is_verified && (
-                  <span className="inline-flex items-center gap-1 px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-sm font-medium">
+                  <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
                     <CheckCircle className="w-4 h-4" />
                     Vérifié
                   </span>
@@ -161,7 +161,7 @@ export function ProviderDetail({ provider, showQuoteForm = true }: ProviderDetai
                   </span>
                 )}
                 {provider.response_time && (
-                  <span className="inline-flex items-center gap-1 px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-sm font-medium">
+                  <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
                     <MessageSquare className="w-4 h-4" />
                     Répond en {provider.response_time}
                   </span>
@@ -174,7 +174,7 @@ export function ProviderDetail({ provider, showQuoteForm = true }: ProviderDetai
               {provider.phone && (
                 <a
                   href={`tel:${provider.phone}`}
-                  className="flex items-center justify-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium"
+                  className="flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
                 >
                   <Phone className="w-5 h-5" />
                   {provider.phone}
@@ -219,7 +219,7 @@ export function ProviderDetail({ provider, showQuoteForm = true }: ProviderDetai
                 onClick={() => setActiveTab(tab.id as typeof activeTab)}
                 className={`py-4 border-b-2 font-medium transition-colors ${
                   activeTab === tab.id
-                    ? 'border-primary-600 text-primary-600'
+                    ? 'border-blue-600 text-blue-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700'
                 }`}
               >
@@ -251,7 +251,7 @@ export function ProviderDetail({ provider, showQuoteForm = true }: ProviderDetai
                 {provider.certifications && provider.certifications.length > 0 && (
                   <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                     <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                      <Shield className="w-5 h-5 text-primary-600" />
+                      <Shield className="w-5 h-5 text-blue-600" />
                       Certifications
                     </h2>
                     <div className="flex flex-wrap gap-2">
@@ -271,7 +271,7 @@ export function ProviderDetail({ provider, showQuoteForm = true }: ProviderDetai
                 {provider.opening_hours && (
                   <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                     <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                      <Calendar className="w-5 h-5 text-primary-600" />
+                      <Calendar className="w-5 h-5 text-blue-600" />
                       Horaires d'ouverture
                     </h2>
                     <div className="space-y-2">
@@ -314,7 +314,7 @@ export function ProviderDetail({ provider, showQuoteForm = true }: ProviderDetai
                       {provider.service_areas.map((area, i) => (
                         <span
                           key={i}
-                          className="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-sm"
+                          className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm"
                         >
                           {area}
                         </span>

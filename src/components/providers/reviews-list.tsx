@@ -47,8 +47,8 @@ export function ReviewsList({ reviews }: ReviewsListProps) {
           )}
 
           {review.response && (
-            <div className="mt-3 pl-4 border-l-2 border-primary-200 bg-primary-50/50 py-2 pr-2 rounded-r">
-              <p className="text-xs text-primary-600 font-medium mb-1">
+            <div className="mt-3 pl-4 border-l-2 border-blue-200 bg-blue-50/50 py-2 pr-2 rounded-r">
+              <p className="text-xs text-blue-600 font-medium mb-1">
                 Réponse de l'artisan
               </p>
               <p className="text-sm text-gray-700">{review.response}</p>

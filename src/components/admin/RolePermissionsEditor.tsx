@@ -162,7 +162,7 @@ export function RolePermissionsEditor({
                         className={`ml-2 text-xs px-2 py-0.5 rounded ${
                           disabled
                             ? 'text-gray-400 cursor-not-allowed'
-                            : 'text-primary-600 hover:bg-primary-50'
+                            : 'text-blue-600 hover:bg-blue-50'
                         }`}
                       >
                         {isGroupFullyEnabled(group.key) ? 'Tout désactiver' : 'Tout activer'}

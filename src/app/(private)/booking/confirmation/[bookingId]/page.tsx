@@ -131,7 +131,7 @@ END:VCALENDAR`
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-violet-50 to-primary-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-violet-50 to-indigo-50 flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-violet-600" />
       </div>
     )
@@ -158,7 +158,7 @@ END:VCALENDAR`
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-50 to-primary-50 py-8 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-violet-50 to-indigo-50 py-8 px-4">
       <div className="max-w-2xl mx-auto">
         {/* Success header */}
         <div className="text-center mb-8">
@@ -176,7 +176,7 @@ END:VCALENDAR`
         {/* Booking details card */}
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-6">
           {/* Header with gradient */}
-          <div className="bg-gradient-to-r from-violet-600 to-primary-700 p-6 text-white">
+          <div className="bg-gradient-to-r from-violet-600 to-indigo-600 p-6 text-white">
             <div className="flex items-center gap-4">
               <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center backdrop-blur">
                 <User className="w-8 h-8" />
@@ -205,8 +205,8 @@ END:VCALENDAR`
               </div>
             </div>
 
-            <div className="flex items-center gap-4 p-4 bg-primary-50 rounded-xl">
-              <Clock className="w-6 h-6 text-primary-600" />
+            <div className="flex items-center gap-4 p-4 bg-blue-50 rounded-xl">
+              <Clock className="w-6 h-6 text-blue-600" />
               <div>
                 <p className="text-sm text-gray-500">Horaire</p>
                 <p className="font-semibold text-gray-900">
@@ -310,12 +310,12 @@ END:VCALENDAR`
         </div>
 
         {/* Reminder note */}
-        <div className="bg-secondary-50 border border-secondary-200 rounded-xl p-4 mb-6">
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
           <div className="flex gap-3">
-            <Bell className="w-5 h-5 text-secondary-600 flex-shrink-0 mt-0.5" />
+            <Bell className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
             <div>
-              <p className="font-medium text-secondary-800">Rappels automatiques</p>
-              <p className="text-sm text-secondary-700 mt-1">
+              <p className="font-medium text-amber-800">Rappels automatiques</p>
+              <p className="text-sm text-amber-700 mt-1">
                 Vous recevrez un rappel par email et SMS 24h et 1h avant votre rendez-vous.
               </p>
             </div>

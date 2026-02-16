@@ -14,7 +14,7 @@ export function StatsCards({ stats, loading }: StatsCardsProps) {
       name: 'Contacts',
       value: stats?.total_contacts || 0,
       icon: Users,
-      color: 'text-primary-600 bg-primary-100',
+      color: 'text-blue-600 bg-blue-100',
       detail: stats ? `${stats.contacts_by_type.artisan} artisans, ${stats.contacts_by_type.client} clients, ${stats.contacts_by_type.mairie} mairies` : '',
     },
     {
@@ -28,20 +28,20 @@ export function StatsCards({ stats, loading }: StatsCardsProps) {
       name: 'Messages envoyés',
       value: stats?.total_messages_sent || 0,
       icon: MessageSquare,
-      color: 'text-primary-600 bg-primary-100',
+      color: 'text-blue-600 bg-blue-100',
       detail: stats ? `Email: ${stats.messages_by_channel.email}, SMS: ${stats.messages_by_channel.sms}, WA: ${stats.messages_by_channel.whatsapp}` : '',
     },
     {
       name: 'Taux de livraison',
       value: `${(stats?.overall_delivery_rate || 0).toFixed(1)}%`,
       icon: TrendingUp,
-      color: 'text-secondary-600 bg-secondary-100',
+      color: 'text-amber-600 bg-amber-100',
     },
     {
       name: 'Taux de réponse',
       value: `${(stats?.overall_reply_rate || 0).toFixed(1)}%`,
       icon: Inbox,
-      color: 'text-primary-600 bg-primary-100',
+      color: 'text-blue-600 bg-blue-100',
       detail: `${stats?.open_conversations || 0} conversations ouvertes`,
     },
     {
@@ -105,10 +105,10 @@ export function ChannelIcon({ channel, className }: { channel: string; className
 export function CampaignStatusBadge({ status }: { status: string }) {
   const styles: Record<string, string> = {
     draft: 'bg-gray-100 text-gray-700',
-    scheduled: 'bg-primary-100 text-primary-700',
+    scheduled: 'bg-blue-100 text-blue-700',
     sending: 'bg-green-100 text-green-700',
     paused: 'bg-yellow-100 text-yellow-700',
-    completed: 'bg-primary-100 text-primary-700',
+    completed: 'bg-blue-100 text-blue-700',
     cancelled: 'bg-red-100 text-red-700',
   }
 
@@ -131,9 +131,9 @@ export function CampaignStatusBadge({ status }: { status: string }) {
 // Badge type contact
 export function ContactTypeBadge({ type }: { type: string }) {
   const styles: Record<string, string> = {
-    artisan: 'bg-primary-100 text-primary-700',
+    artisan: 'bg-blue-100 text-blue-700',
     client: 'bg-green-100 text-green-700',
-    mairie: 'bg-primary-100 text-primary-700',
+    mairie: 'bg-blue-100 text-blue-700',
   }
 
   const labels: Record<string, string> = {

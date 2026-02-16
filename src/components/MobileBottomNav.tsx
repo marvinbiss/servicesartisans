@@ -38,7 +38,7 @@ export default function MobileBottomNav() {
               href={href}
               aria-current={isActive ? 'page' : undefined}
               className={`flex flex-col items-center justify-center gap-0.5 w-full h-full transition-colors touch-manipulation active:scale-95 ${
-                isActive ? 'text-secondary-600' : 'text-gray-500'
+                isActive ? 'text-amber-600' : 'text-gray-500'
               }`}
             >
               <Icon className={`w-5 h-5 ${isActive ? 'stroke-[2.5]' : 'stroke-[1.5]'}`} />

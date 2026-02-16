@@ -117,11 +117,11 @@ export default function ConnexionPage() {
 
             <div className="text-center mb-8">
               <Link href="/" className="inline-flex items-center space-x-3 mb-6">
-                <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center shadow-lg">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
                   <span className="text-white font-bold text-xl">SA</span>
                 </div>
                 <span className="text-2xl font-bold text-white">
-                  Services<span className="text-primary-400">Artisans</span>
+                  Services<span className="text-blue-400">Artisans</span>
                 </span>
               </Link>
               <h1 className="text-3xl font-bold text-white mb-2">
@@ -138,7 +138,7 @@ export default function ConnexionPage() {
                 onClick={() => setUserType('particulier')}
                 className={`flex-1 py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 ${
                   userType === 'particulier'
-                    ? 'bg-gradient-to-r from-primary-600 to-primary-700 text-white shadow-lg'
+                    ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg'
                     : 'text-gray-400 hover:text-white'
                 }`}
               >
@@ -149,7 +149,7 @@ export default function ConnexionPage() {
                 onClick={() => setUserType('artisan')}
                 className={`flex-1 py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 ${
                   userType === 'artisan'
-                    ? 'bg-gradient-to-r from-secondary-500 to-secondary-600 text-white shadow-lg'
+                    ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-lg'
                     : 'text-gray-400 hover:text-white'
                 }`}
               >
@@ -177,7 +177,7 @@ export default function ConnexionPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="w-full pl-10 pr-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                    className="w-full pl-10 pr-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     placeholder="votre@email.com"
                   />
                 </div>
@@ -194,7 +194,7 @@ export default function ConnexionPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="w-full pl-10 pr-12 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                    className="w-full pl-10 pr-12 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     placeholder="••••••••"
                   />
                   <button
@@ -214,11 +214,11 @@ export default function ConnexionPage() {
                     type="checkbox"
                     checked={rememberMe}
                     onChange={(e) => setRememberMe(e.target.checked)}
-                    className="rounded bg-slate-800 border-slate-700 text-primary-600 focus:ring-primary-500"
+                    className="rounded bg-slate-800 border-slate-700 text-blue-600 focus:ring-blue-500"
                   />
                   <span className="text-sm text-gray-400">Se souvenir de moi</span>
                 </label>
-                <Link href="/mot-de-passe-oublie" className="text-sm text-primary-400 hover:text-primary-300">
+                <Link href="/mot-de-passe-oublie" className="text-sm text-blue-400 hover:text-blue-300">
                   Mot de passe oublié ?
                 </Link>
               </div>
@@ -228,8 +228,8 @@ export default function ConnexionPage() {
                 disabled={isLoading}
                 className={`w-full py-3.5 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed ${
                   userType === 'artisan'
-                    ? 'bg-gradient-to-r from-secondary-500 to-secondary-600 hover:from-secondary-600 hover:to-secondary-700 text-white shadow-secondary-500/30'
-                    : 'bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white shadow-primary-600/30'
+                    ? 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-amber-500/30'
+                    : 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-blue-600/30'
                 }`}
               >
                 {isLoading ? (
@@ -248,7 +248,7 @@ export default function ConnexionPage() {
                 Pas encore de compte ?{' '}
                 <Link
                   href={userType === 'artisan' ? '/inscription-artisan' : '/inscription'}
-                  className={`font-medium ${userType === 'artisan' ? 'text-secondary-400 hover:text-secondary-300' : 'text-primary-400 hover:text-primary-300'}`}
+                  className={`font-medium ${userType === 'artisan' ? 'text-amber-400 hover:text-amber-300' : 'text-blue-400 hover:text-blue-300'}`}
                 >
                   Créer un compte
                 </Link>
@@ -282,7 +282,7 @@ export default function ConnexionPage() {
                   onClick={handleFacebookLogin}
                   className="flex items-center justify-center gap-2 bg-slate-800 border border-slate-700 py-3 rounded-xl hover:bg-slate-700 transition-all text-white"
                 >
-                  <svg className="w-5 h-5" fill="#364180" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5" fill="#1877F2" viewBox="0 0 24 24">
                     <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                   </svg>
                   Facebook
@@ -294,13 +294,13 @@ export default function ConnexionPage() {
             <div className="mt-8 pt-8 border-t border-slate-700">
               <p className="text-gray-400 text-sm mb-3">Liens utiles :</p>
               <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
-                <Link href="/comment-ca-marche" className="text-primary-400 hover:text-primary-300">
+                <Link href="/comment-ca-marche" className="text-blue-400 hover:text-blue-300">
                   Comment ça marche ?
                 </Link>
-                <Link href="/faq" className="text-primary-400 hover:text-primary-300">
+                <Link href="/faq" className="text-blue-400 hover:text-blue-300">
                   Questions fréquentes
                 </Link>
-                <Link href="/contact" className="text-primary-400 hover:text-primary-300">
+                <Link href="/contact" className="text-blue-400 hover:text-blue-300">
                   Nous contacter
                 </Link>
               </div>
@@ -309,7 +309,7 @@ export default function ConnexionPage() {
         </div>
 
         {/* Right - Image */}
-        <div className="hidden lg:flex flex-1 bg-gradient-to-br from-primary-600 via-primary-700 to-primary-900 items-center justify-center p-12 relative overflow-hidden">
+        <div className="hidden lg:flex flex-1 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 items-center justify-center p-12 relative overflow-hidden">
           {/* Background pattern */}
           <div className="absolute inset-0 opacity-10">
             <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl translate-x-1/2 -translate-y-1/2" />
@@ -322,21 +322,21 @@ export default function ConnexionPage() {
             <h2 className="text-4xl font-bold mb-6">
               Bienvenue sur ServicesArtisans
             </h2>
-            <p className="text-primary-100 text-lg mb-8">
+            <p className="text-blue-100 text-lg mb-8">
               Connectez-vous pour accéder à votre espace personnel, suivre vos réservations et gérer votre compte.
             </p>
             <div className="grid grid-cols-3 gap-4 text-center">
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
                 <div className="text-3xl font-bold">2500+</div>
-                <div className="text-sm text-primary-200">Artisans</div>
+                <div className="text-sm text-blue-200">Artisans</div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
                 <div className="text-3xl font-bold">50K+</div>
-                <div className="text-sm text-primary-200">Clients</div>
+                <div className="text-sm text-blue-200">Clients</div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
                 <div className="text-3xl font-bold">4.8</div>
-                <div className="text-sm text-primary-200">Note moyenne</div>
+                <div className="text-sm text-blue-200">Note moyenne</div>
               </div>
             </div>
           </div>
@@ -350,8 +350,8 @@ export default function ConnexionPage() {
             Explorez nos services
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
-            <PopularServicesLinks className="[&_h3]:text-gray-300 [&_a]:bg-slate-700 [&_a]:text-gray-300 [&_a:hover]:bg-primary-600 [&_a:hover]:text-white" />
-            <PopularCitiesLinks className="[&_h3]:text-gray-300 [&_a]:bg-slate-700 [&_a]:text-gray-300 [&_a:hover]:bg-primary-600 [&_a:hover]:text-white" />
+            <PopularServicesLinks className="[&_h3]:text-gray-300 [&_a]:bg-slate-700 [&_a]:text-gray-300 [&_a:hover]:bg-blue-600 [&_a:hover]:text-white" />
+            <PopularCitiesLinks className="[&_h3]:text-gray-300 [&_a]:bg-slate-700 [&_a]:text-gray-300 [&_a:hover]:bg-blue-600 [&_a:hover]:text-white" />
           </div>
         </div>
       </section>

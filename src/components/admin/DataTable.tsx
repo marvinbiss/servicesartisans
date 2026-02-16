@@ -44,7 +44,7 @@ export function DataTable<T>({
   if (loading) {
     return (
       <div className="p-8 text-center" role="status" aria-busy="true">
-        <Loader2 className="w-8 h-8 animate-spin mx-auto text-primary-600" />
+        <Loader2 className="w-8 h-8 animate-spin mx-auto text-blue-600" />
         <span className="sr-only">Chargement des données...</span>
       </div>
     )

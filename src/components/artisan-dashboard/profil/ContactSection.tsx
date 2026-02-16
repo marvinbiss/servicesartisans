@@ -45,7 +45,7 @@ export function ContactSection({ provider, onSaved }: ContactSectionProps) {
               pattern={PHONE_PATTERN}
               maxLength={20}
               placeholder="06 12 34 56 78"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
             <p className="text-xs text-gray-500 mt-1">Format : 06 12 34 56 78 ou +33 6 12 34 56 78</p>
           </div>
@@ -61,7 +61,7 @@ export function ContactSection({ provider, onSaved }: ContactSectionProps) {
               pattern={PHONE_PATTERN}
               maxLength={20}
               placeholder="06 12 34 56 78"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
             <p className="text-xs text-gray-500 mt-1">Format : 06 12 34 56 78 ou +33 6 12 34 56 78</p>
           </div>
@@ -79,7 +79,7 @@ export function ContactSection({ provider, onSaved }: ContactSectionProps) {
               onChange={(e) => setField('email', e.target.value || null)}
               maxLength={200}
               placeholder="contact@entreprise.fr"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
           <div>
@@ -93,7 +93,7 @@ export function ContactSection({ provider, onSaved }: ContactSectionProps) {
               onChange={(e) => setField('website', e.target.value || null)}
               maxLength={500}
               placeholder="https://www.entreprise.fr"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
         </div>

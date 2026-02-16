@@ -29,7 +29,7 @@ interface TeamMember {
 }
 
 const COLORS = [
-  { name: 'Bleu', value: '#4a5899' },
+  { name: 'Bleu', value: '#3b82f6' },
   { name: 'Vert', value: '#22c55e' },
   { name: 'Violet', value: '#8b5cf6' },
   { name: 'Orange', value: '#f97316' },
@@ -209,7 +209,7 @@ export default function EquipePage() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
       </div>
     )
   }
@@ -217,7 +217,7 @@ export default function EquipePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-gradient-to-r from-primary-600 to-primary-800 text-white">
+      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex items-center gap-4">
             <Link
@@ -228,7 +228,7 @@ export default function EquipePage() {
             </Link>
             <div>
               <h1 className="text-2xl font-bold">Gestion de l'équipe</h1>
-              <p className="text-primary-100">Gérez les membres de votre équipe et leurs créneaux</p>
+              <p className="text-blue-100">Gérez les membres de votre équipe et leurs créneaux</p>
             </div>
           </div>
         </div>
@@ -265,7 +265,7 @@ export default function EquipePage() {
               })
               setShowAddModal(true)
             }}
-            className="flex items-center gap-2 bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700"
+            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
           >
             <Plus className="w-4 h-4" />
             Ajouter un membre
@@ -284,7 +284,7 @@ export default function EquipePage() {
             </p>
             <button
               onClick={() => setShowAddModal(true)}
-              className="inline-flex items-center gap-2 bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700"
+              className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
             >
               <Plus className="w-4 h-4" />
               Ajouter le premier membre
@@ -316,7 +316,7 @@ export default function EquipePage() {
                   <div className="flex items-center gap-1">
                     <button
                       onClick={() => openEditModal(member)}
-                      className="p-2 text-gray-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg"
+                      className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg"
                     >
                       <Edit2 className="w-4 h-4" />
                     </button>
@@ -363,9 +363,9 @@ export default function EquipePage() {
         )}
 
         {/* Info box */}
-        <div className="mt-8 p-4 bg-primary-50 rounded-lg">
-          <h4 className="font-medium text-primary-900 mb-2">Comment ça fonctionne ?</h4>
-          <ul className="text-sm text-primary-700 space-y-1">
+        <div className="mt-8 p-4 bg-blue-50 rounded-lg">
+          <h4 className="font-medium text-blue-900 mb-2">Comment ça fonctionne ?</h4>
+          <ul className="text-sm text-blue-700 space-y-1">
             <li>1. Ajoutez les membres de votre équipe</li>
             <li>2. Assignez-leur des créneaux de disponibilité dans le calendrier</li>
             <li>3. Les clients peuvent choisir un membre spécifique lors de la réservation</li>
@@ -402,7 +402,7 @@ export default function EquipePage() {
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
                 />
               </div>
@@ -415,7 +415,7 @@ export default function EquipePage() {
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
                 />
               </div>
@@ -428,7 +428,7 @@ export default function EquipePage() {
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
@@ -441,7 +441,7 @@ export default function EquipePage() {
                   value={formData.role}
                   onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                   placeholder="Ex: Coiffeur senior, Apprenti..."
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
                 />
               </div>
@@ -483,7 +483,7 @@ export default function EquipePage() {
                 <button
                   type="submit"
                   disabled={isSaving}
-                  className="flex-1 bg-primary-600 text-white px-4 py-3 rounded-lg font-medium hover:bg-primary-700 disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {isSaving && <Loader2 className="w-4 h-4 animate-spin" />}
                   {editingMember ? 'Enregistrer' : 'Ajouter'}

@@ -99,7 +99,7 @@ export default function ContactsPage() {
           <button onClick={() => setShowSyncConfirm(true)} disabled={syncing} className="flex items-center gap-2 px-4 py-2 text-sm border rounded-lg hover:bg-gray-50 disabled:opacity-50">
             <Users className="w-4 h-4" /> {syncing ? 'Synchronisation...' : 'Synchroniser les artisans'}
           </button>
-          <Link href="/admin/prospection/contacts/import" className="flex items-center gap-2 px-4 py-2 text-sm bg-primary-600 text-white rounded-lg hover:bg-primary-700">
+          <Link href="/admin/prospection/contacts/import" className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700">
             <Upload className="w-4 h-4" /> Importer CSV
           </Link>
         </div>
@@ -111,7 +111,7 @@ export default function ContactsPage() {
       {showSyncConfirm && (
         <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg flex items-center gap-3 text-sm">
           <span className="text-yellow-800">Synchroniser les artisans depuis la base de données ?</span>
-          <button onClick={handleSync} className="px-3 py-1 bg-primary-600 text-white rounded text-sm hover:bg-primary-700">Confirmer</button>
+          <button onClick={handleSync} className="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700">Confirmer</button>
           <button onClick={() => setShowSyncConfirm(false)} className="px-3 py-1 border rounded text-sm hover:bg-gray-50">Annuler</button>
         </div>
       )}
@@ -187,7 +187,7 @@ export default function ContactsPage() {
               contacts.map((contact) => (
                 <tr key={contact.id} className="hover:bg-gray-50">
                   <td className="px-4 py-3">
-                    <Link href={`/admin/prospection/contacts/${contact.id}`} className="font-medium text-primary-600 hover:underline">
+                    <Link href={`/admin/prospection/contacts/${contact.id}`} className="font-medium text-blue-600 hover:underline">
                       {contact.contact_name || contact.company_name || '-'}
                     </Link>
                     {contact.company_name && contact.contact_name && (

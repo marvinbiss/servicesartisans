@@ -33,9 +33,9 @@ const SPEED_CONFIG = {
     icon: Clock,
     label: 'Rapide',
     sublabel: '< 4h',
-    color: 'text-primary-600',
-    bgColor: 'bg-primary-50',
-    borderColor: 'border-primary-200',
+    color: 'text-blue-600',
+    bgColor: 'bg-blue-50',
+    borderColor: 'border-blue-200',
   },
   normal: {
     icon: Timer,
@@ -186,7 +186,7 @@ export function ResponseTimeDisplay({
             className={cn(
               'h-full rounded-full transition-all',
               responseRate >= 90 ? 'bg-green-500' :
-              responseRate >= 70 ? 'bg-primary-500' :
+              responseRate >= 70 ? 'bg-blue-500' :
               responseRate >= 50 ? 'bg-yellow-500' : 'bg-red-500'
             )}
             style={{ width: `${responseRate}%` }}

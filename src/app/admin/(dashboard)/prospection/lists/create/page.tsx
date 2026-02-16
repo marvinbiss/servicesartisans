@@ -164,7 +164,7 @@ export default function CreateListPage() {
                 value="static"
                 checked={listType === 'static'}
                 onChange={() => setListType('static')}
-                className="text-primary-600"
+                className="text-blue-600"
               />
               <span className="text-sm">Statique</span>
               <span className="text-xs text-gray-400">- ajout manuel des contacts</span>
@@ -176,7 +176,7 @@ export default function CreateListPage() {
                 value="dynamic"
                 checked={listType === 'dynamic'}
                 onChange={() => setListType('dynamic')}
-                className="text-primary-600"
+                className="text-blue-600"
               />
               <span className="text-sm">Dynamique</span>
               <span className="text-xs text-gray-400">- bas&eacute;e sur des filtres</span>
@@ -244,7 +244,7 @@ export default function CreateListPage() {
           <button
             onClick={handleSave}
             disabled={saving || !name.trim()}
-            className="flex items-center gap-2 px-4 py-2 text-sm bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
           >
             <Save className="w-4 h-4" /> {saving ? 'Sauvegarde...' : 'Sauvegarder'}
           </button>

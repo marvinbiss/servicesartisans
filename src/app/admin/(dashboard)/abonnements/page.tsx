@@ -81,8 +81,8 @@ export default function AdminSubscriptionsPage() {
 
   const getPlanBadge = (plan: string) => {
     const colors: Record<string, string> = {
-      premium: 'bg-primary-100 text-primary-700',
-      basic: 'bg-primary-100 text-primary-700',
+      premium: 'bg-blue-100 text-blue-700',
+      basic: 'bg-blue-100 text-blue-700',
       free: 'bg-gray-100 text-gray-700',
     }
     return (
@@ -97,7 +97,7 @@ export default function AdminSubscriptionsPage() {
       active: { color: 'bg-green-100 text-green-700', label: 'Actif' },
       canceled: { color: 'bg-gray-100 text-gray-700', label: 'Annulé' },
       past_due: { color: 'bg-red-100 text-red-700', label: 'Impayé' },
-      trialing: { color: 'bg-secondary-100 text-secondary-700', label: 'Essai' },
+      trialing: { color: 'bg-amber-100 text-amber-700', label: 'Essai' },
     }
     const config = configs[status] || configs.active
     return (
@@ -135,7 +135,7 @@ export default function AdminSubscriptionsPage() {
 
           <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
             <div className="flex items-center justify-between mb-4">
-              <div className="p-3 rounded-lg bg-primary-100 text-primary-600">
+              <div className="p-3 rounded-lg bg-blue-100 text-blue-600">
                 <Users className="w-6 h-6" />
               </div>
             </div>
@@ -145,17 +145,17 @@ export default function AdminSubscriptionsPage() {
 
           <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
             <div className="flex items-center justify-between mb-4">
-              <div className="p-3 rounded-lg bg-primary-100 text-primary-600">
+              <div className="p-3 rounded-lg bg-blue-100 text-blue-600">
                 <CreditCard className="w-6 h-6" />
               </div>
             </div>
             <div className="flex items-center gap-4">
               <div>
-                <p className="text-xl font-bold text-primary-600">{displayStats.premiumCount}</p>
+                <p className="text-xl font-bold text-blue-600">{displayStats.premiumCount}</p>
                 <p className="text-xs text-gray-500">Premium</p>
               </div>
               <div>
-                <p className="text-xl font-bold text-primary-600">{displayStats.basicCount}</p>
+                <p className="text-xl font-bold text-blue-600">{displayStats.basicCount}</p>
                 <p className="text-xs text-gray-500">Basique</p>
               </div>
             </div>
@@ -181,7 +181,7 @@ export default function AdminSubscriptionsPage() {
                 onClick={() => { setFilter(f); setPage(1); }}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   filter === f
-                    ? 'bg-primary-600 text-white'
+                    ? 'bg-blue-600 text-white'
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
@@ -197,7 +197,7 @@ export default function AdminSubscriptionsPage() {
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           {isLoading ? (
             <div className="p-8 text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
             </div>
           ) : (
             <>
@@ -259,7 +259,7 @@ export default function AdminSubscriptionsPage() {
                         <td className="px-6 py-4">
                           <div className="flex items-center justify-end gap-2">
                             <button
-                              className="p-2 text-gray-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg"
+                              className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg"
                               title="Voir les détails"
                             >
                               <Eye className="w-5 h-5" />

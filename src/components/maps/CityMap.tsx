@@ -100,7 +100,7 @@ export default function CityMap({ cityName, citySlug }: CityMapProps) {
   return (
     <section className="mb-16">
       <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-        <MapPin className="w-6 h-6 text-primary-600" />
+        <MapPin className="w-6 h-6 text-blue-600" />
         Artisans sur la carte à {cityName}
       </h2>
       <div className="bg-white rounded-xl shadow-sm overflow-hidden">

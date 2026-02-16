@@ -42,7 +42,7 @@ export default function TemplatesPage() {
         </div>
         <Link
           href="/admin/prospection/templates/create"
-          className="flex items-center gap-2 px-4 py-2 text-sm bg-primary-600 text-white rounded-lg hover:bg-primary-700"
+          className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700"
         >
           <Plus className="w-4 h-4" /> Nouveau modèle
         </Link>
@@ -77,7 +77,7 @@ export default function TemplatesPage() {
             <Link
               key={tmpl.id}
               href={`/admin/prospection/templates/${tmpl.id}`}
-              className="bg-white rounded-lg border p-4 hover:border-primary-300 transition-colors"
+              className="bg-white rounded-lg border p-4 hover:border-blue-300 transition-colors"
             >
               <div className="flex items-center justify-between mb-2">
                 <h3 className="font-medium text-gray-900">{tmpl.name}</h3>
@@ -86,7 +86,7 @@ export default function TemplatesPage() {
               <div className="flex gap-2 mb-3">
                 <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 capitalize">{tmpl.channel}</span>
                 {tmpl.audience_type && (
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-primary-100 text-primary-600 capitalize">{tmpl.audience_type}</span>
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-600 capitalize">{tmpl.audience_type}</span>
                 )}
               </div>
               {tmpl.subject && <p className="text-sm text-gray-500 mb-1">Sujet: {tmpl.subject}</p>}

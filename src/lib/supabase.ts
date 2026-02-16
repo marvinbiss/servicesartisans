@@ -127,37 +127,6 @@ const staticServices: Record<string, { id: string; name: string; slug: string; d
   'cuisiniste': { id: 'cuisiniste', name: 'Cuisiniste', slug: 'cuisiniste', description: 'Conception, fabrication et installation de cuisines sur mesure.', category: 'Aménagement', is_active: true },
   'solier': { id: 'solier', name: 'Solier', slug: 'solier', description: 'Pose de revêtements de sols : parquet, moquette, lino, carrelage souple.', category: 'Finitions', is_active: true },
   'nettoyage': { id: 'nettoyage', name: 'Nettoyage', slug: 'nettoyage', description: 'Nettoyage professionnel, ménage, entretien de locaux.', category: 'Services', is_active: true },
-  // ── Nouveaux métiers (31) ──
-  'terrassier': { id: 'terrassier', name: 'Terrassier', slug: 'terrassier', description: 'Travaux de terrassement, fouilles, VRD, assainissement.', category: 'Bâtiment', is_active: true },
-  'charpentier': { id: 'charpentier', name: 'Charpentier', slug: 'charpentier', description: 'Conception et pose de charpentes bois et métalliques.', category: 'Bâtiment', is_active: true },
-  'zingueur': { id: 'zingueur', name: 'Zingueur', slug: 'zingueur', description: 'Travaux de zinguerie, gouttières, chéneaux, descentes.', category: 'Bâtiment', is_active: true },
-  'etancheiste': { id: 'etancheiste', name: 'Étanchéiste', slug: 'etancheiste', description: 'Étanchéité de toitures-terrasses, balcons, fondations.', category: 'Bâtiment', is_active: true },
-  'facadier': { id: 'facadier', name: 'Façadier', slug: 'facadier', description: 'Ravalement de façade, enduits, isolation par l\'extérieur.', category: 'Bâtiment', is_active: true },
-  'platrier': { id: 'platrier', name: 'Plâtrier', slug: 'platrier', description: 'Plâtrerie, cloisons, faux-plafonds, staff et stuc.', category: 'Finitions', is_active: true },
-  'metallier': { id: 'metallier', name: 'Métallier', slug: 'metallier', description: 'Fabrication et pose d\'ouvrages métalliques : escaliers, garde-corps, verrières.', category: 'Bâtiment', is_active: true },
-  'ferronnier': { id: 'ferronnier', name: 'Ferronnier', slug: 'ferronnier', description: 'Ferronnerie d\'art, portails, grilles, rampes en fer forgé.', category: 'Bâtiment', is_active: true },
-  'poseur-de-parquet': { id: 'poseur-de-parquet', name: 'Poseur de parquet', slug: 'poseur-de-parquet', description: 'Pose, ponçage et vitrification de parquets.', category: 'Finitions', is_active: true },
-  'miroitier': { id: 'miroitier', name: 'Miroitier', slug: 'miroitier', description: 'Pose de miroirs, vitrines, crédences en verre, parois de douche.', category: 'Finitions', is_active: true },
-  'storiste': { id: 'storiste', name: 'Storiste', slug: 'storiste', description: 'Installation de stores intérieurs et extérieurs, volets roulants.', category: 'Aménagement', is_active: true },
-  'salle-de-bain': { id: 'salle-de-bain', name: 'Salle de bain', slug: 'salle-de-bain', description: 'Conception et rénovation complète de salles de bain.', category: 'Aménagement', is_active: true },
-  'architecte-interieur': { id: 'architecte-interieur', name: 'Architecte d\'intérieur', slug: 'architecte-interieur', description: 'Aménagement et décoration d\'intérieur, space planning.', category: 'Aménagement', is_active: true },
-  'decorateur': { id: 'decorateur', name: 'Décorateur', slug: 'decorateur', description: 'Décoration intérieure, home staging, conseil couleurs et matériaux.', category: 'Aménagement', is_active: true },
-  'domoticien': { id: 'domoticien', name: 'Domoticien', slug: 'domoticien', description: 'Installation domotique, maison connectée, automatismes.', category: 'Aménagement', is_active: true },
-  'pompe-a-chaleur': { id: 'pompe-a-chaleur', name: 'Pompe à chaleur', slug: 'pompe-a-chaleur', description: 'Installation et entretien de pompes à chaleur air/eau et air/air.', category: 'Énergie', is_active: true },
-  'panneaux-solaires': { id: 'panneaux-solaires', name: 'Panneaux solaires', slug: 'panneaux-solaires', description: 'Installation de panneaux photovoltaïques et solaires thermiques.', category: 'Énergie', is_active: true },
-  'isolation-thermique': { id: 'isolation-thermique', name: 'Isolation thermique', slug: 'isolation-thermique', description: 'Isolation des combles, murs, planchers — ITE et ITI.', category: 'Énergie', is_active: true },
-  'renovation-energetique': { id: 'renovation-energetique', name: 'Rénovation énergétique', slug: 'renovation-energetique', description: 'Audit énergétique, rénovation globale, aides MaPrimeRénov\'.', category: 'Énergie', is_active: true },
-  'borne-recharge': { id: 'borne-recharge', name: 'Borne de recharge', slug: 'borne-recharge', description: 'Installation de bornes de recharge pour véhicules électriques — IRVE.', category: 'Énergie', is_active: true },
-  'ramoneur': { id: 'ramoneur', name: 'Ramoneur', slug: 'ramoneur', description: 'Ramonage de cheminées, poêles, chaudières — certificat obligatoire.', category: 'Chauffage', is_active: true },
-  'alarme-securite': { id: 'alarme-securite', name: 'Alarme et sécurité', slug: 'alarme-securite', description: 'Installation d\'alarmes, vidéosurveillance, contrôle d\'accès.', category: 'Sécurité', is_active: true },
-  'antenniste': { id: 'antenniste', name: 'Antenniste', slug: 'antenniste', description: 'Installation d\'antennes TV, TNT, satellite, fibre optique.', category: 'Technique', is_active: true },
-  'ascensoriste': { id: 'ascensoriste', name: 'Ascensoriste', slug: 'ascensoriste', description: 'Installation, maintenance et modernisation d\'ascenseurs.', category: 'Technique', is_active: true },
-  'diagnostiqueur': { id: 'diagnostiqueur', name: 'Diagnostiqueur', slug: 'diagnostiqueur', description: 'Diagnostics immobiliers : DPE, amiante, plomb, électricité, gaz.', category: 'Diagnostics', is_active: true },
-  'geometre': { id: 'geometre', name: 'Géomètre', slug: 'geometre', description: 'Bornage, division parcellaire, topographie, plans de masse.', category: 'Diagnostics', is_active: true },
-  'desinsectisation': { id: 'desinsectisation', name: 'Désinsectisation', slug: 'desinsectisation', description: 'Traitement contre les insectes nuisibles : cafards, punaises, guêpes.', category: 'Services', is_active: true },
-  'deratisation': { id: 'deratisation', name: 'Dératisation', slug: 'deratisation', description: 'Élimination de rongeurs : rats, souris, fouines.', category: 'Services', is_active: true },
-  'demenageur': { id: 'demenageur', name: 'Déménageur', slug: 'demenageur', description: 'Déménagement, transport de meubles, garde-meubles.', category: 'Services', is_active: true },
-  'pisciniste': { id: 'pisciniste', name: 'Pisciniste', slug: 'pisciniste', description: 'Construction, rénovation et entretien de piscines.', category: 'Extérieur', is_active: true },
 }
 
 export async function getServiceBySlug(slug: string) {
@@ -250,60 +219,15 @@ export async function getProviderBySlug(slug: string) {
 
 // Reverse mapping: service slug → provider specialties (for fallback queries)
 const SERVICE_TO_SPECIALTIES: Record<string, string[]> = {
-  // ── Existants (15) ──
   'plombier': ['plombier'],
   'electricien': ['electricien'],
-  'serrurier': ['serrurier'],
   'chauffagiste': ['chauffagiste'],
-  'peintre-en-batiment': ['peintre', 'platrier', 'finition', 'peintre-en-batiment'],
   'menuisier': ['menuisier', 'menuisier-metallique'],
   'carreleur': ['carreleur'],
   'couvreur': ['couvreur', 'charpentier'],
   'macon': ['macon'],
-  'jardinier': ['jardinier'],
-  'vitrier': ['vitrier'],
-  'climaticien': ['climaticien', 'isolation'],
-  'cuisiniste': ['cuisiniste'],
-  'solier': ['solier', 'solier-moquettiste'],
-  'nettoyage': ['nettoyage'],
-  // ── Bâtiment / Gros œuvre ──
-  'terrassier': ['terrassier'],
-  'charpentier': ['charpentier'],
-  'zingueur': ['zingueur'],
-  'etancheiste': ['etancheiste', 'etancheur'],
-  'facadier': ['facadier', 'facade'],
-  'platrier': ['platrier', 'plaquiste'],
-  'metallier': ['metallier', 'metallier-serrurier'],
-  'ferronnier': ['ferronnier', 'ferronnerie'],
-  // ── Finitions / Aménagement ──
-  'poseur-de-parquet': ['poseur-de-parquet', 'parqueteur'],
-  'miroitier': ['miroitier'],
-  'storiste': ['storiste'],
-  'salle-de-bain': ['salle-de-bain'],
-  'architecte-interieur': ['architecte-interieur'],
-  'decorateur': ['decorateur'],
-  'domoticien': ['domoticien', 'domotique'],
-  // ── Énergie ──
-  'pompe-a-chaleur': ['pompe-a-chaleur', 'pac'],
-  'panneaux-solaires': ['panneaux-solaires', 'photovoltaique'],
-  'isolation-thermique': ['isolation-thermique', 'isolation', 'isolateur'],
-  'renovation-energetique': ['renovation-energetique'],
-  'borne-recharge': ['borne-recharge', 'irve'],
-  'ramoneur': ['ramoneur', 'ramonage'],
-  // ── Extérieur ──
-  'paysagiste': ['paysagiste'],
-  'pisciniste': ['pisciniste'],
-  // ── Sécurité / Technique ──
-  'alarme-securite': ['alarme-securite', 'alarme', 'securite'],
-  'antenniste': ['antenniste'],
-  'ascensoriste': ['ascensoriste'],
-  // ── Diagnostics ──
-  'diagnostiqueur': ['diagnostiqueur', 'diagnostiqueur-immobilier'],
-  'geometre': ['geometre', 'geometre-expert'],
-  // ── Services ──
-  'desinsectisation': ['desinsectisation', 'desinsectiseur'],
-  'deratisation': ['deratisation', 'deratiseur'],
-  'demenageur': ['demenageur', 'demenagement'],
+  'peintre-en-batiment': ['peintre', 'platrier', 'finition'],
+  'climaticien': ['isolation'],
 }
 
 export async function getProvidersByServiceAndLocation(
@@ -536,175 +460,4 @@ export async function getLocationsByService(serviceSlug: string) {
     },
     `getLocationsByService(${serviceSlug})`,
   )
-}
-
-// ============================================================================
-// COMMUNES — 35K+ communes françaises (table `communes`)
-// ============================================================================
-
-export interface Commune {
-  code_insee: string            // PK — natural key, no UUID fragmentation
-  name: string
-  slug: string
-  code_postal: string | null
-  departement_code: string
-  departement_name: string | null
-  region_name: string | null
-  // Géographie
-  latitude: number | null
-  longitude: number | null
-  altitude_moyenne: number | null
-  superficie_km2: number | null
-  // Démographie
-  population: number
-  densite_population: number | null
-  // Socio-économique (pour contenu SEO unique par commune)
-  revenu_median: number | null
-  prix_m2_moyen: number | null
-  nb_logements: number | null
-  part_maisons_pct: number | null
-  // Enrichissement local
-  climat_zone: string | null
-  nb_entreprises_artisanales: number | null
-  gentile: string | null
-  description: string | null
-  // État
-  is_active: boolean
-  nearest_city_with_providers: string | null
-  provider_count: number
-  created_at: string
-  updated_at: string
-}
-
-/**
- * Fetch a commune by its slug from the `communes` table.
- * Falls back to france.ts static data during build or when DB is unavailable.
- */
-export async function getCommuneBySlug(slug: string): Promise<Commune | null> {
-  if (IS_BUILD) return null // Use static france.ts fallback during build
-  try {
-    return await withTimeout(
-      (async () => {
-        const { data, error } = await supabase
-          .from('communes')
-          .select('*')
-          .eq('slug', slug)
-          .eq('is_active', true)
-          .single()
-
-        if (error || !data) return null
-        return data as Commune
-      })(),
-      QUERY_TIMEOUT_MS,
-      `getCommuneBySlug(${slug})`,
-    )
-  } catch {
-    return null
-  }
-}
-
-/**
- * Fetch top communes sorted by population (for generateStaticParams).
- */
-export async function getTopCommunes(limit: number = 30): Promise<Commune[]> {
-  if (IS_BUILD) return []
-  try {
-    return await withTimeout(
-      (async () => {
-        const { data, error } = await supabase
-          .from('communes')
-          .select('*')
-          .eq('is_active', true)
-          .order('population', { ascending: false })
-          .limit(limit)
-
-        if (error || !data) return []
-        return data as Commune[]
-      })(),
-      QUERY_TIMEOUT_MS,
-      `getTopCommunes(${limit})`,
-    )
-  } catch {
-    return []
-  }
-}
-
-/**
- * Provider stats from materialized view mv_provider_counts.
- * Returns all aggregated data (count, verified, avg_rating) for a specialty+city.
- * Uses covering index idx_mv_provider_counts_cover — no heap fetch.
- */
-export interface ProviderStats {
-  provider_count: number
-  verified_count: number
-  avg_rating: number | null
-}
-
-const EMPTY_STATS: ProviderStats = { provider_count: 0, verified_count: 0, avg_rating: null }
-
-export async function getProviderStatsFromMV(
-  specialty: string,
-  city: string,
-): Promise<ProviderStats> {
-  if (IS_BUILD) return EMPTY_STATS
-  try {
-    return await withTimeout(
-      (async () => {
-        const { data, error } = await supabase
-          .from('mv_provider_counts')
-          .select('provider_count, verified_count, avg_rating')
-          .eq('specialty', specialty)
-          .eq('city', city)
-          .single()
-
-        if (error || !data) return EMPTY_STATS
-        return {
-          provider_count: data.provider_count ?? 0,
-          verified_count: data.verified_count ?? 0,
-          avg_rating: data.avg_rating ?? null,
-        }
-      })(),
-      QUERY_TIMEOUT_MS,
-      `getProviderStatsFromMV(${specialty}, ${city})`,
-    )
-  } catch {
-    return EMPTY_STATS
-  }
-}
-
-/**
- * Shorthand: just the count (backward compat).
- */
-export async function getProviderCountFromMV(
-  specialty: string,
-  city: string,
-): Promise<number> {
-  const stats = await getProviderStatsFromMV(specialty, city)
-  return stats.provider_count
-}
-
-/**
- * Get communes by département code, sorted by population.
- */
-export async function getCommunesByDepartement(deptCode: string): Promise<Commune[]> {
-  if (IS_BUILD) return []
-  try {
-    return await withTimeout(
-      (async () => {
-        const { data, error } = await supabase
-          .from('communes')
-          .select('*')
-          .eq('departement_code', deptCode)
-          .eq('is_active', true)
-          .order('population', { ascending: false })
-
-        if (error || !data) return []
-        return data as Commune[]
-      })(),
-      QUERY_TIMEOUT_MS,
-      `getCommunesByDepartement(${deptCode})`,
-    )
-  } catch {
-    return []
-  }
 }

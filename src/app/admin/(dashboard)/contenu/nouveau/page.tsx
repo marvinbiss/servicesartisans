@@ -301,7 +301,7 @@ export default function AdminNouveauContenuPage() {
                 onChange={(e) => handleTitleChange(e.target.value)}
                 placeholder="Titre de la page"
                 maxLength={FIELD_LIMITS.title}
-                className="w-full px-4 py-3 text-lg border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                className="w-full px-4 py-3 text-lg border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
 
@@ -316,7 +316,7 @@ export default function AdminNouveauContenuPage() {
                   onChange={(e) => handleSlugChange(e.target.value)}
                   placeholder="slug-de-la-page"
                   maxLength={FIELD_LIMITS.slug}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                 />
               </div>
               {slugError && <p className="mt-1 text-xs text-red-600">{slugError}</p>}
@@ -334,7 +334,7 @@ export default function AdminNouveauContenuPage() {
                     onChange={(e) => { setServiceSlug(e.target.value); setIsDirty(true) }}
                     placeholder="plombier"
                     maxLength={FIELD_LIMITS.slug}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                   />
                   <p className="mt-1 text-xs text-gray-500">Lettres minuscules, chiffres et tirets uniquement</p>
                 </div>
@@ -347,7 +347,7 @@ export default function AdminNouveauContenuPage() {
                       onChange={(e) => { setLocationSlug(e.target.value); setIsDirty(true) }}
                       placeholder="paris"
                       maxLength={FIELD_LIMITS.slug}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                     />
                     <p className="mt-1 text-xs text-gray-500">Lettres minuscules, chiffres et tirets uniquement</p>
                   </div>
@@ -369,7 +369,7 @@ export default function AdminNouveauContenuPage() {
                       onChange={(e) => { setAuthor(e.target.value); setIsDirty(true) }}
                       placeholder="Nom de l'auteur"
                       maxLength={FIELD_LIMITS.author}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
                   <div>
@@ -377,7 +377,7 @@ export default function AdminNouveauContenuPage() {
                     <select
                       value={category}
                       onChange={(e) => { setCategory(e.target.value); setIsDirty(true) }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
                     >
                       <option value="">Sélectionner...</option>
                       {BLOG_CATEGORIES.map((cat) => (
@@ -399,7 +399,7 @@ export default function AdminNouveauContenuPage() {
                     rows={2}
                     maxLength={FIELD_LIMITS.authorBio}
                     placeholder="Courte biographie de l'auteur..."
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 resize-none"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
                   />
                 </div>
 
@@ -413,7 +413,7 @@ export default function AdminNouveauContenuPage() {
                       value={tags}
                       onChange={(e) => { setTags(e.target.value); setIsDirty(true) }}
                       placeholder="rénovation, plomberie, conseils"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
                   <div>
@@ -424,7 +424,7 @@ export default function AdminNouveauContenuPage() {
                       onChange={(e) => { setReadTime(e.target.value); setIsDirty(true) }}
                       placeholder="5 min"
                       maxLength={FIELD_LIMITS.readTime}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
                 </div>
@@ -437,7 +437,7 @@ export default function AdminNouveauContenuPage() {
                     rows={3}
                     maxLength={FIELD_LIMITS.excerpt}
                     placeholder="Court résumé de l'article..."
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 resize-none"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
                   />
                 </div>
 
@@ -449,7 +449,7 @@ export default function AdminNouveauContenuPage() {
                     onChange={(e) => { setFeaturedImage(e.target.value); setIsDirty(true) }}
                     placeholder="https://example.com/image.jpg"
                     maxLength={FIELD_LIMITS.featuredImage}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
               </div>
@@ -493,7 +493,7 @@ export default function AdminNouveauContenuPage() {
                   <select
                     value={pageType}
                     onChange={(e) => { setPageType(e.target.value); setIsDirty(true) }}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
                   >
                     {PAGE_TYPE_OPTIONS.map((opt) => (
                       <option key={opt.value} value={opt.value}>
@@ -509,7 +509,7 @@ export default function AdminNouveauContenuPage() {
                     type="number"
                     value={sortOrder}
                     onChange={(e) => { setSortOrder(parseInt(e.target.value, 10) || 0); setIsDirty(true) }}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
 
@@ -541,7 +541,7 @@ export default function AdminNouveauContenuPage() {
                   onChange={(e) => { setOgImageUrl(e.target.value); setIsDirty(true) }}
                   placeholder="https://example.com/og-image.jpg"
                   maxLength={FIELD_LIMITS.ogImageUrl}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                 />
               </div>
               <div>
@@ -552,7 +552,7 @@ export default function AdminNouveauContenuPage() {
                   onChange={(e) => { setCanonicalUrl(e.target.value); setIsDirty(true) }}
                   placeholder="https://servicesartisans.com/page"
                   maxLength={FIELD_LIMITS.canonicalUrl}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                 />
               </div>
             </div>

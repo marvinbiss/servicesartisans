@@ -146,7 +146,7 @@ export function NotificationBell({ userId }: NotificationBellProps) {
                     key={notification.id}
                     className={`p-4 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer ${
                       !notification.read
-                        ? 'bg-primary-50 dark:bg-primary-900/20'
+                        ? 'bg-blue-50 dark:bg-blue-900/20'
                         : ''
                     }`}
                     onClick={() => {
@@ -178,7 +178,7 @@ export function NotificationBell({ userId }: NotificationBellProps) {
                         </p>
                       </div>
                       {!notification.read && (
-                        <span className="h-2 w-2 rounded-full bg-primary-500 flex-shrink-0" />
+                        <span className="h-2 w-2 rounded-full bg-blue-500 flex-shrink-0" />
                       )}
                     </div>
                   </div>

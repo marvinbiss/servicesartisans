@@ -95,13 +95,13 @@ export default function PaymentForm(props: PaymentFormProps) {
               onClick={() => setPaymentType('full')}
               className={`p-4 rounded-xl border-2 text-left transition-all ${
                 paymentType === 'full'
-                  ? 'border-primary-500 bg-primary-50'
+                  ? 'border-blue-500 bg-blue-50'
                   : 'border-gray-200 hover:border-gray-300'
               }`}
             >
               <div className="flex items-center gap-3">
                 <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                  paymentType === 'full' ? 'border-primary-500 bg-primary-500' : 'border-gray-300'
+                  paymentType === 'full' ? 'border-blue-500 bg-blue-500' : 'border-gray-300'
                 }`}>
                   {paymentType === 'full' && <Check className="w-3 h-3 text-white" />}
                 </div>
@@ -118,13 +118,13 @@ export default function PaymentForm(props: PaymentFormProps) {
                 onClick={() => setPaymentType('deposit')}
                 className={`p-4 rounded-xl border-2 text-left transition-all ${
                   paymentType === 'deposit'
-                    ? 'border-primary-500 bg-primary-50'
+                    ? 'border-blue-500 bg-blue-50'
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
               >
                 <div className="flex items-center gap-3">
                   <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                    paymentType === 'deposit' ? 'border-primary-500 bg-primary-500' : 'border-gray-300'
+                    paymentType === 'deposit' ? 'border-blue-500 bg-blue-500' : 'border-gray-300'
                   }`}>
                     {paymentType === 'deposit' && <Check className="w-3 h-3 text-white" />}
                   </div>
@@ -144,13 +144,13 @@ export default function PaymentForm(props: PaymentFormProps) {
                 onClick={() => setPaymentType('split')}
                 className={`p-4 rounded-xl border-2 text-left transition-all ${
                   paymentType === 'split'
-                    ? 'border-primary-500 bg-primary-50'
+                    ? 'border-blue-500 bg-blue-50'
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
               >
                 <div className="flex items-center gap-3">
                   <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                    paymentType === 'split' ? 'border-primary-500 bg-primary-500' : 'border-gray-300'
+                    paymentType === 'split' ? 'border-blue-500 bg-blue-500' : 'border-gray-300'
                   }`}>
                     {paymentType === 'split' && <Check className="w-3 h-3 text-white" />}
                   </div>
@@ -182,7 +182,7 @@ export default function PaymentForm(props: PaymentFormProps) {
                     onClick={() => setSplitInstallments(n)}
                     className={`flex-1 py-2 rounded-lg font-medium transition-colors ${
                       splitInstallments === n
-                        ? 'bg-primary-600 text-white'
+                        ? 'bg-blue-600 text-white'
                         : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
                     }`}
                   >
@@ -224,7 +224,7 @@ export default function PaymentForm(props: PaymentFormProps) {
                     onClick={() => setDepositPercentage(pct)}
                     className={`flex-1 py-2 rounded-lg font-medium transition-colors ${
                       depositPercentage === pct
-                        ? 'bg-primary-600 text-white'
+                        ? 'bg-blue-600 text-white'
                         : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
                     }`}
                   >
@@ -279,7 +279,7 @@ export default function PaymentForm(props: PaymentFormProps) {
             appearance: {
               theme: 'stripe',
               variables: {
-                colorPrimary: '#364180',
+                colorPrimary: '#2563eb',
                 colorBackground: '#ffffff',
                 colorText: '#1f2937',
                 colorDanger: '#ef4444',
@@ -296,7 +296,7 @@ export default function PaymentForm(props: PaymentFormProps) {
         </Elements>
       ) : (
         <div className="h-48 flex items-center justify-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary-600 border-t-transparent"></div>
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"></div>
         </div>
       )}
 
@@ -375,7 +375,7 @@ function CheckoutForm({
       <button
         type="submit"
         disabled={!stripe || isProcessing}
-        className="w-full py-4 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+        className="w-full py-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
       >
         {isProcessing ? (
           <>

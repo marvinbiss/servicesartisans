@@ -77,7 +77,7 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
               value={filters.sortBy}
               onChange={(e) => updateFilter('sortBy', e.target.value as FilterState['sortBy'])}
               aria-labelledby={sortLabelId}
-              className="appearance-none bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 pr-8 text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent cursor-pointer transition-colors duration-200"
+              className="appearance-none bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 pr-8 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer transition-colors duration-200"
             >
               <option value="relevance">Pertinence</option>
               <option value="rating">Meilleures notes</option>
@@ -91,9 +91,9 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
             onClick={() => setIsOpen(!isOpen)}
             aria-expanded={isOpen}
             aria-controls={filterPanelId}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 ${
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${
               activeFiltersCount > 0
-                ? 'bg-primary-50 border-primary-200 text-primary-700'
+                ? 'bg-blue-50 border-blue-200 text-blue-700'
                 : 'bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100'
             }`}
           >
@@ -101,7 +101,7 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
             <span>Filtres</span>
             {activeFiltersCount > 0 && (
               <span
-                className="bg-primary-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center"
+                className="bg-blue-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center"
                 aria-label={`${activeFiltersCount} filtre${activeFiltersCount > 1 ? 's' : ''} actif${activeFiltersCount > 1 ? 's' : ''}`}
               >
                 {activeFiltersCount}
@@ -138,7 +138,7 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
             <button
               onClick={() => updateFilter('premium', !filters.premium)}
               aria-pressed={filters.premium}
-              className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary-500 focus-visible:ring-offset-2 ${
+              className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 ${
                 filters.premium
                   ? 'bg-yellow-50 border-yellow-200 text-yellow-700'
                   : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'

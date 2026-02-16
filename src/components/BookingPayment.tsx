@@ -56,8 +56,8 @@ export default function BookingPayment({
   return (
     <div className="bg-white rounded-xl shadow-sm p-6">
       <div className="flex items-center gap-3 mb-6">
-        <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center">
-          <CreditCard className="w-6 h-6 text-primary-600" />
+        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+          <CreditCard className="w-6 h-6 text-blue-600" />
         </div>
         <div>
           <h3 className="font-semibold text-gray-900">Paiement de l'acompte</h3>
@@ -78,7 +78,7 @@ export default function BookingPayment({
         <div className="border-t border-gray-200 pt-3 mt-3">
           <div className="flex justify-between items-center">
             <span className="font-semibold text-gray-900">Acompte à payer</span>
-            <span className="text-xl font-bold text-primary-600">{depositAmount.toFixed(2)} EUR</span>
+            <span className="text-xl font-bold text-blue-600">{depositAmount.toFixed(2)} EUR</span>
           </div>
         </div>
       </div>
@@ -107,7 +107,7 @@ export default function BookingPayment({
       <button
         onClick={handlePayment}
         disabled={isLoading}
-        className="w-full bg-primary-600 text-white py-4 rounded-lg font-semibold hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+        className="w-full bg-blue-600 text-white py-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
       >
         {isLoading ? (
           <>
@@ -125,11 +125,11 @@ export default function BookingPayment({
       {/* Terms */}
       <p className="text-xs text-gray-500 text-center mt-4">
         En procédant au paiement, vous acceptez nos{' '}
-        <a href="/conditions" className="text-primary-600 hover:underline">
+        <a href="/conditions" className="text-blue-600 hover:underline">
           conditions générales
         </a>{' '}
         et notre{' '}
-        <a href="/confidentialite" className="text-primary-600 hover:underline">
+        <a href="/confidentialite" className="text-blue-600 hover:underline">
           politique de remboursement
         </a>.
       </p>

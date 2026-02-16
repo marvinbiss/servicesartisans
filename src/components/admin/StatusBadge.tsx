@@ -12,11 +12,11 @@ interface StatusBadgeProps {
 
 const variantClasses: Record<BadgeVariant, string> = {
   success: 'bg-green-100 text-green-700',
-  warning: 'bg-secondary-100 text-secondary-700',
+  warning: 'bg-amber-100 text-amber-700',
   error: 'bg-red-100 text-red-700',
-  info: 'bg-primary-100 text-primary-700',
+  info: 'bg-blue-100 text-blue-700',
   default: 'bg-gray-100 text-gray-700',
-  purple: 'bg-primary-100 text-primary-700',
+  purple: 'bg-blue-100 text-blue-700',
 }
 
 export function StatusBadge({ variant = 'default', children, className }: StatusBadgeProps) {

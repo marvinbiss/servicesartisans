@@ -145,7 +145,7 @@ export default function CreateCampaignPage() {
         {[1, 2, 3, 4, 5].map((s) => (
           <div key={s} className="flex items-center gap-2">
             <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-              s === step ? 'bg-primary-600 text-white' : s < step ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-400'
+              s === step ? 'bg-blue-600 text-white' : s < step ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-400'
             }`}>
               {s}
             </div>
@@ -175,7 +175,7 @@ export default function CreateCampaignPage() {
                   <button
                     key={ch}
                     onClick={() => setChannel(ch)}
-                    className={`flex items-center gap-3 p-4 rounded-lg border-2 ${channel === ch ? 'border-primary-500 bg-primary-50' : 'border-gray-200 hover:bg-gray-50'}`}
+                    className={`flex items-center gap-3 p-4 rounded-lg border-2 ${channel === ch ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:bg-gray-50'}`}
                   >
                     <ChannelIcon channel={ch} className="w-5 h-5" />
                     <span className="font-medium">{ch === 'whatsapp' ? 'WhatsApp' : ch.toUpperCase()}</span>
@@ -190,7 +190,7 @@ export default function CreateCampaignPage() {
                   <button
                     key={type}
                     onClick={() => setAudienceType(type)}
-                    className={`p-4 rounded-lg border-2 capitalize font-medium ${audienceType === type ? 'border-primary-500 bg-primary-50' : 'border-gray-200 hover:bg-gray-50'}`}
+                    className={`p-4 rounded-lg border-2 capitalize font-medium ${audienceType === type ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:bg-gray-50'}`}
                   >
                     {type === 'mairie' ? 'Mairies' : type + 's'}
                   </button>
@@ -212,7 +212,7 @@ export default function CreateCampaignPage() {
                   <button
                     key={tmpl.id}
                     onClick={() => setTemplateId(tmpl.id)}
-                    className={`w-full text-left p-4 rounded-lg border-2 ${templateId === tmpl.id ? 'border-primary-500 bg-primary-50' : 'border-gray-200 hover:bg-gray-50'}`}
+                    className={`w-full text-left p-4 rounded-lg border-2 ${templateId === tmpl.id ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:bg-gray-50'}`}
                   >
                     <div className="font-medium">{tmpl.name}</div>
                     {tmpl.subject && <div className="text-sm text-gray-500 mt-1">Sujet: {tmpl.subject}</div>}
@@ -236,7 +236,7 @@ export default function CreateCampaignPage() {
                   <button
                     key={list.id}
                     onClick={() => setListId(list.id)}
-                    className={`w-full text-left p-4 rounded-lg border-2 ${listId === list.id ? 'border-primary-500 bg-primary-50' : 'border-gray-200 hover:bg-gray-50'}`}
+                    className={`w-full text-left p-4 rounded-lg border-2 ${listId === list.id ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:bg-gray-50'}`}
                   >
                     <div className="flex justify-between">
                       <span className="font-medium">{list.name}</span>
@@ -259,7 +259,7 @@ export default function CreateCampaignPage() {
                 type="checkbox"
                 checked={aiAutoReply}
                 onChange={(e) => setAiAutoReply(e.target.checked)}
-                className="w-4 h-4 rounded border-gray-300 text-primary-600"
+                className="w-4 h-4 rounded border-gray-300 text-blue-600"
               />
               <div>
                 <span className="font-medium">Activer les réponses IA</span>
@@ -272,14 +272,14 @@ export default function CreateCampaignPage() {
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     onClick={() => setAiProvider('claude')}
-                    className={`p-4 rounded-lg border-2 ${aiProvider === 'claude' ? 'border-primary-500 bg-primary-50' : 'border-gray-200'}`}
+                    className={`p-4 rounded-lg border-2 ${aiProvider === 'claude' ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}`}
                   >
                     <div className="font-medium">Claude (Anthropic)</div>
                     <div className="text-xs text-gray-500 mt-1">Excellent en français</div>
                   </button>
                   <button
                     onClick={() => setAiProvider('openai')}
-                    className={`p-4 rounded-lg border-2 ${aiProvider === 'openai' ? 'border-primary-500 bg-primary-50' : 'border-gray-200'}`}
+                    className={`p-4 rounded-lg border-2 ${aiProvider === 'openai' ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}`}
                   >
                     <div className="font-medium">GPT-4o (OpenAI)</div>
                     <div className="text-xs text-gray-500 mt-1">Rapide et polyvalent</div>
@@ -327,7 +327,7 @@ export default function CreateCampaignPage() {
             <button
               onClick={() => setStep((step + 1) as Step)}
               disabled={step === 1 && !name}
-              className="flex items-center gap-2 px-4 py-2 text-sm bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
             >
               Suivant <ArrowRight className="w-4 h-4" />
             </button>

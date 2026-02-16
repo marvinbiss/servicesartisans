@@ -130,8 +130,8 @@ export default function FileDropzone({
           'transition-all duration-300',
           disabled && 'opacity-50 cursor-not-allowed',
           isDragging
-            ? 'border-primary-500 bg-primary-50'
-            : 'border-gray-300 hover:border-primary-400 hover:bg-gray-50'
+            ? 'border-blue-500 bg-blue-50'
+            : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'
         )}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -155,7 +155,7 @@ export default function FileDropzone({
           <div
             className={clsx(
               'w-16 h-16 rounded-2xl flex items-center justify-center',
-              isDragging ? 'bg-primary-100 text-primary-600' : 'bg-gray-100 text-gray-500'
+              isDragging ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-500'
             )}
           >
             <Icon className="w-8 h-8" />
@@ -167,7 +167,7 @@ export default function FileDropzone({
                 'Déposez vos fichiers ici'
               ) : (
                 <>
-                  <span className="text-primary-600">Cliquez pour parcourir</span> ou glissez-déposez
+                  <span className="text-blue-600">Cliquez pour parcourir</span> ou glissez-déposez
                 </>
               )}
             </p>

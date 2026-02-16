@@ -72,7 +72,7 @@ export function StatsGrid({ stats, loading }: StatsGridProps) {
       label: 'Utilisateurs',
       value: stats.totalUsers.toLocaleString('fr-FR'),
       icon: Users,
-      color: 'bg-primary-100 text-primary-600',
+      color: 'bg-blue-100 text-blue-600',
       trend: stats.trends.users,
       trendLabel: 'vs mois dernier',
       href: '/admin/utilisateurs',
@@ -81,7 +81,7 @@ export function StatsGrid({ stats, loading }: StatsGridProps) {
       label: 'Artisans actifs',
       value: stats.totalArtisans.toLocaleString('fr-FR'),
       icon: Briefcase,
-      color: 'bg-primary-100 text-primary-700',
+      color: 'bg-indigo-100 text-indigo-600',
       trend: null,
       trendLabel: null,
       href: '/admin/artisans',
@@ -99,7 +99,7 @@ export function StatsGrid({ stats, loading }: StatsGridProps) {
       label: 'Revenus ce mois',
       value: `${(stats.totalRevenue / 100).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`,
       icon: DollarSign,
-      color: 'bg-secondary-100 text-secondary-600',
+      color: 'bg-amber-100 text-amber-600',
       trend: stats.trends.revenue,
       trendLabel: 'vs mois dernier',
       href: '/admin/paiements',
@@ -128,7 +128,7 @@ export function StatsGrid({ stats, loading }: StatsGridProps) {
               </div>
             )}
           </div>
-          <p className="text-2xl font-bold text-gray-900 group-hover:text-primary-600 transition-colors">{card.value}</p>
+          <p className="text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">{card.value}</p>
           <p className="text-sm text-gray-500 mt-1">{card.label}</p>
         </Link>
       ))}

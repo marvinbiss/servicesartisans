@@ -159,7 +159,7 @@ export default function AdminDispatchPage() {
 
         {isLoading ? (
           <div className="flex justify-center py-16">
-            <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
+            <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
           </div>
         ) : data ? (
           <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
@@ -224,7 +224,7 @@ export default function AdminDispatchPage() {
                               <button
                                 onClick={() => handleReplay(a.id)}
                                 disabled={actionLoading === a.id}
-                                className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-primary-600 bg-primary-50 rounded-lg hover:bg-primary-100 disabled:opacity-50 transition-colors"
+                                className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 disabled:opacity-50 transition-colors"
                               >
                                 {actionLoading === a.id ? (
                                   <Loader2 className="w-3 h-3 animate-spin" />

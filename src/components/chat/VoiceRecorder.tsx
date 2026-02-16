@@ -179,7 +179,7 @@ export function VoiceRecorder({ onRecorded, onCancel }: VoiceRecorderProps) {
       ) : (
         <button
           onClick={handleSend}
-          className="p-2 bg-primary-600 text-white hover:bg-primary-700 rounded-full"
+          className="p-2 bg-blue-600 text-white hover:bg-blue-700 rounded-full"
           title="Envoyer"
         >
           <Send className="w-5 h-5" />

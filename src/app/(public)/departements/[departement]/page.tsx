@@ -149,9 +149,9 @@ export default async function DepartementPage({ params }: PageProps) {
 
           <div className="max-w-3xl">
             <div className="flex flex-wrap gap-3 mb-5">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-500/15 backdrop-blur-sm rounded-full border border-primary-400/25">
-                <Map className="w-4 h-4 text-primary-400" />
-                <span className="text-sm font-medium text-primary-200">Département</span>
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-500/15 backdrop-blur-sm rounded-full border border-indigo-400/25">
+                <Map className="w-4 h-4 text-indigo-400" />
+                <span className="text-sm font-medium text-indigo-200">Département</span>
               </div>
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500/15 backdrop-blur-sm rounded-full border border-cyan-400/25">
                 <Thermometer className="w-4 h-4 text-cyan-400" />
@@ -164,8 +164,8 @@ export default async function DepartementPage({ params }: PageProps) {
             </div>
 
             <div className="flex items-center gap-4 mb-6">
-              <div className="w-16 h-16 bg-primary-500/15 backdrop-blur rounded-2xl flex items-center justify-center border border-primary-400/20">
-                <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-primary-300">{dept.code}</span>
+              <div className="w-16 h-16 bg-indigo-500/15 backdrop-blur rounded-2xl flex items-center justify-center border border-indigo-400/20">
+                <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-blue-300">{dept.code}</span>
               </div>
               <div>
                 {(() => {
@@ -178,7 +178,7 @@ export default async function DepartementPage({ params }: PageProps) {
                     `Tous les artisans en ${dept.name}, ${dept.region}`,
                   ]
                   return (
-                    <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl leading-[1.1]">
+                    <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-[-0.025em] leading-[1.1]">
                       {h1Templates[h1Hash % h1Templates.length]}
                     </h1>
                   )
@@ -194,15 +194,15 @@ export default async function DepartementPage({ params }: PageProps) {
             {/* Location info */}
             <div className="flex flex-wrap gap-4 mb-8 text-sm">
               <div className="flex items-center gap-2 text-slate-300">
-                <Building2 className="w-4 h-4 text-primary-400" />
+                <Building2 className="w-4 h-4 text-indigo-400" />
                 <span>Chef-lieu : {dept.chefLieu}</span>
               </div>
               <div className="flex items-center gap-2 text-slate-300">
-                <Users className="w-4 h-4 text-primary-400" />
+                <Users className="w-4 h-4 text-indigo-400" />
                 <span>{dept.population} habitants</span>
               </div>
               <div className="flex items-center gap-2 text-slate-300">
-                <MapPin className="w-4 h-4 text-primary-400" />
+                <MapPin className="w-4 h-4 text-indigo-400" />
                 <span>{dept.villes.length} villes principales</span>
               </div>
             </div>
@@ -210,10 +210,10 @@ export default async function DepartementPage({ params }: PageProps) {
             {/* Trust badges */}
             <div className="flex flex-wrap gap-3">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Shield className="w-4 h-4 text-secondary-400" /><span className="text-sm font-medium">Données SIREN officielles</span>
+                <Shield className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Données SIREN officielles</span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Clock className="w-4 h-4 text-secondary-400" /><span className="text-sm font-medium">Devis gratuits</span>
+                <Clock className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Devis gratuits</span>
               </div>
             </div>
           </div>
@@ -224,11 +224,11 @@ export default async function DepartementPage({ params }: PageProps) {
         {/* ─── SERVICES ─────────────────────────────────────── */}
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center">
-              <Wrench className="w-5 h-5 text-primary-700" />
+            <div className="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center">
+              <Wrench className="w-5 h-5 text-indigo-600" />
             </div>
             <div>
-              <h2 className="font-heading text-2xl text-slate-900">
+              <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
                 Trouver un artisan dans le {dept.name}
               </h2>
               <p className="text-sm text-slate-500">{services.length} corps de métier disponibles</p>
@@ -239,12 +239,12 @@ export default async function DepartementPage({ params }: PageProps) {
               <Link
                 key={service.slug}
                 href={`/services/${service.slug}/${villesDuDepartement[0]?.slug || slugify(dept.chefLieu)}`}
-                className={`bg-white rounded-xl shadow-sm p-5 text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group ${topServiceSlugsSet.has(service.slug) ? 'border-2 border-primary-200' : 'border border-gray-100'}`}
+                className={`bg-white rounded-xl shadow-sm p-5 text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group ${topServiceSlugsSet.has(service.slug) ? 'border-2 border-indigo-200' : 'border border-gray-100'}`}
               >
                 {topServiceSlugsSet.has(service.slug) && (
-                  <span className="inline-block text-[10px] font-bold text-primary-700 bg-primary-50 px-2 py-0.5 rounded-full mb-2">Prioritaire</span>
+                  <span className="inline-block text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full mb-2">Prioritaire</span>
                 )}
-                <span className="font-semibold text-slate-800 group-hover:text-primary-700 transition-colors block text-sm">{service.name}</span>
+                <span className="font-semibold text-slate-800 group-hover:text-indigo-600 transition-colors block text-sm">{service.name}</span>
                 <span className="block text-xs text-slate-400 mt-1.5">dans le {dept.code}</span>
               </Link>
             ))}
@@ -258,7 +258,7 @@ export default async function DepartementPage({ params }: PageProps) {
               <Thermometer className="w-5 h-5 text-cyan-600" />
             </div>
             <div>
-              <h2 className="font-heading text-2xl text-slate-900">
+              <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
                 Profil du {dept.name}
               </h2>
               <p className="text-sm text-slate-500">{content.profile.climateLabel} · {content.profile.economyLabel}</p>
@@ -279,20 +279,20 @@ export default async function DepartementPage({ params }: PageProps) {
                 <div className="text-xs font-semibold text-violet-700 uppercase tracking-wider mb-1">Économie</div>
                 <div className="text-sm text-slate-800 font-medium">{content.profile.economyLabel}</div>
               </div>
-              <div className="bg-secondary-50 rounded-xl p-4">
-                <div className="text-xs font-semibold text-secondary-700 uppercase tracking-wider mb-1">Population</div>
+              <div className="bg-amber-50 rounded-xl p-4">
+                <div className="text-xs font-semibold text-amber-700 uppercase tracking-wider mb-1">Population</div>
                 <div className="text-sm text-slate-800 font-medium">{dept.population} habitants</div>
               </div>
             </div>
             <div className="mb-6">
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-3 flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4 text-secondary-500" />
+                <AlertTriangle className="w-4 h-4 text-amber-500" />
                 Problématiques courantes
               </h3>
               <div className="grid sm:grid-cols-2 gap-2">
                 {content.profile.climaticIssues.map((issue, i) => (
                   <div key={i} className="flex items-start gap-2 text-sm text-slate-600">
-                    <span className="text-secondary-500 mt-0.5">•</span>
+                    <span className="text-amber-500 mt-0.5">•</span>
                     {issue}
                   </div>
                 ))}
@@ -305,20 +305,20 @@ export default async function DepartementPage({ params }: PageProps) {
         {/* ─── CONTENU SEO ────────────────────────────────────── */}
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center">
-              <TrendingUp className="w-5 h-5 text-primary-600" />
+            <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+              <TrendingUp className="w-5 h-5 text-blue-600" />
             </div>
-            <h2 className="font-heading text-2xl text-slate-900">
+            <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
               Artisanat dans le {dept.name}
             </h2>
           </div>
           <div className="space-y-6">
             <div className="bg-white rounded-2xl border border-gray-200 p-8">
-              <h3 className="font-heading text-lg text-slate-900 mb-4">Services prioritaires</h3>
+              <h3 className="font-heading text-lg font-bold text-slate-900 mb-4">Services prioritaires</h3>
               <p className="text-slate-700 leading-relaxed">{content.servicesPrioritaires}</p>
             </div>
             <div className="bg-white rounded-2xl border border-gray-200 p-8">
-              <h3 className="font-heading text-lg text-slate-900 mb-4">Conseils pour vos travaux</h3>
+              <h3 className="font-heading text-lg font-bold text-slate-900 mb-4">Conseils pour vos travaux</h3>
               <p className="text-slate-700 leading-relaxed">{content.conseilsDepartement}</p>
             </div>
           </div>
@@ -331,7 +331,7 @@ export default async function DepartementPage({ params }: PageProps) {
               <MapPin className="w-5 h-5 text-emerald-600" />
             </div>
             <div>
-              <h2 className="font-heading text-2xl text-slate-900">
+              <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
                 Principales villes du {dept.name}
               </h2>
               <p className="text-sm text-slate-500">{villesDuDepartement.length > 0 ? villesDuDepartement.length : dept.villes.length} villes référencées</p>
@@ -340,13 +340,13 @@ export default async function DepartementPage({ params }: PageProps) {
           {villesDuDepartement.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
               {villesDuDepartement.map((ville) => (
-                <Link key={ville.slug} href={`/villes/${ville.slug}`} className="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md hover:border-primary-300 hover:-translate-y-0.5 transition-all group">
+                <Link key={ville.slug} href={`/villes/${ville.slug}`} className="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md hover:border-indigo-300 hover:-translate-y-0.5 transition-all group">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gradient-to-br from-primary-50 to-primary-100 rounded-lg flex items-center justify-center group-hover:from-primary-100 group-hover:to-primary-200 transition-colors">
-                      <MapPin className="w-5 h-5 text-primary-700" />
+                    <div className="w-10 h-10 bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-lg flex items-center justify-center group-hover:from-indigo-100 group-hover:to-indigo-200 transition-colors">
+                      <MapPin className="w-5 h-5 text-indigo-600" />
                     </div>
                     <div className="min-w-0">
-                      <div className="font-semibold text-slate-800 group-hover:text-primary-700 transition-colors text-sm truncate">{ville.name}</div>
+                      <div className="font-semibold text-slate-800 group-hover:text-indigo-600 transition-colors text-sm truncate">{ville.name}</div>
                       <div className="text-xs text-slate-400">{ville.population} hab.</div>
                     </div>
                   </div>
@@ -356,7 +356,7 @@ export default async function DepartementPage({ params }: PageProps) {
           ) : (
             <div className="flex flex-wrap gap-2.5">
               {dept.villes.map((villeName) => (
-                <span key={villeName} className="bg-white border border-gray-200 rounded-full px-4 py-2 text-sm text-slate-700 hover:bg-primary-50 hover:text-primary-700 hover:border-primary-200 transition-colors">
+                <span key={villeName} className="bg-white border border-gray-200 rounded-full px-4 py-2 text-sm text-slate-700 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 transition-colors">
                   {villeName}
                 </span>
               ))}
@@ -371,26 +371,26 @@ export default async function DepartementPage({ params }: PageProps) {
               <div className="w-10 h-10 bg-violet-100 rounded-xl flex items-center justify-center">
                 <Wrench className="w-5 h-5 text-violet-600" />
               </div>
-              <h2 className="font-heading text-xl text-slate-900">
+              <h2 className="font-heading text-xl font-bold text-slate-900 tracking-tight">
                 Services par ville dans le {dept.name}
               </h2>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
               {villesDuDepartement.slice(0, 6).map((ville) => (
                 <div key={ville.slug} className="bg-white rounded-2xl border border-gray-200 p-6">
-                  <h3 className="font-heading text-slate-900 mb-4">Artisans à {ville.name}</h3>
+                  <h3 className="font-heading font-semibold text-slate-900 mb-4">Artisans à {ville.name}</h3>
                   <div className="flex flex-wrap gap-2">
                     {services.slice(0, 6).map((service) => (
                       <Link
                         key={`${service.slug}-${ville.slug}`}
                         href={`/services/${service.slug}/${ville.slug}`}
-                        className="text-sm text-slate-600 hover:text-primary-600 hover:bg-primary-50 px-3 py-1.5 rounded-lg transition-colors border border-transparent hover:border-primary-100"
+                        className="text-sm text-slate-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-1.5 rounded-lg transition-colors border border-transparent hover:border-blue-100"
                       >
                         {service.name}
                       </Link>
                     ))}
                   </div>
-                  <Link href={`/villes/${ville.slug}`} className="inline-flex items-center gap-1 text-primary-600 hover:text-primary-700 text-sm font-medium mt-4">
+                  <Link href={`/villes/${ville.slug}`} className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-4">
                     Tous les artisans <ArrowRight className="w-3 h-3" />
                   </Link>
                 </div>
@@ -403,16 +403,16 @@ export default async function DepartementPage({ params }: PageProps) {
         {siblingDepts.length > 0 && (
           <section className="mb-16">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-secondary-100 rounded-xl flex items-center justify-center">
-                <Building2 className="w-5 h-5 text-secondary-600" />
+              <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
+                <Building2 className="w-5 h-5 text-amber-600" />
               </div>
-              <h2 className="font-heading text-xl text-slate-900">
+              <h2 className="font-heading text-xl font-bold text-slate-900 tracking-tight">
                 Autres départements en {dept.region}
               </h2>
             </div>
             <div className="flex flex-wrap gap-3">
               {siblingDepts.slice(0, 10).map((d) => (
-                <Link key={d.slug} href={`/departements/${d.slug}`} className="bg-white border border-gray-200 hover:bg-primary-50 hover:border-primary-200 text-slate-700 hover:text-primary-700 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors">
+                <Link key={d.slug} href={`/departements/${d.slug}`} className="bg-white border border-gray-200 hover:bg-blue-50 hover:border-blue-200 text-slate-700 hover:text-blue-700 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors">
                   {d.name} ({d.code})
                 </Link>
               ))}
@@ -423,10 +423,10 @@ export default async function DepartementPage({ params }: PageProps) {
         {/* ─── FAQ ───────────────────────────────────────────── */}
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 bg-secondary-100 rounded-xl flex items-center justify-center">
-              <HelpCircle className="w-5 h-5 text-secondary-600" />
+            <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
+              <HelpCircle className="w-5 h-5 text-amber-600" />
             </div>
-            <h2 className="font-heading text-2xl text-slate-900">
+            <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
               Questions fréquentes
             </h2>
           </div>
@@ -447,14 +447,14 @@ export default async function DepartementPage({ params }: PageProps) {
           background: 'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(79,70,229,0.12) 0%, transparent 60%)',
         }} />
         <div className="relative max-w-4xl mx-auto px-4 py-16 md:py-20 text-center">
-          <h2 className="font-heading text-2xl md:text-3xl text-white mb-4">
+          <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">
             Besoin d&apos;un artisan dans le {dept.name} ?
           </h2>
           <p className="text-slate-400 mb-8 max-w-lg mx-auto">
             Recevez jusqu&apos;à 3 devis gratuits de professionnels qualifiés.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/devis" className="inline-flex items-center gap-2 bg-gradient-to-r from-secondary-500 via-secondary-400 to-secondary-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-secondary-500/25 hover:shadow-xl hover:shadow-secondary-500/35 hover:-translate-y-0.5 transition-all duration-300">
+            <Link href="/devis" className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-300">
               Demander un devis gratuit
             </Link>
             <Link href="/services" className="inline-flex items-center gap-2 text-slate-300 hover:text-white font-medium transition-colors">
@@ -467,7 +467,7 @@ export default async function DepartementPage({ params }: PageProps) {
       {/* ─── SEO INTERNAL LINKS ─────────────────────────────── */}
       <section className="py-16 bg-white border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-xl text-slate-900 mb-8">
+          <h2 className="font-heading text-xl font-bold text-slate-900 mb-8 tracking-tight">
             Voir aussi
           </h2>
           <div className="grid md:grid-cols-3 gap-10">
@@ -476,13 +476,13 @@ export default async function DepartementPage({ params }: PageProps) {
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Services populaires</h3>
               <div className="space-y-2">
                 {services.slice(0, 8).map((s) => (
-                  <Link key={s.slug} href={`/services/${s.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-primary-600 py-2 transition-colors">
+                  <Link key={s.slug} href={`/services/${s.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {s.name}
                   </Link>
                 ))}
               </div>
-              <Link href="/services" className="inline-flex items-center gap-1 text-primary-600 hover:text-primary-700 text-sm font-medium mt-3">
+              <Link href="/services" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
                 Tous les services <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -492,19 +492,19 @@ export default async function DepartementPage({ params }: PageProps) {
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Région {dept.region}</h3>
               <div className="space-y-2">
                 {regionSlug && (
-                  <Link href={`/regions/${regionSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-primary-600 py-2 transition-colors">
+                  <Link href={`/regions/${regionSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     Artisans en {dept.region}
                   </Link>
                 )}
                 {siblingDepts.slice(0, 5).map((d) => (
-                  <Link key={d.slug} href={`/departements/${d.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-primary-600 py-2 transition-colors">
+                  <Link key={d.slug} href={`/departements/${d.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {d.name} ({d.code})
                   </Link>
                 ))}
               </div>
-              <Link href="/departements" className="inline-flex items-center gap-1 text-primary-600 hover:text-primary-700 text-sm font-medium mt-3">
+              <Link href="/departements" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
                 Tous les départements <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -513,19 +513,19 @@ export default async function DepartementPage({ params }: PageProps) {
             <div>
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Navigation</h3>
               <div className="space-y-2">
-                <Link href="/villes" className="flex items-center gap-2 text-sm text-slate-600 hover:text-primary-600 py-2 transition-colors">
+                <Link href="/villes" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />Toutes les villes
                 </Link>
-                <Link href="/regions" className="flex items-center gap-2 text-sm text-slate-600 hover:text-primary-600 py-2 transition-colors">
+                <Link href="/regions" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />Toutes les régions
                 </Link>
-                <Link href="/departements" className="flex items-center gap-2 text-sm text-slate-600 hover:text-primary-600 py-2 transition-colors">
+                <Link href="/departements" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />Tous les départements
                 </Link>
-                <Link href="/devis" className="flex items-center gap-2 text-sm text-slate-600 hover:text-primary-600 py-2 transition-colors">
+                <Link href="/devis" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />Demander un devis
                 </Link>
-                <Link href="/comment-ca-marche" className="flex items-center gap-2 text-sm text-slate-600 hover:text-primary-600 py-2 transition-colors">
+                <Link href="/comment-ca-marche" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />Comment ça marche
                 </Link>
               </div>
@@ -551,16 +551,16 @@ export default async function DepartementPage({ params }: PageProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-lg font-bold text-gray-900 mb-4">Confiance & Sécurité</h2>
           <div className="flex flex-wrap gap-4">
-            <Link href="/notre-processus-de-verification" className="text-sm text-primary-600 hover:text-primary-800 flex items-center gap-1.5">
+            <Link href="/notre-processus-de-verification" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
               Processus de vérification
             </Link>
-            <Link href="/politique-avis" className="text-sm text-primary-600 hover:text-primary-800 flex items-center gap-1.5">
+            <Link href="/politique-avis" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
               Politique d&apos;avis
             </Link>
-            <Link href="/mediation" className="text-sm text-primary-600 hover:text-primary-800 flex items-center gap-1.5">
+            <Link href="/mediation" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
               Médiation
             </Link>
-            <Link href="/cgv" className="text-sm text-primary-600 hover:text-primary-800 flex items-center gap-1.5">
+            <Link href="/cgv" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
               CGV
             </Link>
           </div>

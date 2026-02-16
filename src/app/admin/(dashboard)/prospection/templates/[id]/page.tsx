@@ -306,7 +306,7 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
             <button
               onClick={handleSave}
               disabled={saving || !name.trim() || !body.trim()}
-              className="flex items-center gap-2 px-4 py-2 text-sm bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
             >
               <Save className="w-4 h-4" /> {saving ? 'Sauvegarde...' : 'Sauvegarder'}
             </button>
@@ -354,7 +354,7 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
                 <button
                   key={v.key}
                   onClick={() => insertVariable(v.key)}
-                  className="w-full text-left text-sm px-2 py-1.5 rounded hover:bg-primary-50 text-primary-600"
+                  className="w-full text-left text-sm px-2 py-1.5 rounded hover:bg-blue-50 text-blue-600"
                 >
                   <code className="text-xs">{`{{${v.key}}}`}</code>
                   <span className="text-gray-500 ml-2">{v.label}</span>

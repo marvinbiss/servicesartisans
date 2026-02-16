@@ -24,8 +24,8 @@ interface LeadEvent {
 }
 
 const EVENT_CONFIG: Record<string, { label: string; icon: typeof Clock; color: string }> = {
-  created: { label: 'Lead créé', icon: ArrowRight, color: 'text-primary-600 bg-primary-100' },
-  dispatched: { label: 'Assigné', icon: ArrowRight, color: 'text-primary-700 bg-primary-100' },
+  created: { label: 'Lead créé', icon: ArrowRight, color: 'text-blue-600 bg-blue-100' },
+  dispatched: { label: 'Assigné', icon: ArrowRight, color: 'text-indigo-600 bg-indigo-100' },
   viewed: { label: 'Consulté', icon: Eye, color: 'text-yellow-600 bg-yellow-100' },
   quoted: { label: 'Devis envoyé', icon: Send, color: 'text-green-600 bg-green-100' },
   declined: { label: 'Décliné', icon: X, color: 'text-gray-600 bg-gray-100' },
@@ -71,7 +71,7 @@ export default function LeadHistoryPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
       </div>
     )
   }

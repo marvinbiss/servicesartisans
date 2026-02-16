@@ -242,7 +242,7 @@ export function MetierAutocomplete({
           className={`
             w-full pl-10 pr-12 py-3.5
             bg-white border-2 border-gray-200 rounded-xl
-            focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20
+            focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20
             placeholder:text-gray-400 text-gray-900
             disabled:bg-gray-100 disabled:cursor-not-allowed
             transition-all
@@ -322,7 +322,7 @@ export function MetierAutocomplete({
                   flex items-center gap-3
                   transition-colors
                   ${index === highlightedIndex
-                    ? 'bg-primary-50'
+                    ? 'bg-blue-50'
                     : 'hover:bg-gray-50'
                   }
                   ${index === 0 && query ? 'rounded-t-xl' : ''}
@@ -344,12 +344,12 @@ export function MetierAutocomplete({
                   <div className="flex items-center gap-2">
                     <span className={`
                       font-medium
-                      ${index === highlightedIndex ? 'text-primary-900' : 'text-gray-900'}
+                      ${index === highlightedIndex ? 'text-blue-900' : 'text-gray-900'}
                     `}>
                       {service.name}
                     </span>
                     {isPopular && !query && (
-                      <span className="px-1.5 py-0.5 text-[10px] font-medium bg-secondary-100 text-secondary-700 rounded-full">
+                      <span className="px-1.5 py-0.5 text-[10px] font-medium bg-amber-100 text-amber-700 rounded-full">
                         Populaire
                       </span>
                     )}

@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import dynamic from 'next/dynamic'
-import { DM_Serif_Display, Source_Sans_3 } from 'next/font/google'
+import { Inter, Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
@@ -9,18 +9,17 @@ import { getOrganizationSchema, getWebsiteSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import GoogleAnalytics from '@/components/GoogleAnalytics'
 
-const sourceSans = Source_Sans_3({
-  subsets: ['latin', 'latin-ext'],
-  variable: '--font-body',
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
   display: 'swap',
-  weight: ['400', '500', '600', '700'],
 })
 
-const dmSerif = DM_Serif_Display({
-  subsets: ['latin', 'latin-ext'],
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ['latin'],
   variable: '--font-heading',
   display: 'swap',
-  weight: '400',
+  weight: ['500', '600', '700', '800'],
 })
 
 // Dynamic imports for performance
@@ -45,8 +44,8 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#364180' },
-    { media: '(prefers-color-scheme: dark)', color: '#2b3468' },
+    { media: '(prefers-color-scheme: light)', color: '#2563eb' },
+    { media: '(prefers-color-scheme: dark)', color: '#1d4ed8' },
   ],
   colorScheme: 'light',
 }
@@ -121,10 +120,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="fr" className={`scroll-smooth ${sourceSans.variable} ${dmSerif.variable}`}>
+    <html lang="fr" className={`scroll-smooth ${inter.variable} ${plusJakarta.variable}`}>
       <head>
         {/* PWA Meta Tags (apple-mobile-web-app, mobile-web-app-capable, theme-color handled by metadata/viewport exports) */}
-        <meta name="msapplication-TileColor" content="#364180" />
+        <meta name="msapplication-TileColor" content="#2563eb" />
         <meta name="msapplication-tap-highlight" content="no" />
 
         {/* Additional icon size (180px apple-touch-icon + icon.svg handled by metadata.icons export) */}
@@ -149,7 +148,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://images.unsplash.com" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
       </head>
-      <body className="font-sans bg-[#f8f6f2] antialiased">
+      <body className="font-sans bg-gray-50 antialiased">
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
         <MobileMenuProvider>
           {/* Skip to main content for accessibility */}

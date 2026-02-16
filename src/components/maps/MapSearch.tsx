@@ -244,7 +244,7 @@ export default function MapSearch() {
     const size = isHighlighted ? 48 : 38
     const zIndex = isHighlighted ? 1000 : 1
 
-    let bgColor = '#4a5899' // blue default
+    let bgColor = '#3b82f6' // blue default
     if (provider.is_verified) bgColor = '#22c55e' // green
 
     // World-class: pulse animation for selected
@@ -318,7 +318,7 @@ export default function MapSearch() {
           <div className="flex items-center gap-3">
             {/* Logo/Back */}
             <Link href="/" className="flex-shrink-0 hidden md:block">
-              <span className="text-xl font-bold text-primary-600">ServicesArtisans</span>
+              <span className="text-xl font-bold text-blue-600">ServicesArtisans</span>
             </Link>
 
             {/* Search Input */}
@@ -337,7 +337,7 @@ export default function MapSearch() {
                   }
                 }}
                 placeholder="Rechercher un artisan, une spécialité..."
-                className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-full focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-gray-50"
+                className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
               />
             </div>
 
@@ -352,7 +352,7 @@ export default function MapSearch() {
                   }))}
                   className={`px-3 py-2 rounded-full text-sm font-medium transition-all ${
                     filters.service === service.value
-                      ? 'bg-primary-600 text-white shadow-md'
+                      ? 'bg-blue-600 text-white shadow-md'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
@@ -367,14 +367,14 @@ export default function MapSearch() {
               onClick={() => setShowFilters(!showFilters)}
               className={`flex items-center gap-2 px-4 py-2.5 border rounded-full transition-all ${
                 showFilters || activeFilterCount > 0
-                  ? 'bg-primary-50 border-primary-500 text-primary-600'
+                  ? 'bg-blue-50 border-blue-500 text-blue-600'
                   : 'border-gray-300 hover:bg-gray-50'
               }`}
             >
               <Filter className="w-4 h-4" />
               <span className="hidden sm:inline">Filtres</span>
               {activeFilterCount > 0 && (
-                <span className="bg-primary-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                <span className="bg-blue-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
                   {activeFilterCount}
                 </span>
               )}
@@ -422,7 +422,7 @@ export default function MapSearch() {
                     <select
                       value={filters.service}
                       onChange={(e) => setFilters({ ...filters, service: e.target.value })}
-                      className="px-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-primary-500 bg-white"
+                      className="px-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-blue-500 bg-white"
                     >
                       <option value="">Tous les services</option>
                       {SERVICES.map((service) => (
@@ -436,7 +436,7 @@ export default function MapSearch() {
                     <select
                       value={filters.minRating}
                       onChange={(e) => setFilters({ ...filters, minRating: Number(e.target.value) })}
-                      className="px-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-primary-500 bg-white"
+                      className="px-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-blue-500 bg-white"
                     >
                       <option value={0}>Toutes notes</option>
                       <option value={3}>⭐ 3+</option>
@@ -512,7 +512,7 @@ export default function MapSearch() {
                   <p className="text-sm text-gray-500">dans cette zone</p>
                 </div>
                 {loading && (
-                  <Loader2 className="w-5 h-5 animate-spin text-primary-600" />
+                  <Loader2 className="w-5 h-5 animate-spin text-blue-600" />
                 )}
               </div>
 
@@ -533,7 +533,7 @@ export default function MapSearch() {
                     }}
                     className={`p-4 border-b cursor-pointer transition-all ${
                       selectedProvider?.id === provider.id
-                        ? 'bg-primary-50 border-l-4 border-l-primary-600'
+                        ? 'bg-blue-50 border-l-4 border-l-blue-600'
                         : hoveredProvider?.id === provider.id
                         ? 'bg-gray-50'
                         : 'hover:bg-gray-50'
@@ -576,13 +576,13 @@ export default function MapSearch() {
                           </button>
                         </div>
 
-                        <p className="text-sm text-primary-600 font-medium">
+                        <p className="text-sm text-blue-600 font-medium">
                           {provider.specialty || 'Artisan'}
                         </p>
 
                         <div className="flex items-center gap-3 mt-1">
                           <div className="flex items-center gap-1">
-                            <Star className="w-4 h-4 text-secondary-400 fill-secondary-400" />
+                            <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
                             <span className="font-semibold text-sm">
                               {provider.rating_average?.toFixed(1)}
                             </span>
@@ -608,7 +608,7 @@ export default function MapSearch() {
                           <Link
                             href={getArtisanUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city })}
                             onClick={(e) => e.stopPropagation()}
-                            className="flex-1 text-center py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors"
+                            className="flex-1 text-center py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
                           >
                             Voir profil
                           </Link>
@@ -732,12 +732,12 @@ export default function MapSearch() {
                             </div>
 
                             {/* Specialty */}
-                            <p className="text-sm text-primary-600 font-medium mb-2">{provider.specialty || 'Artisan'}</p>
+                            <p className="text-sm text-blue-600 font-medium mb-2">{provider.specialty || 'Artisan'}</p>
 
                             {/* Rating - Enhanced */}
                             <div className="flex items-center gap-1.5">
-                              <div className="flex items-center gap-1 bg-secondary-50 px-2 py-1 rounded-full">
-                                <Star className="w-4 h-4 text-secondary-400 fill-secondary-400" />
+                              <div className="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded-full">
+                                <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
                                 <span className="font-bold text-gray-900 text-sm">{provider.rating_average?.toFixed(1)}</span>
                               </div>
                               <span className="text-gray-500 text-sm">({provider.review_count} avis)</span>
@@ -762,7 +762,7 @@ export default function MapSearch() {
                         <div className="flex gap-2 mt-4">
                           <Link
                             href={getArtisanUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city })}
-                            className="flex-1 text-center py-2.5 bg-gradient-to-r from-primary-600 to-primary-700 text-white text-sm font-semibold rounded-lg hover:from-primary-700 hover:to-primary-800 transition-all shadow-md hover:shadow-lg transform hover:scale-[1.02]"
+                            className="flex-1 text-center py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-semibold rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all shadow-md hover:shadow-lg transform hover:scale-[1.02]"
                           >
                             Voir le profil
                           </Link>
@@ -796,10 +796,10 @@ export default function MapSearch() {
                         <div style="
                           width: 20px;
                           height: 20px;
-                          background: #4a5899;
+                          background: #3b82f6;
                           border: 4px solid white;
                           border-radius: 50%;
-                          box-shadow: 0 0 0 2px #4a5899, 0 2px 8px rgba(0,0,0,0.3);
+                          box-shadow: 0 0 0 2px #3b82f6, 0 2px 8px rgba(0,0,0,0.3);
                         "></div>
                       `,
                       iconSize: [20, 20],
@@ -827,13 +827,13 @@ export default function MapSearch() {
               disabled={geolocation.loading}
               className={`p-3 bg-white rounded-xl shadow-lg transition-colors disabled:opacity-50 ${
                 geolocation.error ? 'border-2 border-red-400' : 'hover:bg-gray-50'
-              } ${userLocation ? 'bg-primary-50 border-2 border-primary-400' : ''}`}
+              } ${userLocation ? 'bg-blue-50 border-2 border-blue-400' : ''}`}
               title={geolocation.error || (userLocation ? 'Position détectée' : 'Ma position')}
             >
               {geolocation.loading ? (
-                <Loader2 className="w-5 h-5 animate-spin text-primary-600" />
+                <Loader2 className="w-5 h-5 animate-spin text-blue-600" />
               ) : (
-                <Navigation className={`w-5 h-5 ${userLocation ? 'text-primary-600' : 'text-gray-700'}`} />
+                <Navigation className={`w-5 h-5 ${userLocation ? 'text-blue-600' : 'text-gray-700'}`} />
               )}
             </button>
 
@@ -863,7 +863,7 @@ export default function MapSearch() {
                           setShowStylePicker(false)
                         }}
                         className={`w-full px-3 py-2 text-left rounded-lg text-sm capitalize transition-colors ${
-                          mapStyle === style ? 'bg-primary-100 text-primary-700' : 'hover:bg-gray-100'
+                          mapStyle === style ? 'bg-blue-100 text-blue-700' : 'hover:bg-gray-100'
                         }`}
                       >
                         {style === 'street' ? 'Standard' : style === 'light' ? 'Clair' : 'Sombre'}
@@ -885,7 +885,7 @@ export default function MapSearch() {
                 className="absolute top-4 left-1/2 -translate-x-1/2 z-20"
               >
                 <div className="bg-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2">
-                  <Loader2 className="w-4 h-4 animate-spin text-primary-600" />
+                  <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
                   <span className="text-sm font-medium">Recherche...</span>
                 </div>
               </motion.div>
@@ -910,9 +910,9 @@ export default function MapSearch() {
                     </div>
                     <div>
                       <h3 className="font-bold text-gray-900">{hoveredProvider.name}</h3>
-                      <p className="text-sm text-primary-600">{hoveredProvider.specialty}</p>
+                      <p className="text-sm text-blue-600">{hoveredProvider.specialty}</p>
                       <div className="flex items-center gap-2 mt-1">
-                        <Star className="w-4 h-4 text-secondary-400 fill-secondary-400" />
+                        <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
                         <span className="font-medium">{hoveredProvider.rating_average?.toFixed(1)}</span>
                       </div>
                     </div>
@@ -975,9 +975,9 @@ export default function MapSearch() {
                   </div>
                   <div className="flex-1">
                     <h3 className="font-semibold">{provider.name}</h3>
-                    <p className="text-sm text-primary-600">{provider.specialty}</p>
+                    <p className="text-sm text-blue-600">{provider.specialty}</p>
                     <div className="flex items-center gap-2 mt-1">
-                      <Star className="w-4 h-4 text-secondary-400 fill-secondary-400" />
+                      <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
                       <span className="font-medium text-sm">{provider.rating_average?.toFixed(1)}</span>
                       <span className="text-gray-400 text-sm">• {provider.address_city}</span>
                     </div>

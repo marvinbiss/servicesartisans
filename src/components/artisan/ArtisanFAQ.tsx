@@ -24,7 +24,7 @@ export function ArtisanFAQ({ artisan }: ArtisanFAQProps) {
       className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6"
     >
       <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
-        <HelpCircle className="w-5 h-5 text-primary-600" />
+        <HelpCircle className="w-5 h-5 text-blue-600" />
         Questions fréquentes
       </h2>
 
@@ -48,11 +48,11 @@ export function ArtisanFAQ({ artisan }: ArtisanFAQProps) {
                   onClick={() => setOpenIndex(isOpen ? null : index)}
                   aria-expanded={isOpen}
                   aria-controls={panelId}
-                  className="w-full px-5 py-4 flex items-center justify-between text-left bg-gray-50 hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-inset"
+                  className="w-full px-5 py-4 flex items-center justify-between text-left bg-gray-50 hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset"
                 >
                   <span className="font-medium text-gray-900 pr-4">{item.question}</span>
                   <div
-                    className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-colors ${isOpen ? 'bg-primary-600 text-white' : 'bg-gray-200 text-gray-600'}`}
+                    className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-colors ${isOpen ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'}`}
                     aria-hidden="true"
                   >
                     {isOpen ? (

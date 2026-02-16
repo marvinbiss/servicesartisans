@@ -85,7 +85,7 @@ export default function ProspectionDashboard() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-500">Taux réponse</span>
-                  <span className="font-medium text-primary-600">{ch.reply_rate.toFixed(1)}%</span>
+                  <span className="font-medium text-blue-600">{ch.reply_rate.toFixed(1)}%</span>
                 </div>
               </div>
             </div>

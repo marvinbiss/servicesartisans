@@ -187,7 +187,7 @@ export function InstantSearch({
           onKeyDown={handleKeyDown}
           onFocus={() => setIsOpen(true)}
           placeholder={placeholder}
-          className="w-full pl-12 pr-12 py-4 text-lg border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+          className="w-full pl-12 pr-12 py-4 text-lg border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
         {isLoading ? (
           <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 animate-spin" />
@@ -217,14 +217,14 @@ export function InstantSearch({
                     className={cn(
                       'w-full flex items-center gap-3 px-4 py-3 text-left transition-colors',
                       index === selectedIndex
-                        ? 'bg-primary-50 dark:bg-primary-900/20'
+                        ? 'bg-blue-50 dark:bg-blue-900/20'
                         : 'hover:bg-gray-50 dark:hover:bg-gray-700'
                     )}
                   >
                     <div
                       className={cn(
                         'w-8 h-8 rounded-full flex items-center justify-center',
-                        suggestion.type === 'service' && 'bg-primary-100 text-primary-600',
+                        suggestion.type === 'service' && 'bg-blue-100 text-blue-600',
                         suggestion.type === 'location' && 'bg-green-100 text-green-600',
                         suggestion.type === 'artisan' && 'bg-purple-100 text-purple-600',
                         suggestion.type === 'recent' && 'bg-gray-100 text-gray-600'
@@ -261,7 +261,7 @@ export function InstantSearch({
             <div className="border-t border-gray-200 dark:border-gray-700 p-2">
               <button
                 onClick={handleSubmit}
-                className="w-full flex items-center justify-center gap-2 py-2 px-4 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                className="w-full flex items-center justify-center gap-2 py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 <Search className="w-4 h-4" />
                 Rechercher "{query}"

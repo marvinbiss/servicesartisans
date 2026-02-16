@@ -109,7 +109,7 @@ export default function EditUserPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     )
   }
@@ -121,7 +121,7 @@ export default function EditUserPage() {
           <p className="text-red-600 mb-4">{error}</p>
           <button
             onClick={() => router.push('/admin/utilisateurs')}
-            className="text-primary-600 hover:underline"
+            className="text-blue-600 hover:underline"
           >
             Retour à la liste
           </button>
@@ -149,7 +149,7 @@ export default function EditUserPage() {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
           >
             <Save className="w-5 h-5" />
             {saving ? 'Enregistrement...' : 'Enregistrer'}
@@ -179,7 +179,7 @@ export default function EditUserPage() {
                   type="text"
                   value={formData.full_name}
                   onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               <div className="grid md:grid-cols-2 gap-4">
@@ -205,7 +205,7 @@ export default function EditUserPage() {
                     type="tel"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
               </div>
@@ -227,7 +227,7 @@ export default function EditUserPage() {
                   type="text"
                   value={formData.address}
                   onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               <div className="grid md:grid-cols-2 gap-4">
@@ -239,7 +239,7 @@ export default function EditUserPage() {
                     type="text"
                     value={formData.city}
                     onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div>
@@ -250,7 +250,7 @@ export default function EditUserPage() {
                     type="text"
                     value={formData.postal_code}
                     onChange={(e) => setFormData({ ...formData, postal_code: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
               </div>
@@ -272,7 +272,7 @@ export default function EditUserPage() {
                   <select
                     value={formData.user_type}
                     onChange={(e) => setFormData({ ...formData, user_type: e.target.value as 'client' | 'artisan' })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="client">Client</option>
                     <option value="artisan">Artisan</option>
@@ -327,7 +327,7 @@ export default function EditUserPage() {
                       onClick={() => setFormData({ ...formData, subscription_plan: plan })}
                       className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                         formData.subscription_plan === plan
-                          ? 'bg-primary-600 text-white'
+                          ? 'bg-blue-600 text-white'
                           : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                       }`}
                     >

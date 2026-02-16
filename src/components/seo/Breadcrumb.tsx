@@ -23,7 +23,7 @@ export function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
         <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
           <Link
             href="/"
-            className="text-gray-500 hover:text-primary-600 transition-colors"
+            className="text-gray-500 hover:text-blue-600 transition-colors"
             itemProp="item"
           >
             <Home className="w-4 h-4" />
@@ -44,7 +44,7 @@ export function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
             {item.href ? (
               <Link
                 href={item.href}
-                className="text-gray-500 hover:text-primary-600 transition-colors"
+                className="text-gray-500 hover:text-blue-600 transition-colors"
                 itemProp="item"
               >
                 <span itemProp="name">{item.label}</span>

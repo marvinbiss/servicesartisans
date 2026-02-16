@@ -19,7 +19,7 @@ const badgeConfig = {
     icon: Shield,
     label: 'Identité contrôlée',
     className: 'verified-badge-identity',
-    color: 'text-primary-600',
+    color: 'text-blue-600',
   },
   insurance: {
     icon: FileCheck,
@@ -37,7 +37,7 @@ const badgeConfig = {
     icon: Star,
     label: 'Premium',
     className: 'verified-badge-premium',
-    color: 'text-secondary-600',
+    color: 'text-amber-600',
   },
   enterprise: {
     icon: Building2,
@@ -49,7 +49,7 @@ const badgeConfig = {
     icon: CheckCircle,
     label: 'Avis authentique',
     className: 'verified-badge-identity',
-    color: 'text-primary-600',
+    color: 'text-blue-600',
   },
 }
 
@@ -101,8 +101,8 @@ export function TrustScore({
 }: TrustScoreProps) {
   const getScoreConfig = (score: number) => {
     if (score >= 80) return { label: 'Excellent', className: 'trust-score-excellent', color: 'bg-green-500' }
-    if (score >= 60) return { label: 'Bon', className: 'trust-score-good', color: 'bg-primary-500' }
-    if (score >= 40) return { label: 'Moyen', className: 'trust-score-fair', color: 'bg-secondary-500' }
+    if (score >= 60) return { label: 'Bon', className: 'trust-score-good', color: 'bg-blue-500' }
+    if (score >= 40) return { label: 'Moyen', className: 'trust-score-fair', color: 'bg-amber-500' }
     return { label: 'Faible', className: 'trust-score-poor', color: 'bg-red-500' }
   }
 
@@ -136,9 +136,9 @@ interface VerificationLevelBadgeProps {
 
 const levelConfig = {
   none: { label: 'Non référencé', className: 'bg-gray-100 text-gray-600 border-gray-200', icon: null },
-  basic: { label: 'Vérifié', className: 'bg-primary-100 text-primary-700 border-primary-200', icon: CheckCircle },
+  basic: { label: 'Vérifié', className: 'bg-blue-100 text-blue-700 border-blue-200', icon: CheckCircle },
   standard: { label: 'Référencé+', className: 'bg-green-100 text-green-700 border-green-200', icon: Shield },
-  premium: { label: 'Premium', className: 'bg-secondary-100 text-secondary-700 border-secondary-200', icon: Star },
+  premium: { label: 'Premium', className: 'bg-amber-100 text-amber-700 border-amber-200', icon: Star },
   enterprise: { label: 'Entreprise', className: 'bg-slate-100 text-slate-700 border-slate-200', icon: Building2 },
 }
 
@@ -245,7 +245,7 @@ const escrowStatusConfig = {
   created: { label: 'Créé', className: 'bg-gray-100 text-gray-700' },
   funded: { label: 'Financé', className: 'escrow-funded' },
   in_progress: { label: 'En cours', className: 'escrow-in-progress' },
-  work_completed: { label: 'Travaux terminés', className: 'bg-primary-100 text-primary-700' },
+  work_completed: { label: 'Travaux terminés', className: 'bg-blue-100 text-blue-700' },
   released: { label: 'Libéré', className: 'escrow-completed' },
   disputed: { label: 'Litige', className: 'escrow-disputed' },
   refunded: { label: 'Remboursé', className: 'bg-purple-100 text-purple-700' },

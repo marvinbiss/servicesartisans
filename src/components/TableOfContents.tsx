@@ -53,10 +53,10 @@ export function TableOfContents({ items }: TableOfContentsProps) {
         className="w-full flex items-center justify-between gap-3 px-5 py-4 sm:px-6 sm:py-5 text-left"
       >
         <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-secondary-100 text-secondary-600">
+          <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-amber-100 text-amber-600">
             <List className="w-4 h-4" />
           </div>
-          <span className="font-heading text-gray-900">Sommaire</span>
+          <span className="font-heading font-bold text-gray-900">Sommaire</span>
           <span className="text-xs text-gray-400 font-medium hidden sm:inline">
             {h2Items.length} sections
           </span>
@@ -89,7 +89,7 @@ export function TableOfContents({ items }: TableOfContentsProps) {
                   isH3 ? 'ml-6 ' : ''
                 }${
                   activeId === item.id
-                    ? 'bg-secondary-50 text-secondary-800 font-medium'
+                    ? 'bg-amber-50 text-amber-800 font-medium'
                     : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                 }`}
               >
@@ -97,7 +97,7 @@ export function TableOfContents({ items }: TableOfContentsProps) {
                   <span
                     className={`shrink-0 w-1.5 h-1.5 rounded-full mt-2 transition-colors ${
                       activeId === item.id
-                        ? 'bg-secondary-400'
+                        ? 'bg-amber-400'
                         : 'bg-gray-300 group-hover:bg-gray-400'
                     }`}
                   />
@@ -105,7 +105,7 @@ export function TableOfContents({ items }: TableOfContentsProps) {
                   <span
                     className={`shrink-0 flex items-center justify-center w-6 h-6 rounded-md text-xs font-bold mt-px transition-colors ${
                       activeId === item.id
-                        ? 'bg-secondary-200 text-secondary-900'
+                        ? 'bg-amber-200 text-amber-900'
                         : 'bg-gray-100 text-gray-400 group-hover:bg-gray-200 group-hover:text-gray-600'
                     }`}
                   >

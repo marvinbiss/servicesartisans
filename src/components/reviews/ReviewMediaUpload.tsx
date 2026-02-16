@@ -159,7 +159,7 @@ export function ReviewMediaUpload({
         className={cn(
           'relative border-2 border-dashed rounded-lg p-6 text-center transition-colors',
           dragActive
-            ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
+            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
             : 'border-gray-300 dark:border-gray-600 hover:border-gray-400',
           files.length >= maxFiles && 'opacity-50 pointer-events-none'
         )}
@@ -179,15 +179,15 @@ export function ReviewMediaUpload({
 
         {uploading ? (
           <div className="flex flex-col items-center">
-            <Loader2 className="w-8 h-8 text-primary-500 animate-spin mb-2" />
+            <Loader2 className="w-8 h-8 text-blue-500 animate-spin mb-2" />
             <p className="text-sm text-gray-600 dark:text-gray-400">Upload en cours...</p>
           </div>
         ) : (
           <>
             <div className="flex justify-center gap-2 mb-3">
               {acceptedTypes.includes('image') && (
-                <div className="p-2 bg-primary-100 dark:bg-primary-900/30 rounded-full">
-                  <Camera className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+                <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-full">
+                  <Camera className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                 </div>
               )}
               {acceptedTypes.includes('video') && (
@@ -201,7 +201,7 @@ export function ReviewMediaUpload({
             </p>
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
               <Upload className="w-4 h-4" />
               Parcourir

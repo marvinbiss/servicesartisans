@@ -21,16 +21,16 @@ import { TrendingUp, TrendingDown, ArrowUpRight, ArrowDownRight } from 'lucide-r
 
 // Color palette
 const COLORS = {
-  primary: '#4a5899',
+  primary: '#3b82f6',
   secondary: '#8b5cf6',
   success: '#22c55e',
-  warning: '#c67a3c',
+  warning: '#f59e0b',
   danger: '#ef4444',
   info: '#06b6d4',
   gray: '#6b7280',
 }
 
-const PIE_COLORS = ['#4a5899', '#8b5cf6', '#22c55e', '#c67a3c', '#ef4444', '#06b6d4']
+const PIE_COLORS = ['#3b82f6', '#8b5cf6', '#22c55e', '#f59e0b', '#ef4444', '#06b6d4']
 
 interface StatCardProps {
   title: string
@@ -247,7 +247,7 @@ export function GeographicDistribution({ data }: GeographicHeatmapProps) {
             <div className="w-24 text-sm font-medium text-gray-700 truncate">{item.city}</div>
             <div className="flex-1 h-6 bg-gray-100 rounded-full overflow-hidden">
               <div
-                className="h-full bg-gradient-to-r from-primary-500 to-purple-500 rounded-full transition-all"
+                className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-all"
                 style={{ width: `${(item.bookings / maxBookings) * 100}%` }}
               />
             </div>
@@ -364,7 +364,7 @@ export function DashboardWrapper({ children, onPeriodChange, selectedPeriod = '7
               onClick={() => onPeriodChange?.(period.value)}
               className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                 selectedPeriod === period.value
-                  ? 'bg-white shadow text-primary-600'
+                  ? 'bg-white shadow text-blue-600'
                   : 'text-gray-600 hover:text-gray-900'
               }`}
             >

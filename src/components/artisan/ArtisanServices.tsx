@@ -19,8 +19,8 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
       {/* Section header */}
       <div className="px-6 pt-6 pb-2">
         <h2 className="text-xl font-semibold text-gray-900 font-heading flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-lg bg-primary-50 flex items-center justify-center">
-            <Wrench className="w-4.5 h-4.5 text-primary-600" aria-hidden="true" />
+          <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center">
+            <Wrench className="w-4.5 h-4.5 text-blue-600" aria-hidden="true" />
           </div>
           Services et Tarifs
         </h2>
@@ -74,7 +74,7 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
                       <span>{service.duration}</span>
                     </div>
                   )}
-                  <div className="flex items-center gap-1 text-lg font-bold text-primary-600 whitespace-nowrap bg-primary-50 px-3 py-1 rounded-lg" aria-label={`Prix : ${service.price} euros`}>
+                  <div className="flex items-center gap-1 text-lg font-bold text-blue-600 whitespace-nowrap bg-blue-50 px-3 py-1 rounded-lg" aria-label={`Prix : ${service.price} euros`}>
                     <Euro className="w-4 h-4" aria-hidden="true" />
                     <span>{service.price}</span>
                   </div>
@@ -95,12 +95,12 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
         {/* Hourly rate */}
         {(artisan.hourly_rate_min || artisan.hourly_rate_max) && (
           <div className="mt-6 pt-6 border-t border-gray-100">
-            <div className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-primary-50 to-primary-50 border border-primary-100">
+            <div className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100">
               <div>
                 <span className="font-medium text-gray-900">Taux horaire</span>
                 <p className="text-xs text-slate-500 mt-0.5">Applicable pour les interventions sur mesure</p>
               </div>
-              <span className="text-2xl font-bold text-primary-600">
+              <span className="text-2xl font-bold text-blue-600">
                 {artisan.hourly_rate_min && artisan.hourly_rate_max
                   ? `${artisan.hourly_rate_min}€ - ${artisan.hourly_rate_max}€/h`
                   : artisan.hourly_rate_min

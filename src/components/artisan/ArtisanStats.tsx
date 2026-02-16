@@ -16,7 +16,7 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
     stats.push({ icon: Calendar, label: 'Expérience', value: `${artisan.experience_years} ans`, color: 'text-purple-600', bgColor: 'bg-purple-50 border-purple-100' })
   }
   if (artisan.member_since) {
-    stats.push({ icon: MessageCircle, label: 'Membre depuis', value: artisan.member_since, color: 'text-secondary-600', bgColor: 'bg-secondary-50 border-secondary-100' })
+    stats.push({ icon: MessageCircle, label: 'Membre depuis', value: artisan.member_since, color: 'text-amber-600', bgColor: 'bg-amber-50 border-amber-100' })
   }
   if (artisan.creation_date) {
     const year = new Date(artisan.creation_date).getFullYear()
@@ -38,8 +38,8 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
       {/* Section header */}
       <div className="px-6 pt-6 pb-2">
         <h2 className="text-xl font-semibold text-gray-900 font-heading flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-lg bg-primary-50 flex items-center justify-center">
-            <Award className="w-4.5 h-4.5 text-primary-600" aria-hidden="true" />
+          <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center">
+            <Award className="w-4.5 h-4.5 text-blue-600" aria-hidden="true" />
           </div>
           Statistiques
         </h2>

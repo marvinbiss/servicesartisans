@@ -2,10 +2,6 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
-import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
-import { getPageContent } from '@/lib/cms'
-import { CmsContent } from '@/components/CmsContent'
 
 export const metadata: Metadata = {
   title: 'Espace presse',
@@ -13,35 +9,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: true },
 }
 
-export default async function PressePage() {
-  const cmsPage = await getPageContent('presse', 'static')
-
-  if (cmsPage?.content_html) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <JsonLd data={getBreadcrumbSchema([
-          { name: 'Accueil', url: '/' },
-          { name: 'Presse', url: '/presse' },
-        ])} />
-        <section className="bg-white border-b">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <Breadcrumb items={[{ label: 'Presse' }]} className="mb-4" />
-            <h1 className="font-heading text-3xl font-bold text-gray-900">
-              {cmsPage.title}
-            </h1>
-          </div>
-        </section>
-        <section className="py-12">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-xl shadow-sm p-8">
-              <CmsContent html={cmsPage.content_html} />
-            </div>
-          </div>
-        </section>
-      </div>
-    )
-  }
-
+export default function PressePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero */}

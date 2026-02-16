@@ -143,7 +143,7 @@ export default function AvisDonnesPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
       </div>
     )
   }
@@ -195,7 +195,7 @@ export default function AvisDonnesPage() {
               </Link>
               <Link
                 href="/espace-client/avis-donnes"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary-50 text-primary-600 font-medium"
+                className="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-50 text-blue-600 font-medium"
               >
                 <Star className="w-5 h-5" />
                 Avis donnés
@@ -293,7 +293,7 @@ export default function AvisDonnesPage() {
                         <div className="flex gap-2">
                           <button
                             onClick={() => openEditModal(avis)}
-                            className="p-2 text-gray-400 hover:text-primary-600 transition-colors"
+                            className="p-2 text-gray-400 hover:text-blue-600 transition-colors"
                           >
                             <Edit2 className="w-4 h-4" />
                           </button>
@@ -359,7 +359,7 @@ export default function AvisDonnesPage() {
                   onChange={(e) => setCommentaire(e.target.value)}
                   rows={4}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   placeholder="Décrivez votre expérience avec cet artisan..."
                 />
               </div>
@@ -379,7 +379,7 @@ export default function AvisDonnesPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="flex-1 bg-primary-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
                   {editingAvis ? 'Mettre à jour' : 'Publier l\'avis'}

@@ -39,16 +39,16 @@ function UploadItem({ upload, onRemove }: UploadItemProps) {
       bgColor: 'bg-gray-100',
     },
     uploading: {
-      icon: <Loader2 className="w-4 h-4 animate-spin text-primary-500" />,
+      icon: <Loader2 className="w-4 h-4 animate-spin text-blue-500" />,
       text: `${progress}%`,
-      color: 'text-primary-600',
-      bgColor: 'bg-primary-500',
+      color: 'text-blue-600',
+      bgColor: 'bg-blue-500',
     },
     processing: {
-      icon: <Loader2 className="w-4 h-4 animate-spin text-secondary-500" />,
+      icon: <Loader2 className="w-4 h-4 animate-spin text-amber-500" />,
       text: 'Traitement...',
-      color: 'text-secondary-600',
-      bgColor: 'bg-secondary-500',
+      color: 'text-amber-600',
+      bgColor: 'bg-amber-500',
     },
     complete: {
       icon: <Check className="w-4 h-4 text-green-500" />,
