@@ -1,0 +1,127 @@
+'use client'
+
+import { Users, Briefcase, Calendar, DollarSign, TrendingUp, TrendingDown, Minus } from 'lucide-react'
+
+interface Stats {
+  totalUsers: number
+  totalArtisans: number
+  totalBookings: number
+  totalRevenue: number
+  trends: {
+    users: number
+    bookings: number
+    revenue: number
+  }
+}
+
+interface StatsGridProps {
+  stats: Stats | null
+  loading?: boolean
+}
+
+function TrendBadge({ value }: { value: number }) {
+  if (value === 0) {
+    return (
+      <span className="flex items-center gap-1 text-xs text-gray-400">
+        <Minus className="w-3 h-3" />
+        0%
+      </span>
+    )
+  }
+  if (value > 0) {
+    return (
+      <span className="flex items-center gap-1 text-xs font-medium text-green-600">
+        <TrendingUp className="w-3 h-3" />
+        +{value}%
+      </span>
+    )
+  }
+  return (
+    <span className="flex items-center gap-1 text-xs font-medium text-red-600">
+      <TrendingDown className="w-3 h-3" />
+      {value}%
+    </span>
+  )
+}
+
+function SkeletonCard() {
+  return (
+    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 animate-pulse">
+      <div className="flex items-center justify-between mb-4">
+        <div className="w-12 h-12 bg-gray-200 rounded-lg" />
+        <div className="w-14 h-4 bg-gray-200 rounded" />
+      </div>
+      <div className="w-20 h-8 bg-gray-200 rounded mb-2" />
+      <div className="w-28 h-4 bg-gray-200 rounded" />
+    </div>
+  )
+}
+
+export function StatsGrid({ stats, loading }: StatsGridProps) {
+  if (loading || !stats) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {Array.from({ length: 4 }, (_, i) => <SkeletonCard key={i} />)}
+      </div>
+    )
+  }
+
+  const cards = [
+    {
+      label: 'Utilisateurs',
+      value: stats.totalUsers.toLocaleString('fr-FR'),
+      icon: Users,
+      color: 'bg-blue-100 text-blue-600',
+      trend: stats.trends.users,
+      trendLabel: 'vs mois dernier',
+    },
+    {
+      label: 'Artisans actifs',
+      value: stats.totalArtisans.toLocaleString('fr-FR'),
+      icon: Briefcase,
+      color: 'bg-indigo-100 text-indigo-600',
+      trend: null,
+      trendLabel: null,
+    },
+    {
+      label: 'Réservations',
+      value: stats.totalBookings.toLocaleString('fr-FR'),
+      icon: Calendar,
+      color: 'bg-green-100 text-green-600',
+      trend: stats.trends.bookings,
+      trendLabel: 'vs mois dernier',
+    },
+    {
+      label: 'Revenus ce mois',
+      value: `${(stats.totalRevenue / 100).toLocaleString('fr-FR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} €`,
+      icon: DollarSign,
+      color: 'bg-amber-100 text-amber-600',
+      trend: stats.trends.revenue,
+      trendLabel: 'vs mois dernier',
+    },
+  ]
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {cards.map((card) => (
+        <div key={card.label} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+          <div className="flex items-center justify-between mb-4">
+            <div className={`p-3 rounded-lg ${card.color}`}>
+              <card.icon className="w-6 h-6" />
+            </div>
+            {card.trend !== null && (
+              <div className="text-right">
+                <TrendBadge value={card.trend} />
+                {card.trendLabel && (
+                  <p className="text-[10px] text-gray-400 mt-0.5">{card.trendLabel}</p>
+                )}
+              </div>
+            )}
+          </div>
+          <p className="text-2xl font-bold text-gray-900">{card.value}</p>
+          <p className="text-sm text-gray-500 mt-1">{card.label}</p>
+        </div>
+      ))}
+    </div>
+  )
+}
