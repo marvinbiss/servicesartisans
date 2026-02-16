@@ -1,6 +1,6 @@
 'use client'
 
-import { type ReactNode, useState, useEffect } from 'react'
+import { type ReactNode, useState, useEffect, memo } from 'react'
 import {
   AreaChart,
   Area,
@@ -46,7 +46,7 @@ function ChartSkeleton() {
   )
 }
 
-export function ActivityChart({ data, loading }: ActivityChartProps) {
+export const ActivityChart = memo(function ActivityChart({ data, loading }: ActivityChartProps) {
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
 
@@ -161,4 +161,4 @@ export function ActivityChart({ data, loading }: ActivityChartProps) {
       )}
     </div>
   )
-}
+})

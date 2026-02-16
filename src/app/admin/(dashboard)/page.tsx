@@ -1,5 +1,6 @@
 'use client'
 
+import { Component, type ErrorInfo, type ReactNode } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { Shield, Activity, Star, AlertTriangle, ArrowRight } from 'lucide-react'
@@ -8,6 +9,34 @@ import { useAdminFetch } from '@/hooks/admin/useAdminFetch'
 import { StatsGrid } from '@/components/admin/dashboard/StatsGrid'
 import { RecentActivity } from '@/components/admin/dashboard/RecentActivity'
 import { PendingReports } from '@/components/admin/dashboard/PendingReports'
+
+class ChartErrorBoundary extends Component<
+  { children: ReactNode },
+  { hasError: boolean }
+> {
+  state = { hasError: false }
+
+  static getDerivedStateFromError() {
+    return { hasError: true }
+  }
+
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    console.error('[ActivityChart] render error:', error, info.componentStack)
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+          <p className="text-gray-500 text-center py-12">
+            Impossible de charger le graphique. Rechargez la page.
+          </p>
+        </div>
+      )
+    }
+    return this.props.children
+  }
+}
 
 // Lazy-load recharts bundle (~150KB) — only fetched when dashboard renders
 const ActivityChart = dynamic(
@@ -207,7 +236,9 @@ export default function AdminDashboard() {
         </div>
 
         {/* Activity Chart */}
-        <ActivityChart data={data?.chartData ?? []} loading={isLoading} />
+        <ChartErrorBoundary>
+          <ActivityChart data={data?.chartData ?? []} loading={isLoading} />
+        </ChartErrorBoundary>
 
         {/* Two columns: Recent Activity + Pending Reports */}
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">

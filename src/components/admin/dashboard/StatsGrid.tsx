@@ -97,7 +97,7 @@ export function StatsGrid({ stats, loading }: StatsGridProps) {
     },
     {
       label: 'Revenus ce mois',
-      value: `${(stats.totalRevenue / 100).toLocaleString('fr-FR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} €`,
+      value: `${(stats.totalRevenue / 100).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`,
       icon: DollarSign,
       color: 'bg-amber-100 text-amber-600',
       trend: stats.trends.revenue,

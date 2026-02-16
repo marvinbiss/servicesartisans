@@ -13,15 +13,29 @@ import useSWR, { type SWRConfiguration, type KeyedMutator } from 'swr'
  * - Manual mutate() for optimistic updates after mutations
  */
 
+const FETCH_TIMEOUT_MS = 30_000
+
 const adminFetcher = async (url: string) => {
-  const res = await fetch(url)
-  if (!res.ok) {
-    const body = await res.json().catch(() => ({ error: { message: 'Erreur réseau' } }))
-    const error = new Error(body?.error?.message || `Erreur ${res.status}`)
-    ;(error as unknown as Record<string, unknown>).status = res.status
-    throw error
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS)
+
+  try {
+    const res = await fetch(url, { signal: controller.signal })
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({ error: { message: 'Erreur réseau' } }))
+      const error = new Error(body?.error?.message || `Erreur ${res.status}`)
+      ;(error as unknown as Record<string, unknown>).status = res.status
+      throw error
+    }
+    return res.json()
+  } catch (err) {
+    if (err instanceof DOMException && err.name === 'AbortError') {
+      throw new Error('La requête a expiré (30s). Veuillez réessayer.')
+    }
+    throw err
+  } finally {
+    clearTimeout(timeoutId)
   }
-  return res.json()
 }
 
 const DEFAULT_CONFIG: SWRConfiguration = {
@@ -90,17 +104,30 @@ export async function adminMutate<T = unknown>(
     body?: unknown
   }
 ): Promise<T> {
-  const res = await fetch(url, {
-    method: options.method,
-    headers: { 'Content-Type': 'application/json' },
-    body: options.body ? JSON.stringify(options.body) : undefined,
-  })
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS)
 
-  const data = await res.json()
+  try {
+    const res = await fetch(url, {
+      method: options.method,
+      headers: { 'Content-Type': 'application/json' },
+      body: options.body ? JSON.stringify(options.body) : undefined,
+      signal: controller.signal,
+    })
 
-  if (!res.ok) {
-    throw new Error(data?.error?.message || `Erreur ${res.status}`)
+    const data = await res.json()
+
+    if (!res.ok) {
+      throw new Error(data?.error?.message || `Erreur ${res.status}`)
+    }
+
+    return data as T
+  } catch (err) {
+    if (err instanceof DOMException && err.name === 'AbortError') {
+      throw new Error('La requête a expiré (30s). Veuillez réessayer.')
+    }
+    throw err
+  } finally {
+    clearTimeout(timeoutId)
   }
-
-  return data as T
 }
