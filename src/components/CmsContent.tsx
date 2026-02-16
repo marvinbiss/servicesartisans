@@ -1,14 +1,15 @@
-import DOMPurify from 'isomorphic-dompurify'
-
 interface CmsContentProps {
   html: string
   className?: string
 }
 
-export function CmsContent({ html, className = '' }: CmsContentProps) {
+export async function CmsContent({ html, className = '' }: CmsContentProps) {
   if (!html) {
     return null
   }
+
+  // Lazy-import to avoid JSDOM crash in Vercel serverless cold start
+  const { default: DOMPurify } = await import('isomorphic-dompurify')
 
   return (
     <div

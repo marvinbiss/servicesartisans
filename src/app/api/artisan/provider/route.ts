@@ -8,7 +8,7 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
 import { providerArtisanUpdateSchema } from '@/schemas/provider'
-import DOMPurify from 'isomorphic-dompurify'
+// DOMPurify lazy-imported inside PUT to avoid JSDOM crash in serverless cold start
 
 export const dynamic = 'force-dynamic'
 
@@ -141,9 +141,12 @@ export async function PUT(request: Request) {
 
       if (key === 'description' || key === 'bio') {
         // Strip all HTML tags from description and bio
-        updateData[key] = typeof value === 'string'
-          ? DOMPurify.sanitize(value, { ALLOWED_TAGS: [] })
-          : value
+        if (typeof value === 'string') {
+          const { default: DOMPurify } = await import('isomorphic-dompurify')
+          updateData[key] = DOMPurify.sanitize(value, { ALLOWED_TAGS: [] })
+        } else {
+          updateData[key] = value
+        }
       } else if (key === 'name') {
         // Trim name
         updateData[key] = typeof value === 'string' ? value.trim() : value

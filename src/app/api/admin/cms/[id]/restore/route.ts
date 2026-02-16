@@ -5,7 +5,7 @@ import { logger } from '@/lib/logger'
 import { invalidateCache } from '@/lib/cache'
 import { revalidatePagePaths } from '@/lib/cms-revalidate'
 import { z } from 'zod'
-import DOMPurify from 'isomorphic-dompurify'
+// DOMPurify lazy-imported inside POST to avoid JSDOM crash in serverless cold start
 import { UUID_RE } from '@/lib/cms-utils'
 
 export const dynamic = 'force-dynamic'
@@ -71,7 +71,11 @@ export async function POST(
     }
 
     // Update the page with the version's content (sanitize HTML)
-    const sanitizedHtml = version.content_html ? DOMPurify.sanitize(version.content_html) : version.content_html
+    let sanitizedHtml = version.content_html
+    if (version.content_html) {
+      const { default: DOMPurify } = await import('isomorphic-dompurify')
+      sanitizedHtml = DOMPurify.sanitize(version.content_html)
+    }
     const { data: page, error: updateError } = await supabase
       .from('cms_pages')
       .update({

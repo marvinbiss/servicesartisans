@@ -224,6 +224,9 @@ export default async function ServiceLocationPage({ params }: PageProps) {
   try {
     return await _ServiceLocationPage({ params })
   } catch (err) {
+    // Re-throw Next.js internal errors (notFound, redirect) so the framework handles them
+    if (err && typeof err === 'object' && 'digest' in err) throw err
+
     console.error('[SERVICE-LOCATION] FATAL error rendering page:', err)
     const { service: s, location: l } = await params
     return (

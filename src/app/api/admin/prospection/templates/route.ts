@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
-import DOMPurify from 'isomorphic-dompurify'
+// DOMPurify lazy-imported inside POST to avoid JSDOM crash in serverless cold start
 import { z } from 'zod'
 
 const createSchema = z.object({
@@ -80,7 +80,10 @@ export async function POST(request: NextRequest) {
     if (sanitizedData.name) sanitizedData.name = sanitizedData.name.replace(/<[^>]*>/g, '').trim()
     if (sanitizedData.subject) sanitizedData.subject = sanitizedData.subject.replace(/<[^>]*>/g, '').trim()
     // Sanitize HTML body (allow safe HTML tags only)
-    if (sanitizedData.html_body) sanitizedData.html_body = DOMPurify.sanitize(sanitizedData.html_body)
+    if (sanitizedData.html_body) {
+      const { default: DOMPurify } = await import('isomorphic-dompurify')
+      sanitizedData.html_body = DOMPurify.sanitize(sanitizedData.html_body)
+    }
 
     const { data, error } = await supabase
       .from('prospection_templates')
