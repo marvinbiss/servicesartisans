@@ -4,7 +4,6 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { invalidateCache } from '@/lib/cache'
 import { revalidatePagePaths } from '@/lib/cms-revalidate'
-import DOMPurify from 'isomorphic-dompurify'
 import { UUID_RE, updatePageSchema, sanitizeTextFields } from '@/lib/cms-utils'
 
 export const dynamic = 'force-dynamic'
@@ -90,8 +89,9 @@ export async function PUT(
 
     const validated = parsed.data
 
-    // Sanitize HTML content
+    // Sanitize HTML content (lazy-import to avoid JSDOM crash in serverless cold start)
     if (validated.content_html) {
+      const { default: DOMPurify } = await import('isomorphic-dompurify')
       validated.content_html = DOMPurify.sanitize(validated.content_html)
     }
 
