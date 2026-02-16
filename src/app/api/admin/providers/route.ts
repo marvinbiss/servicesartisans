@@ -29,6 +29,8 @@ const SELECT_COLUMNS = `
   is_verified,
   is_active,
   source,
+  rating_average,
+  review_count,
   created_at,
   provider_services (
     service:services (
@@ -121,8 +123,8 @@ export async function GET(request: NextRequest) {
         is_verified: p.is_verified,
         is_active: p.is_active,
         subscription_type: 'free',
-        rating_average: 0,
-        review_count: 0,
+        rating_average: Number(p.rating_average) || 0,
+        review_count: Number(p.review_count) || 0,
         created_at: p.created_at,
         source: p.source,
         siret: p.siret,

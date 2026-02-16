@@ -1,6 +1,7 @@
 'use client'
 
-import { Calendar, Star, AlertTriangle, Users, Activity } from 'lucide-react'
+import Link from 'next/link'
+import { Calendar, Star, AlertTriangle, Users, Activity, ArrowRight } from 'lucide-react'
 
 interface ActivityItem {
   id: string
@@ -57,8 +58,15 @@ function SkeletonRow() {
 export function RecentActivity({ activity, loading }: RecentActivityProps) {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-      <div className="p-6 border-b border-gray-100">
+      <div className="p-6 border-b border-gray-100 flex items-center justify-between">
         <h3 className="font-semibold text-gray-900">Activité récente</h3>
+        <Link
+          href="/admin/journal"
+          className="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 transition-colors"
+        >
+          Voir tout
+          <ArrowRight className="w-3.5 h-3.5" />
+        </Link>
       </div>
       <div className="divide-y divide-gray-100">
         {loading ? (

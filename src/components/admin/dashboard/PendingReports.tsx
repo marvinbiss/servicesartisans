@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { AlertTriangle, CheckCircle, XCircle, Loader2 } from 'lucide-react'
+import Link from 'next/link'
+import { AlertTriangle, CheckCircle, XCircle, Loader2, ArrowRight } from 'lucide-react'
 import { ConfirmationModal } from '@/components/admin/ConfirmationModal'
 import { Toast } from '@/components/admin/Toast'
 import { adminMutate } from '@/hooks/admin/useAdminFetch'
@@ -111,12 +112,21 @@ export function PendingReports({ reports, loading, onMutate }: PendingReportsPro
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100">
         <div className="p-6 border-b border-gray-100 flex items-center justify-between">
-          <h3 className="font-semibold text-gray-900">Signalements en attente</h3>
-          {reports.length > 0 && (
-            <span className="px-2.5 py-1 bg-red-100 text-red-700 rounded-full text-sm font-medium">
-              {reports.length}
-            </span>
-          )}
+          <div className="flex items-center gap-2">
+            <h3 className="font-semibold text-gray-900">Signalements</h3>
+            {reports.length > 0 && (
+              <span className="px-2 py-0.5 bg-red-100 text-red-700 rounded-full text-xs font-medium">
+                {reports.length}
+              </span>
+            )}
+          </div>
+          <Link
+            href="/admin/signalements"
+            className="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 transition-colors"
+          >
+            Voir tout
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
         </div>
         <div className="divide-y divide-gray-100">
           {loading ? (

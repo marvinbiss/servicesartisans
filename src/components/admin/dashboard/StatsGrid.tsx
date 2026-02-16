@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { Users, Briefcase, Calendar, DollarSign, TrendingUp, TrendingDown, Minus } from 'lucide-react'
 
 interface Stats {
@@ -74,6 +75,7 @@ export function StatsGrid({ stats, loading }: StatsGridProps) {
       color: 'bg-blue-100 text-blue-600',
       trend: stats.trends.users,
       trendLabel: 'vs mois dernier',
+      href: '/admin/utilisateurs',
     },
     {
       label: 'Artisans actifs',
@@ -82,6 +84,7 @@ export function StatsGrid({ stats, loading }: StatsGridProps) {
       color: 'bg-indigo-100 text-indigo-600',
       trend: null,
       trendLabel: null,
+      href: '/admin/artisans',
     },
     {
       label: 'Réservations',
@@ -90,6 +93,7 @@ export function StatsGrid({ stats, loading }: StatsGridProps) {
       color: 'bg-green-100 text-green-600',
       trend: stats.trends.bookings,
       trendLabel: 'vs mois dernier',
+      href: '/admin/reservations',
     },
     {
       label: 'Revenus ce mois',
@@ -98,13 +102,18 @@ export function StatsGrid({ stats, loading }: StatsGridProps) {
       color: 'bg-amber-100 text-amber-600',
       trend: stats.trends.revenue,
       trendLabel: 'vs mois dernier',
+      href: '/admin/paiements',
     },
   ]
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {cards.map((card) => (
-        <div key={card.label} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+        <Link
+          key={card.label}
+          href={card.href}
+          className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-gray-200 transition-all group block"
+        >
           <div className="flex items-center justify-between mb-4">
             <div className={`p-3 rounded-lg ${card.color}`}>
               <card.icon className="w-6 h-6" />
@@ -118,9 +127,9 @@ export function StatsGrid({ stats, loading }: StatsGridProps) {
               </div>
             )}
           </div>
-          <p className="text-2xl font-bold text-gray-900">{card.value}</p>
+          <p className="text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">{card.value}</p>
           <p className="text-sm text-gray-500 mt-1">{card.label}</p>
-        </div>
+        </Link>
       ))}
     </div>
   )
