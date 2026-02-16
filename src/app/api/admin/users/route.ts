@@ -9,6 +9,7 @@ const usersQuerySchema = z.object({
   page: z.coerce.number().int().min(1).optional().default(1),
   limit: z.coerce.number().int().min(1).max(100).optional().default(20),
   filter: z.enum(['all', 'clients', 'artisans', 'banned']).optional().default('all'),
+  plan: z.enum(['all', 'gratuit', 'pro', 'premium']).optional().default('all'),
   search: z.string().max(100).optional().default(''),
 })
 
@@ -39,6 +40,7 @@ export async function GET(request: NextRequest) {
       page: searchParams.get('page') || '1',
       limit: searchParams.get('limit') || '20',
       filter: searchParams.get('filter') || 'all',
+      plan: searchParams.get('plan') || 'all',
       search: searchParams.get('search') || '',
     }
     const result = usersQuerySchema.safeParse(queryParams)
@@ -48,7 +50,7 @@ export async function GET(request: NextRequest) {
         { status: 400 }
       )
     }
-    const { page, limit, filter, search } = result.data
+    const { page, limit, filter, plan, search } = result.data
 
     // Fetch users from Supabase Auth
     const { data: authUsers, error: authError } = await supabase.auth.admin.listUsers({
@@ -107,6 +109,11 @@ export async function GET(request: NextRequest) {
       users = users.filter(u => u.user_type === 'artisan')
     } else if (filter === 'banned') {
       users = users.filter(u => u.is_banned)
+    }
+
+    // Apply plan filter
+    if (plan !== 'all') {
+      users = users.filter(u => u.subscription_plan === plan)
     }
 
     // Apply search

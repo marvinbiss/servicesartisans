@@ -15,6 +15,7 @@ import {
   CheckCircle,
 } from 'lucide-react'
 import { ConfirmationModal } from '@/components/admin/ConfirmationModal'
+import { adminMutate } from '@/hooks/admin/useAdminFetch'
 
 interface PlatformSettings {
   siteName: string
@@ -50,6 +51,9 @@ export default function AdminParametresPage() {
   const [resetModal, setResetModal] = useState(false)
   const [statsResetModal, setStatsResetModal] = useState(false)
   const [clearCacheModal, setClearCacheModal] = useState(false)
+
+  const [actionSuccess, setActionSuccess] = useState<string | null>(null)
+  const [actionError, setActionError] = useState<string | null>(null)
 
   const [settings, setSettings] = useState<PlatformSettings>(DEFAULT_SETTINGS)
   const [originalSettings, setOriginalSettings] = useState<PlatformSettings>(DEFAULT_SETTINGS)
@@ -99,6 +103,23 @@ export default function AdminParametresPage() {
   const handleReset = () => {
     setSettings(originalSettings)
     setResetModal(false)
+  }
+
+  const handleAction = async (action: 'reset-stats' | 'clear-cache') => {
+    try {
+      const result = await adminMutate<{ message: string }>('/api/admin/actions', {
+        method: 'POST',
+        body: { action },
+      })
+      setActionSuccess(result.message)
+      setTimeout(() => setActionSuccess(null), 3000)
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : 'Erreur inattendue')
+      setTimeout(() => setActionError(null), 5000)
+    } finally {
+      if (action === 'reset-stats') setStatsResetModal(false)
+      if (action === 'clear-cache') setClearCacheModal(false)
+    }
   }
 
   const hasChanges = JSON.stringify(settings) !== JSON.stringify(originalSettings)
@@ -248,6 +269,20 @@ export default function AdminParametresPage() {
             </button>
           </div>
         </div>
+
+        {/* Action feedback */}
+        {actionSuccess && (
+          <div className="mb-4 flex items-center gap-2 px-4 py-3 bg-green-50 border border-green-200 text-green-700 rounded-lg text-sm">
+            <CheckCircle className="w-4 h-4 flex-shrink-0" />
+            {actionSuccess}
+          </div>
+        )}
+        {actionError && (
+          <div className="mb-4 flex items-center gap-2 px-4 py-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+            <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+            {actionError}
+          </div>
+        )}
 
         {/* Quick Links */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
@@ -419,7 +454,7 @@ export default function AdminParametresPage() {
       <ConfirmationModal
         isOpen={statsResetModal}
         onClose={() => setStatsResetModal(false)}
-        onConfirm={() => { setStatsResetModal(false); /* reset stats */ }}
+        onConfirm={() => handleAction('reset-stats')}
         title="Réinitialiser les statistiques"
         message="Êtes-vous sûr de vouloir réinitialiser toutes les statistiques ? Cette action est irréversible."
         confirmText="Réinitialiser"
@@ -430,7 +465,7 @@ export default function AdminParametresPage() {
       <ConfirmationModal
         isOpen={clearCacheModal}
         onClose={() => setClearCacheModal(false)}
-        onConfirm={() => { setClearCacheModal(false); /* clear cache */ }}
+        onConfirm={() => handleAction('clear-cache')}
         title="Vider le cache"
         message="Êtes-vous sûr de vouloir vider le cache ? Cela peut ralentir temporairement le site."
         confirmText="Vider le cache"

@@ -13,7 +13,7 @@ import {
 } from 'lucide-react'
 import { StatusBadge } from '@/components/admin/StatusBadge'
 import { ErrorBanner } from '@/components/admin/ErrorBanner'
-import { useAdminFetch } from '@/hooks/admin/useAdminFetch'
+import { useAdminFetch, adminMutate } from '@/hooks/admin/useAdminFetch'
 
 interface Conversation {
   id: string
@@ -56,9 +56,26 @@ export default function AdminMessagesPage() {
     `/api/admin/messages?${params}`
   )
 
+  const [actionLoading, setActionLoading] = useState<string | null>(null)
+
   const conversations = data?.conversations || []
   const totalPages = data?.totalPages || 1
   const total = data?.total || 0
+
+  const handleStatusChange = async (conversationId: string, newStatus: 'archived' | 'blocked') => {
+    try {
+      setActionLoading(conversationId)
+      await adminMutate(`/api/admin/messages/${conversationId}`, {
+        method: 'PATCH',
+        body: { status: newStatus },
+      })
+      mutate()
+    } catch {
+      // Error will surface via SWR on next revalidation
+    } finally {
+      setActionLoading(null)
+    }
+  }
 
   const formatDate = (date: string | null) => {
     if (!date) return '-'
@@ -193,14 +210,18 @@ export default function AdminMessagesPage() {
                         {conversation.status === 'active' && (
                           <>
                             <button
-                              className="p-2 text-gray-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg"
+                              onClick={() => handleStatusChange(conversation.id, 'archived')}
+                              disabled={actionLoading === conversation.id}
+                              className="p-2 text-gray-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg disabled:opacity-50"
                               title="Archiver"
                               aria-label="Archiver la conversation"
                             >
                               <Archive className="w-5 h-5" />
                             </button>
                             <button
-                              className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg"
+                              onClick={() => handleStatusChange(conversation.id, 'blocked')}
+                              disabled={actionLoading === conversation.id}
+                              className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg disabled:opacity-50"
                               title="Bloquer"
                               aria-label="Bloquer la conversation"
                             >

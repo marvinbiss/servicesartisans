@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   ChevronLeft,
@@ -115,6 +115,34 @@ L'équipe ServicesArtisans`,
   },
 ]
 
+const STORAGE_KEY = 'admin_email_templates'
+
+function loadTemplates(): EmailTemplate[] {
+  if (typeof window === 'undefined') return EMAIL_TEMPLATES
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY)
+    if (!stored) return EMAIL_TEMPLATES
+    const saved = JSON.parse(stored) as Record<string, { subject: string; content: string }>
+    return EMAIL_TEMPLATES.map(t => {
+      const override = saved[t.id]
+      return override ? { ...t, subject: override.subject, content: override.content } : t
+    })
+  } catch {
+    return EMAIL_TEMPLATES
+  }
+}
+
+function saveTemplates(templates: EmailTemplate[]) {
+  const overrides: Record<string, { subject: string; content: string }> = {}
+  for (const t of templates) {
+    const original = EMAIL_TEMPLATES.find(o => o.id === t.id)
+    if (original && (t.subject !== original.subject || t.content !== original.content)) {
+      overrides[t.id] = { subject: t.subject, content: t.content }
+    }
+  }
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(overrides))
+}
+
 export default function EmailTemplatesPage() {
   const router = useRouter()
   const [templates, setTemplates] = useState(EMAIL_TEMPLATES)
@@ -125,6 +153,11 @@ export default function EmailTemplatesPage() {
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
 
+  // Load persisted templates on mount
+  useEffect(() => {
+    setTemplates(loadTemplates())
+  }, [])
+
   const handleEdit = (template: EmailTemplate) => {
     setEditingId(template.id)
     setEditContent(template.content)
@@ -132,18 +165,17 @@ export default function EmailTemplatesPage() {
     setPreviewId(null)
   }
 
-  const handleSave = async () => {
+  const handleSave = () => {
     if (!editingId) return
 
     setSaving(true)
-    // Simulated save - in production, call API
-    await new Promise(resolve => setTimeout(resolve, 500))
-
-    setTemplates(templates.map(t =>
+    const updated = templates.map(t =>
       t.id === editingId
         ? { ...t, content: editContent, subject: editSubject }
         : t
-    ))
+    )
+    setTemplates(updated)
+    saveTemplates(updated)
 
     setEditingId(null)
     setSaving(false)
