@@ -4,6 +4,8 @@ import { MapPin, ArrowRight, Users, Building2, ChevronRight, Globe } from 'lucid
 import Breadcrumb from '@/components/Breadcrumb'
 import { SITE_URL } from '@/lib/seo/config'
 import { regions, departements, villes, services } from '@/lib/data/france'
+import { getPageContent } from '@/lib/cms'
+import { CmsContent } from '@/components/CmsContent'
 
 export const metadata: Metadata = {
   title: 'Artisans par région — 18 régions de France',
@@ -18,7 +20,30 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RegionsIndexPage() {
+export default async function RegionsIndexPage() {
+  const cmsPage = await getPageContent('regions', 'static')
+
+  if (cmsPage?.content_html) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <section className="bg-white border-b">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <h1 className="font-heading text-3xl font-bold text-gray-900">
+              {cmsPage.title}
+            </h1>
+          </div>
+        </section>
+        <section className="py-12">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-white rounded-xl shadow-sm p-8">
+              <CmsContent html={cmsPage.content_html} />
+            </div>
+          </div>
+        </section>
+      </div>
+    )
+  }
+
   const totalDepartments = regions.reduce((acc, r) => acc + r.departments.length, 0)
 
   return (

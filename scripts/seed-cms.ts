@@ -48,6 +48,12 @@ const staticPages: CmsSeed[] = [
   { slug: 'mentions-legales', page_type: 'static', title: 'Mentions légales', meta_description: 'Informations juridiques, éditeur, hébergeur.' },
   { slug: 'services', page_type: 'static', title: 'Tous les services artisans', meta_description: 'Annuaire de 350 000+ artisans référencés.' },
   { slug: 'blog', page_type: 'static', title: 'Blog Artisanat & Travaux', meta_description: 'Conseils, guides et actualités sur l\'artisanat et les travaux de rénovation.' },
+  { slug: 'tarifs-artisans', page_type: 'static', title: 'Guide des prix artisans 2026', meta_description: 'Guide complet des tarifs artisans en 2026. Comparez les prix de tous les corps de métier.' },
+  { slug: 'departements', page_type: 'static', title: 'Artisans par département', meta_description: 'Trouvez un artisan dans votre département.' },
+  { slug: 'regions', page_type: 'static', title: 'Artisans par région', meta_description: 'Trouvez un artisan dans votre région.' },
+  { slug: 'villes', page_type: 'static', title: 'Artisans par ville', meta_description: 'Trouvez un artisan dans votre ville.' },
+  { slug: 'plan-du-site', page_type: 'static', title: 'Plan du site', meta_description: 'Plan du site ServicesArtisans — toutes les pages.' },
+  { slug: 'devis', page_type: 'static', title: 'Demander un devis gratuit', meta_description: 'Recevez jusqu\'à 3 devis gratuits d\'artisans qualifiés.' },
 ]
 
 // ─── Homepage ──────────────────────────────────────────────────
@@ -66,18 +72,50 @@ const faqSeed: CmsSeed = {
   meta_description: 'Retrouvez les réponses aux questions les plus fréquentes sur ServicesArtisans.',
 }
 
-// ─── Service pages (37 trades) ─────────────────────────────────
+// ─── Service pages (all 46 trades) ──────────────────────────────
 const servicesSlugs = [
   'plombier', 'electricien', 'serrurier', 'chauffagiste', 'peintre-en-batiment',
-  'couvreur', 'menuisier', 'macon', 'carreleur', 'paysagiste',
-  'climaticien', 'vitrier', 'charpentier', 'plaquiste', 'facade',
+  'menuisier', 'carreleur', 'couvreur', 'macon', 'jardinier',
+  'vitrier', 'climaticien', 'cuisiniste', 'solier', 'nettoyage',
+  'terrassier', 'charpentier', 'zingueur', 'etancheiste', 'facadier',
+  'platrier', 'metallier', 'ferronnier', 'poseur-de-parquet', 'miroitier',
+  'storiste', 'salle-de-bain', 'architecte-interieur', 'decorateur', 'domoticien',
+  'pompe-a-chaleur', 'panneaux-solaires', 'isolation-thermique', 'renovation-energetique',
+  'borne-recharge', 'ramoneur', 'paysagiste', 'pisciniste', 'alarme-securite',
+  'antenniste', 'ascensoriste', 'diagnostiqueur', 'geometre', 'desinsectisation',
+  'deratisation', 'demenageur',
 ]
+
+function capitalize(slug: string): string {
+  return slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, ' ')
+}
 
 const servicePages: CmsSeed[] = servicesSlugs.map(slug => ({
   slug,
   page_type: 'service' as const,
-  title: slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, ' ') + ' en France',
+  title: capitalize(slug) + ' en France',
   service_slug: slug,
+}))
+
+// ─── Tarifs per-service pages ────────────────────────────────────
+const tarifsPages: CmsSeed[] = servicesSlugs.map(slug => ({
+  slug: slug + '-tarifs',
+  page_type: 'static' as const,
+  title: 'Tarifs ' + capitalize(slug).toLowerCase() + ' 2026',
+  meta_description: 'Guide des prix ' + capitalize(slug).toLowerCase() + ' en 2026. Tarifs détaillés par prestation.',
+}))
+
+// ─── Urgence per-service pages (only services with emergencyInfo) ─
+const emergencySlugs = [
+  'plombier', 'electricien', 'serrurier', 'chauffagiste',
+  'vitrier', 'climaticien', 'pompe-a-chaleur', 'desinsectisation',
+]
+
+const urgencePages: CmsSeed[] = emergencySlugs.map(slug => ({
+  slug: slug + '-urgence',
+  page_type: 'static' as const,
+  title: capitalize(slug) + ' urgence 24h/24',
+  meta_description: capitalize(slug) + ' en urgence. Intervention rapide 24h/24 et 7j/7.',
 }))
 
 // ─── All seeds ─────────────────────────────────────────────────
@@ -86,6 +124,8 @@ const allSeeds: CmsSeed[] = [
   homepageSeed,
   faqSeed,
   ...servicePages,
+  ...tarifsPages,
+  ...urgencePages,
 ]
 
 async function main() {

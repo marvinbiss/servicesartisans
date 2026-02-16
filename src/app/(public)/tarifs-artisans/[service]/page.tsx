@@ -10,6 +10,8 @@ import { hashCode } from '@/lib/seo/location-content'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { villes } from '@/lib/data/france'
 import { getServiceImage } from '@/lib/data/images'
+import { getPageContent } from '@/lib/cms'
+import { CmsContent } from '@/components/CmsContent'
 
 const tradeSlugs = getTradesSlugs()
 
@@ -87,6 +89,30 @@ const topCities = villes.slice(0, 6)
 
 export default async function TarifsServicePage({ params }: { params: Promise<{ service: string }> }) {
   const { service } = await params
+
+  const cmsPage = await getPageContent(service + '-tarifs', 'static')
+
+  if (cmsPage?.content_html) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <section className="bg-white border-b">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <h1 className="font-heading text-3xl font-bold text-gray-900">
+              {cmsPage.title}
+            </h1>
+          </div>
+        </section>
+        <section className="py-12">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-white rounded-xl shadow-sm p-8">
+              <CmsContent html={cmsPage.content_html} />
+            </div>
+          </div>
+        </section>
+      </div>
+    )
+  }
+
   const trade = tradeContent[service]
   if (!trade) notFound()
 
