@@ -678,6 +678,26 @@ async function _ServiceLocationPage({ params }: PageProps) {
                 )}
               </div>
             )}
+
+            {/* Service-specific local demand analysis */}
+            {locationContent.dataDriven.demandeLocale && (
+              <div className="bg-gradient-to-br from-violet-50/50 to-purple-50/30 rounded-2xl border border-violet-100 p-8">
+                <h2 className="text-xl font-bold text-gray-900 mb-4 border-l-4 border-violet-500 pl-4">
+                  Demande locale en {service.name.toLowerCase()} à {location.name}
+                </h2>
+                <p className="text-gray-700 leading-relaxed">{locationContent.dataDriven.demandeLocale}</p>
+              </div>
+            )}
+
+            {/* Service-specific regulatory & standards context */}
+            {locationContent.dataDriven.reglementation && (
+              <div className="bg-gradient-to-br from-rose-50/50 to-pink-50/30 rounded-2xl border border-rose-100 p-8">
+                <h2 className="text-xl font-bold text-gray-900 mb-4 border-l-4 border-rose-500 pl-4">
+                  Réglementation et normes — {service.name.toLowerCase()} à {location.name}
+                </h2>
+                <p className="text-gray-700 leading-relaxed">{locationContent.dataDriven.reglementation}</p>
+              </div>
+            )}
           </div>
         </section>
       )}
@@ -689,10 +709,16 @@ async function _ServiceLocationPage({ params }: PageProps) {
             <h2 className="text-xl font-bold text-gray-900 mb-1 border-l-4 border-amber-500 pl-4">
               Pourquoi faire appel à un {service.name.toLowerCase()} professionnel à {location.name} ?
             </h2>
+            <p className="text-gray-600 text-sm mt-2 pl-[calc(1rem+4px)]">
+              Les critères essentiels pour trouver un {service.name.toLowerCase()} fiable et compétent à {location.name}{location.department_name ? `, ${location.department_name}` : ''}.
+            </p>
             <div className="mt-6 space-y-4">
               {trade.certifications && trade.certifications.length > 0 && (
                 <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4">
-                  <h3 className="font-semibold text-emerald-900 mb-2">Certifications et garanties</h3>
+                  <h3 className="font-semibold text-emerald-900 mb-2">Certifications et garanties à {location.name}</h3>
+                  <p className="text-sm text-emerald-800 mb-3">
+                    Parmi les qualifications à rechercher pour un {service.name.toLowerCase()} à {location.name} ({location.department_code}) :
+                  </p>
                   <div className="flex flex-wrap gap-2">
                     {trade.certifications.map((cert, i) => (
                       <span key={i} className="text-sm bg-white text-emerald-700 px-3 py-1 rounded-full border border-emerald-200">
@@ -702,19 +728,27 @@ async function _ServiceLocationPage({ params }: PageProps) {
                   </div>
                 </div>
               )}
-              {trade.tips && trade.tips.length > 0 && (
-                <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
-                  <h3 className="font-semibold text-blue-900 mb-2">Conseils d&apos;expert</h3>
-                  <ul className="space-y-1">
-                    {trade.tips.slice(0, 3).map((tip, i) => (
-                      <li key={i} className="text-sm text-blue-800 flex items-start gap-2">
-                        <span className="text-blue-400 mt-0.5">•</span>
-                        {tip}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+              {trade.tips && trade.tips.length > 0 && (() => {
+                // Hash-based tip selection: show different 3 tips per city
+                const tipHash = hashCode(`tips-${locationSlug}`)
+                const tipCount = trade.tips.length
+                const selectedTips = Array.from({ length: Math.min(3, tipCount) }, (_, i) =>
+                  trade.tips[(tipHash + i) % tipCount]
+                )
+                return (
+                  <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
+                    <h3 className="font-semibold text-blue-900 mb-2">Conseils d&apos;expert à {location.name}</h3>
+                    <ul className="space-y-1">
+                      {selectedTips.map((tip, i) => (
+                        <li key={i} className="text-sm text-blue-800 flex items-start gap-2">
+                          <span className="text-blue-400 mt-0.5">•</span>
+                          {tip}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )
+              })()}
             </div>
           </div>
         </section>
@@ -730,8 +764,8 @@ async function _ServiceLocationPage({ params }: PageProps) {
               </h2>
               <p className="text-gray-600 mb-6 text-sm pl-[calc(1rem+4px)]">
                 Tarif horaire moyen à {location.name} : <strong className="text-gray-900">{Math.round(trade.priceRange.min * pricingMultiplier)}–{Math.round(trade.priceRange.max * pricingMultiplier)} {trade.priceRange.unit}</strong>.
-                {pricingMultiplier !== 1.0 && ' Tarifs ajustés à la zone géographique.'}
-                {pricingMultiplier === 1.0 && ' Les prix peuvent varier selon la complexité des travaux et le professionnel choisi.'}
+                {pricingMultiplier !== 1.0 && ` Tarifs ajustés pour la zone de ${location.name}.`}
+                {pricingMultiplier === 1.0 && ` Les prix à ${location.name} peuvent varier selon la complexité des travaux et le professionnel choisi.`}
               </p>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {trade.commonTasks.slice(0, 6).map((task, i) => {
@@ -758,6 +792,10 @@ async function _ServiceLocationPage({ params }: PageProps) {
                   </p>
                 </div>
               )}
+              <p className="text-xs text-gray-400 mt-4">
+                Les tarifs affichés sont indicatifs et basés sur les moyennes du marché{location.region_name ? ` en ${location.region_name}` : ''} pour un {service.name.toLowerCase()} à {location.name}.{' '}
+                Demandez un devis personnalisé pour obtenir un prix précis adapté à votre projet.
+              </p>
               <Link
                 href={`/tarifs-artisans/${serviceSlug}`}
                 className="inline-flex items-center gap-2 mt-6 text-blue-600 hover:text-blue-800 text-sm font-medium group"
@@ -1028,8 +1066,8 @@ async function _ServiceLocationPage({ params }: PageProps) {
       <section className="py-6 bg-gray-50 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-xs text-gray-400 leading-relaxed max-w-3xl">
-            Les artisans référencés sur cette page sont des entreprises immatriculées vérifiées via l&apos;API SIRENE de l&apos;INSEE.
-            Les tarifs affichés sont indicatifs et basés sur les moyennes du marché en {location.region_name || 'France'}.
+            Les {service.name.toLowerCase()}s référencés à {location.name} sont des entreprises immatriculées, vérifiées via l&apos;API SIRENE de l&apos;INSEE.
+            Les tarifs affichés sont indicatifs et basés sur les moyennes du marché en {location.region_name || 'France'} pour un {service.name.toLowerCase()} à {location.name} ({location.department_code}).
             ServicesArtisans est un annuaire indépendant — nous ne réalisons pas de travaux et ne percevons aucune commission.
           </p>
           {locationContent?.dataDriven?.dataSources && locationContent.dataDriven.dataSources.length > 0 && (
