@@ -1,6 +1,7 @@
 'use client'
 
-import { Shield, Activity, Star, AlertTriangle } from 'lucide-react'
+import Link from 'next/link'
+import { Shield, Activity, Star, AlertTriangle, ArrowRight } from 'lucide-react'
 import { ErrorBanner } from '@/components/admin/ErrorBanner'
 import { useAdminFetch } from '@/hooks/admin/useAdminFetch'
 import { StatsGrid } from '@/components/admin/dashboard/StatsGrid'
@@ -163,9 +164,10 @@ export default function AdminDashboard() {
             {isLoading ? (
               <div className="space-y-3 animate-pulse">
                 <div className="h-4 bg-gray-200 rounded w-full" />
+                <div className="h-10 bg-gray-200 rounded w-full mt-2" />
               </div>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <span className="text-gray-600">Signalements en attente</span>
                   <span
@@ -178,6 +180,13 @@ export default function AdminDashboard() {
                     {data?.stats?.pendingReports ?? 0}
                   </span>
                 </div>
+                <Link
+                  href="/admin/signalements"
+                  className="flex items-center justify-center gap-2 w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm"
+                >
+                  Voir les signalements
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
               </div>
             )}
           </div>

@@ -186,7 +186,10 @@ export async function GET() {
       chartData,
     })
 
-    response.headers.set('Cache-Control', 'private, no-store, max-age=0')
+    response.headers.set('Cache-Control', 'private, no-store, no-cache, must-revalidate, max-age=0')
+    response.headers.set('Pragma', 'no-cache')
+    response.headers.set('Surrogate-Control', 'no-store')
+    response.headers.set('Vercel-CDN-Cache-Control', 'no-store')
     return response
   } catch (error) {
     logger.error('Admin stats error:', error)
