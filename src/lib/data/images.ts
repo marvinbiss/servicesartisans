@@ -170,26 +170,22 @@ export const artisanFaces = [
 ]
 
 // ── 4. TÉMOIGNAGES CLIENTS ───────────────────────────────────────
+// Pas de photos stock — on affiche les initiales dans un cercle coloré
+// pour rester honnête (voir getAvatarColor dans utils.ts).
 export const testimonialImages = [
   {
-    src: unsplash('photo-1527694194835-f9a07834b609', 400, 400),
-    alt: 'Cliente satisfaite après rénovation',
     name: 'Sophie R.',
     text: 'J\'ai trouvé un excellent plombier en 5 minutes. Travail impeccable !',
     ville: 'Paris',
     note: 5,
   },
   {
-    src: unsplash('photo-1565288692954-a8d2b8f930fb', 400, 400),
-    alt: 'Client satisfait après travaux',
     name: 'Jean-Pierre V.',
     text: 'Devis reçu en 24h, chantier terminé dans les temps. Je recommande.',
     ville: 'Bordeaux',
     note: 5,
   },
   {
-    src: unsplash('photo-1590304786889-677d013ff31f', 400, 400),
-    alt: 'Cliente satisfaite des travaux réalisés',
     name: 'Marie C.',
     text: 'Rénovation complète de ma salle de bain. Résultat magnifique.',
     ville: 'Toulouse',

@@ -23,6 +23,14 @@ const plusJakarta = Plus_Jakarta_Sans({
 })
 
 // Dynamic imports for performance
+const CompareProviderClient = dynamic(
+  () => import('@/components/compare/CompareProvider').then(mod => ({ default: mod.CompareProviderWrapper })),
+  { ssr: false }
+)
+const CompareBarClient = dynamic(
+  () => import('@/components/compare/CompareBar').then(mod => ({ default: mod.CompareBar })),
+  { ssr: false }
+)
 const MobileBottomNav = dynamic(() => import('@/components/MobileBottomNav'), {
   ssr: false,
 })
@@ -44,8 +52,8 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#2563eb' },
-    { media: '(prefers-color-scheme: dark)', color: '#1d4ed8' },
+    { media: '(prefers-color-scheme: light)', color: '#1d4fd7' },
+    { media: '(prefers-color-scheme: dark)', color: '#1840b8' },
   ],
   colorScheme: 'light',
 }
@@ -123,7 +131,7 @@ export default function RootLayout({
     <html lang="fr" className={`scroll-smooth ${inter.variable} ${plusJakarta.variable}`}>
       <head>
         {/* PWA Meta Tags (apple-mobile-web-app, mobile-web-app-capable, theme-color handled by metadata/viewport exports) */}
-        <meta name="msapplication-TileColor" content="#2563eb" />
+        <meta name="msapplication-TileColor" content="#1d4fd7" />
         <meta name="msapplication-tap-highlight" content="no" />
 
         {/* Additional icon size (180px apple-touch-icon + icon.svg handled by metadata.icons export) */}
@@ -150,6 +158,7 @@ export default function RootLayout({
       </head>
       <body className="font-sans bg-gray-50 antialiased">
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
+        <CompareProviderClient>
         <MobileMenuProvider>
           {/* Skip to main content for accessibility */}
           <a
@@ -161,11 +170,13 @@ export default function RootLayout({
           <Header />
           <main id="main-content" className="pb-16 md:pb-0">{children}</main>
           <Footer />
+          <CompareBarClient />
           <MobileBottomNav />
           <ServiceWorkerRegistration />
           <CapacitorInit />
           <CookieConsent />
         </MobileMenuProvider>
+        </CompareProviderClient>
       </body>
     </html>
   )

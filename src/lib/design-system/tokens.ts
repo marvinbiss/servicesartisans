@@ -5,19 +5,19 @@
  */
 
 export const colors = {
-  // Primary brand colors
+  // Primary brand colors — custom richer blue
   primary: {
-    50: '#eff6ff',
-    100: '#dbeafe',
-    200: '#bfdbfe',
-    300: '#93c5fd',
-    400: '#60a5fa',
-    500: '#3b82f6', // Main brand color
-    600: '#2563eb',
-    700: '#1d4ed8',
-    800: '#1e40af',
-    900: '#1e3a8a',
-    950: '#172554',
+    50: '#eef4ff',
+    100: '#d9e7ff',
+    200: '#bbcfff',
+    300: '#8eaffe',
+    400: '#5a86fc',
+    500: '#3464f4', // Main brand color
+    600: '#1d4fd7',
+    700: '#1840b8',
+    800: '#1a369a',
+    900: '#1b3179',
+    950: '#13214a',
   },
 
   // Secondary accent colors
@@ -48,18 +48,18 @@ export const colors = {
     900: '#14532d',
   },
 
-  // Warning/Pending
+  // Warning/Pending — custom honey gold
   warning: {
-    50: '#fffbeb',
-    100: '#fef3c7',
-    200: '#fde68a',
-    300: '#fcd34d',
-    400: '#fbbf24',
-    500: '#f59e0b',
-    600: '#d97706',
-    700: '#b45309',
-    800: '#92400e',
-    900: '#78350f',
+    50: '#fefaec',
+    100: '#fcf0c9',
+    200: '#f9de8c',
+    300: '#f5c94f',
+    400: '#f2b523',
+    500: '#e8960a',
+    600: '#c97308',
+    700: '#a8530b',
+    800: '#894110',
+    900: '#713610',
   },
 
   // Error/Danger

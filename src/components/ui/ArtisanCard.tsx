@@ -2,10 +2,12 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { Star, MapPin, Clock, Heart, BadgeCheck, Calendar } from 'lucide-react'
+import { Star, MapPin, Clock, BadgeCheck, Calendar } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
-import { getArtisanUrl } from '@/lib/utils'
+import { getArtisanUrl, getAvatarColor } from '@/lib/utils'
+import { FavoriteButton } from '@/components/ui/FavoriteButton'
+import { CompareButton } from '@/components/ui/CompareButton'
 
 interface ArtisanCardProps {
   id: string
@@ -47,7 +49,6 @@ export function ArtisanCard({
   responseTime,
   variant = 'default',
 }: ArtisanCardProps) {
-  const [isFavorite, setIsFavorite] = useState(false)
   const [_isHovered, setIsHovered] = useState(false)
 
   const href = getArtisanUrl({ stable_id: id, slug, specialty: profession, city: location })
@@ -73,7 +74,7 @@ export function ArtisanCard({
                 sizes="(max-width: 768px) 100vw, 192px"
               />
             ) : (
-              <div className="w-full h-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+              <div className={`w-full h-full bg-gradient-to-br ${getAvatarColor(name)} flex items-center justify-center`}>
                 <span className="text-4xl font-bold text-white">
                   {name.charAt(0)}
                 </span>
@@ -170,7 +171,7 @@ export function ArtisanCard({
           {imageUrl ? (
             <Image src={imageUrl} alt={name} fill className="object-cover" sizes="48px" />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+            <div className={`w-full h-full bg-gradient-to-br ${getAvatarColor(name)} flex items-center justify-center`}>
               <span className="font-bold text-white">{name.charAt(0)}</span>
             </div>
           )}
@@ -212,7 +213,7 @@ export function ArtisanCard({
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 flex items-center justify-center">
+            <div className={`w-full h-full bg-gradient-to-br ${getAvatarColor(name)} flex items-center justify-center`}>
               <span className="text-6xl font-bold text-white/90">
                 {name.charAt(0)}
               </span>
@@ -237,19 +238,19 @@ export function ArtisanCard({
           )}
 
           {/* Bouton favori */}
-          <button
-            onClick={(e) => {
-              e.preventDefault()
-              setIsFavorite(!isFavorite)
-            }}
-            className="absolute top-3 right-3 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
-          >
-            <Heart
-              className={`w-4 h-4 transition-colors ${
-                isFavorite ? 'text-red-500 fill-red-500' : 'text-slate-600'
-              }`}
-            />
-          </button>
+          <FavoriteButton
+            providerId={id}
+            providerName={name}
+            size="md"
+            className="absolute top-3 right-3 z-10"
+          />
+
+          {/* Bouton comparer */}
+          <CompareButton
+            provider={{ id, name, slug, specialty: profession, address_city: location }}
+            size="sm"
+            className="absolute bottom-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
+          />
 
           {/* Disponibilité */}
           {isAvailableNow ? (

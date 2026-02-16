@@ -6,13 +6,14 @@ import {
   Search, Menu, X, ChevronDown, MapPin, Wrench, Zap, Key, Flame,
   PaintBucket, Home, Hammer, HardHat, Wind, TreeDeciduous,
   ShieldCheck, Sparkles, Star, Clock, Phone, ArrowRight, Users, Award,
-  ChefHat, Layers, Brush, Navigation, Map, Building2, Globe
+  ChefHat, Layers, Brush, Navigation, Map, Building2, Globe, Heart
 } from 'lucide-react'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useMobileMenu } from '@/contexts/MobileMenuContext'
+import { useFavorites } from '@/hooks/useFavorites'
 import { regions, villes } from '@/lib/data/france'
-import SearchBar from '@/components/SearchBar'
+import QuickSearch from '@/components/search/QuickSearch'
 import { cn } from '@/lib/utils'
 
 // Reverse geocoding for mobile geolocation
@@ -140,6 +141,7 @@ export default function Header() {
   const router = useRouter()
   const pathname = usePathname()
   const { isMenuOpen, setIsMenuOpen } = useMobileMenu()
+  const { count: favoritesCount } = useFavorites()
 
   // Mobile search state
   const [serviceQuery, setServiceQuery] = useState('')
@@ -386,12 +388,12 @@ export default function Header() {
             </motion.div>
           </Link>
 
-          {/* Search Bar - Compact SearchBar Component */}
+          {/* Quick Search - Combined single-field search */}
           <div className="hidden md:flex flex-1 max-w-xl mx-4 lg:mx-8">
             {mounted ? (
-              <SearchBar size="compact" />
+              <QuickSearch />
             ) : (
-              <div className="w-full flex-row rounded-full p-1 gap-1 border border-gray-200 bg-white h-[42px] animate-pulse" />
+              <div className="w-full rounded-full border border-gray-200 bg-gray-50 h-[38px] animate-pulse" />
             )}
           </div>
 
@@ -471,6 +473,21 @@ export default function Header() {
                 <ChevronDown className={cn('w-4 h-4 transition-transform duration-300', openMenu === 'regions' && 'rotate-180')} />
               </button>
             </div>
+
+            {/* Favoris */}
+            <Link
+              href="/mes-favoris"
+              className="relative text-gray-600 hover:text-red-500 px-3 py-2 rounded-xl transition-all duration-200 hover:bg-red-50/80"
+              aria-label={`Mes favoris${favoritesCount > 0 ? ` (${favoritesCount})` : ''}`}
+              title="Mes favoris"
+            >
+              <Heart className="w-5 h-5" />
+              {mounted && favoritesCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] flex items-center justify-center bg-red-500 text-white text-[10px] font-bold rounded-full px-1 leading-none">
+                  {favoritesCount > 99 ? '99+' : favoritesCount}
+                </span>
+              )}
+            </Link>
 
             <Link
               href="/connexion"
@@ -1077,6 +1094,20 @@ export default function Header() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.25, duration: 0.25 }}
               >
+                {/* Favoris mobile */}
+                <Link
+                  href="/mes-favoris"
+                  className="flex items-center justify-center gap-2 w-full py-3 border-2 border-red-100 text-red-600 rounded-xl font-medium hover:bg-red-50 transition-all duration-200"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <Heart className="w-5 h-5" />
+                  Mes favoris
+                  {favoritesCount > 0 && (
+                    <span className="min-w-[20px] h-[20px] flex items-center justify-center bg-red-500 text-white text-[11px] font-bold rounded-full px-1 leading-none">
+                      {favoritesCount > 99 ? '99+' : favoritesCount}
+                    </span>
+                  )}
+                </Link>
                 <Link
                   href="/urgence"
                   className="flex items-center justify-center gap-2 w-full py-3.5 bg-red-600 hover:bg-red-700 text-white rounded-xl font-semibold transition-colors duration-200 shadow-lg shadow-red-600/20"

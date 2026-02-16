@@ -11,6 +11,7 @@ import {
   Database, Shield, FileCheck, Banknote, Globe, BadgeCheck
 } from 'lucide-react'
 import { getServiceImage, testimonialImages, beforeAfterPairs, BLUR_PLACEHOLDER } from '@/lib/data/images'
+import { getAvatarColor, getInitials } from '@/lib/utils'
 
 // ─── ANIMATION VARIANTS ────────────────────────────────────────
 
@@ -556,8 +557,8 @@ export function TestimonialsSection() {
               className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
             >
               <div className="flex items-center gap-4 mb-4">
-                <div className="relative w-14 h-14 rounded-full overflow-hidden shrink-0">
-                  <Image src={t.src} alt={t.alt} fill className="object-cover" sizes="56px" placeholder="blur" blurDataURL={BLUR_PLACEHOLDER} />
+                <div className={`w-14 h-14 rounded-full bg-gradient-to-br ${getAvatarColor(t.name)} flex items-center justify-center shrink-0`}>
+                  <span className="text-lg font-bold text-white">{getInitials(t.name)}</span>
                 </div>
                 <div>
                   <div className="font-semibold text-slate-900">{t.name}</div>

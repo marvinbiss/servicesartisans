@@ -87,6 +87,30 @@ export function getInitials(name: string): string {
     .slice(0, 2)
 }
 
+// Deterministic avatar gradient color based on name
+const AVATAR_COLORS = [
+  'from-blue-500 to-blue-600',
+  'from-emerald-500 to-emerald-600',
+  'from-violet-500 to-violet-600',
+  'from-rose-500 to-rose-600',
+  'from-amber-500 to-amber-600',
+  'from-teal-500 to-teal-600',
+  'from-indigo-500 to-indigo-600',
+  'from-cyan-500 to-cyan-600',
+  'from-orange-500 to-orange-600',
+  'from-fuchsia-500 to-fuchsia-600',
+  'from-lime-500 to-lime-600',
+  'from-sky-500 to-sky-600',
+]
+
+export function getAvatarColor(name: string): string {
+  let hash = 0
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash)
+  }
+  return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length]
+}
+
 // Validate email
 export function isValidEmail(email: string): boolean {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/

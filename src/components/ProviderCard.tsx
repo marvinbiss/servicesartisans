@@ -2,7 +2,9 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { MapPin, Phone, Star, Clock, Users, ChevronRight } from 'lucide-react'
 import { Provider } from '@/types'
-import { getArtisanUrl } from '@/lib/utils'
+import { getArtisanUrl, getAvatarColor } from '@/lib/utils'
+import { FavoriteButton } from '@/components/ui/FavoriteButton'
+import { CompareButton } from '@/components/ui/CompareButton'
 
 type ProviderCardProvider = Partial<Provider> & Pick<Provider, 'id' | 'name'> & { stable_id?: string; slug?: string; specialty?: string; address_city?: string; avatar_url?: string }
 
@@ -28,6 +30,13 @@ export default function ProviderCard({
           : 'border-gray-100 shadow-sm hover:-translate-y-1 hover:scale-[1.02] hover:border-amber-200 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.12),0_4px_6px_-2px_rgba(0,0,0,0.05)] hover:before:opacity-100'
       }`}
     >
+      {/* Bouton favori — top-right */}
+      <FavoriteButton
+        providerId={provider.stable_id || provider.id}
+        providerName={provider.name}
+        size="sm"
+        className="absolute top-3 right-3 z-30"
+      />
       {/* Mobile: full-card tappable overlay link */}
       <Link
         href={providerUrl}
@@ -51,7 +60,7 @@ export default function ProviderCard({
               className="w-12 h-12 rounded-full object-cover shadow-sm"
             />
           ) : (
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-lg font-bold shadow-sm">
+            <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${getAvatarColor(provider.name)} flex items-center justify-center text-white text-lg font-bold shadow-sm`}>
               {provider.name.charAt(0).toUpperCase()}
             </div>
           )}
@@ -136,6 +145,14 @@ export default function ProviderCard({
             </span>
           </div>
         )}
+      </div>
+
+      {/* Bouton comparer */}
+      <div className="mb-3">
+        <CompareButton
+          provider={{ id: provider.stable_id || provider.id, name: provider.name, slug: provider.slug || '', specialty: provider.specialty, address_city: provider.address_city }}
+          size="sm"
+        />
       </div>
 
       {/* Boutons */}

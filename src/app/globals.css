@@ -9,23 +9,23 @@
 
 @layer base {
   :root {
-    /* Brand Colors */
-    --brand-primary: #2563eb;
-    --brand-primary-light: #3b82f6;
-    --brand-primary-dark: #1d4ed8;
-    --brand-primary-50: #eff6ff;
-    --brand-primary-100: #dbeafe;
+    /* Brand Colors — Custom palette (not Tailwind defaults) */
+    --brand-primary: #1d4fd7;
+    --brand-primary-light: #3464f4;
+    --brand-primary-dark: #1840b8;
+    --brand-primary-50: #eef4ff;
+    --brand-primary-100: #d9e7ff;
 
-    --brand-secondary: #f59e0b;
-    --brand-secondary-light: #fbbf24;
-    --brand-secondary-dark: #d97706;
+    --brand-secondary: #e8960a;
+    --brand-secondary-light: #f2b523;
+    --brand-secondary-dark: #c97308;
 
     --brand-success: #10b981;
     --brand-success-light: #34d399;
     --brand-success-50: #ecfdf5;
 
-    --brand-warning: #f59e0b;
-    --brand-warning-50: #fffbeb;
+    --brand-warning: #e8960a;
+    --brand-warning-50: #fefaec;
 
     --brand-error: #ef4444;
     --brand-error-50: #fef2f2;
@@ -91,7 +91,7 @@
     --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
     --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
     --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-    --shadow-primary: 0 4px 14px 0 rgba(37, 99, 235, 0.3);
+    --shadow-primary: 0 4px 14px 0 rgba(29, 79, 215, 0.3);
 
     /* Transitions */
     --transition-fast: 150ms ease;
@@ -289,8 +289,21 @@
 
 /* Star pulse animation for rating hover */
 @keyframes starPulse {
-  0%, 100% { transform: scale(1.1); filter: drop-shadow(0 0 0 rgba(245, 158, 11, 0)); }
-  50% { transform: scale(1.2); filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.4)); }
+  0%, 100% { transform: scale(1.1); filter: drop-shadow(0 0 0 rgba(232, 150, 10, 0)); }
+  50% { transform: scale(1.2); filter: drop-shadow(0 0 8px rgba(232, 150, 10, 0.4)); }
+}
+
+/* Favorite button bounce animation */
+@keyframes favoriteScale {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+/* Toast fade-in animation */
+@keyframes toastFadeIn {
+  0% { opacity: 0; transform: translateY(-4px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
 /* ===========================================
@@ -471,7 +484,7 @@ img {
 
 /* Smooth focus rings — amber brand accent */
 :focus-visible {
-  outline: 2px solid #f59e0b;
+  outline: 2px solid #e8960a;
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -483,7 +496,7 @@ img {
 
 /* Custom selection color */
 ::selection {
-  background-color: rgba(245, 158, 11, 0.2);
+  background-color: rgba(232, 150, 10, 0.2);
   color: inherit;
 }
 
@@ -608,7 +621,7 @@ img {
   width: 4px;
   min-height: 1.6em;
   border-radius: 9999px;
-  background: linear-gradient(180deg, #f59e0b 0%, #d97706 100%);
+  background: linear-gradient(180deg, #e8960a 0%, #c97308 100%);
   margin-top: 0.15em;
 }
 
@@ -657,7 +670,7 @@ img {
   width: 6px;
   height: 6px;
   border-radius: 9999px;
-  background: #f59e0b; /* amber-500 */
+  background: #e8960a; /* honey-gold-500 */
 }
 
 .article-list-ordered {
@@ -674,7 +687,7 @@ img {
   left: 0;
   top: 0;
   font-weight: 600;
-  color: #f59e0b; /* amber-500 */
+  color: #e8960a; /* honey-gold-500 */
   font-size: 0.9375rem;
 }
 
@@ -730,7 +743,7 @@ img {
 }
 
 .article-table thead {
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  background: linear-gradient(135deg, #e8960a 0%, #c97308 100%);
 }
 
 .article-table th {
@@ -761,7 +774,7 @@ img {
 }
 
 .article-table tbody tr:hover {
-  background-color: #fffbeb;
+  background-color: #fefaec;
 }
 
 .article-table tbody tr:last-child td {
@@ -796,7 +809,7 @@ img {
 }
 
 .article-faq-item:hover {
-  border-color: #fbbf24;
+  border-color: #f2b523;
 }
 
 .article-faq-button {

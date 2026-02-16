@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
-import { AlertCircle, ArrowLeft, Share2, Heart } from 'lucide-react'
+import { AlertCircle, ArrowLeft, Heart } from 'lucide-react'
 import {
   Review,
   getDisplayName,
@@ -18,6 +18,7 @@ import {
   ArtisanBreadcrumb,
   ArtisanPhotoGridSkeleton,
 } from '@/components/artisan'
+import { ShareButton } from '@/components/ui/ShareButton'
 import type { LegacyArtisan } from '@/types/legacy'
 
 // Loading skeleton for lazy-loaded sections
@@ -117,22 +118,6 @@ export default function ArtisanPageClient({
   const reviews = initialReviews
   const [isFavorite, setIsFavorite] = useState(false)
 
-  const handleShare = async () => {
-    if (navigator.share && artisan) {
-      try {
-        await navigator.share({
-          title: getDisplayName(artisan),
-          text: `${artisan.specialty} à ${artisan.city}`,
-          url: window.location.href,
-        })
-      } catch {
-        // User cancelled or error
-      }
-    } else {
-      navigator.clipboard.writeText(window.location.href)
-    }
-  }
-
   // Not found state
   if (!artisan) {
     return (
@@ -195,15 +180,12 @@ export default function ArtisanPageClient({
               </Link>
 
               <div className="flex items-center gap-2">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={handleShare}
-                  className="p-2.5 rounded-full bg-gray-50 hover:bg-gray-100 border border-gray-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                  aria-label="Partager cette page"
-                >
-                  <Share2 className="w-4.5 h-4.5 text-slate-600" aria-hidden="true" />
-                </motion.button>
+                <ShareButton
+                  url={typeof window !== 'undefined' ? window.location.href : ''}
+                  title={`D\u00e9couvrez ${displayName}, artisan sur ServicesArtisans`}
+                  description={`${displayName} \u2014 ${artisan.specialty} \u00e0 ${artisan.city}. Consultez son profil sur ServicesArtisans.`}
+                  variant="icon"
+                />
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}

@@ -6,6 +6,8 @@ import { FileText, MessageSquare, Star, Settings, TrendingUp, Users, Eye, Euro, 
 import Breadcrumb from '@/components/Breadcrumb'
 import { QuickSiteLinks } from '@/components/InternalLinks'
 import LogoutButton from '@/components/LogoutButton'
+import PhotoUploadBanner from '@/components/dashboard/PhotoUploadBanner'
+import { createClient } from '@/lib/supabase/client'
 
 interface StatsData {
   profileViews: { value: number; change: string }
@@ -39,9 +41,11 @@ export default function DashboardArtisanPage() {
   const [stats, setStats] = useState<StatsData | null>(null)
   const [demandes, setDemandes] = useState<Demande[]>([])
   const [profile, setProfile] = useState<Profile | null>(null)
+  const [portfolioPhotoCount, setPortfolioPhotoCount] = useState<number | null>(null)
 
   useEffect(() => {
     fetchDashboardData()
+    fetchPortfolioCount()
   }, [])
 
   const fetchDashboardData = async () => {
@@ -67,6 +71,22 @@ export default function DashboardArtisanPage() {
       setError('Erreur de connexion. Veuillez vérifier votre connexion internet.')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const fetchPortfolioCount = async () => {
+    try {
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+      const { count } = await supabase
+        .from('portfolio_items')
+        .select('*', { count: 'exact', head: true })
+        .eq('artisan_id', user.id)
+      setPortfolioPhotoCount(count ?? 0)
+    } catch {
+      // Silently fail — banner just won't show
+      setPortfolioPhotoCount(null)
     }
   }
 
@@ -259,6 +279,11 @@ export default function DashboardArtisanPage() {
 
           {/* Main content */}
           <div className="lg:col-span-3 space-y-8">
+            {/* Photo upload prompt */}
+            {portfolioPhotoCount !== null && (
+              <PhotoUploadBanner photoCount={portfolioPhotoCount} />
+            )}
+
             {/* Stats */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               {statsDisplay.map((stat) => {
