@@ -1,13 +1,27 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { Shield, Activity, Star, AlertTriangle, ArrowRight } from 'lucide-react'
 import { ErrorBanner } from '@/components/admin/ErrorBanner'
 import { useAdminFetch } from '@/hooks/admin/useAdminFetch'
 import { StatsGrid } from '@/components/admin/dashboard/StatsGrid'
-import { ActivityChart } from '@/components/admin/dashboard/ActivityChart'
 import { RecentActivity } from '@/components/admin/dashboard/RecentActivity'
 import { PendingReports } from '@/components/admin/dashboard/PendingReports'
+
+// Lazy-load recharts bundle (~150KB) — only fetched when dashboard renders
+const ActivityChart = dynamic(
+  () => import('@/components/admin/dashboard/ActivityChart').then(m => ({ default: m.ActivityChart })),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 animate-pulse">
+        <div className="w-48 h-5 bg-gray-200 rounded mb-6" />
+        <div className="w-full h-[300px] bg-gray-50 rounded" />
+      </div>
+    ),
+  }
+)
 
 interface StatsResponse {
   stats: {

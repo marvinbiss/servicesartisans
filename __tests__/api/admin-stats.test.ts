@@ -275,7 +275,7 @@ describe('GET /api/admin/stats', () => {
 
     // Should have logged the Supabase error
     expect(mockLoggerWarn).toHaveBeenCalledWith(
-      expect.stringContaining('[admin-stats] batch1[0]'),
+      expect.stringContaining('[admin-stats] queries[0]'),
       expect.objectContaining({ message: 'permission denied', code: 'PGRST301' })
     )
   })

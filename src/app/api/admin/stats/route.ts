@@ -73,20 +73,31 @@ export async function GET() {
     const thirtyDaysAgo = new Date(now.getTime() - 30 * 86_400_000).toISOString()
     const sevenDaysAgo = new Date(now.getTime() - 7 * 86_400_000).toISOString()
 
-    // ── Batch 1: counts + trend numerics ──────────────────────────────
+    // ── Single batch: all 20 queries in parallel (no sequential batches) ─
     const [
-      totalUsersR, totalArtisansR, totalBookingsR, pendingReportsR, reviewsR,
+      // Counts (0–3)
+      totalUsersR, totalArtisansR, totalBookingsR, pendingReportsR,
+      // Rating sample (4) — 200 rows is statistically sufficient for avg
+      reviewsR,
+      // Today (5–6)
       newUsersTodayR, newBookingsTodayR,
+      // This month vs last month (7–10)
       usersThisMonthR, usersLastMonthR,
       bookingsThisMonthR, bookingsLastMonthR,
+      // Revenue (11–12)
       revThisMonthR, revLastMonthR,
+      // Active users (13)
       activeUsers7dR,
+      // Activity feed (14–16)
+      recentBookingsR, recentReviewsR, pendingReportsListR,
+      // Chart: last 30 days (17–19) — capped at 5K rows each
+      chartProfilesR, chartBookingsR, chartReviewsR,
     ] = await Promise.allSettled([
       supabase.from('profiles').select('id', { count: 'exact', head: true }),
       supabase.from('providers').select('id', { count: 'exact', head: true }).eq('is_active', true),
       supabase.from('bookings').select('id', { count: 'exact', head: true }),
       supabase.from('user_reports').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
-      supabase.from('reviews').select('rating').eq('status', 'published').limit(1000),
+      supabase.from('reviews').select('rating').eq('status', 'published').limit(200),
       // Today
       supabase.from('profiles').select('id', { count: 'exact', head: true }).gte('created_at', todayStart),
       supabase.from('bookings').select('id', { count: 'exact', head: true }).gte('created_at', todayStart),
@@ -100,17 +111,28 @@ export async function GET() {
       supabase.from('bookings').select('total_amount').gte('created_at', lastMonthStart).lt('created_at', thisMonthStart).eq('payment_status', 'paid'),
       // Active users (profile updated in last 7 days)
       supabase.from('profiles').select('id', { count: 'exact', head: true }).gte('updated_at', sevenDaysAgo),
+      // Activity feed
+      supabase.from('bookings').select('id, status, created_at, city').order('created_at', { ascending: false }).limit(5),
+      supabase.from('reviews').select('id, rating, client_name, status, created_at').order('created_at', { ascending: false }).limit(5),
+      supabase.from('user_reports').select('id, target_type, reason, description, status, created_at, reporter_id').eq('status', 'pending').order('created_at', { ascending: false }).limit(10),
+      // Chart: last 30 days — reduced from 10K to 5K per table
+      supabase.from('profiles').select('created_at').gte('created_at', thirtyDaysAgo).limit(5000),
+      supabase.from('bookings').select('created_at').gte('created_at', thirtyDaysAgo).limit(5000),
+      supabase.from('reviews').select('created_at').gte('created_at', thirtyDaysAgo).limit(5000),
     ])
 
-    logBatchErrors('batch1', [
+    logBatchErrors('queries', [
       totalUsersR, totalArtisansR, totalBookingsR, pendingReportsR, reviewsR,
       newUsersTodayR, newBookingsTodayR,
       usersThisMonthR, usersLastMonthR,
       bookingsThisMonthR, bookingsLastMonthR,
       revThisMonthR, revLastMonthR,
       activeUsers7dR,
+      recentBookingsR, recentReviewsR, pendingReportsListR,
+      chartProfilesR, chartBookingsR, chartReviewsR,
     ])
 
+    // ── Derived metrics ────────────────────────────────────────────────
     // Average rating from published reviews sample
     const ratings = safeData<{ rating: number }>(reviewsR as PromiseSettledResult<{ data: { rating: number }[] | null }>)
     const averageRating = ratings.length > 0
@@ -125,25 +147,6 @@ export async function GET() {
     }
     const revThisMonth = sumAmounts(revThisMonthR)
     const revLastMonth = sumAmounts(revLastMonthR)
-
-    // ── Batch 2: activity feed + chart series ─────────────────────────
-    const [
-      recentBookingsR, recentReviewsR, pendingReportsListR,
-      chartProfilesR, chartBookingsR, chartReviewsR,
-    ] = await Promise.allSettled([
-      supabase.from('bookings').select('id, status, created_at, city').order('created_at', { ascending: false }).limit(5),
-      supabase.from('reviews').select('id, rating, client_name, status, created_at').order('created_at', { ascending: false }).limit(5),
-      supabase.from('user_reports').select('id, target_type, reason, description, status, created_at, reporter_id').eq('status', 'pending').order('created_at', { ascending: false }).limit(10),
-      // Chart: last 30 days
-      supabase.from('profiles').select('created_at').gte('created_at', thirtyDaysAgo).limit(10000),
-      supabase.from('bookings').select('created_at').gte('created_at', thirtyDaysAgo).limit(10000),
-      supabase.from('reviews').select('created_at').gte('created_at', thirtyDaysAgo).limit(10000),
-    ])
-
-    logBatchErrors('batch2', [
-      recentBookingsR, recentReviewsR, pendingReportsListR,
-      chartProfilesR, chartBookingsR, chartReviewsR,
-    ])
 
     // ── Build activity feed from real data ────────────────────────────
     type ActivityItem = { id: string; type: string; action: string; details: string; timestamp: string; status?: string }
