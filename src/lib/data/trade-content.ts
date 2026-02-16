@@ -1018,6 +1018,697 @@ export const tradeContent: Record<string, TradeContent> = {
     ],
     averageResponseTime: 'Intervention rapide, selon disponibilité',
   },
+
+  // ════════════════════════════════════════════════════════════════════════
+  // NOUVEAUX MÉTIERS (35 services additionnels)
+  // ════════════════════════════════════════════════════════════════════════
+
+  terrassier: {
+    slug: 'terrassier',
+    name: 'Terrassier',
+    priceRange: { min: 30, max: 60, unit: '\u20AC/m³' },
+    commonTasks: [
+      'Terrassement pour fondations : 30 à 60 \u20AC/m³',
+      'Décaissement de terrain : 5 à 15 \u20AC/m²',
+      'Viabilisation de parcelle (VRD) : 5 000 à 15 000 \u20AC',
+      'Assainissement individuel (fosse septique) : 4 000 à 12 000 \u20AC',
+      'Création de tranchées pour réseaux : 15 à 40 \u20AC/ml',
+    ],
+    tips: [
+      'Avant tout terrassement, faites réaliser une étude de sol (G2) pour connaître la nature du terrain et adapter les travaux.',
+      'Vérifiez que le terrassier dispose d\'une assurance décennale et d\'une RC professionnelle.',
+      'Demandez les autorisations de voirie si les engins doivent circuler sur la voie publique.',
+    ],
+    faq: [
+      { q: 'Combien coûte un terrassement de maison ?', a: 'Le terrassement pour une maison individuelle de 100 m² au sol coûte entre 3 000 et 10 000 \u20AC selon la nature du terrain, la profondeur des fondations et l\'accessibilité du chantier.' },
+      { q: 'Faut-il un permis pour terrassement ?', a: 'Pas de permis spécifique, mais une déclaration préalable de travaux est nécessaire si le terrassement modifie le relief naturel du terrain de plus de 2 m de hauteur et 100 m² de surface.' },
+    ],
+    certifications: ['Qualibat (qualification terrassement)', 'Certificat de capacité d\'engins de chantier (CACES)'],
+    averageResponseTime: 'Devis sous 48h, intervention sous 1 à 3 semaines',
+  },
+
+  charpentier: {
+    slug: 'charpentier',
+    name: 'Charpentier',
+    priceRange: { min: 50, max: 120, unit: '\u20AC/m²' },
+    commonTasks: [
+      'Charpente traditionnelle bois : 70 à 150 \u20AC/m² de toiture',
+      'Charpente fermettes industrielles : 50 à 80 \u20AC/m²',
+      'Réparation de charpente (remplacement de pièces) : 100 à 250 \u20AC/ml',
+      'Traitement insecticide/fongicide : 15 à 30 \u20AC/m²',
+      'Surélévation en ossature bois : 1 200 à 2 000 \u20AC/m²',
+    ],
+    tips: [
+      'Un traitement préventif de la charpente tous les 10 ans prolonge sa durée de vie de plusieurs décennies.',
+      'Pour une extension en bois, vérifiez que le charpentier est certifié ACQPA ou titulaire d\'un Qualibat charpente bois.',
+      'Exigez un diagnostic parasitaire (termites, capricornes) avant toute rénovation de charpente ancienne.',
+    ],
+    faq: [
+      { q: 'Quelle est la durée de vie d\'une charpente bois ?', a: 'Une charpente bois bien entretenue dure 100 ans et plus. Les charpentes en chêne des bâtiments anciens atteignent souvent 200 à 300 ans. Le principal ennemi est l\'humidité, qui favorise les champignons (mérule) et les insectes xylophages.' },
+      { q: 'Charpente traditionnelle ou fermettes ?', a: 'La charpente traditionnelle permet d\'aménager les combles et offre un cachet architectural. Les fermettes sont 30 à 40 % moins chères mais rendent les combles inaménageables (sauf conversion coûteuse). Pour une maison avec projet de combles aménagés, choisissez le traditionnel.' },
+    ],
+    certifications: ['Qualibat charpente bois', 'ACQPA (traitement du bois)', 'Compagnon du Devoir (excellence)'],
+    averageResponseTime: 'Devis sous 1 semaine, intervention sous 2 à 4 semaines',
+  },
+
+  zingueur: {
+    slug: 'zingueur',
+    name: 'Zingueur',
+    priceRange: { min: 40, max: 80, unit: '\u20AC/ml' },
+    commonTasks: [
+      'Pose de gouttières en zinc : 40 à 80 \u20AC/ml',
+      'Remplacement de chéneaux : 60 à 120 \u20AC/ml',
+      'Pose de descentes d\'eau : 30 à 60 \u20AC/ml',
+      'Habillage de rives et bandeaux : 50 à 100 \u20AC/ml',
+      'Réparation de noues et faîtages : 80 à 200 \u20AC/ml',
+    ],
+    tips: [
+      'Le zinc a une durée de vie de 50 à 100 ans selon la qualité et l\'exposition. Préférez le zinc prépatiné pour une meilleure résistance à la corrosion.',
+      'Faites vérifier l\'état de vos gouttières et descentes après chaque automne pour éviter les engorgements.',
+    ],
+    faq: [
+      { q: 'Quel est le prix de remplacement de gouttières ?', a: 'Comptez 40 à 80 \u20AC/ml pour des gouttières en zinc, pose comprise. Pour une maison de 40 ml de gouttières, le budget total se situe entre 2 000 et 4 000 \u20AC. Le PVC est moins cher (20 à 40 \u20AC/ml) mais dure 2 à 3 fois moins longtemps.' },
+    ],
+    certifications: ['Qualibat couverture-zinguerie', 'Certification zinc NF'],
+    averageResponseTime: 'Devis sous 48h, intervention sous 1 à 2 semaines',
+  },
+
+  etancheiste: {
+    slug: 'etancheiste',
+    name: 'Étanchéiste',
+    priceRange: { min: 40, max: 100, unit: '\u20AC/m²' },
+    commonTasks: [
+      'Étanchéité toiture-terrasse (membrane bitume) : 40 à 80 \u20AC/m²',
+      'Étanchéité PVC/EPDM : 50 à 100 \u20AC/m²',
+      'Étanchéité de balcon/loggia : 60 à 120 \u20AC/m²',
+      'Cuvelage de sous-sol : 150 à 300 \u20AC/m²',
+      'Traitement d\'infiltrations : 50 à 200 \u20AC/m²',
+    ],
+    tips: [
+      'L\'étanchéité d\'un toit-terrasse doit être contrôlée tous les 5 ans. Un défaut mineur non traité peut entraîner des dommages structurels majeurs.',
+      'Pour les terrasses accessibles, privilégiez une membrane EPDM (durée de vie 40 ans+) plutôt qu\'un bitume classique.',
+    ],
+    faq: [
+      { q: 'Quelle garantie pour des travaux d\'étanchéité ?', a: 'Les travaux d\'étanchéité sont couverts par la garantie décennale (10 ans). De plus, la plupart des fabricants de membranes offrent une garantie produit de 15 à 25 ans. Exigez les attestations d\'assurance et de garantie fabricant.' },
+    ],
+    certifications: ['Qualibat étanchéité (1311/1312)', 'Certification ASQUAL', 'RGE si isolation associée'],
+    averageResponseTime: 'Devis sous 1 semaine, intervention sous 2 à 3 semaines',
+  },
+
+  facadier: {
+    slug: 'facadier',
+    name: 'Façadier',
+    priceRange: { min: 30, max: 100, unit: '\u20AC/m²' },
+    commonTasks: [
+      'Ravalement de façade (enduit) : 30 à 70 \u20AC/m²',
+      'Isolation thermique par l\'extérieur (ITE) : 100 à 200 \u20AC/m²',
+      'Peinture de façade : 20 à 45 \u20AC/m²',
+      'Nettoyage haute pression : 10 à 25 \u20AC/m²',
+      'Traitement anti-mousse et hydrofuge : 15 à 30 \u20AC/m²',
+    ],
+    tips: [
+      'Un ravalement de façade est obligatoire tous les 10 ans dans certaines communes. Renseignez-vous auprès de votre mairie.',
+      'Profitez d\'un ravalement pour ajouter une isolation par l\'extérieur (ITE) et bénéficier des aides MaPrimeRénov\'.',
+    ],
+    faq: [
+      { q: 'Combien coûte un ravalement de façade pour une maison ?', a: 'Pour une maison de 100 m² de façade, comptez entre 5 000 et 15 000 \u20AC selon l\'état du support, le type d\'enduit et la nécessité d\'un échafaudage. Avec ITE, le budget monte à 15 000 à 25 000 \u20AC mais les aides peuvent couvrir jusqu\'à 40 %.' },
+    ],
+    certifications: ['Qualibat ravalement (6111/6112)', 'RGE pour ITE', 'Certification Sto, Weber ou Parex (fabricants)'],
+    averageResponseTime: 'Devis sous 1 semaine, intervention sous 2 à 6 semaines',
+  },
+
+  platrier: {
+    slug: 'platrier',
+    name: 'Plâtrier',
+    priceRange: { min: 25, max: 55, unit: '\u20AC/m²' },
+    commonTasks: [
+      'Pose de cloisons en plaques de plâtre : 30 à 55 \u20AC/m²',
+      'Faux-plafond en plaques de plâtre : 35 à 65 \u20AC/m²',
+      'Doublage isolant (plaque + isolant) : 40 à 80 \u20AC/m²',
+      'Enduit plâtre traditionnel : 25 à 45 \u20AC/m²',
+      'Staff et corniche décorative : 30 à 100 \u20AC/ml',
+    ],
+    tips: [
+      'Pour les pièces humides (salle de bain, cuisine), exigez des plaques hydrofuges (vertes) et non des plaques standard.',
+      'Un plâtrier-plaquiste expérimenté réalise des joints invisibles. Vérifiez la qualité des finitions sur des chantiers précédents.',
+    ],
+    faq: [
+      { q: 'Plaque de plâtre ou enduit traditionnel ?', a: 'Les plaques de plâtre (BA13) sont plus rapides à poser et moins chères (30-55 \u20AC/m²). L\'enduit traditionnel offre une meilleure inertie thermique et acoustique mais coûte plus cher en main-d\'œuvre. Pour une rénovation, les plaques sont souvent privilégiées ; pour du neuf haut de gamme, l\'enduit traditionnel.' },
+    ],
+    certifications: ['Qualibat plâtrerie (4111/4112)', 'Certification Placo/Saint-Gobain', 'RGE pour doublage isolant'],
+    averageResponseTime: 'Devis sous 48h, intervention sous 1 à 2 semaines',
+  },
+
+  metallier: {
+    slug: 'metallier',
+    name: 'Métallier',
+    priceRange: { min: 150, max: 400, unit: '\u20AC/ml' },
+    commonTasks: [
+      'Escalier métallique sur mesure : 3 000 à 12 000 \u20AC',
+      'Garde-corps en acier/inox : 150 à 400 \u20AC/ml',
+      'Verrière d\'intérieur : 800 à 2 500 \u20AC/m²',
+      'Porte d\'entrée en acier : 1 500 à 5 000 \u20AC',
+      'Pergola métallique : 3 000 à 8 000 \u20AC',
+    ],
+    tips: [
+      'L\'acier thermolaqué offre le meilleur rapport qualité/prix pour les ouvrages extérieurs. L\'inox est réservé aux environnements corrosifs (bord de mer).',
+      'Demandez des plans cotés et une maquette 3D avant la fabrication pour valider les dimensions exactes.',
+    ],
+    faq: [
+      { q: 'Combien coûte une verrière d\'intérieur ?', a: 'Une verrière atelier sur mesure coûte entre 800 et 2 500 \u20AC/m² selon le matériau (acier, aluminium), le type de vitrage (simple, double, feuilleté) et la complexité de la pose. Une verrière standard de 2 m × 1,5 m revient à 2 500 à 5 000 \u20AC, pose comprise.' },
+    ],
+    certifications: ['Qualibat métallerie (4411)', 'Certification AFNOR NF Métallerie', 'Label Artisanat d\'Art (ouvrages décoratifs)'],
+    averageResponseTime: 'Devis sous 1 semaine, fabrication 3 à 6 semaines',
+  },
+
+  ferronnier: {
+    slug: 'ferronnier',
+    name: 'Ferronnier',
+    priceRange: { min: 200, max: 600, unit: '\u20AC/ml' },
+    commonTasks: [
+      'Portail en fer forgé sur mesure : 2 000 à 8 000 \u20AC',
+      'Grille de fenêtre : 150 à 500 \u20AC/unité',
+      'Rampe d\'escalier en fer forgé : 200 à 600 \u20AC/ml',
+      'Table ou mobilier en fer forgé : 500 à 3 000 \u20AC',
+      'Restauration d\'ouvrages anciens : sur devis',
+    ],
+    tips: [
+      'La ferronnerie d\'art est un métier rare — les délais de fabrication sont souvent longs (4 à 8 semaines). Anticipez vos projets.',
+      'Pour les ouvrages extérieurs, exigez un traitement anticorrosion par galvanisation à chaud avant mise en peinture.',
+    ],
+    faq: [
+      { q: 'Quelle est la différence entre un ferronnier et un métallier ?', a: 'Le ferronnier travaille principalement le fer forgé à chaud (forge traditionnelle) pour des ouvrages décoratifs et artistiques. Le métallier travaille l\'acier, l\'inox et l\'aluminium à froid (soudure, pliage) pour des ouvrages structurels. En pratique, beaucoup d\'artisans maîtrisent les deux techniques.' },
+    ],
+    certifications: ['Label Entreprise du Patrimoine Vivant (EPV)', 'Maître Artisan en métier d\'art', 'Compagnon du Devoir'],
+    averageResponseTime: 'Devis sous 1 semaine, fabrication 4 à 8 semaines',
+  },
+
+  'poseur-de-parquet': {
+    slug: 'poseur-de-parquet',
+    name: 'Poseur de parquet',
+    priceRange: { min: 25, max: 80, unit: '\u20AC/m²' },
+    commonTasks: [
+      'Pose de parquet flottant : 25 à 40 \u20AC/m²',
+      'Pose de parquet massif collé : 40 à 80 \u20AC/m²',
+      'Pose de parquet massif cloué : 50 à 90 \u20AC/m²',
+      'Ponçage et vitrification : 25 à 45 \u20AC/m²',
+      'Pose en point de Hongrie ou Versailles : 80 à 150 \u20AC/m²',
+    ],
+    tips: [
+      'Laissez le parquet s\'acclimater 48h minimum dans la pièce avant la pose, pour éviter les déformations.',
+      'Pour un parquet massif dans une pièce humide, optez pour des essences exotiques (teck, ipé) naturellement résistantes à l\'eau.',
+    ],
+    faq: [
+      { q: 'Parquet massif, contrecollé ou stratifié ?', a: 'Le parquet massif (30-80 \u20AC/m² hors pose) se ponce et se rénove plusieurs fois, durant 50 à 100 ans. Le contrecollé (25-60 \u20AC/m²) se ponce 1 à 3 fois et dure 30 ans. Le stratifié (10-25 \u20AC/m²) ne se ponce pas et dure 10 à 20 ans. Le massif est un investissement, le stratifié un compromis économique.' },
+    ],
+    certifications: ['Qualibat pose de revêtements (6321)', 'Certification Parquets de France', 'Label Artisan de confiance'],
+    averageResponseTime: 'Devis sous 48h, intervention sous 1 à 3 semaines',
+  },
+
+  miroitier: {
+    slug: 'miroitier',
+    name: 'Miroitier',
+    priceRange: { min: 80, max: 250, unit: '\u20AC/m²' },
+    commonTasks: [
+      'Pose de miroir sur mesure : 80 à 200 \u20AC/m²',
+      'Crédence de cuisine en verre : 150 à 350 \u20AC/m²',
+      'Paroi de douche en verre trempé : 400 à 1 200 \u20AC',
+      'Vitrine de commerce : 200 à 500 \u20AC/m²',
+      'Remplacement de double vitrage : 150 à 400 \u20AC/m²',
+    ],
+    tips: [
+      'Pour les parois de douche et garde-corps, le verre trempé securit est obligatoire (norme NF EN 12150).',
+      'Un miroir sur mesure avec bords polis et fixations invisibles coûte plus cher mais offre un rendu haut de gamme.',
+    ],
+    faq: [
+      { q: 'Quelle épaisseur de verre pour une crédence ?', a: 'Une crédence de cuisine nécessite un verre trempé de 6 mm minimum (8 mm recommandé pour les grandes surfaces). Le verre laqué est le plus populaire car il offre un large choix de couleurs et se nettoie facilement. Budget : 150 à 350 \u20AC/m², pose comprise.' },
+    ],
+    certifications: ['Qualibat vitrerie-miroiterie (4311)', 'Certification Cekal (vitrages isolants)'],
+    averageResponseTime: 'Devis sous 48h, fabrication 1 à 3 semaines',
+  },
+
+  storiste: {
+    slug: 'storiste',
+    name: 'Storiste',
+    priceRange: { min: 200, max: 800, unit: '\u20AC/unité' },
+    commonTasks: [
+      'Store banne motorisé : 800 à 3 000 \u20AC',
+      'Volet roulant électrique : 300 à 800 \u20AC/fenêtre',
+      'Store intérieur (vénitien, enrouleur) : 100 à 400 \u20AC',
+      'Pergola bioclimatique : 5 000 à 15 000 \u20AC',
+      'Motorisation de volets existants : 200 à 500 \u20AC/volet',
+    ],
+    tips: [
+      'Pour les stores extérieurs, privilégiez une toile acrylique teinte masse (garantie 5 à 10 ans) plutôt qu\'une toile polyester qui se décolore rapidement.',
+      'La motorisation Somfy est la référence en France — elle permet l\'intégration domotique et les capteurs vent/soleil.',
+    ],
+    faq: [
+      { q: 'Combien coûte la motorisation de tous les volets d\'une maison ?', a: 'Pour une maison de 8 à 10 volets, comptez 2 500 à 5 000 \u20AC pour la motorisation complète (moteurs + commandes radio + installation). Une commande centralisée ajoute 300 à 800 \u20AC. La motorisation solaire est possible si le câblage électrique est difficile (+30 % de surcoût).' },
+    ],
+    certifications: ['Qualibat stores et fermetures (3511)', 'Expert Somfy', 'RGE pour volets isolants'],
+    averageResponseTime: 'Devis sous 48h, intervention sous 1 à 2 semaines',
+  },
+
+  'salle-de-bain': {
+    slug: 'salle-de-bain',
+    name: 'Salle de bain',
+    priceRange: { min: 4000, max: 15000, unit: '\u20AC' },
+    commonTasks: [
+      'Rénovation complète salle de bain 5 m² : 5 000 à 12 000 \u20AC',
+      'Remplacement baignoire par douche à l\'italienne : 3 000 à 7 000 \u20AC',
+      'Création d\'une salle de bain (dans une chambre) : 8 000 à 20 000 \u20AC',
+      'Pose de carrelage mural et sol : 40 à 80 \u20AC/m²',
+      'Installation meuble vasque + robinetterie : 500 à 2 500 \u20AC',
+    ],
+    tips: [
+      'Pour une douche à l\'italienne, exigez une étanchéité SPEC (Système de Protection à l\'Eau sous Carrelage) certifiée.',
+      'Prévoyez une VMC performante pour éviter les problèmes d\'humidité et de moisissures.',
+    ],
+    faq: [
+      { q: 'Quelles aides pour rénover sa salle de bain ?', a: 'Si vous avez plus de 60 ans ou êtes en situation de handicap, l\'aide MaPrimeAdapt\' peut couvrir jusqu\'à 70 % des travaux d\'adaptation (douche accessible, barres d\'appui). La TVA réduite à 10 % s\'applique pour les logements de plus de 2 ans. Certaines caisses de retraite proposent aussi des aides.' },
+    ],
+    certifications: ['Qualibat aménagement intérieur', 'Handibat (accessibilité PMR)', 'Label RGE si isolation associée'],
+    averageResponseTime: 'Devis sous 1 semaine, intervention sous 2 à 6 semaines',
+  },
+
+  'architecte-interieur': {
+    slug: 'architecte-interieur',
+    name: 'Architecte d\'intérieur',
+    priceRange: { min: 50, max: 150, unit: '\u20AC/m²' },
+    commonTasks: [
+      'Consultation / conseil déco : 80 à 200 \u20AC/h',
+      'Projet d\'aménagement complet : 50 à 150 \u20AC/m² de surface aménagée',
+      'Suivi de chantier : 8 à 15 % du montant des travaux',
+      'Plans 3D et planches d\'ambiance : 500 à 2 000 \u20AC',
+      'Rénovation d\'appartement haussmannien : 800 à 2 000 \u20AC/m²',
+    ],
+    tips: [
+      'Un architecte d\'intérieur titulaire du diplôme CFAI est inscrit au Conseil français des architectes d\'intérieur et peut porter le titre protégé.',
+      'Définissez un budget précis avant la première consultation pour que le professionnel adapte ses propositions.',
+    ],
+    faq: [
+      { q: 'Architecte d\'intérieur ou décorateur ?', a: 'L\'architecte d\'intérieur peut modifier les volumes (cloisons, ouvertures, mezzanines) et déposer des permis. Le décorateur intervient uniquement sur l\'ameublement, les couleurs et les textiles sans toucher au bâti. Pour une rénovation avec travaux structurels, un architecte d\'intérieur est indispensable.' },
+    ],
+    certifications: ['Diplôme CFAI (Conseil Français des Architectes d\'Intérieur)', 'Inscription à l\'Ordre (si architecte DPLG)', 'Assurance décennale'],
+    averageResponseTime: 'Premier rendez-vous sous 1 semaine',
+  },
+
+  decorateur: {
+    slug: 'decorateur',
+    name: 'Décorateur',
+    priceRange: { min: 50, max: 120, unit: '\u20AC/h' },
+    commonTasks: [
+      'Conseil en décoration (visite + recommandations) : 150 à 500 \u20AC',
+      'Planche d\'ambiance et shopping list : 300 à 1 000 \u20AC/pièce',
+      'Home staging pour vente immobilière : 1 à 3 % du prix de vente',
+      'Décoration événementielle : 500 à 3 000 \u20AC',
+      'Accompagnement achat mobilier : 50 à 120 \u20AC/h',
+    ],
+    tips: [
+      'Un bon décorateur vous fait gagner du temps et de l\'argent en évitant les erreurs d\'achat (meubles inadaptés, couleurs qui ne vont pas ensemble).',
+      'Pour un home staging, comptez un ROI de 5 à 10 fois le coût investi sur le prix de vente final.',
+    ],
+    faq: [
+      { q: 'Combien coûte un décorateur pour un salon ?', a: 'Pour un salon de 25 à 35 m², comptez 500 à 2 000 \u20AC pour une prestation complète : visite, planche d\'ambiance, shopping list et accompagnement achat. Le budget mobilier et accessoires est en sus.' },
+    ],
+    certifications: ['Diplôme en décoration d\'intérieur', 'Membre de l\'UFDI (Union Francophone des Décorateurs d\'Intérieur)'],
+    averageResponseTime: 'Premier rendez-vous sous 1 semaine',
+  },
+
+  domoticien: {
+    slug: 'domoticien',
+    name: 'Domoticien',
+    priceRange: { min: 500, max: 5000, unit: '\u20AC' },
+    commonTasks: [
+      'Installation domotique complète maison : 5 000 à 20 000 \u20AC',
+      'Éclairage connecté (10 points) : 1 000 à 3 000 \u20AC',
+      'Thermostat connecté : 300 à 800 \u20AC (fourniture + pose)',
+      'Serrure connectée : 300 à 1 000 \u20AC',
+      'Système multiroom audio : 2 000 à 8 000 \u20AC',
+    ],
+    tips: [
+      'Privilégiez les protocoles ouverts (KNX, Zigbee, Z-Wave) plutôt que les systèmes propriétaires fermés pour garantir l\'évolutivité.',
+      'Prévoyez un réseau Ethernet en étoile (câble Cat 6) même si vous utilisez du Wi-Fi — c\'est la base d\'une installation fiable.',
+    ],
+    faq: [
+      { q: 'Quel budget pour domotiser une maison ?', a: 'Le budget varie de 3 000 \u20AC (kit DIY : éclairage + thermostat + volets) à 30 000 \u20AC+ (installation professionnelle KNX complète). Un bon compromis est un système Zigbee/Z-Wave avec box domotique (5 000 à 10 000 \u20AC) qui couvre éclairage, chauffage, volets et sécurité.' },
+    ],
+    certifications: ['Certification KNX Partner', 'Certification Crestron/Control4 (haut de gamme)', 'Habilitation électrique'],
+    averageResponseTime: 'Devis sous 1 semaine, installation 1 à 4 semaines',
+  },
+
+  'pompe-a-chaleur': {
+    slug: 'pompe-a-chaleur',
+    name: 'Pompe à chaleur',
+    priceRange: { min: 8000, max: 18000, unit: '\u20AC' },
+    commonTasks: [
+      'PAC air/eau (chauffage + ECS) : 10 000 à 18 000 \u20AC',
+      'PAC air/air (climatisation réversible) : 3 000 à 8 000 \u20AC',
+      'PAC géothermique : 15 000 à 25 000 \u20AC',
+      'Entretien annuel obligatoire : 150 à 300 \u20AC',
+      'Remplacement de chaudière fioul par PAC : 12 000 à 20 000 \u20AC',
+    ],
+    tips: [
+      'Exigez un installateur certifié QualiPAC — c\'est obligatoire pour bénéficier des aides MaPrimeRénov\' et des CEE.',
+      'Un dimensionnement correct est crucial : une PAC surdimensionnée consomme plus et s\'use prématurément. Exigez une étude thermique (800 à 1 500 \u20AC).',
+    ],
+    faq: [
+      { q: 'Quelles aides pour installer une pompe à chaleur ?', a: 'MaPrimeRénov\' : jusqu\'à 5 000 \u20AC (revenus modestes). CEE (prime énergie) : 2 000 à 4 000 \u20AC. Éco-PTZ : prêt à taux zéro jusqu\'à 50 000 \u20AC. TVA réduite à 5,5 %. Au total, les aides peuvent couvrir 40 à 70 % du coût pour les ménages modestes.' },
+    ],
+    emergencyInfo: 'En cas de panne de chauffage en hiver, un chauffagiste d\'urgence peut intervenir en 2 à 4h pour un diagnostic. Coût : 150 à 350 \u20AC (déplacement + diagnostic).',
+    certifications: ['QualiPAC (obligatoire pour les aides)', 'RGE (Reconnu Garant de l\'Environnement)', 'Certification F-Gaz (manipulation de fluides frigorigènes)'],
+    averageResponseTime: 'Devis sous 1 semaine, installation 2 à 4 semaines',
+  },
+
+  'panneaux-solaires': {
+    slug: 'panneaux-solaires',
+    name: 'Panneaux solaires',
+    priceRange: { min: 7000, max: 20000, unit: '\u20AC' },
+    commonTasks: [
+      'Installation photovoltaïque 3 kWc : 7 000 à 10 000 \u20AC',
+      'Installation photovoltaïque 6 kWc : 12 000 à 16 000 \u20AC',
+      'Installation photovoltaïque 9 kWc : 16 000 à 22 000 \u20AC',
+      'Solaire thermique (eau chaude) : 4 000 à 8 000 \u20AC',
+      'Batterie de stockage : 4 000 à 10 000 \u20AC',
+    ],
+    tips: [
+      'La rentabilité dépend de l\'orientation (sud idéal), de l\'inclinaison (30° optimal) et de l\'ensoleillement local. Une étude de faisabilité gratuite est proposée par la plupart des installateurs.',
+      'En autoconsommation avec revente du surplus, le retour sur investissement est de 8 à 12 ans en moyenne.',
+    ],
+    faq: [
+      { q: 'Est-ce rentable d\'installer des panneaux solaires ?', a: 'Oui, avec un prix de l\'électricité en hausse constante. Une installation de 3 kWc produit environ 3 500 kWh/an dans le sud de la France, soit 500 à 700 \u20AC d\'économie annuelle. Avec la prime à l\'autoconsommation (1 140 \u20AC pour 3 kWc) et la revente du surplus à 0,13 \u20AC/kWh, le retour sur investissement se fait en 8 à 12 ans pour un équipement qui dure 30 ans+.' },
+    ],
+    certifications: ['QualiPV (installation photovoltaïque)', 'RGE (obligatoire pour les aides)', 'Certification Qualit\'EnR'],
+    averageResponseTime: 'Étude gratuite sous 1 semaine, installation 4 à 8 semaines',
+  },
+
+  'isolation-thermique': {
+    slug: 'isolation-thermique',
+    name: 'Isolation thermique',
+    priceRange: { min: 20, max: 100, unit: '\u20AC/m²' },
+    commonTasks: [
+      'Isolation des combles perdus (soufflage) : 20 à 35 \u20AC/m²',
+      'Isolation des combles aménagés : 40 à 80 \u20AC/m²',
+      'Isolation des murs par l\'intérieur (ITI) : 30 à 70 \u20AC/m²',
+      'Isolation des murs par l\'extérieur (ITE) : 100 à 200 \u20AC/m²',
+      'Isolation du plancher bas : 25 à 50 \u20AC/m²',
+    ],
+    tips: [
+      'Les combles sont responsables de 25 à 30 % des déperditions thermiques : c\'est le poste à traiter en priorité.',
+      'Exigez des matériaux certifiés ACERMI et un artisan RGE pour bénéficier des aides (MaPrimeRénov\', CEE, éco-PTZ).',
+    ],
+    faq: [
+      { q: 'Quelle épaisseur d\'isolant faut-il ?', a: 'Pour les combles perdus : 30 à 40 cm de laine de verre/roche (R ≥ 7 m².K/W). Pour les murs par l\'intérieur : 12 à 16 cm (R ≥ 3,7). Pour les murs par l\'extérieur : 14 à 18 cm (R ≥ 3,7). Ces valeurs correspondent à la RT 2012 / RE 2020 et permettent d\'obtenir les aides.' },
+    ],
+    certifications: ['RGE (Reconnu Garant de l\'Environnement)', 'Qualibat isolation thermique (7131/7132)', 'Certification ACERMI (matériaux)'],
+    averageResponseTime: 'Devis sous 1 semaine, intervention 1 à 3 semaines',
+  },
+
+  'renovation-energetique': {
+    slug: 'renovation-energetique',
+    name: 'Rénovation énergétique',
+    priceRange: { min: 15000, max: 50000, unit: '\u20AC' },
+    commonTasks: [
+      'Audit énergétique (DPE + préconisations) : 800 à 1 500 \u20AC',
+      'Rénovation globale (isolation + chauffage + ventilation) : 20 000 à 60 000 \u20AC',
+      'Passage de DPE F/G à C/D : 15 000 à 40 000 \u20AC',
+      'Remplacement de chaudière fioul par PAC + isolation : 25 000 à 50 000 \u20AC',
+    ],
+    tips: [
+      'Commencez toujours par un audit énergétique pour hiérarchiser les travaux et maximiser les aides.',
+      'Le bonus MaPrimeRénov\' « rénovation globale » (jusqu\'à 15 000 \u20AC) récompense les projets qui améliorent le DPE d\'au moins 2 classes.',
+    ],
+    faq: [
+      { q: 'Quelles sont les aides pour une rénovation énergétique ?', a: 'MaPrimeRénov\' (jusqu\'à 20 000 \u20AC), MaPrimeRénov\' Sérénité pour les ménages modestes (jusqu\'à 30 000 \u20AC), CEE (primes énergie), éco-PTZ (jusqu\'à 50 000 \u20AC à taux zéro), TVA à 5,5 %, aides locales (régions, départements). Un ménage modeste peut couvrir jusqu\'à 80 % du coût des travaux.' },
+    ],
+    certifications: ['RGE (Reconnu Garant de l\'Environnement)', 'Audit énergétique certifié OPQIBI/Qualibat', 'Label BBC Rénovation'],
+    averageResponseTime: 'Audit sous 2 semaines, planification des travaux 1 à 3 mois',
+  },
+
+  'borne-recharge': {
+    slug: 'borne-recharge',
+    name: 'Borne de recharge',
+    priceRange: { min: 1200, max: 3000, unit: '\u20AC' },
+    commonTasks: [
+      'Borne 7,4 kW (monophasé) : 1 200 à 2 000 \u20AC',
+      'Borne 11 kW (triphasé) : 1 500 à 2 500 \u20AC',
+      'Borne 22 kW (triphasé) : 2 000 à 3 500 \u20AC',
+      'Installation en copropriété (droit à la prise) : 1 500 à 3 000 \u20AC',
+      'Mise aux normes du tableau électrique : 500 à 1 500 \u20AC',
+    ],
+    tips: [
+      'Seul un électricien certifié IRVE peut installer une borne de recharge — c\'est obligatoire pour bénéficier du crédit d\'impôt (300 \u20AC).',
+      'Une borne 7,4 kW suffit pour la plupart des usages (recharge complète en 6 à 8h pendant la nuit).',
+    ],
+    faq: [
+      { q: 'Quelles aides pour installer une borne de recharge ?', a: 'Crédit d\'impôt de 300 \u20AC par borne (75 % du coût plafonné à 300 \u20AC), prime Advenir jusqu\'à 960 \u20AC en copropriété, TVA réduite à 5,5 % pour les logements de plus de 2 ans. Le budget net après aides est souvent inférieur à 1 000 \u20AC pour une borne 7,4 kW.' },
+    ],
+    certifications: ['Qualification IRVE (Infrastructure de Recharge de Véhicules Électriques)', 'Habilitation électrique', 'Certification Qualifelec'],
+    averageResponseTime: 'Devis sous 48h, installation sous 1 à 2 semaines',
+  },
+
+  ramoneur: {
+    slug: 'ramoneur',
+    name: 'Ramoneur',
+    priceRange: { min: 50, max: 120, unit: '\u20AC' },
+    commonTasks: [
+      'Ramonage de cheminée (conduit maçonné) : 50 à 90 \u20AC',
+      'Ramonage de poêle à bois/granulés : 60 à 120 \u20AC',
+      'Ramonage de chaudière (conduit fumée) : 70 à 130 \u20AC',
+      'Débistrage (enlèvement du bistre) : 150 à 400 \u20AC',
+      'Tubage de conduit : 1 500 à 3 500 \u20AC',
+    ],
+    tips: [
+      'Le ramonage est obligatoire 1 à 2 fois par an selon les communes (vérifiez le règlement sanitaire départemental). Le certificat de ramonage est exigé par votre assurance en cas de sinistre.',
+      'Planifiez votre ramonage en septembre/octobre, avant la saison de chauffe — les délais sont plus courts qu\'en plein hiver.',
+    ],
+    faq: [
+      { q: 'Que risque-t-on sans ramonage ?', a: 'Sans ramonage, vous risquez un feu de cheminée (bistre inflammable), une intoxication au monoxyde de carbone (CO), et un refus d\'indemnisation par votre assurance en cas d\'incendie. L\'amende pour défaut de ramonage peut atteindre 450 \u20AC (contravention de 3e classe).' },
+    ],
+    certifications: ['Qualification Qualibat ramonage (5141)', 'Certification du Groupement des Ramoneurs'],
+    averageResponseTime: 'Intervention sous 1 semaine en basse saison, 2 à 3 semaines en automne',
+  },
+
+  paysagiste: {
+    slug: 'paysagiste',
+    name: 'Paysagiste',
+    priceRange: { min: 35, max: 80, unit: '\u20AC/m²' },
+    commonTasks: [
+      'Aménagement paysager complet : 35 à 80 \u20AC/m²',
+      'Création de terrasse (bois, pierre) : 80 à 250 \u20AC/m²',
+      'Engazonnement (semis ou placage) : 5 à 15 \u20AC/m²',
+      'Plantation d\'arbres et haies : 30 à 100 \u20AC/unité',
+      'Système d\'arrosage automatique : 10 à 25 \u20AC/m²',
+    ],
+    tips: [
+      'Un paysagiste concepteur (diplôme DPLG ou ENSP) conçoit le projet ; un paysagiste entrepreneur réalise les travaux. Les deux compétences sont parfois réunies chez le même professionnel.',
+      'Demandez un plan d\'aménagement avec plantations adaptées au climat et au sol de votre région.',
+    ],
+    faq: [
+      { q: 'Combien coûte l\'aménagement d\'un jardin de 200 m² ?', a: 'Pour un jardin de 200 m² avec terrasse, plantations et engazonnement, comptez 8 000 à 20 000 \u20AC selon le niveau de finition. Un projet haut de gamme avec piscine peut atteindre 50 000 \u20AC+.' },
+    ],
+    certifications: ['Diplôme ENSP ou DPLG Paysage', 'Qualipaysage (certification professionnelle)', 'Label Écojardin'],
+    averageResponseTime: 'Étude sous 2 semaines, réalisation 2 à 8 semaines',
+  },
+
+  pisciniste: {
+    slug: 'pisciniste',
+    name: 'Pisciniste',
+    priceRange: { min: 15000, max: 50000, unit: '\u20AC' },
+    commonTasks: [
+      'Piscine coque polyester 8×4 m : 15 000 à 25 000 \u20AC',
+      'Piscine béton maçonnée 8×4 m : 25 000 à 50 000 \u20AC',
+      'Piscine hors-sol bois ou acier : 3 000 à 10 000 \u20AC',
+      'Rénovation de liner : 2 000 à 5 000 \u20AC',
+      'Mise en sécurité (alarme, barrière, couverture) : 1 000 à 5 000 \u20AC',
+    ],
+    tips: [
+      'La mise en sécurité est obligatoire (loi du 3 janvier 2003) : alarme, barrière, couverture ou abri. Amende de 45 000 \u20AC en cas de non-respect.',
+      'Prévoyez un budget annuel d\'entretien de 500 à 1 500 \u20AC (produits, électricité, hivernage).',
+    ],
+    faq: [
+      { q: 'Faut-il un permis de construire pour une piscine ?', a: 'Pas de formalité pour les piscines de moins de 10 m². Déclaration préalable de travaux pour les piscines de 10 à 100 m². Permis de construire obligatoire au-delà de 100 m² ou pour les piscines couvertes de plus de 1,80 m de hauteur. La taxe d\'aménagement s\'applique à toutes les piscines de plus de 10 m² (200 \u20AC/m² en 2025).' },
+    ],
+    certifications: ['Qualification FPP (Fédération des Professionnels de la Piscine)', 'Label Propiscines', 'Certification NF Piscine'],
+    averageResponseTime: 'Étude sous 2 semaines, construction 4 à 12 semaines',
+  },
+
+  'alarme-securite': {
+    slug: 'alarme-securite',
+    name: 'Alarme et sécurité',
+    priceRange: { min: 500, max: 3000, unit: '\u20AC' },
+    commonTasks: [
+      'Alarme sans fil (maison 100 m²) : 500 à 1 500 \u20AC',
+      'Vidéosurveillance (4 caméras) : 1 000 à 3 000 \u20AC',
+      'Interphone/visiophone : 300 à 1 500 \u20AC',
+      'Contrôle d\'accès (digicode, badge) : 500 à 2 000 \u20AC',
+      'Télésurveillance (abonnement) : 20 à 50 \u20AC/mois',
+    ],
+    tips: [
+      'Privilégiez les systèmes certifiés NF A2P (1 à 3 boucliers) — c\'est un gage de fiabilité reconnu par les assurances.',
+      'Une alarme avec télésurveillance permet une intervention des forces de l\'ordre en 15 à 20 minutes en zone urbaine.',
+    ],
+    faq: [
+      { q: 'Mon assurance baisse-t-elle avec une alarme ?', a: 'Oui, la plupart des assureurs accordent une réduction de 5 à 15 % sur la prime habitation pour un système d\'alarme certifié NF A2P avec télésurveillance. Certains contrats exigent même une alarme pour couvrir les objets de valeur supérieure à un certain montant.' },
+    ],
+    certifications: ['Certification APSAD (règles de sécurité)', 'Label NF A2P (alarmes)', 'Habilitation CNAPS (agents de sécurité)'],
+    averageResponseTime: 'Devis sous 48h, installation sous 1 semaine',
+  },
+
+  antenniste: {
+    slug: 'antenniste',
+    name: 'Antenniste',
+    priceRange: { min: 100, max: 400, unit: '\u20AC' },
+    commonTasks: [
+      'Installation antenne TNT : 100 à 250 \u20AC',
+      'Installation parabole satellite : 150 à 400 \u20AC',
+      'Raccordement fibre optique intérieur : 100 à 300 \u20AC',
+      'Amplificateur de signal TNT : 80 à 200 \u20AC',
+      'Câblage coaxial ou Ethernet : 30 à 60 \u20AC/point',
+    ],
+    tips: [
+      'Depuis 2023, la TNT en Ultra HD (DVB-T2) se déploie progressivement. Vérifiez que votre installation est compatible.',
+      'Pour une réception optimale de la TNT, l\'antenne doit être orientée vers l\'émetteur le plus proche (consultez le site de l\'ANFR).',
+    ],
+    faq: [
+      { q: 'TNT, satellite ou box internet : que choisir ?', a: 'La TNT est gratuite et couvre 97 % du territoire mais offre moins de chaînes. Le satellite (Canal+, Fransat) offre plus de chaînes mais nécessite une parabole. La box internet ADSL/fibre propose la TV via le réseau internet avec replay et VOD inclus. En zone blanche (pas de fibre ni de bonne couverture TNT), le satellite reste la meilleure option.' },
+    ],
+    certifications: ['Certification AICVF (antennes et télécommunications)', 'Habilitation électrique', 'Formation fibre optique FTTH'],
+    averageResponseTime: 'Intervention sous 48h à 1 semaine',
+  },
+
+  ascensoriste: {
+    slug: 'ascensoriste',
+    name: 'Ascensoriste',
+    priceRange: { min: 15000, max: 50000, unit: '\u20AC' },
+    commonTasks: [
+      'Installation ascenseur 3 étages : 20 000 à 50 000 \u20AC',
+      'Monte-escalier (1 étage) : 3 500 à 8 000 \u20AC',
+      'Plateforme élévatrice PMR : 8 000 à 15 000 \u20AC',
+      'Contrat de maintenance annuel : 1 500 à 4 000 \u20AC',
+      'Modernisation d\'ascenseur existant : 10 000 à 30 000 \u20AC',
+    ],
+    tips: [
+      'Le contrat de maintenance est obligatoire (décret du 9 septembre 2004). Comparez les offres : certains contrats incluent les pièces d\'usure, d\'autres non.',
+      'Pour un monte-escalier, vérifiez la largeur de l\'escalier (65 cm minimum) et la capacité de charge (jusqu\'à 130 kg standard).',
+    ],
+    faq: [
+      { q: 'Quelles aides pour un monte-escalier ?', a: 'MaPrimeAdapt\' (jusqu\'à 70 % pour les revenus modestes), TVA réduite à 5,5 %, crédit d\'impôt de 25 % (plafonné à 5 000 \u20AC pour une personne seule), aides des caisses de retraite et de l\'ANAH. Le reste à charge peut être inférieur à 1 000 \u20AC pour un ménage modeste.' },
+    ],
+    certifications: ['Certification AFNOR NF Ascenseurs', 'Habilitation électrique', 'Certification Otis/Schindler/Kone (constructeurs)'],
+    averageResponseTime: 'Diagnostic sous 1 semaine, installation 4 à 12 semaines',
+  },
+
+  diagnostiqueur: {
+    slug: 'diagnostiqueur',
+    name: 'Diagnostiqueur',
+    priceRange: { min: 100, max: 600, unit: '\u20AC' },
+    commonTasks: [
+      'DPE (Diagnostic de Performance Énergétique) : 100 à 250 \u20AC',
+      'Pack diagnostics vente (DPE + amiante + plomb + électricité + gaz + termites) : 300 à 600 \u20AC',
+      'Diagnostic amiante : 80 à 150 \u20AC',
+      'Diagnostic plomb (CREP) : 100 à 200 \u20AC',
+      'Diagnostic électricité ou gaz : 100 à 150 \u20AC',
+    ],
+    tips: [
+      'Le DPE est obligatoire pour toute vente ou location depuis 2006. Depuis 2021, il est opposable juridiquement : un mauvais DPE peut entraîner une action en justice.',
+      'Regroupez tous les diagnostics chez un même professionnel pour obtenir un tarif pack (30 à 40 % de réduction).',
+    ],
+    faq: [
+      { q: 'Quels diagnostics sont obligatoires pour vendre ?', a: 'DPE, diagnostic amiante (si permis avant 1997), plomb (si avant 1949), électricité et gaz (si installations de plus de 15 ans), termites (dans les zones à risque), ERP (état des risques et pollutions), et mesurage loi Carrez. Le DPE a une durée de validité de 10 ans, les autres varient de 6 mois (termites) à illimité (amiante si négatif).' },
+    ],
+    certifications: ['Certification COFRAC (obligatoire)', 'Certification par organisme accrédité (Bureau Veritas, Dekra, etc.)', 'Assurance RC professionnelle obligatoire'],
+    averageResponseTime: 'Intervention sous 48h à 1 semaine',
+  },
+
+  geometre: {
+    slug: 'geometre',
+    name: 'Géomètre',
+    priceRange: { min: 500, max: 3000, unit: '\u20AC' },
+    commonTasks: [
+      'Bornage de terrain : 800 à 2 000 \u20AC',
+      'Division parcellaire : 1 000 à 3 000 \u20AC',
+      'Plan topographique : 500 à 1 500 \u20AC',
+      'Plan de masse (permis de construire) : 300 à 800 \u20AC',
+      'Implantation de construction : 500 à 1 500 \u20AC',
+    ],
+    tips: [
+      'Seul un géomètre-expert inscrit à l\'Ordre peut réaliser un bornage officiel — les documents produits par un géomètre non inscrit n\'ont pas de valeur juridique.',
+      'Le bornage est obligatoire pour toute vente de terrain à bâtir (loi SRU). Il est aussi recommandé en cas de litige de voisinage.',
+    ],
+    faq: [
+      { q: 'Quelle est la différence entre bornage et cadastre ?', a: 'Le bornage fixe les limites réelles de propriété sur le terrain (bornes physiques + procès-verbal). Le cadastre est un document fiscal qui donne les limites indicatives. En cas de contradiction, le bornage prévaut. Le cadastre n\'a pas de valeur juridique pour déterminer les limites de propriété.' },
+    ],
+    certifications: ['Inscription à l\'Ordre des Géomètres-Experts (obligatoire)', 'Diplôme DPLG ou ESGT', 'Assurance RC professionnelle obligatoire'],
+    averageResponseTime: 'Devis sous 1 semaine, intervention 2 à 4 semaines',
+  },
+
+  desinsectisation: {
+    slug: 'desinsectisation',
+    name: 'Désinsectisation',
+    priceRange: { min: 80, max: 300, unit: '\u20AC' },
+    commonTasks: [
+      'Traitement punaises de lit (appartement) : 200 à 600 \u20AC',
+      'Traitement cafards/blattes : 80 à 250 \u20AC',
+      'Destruction de nid de guêpes/frelons : 80 à 200 \u20AC',
+      'Traitement anti-moustiques (jardin) : 150 à 400 \u20AC',
+      'Traitement termites : 1 500 à 4 000 \u20AC',
+    ],
+    tips: [
+      'Pour les punaises de lit, un minimum de 2 passages à 15 jours d\'intervalle est nécessaire pour éliminer les œufs qui éclosent après le premier traitement.',
+      'En cas de frelons asiatiques, contactez votre mairie — certaines communes prennent en charge la destruction des nids.',
+    ],
+    emergencyInfo: 'Pour un nid de guêpes ou frelons dangereux (proximité de passage fréquenté), un désinsectiseur peut intervenir en urgence sous 24h. Coût : 100 à 250 \u20AC.',
+    faq: [
+      { q: 'Les punaises de lit sont-elles un signe de saleté ?', a: 'Non, les punaises de lit ne sont pas liées à l\'hygiène. Elles se transportent via les bagages, les vêtements et les meubles d\'occasion. Même les hôtels 5 étoiles peuvent être touchés. Le traitement professionnel (thermique ou chimique) est la seule solution efficace.' },
+    ],
+    certifications: ['Certibiocide (obligatoire pour l\'utilisation de biocides)', 'Certification CS3D (Chambre Syndicale 3D)', 'Assurance RC professionnelle'],
+    averageResponseTime: 'Intervention sous 24 à 48h',
+  },
+
+  deratisation: {
+    slug: 'deratisation',
+    name: 'Dératisation',
+    priceRange: { min: 80, max: 300, unit: '\u20AC' },
+    commonTasks: [
+      'Dératisation maison/appartement : 80 à 200 \u20AC',
+      'Dératisation local commercial : 150 à 400 \u20AC',
+      'Contrat annuel de prévention (4 passages) : 300 à 800 \u20AC',
+      'Traitement fouines/loirs : 150 à 350 \u20AC',
+      'Rebouchage des accès (grillage, mousse expansive) : 100 à 300 \u20AC',
+    ],
+    tips: [
+      'La dératisation est obligatoire dans les locaux à usage professionnel (restaurants, commerces alimentaires) — un contrat annuel est recommandé.',
+      'Un diagnostic des points d\'entrée est essentiel : sans rebouchage, les rongeurs reviennent en quelques semaines.',
+    ],
+    faq: [
+      { q: 'Comment savoir si j\'ai des rats ou des souris ?', a: 'Les indices sont : crottes (2 cm pour un rat, 5 mm pour une souris), traces de grignotage sur les câbles/emballages, bruits de grattement la nuit (dans les cloisons, faux-plafonds), odeur musquée caractéristique. Un professionnel peut confirmer l\'espèce et évaluer l\'ampleur de l\'infestation.' },
+    ],
+    certifications: ['Certibiocide (obligatoire)', 'Certification CS3D (Chambre Syndicale 3D)', 'Assurance RC professionnelle'],
+    averageResponseTime: 'Intervention sous 24 à 48h',
+  },
+
+  demenageur: {
+    slug: 'demenageur',
+    name: 'Déménageur',
+    priceRange: { min: 500, max: 3000, unit: '\u20AC' },
+    commonTasks: [
+      'Déménagement studio (30 m²) même ville : 400 à 800 \u20AC',
+      'Déménagement T3 (60 m²) même ville : 800 à 1 500 \u20AC',
+      'Déménagement T3 longue distance (500 km) : 1 500 à 3 000 \u20AC',
+      'Déménagement maison (120 m²) : 2 000 à 5 000 \u20AC',
+      'Garde-meubles : 50 à 200 \u20AC/m³/mois',
+    ],
+    tips: [
+      'Demandez 3 devis minimum et vérifiez que le déménageur est immatriculé au registre des transporteurs (numéro DREAL).',
+      'Souscrivez l\'assurance « valeur déclarée » (1 à 2 % de la valeur des biens) plutôt que la couverture de base (très faible indemnisation au poids).',
+    ],
+    faq: [
+      { q: 'Quand réserver son déménageur ?', a: 'Réservez 4 à 6 semaines à l\'avance en période creuse (octobre-mars) et 8 à 12 semaines en période haute (juin-septembre). Les premiers et derniers jours du mois sont les plus demandés. Un déménagement en milieu de mois et en semaine est souvent 20 à 30 % moins cher.' },
+    ],
+    certifications: ['Immatriculation DREAL (obligatoire)', 'Label NF Service Déménagement', 'Certification ISO 9001 (qualité)'],
+    averageResponseTime: 'Devis sous 48h (visite technique), planification 2 à 8 semaines',
+  },
 }
 
 /**

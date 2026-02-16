@@ -18,7 +18,6 @@ import {
   Shield,
   Lock,
   Settings,
-  Database,
   ArrowRight,
   Wrench,
   BookOpen,
@@ -51,7 +50,6 @@ const nav = [
   { name: 'Audit', href: '/admin/audit', icon: Shield },
   { name: 'RGPD', href: '/admin/rgpd', icon: Lock },
   { name: 'Prospection', href: '/admin/prospection', icon: Megaphone },
-  { name: 'Import SIRENE', href: '/admin/import', icon: Database },
   { name: 'Paramètres', href: '/admin/parametres', icon: Settings },
 ]
 
