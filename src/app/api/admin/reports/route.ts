@@ -60,14 +60,11 @@ export async function GET(request: NextRequest) {
       .range(offset, offset + limit - 1)
 
     if (error) {
-      logger.warn('Reports query failed, returning empty list', { code: error.code, message: error.message })
-      return NextResponse.json({
-        success: true,
-        reports: [],
-        total: 0,
-        page,
-        totalPages: 0,
-      })
+      logger.warn('Reports query failed', { code: error.code, message: error.message })
+      return NextResponse.json(
+        { success: false, error: { message: 'Erreur lors de la récupération des signalements', code: error.code } },
+        { status: 502 }
+      )
     }
 
     return NextResponse.json({

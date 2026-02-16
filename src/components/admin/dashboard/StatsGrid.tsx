@@ -113,6 +113,7 @@ export function StatsGrid({ stats, loading }: StatsGridProps) {
           key={card.label}
           href={card.href}
           className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-gray-200 transition-all group block"
+          aria-label={`${card.label}: ${card.value}${card.trend !== null ? `, tendance ${card.trend > 0 ? '+' : ''}${card.trend}%` : ''}`}
         >
           <div className="flex items-center justify-between mb-4">
             <div className={`p-3 rounded-lg ${card.color}`}>

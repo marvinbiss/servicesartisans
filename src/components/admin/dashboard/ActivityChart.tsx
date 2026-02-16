@@ -57,13 +57,30 @@ export function ActivityChart({ data, loading }: ActivityChartProps) {
   const hasData = data.some((d) => d.bookings > 0 || d.users > 0 || d.reviews > 0)
 
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100" role="region" aria-label="Graphique d'activité des 30 derniers jours">
       <h3 className="font-semibold text-gray-900 mb-6">Activité des 30 derniers jours</h3>
       {!hasData ? (
         <div className="h-[300px] flex items-center justify-center text-gray-400">
           <p>Aucune donnée sur cette période</p>
         </div>
       ) : (
+        <>
+        <div className="sr-only">
+          <p>Graphique montrant les réservations, inscriptions et avis sur les 30 derniers jours.</p>
+          <table>
+            <thead><tr><th>Date</th><th>Réservations</th><th>Inscriptions</th><th>Avis</th></tr></thead>
+            <tbody>
+              {data.filter(d => d.bookings > 0 || d.users > 0 || d.reviews > 0).map(d => (
+                <tr key={d.date}>
+                  <td>{formatDateTick(d.date)}</td>
+                  <td>{d.bookings}</td>
+                  <td>{d.users}</td>
+                  <td>{d.reviews}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
         <ResponsiveContainer width="100%" height={300}>
           <AreaChart data={data} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
             <defs>
@@ -140,6 +157,7 @@ export function ActivityChart({ data, loading }: ActivityChartProps) {
             />
           </AreaChart>
         </ResponsiveContainer>
+        </>
       )}
     </div>
   )

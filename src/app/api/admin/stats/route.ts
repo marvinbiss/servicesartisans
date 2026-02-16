@@ -10,6 +10,15 @@ import { requirePermission } from '@/lib/admin-auth'
 
 export const dynamic = 'force-dynamic'
 
+/** Log rejected promises so failures aren't silent */
+function logRejections(label: string, results: PromiseSettledResult<unknown>[]) {
+  results.forEach((r, i) => {
+    if (r.status === 'rejected') {
+      logger.warn(`[admin-stats] ${label}[${i}] rejected`, { reason: String(r.reason) })
+    }
+  })
+}
+
 /** Safely extract count from a Promise.allSettled result */
 function safeCount(r: PromiseSettledResult<{ count: number | null }>): number {
   return r.status === 'fulfilled' ? (r.value.count ?? 0) : 0
@@ -80,6 +89,15 @@ export async function GET() {
       supabase.from('profiles').select('id', { count: 'exact', head: true }).gte('updated_at', sevenDaysAgo),
     ])
 
+    logRejections('batch1', [
+      totalUsersR, totalArtisansR, totalBookingsR, pendingReportsR, reviewsR,
+      newUsersTodayR, newBookingsTodayR,
+      usersThisMonthR, usersLastMonthR,
+      bookingsThisMonthR, bookingsLastMonthR,
+      revThisMonthR, revLastMonthR,
+      activeUsers7dR,
+    ])
+
     // Average rating from published reviews sample
     const ratings = safeData<{ rating: number }>(reviewsR as PromiseSettledResult<{ data: { rating: number }[] | null }>)
     const averageRating = ratings.length > 0
@@ -107,6 +125,11 @@ export async function GET() {
       supabase.from('profiles').select('created_at').gte('created_at', thirtyDaysAgo).limit(10000),
       supabase.from('bookings').select('created_at').gte('created_at', thirtyDaysAgo).limit(10000),
       supabase.from('reviews').select('created_at').gte('created_at', thirtyDaysAgo).limit(10000),
+    ])
+
+    logRejections('batch2', [
+      recentBookingsR, recentReviewsR, pendingReportsListR,
+      chartProfilesR, chartBookingsR, chartReviewsR,
     ])
 
     // ── Build activity feed from real data ────────────────────────────
@@ -165,6 +188,7 @@ export async function GET() {
 
     // ── Response ──────────────────────────────────────────────────────
     const response = NextResponse.json({
+      success: true,
       stats: {
         totalUsers: safeCount(totalUsersR),
         totalArtisans: safeCount(totalArtisansR),

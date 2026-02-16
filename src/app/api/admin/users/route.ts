@@ -57,14 +57,11 @@ export async function GET(request: NextRequest) {
     })
 
     if (authError) {
-      logger.warn('Auth users list failed, returning empty list', { message: authError.message })
-      return NextResponse.json({
-        success: true,
-        users: [],
-        total: 0,
-        page,
-        totalPages: 0,
-      })
+      logger.warn('Auth users list failed', { message: authError.message })
+      return NextResponse.json(
+        { success: false, error: { message: 'Erreur lors de la récupération des utilisateurs' } },
+        { status: 502 }
+      )
     }
 
     // Try to get profiles only for the returned users (avoid fetching entire table)

@@ -57,7 +57,7 @@ function SkeletonRow() {
 
 export function RecentActivity({ activity, loading }: RecentActivityProps) {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-100" role="region" aria-label="Activité récente">
       <div className="p-6 border-b border-gray-100 flex items-center justify-between">
         <h3 className="font-semibold text-gray-900">Activité récente</h3>
         <Link
@@ -80,7 +80,9 @@ export function RecentActivity({ activity, loading }: RecentActivityProps) {
           activity.map((item) => {
             const config = typeConfig[item.type] || typeConfig.user
             const Icon = config.icon
-            const statusInfo = item.status ? statusLabels[item.status] : null
+            const statusInfo = item.status
+              ? statusLabels[item.status] ?? { label: item.status, classes: 'bg-gray-100 text-gray-700' }
+              : null
             return (
               <div key={item.id} className="p-4 flex items-center gap-4 hover:bg-gray-50 transition-colors">
                 <div className={`p-2 rounded-lg shrink-0 ${config.bg}`}>
