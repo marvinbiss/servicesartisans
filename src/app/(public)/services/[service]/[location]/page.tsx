@@ -21,6 +21,8 @@ import { getTradeContent } from '@/lib/data/trade-content'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { generateLocationContent, hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
+import { getPageContent } from '@/lib/cms'
+import { CmsContent } from '@/components/CmsContent'
 import type { Service, Location as LocationType, Provider } from '@/types'
 
 // Safely escape JSON for script tags to prevent XSS
@@ -220,6 +222,28 @@ function generateJsonLd(service: Service, location: LocationType, _providers: un
 
 export default async function ServiceLocationPage({ params }: PageProps) {
   const { service: serviceSlug, location: locationSlug } = await params
+
+  // CMS override — if admin published content for this specific service+city page
+  const cmsPage = await getPageContent(`${serviceSlug}-${locationSlug}`, 'location', { serviceSlug, locationSlug })
+
+  if (cmsPage?.content_html) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <section className="bg-white border-b">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <h1 className="font-heading text-3xl font-bold text-gray-900">
+              {cmsPage.title}
+            </h1>
+          </div>
+        </section>
+        <section className="py-12">
+          <div className="max-w-6xl mx-auto px-4">
+            <CmsContent html={cmsPage.content_html} />
+          </div>
+        </section>
+      </div>
+    )
+  }
 
   // 1. Resolve service (DB → static fallback)
   let service: Service
