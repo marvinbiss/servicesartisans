@@ -73,6 +73,7 @@ function SkeletonReport() {
 export function PendingReports({ reports, loading, onMutate }: PendingReportsProps) {
   const [actionLoading, setActionLoading] = useState<string | null>(null)
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
+  const [resolutionNotes, setResolutionNotes] = useState('')
   const [modal, setModal] = useState<{
     open: boolean
     reportId: string
@@ -80,18 +81,21 @@ export function PendingReports({ reports, loading, onMutate }: PendingReportsPro
   }>({ open: false, reportId: '', action: 'resolve' })
 
   const handleAction = (reportId: string, action: 'resolve' | 'dismiss') => {
+    setResolutionNotes('')
     setModal({ open: true, reportId, action })
   }
 
   const confirmAction = async () => {
     const { reportId, action } = modal
+    const notes = resolutionNotes.trim()
     setModal({ open: false, reportId: '', action: 'resolve' })
+    setResolutionNotes('')
 
     try {
       setActionLoading(reportId)
       await adminMutate(`/api/admin/reports/${reportId}/resolve`, {
         method: 'POST',
-        body: { action },
+        body: { action, ...(notes ? { resolution_notes: notes } : {}) },
       })
       setToast({
         message: action === 'resolve' ? 'Signalement résolu' : 'Signalement rejeté',
@@ -193,13 +197,28 @@ export function PendingReports({ reports, loading, onMutate }: PendingReportsPro
 
       <ConfirmationModal
         isOpen={modal.open}
-        onClose={() => setModal({ open: false, reportId: '', action: 'resolve' })}
+        onClose={() => { setModal({ open: false, reportId: '', action: 'resolve' }); setResolutionNotes('') }}
         onConfirm={confirmAction}
         title={modal.action === 'resolve' ? 'Résoudre le signalement' : 'Rejeter le signalement'}
         message={`Êtes-vous sûr de vouloir ${modal.action === 'resolve' ? 'résoudre' : 'rejeter'} ce signalement ?`}
         confirmText={modal.action === 'resolve' ? 'Résoudre' : 'Rejeter'}
         variant={modal.action === 'resolve' ? 'success' : 'warning'}
-      />
+      >
+        <div className="mb-4">
+          <label htmlFor="resolution-notes" className="block text-sm font-medium text-gray-700 mb-1">
+            Notes de résolution <span className="text-gray-400 font-normal">(optionnel)</span>
+          </label>
+          <textarea
+            id="resolution-notes"
+            value={resolutionNotes}
+            onChange={(e) => setResolutionNotes(e.target.value)}
+            placeholder="Décrivez la raison de votre décision..."
+            maxLength={1000}
+            rows={3}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+          />
+        </div>
+      </ConfirmationModal>
     </>
   )
 }

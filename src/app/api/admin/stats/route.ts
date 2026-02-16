@@ -10,23 +10,36 @@ import { requirePermission } from '@/lib/admin-auth'
 
 export const dynamic = 'force-dynamic'
 
-/** Log rejected promises so failures aren't silent */
-function logRejections(label: string, results: PromiseSettledResult<unknown>[]) {
+/**
+ * Log errors from a batch of Promise.allSettled results.
+ * Supabase queries never reject — they resolve with { data, error }.
+ * We must check both rejection (unlikely) AND the Supabase error field.
+ */
+function logBatchErrors(label: string, results: PromiseSettledResult<{ error?: { message: string; code?: string } | null }>[]) {
   results.forEach((r, i) => {
     if (r.status === 'rejected') {
       logger.warn(`[admin-stats] ${label}[${i}] rejected`, { reason: String(r.reason) })
+    } else if (r.value.error) {
+      logger.warn(`[admin-stats] ${label}[${i}] query error`, {
+        message: r.value.error.message,
+        code: r.value.error.code,
+      })
     }
   })
 }
 
-/** Safely extract count from a Promise.allSettled result */
-function safeCount(r: PromiseSettledResult<{ count: number | null }>): number {
-  return r.status === 'fulfilled' ? (r.value.count ?? 0) : 0
+/** Safely extract count — returns 0 on rejection or Supabase error */
+function safeCount(r: PromiseSettledResult<{ count: number | null; error?: unknown }>): number {
+  if (r.status !== 'fulfilled') return 0
+  if (r.value.error) return 0
+  return r.value.count ?? 0
 }
 
-/** Safely extract data array from a Promise.allSettled result */
-function safeData<T>(r: PromiseSettledResult<{ data: T[] | null }>): T[] {
-  return r.status === 'fulfilled' && r.value.data ? r.value.data : []
+/** Safely extract data array — returns [] on rejection or Supabase error */
+function safeData<T>(r: PromiseSettledResult<{ data: T[] | null; error?: unknown }>): T[] {
+  if (r.status !== 'fulfilled') return []
+  if (r.value.error) return []
+  return r.value.data ?? []
 }
 
 /** Compute % change between two periods */
@@ -89,7 +102,7 @@ export async function GET() {
       supabase.from('profiles').select('id', { count: 'exact', head: true }).gte('updated_at', sevenDaysAgo),
     ])
 
-    logRejections('batch1', [
+    logBatchErrors('batch1', [
       totalUsersR, totalArtisansR, totalBookingsR, pendingReportsR, reviewsR,
       newUsersTodayR, newBookingsTodayR,
       usersThisMonthR, usersLastMonthR,
@@ -127,7 +140,7 @@ export async function GET() {
       supabase.from('reviews').select('created_at').gte('created_at', thirtyDaysAgo).limit(10000),
     ])
 
-    logRejections('batch2', [
+    logBatchErrors('batch2', [
       recentBookingsR, recentReviewsR, pendingReportsListR,
       chartProfilesR, chartBookingsR, chartReviewsR,
     ])

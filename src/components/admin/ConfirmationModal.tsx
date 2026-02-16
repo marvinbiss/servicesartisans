@@ -16,6 +16,7 @@ interface ConfirmationModalProps {
   cancelText?: string
   variant?: ModalVariant
   requireConfirmation?: string // Text user must type to confirm
+  children?: React.ReactNode
 }
 
 const variantConfig: Record<ModalVariant, { icon: typeof AlertTriangle; colors: string; buttonColors: string }> = {
@@ -51,6 +52,7 @@ export function ConfirmationModal({
   cancelText = 'Annuler',
   variant = 'danger',
   requireConfirmation,
+  children,
 }: ConfirmationModalProps) {
   const [confirmInput, setConfirmInput] = useState('')
   const [loading, setLoading] = useState(false)
@@ -155,6 +157,9 @@ export function ConfirmationModal({
           {/* Content */}
           <h3 id="confirmation-modal-title" className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
           <p className="text-gray-600 mb-4">{message}</p>
+
+          {/* Custom content */}
+          {children}
 
           {/* Confirmation input */}
           {requireConfirmation && (
