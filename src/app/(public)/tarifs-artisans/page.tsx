@@ -140,16 +140,16 @@ export default async function TarifsArtisansPage() {
             }} />
             <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-50 to-transparent" />
           </div>
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-28 md:pt-14 md:pb-36">
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-20 sm:pt-10 sm:pb-28 md:pt-14 md:pb-36">
             <Breadcrumb
               items={[{ label: 'Tarifs artisans' }]}
               className="mb-6 text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
             />
             <div className="text-center">
-              <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
+              <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 sm:mb-6 tracking-[-0.025em]">
                 Guide des prix artisans 2026
               </h1>
-              <p className="text-xl text-slate-400 max-w-3xl mx-auto mb-4">
+              <p className="text-base sm:text-xl text-slate-400 max-w-3xl mx-auto mb-4">
                 Tarifs moyens par corps de m&eacute;tier en France. Comparez les prix de {trades.length} m&eacute;tiers
                 du b&acirc;timent pour estimer votre budget travaux avant de demander un devis.
               </p>
@@ -172,14 +172,14 @@ export default async function TarifsArtisansPage() {
         </section>
 
         {/* Quick navigation */}
-        <section className="py-8 bg-white border-b sticky top-0 z-10">
+        <section className="py-3 sm:py-8 bg-white border-b sticky top-0 z-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-wrap gap-2">
+            <div className="flex gap-2 overflow-x-auto sm:overflow-x-visible sm:flex-wrap pb-1 sm:pb-0">
               {trades.map((trade) => (
                 <a
                   key={trade.slug}
                   href={`#${trade.slug}`}
-                  className="px-3 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-blue-100 hover:text-blue-700 transition-colors"
+                  className="shrink-0 sm:shrink px-3 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-blue-100 hover:text-blue-700 transition-colors whitespace-nowrap"
                 >
                   {trade.name}
                 </a>
@@ -375,14 +375,14 @@ export default async function TarifsArtisansPage() {
             <div className="flex flex-wrap justify-center gap-4">
               <Link
                 href="/devis"
-                className="inline-flex items-center gap-2 bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-blue-50 transition-colors text-lg"
+                className="inline-flex items-center justify-center gap-2 bg-white text-blue-600 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold hover:bg-blue-50 transition-colors text-base sm:text-lg w-full sm:w-auto"
               >
                 Demander un devis gratuit
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <Link
                 href="/services"
-                className="inline-flex items-center gap-2 bg-blue-500 text-white px-8 py-4 rounded-xl font-semibold hover:bg-blue-400 transition-colors text-lg border border-blue-400"
+                className="inline-flex items-center justify-center gap-2 bg-blue-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold hover:bg-blue-400 transition-colors text-base sm:text-lg border border-blue-400 w-full sm:w-auto"
               >
                 <Search className="w-5 h-5" />
                 Trouver un artisan

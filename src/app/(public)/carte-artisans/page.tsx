@@ -20,9 +20,9 @@ const CarteClient = dynamic(() => import('./CarteClient'), {
 })
 
 export const metadata: Metadata = {
-  title: 'Carte des artisans en France \u2014 350\u00A0000+ professionnels',
+  title: 'Carte des artisans en France — 350\u00A0000+ professionnels',
   description:
-    'Visualisez la couverture des artisans r\u00E9f\u00E9renc\u00E9s en France. 350\u00A0000+ professionnels dans 101 d\u00E9partements. Trouvez un artisan pr\u00E8s de chez vous.',
+    'Visualisez la couverture des artisans référencés en France. 350\u00A0000+ professionnels dans 101 départements. Trouvez un artisan près de chez vous.',
   alternates: {
     canonical: `${SITE_URL}/carte-artisans`,
   },
@@ -35,9 +35,9 @@ export const metadata: Metadata = {
   },
   openGraph: {
     locale: 'fr_FR',
-    title: 'Carte des artisans en France \u2014 350\u00A0000+ professionnels',
+    title: 'Carte des artisans en France — 350\u00A0000+ professionnels',
     description:
-      'Visualisez la couverture des artisans r\u00E9f\u00E9renc\u00E9s en France. 350\u00A0000+ professionnels dans 101 d\u00E9partements.',
+      'Visualisez la couverture des artisans référencés en France. 350\u00A0000+ professionnels dans 101 départements.',
     url: `${SITE_URL}/carte-artisans`,
     type: 'website',
     images: [
@@ -45,15 +45,15 @@ export const metadata: Metadata = {
         url: `${SITE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
-        alt: 'ServicesArtisans \u2014 Carte des artisans en France',
+        alt: 'ServicesArtisans — Carte des artisans en France',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Carte des artisans en France \u2014 350\u00A0000+ professionnels',
+    title: 'Carte des artisans en France — 350\u00A0000+ professionnels',
     description:
-      'Visualisez la couverture des artisans en France. 350\u00A0000+ professionnels dans 101 d\u00E9partements.',
+      'Visualisez la couverture des artisans en France. 350\u00A0000+ professionnels dans 101 départements.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }
@@ -83,7 +83,7 @@ export default function CarteArtisansPage() {
               Carte des artisans en France
             </h1>
             <p className="text-blue-100 text-lg max-w-2xl">
-              Explorez la couverture des 350&nbsp;000+ artisans r\u00E9f\u00E9renc\u00E9s sur notre plateforme. Cliquez sur une ville pour d\u00E9couvrir les professionnels disponibles.
+              Explorez la couverture des 350&nbsp;000+ artisans référencés sur notre plateforme. Cliquez sur une ville pour découvrir les professionnels disponibles.
             </p>
           </div>
         </div>
@@ -97,25 +97,25 @@ export default function CarteArtisansPage() {
         <div className="bg-white border-t border-gray-100">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
             <h2 className="text-2xl font-bold text-gray-900 font-heading mb-8 text-center">
-              Une couverture nationale compl\u00E8te
+              Une couverture nationale complète
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="text-center">
                 <div className="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl font-bold text-blue-600">101</span>
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">D\u00E9partements couverts</h3>
+                <h3 className="font-semibold text-gray-900 mb-2">Départements couverts</h3>
                 <p className="text-sm text-gray-600">
-                  M\u00E9tropole et outre-mer, nos artisans interviennent dans tous les d\u00E9partements fran\u00E7ais.
+                  Métropole et outre-mer, nos artisans interviennent dans tous les départements français.
                 </p>
               </div>
               <div className="text-center">
                 <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl font-bold text-green-600">50+</span>
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">M\u00E9tiers du b\u00E2timent</h3>
+                <h3 className="font-semibold text-gray-900 mb-2">Métiers du bâtiment</h3>
                 <p className="text-sm text-gray-600">
-                  Plombiers, \u00E9lectriciens, ma\u00E7ons, couvreurs, peintres et bien d&apos;autres corps de m\u00E9tier.
+                  Plombiers, électriciens, maçons, couvreurs, peintres et bien d&apos;autres corps de métier.
                 </p>
               </div>
               <div className="text-center">
@@ -124,7 +124,7 @@ export default function CarteArtisansPage() {
                 </div>
                 <h3 className="font-semibold text-gray-900 mb-2">Recherche gratuite</h3>
                 <p className="text-sm text-gray-600">
-                  Acc\u00E9dez gratuitement \u00E0 notre annuaire \u00E0 tout moment. Aucune inscription requise.
+                  Accédez gratuitement à notre annuaire à tout moment. Aucune inscription requise.
                 </p>
               </div>
             </div>

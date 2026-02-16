@@ -72,7 +72,7 @@ export default function DiagnosticClient() {
 
   const serviceSlug = selectedProblem?.recommendedService || ''
   const serviceLabel = serviceLabels[serviceSlug] || serviceSlug
-  const serviceIcon = serviceIcons[serviceSlug] || '\uD83D\uDD27'
+  const serviceIcon = serviceIcons[serviceSlug] || '🔧'
 
   const getResultLink = () => {
     if (isUrgent) {
@@ -94,7 +94,7 @@ export default function DiagnosticClient() {
       <div className="mb-8">
         <div className="flex items-center justify-between mb-2">
           <span className="text-sm font-medium text-gray-600">
-            \u00C9tape {step} sur {step === 4 ? '4' : '3'}
+            Étape {step} sur {step === 4 ? '4' : '3'}
           </span>
           {step > 1 && (
             <button
@@ -128,10 +128,10 @@ export default function DiagnosticClient() {
         {step === 1 && (
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2 font-heading">
-              Quel est votre probl\u00E8me ?
+              Quel est votre problème ?
             </h2>
             <p className="text-gray-600 mb-6">
-              S\u00E9lectionnez la cat\u00E9gorie qui correspond le mieux \u00E0 votre situation.
+              Sélectionnez la catégorie qui correspond le mieux à votre situation.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {diagnosticCategories.map((category) => (
@@ -148,7 +148,7 @@ export default function DiagnosticClient() {
                       {category.label}
                     </span>
                     <span className="block text-sm text-gray-500 mt-0.5">
-                      {category.subProblems.length} probl\u00E8mes courants
+                      {category.subProblems.length} problèmes courants
                     </span>
                   </div>
                   <ChevronRight className="w-5 h-5 text-gray-300 group-hover:text-blue-500 transition-colors flex-shrink-0" />
@@ -162,14 +162,14 @@ export default function DiagnosticClient() {
         {step === 2 && selectedCategory && (
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2 font-heading">
-              Plus pr\u00E9cis\u00E9ment...
+              Plus précisément...
             </h2>
             <p className="text-gray-600 mb-6">
               <span className="inline-flex items-center gap-1.5 text-sm bg-gray-100 px-3 py-1 rounded-full mr-2">
                 <span role="img" aria-hidden="true">{selectedCategory.icon}</span>
                 {selectedCategory.label}
               </span>
-              D\u00E9crivez plus en d\u00E9tail votre probl\u00E8me.
+              Décrivez plus en détail votre problème.
             </p>
             <div className="grid grid-cols-1 gap-3">
               {selectedCategory.subProblems.map((problem) => (
@@ -205,7 +205,7 @@ export default function DiagnosticClient() {
               Est-ce urgent ?
             </h2>
             <p className="text-gray-600 mb-6">
-              Cela nous aide \u00E0 vous orienter vers les bonnes ressources.
+              Cela nous aide à vous orienter vers les bonnes ressources.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <button
@@ -261,13 +261,13 @@ export default function DiagnosticClient() {
               </div>
 
               <p className="text-gray-700 mb-4">
-                Pour votre probl\u00E8me de <strong>{selectedProblem.label.toLowerCase()}</strong>,
-                un <strong>{serviceLabel.toLowerCase()}</strong> est le professionnel le plus adapt\u00E9.
+                Pour votre problème de <strong>{selectedProblem.label.toLowerCase()}</strong>,
+                un <strong>{serviceLabel.toLowerCase()}</strong> est le professionnel le plus adapt&eacute;.
               </p>
 
               {selectedProblem.estimatedPriceRange && (
                 <div className="flex items-center gap-2 mb-4 bg-white/60 rounded-lg px-4 py-3">
-                  <span className="text-sm font-medium text-gray-700">Fourchette de prix estimee :</span>
+                  <span className="text-sm font-medium text-gray-700">Fourchette de prix estimée :</span>
                   <span className="font-bold text-blue-700">{selectedProblem.estimatedPriceRange}</span>
                 </div>
               )}
@@ -307,7 +307,7 @@ export default function DiagnosticClient() {
               <div className="bg-white border border-gray-200 rounded-xl p-5 mb-6">
                 <div className="flex items-center gap-2 mb-3">
                   <MapPin className="w-5 h-5 text-gray-500" />
-                  <span className="font-semibold text-gray-900">Pr\u00E9cisez votre ville (optionnel)</span>
+                  <span className="font-semibold text-gray-900">Précisez votre ville (optionnel)</span>
                 </div>
                 <div className="flex gap-3">
                   <input
@@ -341,7 +341,7 @@ export default function DiagnosticClient() {
                       href={`/services/${altSlug}`}
                       className="inline-flex items-center gap-2 px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-all text-sm"
                     >
-                      <span role="img" aria-hidden="true">{serviceIcons[altSlug] || '\uD83D\uDD27'}</span>
+                      <span role="img" aria-hidden="true">{serviceIcons[altSlug] || '🔧'}</span>
                       <span className="font-medium text-gray-700">
                         {serviceLabels[altSlug] || altSlug}
                       </span>
@@ -357,23 +357,23 @@ export default function DiagnosticClient() {
               <ul className="space-y-2">
                 <li className="flex items-start gap-2 text-sm text-gray-700">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                  V\u00E9rifiez le num\u00E9ro SIRET de l&apos;entreprise sur le site de l&apos;INSEE.
+                  Vérifiez le numéro SIRET de l&apos;entreprise sur le site de l&apos;INSEE.
                 </li>
                 <li className="flex items-start gap-2 text-sm text-gray-700">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                  Demandez toujours un devis d\u00E9taill\u00E9 avant le d\u00E9but des travaux.
+                  Demandez toujours un devis détaillé avant le début des travaux.
                 </li>
                 <li className="flex items-start gap-2 text-sm text-gray-700">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                  Comparez au moins 3 devis pour le m\u00EAme type de travaux.
+                  Comparez au moins 3 devis pour le même type de travaux.
                 </li>
                 <li className="flex items-start gap-2 text-sm text-gray-700">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                  Assurez-vous que l&apos;artisan poss\u00E8de une assurance responsabilit\u00E9 civile professionnelle.
+                  Assurez-vous que l&apos;artisan possède une assurance responsabilité civile professionnelle.
                 </li>
                 <li className="flex items-start gap-2 text-sm text-gray-700">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                  Pour les travaux importants, demandez une garantie d\u00E9cennale.
+                  Pour les travaux importants, demandez une garantie décennale.
                 </li>
               </ul>
             </div>

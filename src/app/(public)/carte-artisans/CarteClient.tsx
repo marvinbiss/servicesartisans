@@ -121,7 +121,7 @@ export default function CarteClient() {
             </div>
             <div>
               <p className="text-sm text-blue-100">
-                {selectedRegion ? `Artisans en ${selectedRegion}` : 'Total artisans r\u00E9f\u00E9renc\u00E9s'}
+                {selectedRegion ? `Artisans en ${selectedRegion}` : 'Total artisans référencés'}
               </p>
               <p className="text-2xl font-bold">
                 {selectedRegion
@@ -131,7 +131,7 @@ export default function CarteClient() {
             </div>
           </div>
           <p className="text-sm text-blue-200">
-            {filteredMarkers.length} villes affich\u00E9es sur la carte
+            {filteredMarkers.length} villes affichées sur la carte
           </p>
         </div>
 
@@ -152,7 +152,7 @@ export default function CarteClient() {
           {/* Region filter */}
           <div className="bg-white border border-gray-200 rounded-xl p-4">
             <label htmlFor="region-filter" className="block text-sm font-semibold text-gray-700 mb-2">
-              Filtrer par r\u00E9gion
+              Filtrer par région
             </label>
             <select
               id="region-filter"
@@ -172,7 +172,7 @@ export default function CarteClient() {
           {/* Service filter */}
           <div className="bg-white border border-gray-200 rounded-xl p-4">
             <label htmlFor="service-filter" className="block text-sm font-semibold text-gray-700 mb-2">
-              Filtrer par m\u00E9tier
+              Filtrer par métier
             </label>
             <select
               id="service-filter"
@@ -180,7 +180,7 @@ export default function CarteClient() {
               onChange={(e) => setSelectedService(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
             >
-              <option value="">Tous les m\u00E9tiers</option>
+              <option value="">Tous les métiers</option>
               {services.map((service) => (
                 <option key={service.slug} value={service.slug}>
                   {service.name}
@@ -196,25 +196,25 @@ export default function CarteClient() {
               className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm text-gray-600 bg-gray-50 border border-gray-200 rounded-xl hover:bg-gray-100 transition-colors"
             >
               <X className="w-4 h-4" />
-              R\u00E9initialiser les filtres
+              Réinitialiser les filtres
             </button>
           )}
 
           {/* Legend */}
           <div className="bg-white border border-gray-200 rounded-xl p-4">
-            <p className="text-sm font-semibold text-gray-700 mb-3">L\u00E9gende</p>
+            <p className="text-sm font-semibold text-gray-700 mb-3">Légende</p>
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <div className="w-4 h-4 rounded-full bg-green-600" />
-                <span className="text-sm text-gray-600">Forte couverture (3\u00A0000+)</span>
+                <span className="text-sm text-gray-600">Forte couverture (3&nbsp;000+)</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-4 h-4 rounded-full bg-amber-500" />
-                <span className="text-sm text-gray-600">Couverture moyenne (1\u00A0000-3\u00A0000)</span>
+                <span className="text-sm text-gray-600">Couverture moyenne (1&nbsp;000-3&nbsp;000)</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-4 h-4 rounded-full bg-red-500" />
-                <span className="text-sm text-gray-600">Couverture limit\u00E9e (&lt; 1\u00A0000)</span>
+                <span className="text-sm text-gray-600">Couverture limitée (&lt; 1&nbsp;000)</span>
               </div>
             </div>
           </div>
@@ -265,7 +265,7 @@ export default function CarteClient() {
                       <h3 className="font-bold text-gray-900 text-base mb-1">{city.name}</h3>
                       <p className="text-sm text-gray-600 mb-1">{city.departement} &middot; {city.region}</p>
                       <p className="text-sm font-medium text-blue-700 mb-3">
-                        {city.providerCount.toLocaleString('fr-FR')} artisans r\u00E9f\u00E9renc\u00E9s
+                        {city.providerCount.toLocaleString('fr-FR')} artisans référencés
                       </p>
 
                       <div className="flex gap-2">
