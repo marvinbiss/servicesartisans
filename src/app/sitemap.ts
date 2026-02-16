@@ -94,6 +94,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       { path: '/politique-avis', changeFrequency: 'monthly' as const, priority: 0.5 },
       { path: '/mediation', changeFrequency: 'yearly' as const, priority: 0.4 },
       { path: '/plan-du-site', changeFrequency: 'monthly' as const, priority: 0.4 },
+      { path: '/outils/calculateur-prix', changeFrequency: 'monthly' as const, priority: 0.7 },
     ].map(({ path, changeFrequency, priority }) => ({
       url: `${SITE_URL}${path}`,
       lastModified: STATIC_LAST_MODIFIED,

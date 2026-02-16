@@ -108,9 +108,25 @@ export default async function TarifsArtisansPage() {
 
   const trades = Object.values(tradeContent)
 
+  // PriceSpecification: aggregate Service schemas with AggregateOffer for each trade
+  const serviceSchemas = trades.map((trade) => ({
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: trade.name,
+    provider: { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
+    areaServed: { '@type': 'Country', name: 'France' },
+    offers: {
+      '@type': 'AggregateOffer',
+      priceCurrency: 'EUR',
+      lowPrice: trade.priceRange.min,
+      highPrice: trade.priceRange.max,
+      offerCount: 350000,
+    },
+  }))
+
   return (
     <>
-      <JsonLd data={[breadcrumbSchema, faqSchema]} />
+      <JsonLd data={[breadcrumbSchema, faqSchema, ...serviceSchemas]} />
       <div className="min-h-screen bg-gray-50">
         {/* Hero */}
         <section className="relative bg-[#0a0f1e] text-white overflow-hidden">

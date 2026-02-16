@@ -8,6 +8,8 @@
 
 import type { Ville } from '@/lib/data/france'
 import { getTradeContent } from '@/lib/data/trade-content'
+import { generateDataDrivenContent, type DataDrivenContent } from '@/lib/seo/data-driven-content'
+import type { CommuneData } from '@/lib/data/commune-data'
 
 // ---------------------------------------------------------------------------
 // Regional pricing multipliers
@@ -226,6 +228,65 @@ const SEASONAL_TIPS: Record<string, SeasonalTips> = {
     default:
       "Pour un résultat professionnel, demandez toujours un devis après visite sur site. Le prix au m² varie selon l'état des lieux et le type de nettoyage requis.",
   },
+}
+
+// ---------------------------------------------------------------------------
+// Bridge: convert static Ville data to partial CommuneData for data-driven
+// content even without the communes DB table being populated.
+// ---------------------------------------------------------------------------
+
+function villeToPartialCommuneData(ville: Ville): CommuneData {
+  const pop = parseInt(ville.population.replace(/\s/g, ''), 10) || 0
+  const regionClimate = REGION_CLIMATE[ville.region] || 'semi-oceanique'
+  const mountainDepts = ['73', '74', '05', '38', '09', '65', '04']
+  const climatZone = mountainDepts.includes(ville.departementCode)
+    ? 'montagnard'
+    : regionClimate === 'oceanique' ? 'océanique'
+    : regionClimate === 'continental' ? 'continental'
+    : regionClimate === 'mediterraneen' ? 'méditerranéen'
+    : regionClimate === 'montagnard' ? 'montagnard'
+    : regionClimate === 'tropical' ? 'tropical'
+    : 'semi-océanique'
+
+  return {
+    code_insee: '',
+    name: ville.name,
+    slug: ville.slug,
+    code_postal: ville.codePostal,
+    departement_code: ville.departementCode,
+    departement_name: ville.departement,
+    region_name: ville.region,
+    latitude: null,
+    longitude: null,
+    altitude_moyenne: null,
+    superficie_km2: null,
+    population: pop,
+    densite_population: null,
+    revenu_median: null,
+    prix_m2_moyen: null,
+    nb_logements: null,
+    part_maisons_pct: null,
+    climat_zone: climatZone,
+    nb_entreprises_artisanales: null,
+    gentile: null,
+    description: ville.description || null,
+    provider_count: 0,
+    nb_artisans_btp: null,
+    nb_artisans_rge: null,
+    pct_passoires_dpe: null,
+    nb_dpe_total: null,
+    jours_gel_annuels: null,
+    precipitation_annuelle: null,
+    mois_travaux_ext_debut: null,
+    mois_travaux_ext_fin: null,
+    temperature_moyenne_hiver: null,
+    temperature_moyenne_ete: null,
+    nb_transactions_annuelles: null,
+    prix_m2_maison: null,
+    prix_m2_appartement: null,
+    nb_maprimerenov_annuel: null,
+    enriched_at: null,
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -550,6 +611,8 @@ export interface LocationContent {
   citySizeLabel: string
   climateTip: string
   faqItems: { question: string; answer: string }[]
+  /** Data-driven content sections (null when commune data unavailable) */
+  dataDriven: DataDrivenContent | null
 }
 
 // Pool of 15 service+location FAQ questions — 4 selected per page via hash
@@ -677,6 +740,7 @@ export function generateLocationContent(
   serviceName: string,
   ville: Ville,
   providerCount: number = 0,
+  communeData?: import('@/lib/data/commune-data').CommuneData | null | undefined,
 ): LocationContent {
   const svcLower = serviceName.toLowerCase()
   const regionClimate = REGION_CLIMATE[ville.region] || 'semi-oceanique'
@@ -701,8 +765,12 @@ export function generateLocationContent(
     return { question: f.q(faqParams), answer: f.a(faqParams) }
   })
 
+  // Generate data-driven content — ALWAYS, using DB data when available, else static Ville data
+  const effectiveCommuneData = communeData || villeToPartialCommuneData(ville)
+  const dataDriven = generateDataDrivenContent(effectiveCommuneData, serviceSlug, serviceName, providerCount)
+
   return {
-    introText: generateIntroText(serviceSlug, serviceName, ville, providerCount),
+    introText: dataDriven?.intro || generateIntroText(serviceSlug, serviceName, ville, providerCount),
     pricingNote: generatePricingNote(serviceSlug, serviceName, ville),
     localTips: generateLocalTips(serviceSlug, serviceName, ville),
     quartierText: generateQuartierText(serviceName, ville),
@@ -710,7 +778,8 @@ export function generateLocationContent(
     climateLabel: finalClimate.label,
     citySizeLabel: size.label,
     climateTip,
-    faqItems,
+    faqItems: dataDriven.faqItems.length > 0 ? dataDriven.faqItems : faqItems,
+    dataDriven,
   }
 }
 

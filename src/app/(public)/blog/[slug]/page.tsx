@@ -760,7 +760,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
                       return (
                         <p
                           key={bIdx}
-                          className={isIntro ? 'article-intro' : 'article-paragraph'}
+                          className={isIntro ? 'article-intro article-excerpt' : 'article-paragraph'}
                         >
                           {renderInlineMarkdown(block.text)}
                         </p>

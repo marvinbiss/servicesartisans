@@ -21,7 +21,7 @@ export function ArticleFAQ({ items }: ArticleFAQProps) {
               <span className="pr-4">{item.question}</span>
               <ChevronDown className="w-5 h-5 text-gray-400 flex-shrink-0" />
             </summary>
-            <div className="pb-4 text-gray-600 leading-relaxed">
+            <div className="faq-answer pb-4 text-gray-600 leading-relaxed">
               {item.answer}
             </div>
           </details>

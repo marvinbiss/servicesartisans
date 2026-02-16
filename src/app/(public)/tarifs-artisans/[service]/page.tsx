@@ -145,6 +145,7 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
       priceCurrency: 'EUR',
       lowPrice: trade.priceRange.min,
       highPrice: trade.priceRange.max,
+      offerCount: 350000,
     },
   }
 

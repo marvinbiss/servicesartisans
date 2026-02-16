@@ -23,6 +23,8 @@ import { SITE_URL } from '@/lib/seo/config'
 import { generateLocationContent, hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
+import { getCommuneBySlug } from '@/lib/data/commune-data'
+import { formatNumber, formatEuro } from '@/lib/data/commune-data'
 import type { Service, Location as LocationType, Provider } from '@/types'
 
 // Safely escape JSON for script tags to prevent XSS
@@ -315,10 +317,18 @@ async function _ServiceLocationPage({ params }: PageProps) {
   const trade = getTradeContent(serviceSlug)
   const baseSchemas = generateJsonLd(service, location, providers || [], serviceSlug, locationSlug)
 
+  // 4. Fetch commune enrichment data (best-effort, never crash)
+  let communeData: Awaited<ReturnType<typeof getCommuneBySlug>> = null
+  try {
+    communeData = await getCommuneBySlug(locationSlug)
+  } catch {
+    // Commune table may not exist yet — continue without data
+  }
+
   // Generate unique SEO content per service+location combo (doorway-page mitigation)
   const ville = getVilleBySlug(locationSlug)
   const locationContent = ville
-    ? generateLocationContent(serviceSlug, service.name, ville, providers.length)
+    ? generateLocationContent(serviceSlug, service.name, ville, providers.length, communeData)
     : null
 
   // Regional pricing multiplier for localized tariffs
@@ -488,6 +498,186 @@ async function _ServiceLocationPage({ params }: PageProps) {
                 )}
               </div>
             </div>
+          </div>
+        </section>
+      )}
+
+      {/* Data-driven sections — unique per commune (powered by communes table + external APIs) */}
+      {locationContent?.dataDriven && (
+        <section className="py-12 bg-white border-t">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+
+            {/* Socio-economic context */}
+            {locationContent.dataDriven.socioEconomic && (
+              <div className="bg-gradient-to-br from-slate-50 to-blue-50/30 rounded-2xl border border-slate-100 p-8">
+                <h2 className="text-xl font-bold text-gray-900 mb-4 border-l-4 border-blue-500 pl-4">
+                  Contexte socio-économique de {location.name}
+                </h2>
+                <p className="text-gray-700 leading-relaxed">{locationContent.dataDriven.socioEconomic}</p>
+                {communeData && (
+                  <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    {communeData.revenu_median && (
+                      <div className="text-center p-3 bg-white rounded-xl border border-slate-100">
+                        <div className="text-lg font-bold text-blue-700">{formatEuro(communeData.revenu_median)}</div>
+                        <div className="text-xs text-gray-500 mt-1">Revenu médian/an</div>
+                      </div>
+                    )}
+                    {communeData.nb_logements && (
+                      <div className="text-center p-3 bg-white rounded-xl border border-slate-100">
+                        <div className="text-lg font-bold text-blue-700">{formatNumber(communeData.nb_logements)}</div>
+                        <div className="text-xs text-gray-500 mt-1">Logements</div>
+                      </div>
+                    )}
+                    {communeData.part_maisons_pct !== null && communeData.part_maisons_pct !== undefined && (
+                      <div className="text-center p-3 bg-white rounded-xl border border-slate-100">
+                        <div className="text-lg font-bold text-blue-700">{communeData.part_maisons_pct}%</div>
+                        <div className="text-xs text-gray-500 mt-1">Maisons individuelles</div>
+                      </div>
+                    )}
+                    {communeData.densite_population && (
+                      <div className="text-center p-3 bg-white rounded-xl border border-slate-100">
+                        <div className="text-lg font-bold text-blue-700">{formatNumber(Math.round(communeData.densite_population))}</div>
+                        <div className="text-xs text-gray-500 mt-1">Hab./km²</div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Real estate market */}
+            {locationContent.dataDriven.immobilier && (
+              <div className="bg-gradient-to-br from-amber-50/50 to-orange-50/30 rounded-2xl border border-amber-100 p-8">
+                <h2 className="text-xl font-bold text-gray-900 mb-4 border-l-4 border-amber-500 pl-4">
+                  Marché immobilier à {location.name}
+                </h2>
+                <p className="text-gray-700 leading-relaxed">{locationContent.dataDriven.immobilier}</p>
+                {communeData && (communeData.prix_m2_moyen || communeData.prix_m2_maison) && (
+                  <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    {communeData.prix_m2_moyen && (
+                      <div className="text-center p-3 bg-white rounded-xl border border-amber-100">
+                        <div className="text-lg font-bold text-amber-700">{formatEuro(communeData.prix_m2_moyen)}/m²</div>
+                        <div className="text-xs text-gray-500 mt-1">Prix moyen</div>
+                      </div>
+                    )}
+                    {communeData.prix_m2_maison && (
+                      <div className="text-center p-3 bg-white rounded-xl border border-amber-100">
+                        <div className="text-lg font-bold text-amber-700">{formatEuro(communeData.prix_m2_maison)}/m²</div>
+                        <div className="text-xs text-gray-500 mt-1">Maisons</div>
+                      </div>
+                    )}
+                    {communeData.prix_m2_appartement && (
+                      <div className="text-center p-3 bg-white rounded-xl border border-amber-100">
+                        <div className="text-lg font-bold text-amber-700">{formatEuro(communeData.prix_m2_appartement)}/m²</div>
+                        <div className="text-xs text-gray-500 mt-1">Appartements</div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Local artisan market */}
+            {locationContent.dataDriven.marcheArtisanal && (
+              <div className="bg-gradient-to-br from-emerald-50/50 to-green-50/30 rounded-2xl border border-emerald-100 p-8">
+                <h2 className="text-xl font-bold text-gray-900 mb-4 border-l-4 border-emerald-500 pl-4">
+                  Marché artisanal à {location.name}
+                </h2>
+                <p className="text-gray-700 leading-relaxed">{locationContent.dataDriven.marcheArtisanal}</p>
+                {communeData && (
+                  <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    {communeData.nb_entreprises_artisanales && (
+                      <div className="text-center p-3 bg-white rounded-xl border border-emerald-100">
+                        <div className="text-lg font-bold text-emerald-700">{formatNumber(communeData.nb_entreprises_artisanales)}</div>
+                        <div className="text-xs text-gray-500 mt-1">Entreprises artisanales</div>
+                      </div>
+                    )}
+                    {communeData.nb_artisans_btp && (
+                      <div className="text-center p-3 bg-white rounded-xl border border-emerald-100">
+                        <div className="text-lg font-bold text-emerald-700">{formatNumber(communeData.nb_artisans_btp)}</div>
+                        <div className="text-xs text-gray-500 mt-1">Entreprises BTP</div>
+                      </div>
+                    )}
+                    {communeData.nb_artisans_rge && (
+                      <div className="text-center p-3 bg-white rounded-xl border border-emerald-100">
+                        <div className="text-lg font-bold text-emerald-700">{formatNumber(communeData.nb_artisans_rge)}</div>
+                        <div className="text-xs text-gray-500 mt-1">Certifiés RGE</div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Energy performance */}
+            {locationContent.dataDriven.energetique && (
+              <div className="bg-gradient-to-br from-orange-50/50 to-red-50/30 rounded-2xl border border-orange-100 p-8">
+                <h2 className="text-xl font-bold text-gray-900 mb-4 border-l-4 border-orange-500 pl-4">
+                  Performance énergétique à {location.name}
+                </h2>
+                <p className="text-gray-700 leading-relaxed">{locationContent.dataDriven.energetique}</p>
+                {communeData && (communeData.pct_passoires_dpe !== null || communeData.nb_maprimerenov_annuel) && (
+                  <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    {communeData.pct_passoires_dpe !== null && communeData.pct_passoires_dpe !== undefined && (
+                      <div className="text-center p-3 bg-white rounded-xl border border-orange-100">
+                        <div className="text-lg font-bold text-orange-700">{communeData.pct_passoires_dpe}%</div>
+                        <div className="text-xs text-gray-500 mt-1">Passoires thermiques (F/G)</div>
+                      </div>
+                    )}
+                    {communeData.nb_dpe_total && (
+                      <div className="text-center p-3 bg-white rounded-xl border border-orange-100">
+                        <div className="text-lg font-bold text-orange-700">{formatNumber(communeData.nb_dpe_total)}</div>
+                        <div className="text-xs text-gray-500 mt-1">DPE réalisés</div>
+                      </div>
+                    )}
+                    {communeData.nb_maprimerenov_annuel && (
+                      <div className="text-center p-3 bg-white rounded-xl border border-orange-100">
+                        <div className="text-lg font-bold text-orange-700">{formatNumber(communeData.nb_maprimerenov_annuel)}</div>
+                        <div className="text-xs text-gray-500 mt-1">Dossiers MaPrimeRénov&apos;/an</div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Climate data */}
+            {locationContent.dataDriven.climatData && (
+              <div className="bg-gradient-to-br from-sky-50/50 to-cyan-50/30 rounded-2xl border border-sky-100 p-8">
+                <h2 className="text-xl font-bold text-gray-900 mb-4 border-l-4 border-sky-500 pl-4">
+                  Climat et saisonnalité à {location.name}
+                </h2>
+                <p className="text-gray-700 leading-relaxed">{locationContent.dataDriven.climatData}</p>
+                {communeData && (communeData.jours_gel_annuels !== null || communeData.precipitation_annuelle !== null) && (
+                  <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    {communeData.jours_gel_annuels !== null && (
+                      <div className="text-center p-3 bg-white rounded-xl border border-sky-100">
+                        <div className="text-lg font-bold text-sky-700">{communeData.jours_gel_annuels}</div>
+                        <div className="text-xs text-gray-500 mt-1">Jours de gel/an</div>
+                      </div>
+                    )}
+                    {communeData.precipitation_annuelle !== null && (
+                      <div className="text-center p-3 bg-white rounded-xl border border-sky-100">
+                        <div className="text-lg font-bold text-sky-700">{formatNumber(communeData.precipitation_annuelle)} mm</div>
+                        <div className="text-xs text-gray-500 mt-1">Précipitations/an</div>
+                      </div>
+                    )}
+                    {communeData.temperature_moyenne_hiver !== null && (
+                      <div className="text-center p-3 bg-white rounded-xl border border-sky-100">
+                        <div className="text-lg font-bold text-sky-700">{communeData.temperature_moyenne_hiver?.toFixed(1)} °C</div>
+                        <div className="text-xs text-gray-500 mt-1">Moy. hiver</div>
+                      </div>
+                    )}
+                    {communeData.temperature_moyenne_ete !== null && (
+                      <div className="text-center p-3 bg-white rounded-xl border border-sky-100">
+                        <div className="text-lg font-bold text-sky-700">{communeData.temperature_moyenne_ete?.toFixed(1)} °C</div>
+                        <div className="text-xs text-gray-500 mt-1">Moy. été</div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </section>
       )}
@@ -834,7 +1024,7 @@ async function _ServiceLocationPage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* Editorial credibility signal */}
+      {/* Editorial credibility signal + E-E-A-T data sources */}
       <section className="py-6 bg-gray-50 border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-xs text-gray-400 leading-relaxed max-w-3xl">
@@ -842,6 +1032,16 @@ async function _ServiceLocationPage({ params }: PageProps) {
             Les tarifs affichés sont indicatifs et basés sur les moyennes du marché en {location.region_name || 'France'}.
             ServicesArtisans est un annuaire indépendant — nous ne réalisons pas de travaux et ne percevons aucune commission.
           </p>
+          {locationContent?.dataDriven?.dataSources && locationContent.dataDriven.dataSources.length > 0 && (
+            <p className="text-xs text-gray-400 mt-2 max-w-3xl">
+              <strong className="text-gray-500">Sources des données locales :</strong>{' '}
+              {locationContent.dataDriven.dataSources.join(' · ')}.
+              Données mises à jour périodiquement. Dernière actualisation{' '}
+              {communeData?.enriched_at
+                ? new Date(communeData.enriched_at).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })
+                : 'récente'}.
+            </p>
+          )}
         </div>
       </section>
 
