@@ -9,8 +9,18 @@ const navigationLinks = [
   { name: 'Accueil', href: '/' },
   { name: 'Services', href: '/services' },
   { name: 'Villes', href: '/villes' },
+  { name: 'Carte des artisans', href: '/carte-artisans' },
   { name: 'Recherche', href: '/recherche' },
   { name: 'Comment ça marche', href: '/comment-ca-marche' },
+]
+
+// Outils links
+const outilsLinks = [
+  { name: 'Calculateur de prix', href: '/outils/calculateur-prix' },
+  { name: 'Diagnostic artisan', href: '/outils/diagnostic' },
+  { name: 'Carte des artisans', href: '/carte-artisans' },
+  { name: 'Tarifs artisans', href: '/tarifs-artisans' },
+  { name: 'Widget pour artisans', href: '/widget' },
 ]
 
 // Information links
@@ -101,7 +111,7 @@ export default function Footer() {
       <div className="relative border-b border-white/[0.06]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
           {/* Desktop: full grid visible */}
-          <div className="hidden md:grid md:grid-cols-4 gap-8 lg:gap-12">
+          <div className="hidden md:grid md:grid-cols-5 gap-8 lg:gap-12">
             {/* Services populaires */}
             <div>
               <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Services populaires</h4>
@@ -177,6 +187,23 @@ export default function Footer() {
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </li>
+              </ul>
+            </div>
+
+            {/* Outils */}
+            <div>
+              <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Outils gratuits</h4>
+              <ul className="space-y-3 text-sm">
+                {outilsLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5"
+                    >
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
 
@@ -281,6 +308,25 @@ export default function Footer() {
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </li>
+              </ul>
+            </details>
+
+            <details className="group border border-white/[0.06] rounded-xl overflow-hidden">
+              <summary className="flex items-center justify-between cursor-pointer px-5 py-4 text-white font-heading font-semibold text-xs uppercase tracking-[0.15em] hover:bg-white/[0.03] transition-colors">
+                Outils gratuits
+                <ArrowRight className="w-4 h-4 text-gray-500 transition-transform duration-200 group-open:rotate-90" />
+              </summary>
+              <ul className="space-y-1 text-sm px-5 pb-4">
+                {outilsLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="text-gray-400 hover:text-white transition-all duration-200 inline-block py-1.5"
+                    >
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </details>
 
