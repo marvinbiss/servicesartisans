@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
-import { MapPin, Users, Building2, ArrowRight, Shield, Clock, ChevronRight, Wrench, HelpCircle } from 'lucide-react'
+import { MapPin, Users, Building2, ArrowRight, Shield, Clock, ChevronRight, Wrench, HelpCircle, BarChart3, Thermometer, Zap, Home } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
@@ -10,6 +10,7 @@ import { SITE_URL } from '@/lib/seo/config'
 import { villes, services, getQuartierBySlug, getQuartiersByVille, getNearbyCities, getRegionSlugByName, getDepartementByCode } from '@/lib/data/france'
 import { getCityImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { generateQuartierContent, hashCode } from '@/lib/seo/location-content'
+import { formatNumber, formatEuro } from '@/lib/data/commune-data'
 
 // Pre-render top 50 cities × their quartiers (~400 pages)
 const TOP_CITIES = 50
@@ -275,14 +276,21 @@ export default async function QuartierPage({ params }: PageProps) {
             </div>
             <p className="text-sm text-slate-600 leading-relaxed mb-4">{content.profile.architecturalNote}</p>
             <div>
-              <p className="text-sm font-semibold text-slate-900 mb-2">Problématiques courantes dans ce type de bâti :</p>
+              <p className="text-sm font-semibold text-slate-900 mb-2">Problématiques courantes à {quartierName} :</p>
               <ul className="grid sm:grid-cols-2 gap-2">
-                {content.profile.commonIssues.map((issue, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-slate-600">
-                    <Wrench className="w-3.5 h-3.5 text-emerald-500 mt-0.5 flex-shrink-0" />
-                    {issue}
-                  </li>
-                ))}
+                {(() => {
+                  const issueHash = Math.abs(hashCode(`issues-${villeSlug}-${quartierSlug}`))
+                  const allIssues = content.profile.commonIssues
+                  const selected = Array.from({ length: Math.min(3, allIssues.length) }, (_, i) =>
+                    allIssues[(issueHash + i) % allIssues.length]
+                  )
+                  return selected.map((issue, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm text-slate-600">
+                      <Wrench className="w-3.5 h-3.5 text-emerald-500 mt-0.5 flex-shrink-0" />
+                      {issue}
+                    </li>
+                  ))
+                })()}
               </ul>
             </div>
             <p className="text-xs text-gray-400 mt-3 italic">
@@ -349,6 +357,113 @@ export default async function QuartierPage({ params }: PageProps) {
           <p className="text-slate-600 leading-relaxed">{content.proximite}</p>
         </section>
 
+        {/* ─── DATA-DRIVEN CONTENT (unique per quartier) ──────── */}
+        {content.dataDriven && (
+          <section className="mb-16 space-y-8">
+            {/* Immobilier quartier */}
+            <div className="bg-gradient-to-br from-amber-50/50 to-orange-50/30 rounded-2xl border border-amber-100 p-8">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center">
+                  <Home className="w-4 h-4 text-amber-600" />
+                </div>
+                <h3 className="font-heading text-xl font-bold text-slate-900 tracking-tight">
+                  Immobilier dans le quartier {quartierName}
+                </h3>
+              </div>
+              <p className="text-slate-600 leading-relaxed">{content.dataDriven.immobilierQuartier}</p>
+              {content.dataDriven.statCards.prixM2Quartier > 0 && (
+                <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-4">
+                  <div className="text-center p-3 bg-white rounded-xl border border-amber-100">
+                    <div className="text-lg font-bold text-amber-700">{formatEuro(content.dataDriven.statCards.prixM2Quartier)}/m²</div>
+                    <div className="text-xs text-slate-500 mt-1">Prix estimé quartier</div>
+                  </div>
+                  {content.dataDriven.statCards.artisansProximite > 0 && (
+                    <div className="text-center p-3 bg-white rounded-xl border border-amber-100">
+                      <div className="text-lg font-bold text-amber-700">{formatNumber(content.dataDriven.statCards.artisansProximite)}</div>
+                      <div className="text-xs text-slate-500 mt-1">Artisans à proximité</div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Marché artisanal */}
+            <div className="bg-gradient-to-br from-emerald-50/50 to-green-50/30 rounded-2xl border border-emerald-100 p-8">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
+                  <BarChart3 className="w-4 h-4 text-emerald-600" />
+                </div>
+                <h3 className="font-heading text-xl font-bold text-slate-900 tracking-tight">
+                  Artisans autour de {quartierName}
+                </h3>
+              </div>
+              <p className="text-slate-600 leading-relaxed">{content.dataDriven.marcheArtisanalQuartier}</p>
+              {content.dataDriven.statCards.artisansBtp > 0 && (
+                <div className="mt-6 grid grid-cols-2 gap-4">
+                  <div className="text-center p-3 bg-white rounded-xl border border-emerald-100">
+                    <div className="text-lg font-bold text-emerald-700">{formatNumber(content.dataDriven.statCards.artisansBtp)}</div>
+                    <div className="text-xs text-slate-500 mt-1">Artisans BTP du secteur</div>
+                  </div>
+                  {content.dataDriven.statCards.artisansProximite > 0 && (
+                    <div className="text-center p-3 bg-white rounded-xl border border-emerald-100">
+                      <div className="text-lg font-bold text-emerald-700">{formatNumber(content.dataDriven.statCards.artisansProximite)}</div>
+                      <div className="text-xs text-slate-500 mt-1">Entreprises artisanales</div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Énergie / DPE */}
+            <div className="bg-gradient-to-br from-orange-50/50 to-red-50/30 rounded-2xl border border-orange-100 p-8">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
+                  <Zap className="w-4 h-4 text-orange-600" />
+                </div>
+                <h3 className="font-heading text-xl font-bold text-slate-900 tracking-tight">
+                  Performance énergétique à {quartierName}
+                </h3>
+              </div>
+              <p className="text-slate-600 leading-relaxed">{content.dataDriven.energetiqueQuartier}</p>
+              {content.dataDriven.statCards.passoiresDpe > 0 && (
+                <div className="mt-6 grid grid-cols-2 gap-4">
+                  <div className="text-center p-3 bg-white rounded-xl border border-orange-100">
+                    <div className="text-lg font-bold text-orange-700">{content.dataDriven.statCards.passoiresDpe} %</div>
+                    <div className="text-xs text-slate-500 mt-1">Passoires thermiques estimées</div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Climat et travaux */}
+            <div className="bg-gradient-to-br from-sky-50/50 to-cyan-50/30 rounded-2xl border border-sky-100 p-8">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-8 h-8 bg-sky-100 rounded-lg flex items-center justify-center">
+                  <Thermometer className="w-4 h-4 text-sky-600" />
+                </div>
+                <h3 className="font-heading text-xl font-bold text-slate-900 tracking-tight">
+                  Climat et travaux à {quartierName}
+                </h3>
+              </div>
+              <p className="text-slate-600 leading-relaxed">{content.dataDriven.climatQuartier}</p>
+              <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-4">
+                {content.dataDriven.statCards.joursGel != null && (
+                  <div className="text-center p-3 bg-white rounded-xl border border-sky-100">
+                    <div className="text-lg font-bold text-sky-700">{content.dataDriven.statCards.joursGel}</div>
+                    <div className="text-xs text-slate-500 mt-1">Jours de gel/an</div>
+                  </div>
+                )}
+                {content.dataDriven.statCards.periodeTravaux && (
+                  <div className="text-center p-3 bg-white rounded-xl border border-sky-100">
+                    <div className="text-sm font-bold text-sky-700">{content.dataDriven.statCards.periodeTravaux}</div>
+                    <div className="text-xs text-slate-500 mt-1">Période travaux ext.</div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
         <section className="mb-16">
           <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
@@ -356,9 +471,18 @@ export default async function QuartierPage({ params }: PageProps) {
             <p className="text-xs text-slate-500 leading-relaxed">
               Les informations de cette page sont compilées à partir de données publiques (INSEE, base SIRENE, cadastre).
               Le profil de bâti est estimé selon les caractéristiques urbaines de {ville.name} et peut varier d&apos;un immeuble à l&apos;autre.
-              Les tarifs sont indicatifs et basés sur des moyennes régionales ({ville.region}).
+              {content.dataDriven?.statCards.prixM2Quartier
+                ? <> Le prix immobilier estimé à {quartierName} ({formatEuro(content.dataDriven.statCards.prixM2Quartier)}/m²) est dérivé des moyennes communales ajustées par époque de construction ({content.profile.eraLabel.toLowerCase()}) et densité urbaine ({content.profile.densityLabel.toLowerCase()}).</>
+                : <> Les tarifs sont indicatifs et basés sur des moyennes régionales ({ville.region}).</>
+              }{' '}
               ServicesArtisans est un annuaire indépendant — nous ne réalisons pas de travaux et ne garantissons pas les prestations des artisans référencés.
             </p>
+            {content.dataDriven?.dataSources && content.dataDriven.dataSources.length > 0 && (
+              <p className="text-xs text-slate-400 mt-2">
+                <strong className="text-slate-500">Sources :</strong>{' '}
+                {content.dataDriven.dataSources.join(' · ')}.
+              </p>
+            )}
           </div>
         </section>
 
@@ -444,12 +568,25 @@ export default async function QuartierPage({ params }: PageProps) {
           background: 'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(16,185,129,0.12) 0%, transparent 60%)',
         }} />
         <div className="relative max-w-4xl mx-auto px-4 py-16 md:py-20 text-center">
-          <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">
-            Besoin d&apos;un artisan à {quartierName} ?
-          </h2>
-          <p className="text-slate-400 mb-8 max-w-lg mx-auto">
-            Décrivez votre projet et recevez des devis gratuits d&apos;artisans qualifiés à {ville.name}.
-          </p>
+          {(() => {
+            const ctaHash = Math.abs(hashCode(`cta-${villeSlug}-${quartierSlug}`))
+            const ctaTemplates = [
+              { h: `Besoin d'un artisan à ${quartierName} ?`, p: `Décrivez votre projet et recevez des devis gratuits d'artisans qualifiés à ${ville.name}.` },
+              { h: `Travaux sur du ${content.profile.eraLabel.toLowerCase()} à ${quartierName} ?`, p: `Nos artisans connaissent les spécificités du bâti de votre quartier. Devis gratuit et sans engagement.` },
+              { h: `Rénovation à ${quartierName}, ${ville.name}`, p: `Trouvez l'artisan adapté au ${content.profile.eraLabel.toLowerCase()} de votre quartier. ${services.length} métiers disponibles.` },
+            ]
+            const cta = ctaTemplates[ctaHash % ctaTemplates.length]
+            return (
+              <>
+                <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">
+                  {cta.h}
+                </h2>
+                <p className="text-slate-400 mb-8 max-w-lg mx-auto">
+                  {cta.p}
+                </p>
+              </>
+            )
+          })()}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/devis" className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-300">
               Demander un devis gratuit

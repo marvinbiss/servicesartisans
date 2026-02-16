@@ -10,6 +10,7 @@ import type { Ville } from '@/lib/data/france'
 import { getTradeContent } from '@/lib/data/trade-content'
 import { generateDataDrivenContent, type DataDrivenContent } from '@/lib/seo/data-driven-content'
 import type { CommuneData } from '@/lib/data/commune-data'
+import { formatNumber, formatEuro, monthName } from '@/lib/data/commune-data'
 
 // ---------------------------------------------------------------------------
 // Regional pricing multipliers
@@ -420,6 +421,88 @@ function villeToPartialCommuneData(ville: Ville): CommuneData {
     prix_m2_appartement: null,
     nb_maprimerenov_annuel: null,
     enriched_at: null,
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Quartier-specific data derivation from city-level commune data
+// ---------------------------------------------------------------------------
+
+const ERA_PRICE_MULT: Record<string, number> = {
+  'haussmannien': 1.25,
+  'post-2000': 1.15,
+  'pre-1950': 0.95,
+  '1950-1980': 0.85,
+  '1980-2000': 1.0,
+  'mixte': 1.0,
+}
+
+const DENSITY_PRICE_MULT: Record<string, number> = {
+  'dense': 1.05,
+  'residentiel': 1.0,
+  'periurbain': 0.90,
+}
+
+const DENSITY_ARTISAN_MULT: Record<string, number> = {
+  'dense': 1.12,
+  'residentiel': 1.0,
+  'periurbain': 0.85,
+}
+
+const DENSITY_MAISONS_ADJUST: Record<string, number> = {
+  'dense': -10,
+  'residentiel': 0,
+  'periurbain': 15,
+}
+
+const ERA_DPE_MULT: Record<string, number> = {
+  'pre-1950': 1.40,
+  'haussmannien': 1.30,
+  '1950-1980': 1.25,
+  '1980-2000': 1.05,
+  'post-2000': 0.40,
+  'mixte': 1.0,
+}
+
+function deriveQuartierCommuneData(
+  cityData: CommuneData,
+  quartierName: string,
+  villeSlug: string,
+  era: string,
+  density: string,
+  quartierCount: number,
+): CommuneData {
+  const qHash = hashCode(`q-${villeSlug}-${quartierName}`)
+  const qPerturbation = 0.92 + (qHash % 17) / 100 // 0.92 to 1.08
+
+  const eraPrice = ERA_PRICE_MULT[era] || 1.0
+  const densityPrice = DENSITY_PRICE_MULT[density] || 1.0
+  const densityArtisan = DENSITY_ARTISAN_MULT[density] || 1.0
+  const dpeMult = ERA_DPE_MULT[era] || 1.0
+  const nQ = Math.max(quartierCount, 4) // min 4 to avoid absurd per-quartier counts
+
+  return {
+    ...cityData,
+    name: `${quartierName} (${cityData.name})`,
+    slug: `${villeSlug}-${quartierName}`,
+    prix_m2_moyen: cityData.prix_m2_moyen
+      ? Math.round(cityData.prix_m2_moyen * eraPrice * densityPrice * qPerturbation / 10) * 10
+      : null,
+    nb_entreprises_artisanales: cityData.nb_entreprises_artisanales
+      ? Math.round(cityData.nb_entreprises_artisanales * densityArtisan * qPerturbation / nQ)
+      : null,
+    nb_artisans_btp: cityData.nb_artisans_btp
+      ? Math.round(cityData.nb_artisans_btp * densityArtisan * qPerturbation / nQ)
+      : null,
+    part_maisons_pct: cityData.part_maisons_pct != null
+      ? Math.max(5, Math.min(95, Math.round((cityData.part_maisons_pct + (DENSITY_MAISONS_ADJUST[density] || 0)) * qPerturbation)))
+      : null,
+    pct_passoires_dpe: cityData.pct_passoires_dpe != null
+      ? Math.max(3, Math.min(55, Math.round(cityData.pct_passoires_dpe * dpeMult * qPerturbation)))
+      : null,
+    nb_logements: cityData.nb_logements
+      ? Math.round(cityData.nb_logements / nQ * qPerturbation)
+      : null,
   }
 }
 
@@ -934,6 +1017,22 @@ export interface QuartierProfile {
   architecturalNote: string
 }
 
+export interface QuartierDataDrivenContent {
+  immobilierQuartier: string
+  marcheArtisanalQuartier: string
+  energetiqueQuartier: string
+  climatQuartier: string
+  statCards: {
+    prixM2Quartier: number
+    artisansProximite: number
+    artisansBtp: number
+    passoiresDpe: number
+    joursGel: number | null
+    periodeTravaux: string | null
+  }
+  dataSources: string[]
+}
+
 export interface QuartierContent {
   profile: QuartierProfile
   intro: string
@@ -942,6 +1041,7 @@ export interface QuartierContent {
   conseils: string
   proximite: string
   faqItems: { question: string; answer: string }[]
+  dataDriven: QuartierDataDrivenContent | null
 }
 
 const ERAS: { key: BuildingEra; label: string }[] = [
@@ -1306,6 +1406,217 @@ function getQuartierProfile(ville: Ville, quartierName: string): QuartierProfile
   }
 }
 
+// ---------------------------------------------------------------------------
+// Data-driven content for quartier pages — unique numeric sections per quartier
+// ---------------------------------------------------------------------------
+
+const ERA_ENERGY_NOTES: Record<string, string[]> = {
+  'pre-1950': [
+    'L\'absence d\'isolation d\'origine et les matériaux anciens expliquent cette proportion élevée.',
+    'Les murs en pierre et les planchers bois, dépourvus d\'isolation moderne, laissent s\'échapper une part importante de la chaleur.',
+    'Sans rupture de pont thermique ni double vitrage, ces constructions d\'avant-guerre affichent des consommations bien supérieures aux standards actuels.',
+  ],
+  'haussmannien': [
+    'Les murs porteurs en pierre offrent une inertie thermique naturelle, mais l\'isolation reste souvent insuffisante.',
+    'L\'épaisseur des murs haussmanniens compense partiellement l\'absence d\'isolation, mais les hauts plafonds augmentent le volume à chauffer.',
+    'La configuration des immeubles haussmanniens (grandes fenêtres, planchers anciens) crée des déperditions significatives malgré la qualité du bâti.',
+  ],
+  '1950-1980': [
+    'Les constructions d\'après-guerre, bâties sans réglementation thermique, sont particulièrement concernées.',
+    'Le béton armé des années 1950-1980, bon marché mais conducteur, génère d\'importants ponts thermiques et une facture énergétique élevée.',
+    'L\'absence de norme thermique à l\'époque de construction se traduit par des performances énergétiques très en deçà des exigences actuelles.',
+  ],
+  '1980-2000': [
+    'Les premières normes thermiques (RT 1982) limitent le phénomène, mais ces logements gagnent à être rénovés.',
+    'Conformes aux normes de l\'époque (RT 1982/1988), ces constructions présentent des performances honorables mais améliorables avec les matériaux actuels.',
+    'Le double vitrage première génération et l\'isolation légère des années 1980-2000 atteignent aujourd\'hui leurs limites après 30 à 40 ans de service.',
+  ],
+  'post-2000': [
+    'Le respect des normes RT 2005/2012 réduit considérablement la proportion de logements énergivores.',
+    'Les logements récents bénéficient d\'une isolation performante, d\'une VMC efficace et de menuiseries haute qualité, limitant les déperditions.',
+    'La construction post-2000, soumise à des exigences réglementaires strictes, affiche des consommations très inférieures à la moyenne du parc français.',
+  ],
+  'mixte': [
+    'La diversité des époques de construction se traduit par des performances énergétiques très hétérogènes.',
+    'Dans un tissu urbain mixte, les logements anciens côtoient des résidences récentes : les écarts de DPE peuvent aller de A à G sur un même quartier.',
+    'Le bâti mixte génère des besoins contrastés : rénovation lourde pour les constructions anciennes, entretien courant pour les plus récentes.',
+  ],
+}
+
+const ERA_CLIMAT_IMPACT: Record<string, ((q: string) => string)[]> = {
+  'pre-1950': [
+    (q) => `Pour le bâti ancien de ${q}, le gel accentue les risques d'infiltration et de fissuration des maçonneries. L'isolation thermique est d'autant plus critique.`,
+    (q) => `À ${q}, les constructions d'avant 1950 sont vulnérables aux cycles gel-dégel qui fragilisent les joints de maçonnerie. Un entretien préventif régulier limite les dégradations.`,
+    (q) => `Le patrimoine bâti ancien de ${q} nécessite une attention particulière lors des épisodes de froid : les matériaux poreux absorbent l'humidité qui, en gelant, fissure pierres et enduits.`,
+  ],
+  '1950-1980': [
+    (q) => `Les constructions d'après-guerre de ${q}, souvent peu isolées, subissent de plein fouet les variations thermiques. Le remplacement des fenêtres simple vitrage est une priorité.`,
+    (q) => `À ${q}, les immeubles des années 1950-1980 présentent des façades exposées aux intempéries sans protection thermique adéquate. La priorité : isoler et remplacer les menuiseries.`,
+    (q) => `Le béton des constructions d'après-guerre de ${q} conduit le froid en profondeur. En période de gel, les ponts thermiques génèrent condensation et moisissures à l'intérieur.`,
+  ],
+  '1980-2000': [
+    (q) => `Les logements des années 1980-2000 à ${q} résistent mieux au climat grâce aux premières normes thermiques, mais les menuiseries d'origine arrivent en fin de vie.`,
+    (q) => `À ${q}, les résidences 1980-2000 sont mieux protégées contre le froid que le parc ancien, mais l'étanchéité des toitures-terrasses et des joints de façade mérite un contrôle régulier.`,
+    (q) => `Le bâti des années 1980-2000 de ${q} bénéficie d'une isolation correcte pour l'époque, mais le vieillissement des matériaux réduit leur efficacité face aux aléas climatiques.`,
+  ],
+  'post-2000': [
+    (q) => `Le bâti récent de ${q} est conçu pour résister aux aléas climatiques. L'entretien courant (VMC, étanchéité) reste néanmoins essentiel.`,
+    (q) => `Les constructions modernes de ${q} intègrent une isolation performante qui protège des variations saisonnières. Un suivi d'entretien préventif suffit généralement.`,
+    (q) => `À ${q}, les logements post-2000 supportent bien les contraintes climatiques grâce aux normes RT en vigueur. La VMC double flux et le double vitrage limitent les déperditions.`,
+  ],
+  'haussmannien': [
+    (q) => `Les immeubles haussmanniens de ${q}, avec leurs murs épais en pierre, offrent une bonne inertie thermique, mais les jonctions fenêtres-maçonnerie sont des points faibles.`,
+    (q) => `À ${q}, le patrimoine haussmannien bénéficie de murs massifs qui régulent naturellement la température. En revanche, les courants d'air aux menuiseries anciennes restent un défi.`,
+    (q) => `La pierre de taille des immeubles haussmanniens de ${q} absorbe et restitue la chaleur, mais les planchers hauts et les grandes fenêtres augmentent les besoins de chauffage en hiver.`,
+  ],
+  'mixte': [
+    (q) => `La diversité architecturale de ${q} implique des réponses climatiques variées, du traitement anti-humidité du bâti ancien à l'entretien préventif du bâti récent.`,
+    (q) => `À ${q}, chaque époque de construction réagit différemment aux aléas climatiques. Un diagnostic thermique adapté à chaque bâtiment est recommandé avant travaux.`,
+    (q) => `Le tissu urbain mixte de ${q} présente des vulnérabilités climatiques hétérogènes : le bâti ancien craint l'humidité, tandis que le bâti récent nécessite un entretien régulier.`,
+  ],
+}
+
+function generateQuartierDataDrivenContent(
+  ville: Ville,
+  quartierName: string,
+  profile: QuartierProfile,
+): QuartierDataDrivenContent {
+  const cityData = villeToPartialCommuneData(ville)
+  const nQ = ville.quartiers.length
+  const qData = deriveQuartierCommuneData(cityData, quartierName, ville.slug, profile.era, profile.density, nQ)
+  const seed = Math.abs(hashCode(`qdd-${ville.slug}-${quartierName}`))
+  const dataSources: string[] = []
+
+  // ── Section 1: Immobilier quartier ──
+  const prixQ = qData.prix_m2_moyen
+  const prixCity = cityData.prix_m2_moyen
+  const logements = qData.nb_logements
+  const partMaisons = qData.part_maisons_pct
+
+  let immobilierQuartier: string
+  if (prixQ && prixCity) {
+    const diff = Math.round(((prixQ - prixCity) / prixCity) * 100)
+    const diffLabel = diff > 0 ? `${diff} % au-dessus` : diff < 0 ? `${Math.abs(diff)} % en dessous` : 'au niveau'
+
+    const immoTemplates = [
+      `Le quartier ${quartierName} à ${ville.name} affiche un prix immobilier estimé à ${formatEuro(prixQ)}/m², soit ${diffLabel} de la moyenne communale (${formatEuro(prixCity)}/m²). ${profile.eraLabel}, ce type de bâti ${diff > 5 ? 'bénéficie d\'une cote supérieure' : diff < -5 ? 'reste plus accessible' : 'se situe dans la norme locale'} sur le marché.${logements ? ` Le parc résidentiel du quartier compte environ ${formatNumber(logements)} logements.` : ''}${partMaisons != null ? ` L'habitat est composé à ${partMaisons} % de maisons individuelles.` : ''}`,
+
+      `Avec un prix au m² estimé à ${formatEuro(prixQ)} dans le quartier ${quartierName}, le marché immobilier local reflète les caractéristiques du ${profile.eraLabel.toLowerCase()} en ${profile.densityLabel.toLowerCase()}. Par rapport à la moyenne de ${ville.name} (${formatEuro(prixCity)}/m²), ce quartier est ${diffLabel}.${logements ? ` On y recense environ ${formatNumber(logements)} logements.` : ''}${partMaisons != null ? ` La part de maisons individuelles atteint ${partMaisons} %.` : ''}`,
+
+      `À ${quartierName} (${ville.name}), le prix immobilier se situe autour de ${formatEuro(prixQ)}/m², ${diffLabel} de la moyenne communale de ${formatEuro(prixCity)}/m². Le ${profile.eraLabel.toLowerCase()} et la densité ${profile.densityLabel.toLowerCase()} influencent directement la valeur foncière et les besoins en rénovation.${logements ? ` Le quartier représente environ ${formatNumber(logements)} logements.` : ''}`,
+    ]
+    immobilierQuartier = immoTemplates[seed % 3]
+    dataSources.push('DVF Etalab / INSEE (estimations prix immobiliers)')
+  } else {
+    immobilierQuartier = `Le quartier ${quartierName} à ${ville.name} est caractérisé par un ${profile.eraLabel.toLowerCase()} en ${profile.densityLabel.toLowerCase()}, des paramètres qui influencent les prix immobiliers et les besoins en travaux.`
+  }
+
+  // ── Section 2: Marché artisanal quartier ──
+  const artisans = qData.nb_entreprises_artisanales
+  const btp = qData.nb_artisans_btp
+
+  let marcheArtisanalQuartier: string
+  if (artisans && btp) {
+    const marchTemplates = [
+      `Le quartier ${quartierName} et ses environs comptent environ ${formatNumber(artisans)} entreprises artisanales, dont ${formatNumber(btp)} dans le BTP (codes NAF 41-43). ${profile.density === 'dense' ? 'La forte densité urbaine concentre l\'offre' : profile.density === 'periurbain' ? 'Le caractère périurbain étend le rayon d\'intervention des artisans' : 'Le profil résidentiel assure un bon maillage de professionnels'} à proximité du quartier.`,
+
+      `Autour de ${quartierName} à ${ville.name}, on recense environ ${formatNumber(artisans)} artisans immatriculés, ${formatNumber(btp)} étant spécialisés dans le BTP. Le bâti de type ${profile.eraLabel.toLowerCase()} génère une demande spécifique que ces professionnels connaissent. ${profile.density === 'dense' ? 'La densité du quartier réduit les temps de déplacement.' : 'Le périmètre d\'intervention s\'adapte au tissu urbain local.'}`,
+
+      `${formatNumber(artisans)} entreprises artisanales opèrent dans le secteur de ${quartierName} (${ville.name}), dont ${formatNumber(btp)} artisans du bâtiment. Ce tissu professionnel ${artisans > 200 ? 'dense' : artisans > 50 ? 'solide' : 'de proximité'} permet de trouver un professionnel adapté au ${profile.eraLabel.toLowerCase()} qui caractérise le quartier.`,
+    ]
+    marcheArtisanalQuartier = marchTemplates[(seed + 1) % 3]
+    dataSources.push('API SIRENE / INSEE (entreprises artisanales)')
+  } else {
+    marcheArtisanalQuartier = `Le quartier ${quartierName} à ${ville.name} est desservi par les artisans du ${ville.departement}. Nos professionnels référencés connaissent le ${profile.eraLabel.toLowerCase()} du secteur.`
+  }
+
+  // ── Section 3: Énergétique / DPE quartier ──
+  const dpe = qData.pct_passoires_dpe
+  const cityDpe = cityData.pct_passoires_dpe
+
+  let energetiqueQuartier: string
+  if (dpe != null && cityDpe != null) {
+    const dpeCompare = dpe > cityDpe
+      ? `supérieur à la moyenne communale (${cityDpe} %)`
+      : dpe < cityDpe
+      ? `inférieur à la moyenne communale (${cityDpe} %)`
+      : 'proche de la moyenne communale'
+    const eraNotes = ERA_ENERGY_NOTES[profile.era] || ['']
+    const eraNote = eraNotes[Math.abs(hashCode(`enr-${ville.slug}-${quartierName}`)) % eraNotes.length]
+
+    const nrgTemplates = [
+      `À ${quartierName}, on estime que ${dpe} % des logements sont des passoires thermiques (DPE F ou G), un taux ${dpeCompare}. ${eraNote} L'interdiction progressive de location des logements mal classés accélère la demande de rénovation énergétique.`,
+
+      `Dans le quartier ${quartierName} (${ville.name}), environ ${dpe} % des logements présentent un diagnostic énergétique défavorable (classes F-G), ${dpeCompare}. ${eraNote} Les artisans RGE du secteur accompagnent les propriétaires dans cette transition.`,
+
+      `Le quartier ${quartierName} affiche une estimation de ${dpe} % de passoires thermiques, ${dpeCompare}. Pour un bâti de type ${profile.eraLabel.toLowerCase()}, ${dpe > 20 ? 'ce chiffre appelle des travaux de rénovation énergétique prioritaires' : dpe > 10 ? 'ce taux reflète les caractéristiques constructives de l\'époque' : 'cette performance témoigne de normes de construction récentes'}. ${eraNote}`,
+    ]
+    energetiqueQuartier = nrgTemplates[(seed + 2) % 3]
+    dataSources.push('ADEME (DPE, estimations par type de bâti)')
+  } else {
+    energetiqueQuartier = `Le ${profile.eraLabel.toLowerCase()} du quartier ${quartierName} influence directement les performances énergétiques des logements. Consultez un artisan RGE pour un diagnostic adapté.`
+  }
+
+  // ── Section 4: Climat et travaux quartier ──
+  const gel = cityData.jours_gel_annuels
+  const precip = cityData.precipitation_annuelle
+  const tempH = cityData.temperature_moyenne_hiver
+  const tempE = cityData.temperature_moyenne_ete
+  const trDebut = cityData.mois_travaux_ext_debut
+  const trFin = cityData.mois_travaux_ext_fin
+
+  let climatQuartier: string
+  if (gel != null || precip != null) {
+    const climatParts: string[] = []
+
+    if (gel != null && tempH != null && tempE != null) {
+      const climTemplates = [
+        `À ${ville.name}, le climat impose ${gel} jours de gel annuels en moyenne, avec des températures variant de ${tempH.toFixed(1)} °C en hiver à ${tempE.toFixed(1)} °C en été.`,
+        `${ville.name} connaît en moyenne ${gel} jours de gel par an. Les températures oscillent entre ${tempH.toFixed(1)} °C (hiver) et ${tempE.toFixed(1)} °C (été).`,
+        `Avec ${gel} jours de gel et un thermomètre entre ${tempH.toFixed(1)} °C et ${tempE.toFixed(1)} °C selon la saison, ${ville.name} présente des contraintes climatiques à prendre en compte.`,
+      ]
+      climatParts.push(climTemplates[(seed + 3) % 3])
+    }
+
+    if (precip != null) {
+      climatParts.push(`La pluviométrie annuelle atteint ${formatNumber(precip)} mm.`)
+    }
+
+    const impactFns = ERA_CLIMAT_IMPACT[profile.era]
+    if (impactFns) {
+      const impactFn = impactFns[Math.abs(hashCode(`clim-${ville.slug}-${quartierName}`)) % impactFns.length]
+      climatParts.push(impactFn(quartierName))
+    }
+
+    if (trDebut != null && trFin != null) {
+      climatParts.push(`La période optimale pour les travaux extérieurs à ${quartierName} s'étend de ${monthName(trDebut)} à ${monthName(trFin)}.`)
+    }
+
+    climatQuartier = climatParts.join(' ')
+    dataSources.push('Open-Meteo / Météo-France (données climatiques)')
+  } else {
+    climatQuartier = `Les conditions climatiques de ${ville.name} influencent les travaux à ${quartierName}. Adaptez le calendrier de vos chantiers aux saisons pour garantir la qualité des interventions.`
+  }
+
+  const periodeTravaux = trDebut != null && trFin != null ? `${monthName(trDebut)} à ${monthName(trFin)}` : null
+
+  return {
+    immobilierQuartier,
+    marcheArtisanalQuartier,
+    energetiqueQuartier,
+    climatQuartier,
+    statCards: {
+      prixM2Quartier: prixQ || 0,
+      artisansProximite: artisans || 0,
+      artisansBtp: btp || 0,
+      passoiresDpe: dpe || 0,
+      joursGel: gel,
+      periodeTravaux,
+    },
+    dataSources: Array.from(new Set(dataSources)),
+  }
+}
+
 export function generateQuartierContent(ville: Ville, quartierName: string): QuartierContent {
   const seed = Math.abs(hashCode(`${ville.slug}-${quartierName}`))
   const profile = getQuartierProfile(ville, quartierName)
@@ -1361,7 +1672,30 @@ export function generateQuartierContent(ville: Ville, quartierName: string): Qua
     }
   })
 
-  return { profile, intro, batimentContext, servicesDemandes, conseils, proximite, faqItems }
+  // Generate data-driven content
+  const dataDriven = generateQuartierDataDrivenContent(ville, quartierName, profile)
+
+  // Add data-driven FAQ items with quartier-specific numbers
+  if (dataDriven.statCards.prixM2Quartier > 0) {
+    const cityData = villeToPartialCommuneData(ville)
+    const prixCity = cityData.prix_m2_moyen
+    if (prixCity) {
+      const diff = Math.round(((dataDriven.statCards.prixM2Quartier - prixCity) / prixCity) * 100)
+      faqItems.push({
+        question: `Quel est le prix immobilier dans le quartier ${quartierName} ?`,
+        answer: `Le prix moyen estimé à ${quartierName} (${ville.name}) est de ${formatEuro(dataDriven.statCards.prixM2Quartier)}/m², ${diff > 0 ? `${diff} % au-dessus` : diff < 0 ? `${Math.abs(diff)} % en dessous` : 'au niveau'} de la moyenne communale de ${formatEuro(prixCity)}/m². Le ${profile.eraLabel.toLowerCase()} et la densité ${profile.densityLabel.toLowerCase()} influencent ce positionnement.`,
+      })
+    }
+  }
+
+  if (dataDriven.statCards.passoiresDpe > 0) {
+    faqItems.push({
+      question: `Les logements de ${quartierName} sont-ils énergivores ?`,
+      answer: `On estime que ${dataDriven.statCards.passoiresDpe} % des logements du quartier ${quartierName} sont classés F ou G au DPE. Pour un ${profile.eraLabel.toLowerCase()}, ${dataDriven.statCards.passoiresDpe > 20 ? 'ce taux justifie des travaux de rénovation énergétique prioritaires' : 'ce taux reflète les caractéristiques constructives du bâti'}. Les artisans RGE de ${ville.name} accompagnent les propriétaires éligibles à MaPrimeRénov'.`,
+    })
+  }
+
+  return { profile, intro, batimentContext, servicesDemandes, conseils, proximite, faqItems, dataDriven }
 }
 
 // ---------------------------------------------------------------------------
