@@ -8,6 +8,7 @@ import { MobileMenuProvider } from '@/contexts/MobileMenuContext'
 import { getOrganizationSchema, getWebsiteSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import GoogleAnalytics from '@/components/GoogleAnalytics'
+import { CompareProviderWrapper } from '@/components/compare/CompareProvider'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -23,10 +24,6 @@ const plusJakarta = Plus_Jakarta_Sans({
 })
 
 // Dynamic imports for performance
-const CompareProviderClient = dynamic(
-  () => import('@/components/compare/CompareProvider').then(mod => ({ default: mod.CompareProviderWrapper })),
-  { ssr: false }
-)
 const CompareBarClient = dynamic(
   () => import('@/components/compare/CompareBar').then(mod => ({ default: mod.CompareBar })),
   { ssr: false }
@@ -158,7 +155,7 @@ export default function RootLayout({
       </head>
       <body className="font-sans bg-gray-50 antialiased">
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
-        <CompareProviderClient>
+        <CompareProviderWrapper>
         <MobileMenuProvider>
           {/* Skip to main content for accessibility */}
           <a
@@ -176,7 +173,7 @@ export default function RootLayout({
           <CapacitorInit />
           <CookieConsent />
         </MobileMenuProvider>
-        </CompareProviderClient>
+        </CompareProviderWrapper>
       </body>
     </html>
   )

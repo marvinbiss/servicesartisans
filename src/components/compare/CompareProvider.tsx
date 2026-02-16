@@ -97,10 +97,17 @@ export function CompareProviderWrapper({ children }: { children: ReactNode }) {
   )
 }
 
+const noopContext: CompareContextType = {
+  compareList: [],
+  addToCompare: () => {},
+  removeFromCompare: () => {},
+  isInCompare: () => false,
+  clearCompare: () => {},
+}
+
 export function useCompare() {
   const context = useContext(CompareContext)
-  if (context === undefined) {
-    throw new Error('useCompare must be used within a CompareProviderWrapper')
-  }
+  // Return noop context during SSR or if provider is not yet mounted
+  if (context === undefined) return noopContext
   return context
 }
