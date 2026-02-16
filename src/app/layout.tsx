@@ -42,6 +42,10 @@ const CapacitorInit = dynamic(
 const CookieConsent = dynamic(() => import('@/components/CookieConsent'), {
   ssr: false,
 })
+const WebVitals = dynamic(
+  () => import('@/components/WebVitals').then(mod => ({ default: mod.WebVitals })),
+  { ssr: false }
+)
 
 // Viewport configuration - Primary brand color
 export const viewport: Viewport = {
@@ -104,6 +108,9 @@ export const metadata: Metadata = {
       'fr-FR': SITE_URL,
       'x-default': SITE_URL,
     },
+    types: {
+      'application/rss+xml': `${SITE_URL}/feed.xml`,
+    },
   },
   manifest: '/manifest.json',
   icons: {
@@ -155,6 +162,7 @@ export default function RootLayout({
       </head>
       <body className="font-sans bg-gray-50 antialiased">
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
+        <WebVitals />
         <CompareProviderWrapper>
         <MobileMenuProvider>
           {/* Skip to main content for accessibility */}
