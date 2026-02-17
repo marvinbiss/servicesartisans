@@ -2,8 +2,12 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import {
   Wrench, Zap, Key, Flame, PaintBucket, Home, Hammer, HardHat,
-  Droplets, Wind, Thermometer, TreeDeciduous, Car, Sofa, Sparkles,
-  ShieldCheck, ArrowRight, TrendingUp, Award, MapPin
+  Droplets, Wind, Thermometer, TreeDeciduous, Sofa, Sparkles,
+  ShieldCheck, ArrowRight, TrendingUp, Award, MapPin,
+  Shovel, Axe, Shield, Building, Paintbrush, Construction, Link as LinkIcon,
+  Maximize, PanelTop, Bath, Ruler, Palette, Cpu, Sun, Snowflake,
+  Leaf, PlugZap, Factory, Trees, Waves, ShieldAlert, Radio,
+  ArrowUpDown, ClipboardCheck, Bug, Truck
 } from 'lucide-react'
 import JsonLd from '@/components/JsonLd'
 import { getOrganizationSchema, getBreadcrumbSchema } from '@/lib/seo/jsonld'
@@ -51,7 +55,8 @@ const allServices = [
       { name: 'Plombier', slug: 'plombier', icon: Wrench, description: 'Réparation fuites, installation sanitaire, débouchage' },
       { name: 'Chauffagiste', slug: 'chauffagiste', icon: Flame, description: 'Chaudière, pompe à chaleur, plancher chauffant' },
       { name: 'Climaticien', slug: 'climaticien', icon: Wind, description: 'Installation et entretien climatisation' },
-      { name: 'Frigoriste', slug: 'frigoriste', icon: Thermometer, description: 'Systèmes frigorifiques professionnels' },
+      { name: 'Salle de bain', slug: 'salle-de-bain', icon: Bath, description: 'Création et rénovation de salles de bain' },
+      { name: 'Ramoneur', slug: 'ramoneur', icon: Factory, description: 'Ramonage cheminées et conduits' },
     ]
   },
   {
@@ -60,7 +65,9 @@ const allServices = [
     color: 'amber',
     services: [
       { name: 'Électricien', slug: 'electricien', icon: Zap, description: 'Installation, mise aux normes, dépannage' },
-      { name: 'Domoticien', slug: 'domoticien', icon: Home, description: 'Maison connectée, automatisation' },
+      { name: 'Domoticien', slug: 'domoticien', icon: Cpu, description: 'Maison connectée, automatisation' },
+      { name: 'Antenniste', slug: 'antenniste', icon: Radio, description: 'Antennes TV, paraboles, TNT' },
+      { name: 'Borne de recharge', slug: 'borne-recharge', icon: PlugZap, description: 'Installation bornes véhicules électriques' },
     ]
   },
   {
@@ -69,7 +76,7 @@ const allServices = [
     color: 'green',
     services: [
       { name: 'Serrurier', slug: 'serrurier', icon: Key, description: 'Ouverture de porte, changement serrure, blindage' },
-      { name: 'Alarme & Vidéosurveillance', slug: 'alarme-videosurveillance', icon: ShieldCheck, description: 'Installation systèmes de sécurité' },
+      { name: 'Alarme et sécurité', slug: 'alarme-securite', icon: ShieldAlert, description: 'Alarme, vidéosurveillance, contrôle d\'accès' },
     ]
   },
   {
@@ -79,8 +86,11 @@ const allServices = [
     services: [
       { name: 'Maçon', slug: 'macon', icon: HardHat, description: 'Construction, rénovation, extension' },
       { name: 'Couvreur', slug: 'couvreur', icon: Home, description: 'Toiture, zinguerie, étanchéité' },
-      { name: 'Façadier', slug: 'facadier', icon: PaintBucket, description: 'Ravalement, isolation extérieure' },
-      { name: 'Terrassier', slug: 'terrassier', icon: Hammer, description: 'Terrassement, VRD, assainissement' },
+      { name: 'Charpentier', slug: 'charpentier', icon: Axe, description: 'Charpente bois, ossature' },
+      { name: 'Façadier', slug: 'facadier', icon: Building, description: 'Ravalement, isolation extérieure' },
+      { name: 'Terrassier', slug: 'terrassier', icon: Shovel, description: 'Terrassement, VRD, assainissement' },
+      { name: 'Étanchéiste', slug: 'etancheiste', icon: Shield, description: 'Étanchéité toiture, terrasse, fondations' },
+      { name: 'Zingueur', slug: 'zingueur', icon: Droplets, description: 'Gouttières, chéneaux, descentes' },
     ]
   },
   {
@@ -89,19 +99,52 @@ const allServices = [
     color: 'violet',
     services: [
       { name: 'Menuisier', slug: 'menuisier', icon: Hammer, description: 'Fenêtres, portes, escaliers, placards' },
-      { name: 'Charpentier', slug: 'charpentier', icon: Home, description: 'Charpente bois, ossature' },
       { name: 'Cuisiniste', slug: 'cuisiniste', icon: Sofa, description: 'Conception et pose de cuisines' },
+      { name: 'Storiste', slug: 'storiste', icon: PanelTop, description: 'Stores, volets roulants, pergolas' },
+      { name: 'Ascensoriste', slug: 'ascensoriste', icon: ArrowUpDown, description: 'Installation et maintenance ascenseurs' },
     ]
   },
   {
-    category: 'Finitions',
+    category: 'Finitions & Revêtements',
     icon: PaintBucket,
     color: 'pink',
     services: [
-      { name: 'Peintre', slug: 'peintre-en-batiment', icon: PaintBucket, description: 'Peinture intérieure et extérieure' },
-      { name: 'Plaquiste', slug: 'plaquiste', icon: Hammer, description: 'Cloisons, plafonds, isolation' },
+      { name: 'Peintre en bâtiment', slug: 'peintre-en-batiment', icon: PaintBucket, description: 'Peinture intérieure et extérieure' },
       { name: 'Carreleur', slug: 'carreleur', icon: Sparkles, description: 'Pose carrelage, faïence, mosaïque' },
-      { name: 'Solier', slug: 'solier', icon: Home, description: 'Parquet, moquette, sols souples' },
+      { name: 'Solier-moquettiste', slug: 'solier', icon: Home, description: 'Parquet, moquette, sols souples' },
+      { name: 'Poseur de parquet', slug: 'poseur-de-parquet', icon: Sparkles, description: 'Parquet massif, contrecollé, stratifié' },
+      { name: 'Plâtrier', slug: 'platrier', icon: Paintbrush, description: 'Cloisons, plafonds, isolation' },
+    ]
+  },
+  {
+    category: 'Métallerie & Vitrerie',
+    icon: Construction,
+    color: 'slate',
+    services: [
+      { name: 'Vitrier', slug: 'vitrier', icon: Maximize, description: 'Remplacement vitres, miroirs, double vitrage' },
+      { name: 'Métallier', slug: 'metallier', icon: Construction, description: 'Ouvrages métalliques, serrurerie' },
+      { name: 'Ferronnier', slug: 'ferronnier', icon: LinkIcon, description: 'Ferronnerie d\'art, garde-corps, portails' },
+      { name: 'Miroitier', slug: 'miroitier', icon: Maximize, description: 'Miroirs sur mesure, crédences en verre' },
+    ]
+  },
+  {
+    category: 'Énergie & Rénovation',
+    icon: Leaf,
+    color: 'emerald',
+    services: [
+      { name: 'Pompe à chaleur', slug: 'pompe-a-chaleur', icon: Thermometer, description: 'Installation et entretien PAC' },
+      { name: 'Panneaux solaires', slug: 'panneaux-solaires', icon: Sun, description: 'Photovoltaïque et solaire thermique' },
+      { name: 'Isolation thermique', slug: 'isolation-thermique', icon: Snowflake, description: 'ITE, ITI, combles, planchers' },
+      { name: 'Rénovation énergétique', slug: 'renovation-energetique', icon: Leaf, description: 'Audit, travaux globaux, aides MaPrimeRénov\'' },
+    ]
+  },
+  {
+    category: 'Décoration & Architecture',
+    icon: Palette,
+    color: 'pink',
+    services: [
+      { name: 'Architecte d\'intérieur', slug: 'architecte-interieur', icon: Ruler, description: 'Conception d\'espaces, aménagement' },
+      { name: 'Décorateur', slug: 'decorateur', icon: Palette, description: 'Décoration intérieure, home staging' },
     ]
   },
   {
@@ -110,18 +153,35 @@ const allServices = [
     color: 'emerald',
     services: [
       { name: 'Jardinier', slug: 'jardinier', icon: TreeDeciduous, description: 'Création et entretien jardins' },
-      { name: 'Pisciniste', slug: 'pisciniste', icon: Droplets, description: 'Construction et entretien piscines' },
-      { name: 'Clôturiste', slug: 'cloturiste', icon: ShieldCheck, description: 'Clôtures, portails, grillages' },
+      { name: 'Paysagiste', slug: 'paysagiste', icon: Trees, description: 'Aménagement paysager, terrasses' },
+      { name: 'Pisciniste', slug: 'pisciniste', icon: Waves, description: 'Construction et entretien piscines' },
     ]
   },
   {
-    category: 'Autres services',
-    icon: Sparkles,
+    category: 'Diagnostics & Expertises',
+    icon: ClipboardCheck,
+    color: 'blue',
+    services: [
+      { name: 'Diagnostiqueur', slug: 'diagnostiqueur', icon: ClipboardCheck, description: 'DPE, amiante, plomb, électricité' },
+      { name: 'Géomètre', slug: 'geometre', icon: MapPin, description: 'Bornage, topographie, division' },
+    ]
+  },
+  {
+    category: 'Nuisibles & Hygiène',
+    icon: Bug,
+    color: 'orange',
+    services: [
+      { name: 'Désinsectisation', slug: 'desinsectisation', icon: Bug, description: 'Cafards, punaises de lit, guêpes' },
+      { name: 'Dératisation', slug: 'deratisation', icon: Bug, description: 'Rats, souris, rongeurs' },
+      { name: 'Nettoyage professionnel', slug: 'nettoyage', icon: Sparkles, description: 'Nettoyage professionnel, remise en état' },
+    ]
+  },
+  {
+    category: 'Déménagement & Transport',
+    icon: Truck,
     color: 'slate',
     services: [
-      { name: 'Vitrier', slug: 'vitrier', icon: Sparkles, description: 'Remplacement vitres, miroirs, double vitrage' },
-      { name: 'Déménageur', slug: 'demenageur', icon: Car, description: 'Déménagement, transport de meubles' },
-      { name: 'Nettoyage', slug: 'nettoyage', icon: Sparkles, description: 'Nettoyage professionnel, remise en état' },
+      { name: 'Déménageur', slug: 'demenageur', icon: Truck, description: 'Déménagement, transport de meubles' },
     ]
   },
 ]

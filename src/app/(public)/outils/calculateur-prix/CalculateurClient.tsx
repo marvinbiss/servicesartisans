@@ -7,12 +7,20 @@ import {
   Grid3X3, Home, TreeDeciduous, Square, Wind, ChefHat,
   Layers, Sparkles, ArrowRight, ArrowLeft, MapPin,
   CheckCircle, Euro, Calculator, Search,
+  Shovel, Axe, Droplets, Shield, Building, Paintbrush, Construction,
+  Link as LinkIcon, Maximize, PanelTop, Bath, Ruler, Palette,
+  Cpu, Thermometer, Sun, Snowflake, Leaf, PlugZap, Factory, Trees,
+  Waves, ShieldAlert, Radio, ArrowUpDown, ClipboardCheck, Bug, Truck,
 } from 'lucide-react'
 /* ── Icon map ────────────────────────────────────────────── */
 const iconMap: Record<string, React.ElementType> = {
   Wrench, Zap, Key, Flame, PaintBucket, Hammer,
   Grid3X3, Home, Blocks: Grid3X3, TreeDeciduous, Square,
   Wind, ChefHat, Layers, Sparkles,
+  Shovel, Axe, Droplets, Shield, Building, Paintbrush, Construction,
+  Link: LinkIcon, Maximize, PanelTop, Bath, Ruler, Palette,
+  Cpu, Thermometer, Sun, Snowflake, Leaf, PlugZap, Factory, Trees,
+  Waves, ShieldAlert, Radio, ArrowUpDown, ClipboardCheck, Bug, Truck,
 }
 
 /* ── Types ───────────────────────────────────────────────── */

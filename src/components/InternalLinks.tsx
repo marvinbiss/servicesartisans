@@ -3,7 +3,12 @@
 import Link from 'next/link'
 import {
   MapPin, Wrench, Zap, Key, Flame, PaintBucket, Hammer, HardHat,
-  ArrowRight, Star, Users, Building2, TreeDeciduous
+  ArrowRight, Star, Users, Building2, TreeDeciduous,
+  Shovel, Axe, Droplets, Shield, Building, Paintbrush, Construction,
+  Link as LinkIcon, Grid3X3, Maximize, PanelTop, Bath, Ruler, Palette,
+  Cpu, Thermometer, Sun, Snowflake, Leaf, PlugZap, Factory, Trees,
+  Waves, ShieldAlert, Radio, ArrowUpDown, ClipboardCheck, Bug, Truck,
+  Home, Wind, ChefHat, Layers, Sparkles, Square
 } from 'lucide-react'
 import {
   popularServices as popularServicesData,
@@ -16,7 +21,12 @@ export { popularCities, popularRegions }
 
 // Add icons to services for client components
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-  Wrench, Zap, Key, Flame, PaintBucket, Hammer, HardHat, TreeDeciduous
+  Wrench, Zap, Key, Flame, PaintBucket, Hammer, HardHat, TreeDeciduous,
+  Shovel, Axe, Droplets, Shield, Building, Paintbrush, Construction,
+  Link: LinkIcon, Grid3X3, Maximize, PanelTop, Bath, Ruler, Palette,
+  Cpu, Thermometer, Sun, Snowflake, Leaf, PlugZap, Factory, Trees,
+  Waves, ShieldAlert, Radio, ArrowUpDown, ClipboardCheck, Bug, Truck,
+  Home, Wind, ChefHat, Layers, Sparkles, Square, Blocks: Grid3X3,
 }
 
 export const popularServices = popularServicesData.map(s => ({
