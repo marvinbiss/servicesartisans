@@ -29,6 +29,9 @@ export async function generateSitemaps() {
     { id: 'quartiers' },        // quartier pages within cities
     // service×quartier sitemaps — split into batches if > 45K URLs
     ...Array.from({ length: sqBatchCount }, (_, i) => ({ id: `service-quartiers-${i}` })),
+    // devis sitemaps
+    { id: 'devis-services' },     // 46 service hub pages
+    ...Array.from({ length: Math.ceil(services.length * villes.length / 45000) }, (_, i) => ({ id: `devis-service-cities-${i}` })),
   ]
 
   // Determine how many provider batches we need
@@ -280,6 +283,40 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
             images: [serviceImage.src],
           })
         }
+      }
+    }
+
+    return allUrls.slice(offset, offset + batchSize)
+  }
+
+  // ── Devis service hub pages ───────────────────────────────────────
+  if (id === 'devis-services') {
+    return Object.keys(tradeContent).map((slug) => ({
+      url: `${SITE_URL}/devis/${slug}`,
+      lastModified: STATIC_LAST_MODIFIED,
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+      images: [getServiceImage(slug).src],
+    }))
+  }
+
+  // ── Devis service×city pages (batched) ────────────────────────────
+  if (id.startsWith('devis-service-cities-')) {
+    const batchIndex = parseInt(id.replace('devis-service-cities-', ''), 10)
+    const batchSize = 45000
+    const offset = batchIndex * batchSize
+
+    const allUrls: { url: string; lastModified: Date; changeFrequency: 'weekly'; priority: number; images: string[] }[] = []
+    for (const svc of services) {
+      const serviceImage = getServiceImage(svc.slug)
+      for (const ville of villes) {
+        allUrls.push({
+          url: `${SITE_URL}/devis/${svc.slug}/${ville.slug}`,
+          lastModified: STATIC_LAST_MODIFIED,
+          changeFrequency: 'weekly',
+          priority: 0.7,
+          images: [serviceImage.src],
+        })
       }
     }
 

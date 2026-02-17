@@ -93,16 +93,30 @@ function StepIndicator({ currentStep }: { currentStep: number }) {
   )
 }
 
-export default function DevisForm() {
-  const [step, setStep] = useState(1)
-  const [formData, setFormData] = useState<FormData>(initialFormData)
+interface DevisFormProps {
+  prefilledService?: string
+  prefilledCity?: string
+  prefilledCityPostal?: string
+}
+
+export default function DevisForm({
+  prefilledService,
+  prefilledCity,
+  prefilledCityPostal,
+}: DevisFormProps = {}) {
+  const [step, setStep] = useState(prefilledService && prefilledCity ? 2 : 1)
+  const [formData, setFormData] = useState<FormData>({
+    ...initialFormData,
+    ...(prefilledService ? { service: prefilledService } : {}),
+    ...(prefilledCity ? { ville: prefilledCity } : {}),
+  })
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({})
   const [submitted, setSubmitted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
-  const [villeQuery, setVilleQuery] = useState('')
+  const [villeQuery, setVilleQuery] = useState(prefilledCity || '')
   const [showVilleSuggestions, setShowVilleSuggestions] = useState(false)
-  const [selectedVillePostal, setSelectedVillePostal] = useState('')
+  const [selectedVillePostal, setSelectedVillePostal] = useState(prefilledCityPostal || '')
 
   const updateField = useCallback(
     <K extends keyof FormData>(field: K, value: FormData[K]) => {

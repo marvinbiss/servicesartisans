@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import Link from 'next/link'
 import { Shield, Clock, Users, Search, FileText, CheckCircle, ChevronDown, Star, ArrowUp } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
@@ -7,6 +8,7 @@ import { SITE_URL } from '@/lib/seo/config'
 import DevisForm from '@/components/DevisForm'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
+import { tradeContent } from '@/lib/data/trade-content'
 
 export const metadata: Metadata = {
   title: 'Demander un devis gratuit',
@@ -277,6 +279,36 @@ export default async function DevisPage() {
                   {item.answer}
                 </div>
               </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── DEVIS PAR MÉTIER ─────────────────────────────────── */}
+      <section className="py-16 bg-white border-t">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h2 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-3 tracking-tight">
+              Devis par m&eacute;tier
+            </h2>
+            <p className="text-slate-500 max-w-lg mx-auto">
+              S&eacute;lectionnez un m&eacute;tier pour obtenir un devis adapt&eacute; &agrave; votre projet.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+            {Object.entries(tradeContent).map(([slug, trade]) => (
+              <Link
+                key={slug}
+                href={`/devis/${slug}`}
+                className="bg-gray-50 hover:bg-blue-50 border border-gray-200 hover:border-blue-300 rounded-xl p-3 transition-all group text-center"
+              >
+                <div className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors text-sm">
+                  {trade.name}
+                </div>
+                <div className="text-xs text-gray-400 mt-1">
+                  {trade.priceRange.min}&ndash;{trade.priceRange.max} {trade.priceRange.unit}
+                </div>
+              </Link>
             ))}
           </div>
         </div>

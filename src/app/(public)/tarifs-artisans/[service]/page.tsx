@@ -443,7 +443,7 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
-              href="/devis"
+              href={`/devis/${service}`}
               className="inline-flex items-center gap-2 bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-blue-50 transition-colors text-lg"
             >
               Demander un devis gratuit
