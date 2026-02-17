@@ -1,5 +1,5 @@
 /**
- * Banque d'images centralisée — 99 photos uniques
+ * Banque d'images centralisée — 120 photos uniques
  * Source : Unsplash (licence gratuite, usage commercial autorisé)
  *
  * RÈGLE D'OR : ZÉRO doublon. Chaque ID Unsplash n'apparaît qu'UNE SEULE fois
@@ -7,7 +7,7 @@
  *
  * Organisation :
  * - Hero homepage (1)
- * - Services / métiers (25 uniques + 1 défaut)
+ * - Services / métiers (46 uniques + 1 défaut)
  * - Artisans confiance (3 visages)
  * - Témoignages clients (3)
  * - Avant/Après (10 paires = 20, tous uniques)
@@ -32,7 +32,7 @@ export const heroImage = {
   blurDataURL: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCAAFAAgDASIAAhEBAxEB/8QAFAABAAAAAAAAAAAAAAAAAAAAB//EABwQAAICAgMAAAAAAAAAAAAAAAABAgMEBREhMf/EABQBAQAAAAAAAAAAAAAAAAAAAAP/xAAWEQEBAQAAAAAAAAAAAAAAAAABAAL/2gAMAwEAAhEDEQA/AKmTl1dEIVRXdbJLt+gA0Jdl/9k=',
 }
 
-// ── 2. IMAGES PAR SERVICE (métier) ───────────────────────────────
+// ── 2. IMAGES PAR SERVICE (métier) — 46 uniques ─────────────────
 export const serviceImages: Record<string, { src: string; alt: string }> = {
   plombier: {
     src: unsplash('photo-1621905252507-b35492cc74b4'),
@@ -102,10 +102,6 @@ export const serviceImages: Record<string, { src: string; alt: string }> = {
     src: unsplash('photo-1569370029765-33aaab1f4851'),
     alt: 'Charpentier assemblant une structure en bois',
   },
-  demolition: {
-    src: unsplash('photo-1754808682731-5d4430b38e11'),
-    alt: 'Travaux de démolition sur un chantier',
-  },
   terrassier: {
     src: unsplash('photo-1567238563567-b99d8ac66e9b'),
     alt: 'Engin de terrassement nivelant un terrain',
@@ -133,6 +129,94 @@ export const serviceImages: Record<string, { src: string; alt: string }> = {
   platrier: {
     src: unsplash('photo-1559126698-1906840f3c95'),
     alt: 'Plâtrier posant des plaques de plâtre sur une ossature',
+  },
+  antenniste: {
+    src: unsplash('photo-1663316026819-ea3a6293e8e9'),
+    alt: 'Antenne parabolique installée sur un toit de maison',
+  },
+  'architecte-interieur': {
+    src: unsplash('photo-1762545112336-646c69e4888b'),
+    alt: 'Salon moderne aménagé par un architecte d\'intérieur',
+  },
+  ascensoriste: {
+    src: unsplash('photo-1758193017781-e3aee6c3e359'),
+    alt: 'Hall d\'ascenseur moderne avec finitions en marbre et verre',
+  },
+  'borne-recharge': {
+    src: unsplash('photo-1582201872911-67877db5fb38'),
+    alt: 'Véhicule électrique branché sur une borne de recharge',
+  },
+  decorateur: {
+    src: unsplash('photo-1507238691740-187a5b1d37b8'),
+    alt: 'Décorateur appliquant de la peinture au rouleau sur un mur',
+  },
+  demenageur: {
+    src: unsplash('photo-1715645948484-da40dd56bc93'),
+    alt: 'Déménageur chargeant des cartons dans un camion de déménagement',
+  },
+  deratisation: {
+    src: unsplash('photo-1646324554833-f0b6a479fa5d'),
+    alt: 'Technicien en tenue de protection pulvérisant un traitement antiparasitaire',
+  },
+  desinsectisation: {
+    src: unsplash('photo-1512592585971-bff48f1c9815'),
+    alt: 'Professionnels de désinsectisation en combinaison de protection intervenant dans un local',
+  },
+  diagnostiqueur: {
+    src: unsplash('photo-1631300313270-227604e71ea5'),
+    alt: 'Diagnostiqueur immobilier avec casque et dossier d\'inspection',
+  },
+  etancheiste: {
+    src: unsplash('photo-1633759593085-1eaeb724fc88'),
+    alt: 'Étanchéiste travaillant sur une toiture avec ses outils',
+  },
+  ferronnier: {
+    src: unsplash('photo-1528717384022-f8d665c86909'),
+    alt: 'Artisan ferronnier forgeant le fer sur une enclume dans son atelier',
+  },
+  geometre: {
+    src: unsplash('photo-1682663810771-89d21838530f'),
+    alt: 'Géomètre-expert avec son appareil de mesure topographique sur un chantier',
+  },
+  metallier: {
+    src: unsplash('photo-1764245546004-e6b743242a80'),
+    alt: 'Métallier soudeur travaillant le métal avec des étincelles en atelier',
+  },
+  miroitier: {
+    src: unsplash('photo-1740595362788-78bc54ea1bad'),
+    alt: 'Miroir rond élégant posé sur un mur de salle de bain par un miroitier',
+  },
+  nettoyage: {
+    src: unsplash('photo-1674158687384-023265a5d536'),
+    alt: 'Professionnelle de nettoyage nettoyant un sol avec une serpillère',
+  },
+  'panneaux-solaires': {
+    src: unsplash('photo-1745187946672-2c1d8cf26a2b'),
+    alt: 'Panneaux solaires installés sur une toiture résidentielle',
+  },
+  'pompe-a-chaleur': {
+    src: unsplash('photo-1649711895336-20ff39db62f8'),
+    alt: 'Unités extérieures de pompe à chaleur installées sur un mur',
+  },
+  ramoneur: {
+    src: unsplash('photo-1671438137059-13173ad60daf'),
+    alt: 'Cheminée de maison avec fumée sortant du conduit',
+  },
+  'renovation-energetique': {
+    src: unsplash('photo-1441038718687-699f189fa401'),
+    alt: 'Maison moderne écoénergétique avec végétation et technologies durables',
+  },
+  solier: {
+    src: unsplash('photo-1580810734898-5e1753f23337'),
+    alt: 'Ouvrier solier nivelant un revêtement de sol sur un chantier',
+  },
+  storiste: {
+    src: unsplash('photo-1758001606578-09b352df5b85'),
+    alt: 'Lumière du soleil filtrant à travers des stores vénitiens posés par un storiste',
+  },
+  zingueur: {
+    src: unsplash('photo-1634853982486-c06f0e17940f'),
+    alt: 'Gouttière en zinc installée sur un toit en gros plan',
   },
 }
 

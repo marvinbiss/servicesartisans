@@ -358,6 +358,8 @@ export const tradeContent: Record<string, TradeContent> = {
         a: 'Deux couches de peinture de finition sont le minimum pour un résultat homogène et durable. Sur un support neuf ou un changement de couleur radical (clair vers foncé), une sous-couche plus deux couches de finition sont nécessaires. Chaque couche doit sécher complètement (4 à 6 heures pour une acrylique) avant l\'application de la suivante.',
       },
     ],
+    emergencyInfo:
+      'Pas de service d\'urgence pour la peinture en bâtiment. Prenez rendez-vous pour un devis gratuit sous 48h et une intervention planifiée sous 1 à 3 semaines.',
     certifications: [
       'Qualibat (qualification 6111/6112 peinture et ravalement)',
       'RGE (obligatoire si ITE — isolation thermique par l\'extérieur)',
@@ -424,6 +426,8 @@ export const tradeContent: Record<string, TradeContent> = {
         a: 'MaPrimeRenov\' finance jusqu\'à 100 \u20AC par fenêtre (simple vers double vitrage) pour les ménages modestes. Les CEE (Certificats d\'Économies d\'Énergie) ajoutent 30 à 80 \u20AC par fenêtre. L\'éco-prêt à taux zéro permet de financer jusqu\'à 7 000 \u20AC de remplacement de fenêtres sans intérêts. Le menuisier doit être certifié RGE pour que vous puissiez bénéficier de ces aides.',
       },
     ],
+    emergencyInfo:
+      'Pas de service d\'urgence pour la menuiserie. Pour le remplacement de fenêtres cassées ou de portes endommagées, prenez rendez-vous pour un devis gratuit sous 48h.',
     certifications: [
       'Qualibat (qualification 3511 fourniture et pose de menuiseries extérieures)',
       'RGE (obligatoire pour les aides — fenêtres et portes isolantes)',
@@ -491,6 +495,8 @@ export const tradeContent: Record<string, TradeContent> = {
         a: 'Il faut attendre 24 heures minimum après la pose avant de marcher sur le carrelage, le temps que la colle sèche. Les joints doivent être réalisés 24 à 48 heures après la pose et nécessitent à leur tour 24 heures de séchage. Au total, comptez 3 à 4 jours avant de pouvoir utiliser normalement la pièce. Évitez de poser des meubles lourds pendant au moins une semaine.',
       },
     ],
+    emergencyInfo:
+      'Pas de service d\'urgence pour le carrelage. Prenez rendez-vous pour un devis gratuit sous 48h et une intervention planifiée sous 1 à 3 semaines.',
     certifications: [
       'Qualibat (qualification 6321/6322 carrelage et revêtements céramiques)',
       'Certification CSTB (classement UPEC des locaux — Centre Scientifique et Technique du Bâtiment)',
@@ -556,6 +562,8 @@ export const tradeContent: Record<string, TradeContent> = {
         a: 'Inspectez les bois de charpente à la recherche de sciure au sol (signe de vrillettes ou capricornes), de trous de sortie d\'insectes, de champignons (mérule) ou de bois qui s\'effrite au contact. Un diagnostic par un professionnel est recommandé tous les 10 ans. Le traitement préventif ou curatif coûte entre 20 et 50 \u20AC/m² et protège la charpente pour 10 à 20 ans.',
       },
     ],
+    emergencyInfo:
+      'Intervention d\'urgence pour dégâts de tempête, tuiles arrachées ou fuite de toiture. Un couvreur d\'urgence peut effectuer un bâchage provisoire sous 2 à 4 heures pour protéger votre habitation. Majorations : +80 à 120 % la nuit et le week-end.',
     certifications: [
       'Qualibat (qualification 3111/3112 couverture en tuiles)',
       'RGE (obligatoire pour l\'isolation de toiture — aides MaPrimeRénov\')',
@@ -622,6 +630,8 @@ export const tradeContent: Record<string, TradeContent> = {
         a: 'Une dalle béton de 15 cm d\'épaisseur pour terrasse coûte entre 60 et 120 \u20AC/m², comprenant le terrassement, le ferraillage, le coffrage et le coulage du béton. Pour une terrasse de 30 m², le budget total est de 1 800 à 3 600 \u20AC. Le béton décoratif (désactivé, ciré ou imprimé) est plus cher : 80 à 180 \u20AC/m², mais ne nécessite pas de revêtement supplémentaire.',
       },
     ],
+    emergencyInfo:
+      'Pas de service d\'urgence pour la maçonnerie. Pour les travaux de gros oeuvre, extension ou rénovation, prenez rendez-vous pour un devis gratuit sous 1 semaine.',
     certifications: [
       'Qualibat (qualification 2111/2112 maçonnerie et béton armé)',
       'RGE (obligatoire si ITE — isolation thermique par l\'extérieur)',
@@ -688,6 +698,8 @@ export const tradeContent: Record<string, TradeContent> = {
         a: 'L\'installation d\'un arrosage automatique enterré coûte entre 8 et 15 \u20AC/m² pour un jardin de 200 à 500 m², incluant les tuyaux, les asperseurs, le programmateur et la main-d\'oeuvre. Un système goutte-à-goutte pour les massifs et haies est moins cher (3 à 8 \u20AC/m²). Le jardinier-paysagiste dimensionne l\'installation en fonction de la pression d\'eau, du débit disponible et des besoins des plantations.',
       },
     ],
+    emergencyInfo:
+      'Pas de service d\'urgence pour le jardinage courant. Pour l\'élagage d\'urgence d\'un arbre dangereux après une tempête, contactez les pompiers (18) ou un élagueur grimpeur spécialisé. Entretien sur rendez-vous sous 1 à 2 semaines.',
     certifications: [
       'Certiphyto (obligatoire pour l\'utilisation de produits phytosanitaires)',
       'Agrément Services à la Personne (SAP — crédit d\'impôt 50 %)',
@@ -891,6 +903,8 @@ export const tradeContent: Record<string, TradeContent> = {
         a: 'Comptez 2 à 3 semaines pour la conception (prise de mesures, plan 3D, choix des matériaux), 4 à 8 semaines pour la fabrication des meubles, et 3 à 7 jours pour la pose complète. Au total, prévoyez 2 à 3 mois entre la commande et l\'installation. Les cuisines haut de gamme ou importées peuvent nécessiter 3 à 4 mois de fabrication.',
       },
     ],
+    emergencyInfo:
+      'Pas de service d\'urgence pour l\'installation de cuisine. La conception, la fabrication et la pose sont des projets planifiés sur plusieurs semaines. Prenez rendez-vous pour un premier échange sous 48h.',
     certifications: [
       'Qualibat (qualification aménagement intérieur)',
       'NF Ameublement (certification AFNOR/FCBA — sécurité et durabilité du mobilier)',
@@ -957,6 +971,8 @@ export const tradeContent: Record<string, TradeContent> = {
         a: 'La sous-couche en mousse polyéthylène (2 à 4 \u20AC/m²) est l\'option économique de base. La sous-couche en liège (5 à 10 \u20AC/m²) offre la meilleure isolation phonique et thermique. La sous-couche en fibre de bois (4 à 8 \u20AC/m²) est le choix écologique. Pour un sol sur vide sanitaire ou en rez-de-chaussée, ajoutez un pare-vapeur pour protéger le parquet de l\'humidité.',
       },
     ],
+    emergencyInfo:
+      'Pas de service d\'urgence pour la pose de revêtements de sol. Prenez rendez-vous pour un devis gratuit sous 48h et une intervention planifiée sous 1 à 3 semaines.',
     certifications: [
       'Qualibat (qualification 6411 revêtements de sol souples)',
       'Qualibat (qualification 6421 parquets et revêtements en bois)',
@@ -1023,6 +1039,8 @@ export const tradeContent: Record<string, TradeContent> = {
         a: 'Les entreprises labellisées Écolabel Européen utilisent des produits biodégradables à base de tensioactifs végétaux, sans phosphates ni solvants chlorés. Les techniques de nettoyage vapeur (150 °C) permettent de désinfecter sans produit chimique. Le microfibre professionnelle réduit la consommation d\'eau de 90 %. Ces solutions écologiques sont particulièrement adaptées aux crèches, écoles et logements avec enfants en bas âge.',
       },
     ],
+    emergencyInfo:
+      'Nettoyage d\'urgence disponible après sinistre (dégât des eaux, incendie, inondation). Intervention sous 24 à 48h pour la remise en état et le nettoyage post-sinistre. Majoration de +30 à 60 % en dehors des heures ouvrées.',
     certifications: [
       'Qualipropre (qualification professionnelle du secteur de la propreté — valable 4 ans)',
       'Agrément Services à la Personne (SAP — crédit d\'impôt 50 % pour le ménage à domicile)',
@@ -1062,6 +1080,8 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Qu\'est-ce qu\'une étude de sol et est-elle obligatoire ?', a: 'L\'étude de sol (ou étude géotechnique G2) analyse la nature du terrain (argile, roche, sable) pour dimensionner les fondations. Elle est obligatoire depuis 2020 pour la vente de terrains constructibles en zone argileuse (loi ELAN). Son coût est de 1 500 à 3 000 € et elle évite des surcoûts majeurs en cas de terrain instable.' },
       { q: 'Combien de temps dure un terrassement pour une maison ?', a: 'Le terrassement d\'une maison individuelle dure en moyenne 2 à 5 jours ouvrés selon la surface, la profondeur des fondations et la nature du sol. Un terrain rocheux nécessitera un brise-roche hydraulique et peut doubler la durée du chantier. L\'évacuation des terres représente souvent 30 à 40 % du temps total.' },
     ],
+    emergencyInfo:
+      'Pas de service d\'urgence pour le terrassement. Les travaux de terrassement nécessitent une préparation rigoureuse (étude de sol, DICT). Prenez rendez-vous pour un devis gratuit sous 48h.',
     certifications: ['Qualibat (qualification 1111/1112 terrassement)', 'CACES (Certificat d\'Aptitude à la Conduite En Sécurité — catégories A à F)', 'AIPR (Autorisation d\'Intervention à Proximité des Réseaux — obligatoire)'],
     averageResponseTime: 'Devis sous 48h, intervention sous 1 à 3 semaines',
   },
@@ -1091,6 +1111,8 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Quel bois choisir pour une charpente ?', a: 'Le sapin et l\'épicéa (résineux) sont les plus courants et économiques (classe d\'emploi 2). Le chêne est plus noble et résistant mais 2 à 3 fois plus cher. Le douglas offre un excellent compromis : naturellement durable (classe 3), il résiste aux insectes sans traitement chimique. Pour les régions humides, le mélèze est recommandé.' },
       { q: 'Combien coûte l\'aménagement de combles avec modification de charpente ?', a: 'L\'aménagement de combles avec modification de charpente (passage de fermettes en charpente traditionnelle) coûte entre 800 et 1 500 €/m² tout compris (charpente, isolation, plancher, escalier, finitions). Pour des combles de 40 m², prévoyez un budget de 35 000 à 60 000 €. C\'est souvent plus rentable qu\'une extension.' },
     ],
+    emergencyInfo:
+      'Pas de service d\'urgence pour la charpente. En cas de dégât de tempête sur la charpente, contactez d\'abord un couvreur pour un bâchage d\'urgence, puis un charpentier pour le diagnostic et la réparation structurelle.',
     certifications: ['Qualibat (qualification 2311/2312 charpente bois)', 'CTB-A+ (certification traitement du bois — FCBA)', 'Compagnons du Devoir (formation d\'excellence)', 'RGE (si isolation des combles associée)'],
     averageResponseTime: 'Devis sous 1 semaine, intervention sous 2 à 4 semaines',
   },
@@ -1120,6 +1142,8 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Quels sont les signes d\'une gouttière en mauvais état ?', a: 'Les signes d\'alerte sont : débordements lors des pluies, traces de rouille ou verdissement, gouttière qui se désolidarise de la façade, fissures visibles, eau qui coule le long du mur au lieu de descendre par les tuyaux. Une gouttière percée non réparée peut provoquer des infiltrations dans les murs et la toiture.' },
       { q: 'Peut-on poser des gouttières soi-même ?', a: 'La pose de gouttières PVC avec collage est accessible aux bricoleurs confirmés. En revanche, la zinguerie (zinc soudé) requiert un savoir-faire professionnel : soudure à l\'étain, façonnage sur mesure et respect des pentes d\'écoulement (5 mm/ml minimum). Un défaut de pose entraîne des infiltrations et engage votre responsabilité en cas de sinistre.' },
     ],
+    emergencyInfo:
+      'Intervention d\'urgence pour débordement de gouttière, descente d\'eau arrachée ou fuite au niveau des raccords de toiture. Un zingueur peut intervenir sous 4 à 8 heures pour une réparation provisoire. Majorations : +60 à 100 % la nuit et le week-end.',
     certifications: ['Qualibat (qualification 3121/3122 couverture-zinguerie)', 'Compagnons du Devoir (formation d\'excellence)', 'Certification VMZINC Installateur (partenaire fabricant)'],
     averageResponseTime: 'Devis sous 48h, intervention sous 1 à 2 semaines',
   },
@@ -1149,6 +1173,8 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Qu\'est-ce qu\'un cuvelage de sous-sol ?', a: 'Le cuvelage est un traitement d\'étanchéité intérieur ou extérieur des murs enterrés pour stopper les infiltrations d\'eau dans un sous-sol. Il combine un enduit d\'imperméabilisation, un drainage périphérique et parfois une pompe de relevage. Le coût varie de 150 à 300 €/m² de surface traitée. C\'est la solution définitive pour un sous-sol humide.' },
       { q: 'Peut-on végétaliser un toit-terrasse étanchéifié ?', a: 'Oui, à condition que la structure porte le surpoids (80 à 150 kg/m² selon le type de végétalisation) et que l\'étanchéité soit anti-racines (membrane bitume avec voile de verre ou EPDM). La végétalisation extensive (sedum) est la plus légère et la moins exigeante en entretien. Elle prolonge la durée de vie de l\'étanchéité en la protégeant des UV.' },
     ],
+    emergencyInfo:
+      'Intervention d\'urgence pour infiltration d\'eau majeure par la toiture-terrasse ou le sous-sol. Un étanchéiste peut réaliser une réparation provisoire sous 4 à 8 heures pour stopper les dégâts. Majorations : +60 à 100 % en dehors des heures ouvrées.',
     certifications: ['Qualibat (qualification 1311/1312 étanchéité)', 'Certification ASQUAL (géomembranes et étanchéité)', 'RGE (obligatoire si isolation thermique associée — toiture chaude)'],
     averageResponseTime: 'Devis sous 1 semaine, intervention sous 2 à 3 semaines',
   },
@@ -1178,6 +1204,8 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Combien de temps durent les travaux de ravalement ?', a: 'Pour une maison individuelle, le ravalement dure 2 à 4 semaines selon la surface et le type de traitement (nettoyage simple, enduit, ITE). L\'installation de l\'échafaudage prend 1 à 2 jours. Prévoyez que l\'échafaudage restera en place pendant toute la durée du chantier, ce qui peut gêner l\'accès au jardin ou au parking.' },
       { q: 'Quelle différence entre enduit monocouche et enduit traditionnel ?', a: 'L\'enduit monocouche (ou enduit projeté) s\'applique en une seule passe à la machine et coûte 25 à 50 €/m². L\'enduit traditionnel se pose en 3 couches à la main (gobetis, corps d\'enduit, finition) et revient à 40 à 70 €/m². Le traditionnel offre une meilleure durabilité et un rendu plus authentique, mais il est plus long à mettre en œuvre.' },
     ],
+    emergencyInfo:
+      'Pas de service d\'urgence pour le ravalement de façade. Les travaux de façade nécessitent un échafaudage et une déclaration préalable en mairie. Prenez rendez-vous pour un devis gratuit sous 1 semaine.',
     certifications: ['Qualibat (qualification 6111/6112 ravalement, 7131/7132 ITE)', 'RGE (obligatoire pour l\'ITE — isolation thermique par l\'extérieur)', 'Certification applicateur Sto, Weber ou Parex-Lanko (partenaires fabricants)'],
     averageResponseTime: 'Devis sous 1 semaine, intervention sous 2 à 6 semaines',
   },
@@ -1207,6 +1235,8 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Combien de temps faut-il pour poser un faux-plafond ?', a: 'Un plâtrier expérimenté pose environ 15 à 25 m² de faux-plafond par jour. Pour une maison de 80 m², comptez 4 à 6 jours (ossature + plaques + bandes). Ajoutez 1 à 2 jours pour les finitions (enduit de lissage, ponçage). Les découpes pour spots encastrés et VMC sont incluses dans ce délai.' },
       { q: 'Quelle est la hauteur minimale pour un faux-plafond ?', a: 'La hauteur sous plafond minimale habitable est de 2,20 m selon le Code de la construction. Un faux-plafond standard consomme 5 à 10 cm de hauteur (suspentes + ossature + plaque). Si vous prévoyez des spots encastrés, comptez 10 à 15 cm. Pour un passage de gaines de VMC ou de climatisation, il faudra 20 à 30 cm.' },
     ],
+    emergencyInfo:
+      'Pas de service d\'urgence pour la plâtrerie. Pour les réparations de cloisons, faux-plafonds ou enduits, prenez rendez-vous pour un devis gratuit sous 48h.',
     certifications: ['Qualibat (qualification 4111/4112 plâtrerie, cloisons et doublages)', 'Certification Placo Applicateur (partenaire Saint-Gobain)', 'RGE (obligatoire si doublage isolant ouvrant droit aux aides)'],
     averageResponseTime: 'Devis sous 48h, intervention sous 1 à 2 semaines',
   },
@@ -1236,6 +1266,8 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Une verrière d\'intérieur isole-t-elle du bruit ?', a: 'Avec un simple vitrage (6 mm), l\'isolation acoustique est faible (environ 25 dB). Un double vitrage 4/16/4 atteint 30 à 35 dB, ce qui est acceptable pour séparer une cuisine d\'un salon. Pour une véritable isolation phonique (bureau, chambre), optez pour un vitrage acoustique feuilleté 44.2 qui offre 37 à 42 dB d\'affaiblissement.' },
       { q: 'Faut-il un permis de construire pour une pergola métallique ?', a: 'Une pergola de moins de 5 m² est dispensée de formalités. Entre 5 et 20 m² (ou 40 m² en zone PLU), une déclaration préalable de travaux suffit. Au-delà de 20 m² (ou 40 m²), un permis de construire est nécessaire. En zone protégée (ABF), toute pergola nécessite au minimum une déclaration préalable, quelle que soit la surface.' },
     ],
+    emergencyInfo:
+      'Pas de service d\'urgence pour la métallerie. Les ouvrages métalliques (escaliers, garde-corps, verrières) sont fabriqués sur mesure en atelier. Prenez rendez-vous pour un devis gratuit sous 1 semaine.',
     certifications: ['Qualibat (qualification 4411/4412 métallerie-serrurerie)', 'Certification EN 1090 (exécution des structures en acier — marquage CE)', 'Label Artisanat d\'Art (ouvrages décoratifs)', 'ACQPA (qualification peinture anticorrosion — si thermolaquage)'],
     averageResponseTime: 'Devis sous 1 semaine, fabrication 3 à 6 semaines',
   },
@@ -1265,6 +1297,8 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Peut-on restaurer une rampe ou un portail ancien en fer forgé ?', a: 'Oui, un ferronnier spécialisé en restauration peut décaper, redresser et ressouder des ouvrages anciens. La restauration coûte généralement 30 à 60 % du prix d\'un ouvrage neuf équivalent, tout en préservant le cachet d\'origine. Le ferronnier peut aussi reproduire à l\'identique les éléments manquants (volutes, rosaces). Comptez 4 à 8 semaines de travail en atelier.' },
       { q: 'Le fer forgé est-il plus solide que l\'acier soudé ?', a: 'Le fer forgé traditionnel (travaillé à la forge à 900-1200 °C) offre une structure fibreuse très résistante à la fatigue et aux chocs. L\'acier soudé industriel est plus rigide mais les soudures constituent des points de faiblesse potentiels. Pour un garde-corps ou un portail, les deux techniques offrent une solidité largement suffisante. Le fer forgé se distingue surtout par son esthétique unique.' },
     ],
+    emergencyInfo:
+      'Pas de service d\'urgence pour la ferronnerie d\'art. Les ouvrages en fer forgé sont fabriqués sur mesure en atelier et nécessitent un délai de fabrication de 4 à 8 semaines. Prenez rendez-vous pour un devis gratuit sous 1 semaine.',
     certifications: ['Label Entreprise du Patrimoine Vivant (EPV — délivré par l\'État)', 'Titre de Maître Artisan en métier d\'art (Chambre de Métiers)', 'Compagnons du Devoir (formation d\'excellence)', 'Qualibat (qualification 4411 métallerie-serrurerie)'],
     averageResponseTime: 'Devis sous 1 semaine, fabrication 4 à 8 semaines',
   },
@@ -1294,6 +1328,8 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Quelle pose choisir : flottante, collée ou clouée ?', a: 'La pose flottante (clipsée sur sous-couche) est la plus rapide et la moins chère (15 à 25 €/m²), idéale pour le stratifié et le contrecollé. La pose collée (25 à 40 €/m²) offre un meilleur confort acoustique et convient au contrecollé et au massif mince. La pose clouée (35 à 50 €/m²) est la méthode traditionnelle pour le parquet massif sur lambourdes, offrant la meilleure longévité.' },
       { q: 'Comment entretenir un parquet au quotidien ?', a: 'Passez l\'aspirateur régulièrement avec une brosse douce (pas de brosse rotative). Nettoyez à la serpillère bien essorée avec un savon neutre. Évitez l\'eau stagnante et les produits agressifs (javel, ammoniaque). Pour un parquet vitrifié, appliquez un polish de rénovation une fois par an. Pour un parquet huilé, repassez une couche d\'huile d\'entretien tous les 6 à 12 mois sur les zones de passage.' },
     ],
+    emergencyInfo:
+      'Pas de service d\'urgence pour la pose de parquet. La pose, le ponçage et la vitrification nécessitent des conditions de température et d\'humidité contrôlées. Prenez rendez-vous pour un devis gratuit sous 48h.',
     certifications: ['Qualibat (qualification 6421 parquets et revêtements en bois)', 'Label Parquets de France (origine et qualité de fabrication)', 'Compagnons du Devoir (formation d\'excellence)'],
     averageResponseTime: 'Devis sous 48h, intervention sous 1 à 3 semaines',
   },
@@ -1323,6 +1359,8 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Un miroitier peut-il intervenir en urgence ?', a: 'Oui, la plupart des miroitiers proposent un service d\'urgence pour les vitrines de commerce cassées, les fenêtres brisées après effraction ou les dégâts de tempête. L\'intervention sous 24h coûte 30 à 50 % de plus qu\'une intervention programmée. En attendant, bâchez l\'ouverture avec une bâche ou du contreplaqué pour sécuriser le local.' },
       { q: 'Comment choisir un miroir pour une salle de bain ?', a: 'Optez pour un miroir avec traitement anti-buée intégré (film chauffant au dos) et bords polis pour résister à l\'humidité. Évitez les miroirs bas de gamme dont le tain (couche réfléchissante) se dégrade rapidement en milieu humide. Un miroir sur mesure avec éclairage LED intégré coûte 200 à 800 € selon les dimensions et les options.' },
     ],
+    emergencyInfo:
+      'Intervention d\'urgence pour vitrine de commerce cassée, miroir brisé ou paroi de douche éclatée. Un miroitier d\'urgence peut sécuriser les lieux et poser un vitrage provisoire sous 1 à 3 heures. Majorations : +100 à 150 % la nuit et le week-end.',
     certifications: ['Qualibat (qualification 4311/4312 vitrerie-miroiterie)', 'Certification Cekal (qualité des vitrages isolants, feuilletés et trempés)', 'Certification NF EN 12150 (verres de sécurité trempés)'],
     averageResponseTime: 'Devis sous 48h, fabrication 1 à 3 semaines',
   },
@@ -1352,6 +1390,8 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Quelles aides pour le remplacement de volets roulants ?', a: 'Le remplacement de volets roulants anciens par des modèles isolants ouvre droit à la TVA réduite à 10 % pour les logements de plus de 2 ans. Si les volets intègrent une isolation thermique renforcée (coefficient Uc ≤ 1,4), vous pouvez bénéficier de MaPrimeRénov\' et des CEE (prime énergie) à condition de passer par un installateur RGE.' },
       { q: 'Pergola bioclimatique ou store banne : que choisir ?', a: 'Le store banne (800 à 3 000 €) est idéal pour un ombrage ponctuel et se rétracte entièrement. La pergola bioclimatique (5 000 à 15 000 €) offre une protection permanente avec des lames orientables qui régulent la luminosité et la ventilation. La pergola ajoute de la valeur au bien immobilier et crée un véritable espace de vie extérieur utilisable même par temps de pluie légère.' },
     ],
+    emergencyInfo:
+      'Intervention d\'urgence pour volet roulant bloqué empêchant la fermeture ou l\'ouverture d\'une fenêtre, ou store banne cassé menaçant de tomber. Un storiste peut intervenir sous 2 à 4 heures pour une réparation ou un déblocage. Majorations : +60 à 100 % en dehors des heures ouvrées.',
     certifications: ['Qualibat (qualification 3511/3512 stores et fermetures)', 'RGE (obligatoire pour volets isolants ouvrant droit aux aides)', 'Expert Somfy (partenaire installateur certifié par le fabricant)'],
     averageResponseTime: 'Devis sous 48h, intervention sous 1 à 2 semaines',
   },
@@ -1381,6 +1421,8 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Quel carrelage choisir pour une salle de bain ?', a: 'Privilégiez un carrelage antidérapant classé R10 ou R11 pour le sol de douche (norme DIN 51097 classe B minimum). Le grès cérame est le matériau le plus résistant à l\'humidité et le plus facile à entretenir. Évitez les joints blancs qui jaunissent : optez pour un joint époxy (imperméable et antifongique) de couleur grise ou assortie au carrelage.' },
       { q: 'Peut-on créer une salle de bain dans une chambre ?', a: 'Oui, c\'est courant lors d\'une rénovation. Les contraintes principales sont : l\'acheminement des arrivées d\'eau et des évacuations (possible avec une pompe de relevage si nécessaire), la ventilation (VMC obligatoire), l\'étanchéité du sol et l\'isolation phonique. Le budget pour créer une salle de bain complète dans une chambre se situe entre 8 000 et 20 000 € selon le niveau de finition.' },
     ],
+    emergencyInfo:
+      'Pas de service d\'urgence pour la rénovation de salle de bain. En cas de fuite d\'eau urgente, contactez un plombier d\'urgence. Pour votre projet de rénovation, prenez rendez-vous pour un devis gratuit sous 1 semaine.',
     certifications: ['Qualibat (qualification aménagement intérieur, plomberie, carrelage)', 'Handibat (label accessibilité PMR — Chambre de Métiers)', 'RGE (si isolation thermique associée — ouvre droit aux aides)'],
     averageResponseTime: 'Devis sous 1 semaine, intervention sous 2 à 6 semaines',
   },
@@ -1410,6 +1452,8 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'L\'architecte d\'intérieur peut-il déposer un permis de construire ?', a: 'L\'architecte d\'intérieur peut déposer une déclaration préalable de travaux et un permis de construire pour les projets de moins de 150 m² de surface de plancher. Au-delà de 150 m², un architecte DPLG (inscrit à l\'Ordre) est obligatoire pour signer le permis. Les deux professionnels travaillent souvent en complémentarité sur les grands projets.' },
       { q: 'Comment choisir le bon architecte d\'intérieur ?', a: 'Consultez son portfolio pour vérifier que son style correspond à vos goûts. Vérifiez son diplôme (CFAI ou équivalent bac+5) et son inscription au Conseil français des architectes d\'intérieur. Demandez des références de clients récents et visitez si possible un chantier en cours. Enfin, comparez au moins 3 devis en vérifiant que le périmètre de la mission est identique.' },
     ],
+    emergencyInfo:
+      'Pas de service d\'urgence pour l\'architecture d\'intérieur. Les projets d\'aménagement et de rénovation sont planifiés sur plusieurs semaines à plusieurs mois. Prenez rendez-vous pour une première consultation sous 1 semaine.',
     certifications: ['Diplôme CFAI (Conseil Français des Architectes d\'Intérieur — titre protégé)', 'Inscription à l\'Ordre des Architectes (si architecte DPLG/HMONP)', 'Assurance décennale (obligatoire pour les travaux de structure)'],
     averageResponseTime: 'Premier rendez-vous sous 1 semaine',
   },
@@ -1439,6 +1483,8 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Quelles sont les tendances déco actuelles ?', a: 'Les tendances 2025-2026 privilégient les matériaux naturels (bois brut, pierre, lin), les couleurs terracotta et vert sauge, le mobilier arrondi et les luminaires sculpturaux. Le style japandi (mélange japonais-scandinave) et le maximalisme coloré coexistent. Un bon décorateur vous guidera vers un style intemporel qui ne se démodera pas en quelques mois.' },
       { q: 'Le décorateur achète-t-il le mobilier à ma place ?', a: 'Selon la formule choisie, le décorateur peut soit vous fournir une shopping list que vous achetez vous-même, soit se charger de toutes les commandes (accompagnement achat). Dans le second cas, il gère les délais de livraison, vérifie la conformité des produits et coordonne la mise en place. Cette prestation coûte 50 à 120 €/h ou un forfait de 500 à 1 500 € selon le volume d\'achats.' },
     ],
+    emergencyInfo:
+      'Pas de service d\'urgence pour la décoration d\'intérieur. Les prestations de conseil déco, home staging et accompagnement achat sont planifiées sur rendez-vous. Premier rendez-vous disponible sous 1 semaine.',
     certifications: ['Titre professionnel Décorateur d\'intérieur (inscrit au RNCP)', 'Membre de l\'UFDI (Union Francophone des Décorateurs d\'Intérieur)', 'Certification home staging (si spécialisation valorisation immobilière)'],
     averageResponseTime: 'Premier rendez-vous sous 1 semaine',
   },
@@ -1468,6 +1514,8 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Peut-on domotiser une maison ancienne sans gros travaux ?', a: 'Oui, grâce aux protocoles sans fil (Zigbee, Z-Wave, Wi-Fi). On remplace les interrupteurs par des modules connectés, on ajoute des capteurs (température, ouverture, mouvement) et on installe une box domotique centrale. L\'installation est non invasive et réversible. Comptez 3 000 à 8 000 € pour une maison de 4 pièces avec éclairage, chauffage, volets et sécurité.' },
       { q: 'La domotique est-elle compatible avec les assistants vocaux ?', a: 'La plupart des systèmes domotiques sont compatibles avec Google Home, Amazon Alexa et Apple HomeKit. Le contrôle vocal permet de piloter l\'éclairage, le chauffage, les volets et les scénarios par la voix. Pour une compatibilité maximale, le nouveau standard Matter (soutenu par Google, Apple, Amazon et Samsung) unifie les protocoles et garantit l\'interopérabilité entre marques.' },
     ],
+    emergencyInfo:
+      'Intervention d\'urgence pour panne de serrure connectée vous empêchant d\'accéder à votre domicile, ou défaillance du système d\'alarme domotique. Un domoticien peut intervenir sous 2 à 4 heures pour un diagnostic et une remise en service. Majorations : +80 à 120 % la nuit et le week-end.',
     certifications: ['Certification KNX Partner (standard international de la domotique filaire)', 'Certification Crestron/Control4 (systèmes haut de gamme)', 'Habilitation électrique (obligatoire)', 'Qualifelec (mention courants faibles et domotique)'],
     averageResponseTime: 'Devis sous 1 semaine, installation 1 à 4 semaines',
   },
@@ -1527,6 +1575,8 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Faut-il une autorisation pour poser des panneaux solaires ?', a: 'Oui, une déclaration préalable de travaux en mairie est obligatoire dans tous les cas. En zone protégée (ABF, monument historique), l\'architecte des Bâtiments de France doit donner son accord, ce qui peut rallonger le délai de 2 à 6 mois. En copropriété, un vote en assemblée générale est requis.' },
       { q: 'Autoconsommation totale ou revente du surplus : quel choix faire ?', a: 'L\'autoconsommation avec revente du surplus est le modèle le plus courant et le plus rentable pour les particuliers. Vous consommez directement l\'électricité produite et revendez l\'excédent à EDF OA à un tarif garanti pendant 20 ans. La revente totale est plutôt réservée aux grandes toitures ou aux bâtiments peu consommateurs.' },
     ],
+    emergencyInfo:
+      'Pas de service d\'urgence pour l\'installation de panneaux solaires. En cas de panne de votre onduleur ou de baisse de production anormale, contactez votre installateur pour un diagnostic sous 48h à 1 semaine.',
     certifications: ['QualiPV (qualification Qualit\'EnR — installation photovoltaïque)', 'RGE (obligatoire pour les aides MaPrimeRénov\' et prime autoconsommation)', 'QualiSol (si installation de solaire thermique — chauffe-eau et SSC)', 'Consuel (attestation de conformité électrique — obligatoire pour le raccordement)'],
     averageResponseTime: 'Étude gratuite sous 1 semaine, installation 4 à 8 semaines',
   },
@@ -1556,6 +1606,8 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Quels matériaux isolants choisir ?', a: 'La laine de verre et la laine de roche offrent le meilleur rapport performance/prix. La ouate de cellulose et la fibre de bois sont des alternatives écologiques avec un bon déphasage thermique (confort d\'été). Le polyuréthane est le plus performant à épaisseur égale mais coûte plus cher. Tous doivent être certifiés ACERMI.' },
       { q: 'L\'isolation phonique et thermique sont-elles la même chose ?', a: 'Non, ce sont deux performances distinctes. Un bon isolant thermique n\'est pas forcément un bon isolant phonique. La laine de roche et la ouate de cellulose offrent de bonnes performances dans les deux domaines. Pour une isolation phonique spécifique, il faut traiter les parois avec des systèmes masse-ressort-masse (double cloison avec isolant intercalé).' },
     ],
+    emergencyInfo:
+      'Pas de service d\'urgence pour l\'isolation thermique. Les travaux d\'isolation sont des projets planifiés nécessitant une étude préalable. Prenez rendez-vous pour un devis gratuit sous 1 semaine.',
     certifications: ['RGE (Reconnu Garant de l\'Environnement — obligatoire pour les aides)', 'Qualibat (qualification 7131/7132 isolation thermique intérieure et extérieure)', 'Certification ACERMI (garantie de performance des matériaux isolants)', 'NF Habitat / NF Habitat HQE (label qualité rénovation)'],
     averageResponseTime: 'Devis sous 1 semaine, intervention 1 à 3 semaines',
   },
@@ -1584,6 +1636,8 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Peut-on rénover par étapes ou faut-il tout faire d\'un coup ?', a: 'On peut rénover par étapes, mais la rénovation globale est plus efficace et mieux aidée. Le parcours « par geste » de MaPrimeRénov\' finance chaque poste séparément, tandis que le parcours « accompagné » pour une rénovation globale offre des primes bonifiées. Attention à l\'ordre des travaux : isoler avant de changer le chauffage pour bien dimensionner l\'équipement.' },
       { q: 'Les logements classés G seront-ils vraiment interdits à la location ?', a: 'Oui, la loi Climat et Résilience interdit progressivement la location des passoires thermiques : les logements G sont interdits à la location depuis janvier 2025, les F le seront en 2028 et les E en 2034. Les propriétaires bailleurs doivent donc engager des travaux de rénovation sous peine de ne plus pouvoir louer.' },
     ],
+    emergencyInfo:
+      'Pas de service d\'urgence pour la rénovation énergétique. Les projets de rénovation globale nécessitent un audit énergétique préalable et une planification sur plusieurs mois. Prenez rendez-vous pour un premier rendez-vous sous 2 semaines.',
     certifications: ['RGE (Reconnu Garant de l\'Environnement — obligatoire pour toutes les aides)', 'Audit énergétique certifié OPQIBI 1905 ou Qualibat 8731', 'Label BBC Rénovation (Bâtiment Basse Consommation)', 'Accompagnateur Rénov\' agréé par l\'État (obligatoire pour MaPrimeRénov\' parcours accompagné)'],
     averageResponseTime: 'Audit sous 2 semaines, planification des travaux 1 à 3 mois',
   },
@@ -1613,6 +1667,8 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Combien coûte la recharge d\'une voiture électrique à domicile ?', a: 'En tarif de base, une recharge complète (batterie de 50 kWh) coûte environ 10 à 12 \u20AC. En heures creuses, ce coût tombe à 7 à 8 \u20AC, soit environ 2 \u20AC aux 100 km. C\'est 4 à 5 fois moins cher qu\'un véhicule essence. Avec un abonnement adapté et la programmation nocturne, le surcoût d\'électricité est de 30 à 50 \u20AC/mois pour 15 000 km/an.' },
       { q: 'L\'installation d\'une borne nécessite-t-elle des travaux importants ?', a: 'Dans la majorité des cas, l\'installation est simple : fixation murale de la borne, tirage d\'un câble depuis le tableau électrique et ajout d\'un disjoncteur dédié. Les travaux durent 2 à 4 heures. Cependant, si le tableau est éloigné du garage (plus de 20 m) ou si une mise aux normes électrique est nécessaire, le coût et la durée augmentent significativement.' },
     ],
+    emergencyInfo:
+      'Pas de service d\'urgence pour l\'installation de bornes de recharge. En cas de panne de votre borne existante, contactez le SAV du fabricant ou votre installateur IRVE pour un diagnostic sous 48h.',
     certifications: ['Qualification IRVE P1/P2/P3 (obligatoire — Infrastructure de Recharge de Véhicules Électriques)', 'Habilitation électrique (obligatoire)', 'Qualifelec (mention IRVE)', 'Consuel (attestation de conformité électrique)'],
     averageResponseTime: 'Devis sous 48h, installation sous 1 à 2 semaines',
   },
@@ -1642,6 +1698,8 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Qu\'est-ce que le bistre et comment le traiter ?', a: 'Le bistre est un dépôt dur et inflammable qui se forme sur les parois du conduit, surtout avec du bois humide ou une combustion lente. Le débistrage nécessite une machine rotative spéciale (débistreuse) et coûte 150 à 400 \u20AC. Un ramonage classique ne suffit pas à l\'éliminer. Brûler du bois sec (moins de 20 % d\'humidité) limite sa formation.' },
       { q: 'Comment choisir un bon ramoneur ?', a: 'Vérifiez qu\'il possède une qualification Qualibat 5141 ou une certification équivalente, une assurance responsabilité civile professionnelle et qu\'il remet systématiquement un certificat de ramonage. Privilégiez un professionnel local recommandé par le bouche-à-oreille. Méfiez-vous des offres à moins de 30 \u20AC : un ramonage sérieux prend 20 à 40 minutes.' },
     ],
+    emergencyInfo:
+      'Intervention d\'urgence en cas de feu de cheminée ou de suspicion d\'intoxication au monoxyde de carbone (CO). Appelez les pompiers (18) en premier. Un ramoneur-fumiste peut intervenir sous 2 à 4 heures pour sécuriser le conduit après l\'intervention des secours. Majorations : +80 à 100 % la nuit et le week-end.',
     certifications: ['Qualibat (qualification 5141 ramonage et entretien de conduits)', 'Titre Professionnel Ramoneur-fumiste (inscrit au RNCP)', 'Compagnons du Devoir (formation d\'excellence)'],
     averageResponseTime: 'Intervention sous 1 semaine en basse saison, 2 à 3 semaines en automne',
   },
@@ -1671,6 +1729,8 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Quelles plantes choisir pour un jardin facile d\'entretien ?', a: 'Privilégiez les plantes vivaces adaptées à votre zone climatique : lavande, romarin et olivier en climat méditerranéen ; hortensias, érables et graminées en climat océanique. Les couvre-sols (pervenche, lierre, thym rampant) limitent le désherbage. Un paillis minéral ou organique réduit l\'arrosage de 50 % et freine la pousse des mauvaises herbes.' },
       { q: 'Comment estimer le budget d\'entretien annuel d\'un jardin ?', a: 'Pour un jardin de 200 m², comptez 1 000 à 3 000 \u20AC/an en entretien professionnel (tonte bimensuelle, taille des haies 2 fois/an, traitement phytosanitaire, nettoyage). Un contrat annuel d\'entretien avec un paysagiste est 20 à 30 % moins cher que des interventions ponctuelles. Le crédit d\'impôt « services à la personne » (50 %) s\'applique pour l\'entretien de jardin chez les particuliers.' },
     ],
+    emergencyInfo:
+      'Pas de service d\'urgence pour l\'aménagement paysager. Les projets de création de jardin, terrasse et plantations sont planifiés sur plusieurs semaines. Prenez rendez-vous pour une étude sous 2 semaines.',
     certifications: ['Diplôme ENSP ou DEP Paysage (titre de paysagiste concepteur)', 'Qualipaysage (certification professionnelle — reconnue par l\'État)', 'Label Écojardin (gestion écologique des espaces verts)', 'Certiphyto (obligatoire si utilisation de produits phytosanitaires)'],
     averageResponseTime: 'Étude sous 2 semaines, réalisation 2 à 8 semaines',
   },
@@ -1700,6 +1760,8 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Combien coûte l\'entretien annuel d\'une piscine ?', a: 'Le budget annuel d\'entretien varie de 500 à 1 500 \u20AC selon la taille et le système de traitement : produits chimiques (200 à 500 \u20AC), électricité pour la filtration (300 à 600 \u20AC), remplacement de pièces d\'usure (100 à 300 \u20AC), hivernage et mise en route (200 à 400 \u20AC si réalisés par un professionnel). Un robot nettoyeur automatique (800 à 2 000 \u20AC) réduit le temps d\'entretien manuel.' },
       { q: 'Une piscine augmente-t-elle la valeur de mon bien immobilier ?', a: 'Oui, une piscine enterrée bien entretenue peut augmenter la valeur d\'une maison de 5 à 15 % selon la région (davantage dans le sud). En revanche, elle augmente aussi la taxe foncière (via la taxe d\'aménagement de 200 \u20AC/m²) et les charges d\'assurance habitation. Dans les régions au nord de la Loire, la plus-value est plus limitée.' },
     ],
+    emergencyInfo:
+      'Pas de service d\'urgence pour la construction de piscine. En cas de fuite de votre piscine existante ou de panne du système de filtration, contactez votre pisciniste pour un diagnostic sous 48h à 1 semaine.',
     certifications: ['Qualification FPP (Fédération des Professionnels de la Piscine)', 'Label Propiscines', 'Certification NF Piscine'],
     averageResponseTime: 'Étude sous 2 semaines, construction 4 à 12 semaines',
   },
@@ -1729,6 +1791,8 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'La télésurveillance vaut-elle le coût de l\'abonnement ?', a: 'L\'abonnement de télésurveillance (20 à 50 \u20AC/mois) inclut la surveillance 24h/24 par un opérateur qui lève le doute en cas d\'alerte et prévient les forces de l\'ordre si nécessaire. C\'est particulièrement utile si vous vous absentez souvent ou si vous avez une résidence secondaire. Sans télésurveillance, l\'alarme ne fait que sonner localement, ce qui est peu dissuasif en zone isolée.' },
       { q: 'Combien de détecteurs faut-il pour protéger une maison ?', a: 'Pour une maison standard de 100 m² sur un niveau : 1 centrale, 1 détecteur d\'ouverture par porte/fenêtre accessible (6 à 10), 2 à 3 détecteurs de mouvement pour les zones de passage intérieures, 1 sirène extérieure et 2 télécommandes. Comptez 500 à 1 500 \u20AC pour un kit complet sans fil certifié NF A2P, hors pose professionnelle (200 à 500 \u20AC).' },
     ],
+    emergencyInfo:
+      'Intervention d\'urgence pour système d\'alarme en panne, caméra de vidéosurveillance défaillante ou intrusion détectée. Un technicien en sécurité peut intervenir sous 2 à 4 heures pour diagnostiquer et remettre en service votre installation. Majorations : +80 à 120 % la nuit et le week-end.',
     certifications: ['Certification APSAD (règles de sécurité)', 'Label NF A2P (alarmes)', 'Habilitation CNAPS (agents de sécurité)'],
     averageResponseTime: 'Devis sous 48h, installation sous 1 semaine',
   },
@@ -1758,6 +1822,8 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Faut-il une autorisation pour installer une parabole ?', a: 'En maison individuelle, aucune autorisation n\'est requise sauf en zone protégée (ABF). En copropriété, le règlement peut interdire les paraboles en façade, mais la loi du 2 juillet 1966 garantit le « droit à l\'antenne » : le syndic ne peut pas refuser si aucune antenne collective ne fournit un service équivalent. La parabole doit être discrète et ne pas nuire à l\'esthétique du bâtiment.' },
       { q: 'Mon antenne TNT est-elle compatible avec la nouvelle norme DVB-T2 ?', a: 'L\'antenne elle-même (râteau UHF) est généralement compatible : c\'est le décodeur TNT ou le téléviseur qui doit supporter le DVB-T2/HEVC. Les téléviseurs vendus depuis 2020 intègrent généralement cette norme. Si votre téléviseur est plus ancien, un décodeur TNT HD compatible DVB-T2 coûte 30 à 60 \u20AC. Vérifiez sur le site recevoirlatnt.fr.' },
     ],
+    emergencyInfo:
+      'Pas de service d\'urgence pour l\'installation d\'antennes ou de paraboles. Pour une panne de réception TNT ou satellite, un antenniste peut intervenir sous 48h à 1 semaine pour un diagnostic et une réparation.',
     certifications: ['Titre Professionnel Installateur Antenniste (inscrit au RNCP)', 'Habilitation électrique (obligatoire)', 'Habilitation travail en hauteur (obligatoire pour interventions sur toiture)', 'Formation fibre optique FTTH (raccordement et câblage)'],
     averageResponseTime: 'Intervention sous 48h à 1 semaine',
   },
@@ -1787,6 +1853,8 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Quel est le coût de maintenance d\'un ascenseur en copropriété ?', a: 'Le contrat de maintenance annuel coûte 1 500 à 4 000 \u20AC selon le type d\'ascenseur et le niveau de prestation (normal ou complet). La loi impose un entretien mensuel, un contrôle semestriel de sécurité et un contrôle technique quinquennal par un organisme indépendant (1 000 à 2 000 \u20AC). Le budget total annuel pour un ascenseur est de 2 500 à 6 000 \u20AC.' },
       { q: 'Quelles sont les normes de sécurité pour un ascenseur ?', a: 'Les ascenseurs doivent respecter la directive européenne 2014/33/UE et la norme NF EN 81-20. Les travaux de modernisation obligatoires (loi SAE de 2003) incluent : porte palière verrouillée, dispositif anti-vandalisme, système de télécommunication en cabine, précision d\'arrêt et d\'horizontalité, et dispositif de protection contre la vitesse excessive.' },
     ],
+    emergencyInfo:
+      'Intervention d\'urgence pour personne bloquée dans un ascenseur ou panne immobilisant la cabine. Un ascensoriste de garde peut intervenir sous 1 à 3 heures 24h/24 et 7j/7. Majorations : +100 à 150 % la nuit, le week-end et les jours fériés. En cas de personne bloquée, appelez également les pompiers (18).',
     certifications: ['Conformité NF EN 81-20/50 (norme européenne de sécurité des ascenseurs)', 'Habilitation électrique HBT (obligatoire)', 'Certification constructeur agréé (Otis, Schindler, Kone, ThyssenKrupp)', 'Contrôle technique quinquennal obligatoire (organisme agréé)'],
     averageResponseTime: 'Diagnostic sous 1 semaine, installation 4 à 12 semaines',
   },
@@ -1816,6 +1884,8 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Peut-on contester un diagnostic immobilier ?', a: 'Oui, si vous estimez qu\'un diagnostic est erroné, vous pouvez faire appel à un autre diagnostiqueur pour un contre-diagnostic. En cas de préjudice avéré (DPE surévalué ayant conduit à un achat plus cher), une action en justice contre le diagnostiqueur est possible via son assurance RC professionnelle. Le vendeur peut aussi être mis en cause pour vice caché.' },
       { q: 'Faut-il être présent lors des diagnostics ?', a: 'Ce n\'est pas obligatoire mais fortement recommandé, surtout pour le DPE. Votre présence permet de fournir des informations utiles au diagnostiqueur (factures d\'énergie, travaux récents d\'isolation, type de chauffage) qui amélioreront la précision du diagnostic. Le diagnostiqueur doit avoir accès à toutes les pièces, y compris les combles, la cave et le garage.' },
     ],
+    emergencyInfo:
+      'Pas de service d\'urgence pour les diagnostics immobiliers. Les diagnostics (DPE, amiante, plomb, électricité, gaz) sont des prestations planifiées. Intervention possible sous 48h à 1 semaine selon la disponibilité.',
     certifications: ['Certification par organisme accrédité COFRAC (obligatoire — Bureau Veritas, Dekra, Qualixpert, I.Cert, etc.)', 'Certifications par domaine : DPE, amiante, plomb, électricité, gaz, termites (chacune est spécifique)', 'Assurance RC professionnelle (obligatoire)', 'Formation continue obligatoire (recyclage tous les 7 ans)'],
     averageResponseTime: 'Intervention sous 48h à 1 semaine',
   },
@@ -1845,6 +1915,8 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Qu\'est-ce qu\'une division parcellaire ?', a: 'La division parcellaire consiste à diviser un terrain en deux ou plusieurs lots constructibles. Le géomètre-expert réalise le plan de division, dépose le dossier en mairie et procède au bornage des nouveaux lots. Cette opération est obligatoire pour vendre une partie de son terrain. Le coût est de 1 000 à 3 000 \u20AC et le délai de 1 à 3 mois.' },
       { q: 'Le géomètre-expert est-il nécessaire pour un permis de construire ?', a: 'Ce n\'est pas une obligation légale, mais le plan topographique et le plan de masse (pièces PCMI 2 et PCMI 3) réalisés par un géomètre-expert sont beaucoup plus précis que ceux faits par un non-professionnel. Pour les projets complexes (terrain en pente, limite de propriété proche), le recours au géomètre est vivement recommandé pour éviter un refus de permis.' },
     ],
+    emergencyInfo:
+      'Pas de service d\'urgence pour les prestations de géomètre-expert. Le bornage, la division parcellaire et les plans topographiques sont des missions planifiées. Prenez rendez-vous pour un devis sous 1 semaine.',
     certifications: ['Inscription à l\'Ordre des Géomètres-Experts (obligatoire)', 'Diplôme DPLG ou ESGT', 'Assurance RC professionnelle obligatoire'],
     averageResponseTime: 'Devis sous 1 semaine, intervention 2 à 4 semaines',
   },
@@ -1904,6 +1976,8 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Les pièges à rats du commerce sont-ils efficaces ?', a: 'Les pièges mécaniques (tapettes) et les pièges à colle peuvent attraper quelques individus isolés, mais sont inefficaces contre une colonie établie. Les rats sont des animaux intelligents qui apprennent rapidement à éviter les pièges. De plus, l\'utilisation de raticides par un non-professionnel peut être dangereuse pour les enfants, les animaux domestiques et la faune sauvage.' },
       { q: 'Le propriétaire ou le locataire doit-il payer la dératisation ?', a: 'La dératisation relève de l\'obligation du propriétaire de fournir un logement décent (loi du 6 juillet 1989). Si l\'infestation préexistait à l\'entrée dans les lieux, le propriétaire paie intégralement. Si elle apparaît en cours de bail à cause d\'un défaut d\'entretien du locataire (poubelles ouvertes, nourriture stockée au sol), le locataire peut être mis à contribution. En copropriété, le syndic traite les parties communes.' },
     ],
+    emergencyInfo:
+      'Intervention d\'urgence pour infestation sévère de rats ou souris menaçant la salubrité ou la sécurité (rongement de câbles électriques, contamination alimentaire). Un dératiseur peut intervenir sous 2 à 6 heures en zone urbaine. Majorations : +50 à 80 % en dehors des heures ouvrées.',
     certifications: ['Certibiocide nuisibles TP14/TP18 (obligatoire — valable 5 ans)', 'Certification CS3D (Chambre Syndicale 3D — Dératisation, Désinsectisation, Désinfection)', 'Assurance RC professionnelle (obligatoire)', 'Déclaration d\'activité biocides auprès de l\'ANSES'],
     averageResponseTime: 'Intervention sous 24 à 48h',
   },
@@ -1933,6 +2007,8 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Combien de cartons faut-il pour un déménagement ?', a: 'En moyenne, comptez 20 à 30 cartons pour un studio, 40 à 60 pour un T3 et 80 à 120 pour une maison. La plupart des déménageurs professionnels fournissent les cartons dans le devis (ou les facturent 2 à 5 \u20AC pièce). Récupérer des cartons gratuits en supermarché est possible mais vérifiez leur solidité — un carton qui cède peut endommager son contenu.' },
       { q: 'Peut-on déménager ses plantes et son électroménager ?', a: 'Les plantes ne sont pas couvertes par l\'assurance du déménageur et voyagent sous votre responsabilité. Transportez-les vous-même si possible. Pour l\'électroménager, le lave-linge doit être vidangé et ses tambours calés avec les vis de transport. Le réfrigérateur doit être débranché 24h à l\'avance et transporté debout. Le déménageur peut refuser ces appareils s\'ils ne sont pas préparés.' },
     ],
+    emergencyInfo:
+      'Pas de service d\'urgence pour le déménagement. Les déménagements nécessitent une visite technique préalable et une planification de 2 à 8 semaines. Prenez rendez-vous pour un devis gratuit sous 48h.',
     certifications: ['Immatriculation DREAL (obligatoire)', 'Label NF Service Déménagement', 'Certification ISO 9001 (qualité)'],
     averageResponseTime: 'Devis sous 48h (visite technique), planification 2 à 8 semaines',
   },

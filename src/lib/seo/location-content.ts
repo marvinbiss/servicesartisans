@@ -19,11 +19,26 @@ import { getDeptArtisanCounts } from '@/lib/data/dept-artisan-counts'
 // ---------------------------------------------------------------------------
 
 const REGIONAL_MULTIPLIERS: Record<string, number> = {
+  // Metropolitan France
   'Île-de-France': 1.25,
-  "Provence-Alpes-Côte d'Azur": 1.10,
+  "Provence-Alpes-Côte d'Azur": 1.15,
   'Auvergne-Rhône-Alpes': 1.10,
-  'Hauts-de-France': 0.95,
+  'Occitanie': 1.05,
+  'Nouvelle-Aquitaine': 1.00,
+  'Pays de la Loire': 0.95,
+  'Bretagne': 0.95,
   'Grand Est': 0.95,
+  'Normandie': 0.95,
+  'Hauts-de-France': 0.90,
+  'Centre-Val de Loire': 0.90,
+  'Bourgogne-Franche-Comté': 0.90,
+  'Corse': 1.20,
+  // Overseas territories (higher costs due to shipping and insularity)
+  'Guadeloupe': 1.30,
+  'Martinique': 1.30,
+  'Guyane': 1.35,
+  'La Réunion': 1.25,
+  'Mayotte': 1.40,
 }
 
 export function getRegionalMultiplier(region: string): number {
@@ -434,6 +449,174 @@ const SEASONAL_TIPS: Record<string, SeasonalTips> = {
       "Les grandes toitures des maisons rurales et bâtiments agricoles offrent un potentiel solaire considérable. Une installation de 6 à 9 kWc en autoconsommation avec revente de surplus couvre les besoins et génère un revenu complémentaire.",
     default:
       "Le printemps et le début de l'automne sont les meilleures périodes pour installer des panneaux solaires : conditions météo favorables, disponibilité des installateurs et mise en service avant les pics de production estivale.",
+  },
+  'isolation-thermique': {
+    coastal:
+      "En zone littorale, l'isolation thermique doit aussi gérer l'humidité saline. Privilégiez les isolants insensibles à l'eau (polyuréthane projeté, verre cellulaire) pour les murs exposés aux embruns et à la condensation.",
+    mountain:
+      "En montagne, une isolation renforcée est indispensable : visez une résistance thermique R ≥ 8 m²K/W en toiture et R ≥ 5 en murs pour compenser les hivers longs et rigoureux à plus de 800 m d'altitude.",
+    urban:
+      "En copropriété, l'isolation thermique par l'extérieur (ITE) est la solution la plus efficace pour améliorer le DPE sans réduire la surface habitable. Elle nécessite un vote en assemblée générale et peut bénéficier de MaPrimeRénov' copropriété.",
+    rural:
+      "Pour les maisons anciennes en pierre, l'isolation par l'intérieur doit préserver la capacité du mur à respirer. Les isolants biosourcés (fibre de bois, chanvre, ouate de cellulose) offrent un excellent compromis entre performance thermique et régulation hygrométrique.",
+    default:
+      "L'automne est la période idéale pour engager des travaux d'isolation thermique : les artisans RGE sont plus disponibles qu'au printemps et les travaux seront terminés avant l'hiver, vous permettant de bénéficier immédiatement des économies de chauffage.",
+  },
+  'renovation-energetique': {
+    coastal:
+      "En zone littorale, la rénovation énergétique doit intégrer la résistance à l'air salin et l'humidité. Les menuiseries en aluminium thermolaqué et les isolants hydrophobes garantissent la pérennité des travaux face aux conditions marines.",
+    mountain:
+      "En montagne, la rénovation énergétique globale (isolation + chauffage + ventilation) est la plus rentable. Les aides MaPrimeRénov' Parcours accompagné sont majorées pour les logements en zone climatique H1, où les besoins de chauffage sont les plus élevés.",
+    urban:
+      "En milieu urbain, la rénovation énergétique des copropriétés représente un enjeu majeur. Le diagnostic technique global (DTG) et l'audit énergétique sont désormais obligatoires pour planifier les travaux dans le plan pluriannuel de travaux.",
+    rural:
+      "Pour les maisons individuelles rurales chauffées au fioul, la rénovation énergétique combinant isolation et remplacement de la chaudière par une pompe à chaleur permet de diviser la facture énergétique par 3 à 4, avec des aides pouvant couvrir jusqu'à 90 % du coût.",
+    default:
+      "Commencez toujours par un audit énergétique réglementaire avant d'engager des travaux de rénovation. Il hiérarchise les postes à traiter (isolation, chauffage, ventilation) et conditionne l'accès aux aides MaPrimeRénov' les plus avantageuses.",
+  },
+  'borne-recharge': {
+    coastal:
+      "En zone littorale, la borne de recharge extérieure doit résister à la corrosion saline. Exigez un boîtier IP65 minimum avec des connecteurs traités anticorrosion, et prévoyez un auvent de protection contre les embruns.",
+    mountain:
+      "En montagne, la borne de recharge doit fonctionner par grand froid (-20 °C). Les modèles avec préchauffage intégré et câble renforcé garantissent une charge fiable même en conditions hivernales extrêmes.",
+    urban:
+      "En copropriété, l'installation d'une borne de recharge relève du droit à la prise : le syndic ne peut s'y opposer. L'installateur IRVE qualifié dimensionnera la puissance disponible et proposera une solution de comptage individuel conforme.",
+    rural:
+      "En zone rurale, l'installation d'une borne de recharge 7 kW en monophasé suffit pour les besoins quotidiens. Si votre compteur le permet, une borne 22 kW triphasée offre une recharge complète en 2 à 3 heures.",
+    default:
+      "Faites installer votre borne de recharge par un installateur certifié IRVE (Infrastructure de Recharge pour Véhicules Électriques). Cette qualification est obligatoire pour les bornes de plus de 3,7 kW et conditionne l'accès au crédit d'impôt de 300 €.",
+  },
+  ramoneur: {
+    coastal:
+      "En zone littorale, les cheminées sont moins sollicitées mais le ramonage annuel reste obligatoire. L'humidité marine favorise les dépôts de bistre dans les conduits peu utilisés, augmentant le risque de feu de cheminée à la reprise.",
+    mountain:
+      "En montagne, le ramonage doit être effectué deux fois par an (obligation légale) en raison de l'usage intensif du chauffage au bois. Planifiez un passage en septembre avant la saison de chauffe et un en mars après l'hiver.",
+    urban:
+      "En immeuble, le ramonage des conduits collectifs est à la charge de la copropriété et doit être réalisé par un professionnel qualifié. Vérifiez que le syndic fait bien effectuer les deux ramonages annuels obligatoires.",
+    rural:
+      "En zone rurale, les poêles à bois et inserts sont très répandus. Un ramoneur qualifié contrôlera non seulement le conduit mais aussi l'état du tubage, les joints d'étanchéité et le tirage, garants d'un fonctionnement sûr et performant.",
+    default:
+      "Le ramonage est obligatoire au moins une fois par an (deux fois pour le bois et le charbon). Le certificat de ramonage délivré par le professionnel est exigé par votre assurance habitation en cas de sinistre lié au chauffage.",
+  },
+  paysagiste: {
+    coastal:
+      "En bord de mer, le paysagiste compose avec les contraintes du vent, du sel et de la sécheresse estivale. Les jardins littoraux réussis associent haies brise-vent (tamaris, éléagnus), couvre-sols résistants et plantes de rocaille.",
+    mountain:
+      "En montagne, le paysagiste doit sélectionner des végétaux rustiques supportant le gel intense et la courte saison de végétation. Les jardins alpins, les murets en pierre sèche et les prairies fleuries s'intègrent naturellement au paysage.",
+    urban:
+      "En milieu urbain, le paysagiste optimise les petits espaces : jardins de ville, terrasses et toitures végétalisées. La conception paysagère intègre les contraintes de vis-à-vis, de poids et d'accès pour créer des îlots de verdure en cœur de ville.",
+    rural:
+      "Pour les grands terrains ruraux, le paysagiste conçoit un plan d'aménagement global : allées, haies champêtres, verger, potager et espaces de détente. Un projet bien pensé valorise la propriété tout en limitant l'entretien futur.",
+    default:
+      "Consultez un paysagiste avant de planter : sa connaissance du sol, du climat local et des végétaux adaptés vous évitera des erreurs coûteuses. Un plan d'aménagement paysager professionnel valorise votre propriété de 10 à 15 %.",
+  },
+  pisciniste: {
+    coastal:
+      "En zone littorale, la piscine bénéficie d'un climat favorable à une longue saison de baignade (mai à octobre). Le pisciniste doit cependant anticiper la corrosion saline des équipements et recommander des matériaux adaptés (inox 316L, PVC renforcé).",
+    mountain:
+      "En montagne, la construction d'une piscine impose des précautions spécifiques : fondations hors gel, hivernage rigoureux, chauffage par pompe à chaleur haute température ou panneaux solaires pour compenser la fraîcheur des soirées d'altitude.",
+    urban:
+      "En milieu urbain, les mini-piscines (moins de 10 m²) ne nécessitent pas de permis de construire et s'intègrent dans les petits jardins de ville. Le pisciniste optimise l'espace avec des formes compactes et des équipements intégrés.",
+    rural:
+      "En zone rurale, les terrains spacieux permettent d'envisager de grandes piscines avec plage immergée et pool house. Vérifiez les règles du PLU et la distance réglementaire par rapport aux limites de propriété avant tout projet.",
+    default:
+      "L'hiver est la meilleure période pour planifier votre projet de piscine : les piscinistes sont plus disponibles, les délais de construction sont plus courts et le bassin sera prêt pour la saison estivale suivante.",
+  },
+  'alarme-securite': {
+    coastal:
+      "En zone littorale, les systèmes d'alarme doivent résister à la corrosion saline. Privilégiez des détecteurs et sirènes en boîtiers étanches IP65 avec traitement anticorrosion, et prévoyez une maintenance semestrielle des contacts extérieurs.",
+    mountain:
+      "En montagne, les résidences secondaires inoccupées une partie de l'année sont des cibles privilégiées. Un système d'alarme connecté avec vidéosurveillance et alerte smartphone permet de surveiller votre bien à distance toute l'année.",
+    urban:
+      "En centre-ville et en appartement, les cambriolages sont statistiquement plus fréquents. Un système d'alarme avec détection d'ouverture sur toutes les fenêtres accessibles et une sirène intérieure dissuasive renforce significativement la protection.",
+    rural:
+      "En zone rurale isolée, un système d'alarme avec détection périmétrique extérieure (barrières infrarouges, vidéo-détection) protège la propriété avant même qu'un intrus n'atteigne le bâtiment. La télésurveillance compense l'éloignement des forces de l'ordre.",
+    default:
+      "Faites réaliser un diagnostic sécurité par un installateur certifié APSAD avant de choisir votre système d'alarme. Il identifiera les points vulnérables de votre habitation et dimensionnera la solution adaptée à votre niveau de risque.",
+  },
+  antenniste: {
+    coastal:
+      "En zone littorale, les antennes sont exposées aux vents forts et à la corrosion saline. L'antenniste doit utiliser des fixations en inox et des câbles à double blindage pour garantir une réception stable et durable face aux conditions marines.",
+    mountain:
+      "En montagne, la réception TNT peut être perturbée par le relief. L'antenniste orientera l'antenne vers le meilleur émetteur et pourra recommander un amplificateur de signal ou une parabole satellite si la couverture terrestre est insuffisante.",
+    urban:
+      "En copropriété, l'antenne collective dessert l'ensemble des logements. L'antenniste peut moderniser l'installation (passage à la fibre optique, ajout de prises multimédia) en intervenant sur les parties communes après accord du syndic.",
+    rural:
+      "En zone rurale, la couverture TNT peut être limitée et la fibre absente. Un antenniste qualifié évaluera les options disponibles : antenne directionnelle haute performance, réception satellite ou internet par antenne 4G/5G fixe.",
+    default:
+      "Depuis le passage à la TNT HD, certaines anciennes antennes râteau ne captent plus tous les canaux. Faites contrôler votre installation par un antenniste pour vérifier la compatibilité et optimiser la qualité de réception.",
+  },
+  ascensoriste: {
+    coastal:
+      "En zone littorale, les ascenseurs sont exposés à l'air salin qui corrode les câbles, guides et composants électroniques. Un contrat de maintenance renforcé avec inspection trimestrielle des pièces sensibles est recommandé pour les immeubles en front de mer.",
+    mountain:
+      "En station de montagne, les ascenseurs subissent des variations de température extrêmes et une fréquentation saisonnière intense. L'ascensoriste doit adapter le programme de maintenance au rythme des saisons touristiques.",
+    urban:
+      "En copropriété urbaine, la modernisation de l'ascenseur (mise aux normes, remplacement de la cabine, installation d'un variateur de fréquence) améliore la sécurité, réduit la consommation d'énergie et valorise le patrimoine de l'immeuble.",
+    rural:
+      "Pour les ERP (établissements recevant du public) en zone rurale comme les mairies, les EHPAD ou les cabinets médicaux, l'installation d'un ascenseur ou d'une plateforme élévatrice répond aux obligations d'accessibilité PMR.",
+    default:
+      "Le contrat d'entretien d'ascenseur est obligatoire et doit inclure au minimum une visite mensuelle de vérification et un contrôle technique quinquennal. Comparez les offres des ascensoristes en vérifiant le détail des prestations incluses.",
+  },
+  diagnostiqueur: {
+    coastal:
+      "En zone littorale, le diagnostiqueur immobilier porte une attention particulière aux risques naturels (submersion marine, érosion côtière) et à l'état des matériaux exposés aux embruns, qui vieillissent plus rapidement qu'à l'intérieur des terres.",
+    mountain:
+      "En montagne, le diagnostic immobilier inclut l'évaluation des risques naturels spécifiques : avalanches, glissements de terrain et mouvements de sols. Le DPE révèle souvent des besoins d'isolation importants dans les logements d'altitude.",
+    urban:
+      "En centre-ville, les logements anciens nécessitent fréquemment un diagnostic amiante (bâtiments avant 1997), un diagnostic plomb (avant 1949) et un DPE qui révèle souvent une étiquette E, F ou G dans le bâti non rénové.",
+    rural:
+      "En zone rurale, le diagnostiqueur vérifie également l'assainissement non collectif (contrôle SPANC obligatoire pour la vente) et les risques liés aux termites, aux mérules ou au radon selon la localisation géographique du bien.",
+    default:
+      "Regroupez tous vos diagnostics immobiliers obligatoires (DPE, amiante, plomb, électricité, gaz, termites, ERP) auprès d'un seul diagnostiqueur certifié. Le pack complet est plus économique que des interventions séparées.",
+  },
+  geometre: {
+    coastal:
+      "En zone littorale, le géomètre-expert intervient dans le contexte particulier du recul du trait de côte et des zones submersibles. Le bornage et la délimitation des propriétés tiennent compte des servitudes liées aux risques côtiers.",
+    mountain:
+      "En montagne, le géomètre-expert travaille sur des terrains pentus avec des accès parfois difficiles. Le relevé topographique est indispensable pour implanter correctement un bâtiment et dimensionner les terrassements sur un terrain en pente.",
+    urban:
+      "En milieu urbain dense, le géomètre-expert intervient pour les divisions parcellaires, les copropriétés et les limites mitoyennes. Son expertise est incontournable lors d'une division de terrain en vue d'une construction en second rang.",
+    rural:
+      "En zone rurale, le bornage par un géomètre-expert est essentiel pour sécuriser les limites de propriété, souvent imprécises sur les anciens cadastres. Cette démarche prévient les litiges de voisinage lors d'une clôture ou d'une construction.",
+    default:
+      "Avant tout achat de terrain constructible, faites réaliser un bornage contradictoire par un géomètre-expert. Ce document officiel, opposable aux tiers, garantit la superficie exacte et les limites précises de votre future propriété.",
+  },
+  desinsectisation: {
+    coastal:
+      "En zone littorale au climat doux, les insectes sont actifs une grande partie de l'année. Les moustiques, les blattes et les guêpes prolifèrent dès le printemps et nécessitent des traitements préventifs réguliers pour les habitations proches du littoral.",
+    mountain:
+      "En montagne, les insectes xylophages (capricornes, vrillettes) menacent les charpentes en bois des chalets et maisons traditionnelles. Un traitement préventif tous les 10 ans et une inspection régulière protègent la structure du bâti.",
+    urban:
+      "En milieu urbain dense, les blattes et les punaises de lit sont les nuisibles les plus fréquents. Une désinsectisation professionnelle avec traitement ciblé et suivi à 15 jours est indispensable pour éradiquer complètement une infestation.",
+    rural:
+      "En zone rurale, les guêpes, frelons (y compris le frelon asiatique) et les termites sont les principales menaces. La destruction d'un nid de frelons doit impérativement être confiée à un professionnel équipé pour intervenir en toute sécurité.",
+    default:
+      "N'attendez pas qu'une infestation s'installe pour agir. Dès les premiers signes (insectes récurrents, traces de piqûres, sciure suspecte), contactez un professionnel de la désinsectisation qui identifiera l'espèce et appliquera le traitement adapté.",
+  },
+  deratisation: {
+    coastal:
+      "En zone portuaire et littorale, les rats sont particulièrement présents en raison de la proximité des zones de stockage et des réseaux d'assainissement. Une dératisation professionnelle avec appâts sécurisés protège les habitations voisines du port.",
+    mountain:
+      "En montagne, les rongeurs cherchent refuge dans les habitations dès les premiers froids d'automne. Une dératisation préventive en septembre, avec obturation des points d'entrée, évite les infestations hivernales dans les combles et les caves.",
+    urban:
+      "En milieu urbain dense, la dératisation est un enjeu de santé publique. En immeuble, l'intervention doit être coordonnée à l'échelle de la copropriété (caves, locaux poubelles, courettes) pour éviter que les rongeurs ne migrent d'un logement à l'autre.",
+    rural:
+      "En zone rurale, les granges, hangars agricoles et dépendances sont des foyers de prolifération des rongeurs. Un plan de dératisation professionnel avec postes d'appâtage sécurisés protège les stocks alimentaires et évite la contamination.",
+    default:
+      "La dératisation professionnelle combine plusieurs techniques (appâts rodonticides, pièges mécaniques, obturation des accès) pour un résultat durable. Un suivi trimestriel est recommandé pour prévenir toute réinfestation après le traitement initial.",
+  },
+  demenageur: {
+    coastal:
+      "En zone littorale, les déménagements estivaux coïncident avec l'afflux touristique, ce qui complique l'accès et le stationnement. Réservez votre déménageur au moins 2 mois à l'avance pour la période juin-septembre en bord de mer.",
+    mountain:
+      "En montagne, les déménagements sont plus complexes en raison des routes sinueuses, des accès limités en hiver et des conditions météo changeantes. Privilégiez la période mai-octobre et choisissez un déménageur habitué au terrain montagneux.",
+    urban:
+      "En centre-ville, le déménageur doit gérer les contraintes d'accès : étages sans ascenseur, rues étroites, stationnement réglementé. Demandez l'autorisation de stationnement en mairie au moins 15 jours avant et prévoyez le monte-meubles si nécessaire.",
+    rural:
+      "En zone rurale, les grandes distances entre l'ancien et le nouveau logement augmentent le coût du déménagement. Un déménageur proposant un forfait tout compris (emballage, transport, déballage) est souvent plus avantageux qu'une location de camion.",
+    default:
+      "Demandez un devis après visite technique obligatoire (gratuite) : le déménageur évaluera le volume à transporter, les contraintes d'accès et les besoins spécifiques. Comparez au moins 3 devis détaillés et vérifiez les assurances proposées.",
   },
 }
 
