@@ -59,6 +59,16 @@ const nextConfig = {
     ]
   },
 
+  async rewrites() {
+    return {
+      beforeFiles: [
+        // Serve sitemap index via API route — works around Next.js 14 bug
+        // where generateSitemaps() fails to produce the /sitemap.xml index
+        { source: '/sitemap.xml', destination: '/api/sitemap-index' },
+      ],
+    }
+  },
+
   async redirects() {
     return [
       { source: '/home', destination: '/', permanent: true },
