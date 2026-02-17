@@ -13,6 +13,7 @@ import {
   Users,
   Thermometer,
   Building2,
+  Star,
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
@@ -24,6 +25,79 @@ import { villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
 import { getCommuneBySlug, formatNumber } from '@/lib/data/commune-data'
 import { getServiceImage } from '@/lib/data/images'
 import { relatedServices } from '@/lib/constants/navigation'
+
+export const revalidate = 86400 // Revalidate every 24h
+
+// ---------------------------------------------------------------------------
+// Types & data-fetching (Supabase)
+// ---------------------------------------------------------------------------
+
+interface AvisProvider {
+  id: string
+  name: string
+  slug: string
+  stable_id: string
+  address_city: string | null
+  rating_average: number | null
+  review_count: number | null
+  is_verified: boolean
+  specialty: string | null
+}
+
+interface AvisReview {
+  id: string
+  rating: number
+  content: string | null
+  author_name: string | null
+  created_at: string
+  provider_id: string
+}
+
+async function getTopProviders(cityName: string, _serviceSlug: string): Promise<AvisProvider[]> {
+  try {
+    const { createAdminClient } = await import('@/lib/supabase/admin')
+    const supabase = createAdminClient()
+
+    const { data, error } = await supabase
+      .from('providers')
+      .select('id, name, slug, stable_id, address_city, rating_average, review_count, is_verified, specialty')
+      .eq('is_active', true)
+      .eq('noindex', false)
+      .gt('review_count', 0)
+      .ilike('address_city', cityName)
+      .order('rating_average', { ascending: false, nullsFirst: false })
+      .order('review_count', { ascending: false })
+      .limit(20)
+
+    if (error || !data) return []
+    return data
+  } catch {
+    return []
+  }
+}
+
+async function getRecentReviews(providerIds: string[]): Promise<AvisReview[]> {
+  if (providerIds.length === 0) return []
+  try {
+    const { createAdminClient } = await import('@/lib/supabase/admin')
+    const supabase = createAdminClient()
+
+    const { data, error } = await supabase
+      .from('reviews')
+      .select('id, rating, content, author_name, created_at, provider_id')
+      .in('provider_id', providerIds)
+      .or('status.eq.published,status.is.null')
+      .not('content', 'is', null)
+      .order('rating', { ascending: false })
+      .order('created_at', { ascending: false })
+      .limit(8)
+
+    if (error || !data) return []
+    return data
+  } catch {
+    return []
+  }
+}
 
 // ---------------------------------------------------------------------------
 // Static params: top 50 cities x 46 services = 2,300 pages
@@ -151,6 +225,36 @@ export default async function AvisServiceVillePage({
 
   const tradeLower = trade.name.toLowerCase()
 
+  // ----- Fetch real data from database -----
+  const allProviders = await getTopProviders(villeData.name, service)
+  // Filter by specialty matching this service (case-insensitive)
+  const serviceProviders = allProviders.filter(p =>
+    p.specialty?.toLowerCase().includes(tradeLower) ||
+    p.specialty?.toLowerCase().includes(service.replace(/-/g, ' '))
+  )
+  // Use service-specific providers if available, otherwise all providers in city
+  const topProviders = serviceProviders.length >= 2 ? serviceProviders.slice(0, 6) : allProviders.slice(0, 6)
+  const providerIds = topProviders.map(p => p.id)
+  const reviews = await getRecentReviews(providerIds)
+
+  // Calculate aggregate stats
+  const totalReviews = topProviders.reduce((sum, p) => sum + (p.review_count || 0), 0)
+  const ratedProviders = topProviders.filter(p => p.rating_average && p.rating_average > 0)
+  const avgRating = ratedProviders.length > 0
+    ? ratedProviders.reduce((sum, p) => sum + (p.rating_average || 0), 0) / ratedProviders.length
+    : 0
+  const roundedRating = Math.round(avgRating * 10) / 10
+
+  // Rating distribution from reviews
+  const ratingDistribution = [5, 4, 3, 2, 1].map(stars => ({
+    stars,
+    count: reviews.filter(r => r.rating === stars).length,
+    pct: reviews.length > 0 ? Math.round((reviews.filter(r => r.rating === stars).length / reviews.length) * 100) : 0,
+  }))
+
+  // Provider map for review display
+  const providerMap = new Map(topProviders.map(p => [p.id, p]))
+
   // ----- JSON-LD schemas -----
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
@@ -217,6 +321,22 @@ export default async function AvisServiceVillePage({
       highPrice: maxPrice,
       offerCount: commune?.nb_entreprises_artisanales ?? undefined,
     },
+    ...(totalReviews > 0 ? {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: roundedRating,
+        reviewCount: totalReviews,
+        bestRating: 5,
+        worstRating: 1,
+      },
+      review: reviews.slice(0, 5).map(r => ({
+        '@type': 'Review',
+        author: { '@type': 'Person', name: r.author_name || 'Client vérifié' },
+        reviewRating: { '@type': 'Rating', ratingValue: r.rating, bestRating: 5 },
+        reviewBody: r.content,
+        datePublished: r.created_at?.split('T')[0],
+      })),
+    } : {}),
   }
 
   // ----- Related links -----
@@ -326,6 +446,12 @@ export default async function AvisServiceVillePage({
               Prix local : {minPrice} &agrave; {maxPrice} {trade.priceRange.unit}.
             </p>
             <div className="flex flex-wrap justify-center gap-3 mt-8">
+              {totalReviews > 0 && (
+                <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/10 rounded-full px-4 py-2">
+                  <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+                  <span className="text-sm font-medium">{roundedRating.toFixed(1)}/5 — {totalReviews} avis</span>
+                </div>
+              )}
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
                 <Euro className="w-4 h-4 text-amber-400" />
                 <span>
@@ -348,6 +474,191 @@ export default async function AvisServiceVillePage({
           </div>
         </div>
       </section>
+
+      {/* ─── REAL STATS BANNER ─────────────────────────── */}
+      {totalReviews > 0 && (
+        <section className="py-8 bg-white border-b">
+          <div className="max-w-5xl mx-auto px-4">
+            <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12">
+              <div className="text-center">
+                <div className="flex items-center gap-2 justify-center mb-1">
+                  <Star className="w-7 h-7 text-amber-500 fill-amber-500" />
+                  <span className="text-3xl font-bold text-gray-900">{roundedRating.toFixed(1)}</span>
+                </div>
+                <div className="text-sm text-gray-500">Note moyenne</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-gray-900">{totalReviews}</div>
+                <div className="text-sm text-gray-500">Avis vérifiés</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-gray-900">{topProviders.length}</div>
+                <div className="text-sm text-gray-500">Artisans notés</div>
+              </div>
+              {/* Rating distribution bars */}
+              <div className="flex flex-col gap-1">
+                {ratingDistribution.map(({ stars, pct }) => (
+                  <div key={stars} className="flex items-center gap-2">
+                    <span className="text-xs text-gray-500 w-3">{stars}</span>
+                    <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
+                    <div className="w-24 h-2 bg-gray-100 rounded-full overflow-hidden">
+                      <div className="h-full bg-amber-400 rounded-full" style={{ width: `${pct}%` }} />
+                    </div>
+                    <span className="text-xs text-gray-400 w-8">{pct}%</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ─── ARTISANS LES MIEUX NOTÉS ───────────────────── */}
+      {topProviders.length > 0 && (
+        <section className="py-12 bg-white">
+          <div className="max-w-5xl mx-auto px-4">
+            <h2 className="font-heading text-2xl font-bold text-slate-900 mb-2 text-center">
+              {serviceProviders.length >= 2
+                ? `${trade.name}s les mieux notés à ${villeData.name}`
+                : `Artisans les mieux notés à ${villeData.name}`}
+            </h2>
+            <p className="text-slate-500 text-center mb-8 max-w-lg mx-auto">
+              Classement basé sur les avis clients vérifiés et la note moyenne.
+            </p>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {topProviders.map((provider, i) => (
+                <Link
+                  key={provider.id}
+                  href={`/services/${service}/${villeSlug}/${provider.stable_id}`}
+                  className="bg-gray-50 hover:bg-blue-50 border border-gray-200 hover:border-blue-300 rounded-xl p-5 transition-all group"
+                >
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-sm">
+                        {provider.name.charAt(0).toUpperCase()}
+                      </div>
+                      <div>
+                        <div className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors text-sm">
+                          {provider.name}
+                        </div>
+                        {provider.is_verified && (
+                          <div className="flex items-center gap-1 text-green-600 text-xs">
+                            <CheckCircle className="w-3 h-3" />
+                            Vérifié
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    {i < 3 && (
+                      <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                        i === 0 ? 'bg-amber-100 text-amber-700' :
+                        i === 1 ? 'bg-gray-100 text-gray-600' :
+                        'bg-orange-50 text-orange-600'
+                      }`}>
+                        {i + 1}
+                      </div>
+                    )}
+                  </div>
+                  {provider.rating_average && provider.rating_average > 0 && (
+                    <div className="flex items-center gap-2">
+                      <div className="flex">
+                        {[1, 2, 3, 4, 5].map(star => (
+                          <Star
+                            key={star}
+                            className={`w-4 h-4 ${
+                              star <= Math.round(provider.rating_average!)
+                                ? 'text-amber-400 fill-amber-400'
+                                : 'text-gray-200'
+                            }`}
+                          />
+                        ))}
+                      </div>
+                      <span className="text-sm font-semibold text-gray-900">{provider.rating_average.toFixed(1)}</span>
+                      <span className="text-xs text-gray-500">({provider.review_count} avis)</span>
+                    </div>
+                  )}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ─── DERNIERS AVIS CLIENTS ──────────────────────── */}
+      {reviews.length > 0 && (
+        <section className="py-12 bg-gray-50">
+          <div className="max-w-4xl mx-auto px-4">
+            <h2 className="font-heading text-2xl font-bold text-slate-900 mb-2 text-center">
+              Derniers avis clients
+            </h2>
+            <p className="text-slate-500 text-center mb-8">
+              Avis authentiques de clients ayant fait appel à un {tradeLower} à {villeData.name}.
+            </p>
+            <div className="space-y-4">
+              {reviews.slice(0, 5).map(review => {
+                const provider = providerMap.get(review.provider_id)
+                return (
+                  <div key={review.id} className="bg-white rounded-xl border border-gray-100 p-5">
+                    <div className="flex items-start justify-between mb-3">
+                      <div>
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="font-semibold text-gray-900 text-sm">
+                            {review.author_name || 'Client vérifié'}
+                          </span>
+                          <span className="inline-flex items-center gap-1 text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
+                            <CheckCircle className="w-3 h-3" />
+                            Vérifié
+                          </span>
+                        </div>
+                        {provider && (
+                          <div className="text-xs text-gray-500">
+                            {tradeLower} — {provider.name}
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-1 shrink-0">
+                        {[1, 2, 3, 4, 5].map(star => (
+                          <Star
+                            key={star}
+                            className={`w-4 h-4 ${
+                              star <= review.rating
+                                ? 'text-amber-400 fill-amber-400'
+                                : 'text-gray-200'
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    {review.content && (
+                      <p className="text-gray-700 text-sm leading-relaxed">
+                        {review.content.length > 300 ? review.content.slice(0, 300) + '\u2026' : review.content}
+                      </p>
+                    )}
+                    <div className="mt-3 text-xs text-gray-400">
+                      {new Date(review.created_at).toLocaleDateString('fr-FR', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      })}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+            {topProviders.length > 0 && (
+              <div className="text-center mt-8">
+                <Link
+                  href={`/services/${service}/${villeSlug}`}
+                  className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold text-sm"
+                >
+                  Voir tous les {tradeLower}s à {villeData.name}
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* ─── REVIEW CRITERIA (localized) ──────────────────────── */}
       <section className="py-16 bg-white">

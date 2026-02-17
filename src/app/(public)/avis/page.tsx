@@ -9,6 +9,8 @@ import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import { tradeContent } from '@/lib/data/trade-content'
 
+export const revalidate = 86400 // 24h
+
 export const metadata: Metadata = {
   title: 'Avis artisans \u2014 Trouvez un professionnel de confiance',
   description:
@@ -110,7 +112,44 @@ const faqItems = [
   },
 ]
 
+async function getPlatformStats() {
+  try {
+    const { createAdminClient } = await import('@/lib/supabase/admin')
+    const supabase = createAdminClient()
+
+    // Get total providers with reviews
+    const { count: providerCount } = await supabase
+      .from('providers')
+      .select('*', { count: 'exact', head: true })
+      .eq('is_active', true)
+      .gt('review_count', 0)
+
+    // Get total review count and average rating
+    const { data: stats } = await supabase
+      .from('providers')
+      .select('rating_average, review_count')
+      .eq('is_active', true)
+      .gt('review_count', 0)
+
+    if (!stats || stats.length === 0) {
+      return { totalReviews: 0, avgRating: 0, providerCount: 0 }
+    }
+
+    const totalReviews = stats.reduce((sum, p) => sum + (p.review_count || 0), 0)
+    const avgRating = stats.reduce((sum, p) => sum + (p.rating_average || 0), 0) / stats.filter(p => p.rating_average && p.rating_average > 0).length
+
+    return {
+      totalReviews,
+      avgRating: Math.round(avgRating * 10) / 10,
+      providerCount: providerCount || 0,
+    }
+  } catch {
+    return { totalReviews: 0, avgRating: 0, providerCount: 0 }
+  }
+}
+
 export default async function AvisPage() {
+  const platformStats = await getPlatformStats()
   const cmsPage = await getPageContent('avis', 'static')
 
   if (cmsPage?.content_html) {
@@ -148,6 +187,19 @@ export default async function AvisPage() {
               answer: item.answer,
             }))
           ),
+          ...(platformStats.totalReviews > 0 ? [{
+            '@context': 'https://schema.org',
+            '@type': 'Organization',
+            name: 'ServicesArtisans',
+            url: SITE_URL,
+            aggregateRating: {
+              '@type': 'AggregateRating',
+              ratingValue: platformStats.avgRating,
+              reviewCount: platformStats.totalReviews,
+              bestRating: 5,
+              worstRating: 1,
+            },
+          }] : []),
         ]}
       />
 
@@ -219,6 +271,33 @@ export default async function AvisPage() {
           </div>
         </div>
       </section>
+
+      {/* ─── REAL PLATFORM STATS ─────────────────────────── */}
+      {platformStats.totalReviews > 0 && (
+        <section className="relative -mt-10 z-10 px-4 pb-8">
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
+              <div className="grid grid-cols-3 gap-8 text-center">
+                <div>
+                  <div className="flex items-center gap-2 justify-center mb-1">
+                    <Star className="w-6 h-6 text-amber-500 fill-amber-500" />
+                    <span className="text-3xl font-bold text-gray-900">{platformStats.avgRating.toFixed(1)}</span>
+                  </div>
+                  <div className="text-sm text-gray-500">Note moyenne</div>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold text-gray-900">{platformStats.totalReviews.toLocaleString('fr-FR')}</div>
+                  <div className="text-sm text-gray-500">Avis v&eacute;rifi&eacute;s</div>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold text-gray-900">{platformStats.providerCount.toLocaleString('fr-FR')}</div>
+                  <div className="text-sm text-gray-500">Artisans not&eacute;s</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ─── HOW IT WORKS ─────────────────────────────────────── */}
       <section className="py-20 bg-white">

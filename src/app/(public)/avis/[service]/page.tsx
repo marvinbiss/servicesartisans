@@ -21,6 +21,8 @@ import { villes } from '@/lib/data/france'
 import { getServiceImage } from '@/lib/data/images'
 import { relatedServices } from '@/lib/constants/navigation'
 
+export const revalidate = 86400 // 24h
+
 const tradeSlugs = getTradesSlugs()
 
 export function generateStaticParams() {
@@ -91,6 +93,91 @@ export async function generateMetadata({
   }
 }
 
+interface ServiceAvisProvider {
+  id: string
+  name: string
+  slug: string
+  stable_id: string
+  address_city: string | null
+  rating_average: number | null
+  review_count: number | null
+  is_verified: boolean
+  specialty: string | null
+}
+
+interface ServiceAvisReview {
+  id: string
+  rating: number
+  content: string | null
+  author_name: string | null
+  created_at: string
+  provider_id: string
+}
+
+async function getServiceStats(serviceName: string) {
+  try {
+    const { createAdminClient } = await import('@/lib/supabase/admin')
+    const supabase = createAdminClient()
+
+    // Get providers with reviews that match this service
+    const { data: providers } = await supabase
+      .from('providers')
+      .select('id, name, slug, stable_id, address_city, rating_average, review_count, is_verified, specialty')
+      .eq('is_active', true)
+      .eq('noindex', false)
+      .gt('review_count', 0)
+      .order('rating_average', { ascending: false, nullsFirst: false })
+      .order('review_count', { ascending: false })
+      .limit(50)
+
+    if (!providers || providers.length === 0) {
+      return { providers: [] as ServiceAvisProvider[], reviews: [] as ServiceAvisReview[], totalReviews: 0, avgRating: 0 }
+    }
+
+    // Filter by specialty matching service name (case-insensitive)
+    const serviceNameLower = serviceName.toLowerCase()
+    const matchedProviders = providers.filter(p =>
+      p.specialty?.toLowerCase().includes(serviceNameLower) ||
+      p.specialty?.toLowerCase().includes(serviceNameLower.replace(/\s/g, '-'))
+    )
+
+    // Use matched or all if not enough
+    const topProviders = matchedProviders.length >= 3 ? matchedProviders.slice(0, 6) : providers.slice(0, 6)
+
+    const totalReviews = topProviders.reduce((sum, p) => sum + (p.review_count || 0), 0)
+    const ratedProviders = topProviders.filter(p => p.rating_average && p.rating_average > 0)
+    const avgRating = ratedProviders.length > 0
+      ? ratedProviders.reduce((sum, p) => sum + (p.rating_average || 0), 0) / ratedProviders.length
+      : 0
+
+    // Fetch recent reviews for these providers
+    const providerIds = topProviders.map(p => p.id)
+    let reviews: ServiceAvisReview[] = []
+    if (providerIds.length > 0) {
+      const { data: reviewData } = await supabase
+        .from('reviews')
+        .select('id, rating, content, author_name, created_at, provider_id')
+        .in('provider_id', providerIds)
+        .or('status.eq.published,status.is.null')
+        .not('content', 'is', null)
+        .order('rating', { ascending: false })
+        .order('created_at', { ascending: false })
+        .limit(6)
+
+      if (reviewData) reviews = reviewData as ServiceAvisReview[]
+    }
+
+    return {
+      providers: topProviders as ServiceAvisProvider[],
+      reviews,
+      totalReviews,
+      avgRating: Math.round(avgRating * 10) / 10,
+    }
+  } catch {
+    return { providers: [] as ServiceAvisProvider[], reviews: [] as ServiceAvisReview[], totalReviews: 0, avgRating: 0 }
+  }
+}
+
 const topCities = villes.slice(0, 20)
 
 export default async function AvisServicePage({
@@ -104,6 +191,8 @@ export default async function AvisServicePage({
   if (!trade) notFound()
 
   const tradeLower = trade.name.toLowerCase()
+
+  const serviceStats = await getServiceStats(trade.name)
 
   // JSON-LD schemas
   const breadcrumbSchema = getBreadcrumbSchema([
@@ -167,6 +256,22 @@ export default async function AvisServicePage({
       highPrice: trade.priceRange.max,
       offerCount: 350000,
     },
+    ...(serviceStats.totalReviews > 0 ? {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: serviceStats.avgRating,
+        reviewCount: serviceStats.totalReviews,
+        bestRating: 5,
+        worstRating: 1,
+      },
+      review: serviceStats.reviews.slice(0, 3).map(r => ({
+        '@type': 'Review',
+        author: { '@type': 'Person', name: r.author_name || 'Client v\u00e9rifi\u00e9' },
+        reviewRating: { '@type': 'Rating', ratingValue: r.rating, bestRating: 5 },
+        reviewBody: r.content,
+        datePublished: r.created_at?.split('T')[0],
+      })),
+    } : {}),
   }
 
   // Related services
@@ -279,6 +384,12 @@ export default async function AvisServicePage({
                 <Star className="w-4 h-4 text-amber-400" />
                 <span>Avis v&eacute;rifi&eacute;s</span>
               </div>
+              {serviceStats.totalReviews > 0 && (
+                <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/10 rounded-full px-4 py-2">
+                  <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+                  <span className="text-sm font-medium">{serviceStats.avgRating.toFixed(1)}/5 &mdash; {serviceStats.totalReviews} avis</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -318,6 +429,124 @@ export default async function AvisServicePage({
           </div>
         </div>
       </section>
+
+      {/* ─── TOP ARTISANS ─────────────────────────────── */}
+      {serviceStats.providers.length > 0 && (
+        <section className="py-12 bg-gray-50">
+          <div className="max-w-5xl mx-auto px-4">
+            <h2 className="font-heading text-2xl font-bold text-slate-900 mb-2 text-center">
+              {trade.name}s les mieux not&eacute;s en France
+            </h2>
+            <p className="text-slate-500 text-center mb-8 max-w-lg mx-auto">
+              Classement bas&eacute; sur les avis clients v&eacute;rifi&eacute;s.
+            </p>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {serviceStats.providers.map((provider, i) => (
+                <div
+                  key={provider.id}
+                  className="bg-white border border-gray-200 rounded-xl p-5"
+                >
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-sm">
+                        {provider.name.charAt(0).toUpperCase()}
+                      </div>
+                      <div>
+                        <div className="font-semibold text-gray-900 text-sm">{provider.name}</div>
+                        <div className="text-xs text-gray-500">{provider.address_city || 'France'}</div>
+                      </div>
+                    </div>
+                    {i < 3 && (
+                      <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                        i === 0 ? 'bg-amber-100 text-amber-700' :
+                        i === 1 ? 'bg-gray-100 text-gray-600' :
+                        'bg-orange-50 text-orange-600'
+                      }`}>
+                        {i + 1}
+                      </div>
+                    )}
+                  </div>
+                  {provider.rating_average && provider.rating_average > 0 && (
+                    <div className="flex items-center gap-2">
+                      <div className="flex">
+                        {[1, 2, 3, 4, 5].map(star => (
+                          <Star
+                            key={star}
+                            className={`w-4 h-4 ${
+                              star <= Math.round(provider.rating_average!)
+                                ? 'text-amber-400 fill-amber-400'
+                                : 'text-gray-200'
+                            }`}
+                          />
+                        ))}
+                      </div>
+                      <span className="text-sm font-semibold text-gray-900">{provider.rating_average.toFixed(1)}</span>
+                      <span className="text-xs text-gray-500">({provider.review_count} avis)</span>
+                    </div>
+                  )}
+                  {provider.is_verified && (
+                    <div className="flex items-center gap-1 text-green-600 text-xs mt-2">
+                      <CheckCircle className="w-3 h-3" />
+                      SIREN v&eacute;rifi&eacute;
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ─── DERNIERS AVIS CLIENTS ────────────────────── */}
+      {serviceStats.reviews.length > 0 && (
+        <section className="py-12 bg-white border-t">
+          <div className="max-w-4xl mx-auto px-4">
+            <h2 className="font-heading text-2xl font-bold text-slate-900 mb-2 text-center">
+              Derniers avis clients &mdash; {trade.name}
+            </h2>
+            <p className="text-slate-500 text-center mb-8">
+              Retours d&apos;exp&eacute;rience v&eacute;rifi&eacute;s de clients.
+            </p>
+            <div className="space-y-4">
+              {serviceStats.reviews.map(review => (
+                <div key={review.id} className="bg-gray-50 rounded-xl border border-gray-100 p-5">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold text-gray-900 text-sm">
+                        {review.author_name || 'Client v\u00e9rifi\u00e9'}
+                      </span>
+                      <span className="inline-flex items-center gap-1 text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
+                        <CheckCircle className="w-3 h-3" />
+                        V&eacute;rifi&eacute;
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1 shrink-0">
+                      {[1, 2, 3, 4, 5].map(star => (
+                        <Star
+                          key={star}
+                          className={`w-4 h-4 ${
+                            star <= review.rating
+                              ? 'text-amber-400 fill-amber-400'
+                              : 'text-gray-200'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  {review.content && (
+                    <p className="text-gray-700 text-sm leading-relaxed">
+                      {review.content.length > 300 ? review.content.slice(0, 300) + '\u2026' : review.content}
+                    </p>
+                  )}
+                  <div className="mt-3 text-xs text-gray-400">
+                    {new Date(review.created_at).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Pricing expectations */}
       <section className="py-16 bg-gray-50">
