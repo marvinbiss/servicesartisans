@@ -81,12 +81,14 @@ export const tradeContent: Record<string, TradeContent> = {
     emergencyInfo:
       'En cas de fuite d\'eau importante ou de canalisation bouchée, un plombier d\'urgence peut intervenir 24h/24 et 7j/7. Coupez immédiatement l\'arrivée d\'eau au compteur général et contactez un professionnel. Les tarifs d\'urgence sont majorés de 50 à 100 % par rapport à une intervention en journée.',
     certifications: [
+      'Qualibat (qualification 5111/5112 plomberie sanitaire)',
       'RGE (Reconnu Garant de l\'Environnement)',
-      'Qualibat',
-      'PG (Professionnel du Gaz)',
-      'QualiPAC (pour les pompes à chaleur)',
+      'PG (Professionnel du Gaz — obligatoire pour les installations gaz)',
+      'Qualigaz (certificat de conformité gaz)',
+      'QualiPAC (pompes à chaleur)',
+      'QualiSol (chauffe-eau solaire)',
     ],
-    averageResponseTime: 'Intervention rapide, selon disponibilité',
+    averageResponseTime: 'Urgence (fuite, bouchon) : 1 à 4h ; travaux planifiés sous 1 à 2 semaines',
   },
 
   electricien: {
@@ -149,13 +151,14 @@ export const tradeContent: Record<string, TradeContent> = {
     emergencyInfo:
       'En cas de panne électrique, de fils dénudés ou d\'odeur de brûlé, coupez immédiatement le disjoncteur général et appelez un électricien d\'urgence. Ne tentez jamais de réparer vous-même un problème électrique. Un électricien d\'astreinte peut intervenir sous 1 à 3 heures, avec une majoration de 50 à 100 % en dehors des heures ouvrées.',
     certifications: [
-      'Qualifelec',
+      'Qualifelec (qualification E1 à E3 selon le niveau de compétence)',
       'RGE (Reconnu Garant de l\'Environnement)',
-      'IRVE (Infrastructure de Recharge pour Véhicules Électriques)',
-      'Habilitation électrique (B1, B2, BR)',
-      'Qualibat',
+      'Qualification IRVE (obligatoire pour les bornes de recharge)',
+      'Habilitation électrique (B1, B2, BR, HC — obligatoire)',
+      'Qualibat (qualification 5411/5412 installations électriques)',
+      'Consuel (attestation de conformité électrique)',
     ],
-    averageResponseTime: 'Intervention rapide, selon disponibilité',
+    averageResponseTime: 'Urgence (panne, court-circuit) : 1 à 3h ; travaux planifiés sous 1 à 2 semaines',
   },
 
   serrurier: {
@@ -218,11 +221,12 @@ export const tradeContent: Record<string, TradeContent> = {
     emergencyInfo:
       'En cas de porte claquée ou de serrure cassée, un serrurier d\'urgence intervient généralement sous 30 minutes à 1 heure en zone urbaine. Attention aux majorations : +50 % en soirée (après 19h), +75 à 100 % la nuit (après 22h), le dimanche et les jours fériés. Exigez toujours un devis écrit avant le début de l\'intervention.',
     certifications: [
-      'A2P Service (certification des serruriers par le CNPP)',
-      'Qualibat',
-      'Certification Qualisr (Qualification Serrurerie)',
+      'Certification A2P (1 à 3 étoiles — résistance à l\'effraction, délivrée par le CNPP)',
+      'Qualibat (qualification 4421 serrurerie)',
+      'CQP Serrurier-dépanneur (Certificat de Qualification Professionnelle)',
+      'Certification FMSD (Serrurier dépanneur-installateur, inscrite au RNCP)',
     ],
-    averageResponseTime: 'Intervention rapide, selon disponibilité',
+    averageResponseTime: 'Urgence (porte claquée, effraction) : 30 min à 1h en zone urbaine',
   },
 
   chauffagiste: {
@@ -286,13 +290,15 @@ export const tradeContent: Record<string, TradeContent> = {
       'En cas de panne de chauffage en hiver ou de fuite de gaz, un chauffagiste d\'urgence peut intervenir sous 4 à 12 heures. En cas d\'odeur de gaz, ouvrez les fenêtres, ne touchez pas aux interrupteurs électriques, quittez le logement et appelez immédiatement le numéro d\'urgence GRDF : 0 800 47 33 33 (gratuit, 24h/24).',
     certifications: [
       'RGE (Reconnu Garant de l\'Environnement)',
-      'Qualibat',
-      'PG (Professionnel du Gaz)',
+      'Qualibat (qualification 5211/5212 chauffage)',
+      'PG (Professionnel du Gaz — obligatoire pour les installations gaz)',
+      'Qualigaz (certificat de conformité gaz)',
       'QualiPAC (pompes à chaleur)',
+      'Qualibois (chauffage bois : poêles, chaudières)',
       'Qualifioul (installations fioul)',
       'QualiSol (chauffe-eau solaire)',
     ],
-    averageResponseTime: 'Intervention rapide, selon disponibilité',
+    averageResponseTime: 'Urgence : dépannage en 4 à 12h ; entretien sur rendez-vous sous 1 à 2 semaines',
   },
 
   'peintre-en-batiment': {
@@ -353,11 +359,12 @@ export const tradeContent: Record<string, TradeContent> = {
       },
     ],
     certifications: [
-      'Qualibat (qualification 6111 pour la peinture)',
-      'RGE (si travaux d\'isolation thermique par l\'extérieur)',
-      'OPPBTP (Organisation Professionnelle de Prévention du Bâtiment)',
+      'Qualibat (qualification 6111/6112 peinture et ravalement)',
+      'RGE (obligatoire si ITE — isolation thermique par l\'extérieur)',
+      'ACQPA (qualification peinture anticorrosion — ouvrages métalliques)',
+      'Compagnons du Devoir (formation d\'excellence)',
     ],
-    averageResponseTime: 'Intervention rapide, selon disponibilité',
+    averageResponseTime: 'Devis sous 48h, intervention sous 1 à 3 semaines',
   },
 
   menuisier: {
@@ -418,12 +425,13 @@ export const tradeContent: Record<string, TradeContent> = {
       },
     ],
     certifications: [
-      'Qualibat (qualification menuiserie)',
-      'RGE (pour les travaux d\'isolation par les fenêtres)',
-      'Certification QB (Qualité Bois)',
-      'FCBA (Institut Technologique Forêt Cellulose Bois-construction Ameublement)',
+      'Qualibat (qualification 3511 fourniture et pose de menuiseries extérieures)',
+      'RGE (obligatoire pour les aides — fenêtres et portes isolantes)',
+      'Certification NF Fenêtres bois ou NF Fenêtres PVC (FCBA/CSTB)',
+      'Compagnons du Devoir (formation d\'excellence)',
+      'Label Menuiserie 21 (engagement qualité UFME)',
     ],
-    averageResponseTime: 'Intervention rapide, selon disponibilité',
+    averageResponseTime: 'Devis sous 48h, intervention sous 2 à 4 semaines',
   },
 
   carreleur: {
@@ -484,10 +492,11 @@ export const tradeContent: Record<string, TradeContent> = {
       },
     ],
     certifications: [
-      'Qualibat (qualification 6321 pour carrelage et revêtements)',
-      'CSTB (Centre Scientifique et Technique du Bâtiment)',
+      'Qualibat (qualification 6321/6322 carrelage et revêtements céramiques)',
+      'Certification CSTB (classement UPEC des locaux — Centre Scientifique et Technique du Bâtiment)',
+      'Compagnons du Devoir (formation d\'excellence)',
     ],
-    averageResponseTime: 'Intervention rapide, selon disponibilité',
+    averageResponseTime: 'Devis sous 48h, intervention sous 1 à 3 semaines',
   },
 
   couvreur: {
@@ -548,12 +557,12 @@ export const tradeContent: Record<string, TradeContent> = {
       },
     ],
     certifications: [
-      'Qualibat (qualification 3111 pour couverture en tuiles)',
-      'RGE (pour l\'isolation de toiture)',
+      'Qualibat (qualification 3111/3112 couverture en tuiles)',
+      'RGE (obligatoire pour l\'isolation de toiture — aides MaPrimeRénov\')',
       'Compagnons du Devoir (formation d\'excellence)',
-      'Certification Qualit\'EnR',
+      'QualiPV (si pose de panneaux solaires en toiture)',
     ],
-    averageResponseTime: 'Intervention rapide, selon disponibilité',
+    averageResponseTime: 'Urgence (bâchage, fuite) : 4 à 24h ; travaux de réfection sous 1 à 4 semaines',
   },
 
   macon: {
@@ -614,11 +623,12 @@ export const tradeContent: Record<string, TradeContent> = {
       },
     ],
     certifications: [
-      'Qualibat (qualification 2111 pour maçonnerie)',
-      'RGE (si travaux d\'isolation par l\'extérieur)',
-      'NF DTU 20.1 (norme de référence pour la maçonnerie)',
+      'Qualibat (qualification 2111/2112 maçonnerie et béton armé)',
+      'RGE (obligatoire si ITE — isolation thermique par l\'extérieur)',
+      'Compagnons du Devoir (formation d\'excellence)',
+      'NF Habitat (label qualité construction neuve et rénovation)',
     ],
-    averageResponseTime: 'Intervention rapide, selon disponibilité',
+    averageResponseTime: 'Devis sous 1 semaine, intervention sous 2 à 6 semaines',
   },
 
   jardinier: {
@@ -679,12 +689,13 @@ export const tradeContent: Record<string, TradeContent> = {
       },
     ],
     certifications: [
-      'CS Taille et soins des arbres (pour l\'élagage)',
-      'Agrément Services à la Personne (SAP)',
-      'Certiphyto (utilisation de produits phytosanitaires)',
-      'CAPA Travaux Paysagers',
+      'Certiphyto (obligatoire pour l\'utilisation de produits phytosanitaires)',
+      'Agrément Services à la Personne (SAP — crédit d\'impôt 50 %)',
+      'CS Taille et soins des arbres (certificat de spécialisation élagage)',
+      'Qualipaysage (certification professionnelle du secteur paysager)',
+      'CAPA Travaux Paysagers (diplôme de référence)',
     ],
-    averageResponseTime: 'Intervention rapide, selon disponibilité',
+    averageResponseTime: 'Devis sous 48h, intervention sous 1 à 2 semaines selon la saison',
   },
 
   vitrier: {
@@ -747,11 +758,11 @@ export const tradeContent: Record<string, TradeContent> = {
     emergencyInfo:
       'En cas de vitre cassée (effraction, tempête, accident), un vitrier d\'urgence peut intervenir sous 1 à 3 heures pour sécuriser l\'ouverture avec un panneau provisoire. Le remplacement définitif se fait généralement sous 24 à 48h. Majorations : +50 à 100 % la nuit et le week-end.',
     certifications: [
-      'Qualibat (qualification miroiterie-vitrerie)',
-      'Certification Cekal (performance des vitrages isolants)',
-      'NF DTU 39 (norme de référence pour la vitrerie)',
+      'Qualibat (qualification 4311/4312 vitrerie-miroiterie)',
+      'Certification Cekal (qualité des vitrages isolants, feuilletés et trempés)',
+      'RGE (pour remplacement de vitrages isolants ouvrant droit aux aides)',
     ],
-    averageResponseTime: 'Intervention rapide, selon disponibilité',
+    averageResponseTime: 'Urgence (bris de vitre) : 1 à 3h ; remplacement définitif sous 24 à 48h',
   },
 
   climaticien: {
@@ -814,13 +825,13 @@ export const tradeContent: Record<string, TradeContent> = {
     emergencyInfo:
       'En cas de panne de climatisation pendant une canicule, un climaticien d\'urgence peut intervenir sous 4 à 12 heures. Vérifiez d\'abord les réglages, le disjoncteur dédié et les filtres (encrassés = perte de performance). En attendant, fermez les volets, aérez la nuit et utilisez un ventilateur.',
     certifications: [
+      'Attestation de capacité fluides frigorigènes (obligatoire — catégorie I à IV)',
       'RGE (Reconnu Garant de l\'Environnement)',
-      'Attestation de capacité fluides frigorigènes',
-      'Qualibat',
-      'QualiPAC (pompes à chaleur)',
-      'Qualifroid',
+      'QualiPAC (pompes à chaleur et climatisation réversible)',
+      'Qualifroid / Qualiclimafroid (qualification froid et climatisation, accrédité COFRAC)',
+      'Qualibat (qualification 5311/5312 génie climatique)',
     ],
-    averageResponseTime: 'Intervention rapide, selon disponibilité',
+    averageResponseTime: 'Urgence canicule : dépannage en 4 à 12h ; installation sur devis sous 2 à 4 semaines',
   },
 
   cuisiniste: {
@@ -881,11 +892,12 @@ export const tradeContent: Record<string, TradeContent> = {
       },
     ],
     certifications: [
-      'Qualibat',
-      'Label Cuisine Qualité (AFNOR)',
-      'Garantie Meubles de France',
+      'Qualibat (qualification aménagement intérieur)',
+      'NF Ameublement (certification AFNOR/FCBA — sécurité et durabilité du mobilier)',
+      'NF Environnement Ameublement (label éco-responsable)',
+      'Garantie Meubles de France (fabrication française)',
     ],
-    averageResponseTime: 'Intervention rapide, selon disponibilité',
+    averageResponseTime: 'Conception 2 à 3 semaines, fabrication 4 à 8 semaines, pose 3 à 7 jours',
   },
 
   solier: {
@@ -946,11 +958,12 @@ export const tradeContent: Record<string, TradeContent> = {
       },
     ],
     certifications: [
-      'Qualibat (qualification 6411 pour revêtements de sol souples)',
-      'Qualibat (qualification 6421 pour parquets)',
-      'Certification UPEC (Union Professionnelle de l\'Expertise en Construction)',
+      'Qualibat (qualification 6411 revêtements de sol souples)',
+      'Qualibat (qualification 6421 parquets et revêtements en bois)',
+      'Titre Professionnel Solier Moquettiste (inscrit au RNCP)',
+      'Compagnons du Devoir (formation d\'excellence)',
     ],
-    averageResponseTime: 'Intervention rapide, selon disponibilité',
+    averageResponseTime: 'Devis sous 48h, intervention sous 1 à 3 semaines',
   },
 
   nettoyage: {
@@ -1011,12 +1024,13 @@ export const tradeContent: Record<string, TradeContent> = {
       },
     ],
     certifications: [
-      'Qualipropre (certification du secteur de la propreté)',
-      'Agrément Services à la Personne (SAP) pour le ménage à domicile',
+      'Qualipropre (qualification professionnelle du secteur de la propreté — valable 4 ans)',
+      'Agrément Services à la Personne (SAP — crédit d\'impôt 50 % pour le ménage à domicile)',
       'ISO 14001 (management environnemental)',
       'Écolabel Européen (utilisation de produits écologiques)',
+      'CQP Agent de propreté (Certificat de Qualification Professionnelle — INHNI)',
     ],
-    averageResponseTime: 'Intervention rapide, selon disponibilité',
+    averageResponseTime: 'Devis sous 48h, intervention sous 1 à 5 jours',
   },
 
   // ════════════════════════════════════════════════════════════════════════
@@ -1048,7 +1062,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Qu\'est-ce qu\'une étude de sol et est-elle obligatoire ?', a: 'L\'étude de sol (ou étude géotechnique G2) analyse la nature du terrain (argile, roche, sable) pour dimensionner les fondations. Elle est obligatoire depuis 2020 pour la vente de terrains constructibles en zone argileuse (loi ELAN). Son coût est de 1 500 à 3 000 € et elle évite des surcoûts majeurs en cas de terrain instable.' },
       { q: 'Combien de temps dure un terrassement pour une maison ?', a: 'Le terrassement d\'une maison individuelle dure en moyenne 2 à 5 jours ouvrés selon la surface, la profondeur des fondations et la nature du sol. Un terrain rocheux nécessitera un brise-roche hydraulique et peut doubler la durée du chantier. L\'évacuation des terres représente souvent 30 à 40 % du temps total.' },
     ],
-    certifications: ['Qualibat (qualification terrassement)', 'Certificat de capacité d\'engins de chantier (CACES)'],
+    certifications: ['Qualibat (qualification 1111/1112 terrassement)', 'CACES (Certificat d\'Aptitude à la Conduite En Sécurité — catégories A à F)', 'AIPR (Autorisation d\'Intervention à Proximité des Réseaux — obligatoire)'],
     averageResponseTime: 'Devis sous 48h, intervention sous 1 à 3 semaines',
   },
 
@@ -1077,7 +1091,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Quel bois choisir pour une charpente ?', a: 'Le sapin et l\'épicéa (résineux) sont les plus courants et économiques (classe d\'emploi 2). Le chêne est plus noble et résistant mais 2 à 3 fois plus cher. Le douglas offre un excellent compromis : naturellement durable (classe 3), il résiste aux insectes sans traitement chimique. Pour les régions humides, le mélèze est recommandé.' },
       { q: 'Combien coûte l\'aménagement de combles avec modification de charpente ?', a: 'L\'aménagement de combles avec modification de charpente (passage de fermettes en charpente traditionnelle) coûte entre 800 et 1 500 €/m² tout compris (charpente, isolation, plancher, escalier, finitions). Pour des combles de 40 m², prévoyez un budget de 35 000 à 60 000 €. C\'est souvent plus rentable qu\'une extension.' },
     ],
-    certifications: ['Qualibat charpente bois', 'ACQPA (traitement du bois)', 'Compagnon du Devoir (excellence)'],
+    certifications: ['Qualibat (qualification 2311/2312 charpente bois)', 'CTB-A+ (certification traitement du bois — FCBA)', 'Compagnons du Devoir (formation d\'excellence)', 'RGE (si isolation des combles associée)'],
     averageResponseTime: 'Devis sous 1 semaine, intervention sous 2 à 4 semaines',
   },
 
@@ -1106,7 +1120,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Quels sont les signes d\'une gouttière en mauvais état ?', a: 'Les signes d\'alerte sont : débordements lors des pluies, traces de rouille ou verdissement, gouttière qui se désolidarise de la façade, fissures visibles, eau qui coule le long du mur au lieu de descendre par les tuyaux. Une gouttière percée non réparée peut provoquer des infiltrations dans les murs et la toiture.' },
       { q: 'Peut-on poser des gouttières soi-même ?', a: 'La pose de gouttières PVC avec collage est accessible aux bricoleurs confirmés. En revanche, la zinguerie (zinc soudé) requiert un savoir-faire professionnel : soudure à l\'étain, façonnage sur mesure et respect des pentes d\'écoulement (5 mm/ml minimum). Un défaut de pose entraîne des infiltrations et engage votre responsabilité en cas de sinistre.' },
     ],
-    certifications: ['Qualibat couverture-zinguerie', 'Certification zinc NF'],
+    certifications: ['Qualibat (qualification 3121/3122 couverture-zinguerie)', 'Compagnons du Devoir (formation d\'excellence)', 'Certification VMZINC Installateur (partenaire fabricant)'],
     averageResponseTime: 'Devis sous 48h, intervention sous 1 à 2 semaines',
   },
 
@@ -1135,7 +1149,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Qu\'est-ce qu\'un cuvelage de sous-sol ?', a: 'Le cuvelage est un traitement d\'étanchéité intérieur ou extérieur des murs enterrés pour stopper les infiltrations d\'eau dans un sous-sol. Il combine un enduit d\'imperméabilisation, un drainage périphérique et parfois une pompe de relevage. Le coût varie de 150 à 300 €/m² de surface traitée. C\'est la solution définitive pour un sous-sol humide.' },
       { q: 'Peut-on végétaliser un toit-terrasse étanchéifié ?', a: 'Oui, à condition que la structure porte le surpoids (80 à 150 kg/m² selon le type de végétalisation) et que l\'étanchéité soit anti-racines (membrane bitume avec voile de verre ou EPDM). La végétalisation extensive (sedum) est la plus légère et la moins exigeante en entretien. Elle prolonge la durée de vie de l\'étanchéité en la protégeant des UV.' },
     ],
-    certifications: ['Qualibat étanchéité (1311/1312)', 'Certification ASQUAL', 'RGE si isolation associée'],
+    certifications: ['Qualibat (qualification 1311/1312 étanchéité)', 'Certification ASQUAL (géomembranes et étanchéité)', 'RGE (obligatoire si isolation thermique associée — toiture chaude)'],
     averageResponseTime: 'Devis sous 1 semaine, intervention sous 2 à 3 semaines',
   },
 
@@ -1164,7 +1178,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Combien de temps durent les travaux de ravalement ?', a: 'Pour une maison individuelle, le ravalement dure 2 à 4 semaines selon la surface et le type de traitement (nettoyage simple, enduit, ITE). L\'installation de l\'échafaudage prend 1 à 2 jours. Prévoyez que l\'échafaudage restera en place pendant toute la durée du chantier, ce qui peut gêner l\'accès au jardin ou au parking.' },
       { q: 'Quelle différence entre enduit monocouche et enduit traditionnel ?', a: 'L\'enduit monocouche (ou enduit projeté) s\'applique en une seule passe à la machine et coûte 25 à 50 €/m². L\'enduit traditionnel se pose en 3 couches à la main (gobetis, corps d\'enduit, finition) et revient à 40 à 70 €/m². Le traditionnel offre une meilleure durabilité et un rendu plus authentique, mais il est plus long à mettre en œuvre.' },
     ],
-    certifications: ['Qualibat ravalement (6111/6112)', 'RGE pour ITE', 'Certification Sto, Weber ou Parex (fabricants)'],
+    certifications: ['Qualibat (qualification 6111/6112 ravalement, 7131/7132 ITE)', 'RGE (obligatoire pour l\'ITE — isolation thermique par l\'extérieur)', 'Certification applicateur Sto, Weber ou Parex-Lanko (partenaires fabricants)'],
     averageResponseTime: 'Devis sous 1 semaine, intervention sous 2 à 6 semaines',
   },
 
@@ -1193,7 +1207,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Combien de temps faut-il pour poser un faux-plafond ?', a: 'Un plâtrier expérimenté pose environ 15 à 25 m² de faux-plafond par jour. Pour une maison de 80 m², comptez 4 à 6 jours (ossature + plaques + bandes). Ajoutez 1 à 2 jours pour les finitions (enduit de lissage, ponçage). Les découpes pour spots encastrés et VMC sont incluses dans ce délai.' },
       { q: 'Quelle est la hauteur minimale pour un faux-plafond ?', a: 'La hauteur sous plafond minimale habitable est de 2,20 m selon le Code de la construction. Un faux-plafond standard consomme 5 à 10 cm de hauteur (suspentes + ossature + plaque). Si vous prévoyez des spots encastrés, comptez 10 à 15 cm. Pour un passage de gaines de VMC ou de climatisation, il faudra 20 à 30 cm.' },
     ],
-    certifications: ['Qualibat plâtrerie (4111/4112)', 'Certification Placo/Saint-Gobain', 'RGE pour doublage isolant'],
+    certifications: ['Qualibat (qualification 4111/4112 plâtrerie, cloisons et doublages)', 'Certification Placo Applicateur (partenaire Saint-Gobain)', 'RGE (obligatoire si doublage isolant ouvrant droit aux aides)'],
     averageResponseTime: 'Devis sous 48h, intervention sous 1 à 2 semaines',
   },
 
@@ -1222,7 +1236,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Une verrière d\'intérieur isole-t-elle du bruit ?', a: 'Avec un simple vitrage (6 mm), l\'isolation acoustique est faible (environ 25 dB). Un double vitrage 4/16/4 atteint 30 à 35 dB, ce qui est acceptable pour séparer une cuisine d\'un salon. Pour une véritable isolation phonique (bureau, chambre), optez pour un vitrage acoustique feuilleté 44.2 qui offre 37 à 42 dB d\'affaiblissement.' },
       { q: 'Faut-il un permis de construire pour une pergola métallique ?', a: 'Une pergola de moins de 5 m² est dispensée de formalités. Entre 5 et 20 m² (ou 40 m² en zone PLU), une déclaration préalable de travaux suffit. Au-delà de 20 m² (ou 40 m²), un permis de construire est nécessaire. En zone protégée (ABF), toute pergola nécessite au minimum une déclaration préalable, quelle que soit la surface.' },
     ],
-    certifications: ['Qualibat métallerie (4411)', 'Certification AFNOR NF Métallerie', 'Label Artisanat d\'Art (ouvrages décoratifs)'],
+    certifications: ['Qualibat (qualification 4411/4412 métallerie-serrurerie)', 'Certification EN 1090 (exécution des structures en acier — marquage CE)', 'Label Artisanat d\'Art (ouvrages décoratifs)', 'ACQPA (qualification peinture anticorrosion — si thermolaquage)'],
     averageResponseTime: 'Devis sous 1 semaine, fabrication 3 à 6 semaines',
   },
 
@@ -1251,7 +1265,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Peut-on restaurer une rampe ou un portail ancien en fer forgé ?', a: 'Oui, un ferronnier spécialisé en restauration peut décaper, redresser et ressouder des ouvrages anciens. La restauration coûte généralement 30 à 60 % du prix d\'un ouvrage neuf équivalent, tout en préservant le cachet d\'origine. Le ferronnier peut aussi reproduire à l\'identique les éléments manquants (volutes, rosaces). Comptez 4 à 8 semaines de travail en atelier.' },
       { q: 'Le fer forgé est-il plus solide que l\'acier soudé ?', a: 'Le fer forgé traditionnel (travaillé à la forge à 900-1200 °C) offre une structure fibreuse très résistante à la fatigue et aux chocs. L\'acier soudé industriel est plus rigide mais les soudures constituent des points de faiblesse potentiels. Pour un garde-corps ou un portail, les deux techniques offrent une solidité largement suffisante. Le fer forgé se distingue surtout par son esthétique unique.' },
     ],
-    certifications: ['Label Entreprise du Patrimoine Vivant (EPV)', 'Maître Artisan en métier d\'art', 'Compagnon du Devoir'],
+    certifications: ['Label Entreprise du Patrimoine Vivant (EPV — délivré par l\'État)', 'Titre de Maître Artisan en métier d\'art (Chambre de Métiers)', 'Compagnons du Devoir (formation d\'excellence)', 'Qualibat (qualification 4411 métallerie-serrurerie)'],
     averageResponseTime: 'Devis sous 1 semaine, fabrication 4 à 8 semaines',
   },
 
@@ -1280,7 +1294,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Quelle pose choisir : flottante, collée ou clouée ?', a: 'La pose flottante (clipsée sur sous-couche) est la plus rapide et la moins chère (15 à 25 €/m²), idéale pour le stratifié et le contrecollé. La pose collée (25 à 40 €/m²) offre un meilleur confort acoustique et convient au contrecollé et au massif mince. La pose clouée (35 à 50 €/m²) est la méthode traditionnelle pour le parquet massif sur lambourdes, offrant la meilleure longévité.' },
       { q: 'Comment entretenir un parquet au quotidien ?', a: 'Passez l\'aspirateur régulièrement avec une brosse douce (pas de brosse rotative). Nettoyez à la serpillère bien essorée avec un savon neutre. Évitez l\'eau stagnante et les produits agressifs (javel, ammoniaque). Pour un parquet vitrifié, appliquez un polish de rénovation une fois par an. Pour un parquet huilé, repassez une couche d\'huile d\'entretien tous les 6 à 12 mois sur les zones de passage.' },
     ],
-    certifications: ['Qualibat pose de revêtements (6321)', 'Certification Parquets de France', 'Label Artisan de confiance'],
+    certifications: ['Qualibat (qualification 6421 parquets et revêtements en bois)', 'Label Parquets de France (origine et qualité de fabrication)', 'Compagnons du Devoir (formation d\'excellence)'],
     averageResponseTime: 'Devis sous 48h, intervention sous 1 à 3 semaines',
   },
 
@@ -1309,7 +1323,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Un miroitier peut-il intervenir en urgence ?', a: 'Oui, la plupart des miroitiers proposent un service d\'urgence pour les vitrines de commerce cassées, les fenêtres brisées après effraction ou les dégâts de tempête. L\'intervention sous 24h coûte 30 à 50 % de plus qu\'une intervention programmée. En attendant, bâchez l\'ouverture avec une bâche ou du contreplaqué pour sécuriser le local.' },
       { q: 'Comment choisir un miroir pour une salle de bain ?', a: 'Optez pour un miroir avec traitement anti-buée intégré (film chauffant au dos) et bords polis pour résister à l\'humidité. Évitez les miroirs bas de gamme dont le tain (couche réfléchissante) se dégrade rapidement en milieu humide. Un miroir sur mesure avec éclairage LED intégré coûte 200 à 800 € selon les dimensions et les options.' },
     ],
-    certifications: ['Qualibat vitrerie-miroiterie (4311)', 'Certification Cekal (vitrages isolants)'],
+    certifications: ['Qualibat (qualification 4311/4312 vitrerie-miroiterie)', 'Certification Cekal (qualité des vitrages isolants, feuilletés et trempés)', 'Certification NF EN 12150 (verres de sécurité trempés)'],
     averageResponseTime: 'Devis sous 48h, fabrication 1 à 3 semaines',
   },
 
@@ -1338,7 +1352,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Quelles aides pour le remplacement de volets roulants ?', a: 'Le remplacement de volets roulants anciens par des modèles isolants ouvre droit à la TVA réduite à 10 % pour les logements de plus de 2 ans. Si les volets intègrent une isolation thermique renforcée (coefficient Uc ≤ 1,4), vous pouvez bénéficier de MaPrimeRénov\' et des CEE (prime énergie) à condition de passer par un installateur RGE.' },
       { q: 'Pergola bioclimatique ou store banne : que choisir ?', a: 'Le store banne (800 à 3 000 €) est idéal pour un ombrage ponctuel et se rétracte entièrement. La pergola bioclimatique (5 000 à 15 000 €) offre une protection permanente avec des lames orientables qui régulent la luminosité et la ventilation. La pergola ajoute de la valeur au bien immobilier et crée un véritable espace de vie extérieur utilisable même par temps de pluie légère.' },
     ],
-    certifications: ['Qualibat stores et fermetures (3511)', 'Expert Somfy', 'RGE pour volets isolants'],
+    certifications: ['Qualibat (qualification 3511/3512 stores et fermetures)', 'RGE (obligatoire pour volets isolants ouvrant droit aux aides)', 'Expert Somfy (partenaire installateur certifié par le fabricant)'],
     averageResponseTime: 'Devis sous 48h, intervention sous 1 à 2 semaines',
   },
 
@@ -1367,7 +1381,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Quel carrelage choisir pour une salle de bain ?', a: 'Privilégiez un carrelage antidérapant classé R10 ou R11 pour le sol de douche (norme DIN 51097 classe B minimum). Le grès cérame est le matériau le plus résistant à l\'humidité et le plus facile à entretenir. Évitez les joints blancs qui jaunissent : optez pour un joint époxy (imperméable et antifongique) de couleur grise ou assortie au carrelage.' },
       { q: 'Peut-on créer une salle de bain dans une chambre ?', a: 'Oui, c\'est courant lors d\'une rénovation. Les contraintes principales sont : l\'acheminement des arrivées d\'eau et des évacuations (possible avec une pompe de relevage si nécessaire), la ventilation (VMC obligatoire), l\'étanchéité du sol et l\'isolation phonique. Le budget pour créer une salle de bain complète dans une chambre se situe entre 8 000 et 20 000 € selon le niveau de finition.' },
     ],
-    certifications: ['Qualibat aménagement intérieur', 'Handibat (accessibilité PMR)', 'Label RGE si isolation associée'],
+    certifications: ['Qualibat (qualification aménagement intérieur, plomberie, carrelage)', 'Handibat (label accessibilité PMR — Chambre de Métiers)', 'RGE (si isolation thermique associée — ouvre droit aux aides)'],
     averageResponseTime: 'Devis sous 1 semaine, intervention sous 2 à 6 semaines',
   },
 
@@ -1396,7 +1410,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'L\'architecte d\'intérieur peut-il déposer un permis de construire ?', a: 'L\'architecte d\'intérieur peut déposer une déclaration préalable de travaux et un permis de construire pour les projets de moins de 150 m² de surface de plancher. Au-delà de 150 m², un architecte DPLG (inscrit à l\'Ordre) est obligatoire pour signer le permis. Les deux professionnels travaillent souvent en complémentarité sur les grands projets.' },
       { q: 'Comment choisir le bon architecte d\'intérieur ?', a: 'Consultez son portfolio pour vérifier que son style correspond à vos goûts. Vérifiez son diplôme (CFAI ou équivalent bac+5) et son inscription au Conseil français des architectes d\'intérieur. Demandez des références de clients récents et visitez si possible un chantier en cours. Enfin, comparez au moins 3 devis en vérifiant que le périmètre de la mission est identique.' },
     ],
-    certifications: ['Diplôme CFAI (Conseil Français des Architectes d\'Intérieur)', 'Inscription à l\'Ordre (si architecte DPLG)', 'Assurance décennale'],
+    certifications: ['Diplôme CFAI (Conseil Français des Architectes d\'Intérieur — titre protégé)', 'Inscription à l\'Ordre des Architectes (si architecte DPLG/HMONP)', 'Assurance décennale (obligatoire pour les travaux de structure)'],
     averageResponseTime: 'Premier rendez-vous sous 1 semaine',
   },
 
@@ -1425,7 +1439,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Quelles sont les tendances déco actuelles ?', a: 'Les tendances 2025-2026 privilégient les matériaux naturels (bois brut, pierre, lin), les couleurs terracotta et vert sauge, le mobilier arrondi et les luminaires sculpturaux. Le style japandi (mélange japonais-scandinave) et le maximalisme coloré coexistent. Un bon décorateur vous guidera vers un style intemporel qui ne se démodera pas en quelques mois.' },
       { q: 'Le décorateur achète-t-il le mobilier à ma place ?', a: 'Selon la formule choisie, le décorateur peut soit vous fournir une shopping list que vous achetez vous-même, soit se charger de toutes les commandes (accompagnement achat). Dans le second cas, il gère les délais de livraison, vérifie la conformité des produits et coordonne la mise en place. Cette prestation coûte 50 à 120 €/h ou un forfait de 500 à 1 500 € selon le volume d\'achats.' },
     ],
-    certifications: ['Diplôme en décoration d\'intérieur', 'Membre de l\'UFDI (Union Francophone des Décorateurs d\'Intérieur)'],
+    certifications: ['Titre professionnel Décorateur d\'intérieur (inscrit au RNCP)', 'Membre de l\'UFDI (Union Francophone des Décorateurs d\'Intérieur)', 'Certification home staging (si spécialisation valorisation immobilière)'],
     averageResponseTime: 'Premier rendez-vous sous 1 semaine',
   },
 
@@ -1454,7 +1468,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Peut-on domotiser une maison ancienne sans gros travaux ?', a: 'Oui, grâce aux protocoles sans fil (Zigbee, Z-Wave, Wi-Fi). On remplace les interrupteurs par des modules connectés, on ajoute des capteurs (température, ouverture, mouvement) et on installe une box domotique centrale. L\'installation est non invasive et réversible. Comptez 3 000 à 8 000 € pour une maison de 4 pièces avec éclairage, chauffage, volets et sécurité.' },
       { q: 'La domotique est-elle compatible avec les assistants vocaux ?', a: 'La plupart des systèmes domotiques sont compatibles avec Google Home, Amazon Alexa et Apple HomeKit. Le contrôle vocal permet de piloter l\'éclairage, le chauffage, les volets et les scénarios par la voix. Pour une compatibilité maximale, le nouveau standard Matter (soutenu par Google, Apple, Amazon et Samsung) unifie les protocoles et garantit l\'interopérabilité entre marques.' },
     ],
-    certifications: ['Certification KNX Partner', 'Certification Crestron/Control4 (haut de gamme)', 'Habilitation électrique'],
+    certifications: ['Certification KNX Partner (standard international de la domotique filaire)', 'Certification Crestron/Control4 (systèmes haut de gamme)', 'Habilitation électrique (obligatoire)', 'Qualifelec (mention courants faibles et domotique)'],
     averageResponseTime: 'Devis sous 1 semaine, installation 1 à 4 semaines',
   },
 
@@ -1484,7 +1498,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'La pompe à chaleur est-elle bruyante ?', a: 'L\'unité extérieure émet 40 à 55 dB(A) à 1 m de distance (comparable à une conversation). Les modèles récents proposent un mode silencieux nocturne (35 à 45 dB). La réglementation impose un seuil d\'émergence de 5 dB(A) le jour et 3 dB(A) la nuit par rapport au bruit ambiant. Installez l\'unité extérieure à distance des chambres du voisin et sur des plots anti-vibratiles pour limiter les nuisances.' },
     ],
     emergencyInfo: 'En cas de panne de chauffage en hiver, un chauffagiste d\'urgence peut intervenir en 2 à 4h pour un diagnostic. Coût : 150 à 350 \u20AC (déplacement + diagnostic).',
-    certifications: ['QualiPAC (obligatoire pour les aides)', 'RGE (Reconnu Garant de l\'Environnement)', 'Certification F-Gaz (manipulation de fluides frigorigènes)'],
+    certifications: ['QualiPAC (obligatoire pour les aides MaPrimeRénov\' et CEE)', 'RGE (Reconnu Garant de l\'Environnement)', 'Attestation de capacité fluides frigorigènes (obligatoire — catégorie I)', 'Qualibat (qualification 5212/5213 chauffage, génie climatique)'],
     averageResponseTime: 'Devis sous 1 semaine, installation 2 à 4 semaines',
   },
 
@@ -1513,7 +1527,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Faut-il une autorisation pour poser des panneaux solaires ?', a: 'Oui, une déclaration préalable de travaux en mairie est obligatoire dans tous les cas. En zone protégée (ABF, monument historique), l\'architecte des Bâtiments de France doit donner son accord, ce qui peut rallonger le délai de 2 à 6 mois. En copropriété, un vote en assemblée générale est requis.' },
       { q: 'Autoconsommation totale ou revente du surplus : quel choix faire ?', a: 'L\'autoconsommation avec revente du surplus est le modèle le plus courant et le plus rentable pour les particuliers. Vous consommez directement l\'électricité produite et revendez l\'excédent à EDF OA à un tarif garanti pendant 20 ans. La revente totale est plutôt réservée aux grandes toitures ou aux bâtiments peu consommateurs.' },
     ],
-    certifications: ['QualiPV (installation photovoltaïque)', 'RGE (obligatoire pour les aides)', 'Certification Qualit\'EnR'],
+    certifications: ['QualiPV (qualification Qualit\'EnR — installation photovoltaïque)', 'RGE (obligatoire pour les aides MaPrimeRénov\' et prime autoconsommation)', 'QualiSol (si installation de solaire thermique — chauffe-eau et SSC)', 'Consuel (attestation de conformité électrique — obligatoire pour le raccordement)'],
     averageResponseTime: 'Étude gratuite sous 1 semaine, installation 4 à 8 semaines',
   },
 
@@ -1542,7 +1556,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Quels matériaux isolants choisir ?', a: 'La laine de verre et la laine de roche offrent le meilleur rapport performance/prix. La ouate de cellulose et la fibre de bois sont des alternatives écologiques avec un bon déphasage thermique (confort d\'été). Le polyuréthane est le plus performant à épaisseur égale mais coûte plus cher. Tous doivent être certifiés ACERMI.' },
       { q: 'L\'isolation phonique et thermique sont-elles la même chose ?', a: 'Non, ce sont deux performances distinctes. Un bon isolant thermique n\'est pas forcément un bon isolant phonique. La laine de roche et la ouate de cellulose offrent de bonnes performances dans les deux domaines. Pour une isolation phonique spécifique, il faut traiter les parois avec des systèmes masse-ressort-masse (double cloison avec isolant intercalé).' },
     ],
-    certifications: ['RGE (Reconnu Garant de l\'Environnement)', 'Qualibat isolation thermique (7131/7132)', 'Certification ACERMI (matériaux)'],
+    certifications: ['RGE (Reconnu Garant de l\'Environnement — obligatoire pour les aides)', 'Qualibat (qualification 7131/7132 isolation thermique intérieure et extérieure)', 'Certification ACERMI (garantie de performance des matériaux isolants)', 'NF Habitat / NF Habitat HQE (label qualité rénovation)'],
     averageResponseTime: 'Devis sous 1 semaine, intervention 1 à 3 semaines',
   },
 
@@ -1570,7 +1584,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Peut-on rénover par étapes ou faut-il tout faire d\'un coup ?', a: 'On peut rénover par étapes, mais la rénovation globale est plus efficace et mieux aidée. Le parcours « par geste » de MaPrimeRénov\' finance chaque poste séparément, tandis que le parcours « accompagné » pour une rénovation globale offre des primes bonifiées. Attention à l\'ordre des travaux : isoler avant de changer le chauffage pour bien dimensionner l\'équipement.' },
       { q: 'Les logements classés G seront-ils vraiment interdits à la location ?', a: 'Oui, la loi Climat et Résilience interdit progressivement la location des passoires thermiques : les logements G sont interdits à la location depuis janvier 2025, les F le seront en 2028 et les E en 2034. Les propriétaires bailleurs doivent donc engager des travaux de rénovation sous peine de ne plus pouvoir louer.' },
     ],
-    certifications: ['RGE (Reconnu Garant de l\'Environnement)', 'Audit énergétique certifié OPQIBI/Qualibat', 'Label BBC Rénovation'],
+    certifications: ['RGE (Reconnu Garant de l\'Environnement — obligatoire pour toutes les aides)', 'Audit énergétique certifié OPQIBI 1905 ou Qualibat 8731', 'Label BBC Rénovation (Bâtiment Basse Consommation)', 'Accompagnateur Rénov\' agréé par l\'État (obligatoire pour MaPrimeRénov\' parcours accompagné)'],
     averageResponseTime: 'Audit sous 2 semaines, planification des travaux 1 à 3 mois',
   },
 
@@ -1599,7 +1613,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Combien coûte la recharge d\'une voiture électrique à domicile ?', a: 'En tarif de base, une recharge complète (batterie de 50 kWh) coûte environ 10 à 12 \u20AC. En heures creuses, ce coût tombe à 7 à 8 \u20AC, soit environ 2 \u20AC aux 100 km. C\'est 4 à 5 fois moins cher qu\'un véhicule essence. Avec un abonnement adapté et la programmation nocturne, le surcoût d\'électricité est de 30 à 50 \u20AC/mois pour 15 000 km/an.' },
       { q: 'L\'installation d\'une borne nécessite-t-elle des travaux importants ?', a: 'Dans la majorité des cas, l\'installation est simple : fixation murale de la borne, tirage d\'un câble depuis le tableau électrique et ajout d\'un disjoncteur dédié. Les travaux durent 2 à 4 heures. Cependant, si le tableau est éloigné du garage (plus de 20 m) ou si une mise aux normes électrique est nécessaire, le coût et la durée augmentent significativement.' },
     ],
-    certifications: ['Qualification IRVE (Infrastructure de Recharge de Véhicules Électriques)', 'Habilitation électrique', 'Certification Qualifelec'],
+    certifications: ['Qualification IRVE P1/P2/P3 (obligatoire — Infrastructure de Recharge de Véhicules Électriques)', 'Habilitation électrique (obligatoire)', 'Qualifelec (mention IRVE)', 'Consuel (attestation de conformité électrique)'],
     averageResponseTime: 'Devis sous 48h, installation sous 1 à 2 semaines',
   },
 
@@ -1628,7 +1642,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Qu\'est-ce que le bistre et comment le traiter ?', a: 'Le bistre est un dépôt dur et inflammable qui se forme sur les parois du conduit, surtout avec du bois humide ou une combustion lente. Le débistrage nécessite une machine rotative spéciale (débistreuse) et coûte 150 à 400 \u20AC. Un ramonage classique ne suffit pas à l\'éliminer. Brûler du bois sec (moins de 20 % d\'humidité) limite sa formation.' },
       { q: 'Comment choisir un bon ramoneur ?', a: 'Vérifiez qu\'il possède une qualification Qualibat 5141 ou une certification équivalente, une assurance responsabilité civile professionnelle et qu\'il remet systématiquement un certificat de ramonage. Privilégiez un professionnel local recommandé par le bouche-à-oreille. Méfiez-vous des offres à moins de 30 \u20AC : un ramonage sérieux prend 20 à 40 minutes.' },
     ],
-    certifications: ['Qualification Qualibat ramonage (5141)', 'Certification du Groupement des Ramoneurs'],
+    certifications: ['Qualibat (qualification 5141 ramonage et entretien de conduits)', 'Titre Professionnel Ramoneur-fumiste (inscrit au RNCP)', 'Compagnons du Devoir (formation d\'excellence)'],
     averageResponseTime: 'Intervention sous 1 semaine en basse saison, 2 à 3 semaines en automne',
   },
 
@@ -1657,7 +1671,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Quelles plantes choisir pour un jardin facile d\'entretien ?', a: 'Privilégiez les plantes vivaces adaptées à votre zone climatique : lavande, romarin et olivier en climat méditerranéen ; hortensias, érables et graminées en climat océanique. Les couvre-sols (pervenche, lierre, thym rampant) limitent le désherbage. Un paillis minéral ou organique réduit l\'arrosage de 50 % et freine la pousse des mauvaises herbes.' },
       { q: 'Comment estimer le budget d\'entretien annuel d\'un jardin ?', a: 'Pour un jardin de 200 m², comptez 1 000 à 3 000 \u20AC/an en entretien professionnel (tonte bimensuelle, taille des haies 2 fois/an, traitement phytosanitaire, nettoyage). Un contrat annuel d\'entretien avec un paysagiste est 20 à 30 % moins cher que des interventions ponctuelles. Le crédit d\'impôt « services à la personne » (50 %) s\'applique pour l\'entretien de jardin chez les particuliers.' },
     ],
-    certifications: ['Diplôme ENSP ou DPLG Paysage', 'Qualipaysage (certification professionnelle)', 'Label Écojardin'],
+    certifications: ['Diplôme ENSP ou DEP Paysage (titre de paysagiste concepteur)', 'Qualipaysage (certification professionnelle — reconnue par l\'État)', 'Label Écojardin (gestion écologique des espaces verts)', 'Certiphyto (obligatoire si utilisation de produits phytosanitaires)'],
     averageResponseTime: 'Étude sous 2 semaines, réalisation 2 à 8 semaines',
   },
 
@@ -1744,7 +1758,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Faut-il une autorisation pour installer une parabole ?', a: 'En maison individuelle, aucune autorisation n\'est requise sauf en zone protégée (ABF). En copropriété, le règlement peut interdire les paraboles en façade, mais la loi du 2 juillet 1966 garantit le « droit à l\'antenne » : le syndic ne peut pas refuser si aucune antenne collective ne fournit un service équivalent. La parabole doit être discrète et ne pas nuire à l\'esthétique du bâtiment.' },
       { q: 'Mon antenne TNT est-elle compatible avec la nouvelle norme DVB-T2 ?', a: 'L\'antenne elle-même (râteau UHF) est généralement compatible : c\'est le décodeur TNT ou le téléviseur qui doit supporter le DVB-T2/HEVC. Les téléviseurs vendus depuis 2020 intègrent généralement cette norme. Si votre téléviseur est plus ancien, un décodeur TNT HD compatible DVB-T2 coûte 30 à 60 \u20AC. Vérifiez sur le site recevoirlatnt.fr.' },
     ],
-    certifications: ['Certification AICVF (antennes et télécommunications)', 'Habilitation électrique', 'Formation fibre optique FTTH'],
+    certifications: ['Titre Professionnel Installateur Antenniste (inscrit au RNCP)', 'Habilitation électrique (obligatoire)', 'Habilitation travail en hauteur (obligatoire pour interventions sur toiture)', 'Formation fibre optique FTTH (raccordement et câblage)'],
     averageResponseTime: 'Intervention sous 48h à 1 semaine',
   },
 
@@ -1773,7 +1787,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Quel est le coût de maintenance d\'un ascenseur en copropriété ?', a: 'Le contrat de maintenance annuel coûte 1 500 à 4 000 \u20AC selon le type d\'ascenseur et le niveau de prestation (normal ou complet). La loi impose un entretien mensuel, un contrôle semestriel de sécurité et un contrôle technique quinquennal par un organisme indépendant (1 000 à 2 000 \u20AC). Le budget total annuel pour un ascenseur est de 2 500 à 6 000 \u20AC.' },
       { q: 'Quelles sont les normes de sécurité pour un ascenseur ?', a: 'Les ascenseurs doivent respecter la directive européenne 2014/33/UE et la norme NF EN 81-20. Les travaux de modernisation obligatoires (loi SAE de 2003) incluent : porte palière verrouillée, dispositif anti-vandalisme, système de télécommunication en cabine, précision d\'arrêt et d\'horizontalité, et dispositif de protection contre la vitesse excessive.' },
     ],
-    certifications: ['Certification AFNOR NF Ascenseurs', 'Habilitation électrique', 'Certification Otis/Schindler/Kone (constructeurs)'],
+    certifications: ['Conformité NF EN 81-20/50 (norme européenne de sécurité des ascenseurs)', 'Habilitation électrique HBT (obligatoire)', 'Certification constructeur agréé (Otis, Schindler, Kone, ThyssenKrupp)', 'Contrôle technique quinquennal obligatoire (organisme agréé)'],
     averageResponseTime: 'Diagnostic sous 1 semaine, installation 4 à 12 semaines',
   },
 
@@ -1802,7 +1816,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Peut-on contester un diagnostic immobilier ?', a: 'Oui, si vous estimez qu\'un diagnostic est erroné, vous pouvez faire appel à un autre diagnostiqueur pour un contre-diagnostic. En cas de préjudice avéré (DPE surévalué ayant conduit à un achat plus cher), une action en justice contre le diagnostiqueur est possible via son assurance RC professionnelle. Le vendeur peut aussi être mis en cause pour vice caché.' },
       { q: 'Faut-il être présent lors des diagnostics ?', a: 'Ce n\'est pas obligatoire mais fortement recommandé, surtout pour le DPE. Votre présence permet de fournir des informations utiles au diagnostiqueur (factures d\'énergie, travaux récents d\'isolation, type de chauffage) qui amélioreront la précision du diagnostic. Le diagnostiqueur doit avoir accès à toutes les pièces, y compris les combles, la cave et le garage.' },
     ],
-    certifications: ['Certification COFRAC (obligatoire)', 'Certification par organisme accrédité (Bureau Veritas, Dekra, etc.)', 'Assurance RC professionnelle obligatoire'],
+    certifications: ['Certification par organisme accrédité COFRAC (obligatoire — Bureau Veritas, Dekra, Qualixpert, I.Cert, etc.)', 'Certifications par domaine : DPE, amiante, plomb, électricité, gaz, termites (chacune est spécifique)', 'Assurance RC professionnelle (obligatoire)', 'Formation continue obligatoire (recyclage tous les 7 ans)'],
     averageResponseTime: 'Intervention sous 48h à 1 semaine',
   },
 
@@ -1861,7 +1875,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Les produits anti-cafards du commerce sont-ils efficaces ?', a: 'Les gels et pièges vendus en grande surface peuvent traiter une infestation légère (quelques individus). Pour une infestation établie (plusieurs dizaines d\'individus, présence en journée), seul un traitement professionnel avec des biocides à usage restreint (non accessibles au public) garantit une éradication complète. Le coût professionnel (80 à 250 \u20AC) est vite amorti face à une infestation qui s\'aggrave.' },
       { q: 'Le propriétaire ou le locataire doit-il payer la désinsectisation ?', a: 'En cas de punaises de lit, la loi Elan (2018) impose au propriétaire de prendre en charge le traitement, sauf si le locataire est à l\'origine de l\'infestation (ce qui est difficile à prouver). Pour les cafards, le propriétaire doit livrer un logement décent exempt de nuisibles. L\'entretien courant (prévention) reste à la charge du locataire. En copropriété, le syndic peut faire traiter les parties communes.' },
     ],
-    certifications: ['Certibiocide (obligatoire pour l\'utilisation de biocides)', 'Certification CS3D (Chambre Syndicale 3D)', 'Assurance RC professionnelle'],
+    certifications: ['Certibiocide nuisibles TP14/TP18 (obligatoire — valable 5 ans)', 'Certification CS3D (Chambre Syndicale 3D — Dératisation, Désinsectisation, Désinfection)', 'Assurance RC professionnelle (obligatoire)', 'Déclaration d\'activité biocides auprès de l\'ANSES'],
     averageResponseTime: 'Intervention sous 24 à 48h',
   },
 
@@ -1890,7 +1904,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Les pièges à rats du commerce sont-ils efficaces ?', a: 'Les pièges mécaniques (tapettes) et les pièges à colle peuvent attraper quelques individus isolés, mais sont inefficaces contre une colonie établie. Les rats sont des animaux intelligents qui apprennent rapidement à éviter les pièges. De plus, l\'utilisation de raticides par un non-professionnel peut être dangereuse pour les enfants, les animaux domestiques et la faune sauvage.' },
       { q: 'Le propriétaire ou le locataire doit-il payer la dératisation ?', a: 'La dératisation relève de l\'obligation du propriétaire de fournir un logement décent (loi du 6 juillet 1989). Si l\'infestation préexistait à l\'entrée dans les lieux, le propriétaire paie intégralement. Si elle apparaît en cours de bail à cause d\'un défaut d\'entretien du locataire (poubelles ouvertes, nourriture stockée au sol), le locataire peut être mis à contribution. En copropriété, le syndic traite les parties communes.' },
     ],
-    certifications: ['Certibiocide (obligatoire)', 'Certification CS3D (Chambre Syndicale 3D)', 'Assurance RC professionnelle'],
+    certifications: ['Certibiocide nuisibles TP14/TP18 (obligatoire — valable 5 ans)', 'Certification CS3D (Chambre Syndicale 3D — Dératisation, Désinsectisation, Désinfection)', 'Assurance RC professionnelle (obligatoire)', 'Déclaration d\'activité biocides auprès de l\'ANSES'],
     averageResponseTime: 'Intervention sous 24 à 48h',
   },
 

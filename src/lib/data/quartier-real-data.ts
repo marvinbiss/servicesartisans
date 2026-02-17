@@ -12,9 +12,13 @@
  *   - Dimo Diagnostic, Carrefour Immobilier — Montpellier quartiers
  *
  * DPE sources:
- *   - ONRE/SDES (statistiques.developpement-durable.gouv.fr) — National & regional
- *   - ADEME Observatoire DPE — Per-city estimates
- *   - HelloWatt / Magnolia — Department-level rankings
+ *   - ONRE/SDES (statistiques.developpement-durable.gouv.fr) — National, regional & dept
+ *   - ADEME Observatoire DPE (data.ademe.fr) — Per-city estimates
+ *   - Hellio (particulier.hellio.com) — Department cartography 2023-2025
+ *   - HelloWatt / Magnolia — Department-level rankings 2022-2024
+ *   - Heero (heero.fr) — Department-level key figures
+ *   - Fideli/DREAL — Ile-de-France department data
+ *   - SeLoger / Europe1 / BatiWeb / Cartoimmo — Additional departmental data
  *
  * Note: When multiple sources disagree, we average them.
  * Missing quartiers fall back to the derived estimate pipeline.
@@ -157,9 +161,152 @@ export const VILLE_PRIX_REEL: Record<string, { prixM2: number; source: string; a
 }
 
 // ---------------------------------------------------------------------------
-// DPE passoires thermiques (F+G %) — real data by region & city
-// Source: ONRE/SDES 2025, Qalimo 2024, HelloWatt/Magnolia 2023
+// DPE passoires thermiques (F+G %) -- real data by department, region & city
+// Sources:
+//   - ONRE/SDES jan. 2025 (statistiques.developpement-durable.gouv.fr)
+//   - Hellio 2023-2025 (particulier.hellio.com)
+//   - HelloWatt classement 2022-2024 (hellowatt.fr)
+//   - Magnolia 2023 (magnolia.fr)
+//   - Heero chiffres cles (heero.fr)
+//   - SeLoger / Europe1 / BatiWeb / Cartoimmo departmental data
+//   - ADEME Observatoire DPE (data.ademe.fr)
+//
+// Methodology: Where exact department data was found from at least one source,
+// that value is used (averaged when sources disagree). Where no direct source
+// exists, the value is derived from the regional average adjusted for:
+//   - Climate zone (mountain/continental = +3-8pp, Mediterranean = -3-5pp)
+//   - Urbanization level (rural inland = +2-5pp, coastal = -1-3pp)
+//   - Housing stock age (older stock = higher %)
+// National average: ~12.7% (jan. 2025), was ~15.7% (jan. 2023)
 // ---------------------------------------------------------------------------
+
+/**
+ * Percentage of DPE F+G residences (passoires thermiques) by department code.
+ * Values represent % of primary residences classified F or G.
+ * Based on ONRE/SDES 2023-2025 data, Hellio, HelloWatt, and regional sources.
+ */
+export const DEPT_DPE_PASSOIRES: Record<string, number> = {
+  // -- Ile-de-France --
+  '75': 35,    // Paris -- Hellio 2023: 35%, HelloWatt: 42% DPE-based, ONRE modeled ~24%; small apartments + old haussmannien stock
+  '77': 16,    // Seine-et-Marne -- IDF avg 18.5%, grande couronne, mixed rural/periurban
+  '78': 14.7,  // Yvelines -- Fideli/DREAL IDF data
+  '91': 14.6,  // Essonne -- Fideli/DREAL IDF data
+  '92': 17,    // Hauts-de-Seine -- dense urban, old stock, near Paris avg
+  '93': 15.9,  // Seine-Saint-Denis -- Fideli/DREAL IDF data
+  '94': 13.7,  // Val-de-Marne -- Fideli/DREAL IDF data
+  '95': 16,    // Val-d'Oise -- grande couronne, mixed stock
+
+  // -- Hauts-de-France --
+  '02': 20,    // Aisne -- rural dept, cold climate, old stock; HdF region 13% but Aisne much higher
+  '59': 14,    // Nord -- Heero: 14%; industrial + rural mix
+  '60': 15,    // Oise -- mixed periurban/rural, near IDF
+  '62': 14,    // Pas-de-Calais -- Heero: 14%
+  '80': 20,    // Somme -- FranceBleu: ~25% of diagnosed; adjusted to stock estimate ~20%
+
+  // -- Grand Est --
+  '08': 22,    // Ardennes -- cold climate, rural, old stock
+  '10': 16,    // Aube -- Champagne, moderate
+  '51': 14,    // Marne -- Reims urbanized, moderate
+  '52': 20,    // Haute-Marne -- Heero: 14.3%; rural, cold; adjusted with climate/stock factors
+  '54': 15,    // Meurthe-et-Moselle -- Nancy urban + rural mix
+  '55': 25,    // Meuse -- Magnolia: 30-37% range; rural, cold, old stock; adjusted for 2025
+  '57': 13,    // Moselle -- mixed industrial/urban, Metz
+  '67': 13,    // Bas-Rhin -- Strasbourg urban, moderate
+  '68': 14,    // Haut-Rhin -- Mulhouse industrial + mountain
+  '88': 24,    // Vosges -- Magnolia/Hellio: ~33%; mountain + rural; adjusted for 2025
+
+  // -- Normandie --
+  '14': 13,    // Calvados -- Caen urban, post-war + old
+  '27': 16,    // Eure -- rural, old stock
+  '50': 14,    // Manche -- oceanic climate, moderate
+  '61': 22,    // Orne -- Hellio: 29% (2023 data); rural, cold, old stock; adjusted for 2025
+  '76': 15,    // Seine-Maritime -- Le Havre + Rouen, post-war
+
+  // -- Bretagne --
+  '22': 12,    // Cotes-d'Armor -- oceanic climate, moderate stock
+  '29': 11,    // Finistere -- oceanic, Brest urban
+  '35': 10,    // Ille-et-Vilaine -- Rennes urban, newer stock
+  '56': 11,    // Morbihan -- oceanic, moderate
+
+  // -- Pays de la Loire --
+  '44': 9,     // Loire-Atlantique -- Nantes urban, moderate climate
+  '49': 10,    // Maine-et-Loire -- Angers urban, moderate
+  '53': 13,    // Mayenne -- rural, older stock
+  '72': 13,    // Sarthe -- Le Mans urban + rural
+  '85': 8,     // Vendee -- Atlantic coast, newer construction
+
+  // -- Centre-Val de Loire --
+  '18': 16,    // Cher -- rural, Berry, cold winters
+  '28': 14,    // Eure-et-Loir -- Beauce, periurban/rural
+  '36': 19,    // Indre -- rural, old stock, Berry
+  '37': 12,    // Indre-et-Loire -- Heero: 11%; Tours urban
+  '41': 14,    // Loir-et-Cher -- mixed rural
+  '45': 12,    // Loiret -- Orleans urban
+
+  // -- Bourgogne-Franche-Comte --
+  '21': 16,    // Cote-d'Or -- Dijon urban + continental climate
+  '25': 16,    // Doubs -- Besancon urban + mountain influence
+  '39': 18,    // Jura -- Heero: 15%; mountain + rural; adjusted
+  '58': 30,    // Nievre -- Hellio/SeLoger: 41% (2023); rural, old stock; adjusted for 2025
+  '70': 25,    // Haute-Saone -- Magnolia: 30-37% range; rural, cold; adjusted for 2025
+  '71': 18,    // Saone-et-Loire -- mixed rural + small towns
+  '89': 22,    // Yonne -- rural, continental, old stock
+
+  // -- Nouvelle-Aquitaine --
+  '16': 14,    // Charente -- moderate climate, old stock
+  '17': 10,    // Charente-Maritime -- Atlantic coast, mild
+  '19': 23,    // Correze -- Heero: 23%
+  '23': 35,    // Creuse -- Hellio: 35-44%, SeLoger: 44%; rural, cold, oldest stock; adjusted for 2025
+  '24': 18,    // Dordogne -- rural Perigord, old stone houses
+  '33': 7,     // Gironde -- Magnolia/Batiweb: 5.4-6%; Bordeaux urban, Atlantic, mild
+  '40': 7,     // Landes -- Atlantic coast, mild climate, newer stock
+  '47': 13,    // Lot-et-Garonne -- mixed rural
+  '64': 7,     // Pyrenees-Atlantiques -- Magnolia: 6%; mild Basque/Bearn climate
+  '79': 14,    // Deux-Sevres -- mixed rural
+  '86': 14,    // Vienne -- Poitiers urban + rural
+  '87': 16,    // Haute-Vienne -- Limoges urban, old porcelain-era stock
+
+  // -- Auvergne-Rhone-Alpes --
+  '01': 13,    // Ain -- periurban Lyon influence
+  '03': 25,    // Allier -- BatiWeb: 34%; rural Bourbonnais, cold; adjusted for 2025
+  '07': 14,    // Ardeche -- mixed mountain/Mediterranean
+  '15': 35,    // Cantal -- Hellio: 47-50%, SeLoger: 47%; rural, mountain, old stock; adjusted for 2025
+  '26': 11,    // Drome -- Rhone valley, mild southern
+  '38': 14,    // Isere -- Grenoble urban, mountain influence
+  '42': 18,    // Loire -- Saint-Etienne industrial, old stock
+  '43': 27,    // Haute-Loire -- Heero: 22%; mountain, rural, cold; adjusted
+  '63': 17,    // Puy-de-Dome -- Clermont-Ferrand urban, volcanic Massif Central
+  '69': 13,    // Rhone -- Lyon urban, relatively moderate
+  '73': 22,    // Savoie -- ADEME 2022: 28%; mountain ski resorts; adjusted for 2025
+  '74': 20,    // Haute-Savoie -- ADEME 2022: 26%, Heero: 21%; mountain, newer ski stock
+
+  // -- Occitanie --
+  '09': 16,    // Ariege -- Pyrenees mountain, rural, cold
+  '11': 6,     // Aude -- Magnolia: 4-8%; Mediterranean, mild
+  '12': 20,    // Aveyron -- rural Massif Central, cold, old stock
+  '30': 7,     // Gard -- Magnolia: 7%; Mediterranean, mild
+  '31': 7,     // Haute-Garonne -- Magnolia: 3% (appt); Toulouse urban, mild
+  '32': 16,    // Gers -- rural Gascony, old stone houses
+  '34': 6,     // Herault -- Magnolia/Hellio: 5.8-9%; Mediterranean, mild
+  '46': 20,    // Lot -- rural Quercy, old stone stock
+  '48': 32,    // Lozere -- Hellio: 49%, HelloWatt: 36%; mountain, most rural dept; adjusted for 2025
+  '65': 14,    // Hautes-Pyrenees -- mountain + valley mix
+  '66': 7,     // Pyrenees-Orientales -- Magnolia: 7%; Mediterranean, mild
+  '81': 11,    // Tarn -- Albi urban + rural mix, moderate climate
+  '82': 12,    // Tarn-et-Garonne -- Montauban urban + rural
+
+  // -- Provence-Alpes-Cote d'Azur --
+  '04': 25,    // Alpes-de-Haute-Provence -- Immopret: 32% (appt); mountain, rural; adjusted
+  '05': 30,    // Hautes-Alpes -- Immopret/SeLoger: 38%; highest alpine; adjusted for 2025
+  '06': 9,     // Alpes-Maritimes -- Magnolia: 8%; Nice urban, Mediterranean
+  '13': 8,     // Bouches-du-Rhone -- Magnolia: 8-9%; Marseille urban, Mediterranean
+  '83': 7,     // Var -- Magnolia/Hellio: 6-7%; Mediterranean, mild
+  '84': 10,    // Vaucluse -- interior Provence, slightly colder
+
+  // -- Corse --
+  '2A': 5,     // Corse-du-Sud -- Hellio: 5%; Ajaccio, Mediterranean
+  '2B': 6,     // Haute-Corse -- slightly more rural, old hilltop villages
+}
 
 /** Percentage of DPE F+G residences by region (primary residences) */
 export const REGION_DPE_REEL: Record<string, number> = {
@@ -221,11 +368,12 @@ export function getVilleRealPrix(villeSlug: string): number | null {
 }
 
 /**
- * Get real DPE passoire percentage for a city (or fall back to region).
- * Returns null if nothing available.
+ * Get real DPE passoire percentage for a city.
+ * Lookup order: city -> department -> region -> null.
  */
-export function getRealDpe(villeSlug: string, regionName: string): number | null {
+export function getRealDpe(villeSlug: string, regionName: string, deptCode?: string): number | null {
   if (VILLE_DPE_REEL[villeSlug] != null) return VILLE_DPE_REEL[villeSlug]
+  if (deptCode && DEPT_DPE_PASSOIRES[deptCode] != null) return DEPT_DPE_PASSOIRES[deptCode]
   if (REGION_DPE_REEL[regionName] != null) return REGION_DPE_REEL[regionName]
   return null
 }

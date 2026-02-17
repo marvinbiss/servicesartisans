@@ -12,6 +12,7 @@ import { generateDataDrivenContent, type DataDrivenContent } from '@/lib/seo/dat
 import type { CommuneData } from '@/lib/data/commune-data'
 import { formatNumber, formatEuro, monthName } from '@/lib/data/commune-data'
 import { getQuartierRealPrix, getVilleRealPrix, getRealDpe } from '@/lib/data/quartier-real-data'
+import { getDeptArtisanCounts } from '@/lib/data/dept-artisan-counts'
 
 // ---------------------------------------------------------------------------
 // Regional pricing multipliers
@@ -230,6 +231,210 @@ const SEASONAL_TIPS: Record<string, SeasonalTips> = {
     default:
       "Pour un résultat professionnel, demandez toujours un devis après visite sur site. Le prix au m² varie selon l'état des lieux et le type de nettoyage requis.",
   },
+  terrassier: {
+    coastal:
+      "En zone littorale, les sols sablonneux et la proximité de la nappe phréatique imposent une étude géotechnique préalable. Le terrassier doit adapter le compactage et prévoir un drainage renforcé pour éviter les remontées d'eau.",
+    mountain:
+      "En montagne, la profondeur hors gel des fondations peut dépasser 1 mètre selon l'altitude. Privilégiez les travaux de terrassement en été, lorsque le sol est dégelé et sec, pour éviter les effondrements liés au dégel.",
+    urban:
+      "En milieu urbain dense, le terrassement nécessite une attention particulière aux réseaux enterrés (gaz, eau, électricité, fibre). Une déclaration de travaux (DT/DICT) est obligatoire avant tout coup de pelle mécanique.",
+    rural:
+      "En zone rurale, les terrains non viabilisés peuvent présenter des surprises : roche affleurante, argiles gonflantes ou anciennes cavités. Une étude de sol G2 est recommandée avant tout projet de construction.",
+    default:
+      "Planifiez vos travaux de terrassement en période sèche (printemps ou début d'automne) : un sol détrempé par la pluie est instable, plus lourd à évacuer et sujet aux effondrements de talus.",
+  },
+  charpentier: {
+    coastal:
+      "En bord de mer, l'humidité saline accélère la dégradation du bois de charpente. Privilégiez des essences naturellement résistantes (chêne, châtaignier) ou un traitement autoclave classe 4 pour les pièces exposées.",
+    mountain:
+      "En montagne, la charpente doit être dimensionnée pour supporter les charges de neige selon la norme NF EN 1991-1-3 (jusqu'à 400 kg/m² en haute altitude). Un contrôle après chaque hiver rigoureux est conseillé.",
+    urban:
+      "En centre-ville, la rénovation d'une charpente ancienne nécessite souvent un diagnostic préalable (insectes xylophages, champignons). En secteur protégé, l'architecte des Bâtiments de France peut imposer des matériaux spécifiques.",
+    rural:
+      "Pour les granges et corps de ferme, un charpentier spécialisé en patrimoine rural saura restaurer les fermes traditionnelles tout en renforçant la structure pour un aménagement de combles ou un changement d'usage.",
+    default:
+      "L'été est la saison idéale pour les travaux de charpente : le bois sec absorbe mieux les traitements préventifs, et les conditions météo permettent de travailler à découvert sans risque d'infiltration.",
+  },
+  zingueur: {
+    coastal:
+      "En zone littorale, le zinc est soumis à la corrosion saline accélérée. Optez pour du zinc prépatiné ou du zinc-titane à haute résistance, et faites contrôler les soudures et joints tous les 2 ans.",
+    mountain:
+      "En montagne, les fortes chutes de neige et le gel peuvent endommager les gouttières et chéneaux en zinc. Un zingueur doit vérifier les fixations et l'étanchéité des raccords après chaque hiver.",
+    urban:
+      "En centre-ville, les toitures en zinc à joints debout sont caractéristiques du patrimoine haussmannien. Faites appel à un zingueur qualifié pour les réparations afin de préserver l'aspect d'origine et la conformité urbanistique.",
+    rural:
+      "Pour les bâtiments agricoles et les grandes toitures, le zinc offre un excellent rapport durabilité-prix avec une durée de vie de 80 à 100 ans. Un entretien régulier des évacuations d'eau pluviale prolonge cette longévité.",
+    default:
+      "Faites nettoyer et inspecter vos gouttières, chéneaux et descentes en zinc au printemps et à l'automne pour éviter les obstructions par les feuilles mortes et garantir un bon écoulement des eaux pluviales.",
+  },
+  etancheiste: {
+    coastal:
+      "En bord de mer, les toitures-terrasses sont exposées aux embruns et aux vents violents. L'étanchéiste doit utiliser des membranes renforcées (EPDM ou bitume élastomère SBS) avec un collage intégral pour résister aux arrachements.",
+    mountain:
+      "En altitude, les cycles gel-dégel répétés mettent à rude épreuve l'étanchéité des toitures plates. Une membrane élastique capable de supporter des températures jusqu'à -30 °C est indispensable.",
+    urban:
+      "En immeuble, l'étanchéité des toitures-terrasses doit être contrôlée tous les 5 ans et rénovée tous les 15 à 20 ans. En copropriété, ce poste représente un investissement majeur à anticiper dans le plan pluriannuel de travaux.",
+    rural:
+      "Pour les dépendances et extensions à toit plat en zone rurale, une étanchéité liquide (résine polyuréthane) offre une mise en œuvre rapide et une excellente adaptation aux formes irrégulières des bâtis anciens.",
+    default:
+      "Planifiez les travaux d'étanchéité au printemps ou en début d'automne, par temps sec et hors gel (température supérieure à 5 °C), pour garantir une adhérence optimale des membranes et résines.",
+  },
+  facadier: {
+    coastal:
+      "En zone littorale, les façades subissent une usure accélérée due aux embruns salins et à l'humidité. Un ravalement avec un enduit hydrofuge et une peinture spéciale façade marine est recommandé tous les 8 à 10 ans.",
+    mountain:
+      "En montagne, les écarts de température importants (jusqu'à 40 °C d'amplitude annuelle) imposent l'utilisation d'enduits souples et de peintures élastiques capables de résister aux cycles gel-dégel sans fissurer.",
+    urban:
+      "En centre-ville, le ravalement de façade est souvent obligatoire tous les 10 ans (arrêté municipal). Renseignez-vous en mairie sur les couleurs autorisées et les aides financières disponibles (ANAH, MaPrimeRénov').",
+    rural:
+      "Pour les maisons en pierre de pays, le facadier doit maîtriser les enduits à la chaux qui laissent respirer les murs anciens. Les enduits ciment sont à proscrire car ils emprisonnent l'humidité et dégradent la pierre.",
+    default:
+      "La période idéale pour un ravalement de façade se situe entre avril et octobre, lorsque les températures sont comprises entre 5 et 30 °C et que l'humidité relative reste inférieure à 80 %.",
+  },
+  platrier: {
+    coastal:
+      "En zone littorale, l'humidité ambiante élevée ralentit le séchage du plâtre. Privilégiez les plaques de plâtre hydrofuges (type H1) pour les pièces exposées, et prévoyez une ventilation renforcée pendant le séchage.",
+    mountain:
+      "En montagne, les variations importantes de température et d'hygrométrie entre les saisons imposent l'utilisation de bandes de désolidarisation aux jonctions murs-plafond pour absorber les mouvements du bâti.",
+    urban:
+      "En appartement ancien, le plâtrier intervient souvent pour la rénovation des moulures, corniches et rosaces au plafond. Un artisan spécialisé en plâtrerie traditionnelle saura restaurer ces éléments patrimoniaux.",
+    rural:
+      "Pour les maisons anciennes en pierre, le plâtre traditionnel projeté offre une meilleure régulation hygrométrique que les plaques de plâtre. Il laisse respirer les murs tout en offrant une finition lisse et durable.",
+    default:
+      "Les travaux de plâtrerie nécessitent une température ambiante comprise entre 5 et 30 °C pour un séchage optimal. Comptez une semaine par centimètre d'épaisseur avant d'appliquer la peinture de finition.",
+  },
+  metallier: {
+    coastal:
+      "En bord de mer, les ouvrages métalliques (garde-corps, portails, verrières) doivent recevoir un traitement anticorrosion renforcé : galvanisation à chaud suivie d'un thermolaquage pour résister à l'air salin (classe de corrosivité C4-C5).",
+    mountain:
+      "En montagne, les structures métalliques extérieures (balcons, escaliers, auvents) doivent être dimensionnées pour supporter les charges de neige et les contraintes thermiques liées aux écarts de température importants.",
+    urban:
+      "En milieu urbain, le métallier conçoit des ouvrages sur mesure adaptés aux contraintes d'espace : verrières d'atelier, mezzanines, escaliers hélicoïdaux et garde-corps design qui optimisent les volumes intérieurs.",
+    rural:
+      "Pour les propriétés rurales, le métallier fabrique des portails, clôtures et structures agricoles (hangars, abris) robustes et fonctionnels. L'acier galvanisé offre un excellent rapport résistance-prix pour ces grands ouvrages.",
+    default:
+      "Un entretien annuel des ouvrages métalliques extérieurs est indispensable : inspection des soudures, reprise des points de rouille et application d'une peinture antirouille prolongent la durée de vie de vos installations.",
+  },
+  ferronnier: {
+    coastal:
+      "En bord de mer, le fer forgé est particulièrement vulnérable à la corrosion saline. Exigez un système duplex (galvanisation + thermolaquage) pour vos garde-corps, portails et grilles, et prévoyez un entretien trimestriel.",
+    mountain:
+      "En montagne, les ouvrages en fer forgé extérieurs (rambardes, balconnets) subissent les cycles gel-dégel qui accélèrent l'oxydation. Un traitement antirouille et une peinture spéciale montagne sont recommandés chaque printemps.",
+    urban:
+      "En centre-ville historique, le ferronnier d'art restaure les éléments de patrimoine (grilles, impostes, marquises) dans le respect du style d'origine. En secteur ABF, la conformité des ouvrages aux prescriptions architecturales est obligatoire.",
+    rural:
+      "Pour les demeures de caractère, le ferronnier crée des pièces uniques (portails, rampes d'escalier, girouettes) qui valorisent le patrimoine rural. Le fer forgé artisanal apporte un cachet authentique aux maisons de campagne.",
+    default:
+      "Entretenez vos ouvrages en fer forgé au moins deux fois par an : un nettoyage à l'eau savonneuse suivi d'une application de cire ou de vernis antirouille protège durablement le métal contre l'oxydation.",
+  },
+  'poseur-de-parquet': {
+    coastal:
+      "En zone littorale, l'humidité ambiante élevée rend le parquet massif vulnérable aux déformations. Privilégiez un parquet contrecollé ou un parquet en bois exotique (teck, ipé) naturellement résistant à l'humidité.",
+    mountain:
+      "En montagne, le parquet en chêne massif ou en châtaignier apporte chaleur et authenticité aux chalets. Associé à un plancher chauffant, le parquet contrecollé (épaisseur ≤ 15 mm) offre le meilleur compromis thermique.",
+    urban:
+      "En appartement, l'isolation phonique sous parquet est essentielle pour le confort des voisins. Exigez une sous-couche acoustique conforme à la réglementation (affaiblissement ΔLw ≥ 17 dB) avant toute pose.",
+    rural:
+      "Pour les maisons anciennes aux planchers irréguliers, un ragréage soigné est indispensable avant la pose. Un poseur expérimenté saura adapter la technique (pose collée, flottante ou clouée) à l'état du support.",
+    default:
+      "Le printemps et l'automne offrent les meilleures conditions pour la pose de parquet : une température de 18 à 20 °C et une hygrométrie entre 40 et 60 % garantissent la stabilité dimensionnelle du bois.",
+  },
+  miroitier: {
+    coastal:
+      "En bord de mer, les vitrages et miroirs extérieurs sont exposés aux projections salines. Le miroitier doit utiliser des vitrages traités anticorrosion avec des intercalaires warm-edge pour éviter la dégradation des joints.",
+    mountain:
+      "En altitude, le triple vitrage est recommandé pour les grandes surfaces vitrées exposées au froid. Le miroitier peut concevoir des vitrages à isolation thermique renforcée (Ug ≤ 0,6 W/m²K) pour limiter les déperditions.",
+    urban:
+      "En milieu urbain, le miroitier installe des cloisons vitrées, des crédences en verre et des miroirs sur mesure qui agrandissent visuellement les espaces réduits des appartements en centre-ville.",
+    rural:
+      "Pour les maisons isolées, le miroitier peut poser des vitrages retardateurs d'effraction (classés P2A à P5A) qui renforcent la sécurité sans nuire à l'esthétique ni nécessiter de barreaux ou volets blindés.",
+    default:
+      "Lors du remplacement d'un vitrage, demandez au miroitier un devis comparatif entre double et triple vitrage. L'écart de prix de 40 à 60 % peut être rentabilisé en 5 à 8 ans grâce aux économies d'énergie.",
+  },
+  storiste: {
+    coastal:
+      "En zone littorale, les stores bannes et volets roulants sont exposés aux vents forts et à l'air salin. Optez pour des toiles traitées anti-UV et anti-moisissures, et des mécanismes en aluminium laqué résistant à la corrosion.",
+    mountain:
+      "En montagne, les volets roulants isolants (mousse polyuréthane injectée) réduisent significativement les déperditions thermiques en hiver. Un storiste local saura adapter les dimensions aux contraintes des ouvertures de chalet.",
+    urban:
+      "En copropriété, l'installation de stores extérieurs ou de volets roulants peut nécessiter l'accord de l'assemblée générale si l'aspect de la façade est modifié. Vérifiez le règlement de copropriété avant les travaux.",
+    rural:
+      "Pour les grandes maisons avec de nombreuses ouvertures, un système de volets roulants motorisés avec centralisation domotique permet de gérer l'ensemble des ouvrants depuis une seule commande ou un smartphone.",
+    default:
+      "Faites installer vos stores bannes au printemps, avant les premières chaleurs estivales. Un entretien annuel (nettoyage de la toile, lubrification du mécanisme, vérification du moteur) prolonge leur durée de vie de 5 à 10 ans.",
+  },
+  'salle-de-bain': {
+    coastal:
+      "En zone littorale, l'humidité ambiante élevée exige une ventilation renforcée dans la salle de bain (VMC hygroréglable type B minimum) et des matériaux résistants : carrelage grès cérame, meubles en stratifié hydrofuge.",
+    mountain:
+      "En montagne, la salle de bain doit compenser le froid extérieur : plancher chauffant électrique, sèche-serviettes performant et isolation thermique renforcée des murs donnant sur l'extérieur garantissent le confort.",
+    urban:
+      "En appartement, la rénovation d'une salle de bain implique souvent des contraintes d'accès et de mitoyenneté. Planifiez les travaux en automne ou en hiver, quand les artisans sont plus disponibles et les délais plus courts.",
+    rural:
+      "Pour les maisons non raccordées au tout-à-l'égout, la salle de bain doit être conçue pour limiter la charge sur l'assainissement individuel : robinetterie économe en eau, douche plutôt que baignoire, chasse d'eau double débit.",
+    default:
+      "Les vacances d'été sont souvent privilégiées pour rénover la salle de bain (4 semaines de travaux en moyenne), mais la période septembre-février offre de meilleurs délais et parfois des tarifs plus avantageux.",
+  },
+  'architecte-interieur': {
+    coastal:
+      "En bord de mer, l'architecte d'intérieur privilégie des matériaux résistants à l'humidité saline : sols en grès cérame, menuiseries en aluminium thermolaqué et textiles techniques anti-moisissures pour un intérieur durable.",
+    mountain:
+      "En montagne, l'architecte d'intérieur conçoit des espaces chaleureux adaptés au climat : bois massif, pierre naturelle, isolation renforcée et optimisation de la lumière naturelle dans des pièces souvent plus sombres en hiver.",
+    urban:
+      "En appartement citadin, l'architecte d'intérieur optimise chaque mètre carré : cloisons amovibles, rangements sur mesure, mezzanines et jeux de lumière agrandissent visuellement les espaces les plus contraints.",
+    rural:
+      "Pour les maisons de campagne et les corps de ferme réhabilités, l'architecte d'intérieur valorise les éléments de caractère (poutres apparentes, pierres, tomettes) tout en intégrant un confort moderne et fonctionnel.",
+    default:
+      "Consultez un architecte d'intérieur en amont de vos travaux de rénovation : sa vision globale du projet permet d'optimiser le budget, d'anticiper les contraintes techniques et de coordonner efficacement les différents corps de métier.",
+  },
+  decorateur: {
+    coastal:
+      "En bord de mer, le décorateur sélectionne des textiles résistants à l'humidité et aux UV (lin lavé, coton traité) et des couleurs qui ne ternissent pas avec le sel marin. Les matières naturelles (rotin, jute) apportent une ambiance littorale authentique.",
+    mountain:
+      "En montagne, le décorateur crée des ambiances cocooning avec des matières chaudes (laine, fourrure, bois brut) et des teintes profondes. Le mobilier et les textiles doivent aussi répondre aux contraintes d'entretien liées aux activités outdoor.",
+    urban:
+      "En petit espace urbain, le décorateur joue sur les couleurs claires, les miroirs et l'éclairage stratégique pour agrandir visuellement les pièces. Un choix cohérent de mobilier multifonctionnel optimise le confort au quotidien.",
+    rural:
+      "Pour les maisons de campagne, le décorateur marie l'ancien et le contemporain : meubles chinés, objets artisanaux locaux et touches de modernité créent un intérieur chaleureux qui respecte le cachet du bâti traditionnel.",
+    default:
+      "Faites appel à un décorateur avant d'acheter mobilier et matériaux : ses conseils sur les couleurs, les textures et l'agencement vous évitent des erreurs coûteuses et garantissent un résultat harmonieux dès le premier essai.",
+  },
+  domoticien: {
+    coastal:
+      "En zone littorale, la domotique permet de gérer automatiquement la fermeture des volets en cas de vent fort (capteur anémométrique) et de contrôler la ventilation pour lutter contre l'humidité saline dans le logement.",
+    mountain:
+      "En montagne, un système domotique optimise le chauffage : programmation selon les heures d'ensoleillement, gestion à distance pour les résidences secondaires et alertes en cas de gel pour prévenir les dégâts sur les canalisations.",
+    urban:
+      "En appartement connecté, la domotique centralise la gestion de l'éclairage, du chauffage, des volets et de la sécurité via une seule application. L'installation sans fil (protocole Zigbee, Z-Wave) évite les travaux lourds de câblage.",
+    rural:
+      "Pour les grandes propriétés rurales, la domotique sécurise les accès (portail motorisé, vidéosurveillance, détection de présence) et automatise l'arrosage du jardin et la gestion de l'éclairage extérieur à distance.",
+    default:
+      "Planifiez l'installation domotique pendant une rénovation électrique pour intégrer le câblage nécessaire. Pour un logement existant, les solutions sans fil offrent une mise en œuvre rapide et non invasive.",
+  },
+  'pompe-a-chaleur': {
+    coastal:
+      "En zone littorale aux hivers doux, la pompe à chaleur air-eau affiche un COP optimal (coefficient de performance de 4 à 5). L'unité extérieure doit cependant être protégée de la corrosion saline par un traitement anticorrosion spécifique.",
+    mountain:
+      "En altitude, les températures hivernales basses (sous -10 °C) réduisent significativement le rendement des PAC air-eau. Un modèle haute température ou un système hybride (PAC + chaudière bois) est recommandé au-dessus de 800 m.",
+    urban:
+      "En copropriété, l'installation d'une pompe à chaleur nécessite l'accord de l'AG pour l'unité extérieure. Attention au bruit : respectez la réglementation sur les émergences sonores (5 dB de jour, 3 dB de nuit) pour le voisinage.",
+    rural:
+      "En zone rurale non raccordée au gaz de ville, la pompe à chaleur est l'alternative idéale au fioul (en voie de suppression). Un modèle air-eau de 8 à 12 kW couvre les besoins d'une maison individuelle de 100 à 150 m².",
+    default:
+      "Faites installer votre pompe à chaleur au printemps ou en été, quand les besoins en chauffage sont faibles. Cela évite une coupure inconfortable en plein hiver et permet de bénéficier de délais d'intervention plus courts.",
+  },
+  'panneaux-solaires': {
+    coastal:
+      "En zone littorale, l'ensoleillement généreux (1 800 à 2 500 h/an) maximise la production solaire. Attention toutefois à la corrosion saline des fixations : exigez des supports en aluminium anodisé ou en acier inoxydable.",
+    mountain:
+      "En montagne, l'ensoleillement est excellent mais la neige peut recouvrir les panneaux en hiver. Une inclinaison de 35 à 45° favorise le glissement naturel de la neige et optimise la production estivale en altitude.",
+    urban:
+      "En toiture d'immeuble, les panneaux solaires sont une excellente valorisation des parties communes. La copropriété peut opter pour l'autoconsommation collective, réduisant la facture énergétique de l'ensemble des résidents.",
+    rural:
+      "Les grandes toitures des maisons rurales et bâtiments agricoles offrent un potentiel solaire considérable. Une installation de 6 à 9 kWc en autoconsommation avec revente de surplus couvre les besoins et génère un revenu complémentaire.",
+    default:
+      "Le printemps et le début de l'automne sont les meilleures périodes pour installer des panneaux solaires : conditions météo favorables, disponibilité des installateurs et mise en service avant les pics de production estivale.",
+  },
 }
 
 // ---------------------------------------------------------------------------
@@ -338,24 +543,41 @@ function villeToPartialCommuneData(ville: Ville): CommuneData {
     travaux_fin: climEstBase.travaux_fin,
   } : null
 
-  // ---- Artisan market estimates (SIRENE national avg: ~6 artisans/1000 hab) ----
-  // Varies by region: IDF lower density, rural higher density
-  const ARTISAN_RATIO: Record<string, number> = {
-    'Île-de-France': 3.5,
-    'Bretagne': 7.2, 'Pays de la Loire': 7.0, 'Normandie': 6.5,
-    'Nouvelle-Aquitaine': 7.5, 'Occitanie': 7.8,
-    "Provence-Alpes-Côte d'Azur": 6.8, 'Corse': 9.0,
-    'Auvergne-Rhône-Alpes': 6.5, 'Grand Est': 5.8,
-    'Hauts-de-France': 5.2, 'Centre-Val de Loire': 6.0,
-    'Bourgogne-Franche-Comté': 6.5,
+  // ---- Artisan market estimates from real INSEE/CMA/CAPEB department data ----
+  // Uses DEPT_ARTISAN_COUNTS lookup (dept-artisan-counts.ts) for department-level
+  // totals, then derives city-level estimate proportional to population share.
+  const deptCounts = getDeptArtisanCounts(ville.departementCode, pop)
+  // Department population estimates (INSEE 2024) for computing city share
+  const DEPT_POPULATION: Record<string, number> = {
+    '75': 2104000, '77': 1421000, '78': 1448000, '91': 1306000,
+    '92': 1624000, '93': 1644000, '94': 1407000, '95': 1249000,
+    '02': 525000, '59': 2608000, '60': 829000, '62': 1468000, '80': 572000,
+    '08': 270000, '10': 311000, '51': 567000, '52': 172000,
+    '54': 733000, '55': 184000, '57': 1046000, '67': 1140000, '68': 764000, '88': 363000,
+    '14': 694000, '27': 601000, '50': 495000, '61': 278000, '76': 1256000,
+    '22': 600000, '29': 909000, '35': 1094000, '56': 759000,
+    '44': 1437000, '49': 818000, '53': 307000, '72': 566000, '85': 685000,
+    '18': 302000, '28': 432000, '36': 218000, '37': 610000, '41': 329000, '45': 680000,
+    '21': 534000, '25': 543000, '39': 260000, '58': 202000, '70': 234000, '71': 551000, '89': 338000, '90': 142000,
+    '01': 655000, '03': 335000, '07': 328000, '15': 144000, '26': 517000,
+    '38': 1272000, '42': 762000, '43': 227000, '63': 659000, '69': 1878000, '73': 436000, '74': 826000,
+    '16': 352000, '17': 651000, '19': 240000, '23': 116000, '24': 413000,
+    '33': 1623000, '40': 413000, '47': 330000, '64': 682000, '79': 374000, '86': 439000, '87': 373000,
+    '09': 153000, '11': 374000, '12': 279000, '30': 748000, '31': 1415000, '32': 191000,
+    '34': 1175000, '46': 174000, '48': 76000, '65': 228000, '66': 479000, '81': 389000, '82': 262000,
+    '04': 164000, '05': 141000, '06': 1083000, '13': 2043000, '83': 1076000, '84': 561000,
+    '2A': 158000, '2B': 181000,
+    '971': 384000, '972': 364000, '973': 294000, '974': 860000, '976': 321000,
   }
-  const artisanRatio = ARTISAN_RATIO[ville.region] || 6.0
-  // Apply perturbation for per-city variation; smaller cities tend to have higher ratio
-  const popFactor = pop < 5000 ? 1.15 : pop < 20000 ? 1.05 : pop < 100000 ? 1.0 : 0.92
-  const estimatedArtisans = pop > 0 ? Math.round((pop * artisanRatio * popFactor * perturbation) / 1000) : null
-  // ~35-45% of artisans are BTP (varies by perturbation)
-  const btpPct = 0.35 + (cityHash % 11) / 100 // 0.35 to 0.45
-  const estimatedBtp = estimatedArtisans ? Math.round(estimatedArtisans * btpPct) : null
+  const deptPop = DEPT_POPULATION[ville.departementCode] || pop * 10 // fallback
+  // City share of department: ratio of city pop to department pop, with perturbation
+  const cityShare = deptPop > 0 ? (pop / deptPop) * perturbation : perturbation
+  const estimatedArtisans = deptCounts && pop > 0
+    ? Math.max(1, Math.round(deptCounts.artisans * cityShare))
+    : null
+  const estimatedBtp = deptCounts && estimatedArtisans
+    ? Math.max(1, Math.round(deptCounts.btp * cityShare))
+    : null
 
   // ---- DPE passoires estimates by region (ADEME Observatoire DPE averages) ----
   const REGIONAL_DPE_PASSOIRES: Record<string, number> = {
@@ -374,7 +596,7 @@ function villeToPartialCommuneData(ville: Ville): CommuneData {
     'Corse': 11,
   }
   // Use real DPE data when available, else regional estimate with perturbation
-  const realDpe = getRealDpe(ville.slug, ville.region)
+  const realDpe = getRealDpe(ville.slug, ville.region, ville.departementCode)
   const baseDpe = REGIONAL_DPE_PASSOIRES[ville.region]
   const estimatedPassoiresDpe = realDpe != null
     ? realDpe
