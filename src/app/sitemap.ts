@@ -32,6 +32,15 @@ export async function generateSitemaps() {
     // devis sitemaps
     { id: 'devis-services' },     // 46 service hub pages
     ...Array.from({ length: Math.ceil(services.length * villes.length / 45000) }, (_, i) => ({ id: `devis-service-cities-${i}` })),
+    // devis×quartier sitemaps — batched at 45K per sitemap
+    ...(() => {
+      let totalDevisQuartierUrls = 0
+      for (const v of villes) {
+        totalDevisQuartierUrls += (v.quartiers?.length || 0) * services.length
+      }
+      const dqBatchCount = Math.ceil(totalDevisQuartierUrls / 45000)
+      return Array.from({ length: dqBatchCount }, (_, i) => ({ id: `devis-quartiers-${i}` }))
+    })(),
   ]
 
   // Determine how many provider batches we need
@@ -317,6 +326,32 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
           priority: 0.7,
           images: [serviceImage.src],
         })
+      }
+    }
+
+    return allUrls.slice(offset, offset + batchSize)
+  }
+
+  // ── Devis × Quartier pages (batched) ──────────────────────────────
+  if (id.startsWith('devis-quartiers-')) {
+    const batchIndex = parseInt(id.replace('devis-quartiers-', ''), 10)
+    const batchSize = 45000
+    const offset = batchIndex * batchSize
+
+    const allUrls: { url: string; lastModified: Date; changeFrequency: 'weekly'; priority: number; images: string[] }[] = []
+    for (const svc of services) {
+      const serviceImage = getServiceImage(svc.slug)
+      for (const ville of villes) {
+        const quartiers = getQuartiersByVille(ville.slug)
+        for (const q of quartiers) {
+          allUrls.push({
+            url: `${SITE_URL}/devis/${svc.slug}/${ville.slug}/${q.slug}`,
+            lastModified: STATIC_LAST_MODIFIED,
+            changeFrequency: 'weekly',
+            priority: 0.6,
+            images: [serviceImage.src],
+          })
+        }
       }
     }
 
