@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
-import { getProviderByStableId, getProviderBySlug, getServiceBySlug, getLocationBySlug } from '@/lib/supabase'
+import { getProviderByStableId, getProviderBySlug, getServiceBySlug, getLocationBySlug, getProviderCountByServiceAndLocation } from '@/lib/supabase'
 import { getArtisanUrl } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/server'
 import ArtisanPageClient from '@/components/artisan/ArtisanPageClient'
@@ -13,8 +13,29 @@ import { SITE_URL } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import JsonLd from '@/components/JsonLd'
+import { getQuartierBySlug, services as staticServicesList, villes } from '@/lib/data/france'
+import ServiceQuartierPage from './ServiceQuartierPage'
 
 export const revalidate = 300
+
+// Pre-render top service×city×quartier combos for ISR warming
+const TOP_CITIES_QUARTIER = 30
+export function generateStaticParams() {
+  const topCities = villes.slice(0, TOP_CITIES_QUARTIER)
+  // Only pre-render first 8 services × 30 cities × quartiers to keep build manageable
+  const topServices = staticServicesList.slice(0, 8)
+  return topServices.flatMap(s =>
+    topCities.flatMap(v => {
+      const quartiers = v.quartiers || []
+      return quartiers.map(q => ({
+        service: s.slug,
+        location: v.slug,
+        publicId: q.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
+      }))
+    })
+  )
+}
+export const dynamicParams = true
 
 interface PageProps {
   params: Promise<{
@@ -259,6 +280,56 @@ function truncateTitle(title: string, maxLen = 55): string {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { service: serviceSlug, location: locationSlug, publicId } = await params
 
+  // ─── QUARTIER DETECTION ──────────────────────────────────
+  const quartierMatch = getQuartierBySlug(locationSlug, publicId)
+  if (quartierMatch) {
+    const { ville, quartierName } = quartierMatch
+    const staticSvc = staticServicesList.find(s => s.slug === serviceSlug)
+    if (!staticSvc) return { title: 'Non trouvé' }
+
+    const svcLower = staticSvc.name.toLowerCase()
+    let providerCount = 0
+    try { providerCount = await getProviderCountByServiceAndLocation(serviceSlug, locationSlug) } catch { /* best-effort */ }
+    const hasProviders = providerCount > 0
+
+    const tHash = Math.abs(hashCode(`sq-title-${serviceSlug}-${locationSlug}-${publicId}`))
+    const titleTemplates = hasProviders
+      ? [
+          `${staticSvc.name} à ${quartierName}, ${ville.name} — ${providerCount} pros`,
+          `${providerCount} ${svcLower}s à ${quartierName} (${ville.name})`,
+          `${staticSvc.name} ${quartierName} ${ville.name} : devis gratuit`,
+          `Trouver un ${svcLower} à ${quartierName}, ${ville.name}`,
+        ]
+      : [
+          `${staticSvc.name} à ${quartierName}, ${ville.name} — Devis gratuit`,
+          `${svcLower} à ${quartierName} (${ville.name}) : artisans vérifiés`,
+          `Trouver un ${svcLower} à ${quartierName}, ${ville.name}`,
+        ]
+    const title = truncateTitle(titleTemplates[tHash % titleTemplates.length])
+
+    const dHash = Math.abs(hashCode(`sq-desc-${serviceSlug}-${locationSlug}-${publicId}`))
+    const descTemplates = hasProviders
+      ? [
+          `${providerCount} ${svcLower}s référencés à ${quartierName}, ${ville.name} (${ville.departementCode}). Devis gratuit en ${ville.region}.`,
+          `Comparez les ${svcLower}s à ${quartierName} (${ville.name}). ${providerCount} artisans vérifiés SIREN. Devis gratuit.`,
+        ]
+      : [
+          `Trouvez un ${svcLower} qualifié à ${quartierName}, ${ville.name} (${ville.departementCode}). Artisans vérifiés, devis gratuit.`,
+          `${svcLower} à ${quartierName} (${ville.name}) : annuaire d'artisans référencés en ${ville.region}. Devis gratuit.`,
+        ]
+    const description = descTemplates[dHash % descTemplates.length]
+
+    return {
+      title,
+      description,
+      ...(providerCount > 2 ? {} : { robots: { index: false, follow: true } }),
+      openGraph: { title, description, type: 'website', locale: 'fr_FR', images: [{ url: getServiceImage(serviceSlug).src, width: 1200, height: 630, alt: title }] },
+      twitter: { card: 'summary_large_image', title, description, images: [getServiceImage(serviceSlug).src] },
+      alternates: { canonical: `${SITE_URL}/services/${serviceSlug}/${locationSlug}/${publicId}` },
+    }
+  }
+
+  // ─── PROVIDER DETAIL (existing logic) ────────────────────
   try {
     const [providerByStableId, service, location] = await Promise.all([
       getProviderByStableId(publicId),
@@ -339,6 +410,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function ProviderPage({ params }: PageProps) {
   const { service: serviceSlug, location: locationSlug, publicId } = await params
 
+  // ─── QUARTIER DETECTION ──────────────────────────────────
+  const quartierMatch = getQuartierBySlug(locationSlug, publicId)
+  if (quartierMatch) {
+    return <ServiceQuartierPage serviceSlug={serviceSlug} locationSlug={locationSlug} quartierSlug={publicId} />
+  }
+
+  // ─── PROVIDER DETAIL (existing logic) ────────────────────
   let provider: any, service: any, location: any
 
   try {

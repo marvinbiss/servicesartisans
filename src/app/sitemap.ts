@@ -14,12 +14,21 @@ const PROVIDER_BATCH_SIZE = 40_000
  * Next.js 14 calls this to produce /sitemap/[id].xml and a sitemap index.
  */
 export async function generateSitemaps() {
+  // Count total service×quartier URLs to determine batch count
+  let totalServiceQuartierUrls = 0
+  for (const v of villes) {
+    totalServiceQuartierUrls += (v.quartiers?.length || 0) * services.length
+  }
+  const sqBatchCount = Math.ceil(totalServiceQuartierUrls / 45000) // Stay under 50K limit
+
   const sitemaps: { id: string }[] = [
     { id: 'static' },           // homepage, static pages, services index, individual services
     { id: 'service-cities' },   // service + city combination pages
     { id: 'cities' },           // villes index + individual city pages
     { id: 'geo' },              // departements + regions (index + individual)
     { id: 'quartiers' },        // quartier pages within cities
+    // service×quartier sitemaps — split into batches if > 45K URLs
+    ...Array.from({ length: sqBatchCount }, (_, i) => ({ id: `service-quartiers-${i}` })),
   ]
 
   // Determine how many provider batches we need
@@ -248,6 +257,33 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         ...(images.length > 0 ? { images } : {}),
       }))
     })
+  }
+
+  // ── Service × Quartier pages (batched) ─────────────────────────────
+  if (id.startsWith('service-quartiers-')) {
+    const batchIndex = parseInt(id.replace('service-quartiers-', ''), 10)
+    const batchSize = 45000
+    const offset = batchIndex * batchSize
+
+    // Flatten all service×ville×quartier URLs
+    const allUrls: { url: string; lastModified: Date; changeFrequency: 'weekly'; priority: number; images: string[] }[] = []
+    for (const svc of services) {
+      const serviceImage = getServiceImage(svc.slug)
+      for (const ville of villes) {
+        const quartiers = getQuartiersByVille(ville.slug)
+        for (const q of quartiers) {
+          allUrls.push({
+            url: `${SITE_URL}/services/${svc.slug}/${ville.slug}/${q.slug}`,
+            lastModified: STATIC_LAST_MODIFIED,
+            changeFrequency: 'weekly',
+            priority: 0.6,
+            images: [serviceImage.src],
+          })
+        }
+      }
+    }
+
+    return allUrls.slice(offset, offset + batchSize)
   }
 
   // ── Provider pages (batched) ────────────────────────────────────────
