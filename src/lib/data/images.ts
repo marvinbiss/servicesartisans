@@ -78,11 +78,11 @@ export const serviceImages: Record<string, { src: string; alt: string }> = {
     src: unsplash('photo-1588090272888-033e92b141b1'),
     alt: 'Technicien installant une climatisation murale',
   },
-  'installateur-de-cuisine': {
+  cuisiniste: {
     src: unsplash('photo-1556912167-f556f1f39fdf'),
     alt: 'Cuisine moderne installée par un professionnel',
   },
-  'installateur-de-salle-de-bain': {
+  'salle-de-bain': {
     src: unsplash('photo-1758548157466-7c454382035a'),
     alt: 'Salle de bain rénovée avec vasque moderne',
   },
@@ -94,7 +94,7 @@ export const serviceImages: Record<string, { src: string; alt: string }> = {
     src: unsplash('photo-1571091374875-3e354ceb6ed3'),
     alt: 'Artisan posant un parquet en bois massif',
   },
-  facade: {
+  facadier: {
     src: unsplash('photo-1597758011002-9a3e9537dd8b'),
     alt: 'Façade d\'immeuble en cours de ravalement',
   },
@@ -106,7 +106,7 @@ export const serviceImages: Record<string, { src: string; alt: string }> = {
     src: unsplash('photo-1754808682731-5d4430b38e11'),
     alt: 'Travaux de démolition sur un chantier',
   },
-  terrassement: {
+  terrassier: {
     src: unsplash('photo-1567238563567-b99d8ac66e9b'),
     alt: 'Engin de terrassement nivelant un terrain',
   },
@@ -114,7 +114,7 @@ export const serviceImages: Record<string, { src: string; alt: string }> = {
     src: unsplash('photo-1631277190979-1704e8c7d574'),
     alt: 'Artisan posant de l\'isolation thermique en laine de roche',
   },
-  domotique: {
+  domoticien: {
     src: unsplash('photo-1545259741-2ea3ebf61fa3'),
     alt: 'Installation domotique dans une maison connectée',
   },
@@ -130,9 +130,9 @@ export const serviceImages: Record<string, { src: string; alt: string }> = {
     src: unsplash('photo-1528312635006-8ea0bc49ec63'),
     alt: 'Caméra de surveillance et système de sécurité résidentiel',
   },
-  plaquiste: {
+  platrier: {
     src: unsplash('photo-1559126698-1906840f3c95'),
-    alt: 'Plaquiste posant des plaques de plâtre sur une ossature',
+    alt: 'Plâtrier posant des plaques de plâtre sur une ossature',
   },
 }
 
@@ -540,12 +540,12 @@ const slugKeywords: [RegExp, string, 'service' | 'topic'][] = [
   [/macon|maçon/, 'macon', 'service'],
   [/jardin|paysag/, 'jardinier', 'service'],
   [/climatici|climatisation/, 'climaticien', 'service'],
-  [/cuisin/, 'installateur-de-cuisine', 'service'],
+  [/cuisin/, 'cuisiniste', 'service'],
   [/vitr|fenêtre|fenetre|vitrage/, 'vitrier', 'service'],
   [/isol/, 'isolation-thermique', 'service'],
-  [/domotiq/, 'domotique', 'service'],
+  [/domotiq/, 'domoticien', 'service'],
   [/nettoyag/, 'entretien', 'topic'],
-  [/facade|ravalement/, 'facade', 'service'],
+  [/facade|ravalement/, 'facadier', 'service'],
   // Topics → photo spécifique
   [/terrasse/, 'terrasse', 'topic'],
   [/sdb|salle.de.bain/, 'sdb', 'topic'],

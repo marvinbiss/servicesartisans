@@ -1630,8 +1630,9 @@ function generateQuartierDataDrivenContent(
   }
 }
 
-export function generateQuartierContent(ville: Ville, quartierName: string): QuartierContent {
-  const seed = Math.abs(hashCode(`${ville.slug}-${quartierName}`))
+export function generateQuartierContent(ville: Ville, quartierName: string, serviceSlug?: string): QuartierContent {
+  const seedSuffix = serviceSlug ? `-${serviceSlug}` : ''
+  const seed = Math.abs(hashCode(`${ville.slug}-${quartierName}${seedSuffix}`))
   const profile = getQuartierProfile(ville, quartierName)
 
   // Intro — 12 templates × era/density/arch data = unique per profile
@@ -1640,7 +1641,7 @@ export function generateQuartierContent(ville: Ville, quartierName: string): Qua
 
   // Building context — by era
   const ctxTemplates = BATIMENT_CONTEXTS[profile.era]
-  const batimentContext = ctxTemplates[Math.abs(hashCode(`ctx-${ville.slug}-${quartierName}`)) % ctxTemplates.length](quartierName, ville.name)
+  const batimentContext = ctxTemplates[Math.abs(hashCode(`ctx-${ville.slug}-${quartierName}${seedSuffix}`)) % ctxTemplates.length](quartierName, ville.name)
 
   // Services pricing — top 5 for this era
   const multiplier = getRegionalMultiplier(ville.region)
@@ -1659,19 +1660,19 @@ export function generateQuartierContent(ville: Ville, quartierName: string): Qua
     `Pour un logement à ${quartierName}, les travaux courants sur du ${profile.eraLabel.toLowerCase()} couvrent : ${pricingLines.join(' · ')}. Ces estimations pour la région ${ville.region} dépendent de l'état du bâti, de l'accès chantier et des finitions souhaitées.`,
     `Le quartier ${quartierName} à ${ville.name}, typique du ${profile.eraLabel.toLowerCase()}, génère une demande régulière pour : ${pricingLines.join(' · ')}. Tarifs indicatifs ${ville.region}, à confirmer par devis personnalisé.`,
   ]
-  const servicesDemandes = sdTemplates[Math.abs(hashCode(`sd-${ville.slug}-${quartierName}`)) % sdTemplates.length]
+  const servicesDemandes = sdTemplates[Math.abs(hashCode(`sd-${ville.slug}-${quartierName}${seedSuffix}`)) % sdTemplates.length]
 
   // Tips — by era
   const tipTemplates = ERA_TIPS[profile.era]
-  const conseils = tipTemplates[Math.abs(hashCode(`tips-${ville.slug}-${quartierName}`)) % tipTemplates.length](quartierName, ville.name)
+  const conseils = tipTemplates[Math.abs(hashCode(`tips-${ville.slug}-${quartierName}${seedSuffix}`)) % tipTemplates.length](quartierName, ville.name)
 
   // Proximity
-  const proxFn = PROXIMITY_TEMPLATES[Math.abs(hashCode(`prox-${ville.slug}-${quartierName}`)) % PROXIMITY_TEMPLATES.length]
+  const proxFn = PROXIMITY_TEMPLATES[Math.abs(hashCode(`prox-${ville.slug}-${quartierName}${seedSuffix}`)) % PROXIMITY_TEMPLATES.length]
   const proximite = proxFn(quartierName, ville.name, profile.eraLabel)
 
   // FAQ — select 4 from pool of 15 via hash
   const faqIndices: number[] = []
-  let faqSeed = Math.abs(hashCode(`faq-${ville.slug}-${quartierName}`))
+  let faqSeed = Math.abs(hashCode(`faq-${ville.slug}-${quartierName}${seedSuffix}`))
   while (faqIndices.length < 4) {
     const idx = faqSeed % FAQ_POOL.length
     if (!faqIndices.includes(idx)) faqIndices.push(idx)

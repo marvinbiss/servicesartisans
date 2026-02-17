@@ -77,7 +77,7 @@ export default async function ServiceQuartierPage({
 
   // 4. Generate content
   const trade = getTradeContent(serviceSlug)
-  const quartierContent = generateQuartierContent(ville, quartierName)
+  const quartierContent = generateQuartierContent(ville, quartierName, serviceSlug)
   const pricingMultiplier = getRegionalMultiplier(ville.region)
   const svcLower = service.name.toLowerCase()
 
@@ -457,7 +457,7 @@ export default async function ServiceQuartierPage({
                         <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                       </svg>
                     </summary>
-                    <div className="px-6 pb-5 text-slate-600 leading-relaxed text-sm animate-fade-in">
+                    <div className="faq-answer px-6 pb-5 text-slate-600 leading-relaxed text-sm animate-fade-in">
                       {item.answer}
                     </div>
                   </details>

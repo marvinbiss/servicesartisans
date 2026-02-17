@@ -323,7 +323,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       ...(providerCount > 2 ? {} : { robots: { index: false, follow: true } }),
-      openGraph: { title, description, type: 'website', locale: 'fr_FR', images: [{ url: getServiceImage(serviceSlug).src, width: 1200, height: 630, alt: title }] },
+      openGraph: { title, description, type: 'website', locale: 'fr_FR', url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}/${publicId}`, images: [{ url: getServiceImage(serviceSlug).src, width: 1200, height: 630, alt: title }] },
       twitter: { card: 'summary_large_image', title, description, images: [getServiceImage(serviceSlug).src] },
       alternates: { canonical: `${SITE_URL}/services/${serviceSlug}/${locationSlug}/${publicId}` },
     }
