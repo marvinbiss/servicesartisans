@@ -11,6 +11,7 @@ import { getTradeContent } from '@/lib/data/trade-content'
 import { generateDataDrivenContent, type DataDrivenContent } from '@/lib/seo/data-driven-content'
 import type { CommuneData } from '@/lib/data/commune-data'
 import { formatNumber, formatEuro, monthName } from '@/lib/data/commune-data'
+import { getQuartierRealPrix, getVilleRealPrix, getRealDpe } from '@/lib/data/quartier-real-data'
 
 // ---------------------------------------------------------------------------
 // Regional pricing multipliers
@@ -372,9 +373,12 @@ function villeToPartialCommuneData(ville: Ville): CommuneData {
     "Provence-Alpes-Côte d'Azur": 13,
     'Corse': 11,
   }
-  // Apply per-city perturbation (±3 percentage points) so same-region cities differ
+  // Use real DPE data when available, else regional estimate with perturbation
+  const realDpe = getRealDpe(ville.slug, ville.region)
   const baseDpe = REGIONAL_DPE_PASSOIRES[ville.region]
-  const estimatedPassoiresDpe = baseDpe != null
+  const estimatedPassoiresDpe = realDpe != null
+    ? realDpe
+    : baseDpe != null
     ? Math.round(baseDpe * perturbation)
     : null
 
@@ -396,9 +400,10 @@ function villeToPartialCommuneData(ville: Ville): CommuneData {
     revenu_median: REGIONAL_REVENU_MEDIAN[ville.region]
       ? Math.round((REGIONAL_REVENU_MEDIAN[ville.region] * (pop >= 100000 ? 1.08 : pop >= 30000 ? 1.02 : pop >= 10000 ? 0.97 : 0.93) * perturbation) / 10) * 10
       : null,
-    prix_m2_moyen: REGIONAL_PRIX_M2[ville.region]
-      ? Math.round((REGIONAL_PRIX_M2[ville.region] * (pop >= 200000 ? 1.25 : pop >= 100000 ? 1.10 : pop >= 50000 ? 1.0 : pop >= 10000 ? 0.85 : 0.70) * perturbation) / 10) * 10
-      : null,
+    prix_m2_moyen: getVilleRealPrix(ville.slug)
+      ?? (REGIONAL_PRIX_M2[ville.region]
+        ? Math.round((REGIONAL_PRIX_M2[ville.region] * (pop >= 200000 ? 1.25 : pop >= 100000 ? 1.10 : pop >= 50000 ? 1.0 : pop >= 10000 ? 0.85 : 0.70) * perturbation) / 10) * 10
+        : null),
     nb_logements: estimatedLogements,
     part_maisons_pct: estimatedPartMaisons,
     climat_zone: climatZone,
@@ -481,11 +486,16 @@ function deriveQuartierCommuneData(
   const dpeMult = ERA_DPE_MULT[era] || 1.0
   const nQ = Math.max(quartierCount, 4) // min 4 to avoid absurd per-quartier counts
 
+  // Use real quartier prix/m² when available
+  const realData = getQuartierRealPrix(villeSlug, quartierName)
+
   return {
     ...cityData,
     name: `${quartierName} (${cityData.name})`,
     slug: `${villeSlug}-${quartierName}`,
-    prix_m2_moyen: cityData.prix_m2_moyen
+    prix_m2_moyen: realData
+      ? realData.prixM2
+      : cityData.prix_m2_moyen
       ? Math.round(cityData.prix_m2_moyen * eraPrice * densityPrice * qPerturbation / 10) * 10
       : null,
     nb_entreprises_artisanales: cityData.nb_entreprises_artisanales
@@ -1506,7 +1516,10 @@ function generateQuartierDataDrivenContent(
       `À ${quartierName} (${ville.name}), le prix immobilier se situe autour de ${formatEuro(prixQ)}/m², ${diffLabel} de la moyenne communale de ${formatEuro(prixCity)}/m². Le ${profile.eraLabel.toLowerCase()} et la densité ${profile.densityLabel.toLowerCase()} influencent directement la valeur foncière et les besoins en rénovation.${logements ? ` Le quartier représente environ ${formatNumber(logements)} logements.` : ''}`,
     ]
     immobilierQuartier = immoTemplates[seed % 3]
-    dataSources.push('DVF Etalab / INSEE (estimations prix immobiliers)')
+    const realPrixData = getQuartierRealPrix(ville.slug, quartierName)
+    dataSources.push(realPrixData
+      ? `${realPrixData.source} (prix réels ${realPrixData.annee})`
+      : 'DVF Etalab / INSEE (estimations prix immobiliers)')
   } else {
     immobilierQuartier = `Le quartier ${quartierName} à ${ville.name} est caractérisé par un ${profile.eraLabel.toLowerCase()} en ${profile.densityLabel.toLowerCase()}, des paramètres qui influencent les prix immobiliers et les besoins en travaux.`
   }
