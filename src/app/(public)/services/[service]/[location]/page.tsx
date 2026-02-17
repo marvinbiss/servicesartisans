@@ -10,7 +10,7 @@ import ServiceLocationPageClient from './PageClient'
 
 import { getBreadcrumbSchema, getItemListSchema } from '@/lib/seo/jsonld'
 import { PopularServicesLinks } from '@/components/InternalLinks'
-import { popularServices } from '@/lib/constants/navigation'
+import { popularServices, relatedServices } from '@/lib/constants/navigation'
 import Breadcrumb from '@/components/Breadcrumb'
 import Link from 'next/link'
 import { REVALIDATE } from '@/lib/cache'
@@ -369,8 +369,14 @@ async function _ServiceLocationPage({ params }: PageProps) {
     ...(itemListSchema ? [itemListSchema] : []),
   ]
 
-  // Filter out current location and get other services for cross-linking
-  const otherServices = popularServices.filter(s => s.slug !== serviceSlug).slice(0, 6)
+  // Cross-link to semantically related services (with fallback to popular)
+  const relatedSlugs = relatedServices[serviceSlug] || []
+  const otherServices = relatedSlugs.length > 0
+    ? relatedSlugs.slice(0, 6).map(slug => {
+        const svc = staticServicesList.find(s => s.slug === slug)
+        return svc ? { slug: svc.slug, name: svc.name, icon: svc.icon } : null
+      }).filter(Boolean) as { slug: string; name: string; icon: string }[]
+    : popularServices.filter(s => s.slug !== serviceSlug).slice(0, 6)
   const nearbyCities = getNearbyCities(locationSlug, 12)
   const deptCities = location.department_code
     ? getVillesByDepartement(location.department_code).filter(v => v.slug !== locationSlug).slice(0, 10)
