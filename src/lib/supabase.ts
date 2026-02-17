@@ -218,7 +218,10 @@ export async function getProviderBySlug(slug: string) {
 }
 
 // Reverse mapping: service slug → provider specialties (for fallback queries)
+// All 46 services must be mapped here — unmapped services can never show providers
+// on quartier pages, causing them to be permanently noindexed.
 const SERVICE_TO_SPECIALTIES: Record<string, string[]> = {
+  // --- Original 9 mappings ---
   'plombier': ['plombier'],
   'electricien': ['electricien'],
   'chauffagiste': ['chauffagiste'],
@@ -228,6 +231,45 @@ const SERVICE_TO_SPECIALTIES: Record<string, string[]> = {
   'macon': ['macon'],
   'peintre-en-batiment': ['peintre', 'platrier', 'finition'],
   'climaticien': ['isolation'],
+
+  // --- 37 additional services ---
+  'serrurier': ['serrurier'],
+  'jardinier': ['jardinier', 'paysagiste'],
+  'vitrier': ['vitrier', 'miroitier'],
+  'cuisiniste': ['cuisiniste', 'installateur-de-cuisine'],
+  'solier': ['solier', 'poseur-de-parquet', 'moquettiste'],
+  'nettoyage': ['nettoyage', 'nettoyage-professionnel'],
+  'terrassier': ['terrassier', 'terrassement'],
+  'charpentier': ['charpentier'],
+  'zingueur': ['zingueur', 'couvreur-zingueur'],
+  'etancheiste': ['etancheiste', 'etancheite'],
+  'facadier': ['facadier', 'facade', 'ravalement'],
+  'platrier': ['platrier', 'plaquiste', 'platrerie'],
+  'metallier': ['metallier', 'metallerie'],
+  'ferronnier': ['ferronnier', 'ferronnerie'],
+  'poseur-de-parquet': ['poseur-de-parquet', 'parqueteur', 'solier'],
+  'miroitier': ['miroitier', 'vitrier'],
+  'storiste': ['storiste', 'store', 'volet'],
+  'salle-de-bain': ['salle-de-bain', 'installateur-de-salle-de-bain', 'plombier'],
+  'architecte-interieur': ['architecte-interieur', 'architecte-d-interieur', 'decoration'],
+  'decorateur': ['decorateur', 'decoration', 'peintre-decorateur'],
+  'domoticien': ['domoticien', 'domotique', 'electricien'],
+  'pompe-a-chaleur': ['pompe-a-chaleur', 'pac', 'chauffagiste'],
+  'panneaux-solaires': ['panneaux-solaires', 'photovoltaique', 'solaire'],
+  'isolation-thermique': ['isolation', 'isolation-thermique', 'ite', 'iti'],
+  'renovation-energetique': ['renovation-energetique', 'rge', 'isolation'],
+  'borne-recharge': ['borne-recharge', 'borne-electrique', 'electricien'],
+  'ramoneur': ['ramoneur', 'ramonage'],
+  'paysagiste': ['paysagiste', 'jardinier', 'amenagement-exterieur'],
+  'pisciniste': ['pisciniste', 'piscine'],
+  'alarme-securite': ['alarme', 'securite', 'videosurveillance', 'alarme-securite'],
+  'antenniste': ['antenniste', 'antenne'],
+  'ascensoriste': ['ascensoriste', 'ascenseur'],
+  'diagnostiqueur': ['diagnostiqueur', 'diagnostic', 'dpe'],
+  'geometre': ['geometre', 'geometre-expert'],
+  'desinsectisation': ['desinsectisation', 'desinsectiseur', 'nuisibles'],
+  'deratisation': ['deratisation', 'deratiseur', 'nuisibles'],
+  'demenageur': ['demenageur', 'demenagement'],
 }
 
 export async function getProvidersByServiceAndLocation(

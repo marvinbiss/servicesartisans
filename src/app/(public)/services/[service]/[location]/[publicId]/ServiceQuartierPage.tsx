@@ -21,7 +21,7 @@ import {
   hashCode,
   getRegionalMultiplier,
 } from '@/lib/seo/location-content'
-import { popularServices } from '@/lib/constants/navigation'
+import { popularServices, relatedServices } from '@/lib/constants/navigation'
 import Breadcrumb from '@/components/Breadcrumb'
 import { formatEuro } from '@/lib/data/commune-data'
 import type { Service, Location as LocationType, Provider } from '@/types'
@@ -172,8 +172,14 @@ export default async function ServiceQuartierPage({
     created_at: '',
   }
 
-  // Other services for cross-linking
-  const otherServices = popularServices.filter(s => s.slug !== serviceSlug).slice(0, 6)
+  // Other services for cross-linking — use related services map with fallback
+  const relatedSlugs = relatedServices[serviceSlug] || []
+  const otherServices = relatedSlugs.length > 0
+    ? relatedSlugs.slice(0, 6).map(slug => {
+        const svc = staticServicesList.find(s => s.slug === slug)
+        return svc ? { name: svc.name, slug: svc.slug } : null
+      }).filter((s): s is NonNullable<typeof s> => s !== null)
+    : popularServices.filter(s => s.slug !== serviceSlug).slice(0, 6)
   const otherQuartiers = getQuartiersByVille(locationSlug).filter(q => q.slug !== quartierSlug).slice(0, 10)
   const nearbyCities = getNearbyCities(locationSlug, 8)
   const { profile } = quartierContent
