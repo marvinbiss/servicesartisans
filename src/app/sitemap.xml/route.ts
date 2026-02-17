@@ -8,15 +8,16 @@ import { generateSitemaps } from '../sitemap'
  */
 export async function GET() {
   const sitemaps = await generateSitemaps()
+  const baseUrl = SITE_URL.trim().replace(/\/+$/, '')
 
   const xml = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
     ...sitemaps.map(
       ({ id }) =>
-        `  <sitemap><loc>${SITE_URL}/sitemap/${id}.xml</loc></sitemap>`
+        `  <sitemap><loc>${baseUrl}/sitemap/${id}.xml</loc></sitemap>`
     ),
-    `  <sitemap><loc>${SITE_URL}/news-sitemap.xml</loc></sitemap>`,
+    `  <sitemap><loc>${baseUrl}/news-sitemap.xml</loc></sitemap>`,
     '</sitemapindex>',
   ].join('\n')
 
