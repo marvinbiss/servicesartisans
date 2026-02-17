@@ -242,7 +242,7 @@ export const emailTemplates = {
               <div class="stars">⭐⭐⭐⭐⭐</div>
 
               <p style="text-align: center;">
-                <a href="${process.env.NEXT_PUBLIC_APP_URL}/avis/${bookingId}" class="button">
+                <a href="${process.env.NEXT_PUBLIC_APP_URL}/donner-avis/${bookingId}" class="button">
                   Donner mon avis
                 </a>
               </p>

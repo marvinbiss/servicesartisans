@@ -388,7 +388,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
             {topCities.map((ville) => (
               <Link
                 key={ville.slug}
-                href={`/services/${service}/${ville.slug}`}
+                href={`/urgence/${service}/${ville.slug}`}
                 className="bg-white hover:bg-red-50 border border-gray-200 hover:border-red-300 rounded-xl p-4 transition-all group"
               >
                 <div className="flex items-center gap-3">
@@ -497,7 +497,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
               <h3 className="font-semibold text-gray-900 mb-3">{trade.name} par ville</h3>
               <div className="space-y-2">
                 {topCities.slice(0, 6).map((v) => (
-                  <Link key={v.slug} href={`/services/${service}/${v.slug}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
+                  <Link key={v.slug} href={`/urgence/${service}/${v.slug}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
                     {trade.name} à {v.name}
                   </Link>
                 ))}

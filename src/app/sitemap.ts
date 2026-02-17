@@ -41,6 +41,18 @@ export async function generateSitemaps() {
       const dqBatchCount = Math.ceil(totalDevisQuartierUrls / 45000)
       return Array.from({ length: dqBatchCount }, (_, i) => ({ id: `devis-quartiers-${i}` }))
     })(),
+    // urgence service×city sitemaps
+    ...(() => {
+      const emergencySlugs = Object.keys(tradeContent).filter(s => tradeContent[s].emergencyInfo)
+      const ucBatchCount = Math.ceil(emergencySlugs.length * villes.length / 45000)
+      return Array.from({ length: ucBatchCount }, (_, i) => ({ id: `urgence-service-cities-${i}` }))
+    })(),
+    // avis sitemaps
+    { id: 'avis-services' },
+    ...Array.from(
+      { length: Math.ceil(services.length * villes.length / 45000) },
+      (_, i) => ({ id: `avis-service-cities-${i}` })
+    ),
   ]
 
   // Determine how many provider batches we need
@@ -356,6 +368,62 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     }
 
     return allUrls.slice(offset, offset + batchSize)
+  }
+
+  // ── Urgence service×city pages (batched) ────────────────────────────
+  if (id.startsWith('urgence-service-cities-')) {
+    const batchIndex = parseInt(id.replace('urgence-service-cities-', ''), 10)
+    const BATCH = 45000
+    const emergencySlugs = Object.keys(tradeContent).filter(s => tradeContent[s].emergencyInfo)
+    const allUrls: MetadataRoute.Sitemap = []
+
+    for (const svc of emergencySlugs) {
+      for (const v of villes) {
+        allUrls.push({
+          url: `${SITE_URL}/urgence/${svc}/${v.slug}`,
+          lastModified: STATIC_LAST_MODIFIED,
+          changeFrequency: 'monthly',
+          priority: 0.6,
+        })
+      }
+    }
+
+    return allUrls.slice(batchIndex * BATCH, (batchIndex + 1) * BATCH)
+  }
+
+  // ── Avis service hub pages ──────────────────────────────────────────
+  if (id === 'avis-services') {
+    const tradeSlugs = Object.keys(tradeContent)
+    return [
+      { url: `${SITE_URL}/avis`, lastModified: STATIC_LAST_MODIFIED, changeFrequency: 'monthly' as const, priority: 0.7 },
+      ...tradeSlugs.map(slug => ({
+        url: `${SITE_URL}/avis/${slug}`,
+        lastModified: STATIC_LAST_MODIFIED,
+        changeFrequency: 'monthly' as const,
+        priority: 0.6,
+      })),
+    ]
+  }
+
+  // ── Avis service×city pages (batched) ───────────────────────────────
+  if (id.startsWith('avis-service-cities-')) {
+    const batchIndex = parseInt(id.replace('avis-service-cities-', ''), 10)
+    const BATCH = 45000
+    const tradeSlugs = Object.keys(tradeContent)
+    const allUrls: MetadataRoute.Sitemap = []
+
+    for (const svc of tradeSlugs) {
+      for (const v of villes) {
+        allUrls.push({
+          url: `${SITE_URL}/avis/${svc}/${v.slug}`,
+          lastModified: STATIC_LAST_MODIFIED,
+          changeFrequency: 'monthly',
+          priority: 0.5,
+        })
+      }
+    }
+
+    return allUrls.slice(batchIndex * BATCH, (batchIndex + 1) * BATCH)
   }
 
   // ── Provider pages (batched) ────────────────────────────────────────

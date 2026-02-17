@@ -191,7 +191,7 @@ export async function GET(request: Request) {
       const slot = getSlot(booking.slot)
       const artisan = artisanMap.get(slot?.artisan_id || '')
       const artisanName = artisan?.company_name || artisan?.full_name || 'Artisan'
-      const reviewUrl = `${SITE_URL}/avis/${booking.id.slice(0, 8)}`
+      const reviewUrl = `${SITE_URL}/donner-avis/${booking.id.slice(0, 8)}`
 
       try {
         // Send email

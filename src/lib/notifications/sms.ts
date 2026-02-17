@@ -98,7 +98,7 @@ Réservez vite: servicesartisans.fr`,
   // Review request (post-appointment)
   reviewRequest: (data: SMSData) =>
     `Comment s'est passé votre RDV avec ${data.artisanName}?
-Donnez votre avis: servicesartisans.fr/avis/${data.bookingId.slice(0, 8)}`,
+Donnez votre avis: servicesartisans.fr/donner-avis/${data.bookingId.slice(0, 8)}`,
 }
 
 // Send SMS function
