@@ -7,7 +7,6 @@ import JsonLd from '@/components/JsonLd'
 import { SITE_URL } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { departements, getDepartementBySlug, getVillesByDepartement, services, getRegionSlugByName } from '@/lib/data/france'
-import { slugify } from '@/lib/utils'
 import { getDepartmentImage } from '@/lib/data/images'
 import { generateDepartementContent, hashCode } from '@/lib/seo/location-content'
 import { Thermometer, Home, TrendingUp, AlertTriangle } from 'lucide-react'
@@ -238,7 +237,7 @@ export default async function DepartementPage({ params }: PageProps) {
             {orderedServices.map((service) => (
               <Link
                 key={service.slug}
-                href={`/services/${service.slug}/${villesDuDepartement[0]?.slug || slugify(dept.chefLieu)}`}
+                href={`/departements/${dept.slug}/${service.slug}`}
                 className={`bg-white rounded-xl shadow-sm p-5 text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group ${topServiceSlugsSet.has(service.slug) ? 'border-2 border-indigo-200' : 'border border-gray-100'}`}
               >
                 {topServiceSlugsSet.has(service.slug) && (

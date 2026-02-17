@@ -217,7 +217,7 @@ export default async function RegionPage({ params }: PageProps) {
             {orderedServices.slice(0, 8).map((service) => (
               <Link
                 key={service.slug}
-                href={`/services/${service.slug}`}
+                href={`/regions/${regionSlug}/${service.slug}`}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors border ${topServiceSlugsSet.has(service.slug) ? 'bg-indigo-50 text-indigo-700 border-indigo-200 hover:bg-indigo-100' : 'bg-gray-50 text-slate-700 border-gray-200 hover:bg-slate-100'}`}
               >
                 {service.name} en {region.name}
@@ -456,12 +456,12 @@ export default async function RegionPage({ params }: PageProps) {
           <div className="grid md:grid-cols-3 gap-10">
             {/* Services */}
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Services populaires</h3>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Services en {region.name}</h3>
               <div className="space-y-2">
                 {allServices.slice(0, 8).map((s) => (
-                  <Link key={s.slug} href={`/services/${s.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
+                  <Link key={s.slug} href={`/regions/${regionSlug}/${s.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
-                    {s.name}
+                    {s.name} en {region.name}
                   </Link>
                 ))}
               </div>

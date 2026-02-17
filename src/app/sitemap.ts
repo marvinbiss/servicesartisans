@@ -1,7 +1,9 @@
 import type { MetadataRoute } from 'next'
 import { SITE_URL } from '@/lib/seo/config'
 import { services, villes, departements, regions, getQuartiersByVille } from '@/lib/data/france'
-import { tradeContent } from '@/lib/data/trade-content'
+import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
+import { getProblemSlugs } from '@/lib/data/problems'
+import { getGuideSlugs } from '@/lib/data/guides'
 import { articleSlugs } from '@/lib/data/blog/articles'
 import { allArticles } from '@/lib/data/blog/articles'
 import { getBlogImage, getServiceImage, getCityImage, heroImage, getDepartmentImage, getRegionImage, pageImages, ambianceImages } from '@/lib/data/images'
@@ -53,6 +55,21 @@ export async function generateSitemaps() {
       { length: Math.ceil(services.length * villes.length / 45000) },
       (_, i) => ({ id: `avis-service-cities-${i}` })
     ),
+    // Problemes sitemaps
+    { id: 'problemes' },  // hub + 30 problem pages
+    ...Array.from(
+      { length: Math.ceil(30 * villes.length / 45000) },
+      (_, i) => ({ id: `problemes-cities-${i}` })
+    ),
+    // Dept×service sitemaps
+    ...Array.from(
+      { length: Math.ceil(departements.length * getTradesSlugs().length / 45000) },
+      (_, i) => ({ id: `dept-services-${i}` })
+    ),
+    // Region×service sitemap
+    { id: 'region-services' },
+    // Guides sitemap
+    { id: 'guides' },
   ]
 
   // Determine how many provider batches we need
@@ -424,6 +441,83 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     }
 
     return allUrls.slice(batchIndex * BATCH, (batchIndex + 1) * BATCH)
+  }
+
+  // ── Problemes hub + individual pages ────────────────────────────────
+  if (id === 'problemes') {
+    const problemSlugs = getProblemSlugs()
+    return [
+      { url: `${SITE_URL}/problemes`, lastModified: STATIC_LAST_MODIFIED, changeFrequency: 'weekly' as const, priority: 0.7 },
+      ...problemSlugs.map(slug => ({
+        url: `${SITE_URL}/problemes/${slug}`,
+        lastModified: STATIC_LAST_MODIFIED,
+        changeFrequency: 'monthly' as const,
+        priority: 0.6,
+      })),
+    ]
+  }
+
+  // ── Problemes × city pages (batched) ──────────────────────────────
+  if (id.startsWith('problemes-cities-')) {
+    const batchIndex = parseInt(id.split('-').pop()!)
+    const problemSlugs = getProblemSlugs()
+    const allUrls: MetadataRoute.Sitemap = []
+    for (const problem of problemSlugs) {
+      for (const ville of villes) {
+        allUrls.push({
+          url: `${SITE_URL}/problemes/${problem}/${ville.slug}`,
+          lastModified: STATIC_LAST_MODIFIED,
+          changeFrequency: 'monthly',
+          priority: 0.4,
+        })
+      }
+    }
+    return allUrls.slice(batchIndex * 45000, (batchIndex + 1) * 45000)
+  }
+
+  // ── Dept × service pages (batched) ────────────────────────────────
+  if (id.startsWith('dept-services-')) {
+    const batchIndex = parseInt(id.split('-').pop()!)
+    const tradeSlugs = getTradesSlugs()
+    const allUrls: MetadataRoute.Sitemap = []
+    for (const dept of departements) {
+      for (const service of tradeSlugs) {
+        allUrls.push({
+          url: `${SITE_URL}/departements/${dept.slug}/${service}`,
+          lastModified: STATIC_LAST_MODIFIED,
+          changeFrequency: 'monthly',
+          priority: 0.5,
+        })
+      }
+    }
+    return allUrls.slice(batchIndex * 45000, (batchIndex + 1) * 45000)
+  }
+
+  // ── Region × service pages ────────────────────────────────────────
+  if (id === 'region-services') {
+    const tradeSlugs = getTradesSlugs()
+    return regions.flatMap(region =>
+      tradeSlugs.map(service => ({
+        url: `${SITE_URL}/regions/${region.slug}/${service}`,
+        lastModified: STATIC_LAST_MODIFIED,
+        changeFrequency: 'monthly' as const,
+        priority: 0.5,
+      }))
+    )
+  }
+
+  // ── Guides hub + individual pages ─────────────────────────────────
+  if (id === 'guides') {
+    const guideSlugs = getGuideSlugs()
+    return [
+      { url: `${SITE_URL}/guides`, lastModified: STATIC_LAST_MODIFIED, changeFrequency: 'weekly' as const, priority: 0.7 },
+      ...guideSlugs.map(slug => ({
+        url: `${SITE_URL}/guides/${slug}`,
+        lastModified: STATIC_LAST_MODIFIED,
+        changeFrequency: 'monthly' as const,
+        priority: 0.6,
+      })),
+    ]
   }
 
   // ── Provider pages (batched) ────────────────────────────────────────
