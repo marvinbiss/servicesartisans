@@ -19,6 +19,7 @@ import {
   ArtisanPhotoGridSkeleton,
 } from '@/components/artisan'
 import { ShareButton } from '@/components/ui/ShareButton'
+import { ClaimButton } from '@/components/artisan/ClaimButton'
 import type { LegacyArtisan } from '@/types/legacy'
 
 // Loading skeleton for lazy-loaded sections
@@ -106,13 +107,17 @@ interface ArtisanPageClientProps {
   initialReviews: Review[]
   artisanId: string
   similarArtisans?: SimilarArtisan[]
+  isClaimed?: boolean
+  hasSiret?: boolean
 }
 
 export default function ArtisanPageClient({
   initialArtisan,
   initialReviews,
-  artisanId: _artisanId,
+  artisanId,
   similarArtisans,
+  isClaimed = true,
+  hasSiret = false,
 }: ArtisanPageClientProps) {
   const artisan = initialArtisan
   const reviews = initialReviews
@@ -239,6 +244,11 @@ export default function ArtisanPageClient({
               <section className="lg:hidden" aria-label="Contacter cet artisan">
                 <ArtisanContactCard artisan={artisan} />
               </section>
+              {!isClaimed && (
+                <section className="lg:hidden" aria-label="Revendiquer cette fiche">
+                  <ClaimButton providerId={artisanId} providerName={artisan.business_name || artisan.name || 'Artisan'} hasSiret={hasSiret} />
+                </section>
+              )}
               <section id="services" aria-label="Services et tarifs">
                 <ArtisanServices artisan={artisan} />
               </section>
@@ -263,6 +273,9 @@ export default function ArtisanPageClient({
             <aside id="contact-sidebar" className="hidden lg:block" aria-label="Informations de contact">
               <div className="space-y-6 sticky top-20">
                 <ArtisanSidebar artisan={artisan} />
+                {!isClaimed && (
+                  <ClaimButton providerId={artisanId} providerName={artisan.business_name || artisan.name || 'Artisan'} hasSiret={hasSiret} />
+                )}
               </div>
             </aside>
           </div>

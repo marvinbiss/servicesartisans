@@ -494,6 +494,8 @@ export default async function ProviderPage({ params }: PageProps) {
         initialReviews={reviews}
         artisanId={provider.id}
         similarArtisans={similarArtisans}
+        isClaimed={!!provider.user_id}
+        hasSiret={!!provider.siret}
       />
 
       {/* Lien retour vers le listing service+location (maillage bidirectionnel) */}

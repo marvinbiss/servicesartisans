@@ -25,6 +25,7 @@ import {
   Sliders,
   Megaphone,
   FileEdit,
+  BadgeCheck,
   Menu,
   X,
 } from 'lucide-react'
@@ -39,6 +40,7 @@ const nav = [
   { name: 'Journal', href: '/admin/journal', icon: BookOpen },
   { name: 'Utilisateurs', href: '/admin/utilisateurs', icon: Users },
   { name: 'Artisans', href: '/admin/artisans', icon: Briefcase },
+  { name: 'Revendications', href: '/admin/revendications', icon: BadgeCheck },
   { name: 'Réservations', href: '/admin/reservations', icon: Calendar },
   { name: 'Devis', href: '/admin/devis', icon: FileText },
   { name: 'Avis', href: '/admin/avis', icon: Star },

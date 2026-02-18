@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { NextResponse } from 'next/server'
 
 export async function GET(request: Request) {
@@ -8,9 +9,46 @@ export async function GET(request: Request) {
 
   if (code) {
     const supabase = await createClient()
-    const { error } = await supabase.auth.exchangeCodeForSession(code)
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code)
 
-    if (!error) {
+    if (!error && data.session?.user) {
+      const user = data.session.user
+
+      // Check if profile exists — create one if this is a first OAuth sign-in
+      const adminClient = createAdminClient()
+      const { data: existingProfile } = await adminClient
+        .from('profiles')
+        .select('id, user_type')
+        .eq('id', user.id)
+        .single()
+
+      if (!existingProfile) {
+        // Extract name from OAuth metadata
+        const meta = user.user_metadata
+        const fullName =
+          meta?.full_name ||
+          meta?.name ||
+          `${meta?.first_name || ''} ${meta?.last_name || ''}`.trim() ||
+          user.email?.split('@')[0] ||
+          ''
+
+        await adminClient.from('profiles').insert({
+          id: user.id,
+          email: (user.email || '').toLowerCase(),
+          full_name: fullName,
+          role: 'user',
+          user_type: 'client',
+          created_at: new Date().toISOString(),
+        })
+      }
+
+      // Redirect to appropriate dashboard if no specific next URL
+      if (next === '/') {
+        const userType = existingProfile?.user_type || 'client'
+        const defaultRedirect = userType === 'artisan' ? '/espace-artisan' : '/espace-client'
+        return NextResponse.redirect(`${origin}${defaultRedirect}`)
+      }
+
       return NextResponse.redirect(`${origin}${next}`)
     }
   }

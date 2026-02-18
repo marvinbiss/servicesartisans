@@ -6,6 +6,7 @@ import { z } from 'zod'
 // POST request schema
 const oauthSchema = z.object({
   provider: z.enum(['google', 'facebook', 'apple']),
+  next: z.string().optional(),
 })
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
@@ -21,11 +22,14 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
-    const { provider } = result.data
+    const { provider, next } = result.data
 
     const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-    const redirectTo = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'}/auth/callback`
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr'
+    const redirectTo = next
+      ? `${siteUrl}/auth/callback?next=${encodeURIComponent(next)}`
+      : `${siteUrl}/auth/callback`
 
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: provider as 'google' | 'facebook' | 'apple',
