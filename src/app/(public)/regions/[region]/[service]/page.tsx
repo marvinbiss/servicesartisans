@@ -12,13 +12,14 @@ import { generateRegionContent, hashCode, getRegionalMultiplier } from '@/lib/se
 import { getServiceImage } from '@/lib/data/images'
 
 export function generateStaticParams() {
-  const tradeSlugs = getTradesSlugs()
+  // Pre-render only top 5 services per region; rest served via ISR
+  const topSlugs = getTradesSlugs().slice(0, 5)
   return regions.flatMap(r =>
-    tradeSlugs.map(s => ({ region: r.slug, service: s }))
+    topSlugs.map(s => ({ region: r.slug, service: s }))
   )
 }
 
-export const dynamicParams = false
+export const dynamicParams = true
 export const revalidate = 86400
 
 interface PageProps {

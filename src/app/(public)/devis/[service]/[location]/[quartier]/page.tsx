@@ -14,14 +14,14 @@ import { relatedServices } from '@/lib/constants/navigation'
 import DevisForm from '@/components/DevisForm'
 
 // ---------------------------------------------------------------------------
-// Static params: top 8 services x top 30 cities x their quartiers
+// Static params: top 3 services x top 10 cities x their quartiers
 // ---------------------------------------------------------------------------
 
 const tradeSlugs = getTradesSlugs()
 
 export function generateStaticParams() {
-  const topServices = tradeSlugs.slice(0, 5)
-  const topCities = villes.slice(0, 15)
+  const topServices = tradeSlugs.slice(0, 3)
+  const topCities = villes.slice(0, 10)
   return topServices.flatMap((s) =>
     topCities.flatMap((v) =>
       getQuartiersByVille(v.slug).map((q) => ({

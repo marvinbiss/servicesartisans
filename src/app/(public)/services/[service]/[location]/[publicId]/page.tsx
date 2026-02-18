@@ -19,11 +19,11 @@ import ServiceQuartierPage from './ServiceQuartierPage'
 export const revalidate = 300
 
 // Pre-render top service×city×quartier combos for ISR warming
-const TOP_CITIES_QUARTIER = 30
+const TOP_CITIES_QUARTIER = 10
 export function generateStaticParams() {
   const topCities = villes.slice(0, TOP_CITIES_QUARTIER)
-  // Only pre-render first 8 services × 30 cities × quartiers to keep build manageable
-  const topServices = staticServicesList.slice(0, 8)
+  // Only pre-render first 3 services × 10 cities × quartiers to keep build fast
+  const topServices = staticServicesList.slice(0, 3)
   return topServices.flatMap(s =>
     topCities.flatMap(v => {
       const quartiers = v.quartiers || []

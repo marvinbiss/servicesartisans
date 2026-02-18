@@ -20,14 +20,14 @@ function parsePopulation(pop: string): number {
   return parseInt(pop.replace(/\s/g, ''), 10) || 0
 }
 
-const top20Cities = [...villes]
+const top10Cities = [...villes]
   .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
-  .slice(0, 20)
+  .slice(0, 10)
 
 export function generateStaticParams() {
   const top10Problems = getProblemSlugs().slice(0, 10)
   return top10Problems.flatMap((p) =>
-    top20Cities.map((v) => ({ probleme: p, ville: v.slug }))
+    top10Cities.map((v) => ({ probleme: p, ville: v.slug }))
   )
 }
 
