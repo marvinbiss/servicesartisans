@@ -34,7 +34,7 @@ async function getRecentProviders(limit = 50) {
 
   const { data, error } = await supabase
     .from('providers')
-    .select('id, stable_id, name, slug, specialty, address_city, address_postal_code, address_street, address_region, siret, phone, is_verified, is_active, rating_average, review_count, experience_years, employee_count, created_at')
+    .select('id, stable_id, name, slug, specialty, address_city, address_postal_code, address_street, address_region, siret, phone, is_verified, is_active, rating_average, review_count, created_at')
     .eq('is_active', true)
     .order('is_verified', { ascending: false })
     .order('created_at', { ascending: false })
@@ -226,23 +226,13 @@ export default async function ArtisansPage() {
                   )}
 
                   {/* Badges */}
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {provider.experience_years > 0 && (
-                      <span className="text-xs px-2.5 py-1 rounded-full bg-green-50 border border-green-100 text-green-700 font-medium">
-                        {provider.experience_years} ans d&apos;exp.
-                      </span>
-                    )}
-                    {provider.employee_count > 0 && (
-                      <span className="text-xs px-2.5 py-1 rounded-full bg-purple-50 border border-purple-100 text-purple-700 font-medium">
-                        {provider.employee_count} employés
-                      </span>
-                    )}
-                    {provider.address_region && (
+                  {provider.address_region && (
+                    <div className="flex flex-wrap gap-2 mb-4">
                       <span className="text-xs px-2.5 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-700 font-medium">
                         {provider.address_region}
                       </span>
-                    )}
-                  </div>
+                    </div>
+                  )}
 
                   {/* CTA */}
                   <div className="flex gap-3">
