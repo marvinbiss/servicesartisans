@@ -32,7 +32,7 @@ export async function GET() {
       data: anonSample,
       error: anonErr?.message || null,
       code: anonErr?.code || null,
-      hint: (anonErr as Record<string, unknown>)?.hint || null,
+      hint: anonErr ? (anonErr as unknown as { hint?: string }).hint || null : null,
       ms: Date.now() - ta1,
     }
 
