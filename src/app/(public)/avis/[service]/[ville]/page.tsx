@@ -28,6 +28,8 @@ import { relatedServices } from '@/lib/constants/navigation'
 
 export const revalidate = 86400 // Revalidate every 24h
 
+const IS_BUILD = process.env.NEXT_PHASE === 'phase-production-build'
+
 // ---------------------------------------------------------------------------
 // Types & data-fetching (Supabase)
 // ---------------------------------------------------------------------------
@@ -54,6 +56,7 @@ interface AvisReview {
 }
 
 async function getTopProviders(cityName: string, _serviceSlug: string): Promise<AvisProvider[]> {
+  if (IS_BUILD) return []
   try {
     const { createAdminClient } = await import('@/lib/supabase/admin')
     const supabase = createAdminClient()
@@ -76,7 +79,7 @@ async function getTopProviders(cityName: string, _serviceSlug: string): Promise<
 }
 
 async function getRecentReviews(providerIds: string[]): Promise<AvisReview[]> {
-  if (providerIds.length === 0) return []
+  if (IS_BUILD || providerIds.length === 0) return []
   try {
     const { createAdminClient } = await import('@/lib/supabase/admin')
     const supabase = createAdminClient()

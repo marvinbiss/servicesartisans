@@ -11,6 +11,8 @@ import { tradeContent } from '@/lib/data/trade-content'
 
 export const revalidate = 86400 // 24h
 
+const IS_BUILD = process.env.NEXT_PHASE === 'phase-production-build'
+
 export const metadata: Metadata = {
   title: 'Avis artisans — Trouvez un professionnel de confiance',
   description:
@@ -113,6 +115,7 @@ const faqItems = [
 ]
 
 async function getPlatformStats() {
+  if (IS_BUILD) return { totalReviews: 0, avgRating: 0, providerCount: 0 }
   try {
     const { createAdminClient } = await import('@/lib/supabase/admin')
     const supabase = createAdminClient()

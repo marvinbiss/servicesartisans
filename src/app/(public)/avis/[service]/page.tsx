@@ -23,6 +23,7 @@ import { relatedServices } from '@/lib/constants/navigation'
 
 export const revalidate = 86400 // 24h
 
+const IS_BUILD = process.env.NEXT_PHASE === 'phase-production-build'
 const tradeSlugs = getTradesSlugs()
 
 export function generateStaticParams() {
@@ -115,6 +116,7 @@ interface ServiceAvisReview {
 }
 
 async function getServiceStats(serviceName: string) {
+  if (IS_BUILD) return { providers: [] as ServiceAvisProvider[], reviews: [] as ServiceAvisReview[], totalReviews: 0, avgRating: 0 }
   try {
     const { createAdminClient } = await import('@/lib/supabase/admin')
     const supabase = createAdminClient()

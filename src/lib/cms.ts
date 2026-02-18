@@ -3,6 +3,8 @@ import { getCachedData, CACHE_TTL } from '@/lib/cache'
 import { logger } from '@/lib/logger'
 import type { CmsPage, CmsPageType } from '@/types/cms'
 
+const IS_BUILD = process.env.NEXT_PHASE === 'phase-production-build'
+
 /**
  * Fetch published CMS content for a given slug + type.
  * Returns null if no published record exists (caller uses hardcoded fallback).
@@ -13,7 +15,7 @@ export async function getPageContent(
   pageType: CmsPageType,
   options?: { serviceSlug?: string; locationSlug?: string }
 ): Promise<CmsPage | null> {
-  if (!slug) return null
+  if (!slug || IS_BUILD) return null
 
   const cacheKey = `cms:${pageType}:${slug}:${options?.serviceSlug ?? ''}:${options?.locationSlug ?? ''}`
 
@@ -49,6 +51,7 @@ export async function getPageContent(
  * Fetch all published blog articles from CMS.
  */
 export async function getCmsBlogArticles(): Promise<CmsPage[]> {
+  if (IS_BUILD) return []
   return getCachedData('cms:blog:all', async () => {
     try {
       const supabase = createAdminClient()
