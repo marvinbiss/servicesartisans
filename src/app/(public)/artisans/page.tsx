@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import { createClient } from '@supabase/supabase-js'
 import Link from 'next/link'
-import { MapPin, Star, Phone, Shield, Search, Users, Building2 } from 'lucide-react'
+import { MapPin, Star, Phone, Search, Users, Building2 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { SITE_URL } from '@/lib/seo/config'
 import { getArtisanUrl, getAvatarColor } from '@/lib/utils'
