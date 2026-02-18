@@ -156,20 +156,34 @@ export async function getServiceBySlug(slug: string) {
 }
 
 export async function getLocationBySlug(slug: string) {
-  if (IS_BUILD) return null // Use static france.ts fallback during build
-  return retryWithBackoff(
-    async () => {
-      const { data, error } = await supabase
-        .from('locations')
-        .select('*')
-        .eq('slug', slug)
-        .single()
+  if (IS_BUILD) {
+    // Use static france.ts fallback during build
+    const ville = getVilleBySlugImport(slug)
+    if (ville) return { id: '', name: ville.name, slug: ville.slug, postal_code: ville.codePostal }
+    return null
+  }
 
-      if (error) throw error
-      return data
-    },
-    `getLocationBySlug(${slug})`,
-  )
+  try {
+    const data = await retryWithBackoff(
+      async () => {
+        const { data, error } = await supabase
+          .from('locations')
+          .select('*')
+          .eq('slug', slug)
+          .single()
+
+        if (error || !data) throw error || new Error('Location not found')
+        return data
+      },
+      `getLocationBySlug(${slug})`,
+    )
+    return data
+  } catch {
+    // Fallback to france.ts static data when DB table is empty/missing
+    const ville = getVilleBySlugImport(slug)
+    if (ville) return { id: '', name: ville.name, slug: ville.slug, postal_code: ville.codePostal }
+    return null
+  }
 }
 
 // Lookup by stable_id ONLY — no fallback.
