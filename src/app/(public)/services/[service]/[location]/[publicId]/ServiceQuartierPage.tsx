@@ -16,6 +16,7 @@ import {
   getNearbyCities,
 } from '@/lib/data/france'
 import { getTradeContent } from '@/lib/data/trade-content'
+import { getQuartierData } from '@/lib/data/quartier-data'
 import {
   generateQuartierContent,
   hashCode,
@@ -49,6 +50,9 @@ export default async function ServiceQuartierPage({
   const quartierData = getQuartierBySlug(locationSlug, quartierSlug)
   if (!quartierData) notFound()
   const { ville, quartierName } = quartierData
+
+  // 1b. Enriched quartier data (real stats, description, risks, transport…)
+  const quartierRealData = getQuartierData(locationSlug, quartierSlug)
 
   // 2. Resolve service (DB → static fallback)
   let service: Service
@@ -207,6 +211,31 @@ export default async function ServiceQuartierPage({
         </div>
       </div>
 
+      {/* ─── QUARTIER IDENTITY CARD ────────────────────────── */}
+      {quartierRealData && (
+        <section className="bg-gradient-to-r from-blue-50 to-amber-50 border-b">
+          <div className="max-w-7xl mx-auto px-4 py-6">
+            <p className="text-gray-700 leading-relaxed">{quartierRealData.description}</p>
+            <div className="flex flex-wrap gap-2 mt-3">
+              <span className="text-xs bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-medium">
+                {quartierRealData.typeQuartier}
+              </span>
+              <span className="text-xs bg-amber-100 text-amber-800 px-3 py-1 rounded-full font-medium">
+                {quartierRealData.epoque}
+              </span>
+              {quartierRealData.transport.filter(t => t !== 'bus' && t !== 'aucun').map(t => (
+                <span key={t} className="text-xs bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full font-medium">
+                  {t.toUpperCase()}
+                </span>
+              ))}
+            </div>
+            {quartierRealData.atout && (
+              <p className="text-sm text-amber-700 font-medium mt-2">{quartierRealData.atout}</p>
+            )}
+          </div>
+        </section>
+      )}
+
       {/* Provider Listing (reuses the split-view PageClient from service×location) */}
       <ServiceLocationPageClient
         service={service}
@@ -227,23 +256,54 @@ export default async function ServiceQuartierPage({
 
               <h3>Contexte du bâti à {quartierName}</h3>
               <p>{quartierContent.batimentContext}</p>
-              <div className="not-prose grid grid-cols-2 sm:grid-cols-4 gap-3 my-4">
-                <div className="text-center p-3 bg-amber-50 rounded-xl border border-amber-100">
-                  <div className="text-sm font-bold text-amber-700">{profile.eraLabel}</div>
-                  <div className="text-xs text-gray-500 mt-1">Type de bâti</div>
-                </div>
-                <div className="text-center p-3 bg-blue-50 rounded-xl border border-blue-100">
-                  <div className="text-sm font-bold text-blue-700">{profile.densityLabel}</div>
-                  <div className="text-xs text-gray-500 mt-1">Densité urbaine</div>
-                </div>
-                <div className="text-center p-3 bg-emerald-50 rounded-xl border border-emerald-100">
-                  <div className="text-sm font-bold text-emerald-700">{providers.length}</div>
-                  <div className="text-xs text-gray-500 mt-1">{svcLower}s à {ville.name}</div>
-                </div>
-                <div className="text-center p-3 bg-slate-50 rounded-xl border border-slate-100">
-                  <div className="text-sm font-bold text-slate-700">{ville.departementCode}</div>
-                  <div className="text-xs text-gray-500 mt-1">{ville.departement}</div>
-                </div>
+              <div className="not-prose grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 my-4">
+                {quartierRealData ? (
+                  <>
+                    <div className="text-center p-3 bg-amber-50 rounded-xl border border-amber-100">
+                      <div className="text-sm font-bold text-amber-700">{formatEuro(quartierRealData.prixM2)}/m²</div>
+                      <div className="text-xs text-gray-500 mt-1">Prix m²</div>
+                    </div>
+                    <div className="text-center p-3 bg-blue-50 rounded-xl border border-blue-100">
+                      <div className="text-sm font-bold text-blue-700">{quartierRealData.loyerM2} €/m²</div>
+                      <div className="text-xs text-gray-500 mt-1">Loyer m²</div>
+                    </div>
+                    <div className="text-center p-3 bg-emerald-50 rounded-xl border border-emerald-100">
+                      <div className="text-sm font-bold text-emerald-700">{quartierRealData.tauxProprietaires}%</div>
+                      <div className="text-xs text-gray-500 mt-1">Taux propriétaires</div>
+                    </div>
+                    <div className="text-center p-3 bg-violet-50 rounded-xl border border-violet-100">
+                      <div className="text-sm font-bold text-violet-700">{quartierRealData.populationEstimee.toLocaleString('fr-FR')}</div>
+                      <div className="text-xs text-gray-500 mt-1">Population quartier</div>
+                    </div>
+                    <div className="text-center p-3 bg-orange-50 rounded-xl border border-orange-100">
+                      <div className="text-sm font-bold text-orange-700">DPE {quartierRealData.dpeMedian}</div>
+                      <div className="text-xs text-gray-500 mt-1">DPE médian</div>
+                    </div>
+                    <div className="text-center p-3 bg-slate-50 rounded-xl border border-slate-100">
+                      <div className="text-sm font-bold text-slate-700">{quartierRealData.codePostal}</div>
+                      <div className="text-xs text-gray-500 mt-1">Code postal</div>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="text-center p-3 bg-amber-50 rounded-xl border border-amber-100">
+                      <div className="text-sm font-bold text-amber-700">{profile.eraLabel}</div>
+                      <div className="text-xs text-gray-500 mt-1">Type de bâti</div>
+                    </div>
+                    <div className="text-center p-3 bg-blue-50 rounded-xl border border-blue-100">
+                      <div className="text-sm font-bold text-blue-700">{profile.densityLabel}</div>
+                      <div className="text-xs text-gray-500 mt-1">Densité urbaine</div>
+                    </div>
+                    <div className="text-center p-3 bg-emerald-50 rounded-xl border border-emerald-100">
+                      <div className="text-sm font-bold text-emerald-700">{providers.length}</div>
+                      <div className="text-xs text-gray-500 mt-1">{svcLower}s à {ville.name}</div>
+                    </div>
+                    <div className="text-center p-3 bg-slate-50 rounded-xl border border-slate-100">
+                      <div className="text-sm font-bold text-slate-700">{ville.departementCode}</div>
+                      <div className="text-xs text-gray-500 mt-1">{ville.departement}</div>
+                    </div>
+                  </>
+                )}
               </div>
 
               {/* Common issues relevant to this service */}
@@ -339,6 +399,44 @@ export default async function ServiceQuartierPage({
                   Climat et saisonnalité à {quartierName}
                 </h2>
                 <p className="text-gray-700 leading-relaxed">{quartierContent.dataDriven.climatQuartier}</p>
+              </div>
+            )}
+
+            {/* ─── RISQUES NATURELS (from quartierRealData) ──── */}
+            {quartierRealData?.risques && quartierRealData.risques.length > 0 && (
+              <div className="bg-gradient-to-br from-red-50/50 to-orange-50/30 rounded-2xl border border-red-100 p-8">
+                <h2 className="text-xl font-bold text-gray-900 mb-4 border-l-4 border-red-500 pl-4">
+                  Risques naturels à {quartierName}
+                </h2>
+                <div className="flex flex-wrap gap-3">
+                  {quartierRealData.risques.map(risque => (
+                    <div key={risque} className="flex items-center gap-2 bg-white px-4 py-2 rounded-xl border border-red-100">
+                      <span className="text-red-500">&#9888;</span>
+                      <span className="text-sm font-medium text-gray-700 capitalize">{risque}</span>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-sm text-gray-600 mt-4">
+                  Ces risques naturels identifiés à {quartierName} ({ville.name}) peuvent impacter
+                  les travaux et l&apos;entretien de votre logement. Un {svcLower} expérimenté saura
+                  adapter ses interventions en conséquence.
+                </p>
+              </div>
+            )}
+
+            {/* ─── TRANSPORTS (from quartierRealData) ────────── */}
+            {quartierRealData?.transport && quartierRealData.transport.length > 0 && quartierRealData.transport[0] !== 'aucun' && (
+              <div className="bg-gradient-to-br from-emerald-50/50 to-teal-50/30 rounded-2xl border border-emerald-100 p-8">
+                <h2 className="text-xl font-bold text-gray-900 mb-4 border-l-4 border-emerald-500 pl-4">
+                  Transports à {quartierName}
+                </h2>
+                <div className="flex flex-wrap gap-3">
+                  {quartierRealData.transport.map(t => (
+                    <div key={t} className="flex items-center gap-2 bg-white px-4 py-2 rounded-xl border border-emerald-100">
+                      <span className="text-sm font-medium text-gray-700">{t === 'metro' ? '🚇 Métro' : t === 'tram' ? '🚊 Tramway' : t === 'rer' ? '🚈 RER' : t === 'bus' ? '🚌 Bus' : t === 'gare' ? '🚂 Gare' : t}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
           </div>

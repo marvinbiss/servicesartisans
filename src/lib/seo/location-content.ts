@@ -13,6 +13,7 @@ import type { CommuneData } from '@/lib/data/commune-data'
 import { formatNumber, formatEuro, monthName } from '@/lib/data/commune-data'
 import { getQuartierRealPrix, getVilleRealPrix, getRealDpe } from '@/lib/data/quartier-real-data'
 import { getDeptArtisanCounts } from '@/lib/data/dept-artisan-counts'
+import { getQuartierData, type QuartierProfile as QuartierDataProfile } from '@/lib/data/quartier-data'
 
 // ---------------------------------------------------------------------------
 // Regional pricing multipliers
@@ -1760,7 +1761,57 @@ const PROXIMITY_TEMPLATES: ((q: string, v: string, era: string) => string)[] = [
   (q, v) => `Un professionnel du bâtiment ancré à ${v} et habitué à intervenir à ${q} est un partenaire de confiance pour vos travaux. Il connaît les règles d'urbanisme locales, les spécificités du quartier et peut coordonner plusieurs corps de métier en s'appuyant sur son réseau de confrères à proximité.`,
 ]
 
+// Inline slug helper — same logic as toQuartierSlug in france.ts / slugify in utils.ts
+function toQuartierSlug(text: string): string {
+  return text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+}
+
+// Map quartier-data.ts epoque → location-content.ts BuildingEra
+function mapEpoqueToBuildingEra(epoque: QuartierDataProfile['epoque']): BuildingEra {
+  switch (epoque) {
+    case 'medieval': return 'pre-1950'
+    case 'haussmannien': return 'haussmannien'
+    case '1945-1970': return '1950-1980'
+    case '1970-2000': return '1980-2000'
+    case 'post-2000': return 'post-2000'
+  }
+}
+
+// Map quartier-data.ts densite → location-content.ts UrbanDensity
+function mapDensiteToUrbanDensity(densite: QuartierDataProfile['densite']): UrbanDensity {
+  switch (densite) {
+    case 'haute': return 'dense'
+    case 'moyenne': return 'residentiel'
+    case 'faible': return 'periurbain'
+  }
+}
+
 function getQuartierProfile(ville: Ville, quartierName: string): QuartierProfile {
+  // Try to get enriched data from quartier-data.ts first
+  const realData = getQuartierData(ville.slug, toQuartierSlug(quartierName))
+  if (realData) {
+    const eraKey = mapEpoqueToBuildingEra(realData.epoque)
+    const densityKey = mapDensiteToUrbanDensity(realData.densite)
+    const era = ERAS.find(e => e.key === eraKey) || ERAS[0]
+    const density = DENSITIES.find(d => d.key === densityKey) || DENSITIES[1]
+    const seed3 = Math.abs(hashCode(`arch-${ville.slug}-${quartierName}`))
+    const archNotes = ERA_ARCH_NOTES[era.key]
+    const archNote = archNotes[seed3 % archNotes.length]
+    const issues = ERA_ISSUES[era.key]
+    const topSlugs = SERVICE_PRIORITY[era.key]
+
+    return {
+      era: era.key,
+      eraLabel: era.label,
+      density: density.key,
+      densityLabel: density.label,
+      commonIssues: issues,
+      topServiceSlugs: topSlugs,
+      architecturalNote: archNote,
+    }
+  }
+
+  // Fallback: algorithmic logic when no enriched quartier data is available
   const pop = parsePop(ville.population)
   const quartierIdx = ville.quartiers.indexOf(quartierName)
   const total = ville.quartiers.length
@@ -1936,8 +1987,11 @@ function generateQuartierDataDrivenContent(
   const seed = Math.abs(hashCode(`qdd-${ville.slug}-${quartierName}`))
   const dataSources: string[] = []
 
+  // Try to get enriched quartier data for real values
+  const realData = getQuartierData(ville.slug, toQuartierSlug(quartierName))
+
   // ── Section 1: Immobilier quartier ──
-  const prixQ = qData.prix_m2_moyen
+  const prixQ = realData ? realData.prixM2 : qData.prix_m2_moyen
   const prixCity = cityData.prix_m2_moyen
   const logements = qData.nb_logements
   const partMaisons = qData.part_maisons_pct
@@ -1983,8 +2037,9 @@ function generateQuartierDataDrivenContent(
   }
 
   // ── Section 3: Énergétique / DPE quartier ──
-  const dpe = qData.pct_passoires_dpe
+  const dpe = realData ? realData.tauxPassoires : qData.pct_passoires_dpe
   const cityDpe = cityData.pct_passoires_dpe
+  const dpeMedianLabel = realData ? `DPE médian ${realData.dpeMedian}` : null
 
   let energetiqueQuartier: string
   if (dpe != null && cityDpe != null) {
@@ -1995,13 +2050,14 @@ function generateQuartierDataDrivenContent(
       : 'proche de la moyenne communale'
     const eraNotes = ERA_ENERGY_NOTES[profile.era] || ['']
     const eraNote = eraNotes[Math.abs(hashCode(`enr-${ville.slug}-${quartierName}`)) % eraNotes.length]
+    const dpeMedianSuffix = dpeMedianLabel ? ` Le ${dpeMedianLabel} du quartier confirme cette tendance.` : ''
 
     const nrgTemplates = [
-      `À ${quartierName}, on estime que ${dpe} % des logements sont des passoires thermiques (DPE F ou G), un taux ${dpeCompare}. ${eraNote} L'interdiction progressive de location des logements mal classés accélère la demande de rénovation énergétique.`,
+      `À ${quartierName}, on estime que ${dpe} % des logements sont des passoires thermiques (DPE F ou G), un taux ${dpeCompare}. ${eraNote} L'interdiction progressive de location des logements mal classés accélère la demande de rénovation énergétique.${dpeMedianSuffix}`,
 
-      `Dans le quartier ${quartierName} (${ville.name}), environ ${dpe} % des logements présentent un diagnostic énergétique défavorable (classes F-G), ${dpeCompare}. ${eraNote} Les artisans RGE du secteur accompagnent les propriétaires dans cette transition.`,
+      `Dans le quartier ${quartierName} (${ville.name}), environ ${dpe} % des logements présentent un diagnostic énergétique défavorable (classes F-G), ${dpeCompare}. ${eraNote} Les artisans RGE du secteur accompagnent les propriétaires dans cette transition.${dpeMedianSuffix}`,
 
-      `Le quartier ${quartierName} affiche une estimation de ${dpe} % de passoires thermiques, ${dpeCompare}. Pour un bâti de type ${profile.eraLabel.toLowerCase()}, ${dpe > 20 ? 'ce chiffre appelle des travaux de rénovation énergétique prioritaires' : dpe > 10 ? 'ce taux reflète les caractéristiques constructives de l\'époque' : 'cette performance témoigne de normes de construction récentes'}. ${eraNote}`,
+      `Le quartier ${quartierName} affiche une estimation de ${dpe} % de passoires thermiques, ${dpeCompare}. Pour un bâti de type ${profile.eraLabel.toLowerCase()}, ${dpe > 20 ? 'ce chiffre appelle des travaux de rénovation énergétique prioritaires' : dpe > 10 ? 'ce taux reflète les caractéristiques constructives de l\'époque' : 'cette performance témoigne de normes de construction récentes'}. ${eraNote}${dpeMedianSuffix}`,
     ]
     energetiqueQuartier = nrgTemplates[(seed + 2) % 3]
     dataSources.push('ADEME (DPE, estimations par type de bâti)')
@@ -2051,6 +2107,40 @@ function generateQuartierDataDrivenContent(
   }
 
   const periodeTravaux = trDebut != null && trFin != null ? `${monthName(trDebut)} à ${monthName(trFin)}` : null
+
+  // ── Enrich with transport & risques from real quartier data ──
+  if (realData) {
+    const RISQUE_LABELS: Record<string, string> = {
+      inondation: 'risque d\'inondation',
+      sismique: 'risque sismique',
+      argile: 'retrait-gonflement des argiles',
+      radon: 'exposition au radon',
+      littoral: 'érosion littorale',
+    }
+    const TRANSPORT_LABELS: Record<string, string> = {
+      metro: 'métro',
+      tram: 'tramway',
+      rer: 'RER',
+      bus: 'bus',
+      gare: 'gare ferroviaire',
+      aucun: 'aucun transport en commun',
+    }
+
+    if (realData.risques.length > 0) {
+      const risquesStr = realData.risques.map(r => RISQUE_LABELS[r] || r).join(', ')
+      climatQuartier += ` Le quartier ${quartierName} est également concerné par : ${risquesStr}. Ces facteurs peuvent influencer les travaux de rénovation et les choix de matériaux.`
+    }
+
+    if (realData.transport.length > 0 && !realData.transport.includes('aucun')) {
+      const transportStr = realData.transport.map(t => TRANSPORT_LABELS[t] || t).join(', ')
+      marcheArtisanalQuartier += ` Le quartier est desservi par : ${transportStr}, facilitant l'accès des artisans au chantier.`
+    }
+
+    // Add loyer info to immobilier section when available
+    if (realData.loyerM2 > 0) {
+      immobilierQuartier += ` Le loyer moyen se situe autour de ${formatEuro(realData.loyerM2)}/m²/mois, avec un taux de propriétaires de ${realData.tauxProprietaires} %.`
+    }
+  }
 
   return {
     immobilierQuartier,
