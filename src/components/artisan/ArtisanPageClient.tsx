@@ -246,7 +246,7 @@ export default function ArtisanPageClient({
               </section>
               {!isClaimed && (
                 <section className="lg:hidden" aria-label="Revendiquer cette fiche">
-                  <ClaimButton providerId={artisanId} providerName={artisan.business_name || artisan.name || 'Artisan'} hasSiret={hasSiret} />
+                  <ClaimButton providerId={artisanId} providerName={artisan.business_name || displayName} hasSiret={hasSiret} />
                 </section>
               )}
               <section id="services" aria-label="Services et tarifs">
@@ -274,7 +274,7 @@ export default function ArtisanPageClient({
               <div className="space-y-6 sticky top-20">
                 <ArtisanSidebar artisan={artisan} />
                 {!isClaimed && (
-                  <ClaimButton providerId={artisanId} providerName={artisan.business_name || artisan.name || 'Artisan'} hasSiret={hasSiret} />
+                  <ClaimButton providerId={artisanId} providerName={artisan.business_name || displayName} hasSiret={hasSiret} />
                 )}
               </div>
             </aside>
