@@ -221,7 +221,7 @@ export async function getProviderBySlug(slug: string) {
 // All 46 services must be mapped here — unmapped services can never show providers
 // on quartier pages, causing them to be permanently noindexed.
 const SERVICE_TO_SPECIALTIES: Record<string, string[]> = {
-  // --- Original 9 mappings ---
+  // --- Core trades (direct match) ---
   'plombier': ['plombier'],
   'electricien': ['electricien'],
   'chauffagiste': ['chauffagiste'],
@@ -230,45 +230,57 @@ const SERVICE_TO_SPECIALTIES: Record<string, string[]> = {
   'couvreur': ['couvreur', 'charpentier'],
   'macon': ['macon'],
   'peintre-en-batiment': ['peintre', 'platrier', 'finition'],
-  'climaticien': ['isolation'],
-
-  // --- 37 additional services ---
-  'serrurier': ['serrurier'],
+  'climaticien': ['isolation', 'chauffagiste'],
+  'serrurier': ['serrurier', 'menuisier-metallique'],
   'jardinier': ['jardinier', 'paysagiste'],
-  'vitrier': ['vitrier', 'miroitier'],
-  'cuisiniste': ['cuisiniste', 'installateur-de-cuisine'],
-  'solier': ['solier', 'poseur-de-parquet', 'moquettiste'],
+  'vitrier': ['vitrier', 'miroitier', 'menuisier'],
+  'cuisiniste': ['cuisiniste', 'installateur-de-cuisine', 'menuisier'],
+  'solier': ['solier', 'poseur-de-parquet', 'moquettiste', 'carreleur'],
   'nettoyage': ['nettoyage', 'nettoyage-professionnel'],
-  'terrassier': ['terrassier', 'terrassement'],
-  'charpentier': ['charpentier'],
-  'zingueur': ['zingueur', 'couvreur-zingueur'],
-  'etancheiste': ['etancheiste', 'etancheite'],
-  'facadier': ['facadier', 'facade', 'ravalement'],
-  'platrier': ['platrier', 'plaquiste', 'platrerie'],
-  'metallier': ['metallier', 'metallerie'],
-  'ferronnier': ['ferronnier', 'ferronnerie'],
-  'poseur-de-parquet': ['poseur-de-parquet', 'parqueteur', 'solier'],
-  'miroitier': ['miroitier', 'vitrier'],
-  'storiste': ['storiste', 'store', 'volet'],
-  'salle-de-bain': ['salle-de-bain', 'installateur-de-salle-de-bain', 'plombier'],
-  'architecte-interieur': ['architecte-interieur', 'architecte-d-interieur', 'decoration'],
-  'decorateur': ['decorateur', 'decoration', 'peintre-decorateur'],
+
+  // --- Bâtiment / Gros œuvre (linked to macon, couvreur, charpentier) ---
+  'terrassier': ['terrassier', 'terrassement', 'macon'],
+  'charpentier': ['charpentier', 'couvreur'],
+  'zingueur': ['zingueur', 'couvreur-zingueur', 'couvreur'],
+  'etancheiste': ['etancheiste', 'etancheite', 'couvreur', 'macon'],
+  'facadier': ['facadier', 'facade', 'ravalement', 'peintre', 'macon'],
+  'platrier': ['platrier', 'plaquiste', 'platrerie', 'finition'],
+  'metallier': ['metallier', 'metallerie', 'menuisier-metallique'],
+  'ferronnier': ['ferronnier', 'ferronnerie', 'menuisier-metallique'],
+
+  // --- Finitions / Aménagement (linked to menuisier, peintre, plombier) ---
+  'poseur-de-parquet': ['poseur-de-parquet', 'parqueteur', 'solier', 'menuisier'],
+  'miroitier': ['miroitier', 'vitrier', 'menuisier'],
+  'storiste': ['storiste', 'store', 'volet', 'menuisier'],
+  'salle-de-bain': ['salle-de-bain', 'installateur-de-salle-de-bain', 'plombier', 'carreleur'],
+  'architecte-interieur': ['architecte-interieur', 'architecte-d-interieur', 'decoration', 'peintre'],
+  'decorateur': ['decorateur', 'decoration', 'peintre-decorateur', 'peintre'],
+
+  // --- Énergie / Chauffage (linked to electricien, chauffagiste, couvreur) ---
   'domoticien': ['domoticien', 'domotique', 'electricien'],
   'pompe-a-chaleur': ['pompe-a-chaleur', 'pac', 'chauffagiste'],
-  'panneaux-solaires': ['panneaux-solaires', 'photovoltaique', 'solaire'],
-  'isolation-thermique': ['isolation', 'isolation-thermique', 'ite', 'iti'],
-  'renovation-energetique': ['renovation-energetique', 'rge', 'isolation'],
+  'panneaux-solaires': ['panneaux-solaires', 'photovoltaique', 'solaire', 'electricien', 'couvreur'],
+  'isolation-thermique': ['isolation', 'isolation-thermique', 'ite', 'iti', 'macon'],
+  'renovation-energetique': ['renovation-energetique', 'rge', 'isolation', 'chauffagiste', 'macon'],
   'borne-recharge': ['borne-recharge', 'borne-electrique', 'electricien'],
-  'ramoneur': ['ramoneur', 'ramonage'],
-  'paysagiste': ['paysagiste', 'jardinier', 'amenagement-exterieur'],
-  'pisciniste': ['pisciniste', 'piscine'],
-  'alarme-securite': ['alarme', 'securite', 'videosurveillance', 'alarme-securite'],
-  'antenniste': ['antenniste', 'antenne'],
-  'ascensoriste': ['ascensoriste', 'ascenseur'],
-  'diagnostiqueur': ['diagnostiqueur', 'diagnostic', 'dpe'],
-  'geometre': ['geometre', 'geometre-expert'],
-  'desinsectisation': ['desinsectisation', 'desinsectiseur', 'nuisibles'],
-  'deratisation': ['deratisation', 'deratiseur', 'nuisibles'],
+  'ramoneur': ['ramoneur', 'ramonage', 'chauffagiste'],
+
+  // --- Extérieur (linked to macon, peintre) ---
+  'paysagiste': ['paysagiste', 'jardinier', 'amenagement-exterieur', 'macon'],
+  'pisciniste': ['pisciniste', 'piscine', 'macon', 'plombier'],
+
+  // --- Sécurité / Technique (linked to electricien) ---
+  'alarme-securite': ['alarme', 'securite', 'videosurveillance', 'alarme-securite', 'electricien'],
+  'antenniste': ['antenniste', 'antenne', 'electricien'],
+  'ascensoriste': ['ascensoriste', 'ascenseur', 'electricien'],
+
+  // --- Diagnostics / Conseil (linked to macon, electricien) ---
+  'diagnostiqueur': ['diagnostiqueur', 'diagnostic', 'dpe', 'electricien'],
+  'geometre': ['geometre', 'geometre-expert', 'macon'],
+
+  // --- Services spécialisés ---
+  'desinsectisation': ['desinsectisation', 'desinsectiseur', 'nuisibles', 'nettoyage'],
+  'deratisation': ['deratisation', 'deratiseur', 'nuisibles', 'nettoyage'],
   'demenageur': ['demenageur', 'demenagement'],
 }
 

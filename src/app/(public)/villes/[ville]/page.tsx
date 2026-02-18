@@ -11,8 +11,8 @@ import { villes, getVilleBySlug, services, getRegionSlugByName, getDepartementBy
 import { getCityImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { generateVilleContent, hashCode } from '@/lib/seo/location-content'
 
-// Pre-render top 500 cities, rest generated on-demand via ISR
-const TOP_CITIES_COUNT = 500
+// Pre-render top 200 cities, rest generated on-demand via ISR
+const TOP_CITIES_COUNT = 200
 export function generateStaticParams() {
   return villes.slice(0, TOP_CITIES_COUNT).map((ville) => ({ ville: ville.slug }))
 }
