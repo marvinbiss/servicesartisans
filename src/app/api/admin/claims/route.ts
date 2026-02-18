@@ -7,6 +7,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission } from '@/lib/admin-auth'
+import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
 export const dynamic = 'force-dynamic'
@@ -60,8 +61,10 @@ export async function GET(request: NextRequest) {
         rejection_reason,
         reviewed_at,
         created_at,
-        provider:providers(id, name, siret, address_city, stable_id),
-        user:profiles!provider_claims_user_id_fkey(id, email, full_name)
+        provider_id,
+        user_id,
+        provider:provider_id(id, name, siret, address_city, stable_id),
+        user:user_id(id, email, full_name)
       `, { count: 'exact' })
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1)
@@ -139,6 +142,26 @@ export async function PATCH(request: NextRequest) {
     }
 
     if (action === 'approve') {
+      // 0. Verify provider is still unclaimed (race condition check)
+      const { data: provider } = await supabase
+        .from('providers')
+        .select('id, user_id, name')
+        .eq('id', claim.provider_id)
+        .single()
+
+      if (provider?.user_id) {
+        // Provider was claimed by another flow — auto-reject this claim
+        await supabase
+          .from('provider_claims')
+          .update({ status: 'rejected', rejection_reason: 'Fiche déjà attribuée', reviewed_by: authResult.admin.id, reviewed_at: now })
+          .eq('id', claimId)
+
+        return NextResponse.json(
+          { success: false, error: { message: 'Cette fiche a déjà été attribuée à un autre utilisateur' } },
+          { status: 409 }
+        )
+      }
+
       // 1. Update the claim status
       const { error: updateClaimError } = await supabase
         .from('provider_claims')
@@ -189,6 +212,13 @@ export async function PATCH(request: NextRequest) {
         })
         .eq('id', claim.user_id)
 
+      logger.info('Claim approved', {
+        claimId,
+        providerId: claim.provider_id,
+        userId: claim.user_id,
+        adminId: authResult.admin.id,
+      })
+
       return NextResponse.json({
         success: true,
         message: 'Demande approuvée. La fiche a été attribuée à l\'artisan.',
@@ -212,12 +242,21 @@ export async function PATCH(request: NextRequest) {
         )
       }
 
+      logger.info('Claim rejected', {
+        claimId,
+        providerId: claim.provider_id,
+        userId: claim.user_id,
+        adminId: authResult.admin.id,
+        reason: rejectionReason || null,
+      })
+
       return NextResponse.json({
         success: true,
         message: 'Demande rejetée.',
       })
     }
-  } catch {
+  } catch (err) {
+    logger.error('Admin claims PATCH error', { error: err })
     return NextResponse.json(
       { success: false, error: { message: 'Erreur serveur' } },
       { status: 500 }

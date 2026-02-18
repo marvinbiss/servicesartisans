@@ -6,6 +6,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
 export const dynamic = 'force-dynamic'
@@ -29,7 +30,16 @@ export async function POST(request: Request) {
     }
 
     // Validate body
-    const body = await request.json()
+    let body
+    try {
+      body = await request.json()
+    } catch {
+      return NextResponse.json(
+        { error: 'Corps de requête invalide' },
+        { status: 400 }
+      )
+    }
+
     const validation = claimSchema.safeParse(body)
     if (!validation.success) {
       return NextResponse.json(
@@ -41,7 +51,7 @@ export async function POST(request: Request) {
     const { providerId, siret } = validation.data
     const adminClient = createAdminClient()
 
-    // Check if user already has a claimed provider
+    // Check if user already owns a provider
     const { data: existingProvider } = await adminClient
       .from('providers')
       .select('id, name')
@@ -55,17 +65,32 @@ export async function POST(request: Request) {
       )
     }
 
-    // Check if user already has a pending claim
-    const { data: existingClaim } = await adminClient
+    // Check if user already has a pending claim (for any provider)
+    const { data: pendingClaims } = await adminClient
       .from('provider_claims')
-      .select('id, status')
+      .select('id')
       .eq('user_id', user.id)
       .eq('status', 'pending')
-      .single()
+      .limit(1)
 
-    if (existingClaim) {
+    if (pendingClaims && pendingClaims.length > 0) {
       return NextResponse.json(
         { error: 'Vous avez déjà une demande de revendication en cours de validation' },
+        { status: 409 }
+      )
+    }
+
+    // Check if this specific provider already has a pending claim from anyone
+    const { data: providerPendingClaims } = await adminClient
+      .from('provider_claims')
+      .select('id')
+      .eq('provider_id', providerId)
+      .eq('status', 'pending')
+      .limit(1)
+
+    if (providerPendingClaims && providerPendingClaims.length > 0) {
+      return NextResponse.json(
+        { error: 'Une demande de revendication est déjà en cours pour cette fiche' },
         { status: 409 }
       )
     }
@@ -84,7 +109,7 @@ export async function POST(request: Request) {
       )
     }
 
-    // Check if already claimed
+    // Check if already claimed by someone
     if (provider.user_id) {
       return NextResponse.json(
         { error: 'Cette fiche a déjà été revendiquée par un autre utilisateur' },
@@ -100,11 +125,22 @@ export async function POST(request: Request) {
       )
     }
 
-    // SIRET verification
+    // SIRET verification (normalize: strip spaces)
     const normalizedInput = siret.replace(/\s/g, '')
     const normalizedStored = provider.siret.replace(/\s/g, '')
 
     if (normalizedInput !== normalizedStored) {
+      // Log failed SIRET attempt for abuse detection
+      logger.warn('Claim SIRET mismatch', {
+        userId: user.id,
+        userEmail: user.email,
+        providerId,
+        providerName: provider.name,
+        // Only log first 9 digits (SIREN) for privacy — last 5 are establishment-specific
+        inputSiren: normalizedInput.slice(0, 9),
+        storedSiren: normalizedStored.slice(0, 9),
+      })
+
       return NextResponse.json(
         { error: 'Le numéro SIRET ne correspond pas à celui enregistré pour cet artisan' },
         { status: 403 }
@@ -122,24 +158,34 @@ export async function POST(request: Request) {
       })
 
     if (insertError) {
-      // Handle unique constraint violation
+      // Handle unique constraint violation (race condition: 2 requests at once)
       if (insertError.code === '23505') {
         return NextResponse.json(
           { error: 'Vous avez déjà soumis une demande pour cette fiche' },
           { status: 409 }
         )
       }
+      logger.error('Claim insert error', { error: insertError, userId: user.id, providerId })
       return NextResponse.json(
         { error: 'Erreur lors de la soumission de la demande' },
         { status: 500 }
       )
     }
 
+    // Log successful claim submission
+    logger.info('Claim submitted', {
+      userId: user.id,
+      userEmail: user.email,
+      providerId,
+      providerName: provider.name,
+    })
+
     return NextResponse.json({
       success: true,
       message: 'Votre demande de revendication a été soumise. Un administrateur la validera sous 24 à 48 heures.',
     })
-  } catch {
+  } catch (err) {
+    logger.error('Claim API unexpected error', { error: err })
     return NextResponse.json(
       { error: 'Erreur serveur' },
       { status: 500 }
