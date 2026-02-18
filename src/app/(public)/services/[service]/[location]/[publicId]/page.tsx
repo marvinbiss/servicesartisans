@@ -190,7 +190,7 @@ async function getSimilarArtisans(providerId: string, specialty: string, postalC
 
     let query = supabase
       .from('providers')
-      .select('id, stable_id, slug, name, specialty, rating_average, review_count, address_city, hourly_rate_min, hourly_rate_max, is_verified, avatar_url')
+      .select('id, stable_id, slug, name, specialty, rating_average, review_count, address_city, is_verified')
       .eq('is_active', true)
       .neq('id', providerId)
       .order('rating_average', { ascending: false, nullsFirst: false })
@@ -217,9 +217,7 @@ async function getSimilarArtisans(providerId: string, specialty: string, postalC
       rating: p.rating_average || 0,
       reviews: p.review_count || 0,
       city: p.address_city || '',
-      hourly_rate: p.hourly_rate_min || undefined,
       is_verified: p.is_verified || false,
-      avatar_url: p.avatar_url || undefined,
     }))
   } catch {
     return []
@@ -450,11 +448,17 @@ export default async function ProviderPage({ params }: PageProps) {
   // Convert to Artisan format
   const artisan = convertToArtisan(provider, service, location, serviceSlug)
 
-  // Fetch reviews and similar artisans in parallel
-  const [reviews, similarArtisans] = await Promise.all([
-    getProviderReviews(provider.id, service?.name || artisan.specialty),
-    getSimilarArtisans(provider.id, artisan.specialty, artisan.postal_code),
-  ])
+  // Fetch reviews and similar artisans in parallel (graceful degradation)
+  let reviews: Review[] = []
+  let similarArtisans: Awaited<ReturnType<typeof getSimilarArtisans>> = []
+  try {
+    ;[reviews, similarArtisans] = await Promise.all([
+      getProviderReviews(provider.id, service?.name || artisan.specialty),
+      getSimilarArtisans(provider.id, artisan.specialty, artisan.postal_code),
+    ])
+  } catch {
+    // Graceful degradation — page renders without reviews/similar artisans
+  }
 
   return (
     <>

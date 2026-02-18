@@ -44,7 +44,7 @@ function addSecurityHeaders(response: NextResponse, request: NextRequest): NextR
   response.headers.set('X-Frame-Options', 'DENY')
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
   response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(self), payment=(self)')
-  response.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload')
+  response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload')
   response.headers.set('X-DNS-Prefetch-Control', 'on')
 
   return response
@@ -64,6 +64,15 @@ function getCanonicalRedirect(request: NextRequest): string | null {
 
   if (url.pathname !== '/' && url.pathname.endsWith('/')) {
     return `https://${host}${url.pathname.slice(0, -1)}${url.search}`
+  }
+
+  // Strip UTM and tracking parameters to avoid duplicate content
+  const trackingParams = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'fbclid', 'gclid']
+  const hasTracking = trackingParams.some(p => url.searchParams.has(p))
+  if (hasTracking) {
+    trackingParams.forEach(p => url.searchParams.delete(p))
+    const cleanSearch = url.searchParams.toString()
+    return `https://${host}${url.pathname}${cleanSearch ? `?${cleanSearch}` : ''}`
   }
 
   return null
