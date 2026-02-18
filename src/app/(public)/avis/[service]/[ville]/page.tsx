@@ -108,14 +108,14 @@ function parsePopulation(pop: string): number {
   return parseInt(pop.replace(/\s/g, ''), 10) || 0
 }
 
-const top10Cities = [...villes]
+const top5Cities = [...villes]
   .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
-  .slice(0, 10)
+  .slice(0, 5)
 
 export function generateStaticParams() {
   const params: { service: string; ville: string }[] = []
   for (const service of tradeSlugs) {
-    for (const ville of top10Cities) {
+    for (const ville of top5Cities) {
       params.push({ service, ville: ville.slug })
     }
   }
