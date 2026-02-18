@@ -62,7 +62,6 @@ async function getTopProviders(cityName: string, _serviceSlug: string): Promise<
       .from('providers')
       .select('id, name, slug, stable_id, address_city, rating_average, review_count, is_verified, specialty')
       .eq('is_active', true)
-      .eq('noindex', false)
       .gt('review_count', 0)
       .ilike('address_city', cityName)
       .order('rating_average', { ascending: false, nullsFirst: false })

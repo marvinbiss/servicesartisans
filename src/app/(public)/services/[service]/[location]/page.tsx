@@ -40,9 +40,9 @@ export const revalidate = REVALIDATE.serviceLocation
 // Allow on-demand ISR for cities not pre-rendered at build time
 export const dynamicParams = true
 
-// Pre-render top 50 cities only (46 × 50 = 2,300 pages)
+// Pre-render top 300 cities (47 × 300 = 14,100 pages)
 // Remaining cities are generated on-demand via ISR
-const TOP_CITIES_COUNT = 50
+const TOP_CITIES_COUNT = 300
 export function generateStaticParams() {
   const topCities = villes.slice(0, TOP_CITIES_COUNT)
   return staticServicesList.flatMap(s =>
@@ -171,7 +171,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
-    ...(providerCount > 2 ? {} : { robots: { index: false, follow: true } }),
+    // All service×city pages indexed — rich content exists even with 0 providers
     openGraph: {
       title,
       description,
@@ -1009,6 +1009,32 @@ async function _ServiceLocationPage({ params }: PageProps) {
                     Artisans dans {location.department_name} ({location.department_code})
                   </Link>
                 )}
+              </div>
+            </div>
+            {/* Intent variants — cross-link to devis, avis, tarifs */}
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+              <h3 className="font-semibold text-gray-900 mb-4">
+                {service.name} à {location.name}
+              </h3>
+              <div className="space-y-2">
+                <Link
+                  href={`/devis/${serviceSlug}/${locationSlug}`}
+                  className="flex items-center gap-2 px-4 py-3 bg-amber-50 hover:bg-amber-100 text-amber-800 rounded-xl text-sm font-medium border border-amber-100 hover:border-amber-200 transition-all"
+                >
+                  Devis {service.name.toLowerCase()} à {location.name}
+                </Link>
+                <Link
+                  href={`/avis/${serviceSlug}/${locationSlug}`}
+                  className="flex items-center gap-2 px-4 py-3 bg-blue-50 hover:bg-blue-100 text-blue-800 rounded-xl text-sm font-medium border border-blue-100 hover:border-blue-200 transition-all"
+                >
+                  Avis {service.name.toLowerCase()} à {location.name}
+                </Link>
+                <Link
+                  href={`/tarifs-artisans/${serviceSlug}/${locationSlug}`}
+                  className="flex items-center gap-2 px-4 py-3 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 rounded-xl text-sm font-medium border border-emerald-100 hover:border-emerald-200 transition-all"
+                >
+                  Tarifs {service.name.toLowerCase()} à {location.name}
+                </Link>
               </div>
             </div>
             {/* Cross-service callouts */}

@@ -12,8 +12,8 @@ import { getCityImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { generateQuartierContent, hashCode } from '@/lib/seo/location-content'
 import { formatNumber, formatEuro } from '@/lib/data/commune-data'
 
-// Pre-render top 50 cities × their quartiers (~400 pages)
-const TOP_CITIES = 50
+// Pre-render top 150 cities × their quartiers (~1,200 pages)
+const TOP_CITIES = 150
 export function generateStaticParams() {
   return villes.slice(0, TOP_CITIES).flatMap(v =>
     getQuartiersByVille(v.slug).map(q => ({ ville: v.slug, quartier: q.slug }))
@@ -61,13 +61,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
-  // Parse population — remove spaces (e.g. "2 161 568" → 2161568)
-  const pop = parseInt(ville.population.replace(/\s/g, ''), 10) || 0
-
   return {
     title,
     description,
-    ...(pop < 10000 ? { robots: { index: false, follow: true } } : {}),
+    // All quartier pages indexed — each has unique content (profil bâti, FAQ, données)
     openGraph: {
       locale: 'fr_FR',
       title,
@@ -316,7 +313,7 @@ export default async function QuartierPage({ params }: PageProps) {
             {orderedServices.map((service) => (
               <Link
                 key={service.slug}
-                href={`/services/${service.slug}/${villeSlug}`}
+                href={`/services/${service.slug}/${villeSlug}/${quartierSlug}`}
                 className={`rounded-xl shadow-sm p-5 text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group ${topServiceSlugs.has(service.slug) ? 'bg-emerald-50 border-2 border-emerald-200' : 'bg-white border border-gray-100'}`}
               >
                 <h3 className="font-semibold text-slate-800 group-hover:text-emerald-600 transition-colors text-sm">{service.name}</h3>
@@ -606,9 +603,15 @@ export default async function QuartierPage({ params }: PageProps) {
           </h2>
           <div className="grid md:grid-cols-3 gap-10">
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Services à {ville.name}</h3>
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Services à {quartierName}</h3>
               <div className="space-y-2">
-                {services.slice(0, 10).map((s) => (
+                {services.slice(0, 6).map((s) => (
+                  <Link key={s.slug} href={`/services/${s.slug}/${villeSlug}/${quartierSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
+                    <ChevronRight className="w-3 h-3" />
+                    {s.name} à {quartierName}
+                  </Link>
+                ))}
+                {services.slice(6, 10).map((s) => (
                   <Link key={s.slug} href={`/services/${s.slug}/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {s.name} à {ville.name}
@@ -651,6 +654,14 @@ export default async function QuartierPage({ params }: PageProps) {
                     {ville.departement} ({ville.departementCode})
                   </Link>
                 )}
+                <Link href={`/devis/plombier/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
+                  <ChevronRight className="w-3 h-3" />
+                  Devis plombier à {ville.name}
+                </Link>
+                <Link href={`/devis/electricien/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
+                  <ChevronRight className="w-3 h-3" />
+                  Devis électricien à {ville.name}
+                </Link>
                 <Link href="/services" className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />
                   Tous les services

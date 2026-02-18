@@ -11,8 +11,8 @@ import { villes, getVilleBySlug, services, getRegionSlugByName, getDepartementBy
 import { getCityImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { generateVilleContent, hashCode } from '@/lib/seo/location-content'
 
-// Pre-render top 200 cities, rest generated on-demand via ISR
-const TOP_CITIES_COUNT = 200
+// Pre-render top 500 cities, rest generated on-demand via ISR
+const TOP_CITIES_COUNT = 500
 export function generateStaticParams() {
   return villes.slice(0, TOP_CITIES_COUNT).map((ville) => ({ ville: ville.slug }))
 }
@@ -373,6 +373,40 @@ export default async function VillePage({ params }: PageProps) {
           </div>
         </section>
 
+        {/* ─── DEVIS RAPIDES ─────────────────────────────────── */}
+        <section className="mb-16">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
+              <ArrowRight className="w-5 h-5 text-amber-600" />
+            </div>
+            <div>
+              <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
+                Devis artisan à {ville.name}
+              </h2>
+              <p className="text-sm text-slate-500">Demandez un devis gratuit en ligne</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { slug: 'plombier', label: 'Plombier' },
+              { slug: 'electricien', label: 'Électricien' },
+              { slug: 'chauffagiste', label: 'Chauffagiste' },
+              { slug: 'serrurier', label: 'Serrurier' },
+            ].map((s) => (
+              <Link
+                key={s.slug}
+                href={`/devis/${s.slug}/${villeSlug}`}
+                className="bg-white rounded-xl border border-gray-200 p-5 text-center hover:border-amber-300 hover:shadow-md transition-all group"
+              >
+                <h3 className="font-semibold text-slate-800 group-hover:text-amber-600 transition-colors text-sm">
+                  Devis {s.label}
+                </h3>
+                <p className="text-xs text-slate-400 mt-1.5">à {ville.name}</p>
+              </Link>
+            ))}
+          </div>
+        </section>
+
         {/* ─── NEARBY VILLES ────────────────────────────────── */}
         {nearbyVilles.length > 0 && (
           <section className="mb-16">
@@ -506,6 +540,22 @@ export default async function VillePage({ params }: PageProps) {
                 <Link href="/devis" className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                   <ChevronRight className="w-3 h-3" />
                   Demander un devis
+                </Link>
+                <Link href={`/devis/plombier/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
+                  <ChevronRight className="w-3 h-3" />
+                  Devis plombier à {ville.name}
+                </Link>
+                <Link href={`/devis/electricien/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
+                  <ChevronRight className="w-3 h-3" />
+                  Devis électricien à {ville.name}
+                </Link>
+                <Link href={`/devis/chauffagiste/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
+                  <ChevronRight className="w-3 h-3" />
+                  Devis chauffagiste à {ville.name}
+                </Link>
+                <Link href={`/devis/serrurier/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
+                  <ChevronRight className="w-3 h-3" />
+                  Devis serrurier à {ville.name}
                 </Link>
               </div>
             </div>

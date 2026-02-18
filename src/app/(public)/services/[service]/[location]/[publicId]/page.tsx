@@ -322,7 +322,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {
       title,
       description,
-      ...(providerCount > 2 ? {} : { robots: { index: false, follow: true } }),
+      // All service×quartier pages indexed — rich content exists even with few providers
       openGraph: { title, description, type: 'website', locale: 'fr_FR', url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}/${publicId}`, images: [{ url: getServiceImage(serviceSlug).src, width: 1200, height: 630, alt: title }] },
       twitter: { card: 'summary_large_image', title, description, images: [getServiceImage(serviceSlug).src] },
       alternates: { canonical: `${SITE_URL}/services/${serviceSlug}/${locationSlug}/${publicId}` },
@@ -360,17 +360,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const rawDesc = descParts.join(' \u00b7 ') + '.'
     const description = rawDesc.length > 155 ? rawDesc.slice(0, 154).replace(/\s+\S*$/, '') + '\u2026' : rawDesc
 
-    // Quality score for indexing decision — profile needs >= 3 signals to be indexed
-    const qualityScore = [
-      provider.siret ? 1 : 0,                                              // Has SIRET
-      provider.description && provider.description.length > 50 ? 1 : 0,    // Has real description
-      (provider.review_count || 0) > 0 ? 1 : 0,                            // Has reviews
-      provider.certifications?.length > 0 ? 1 : 0,                         // Has certifications
-      provider.portfolio_images?.length > 0 ? 1 : 0,                       // Has portfolio
-      provider.is_verified ? 1 : 0,                                         // Is verified
-    ].reduce((sum: number, v: number) => sum + v, 0)
-
-    const shouldNoindex = provider.noindex || qualityScore < 3
+    // Only noindex explicitly flagged providers (inactive/dead businesses)
+    const shouldNoindex = provider.noindex === true
 
     const serviceImage = getServiceImage(serviceSlug)
     const ogAlt = `${displayName} - ${serviceName} à ${cityName}`
@@ -380,7 +371,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {
       title,
       description,
-      // Quality-gated indexing: thin profiles (< 3 quality signals) get noindex, follow: true preserves link equity
       robots: shouldNoindex ? { index: false, follow: true } : undefined,
       openGraph: {
         title,

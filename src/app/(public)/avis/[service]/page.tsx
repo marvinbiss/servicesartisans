@@ -124,7 +124,6 @@ async function getServiceStats(serviceName: string) {
       .from('providers')
       .select('id, name, slug, stable_id, address_city, rating_average, review_count, is_verified, specialty')
       .eq('is_active', true)
-      .eq('noindex', false)
       .gt('review_count', 0)
       .order('rating_average', { ascending: false, nullsFirst: false })
       .order('review_count', { ascending: false })
