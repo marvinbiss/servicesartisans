@@ -295,7 +295,7 @@ export default function AdminClaimsPage() {
             ? `Approuver la revendication de "${actionModal.providerName}" par ${actionModal.userName} ? La fiche sera attribuée et l'utilisateur deviendra artisan.`
             : `Rejeter la revendication de "${actionModal.providerName}" par ${actionModal.userName} ?`
         }
-        confirmLabel={actionModal.action === 'approve' ? 'Approuver' : 'Rejeter'}
+        confirmText={actionModal.action === 'approve' ? 'Approuver' : 'Rejeter'}
         variant={actionModal.action === 'approve' ? 'success' : 'danger'}
       >
         {actionModal.action === 'reject' && (
