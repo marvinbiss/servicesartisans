@@ -9,6 +9,7 @@ import { getOrganizationSchema, getWebsiteSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import GoogleAnalytics from '@/components/GoogleAnalytics'
 import { CompareProviderWrapper } from '@/components/compare/CompareProvider'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -182,6 +183,7 @@ export default function RootLayout({
           <CookieConsent />
         </MobileMenuProvider>
         </CompareProviderWrapper>
+        <SpeedInsights />
       </body>
     </html>
   )
