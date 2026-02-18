@@ -420,14 +420,12 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const allUrls: MetadataRoute.Sitemap = []
 
     for (const svc of services) {
-      const serviceImage = getServiceImage(svc.slug)
       for (const v of villes) {
         allUrls.push({
           url: `${SITE_URL}/tarifs-artisans/${svc.slug}/${v.slug}`,
           lastModified: STATIC_LAST_MODIFIED,
           changeFrequency: 'monthly',
           priority: 0.6,
-          images: [serviceImage.src],
         })
       }
     }
