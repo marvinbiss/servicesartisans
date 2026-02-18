@@ -166,7 +166,7 @@ export const villes: Ville[] = [
     population: '178 000',
     codePostal: '51100',
     description: 'Cité des sacres, capitale du champagne.',
-    quartiers: ['Centre-ville', 'Clairmarais', 'Croix-Rouge', 'Jean-Jaurès'],
+    quartiers: ['Centre-ville', 'Clairmarais', 'Croix-Rouge', 'Jean-Jaurès', 'Tinqueux', 'Cormontreuil', 'Wilson'],
   },
   {
     slug: 'saint-etienne',
@@ -177,7 +177,7 @@ export const villes: Ville[] = [
     population: '173 000',
     codePostal: '42000',
     description: 'Ville design UNESCO, ancien bassin industriel.',
-    quartiers: ['Centre-ville', 'Châteaucreux', 'Bellevue', 'Terrenoire'],
+    quartiers: ['Centre-ville', 'Châteaucreux', 'Bellevue', 'Terrenoire', 'Montreynaud', 'La Métare'],
   },
   {
     slug: 'le-havre',
@@ -188,7 +188,7 @@ export const villes: Ville[] = [
     population: '167 000',
     codePostal: '76600',
     description: 'Premier port français, ville reconstruite par Perret.',
-    quartiers: ['Centre reconstruit', 'Sainte-Adresse', 'Sanvic', 'Graville'],
+    quartiers: ['Centre reconstruit', 'Sainte-Adresse', 'Sanvic', 'Graville', 'Danton'],
   },
   {
     slug: 'villeurbanne',
@@ -199,7 +199,7 @@ export const villes: Ville[] = [
     population: '164 000',
     codePostal: '69100',
     description: 'Ville attenante à Lyon, pôle universitaire majeur.',
-    quartiers: ['Gratte-Ciel', 'Tonkin', 'Cusset', 'Grandclément'],
+    quartiers: ['Gratte-Ciel', 'Tonkin', 'Cusset', 'Grandclément', 'Charpennes'],
   },
   {
     slug: 'dijon',
@@ -221,7 +221,7 @@ export const villes: Ville[] = [
     population: '159 000',
     codePostal: '49000',
     description: 'Ville verte au patrimoine médiéval remarquable.',
-    quartiers: ['Centre-ville', 'Doutre', 'Belle-Beille', 'Monplaisir'],
+    quartiers: ['Centre-ville', 'Doutre', 'Belle-Beille', 'Monplaisir', 'Roseraie'],
   },
   {
     slug: 'grenoble',
@@ -232,7 +232,7 @@ export const villes: Ville[] = [
     population: '156 000',
     codePostal: '38000',
     description: 'Capitale des Alpes françaises, ville universitaire.',
-    quartiers: ['Centre-ville', 'Europole', 'Île Verte', 'Village Olympique'],
+    quartiers: ['Centre-ville', 'Europole', 'Île Verte', 'Village Olympique', 'Championnet', 'Bajatière', 'Eaux-Claires'],
   },
   {
     slug: 'saint-denis',
@@ -243,7 +243,7 @@ export const villes: Ville[] = [
     population: '156 000',
     codePostal: '93200',
     description: 'Ville royale avec sa basilique des rois de France.',
-    quartiers: ['Centre-ville', 'Floréal', 'Pleyel', 'Stade de France'],
+    quartiers: ['Centre-ville', 'Floréal', 'Pleyel', 'Stade de France', 'Franc-Moisin', 'Basilique'],
   },
   {
     slug: 'nimes',
@@ -254,7 +254,7 @@ export const villes: Ville[] = [
     population: '152 000',
     codePostal: '30000',
     description: 'Rome française avec ses monuments antiques.',
-    quartiers: ['Écusson', 'Gambetta', 'Costières', 'Mas de Mingue'],
+    quartiers: ['Écusson', 'Gambetta', 'Costières', 'Mas de Mingue', 'Richelieu', 'Jean-Jaurès', 'Pissevin'],
   },
   {
     slug: 'aix-en-provence',
@@ -276,7 +276,7 @@ export const villes: Ville[] = [
     population: '146 000',
     codePostal: '63000',
     description: 'Capitale auvergnate au pied des volcans.',
-    quartiers: ['Centre historique', 'Jaude', 'Montferrand', 'Croix-de-Neyrat'],
+    quartiers: ['Centre historique', 'Jaude', 'Montferrand', 'Croix-de-Neyrat', 'Les Cézeaux', 'Salins'],
   },
   {
     slug: 'le-mans',
@@ -287,7 +287,7 @@ export const villes: Ville[] = [
     population: '146 000',
     codePostal: '72000',
     description: 'Ville des 24 Heures, patrimoine historique.',
-    quartiers: ['Centre-ville', 'Pontlieue', 'Les Sablons', 'Université'],
+    quartiers: ['Centre-ville', 'Pontlieue', 'Les Sablons', 'Université', 'Bollée', 'Coulaines'],
   },
   {
     slug: 'brest',
@@ -298,7 +298,7 @@ export const villes: Ville[] = [
     population: '142 000',
     codePostal: '29200',
     description: 'Grand port breton, ville maritime par excellence.',
-    quartiers: ['Centre-ville', 'Recouvrance', 'Saint-Marc', 'Lambézellec'],
+    quartiers: ['Centre-ville', 'Recouvrance', 'Saint-Marc', 'Lambézellec', 'Bellevue'],
   },
   {
     slug: 'tours',
@@ -309,7 +309,7 @@ export const villes: Ville[] = [
     population: '139 000',
     codePostal: '37000',
     description: 'Jardin de la France, au cœur des châteaux de la Loire.',
-    quartiers: ['Vieux Tours', 'Grammont', 'Les Deux-Lions', 'Saint-Symphorien'],
+    quartiers: ['Vieux Tours', 'Grammont', 'Les Deux-Lions', 'Saint-Symphorien', 'Sanitas'],
   },
   {
     slug: 'amiens',
@@ -320,7 +320,7 @@ export const villes: Ville[] = [
     population: '136 000',
     codePostal: '80000',
     description: 'Ville d\'art et d\'histoire, célèbre pour sa cathédrale.',
-    quartiers: ['Centre-ville', 'Saint-Leu', 'Henriville', 'Étouvie'],
+    quartiers: ['Centre-ville', 'Saint-Leu', 'Henriville', 'Étouvie', 'Saint-Acheul'],
   },
   {
     slug: 'annecy',
@@ -331,7 +331,7 @@ export const villes: Ville[] = [
     population: '132 000',
     codePostal: '74000',
     description: 'Venise des Alpes, ville au bord du lac.',
-    quartiers: ['Vieille Ville', 'Les Balmettes', 'Annecy-le-Vieux', 'Seynod'],
+    quartiers: ['Vieille Ville', 'Les Balmettes', 'Annecy-le-Vieux', 'Seynod', 'Cran-Gevrier', 'Novel'],
   },
   {
     slug: 'limoges',
@@ -342,7 +342,7 @@ export const villes: Ville[] = [
     population: '130 000',
     codePostal: '87000',
     description: 'Capitale des arts du feu, porcelaine et émail.',
-    quartiers: ['Centre-ville', 'Beaubreuil', 'Val de l\'Aurence', 'La Borie'],
+    quartiers: ['Centre-ville', 'Beaubreuil', 'Val de l\'Aurence', 'La Borie', 'La Bastide', 'Le Sablard'],
   },
   {
     slug: 'metz',
@@ -353,7 +353,7 @@ export const villes: Ville[] = [
     population: '123 000',
     codePostal: '57000',
     description: 'Ville d\'art à l\'architecture remarquable.',
-    quartiers: ['Centre-ville', 'Sablon', 'Plantières', 'Queuleu'],
+    quartiers: ['Centre-ville', 'Sablon', 'Plantières', 'Queuleu', 'Borny'],
   },
   {
     slug: 'perpignan',
@@ -364,7 +364,7 @@ export const villes: Ville[] = [
     population: '122 000',
     codePostal: '66000',
     description: 'Porte de la Catalogne française.',
-    quartiers: ['Centre historique', 'Saint-Jacques', 'Moulin à Vent', 'Le Vernet'],
+    quartiers: ['Centre historique', 'Saint-Jacques', 'Moulin à Vent', 'Le Vernet', 'Bas-Vernet'],
   },
   {
     slug: 'boulogne-billancourt',
@@ -375,7 +375,7 @@ export const villes: Ville[] = [
     population: '119 000',
     codePostal: '92100',
     description: 'Ville aux portes de Paris, pôle économique.',
-    quartiers: ['Centre-ville', 'Pont de Sèvres', 'République', 'Les Princes'],
+    quartiers: ['Centre-ville', 'Pont de Sèvres', 'République', 'Les Princes', 'Point-du-Jour', 'Silly', 'Parchamp'],
   },
   {
     slug: 'besancon',
@@ -386,7 +386,7 @@ export const villes: Ville[] = [
     population: '118 000',
     codePostal: '25000',
     description: 'Capitale de l\'horlogerie française, ville verte.',
-    quartiers: ['Centre-ville', 'Battant', 'Planoise', 'Palente'],
+    quartiers: ['Centre-ville', 'Battant', 'Planoise', 'Palente', 'Bregille'],
   },
   {
     slug: 'rouen',
@@ -397,7 +397,7 @@ export const villes: Ville[] = [
     population: '118 000',
     codePostal: '76000',
     description: 'Capitale normande au riche patrimoine médiéval.',
-    quartiers: ['Centre historique', 'Saint-Sever', 'Martainville', 'Saint-Clément'],
+    quartiers: ['Centre historique', 'Saint-Sever', 'Martainville', 'Saint-Clément', 'Grammont', 'Jouvenet'],
   },
   {
     slug: 'orleans',
@@ -408,7 +408,7 @@ export const villes: Ville[] = [
     population: '116 000',
     codePostal: '45000',
     description: 'Cité johannique sur les bords de la Loire.',
-    quartiers: ['Centre-ville', 'La Source', 'Saint-Marceau', 'Argonne'],
+    quartiers: ['Centre-ville', 'La Source', 'Saint-Marceau', 'Argonne', 'Madeleine'],
   },
   {
     slug: 'montreuil',
@@ -419,7 +419,7 @@ export const villes: Ville[] = [
     population: '112 000',
     codePostal: '93100',
     description: 'Ville créative aux portes de Paris.',
-    quartiers: ['Centre-ville', 'Croix de Chavaux', 'Villiers-Barbusse', 'La Noue'],
+    quartiers: ['Centre-ville', 'Croix de Chavaux', 'Villiers-Barbusse', 'La Noue', 'Bel-Air'],
   },
   {
     slug: 'caen',
@@ -430,7 +430,7 @@ export const villes: Ville[] = [
     population: '109 000',
     codePostal: '14000',
     description: 'Cité de Guillaume le Conquérant.',
-    quartiers: ['Centre-ville', 'Vaucelles', 'Calvaire Saint-Pierre', 'Beaulieu'],
+    quartiers: ['Centre-ville', 'Vaucelles', 'Calvaire Saint-Pierre', 'Beaulieu', 'Vaugueux', 'Saint-Jean', 'Grâce-de-Dieu', 'La Guérinière'],
   },
   {
     slug: 'saint-paul',
@@ -463,7 +463,7 @@ export const villes: Ville[] = [
     population: '105 000',
     codePostal: '68100',
     description: 'Capitale industrielle alsacienne.',
-    quartiers: ['Centre-ville', 'Rebberg', 'Dornach', 'Bourtzwiller'],
+    quartiers: ['Centre-ville', 'Rebberg', 'Dornach', 'Bourtzwiller', 'Fonderie'],
   },
   {
     slug: 'nancy',
@@ -474,7 +474,7 @@ export const villes: Ville[] = [
     population: '104 000',
     codePostal: '54000',
     description: 'Capitale de l\'Art nouveau, place Stanislas UNESCO.',
-    quartiers: ['Centre-ville', 'Saurupt', 'Haussonville', 'Trois Maisons'],
+    quartiers: ['Centre-ville', 'Saurupt', 'Haussonville', 'Trois Maisons', 'Stanislas', 'Poincaré', 'Haut-du-Lièvre'],
   },
   {
     slug: 'tourcoing',
@@ -485,7 +485,7 @@ export const villes: Ville[] = [
     population: '99 000',
     codePostal: '59200',
     description: 'Ville industrielle à la frontière belge.',
-    quartiers: ['Centre-ville', 'Virolois', 'Croix-Rouge', 'Blanc Seau'],
+    quartiers: ['Centre-ville', 'Virolois', 'Croix-Rouge', 'Blanc Seau', 'Pont-de-Neuville', 'Épidème', 'Marlière'],
   },
   {
     slug: 'roubaix',
@@ -496,7 +496,7 @@ export const villes: Ville[] = [
     population: '98 000',
     codePostal: '59100',
     description: 'Ancienne capitale textile, ville en renouveau.',
-    quartiers: ['Centre-ville', 'Barbieux', 'Alma', 'Nouveau Roubaix'],
+    quartiers: ['Centre-ville', 'Barbieux', 'Alma', 'Nouveau Roubaix', 'Épeule', 'Cul-de-Four', 'Pile'],
   },
   {
     slug: 'nanterre',
@@ -507,7 +507,7 @@ export const villes: Ville[] = [
     population: '98 000',
     codePostal: '92000',
     description: 'Préfecture des Hauts-de-Seine, ville universitaire.',
-    quartiers: ['Centre-ville', 'Petit-Nanterre', 'Mont-Valérien', 'Les Provinces'],
+    quartiers: ['Centre-ville', 'Petit-Nanterre', 'Mont-Valérien', 'Les Provinces', 'Vieux-Pont', 'Parc Sud', 'Chemin de l\'Île'],
   },
   {
     slug: 'vitry-sur-seine',
@@ -518,7 +518,7 @@ export const villes: Ville[] = [
     population: '94 000',
     codePostal: '94400',
     description: 'Ville d\'art contemporain en bord de Seine.',
-    quartiers: ['Centre-ville', 'Port-à-l\'Anglais', 'Moulin Vert', 'Plateau'],
+    quartiers: ['Centre-ville', 'Port-à-l\'Anglais', 'Moulin Vert', 'Plateau', 'Commune-de-Paris', 'Gare', 'Coteau'],
   },
   {
     slug: 'asnieres-sur-seine',
@@ -540,7 +540,7 @@ export const villes: Ville[] = [
     population: '93 000',
     codePostal: '94000',
     description: 'Préfecture du Val-de-Marne, ville nouvelle.',
-    quartiers: ['Centre ancien', 'Palais', 'Échat', 'Mont-Mesly'],
+    quartiers: ['Centre ancien', 'Palais', 'Échat', 'Mont-Mesly', 'Préfecture', 'Lévrière', 'Habette'],
   },
   {
     slug: 'avignon',
@@ -562,7 +562,7 @@ export const villes: Ville[] = [
     population: '91 000',
     codePostal: '92700',
     description: 'Ville résidentielle des Hauts-de-Seine.',
-    quartiers: ['Centre-ville', 'Petit-Colombes', 'Agent-Sarre', 'Grèves'],
+    quartiers: ['Centre-ville', 'Petit-Colombes', 'Agent-Sarre', 'Grèves', 'Europe', 'Fossés-Jean', 'Stade'],
   },
   {
     slug: 'poitiers',
@@ -573,7 +573,7 @@ export const villes: Ville[] = [
     population: '90 000',
     codePostal: '86000',
     description: 'Ville d\'art roman au riche patrimoine.',
-    quartiers: ['Centre-ville', 'Couronneries', 'Gibauderie', 'Beaulieu'],
+    quartiers: ['Centre-ville', 'Couronneries', 'Gibauderie', 'Beaulieu', 'Trois-Cités', 'Saint-Éloi', 'Montmidi'],
   },
   {
     slug: 'aubervilliers',
@@ -584,7 +584,7 @@ export const villes: Ville[] = [
     population: '88 000',
     codePostal: '93300',
     description: 'Ville de théâtre et culture.',
-    quartiers: ['Centre-ville', 'Quatre Chemins', 'Landy', 'Villette'],
+    quartiers: ['Centre-ville', 'Quatre Chemins', 'Landy', 'Villette', 'Robespierre', 'Maladrerie', 'Presqu\'île'],
   },
   {
     slug: 'aulnay-sous-bois',
@@ -595,7 +595,7 @@ export const villes: Ville[] = [
     population: '88 000',
     codePostal: '93600',
     description: 'Ville verte de Seine-Saint-Denis.',
-    quartiers: ['Centre-ville', 'Rose des Vents', 'Ambourget', 'Chanteloup'],
+    quartiers: ['Centre-ville', 'Rose des Vents', 'Ambourget', 'Chanteloup', 'Gros-Saule', 'Nonneville', 'Mitry'],
   },
   {
     slug: 'dunkerque',
@@ -606,7 +606,7 @@ export const villes: Ville[] = [
     population: '86 000',
     codePostal: '59140',
     description: 'Premier port français de la mer du Nord.',
-    quartiers: ['Centre-ville', 'Malo-les-Bains', 'Rosendaël', 'Petite-Synthe'],
+    quartiers: ['Centre-ville', 'Malo-les-Bains', 'Rosendaël', 'Petite-Synthe', 'Glacis', 'Coudekerque-Branche', 'Saint-Pol-sur-Mer'],
   },
   {
     slug: 'noumea',
@@ -639,7 +639,7 @@ export const villes: Ville[] = [
     population: '84 000',
     codePostal: '78000',
     description: 'Cité royale avec son château mondialement célèbre.',
-    quartiers: ['Centre-ville', 'Notre-Dame', 'Saint-Louis', 'Montreuil'],
+    quartiers: ['Centre-ville', 'Notre-Dame', 'Saint-Louis', 'Montreuil', 'Porchefontaine', 'Clagny', 'Jussieu'],
   },
   {
     slug: 'courbevoie',
@@ -650,7 +650,7 @@ export const villes: Ville[] = [
     population: '83 000',
     codePostal: '92400',
     description: 'Ville d\'affaires aux portes de La Défense.',
-    quartiers: ['Centre-ville', 'Bécon', 'Faubourg de l\'Arche', 'Marceau'],
+    quartiers: ['Centre-ville', 'Bécon', 'Faubourg de l\'Arche', 'Marceau', 'Regnault', 'Gambetta', 'Voltaire'],
   },
   {
     slug: 'rueil-malmaison',
@@ -661,7 +661,7 @@ export const villes: Ville[] = [
     population: '83 000',
     codePostal: '92500',
     description: 'Ville impériale aux portes de Paris.',
-    quartiers: ['Centre-ville', 'Mont-Valérien', 'Buzenval', 'Jonchère'],
+    quartiers: ['Centre-ville', 'Mont-Valérien', 'Buzenval', 'Jonchère', 'Plaine-Gare', 'Bois-Préau', 'Coteaux'],
   },
   {
     slug: 'le-tampon',
@@ -683,7 +683,7 @@ export const villes: Ville[] = [
     population: '82 000',
     codePostal: '34500',
     description: 'Ville viticole du Languedoc.',
-    quartiers: ['Centre historique', 'Arènes', 'Devèze', 'La Montagnette'],
+    quartiers: ['Centre historique', 'Arènes', 'Devèze', 'La Montagnette', 'Faubourg', 'Iranget', 'Grangette'],
   },
   {
     slug: 'pau',
@@ -694,7 +694,7 @@ export const villes: Ville[] = [
     population: '80 000',
     codePostal: '64000',
     description: 'Ville royale au pied des Pyrénées.',
-    quartiers: ['Centre-ville', 'Trespoey', 'Saragosse', 'Bosquet'],
+    quartiers: ['Centre-ville', 'Trespoey', 'Saragosse', 'Bosquet', 'Dufau', 'Ousse-des-Bois', 'Université'],
   },
   {
     slug: 'la-rochelle',
@@ -705,7 +705,7 @@ export const villes: Ville[] = [
     population: '80 000',
     codePostal: '17000',
     description: 'Port atlantique historique, ville écologique.',
-    quartiers: ['Vieux Port', 'Minimes', 'Laleu', 'Mireuil'],
+    quartiers: ['Vieux Port', 'Minimes', 'Laleu', 'Mireuil', 'La Pallice', 'Villeneuve-les-Salines', 'Port-Neuf'],
   },
   {
     slug: 'cherbourg-en-cotentin',
@@ -716,7 +716,7 @@ export const villes: Ville[] = [
     population: '78 000',
     codePostal: '50100',
     description: 'Grand port transatlantique normand.',
-    quartiers: ['Centre-ville', 'Équeurdreville', 'Octeville', 'Tourlaville'],
+    quartiers: ['Centre-ville', 'Équeurdreville', 'Octeville', 'Tourlaville', 'Val-de-Saire', 'Querqueville', 'La Glacerie'],
   },
   {
     slug: 'merignac',
@@ -727,7 +727,7 @@ export const villes: Ville[] = [
     population: '78 000',
     codePostal: '33700',
     description: 'Ville aéronautique de la métropole bordelaise.',
-    quartiers: ['Centre-ville', 'Capeyron', 'Arlac', 'Chemin Long'],
+    quartiers: ['Centre-ville', 'Capeyron', 'Arlac', 'Chemin Long', 'Beutre', 'Bourranville', 'Pichey'],
   },
   {
     slug: 'champigny-sur-marne',
@@ -738,7 +738,7 @@ export const villes: Ville[] = [
     population: '78 000',
     codePostal: '94500',
     description: 'Ville dynamique en bord de Marne.',
-    quartiers: ['Centre-ville', 'Coeuilly', 'Plant', 'Tremblay'],
+    quartiers: ['Centre-ville', 'Coeuilly', 'Plant', 'Tremblay', 'Bois-l\'Abbé', 'Musselburgh', 'Mordacs'],
   },
   {
     slug: 'antibes',
@@ -749,7 +749,7 @@ export const villes: Ville[] = [
     population: '78 000',
     codePostal: '06600',
     description: 'Station balnéaire sur la Côte d\'Azur.',
-    quartiers: ['Centre-ville', 'Juan-les-Pins', 'Sophia Antipolis', 'La Fontonne'],
+    quartiers: ['Centre-ville', 'Juan-les-Pins', 'Sophia Antipolis', 'La Fontonne', 'Cap-d\'Antibes', 'Les Semboules', 'Rabiac'],
   },
   {
     slug: 'saint-maur-des-fosses',
@@ -760,7 +760,7 @@ export const villes: Ville[] = [
     population: '77 000',
     codePostal: '94100',
     description: 'Ville résidentielle en bord de Marne.',
-    quartiers: ['Le Parc', 'La Varenne', 'Saint-Hilaire', 'Champignol'],
+    quartiers: ['Le Parc', 'La Varenne', 'Saint-Hilaire', 'Champignol', 'Adamville', 'La Pie', 'Les Mûriers'],
   },
   {
     slug: 'ajaccio',
@@ -771,7 +771,7 @@ export const villes: Ville[] = [
     population: '76 000',
     codePostal: '20000',
     description: 'Cité impériale, ville natale de Napoléon.',
-    quartiers: ['Centre-ville', 'Les Cannes', 'Mezzavia', 'Salines'],
+    quartiers: ['Centre-ville', 'Les Cannes', 'Mezzavia', 'Salines', 'Saint-Jean', 'Pietralba', 'Résidence des Îles'],
   },
   {
     slug: 'fort-de-france',
@@ -804,7 +804,7 @@ export const villes: Ville[] = [
     population: '74 000',
     codePostal: '06400',
     description: 'Capitale mondiale du cinéma sur la Croisette.',
-    quartiers: ['Centre-ville', 'La Bocca', 'Carnot', 'Croix des Gardes'],
+    quartiers: ['Centre-ville', 'La Bocca', 'Carnot', 'Croix des Gardes', 'Californie', 'Petit-Juas', 'République'],
   },
   {
     slug: 'noisy-le-grand',
@@ -826,7 +826,7 @@ export const villes: Ville[] = [
     population: '72 000',
     codePostal: '93700',
     description: 'Ville mémorielle de Seine-Saint-Denis.',
-    quartiers: ['Centre-ville', 'La Muette', 'Paris-Campagne', 'Village Parisien'],
+    quartiers: ['Centre-ville', 'La Muette', 'Paris-Campagne', 'Village Parisien', 'Économie', 'Avenir Parisien', 'Petit-Drancy'],
   },
   {
     slug: 'mamoudzou',
@@ -848,7 +848,7 @@ export const villes: Ville[] = [
     population: '71 000',
     codePostal: '95000',
     description: 'Ville nouvelle, préfecture du Val-d\'Oise.',
-    quartiers: ['Centre', 'Grand Centre', 'Axe Majeur', 'Les Hauts de Cergy'],
+    quartiers: ['Centre', 'Grand Centre', 'Axe Majeur', 'Les Hauts de Cergy', 'Cergy-Préfecture', 'Cergy-Village', 'Cergy-Saint-Christophe'],
   },
   {
     slug: 'levallois-perret',
@@ -881,7 +881,7 @@ export const villes: Ville[] = [
     population: '68 000',
     codePostal: '62100',
     description: 'Premier port transmanche de France.',
-    quartiers: ['Centre-ville', 'Saint-Pierre', 'Beau-Marais', 'Fort-Nieulay'],
+    quartiers: ['Centre-ville', 'Saint-Pierre', 'Beau-Marais', 'Fort-Nieulay', 'Courgain', 'Nouvelle-France', 'Pont-du-Leu'],
   },
   {
     slug: 'pessac',
@@ -969,7 +969,7 @@ export const villes: Ville[] = [
     population: '64 000',
     codePostal: '29000',
     description: 'Capitale de la Cornouaille bretonne.',
-    quartiers: ['Centre historique', 'Ergué-Armel', 'Penhars', 'Kerfeunteun'],
+    quartiers: ['Centre historique', 'Ergué-Armel', 'Penhars', 'Kerfeunteun', 'Moulin-Vert', 'Locmaria', 'Creac\'h Gwen'],
   },
   {
     slug: 'antony',
@@ -991,7 +991,7 @@ export const villes: Ville[] = [
     population: '64 000',
     codePostal: '18000',
     description: 'Ville d\'art au cœur de la France.',
-    quartiers: ['Centre historique', 'Asnières', 'Gibjoncs', 'Pignoux'],
+    quartiers: ['Centre historique', 'Asnières', 'Gibjoncs', 'Pignoux', 'Val-d\'Auron', 'Chancellerie', 'Aéroport'],
   },
   {
     slug: 'la-seyne-sur-mer',
@@ -1002,7 +1002,7 @@ export const villes: Ville[] = [
     population: '64 000',
     codePostal: '83500',
     description: 'Ville maritime de la rade de Toulon.',
-    quartiers: ['Centre-ville', 'Tamaris', 'Les Sablettes', 'Berthe'],
+    quartiers: ['Centre-ville', 'Tamaris', 'Les Sablettes', 'Berthe', 'Mar Vivo', 'Pont-de-Fabre', 'Jas-de-Ville'],
   },
   {
     slug: 'montauban',
@@ -1024,7 +1024,7 @@ export const villes: Ville[] = [
     population: '63 000',
     codePostal: '59650',
     description: 'Ville technologique de la métropole lilloise.',
-    quartiers: ['Hôtel de Ville', 'Pont de Bois', 'Triolo', 'Château'],
+    quartiers: ['Hôtel de Ville', 'Pont de Bois', 'Triolo', 'Château', 'Flers', 'Annappes', 'Brigode'],
   },
   {
     slug: 'cayenne',
@@ -1057,7 +1057,7 @@ export const villes: Ville[] = [
     population: '62 000',
     codePostal: '10000',
     description: 'Capitale historique de la Champagne.',
-    quartiers: ['Centre historique', 'Pont-Sainte-Marie', 'Chartreux', 'Boucherat'],
+    quartiers: ['Centre historique', 'Pont-Sainte-Marie', 'Chartreux', 'Boucherat', 'Sénardes', 'Jules-Guesde', 'Bouchon-de-Champagne'],
   },
   {
     slug: 'pantin',
@@ -1101,7 +1101,7 @@ export const villes: Ville[] = [
     population: '60 000',
     codePostal: '79000',
     description: 'Capitale des mutuelles françaises.',
-    quartiers: ['Centre-ville', 'Souché', 'Saint-Florent', 'Clou-Bouchet'],
+    quartiers: ['Centre-ville', 'Souché', 'Saint-Florent', 'Clou-Bouchet', 'Sainte-Pezenne', 'Surimeau', 'Tour Chabot-Gavacherie'],
   },
   {
     slug: 'frejus',
@@ -1112,7 +1112,7 @@ export const villes: Ville[] = [
     population: '60 000',
     codePostal: '83600',
     description: 'Cité romaine de la Côte d\'Azur.',
-    quartiers: ['Centre-ville', 'Fréjus-Plage', 'Saint-Aygulf', 'Les Adrets'],
+    quartiers: ['Centre-ville', 'Fréjus-Plage', 'Saint-Aygulf', 'Les Adrets', 'La Tour-de-Mare', 'Villeneuve', 'Puget-sur-Argens'],
   },
   {
     slug: 'neuilly-sur-seine',
@@ -1134,7 +1134,7 @@ export const villes: Ville[] = [
     population: '59 000',
     codePostal: '95200',
     description: 'Ville nouvelle du Val-d\'Oise.',
-    quartiers: ['Village', 'Grand Ensemble', 'Lochères', 'Flanades'],
+    quartiers: ['Village', 'Grand Ensemble', 'Lochères', 'Flanades', 'Chardonnerettes', 'Watteau', 'Chantepie'],
   },
   {
     slug: 'saint-andre',
@@ -1222,7 +1222,7 @@ export const villes: Ville[] = [
     population: '56 000',
     codePostal: '83400',
     description: 'Ville aux îles d\'Or, station balnéaire historique.',
-    quartiers: ['Centre-ville', 'Giens', 'L\'Ayguade', 'Les Salins'],
+    quartiers: ['Centre-ville', 'Giens', 'L\'Ayguade', 'Les Salins', 'Costebelle', 'La Capte', 'La Bayorre'],
   },
   {
     slug: 'vannes',
@@ -1420,7 +1420,7 @@ export const villes: Ville[] = [
     population: '52 000',
     codePostal: '13200',
     description: 'Plus grande commune de France, patrimoine UNESCO.',
-    quartiers: ['Centre historique', 'Trinquetaille', 'Barriol', 'Pont de Crau'],
+    quartiers: ['Centre historique', 'Trinquetaille', 'Barriol', 'Pont de Crau', 'Griffeuille', 'Trébon', 'Monplaisir'],
   },
   {
     slug: 'massy',
@@ -1486,7 +1486,7 @@ export const villes: Ville[] = [
     population: '51 000',
     codePostal: '06130',
     description: 'Capitale mondiale du parfum.',
-    quartiers: ['Centre-ville', 'Saint-Claude', 'Magagnosc', 'Le Plan'],
+    quartiers: ['Centre-ville', 'Saint-Claude', 'Magagnosc', 'Le Plan', 'Plan-de-Grasse', 'Saint-Jacques', 'Les Marronniers'],
   },
   {
     slug: 'bondy',
@@ -3048,7 +3048,7 @@ export const villes: Ville[] = [
     population: '31 000',
     codePostal: '97150',
     description: 'Vous habitez à Saint-Martin ou ses environs ? Nos artisans qualifiés du Saint-Martin sont disponibles pour tous vos travaux. Saint-Martin, ville dynamique française de 31 000 habitants, mérite des professionnels à la hauteur.',
-    quartiers: ['Centre-ville'],
+    quartiers: ['Centre-ville', 'Marigot', 'Grand Case', 'Sandy Ground'],
   },
   {
     slug: 'savigny-le-temple',
@@ -4082,7 +4082,7 @@ export const villes: Ville[] = [
     population: '25 000',
     codePostal: '98809',
     description: 'Découvrez les meilleurs artisans à Le Mont-Dore en Nouvelle-Calédonie. Avec la France et 25 000 habitants, cette ville active offre un large choix de professionnels pour tous vos travaux de rénovation et dépannage.',
-    quartiers: ['Centre-ville'],
+    quartiers: ['Centre-ville', 'Boulari', 'La Coulée', 'Plum'],
   },
   {
     slug: 'vernon',
@@ -4170,7 +4170,7 @@ export const villes: Ville[] = [
     population: '25 000',
     codePostal: '97310',
     description: 'Kourou (Guyane, Guyane) est une ville active de 25 000 habitants où nos artisans qualifiés proposent des services de qualité : rénovation, construction, dépannage et entretien. Devis gratuit et intervention rapide.',
-    quartiers: ['Centre-ville'],
+    quartiers: ['Centre-ville', 'Village Saramaca', 'Les Roches', 'Zone Industrielle'],
   },
   {
     slug: 'montbeliard',
