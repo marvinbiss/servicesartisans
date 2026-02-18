@@ -25062,6 +25062,11 @@ export const departements: Departement[] = [
   { code: '95', slug: 'val-doise', name: 'Val-d\'Oise', region: 'Île-de-France', chefLieu: 'Cergy', population: '1 249 000', description: 'Département au nord de Paris.', villes: ['Argenteuil', 'Sarcelles', 'Cergy'] },
   { code: '2A', slug: 'corse-du-sud', name: 'Corse-du-Sud', region: 'Corse', chefLieu: 'Ajaccio', population: '158 000', description: 'Département corse.', villes: ['Ajaccio', 'Porto-Vecchio', 'Propriano'] },
   { code: '2B', slug: 'haute-corse', name: 'Haute-Corse', region: 'Corse', chefLieu: 'Bastia', population: '181 000', description: 'Département corse.', villes: ['Bastia', 'Corte', 'Calvi'] },
+  { code: '971', slug: 'guadeloupe', name: 'Guadeloupe', region: 'Guadeloupe', chefLieu: 'Basse-Terre', population: '384 000', description: 'Département d\'outre-mer des Antilles françaises.', villes: ['Pointe-à-Pitre', 'Les Abymes', 'Baie-Mahault', 'Le Gosier'] },
+  { code: '972', slug: 'martinique', name: 'Martinique', region: 'Martinique', chefLieu: 'Fort-de-France', population: '368 000', description: 'Île des Antilles françaises au patrimoine culturel riche.', villes: ['Fort-de-France', 'Le Lamentin', 'Le Robert', 'Schœlcher'] },
+  { code: '973', slug: 'guyane', name: 'Guyane', region: 'Guyane', chefLieu: 'Cayenne', population: '294 000', description: 'Département d\'outre-mer en Amérique du Sud.', villes: ['Cayenne', 'Saint-Laurent-du-Maroni', 'Matoury', 'Kourou'] },
+  { code: '974', slug: 'la-reunion', name: 'La Réunion', region: 'La Réunion', chefLieu: 'Saint-Denis', population: '873 000', description: 'Île de l\'océan Indien au dynamisme économique important.', villes: ['Saint-Denis', 'Saint-Paul', 'Saint-Pierre', 'Le Tampon'] },
+  { code: '976', slug: 'mayotte', name: 'Mayotte', region: 'Mayotte', chefLieu: 'Mamoudzou', population: '321 000', description: 'Plus jeune département français dans l\'océan Indien.', villes: ['Mamoudzou', 'Koungou', 'Dzaoudzi', 'Dembeni'] },
 ]
 
 // Fonction pour obtenir une ville par son slug

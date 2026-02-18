@@ -49,6 +49,11 @@ export async function generateSitemaps() {
       const ucBatchCount = Math.ceil(emergencySlugs.length * villes.length / 45000)
       return Array.from({ length: ucBatchCount }, (_, i) => ({ id: `urgence-service-cities-${i}` }))
     })(),
+    // tarifs service×city sitemaps
+    ...Array.from(
+      { length: Math.ceil(services.length * villes.length / 45000) },
+      (_, i) => ({ id: `tarifs-service-cities-${i}` })
+    ),
     // avis sitemaps
     { id: 'avis-services' },
     ...Array.from(
@@ -401,6 +406,28 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
           lastModified: STATIC_LAST_MODIFIED,
           changeFrequency: 'monthly',
           priority: 0.6,
+        })
+      }
+    }
+
+    return allUrls.slice(batchIndex * BATCH, (batchIndex + 1) * BATCH)
+  }
+
+  // ── Tarifs service×city pages (batched) ─────────────────────────────
+  if (id.startsWith('tarifs-service-cities-')) {
+    const batchIndex = parseInt(id.replace('tarifs-service-cities-', ''), 10)
+    const BATCH = 45000
+    const allUrls: MetadataRoute.Sitemap = []
+
+    for (const svc of services) {
+      const serviceImage = getServiceImage(svc.slug)
+      for (const v of villes) {
+        allUrls.push({
+          url: `${SITE_URL}/tarifs-artisans/${svc.slug}/${v.slug}`,
+          lastModified: STATIC_LAST_MODIFIED,
+          changeFrequency: 'monthly',
+          priority: 0.6,
+          images: [serviceImage.src],
         })
       }
     }

@@ -11,17 +11,17 @@ function escapeXml(s: string): string {
 }
 
 /**
- * Google News Sitemap — includes blog articles from the last 30 days.
- * Google News sitemaps technically require articles from the last 2 days,
- * but since this is a static blog we include 30 days for broader coverage.
+ * Google News Sitemap — includes blog articles from the last 2 days (48 hours).
+ * Google News requires articles published within the last 2 days only.
+ * Older articles are already covered by the regular blog sitemap.
  */
 export async function GET() {
   const now = new Date()
-  const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
+  const twoDaysAgo = new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000)
 
   const recentArticles = articleSlugs
     .map((slug) => ({ slug, ...allArticles[slug] }))
-    .filter((article) => new Date(article.date) >= thirtyDaysAgo)
+    .filter((article) => new Date(article.date) >= twoDaysAgo)
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 
   const urls = recentArticles.map((article) => {
