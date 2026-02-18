@@ -1023,6 +1023,12 @@ export default async function AvisServiceVillePage({
                 >
                   Tarifs {tradeLower} &agrave; {villeData.name}
                 </Link>
+                <Link
+                  href={`/urgence/${service}/${villeSlug}`}
+                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
+                >
+                  {trade.name} urgence &agrave; {villeData.name}
+                </Link>
               </div>
             </div>
             <div>

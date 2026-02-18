@@ -525,6 +525,15 @@ export default async function TarifsServiceVillePage({
                 <Link href={`/services/${service}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
                   {trade.name} {'—'} tous les artisans
                 </Link>
+                <Link href={`/devis/${service}/${villeSlug}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
+                  Devis {tradeLower} {'\u00E0'} {villeData.name}
+                </Link>
+                <Link href={`/avis/${service}/${villeSlug}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
+                  Avis {tradeLower} {'\u00E0'} {villeData.name}
+                </Link>
+                <Link href={`/urgence/${service}/${villeSlug}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
+                  {trade.name} urgence {'\u00E0'} {villeData.name}
+                </Link>
               </div>
             </div>
             <div>

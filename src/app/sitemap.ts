@@ -82,7 +82,6 @@ export async function generateSitemaps() {
       .from('providers')
       .select('*', { count: 'exact', head: true })
       .eq('is_active', true)
-      .eq('noindex', false)
 
     if (!error && count) {
       providerCount = count
@@ -580,7 +579,6 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
           .from('providers')
           .select('name, slug, stable_id, specialty, address_city, updated_at')
           .eq('is_active', true)
-          .eq('noindex', false)
           .order('updated_at', { ascending: false })
           .range(from, Math.min(from + PAGE_SIZE - 1, limit - 1))
 
