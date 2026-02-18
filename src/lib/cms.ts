@@ -3,7 +3,7 @@ import { getCachedData, CACHE_TTL } from '@/lib/cache'
 import { logger } from '@/lib/logger'
 import type { CmsPage, CmsPageType } from '@/types/cms'
 
-const IS_BUILD = process.env.NEXT_PHASE === 'phase-production-build'
+const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
 
 /**
  * Fetch published CMS content for a given slug + type.

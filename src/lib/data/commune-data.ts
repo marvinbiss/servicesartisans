@@ -102,7 +102,7 @@ const COMMUNE_COLUMNS = [
 // Fetch commune data by slug (cached 24h)
 // ---------------------------------------------------------------------------
 
-const IS_BUILD = process.env.NEXT_PHASE === 'phase-production-build'
+const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
 
 export async function getCommuneBySlug(slug: string): Promise<CommuneData | null> {
   if (IS_BUILD) return null // Skip DB during build — ISR will populate on first visit

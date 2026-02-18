@@ -42,7 +42,7 @@ export const metadata: Metadata = {
 
 export const revalidate = 3600
 
-const IS_BUILD = process.env.NEXT_PHASE === 'phase-production-build'
+const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
 
 // Fallback stats used when DB is unavailable during static generation
 const FALLBACK_STATS = { artisanCount: 350_000, reviewCount: 12_000, cityCount: 2_500 }

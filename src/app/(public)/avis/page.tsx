@@ -11,7 +11,7 @@ import { tradeContent } from '@/lib/data/trade-content'
 
 export const revalidate = 86400 // 24h
 
-const IS_BUILD = process.env.NEXT_PHASE === 'phase-production-build'
+const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
 
 export const metadata: Metadata = {
   title: 'Avis artisans — Trouvez un professionnel de confiance',

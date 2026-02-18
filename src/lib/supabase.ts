@@ -11,7 +11,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey)
  * During build, skip heavy DB queries to avoid overwhelming Supabase free tier.
  * Pages use ISR (revalidate) so they'll get fresh data on first visit.
  */
-const IS_BUILD = process.env.NEXT_PHASE === 'phase-production-build'
+const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
 
 // Helper to check if a string is a valid UUID
 function isValidUUID(str: string): boolean {

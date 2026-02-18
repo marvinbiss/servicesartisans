@@ -23,7 +23,7 @@ import { relatedServices } from '@/lib/constants/navigation'
 
 export const revalidate = 86400 // 24h
 
-const IS_BUILD = process.env.NEXT_PHASE === 'phase-production-build'
+const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
 const tradeSlugs = getTradesSlugs()
 
 export function generateStaticParams() {
