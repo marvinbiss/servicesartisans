@@ -20,8 +20,8 @@ import DevisForm from '@/components/DevisForm'
 const tradeSlugs = getTradesSlugs()
 
 export function generateStaticParams() {
-  const topServices = tradeSlugs.slice(0, 8)
-  const topCities = villes.slice(0, 30)
+  const topServices = tradeSlugs.slice(0, 5)
+  const topCities = villes.slice(0, 15)
   return topServices.flatMap((s) =>
     topCities.flatMap((v) =>
       getQuartiersByVille(v.slug).map((q) => ({
