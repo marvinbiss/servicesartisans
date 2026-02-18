@@ -559,12 +559,6 @@ export default async function ProblemeVillePage({
                 <Link href={`/urgence/${problem.primaryService}/${ville}`} className="block text-sm text-gray-600 hover:text-amber-600 py-1">
                   {tradeName} urgence à {villeData.name}
                 </Link>
-                <Link href={`/tarifs-artisans/${problem.primaryService}/${ville}`} className="block text-sm text-gray-600 hover:text-amber-600 py-1">
-                  Tarifs {tradeName.toLowerCase()} à {villeData.name}
-                </Link>
-                <Link href={`/avis/${problem.primaryService}/${ville}`} className="block text-sm text-gray-600 hover:text-amber-600 py-1">
-                  Avis {tradeName.toLowerCase()} à {villeData.name}
-                </Link>
               </div>
             </div>
             <div>

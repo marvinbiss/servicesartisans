@@ -507,12 +507,6 @@ export default async function DevisServiceLocationPage({
                 <Link href={`/services/${service}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
                   {trade.name} — tous les artisans
                 </Link>
-                <Link href={`/avis/${service}/${location}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
-                  Avis {tradeLower} à {villeData.name}
-                </Link>
-                <Link href={`/urgence/${service}/${location}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
-                  {trade.name} urgence à {villeData.name}
-                </Link>
               </div>
             </div>
             <div>

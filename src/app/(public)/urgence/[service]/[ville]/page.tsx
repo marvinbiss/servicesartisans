@@ -877,12 +877,6 @@ export default async function UrgenceServiceVillePage({
                 >
                   Devis {tradeLower} à {villeData.name}
                 </Link>
-                <Link
-                  href={`/avis/${service}/${villeSlug}`}
-                  className="block text-sm text-gray-600 hover:text-blue-600 py-1"
-                >
-                  Avis {tradeLower} à {villeData.name}
-                </Link>
               </div>
             </div>
             <div>
