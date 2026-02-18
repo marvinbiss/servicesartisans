@@ -54,22 +54,6 @@ async function getRecentProviders(limit = 50) {
   return { providers: data || [], count: count ?? 0, error: null }
 }
 
-// Get top cities with most providers
-async function getTopCities(limit = 12) {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-  )
-
-  const { data } = await supabase
-    .rpc('get_top_cities', { limit_count: limit })
-
-  // Fallback: if RPC doesn't exist, return static list
-  if (!data) {
-    return ['Paris', 'Marseille', 'Lyon', 'Toulouse', 'Nice', 'Nantes', 'Montpellier', 'Strasbourg', 'Bordeaux', 'Lille', 'Rennes', 'Reims']
-  }
-  return data.map((d: { city: string }) => d.city)
-}
 
 export default async function ArtisansPage() {
   const { providers, count, error } = await getRecentProviders(60)
