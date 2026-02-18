@@ -58,15 +58,15 @@ export async function generateMetadata({
 
   const titleHash = Math.abs(hashCode(`devis-q-title-${service}-${location}-${quartier}`))
   const titleTemplates = [
-    `Devis ${tradeLower} \u00e0 ${quartierName}, ${ville.name} \u2014 Gratuit`,
-    `Devis gratuit ${tradeLower} \u2014 ${quartierName}, ${ville.name}`,
-    `${trade.name} \u00e0 ${quartierName} (${ville.name}) : devis gratuit`,
+    `Devis ${tradeLower} à ${quartierName}, ${ville.name} — Gratuit`,
+    `Devis gratuit ${tradeLower} — ${quartierName}, ${ville.name}`,
+    `${trade.name} à ${quartierName} (${ville.name}) : devis gratuit`,
     `Devis ${tradeLower} ${quartierName} ${ville.name} 2026`,
     `${quartierName}, ${ville.name} : devis ${tradeLower} gratuit`,
   ]
   const title = titleTemplates[titleHash % titleTemplates.length]
 
-  const description = `Devis ${tradeLower} \u00e0 ${quartierName}, ${ville.name} : ${minPrice}\u2013${maxPrice} ${unit}. Comparez jusqu\u2019\u00e0 3 artisans. Gratuit, sans engagement.`
+  const description = `Devis ${tradeLower} à ${quartierName}, ${ville.name} : ${minPrice}–${maxPrice} ${unit}. Comparez jusqu’à 3 artisans. Gratuit, sans engagement.`
 
   const serviceImage = getServiceImage(service)
   const canonicalUrl = `${SITE_URL}/devis/${service}/${location}/${quartier}`
@@ -81,7 +81,7 @@ export async function generateMetadata({
       description,
       url: canonicalUrl,
       type: 'website',
-      images: [{ url: serviceImage.src, width: 800, height: 600, alt: `Devis ${trade.name} \u00e0 ${quartierName}, ${ville.name}` }],
+      images: [{ url: serviceImage.src, width: 800, height: 600, alt: `Devis ${trade.name} à ${quartierName}, ${ville.name}` }],
     },
     twitter: {
       card: 'summary_large_image',
@@ -147,8 +147,8 @@ export default async function DevisQuartierPage({
   const serviceSchema = {
     '@context': 'https://schema.org',
     '@type': 'Service',
-    name: `Devis ${trade.name} \u00e0 ${quartierName}, ${ville.name}`,
-    description: `Demandez un devis gratuit pour ${tradeLower} \u00e0 ${quartierName}, ${ville.name}. Prix : ${minPrice}\u2013${maxPrice} ${unit}.`,
+    name: `Devis ${trade.name} à ${quartierName}, ${ville.name}`,
+    description: `Demandez un devis gratuit pour ${tradeLower} à ${quartierName}, ${ville.name}. Prix : ${minPrice}–${maxPrice} ${unit}.`,
     provider: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
     areaServed: {
       '@type': 'Place',
@@ -215,22 +215,22 @@ export default async function DevisQuartierPage({
               {(() => {
                 const h1Hash = Math.abs(hashCode(`devis-q-h1-${service}-${location}-${quartier}`))
                 const h1Templates = [
-                  `Devis ${tradeLower} \u00e0 ${quartierName}, ${ville.name}`,
-                  `Obtenez un devis ${tradeLower} gratuit \u2014 ${quartierName}`,
-                  `${trade.name} \u00e0 ${quartierName} : devis gratuit en 24h`,
-                  `Devis ${tradeLower} : artisans \u00e0 ${quartierName}, ${ville.name}`,
-                  `${quartierName}, ${ville.name} : devis ${tradeLower} d\u00e9taill\u00e9`,
+                  `Devis ${tradeLower} à ${quartierName}, ${ville.name}`,
+                  `Obtenez un devis ${tradeLower} gratuit — ${quartierName}`,
+                  `${trade.name} à ${quartierName} : devis gratuit en 24h`,
+                  `Devis ${tradeLower} : artisans à ${quartierName}, ${ville.name}`,
+                  `${quartierName}, ${ville.name} : devis ${tradeLower} détaillé`,
                 ]
                 return h1Templates[h1Hash % h1Templates.length]
               })()}
             </h1>
             <p className="text-xl text-slate-400 max-w-3xl mx-auto mb-4">
-              Comparez jusqu&apos;\u00e0 3 devis de {tradeLower}s \u00e0 {quartierName} ({ville.departement}).
+              Comparez jusqu&apos;à 3 devis de {tradeLower}s à {quartierName} ({ville.departement}).
             </p>
             <div className="flex flex-wrap justify-center gap-3 mt-8">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
                 <Euro className="w-4 h-4 text-amber-400" />
-                <span>{minPrice} \u2013 {maxPrice} {unit}</span>
+                <span>{minPrice} – {maxPrice} {unit}</span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
                 <MapPin className="w-4 h-4 text-amber-400" />
@@ -255,18 +255,18 @@ export default async function DevisQuartierPage({
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="prose prose-gray max-w-none">
             <h2 className="border-l-4 border-amber-500 pl-4 !mt-0">
-              Devis {trade.name} dans le quartier {quartierName} \u00e0 {ville.name}
+              Devis {trade.name} dans le quartier {quartierName} à {ville.name}
             </h2>
             <p>{quartierContent.intro}</p>
-            <h3>Contexte du b\u00e2ti \u00e0 {quartierName}</h3>
+            <h3>Contexte du bâti à {quartierName}</h3>
             <p>{quartierContent.batimentContext}</p>
           </div>
           {/* 4-column stat cards */}
           <div className="not-prose grid grid-cols-2 sm:grid-cols-4 gap-3 my-6">
-            <StatCard label="Type de b\u00e2ti" value={profile.eraLabel} color="amber" />
-            <StatCard label="Densit\u00e9 urbaine" value={profile.densityLabel} color="blue" />
-            <StatCard label="D\u00e9partement" value={`${ville.departementCode} \u2014 ${ville.departement}`} color="slate" />
-            <StatCard label="R\u00e9gion" value={ville.region} color="emerald" />
+            <StatCard label="Type de bâti" value={profile.eraLabel} color="amber" />
+            <StatCard label="Densité urbaine" value={profile.densityLabel} color="blue" />
+            <StatCard label="Département" value={`${ville.departementCode} — ${ville.departement}`} color="slate" />
+            <StatCard label="Région" value={ville.region} color="emerald" />
           </div>
         </div>
       </section>
@@ -276,28 +276,28 @@ export default async function DevisQuartierPage({
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-8 text-center mb-12">
             <h2 className="text-lg font-semibold text-gray-700 mb-2">
-              Tarif indicatif \u00e0 {quartierName}, {ville.name}
+              Tarif indicatif à {quartierName}, {ville.name}
             </h2>
             <div className="flex items-baseline justify-center gap-2">
               <span className="text-5xl font-bold text-blue-600">
-                {minPrice} \u2014 {maxPrice}
+                {minPrice} — {maxPrice}
               </span>
               <span className="text-gray-600 text-lg">{unit}</span>
             </div>
             <p className="text-gray-500 text-sm mt-3">
-              Prix moyen constat\u00e9 \u00e0 {quartierName}, main-d&apos;\u0153uvre incluse
+              Prix moyen constaté à {quartierName}, main-d&apos;\u0153uvre incluse
             </p>
             {multiplier !== 1.0 && (
               <p className="text-xs text-gray-400 mt-2">
                 {multiplier > 1.0
-                  ? `Les tarifs en ${ville.region} sont en moyenne ${Math.round((multiplier - 1) * 100)}\u00a0% sup\u00e9rieurs \u00e0 la moyenne nationale`
-                  : `Les tarifs en ${ville.region} sont en moyenne ${Math.round((1 - multiplier) * 100)}\u00a0% inf\u00e9rieurs \u00e0 la moyenne nationale`}
+                  ? `Les tarifs en ${ville.region} sont en moyenne ${Math.round((multiplier - 1) * 100)} % supérieurs à la moyenne nationale`
+                  : `Les tarifs en ${ville.region} sont en moyenne ${Math.round((1 - multiplier) * 100)} % inférieurs à la moyenne nationale`}
               </p>
             )}
           </div>
 
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            Prestations courantes \u00e0 {quartierName}
+            Prestations courantes à {quartierName}
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {trade.commonTasks.slice(0, 6).map((task, i) => {
@@ -329,7 +329,7 @@ export default async function DevisQuartierPage({
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-            Conseils pour choisir un {tradeLower} \u00e0 {quartierName}
+            Conseils pour choisir un {tradeLower} à {quartierName}
           </h2>
           <div className="space-y-4">
             {selectedTips.map((tip, i) => (
@@ -349,7 +349,7 @@ export default async function DevisQuartierPage({
         <section className="py-16 bg-gray-50">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
-              Questions fr\u00e9quentes \u2014 Devis {trade.name} \u00e0 {quartierName}, {ville.name}
+              Questions fréquentes — Devis {trade.name} à {quartierName}, {ville.name}
             </h2>
             <div className="space-y-4">
               {combinedFaq.map((item, i) => (
@@ -374,10 +374,10 @@ export default async function DevisQuartierPage({
       <section className="py-20 bg-blue-600">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
-            Pr\u00eat \u00e0 lancer votre projet \u00e0 {quartierName}\u00a0?
+            Prêt à lancer votre projet à {quartierName} ?
           </h2>
           <p className="text-xl text-blue-100 mb-8">
-            Comparez les profils et obtenez un devis gratuit aupr\u00e8s de professionnels r\u00e9f\u00e9renc\u00e9s \u00e0 {quartierName}.
+            Comparez les profils et obtenez un devis gratuit auprès de professionnels référencés à {quartierName}.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a
@@ -391,7 +391,7 @@ export default async function DevisQuartierPage({
               href={`/services/${service}/${location}/${quartier}`}
               className="inline-flex items-center gap-2 bg-blue-500 text-white px-8 py-4 rounded-xl font-semibold hover:bg-blue-400 transition-colors text-lg border border-blue-400"
             >
-              Voir les {tradeLower}s \u00e0 {quartierName}
+              Voir les {tradeLower}s à {quartierName}
               <ArrowRight className="w-5 h-5" />
             </Link>
           </div>
@@ -425,7 +425,7 @@ export default async function DevisQuartierPage({
           {otherServices.length > 0 && (
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                Autres devis artisans \u00e0 {quartierName}
+                Autres devis artisans à {quartierName}
               </h2>
               <div className="flex flex-wrap gap-2">
                 {otherServices.map((slug) => {
@@ -479,13 +479,13 @@ export default async function DevisQuartierPage({
                   Devis {tradeLower} en France
                 </Link>
                 <Link href={`/tarifs-artisans/${service}/${location}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
-                  Tarifs {tradeLower} \u00e0 {ville.name}
+                  Tarifs {tradeLower} à {ville.name}
                 </Link>
                 <Link href={`/services/${service}/${location}/${quartier}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
-                  {trade.name} \u00e0 {quartierName}
+                  {trade.name} à {quartierName}
                 </Link>
                 <Link href={`/services/${service}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
-                  {trade.name} \u2014 tous les artisans
+                  {trade.name} — tous les artisans
                 </Link>
               </div>
             </div>
@@ -493,14 +493,14 @@ export default async function DevisQuartierPage({
               <h3 className="font-semibold text-gray-900 mb-3">Cette ville</h3>
               <div className="space-y-2">
                 <Link href={`/villes/${location}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
-                  Artisans \u00e0 {ville.name}
+                  Artisans à {ville.name}
                 </Link>
                 {otherServices.slice(0, 3).map((slug) => {
                   const t = tradeContent[slug]
                   if (!t) return null
                   return (
                     <Link key={slug} href={`/devis/${slug}/${location}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
-                      Devis {t.name.toLowerCase()} \u00e0 {ville.name}
+                      Devis {t.name.toLowerCase()} à {ville.name}
                     </Link>
                   )
                 })}
@@ -511,7 +511,7 @@ export default async function DevisQuartierPage({
               <div className="space-y-2">
                 <Link href="/devis" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Demander un devis</Link>
                 <Link href="/tarifs-artisans" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Guide complet des tarifs</Link>
-                <Link href="/comment-ca-marche" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Comment \u00e7a marche</Link>
+                <Link href="/comment-ca-marche" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Comment ça marche</Link>
                 <Link href="/faq" className="block text-sm text-gray-600 hover:text-blue-600 py-1">FAQ</Link>
               </div>
             </div>
@@ -525,7 +525,7 @@ export default async function DevisQuartierPage({
           <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
             <h3 className="text-sm font-semibold text-slate-700 mb-2">Transparence tarifaire</h3>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Les prix affich\u00e9s pour {quartierName} \u00e0 {ville.name} sont des fourchettes indicatives ajust\u00e9es en fonction des donn\u00e9es r\u00e9gionales ({ville.region}). Ils varient selon la complexit\u00e9 du chantier, les mat\u00e9riaux et l&apos;urgence. Seul un devis personnalis\u00e9 fait foi. {SITE_NAME} est un annuaire ind\u00e9pendant.
+              Les prix affichés pour {quartierName} à {ville.name} sont des fourchettes indicatives ajustées en fonction des données régionales ({ville.region}). Ils varient selon la complexité du chantier, les matériaux et l&apos;urgence. Seul un devis personnalisé fait foi. {SITE_NAME} est un annuaire indépendant.
             </p>
           </div>
         </div>

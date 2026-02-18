@@ -31,7 +31,7 @@ export function generateStaticParams() {
 
 function truncateTitle(title: string, maxLen = 55): string {
   if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '\u2026'
+  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
 
 export async function generateMetadata({
@@ -47,19 +47,19 @@ export async function generateMetadata({
 
   const titleHash = Math.abs(hashCode(`avis-title-${service}`))
   const titleTemplates = [
-    `Avis ${tradeLower} \u2014 Comment bien choisir`,
-    `Choisir un bon ${tradeLower} \u2014 Avis et conseils`,
+    `Avis ${tradeLower} — Comment bien choisir`,
+    `Choisir un bon ${tradeLower} — Avis et conseils`,
     `Avis et recommandations ${tradeLower}`,
     `${trade.name} : avis, tarifs et conseils pour bien choisir`,
-    `Trouver un ${tradeLower} de confiance \u2014 Avis v\u00e9rifi\u00e9s`,
+    `Trouver un ${tradeLower} de confiance — Avis vérifiés`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
   const descHash = Math.abs(hashCode(`avis-desc-${service}`))
   const descTemplates = [
-    `Consultez les avis sur les ${tradeLower}s. Comparez les profils, v\u00e9rifiez les certifications et choisissez un professionnel de confiance. ${trade.priceRange.min}\u2013${trade.priceRange.max} ${trade.priceRange.unit}.`,
-    `Avis ${tradeLower} : comment bien choisir\u00a0? Tarifs ${trade.priceRange.min}\u2013${trade.priceRange.max} ${trade.priceRange.unit}, certifications, conseils et retours clients v\u00e9rifi\u00e9s.`,
-    `Trouvez un ${tradeLower} de confiance gr\u00e2ce aux avis v\u00e9rifi\u00e9s. Prix : ${trade.priceRange.min} \u00e0 ${trade.priceRange.max} ${trade.priceRange.unit}. Comparaison gratuite.`,
+    `Consultez les avis sur les ${tradeLower}s. Comparez les profils, vérifiez les certifications et choisissez un professionnel de confiance. ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}.`,
+    `Avis ${tradeLower} : comment bien choisir ? Tarifs ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}, certifications, conseils et retours clients vérifiés.`,
+    `Trouvez un ${tradeLower} de confiance grâce aux avis vérifiés. Prix : ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}. Comparaison gratuite.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
@@ -204,18 +204,18 @@ export default async function AvisServicePage({
   // Merge trade FAQ + review-specific FAQ
   const reviewFaqItems = [
     {
-      question: `Comment choisir un bon ${tradeLower}\u00a0?`,
-      answer: `Pour choisir un bon ${tradeLower}, v\u00e9rifiez ses certifications (${trade.certifications.length > 0 ? trade.certifications.slice(0, 3).join(', ') : 'assurance d\u00e9cennale, RC pro'}), comparez les avis clients et demandez plusieurs devis. Les tarifs habituels vont de ${trade.priceRange.min} \u00e0 ${trade.priceRange.max} ${trade.priceRange.unit}.`,
+      question: `Comment choisir un bon ${tradeLower} ?`,
+      answer: `Pour choisir un bon ${tradeLower}, vérifiez ses certifications (${trade.certifications.length > 0 ? trade.certifications.slice(0, 3).join(', ') : 'assurance décennale, RC pro'}), comparez les avis clients et demandez plusieurs devis. Les tarifs habituels vont de ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}.`,
     },
     {
-      question: `Combien co\u00fbte un ${tradeLower}\u00a0?`,
-      answer: `Les tarifs d\u2019un ${tradeLower} varient g\u00e9n\u00e9ralement de ${trade.priceRange.min} \u00e0 ${trade.priceRange.max} ${trade.priceRange.unit}, selon la complexit\u00e9 de l\u2019intervention et votre r\u00e9gion. Demandez plusieurs devis pour comparer.`,
+      question: `Combien coûte un ${tradeLower} ?`,
+      answer: `Les tarifs d’un ${tradeLower} varient généralement de ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}, selon la complexité de l’intervention et votre région. Demandez plusieurs devis pour comparer.`,
     },
     {
-      question: `Quelles certifications v\u00e9rifier pour un ${tradeLower}\u00a0?`,
+      question: `Quelles certifications vérifier pour un ${tradeLower} ?`,
       answer: trade.certifications.length > 0
-        ? `Pour un ${tradeLower}, les certifications \u00e0 v\u00e9rifier sont : ${trade.certifications.join(', ')}. V\u00e9rifiez \u00e9galement l\u2019assurance d\u00e9cennale et la responsabilit\u00e9 civile professionnelle.`
-        : `V\u00e9rifiez au minimum l\u2019assurance d\u00e9cennale et la responsabilit\u00e9 civile professionnelle. Un ${tradeLower} s\u00e9rieux fournit ces documents sans difficult\u00e9.`,
+        ? `Pour un ${tradeLower}, les certifications à vérifier sont : ${trade.certifications.join(', ')}. Vérifiez également l’assurance décennale et la responsabilité civile professionnelle.`
+        : `Vérifiez au minimum l’assurance décennale et la responsabilité civile professionnelle. Un ${tradeLower} sérieux fournit ces documents sans difficulté.`,
     },
   ]
 
@@ -239,7 +239,7 @@ export default async function AvisServicePage({
     '@context': 'https://schema.org',
     '@type': 'Service',
     name: `Avis ${trade.name} en France`,
-    description: `Consultez les avis et recommandations pour choisir un ${tradeLower} de confiance. ${trade.priceRange.min} \u00e0 ${trade.priceRange.max} ${trade.priceRange.unit}. Artisans r\u00e9f\u00e9renc\u00e9s.`,
+    description: `Consultez les avis et recommandations pour choisir un ${tradeLower} de confiance. ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}. Artisans référencés.`,
     provider: {
       '@type': 'Organization',
       name: 'ServicesArtisans',
@@ -266,7 +266,7 @@ export default async function AvisServicePage({
       },
       review: serviceStats.reviews.slice(0, 3).map(r => ({
         '@type': 'Review',
-        author: { '@type': 'Person', name: r.author_name || 'Client v\u00e9rifi\u00e9' },
+        author: { '@type': 'Person', name: r.author_name || 'Client vérifié' },
         reviewRating: { '@type': 'Rating', ratingValue: r.rating, bestRating: 5 },
         reviewBody: r.content,
         datePublished: r.created_at?.split('T')[0],
@@ -296,28 +296,28 @@ export default async function AvisServicePage({
       title: 'Qualifications et certifications',
       description:
         trade.certifications.length > 0
-          ? `V\u00e9rifiez que votre ${tradeLower} poss\u00e8de les certifications suivantes : ${trade.certifications.join(', ')}. L\u2019assurance d\u00e9cennale et la RC pro sont obligatoires.`
-          : `V\u00e9rifiez que votre ${tradeLower} dispose d\u2019une assurance d\u00e9cennale et d\u2019une responsabilit\u00e9 civile professionnelle. Ces garanties sont obligatoires pour tout artisan du b\u00e2timent.`,
+          ? `Vérifiez que votre ${tradeLower} possède les certifications suivantes : ${trade.certifications.join(', ')}. L’assurance décennale et la RC pro sont obligatoires.`
+          : `Vérifiez que votre ${tradeLower} dispose d’une assurance décennale et d’une responsabilité civile professionnelle. Ces garanties sont obligatoires pour tout artisan du bâtiment.`,
     },
     {
       icon: Euro,
       title: 'Transparence des tarifs',
-      description: `Un bon ${tradeLower} fournit un devis d\u00e9taill\u00e9 avant intervention. Prix habituels : ${trade.priceRange.min}\u2013${trade.priceRange.max} ${trade.priceRange.unit}.`,
+      description: `Un bon ${tradeLower} fournit un devis détaillé avant intervention. Prix habituels : ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}.`,
     },
     {
       icon: Clock,
-      title: 'R\u00e9activit\u00e9 et ponctualit\u00e9',
-      description: `V\u00e9rifiez le d\u00e9lai de r\u00e9ponse habituel. ${trade.averageResponseTime}.`,
+      title: 'Réactivité et ponctualité',
+      description: `Vérifiez le délai de réponse habituel. ${trade.averageResponseTime}.`,
     },
     {
       icon: CheckCircle,
-      title: 'Qualit\u00e9 des finitions',
-      description: `Examinez les photos avant/apr\u00e8s dans les avis clients. Un ${tradeLower} soigneux est un gage de s\u00e9rieux et de durabilit\u00e9 des travaux.`,
+      title: 'Qualité des finitions',
+      description: `Examinez les photos avant/après dans les avis clients. Un ${tradeLower} soigneux est un gage de sérieux et de durabilité des travaux.`,
     },
     {
       icon: Phone,
-      title: 'Service apr\u00e8s-intervention',
-      description: `Un artisan s\u00e9rieux assure un suivi et reste joignable apr\u00e8s les travaux. V\u00e9rifiez ce point dans les avis clients.`,
+      title: 'Service après-intervention',
+      description: `Un artisan sérieux assure un suivi et reste joignable après les travaux. Vérifiez ce point dans les avis clients.`,
     },
   ]
 
@@ -358,10 +358,10 @@ export default async function AvisServicePage({
               {(() => {
                 const h1Hash = Math.abs(hashCode(`avis-h1-${service}`))
                 const h1Templates = [
-                  `Avis ${tradeLower} \u2014 Comment bien choisir`,
+                  `Avis ${tradeLower} — Comment bien choisir`,
                   `Choisir un bon ${tradeLower} : avis et conseils`,
                   `Avis ${tradeLower} : comparez les professionnels`,
-                  `${trade.name} : avis v\u00e9rifi\u00e9s et recommandations`,
+                  `${trade.name} : avis vérifiés et recommandations`,
                   `Trouver un ${tradeLower} de confiance`,
                 ]
                 return h1Templates[h1Hash % h1Templates.length]
@@ -513,7 +513,7 @@ export default async function AvisServicePage({
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-2">
                       <span className="font-semibold text-gray-900 text-sm">
-                        {review.author_name || 'Client v\u00e9rifi\u00e9'}
+                        {review.author_name || 'Client vérifié'}
                       </span>
                       <span className="inline-flex items-center gap-1 text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
                         <CheckCircle className="w-3 h-3" />
@@ -535,7 +535,7 @@ export default async function AvisServicePage({
                   </div>
                   {review.content && (
                     <p className="text-gray-700 text-sm leading-relaxed">
-                      {review.content.length > 300 ? review.content.slice(0, 300) + '\u2026' : review.content}
+                      {review.content.length > 300 ? review.content.slice(0, 300) + '…' : review.content}
                     </p>
                   )}
                   <div className="mt-3 text-xs text-gray-400">

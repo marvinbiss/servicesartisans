@@ -27,15 +27,15 @@ export const tradeContent: Record<string, TradeContent> = {
     priceRange: {
       min: 60,
       max: 90,
-      unit: '\u20AC/h',
+      unit: '€/h',
     },
     commonTasks: [
-      'Débouchage de canalisation : 80 à 250 \u20AC selon la complexité',
-      'Remplacement d\'un chauffe-eau : 800 à 2 500 \u20AC (fourniture + pose)',
-      'Réparation de fuite d\'eau : 90 à 300 \u20AC',
-      'Installation d\'un WC : 200 à 600 \u20AC (hors fourniture)',
-      'Pose d\'un robinet mitigeur : 80 à 200 \u20AC (hors fourniture)',
-      'Remplacement d\'un ballon d\'eau chaude : 600 à 2 000 \u20AC',
+      'Débouchage de canalisation : 80 à 250 € selon la complexité',
+      'Remplacement d\'un chauffe-eau : 800 à 2 500 € (fourniture + pose)',
+      'Réparation de fuite d\'eau : 90 à 300 €',
+      'Installation d\'un WC : 200 à 600 € (hors fourniture)',
+      'Pose d\'un robinet mitigeur : 80 à 200 € (hors fourniture)',
+      'Remplacement d\'un ballon d\'eau chaude : 600 à 2 000 €',
     ],
     tips: [
       'Vérifiez que le plombier dispose d\'une assurance responsabilité civile professionnelle et d\'une garantie décennale, obligatoires pour les travaux de plomberie.',
@@ -47,7 +47,7 @@ export const tradeContent: Record<string, TradeContent> = {
     faq: [
       {
         q: 'Combien coûte une intervention de plombier en urgence ?',
-        a: 'Une intervention d\'urgence coûte en moyenne entre 150 et 400 \u20AC, avec des majorations possibles la nuit (+50 à 100 %), le week-end (+25 à 50 %) et les jours fériés (+50 à 100 %). Exigez toujours un devis avant que le plombier ne commence les travaux, même en urgence.',
+        a: 'Une intervention d\'urgence coûte en moyenne entre 150 et 400 €, avec des majorations possibles la nuit (+50 à 100 %), le week-end (+25 à 50 %) et les jours fériés (+50 à 100 %). Exigez toujours un devis avant que le plombier ne commence les travaux, même en urgence.',
       },
       {
         q: 'Comment savoir si mon plombier est fiable ?',
@@ -59,7 +59,7 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'Le plombier doit-il fournir une facture ?',
-        a: 'Oui, c\'est obligatoire pour toute prestation supérieure à 25 \u20AC. La facture doit mentionner le détail des travaux, le prix unitaire des pièces, le taux horaire de la main-d\'oeuvre et la TVA appliquée (10 % pour la rénovation, 20 % pour le neuf). Conservez-la précieusement pour la garantie.',
+        a: 'Oui, c\'est obligatoire pour toute prestation supérieure à 25 €. La facture doit mentionner le détail des travaux, le prix unitaire des pièces, le taux horaire de la main-d\'oeuvre et la TVA appliquée (10 % pour la rénovation, 20 % pour le neuf). Conservez-la précieusement pour la garantie.',
       },
       {
         q: 'Que faire en cas de fuite d\'eau la nuit ?',
@@ -71,7 +71,7 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'Quel est le coût d\'un remplacement de chauffe-eau ?',
-        a: 'Le remplacement d\'un chauffe-eau électrique de 200 litres coûte entre 800 et 1 500 \u20AC (fourniture + pose), tandis qu\'un chauffe-eau thermodynamique revient à 2 500 à 4 500 \u20AC. Le prix dépend du type (électrique, gaz, thermodynamique, solaire), de la capacité et de l\'accessibilité de l\'installation. Un chauffe-eau thermodynamique permet d\'économiser jusqu\'à 70 % sur la facture d\'eau chaude.',
+        a: 'Le remplacement d\'un chauffe-eau électrique de 200 litres coûte entre 800 et 1 500 € (fourniture + pose), tandis qu\'un chauffe-eau thermodynamique revient à 2 500 à 4 500 €. Le prix dépend du type (électrique, gaz, thermodynamique, solaire), de la capacité et de l\'accessibilité de l\'installation. Un chauffe-eau thermodynamique permet d\'économiser jusqu\'à 70 % sur la facture d\'eau chaude.',
       },
       {
         q: 'Quelle est la durée de vie d\'une installation de plomberie ?',
@@ -97,15 +97,15 @@ export const tradeContent: Record<string, TradeContent> = {
     priceRange: {
       min: 50,
       max: 80,
-      unit: '\u20AC/h',
+      unit: '€/h',
     },
     commonTasks: [
-      'Mise aux normes d\'un tableau électrique : 800 à 2 500 \u20AC',
-      'Installation d\'un point lumineux : 80 à 200 \u20AC',
-      'Pose d\'une prise électrique supplémentaire : 60 à 150 \u20AC',
-      'Remplacement d\'un interrupteur différentiel : 150 à 350 \u20AC',
-      'Installation d\'un interphone ou visiophone : 300 à 1 200 \u20AC',
-      'Réfection complète de l\'électricité d\'un appartement (60 m²) : 5 000 à 10 000 \u20AC',
+      'Mise aux normes d\'un tableau électrique : 800 à 2 500 €',
+      'Installation d\'un point lumineux : 80 à 200 €',
+      'Pose d\'une prise électrique supplémentaire : 60 à 150 €',
+      'Remplacement d\'un interrupteur différentiel : 150 à 350 €',
+      'Installation d\'un interphone ou visiophone : 300 à 1 200 €',
+      'Réfection complète de l\'électricité d\'un appartement (60 m²) : 5 000 à 10 000 €',
     ],
     tips: [
       'Assurez-vous que l\'électricien respecte la norme NF C 15-100, obligatoire pour toute installation électrique en France. Demandez un certificat de conformité Consuel à la fin des travaux.',
@@ -117,23 +117,23 @@ export const tradeContent: Record<string, TradeContent> = {
     faq: [
       {
         q: 'Ma maison est ancienne, faut-il refaire toute l\'électricité ?',
-        a: 'Pas nécessairement, mais un diagnostic électrique est fortement recommandé pour les installations de plus de 15 ans. Un électricien qualifié évaluera la conformité à la norme NF C 15-100 et proposera les mises à niveau nécessaires. Une rénovation partielle (tableau, prises de terre, différentiels) coûte entre 1 500 et 4 000 \u20AC selon la surface.',
+        a: 'Pas nécessairement, mais un diagnostic électrique est fortement recommandé pour les installations de plus de 15 ans. Un électricien qualifié évaluera la conformité à la norme NF C 15-100 et proposera les mises à niveau nécessaires. Une rénovation partielle (tableau, prises de terre, différentiels) coûte entre 1 500 et 4 000 € selon la surface.',
       },
       {
         q: 'Combien coûte l\'installation d\'une borne de recharge pour voiture électrique ?',
-        a: 'L\'installation d\'une borne de recharge domestique (wallbox 7 kW) coûte entre 1 200 et 2 500 \u20AC pose comprise. Un crédit d\'impôt de 300 \u20AC est disponible, à condition de faire appel à un électricien certifié IRVE. Le délai d\'installation est généralement de 1 à 3 jours.',
+        a: 'L\'installation d\'une borne de recharge domestique (wallbox 7 kW) coûte entre 1 200 et 2 500 € pose comprise. Un crédit d\'impôt de 300 € est disponible, à condition de faire appel à un électricien certifié IRVE. Le délai d\'installation est généralement de 1 à 3 jours.',
       },
       {
         q: 'Qu\'est-ce que le certificat Consuel et est-il obligatoire ?',
-        a: 'Le Consuel (Comité National pour la Sécurité des Usagers de l\'Électricité) délivre une attestation de conformité électrique. Il est obligatoire pour toute nouvelle installation ou rénovation complète avant la mise sous tension par Enedis. Le coût est d\'environ 120 à 180 \u20AC selon le type d\'installation.',
+        a: 'Le Consuel (Comité National pour la Sécurité des Usagers de l\'Électricité) délivre une attestation de conformité électrique. Il est obligatoire pour toute nouvelle installation ou rénovation complète avant la mise sous tension par Enedis. Le coût est d\'environ 120 à 180 € selon le type d\'installation.',
       },
       {
         q: 'Comment savoir si mon installation électrique est aux normes ?',
-        a: 'Faites réaliser un diagnostic électrique par un électricien certifié ou un diagnostiqueur agréé. Ce contrôle vérifie la conformité à la norme NF C 15-100 : présence d\'un disjoncteur différentiel 30 mA, mise à la terre, protection des circuits et état des prises. Ce diagnostic est obligatoire pour la vente d\'un logement de plus de 15 ans et coûte entre 100 et 200 \u20AC.',
+        a: 'Faites réaliser un diagnostic électrique par un électricien certifié ou un diagnostiqueur agréé. Ce contrôle vérifie la conformité à la norme NF C 15-100 : présence d\'un disjoncteur différentiel 30 mA, mise à la terre, protection des circuits et état des prises. Ce diagnostic est obligatoire pour la vente d\'un logement de plus de 15 ans et coûte entre 100 et 200 €.',
       },
       {
         q: 'Quand faut-il refaire le tableau électrique ?',
-        a: 'Le remplacement du tableau est nécessaire si votre installation a plus de 25 ans, si le tableau comporte encore des fusibles à broche, s\'il n\'y a pas de disjoncteur différentiel 30 mA ou si vous ajoutez des équipements énergivores (borne de recharge, pompe à chaleur). Le coût d\'un tableau neuf aux normes est de 800 à 2 500 \u20AC selon le nombre de circuits.',
+        a: 'Le remplacement du tableau est nécessaire si votre installation a plus de 25 ans, si le tableau comporte encore des fusibles à broche, s\'il n\'y a pas de disjoncteur différentiel 30 mA ou si vous ajoutez des équipements énergivores (borne de recharge, pompe à chaleur). Le coût d\'un tableau neuf aux normes est de 800 à 2 500 € selon le nombre de circuits.',
       },
       {
         q: 'Les travaux électriques nécessitent-ils une mise aux normes complète ?',
@@ -167,19 +167,19 @@ export const tradeContent: Record<string, TradeContent> = {
     priceRange: {
       min: 80,
       max: 150,
-      unit: '\u20AC/intervention',
+      unit: '€/intervention',
     },
     commonTasks: [
-      'Ouverture de porte claquée (sans effraction) : 80 à 150 \u20AC',
-      'Ouverture de porte blindée : 150 à 400 \u20AC',
-      'Changement de serrure standard : 100 à 300 \u20AC (fourniture incluse)',
-      'Pose d\'une serrure multipoints : 300 à 800 \u20AC',
-      'Blindage de porte existante : 800 à 2 000 \u20AC',
-      'Installation d\'une porte blindée complète : 1 500 à 4 500 \u20AC',
+      'Ouverture de porte claquée (sans effraction) : 80 à 150 €',
+      'Ouverture de porte blindée : 150 à 400 €',
+      'Changement de serrure standard : 100 à 300 € (fourniture incluse)',
+      'Pose d\'une serrure multipoints : 300 à 800 €',
+      'Blindage de porte existante : 800 à 2 000 €',
+      'Installation d\'une porte blindée complète : 1 500 à 4 500 €',
     ],
     tips: [
       'En cas de porte claquée, ne paniquez pas : un serrurier qualifié peut ouvrir sans dégradation dans la majorité des cas. Ne faites jamais appel à un dépanneur trouvé sur un prospectus dans votre boîte aux lettres.',
-      'Exigez un devis ferme et définitif avant toute intervention, y compris en urgence. La loi oblige le serrurier à vous remettre un devis écrit pour toute prestation dépassant 150 \u20AC.',
+      'Exigez un devis ferme et définitif avant toute intervention, y compris en urgence. La loi oblige le serrurier à vous remettre un devis écrit pour toute prestation dépassant 150 €.',
       'Méfiez-vous des serruriers qui annoncent des prix très bas par téléphone puis gonflent la facture une fois sur place. Vérifiez les avis en ligne et le numéro SIRET avant d\'appeler.',
       'Privilégiez les serruriers ayant une adresse physique vérifiable (atelier ou magasin). C\'est un gage de sérieux et de recours possible en cas de problème.',
       'Après un cambriolage, faites intervenir la police avant le serrurier. Vous aurez besoin du dépôt de plainte pour votre assurance, et il ne faut pas toucher à la scène.',
@@ -187,11 +187,11 @@ export const tradeContent: Record<string, TradeContent> = {
     faq: [
       {
         q: 'Combien coûte une ouverture de porte le dimanche ou la nuit ?',
-        a: 'Une ouverture de porte en horaires non ouvrés (nuit, dimanche, jours fériés) coûte entre 150 et 350 \u20AC pour une porte standard, et entre 250 et 500 \u20AC pour une porte blindée. Les majorations de nuit (entre 20h et 6h) vont de 50 à 100 % du tarif de base. Demandez toujours le prix total avant que le serrurier n\'intervienne.',
+        a: 'Une ouverture de porte en horaires non ouvrés (nuit, dimanche, jours fériés) coûte entre 150 et 350 € pour une porte standard, et entre 250 et 500 € pour une porte blindée. Les majorations de nuit (entre 20h et 6h) vont de 50 à 100 % du tarif de base. Demandez toujours le prix total avant que le serrurier n\'intervienne.',
       },
       {
         q: 'Quelle serrure choisir pour sécuriser mon logement ?',
-        a: 'Pour une sécurité optimale, optez pour une serrure certifiée A2P (Assurance Prévention Protection). Il existe 3 niveaux : A2P* (résistance de 5 min à l\'effraction), A2P** (10 min) et A2P*** (15 min). Les assureurs exigent souvent un niveau A2P** minimum. Comptez 200 à 600 \u20AC pour la serrure et 100 à 200 \u20AC pour la pose.',
+        a: 'Pour une sécurité optimale, optez pour une serrure certifiée A2P (Assurance Prévention Protection). Il existe 3 niveaux : A2P* (résistance de 5 min à l\'effraction), A2P** (10 min) et A2P*** (15 min). Les assureurs exigent souvent un niveau A2P** minimum. Comptez 200 à 600 € pour la serrure et 100 à 200 € pour la pose.',
       },
       {
         q: 'Mon assurance prend-elle en charge les frais de serrurier ?',
@@ -235,22 +235,22 @@ export const tradeContent: Record<string, TradeContent> = {
     priceRange: {
       min: 60,
       max: 100,
-      unit: '\u20AC/h',
+      unit: '€/h',
     },
     commonTasks: [
-      'Entretien annuel de chaudière gaz : 100 à 200 \u20AC',
-      'Remplacement d\'une chaudière gaz à condensation : 3 000 à 7 000 \u20AC (fourniture + pose)',
-      'Installation d\'une pompe à chaleur air-eau : 8 000 à 15 000 \u20AC',
-      'Désembouage d\'un circuit de chauffage : 400 à 900 \u20AC',
-      'Remplacement de radiateurs : 300 à 800 \u20AC par radiateur (fourniture + pose)',
-      'Installation d\'un plancher chauffant : 50 à 100 \u20AC/m²',
+      'Entretien annuel de chaudière gaz : 100 à 200 €',
+      'Remplacement d\'une chaudière gaz à condensation : 3 000 à 7 000 € (fourniture + pose)',
+      'Installation d\'une pompe à chaleur air-eau : 8 000 à 15 000 €',
+      'Désembouage d\'un circuit de chauffage : 400 à 900 €',
+      'Remplacement de radiateurs : 300 à 800 € par radiateur (fourniture + pose)',
+      'Installation d\'un plancher chauffant : 50 à 100 €/m²',
     ],
     tips: [
       'L\'entretien annuel de votre chaudière est obligatoire par la loi (décret du 9 juin 2009). Prévoyez-le à l\'automne, avant la saison de chauffe, pour éviter les pannes en plein hiver.',
-      'Privilégiez un chauffagiste certifié RGE pour bénéficier des aides financières : MaPrimeRenov\' (jusqu\'à 5 000 \u20AC pour une pompe à chaleur), CEE, éco-prêt à taux zéro et TVA à 5,5 %.',
+      'Privilégiez un chauffagiste certifié RGE pour bénéficier des aides financières : MaPrimeRenov\' (jusqu\'à 5 000 € pour une pompe à chaleur), CEE, éco-prêt à taux zéro et TVA à 5,5 %.',
       'Comparez les performances énergétiques (COP pour les pompes à chaleur, rendement pour les chaudières) et pas seulement le prix d\'achat. Une chaudière à condensation consomme 15 à 30 % de moins qu\'un modèle classique.',
       'Demandez un bilan thermique complet avant l\'installation d\'un nouveau système de chauffage. Un bon chauffagiste dimensionne l\'installation en fonction de la surface, de l\'isolation et de la zone climatique.',
-      'Souscrivez un contrat d\'entretien annuel : il coûte entre 120 et 250 \u20AC par an et inclut généralement la visite obligatoire, le dépannage prioritaire et les pièces d\'usure.',
+      'Souscrivez un contrat d\'entretien annuel : il coûte entre 120 et 250 € par an et inclut généralement la visite obligatoire, le dépannage prioritaire et les pièces d\'usure.',
     ],
     faq: [
       {
@@ -259,11 +259,11 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'Pompe à chaleur ou chaudière gaz : que choisir ?',
-        a: 'La pompe à chaleur air-eau est plus écologique et bénéficie de plus d\'aides (MaPrimeRenov\' jusqu\'à 5 000 \u20AC), mais son coût d\'installation est plus élevé (8 000 à 15 000 \u20AC contre 3 000 à 7 000 \u20AC pour une chaudière gaz). Elle est idéale pour les maisons bien isolées. La chaudière gaz à condensation reste pertinente en appartement ou si le réseau de gaz est déjà installé.',
+        a: 'La pompe à chaleur air-eau est plus écologique et bénéficie de plus d\'aides (MaPrimeRenov\' jusqu\'à 5 000 €), mais son coût d\'installation est plus élevé (8 000 à 15 000 € contre 3 000 à 7 000 € pour une chaudière gaz). Elle est idéale pour les maisons bien isolées. La chaudière gaz à condensation reste pertinente en appartement ou si le réseau de gaz est déjà installé.',
       },
       {
         q: 'Les aides de l\'État pour le chauffage sont-elles cumulables ?',
-        a: 'Oui, sous conditions de revenus et avec un artisan RGE. Vous pouvez cumuler MaPrimeRenov\', les CEE (Certificats d\'Économies d\'Énergie), l\'éco-prêt à taux zéro (jusqu\'à 50 000 \u20AC) et la TVA réduite à 5,5 %. Le montant total peut couvrir 50 à 90 % du coût des travaux pour les ménages modestes.',
+        a: 'Oui, sous conditions de revenus et avec un artisan RGE. Vous pouvez cumuler MaPrimeRenov\', les CEE (Certificats d\'Économies d\'Énergie), l\'éco-prêt à taux zéro (jusqu\'à 50 000 €) et la TVA réduite à 5,5 %. Le montant total peut couvrir 50 à 90 % du coût des travaux pour les ménages modestes.',
       },
       {
         q: 'Ma chaudière est en panne en plein hiver, que faire ?',
@@ -271,7 +271,7 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'L\'entretien annuel de la chaudière est-il vraiment obligatoire ?',
-        a: 'Oui, l\'entretien annuel est obligatoire depuis le décret du 9 juin 2009 pour toutes les chaudières (gaz, fioul, bois) d\'une puissance de 4 à 400 kW. Le chauffagiste vérifie la combustion, nettoie les composants et mesure les émissions de CO. Il remet une attestation d\'entretien, exigée par l\'assurance en cas de sinistre. Le coût est de 100 à 200 \u20AC.',
+        a: 'Oui, l\'entretien annuel est obligatoire depuis le décret du 9 juin 2009 pour toutes les chaudières (gaz, fioul, bois) d\'une puissance de 4 à 400 kW. Le chauffagiste vérifie la combustion, nettoie les composants et mesure les émissions de CO. Il remet une attestation d\'entretien, exigée par l\'assurance en cas de sinistre. Le coût est de 100 à 200 €.',
       },
       {
         q: 'Comment purger correctement ses radiateurs ?',
@@ -279,11 +279,11 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'Quel est le coût d\'un plancher chauffant ?',
-        a: 'L\'installation d\'un plancher chauffant hydraulique coûte entre 50 et 100 \u20AC/m² (pose uniquement) et entre 70 et 120 \u20AC/m² pour un système électrique. Pour une maison de 100 m², le budget total (fourniture + pose) est de 8 000 à 15 000 \u20AC. Le plancher chauffant offre un confort supérieur aux radiateurs et permet des économies d\'énergie de 10 à 15 %.',
+        a: 'L\'installation d\'un plancher chauffant hydraulique coûte entre 50 et 100 €/m² (pose uniquement) et entre 70 et 120 €/m² pour un système électrique. Pour une maison de 100 m², le budget total (fourniture + pose) est de 8 000 à 15 000 €. Le plancher chauffant offre un confort supérieur aux radiateurs et permet des économies d\'énergie de 10 à 15 %.',
       },
       {
         q: 'Faut-il un contrat d\'entretien pour sa chaudière ?',
-        a: 'Le contrat d\'entretien n\'est pas obligatoire mais vivement recommandé. Il coûte entre 120 et 250 \u20AC par an et inclut la visite annuelle obligatoire, le dépannage prioritaire (souvent sous 24h) et parfois les pièces d\'usure. Sans contrat, une intervention d\'urgence coûte 150 à 350 \u20AC avec des délais plus longs, surtout en plein hiver.',
+        a: 'Le contrat d\'entretien n\'est pas obligatoire mais vivement recommandé. Il coûte entre 120 et 250 € par an et inclut la visite annuelle obligatoire, le dépannage prioritaire (souvent sous 24h) et parfois les pièces d\'usure. Sans contrat, une intervention d\'urgence coûte 150 à 350 € avec des délais plus longs, surtout en plein hiver.',
       },
     ],
     emergencyInfo:
@@ -307,15 +307,15 @@ export const tradeContent: Record<string, TradeContent> = {
     priceRange: {
       min: 25,
       max: 45,
-      unit: '\u20AC/m²',
+      unit: '€/m²',
     },
     commonTasks: [
-      'Peinture d\'une pièce (murs + plafond, 12 m²) : 400 à 800 \u20AC',
-      'Ravalement de façade (enduit + peinture) : 40 à 100 \u20AC/m²',
-      'Pose de papier peint : 15 à 35 \u20AC/m² (hors fourniture)',
-      'Laquage de boiseries et portes : 30 à 60 \u20AC/m²',
-      'Traitement et peinture de volets : 50 à 120 \u20AC par volet',
-      'Peinture de plafond seul : 18 à 35 \u20AC/m²',
+      'Peinture d\'une pièce (murs + plafond, 12 m²) : 400 à 800 €',
+      'Ravalement de façade (enduit + peinture) : 40 à 100 €/m²',
+      'Pose de papier peint : 15 à 35 €/m² (hors fourniture)',
+      'Laquage de boiseries et portes : 30 à 60 €/m²',
+      'Traitement et peinture de volets : 50 à 120 € par volet',
+      'Peinture de plafond seul : 18 à 35 €/m²',
     ],
     tips: [
       'Un bon peintre commence toujours par une préparation minutieuse des surfaces : lessivage, ponçage, rebouchage des fissures et application d\'une sous-couche. Cette étape représente 60 % du travail et garantit un résultat durable.',
@@ -327,7 +327,7 @@ export const tradeContent: Record<string, TradeContent> = {
     faq: [
       {
         q: 'Combien coûte la peinture d\'un appartement complet ?',
-        a: 'Pour un appartement de 60 m², comptez entre 2 500 et 5 000 \u20AC pour la peinture de toutes les pièces (murs et plafonds), fournitures incluses. Le prix varie selon l\'état des murs (plus de préparation = plus cher), le nombre de couleurs et la qualité de la peinture choisie. Demandez au moins 3 devis pour comparer.',
+        a: 'Pour un appartement de 60 m², comptez entre 2 500 et 5 000 € pour la peinture de toutes les pièces (murs et plafonds), fournitures incluses. Le prix varie selon l\'état des murs (plus de préparation = plus cher), le nombre de couleurs et la qualité de la peinture choisie. Demandez au moins 3 devis pour comparer.',
       },
       {
         q: 'Faut-il vider entièrement la pièce avant les travaux de peinture ?',
@@ -347,7 +347,7 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'Quelle peinture choisir pour une salle de bain ?',
-        a: 'Optez pour une peinture acrylique spéciale pièces humides, résistante à l\'humidité et aux moisissures (classe 1 ou 2 selon la norme ISO 11998). Les marques professionnelles comme Tollens, Sikkens ou Zolpan proposent des gammes dédiées. Comptez 30 à 50 \u20AC le litre en qualité professionnelle. Évitez les peintures glycéro dans les pièces de vie en raison de leurs émanations de COV.',
+        a: 'Optez pour une peinture acrylique spéciale pièces humides, résistante à l\'humidité et aux moisissures (classe 1 ou 2 selon la norme ISO 11998). Les marques professionnelles comme Tollens, Sikkens ou Zolpan proposent des gammes dédiées. Comptez 30 à 50 € le litre en qualité professionnelle. Évitez les peintures glycéro dans les pièces de vie en raison de leurs émanations de COV.',
       },
       {
         q: 'La peinture de façade nécessite-t-elle une autorisation ?',
@@ -375,15 +375,15 @@ export const tradeContent: Record<string, TradeContent> = {
     priceRange: {
       min: 45,
       max: 75,
-      unit: '\u20AC/h',
+      unit: '€/h',
     },
     commonTasks: [
-      'Pose d\'une fenêtre double vitrage PVC : 300 à 800 \u20AC (hors fourniture)',
-      'Fabrication et pose d\'un placard sur mesure : 800 à 3 000 \u20AC',
-      'Pose d\'une porte intérieure : 150 à 400 \u20AC (hors fourniture)',
-      'Installation d\'une cuisine aménagée : 1 500 à 5 000 \u20AC (pose uniquement)',
-      'Création d\'un escalier sur mesure : 3 000 à 10 000 \u20AC',
-      'Pose de parquet massif ou contrecollé : 30 à 70 \u20AC/m² (pose uniquement)',
+      'Pose d\'une fenêtre double vitrage PVC : 300 à 800 € (hors fourniture)',
+      'Fabrication et pose d\'un placard sur mesure : 800 à 3 000 €',
+      'Pose d\'une porte intérieure : 150 à 400 € (hors fourniture)',
+      'Installation d\'une cuisine aménagée : 1 500 à 5 000 € (pose uniquement)',
+      'Création d\'un escalier sur mesure : 3 000 à 10 000 €',
+      'Pose de parquet massif ou contrecollé : 30 à 70 €/m² (pose uniquement)',
     ],
     tips: [
       'Distinguez le menuisier d\'agencement (placards, cuisines, dressings sur mesure) du menuisier poseur (fenêtres, portes, parquet). Choisissez le spécialiste adapté à votre projet pour un résultat optimal.',
@@ -395,11 +395,11 @@ export const tradeContent: Record<string, TradeContent> = {
     faq: [
       {
         q: 'Combien coûte le remplacement de toutes les fenêtres d\'une maison ?',
-        a: 'Pour une maison standard avec 8 à 12 fenêtres, comptez entre 5 000 et 15 000 \u20AC selon le matériau (PVC : le moins cher, aluminium : intermédiaire, bois : le plus cher) et le type de vitrage. Avec les aides (MaPrimeRenov\' + CEE), la facture peut être réduite de 30 à 50 % pour les ménages modestes.',
+        a: 'Pour une maison standard avec 8 à 12 fenêtres, comptez entre 5 000 et 15 000 € selon le matériau (PVC : le moins cher, aluminium : intermédiaire, bois : le plus cher) et le type de vitrage. Avec les aides (MaPrimeRenov\' + CEE), la facture peut être réduite de 30 à 50 % pour les ménages modestes.',
       },
       {
         q: 'Bois, PVC ou aluminium : quel matériau choisir pour mes fenêtres ?',
-        a: 'Le PVC offre le meilleur rapport qualité-prix et une bonne isolation (à partir de 300 \u20AC la fenêtre). Le bois est le plus esthétique et isolant mais nécessite un entretien régulier (à partir de 500 \u20AC). L\'aluminium est fin, moderne et sans entretien, mais moins isolant (à partir de 450 \u20AC). Le mixte bois-alu combine les avantages des deux.',
+        a: 'Le PVC offre le meilleur rapport qualité-prix et une bonne isolation (à partir de 300 € la fenêtre). Le bois est le plus esthétique et isolant mais nécessite un entretien régulier (à partir de 500 €). L\'aluminium est fin, moderne et sans entretien, mais moins isolant (à partir de 450 €). Le mixte bois-alu combine les avantages des deux.',
       },
       {
         q: 'Faut-il un permis de construire pour changer les fenêtres ?',
@@ -407,7 +407,7 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'Combien coûte un dressing ou placard sur mesure ?',
-        a: 'Un placard sur mesure avec portes coulissantes coûte entre 800 et 3 000 \u20AC selon les dimensions, le matériau (mélaminé, bois massif, laqué) et les aménagements intérieurs (tiroirs, penderies, étagères). Un dressing complet avec éclairage intégré peut atteindre 5 000 à 8 000 \u20AC. Le sur-mesure permet d\'exploiter chaque centimètre, notamment sous les combles ou dans les espaces atypiques.',
+        a: 'Un placard sur mesure avec portes coulissantes coûte entre 800 et 3 000 € selon les dimensions, le matériau (mélaminé, bois massif, laqué) et les aménagements intérieurs (tiroirs, penderies, étagères). Un dressing complet avec éclairage intégré peut atteindre 5 000 à 8 000 €. Le sur-mesure permet d\'exploiter chaque centimètre, notamment sous les combles ou dans les espaces atypiques.',
       },
       {
         q: 'Quelle est la durée de vie des fenêtres en PVC ?',
@@ -415,7 +415,7 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'Un menuisier peut-il fabriquer un escalier sur mesure ?',
-        a: 'Oui, c\'est même l\'une des spécialités du menuisier d\'agencement. Un escalier sur mesure en bois coûte entre 3 000 et 10 000 \u20AC selon l\'essence (hêtre, chêne, frêne), la forme (droit, tournant, hélicoïdal) et les finitions (vitrification, peinture, garde-corps). La fabrication et la pose prennent 2 à 4 semaines. Un escalier sur mesure optimise l\'espace et s\'adapte parfaitement à la configuration du logement.',
+        a: 'Oui, c\'est même l\'une des spécialités du menuisier d\'agencement. Un escalier sur mesure en bois coûte entre 3 000 et 10 000 € selon l\'essence (hêtre, chêne, frêne), la forme (droit, tournant, hélicoïdal) et les finitions (vitrification, peinture, garde-corps). La fabrication et la pose prennent 2 à 4 semaines. Un escalier sur mesure optimise l\'espace et s\'adapte parfaitement à la configuration du logement.',
       },
       {
         q: 'Comment entretenir ses menuiseries en bois ?',
@@ -423,7 +423,7 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'Quelles aides existent pour le remplacement de fenêtres ?',
-        a: 'MaPrimeRenov\' finance jusqu\'à 100 \u20AC par fenêtre (simple vers double vitrage) pour les ménages modestes. Les CEE (Certificats d\'Économies d\'Énergie) ajoutent 30 à 80 \u20AC par fenêtre. L\'éco-prêt à taux zéro permet de financer jusqu\'à 7 000 \u20AC de remplacement de fenêtres sans intérêts. Le menuisier doit être certifié RGE pour que vous puissiez bénéficier de ces aides.',
+        a: 'MaPrimeRenov\' finance jusqu\'à 100 € par fenêtre (simple vers double vitrage) pour les ménages modestes. Les CEE (Certificats d\'Économies d\'Énergie) ajoutent 30 à 80 € par fenêtre. L\'éco-prêt à taux zéro permet de financer jusqu\'à 7 000 € de remplacement de fenêtres sans intérêts. Le menuisier doit être certifié RGE pour que vous puissiez bénéficier de ces aides.',
       },
     ],
     emergencyInfo:
@@ -444,15 +444,15 @@ export const tradeContent: Record<string, TradeContent> = {
     priceRange: {
       min: 35,
       max: 65,
-      unit: '\u20AC/m²',
+      unit: '€/m²',
     },
     commonTasks: [
-      'Pose de carrelage au sol (format standard) : 35 à 55 \u20AC/m² (pose uniquement)',
-      'Pose de carrelage grand format (60x60 et plus) : 50 à 75 \u20AC/m²',
-      'Pose de faïence murale (salle de bain) : 40 à 65 \u20AC/m²',
-      'Pose de mosaïque : 60 à 100 \u20AC/m²',
-      'Carrelage d\'une terrasse extérieure : 45 à 80 \u20AC/m²',
-      'Dépose d\'ancien carrelage + repose : 15 à 30 \u20AC/m² supplémentaires',
+      'Pose de carrelage au sol (format standard) : 35 à 55 €/m² (pose uniquement)',
+      'Pose de carrelage grand format (60x60 et plus) : 50 à 75 €/m²',
+      'Pose de faïence murale (salle de bain) : 40 à 65 €/m²',
+      'Pose de mosaïque : 60 à 100 €/m²',
+      'Carrelage d\'une terrasse extérieure : 45 à 80 €/m²',
+      'Dépose d\'ancien carrelage + repose : 15 à 30 €/m² supplémentaires',
     ],
     tips: [
       'Le prix de la pose dépend fortement du format des carreaux : les grands formats (60x60, 80x80) et les poses en diagonale ou en décalé coûtent 20 à 40 % plus cher que la pose droite en format standard.',
@@ -476,11 +476,11 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'Quel est le coût de la pose de carrelage au m² ?',
-        a: 'La pose de carrelage au sol coûte entre 35 et 55 \u20AC/m² en format standard (30x30 à 45x45), 50 à 75 \u20AC/m² pour du grand format (60x60 et plus) et 60 à 100 \u20AC/m² pour de la mosaïque. La pose murale (faïence) revient à 40 à 65 \u20AC/m². Ces prix s\'entendent hors fourniture du carrelage. Ajoutez 15 à 30 \u20AC/m² si l\'ancien revêtement doit être déposé.',
+        a: 'La pose de carrelage au sol coûte entre 35 et 55 €/m² en format standard (30x30 à 45x45), 50 à 75 €/m² pour du grand format (60x60 et plus) et 60 à 100 €/m² pour de la mosaïque. La pose murale (faïence) revient à 40 à 65 €/m². Ces prix s\'entendent hors fourniture du carrelage. Ajoutez 15 à 30 €/m² si l\'ancien revêtement doit être déposé.',
       },
       {
         q: 'Faut-il une étanchéité sous le carrelage de salle de bain ?',
-        a: 'Oui, l\'étanchéité sous carrelage (système SPEC) est indispensable dans les zones de projection d\'eau (douche, contour de baignoire) conformément au DTU 52.1. Le carreleur applique une membrane ou un produit liquide d\'étanchéité avant la pose du carrelage. Ce poste supplémentaire coûte 20 à 40 \u20AC/m² mais évite les infiltrations d\'eau et les dégâts des eaux chez le voisin du dessous.',
+        a: 'Oui, l\'étanchéité sous carrelage (système SPEC) est indispensable dans les zones de projection d\'eau (douche, contour de baignoire) conformément au DTU 52.1. Le carreleur applique une membrane ou un produit liquide d\'étanchéité avant la pose du carrelage. Ce poste supplémentaire coûte 20 à 40 €/m² mais évite les infiltrations d\'eau et les dégâts des eaux chez le voisin du dessous.',
       },
       {
         q: 'Comment choisir entre carrelage et grès cérame ?',
@@ -488,7 +488,7 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'Quel carrelage choisir pour une terrasse extérieure ?',
-        a: 'Pour une terrasse, choisissez un carrelage antidérapant classé R11 minimum (R12 en bord de piscine), résistant au gel (norme ISO 10545-12) et de faible porosité. Le grès cérame pleine masse ou le carrelage en pierre naturelle sont les mieux adaptés. Prévoyez une pente de 1 à 2 % pour l\'évacuation de l\'eau. Le budget est de 45 à 80 \u20AC/m² pour la pose.',
+        a: 'Pour une terrasse, choisissez un carrelage antidérapant classé R11 minimum (R12 en bord de piscine), résistant au gel (norme ISO 10545-12) et de faible porosité. Le grès cérame pleine masse ou le carrelage en pierre naturelle sont les mieux adaptés. Prévoyez une pente de 1 à 2 % pour l\'évacuation de l\'eau. Le budget est de 45 à 80 €/m² pour la pose.',
       },
       {
         q: 'Combien de temps faut-il attendre avant de marcher sur un carrelage neuf ?',
@@ -511,15 +511,15 @@ export const tradeContent: Record<string, TradeContent> = {
     priceRange: {
       min: 50,
       max: 90,
-      unit: '\u20AC/m²',
+      unit: '€/m²',
     },
     commonTasks: [
-      'Réparation de fuite de toiture : 200 à 800 \u20AC',
-      'Remplacement de tuiles cassées : 40 à 80 \u20AC/m²',
-      'Réfection complète de toiture (100 m²) : 8 000 à 18 000 \u20AC',
-      'Pose de gouttière en zinc : 40 à 80 \u20AC/ml',
-      'Nettoyage et démoussage de toiture : 15 à 30 \u20AC/m²',
-      'Installation de fenêtre de toit (Velux) : 500 à 1 500 \u20AC (hors fourniture)',
+      'Réparation de fuite de toiture : 200 à 800 €',
+      'Remplacement de tuiles cassées : 40 à 80 €/m²',
+      'Réfection complète de toiture (100 m²) : 8 000 à 18 000 €',
+      'Pose de gouttière en zinc : 40 à 80 €/ml',
+      'Nettoyage et démoussage de toiture : 15 à 30 €/m²',
+      'Installation de fenêtre de toit (Velux) : 500 à 1 500 € (hors fourniture)',
     ],
     tips: [
       'Faites inspecter votre toiture tous les 5 ans et après chaque épisode de grêlons ou de tempête. Une petite réparation à temps évite un remplacement complet bien plus coûteux.',
@@ -531,7 +531,7 @@ export const tradeContent: Record<string, TradeContent> = {
     faq: [
       {
         q: 'Combien coûte une réfection complète de toiture ?',
-        a: 'Pour une maison de 100 m² de toiture, comptez entre 8 000 et 18 000 \u20AC selon le matériau (tuiles terre cuite : 50-80 \u20AC/m², ardoise : 80-120 \u20AC/m², zinc : 60-100 \u20AC/m²) et la complexité (pente, cheminée, lucarnes). Ce prix inclut la dépose, la fourniture et la pose. L\'échafaudage représente 10 à 15 % du budget.',
+        a: 'Pour une maison de 100 m² de toiture, comptez entre 8 000 et 18 000 € selon le matériau (tuiles terre cuite : 50-80 €/m², ardoise : 80-120 €/m², zinc : 60-100 €/m²) et la complexité (pente, cheminée, lucarnes). Ce prix inclut la dépose, la fourniture et la pose. L\'échafaudage représente 10 à 15 % du budget.',
       },
       {
         q: 'Faut-il un permis de construire pour refaire sa toiture ?',
@@ -539,7 +539,7 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'À quelle fréquence faut-il démousser sa toiture ?',
-        a: 'Un démoussage est recommandé tous les 3 à 5 ans, selon l\'exposition et l\'environnement (plus fréquent près d\'arbres ou en zone humide). Le démoussage coûte entre 15 et 30 \u20AC/m² et prolonge la durée de vie de votre couverture. Évitez le nettoyeur haute pression, qui endommage les tuiles.',
+        a: 'Un démoussage est recommandé tous les 3 à 5 ans, selon l\'exposition et l\'environnement (plus fréquent près d\'arbres ou en zone humide). Le démoussage coûte entre 15 et 30 €/m² et prolonge la durée de vie de votre couverture. Évitez le nettoyeur haute pression, qui endommage les tuiles.',
       },
       {
         q: 'Ma toiture fuit après une tempête, que faire en urgence ?',
@@ -551,15 +551,15 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'Combien coûte l\'installation d\'une fenêtre de toit (Velux) ?',
-        a: 'L\'installation d\'une fenêtre de toit standard (78x98 cm) coûte entre 500 et 1 500 \u20AC pour la pose seule, auxquels s\'ajoute le prix de la fenêtre (300 à 1 200 \u20AC selon le modèle). Une fenêtre motorisée avec stores intégrés peut atteindre 2 500 \u20AC. Le couvreur doit assurer une parfaite étanchéité avec un kit de raccordement adapté à la couverture.',
+        a: 'L\'installation d\'une fenêtre de toit standard (78x98 cm) coûte entre 500 et 1 500 € pour la pose seule, auxquels s\'ajoute le prix de la fenêtre (300 à 1 200 € selon le modèle). Une fenêtre motorisée avec stores intégrés peut atteindre 2 500 €. Le couvreur doit assurer une parfaite étanchéité avec un kit de raccordement adapté à la couverture.',
       },
       {
         q: 'L\'isolation de toiture est-elle éligible aux aides de l\'État ?',
-        a: 'Oui, l\'isolation de la toiture par l\'intérieur ou l\'extérieur (sarking) est éligible à MaPrimeRenov\' (jusqu\'à 25 \u20AC/m² pour les ménages modestes), aux CEE et à l\'éco-prêt à taux zéro. Le couvreur doit être certifié RGE. L\'isolation de toiture est l\'un des travaux les plus rentables : elle réduit les déperditions thermiques de 25 à 30 % et se rentabilise en 4 à 6 ans.',
+        a: 'Oui, l\'isolation de la toiture par l\'intérieur ou l\'extérieur (sarking) est éligible à MaPrimeRenov\' (jusqu\'à 25 €/m² pour les ménages modestes), aux CEE et à l\'éco-prêt à taux zéro. Le couvreur doit être certifié RGE. L\'isolation de toiture est l\'un des travaux les plus rentables : elle réduit les déperditions thermiques de 25 à 30 % et se rentabilise en 4 à 6 ans.',
       },
       {
         q: 'Comment savoir si ma charpente a besoin d\'un traitement ?',
-        a: 'Inspectez les bois de charpente à la recherche de sciure au sol (signe de vrillettes ou capricornes), de trous de sortie d\'insectes, de champignons (mérule) ou de bois qui s\'effrite au contact. Un diagnostic par un professionnel est recommandé tous les 10 ans. Le traitement préventif ou curatif coûte entre 20 et 50 \u20AC/m² et protège la charpente pour 10 à 20 ans.',
+        a: 'Inspectez les bois de charpente à la recherche de sciure au sol (signe de vrillettes ou capricornes), de trous de sortie d\'insectes, de champignons (mérule) ou de bois qui s\'effrite au contact. Un diagnostic par un professionnel est recommandé tous les 10 ans. Le traitement préventif ou curatif coûte entre 20 et 50 €/m² et protège la charpente pour 10 à 20 ans.',
       },
     ],
     emergencyInfo:
@@ -579,15 +579,15 @@ export const tradeContent: Record<string, TradeContent> = {
     priceRange: {
       min: 45,
       max: 70,
-      unit: '\u20AC/h',
+      unit: '€/h',
     },
     commonTasks: [
-      'Construction d\'un mur en parpaings : 50 à 80 \u20AC/m²',
-      'Coulée d\'une dalle béton (garage, terrasse) : 60 à 120 \u20AC/m²',
-      'Ouverture d\'un mur porteur (avec IPN) : 2 500 à 6 000 \u20AC',
-      'Construction d\'une extension : 1 200 à 2 000 \u20AC/m²',
-      'Réparation de fissures structurelles : 50 à 200 \u20AC/ml',
-      'Montage d\'un mur de clôture : 100 à 250 \u20AC/ml',
+      'Construction d\'un mur en parpaings : 50 à 80 €/m²',
+      'Coulée d\'une dalle béton (garage, terrasse) : 60 à 120 €/m²',
+      'Ouverture d\'un mur porteur (avec IPN) : 2 500 à 6 000 €',
+      'Construction d\'une extension : 1 200 à 2 000 €/m²',
+      'Réparation de fissures structurelles : 50 à 200 €/ml',
+      'Montage d\'un mur de clôture : 100 à 250 €/ml',
     ],
     tips: [
       'Pour toute ouverture dans un mur porteur, exigez une étude structurelle réalisée par un bureau d\'études agréé. Le maçon doit suivre les préconisations de l\'ingénieur et poser une poutre (IPN) dimensionnée pour reprendre les charges.',
@@ -599,11 +599,11 @@ export const tradeContent: Record<string, TradeContent> = {
     faq: [
       {
         q: 'Combien coûte la construction d\'une extension de maison ?',
-        a: 'Le prix d\'une extension en maçonnerie traditionnelle varie de 1 200 à 2 000 \u20AC/m² selon les finitions, la complexité de la structure et la région. Une extension de 20 m² coûte ainsi entre 24 000 et 40 000 \u20AC. Ce prix comprend les fondations, les murs, la toiture et le clos couvert, mais pas les finitions intérieures.',
+        a: 'Le prix d\'une extension en maçonnerie traditionnelle varie de 1 200 à 2 000 €/m² selon les finitions, la complexité de la structure et la région. Une extension de 20 m² coûte ainsi entre 24 000 et 40 000 €. Ce prix comprend les fondations, les murs, la toiture et le clos couvert, mais pas les finitions intérieures.',
       },
       {
         q: 'Peut-on abattre un mur porteur soi-même ?',
-        a: 'Absolument pas. L\'ouverture d\'un mur porteur sans étude structurelle préalable et sans professionnel qualifié peut provoquer l\'effondrement partiel ou total du bâtiment. De plus, en copropriété, l\'accord du syndicat est obligatoire. Le coût d\'une ouverture dans un mur porteur (étude + travaux) est de 2 500 à 6 000 \u20AC.',
+        a: 'Absolument pas. L\'ouverture d\'un mur porteur sans étude structurelle préalable et sans professionnel qualifié peut provoquer l\'effondrement partiel ou total du bâtiment. De plus, en copropriété, l\'accord du syndicat est obligatoire. Le coût d\'une ouverture dans un mur porteur (étude + travaux) est de 2 500 à 6 000 €.',
       },
       {
         q: 'Quelles sont les fondations nécessaires pour un mur de clôture ?',
@@ -611,7 +611,7 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'Combien coûte la construction d\'un garage en parpaings ?',
-        a: 'La construction d\'un garage simple (environ 20 m²) en parpaings coûte entre 15 000 et 25 000 \u20AC, comprenant les fondations, les murs, la dalle, la toiture et la porte de garage. Un garage double (40 m²) revient à 25 000 à 45 000 \u20AC. Un permis de construire est nécessaire pour une surface supérieure à 20 m², une déclaration préalable en dessous.',
+        a: 'La construction d\'un garage simple (environ 20 m²) en parpaings coûte entre 15 000 et 25 000 €, comprenant les fondations, les murs, la dalle, la toiture et la porte de garage. Un garage double (40 m²) revient à 25 000 à 45 000 €. Un permis de construire est nécessaire pour une surface supérieure à 20 m², une déclaration préalable en dessous.',
       },
       {
         q: 'Les fissures sur ma maison sont-elles dangereuses ?',
@@ -627,7 +627,7 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'Combien coûte une dalle béton pour une terrasse ?',
-        a: 'Une dalle béton de 15 cm d\'épaisseur pour terrasse coûte entre 60 et 120 \u20AC/m², comprenant le terrassement, le ferraillage, le coffrage et le coulage du béton. Pour une terrasse de 30 m², le budget total est de 1 800 à 3 600 \u20AC. Le béton décoratif (désactivé, ciré ou imprimé) est plus cher : 80 à 180 \u20AC/m², mais ne nécessite pas de revêtement supplémentaire.',
+        a: 'Une dalle béton de 15 cm d\'épaisseur pour terrasse coûte entre 60 et 120 €/m², comprenant le terrassement, le ferraillage, le coffrage et le coulage du béton. Pour une terrasse de 30 m², le budget total est de 1 800 à 3 600 €. Le béton décoratif (désactivé, ciré ou imprimé) est plus cher : 80 à 180 €/m², mais ne nécessite pas de revêtement supplémentaire.',
       },
     ],
     emergencyInfo:
@@ -647,27 +647,27 @@ export const tradeContent: Record<string, TradeContent> = {
     priceRange: {
       min: 30,
       max: 50,
-      unit: '\u20AC/h',
+      unit: '€/h',
     },
     commonTasks: [
-      'Tonte de pelouse (jardin de 200 m²) : 30 à 60 \u20AC',
-      'Taille de haie : 15 à 25 \u20AC/ml',
-      'Élagage d\'arbre (hauteur moyenne) : 200 à 600 \u20AC par arbre',
-      'Création de jardin (plantations + engazonnement) : 20 à 50 \u20AC/m²',
-      'Entretien mensuel d\'un jardin (200 m²) : 100 à 200 \u20AC/mois',
-      'Abattage d\'arbre avec dessouchage : 400 à 1 500 \u20AC selon la taille',
+      'Tonte de pelouse (jardin de 200 m²) : 30 à 60 €',
+      'Taille de haie : 15 à 25 €/ml',
+      'Élagage d\'arbre (hauteur moyenne) : 200 à 600 € par arbre',
+      'Création de jardin (plantations + engazonnement) : 20 à 50 €/m²',
+      'Entretien mensuel d\'un jardin (200 m²) : 100 à 200 €/mois',
+      'Abattage d\'arbre avec dessouchage : 400 à 1 500 € selon la taille',
     ],
     tips: [
-      'Les prestations de jardinage à domicile ouvrent droit à un crédit d\'impôt de 50 % dans la limite de 5 000 \u20AC de dépenses par an (soit 2 500 \u20AC de crédit d\'impôt). Le jardinier doit être déclaré en tant que service à la personne (SAP).',
+      'Les prestations de jardinage à domicile ouvrent droit à un crédit d\'impôt de 50 % dans la limite de 5 000 € de dépenses par an (soit 2 500 € de crédit d\'impôt). Le jardinier doit être déclaré en tant que service à la personne (SAP).',
       'Privilégiez un contrat annuel d\'entretien plutôt que des interventions ponctuelles : le tarif horaire est généralement 20 à 30 % inférieur et le jardinier connaît mieux votre terrain au fil des saisons.',
       'Pour l\'élagage d\'arbres de plus de 7 mètres, faites appel à un élagueur-grimpeur certifié CS (Certificat de Spécialisation) taille et soins des arbres. L\'élagage non professionnel peut tuer l\'arbre et engager votre responsabilité.',
-      'Vérifiez que le jardinier évacue les déchets verts ou prévoyez ce poste dans le devis. L\'évacuation et le traitement en déchetterie représentent un coût supplémentaire de 50 à 150 \u20AC par intervention.',
+      'Vérifiez que le jardinier évacue les déchets verts ou prévoyez ce poste dans le devis. L\'évacuation et le traitement en déchetterie représentent un coût supplémentaire de 50 à 150 € par intervention.',
       'Pour la création d\'un jardin, demandez un plan d\'aménagement tenant compte de l\'exposition, du sol et du climat de votre région. Un jardinier-paysagiste saura choisir des plantes adaptées qui nécessiteront moins d\'entretien.',
     ],
     faq: [
       {
         q: 'Puis-je bénéficier d\'un crédit d\'impôt pour les travaux de jardinage ?',
-        a: 'Oui, les petits travaux de jardinage (tonte, taille de haies, désherbage, débroussaillage) bénéficient d\'un crédit d\'impôt de 50 % dans la limite de 5 000 \u20AC par an. Le jardinier doit être agréé services à la personne (SAP) ou vous devez passer par un organisme agréé (CESU). Les travaux de création paysagère ne sont pas éligibles.',
+        a: 'Oui, les petits travaux de jardinage (tonte, taille de haies, désherbage, débroussaillage) bénéficient d\'un crédit d\'impôt de 50 % dans la limite de 5 000 € par an. Le jardinier doit être agréé services à la personne (SAP) ou vous devez passer par un organisme agréé (CESU). Les travaux de création paysagère ne sont pas éligibles.',
       },
       {
         q: 'A-t-on le droit de couper les branches du voisin qui dépassent ?',
@@ -679,15 +679,15 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'Quel budget pour l\'entretien annuel d\'un jardin de 500 m² ?',
-        a: 'Comptez entre 1 500 et 3 500 \u20AC par an pour un entretien complet comprenant la tonte bimensuelle (avril à octobre), 2 tailles de haie, le désherbage des massifs et le ramassage des feuilles à l\'automne. Ce budget peut être réduit de 50 % grâce au crédit d\'impôt si le jardinier est agréé SAP.',
+        a: 'Comptez entre 1 500 et 3 500 € par an pour un entretien complet comprenant la tonte bimensuelle (avril à octobre), 2 tailles de haie, le désherbage des massifs et le ramassage des feuilles à l\'automne. Ce budget peut être réduit de 50 % grâce au crédit d\'impôt si le jardinier est agréé SAP.',
       },
       {
         q: 'Combien coûte l\'élagage d\'un grand arbre ?',
-        a: 'L\'élagage d\'un arbre de taille moyenne (8 à 15 m) coûte entre 200 et 600 \u20AC, et entre 500 et 1 500 \u20AC pour un grand arbre (plus de 15 m). Le prix dépend de la hauteur, de l\'accessibilité et du volume de branches à couper. L\'abattage avec dessouchage est plus cher : 400 à 2 500 \u20AC selon la taille. Faites appel à un élagueur-grimpeur certifié CS pour les arbres de grande hauteur.',
+        a: 'L\'élagage d\'un arbre de taille moyenne (8 à 15 m) coûte entre 200 et 600 €, et entre 500 et 1 500 € pour un grand arbre (plus de 15 m). Le prix dépend de la hauteur, de l\'accessibilité et du volume de branches à couper. L\'abattage avec dessouchage est plus cher : 400 à 2 500 € selon la taille. Faites appel à un élagueur-grimpeur certifié CS pour les arbres de grande hauteur.',
       },
       {
         q: 'Quand et comment scarifier sa pelouse ?',
-        a: 'La scarification se fait idéalement au printemps (mars-avril) et éventuellement à l\'automne (septembre). Elle consiste à griffer le sol pour retirer la mousse et le feutrage qui étouffent le gazon. Après scarification, semez du gazon de regarnissage et apportez un engrais adapté. Un jardinier professionnel facture la scarification entre 0,15 et 0,30 \u20AC/m².',
+        a: 'La scarification se fait idéalement au printemps (mars-avril) et éventuellement à l\'automne (septembre). Elle consiste à griffer le sol pour retirer la mousse et le feutrage qui étouffent le gazon. Après scarification, semez du gazon de regarnissage et apportez un engrais adapté. Un jardinier professionnel facture la scarification entre 0,15 et 0,30 €/m².',
       },
       {
         q: 'Faut-il une autorisation pour abattre un arbre dans son jardin ?',
@@ -695,7 +695,7 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'Comment créer un système d\'arrosage automatique ?',
-        a: 'L\'installation d\'un arrosage automatique enterré coûte entre 8 et 15 \u20AC/m² pour un jardin de 200 à 500 m², incluant les tuyaux, les asperseurs, le programmateur et la main-d\'oeuvre. Un système goutte-à-goutte pour les massifs et haies est moins cher (3 à 8 \u20AC/m²). Le jardinier-paysagiste dimensionne l\'installation en fonction de la pression d\'eau, du débit disponible et des besoins des plantations.',
+        a: 'L\'installation d\'un arrosage automatique enterré coûte entre 8 et 15 €/m² pour un jardin de 200 à 500 m², incluant les tuyaux, les asperseurs, le programmateur et la main-d\'oeuvre. Un système goutte-à-goutte pour les massifs et haies est moins cher (3 à 8 €/m²). Le jardinier-paysagiste dimensionne l\'installation en fonction de la pression d\'eau, du débit disponible et des besoins des plantations.',
       },
     ],
     emergencyInfo:
@@ -716,15 +716,15 @@ export const tradeContent: Record<string, TradeContent> = {
     priceRange: {
       min: 50,
       max: 100,
-      unit: '\u20AC/intervention',
+      unit: '€/intervention',
     },
     commonTasks: [
-      'Remplacement d\'un simple vitrage : 60 à 150 \u20AC/m² (fourniture + pose)',
-      'Pose de double vitrage : 150 à 350 \u20AC/m²',
-      'Remplacement d\'une vitre cassée (standard) : 80 à 200 \u20AC',
-      'Survitrage d\'une fenêtre existante : 80 à 150 \u20AC/m²',
-      'Pose d\'une crédence en verre (cuisine) : 200 à 500 \u20AC/m²',
-      'Installation d\'une paroi de douche en verre : 400 à 1 200 \u20AC',
+      'Remplacement d\'un simple vitrage : 60 à 150 €/m² (fourniture + pose)',
+      'Pose de double vitrage : 150 à 350 €/m²',
+      'Remplacement d\'une vitre cassée (standard) : 80 à 200 €',
+      'Survitrage d\'une fenêtre existante : 80 à 150 €/m²',
+      'Pose d\'une crédence en verre (cuisine) : 200 à 500 €/m²',
+      'Installation d\'une paroi de douche en verre : 400 à 1 200 €',
     ],
     tips: [
       'En cas de vitre cassée, sécurisez la zone avec du carton ou du ruban adhésif en attendant le vitrier. Ne tentez pas de retirer les morceaux de verre à mains nues.',
@@ -736,7 +736,7 @@ export const tradeContent: Record<string, TradeContent> = {
     faq: [
       {
         q: 'Combien coûte le remplacement d\'une vitre cassée ?',
-        a: 'Le remplacement d\'une vitre simple coûte entre 80 et 200 \u20AC pour une fenêtre standard (environ 1 m²). Pour du double vitrage, comptez 150 à 350 \u20AC/m² fourniture et pose comprises. Les tarifs augmentent pour les grandes dimensions, les formes spéciales et les interventions en urgence (+50 à 100 %).',
+        a: 'Le remplacement d\'une vitre simple coûte entre 80 et 200 € pour une fenêtre standard (environ 1 m²). Pour du double vitrage, comptez 150 à 350 €/m² fourniture et pose comprises. Les tarifs augmentent pour les grandes dimensions, les formes spéciales et les interventions en urgence (+50 à 100 %).',
       },
       {
         q: 'Mon assurance couvre-t-elle le remplacement d\'une vitre ?',
@@ -748,7 +748,7 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'Peut-on remplacer un simple vitrage par du double vitrage sans changer la fenêtre ?',
-        a: 'Oui, grâce au survitrage ou au remplacement du vitrage seul (si le châssis est en bon état et assez profond pour accueillir un double vitrage). Le survitrage consiste à fixer un second vitrage sur la fenêtre existante (80 à 150 \u20AC/m²). Le remplacement du vitrage dans le châssis existant coûte 150 à 300 \u20AC/m². Ces solutions sont moins performantes qu\'un remplacement complet mais beaucoup moins chères.',
+        a: 'Oui, grâce au survitrage ou au remplacement du vitrage seul (si le châssis est en bon état et assez profond pour accueillir un double vitrage). Le survitrage consiste à fixer un second vitrage sur la fenêtre existante (80 à 150 €/m²). Le remplacement du vitrage dans le châssis existant coûte 150 à 300 €/m². Ces solutions sont moins performantes qu\'un remplacement complet mais beaucoup moins chères.',
       },
       {
         q: 'Combien de temps faut-il pour remplacer une vitre cassée ?',
@@ -760,11 +760,11 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'Comment améliorer l\'isolation de mes vitrages sans tout changer ?',
-        a: 'Plusieurs solutions existent : le film isolant thermique à coller sur le vitrage (10 à 30 \u20AC/m², gain de 30 % sur les déperditions), le survitrage (80 à 150 \u20AC/m²), ou le remplacement des joints d\'étanchéité des fenêtres (5 à 15 \u20AC/ml). Un vitrier peut aussi remplacer le vitrage seul sans changer le châssis, si celui-ci est en bon état.',
+        a: 'Plusieurs solutions existent : le film isolant thermique à coller sur le vitrage (10 à 30 €/m², gain de 30 % sur les déperditions), le survitrage (80 à 150 €/m²), ou le remplacement des joints d\'étanchéité des fenêtres (5 à 15 €/ml). Un vitrier peut aussi remplacer le vitrage seul sans changer le châssis, si celui-ci est en bon état.',
       },
       {
         q: 'Quel type de verre choisir pour une crédence de cuisine ?',
-        a: 'La crédence en verre doit être en verre trempé sécurit (obligatoire derrière une plaque de cuisson) de 6 mm d\'épaisseur minimum. Elle peut être laquée dans la couleur de votre choix, imprimée avec un motif ou en verre dépoli. Comptez 200 à 500 \u20AC/m² pose comprise. L\'avantage principal est l\'absence de joints : le nettoyage est simple et l\'hygiène optimale.',
+        a: 'La crédence en verre doit être en verre trempé sécurit (obligatoire derrière une plaque de cuisson) de 6 mm d\'épaisseur minimum. Elle peut être laquée dans la couleur de votre choix, imprimée avec un motif ou en verre dépoli. Comptez 200 à 500 €/m² pose comprise. L\'avantage principal est l\'absence de joints : le nettoyage est simple et l\'hygiène optimale.',
       },
     ],
     emergencyInfo:
@@ -783,15 +783,15 @@ export const tradeContent: Record<string, TradeContent> = {
     priceRange: {
       min: 60,
       max: 100,
-      unit: '\u20AC/h',
+      unit: '€/h',
     },
     commonTasks: [
-      'Installation d\'un split mural (2,5 kW) : 1 500 à 3 000 \u20AC',
-      'Pose d\'une climatisation gainable : 5 000 à 12 000 \u20AC',
-      'Installation d\'une climatisation multi-split (3 unités) : 4 000 à 8 000 \u20AC',
-      'Entretien annuel d\'une climatisation : 100 à 200 \u20AC',
-      'Recharge de gaz réfrigérant : 200 à 500 \u20AC',
-      'Installation d\'une pompe à chaleur air-air : 3 000 à 7 000 \u20AC',
+      'Installation d\'un split mural (2,5 kW) : 1 500 à 3 000 €',
+      'Pose d\'une climatisation gainable : 5 000 à 12 000 €',
+      'Installation d\'une climatisation multi-split (3 unités) : 4 000 à 8 000 €',
+      'Entretien annuel d\'une climatisation : 100 à 200 €',
+      'Recharge de gaz réfrigérant : 200 à 500 €',
+      'Installation d\'une pompe à chaleur air-air : 3 000 à 7 000 €',
     ],
     tips: [
       'Privilégiez un climaticien certifié RGE et détenteur de l\'attestation de capacité à manipuler les fluides frigorigènes, obligatoire depuis 2015 pour toute intervention sur un circuit frigorifique.',
@@ -803,11 +803,11 @@ export const tradeContent: Record<string, TradeContent> = {
     faq: [
       {
         q: 'Combien coûte l\'installation d\'une climatisation ?',
-        a: 'Un split mural standard (2,5 kW, pour une pièce de 25 m²) coûte entre 1 500 et 3 000 \u20AC pose comprise. Un système multi-split (3 unités intérieures) revient à 4 000 à 8 000 \u20AC. La climatisation gainable (invisible, conduits dans les faux plafonds) coûte 5 000 à 12 000 \u20AC. Les modèles réversibles (chaud/froid) sont plus économiques à l\'usage.',
+        a: 'Un split mural standard (2,5 kW, pour une pièce de 25 m²) coûte entre 1 500 et 3 000 € pose comprise. Un système multi-split (3 unités intérieures) revient à 4 000 à 8 000 €. La climatisation gainable (invisible, conduits dans les faux plafonds) coûte 5 000 à 12 000 €. Les modèles réversibles (chaud/froid) sont plus économiques à l\'usage.',
       },
       {
         q: 'La climatisation réversible est-elle économique pour le chauffage ?',
-        a: 'Oui, une pompe à chaleur air-air réversible consomme 3 à 4 fois moins d\'électricité qu\'un radiateur électrique classique grâce à son COP (Coefficient de Performance). Pour un appartement de 60 m², l\'économie est de 300 à 600 \u20AC par an sur la facture de chauffage. L\'investissement est amorti en 3 à 5 ans.',
+        a: 'Oui, une pompe à chaleur air-air réversible consomme 3 à 4 fois moins d\'électricité qu\'un radiateur électrique classique grâce à son COP (Coefficient de Performance). Pour un appartement de 60 m², l\'économie est de 300 à 600 € par an sur la facture de chauffage. L\'investissement est amorti en 3 à 5 ans.',
       },
       {
         q: 'Faut-il une autorisation pour installer une climatisation ?',
@@ -815,7 +815,7 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'À quelle fréquence faut-il entretenir sa climatisation ?',
-        a: 'L\'entretien annuel est obligatoire pour les systèmes contenant plus de 2 kg de fluide frigorigène. Nettoyez les filtres intérieurs tous les 2 à 4 semaines en période d\'utilisation (un filtre encrassé réduit les performances de 20 à 30 %). L\'entretien professionnel comprend la vérification du circuit frigorifique, le nettoyage des échangeurs et le contrôle de l\'étanchéité. Le coût est de 100 à 200 \u20AC par an.',
+        a: 'L\'entretien annuel est obligatoire pour les systèmes contenant plus de 2 kg de fluide frigorigène. Nettoyez les filtres intérieurs tous les 2 à 4 semaines en période d\'utilisation (un filtre encrassé réduit les performances de 20 à 30 %). L\'entretien professionnel comprend la vérification du circuit frigorifique, le nettoyage des échangeurs et le contrôle de l\'étanchéité. Le coût est de 100 à 200 € par an.',
       },
       {
         q: 'Quelle puissance de climatisation pour ma pièce ?',
@@ -827,11 +827,11 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'Climatisation split ou gainable : quelle différence ?',
-        a: 'Le split mural est l\'option la plus simple et la moins chère (1 500 à 3 000 \u20AC par unité), idéale pour climatiser une ou deux pièces. La climatisation gainable distribue l\'air via des gaines dans les faux plafonds : elle est invisible, silencieuse et climatise tout le logement de manière homogène, mais coûte plus cher (5 000 à 12 000 \u20AC) et nécessite un faux plafond ou des combles accessibles.',
+        a: 'Le split mural est l\'option la plus simple et la moins chère (1 500 à 3 000 € par unité), idéale pour climatiser une ou deux pièces. La climatisation gainable distribue l\'air via des gaines dans les faux plafonds : elle est invisible, silencieuse et climatise tout le logement de manière homogène, mais coûte plus cher (5 000 à 12 000 €) et nécessite un faux plafond ou des combles accessibles.',
       },
       {
         q: 'Quel est l\'impact de la climatisation sur la facture d\'électricité ?',
-        a: 'Un split de 2,5 kW consomme environ 800 à 1 200 kWh par saison (juin à septembre), soit 150 à 250 \u20AC sur la facture d\'électricité. Les modèles Inverter de classe A+++ consomment 30 à 40 % de moins que les modèles classiques. Réglez le thermostat sur 25-26 °C plutôt que 20 °C : chaque degré en moins augmente la consommation de 7 %.',
+        a: 'Un split de 2,5 kW consomme environ 800 à 1 200 kWh par saison (juin à septembre), soit 150 à 250 € sur la facture d\'électricité. Les modèles Inverter de classe A+++ consomment 30 à 40 % de moins que les modèles classiques. Réglez le thermostat sur 25-26 °C plutôt que 20 °C : chaque degré en moins augmente la consommation de 7 %.',
       },
     ],
     emergencyInfo:
@@ -852,15 +852,15 @@ export const tradeContent: Record<string, TradeContent> = {
     priceRange: {
       min: 3000,
       max: 15000,
-      unit: '\u20AC (cuisine complète)',
+      unit: '€ (cuisine complète)',
     },
     commonTasks: [
-      'Cuisine équipée entrée de gamme (5 ml) : 3 000 à 6 000 \u20AC (fourniture + pose)',
-      'Cuisine équipée milieu de gamme : 6 000 à 12 000 \u20AC',
-      'Cuisine sur mesure haut de gamme : 12 000 à 30 000 \u20AC',
-      'Remplacement d\'un plan de travail : 200 à 800 \u20AC/ml selon le matériau',
-      'Pose seule d\'une cuisine (hors meubles) : 1 500 à 4 000 \u20AC',
-      'Installation d\'un îlot central : 2 000 à 8 000 \u20AC',
+      'Cuisine équipée entrée de gamme (5 ml) : 3 000 à 6 000 € (fourniture + pose)',
+      'Cuisine équipée milieu de gamme : 6 000 à 12 000 €',
+      'Cuisine sur mesure haut de gamme : 12 000 à 30 000 €',
+      'Remplacement d\'un plan de travail : 200 à 800 €/ml selon le matériau',
+      'Pose seule d\'une cuisine (hors meubles) : 1 500 à 4 000 €',
+      'Installation d\'un îlot central : 2 000 à 8 000 €',
     ],
     tips: [
       'Faites réaliser plusieurs plans d\'aménagement avant de vous engager. Un bon cuisiniste propose un plan 3D gratuit et prend en compte vos habitudes culinaires, pas uniquement l\'esthétique.',
@@ -872,7 +872,7 @@ export const tradeContent: Record<string, TradeContent> = {
     faq: [
       {
         q: 'Quel budget prévoir pour une cuisine équipée ?',
-        a: 'Pour une cuisine de 5 mètres linéaires, comptez 3 000 à 6 000 \u20AC en entrée de gamme (meubles en mélaminé, électroménager basique), 6 000 à 12 000 \u20AC en milieu de gamme (façades laquées, électroménager de marque) et 12 000 à 30 000 \u20AC pour du haut de gamme ou du sur-mesure. La pose représente 15 à 25 % du budget total.',
+        a: 'Pour une cuisine de 5 mètres linéaires, comptez 3 000 à 6 000 € en entrée de gamme (meubles en mélaminé, électroménager basique), 6 000 à 12 000 € en milieu de gamme (façades laquées, électroménager de marque) et 12 000 à 30 000 € pour du haut de gamme ou du sur-mesure. La pose représente 15 à 25 % du budget total.',
       },
       {
         q: 'Combien de temps dure l\'installation d\'une cuisine ?',
@@ -880,11 +880,11 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'Quel plan de travail choisir ?',
-        a: 'Le stratifié est le plus abordable (50-150 \u20AC/ml) et disponible en nombreux décors. Le bois massif (150-300 \u20AC/ml) est chaleureux mais demande un entretien régulier. Le quartz (250-500 \u20AC/ml) est très résistant et sans entretien. Le granit (300-600 \u20AC/ml) est indestructible. La céramique (400-800 \u20AC/ml) résiste à tout (chaleur, rayures, taches).',
+        a: 'Le stratifié est le plus abordable (50-150 €/ml) et disponible en nombreux décors. Le bois massif (150-300 €/ml) est chaleureux mais demande un entretien régulier. Le quartz (250-500 €/ml) est très résistant et sans entretien. Le granit (300-600 €/ml) est indestructible. La céramique (400-800 €/ml) résiste à tout (chaleur, rayures, taches).',
       },
       {
         q: 'Faut-il prévoir des travaux de plomberie et d\'électricité avec la cuisine ?',
-        a: 'Oui, la rénovation d\'une cuisine implique presque toujours des travaux de plomberie (déplacement de l\'évier, raccordement du lave-vaisselle) et d\'électricité (ajout de prises, circuit dédié pour le four et la plaque). Un bon cuisiniste coordonne ces corps de métier. Prévoyez 500 à 2 000 \u20AC supplémentaires pour la plomberie et 300 à 1 500 \u20AC pour l\'électricité.',
+        a: 'Oui, la rénovation d\'une cuisine implique presque toujours des travaux de plomberie (déplacement de l\'évier, raccordement du lave-vaisselle) et d\'électricité (ajout de prises, circuit dédié pour le four et la plaque). Un bon cuisiniste coordonne ces corps de métier. Prévoyez 500 à 2 000 € supplémentaires pour la plomberie et 300 à 1 500 € pour l\'électricité.',
       },
       {
         q: 'Comment bien agencer une petite cuisine ?',
@@ -892,7 +892,7 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'Quelle est la différence entre une cuisine en kit et une cuisine sur mesure ?',
-        a: 'La cuisine en kit (grande surface de bricolage) coûte 1 000 à 4 000 \u20AC pour 5 ml mais propose des dimensions standardisées qui laissent parfois des espaces vides. La cuisine sur mesure (cuisiniste professionnel) coûte 3 000 à 15 000 \u20AC mais s\'adapte parfaitement à votre pièce, avec des matériaux de meilleure qualité et un suivi de chantier complet incluant la pose.',
+        a: 'La cuisine en kit (grande surface de bricolage) coûte 1 000 à 4 000 € pour 5 ml mais propose des dimensions standardisées qui laissent parfois des espaces vides. La cuisine sur mesure (cuisiniste professionnel) coûte 3 000 à 15 000 € mais s\'adapte parfaitement à votre pièce, avec des matériaux de meilleure qualité et un suivi de chantier complet incluant la pose.',
       },
       {
         q: 'Les cuisinistes proposent-ils un service après-vente ?',
@@ -920,18 +920,18 @@ export const tradeContent: Record<string, TradeContent> = {
     priceRange: {
       min: 25,
       max: 60,
-      unit: '\u20AC/m²',
+      unit: '€/m²',
     },
     commonTasks: [
-      'Pose de parquet flottant : 20 à 35 \u20AC/m² (pose uniquement)',
-      'Pose de parquet massif collé : 35 à 60 \u20AC/m²',
-      'Pose de sol PVC/vinyle en lames ou dalles : 15 à 30 \u20AC/m²',
-      'Pose de moquette : 10 à 25 \u20AC/m²',
-      'Ragréage du sol (mise à niveau) : 15 à 30 \u20AC/m²',
-      'Pose de sol souple linoléum : 20 à 40 \u20AC/m²',
+      'Pose de parquet flottant : 20 à 35 €/m² (pose uniquement)',
+      'Pose de parquet massif collé : 35 à 60 €/m²',
+      'Pose de sol PVC/vinyle en lames ou dalles : 15 à 30 €/m²',
+      'Pose de moquette : 10 à 25 €/m²',
+      'Ragréage du sol (mise à niveau) : 15 à 30 €/m²',
+      'Pose de sol souple linoléum : 20 à 40 €/m²',
     ],
     tips: [
-      'Le ragréage (mise à niveau du support) est souvent indispensable avant la pose d\'un revêtement de sol. Un sol mal préparé est la première cause de désordres. Ce poste peut représenter 15 à 30 \u20AC/m² supplémentaires.',
+      'Le ragréage (mise à niveau du support) est souvent indispensable avant la pose d\'un revêtement de sol. Un sol mal préparé est la première cause de désordres. Ce poste peut représenter 15 à 30 €/m² supplémentaires.',
       'Le parquet contrecollé offre le meilleur compromis entre esthétique (couche d\'usure en bois noble) et stabilité (pas de retrait ni gonflement). Il est compatible avec le chauffage au sol.',
       'Les sols PVC/vinyle nouvelle génération (LVT - Luxury Vinyl Tiles) offrent un rendu très réaliste (imitation bois, pierre) avec une grande résistance à l\'eau et à l\'usure, idéaux pour les salles de bain et cuisines.',
       'Demandez au solier le classement UPEC du revêtement proposé et vérifiez qu\'il correspond à l\'usage de la pièce : U3 P3 minimum pour une entrée ou un couloir, U2 P2 suffisant pour une chambre.',
@@ -940,7 +940,7 @@ export const tradeContent: Record<string, TradeContent> = {
     faq: [
       {
         q: 'Parquet massif, contrecollé ou stratifié : lequel choisir ?',
-        a: 'Le parquet massif (30-80 \u20AC/m²) est le plus noble et durable (ponçable plusieurs fois), mais sensible à l\'humidité. Le contrecollé (25-60 \u20AC/m²) offre le meilleur compromis qualité-prix et convient au chauffage au sol. Le stratifié (10-25 \u20AC/m²) est le moins cher mais ne peut pas être poncé et a une durée de vie limitée (10-15 ans).',
+        a: 'Le parquet massif (30-80 €/m²) est le plus noble et durable (ponçable plusieurs fois), mais sensible à l\'humidité. Le contrecollé (25-60 €/m²) offre le meilleur compromis qualité-prix et convient au chauffage au sol. Le stratifié (10-25 €/m²) est le moins cher mais ne peut pas être poncé et a une durée de vie limitée (10-15 ans).',
       },
       {
         q: 'Peut-on poser du parquet sur du carrelage existant ?',
@@ -948,11 +948,11 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'Quel sol choisir pour une salle de bain ?',
-        a: 'Les meilleurs choix sont le sol PVC/vinyle (étanche, antidérapant, 15-30 \u20AC/m²), le parquet teck ou bambou (naturellement résistant à l\'eau, 40-70 \u20AC/m²) ou le sol souple linoléum (écologique, antibactérien, 20-40 \u20AC/m²). Évitez le stratifié classique qui gonfle au contact de l\'eau. Le carrelage reste la solution la plus durable.',
+        a: 'Les meilleurs choix sont le sol PVC/vinyle (étanche, antidérapant, 15-30 €/m²), le parquet teck ou bambou (naturellement résistant à l\'eau, 40-70 €/m²) ou le sol souple linoléum (écologique, antibactérien, 20-40 €/m²). Évitez le stratifié classique qui gonfle au contact de l\'eau. Le carrelage reste la solution la plus durable.',
       },
       {
         q: 'Qu\'est-ce que le ragréage et quand est-il nécessaire ?',
-        a: 'Le ragréage est une chape fine (3 à 10 mm) coulée sur le sol existant pour le lisser et le mettre à niveau avant la pose d\'un revêtement. Il est nécessaire quand le sol présente des irrégularités supérieures à 2 mm sous la règle de 2 m. Le coût est de 15 à 30 \u20AC/m². Le solier utilise un ragréage autolissant qui se met à niveau seul et sèche en 4 à 24 heures.',
+        a: 'Le ragréage est une chape fine (3 à 10 mm) coulée sur le sol existant pour le lisser et le mettre à niveau avant la pose d\'un revêtement. Il est nécessaire quand le sol présente des irrégularités supérieures à 2 mm sous la règle de 2 m. Le coût est de 15 à 30 €/m². Le solier utilise un ragréage autolissant qui se met à niveau seul et sèche en 4 à 24 heures.',
       },
       {
         q: 'Le parquet est-il compatible avec le chauffage au sol ?',
@@ -960,15 +960,15 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'Combien coûte la pose de parquet dans un appartement ?',
-        a: 'Pour un appartement de 60 m², la pose de parquet flottant coûte entre 1 200 et 2 100 \u20AC (pose seule, 20 à 35 \u20AC/m²), le parquet contrecollé collé entre 2 100 et 3 600 \u20AC (35 à 60 \u20AC/m²), et le parquet massif entre 3 000 et 4 800 \u20AC (50 à 80 \u20AC/m²). Ajoutez le ragréage si nécessaire (15 à 30 \u20AC/m²) et la sous-couche isolante (3 à 8 \u20AC/m²).',
+        a: 'Pour un appartement de 60 m², la pose de parquet flottant coûte entre 1 200 et 2 100 € (pose seule, 20 à 35 €/m²), le parquet contrecollé collé entre 2 100 et 3 600 € (35 à 60 €/m²), et le parquet massif entre 3 000 et 4 800 € (50 à 80 €/m²). Ajoutez le ragréage si nécessaire (15 à 30 €/m²) et la sous-couche isolante (3 à 8 €/m²).',
       },
       {
         q: 'Pose collée ou pose flottante : quelle différence ?',
-        a: 'La pose flottante (les lames s\'emboîtent sans fixation au sol) est plus rapide, moins chère (20 à 35 \u20AC/m²) et permet de démonter le parquet. La pose collée (les lames sont collées directement au sol) offre un meilleur confort acoustique, une meilleure stabilité et est obligatoire pour le parquet massif et le chauffage au sol. Elle coûte 35 à 60 \u20AC/m² et nécessite un sol parfaitement préparé.',
+        a: 'La pose flottante (les lames s\'emboîtent sans fixation au sol) est plus rapide, moins chère (20 à 35 €/m²) et permet de démonter le parquet. La pose collée (les lames sont collées directement au sol) offre un meilleur confort acoustique, une meilleure stabilité et est obligatoire pour le parquet massif et le chauffage au sol. Elle coûte 35 à 60 €/m² et nécessite un sol parfaitement préparé.',
       },
       {
         q: 'Quelle sous-couche choisir sous un parquet flottant ?',
-        a: 'La sous-couche en mousse polyéthylène (2 à 4 \u20AC/m²) est l\'option économique de base. La sous-couche en liège (5 à 10 \u20AC/m²) offre la meilleure isolation phonique et thermique. La sous-couche en fibre de bois (4 à 8 \u20AC/m²) est le choix écologique. Pour un sol sur vide sanitaire ou en rez-de-chaussée, ajoutez un pare-vapeur pour protéger le parquet de l\'humidité.',
+        a: 'La sous-couche en mousse polyéthylène (2 à 4 €/m²) est l\'option économique de base. La sous-couche en liège (5 à 10 €/m²) offre la meilleure isolation phonique et thermique. La sous-couche en fibre de bois (4 à 8 €/m²) est le choix écologique. Pour un sol sur vide sanitaire ou en rez-de-chaussée, ajoutez un pare-vapeur pour protéger le parquet de l\'humidité.',
       },
     ],
     emergencyInfo:
@@ -988,31 +988,31 @@ export const tradeContent: Record<string, TradeContent> = {
     priceRange: {
       min: 25,
       max: 45,
-      unit: '\u20AC/h',
+      unit: '€/h',
     },
     commonTasks: [
-      'Nettoyage de fin de chantier (appartement 60 m²) : 400 à 800 \u20AC',
-      'Nettoyage de copropriété (parties communes) : 200 à 500 \u20AC/mois',
-      'Nettoyage de vitres (logement) : 5 à 10 \u20AC/m²',
-      'Remise en état après sinistre : 500 à 2 000 \u20AC',
-      'Nettoyage de façade (kärcher professionnel) : 10 à 25 \u20AC/m²',
-      'Débarras et nettoyage de locaux : 30 à 50 \u20AC/m²',
+      'Nettoyage de fin de chantier (appartement 60 m²) : 400 à 800 €',
+      'Nettoyage de copropriété (parties communes) : 200 à 500 €/mois',
+      'Nettoyage de vitres (logement) : 5 à 10 €/m²',
+      'Remise en état après sinistre : 500 à 2 000 €',
+      'Nettoyage de façade (kärcher professionnel) : 10 à 25 €/m²',
+      'Débarras et nettoyage de locaux : 30 à 50 €/m²',
     ],
     tips: [
       'Pour un nettoyage de fin de chantier, exigez un cahier des charges précis : lessivage des murs, décapage des sols, nettoyage des vitres (intérieur + extérieur), dégraissage de la cuisine et nettoyage des sanitaires.',
       'Vérifiez que l\'entreprise de nettoyage dispose d\'une assurance responsabilité civile professionnelle et que ses salariés sont déclarés (demandez un extrait Kbis et une attestation URSSAF).',
       'Pour le nettoyage régulier de copropriété, un contrat annuel avec un cahier des charges détaillé (fréquence, surfaces, prestations) est plus économique que des interventions ponctuelles.',
-      'Les entreprises de nettoyage à domicile agréées services à la personne (SAP) ouvrent droit à un crédit d\'impôt de 50 % dans la limite de 12 000 \u20AC de dépenses par an.',
+      'Les entreprises de nettoyage à domicile agréées services à la personne (SAP) ouvrent droit à un crédit d\'impôt de 50 % dans la limite de 12 000 € de dépenses par an.',
       'Pour un nettoyage après sinistre (dégât des eaux, incendie), conservez les factures pour votre assurance. La plupart des contrats d\'assurance habitation couvrent ces frais.',
     ],
     faq: [
       {
         q: 'Combien coûte un nettoyage de fin de chantier ?',
-        a: 'Pour un appartement de 60 m², comptez 400 à 800 \u20AC selon l\'état des lieux et l\'étendue des travaux réalisés. Pour une maison de 120 m², le budget est de 700 à 1 500 \u20AC. Ce tarif inclut le lessivage des murs, le décapage et lustrage des sols, le nettoyage des vitres et la désinfection des sanitaires.',
+        a: 'Pour un appartement de 60 m², comptez 400 à 800 € selon l\'état des lieux et l\'étendue des travaux réalisés. Pour une maison de 120 m², le budget est de 700 à 1 500 €. Ce tarif inclut le lessivage des murs, le décapage et lustrage des sols, le nettoyage des vitres et la désinfection des sanitaires.',
       },
       {
         q: 'Puis-je bénéficier d\'un crédit d\'impôt pour le nettoyage ?',
-        a: 'Oui, le ménage à domicile bénéficie d\'un crédit d\'impôt de 50 % si l\'entreprise est agréée services à la personne (SAP) ou si vous employez directement une personne via le CESU. Le plafond est de 12 000 \u20AC de dépenses par an (+1 500 \u20AC par enfant à charge). Seul le nettoyage à domicile est éligible, pas le nettoyage professionnel de locaux.',
+        a: 'Oui, le ménage à domicile bénéficie d\'un crédit d\'impôt de 50 % si l\'entreprise est agréée services à la personne (SAP) ou si vous employez directement une personne via le CESU. Le plafond est de 12 000 € de dépenses par an (+1 500 € par enfant à charge). Seul le nettoyage à domicile est éligible, pas le nettoyage professionnel de locaux.',
       },
       {
         q: 'Comment choisir une entreprise de nettoyage fiable ?',
@@ -1024,7 +1024,7 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'Combien coûte le nettoyage des parties communes d\'un immeuble ?',
-        a: 'Le nettoyage hebdomadaire des parties communes (hall, escalier, paliers) d\'un petit immeuble de 10 à 20 lots coûte entre 200 et 500 \u20AC par mois. Ce tarif inclut le balayage, le lavage des sols, le nettoyage des vitres d\'entrée et la sortie des poubelles. Un contrat annuel est plus économique que des interventions ponctuelles et permet de répartir les charges entre copropriétaires.',
+        a: 'Le nettoyage hebdomadaire des parties communes (hall, escalier, paliers) d\'un petit immeuble de 10 à 20 lots coûte entre 200 et 500 € par mois. Ce tarif inclut le balayage, le lavage des sols, le nettoyage des vitres d\'entrée et la sortie des poubelles. Un contrat annuel est plus économique que des interventions ponctuelles et permet de répartir les charges entre copropriétaires.',
       },
       {
         q: 'Le nettoyage après un dégât des eaux est-il couvert par l\'assurance ?',
@@ -1032,7 +1032,7 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'Peut-on nettoyer une façade soi-même ou faut-il un professionnel ?',
-        a: 'Le nettoyage d\'une façade de plain-pied peut se faire soi-même avec un nettoyeur haute pression (attention à ne pas dépasser 100 bars pour ne pas abîmer l\'enduit). Au-delà du premier étage, faites appel à un professionnel équipé (nacelle, échafaudage) pour des raisons de sécurité. Le nettoyage professionnel de façade coûte 10 à 25 \u20AC/m² et peut inclure un traitement hydrofuge de protection.',
+        a: 'Le nettoyage d\'une façade de plain-pied peut se faire soi-même avec un nettoyeur haute pression (attention à ne pas dépasser 100 bars pour ne pas abîmer l\'enduit). Au-delà du premier étage, faites appel à un professionnel équipé (nacelle, échafaudage) pour des raisons de sécurité. Le nettoyage professionnel de façade coûte 10 à 25 €/m² et peut inclure un traitement hydrofuge de protection.',
       },
       {
         q: 'Quels produits sont utilisés pour un nettoyage professionnel écologique ?',
@@ -1058,13 +1058,13 @@ export const tradeContent: Record<string, TradeContent> = {
   terrassier: {
     slug: 'terrassier',
     name: 'Terrassier',
-    priceRange: { min: 30, max: 60, unit: '\u20AC/m³' },
+    priceRange: { min: 30, max: 60, unit: '€/m³' },
     commonTasks: [
-      'Terrassement pour fondations : 30 à 60 \u20AC/m³',
-      'Décaissement de terrain : 5 à 15 \u20AC/m²',
-      'Viabilisation de parcelle (VRD) : 5 000 à 15 000 \u20AC',
-      'Assainissement individuel (fosse septique) : 4 000 à 12 000 \u20AC',
-      'Création de tranchées pour réseaux : 15 à 40 \u20AC/ml',
+      'Terrassement pour fondations : 30 à 60 €/m³',
+      'Décaissement de terrain : 5 à 15 €/m²',
+      'Viabilisation de parcelle (VRD) : 5 000 à 15 000 €',
+      'Assainissement individuel (fosse septique) : 4 000 à 12 000 €',
+      'Création de tranchées pour réseaux : 15 à 40 €/ml',
     ],
     tips: [
       'Avant tout terrassement, faites réaliser une étude de sol (G2) pour connaître la nature du terrain et adapter les travaux.',
@@ -1074,7 +1074,7 @@ export const tradeContent: Record<string, TradeContent> = {
       'Prévoyez une zone de stockage suffisante pour les déblais : un terrassement de 100 m² génère 50 à 150 m³ de terre à évacuer ou à réutiliser en remblai.',
     ],
     faq: [
-      { q: 'Combien coûte un terrassement de maison ?', a: 'Le terrassement pour une maison individuelle de 100 m² au sol coûte entre 3 000 et 10 000 \u20AC selon la nature du terrain, la profondeur des fondations et l\'accessibilité du chantier.' },
+      { q: 'Combien coûte un terrassement de maison ?', a: 'Le terrassement pour une maison individuelle de 100 m² au sol coûte entre 3 000 et 10 000 € selon la nature du terrain, la profondeur des fondations et l\'accessibilité du chantier.' },
       { q: 'Faut-il un permis pour terrassement ?', a: 'Pas de permis spécifique, mais une déclaration préalable de travaux est nécessaire si le terrassement modifie le relief naturel du terrain de plus de 2 m de hauteur et 100 m² de surface.' },
       { q: 'Quelle est la meilleure période pour réaliser un terrassement ?', a: 'Le printemps et l\'été sont les saisons idéales, car le sol est sec et stable. Évitez les périodes de gel (le sol gelé est très dur à creuser) et les fortes pluies (risque d\'effondrement et de boue). Un terrassier expérimenté adapte ses techniques selon la saison.' },
       { q: 'Qu\'est-ce qu\'une étude de sol et est-elle obligatoire ?', a: 'L\'étude de sol (ou étude géotechnique G2) analyse la nature du terrain (argile, roche, sable) pour dimensionner les fondations. Elle est obligatoire depuis 2020 pour la vente de terrains constructibles en zone argileuse (loi ELAN). Son coût est de 1 500 à 3 000 € et elle évite des surcoûts majeurs en cas de terrain instable.' },
@@ -1089,13 +1089,13 @@ export const tradeContent: Record<string, TradeContent> = {
   charpentier: {
     slug: 'charpentier',
     name: 'Charpentier',
-    priceRange: { min: 50, max: 120, unit: '\u20AC/m²' },
+    priceRange: { min: 50, max: 120, unit: '€/m²' },
     commonTasks: [
-      'Charpente traditionnelle bois : 70 à 150 \u20AC/m² de toiture',
-      'Charpente fermettes industrielles : 50 à 80 \u20AC/m²',
-      'Réparation de charpente (remplacement de pièces) : 100 à 250 \u20AC/ml',
-      'Traitement insecticide/fongicide : 15 à 30 \u20AC/m²',
-      'Surélévation en ossature bois : 1 200 à 2 000 \u20AC/m²',
+      'Charpente traditionnelle bois : 70 à 150 €/m² de toiture',
+      'Charpente fermettes industrielles : 50 à 80 €/m²',
+      'Réparation de charpente (remplacement de pièces) : 100 à 250 €/ml',
+      'Traitement insecticide/fongicide : 15 à 30 €/m²',
+      'Surélévation en ossature bois : 1 200 à 2 000 €/m²',
     ],
     tips: [
       'Un traitement préventif de la charpente tous les 10 ans prolonge sa durée de vie de plusieurs décennies.',
@@ -1120,13 +1120,13 @@ export const tradeContent: Record<string, TradeContent> = {
   zingueur: {
     slug: 'zingueur',
     name: 'Zingueur',
-    priceRange: { min: 40, max: 80, unit: '\u20AC/ml' },
+    priceRange: { min: 40, max: 80, unit: '€/ml' },
     commonTasks: [
-      'Pose de gouttières en zinc : 40 à 80 \u20AC/ml',
-      'Remplacement de chéneaux : 60 à 120 \u20AC/ml',
-      'Pose de descentes d\'eau : 30 à 60 \u20AC/ml',
-      'Habillage de rives et bandeaux : 50 à 100 \u20AC/ml',
-      'Réparation de noues et faîtages : 80 à 200 \u20AC/ml',
+      'Pose de gouttières en zinc : 40 à 80 €/ml',
+      'Remplacement de chéneaux : 60 à 120 €/ml',
+      'Pose de descentes d\'eau : 30 à 60 €/ml',
+      'Habillage de rives et bandeaux : 50 à 100 €/ml',
+      'Réparation de noues et faîtages : 80 à 200 €/ml',
     ],
     tips: [
       'Le zinc a une durée de vie de 50 à 100 ans selon la qualité et l\'exposition. Préférez le zinc prépatiné pour une meilleure résistance à la corrosion.',
@@ -1136,7 +1136,7 @@ export const tradeContent: Record<string, TradeContent> = {
       'En bord de mer, le zinc standard se corrode rapidement. Optez pour du zinc-cuivre-titane (VMZINC) ou de l\'aluminium laqué, plus résistant aux embruns salins.',
     ],
     faq: [
-      { q: 'Quel est le prix de remplacement de gouttières ?', a: 'Comptez 40 à 80 \u20AC/ml pour des gouttières en zinc, pose comprise. Pour une maison de 40 ml de gouttières, le budget total se situe entre 2 000 et 4 000 \u20AC. Le PVC est moins cher (20 à 40 \u20AC/ml) mais dure 2 à 3 fois moins longtemps.' },
+      { q: 'Quel est le prix de remplacement de gouttières ?', a: 'Comptez 40 à 80 €/ml pour des gouttières en zinc, pose comprise. Pour une maison de 40 ml de gouttières, le budget total se situe entre 2 000 et 4 000 €. Le PVC est moins cher (20 à 40 €/ml) mais dure 2 à 3 fois moins longtemps.' },
       { q: 'Gouttière zinc, PVC ou aluminium : laquelle choisir ?', a: 'Le zinc est le matériau le plus durable (50 à 100 ans) avec un bel aspect patiné, mais il est le plus cher. L\'aluminium laqué offre un bon compromis (30 à 50 ans, large choix de couleurs, 35 à 70 €/ml). Le PVC est économique (20 à 40 €/ml) mais se déforme sous l\'effet du soleil et ne dure que 15 à 25 ans.' },
       { q: 'À quelle fréquence faut-il nettoyer ses gouttières ?', a: 'Un nettoyage complet est recommandé 2 fois par an : à la fin de l\'automne (après la chute des feuilles) et au printemps. Si votre maison est entourée d\'arbres, ajoutez un nettoyage en été. Des gouttières bouchées provoquent des débordements qui endommagent les façades et les fondations.' },
       { q: 'Quels sont les signes d\'une gouttière en mauvais état ?', a: 'Les signes d\'alerte sont : débordements lors des pluies, traces de rouille ou verdissement, gouttière qui se désolidarise de la façade, fissures visibles, eau qui coule le long du mur au lieu de descendre par les tuyaux. Une gouttière percée non réparée peut provoquer des infiltrations dans les murs et la toiture.' },
@@ -1151,13 +1151,13 @@ export const tradeContent: Record<string, TradeContent> = {
   etancheiste: {
     slug: 'etancheiste',
     name: 'Étanchéiste',
-    priceRange: { min: 40, max: 100, unit: '\u20AC/m²' },
+    priceRange: { min: 40, max: 100, unit: '€/m²' },
     commonTasks: [
-      'Étanchéité toiture-terrasse (membrane bitume) : 40 à 80 \u20AC/m²',
-      'Étanchéité PVC/EPDM : 50 à 100 \u20AC/m²',
-      'Étanchéité de balcon/loggia : 60 à 120 \u20AC/m²',
-      'Cuvelage de sous-sol : 150 à 300 \u20AC/m²',
-      'Traitement d\'infiltrations : 50 à 200 \u20AC/m²',
+      'Étanchéité toiture-terrasse (membrane bitume) : 40 à 80 €/m²',
+      'Étanchéité PVC/EPDM : 50 à 100 €/m²',
+      'Étanchéité de balcon/loggia : 60 à 120 €/m²',
+      'Cuvelage de sous-sol : 150 à 300 €/m²',
+      'Traitement d\'infiltrations : 50 à 200 €/m²',
     ],
     tips: [
       'L\'étanchéité d\'un toit-terrasse doit être contrôlée tous les 5 ans. Un défaut mineur non traité peut entraîner des dommages structurels majeurs.',
@@ -1182,13 +1182,13 @@ export const tradeContent: Record<string, TradeContent> = {
   facadier: {
     slug: 'facadier',
     name: 'Façadier',
-    priceRange: { min: 30, max: 100, unit: '\u20AC/m²' },
+    priceRange: { min: 30, max: 100, unit: '€/m²' },
     commonTasks: [
-      'Ravalement de façade (enduit) : 30 à 70 \u20AC/m²',
-      'Isolation thermique par l\'extérieur (ITE) : 100 à 200 \u20AC/m²',
-      'Peinture de façade : 20 à 45 \u20AC/m²',
-      'Nettoyage haute pression : 10 à 25 \u20AC/m²',
-      'Traitement anti-mousse et hydrofuge : 15 à 30 \u20AC/m²',
+      'Ravalement de façade (enduit) : 30 à 70 €/m²',
+      'Isolation thermique par l\'extérieur (ITE) : 100 à 200 €/m²',
+      'Peinture de façade : 20 à 45 €/m²',
+      'Nettoyage haute pression : 10 à 25 €/m²',
+      'Traitement anti-mousse et hydrofuge : 15 à 30 €/m²',
     ],
     tips: [
       'Un ravalement de façade est obligatoire tous les 10 ans dans certaines communes. Renseignez-vous auprès de votre mairie.',
@@ -1198,7 +1198,7 @@ export const tradeContent: Record<string, TradeContent> = {
       'Privilégiez les mois de printemps et d\'automne pour le ravalement : les enduits ne doivent pas être appliqués en dessous de 5 °C ni au-dessus de 35 °C.',
     ],
     faq: [
-      { q: 'Combien coûte un ravalement de façade pour une maison ?', a: 'Pour une maison de 100 m² de façade, comptez entre 5 000 et 15 000 \u20AC selon l\'état du support, le type d\'enduit et la nécessité d\'un échafaudage. Avec ITE, le budget monte à 15 000 à 25 000 \u20AC mais les aides peuvent couvrir jusqu\'à 40 %.' },
+      { q: 'Combien coûte un ravalement de façade pour une maison ?', a: 'Pour une maison de 100 m² de façade, comptez entre 5 000 et 15 000 € selon l\'état du support, le type d\'enduit et la nécessité d\'un échafaudage. Avec ITE, le budget monte à 15 000 à 25 000 € mais les aides peuvent couvrir jusqu\'à 40 %.' },
       { q: 'Le ravalement de façade est-il obligatoire ?', a: 'Dans les communes ayant pris un arrêté en ce sens, le ravalement est obligatoire tous les 10 ans (article L132-1 du Code de la construction). La mairie peut vous mettre en demeure de réaliser les travaux sous 6 mois. En copropriété, le ravalement est voté en assemblée générale à la majorité absolue.' },
       { q: 'Quelles aides financières pour un ravalement de façade ?', a: 'Un ravalement simple n\'ouvre pas droit aux aides. En revanche, si vous ajoutez une isolation thermique par l\'extérieur (ITE), vous pouvez bénéficier de MaPrimeRénov\' (jusqu\'à 75 €/m²), des CEE (prime énergie), de l\'éco-PTZ et de la TVA à 5,5 %. Certaines communes accordent aussi des subventions pour l\'embellissement des façades.' },
       { q: 'Combien de temps durent les travaux de ravalement ?', a: 'Pour une maison individuelle, le ravalement dure 2 à 4 semaines selon la surface et le type de traitement (nettoyage simple, enduit, ITE). L\'installation de l\'échafaudage prend 1 à 2 jours. Prévoyez que l\'échafaudage restera en place pendant toute la durée du chantier, ce qui peut gêner l\'accès au jardin ou au parking.' },
@@ -1213,13 +1213,13 @@ export const tradeContent: Record<string, TradeContent> = {
   platrier: {
     slug: 'platrier',
     name: 'Plâtrier',
-    priceRange: { min: 25, max: 55, unit: '\u20AC/m²' },
+    priceRange: { min: 25, max: 55, unit: '€/m²' },
     commonTasks: [
-      'Pose de cloisons en plaques de plâtre : 30 à 55 \u20AC/m²',
-      'Faux-plafond en plaques de plâtre : 35 à 65 \u20AC/m²',
-      'Doublage isolant (plaque + isolant) : 40 à 80 \u20AC/m²',
-      'Enduit plâtre traditionnel : 25 à 45 \u20AC/m²',
-      'Staff et corniche décorative : 30 à 100 \u20AC/ml',
+      'Pose de cloisons en plaques de plâtre : 30 à 55 €/m²',
+      'Faux-plafond en plaques de plâtre : 35 à 65 €/m²',
+      'Doublage isolant (plaque + isolant) : 40 à 80 €/m²',
+      'Enduit plâtre traditionnel : 25 à 45 €/m²',
+      'Staff et corniche décorative : 30 à 100 €/ml',
     ],
     tips: [
       'Pour les pièces humides (salle de bain, cuisine), exigez des plaques hydrofuges (vertes) et non des plaques standard.',
@@ -1229,7 +1229,7 @@ export const tradeContent: Record<string, TradeContent> = {
       'Pour un faux-plafond, demandez un plâtrier qui utilise des suspentes anti-vibratiles : elles réduisent considérablement la transmission des bruits d\'impact venant de l\'étage supérieur.',
     ],
     faq: [
-      { q: 'Plaque de plâtre ou enduit traditionnel ?', a: 'Les plaques de plâtre (BA13) sont plus rapides à poser et moins chères (30-55 \u20AC/m²). L\'enduit traditionnel offre une meilleure inertie thermique et acoustique mais coûte plus cher en main-d\'œuvre. Pour une rénovation, les plaques sont souvent privilégiées ; pour du neuf haut de gamme, l\'enduit traditionnel.' },
+      { q: 'Plaque de plâtre ou enduit traditionnel ?', a: 'Les plaques de plâtre (BA13) sont plus rapides à poser et moins chères (30-55 €/m²). L\'enduit traditionnel offre une meilleure inertie thermique et acoustique mais coûte plus cher en main-d\'œuvre. Pour une rénovation, les plaques sont souvent privilégiées ; pour du neuf haut de gamme, l\'enduit traditionnel.' },
       { q: 'Quelle épaisseur de cloison pour une bonne isolation phonique ?', a: 'Une cloison standard en BA13 (72 mm total) offre un affaiblissement de 35 à 40 dB. Pour une isolation phonique correcte entre deux chambres, optez pour une cloison de 98 mm (ossature 48 mm + 2 plaques de 13 mm + laine 45 mm) qui atteint 42 à 48 dB. Pour un mur mitoyen ou un studio de musique, une double cloison désolidarisée (160 mm) atteint 55 à 60 dB.' },
       { q: 'Comment réparer une fissure dans un plafond en plâtre ?', a: 'Pour une fissure superficielle, grattez la fissure en V, appliquez un calicot (bande à fissure) enduit de MAP ou d\'enduit de lissage. Pour une fissure structurelle (qui s\'ouvre progressivement), faites d\'abord diagnostiquer la cause (mouvement de structure, tassement) avant de réparer le plâtre. Une réparation cosmétique sur une fissure active réapparaîtra en quelques mois.' },
       { q: 'Combien de temps faut-il pour poser un faux-plafond ?', a: 'Un plâtrier expérimenté pose environ 15 à 25 m² de faux-plafond par jour. Pour une maison de 80 m², comptez 4 à 6 jours (ossature + plaques + bandes). Ajoutez 1 à 2 jours pour les finitions (enduit de lissage, ponçage). Les découpes pour spots encastrés et VMC sont incluses dans ce délai.' },
@@ -1244,13 +1244,13 @@ export const tradeContent: Record<string, TradeContent> = {
   metallier: {
     slug: 'metallier',
     name: 'Métallier',
-    priceRange: { min: 150, max: 400, unit: '\u20AC/ml' },
+    priceRange: { min: 150, max: 400, unit: '€/ml' },
     commonTasks: [
-      'Escalier métallique sur mesure : 3 000 à 12 000 \u20AC',
-      'Garde-corps en acier/inox : 150 à 400 \u20AC/ml',
-      'Verrière d\'intérieur : 800 à 2 500 \u20AC/m²',
-      'Porte d\'entrée en acier : 1 500 à 5 000 \u20AC',
-      'Pergola métallique : 3 000 à 8 000 \u20AC',
+      'Escalier métallique sur mesure : 3 000 à 12 000 €',
+      'Garde-corps en acier/inox : 150 à 400 €/ml',
+      'Verrière d\'intérieur : 800 à 2 500 €/m²',
+      'Porte d\'entrée en acier : 1 500 à 5 000 €',
+      'Pergola métallique : 3 000 à 8 000 €',
     ],
     tips: [
       'L\'acier thermolaqué offre le meilleur rapport qualité/prix pour les ouvrages extérieurs. L\'inox est réservé aux environnements corrosifs (bord de mer).',
@@ -1260,7 +1260,7 @@ export const tradeContent: Record<string, TradeContent> = {
       'Demandez au métallier de vous fournir une note de calcul pour les ouvrages structurels (escaliers, mezzanines, passerelles) afin de garantir la conformité aux normes de résistance.',
     ],
     faq: [
-      { q: 'Combien coûte une verrière d\'intérieur ?', a: 'Une verrière atelier sur mesure coûte entre 800 et 2 500 \u20AC/m² selon le matériau (acier, aluminium), le type de vitrage (simple, double, feuilleté) et la complexité de la pose. Une verrière standard de 2 m × 1,5 m revient à 2 500 à 5 000 \u20AC, pose comprise.' },
+      { q: 'Combien coûte une verrière d\'intérieur ?', a: 'Une verrière atelier sur mesure coûte entre 800 et 2 500 €/m² selon le matériau (acier, aluminium), le type de vitrage (simple, double, feuilleté) et la complexité de la pose. Une verrière standard de 2 m × 1,5 m revient à 2 500 à 5 000 €, pose comprise.' },
       { q: 'Acier, inox ou aluminium : quel métal choisir ?', a: 'L\'acier est le plus polyvalent et le moins cher, idéal pour la plupart des ouvrages intérieurs et extérieurs (avec traitement thermolaqué). L\'inox (304 ou 316) résiste à la corrosion sans entretien, parfait pour les bords de mer ou de piscine, mais coûte 2 à 3 fois plus cher. L\'aluminium est léger et ne rouille pas, adapté aux menuiseries et grandes portées.' },
       { q: 'Combien coûte un escalier métallique sur mesure ?', a: 'Un escalier droit en acier thermolaqué revient à 3 000 à 6 000 €, un quart-tournant à 5 000 à 8 000 € et un escalier hélicoïdal à 6 000 à 12 000 €. Le prix augmente avec les finitions (marches en bois, verre ou acier), le type de garde-corps et la complexité de la pose. Prévoyez 4 à 6 semaines de fabrication.' },
       { q: 'Une verrière d\'intérieur isole-t-elle du bruit ?', a: 'Avec un simple vitrage (6 mm), l\'isolation acoustique est faible (environ 25 dB). Un double vitrage 4/16/4 atteint 30 à 35 dB, ce qui est acceptable pour séparer une cuisine d\'un salon. Pour une véritable isolation phonique (bureau, chambre), optez pour un vitrage acoustique feuilleté 44.2 qui offre 37 à 42 dB d\'affaiblissement.' },
@@ -1275,12 +1275,12 @@ export const tradeContent: Record<string, TradeContent> = {
   ferronnier: {
     slug: 'ferronnier',
     name: 'Ferronnier',
-    priceRange: { min: 200, max: 600, unit: '\u20AC/ml' },
+    priceRange: { min: 200, max: 600, unit: '€/ml' },
     commonTasks: [
-      'Portail en fer forgé sur mesure : 2 000 à 8 000 \u20AC',
-      'Grille de fenêtre : 150 à 500 \u20AC/unité',
-      'Rampe d\'escalier en fer forgé : 200 à 600 \u20AC/ml',
-      'Table ou mobilier en fer forgé : 500 à 3 000 \u20AC',
+      'Portail en fer forgé sur mesure : 2 000 à 8 000 €',
+      'Grille de fenêtre : 150 à 500 €/unité',
+      'Rampe d\'escalier en fer forgé : 200 à 600 €/ml',
+      'Table ou mobilier en fer forgé : 500 à 3 000 €',
       'Restauration d\'ouvrages anciens : sur devis',
     ],
     tips: [
@@ -1306,13 +1306,13 @@ export const tradeContent: Record<string, TradeContent> = {
   'poseur-de-parquet': {
     slug: 'poseur-de-parquet',
     name: 'Poseur de parquet',
-    priceRange: { min: 25, max: 80, unit: '\u20AC/m²' },
+    priceRange: { min: 25, max: 80, unit: '€/m²' },
     commonTasks: [
-      'Pose de parquet flottant : 25 à 40 \u20AC/m²',
-      'Pose de parquet massif collé : 40 à 80 \u20AC/m²',
-      'Pose de parquet massif cloué : 50 à 90 \u20AC/m²',
-      'Ponçage et vitrification : 25 à 45 \u20AC/m²',
-      'Pose en point de Hongrie ou Versailles : 80 à 150 \u20AC/m²',
+      'Pose de parquet flottant : 25 à 40 €/m²',
+      'Pose de parquet massif collé : 40 à 80 €/m²',
+      'Pose de parquet massif cloué : 50 à 90 €/m²',
+      'Ponçage et vitrification : 25 à 45 €/m²',
+      'Pose en point de Hongrie ou Versailles : 80 à 150 €/m²',
     ],
     tips: [
       'Laissez le parquet s\'acclimater 48h minimum dans la pièce avant la pose, pour éviter les déformations.',
@@ -1322,7 +1322,7 @@ export const tradeContent: Record<string, TradeContent> = {
       'Demandez au poseur de laisser un joint de dilatation périphérique de 8 à 10 mm le long des murs. Ce joint, caché par les plinthes, est indispensable pour que le bois puisse travailler avec les variations d\'humidité.',
     ],
     faq: [
-      { q: 'Parquet massif, contrecollé ou stratifié ?', a: 'Le parquet massif (30-80 \u20AC/m² hors pose) se ponce et se rénove plusieurs fois, durant 50 à 100 ans. Le contrecollé (25-60 \u20AC/m²) se ponce 1 à 3 fois et dure 30 ans. Le stratifié (10-25 \u20AC/m²) ne se ponce pas et dure 10 à 20 ans. Le massif est un investissement, le stratifié un compromis économique.' },
+      { q: 'Parquet massif, contrecollé ou stratifié ?', a: 'Le parquet massif (30-80 €/m² hors pose) se ponce et se rénove plusieurs fois, durant 50 à 100 ans. Le contrecollé (25-60 €/m²) se ponce 1 à 3 fois et dure 30 ans. Le stratifié (10-25 €/m²) ne se ponce pas et dure 10 à 20 ans. Le massif est un investissement, le stratifié un compromis économique.' },
       { q: 'Peut-on poser du parquet sur un plancher chauffant ?', a: 'Oui, à condition de choisir un parquet compatible. Le parquet contrecollé (épaisseur de parement 2,5 à 4 mm) est le plus adapté car il se déforme peu. Le parquet massif est possible si l\'épaisseur reste sous 15 mm. Évitez les essences sensibles (hêtre, érable) et privilégiez le chêne. La pose collée en plein est obligatoire — la pose flottante est déconseillée sur plancher chauffant.' },
       { q: 'Combien coûte un ponçage-vitrification de parquet ?', a: 'Le ponçage-vitrification coûte entre 25 et 45 €/m² pour un parquet en bon état (3 passes de ponçage + 2 couches de vitrification). Si le parquet est très abîmé ou taché, un rebouchage des joints et des trous ajoute 5 à 10 €/m². Pour un appartement de 60 m², le budget total est de 1 800 à 3 300 €. Le chantier dure 3 à 5 jours avec un séchage de 24 à 48h après la dernière couche.' },
       { q: 'Quelle pose choisir : flottante, collée ou clouée ?', a: 'La pose flottante (clipsée sur sous-couche) est la plus rapide et la moins chère (15 à 25 €/m²), idéale pour le stratifié et le contrecollé. La pose collée (25 à 40 €/m²) offre un meilleur confort acoustique et convient au contrecollé et au massif mince. La pose clouée (35 à 50 €/m²) est la méthode traditionnelle pour le parquet massif sur lambourdes, offrant la meilleure longévité.' },
@@ -1337,13 +1337,13 @@ export const tradeContent: Record<string, TradeContent> = {
   miroitier: {
     slug: 'miroitier',
     name: 'Miroitier',
-    priceRange: { min: 80, max: 250, unit: '\u20AC/m²' },
+    priceRange: { min: 80, max: 250, unit: '€/m²' },
     commonTasks: [
-      'Pose de miroir sur mesure : 80 à 200 \u20AC/m²',
-      'Crédence de cuisine en verre : 150 à 350 \u20AC/m²',
-      'Paroi de douche en verre trempé : 400 à 1 200 \u20AC',
-      'Vitrine de commerce : 200 à 500 \u20AC/m²',
-      'Remplacement de double vitrage : 150 à 400 \u20AC/m²',
+      'Pose de miroir sur mesure : 80 à 200 €/m²',
+      'Crédence de cuisine en verre : 150 à 350 €/m²',
+      'Paroi de douche en verre trempé : 400 à 1 200 €',
+      'Vitrine de commerce : 200 à 500 €/m²',
+      'Remplacement de double vitrage : 150 à 400 €/m²',
     ],
     tips: [
       'Pour les parois de douche et garde-corps, le verre trempé securit est obligatoire (norme NF EN 12150).',
@@ -1353,7 +1353,7 @@ export const tradeContent: Record<string, TradeContent> = {
       'Le verre feuilleté (deux verres collés par un film PVB) est obligatoire pour les garde-corps et les applications en hauteur. En cas de casse, les morceaux restent collés au film, évitant les blessures.',
     ],
     faq: [
-      { q: 'Quelle épaisseur de verre pour une crédence ?', a: 'Une crédence de cuisine nécessite un verre trempé de 6 mm minimum (8 mm recommandé pour les grandes surfaces). Le verre laqué est le plus populaire car il offre un large choix de couleurs et se nettoie facilement. Budget : 150 à 350 \u20AC/m², pose comprise.' },
+      { q: 'Quelle épaisseur de verre pour une crédence ?', a: 'Une crédence de cuisine nécessite un verre trempé de 6 mm minimum (8 mm recommandé pour les grandes surfaces). Le verre laqué est le plus populaire car il offre un large choix de couleurs et se nettoie facilement. Budget : 150 à 350 €/m², pose comprise.' },
       { q: 'Combien coûte le remplacement d\'un double vitrage ?', a: 'Le remplacement d\'un double vitrage standard (4/16/4) coûte entre 150 et 300 €/m² pose comprise. Un vitrage à isolation renforcée (VIR ou ITR) revient à 200 à 400 €/m² mais réduit les déperditions thermiques de 40 %. Pour une fenêtre standard (1,2 m × 1 m), comptez 200 à 400 € tout compris. Le délai est de 1 à 2 semaines (fabrication sur mesure).' },
       { q: 'Verre trempé ou verre feuilleté : lequel choisir ?', a: 'Le verre trempé (securit) est 5 fois plus résistant que le verre ordinaire et se brise en petits morceaux non coupants. Il est obligatoire pour les parois de douche et les tables. Le verre feuilleté (deux verres + film PVB) ne tombe pas en morceaux à la casse : il est obligatoire pour les garde-corps, les toitures vitrées et les vitrines. Certaines applications exigent un verre trempé-feuilleté (cumul des deux propriétés).' },
       { q: 'Un miroitier peut-il intervenir en urgence ?', a: 'Oui, la plupart des miroitiers proposent un service d\'urgence pour les vitrines de commerce cassées, les fenêtres brisées après effraction ou les dégâts de tempête. L\'intervention sous 24h coûte 30 à 50 % de plus qu\'une intervention programmée. En attendant, bâchez l\'ouverture avec une bâche ou du contreplaqué pour sécuriser le local.' },
@@ -1368,13 +1368,13 @@ export const tradeContent: Record<string, TradeContent> = {
   storiste: {
     slug: 'storiste',
     name: 'Storiste',
-    priceRange: { min: 200, max: 800, unit: '\u20AC/unité' },
+    priceRange: { min: 200, max: 800, unit: '€/unité' },
     commonTasks: [
-      'Store banne motorisé : 800 à 3 000 \u20AC',
-      'Volet roulant électrique : 300 à 800 \u20AC/fenêtre',
-      'Store intérieur (vénitien, enrouleur) : 100 à 400 \u20AC',
-      'Pergola bioclimatique : 5 000 à 15 000 \u20AC',
-      'Motorisation de volets existants : 200 à 500 \u20AC/volet',
+      'Store banne motorisé : 800 à 3 000 €',
+      'Volet roulant électrique : 300 à 800 €/fenêtre',
+      'Store intérieur (vénitien, enrouleur) : 100 à 400 €',
+      'Pergola bioclimatique : 5 000 à 15 000 €',
+      'Motorisation de volets existants : 200 à 500 €/volet',
     ],
     tips: [
       'Pour les stores extérieurs, privilégiez une toile acrylique teinte masse (garantie 5 à 10 ans) plutôt qu\'une toile polyester qui se décolore rapidement.',
@@ -1384,7 +1384,7 @@ export const tradeContent: Record<string, TradeContent> = {
       'Si vos volets roulants grincent ou peinent à monter, un simple graissage des coulisses et un dépoussiérage du tablier suffisent souvent. L\'entretien annuel prolonge leur durée de vie de plusieurs années.',
     ],
     faq: [
-      { q: 'Combien coûte la motorisation de tous les volets d\'une maison ?', a: 'Pour une maison de 8 à 10 volets, comptez 2 500 à 5 000 \u20AC pour la motorisation complète (moteurs + commandes radio + installation). Une commande centralisée ajoute 300 à 800 \u20AC. La motorisation solaire est possible si le câblage électrique est difficile (+30 % de surcoût).' },
+      { q: 'Combien coûte la motorisation de tous les volets d\'une maison ?', a: 'Pour une maison de 8 à 10 volets, comptez 2 500 à 5 000 € pour la motorisation complète (moteurs + commandes radio + installation). Une commande centralisée ajoute 300 à 800 €. La motorisation solaire est possible si le câblage électrique est difficile (+30 % de surcoût).' },
       { q: 'Store banne manuel ou motorisé ?', a: 'Un store banne manuel (manivelle) coûte 500 à 1 500 € et convient aux petites largeurs (jusqu\'à 3 m). Un store motorisé (800 à 3 000 €) est recommandé au-delà de 3 m de largeur, car la manœuvre manuelle devient pénible. La motorisation permet aussi l\'ajout de capteurs automatiques (vent, soleil, pluie) qui protègent le store en votre absence.' },
       { q: 'Quelle est la durée de vie d\'un store banne ?', a: 'Un store banne de qualité dure 10 à 15 ans avec un entretien correct. La toile acrylique teinte masse (la plus résistante) conserve ses couleurs 10 à 12 ans. L\'armature en aluminium dure 20 ans+. Pour prolonger la durée de vie : rétractez le store en cas de vent fort, laissez sécher la toile avant de la replier et nettoyez-la une fois par an au savon de Marseille.' },
       { q: 'Quelles aides pour le remplacement de volets roulants ?', a: 'Le remplacement de volets roulants anciens par des modèles isolants ouvre droit à la TVA réduite à 10 % pour les logements de plus de 2 ans. Si les volets intègrent une isolation thermique renforcée (coefficient Uc ≤ 1,4), vous pouvez bénéficier de MaPrimeRénov\' et des CEE (prime énergie) à condition de passer par un installateur RGE.' },
@@ -1399,13 +1399,13 @@ export const tradeContent: Record<string, TradeContent> = {
   'salle-de-bain': {
     slug: 'salle-de-bain',
     name: 'Salle de bain',
-    priceRange: { min: 4000, max: 15000, unit: '\u20AC' },
+    priceRange: { min: 4000, max: 15000, unit: '€' },
     commonTasks: [
-      'Rénovation complète salle de bain 5 m² : 5 000 à 12 000 \u20AC',
-      'Remplacement baignoire par douche à l\'italienne : 3 000 à 7 000 \u20AC',
-      'Création d\'une salle de bain (dans une chambre) : 8 000 à 20 000 \u20AC',
-      'Pose de carrelage mural et sol : 40 à 80 \u20AC/m²',
-      'Installation meuble vasque + robinetterie : 500 à 2 500 \u20AC',
+      'Rénovation complète salle de bain 5 m² : 5 000 à 12 000 €',
+      'Remplacement baignoire par douche à l\'italienne : 3 000 à 7 000 €',
+      'Création d\'une salle de bain (dans une chambre) : 8 000 à 20 000 €',
+      'Pose de carrelage mural et sol : 40 à 80 €/m²',
+      'Installation meuble vasque + robinetterie : 500 à 2 500 €',
     ],
     tips: [
       'Pour une douche à l\'italienne, exigez une étanchéité SPEC (Système de Protection à l\'Eau sous Carrelage) certifiée.',
@@ -1430,13 +1430,13 @@ export const tradeContent: Record<string, TradeContent> = {
   'architecte-interieur': {
     slug: 'architecte-interieur',
     name: 'Architecte d\'intérieur',
-    priceRange: { min: 50, max: 150, unit: '\u20AC/m²' },
+    priceRange: { min: 50, max: 150, unit: '€/m²' },
     commonTasks: [
-      'Consultation / conseil déco : 80 à 200 \u20AC/h',
-      'Projet d\'aménagement complet : 50 à 150 \u20AC/m² de surface aménagée',
+      'Consultation / conseil déco : 80 à 200 €/h',
+      'Projet d\'aménagement complet : 50 à 150 €/m² de surface aménagée',
       'Suivi de chantier : 8 à 15 % du montant des travaux',
-      'Plans 3D et planches d\'ambiance : 500 à 2 000 \u20AC',
-      'Rénovation d\'appartement haussmannien : 800 à 2 000 \u20AC/m²',
+      'Plans 3D et planches d\'ambiance : 500 à 2 000 €',
+      'Rénovation d\'appartement haussmannien : 800 à 2 000 €/m²',
     ],
     tips: [
       'Un architecte d\'intérieur titulaire du diplôme CFAI est inscrit au Conseil français des architectes d\'intérieur et peut porter le titre protégé.',
@@ -1461,13 +1461,13 @@ export const tradeContent: Record<string, TradeContent> = {
   decorateur: {
     slug: 'decorateur',
     name: 'Décorateur',
-    priceRange: { min: 50, max: 120, unit: '\u20AC/h' },
+    priceRange: { min: 50, max: 120, unit: '€/h' },
     commonTasks: [
-      'Conseil en décoration (visite + recommandations) : 150 à 500 \u20AC',
-      'Planche d\'ambiance et shopping list : 300 à 1 000 \u20AC/pièce',
+      'Conseil en décoration (visite + recommandations) : 150 à 500 €',
+      'Planche d\'ambiance et shopping list : 300 à 1 000 €/pièce',
       'Home staging pour vente immobilière : 1 à 3 % du prix de vente',
-      'Décoration événementielle : 500 à 3 000 \u20AC',
-      'Accompagnement achat mobilier : 50 à 120 \u20AC/h',
+      'Décoration événementielle : 500 à 3 000 €',
+      'Accompagnement achat mobilier : 50 à 120 €/h',
     ],
     tips: [
       'Un bon décorateur vous fait gagner du temps et de l\'argent en évitant les erreurs d\'achat (meubles inadaptés, couleurs qui ne vont pas ensemble).',
@@ -1477,7 +1477,7 @@ export const tradeContent: Record<string, TradeContent> = {
       'Un décorateur professionnel bénéficie de tarifs négociés chez les fournisseurs (10 à 30 % de remise) : même en comptant ses honoraires, vous pouvez économiser sur l\'achat du mobilier.',
     ],
     faq: [
-      { q: 'Combien coûte un décorateur pour un salon ?', a: 'Pour un salon de 25 à 35 m², comptez 500 à 2 000 \u20AC pour une prestation complète : visite, planche d\'ambiance, shopping list et accompagnement achat. Le budget mobilier et accessoires est en sus.' },
+      { q: 'Combien coûte un décorateur pour un salon ?', a: 'Pour un salon de 25 à 35 m², comptez 500 à 2 000 € pour une prestation complète : visite, planche d\'ambiance, shopping list et accompagnement achat. Le budget mobilier et accessoires est en sus.' },
       { q: 'Quelle est la différence entre un décorateur et un home stager ?', a: 'Le décorateur crée un intérieur personnalisé selon les goûts et le mode de vie du client (projet durable). Le home stager prépare un bien immobilier pour la vente en le dépersonnalisant et en le mettant en valeur pour séduire un maximum d\'acheteurs (projet temporaire). Le home staging coûte généralement 1 à 3 % du prix de vente et permet de vendre plus vite et souvent à un meilleur prix.' },
       { q: 'Un décorateur peut-il intervenir à distance ?', a: 'Oui, beaucoup de décorateurs proposent des prestations en ligne : vous envoyez les photos et les mesures de votre pièce, et le décorateur vous livre une planche d\'ambiance, un plan d\'aménagement et une shopping list. Le coût est 30 à 50 % inférieur à une prestation sur place (300 à 1 000 € par pièce). C\'est une bonne solution pour les petits budgets ou les zones éloignées.' },
       { q: 'Quelles sont les tendances déco actuelles ?', a: 'Les tendances 2025-2026 privilégient les matériaux naturels (bois brut, pierre, lin), les couleurs terracotta et vert sauge, le mobilier arrondi et les luminaires sculpturaux. Le style japandi (mélange japonais-scandinave) et le maximalisme coloré coexistent. Un bon décorateur vous guidera vers un style intemporel qui ne se démodera pas en quelques mois.' },
@@ -1492,13 +1492,13 @@ export const tradeContent: Record<string, TradeContent> = {
   domoticien: {
     slug: 'domoticien',
     name: 'Domoticien',
-    priceRange: { min: 500, max: 5000, unit: '\u20AC' },
+    priceRange: { min: 500, max: 5000, unit: '€' },
     commonTasks: [
-      'Installation domotique complète maison : 5 000 à 20 000 \u20AC',
-      'Éclairage connecté (10 points) : 1 000 à 3 000 \u20AC',
-      'Thermostat connecté : 300 à 800 \u20AC (fourniture + pose)',
-      'Serrure connectée : 300 à 1 000 \u20AC',
-      'Système multiroom audio : 2 000 à 8 000 \u20AC',
+      'Installation domotique complète maison : 5 000 à 20 000 €',
+      'Éclairage connecté (10 points) : 1 000 à 3 000 €',
+      'Thermostat connecté : 300 à 800 € (fourniture + pose)',
+      'Serrure connectée : 300 à 1 000 €',
+      'Système multiroom audio : 2 000 à 8 000 €',
     ],
     tips: [
       'Privilégiez les protocoles ouverts (KNX, Zigbee, Z-Wave) plutôt que les systèmes propriétaires fermés pour garantir l\'évolutivité.',
@@ -1508,7 +1508,7 @@ export const tradeContent: Record<string, TradeContent> = {
       'Choisissez un domoticien qui propose un contrat de maintenance : les mises à jour logicielles, le remplacement de piles des capteurs et le support technique sont essentiels pour la pérennité du système.',
     ],
     faq: [
-      { q: 'Quel budget pour domotiser une maison ?', a: 'Le budget varie de 3 000 \u20AC (kit DIY : éclairage + thermostat + volets) à 30 000 \u20AC+ (installation professionnelle KNX complète). Un bon compromis est un système Zigbee/Z-Wave avec box domotique (5 000 à 10 000 \u20AC) qui couvre éclairage, chauffage, volets et sécurité.' },
+      { q: 'Quel budget pour domotiser une maison ?', a: 'Le budget varie de 3 000 € (kit DIY : éclairage + thermostat + volets) à 30 000 €+ (installation professionnelle KNX complète). Un bon compromis est un système Zigbee/Z-Wave avec box domotique (5 000 à 10 000 €) qui couvre éclairage, chauffage, volets et sécurité.' },
       { q: 'KNX, Zigbee ou Z-Wave : quel protocole choisir ?', a: 'Le KNX est le standard professionnel filaire le plus fiable et pérenne (30 ans+), mais il coûte 2 à 3 fois plus cher et nécessite un câblage spécifique (bus EIB). Le Zigbee est le protocole sans fil le plus répandu (compatible Philips Hue, Ikea, Aqara) avec un excellent rapport qualité-prix. Le Z-Wave offre une portée supérieure et moins d\'interférences mais un choix de produits plus restreint. En rénovation, Zigbee ou Z-Wave sont les plus adaptés.' },
       { q: 'La domotique permet-elle de réaliser des économies d\'énergie ?', a: 'Oui, une installation domotique bien configurée réduit la facture énergétique de 15 à 30 %. Le thermostat connecté seul fait économiser 10 à 15 % sur le chauffage. L\'automatisation des volets (fermeture la nuit en hiver, occultation en été) ajoute 5 à 10 %. La gestion intelligente de l\'éclairage (détecteurs de présence, scénarios) réduit la consommation de 20 à 40 %.' },
       { q: 'Peut-on domotiser une maison ancienne sans gros travaux ?', a: 'Oui, grâce aux protocoles sans fil (Zigbee, Z-Wave, Wi-Fi). On remplace les interrupteurs par des modules connectés, on ajoute des capteurs (température, ouverture, mouvement) et on installe une box domotique centrale. L\'installation est non invasive et réversible. Comptez 3 000 à 8 000 € pour une maison de 4 pièces avec éclairage, chauffage, volets et sécurité.' },
@@ -1523,29 +1523,29 @@ export const tradeContent: Record<string, TradeContent> = {
   'pompe-a-chaleur': {
     slug: 'pompe-a-chaleur',
     name: 'Pompe à chaleur',
-    priceRange: { min: 8000, max: 18000, unit: '\u20AC' },
+    priceRange: { min: 8000, max: 18000, unit: '€' },
     commonTasks: [
-      'PAC air/eau (chauffage + ECS) : 10 000 à 18 000 \u20AC',
-      'PAC air/air (climatisation réversible) : 3 000 à 8 000 \u20AC',
-      'PAC géothermique : 15 000 à 25 000 \u20AC',
-      'Entretien annuel obligatoire : 150 à 300 \u20AC',
-      'Remplacement de chaudière fioul par PAC : 12 000 à 20 000 \u20AC',
+      'PAC air/eau (chauffage + ECS) : 10 000 à 18 000 €',
+      'PAC air/air (climatisation réversible) : 3 000 à 8 000 €',
+      'PAC géothermique : 15 000 à 25 000 €',
+      'Entretien annuel obligatoire : 150 à 300 €',
+      'Remplacement de chaudière fioul par PAC : 12 000 à 20 000 €',
     ],
     tips: [
       'Exigez un installateur certifié QualiPAC — c\'est obligatoire pour bénéficier des aides MaPrimeRénov\' et des CEE.',
-      'Un dimensionnement correct est crucial : une PAC surdimensionnée consomme plus et s\'use prématurément. Exigez une étude thermique (800 à 1 500 \u20AC).',
+      'Un dimensionnement correct est crucial : une PAC surdimensionnée consomme plus et s\'use prématurément. Exigez une étude thermique (800 à 1 500 €).',
       'L\'entretien annuel d\'une PAC de plus de 4 kW est obligatoire depuis 2020 (décret n° 2020-912). Souscrivez un contrat de maintenance dès l\'installation pour garantir les performances et la durée de vie.',
       'Vérifiez le niveau sonore de l\'unité extérieure (exprimé en dB(A) à 1 m) avant l\'achat : les PAC air/eau les plus silencieuses descendent sous 40 dB(A). Un mauvais choix peut créer des conflits de voisinage.',
       'Coupler une pompe à chaleur avec des panneaux solaires photovoltaïques permet d\'alimenter la PAC avec de l\'électricité gratuite en journée, réduisant la facture de chauffage de 60 à 80 %.',
     ],
     faq: [
-      { q: 'Quelles aides pour installer une pompe à chaleur ?', a: 'MaPrimeRénov\' : jusqu\'à 5 000 \u20AC (revenus modestes). CEE (prime énergie) : 2 000 à 4 000 \u20AC. Éco-PTZ : prêt à taux zéro jusqu\'à 50 000 \u20AC. TVA réduite à 5,5 %. Au total, les aides peuvent couvrir 40 à 70 % du coût pour les ménages modestes.' },
+      { q: 'Quelles aides pour installer une pompe à chaleur ?', a: 'MaPrimeRénov\' : jusqu\'à 5 000 € (revenus modestes). CEE (prime énergie) : 2 000 à 4 000 €. Éco-PTZ : prêt à taux zéro jusqu\'à 50 000 €. TVA réduite à 5,5 %. Au total, les aides peuvent couvrir 40 à 70 % du coût pour les ménages modestes.' },
       { q: 'PAC air/eau ou air/air : laquelle choisir ?', a: 'La PAC air/eau chauffe l\'eau du circuit de radiateurs ou du plancher chauffant et peut aussi produire l\'eau chaude sanitaire. Elle est idéale en remplacement d\'une chaudière fioul ou gaz (10 000 à 18 000 €). La PAC air/air (climatisation réversible) souffle de l\'air chaud ou froid via des splits muraux (3 000 à 8 000 €). Elle est plus économique mais ne produit pas d\'eau chaude et n\'ouvre pas droit à MaPrimeRénov\'.' },
       { q: 'Quelle est la durée de vie d\'une pompe à chaleur ?', a: 'Une PAC air/eau bien entretenue dure 15 à 20 ans. Le compresseur (pièce la plus sollicitée) a une durée de vie de 12 à 15 ans. Un entretien annuel (vérification du fluide frigorigène, nettoyage des filtres, contrôle des performances) est obligatoire et prolonge significativement la durée de vie. Le remplacement du compresseur (1 500 à 3 000 €) peut redonner 10 ans de vie à l\'installation.' },
       { q: 'Une pompe à chaleur fonctionne-t-elle par grand froid ?', a: 'Les PAC air/eau récentes fonctionnent jusqu\'à -15 °C, voire -25 °C pour les modèles haut de gamme (Daikin Altherma, Atlantic Alfea). Toutefois, le COP (coefficient de performance) diminue avec la température extérieure : de 4 à 5 par temps doux (7 °C), il chute à 2 à 3 par -10 °C. Un appoint électrique intégré prend le relais lors des vagues de froid exceptionnelles.' },
       { q: 'La pompe à chaleur est-elle bruyante ?', a: 'L\'unité extérieure émet 40 à 55 dB(A) à 1 m de distance (comparable à une conversation). Les modèles récents proposent un mode silencieux nocturne (35 à 45 dB). La réglementation impose un seuil d\'émergence de 5 dB(A) le jour et 3 dB(A) la nuit par rapport au bruit ambiant. Installez l\'unité extérieure à distance des chambres du voisin et sur des plots anti-vibratiles pour limiter les nuisances.' },
     ],
-    emergencyInfo: 'En cas de panne de chauffage en hiver, un chauffagiste d\'urgence peut intervenir en 2 à 4h pour un diagnostic. Coût : 150 à 350 \u20AC (déplacement + diagnostic).',
+    emergencyInfo: 'En cas de panne de chauffage en hiver, un chauffagiste d\'urgence peut intervenir en 2 à 4h pour un diagnostic. Coût : 150 à 350 € (déplacement + diagnostic).',
     certifications: ['QualiPAC (obligatoire pour les aides MaPrimeRénov\' et CEE)', 'RGE (Reconnu Garant de l\'Environnement)', 'Attestation de capacité fluides frigorigènes (obligatoire — catégorie I)', 'Qualibat (qualification 5212/5213 chauffage, génie climatique)'],
     averageResponseTime: 'Devis sous 1 semaine, installation 2 à 4 semaines',
   },
@@ -1553,13 +1553,13 @@ export const tradeContent: Record<string, TradeContent> = {
   'panneaux-solaires': {
     slug: 'panneaux-solaires',
     name: 'Panneaux solaires',
-    priceRange: { min: 7000, max: 20000, unit: '\u20AC' },
+    priceRange: { min: 7000, max: 20000, unit: '€' },
     commonTasks: [
-      'Installation photovoltaïque 3 kWc : 7 000 à 10 000 \u20AC',
-      'Installation photovoltaïque 6 kWc : 12 000 à 16 000 \u20AC',
-      'Installation photovoltaïque 9 kWc : 16 000 à 22 000 \u20AC',
-      'Solaire thermique (eau chaude) : 4 000 à 8 000 \u20AC',
-      'Batterie de stockage : 4 000 à 10 000 \u20AC',
+      'Installation photovoltaïque 3 kWc : 7 000 à 10 000 €',
+      'Installation photovoltaïque 6 kWc : 12 000 à 16 000 €',
+      'Installation photovoltaïque 9 kWc : 16 000 à 22 000 €',
+      'Solaire thermique (eau chaude) : 4 000 à 8 000 €',
+      'Batterie de stockage : 4 000 à 10 000 €',
     ],
     tips: [
       'La rentabilité dépend de l\'orientation (sud idéal), de l\'inclinaison (30° optimal) et de l\'ensoleillement local. Une étude de faisabilité gratuite est proposée par la plupart des installateurs.',
@@ -1569,8 +1569,8 @@ export const tradeContent: Record<string, TradeContent> = {
       'Pensez au monitoring en temps réel via une application : un dysfonctionnement non détecté peut représenter plusieurs centaines d\'euros de perte de production sur un an.',
     ],
     faq: [
-      { q: 'Est-ce rentable d\'installer des panneaux solaires ?', a: 'Oui, avec un prix de l\'électricité en hausse constante. Une installation de 3 kWc produit environ 3 500 kWh/an dans le sud de la France, soit 500 à 700 \u20AC d\'économie annuelle. Avec la prime à l\'autoconsommation (1 140 \u20AC pour 3 kWc) et la revente du surplus à 0,13 \u20AC/kWh, le retour sur investissement se fait en 8 à 12 ans pour un équipement qui dure 30 ans+.' },
-      { q: 'Quelle est la durée de vie des panneaux solaires ?', a: 'Les panneaux photovoltaïques ont une durée de vie de 30 à 40 ans. La garantie constructeur couvre généralement 25 ans sur la production (80 % du rendement initial garanti). L\'onduleur, en revanche, doit être remplacé tous les 10 à 15 ans (coût : 1 000 à 2 000 \u20AC).' },
+      { q: 'Est-ce rentable d\'installer des panneaux solaires ?', a: 'Oui, avec un prix de l\'électricité en hausse constante. Une installation de 3 kWc produit environ 3 500 kWh/an dans le sud de la France, soit 500 à 700 € d\'économie annuelle. Avec la prime à l\'autoconsommation (1 140 € pour 3 kWc) et la revente du surplus à 0,13 €/kWh, le retour sur investissement se fait en 8 à 12 ans pour un équipement qui dure 30 ans+.' },
+      { q: 'Quelle est la durée de vie des panneaux solaires ?', a: 'Les panneaux photovoltaïques ont une durée de vie de 30 à 40 ans. La garantie constructeur couvre généralement 25 ans sur la production (80 % du rendement initial garanti). L\'onduleur, en revanche, doit être remplacé tous les 10 à 15 ans (coût : 1 000 à 2 000 €).' },
       { q: 'Peut-on installer des panneaux solaires sur un toit plat ou orienté nord ?', a: 'Un toit plat convient très bien grâce à des supports inclinés à 30° orientés plein sud. En revanche, une orientation nord réduit la production de 40 à 50 %, ce qui rend le projet rarement rentable. Les orientations est et ouest restent viables avec une perte de 15 à 20 % seulement.' },
       { q: 'Faut-il une autorisation pour poser des panneaux solaires ?', a: 'Oui, une déclaration préalable de travaux en mairie est obligatoire dans tous les cas. En zone protégée (ABF, monument historique), l\'architecte des Bâtiments de France doit donner son accord, ce qui peut rallonger le délai de 2 à 6 mois. En copropriété, un vote en assemblée générale est requis.' },
       { q: 'Autoconsommation totale ou revente du surplus : quel choix faire ?', a: 'L\'autoconsommation avec revente du surplus est le modèle le plus courant et le plus rentable pour les particuliers. Vous consommez directement l\'électricité produite et revendez l\'excédent à EDF OA à un tarif garanti pendant 20 ans. La revente totale est plutôt réservée aux grandes toitures ou aux bâtiments peu consommateurs.' },
@@ -1584,13 +1584,13 @@ export const tradeContent: Record<string, TradeContent> = {
   'isolation-thermique': {
     slug: 'isolation-thermique',
     name: 'Isolation thermique',
-    priceRange: { min: 20, max: 100, unit: '\u20AC/m²' },
+    priceRange: { min: 20, max: 100, unit: '€/m²' },
     commonTasks: [
-      'Isolation des combles perdus (soufflage) : 20 à 35 \u20AC/m²',
-      'Isolation des combles aménagés : 40 à 80 \u20AC/m²',
-      'Isolation des murs par l\'intérieur (ITI) : 30 à 70 \u20AC/m²',
-      'Isolation des murs par l\'extérieur (ITE) : 100 à 200 \u20AC/m²',
-      'Isolation du plancher bas : 25 à 50 \u20AC/m²',
+      'Isolation des combles perdus (soufflage) : 20 à 35 €/m²',
+      'Isolation des combles aménagés : 40 à 80 €/m²',
+      'Isolation des murs par l\'intérieur (ITI) : 30 à 70 €/m²',
+      'Isolation des murs par l\'extérieur (ITE) : 100 à 200 €/m²',
+      'Isolation du plancher bas : 25 à 50 €/m²',
     ],
     tips: [
       'Les combles sont responsables de 25 à 30 % des déperditions thermiques : c\'est le poste à traiter en priorité.',
@@ -1601,8 +1601,8 @@ export const tradeContent: Record<string, TradeContent> = {
     ],
     faq: [
       { q: 'Quelle épaisseur d\'isolant faut-il ?', a: 'Pour les combles perdus : 30 à 40 cm de laine de verre/roche (R ≥ 7 m².K/W). Pour les murs par l\'intérieur : 12 à 16 cm (R ≥ 3,7). Pour les murs par l\'extérieur : 14 à 18 cm (R ≥ 3,7). Ces valeurs correspondent à la RT 2012 / RE 2020 et permettent d\'obtenir les aides.' },
-      { q: 'Isolation par l\'intérieur ou par l\'extérieur : que choisir ?', a: 'L\'ITI (intérieur) est moins chère (30 à 70 \u20AC/m²) et ne modifie pas la façade, mais réduit la surface habitable de 3 à 5 %. L\'ITE (extérieur) coûte plus cher (100 à 200 \u20AC/m²) mais supprime les ponts thermiques, préserve l\'espace intérieur et offre un ravalement de façade inclus. L\'ITE est idéale lors d\'un ravalement obligatoire.' },
-      { q: 'L\'isolation des combles est-elle vraiment prioritaire ?', a: 'Oui, car la chaleur monte : les combles non isolés représentent 25 à 30 % des pertes de chaleur d\'une maison. C\'est aussi l\'isolation la moins chère (20 à 35 \u20AC/m² en soufflage pour combles perdus) avec le meilleur retour sur investissement (amortie en 3 à 5 ans grâce aux économies de chauffage).' },
+      { q: 'Isolation par l\'intérieur ou par l\'extérieur : que choisir ?', a: 'L\'ITI (intérieur) est moins chère (30 à 70 €/m²) et ne modifie pas la façade, mais réduit la surface habitable de 3 à 5 %. L\'ITE (extérieur) coûte plus cher (100 à 200 €/m²) mais supprime les ponts thermiques, préserve l\'espace intérieur et offre un ravalement de façade inclus. L\'ITE est idéale lors d\'un ravalement obligatoire.' },
+      { q: 'L\'isolation des combles est-elle vraiment prioritaire ?', a: 'Oui, car la chaleur monte : les combles non isolés représentent 25 à 30 % des pertes de chaleur d\'une maison. C\'est aussi l\'isolation la moins chère (20 à 35 €/m² en soufflage pour combles perdus) avec le meilleur retour sur investissement (amortie en 3 à 5 ans grâce aux économies de chauffage).' },
       { q: 'Quels matériaux isolants choisir ?', a: 'La laine de verre et la laine de roche offrent le meilleur rapport performance/prix. La ouate de cellulose et la fibre de bois sont des alternatives écologiques avec un bon déphasage thermique (confort d\'été). Le polyuréthane est le plus performant à épaisseur égale mais coûte plus cher. Tous doivent être certifiés ACERMI.' },
       { q: 'L\'isolation phonique et thermique sont-elles la même chose ?', a: 'Non, ce sont deux performances distinctes. Un bon isolant thermique n\'est pas forcément un bon isolant phonique. La laine de roche et la ouate de cellulose offrent de bonnes performances dans les deux domaines. Pour une isolation phonique spécifique, il faut traiter les parois avec des systèmes masse-ressort-masse (double cloison avec isolant intercalé).' },
     ],
@@ -1615,24 +1615,24 @@ export const tradeContent: Record<string, TradeContent> = {
   'renovation-energetique': {
     slug: 'renovation-energetique',
     name: 'Rénovation énergétique',
-    priceRange: { min: 15000, max: 50000, unit: '\u20AC' },
+    priceRange: { min: 15000, max: 50000, unit: '€' },
     commonTasks: [
-      'Audit énergétique (DPE + préconisations) : 800 à 1 500 \u20AC',
-      'Rénovation globale (isolation + chauffage + ventilation) : 20 000 à 60 000 \u20AC',
-      'Passage de DPE F/G à C/D : 15 000 à 40 000 \u20AC',
-      'Remplacement de chaudière fioul par PAC + isolation : 25 000 à 50 000 \u20AC',
+      'Audit énergétique (DPE + préconisations) : 800 à 1 500 €',
+      'Rénovation globale (isolation + chauffage + ventilation) : 20 000 à 60 000 €',
+      'Passage de DPE F/G à C/D : 15 000 à 40 000 €',
+      'Remplacement de chaudière fioul par PAC + isolation : 25 000 à 50 000 €',
     ],
     tips: [
       'Commencez toujours par un audit énergétique pour hiérarchiser les travaux et maximiser les aides.',
-      'Le bonus MaPrimeRénov\' « rénovation globale » (jusqu\'à 15 000 \u20AC) récompense les projets qui améliorent le DPE d\'au moins 2 classes.',
+      'Le bonus MaPrimeRénov\' « rénovation globale » (jusqu\'à 15 000 €) récompense les projets qui améliorent le DPE d\'au moins 2 classes.',
       'Faites appel à un Accompagnateur Rénov\' agréé par l\'État : c\'est désormais obligatoire pour les projets de rénovation globale bénéficiant de MaPrimeRénov\'.',
       'Priorisez les travaux dans cet ordre : isolation (combles, murs, sols), puis ventilation (VMC double flux), puis changement du système de chauffage. Isoler sans ventiler provoque des problèmes d\'humidité.',
       'Conservez toutes les factures et attestations RGE pendant 10 ans : elles servent de preuve pour les garanties décennales et en cas de contrôle fiscal sur les aides perçues.',
     ],
     faq: [
-      { q: 'Quelles sont les aides pour une rénovation énergétique ?', a: 'MaPrimeRénov\' (jusqu\'à 20 000 \u20AC), MaPrimeRénov\' Sérénité pour les ménages modestes (jusqu\'à 30 000 \u20AC), CEE (primes énergie), éco-PTZ (jusqu\'à 50 000 \u20AC à taux zéro), TVA à 5,5 %, aides locales (régions, départements). Un ménage modeste peut couvrir jusqu\'à 80 % du coût des travaux.' },
-      { q: 'Qu\'est-ce qu\'un audit énergétique et est-il obligatoire ?', a: 'L\'audit énergétique est une analyse complète de votre logement (isolation, chauffage, ventilation) avec un plan de travaux chiffré. Il est obligatoire depuis 2023 pour la vente des logements classés F ou G au DPE. Son coût (800 à 1 500 \u20AC) est partiellement pris en charge par MaPrimeRénov\' (jusqu\'à 500 \u20AC).' },
-      { q: 'Comment passer d\'un DPE F ou G à un DPE C ou D ?', a: 'Il faut généralement combiner isolation des combles et des murs (gain de 1 à 2 classes), remplacement du chauffage par une pompe à chaleur ou chaudière à condensation (gain de 1 classe), et installation d\'une VMC double flux. Le budget moyen est de 20 000 à 40 000 \u20AC, mais les aides peuvent couvrir 50 à 80 % pour les ménages modestes.' },
+      { q: 'Quelles sont les aides pour une rénovation énergétique ?', a: 'MaPrimeRénov\' (jusqu\'à 20 000 €), MaPrimeRénov\' Sérénité pour les ménages modestes (jusqu\'à 30 000 €), CEE (primes énergie), éco-PTZ (jusqu\'à 50 000 € à taux zéro), TVA à 5,5 %, aides locales (régions, départements). Un ménage modeste peut couvrir jusqu\'à 80 % du coût des travaux.' },
+      { q: 'Qu\'est-ce qu\'un audit énergétique et est-il obligatoire ?', a: 'L\'audit énergétique est une analyse complète de votre logement (isolation, chauffage, ventilation) avec un plan de travaux chiffré. Il est obligatoire depuis 2023 pour la vente des logements classés F ou G au DPE. Son coût (800 à 1 500 €) est partiellement pris en charge par MaPrimeRénov\' (jusqu\'à 500 €).' },
+      { q: 'Comment passer d\'un DPE F ou G à un DPE C ou D ?', a: 'Il faut généralement combiner isolation des combles et des murs (gain de 1 à 2 classes), remplacement du chauffage par une pompe à chaleur ou chaudière à condensation (gain de 1 classe), et installation d\'une VMC double flux. Le budget moyen est de 20 000 à 40 000 €, mais les aides peuvent couvrir 50 à 80 % pour les ménages modestes.' },
       { q: 'Peut-on rénover par étapes ou faut-il tout faire d\'un coup ?', a: 'On peut rénover par étapes, mais la rénovation globale est plus efficace et mieux aidée. Le parcours « par geste » de MaPrimeRénov\' finance chaque poste séparément, tandis que le parcours « accompagné » pour une rénovation globale offre des primes bonifiées. Attention à l\'ordre des travaux : isoler avant de changer le chauffage pour bien dimensionner l\'équipement.' },
       { q: 'Les logements classés G seront-ils vraiment interdits à la location ?', a: 'Oui, la loi Climat et Résilience interdit progressivement la location des passoires thermiques : les logements G sont interdits à la location depuis janvier 2025, les F le seront en 2028 et les E en 2034. Les propriétaires bailleurs doivent donc engager des travaux de rénovation sous peine de ne plus pouvoir louer.' },
     ],
@@ -1645,26 +1645,26 @@ export const tradeContent: Record<string, TradeContent> = {
   'borne-recharge': {
     slug: 'borne-recharge',
     name: 'Borne de recharge',
-    priceRange: { min: 1200, max: 3000, unit: '\u20AC' },
+    priceRange: { min: 1200, max: 3000, unit: '€' },
     commonTasks: [
-      'Borne 7,4 kW (monophasé) : 1 200 à 2 000 \u20AC',
-      'Borne 11 kW (triphasé) : 1 500 à 2 500 \u20AC',
-      'Borne 22 kW (triphasé) : 2 000 à 3 500 \u20AC',
-      'Installation en copropriété (droit à la prise) : 1 500 à 3 000 \u20AC',
-      'Mise aux normes du tableau électrique : 500 à 1 500 \u20AC',
+      'Borne 7,4 kW (monophasé) : 1 200 à 2 000 €',
+      'Borne 11 kW (triphasé) : 1 500 à 2 500 €',
+      'Borne 22 kW (triphasé) : 2 000 à 3 500 €',
+      'Installation en copropriété (droit à la prise) : 1 500 à 3 000 €',
+      'Mise aux normes du tableau électrique : 500 à 1 500 €',
     ],
     tips: [
-      'Seul un électricien certifié IRVE peut installer une borne de recharge — c\'est obligatoire pour bénéficier du crédit d\'impôt (300 \u20AC).',
+      'Seul un électricien certifié IRVE peut installer une borne de recharge — c\'est obligatoire pour bénéficier du crédit d\'impôt (300 €).',
       'Une borne 7,4 kW suffit pour la plupart des usages (recharge complète en 6 à 8h pendant la nuit).',
       'Vérifiez la puissance de votre abonnement électrique avant l\'installation : une borne 7,4 kW nécessite souvent un passage en 9 kVA minimum, et une borne 11 kW exige un raccordement triphasé.',
       'Programmez la recharge en heures creuses (généralement entre 22h et 6h) pour réduire le coût d\'électricité de 30 à 40 % par rapport aux heures pleines.',
       'En copropriété, vous pouvez invoquer le « droit à la prise » (décret du 13 juillet 2011) : le syndic ne peut pas refuser l\'installation sauf motif sérieux et légitime.',
     ],
     faq: [
-      { q: 'Quelles aides pour installer une borne de recharge ?', a: 'Crédit d\'impôt de 300 \u20AC par borne (75 % du coût plafonné à 300 \u20AC), prime Advenir jusqu\'à 960 \u20AC en copropriété, TVA réduite à 5,5 % pour les logements de plus de 2 ans. Le budget net après aides est souvent inférieur à 1 000 \u20AC pour une borne 7,4 kW.' },
+      { q: 'Quelles aides pour installer une borne de recharge ?', a: 'Crédit d\'impôt de 300 € par borne (75 % du coût plafonné à 300 €), prime Advenir jusqu\'à 960 € en copropriété, TVA réduite à 5,5 % pour les logements de plus de 2 ans. Le budget net après aides est souvent inférieur à 1 000 € pour une borne 7,4 kW.' },
       { q: 'Peut-on recharger sa voiture électrique sur une prise domestique classique ?', a: 'Techniquement oui, mais c\'est déconseillé pour un usage quotidien. Une prise standard 230V/10A délivre seulement 2,3 kW, soit 10 à 15 heures pour une recharge complète. De plus, elle n\'est pas conçue pour une utilisation prolongée à pleine charge et peut provoquer un échauffement dangereux. Une prise renforcée Green\'Up (3,7 kW) est un minimum acceptable.' },
-      { q: 'Quelle différence entre une borne monophasée et triphasée ?', a: 'Une borne monophasée (7,4 kW max) est la plus courante en maison individuelle et suffit pour une recharge nocturne. Une borne triphasée (11 ou 22 kW) recharge 2 à 3 fois plus vite mais nécessite un raccordement triphasé (modification du compteur Enedis, 150 à 300 \u20AC). Le triphasé est recommandé si vous parcourez plus de 100 km par jour.' },
-      { q: 'Combien coûte la recharge d\'une voiture électrique à domicile ?', a: 'En tarif de base, une recharge complète (batterie de 50 kWh) coûte environ 10 à 12 \u20AC. En heures creuses, ce coût tombe à 7 à 8 \u20AC, soit environ 2 \u20AC aux 100 km. C\'est 4 à 5 fois moins cher qu\'un véhicule essence. Avec un abonnement adapté et la programmation nocturne, le surcoût d\'électricité est de 30 à 50 \u20AC/mois pour 15 000 km/an.' },
+      { q: 'Quelle différence entre une borne monophasée et triphasée ?', a: 'Une borne monophasée (7,4 kW max) est la plus courante en maison individuelle et suffit pour une recharge nocturne. Une borne triphasée (11 ou 22 kW) recharge 2 à 3 fois plus vite mais nécessite un raccordement triphasé (modification du compteur Enedis, 150 à 300 €). Le triphasé est recommandé si vous parcourez plus de 100 km par jour.' },
+      { q: 'Combien coûte la recharge d\'une voiture électrique à domicile ?', a: 'En tarif de base, une recharge complète (batterie de 50 kWh) coûte environ 10 à 12 €. En heures creuses, ce coût tombe à 7 à 8 €, soit environ 2 € aux 100 km. C\'est 4 à 5 fois moins cher qu\'un véhicule essence. Avec un abonnement adapté et la programmation nocturne, le surcoût d\'électricité est de 30 à 50 €/mois pour 15 000 km/an.' },
       { q: 'L\'installation d\'une borne nécessite-t-elle des travaux importants ?', a: 'Dans la majorité des cas, l\'installation est simple : fixation murale de la borne, tirage d\'un câble depuis le tableau électrique et ajout d\'un disjoncteur dédié. Les travaux durent 2 à 4 heures. Cependant, si le tableau est éloigné du garage (plus de 20 m) ou si une mise aux normes électrique est nécessaire, le coût et la durée augmentent significativement.' },
     ],
     emergencyInfo:
@@ -1676,27 +1676,27 @@ export const tradeContent: Record<string, TradeContent> = {
   ramoneur: {
     slug: 'ramoneur',
     name: 'Ramoneur',
-    priceRange: { min: 50, max: 120, unit: '\u20AC' },
+    priceRange: { min: 50, max: 120, unit: '€' },
     commonTasks: [
-      'Ramonage de cheminée (conduit maçonné) : 50 à 90 \u20AC',
-      'Ramonage de poêle à bois/granulés : 60 à 120 \u20AC',
-      'Ramonage de chaudière (conduit fumée) : 70 à 130 \u20AC',
-      'Débistrage (enlèvement du bistre) : 150 à 400 \u20AC',
-      'Tubage de conduit : 1 500 à 3 500 \u20AC',
+      'Ramonage de cheminée (conduit maçonné) : 50 à 90 €',
+      'Ramonage de poêle à bois/granulés : 60 à 120 €',
+      'Ramonage de chaudière (conduit fumée) : 70 à 130 €',
+      'Débistrage (enlèvement du bistre) : 150 à 400 €',
+      'Tubage de conduit : 1 500 à 3 500 €',
     ],
     tips: [
       'Le ramonage est obligatoire 1 à 2 fois par an selon les communes (vérifiez le règlement sanitaire départemental). Le certificat de ramonage est exigé par votre assurance en cas de sinistre.',
       'Planifiez votre ramonage en septembre/octobre, avant la saison de chauffe — les délais sont plus courts qu\'en plein hiver.',
       'Après l\'intervention, exigez un certificat de ramonage portant la date, la nature des travaux et le nom du professionnel : c\'est ce document que votre assureur réclamera en cas de sinistre.',
-      'Si votre conduit est ancien (avant 1960) ou fissuré, le ramoneur peut recommander un tubage en inox : c\'est un investissement de 1 500 à 3 500 \u20AC qui sécurise l\'installation pour 30 ans.',
+      'Si votre conduit est ancien (avant 1960) ou fissuré, le ramoneur peut recommander un tubage en inox : c\'est un investissement de 1 500 à 3 500 € qui sécurise l\'installation pour 30 ans.',
       'Pour un poêle à granulés, le ramonage doit inclure le nettoyage du conduit d\'évacuation ET du conduit de raccordement : les deux sont sources d\'encrassement et de risque.',
     ],
     faq: [
-      { q: 'Que risque-t-on sans ramonage ?', a: 'Sans ramonage, vous risquez un feu de cheminée (bistre inflammable), une intoxication au monoxyde de carbone (CO), et un refus d\'indemnisation par votre assurance en cas d\'incendie. L\'amende pour défaut de ramonage peut atteindre 450 \u20AC (contravention de 3e classe).' },
+      { q: 'Que risque-t-on sans ramonage ?', a: 'Sans ramonage, vous risquez un feu de cheminée (bistre inflammable), une intoxication au monoxyde de carbone (CO), et un refus d\'indemnisation par votre assurance en cas d\'incendie. L\'amende pour défaut de ramonage peut atteindre 450 € (contravention de 3e classe).' },
       { q: 'Combien de fois par an faut-il faire ramoner ?', a: 'Le règlement sanitaire départemental impose généralement 2 ramonages par an pour les combustibles solides (bois, granulés) dont 1 pendant la période de chauffe, et 1 ramonage par an pour le gaz et le fioul. Vérifiez les obligations de votre commune car elles varient d\'un département à l\'autre.' },
       { q: 'Quelle est la différence entre ramonage mécanique et chimique ?', a: 'Le ramonage mécanique (avec hérisson) est le seul reconnu légalement et par les assurances. Le ramonage chimique (bûches de ramonage) est un complément d\'entretien qui ramollit les dépôts de suie, mais ne remplace jamais le passage d\'un professionnel. Les bûches de ramonage ne donnent pas droit à un certificat.' },
-      { q: 'Qu\'est-ce que le bistre et comment le traiter ?', a: 'Le bistre est un dépôt dur et inflammable qui se forme sur les parois du conduit, surtout avec du bois humide ou une combustion lente. Le débistrage nécessite une machine rotative spéciale (débistreuse) et coûte 150 à 400 \u20AC. Un ramonage classique ne suffit pas à l\'éliminer. Brûler du bois sec (moins de 20 % d\'humidité) limite sa formation.' },
-      { q: 'Comment choisir un bon ramoneur ?', a: 'Vérifiez qu\'il possède une qualification Qualibat 5141 ou une certification équivalente, une assurance responsabilité civile professionnelle et qu\'il remet systématiquement un certificat de ramonage. Privilégiez un professionnel local recommandé par le bouche-à-oreille. Méfiez-vous des offres à moins de 30 \u20AC : un ramonage sérieux prend 20 à 40 minutes.' },
+      { q: 'Qu\'est-ce que le bistre et comment le traiter ?', a: 'Le bistre est un dépôt dur et inflammable qui se forme sur les parois du conduit, surtout avec du bois humide ou une combustion lente. Le débistrage nécessite une machine rotative spéciale (débistreuse) et coûte 150 à 400 €. Un ramonage classique ne suffit pas à l\'éliminer. Brûler du bois sec (moins de 20 % d\'humidité) limite sa formation.' },
+      { q: 'Comment choisir un bon ramoneur ?', a: 'Vérifiez qu\'il possède une qualification Qualibat 5141 ou une certification équivalente, une assurance responsabilité civile professionnelle et qu\'il remet systématiquement un certificat de ramonage. Privilégiez un professionnel local recommandé par le bouche-à-oreille. Méfiez-vous des offres à moins de 30 € : un ramonage sérieux prend 20 à 40 minutes.' },
     ],
     emergencyInfo:
       'Intervention d\'urgence en cas de feu de cheminée ou de suspicion d\'intoxication au monoxyde de carbone (CO). Appelez les pompiers (18) en premier. Un ramoneur-fumiste peut intervenir sous 2 à 4 heures pour sécuriser le conduit après l\'intervention des secours. Majorations : +80 à 100 % la nuit et le week-end.',
@@ -1707,13 +1707,13 @@ export const tradeContent: Record<string, TradeContent> = {
   paysagiste: {
     slug: 'paysagiste',
     name: 'Paysagiste',
-    priceRange: { min: 35, max: 80, unit: '\u20AC/m²' },
+    priceRange: { min: 35, max: 80, unit: '€/m²' },
     commonTasks: [
-      'Aménagement paysager complet : 35 à 80 \u20AC/m²',
-      'Création de terrasse (bois, pierre) : 80 à 250 \u20AC/m²',
-      'Engazonnement (semis ou placage) : 5 à 15 \u20AC/m²',
-      'Plantation d\'arbres et haies : 30 à 100 \u20AC/unité',
-      'Système d\'arrosage automatique : 10 à 25 \u20AC/m²',
+      'Aménagement paysager complet : 35 à 80 €/m²',
+      'Création de terrasse (bois, pierre) : 80 à 250 €/m²',
+      'Engazonnement (semis ou placage) : 5 à 15 €/m²',
+      'Plantation d\'arbres et haies : 30 à 100 €/unité',
+      'Système d\'arrosage automatique : 10 à 25 €/m²',
     ],
     tips: [
       'Un paysagiste concepteur (diplôme DPLG ou ENSP) conçoit le projet ; un paysagiste entrepreneur réalise les travaux. Les deux compétences sont parfois réunies chez le même professionnel.',
@@ -1723,11 +1723,11 @@ export const tradeContent: Record<string, TradeContent> = {
       'Demandez un plan d\'entretien annuel chiffré : un beau jardin nécessite un suivi régulier (taille, fertilisation, désherbage) dont le coût annuel représente 5 à 10 % de l\'investissement initial.',
     ],
     faq: [
-      { q: 'Combien coûte l\'aménagement d\'un jardin de 200 m² ?', a: 'Pour un jardin de 200 m² avec terrasse, plantations et engazonnement, comptez 8 000 à 20 000 \u20AC selon le niveau de finition. Un projet haut de gamme avec piscine peut atteindre 50 000 \u20AC+.' },
-      { q: 'Quelle est la différence entre un paysagiste et un jardinier ?', a: 'Le paysagiste conçoit et réalise des aménagements extérieurs complets (terrasses, plantations, murets, éclairage, arrosage). Le jardinier assure l\'entretien courant (tonte, taille, désherbage). Un paysagiste diplômé DPLG ou ENSP peut aussi réaliser des études de sol et des plans d\'architecte paysagiste. Pour un simple entretien de jardin, un jardinier suffit (20 à 40 \u20AC/h).' },
+      { q: 'Combien coûte l\'aménagement d\'un jardin de 200 m² ?', a: 'Pour un jardin de 200 m² avec terrasse, plantations et engazonnement, comptez 8 000 à 20 000 € selon le niveau de finition. Un projet haut de gamme avec piscine peut atteindre 50 000 €+.' },
+      { q: 'Quelle est la différence entre un paysagiste et un jardinier ?', a: 'Le paysagiste conçoit et réalise des aménagements extérieurs complets (terrasses, plantations, murets, éclairage, arrosage). Le jardinier assure l\'entretien courant (tonte, taille, désherbage). Un paysagiste diplômé DPLG ou ENSP peut aussi réaliser des études de sol et des plans d\'architecte paysagiste. Pour un simple entretien de jardin, un jardinier suffit (20 à 40 €/h).' },
       { q: 'Faut-il un permis pour des travaux d\'aménagement extérieur ?', a: 'Aucune autorisation n\'est requise pour les plantations et l\'engazonnement. En revanche, une déclaration préalable de travaux est nécessaire pour une terrasse de plus de 20 m² ou surélevée de plus de 60 cm, un mur de clôture dépassant 2 m de hauteur, ou un abri de jardin de plus de 5 m². Un permis de construire s\'impose au-delà de 20 m² de surface de plancher.' },
       { q: 'Quelles plantes choisir pour un jardin facile d\'entretien ?', a: 'Privilégiez les plantes vivaces adaptées à votre zone climatique : lavande, romarin et olivier en climat méditerranéen ; hortensias, érables et graminées en climat océanique. Les couvre-sols (pervenche, lierre, thym rampant) limitent le désherbage. Un paillis minéral ou organique réduit l\'arrosage de 50 % et freine la pousse des mauvaises herbes.' },
-      { q: 'Comment estimer le budget d\'entretien annuel d\'un jardin ?', a: 'Pour un jardin de 200 m², comptez 1 000 à 3 000 \u20AC/an en entretien professionnel (tonte bimensuelle, taille des haies 2 fois/an, traitement phytosanitaire, nettoyage). Un contrat annuel d\'entretien avec un paysagiste est 20 à 30 % moins cher que des interventions ponctuelles. Le crédit d\'impôt « services à la personne » (50 %) s\'applique pour l\'entretien de jardin chez les particuliers.' },
+      { q: 'Comment estimer le budget d\'entretien annuel d\'un jardin ?', a: 'Pour un jardin de 200 m², comptez 1 000 à 3 000 €/an en entretien professionnel (tonte bimensuelle, taille des haies 2 fois/an, traitement phytosanitaire, nettoyage). Un contrat annuel d\'entretien avec un paysagiste est 20 à 30 % moins cher que des interventions ponctuelles. Le crédit d\'impôt « services à la personne » (50 %) s\'applique pour l\'entretien de jardin chez les particuliers.' },
     ],
     emergencyInfo:
       'Pas de service d\'urgence pour l\'aménagement paysager. Les projets de création de jardin, terrasse et plantations sont planifiés sur plusieurs semaines. Prenez rendez-vous pour une étude sous 2 semaines.',
@@ -1738,27 +1738,27 @@ export const tradeContent: Record<string, TradeContent> = {
   pisciniste: {
     slug: 'pisciniste',
     name: 'Pisciniste',
-    priceRange: { min: 15000, max: 50000, unit: '\u20AC' },
+    priceRange: { min: 15000, max: 50000, unit: '€' },
     commonTasks: [
-      'Piscine coque polyester 8×4 m : 15 000 à 25 000 \u20AC',
-      'Piscine béton maçonnée 8×4 m : 25 000 à 50 000 \u20AC',
-      'Piscine hors-sol bois ou acier : 3 000 à 10 000 \u20AC',
-      'Rénovation de liner : 2 000 à 5 000 \u20AC',
-      'Mise en sécurité (alarme, barrière, couverture) : 1 000 à 5 000 \u20AC',
+      'Piscine coque polyester 8×4 m : 15 000 à 25 000 €',
+      'Piscine béton maçonnée 8×4 m : 25 000 à 50 000 €',
+      'Piscine hors-sol bois ou acier : 3 000 à 10 000 €',
+      'Rénovation de liner : 2 000 à 5 000 €',
+      'Mise en sécurité (alarme, barrière, couverture) : 1 000 à 5 000 €',
     ],
     tips: [
-      'La mise en sécurité est obligatoire (loi du 3 janvier 2003) : alarme, barrière, couverture ou abri. Amende de 45 000 \u20AC en cas de non-respect.',
-      'Prévoyez un budget annuel d\'entretien de 500 à 1 500 \u20AC (produits, électricité, hivernage).',
+      'La mise en sécurité est obligatoire (loi du 3 janvier 2003) : alarme, barrière, couverture ou abri. Amende de 45 000 € en cas de non-respect.',
+      'Prévoyez un budget annuel d\'entretien de 500 à 1 500 € (produits, électricité, hivernage).',
       'Faites réaliser une étude de sol avant de choisir le type de piscine : un terrain argileux ou avec une nappe phréatique haute impose des contraintes de construction qui peuvent doubler le budget.',
       'Comparez les garanties décennales des piscinistes : la structure (béton, coque) doit être couverte 10 ans, mais le liner et les équipements techniques ont des garanties plus courtes (2 à 5 ans).',
       'Pensez à l\'hivernage actif (filtration réduite) plutôt que passif (arrêt total) si vous êtes dans une région où les températures descendent rarement sous 0°C : la remise en route au printemps sera beaucoup plus simple.',
     ],
     faq: [
-      { q: 'Faut-il un permis de construire pour une piscine ?', a: 'Pas de formalité pour les piscines de moins de 10 m². Déclaration préalable de travaux pour les piscines de 10 à 100 m². Permis de construire obligatoire au-delà de 100 m² ou pour les piscines couvertes de plus de 1,80 m de hauteur. La taxe d\'aménagement s\'applique à toutes les piscines de plus de 10 m² (200 \u20AC/m² en 2025).' },
-      { q: 'Piscine coque ou béton : laquelle choisir ?', a: 'La piscine coque polyester est moins chère (15 000 à 25 000 \u20AC pour 8×4 m), plus rapide à installer (1 à 2 semaines) et facile d\'entretien, mais les formes et dimensions sont limitées au catalogue du fabricant. La piscine béton (25 000 à 50 000 \u20AC) permet toutes les formes et dimensions sur mesure, mais nécessite 2 à 3 mois de travaux. Le béton est plus durable (50 ans+) que la coque (20 à 25 ans).' },
-      { q: 'Quel système de traitement d\'eau choisir ?', a: 'Le chlore reste le plus économique (200 à 400 \u20AC/an) mais peut irriter la peau et les yeux. L\'électrolyse au sel (1 500 à 3 000 \u20AC d\'investissement) est plus confortable et économique sur le long terme. Le traitement UV ou à l\'ozone (2 000 à 4 000 \u20AC) réduit drastiquement l\'usage de produits chimiques. Le brome est recommandé pour les piscines chauffées (spa, couverture).' },
-      { q: 'Combien coûte l\'entretien annuel d\'une piscine ?', a: 'Le budget annuel d\'entretien varie de 500 à 1 500 \u20AC selon la taille et le système de traitement : produits chimiques (200 à 500 \u20AC), électricité pour la filtration (300 à 600 \u20AC), remplacement de pièces d\'usure (100 à 300 \u20AC), hivernage et mise en route (200 à 400 \u20AC si réalisés par un professionnel). Un robot nettoyeur automatique (800 à 2 000 \u20AC) réduit le temps d\'entretien manuel.' },
-      { q: 'Une piscine augmente-t-elle la valeur de mon bien immobilier ?', a: 'Oui, une piscine enterrée bien entretenue peut augmenter la valeur d\'une maison de 5 à 15 % selon la région (davantage dans le sud). En revanche, elle augmente aussi la taxe foncière (via la taxe d\'aménagement de 200 \u20AC/m²) et les charges d\'assurance habitation. Dans les régions au nord de la Loire, la plus-value est plus limitée.' },
+      { q: 'Faut-il un permis de construire pour une piscine ?', a: 'Pas de formalité pour les piscines de moins de 10 m². Déclaration préalable de travaux pour les piscines de 10 à 100 m². Permis de construire obligatoire au-delà de 100 m² ou pour les piscines couvertes de plus de 1,80 m de hauteur. La taxe d\'aménagement s\'applique à toutes les piscines de plus de 10 m² (200 €/m² en 2025).' },
+      { q: 'Piscine coque ou béton : laquelle choisir ?', a: 'La piscine coque polyester est moins chère (15 000 à 25 000 € pour 8×4 m), plus rapide à installer (1 à 2 semaines) et facile d\'entretien, mais les formes et dimensions sont limitées au catalogue du fabricant. La piscine béton (25 000 à 50 000 €) permet toutes les formes et dimensions sur mesure, mais nécessite 2 à 3 mois de travaux. Le béton est plus durable (50 ans+) que la coque (20 à 25 ans).' },
+      { q: 'Quel système de traitement d\'eau choisir ?', a: 'Le chlore reste le plus économique (200 à 400 €/an) mais peut irriter la peau et les yeux. L\'électrolyse au sel (1 500 à 3 000 € d\'investissement) est plus confortable et économique sur le long terme. Le traitement UV ou à l\'ozone (2 000 à 4 000 €) réduit drastiquement l\'usage de produits chimiques. Le brome est recommandé pour les piscines chauffées (spa, couverture).' },
+      { q: 'Combien coûte l\'entretien annuel d\'une piscine ?', a: 'Le budget annuel d\'entretien varie de 500 à 1 500 € selon la taille et le système de traitement : produits chimiques (200 à 500 €), électricité pour la filtration (300 à 600 €), remplacement de pièces d\'usure (100 à 300 €), hivernage et mise en route (200 à 400 € si réalisés par un professionnel). Un robot nettoyeur automatique (800 à 2 000 €) réduit le temps d\'entretien manuel.' },
+      { q: 'Une piscine augmente-t-elle la valeur de mon bien immobilier ?', a: 'Oui, une piscine enterrée bien entretenue peut augmenter la valeur d\'une maison de 5 à 15 % selon la région (davantage dans le sud). En revanche, elle augmente aussi la taxe foncière (via la taxe d\'aménagement de 200 €/m²) et les charges d\'assurance habitation. Dans les régions au nord de la Loire, la plus-value est plus limitée.' },
     ],
     emergencyInfo:
       'Pas de service d\'urgence pour la construction de piscine. En cas de fuite de votre piscine existante ou de panne du système de filtration, contactez votre pisciniste pour un diagnostic sous 48h à 1 semaine.',
@@ -1769,13 +1769,13 @@ export const tradeContent: Record<string, TradeContent> = {
   'alarme-securite': {
     slug: 'alarme-securite',
     name: 'Alarme et sécurité',
-    priceRange: { min: 500, max: 3000, unit: '\u20AC' },
+    priceRange: { min: 500, max: 3000, unit: '€' },
     commonTasks: [
-      'Alarme sans fil (maison 100 m²) : 500 à 1 500 \u20AC',
-      'Vidéosurveillance (4 caméras) : 1 000 à 3 000 \u20AC',
-      'Interphone/visiophone : 300 à 1 500 \u20AC',
-      'Contrôle d\'accès (digicode, badge) : 500 à 2 000 \u20AC',
-      'Télésurveillance (abonnement) : 20 à 50 \u20AC/mois',
+      'Alarme sans fil (maison 100 m²) : 500 à 1 500 €',
+      'Vidéosurveillance (4 caméras) : 1 000 à 3 000 €',
+      'Interphone/visiophone : 300 à 1 500 €',
+      'Contrôle d\'accès (digicode, badge) : 500 à 2 000 €',
+      'Télésurveillance (abonnement) : 20 à 50 €/mois',
     ],
     tips: [
       'Privilégiez les systèmes certifiés NF A2P (1 à 3 boucliers) — c\'est un gage de fiabilité reconnu par les assurances.',
@@ -1788,8 +1788,8 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Mon assurance baisse-t-elle avec une alarme ?', a: 'Oui, la plupart des assureurs accordent une réduction de 5 à 15 % sur la prime habitation pour un système d\'alarme certifié NF A2P avec télésurveillance. Certains contrats exigent même une alarme pour couvrir les objets de valeur supérieure à un certain montant.' },
       { q: 'Alarme filaire ou sans fil : que choisir ?', a: 'L\'alarme sans fil est la plus répandue en résidentiel : installation rapide (1 journée), pas de travaux de câblage, et elle se déplace facilement en cas de déménagement. L\'alarme filaire est plus fiable (pas de problème de batterie ni d\'interférence radio), idéale pour les grandes maisons ou les locaux professionnels, mais nécessite des travaux d\'installation plus importants.' },
       { q: 'Peut-on installer une caméra de vidéosurveillance chez soi sans autorisation ?', a: 'Chez un particulier, aucune autorisation n\'est requise tant que les caméras ne filment que votre propriété privée (jardin, entrée, garage). Il est interdit de filmer la voie publique, le trottoir ou la propriété des voisins. En copropriété, l\'installation dans les parties communes nécessite un vote en assemblée générale. Vous devez informer vos visiteurs par un panneau visible.' },
-      { q: 'La télésurveillance vaut-elle le coût de l\'abonnement ?', a: 'L\'abonnement de télésurveillance (20 à 50 \u20AC/mois) inclut la surveillance 24h/24 par un opérateur qui lève le doute en cas d\'alerte et prévient les forces de l\'ordre si nécessaire. C\'est particulièrement utile si vous vous absentez souvent ou si vous avez une résidence secondaire. Sans télésurveillance, l\'alarme ne fait que sonner localement, ce qui est peu dissuasif en zone isolée.' },
-      { q: 'Combien de détecteurs faut-il pour protéger une maison ?', a: 'Pour une maison standard de 100 m² sur un niveau : 1 centrale, 1 détecteur d\'ouverture par porte/fenêtre accessible (6 à 10), 2 à 3 détecteurs de mouvement pour les zones de passage intérieures, 1 sirène extérieure et 2 télécommandes. Comptez 500 à 1 500 \u20AC pour un kit complet sans fil certifié NF A2P, hors pose professionnelle (200 à 500 \u20AC).' },
+      { q: 'La télésurveillance vaut-elle le coût de l\'abonnement ?', a: 'L\'abonnement de télésurveillance (20 à 50 €/mois) inclut la surveillance 24h/24 par un opérateur qui lève le doute en cas d\'alerte et prévient les forces de l\'ordre si nécessaire. C\'est particulièrement utile si vous vous absentez souvent ou si vous avez une résidence secondaire. Sans télésurveillance, l\'alarme ne fait que sonner localement, ce qui est peu dissuasif en zone isolée.' },
+      { q: 'Combien de détecteurs faut-il pour protéger une maison ?', a: 'Pour une maison standard de 100 m² sur un niveau : 1 centrale, 1 détecteur d\'ouverture par porte/fenêtre accessible (6 à 10), 2 à 3 détecteurs de mouvement pour les zones de passage intérieures, 1 sirène extérieure et 2 télécommandes. Comptez 500 à 1 500 € pour un kit complet sans fil certifié NF A2P, hors pose professionnelle (200 à 500 €).' },
     ],
     emergencyInfo:
       'Intervention d\'urgence pour système d\'alarme en panne, caméra de vidéosurveillance défaillante ou intrusion détectée. Un technicien en sécurité peut intervenir sous 2 à 4 heures pour diagnostiquer et remettre en service votre installation. Majorations : +80 à 120 % la nuit et le week-end.',
@@ -1800,13 +1800,13 @@ export const tradeContent: Record<string, TradeContent> = {
   antenniste: {
     slug: 'antenniste',
     name: 'Antenniste',
-    priceRange: { min: 100, max: 400, unit: '\u20AC' },
+    priceRange: { min: 100, max: 400, unit: '€' },
     commonTasks: [
-      'Installation antenne TNT : 100 à 250 \u20AC',
-      'Installation parabole satellite : 150 à 400 \u20AC',
-      'Raccordement fibre optique intérieur : 100 à 300 \u20AC',
-      'Amplificateur de signal TNT : 80 à 200 \u20AC',
-      'Câblage coaxial ou Ethernet : 30 à 60 \u20AC/point',
+      'Installation antenne TNT : 100 à 250 €',
+      'Installation parabole satellite : 150 à 400 €',
+      'Raccordement fibre optique intérieur : 100 à 300 €',
+      'Amplificateur de signal TNT : 80 à 200 €',
+      'Câblage coaxial ou Ethernet : 30 à 60 €/point',
     ],
     tips: [
       'Depuis 2023, la TNT en Ultra HD (DVB-T2) se déploie progressivement. Vérifiez que votre installation est compatible.',
@@ -1818,9 +1818,9 @@ export const tradeContent: Record<string, TradeContent> = {
     faq: [
       { q: 'TNT, satellite ou box internet : que choisir ?', a: 'La TNT est gratuite et couvre 97 % du territoire mais offre moins de chaînes. Le satellite (Canal+, Fransat) offre plus de chaînes mais nécessite une parabole. La box internet ADSL/fibre propose la TV via le réseau internet avec replay et VOD inclus. En zone blanche (pas de fibre ni de bonne couverture TNT), le satellite reste la meilleure option.' },
       { q: 'Pourquoi ma réception TNT est-elle mauvaise ?', a: 'Les causes les plus fréquentes sont : une antenne mal orientée ou vieillissante, un câble coaxial abîmé ou trop ancien (préférez le câble de type 17 VATC), des interférences 4G/5G (nécessitant un filtre LTE), un amplificateur défaillant ou des prises murales oxydées. Un antenniste peut diagnostiquer le problème en mesurant le signal à chaque point du réseau.' },
-      { q: 'Combien coûte le raccordement fibre optique intérieur ?', a: 'Le raccordement de la fibre depuis le point de branchement optique (PBO) jusqu\'à la prise terminale optique (PTO) est gratuit et réalisé par l\'opérateur. En revanche, si vous souhaitez plusieurs prises Ethernet dans différentes pièces ou un câblage encastré, un antenniste facture 100 à 300 \u20AC par point de desserte, plus le passage de gaines si nécessaire.' },
+      { q: 'Combien coûte le raccordement fibre optique intérieur ?', a: 'Le raccordement de la fibre depuis le point de branchement optique (PBO) jusqu\'à la prise terminale optique (PTO) est gratuit et réalisé par l\'opérateur. En revanche, si vous souhaitez plusieurs prises Ethernet dans différentes pièces ou un câblage encastré, un antenniste facture 100 à 300 € par point de desserte, plus le passage de gaines si nécessaire.' },
       { q: 'Faut-il une autorisation pour installer une parabole ?', a: 'En maison individuelle, aucune autorisation n\'est requise sauf en zone protégée (ABF). En copropriété, le règlement peut interdire les paraboles en façade, mais la loi du 2 juillet 1966 garantit le « droit à l\'antenne » : le syndic ne peut pas refuser si aucune antenne collective ne fournit un service équivalent. La parabole doit être discrète et ne pas nuire à l\'esthétique du bâtiment.' },
-      { q: 'Mon antenne TNT est-elle compatible avec la nouvelle norme DVB-T2 ?', a: 'L\'antenne elle-même (râteau UHF) est généralement compatible : c\'est le décodeur TNT ou le téléviseur qui doit supporter le DVB-T2/HEVC. Les téléviseurs vendus depuis 2020 intègrent généralement cette norme. Si votre téléviseur est plus ancien, un décodeur TNT HD compatible DVB-T2 coûte 30 à 60 \u20AC. Vérifiez sur le site recevoirlatnt.fr.' },
+      { q: 'Mon antenne TNT est-elle compatible avec la nouvelle norme DVB-T2 ?', a: 'L\'antenne elle-même (râteau UHF) est généralement compatible : c\'est le décodeur TNT ou le téléviseur qui doit supporter le DVB-T2/HEVC. Les téléviseurs vendus depuis 2020 intègrent généralement cette norme. Si votre téléviseur est plus ancien, un décodeur TNT HD compatible DVB-T2 coûte 30 à 60 €. Vérifiez sur le site recevoirlatnt.fr.' },
     ],
     emergencyInfo:
       'Pas de service d\'urgence pour l\'installation d\'antennes ou de paraboles. Pour une panne de réception TNT ou satellite, un antenniste peut intervenir sous 48h à 1 semaine pour un diagnostic et une réparation.',
@@ -1831,13 +1831,13 @@ export const tradeContent: Record<string, TradeContent> = {
   ascensoriste: {
     slug: 'ascensoriste',
     name: 'Ascensoriste',
-    priceRange: { min: 15000, max: 50000, unit: '\u20AC' },
+    priceRange: { min: 15000, max: 50000, unit: '€' },
     commonTasks: [
-      'Installation ascenseur 3 étages : 20 000 à 50 000 \u20AC',
-      'Monte-escalier (1 étage) : 3 500 à 8 000 \u20AC',
-      'Plateforme élévatrice PMR : 8 000 à 15 000 \u20AC',
-      'Contrat de maintenance annuel : 1 500 à 4 000 \u20AC',
-      'Modernisation d\'ascenseur existant : 10 000 à 30 000 \u20AC',
+      'Installation ascenseur 3 étages : 20 000 à 50 000 €',
+      'Monte-escalier (1 étage) : 3 500 à 8 000 €',
+      'Plateforme élévatrice PMR : 8 000 à 15 000 €',
+      'Contrat de maintenance annuel : 1 500 à 4 000 €',
+      'Modernisation d\'ascenseur existant : 10 000 à 30 000 €',
     ],
     tips: [
       'Le contrat de maintenance est obligatoire (décret du 9 septembre 2004). Comparez les offres : certains contrats incluent les pièces d\'usure, d\'autres non.',
@@ -1847,10 +1847,10 @@ export const tradeContent: Record<string, TradeContent> = {
       'Pour l\'installation d\'un monte-escalier, demandez une démonstration à domicile avant d\'acheter : chaque escalier est différent (courbe, largeur, palier intermédiaire) et le confort d\'utilisation doit être testé in situ.',
     ],
     faq: [
-      { q: 'Quelles aides pour un monte-escalier ?', a: 'MaPrimeAdapt\' (jusqu\'à 70 % pour les revenus modestes), TVA réduite à 5,5 %, crédit d\'impôt de 25 % (plafonné à 5 000 \u20AC pour une personne seule), aides des caisses de retraite et de l\'ANAH. Le reste à charge peut être inférieur à 1 000 \u20AC pour un ménage modeste.' },
-      { q: 'Peut-on installer un ascenseur dans une maison individuelle ?', a: 'Oui, il existe des ascenseurs privatifs compacts (cabine de 1 m² environ) qui s\'installent dans une trémie de 1,20 × 1,20 m ou à l\'extérieur du bâtiment. Le coût varie de 15 000 à 40 000 \u20AC selon le nombre d\'étages et le type (hydraulique, électrique, pneumatique). Un permis de construire est nécessaire si l\'installation modifie la structure ou la façade du bâtiment.' },
-      { q: 'Monte-escalier droit ou tournant : quelle différence de prix ?', a: 'Un monte-escalier pour escalier droit coûte 3 500 à 5 000 \u20AC car le rail est standard. Pour un escalier tournant ou avec palier, le rail est fabriqué sur mesure, ce qui porte le prix à 6 000 à 12 000 \u20AC. L\'installation prend 2 à 4 heures pour un droit et une journée pour un tournant. Les deux types bénéficient des mêmes aides financières.' },
-      { q: 'Quel est le coût de maintenance d\'un ascenseur en copropriété ?', a: 'Le contrat de maintenance annuel coûte 1 500 à 4 000 \u20AC selon le type d\'ascenseur et le niveau de prestation (normal ou complet). La loi impose un entretien mensuel, un contrôle semestriel de sécurité et un contrôle technique quinquennal par un organisme indépendant (1 000 à 2 000 \u20AC). Le budget total annuel pour un ascenseur est de 2 500 à 6 000 \u20AC.' },
+      { q: 'Quelles aides pour un monte-escalier ?', a: 'MaPrimeAdapt\' (jusqu\'à 70 % pour les revenus modestes), TVA réduite à 5,5 %, crédit d\'impôt de 25 % (plafonné à 5 000 € pour une personne seule), aides des caisses de retraite et de l\'ANAH. Le reste à charge peut être inférieur à 1 000 € pour un ménage modeste.' },
+      { q: 'Peut-on installer un ascenseur dans une maison individuelle ?', a: 'Oui, il existe des ascenseurs privatifs compacts (cabine de 1 m² environ) qui s\'installent dans une trémie de 1,20 × 1,20 m ou à l\'extérieur du bâtiment. Le coût varie de 15 000 à 40 000 € selon le nombre d\'étages et le type (hydraulique, électrique, pneumatique). Un permis de construire est nécessaire si l\'installation modifie la structure ou la façade du bâtiment.' },
+      { q: 'Monte-escalier droit ou tournant : quelle différence de prix ?', a: 'Un monte-escalier pour escalier droit coûte 3 500 à 5 000 € car le rail est standard. Pour un escalier tournant ou avec palier, le rail est fabriqué sur mesure, ce qui porte le prix à 6 000 à 12 000 €. L\'installation prend 2 à 4 heures pour un droit et une journée pour un tournant. Les deux types bénéficient des mêmes aides financières.' },
+      { q: 'Quel est le coût de maintenance d\'un ascenseur en copropriété ?', a: 'Le contrat de maintenance annuel coûte 1 500 à 4 000 € selon le type d\'ascenseur et le niveau de prestation (normal ou complet). La loi impose un entretien mensuel, un contrôle semestriel de sécurité et un contrôle technique quinquennal par un organisme indépendant (1 000 à 2 000 €). Le budget total annuel pour un ascenseur est de 2 500 à 6 000 €.' },
       { q: 'Quelles sont les normes de sécurité pour un ascenseur ?', a: 'Les ascenseurs doivent respecter la directive européenne 2014/33/UE et la norme NF EN 81-20. Les travaux de modernisation obligatoires (loi SAE de 2003) incluent : porte palière verrouillée, dispositif anti-vandalisme, système de télécommunication en cabine, précision d\'arrêt et d\'horizontalité, et dispositif de protection contre la vitesse excessive.' },
     ],
     emergencyInfo:
@@ -1862,13 +1862,13 @@ export const tradeContent: Record<string, TradeContent> = {
   diagnostiqueur: {
     slug: 'diagnostiqueur',
     name: 'Diagnostiqueur',
-    priceRange: { min: 100, max: 600, unit: '\u20AC' },
+    priceRange: { min: 100, max: 600, unit: '€' },
     commonTasks: [
-      'DPE (Diagnostic de Performance Énergétique) : 100 à 250 \u20AC',
-      'Pack diagnostics vente (DPE + amiante + plomb + électricité + gaz + termites) : 300 à 600 \u20AC',
-      'Diagnostic amiante : 80 à 150 \u20AC',
-      'Diagnostic plomb (CREP) : 100 à 200 \u20AC',
-      'Diagnostic électricité ou gaz : 100 à 150 \u20AC',
+      'DPE (Diagnostic de Performance Énergétique) : 100 à 250 €',
+      'Pack diagnostics vente (DPE + amiante + plomb + électricité + gaz + termites) : 300 à 600 €',
+      'Diagnostic amiante : 80 à 150 €',
+      'Diagnostic plomb (CREP) : 100 à 200 €',
+      'Diagnostic électricité ou gaz : 100 à 150 €',
     ],
     tips: [
       'Le DPE est obligatoire pour toute vente ou location depuis 2006. Depuis 2021, il est opposable juridiquement : un mauvais DPE peut entraîner une action en justice.',
@@ -1893,13 +1893,13 @@ export const tradeContent: Record<string, TradeContent> = {
   geometre: {
     slug: 'geometre',
     name: 'Géomètre',
-    priceRange: { min: 500, max: 3000, unit: '\u20AC' },
+    priceRange: { min: 500, max: 3000, unit: '€' },
     commonTasks: [
-      'Bornage de terrain : 800 à 2 000 \u20AC',
-      'Division parcellaire : 1 000 à 3 000 \u20AC',
-      'Plan topographique : 500 à 1 500 \u20AC',
-      'Plan de masse (permis de construire) : 300 à 800 \u20AC',
-      'Implantation de construction : 500 à 1 500 \u20AC',
+      'Bornage de terrain : 800 à 2 000 €',
+      'Division parcellaire : 1 000 à 3 000 €',
+      'Plan topographique : 500 à 1 500 €',
+      'Plan de masse (permis de construire) : 300 à 800 €',
+      'Implantation de construction : 500 à 1 500 €',
     ],
     tips: [
       'Seul un géomètre-expert inscrit à l\'Ordre peut réaliser un bornage officiel — les documents produits par un géomètre non inscrit n\'ont pas de valeur juridique.',
@@ -1911,8 +1911,8 @@ export const tradeContent: Record<string, TradeContent> = {
     faq: [
       { q: 'Quelle est la différence entre bornage et cadastre ?', a: 'Le bornage fixe les limites réelles de propriété sur le terrain (bornes physiques + procès-verbal). Le cadastre est un document fiscal qui donne les limites indicatives. En cas de contradiction, le bornage prévaut. Le cadastre n\'a pas de valeur juridique pour déterminer les limites de propriété.' },
       { q: 'Mon voisin peut-il refuser un bornage ?', a: 'Non, le bornage est un droit imprescriptible prévu par l\'article 646 du Code civil. Si votre voisin refuse de participer au bornage amiable, vous pouvez saisir le tribunal judiciaire pour demander un bornage judiciaire. Le juge désignera un géomètre-expert et les frais seront partagés entre les deux parties. La procédure dure 6 à 18 mois.' },
-      { q: 'Combien coûte un bornage de terrain ?', a: 'Le bornage amiable coûte entre 800 et 2 000 \u20AC selon la taille du terrain, le nombre de bornes à poser et la complexité (terrain en pente, accès difficile, nombreux voisins). Le bornage judiciaire est plus cher (2 000 à 5 000 \u20AC) en raison des frais de procédure. Les honoraires sont libres mais doivent être annoncés par devis préalable.' },
-      { q: 'Qu\'est-ce qu\'une division parcellaire ?', a: 'La division parcellaire consiste à diviser un terrain en deux ou plusieurs lots constructibles. Le géomètre-expert réalise le plan de division, dépose le dossier en mairie et procède au bornage des nouveaux lots. Cette opération est obligatoire pour vendre une partie de son terrain. Le coût est de 1 000 à 3 000 \u20AC et le délai de 1 à 3 mois.' },
+      { q: 'Combien coûte un bornage de terrain ?', a: 'Le bornage amiable coûte entre 800 et 2 000 € selon la taille du terrain, le nombre de bornes à poser et la complexité (terrain en pente, accès difficile, nombreux voisins). Le bornage judiciaire est plus cher (2 000 à 5 000 €) en raison des frais de procédure. Les honoraires sont libres mais doivent être annoncés par devis préalable.' },
+      { q: 'Qu\'est-ce qu\'une division parcellaire ?', a: 'La division parcellaire consiste à diviser un terrain en deux ou plusieurs lots constructibles. Le géomètre-expert réalise le plan de division, dépose le dossier en mairie et procède au bornage des nouveaux lots. Cette opération est obligatoire pour vendre une partie de son terrain. Le coût est de 1 000 à 3 000 € et le délai de 1 à 3 mois.' },
       { q: 'Le géomètre-expert est-il nécessaire pour un permis de construire ?', a: 'Ce n\'est pas une obligation légale, mais le plan topographique et le plan de masse (pièces PCMI 2 et PCMI 3) réalisés par un géomètre-expert sont beaucoup plus précis que ceux faits par un non-professionnel. Pour les projets complexes (terrain en pente, limite de propriété proche), le recours au géomètre est vivement recommandé pour éviter un refus de permis.' },
     ],
     emergencyInfo:
@@ -1924,13 +1924,13 @@ export const tradeContent: Record<string, TradeContent> = {
   desinsectisation: {
     slug: 'desinsectisation',
     name: 'Désinsectisation',
-    priceRange: { min: 80, max: 300, unit: '\u20AC' },
+    priceRange: { min: 80, max: 300, unit: '€' },
     commonTasks: [
-      'Traitement punaises de lit (appartement) : 200 à 600 \u20AC',
-      'Traitement cafards/blattes : 80 à 250 \u20AC',
-      'Destruction de nid de guêpes/frelons : 80 à 200 \u20AC',
-      'Traitement anti-moustiques (jardin) : 150 à 400 \u20AC',
-      'Traitement termites : 1 500 à 4 000 \u20AC',
+      'Traitement punaises de lit (appartement) : 200 à 600 €',
+      'Traitement cafards/blattes : 80 à 250 €',
+      'Destruction de nid de guêpes/frelons : 80 à 200 €',
+      'Traitement anti-moustiques (jardin) : 150 à 400 €',
+      'Traitement termites : 1 500 à 4 000 €',
     ],
     tips: [
       'Pour les punaises de lit, un minimum de 2 passages à 15 jours d\'intervalle est nécessaire pour éliminer les œufs qui éclosent après le premier traitement.',
@@ -1939,12 +1939,12 @@ export const tradeContent: Record<string, TradeContent> = {
       'Après un traitement contre les cafards, ne nettoyez pas les zones traitées pendant au moins 15 jours : le produit insecticide continue d\'agir par contact sur les insectes survivants.',
       'Pour prévenir le retour des punaises de lit après traitement, placez des housses anti-punaises sur les matelas et sommiers et inspectez régulièrement les coutures et les recoins du lit.',
     ],
-    emergencyInfo: 'Pour un nid de guêpes ou frelons dangereux (proximité de passage fréquenté), un désinsectiseur peut intervenir en urgence sous 24h. Coût : 100 à 250 \u20AC.',
+    emergencyInfo: 'Pour un nid de guêpes ou frelons dangereux (proximité de passage fréquenté), un désinsectiseur peut intervenir en urgence sous 24h. Coût : 100 à 250 €.',
     faq: [
       { q: 'Les punaises de lit sont-elles un signe de saleté ?', a: 'Non, les punaises de lit ne sont pas liées à l\'hygiène. Elles se transportent via les bagages, les vêtements et les meubles d\'occasion. Même les hôtels 5 étoiles peuvent être touchés. Le traitement professionnel (thermique ou chimique) est la seule solution efficace.' },
       { q: 'Traitement thermique ou chimique contre les punaises de lit ?', a: 'Le traitement thermique (vapeur sèche à 180°C ou canon à chaleur) tue les punaises et leurs œufs en une seule intervention, sans produit chimique. Il coûte 30 à 50 % plus cher que le traitement chimique mais est plus rapide et sans résidu. Le traitement chimique (insecticide professionnel) est efficace mais nécessite 2 à 3 passages car les œufs résistent au premier traitement.' },
       { q: 'Comment reconnaître des punaises de lit ?', a: 'Les punaises de lit adultes mesurent 5 à 7 mm, sont ovales, plates et de couleur brun-rougeâtre. Les signes d\'infestation sont : piqûres en ligne ou en grappe sur la peau au réveil, petites taches noires (déjections) sur le matelas et les draps, traces de sang sur les draps, et une odeur douceâtre dans les cas avancés. Elles se cachent dans les coutures des matelas, les fissures du sommier et derrière les têtes de lit.' },
-      { q: 'Les produits anti-cafards du commerce sont-ils efficaces ?', a: 'Les gels et pièges vendus en grande surface peuvent traiter une infestation légère (quelques individus). Pour une infestation établie (plusieurs dizaines d\'individus, présence en journée), seul un traitement professionnel avec des biocides à usage restreint (non accessibles au public) garantit une éradication complète. Le coût professionnel (80 à 250 \u20AC) est vite amorti face à une infestation qui s\'aggrave.' },
+      { q: 'Les produits anti-cafards du commerce sont-ils efficaces ?', a: 'Les gels et pièges vendus en grande surface peuvent traiter une infestation légère (quelques individus). Pour une infestation établie (plusieurs dizaines d\'individus, présence en journée), seul un traitement professionnel avec des biocides à usage restreint (non accessibles au public) garantit une éradication complète. Le coût professionnel (80 à 250 €) est vite amorti face à une infestation qui s\'aggrave.' },
       { q: 'Le propriétaire ou le locataire doit-il payer la désinsectisation ?', a: 'En cas de punaises de lit, la loi Elan (2018) impose au propriétaire de prendre en charge le traitement, sauf si le locataire est à l\'origine de l\'infestation (ce qui est difficile à prouver). Pour les cafards, le propriétaire doit livrer un logement décent exempt de nuisibles. L\'entretien courant (prévention) reste à la charge du locataire. En copropriété, le syndic peut faire traiter les parties communes.' },
     ],
     certifications: ['Certibiocide nuisibles TP14/TP18 (obligatoire — valable 5 ans)', 'Certification CS3D (Chambre Syndicale 3D — Dératisation, Désinsectisation, Désinfection)', 'Assurance RC professionnelle (obligatoire)', 'Déclaration d\'activité biocides auprès de l\'ANSES'],
@@ -1954,13 +1954,13 @@ export const tradeContent: Record<string, TradeContent> = {
   deratisation: {
     slug: 'deratisation',
     name: 'Dératisation',
-    priceRange: { min: 80, max: 300, unit: '\u20AC' },
+    priceRange: { min: 80, max: 300, unit: '€' },
     commonTasks: [
-      'Dératisation maison/appartement : 80 à 200 \u20AC',
-      'Dératisation local commercial : 150 à 400 \u20AC',
-      'Contrat annuel de prévention (4 passages) : 300 à 800 \u20AC',
-      'Traitement fouines/loirs : 150 à 350 \u20AC',
-      'Rebouchage des accès (grillage, mousse expansive) : 100 à 300 \u20AC',
+      'Dératisation maison/appartement : 80 à 200 €',
+      'Dératisation local commercial : 150 à 400 €',
+      'Contrat annuel de prévention (4 passages) : 300 à 800 €',
+      'Traitement fouines/loirs : 150 à 350 €',
+      'Rebouchage des accès (grillage, mousse expansive) : 100 à 300 €',
     ],
     tips: [
       'La dératisation est obligatoire dans les locaux à usage professionnel (restaurants, commerces alimentaires) — un contrat annuel est recommandé.',
@@ -1985,13 +1985,13 @@ export const tradeContent: Record<string, TradeContent> = {
   demenageur: {
     slug: 'demenageur',
     name: 'Déménageur',
-    priceRange: { min: 500, max: 3000, unit: '\u20AC' },
+    priceRange: { min: 500, max: 3000, unit: '€' },
     commonTasks: [
-      'Déménagement studio (30 m²) même ville : 400 à 800 \u20AC',
-      'Déménagement T3 (60 m²) même ville : 800 à 1 500 \u20AC',
-      'Déménagement T3 longue distance (500 km) : 1 500 à 3 000 \u20AC',
-      'Déménagement maison (120 m²) : 2 000 à 5 000 \u20AC',
-      'Garde-meubles : 50 à 200 \u20AC/m³/mois',
+      'Déménagement studio (30 m²) même ville : 400 à 800 €',
+      'Déménagement T3 (60 m²) même ville : 800 à 1 500 €',
+      'Déménagement T3 longue distance (500 km) : 1 500 à 3 000 €',
+      'Déménagement maison (120 m²) : 2 000 à 5 000 €',
+      'Garde-meubles : 50 à 200 €/m³/mois',
     ],
     tips: [
       'Demandez 3 devis minimum et vérifiez que le déménageur est immatriculé au registre des transporteurs (numéro DREAL).',
@@ -2004,7 +2004,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Quand réserver son déménageur ?', a: 'Réservez 4 à 6 semaines à l\'avance en période creuse (octobre-mars) et 8 à 12 semaines en période haute (juin-septembre). Les premiers et derniers jours du mois sont les plus demandés. Un déménagement en milieu de mois et en semaine est souvent 20 à 30 % moins cher.' },
       { q: 'Comment vérifier si un déménageur est sérieux ?', a: 'Vérifiez qu\'il possède une immatriculation DREAL (registre des transporteurs, obligatoire), une assurance responsabilité civile professionnelle et idéalement le label NF Service Déménagement. Consultez les avis en ligne et demandez des références. Méfiez-vous des devis par téléphone sans visite à domicile et des prix très inférieurs au marché.' },
       { q: 'Que faire en cas de casse ou de perte pendant le déménagement ?', a: 'Notez les réserves directement sur le bon de livraison le jour du déménagement (« carton X abîmé », « meuble rayé »). Confirmez par lettre recommandée AR dans les 10 jours. L\'indemnisation dépend de l\'assurance souscrite : la couverture de base rembourse au poids (très peu), tandis que l\'assurance « valeur déclarée » rembourse à la valeur réelle. Conservez les factures d\'achat des objets de valeur.' },
-      { q: 'Combien de cartons faut-il pour un déménagement ?', a: 'En moyenne, comptez 20 à 30 cartons pour un studio, 40 à 60 pour un T3 et 80 à 120 pour une maison. La plupart des déménageurs professionnels fournissent les cartons dans le devis (ou les facturent 2 à 5 \u20AC pièce). Récupérer des cartons gratuits en supermarché est possible mais vérifiez leur solidité — un carton qui cède peut endommager son contenu.' },
+      { q: 'Combien de cartons faut-il pour un déménagement ?', a: 'En moyenne, comptez 20 à 30 cartons pour un studio, 40 à 60 pour un T3 et 80 à 120 pour une maison. La plupart des déménageurs professionnels fournissent les cartons dans le devis (ou les facturent 2 à 5 € pièce). Récupérer des cartons gratuits en supermarché est possible mais vérifiez leur solidité — un carton qui cède peut endommager son contenu.' },
       { q: 'Peut-on déménager ses plantes et son électroménager ?', a: 'Les plantes ne sont pas couvertes par l\'assurance du déménageur et voyagent sous votre responsabilité. Transportez-les vous-même si possible. Pour l\'électroménager, le lave-linge doit être vidangé et ses tambours calés avec les vis de transport. Le réfrigérateur doit être débranché 24h à l\'avance et transporté debout. Le déménageur peut refuser ces appareils s\'ils ne sont pas préparés.' },
     ],
     emergencyInfo:

@@ -54,7 +54,7 @@ function getRegionalMultiplier(region: string): number {
     'Pays de la Loire': 1.00,
     'Normandie': 0.95,
     'Centre-Val de Loire': 0.95,
-    'Bourgogne-Franche-Comt\u00E9': 0.95,
+    'Bourgogne-Franche-Comté': 0.95,
     'Corse': 1.10,
   }
   return multipliers[region] ?? 1.0
@@ -66,29 +66,29 @@ function formatNumber(n: number): string {
 
 function getClimatLabel(zone: string | null): string {
   const labels: Record<string, string> = {
-    oceanique: 'Climat oc\u00E9anique',
-    'semi-oceanique': 'Climat semi-oc\u00E9anique',
+    oceanique: 'Climat océanique',
+    'semi-oceanique': 'Climat semi-océanique',
     continental: 'Climat continental',
-    mediterraneen: 'Climat m\u00E9diterran\u00E9en',
+    mediterraneen: 'Climat méditerranéen',
     montagnard: 'Climat montagnard',
   }
-  return zone ? (labels[zone] ?? zone) : 'Climat temp\u00E9r\u00E9'
+  return zone ? (labels[zone] ?? zone) : 'Climat tempéré'
 }
 
 function getSeasonalTip(zone: string | null, serviceName: string): string {
   if (zone === 'mediterraneen') {
-    return `\u00C0 noter : le climat m\u00E9diterran\u00E9en favorise les travaux ext\u00E9rieurs quasiment toute l\u2019ann\u00E9e. La demande de ${serviceName.toLowerCase()} peut \u00EAtre plus forte en \u00E9t\u00E9 avec l\u2019afflux de r\u00E9sidents saisonniers.`
+    return `\u00C0 noter : le climat méditerranéen favorise les travaux extérieurs quasiment toute l’année. La demande de ${serviceName.toLowerCase()} peut \u00EAtre plus forte en été avec l’afflux de résidents saisonniers.`
   }
   if (zone === 'montagnard') {
-    return `En zone de montagne, les conditions hivernales peuvent limiter certains travaux ext\u00E9rieurs et augmenter les d\u00E9lais d\u2019intervention. Pr\u00E9voyez vos travaux de ${serviceName.toLowerCase()} en amont.`
+    return `En zone de montagne, les conditions hivernales peuvent limiter certains travaux extérieurs et augmenter les délais d’intervention. Prévoyez vos travaux de ${serviceName.toLowerCase()} en amont.`
   }
   if (zone === 'continental') {
-    return `Avec un climat continental, les \u00E9carts de temp\u00E9rature sont importants. Les travaux de ${serviceName.toLowerCase()} li\u00E9s au chauffage et \u00E0 l\u2019isolation sont particuli\u00E8rement pertinents.`
+    return `Avec un climat continental, les écarts de température sont importants. Les travaux de ${serviceName.toLowerCase()} liés au chauffage et \u00E0 l’isolation sont particuli\u00E8rement pertinents.`
   }
   if (zone === 'oceanique' || zone === 'semi-oceanique') {
-    return `Le climat oc\u00E9anique implique une humidit\u00E9 fr\u00E9quente. Les interventions de ${serviceName.toLowerCase()} li\u00E9es \u00E0 l\u2019\u00E9tanch\u00E9it\u00E9 et \u00E0 la ventilation sont courantes.`
+    return `Le climat océanique implique une humidité fréquente. Les interventions de ${serviceName.toLowerCase()} liées \u00E0 l’étanchéité et \u00E0 la ventilation sont courantes.`
   }
-  return `Les conditions climatiques locales peuvent influencer le type et la fr\u00E9quence des interventions de ${serviceName.toLowerCase()}.`
+  return `Les conditions climatiques locales peuvent influencer le type et la fréquence des interventions de ${serviceName.toLowerCase()}.`
 }
 
 // ---------------------------------------------------------------------------
@@ -110,7 +110,7 @@ export async function generateMetadata({
   const minPrice = Math.round(trade.priceRange.min * multiplier)
   const maxPrice = Math.round(trade.priceRange.max * multiplier)
 
-  const title = `Tarifs ${tradeLower} \u00E0 ${villeData.name} 2026 \u2014 Prix et devis`
+  const title = `Tarifs ${tradeLower} \u00E0 ${villeData.name} 2026 — Prix et devis`
   const description = `Prix ${tradeLower} \u00E0 ${villeData.name} en 2026 : ${minPrice} \u00E0 ${maxPrice} ${trade.priceRange.unit}. Tarifs locaux, facteurs de prix et devis gratuit.`
 
   const canonicalUrl = `${SITE_URL}/tarifs-artisans/${service}/${villeSlug}`
@@ -239,12 +239,12 @@ export default async function TarifsServiceVillePage({
             <p className="text-xl text-slate-400 max-w-3xl mx-auto mb-4">
               Prix {tradeLower} {'\u00E0'} {villeData.name} ({villeData.departement}) :
               {' '}{minPrice} {'\u00E0'} {maxPrice} {trade.priceRange.unit}.
-              Tarifs adapt{'\u00E9'}s au march{'\u00E9'} local.
+              Tarifs adapt{'é'}s au march{'é'} local.
             </p>
             <div className="flex flex-wrap justify-center gap-3 mt-8">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
                 <Euro className="w-4 h-4 text-amber-400" />
-                <span>{minPrice} {'\u2013'} {maxPrice} {trade.priceRange.unit}</span>
+                <span>{minPrice} {'–'} {maxPrice} {trade.priceRange.unit}</span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
                 <MapPin className="w-4 h-4 text-amber-400" />
@@ -270,19 +270,19 @@ export default async function TarifsServiceVillePage({
             </h2>
             <div className="flex items-baseline justify-center gap-2">
               <span className="text-5xl font-bold text-blue-600">
-                {minPrice} {'\u2014'} {maxPrice}
+                {minPrice} {'—'} {maxPrice}
               </span>
               <span className="text-gray-600 text-lg">{trade.priceRange.unit}</span>
             </div>
             <p className="text-gray-500 text-sm mt-3">
-              Prix moyen constat{'\u00E9'} {'\u00E0'} {villeData.name} et ses alentours,
+              Prix moyen constat{'é'} {'\u00E0'} {villeData.name} et ses alentours,
               main-d&apos;oeuvre incluse
             </p>
             {multiplier !== 1.0 && (
               <p className="text-xs text-gray-400 mt-2">
                 {multiplier > 1.0
-                  ? `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((multiplier - 1) * 100)}\u00A0% sup\u00E9rieurs \u00E0 la moyenne nationale`
-                  : `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((1 - multiplier) * 100)}\u00A0% inf\u00E9rieurs \u00E0 la moyenne nationale`}
+                  ? `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((multiplier - 1) * 100)}\u00A0% supérieurs \u00E0 la moyenne nationale`
+                  : `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((1 - multiplier) * 100)}\u00A0% inférieurs \u00E0 la moyenne nationale`}
               </p>
             )}
           </div>
@@ -317,11 +317,11 @@ export default async function TarifsServiceVillePage({
             <LocalFactorCard
               icon={<Euro className="w-5 h-5 text-blue-600" />}
               title="Pouvoir d'achat local"
-              value={commune?.revenu_median ? `${formatNumber(commune.revenu_median)} \u20AC/an` : null}
+              value={commune?.revenu_median ? `${formatNumber(commune.revenu_median)} €/an` : null}
               description={
                 commune?.revenu_median
-                  ? `Le revenu m\u00E9dian \u00E0 ${villeData.name} est de ${formatNumber(commune.revenu_median)}\u00A0\u20AC par an, ce qui influence le positionnement tarifaire des artisans locaux.`
-                  : `Le pouvoir d\u2019achat local \u00E0 ${villeData.name} influence le niveau des tarifs pratiqu\u00E9s par les artisans.`
+                  ? `Le revenu médian \u00E0 ${villeData.name} est de ${formatNumber(commune.revenu_median)}\u00A0€ par an, ce qui influence le positionnement tarifaire des artisans locaux.`
+                  : `Le pouvoir d’achat local \u00E0 ${villeData.name} influence le niveau des tarifs pratiqués par les artisans.`
               }
             />
 
@@ -333,9 +333,9 @@ export default async function TarifsServiceVillePage({
               description={
                 commune?.nb_entreprises_artisanales
                   ? commune.nb_entreprises_artisanales > 500
-                    ? `Avec ${formatNumber(commune.nb_entreprises_artisanales)} entreprises artisanales, ${villeData.name} b\u00E9n\u00E9ficie d\u2019une forte concurrence, ce qui peut maintenir les prix comp\u00E9titifs.`
-                    : `${villeData.name} compte ${formatNumber(commune.nb_entreprises_artisanales)} entreprises artisanales. Une concurrence mod\u00E9r\u00E9e peut impliquer des tarifs l\u00E9g\u00E8rement plus \u00E9lev\u00E9s.`
-                  : `Le nombre d\u2019artisans disponibles \u00E0 ${villeData.name} influence directement les tarifs pratiqu\u00E9s.`
+                    ? `Avec ${formatNumber(commune.nb_entreprises_artisanales)} entreprises artisanales, ${villeData.name} bénéficie d’une forte concurrence, ce qui peut maintenir les prix compétitifs.`
+                    : `${villeData.name} compte ${formatNumber(commune.nb_entreprises_artisanales)} entreprises artisanales. Une concurrence modérée peut impliquer des tarifs lég\u00E8rement plus élevés.`
+                  : `Le nombre d’artisans disponibles \u00E0 ${villeData.name} influence directement les tarifs pratiqués.`
               }
             />
 
@@ -355,9 +355,9 @@ export default async function TarifsServiceVillePage({
               description={
                 commune?.part_maisons_pct
                   ? commune.part_maisons_pct > 50
-                    ? `\u00C0 ${villeData.name}, ${commune.part_maisons_pct}\u00A0% des logements sont des maisons individuelles. Les interventions sur maisons (toiture, fa\u00E7ade, jardin) sont fr\u00E9quentes.`
-                    : `\u00C0 ${villeData.name}, les appartements sont majoritaires (${100 - commune.part_maisons_pct}\u00A0%). Les travaux en copropri\u00E9t\u00E9 peuvent impliquer des contraintes sp\u00E9cifiques.`
-                  : `La r\u00E9partition entre maisons et appartements \u00E0 ${villeData.name} influence les types de travaux demand\u00E9s.`
+                    ? `\u00C0 ${villeData.name}, ${commune.part_maisons_pct}\u00A0% des logements sont des maisons individuelles. Les interventions sur maisons (toiture, fa\u00E7ade, jardin) sont fréquentes.`
+                    : `\u00C0 ${villeData.name}, les appartements sont majoritaires (${100 - commune.part_maisons_pct}\u00A0%). Les travaux en copropriété peuvent impliquer des contraintes spécifiques.`
+                  : `La répartition entre maisons et appartements \u00E0 ${villeData.name} influence les types de travaux demandés.`
               }
             />
           </div>
@@ -367,14 +367,14 @@ export default async function TarifsServiceVillePage({
             <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {commune.prix_m2_moyen && (
                 <div className="bg-white rounded-xl border border-gray-200 p-4 text-center">
-                  <div className="text-2xl font-bold text-gray-900">{formatNumber(commune.prix_m2_moyen)} {'\u20AC'}/m{'\u00B2'}</div>
+                  <div className="text-2xl font-bold text-gray-900">{formatNumber(commune.prix_m2_moyen)} {'€'}/m{'\u00B2'}</div>
                   <div className="text-sm text-gray-500 mt-1">Prix immobilier moyen</div>
                 </div>
               )}
               {commune.nb_artisans_rge && (
                 <div className="bg-white rounded-xl border border-gray-200 p-4 text-center">
                   <div className="text-2xl font-bold text-gray-900">{formatNumber(commune.nb_artisans_rge)}</div>
-                  <div className="text-sm text-gray-500 mt-1">Artisans RGE certifi{'\u00E9'}s</div>
+                  <div className="text-sm text-gray-500 mt-1">Artisans RGE certifi{'é'}s</div>
                 </div>
               )}
               {commune.population && (
@@ -411,7 +411,7 @@ export default async function TarifsServiceVillePage({
       <section className="py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
-            Questions fr{'\u00E9'}quentes {'\u2014'} {trade.name} {'\u00E0'} {villeData.name}
+            Questions fr{'é'}quentes {'—'} {trade.name} {'\u00E0'} {villeData.name}
           </h2>
           <div className="space-y-4">
             {trade.faq.slice(0, 5).map((item, i) => (
@@ -436,7 +436,7 @@ export default async function TarifsServiceVillePage({
             Trouver un {tradeLower} {'\u00E0'} {villeData.name}
           </h2>
           <p className="text-xl text-blue-100 mb-8">
-            Comparez les profils et obtenez un devis gratuit aupr{'\u00E8'}s de professionnels r{'\u00E9'}f{'\u00E9'}renc{'\u00E9'}s {'\u00E0'} {villeData.name}.
+            Comparez les profils et obtenez un devis gratuit aupr{'\u00E8'}s de professionnels r{'é'}f{'é'}renc{'é'}s {'\u00E0'} {villeData.name}.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
@@ -499,7 +499,7 @@ export default async function TarifsServiceVillePage({
                     {t.name} {'\u00E0'} {villeData.name}
                   </div>
                   <div className="text-xs text-gray-500 mt-1">
-                    {Math.round(t.priceRange.min * m)} {'\u2014'} {Math.round(t.priceRange.max * m)} {t.priceRange.unit}
+                    {Math.round(t.priceRange.min * m)} {'—'} {Math.round(t.priceRange.max * m)} {t.priceRange.unit}
                   </div>
                 </Link>
               )
@@ -523,7 +523,7 @@ export default async function TarifsServiceVillePage({
                   {trade.name} {'\u00E0'} {villeData.name}
                 </Link>
                 <Link href={`/services/${service}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
-                  {trade.name} {'\u2014'} tous les artisans
+                  {trade.name} {'—'} tous les artisans
                 </Link>
               </div>
             </div>
@@ -557,9 +557,9 @@ export default async function TarifsServiceVillePage({
       <section className="mb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
-            <h3 className="text-sm font-semibold text-slate-700 mb-2">M{'\u00E9'}thodologie tarifaire</h3>
+            <h3 className="text-sm font-semibold text-slate-700 mb-2">M{'é'}thodologie tarifaire</h3>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Les prix affich{'\u00E9'}s pour {villeData.name} sont des fourchettes indicatives ajust{'\u00E9'}es en fonction des donn{'\u00E9'}es r{'\u00E9'}gionales ({villeData.region}). Ils varient selon la complexit{'\u00E9'} du chantier, les mat{'\u00E9'}riaux et l&apos;urgence. Seul un devis personnalis{'\u00E9'} fait foi. {SITE_NAME} est un annuaire ind{'\u00E9'}pendant.
+              Les prix affich{'é'}s pour {villeData.name} sont des fourchettes indicatives ajust{'é'}es en fonction des donn{'é'}es r{'é'}gionales ({villeData.region}). Ils varient selon la complexit{'é'} du chantier, les mat{'é'}riaux et l&apos;urgence. Seul un devis personnalis{'é'} fait foi. {SITE_NAME} est un annuaire ind{'é'}pendant.
             </p>
           </div>
         </div>

@@ -28,7 +28,7 @@ interface PageProps {
 
 function truncateTitle(title: string, maxLen = 55): string {
   if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '\u2026'
+  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -44,7 +44,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const titleHash = Math.abs(hashCode(`title-dept-svc-${deptSlug}-${serviceSlug}`))
   const titleTemplates = [
     `${trade.name} dans le ${dept.name} (${dept.code})`,
-    `${trade.name} ${dept.name} \u2014 Devis gratuit`,
+    `${trade.name} ${dept.name} — Devis gratuit`,
     `Trouver un ${trade.name.toLowerCase()} en ${dept.name}`,
     `${trade.name} ${dept.code} : tarifs et devis`,
     `${dept.name} : ${trade.name.toLowerCase()} qualifié`,
@@ -53,9 +53,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const descHash = Math.abs(hashCode(`desc-dept-svc-${deptSlug}-${serviceSlug}`))
   const descTemplates = [
-    `Trouvez un ${trade.name.toLowerCase()} qualifié dans le ${dept.name} (${dept.code}). Tarif moyen : ${minPrice}\u2013${maxPrice} ${trade.priceRange.unit}. Devis gratuit, artisans vérifiés.`,
+    `Trouvez un ${trade.name.toLowerCase()} qualifié dans le ${dept.name} (${dept.code}). Tarif moyen : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Devis gratuit, artisans vérifiés.`,
     `${trade.name} en ${dept.name} : comparez les devis de professionnels référencés SIREN. ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Réponse sous 24h.`,
-    `Besoin d\u2019un ${trade.name.toLowerCase()} dans le ${dept.code} ? ${minPrice}\u2013${maxPrice} ${trade.priceRange.unit}. Artisans certifiés, devis gratuits en ligne.`,
+    `Besoin d’un ${trade.name.toLowerCase()} dans le ${dept.code} ? ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Artisans certifiés, devis gratuits en ligne.`,
     `${dept.name} (${dept.code}) : ${trade.name.toLowerCase()} disponible. Tarifs de ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Comparez gratuitement.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
@@ -143,7 +143,7 @@ export default async function DeptServicePage({ params }: PageProps) {
 
   const serviceSchema = getServiceSchema({
     name: `${trade.name} en ${dept.name}`,
-    description: `Service de ${trade.name.toLowerCase()} dans le ${dept.name} (${dept.code}). Tarif moyen : ${minPrice}\u2013${maxPrice} ${trade.priceRange.unit}.`,
+    description: `Service de ${trade.name.toLowerCase()} dans le ${dept.name} (${dept.code}). Tarif moyen : ${minPrice}–${maxPrice} ${trade.priceRange.unit}.`,
     areaServed: dept.name,
     category: trade.name,
   })
@@ -190,7 +190,7 @@ export default async function DeptServicePage({ params }: PageProps) {
               </div>
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/15 backdrop-blur-sm rounded-full border border-emerald-400/25">
                 <Euro className="w-4 h-4 text-emerald-400" />
-                <span className="text-sm font-medium text-emerald-200">{minPrice}\u2013{maxPrice} {trade.priceRange.unit}</span>
+                <span className="text-sm font-medium text-emerald-200">{minPrice}–{maxPrice} {trade.priceRange.unit}</span>
               </div>
             </div>
 
@@ -206,7 +206,7 @@ export default async function DeptServicePage({ params }: PageProps) {
                     `Trouver un ${trade.name.toLowerCase()} en ${dept.name}`,
                     `${trade.name} ${dept.name} (${dept.code})`,
                     `${dept.name} : votre ${trade.name.toLowerCase()} qualifié`,
-                    `${trade.name} dans le ${dept.code} \u2014 ${dept.name}`,
+                    `${trade.name} dans le ${dept.code} — ${dept.name}`,
                   ]
                   return (
                     <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-[-0.025em] leading-[1.1]">
@@ -342,15 +342,15 @@ export default async function DeptServicePage({ params }: PageProps) {
             <div className="grid sm:grid-cols-3 gap-6 mb-6">
               <div className="text-center p-4 bg-slate-50 rounded-xl">
                 <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Tarif horaire min.</div>
-                <div className="text-2xl font-bold text-slate-900">{minPrice} \u20AC</div>
+                <div className="text-2xl font-bold text-slate-900">{minPrice} €</div>
               </div>
               <div className="text-center p-4 bg-indigo-50 rounded-xl">
                 <div className="text-xs font-semibold text-indigo-600 uppercase tracking-wider mb-1">Tarif horaire max.</div>
-                <div className="text-2xl font-bold text-indigo-700">{maxPrice} \u20AC</div>
+                <div className="text-2xl font-bold text-indigo-700">{maxPrice} €</div>
               </div>
               <div className="text-center p-4 bg-slate-50 rounded-xl">
                 <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Moyenne nationale</div>
-                <div className="text-2xl font-bold text-slate-900">{trade.priceRange.min}\u2013{trade.priceRange.max} \u20AC</div>
+                <div className="text-2xl font-bold text-slate-900">{trade.priceRange.min}–{trade.priceRange.max} €</div>
               </div>
             </div>
             <p className="text-sm text-slate-500">Les tarifs dans le {dept.name} sont {multiplier >= 1.05 ? 'supérieurs' : multiplier <= 0.95 ? 'inférieurs' : 'proches de'} la moyenne nationale (coefficient {multiplier.toFixed(2)}). Ces prix sont indicatifs et varient selon la complexité de l&apos;intervention.</p>

@@ -27,7 +27,7 @@ interface PageProps {
 
 function truncateTitle(title: string, maxLen = 55): string {
   if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '\u2026'
+  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -44,18 +44,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const titleHash = Math.abs(hashCode(`title-region-svc-${regionSlug}-${serviceSlug}`))
   const titleTemplates = [
     `${trade.name} en ${region.name}`,
-    `${trade.name} ${region.name} \u2014 Devis gratuit`,
+    `${trade.name} ${region.name} — Devis gratuit`,
     `Trouver un ${trade.name.toLowerCase()} en ${region.name}`,
     `${region.name} : ${trade.name.toLowerCase()} qualifié`,
-    `${trade.name} en ${region.name} \u2014 ${deptCount} dép.`,
+    `${trade.name} en ${region.name} — ${deptCount} dép.`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
   const descHash = Math.abs(hashCode(`desc-region-svc-${regionSlug}-${serviceSlug}`))
   const descTemplates = [
-    `Trouvez un ${trade.name.toLowerCase()} en ${region.name}. Tarif moyen : ${minPrice}\u2013${maxPrice} ${trade.priceRange.unit}. ${deptCount} départements couverts. Devis gratuit.`,
+    `Trouvez un ${trade.name.toLowerCase()} en ${region.name}. Tarif moyen : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. ${deptCount} départements couverts. Devis gratuit.`,
     `${trade.name} en ${region.name} : comparez les devis. ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Artisans référencés dans ${deptCount} départements.`,
-    `Besoin d\u2019un ${trade.name.toLowerCase()} en ${region.name} ? ${minPrice}\u2013${maxPrice} ${trade.priceRange.unit}. Comparez gratuitement les artisans.`,
+    `Besoin d’un ${trade.name.toLowerCase()} en ${region.name} ? ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Comparez gratuitement les artisans.`,
     `${region.name} : ${trade.name.toLowerCase()} disponible dans ${deptCount} départements. De ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Devis gratuits.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
@@ -138,7 +138,7 @@ export default async function RegionServicePage({ params }: PageProps) {
 
   const serviceSchema = getServiceSchema({
     name: `${trade.name} en ${region.name}`,
-    description: `Service de ${trade.name.toLowerCase()} en ${region.name}. Tarif moyen : ${minPrice}\u2013${maxPrice} ${trade.priceRange.unit}. ${deptCount} départements couverts.`,
+    description: `Service de ${trade.name.toLowerCase()} en ${region.name}. Tarif moyen : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. ${deptCount} départements couverts.`,
     areaServed: region.name,
     category: trade.name,
   })
@@ -184,7 +184,7 @@ export default async function RegionServicePage({ params }: PageProps) {
               </div>
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/15 backdrop-blur-sm rounded-full border border-emerald-400/25">
                 <Euro className="w-4 h-4 text-emerald-400" />
-                <span className="text-sm font-medium text-emerald-200">{minPrice}\u2013{maxPrice} {trade.priceRange.unit}</span>
+                <span className="text-sm font-medium text-emerald-200">{minPrice}–{maxPrice} {trade.priceRange.unit}</span>
               </div>
             </div>
 
@@ -253,15 +253,15 @@ export default async function RegionServicePage({ params }: PageProps) {
             <div className="grid sm:grid-cols-3 gap-6 mb-6">
               <div className="text-center p-4 bg-slate-50 rounded-xl">
                 <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Tarif horaire min.</div>
-                <div className="text-2xl font-bold text-slate-900">{minPrice} \u20AC</div>
+                <div className="text-2xl font-bold text-slate-900">{minPrice} €</div>
               </div>
               <div className="text-center p-4 bg-indigo-50 rounded-xl">
                 <div className="text-xs font-semibold text-indigo-600 uppercase tracking-wider mb-1">Tarif horaire max.</div>
-                <div className="text-2xl font-bold text-indigo-700">{maxPrice} \u20AC</div>
+                <div className="text-2xl font-bold text-indigo-700">{maxPrice} €</div>
               </div>
               <div className="text-center p-4 bg-slate-50 rounded-xl">
                 <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Moyenne nationale</div>
-                <div className="text-2xl font-bold text-slate-900">{trade.priceRange.min}\u2013{trade.priceRange.max} \u20AC</div>
+                <div className="text-2xl font-bold text-slate-900">{trade.priceRange.min}–{trade.priceRange.max} €</div>
               </div>
             </div>
             <p className="text-sm text-slate-500">Les tarifs en {region.name} sont {multiplier >= 1.05 ? 'supérieurs' : multiplier <= 0.95 ? 'inférieurs' : 'proches de'} la moyenne nationale (coefficient {multiplier.toFixed(2)}). {content.profile.economyLabel}.</p>

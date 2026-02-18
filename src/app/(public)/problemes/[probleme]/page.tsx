@@ -43,7 +43,7 @@ const urgencyDotColors = {
 
 function truncateTitle(title: string, maxLen = 60): string {
   if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '\u2026'
+  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ probleme: string }> }): Promise<Metadata> {
@@ -56,15 +56,15 @@ export async function generateMetadata({ params }: { params: Promise<{ probleme:
 
   const titleHash = Math.abs(hashCode(`probleme-title-${probleme}`))
   const titleTemplates = [
-    `${problem.name} \u2014 Diagnostic et solutions`,
-    `${problem.name} : que faire ? Conseils et co\u00fbts`,
-    `R\u00e9soudre un probl\u00e8me de ${problem.name.toLowerCase()}`,
-    `${problem.name} \u2014 Guide complet ${tradeName.toLowerCase()}`,
-    `${problem.name} : sympt\u00f4mes, co\u00fbts et solutions`,
+    `${problem.name} — Diagnostic et solutions`,
+    `${problem.name} : que faire ? Conseils et coûts`,
+    `Résoudre un problème de ${problem.name.toLowerCase()}`,
+    `${problem.name} — Guide complet ${tradeName.toLowerCase()}`,
+    `${problem.name} : symptômes, coûts et solutions`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
-  const description = `${problem.name} : ${problem.description} Co\u00fbt estim\u00e9 : ${problem.estimatedCost.min} \u00e0 ${problem.estimatedCost.max} \u20ac. ${problem.averageResponseTime}.`
+  const description = `${problem.name} : ${problem.description} Coût estimé : ${problem.estimatedCost.min} à ${problem.estimatedCost.max} \u20ac. ${problem.averageResponseTime}.`
 
   return {
     title,
@@ -76,7 +76,7 @@ export async function generateMetadata({ params }: { params: Promise<{ probleme:
       description,
       url: `${SITE_URL}/problemes/${probleme}`,
       type: 'website',
-      images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: `${problem.name} \u2014 ServicesArtisans` }],
+      images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: `${problem.name} — ServicesArtisans` }],
     },
     twitter: {
       card: 'summary_large_image',
@@ -105,10 +105,10 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
   const h1Hash = Math.abs(hashCode(`probleme-h1-${probleme}`))
   const h1Templates = [
     problem.name,
-    `${problem.name} \u2014 Que faire ?`,
-    `Probl\u00e8me de ${problem.name.toLowerCase()}`,
+    `${problem.name} — Que faire ?`,
+    `Problème de ${problem.name.toLowerCase()}`,
     `${problem.name} : diagnostic et solutions`,
-    `R\u00e9soudre un probl\u00e8me de ${problem.name.toLowerCase()}`,
+    `Résoudre un problème de ${problem.name.toLowerCase()}`,
   ]
   const h1 = h1Templates[h1Hash % h1Templates.length]
 
@@ -120,7 +120,7 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
   // Breadcrumb
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },
-    { name: 'Probl\u00e8mes courants', url: '/problemes' },
+    { name: 'Problèmes courants', url: '/problemes' },
     { name: problem.name, url: `/problemes/${probleme}` },
   ])
 
@@ -154,7 +154,7 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <Breadcrumb items={[
-            { label: 'Probl\u00e8mes', href: '/problemes' },
+            { label: 'Problèmes', href: '/problemes' },
             { label: problem.name },
           ]} />
         </div>
@@ -181,7 +181,7 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
           <div className="flex flex-wrap gap-3 mb-8">
             <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
               <Euro className="w-4 h-4" />
-              <span className="text-sm">{problem.estimatedCost.min} \u2013 {problem.estimatedCost.max} \u20ac</span>
+              <span className="text-sm">{problem.estimatedCost.min} – {problem.estimatedCost.max} \u20ac</span>
             </div>
             <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
               <Clock className="w-4 h-4" />
@@ -222,13 +222,13 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
           <div className="text-center mb-10">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-amber-50 text-amber-600 rounded-full text-sm font-medium mb-4">
               <Eye className="w-4 h-4" />
-              Sympt\u00f4mes
+              Symptômes
             </div>
             <h2 className="text-3xl font-bold text-gray-900 mb-3">
-              Comment reconna\u00eetre ce probl\u00e8me ?
+              Comment reconnaître ce problème ?
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Voici les signes qui permettent d&apos;identifier un probl\u00e8me de {problem.name.toLowerCase()}.
+              Voici les signes qui permettent d&apos;identifier un problème de {problem.name.toLowerCase()}.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
@@ -251,13 +251,13 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
           <div className="text-center mb-10">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-red-50 text-red-600 rounded-full text-sm font-medium mb-4">
               <ListChecks className="w-4 h-4" />
-              Actions imm\u00e9diates
+              Actions immédiates
             </div>
             <h2 className="text-3xl font-bold text-gray-900 mb-3">
               Que faire en urgence ?
             </h2>
             <p className="text-gray-600 max-w-xl mx-auto">
-              Suivez ces \u00e9tapes en attendant l&apos;intervention d&apos;un professionnel.
+              Suivez ces étapes en attendant l&apos;intervention d&apos;un professionnel.
             </p>
           </div>
           <div className="space-y-4">
@@ -278,22 +278,22 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <h2 className="text-3xl font-bold text-gray-900 mb-3">
-              Co\u00fbt estim\u00e9
+              Coût estimé
             </h2>
           </div>
           <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-8 text-center mb-8">
             <h3 className="text-lg font-semibold text-gray-700 mb-2">Fourchette de prix</h3>
             <div className="flex items-baseline justify-center gap-2">
               <span className="text-5xl font-bold text-blue-600">
-                {problem.estimatedCost.min} \u2014 {problem.estimatedCost.max}
+                {problem.estimatedCost.min} — {problem.estimatedCost.max}
               </span>
               <span className="text-gray-600 text-lg">\u20ac</span>
             </div>
             <p className="text-gray-500 text-sm mt-3">
-              Prix moyen constat\u00e9 en France m\u00e9tropolitaine, main-d&apos;\u0153uvre incluse
+              Prix moyen constaté en France métropolitaine, main-d&apos;\u0153uvre incluse
             </p>
             <p className="text-xs text-gray-400 mt-2">
-              Les tarifs varient selon votre r\u00e9gion, la complexit\u00e9 du probl\u00e8me et l&apos;urgence. Majorations possibles en nuit/week-end.
+              Les tarifs varient selon votre région, la complexité du problème et l&apos;urgence. Majorations possibles en nuit/week-end.
             </p>
           </div>
 
@@ -305,19 +305,19 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
               </div>
               <div>
                 <h3 className="font-bold text-gray-900">{tradeName}</h3>
-                <p className="text-sm text-gray-500">Artisan sp\u00e9cialis\u00e9 pour ce type de probl\u00e8me</p>
+                <p className="text-sm text-gray-500">Artisan spécialisé pour ce type de problème</p>
               </div>
             </div>
             {trade && (
               <p className="text-gray-600 text-sm mb-4">
-                Tarif horaire moyen : {trade.priceRange.min} \u00e0 {trade.priceRange.max} {trade.priceRange.unit}. {trade.averageResponseTime}.
+                Tarif horaire moyen : {trade.priceRange.min} à {trade.priceRange.max} {trade.priceRange.unit}. {trade.averageResponseTime}.
               </p>
             )}
             <Link
               href={`/services/${problem.primaryService}`}
               className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold text-sm"
             >
-              Voir les {tradeName.toLowerCase()}s pr\u00e8s de chez vous
+              Voir les {tradeName.toLowerCase()}s près de chez vous
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -330,10 +330,10 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
           <div className="text-center mb-10">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-green-50 text-green-600 rounded-full text-sm font-medium mb-4">
               <Shield className="w-4 h-4" />
-              Pr\u00e9vention
+              Prévention
             </div>
             <h2 className="text-3xl font-bold text-gray-900 mb-3">
-              Comment \u00e9viter ce probl\u00e8me ?
+              Comment éviter ce problème ?
             </h2>
           </div>
           <div className="space-y-4">
@@ -388,7 +388,7 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
       <section className="py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
-            Questions fr\u00e9quentes \u2014 {problem.name}
+            Questions fréquentes — {problem.name}
           </h2>
           <div className="space-y-4">
             {problem.faq.map((item, i) => (
@@ -410,7 +410,7 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
       {relatedProblems.length > 0 && (
         <section className="py-16 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Probl\u00e8mes similaires</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Problèmes similaires</h2>
             <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
               {relatedProblems.map((rp) => {
                 const rpUrgency = urgencyBadgeColors[rp.urgencyLevel]
@@ -430,7 +430,7 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
                     </div>
                     <p className="text-xs text-gray-500 line-clamp-2">{rp.description}</p>
                     <div className="mt-2 text-xs text-gray-400">
-                      {rp.estimatedCost.min} \u2013 {rp.estimatedCost.max} \u20ac
+                      {rp.estimatedCost.min} – {rp.estimatedCost.max} \u20ac
                     </div>
                   </Link>
                 )
@@ -447,7 +447,7 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
             Besoin d&apos;un {tradeName.toLowerCase()} ?
           </h2>
           <p className="text-xl opacity-90 mb-8">
-            Demandez un devis gratuit et comparez les artisans r\u00e9f\u00e9renc\u00e9s pr\u00e8s de chez vous.
+            Demandez un devis gratuit et comparez les artisans référencés près de chez vous.
           </p>
           <Link
             href={`/devis/${problem.primaryService}`}
@@ -468,7 +468,7 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
               <h3 className="font-semibold text-gray-900 mb-3">Ce service</h3>
               <div className="space-y-2">
                 <Link href={`/services/${problem.primaryService}`} className="block text-sm text-gray-600 hover:text-amber-600 py-1">
-                  {tradeName} \u2014 page principale
+                  {tradeName} — page principale
                 </Link>
                 <Link href={`/devis/${problem.primaryService}`} className="block text-sm text-gray-600 hover:text-amber-600 py-1">
                   Devis {tradeName.toLowerCase()}
@@ -482,7 +482,7 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
               </div>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Probl\u00e8mes similaires</h3>
+              <h3 className="font-semibold text-gray-900 mb-3">Problèmes similaires</h3>
               <div className="space-y-2">
                 {relatedProblems.slice(0, 5).map((rp) => (
                   <Link key={rp.slug} href={`/problemes/${rp.slug}`} className="block text-sm text-gray-600 hover:text-amber-600 py-1">
@@ -494,7 +494,7 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
             <div>
               <h3 className="font-semibold text-gray-900 mb-3">Informations utiles</h3>
               <div className="space-y-2">
-                <Link href="/problemes" className="block text-sm text-gray-600 hover:text-amber-600 py-1">Tous les probl\u00e8mes</Link>
+                <Link href="/problemes" className="block text-sm text-gray-600 hover:text-amber-600 py-1">Tous les problèmes</Link>
                 <Link href="/urgence" className="block text-sm text-gray-600 hover:text-amber-600 py-1">Urgence artisan 24h/24</Link>
                 <Link href="/tarifs-artisans" className="block text-sm text-gray-600 hover:text-amber-600 py-1">Guide des tarifs</Link>
                 <Link href="/faq" className="block text-sm text-gray-600 hover:text-amber-600 py-1">FAQ</Link>
@@ -510,7 +510,7 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
           <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
             <h3 className="text-sm font-semibold text-slate-700 mb-2">Information importante</h3>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Les co\u00fbts et d\u00e9lais indiqu\u00e9s sont des estimations moyennes. Ils varient selon la complexit\u00e9, votre r\u00e9gion et l&apos;urgence. Seul un devis personnalis\u00e9 fait foi. {SITE_NAME} est un annuaire ind\u00e9pendant. En cas d&apos;urgence vitale, appelez le 18 (pompiers) ou le 112.
+              Les coûts et délais indiqués sont des estimations moyennes. Ils varient selon la complexité, votre région et l&apos;urgence. Seul un devis personnalisé fait foi. {SITE_NAME} est un annuaire indépendant. En cas d&apos;urgence vitale, appelez le 18 (pompiers) ou le 112.
             </p>
           </div>
         </div>

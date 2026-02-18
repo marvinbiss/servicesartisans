@@ -131,13 +131,13 @@ export const dynamicParams = true
 
 function getClimatLabel(zone: string | null): string {
   const labels: Record<string, string> = {
-    oceanique: 'Climat oc\u00e9anique',
-    'semi-oceanique': 'Climat semi-oc\u00e9anique',
+    oceanique: 'Climat océanique',
+    'semi-oceanique': 'Climat semi-océanique',
     continental: 'Climat continental',
-    mediterraneen: 'Climat m\u00e9diterran\u00e9en',
+    mediterraneen: 'Climat méditerranéen',
     montagnard: 'Climat montagnard',
   }
-  return zone ? (labels[zone] ?? zone) : 'Climat temp\u00e9r\u00e9'
+  return zone ? (labels[zone] ?? zone) : 'Climat tempéré'
 }
 
 // ---------------------------------------------------------------------------
@@ -161,15 +161,15 @@ export async function generateMetadata({
 
   const titleHash = Math.abs(hashCode(`avis-loc-title-${service}-${ville}`))
   const titleTemplates = [
-    `Avis ${tradeLower} \u00e0 ${villeData.name} \u2014 Artisans de confiance`,
-    `Choisir un ${tradeLower} \u00e0 ${villeData.name} \u2014 Avis et recommandations`,
-    `${trade.name} \u00e0 ${villeData.name} : avis clients et tarifs indicatifs`,
-    `Trouver un bon ${tradeLower} \u00e0 ${villeData.name} \u2014 Avis v\u00e9rifi\u00e9s`,
-    `Avis et recommandations ${tradeLower} \u00e0 ${villeData.name}`,
+    `Avis ${tradeLower} à ${villeData.name} — Artisans de confiance`,
+    `Choisir un ${tradeLower} à ${villeData.name} — Avis et recommandations`,
+    `${trade.name} à ${villeData.name} : avis clients et tarifs indicatifs`,
+    `Trouver un bon ${tradeLower} à ${villeData.name} — Avis vérifiés`,
+    `Avis et recommandations ${tradeLower} à ${villeData.name}`,
   ]
   const title = titleTemplates[titleHash % titleTemplates.length]
 
-  const description = `Avis ${tradeLower} \u00e0 ${villeData.name} : ${minPrice}\u2013${maxPrice} ${trade.priceRange.unit}. Consultez les recommandations, comparez les artisans et trouvez un professionnel de confiance.`
+  const description = `Avis ${tradeLower} à ${villeData.name} : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Consultez les recommandations, comparez les artisans et trouvez un professionnel de confiance.`
 
   const serviceImage = getServiceImage(service)
   const canonicalUrl = `${SITE_URL}/avis/${service}/${ville}`
@@ -189,7 +189,7 @@ export async function generateMetadata({
           url: serviceImage.src,
           width: 800,
           height: 600,
-          alt: `Avis ${trade.name} \u00e0 ${villeData.name}`,
+          alt: `Avis ${trade.name} à ${villeData.name}`,
         },
       ],
     },
@@ -266,18 +266,18 @@ export default async function AvisServiceVillePage({
   // Review-specific FAQ (localized)
   const reviewFaqItems = [
     {
-      question: `Comment trouver un bon ${tradeLower} \u00e0 ${villeData.name}\u00a0?`,
-      answer: `Pour trouver un bon ${tradeLower} \u00e0 ${villeData.name}, consultez les avis clients, v\u00e9rifiez les certifications (${trade.certifications.length > 0 ? trade.certifications.slice(0, 3).join(', ') : 'assurance d\u00e9cennale, RC pro'}) et comparez plusieurs devis. Les tarifs locaux vont de ${minPrice} \u00e0 ${maxPrice} ${trade.priceRange.unit}.`,
+      question: `Comment trouver un bon ${tradeLower} à ${villeData.name} ?`,
+      answer: `Pour trouver un bon ${tradeLower} à ${villeData.name}, consultez les avis clients, vérifiez les certifications (${trade.certifications.length > 0 ? trade.certifications.slice(0, 3).join(', ') : 'assurance décennale, RC pro'}) et comparez plusieurs devis. Les tarifs locaux vont de ${minPrice} à ${maxPrice} ${trade.priceRange.unit}.`,
     },
     {
-      question: `Quel est le prix moyen d\u2019un ${tradeLower} \u00e0 ${villeData.name}\u00a0?`,
-      answer: `\u00c0 ${villeData.name} (${villeData.region}), les tarifs d\u2019un ${tradeLower} varient de ${minPrice} \u00e0 ${maxPrice} ${trade.priceRange.unit}. Ces prix sont ajust\u00e9s selon le co\u00fbt de la vie r\u00e9gional. Demandez plusieurs devis pour comparer.`,
+      question: `Quel est le prix moyen d’un ${tradeLower} à ${villeData.name} ?`,
+      answer: `\u00c0 ${villeData.name} (${villeData.region}), les tarifs d’un ${tradeLower} varient de ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Ces prix sont ajustés selon le coût de la vie régional. Demandez plusieurs devis pour comparer.`,
     },
     {
-      question: `Quelles certifications v\u00e9rifier pour un ${tradeLower} \u00e0 ${villeData.name}\u00a0?`,
+      question: `Quelles certifications vérifier pour un ${tradeLower} à ${villeData.name} ?`,
       answer: trade.certifications.length > 0
-        ? `Pour un ${tradeLower} \u00e0 ${villeData.name}, v\u00e9rifiez les certifications suivantes : ${trade.certifications.join(', ')}. L\u2019assurance d\u00e9cennale et la RC pro sont obligatoires.`
-        : `V\u00e9rifiez au minimum l\u2019assurance d\u00e9cennale et la responsabilit\u00e9 civile professionnelle. Un ${tradeLower} s\u00e9rieux \u00e0 ${villeData.name} fournit ces documents sans difficult\u00e9.`,
+        ? `Pour un ${tradeLower} à ${villeData.name}, vérifiez les certifications suivantes : ${trade.certifications.join(', ')}. L’assurance décennale et la RC pro sont obligatoires.`
+        : `Vérifiez au minimum l’assurance décennale et la responsabilité civile professionnelle. Un ${tradeLower} sérieux à ${villeData.name} fournit ces documents sans difficulté.`,
     },
   ]
 
@@ -288,7 +288,7 @@ export default async function AvisServiceVillePage({
     return ha - hb
   })
   const tradeFaqItems = tradeFaqSorted.slice(0, 2).map((f) => ({
-    question: f.q.replace(/\?$/, '') + ` \u00e0 ${villeData.name}\u00a0?`,
+    question: f.q.replace(/\?$/, '') + ` à ${villeData.name} ?`,
     answer: f.a,
   }))
 
@@ -299,8 +299,8 @@ export default async function AvisServiceVillePage({
   const serviceSchema = {
     '@context': 'https://schema.org',
     '@type': 'Service',
-    name: `Avis ${trade.name} \u00e0 ${villeData.name}`,
-    description: `Consultez les avis et recommandations pour choisir un ${tradeLower} de confiance \u00e0 ${villeData.name} (${villeData.departement}). Prix : ${minPrice}\u2013${maxPrice} ${trade.priceRange.unit}.`,
+    name: `Avis ${trade.name} à ${villeData.name}`,
+    description: `Consultez les avis et recommandations pour choisir un ${tradeLower} de confiance à ${villeData.name} (${villeData.departement}). Prix : ${minPrice}–${maxPrice} ${trade.priceRange.unit}.`,
     provider: {
       '@type': 'Organization',
       name: SITE_NAME,
@@ -368,28 +368,28 @@ export default async function AvisServiceVillePage({
       title: 'Qualifications et certifications',
       description:
         trade.certifications.length > 0
-          ? `V\u00e9rifiez que votre ${tradeLower} \u00e0 ${villeData.name} poss\u00e8de les certifications suivantes : ${trade.certifications.join(', ')}. L\u2019assurance d\u00e9cennale et la RC pro sont obligatoires.`
-          : `V\u00e9rifiez que votre ${tradeLower} \u00e0 ${villeData.name} dispose d\u2019une assurance d\u00e9cennale et d\u2019une responsabilit\u00e9 civile professionnelle.`,
+          ? `Vérifiez que votre ${tradeLower} à ${villeData.name} possède les certifications suivantes : ${trade.certifications.join(', ')}. L’assurance décennale et la RC pro sont obligatoires.`
+          : `Vérifiez que votre ${tradeLower} à ${villeData.name} dispose d’une assurance décennale et d’une responsabilité civile professionnelle.`,
     },
     {
       icon: Euro,
       title: 'Transparence des tarifs',
-      description: `Un bon ${tradeLower} \u00e0 ${villeData.name} fournit un devis d\u00e9taill\u00e9 avant intervention. Prix habituels : ${minPrice}\u2013${maxPrice} ${trade.priceRange.unit}.`,
+      description: `Un bon ${tradeLower} à ${villeData.name} fournit un devis détaillé avant intervention. Prix habituels : ${minPrice}–${maxPrice} ${trade.priceRange.unit}.`,
     },
     {
       icon: Clock,
-      title: 'R\u00e9activit\u00e9 et ponctualit\u00e9',
-      description: `V\u00e9rifiez le d\u00e9lai de r\u00e9ponse habituel \u00e0 ${villeData.name}. ${trade.averageResponseTime}.`,
+      title: 'Réactivité et ponctualité',
+      description: `Vérifiez le délai de réponse habituel à ${villeData.name}. ${trade.averageResponseTime}.`,
     },
     {
       icon: CheckCircle,
-      title: 'Qualit\u00e9 des finitions',
-      description: `Examinez les photos avant/apr\u00e8s dans les avis clients. Un ${tradeLower} soigneux \u00e0 ${villeData.name} est un gage de s\u00e9rieux.`,
+      title: 'Qualité des finitions',
+      description: `Examinez les photos avant/après dans les avis clients. Un ${tradeLower} soigneux à ${villeData.name} est un gage de sérieux.`,
     },
     {
       icon: Phone,
-      title: 'Service apr\u00e8s-intervention',
-      description: `Un artisan s\u00e9rieux \u00e0 ${villeData.name} assure un suivi et reste joignable apr\u00e8s les travaux.`,
+      title: 'Service après-intervention',
+      description: `Un artisan sérieux à ${villeData.name} assure un suivi et reste joignable après les travaux.`,
     },
   ]
 
@@ -431,11 +431,11 @@ export default async function AvisServiceVillePage({
               {(() => {
                 const h1Hash = Math.abs(hashCode(`avis-loc-h1-${service}-${villeSlug}`))
                 const h1Templates = [
-                  `Avis ${tradeLower} \u00e0 ${villeData.name}`,
-                  `Choisir un ${tradeLower} \u00e0 ${villeData.name} \u2014 Avis et recommandations`,
-                  `${trade.name} \u00e0 ${villeData.name} : avis clients v\u00e9rifi\u00e9s`,
-                  `Trouver un bon ${tradeLower} \u00e0 ${villeData.name}`,
-                  `Avis et recommandations ${tradeLower} \u00e0 ${villeData.name}`,
+                  `Avis ${tradeLower} à ${villeData.name}`,
+                  `Choisir un ${tradeLower} à ${villeData.name} — Avis et recommandations`,
+                  `${trade.name} à ${villeData.name} : avis clients vérifiés`,
+                  `Trouver un bon ${tradeLower} à ${villeData.name}`,
+                  `Avis et recommandations ${tradeLower} à ${villeData.name}`,
                 ]
                 return h1Templates[h1Hash % h1Templates.length]
               })()}
@@ -631,7 +631,7 @@ export default async function AvisServiceVillePage({
                     </div>
                     {review.content && (
                       <p className="text-gray-700 text-sm leading-relaxed">
-                        {review.content.length > 300 ? review.content.slice(0, 300) + '\u2026' : review.content}
+                        {review.content.length > 300 ? review.content.slice(0, 300) + '…' : review.content}
                       </p>
                     )}
                     <div className="mt-3 text-xs text-gray-400">
@@ -716,8 +716,8 @@ export default async function AvisServiceVillePage({
             {multiplier !== 1.0 && (
               <p className="text-xs text-gray-400 mt-2">
                 {multiplier > 1.0
-                  ? `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((multiplier - 1) * 100)}\u00a0% sup\u00e9rieurs \u00e0 la moyenne nationale`
-                  : `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((1 - multiplier) * 100)}\u00a0% inf\u00e9rieurs \u00e0 la moyenne nationale`}
+                  ? `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((multiplier - 1) * 100)} % supérieurs à la moyenne nationale`
+                  : `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((1 - multiplier) * 100)} % inférieurs à la moyenne nationale`}
               </p>
             )}
           </div>
@@ -752,7 +752,7 @@ export default async function AvisServiceVillePage({
             <LocalFactorCard
               icon={<Users className="w-5 h-5 text-amber-600" />}
               bgColor="bg-amber-50"
-              title="Densit\u00e9 d\u2019artisans"
+              title="Densité d’artisans"
               value={
                 commune?.nb_entreprises_artisanales
                   ? `${formatNumber(commune.nb_entreprises_artisanales)} entreprises`
@@ -763,7 +763,7 @@ export default async function AvisServiceVillePage({
                   ? commune.nb_entreprises_artisanales > 500
                     ? `Avec ${formatNumber(commune.nb_entreprises_artisanales)} entreprises artisanales, ${villeData.name} offre un large choix de ${tradeLower}s. Comparez les avis pour faire le bon choix.`
                     : `${villeData.name} compte ${formatNumber(commune.nb_entreprises_artisanales)} entreprises artisanales. Consultez les avis pour identifier les meilleurs professionnels.`
-                  : `Le nombre d\u2019artisans disponibles \u00e0 ${villeData.name} influence directement l\u2019offre et la qualit\u00e9 de service.`
+                  : `Le nombre d’artisans disponibles à ${villeData.name} influence directement l’offre et la qualité de service.`
               }
             />
 
@@ -773,7 +773,7 @@ export default async function AvisServiceVillePage({
               bgColor="bg-blue-50"
               title="Zone climatique"
               value={getClimatLabel(commune?.climat_zone ?? null)}
-              description={`Les conditions climatiques \u00e0 ${villeData.name} peuvent influencer le type d\u2019interventions demand\u00e9es et la disponibilit\u00e9 des ${tradeLower}s.`}
+              description={`Les conditions climatiques à ${villeData.name} peuvent influencer le type d’interventions demandées et la disponibilité des ${tradeLower}s.`}
             />
 
             {/* Housing type */}
@@ -783,15 +783,15 @@ export default async function AvisServiceVillePage({
               title="Type de logement"
               value={
                 commune?.part_maisons_pct
-                  ? `${commune.part_maisons_pct}\u00a0% de maisons`
+                  ? `${commune.part_maisons_pct} % de maisons`
                   : null
               }
               description={
                 commune?.part_maisons_pct
                   ? commune.part_maisons_pct > 50
-                    ? `\u00c0 ${villeData.name}, ${commune.part_maisons_pct}\u00a0% des logements sont des maisons individuelles, ce qui influence les types de travaux de ${tradeLower} demand\u00e9s.`
-                    : `\u00c0 ${villeData.name}, les appartements sont majoritaires (${100 - commune.part_maisons_pct}\u00a0%). Les travaux en copropri\u00e9t\u00e9 peuvent impliquer des contraintes sp\u00e9cifiques.`
-                  : `La r\u00e9partition entre maisons et appartements \u00e0 ${villeData.name} influence les types de travaux demand\u00e9s.`
+                    ? `\u00c0 ${villeData.name}, ${commune.part_maisons_pct} % des logements sont des maisons individuelles, ce qui influence les types de travaux de ${tradeLower} demandés.`
+                    : `\u00c0 ${villeData.name}, les appartements sont majoritaires (${100 - commune.part_maisons_pct} %). Les travaux en copropriété peuvent impliquer des contraintes spécifiques.`
+                  : `La répartition entre maisons et appartements à ${villeData.name} influence les types de travaux demandés.`
               }
             />
 
@@ -807,7 +807,7 @@ export default async function AvisServiceVillePage({
                     ? `${villeData.population} habitants`
                     : null
               }
-              description={`La taille de la population \u00e0 ${villeData.name} influence la concurrence entre artisans et la facilit\u00e9 \u00e0 trouver un ${tradeLower} disponible rapidement.`}
+              description={`La taille de la population à ${villeData.name} influence la concurrence entre artisans et la facilité à trouver un ${tradeLower} disponible rapidement.`}
             />
           </div>
         </div>

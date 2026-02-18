@@ -8,21 +8,21 @@ import { SITE_URL } from '@/lib/seo/config'
 import problems from '@/lib/data/problems'
 
 export const metadata: Metadata = {
-  title: 'Probl\u00e8mes courants \u2014 Diagnostic et solutions',
-  description: 'Identifiez votre probl\u00e8me (fuite d\u2019eau, panne \u00e9lectrique, serrure bloqu\u00e9e\u2026) et trouvez la solution adapt\u00e9e. Diagnostic gratuit, conseils pratiques et mise en relation avec des artisans r\u00e9f\u00e9renc\u00e9s.',
+  title: 'Problèmes courants — Diagnostic et solutions',
+  description: 'Identifiez votre problème (fuite d’eau, panne électrique, serrure bloquée…) et trouvez la solution adaptée. Diagnostic gratuit, conseils pratiques et mise en relation avec des artisans référencés.',
   alternates: { canonical: `${SITE_URL}/problemes` },
   openGraph: {
     locale: 'fr_FR',
-    title: 'Probl\u00e8mes courants \u2014 Diagnostic et solutions',
-    description: 'Identifiez votre probl\u00e8me et trouvez la solution adapt\u00e9e. Diagnostic gratuit, conseils pratiques et artisans r\u00e9f\u00e9renc\u00e9s.',
+    title: 'Problèmes courants — Diagnostic et solutions',
+    description: 'Identifiez votre problème et trouvez la solution adaptée. Diagnostic gratuit, conseils pratiques et artisans référencés.',
     url: `${SITE_URL}/problemes`,
     type: 'website',
-    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans \u2014 Probl\u00e8mes courants' }],
+    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Problèmes courants' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Probl\u00e8mes courants \u2014 Diagnostic et solutions',
-    description: 'Identifiez votre probl\u00e8me et trouvez la solution adapt\u00e9e avec nos artisans r\u00e9f\u00e9renc\u00e9s.',
+    title: 'Problèmes courants — Diagnostic et solutions',
+    description: 'Identifiez votre problème et trouvez la solution adaptée avec nos artisans référencés.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }
@@ -35,11 +35,11 @@ const urgencyConfig = {
 
 const serviceCategories = [
   { name: 'Plomberie', slug: 'plombier', icon: Wrench, color: 'text-blue-600', bg: 'bg-blue-50' },
-  { name: '\u00c9lectricit\u00e9', slug: 'electricien', icon: Zap, color: 'text-amber-600', bg: 'bg-amber-50' },
+  { name: 'Électricité', slug: 'electricien', icon: Zap, color: 'text-amber-600', bg: 'bg-amber-50' },
   { name: 'Serrurerie', slug: 'serrurier', icon: Key, color: 'text-green-600', bg: 'bg-green-50' },
   { name: 'Chauffage', slug: 'chauffagiste', icon: Flame, color: 'text-red-600', bg: 'bg-red-50' },
   { name: 'Toiture', slug: 'couvreur', icon: HardHat, color: 'text-cyan-600', bg: 'bg-cyan-50' },
-  { name: 'Ma\u00e7onnerie', slug: 'macon', icon: HardHat, color: 'text-gray-600', bg: 'bg-gray-100' },
+  { name: 'Maçonnerie', slug: 'macon', icon: HardHat, color: 'text-gray-600', bg: 'bg-gray-100' },
   { name: 'Autres', slug: '_other', icon: Wrench, color: 'text-purple-600', bg: 'bg-purple-50' },
 ]
 
@@ -54,59 +54,59 @@ function getProblemsByCategory(slug: string) {
 
 const serviceNameMap: Record<string, string> = {
   plombier: 'Plombier',
-  electricien: '\u00c9lectricien',
+  electricien: 'Électricien',
   serrurier: 'Serrurier',
   chauffagiste: 'Chauffagiste',
   couvreur: 'Couvreur',
-  macon: 'Ma\u00e7on',
-  'peintre-en-batiment': 'Peintre en b\u00e2timent',
+  macon: 'Maçon',
+  'peintre-en-batiment': 'Peintre en bâtiment',
   vitrier: 'Vitrier',
   menuisier: 'Menuisier',
   'isolation-thermique': 'Isolation thermique',
-  desinsectisation: 'D\u00e9sinsectisation',
+  desinsectisation: 'Désinsectisation',
 }
 
 const howSteps = [
   {
     step: 1,
     icon: Search,
-    title: 'Identifiez votre probl\u00e8me',
-    description: 'Parcourez notre liste de probl\u00e8mes courants ou d\u00e9crivez votre situation pour trouver le diagnostic adapt\u00e9.',
+    title: 'Identifiez votre problème',
+    description: 'Parcourez notre liste de problèmes courants ou décrivez votre situation pour trouver le diagnostic adapté.',
   },
   {
     step: 2,
     icon: CheckCircle,
     title: 'Suivez nos conseils',
-    description: 'Consultez les gestes d\u2019urgence, les sympt\u00f4mes \u00e0 surveiller et les actions \u00e0 mener en attendant l\u2019artisan.',
+    description: 'Consultez les gestes d’urgence, les symptômes à surveiller et les actions à mener en attendant l’artisan.',
   },
   {
     step: 3,
     icon: Wrench,
     title: 'Contactez un artisan',
-    description: 'Demandez un devis gratuit aupr\u00e8s d\u2019artisans r\u00e9f\u00e9renc\u00e9s sp\u00e9cialis\u00e9s dans votre type de probl\u00e8me.',
+    description: 'Demandez un devis gratuit auprès d’artisans référencés spécialisés dans votre type de problème.',
   },
 ]
 
 const faqItems = [
   {
-    question: 'Comment identifier le type de probl\u00e8me que j\u2019ai ?',
-    answer: 'Parcourez notre liste de probl\u00e8mes class\u00e9s par cat\u00e9gorie (plomberie, \u00e9lectricit\u00e9, serrurerie\u2026). Chaque fiche d\u00e9taille les sympt\u00f4mes typiques pour vous aider \u00e0 identifier votre situation. En cas de doute, contactez un artisan pour un diagnostic professionnel.',
+    question: 'Comment identifier le type de problème que j’ai ?',
+    answer: 'Parcourez notre liste de problèmes classés par catégorie (plomberie, électricité, serrurerie…). Chaque fiche détaille les symptômes typiques pour vous aider à identifier votre situation. En cas de doute, contactez un artisan pour un diagnostic professionnel.',
   },
   {
-    question: 'Que faire en attendant l\u2019artisan ?',
-    answer: 'Chaque fiche probl\u00e8me liste les gestes d\u2019urgence \u00e0 r\u00e9aliser imm\u00e9diatement : couper l\u2019eau, l\u2019\u00e9lectricit\u00e9 ou le gaz si n\u00e9cessaire, s\u00e9curiser la zone et prot\u00e9ger vos biens. Ces actions simples limitent les d\u00e9g\u00e2ts en attendant l\u2019intervention.',
+    question: 'Que faire en attendant l’artisan ?',
+    answer: 'Chaque fiche problème liste les gestes d’urgence à réaliser immédiatement : couper l’eau, l’électricité ou le gaz si nécessaire, sécuriser la zone et protéger vos biens. Ces actions simples limitent les dégâts en attendant l’intervention.',
   },
   {
     question: 'Les diagnostics sont-ils gratuits ?',
-    answer: 'Les fiches de diagnostic sur ServicesArtisans sont enti\u00e8rement gratuites. La demande de devis est \u00e9galement gratuite et sans engagement. Seule l\u2019intervention de l\u2019artisan est payante, apr\u00e8s acceptation de votre part.',
+    answer: 'Les fiches de diagnostic sur ServicesArtisans sont entièrement gratuites. La demande de devis est également gratuite et sans engagement. Seule l’intervention de l’artisan est payante, après acceptation de votre part.',
   },
   {
-    question: 'Comment trouver un artisan pour mon probl\u00e8me ?',
-    answer: 'Depuis chaque fiche probl\u00e8me, vous pouvez acc\u00e9der directement \u00e0 la page du service concern\u00e9 et demander un devis gratuit. Nos artisans sont r\u00e9f\u00e9renc\u00e9s par SIREN et leurs coordonn\u00e9es sont v\u00e9rifi\u00e9es.',
+    question: 'Comment trouver un artisan pour mon problème ?',
+    answer: 'Depuis chaque fiche problème, vous pouvez accéder directement à la page du service concerné et demander un devis gratuit. Nos artisans sont référencés par SIREN et leurs coordonnées sont vérifiées.',
   },
   {
-    question: 'Les co\u00fbts indiqu\u00e9s sont-ils fiables ?',
-    answer: 'Les fourchettes de prix sont des estimations indicatives bas\u00e9es sur les tarifs constat\u00e9s en France. Le co\u00fbt r\u00e9el d\u00e9pend de la complexit\u00e9 du probl\u00e8me, de votre r\u00e9gion et de l\u2019urgence. Seul un devis personnalis\u00e9 fait foi.',
+    question: 'Les coûts indiqués sont-ils fiables ?',
+    answer: 'Les fourchettes de prix sont des estimations indicatives basées sur les tarifs constatés en France. Le coût réel dépend de la complexité du problème, de votre région et de l’urgence. Seul un devis personnalisé fait foi.',
   },
 ]
 
@@ -116,7 +116,7 @@ export default function ProblemesPage() {
       <JsonLd data={[
         getBreadcrumbSchema([
           { name: 'Accueil', url: '/' },
-          { name: 'Probl\u00e8mes courants', url: '/problemes' },
+          { name: 'Problèmes courants', url: '/problemes' },
         ]),
         getFAQSchema(faqItems.map((item) => ({ question: item.question, answer: item.answer }))),
       ]} />
@@ -124,7 +124,7 @@ export default function ProblemesPage() {
       {/* Breadcrumb */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          <Breadcrumb items={[{ label: 'Probl\u00e8mes courants' }]} />
+          <Breadcrumb items={[{ label: 'Problèmes courants' }]} />
         </div>
       </div>
 
@@ -153,26 +153,26 @@ export default function ProblemesPage() {
           <div className="text-center max-w-3xl mx-auto">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500/20 backdrop-blur-sm border border-amber-400/30 rounded-full mb-6">
               <AlertTriangle className="w-4 h-4 text-amber-400" />
-              <span className="text-sm font-semibold text-amber-200">30 probl\u00e8mes document\u00e9s</span>
+              <span className="text-sm font-semibold text-amber-200">30 problèmes documentés</span>
             </div>
             <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
-              Probl\u00e8mes courants{' '}
+              Problèmes courants{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-orange-300">
                 Diagnostic et solutions
               </span>
             </h1>
             <p className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10">
-              Identifiez votre probl\u00e8me, suivez nos conseils d&apos;urgence et trouvez un artisan r\u00e9f\u00e9renc\u00e9
-              pour intervenir rapidement. Fiches compl\u00e8tes avec sympt\u00f4mes, co\u00fbts et pr\u00e9vention.
+              Identifiez votre problème, suivez nos conseils d&apos;urgence et trouvez un artisan référencé
+              pour intervenir rapidement. Fiches complètes avec symptômes, coûts et prévention.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
                 <Shield className="w-4 h-4 text-green-400" />
-                <span className="text-sm text-white/80">Artisans r\u00e9f\u00e9renc\u00e9s</span>
+                <span className="text-sm text-white/80">Artisans référencés</span>
               </div>
               <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
                 <Clock className="w-4 h-4 text-amber-400" />
-                <span className="text-sm text-white/80">Conseils imm\u00e9diats</span>
+                <span className="text-sm text-white/80">Conseils immédiats</span>
               </div>
               <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
                 <CheckCircle className="w-4 h-4 text-green-400" />
@@ -187,12 +187,12 @@ export default function ProblemesPage() {
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <p className="text-sm font-semibold text-amber-600 uppercase tracking-wider mb-2">Par cat\u00e9gorie</p>
+            <p className="text-sm font-semibold text-amber-600 uppercase tracking-wider mb-2">Par catégorie</p>
             <h2 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-3 tracking-tight">
-              Trouvez votre probl\u00e8me
+              Trouvez votre problème
             </h2>
             <p className="text-slate-500 max-w-lg mx-auto">
-              S\u00e9lectionnez la cat\u00e9gorie correspondante pour acc\u00e9der au diagnostic d\u00e9taill\u00e9 et aux solutions.
+              Sélectionnez la catégorie correspondante pour accéder au diagnostic détaillé et aux solutions.
             </p>
           </div>
 
@@ -208,7 +208,7 @@ export default function ProblemesPage() {
                       <Icon className={`w-5 h-5 ${category.color}`} />
                     </div>
                     <h3 className="text-xl font-bold text-gray-900">{category.name}</h3>
-                    <span className="text-sm text-gray-400">({categoryProblems.length} probl\u00e8me{categoryProblems.length > 1 ? 's' : ''})</span>
+                    <span className="text-sm text-gray-400">({categoryProblems.length} problème{categoryProblems.length > 1 ? 's' : ''})</span>
                   </div>
                   <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {categoryProblems.map((problem) => {
@@ -231,7 +231,7 @@ export default function ProblemesPage() {
                           <p className="text-sm text-gray-500 mb-3 line-clamp-2">{problem.description}</p>
                           <div className="flex items-center justify-between">
                             <span className="text-sm font-medium text-gray-700">
-                              {problem.estimatedCost.min} \u2013 {problem.estimatedCost.max} \u20ac
+                              {problem.estimatedCost.min} – {problem.estimatedCost.max} \u20ac
                             </span>
                             <span className="text-xs text-gray-400">
                               {serviceNameMap[problem.primaryService] || problem.primaryService}
@@ -254,10 +254,10 @@ export default function ProblemesPage() {
           <div className="text-center mb-14">
             <p className="text-sm font-semibold text-amber-600 uppercase tracking-wider mb-2">Simple et rapide</p>
             <h2 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-3 tracking-tight">
-              Comment \u00e7a marche ?
+              Comment ça marche ?
             </h2>
             <p className="text-slate-500 max-w-lg mx-auto">
-              Trois \u00e9tapes pour diagnostiquer votre probl\u00e8me et trouver un artisan.
+              Trois étapes pour diagnostiquer votre problème et trouver un artisan.
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-10 relative">
@@ -291,7 +291,7 @@ export default function ProblemesPage() {
           <div className="text-center mb-12">
             <p className="text-sm font-semibold text-amber-600 uppercase tracking-wider mb-2">FAQ</p>
             <h2 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-3 tracking-tight">
-              Questions fr\u00e9quentes
+              Questions fréquentes
             </h2>
           </div>
           <div className="space-y-4">
@@ -320,7 +320,7 @@ export default function ProblemesPage() {
             Besoin d&apos;un artisan ?
           </h2>
           <p className="text-xl text-amber-100/90 mb-8 max-w-2xl mx-auto">
-            Demandez un devis gratuit et recevez jusqu&apos;\u00e0 3 propositions d&apos;artisans r\u00e9f\u00e9renc\u00e9s dans votre r\u00e9gion.
+            Demandez un devis gratuit et recevez jusqu&apos;à 3 propositions d&apos;artisans référencés dans votre région.
           </p>
           <Link
             href="/devis"
@@ -342,16 +342,16 @@ export default function ProblemesPage() {
               <div className="space-y-2">
                 <Link href="/urgence" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Urgence artisan 24h/24</Link>
                 <Link href="/urgence/plombier" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Plombier urgence</Link>
-                <Link href="/urgence/electricien" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">\u00c9lectricien urgence</Link>
+                <Link href="/urgence/electricien" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Électricien urgence</Link>
                 <Link href="/urgence/serrurier" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Serrurier urgence</Link>
                 <Link href="/urgence/chauffagiste" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Chauffagiste urgence</Link>
               </div>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Devis par m\u00e9tier</h3>
+              <h3 className="font-semibold text-gray-900 mb-3">Devis par métier</h3>
               <div className="space-y-2">
                 <Link href="/devis/plombier" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Devis plombier</Link>
-                <Link href="/devis/electricien" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Devis \u00e9lectricien</Link>
+                <Link href="/devis/electricien" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Devis électricien</Link>
                 <Link href="/devis/serrurier" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Devis serrurier</Link>
                 <Link href="/devis/chauffagiste" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Devis chauffagiste</Link>
                 <Link href="/devis/couvreur" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Devis couvreur</Link>
@@ -360,10 +360,10 @@ export default function ProblemesPage() {
             <div>
               <h3 className="font-semibold text-gray-900 mb-3">Informations utiles</h3>
               <div className="space-y-2">
-                <Link href="/comment-ca-marche" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Comment \u00e7a marche</Link>
+                <Link href="/comment-ca-marche" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Comment ça marche</Link>
                 <Link href="/tarifs-artisans" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Guide des tarifs</Link>
                 <Link href="/faq" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">FAQ</Link>
-                <Link href="/notre-processus-de-verification" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Processus de v\u00e9rification</Link>
+                <Link href="/notre-processus-de-verification" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Processus de vérification</Link>
               </div>
             </div>
           </div>
@@ -376,7 +376,7 @@ export default function ProblemesPage() {
           <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
             <h3 className="text-sm font-semibold text-slate-700 mb-2">Information importante</h3>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Les co\u00fbts et d\u00e9lais indiqu\u00e9s sont des estimations moyennes constat\u00e9es en France m\u00e9tropolitaine. Ils varient selon la complexit\u00e9 du probl\u00e8me, votre r\u00e9gion et l&apos;urgence. Seul un devis personnalis\u00e9 fait foi. ServicesArtisans est un annuaire ind\u00e9pendant \u2014 nous mettons en relation mais ne r\u00e9alisons pas les interventions. En cas d&apos;urgence vitale, appelez le 18 (pompiers) ou le 112.
+              Les coûts et délais indiqués sont des estimations moyennes constatées en France métropolitaine. Ils varient selon la complexité du problème, votre région et l&apos;urgence. Seul un devis personnalisé fait foi. ServicesArtisans est un annuaire indépendant — nous mettons en relation mais ne réalisons pas les interventions. En cas d&apos;urgence vitale, appelez le 18 (pompiers) ou le 112.
             </p>
           </div>
         </div>

@@ -159,18 +159,18 @@ export function generateStaticParams() {
 
 function truncateTitle(title: string, maxLen = 55): string {
   if (title.length <= maxLen) return title
-  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '\u2026'
+  return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
 
 function getClimatLabel(zone: string | null): string {
   const labels: Record<string, string> = {
-    oceanique: 'Climat oc\u00e9anique',
-    'semi-oceanique': 'Climat semi-oc\u00e9anique',
+    oceanique: 'Climat océanique',
+    'semi-oceanique': 'Climat semi-océanique',
     continental: 'Climat continental',
-    mediterraneen: 'Climat m\u00e9diterran\u00e9en',
+    mediterraneen: 'Climat méditerranéen',
     montagnard: 'Climat montagnard',
   }
-  return zone ? (labels[zone] ?? zone) : 'Climat temp\u00e9r\u00e9'
+  return zone ? (labels[zone] ?? zone) : 'Climat tempéré'
 }
 
 // ---------------------------------------------------------------------------
@@ -191,15 +191,15 @@ export async function generateMetadata({
 
   const titleHash = Math.abs(hashCode(`urgence-ville-title-${service}-${villeSlug}`))
   const titleTemplates = [
-    `Urgence ${tradeLower} \u00e0 ${villeData.name} \u2014 24h/24`,
-    `D\u00e9pannage ${tradeLower} urgent \u00e0 ${villeData.name}`,
-    `${trade.name} urgence ${villeData.name} \u2014 7j/7`,
-    `${trade.name} d'urgence \u00e0 ${villeData.name} 24h/24`,
+    `Urgence ${tradeLower} à ${villeData.name} — 24h/24`,
+    `Dépannage ${tradeLower} urgent à ${villeData.name}`,
+    `${trade.name} urgence ${villeData.name} — 7j/7`,
+    `${trade.name} d'urgence à ${villeData.name} 24h/24`,
     `Urgence ${tradeLower} ${villeData.name} : intervention rapide`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
-  const description = `Urgence ${tradeLower} \u00e0 ${villeData.name} : intervention 24h/24, 7j/7. ${trade.averageResponseTime}. Artisans r\u00e9f\u00e9renc\u00e9s, devis gratuit.`
+  const description = `Urgence ${tradeLower} à ${villeData.name} : intervention 24h/24, 7j/7. ${trade.averageResponseTime}. Artisans référencés, devis gratuit.`
 
   const serviceImage = getServiceImage(service)
   const canonicalUrl = `${SITE_URL}/urgence/${service}/${villeSlug}`
@@ -219,7 +219,7 @@ export async function generateMetadata({
           url: serviceImage.src,
           width: 800,
           height: 600,
-          alt: `${trade.name} urgence \u00e0 ${villeData.name}`,
+          alt: `${trade.name} urgence à ${villeData.name}`,
         },
       ],
     },
@@ -273,20 +273,20 @@ export default async function UrgenceServiceVillePage({
   // Emergency FAQ items
   const emergencyFaqItems = [
     {
-      question: `Combien co\u00fbte un ${tradeLower} en urgence \u00e0 ${villeData.name}\u00a0?`,
-      answer: `Les interventions d\u2019urgence de nuit (apr\u00e8s 20h) sont major\u00e9es de 50 \u00e0 100\u00a0% par rapport aux tarifs de journ\u00e9e. \u00c0 ${villeData.name}, comptez environ ${Math.round(minPrice * 1.5)} \u00e0 ${Math.round(maxPrice * 2)} ${trade.priceRange.unit} en urgence nocturne. Demandez toujours un devis avant intervention.`,
+      question: `Combien coûte un ${tradeLower} en urgence à ${villeData.name} ?`,
+      answer: `Les interventions d’urgence de nuit (après 20h) sont majorées de 50 à 100 % par rapport aux tarifs de journée. \u00c0 ${villeData.name}, comptez environ ${Math.round(minPrice * 1.5)} à ${Math.round(maxPrice * 2)} ${trade.priceRange.unit} en urgence nocturne. Demandez toujours un devis avant intervention.`,
     },
     {
-      question: `Quel est le d\u00e9lai d\u2019intervention \u00e0 ${villeData.name}\u00a0?`,
-      answer: `${trade.averageResponseTime}. Les artisans d\u2019urgence r\u00e9f\u00e9renc\u00e9s \u00e0 ${villeData.name} sont disponibles 24h/24 et 7j/7, y compris les jours f\u00e9ri\u00e9s. Le d\u00e9lai varie selon votre localisation exacte et la disponibilit\u00e9 des professionnels.`,
+      question: `Quel est le délai d’intervention à ${villeData.name} ?`,
+      answer: `${trade.averageResponseTime}. Les artisans d’urgence référencés à ${villeData.name} sont disponibles 24h/24 et 7j/7, y compris les jours fériés. Le délai varie selon votre localisation exacte et la disponibilité des professionnels.`,
     },
     {
-      question: `Que faire en attendant le ${tradeLower}\u00a0?`,
-      answer: `En attendant l\u2019arriv\u00e9e du professionnel \u00e0 ${villeData.name} : s\u00e9curisez la zone, coupez l\u2019arriv\u00e9e d\u2019eau ou le disjoncteur si n\u00e9cessaire, et ne tentez pas de r\u00e9paration vous-m\u00eame. Prot\u00e9gez vos biens des d\u00e9g\u00e2ts \u00e9ventuels.`,
+      question: `Que faire en attendant le ${tradeLower} ?`,
+      answer: `En attendant l’arrivée du professionnel à ${villeData.name} : sécurisez la zone, coupez l’arrivée d’eau ou le disjoncteur si nécessaire, et ne tentez pas de réparation vous-même. Protégez vos biens des dégâts éventuels.`,
     },
     {
-      question: `Un ${tradeLower} d\u2019urgence est-il assur\u00e9\u00a0?`,
-      answer: `Tout ${tradeLower} professionnel doit disposer d\u2019une assurance responsabilit\u00e9 civile professionnelle et d\u2019une garantie d\u00e9cennale. Exigez une attestation avant le d\u00e9but des travaux, m\u00eame en urgence.`,
+      question: `Un ${tradeLower} d’urgence est-il assuré ?`,
+      answer: `Tout ${tradeLower} professionnel doit disposer d’une assurance responsabilité civile professionnelle et d’une garantie décennale. Exigez une attestation avant le début des travaux, même en urgence.`,
     },
   ]
 
@@ -302,7 +302,7 @@ export default async function UrgenceServiceVillePage({
   const allFaqItems = [
     ...emergencyFaqItems.map((f) => ({ question: f.question, answer: f.answer })),
     ...tradeFaqItems.map((f) => ({
-      question: f.q.replace(/\?$/, '') + ` \u00e0 ${villeData.name}\u00a0?`,
+      question: f.q.replace(/\?$/, '') + ` à ${villeData.name} ?`,
       answer: f.a,
     })),
   ]
@@ -340,8 +340,8 @@ export default async function UrgenceServiceVillePage({
   const serviceSchema = {
     '@context': 'https://schema.org',
     '@type': 'Service',
-    name: `${trade.name} urgence \u00e0 ${villeData.name} 24h/24`,
-    description: `Intervention d\u2019urgence ${tradeLower} \u00e0 ${villeData.name}. ${trade.averageResponseTime}. Disponible 24h/24 et 7j/7.`,
+    name: `${trade.name} urgence à ${villeData.name} 24h/24`,
+    description: `Intervention d’urgence ${tradeLower} à ${villeData.name}. ${trade.averageResponseTime}. Disponible 24h/24 et 7j/7.`,
     provider: {
       '@type': 'Organization',
       name: SITE_NAME,
@@ -415,21 +415,21 @@ export default async function UrgenceServiceVillePage({
                 hashCode(`urgence-ville-h1-${service}-${villeSlug}`)
               )
               const h1Templates = [
-                `${trade.name} urgence \u00e0 ${villeData.name}`,
-                `Urgence ${tradeLower} \u00e0 ${villeData.name} 24h/24`,
-                `D\u00e9pannage ${tradeLower} urgent \u00e0 ${villeData.name}`,
-                `${trade.name} d\u2019urgence \u00e0 ${villeData.name}`,
-                `Intervention ${tradeLower} urgente \u00e0 ${villeData.name}`,
+                `${trade.name} urgence à ${villeData.name}`,
+                `Urgence ${tradeLower} à ${villeData.name} 24h/24`,
+                `Dépannage ${tradeLower} urgent à ${villeData.name}`,
+                `${trade.name} d’urgence à ${villeData.name}`,
+                `Intervention ${tradeLower} urgente à ${villeData.name}`,
               ]
               return h1Templates[h1Hash % h1Templates.length]
             })()}
             <br />
-            <span className="opacity-80">Intervention imm\u00e9diate.</span>
+            <span className="opacity-80">Intervention immédiate.</span>
           </h1>
 
           <p className="text-xl opacity-90 max-w-2xl mb-8">
-            {trade.emergencyInfo} Artisans r\u00e9f\u00e9renc\u00e9s
-            disponibles \u00e0 {villeData.name} et ses environs.
+            {trade.emergencyInfo} Artisans référencés
+            disponibles à {villeData.name} et ses environs.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 mb-8">
@@ -444,7 +444,7 @@ export default async function UrgenceServiceVillePage({
               href={`/devis/${service}/${villeSlug}`}
               className="inline-flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all"
             >
-              Demander un devis \u00e0 {villeData.name}
+              Demander un devis à {villeData.name}
               <ArrowRight className="w-5 h-5" />
             </Link>
           </div>
@@ -456,7 +456,7 @@ export default async function UrgenceServiceVillePage({
             </div>
             <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
               <Shield className="w-4 h-4" />
-              <span className="text-sm">Artisans r\u00e9f\u00e9renc\u00e9s</span>
+              <span className="text-sm">Artisans référencés</span>
             </div>
             <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
               <CheckCircle className="w-4 h-4" />
@@ -471,12 +471,12 @@ export default async function UrgenceServiceVillePage({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <h2 className="font-heading text-3xl font-bold text-gray-900 mb-3">
-              Urgences {tradeLower} courantes \u00e0 {villeData.name}
+              Urgences {tradeLower} courantes à {villeData.name}
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Les {tradeLower}s d&apos;urgence r\u00e9f\u00e9renc\u00e9s
-              interviennent rapidement \u00e0 {villeData.name} pour tous ces
-              probl\u00e8mes.
+              Les {tradeLower}s d&apos;urgence référencés
+              interviennent rapidement à {villeData.name} pour tous ces
+              problèmes.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -497,10 +497,10 @@ export default async function UrgenceServiceVillePage({
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-3xl font-bold text-gray-900 mb-3 text-center">
-            Tarifs {tradeLower} urgence \u00e0 {villeData.name}
+            Tarifs {tradeLower} urgence à {villeData.name}
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto text-center mb-10">
-            Prix indicatifs pour les interventions d&apos;urgence \u00e0{' '}
+            Prix indicatifs pour les interventions d&apos;urgence à{' '}
             {villeData.name}. Les majorations varient selon l&apos;horaire et le
             jour d&apos;intervention.
           </p>
@@ -509,16 +509,16 @@ export default async function UrgenceServiceVillePage({
           <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-12">
             <div className="bg-white rounded-2xl border border-gray-200 p-6 text-center">
               <div className="text-sm font-semibold text-gray-500 mb-2 uppercase tracking-wide">
-                Tarif journ\u00e9e
+                Tarif journée
               </div>
               <div className="text-3xl font-bold text-gray-900 mb-1">
-                {minPrice} \u2014 {maxPrice}
+                {minPrice} — {maxPrice}
               </div>
               <div className="text-sm text-gray-500">
                 {trade.priceRange.unit}
               </div>
               <div className="mt-3 text-xs text-gray-400">
-                Lundi \u00e0 samedi, 8h\u201320h
+                Lundi à samedi, 8h–20h
               </div>
             </div>
             <div className="bg-white rounded-2xl border-2 border-amber-300 p-6 text-center relative">
@@ -529,14 +529,14 @@ export default async function UrgenceServiceVillePage({
                 Nuit / Week-end
               </div>
               <div className="text-3xl font-bold text-amber-600 mb-1">
-                {Math.round(minPrice * 1.5)} \u2014{' '}
+                {Math.round(minPrice * 1.5)} —{' '}
                 {Math.round(maxPrice * 1.5)}
               </div>
               <div className="text-sm text-gray-500">
                 {trade.priceRange.unit}
               </div>
               <div className="mt-3 text-xs text-gray-400">
-                Samedi apr\u00e8s 20h, dimanche matin
+                Samedi après 20h, dimanche matin
               </div>
             </div>
             <div className="bg-white rounded-2xl border-2 border-red-300 p-6 text-center relative">
@@ -544,16 +544,16 @@ export default async function UrgenceServiceVillePage({
                 +100 %
               </div>
               <div className="text-sm font-semibold text-gray-500 mb-2 uppercase tracking-wide">
-                Dimanche / Jour f\u00e9ri\u00e9
+                Dimanche / Jour férié
               </div>
               <div className="text-3xl font-bold text-red-600 mb-1">
-                {Math.round(minPrice * 2)} \u2014 {Math.round(maxPrice * 2)}
+                {Math.round(minPrice * 2)} — {Math.round(maxPrice * 2)}
               </div>
               <div className="text-sm text-gray-500">
                 {trade.priceRange.unit}
               </div>
               <div className="mt-3 text-xs text-gray-400">
-                Dimanche, jours f\u00e9ri\u00e9s, 1er mai
+                Dimanche, jours fériés, 1er mai
               </div>
             </div>
           </div>
@@ -561,8 +561,8 @@ export default async function UrgenceServiceVillePage({
           {multiplier !== 1.0 && (
             <p className="text-xs text-gray-400 text-center mb-8">
               {multiplier > 1.0
-                ? `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((multiplier - 1) * 100)}\u00a0% sup\u00e9rieurs \u00e0 la moyenne nationale`
-                : `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((1 - multiplier) * 100)}\u00a0% inf\u00e9rieurs \u00e0 la moyenne nationale`}
+                ? `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((multiplier - 1) * 100)} % supérieurs à la moyenne nationale`
+                : `Les tarifs en ${villeData.region} sont en moyenne ${Math.round((1 - multiplier) * 100)} % inférieurs à la moyenne nationale`}
             </p>
           )}
 
@@ -587,7 +587,7 @@ export default async function UrgenceServiceVillePage({
               href={`/tarifs-artisans/${service}/${villeSlug}`}
               className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold"
             >
-              Tarifs d\u00e9taill\u00e9s {tradeLower} \u00e0 {villeData.name}
+              Tarifs détaillés {tradeLower} à {villeData.name}
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -598,11 +598,11 @@ export default async function UrgenceServiceVillePage({
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-gray-900 mb-2 text-center">
-            Contexte local \u00e0 {villeData.name}
+            Contexte local à {villeData.name}
           </h2>
           <p className="text-gray-500 text-sm text-center mb-8">
-            Donn\u00e9es locales qui influencent les interventions d&apos;urgence{' '}
-            {tradeLower} \u00e0 {villeData.name}.
+            Données locales qui influencent les interventions d&apos;urgence{' '}
+            {tradeLower} à {villeData.name}.
           </p>
           <div className="grid sm:grid-cols-2 gap-6">
             <LocalFactorCard
@@ -615,30 +615,30 @@ export default async function UrgenceServiceVillePage({
               }
               description={
                 commune?.nb_entreprises_artisanales
-                  ? `${villeData.name} compte ${formatNumber(commune.nb_entreprises_artisanales)} entreprises artisanales, ce qui facilite l\u2019acc\u00e8s \u00e0 un ${tradeLower} d\u2019urgence disponible rapidement.`
-                  : `Le nombre d\u2019artisans disponibles \u00e0 ${villeData.name} influence le d\u00e9lai d\u2019intervention en urgence.`
+                  ? `${villeData.name} compte ${formatNumber(commune.nb_entreprises_artisanales)} entreprises artisanales, ce qui facilite l’accès à un ${tradeLower} d’urgence disponible rapidement.`
+                  : `Le nombre d’artisans disponibles à ${villeData.name} influence le délai d’intervention en urgence.`
               }
             />
             <LocalFactorCard
               icon={<Thermometer className="w-5 h-5 text-green-600" />}
               title="Climat"
               value={getClimatLabel(commune?.climat_zone ?? null)}
-              description={`Le climat local \u00e0 ${villeData.name} influence la fr\u00e9quence de certaines urgences (gel, canicule, intempéries). Anticipez les p\u00e9riodes \u00e0 risque.`}
+              description={`Le climat local à ${villeData.name} influence la fréquence de certaines urgences (gel, canicule, intempéries). Anticipez les périodes à risque.`}
             />
             <LocalFactorCard
               icon={<Building2 className="w-5 h-5 text-purple-600" />}
               title="Type de logement"
               value={
                 commune?.part_maisons_pct
-                  ? `${commune.part_maisons_pct}\u00a0% de maisons`
+                  ? `${commune.part_maisons_pct} % de maisons`
                   : null
               }
               description={
                 commune?.part_maisons_pct
                   ? commune.part_maisons_pct > 50
-                    ? `\u00c0 ${villeData.name}, ${commune.part_maisons_pct}\u00a0% des logements sont des maisons individuelles. Les interventions d\u2019urgence sur maisons (toiture, canalisations) sont fr\u00e9quentes.`
-                    : `\u00c0 ${villeData.name}, les appartements sont majoritaires (${100 - commune.part_maisons_pct}\u00a0%). Les urgences en copropri\u00e9t\u00e9 peuvent impliquer des contraintes sp\u00e9cifiques.`
-                  : `La r\u00e9partition entre maisons et appartements \u00e0 ${villeData.name} influence les types d\u2019urgences rencontr\u00e9es.`
+                    ? `\u00c0 ${villeData.name}, ${commune.part_maisons_pct} % des logements sont des maisons individuelles. Les interventions d’urgence sur maisons (toiture, canalisations) sont fréquentes.`
+                    : `\u00c0 ${villeData.name}, les appartements sont majoritaires (${100 - commune.part_maisons_pct} %). Les urgences en copropriété peuvent impliquer des contraintes spécifiques.`
+                  : `La répartition entre maisons et appartements à ${villeData.name} influence les types d’urgences rencontrées.`
               }
             />
             <LocalFactorCard
@@ -649,7 +649,7 @@ export default async function UrgenceServiceVillePage({
                   ? `${formatNumber(commune.population)} habitants`
                   : villeData.population
               }
-              description={`La taille de ${villeData.name} conditionne le maillage d\u2019artisans d\u2019urgence disponibles et les d\u00e9lais d\u2019intervention.`}
+              description={`La taille de ${villeData.name} conditionne le maillage d’artisans d’urgence disponibles et les délais d’intervention.`}
             />
           </div>
         </div>
@@ -659,7 +659,7 @@ export default async function UrgenceServiceVillePage({
       <section className="py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 text-center">
-            Que faire en attendant le {tradeLower}\u00a0?
+            Que faire en attendant le {tradeLower} ?
           </h2>
           <div className="bg-amber-50 border-2 border-amber-200 rounded-2xl p-6 md:p-8">
             <div className="flex items-start gap-4">
@@ -668,7 +668,7 @@ export default async function UrgenceServiceVillePage({
               </div>
               <div>
                 <h3 className="font-heading text-lg font-semibold text-amber-800 mb-2">
-                  Conseils de s\u00e9curit\u00e9 en attendant l&apos;artisan
+                  Conseils de sécurité en attendant l&apos;artisan
                 </h3>
                 <p className="text-amber-700 leading-relaxed">
                   {trade.emergencyInfo}
@@ -676,7 +676,7 @@ export default async function UrgenceServiceVillePage({
                 <p className="text-amber-600 text-sm mt-4">
                   En cas d&apos;urgence vitale (fuite de gaz, incendie),
                   appelez le 18 (pompiers) ou le 112 avant toute autre
-                  d\u00e9marche.
+                  démarche.
                 </p>
               </div>
             </div>
@@ -689,7 +689,7 @@ export default async function UrgenceServiceVillePage({
         <section className="py-16 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 text-center">
-              Certifications \u00e0 v\u00e9rifier
+              Certifications à vérifier
             </h2>
             <div className="flex flex-wrap justify-center gap-3">
               {trade.certifications.map((cert) => (
@@ -734,7 +734,7 @@ export default async function UrgenceServiceVillePage({
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 text-center">
-            Questions fr\u00e9quentes — {trade.name} urgence \u00e0{' '}
+            Questions fréquentes — {trade.name} urgence à{' '}
             {villeData.name}
           </h2>
           <div className="space-y-4">
@@ -764,11 +764,11 @@ export default async function UrgenceServiceVillePage({
       >
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-heading text-3xl font-bold mb-4">
-            Besoin d&apos;un {tradeLower} en urgence \u00e0 {villeData.name}
+            Besoin d&apos;un {tradeLower} en urgence à {villeData.name}
             &nbsp;?
           </h2>
           <p className="text-xl opacity-90 mb-8">
-            Les {tradeLower}s r\u00e9f\u00e9renc\u00e9s \u00e0{' '}
+            Les {tradeLower}s référencés à{' '}
             {villeData.name} sont disponibles 24h/24 et 7j/7.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
@@ -783,7 +783,7 @@ export default async function UrgenceServiceVillePage({
               href={`/devis/${service}/${villeSlug}`}
               className="inline-flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all"
             >
-              Demander un devis \u00e0 {villeData.name}
+              Demander un devis à {villeData.name}
               <ArrowRight className="w-5 h-5" />
             </Link>
           </div>
@@ -804,7 +804,7 @@ export default async function UrgenceServiceVillePage({
                 className="bg-gray-50 hover:bg-red-50 border border-gray-200 hover:border-red-300 rounded-xl p-4 transition-all group text-center"
               >
                 <div className="font-semibold text-gray-900 group-hover:text-red-600 transition-colors text-sm">
-                  {trade.name} urgence \u00e0 {v.name}
+                  {trade.name} urgence à {v.name}
                 </div>
                 <div className="text-xs text-gray-500 mt-1">24h/24</div>
               </Link>
@@ -817,7 +817,7 @@ export default async function UrgenceServiceVillePage({
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6">
-            Autres urgences \u00e0 {villeData.name}
+            Autres urgences à {villeData.name}
           </h2>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {otherEmergencyServices.map((slug) => {
@@ -863,19 +863,19 @@ export default async function UrgenceServiceVillePage({
                   href={`/services/${service}/${villeSlug}`}
                   className="block text-sm text-gray-600 hover:text-blue-600 py-1"
                 >
-                  {trade.name} \u00e0 {villeData.name}
+                  {trade.name} à {villeData.name}
                 </Link>
                 <Link
                   href={`/tarifs-artisans/${service}/${villeSlug}`}
                   className="block text-sm text-gray-600 hover:text-blue-600 py-1"
                 >
-                  Tarifs {tradeLower} \u00e0 {villeData.name}
+                  Tarifs {tradeLower} à {villeData.name}
                 </Link>
                 <Link
                   href={`/devis/${service}/${villeSlug}`}
                   className="block text-sm text-gray-600 hover:text-blue-600 py-1"
                 >
-                  Devis {tradeLower} \u00e0 {villeData.name}
+                  Devis {tradeLower} à {villeData.name}
                 </Link>
               </div>
             </div>
@@ -888,7 +888,7 @@ export default async function UrgenceServiceVillePage({
                   href={`/villes/${villeSlug}`}
                   className="block text-sm text-gray-600 hover:text-blue-600 py-1"
                 >
-                  Artisans \u00e0 {villeData.name}
+                  Artisans à {villeData.name}
                 </Link>
                 {otherTrades.slice(0, 3).map((slug) => {
                   const t = tradeContent[slug]
@@ -899,7 +899,7 @@ export default async function UrgenceServiceVillePage({
                       href={`/urgence/${slug}/${villeSlug}`}
                       className="block text-sm text-gray-600 hover:text-blue-600 py-1"
                     >
-                      {t.name} urgence \u00e0 {villeData.name}
+                      {t.name} urgence à {villeData.name}
                     </Link>
                   )
                 })}
@@ -920,7 +920,7 @@ export default async function UrgenceServiceVillePage({
                   href="/comment-ca-marche"
                   className="block text-sm text-gray-600 hover:text-blue-600 py-1"
                 >
-                  Comment \u00e7a marche
+                  Comment ça marche
                 </Link>
                 <Link
                   href="/tarifs-artisans"
@@ -938,7 +938,7 @@ export default async function UrgenceServiceVillePage({
                   href="/notre-processus-de-verification"
                   className="block text-sm text-gray-600 hover:text-blue-600 py-1"
                 >
-                  Processus de v\u00e9rification
+                  Processus de vérification
                 </Link>
               </div>
             </div>
@@ -954,13 +954,13 @@ export default async function UrgenceServiceVillePage({
               Information importante
             </h3>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Les d\u00e9lais d&apos;intervention et tarifs affich\u00e9s pour{' '}
-              {villeData.name} sont des estimations bas\u00e9es sur la
-              disponibilit\u00e9 habituelle des artisans et les donn\u00e9es
-              r\u00e9gionales ({villeData.region}). Ils peuvent varier selon la
-              complexit\u00e9 de l&apos;intervention et la disponibilit\u00e9
-              des professionnels. {SITE_NAME} est un annuaire ind\u00e9pendant
-              — nous mettons en relation mais ne r\u00e9alisons pas les
+              Les délais d&apos;intervention et tarifs affichés pour{' '}
+              {villeData.name} sont des estimations basées sur la
+              disponibilité habituelle des artisans et les données
+              régionales ({villeData.region}). Ils peuvent varier selon la
+              complexité de l&apos;intervention et la disponibilité
+              des professionnels. {SITE_NAME} est un annuaire indépendant
+              — nous mettons en relation mais ne réalisons pas les
               interventions. En cas d&apos;urgence vitale, appelez le 18
               (pompiers) ou le 112.
             </p>

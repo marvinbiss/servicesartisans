@@ -12,9 +12,9 @@ import { tradeContent } from '@/lib/data/trade-content'
 export const revalidate = 86400 // 24h
 
 export const metadata: Metadata = {
-  title: 'Avis artisans \u2014 Trouvez un professionnel de confiance',
+  title: 'Avis artisans — Trouvez un professionnel de confiance',
   description:
-    'Consultez les avis et recommandations pour choisir le bon artisan. Plombier, \u00e9lectricien, serrurier\u2026 Comparez les profils et les avis v\u00e9rifi\u00e9s.',
+    'Consultez les avis et recommandations pour choisir le bon artisan. Plombier, électricien, serrurier… Comparez les profils et les avis vérifiés.',
   alternates: {
     canonical: `${SITE_URL}/avis`,
   },
@@ -26,9 +26,9 @@ export const metadata: Metadata = {
     'max-video-preview': -1,
   },
   openGraph: {
-    title: 'Avis artisans \u2014 Trouvez un professionnel de confiance',
+    title: 'Avis artisans — Trouvez un professionnel de confiance',
     description:
-      'Consultez les avis et recommandations pour choisir le bon artisan. Plombier, \u00e9lectricien, serrurier\u2026 Comparez les profils et les avis v\u00e9rifi\u00e9s.',
+      'Consultez les avis et recommandations pour choisir le bon artisan. Plombier, électricien, serrurier… Comparez les profils et les avis vérifiés.',
     url: `${SITE_URL}/avis`,
     type: 'website',
     images: [
@@ -36,22 +36,22 @@ export const metadata: Metadata = {
         url: `${SITE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
-        alt: 'ServicesArtisans \u2014 Avis artisans',
+        alt: 'ServicesArtisans — Avis artisans',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Avis artisans \u2014 Trouvez un professionnel de confiance',
+    title: 'Avis artisans — Trouvez un professionnel de confiance',
     description:
-      'Consultez les avis et recommandations pour choisir le bon artisan. Comparez les profils et les avis v\u00e9rifi\u00e9s.',
+      'Consultez les avis et recommandations pour choisir le bon artisan. Comparez les profils et les avis vérifiés.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }
 
 const trustBadges = [
-  { icon: Star, label: 'Avis v\u00e9rifi\u00e9s', sublabel: 'Clients authentiques' },
-  { icon: Shield, label: 'Artisans r\u00e9f\u00e9renc\u00e9s', sublabel: 'SIREN contr\u00f4l\u00e9' },
+  { icon: Star, label: 'Avis vérifiés', sublabel: 'Clients authentiques' },
+  { icon: Shield, label: 'Artisans référencés', sublabel: 'SIREN contrôlé' },
   { icon: Users, label: 'Comparaison gratuite', sublabel: 'Sans engagement' },
 ]
 
@@ -61,54 +61,54 @@ const howSteps = [
     icon: Search,
     title: 'Consultez les profils',
     description:
-      'Explorez les profils d\u2019artisans r\u00e9f\u00e9renc\u00e9s pr\u00e8s de chez vous et consultez leurs comp\u00e9tences.',
+      'Explorez les profils d’artisans référencés près de chez vous et consultez leurs compétences.',
   },
   {
     number: '2',
     icon: Star,
     title: 'Comparez les avis',
     description:
-      'Lisez les retours d\u2019exp\u00e9rience v\u00e9rifi\u00e9s et comparez les notes des professionnels.',
+      'Lisez les retours d’expérience vérifiés et comparez les notes des professionnels.',
   },
   {
     number: '3',
     icon: CheckCircle,
     title: 'Choisissez votre artisan',
     description:
-      'S\u00e9lectionnez le professionnel qui correspond le mieux \u00e0 votre projet et demandez un devis.',
+      'Sélectionnez le professionnel qui correspond le mieux à votre projet et demandez un devis.',
   },
 ]
 
 const faqItems = [
   {
-    question: 'Comment sont v\u00e9rifi\u00e9s les avis\u00a0?',
+    question: 'Comment sont vérifiés les avis ?',
     answer:
-      'Les avis publi\u00e9s sur ServicesArtisans proviennent de clients ayant effectivement sollicit\u00e9 un artisan via notre plateforme. Chaque avis est associ\u00e9 \u00e0 une demande de devis ou \u00e0 une mise en relation v\u00e9rifi\u00e9e.',
+      'Les avis publiés sur ServicesArtisans proviennent de clients ayant effectivement sollicité un artisan via notre plateforme. Chaque avis est associé à une demande de devis ou à une mise en relation vérifiée.',
   },
   {
-    question: 'Puis-je laisser un avis\u00a0?',
+    question: 'Puis-je laisser un avis ?',
     answer:
-      'Oui, tout client ayant fait appel \u00e0 un artisan r\u00e9f\u00e9renc\u00e9 peut d\u00e9poser un avis. Celui-ci sera publi\u00e9 apr\u00e8s v\u00e9rification de la mise en relation.',
+      'Oui, tout client ayant fait appel à un artisan référencé peut déposer un avis. Celui-ci sera publié après vérification de la mise en relation.',
   },
   {
-    question: 'Les artisans peuvent-ils supprimer un avis n\u00e9gatif\u00a0?',
+    question: 'Les artisans peuvent-ils supprimer un avis négatif ?',
     answer:
-      'Non. Les avis n\u00e9gatifs sont maintenus d\u00e8s lors qu\u2019ils respectent nos conditions de publication (pas d\u2019insultes, contenu v\u00e9ridique). Les artisans peuvent y r\u00e9pondre publiquement.',
+      'Non. Les avis négatifs sont maintenus dès lors qu’ils respectent nos conditions de publication (pas d’insultes, contenu véridique). Les artisans peuvent y répondre publiquement.',
   },
   {
-    question: 'Comment lire les avis efficacement\u00a0?',
+    question: 'Comment lire les avis efficacement ?',
     answer:
-      'Privil\u00e9giez les avis d\u00e9taill\u00e9s qui d\u00e9crivent le type de travaux r\u00e9alis\u00e9s, le respect des d\u00e9lais et la qualit\u00e9 du r\u00e9sultat. Un artisan avec 10 avis \u00e0 4,5/5 est souvent plus fiable qu\u2019un artisan avec 2 avis \u00e0 5/5.',
+      'Privilégiez les avis détaillés qui décrivent le type de travaux réalisés, le respect des délais et la qualité du résultat. Un artisan avec 10 avis à 4,5/5 est souvent plus fiable qu’un artisan avec 2 avis à 5/5.',
   },
   {
-    question: 'Les avis influencent-ils le classement des artisans\u00a0?',
+    question: 'Les avis influencent-ils le classement des artisans ?',
     answer:
-      'Oui, les artisans les mieux not\u00e9s et les plus actifs apparaissent en priorit\u00e9 dans les r\u00e9sultats de recherche sur ServicesArtisans.',
+      'Oui, les artisans les mieux notés et les plus actifs apparaissent en priorité dans les résultats de recherche sur ServicesArtisans.',
   },
   {
-    question: 'Que faire en cas de litige avec un artisan\u00a0?',
+    question: 'Que faire en cas de litige avec un artisan ?',
     answer:
-      'En cas de diff\u00e9rend, contactez notre service de m\u00e9diation. Nous intervenons gratuitement pour faciliter la r\u00e9solution entre le client et l\u2019artisan.',
+      'En cas de différend, contactez notre service de médiation. Nous intervenons gratuitement pour faciliter la résolution entre le client et l’artisan.',
   },
 ]
 
