@@ -329,16 +329,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   // ─── PROVIDER DETAIL (existing logic) ────────────────────
   try {
-    const [providerByStableId, service, location] = await Promise.all([
-      getProviderByStableId(publicId),
-      getServiceBySlug(serviceSlug),
-      getLocationBySlug(locationSlug),
-    ])
-
-    // Fallback: try slug lookup if stable_id didn't match
-    const provider = providerByStableId || await getProviderBySlug(publicId)
-
+    // Separate lookups so a service/location failure doesn't kill provider lookup
+    const provider = await getProviderByStableId(publicId) || await getProviderBySlug(publicId)
     if (!provider) return { title: 'Artisan non trouvé' }
+
+    const [service, location] = await Promise.all([
+      getServiceBySlug(serviceSlug).catch(() => null),
+      getLocationBySlug(locationSlug).catch(() => null),
+    ])
 
     const displayName = provider.name || provider.business_name || 'Artisan'
     const cityName = location?.name || provider.address_city || ''
@@ -405,30 +403,34 @@ export default async function ProviderPage({ params }: PageProps) {
   }
 
   // ─── PROVIDER DETAIL (existing logic) ────────────────────
-  let provider: any, service: any, location: any
+  // Separate provider lookup from service/location — a service lookup failure
+  // must NOT kill the provider lookup (they are independent)
+  let provider: any = null
+  let service: any = null
+  let location: any = null
 
+  // 1. Provider lookup (critical — without this, 404)
   try {
-    // Try stable_id first, then slug as fallback
-    const [providerByStableId, svc, loc] = await Promise.all([
-      getProviderByStableId(publicId),
-      getServiceBySlug(serviceSlug),
-      getLocationBySlug(locationSlug),
-    ])
-    provider = providerByStableId
-    service = svc
-    location = loc
-
-    // Fallback: try slug lookup if stable_id didn't match
+    provider = await getProviderByStableId(publicId)
     if (!provider) {
       provider = await getProviderBySlug(publicId)
     }
   } catch (error) {
-    console.error('Provider page DB error:', error)
-    // Don't throw — show 404 instead of crashing the error boundary
+    console.error('Provider lookup error:', error)
   }
 
   if (!provider) {
     notFound()
+  }
+
+  // 2. Service + Location (non-critical — page still renders with fallback data)
+  try {
+    ;[service, location] = await Promise.all([
+      getServiceBySlug(serviceSlug).catch(() => null),
+      getLocationBySlug(locationSlug).catch(() => null),
+    ])
+  } catch {
+    // Graceful degradation — use provider's own data as fallback
   }
 
   // Canonical redirect: if the URL segments don't match the canonical slugs, redirect

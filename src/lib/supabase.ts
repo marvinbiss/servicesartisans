@@ -188,38 +188,70 @@ export async function getLocationBySlug(slug: string) {
 
 // Lookup by stable_id ONLY — no fallback.
 export async function getProviderByStableId(stableId: string) {
-  return withTimeout(
-    (async () => {
+  if (IS_BUILD) return null // Skip during build — ISR will populate on first visit
+  try {
+    return await withTimeout(
+      (async () => {
+        const { data } = await supabase
+          .from('providers')
+          .select(PROVIDER_SELECT)
+          .eq('stable_id', stableId)
+          .eq('is_active', true)
+          .single()
+
+        return data || null
+      })(),
+      QUERY_TIMEOUT_MS,
+      `getProviderByStableId(${stableId})`,
+    )
+  } catch {
+    // Fallback: simpler query without joins (in case provider_services/provider_locations fail)
+    try {
       const { data } = await supabase
         .from('providers')
-        .select(PROVIDER_SELECT)
+        .select('*')
         .eq('stable_id', stableId)
         .eq('is_active', true)
         .single()
-
       return data || null
-    })(),
-    QUERY_TIMEOUT_MS,
-    `getProviderByStableId(${stableId})`,
-  )
+    } catch {
+      return null
+    }
+  }
 }
 
 // Legacy — still used by non-slice code paths. Will be removed in a future PR.
 export async function getProviderBySlug(slug: string) {
-  return withTimeout(
-    (async () => {
+  if (IS_BUILD) return null // Skip during build — ISR will populate on first visit
+  try {
+    return await withTimeout(
+      (async () => {
+        const { data } = await supabase
+          .from('providers')
+          .select(PROVIDER_SELECT)
+          .eq('slug', slug)
+          .eq('is_active', true)
+          .single()
+
+        return data || null
+      })(),
+      QUERY_TIMEOUT_MS,
+      `getProviderBySlug(${slug})`,
+    )
+  } catch {
+    // Fallback: simpler query without joins
+    try {
       const { data } = await supabase
         .from('providers')
-        .select(PROVIDER_SELECT)
+        .select('*')
         .eq('slug', slug)
         .eq('is_active', true)
         .single()
-
       return data || null
-    })(),
-    QUERY_TIMEOUT_MS,
-    `getProviderBySlug(${slug})`,
-  )
+    } catch {
+      return null
+    }
+  }
 }
 
 // Reverse mapping: service slug → provider specialties (for fallback queries)
