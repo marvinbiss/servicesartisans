@@ -464,11 +464,12 @@ export default async function ProviderPage({ params }: PageProps) {
   }
 
   // Canonical redirect: if the URL segments don't match the canonical slugs, redirect
+  // Use location.name (resolved) over raw provider.address_city (may be an INSEE code)
   const canonicalUrl = getArtisanUrl({
     stable_id: provider.stable_id,
     slug: provider.slug,
     specialty: provider.specialty,
-    city: provider.address_city,
+    city: location?.name || provider.address_city,
   })
   const currentPath = `/services/${serviceSlug}/${locationSlug}/${publicId}`
   // Only redirect if canonical URL has a valid ID segment (avoid redirect to hub page)
