@@ -312,7 +312,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (quartierMatch) {
     const { ville, quartierName } = quartierMatch
     const staticSvc = staticServicesList.find(s => s.slug === serviceSlug)
-    if (!staticSvc) return { title: 'Non trouvé' }
+    if (!staticSvc) return { title: 'Non trouvé', robots: { index: false, follow: false } }
 
     const svcLower = staticSvc.name.toLowerCase()
     let providerCount = 0
@@ -366,7 +366,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       getLocationBySlug(locationSlug).catch(() => null),
     ])
     const provider = stableIdResult || slugResult
-    if (!provider) return { title: 'Artisan non trouvé' }
+    if (!provider) return { title: 'Artisan non trouvé', robots: { index: false, follow: false } }
 
     const displayName = provider.name || provider.business_name || 'Artisan'
     const cityName = location?.name || provider.address_city || ''

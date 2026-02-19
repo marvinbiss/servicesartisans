@@ -121,7 +121,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   if (!serviceName || !locationName) {
-    return { title: 'Non trouvé' }
+    return { title: 'Non trouvé', robots: { index: false, follow: false } }
   }
 
   const hasProviders = providerCount > 0
