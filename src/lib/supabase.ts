@@ -311,24 +311,19 @@ export async function getProvidersByServiceAndLocation(
 ) {
   if (IS_BUILD) return [] // Skip during build — ISR will populate on first visit
 
-  // Resolve service + location OUTSIDE retryWithBackoff — they have their own retry logic.
-  // Nesting them inside retryWithBackoff(8s) caused timeouts: inner retries could exceed
-  // the outer 8s timeout on Supabase free tier cold starts.
-  const [service, location] = await Promise.all([
-    getServiceBySlug(serviceSlug).catch(() => null),
-    getLocationBySlug(locationSlug).catch(() => null),
-  ])
+  // Use STATIC data for service/location — no DB needed. This keeps total function
+  // time well under Vercel's 10s serverless timeout (avoids nested retry cascades).
+  const ville = getVilleBySlugImport(locationSlug)
+  if (!ville) return []
 
-  if (!service || !location) return []
-
-  const cityValues = getCityValues(location.name)
+  const cityValues = getCityValues(ville.name)
   const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
+  if (!specialties || specialties.length === 0) return []
 
-  // Only the actual provider query is retried with timeout
-  return retryWithBackoff(
-    async () => {
-      // Primary query: direct specialty + city (fast — uses composite index + .in())
-      if (specialties && specialties.length > 0) {
+  try {
+    return await withTimeout(
+      (async () => {
+        // Primary: direct specialty + city (fast — uses index + .in())
         const { data: direct, error: directError } = await supabase
           .from('providers')
           .select(PROVIDER_LIST_SELECT)
@@ -339,34 +334,32 @@ export async function getProvidersByServiceAndLocation(
           .order('name')
           .limit(500)
 
-        // Throw on error so retryWithBackoff can retry (don't silently swallow timeouts)
-        if (directError) throw directError
-        if (direct && direct.length > 0) return resolveProviderCities(direct as any[])
-      }
+        if (!directError && direct && direct.length > 0) return resolveProviderCities(direct as any[])
 
-      // Fallback: via provider_services join (slower but handles specialty mapping edge cases)
-      if (isValidUUID(service.id)) {
-        const { data, error } = await supabase
-          .from('providers')
-          .select(`
-            ${PROVIDER_LIST_SELECT},
-            provider_services!inner(service_id)
-          `)
-          .eq('provider_services.service_id', service.id)
-          .in('address_city', cityValues)
-          .eq('is_active', true)
-          .order('is_verified', { ascending: false })
-          .order('name')
-          .limit(500)
+        // Fallback: provider_services join (handles specialty mapping edge cases)
+        const svc = staticServices[serviceSlug]
+        if (svc && isValidUUID(svc.id)) {
+          const { data, error } = await supabase
+            .from('providers')
+            .select(`${PROVIDER_LIST_SELECT}, provider_services!inner(service_id)`)
+            .eq('provider_services.service_id', svc.id)
+            .in('address_city', cityValues)
+            .eq('is_active', true)
+            .order('is_verified', { ascending: false })
+            .order('name')
+            .limit(500)
 
-        if (error) throw error
-        if (data && data.length > 0) return resolveProviderCities(data as any[])
-      }
+          if (!error && data && data.length > 0) return resolveProviderCities(data as any[])
+        }
 
-      return []
-    },
-    `getProvidersByServiceAndLocation(${serviceSlug}, ${locationSlug})`,
-  )
+        return []
+      })(),
+      QUERY_TIMEOUT_MS,
+      `getProvidersByServiceAndLocation(${serviceSlug}, ${locationSlug})`,
+    )
+  } catch {
+    return [] // Timeout or error — ISR will retry on next revalidation
+  }
 }
 
 /**
@@ -449,27 +442,32 @@ export async function getProviderCountByServiceAndLocation(
 export async function getProvidersByLocation(locationSlug: string) {
   if (IS_BUILD) return [] // Skip during build
 
-  // Resolve location OUTSIDE retryWithBackoff — it has its own retry logic
-  const location = await getLocationBySlug(locationSlug).catch(() => null)
-  if (!location) return []
+  // Use STATIC data for location — no DB needed
+  const ville = getVilleBySlugImport(locationSlug)
+  if (!ville) return []
 
-  const cityValues = getCityValues(location.name)
-  return retryWithBackoff(
-    async () => {
-      const { data, error } = await supabase
-        .from('providers')
-        .select(PROVIDER_LIST_SELECT)
-        .in('address_city', cityValues)
-        .eq('is_active', true)
-        .order('is_verified', { ascending: false })
-        .order('name')
-        .limit(500)
+  const cityValues = getCityValues(ville.name)
+  try {
+    return await withTimeout(
+      (async () => {
+        const { data, error } = await supabase
+          .from('providers')
+          .select(PROVIDER_LIST_SELECT)
+          .in('address_city', cityValues)
+          .eq('is_active', true)
+          .order('is_verified', { ascending: false })
+          .order('name')
+          .limit(500)
 
-      if (error) throw error
-      return resolveProviderCities((data || []) as any[])
-    },
-    `getProvidersByLocation(${locationSlug})`,
-  )
+        if (error) throw error
+        return resolveProviderCities((data || []) as any[])
+      })(),
+      QUERY_TIMEOUT_MS,
+      `getProvidersByLocation(${locationSlug})`,
+    )
+  } catch {
+    return []
+  }
 }
 
 export async function getAllProviders() {
@@ -494,33 +492,37 @@ export async function getAllProviders() {
 export async function getProvidersByService(serviceSlug: string, limit?: number) {
   if (IS_BUILD) return [] // Skip during build
 
-  // Resolve service OUTSIDE retryWithBackoff — it has its own retry logic
-  const service = await getServiceBySlug(serviceSlug).catch(() => null)
-  if (!service) return []
-  if (!isValidUUID(service.id)) return []
+  // Use STATIC data for service — no DB needed
+  const svc = staticServices[serviceSlug]
+  if (!svc || !isValidUUID(svc.id)) return []
 
   const effectiveLimit = limit || 50
-  return retryWithBackoff(
-    async () => {
-      const { data, error } = await supabase
-        .from('providers')
-        .select(`
-          *,
-          provider_services!inner(service_id),
-          provider_locations(
-            location:locations(name, slug)
-          )
-        `)
-        .eq('provider_services.service_id', service.id)
-        .eq('is_active', true)
-        .order('is_verified', { ascending: false })
-        .limit(effectiveLimit)
+  try {
+    return await withTimeout(
+      (async () => {
+        const { data, error } = await supabase
+          .from('providers')
+          .select(`
+            *,
+            provider_services!inner(service_id),
+            provider_locations(
+              location:locations(name, slug)
+            )
+          `)
+          .eq('provider_services.service_id', svc.id)
+          .eq('is_active', true)
+          .order('is_verified', { ascending: false })
+          .limit(effectiveLimit)
 
-      if (error) throw error
-      return resolveProviderCities(data || [])
-    },
-    `getProvidersByService(${serviceSlug})`,
-  )
+        if (error) throw error
+        return resolveProviderCities(data || [])
+      })(),
+      QUERY_TIMEOUT_MS,
+      `getProvidersByService(${serviceSlug})`,
+    )
+  } catch {
+    return []
+  }
 }
 
 export async function getLocationsByService(serviceSlug: string) {
