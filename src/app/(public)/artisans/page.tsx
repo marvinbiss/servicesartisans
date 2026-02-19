@@ -27,31 +27,42 @@ export const metadata: Metadata = {
 
 // Direct Supabase query — bypasses IS_BUILD since page is force-dynamic
 async function getRecentProviders(limit = 50) {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-  )
+  try {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-  const { data, error } = await supabase
-    .from('providers')
-    .select('id, stable_id, name, slug, specialty, address_city, address_postal_code, address_street, address_region, siret, phone, is_verified, is_active, rating_average, review_count, created_at')
-    .eq('is_active', true)
-    .order('is_verified', { ascending: false })
-    .order('created_at', { ascending: false })
-    .limit(limit)
+    if (!url || !key) {
+      return { providers: [], count: 0, error: `Env vars missing: URL=${!!url}, KEY=${!!key}` }
+    }
 
-  if (error) {
-    console.error('Artisans page — DB error:', error.message)
-    return { providers: [], count: 0, error: error.message }
+    const supabase = createClient(url, key)
+
+    // Use SELECT * to avoid column name mismatches
+    const { data, error } = await supabase
+      .from('providers')
+      .select('*')
+      .eq('is_active', true)
+      .order('is_verified', { ascending: false })
+      .limit(limit)
+
+    if (error) {
+      return { providers: [], count: 0, error: `Query error: ${error.message} (code: ${error.code})` }
+    }
+
+    // Get total count
+    const { count, error: countErr } = await supabase
+      .from('providers')
+      .select('id', { count: 'exact', head: true })
+      .eq('is_active', true)
+
+    return {
+      providers: data || [],
+      count: count ?? 0,
+      error: countErr ? `Count error: ${countErr.message}` : null,
+    }
+  } catch (e) {
+    return { providers: [], count: 0, error: `Exception: ${e instanceof Error ? e.message : String(e)}` }
   }
-
-  // Also get total count
-  const { count } = await supabase
-    .from('providers')
-    .select('id', { count: 'exact', head: true })
-    .eq('is_active', true)
-
-  return { providers: data || [], count: count ?? 0, error: null }
 }
 
 
