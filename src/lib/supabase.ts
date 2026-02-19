@@ -92,8 +92,6 @@ const PROVIDER_SELECT = `
   )
 `
 
-// Lightweight select for listing pages — only columns used by ProviderCard/ProviderList/GeographicMap
-const PROVIDER_LIST_SELECT = 'id,stable_id,name,slug,specialty,address_street,address_postal_code,address_city,address_region,is_verified,is_active,rating_average,review_count,avatar_url,phone,siret,employee_count,latitude,longitude'
 
 export async function getServices() {
   if (IS_BUILD) return Object.values(staticServices) // Use static data during build
@@ -348,7 +346,7 @@ export async function getProvidersByServiceAndLocation(
       if (specialties && specialties.length > 0) {
         const { data: direct, error: directError } = await supabase
           .from('providers')
-          .select(PROVIDER_LIST_SELECT)
+          .select('*')
           .in('specialty', specialties)
           .in('address_city', cityValues)
           .eq('is_active', true)
@@ -364,7 +362,7 @@ export async function getProvidersByServiceAndLocation(
         const { data, error } = await supabase
           .from('providers')
           .select(`
-            ${PROVIDER_LIST_SELECT},
+            *,
             provider_services!inner(service_id)
           `)
           .eq('provider_services.service_id', service.id)
@@ -470,7 +468,7 @@ export async function getProvidersByLocation(locationSlug: string) {
       const cityValues = getCityValues(location.name)
       const { data, error } = await supabase
         .from('providers')
-        .select(PROVIDER_LIST_SELECT)
+        .select('*')
         .in('address_city', cityValues)
         .eq('is_active', true)
         .order('is_verified', { ascending: false })
