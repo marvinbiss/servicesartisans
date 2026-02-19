@@ -168,11 +168,37 @@ function generateDescription(name: string, specialty: string, city: string, prov
     parts.push(`Entreprise immatriculée et référencée (SIRET ${provider.siret.substring(0, 9)}...).`)
   }
 
+  // Legal form
+  if (provider?.legal_form) {
+    parts.push(`Forme juridique : ${provider.legal_form}.`)
+  }
+
   // Rating
   const rating = provider?.rating_average || provider?.average_rating
   if (rating && rating >= 4) {
     parts.push(`Noté ${Number(rating).toFixed(1)}/5 par ses clients.`)
   }
+
+  // Service-specific expertise (programmatic based on specialty slug)
+  const serviceDescriptions: Record<string, string> = {
+    'plombier': `Les prestations couvrent l'installation, la réparation et l'entretien de plomberie : robinetterie, canalisations, sanitaires, chauffe-eau et dépannage de fuites.`,
+    'electricien': `Les interventions incluent la mise aux normes électriques, l'installation de tableaux, le câblage, le dépannage et la pose d'éclairage intérieur et extérieur.`,
+    'chauffagiste': `Spécialiste en systèmes de chauffage : installation, entretien et dépannage de chaudières, radiateurs, planchers chauffants et pompes à chaleur.`,
+    'serrurier': `Interventions en serrurerie : ouverture de portes, changement de serrures, blindage, installation de systèmes de sécurité et reproduction de clés.`,
+    'menuisier': `Travaux de menuiserie intérieure et extérieure : fabrication et pose de portes, fenêtres, placards, escaliers et aménagements sur mesure.`,
+    'couvreur': `Travaux de couverture : réfection de toiture, pose de tuiles et ardoises, zinguerie, étanchéité et isolation de combles.`,
+    'macon': `Travaux de maçonnerie : construction, rénovation, extension, dalles, murs porteurs, fondations et ravalement de façade.`,
+    'carreleur': `Pose de carrelage et faïence : sols, murs, douches à l'italienne, terrasses et mosaïques pour tous types de projets.`,
+    'peintre-en-batiment': `Travaux de peinture intérieure et extérieure : préparation des surfaces, enduits, peinture décorative et ravalement.`,
+    'climaticien': `Installation et maintenance de climatisation : pose de splits, gainable, réversible et contrats d'entretien annuel.`,
+  }
+  const svcDesc = serviceDescriptions[serviceSlug || '']
+  if (svcDesc) {
+    parts.push(svcDesc)
+  }
+
+  // Zone d'intervention
+  parts.push(`Zone d'intervention : ${city} et communes environnantes.`)
 
   // CTA
   parts.push(`Contactez ${name} pour obtenir un devis gratuit et personnalisé, sans engagement.`)

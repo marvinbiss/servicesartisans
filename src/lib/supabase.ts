@@ -82,15 +82,6 @@ async function retryWithBackoff<T>(
   throw lastError
 }
 
-const PROVIDER_SELECT = `
-  *,
-  provider_services(
-    service:services(*)
-  ),
-  provider_locations(
-    location:locations(*)
-  )
-`
 
 // Lightweight select for listing pages — all required Provider fields + display fields
 // Covers: ProviderCard, ProviderList, GeographicMap, ServiceQuartierPage
@@ -209,7 +200,7 @@ export async function getProviderByStableId(stableId: string) {
       (async () => {
         const { data } = await supabase
           .from('providers')
-          .select(PROVIDER_SELECT)
+          .select('*')
           .eq('stable_id', stableId)
           .eq('is_active', true)
           .single()
@@ -220,18 +211,7 @@ export async function getProviderByStableId(stableId: string) {
       `getProviderByStableId(${stableId})`,
     )
   } catch {
-    // Fallback: simpler query without joins (in case provider_services/provider_locations fail)
-    try {
-      const { data } = await supabase
-        .from('providers')
-        .select('*')
-        .eq('stable_id', stableId)
-        .eq('is_active', true)
-        .single()
-      return data ? resolveProviderCity(data) : null
-    } catch {
-      return null
-    }
+    return null
   }
 }
 
@@ -243,7 +223,7 @@ export async function getProviderBySlug(slug: string) {
       (async () => {
         const { data } = await supabase
           .from('providers')
-          .select(PROVIDER_SELECT)
+          .select('*')
           .eq('slug', slug)
           .eq('is_active', true)
           .single()
@@ -254,18 +234,7 @@ export async function getProviderBySlug(slug: string) {
       `getProviderBySlug(${slug})`,
     )
   } catch {
-    // Fallback: simpler query without joins
-    try {
-      const { data } = await supabase
-        .from('providers')
-        .select('*')
-        .eq('slug', slug)
-        .eq('is_active', true)
-        .single()
-      return data ? resolveProviderCity(data) : null
-    } catch {
-      return null
-    }
+    return null
   }
 }
 
@@ -365,7 +334,7 @@ export async function getProvidersByServiceAndLocation(
           .eq('is_active', true)
           .order('is_verified', { ascending: false })
           .order('name')
-          .limit(50)
+          .limit(500)
 
         if (!directError && direct && direct.length > 0) return resolveProviderCities(direct as any[])
       }
@@ -383,7 +352,7 @@ export async function getProvidersByServiceAndLocation(
           .eq('is_active', true)
           .order('is_verified', { ascending: false })
           .order('name')
-          .limit(50)
+          .limit(500)
 
         if (!error && data && data.length > 0) return resolveProviderCities(data as any[])
       }
@@ -486,7 +455,7 @@ export async function getProvidersByLocation(locationSlug: string) {
         .eq('is_active', true)
         .order('is_verified', { ascending: false })
         .order('name')
-        .limit(100)
+        .limit(500)
 
       if (error) throw error
       return resolveProviderCities((data || []) as any[])
