@@ -13,6 +13,27 @@ import communeData from '@/lib/data/insee-communes.json'
 type CommuneEntry = { n: string; r: string; d: string }
 const communes = communeData as Record<string, CommuneEntry>
 
+// Paris, Marseille, Lyon have arrondissement codes not in the main communes JSON.
+// Map them to the parent commune so resolveProviderCity works for all 743K+ providers.
+const ARRONDISSEMENT_MAP: Record<string, CommuneEntry> = {}
+// Paris: 75101–75120 → Paris (75056)
+for (let i = 75101; i <= 75120; i++) {
+  ARRONDISSEMENT_MAP[String(i)] = { n: 'Paris', r: 'Île-de-France', d: '75' }
+}
+// Marseille: 13201–13216 → Marseille (13055)
+for (let i = 13201; i <= 13216; i++) {
+  ARRONDISSEMENT_MAP[String(i)] = { n: 'Marseille', r: "Provence-Alpes-Côte d'Azur", d: '13' }
+}
+// Lyon: 69381–69389 → Lyon (69123)
+for (let i = 69381; i <= 69389; i++) {
+  ARRONDISSEMENT_MAP[String(i)] = { n: 'Lyon', r: 'Auvergne-Rhône-Alpes', d: '69' }
+}
+
+// Merged lookup: communes JSON + arrondissement overrides
+function getCommune(code: string): CommuneEntry | undefined {
+  return communes[code] || ARRONDISSEMENT_MAP[code]
+}
+
 const INSEE_CODE_RE = /^\d{4,5}$/
 const CORSE_CODE_RE = /^[0-9][A-Z0-9]\d{3}$/
 
@@ -33,7 +54,7 @@ export function resolveProviderCity<T extends { address_city?: string | null; ad
   const city = provider.address_city
   if (!city || !isInseeCode(city)) return provider
 
-  const commune = communes[city]
+  const commune = getCommune(city)
   if (!commune) return provider
 
   return {
@@ -90,7 +111,20 @@ export function getInseeCodesForCity(cityName: string): string[] {
  * Use with `.in('address_city', getCityValues(...))` for index-friendly queries.
  */
 export function getCityValues(cityName: string): string[] {
-  return [cityName, ...getInseeCodesForCity(cityName)]
+  const codes = getInseeCodesForCity(cityName)
+  const normalized = _normalize(cityName)
+
+  // Include arrondissement codes for Paris, Marseille, Lyon
+  const arrondissementCodes: string[] = []
+  if (normalized === 'paris') {
+    for (let i = 75101; i <= 75120; i++) arrondissementCodes.push(String(i))
+  } else if (normalized === 'marseille') {
+    for (let i = 13201; i <= 13216; i++) arrondissementCodes.push(String(i))
+  } else if (normalized === 'lyon') {
+    for (let i = 69381; i <= 69389; i++) arrondissementCodes.push(String(i))
+  }
+
+  return [cityName, ...codes, ...arrondissementCodes]
 }
 
 /**
