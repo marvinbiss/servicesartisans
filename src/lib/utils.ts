@@ -56,7 +56,62 @@ export function slugify(text: string): string {
 // Static slug lookup maps — prefer canonical slugs from france.ts over dynamic slugification
 const _normalize = (t: string) => t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
 const _serviceMap = new Map(services.map(s => [_normalize(s.name), s.slug]))
+// Also map slug → slug for direct matches (provider specialty may already be a slug)
+services.forEach(s => { if (!_serviceMap.has(s.slug)) _serviceMap.set(s.slug, s.slug) })
 const _villeMap = new Map(villes.map(v => [_normalize(v.name), v.slug]))
+
+// Reverse mapping: provider specialty variants → canonical service slug
+// Covers cases where provider.specialty is a synonym (e.g., "peintre" → "peintre-en-batiment")
+const _specialtyToServiceSlug: Record<string, string> = {
+  'peintre': 'peintre-en-batiment',
+  'platrier': 'platrier',
+  'plaquiste': 'platrier',
+  'platrerie': 'platrier',
+  'finition': 'peintre-en-batiment',
+  'menuisier-metallique': 'serrurier',
+  'charpentier': 'charpentier',
+  'isolation': 'isolation-thermique',
+  'couvreur-zingueur': 'zingueur',
+  'etancheite': 'etancheiste',
+  'facade': 'facadier',
+  'ravalement': 'facadier',
+  'metallerie': 'metallier',
+  'ferronnerie': 'ferronnier',
+  'parqueteur': 'poseur-de-parquet',
+  'moquettiste': 'solier',
+  'store': 'storiste',
+  'volet': 'storiste',
+  'installateur-de-cuisine': 'cuisiniste',
+  'installateur-de-salle-de-bain': 'salle-de-bain',
+  'architecte-d-interieur': 'architecte-interieur',
+  'decoration': 'decorateur',
+  'peintre-decorateur': 'decorateur',
+  'domotique': 'domoticien',
+  'pac': 'pompe-a-chaleur',
+  'photovoltaique': 'panneaux-solaires',
+  'solaire': 'panneaux-solaires',
+  'ite': 'isolation-thermique',
+  'iti': 'isolation-thermique',
+  'rge': 'renovation-energetique',
+  'borne-electrique': 'borne-recharge',
+  'ramonage': 'ramoneur',
+  'amenagement-exterieur': 'paysagiste',
+  'piscine': 'pisciniste',
+  'alarme': 'alarme-securite',
+  'securite': 'alarme-securite',
+  'videosurveillance': 'alarme-securite',
+  'antenne': 'antenniste',
+  'ascenseur': 'ascensoriste',
+  'diagnostic': 'diagnostiqueur',
+  'dpe': 'diagnostiqueur',
+  'geometre-expert': 'geometre',
+  'desinsectiseur': 'desinsectisation',
+  'nuisibles': 'desinsectisation',
+  'deratiseur': 'deratisation',
+  'demenagement': 'demenageur',
+  'nettoyage-professionnel': 'nettoyage',
+  'terrassement': 'terrassier',
+}
 
 // Generate SEO-friendly artisan URL using static slug lookup
 export function getArtisanUrl(artisan: {
@@ -65,7 +120,8 @@ export function getArtisanUrl(artisan: {
   specialty?: string | null
   city?: string | null
 }): string {
-  const serviceSlug = _serviceMap.get(_normalize(artisan.specialty || '')) || slugify(artisan.specialty || 'artisan')
+  const normalized = _normalize(artisan.specialty || '')
+  const serviceSlug = _serviceMap.get(normalized) || _specialtyToServiceSlug[normalized] || slugify(artisan.specialty || 'artisan')
   const locationSlug = _villeMap.get(_normalize(artisan.city || '')) || slugify(artisan.city || 'france')
   const id = artisan.stable_id || artisan.slug || ''
   return `/services/${serviceSlug}/${locationSlug}/${id}`

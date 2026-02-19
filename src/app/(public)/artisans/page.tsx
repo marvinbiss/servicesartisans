@@ -6,6 +6,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import { SITE_URL } from '@/lib/seo/config'
 import { getArtisanUrl, getAvatarColor } from '@/lib/utils'
 import { services as staticServicesList } from '@/lib/data/france'
+import { resolveProviderCities } from '@/lib/insee-resolver'
 
 // Force dynamic rendering — always query DB live, never cache at build time
 export const dynamic = 'force-dynamic'
@@ -63,7 +64,7 @@ async function getRecentProviders(limit = 50) {
     }
 
     return {
-      providers: data || [],
+      providers: resolveProviderCities(data || []),
       count: totalCount,
       error: null,
     }

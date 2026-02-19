@@ -70,14 +70,20 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
     termsOfService: `${baseUrl}/cgv`,
   }))
 
-  // LocalBusiness Schema
+  // LocalBusiness Schema — use more specific @type when possible for richer snippets
+  const businessType = artisan.specialty?.toLowerCase().includes('plomb') ? 'Plumber'
+    : artisan.specialty?.toLowerCase().includes('electr') ? 'Electrician'
+    : 'HomeAndConstructionBusiness'
+
   const localBusinessSchema = {
     '@context': 'https://schema.org',
-    '@type': 'LocalBusiness',
+    '@type': ['LocalBusiness', businessType],
     '@id': `${artisanUrl}#business`,
     name: displayName,
     description: artisan.description || `${displayName} - ${artisan.specialty} à ${artisan.city}`,
     image: artisan.avatar_url || artisan.portfolio?.[0]?.imageUrl || `${baseUrl}/opengraph-image`,
+    // Add knowsAbout for E-E-A-T signals
+    knowsAbout: artisan.specialty,
     ...(artisan.phone && artisan.phone.replace(/\D/g, '').length >= 10 && {
       telephone: artisan.phone,
     }),
@@ -203,6 +209,31 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
     }),
     ...(artisan.payment_methods?.length ? { paymentAccepted: artisan.payment_methods.join(', ') } : {}),
     currenciesAccepted: 'EUR',
+
+    // Opening hours for Google Knowledge Panel
+    ...(artisan.opening_hours && Object.keys(artisan.opening_hours).length > 0 && {
+      openingHoursSpecification: (() => {
+        const dayMap: Record<string, string> = {
+          lundi: 'Monday', mardi: 'Tuesday', mercredi: 'Wednesday',
+          jeudi: 'Thursday', vendredi: 'Friday', samedi: 'Saturday', dimanche: 'Sunday',
+        }
+        return Object.entries(artisan.opening_hours)
+          .filter(([, val]: [string, any]) => val?.ouvert)
+          .map(([day, val]: [string, any]) => ({
+            '@type': 'OpeningHoursSpecification',
+            dayOfWeek: dayMap[day] || day,
+            opens: val.debut || '08:00',
+            closes: val.fin || '18:00',
+          }))
+      })(),
+    }),
+
+    // Quote request action for rich results
+    potentialAction: {
+      '@type': 'CommunicateAction',
+      target: `${artisanUrl}#devis`,
+      name: 'Demander un devis gratuit',
+    },
   }
 
   // FAQPage Schema

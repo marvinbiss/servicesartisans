@@ -7,6 +7,8 @@ import { getGuideSlugs } from '@/lib/data/guides'
 import { articleSlugs } from '@/lib/data/blog/articles'
 import { allArticles } from '@/lib/data/blog/articles'
 import { getBlogImage, getServiceImage, getCityImage, heroImage, getDepartmentImage, getRegionImage, pageImages, ambianceImages } from '@/lib/data/images'
+import { readFileSync } from 'fs'
+import { join } from 'path'
 
 // Provider batch size — well under the 50,000 URL sitemap limit
 const PROVIDER_BATCH_SIZE = 40_000
@@ -570,20 +572,108 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         )
       }
 
+      // Reverse mapping: provider specialty → service slug (must cover ALL 46 services)
+      // Derived from SERVICE_TO_SPECIALTIES in supabase.ts
       const specialtyToSlug: Record<string, string> = {
+        // Core trades
         'plombier': 'plombier',
         'electricien': 'electricien',
         'chauffagiste': 'chauffagiste',
         'menuisier': 'menuisier',
-        'menuisier-metallique': 'menuisier',
+        'menuisier-metallique': 'serrurier',
         'carreleur': 'carreleur',
         'couvreur': 'couvreur',
         'macon': 'macon',
         'peintre': 'peintre-en-batiment',
-        'charpentier': 'couvreur',
-        'isolation': 'climaticien',
-        'platrier': 'peintre-en-batiment',
+        'charpentier': 'charpentier',
+        'isolation': 'isolation-thermique',
+        'platrier': 'platrier',
         'finition': 'peintre-en-batiment',
+        'serrurier': 'serrurier',
+        'jardinier': 'jardinier',
+        'paysagiste': 'paysagiste',
+        'vitrier': 'vitrier',
+        'miroitier': 'miroitier',
+        'cuisiniste': 'cuisiniste',
+        'installateur-de-cuisine': 'cuisiniste',
+        'solier': 'solier',
+        'poseur-de-parquet': 'poseur-de-parquet',
+        'parqueteur': 'poseur-de-parquet',
+        'moquettiste': 'solier',
+        'nettoyage': 'nettoyage',
+        'nettoyage-professionnel': 'nettoyage',
+        // Bâtiment / Gros œuvre
+        'terrassier': 'terrassier',
+        'terrassement': 'terrassier',
+        'zingueur': 'zingueur',
+        'couvreur-zingueur': 'zingueur',
+        'etancheiste': 'etancheiste',
+        'etancheite': 'etancheiste',
+        'facadier': 'facadier',
+        'facade': 'facadier',
+        'ravalement': 'facadier',
+        'plaquiste': 'platrier',
+        'platrerie': 'platrier',
+        'metallier': 'metallier',
+        'metallerie': 'metallier',
+        'ferronnier': 'ferronnier',
+        'ferronnerie': 'ferronnier',
+        // Finitions / Aménagement
+        'storiste': 'storiste',
+        'store': 'storiste',
+        'volet': 'storiste',
+        'salle-de-bain': 'salle-de-bain',
+        'installateur-de-salle-de-bain': 'salle-de-bain',
+        'architecte-interieur': 'architecte-interieur',
+        'architecte-d-interieur': 'architecte-interieur',
+        'decoration': 'decorateur',
+        'decorateur': 'decorateur',
+        'peintre-decorateur': 'decorateur',
+        // Énergie / Chauffage
+        'domoticien': 'domoticien',
+        'domotique': 'domoticien',
+        'pompe-a-chaleur': 'pompe-a-chaleur',
+        'pac': 'pompe-a-chaleur',
+        'panneaux-solaires': 'panneaux-solaires',
+        'photovoltaique': 'panneaux-solaires',
+        'solaire': 'panneaux-solaires',
+        'isolation-thermique': 'isolation-thermique',
+        'ite': 'isolation-thermique',
+        'iti': 'isolation-thermique',
+        'renovation-energetique': 'renovation-energetique',
+        'rge': 'renovation-energetique',
+        'borne-recharge': 'borne-recharge',
+        'borne-electrique': 'borne-recharge',
+        'ramoneur': 'ramoneur',
+        'ramonage': 'ramoneur',
+        // Extérieur
+        'amenagement-exterieur': 'paysagiste',
+        'pisciniste': 'pisciniste',
+        'piscine': 'pisciniste',
+        // Sécurité / Technique
+        'alarme': 'alarme-securite',
+        'securite': 'alarme-securite',
+        'videosurveillance': 'alarme-securite',
+        'alarme-securite': 'alarme-securite',
+        'antenniste': 'antenniste',
+        'antenne': 'antenniste',
+        'ascensoriste': 'ascensoriste',
+        'ascenseur': 'ascensoriste',
+        // Diagnostics / Conseil
+        'diagnostiqueur': 'diagnostiqueur',
+        'diagnostic': 'diagnostiqueur',
+        'dpe': 'diagnostiqueur',
+        'geometre': 'geometre',
+        'geometre-expert': 'geometre',
+        // Services spécialisés
+        'desinsectisation': 'desinsectisation',
+        'desinsectiseur': 'desinsectisation',
+        'nuisibles': 'desinsectisation',
+        'deratisation': 'deratisation',
+        'deratiseur': 'deratisation',
+        'demenageur': 'demenageur',
+        'demenagement': 'demenageur',
+        'climaticien': 'climaticien',
       }
 
       type ProviderRow = {
@@ -594,6 +684,12 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         address_city: string | null
         updated_at: string | null
       }
+
+      // Load INSEE commune lookup once (not per-provider)
+      let inseeMap: Record<string, { n: string }> = {}
+      try {
+        inseeMap = JSON.parse(readFileSync(join(process.cwd(), 'src/lib/data/insee-communes.json'), 'utf-8'))
+      } catch { /* fallback: no INSEE resolution */ }
 
       let allProviders: ProviderRow[] = []
       let from = offset
@@ -620,7 +716,11 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         .map((p) => {
           const normalizedSpecialty = p.specialty!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
           const serviceSlug = serviceMap.get(normalizedSpecialty) || specialtyToSlug[p.specialty!.toLowerCase()]
-          const normalizedCity = p.address_city!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
+          // Resolve INSEE code → city name if needed
+          const rawCity = p.address_city!
+          const isInsee = /^\d{4,5}$/.test(rawCity) || /^[0-9][A-Z0-9]\d{3}$/.test(rawCity)
+          const cityName = isInsee ? (inseeMap[rawCity]?.n || rawCity) : rawCity
+          const normalizedCity = cityName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
           const locationSlug = villeMap.get(normalizedCity)
           const publicId = p.stable_id || p.slug
 

@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import { getVilleBySlug as getVilleBySlugImport } from '@/lib/data/france'
+import { resolveProviderCity, resolveProviderCities, buildCityFilter } from '@/lib/insee-resolver'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -199,7 +200,7 @@ export async function getProviderByStableId(stableId: string) {
           .eq('is_active', true)
           .single()
 
-        return data || null
+        return data ? resolveProviderCity(data) : null
       })(),
       QUERY_TIMEOUT_MS,
       `getProviderByStableId(${stableId})`,
@@ -213,7 +214,7 @@ export async function getProviderByStableId(stableId: string) {
         .eq('stable_id', stableId)
         .eq('is_active', true)
         .single()
-      return data || null
+      return data ? resolveProviderCity(data) : null
     } catch {
       return null
     }
@@ -233,7 +234,7 @@ export async function getProviderBySlug(slug: string) {
           .eq('is_active', true)
           .single()
 
-        return data || null
+        return data ? resolveProviderCity(data) : null
       })(),
       QUERY_TIMEOUT_MS,
       `getProviderBySlug(${slug})`,
@@ -247,7 +248,7 @@ export async function getProviderBySlug(slug: string) {
         .eq('slug', slug)
         .eq('is_active', true)
         .single()
-      return data || null
+      return data ? resolveProviderCity(data) : null
     } catch {
       return null
     }
@@ -336,6 +337,9 @@ export async function getProvidersByServiceAndLocation(
 
       if (!service || !location) return []
 
+      // Build city filter that matches both city name AND INSEE codes
+      const cityFilter = buildCityFilter(location.name)
+
       // Primary query: via provider_services join (works when join table is populated)
       if (isValidUUID(service.id)) {
         const { data, error } = await supabase
@@ -345,13 +349,13 @@ export async function getProvidersByServiceAndLocation(
             provider_services!inner(service_id)
           `)
           .eq('provider_services.service_id', service.id)
-          .ilike('address_city', location.name)
+          .or(cityFilter)
           .eq('is_active', true)
           .order('is_verified', { ascending: false })
           .order('name')
           .limit(50)
 
-        if (!error && data && data.length > 0) return data
+        if (!error && data && data.length > 0) return resolveProviderCities(data)
       }
 
       // Fallback: direct query by specialty + city (uses indexed columns)
@@ -362,14 +366,14 @@ export async function getProvidersByServiceAndLocation(
         .from('providers')
         .select('*')
         .in('specialty', specialties)
-        .ilike('address_city', `%${location.name}%`)
+        .or(cityFilter)
         .eq('is_active', true)
         .order('is_verified', { ascending: false })
         .order('name')
         .limit(50)
 
       if (fbError) throw fbError
-      return fallback || []
+      return resolveProviderCities(fallback || [])
     },
     `getProvidersByServiceAndLocation(${serviceSlug}, ${locationSlug})`,
   )
@@ -395,11 +399,12 @@ export async function hasProvidersByServiceAndLocation(
         const cityName = ville?.name
         if (!cityName) return false
 
+        const cityFilter = buildCityFilter(cityName)
         const { count, error } = await supabase
           .from('providers')
           .select('id', { count: 'exact', head: true })
           .in('specialty', specialties)
-          .ilike('address_city', cityName)
+          .or(cityFilter)
           .eq('is_active', true)
 
         if (error) throw error
@@ -433,11 +438,12 @@ export async function getProviderCountByServiceAndLocation(
         const cityName = ville?.name
         if (!cityName) return 0
 
+        const cityFilter = buildCityFilter(cityName)
         const { count, error } = await supabase
           .from('providers')
           .select('id', { count: 'exact', head: true })
           .in('specialty', specialties)
-          .ilike('address_city', cityName)
+          .or(cityFilter)
           .eq('is_active', true)
 
         if (error) throw error
@@ -457,17 +463,18 @@ export async function getProvidersByLocation(locationSlug: string) {
       const location = await getLocationBySlug(locationSlug)
       if (!location) return []
 
+      const cityFilter = buildCityFilter(location.name)
       const { data, error } = await supabase
         .from('providers')
         .select('*')
-        .ilike('address_city', location.name)
+        .or(cityFilter)
         .eq('is_active', true)
         .order('is_verified', { ascending: false })
         .order('name')
         .limit(100)
 
       if (error) throw error
-      return data || []
+      return resolveProviderCities(data || [])
     },
     `getProvidersByLocation(${locationSlug})`,
   )
@@ -485,7 +492,7 @@ export async function getAllProviders() {
         .order('name')
 
       if (error) throw error
-      return data || []
+      return resolveProviderCities(data || [])
     })(),
     QUERY_TIMEOUT_MS,
     'getAllProviders',
@@ -517,7 +524,7 @@ export async function getProvidersByService(serviceSlug: string, limit?: number)
         .limit(effectiveLimit)
 
       if (error) throw error
-      return data
+      return resolveProviderCities(data || [])
     },
     `getProvidersByService(${serviceSlug})`,
   )

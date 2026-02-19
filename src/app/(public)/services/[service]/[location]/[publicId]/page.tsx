@@ -3,6 +3,7 @@ import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
 import { getProviderByStableId, getProviderBySlug, getServiceBySlug, getLocationBySlug, getProviderCountByServiceAndLocation } from '@/lib/supabase'
 import { getArtisanUrl } from '@/lib/utils'
+import { resolveProviderCity } from '@/lib/insee-resolver'
 import { createClient } from '@/lib/supabase/server'
 import ArtisanPageClient from '@/components/artisan/ArtisanPageClient'
 import ArtisanInternalLinks from '@/components/artisan/ArtisanInternalLinks'
@@ -208,17 +209,20 @@ async function getSimilarArtisans(providerId: string, specialty: string, postalC
 
     const { data } = await query
 
-    return (data || []).map((p: any) => ({
-      id: p.id,
-      stable_id: p.stable_id || undefined,
-      slug: p.slug || undefined,
-      name: p.name || 'Artisan',
-      specialty: p.specialty || specialty,
-      rating: p.rating_average || 0,
-      reviews: p.review_count || 0,
-      city: p.address_city || '',
-      is_verified: p.is_verified || false,
-    }))
+    return (data || []).map((p: any) => {
+      const resolved = resolveProviderCity(p)
+      return {
+        id: p.id,
+        stable_id: p.stable_id || undefined,
+        slug: p.slug || undefined,
+        name: p.name || 'Artisan',
+        specialty: p.specialty || specialty,
+        rating: p.rating_average || 0,
+        reviews: p.review_count || 0,
+        city: resolved.address_city || '',
+        is_verified: p.is_verified || false,
+      }
+    })
   } catch {
     return []
   }
