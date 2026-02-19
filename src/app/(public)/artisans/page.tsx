@@ -49,16 +49,23 @@ async function getRecentProviders(limit = 50) {
       return { providers: [], count: 0, error: `Query error: ${error.message} (code: ${error.code})` }
     }
 
-    // Get total count
-    const { count, error: countErr } = await supabase
-      .from('providers')
-      .select('id', { count: 'exact', head: true })
-      .eq('is_active', true)
+    // Get total count — use estimated count to avoid timeout on 743K+ rows
+    let totalCount = data?.length ?? 0
+    try {
+      const { count } = await supabase
+        .from('providers')
+        .select('id', { count: 'estimated', head: true })
+        .eq('is_active', true)
+      if (count && count > 0) totalCount = count
+    } catch {
+      // Count failed — use fallback estimate
+      totalCount = 743000
+    }
 
     return {
       providers: data || [],
-      count: count ?? 0,
-      error: countErr ? `Count error: ${countErr.message}` : null,
+      count: totalCount,
+      error: null,
     }
   } catch (e) {
     return { providers: [], count: 0, error: `Exception: ${e instanceof Error ? e.message : String(e)}` }
