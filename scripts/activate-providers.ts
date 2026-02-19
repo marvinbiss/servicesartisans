@@ -245,15 +245,16 @@ async function step2_fixCity() {
   stats.step2.communesLoaded = communeMap.size
   console.log(`  ${communeMap.size} communes chargées`)
 
-  // Fetch providers with numeric address_city (INSEE codes)
+  // Fetch ALL providers with address_city (not just active ones)
+  // so we fix INSEE codes across the entire database.
   console.log('  Recherche des providers avec code INSEE dans address_city...')
   const providers = await fetchAllPages<{ id: string; address_city: string }>(
     'providers',
     'id, address_city',
-    (q: any) => q.not('address_city', 'is', null).eq('is_active', true),
+    (q: any) => q.not('address_city', 'is', null),
   )
 
-  console.log(`  ${providers.length} providers actifs avec address_city`)
+  console.log(`  ${providers.length} providers avec address_city`)
 
   // Filter: only those with numeric codes (INSEE format: 5 digits)
   const toFix = providers.filter(p => /^\d{4,5}$/.test(p.address_city))

@@ -267,11 +267,13 @@ export async function getProvidersByServiceAndLocation(
       const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
       if (!specialties || specialties.length === 0) return []
 
+      // Use exact ILIKE match (no % wildcards) — B-tree index friendly.
+      // address_city should contain proper city names after INSEE→name backfill.
       const { data: fallback, error: fbError } = await supabase
         .from('providers')
         .select('*')
         .in('specialty', specialties)
-        .ilike('address_city', `%${location.name}%`)
+        .ilike('address_city', location.name)
         .eq('is_active', true)
         .order('is_verified', { ascending: false })
         .order('name')

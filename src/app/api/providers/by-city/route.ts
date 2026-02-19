@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
       .eq('is_active', true)
       .not('latitude', 'is', null)
       .not('longitude', 'is', null)
-      .ilike('address_city', `%${city}%`)
+      .ilike('address_city', city)
       .order('rating_average', { ascending: false })
       .limit(limit)
 
