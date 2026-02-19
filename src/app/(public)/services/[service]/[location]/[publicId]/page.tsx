@@ -4,7 +4,6 @@ import Link from 'next/link'
 import { getProviderByStableId, getProviderBySlug, getServiceBySlug, getLocationBySlug, getProviderCountByServiceAndLocation } from '@/lib/supabase'
 import { getArtisanUrl } from '@/lib/utils'
 import { resolveProviderCity } from '@/lib/insee-resolver'
-import { createClient } from '@/lib/supabase/server'
 import ArtisanPageClient from '@/components/artisan/ArtisanPageClient'
 import ArtisanInternalLinks from '@/components/artisan/ArtisanInternalLinks'
 import { Review } from '@/components/artisan'
@@ -212,7 +211,7 @@ function generateDescription(name: string, specialty: string, city: string, prov
 // Fetch similar artisans (same specialty, same department)
 async function getSimilarArtisans(providerId: string, specialty: string, postalCode?: string) {
   try {
-    const supabase = await createClient()
+    const { supabase } = await import('@/lib/supabase')
     const deptCode = postalCode && postalCode.length >= 2 ? postalCode.substring(0, 2) : null
 
     let query = supabase
@@ -223,9 +222,9 @@ async function getSimilarArtisans(providerId: string, specialty: string, postalC
       .order('rating_average', { ascending: false, nullsFirst: false })
       .limit(8)
 
-    // Try to match specialty
+    // Match exact specialty (fast — uses index)
     if (specialty) {
-      query = query.ilike('specialty', `%${specialty}%`)
+      query = query.eq('specialty', specialty.toLowerCase())
     }
 
     // Prefer same department
@@ -257,7 +256,7 @@ async function getSimilarArtisans(providerId: string, specialty: string, postalC
 // Fetch reviews for provider (only real reviews from database)
 async function getProviderReviews(providerId: string, serviceName?: string): Promise<Review[]> {
   try {
-    const supabase = await createClient()
+    const { supabase } = await import('@/lib/supabase')
     const { data: reviews } = await supabase
       .from('reviews')
       .select(`
@@ -359,14 +358,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   // ─── PROVIDER DETAIL (existing logic) ────────────────────
   try {
-    // Separate lookups so a service/location failure doesn't kill provider lookup
-    const provider = await getProviderByStableId(publicId) || await getProviderBySlug(publicId)
-    if (!provider) return { title: 'Artisan non trouvé' }
-
-    const [service, location] = await Promise.all([
+    // Parallel lookups to minimize total latency
+    const [stableIdResult, slugResult, service, location] = await Promise.all([
+      getProviderByStableId(publicId).catch(() => null),
+      getProviderBySlug(publicId).catch(() => null),
       getServiceBySlug(serviceSlug).catch(() => null),
       getLocationBySlug(locationSlug).catch(() => null),
     ])
+    const provider = stableIdResult || slugResult
+    if (!provider) return { title: 'Artisan non trouvé' }
 
     const displayName = provider.name || provider.business_name || 'Artisan'
     const cityName = location?.name || provider.address_city || ''
@@ -433,34 +433,27 @@ export default async function ProviderPage({ params }: PageProps) {
   }
 
   // ─── PROVIDER DETAIL (existing logic) ────────────────────
-  // Separate provider lookup from service/location — a service lookup failure
-  // must NOT kill the provider lookup (they are independent)
+  // Run ALL lookups in parallel to minimize total latency
   let provider: any = null
   let service: any = null
   let location: any = null
 
-  // 1. Provider lookup (critical — without this, 404)
   try {
-    provider = await getProviderByStableId(publicId)
-    if (!provider) {
-      provider = await getProviderBySlug(publicId)
-    }
-  } catch (error) {
-    console.error('Provider lookup error:', error)
+    const [stableIdResult, slugResult, svcResult, locResult] = await Promise.all([
+      getProviderByStableId(publicId).catch(() => null),
+      getProviderBySlug(publicId).catch(() => null),
+      getServiceBySlug(serviceSlug).catch(() => null),
+      getLocationBySlug(locationSlug).catch(() => null),
+    ])
+    provider = stableIdResult || slugResult
+    service = svcResult
+    location = locResult
+  } catch {
+    // Graceful degradation
   }
 
   if (!provider) {
     notFound()
-  }
-
-  // 2. Service + Location (non-critical — page still renders with fallback data)
-  try {
-    ;[service, location] = await Promise.all([
-      getServiceBySlug(serviceSlug).catch(() => null),
-      getLocationBySlug(locationSlug).catch(() => null),
-    ])
-  } catch {
-    // Graceful degradation — use provider's own data as fallback
   }
 
   // Canonical redirect: if the URL segments don't match the canonical slugs, redirect
