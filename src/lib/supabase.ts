@@ -310,21 +310,24 @@ export async function getProvidersByServiceAndLocation(
   locationSlug: string
 ) {
   if (IS_BUILD) return [] // Skip during build — ISR will populate on first visit
-  // Use retry with backoff to handle statement_timeout during static generation
+
+  // Resolve service + location OUTSIDE retryWithBackoff — they have their own retry logic.
+  // Nesting them inside retryWithBackoff(8s) caused timeouts: inner retries could exceed
+  // the outer 8s timeout on Supabase free tier cold starts.
+  const [service, location] = await Promise.all([
+    getServiceBySlug(serviceSlug).catch(() => null),
+    getLocationBySlug(locationSlug).catch(() => null),
+  ])
+
+  if (!service || !location) return []
+
+  const cityValues = getCityValues(location.name)
+  const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
+
+  // Only the actual provider query is retried with timeout
   return retryWithBackoff(
     async () => {
-      const [service, location] = await Promise.all([
-        getServiceBySlug(serviceSlug),
-        getLocationBySlug(locationSlug),
-      ])
-
-      if (!service || !location) return []
-
-      // Get all city values (city name + INSEE codes) for direct .in() filter
-      const cityValues = getCityValues(location.name)
-
       // Primary query: direct specialty + city (fast — uses composite index + .in())
-      const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
       if (specialties && specialties.length > 0) {
         const { data: direct, error: directError } = await supabase
           .from('providers')
@@ -442,12 +445,14 @@ export async function getProviderCountByServiceAndLocation(
 
 export async function getProvidersByLocation(locationSlug: string) {
   if (IS_BUILD) return [] // Skip during build
+
+  // Resolve location OUTSIDE retryWithBackoff — it has its own retry logic
+  const location = await getLocationBySlug(locationSlug).catch(() => null)
+  if (!location) return []
+
+  const cityValues = getCityValues(location.name)
   return retryWithBackoff(
     async () => {
-      const location = await getLocationBySlug(locationSlug)
-      if (!location) return []
-
-      const cityValues = getCityValues(location.name)
       const { data, error } = await supabase
         .from('providers')
         .select(PROVIDER_LIST_SELECT)
@@ -485,14 +490,15 @@ export async function getAllProviders() {
 
 export async function getProvidersByService(serviceSlug: string, limit?: number) {
   if (IS_BUILD) return [] // Skip during build
+
+  // Resolve service OUTSIDE retryWithBackoff — it has its own retry logic
+  const service = await getServiceBySlug(serviceSlug).catch(() => null)
+  if (!service) return []
+  if (!isValidUUID(service.id)) return []
+
+  const effectiveLimit = limit || 50
   return retryWithBackoff(
     async () => {
-      const service = await getServiceBySlug(serviceSlug)
-      if (!service) return []
-      if (!isValidUUID(service.id)) return []
-
-      const effectiveLimit = limit || 50
-
       const { data, error } = await supabase
         .from('providers')
         .select(`
