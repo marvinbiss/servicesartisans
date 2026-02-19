@@ -250,6 +250,7 @@ const SERVICE_TO_SPECIALTIES: Record<string, string[]> = {
   'couvreur': ['couvreur', 'charpentier'],
   'macon': ['macon'],
   'peintre-en-batiment': ['peintre', 'platrier', 'finition'],
+  'peintre': ['peintre', 'platrier', 'finition'],  // alias — redirects to peintre-en-batiment
   'climaticien': ['isolation', 'chauffagiste'],
   'serrurier': ['serrurier', 'menuisier-metallique'],
   'jardinier': ['jardinier', 'paysagiste'],
