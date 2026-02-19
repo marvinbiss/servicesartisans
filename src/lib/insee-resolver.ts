@@ -85,12 +85,19 @@ export function getInseeCodesForCity(cityName: string): string[] {
 }
 
 /**
+ * Get all possible address_city values for a given city name.
+ * Returns the city name itself plus all matching INSEE codes.
+ * Use with `.in('address_city', getCityValues(...))` for index-friendly queries.
+ */
+export function getCityValues(cityName: string): string[] {
+  return [cityName, ...getInseeCodesForCity(cityName)]
+}
+
+/**
  * Build a PostgREST OR filter that matches BOTH the city name AND its INSEE codes.
+ * Uses `in` instead of `ilike` to avoid sequential scans on 743K+ rows.
  */
 export function buildCityFilter(cityName: string): string {
-  const codes = getInseeCodesForCity(cityName)
-  if (codes.length === 0) {
-    return `address_city.ilike.${cityName}`
-  }
-  return `address_city.ilike.${cityName},address_city.in.(${codes.join(',')})`
+  const values = getCityValues(cityName)
+  return `address_city.in.(${values.join(',')})`
 }

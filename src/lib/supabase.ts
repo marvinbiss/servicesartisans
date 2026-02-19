@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import { getVilleBySlug as getVilleBySlugImport } from '@/lib/data/france'
-import { resolveProviderCity, resolveProviderCities, buildCityFilter } from '@/lib/insee-resolver'
+import { resolveProviderCity, resolveProviderCities, getCityValues } from '@/lib/insee-resolver'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -91,6 +91,9 @@ const PROVIDER_SELECT = `
     location:locations(*)
   )
 `
+
+// Lightweight select for listing pages — only columns used by ProviderCard/ProviderList/GeographicMap
+const PROVIDER_LIST_SELECT = 'id,stable_id,name,slug,specialty,address_street,address_postal_code,address_city,address_region,is_verified,is_active,rating_average,review_count,avatar_url,phone,siret,employee_count,latitude,longitude'
 
 export async function getServices() {
   if (IS_BUILD) return Object.values(staticServices) // Use static data during build
@@ -337,17 +340,17 @@ export async function getProvidersByServiceAndLocation(
 
       if (!service || !location) return []
 
-      // Build city filter that matches both city name AND INSEE codes
-      const cityFilter = buildCityFilter(location.name)
+      // Get all city values (city name + INSEE codes) for direct .in() filter
+      const cityValues = getCityValues(location.name)
 
-      // Primary query: direct specialty + city (fast — uses composite index)
+      // Primary query: direct specialty + city (fast — uses composite index + .in())
       const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
       if (specialties && specialties.length > 0) {
         const { data: direct, error: directError } = await supabase
           .from('providers')
-          .select('*')
+          .select(PROVIDER_LIST_SELECT)
           .in('specialty', specialties)
-          .or(cityFilter)
+          .in('address_city', cityValues)
           .eq('is_active', true)
           .order('is_verified', { ascending: false })
           .order('name')
@@ -361,11 +364,11 @@ export async function getProvidersByServiceAndLocation(
         const { data, error } = await supabase
           .from('providers')
           .select(`
-            *,
+            ${PROVIDER_LIST_SELECT},
             provider_services!inner(service_id)
           `)
           .eq('provider_services.service_id', service.id)
-          .or(cityFilter)
+          .in('address_city', cityValues)
           .eq('is_active', true)
           .order('is_verified', { ascending: false })
           .order('name')
@@ -400,12 +403,12 @@ export async function hasProvidersByServiceAndLocation(
         const cityName = ville?.name
         if (!cityName) return false
 
-        const cityFilter = buildCityFilter(cityName)
+        const cityValues = getCityValues(cityName)
         const { count, error } = await supabase
           .from('providers')
           .select('id', { count: 'exact', head: true })
           .in('specialty', specialties)
-          .or(cityFilter)
+          .in('address_city', cityValues)
           .eq('is_active', true)
 
         if (error) throw error
@@ -439,12 +442,12 @@ export async function getProviderCountByServiceAndLocation(
         const cityName = ville?.name
         if (!cityName) return 0
 
-        const cityFilter = buildCityFilter(cityName)
+        const cityValues = getCityValues(cityName)
         const { count, error } = await supabase
           .from('providers')
           .select('id', { count: 'exact', head: true })
           .in('specialty', specialties)
-          .or(cityFilter)
+          .in('address_city', cityValues)
           .eq('is_active', true)
 
         if (error) throw error
@@ -464,11 +467,11 @@ export async function getProvidersByLocation(locationSlug: string) {
       const location = await getLocationBySlug(locationSlug)
       if (!location) return []
 
-      const cityFilter = buildCityFilter(location.name)
+      const cityValues = getCityValues(location.name)
       const { data, error } = await supabase
         .from('providers')
-        .select('*')
-        .or(cityFilter)
+        .select(PROVIDER_LIST_SELECT)
+        .in('address_city', cityValues)
         .eq('is_active', true)
         .order('is_verified', { ascending: false })
         .order('name')
