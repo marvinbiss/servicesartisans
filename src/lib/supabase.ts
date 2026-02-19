@@ -339,7 +339,9 @@ export async function getProvidersByServiceAndLocation(
           .order('name')
           .limit(500)
 
-        if (!directError && direct && direct.length > 0) return resolveProviderCities(direct as any[])
+        // Throw on error so retryWithBackoff can retry (don't silently swallow timeouts)
+        if (directError) throw directError
+        if (direct && direct.length > 0) return resolveProviderCities(direct as any[])
       }
 
       // Fallback: via provider_services join (slower but handles specialty mapping edge cases)
@@ -357,7 +359,8 @@ export async function getProvidersByServiceAndLocation(
           .order('name')
           .limit(500)
 
-        if (!error && data && data.length > 0) return resolveProviderCities(data as any[])
+        if (error) throw error
+        if (data && data.length > 0) return resolveProviderCities(data as any[])
       }
 
       return []
