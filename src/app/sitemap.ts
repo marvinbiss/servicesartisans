@@ -7,8 +7,7 @@ import { getGuideSlugs } from '@/lib/data/guides'
 import { articleSlugs } from '@/lib/data/blog/articles'
 import { allArticles } from '@/lib/data/blog/articles'
 import { getBlogImage, getServiceImage, getCityImage, heroImage, getDepartmentImage, getRegionImage, pageImages, ambianceImages } from '@/lib/data/images'
-import { readFileSync } from 'fs'
-import { join } from 'path'
+import inseeCommunes from '@/lib/data/insee-communes.json'
 
 // Provider batch size — well under the 50,000 URL sitemap limit
 const PROVIDER_BATCH_SIZE = 40_000
@@ -685,11 +684,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         updated_at: string | null
       }
 
-      // Load INSEE commune lookup once (not per-provider)
-      let inseeMap: Record<string, { n: string }> = {}
-      try {
-        inseeMap = JSON.parse(readFileSync(join(process.cwd(), 'src/lib/data/insee-communes.json'), 'utf-8'))
-      } catch { /* fallback: no INSEE resolution */ }
+      // INSEE commune lookup (imported at top level, bundled by webpack)
+      const inseeMap = inseeCommunes as Record<string, { n: string }>
 
       let allProviders: ProviderRow[] = []
       let from = offset

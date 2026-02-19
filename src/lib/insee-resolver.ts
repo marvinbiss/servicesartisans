@@ -8,24 +8,10 @@
  * 2. getInseeCodesForCity() — get INSEE codes matching a city name (for queries)
  */
 
-import { readFileSync } from 'fs'
-import { join } from 'path'
+import communeData from '@/lib/data/insee-communes.json'
 
 type CommuneEntry = { n: string; r: string; d: string }
-
-// Load communes data lazily — avoids webpack bundling a 2MB JSON
-let _communes: Record<string, CommuneEntry> | null = null
-
-function getCommunes(): Record<string, CommuneEntry> {
-  if (_communes) return _communes
-  try {
-    const filePath = join(process.cwd(), 'src/lib/data/insee-communes.json')
-    _communes = JSON.parse(readFileSync(filePath, 'utf-8'))
-  } catch {
-    _communes = {}
-  }
-  return _communes!
-}
+const communes = communeData as Record<string, CommuneEntry>
 
 const INSEE_CODE_RE = /^\d{4,5}$/
 const CORSE_CODE_RE = /^[0-9][A-Z0-9]\d{3}$/
@@ -47,7 +33,6 @@ export function resolveProviderCity<T extends { address_city?: string | null; ad
   const city = provider.address_city
   if (!city || !isInseeCode(city)) return provider
 
-  const communes = getCommunes()
   const commune = communes[city]
   if (!commune) return provider
 
@@ -78,7 +63,6 @@ let _reverseMap: Map<string, string[]> | null = null
 function getReverseMap(): Map<string, string[]> {
   if (_reverseMap) return _reverseMap
 
-  const communes = getCommunes()
   _reverseMap = new Map()
   for (const [code, info] of Object.entries(communes)) {
     const key = _normalize(info.n)
@@ -94,7 +78,6 @@ function getReverseMap(): Map<string, string[]> {
 
 /**
  * Get all INSEE codes that match a given city name.
- * Handles multiple communes with the same name (e.g., "Saint-Martin" in different departments).
  * Returns empty array if no match.
  */
 export function getInseeCodesForCity(cityName: string): string[] {
@@ -103,7 +86,6 @@ export function getInseeCodesForCity(cityName: string): string[] {
 
 /**
  * Build a PostgREST OR filter that matches BOTH the city name AND its INSEE codes.
- * Example: "address_city.ilike.Lyon,address_city.in.(69123,69381,69382,...)"
  */
 export function buildCityFilter(cityName: string): string {
   const codes = getInseeCodesForCity(cityName)
