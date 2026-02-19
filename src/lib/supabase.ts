@@ -340,7 +340,23 @@ export async function getProvidersByServiceAndLocation(
       // Build city filter that matches both city name AND INSEE codes
       const cityFilter = buildCityFilter(location.name)
 
-      // Primary query: via provider_services join (works when join table is populated)
+      // Primary query: direct specialty + city (fast — uses composite index)
+      const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
+      if (specialties && specialties.length > 0) {
+        const { data: direct, error: directError } = await supabase
+          .from('providers')
+          .select('*')
+          .in('specialty', specialties)
+          .or(cityFilter)
+          .eq('is_active', true)
+          .order('is_verified', { ascending: false })
+          .order('name')
+          .limit(50)
+
+        if (!directError && direct && direct.length > 0) return resolveProviderCities(direct)
+      }
+
+      // Fallback: via provider_services join (slower but handles specialty mapping edge cases)
       if (isValidUUID(service.id)) {
         const { data, error } = await supabase
           .from('providers')
@@ -358,22 +374,7 @@ export async function getProvidersByServiceAndLocation(
         if (!error && data && data.length > 0) return resolveProviderCities(data)
       }
 
-      // Fallback: direct query by specialty + city (uses indexed columns)
-      const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
-      if (!specialties || specialties.length === 0) return []
-
-      const { data: fallback, error: fbError } = await supabase
-        .from('providers')
-        .select('*')
-        .in('specialty', specialties)
-        .or(cityFilter)
-        .eq('is_active', true)
-        .order('is_verified', { ascending: false })
-        .order('name')
-        .limit(50)
-
-      if (fbError) throw fbError
-      return resolveProviderCities(fallback || [])
+      return []
     },
     `getProvidersByServiceAndLocation(${serviceSlug}, ${locationSlug})`,
   )
