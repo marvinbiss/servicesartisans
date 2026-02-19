@@ -9,6 +9,7 @@ import { CmsContent } from '@/components/CmsContent'
 export const metadata: Metadata = {
   title: 'Politique de confidentialité',
   description: 'Politique de confidentialité de ServicesArtisans - Comment nous collectons, utilisons et protégeons vos données personnelles.',
+  robots: { index: false, follow: true },
   alternates: {
     canonical: `${SITE_URL}/confidentialite`,
   },

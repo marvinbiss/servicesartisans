@@ -10,6 +10,7 @@ import { CmsContent } from '@/components/CmsContent'
 export const metadata: Metadata = {
   title: 'Accessibilité',
   description: 'Déclaration d\'accessibilité de ServicesArtisans - Notre engagement pour rendre le site accessible à tous.',
+  robots: { index: false, follow: true },
   alternates: {
     canonical: `${SITE_URL}/accessibilite`,
   },

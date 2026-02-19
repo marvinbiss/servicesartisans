@@ -11,7 +11,7 @@ import type { LegacyArtisan } from '@/types/legacy'
 import { getServiceImage } from '@/lib/data/images'
 import { SITE_URL } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
-import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getLocalBusinessSchema } from '@/lib/seo/jsonld'
 import JsonLd from '@/components/JsonLd'
 import { getQuartierBySlug, services as staticServicesList, villes } from '@/lib/data/france'
 import ServiceQuartierPage from './ServiceQuartierPage'
@@ -397,16 +397,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {
       title,
       description,
-      robots: shouldNoindex ? { index: false, follow: true } : undefined,
+      robots: shouldNoindex
+        ? { index: false, follow: true }
+        : { index: true, follow: true, 'max-snippet': -1 as const, 'max-image-preview': 'large' as const, 'max-video-preview': -1 as const },
       openGraph: {
         title,
         description,
         type: 'profile',
         locale: 'fr_FR',
         url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}/${publicId}`,
-        images: provider.avatar_url
-          ? [{ url: provider.avatar_url, alt: ogAlt }]
-          : [{ url: serviceImage.src, width: 1200, height: 630, alt: ogAlt }],
+        images: [{ url: ogImage, width: 1200, height: 630, alt: ogAlt }],
       },
       twitter: {
         card: 'summary_large_image' as const,
@@ -508,6 +508,21 @@ export default async function ProviderPage({ params }: PageProps) {
         { name: artisan.city, url: `/services/${serviceSlug}/${locationSlug}` },
         { name: artisan.business_name || 'Artisan', url: `/services/${serviceSlug}/${locationSlug}/${publicId}` },
       ])} />
+
+      {/* LocalBusiness JSON-LD for rich search results */}
+      <JsonLd data={getLocalBusinessSchema({
+        name: artisan.business_name || 'Artisan',
+        description: artisan.description || `${artisan.specialty} à ${artisan.city}`,
+        address: artisan.address || '',
+        city: artisan.city,
+        postalCode: artisan.postal_code || '',
+        phone: artisan.phone,
+        rating: artisan.average_rating || undefined,
+        reviewCount: artisan.review_count || undefined,
+        services: [service?.name || artisan.specialty],
+        url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}/${publicId}`,
+        image: artisan.avatar_url || undefined,
+      })} />
 
       <ArtisanPageClient
         initialArtisan={artisan}

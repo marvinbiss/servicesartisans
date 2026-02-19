@@ -90,9 +90,8 @@ const PROVIDER_LIST_SELECT = [
   'address_street', 'address_postal_code', 'address_city', 'address_region',
   'is_verified', 'is_active', 'noindex',
   'rating_average', 'review_count', 'avatar_url',
-  'phone', 'siret', 'employee_count',
+  'phone', 'siret',
   'latitude', 'longitude',
-  'description', 'meta_description',
   'created_at', 'updated_at',
 ].join(',')
 
@@ -480,6 +479,7 @@ export async function getAllProviders() {
         .eq('is_active', true)
         .order('is_verified', { ascending: false })
         .order('name')
+        .limit(1000)
 
       if (error) throw error
       return resolveProviderCities(data || [])

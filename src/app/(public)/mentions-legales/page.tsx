@@ -14,11 +14,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: `${SITE_URL}/mentions-legales`,
   },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: { index: true, follow: true },
-  },
+  robots: { index: false, follow: true },
   openGraph: {
     title: 'Mentions légales',
     description: 'Informations juridiques, éditeur, hébergeur et conditions d\'utilisation.',

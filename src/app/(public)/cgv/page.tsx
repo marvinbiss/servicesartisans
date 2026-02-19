@@ -9,6 +9,7 @@ import { CmsContent } from '@/components/CmsContent'
 export const metadata: Metadata = {
   title: 'Conditions Générales de Vente',
   description: 'Conditions générales de vente et d\'utilisation du service ServicesArtisans.',
+  robots: { index: false, follow: true },
   alternates: {
     canonical: `${SITE_URL}/cgv`,
   },

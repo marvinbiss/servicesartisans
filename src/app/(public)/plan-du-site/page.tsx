@@ -12,6 +12,7 @@ import { CmsContent } from '@/components/CmsContent'
 export const metadata: Metadata = {
   title: 'Plan du site',
   description: 'Plan du site complet de ServicesArtisans. Accédez à tous nos services, villes, départements et régions.',
+  robots: { index: false, follow: true },
   alternates: { canonical: `${SITE_URL}/plan-du-site` },
 }
 

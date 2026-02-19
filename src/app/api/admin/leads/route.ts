@@ -75,8 +75,8 @@ export async function GET(request: Request) {
       .order('name', { ascending: true })
       .limit(100)
 
-    if (city) artisansQuery = artisansQuery.ilike('address_city', `%${city}%`)
-    if (service) artisansQuery = artisansQuery.ilike('specialty', `%${service}%`)
+    if (city) artisansQuery = artisansQuery.ilike('address_city', `${city}%`)
+    if (service) artisansQuery = artisansQuery.ilike('specialty', `${service}%`)
 
     const { data: artisans, error: artisansError } = await artisansQuery
 
