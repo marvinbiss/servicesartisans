@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { MapPin, Navigation } from 'lucide-react'
+import { MapPin, Navigation, ExternalLink } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 
 interface ArtisanMapProps {
@@ -15,21 +15,24 @@ export function ArtisanMap({ artisan }: ArtisanMapProps) {
   const hasZones = artisan.intervention_zones && artisan.intervention_zones.length > 0
   const hasRadius = !!artisan.intervention_zone
 
-  // Hide entire section when there's no useful location data at all
   if (!hasCoordinates && !hasCity && !hasAddress && !hasZones && !hasRadius) {
     return null
   }
 
-  // Build map URL: use coordinates if available, otherwise geocode by city name
+  // OSM embed — only when we have precise GPS coordinates (no API key required)
   let mapSrc: string | null = null
   if (hasCoordinates) {
     mapSrc = `https://www.openstreetmap.org/export/embed.html?bbox=${artisan.longitude! - 0.08},${artisan.latitude! - 0.05},${artisan.longitude! + 0.08},${artisan.latitude! + 0.05}&layer=mapnik&marker=${artisan.latitude},${artisan.longitude}`
-  } else if (hasCity) {
-    const query = artisan.postal_code
-      ? `${artisan.city}, ${artisan.postal_code}, France`
-      : `${artisan.city}, France`
-    mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent(query)}&t=&z=13&ie=UTF8&iwloc=&output=embed`
   }
+
+  // Google Maps search link — used as CTA when no GPS coordinates are available
+  // (the old `?output=embed` format no longer works without an API key)
+  const mapsQuery = artisan.address
+    ? `${artisan.address}, ${artisan.postal_code} ${artisan.city}, France`
+    : artisan.postal_code
+    ? `${artisan.city} ${artisan.postal_code} France`
+    : `${artisan.city} France`
+  const mapsLink = `https://www.google.com/maps/search/${encodeURIComponent(mapsQuery)}`
 
   return (
     <motion.div
@@ -43,8 +46,8 @@ export function ArtisanMap({ artisan }: ArtisanMapProps) {
         Zone d&apos;intervention
       </h2>
 
-      {/* Map */}
-      {mapSrc && (
+      {/* Precise OSM map when GPS coordinates are available */}
+      {mapSrc ? (
         <div className="rounded-xl overflow-hidden bg-gray-100 mb-4" style={{ height: '280px' }}>
           <iframe
             width="100%"
@@ -58,9 +61,31 @@ export function ArtisanMap({ artisan }: ArtisanMapProps) {
             allowFullScreen
           />
         </div>
-      )}
+      ) : hasCity ? (
+        /* No GPS coordinates — show a styled Google Maps link instead of a broken embed */
+        <a
+          href={mapsLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-between gap-3 p-4 rounded-xl bg-blue-50 border border-blue-100 mb-4 hover:bg-blue-100 transition-colors group"
+          aria-label={`Voir ${artisan.city} sur Google Maps`}
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center flex-shrink-0">
+              <MapPin className="w-5 h-5 text-white" aria-hidden="true" />
+            </div>
+            <div>
+              <p className="font-semibold text-gray-900 text-sm">Voir sur Google Maps</p>
+              <p className="text-xs text-slate-500">
+                {artisan.city}{artisan.postal_code ? ` (${artisan.postal_code})` : ''}
+              </p>
+            </div>
+          </div>
+          <ExternalLink className="w-4 h-4 text-blue-500 group-hover:translate-x-0.5 transition-transform" aria-hidden="true" />
+        </a>
+      ) : null}
 
-      {/* Address */}
+      {/* Structured address */}
       {artisan.address && (
         <address className="flex items-start gap-3 p-4 rounded-xl bg-gray-50 mb-4 not-italic">
           <Navigation className="w-5 h-5 text-gray-400 mt-0.5" aria-hidden="true" />
@@ -69,14 +94,6 @@ export function ArtisanMap({ artisan }: ArtisanMapProps) {
             <p className="text-gray-500">{artisan.postal_code} {artisan.city}</p>
           </div>
         </address>
-      )}
-
-      {/* City display when no address */}
-      {!artisan.address && hasCity && (
-        <div className="flex items-center gap-3 p-4 rounded-xl bg-gray-50 mb-4">
-          <MapPin className="w-5 h-5 text-gray-400" aria-hidden="true" />
-          <span className="text-gray-700">{artisan.city}{artisan.postal_code ? ` (${artisan.postal_code})` : ''}</span>
-        </div>
       )}
 
       {/* Intervention zones */}

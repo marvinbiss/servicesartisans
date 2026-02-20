@@ -102,6 +102,12 @@ function convertToArtisan(provider: ProviderRecord, service: Service | null, loc
     ? existingDesc
     : generateDescription(name, specialty, city || 'votre région', provider, serviceSlug)
 
+  // Only show member_since if it's a meaningful past year.
+  // Providers imported in the current year (e.g. 2026 bulk import) would show
+  // "Inscrit depuis 2026" which is not informative.
+  const memberYear = provider.created_at ? new Date(provider.created_at).getFullYear() : null
+  const currentYear = new Date().getFullYear()
+
   return {
     id: provider.id,
     stable_id: provider.stable_id || undefined,
@@ -136,7 +142,7 @@ function convertToArtisan(provider: ProviderRecord, service: Service | null, loc
     phone_secondary: provider.phone_secondary || undefined,
     opening_hours: provider.opening_hours && Object.keys(provider.opening_hours).length > 0 ? provider.opening_hours : undefined,
     intervention_radius_km: provider.intervention_radius_km || undefined,
-    member_since: provider.created_at ? new Date(provider.created_at).getFullYear().toString() : undefined,
+    member_since: (memberYear && memberYear < currentYear) ? memberYear.toString() : undefined,
     siret: provider.siret || undefined,
     legal_form: provider.legal_form || undefined,
     creation_date: provider.creation_date || undefined,

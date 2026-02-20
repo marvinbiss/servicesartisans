@@ -1,29 +1,146 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Calendar, MessageCircle, Award } from 'lucide-react'
+import {
+  Calendar,
+  MessageCircle,
+  Award,
+  Star,
+  Shield,
+  Users,
+  Clock,
+  Navigation,
+  CheckCircle,
+} from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 
 interface ArtisanStatsProps {
   artisan: LegacyArtisan
 }
 
-export function ArtisanStats({ artisan }: ArtisanStatsProps) {
-  // Only show stats that have real data
-  const stats: { icon: typeof Calendar; label: string; value: string; color: string; bgColor: string }[] = []
+interface StatConfig {
+  icon: typeof Calendar
+  label: string
+  value: string
+  subValue?: string
+  color: string
+  bgColor: string
+}
 
-  if (artisan.member_since) {
-    stats.push({ icon: MessageCircle, label: 'Membre depuis', value: artisan.member_since, color: 'text-amber-600', bgColor: 'bg-amber-50 border-amber-100' })
+export function ArtisanStats({ artisan }: ArtisanStatsProps) {
+  const stats: StatConfig[] = []
+  const currentYear = new Date().getFullYear()
+
+  // Average rating
+  if (artisan.average_rating > 0) {
+    stats.push({
+      icon: Star,
+      label: 'Note moyenne',
+      value: artisan.average_rating.toFixed(1),
+      subValue: '/ 5',
+      color: 'text-amber-600',
+      bgColor: 'bg-amber-50 border-amber-100',
+    })
   }
+
+  // Review count
+  if (artisan.review_count > 0) {
+    stats.push({
+      icon: MessageCircle,
+      label: 'Avis clients',
+      value: artisan.review_count.toString(),
+      color: 'text-blue-600',
+      bgColor: 'bg-blue-50 border-blue-100',
+    })
+  }
+
+  // Company creation year (from SIRENE / provider data)
   if (artisan.creation_date) {
     const year = new Date(artisan.creation_date).getFullYear()
-    if (!artisan.member_since) {
-      stats.push({ icon: Calendar, label: 'Entreprise créée', value: year.toString(), color: 'text-purple-600', bgColor: 'bg-purple-50 border-purple-100' })
-    }
+    const age = currentYear - year
+    stats.push({
+      icon: Calendar,
+      label: age > 1 ? `${age} ans d'expérience` : 'Entreprise créée',
+      value: year.toString(),
+      color: 'text-purple-600',
+      bgColor: 'bg-purple-50 border-purple-100',
+    })
+  } else if (artisan.member_since && parseInt(artisan.member_since, 10) < currentYear) {
+    // member_since is the platform join year — only show if it's a meaningful past year
+    stats.push({
+      icon: Calendar,
+      label: 'Membre depuis',
+      value: artisan.member_since,
+      color: 'text-purple-600',
+      bgColor: 'bg-purple-50 border-purple-100',
+    })
   }
 
-  // Don't render section if no real stats
+  // SIRET verified
+  if (artisan.is_verified) {
+    stats.push({
+      icon: Shield,
+      label: 'Identité vérifiée',
+      value: 'SIRET',
+      color: 'text-green-600',
+      bgColor: 'bg-green-50 border-green-100',
+    })
+  }
+
+  // Available 24h/7j
+  if (artisan.available_24h) {
+    stats.push({
+      icon: Clock,
+      label: 'Disponibilité',
+      value: '24h/7j',
+      color: 'text-red-600',
+      bgColor: 'bg-red-50 border-red-100',
+    })
+  }
+
+  // Free quote
+  if (artisan.free_quote) {
+    stats.push({
+      icon: CheckCircle,
+      label: 'Devis',
+      value: 'Gratuit',
+      color: 'text-emerald-600',
+      bgColor: 'bg-emerald-50 border-emerald-100',
+    })
+  }
+
+  // Team size
+  if (artisan.team_size && artisan.team_size > 1) {
+    stats.push({
+      icon: Users,
+      label: 'Équipe',
+      value: artisan.team_size.toString(),
+      subValue: 'pers.',
+      color: 'text-indigo-600',
+      bgColor: 'bg-indigo-50 border-indigo-100',
+    })
+  }
+
+  // Intervention radius
+  if (artisan.intervention_radius_km) {
+    stats.push({
+      icon: Navigation,
+      label: "Zone d'action",
+      value: artisan.intervention_radius_km.toString(),
+      subValue: 'km',
+      color: 'text-sky-600',
+      bgColor: 'bg-sky-50 border-sky-100',
+    })
+  }
+
   if (stats.length === 0) return null
+
+  const gridCols =
+    stats.length >= 4
+      ? 'md:grid-cols-4'
+      : stats.length === 3
+      ? 'md:grid-cols-3'
+      : 'md:grid-cols-2'
 
   return (
     <motion.div
@@ -38,32 +155,48 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
           <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center">
             <Award className="w-4.5 h-4.5 text-blue-600" aria-hidden="true" />
           </div>
-          Statistiques
+          En bref
         </h2>
       </div>
 
       {/* Stats grid */}
       <div className="px-6 pb-6 pt-4">
-        <div className={`grid grid-cols-2 ${stats.length >= 4 ? 'md:grid-cols-4' : stats.length === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-3`} role="list" aria-label="Statistiques de l'artisan">
+        <div
+          className={`grid grid-cols-2 ${gridCols} gap-3`}
+          role="list"
+          aria-label="Informations clés de l'artisan"
+        >
           {stats.map((stat, index) => (
             <motion.div
               key={stat.label}
               role="listitem"
-              initial={{ opacity: 0, scale: 0.8 }}
+              initial={{ opacity: 0, scale: 0.85 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.1 + index * 0.08 }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1], delay: 0.1 + index * 0.06 }}
               className={`text-center p-4 rounded-xl border ${stat.bgColor}`}
             >
-              <div className={`w-12 h-12 rounded-xl ${stat.color} bg-white/80 flex items-center justify-center mx-auto mb-2.5 shadow-sm`} aria-hidden="true">
+              <div
+                className={`w-10 h-10 rounded-xl ${stat.color} bg-white/80 flex items-center justify-center mx-auto mb-2.5 shadow-sm`}
+                aria-hidden="true"
+              >
                 <stat.icon className="w-5 h-5" />
               </div>
-              <div className="text-2xl font-bold text-gray-900" aria-label={`${stat.label}: ${stat.value}`}>{stat.value}</div>
-              <div className="text-sm text-slate-500 mt-1 font-medium" aria-hidden="true">{stat.label}</div>
+              <div
+                className="text-2xl font-bold text-gray-900 leading-none"
+                aria-label={`${stat.label} : ${stat.value}${stat.subValue ? ' ' + stat.subValue : ''}`}
+              >
+                {stat.value}
+                {stat.subValue && (
+                  <span className="text-sm font-normal text-slate-500 ml-0.5">{stat.subValue}</span>
+                )}
+              </div>
+              <div className="text-xs text-slate-500 mt-1.5 font-medium leading-tight" aria-hidden="true">
+                {stat.label}
+              </div>
             </motion.div>
           ))}
         </div>
       </div>
-
     </motion.div>
   )
 }
