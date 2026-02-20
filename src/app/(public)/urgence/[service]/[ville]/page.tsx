@@ -603,7 +603,7 @@ export default async function UrgenceServiceVillePage({
 
           <div className="text-center mt-8">
             <Link
-              href={`/tarifs-artisans/${service}/${villeSlug}`}
+              href={`/tarifs/${service}/${villeSlug}`}
               className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold"
             >
               Tarifs détaillés {tradeLower} à {villeData.name}
@@ -885,7 +885,7 @@ export default async function UrgenceServiceVillePage({
                   {trade.name} à {villeData.name}
                 </Link>
                 <Link
-                  href={`/tarifs-artisans/${service}/${villeSlug}`}
+                  href={`/tarifs/${service}/${villeSlug}`}
                   className="block text-sm text-gray-600 hover:text-blue-600 py-1"
                 >
                   Tarifs {tradeLower} à {villeData.name}
@@ -948,7 +948,7 @@ export default async function UrgenceServiceVillePage({
                   Comment ça marche
                 </Link>
                 <Link
-                  href="/tarifs-artisans"
+                  href="/tarifs"
                   className="block text-sm text-gray-600 hover:text-blue-600 py-1"
                 >
                   Guide des tarifs

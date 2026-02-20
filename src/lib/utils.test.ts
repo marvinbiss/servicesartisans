@@ -11,7 +11,8 @@ import {
   isValidSIRET,
   calculateDistance,
   getRatingColor,
-  parseQueryString
+  parseQueryString,
+  getArtisanUrl,
 } from './utils'
 
 describe('cn (classNames utility)', () => {
@@ -234,5 +235,43 @@ describe('parseQueryString', () => {
   it('should handle encoded values', () => {
     const result = parseQueryString('?name=John%20Doe')
     expect(result.name).toBe('John Doe')
+  })
+})
+
+describe('getArtisanUrl', () => {
+  it('should build URL with known service and city', () => {
+    const url = getArtisanUrl({ specialty: 'plombier', city: 'Paris', slug: 'dupont-plomberie-75' })
+    expect(url).toBe('/services/plombier/paris/dupont-plomberie-75')
+  })
+
+  it('should prefer slug over stable_id', () => {
+    const url = getArtisanUrl({ specialty: 'electricien', city: 'Lyon', slug: 'martin-elec-69', stable_id: 'STBL123' })
+    expect(url).toContain('martin-elec-69')
+    expect(url).not.toContain('STBL123')
+  })
+
+  it('should fall back to stable_id when no slug', () => {
+    const url = getArtisanUrl({ specialty: 'plombier', city: 'Paris', stable_id: 'STBL456' })
+    expect(url).toContain('STBL456')
+  })
+
+  it('should resolve specialty synonym to canonical slug', () => {
+    const url = getArtisanUrl({ specialty: 'peintre', city: 'Paris', slug: 'test' })
+    expect(url).toContain('/peintre-en-batiment/')
+  })
+
+  it('should slugify unknown city', () => {
+    const url = getArtisanUrl({ specialty: 'plombier', city: 'Ville Inconnue', slug: 'test' })
+    expect(url).toContain('/ville-inconnue/')
+  })
+
+  it('should fall back gracefully with missing fields', () => {
+    const url = getArtisanUrl({})
+    expect(url).toMatch(/^\/services\/artisan\/france\/$/)
+  })
+
+  it('should start with /services/', () => {
+    const url = getArtisanUrl({ specialty: 'menuisier', city: 'Marseille', slug: 'bois-pro' })
+    expect(url).toMatch(/^\/services\//)
   })
 })

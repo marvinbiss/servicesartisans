@@ -417,7 +417,7 @@ export default async function CommentCaMarchePage() {
               </span>
             </Link>
             <Link
-              href="/tarifs-artisans"
+              href="/tarifs"
               className="bg-gray-50 p-6 rounded-xl hover:bg-blue-50 transition-colors border border-gray-200"
             >
               <h3 className="font-semibold text-gray-900 mb-2">Guide des prix</h3>

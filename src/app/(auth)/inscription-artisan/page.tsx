@@ -474,7 +474,7 @@ export default function InscriptionArtisanPage() {
 
           <div className="mt-12 grid md:grid-cols-3 gap-6">
             <Link
-              href="/tarifs-artisans"
+              href="/tarifs"
               className="bg-gray-50 hover:bg-blue-50 rounded-xl p-6 transition-colors group"
             >
               <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 mb-2">Nos tarifs</h3>

@@ -176,8 +176,8 @@ function setDefaultListUsersData() {
 
   mockProfilesResult = {
     data: [
-      { id: 'u1', full_name: 'Alice Dupont (profile)', phone: '0612345678', user_type: 'client' },
-      { id: 'u2', full_name: 'Bob Martin (profile)', phone: '0698765432', user_type: 'artisan' },
+      { id: 'u1', full_name: 'Alice Dupont (profile)', phone_e164: '0612345678', role: 'client' },
+      { id: 'u2', full_name: 'Bob Martin (profile)', phone_e164: '0698765432', role: 'artisan' },
     ],
     error: null,
   }

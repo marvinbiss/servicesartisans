@@ -155,7 +155,7 @@ export default function RecherchePage() {
               <h3 className="font-semibold text-gray-900 mb-4">Pages utiles</h3>
               <div className="space-y-2">
                 <Link href="/comment-ca-marche" className="block text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">Comment ça marche</Link>
-                <Link href="/tarifs-artisans" className="block text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">Tarifs des artisans</Link>
+                <Link href="/tarifs" className="block text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">Tarifs des artisans</Link>
                 <Link href="/urgence" className="block text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">Urgence 24h/24</Link>
                 <Link href="/faq" className="block text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">Questions fréquentes</Link>
                 <Link href="/blog" className="block text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">Blog</Link>

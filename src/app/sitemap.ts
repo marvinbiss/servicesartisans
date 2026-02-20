@@ -30,7 +30,7 @@ export async function generateSitemaps() {
     { id: 'cities' },           // villes index + individual city pages
     { id: 'geo' },              // departements + regions (index + individual)
     { id: 'quartiers' },        // quartier pages within cities
-    // service×quartier sitemaps — split into batches if > 45K URLs
+    // service×quartier sitemaps — served by [publicId] route via quartier detection
     ...Array.from({ length: sqBatchCount }, (_, i) => ({ id: `service-quartiers-${i}` })),
     // devis sitemaps
     { id: 'devis-services' },     // 46 service hub pages
@@ -138,7 +138,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       { path: '/blog', changeFrequency: 'weekly' as const, priority: 0.7 },
       { path: '/faq', changeFrequency: 'monthly' as const, priority: 0.6 },
       { path: '/comment-ca-marche', changeFrequency: 'monthly' as const, priority: 0.6 },
-      { path: '/tarifs-artisans', changeFrequency: 'weekly' as const, priority: 0.8 },
+      { path: '/tarifs', changeFrequency: 'weekly' as const, priority: 0.8 },
       { path: '/urgence', changeFrequency: 'weekly' as const, priority: 0.8 },
       { path: '/devis', changeFrequency: 'weekly' as const, priority: 0.7 },
       { path: '/recherche', changeFrequency: 'monthly' as const, priority: 0.4 },
@@ -203,7 +203,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
     // Tarifs per-service pages
     const tarifsPages: MetadataRoute.Sitemap = Object.keys(tradeContent).map((slug) => ({
-      url: `${SITE_URL}/tarifs-artisans/${slug}`,
+      url: `${SITE_URL}/tarifs/${slug}`,
       lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'monthly' as const,
       priority: 0.7,
@@ -306,13 +306,12 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     })
   }
 
-  // ── Service × Quartier pages (batched) ─────────────────────────────
+  // ── Service × Quartier pages (batched, served by [publicId] route) ─
   if (id.startsWith('service-quartiers-')) {
     const batchIndex = parseInt(id.replace('service-quartiers-', ''), 10)
     const batchSize = 45000
     const offset = batchIndex * batchSize
 
-    // Flatten all service×ville×quartier URLs
     const allUrls: { url: string; lastModified: Date; changeFrequency: 'weekly'; priority: number; images: string[] }[] = []
     for (const svc of services) {
       const serviceImage = getServiceImage(svc.slug)
@@ -423,7 +422,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     for (const svc of services) {
       for (const v of villes) {
         allUrls.push({
-          url: `${SITE_URL}/tarifs-artisans/${svc.slug}/${v.slug}`,
+          url: `${SITE_URL}/tarifs/${svc.slug}/${v.slug}`,
           lastModified: STATIC_LAST_MODIFIED,
           changeFrequency: 'monthly',
           priority: 0.6,

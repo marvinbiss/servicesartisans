@@ -409,7 +409,7 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
               <h3 className="font-semibold text-gray-900 mb-3">Ce service</h3>
               <div className="space-y-2">
                 <Link href={`/services/${service}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">{trade.name} — tous les artisans</Link>
-                <Link href={`/tarifs-artisans/${service}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">Tarifs {tradeLower}</Link>
+                <Link href={`/tarifs/${service}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">Tarifs {tradeLower}</Link>
                 {trade.emergencyInfo && (
                   <Link href={`/urgence/${service}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">{trade.name} urgence</Link>
                 )}
@@ -438,7 +438,7 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
               <h3 className="font-semibold text-gray-900 mb-3">Informations utiles</h3>
               <div className="space-y-2">
                 <Link href="/devis" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Demander un devis</Link>
-                <Link href="/tarifs-artisans" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Guide complet des tarifs</Link>
+                <Link href="/tarifs" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Guide complet des tarifs</Link>
                 <Link href="/comment-ca-marche" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Comment ça marche</Link>
                 <Link href="/faq" className="block text-sm text-gray-600 hover:text-blue-600 py-1">FAQ</Link>
                 <Link href="/notre-processus-de-verification" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Processus de vérification</Link>

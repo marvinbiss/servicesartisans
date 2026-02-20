@@ -19,7 +19,7 @@ const outilsLinks = [
   { name: 'Calculateur de prix', href: '/outils/calculateur-prix' },
   { name: 'Diagnostic artisan', href: '/outils/diagnostic' },
   { name: 'Carte des artisans', href: '/carte-artisans' },
-  { name: 'Tarifs artisans', href: '/tarifs-artisans' },
+  { name: 'Tarifs artisans', href: '/tarifs' },
   { name: 'Widget pour artisans', href: '/widget' },
 ]
 
@@ -29,7 +29,7 @@ const informationLinks = [
   { name: 'Contact', href: '/contact' },
   { name: 'FAQ', href: '/faq' },
   { name: 'Blog', href: '/blog' },
-  { name: 'Tarifs artisans', href: '/tarifs-artisans' },
+  { name: 'Tarifs artisans', href: '/tarifs' },
   { name: 'CGV', href: '/cgv' },
   { name: 'Mentions légales', href: '/mentions-legales' },
   { name: 'Confidentialité', href: '/confidentialite' },

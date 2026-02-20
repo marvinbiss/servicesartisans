@@ -578,7 +578,7 @@ export default async function ProblemeVillePage({
                 <Link href={`/urgence/${problem.primaryService}/${ville}`} className="block text-sm text-gray-600 hover:text-amber-600 py-1">
                   {tradeName} urgence à {villeData.name}
                 </Link>
-                <Link href={`/tarifs-artisans/${problem.primaryService}/${ville}`} className="block text-sm text-gray-600 hover:text-amber-600 py-1">
+                <Link href={`/tarifs/${problem.primaryService}/${ville}`} className="block text-sm text-gray-600 hover:text-amber-600 py-1">
                   Tarifs {tradeName.toLowerCase()} à {villeData.name}
                 </Link>
                 <Link href={`/avis/${problem.primaryService}/${ville}`} className="block text-sm text-gray-600 hover:text-amber-600 py-1">
@@ -604,7 +604,7 @@ export default async function ProblemeVillePage({
               <div className="space-y-2">
                 <Link href="/problemes" className="block text-sm text-gray-600 hover:text-amber-600 py-1">Tous les problèmes</Link>
                 <Link href="/urgence" className="block text-sm text-gray-600 hover:text-amber-600 py-1">Urgence artisan 24h/24</Link>
-                <Link href="/tarifs-artisans" className="block text-sm text-gray-600 hover:text-amber-600 py-1">Guide des tarifs</Link>
+                <Link href="/tarifs" className="block text-sm text-gray-600 hover:text-amber-600 py-1">Guide des tarifs</Link>
                 <Link href="/faq" className="block text-sm text-gray-600 hover:text-amber-600 py-1">FAQ</Link>
               </div>
             </div>

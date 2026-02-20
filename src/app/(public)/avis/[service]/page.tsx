@@ -768,7 +768,7 @@ export default async function AvisServicePage({
                   Devis {tradeLower}
                 </Link>
                 <Link
-                  href={`/tarifs-artisans/${service}`}
+                  href={`/tarifs/${service}`}
                   className="block text-sm text-gray-600 hover:text-blue-600 py-1"
                 >
                   Tarifs {tradeLower}
@@ -830,7 +830,7 @@ export default async function AvisServicePage({
                   Demander un devis
                 </Link>
                 <Link
-                  href="/tarifs-artisans"
+                  href="/tarifs"
                   className="block text-sm text-gray-600 hover:text-blue-600 py-1"
                 >
                   Guide complet des tarifs

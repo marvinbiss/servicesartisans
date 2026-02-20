@@ -478,7 +478,7 @@ export default async function DevisQuartierPage({
                 <Link href={`/devis/${service}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
                   Devis {tradeLower} en France
                 </Link>
-                <Link href={`/tarifs-artisans/${service}/${location}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
+                <Link href={`/tarifs/${service}/${location}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
                   Tarifs {tradeLower} à {ville.name}
                 </Link>
                 <Link href={`/services/${service}/${location}/${quartier}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
@@ -510,7 +510,7 @@ export default async function DevisQuartierPage({
               <h3 className="font-semibold text-gray-900 mb-3">Informations utiles</h3>
               <div className="space-y-2">
                 <Link href="/devis" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Demander un devis</Link>
-                <Link href="/tarifs-artisans" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Guide complet des tarifs</Link>
+                <Link href="/tarifs" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Guide complet des tarifs</Link>
                 <Link href="/comment-ca-marche" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Comment ça marche</Link>
                 <Link href="/faq" className="block text-sm text-gray-600 hover:text-blue-600 py-1">FAQ</Link>
               </div>

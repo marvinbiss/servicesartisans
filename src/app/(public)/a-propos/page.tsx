@@ -318,7 +318,7 @@ export default async function AProposPage() {
               </div>
               <div className="mt-6 pt-6 border-t border-blue-400/30">
                 <Link
-                  href="/tarifs-artisans"
+                  href="/tarifs"
                   className="inline-flex items-center gap-2 text-white font-semibold hover:underline"
                 >
                   Voir les tarifs artisans

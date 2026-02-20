@@ -197,7 +197,7 @@ export default async function PlanDuSitePage() {
             {Object.values(tradeContent).map(trade => (
               <Link
                 key={trade.slug}
-                href={`/tarifs-artisans/${trade.slug}`}
+                href={`/tarifs/${trade.slug}`}
                 className="text-sm text-blue-600 hover:text-blue-800 py-1"
               >
                 Tarifs {trade.name.toLowerCase()}
@@ -272,7 +272,7 @@ export default async function PlanDuSitePage() {
               { href: '/devis', label: 'Demander un devis' },
               { href: '/urgence', label: 'Urgence 24h/24' },
               { href: '/blog', label: 'Blog' },
-              { href: '/tarifs-artisans', label: 'Tarifs artisans' },
+              { href: '/tarifs', label: 'Tarifs artisans' },
               { href: '/recherche', label: 'Recherche' },
               { href: '/notre-processus-de-verification', label: 'Processus de vérification' },
               { href: '/mentions-legales', label: 'Mentions légales' },

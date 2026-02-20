@@ -1042,7 +1042,7 @@ export default async function AvisServiceVillePage({
                   Devis {tradeLower} &agrave; {villeData.name}
                 </Link>
                 <Link
-                  href={`/tarifs-artisans/${service}/${villeSlug}`}
+                  href={`/tarifs/${service}/${villeSlug}`}
                   className="block text-sm text-gray-600 hover:text-blue-600 py-1"
                 >
                   Tarifs {tradeLower} &agrave; {villeData.name}
@@ -1097,7 +1097,7 @@ export default async function AvisServiceVillePage({
                   Demander un devis
                 </Link>
                 <Link
-                  href="/tarifs-artisans"
+                  href="/tarifs"
                   className="block text-sm text-gray-600 hover:text-blue-600 py-1"
                 >
                   Guide complet des tarifs

@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { MapPin, ArrowRight, Star, Shield, ChevronDown, BadgeCheck, Euro, Clock, Wrench } from 'lucide-react'
-import { getServiceBySlug, getLocationsByService, getProvidersByService } from '@/lib/supabase'
+import { getServiceBySlug, getLocationsByService, getProvidersByService, getProviderCountByService } from '@/lib/supabase'
 import JsonLd from '@/components/JsonLd'
 import { getServiceSchema, getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { hashCode } from '@/lib/seo/location-content'
@@ -160,6 +160,7 @@ export default async function ServicePage({ params }: PageProps) {
   let service: { name: string; slug: string; description?: string; category?: string } | null = null
   let topCities: CityInfo[] = []
   let recentProviders: ServiceProvider[] = []
+  let totalProviderCount = 0
 
   try {
     service = await getServiceBySlug(serviceSlug)
@@ -167,10 +168,11 @@ export default async function ServicePage({ params }: PageProps) {
     console.error('Service page DB error (service):', error)
   }
 
-  // Fetch cities and providers independently — failure in one should not block the other
-  const [citiesResult, providersResult] = await Promise.allSettled([
+  // Fetch cities, providers and total count independently — failure in one should not block the other
+  const [citiesResult, providersResult, countResult] = await Promise.allSettled([
     getLocationsByService(serviceSlug),
     getProvidersByService(serviceSlug, 12),
+    getProviderCountByService(serviceSlug),
   ])
   if (citiesResult.status === 'fulfilled') {
     topCities = citiesResult.value || []
@@ -181,6 +183,9 @@ export default async function ServicePage({ params }: PageProps) {
     recentProviders = (providersResult.value || []) as ServiceProvider[]
   } else {
     console.error('Service page DB error (providers):', providersResult.reason)
+  }
+  if (countResult.status === 'fulfilled') {
+    totalProviderCount = countResult.value
   }
 
   // Fallback to static data if DB failed
@@ -292,7 +297,7 @@ export default async function ServicePage({ params }: PageProps) {
           <div className="flex flex-wrap gap-6 md:gap-10 mt-10">
             <div className="flex flex-col">
               <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-amber-500">
-                {recentProviders?.length || 0}+
+                {totalProviderCount > 0 ? totalProviderCount.toLocaleString('fr-FR') : '—'}
               </span>
               <span className="text-sm text-slate-400 mt-1">artisans référencés</span>
             </div>

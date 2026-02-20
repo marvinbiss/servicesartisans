@@ -146,7 +146,7 @@ export default function ArtisanInternalLinks({
                 {serviceName} en France
               </Link>
               <Link
-                href={`/tarifs-artisans/${serviceSlug}`}
+                href={`/tarifs/${serviceSlug}`}
                 className="block px-3 py-2 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-lg text-sm transition-colors"
               >
                 Tarifs {serviceName} en France

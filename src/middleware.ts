@@ -83,6 +83,13 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
 
+  // Redirect /tarifs-artisans → /tarifs (301 permanent)
+  if (pathname.startsWith('/tarifs-artisans')) {
+    const newPath = pathname.replace('/tarifs-artisans', '/tarifs')
+    const host = request.headers.get('host') || 'servicesartisans.fr'
+    return NextResponse.redirect(`https://${host}${newPath}${request.nextUrl.search}`, 301)
+  }
+
   // URL canonicalization
   const canonicalUrl = getCanonicalRedirect(request)
   if (canonicalUrl && process.env.NODE_ENV === 'production') {

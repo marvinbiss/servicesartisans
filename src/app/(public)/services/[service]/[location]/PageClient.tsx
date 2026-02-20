@@ -63,10 +63,14 @@ export default function ServiceLocationPageClient({
               <h1 className="font-heading text-xl md:text-2xl font-bold text-gray-900">
                 {h1Text || `${service.name} à ${location.name}`}
               </h1>
-              <p className="text-gray-500 text-sm flex items-center gap-1 mt-1">
-                <MapPin className="w-4 h-4" />
-                {location.department_name} ({location.department_code})
-              </p>
+              {(location.department_name || location.postal_code) && (
+                <p className="text-gray-500 text-sm flex items-center gap-1 mt-1">
+                  <MapPin className="w-4 h-4" />
+                  {location.department_name
+                    ? `${location.department_name}${location.department_code ? ` (${location.department_code})` : ''}`
+                    : location.postal_code}
+                </p>
+              )}
             </div>
 
             {/* View toggle - Desktop */}

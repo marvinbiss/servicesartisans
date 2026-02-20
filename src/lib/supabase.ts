@@ -559,6 +559,29 @@ export async function getProvidersByService(serviceSlug: string, limit?: number)
   }
 }
 
+export async function getProviderCountByService(serviceSlug: string): Promise<number> {
+  if (IS_BUILD) return 0
+  const svc = staticServices[serviceSlug]
+  if (!svc || !isValidUUID(svc.id)) return 0
+  try {
+    return await withTimeout(
+      (async () => {
+        const { count, error } = await supabase
+          .from('providers')
+          .select('id, provider_services!inner(service_id)', { count: 'exact', head: true })
+          .eq('provider_services.service_id', svc.id)
+          .eq('is_active', true)
+        if (error) throw error
+        return count ?? 0
+      })(),
+      QUERY_TIMEOUT_MS,
+      `getProviderCountByService(${serviceSlug})`,
+    )
+  } catch {
+    return 0
+  }
+}
+
 export async function getLocationsByService(serviceSlug: string) {
   if (IS_BUILD) return [] // Skip during build
   return retryWithBackoff(

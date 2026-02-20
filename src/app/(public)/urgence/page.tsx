@@ -509,7 +509,7 @@ export default async function UrgencePage() {
               <h3 className="font-semibold text-gray-900 mb-4">Informations utiles</h3>
               <div className="space-y-2">
                 <Link href="/comment-ca-marche" className="block text-sm text-gray-600 hover:text-red-600 py-1 transition-colors">Comment ça marche</Link>
-                <Link href="/tarifs-artisans" className="block text-sm text-gray-600 hover:text-red-600 py-1 transition-colors">Tarifs des artisans</Link>
+                <Link href="/tarifs" className="block text-sm text-gray-600 hover:text-red-600 py-1 transition-colors">Tarifs des artisans</Link>
                 <Link href="/faq" className="block text-sm text-gray-600 hover:text-red-600 py-1 transition-colors">Questions fréquentes</Link>
                 <Link href="/notre-processus-de-verification" className="block text-sm text-gray-600 hover:text-red-600 py-1 transition-colors">Processus de vérification</Link>
                 <Link href="/blog/urgence-plomberie-que-faire" className="block text-sm text-gray-600 hover:text-red-600 py-1 transition-colors">Urgence plomberie : que faire ?</Link>

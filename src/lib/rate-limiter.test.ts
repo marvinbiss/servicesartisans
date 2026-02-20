@@ -1,0 +1,189 @@
+import { describe, it, expect } from 'vitest'
+import {
+  getRateLimitConfig,
+  getRateLimitKey,
+  getClientIp,
+  checkRateLimit,
+  RATE_LIMITS,
+} from './rate-limiter'
+
+// In test env: NODE_ENV !== 'production' and no Redis → always uses MemoryRateLimiter
+
+describe('getRateLimitConfig', () => {
+  it('returns auth config for /api/auth routes', () => {
+    expect(getRateLimitConfig('/api/auth/login')).toBe(RATE_LIMITS.auth)
+    expect(getRateLimitConfig('/api/auth/register')).toBe(RATE_LIMITS.auth)
+  })
+
+  it('returns payment config for payment routes', () => {
+    expect(getRateLimitConfig('/api/payments/create')).toBe(RATE_LIMITS.payment)
+    expect(getRateLimitConfig('/api/stripe/webhook')).toBe(RATE_LIMITS.payment)
+  })
+
+  it('returns booking config for booking routes', () => {
+    expect(getRateLimitConfig('/api/bookings')).toBe(RATE_LIMITS.booking)
+  })
+
+  it('returns reviews config for review routes', () => {
+    expect(getRateLimitConfig('/api/reviews')).toBe(RATE_LIMITS.reviews)
+  })
+
+  it('returns devis config for devis routes', () => {
+    expect(getRateLimitConfig('/api/devis/create')).toBe(RATE_LIMITS.devis)
+    expect(getRateLimitConfig('/api/artisan/devis')).toBe(RATE_LIMITS.devis)
+  })
+
+  it('returns contact config for contact routes', () => {
+    expect(getRateLimitConfig('/api/contact')).toBe(RATE_LIMITS.contact)
+  })
+
+  it('returns upload config for upload routes', () => {
+    expect(getRateLimitConfig('/api/photos/upload')).toBe(RATE_LIMITS.upload)
+  })
+
+  it('returns search config for search routes', () => {
+    expect(getRateLimitConfig('/api/search')).toBe(RATE_LIMITS.search)
+  })
+
+  it('returns api config for generic API routes', () => {
+    expect(getRateLimitConfig('/api/geo/cities')).toBe(RATE_LIMITS.api)
+  })
+
+  it('returns default config for non-API routes', () => {
+    expect(getRateLimitConfig('/services/plombier/paris')).toBe(RATE_LIMITS.default)
+    expect(getRateLimitConfig('/')).toBe(RATE_LIMITS.default)
+  })
+})
+
+describe('getRateLimitKey', () => {
+  it('combines ip and pathname', () => {
+    expect(getRateLimitKey('1.2.3.4', '/api/auth')).toBe('1.2.3.4:/api/auth')
+  })
+
+  it('handles unknown IP', () => {
+    expect(getRateLimitKey('unknown', '/api/contact')).toBe('unknown:/api/contact')
+  })
+})
+
+describe('getClientIp', () => {
+  it('extracts IP from x-forwarded-for (first entry)', () => {
+    const headers = new Headers({ 'x-forwarded-for': '10.0.0.1, 10.0.0.2' })
+    expect(getClientIp(headers)).toBe('10.0.0.1')
+  })
+
+  it('falls back to x-real-ip', () => {
+    const headers = new Headers({ 'x-real-ip': '10.0.0.5' })
+    expect(getClientIp(headers)).toBe('10.0.0.5')
+  })
+
+  it('falls back to cf-connecting-ip', () => {
+    const headers = new Headers({ 'cf-connecting-ip': '10.0.0.9' })
+    expect(getClientIp(headers)).toBe('10.0.0.9')
+  })
+
+  it('returns unknown when no IP header present', () => {
+    const headers = new Headers()
+    expect(getClientIp(headers)).toBe('unknown')
+  })
+
+  it('prefers x-forwarded-for over x-real-ip', () => {
+    const headers = new Headers({
+      'x-forwarded-for': '1.1.1.1',
+      'x-real-ip': '2.2.2.2',
+    })
+    expect(getClientIp(headers)).toBe('1.1.1.1')
+  })
+})
+
+describe('checkRateLimit (in-memory)', () => {
+  // Use unique keys per test to avoid cross-contamination from module-level memoryStore
+  const uniqueKey = () => `test:${Math.random().toString(36).slice(2)}`
+
+  it('allows requests under the limit', async () => {
+    const key = uniqueKey()
+    const config = { window: 60_000, max: 5 }
+
+    const result = await checkRateLimit(key, config)
+    expect(result.allowed).toBe(true)
+    expect(result.remaining).toBe(4)
+  })
+
+  it('decrements remaining on each call', async () => {
+    const key = uniqueKey()
+    const config = { window: 60_000, max: 3 }
+
+    const r1 = await checkRateLimit(key, config)
+    const r2 = await checkRateLimit(key, config)
+    const r3 = await checkRateLimit(key, config)
+
+    expect(r1.remaining).toBe(2)
+    expect(r2.remaining).toBe(1)
+    expect(r3.remaining).toBe(0)
+    expect(r3.allowed).toBe(true)
+  })
+
+  it('blocks when limit is reached', async () => {
+    const key = uniqueKey()
+    const config = { window: 60_000, max: 2 }
+
+    await checkRateLimit(key, config)
+    await checkRateLimit(key, config)
+    const result = await checkRateLimit(key, config)
+
+    expect(result.allowed).toBe(false)
+    expect(result.remaining).toBe(0)
+  })
+
+  it('allows exactly max requests', async () => {
+    const key = uniqueKey()
+    const config = { window: 60_000, max: 1 }
+
+    const first = await checkRateLimit(key, config)
+    expect(first.allowed).toBe(true)
+
+    const second = await checkRateLimit(key, config)
+    expect(second.allowed).toBe(false)
+  })
+
+  it('provides a resetTime in the future', async () => {
+    const key = uniqueKey()
+    const config = { window: 60_000, max: 10 }
+    const before = Date.now()
+
+    const result = await checkRateLimit(key, config)
+
+    expect(result.resetTime).toBeGreaterThan(before)
+    expect(result.resetTime).toBeLessThanOrEqual(before + 60_000 + 100)
+  })
+
+  it('resets after window expiry', async () => {
+    const key = uniqueKey()
+    const config = { window: 1, max: 1 } // 1ms window
+
+    await checkRateLimit(key, config)
+    await checkRateLimit(key, config) // blocked
+
+    // Wait for window to expire
+    await new Promise((r) => setTimeout(r, 10))
+
+    const result = await checkRateLimit(key, config)
+    expect(result.allowed).toBe(true)
+  })
+})
+
+describe('RATE_LIMITS constants', () => {
+  it('auth limit is stricter than api limit', () => {
+    expect(RATE_LIMITS.auth.max).toBeLessThan(RATE_LIMITS.api.max)
+  })
+
+  it('contact has longer window than auth', () => {
+    expect(RATE_LIMITS.contact.window).toBeGreaterThan(RATE_LIMITS.auth.window)
+  })
+
+  it('all configs have positive window and max', () => {
+    for (const config of Object.values(RATE_LIMITS)) {
+      expect(config.window).toBeGreaterThan(0)
+      expect(config.max).toBeGreaterThan(0)
+    }
+  })
+})

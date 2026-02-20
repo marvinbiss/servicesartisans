@@ -349,7 +349,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
           </div>
           <div className="text-center mt-8">
             <Link
-              href="/tarifs-artisans"
+              href="/tarifs"
               className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold"
             >
               Guide complet des tarifs
@@ -487,7 +487,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
               <h3 className="font-semibold text-gray-900 mb-3">Services associés</h3>
               <div className="space-y-2">
                 <Link href={`/services/${service}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">{trade.name} — page principale</Link>
-                <Link href={`/tarifs-artisans/${service}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">Tarifs {trade.name.toLowerCase()}</Link>
+                <Link href={`/tarifs/${service}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">Tarifs {trade.name.toLowerCase()}</Link>
                 {relatedServices.map((s) => (
                   <Link key={s.slug} href={`/services/${s.slug}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">{s.name}</Link>
                 ))}
@@ -508,7 +508,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
               <div className="space-y-2">
                 <Link href="/urgence" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Toutes les urgences</Link>
                 <Link href="/comment-ca-marche" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Comment ça marche</Link>
-                <Link href="/tarifs-artisans" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Guide des tarifs</Link>
+                <Link href="/tarifs" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Guide des tarifs</Link>
                 <Link href="/faq" className="block text-sm text-gray-600 hover:text-blue-600 py-1">FAQ</Link>
                 <Link href="/notre-processus-de-verification" className="block text-sm text-gray-600 hover:text-blue-600 py-1">Processus de vérification</Link>
               </div>

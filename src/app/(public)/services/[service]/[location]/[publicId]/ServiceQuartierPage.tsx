@@ -481,7 +481,7 @@ export default async function ServiceQuartierPage({
                 Les tarifs affichés sont indicatifs et basés sur les moyennes du marché en {ville.region} pour un {svcLower} à {quartierName}, {ville.name}.
               </p>
               <Link
-                href={`/tarifs-artisans/${serviceSlug}`}
+                href={`/tarifs/${serviceSlug}`}
                 className="inline-flex items-center gap-2 mt-6 text-blue-600 hover:text-blue-800 text-sm font-medium group"
               >
                 Voir tous les tarifs {svcLower} en France
