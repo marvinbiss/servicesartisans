@@ -44,18 +44,18 @@ export async function GET(request: NextRequest) {
       .from('reviews')
       .select(`
         *,
-        provider:providers(id, name)
+        artisan:profiles!artisan_id(id, full_name)
       `, { count: 'exact' })
 
-    // Apply filters
+    // Apply filters — reviews.status: 'published' | 'pending_review' | 'hidden' | 'flagged'
     if (filter === 'pending') {
-      query = query.eq('moderation_status', 'pending')
+      query = query.eq('status', 'pending_review')
     } else if (filter === 'flagged') {
-      query = query.eq('is_flagged', true)
+      query = query.eq('status', 'flagged')
     } else if (filter === 'approved') {
-      query = query.eq('moderation_status', 'approved')
+      query = query.eq('status', 'published')
     } else if (filter === 'rejected') {
-      query = query.eq('moderation_status', 'rejected')
+      query = query.eq('status', 'hidden')
     }
 
     const { data: reviews, count, error } = await query
@@ -73,19 +73,19 @@ export async function GET(request: NextRequest) {
       })
     }
 
-    // Transform data
+    // Transform data — map schema columns to frontend fields
     const transformedReviews = (reviews || []).map((review) => ({
       id: review.id,
-      author_name: review.author_name || 'Anonyme',
-      author_email: review.author_email || '',
-      provider_name: review.provider?.name || 'Inconnu',
-      provider_id: review.provider_id,
+      author_name: review.client_name || 'Anonyme',
+      author_email: review.client_email || '',
+      provider_name: review.artisan?.full_name || 'Inconnu',
+      provider_id: review.artisan_id,
       rating: review.rating,
       comment: review.comment,
-      response: review.response,
-      moderation_status: review.moderation_status || 'pending',
-      is_visible: review.is_visible,
-      is_flagged: review.is_flagged || false,
+      response: review.artisan_response,
+      moderation_status: review.status || 'pending_review',
+      is_visible: review.status === 'published',
+      is_flagged: review.status === 'flagged',
       created_at: review.created_at,
     }))
 

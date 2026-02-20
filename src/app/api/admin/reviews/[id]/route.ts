@@ -5,11 +5,18 @@ import { logger } from '@/lib/logger'
 import { isValidUuid } from '@/lib/sanitize'
 import { z } from 'zod'
 
-// PATCH request schema
+// PATCH request schema — maps to reviews.status column
 const moderateReviewSchema = z.object({
   moderation_status: z.enum(['pending', 'approved', 'rejected']),
   is_visible: z.boolean().optional(),
 })
+
+// Map frontend moderation_status to DB status column
+function toDbStatus(moderationStatus: string): string {
+  if (moderationStatus === 'approved') return 'published'
+  if (moderationStatus === 'rejected') return 'hidden'
+  return 'pending_review'
+}
 
 export const dynamic = 'force-dynamic'
 
@@ -45,10 +52,8 @@ export async function PATCH(
     const { data, error } = await supabase
       .from('reviews')
       .update({
-        moderation_status: result.data.moderation_status,
-        is_visible: result.data.is_visible,
-        moderated_at: new Date().toISOString(),
-        moderated_by: authResult.admin.id,
+        status: toDbStatus(result.data.moderation_status),
+        updated_at: new Date().toISOString(),
       })
       .eq('id', params.id)
       .select()

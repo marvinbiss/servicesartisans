@@ -18,7 +18,7 @@ import { useAdminFetch, adminMutate } from '@/hooks/admin/useAdminFetch'
 
 interface Booking {
   id: string
-  artisan_id: string
+  provider_id: string
   client_email: string
   service: string
   booking_date: string
@@ -27,11 +27,10 @@ interface Booking {
   payment_status: string
   deposit_amount: number | null
   created_at: string
-  profiles?: {
+  provider?: {
     id: string
-    full_name: string | null
+    name: string | null
     email: string
-    company_name: string | null
   }
 }
 
@@ -212,7 +211,7 @@ export default function AdminReservationsPage() {
                             <Briefcase className="w-4 h-4 text-gray-400" />
                             <div>
                               <p className="text-gray-900">
-                                {booking.profiles?.company_name || booking.profiles?.full_name || '-'}
+                                {booking.provider?.name || '-'}
                               </p>
                               <p className="text-sm text-gray-500">{booking.profiles?.email}</p>
                             </div>
