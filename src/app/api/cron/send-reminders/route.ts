@@ -100,7 +100,7 @@ export async function GET(request: Request) {
     const artisanIds = Array.from(new Set(bookingsToRemind.map((b) => getSlot(b.slot)?.artisan_id).filter(Boolean)))
     const { data: artisans } = await supabase
       .from('profiles')
-      .select('id, full_name, company_name')
+      .select('id, full_name')
       .in('id', artisanIds)
 
     const artisanMap = new Map(artisans?.map((a) => [a.id, a]) || [])
@@ -121,7 +121,7 @@ export async function GET(request: Request) {
         clientName: booking.client_name,
         clientEmail: booking.client_email,
         clientPhone: booking.client_phone,
-        artisanName: artisan?.company_name || artisan?.full_name || 'Artisan',
+        artisanName: artisan?.full_name || 'Artisan',
         serviceName: booking.service_description || 'Service',
         date: formattedDate,
         startTime: slot?.start_time || '',

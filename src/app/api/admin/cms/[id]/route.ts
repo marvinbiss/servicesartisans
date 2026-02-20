@@ -30,7 +30,7 @@ export async function GET(
 
     const { data: page, error } = await supabase
       .from('cms_pages')
-      .select('*')
+      .select('id, slug, page_type, title, content_json, content_html, structured_data, meta_title, meta_description, og_image_url, canonical_url, excerpt, author, author_bio, category, tags, read_time, featured_image, service_slug, location_slug, status, published_at, published_by, sort_order, is_active, created_by, updated_by, created_at, updated_at')
       .eq('id', id)
       .single()
 

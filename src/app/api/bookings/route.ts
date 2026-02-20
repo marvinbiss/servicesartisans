@@ -118,7 +118,11 @@ export async function GET(request: Request) {
     const { data: bookings, error } = await supabase
       .from('bookings')
       .select(`
-        *,
+        id, client_id, provider_id, service_id, status, scheduled_date, scheduled_time,
+        duration_minutes, address, city, postal_code, notes, total_amount, payment_status,
+        client_name, client_email, client_phone, service_description,
+        cancelled_at, cancelled_by, cancellation_reason,
+        rescheduled_at, deposit_amount, created_at, updated_at,
         slot:availability_slots(
           date,
           start_time,

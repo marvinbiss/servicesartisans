@@ -64,9 +64,7 @@ interface BookingEntry {
 interface UserProfile {
   id: string
   full_name: string
-  company_name?: string
   subscription_plan: 'gratuit' | 'pro' | 'premium'
-  is_verified: boolean
 }
 
 // Create Supabase client
@@ -131,7 +129,7 @@ export default function CalendrierPage() {
       if (user) {
         const { data } = await supabase
           .from('profiles')
-          .select('id, full_name, company_name, subscription_plan, is_verified')
+          .select('id, full_name, subscription_plan')
           .eq('id', user.id)
           .single()
 
@@ -462,14 +460,9 @@ export default function CalendrierPage() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold">Espace Artisan</h1>
-              <p className="text-blue-100">{profile?.company_name || profile?.full_name}</p>
+              <p className="text-blue-100">{profile?.full_name}</p>
             </div>
             <div className="flex items-center gap-4">
-              {profile?.is_verified && (
-                <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                  Profil référencé
-                </span>
-              )}
               <span className="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-medium capitalize">
                 {profile?.subscription_plan}
               </span>

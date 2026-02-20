@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { Send, Paperclip, Image, Check, CheckCheck } from 'lucide-react'
 import { Button, Input } from '@/components/ui'
+import NextImage from 'next/image'
 import { chatService, ChatMessage, TypingIndicator } from '@/lib/realtime/chat-service'
 import { cn } from '@/lib/utils'
 
@@ -172,11 +173,12 @@ export function ChatWindow({
       <div className="flex items-center gap-3 p-4 border-b border-gray-200 dark:border-gray-700">
         <div className="relative">
           {otherUserAvatar ? (
-            <img
+            <NextImage
               src={otherUserAvatar}
               alt={otherUserName}
+              width={40}
+              height={40}
               className="w-10 h-10 rounded-full object-cover"
-              loading="lazy"
             />
           ) : (
             <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">

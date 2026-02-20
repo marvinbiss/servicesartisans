@@ -41,36 +41,16 @@ export async function GET(request: Request) {
       )
     }
 
-    // Get artisan profile to check zones/services
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('services, zones, city, postal_code')
-      .eq('id', user.id)
-      .single()
-
-    // Build query for devis_requests matching artisan's services/zones
+    // Build query for devis_requests
+    // TODO: zone/service filtering disabled — profiles no longer stores zones/services columns
     let query = supabase
       .from('devis_requests')
-      .select('*')
+      .select('id, client_id, service_id, service_name, postal_code, city, description, budget, urgency, status, client_name, client_email, client_phone, created_at, updated_at')
       .order('created_at', { ascending: false })
 
     // Filter by status if provided
     if (status && status !== 'all') {
       query = query.eq('status', status)
-    }
-
-    // Filter by zones that match artisan's zones
-    if (profile?.zones && profile.zones.length > 0) {
-      // Zone conditions prepared for future RPC-based filtering
-      // Match postal codes or cities
-      profile.zones.forEach((zone: string) => {
-        const postalMatch = zone.match(/\d{2,5}/)
-        if (postalMatch) {
-          // Could use: `postal_code.ilike.${postalMatch[0]}%`
-        }
-        // Could use: `city.ilike.%${zone}%`
-      })
-      // For now, get all requests (zone filtering can be done client-side or with RPC)
     }
 
     const { data: demandes, error: demandesError } = await query

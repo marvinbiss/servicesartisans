@@ -395,7 +395,7 @@ export class UnifiedNotificationService {
   > {
     const { data, error } = await this.supabase
       .from('notification_logs')
-      .select('*')
+      .select('type, status, recipient_email, sent_at, error_message')
       .eq('booking_id', bookingId)
       .order('sent_at', { ascending: false })
 

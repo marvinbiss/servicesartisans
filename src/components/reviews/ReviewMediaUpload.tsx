@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react'
 import { Camera, Video, X, Upload, Loader2, Image as ImageIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import Image from 'next/image'
 
 interface ReviewMediaUploadProps {
   onUpload: (files: UploadedMedia[]) => void
@@ -233,11 +234,13 @@ export function ReviewMediaUpload({
             >
               {/* Preview */}
               {file.type === 'photo' ? (
-                <img
+                <Image
                   src={file.url}
                   alt={file.fileName}
+                  width={200}
+                  height={128}
                   className="w-full h-32 object-cover"
-                  loading="lazy"
+                  unoptimized
                 />
               ) : (
                 <div className="w-full h-32 flex items-center justify-center bg-gray-200 dark:bg-gray-700">

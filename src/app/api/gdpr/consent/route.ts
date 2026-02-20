@@ -129,7 +129,7 @@ export async function GET(_request: Request) {
 
     const { data: consents } = await getSupabaseAdmin()
       .from('cookie_consents')
-      .select('*')
+      .select('id, user_id, session_id, ip_address, user_agent, necessary, analytics, marketing, personalization, consent_given_at, updated_at')
       .eq('user_id', user.id)
       .order('consent_given_at', { ascending: false })
 

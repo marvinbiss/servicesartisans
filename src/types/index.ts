@@ -8,7 +8,7 @@ export interface Service {
   meta_title?: string
   meta_description?: string
   is_active: boolean
-  created_at: string
+  created_at?: string
 }
 
 export interface Location {
@@ -24,8 +24,8 @@ export interface Location {
   latitude?: number
   longitude?: number
   population?: number
-  is_active: boolean
-  created_at: string
+  is_active?: boolean
+  created_at?: string
 }
 
 export interface Provider {

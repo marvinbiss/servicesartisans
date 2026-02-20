@@ -52,7 +52,7 @@ export async function POST(request: Request) {
     // Verify user is an artisan
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
-      .select('user_type')
+      .select('role')
       .eq('id', user.id)
       .single()
 
@@ -63,7 +63,7 @@ export async function POST(request: Request) {
       )
     }
 
-    if (profile.user_type !== 'artisan') {
+    if (profile.role !== 'artisan') {
       return NextResponse.json(
         { error: 'Accès réservé aux artisans' },
         { status: 403 }
@@ -199,7 +199,7 @@ export async function DELETE() {
     // Verify user is an artisan
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
-      .select('user_type')
+      .select('role')
       .eq('id', user.id)
       .single()
 
@@ -210,7 +210,7 @@ export async function DELETE() {
       )
     }
 
-    if (profile.user_type !== 'artisan') {
+    if (profile.role !== 'artisan') {
       return NextResponse.json(
         { error: 'Accès réservé aux artisans' },
         { status: 403 }

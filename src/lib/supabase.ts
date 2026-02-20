@@ -549,7 +549,7 @@ export async function getProvidersByService(serviceSlug: string, limit?: number)
           .limit(effectiveLimit)
 
         if (error) throw error
-        return resolveProviderCities(data || [])
+        return resolveProviderCities((data || []) as unknown as ProviderListRow[])
       })(),
       QUERY_TIMEOUT_MS,
       `getProvidersByService(${serviceSlug})`,

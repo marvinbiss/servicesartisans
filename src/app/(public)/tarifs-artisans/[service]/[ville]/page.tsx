@@ -77,16 +77,16 @@ function getClimatLabel(zone: string | null): string {
 
 function getSeasonalTip(zone: string | null, serviceName: string): string {
   if (zone === 'mediterraneen') {
-    return `\u00C0 noter : le climat méditerranéen favorise les travaux extérieurs quasiment toute l’année. La demande de ${serviceName.toLowerCase()} peut \u00EAtre plus forte en été avec l’afflux de résidents saisonniers.`
+    return `\u00C0 noter : le climat méditerranéen favorise les travaux extérieurs quasiment toute l'année. La demande de ${serviceName.toLowerCase()} peut \u00EAtre plus forte en été avec l'afflux de résidents saisonniers.`
   }
   if (zone === 'montagnard') {
-    return `En zone de montagne, les conditions hivernales peuvent limiter certains travaux extérieurs et augmenter les délais d’intervention. Prévoyez vos travaux de ${serviceName.toLowerCase()} en amont.`
+    return `En zone de montagne, les conditions hivernales peuvent limiter certains travaux extérieurs et augmenter les délais d'intervention. Prévoyez vos travaux de ${serviceName.toLowerCase()} en amont.`
   }
   if (zone === 'continental') {
-    return `Avec un climat continental, les écarts de température sont importants. Les travaux de ${serviceName.toLowerCase()} liés au chauffage et \u00E0 l’isolation sont particuli\u00E8rement pertinents.`
+    return `Avec un climat continental, les écarts de température sont importants. Les travaux de ${serviceName.toLowerCase()} liés au chauffage et \u00E0 l'isolation sont particuli\u00E8rement pertinents.`
   }
   if (zone === 'oceanique' || zone === 'semi-oceanique') {
-    return `Le climat océanique implique une humidité fréquente. Les interventions de ${serviceName.toLowerCase()} liées \u00E0 l’étanchéité et \u00E0 la ventilation sont courantes.`
+    return `Le climat océanique implique une humidité fréquente. Les interventions de ${serviceName.toLowerCase()} liées \u00E0 l'étanchéité et \u00E0 la ventilation sont courantes.`
   }
   return `Les conditions climatiques locales peuvent influencer le type et la fréquence des interventions de ${serviceName.toLowerCase()}.`
 }
@@ -115,10 +115,29 @@ export async function generateMetadata({
 
   const canonicalUrl = `${SITE_URL}/tarifs-artisans/${service}/${villeSlug}`
 
+  // noindex when no real providers exist for this city
+  let providerCount = 1
+  if (process.env.NEXT_BUILD_SKIP_DB !== '1') {
+    try {
+      const { createAdminClient } = await import('@/lib/supabase/admin')
+      const supabase = createAdminClient()
+      const { count } = await supabase
+        .from('providers')
+        .select('id', { count: 'exact', head: true })
+        .eq('is_active', true)
+        .eq('address_city', villeData.name)
+        .limit(1)
+      providerCount = count ?? 0
+    } catch {
+      providerCount = 1
+    }
+  }
+
   return {
     title,
     description,
     alternates: { canonical: canonicalUrl },
+    ...(providerCount === 0 ? { robots: { index: false, follow: true } } : {}),
     openGraph: {
       locale: 'fr_FR',
       title,
@@ -321,7 +340,7 @@ export default async function TarifsServiceVillePage({
               description={
                 commune?.revenu_median
                   ? `Le revenu médian \u00E0 ${villeData.name} est de ${formatNumber(commune.revenu_median)}\u00A0€ par an, ce qui influence le positionnement tarifaire des artisans locaux.`
-                  : `Le pouvoir d’achat local \u00E0 ${villeData.name} influence le niveau des tarifs pratiqués par les artisans.`
+                  : `Le pouvoir d'achat local \u00E0 ${villeData.name} influence le niveau des tarifs pratiqués par les artisans.`
               }
             />
 
@@ -333,9 +352,9 @@ export default async function TarifsServiceVillePage({
               description={
                 commune?.nb_entreprises_artisanales
                   ? commune.nb_entreprises_artisanales > 500
-                    ? `Avec ${formatNumber(commune.nb_entreprises_artisanales)} entreprises artisanales, ${villeData.name} bénéficie d’une forte concurrence, ce qui peut maintenir les prix compétitifs.`
+                    ? `Avec ${formatNumber(commune.nb_entreprises_artisanales)} entreprises artisanales, ${villeData.name} bénéficie d'une forte concurrence, ce qui peut maintenir les prix compétitifs.`
                     : `${villeData.name} compte ${formatNumber(commune.nb_entreprises_artisanales)} entreprises artisanales. Une concurrence modérée peut impliquer des tarifs lég\u00E8rement plus élevés.`
-                  : `Le nombre d’artisans disponibles \u00E0 ${villeData.name} influence directement les tarifs pratiqués.`
+                  : `Le nombre d'artisans disponibles \u00E0 ${villeData.name} influence directement les tarifs pratiqués.`
               }
             />
 

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Star, CheckCircle, ChevronDown, Filter, ThumbsUp, Image as ImageIcon } from 'lucide-react'
 import { Artisan, Review } from './types'
+import Image from 'next/image'
 
 interface ArtisanReviewsProps {
   artisan: Artisan
@@ -262,11 +263,12 @@ export function ArtisanReviews({ artisan: _artisan, reviews }: ArtisanReviewsPro
               {/* Review photo */}
               {review.hasPhoto && review.photoUrl && (
                 <div className="mt-3">
-                  <img
+                  <Image
                     src={review.photoUrl}
                     alt="Photo du client"
+                    width={128}
+                    height={96}
                     className="w-32 h-24 object-cover rounded-lg border border-gray-200"
-                    loading="lazy"
                   />
                 </div>
               )}

@@ -178,7 +178,7 @@ export default async function ServicePage({ params }: PageProps) {
     console.error('Service page DB error (locations):', citiesResult.reason)
   }
   if (providersResult.status === 'fulfilled') {
-    recentProviders = providersResult.value || []
+    recentProviders = (providersResult.value || []) as ServiceProvider[]
   } else {
     console.error('Service page DB error (providers):', providersResult.reason)
   }

@@ -497,8 +497,8 @@ export default async function ProviderPage({ params }: PageProps) {
       getLocationBySlug(locationSlug).catch(() => null),
     ])
     provider = (stableIdResult || slugResult) as ProviderRecord | null
-    service = svcResult
-    location = locResult
+    service = svcResult as Service | null
+    location = locResult as Location | null
   } catch {
     // Graceful degradation
   }

@@ -94,7 +94,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   try {
     const [service, location, count] = await Promise.all([
       getServiceBySlug(serviceSlug),
-      getLocationBySlug(locationSlug),
+      getLocationBySlug(locationSlug) as Promise<import('@/types').Location | null>,
       // Lightweight count-only check — avoids fetching all provider rows
       getProviderCountByServiceAndLocation(serviceSlug, locationSlug),
     ])

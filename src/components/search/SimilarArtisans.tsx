@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Star, MapPin, Sparkles, ChevronRight, Loader2 } from 'lucide-react'
 import { cn, getArtisanUrl } from '@/lib/utils'
 
@@ -103,11 +104,12 @@ export function SimilarArtisans({
               {/* Avatar */}
               <div className="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center flex-shrink-0 overflow-hidden">
                 {artisan.avatarUrl ? (
-                  <img
+                  <Image
                     src={artisan.avatarUrl}
                     alt={artisan.name}
+                    width={48}
+                    height={48}
                     className="w-full h-full object-cover"
-                    loading="lazy"
                   />
                 ) : (
                   <span className="text-lg font-medium text-gray-500 dark:text-gray-400">

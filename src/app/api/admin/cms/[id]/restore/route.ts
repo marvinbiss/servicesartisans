@@ -58,7 +58,7 @@ export async function POST(
     // Fetch the version to restore
     const { data: version, error: versionError } = await supabase
       .from('cms_page_versions')
-      .select('*')
+      .select('id, page_id, version_number, title, content_json, content_html, structured_data, meta_title, meta_description, status, created_by, created_at, change_summary')
       .eq('id', version_id)
       .eq('page_id', id)
       .single()

@@ -27,7 +27,7 @@ export async function POST() {
     // Get user's email and phone from profile
     const { data: profile } = await supabase
       .from('profiles')
-      .select('email, phone')
+      .select('email, phone_e164')
       .eq('id', user.id)
       .single()
 

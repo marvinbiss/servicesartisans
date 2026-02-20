@@ -98,12 +98,12 @@ export async function POST(request: Request) {
     // Get user profile (may not exist yet)
     const { data: profile } = await supabase
       .from('profiles')
-      .select('role, user_type, full_name')
+      .select('role, full_name')
       .eq('id', data.user.id)
       .single()
 
-    // Déterminer si l'utilisateur est un artisan basé sur user_type
-    const isArtisan = profile?.user_type === 'artisan'
+    // Déterminer si l'utilisateur est un artisan basé sur role
+    const isArtisan = profile?.role === 'artisan'
 
     // SECURITY FIX: Ne pas exposer le refresh token dans la réponse JSON
     // Le refresh token est géré par les cookies HTTP-only de Supabase
@@ -114,7 +114,7 @@ export async function POST(request: Request) {
           email: data.user.email,
           fullName: profile?.full_name || data.user.user_metadata?.full_name || `${data.user.user_metadata?.first_name || ''} ${data.user.user_metadata?.last_name || ''}`.trim() || null,
           role: profile?.role || 'user',
-          userType: profile?.user_type || 'client',
+          userType: profile?.role === 'artisan' ? 'artisan' : 'client',
           isArtisan,
         },
         session: {

@@ -9,10 +9,8 @@ import {
   ChefHat, Layers, Brush, Navigation, Map, Building2, Globe, Heart
 } from 'lucide-react'
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { useMobileMenu } from '@/contexts/MobileMenuContext'
 import { useFavorites } from '@/hooks/useFavorites'
-import { regions, villes } from '@/lib/data/france'
 import QuickSearch from '@/components/search/QuickSearch'
 import { cn } from '@/lib/utils'
 
@@ -91,48 +89,12 @@ const serviceCategories = [
   },
 ]
 
-// Format population for display (e.g. '2 104 000' → '2.1M', '519 000' → '519K')
-function formatPop(pop: string): string {
-  const n = parseInt(pop.replace(/\s/g, ''), 10)
-  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`
-  return `${Math.round(n / 1000)}K`
-}
-
-// Build citiesByRegion dynamically from france.ts villes data
-// Show the top 4 cities (by population) for the 10 largest metropolitan regions
-const megaMenuRegions = [
-  'Île-de-France',
-  'Auvergne-Rhône-Alpes',
-  'Provence-Alpes-Côte d\'Azur',
-  'Occitanie',
-  'Nouvelle-Aquitaine',
-  'Hauts-de-France',
-  'Grand Est',
-  'Pays de la Loire',
-  'Bretagne',
-  'Normandie',
-]
-
-const citiesByRegion = megaMenuRegions.map((regionName) => {
-  const regionVilles = villes
-    .filter((v) => v.region === regionName)
-    .sort((a, b) => parseInt(b.population.replace(/\s/g, ''), 10) - parseInt(a.population.replace(/\s/g, ''), 10))
-    .slice(0, 4)
-  return {
-    region: regionName === 'Provence-Alpes-Côte d\'Azur' ? 'PACA' : regionName,
-    cities: regionVilles.map((v) => ({ name: v.name, slug: v.slug, population: formatPop(v.population) })),
-  }
-})
-
-// Flat list of top 12 cities for mobile (sorted by population)
-const popularCities = villes
-  .sort((a, b) => parseInt(b.population.replace(/\s/g, ''), 10) - parseInt(a.population.replace(/\s/g, ''), 10))
-  .slice(0, 12)
-  .map((v) => ({ name: v.name, slug: v.slug }))
-
-// Metropolitan regions (first 13) and DOM-TOM for the regions mega menu
-const metroRegions = regions.slice(0, 13)
-const domTomRegions = regions.slice(13)
+// Types for geo menu data fetched from /api/geo/menu-data
+interface CityMenuItem { name: string; slug: string; population: string }
+interface RegionCities { region: string; cities: CityMenuItem[] }
+interface PopularCity { name: string; slug: string }
+interface MetroRegion { slug: string; name: string; departments: { name: string; code: string; slug: string }[] }
+interface DomTomRegion { slug: string; name: string; departments?: { name: string; code: string; slug: string }[] }
 
 type MenuType = 'services' | 'villes' | 'regions' | null
 type MobileAccordion = 'services' | 'villes' | 'regions' | null
@@ -153,11 +115,32 @@ export default function Header() {
   const [openMenu, setOpenMenu] = useState<MenuType>(null)
   const [mobileAccordion, setMobileAccordion] = useState<MobileAccordion>(null)
 
+  // Geo menu data loaded from API to keep france.ts out of client bundle
+  const [citiesByRegion, setCitiesByRegion] = useState<RegionCities[]>([])
+  const [popularCities, setPopularCities] = useState<PopularCity[]>([])
+  const [metroRegions, setMetroRegions] = useState<MetroRegion[]>([])
+  const [domTomRegions, setDomTomRegions] = useState<DomTomRegion[]>([])
+
   const megaMenuTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Wait for client-side mount
   useEffect(() => {
     setMounted(true)
+  }, [])
+
+  // Fetch geo menu data (keeps france.ts out of client bundle)
+  useEffect(() => {
+    fetch('/api/geo/menu-data')
+      .then((res) => res.json())
+      .then((data) => {
+        setCitiesByRegion(data.citiesByRegion ?? [])
+        setPopularCities(data.popularCities ?? [])
+        setMetroRegions(data.metroRegions ?? [])
+        setDomTomRegions(data.domTomRegions ?? [])
+      })
+      .catch(() => {
+        // Silently ignore — menu simply stays empty until next load
+      })
   }, [])
 
   // Scroll listener for floating navbar effect
@@ -352,11 +335,7 @@ export default function Header() {
         )}>
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 flex-shrink-0 group/logo">
-            <motion.div
-              className="flex items-center gap-2.5"
-              whileHover={{ scale: 1.02 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-            >
+            <div className="flex items-center gap-2.5 transition-transform duration-200 hover:scale-[1.02]">
               <svg
                 width="36"
                 height="36"
@@ -385,7 +364,7 @@ export default function Header() {
               <span className="hidden sm:inline text-xl font-heading font-extrabold tracking-tight text-gray-900 group-hover/logo:text-gray-700 transition-colors duration-200">
                 Services<span className="text-blue-600 group-hover/logo:text-blue-500 transition-colors duration-200">Artisans</span>
               </span>
-            </motion.div>
+            </div>
           </Link>
 
           {/* Quick Search - Combined single-field search */}
@@ -834,24 +813,16 @@ export default function Header() {
       )}
 
       {/* ==================== MOBILE MENU ==================== */}
-      <AnimatePresence>
       {isMenuOpen && (
-        <motion.div
+        <div
           data-menu-content="mobile-menu"
           className="lg:hidden border-t border-gray-100/50 max-h-[calc(100vh-120px)] overflow-y-auto bg-white/95 backdrop-blur-xl"
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: 'auto' }}
-          exit={{ opacity: 0, height: 0 }}
-          transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
             {/* Search Mobile - Dual Field */}
-            <motion.form
+            <form
               onSubmit={handleSearch}
               className="mb-4"
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.05, duration: 0.25 }}
             >
               <div className="flex items-center bg-white border-2 border-gray-200 rounded-2xl overflow-hidden focus-within:border-blue-500 focus-within:shadow-lg focus-within:shadow-blue-500/10 transition-all duration-200">
                 {/* Service Input Mobile */}
@@ -900,16 +871,11 @@ export default function Header() {
                   <Search className="w-4 h-4" />
                 </button>
               </div>
-            </motion.form>
+            </form>
 
             <nav className="space-y-2" aria-label="Menu mobile">
               {/* ===== Services Accordion ===== */}
-              <motion.div
-                className="rounded-xl border border-gray-100 overflow-hidden"
-                initial={{ opacity: 0, y: -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1, duration: 0.25 }}
-              >
+              <div className="rounded-xl border border-gray-100 overflow-hidden">
                 <button
                   type="button"
                   onClick={() => toggleMobileAccordion('services')}
@@ -968,15 +934,10 @@ export default function Header() {
                     </Link>
                   </div>
                 )}
-              </motion.div>
+              </div>
 
               {/* ===== Villes Accordion ===== */}
-              <motion.div
-                className="rounded-xl border border-gray-100 overflow-hidden"
-                initial={{ opacity: 0, y: -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.15, duration: 0.25 }}
-              >
+              <div className="rounded-xl border border-gray-100 overflow-hidden">
                 <button
                   type="button"
                   onClick={() => toggleMobileAccordion('villes')}
@@ -1025,15 +986,10 @@ export default function Header() {
                     </Link>
                   </div>
                 )}
-              </motion.div>
+              </div>
 
               {/* ===== Régions Accordion ===== */}
-              <motion.div
-                className="rounded-xl border border-gray-100 overflow-hidden"
-                initial={{ opacity: 0, y: -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2, duration: 0.25 }}
-              >
+              <div className="rounded-xl border border-gray-100 overflow-hidden">
                 <button
                   type="button"
                   onClick={() => toggleMobileAccordion('regions')}
@@ -1060,7 +1016,7 @@ export default function Header() {
                 {mobileAccordion === 'regions' && (
                   <div className="px-4 pb-4 pt-2 bg-white">
                     <div className="grid grid-cols-2 gap-1.5">
-                      {regions.map((region) => (
+                      {[...metroRegions, ...domTomRegions].map((region) => (
                         <Link
                           key={region.slug}
                           href={`/regions/${region.slug}`}
@@ -1070,7 +1026,7 @@ export default function Header() {
                           <Map className="w-3.5 h-3.5 text-slate-400" />
                           <div className="min-w-0">
                             <div className="text-sm font-medium text-slate-700 truncate">{region.name}</div>
-                            <div className="text-[11px] text-slate-400">{region.departments.length} dép.</div>
+                            <div className="text-[11px] text-slate-400">{(region.departments?.length ?? 0)} dép.</div>
                           </div>
                         </Link>
                       ))}
@@ -1085,15 +1041,10 @@ export default function Header() {
                     </Link>
                   </div>
                 )}
-              </motion.div>
+              </div>
 
               {/* CTAs */}
-              <motion.div
-                className="pt-3 space-y-3"
-                initial={{ opacity: 0, y: -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.25, duration: 0.25 }}
-              >
+              <div className="pt-3 space-y-3">
                 {/* Favoris mobile */}
                 <Link
                   href="/mes-favoris"
@@ -1132,12 +1083,11 @@ export default function Header() {
                     Devis gratuit
                   </Link>
                 </div>
-              </motion.div>
+              </div>
             </nav>
           </div>
-        </motion.div>
+        </div>
       )}
-      </AnimatePresence>
     </header>
     {/* Spacer to offset fixed header height (top bar ~40px + nav 64px) */}
     <div className="h-[104px]" aria-hidden="true" />

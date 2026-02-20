@@ -44,7 +44,7 @@ export async function GET(
 
     const { data: admin, error } = await supabase
       .from('admin_users')
-      .select('*')
+      .select('id, user_id, email, role, permissions, created_at, updated_at')
       .eq('id', params.id)
       .single()
 
@@ -100,7 +100,7 @@ export async function PATCH(
     // Get old data for audit
     const { data: _oldAdmin } = await supabase
       .from('admin_users')
-      .select('*')
+      .select('id, user_id, email, role, permissions, created_at, updated_at')
       .eq('id', params.id)
       .single()
 
@@ -166,7 +166,7 @@ export async function DELETE(
     // Get admin data for audit
     const { data: _adminToDelete } = await supabase
       .from('admin_users')
-      .select('*')
+      .select('id, user_id, email, role, permissions, created_at, updated_at')
       .eq('id', params.id)
       .single()
 

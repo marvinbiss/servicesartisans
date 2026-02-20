@@ -73,7 +73,7 @@ export async function GET(request: NextRequest) {
       if (userIds.length > 0) {
         const { data: profiles } = await supabase
           .from('profiles')
-          .select('*')
+          .select('id, email, full_name, is_admin, role, phone_e164, average_rating, review_count')
           .in('id', userIds)
 
         if (profiles) {
@@ -91,8 +91,8 @@ export async function GET(request: NextRequest) {
         id: user.id,
         email: user.email || '',
         full_name: (profile.full_name as string) || user.user_metadata?.full_name || user.user_metadata?.name || null,
-        phone: (profile.phone as string) || user.user_metadata?.phone || null,
-        user_type: (profile.user_type as string) || (user.user_metadata?.is_artisan ? 'artisan' : 'client'),
+        phone: (profile.phone_e164 as string) || user.user_metadata?.phone || null,
+        user_type: (profile.role as string) === 'artisan' ? 'artisan' : (user.user_metadata?.is_artisan ? 'artisan' : 'client'),
         is_verified: !!user.email_confirmed_at,
         is_banned: (profile.is_banned as boolean) || user.banned_until !== null,
         subscription_plan: (profile.subscription_plan as string) || 'gratuit',
@@ -194,8 +194,7 @@ export async function POST(request: NextRequest) {
             id: authData.user.id,
             email,
             full_name,
-            phone,
-            user_type: user_type || 'client',
+            role: user_type === 'artisan' ? 'artisan' : 'user',
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
           })

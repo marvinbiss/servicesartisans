@@ -36,10 +36,10 @@ export async function POST(
       { data: reviews },
       { data: conversations },
     ] = await Promise.all([
-      supabase.from('profiles').select('*').eq('id', userId).single(),
-      supabase.from('bookings').select('*').or(`provider_id.eq.${userId},client_email.eq.${userId}`),
-      supabase.from('reviews').select('*').eq('client_id', userId),
-      supabase.from('conversations').select('*').or(`client_id.eq.${userId},provider_id.eq.${userId}`),
+      supabase.from('profiles').select('id, email, full_name, is_admin, role, phone_e164, average_rating, review_count').eq('id', userId).single(),
+      supabase.from('bookings').select('id, provider_id, client_id, status, scheduled_date, scheduled_time, duration_minutes, address, city, postal_code, notes, total_amount, payment_status, created_at, updated_at').or(`provider_id.eq.${userId},client_email.eq.${userId}`),
+      supabase.from('reviews').select('id, booking_id, artisan_id, client_name, client_email, rating, comment, would_recommend, status, artisan_response, artisan_responded_at, helpful_count, created_at, updated_at').eq('client_id', userId),
+      supabase.from('conversations').select('id, client_id, provider_id, quote_id, booking_id, status, last_message_at, unread_count, created_at, updated_at').or(`client_id.eq.${userId},provider_id.eq.${userId}`),
     ])
 
     const exportData = {

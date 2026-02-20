@@ -16,90 +16,219 @@ export interface Database {
           updated_at: string
           email: string
           full_name: string | null
-          avatar_url: string | null
           phone: string | null
-          user_type: 'client' | 'artisan'
-          // Artisan specific
-          siret: string | null
-          description: string | null
-          address: string | null
-          city: string | null
-          postal_code: string | null
-          services: string[] | null
-          zones: string[] | null
-          is_verified: boolean
-          // Subscription
-          subscription_plan: 'gratuit' | 'pro' | 'premium'
-          subscription_status: 'active' | 'canceled' | 'past_due' | null
-          subscription_period_end: string | null
+          phone_e164: string | null
+          is_admin: boolean
+          // Added by migration 309
+          role: 'super_admin' | 'admin' | 'moderator' | 'viewer' | null
+          subscription_plan: 'gratuit' | 'pro' | 'premium' | null
+          subscription_status: 'active' | 'canceled' | 'past_due' | 'trialing' | null
           stripe_customer_id: string | null
-          stripe_subscription_id: string | null
+          // Ratings (denormalised)
+          average_rating: number | null
+          review_count: number | null
         }
         Insert: {
           id: string
           email: string
           full_name?: string | null
-          avatar_url?: string | null
           phone?: string | null
-          user_type?: 'client' | 'artisan'
-          siret?: string | null
-          description?: string | null
-          address?: string | null
-          city?: string | null
-          postal_code?: string | null
-          services?: string[] | null
-          zones?: string[] | null
-          is_verified?: boolean
-          subscription_plan?: 'gratuit' | 'pro' | 'premium'
+          phone_e164?: string | null
+          is_admin?: boolean
+          role?: 'super_admin' | 'admin' | 'moderator' | 'viewer' | null
+          subscription_plan?: 'gratuit' | 'pro' | 'premium' | null
           stripe_customer_id?: string | null
         }
         Update: {
           email?: string
           full_name?: string | null
-          avatar_url?: string | null
           phone?: string | null
-          user_type?: 'client' | 'artisan'
-          siret?: string | null
-          description?: string | null
-          address?: string | null
-          city?: string | null
-          postal_code?: string | null
-          services?: string[] | null
-          zones?: string[] | null
-          is_verified?: boolean
-          subscription_plan?: 'gratuit' | 'pro' | 'premium'
-          subscription_status?: 'active' | 'canceled' | 'past_due' | null
-          subscription_period_end?: string | null
+          phone_e164?: string | null
+          is_admin?: boolean
+          role?: 'super_admin' | 'admin' | 'moderator' | 'viewer' | null
+          subscription_plan?: 'gratuit' | 'pro' | 'premium' | null
+          subscription_status?: 'active' | 'canceled' | 'past_due' | 'trialing' | null
           stripe_customer_id?: string | null
-          stripe_subscription_id?: string | null
+          average_rating?: number | null
+          review_count?: number | null
         }
       }
-      services: {
+      providers: {
         Row: {
           id: string
           created_at: string
+          updated_at: string
+          // Core identity — NB: column is 'name', NOT 'company_name'
           name: string
           slug: string
-          description: string | null
-          icon: string | null
-          category: string | null
+          email: string | null
+          phone: string | null
+          siret: string | null
+          // Status flags
+          is_verified: boolean
           is_active: boolean
+          // Dedup / SEO
+          stable_id: string
+          noindex: boolean
+          // Address fields
+          address_city: string | null
+          address_postal_code: string | null
+          address_street: string | null
+          address_region: string | null
+          // Service
+          specialty: string | null
+          // Ratings (denormalised)
+          rating_average: number | null
+          review_count: number | null
+          // Provider public page fields (added by migration 306)
+          avatar_url: string | null
+          certifications: string[] | null
+          insurance: string[] | null
+          payment_methods: string[] | null
+          languages: string[] | null
+          emergency_available: boolean | null
+          available_24h: boolean | null
+          hourly_rate_min: number | null
+          hourly_rate_max: number | null
+          phone_secondary: string | null
+          opening_hours: Json | null
+          accepts_new_clients: boolean | null
+          free_quote: boolean | null
+          intervention_radius_km: number | null
+          service_prices: Json | null
+          faq: Json | null
+          team_size: number | null
+          services_offered: string[] | null
+          bio: string | null
         }
         Insert: {
           name: string
           slug: string
-          description?: string | null
-          icon?: string | null
-          category?: string | null
+          email?: string | null
+          phone?: string | null
+          siret?: string | null
+          is_verified?: boolean
           is_active?: boolean
+          stable_id: string
+          noindex?: boolean
+          address_city?: string | null
+          address_postal_code?: string | null
+          address_street?: string | null
+          address_region?: string | null
+          specialty?: string | null
+          rating_average?: number | null
+          review_count?: number | null
+          avatar_url?: string | null
+          bio?: string | null
         }
         Update: {
           name?: string
           slug?: string
-          description?: string | null
-          icon?: string | null
-          category?: string | null
+          email?: string | null
+          phone?: string | null
+          siret?: string | null
+          is_verified?: boolean
           is_active?: boolean
+          noindex?: boolean
+          address_city?: string | null
+          address_postal_code?: string | null
+          address_street?: string | null
+          address_region?: string | null
+          specialty?: string | null
+          rating_average?: number | null
+          review_count?: number | null
+          avatar_url?: string | null
+          certifications?: string[] | null
+          insurance?: string[] | null
+          payment_methods?: string[] | null
+          languages?: string[] | null
+          emergency_available?: boolean | null
+          available_24h?: boolean | null
+          hourly_rate_min?: number | null
+          hourly_rate_max?: number | null
+          phone_secondary?: string | null
+          opening_hours?: Json | null
+          accepts_new_clients?: boolean | null
+          free_quote?: boolean | null
+          intervention_radius_km?: number | null
+          service_prices?: Json | null
+          faq?: Json | null
+          team_size?: number | null
+          services_offered?: string[] | null
+          bio?: string | null
+        }
+      }
+      bookings: {
+        Row: {
+          id: string
+          created_at: string
+          updated_at: string
+          client_id: string | null
+          // NB: column is 'provider_id', NOT 'artisan_id'
+          provider_id: string | null
+          service_id: string | null
+          status: 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled' | 'disputed'
+          scheduled_date: string | null
+          scheduled_time: string | null
+          duration_minutes: number | null
+          address: string | null
+          city: string | null
+          postal_code: string | null
+          notes: string | null
+          total_amount: number | null
+          payment_status: 'pending' | 'paid' | 'refunded' | 'failed'
+        }
+        Insert: {
+          client_id?: string | null
+          provider_id?: string | null
+          service_id?: string | null
+          status?: 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled' | 'disputed'
+          scheduled_date?: string | null
+          scheduled_time?: string | null
+          duration_minutes?: number | null
+          address?: string | null
+          city?: string | null
+          postal_code?: string | null
+          notes?: string | null
+          total_amount?: number | null
+          payment_status?: 'pending' | 'paid' | 'refunded' | 'failed'
+        }
+        Update: {
+          status?: 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled' | 'disputed'
+          scheduled_date?: string | null
+          scheduled_time?: string | null
+          notes?: string | null
+          total_amount?: number | null
+          payment_status?: 'pending' | 'paid' | 'refunded' | 'failed'
+        }
+      }
+      reviews: {
+        Row: {
+          id: string
+          created_at: string
+          booking_id: string | null
+          provider_id: string | null
+          author_name: string | null
+          author_email: string | null
+          rating: number
+          content: string | null
+          status: 'published' | 'pending_review' | 'hidden' | 'flagged' | null
+          provider_response: string | null
+        }
+        Insert: {
+          booking_id?: string | null
+          provider_id?: string | null
+          author_name?: string | null
+          author_email?: string | null
+          rating: number
+          content?: string | null
+          status?: 'published' | 'pending_review' | 'hidden' | 'flagged' | null
+        }
+        Update: {
+          rating?: number
+          content?: string | null
+          provider_response?: string | null
+          status?: 'published' | 'pending_review' | 'hidden' | 'flagged' | null
         }
       }
       devis_requests: {
@@ -160,36 +289,6 @@ export interface Database {
           status?: 'pending' | 'accepted' | 'refused' | 'expired'
         }
       }
-      reviews: {
-        Row: {
-          id: string
-          created_at: string
-          booking_id: string
-          artisan_id: string
-          client_name: string
-          client_email: string
-          rating: number
-          comment: string | null
-          would_recommend: boolean | null
-          status: 'published' | 'pending_review' | 'hidden' | 'flagged'
-          artisan_response: string | null
-        }
-        Insert: {
-          booking_id: string
-          artisan_id: string
-          client_name: string
-          client_email: string
-          rating: number
-          comment?: string | null
-          would_recommend?: boolean | null
-        }
-        Update: {
-          rating?: number
-          comment?: string | null
-          artisan_response?: string | null
-          status?: 'published' | 'pending_review' | 'hidden' | 'flagged'
-        }
-      }
       messages: {
         Row: {
           id: string
@@ -209,29 +308,6 @@ export interface Database {
         }
         Update: {
           is_read?: boolean
-        }
-      }
-      invoices: {
-        Row: {
-          id: string
-          created_at: string
-          profile_id: string
-          stripe_invoice_id: string
-          amount: number
-          currency: string
-          status: 'paid' | 'pending' | 'failed'
-          invoice_url: string | null
-        }
-        Insert: {
-          profile_id: string
-          stripe_invoice_id: string
-          amount: number
-          currency?: string
-          status?: 'paid' | 'pending' | 'failed'
-          invoice_url?: string | null
-        }
-        Update: {
-          status?: 'paid' | 'pending' | 'failed'
         }
       }
     }

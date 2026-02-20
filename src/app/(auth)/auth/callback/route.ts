@@ -18,7 +18,7 @@ export async function GET(request: Request) {
       const adminClient = createAdminClient()
       const { data: existingProfile } = await adminClient
         .from('profiles')
-        .select('id, user_type')
+        .select('id, role')
         .eq('id', user.id)
         .single()
 
@@ -37,15 +37,13 @@ export async function GET(request: Request) {
           email: (user.email || '').toLowerCase(),
           full_name: fullName,
           role: 'user',
-          user_type: 'client',
           created_at: new Date().toISOString(),
         })
       }
 
       // Redirect to appropriate dashboard if no specific next URL
       if (next === '/') {
-        const userType = existingProfile?.user_type || 'client'
-        const defaultRedirect = userType === 'artisan' ? '/espace-artisan' : '/espace-client'
+        const defaultRedirect = existingProfile?.role === 'artisan' ? '/espace-artisan' : '/espace-client'
         return NextResponse.redirect(`${origin}${defaultRedirect}`)
       }
 

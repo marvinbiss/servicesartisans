@@ -70,7 +70,7 @@ export default function EquipePage() {
 
       const { data, error } = await supabase
         .from('team_members')
-        .select('*')
+        .select('id, name, email, phone, role, color, avatar_url, is_active, created_at')
         .eq('artisan_id', user.id)
         .order('created_at', { ascending: true })
 

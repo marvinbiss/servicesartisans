@@ -90,9 +90,9 @@ class UpstashRateLimiter {
 
       return { allowed, remaining, resetTime }
     } catch (error) {
-      logger.error('Redis rate limit error, falling back to allow:', error)
-      // On error, allow the request (fail open for availability)
-      return { allowed: true, remaining: config.max - 1, resetTime: now + windowMs }
+      logger.error('Redis rate limit error, falling back to in-memory limiter:', error)
+      logger.warn('Rate limiter: Redis unavailable, using in-memory fallback')
+      return memoryLimiter.checkRateLimit(`fallback:${key}`, config)
     }
   }
 

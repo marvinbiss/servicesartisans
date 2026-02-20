@@ -9,6 +9,7 @@ import {
   Loader2,
   AlertCircle,
 } from 'lucide-react'
+import Image from 'next/image'
 import { FileDropzone } from '@/components/upload'
 import Button from '@/components/ui/Button'
 import type { PortfolioItem, MediaType, UploadedFile } from '@/types/portfolio'
@@ -267,11 +268,12 @@ export default function AddPortfolioModal({
                     </label>
                     {beforeFile ? (
                       <div className="relative aspect-video rounded-xl overflow-hidden bg-gray-100">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
+                        <Image
                           src={beforeFile.url}
                           alt="Avant"
-                          className="w-full h-full object-cover"
+                          fill
+                          className="object-cover"
+                          unoptimized
                         />
                         <button
                           onClick={() => setBeforeFile(null)}
@@ -296,11 +298,12 @@ export default function AddPortfolioModal({
                     </label>
                     {afterFile ? (
                       <div className="relative aspect-video rounded-xl overflow-hidden bg-gray-100">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
+                        <Image
                           src={afterFile.url}
                           alt="Après"
-                          className="w-full h-full object-cover"
+                          fill
+                          className="object-cover"
+                          unoptimized
                         />
                         <button
                           onClick={() => setAfterFile(null)}
@@ -333,11 +336,12 @@ export default function AddPortfolioModal({
                           controls
                         />
                       ) : (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
+                        <Image
                           src={mainFile.url}
                           alt="Aperçu"
-                          className="w-full h-full object-cover"
+                          fill
+                          className="object-cover"
+                          unoptimized
                         />
                       )}
                       <button

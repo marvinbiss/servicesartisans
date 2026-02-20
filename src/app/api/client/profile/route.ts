@@ -37,7 +37,7 @@ export async function GET() {
     // Fetch profile
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
-      .select('*')
+      .select('id, email, full_name, phone_e164, average_rating, review_count, created_at, updated_at')
       .eq('id', user.id)
       .single()
 
@@ -46,14 +46,6 @@ export async function GET() {
       return NextResponse.json(
         { error: 'Erreur lors de la récupération du profil' },
         { status: 500 }
-      )
-    }
-
-    // Verify user is a client (not artisan)
-    if (profile.user_type === 'artisan') {
-      return NextResponse.json(
-        { error: 'Accès réservé aux clients. Utilisez /api/artisan/profile pour les artisans.' },
-        { status: 403 }
       )
     }
 
@@ -81,27 +73,6 @@ export async function PUT(request: Request) {
       )
     }
 
-    // Verify user is a client (not artisan) before allowing update
-    const { data: existingProfile, error: profileFetchError } = await supabase
-      .from('profiles')
-      .select('user_type')
-      .eq('id', user.id)
-      .single()
-
-    if (profileFetchError || !existingProfile) {
-      return NextResponse.json(
-        { error: 'Profil introuvable' },
-        { status: 404 }
-      )
-    }
-
-    if (existingProfile.user_type === 'artisan') {
-      return NextResponse.json(
-        { error: 'Accès réservé aux clients. Utilisez /api/artisan/profile pour les artisans.' },
-        { status: 403 }
-      )
-    }
-
     // Parse request body
     const body = await request.json()
     const result = updateClientProfileSchema.safeParse(body)
@@ -111,23 +82,13 @@ export async function PUT(request: Request) {
         { status: 400 }
       )
     }
-    const {
-      full_name,
-      phone,
-      address,
-      city,
-      postal_code,
-    } = result.data
+    const { full_name } = result.data
 
-    // Update profile
+    // Update profile — only columns that exist on profiles table
     const { data: profile, error: updateError } = await supabase
       .from('profiles')
       .update({
         full_name,
-        phone,
-        address,
-        city,
-        postal_code,
         updated_at: new Date().toISOString(),
       })
       .eq('id', user.id)

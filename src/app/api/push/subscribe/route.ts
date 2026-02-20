@@ -4,7 +4,6 @@
  */
 
 import { NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
 import { createClient as createServerClient } from '@/lib/supabase/server'
 import { getVapidPublicKey } from '@/lib/notifications/push'
 import { logger } from '@/lib/logger'
@@ -29,13 +28,6 @@ const unsubscribeSchema = z.object({
 }).refine(data => data.endpoint || data.userId, {
   message: 'endpoint or userId required',
 })
-
-function getSupabaseAdmin() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  )
-}
 
 // GET /api/push/subscribe - Get VAPID public key
 export const dynamic = 'force-dynamic'
@@ -75,28 +67,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Non autorisé' }, { status: 403 })
     }
 
-    const { endpoint, keys } = subscription
-
-    // Get user agent
-    const userAgent = request.headers.get('user-agent') || ''
-
-    // Upsert subscription
-    const { error } = await getSupabaseAdmin()
-      .from('push_subscriptions')
-      .upsert(
-        {
-          user_id: userId,
-          endpoint,
-          p256dh: keys.p256dh,
-          auth: keys.auth,
-          user_agent: userAgent,
-          is_active: true,
-          last_used_at: new Date().toISOString(),
-        },
-        { onConflict: 'endpoint' }
-      )
-
-    if (error) throw error
+    // TODO: push_subscriptions table was dropped in migration 100. Re-create the table
+    // before re-enabling persistence. For now return success without storing.
+    void subscription // suppress unused-var warning
 
     return NextResponse.json({ success: true })
   } catch (error) {
@@ -134,17 +107,10 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: 'Non autorisé' }, { status: 403 })
     }
 
-    const query = getSupabaseAdmin().from('push_subscriptions')
-
-    if (endpoint) {
-      // Delete specific subscription
-      const { error } = await query.delete().eq('endpoint', endpoint)
-      if (error) throw error
-    } else if (userId) {
-      // Delete all subscriptions for user
-      const { error } = await query.delete().eq('user_id', userId)
-      if (error) throw error
-    }
+    // TODO: push_subscriptions table was dropped in migration 100. Re-create the table
+    // before re-enabling deletion. For now return success without DB operation.
+    void endpoint
+    void userId
 
     return NextResponse.json({ success: true })
   } catch (error) {

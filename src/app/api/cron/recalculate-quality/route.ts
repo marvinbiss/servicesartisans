@@ -85,7 +85,7 @@ export async function GET(request: Request) {
       // - only active artisan providers
       const { data: providers, error } = await supabase
         .from('providers')
-        .select('*')
+        .select('id, name, siren, siret, address_street, address_city, address_postal_code, address_department, latitude, longitude, phone, email, code_naf, creation_date, legal_form, specialty, website, description, employee_count, data_quality_score, data_quality_flags, updated_at, derniere_maj_api')
         .eq('is_artisan', true)
         .eq('is_active', true)
         .or('data_quality_score.is.null,data_quality_score.eq.0,updated_at.gt.derniere_maj_api')

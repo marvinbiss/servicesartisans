@@ -55,16 +55,16 @@ function getClimatLabel(zone: string | null): string {
 
 function getSeasonalTip(zone: string | null, serviceName: string): string {
   if (zone === 'mediterraneen') {
-    return `\u00c0 noter : le climat méditerranéen favorise les travaux extérieurs quasiment toute l’année. La demande de ${serviceName.toLowerCase()} peut être plus forte en été avec l’afflux de résidents saisonniers.`
+    return `\u00c0 noter : le climat méditerranéen favorise les travaux extérieurs quasiment toute l'année. La demande de ${serviceName.toLowerCase()} peut être plus forte en été avec l'afflux de résidents saisonniers.`
   }
   if (zone === 'montagnard') {
-    return `En zone de montagne, les conditions hivernales peuvent limiter certains travaux extérieurs et augmenter les délais d’intervention. Prévoyez vos travaux de ${serviceName.toLowerCase()} en amont.`
+    return `En zone de montagne, les conditions hivernales peuvent limiter certains travaux extérieurs et augmenter les délais d'intervention. Prévoyez vos travaux de ${serviceName.toLowerCase()} en amont.`
   }
   if (zone === 'continental') {
-    return `Avec un climat continental, les écarts de température sont importants. Les travaux de ${serviceName.toLowerCase()} liés au chauffage et à l’isolation sont particulièrement pertinents.`
+    return `Avec un climat continental, les écarts de température sont importants. Les travaux de ${serviceName.toLowerCase()} liés au chauffage et à l'isolation sont particulièrement pertinents.`
   }
   if (zone === 'oceanique' || zone === 'semi-oceanique') {
-    return `Le climat océanique implique une humidité fréquente. Les interventions de ${serviceName.toLowerCase()} liées à l’étanchéité et à la ventilation sont courantes.`
+    return `Le climat océanique implique une humidité fréquente. Les interventions de ${serviceName.toLowerCase()} liées à l'étanchéité et à la ventilation sont courantes.`
   }
   return `Les conditions climatiques locales peuvent influencer le type et la fréquence des interventions de ${serviceName.toLowerCase()}.`
 }
@@ -97,15 +97,34 @@ export async function generateMetadata({
   ]
   const title = titleTemplates[titleHash % titleTemplates.length]
 
-  const description = `Devis ${tradeLower} à ${villeData.name} : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Comparez jusqu’à 3 artisans référencés. 100 % gratuit, sans engagement.`
+  const description = `Devis ${tradeLower} à ${villeData.name} : ${minPrice}–${maxPrice} ${trade.priceRange.unit}. Comparez jusqu'à 3 artisans référencés. 100 % gratuit, sans engagement.`
 
   const serviceImage = getServiceImage(service)
   const canonicalUrl = `${SITE_URL}/devis/${service}/${location}`
+
+  // noindex when no real providers exist for this city+service
+  let providerCount = 1 // default: assume providers exist (fail open for SEO)
+  if (process.env.NEXT_BUILD_SKIP_DB !== '1') {
+    try {
+      const { createAdminClient } = await import('@/lib/supabase/admin')
+      const supabase = createAdminClient()
+      const { count } = await supabase
+        .from('providers')
+        .select('id', { count: 'exact', head: true })
+        .eq('is_active', true)
+        .eq('address_city', villeData.name)
+        .limit(1)
+      providerCount = count ?? 0
+    } catch {
+      providerCount = 1
+    }
+  }
 
   return {
     title,
     description,
     alternates: { canonical: canonicalUrl },
+    ...(providerCount === 0 ? { robots: { index: false, follow: true } } : {}),
     openGraph: {
       locale: 'fr_FR',
       title,
@@ -317,7 +336,7 @@ export default async function DevisServiceLocationPage({
             Facteurs locaux à {villeData.name}
           </h2>
           <p className="text-gray-500 text-sm text-center mb-8">
-            Plusieurs facteurs locaux influencent le coût d’un {tradeLower} à {villeData.name}.
+            Plusieurs facteurs locaux influencent le coût d'un {tradeLower} à {villeData.name}.
           </p>
           <div className="grid sm:grid-cols-2 gap-6">
             <LocalFactorCard
@@ -327,7 +346,7 @@ export default async function DevisServiceLocationPage({
               description={
                 commune?.revenu_median
                   ? `Le revenu médian à ${villeData.name} est de ${formatNumber(commune.revenu_median)} \u20ac par an, ce qui influence le positionnement tarifaire des artisans locaux.`
-                  : `Le pouvoir d’achat local à ${villeData.name} influence le niveau des tarifs pratiqués par les artisans.`
+                  : `Le pouvoir d'achat local à ${villeData.name} influence le niveau des tarifs pratiqués par les artisans.`
               }
             />
             <LocalFactorCard
@@ -337,9 +356,9 @@ export default async function DevisServiceLocationPage({
               description={
                 commune?.nb_entreprises_artisanales
                   ? commune.nb_entreprises_artisanales > 500
-                    ? `Avec ${formatNumber(commune.nb_entreprises_artisanales)} entreprises artisanales, ${villeData.name} bénéficie d’une forte concurrence, ce qui peut maintenir les prix compétitifs.`
+                    ? `Avec ${formatNumber(commune.nb_entreprises_artisanales)} entreprises artisanales, ${villeData.name} bénéficie d'une forte concurrence, ce qui peut maintenir les prix compétitifs.`
                     : `${villeData.name} compte ${formatNumber(commune.nb_entreprises_artisanales)} entreprises artisanales. Une concurrence modérée peut impliquer des tarifs légèrement plus élevés.`
-                  : `Le nombre d’artisans disponibles à ${villeData.name} influence directement les tarifs pratiqués.`
+                  : `Le nombre d'artisans disponibles à ${villeData.name} influence directement les tarifs pratiqués.`
               }
             />
             <LocalFactorCard

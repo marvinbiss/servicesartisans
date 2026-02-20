@@ -178,10 +178,29 @@ export async function generateMetadata({
   const serviceImage = getServiceImage(service)
   const canonicalUrl = `${SITE_URL}/avis/${service}/${ville}`
 
+  // noindex when no real providers exist for this city
+  let providerCount = 1
+  if (!IS_BUILD) {
+    try {
+      const { createAdminClient } = await import('@/lib/supabase/admin')
+      const supabase = createAdminClient()
+      const { count } = await supabase
+        .from('providers')
+        .select('id', { count: 'exact', head: true })
+        .eq('is_active', true)
+        .eq('address_city', villeData.name)
+        .limit(1)
+      providerCount = count ?? 0
+    } catch {
+      providerCount = 1
+    }
+  }
+
   return {
     title,
     description,
     alternates: { canonical: canonicalUrl },
+    ...(providerCount === 0 ? { robots: { index: false, follow: true } } : {}),
     openGraph: {
       locale: 'fr_FR',
       title,
@@ -274,14 +293,14 @@ export default async function AvisServiceVillePage({
       answer: `Pour trouver un bon ${tradeLower} à ${villeData.name}, consultez les avis clients, vérifiez les certifications (${trade.certifications.length > 0 ? trade.certifications.slice(0, 3).join(', ') : 'assurance décennale, RC pro'}) et comparez plusieurs devis. Les tarifs locaux vont de ${minPrice} à ${maxPrice} ${trade.priceRange.unit}.`,
     },
     {
-      question: `Quel est le prix moyen d’un ${tradeLower} à ${villeData.name} ?`,
-      answer: `\u00c0 ${villeData.name} (${villeData.region}), les tarifs d’un ${tradeLower} varient de ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Ces prix sont ajustés selon le coût de la vie régional. Demandez plusieurs devis pour comparer.`,
+      question: `Quel est le prix moyen d'un ${tradeLower} à ${villeData.name} ?`,
+      answer: `\u00c0 ${villeData.name} (${villeData.region}), les tarifs d'un ${tradeLower} varient de ${minPrice} à ${maxPrice} ${trade.priceRange.unit}. Ces prix sont ajustés selon le coût de la vie régional. Demandez plusieurs devis pour comparer.`,
     },
     {
       question: `Quelles certifications vérifier pour un ${tradeLower} à ${villeData.name} ?`,
       answer: trade.certifications.length > 0
-        ? `Pour un ${tradeLower} à ${villeData.name}, vérifiez les certifications suivantes : ${trade.certifications.join(', ')}. L’assurance décennale et la RC pro sont obligatoires.`
-        : `Vérifiez au minimum l’assurance décennale et la responsabilité civile professionnelle. Un ${tradeLower} sérieux à ${villeData.name} fournit ces documents sans difficulté.`,
+        ? `Pour un ${tradeLower} à ${villeData.name}, vérifiez les certifications suivantes : ${trade.certifications.join(', ')}. L'assurance décennale et la RC pro sont obligatoires.`
+        : `Vérifiez au minimum l'assurance décennale et la responsabilité civile professionnelle. Un ${tradeLower} sérieux à ${villeData.name} fournit ces documents sans difficulté.`,
     },
   ]
 
@@ -372,8 +391,8 @@ export default async function AvisServiceVillePage({
       title: 'Qualifications et certifications',
       description:
         trade.certifications.length > 0
-          ? `Vérifiez que votre ${tradeLower} à ${villeData.name} possède les certifications suivantes : ${trade.certifications.join(', ')}. L’assurance décennale et la RC pro sont obligatoires.`
-          : `Vérifiez que votre ${tradeLower} à ${villeData.name} dispose d’une assurance décennale et d’une responsabilité civile professionnelle.`,
+          ? `Vérifiez que votre ${tradeLower} à ${villeData.name} possède les certifications suivantes : ${trade.certifications.join(', ')}. L'assurance décennale et la RC pro sont obligatoires.`
+          : `Vérifiez que votre ${tradeLower} à ${villeData.name} dispose d'une assurance décennale et d'une responsabilité civile professionnelle.`,
     },
     {
       icon: Euro,
@@ -756,7 +775,7 @@ export default async function AvisServiceVillePage({
             <LocalFactorCard
               icon={<Users className="w-5 h-5 text-amber-600" />}
               bgColor="bg-amber-50"
-              title="Densité d’artisans"
+              title="Densité d'artisans"
               value={
                 commune?.nb_entreprises_artisanales
                   ? `${formatNumber(commune.nb_entreprises_artisanales)} entreprises`
@@ -767,7 +786,7 @@ export default async function AvisServiceVillePage({
                   ? commune.nb_entreprises_artisanales > 500
                     ? `Avec ${formatNumber(commune.nb_entreprises_artisanales)} entreprises artisanales, ${villeData.name} offre un large choix de ${tradeLower}s. Comparez les avis pour faire le bon choix.`
                     : `${villeData.name} compte ${formatNumber(commune.nb_entreprises_artisanales)} entreprises artisanales. Consultez les avis pour identifier les meilleurs professionnels.`
-                  : `Le nombre d’artisans disponibles à ${villeData.name} influence directement l’offre et la qualité de service.`
+                  : `Le nombre d'artisans disponibles à ${villeData.name} influence directement l'offre et la qualité de service.`
               }
             />
 
@@ -777,7 +796,7 @@ export default async function AvisServiceVillePage({
               bgColor="bg-blue-50"
               title="Zone climatique"
               value={getClimatLabel(commune?.climat_zone ?? null)}
-              description={`Les conditions climatiques à ${villeData.name} peuvent influencer le type d’interventions demandées et la disponibilité des ${tradeLower}s.`}
+              description={`Les conditions climatiques à ${villeData.name} peuvent influencer le type d'interventions demandées et la disponibilité des ${tradeLower}s.`}
             />
 
             {/* Housing type */}

@@ -95,7 +95,7 @@ export async function enqueueCampaignMessages(
   // Charger la campagne avec template et liste
   const { data: campaign, error: campError } = await supabase
     .from('prospection_campaigns')
-    .select('*, template:prospection_templates(*), list:prospection_lists(*)')
+    .select('id, name, channel, list_id, template_id, status, ab_test_enabled, ab_split_percent, template:prospection_templates(id, name, channel, subject, body, variables), list:prospection_lists(id, name)')
     .eq('id', campaignId)
     .single()
 
@@ -114,7 +114,7 @@ export async function enqueueCampaignMessages(
   // Prevent double-enqueue
   const { count: existingMessages } = await supabase
     .from('prospection_messages')
-    .select('*', { count: 'exact', head: true })
+    .select('id', { count: 'exact', head: true })
     .eq('campaign_id', campaignId)
 
   if (existingMessages && existingMessages > 0) {
@@ -135,7 +135,7 @@ export async function enqueueCampaignMessages(
   const contactIds = members.map(m => m.contact_id)
   const { data: contacts, error: contactError } = await supabase
     .from('prospection_contacts')
-    .select('*')
+    .select('id, contact_type, company_name, contact_name, email, phone, phone_e164, city, postal_code, department, region, commune_code, custom_fields, is_active, consent_status')
     .in('id', contactIds)
     .eq('is_active', true)
     .eq('consent_status', 'opted_in')
@@ -145,18 +145,18 @@ export async function enqueueCampaignMessages(
   }
 
   // Filtrer les contacts qui ont le canal nécessaire
-  const validContacts = (contacts || []).filter(c => {
+  const validContacts = ((contacts || []) as unknown as ProspectionContact[]).filter(c => {
     if (campaign.channel === 'email') return !!c.email
     return !!c.phone_e164
   })
 
   // Déterminer le variant A/B
-  const template = campaign.template as ProspectionTemplate
+  const template = campaign.template as unknown as ProspectionTemplate
   const messages = validContacts.map((contact: ProspectionContact, index: number) => {
     const isVariantB = campaign.ab_test_enabled && index % 100 < campaign.ab_split_percent
-    const renderedBody = renderTemplate(template.body, contact, campaign as ProspectionCampaign)
+    const renderedBody = renderTemplate(template.body, contact, campaign as unknown as ProspectionCampaign)
     const renderedSubject = template.subject
-      ? renderTemplate(template.subject, contact, campaign as ProspectionCampaign)
+      ? renderTemplate(template.subject, contact, campaign as unknown as ProspectionCampaign)
       : null
 
     return {
@@ -251,10 +251,10 @@ export async function processBatch(
   const contactIds = Array.from(new Set(claimedMessages.map((m: ProspectionMessage) => m.contact_id)))
   const { data: contacts } = await supabase
     .from('prospection_contacts')
-    .select('*')
+    .select('id, email, phone_e164')
     .in('id', contactIds)
 
-  const contactMap = new Map((contacts || []).map((c: ProspectionContact) => [c.id, c]))
+  const contactMap = new Map(((contacts || []) as unknown as ProspectionContact[]).map((c: ProspectionContact) => [c.id, c]))
   const messages = claimedMessages.map((m: ProspectionMessage) => ({
     ...m,
     contact: contactMap.get(m.contact_id) || null,
@@ -492,7 +492,7 @@ export async function getQueueStats(campaignId: string): Promise<QueueStats> {
   for (const status of statuses) {
     const { count } = await supabase
       .from('prospection_messages')
-      .select('*', { count: 'exact', head: true })
+      .select('id', { count: 'exact', head: true })
       .eq('campaign_id', campaignId)
       .eq('status', status)
 
@@ -621,7 +621,7 @@ async function checkCampaignCompletion(
 ): Promise<void> {
   const { count: remaining } = await supabase
     .from('prospection_messages')
-    .select('*', { count: 'exact', head: true })
+    .select('id', { count: 'exact', head: true })
     .eq('campaign_id', campaignId)
     .in('status', ['queued', 'sending'])
 

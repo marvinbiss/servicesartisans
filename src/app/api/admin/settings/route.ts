@@ -53,7 +53,7 @@ export async function GET() {
     // Fetch settings from database
     const { data: settings, error } = await supabase
       .from('platform_settings')
-      .select('*')
+      .select('id, data, updated_at, updated_by')
       .single()
 
     if (error || !settings) {
@@ -92,7 +92,7 @@ export async function PATCH(request: NextRequest) {
     try {
       const { data } = await supabase
         .from('platform_settings')
-        .select('*')
+        .select('id, data, updated_at, updated_by')
         .single()
       currentSettings = data
     } catch {

@@ -3,6 +3,7 @@
 import { forwardRef, ImgHTMLAttributes } from 'react'
 import { User } from 'lucide-react'
 import { clsx } from 'clsx'
+import Image from 'next/image'
 
 export interface AvatarProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, 'src'> {
   src?: string | null
@@ -17,6 +18,14 @@ const sizes = {
   md: 'w-10 h-10 text-base',
   lg: 'w-14 h-14 text-lg',
   xl: 'w-20 h-20 text-2xl',
+}
+
+const sizePx = {
+  xs: 24,
+  sm: 32,
+  md: 40,
+  lg: 56,
+  xl: 80,
 }
 
 const iconSizes = {
@@ -72,7 +81,7 @@ function getColorFromName(name: string): string {
 }
 
 const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
-  ({ src, name, size = 'md', status, className, alt, ...props }, ref) => {
+  ({ src, name, size = 'md', status, className, alt }, ref) => {
     const hasImage = Boolean(src)
     const initials = name ? getInitials(name) : null
     const bgColor = name ? getColorFromName(name) : 'bg-gray-200'
@@ -83,15 +92,15 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
         className={clsx('relative inline-flex flex-shrink-0', className)}
       >
         {hasImage ? (
-          <img
+          <Image
             src={src!}
             alt={alt || name || 'Avatar'}
-            loading="lazy"
+            width={sizePx[size]}
+            height={sizePx[size]}
             className={clsx(
               'rounded-full object-cover',
               sizes[size]
             )}
-            {...props}
           />
         ) : (
           <div

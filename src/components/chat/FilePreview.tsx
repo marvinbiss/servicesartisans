@@ -13,6 +13,7 @@ import {
   ZoomOut,
   RotateCw,
 } from 'lucide-react'
+import Image from 'next/image'
 import { MessageAttachment } from '@/lib/realtime/chat-service'
 
 interface FilePreviewProps {
@@ -67,12 +68,14 @@ export function FilePreview({ attachment, onClose, isModal = false }: FilePrevie
     if (isImage) {
       return (
         <div className="relative group">
-          <img
+          <Image
             src={attachment.thumbnail_url || attachment.file_url}
             alt={attachment.file_name}
-            className="max-w-full max-h-48 rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+            width={320}
+            height={192}
+            className="max-w-full max-h-48 rounded-lg cursor-pointer hover:opacity-90 transition-opacity object-contain"
             onClick={() => window.open(attachment.file_url, '_blank')}
-            loading="lazy"
+            unoptimized
           />
           <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
             <button
@@ -193,14 +196,17 @@ export function FilePreview({ attachment, onClose, isModal = false }: FilePrevie
       {/* Content */}
       <div className="flex-1 flex items-center justify-center overflow-auto p-4">
         {isImage && (
-          <img
+          <Image
             src={attachment.file_url}
             alt={attachment.file_name}
+            width={1200}
+            height={900}
             style={{
               transform: `scale(${zoom}) rotate(${rotation}deg)`,
               transition: 'transform 0.2s ease-out',
             }}
             className="max-w-full max-h-full object-contain"
+            unoptimized
           />
         )}
 

@@ -482,10 +482,10 @@ class ChatService {
     let query = this.supabase
       .from('messages')
       .select(`
-        *,
-        attachments:message_attachments(*),
-        reactions:message_reactions(*),
-        read_receipts:message_read_receipts(*)
+        id, conversation_id, sender_id, sender_type, content, message_type, file_url, read_at, created_at, edited_at, deleted_at, reply_to_message_id, rich_content,
+        attachments:message_attachments(id, message_id, file_url, file_name, file_size, mime_type, thumbnail_url, duration, transcription, created_at),
+        reactions:message_reactions(id, message_id, user_id, emoji, created_at),
+        read_receipts:message_read_receipts(id, message_id, user_id, read_at)
       `)
       .eq('conversation_id', conversationId)
       .is('deleted_at', null)
@@ -591,10 +591,10 @@ class ChatService {
     let query = this.supabase
       .from('conversations')
       .select(`
-        *,
+        id, client_id, provider_id, quote_id, booking_id, status, last_message_at, unread_count, created_at,
         client:profiles!client_id(id, full_name, avatar_url),
         provider:providers!provider_id(id, name, avatar_url),
-        settings:conversation_settings(*)
+        settings:conversation_settings(is_muted, is_archived, is_pinned, notification_preference)
       `)
       .eq(column, userId)
 

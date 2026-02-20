@@ -179,7 +179,7 @@ export async function GET(request: Request) {
     const artisanIds = Array.from(new Set(bookingsToRequest.map((b) => getSlot(b.slot)?.artisan_id).filter(Boolean)))
     const { data: artisans } = await supabase
       .from('profiles')
-      .select('id, full_name, company_name, slug')
+      .select('id, full_name, slug')
       .in('id', artisanIds)
 
     const artisanMap = new Map(artisans?.map((a) => [a.id, a]) || [])
@@ -190,7 +190,7 @@ export async function GET(request: Request) {
     for (const booking of bookingsToRequest) {
       const slot = getSlot(booking.slot)
       const artisan = artisanMap.get(slot?.artisan_id || '')
-      const artisanName = artisan?.company_name || artisan?.full_name || 'Artisan'
+      const artisanName = artisan?.full_name || 'Artisan'
       const reviewUrl = `${SITE_URL}/donner-avis/${booking.id.slice(0, 8)}`
 
       try {

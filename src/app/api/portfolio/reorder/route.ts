@@ -36,11 +36,11 @@ export async function PUT(request: NextRequest) {
     // Verify user is an artisan
     const { data: profile } = await supabase
       .from('profiles')
-      .select('user_type')
+      .select('role')
       .eq('id', user.id)
       .single()
 
-    if (!profile || profile.user_type !== 'artisan') {
+    if (!profile || profile.role !== 'artisan') {
       return NextResponse.json(
         { error: 'Accès réservé aux artisans' },
         { status: 403 }

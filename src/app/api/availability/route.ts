@@ -61,7 +61,7 @@ export async function GET(request: Request) {
 
     const { data: settings, error } = await supabase
       .from('availability_settings')
-      .select('*')
+      .select('artisan_id, default_slots, working_days, booking_enabled, advance_booking_days, min_notice_hours, intervention_radius_km, updated_at')
       .eq('artisan_id', artisanId)
       .single()
 

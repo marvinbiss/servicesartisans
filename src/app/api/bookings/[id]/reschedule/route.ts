@@ -75,7 +75,8 @@ export async function POST(
     }
 
     // Verify new slot belongs to the same artisan
-    if (newSlot.artisan_id !== booking.slot.artisan_id) {
+    const bookingSlot = Array.isArray(booking.slot) ? booking.slot[0] : booking.slot
+    if (newSlot.artisan_id !== bookingSlot?.artisan_id) {
       return NextResponse.json(
         { error: 'Le créneau doit appartenir au même artisan' },
         { status: 400 }
@@ -97,7 +98,7 @@ export async function POST(
       .update({
         slot_id: newSlotId,
         rescheduled_at: new Date().toISOString(),
-        rescheduled_from_slot_id: booking.slot.id,
+        rescheduled_from_slot_id: bookingSlot?.id,
       })
       .eq('id', params.id)
 
@@ -107,7 +108,7 @@ export async function POST(
     await supabase
       .from('availability_slots')
       .update({ is_available: true })
-      .eq('id', booking.slot.id)
+      .eq('id', bookingSlot?.id)
 
     // Mark new slot as unavailable
     await supabase
@@ -119,7 +120,7 @@ export async function POST(
     const { data: artisan } = await supabase
       .from('profiles')
       .select('full_name, email')
-      .eq('id', booking.slot.artisan_id)
+      .eq('id', bookingSlot?.artisan_id)
       .single()
 
     // Format new date for email
@@ -143,7 +144,7 @@ export async function POST(
         date: formattedDate,
         startTime: newSlot.start_time,
         endTime: newSlot.end_time,
-        message: `Report de réservation - Ancien créneau: ${booking.slot.date} ${booking.slot.start_time}`,
+        message: `Report de réservation - Ancien créneau: ${bookingSlot?.date} ${bookingSlot?.start_time}`,
       }).then(async (result) => {
         await logNotification(supabase, {
           bookingId: params.id,

@@ -101,7 +101,7 @@ export async function GET(
     if (slot?.artisan_id) {
       const { data: artisanData } = await adminSupabase
         .from('profiles')
-        .select('id, full_name, phone, email, avatar_url')
+        .select('id, full_name, phone_e164, email')
         .eq('id', slot.artisan_id)
         .single()
       artisan = artisanData
@@ -129,9 +129,9 @@ export async function GET(
         slotId: slot?.id,
         artisanId: artisan?.id || slot?.artisan_id,
         artisanName: artisan?.full_name || 'Artisan',
-        artisanPhone: artisan?.phone,
+        artisanPhone: artisan?.phone_e164 ?? null,
         artisanEmail: artisan?.email,
-        artisanAvatar: artisan?.avatar_url,
+        artisanAvatar: null,
         // Legacy format for backward compatibility
         client_name: booking.client_name,
         client_phone: booking.client_phone,

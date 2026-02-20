@@ -32,7 +32,7 @@ export async function GET(
     const { data: quote, error } = await supabase
       .from('quotes')
       .select(`
-        *,
+        id, request_id, provider_id, client_id, booking_id, amount, description, valid_until, status, created_at, updated_at,
         booking:bookings(
           id,
           service_type,

@@ -29,7 +29,7 @@ export async function GET() {
     // Verify user is an artisan
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
-      .select('user_type')
+      .select('role')
       .eq('id', user.id)
       .single()
 
@@ -40,7 +40,7 @@ export async function GET() {
       )
     }
 
-    if (profile.user_type !== 'artisan') {
+    if (profile.role !== 'artisan') {
       return NextResponse.json(
         { error: 'Accès réservé aux artisans' },
         { status: 403 }
@@ -50,7 +50,7 @@ export async function GET() {
     // Fetch provider by user_id
     const { data: provider, error: providerError } = await supabase
       .from('providers')
-      .select('*')
+      .select('id, stable_id, name, slug, email, phone, siret, siren, specialty, description, bio, website, address_street, address_city, address_postal_code, address_region, address_department, latitude, longitude, is_verified, is_active, noindex, rating_average, review_count, code_naf, legal_form, creation_date, user_id, created_at, updated_at')
       .eq('user_id', user.id)
       .single()
 
@@ -88,7 +88,7 @@ export async function PUT(request: Request) {
     // Verify user is an artisan
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
-      .select('user_type')
+      .select('role')
       .eq('id', user.id)
       .single()
 
@@ -99,7 +99,7 @@ export async function PUT(request: Request) {
       )
     }
 
-    if (profile.user_type !== 'artisan') {
+    if (profile.role !== 'artisan') {
       return NextResponse.json(
         { error: 'Accès réservé aux artisans' },
         { status: 403 }
@@ -180,13 +180,9 @@ export async function PUT(request: Request) {
     // Sync overlapping fields to profiles (best-effort, fire and forget)
     const profileData: Record<string, unknown> = {}
 
+    // Only sync columns that exist on profiles table
     if (updateData.name !== undefined) profileData.full_name = updateData.name
-    if (updateData.phone !== undefined) profileData.phone = updateData.phone
     if (updateData.email !== undefined) profileData.email = updateData.email
-    if (updateData.address_city !== undefined) profileData.city = updateData.address_city
-    if (updateData.address_postal_code !== undefined) profileData.postal_code = updateData.address_postal_code
-    if (updateData.address_street !== undefined) profileData.address = updateData.address_street
-    if (updateData.siret !== undefined) profileData.siret = updateData.siret
 
     if (Object.keys(profileData).length > 0) {
       supabase

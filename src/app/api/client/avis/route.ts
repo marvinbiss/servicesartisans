@@ -48,12 +48,13 @@ export async function GET() {
     }
 
     // Fetch published reviews by this client
+    // Note: 'devis' table does not exist (TODO: re-enable join when reconciled)
+    // Note: profiles does not have company_name or avatar_url
     const { data: avisPublies, error: avisError } = await supabase
       .from('reviews')
       .select(`
         *,
-        artisan:profiles!artisan_id(id, full_name, company_name, avatar_url),
-        devis:devis(request:devis_requests(service_name))
+        artisan:profiles!artisan_id(id, full_name)
       `)
       .eq('client_id', user.id)
       .order('created_at', { ascending: false })
@@ -66,39 +67,15 @@ export async function GET() {
       )
     }
 
-    // Fetch completed devis that don't have reviews yet (pending reviews)
-    const { data: devisCompleted, error: devisError } = await supabase
-      .from('devis')
-      .select(`
-        *,
-        request:devis_requests!devis_request_id(id, service_name, client_id),
-        artisan:profiles!artisan_id(id, full_name, company_name, avatar_url)
-      `)
-      .eq('status', 'completed')
-
-    if (devisError) {
-      logger.error('Error fetching completed devis:', devisError)
-    }
-
-    // Filter devis for this client that don't have reviews
-    const reviewedDevisIds = new Set(avisPublies?.map(r => r.devis_id) || [])
-    const avisEnAttente = devisCompleted?.filter(d =>
-      d.request?.client_id === user.id && !reviewedDevisIds.has(d.id)
-    ).map(d => ({
-      id: d.id,
-      artisan: d.artisan?.company_name || d.artisan?.full_name || 'Artisan',
-      artisan_id: d.artisan_id,
-      service: d.request?.service_name || 'Service',
-      date: d.updated_at || d.created_at,
-      devis_id: d.id,
-    })) || []
+    // TODO: table 'devis' does not exist — pending reviews from completed devis disabled
+    const avisEnAttente: unknown[] = []
 
     // Format published reviews
     const formattedAvisPublies = avisPublies?.map(r => ({
       id: r.id,
-      artisan: r.artisan?.company_name || r.artisan?.full_name || 'Artisan',
+      artisan: r.artisan?.full_name || 'Artisan',
       artisan_id: r.artisan_id,
-      service: r.devis?.request?.service_name || 'Service',
+      service: 'Service',
       date: r.created_at,
       note: r.rating,
       commentaire: r.comment,

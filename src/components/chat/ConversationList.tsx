@@ -5,6 +5,7 @@ import { formatDistanceToNow } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { MessageSquare, Search } from 'lucide-react'
 import { Input } from '@/components/ui'
+import Image from 'next/image'
 import { chatService, Conversation } from '@/lib/realtime/chat-service'
 import { cn } from '@/lib/utils'
 
@@ -123,11 +124,12 @@ export function ConversationList({
                   {/* Avatar */}
                   <div className="relative flex-shrink-0">
                     {avatar ? (
-                      <img
+                      <Image
                         src={avatar}
-                        alt={name}
+                        alt={name ?? ''}
+                        width={48}
+                        height={48}
                         className="w-12 h-12 rounded-full object-cover"
-                        loading="lazy"
                       />
                     ) : (
                       <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">

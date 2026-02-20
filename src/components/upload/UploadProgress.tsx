@@ -3,6 +3,7 @@
 import { X, Check, AlertCircle, Loader2, Image as ImageIcon, Video } from 'lucide-react'
 import { clsx } from 'clsx'
 import { formatFileSize } from '@/lib/storage'
+import Image from 'next/image'
 import type { UploadProgress as UploadProgressType } from '@/types/portfolio'
 
 export interface UploadProgressProps {
@@ -155,12 +156,12 @@ export function FilePreview({ files, onRemove }: FilePreviewProps) {
                   playsInline
                 />
               ) : (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
+                <Image
                   src={file.thumbnailUrl || file.url}
                   alt={file.fileName}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
+                  fill
+                  className="object-cover"
+                  unoptimized
                 />
               )}
             </div>

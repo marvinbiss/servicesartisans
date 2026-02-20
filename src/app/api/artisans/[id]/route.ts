@@ -385,9 +385,9 @@ export async function GET(
     if (!artisan) {
       const { data: profile, error: profileError } = await supabase
         .from('profiles')
-        .select('id, full_name, email, phone, company_name, city, postal_code, address, services, description, is_verified, team_size, accepts_new_clients, intervention_zones, siret, legal_form, creation_date, website, latitude, longitude, created_at, user_type')
+        .select('id, full_name, email, phone_e164, average_rating, review_count, created_at, role')
         .eq('id', artisanId)
-        .eq('user_type', 'artisan')
+        .eq('role', 'artisan')
         .single()
 
       if (profile && !profileError) {
@@ -463,37 +463,37 @@ export async function GET(
 
         artisan = {
           id: profile.id,
-          business_name: profile.company_name,
+          business_name: profile.full_name,
           first_name: firstName,
           last_name: lastName,
-          city: profile.city || '',
-          postal_code: profile.postal_code || '',
-          address: profile.address,
-          specialty: profile.services?.[0] || 'Artisan',
-          description: profile.description,
+          city: '',
+          postal_code: '',
+          address: null,
+          specialty: 'Artisan',
+          description: null,
           average_rating: Math.round(averageRating * 10) / 10,
           review_count: reviewCount,
-          is_verified: profile.is_verified,
-          is_center: !!profile.company_name,
-          team_size: profile.team_size || null,
-          services: profile.services || [],
+          is_verified: false,
+          is_center: false,
+          team_size: null,
+          services: [],
           service_prices: [],
-          accepts_new_clients: profile.accepts_new_clients !== false,
-          intervention_zones: profile.intervention_zones || [],
+          accepts_new_clients: true,
+          intervention_zones: [],
           member_since: profile.created_at
             ? new Date(profile.created_at).getFullYear().toString()
             : null,
           portfolio,
           faq,
-          siret: profile.siret,
+          siret: null,
           siren: null,
-          legal_form: profile.legal_form || null,
-          creation_date: profile.creation_date || null,
-          phone: profile.phone,
+          legal_form: null,
+          creation_date: null,
+          phone: profile.phone_e164,
           email: profile.email,
-          website: profile.website || null,
-          latitude: profile.latitude || null,
-          longitude: profile.longitude || null,
+          website: null,
+          latitude: null,
+          longitude: null,
         }
 
         // Transformer les avis
@@ -513,7 +513,7 @@ export async function GET(
             year: 'numeric'
           }),
           comment: r.comment || '',
-          service: r.service_name || profile.services?.[0] || 'Prestation',
+          service: r.service_name || 'Prestation',
           hasPhoto: !!r.photo_url,
           photoUrl: r.photo_url || null,
           verified: r.is_verified,

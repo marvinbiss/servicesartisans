@@ -204,10 +204,29 @@ export async function generateMetadata({
   const serviceImage = getServiceImage(service)
   const canonicalUrl = `${SITE_URL}/urgence/${service}/${villeSlug}`
 
+  // noindex when no real providers exist for this city
+  let providerCount = 1
+  if (process.env.NEXT_BUILD_SKIP_DB !== '1') {
+    try {
+      const { createAdminClient } = await import('@/lib/supabase/admin')
+      const supabase = createAdminClient()
+      const { count } = await supabase
+        .from('providers')
+        .select('id', { count: 'exact', head: true })
+        .eq('is_active', true)
+        .eq('address_city', villeData.name)
+        .limit(1)
+      providerCount = count ?? 0
+    } catch {
+      providerCount = 1
+    }
+  }
+
   return {
     title,
     description,
     alternates: { canonical: canonicalUrl },
+    ...(providerCount === 0 ? { robots: { index: false, follow: true } } : {}),
     openGraph: {
       locale: 'fr_FR',
       title,
@@ -274,19 +293,19 @@ export default async function UrgenceServiceVillePage({
   const emergencyFaqItems = [
     {
       question: `Combien coûte un ${tradeLower} en urgence à ${villeData.name} ?`,
-      answer: `Les interventions d’urgence de nuit (après 20h) sont majorées de 50 à 100 % par rapport aux tarifs de journée. \u00c0 ${villeData.name}, comptez environ ${Math.round(minPrice * 1.5)} à ${Math.round(maxPrice * 2)} ${trade.priceRange.unit} en urgence nocturne. Demandez toujours un devis avant intervention.`,
+      answer: `Les interventions d'urgence de nuit (après 20h) sont majorées de 50 à 100 % par rapport aux tarifs de journée. \u00c0 ${villeData.name}, comptez environ ${Math.round(minPrice * 1.5)} à ${Math.round(maxPrice * 2)} ${trade.priceRange.unit} en urgence nocturne. Demandez toujours un devis avant intervention.`,
     },
     {
-      question: `Quel est le délai d’intervention à ${villeData.name} ?`,
-      answer: `${trade.averageResponseTime}. Les artisans d’urgence référencés à ${villeData.name} sont disponibles 24h/24 et 7j/7, y compris les jours fériés. Le délai varie selon votre localisation exacte et la disponibilité des professionnels.`,
+      question: `Quel est le délai d'intervention à ${villeData.name} ?`,
+      answer: `${trade.averageResponseTime}. Les artisans d'urgence référencés à ${villeData.name} sont disponibles 24h/24 et 7j/7, y compris les jours fériés. Le délai varie selon votre localisation exacte et la disponibilité des professionnels.`,
     },
     {
       question: `Que faire en attendant le ${tradeLower} ?`,
-      answer: `En attendant l’arrivée du professionnel à ${villeData.name} : sécurisez la zone, coupez l’arrivée d’eau ou le disjoncteur si nécessaire, et ne tentez pas de réparation vous-même. Protégez vos biens des dégâts éventuels.`,
+      answer: `En attendant l'arrivée du professionnel à ${villeData.name} : sécurisez la zone, coupez l'arrivée d'eau ou le disjoncteur si nécessaire, et ne tentez pas de réparation vous-même. Protégez vos biens des dégâts éventuels.`,
     },
     {
-      question: `Un ${tradeLower} d’urgence est-il assuré ?`,
-      answer: `Tout ${tradeLower} professionnel doit disposer d’une assurance responsabilité civile professionnelle et d’une garantie décennale. Exigez une attestation avant le début des travaux, même en urgence.`,
+      question: `Un ${tradeLower} d'urgence est-il assuré ?`,
+      answer: `Tout ${tradeLower} professionnel doit disposer d'une assurance responsabilité civile professionnelle et d'une garantie décennale. Exigez une attestation avant le début des travaux, même en urgence.`,
     },
   ]
 
@@ -341,7 +360,7 @@ export default async function UrgenceServiceVillePage({
     '@context': 'https://schema.org',
     '@type': 'Service',
     name: `${trade.name} urgence à ${villeData.name} 24h/24`,
-    description: `Intervention d’urgence ${tradeLower} à ${villeData.name}. ${trade.averageResponseTime}. Disponible 24h/24 et 7j/7.`,
+    description: `Intervention d'urgence ${tradeLower} à ${villeData.name}. ${trade.averageResponseTime}. Disponible 24h/24 et 7j/7.`,
     provider: {
       '@type': 'Organization',
       name: SITE_NAME,
@@ -418,7 +437,7 @@ export default async function UrgenceServiceVillePage({
                 `${trade.name} urgence à ${villeData.name}`,
                 `Urgence ${tradeLower} à ${villeData.name} 24h/24`,
                 `Dépannage ${tradeLower} urgent à ${villeData.name}`,
-                `${trade.name} d’urgence à ${villeData.name}`,
+                `${trade.name} d'urgence à ${villeData.name}`,
                 `Intervention ${tradeLower} urgente à ${villeData.name}`,
               ]
               return h1Templates[h1Hash % h1Templates.length]
@@ -615,8 +634,8 @@ export default async function UrgenceServiceVillePage({
               }
               description={
                 commune?.nb_entreprises_artisanales
-                  ? `${villeData.name} compte ${formatNumber(commune.nb_entreprises_artisanales)} entreprises artisanales, ce qui facilite l’accès à un ${tradeLower} d’urgence disponible rapidement.`
-                  : `Le nombre d’artisans disponibles à ${villeData.name} influence le délai d’intervention en urgence.`
+                  ? `${villeData.name} compte ${formatNumber(commune.nb_entreprises_artisanales)} entreprises artisanales, ce qui facilite l'accès à un ${tradeLower} d'urgence disponible rapidement.`
+                  : `Le nombre d'artisans disponibles à ${villeData.name} influence le délai d'intervention en urgence.`
               }
             />
             <LocalFactorCard
@@ -636,9 +655,9 @@ export default async function UrgenceServiceVillePage({
               description={
                 commune?.part_maisons_pct
                   ? commune.part_maisons_pct > 50
-                    ? `\u00c0 ${villeData.name}, ${commune.part_maisons_pct} % des logements sont des maisons individuelles. Les interventions d’urgence sur maisons (toiture, canalisations) sont fréquentes.`
+                    ? `\u00c0 ${villeData.name}, ${commune.part_maisons_pct} % des logements sont des maisons individuelles. Les interventions d'urgence sur maisons (toiture, canalisations) sont fréquentes.`
                     : `\u00c0 ${villeData.name}, les appartements sont majoritaires (${100 - commune.part_maisons_pct} %). Les urgences en copropriété peuvent impliquer des contraintes spécifiques.`
-                  : `La répartition entre maisons et appartements à ${villeData.name} influence les types d’urgences rencontrées.`
+                  : `La répartition entre maisons et appartements à ${villeData.name} influence les types d'urgences rencontrées.`
               }
             />
             <LocalFactorCard
@@ -649,7 +668,7 @@ export default async function UrgenceServiceVillePage({
                   ? `${formatNumber(commune.population)} habitants`
                   : villeData.population
               }
-              description={`La taille de ${villeData.name} conditionne le maillage d’artisans d’urgence disponibles et les délais d’intervention.`}
+              description={`La taille de ${villeData.name} conditionne le maillage d'artisans d'urgence disponibles et les délais d'intervention.`}
             />
           </div>
         </div>

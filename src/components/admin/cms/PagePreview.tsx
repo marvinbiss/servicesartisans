@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 import { Eye, X } from 'lucide-react'
 import DOMPurify from 'isomorphic-dompurify'
+import Image from 'next/image'
 
 interface PagePreviewProps {
   isOpen: boolean
@@ -73,11 +74,12 @@ export function PagePreview({ isOpen, onClose, title, contentHtml, structuredDat
 
             {/* Featured image */}
             {featuredImage && (
-              <div className="mb-6">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+              <div className="relative mb-6 w-full max-h-[300px] overflow-hidden rounded-lg">
+                <Image
                   src={featuredImage}
                   alt={title}
+                  width={800}
+                  height={300}
                   className="w-full max-h-[300px] object-cover rounded-lg"
                 />
               </div>

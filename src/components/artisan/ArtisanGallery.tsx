@@ -260,10 +260,13 @@ export function ArtisanGallery({ artisan }: ArtisanGalleryProps) {
                     className="max-h-[70vh] aspect-video mx-auto"
                   />
                 ) : (
-                  <img
-                    src={currentPhoto.imageUrl}
+                  <Image
+                    src={currentPhoto.imageUrl ?? ''}
                     alt={currentPhoto.title}
+                    width={1200}
+                    height={800}
                     className="max-w-full max-h-[70vh] object-contain rounded-lg mx-auto"
+                    unoptimized
                   />
                 )}
               </motion.div>

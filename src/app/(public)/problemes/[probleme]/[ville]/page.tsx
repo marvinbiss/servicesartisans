@@ -103,12 +103,31 @@ export async function generateMetadata({
   const minPrice = Math.round(problem.estimatedCost.min * multiplier)
   const maxPrice = Math.round(problem.estimatedCost.max * multiplier)
 
-  const description = `${problem.name} à ${villeData.name} : coût ${minPrice} à ${maxPrice} \u20ac. Diagnostic, conseils d’urgence et artisans référencés. ${problem.averageResponseTime}.`
+  const description = `${problem.name} à ${villeData.name} : coût ${minPrice} à ${maxPrice} \u20ac. Diagnostic, conseils d'urgence et artisans référencés. ${problem.averageResponseTime}.`
+
+  // noindex when no real providers exist for this city
+  let providerCount = 1
+  if (process.env.NEXT_BUILD_SKIP_DB !== '1') {
+    try {
+      const { createAdminClient } = await import('@/lib/supabase/admin')
+      const supabase = createAdminClient()
+      const { count } = await supabase
+        .from('providers')
+        .select('id', { count: 'exact', head: true })
+        .eq('is_active', true)
+        .eq('address_city', villeData.name)
+        .limit(1)
+      providerCount = count ?? 0
+    } catch {
+      providerCount = 1
+    }
+  }
 
   return {
     title,
     description,
     alternates: { canonical: `${SITE_URL}/problemes/${probleme}/${ville}` },
+    ...(providerCount === 0 ? { robots: { index: false, follow: true } } : {}),
     openGraph: {
       locale: 'fr_FR',
       title,
@@ -388,8 +407,8 @@ export default async function ProblemeVillePage({
               value={getClimatLabel(commune?.climat_zone ?? null)}
               description={
                 problem.seasonality
-                  ? `Ce problème est plus fréquent en ${problem.seasonality}. Le climat à ${villeData.name} influence la fréquence de ce type d’intervention.`
-                  : `Le climat local à ${villeData.name} peut influencer la fréquence et l’urgence de ce type de problème.`
+                  ? `Ce problème est plus fréquent en ${problem.seasonality}. Le climat à ${villeData.name} influence la fréquence de ce type d'intervention.`
+                  : `Le climat local à ${villeData.name} peut influencer la fréquence et l'urgence de ce type de problème.`
               }
             />
             <LocalFactorCard
@@ -408,7 +427,7 @@ export default async function ProblemeVillePage({
               icon={<MapPin className="w-5 h-5 text-amber-600" />}
               title="Population"
               value={commune?.population ? formatNumber(commune.population) + ' habitants' : villeData.population + ' habitants'}
-              description={`${villeData.name} est une commune de ${villeData.departement} (${villeData.region}). La densité de population influence les délais d’intervention des artisans.`}
+              description={`${villeData.name} est une commune de ${villeData.departement} (${villeData.region}). La densité de population influence les délais d'intervention des artisans.`}
             />
           </div>
         </div>

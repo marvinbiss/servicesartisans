@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
 
     let query = supabase
       .from('services')
-      .select('*')
+      .select('id, name, slug, description, icon, category, is_active, sort_order, created_at')
       .order('name', { ascending: true })
 
     if (!includeInactive) {

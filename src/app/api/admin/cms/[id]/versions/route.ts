@@ -42,7 +42,7 @@ export async function GET(
 
     const { data: versions, error } = await supabase
       .from('cms_page_versions')
-      .select('*')
+      .select('id, page_id, version_number, title, content_json, content_html, structured_data, meta_title, meta_description, status, created_by, created_at, change_summary')
       .eq('page_id', id)
       .order('version_number', { ascending: false })
       .limit(50)

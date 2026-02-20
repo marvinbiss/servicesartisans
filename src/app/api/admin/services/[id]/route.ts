@@ -42,7 +42,7 @@ export async function GET(
 
     const { data: service, error } = await supabase
       .from('services')
-      .select('*')
+      .select('id, name, slug, description, icon, category, is_active, sort_order, created_at')
       .eq('id', params.id)
       .single()
 

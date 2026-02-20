@@ -50,11 +50,11 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
     // Verify user is an artisan
     const { data: profile } = await supabase
       .from('profiles')
-      .select('user_type')
+      .select('role')
       .eq('id', user.id)
       .single()
 
-    if (!profile || profile.user_type !== 'artisan') {
+    if (!profile || profile.role !== 'artisan') {
       return NextResponse.json(
         { error: 'Accès réservé aux artisans' },
         { status: 403 }
@@ -64,7 +64,7 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
     // Fetch portfolio item
     const { data: item, error } = await supabase
       .from('portfolio_items')
-      .select('*')
+      .select('id, artisan_id, title, description, image_url, thumbnail_url, category, tags, is_featured, display_order, created_at, media_type, video_url, before_image_url, after_image_url, is_visible')
       .eq('id', id)
       .eq('artisan_id', user.id)
       .single()
@@ -104,11 +104,11 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     // Verify user is an artisan
     const { data: profile } = await supabase
       .from('profiles')
-      .select('user_type')
+      .select('role')
       .eq('id', user.id)
       .single()
 
-    if (!profile || profile.user_type !== 'artisan') {
+    if (!profile || profile.role !== 'artisan') {
       return NextResponse.json(
         { error: 'Accès réservé aux artisans' },
         { status: 403 }
@@ -192,11 +192,11 @@ export async function DELETE(_request: NextRequest, { params }: RouteParams) {
     // Verify user is an artisan
     const { data: profile } = await supabase
       .from('profiles')
-      .select('user_type')
+      .select('role')
       .eq('id', user.id)
       .single()
 
-    if (!profile || profile.user_type !== 'artisan') {
+    if (!profile || profile.role !== 'artisan') {
       return NextResponse.json(
         { error: 'Accès réservé aux artisans' },
         { status: 403 }
@@ -206,7 +206,7 @@ export async function DELETE(_request: NextRequest, { params }: RouteParams) {
     // Get item to delete (also verifies ownership)
     const { data: item, error: fetchError } = await supabase
       .from('portfolio_items')
-      .select('*')
+      .select('id')
       .eq('id', id)
       .eq('artisan_id', user.id)
       .single()

@@ -72,13 +72,13 @@ export async function getOverviewStats(
   // 2. Campaign counts (total + active) in parallel
   let campaignQuery = supabase
     .from('prospection_campaigns')
-    .select('*', { count: 'exact', head: true })
+    .select('id', { count: 'exact', head: true })
   if (dateFrom) campaignQuery = campaignQuery.gte('created_at', dateFrom)
   if (dateTo) campaignQuery = campaignQuery.lte('created_at', dateTo)
 
   const activeCampaignsPromise = supabase
     .from('prospection_campaigns')
-    .select('*', { count: 'exact', head: true })
+    .select('id', { count: 'exact', head: true })
     .eq('status', 'sending')
 
   // 3. All sent/delivered messages with channel+status (single query, group in JS)
@@ -92,11 +92,11 @@ export async function getOverviewStats(
   // 4. Conversations counts in parallel
   const totalConversationsPromise = supabase
     .from('prospection_conversations')
-    .select('*', { count: 'exact', head: true })
+    .select('id', { count: 'exact', head: true })
 
   const openConversationsPromise = supabase
     .from('prospection_conversations')
-    .select('*', { count: 'exact', head: true })
+    .select('id', { count: 'exact', head: true })
     .in('status', ['open', 'ai_handling', 'human_required'])
 
   // 5. Cost data

@@ -11,6 +11,7 @@ import {
   Copy,
   Smile,
 } from 'lucide-react'
+import Image from 'next/image'
 import { ChatMessage } from '@/lib/realtime/chat-service'
 import { cn } from '@/lib/utils'
 import MessageReactions from './MessageReactions'
@@ -203,12 +204,14 @@ export function MessageBubble({
         >
           {/* File/Image preview */}
           {message.message_type === 'image' && message.file_url && (
-            <img
+            <Image
               src={message.file_url}
               alt="Image partagée"
-              className="max-w-full rounded-lg mb-2 cursor-pointer hover:opacity-90"
+              width={400}
+              height={300}
+              className="max-w-full rounded-lg mb-2 cursor-pointer hover:opacity-90 object-contain"
               onClick={() => window.open(message.file_url, '_blank')}
-              loading="lazy"
+              unoptimized
             />
           )}
 

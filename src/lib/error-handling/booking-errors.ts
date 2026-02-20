@@ -4,6 +4,8 @@
  * Includes retry logic, offline detection, and error tracking
  */
 
+import { logger } from '@/lib/logger'
+
 // Error types
 export type BookingErrorCode =
   | 'SLOT_UNAVAILABLE'
@@ -332,7 +334,6 @@ export function logError(error: BookingError, context?: Record<string, unknown>)
   }
 
   // Log using structured logger
-  const { logger } = require('@/lib/logger')
   logger.error('[BookingError]', new Error(error.message), errorLog)
 
   // In production, send to analytics/error tracking service

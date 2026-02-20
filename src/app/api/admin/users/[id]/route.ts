@@ -61,7 +61,7 @@ export async function GET(
     try {
       const { data } = await supabase
         .from('profiles')
-        .select('*')
+        .select('id, email, full_name, is_admin, role, phone_e164, average_rating, review_count')
         .eq('id', userId)
         .single()
       if (data) profile = data
@@ -74,7 +74,7 @@ export async function GET(
     try {
       const { data: provider } = await supabase
         .from('providers')
-        .select('*')
+        .select('id, name, slug, email, phone, siret, is_verified, is_active, stable_id, noindex, address_city, address_postal_code, address_street, address_region, specialty, rating_average, review_count, created_at')
         .eq('user_id', userId)
         .single()
       providerData = provider
@@ -87,7 +87,7 @@ export async function GET(
     try {
       const { count } = await supabase
         .from('bookings')
-        .select('*', { count: 'exact', head: true })
+        .select('id', { count: 'exact', head: true })
         .or(`provider_id.eq.${userId},client_email.eq.${user.email}`)
       bookingsCount = count || 0
     } catch {
@@ -99,7 +99,7 @@ export async function GET(
     try {
       const { count } = await supabase
         .from('reviews')
-        .select('*', { count: 'exact', head: true })
+        .select('id', { count: 'exact', head: true })
         .eq('client_id', userId)
       reviewsCount = count || 0
     } catch {
@@ -112,8 +112,8 @@ export async function GET(
         id: user.id,
         email: user.email,
         full_name: profile.full_name || user.user_metadata?.full_name || user.user_metadata?.name || null,
-        phone: profile.phone || user.user_metadata?.phone || null,
-        user_type: profile.user_type || (user.user_metadata?.is_artisan ? 'artisan' : 'client'),
+        phone: profile.phone_e164 || user.user_metadata?.phone || null,
+        user_type: profile.role === 'artisan' ? 'artisan' : (user.user_metadata?.is_artisan ? 'artisan' : 'client'),
         is_verified: !!user.email_confirmed_at,
         is_banned: profile.is_banned || user.banned_until !== null,
         subscription_plan: profile.subscription_plan || 'gratuit',
@@ -184,16 +184,9 @@ export async function PATCH(
 
     // Try to update profile if table exists
     try {
+      // Only include columns that actually exist on profiles table
       const allowedFields = [
         'full_name',
-        'phone',
-        'user_type',
-        'siret',
-        'description',
-        'address',
-        'city',
-        'postal_code',
-        'is_verified',
         'subscription_plan',
       ]
 
@@ -202,6 +195,10 @@ export async function PATCH(
         if (field in result.data) {
           updates[field] = result.data[field as keyof typeof result.data]
         }
+      }
+      // Map user_type → role (profiles has role, not user_type)
+      if (result.data.user_type !== undefined) {
+        updates.role = result.data.user_type === 'artisan' ? 'artisan' : 'user'
       }
       updates.updated_at = new Date().toISOString()
 

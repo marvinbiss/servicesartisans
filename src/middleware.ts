@@ -87,7 +87,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // Auth guard for private spaces
-  if (pathname.startsWith('/espace-client') || pathname.startsWith('/espace-artisan')) {
+  if (pathname.startsWith('/espace-client') || pathname.startsWith('/espace-artisan') || pathname.startsWith('/admin')) {
     try {
       const { createServerClient } = await import('@supabase/ssr')
 
@@ -114,15 +114,15 @@ export async function middleware(request: NextRequest) {
 
       const { data: profile } = await supabase
         .from('profiles')
-        .select('user_type')
+        .select('role')
         .eq('id', user.id)
         .single()
 
       if (profile) {
-        if (pathname.startsWith('/espace-artisan') && profile.user_type !== 'artisan') {
+        if (pathname.startsWith('/espace-artisan') && profile.role !== 'artisan') {
           return NextResponse.redirect(new URL('/espace-client', request.url))
         }
-        if (pathname.startsWith('/espace-client') && profile.user_type === 'artisan') {
+        if (pathname.startsWith('/espace-client') && profile.role === 'artisan') {
           return NextResponse.redirect(new URL('/espace-artisan', request.url))
         }
       }

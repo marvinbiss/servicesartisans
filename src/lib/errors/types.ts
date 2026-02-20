@@ -1,7 +1,29 @@
 /**
  * Error Types - ServicesArtisans
  * Standardized error responses for all API routes
+ *
+ * NOTE: AppError classes (AppError, ValidationError, NotFoundError, etc.) live in
+ * src/lib/errors.ts — that is the single source of truth for error classes.
+ * They are re-exported below for convenience.
+ *
+ * @deprecated For AppError class hierarchy, import directly from '@/lib/errors'.
  */
+
+// Re-export AppError class hierarchy from the canonical source
+export {
+  AppError,
+  ValidationError,
+  NotFoundError,
+  AuthenticationError,
+  AuthorizationError,
+  RateLimitError,
+  ExternalServiceError,
+  ConflictError,
+  PaymentError,
+  isAppError,
+  toAppError,
+  formatErrorResponse,
+} from '@/lib/errors'
 
 export enum ErrorCode {
   // Authentication errors (1xxx)

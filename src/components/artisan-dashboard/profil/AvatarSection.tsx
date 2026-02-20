@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react'
 import { Camera, Loader2, Trash2 } from 'lucide-react'
 import { getInitials } from '@/lib/utils'
+import Image from 'next/image'
 
 interface AvatarSectionProps {
   provider: Record<string, unknown>
@@ -120,10 +121,13 @@ export function AvatarSection({ provider, onSaved }: AvatarSectionProps) {
       <div className="flex items-center gap-6">
         <div className="relative">
           {displayUrl ? (
-            <img
+            <Image
               src={displayUrl}
               alt={`Photo de profil de ${name}`}
+              width={96}
+              height={96}
               className="w-24 h-24 rounded-full object-cover"
+              unoptimized
             />
           ) : (
             <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center" role="img" aria-label="Aucune photo de profil">
