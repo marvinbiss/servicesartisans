@@ -223,27 +223,6 @@ function generateJsonLd(service: Service, location: LocationType, _providers: un
 }
 
 export default async function ServiceLocationPage({ params }: PageProps) {
-  try {
-    return await _ServiceLocationPage({ params })
-  } catch (err) {
-    // Re-throw Next.js internal errors (notFound, redirect) so the framework handles them
-    if (err && typeof err === 'object' && 'digest' in err) throw err
-
-    console.error('[SERVICE-LOCATION] FATAL error rendering page:', err)
-    const { service: s, location: l } = await params
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="bg-white rounded-2xl shadow p-8 max-w-lg text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Page temporairement indisponible</h1>
-          <p className="text-gray-600 mb-2">Service : {s} — Ville : {l}</p>
-          <p className="text-gray-400 text-sm">Erreur : {err instanceof Error ? err.message : String(err)}</p>
-        </div>
-      </div>
-    )
-  }
-}
-
-async function _ServiceLocationPage({ params }: PageProps) {
   const { service: serviceSlug, location: locationSlug } = await params
 
   // CMS override — if admin published content for this specific service+city page
