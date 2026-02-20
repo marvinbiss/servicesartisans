@@ -213,7 +213,7 @@ export default function AdminReservationsPage() {
                               <p className="text-gray-900">
                                 {booking.provider?.name || '-'}
                               </p>
-                              <p className="text-sm text-gray-500">{booking.profiles?.email}</p>
+                              <p className="text-sm text-gray-500">{booking.provider?.email}</p>
                             </div>
                           </div>
                         </td>
