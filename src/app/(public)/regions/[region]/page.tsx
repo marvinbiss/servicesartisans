@@ -214,7 +214,7 @@ export default async function RegionPage({ params }: PageProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-center gap-3">
             <span className="text-sm text-slate-500 font-medium">Services prioritaires :</span>
-            {orderedServices.slice(0, 8).map((service) => (
+            {orderedServices.map((service) => (
               <Link
                 key={service.slug}
                 href={`/regions/${regionSlug}/${service.slug}`}
@@ -366,7 +366,7 @@ export default async function RegionPage({ params }: PageProps) {
               <div key={city.slug} className="bg-white rounded-2xl border border-gray-200 p-6">
                 <h3 className="font-heading font-semibold text-slate-900 mb-4">Artisans à {city.name}</h3>
                 <div className="flex flex-wrap gap-2">
-                  {allServices.slice(0, 6).map((service) => (
+                  {allServices.map((service) => (
                     <Link
                       key={`${service.slug}-${city.slug}`}
                       href={`/services/${service.slug}/${city.slug}`}

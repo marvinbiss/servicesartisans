@@ -379,7 +379,7 @@ export default async function DepartementPage({ params }: PageProps) {
                 <div key={ville.slug} className="bg-white rounded-2xl border border-gray-200 p-6">
                   <h3 className="font-heading font-semibold text-slate-900 mb-4">Artisans à {ville.name}</h3>
                   <div className="flex flex-wrap gap-2">
-                    {services.slice(0, 6).map((service) => (
+                    {services.map((service) => (
                       <Link
                         key={`${service.slug}-${ville.slug}`}
                         href={`/services/${service.slug}/${ville.slug}`}
