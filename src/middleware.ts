@@ -12,7 +12,7 @@ import { checkRateLimit, getRateLimitConfig, getRateLimitKey, getClientIp } from
  */
 
 // Security headers
-function addSecurityHeaders(response: NextResponse, request: NextRequest): NextResponse {
+function addSecurityHeaders(response: NextResponse, request: NextRequest, nonce: string): NextResponse {
   const userAgent = request.headers.get('user-agent') || ''
   const isCapacitor = userAgent.includes('Capacitor') || userAgent.includes('Android') || userAgent.includes('iPhone')
   const isDev = process.env.NODE_ENV === 'development'
@@ -25,7 +25,7 @@ function addSecurityHeaders(response: NextResponse, request: NextRequest): NextR
 
   const cspDirectives = [
     "default-src 'self'",
-    `script-src 'self' 'unsafe-inline' https://js.stripe.com`,
+    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https://js.stripe.com`,
     `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`,
     "font-src 'self' https://fonts.gstatic.com data:",
     "img-src 'self' data: blob: https: http:",
@@ -38,7 +38,9 @@ function addSecurityHeaders(response: NextResponse, request: NextRequest): NextR
     "upgrade-insecure-requests",
   ]
 
-  response.headers.set('Content-Security-Policy', cspDirectives.join('; '))
+  const cspHeader = cspDirectives.join('; ')
+  response.headers.set('Content-Security-Policy', cspHeader)
+  response.headers.set('x-nonce', nonce)
   response.headers.set('X-Content-Type-Options', 'nosniff')
   response.headers.set('X-Frame-Options', 'DENY')
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
@@ -79,6 +81,7 @@ function getCanonicalRedirect(request: NextRequest): string | null {
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
+  const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
 
   // URL canonicalization
   const canonicalUrl = getCanonicalRedirect(request)
@@ -185,7 +188,7 @@ export async function middleware(request: NextRequest) {
     response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, private')
   }
 
-  return addSecurityHeaders(response, request)
+  return addSecurityHeaders(response, request, nonce)
 }
 
 export const config = {

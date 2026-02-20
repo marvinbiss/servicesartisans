@@ -1,5 +1,6 @@
 interface JsonLdProps {
   data: Record<string, unknown> | Record<string, unknown>[]
+  nonce?: string
 }
 
 // Safely escape JSON for script tags to prevent XSS
@@ -10,7 +11,7 @@ function safeJsonStringify(data: unknown): string {
     .replace(/&/g, '\\u0026')
 }
 
-export default function JsonLd({ data }: JsonLdProps) {
+export default function JsonLd({ data, nonce }: JsonLdProps) {
   const jsonLdArray = Array.isArray(data) ? data : [data]
 
   return (
@@ -19,6 +20,7 @@ export default function JsonLd({ data }: JsonLdProps) {
         <script
           key={index}
           type="application/ld+json"
+          nonce={nonce}
           dangerouslySetInnerHTML={{ __html: safeJsonStringify(item) }}
         />
       ))}

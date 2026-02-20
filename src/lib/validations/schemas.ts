@@ -80,6 +80,7 @@ export const createReviewSchema = z.object({
   bookingId: uuidSchema,
   rating: z.number().int().min(1).max(5),
   comment: z.string().min(10, 'Commentaire trop court').max(500, 'Commentaire trop long'),
+  reviewToken: z.string().optional(),
 })
 
 export const getReviewsSchema = z.object({

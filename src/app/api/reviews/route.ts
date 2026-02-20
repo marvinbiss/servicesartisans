@@ -6,6 +6,7 @@
 
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { createHmac, timingSafeEqual } from 'crypto'
 import { logger } from '@/lib/logger'
 import { createReviewSchema, validateRequest, formatZodErrors } from '@/lib/validations/schemas'
 import { createErrorResponse, createSuccessResponse, ErrorCode } from '@/lib/errors/types'
@@ -245,8 +246,22 @@ export async function POST(request: Request) {
       )
     }
 
-    const { bookingId, rating, comment } = validation.data
+    const { bookingId, rating, comment, reviewToken } = validation.data
     const wouldRecommend = body.wouldRecommend ?? true
+
+    // Validate HMAC review token (prevents fake reviews)
+    if (process.env.REVIEW_HMAC_SECRET && reviewToken) {
+      const expected = createHmac('sha256', process.env.REVIEW_HMAC_SECRET)
+        .update(bookingId)
+        .digest('hex')
+        .slice(0, 32)
+      const provided = Buffer.from(reviewToken, 'hex')
+      const expectedBuf = Buffer.from(expected, 'hex')
+      if (provided.length !== expectedBuf.length || !timingSafeEqual(provided, expectedBuf)) {
+        return NextResponse.json(createErrorResponse(ErrorCode.UNAUTHORIZED, 'Token invalide'), { status: 401 })
+      }
+    }
+    // If no REVIEW_HMAC_SECRET configured, allow without token (backward compat)
 
     // Validate bookingId is a valid UUID to prevent enumeration
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i

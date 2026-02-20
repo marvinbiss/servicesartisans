@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import dynamic from 'next/dynamic'
 import { Inter, Plus_Jakarta_Sans } from 'next/font/google'
+import { headers } from 'next/headers'
 import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
@@ -126,11 +127,12 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const nonce = (await headers()).get('x-nonce') ?? undefined
   return (
     <html lang="fr" className={`scroll-smooth ${inter.variable} ${plusJakarta.variable}`}>
       <head>
@@ -144,6 +146,7 @@ export default function RootLayout({
         {/* Global Organization + WebSite schema (E-E-A-T) */}
         <script
           type="application/ld+json"
+          nonce={nonce}
           dangerouslySetInnerHTML={{
             __html: JSON.stringify([getOrganizationSchema(), getWebsiteSchema()])
               .replace(/</g, '\\u003c')

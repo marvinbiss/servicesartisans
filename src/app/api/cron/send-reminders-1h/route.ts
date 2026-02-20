@@ -62,6 +62,7 @@ export async function GET(request: Request) {
       `)
       .eq('status', 'confirmed')
       .not('slot', 'is', null)
+      .limit(500)
 
     if (error) {
       logger.error('[Cron 1h] Error fetching bookings:', error)
