@@ -335,7 +335,7 @@ const SERVICE_TO_SPECIALTIES: Record<string, string[]> = {
 export async function getProvidersByServiceAndLocation(
   serviceSlug: string,
   locationSlug: string,
-  { limit = 50, offset = 0 }: { limit?: number; offset?: number } = {}
+  { limit = 50, offset = 0, postalCode }: { limit?: number; offset?: number; postalCode?: string } = {}
 ) {
   if (IS_BUILD) return [] // Skip during build — ISR will populate on first visit
 
@@ -344,9 +344,32 @@ export async function getProvidersByServiceAndLocation(
   const ville = getVilleBySlugImport(locationSlug)
   if (!ville) return []
 
-  const cityValues = getCityValues(ville.name)
   const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
   if (!specialties || specialties.length === 0) return []
+
+  // STRICT RULE: arrondissement pages (Paris/Lyon/Marseille) show ONLY providers
+  // whose address_postal_code matches the exact arrondissement.
+  if (postalCode) {
+    return await retryWithBackoff(
+      async () => {
+        const { data, error } = await supabase
+          .from('providers')
+          .select(PROVIDER_LIST_SELECT)
+          .in('specialty', specialties)
+          .eq('address_postal_code', postalCode)
+          .eq('is_active', true)
+          .order('phone', { ascending: false, nullsFirst: false })
+          .order('is_verified', { ascending: false })
+          .order('name')
+          .range(offset, offset + limit - 1)
+        if (error) throw error
+        return resolveProviderCities((data || []) as unknown as ProviderListRow[])
+      },
+      `getProvidersByServiceAndLocation:postal(${serviceSlug}, ${postalCode})`,
+    )
+  }
+
+  const cityValues = getCityValues(ville.name)
 
   try {
     return await retryWithBackoff(

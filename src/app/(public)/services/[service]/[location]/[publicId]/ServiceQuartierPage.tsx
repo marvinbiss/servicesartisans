@@ -71,9 +71,21 @@ export default async function ServiceQuartierPage({
     service = { id: '', name: staticSvc.name, slug: staticSvc.slug, is_active: true, created_at: '' }
   }
 
-  // 3. Fetch providers (city-level — quartiers share the same providers pool)
+  // 3. Fetch providers
+  // STRICT RULE: Paris/Lyon/Marseille arrondissements show ONLY providers in that
+  // exact arrondissement (filtered by address_postal_code). Other quartiers use the
+  // city-level pool as before.
+  const ARRONDISSEMENT_CITIES = ['paris', 'lyon', 'marseille']
+  const arrondissementPostalCode =
+    ARRONDISSEMENT_CITIES.includes(locationSlug) && quartierRealData?.codePostal
+      ? quartierRealData.codePostal
+      : undefined
   // Throw on failure so ISR keeps stale cache (prevents "disappearing artisans" bug)
-  const providers = await getProvidersByServiceAndLocation(serviceSlug, locationSlug) as unknown as Provider[]
+  const providers = await getProvidersByServiceAndLocation(
+    serviceSlug,
+    locationSlug,
+    { postalCode: arrondissementPostalCode },
+  ) as unknown as Provider[]
 
   // 4. Generate content
   const trade = getTradeContent(serviceSlug)
