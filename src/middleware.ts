@@ -97,7 +97,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // Auth guard for private spaces
-  if (pathname.startsWith('/espace-client') || pathname.startsWith('/espace-artisan') || pathname.startsWith('/admin')) {
+  if (pathname.startsWith('/espace-client') || pathname.startsWith('/espace-artisan') || (pathname.startsWith('/admin') && pathname !== '/admin/connexion')) {
     try {
       const { createServerClient } = await import('@supabase/ssr')
 
