@@ -111,7 +111,7 @@ export default function BookingPage() {
       // Flatten slots from all dates
       const allSlots: AvailableSlot[] = []
       for (const [date, slots] of Object.entries(data.slots || {})) {
-        for (const slot of slots as any[]) {
+        for (const slot of slots as Array<{ id: string; start: string; end: string; available: boolean }>) {
           if (slot.available && new Date(`${date}T${slot.start}`) > new Date()) {
             allSlots.push({
               id: slot.id,

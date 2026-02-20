@@ -26,7 +26,6 @@ interface ProviderListRow {
   noindex: boolean | null
   rating_average: number | null
   review_count: number | null
-  avatar_url: string | null
   phone: string | null
   siret: string | null
   latitude: number | null
@@ -117,7 +116,7 @@ const PROVIDER_LIST_SELECT = [
   'id', 'stable_id', 'name', 'slug', 'specialty',
   'address_street', 'address_postal_code', 'address_city', 'address_region',
   'is_verified', 'is_active', 'noindex',
-  'rating_average', 'review_count', 'avatar_url',
+  'rating_average', 'review_count',
   'phone', 'siret',
   'latitude', 'longitude',
   'created_at', 'updated_at',
@@ -130,7 +129,7 @@ export async function getServices() {
     (async () => {
       const { data, error } = await supabase
         .from('services')
-        .select('*')
+        .select('id, name, slug, description, icon, category, is_active')
         .eq('is_active', true)
         .order('name')
 
@@ -166,7 +165,7 @@ export async function getServiceBySlug(slug: string) {
       (async () => {
         const { data, error } = await supabase
           .from('services')
-          .select('*')
+          .select('id, name, slug, description, icon, category, is_active')
           .eq('slug', slug)
           .single()
 
@@ -201,7 +200,7 @@ export async function getLocationBySlug(slug: string) {
       async () => {
         const { data, error } = await supabase
           .from('locations')
-          .select('*')
+          .select('id, name, slug, postal_code, population, department, region, is_active')
           .eq('slug', slug)
           .single()
 
@@ -227,7 +226,7 @@ export async function getProviderByStableId(stableId: string) {
       (async () => {
         const { data } = await supabase
           .from('providers')
-          .select('*')
+          .select('id, name, slug, email, phone, siret, is_verified, is_active, stable_id, noindex, address_city, address_postal_code, address_street, address_region, specialty, rating_average, review_count, created_at')
           .eq('stable_id', stableId)
           .eq('is_active', true)
           .single()
@@ -250,7 +249,7 @@ export async function getProviderBySlug(slug: string) {
       (async () => {
         const { data } = await supabase
           .from('providers')
-          .select('*')
+          .select('id, name, slug, email, phone, siret, is_verified, is_active, stable_id, noindex, address_city, address_postal_code, address_street, address_region, specialty, rating_average, review_count, created_at')
           .eq('slug', slug)
           .eq('is_active', true)
           .single()
@@ -510,7 +509,7 @@ export async function getAllProviders() {
     (async () => {
       const { data, error } = await supabase
         .from('providers')
-        .select('*')
+        .select(PROVIDER_LIST_SELECT)
         .eq('is_active', true)
         .order('is_verified', { ascending: false })
         .order('name')
@@ -538,7 +537,7 @@ export async function getProvidersByService(serviceSlug: string, limit?: number)
         const { data, error } = await supabase
           .from('providers')
           .select(`
-            *,
+            ${PROVIDER_LIST_SELECT},
             provider_services!inner(service_id),
             provider_locations(
               location:locations(name, slug)
@@ -571,7 +570,7 @@ export async function getLocationsByService(serviceSlug: string) {
       const { data, error } = await supabase
         .from('locations')
         .select(`
-          *,
+          id, name, slug, postal_code, population, department, region, is_active,
           provider_locations!inner(
             provider:providers!inner(
               provider_services!inner(service_id)

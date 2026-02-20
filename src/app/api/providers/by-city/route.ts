@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { z } from 'zod'
 import { logger } from '@/lib/logger'
+import { getCityValues } from '@/lib/insee-resolver'
 
 const byCityQuerySchema = z.object({
   city: z.string().min(1, 'City parameter is required').max(200),
@@ -40,7 +41,8 @@ export async function GET(request: NextRequest) {
       .eq('is_active', true)
       .not('latitude', 'is', null)
       .not('longitude', 'is', null)
-      .ilike('address_city', `${city}%`)
+      // Use .in() with INSEE codes instead of ILIKE to avoid full table scan on 750K rows
+      .in('address_city', getCityValues(city))
       .order('rating_average', { ascending: false })
       .limit(limit)
 

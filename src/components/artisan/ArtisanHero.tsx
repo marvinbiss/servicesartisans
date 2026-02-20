@@ -1,8 +1,7 @@
 'use client'
 
-import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { Star, MapPin, CheckCircle, Zap, Users, Clock, Phone, CalendarCheck } from 'lucide-react'
+import { Star, MapPin, CheckCircle, Users, Clock, Phone, CalendarCheck } from 'lucide-react'
 import { getDisplayName } from './types'
 import type { LegacyArtisan } from '@/types/legacy'
 import {
@@ -14,17 +13,8 @@ interface ArtisanHeroProps {
   artisan: LegacyArtisan
 }
 
-// Blur placeholder for avatar
-const BLUR_DATA_URL = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAn/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBEQCEAwEPwAB//9k='
-
 // Determine verification level based on artisan data
 function getVerificationLevel(artisan: LegacyArtisan): 'none' | 'basic' | 'standard' | 'premium' | 'enterprise' {
-  if (artisan.is_verified && artisan.insurance && artisan.insurance.length > 0 && artisan.certifications && artisan.certifications.length > 0) {
-    return 'premium'
-  }
-  if (artisan.is_verified && artisan.insurance && artisan.insurance.length > 0) {
-    return 'standard'
-  }
   if (artisan.is_verified) {
     return 'basic'
   }
@@ -53,19 +43,7 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
           <div className="flex-shrink-0">
             <div className="relative">
               <div className="w-24 h-24 md:w-32 md:h-32 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-3xl md:text-4xl font-bold shadow-lg shadow-blue-500/20 overflow-hidden ring-4 ring-white">
-                {artisan.avatar_url ? (
-                  <Image
-                    src={artisan.avatar_url}
-                    alt={`Photo de ${displayName}`}
-                    fill
-                    className="object-cover"
-                    placeholder="blur"
-                    blurDataURL={BLUR_DATA_URL}
-                    sizes="(max-width: 768px) 96px, 128px"
-                  />
-                ) : (
-                  <span aria-hidden="true">{displayName.charAt(0).toUpperCase()}</span>
-                )}
+                <span aria-hidden="true">{displayName.charAt(0).toUpperCase()}</span>
               </div>
               {artisan.is_verified && (
                 <div
@@ -84,12 +62,6 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
             {/* Top Badges Row */}
             <div className="flex flex-wrap gap-2 mb-3" role="list" aria-label="Badges et certifications">
               <VerificationLevelBadge level={verificationLevel} size="sm" />
-              {artisan.emergency_available && (
-                <span role="listitem" className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 text-red-700 text-xs font-semibold border border-red-200">
-                  <Zap className="w-3.5 h-3.5" aria-hidden="true" />
-                  Urgences 24/7
-                </span>
-              )}
             </div>
 
             {/* Name & Specialty */}
@@ -128,12 +100,6 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
               {artisan.is_verified && (
                 <VerifiedBadge type="identity" size="sm" />
               )}
-              {artisan.insurance && artisan.insurance.length > 0 && (
-                <VerifiedBadge type="insurance" size="sm" />
-              )}
-              {artisan.certifications && artisan.certifications.length > 0 && (
-                <VerifiedBadge type="certification" size="sm" />
-              )}
             </div>
 
             {/* Rating & Stats Row */}
@@ -153,13 +119,6 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
                   </a>
                 )}
               </div>
-
-              {artisan.experience_years && artisan.experience_years > 0 && (
-                <div className="flex items-center gap-1.5 text-slate-600">
-                  <Clock className="w-4 h-4 text-slate-400" aria-hidden="true" />
-                  <span>{artisan.experience_years} ans d&apos;exp&eacute;rience</span>
-                </div>
-              )}
 
               {artisan.team_size && artisan.team_size > 1 && (
                 <div className="flex items-center gap-1.5 text-slate-600">

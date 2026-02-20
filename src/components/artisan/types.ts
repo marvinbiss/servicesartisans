@@ -29,7 +29,6 @@ export interface Artisan {
   business_name: string | null
   first_name: string | null
   last_name: string | null
-  avatar_url: string | null
   city: string
   city_slug?: string
   postal_code: string
@@ -48,12 +47,6 @@ export interface Artisan {
   services: string[]
   service_prices: ServicePrice[]
   accepts_new_clients?: boolean
-  experience_years?: number
-  certifications?: string[]
-  insurance?: string[]
-  payment_methods?: string[]
-  languages?: string[]
-  emergency_available?: boolean
   member_since?: string
   portfolio?: PortfolioItem[]
   faq?: Array<{ question: string; answer: string }>
@@ -61,7 +54,6 @@ export interface Artisan {
   siren?: string
   legal_form?: string
   creation_date?: string
-  employee_count?: number
   phone?: string
   phone_secondary?: string
   email?: string
@@ -70,14 +62,14 @@ export interface Artisan {
   longitude?: number
   prices_are_estimated?: boolean
   available_24h?: boolean
-  hourly_rate_min?: number
-  hourly_rate_max?: number
   opening_hours?: Record<string, { ouvert: boolean; debut: string; fin: string }>
   free_quote?: boolean
   intervention_radius_km?: number
   bio?: string
   updated_at?: string
-  // GUARD: Do NOT add is_premium, hourly_rate, response_time, etc. here.
+  // GUARD: Do NOT add is_premium, hourly_rate, response_time, avatar_url,
+  // certifications, insurance, payment_methods, languages, emergency_available,
+  // experience_years, employee_count, hourly_rate_min/max here.
   // Legacy fields live in src/types/legacy/ (LegacyArtisan).
 }
 

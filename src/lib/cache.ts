@@ -4,10 +4,10 @@ const cache = new Map<string, { data: unknown; expiry: number }>()
 // Cache TTL configurations (in seconds)
 export const CACHE_TTL = {
   services: 3600, // 1 hour
-  artisans: 300, // 5 minutes
-  reviews: 600, // 10 minutes
+  artisans: 600, // 10 minutes
+  reviews: 1200, // 20 minutes
   locations: 86400, // 24 hours
-  stats: 1800, // 30 minutes
+  stats: 3600, // 1 hour
   cms: 300, // 5 minutes
 } as const
 
@@ -15,8 +15,8 @@ export const CACHE_TTL = {
 export const REVALIDATE = {
   services: 3600, // 1 hour
   serviceDetail: 1800, // 30 minutes
-  serviceLocation: 60, // 1 minute - Court pour voir les changements rapidement
-  artisanProfile: 300, // 5 minutes
+  serviceLocation: 300, // 5 minutes
+  artisanProfile: 900, // 15 minutes
   locations: 86400, // 24 hours
   blog: 3600, // 1 hour
   staticPages: 86400, // 24 hours

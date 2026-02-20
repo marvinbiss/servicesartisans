@@ -38,10 +38,9 @@ async function getRecentProviders(limit = 50) {
 
     const supabase = createClient(url, key)
 
-    // Use SELECT * to avoid column name mismatches
     const { data, error } = await supabase
       .from('providers')
-      .select('*')
+      .select('id, stable_id, name, slug, specialty, address_street, address_postal_code, address_city, address_region, is_verified, is_active, phone, siret, rating_average, review_count')
       .eq('is_active', true)
       .order('is_verified', { ascending: false })
       .limit(limit)

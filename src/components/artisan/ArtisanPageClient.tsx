@@ -96,10 +96,7 @@ interface SimilarArtisan {
   rating: number
   reviews: number
   city: string
-  hourly_rate?: number
   is_verified?: boolean
-  is_premium?: boolean
-  avatar_url?: string
 }
 
 interface ArtisanPageClientProps {

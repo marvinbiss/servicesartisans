@@ -54,7 +54,7 @@ export async function GET() {
 
     const { data: preferences } = await supabaseAdmin
       .from('user_preferences')
-      .select('*')
+      .select('user_id, preferences, email_booking_confirmation, email_booking_reminder, email_marketing, email_newsletter, sms_booking_reminder, sms_marketing, push_enabled, push_booking_updates, push_messages, push_promotions, profile_public, show_online_status, allow_reviews, language, currency, theme, timezone, updated_at')
       .eq('user_id', user.id)
       .single()
 

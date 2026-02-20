@@ -72,7 +72,7 @@ export default function AdvancedSearch({
     service: searchParams.get('service') || initialFilters.service,
     location: searchParams.get('location') || initialFilters.location,
     minRating: searchParams.get('minRating') ? parseInt(searchParams.get('minRating')!) : initialFilters.minRating,
-    availability: (searchParams.get('availability') as any) || initialFilters.availability,
+    availability: (searchParams.get('availability') as SearchFilters['availability']) || initialFilters.availability,
     sortBy: searchParams.get('sortBy') || initialFilters.sortBy || 'relevance',
     ...initialFilters,
   })
@@ -415,7 +415,7 @@ export default function AdvancedSearch({
                     onChange={(e) =>
                       setFilters({
                         ...filters,
-                        availability: e.target.value as any || undefined,
+                        availability: (e.target.value as SearchFilters['availability']) || undefined,
                       })
                     }
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"

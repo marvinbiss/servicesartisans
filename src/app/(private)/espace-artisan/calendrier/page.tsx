@@ -49,6 +49,18 @@ interface DaySchedule {
   slots: TimeSlot[]
 }
 
+interface BookingEntry {
+  id: string
+  client_name: string
+  service_description: string
+  status: string
+  slot?: {
+    date: string
+    start_time: string
+    end_time: string
+  }
+}
+
 interface UserProfile {
   id: string
   full_name: string
@@ -93,7 +105,7 @@ export default function CalendrierPage() {
   const [isSaving, setIsSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [profile, setProfile] = useState<UserProfile | null>(null)
-  const [upcomingBookings, setUpcomingBookings] = useState<any[]>([])
+  const [upcomingBookings, setUpcomingBookings] = useState<BookingEntry[]>([])
   const [stats, setStats] = useState({ monthlyBookings: 0, fillRate: 0, avgRating: 0 })
 
   // New slot form state
@@ -202,15 +214,15 @@ export default function CalendrierPage() {
 
       if (data.bookings) {
         const upcoming = data.bookings
-          .filter((b: any) => b.status === 'confirmed' && new Date(b.slot?.date) >= new Date())
+          .filter((b: BookingEntry) => b.status === 'confirmed' && new Date(b.slot?.date ?? 0) >= new Date())
           .slice(0, 5)
         setUpcomingBookings(upcoming)
 
         // Calculate stats
         const thisMonth = new Date().getMonth()
         const thisYear = new Date().getFullYear()
-        const monthlyBookings = data.bookings.filter((b: any) => {
-          const bookingDate = new Date(b.slot?.date)
+        const monthlyBookings = data.bookings.filter((b: BookingEntry) => {
+          const bookingDate = new Date(b.slot?.date ?? 0)
           return bookingDate.getMonth() === thisMonth && bookingDate.getFullYear() === thisYear
         }).length
 

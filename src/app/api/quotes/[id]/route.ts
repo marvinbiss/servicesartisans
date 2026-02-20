@@ -126,7 +126,7 @@ export async function PATCH(
 
     const { data: quote } = await supabase
       .from('quotes')
-      .select('*')
+      .select('id, request_id, provider_id, client_id, booking_id, amount, description, valid_until, status, created_at, updated_at')
       .eq('id', params.id)
       .single()
 

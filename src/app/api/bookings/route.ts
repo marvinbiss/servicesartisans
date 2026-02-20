@@ -53,7 +53,7 @@ export async function GET(request: Request) {
 
       const { data: slots, error } = await supabase
         .from('availability_slots')
-        .select('*')
+        .select('id, artisan_id, date, start_time, end_time, is_available')
         .eq('artisan_id', artisanId)
         .eq('is_available', true)
         .gte('date', startDate.toISOString().split('T')[0])

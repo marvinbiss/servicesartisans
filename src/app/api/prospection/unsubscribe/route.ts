@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
-import crypto from 'crypto'
+import { verifyUnsubscribeToken } from '@/lib/prospection/template-renderer'
 
 export const dynamic = 'force-dynamic'
 
@@ -60,43 +60,11 @@ export async function GET(request: NextRequest) {
       })
     }
 
-    // Vérifier le format token.signature
-    const parts = token.split('.')
-    if (parts.length !== 2) {
-      return new NextResponse(unsubscribePage('Lien invalide', false), {
-        status: 400,
-        headers: securityHeaders,
-      })
-    }
+    // Verify HMAC-signed token using the same key derivation as generation
+    const payload = verifyUnsubscribeToken(token)
 
-    const [tokenPart, signature] = parts
-    const secret = process.env.UNSUBSCRIBE_SECRET || process.env.SUPABASE_SERVICE_ROLE_KEY || ''
-    const expectedSig = crypto.createHmac('sha256', secret).update(tokenPart).digest('base64url')
-
-    // Vérification en temps constant pour éviter les attaques par timing
-    const sigBuffer = Buffer.from(signature)
-    const expectedBuffer = Buffer.from(expectedSig)
-    if (sigBuffer.length !== expectedBuffer.length || !crypto.timingSafeEqual(sigBuffer, expectedBuffer)) {
-      return new NextResponse(unsubscribePage('Lien invalide', false), {
-        status: 400,
-        headers: securityHeaders,
-      })
-    }
-
-    // Décoder le token
-    let payload: { cid: string; ch: string; t: number }
-    try {
-      payload = JSON.parse(Buffer.from(tokenPart, 'base64url').toString())
-    } catch {
-      return new NextResponse(unsubscribePage('Lien invalide', false), {
-        status: 400,
-        headers: securityHeaders,
-      })
-    }
-
-    // Vérifier l'expiration (30 jours)
-    if (Date.now() - payload.t > 30 * 24 * 60 * 60 * 1000) {
-      return new NextResponse(unsubscribePage('Ce lien a expiré', false), {
+    if (!payload) {
+      return new NextResponse(unsubscribePage('Lien invalide ou expiré', false), {
         status: 400,
         headers: securityHeaders,
       })

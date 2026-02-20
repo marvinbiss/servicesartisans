@@ -22,26 +22,23 @@ const artisanIdSchema = z.string().min(1).max(255).regex(
 // Type pour les données artisan enrichies
 interface ArtisanDetails {
   id: string
-  slug?: string  // URL slug for SEO-friendly URLs
+  slug?: string
   business_name: string | null
   first_name: string | null
   last_name: string | null
-  avatar_url: string | null
   city: string
-  city_slug?: string  // URL slug for city
+  city_slug?: string
   postal_code: string
   address: string | null
   department?: string
   department_code?: string
   region?: string
   specialty: string
-  specialty_slug?: string  // URL slug for specialty/service
+  specialty_slug?: string
   description: string | null
   average_rating: number
   review_count: number
-  hourly_rate: number | null
   is_verified: boolean
-  is_premium: boolean
   is_center: boolean
   team_size: number | null
   services: string[]
@@ -52,18 +49,8 @@ interface ArtisanDetails {
     duration?: string
   }>
   accepts_new_clients: boolean
-  intervention_zone: string | null
   intervention_zones: string[]
-  response_time: string | null
-  experience_years: number | null
-  certifications: string[]
-  insurance: string[]
-  payment_methods: string[]
-  languages: string[]
-  emergency_available: boolean
   member_since: string | null
-  response_rate: number | null
-  bookings_this_week: number | null
   portfolio: Array<{
     id: string
     title: string
@@ -79,8 +66,6 @@ interface ArtisanDetails {
   siren: string | null
   legal_form: string | null
   creation_date: string | null
-  employee_count: number | null
-  annual_revenue: number | null
   phone: string | null
   email: string | null
   website: string | null
@@ -154,9 +139,10 @@ export async function GET(
     const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(artisanId)
 
     // First, try a simple query to find the provider
+    const PROVIDER_COLUMNS = 'id,name,slug,email,phone,siret,is_verified,is_active,stable_id,noindex,address_city,address_postal_code,address_street,address_region,specialty,rating_average,review_count,created_at,siren,legal_form,creation_date,description,meta_description,website,latitude,longitude'
     let simpleQuery = supabase
       .from('providers')
-      .select('*')
+      .select(PROVIDER_COLUMNS)
 
     if (isUUID) {
       simpleQuery = simpleQuery.eq('id', artisanId)
@@ -172,7 +158,8 @@ export async function GET(
     }
 
     // Now get full data with relations (if tables exist)
-    let provider = simpleProvider
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- provider may include join columns (provider_services, provider_locations, portfolio_items) from the full query
+    let provider: Record<string, any> | null = simpleProvider
     const providerError = simpleError
 
     if (simpleProvider) {
@@ -181,16 +168,16 @@ export async function GET(
         const { data: fullProvider } = await supabase
           .from('providers')
           .select(`
-            *,
+            ${PROVIDER_COLUMNS},
             provider_services (
-              *,
-              service:services (*)
+              service_id, price_min, price_max, price_unit,
+              service:services (id, name, slug)
             ),
             provider_locations (
-              *,
-              location:locations (*)
+              radius_km,
+              location:locations (id, name, slug, postal_code)
             ),
-            portfolio_items (*)
+            portfolio_items (id, title, description, image_url, category)
           `)
           .eq('id', simpleProvider.id)
           .single()
@@ -211,13 +198,13 @@ export async function GET(
       const [{ data: providerReviews }, { data: faqData }] = await Promise.all([
         supabase
           .from('reviews')
-          .select('*')
+          .select('id, rating, author_name, content, service_name, source_date, created_at, has_media, author_verified')
           .eq('provider_id', provider.id)
           .order('created_at', { ascending: false })
           .limit(100),
         supabase
           .from('provider_faq')
-          .select('*')
+          .select('question, answer, sort_order')
           .eq('provider_id', provider.id)
           .order('sort_order', { ascending: true }),
       ])
@@ -324,7 +311,6 @@ export async function GET(
         business_name: provider.name,
         first_name: null,
         last_name: null,
-        avatar_url: provider.avatar_url || null,
         city: provider.address_city || '',
         city_slug: provider.address_city ? slugify(provider.address_city) : undefined,
         postal_code: postalCode,
@@ -337,11 +323,9 @@ export async function GET(
         description: finalDescription,
         average_rating: Math.round(Number(finalRating) * 10) / 10,
         review_count: finalReviewCount,
-        hourly_rate: provider.hourly_rate_min || null,
         is_verified: provider.is_verified,
-        is_premium: provider.is_premium,
-        is_center: (provider.employee_count || 0) > 1,
-        team_size: provider.employee_count,
+        is_center: false,
+        team_size: null,
         services: services.length > 0 ? services : [finalSpecialty],
         service_prices: provider.provider_services?.map((ps: {
           service?: { name: string }
@@ -359,32 +343,16 @@ export async function GET(
           duration: undefined
         })) || [],
         accepts_new_clients: true,
-        intervention_zone: provider.intervention_zone || (provider.provider_locations?.[0]?.radius_km
-          ? `${provider.provider_locations[0].radius_km} km`
-          : null),
         intervention_zones: interventionZones,
-        response_time: provider.response_time || null,
-        experience_years: provider.creation_date
-          ? new Date().getFullYear() - new Date(provider.creation_date).getFullYear()
-          : null,
-        certifications: provider.certifications || [],
-        insurance: provider.insurance || [],
-        payment_methods: provider.payment_methods || [],
-        languages: provider.languages || [],
-        emergency_available: provider.emergency_available || false,
         member_since: provider.created_at
           ? new Date(provider.created_at).getFullYear().toString()
           : null,
-        response_rate: provider.response_rate || null,
-        bookings_this_week: null,
         portfolio,
         faq,
         siret: provider.siret,
         siren: provider.siren,
         legal_form: provider.legal_form,
         creation_date: provider.creation_date,
-        employee_count: provider.employee_count,
-        annual_revenue: provider.annual_revenue,
         phone: provider.phone,
         email: provider.email,
         website: provider.website,
@@ -417,7 +385,7 @@ export async function GET(
     if (!artisan) {
       const { data: profile, error: profileError } = await supabase
         .from('profiles')
-        .select('*')
+        .select('id, full_name, email, phone, company_name, city, postal_code, address, services, description, is_verified, team_size, accepts_new_clients, intervention_zones, siret, legal_form, creation_date, website, latitude, longitude, created_at, user_type')
         .eq('id', artisanId)
         .eq('user_type', 'artisan')
         .single()
@@ -429,7 +397,7 @@ export async function GET(
         const { data: profileReviews } = await supabase
           .from('reviews')
           .select(`
-            *,
+            id, rating, comment, service_name, photo_url, is_verified, created_at,
             client:profiles!reviews_client_id_fkey (full_name)
           `)
           .eq('artisan_id', artisanId)
@@ -439,7 +407,7 @@ export async function GET(
         // Récupérer le portfolio (filtrer les données de démo)
         const { data: portfolioData } = await supabase
           .from('portfolio_items')
-          .select('*')
+          .select('id, title, description, image_url, category, created_at')
           .eq('user_id', artisanId)
           .order('created_at', { ascending: false })
 
@@ -469,7 +437,7 @@ export async function GET(
         // Récupérer la FAQ
         const { data: faqData } = await supabase
           .from('artisan_faq')
-          .select('*')
+          .select('question, answer, sort_order')
           .eq('user_id', artisanId)
           .order('sort_order', { ascending: true })
 
@@ -498,7 +466,6 @@ export async function GET(
           business_name: profile.company_name,
           first_name: firstName,
           last_name: lastName,
-          avatar_url: profile.avatar_url,
           city: profile.city || '',
           postal_code: profile.postal_code || '',
           address: profile.address,
@@ -506,36 +473,22 @@ export async function GET(
           description: profile.description,
           average_rating: Math.round(averageRating * 10) / 10,
           review_count: reviewCount,
-          hourly_rate: profile.hourly_rate || null,
           is_verified: profile.is_verified,
-          is_premium: profile.subscription_plan === 'premium',
           is_center: !!profile.company_name,
           team_size: profile.team_size || null,
           services: profile.services || [],
           service_prices: [],
           accepts_new_clients: profile.accepts_new_clients !== false,
-          intervention_zone: profile.intervention_zone || null,
           intervention_zones: profile.intervention_zones || [],
-          response_time: profile.response_time || null,
-          experience_years: profile.experience_years || null,
-          certifications: profile.certifications || [],
-          insurance: profile.insurance || [],
-          payment_methods: profile.payment_methods || [],
-          languages: profile.languages || [],
-          emergency_available: profile.emergency_available || false,
           member_since: profile.created_at
             ? new Date(profile.created_at).getFullYear().toString()
             : null,
-          response_rate: profile.response_rate || null,
-          bookings_this_week: null,
           portfolio,
           faq,
           siret: profile.siret,
           siren: null,
           legal_form: profile.legal_form || null,
           creation_date: profile.creation_date || null,
-          employee_count: profile.employee_count || null,
-          annual_revenue: null,
           phone: profile.phone,
           email: profile.email,
           website: profile.website || null,
@@ -544,10 +497,14 @@ export async function GET(
         }
 
         // Transformer les avis
-        reviews = (profileReviews || []).map(r => ({
+        reviews = (profileReviews || []).map(r => {
+          // Supabase FK joins return object or array depending on cardinality
+          const clientData = Array.isArray(r.client) ? r.client[0] : r.client
+          const clientName = clientData?.full_name as string | undefined
+          return {
           id: r.id,
-          author: r.client?.full_name
-            ? `${r.client.full_name.split(' ')[0]} ${r.client.full_name.split(' ')[1]?.[0] || ''}.`
+          author: clientName
+            ? `${clientName.split(' ')[0]} ${clientName.split(' ')[1]?.[0] || ''}.`
             : 'Client',
           rating: r.rating,
           date: new Date(r.created_at).toLocaleDateString('fr-FR', {
@@ -560,7 +517,8 @@ export async function GET(
           hasPhoto: !!r.photo_url,
           photoUrl: r.photo_url || null,
           verified: r.is_verified,
-        }))
+        }
+        })
       }
     }
 

@@ -33,7 +33,7 @@ export async function POST(
     const { data: booking, error: bookingError } = await supabase
       .from('bookings')
       .select(`
-        *,
+        id, status, client_name, client_email, client_phone, service_description,
         slot:availability_slots(
           id,
           date,
@@ -62,7 +62,7 @@ export async function POST(
     // Verify new slot exists and is available
     const { data: newSlot, error: slotError } = await supabase
       .from('availability_slots')
-      .select('*')
+      .select('id, artisan_id, date, start_time, end_time, is_available')
       .eq('id', newSlotId)
       .eq('is_available', true)
       .single()

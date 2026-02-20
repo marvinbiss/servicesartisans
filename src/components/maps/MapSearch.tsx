@@ -62,6 +62,13 @@ interface Provider {
   avatar_url?: string
 }
 
+interface MapBounds {
+  north: number
+  south: number
+  east: number
+  west: number
+}
+
 interface Filters {
   service: string
   minRating: number
@@ -105,7 +112,7 @@ export default function MapSearch() {
   const [showFilters, setShowFilters] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [mapReady, setMapReady] = useState(false)
-  const [currentBounds, setCurrentBounds] = useState<any>(null)
+  const [currentBounds, setCurrentBounds] = useState<MapBounds | null>(null)
   const [mapStyle, setMapStyle] = useState<'street' | 'light' | 'dark'>('light')
   const [showStylePicker, setShowStylePicker] = useState(false)
   const [viewMode, setViewMode] = useState<'split' | 'map' | 'list'>('split')
@@ -147,7 +154,7 @@ export default function MapSearch() {
   }, [filters])
 
   // World-class search with caching and performance monitoring
-  const searchInBounds = useCallback(async (bounds: any, query?: string) => {
+  const searchInBounds = useCallback(async (bounds: MapBounds, query?: string) => {
     if (!bounds) return
 
     // Check cache first
@@ -195,7 +202,7 @@ export default function MapSearch() {
   }, [filters, searchCache])
 
   // Handle bounds change with debounce
-  const handleBoundsChange = useCallback((bounds: any) => {
+  const handleBoundsChange = useCallback((bounds: MapBounds) => {
     setCurrentBounds(bounds)
 
     if (searchDebounceRef.current) {

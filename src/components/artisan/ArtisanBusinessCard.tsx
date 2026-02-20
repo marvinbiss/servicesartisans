@@ -1,6 +1,6 @@
 'use client'
 
-import { Shield, CheckCircle, ExternalLink, Phone, Building2, Calendar, Users, Hash, Scale, Briefcase } from 'lucide-react'
+import { Shield, CheckCircle, ExternalLink, Phone, Building2, Calendar, Hash, Scale, Briefcase } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 
 interface ArtisanBusinessCardProps {
@@ -61,7 +61,7 @@ function getYearsSinceCreation(dateStr: string): number | null {
 
 export function ArtisanBusinessCard({ artisan }: ArtisanBusinessCardProps) {
   const hasSiret = !!artisan.siret
-  const hasAnyData = hasSiret || artisan.legal_form || artisan.creation_date || artisan.employee_count || isValidPhone(artisan.phone) || artisan.email || artisan.website
+  const hasAnyData = hasSiret || artisan.legal_form || artisan.creation_date || isValidPhone(artisan.phone) || artisan.email || artisan.website
 
   if (!hasAnyData) return null
 
@@ -142,19 +142,6 @@ export function ArtisanBusinessCard({ artisan }: ArtisanBusinessCardProps) {
             </div>
           )}
 
-          {artisan.employee_count != null && artisan.employee_count > 0 && (
-            <div className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50/80 border border-slate-100 transition-colors hover:bg-slate-100/80">
-              <div className="w-9 h-9 rounded-lg bg-white flex items-center justify-center shadow-sm flex-shrink-0">
-                <Users className="w-4 h-4 text-green-600" aria-hidden="true" />
-              </div>
-              <div className="min-w-0">
-                <dt className="text-xs font-medium text-slate-500 uppercase tracking-wide">Effectif</dt>
-                <dd className="mt-0.5 text-sm font-semibold text-gray-900">
-                  {artisan.employee_count} {artisan.employee_count === 1 ? 'personne' : 'personnes'}
-                </dd>
-              </div>
-            </div>
-          )}
         </dl>
 
         {/* Contact actions row */}

@@ -161,7 +161,7 @@ export class TwoFactorAuthService {
   async verifyAndEnable(userId: string, code: string): Promise<boolean> {
     const { data: twoFactor } = await this.supabase
       .from('two_factor_auth')
-      .select('*')
+      .select('id, user_id, secret, backup_codes, verified, verified_at, last_used_at, created_at')
       .eq('user_id', userId)
       .single()
 
@@ -210,7 +210,7 @@ export class TwoFactorAuthService {
   async verifyCode(userId: string, code: string): Promise<boolean> {
     const { data: twoFactor } = await this.supabase
       .from('two_factor_auth')
-      .select('*')
+      .select('id, user_id, secret, backup_codes, verified, verified_at, last_used_at, created_at')
       .eq('user_id', userId)
       .eq('verified', true)
       .single()
@@ -248,7 +248,7 @@ export class TwoFactorAuthService {
   private async verifyBackupCode(
     userId: string,
     code: string,
-    twoFactor: any
+    twoFactor: { backup_codes: string[] | null }
   ): Promise<boolean> {
     const hashedCode = this.hashCode(code)
     const backupCodes: string[] = twoFactor.backup_codes || []
@@ -343,7 +343,7 @@ export class TwoFactorAuthService {
   async getStatus(userId: string): Promise<TwoFactorStatus> {
     const { data: twoFactor } = await this.supabase
       .from('two_factor_auth')
-      .select('*')
+      .select('id, user_id, backup_codes, verified, last_used_at, created_at')
       .eq('user_id', userId)
       .single()
 

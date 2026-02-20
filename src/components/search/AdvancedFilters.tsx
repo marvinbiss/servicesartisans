@@ -54,7 +54,7 @@ export function AdvancedFilters({
     setExpandedSections(newSections)
   }
 
-  const handleChange = (key: keyof FilterValues, value: any) => {
+  const handleChange = (key: keyof FilterValues, value: FilterValues[keyof FilterValues]) => {
     onChange({ ...values, [key]: value })
   }
 
@@ -251,7 +251,7 @@ export function AdvancedFilters({
             </label>
             <select
               value={values.sortBy || 'relevance'}
-              onChange={(e) => handleChange('sortBy', e.target.value as any)}
+              onChange={(e) => handleChange('sortBy', e.target.value as FilterValues['sortBy'])}
               className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
             >
               <option value="relevance">Pertinence</option>

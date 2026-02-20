@@ -25,6 +25,7 @@ import { villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
 import { getCommuneBySlug, formatNumber } from '@/lib/data/commune-data'
 import { getServiceImage } from '@/lib/data/images'
 import { relatedServices } from '@/lib/constants/navigation'
+import { getCityValues } from '@/lib/insee-resolver'
 
 export const revalidate = 86400 // Revalidate every 24h
 
@@ -66,7 +67,8 @@ async function getTopProviders(cityName: string, _serviceSlug: string): Promise<
       .select('id, name, slug, stable_id, address_city, rating_average, review_count, is_verified, specialty')
       .eq('is_active', true)
       .gt('review_count', 0)
-      .ilike('address_city', cityName)
+      // Use .in() with INSEE codes instead of ILIKE to avoid full table scan on 750K rows
+      .in('address_city', getCityValues(cityName))
       .order('rating_average', { ascending: false, nullsFirst: false })
       .order('review_count', { ascending: false })
       .limit(20)

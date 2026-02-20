@@ -8,7 +8,6 @@ function createTestArtisan(overrides: Partial<Artisan> = {}): Artisan {
     business_name: null,
     first_name: null,
     last_name: null,
-    avatar_url: null,
     city: 'Paris',
     postal_code: '75001',
     specialty: 'Plomberie',

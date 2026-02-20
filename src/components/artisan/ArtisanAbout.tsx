@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { User, ChevronDown, Shield, Award, CheckCircle } from 'lucide-react'
+import { User, ChevronDown } from 'lucide-react'
 import { Artisan } from './types'
 
 interface ArtisanAboutProps {
@@ -61,69 +61,7 @@ export function ArtisanAbout({ artisan }: ArtisanAboutProps) {
         </div>
       ) : null}
 
-      {/* Certifications List */}
-      {artisan.certifications && artisan.certifications.length > 0 && (
-        <div className="mx-6 mt-6 pt-6 border-t border-gray-100">
-          <h3 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
-            <Award className="w-4 h-4 text-purple-600" />
-            Certifications &amp; Qualifications
-          </h3>
-          <div className="flex flex-wrap gap-2">
-            {artisan.certifications.map((cert, i) => (
-              <span
-                key={i}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-50 text-purple-700 text-sm border border-purple-200 font-medium"
-              >
-                <CheckCircle className="w-3.5 h-3.5" />
-                {cert}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Insurance List */}
-      {artisan.insurance && artisan.insurance.length > 0 && (
-        <div className="mx-6 mt-6 pt-6 border-t border-gray-100">
-          <h3 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
-            <Shield className="w-4 h-4 text-green-600" />
-            Assurances
-          </h3>
-          <div className="flex flex-wrap gap-2">
-            {artisan.insurance.map((ins, i) => (
-              <span
-                key={i}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-50 text-green-700 text-sm border border-green-200 font-medium"
-              >
-                <CheckCircle className="w-3.5 h-3.5" />
-                {ins}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Languages */}
-      {artisan.languages && artisan.languages.length > 0 && (
-        <div className="mx-6 mt-6 pt-6 border-t border-gray-100 pb-6">
-          <h3 className="text-sm font-semibold text-gray-900 mb-3">Langues parl&eacute;es</h3>
-          <div className="flex flex-wrap gap-2">
-            {artisan.languages.map((lang, i) => (
-              <span
-                key={i}
-                className="px-3 py-1.5 rounded-lg bg-gray-50 border border-gray-100 text-slate-700 text-sm font-medium"
-              >
-                {lang}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Bottom padding when no languages section */}
-      {(!artisan.languages || artisan.languages.length === 0) && (
-        <div className="pb-6" />
-      )}
+      <div className="pb-6" />
     </motion.div>
   )
 }

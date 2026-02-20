@@ -382,7 +382,7 @@ class ChatService {
   async getReactions(messageId: string): Promise<MessageReaction[]> {
     const { data, error } = await this.supabase
       .from('message_reactions')
-      .select('*')
+      .select('id, message_id, user_id, emoji, created_at')
       .eq('message_id', messageId)
 
     if (error) {
@@ -516,7 +516,7 @@ class ChatService {
   ): Promise<ChatMessage[]> {
     const { data, error } = await this.supabase
       .from('messages')
-      .select('*')
+      .select('id, conversation_id, sender_id, sender_type, content, message_type, file_url, read_at, created_at, edited_at, deleted_at, reply_to_message_id, rich_content')
       .eq('conversation_id', conversationId)
       .is('deleted_at', null)
       .textSearch('search_vector', query, {
@@ -545,7 +545,7 @@ class ChatService {
     // Try to find existing conversation
     const { data: existing } = await this.supabase
       .from('conversations')
-      .select('*')
+      .select('id, client_id, provider_id, quote_id, booking_id, status, last_message_at, unread_count, created_at')
       .eq('client_id', clientId)
       .eq('provider_id', providerId)
       .eq('status', 'active')
@@ -746,7 +746,7 @@ class ChatService {
   async getQuickReplies(userId: string): Promise<QuickReplyTemplate[]> {
     const { data, error } = await this.supabase
       .from('quick_reply_templates')
-      .select('*')
+      .select('id, user_id, title, content, shortcut, category, usage_count, is_active, created_at')
       .eq('user_id', userId)
       .eq('is_active', true)
       .order('usage_count', { ascending: false })

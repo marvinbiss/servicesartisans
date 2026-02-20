@@ -76,7 +76,7 @@ export default function ParametresClientPage() {
   const [deleteConfirmText, setDeleteConfirmText] = useState('')
   const [deletePassword, setDeletePassword] = useState('')
   const [deleteReason, setDeleteReason] = useState('')
-  const [deletionStatus, setDeletionStatus] = useState<any>(null)
+  const [deletionStatus, setDeletionStatus] = useState<{ status: string; scheduled_deletion_at?: string } | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
   const [saveSuccess, setSaveSuccess] = useState(false)
@@ -315,7 +315,7 @@ export default function ParametresClientPage() {
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
-                  onClick={() => setActiveTab(tab.id as any)}
+                  onClick={() => setActiveTab(tab.id as typeof activeTab)}
                   className={`flex items-center gap-3 px-4 py-3 rounded-lg w-full transition-colors ${
                     activeTab === tab.id
                       ? 'bg-blue-50 text-blue-600 font-medium'
@@ -758,7 +758,7 @@ export default function ParametresClientPage() {
                           <p className="text-sm text-red-700 mb-3">
                             Votre compte est programmé pour suppression le{' '}
                             <strong>
-                              {new Date(deletionStatus.scheduled_deletion_at).toLocaleDateString('fr-FR')}
+                              {new Date(deletionStatus.scheduled_deletion_at ?? '').toLocaleDateString('fr-FR')}
                             </strong>.
                           </p>
                           <button

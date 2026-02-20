@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { getCachedData, generateCacheKey, CACHE_TTL } from '@/lib/cache'
 import { logger } from '@/lib/logger'
+import { getCityValues } from '@/lib/insee-resolver'
 
 export interface Service {
   id: string
@@ -34,7 +35,7 @@ export async function getServices(): Promise<Service[]> {
       const supabase = await createClient()
       const { data, error } = await supabase
         .from('services')
-        .select('*')
+        .select('id, name, slug, description, icon, category, is_active')
         .eq('is_active', true)
         .order('name')
 
@@ -59,7 +60,7 @@ export async function getServiceBySlug(slug: string): Promise<Service | null> {
       const supabase = await createClient()
       const { data, error } = await supabase
         .from('services')
-        .select('*')
+        .select('id, name, slug, description, icon, category, is_active')
         .eq('slug', slug)
         .eq('is_active', true)
         .single()
@@ -102,7 +103,8 @@ export async function getArtisans(params: {
       }
 
       if (params.city) {
-        query = query.ilike('address_city', `%${params.city}%`)
+        // Use .in() with INSEE codes instead of ILIKE to avoid full table scan on 750K rows
+        query = query.in('address_city', getCityValues(params.city))
       }
 
       if (params.postalCode) {
@@ -215,6 +217,9 @@ export async function getArtisanReviews(artisanId: string, limit = 10) {
 
 /**
  * Get platform stats
+ *
+ * Uses the v_public_stats SQL view (migration 109) which computes all
+ * aggregates server-side in a single query instead of fetching rows to JS.
  */
 export async function getPlatformStats() {
   return getCachedData(
@@ -222,40 +227,26 @@ export async function getPlatformStats() {
     async () => {
       const supabase = await createClient()
 
-      const [providersResult, reviewsCountResult, reviewsAvgResult, citiesResult] = await Promise.all([
-        supabase
-          .from('providers')
-          .select('id', { count: 'exact', head: true })
-          .eq('is_active', true)
-          .eq('is_verified', true),
-        supabase
-          .from('reviews')
-          .select('id', { count: 'exact', head: true }),
-        supabase
-          .from('reviews')
-          .select('rating')
-          .limit(1000),
-        supabase
-          .from('providers')
-          .select('address_city')
-          .eq('is_active', true)
-          .eq('is_verified', true),
-      ])
+      const { data, error } = await supabase
+        .from('v_public_stats')
+        .select('total_verified, total_reviews, avg_rating, total_cities')
+        .single()
 
-      const totalArtisans = providersResult.count || 0
-      const totalReviews = reviewsCountResult.count || 0
-      const reviewsSample = reviewsAvgResult.data || []
-      const avgRating =
-        reviewsSample.length > 0
-          ? reviewsSample.reduce((sum, r) => sum + r.rating, 0) / reviewsSample.length
-          : 0
-      const uniqueCities = new Set(citiesResult.data?.map((p) => p.address_city).filter(Boolean))
+      if (error) {
+        logger.error('Error fetching platform stats', error)
+        return {
+          totalArtisans: 0,
+          totalReviews: 0,
+          averageRating: 0,
+          totalCities: 0,
+        }
+      }
 
       return {
-        totalArtisans,
-        totalReviews,
-        averageRating: Math.round(avgRating * 10) / 10,
-        totalCities: uniqueCities.size,
+        totalArtisans: data.total_verified || 0,
+        totalReviews: data.total_reviews || 0,
+        averageRating: data.avg_rating || 0,
+        totalCities: data.total_cities || 0,
       }
     },
     CACHE_TTL.stats

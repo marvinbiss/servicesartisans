@@ -20,8 +20,6 @@ interface ProviderRecord {
   business_name?: string | null
   first_name?: string | null
   last_name?: string | null
-  avatar_url?: string | null
-  logo_url?: string | null
   specialty?: string | null
   description?: string | null
   bio?: string | null
@@ -36,19 +34,10 @@ interface ProviderRecord {
   rating_average?: number | null
   average_rating?: number | null
   review_count?: number | null
-  experience_years?: number | null
-  employee_count?: number | null
   team_size?: number | null
-  certifications?: string[] | null
-  insurance?: string[] | null
-  payment_methods?: string[] | null
-  languages?: string[] | null
-  emergency_available?: boolean | null
   available_24h?: boolean | null
   accepts_new_clients?: boolean | null
   free_quote?: boolean | null
-  hourly_rate_min?: number | null
-  hourly_rate_max?: number | null
   phone?: string | null
   phone_secondary?: string | null
   email?: string | null
@@ -120,7 +109,6 @@ function convertToArtisan(provider: ProviderRecord, service: Service | null, loc
     business_name: name,
     first_name: provider.first_name || null,
     last_name: provider.last_name || null,
-    avatar_url: provider.avatar_url || provider.logo_url || null,
     city: city,
     postal_code: String(location?.postal_code || provider.address_postal_code || '').replace(/\.0$/, ''),
     address: provider.address_street || '',
@@ -144,15 +132,7 @@ function convertToArtisan(provider: ProviderRecord, service: Service | null, loc
     prices_are_estimated: false,
     accepts_new_clients: provider.accepts_new_clients === true ? true : undefined,
     free_quote: provider.free_quote === true ? true : undefined,
-    experience_years: provider.experience_years || undefined,
-    certifications: provider.certifications || [],
-    insurance: provider.insurance || [],
-    payment_methods: provider.payment_methods || [],
-    languages: provider.languages || [],
-    emergency_available: provider.emergency_available || false,
     available_24h: provider.available_24h || false,
-    hourly_rate_min: provider.hourly_rate_min != null ? Number(provider.hourly_rate_min) : undefined,
-    hourly_rate_max: provider.hourly_rate_max != null ? Number(provider.hourly_rate_max) : undefined,
     phone_secondary: provider.phone_secondary || undefined,
     opening_hours: provider.opening_hours && Object.keys(provider.opening_hours).length > 0 ? provider.opening_hours : undefined,
     intervention_radius_km: provider.intervention_radius_km || undefined,
@@ -160,7 +140,6 @@ function convertToArtisan(provider: ProviderRecord, service: Service | null, loc
     siret: provider.siret || undefined,
     legal_form: provider.legal_form || undefined,
     creation_date: provider.creation_date || undefined,
-    employee_count: provider.employee_count || undefined,
     phone: provider.phone || undefined,
     email: provider.email || undefined,
     website: provider.website || undefined,
@@ -197,27 +176,6 @@ function generateDescription(name: string, specialty: string, city: string, prov
     if (age > 1) {
       parts.push(`Fondée en ${year}, l'entreprise bénéficie de plus de ${age} ans de présence dans la région.`)
     }
-  } else if (provider?.experience_years && provider.experience_years > 0) {
-    parts.push(`Fort de ${provider.experience_years} ans d'expérience, ce professionnel maîtrise tous les aspects du métier.`)
-  }
-
-  // Team and structure
-  if (provider?.employee_count && provider.employee_count > 1) {
-    parts.push(`L'équipe, composée de ${provider.employee_count} personnes, assure des interventions rapides et soignées.`)
-  }
-
-  // Certifications
-  if (provider?.certifications && provider.certifications.length > 0) {
-    if (provider.certifications.length === 1) {
-      parts.push(`Certifié ${provider.certifications[0]}.`)
-    } else {
-      parts.push(`Titulaire de ${provider.certifications.length} certifications professionnelles dont ${provider.certifications[0]}.`)
-    }
-  }
-
-  // Insurance
-  if (provider?.insurance && provider.insurance.length > 0) {
-    parts.push(`Assuré pour la garantie décennale et la responsabilité civile professionnelle.`)
   }
 
   // Verification
@@ -446,8 +404,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       getProviderBySlug(publicId).catch(() => null),
       getServiceBySlug(serviceSlug).catch(() => null),
     ])
-    const provider = stableIdResult || slugResult
-    if (!provider) return { title: 'Artisan non trouvé', robots: { index: false, follow: false } }
+    const rawProvider = stableIdResult || slugResult
+    if (!rawProvider) return { title: 'Artisan non trouvé', robots: { index: false, follow: false } }
+
+    // Cast to access DB columns that TS can't infer from select('*')
+    const provider = rawProvider as unknown as ProviderRecord
 
     // Resolve provider's real city (may be INSEE code in DB)
     const resolved = resolveProviderCity(provider)
@@ -469,11 +430,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
     const descParts: string[] = []
     descParts.push(`${displayName}, ${serviceName.toLowerCase()} à ${realCity}`)
-    if (provider.experience_years) descParts.push(`${provider.experience_years} ans d'expérience`)
     if (provider.review_count && provider.review_count > 0) {
       descParts.push(`${provider.review_count} avis${provider.rating_average ? ` (${Number(provider.rating_average).toFixed(1)}/5)` : ''}`)
     }
-    if (provider.certifications?.length) descParts.push(`${provider.certifications.length} certification${provider.certifications.length > 1 ? 's' : ''}`)
     if (provider.siret) descParts.push('SIRET vérifié')
     descParts.push('Devis gratuit')
     const rawDesc = descParts.join(' \u00b7 ') + '.'
@@ -484,8 +443,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
     const serviceImage = getServiceImage(serviceSlug)
     const ogAlt = `${displayName} - ${serviceName} à ${realCity}`
-    // Use avatar if available, otherwise fall back to service-specific image (not generic OG)
-    const ogImage = provider.avatar_url || serviceImage.src
+    const ogImage = serviceImage.src
 
     return {
       title,
@@ -538,7 +496,7 @@ export default async function ProviderPage({ params }: PageProps) {
       getServiceBySlug(serviceSlug).catch(() => null),
       getLocationBySlug(locationSlug).catch(() => null),
     ])
-    provider = stableIdResult || slugResult
+    provider = (stableIdResult || slugResult) as ProviderRecord | null
     service = svcResult
     location = locResult
   } catch {
@@ -583,15 +541,6 @@ export default async function ProviderPage({ params }: PageProps) {
   return (
     <>
       {/* Preload hints */}
-      {artisan.avatar_url && (
-        <link
-          rel="preload"
-          href={artisan.avatar_url}
-          as="image"
-          // @ts-expect-error fetchpriority is a valid HTML attribute on <link> but @types/react@18 lacks it
-          fetchpriority="high"
-        />
-      )}
       <link rel="dns-prefetch" href="//umjmbdbwcsxrvfqktiui.supabase.co" />
 
       {/* JSON-LD structured data (BreadcrumbList, LocalBusiness, ProfilePage, etc.)
