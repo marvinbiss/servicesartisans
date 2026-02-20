@@ -1,10 +1,12 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
-import { MapPin, List, Map as MapIcon, Search } from 'lucide-react'
+import { MapPin, List, Map as MapIcon, Search, ChevronDown } from 'lucide-react'
 import { Provider, Service, Location } from '@/types'
 import ProviderList from '@/components/ProviderList'
+
+const PAGE_SIZE = 50
 
 // Import GeographicMap (world-class version) dynamically to avoid SSR issues with Leaflet
 const GeographicMap = dynamic(() => import('@/components/maps/GeographicMap'), {
@@ -24,19 +26,48 @@ interface ServiceLocationPageClientProps {
   location: Location
   providers: Provider[]
   h1Text?: string
+  totalCount?: number
+  serviceSlug?: string
+  locationSlug?: string
 }
 
 export default function ServiceLocationPageClient({
   service,
   location,
-  providers,
+  providers: initialProviders,
   h1Text,
+  totalCount = 0,
+  serviceSlug,
+  locationSlug,
 }: ServiceLocationPageClientProps) {
+  const [allProviders, setAllProviders] = useState<Provider[]>(initialProviders)
+  const [isLoadingMore, setIsLoadingMore] = useState(false)
   const [selectedProvider, setSelectedProvider] = useState<Provider | null>(null)
   const [viewMode, setViewMode] = useState<'split' | 'list' | 'map'>('split')
   const [_isMobile, setIsMobile] = useState(false)
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
   const [sortOrder, setSortOrder] = useState<'default' | 'name' | 'rating'>('default')
+
+  const hasMore = allProviders.length < totalCount
+
+  const loadMore = useCallback(async () => {
+    if (isLoadingMore || !hasMore || !serviceSlug || !locationSlug) return
+    setIsLoadingMore(true)
+    try {
+      const res = await fetch(
+        `/api/providers/listing?service=${serviceSlug}&location=${locationSlug}&offset=${allProviders.length}&limit=${PAGE_SIZE}`
+      )
+      if (!res.ok) throw new Error('fetch error')
+      const data = await res.json()
+      if (data.providers?.length) {
+        setAllProviders(prev => [...prev, ...data.providers])
+      }
+    } catch {
+      // silently fail — user can retry by clicking again
+    } finally {
+      setIsLoadingMore(false)
+    }
+  }, [isLoadingMore, hasMore, serviceSlug, locationSlug, allProviders.length])
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768)
@@ -207,14 +238,32 @@ export default function ServiceLocationPageClient({
         {/* Provider List */}
         {(viewMode === 'split' || viewMode === 'list') && (
           <div
-            className={`bg-white border-r border-gray-200 max-h-[60vh] overflow-y-auto md:max-h-none md:overflow-hidden ${
+            className={`bg-white border-r border-gray-200 max-h-[60vh] overflow-y-auto md:max-h-none md:overflow-y-auto ${
               viewMode === 'split' ? 'w-full md:w-1/2 lg:w-2/5' : 'w-full'
             }`}
           >
             <ProviderList
-              providers={providers}
+              providers={allProviders}
               onProviderHover={setSelectedProvider}
             />
+            {hasMore && (
+              <div className="p-4 border-t border-gray-100 bg-white sticky bottom-0">
+                <button
+                  onClick={loadMore}
+                  disabled={isLoadingMore}
+                  className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold rounded-xl transition-colors disabled:opacity-60"
+                >
+                  {isLoadingMore ? (
+                    <span className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <ChevronDown className="w-4 h-4" />
+                  )}
+                  {isLoadingMore
+                    ? 'Chargement...'
+                    : `Afficher plus (${allProviders.length} / ${totalCount.toLocaleString('fr-FR')})`}
+                </button>
+              </div>
+            )}
           </div>
         )}
 
@@ -231,7 +280,7 @@ export default function ServiceLocationPageClient({
               centerLat={mapCenter[0]}
               centerLng={mapCenter[1]}
               zoom={mapZoom}
-              providers={providers.map(p => ({
+              providers={allProviders.map(p => ({
                 id: p.id,
                 name: p.name || '',
                 stable_id: p.stable_id ?? undefined,

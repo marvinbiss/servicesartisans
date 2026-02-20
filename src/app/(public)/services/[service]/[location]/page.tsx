@@ -285,9 +285,12 @@ export default async function ServiceLocationPage({ params }: PageProps) {
     location = fallback
   }
 
-  // 3. Fetch providers — throw on failure so ISR keeps stale cache
-  // (prevents "artisans disappear" bug where cached page is replaced with empty data)
-  const providers = await getProvidersByServiceAndLocation(serviceSlug, locationSlug)
+  // 3. Fetch providers + total count in parallel
+  // (throw on providers failure so ISR keeps stale cache)
+  const [providers, totalProviderCount] = await Promise.all([
+    getProvidersByServiceAndLocation(serviceSlug, locationSlug),
+    getProviderCountByServiceAndLocation(serviceSlug, locationSlug).catch(() => 0),
+  ])
 
   const trade = getTradeContent(serviceSlug)
   const baseSchemas = generateJsonLd(service, location, providers || [], serviceSlug, locationSlug)
@@ -396,6 +399,9 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         location={location}
         providers={(providers || []) as unknown as Provider[]}
         h1Text={h1Text}
+        totalCount={totalProviderCount}
+        serviceSlug={serviceSlug}
+        locationSlug={locationSlug}
       />
 
       <SeoContent

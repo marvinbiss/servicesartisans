@@ -334,7 +334,8 @@ const SERVICE_TO_SPECIALTIES: Record<string, string[]> = {
 
 export async function getProvidersByServiceAndLocation(
   serviceSlug: string,
-  locationSlug: string
+  locationSlug: string,
+  { limit = 50, offset = 0 }: { limit?: number; offset?: number } = {}
 ) {
   if (IS_BUILD) return [] // Skip during build — ISR will populate on first visit
 
@@ -359,7 +360,7 @@ export async function getProvidersByServiceAndLocation(
           .eq('is_active', true)
           .order('is_verified', { ascending: false })
           .order('name')
-          .limit(500)
+          .range(offset, offset + limit - 1)
 
         if (directError) {
           console.warn(`[getProvidersByServiceAndLocation] primary query error for ${serviceSlug}/${locationSlug}:`, directError.message)
@@ -378,7 +379,7 @@ export async function getProvidersByServiceAndLocation(
             .eq('is_active', true)
             .order('is_verified', { ascending: false })
             .order('name')
-            .limit(500)
+            .range(offset, offset + limit - 1)
 
           if (!error && data && data.length > 0) return resolveProviderCities(data as unknown as ProviderListRow[])
         }
