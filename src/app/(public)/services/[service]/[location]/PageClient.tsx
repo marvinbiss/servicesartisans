@@ -245,6 +245,7 @@ export default function ServiceLocationPageClient({
             <ProviderList
               providers={allProviders}
               onProviderHover={setSelectedProvider}
+              totalCount={totalCount || allProviders.length}
             />
             {hasMore && (
               <div className="p-4 border-t border-gray-100 bg-white sticky bottom-0">

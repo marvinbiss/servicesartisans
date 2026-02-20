@@ -11,6 +11,7 @@ interface ProviderListProps {
   providers: Provider[]
   onProviderHover?: (provider: Provider | null) => void
   isLoading?: boolean
+  totalCount?: number
 }
 
 interface FilterState {
@@ -24,6 +25,7 @@ export default function ProviderList({
   providers,
   onProviderHover,
   isLoading = false,
+  totalCount,
 }: ProviderListProps) {
   const [filters, setFilters] = useState<FilterState>({
     verified: false,
@@ -59,7 +61,7 @@ export default function ProviderList({
       {/* Filters */}
       <SearchFilters
         onFilterChange={setFilters}
-        totalResults={isLoading ? 0 : sortedProviders.length}
+        totalResults={isLoading ? 0 : (totalCount ?? sortedProviders.length)}
       />
 
       {/* Provider list */}
