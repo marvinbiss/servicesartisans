@@ -123,7 +123,7 @@ export function getArtisanUrl(artisan: {
   const normalized = _normalize(artisan.specialty || '')
   const serviceSlug = _serviceMap.get(normalized) || _specialtyToServiceSlug[normalized] || slugify(artisan.specialty || 'artisan')
   const locationSlug = _villeMap.get(_normalize(artisan.city || '')) || slugify(artisan.city || 'france')
-  const id = artisan.stable_id || artisan.slug || ''
+  const id = artisan.slug || artisan.stable_id || ''
   return `/services/${serviceSlug}/${locationSlug}/${id}`
 }
 
