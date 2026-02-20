@@ -77,6 +77,13 @@ const nextConfig = {
     ]
   },
 
+  async rewrites() {
+    return [
+      // Next.js 14.2 generateSitemaps() doesn't auto-generate the sitemap index
+      { source: '/sitemap.xml', destination: '/api/sitemap-index' },
+    ]
+  },
+
   env: {
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr',
   },
