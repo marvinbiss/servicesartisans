@@ -25,7 +25,7 @@ interface OpeningHours {
   dimanche: DaySchedule
 }
 
-const FIELDS = ['opening_hours', 'emergency_available', 'available_24h', 'accepts_new_clients'] as const
+const FIELDS = ['opening_hours', 'available_24h', 'accepts_new_clients'] as const
 
 const DAYS: { key: keyof OpeningHours; label: string }[] = [
   { key: 'lundi', label: 'Lundi' },
@@ -57,7 +57,6 @@ export function DisponibiliteSection({ provider, onSaved }: DisponibiliteSection
 
   const isUsingDefaults = !provider['opening_hours']
   const openingHours = (formData.opening_hours as OpeningHours) || DEFAULT_HOURS
-  const emergencyAvailable = Boolean(formData.emergency_available)
   const available24h = Boolean(formData.available_24h)
   const acceptsNewClients = formData.accepts_new_clients !== false
 
@@ -156,28 +155,6 @@ export function DisponibiliteSection({ provider, onSaved }: DisponibiliteSection
 
         {/* Toggle switches */}
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <label htmlFor="dispo-emergency" className="text-sm font-medium text-gray-700">
-              Disponible en urgence 24h/24
-            </label>
-            <button
-              id="dispo-emergency"
-              type="button"
-              role="switch"
-              aria-checked={emergencyAvailable}
-              onClick={() => setField('emergency_available', !emergencyAvailable)}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                emergencyAvailable ? 'bg-blue-600' : 'bg-gray-300'
-              }`}
-            >
-              <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                  emergencyAvailable ? 'translate-x-6' : 'translate-x-1'
-                }`}
-              />
-            </button>
-          </div>
-
           <div className="flex items-center justify-between">
             <label htmlFor="dispo-24h" className="text-sm font-medium text-gray-700">
               Disponible 24h/24

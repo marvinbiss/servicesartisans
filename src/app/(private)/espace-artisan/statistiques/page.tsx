@@ -60,13 +60,13 @@ export default function StatistiquesPage() {
           deposit_amount,
           slot:availability_slots(date, start_time, end_time)
         `)
-        .eq('artisan_id', user.id)
+        .eq('provider_id', user.id)
 
       // Fetch reviews
       const { data: reviews } = await supabase
         .from('reviews')
         .select('rating')
-        .eq('artisan_id', user.id)
+        .eq('provider_id', user.id)
 
       // Calculate stats
       const now = new Date()

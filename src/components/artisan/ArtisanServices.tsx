@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Wrench, Clock, Euro, CheckCircle, CreditCard } from 'lucide-react'
+import { Wrench, Clock, Euro, CheckCircle } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 
 interface ArtisanServicesProps {
@@ -92,46 +92,6 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
           </div>
         )}
 
-        {/* Hourly rate */}
-        {(artisan.hourly_rate_min || artisan.hourly_rate_max) && (
-          <div className="mt-6 pt-6 border-t border-gray-100">
-            <div className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100">
-              <div>
-                <span className="font-medium text-gray-900">Taux horaire</span>
-                <p className="text-xs text-slate-500 mt-0.5">Applicable pour les interventions sur mesure</p>
-              </div>
-              <span className="text-2xl font-bold text-blue-600">
-                {artisan.hourly_rate_min && artisan.hourly_rate_max
-                  ? `${artisan.hourly_rate_min}€ - ${artisan.hourly_rate_max}€/h`
-                  : artisan.hourly_rate_min
-                    ? `À partir de ${artisan.hourly_rate_min}€/h`
-                    : `Jusqu'à ${artisan.hourly_rate_max}€/h`
-                }
-              </span>
-            </div>
-          </div>
-        )}
-
-        {/* Payment methods */}
-        {artisan.payment_methods && artisan.payment_methods.length > 0 && (
-          <div className="mt-6 pt-6 border-t border-gray-100">
-            <h3 className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
-              <CreditCard className="w-4 h-4 text-slate-400" />
-              Moyens de paiement accept&eacute;s
-            </h3>
-            <div className="flex flex-wrap gap-2" role="list" aria-label="Moyens de paiement">
-              {artisan.payment_methods.map((method, i) => (
-                <span
-                  key={i}
-                  role="listitem"
-                  className="px-3 py-1.5 rounded-lg bg-gray-50 border border-gray-100 text-slate-600 text-sm font-medium"
-                >
-                  {method}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
     </motion.div>
   )

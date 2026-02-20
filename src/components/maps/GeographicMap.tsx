@@ -71,10 +71,8 @@ export default function GeographicMap({
   const mapRef = useRef<import('leaflet').Map | null>(null)
 
   useEffect(() => {
-    // Import Leaflet and its CSS on client side
+    // Import Leaflet on client side (CSS already imported statically at top of file)
     import('leaflet').then((leaflet) => {
-      // @ts-ignore - CSS import
-      import('leaflet/dist/leaflet.css')
       setL(leaflet.default)
       setMapReady(true)
     })

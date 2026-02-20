@@ -42,10 +42,14 @@ export function ConversationList({
 
   const filteredConversations = conversations.filter((conv) => {
     if (!searchQuery) return true
-    const name = userType === 'client'
-      ? (conv as any).provider?.company_name
-      : (conv as any).client?.full_name
-    return name?.toLowerCase().includes(searchQuery.toLowerCase())
+    // The getConversations join includes provider:providers(id, name, ...) and client:profiles(id, full_name, ...)
+    const convAny = conv as unknown as Record<string, unknown>
+    const providerData = convAny.provider as { name?: string } | undefined
+    const clientData = convAny.client as { full_name?: string } | undefined
+    const displayName = userType === 'client'
+      ? providerData?.name
+      : clientData?.full_name
+    return displayName?.toLowerCase().includes(searchQuery.toLowerCase())
   })
 
   const formatTime = (dateStr: string) => {
@@ -98,15 +102,14 @@ export function ConversationList({
         ) : (
           <div className="divide-y divide-gray-100 dark:divide-gray-800">
             {filteredConversations.map((conversation) => {
-              const otherUser = userType === 'client'
-                ? (conversation as any).provider
-                : (conversation as any).client
+              const convAny = conversation as unknown as Record<string, unknown>
+              const providerData = convAny.provider as { id?: string; name?: string } | undefined
+              const clientData = convAny.client as { id?: string; full_name?: string } | undefined
               const name = userType === 'client'
-                ? otherUser?.company_name
-                : otherUser?.full_name
-              const avatar = userType === 'client'
-                ? otherUser?.logo_url
-                : otherUser?.avatar_url
+                ? providerData?.name
+                : clientData?.full_name
+              // avatar_url was dropped from providers; not reliably available
+              const avatar: string | undefined = undefined
 
               return (
                 <button

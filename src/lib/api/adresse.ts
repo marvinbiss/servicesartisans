@@ -11,7 +11,7 @@
 import { retry } from '../utils/retry'
 import { searchCache, geocodeCache } from '../utils/cache'
 import { APIError, ValidationError } from '../utils/errors'
-import { apiLogger } from '../utils/logger'
+import { apiLogger } from '@/lib/logger'
 
 const API_BASE = 'https://api-adresse.data.gouv.fr'
 
@@ -117,7 +117,7 @@ async function adresseRequest<T>(
         }
 
         const data = await response.json()
-        logger.api('GET', endpoint, { statusCode: response.status, duration })
+        logger.api.request(endpoint, 'GET', { statusCode: response.status, duration })
 
         // Cache successful response
         if (options.cacheKey) {

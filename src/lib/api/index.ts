@@ -9,7 +9,7 @@
 export * from '../utils/errors'
 export * from '../utils/retry'
 export * from '../utils/cache'
-export * from '../utils/logger'
+export { logger, apiLogger, dbLogger, authLogger, paymentLogger } from '@/lib/logger'
 
 // ============================================
 // API Clients

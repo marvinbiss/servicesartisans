@@ -7,7 +7,7 @@
 import Stripe from 'stripe'
 import { retry } from '../utils/retry'
 import { APIError, ErrorCode, AppError } from '../utils/errors'
-import { paymentLogger } from '../utils/logger'
+import { paymentLogger } from '@/lib/logger'
 
 // Lazy-loaded Stripe client
 let stripeClient: Stripe | null = null

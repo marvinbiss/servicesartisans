@@ -25,7 +25,7 @@ import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
 import { formatNumber, formatEuro } from '@/lib/data/commune-data'
-import type { Service, Location as LocationType } from '@/types'
+import type { Service, Location as LocationType, Provider } from '@/types'
 
 // Safely escape JSON for script tags to prevent XSS
 function safeJsonStringify(data: unknown): string {
@@ -331,8 +331,8 @@ export default async function ServiceLocationPage({ params }: PageProps) {
           url: getArtisanUrl({ stable_id: p.stable_id, slug: p.slug, specialty: p.specialty, city: p.address_city }),
           position: i + 1,
           image: getServiceImage(serviceSlug).src,
-          rating: p.rating_average,
-          reviewCount: p.review_count,
+          rating: p.rating_average ?? undefined,
+          reviewCount: p.review_count ?? undefined,
         })),
       })
     : null
@@ -393,7 +393,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
       <ServiceLocationPageClient
         service={service}
         location={location}
-        providers={providers || []}
+        providers={(providers || []) as unknown as Provider[]}
         h1Text={h1Text}
       />
 

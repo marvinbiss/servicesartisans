@@ -18,6 +18,28 @@ import { getServiceImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { getPageContent, getTradeContentOverride } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 
+/** Shape returned by getLocationsByService / getStaticCities */
+interface CityInfo {
+  id: string
+  name: string
+  slug: string
+  department_code?: string
+  region_name?: string
+}
+
+/** Shape returned by getProvidersByService (provider with joined location) */
+interface ServiceProvider {
+  id: string
+  name: string
+  slug: string
+  stable_id?: string
+  address_city?: string
+  address_postal_code?: string
+  provider_locations?: Array<{
+    location?: { name: string; slug: string } | null
+  }>
+}
+
 // ISR: Revalidate every 30 minutes
 export const revalidate = REVALIDATE.serviceDetail
 export const dynamicParams = false
@@ -136,8 +158,8 @@ export default async function ServicePage({ params }: PageProps) {
   }
 
   let service: { name: string; slug: string; description?: string; category?: string } | null = null
-  let topCities: any[] = []
-  let recentProviders: any[] = []
+  let topCities: CityInfo[] = []
+  let recentProviders: ServiceProvider[] = []
 
   try {
     service = await getServiceBySlug(serviceSlug)
@@ -174,12 +196,12 @@ export default async function ServicePage({ params }: PageProps) {
   }
 
   // Grouper les villes par région
-  const citiesByRegion = topCities?.reduce((acc: Record<string, typeof topCities>, city: any) => {
+  const citiesByRegion = topCities?.reduce((acc: Record<string, CityInfo[]>, city: CityInfo) => {
     const region = city.region_name || 'Autres'
     if (!acc[region]) acc[region] = []
     acc[region].push(city)
     return acc
-  }, {} as Record<string, typeof topCities>) || {}
+  }, {} as Record<string, CityInfo[]>) || {}
 
   // Trade-specific rich content (prices, FAQ, tips, certifications)
   const tradeBase = getTradeContent(serviceSlug)
@@ -336,7 +358,7 @@ export default async function ServicePage({ params }: PageProps) {
 
           {/* Popular cities grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 mb-8">
-            {topCities?.slice(0, 12).map((city: any) => (
+            {topCities?.slice(0, 12).map((city) => (
               <Link
                 key={city.id}
                 href={`/services/${serviceSlug}/${city.slug}`}
@@ -368,7 +390,7 @@ export default async function ServicePage({ params }: PageProps) {
                       {service.name} en {region}
                     </h3>
                     <div className="flex flex-wrap gap-2">
-                      {(cities as any[]).slice(0, 10).map((city: any) => (
+                      {cities.slice(0, 10).map((city) => (
                         <Link
                           key={city.id}
                           href={`/services/${serviceSlug}/${city.slug}`}
@@ -377,9 +399,9 @@ export default async function ServicePage({ params }: PageProps) {
                           {city.name}
                         </Link>
                       ))}
-                      {(cities as any[]).length > 10 && (
+                      {cities.length > 10 && (
                         <span className="text-sm text-gray-500 px-3 py-1.5">
-                          +{(cities as any[]).length - 10} villes
+                          +{cities.length - 10} villes
                         </span>
                       )}
                     </div>
@@ -441,7 +463,7 @@ export default async function ServicePage({ params }: PageProps) {
               {service.name}s récemment ajoutés
             </h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {recentProviders.slice(0, 6).map((provider: any) => {
+              {recentProviders.slice(0, 6).map((provider) => {
                 const location = provider.provider_locations?.[0]?.location
                 return (
                   <Link

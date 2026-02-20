@@ -8,10 +8,10 @@ interface ProviderCardProps {
   provider: {
     id: string
     slug: string
-    company_name: string
+    name: string
     description?: string
-    city: string
-    region: string
+    address_city: string
+    address_region: string
     phone?: string
     rating_average: number
     review_count: number
@@ -53,13 +53,13 @@ export function ProviderCard({ provider, showContact = false }: ProviderCardProp
             {provider.image_url ? (
               <Image
                 src={provider.image_url}
-                alt={provider.company_name}
+                alt={provider.name}
                 fill
                 className="object-cover"
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-gray-400 text-2xl font-bold">
-                {provider.company_name.charAt(0)}
+                {provider.name.charAt(0)}
               </div>
             )}
           </div>
@@ -71,7 +71,7 @@ export function ProviderCard({ provider, showContact = false }: ProviderCardProp
                 href={`/artisan/${provider.slug}`}
                 className="font-semibold text-gray-900 hover:text-blue-600 transition-colors truncate"
               >
-                {provider.company_name}
+                {provider.name}
               </Link>
               {provider.is_verified && (
                 <CheckCircle className="w-5 h-5 text-blue-600 flex-shrink-0" />
@@ -96,7 +96,7 @@ export function ProviderCard({ provider, showContact = false }: ProviderCardProp
 
             <div className="flex items-center gap-1 text-sm text-gray-500 mt-1">
               <MapPin className="w-4 h-4" />
-              <span>{provider.city}, {provider.region}</span>
+              <span>{provider.address_city}, {provider.address_region}</span>
             </div>
           </div>
         </div>

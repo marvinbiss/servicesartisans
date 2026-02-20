@@ -6,7 +6,7 @@
 import { getEntrepriseParSiret, verifierSanteEntreprise, getBadgeConfiance, validateSiret, validateSiren } from '../api/pappers'
 import { verifierSiret as verifierSiretSirene } from '../api/sirene'
 import { geocoder } from '../api/adresse'
-import { apiLogger } from '../utils/logger'
+import { apiLogger } from '@/lib/logger'
 import type { EntrepriseComplete } from '../api/pappers'
 
 export interface VerificationResult {

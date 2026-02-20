@@ -16,10 +16,7 @@ interface SimilarArtisan {
   rating: number
   reviews: number
   city: string
-  hourly_rate?: number
   is_verified?: boolean
-  is_premium?: boolean
-  avatar_url?: string
 }
 
 interface ArtisanSimilarProps {
@@ -130,17 +127,8 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSi
               >
                 {/* Header */}
                 <div className="flex items-start gap-3 mb-3">
-                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-xl font-bold flex-shrink-0 overflow-hidden">
-                    {item.avatar_url ? (
-                      <img
-                        src={item.avatar_url}
-                        alt={`Photo de ${item.name}`}
-                        className="w-full h-full object-cover rounded-xl"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <span aria-hidden="true">{item.name.charAt(0).toUpperCase()}</span>
-                    )}
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-xl font-bold flex-shrink-0">
+                    <span aria-hidden="true">{item.name.charAt(0).toUpperCase()}</span>
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="font-semibold text-gray-900 truncate">{item.name}</h3>
@@ -171,13 +159,6 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSi
                   </div>
                 </div>
 
-                {/* Price */}
-                {item.hourly_rate && (
-                  <div className="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between">
-                    <span className="text-sm text-gray-500">À partir de</span>
-                    <span className="font-bold text-blue-600">{item.hourly_rate}€/h</span>
-                  </div>
-                )}
               </motion.article>
             </Link>
           </motion.div>

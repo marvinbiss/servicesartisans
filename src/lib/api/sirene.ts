@@ -7,7 +7,7 @@
 import { retry, CircuitBreaker } from '../utils/retry'
 import { apiCache } from '../utils/cache'
 import { APIError, ValidationError, NotFoundError, ErrorCode } from '../utils/errors'
-import { apiLogger } from '../utils/logger'
+import { apiLogger } from '@/lib/logger'
 
 const INSEE_API_BASE = 'https://api.insee.fr/entreprises/sirene/V3.11'
 
@@ -189,7 +189,7 @@ async function sireneRequest<T>(
         }
 
         const data = await response.json()
-        logger.api('GET', url.toString(), { statusCode: response.status, duration })
+        logger.api.request(url.toString(), 'GET', { statusCode: response.status, duration })
 
         // Cache successful response
         if (options.cacheKey) {

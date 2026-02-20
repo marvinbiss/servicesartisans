@@ -11,7 +11,6 @@ import {
   CheckCircle,
   Clock,
   Calendar,
-  Shield,
   Award,
   MessageSquare,
 } from 'lucide-react'
@@ -31,7 +30,7 @@ interface Review {
 interface Provider {
   id: string
   slug: string
-  company_name: string
+  name: string
   description?: string
   full_description?: string
   city: string
@@ -47,7 +46,6 @@ interface Provider {
   is_available_24h?: boolean
   response_time?: string
   years_experience?: number
-  certifications?: string[]
   services?: string[]
   service_areas?: string[]
   image_url?: string
@@ -103,13 +101,13 @@ export function ProviderDetail({ provider, showQuoteForm = true }: ProviderDetai
               {provider.image_url ? (
                 <Image
                   src={provider.image_url}
-                  alt={provider.company_name}
+                  alt={provider.name}
                   fill
                   className="object-cover"
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-gray-400 text-4xl font-bold">
-                  {provider.company_name.charAt(0)}
+                  {provider.name.charAt(0)}
                 </div>
               )}
             </div>
@@ -118,7 +116,7 @@ export function ProviderDetail({ provider, showQuoteForm = true }: ProviderDetai
             <div className="flex-1">
               <div className="flex items-center gap-3 flex-wrap">
                 <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
-                  {provider.company_name}
+                  {provider.name}
                 </h1>
                 {provider.is_verified && (
                   <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
@@ -246,26 +244,6 @@ export function ProviderDetail({ provider, showQuoteForm = true }: ProviderDetai
                     {provider.full_description || provider.description || 'Pas de description disponible.'}
                   </p>
                 </div>
-
-                {/* Certifications */}
-                {provider.certifications && provider.certifications.length > 0 && (
-                  <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                    <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                      <Shield className="w-5 h-5 text-blue-600" />
-                      Certifications
-                    </h2>
-                    <div className="flex flex-wrap gap-2">
-                      {provider.certifications.map((cert, i) => (
-                        <span
-                          key={i}
-                          className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm"
-                        >
-                          {cert}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
 
                 {/* Opening hours */}
                 {provider.opening_hours && (

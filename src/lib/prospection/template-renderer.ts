@@ -42,18 +42,31 @@ const CAMPAIGN_VARIABLES: Record<string, (campaign: ProspectionCampaign) => stri
  * Format: base64url(payload).base64url(hmac_signature)
  * This prevents contacts from forging unsubscribe links for other users.
  */
+function deriveSigningKey(rawKey: string): string {
+  return crypto.createHash('sha256').update(`unsubscribe:${rawKey}`).digest('hex')
+}
+
+function getUnsubscribeSigningKey(): string {
+  const UNSUBSCRIBE_SECRET = process.env.UNSUBSCRIBE_SECRET
+  if (UNSUBSCRIBE_SECRET) return UNSUBSCRIBE_SECRET
+
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('UNSUBSCRIBE_SECRET must be set in production')
+  }
+
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!serviceRoleKey) {
+    throw new Error('UNSUBSCRIBE_SECRET or SUPABASE_SERVICE_ROLE_KEY must be set')
+  }
+
+  logger.warn('UNSUBSCRIBE_SECRET not set - deriving key from SUPABASE_SERVICE_ROLE_KEY hash. Set a dedicated secret in production.')
+  return deriveSigningKey(serviceRoleKey)
+}
+
 function generateUnsubscribeToken(contactId: string, channel: string): string {
   const payload = JSON.stringify({ cid: contactId, ch: channel, t: Date.now() })
   const token = Buffer.from(payload).toString('base64url')
-  const UNSUBSCRIBE_SECRET = process.env.UNSUBSCRIBE_SECRET
-  if (!UNSUBSCRIBE_SECRET) {
-    if (process.env.NODE_ENV === 'production') {
-      throw new Error('UNSUBSCRIBE_SECRET must be set in production')
-    }
-    logger.warn('UNSUBSCRIBE_SECRET not set - falling back to SUPABASE_SERVICE_ROLE_KEY. Set a dedicated secret in production.')
-  }
-  const signingKey = UNSUBSCRIBE_SECRET || process.env.SUPABASE_SERVICE_ROLE_KEY || ''
-  if (!signingKey) throw new Error('UNSUBSCRIBE_SECRET or SUPABASE_SERVICE_ROLE_KEY must be set')
+  const signingKey = getUnsubscribeSigningKey()
   const signature = crypto.createHmac('sha256', signingKey).update(token).digest('base64url')
   return `${token}.${signature}`
 }
@@ -71,15 +84,7 @@ export function verifyUnsubscribeToken(
   const token = signedToken.substring(0, dotIndex)
   const signature = signedToken.substring(dotIndex + 1)
 
-  const UNSUBSCRIBE_SECRET = process.env.UNSUBSCRIBE_SECRET
-  if (!UNSUBSCRIBE_SECRET) {
-    if (process.env.NODE_ENV === 'production') {
-      throw new Error('UNSUBSCRIBE_SECRET must be set in production')
-    }
-    logger.warn('UNSUBSCRIBE_SECRET not set - falling back to SUPABASE_SERVICE_ROLE_KEY. Set a dedicated secret in production.')
-  }
-  const signingKey = UNSUBSCRIBE_SECRET || process.env.SUPABASE_SERVICE_ROLE_KEY || ''
-  if (!signingKey) throw new Error('UNSUBSCRIBE_SECRET or SUPABASE_SERVICE_ROLE_KEY must be set')
+  const signingKey = getUnsubscribeSigningKey()
   const expectedSignature = crypto.createHmac('sha256', signingKey).update(token).digest('base64url')
 
   try {

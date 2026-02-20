@@ -12,8 +12,6 @@ interface Provider {
   address_city?: string
   address_postal_code?: string
   logo?: string
-  certifications?: string[]
-  hourly_rate_min?: number
   is_verified?: boolean
 }
 
@@ -29,8 +27,6 @@ export function CompletionChecklist({ provider }: CompletionChecklistProps) {
     { label: 'Email', done: !!provider.email },
     { label: 'Adresse complète', done: !!provider.address_street && !!provider.address_city && !!provider.address_postal_code },
     { label: 'Logo', done: !!provider.logo },
-    { label: 'Certifications', done: (provider.certifications?.length || 0) > 0 },
-    { label: 'Tarifs', done: !!provider.hourly_rate_min },
   ]
 
   const completedCount = checks.filter(c => c.done).length

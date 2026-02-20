@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Star, MapPin, Phone, Award, Clock } from 'lucide-react'
+import { Star, MapPin, Phone, Clock } from 'lucide-react'
 
 interface Provider {
   id: string
@@ -11,7 +11,6 @@ interface Provider {
   address_city?: string
   specialty?: string
   is_verified?: boolean
-  is_premium?: boolean
   phone?: string
 }
 
@@ -50,15 +49,6 @@ export default function MapTooltip({ provider, position }: MapTooltipProps) {
             )}
           </div>
           <div className="flex items-center gap-1 flex-shrink-0">
-            {provider.is_premium && (
-              <div
-                className="p-1 rounded-full"
-                title="Premium"
-                style={{ background: 'linear-gradient(90deg, #fde68a 0%, #fff7d1 100%)' }}
-              >
-                <Award className="w-3 h-3 text-amber-700" />
-              </div>
-            )}
             {provider.is_verified && (
               <div
                 className="p-1 rounded-full"

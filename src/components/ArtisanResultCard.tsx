@@ -29,7 +29,6 @@ interface Artisan {
   business_name: string | null
   first_name: string | null
   last_name: string | null
-  avatar_url: string | null
   city: string
   postal_code: string
   address?: string
@@ -37,9 +36,7 @@ interface Artisan {
   description?: string
   average_rating: number
   review_count: number
-  hourly_rate?: number
   is_verified: boolean
-  is_premium: boolean
   is_center?: boolean
   team_size?: number
   distance?: number
@@ -129,16 +126,7 @@ export default function ArtisanResultCard({
         <div className="flex gap-4">
           {/* Avatar / Logo */}
           <div className="flex-shrink-0">
-            {artisan.avatar_url ? (
-              <img
-                src={artisan.avatar_url}
-                alt={`Photo de ${displayName || 'Artisan'}`}
-                width={64}
-                height={64}
-                loading="lazy"
-                className="w-16 h-16 rounded-full object-cover"
-              />
-            ) : artisan.is_center ? (
+            {artisan.is_center ? (
               <div className="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center">
                 <Building2 className="w-8 h-8 text-blue-600" />
               </div>
@@ -186,15 +174,12 @@ export default function ArtisanResultCard({
                   </p>
                 </div>
 
-                {/* Hourly Rate & Intervention Zone */}
-                <div className="mt-1 flex items-center gap-3 text-sm text-gray-500">
-                  {artisan.hourly_rate && (
-                    <span>À partir de {artisan.hourly_rate}€/h</span>
-                  )}
-                  {artisan.intervention_zone && (
+                {/* Intervention Zone */}
+                {artisan.intervention_zone && (
+                  <div className="mt-1 flex items-center gap-3 text-sm text-gray-500">
                     <span>Zone: {artisan.intervention_zone}</span>
-                  )}
-                </div>
+                  </div>
+                )}
 
                 {/* Badges */}
                 <div className="flex items-center gap-2 mt-2 flex-wrap">

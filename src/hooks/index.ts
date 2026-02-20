@@ -3,8 +3,7 @@
  */
 
 export { useAuth } from './useAuth'
-export { useDebounce } from './useDebounce'
-export { useDebounce as useDebounceValue } from './use-debounce'
+export { useDebounce, useDebounce as useDebounceValue } from './useDebounce'
 export { useIntersectionObserver } from './useIntersectionObserver'
 export { useProvider } from './useProvider'
 export { useToast } from './useToast'

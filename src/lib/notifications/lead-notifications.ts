@@ -7,6 +7,7 @@
  */
 
 import { createAdminClient } from '@/lib/supabase/admin'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { sendEmail } from '@/lib/api/resend-client'
 import type { LeadEventType } from '@/lib/dashboard/events'
 
@@ -136,8 +137,7 @@ export async function processLeadEvent(event: LeadEventPayload): Promise<void> {
 // ============================================================
 
 async function deliverNotification(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  supabase: any,
+  supabase: SupabaseClient,
   eventId: string,
   channel: 'email' | 'in_app',
   target: NotificationTarget,
@@ -185,15 +185,17 @@ async function deliverNotification(
   }
 
   // Record delivery (idempotency key)
-  await supabase.from('notification_deliveries').insert({
-    event_id: eventId,
-    channel,
-    recipient_id: target.userId,
-    status,
-    error_message: errorMessage,
-  }).catch(() => {
+  try {
+    await supabase.from('notification_deliveries').insert({
+      event_id: eventId,
+      channel,
+      recipient_id: target.userId,
+      status,
+      error_message: errorMessage,
+    })
+  } catch {
     // Unique constraint violation = already recorded by concurrent request
-  })
+  }
 }
 
 // ============================================================

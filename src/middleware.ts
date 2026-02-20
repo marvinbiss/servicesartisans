@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import { updateSession } from '@/lib/supabase/middleware'
+import { checkRateLimit, getRateLimitConfig, getRateLimitKey, getClientIp } from '@/lib/rate-limiter'
 
 /**
  * Middleware v2 — simplified
@@ -7,9 +8,7 @@ import { updateSession } from '@/lib/supabase/middleware'
  * - Auth guard for private routes
  * - URL canonicalization
  * - Security headers
- *
- * Rate-limiting should be handled at edge/CDN level (Vercel, Cloudflare)
- * not in-memory which resets on every deploy.
+ * - Rate limiting for API routes (Upstash Redis in production, in-memory fallback in dev)
  */
 
 // Security headers
@@ -129,6 +128,40 @@ export async function middleware(request: NextRequest) {
       }
     } catch (error) {
       console.error('Middleware auth error:', error)
+      const loginUrl = new URL('/connexion', request.url)
+      loginUrl.searchParams.set('redirect', request.nextUrl.pathname)
+      return NextResponse.redirect(loginUrl)
+    }
+  }
+
+  // Rate limiting for API routes
+  if (pathname.startsWith('/api/')) {
+    const clientIp = getClientIp(request.headers)
+    const rateLimitConfig = getRateLimitConfig(pathname)
+    const rateLimitKey = getRateLimitKey(clientIp, pathname)
+
+    try {
+      const result = await checkRateLimit(rateLimitKey, rateLimitConfig)
+
+      if (!result.allowed) {
+        const retryAfter = Math.ceil((result.resetTime - Date.now()) / 1000)
+        return new NextResponse(
+          JSON.stringify({ error: 'Trop de requêtes. Veuillez réessayer plus tard.' }),
+          {
+            status: 429,
+            headers: {
+              'Content-Type': 'application/json',
+              'Retry-After': String(retryAfter),
+              'X-RateLimit-Limit': String(rateLimitConfig.max),
+              'X-RateLimit-Remaining': '0',
+              'X-RateLimit-Reset': String(result.resetTime),
+            },
+          }
+        )
+      }
+    } catch (error) {
+      // Fail open: if rate limiter errors, allow the request through
+      console.error('Rate limiter error:', error)
     }
   }
 

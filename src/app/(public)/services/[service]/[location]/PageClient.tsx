@@ -230,7 +230,7 @@ export default function ServiceLocationPageClient({
               providers={providers.map(p => ({
                 id: p.id,
                 name: p.name || '',
-                stable_id: p.stable_id,
+                stable_id: p.stable_id ?? undefined,
                 slug: p.slug,
                 latitude: p.latitude || 0,
                 longitude: p.longitude || 0,

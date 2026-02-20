@@ -96,8 +96,8 @@ export default function CookieConsent() {
 
   const enableAnalytics = () => {
     // Initialize analytics (Google Analytics, etc.)
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('consent', 'update', {
+    if (typeof window !== 'undefined') {
+      window.gtag?.('consent', 'update', {
         analytics_storage: 'granted',
       })
     }
@@ -105,8 +105,8 @@ export default function CookieConsent() {
 
   const enableMarketing = () => {
     // Initialize marketing cookies
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('consent', 'update', {
+    if (typeof window !== 'undefined') {
+      window.gtag?.('consent', 'update', {
         ad_storage: 'granted',
         ad_user_data: 'granted',
         ad_personalization: 'granted',

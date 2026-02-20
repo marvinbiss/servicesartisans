@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Phone, Mail, MessageCircle, Zap, Shield, FileCheck, Award } from 'lucide-react'
+import { Phone, Mail, MessageCircle, Shield } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 import { QuoteRequestModal } from './QuoteRequestModal'
 
@@ -45,21 +45,6 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500" />
             </span>
             <span className="text-sm font-medium">Accepte de nouveaux clients</span>
-          </div>
-        )}
-
-        {/* Price range */}
-        {(artisan.hourly_rate_min || artisan.hourly_rate_max) && (
-          <div className="mb-6">
-            <div className="text-sm text-slate-500">Taux horaire</div>
-            <div className="text-3xl font-bold text-gray-900 tracking-tight">
-              {artisan.hourly_rate_min && artisan.hourly_rate_max
-                ? <>{artisan.hourly_rate_min}&euro; - {artisan.hourly_rate_max}&euro;<span className="text-lg text-slate-400 font-normal">/heure</span></>
-                : artisan.hourly_rate_min
-                  ? <>À partir de {artisan.hourly_rate_min}&euro;<span className="text-lg text-slate-400 font-normal">/heure</span></>
-                  : <>Jusqu&apos;à {artisan.hourly_rate_max}&euro;<span className="text-lg text-slate-400 font-normal">/heure</span></>
-              }
-            </div>
           </div>
         )}
 
@@ -110,18 +95,6 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
           )}
         </div>
 
-        {/* Quick info */}
-        {artisan.emergency_available && (
-          <div className="mb-6 pb-6 border-b border-gray-100">
-            <div className="flex items-center gap-3 text-sm text-red-600">
-              <div className="w-7 h-7 rounded-lg bg-red-50 flex items-center justify-center flex-shrink-0">
-                <Zap className="w-3.5 h-3.5 text-red-500" />
-              </div>
-              <span className="font-medium">Urgences 24h/24</span>
-            </div>
-          </div>
-        )}
-
         {/* Trust badges */}
         <div className="space-y-2.5 mb-6 pb-6 border-b border-gray-100">
           <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">V&eacute;rifications</h4>
@@ -129,18 +102,6 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
             <div className="flex items-center gap-2.5 text-sm text-slate-600">
               <Shield className="w-4 h-4 text-green-500 flex-shrink-0" />
               <span>Identit&eacute; v&eacute;rifi&eacute;e (SIRET)</span>
-            </div>
-          )}
-          {artisan.insurance && artisan.insurance.length > 0 && (
-            <div className="flex items-center gap-2.5 text-sm text-slate-600">
-              <FileCheck className="w-4 h-4 text-green-500 flex-shrink-0" />
-              <span>Assurance v&eacute;rifi&eacute;e</span>
-            </div>
-          )}
-          {artisan.certifications && artisan.certifications.length > 0 && (
-            <div className="flex items-center gap-2.5 text-sm text-slate-600">
-              <Award className="w-4 h-4 text-purple-500 flex-shrink-0" />
-              <span>{artisan.certifications.length} certification(s)</span>
             </div>
           )}
         </div>
@@ -178,20 +139,6 @@ export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
         role="group"
         aria-label="Actions rapides"
       >
-        {/* Price hint */}
-        {(artisan.hourly_rate_min || artisan.hourly_rate_max) && (
-          <div className="flex items-baseline gap-1 mb-2.5">
-            <span className="text-lg font-bold text-gray-900">
-              {artisan.hourly_rate_min && artisan.hourly_rate_max
-                ? `${artisan.hourly_rate_min}€ - ${artisan.hourly_rate_max}€`
-                : artisan.hourly_rate_min
-                  ? `À partir de ${artisan.hourly_rate_min}€`
-                  : `Jusqu'à ${artisan.hourly_rate_max}€`
-              }
-            </span>
-            <span className="text-sm text-slate-500">/heure</span>
-          </div>
-        )}
         <div className="flex gap-3">
           {artisan.phone && (
             <motion.button

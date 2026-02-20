@@ -5,23 +5,23 @@ import { createClient } from '@/lib/supabase/client'
 
 export interface Provider {
   id: string
-  user_id: string
   name: string
   slug: string
   siret: string
-  description: string | null
   phone: string | null
+  email: string | null
+  is_verified: boolean
+  is_active: boolean
+  stable_id: string | null
+  noindex: boolean | null
   address_city: string | null
   address_postal_code: string | null
-  intervention_radius_km: number | null
-  services_offered: string[]
-  hourly_rate_min: number | null
-  hourly_rate_max: number | null
-  is_verified: boolean
+  address_street: string | null
+  address_region: string | null
+  specialty: string | null
   rating_average: number
   review_count: number
   created_at: string
-  updated_at: string
 }
 
 export interface ProviderStats {
@@ -64,10 +64,10 @@ export function useProvider(): UseProviderReturn {
         return
       }
 
-      // Fetch provider profile
+      // Fetch provider profile with explicit column list
       const { data: providerData, error: providerError } = await supabase
         .from('providers')
-        .select('*')
+        .select('id, name, slug, email, phone, siret, is_verified, is_active, stable_id, noindex, address_city, address_postal_code, address_street, address_region, specialty, rating_average, review_count, created_at')
         .eq('user_id', user.id)
         .single()
 
@@ -83,16 +83,19 @@ export function useProvider(): UseProviderReturn {
 
       setProvider(providerData)
 
-      // Fetch provider stats
-      const { data: bookingsData } = await supabase
-        .from('bookings')
-        .select('id, status, total_price')
-        .eq('provider_id', providerData.id)
-
-      const { data: reviewsData } = await supabase
-        .from('reviews')
-        .select('rating')
-        .eq('provider_id', providerData.id)
+      // Fetch provider stats in parallel to avoid N+1 queries
+      const [{ data: bookingsData }, { data: reviewsData }] = await Promise.all([
+        supabase
+          .from('bookings')
+          .select('id, status, total_price')
+          .eq('provider_id', providerData.id)
+          .limit(500),
+        supabase
+          .from('reviews')
+          .select('rating')
+          .eq('provider_id', providerData.id)
+          .limit(500),
+      ])
 
       if (bookingsData) {
         const completed = bookingsData.filter(b => b.status === 'completed')

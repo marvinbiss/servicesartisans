@@ -9,18 +9,20 @@ import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
-// PUT request schema
+// PUT request schema — only columns that actually exist
+// profiles: full_name, phone_e164
+// providers: name, siret, phone, address_street, address_city, address_postal_code, specialty
 const updateProfileSchema = z.object({
-  company_name: z.string().max(200).optional(),
-  siret: z.string().max(20).optional(),
   full_name: z.string().max(100).optional(),
+  phone_e164: z.string().max(20).optional(),
+  // Provider fields (written to providers table, not profiles)
+  name: z.string().max(200).optional(),
+  siret: z.string().max(20).optional(),
   phone: z.string().max(20).optional(),
-  address: z.string().max(200).optional(),
-  city: z.string().max(100).optional(),
-  postal_code: z.string().max(10).optional(),
-  description: z.string().max(2000).optional(),
-  services: z.array(z.string().max(100)).optional(),
-  zones: z.array(z.string().max(100)).optional(),
+  address_street: z.string().max(200).optional(),
+  address_city: z.string().max(100).optional(),
+  address_postal_code: z.string().max(10).optional(),
+  specialty: z.string().max(100).optional(),
 })
 
 export const dynamic = 'force-dynamic'
@@ -39,10 +41,10 @@ export async function GET() {
       )
     }
 
-    // Fetch profile
+    // Fetch profile with explicit column list (profiles table)
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
-      .select('*')
+      .select('id, email, full_name, role, phone_e164, average_rating, review_count')
       .eq('id', user.id)
       .single()
 
@@ -54,14 +56,21 @@ export async function GET() {
       )
     }
 
-    if (profile.user_type !== 'artisan') {
+    if (profile.role !== 'artisan') {
       return NextResponse.json(
         { error: 'Accès réservé aux artisans' },
         { status: 403 }
       )
     }
 
-    return NextResponse.json({ profile })
+    // Fetch associated provider data
+    const { data: provider } = await supabase
+      .from('providers')
+      .select('id, name, slug, siret, phone, address_street, address_city, address_postal_code, address_region, specialty, rating_average, review_count, is_verified, is_active')
+      .eq('id', user.id)
+      .single()
+
+    return NextResponse.json({ profile, provider })
   } catch (error) {
     logger.error('Profile GET error:', error)
     return NextResponse.json(
@@ -88,7 +97,7 @@ export async function PUT(request: Request) {
     // Verify user is an artisan before allowing profile update
     const { data: existingProfile, error: profileFetchError } = await supabase
       .from('profiles')
-      .select('user_type')
+      .select('role')
       .eq('id', user.id)
       .single()
 
@@ -99,7 +108,7 @@ export async function PUT(request: Request) {
       )
     }
 
-    if (existingProfile.user_type !== 'artisan') {
+    if (existingProfile.role !== 'artisan') {
       return NextResponse.json(
         { error: 'Accès réservé aux artisans' },
         { status: 403 }
@@ -116,49 +125,74 @@ export async function PUT(request: Request) {
       )
     }
     const {
-      company_name,
-      siret,
       full_name,
+      phone_e164,
+      name,
+      siret,
       phone,
-      address,
-      city,
-      postal_code,
-      description,
-      services,
-      zones,
+      address_street,
+      address_city,
+      address_postal_code,
+      specialty,
     } = result.data
 
-    // Update profile
-    const { data: profile, error: updateError } = await supabase
-      .from('profiles')
-      .update({
-        company_name,
-        siret,
-        full_name,
-        phone,
-        address,
-        city,
-        postal_code,
-        description,
-        services,
-        zones,
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', user.id)
-      .select()
-      .single()
+    // Update profiles table (only columns that exist: full_name, phone_e164)
+    const profileUpdate: Record<string, string> = {}
+    if (full_name !== undefined) profileUpdate.full_name = full_name
+    if (phone_e164 !== undefined) profileUpdate.phone_e164 = phone_e164
 
-    if (updateError) {
-      logger.error('Error updating profile:', updateError)
-      return NextResponse.json(
-        { error: 'Erreur lors de la mise à jour du profil' },
-        { status: 500 }
-      )
+    let profile = null
+    if (Object.keys(profileUpdate).length > 0) {
+      const { data, error: updateError } = await supabase
+        .from('profiles')
+        .update(profileUpdate)
+        .eq('id', user.id)
+        .select('id, email, full_name, role, phone_e164, average_rating, review_count')
+        .single()
+
+      if (updateError) {
+        logger.error('Error updating profile:', updateError)
+        return NextResponse.json(
+          { error: 'Erreur lors de la mise à jour du profil' },
+          { status: 500 }
+        )
+      }
+      profile = data
+    }
+
+    // Update providers table (business data)
+    const providerUpdate: Record<string, string> = {}
+    if (name !== undefined) providerUpdate.name = name
+    if (siret !== undefined) providerUpdate.siret = siret
+    if (phone !== undefined) providerUpdate.phone = phone
+    if (address_street !== undefined) providerUpdate.address_street = address_street
+    if (address_city !== undefined) providerUpdate.address_city = address_city
+    if (address_postal_code !== undefined) providerUpdate.address_postal_code = address_postal_code
+    if (specialty !== undefined) providerUpdate.specialty = specialty
+
+    let provider = null
+    if (Object.keys(providerUpdate).length > 0) {
+      const { data, error: providerError } = await supabase
+        .from('providers')
+        .update(providerUpdate)
+        .eq('id', user.id)
+        .select('id, name, slug, siret, phone, address_street, address_city, address_postal_code, specialty, is_verified, is_active')
+        .single()
+
+      if (providerError) {
+        logger.error('Error updating provider:', providerError)
+        return NextResponse.json(
+          { error: 'Erreur lors de la mise à jour du profil artisan' },
+          { status: 500 }
+        )
+      }
+      provider = data
     }
 
     return NextResponse.json({
       success: true,
       profile,
+      provider,
       message: 'Profil mis à jour avec succès'
     })
   } catch (error) {

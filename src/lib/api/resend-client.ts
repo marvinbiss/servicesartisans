@@ -7,7 +7,7 @@
 import { Resend } from 'resend'
 import { retry } from '../utils/retry'
 import { APIError, ErrorCode, AppError, ValidationError } from '../utils/errors'
-import { apiLogger } from '../utils/logger'
+import { apiLogger } from '@/lib/logger'
 
 // Lazy-loaded Resend client
 let resendClient: Resend | null = null
@@ -85,31 +85,30 @@ export async function sendEmail(params: EmailParams): Promise<EmailResult> {
   try {
     const resend = getResendClient()
 
+    type ResendSendParams = Parameters<typeof resend.emails.send>[0]
+
     const result = await retry(
       async () => {
-        // Use any to avoid complex type issues with Resend's changing API
-        const emailData: Record<string, unknown> = {
+        const emailData = {
           from: params.from || DEFAULT_FROM,
           to: Array.isArray(params.to) ? params.to : [params.to],
           subject: params.subject,
-        }
+          ...(params.html ? { html: params.html } : {}),
+          ...(params.text ? { text: params.text } : {}),
+          ...(params.replyTo ? { reply_to: params.replyTo } : {}),
+          ...(params.cc ? { cc: Array.isArray(params.cc) ? params.cc : [params.cc] } : {}),
+          ...(params.bcc ? { bcc: Array.isArray(params.bcc) ? params.bcc : [params.bcc] } : {}),
+          ...(params.tags ? { tags: params.tags } : {}),
+          ...(params.headers ? { headers: params.headers } : {}),
+          ...(params.attachments?.length ? {
+            attachments: params.attachments.map(a => ({
+              filename: a.filename,
+              content: typeof a.content === 'string' ? Buffer.from(a.content) : a.content,
+            })),
+          } : {}),
+        } as ResendSendParams
 
-        if (params.html) emailData.html = params.html
-        if (params.text) emailData.text = params.text
-        if (params.replyTo) emailData.reply_to = params.replyTo
-        if (params.cc) emailData.cc = Array.isArray(params.cc) ? params.cc : [params.cc]
-        if (params.bcc) emailData.bcc = Array.isArray(params.bcc) ? params.bcc : [params.bcc]
-        if (params.tags) emailData.tags = params.tags
-        if (params.headers) emailData.headers = params.headers
-        if (params.attachments?.length) {
-          emailData.attachments = params.attachments.map(a => ({
-            filename: a.filename,
-            content: typeof a.content === 'string' ? Buffer.from(a.content) : a.content,
-          }))
-        }
-
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const response = await (resend.emails.send as any)(emailData)
+        const response = await resend.emails.send(emailData)
 
         if (response.error) {
           throw new APIError('Resend', response.error.message, {
@@ -165,20 +164,18 @@ export async function sendBatchEmails(params: BatchEmailParams): Promise<EmailRe
   try {
     const resend = getResendClient()
 
-    const batchParams = params.emails.map(email => {
-      const emailData: Record<string, unknown> = {
-        from: email.from || DEFAULT_FROM,
-        to: Array.isArray(email.to) ? email.to : [email.to],
-        subject: email.subject,
-      }
-      if (email.html) emailData.html = email.html
-      if (email.text) emailData.text = email.text
-      if (email.replyTo) emailData.reply_to = email.replyTo
-      return emailData
-    })
+    type ResendBatchParams = Parameters<typeof resend.batch.send>[0]
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const response = await (resend.batch.send as any)(batchParams)
+    const batchParams = params.emails.map(email => ({
+      from: email.from || DEFAULT_FROM,
+      to: Array.isArray(email.to) ? email.to : [email.to],
+      subject: email.subject,
+      ...(email.html ? { html: email.html } : {}),
+      ...(email.text ? { text: email.text } : {}),
+      ...(email.replyTo ? { reply_to: email.replyTo } : {}),
+    })) as ResendBatchParams
+
+    const response = await resend.batch.send(batchParams)
 
     if (response.error) {
       throw new APIError('Resend', response.error.message, {

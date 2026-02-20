@@ -59,7 +59,6 @@ interface Provider {
   services: string[]
   specialty?: string
   is_verified: boolean
-  hourly_rate_min?: number
   avatar_url?: string
 }
 
@@ -749,12 +748,6 @@ export default function MapSearch() {
                               {provider.address_city}
                             </p>
 
-                            {/* Hourly rate if available */}
-                            {provider.hourly_rate_min && (
-                              <p className="text-sm text-green-600 font-medium mt-1">
-                                À partir de {provider.hourly_rate_min}€/h
-                              </p>
-                            )}
                           </div>
                         </div>
 

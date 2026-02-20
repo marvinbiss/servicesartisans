@@ -24,10 +24,11 @@ export async function GET() {
       )
     }
 
-    // Fetch profile with subscription info
+    // Fetch profile with subscription info (columns from migration 309)
+    // Note: subscription_period_end does not exist in the schema
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
-      .select('subscription_plan, subscription_status, subscription_period_end, stripe_customer_id')
+      .select('subscription_plan, subscription_status, stripe_customer_id')
       .eq('id', user.id)
       .single()
 
@@ -39,23 +40,23 @@ export async function GET() {
       )
     }
 
-    // Fetch invoices
+    // Fetch invoices (invoices table uses provider_id, not profile_id)
     const { data: invoices } = await supabase
       .from('invoices')
-      .select('*')
-      .eq('profile_id', user.id)
+      .select('id, created_at, status')
+      .eq('provider_id', user.id)
       .order('created_at', { ascending: false })
       .limit(10)
 
-    // Get devis count this month
+    // Get devis_requests count this month (devis table doesn't exist, use devis_requests)
     const startOfMonth = new Date()
     startOfMonth.setDate(1)
     startOfMonth.setHours(0, 0, 0, 0)
 
     const { count: devisCount } = await supabase
-      .from('devis')
-      .select('*', { count: 'exact', head: true })
-      .eq('artisan_id', user.id)
+      .from('devis_requests')
+      .select('id', { count: 'exact', head: true })
+      .eq('client_id', user.id)
       .gte('created_at', startOfMonth.toISOString())
 
     // Determine limits based on plan
@@ -71,16 +72,14 @@ export async function GET() {
     return NextResponse.json({
       plan: currentPlan,
       status: profile?.subscription_status || null,
-      periodEnd: profile?.subscription_period_end || null,
+      periodEnd: null,
       devisUsed: devisCount || 0,
       devisLimit: limit,
       hasStripeCustomer: !!profile?.stripe_customer_id,
       invoices: invoices?.map(inv => ({
         id: inv.id,
         date: inv.created_at,
-        montant: inv.amount / 100, // Convert from cents
         status: inv.status,
-        url: inv.invoice_url,
       })) || [],
     })
   } catch (error) {

@@ -9,7 +9,7 @@ interface IdentiteSectionProps {
   onSaved: (updated: Record<string, unknown>) => void
 }
 
-const FIELDS = ['name', 'legal_form', 'siret', 'creation_date', 'employee_count', 'experience_years', 'team_size'] as const
+const FIELDS = ['name', 'legal_form', 'siret', 'creation_date', 'team_size'] as const
 
 export function IdentiteSection({ provider, onSaved }: IdentiteSectionProps) {
   const { formData, setField, isDirty, saving, error, success, handleSave } = useProviderForm(provider, FIELDS)
@@ -98,37 +98,6 @@ export function IdentiteSection({ provider, onSaved }: IdentiteSectionProps) {
               value={(formData.creation_date as string) || ''}
               onChange={(e) => setField('creation_date', e.target.value)}
               maxLength={20}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-6">
-          <div>
-            <label htmlFor="identite-employee-count" className="block text-sm font-medium text-gray-700 mb-2">
-              Nombre de salariés
-            </label>
-            <input
-              id="identite-employee-count"
-              type="number"
-              value={formData.employee_count != null ? Number(formData.employee_count) : ''}
-              onChange={(e) => setField('employee_count', e.target.value ? parseInt(e.target.value, 10) : null)}
-              min={0}
-              max={10000}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-          <div>
-            <label htmlFor="identite-experience-years" className="block text-sm font-medium text-gray-700 mb-2">
-              Années d&apos;expérience
-            </label>
-            <input
-              id="identite-experience-years"
-              type="number"
-              value={formData.experience_years != null ? Number(formData.experience_years) : ''}
-              onChange={(e) => setField('experience_years', e.target.value ? parseInt(e.target.value, 10) : null)}
-              min={0}
-              max={100}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>

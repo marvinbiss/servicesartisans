@@ -14,15 +14,14 @@ export interface Service {
 
 export interface Artisan {
   id: string
-  company_name: string
-  description: string | null
-  city: string
-  postal_code: string
-  services: string[]
-  rating: number
+  name: string
+  specialty: string | null
+  address_city: string
+  address_postal_code: string
+  rating_average: number
   review_count: number
   is_verified: boolean
-  subscription_plan: 'gratuit' | 'pro' | 'premium'
+  is_active: boolean
 }
 
 /**
@@ -93,27 +92,26 @@ export async function getArtisans(params: {
     async () => {
       const supabase = await createClient()
       let query = supabase
-        .from('profiles')
-        .select('*', { count: 'exact' })
-        .eq('user_type', 'artisan')
+        .from('providers')
+        .select('id, name, slug, specialty, address_city, address_postal_code, rating_average, review_count, is_verified, is_active', { count: 'exact' })
+        .eq('is_active', true)
         .eq('is_verified', true)
 
       if (params.service) {
-        query = query.contains('services', [params.service])
+        query = query.eq('specialty', params.service)
       }
 
       if (params.city) {
-        query = query.ilike('city', `%${params.city}%`)
+        query = query.ilike('address_city', `%${params.city}%`)
       }
 
       if (params.postalCode) {
-        query = query.like('postal_code', `${params.postalCode.substring(0, 2)}%`)
+        query = query.like('address_postal_code', `${params.postalCode.substring(0, 2)}%`)
       }
 
-      // Order by subscription plan (premium first) and rating
+      // Order by rating
       query = query
-        .order('subscription_plan', { ascending: false })
-        .order('rating', { ascending: false, nullsFirst: false })
+        .order('rating_average', { ascending: false, nullsFirst: false })
 
       if (params.limit) {
         query = query.limit(params.limit)
@@ -133,15 +131,14 @@ export async function getArtisans(params: {
       return {
         artisans: (data || []).map((a) => ({
           id: a.id,
-          company_name: a.company_name || 'Artisan',
-          description: a.description,
-          city: a.city || '',
-          postal_code: a.postal_code || '',
-          services: a.services || [],
-          rating: a.rating || 0,
+          name: a.name || 'Artisan',
+          specialty: a.specialty,
+          address_city: a.address_city || '',
+          address_postal_code: a.address_postal_code || '',
+          rating_average: a.rating_average || 0,
           review_count: a.review_count || 0,
           is_verified: a.is_verified || false,
-          subscription_plan: a.subscription_plan || 'gratuit',
+          is_active: a.is_active || false,
         })),
         total: count || 0,
       }
@@ -159,10 +156,10 @@ export async function getArtisanById(id: string): Promise<Artisan | null> {
     async () => {
       const supabase = await createClient()
       const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
+        .from('providers')
+        .select('id, name, slug, specialty, address_city, address_postal_code, rating_average, review_count, is_verified, is_active')
         .eq('id', id)
-        .eq('user_type', 'artisan')
+        .eq('is_active', true)
         .single()
 
       if (error) {
@@ -172,15 +169,14 @@ export async function getArtisanById(id: string): Promise<Artisan | null> {
 
       return {
         id: data.id,
-        company_name: data.company_name || 'Artisan',
-        description: data.description,
-        city: data.city || '',
-        postal_code: data.postal_code || '',
-        services: data.services || [],
-        rating: data.rating || 0,
+        name: data.name || 'Artisan',
+        specialty: data.specialty,
+        address_city: data.address_city || '',
+        address_postal_code: data.address_postal_code || '',
+        rating_average: data.rating_average || 0,
         review_count: data.review_count || 0,
         is_verified: data.is_verified || false,
-        subscription_plan: data.subscription_plan || 'gratuit',
+        is_active: data.is_active || false,
       }
     },
     CACHE_TTL.artisans
@@ -201,7 +197,7 @@ export async function getArtisanReviews(artisanId: string, limit = 10) {
           *,
           client:profiles!reviews_client_id_fkey(full_name)
         `)
-        .eq('artisan_id', artisanId)
+        .eq('provider_id', artisanId)
         // REMOVED: .eq('is_verified', true) to show ALL real reviews
         .order('created_at', { ascending: false })
         .limit(limit)
@@ -226,34 +222,38 @@ export async function getPlatformStats() {
     async () => {
       const supabase = await createClient()
 
-      const [artisansResult, reviewsResult, citiesResult] = await Promise.all([
+      const [providersResult, reviewsCountResult, reviewsAvgResult, citiesResult] = await Promise.all([
         supabase
-          .from('profiles')
+          .from('providers')
           .select('id', { count: 'exact', head: true })
-          .eq('user_type', 'artisan')
+          .eq('is_active', true)
           .eq('is_verified', true),
         supabase
           .from('reviews')
-          .select('rating'),
-          // REMOVED: .eq('is_verified', true) to include ALL real reviews in stats
+          .select('id', { count: 'exact', head: true }),
         supabase
-          .from('profiles')
-          .select('city')
-          .eq('user_type', 'artisan')
+          .from('reviews')
+          .select('rating')
+          .limit(1000),
+        supabase
+          .from('providers')
+          .select('address_city')
+          .eq('is_active', true)
           .eq('is_verified', true),
       ])
 
-      const totalArtisans = artisansResult.count || 0
-      const reviews = reviewsResult.data || []
+      const totalArtisans = providersResult.count || 0
+      const totalReviews = reviewsCountResult.count || 0
+      const reviewsSample = reviewsAvgResult.data || []
       const avgRating =
-        reviews.length > 0
-          ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+        reviewsSample.length > 0
+          ? reviewsSample.reduce((sum, r) => sum + r.rating, 0) / reviewsSample.length
           : 0
-      const uniqueCities = new Set(citiesResult.data?.map((p) => p.city).filter(Boolean))
+      const uniqueCities = new Set(citiesResult.data?.map((p) => p.address_city).filter(Boolean))
 
       return {
         totalArtisans,
-        totalReviews: reviews.length,
+        totalReviews,
         averageRating: Math.round(avgRating * 10) / 10,
         totalCities: uniqueCities.size,
       }

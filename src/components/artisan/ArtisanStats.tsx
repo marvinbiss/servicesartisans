@@ -12,9 +12,6 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
   // Only show stats that have real data
   const stats: { icon: typeof Calendar; label: string; value: string; color: string; bgColor: string }[] = []
 
-  if (artisan.experience_years && artisan.experience_years > 0) {
-    stats.push({ icon: Calendar, label: 'Expérience', value: `${artisan.experience_years} ans`, color: 'text-purple-600', bgColor: 'bg-purple-50 border-purple-100' })
-  }
   if (artisan.member_since) {
     stats.push({ icon: MessageCircle, label: 'Membre depuis', value: artisan.member_since, color: 'text-amber-600', bgColor: 'bg-amber-50 border-amber-100' })
   }

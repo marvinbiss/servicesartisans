@@ -81,7 +81,7 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
     '@id': `${artisanUrl}#business`,
     name: displayName,
     description: artisan.description || `${displayName} - ${artisan.specialty} à ${artisan.city}`,
-    image: artisan.avatar_url || artisan.portfolio?.[0]?.imageUrl || `${baseUrl}/opengraph-image`,
+    image: artisan.portfolio?.[0]?.imageUrl || `${baseUrl}/opengraph-image`,
     // Add knowsAbout for E-E-A-T signals
     knowsAbout: artisan.specialty,
     ...(artisan.phone && artisan.phone.replace(/\D/g, '').length >= 10 && {
@@ -89,11 +89,6 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
     }),
     ...(artisan.email && { email: artisan.email }),
     url: artisanUrl,
-    ...(artisan.hourly_rate_min && artisan.hourly_rate_max
-      ? { priceRange: `${artisan.hourly_rate_min}€ - ${artisan.hourly_rate_max}€` }
-      : artisan.hourly_rate_min
-        ? { priceRange: `À partir de ${artisan.hourly_rate_min}€` }
-        : {}),
     parentOrganization: {
       '@type': 'Organization',
       '@id': `${baseUrl}#organization`,
@@ -194,20 +189,6 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
 
     // Additional SEO-friendly properties
     ...(artisan.creation_date ? { foundingDate: artisan.creation_date } : {}),
-    ...(artisan.employee_count && {
-      numberOfEmployees: {
-        '@type': 'QuantitativeValue',
-        value: artisan.employee_count,
-      },
-    }),
-    ...(artisan.certifications && artisan.certifications.length > 0 && {
-      hasCredential: artisan.certifications.map(cert => ({
-        '@type': 'EducationalOccupationalCredential',
-        credentialCategory: 'certification',
-        name: cert,
-      })),
-    }),
-    ...(artisan.payment_methods?.length ? { paymentAccepted: artisan.payment_methods.join(', ') } : {}),
     currenciesAccepted: 'EUR',
 
     // Opening hours for Google Knowledge Panel

@@ -225,36 +225,14 @@ export async function POST(request: NextRequest) {
         process.env.SUPABASE_SERVICE_ROLE_KEY!
       )
 
+      // Only update columns that exist in the providers table.
+      // Dropped columns: company_name, trust_badge, trust_score, etc.
+      // Non-existent columns: siret_verified, company_legal_form, company_naf_*, pappers_data
       await supabase
         .from('providers')
         .update({
-          // Données contrôlées
-          siret_verified: true,
-          siret_verified_at: new Date().toISOString(),
-          company_name: entreprise.nom,
-          company_legal_form: entreprise.formeJuridique,
-          company_creation_date: entreprise.dateCreation,
-          company_naf_code: entreprise.codeNAF,
-          company_naf_label: entreprise.libelleNAF,
-
-          // Données Pappers enrichies
-          pappers_data: {
-            siren: entreprise.siren,
-            dirigeants: entreprise.dirigeants,
-            capital: entreprise.capital,
-            effectif: entreprise.effectif,
-            dernierCA: entreprise.dernierCA,
-            procedureCollective: entreprise.procedureCollective,
-            badges: entreprise.badges,
-            santeScore: sante.score,
-            badgeNiveau: badge.niveau,
-            updatedAt: new Date().toISOString()
-          },
-
-          // NOTE: trust_badge column was dropped in v2 (100_v2_schema_cleanup.sql).
-          // Badge data is preserved in pappers_data.badgeNiveau above.
-
-          updated_at: new Date().toISOString()
+          siret: siret,
+          is_verified: true,
         })
         .eq('id', artisanId)
     }

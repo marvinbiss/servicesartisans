@@ -157,7 +157,7 @@ export class AnalyticsService {
     ] = await Promise.all([
       supabase.from('profiles').select('id', { count: 'exact', head: true }),
       supabase.from('providers').select('id', { count: 'exact', head: true }),
-      supabase.from('bookings').select('id, total_price, status, created_at').limit(10000),
+      supabase.from('bookings').select('id, total_price, status, created_at').limit(1000),
       supabase
         .from('bookings')
         .select('id', { count: 'exact', head: true })
@@ -247,23 +247,35 @@ export class AnalyticsService {
   async getProviderMetrics(providerId: string): Promise<ProviderMetrics> {
     const supabase = await createServerClient()
 
-    const [bookingsResult, reviewsResult, quotesResult, eventsResult] =
+    const [bookingsResult, reviewsResult, quotesResult, profileViewsResult] =
       await Promise.all([
-        supabase.from('bookings').select('*').eq('provider_id', providerId).limit(1000),
-        supabase.from('reviews').select('rating').eq('provider_id', providerId).limit(1000),
-        supabase.from('quotes').select('*').eq('provider_id', providerId).limit(1000),
+        supabase
+          .from('bookings')
+          .select('id, status, total_price, created_at, service_type')
+          .eq('provider_id', providerId)
+          .limit(1000),
+        supabase
+          .from('reviews')
+          .select('rating')
+          .eq('provider_id', providerId)
+          .limit(1000),
+        supabase
+          .from('quotes')
+          .select('id, status')
+          .eq('provider_id', providerId)
+          .limit(1000),
+        // Use count query instead of fetching all rows just to count them
         supabase
           .from('analytics_events')
-          .select('*')
+          .select('id', { count: 'exact', head: true })
           .eq('provider_id', providerId)
-          .eq('event_type', 'profile_view')
-          .limit(10000),
+          .eq('event_type', 'profile_view'),
       ])
 
     const bookings = bookingsResult.data || []
     const reviews = reviewsResult.data || []
     const quotes = quotesResult.data || []
-    const profileViews = eventsResult.data?.length || 0
+    const profileViews = profileViewsResult.count || 0
 
     const totalBookings = bookings.length
     const completedBookings = bookings.filter(

@@ -8,7 +8,65 @@ import ArtisanPageClient from '@/components/artisan/ArtisanPageClient'
 import ArtisanInternalLinks from '@/components/artisan/ArtisanInternalLinks'
 import { Review } from '@/components/artisan'
 import type { LegacyArtisan } from '@/types/legacy'
+import type { Service, Location } from '@/types'
 import { getServiceImage } from '@/lib/data/images'
+
+/** Raw provider row from select('*') — includes all DB columns the mapper reads */
+interface ProviderRecord {
+  id: string
+  stable_id?: string | null
+  slug?: string | null
+  name?: string | null
+  business_name?: string | null
+  first_name?: string | null
+  last_name?: string | null
+  avatar_url?: string | null
+  logo_url?: string | null
+  specialty?: string | null
+  description?: string | null
+  bio?: string | null
+  address_street?: string | null
+  address_city?: string | null
+  address_postal_code?: string | null
+  address_region?: string | null
+  is_verified?: boolean | null
+  is_active?: boolean | null
+  is_center?: boolean | null
+  noindex?: boolean | null
+  rating_average?: number | null
+  average_rating?: number | null
+  review_count?: number | null
+  experience_years?: number | null
+  employee_count?: number | null
+  team_size?: number | null
+  certifications?: string[] | null
+  insurance?: string[] | null
+  payment_methods?: string[] | null
+  languages?: string[] | null
+  emergency_available?: boolean | null
+  available_24h?: boolean | null
+  accepts_new_clients?: boolean | null
+  free_quote?: boolean | null
+  hourly_rate_min?: number | null
+  hourly_rate_max?: number | null
+  phone?: string | null
+  phone_secondary?: string | null
+  email?: string | null
+  website?: string | null
+  siret?: string | null
+  legal_form?: string | null
+  creation_date?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  opening_hours?: Record<string, { ouvert: boolean; debut: string; fin: string }> | null
+  intervention_radius_km?: number | null
+  services_offered?: string[] | null
+  service_prices?: Array<{ name: string; description?: string; price: string; duration?: string }> | null
+  faq?: Array<{ question: string; answer: string }> | null
+  created_at?: string | null
+  updated_at?: string | null
+  user_id?: string | null
+}
 import { SITE_URL } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
 import { getQuartierBySlug, services as staticServicesList, villes } from '@/lib/data/france'
@@ -44,7 +102,7 @@ interface PageProps {
 }
 
 // Convert provider data to LegacyArtisan format (sub-components still read legacy fields)
-function convertToArtisan(provider: any, service: any, location: any, serviceSlug: string): LegacyArtisan {
+function convertToArtisan(provider: ProviderRecord, service: Service | null, location: Location | null, serviceSlug: string): LegacyArtisan {
   const specialty = service?.name || provider.specialty || 'Artisan'
   const city = location?.name || provider.address_city || ''
   const name = provider.name || provider.business_name || 'Artisan'
@@ -58,7 +116,7 @@ function convertToArtisan(provider: any, service: any, location: any, serviceSlu
   return {
     id: provider.id,
     stable_id: provider.stable_id || undefined,
-    slug: provider.slug,
+    slug: provider.slug || undefined,
     business_name: name,
     first_name: provider.first_name || null,
     last_name: provider.last_name || null,
@@ -74,13 +132,15 @@ function convertToArtisan(provider: any, service: any, location: any, serviceSlu
     city_slug: location?.slug || undefined,
     description: description,
     bio: provider.bio || undefined,
-    average_rating: provider.rating_average || provider.average_rating || null,
+    average_rating: provider.rating_average || provider.average_rating || 0,
     review_count: provider.review_count || 0,
     is_verified: provider.is_verified || false,
     is_center: provider.is_center || false,
     team_size: provider.team_size || undefined,
     services: provider.services_offered || [],
-    service_prices: (provider.service_prices && provider.service_prices.length > 0) ? provider.service_prices : [],
+    service_prices: (provider.service_prices && provider.service_prices.length > 0)
+      ? provider.service_prices.map(sp => ({ name: sp.name, description: sp.description || '', price: sp.price, duration: sp.duration }))
+      : [],
     prices_are_estimated: false,
     accepts_new_clients: provider.accepts_new_clients === true ? true : undefined,
     free_quote: provider.free_quote === true ? true : undefined,
@@ -114,7 +174,7 @@ function convertToArtisan(provider: any, service: any, location: any, serviceSlu
 }
 
 // Generate a rich, unique description based on all available provider data
-function generateDescription(name: string, specialty: string, city: string, provider?: any, serviceSlug?: string): string {
+function generateDescription(name: string, specialty: string, city: string, provider?: ProviderRecord | null, serviceSlug?: string): string {
   const spe = specialty.toLowerCase()
   const parts: string[] = []
 
@@ -206,6 +266,30 @@ function generateDescription(name: string, specialty: string, city: string, prov
   return parts.join(' ')
 }
 
+/** Row shape from the similar-artisans lightweight query */
+interface SimilarProviderRow {
+  id: string
+  stable_id: string | null
+  slug: string | null
+  name: string | null
+  specialty: string | null
+  rating_average: number | null
+  review_count: number | null
+  address_city: string | null
+  is_verified: boolean | null
+}
+
+/** Row shape from the reviews query */
+interface ReviewRow {
+  id: string
+  rating: number
+  content: string | null
+  created_at: string
+  author_verified: boolean | null
+  author_name: string | null
+  has_media: boolean | null
+}
+
 // Fetch similar artisans (same specialty, same department)
 async function getSimilarArtisans(providerId: string, specialty: string, postalCode?: string) {
   try {
@@ -232,7 +316,7 @@ async function getSimilarArtisans(providerId: string, specialty: string, postalC
 
     const { data } = await query
 
-    return (data || []).map((p: any) => {
+    return ((data || []) as SimilarProviderRow[]).map((p) => {
       const resolved = resolveProviderCity(p)
       return {
         id: p.id,
@@ -272,7 +356,7 @@ async function getProviderReviews(providerId: string, serviceName?: string): Pro
       .limit(100) // Increased limit to show more reviews
 
     if (reviews && reviews.length > 0) {
-      return reviews.map((r: any) => ({
+      return (reviews as ReviewRow[]).map((r) => ({
         id: r.id,
         author: r.author_name || 'Client',
         rating: r.rating,
@@ -443,9 +527,9 @@ export default async function ProviderPage({ params }: PageProps) {
 
   // ─── PROVIDER DETAIL (existing logic) ────────────────────
   // Run ALL lookups in parallel to minimize total latency
-  let provider: any = null
-  let service: any = null
-  let location: any = null
+  let provider: ProviderRecord | null = null
+  let service: Service | null = null
+  let location: Location | null = null
 
   try {
     const [stableIdResult, slugResult, svcResult, locResult] = await Promise.all([
@@ -504,7 +588,7 @@ export default async function ProviderPage({ params }: PageProps) {
           rel="preload"
           href={artisan.avatar_url}
           as="image"
-          // @ts-expect-error - fetchPriority is valid but not in React types yet
+          // @ts-expect-error fetchpriority is a valid HTML attribute on <link> but @types/react@18 lacks it
           fetchpriority="high"
         />
       )}

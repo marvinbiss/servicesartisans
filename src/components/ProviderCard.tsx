@@ -1,12 +1,11 @@
 import Link from 'next/link'
-import Image from 'next/image'
-import { MapPin, Phone, Star, Clock, Users, ChevronRight } from 'lucide-react'
+import { MapPin, Phone, Star, ChevronRight } from 'lucide-react'
 import { Provider } from '@/types'
 import { getArtisanUrl, getAvatarColor } from '@/lib/utils'
 import { FavoriteButton } from '@/components/ui/FavoriteButton'
 import { CompareButton } from '@/components/ui/CompareButton'
 
-type ProviderCardProvider = Partial<Provider> & Pick<Provider, 'id' | 'name'> & { stable_id?: string; slug?: string; specialty?: string; address_city?: string; avatar_url?: string }
+type ProviderCardProvider = Partial<Provider> & Pick<Provider, 'id' | 'name'>
 
 interface ProviderCardProps {
   provider: ProviderCardProvider
@@ -20,7 +19,6 @@ export default function ProviderCard({
   const providerUrl = getArtisanUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city })
   const ratingValue = provider.rating_average?.toFixed(1)
   const reviewCount = provider.review_count
-  const employeeCount = provider.employee_count
 
   return (
     <div
@@ -51,19 +49,9 @@ export default function ProviderCard({
       <div className="flex items-start gap-4 mb-2">
         {/* Avatar / Initials */}
         <Link href={providerUrl} className="flex-shrink-0">
-          {provider.avatar_url ? (
-            <Image
-              src={provider.avatar_url}
-              alt={`Photo de ${provider.name}`}
-              width={48}
-              height={48}
-              className="w-12 h-12 rounded-full object-cover shadow-sm"
-            />
-          ) : (
-            <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${getAvatarColor(provider.name)} flex items-center justify-center text-white text-lg font-bold shadow-sm`}>
-              {provider.name.charAt(0).toUpperCase()}
-            </div>
-          )}
+          <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${getAvatarColor(provider.name)} flex items-center justify-center text-white text-lg font-bold shadow-sm`}>
+            {provider.name.charAt(0).toUpperCase()}
+          </div>
         </Link>
 
         <div className="flex-1 min-w-0">
@@ -125,27 +113,6 @@ export default function ProviderCard({
           SIREN {provider.siret.slice(0, 9)}
         </p>
       )}
-
-      {/* Infos */}
-      <div className="flex flex-wrap gap-3 mb-5">
-        {typeof provider.experience_years === 'number' &&
-          provider.experience_years > 0 && (
-            <div className="flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-full bg-green-50 border border-green-100">
-              <Clock className="w-4 h-4 text-green-600" />
-              <span className="text-green-700 font-medium">
-                {provider.experience_years} ans d'expérience
-              </span>
-            </div>
-          )}
-        {typeof employeeCount === 'number' && (
-          <div className="flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-full bg-purple-50 border border-purple-100">
-            <Users className="w-4 h-4 text-purple-600" />
-            <span className="text-purple-700 font-medium">
-              {employeeCount} employés
-            </span>
-          </div>
-        )}
-      </div>
 
       {/* Bouton comparer */}
       <div className="mb-3">

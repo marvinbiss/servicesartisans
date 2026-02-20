@@ -30,7 +30,7 @@ export interface Location {
 
 export interface Provider {
   id: string
-  stable_id: string
+  stable_id?: string | null
   name: string
   slug: string
   siren?: string
@@ -47,7 +47,6 @@ export interface Provider {
   longitude?: number
   legal_form?: string
   creation_date?: string
-  employee_count?: number
   is_verified: boolean
   is_active: boolean
   noindex: boolean
@@ -60,16 +59,7 @@ export interface Provider {
   source_id?: string
   rating_average?: number
   review_count?: number
-  experience_years?: number
-  avatar_url?: string
-  certifications?: string[]
-  insurance?: string[]
-  payment_methods?: string[]
-  languages?: string[]
-  emergency_available?: boolean
   available_24h?: boolean
-  hourly_rate_min?: number
-  hourly_rate_max?: number
   phone_secondary?: string
   opening_hours?: Record<string, { ouvert: boolean; debut: string; fin: string }>
   accepts_new_clients?: boolean

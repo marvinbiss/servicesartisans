@@ -14,7 +14,7 @@
 import { retry, CircuitBreaker } from '../utils/retry'
 import { apiCache } from '../utils/cache'
 import { APIError, ValidationError, NotFoundError, ErrorCode } from '../utils/errors'
-import { apiLogger } from '../utils/logger'
+import { apiLogger } from '@/lib/logger'
 
 const PAPPERS_API_BASE = 'https://api.pappers.fr/v2'
 
@@ -187,7 +187,7 @@ async function pappersRequest<T>(
           }
 
           const data = await response.json()
-          logger.api('GET', endpoint, { statusCode: response.status, duration })
+          logger.api.request(endpoint, 'GET', { statusCode: response.status, duration })
 
           // Cache successful response
           if (options.cacheKey) {

@@ -20,7 +20,7 @@ interface ServicePrice {
 const MAX_SERVICES = 30
 const MAX_SERVICE_PRICES = 20
 
-const FIELDS = ['services_offered', 'hourly_rate_min', 'hourly_rate_max', 'service_prices', 'free_quote'] as const
+const FIELDS = ['services_offered', 'service_prices', 'free_quote'] as const
 
 export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSectionProps) {
   const { formData, setField, isDirty, saving, error, success, handleSave } = useProviderForm(provider, FIELDS)
@@ -134,51 +134,6 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
           {servicesAtMax && (
             <p className="text-xs text-amber-600 mt-1">Limite de {MAX_SERVICES} services atteinte.</p>
           )}
-        </div>
-
-        {/* Hourly rates */}
-        <div>
-          <span className="block text-sm font-medium text-gray-700 mb-2">Taux horaire</span>
-          <div className="grid md:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="services-rate-min" className="block text-xs text-gray-500 mb-1">
-                Min
-              </label>
-              <div className="relative">
-                <input
-                  id="services-rate-min"
-                  type="number"
-                  value={formData.hourly_rate_min != null ? Number(formData.hourly_rate_min) : ''}
-                  onChange={(e) => setField('hourly_rate_min', e.target.value ? parseFloat(e.target.value) : null)}
-                  min={0}
-                  max={9999}
-                  step={0.5}
-                  placeholder="30"
-                  className="w-full px-4 py-3 pr-14 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                />
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm">&euro;/h</span>
-              </div>
-            </div>
-            <div>
-              <label htmlFor="services-rate-max" className="block text-xs text-gray-500 mb-1">
-                Max
-              </label>
-              <div className="relative">
-                <input
-                  id="services-rate-max"
-                  type="number"
-                  value={formData.hourly_rate_max != null ? Number(formData.hourly_rate_max) : ''}
-                  onChange={(e) => setField('hourly_rate_max', e.target.value ? parseFloat(e.target.value) : null)}
-                  min={0}
-                  max={9999}
-                  step={0.5}
-                  placeholder="60"
-                  className="w-full px-4 py-3 pr-14 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                />
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm">&euro;/h</span>
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* Service prices */}

@@ -8,6 +8,34 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 /**
+ * Row shape returned by provider listing queries (PROVIDER_LIST_SELECT).
+ * Matches the columns selected in the lightweight listing query.
+ */
+interface ProviderListRow {
+  id: string
+  stable_id: string | null
+  name: string
+  slug: string
+  specialty: string | null
+  address_street: string | null
+  address_postal_code: string | null
+  address_city: string | null
+  address_region: string | null
+  is_verified: boolean | null
+  is_active: boolean | null
+  noindex: boolean | null
+  rating_average: number | null
+  review_count: number | null
+  avatar_url: string | null
+  phone: string | null
+  siret: string | null
+  latitude: number | null
+  longitude: number | null
+  created_at: string | null
+  updated_at: string | null
+}
+
+/**
  * Detect if we're inside `next build` (static generation phase).
  * During build, skip heavy DB queries to avoid overwhelming Supabase free tier.
  * Pages use ISR (revalidate) so they'll get fresh data on first visit.
@@ -338,7 +366,7 @@ export async function getProvidersByServiceAndLocation(
           console.warn(`[getProvidersByServiceAndLocation] primary query error for ${serviceSlug}/${locationSlug}:`, directError.message)
         }
 
-        if (!directError && direct && direct.length > 0) return resolveProviderCities(direct as any[])
+        if (!directError && direct && direct.length > 0) return resolveProviderCities(direct as unknown as ProviderListRow[])
 
         // Fallback: provider_services join (handles specialty mapping edge cases)
         const svc = staticServices[serviceSlug]
@@ -353,7 +381,7 @@ export async function getProvidersByServiceAndLocation(
             .order('name')
             .limit(500)
 
-          if (!error && data && data.length > 0) return resolveProviderCities(data as any[])
+          if (!error && data && data.length > 0) return resolveProviderCities(data as unknown as ProviderListRow[])
         }
 
         return []
@@ -466,7 +494,7 @@ export async function getProvidersByLocation(locationSlug: string) {
           .limit(500)
 
         if (error) throw error
-        return resolveProviderCities((data || []) as any[])
+        return resolveProviderCities((data || []) as unknown as ProviderListRow[])
       },
       `getProvidersByLocation(${locationSlug})`,
     )
@@ -489,7 +517,7 @@ export async function getAllProviders() {
         .limit(1000)
 
       if (error) throw error
-      return resolveProviderCities((data || []) as any[])
+      return resolveProviderCities((data || []) as unknown as ProviderListRow[])
     })(),
     QUERY_TIMEOUT_MS,
     'getAllProviders',

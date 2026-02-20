@@ -9,6 +9,15 @@ import { sendBookingConfirmationSMS, sendReminder24hSMS, sendReminder1hSMS, send
 import { createClient } from '@supabase/supabase-js'
 import { logger } from '@/lib/logger'
 
+/** Row shape for notification_logs inserts (no generated Supabase types available) */
+interface NotificationLogInsert {
+  booking_id: string
+  type: string
+  status: string
+  recipient_email: string
+  error_message?: string
+}
+
 // Notification types
 export type NotificationType =
   | 'booking_confirmation'
@@ -304,14 +313,15 @@ export class UnifiedNotificationService {
     error?: string
   ): Promise<void> {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await (this.supabase as any).from('notification_logs').insert({
+      const row: NotificationLogInsert = {
         booking_id: bookingId,
         type: `${type}_${channel}`,
         status: success ? 'sent' : 'failed',
         recipient_email: recipient,
         error_message: error,
-      })
+      }
+      // @ts-expect-error - notification_logs table is not in generated Supabase types; row shape is validated by NotificationLogInsert
+      await this.supabase.from('notification_logs').insert(row)
     } catch (err) {
       logger.error('[Notification] Failed to log notification', err as Error)
     }
