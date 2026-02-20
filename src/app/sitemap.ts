@@ -24,9 +24,13 @@ export async function generateSitemaps() {
   }
   const sqBatchCount = Math.ceil(totalServiceQuartierUrls / 45000) // Stay under 50K limit
 
+  // service-cities batches (same formula as devis-service-cities)
+  const serviceCitiesBatchCount = Math.ceil(services.length * villes.length / 45000)
+
   const sitemaps: { id: string }[] = [
     { id: 'static' },           // homepage, static pages, services index, individual services
-    { id: 'service-cities' },   // service + city combination pages
+    // service × city pages — batched to stay under 45K/50MB sitemap limit
+    ...Array.from({ length: serviceCitiesBatchCount }, (_, i) => ({ id: `service-cities-${i}` })),
     { id: 'cities' },           // villes index + individual city pages
     { id: 'geo' },              // departements + regions (index + individual)
     { id: 'quartiers' },        // quartier pages within cities
@@ -213,18 +217,27 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     return [...homepage, ...staticPages, ...blogArticlePages, ...servicesIndex, ...servicePages, ...urgencePages, ...tarifsPages]
   }
 
-  // ── Service + city combination pages ────────────────────────────────
-  if (id === 'service-cities') {
-    return services.flatMap((service) => {
+  // ── Service + city combination pages (batched at 45K — limits were 50K) ──────
+  if (id.startsWith('service-cities-')) {
+    const batchIndex = parseInt(id.replace('service-cities-', ''), 10)
+    const BATCH = 45000
+    const offset = batchIndex * BATCH
+
+    const allUrls: { url: string; lastModified: Date; changeFrequency: 'weekly'; priority: number; images: string[] }[] = []
+    for (const service of services) {
       const serviceImage = getServiceImage(service.slug)
-      return villes.map((ville) => ({
-        url: `${SITE_URL}/services/${service.slug}/${ville.slug}`,
-        lastModified: STATIC_LAST_MODIFIED,
-        changeFrequency: 'weekly' as const,
-        priority: 0.8,
-        images: [serviceImage.src],
-      }))
-    })
+      for (const ville of villes) {
+        allUrls.push({
+          url: `${SITE_URL}/services/${service.slug}/${ville.slug}`,
+          lastModified: STATIC_LAST_MODIFIED,
+          changeFrequency: 'weekly' as const,
+          priority: 0.8,
+          images: [serviceImage.src],
+        })
+      }
+    }
+
+    return allUrls.slice(offset, offset + BATCH)
   }
 
   // ── City pages ──────────────────────────────────────────────────────

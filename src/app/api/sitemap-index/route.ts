@@ -23,9 +23,13 @@ export async function GET() {
   const tradeSlugs = getTradesSlugs()
   const serviceCityBatches = Math.ceil(services.length * villes.length / 45000)
 
+  // service-cities batched (same formula as devis-service-cities)
+  const serviceCitiesBatchCount = Math.ceil(services.length * villes.length / 45000)
+
   const ids: string[] = [
     'static',
-    'service-cities',
+    // service × city pages — batched to stay under 45K/50MB sitemap limit
+    ...Array.from({ length: serviceCitiesBatchCount }, (_, i) => `service-cities-${i}`),
     'cities',
     'geo',
     'quartiers',
