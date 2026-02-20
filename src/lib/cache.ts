@@ -1,30 +1,36 @@
-// In-memory cache for server-side data
-const cache = new Map<string, { data: unknown; expiry: number }>()
+import { CacheService } from '@/lib/cache/redis-client'
+
+// L1: in-memory (fast path, même invocation Lambda)
+const memoryCache = new Map<string, { data: unknown; expiry: number }>()
+
+// L2: Redis (partagé entre toutes les instances Vercel)
+const redisCache = new CacheService('sa:cache:')
 
 // Cache TTL configurations (in seconds)
 export const CACHE_TTL = {
-  services: 3600, // 1 hour
-  artisans: 600, // 10 minutes
-  reviews: 1200, // 20 minutes
+  services: 3600,   // 1 hour
+  artisans: 600,    // 10 minutes
+  reviews: 1200,    // 20 minutes
   locations: 86400, // 24 hours
-  stats: 3600, // 1 hour
-  cms: 300, // 5 minutes
+  stats: 3600,      // 1 hour
+  cms: 300,         // 5 minutes
 } as const
 
 // ISR Revalidation times (in seconds)
 export const REVALIDATE = {
-  services: 3600, // 1 hour
-  serviceDetail: 1800, // 30 minutes
-  serviceLocation: 300, // 5 minutes
-  artisanProfile: 900, // 15 minutes
-  locations: 86400, // 24 hours
-  blog: 3600, // 1 hour
-  staticPages: 86400, // 24 hours
-  cms: 300, // 5 minutes
+  services: 3600,
+  serviceDetail: 1800,
+  serviceLocation: 300,
+  artisanProfile: 900,
+  locations: 86400,
+  blog: 3600,
+  staticPages: 86400,
+  cms: 300,
 } as const
 
 /**
  * Get cached data or fetch new data.
+ * L1 (memory) → L2 (Redis) → fetcher
  * When skipNull is true, null/empty results are NOT cached (prevents caching DB errors).
  */
 export async function getCachedData<T>(
@@ -33,18 +39,33 @@ export async function getCachedData<T>(
   ttl: number = 300,
   options?: { skipNull?: boolean }
 ): Promise<T> {
-  const cached = cache.get(key)
-
-  if (cached && cached.expiry > Date.now()) {
-    return cached.data as T
+  // L1: in-memory hit (same Lambda invocation — zero latency)
+  const memHit = memoryCache.get(key)
+  if (memHit && memHit.expiry > Date.now()) {
+    return memHit.data as T
   }
 
+  // L2: Redis hit (shared across all instances — ~1ms)
+  const redisHit = await redisCache.get<T>(key)
+  if (redisHit !== null) {
+    // Warm L1 from Redis hit to avoid repeated Redis calls within same invocation
+    memoryCache.set(key, { data: redisHit, expiry: Date.now() + Math.min(ttl, 60) * 1000 })
+    return redisHit
+  }
+
+  // Cache miss: fetch fresh data
   const data = await fetcher()
 
-  // Don't cache null/empty results if skipNull is set
-  const shouldSkip = options?.skipNull && (data === null || data === undefined || (Array.isArray(data) && data.length === 0))
+  const shouldSkip = options?.skipNull && (
+    data === null ||
+    data === undefined ||
+    (Array.isArray(data) && data.length === 0)
+  )
+
   if (!shouldSkip) {
-    cache.set(key, { data, expiry: Date.now() + ttl * 1000 })
+    // Write to both layers (fire-and-forget Redis to not block the response)
+    redisCache.set(key, data, ttl).catch(() => {})
+    memoryCache.set(key, { data, expiry: Date.now() + Math.min(ttl, 60) * 1000 })
   }
 
   return data
@@ -55,22 +76,23 @@ export async function getCachedData<T>(
  */
 export function invalidateCache(keyOrPattern: string | RegExp): void {
   if (typeof keyOrPattern === 'string') {
-    cache.delete(keyOrPattern)
+    memoryCache.delete(keyOrPattern)
+    redisCache.delete(keyOrPattern).catch(() => {})
   } else {
-    const keys = Array.from(cache.keys())
-    for (const key of keys) {
+    for (const key of Array.from(memoryCache.keys())) {
       if (keyOrPattern.test(key)) {
-        cache.delete(key)
+        memoryCache.delete(key)
+        redisCache.delete(key).catch(() => {})
       }
     }
   }
 }
 
 /**
- * Clear entire cache
+ * Clear entire cache (memory only — Redis keys expire naturally via TTL)
  */
 export function clearCache(): void {
-  cache.clear()
+  memoryCache.clear()
 }
 
 /**
@@ -78,8 +100,8 @@ export function clearCache(): void {
  */
 export function getCacheStats(): { size: number; keys: string[] } {
   return {
-    size: cache.size,
-    keys: Array.from(cache.keys()),
+    size: memoryCache.size,
+    keys: Array.from(memoryCache.keys()),
   }
 }
 
@@ -91,7 +113,6 @@ export function generateCacheKey(prefix: string, params: Record<string, unknown>
     .sort()
     .map((key) => `${key}=${params[key]}`)
     .join('&')
-
   return `${prefix}:${sortedParams}`
 }
 
@@ -110,7 +131,7 @@ export function memoize<T extends (...args: unknown[]) => Promise<unknown>>(
 }
 
 /**
- * Deduplicate concurrent requests
+ * Deduplicate concurrent requests (in-memory, per-invocation)
  */
 const pendingRequests = new Map<string, Promise<unknown>>()
 
@@ -119,16 +140,12 @@ export async function dedupeRequest<T>(
   fetcher: () => Promise<T>
 ): Promise<T> {
   const pending = pendingRequests.get(key)
-
-  if (pending) {
-    return pending as Promise<T>
-  }
+  if (pending) return pending as Promise<T>
 
   const request = fetcher().finally(() => {
     pendingRequests.delete(key)
   })
 
   pendingRequests.set(key, request)
-
   return request
 }
