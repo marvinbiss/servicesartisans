@@ -483,7 +483,7 @@ export async function getAllProviders() {
         .limit(1000)
 
       if (error) throw error
-      return resolveProviderCities(data || [])
+      return resolveProviderCities((data || []) as any[])
     })(),
     QUERY_TIMEOUT_MS,
     'getAllProviders',
