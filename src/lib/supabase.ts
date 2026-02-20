@@ -321,8 +321,8 @@ export async function getProvidersByServiceAndLocation(
   if (!specialties || specialties.length === 0) return []
 
   try {
-    return await withTimeout(
-      (async () => {
+    return await retryWithBackoff(
+      async () => {
         // Primary: direct specialty + city (fast — uses index + .in())
         const { data: direct, error: directError } = await supabase
           .from('providers')
@@ -333,6 +333,10 @@ export async function getProvidersByServiceAndLocation(
           .order('is_verified', { ascending: false })
           .order('name')
           .limit(500)
+
+        if (directError) {
+          console.warn(`[getProvidersByServiceAndLocation] primary query error for ${serviceSlug}/${locationSlug}:`, directError.message)
+        }
 
         if (!directError && direct && direct.length > 0) return resolveProviderCities(direct as any[])
 
@@ -353,12 +357,14 @@ export async function getProvidersByServiceAndLocation(
         }
 
         return []
-      })(),
-      QUERY_TIMEOUT_MS,
+      },
       `getProvidersByServiceAndLocation(${serviceSlug}, ${locationSlug})`,
     )
-  } catch {
-    return [] // Timeout or error — ISR will retry on next revalidation
+  } catch (err) {
+    // Re-throw so ISR keeps stale cached page instead of caching empty results.
+    // Page component catches this and renders gracefully on first cold visit.
+    console.error(`[getProvidersByServiceAndLocation] FAILED for ${serviceSlug}/${locationSlug}:`, err instanceof Error ? err.message : err)
+    throw err
   }
 }
 
@@ -448,8 +454,8 @@ export async function getProvidersByLocation(locationSlug: string) {
 
   const cityValues = getCityValues(ville.name)
   try {
-    return await withTimeout(
-      (async () => {
+    return await retryWithBackoff(
+      async () => {
         const { data, error } = await supabase
           .from('providers')
           .select(PROVIDER_LIST_SELECT)
@@ -461,12 +467,12 @@ export async function getProvidersByLocation(locationSlug: string) {
 
         if (error) throw error
         return resolveProviderCities((data || []) as any[])
-      })(),
-      QUERY_TIMEOUT_MS,
+      },
       `getProvidersByLocation(${locationSlug})`,
     )
-  } catch {
-    return []
+  } catch (err) {
+    console.error(`[getProvidersByLocation] FAILED for ${locationSlug}:`, err instanceof Error ? err.message : err)
+    throw err
   }
 }
 

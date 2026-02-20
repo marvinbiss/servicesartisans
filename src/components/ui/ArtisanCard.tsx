@@ -247,7 +247,7 @@ export function ArtisanCard({
 
           {/* Bouton comparer */}
           <CompareButton
-            provider={{ id, name, slug, specialty: profession, address_city: location }}
+            provider={{ id, name, slug, specialty: profession, address_city: location, is_verified: isVerified, rating_average: rating, review_count: reviewCount }}
             size="sm"
             className="absolute bottom-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
           />

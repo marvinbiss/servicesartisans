@@ -21,18 +21,12 @@ export interface CompareProvider {
   specialty?: string
   address_city?: string
   address_region?: string
+  address_postal_code?: string
   is_verified?: boolean
   rating_average?: number
   review_count?: number
-  experience_years?: number
-  certifications?: string[]
-  insurance?: string[]
-  services_offered?: string[]
-  avatar_url?: string
   phone?: string
-  emergency_available?: boolean
-  hourly_rate_min?: number
-  hourly_rate_max?: number
+  siret?: string
 }
 
 interface CompareContextType {

@@ -25,7 +25,7 @@ import {
 import { popularServices, relatedServices } from '@/lib/constants/navigation'
 import Breadcrumb from '@/components/Breadcrumb'
 import { formatEuro } from '@/lib/data/commune-data'
-import type { Service, Location as LocationType, Provider } from '@/types'
+import type { Service, Location as LocationType } from '@/types'
 
 // Safely escape JSON for script tags to prevent XSS
 function safeJsonStringify(data: unknown): string {
@@ -72,12 +72,8 @@ export default async function ServiceQuartierPage({
   }
 
   // 3. Fetch providers (city-level — quartiers share the same providers pool)
-  let providers: Provider[] = []
-  try {
-    providers = await getProvidersByServiceAndLocation(serviceSlug, locationSlug)
-  } catch {
-    // Continue with empty providers — page still renders
-  }
+  // Throw on failure so ISR keeps stale cache (prevents "disappearing artisans" bug)
+  const providers = await getProvidersByServiceAndLocation(serviceSlug, locationSlug)
 
   // 4. Generate content
   const trade = getTradeContent(serviceSlug)

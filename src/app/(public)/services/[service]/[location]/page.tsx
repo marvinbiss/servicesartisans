@@ -25,7 +25,7 @@ import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import { getCommuneBySlug } from '@/lib/data/commune-data'
 import { formatNumber, formatEuro } from '@/lib/data/commune-data'
-import type { Service, Location as LocationType, Provider } from '@/types'
+import type { Service, Location as LocationType } from '@/types'
 
 // Safely escape JSON for script tags to prevent XSS
 function safeJsonStringify(data: unknown): string {
@@ -305,14 +305,9 @@ async function _ServiceLocationPage({ params }: PageProps) {
     location = fallback
   }
 
-  // 3. Fetch providers (best-effort, never crash)
-  let providers: Provider[] = []
-  try {
-    providers = await getProvidersByServiceAndLocation(serviceSlug, locationSlug)
-  } catch (error) {
-    console.error('Hub DB error (providers):', error)
-    // Continue with empty providers — page still renders
-  }
+  // 3. Fetch providers — throw on failure so ISR keeps stale cache
+  // (prevents "artisans disappear" bug where cached page is replaced with empty data)
+  const providers = await getProvidersByServiceAndLocation(serviceSlug, locationSlug)
 
   const trade = getTradeContent(serviceSlug)
   const baseSchemas = generateJsonLd(service, location, providers || [], serviceSlug, locationSlug)

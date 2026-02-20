@@ -6,11 +6,11 @@ import {
   Star,
   MapPin,
   Shield,
-  Clock,
   Phone,
-  Zap,
   CheckCircle,
   XCircle,
+  FileText,
+  MapPinned,
 } from 'lucide-react'
 import { clsx } from 'clsx'
 import { useCompare } from '@/components/compare/CompareProvider'
@@ -220,23 +220,6 @@ export function CompareView({ onClose }: CompareViewProps) {
               </ProviderGrid>
             </CompareRow>
 
-            {/* Experience */}
-            <CompareRow
-              label="Exp\u00e9rience"
-              icon={<Clock className="w-4 h-4 text-gray-400" />}
-              providers={compareList}
-            >
-              <ProviderGrid providers={compareList}>
-                {(provider) => (
-                  <span className="text-gray-700">
-                    {provider.experience_years
-                      ? `${provider.experience_years} ans`
-                      : '-'}
-                  </span>
-                )}
-              </ProviderGrid>
-            </CompareRow>
-
             {/* Phone */}
             <CompareRow
               label="T\u00e9l\u00e9phone"
@@ -261,89 +244,32 @@ export function CompareView({ onClose }: CompareViewProps) {
               </ProviderGrid>
             </CompareRow>
 
-            {/* Emergency */}
+            {/* SIRET */}
             <CompareRow
-              label="Urgences"
-              icon={<Zap className="w-4 h-4 text-red-500" />}
+              label="SIRET"
+              icon={<FileText className="w-4 h-4 text-gray-400" />}
               providers={compareList}
             >
               <ProviderGrid providers={compareList}>
                 {(provider) => (
-                  <BooleanCell value={provider.emergency_available} />
+                  <span className="text-gray-700 text-xs font-mono">
+                    {provider.siret || '-'}
+                  </span>
                 )}
               </ProviderGrid>
             </CompareRow>
 
-            {/* Price range */}
+            {/* Postal code */}
             <CompareRow
-              label="Tarif horaire"
-              icon={
-                <span className="text-gray-400 text-sm font-bold">\u20ac</span>
-              }
+              label="Code postal"
+              icon={<MapPinned className="w-4 h-4 text-gray-400" />}
               providers={compareList}
             >
               <ProviderGrid providers={compareList}>
                 {(provider) => (
                   <span className="text-gray-700">
-                    {provider.hourly_rate_min != null ||
-                    provider.hourly_rate_max != null
-                      ? `${provider.hourly_rate_min ?? '?'}\u20ac - ${provider.hourly_rate_max ?? '?'}\u20ac`
-                      : '-'}
+                    {provider.address_postal_code || '-'}
                   </span>
-                )}
-              </ProviderGrid>
-            </CompareRow>
-
-            {/* Certifications */}
-            <CompareRow
-              label="Certifications"
-              icon={<Shield className="w-4 h-4 text-blue-500" />}
-              providers={compareList}
-            >
-              <ProviderGrid providers={compareList}>
-                {(provider) => (
-                  <span className="text-gray-700">
-                    {provider.certifications && provider.certifications.length > 0
-                      ? provider.certifications.join(', ')
-                      : '-'}
-                  </span>
-                )}
-              </ProviderGrid>
-            </CompareRow>
-
-            {/* Services */}
-            <CompareRow
-              label="Services"
-              icon={
-                <span className="text-gray-400 text-sm font-bold">#</span>
-              }
-              providers={compareList}
-            >
-              <ProviderGrid providers={compareList}>
-                {(provider) => (
-                  <span className="text-gray-700 text-xs leading-relaxed">
-                    {provider.services_offered &&
-                    provider.services_offered.length > 0
-                      ? provider.services_offered.slice(0, 5).join(', ')
-                      : '-'}
-                  </span>
-                )}
-              </ProviderGrid>
-            </CompareRow>
-
-            {/* Insurance */}
-            <CompareRow
-              label="Assurance"
-              icon={<Shield className="w-4 h-4 text-indigo-500" />}
-              providers={compareList}
-            >
-              <ProviderGrid providers={compareList}>
-                {(provider) => (
-                  <BooleanCell
-                    value={
-                      provider.insurance != null && provider.insurance.length > 0
-                    }
-                  />
                 )}
               </ProviderGrid>
             </CompareRow>
