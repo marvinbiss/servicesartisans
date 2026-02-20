@@ -381,6 +381,18 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
               Toutes les villes <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
+          {/* Service×ville cross-links — maillage interne vers pages artisans */}
+          <div className="mt-6 flex flex-wrap gap-2">
+            {top20Cities.slice(0, 8).map((ville) => (
+              <Link
+                key={ville.slug}
+                href={`/services/${problem.primaryService}/${ville.slug}`}
+                className="text-xs text-gray-500 hover:text-amber-600 px-3 py-1.5 bg-gray-50 hover:bg-amber-50 border border-gray-200 rounded-full transition-colors"
+              >
+                {tradeName} à {ville.name}
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 

@@ -303,7 +303,7 @@ export default async function GuidePage({ params }: PageProps) {
           <h2 className="font-heading text-xl font-bold text-slate-900 mb-8 tracking-tight">
             Voir aussi
           </h2>
-          <div className="grid md:grid-cols-3 gap-10">
+          <div className="grid md:grid-cols-4 gap-10">
             <div>
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Services associés</h3>
               <div className="space-y-2">
@@ -315,6 +315,22 @@ export default async function GuidePage({ params }: PageProps) {
                 ))}
               </div>
             </div>
+            {relatedTrades.length > 0 && (
+              <div>
+                <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Artisans par ville</h3>
+                <div className="space-y-2">
+                  {['paris','lyon','marseille','toulouse','nice'].map((citySlug) => {
+                    const cityName = citySlug.charAt(0).toUpperCase() + citySlug.slice(1)
+                    return (
+                      <Link key={citySlug} href={`/services/${relatedTrades[0].slug}/${citySlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
+                        <ChevronRight className="w-3 h-3" />
+                        {relatedTrades[0].name} à {cityName}
+                      </Link>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
             <div>
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Devis gratuits</h3>
               <div className="space-y-2">

@@ -94,6 +94,17 @@ export function getRelatedServiceLinks(
   const slugWords = slug.toLowerCase()
   const searchTerms = [slugWords, ...tags.map((t) => t.toLowerCase())]
 
+  // Top 5 cities for service×ville cross-links
+  const TOP_CITIES = [
+    { name: 'Paris', slug: 'paris' },
+    { name: 'Lyon', slug: 'lyon' },
+    { name: 'Marseille', slug: 'marseille' },
+    { name: 'Toulouse', slug: 'toulouse' },
+    { name: 'Nice', slug: 'nice' },
+  ]
+
+  let firstServiceSlug: string | null = null
+
   for (const term of searchTerms) {
     for (const [keyword, service] of Object.entries(serviceMapping)) {
       if (term.includes(keyword) && !addedSlugs.has(service.slug)) {
@@ -101,6 +112,16 @@ export function getRelatedServiceLinks(
           text: `Trouver un ${service.label} qualifié`,
           href: `/services/${service.slug}`,
         })
+        // Add top-city variants for the first matched service only
+        if (!firstServiceSlug) {
+          firstServiceSlug = service.slug
+          for (const city of TOP_CITIES) {
+            links.push({
+              text: `${service.label.charAt(0).toUpperCase() + service.label.slice(1)} à ${city.name}`,
+              href: `/services/${service.slug}/${city.slug}`,
+            })
+          }
+        }
         addedSlugs.add(service.slug)
       }
     }
