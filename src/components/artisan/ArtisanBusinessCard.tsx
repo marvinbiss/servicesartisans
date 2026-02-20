@@ -1,6 +1,17 @@
 'use client'
 
-import { Shield, CheckCircle, ExternalLink, Phone, Building2, Calendar, Hash, Scale, Briefcase } from 'lucide-react'
+import { motion } from 'framer-motion'
+import {
+  Shield,
+  CheckCircle,
+  ExternalLink,
+  Building2,
+  Calendar,
+  Hash,
+  Scale,
+  Users,
+  Briefcase,
+} from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
 
 interface ArtisanBusinessCardProps {
@@ -14,25 +25,7 @@ function formatSiret(siret: string): string {
   return `${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6, 9)} ${digits.slice(9, 14)}`
 }
 
-/** Format French phone: 0X XX XX XX XX */
-function formatFrenchPhone(phone: string): string {
-  const digits = phone.replace(/\D/g, '')
-  // Handle +33 prefix
-  const normalized = digits.startsWith('33') && digits.length === 11
-    ? '0' + digits.slice(2)
-    : digits
-  if (normalized.length !== 10 || !normalized.startsWith('0')) return phone
-  return `${normalized.slice(0, 2)} ${normalized.slice(2, 4)} ${normalized.slice(4, 6)} ${normalized.slice(6, 8)} ${normalized.slice(8, 10)}`
-}
-
-/** Check if a phone number is valid (not empty, not placeholder) */
-function isValidPhone(phone: string | undefined | null): phone is string {
-  if (!phone) return false
-  const digits = phone.replace(/\D/g, '')
-  return digits.length >= 10
-}
-
-/** Format creation date to French locale */
+/** Format creation date to French locale — full date */
 function formatCreationDate(dateStr: string): string {
   try {
     const date = new Date(dateStr)
@@ -47,7 +40,7 @@ function formatCreationDate(dateStr: string): string {
   }
 }
 
-/** Calculate years since creation */
+/** Calculate full years since creation */
 function getYearsSinceCreation(dateStr: string): number | null {
   try {
     const date = new Date(dateStr)
@@ -59,32 +52,55 @@ function getYearsSinceCreation(dateStr: string): number | null {
   }
 }
 
+/** Format employee / team size to a readable label */
+function formatTeamSize(size: number): string {
+  if (size === 0) return 'Indépendant'
+  if (size === 1) return '1 salarié'
+  return `${size} salariés`
+}
+
 export function ArtisanBusinessCard({ artisan }: ArtisanBusinessCardProps) {
   const hasSiret = !!artisan.siret
-  const hasAnyData = hasSiret || artisan.legal_form || artisan.creation_date || isValidPhone(artisan.phone) || artisan.email || artisan.website
+  const hasEmployees = artisan.team_size != null && artisan.team_size >= 0
+  const hasAnyData =
+    hasSiret ||
+    !!artisan.legal_form ||
+    !!artisan.creation_date ||
+    !!artisan.email ||
+    !!artisan.website ||
+    hasEmployees
 
   if (!hasAnyData) return null
 
-  const yearsSinceCreation = artisan.creation_date ? getYearsSinceCreation(artisan.creation_date) : null
+  const yearsSinceCreation = artisan.creation_date
+    ? getYearsSinceCreation(artisan.creation_date)
+    : null
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-      {/* Header with verification badge */}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: 0.2 }}
+      className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
+    >
+      {/* ── Header ─────────────────────────────────────────────────── */}
       <div className="px-6 py-5 bg-gradient-to-r from-slate-50 via-blue-50/30 to-slate-50 border-b border-gray-100">
-        <div className="flex items-start justify-between">
+        <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-sm shadow-blue-500/20">
+            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-sm shadow-blue-500/20 flex-shrink-0">
               <Shield className="w-5 h-5 text-white" aria-hidden="true" />
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 font-heading">Fiche entreprise</h3>
+              <h3 className="text-lg font-semibold text-gray-900 font-heading">
+                Fiche entreprise
+              </h3>
               <p className="text-sm text-slate-500">
                 Donn&eacute;es v&eacute;rifi&eacute;es par l&apos;API gouvernementale
               </p>
             </div>
           </div>
           {hasSiret && (
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-50 text-green-700 text-xs font-semibold border border-green-200 shadow-sm">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-50 text-green-700 text-xs font-semibold border border-green-200 shadow-sm flex-shrink-0">
               <CheckCircle className="w-3.5 h-3.5" aria-hidden="true" />
               V&eacute;rifi&eacute;e
             </span>
@@ -92,49 +108,46 @@ export function ArtisanBusinessCard({ artisan }: ArtisanBusinessCardProps) {
         </div>
       </div>
 
-      {/* Content: structured data grid */}
+      {/* ── Data grid ──────────────────────────────────────────────── */}
       <div className="p-6">
-        <dl className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+          {/* SIRET */}
           {artisan.siret && (
-            <div className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50/80 border border-slate-100 transition-colors hover:bg-slate-100/80">
+            <div className="flex items-start gap-3 p-4 rounded-xl bg-slate-50/80 border border-slate-100 hover:bg-slate-100/60 transition-colors">
               <div className="w-9 h-9 rounded-lg bg-white flex items-center justify-center shadow-sm flex-shrink-0">
                 <Hash className="w-4 h-4 text-blue-600" aria-hidden="true" />
               </div>
               <div className="min-w-0">
-                <dt className="text-xs font-medium text-slate-500 uppercase tracking-wide">SIRET</dt>
-                <dd className="mt-0.5 text-sm font-semibold text-gray-900 font-mono tracking-wide">
+                <dt className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                  SIRET
+                </dt>
+                <dd className="mt-0.5 text-sm font-bold text-gray-900 font-mono tracking-widest">
                   {formatSiret(artisan.siret)}
                 </dd>
               </div>
             </div>
           )}
 
-          {artisan.legal_form && (
-            <div className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50/80 border border-slate-100 transition-colors hover:bg-slate-100/80">
-              <div className="w-9 h-9 rounded-lg bg-white flex items-center justify-center shadow-sm flex-shrink-0">
-                <Scale className="w-4 h-4 text-purple-600" aria-hidden="true" />
-              </div>
-              <div className="min-w-0">
-                <dt className="text-xs font-medium text-slate-500 uppercase tracking-wide">Forme juridique</dt>
-                <dd className="mt-0.5 text-sm font-semibold text-gray-900">
-                  {artisan.legal_form}
-                </dd>
-              </div>
-            </div>
-          )}
-
+          {/* Date de création — prominent */}
           {artisan.creation_date && (
-            <div className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50/80 border border-slate-100 transition-colors hover:bg-slate-100/80">
+            <div className="flex items-start gap-3 p-4 rounded-xl bg-amber-50/60 border border-amber-100 hover:bg-amber-50 transition-colors">
               <div className="w-9 h-9 rounded-lg bg-white flex items-center justify-center shadow-sm flex-shrink-0">
                 <Calendar className="w-4 h-4 text-amber-600" aria-hidden="true" />
               </div>
               <div className="min-w-0">
-                <dt className="text-xs font-medium text-slate-500 uppercase tracking-wide">Date de cr&eacute;ation</dt>
-                <dd className="mt-0.5 text-sm font-semibold text-gray-900">
-                  {formatCreationDate(artisan.creation_date)}
+                <dt className="text-xs font-semibold text-amber-600/90 uppercase tracking-wide">
+                  Cr&eacute;&eacute;e le
+                </dt>
+                <dd className="mt-0.5">
+                  <span className="text-sm font-bold text-gray-900">
+                    {formatCreationDate(artisan.creation_date)}
+                  </span>
                   {yearsSinceCreation !== null && yearsSinceCreation > 0 && (
-                    <span className="ml-1.5 text-xs font-medium text-slate-400">
-                      ({yearsSinceCreation} {yearsSinceCreation === 1 ? 'an' : 'ans'})
+                    <span className="mt-1.5 flex">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 text-xs font-semibold border border-amber-200">
+                        {yearsSinceCreation}&nbsp;an{yearsSinceCreation > 1 ? 's' : ''}&nbsp;d&apos;activit&eacute;
+                      </span>
                     </span>
                   )}
                 </dd>
@@ -142,28 +155,55 @@ export function ArtisanBusinessCard({ artisan }: ArtisanBusinessCardProps) {
             </div>
           )}
 
+          {/* Forme juridique */}
+          {artisan.legal_form && (
+            <div className="flex items-start gap-3 p-4 rounded-xl bg-slate-50/80 border border-slate-100 hover:bg-slate-100/60 transition-colors">
+              <div className="w-9 h-9 rounded-lg bg-white flex items-center justify-center shadow-sm flex-shrink-0">
+                <Scale className="w-4 h-4 text-purple-600" aria-hidden="true" />
+              </div>
+              <div className="min-w-0">
+                <dt className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                  Forme juridique
+                </dt>
+                <dd className="mt-0.5 text-sm font-bold text-gray-900">
+                  {artisan.legal_form}
+                </dd>
+              </div>
+            </div>
+          )}
+
+          {/* Effectif / nombre d'employés — prominent */}
+          {hasEmployees && (
+            <div className="flex items-start gap-3 p-4 rounded-xl bg-blue-50/50 border border-blue-100 hover:bg-blue-50/80 transition-colors">
+              <div className="w-9 h-9 rounded-lg bg-white flex items-center justify-center shadow-sm flex-shrink-0">
+                <Users className="w-4 h-4 text-blue-600" aria-hidden="true" />
+              </div>
+              <div className="min-w-0">
+                <dt className="text-xs font-semibold text-blue-600/90 uppercase tracking-wide">
+                  Effectif
+                </dt>
+                <dd className="mt-0.5">
+                  <span className="text-sm font-bold text-gray-900">
+                    {formatTeamSize(artisan.team_size!)}
+                  </span>
+                  <span className="mt-1 block text-xs text-slate-400">
+                    Source : SIRENE (INSEE)
+                  </span>
+                </dd>
+              </div>
+            </div>
+          )}
         </dl>
 
-        {/* Contact actions row */}
-        {(isValidPhone(artisan.phone) || artisan.email || artisan.website) && (
+        {/* ── Secondary links: website & email only (no phone here) ── */}
+        {(artisan.email || artisan.website) && (
           <div className="mt-5 pt-5 border-t border-gray-100">
             <div className="flex flex-wrap gap-3">
-              {isValidPhone(artisan.phone) && (
-                <a
-                  href={`tel:${artisan.phone.replace(/\s/g, '')}`}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition-all duration-200 shadow-sm shadow-blue-500/20 hover:shadow-md hover:shadow-blue-500/25 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                  aria-label={`Appeler le ${formatFrenchPhone(artisan.phone)}`}
-                >
-                  <Phone className="w-4 h-4" aria-hidden="true" />
-                  {formatFrenchPhone(artisan.phone)}
-                </a>
-              )}
-
               {artisan.email && (
                 <a
                   href={`mailto:${artisan.email}`}
                   className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200 text-sm font-medium text-slate-700 hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2"
-                  aria-label={`Envoyer un email à ${artisan.email}`}
+                  aria-label={`Envoyer un email \u00e0 ${artisan.email}`}
                 >
                   <Briefcase className="w-4 h-4 text-slate-400" aria-hidden="true" />
                   <span className="truncate max-w-[200px]">{artisan.email}</span>
@@ -172,14 +212,20 @@ export function ArtisanBusinessCard({ artisan }: ArtisanBusinessCardProps) {
 
               {artisan.website && (
                 <a
-                  href={artisan.website.startsWith('http') ? artisan.website : `https://${artisan.website}`}
+                  href={
+                    artisan.website.startsWith('http')
+                      ? artisan.website
+                      : `https://${artisan.website}`
+                  }
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200 text-sm font-medium text-blue-600 hover:text-blue-700 hover:border-blue-200 hover:bg-blue-50/50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
                 >
                   <Building2 className="w-4 h-4" aria-hidden="true" />
                   <span className="truncate max-w-[180px]">
-                    {artisan.website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}
+                    {artisan.website
+                      .replace(/^https?:\/\/(www\.)?/, '')
+                      .replace(/\/$/, '')}
                   </span>
                   <ExternalLink className="w-3 h-3 flex-shrink-0" aria-hidden="true" />
                 </a>
@@ -188,6 +234,6 @@ export function ArtisanBusinessCard({ artisan }: ArtisanBusinessCardProps) {
           </div>
         )}
       </div>
-    </div>
+    </motion.div>
   )
 }
