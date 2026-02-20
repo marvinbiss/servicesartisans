@@ -114,8 +114,8 @@ export default function ProviderCard({
         </p>
       )}
 
-      {/* Bouton comparer */}
-      <div className="mb-3">
+      {/* Bouton comparer — désactivé temporairement, à réactiver plus tard */}
+      <div className="mb-3 hidden">
         <CompareButton
           provider={{ id: provider.stable_id || provider.id, name: provider.name, slug: provider.slug || '', specialty: provider.specialty, address_city: provider.address_city, address_region: provider.address_region, address_postal_code: provider.address_postal_code, is_verified: provider.is_verified, rating_average: provider.rating_average, review_count: provider.review_count, phone: provider.phone, siret: provider.siret }}
           size="sm"

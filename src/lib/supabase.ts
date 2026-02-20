@@ -358,6 +358,8 @@ export async function getProvidersByServiceAndLocation(
           .in('specialty', specialties)
           .in('address_city', cityValues)
           .eq('is_active', true)
+          // STRICT RULE: providers with phone always rank above those without
+          .order('phone', { ascending: false, nullsFirst: false })
           .order('is_verified', { ascending: false })
           .order('name')
           .range(offset, offset + limit - 1)
@@ -377,6 +379,8 @@ export async function getProvidersByServiceAndLocation(
             .eq('provider_services.service_id', svc.id)
             .in('address_city', cityValues)
             .eq('is_active', true)
+          // STRICT RULE: providers with phone always rank above those without
+            .order('phone', { ascending: false, nullsFirst: false })
             .order('is_verified', { ascending: false })
             .order('name')
             .range(offset, offset + limit - 1)

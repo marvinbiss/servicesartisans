@@ -50,6 +50,10 @@ export default function ProviderList({
         return 0
       case 'relevance':
       default: {
+        // STRICT RULE: providers with phone always rank above those without
+        const aPhone = !!a.phone
+        const bPhone = !!b.phone
+        if (aPhone !== bPhone) return aPhone ? -1 : 1
         if (a.is_verified !== b.is_verified) return a.is_verified ? -1 : 1
         return 0
       }
