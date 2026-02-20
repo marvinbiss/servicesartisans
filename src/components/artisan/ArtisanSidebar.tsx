@@ -122,6 +122,7 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
 // Mobile CTA bar
 export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
   const [showQuoteModal, setShowQuoteModal] = useState(false)
+  const [showPhone, setShowPhone] = useState(false)
 
   const handleCall = () => {
     if (artisan.phone) {
@@ -143,12 +144,12 @@ export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
           {artisan.phone && (
             <motion.button
               whileTap={{ scale: 0.95 }}
-              onClick={handleCall}
-              className="flex-1 py-3.5 px-4 rounded-xl bg-blue-600 text-white font-semibold flex items-center justify-center gap-2 shadow-md shadow-blue-500/20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-              aria-label={`Appeler l'artisan au ${artisan.phone}`}
+              onClick={() => { if (showPhone) handleCall(); else setShowPhone(true) }}
+              className="flex-1 py-3.5 px-4 rounded-xl bg-blue-600 text-white font-semibold flex items-center justify-center gap-2 shadow-md shadow-blue-500/20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 min-w-0"
+              aria-label={showPhone ? `Appeler l'artisan au ${artisan.phone}` : 'Afficher le numéro de téléphone'}
             >
-              <Phone className="w-5 h-5" aria-hidden="true" />
-              Appeler
+              <Phone className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
+              <span className="truncate text-sm">{showPhone ? artisan.phone : 'Voir le numéro'}</span>
             </motion.button>
           )}
           <motion.button

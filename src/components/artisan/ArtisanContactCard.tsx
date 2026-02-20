@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
 import { Phone, Mail, ExternalLink, FileText, Shield, Star } from 'lucide-react'
 import type { LegacyArtisan } from '@/types/legacy'
@@ -29,6 +30,7 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
   const hasPhone = isValidPhone(artisan.phone)
   const hasEmail = !!artisan.email
   const hasWebsite = !!artisan.website
+  const [showPhone, setShowPhone] = useState(false)
 
   return (
     <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
@@ -69,16 +71,25 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
           </Link>
 
           {hasPhone && (
-            <a
-              href={`tel:${artisan.phone!.replace(/\s/g, '')}`}
-              className="w-full py-3.5 px-4 rounded-xl bg-blue-600 text-white font-semibold flex items-center justify-center gap-2.5 shadow-md shadow-blue-500/20 hover:bg-blue-700 hover:shadow-blue-500/30 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 group"
-              aria-label={`Appeler le ${formatFrenchPhone(artisan.phone!)}`}
+            <button
+              type="button"
+              onClick={() => {
+                if (showPhone) {
+                  window.location.href = `tel:${artisan.phone!.replace(/\s/g, '')}`
+                } else {
+                  setShowPhone(true)
+                }
+              }}
+              className="w-full py-3.5 px-4 rounded-xl bg-blue-600 text-white font-semibold flex items-center justify-center gap-2.5 shadow-md shadow-blue-500/20 hover:bg-blue-700 hover:shadow-blue-500/30 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              aria-label={showPhone ? `Appeler le ${formatFrenchPhone(artisan.phone!)}` : 'Afficher le numéro de téléphone'}
             >
-              <Phone className="w-5 h-5 transition-transform group-hover:scale-110" aria-hidden="true" />
-              <span>Appeler</span>
-              <span className="text-blue-200 font-normal">&middot;</span>
-              <span className="text-blue-100 font-normal text-sm">{formatFrenchPhone(artisan.phone!)}</span>
-            </a>
+              <Phone className="w-5 h-5" aria-hidden="true" />
+              {showPhone ? (
+                <span>{formatFrenchPhone(artisan.phone!)}</span>
+              ) : (
+                <span>Afficher le numéro</span>
+              )}
+            </button>
           )}
 
           {hasEmail && (

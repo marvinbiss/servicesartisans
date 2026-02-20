@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Star, MapPin, CheckCircle, Users, Clock, Phone, CalendarCheck } from 'lucide-react'
 import { getDisplayName } from './types'
@@ -24,6 +25,7 @@ function getVerificationLevel(artisan: LegacyArtisan): 'none' | 'basic' | 'stand
 export function ArtisanHero({ artisan }: ArtisanHeroProps) {
   const displayName = getDisplayName(artisan)
   const verificationLevel = getVerificationLevel(artisan)
+  const [showPhone, setShowPhone] = useState(false)
 
   return (
     <motion.div
@@ -83,16 +85,23 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
               )}
             </div>
 
-            {/* Phone - Display directly if available */}
+            {/* Phone - click-to-reveal then call */}
             {artisan.phone && (
-              <a
-                href={`tel:${artisan.phone.replace(/\s/g, '')}`}
-                className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium mb-4 transition-colors group/phone"
-                aria-label={`Appeler au ${artisan.phone}`}
+              <button
+                type="button"
+                onClick={() => {
+                  if (showPhone) {
+                    window.location.href = `tel:${artisan.phone!.replace(/\s/g, '')}`
+                  } else {
+                    setShowPhone(true)
+                  }
+                }}
+                className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium mb-4 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded"
+                aria-label={showPhone ? `Appeler au ${artisan.phone}` : 'Afficher le numéro de téléphone'}
               >
-                <Phone className="w-4 h-4 transition-transform group-hover/phone:scale-110" />
-                <span>{artisan.phone}</span>
-              </a>
+                <Phone className="w-4 h-4" />
+                <span>{showPhone ? artisan.phone : 'Afficher le numéro'}</span>
+              </button>
             )}
 
             {/* Verification Badges Row */}
