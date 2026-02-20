@@ -11,8 +11,6 @@ import type { LegacyArtisan } from '@/types/legacy'
 import { getServiceImage } from '@/lib/data/images'
 import { SITE_URL } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
-import { getBreadcrumbSchema, getLocalBusinessSchema } from '@/lib/seo/jsonld'
-import JsonLd from '@/components/JsonLd'
 import { getQuartierBySlug, services as staticServicesList, villes } from '@/lib/data/france'
 import ServiceQuartierPage from './ServiceQuartierPage'
 
@@ -359,23 +357,34 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   // ─── PROVIDER DETAIL (existing logic) ────────────────────
   try {
     // Parallel lookups to minimize total latency
-    const [stableIdResult, slugResult, service, location] = await Promise.all([
+    const [stableIdResult, slugResult, service] = await Promise.all([
       getProviderByStableId(publicId).catch(() => null),
       getProviderBySlug(publicId).catch(() => null),
       getServiceBySlug(serviceSlug).catch(() => null),
-      getLocationBySlug(locationSlug).catch(() => null),
     ])
     const provider = stableIdResult || slugResult
     if (!provider) return { title: 'Artisan non trouvé', robots: { index: false, follow: false } }
 
+    // Resolve provider's real city (may be INSEE code in DB)
+    const resolved = resolveProviderCity(provider)
+    const realCity = resolved.address_city || provider.address_city || ''
     const displayName = provider.name || provider.business_name || 'Artisan'
-    const cityName = location?.name || provider.address_city || ''
     const serviceName = service?.name || 'Artisan'
 
-    const title = truncateTitle(`${displayName} - ${serviceName} à ${cityName}`)
+    // Compute canonical from provider's REAL data, not URL segments
+    const canonicalPath = getArtisanUrl({
+      stable_id: provider.stable_id,
+      slug: provider.slug,
+      specialty: provider.specialty,
+      city: realCity,
+    })
+    const currentPath = `/services/${serviceSlug}/${locationSlug}/${publicId}`
+    const isWrongUrl = currentPath !== canonicalPath
+
+    const title = truncateTitle(`${displayName} - ${serviceName} à ${realCity}`)
 
     const descParts: string[] = []
-    descParts.push(`${displayName}, ${serviceName.toLowerCase()} à ${cityName}`)
+    descParts.push(`${displayName}, ${serviceName.toLowerCase()} à ${realCity}`)
     if (provider.experience_years) descParts.push(`${provider.experience_years} ans d'expérience`)
     if (provider.review_count && provider.review_count > 0) {
       descParts.push(`${provider.review_count} avis${provider.rating_average ? ` (${Number(provider.rating_average).toFixed(1)}/5)` : ''}`)
@@ -386,11 +395,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const rawDesc = descParts.join(' \u00b7 ') + '.'
     const description = rawDesc.length > 155 ? rawDesc.slice(0, 154).replace(/\s+\S*$/, '') + '\u2026' : rawDesc
 
-    // Only noindex explicitly flagged providers (inactive/dead businesses)
-    const shouldNoindex = provider.noindex === true
+    // Noindex if provider is flagged OR if this URL is not the canonical (wrong service/city)
+    const shouldNoindex = provider.noindex === true || isWrongUrl
 
     const serviceImage = getServiceImage(serviceSlug)
-    const ogAlt = `${displayName} - ${serviceName} à ${cityName}`
+    const ogAlt = `${displayName} - ${serviceName} à ${realCity}`
     // Use avatar if available, otherwise fall back to service-specific image (not generic OG)
     const ogImage = provider.avatar_url || serviceImage.src
 
@@ -405,7 +414,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         description,
         type: 'profile',
         locale: 'fr_FR',
-        url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}/${publicId}`,
+        url: `${SITE_URL}${canonicalPath}`,
         images: [{ url: ogImage, width: 1200, height: 630, alt: ogAlt }],
       },
       twitter: {
@@ -415,7 +424,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         images: [ogImage],
       },
       alternates: {
-        canonical: `${SITE_URL}/services/${serviceSlug}/${locationSlug}/${publicId}`,
+        canonical: `${SITE_URL}${canonicalPath}`,
       },
     }
   } catch {
@@ -457,12 +466,13 @@ export default async function ProviderPage({ params }: PageProps) {
   }
 
   // Canonical redirect: if the URL segments don't match the canonical slugs, redirect
-  // Use location.name (resolved) over raw provider.address_city (may be an INSEE code)
+  // Use provider's REAL city (resolved from INSEE if needed), NOT the URL's location
+  const resolvedProvider = resolveProviderCity(provider)
   const canonicalUrl = getArtisanUrl({
     stable_id: provider.stable_id,
     slug: provider.slug,
     specialty: provider.specialty,
-    city: location?.name || provider.address_city,
+    city: resolvedProvider.address_city || provider.address_city,
   })
   const currentPath = `/services/${serviceSlug}/${locationSlug}/${publicId}`
   // Only redirect if canonical URL has a valid ID segment (avoid redirect to hub page)
@@ -500,29 +510,8 @@ export default async function ProviderPage({ params }: PageProps) {
       )}
       <link rel="dns-prefetch" href="//umjmbdbwcsxrvfqktiui.supabase.co" />
 
-      {/* Server-rendered BreadcrumbList JSON-LD for immediate crawlability */}
-      <JsonLd data={getBreadcrumbSchema([
-        { name: 'Accueil', url: '/' },
-        { name: 'Services', url: '/services' },
-        { name: service?.name || artisan.specialty, url: `/services/${serviceSlug}` },
-        { name: artisan.city, url: `/services/${serviceSlug}/${locationSlug}` },
-        { name: artisan.business_name || 'Artisan', url: `/services/${serviceSlug}/${locationSlug}/${publicId}` },
-      ])} />
-
-      {/* LocalBusiness JSON-LD for rich search results */}
-      <JsonLd data={getLocalBusinessSchema({
-        name: artisan.business_name || 'Artisan',
-        description: artisan.description || `${artisan.specialty} à ${artisan.city}`,
-        address: artisan.address || '',
-        city: artisan.city,
-        postalCode: artisan.postal_code || '',
-        phone: artisan.phone,
-        rating: artisan.average_rating || undefined,
-        reviewCount: artisan.review_count || undefined,
-        services: [service?.name || artisan.specialty],
-        url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}/${publicId}`,
-        image: artisan.avatar_url || undefined,
-      })} />
+      {/* JSON-LD structured data (BreadcrumbList, LocalBusiness, ProfilePage, etc.)
+           is rendered by ArtisanSchema inside ArtisanPageClient — no duplicates here */}
 
       <ArtisanPageClient
         initialArtisan={artisan}
