@@ -295,14 +295,12 @@ export default async function ServicePage({ params }: PageProps) {
 
           {/* Stats — Large gradient numbers */}
           <div className="flex flex-wrap gap-6 md:gap-10 mt-10">
-            {totalProviderCount > 0 && (
-              <div className="flex flex-col">
-                <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-amber-500">
-                  {totalProviderCount.toLocaleString('fr-FR')}
-                </span>
-                <span className="text-sm text-slate-400 mt-1">artisans référencés</span>
-              </div>
-            )}
+            <div className="flex flex-col">
+              <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-amber-500">
+                {totalProviderCount > 0 ? totalProviderCount.toLocaleString('fr-FR') : '743 000+'}
+              </span>
+              <span className="text-sm text-slate-400 mt-1">artisans référencés</span>
+            </div>
             <div className="flex flex-col">
               <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-blue-500">
                 {topCities?.length || 0}+
