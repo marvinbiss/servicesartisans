@@ -167,7 +167,8 @@ export default function ArtisanPageClient({
         </a>
       </nav>
 
-      <div className="min-h-screen bg-gray-50/80 pb-24 md:pb-8">
+      {/* pb-44 on mobile = CTA bar (~72px at bottom-16) + bottom nav (64px) + margin */}
+      <div className="min-h-screen bg-gray-50/80 pb-44 md:pb-8">
         {/* Header */}
         <header className="bg-white/95 backdrop-blur-lg border-b border-gray-100 sticky top-0 z-40 shadow-sm">
           <div className="max-w-7xl mx-auto px-4 py-3.5">

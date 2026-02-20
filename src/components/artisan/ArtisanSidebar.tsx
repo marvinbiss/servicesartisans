@@ -136,7 +136,7 @@ export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
         initial={{ y: 100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.3 }}
-        className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200 p-4 md:hidden z-50 safe-area-bottom shadow-[0_-4px_20px_rgba(0,0,0,0.08)]"
+        className="fixed bottom-16 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200 p-4 md:hidden z-40 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]"
         role="group"
         aria-label="Actions rapides"
       >
