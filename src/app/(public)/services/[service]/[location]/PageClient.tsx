@@ -238,7 +238,7 @@ export default function ServiceLocationPageClient({
         {/* Provider List */}
         {(viewMode === 'split' || viewMode === 'list') && (
           <div
-            className={`bg-white border-r border-gray-200 max-h-[60vh] overflow-y-auto md:max-h-none md:overflow-y-auto ${
+            className={`bg-white border-r border-gray-200 overflow-y-auto md:h-full md:overflow-y-auto ${
               viewMode === 'split' ? 'w-full md:w-1/2 lg:w-2/5' : 'w-full'
             }`}
           >
