@@ -487,7 +487,7 @@ export default async function VillePage({ params }: PageProps) {
             <div>
               <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Services à {ville.name}</h3>
               <div className="space-y-2">
-                {services.slice(0, 10).map((s) => (
+                {services.map((s) => (
                   <Link key={s.slug} href={`/services/${s.slug}/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {s.name} à {ville.name}
@@ -495,7 +495,7 @@ export default async function VillePage({ params }: PageProps) {
                 ))}
               </div>
               <Link href="/services" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
-                Tous les services <ArrowRight className="w-4 h-4" />
+                47 métiers d&apos;artisanat <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
 
