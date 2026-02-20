@@ -71,7 +71,7 @@ export function PopularServicesLinks({
         href="/services"
         className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3"
       >
-        Tous les services <ArrowRight className="w-4 h-4" />
+        47 métiers d&apos;artisanat <ArrowRight className="w-4 h-4" />
       </Link>
     </div>
   )
@@ -110,7 +110,7 @@ export function PopularCitiesLinks({
         href="/villes"
         className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3"
       >
-        Toutes les villes <ArrowRight className="w-4 h-4" />
+        Artisans dans 2 280 villes <ArrowRight className="w-4 h-4" />
       </Link>
     </div>
   )
@@ -243,10 +243,10 @@ export function QuickSiteLinks({ className = '' }: { className?: string }) {
           Accueil
         </Link>
         <Link href="/services" className="text-gray-600 hover:text-blue-600 py-1">
-          Tous les services
+          47 métiers d&apos;artisanat
         </Link>
         <Link href="/villes" className="text-gray-600 hover:text-blue-600 py-1">
-          Toutes les villes
+          2 280 villes de France
         </Link>
         <Link href="/regions" className="text-gray-600 hover:text-blue-600 py-1">
           Par région
@@ -296,7 +296,7 @@ export function InternalLinksFooter({ className = '' }: { className?: string }) 
               href="/regions"
               className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3"
             >
-              Toutes les régions <ArrowRight className="w-4 h-4" />
+              Artisans par région <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
