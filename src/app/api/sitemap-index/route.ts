@@ -23,8 +23,10 @@ export async function GET() {
   const tradeSlugs = getTradesSlugs()
   const serviceCityBatches = Math.ceil(services.length * villes.length / 45000)
 
-  // service-cities batched (same formula as devis-service-cities)
-  const serviceCitiesBatchCount = Math.ceil(services.length * villes.length / 45000)
+  // Phase 1: service × top-300 cities only (conservative crawl budget for new domain).
+  // Must match TOP_CITIES_PHASE1 in sitemap.ts.
+  const TOP_CITIES_PHASE1 = 300
+  const serviceCitiesBatchCount = Math.ceil(services.length * TOP_CITIES_PHASE1 / 45000)
 
   const ids: string[] = [
     'static',

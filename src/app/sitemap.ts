@@ -12,6 +12,11 @@ import inseeCommunes from '@/lib/data/insee-communes.json'
 // Provider batch size — well under the 50,000 URL sitemap limit
 const PROVIDER_BATCH_SIZE = 40_000
 
+// Phase 1: submit only top-300 cities for new domain (conservative crawl budget).
+// Phase 2 (service-cities-extended) is handled below but NOT registered in generateSitemaps yet.
+// Uncomment the Phase 2 line in generateSitemaps() once domain authority grows (month 2-3).
+const TOP_CITIES_PHASE1 = 300
+
 /**
  * Generate sitemap index entries.
  * Next.js 14 calls this to produce /sitemap/[id].xml and a sitemap index.
@@ -24,13 +29,17 @@ export async function generateSitemaps() {
   }
   const sqBatchCount = Math.ceil(totalServiceQuartierUrls / 45000) // Stay under 50K limit
 
-  // service-cities batches (same formula as devis-service-cities)
-  const serviceCitiesBatchCount = Math.ceil(services.length * villes.length / 45000)
+  // Phase 1: top 300 cities only — focused crawl budget on high-traffic cities for new domain.
+  // Phase 2 (service-cities-extended) exists as a handler but is NOT registered here yet.
+  // Add extended batches once domain authority grows (month 2-3).
+  const serviceCitiesPhase1BatchCount = Math.ceil(services.length * TOP_CITIES_PHASE1 / 45000)
 
   const sitemaps: { id: string }[] = [
     { id: 'static' },           // homepage, static pages, services index, individual services
-    // service × city pages — batched to stay under 45K/50MB sitemap limit
-    ...Array.from({ length: serviceCitiesBatchCount }, (_, i) => ({ id: `service-cities-${i}` })),
+    // Phase 1: service × top-300 city pages (14 100 URLs, fits in 1 batch)
+    ...Array.from({ length: serviceCitiesPhase1BatchCount }, (_, i) => ({ id: `service-cities-${i}` })),
+    // Phase 2: uncomment when domain authority grows (month 2-3):
+    // ...Array.from({ length: Math.ceil(services.length * (villes.length - TOP_CITIES_PHASE1) / 45000) }, (_, i) => ({ id: `service-cities-extended-${i}` })),
     { id: 'cities' },           // villes index + individual city pages
     { id: 'geo' },              // departements + regions (index + individual)
     { id: 'quartiers' },        // quartier pages within cities
@@ -217,21 +226,47 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     return [...homepage, ...staticPages, ...blogArticlePages, ...servicesIndex, ...servicePages, ...urgencePages, ...tarifsPages]
   }
 
-  // ── Service + city combination pages (batched at 45K — limits were 50K) ──────
-  if (id.startsWith('service-cities-')) {
+  // ── Service + city combination pages — Phase 1: top 300 cities only ────────
+  if (id.startsWith('service-cities-') && !id.startsWith('service-cities-extended-')) {
     const batchIndex = parseInt(id.replace('service-cities-', ''), 10)
     const BATCH = 45000
     const offset = batchIndex * BATCH
 
+    const phase1Cities = villes.slice(0, TOP_CITIES_PHASE1)
     const allUrls: { url: string; lastModified: Date; changeFrequency: 'weekly'; priority: number; images: string[] }[] = []
     for (const service of services) {
       const serviceImage = getServiceImage(service.slug)
-      for (const ville of villes) {
+      for (const ville of phase1Cities) {
         allUrls.push({
           url: `${SITE_URL}/services/${service.slug}/${ville.slug}`,
           lastModified: STATIC_LAST_MODIFIED,
           changeFrequency: 'weekly' as const,
           priority: 0.8,
+          images: [serviceImage.src],
+        })
+      }
+    }
+
+    return allUrls.slice(offset, offset + BATCH)
+  }
+
+  // ── Service + city combination pages — Phase 2: remaining cities (not registered yet) ──
+  // Register in generateSitemaps() once domain authority grows (month 2-3).
+  if (id.startsWith('service-cities-extended-')) {
+    const batchIndex = parseInt(id.replace('service-cities-extended-', ''), 10)
+    const BATCH = 45000
+    const offset = batchIndex * BATCH
+
+    const phase2Cities = villes.slice(TOP_CITIES_PHASE1)
+    const allUrls: { url: string; lastModified: Date; changeFrequency: 'weekly'; priority: number; images: string[] }[] = []
+    for (const service of services) {
+      const serviceImage = getServiceImage(service.slug)
+      for (const ville of phase2Cities) {
+        allUrls.push({
+          url: `${SITE_URL}/services/${service.slug}/${ville.slug}`,
+          lastModified: STATIC_LAST_MODIFIED,
+          changeFrequency: 'weekly' as const,
+          priority: 0.7,
           images: [serviceImage.src],
         })
       }
