@@ -457,6 +457,11 @@ export default async function ServicePage({ params }: PageProps) {
               )
             })}
           </div>
+          <div className="mt-6 flex flex-wrap gap-4 text-sm">
+            <Link href="/departements" className="text-blue-600 hover:underline">Tous les départements →</Link>
+            <Link href="/regions" className="text-blue-600 hover:underline">Toutes les régions →</Link>
+            <Link href="/villes" className="text-blue-600 hover:underline">Toutes les villes →</Link>
+          </div>
         </div>
       </section>
 
