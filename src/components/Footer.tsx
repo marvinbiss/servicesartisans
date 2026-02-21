@@ -48,13 +48,13 @@ export default function Footer() {
       {/* Newsletter Section Premium */}
       <div className="relative border-b border-white/[0.06]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-          <div className="relative flex flex-col lg:flex-row items-center justify-between gap-8 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-700 rounded-2xl p-8 lg:p-10 overflow-hidden shadow-2xl shadow-blue-900/30">
+          <div className="relative flex flex-col lg:flex-row items-center justify-between gap-8 bg-gradient-to-br from-clay-400 to-clay-600 rounded-2xl p-8 lg:p-10 overflow-hidden shadow-2xl shadow-clay-900/30">
             {/* Decorative gradient orbs */}
-            <div className="absolute -top-20 -right-20 w-60 h-60 bg-blue-400/20 rounded-full blur-3xl" aria-hidden="true" />
-            <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-indigo-400/15 rounded-full blur-3xl" aria-hidden="true" />
+            <div className="absolute -top-20 -right-20 w-60 h-60 bg-clay-300/20 rounded-full blur-3xl" aria-hidden="true" />
+            <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-clay-200/15 rounded-full blur-3xl" aria-hidden="true" />
             <div className="relative text-center lg:text-left">
               <h3 className="font-heading text-2xl lg:text-3xl font-bold text-white mb-2 tracking-tight">Restez informé</h3>
-              <p className="text-blue-100/90 text-base">Recevez nos conseils et offres exclusives</p>
+              <p className="text-white/80 text-base">Recevez nos conseils et offres exclusives</p>
             </div>
             <div className="relative w-full lg:w-auto">
               <NewsletterForm />
@@ -77,8 +77,8 @@ export default function Footer() {
               </div>
             </div>
             <div className="group flex items-center gap-3.5 bg-white/[0.03] hover:bg-white/[0.06] backdrop-blur-sm rounded-2xl border border-white/[0.06] hover:border-white/[0.12] p-5 transition-all duration-300">
-              <div className="w-12 h-12 bg-blue-500/10 group-hover:bg-blue-500/15 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-300">
-                <Building2 className="w-6 h-6 text-blue-400" />
+              <div className="w-12 h-12 bg-clay-400/10 group-hover:bg-clay-400/15 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-300">
+                <Building2 className="w-6 h-6 text-clay-400" />
               </div>
               <div>
                 <p className="text-white font-semibold text-sm">101 départements</p>
@@ -95,8 +95,8 @@ export default function Footer() {
               </div>
             </div>
             <div className="group flex items-center gap-3.5 bg-white/[0.03] hover:bg-white/[0.06] backdrop-blur-sm rounded-2xl border border-white/[0.06] hover:border-white/[0.12] p-5 transition-all duration-300">
-              <div className="w-12 h-12 bg-purple-500/10 group-hover:bg-purple-500/15 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-300">
-                <CreditCard className="w-6 h-6 text-purple-400" />
+              <div className="w-12 h-12 bg-clay-400/10 group-hover:bg-clay-400/15 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-300">
+                <CreditCard className="w-6 h-6 text-clay-400" />
               </div>
               <div>
                 <p className="text-white font-semibold text-sm">Données officielles</p>
@@ -127,7 +127,7 @@ export default function Footer() {
                   </li>
                 ))}
                 <li className="pt-2">
-                  <Link href="/services" className="text-primary-400 hover:text-primary-300 flex items-center gap-1 group py-1.5">
+                  <Link href="/services" className="text-clay-400 hover:text-clay-300 flex items-center gap-1 group py-1.5">
                     Tous les services
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
@@ -150,7 +150,7 @@ export default function Footer() {
                   </li>
                 ))}
                 <li className="pt-2">
-                  <Link href="/villes" className="text-primary-400 hover:text-primary-300 flex items-center gap-1 group py-1.5">
+                  <Link href="/villes" className="text-clay-400 hover:text-clay-300 flex items-center gap-1 group py-1.5">
                     Toutes les villes
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
@@ -176,13 +176,13 @@ export default function Footer() {
                   </li>
                 ))}
                 <li className="pt-2">
-                  <Link href="/regions" className="text-primary-400 hover:text-primary-300 flex items-center gap-1 group py-1.5">
+                  <Link href="/regions" className="text-clay-400 hover:text-clay-300 flex items-center gap-1 group py-1.5">
                     Toutes les régions
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </li>
                 <li>
-                  <Link href="/departements" className="text-primary-400 hover:text-primary-300 flex items-center gap-1 group py-1.5">
+                  <Link href="/departements" className="text-clay-400 hover:text-clay-300 flex items-center gap-1 group py-1.5">
                     Tous les départements
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
@@ -244,7 +244,7 @@ export default function Footer() {
                   </li>
                 ))}
                 <li className="pt-1">
-                  <Link href="/services" className="text-primary-400 hover:text-primary-300 flex items-center gap-1 group py-1.5">
+                  <Link href="/services" className="text-clay-400 hover:text-clay-300 flex items-center gap-1 group py-1.5">
                     Tous les services
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
@@ -269,7 +269,7 @@ export default function Footer() {
                   </li>
                 ))}
                 <li className="pt-1">
-                  <Link href="/villes" className="text-primary-400 hover:text-primary-300 flex items-center gap-1 group py-1.5">
+                  <Link href="/villes" className="text-clay-400 hover:text-clay-300 flex items-center gap-1 group py-1.5">
                     Toutes les villes
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
@@ -297,13 +297,13 @@ export default function Footer() {
                   </li>
                 ))}
                 <li className="pt-1">
-                  <Link href="/regions" className="text-primary-400 hover:text-primary-300 flex items-center gap-1 group py-1.5">
+                  <Link href="/regions" className="text-clay-400 hover:text-clay-300 flex items-center gap-1 group py-1.5">
                     Toutes les régions
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </li>
                 <li>
-                  <Link href="/departements" className="text-primary-400 hover:text-primary-300 flex items-center gap-1 group py-1.5">
+                  <Link href="/departements" className="text-clay-400 hover:text-clay-300 flex items-center gap-1 group py-1.5">
                     Tous les départements
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
@@ -367,9 +367,9 @@ export default function Footer() {
               >
                 <defs>
                   <linearGradient id="footerLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#3b82f6" />
-                    <stop offset="50%" stopColor="#2563eb" />
-                    <stop offset="100%" stopColor="#1d4ed8" />
+                    <stop offset="0%" stopColor="#E86B4B" />
+                    <stop offset="50%" stopColor="#D4553A" />
+                    <stop offset="100%" stopColor="#C24B2A" />
                   </linearGradient>
                   <linearGradient id="footerAccent" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor="#f59e0b" />
@@ -378,13 +378,13 @@ export default function Footer() {
                 </defs>
                 <rect x="2" y="2" width="44" height="44" rx="14" fill="url(#footerLogoGrad)" />
                 <path d="M24 10L9 22.5H13.5V36H34.5V22.5H39L24 10Z" fill="white" fillOpacity="0.95" />
-                <path d="M21.5 24.5C21.5 22.57 23.07 21 25 21C26.38 21 27.56 21.82 28.1 22.99L31.5 20.5L32.5 21.5L29.1 24.01C29.37 24.48 29.5 25.02 29.5 25.5C29.5 27.43 27.93 29 26 29C24.62 29 23.44 28.18 22.9 27.01L19.5 29.5L18.5 28.5L21.9 25.99C21.63 25.52 21.5 24.98 21.5 24.5Z" fill="#2563eb" />
-                <rect x="21.5" y="29.5" width="5" height="6.5" rx="1.5" fill="#2563eb" fillOpacity="0.25" />
+                <path d="M21.5 24.5C21.5 22.57 23.07 21 25 21C26.38 21 27.56 21.82 28.1 22.99L31.5 20.5L32.5 21.5L29.1 24.01C29.37 24.48 29.5 25.02 29.5 25.5C29.5 27.43 27.93 29 26 29C24.62 29 23.44 28.18 22.9 27.01L19.5 29.5L18.5 28.5L21.9 25.99C21.63 25.52 21.5 24.98 21.5 24.5Z" fill="#E86B4B" />
+                <rect x="21.5" y="29.5" width="5" height="6.5" rx="1.5" fill="#E86B4B" fillOpacity="0.25" />
                 <circle cx="39" cy="9" r="5" fill="url(#footerAccent)" />
                 <path d="M37.5 9L38.5 10L40.5 8" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
               <span className="text-2xl font-heading font-extrabold tracking-tight text-white group-hover:text-gray-200 transition-colors duration-200">
-                Services<span className="text-primary-400">Artisans</span>
+                Services<span className="text-clay-400">Artisans</span>
               </span>
             </Link>
             <p className="text-sm text-gray-500 mb-2 font-medium">La plateforme de confiance pour trouver votre artisan</p>
@@ -507,8 +507,8 @@ export default function Footer() {
           <div className="grid md:grid-cols-3 gap-6">
             {companyIdentity.address && (
               <div className="group flex items-center gap-4 p-5 bg-white/[0.02] hover:bg-white/[0.05] rounded-2xl border border-white/[0.04] hover:border-white/[0.08] transition-all duration-300">
-                <div className="w-12 h-12 bg-blue-500/10 group-hover:bg-blue-500/15 rounded-xl flex items-center justify-center transition-colors duration-300">
-                  <MapPin className="w-5 h-5 text-blue-400" />
+                <div className="w-12 h-12 bg-clay-400/10 group-hover:bg-clay-400/15 rounded-xl flex items-center justify-center transition-colors duration-300">
+                  <MapPin className="w-5 h-5 text-clay-400" />
                 </div>
                 <div>
                   <p className="text-white font-medium text-sm mb-0.5">Adresse</p>
@@ -518,8 +518,8 @@ export default function Footer() {
             )}
             {companyIdentity.phone && (
               <div className="group flex items-center gap-4 p-5 bg-white/[0.02] hover:bg-white/[0.05] rounded-2xl border border-white/[0.04] hover:border-white/[0.08] transition-all duration-300">
-                <div className="w-12 h-12 bg-blue-500/10 group-hover:bg-blue-500/15 rounded-xl flex items-center justify-center transition-colors duration-300">
-                  <Phone className="w-5 h-5 text-blue-400" />
+                <div className="w-12 h-12 bg-clay-400/10 group-hover:bg-clay-400/15 rounded-xl flex items-center justify-center transition-colors duration-300">
+                  <Phone className="w-5 h-5 text-clay-400" />
                 </div>
                 <div>
                   <p className="text-white font-medium text-sm mb-0.5">Téléphone</p>
@@ -528,8 +528,8 @@ export default function Footer() {
               </div>
             )}
             <div className="group flex items-center gap-4 p-5 bg-white/[0.02] hover:bg-white/[0.05] rounded-2xl border border-white/[0.04] hover:border-white/[0.08] transition-all duration-300">
-              <div className="w-12 h-12 bg-blue-500/10 group-hover:bg-blue-500/15 rounded-xl flex items-center justify-center transition-colors duration-300">
-                <Mail className="w-5 h-5 text-blue-400" />
+              <div className="w-12 h-12 bg-clay-400/10 group-hover:bg-clay-400/15 rounded-xl flex items-center justify-center transition-colors duration-300">
+                <Mail className="w-5 h-5 text-clay-400" />
               </div>
               <div>
                 <p className="text-white font-medium text-sm mb-0.5">Email</p>

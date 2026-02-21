@@ -346,9 +346,9 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
               >
                 <defs>
                   <linearGradient id="headerLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#2563eb" />
-                    <stop offset="50%" stopColor="#1d4ed8" />
-                    <stop offset="100%" stopColor="#1e40af" />
+                    <stop offset="0%" stopColor="#E86B4B" />
+                    <stop offset="50%" stopColor="#D4553A" />
+                    <stop offset="100%" stopColor="#C24B2A" />
                   </linearGradient>
                   <linearGradient id="headerAccent" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor="#f59e0b" />
@@ -357,13 +357,13 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
                 </defs>
                 <rect x="2" y="2" width="44" height="44" rx="14" fill="url(#headerLogoGrad)" />
                 <path d="M24 10L9 22.5H13.5V36H34.5V22.5H39L24 10Z" fill="white" fillOpacity="0.95" />
-                <path d="M21.5 24.5C21.5 22.57 23.07 21 25 21C26.38 21 27.56 21.82 28.1 22.99L31.5 20.5L32.5 21.5L29.1 24.01C29.37 24.48 29.5 25.02 29.5 25.5C29.5 27.43 27.93 29 26 29C24.62 29 23.44 28.18 22.9 27.01L19.5 29.5L18.5 28.5L21.9 25.99C21.63 25.52 21.5 24.98 21.5 24.5Z" fill="#2563eb" />
-                <rect x="21.5" y="29.5" width="5" height="6.5" rx="1.5" fill="#2563eb" fillOpacity="0.25" />
+                <path d="M21.5 24.5C21.5 22.57 23.07 21 25 21C26.38 21 27.56 21.82 28.1 22.99L31.5 20.5L32.5 21.5L29.1 24.01C29.37 24.48 29.5 25.02 29.5 25.5C29.5 27.43 27.93 29 26 29C24.62 29 23.44 28.18 22.9 27.01L19.5 29.5L18.5 28.5L21.9 25.99C21.63 25.52 21.5 24.98 21.5 24.5Z" fill="#E86B4B" />
+                <rect x="21.5" y="29.5" width="5" height="6.5" rx="1.5" fill="#E86B4B" fillOpacity="0.25" />
                 <circle cx="39" cy="9" r="5" fill="url(#headerAccent)" />
                 <path d="M37.5 9L38.5 10L40.5 8" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
               <span className="hidden sm:inline text-xl font-heading font-extrabold tracking-tight text-gray-900 group-hover/logo:text-gray-700 transition-colors duration-200">
-                Services<span className="text-blue-600 group-hover/logo:text-blue-500 transition-colors duration-200">Artisans</span>
+                Services<span className="text-clay-400 group-hover/logo:text-clay-300 transition-colors duration-200">Artisans</span>
               </span>
             </div>
           </Link>
@@ -393,10 +393,10 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
                 aria-haspopup="true"
                 className={cn(
                   'relative flex items-center gap-1.5 px-4 py-2 rounded-xl font-medium text-[0.9rem] transition-all duration-200',
-                  'after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-blue-600 after:transition-all after:duration-300 after:rounded-full',
+                  'after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-clay-400 after:transition-all after:duration-300 after:rounded-full',
                   openMenu === 'services'
-                    ? 'text-blue-600 bg-blue-50/80 after:w-[60%]'
-                    : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50/80 after:w-0 hover:after:w-[60%]'
+                    ? 'text-clay-400 bg-[#FDF1EC]/80 after:w-[60%]'
+                    : 'text-gray-600 hover:text-clay-400 hover:bg-gray-50/80 after:w-0 hover:after:w-[60%]'
                 )}
               >
                 Services
@@ -418,10 +418,10 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
                 aria-haspopup="true"
                 className={cn(
                   'relative flex items-center gap-1.5 px-4 py-2 rounded-xl font-medium text-[0.9rem] transition-all duration-200',
-                  'after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-blue-600 after:transition-all after:duration-300 after:rounded-full',
+                  'after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-clay-400 after:transition-all after:duration-300 after:rounded-full',
                   openMenu === 'villes'
-                    ? 'text-blue-600 bg-blue-50/80 after:w-[60%]'
-                    : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50/80 after:w-0 hover:after:w-[60%]'
+                    ? 'text-clay-400 bg-[#FDF1EC]/80 after:w-[60%]'
+                    : 'text-gray-600 hover:text-clay-400 hover:bg-gray-50/80 after:w-0 hover:after:w-[60%]'
                 )}
               >
                 Villes
@@ -443,10 +443,10 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
                 aria-haspopup="true"
                 className={cn(
                   'relative flex items-center gap-1.5 px-4 py-2 rounded-xl font-medium text-[0.9rem] transition-all duration-200',
-                  'after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-blue-600 after:transition-all after:duration-300 after:rounded-full',
+                  'after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-clay-400 after:transition-all after:duration-300 after:rounded-full',
                   openMenu === 'regions'
-                    ? 'text-blue-600 bg-blue-50/80 after:w-[60%]'
-                    : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50/80 after:w-0 hover:after:w-[60%]'
+                    ? 'text-clay-400 bg-[#FDF1EC]/80 after:w-[60%]'
+                    : 'text-gray-600 hover:text-clay-400 hover:bg-gray-50/80 after:w-0 hover:after:w-[60%]'
                 )}
               >
                 Régions
@@ -471,14 +471,14 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
 
             <Link
               href="/connexion"
-              className="relative text-gray-600 hover:text-blue-600 px-4 py-2 rounded-xl font-medium text-[0.9rem] hover:bg-gray-50/80 transition-all duration-200 after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:w-0 hover:after:w-[60%] after:h-[2px] after:bg-blue-600 after:transition-all after:duration-300 after:rounded-full"
+              className="relative text-gray-600 hover:text-clay-400 px-4 py-2 rounded-xl font-medium text-[0.9rem] hover:bg-gray-50/80 transition-all duration-200 after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:w-0 hover:after:w-[60%] after:h-[2px] after:bg-clay-400 after:transition-all after:duration-300 after:rounded-full"
             >
               Connexion
             </Link>
 
             <Link
               href="/devis"
-              className="ml-3 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-semibold rounded-xl shadow-md shadow-amber-500/20 hover:shadow-lg hover:shadow-amber-500/30 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
+              className="ml-3 px-5 py-2.5 bg-gradient-to-r from-clay-400 to-clay-600 hover:from-clay-500 hover:to-clay-700 text-white font-semibold rounded-xl shadow-md shadow-clay-400/20 hover:shadow-lg hover:shadow-clay-400/30 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
             >
               Devis gratuit
             </Link>
@@ -825,7 +825,7 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
               onSubmit={handleSearch}
               className="mb-4"
             >
-              <div className="flex items-center bg-white border-2 border-gray-200 rounded-2xl overflow-hidden focus-within:border-blue-500 focus-within:shadow-lg focus-within:shadow-blue-500/10 transition-all duration-200">
+              <div className="flex items-center bg-white border-2 border-gray-200 rounded-2xl overflow-hidden focus-within:border-clay-400 focus-within:shadow-lg focus-within:shadow-clay-400/10 transition-all duration-200">
                 {/* Service Input Mobile */}
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -859,14 +859,14 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
                     className="absolute right-1 top-1/2 -translate-y-1/2 p-2 hover:bg-gray-100 rounded-full transition-colors disabled:opacity-50"
                     title="Ma position"
                   >
-                    <Navigation className={`w-4 h-4 ${isLocating ? 'animate-spin text-blue-600' : 'text-gray-400'}`} />
+                    <Navigation className={`w-4 h-4 ${isLocating ? 'animate-spin text-clay-400' : 'text-gray-400'}`} />
                   </button>
                 </div>
 
                 {/* Search Button Mobile */}
                 <button
                   type="submit"
-                  className="flex-shrink-0 m-1.5 w-10 h-10 bg-blue-600 hover:bg-blue-700 text-white rounded-full transition-all flex items-center justify-center"
+                  className="flex-shrink-0 m-1.5 w-10 h-10 bg-clay-400 hover:bg-clay-600 text-white rounded-full transition-all flex items-center justify-center"
                   aria-label="Rechercher"
                 >
                   <Search className="w-4 h-4" />
@@ -1078,7 +1078,7 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
                   </Link>
                   <Link
                     href="/devis"
-                    className="flex-1 py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white rounded-xl font-semibold text-center shadow-md shadow-amber-500/20 transition-all duration-200"
+                    className="flex-1 py-3 bg-gradient-to-r from-clay-400 to-clay-600 hover:from-clay-500 hover:to-clay-700 text-white rounded-xl font-semibold text-center shadow-md shadow-clay-400/20 transition-all duration-200"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Devis gratuit
