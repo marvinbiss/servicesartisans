@@ -474,6 +474,13 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         )
       }
 
+      // Arrondissement INSEE codes → main city slug
+      // Paris 75101-75120, Marseille 13201-13216, Lyon 69381-69389
+      const arrondissementMap: Record<string, string> = {}
+      for (let i = 1; i <= 20; i++) arrondissementMap[`751${String(i).padStart(2, '0')}`] = 'paris'
+      for (let i = 1; i <= 16; i++) arrondissementMap[`132${String(i).padStart(2, '0')}`] = 'marseille'
+      for (let i = 81; i <= 89; i++) arrondissementMap[`693${String(i)}`] = 'lyon'
+
       const specialtyToSlug: Record<string, string> = {
         'plombier': 'plombier',
         'electricien': 'electricien',
@@ -607,9 +614,11 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
           const serviceSlug = serviceMap.get(normalizedSpecialty) || specialtyToSlug[p.specialty!.toLowerCase()]
           const rawCity = p.address_city!
           const isInsee = /^\d{4,5}$/.test(rawCity) || /^[0-9][A-Z0-9]\d{3}$/.test(rawCity)
+          // Try arrondissement map first (Paris 75101-75120, Marseille 13201-13216, Lyon 69381-69389)
+          const arrondissementSlug = isInsee ? arrondissementMap[rawCity] : undefined
           const cityName = isInsee ? (inseeMap[rawCity]?.n || rawCity) : rawCity
           const normalizedCity = cityName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
-          const locationSlug = villeMap.get(normalizedCity)
+          const locationSlug = arrondissementSlug || villeMap.get(normalizedCity)
           const publicId = p.stable_id || p.slug || p.id
 
           if (!serviceSlug || !locationSlug || !publicId) return null
