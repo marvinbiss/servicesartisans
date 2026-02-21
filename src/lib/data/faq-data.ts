@@ -4,7 +4,7 @@ export const faqCategories = [
     questions: [
       {
         q: 'Qu\'est-ce que ServicesArtisans ?',
-        a: 'ServicesArtisans est le plus grand annuaire d\'artisans de France. Avec plus de 350 000 professionnels référencés dans 101 départements, nos données proviennent directement des registres SIREN officiels de l\'État via l\'API Annuaire des Entreprises. Le service est 100% gratuit.',
+        a: 'ServicesArtisans est l\'un des premiers annuaires d\'artisans de France. Avec plus de 350 000 professionnels référencés dans 101 départements, nos données proviennent directement des registres SIREN officiels de l\'État via l\'API Annuaire des Entreprises. Le service est 100% gratuit.',
       },
       {
         q: 'Le service est-il gratuit ?',
@@ -46,11 +46,11 @@ export const faqCategories = [
     questions: [
       {
         q: 'Comment sont sélectionnés les artisans ?',
-        a: 'Chaque artisan référencé sur ServicesArtisans provient des registres officiels SIREN de l\'État français. Nous contrôlons que l\'entreprise est active, que le code NAF correspond bien à un métier du bâtiment, et que le siège social est localisé en France. Cela couvre 13 catégories de métiers dans les 101 départements français.',
+        a: 'Chaque artisan référencé sur ServicesArtisans provient des registres officiels SIREN de l\'État français. Nous contrôlons que l\'entreprise est active, que le code NAF correspond bien à un métier du bâtiment, et que le siège social est localisé en France. Cela couvre des dizaines de métiers du bâtiment dans les 101 départements français.',
       },
       {
         q: 'Les artisans sont-ils assurés ?',
-        a: 'Oui, tous nos artisans partenaires doivent justifier d\'une assurance responsabilité civile professionnelle et d\'une garantie décennale pour les travaux concernés.',
+        a: 'Les artisans du bâtiment sont légalement tenus de disposer d\'une garantie décennale (art. L241-1 Code des assurances). Nous vous recommandons de la vérifier systématiquement avant de signer tout devis.',
       },
       {
         q: 'Puis-je voir les avis sur un artisan ?',

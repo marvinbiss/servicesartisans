@@ -11,21 +11,21 @@ import { villes } from '@/lib/data/france'
 import { PopularCitiesLinks } from '@/components/InternalLinks'
 
 export const metadata: Metadata = {
-  title: 'Urgence artisan 24h/24 — Plombier, Serrurier',
-  description: 'Besoin d\'un artisan en urgence ? Plombier, électricien, serrurier disponibles 24h/24 et 7j/7 partout en France. Intervention rapide, devis gratuit, artisans référencés.',
+  title: 'Urgence artisan soir & week-end — Plombier, Serrurier',
+  description: 'Besoin d\'un artisan en urgence ? Plombier, électricien, serrurier disponibles selon les artisans de votre secteur partout en France. Intervention rapide, devis gratuit, artisans référencés.',
   alternates: { canonical: `${SITE_URL}/urgence` },
   openGraph: {
     locale: 'fr_FR',
-    title: 'Urgence artisan 24h/24 — Intervention rapide partout en France',
-    description: 'Plombier, électricien, serrurier disponibles 24h/24 et 7j/7. Intervention rapide, devis gratuit, artisans référencés.',
+    title: 'Urgence artisan soir & week-end — Intervention rapide partout en France',
+    description: 'Plombier, électricien, serrurier disponibles selon les artisans de votre secteur. Intervention rapide, devis gratuit, artisans référencés.',
     url: `${SITE_URL}/urgence`,
     type: 'website',
     images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Urgence artisan' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Urgence artisan 24h/24 — Intervention rapide partout en France',
-    description: 'Plombier, électricien, serrurier disponibles 24h/24 et 7j/7. Intervention rapide, devis gratuit.',
+    title: 'Urgence artisan soir & week-end — Intervention rapide partout en France',
+    description: 'Plombier, électricien, serrurier disponibles selon les artisans de votre secteur. Intervention rapide, devis gratuit.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }
@@ -66,7 +66,7 @@ const urgencyServices = [
       'Odeur de brûlé électrique',
       'Fil dénudé dangereux',
     ],
-    description: 'Dépannage électrique en urgence 24h/24. Nos électriciens qualifiés interviennent rapidement pour sécuriser votre installation électrique.',
+    description: 'Dépannage électrique en urgence, soir & week-end. Nos électriciens qualifiés interviennent rapidement pour sécuriser votre installation électrique.',
     responseTime: 'Intervention rapide',
   },
   {
@@ -85,7 +85,7 @@ const urgencyServices = [
       'Changement de serrure urgent',
       'Porte blindée bloquée',
     ],
-    description: 'Ouverture de porte et dépannage serrurerie en urgence. Nos serruriers interviennent sans dégâts, 24h/24 et 7j/7.',
+    description: 'Ouverture de porte et dépannage serrurerie en urgence. Nos serruriers interviennent sans dégâts, disponibles selon les artisans de votre secteur.',
     responseTime: 'Intervention rapide',
   },
   {
@@ -119,8 +119,8 @@ const emergencySteps = [
   },
   {
     step: 2,
-    title: 'Artisan dépêché',
-    description: 'Un artisan disponible et référencé est immédiatement envoyé à votre adresse.',
+    title: 'Mise en relation',
+    description: 'Nous vous mettons en relation avec un artisan disponible dans votre secteur.',
   },
   {
     step: 3,
@@ -163,7 +163,7 @@ export default async function UrgencePage() {
       {/* Breadcrumb */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          <Breadcrumb items={[{ label: 'Urgence 24h/24' }]} />
+          <Breadcrumb items={[{ label: 'Urgence soir & week-end' }]} />
         </div>
       </div>
 
@@ -177,12 +177,12 @@ export default async function UrgencePage() {
           <div className="flex items-center gap-3 mb-6">
             <div className="flex items-center gap-2 bg-red-500/30 backdrop-blur-sm border border-red-400/30 px-4 py-2 rounded-full">
               <div className="w-2.5 h-2.5 rounded-full bg-red-400 animate-pulse" />
-              <span className="text-sm font-semibold text-red-100">Disponible 24h/24 — 7j/7</span>
+              <span className="text-sm font-semibold text-red-100">Disponible soir et week-end</span>
             </div>
           </div>
           <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
             Urgence artisan ?<br />
-            <span className="text-red-300">Intervention immédiate.</span>
+            <span className="text-red-300">Trouvez rapidement un professionnel.</span>
           </h1>
           <p className="text-xl text-red-100/80 max-w-2xl mb-10">
             Plombier, électricien, serrurier, chauffagiste — un artisan référencé intervient
@@ -219,7 +219,7 @@ export default async function UrgencePage() {
             </div>
             <div className="flex items-center gap-2 bg-white/[0.06] backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
               <Clock className="w-4 h-4 text-amber-400" />
-              <span className="text-sm text-white/80">Disponible 24h/24</span>
+              <span className="text-sm text-white/80">Disponible soir et week-end</span>
             </div>
             <div className="flex items-center gap-2 bg-white/[0.06] backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
               <CheckCircle className="w-4 h-4 text-green-400" />
@@ -241,7 +241,7 @@ export default async function UrgencePage() {
               Quel type d&apos;urgence ?
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Sélectionnez votre type de problème pour être mis en relation avec un artisan spécialisé disponible immédiatement.
+              Sélectionnez votre type de problème pour être mis en relation avec un artisan spécialisé disponible dans votre secteur.
             </p>
           </div>
 
@@ -266,7 +266,7 @@ export default async function UrgencePage() {
                       </div>
                       <div className="hidden sm:flex items-center gap-1 bg-white/20 rounded-full px-3 py-1">
                         <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
-                        <span className="text-xs font-medium">24h/24</span>
+                        <span className="text-xs font-medium">Soir & week-end</span>
                       </div>
                     </div>
                   </div>
@@ -288,7 +288,7 @@ export default async function UrgencePage() {
                         href={`/urgence/${service.slug}`}
                         className={`inline-flex items-center gap-2 font-semibold ${service.lightText} hover:underline`}
                       >
-                        {service.name} 24h/24
+                        {service.name} soir & week-end
                         <ArrowRight className="w-4 h-4" />
                       </Link>
                       <Link
@@ -468,7 +468,7 @@ export default async function UrgencePage() {
             Une urgence ? Ne perdez pas de temps.
           </h2>
           <p className="text-xl text-red-100/80 mb-8">
-            Nos artisans référencés sont disponibles 24h/24 et 7j/7 pour intervenir rapidement chez vous.
+            Nos artisans référencés sont disponibles selon leurs horaires, y compris parfois les jours fériés pour intervenir rapidement chez vous.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
@@ -540,15 +540,15 @@ export default async function UrgencePage() {
             '@graph': [
               {
                 '@type': 'WebPage',
-                name: 'Urgence artisan 24h/24 7j/7',
-                description: 'Plombier, électricien, serrurier disponibles 24h/24 et 7j/7 partout en France.',
+                name: 'Urgence artisan soir & week-end',
+                description: 'Plombier, électricien, serrurier disponibles selon les artisans de votre secteur partout en France.',
                 url: `${SITE_URL}/urgence`,
               },
               {
                 '@type': 'BreadcrumbList',
                 itemListElement: [
                   { '@type': 'ListItem', position: 1, name: 'Accueil', item: SITE_URL },
-                  { '@type': 'ListItem', position: 2, name: 'Urgence 24h/24' },
+                  { '@type': 'ListItem', position: 2, name: 'Urgence soir & week-end' },
                 ],
               },
               ...urgencyServices.map((s) => ({

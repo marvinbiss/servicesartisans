@@ -110,7 +110,7 @@ export const tradeContent: Record<string, TradeContent> = {
     tips: [
       'Assurez-vous que l\'électricien respecte la norme NF C 15-100, obligatoire pour toute installation électrique en France. Demandez un certificat de conformité Consuel à la fin des travaux.',
       'Comparez au moins trois devis en vérifiant que chacun détaille les fournitures, la main-d\'oeuvre et le coût des mises en conformité éventuelles.',
-      'Choisissez un électricien certifié IRVE si vous souhaitez installer une borne de recharge pour véhicule électrique : c\'est obligatoire pour bénéficier du crédit d\'impôt.',
+      'Choisissez un électricien certifié IRVE si vous souhaitez installer une borne de recharge pour véhicule électrique : c\'est obligatoire pour bénéficier des aides. Note : le crédit d\'impôt pour borne de recharge a été supprimé au 1er janvier 2026.',
       'Avant toute intervention, vérifiez que l\'électricien possède une habilitation électrique valide (B1, B2 ou BR selon le type de travaux).',
       'Pour des travaux de rénovation énergétique (chauffage électrique performant, VMC), un électricien RGE est indispensable pour obtenir les aides financières de l\'État.',
     ],
@@ -121,7 +121,7 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'Combien coûte l\'installation d\'une borne de recharge pour voiture électrique ?',
-        a: 'L\'installation d\'une borne de recharge domestique (wallbox 7 kW) coûte entre 1 200 et 2 500 € pose comprise. Un crédit d\'impôt de 300 € est disponible, à condition de faire appel à un électricien certifié IRVE. Le délai d\'installation est généralement de 1 à 3 jours.',
+        a: 'L\'installation d\'une borne de recharge domestique (wallbox 7 kW) coûte entre 1 200 et 2 500 € pose comprise. Note : le crédit d\'impôt pour borne de recharge a été supprimé au 1er janvier 2026. Faites appel à un électricien certifié IRVE. Le délai d\'installation est généralement de 1 à 3 jours.',
       },
       {
         q: 'Qu\'est-ce que le certificat Consuel et est-il obligatoire ?',
@@ -543,7 +543,7 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'Ma toiture fuit après une tempête, que faire en urgence ?',
-        a: 'Placez des récipients sous les fuites et contactez un couvreur d\'urgence. Prenez des photos des dégâts pour votre assurance et déclarez le sinistre sous 5 jours (2 jours pour une catastrophe naturelle). En attendant le couvreur, vous pouvez bâcher temporairement la zone depuis l\'intérieur des combles, sans monter sur le toit.',
+        a: 'Placez des récipients sous les fuites et contactez un couvreur d\'urgence. Prenez des photos des dégâts pour votre assurance et déclarez le sinistre sous 5 jours ouvrés (30 jours après publication de l\'arrêté de catastrophe naturelle au Journal Officiel, art. L113-2 Code des assurances). En attendant le couvreur, vous pouvez bâcher temporairement la zone depuis l\'intérieur des combles, sans monter sur le toit.',
       },
       {
         q: 'Quelle est la durée de vie d\'une toiture selon le matériau ?',
@@ -1624,13 +1624,13 @@ export const tradeContent: Record<string, TradeContent> = {
     ],
     tips: [
       'Commencez toujours par un audit énergétique pour hiérarchiser les travaux et maximiser les aides.',
-      'Le bonus MaPrimeRénov\' « rénovation globale » (jusqu\'à 15 000 €) récompense les projets qui améliorent le DPE d\'au moins 2 classes.',
+      'Le Parcours accompagné de MaPrimeRénov\' récompense les projets de rénovation globale améliorant le DPE d\'au moins 2 classes. Ce bonus a été intégré dans le Parcours accompagné depuis 2024.',
       'Faites appel à un Accompagnateur Rénov\' agréé par l\'État : c\'est désormais obligatoire pour les projets de rénovation globale bénéficiant de MaPrimeRénov\'.',
       'Priorisez les travaux dans cet ordre : isolation (combles, murs, sols), puis ventilation (VMC double flux), puis changement du système de chauffage. Isoler sans ventiler provoque des problèmes d\'humidité.',
       'Conservez toutes les factures et attestations RGE pendant 10 ans : elles servent de preuve pour les garanties décennales et en cas de contrôle fiscal sur les aides perçues.',
     ],
     faq: [
-      { q: 'Quelles sont les aides pour une rénovation énergétique ?', a: 'MaPrimeRénov\' (jusqu\'à 20 000 €), MaPrimeRénov\' Sérénité pour les ménages modestes (jusqu\'à 30 000 €), CEE (primes énergie), éco-PTZ (jusqu\'à 50 000 € à taux zéro), TVA à 5,5 %, aides locales (régions, départements). Un ménage modeste peut couvrir jusqu\'à 80 % du coût des travaux.' },
+      { q: 'Quelles sont les aides pour une rénovation énergétique ?', a: 'MaPrimeRénov\' (jusqu\'à 20 000 €), MaPrimeRénov\' Parcours accompagné pour les ménages modestes (jusqu\'à 32 000 € pour les très modestes), CEE (primes énergie), éco-PTZ (jusqu\'à 50 000 € à taux zéro), TVA à 5,5 %, aides locales (régions, départements). Un ménage modeste peut couvrir jusqu\'à 80 % du coût des travaux.' },
       { q: 'Qu\'est-ce qu\'un audit énergétique et est-il obligatoire ?', a: 'L\'audit énergétique est une analyse complète de votre logement (isolation, chauffage, ventilation) avec un plan de travaux chiffré. Il est obligatoire depuis 2023 pour la vente des logements classés F ou G au DPE. Son coût (800 à 1 500 €) est partiellement pris en charge par MaPrimeRénov\' (jusqu\'à 500 €).' },
       { q: 'Comment passer d\'un DPE F ou G à un DPE C ou D ?', a: 'Il faut généralement combiner isolation des combles et des murs (gain de 1 à 2 classes), remplacement du chauffage par une pompe à chaleur ou chaudière à condensation (gain de 1 classe), et installation d\'une VMC double flux. Le budget moyen est de 20 000 à 40 000 €, mais les aides peuvent couvrir 50 à 80 % pour les ménages modestes.' },
       { q: 'Peut-on rénover par étapes ou faut-il tout faire d\'un coup ?', a: 'On peut rénover par étapes, mais la rénovation globale est plus efficace et mieux aidée. Le parcours « par geste » de MaPrimeRénov\' finance chaque poste séparément, tandis que le parcours « accompagné » pour une rénovation globale offre des primes bonifiées. Attention à l\'ordre des travaux : isoler avant de changer le chauffage pour bien dimensionner l\'équipement.' },
@@ -1654,14 +1654,14 @@ export const tradeContent: Record<string, TradeContent> = {
       'Mise aux normes du tableau électrique : 500 à 1 500 €',
     ],
     tips: [
-      'Seul un électricien certifié IRVE peut installer une borne de recharge — c\'est obligatoire pour bénéficier du crédit d\'impôt (300 €).',
+      'Seul un électricien certifié IRVE peut installer une borne de recharge — c\'est obligatoire pour bénéficier des aides (prime Advenir en copropriété). Note : le crédit d\'impôt de 300 € a été supprimé au 1er janvier 2026.',
       'Une borne 7,4 kW suffit pour la plupart des usages (recharge complète en 6 à 8h pendant la nuit).',
       'Vérifiez la puissance de votre abonnement électrique avant l\'installation : une borne 7,4 kW nécessite souvent un passage en 9 kVA minimum, et une borne 11 kW exige un raccordement triphasé.',
       'Programmez la recharge en heures creuses (généralement entre 22h et 6h) pour réduire le coût d\'électricité de 30 à 40 % par rapport aux heures pleines.',
       'En copropriété, vous pouvez invoquer le « droit à la prise » (décret du 13 juillet 2011) : le syndic ne peut pas refuser l\'installation sauf motif sérieux et légitime.',
     ],
     faq: [
-      { q: 'Quelles aides pour installer une borne de recharge ?', a: 'Crédit d\'impôt de 300 € par borne (75 % du coût plafonné à 300 €), prime Advenir jusqu\'à 960 € en copropriété, TVA réduite à 5,5 % pour les logements de plus de 2 ans. Le budget net après aides est souvent inférieur à 1 000 € pour une borne 7,4 kW.' },
+      { q: 'Quelles aides pour installer une borne de recharge ?', a: 'Le crédit d\'impôt pour borne de recharge a été supprimé au 1er janvier 2026. Prime Advenir jusqu\'à 960 € en copropriété, TVA réduite à 5,5 % pour les logements de plus de 2 ans. Le budget net après aides dépend de votre situation (copropriété, aides locales).' },
       { q: 'Peut-on recharger sa voiture électrique sur une prise domestique classique ?', a: 'Techniquement oui, mais c\'est déconseillé pour un usage quotidien. Une prise standard 230V/10A délivre seulement 2,3 kW, soit 10 à 15 heures pour une recharge complète. De plus, elle n\'est pas conçue pour une utilisation prolongée à pleine charge et peut provoquer un échauffement dangereux. Une prise renforcée Green\'Up (3,7 kW) est un minimum acceptable.' },
       { q: 'Quelle différence entre une borne monophasée et triphasée ?', a: 'Une borne monophasée (7,4 kW max) est la plus courante en maison individuelle et suffit pour une recharge nocturne. Une borne triphasée (11 ou 22 kW) recharge 2 à 3 fois plus vite mais nécessite un raccordement triphasé (modification du compteur Enedis, 150 à 300 €). Le triphasé est recommandé si vous parcourez plus de 100 km par jour.' },
       { q: 'Combien coûte la recharge d\'une voiture électrique à domicile ?', a: 'En tarif de base, une recharge complète (batterie de 50 kWh) coûte environ 10 à 12 €. En heures creuses, ce coût tombe à 7 à 8 €, soit environ 2 € aux 100 km. C\'est 4 à 5 fois moins cher qu\'un véhicule essence. Avec un abonnement adapté et la programmation nocturne, le surcoût d\'électricité est de 30 à 50 €/mois pour 15 000 km/an.' },

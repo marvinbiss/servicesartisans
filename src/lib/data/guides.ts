@@ -91,13 +91,13 @@ export const guides: Guide[] = [
     intro: 'Isoler son logement est l\'investissement le plus rentable pour réduire les factures d\'énergie. Les coûts varient de 20 €/m² pour des combles perdus à 250 €/m² pour une isolation par l\'extérieur.',
     sections: [
       { title: 'Prix par type d\'isolation', content: 'Combles perdus (soufflage) : 20–50 €/m². Combles aménagés : 40–80 €/m². Murs par l\'intérieur (ITI) : 30–80 €/m². Isolation thermique par l\'extérieur (ITE) : 100–250 €/m². Plancher bas : 25–60 €/m².' },
-      { title: 'Aides financières disponibles', content: 'MaPrimeRénov\' : 15 à 75 % selon les revenus. CEE : primes complémentaires via fournisseurs d\'énergie. Éco-PTZ : jusqu\'à 50 000 € sans intérêts. Ces aides sont cumulables.' },
+      { title: 'Aides financières disponibles', content: 'MaPrimeRénov\' : 10 à 80 % selon le profil de revenus. CEE : primes complémentaires via fournisseurs d\'énergie. Éco-PTZ : jusqu\'à 50 000 € sans intérêts. Ces aides sont cumulables.' },
       { title: 'Choisir le bon matériau isolant', content: 'Laine de verre/roche : plus économique (5–15 €/m²). Ouate de cellulose : bon rapport qualité-prix + acoustique. Polyuréthane : meilleures performances, plus cher. Pour des combles perdus, le soufflage en vrac est la solution la plus rapide.' },
     ],
     faq: [
       { q: 'Quelle isolation est la plus efficace pour les combles ?', a: 'Pour combles perdus : soufflage laine minérale ou ouate (R ≥ 7 m².K/W). Pour combles aménagés : panneaux rigides polyuréthane ou laine de bois.' },
       { q: 'Combien d\'années pour rentabiliser une isolation ?', a: 'L\'isolation des combles est amortie en 3 à 7 ans. Avec les aides, moins de 3 ans pour les ménages modestes.' },
-      { q: 'L\'isolation est-elle obligatoire lors d\'une rénovation ?', a: 'Depuis 2023, une isolation minimale est requise lors de travaux importants sur un bâtiment existant.' },
+      { q: 'L\'isolation est-elle obligatoire lors d\'une rénovation ?', a: 'Depuis le 1er janvier 2017 (décret 2016-711 du 30 mai 2016), une isolation minimale est requise lors de travaux importants sur un bâtiment existant.' },
     ],
     relatedServices: ['isolation-thermique', 'renovation-energetique', 'chauffagiste'],
     lastUpdated: '2025-01-15',
@@ -135,7 +135,7 @@ export const guides: Guide[] = [
     intro: 'Une rénovation énergétique globale d\'une maison coûte entre 15 000 et 80 000 €. Avec les aides cumulées, le reste à charge peut descendre sous les 10 000 € pour les ménages modestes.',
     sections: [
       { title: 'Coût des principaux postes', content: 'Isolation combles : 3 000–8 000 €. ITE : 15 000–30 000 € (maison 100 m²). Remplacement fenêtres : 5 000–15 000 €. PAC : 8 000–15 000 €. VMC double flux : 3 000–6 000 €.' },
-      { title: 'Les aides disponibles en 2025', content: 'MaPrimeRénov\' Rénovation d\'Ampleur : jusqu\'à 70 % (plafond 70 000 €). CEE : 500–5 000 € selon travaux. Éco-PTZ : jusqu\'à 50 000 € sur 20 ans. TVA à 5,5 % sur isolation et chauffage.' },
+      { title: 'Les aides disponibles en 2025', content: 'MaPrimeRénov\' Rénovation d\'Ampleur : jusqu\'à 80 % (plafond 40 000 € HT). CEE : 500–5 000 € selon travaux. Éco-PTZ : jusqu\'à 50 000 € sur 20 ans. TVA à 5,5 % sur isolation et chauffage.' },
       { title: 'Gain sur les factures énergétiques', content: 'Passer de G à B réduit les dépenses de chauffage de 60 à 80 %. Pour une maison à 3 000 €/an d\'énergie : économie annuelle de 1 800–2 400 €, retour sur investissement en 5 à 15 ans.' },
     ],
     faq: [
@@ -179,7 +179,7 @@ export const guides: Guide[] = [
     intro: 'Une installation photovoltaïque résidentielle coûte entre 8 000 et 20 000 €. Les aides et l\'économie sur la facture permettent un retour sur investissement de 8 à 12 ans.',
     sections: [
       { title: 'Prix selon la puissance installée', content: '3 kWc : 5 000–9 000 €. 6 kWc : 8 000–14 000 €. 9 kWc : 12 000–20 000 €. Coût au Wc : 1,50 à 2,50 € fourniture et pose.' },
-      { title: 'Aides et dispositifs fiscaux', content: 'Prime autoconsommation (EDF OA) : 400–1 000 €. TVA à 10 % pour ≤ 3 kWc. Revente surplus : ~0,13 €/kWh. Certaines collectivités apportent jusqu\'à 2 000 € supplémentaires.' },
+      { title: 'Aides et dispositifs fiscaux', content: 'Prime autoconsommation (EDF OA) : 400–1 000 €. TVA à 10 % pour ≤ 3 kWc. Revente surplus : ~0,04 €/kWh (tarif surplus ≤ 9 kWc, T1 2026 — vérifier mise à jour annuelle sur EDF OA). Certaines collectivités apportent jusqu\'à 2 000 € supplémentaires.' },
       { title: 'Production et rentabilité', content: '1 kWc produit 900–1 400 kWh/an selon l\'ensoleillement. Installation 6 kWc : 50 à 80 % des besoins d\'une famille de 4. Économie annuelle : 600–1 200 €.' },
     ],
     faq: [
@@ -284,7 +284,7 @@ export const guides: Guide[] = [
     readingTime: 7,
     intro: 'En 2025, les aides à la rénovation énergétique restent généreuses. MaPrimeRénov\', CEE, éco-PTZ et TVA réduite peuvent couvrir jusqu\'à 90 % des travaux pour les ménages les plus modestes.',
     sections: [
-      { title: 'MaPrimeRénov\' 2025 : montants et conditions', content: 'Accessible à tous les propriétaires pour leur résidence principale. Parcours "rénovation d\'ampleur" : jusqu\'à 70 % des travaux (plafond 70 000 €) pour ménages très modestes. Travaux obligatoirement réalisés par un artisan RGE.' },
+      { title: 'MaPrimeRénov\' 2025 : montants et conditions', content: 'Accessible à tous les propriétaires pour leur résidence principale. Parcours "rénovation d\'ampleur" : jusqu\'à 80 % des travaux (plafond 40 000 € HT) pour ménages très modestes. Travaux obligatoirement réalisés par un artisan RGE.' },
       { title: 'Les Certificats d\'Économies d\'Énergie (CEE)', content: 'Primes versées par les fournisseurs d\'énergie (EDF, Engie, Total Énergie...) : quelques centaines à plusieurs milliers d\'euros. Aucune condition de revenus. Cumulables avec MaPrimeRénov\'.' },
       { title: 'L\'éco-prêt à taux zéro (éco-PTZ)', content: 'Finance jusqu\'à 50 000 € de travaux sans intérêts sur 20 ans maximum. Accordé par des banques conventionnées, sans condition de revenus. Cumulable avec MaPrimeRénov\'.' },
     ],
@@ -329,7 +329,7 @@ export const guides: Guide[] = [
     sections: [
       { title: 'Étapes immédiates à suivre', content: 'Coupez l\'eau au robinet d\'arrêt général. Si la fuite vient d\'un appareil électrique (chauffe-eau), coupez le disjoncteur. Protégez les meubles et planchers. Prenez des photos pour l\'assurance.' },
       { title: 'Localiser la fuite', content: 'Relevez votre compteur d\'eau, fermez tous les robinets, revérifiez 2h plus tard : compteur en mouvement = fuite cachée. Un plombier avec caméra thermique peut localiser les fuites dans les murs.' },
-      { title: 'Gérer la déclaration assurance', content: 'Déclarez tout dégât des eaux à votre assurance dans les 5 jours ouvrés. Conservez toutes les factures. La convention CIDRE simplifie le règlement entre assureurs en cas de dommages provenant d\'un voisin.' },
+      { title: 'Gérer la déclaration assurance', content: 'Déclarez tout dégât des eaux à votre assurance dans les 5 jours ouvrés. Conservez toutes les factures. La convention IRSI (en vigueur depuis juin 2018) simplifie le règlement entre assureurs en cas de dommages provenant d\'un voisin.' },
     ],
     faq: [
       { q: 'Où se trouve le robinet d\'arrêt général dans un appartement ?', a: 'Sous l\'évier de cuisine, dans le couloir d\'entrée, dans un placard technique ou sur le palier. Repérez-le avant toute urgence.' },
@@ -640,7 +640,7 @@ export const guides: Guide[] = [
     faq: [
       { q: 'Que risque-t-on à construire sans autorisation ?', a: 'Amende de 1 200 à 6 000 €/m², démolition judiciaire aux frais du propriétaire, hypothèque légale sur le bien.' },
       { q: 'Le PLU peut-il interdire des travaux normalement autorisés ?', a: 'Oui, le PLU peut imposer des règles plus strictes. Consultez-le avant tout projet (mairie ou géoportail de l\'urbanisme).' },
-      { q: 'Le certificat de conformité est-il obligatoire ?', a: 'La DAACT doit être déposée en mairie dans les 90 jours suivant l\'achèvement. Obligatoire pour permis de construire et déclarations préalables.' },
+      { q: 'Le certificat de conformité est-il obligatoire ?', a: 'La DAACT doit être déposée en mairie dans les 30 jours suivant l\'achèvement (art. R*462-1 Code de l\'urbanisme). Obligatoire pour permis de construire et déclarations préalables.' },
     ],
     relatedServices: ['macon', 'couvreur', 'menuisier'],
     lastUpdated: '2025-01-15',

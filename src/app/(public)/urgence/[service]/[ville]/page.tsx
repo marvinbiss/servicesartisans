@@ -191,15 +191,15 @@ export async function generateMetadata({
 
   const titleHash = Math.abs(hashCode(`urgence-ville-title-${service}-${villeSlug}`))
   const titleTemplates = [
-    `Urgence ${tradeLower} à ${villeData.name} — 24h/24`,
+    `Urgence ${tradeLower} à ${villeData.name} — soir & week-end`,
     `Dépannage ${tradeLower} urgent à ${villeData.name}`,
-    `${trade.name} urgence ${villeData.name} — 7j/7`,
-    `${trade.name} d'urgence à ${villeData.name} 24h/24`,
+    `${trade.name} urgence ${villeData.name} — y compris le week-end`,
+    `${trade.name} d'urgence à ${villeData.name} soir & week-end`,
     `Urgence ${tradeLower} ${villeData.name} : intervention rapide`,
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
-  const description = `Urgence ${tradeLower} à ${villeData.name} : intervention 24h/24, 7j/7. ${trade.averageResponseTime}. Artisans référencés, devis gratuit.`
+  const description = `Urgence ${tradeLower} à ${villeData.name} : intervention rapide, y compris le week-end. ${trade.averageResponseTime}. Artisans référencés, devis gratuit.`
 
   const serviceImage = getServiceImage(service)
   const canonicalUrl = `${SITE_URL}/urgence/${service}/${villeSlug}`
@@ -297,7 +297,7 @@ export default async function UrgenceServiceVillePage({
     },
     {
       question: `Quel est le délai d'intervention à ${villeData.name} ?`,
-      answer: `${trade.averageResponseTime}. Les artisans d'urgence référencés à ${villeData.name} sont disponibles 24h/24 et 7j/7, y compris les jours fériés. Le délai varie selon votre localisation exacte et la disponibilité des professionnels.`,
+      answer: `${trade.averageResponseTime}. Les artisans d'urgence référencés à ${villeData.name} sont disponibles selon leurs horaires, y compris parfois les jours fériés. Le délai varie selon votre localisation exacte et la disponibilité des professionnels.`,
     },
     {
       question: `Que faire en attendant le ${tradeLower} ?`,
@@ -359,8 +359,8 @@ export default async function UrgenceServiceVillePage({
   const serviceSchema = {
     '@context': 'https://schema.org',
     '@type': 'Service',
-    name: `${trade.name} urgence à ${villeData.name} 24h/24`,
-    description: `Intervention d'urgence ${tradeLower} à ${villeData.name}. ${trade.averageResponseTime}. Disponible 24h/24 et 7j/7.`,
+    name: `${trade.name} urgence à ${villeData.name} soir & week-end`,
+    description: `Intervention d'urgence ${tradeLower} à ${villeData.name}. ${trade.averageResponseTime}. Disponible soir et week-end.`,
     provider: {
       '@type': 'Organization',
       name: SITE_NAME,
@@ -423,7 +423,7 @@ export default async function UrgenceServiceVillePage({
             <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full">
               <div className="w-2.5 h-2.5 rounded-full bg-white animate-pulse" />
               <span className="text-sm font-semibold">
-                Disponible 24h/24 — 7j/7
+                Disponible soir et week-end
               </span>
             </div>
           </div>
@@ -435,7 +435,7 @@ export default async function UrgenceServiceVillePage({
               )
               const h1Templates = [
                 `${trade.name} urgence à ${villeData.name}`,
-                `Urgence ${tradeLower} à ${villeData.name} 24h/24`,
+                `Urgence ${tradeLower} à ${villeData.name} soir & week-end`,
                 `Dépannage ${tradeLower} urgent à ${villeData.name}`,
                 `${trade.name} d'urgence à ${villeData.name}`,
                 `Intervention ${tradeLower} urgente à ${villeData.name}`,
@@ -443,7 +443,7 @@ export default async function UrgenceServiceVillePage({
               return h1Templates[h1Hash % h1Templates.length]
             })()}
             <br />
-            <span className="opacity-80">Intervention immédiate.</span>
+            <span className="opacity-80">Trouvez rapidement un professionnel.</span>
           </h1>
 
           <p className="text-xl opacity-90 max-w-2xl mb-8">
@@ -788,7 +788,7 @@ export default async function UrgenceServiceVillePage({
           </h2>
           <p className="text-xl opacity-90 mb-8">
             Les {tradeLower}s référencés à{' '}
-            {villeData.name} sont disponibles 24h/24 et 7j/7.
+            {villeData.name} sont disponibles selon leurs horaires, y compris parfois les jours fériés.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <a
@@ -825,7 +825,7 @@ export default async function UrgenceServiceVillePage({
                 <div className="font-semibold text-gray-900 group-hover:text-red-600 transition-colors text-sm">
                   {trade.name} urgence à {v.name}
                 </div>
-                <div className="text-xs text-gray-500 mt-1">24h/24</div>
+                <div className="text-xs text-gray-500 mt-1">Soir & week-end</div>
               </Link>
             ))}
           </div>

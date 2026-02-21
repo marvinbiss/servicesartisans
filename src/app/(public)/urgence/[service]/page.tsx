@@ -116,9 +116,9 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
 
   const titleHash = Math.abs(hashCode(`urgence-title-${service}`))
   const titleTemplates = [
-    `${trade.name} urgence 24h/24 — Intervention immédiate`,
-    `Urgence ${trade.name.toLowerCase()} : intervention rapide 7j/7`,
-    `${trade.name} d'urgence — Dépannage 24h/24`,
+    `${trade.name} urgence soir & week-end — Trouvez rapidement un professionnel`,
+    `Urgence ${trade.name.toLowerCase()} : intervention rapide y compris le week-end`,
+    `${trade.name} d'urgence — Dépannage soir & week-end`,
     `Dépannage ${trade.name.toLowerCase()} urgent partout en France`,
     `${trade.name} urgence — ${trade.averageResponseTime}`,
   ]
@@ -127,11 +127,11 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
   const descHash = Math.abs(hashCode(`urgence-desc-${service}`))
   const tradeLower = trade.name.toLowerCase()
   const descTemplates = [
-    `Besoin d'un ${tradeLower} en urgence ? Intervention 24h/24, 7j/7 partout en France. ${trade.averageResponseTime}. Artisans référencés.`,
-    `${trade.name} urgence : dépannage immédiat jour et nuit. ${trade.averageResponseTime}. Devis gratuit, artisans vérifiés SIREN.`,
-    `Urgence ${tradeLower} ? Trouvez un professionnel disponible 24h/24. Intervention rapide, artisans qualifiés, devis gratuit.`,
-    `Dépannage ${tradeLower} en urgence, 7j/7. Artisans référencés par SIREN, intervention sous ${trade.averageResponseTime}. Gratuit.`,
-    `${trade.name} d'urgence 24h/24 : artisans disponibles partout en France. Devis immédiat, intervention ${trade.averageResponseTime}.`,
+    `Besoin d'un ${tradeLower} en urgence ? Disponible selon les artisans de votre secteur partout en France. ${trade.averageResponseTime}. Artisans référencés.`,
+    `${trade.name} urgence : dépannage rapide jour et nuit. ${trade.averageResponseTime}. Devis gratuit, artisans vérifiés SIREN.`,
+    `Urgence ${tradeLower} ? Trouvez un professionnel disponible dans votre secteur. Intervention rapide, artisans qualifiés, devis gratuit.`,
+    `Dépannage ${tradeLower} en urgence, y compris le week-end. Artisans référencés par SIREN, intervention sous ${trade.averageResponseTime}. Gratuit.`,
+    `${trade.name} d'urgence soir & week-end : artisans disponibles partout en France. Devis rapide, intervention ${trade.averageResponseTime}.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
   const serviceImage = getServiceImage(service)
@@ -200,7 +200,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
   const tradeLowerFaq = trade.name.toLowerCase()
   const emergencyFaqItems = [
     { question: `Combien coûte un ${tradeLowerFaq} en urgence la nuit ?`, answer: `Les interventions d'urgence de nuit (après 20h) sont majorées de 50 à 100% par rapport aux tarifs de journée. Pour un ${tradeLowerFaq}, comptez environ ${Math.round((trade.priceRange?.min || 60) * 1.5)} à ${Math.round((trade.priceRange?.max || 90) * 2)} €/h en urgence nocturne. Demandez toujours un devis avant intervention.` },
-    { question: `Quel est le délai d'intervention d'un ${tradeLowerFaq} en urgence ?`, answer: `${trade.averageResponseTime}. Les artisans d'urgence sont disponibles 24h/24 et 7j/7, y compris les jours fériés. Le délai varie selon votre localisation et la disponibilité des professionnels.` },
+    { question: `Quel est le délai d'intervention d'un ${tradeLowerFaq} en urgence ?`, answer: `${trade.averageResponseTime}. Les artisans d'urgence pouvant intervenir le soir et le week-end. Le délai varie selon votre localisation et la disponibilité des professionnels.` },
     { question: `Que faire en attendant le ${tradeLowerFaq} d'urgence ?`, answer: `En attendant l'arrivée du professionnel : sécurisez la zone, coupez l'arrivée d'eau ou le disjoncteur si nécessaire, et ne tentez pas de réparation vous-même. Protégez vos biens des dégâts éventuels.` },
     { question: `Un ${tradeLowerFaq} d'urgence est-il assuré ?`, answer: `Tout ${tradeLowerFaq} professionnel doit disposer d'une assurance responsabilité civile professionnelle et d'une garantie décennale. Exigez une attestation avant le début des travaux, même en urgence.` },
   ]
@@ -220,7 +220,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
       <JsonLd data={[breadcrumbSchema, faqSchema, {
         '@context': 'https://schema.org',
         '@type': 'Service',
-        name: `${trade.name} urgence 24h/24`,
+        name: `${trade.name} urgence soir & week-end`,
         description: trade.emergencyInfo,
         provider: { '@type': 'Organization', name: 'ServicesArtisans', url: SITE_URL },
         areaServed: { '@type': 'Country', name: 'France' },
@@ -251,7 +251,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
           <div className="flex items-center gap-2 mb-6">
             <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full">
               <div className="w-2.5 h-2.5 rounded-full bg-white animate-pulse" />
-              <span className="text-sm font-semibold">Disponible 24h/24 — 7j/7</span>
+              <span className="text-sm font-semibold">Disponible soir et week-end</span>
             </div>
           </div>
           <h1 className="font-heading text-4xl md:text-5xl font-bold mb-6 leading-tight">
@@ -259,14 +259,14 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
               const h1Hash = Math.abs(hashCode(`urgence-h1-${service}`))
               const h1Templates = [
                 `${trade.name} urgence`,
-                `Urgence ${trade.name.toLowerCase()} 24h/24`,
+                `Urgence ${trade.name.toLowerCase()} soir & week-end`,
                 `Dépannage ${trade.name.toLowerCase()} urgent`,
-                `${trade.name} d'urgence — 7j/7`,
+                `${trade.name} d'urgence — y compris le week-end`,
                 `Intervention ${trade.name.toLowerCase()} en urgence`,
               ]
               return h1Templates[h1Hash % h1Templates.length]
             })()}<br />
-            <span className="opacity-80">Intervention immédiate.</span>
+            <span className="opacity-80">Trouvez rapidement un professionnel.</span>
           </h1>
           <p className="text-xl opacity-90 max-w-2xl mb-8">
             {trade.emergencyInfo}
@@ -399,7 +399,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
                     <div className="font-semibold text-gray-900 group-hover:text-red-600 transition-colors text-sm">
                       {trade.name} à {ville.name}
                     </div>
-                    <div className="text-xs text-gray-500">Urgence 24h/24</div>
+                    <div className="text-xs text-gray-500">Urgence soir & week-end</div>
                   </div>
                 </div>
               </Link>
@@ -556,7 +556,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
             Besoin d&apos;un {trade.name.toLowerCase()} en urgence ?
           </h2>
           <p className="text-xl opacity-90 mb-8">
-            Les {trade.name.toLowerCase()}s référencés sur ServicesArtisans sont disponibles 24h/24 et 7j/7.
+            Les {trade.name.toLowerCase()}s référencés sur ServicesArtisans sont disponibles selon leurs horaires, y compris parfois les jours fériés.
           </p>
           <a
             href={PHONE_TEL}
