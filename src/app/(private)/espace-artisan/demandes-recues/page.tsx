@@ -1,55 +1,66 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { FileText, MessageSquare, Star, Settings, TrendingUp, Euro, ArrowLeft, Filter, Calendar, MapPin, ChevronRight, Eye, Send, ExternalLink, Search, Loader2, X, Phone, Mail } from 'lucide-react'
+import { FileText, MessageSquare, Star, Settings, TrendingUp, Euro, ArrowLeft, Filter, Calendar, MapPin, ChevronRight, Eye, Send, ExternalLink, Search, Loader2, X, Phone } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { QuickSiteLinks } from '@/components/InternalLinks'
 import LogoutButton from '@/components/LogoutButton'
 import { getArtisanUrl } from '@/lib/utils'
+import { Pagination } from '@/components/dashboard/Pagination'
 
-interface Demande {
+interface LeadRequest {
   id: string
-  client_id: string | null
-  client_name: string
-  client_email: string
-  client_phone: string
   service_name: string
-  description: string
   city: string | null
   postal_code: string
-  created_at: string
-  budget: string | null
-  status: string
+  description: string
   urgency: string
+  client_name: string
+  client_phone: string
+  created_at: string
+  status: string
 }
 
-interface Stats {
-  total: number
-  nouveau: number
-  devis_envoye: number
-  accepte: number
-  refuse: number
+interface Lead {
+  id: string
+  status: string
+  assigned_at: string
+  viewed_at: string | null
+  lead: LeadRequest | null
+}
+
+interface PaginationInfo {
+  page: number
+  pageSize: number
+  totalPages: number
+  totalItems: number
 }
 
 const statusConfig: Record<string, { label: string; color: string }> = {
   pending: { label: 'Nouveau', color: 'bg-red-100 text-red-700' },
-  sent: { label: 'Devis envoyé', color: 'bg-yellow-100 text-yellow-700' },
+  viewed: { label: 'Vu', color: 'bg-yellow-100 text-yellow-700' },
+  quoted: { label: 'Devis envoyé', color: 'bg-blue-100 text-blue-700' },
+  declined: { label: 'Refusé', color: 'bg-gray-100 text-gray-700' },
   accepted: { label: 'Accepté', color: 'bg-green-100 text-green-700' },
-  refused: { label: 'Refusé', color: 'bg-gray-100 text-gray-700' },
-  expired: { label: 'Expiré', color: 'bg-blue-100 text-blue-700' },
 }
 
 export default function DemandesRecuesPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(true)
-  const [demandes, setDemandes] = useState<Demande[]>([])
-  const [stats, setStats] = useState<Stats | null>(null)
+  const [leads, setLeads] = useState<Lead[]>([])
+  const [totalItems, setTotalItems] = useState(0)
+  const [pagination, setPagination] = useState<PaginationInfo>({
+    page: 1,
+    pageSize: 20,
+    totalPages: 1,
+    totalItems: 0,
+  })
   const [filterStatus, setFilterStatus] = useState('all')
   const [showDevisModal, setShowDevisModal] = useState(false)
   const [showDetailModal, setShowDetailModal] = useState(false)
-  const [selectedDemande, setSelectedDemande] = useState<Demande | null>(null)
+  const [selectedLead, setSelectedLead] = useState<Lead | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [publicUrl, setPublicUrl] = useState<string | null>(null)
   const [devisForm, setDevisForm] = useState({
@@ -58,66 +69,76 @@ export default function DemandesRecuesPage() {
     validity_days: 30,
   })
 
-  useEffect(() => {
-    fetchDemandes()
-  }, [filterStatus])
-
-  useEffect(() => {
-    fetchPublicUrl()
-  }, [])
-
-  const fetchPublicUrl = async () => {
-    try {
-      const response = await fetch('/api/artisan/stats')
-      const data = await response.json()
-      if (response.ok && data.profile) {
-        const url = getArtisanUrl({
-          stable_id: data.profile.stable_id ?? null,
-          slug: data.profile.slug ?? null,
-          specialty: data.profile.specialty ?? null,
-          city: data.profile.address_city ?? null,
-        })
-        setPublicUrl(url)
-      }
-    } catch {
-      // Silently fail — link just won't show
-    }
-  }
-
-  const fetchDemandes = async () => {
+  const fetchLeads = useCallback(async (page: number, status: string) => {
     try {
       setLoading(true)
-      const url = filterStatus === 'all'
-        ? '/api/artisan/demandes'
-        : `/api/artisan/demandes?status=${filterStatus}`
-      const response = await fetch(url)
+      const params = new URLSearchParams({ page: String(page), pageSize: '20' })
+      if (status !== 'all') params.set('status', status)
+      const response = await fetch(`/api/artisan/leads?${params.toString()}`)
       const data = await response.json()
 
       if (response.ok) {
-        setDemandes(data.demandes || [])
-        setStats(data.stats)
+        setLeads(data.leads || [])
+        setTotalItems(data.count ?? 0)
+        if (data.pagination) {
+          setPagination(data.pagination)
+        }
       }
     } catch (error) {
-      console.error('Error fetching demandes:', error)
+      console.error('Error fetching leads:', error)
     } finally {
       setLoading(false)
     }
+  }, [])
+
+  useEffect(() => {
+    fetchLeads(1, filterStatus)
+  }, [filterStatus, fetchLeads])
+
+  useEffect(() => {
+    const fetchPublicUrl = async () => {
+      try {
+        const response = await fetch('/api/artisan/stats')
+        const data = await response.json()
+        if (response.ok && data.profile) {
+          const url = getArtisanUrl({
+            stable_id: data.profile.stable_id ?? null,
+            slug: data.profile.slug ?? null,
+            specialty: data.profile.specialty ?? null,
+            city: data.profile.address_city ?? null,
+          })
+          setPublicUrl(url)
+        }
+      } catch {
+        // Silently fail — link just won't show
+      }
+    }
+    fetchPublicUrl()
+  }, [])
+
+  const handlePageChange = (page: number) => {
+    fetchLeads(page, filterStatus)
   }
 
-  const openDevisModal = (demande: Demande) => {
-    setSelectedDemande(demande)
+  const handleFilterChange = (status: string) => {
+    setFilterStatus(status)
+    // fetchLeads will be called by the useEffect on filterStatus change
+  }
+
+  const openDevisModal = (lead: Lead) => {
+    setSelectedLead(lead)
     setDevisForm({ amount: '', description: '', validity_days: 30 })
     setShowDevisModal(true)
   }
 
-  const openDetailModal = (demande: Demande) => {
-    setSelectedDemande(demande)
+  const openDetailModal = (lead: Lead) => {
+    setSelectedLead(lead)
     setShowDetailModal(true)
   }
 
   const handleSendDevis = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!selectedDemande || !devisForm.amount) return
+    if (!selectedLead?.lead || !devisForm.amount) return
 
     setSubmitting(true)
     try {
@@ -125,7 +146,7 @@ export default function DemandesRecuesPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          devis_request_id: selectedDemande.id,
+          devis_request_id: selectedLead.lead.id,
           amount: parseFloat(devisForm.amount),
           description: devisForm.description,
           validity_days: devisForm.validity_days,
@@ -136,8 +157,8 @@ export default function DemandesRecuesPage() {
 
       if (response.ok) {
         setShowDevisModal(false)
-        setSelectedDemande(null)
-        await fetchDemandes()
+        setSelectedLead(null)
+        await fetchLeads(pagination.page, filterStatus)
         alert('Devis envoyé avec succès!')
       } else {
         alert(data.error || 'Erreur lors de l\'envoi du devis')
@@ -150,12 +171,11 @@ export default function DemandesRecuesPage() {
     }
   }
 
-  const handleContact = (_demande: Demande) => {
-    // Navigate to messages (param ?with= not currently handled — navigate to messages root)
+  const handleContact = () => {
     router.push('/espace-artisan/messages')
   }
 
-  const filteredDemandes = demandes
+  const pendingCount = leads.filter(l => l.status === 'pending').length
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -202,8 +222,8 @@ export default function DemandesRecuesPage() {
               >
                 <FileText className="w-5 h-5" />
                 Demandes reçues
-                {stats?.nouveau ? (
-                  <span className="ml-auto bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">{stats.nouveau}</span>
+                {pendingCount > 0 ? (
+                  <span className="ml-auto bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">{pendingCount}</span>
                 ) : null}
               </Link>
               <Link
@@ -279,147 +299,154 @@ export default function DemandesRecuesPage() {
                 <Filter className="w-5 h-5 text-gray-400" />
                 <div className="flex flex-wrap gap-2">
                   <button
-                    onClick={() => setFilterStatus('all')}
+                    onClick={() => handleFilterChange('all')}
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                       filterStatus === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
-                    Toutes ({stats?.total || 0})
+                    Toutes ({filterStatus === 'all' ? totalItems : '—'})
                   </button>
                   <button
-                    onClick={() => setFilterStatus('pending')}
+                    onClick={() => handleFilterChange('pending')}
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                       filterStatus === 'pending' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
-                    Nouvelles ({stats?.nouveau || 0})
+                    Nouvelles
                   </button>
                   <button
-                    onClick={() => setFilterStatus('sent')}
+                    onClick={() => handleFilterChange('quoted')}
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      filterStatus === 'sent' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      filterStatus === 'quoted' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
-                    Devis envoyés ({stats?.devis_envoye || 0})
+                    Devis envoyés
                   </button>
                   <button
-                    onClick={() => setFilterStatus('accepted')}
+                    onClick={() => handleFilterChange('accepted')}
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                       filterStatus === 'accepted' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
-                    Acceptées ({stats?.accepte || 0})
+                    Acceptées
                   </button>
                 </div>
               </div>
             </div>
 
-            {/* Demandes list */}
+            {/* Leads list */}
             {loading ? (
               <div className="bg-white rounded-xl shadow-sm p-12 text-center">
                 <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
                 <p className="text-gray-600">Chargement des demandes...</p>
               </div>
             ) : (
-              <div className="space-y-4">
-                {filteredDemandes.map((demande) => {
-                  const statusInfo = statusConfig[demande.status] || { label: demande.status, color: 'bg-gray-100 text-gray-700' }
-                  return (
-                    <div
-                      key={demande.id}
-                      className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow"
-                    >
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-2">
-                            <h3 className="font-semibold text-gray-900">{demande.service_name}</h3>
-                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusInfo.color}`}>
-                              {statusInfo.label}
-                            </span>
-                            {demande.urgency === 'urgent' && (
-                              <span className="px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-700">
-                                Urgent
+              <>
+                <div className="space-y-4">
+                  {leads.map((item) => {
+                    const lead = item.lead
+                    if (!lead) return null
+                    const statusInfo = statusConfig[item.status] || { label: item.status, color: 'bg-gray-100 text-gray-700' }
+                    return (
+                      <div
+                        key={item.id}
+                        className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow"
+                      >
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-2">
+                              <h3 className="font-semibold text-gray-900">{lead.service_name}</h3>
+                              <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusInfo.color}`}>
+                                {statusInfo.label}
                               </span>
-                            )}
-                            {demande.urgency === 'tres_urgent' && (
-                              <span className="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700">
-                                Très urgent
+                              {lead.urgency === 'urgent' && (
+                                <span className="px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-700">
+                                  Urgent
+                                </span>
+                              )}
+                              {lead.urgency === 'tres_urgent' && (
+                                <span className="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700">
+                                  Très urgent
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-gray-600 mb-3">{lead.description}</p>
+                            <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+                              <span className="font-medium text-gray-900">{lead.client_name}</span>
+                              <span className="flex items-center gap-1">
+                                <MapPin className="w-4 h-4" />
+                                {lead.city || lead.postal_code || 'Non précisé'}
                               </span>
-                            )}
+                              <span className="flex items-center gap-1">
+                                <Calendar className="w-4 h-4" />
+                                {new Date(lead.created_at).toLocaleDateString('fr-FR')}
+                              </span>
+                            </div>
                           </div>
-                          <p className="text-gray-600 mb-3">{demande.description}</p>
-                          <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
-                            <span className="font-medium text-gray-900">{demande.client_name}</span>
-                            <span className="flex items-center gap-1">
-                              <MapPin className="w-4 h-4" />
-                              {demande.city || demande.postal_code || 'Non précisé'}
-                            </span>
-                            <span className="flex items-center gap-1">
-                              <Calendar className="w-4 h-4" />
-                              {new Date(demande.created_at).toLocaleDateString('fr-FR')}
-                            </span>
-                            {demande.budget && (
-                              <span className="font-medium text-blue-600">
-                                Budget : {demande.budget}
-                              </span>
+                          <div className="flex items-center gap-2">
+                            {item.status === 'pending' && (
+                              <>
+                                <button
+                                  onClick={() => openDevisModal(item)}
+                                  className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                                >
+                                  <Send className="w-4 h-4" />
+                                  Envoyer devis
+                                </button>
+                                <button
+                                  onClick={() => openDetailModal(item)}
+                                  className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+                                >
+                                  <Eye className="w-5 h-5" />
+                                </button>
+                              </>
                             )}
+                            {(item.status === 'viewed' || item.status === 'quoted') && (
+                              <button
+                                onClick={handleContact}
+                                className="flex items-center gap-2 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+                              >
+                                <MessageSquare className="w-4 h-4" />
+                                Contacter
+                              </button>
+                            )}
+                            {item.status === 'accepted' && (
+                              <span className="text-green-600 font-medium">Mission confirmée</span>
+                            )}
+                            {item.status === 'declined' && (
+                              <span className="text-gray-500 font-medium">Refusé</span>
+                            )}
+                            <ChevronRight className="w-5 h-5 text-gray-400" />
                           </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          {demande.status === 'pending' && (
-                            <>
-                              <button
-                                onClick={() => openDevisModal(demande)}
-                                className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
-                              >
-                                <Send className="w-4 h-4" />
-                                Envoyer devis
-                              </button>
-                              <button
-                                onClick={() => openDetailModal(demande)}
-                                className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
-                              >
-                                <Eye className="w-5 h-5" />
-                              </button>
-                            </>
-                          )}
-                          {demande.status === 'sent' && (
-                            <button
-                              onClick={() => handleContact(demande)}
-                              className="flex items-center gap-2 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-50 transition-colors"
-                            >
-                              <MessageSquare className="w-4 h-4" />
-                              Contacter
-                            </button>
-                          )}
-                          {demande.status === 'accepted' && (
-                            <span className="text-green-600 font-medium">Mission confirmée</span>
-                          )}
-                          {demande.status === 'expired' && (
-                            <span className="text-blue-600 font-medium">Expirée</span>
-                          )}
-                          <ChevronRight className="w-5 h-5 text-gray-400" />
                         </div>
                       </div>
-                    </div>
-                  )
-                })}
-              </div>
-            )}
+                    )
+                  })}
+                </div>
 
-            {!loading && filteredDemandes.length === 0 && (
-              <div className="bg-white rounded-xl shadow-sm p-12 text-center">
-                <FileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                <h3 className="font-medium text-gray-900 mb-2">Aucune demande</h3>
-                <p className="text-gray-500">Aucune demande ne correspond à ce filtre.</p>
-              </div>
+                {leads.length === 0 && (
+                  <div className="bg-white rounded-xl shadow-sm p-12 text-center">
+                    <FileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+                    <h3 className="font-medium text-gray-900 mb-2">Aucune demande</h3>
+                    <p className="text-gray-500">Aucune demande ne correspond à ce filtre.</p>
+                  </div>
+                )}
+
+                {pagination.totalPages > 1 && (
+                  <Pagination
+                    page={pagination.page}
+                    totalPages={pagination.totalPages}
+                    onPageChange={handlePageChange}
+                  />
+                )}
+              </>
             )}
           </div>
         </div>
       </div>
 
       {/* Modal Envoyer Devis */}
-      {showDevisModal && selectedDemande && (
+      {showDevisModal && selectedLead?.lead && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl max-w-lg w-full p-6">
             <div className="flex items-center justify-between mb-6">
@@ -435,10 +462,10 @@ export default function DemandesRecuesPage() {
             </div>
 
             <div className="bg-gray-50 rounded-lg p-4 mb-6">
-              <h3 className="font-medium text-gray-900 mb-2">{selectedDemande.service_name}</h3>
-              <p className="text-sm text-gray-600 mb-2">{selectedDemande.description}</p>
+              <h3 className="font-medium text-gray-900 mb-2">{selectedLead.lead.service_name}</h3>
+              <p className="text-sm text-gray-600 mb-2">{selectedLead.lead.description}</p>
               <div className="text-sm text-gray-500">
-                <span className="font-medium">{selectedDemande.client_name}</span> - {selectedDemande.city || selectedDemande.postal_code || 'Non précisé'}
+                <span className="font-medium">{selectedLead.lead.client_name}</span> — {selectedLead.lead.city || selectedLead.lead.postal_code || 'Non précisé'}
               </div>
             </div>
 
@@ -512,7 +539,7 @@ export default function DemandesRecuesPage() {
       )}
 
       {/* Modal Détails */}
-      {showDetailModal && selectedDemande && (
+      {showDetailModal && selectedLead?.lead && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl max-w-lg w-full p-6">
             <div className="flex items-center justify-between mb-6">
@@ -529,49 +556,43 @@ export default function DemandesRecuesPage() {
 
             <div className="space-y-4">
               <div>
-                <h3 className="font-semibold text-gray-900 text-lg mb-2">{selectedDemande.service_name}</h3>
-                <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusConfig[selectedDemande.status]?.color || 'bg-gray-100'}`}>
-                  {statusConfig[selectedDemande.status]?.label || selectedDemande.status}
+                <h3 className="font-semibold text-gray-900 text-lg mb-2">{selectedLead.lead.service_name}</h3>
+                <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusConfig[selectedLead.status]?.color || 'bg-gray-100'}`}>
+                  {statusConfig[selectedLead.status]?.label || selectedLead.status}
                 </span>
               </div>
 
               <div className="bg-gray-50 rounded-lg p-4">
                 <h4 className="font-medium text-gray-700 mb-2">Description</h4>
-                <p className="text-gray-600">{selectedDemande.description || 'Non précisé'}</p>
+                <p className="text-gray-600">{selectedLead.lead.description || 'Non précisé'}</p>
               </div>
 
               <div className="bg-gray-50 rounded-lg p-4">
                 <h4 className="font-medium text-gray-700 mb-3">Contact client</h4>
                 <div className="space-y-2">
-                  <p className="font-medium text-gray-900">{selectedDemande.client_name}</p>
-                  <p className="flex items-center gap-2 text-gray-600">
-                    <Mail className="w-4 h-4" />
-                    <a href={`mailto:${selectedDemande.client_email}`} className="text-blue-600 hover:underline">
-                      {selectedDemande.client_email}
-                    </a>
-                  </p>
+                  <p className="font-medium text-gray-900">{selectedLead.lead.client_name}</p>
                   <p className="flex items-center gap-2 text-gray-600">
                     <Phone className="w-4 h-4" />
-                    <a href={`tel:${selectedDemande.client_phone}`} className="text-blue-600 hover:underline">
-                      {selectedDemande.client_phone}
+                    <a href={`tel:${selectedLead.lead.client_phone}`} className="text-blue-600 hover:underline">
+                      {selectedLead.lead.client_phone}
                     </a>
                   </p>
                   <p className="flex items-center gap-2 text-gray-600">
                     <MapPin className="w-4 h-4" />
-                    {selectedDemande.city || selectedDemande.postal_code || 'Non précisé'}
+                    {selectedLead.lead.city || selectedLead.lead.postal_code || 'Non précisé'}
                   </p>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div className="bg-gray-50 rounded-lg p-3">
-                  <span className="text-gray-500">Budget estimé</span>
-                  <p className="font-medium text-gray-900">{selectedDemande.budget || 'Non précisé'}</p>
+                  <span className="text-gray-500">Urgence</span>
+                  <p className="font-medium text-gray-900 capitalize">{selectedLead.lead.urgency || 'Non précisé'}</p>
                 </div>
                 <div className="bg-gray-50 rounded-lg p-3">
                   <span className="text-gray-500">Date de demande</span>
                   <p className="font-medium text-gray-900">
-                    {new Date(selectedDemande.created_at).toLocaleDateString('fr-FR', {
+                    {new Date(selectedLead.lead.created_at).toLocaleDateString('fr-FR', {
                       day: 'numeric',
                       month: 'long',
                       year: 'numeric',
@@ -587,11 +608,11 @@ export default function DemandesRecuesPage() {
                 >
                   Fermer
                 </button>
-                {selectedDemande.status === 'pending' && (
+                {selectedLead.status === 'pending' && (
                   <button
                     onClick={() => {
                       setShowDetailModal(false)
-                      openDevisModal(selectedDemande)
+                      openDevisModal(selectedLead)
                     }}
                     className="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
                   >

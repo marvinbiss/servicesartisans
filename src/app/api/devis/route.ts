@@ -10,6 +10,7 @@ import { createClient as createServerClient } from '@/lib/supabase/server'
 import { getResendClient } from '@/lib/api/resend-client'
 import { z } from 'zod'
 import { dispatchLead } from '@/app/actions/dispatch'
+import { logLeadEvent } from '@/lib/dashboard/events'
 
 export const dynamic = 'force-dynamic'
 
@@ -122,7 +123,8 @@ export async function POST(request: Request) {
       // Continue even if DB fails - we'll still send emails
     }
 
-    // Dispatch to eligible artisans (fire-and-forget, non-blocking)
+    // Dispatch to eligible artisans
+    let assignedProviders: string[] = []
     if (lead) {
       const urgencyMap: Record<string, string> = {
         urgent: 'urgent',
@@ -130,13 +132,16 @@ export async function POST(request: Request) {
         mois: 'normal',
         flexible: 'flexible',
       }
-      dispatchLead(lead.id, {
+      assignedProviders = await dispatchLead(lead.id, {
         serviceName: serviceNames[data.service] || data.service,
         city: data.ville,
         postalCode: data.codePostal,
         urgency: urgencyMap[data.urgency] || 'normal',
         sourceTable: 'devis_requests',
-      }).catch((err) => logger.error('Dispatch failed (non-blocking)', err))
+      }).catch(() => [])
+      if (assignedProviders.length > 0) {
+        logLeadEvent(lead.id, 'dispatched', { metadata: { count: assignedProviders.length } }).catch(() => {})
+      }
     }
 
     // Send both confirmation emails in parallel
@@ -197,6 +202,8 @@ export async function POST(request: Request) {
       success: true,
       message: 'Demande de devis envoyée avec succès',
       id: lead?.id,
+      artisans_notified: assignedProviders.length,
+      ...(assignedProviders.length === 0 && { artisans_found: false }),
     })
   } catch (error) {
     logger.error('Devis API error', error)

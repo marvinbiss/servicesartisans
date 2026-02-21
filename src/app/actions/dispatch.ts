@@ -1,6 +1,7 @@
 'use server'
 
 import { createAdminClient } from '@/lib/supabase/admin'
+import { logger } from '@/lib/logger'
 
 export interface DispatchOptions {
   serviceName?: string
@@ -46,13 +47,13 @@ export async function dispatchLead(
     })
 
     if (error) {
-      console.error('Dispatch error:', error)
+      logger.error('Dispatch error', error)
       return []
     }
 
     return (data as string[]) || []
   } catch (err) {
-    console.error('Dispatch action error:', err)
+    logger.error('Dispatch action error', err)
     return []
   }
 }

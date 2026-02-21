@@ -15,11 +15,34 @@ import {
   History,
   MessageSquare,
   Shield,
+  Star,
+  Check,
+  X,
+  Users,
+  Eye,
+  CheckCircle,
 } from 'lucide-react'
 import ClientSidebar from '@/components/client/ClientSidebar'
 import { EventTimeline } from '@/components/dashboard/EventTimeline'
 import { URGENCY_META } from '@/types/leads'
 import type { LeadEventType } from '@/types/leads'
+
+interface ProviderInfo {
+  name: string
+  specialty: string | null
+  city: string | null
+  rating_average: number | null
+}
+
+interface Quote {
+  id: string
+  amount: number
+  description: string
+  valid_until: string | null
+  status: 'pending' | 'accepted' | 'refused' | 'expired'
+  created_at: string
+  provider: ProviderInfo | null
+}
 
 interface LeadDetail {
   id: string
@@ -44,15 +67,50 @@ interface ClientEvent {
   created_at: string
 }
 
+interface LeadStats {
+  artisans_notified: number
+  artisans_viewed: number
+  quotes_count: number
+}
+
+const QUOTE_STATUS_CONFIG: Record<string, { label: string; cls: string }> = {
+  pending: { label: 'En attente', cls: 'bg-blue-100 text-blue-700' },
+  accepted: { label: 'Accepté', cls: 'bg-emerald-100 text-emerald-700' },
+  refused: { label: 'Refusé', cls: 'bg-red-100 text-red-700' },
+  expired: { label: 'Expiré', cls: 'bg-orange-100 text-orange-700' },
+}
+
+function formatDate(dateStr: string): string {
+  return new Date(dateStr).toLocaleDateString('fr-FR', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  })
+}
+
+function StarRating({ value }: { value: number | null }) {
+  if (!value) return null
+  return (
+    <span className="flex items-center gap-1 text-sm text-amber-600">
+      <Star className="w-3.5 h-3.5 fill-amber-400 stroke-amber-400" />
+      {value.toFixed(1)}
+    </span>
+  )
+}
+
 export default function LeadDetailPage() {
   const params = useParams()
   const id = params.id as string
 
   const [lead, setLead] = useState<LeadDetail | null>(null)
+  const [quotes, setQuotes] = useState<Quote[]>([])
   const [events, setEvents] = useState<ClientEvent[]>([])
-  const [quotesCount, setQuotesCount] = useState(0)
+  const [stats, setStats] = useState<LeadStats | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [actionLoading, setActionLoading] = useState<string | null>(null)
+  const [actionError, setActionError] = useState<string | null>(null)
+  const [actionSuccess, setActionSuccess] = useState<string | null>(null)
 
   const fetchData = useCallback(async () => {
     try {
@@ -63,8 +121,9 @@ export default function LeadDetailPage() {
 
       if (res.ok) {
         setLead(data.lead)
+        setQuotes(data.quotes || [])
         setEvents(data.events || [])
-        setQuotesCount(data.quotesCount || 0)
+        setStats(data.stats || null)
       } else if (res.status === 401) {
         window.location.href = '/connexion?redirect=/espace-client/mes-demandes'
         return
@@ -81,6 +140,54 @@ export default function LeadDetailPage() {
   useEffect(() => {
     fetchData()
   }, [fetchData])
+
+  const handleAccept = async (quoteId: string) => {
+    setActionLoading(quoteId)
+    setActionError(null)
+    setActionSuccess(null)
+    try {
+      const res = await fetch(`/api/client/leads/${id}/accept`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ quote_id: quoteId }),
+      })
+      const data = await res.json()
+      if (res.ok) {
+        setActionSuccess('Devis accepté avec succès. L\'artisan va vous contacter.')
+        await fetchData()
+      } else {
+        setActionError(data.error || 'Erreur lors de l\'acceptation')
+      }
+    } catch {
+      setActionError('Erreur de connexion')
+    } finally {
+      setActionLoading(null)
+    }
+  }
+
+  const handleRefuse = async (quoteId: string) => {
+    setActionLoading(`refuse-${quoteId}`)
+    setActionError(null)
+    setActionSuccess(null)
+    try {
+      const res = await fetch(`/api/client/leads/${id}/refuse`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ quote_id: quoteId }),
+      })
+      const data = await res.json()
+      if (res.ok) {
+        setActionSuccess('Devis refusé.')
+        await fetchData()
+      } else {
+        setActionError(data.error || 'Erreur lors du refus')
+      }
+    } catch {
+      setActionError('Erreur de connexion')
+    } finally {
+      setActionLoading(null)
+    }
+  }
 
   if (loading) {
     return (
@@ -110,10 +217,12 @@ export default function LeadDetailPage() {
   if (!lead) return null
 
   const urg = URGENCY_META[lead.urgency] || URGENCY_META.normal
+  const pendingQuotes = quotes.filter(q => q.status === 'pending')
+  const hasAcceptedQuote = quotes.some(q => q.status === 'accepted')
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
+      {/* Header / Breadcrumb */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center gap-2 text-sm text-gray-500">
@@ -121,7 +230,7 @@ export default function LeadDetailPage() {
             <span>/</span>
             <Link href="/espace-client/mes-demandes" className="hover:text-gray-900">Mes demandes</Link>
             <span>/</span>
-            <span className="text-gray-900 font-medium">Détail</span>
+            <span className="text-gray-900 font-medium truncate max-w-xs">{lead.service_name}</span>
           </div>
         </div>
       </div>
@@ -141,6 +250,19 @@ export default function LeadDetailPage() {
               Retour à mes demandes
             </Link>
 
+            {/* Action feedback banners */}
+            {actionSuccess && (
+              <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4 mb-6 flex items-center gap-3">
+                <CheckCircle className="w-5 h-5 text-emerald-500 flex-shrink-0" />
+                <p className="text-emerald-700 text-sm font-medium">{actionSuccess}</p>
+              </div>
+            )}
+            {actionError && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-center gap-3">
+                <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
+                <p className="text-red-700 text-sm">{actionError}</p>
+              </div>
+            )}
             {error && (
               <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-center gap-3">
                 <AlertCircle className="w-5 h-5 text-red-500" />
@@ -149,7 +271,7 @@ export default function LeadDetailPage() {
             )}
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/* Left: Lead details */}
+              {/* Left column: lead details + quotes */}
               <div className="lg:col-span-2 space-y-6">
                 {/* Lead header card */}
                 <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
@@ -179,7 +301,8 @@ export default function LeadDetailPage() {
                           <p className="text-xs text-gray-400">Créée le</p>
                           <p className="text-sm text-gray-700">
                             {new Date(lead.created_at).toLocaleDateString('fr-FR', {
-                              day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
+                              day: 'numeric', month: 'long', year: 'numeric',
+                              hour: '2-digit', minute: '2-digit',
                             })}
                           </p>
                         </div>
@@ -199,19 +322,175 @@ export default function LeadDetailPage() {
                   </div>
                 </div>
 
-                {/* Quotes info */}
-                {quotesCount > 0 && (
-                  <div className="bg-white rounded-xl border border-gray-200 p-6">
-                    <h2 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                      <FileText className="w-5 h-5 text-gray-400" />
-                      Devis reçus
-                    </h2>
-                    <p className="text-sm text-gray-600">
-                      Vous avez reçu <strong>{quotesCount}</strong> devis pour cette demande.
-                      Consultez la timeline ci-contre pour voir les montants proposés.
-                    </p>
+                {/* Stats bar */}
+                {stats && (
+                  <div className="bg-white rounded-xl border border-gray-200 p-4">
+                    <div className="grid grid-cols-3 gap-4 text-center">
+                      <div>
+                        <div className="flex items-center justify-center gap-1.5 text-gray-400 mb-1">
+                          <Users className="w-4 h-4" />
+                          <span className="text-xs">Contactés</span>
+                        </div>
+                        <p className="text-2xl font-bold text-gray-900">{stats.artisans_notified}</p>
+                      </div>
+                      <div>
+                        <div className="flex items-center justify-center gap-1.5 text-gray-400 mb-1">
+                          <Eye className="w-4 h-4" />
+                          <span className="text-xs">Intéressés</span>
+                        </div>
+                        <p className="text-2xl font-bold text-gray-900">{stats.artisans_viewed}</p>
+                      </div>
+                      <div>
+                        <div className="flex items-center justify-center gap-1.5 text-gray-400 mb-1">
+                          <FileText className="w-4 h-4" />
+                          <span className="text-xs">Devis reçus</span>
+                        </div>
+                        <p className="text-2xl font-bold text-gray-900">{stats.quotes_count}</p>
+                      </div>
+                    </div>
                   </div>
                 )}
+
+                {/* Quotes section */}
+                <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                  <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-2">
+                    <FileText className="w-5 h-5 text-gray-400" />
+                    <h2 className="font-semibold text-gray-900">Devis reçus</h2>
+                    {quotes.length > 0 && (
+                      <span className="ml-auto bg-blue-100 text-blue-700 text-xs font-medium px-2 py-0.5 rounded-full">
+                        {quotes.length}
+                      </span>
+                    )}
+                  </div>
+
+                  {quotes.length === 0 ? (
+                    <div className="p-10 text-center">
+                      <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <Clock className="w-6 h-6 text-gray-400" />
+                      </div>
+                      <p className="font-medium text-gray-600">En attente de devis des artisans</p>
+                      <p className="text-sm text-gray-400 mt-1">
+                        Les artisans intéressés vous enverront leur proposition sous 24–48h.
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="divide-y divide-gray-100">
+                      {quotes.map((quote) => {
+                        const statusCfg = QUOTE_STATUS_CONFIG[quote.status] || QUOTE_STATUS_CONFIG.pending
+                        const isAccepting = actionLoading === quote.id
+                        const isRefusing = actionLoading === `refuse-${quote.id}`
+                        const anyLoading = actionLoading !== null
+
+                        return (
+                          <div
+                            key={quote.id}
+                            className={`p-6 transition-colors ${
+                              quote.status === 'accepted' ? 'bg-emerald-50' : ''
+                            }`}
+                          >
+                            {/* Quote header */}
+                            <div className="flex items-start justify-between gap-4 mb-4">
+                              <div>
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <span className="text-2xl font-bold text-gray-900">
+                                    {Number(quote.amount).toLocaleString('fr-FR', {
+                                      style: 'currency',
+                                      currency: 'EUR',
+                                    })}
+                                  </span>
+                                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${statusCfg.cls}`}>
+                                    {statusCfg.label}
+                                  </span>
+                                </div>
+                                {quote.valid_until && (
+                                  <p className="text-xs text-gray-400 mt-1">
+                                    Valable jusqu&apos;au {formatDate(quote.valid_until)}
+                                  </p>
+                                )}
+                              </div>
+                              <p className="text-xs text-gray-400 whitespace-nowrap">
+                                {formatDate(quote.created_at)}
+                              </p>
+                            </div>
+
+                            {/* Provider info */}
+                            {quote.provider && (
+                              <div className="flex items-center gap-3 mb-4 p-3 bg-gray-50 rounded-lg">
+                                <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                                  <span className="text-blue-700 font-bold text-sm">
+                                    {quote.provider.name.charAt(0).toUpperCase()}
+                                  </span>
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <p className="font-medium text-gray-900 text-sm truncate">
+                                    {quote.provider.name}
+                                  </p>
+                                  <div className="flex items-center gap-3 flex-wrap">
+                                    {quote.provider.specialty && (
+                                      <span className="text-xs text-gray-500">{quote.provider.specialty}</span>
+                                    )}
+                                    {quote.provider.city && (
+                                      <span className="flex items-center gap-0.5 text-xs text-gray-500">
+                                        <MapPin className="w-3 h-3" />
+                                        {quote.provider.city}
+                                      </span>
+                                    )}
+                                    <StarRating value={quote.provider.rating_average} />
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Quote description */}
+                            {quote.description && (
+                              <p className="text-sm text-gray-600 leading-relaxed mb-4">
+                                {quote.description}
+                              </p>
+                            )}
+
+                            {/* Actions — only for pending quotes when no quote has been accepted yet */}
+                            {quote.status === 'pending' && !hasAcceptedQuote && (
+                              <div className="flex gap-3">
+                                <button
+                                  onClick={() => handleAccept(quote.id)}
+                                  disabled={anyLoading}
+                                  className="flex items-center gap-2 px-4 py-2.5 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                >
+                                  {isAccepting ? (
+                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                  ) : (
+                                    <Check className="w-4 h-4" />
+                                  )}
+                                  Accepter ce devis
+                                </button>
+                                <button
+                                  onClick={() => handleRefuse(quote.id)}
+                                  disabled={anyLoading}
+                                  className="flex items-center gap-2 px-4 py-2.5 border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                >
+                                  {isRefusing ? (
+                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                  ) : (
+                                    <X className="w-4 h-4" />
+                                  )}
+                                  Refuser
+                                </button>
+                              </div>
+                            )}
+
+                            {/* Accepted confirmation banner */}
+                            {quote.status === 'accepted' && (
+                              <div className="flex items-center gap-2 text-emerald-700 text-sm font-medium">
+                                <CheckCircle className="w-4 h-4" />
+                                Vous avez accepté ce devis — l&apos;artisan va vous contacter.
+                              </div>
+                            )}
+                          </div>
+                        )
+                      })}
+                    </div>
+                  )}
+                </div>
 
                 {/* Contact CTA */}
                 <div className="bg-blue-50 rounded-xl border border-blue-100 p-6">
@@ -232,7 +511,7 @@ export default function LeadDetailPage() {
                 </div>
               </div>
 
-              {/* Right sidebar: Timeline + info */}
+              {/* Right column: Timeline + info */}
               <div className="space-y-6">
                 {/* Event timeline */}
                 <div className="bg-white rounded-xl border border-gray-200 p-6">
@@ -265,9 +544,15 @@ export default function LeadDetailPage() {
                       <span className="text-gray-700">{events.length}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-500">Devis</span>
-                      <span className="text-gray-700">{quotesCount}</span>
+                      <span className="text-gray-500">Devis reçus</span>
+                      <span className="text-gray-700">{quotes.length}</span>
                     </div>
+                    {pendingQuotes.length > 0 && !hasAcceptedQuote && (
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">En attente</span>
+                        <span className="text-blue-700 font-medium">{pendingQuotes.length}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
 

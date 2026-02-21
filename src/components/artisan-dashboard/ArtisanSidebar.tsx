@@ -1,9 +1,12 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { FileText, MessageSquare, Star, Settings, TrendingUp, Euro, Calendar, ExternalLink, Search, Image as ImageIcon, Inbox } from 'lucide-react'
 import { QuickSiteLinks } from '@/components/InternalLinks'
 import LogoutButton from '@/components/LogoutButton'
+import { NotificationBell } from '@/components/notifications/NotificationBell'
+import { getSupabaseClient } from '@/lib/supabase/client'
 
 interface ArtisanSidebarProps {
   activePage?: 'dashboard' | 'leads' | 'demandes-recues' | 'calendrier' | 'messages' | 'portfolio' | 'statistiques' | 'avis-recus' | 'profil' | 'abonnement'
@@ -14,9 +17,23 @@ interface ArtisanSidebarProps {
 }
 
 export default function ArtisanSidebar({ activePage = 'dashboard', newDemandesCount = 0, unreadMessagesCount = 0, publicUrl, subscriptionPlan }: ArtisanSidebarProps) {
+  const [userId, setUserId] = useState<string | undefined>(undefined)
+
+  useEffect(() => {
+    const supabase = getSupabaseClient()
+    supabase.auth.getUser().then(({ data }) => {
+      if (data.user) setUserId(data.user.id)
+    })
+  }, [])
+
   return (
     <div className="lg:col-span-1">
       <nav className="bg-white rounded-xl shadow-sm p-4 space-y-1">
+        {/* Notifications */}
+        <div className="flex items-center justify-between px-2 pb-2 mb-1 border-b border-gray-100">
+          <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Menu</span>
+          <NotificationBell userId={userId} />
+        </div>
         <Link
           href="/espace-artisan/dashboard"
           className={`flex items-center gap-3 px-4 py-3 rounded-lg ${

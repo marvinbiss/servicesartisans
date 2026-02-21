@@ -1,11 +1,13 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { z } from 'zod'
 import { dispatchLead } from './dispatch'
+import { logLeadEvent } from '@/lib/dashboard/events'
 
 const leadSchema = z.object({
-  providerId: z.string().min(1),
+  providerId: z.string().min(1).optional(),
   serviceName: z.string().min(1),
   name: z.string().min(1, 'Votre nom est requis'),
   email: z.string().email('Email invalide'),
@@ -79,16 +81,27 @@ export async function submitLead(
       return { success: false, error: 'Erreur lors de l\'envoi. Reessayez.' }
     }
 
-    // Dispatch lead to eligible artisans (fire-and-forget, non-blocking)
-    dispatchLead(inserted.id, {
-      serviceName: data.serviceName,
-      city: data.city,
-      postalCode: data.postalCode,
-      urgency: data.urgency,
-      sourceTable: 'devis_requests',
-    }).catch((err) =>
-      console.error('Dispatch failed (non-blocking):', err)
-    )
+    if (data.providerId) {
+      const adminClient = createAdminClient()
+      const { error: assignError } = await adminClient.from('lead_assignments').insert({
+        lead_id: inserted.id,
+        provider_id: data.providerId,
+        source_table: 'devis_requests',
+      })
+      if (!assignError) {
+        logLeadEvent(inserted.id, 'dispatched', { providerId: data.providerId }).catch(() => {})
+      }
+    } else {
+      dispatchLead(inserted.id, {
+        serviceName: data.serviceName,
+        city: data.city,
+        postalCode: data.postalCode,
+        urgency: data.urgency,
+        sourceTable: 'devis_requests',
+      }).catch((err) =>
+        console.error('Dispatch failed (non-blocking):', err)
+      )
+    }
 
     return { success: true }
   } catch (err) {

@@ -1,7 +1,6 @@
 /**
  * Client Lead Detail API — read-only
- * GET: Fetch single devis_request with full event timeline
- * No write operations — client is read-only for lead_events
+ * GET: Fetch single devis_request with quotes + event timeline + stats
  */
 
 import { NextRequest, NextResponse } from 'next/server'
@@ -49,8 +48,30 @@ export async function GET(
       return NextResponse.json({ error: 'Demande non trouvée' }, { status: 404 })
     }
 
-    // Fetch events for this lead (admin client — RLS is admin-only on lead_events)
+    // Use admin client for tables restricted by RLS to providers only
     const adminClient = createAdminClient()
+
+    // Fetch quotes for this lead — join provider info
+    const { data: quotesRaw, error: quotesError } = await adminClient
+      .from('quotes')
+      .select(`
+        id,
+        amount,
+        description,
+        valid_until,
+        status,
+        created_at,
+        provider_id,
+        provider:providers!provider_id(id, name, specialty, address_city, rating_average)
+      `)
+      .eq('request_id', id)
+      .order('created_at', { ascending: true })
+
+    if (quotesError) {
+      logger.error('Client lead detail quotes error:', quotesError)
+    }
+
+    // Fetch events for this lead (admin client — RLS is admin-only on lead_events)
     const { data: events, error: eventsError } = await adminClient
       .from('lead_events')
       .select('id, event_type, metadata, created_at')
@@ -59,6 +80,16 @@ export async function GET(
 
     if (eventsError) {
       logger.error('Client lead detail events error:', eventsError)
+    }
+
+    // Fetch lead_assignments stats — how many artisans have seen this lead
+    const { data: assignments, error: assignmentsError } = await adminClient
+      .from('lead_assignments')
+      .select('id, status')
+      .eq('lead_id', id)
+
+    if (assignmentsError) {
+      logger.error('Client lead detail assignments error:', assignmentsError)
     }
 
     // Sanitize events for client view:
@@ -73,12 +104,47 @@ export async function GET(
       created_at: e.created_at,
     }))
 
-    // Count quotes received
-    const quotesCount = (events || []).filter(e => e.event_type === 'quoted').length
+    // Build quotes list — strip provider_id from client response
+    const quotes = (quotesRaw || []).map(q => {
+      // Supabase returns the join as an array or object depending on FK cardinality
+      const providerRaw = Array.isArray(q.provider) ? q.provider[0] : q.provider
+      return {
+        id: q.id,
+        amount: q.amount,
+        description: q.description,
+        valid_until: q.valid_until,
+        status: q.status,
+        created_at: q.created_at,
+        provider: providerRaw
+          ? {
+              name: providerRaw.name as string,
+              specialty: providerRaw.specialty as string | null,
+              city: providerRaw.address_city as string | null,
+              rating_average: providerRaw.rating_average as number | null,
+            }
+          : null,
+      }
+    })
+
+    const allAssignments = assignments || []
+    const artisansViewed = allAssignments.filter(a =>
+      ['viewed', 'quoted', 'declined'].includes(a.status)
+    ).length
+
+    const stats = {
+      artisans_notified: allAssignments.length,
+      artisans_viewed: artisansViewed,
+      quotes_count: quotes.length,
+    }
+
+    // Legacy field kept for backward compatibility with existing page
+    const quotesCount = quotes.length
 
     return NextResponse.json({
       lead,
+      quotes,
       events: clientEvents,
+      stats,
       quotesCount,
     })
   } catch (error) {
