@@ -612,15 +612,15 @@ export async function getProvidersByService(serviceSlug: string, limit?: number)
 
 export async function getProviderCountByService(serviceSlug: string): Promise<number> {
   if (IS_BUILD) return 0
-  const svc = staticServices[serviceSlug]
-  if (!svc || !isValidUUID(svc.id)) return 0
+  const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
+  if (!specialties || specialties.length === 0) return 0
   try {
     return await withTimeout(
       (async () => {
         const { count, error } = await supabase
           .from('providers')
-          .select('id, provider_services!inner(service_id)', { count: 'exact', head: true })
-          .eq('provider_services.service_id', svc.id)
+          .select('id', { count: 'exact', head: true })
+          .in('specialty', specialties)
           .eq('is_active', true)
         if (error) throw error
         return count ?? 0
