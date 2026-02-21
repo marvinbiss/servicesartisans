@@ -6,6 +6,7 @@ import { getQuartiersByVille } from '@/lib/data/france'
 
 // Must match the BATCH constant used in sitemap.ts
 const BATCH_SIZE = 10_000
+const PROVIDER_BATCH_SIZE = 5_000
 
 /**
  * Sitemap index generator — workaround for Next.js 14.2 not auto-generating
@@ -20,7 +21,7 @@ export async function GET() {
   for (const v of villes) {
     totalQuartierUrls += (getQuartiersByVille(v.slug)?.length || 0) * services.length
   }
-  const sqBatchCount = Math.ceil(totalQuartierUrls / 45000)
+  const sqBatchCount = Math.ceil(totalQuartierUrls / BATCH_SIZE)
 
   const emergencySlugs = Object.keys(tradeContent).filter(s => tradeContent[s].emergencyInfo)
   const tradeSlugs = getTradesSlugs()
@@ -49,6 +50,7 @@ export async function GET() {
     // avis-service-cities uses tradeContent keys (not services) — use correct count
     ...Array.from({ length: Math.ceil(avisServiceSlugs.length * villes.length / BATCH_SIZE) }, (_, i) => `avis-service-cities-${i}`),
     'problemes',
+    // problemes-cities uses actual getProblemSlugs() count — approximated conservatively
     ...Array.from({ length: Math.ceil(30 * villes.length / BATCH_SIZE) }, (_, i) => `problemes-cities-${i}`),
     ...Array.from({ length: Math.ceil(departements.length * tradeSlugs.length / BATCH_SIZE) }, (_, i) => `dept-services-${i}`),
     'region-services',
@@ -66,7 +68,7 @@ export async function GET() {
       .eq('noindex', false)
 
     if (!error && count && count > 0) {
-      const batchCount = Math.ceil(count / 40_000)
+      const batchCount = Math.ceil(count / PROVIDER_BATCH_SIZE)
       for (let i = 0; i < batchCount; i++) {
         ids.push(`providers-${i}`)
       }

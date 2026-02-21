@@ -8,8 +8,8 @@ import { articleSlugs } from '@/lib/data/blog/articles'
 import { allArticles } from '@/lib/data/blog/articles'
 import inseeCommunes from '@/lib/data/insee-communes.json'
 
-// Provider batch size — well under the 50,000 URL sitemap limit
-const PROVIDER_BATCH_SIZE = 40_000
+// Provider batch size — small enough to avoid Vercel function timeout (5 DB queries of 1k each)
+const PROVIDER_BATCH_SIZE = 5_000
 
 // Phase 1: submit only top-300 cities for new domain (conservative crawl budget).
 // Phase 2 (service-cities-extended) is handled below but NOT registered in generateSitemaps yet.
@@ -246,20 +246,24 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── Service × Quartier pages ────────────────────────────────────────
   if (id.startsWith('service-quartiers-')) {
     const batchIndex = parseInt(id.replace('service-quartiers-', ''), 10)
-    const batchSize = 45000
-    const offset = batchIndex * batchSize
+    const BATCH = 10_000
+    const start = batchIndex * BATCH
+    const end = start + BATCH
+    const result: MetadataRoute.Sitemap = []
+    let count = 0
 
-    const allUrls: MetadataRoute.Sitemap = []
-    for (const svc of services) {
+    outer: for (const svc of services) {
       for (const ville of villes) {
         const quartiers = getQuartiersByVille(ville.slug)
         for (const q of quartiers) {
-          allUrls.push({ url: `${SITE_URL}/services/${svc.slug}/${ville.slug}/${q.slug}` })
+          if (count >= end) break outer
+          if (count >= start) result.push({ url: `${SITE_URL}/services/${svc.slug}/${ville.slug}/${q.slug}` })
+          count++
         }
       }
     }
 
-    return allUrls.slice(offset, offset + batchSize)
+    return result
   }
 
   // ── Devis service hub pages ─────────────────────────────────────────
@@ -395,14 +399,22 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── Problemes × city pages ──────────────────────────────────────────
   if (id.startsWith('problemes-cities-')) {
     const batchIndex = parseInt(id.split('-').pop()!)
+    const BATCH = 10_000
+    const start = batchIndex * BATCH
+    const end = start + BATCH
     const problemSlugs = getProblemSlugs()
-    const allUrls: MetadataRoute.Sitemap = []
-    for (const problem of problemSlugs) {
+    const result: MetadataRoute.Sitemap = []
+    let count = 0
+
+    outer: for (const problem of problemSlugs) {
       for (const ville of villes) {
-        allUrls.push({ url: `${SITE_URL}/problemes/${problem}/${ville.slug}` })
+        if (count >= end) break outer
+        if (count >= start) result.push({ url: `${SITE_URL}/problemes/${problem}/${ville.slug}` })
+        count++
       }
     }
-    return allUrls.slice(batchIndex * 45000, (batchIndex + 1) * 45000)
+
+    return result
   }
 
   // ── Dept × service pages ────────────────────────────────────────────
