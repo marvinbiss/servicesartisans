@@ -13,7 +13,7 @@ import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
 const updateProviderSchema = z.object({
-  company_name: z.string().max(200).optional(),
+  name: z.string().max(200).optional(),
   full_name: z.string().max(200).optional(),
   phone: z.string().max(20).optional().nullable(),
   email: z.string().email().optional().nullable(),
@@ -53,9 +53,9 @@ function buildUpdateData(body: Record<string, unknown>): Record<string, unknown>
     updated_at: new Date().toISOString(),
   }
 
-  // Name: prefer company_name, fall back to full_name
-  if (body.company_name && typeof body.company_name === 'string' && body.company_name.trim()) {
-    data.name = stripTags(body.company_name as string)
+  // Name: prefer name, fall back to full_name
+  if (body.name && typeof body.name === 'string' && body.name.trim()) {
+    data.name = stripTags(body.name as string)
   } else if (body.full_name && typeof body.full_name === 'string' && (body.full_name as string).trim()) {
     data.name = stripTags(body.full_name as string)
   }
@@ -128,7 +128,7 @@ export async function GET(
         user_id: provider.user_id || null,
         email: provider.email || '',
         full_name: provider.name,
-        company_name: provider.name,
+        name: provider.name,
         phone: provider.phone || '',
         siret: provider.siret || '',
         description: provider.description || '',
@@ -145,7 +145,6 @@ export async function GET(
         is_active: provider.is_active !== false,
         rating: provider.rating_average || null,
         reviews_count: provider.review_count || 0,
-        subscription_plan: 'gratuit',
         source: 'manual',
         created_at: provider.created_at,
         updated_at: provider.updated_at,

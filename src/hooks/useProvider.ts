@@ -93,7 +93,7 @@ export function useProvider(): UseProviderReturn {
         supabase
           .from('reviews')
           .select('rating')
-          .eq('provider_id', providerData.id)
+          .eq('artisan_id', user.id)
           .limit(500),
       ])
 

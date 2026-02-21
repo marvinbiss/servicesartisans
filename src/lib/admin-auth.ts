@@ -323,7 +323,6 @@ export async function logAdminAction(
       resource_type: entityType,
       resource_id: entityId,
       new_value: details || {},
-      created_at: new Date().toISOString(),
     })
   } catch (error) {
     // Audit logging should not break the main operation

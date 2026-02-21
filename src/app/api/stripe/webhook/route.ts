@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server'
 import { headers } from 'next/headers'
-import { stripe, PLANS } from '@/lib/stripe/server'
+import { stripe } from '@/lib/stripe/server'
 import { logger } from '@/lib/logger'
 import { createClient, SupabaseClient } from '@supabase/supabase-js'
-import { sendPaymentFailedNotification } from '@/lib/notifications/unified-notification-service'
 import Stripe from 'stripe'
 
 // Lazy create admin client to avoid build-time errors
@@ -193,127 +192,21 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
 
   if (!userId || !planId) return
 
-  // Update user's subscription in database
-  await getSupabaseAdmin()
-    .from('profiles')
-    .update({
-      subscription_plan: planId,
-      subscription_status: 'active',
-      stripe_subscription_id: session.subscription as string,
-      subscription_period_end: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-    })
-    .eq('id', userId)
-
-  logger.info(`Subscription activated for user ${userId}: ${planId}`)
+  logger.info(`Checkout completed for user ${userId}: plan=${planId}, subscription=${session.subscription}`)
 }
 
 async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
-  const customerId = subscription.customer as string
-
-  // Get user by customer ID
-  const { data: profile } = await getSupabaseAdmin()
-    .from('profiles')
-    .select('id')
-    .eq('stripe_customer_id', customerId)
-    .single()
-
-  if (!profile) return
-
-  // Determine plan from price
-  const priceId = subscription.items.data[0]?.price.id
-  let planId = 'gratuit'
-
-  for (const [key, plan] of Object.entries(PLANS)) {
-    if (plan.priceId === priceId) {
-      planId = key
-      break
-    }
-  }
-
-  await getSupabaseAdmin()
-    .from('profiles')
-    .update({
-      subscription_plan: planId,
-      subscription_status: subscription.status,
-      subscription_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
-    })
-    .eq('id', profile.id)
+  logger.info(`Subscription updated: id=${subscription.id}, customer=${subscription.customer}, status=${subscription.status}`)
 }
 
 async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
-  const customerId = subscription.customer as string
-
-  const { data: profile } = await getSupabaseAdmin()
-    .from('profiles')
-    .select('id')
-    .eq('stripe_customer_id', customerId)
-    .single()
-
-  if (!profile) return
-
-  await getSupabaseAdmin()
-    .from('profiles')
-    .update({
-      subscription_plan: 'gratuit',
-      subscription_status: 'canceled',
-      stripe_subscription_id: null,
-    })
-    .eq('id', profile.id)
+  logger.info(`Subscription deleted: id=${subscription.id}, customer=${subscription.customer}`)
 }
 
 async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
-  const customerId = invoice.customer as string
-
-  const { data: profile } = await getSupabaseAdmin()
-    .from('profiles')
-    .select('id')
-    .eq('stripe_customer_id', customerId)
-    .single()
-
-  if (!profile) return
-
-  // Record the payment
-  await getSupabaseAdmin().from('invoices').insert({
-    profile_id: profile.id,
-    stripe_invoice_id: invoice.id,
-    amount: invoice.amount_paid / 100,
-    currency: invoice.currency,
-    status: 'paid',
-    invoice_url: invoice.hosted_invoice_url,
-    created_at: new Date(invoice.created * 1000).toISOString(),
-  })
+  logger.info(`Invoice payment succeeded: id=${invoice.id}, customer=${invoice.customer}, amount=${invoice.amount_paid}`)
 }
 
 async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
-  const customerId = invoice.customer as string
-
-  const { data: profile } = await getSupabaseAdmin()
-    .from('profiles')
-    .select('id, email, full_name')
-    .eq('stripe_customer_id', customerId)
-    .single()
-
-  if (!profile) return
-
-  // Update subscription status
-  await getSupabaseAdmin()
-    .from('profiles')
-    .update({
-      subscription_status: 'past_due',
-    })
-    .eq('id', profile.id)
-
-  // Send email notification about failed payment
-  const displayName = profile.full_name || 'Client'
-
-  await sendPaymentFailedNotification({
-    bookingId: invoice.id || 'payment',
-    clientName: displayName,
-    clientEmail: profile.email || '',
-    artisanName: 'ServicesArtisans',
-    serviceName: 'Abonnement',
-    date: new Date().toLocaleDateString('fr-FR'),
-    startTime: '',
-    message: `Montant: ${(invoice.amount_due / 100).toFixed(2)}€`,
-  }).catch((err) => logger.error('Payment failed notification error', err))
+  logger.info(`Invoice payment failed: id=${invoice.id}, customer=${invoice.customer}, amount_due=${invoice.amount_due}`)
 }

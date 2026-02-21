@@ -49,31 +49,14 @@ export async function POST(request: Request) {
       )
     }
 
-    // Check if user already has a Stripe customer ID
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('stripe_customer_id')
-      .eq('id', user.id)
-      .single()
-
-    let customerId = profile?.stripe_customer_id
-
-    // Create new Stripe customer if needed
-    if (!customerId) {
-      const customer = await stripe.customers.create({
-        email: user.email,
-        metadata: {
-          supabase_user_id: user.id,
-        },
-      })
-      customerId = customer.id
-
-      // Save customer ID to profile
-      await supabase
-        .from('profiles')
-        .update({ stripe_customer_id: customerId })
-        .eq('id', user.id)
-    }
+    // Create Stripe customer for this session
+    const customer = await stripe.customers.create({
+      email: user.email,
+      metadata: {
+        supabase_user_id: user.id,
+      },
+    })
+    const customerId = customer.id
 
     // Create checkout session
     const session = await stripe.checkout.sessions.create({

@@ -18,9 +18,8 @@ import { useAdminFetch, adminMutate } from '@/hooks/admin/useAdminFetch'
 
 interface ProviderClaim {
   id: string
-  siret_provided: string
   status: 'pending' | 'approved' | 'rejected'
-  rejection_reason: string | null
+  notes: string | null
   reviewed_at: string | null
   created_at: string
   provider: {
@@ -188,21 +187,14 @@ export default function AdminClaimsPage() {
                     <span className="text-gray-400">({claim.user?.email})</span>
                   </div>
 
-                  {/* SIRET comparison */}
+                  {/* SIRET en base */}
                   <div className="flex items-center gap-4 text-sm">
                     <div>
-                      <span className="text-gray-500">SIRET fourni :</span>{' '}
-                      <span className="font-mono font-medium text-gray-900">{claim.siret_provided}</span>
-                    </div>
-                    <div>
                       <span className="text-gray-500">SIRET en base :</span>{' '}
-                      <span className={`font-mono font-medium ${claim.siret_provided === claim.provider?.siret ? 'text-green-600' : 'text-red-600'}`}>
+                      <span className="font-mono font-medium text-gray-900">
                         {claim.provider?.siret || 'N/A'}
                       </span>
                     </div>
-                    {claim.siret_provided === claim.provider?.siret && (
-                      <CheckCircle className="w-4 h-4 text-green-500" />
-                    )}
                   </div>
 
                   {/* Date */}
@@ -211,10 +203,10 @@ export default function AdminClaimsPage() {
                     {formatDate(claim.created_at)}
                   </div>
 
-                  {/* Rejection reason */}
-                  {claim.rejection_reason && (
-                    <p className="text-sm text-red-600 bg-red-50 rounded-lg p-2">
-                      Motif de rejet : {claim.rejection_reason}
+                  {/* Notes / Rejection reason */}
+                  {claim.notes && (
+                    <p className={`text-sm rounded-lg p-2 ${claim.status === 'rejected' ? 'text-red-600 bg-red-50' : 'text-gray-700 bg-gray-50'}`}>
+                      {claim.status === 'rejected' ? 'Motif de rejet' : 'Notes'} : {claim.notes}
                     </p>
                   )}
                 </div>

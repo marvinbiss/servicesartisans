@@ -247,10 +247,9 @@ interface SimilarProviderRow {
 interface ReviewRow {
   id: string
   rating: number
-  content: string | null
+  comment: string | null
   created_at: string
-  author_verified: boolean | null
-  author_name: string | null
+  client_name: string | null
   has_media: boolean | null
 }
 
@@ -308,31 +307,30 @@ async function getProviderReviews(providerId: string, serviceName?: string): Pro
       .select(`
         id,
         rating,
-        content,
+        comment,
         created_at,
-        author_verified,
-        author_name,
+        client_name,
         has_media
       `)
-      .eq('provider_id', providerId)
-      .or('status.eq.published,status.is.null')
+      .eq('artisan_id', providerId)
+      .eq('status', 'published')
       .order('created_at', { ascending: false })
       .limit(100) // Increased limit to show more reviews
 
     if (reviews && reviews.length > 0) {
       return (reviews as ReviewRow[]).map((r) => ({
         id: r.id,
-        author: r.author_name || 'Client',
+        author: r.client_name || 'Client',
         rating: r.rating,
         date: new Date(r.created_at).toLocaleDateString('fr-FR', {
           day: 'numeric',
           month: 'long',
           year: 'numeric',
         }),
-        comment: r.content || '',
+        comment: r.comment || '',
         dateISO: r.created_at ? r.created_at.split('T')[0] : undefined,
         service: serviceName || '',
-        verified: r.author_verified || false,
+        verified: false,
         hasPhoto: r.has_media || false,
       }))
     }

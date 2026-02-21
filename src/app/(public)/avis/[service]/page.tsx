@@ -109,10 +109,10 @@ interface ServiceAvisProvider {
 interface ServiceAvisReview {
   id: string
   rating: number
-  content: string | null
-  author_name: string | null
+  comment: string | null
+  client_name: string | null
   created_at: string
-  provider_id: string
+  artisan_id: string
 }
 
 async function getServiceStats(serviceName: string) {
@@ -121,10 +121,10 @@ async function getServiceStats(serviceName: string) {
     const { createAdminClient } = await import('@/lib/supabase/admin')
     const supabase = createAdminClient()
 
-    // Get providers with reviews that match this service
+    // Get providers with reviews that match this service (user_id needed to match artisan_id in reviews)
     const { data: providers } = await supabase
       .from('providers')
-      .select('id, name, slug, stable_id, address_city, rating_average, review_count, is_verified, specialty')
+      .select('id, user_id, name, slug, stable_id, address_city, rating_average, review_count, is_verified, specialty')
       .eq('is_active', true)
       .gt('review_count', 0)
       .order('rating_average', { ascending: false, nullsFirst: false })
@@ -152,15 +152,16 @@ async function getServiceStats(serviceName: string) {
       : 0
 
     // Fetch recent reviews for these providers
-    const providerIds = topProviders.map(p => p.id)
+    // reviews.artisan_id references profiles.id = providers.user_id
+    const artisanIds = topProviders.map(p => p.user_id).filter((uid): uid is string => !!uid)
     let reviews: ServiceAvisReview[] = []
-    if (providerIds.length > 0) {
+    if (artisanIds.length > 0) {
       const { data: reviewData } = await supabase
         .from('reviews')
-        .select('id, rating, content, author_name, created_at, provider_id')
-        .in('provider_id', providerIds)
-        .or('status.eq.published,status.is.null')
-        .not('content', 'is', null)
+        .select('id, rating, comment, client_name, created_at, artisan_id')
+        .in('artisan_id', artisanIds)
+        .eq('status', 'published')
+        .not('comment', 'is', null)
         .order('rating', { ascending: false })
         .order('created_at', { ascending: false })
         .limit(6)
@@ -267,9 +268,9 @@ export default async function AvisServicePage({
       },
       review: serviceStats.reviews.slice(0, 3).map(r => ({
         '@type': 'Review',
-        author: { '@type': 'Person', name: r.author_name || 'Client vérifié' },
+        author: { '@type': 'Person', name: r.client_name || 'Client vérifié' },
         reviewRating: { '@type': 'Rating', ratingValue: r.rating, bestRating: 5 },
-        reviewBody: r.content,
+        reviewBody: r.comment,
         datePublished: r.created_at?.split('T')[0],
       })),
     } : {}),
@@ -514,7 +515,7 @@ export default async function AvisServicePage({
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-2">
                       <span className="font-semibold text-gray-900 text-sm">
-                        {review.author_name || 'Client vérifié'}
+                        {review.client_name || 'Client vérifié'}
                       </span>
                       <span className="inline-flex items-center gap-1 text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
                         <CheckCircle className="w-3 h-3" />
@@ -534,9 +535,9 @@ export default async function AvisServicePage({
                       ))}
                     </div>
                   </div>
-                  {review.content && (
+                  {review.comment && (
                     <p className="text-gray-700 text-sm leading-relaxed">
-                      {review.content.length > 300 ? review.content.slice(0, 300) + '…' : review.content}
+                      {review.comment.length > 300 ? review.comment.slice(0, 300) + '…' : review.comment}
                     </p>
                   )}
                   <div className="mt-3 text-xs text-gray-400">

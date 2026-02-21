@@ -16,26 +16,27 @@ import LogoutButton from '@/components/LogoutButton'
 interface NotificationPreferences {
   email_booking_confirmation: boolean
   email_booking_reminder: boolean
-  email_booking_cancellation: boolean
   email_marketing: boolean
+  email_newsletter: boolean
   push_enabled: boolean
   push_booking_updates: boolean
   push_messages: boolean
   push_promotions: boolean
-  sms_enabled: boolean
-  sms_reminders: boolean
+  sms_booking_reminder: boolean
+  sms_marketing: boolean
 }
 
 interface PrivacyPreferences {
-  profile_visible: boolean
-  show_reviews: boolean
-  allow_messages: boolean
+  profile_public: boolean
+  show_online_status: boolean
+  allow_reviews: boolean
 }
 
 interface DisplayPreferences {
   language: string
-  theme: 'light' | 'dark' | 'system'
-  compact_mode: boolean
+  theme: string
+  timezone: string
+  currency: string
 }
 
 export default function ParametresClientPage() {
@@ -49,26 +50,27 @@ export default function ParametresClientPage() {
   const [notifications, setNotifications] = useState<NotificationPreferences>({
     email_booking_confirmation: true,
     email_booking_reminder: true,
-    email_booking_cancellation: true,
     email_marketing: false,
+    email_newsletter: false,
     push_enabled: false,
     push_booking_updates: true,
     push_messages: true,
     push_promotions: false,
-    sms_enabled: false,
-    sms_reminders: false,
+    sms_booking_reminder: false,
+    sms_marketing: false,
   })
 
   const [privacy, setPrivacy] = useState<PrivacyPreferences>({
-    profile_visible: true,
-    show_reviews: true,
-    allow_messages: true,
+    profile_public: true,
+    show_online_status: true,
+    allow_reviews: true,
   })
 
   const [display, setDisplay] = useState<DisplayPreferences>({
     language: 'fr',
-    theme: 'system',
-    compact_mode: false,
+    theme: 'light',
+    timezone: 'Europe/Paris',
+    currency: 'EUR',
   })
 
   const [activeTab, setActiveTab] = useState<'profile' | 'notifications' | 'privacy' | 'display' | 'data'>('profile')
@@ -95,10 +97,33 @@ export default function ParametresClientPage() {
       const response = await fetch('/api/user/preferences')
       if (response.ok) {
         const data = await response.json()
-        if (data.notifications) setNotifications(data.notifications)
-        if (data.privacy) setPrivacy(data.privacy)
-        if (data.display) setDisplay(data.display)
         if (data.userId) setUserId(data.userId)
+        if (data.preferences) {
+          const p = data.preferences
+          setNotifications({
+            email_booking_confirmation: p.email_booking_confirmation ?? true,
+            email_booking_reminder: p.email_booking_reminder ?? true,
+            email_marketing: p.email_marketing ?? false,
+            email_newsletter: p.email_newsletter ?? false,
+            push_enabled: p.push_enabled ?? false,
+            push_booking_updates: p.push_booking_updates ?? true,
+            push_messages: p.push_messages ?? true,
+            push_promotions: p.push_promotions ?? false,
+            sms_booking_reminder: p.sms_booking_reminder ?? false,
+            sms_marketing: p.sms_marketing ?? false,
+          })
+          setPrivacy({
+            profile_public: p.profile_public ?? true,
+            show_online_status: p.show_online_status ?? true,
+            allow_reviews: p.allow_reviews ?? true,
+          })
+          setDisplay({
+            language: p.language ?? 'fr',
+            theme: p.theme ?? 'light',
+            timezone: p.timezone ?? 'Europe/Paris',
+            currency: p.currency ?? 'EUR',
+          })
+        }
       }
 
       // Load profile data
@@ -493,19 +518,19 @@ export default function ParametresClientPage() {
                           }
                         />
                         <ToggleSetting
-                          label="Annulations"
-                          description="Notifications en cas d'annulation"
-                          checked={notifications.email_booking_cancellation}
-                          onChange={(checked) =>
-                            setNotifications({ ...notifications, email_booking_cancellation: checked })
-                          }
-                        />
-                        <ToggleSetting
                           label="Offres et actualités"
                           description="Promotions et nouveautés des artisans"
                           checked={notifications.email_marketing}
                           onChange={(checked) =>
                             setNotifications({ ...notifications, email_marketing: checked })
+                          }
+                        />
+                        <ToggleSetting
+                          label="Newsletter"
+                          description="Recevez notre newsletter mensuelle"
+                          checked={notifications.email_newsletter}
+                          onChange={(checked) =>
+                            setNotifications({ ...notifications, email_newsletter: checked })
                           }
                         />
                       </div>
@@ -570,23 +595,21 @@ export default function ParametresClientPage() {
                       </h2>
                       <div className="space-y-4">
                         <ToggleSetting
-                          label="Activer les SMS"
-                          description="Recevez des rappels par SMS"
-                          checked={notifications.sms_enabled}
+                          label="Rappels de rendez-vous"
+                          description="SMS de rappel 2h avant le rendez-vous"
+                          checked={notifications.sms_booking_reminder}
                           onChange={(checked) =>
-                            setNotifications({ ...notifications, sms_enabled: checked })
+                            setNotifications({ ...notifications, sms_booking_reminder: checked })
                           }
                         />
-                        {notifications.sms_enabled && (
-                          <ToggleSetting
-                            label="Rappels de rendez-vous"
-                            description="SMS de rappel 2h avant le rendez-vous"
-                            checked={notifications.sms_reminders}
-                            onChange={(checked) =>
-                              setNotifications({ ...notifications, sms_reminders: checked })
-                            }
-                          />
-                        )}
+                        <ToggleSetting
+                          label="Offres par SMS"
+                          description="Promotions et offres spéciales par SMS"
+                          checked={notifications.sms_marketing}
+                          onChange={(checked) =>
+                            setNotifications({ ...notifications, sms_marketing: checked })
+                          }
+                        />
                       </div>
                     </div>
 
@@ -608,27 +631,27 @@ export default function ParametresClientPage() {
                     </h2>
                     <div className="space-y-4">
                       <ToggleSetting
-                        label="Profil visible"
+                        label="Profil public"
                         description="Les artisans peuvent voir votre profil"
-                        checked={privacy.profile_visible}
+                        checked={privacy.profile_public}
                         onChange={(checked) =>
-                          setPrivacy({ ...privacy, profile_visible: checked })
+                          setPrivacy({ ...privacy, profile_public: checked })
                         }
                       />
                       <ToggleSetting
-                        label="Afficher mes avis"
-                        description="Vos avis sont visibles publiquement"
-                        checked={privacy.show_reviews}
+                        label="Statut en ligne visible"
+                        description="Les artisans peuvent voir si vous êtes en ligne"
+                        checked={privacy.show_online_status}
                         onChange={(checked) =>
-                          setPrivacy({ ...privacy, show_reviews: checked })
+                          setPrivacy({ ...privacy, show_online_status: checked })
                         }
                       />
                       <ToggleSetting
-                        label="Autoriser les messages"
-                        description="Les artisans peuvent vous envoyer des messages"
-                        checked={privacy.allow_messages}
+                        label="Autoriser les avis"
+                        description="Les artisans peuvent déposer des avis sur vous"
+                        checked={privacy.allow_reviews}
                         onChange={(checked) =>
-                          setPrivacy({ ...privacy, allow_messages: checked })
+                          setPrivacy({ ...privacy, allow_reviews: checked })
                         }
                       />
                     </div>
@@ -695,14 +718,40 @@ export default function ParametresClientPage() {
                       </div>
                     </div>
 
-                    <ToggleSetting
-                      label="Mode compact"
-                      description="Affichage plus condensé des listes"
-                      checked={display.compact_mode}
-                      onChange={(checked) =>
-                        setDisplay({ ...display, compact_mode: checked })
-                      }
-                    />
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Fuseau horaire
+                      </label>
+                      <select
+                        value={display.timezone}
+                        onChange={(e) =>
+                          setDisplay({ ...display, timezone: e.target.value })
+                        }
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      >
+                        <option value="Europe/Paris">Europe/Paris</option>
+                        <option value="Europe/London">Europe/London</option>
+                        <option value="America/New_York">America/New_York</option>
+                        <option value="America/Los_Angeles">America/Los_Angeles</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Devise
+                      </label>
+                      <select
+                        value={display.currency}
+                        onChange={(e) =>
+                          setDisplay({ ...display, currency: e.target.value })
+                        }
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      >
+                        <option value="EUR">EUR — Euro</option>
+                        <option value="USD">USD — Dollar</option>
+                        <option value="GBP">GBP — Livre sterling</option>
+                      </select>
+                    </div>
 
                     <button
                       onClick={savePreferences}

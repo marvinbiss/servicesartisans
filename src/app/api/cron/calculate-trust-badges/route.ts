@@ -45,10 +45,10 @@ export async function GET(request: Request) {
     let hasMore = true
 
     while (hasMore) {
-      // Fetch active providers with their current metrics
+      // Fetch active providers with their current metrics (user_id needed to match artisan_id in reviews)
       const { data: providers, error } = await supabase
         .from('providers')
-        .select('id, rating_average, review_count')
+        .select('id, user_id, rating_average, review_count')
         .eq('is_active', true)
         .range(offset, offset + BATCH_SIZE - 1)
         .order('id')
@@ -67,11 +67,16 @@ export async function GET(request: Request) {
       for (const provider of providers) {
         try {
           // Calculate review metrics for this provider
+          // reviews.artisan_id references profiles.id = providers.user_id
+          if (!provider.user_id) {
+            totalSkipped++
+            continue
+          }
           const { data: reviewStats, error: reviewError } = await supabase
             .from('reviews')
             .select('rating')
-            .eq('provider_id', provider.id)
-            .eq('is_visible', true)
+            .eq('artisan_id', provider.user_id)
+            .eq('status', 'published')
 
           if (reviewError) {
             totalErrors++
