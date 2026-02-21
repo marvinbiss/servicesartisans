@@ -86,6 +86,18 @@ export async function submitLead(
 
     if (data.providerId) {
       const adminClient = createAdminClient()
+
+      // Validate provider exists and is active before assigning
+      const { data: provider } = await adminClient
+        .from('providers')
+        .select('id, is_active')
+        .eq('id', data.providerId)
+        .single()
+
+      if (!provider || !provider.is_active) {
+        return { success: false, error: 'Artisan invalide ou inactif.' }
+      }
+
       const { error: assignError } = await adminClient.from('lead_assignments').insert({
         lead_id: inserted.id,
         provider_id: data.providerId,

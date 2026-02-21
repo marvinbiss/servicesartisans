@@ -63,6 +63,7 @@ export default function DemandesRecuesPage() {
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [publicUrl, setPublicUrl] = useState<string | null>(null)
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
   const [devisForm, setDevisForm] = useState({
     amount: '',
     description: '',
@@ -162,13 +163,13 @@ export default function DemandesRecuesPage() {
         setShowDevisModal(false)
         setSelectedLead(null)
         await fetchLeads(pagination.page, filterStatus)
-        alert('Devis envoyé avec succès!')
+        setToast({ message: 'Devis envoyé avec succès !', type: 'success' })
       } else {
-        alert(data.error || 'Erreur lors de l\'envoi du devis')
+        setToast({ message: data.error || 'Erreur lors de l\'envoi du devis', type: 'error' })
       }
     } catch (error) {
       console.error('Error sending devis:', error)
-      alert('Erreur lors de l\'envoi du devis')
+      setToast({ message: 'Erreur lors de l\'envoi du devis', type: 'error' })
     } finally {
       setSubmitting(false)
     }
@@ -182,6 +183,18 @@ export default function DemandesRecuesPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Toast notification */}
+      {toast && (
+        <div className={`fixed top-4 right-4 z-50 flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg text-white text-sm font-medium transition-all ${
+          toast.type === 'success' ? 'bg-green-600' : 'bg-red-600'
+        }`}>
+          <span>{toast.message}</span>
+          <button onClick={() => setToast(null)} className="ml-2 hover:opacity-75">
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
       {/* Breadcrumb */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
