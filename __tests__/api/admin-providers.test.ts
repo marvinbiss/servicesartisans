@@ -169,7 +169,7 @@ function sampleProvider(overrides: Record<string, unknown> = {}) {
     siret: '12345678901234',
     is_verified: true,
     is_active: true,
-    source: 'manual',
+    source_api: 'manual',
     rating_average: 4.5,
     review_count: 12,
     created_at: '2026-01-15T10:00:00Z',
@@ -235,7 +235,7 @@ describe('GET /api/admin/providers', () => {
   // ------------------------------------------
   it('returns providers list on success', async () => {
     const { GET } = await import('@/app/api/admin/providers/route')
-    const result = await GET(createMockRequest() as never) as { body: Record<string, unknown> }
+    const result = await GET(createMockRequest() as never) as unknown as { body: Record<string, unknown> }
 
     expect(result.body).toHaveProperty('success', true)
     expect(result.body).toHaveProperty('providers')
@@ -251,7 +251,7 @@ describe('GET /api/admin/providers', () => {
     mockQueryResult = { data: [], error: null, count: 55 }
 
     const { GET } = await import('@/app/api/admin/providers/route')
-    const result = await GET(createMockRequest({ page: '3', limit: '10' }) as never) as {
+    const result = await GET(createMockRequest({ page: '3', limit: '10' }) as never) as unknown as {
       body: { page: number; totalPages: number; total: number }
     }
 
@@ -340,7 +340,7 @@ describe('GET /api/admin/providers', () => {
   // ------------------------------------------
   it('returns 400 when page is 0', async () => {
     const { GET } = await import('@/app/api/admin/providers/route')
-    const result = await GET(createMockRequest({ page: '0' }) as never) as {
+    const result = await GET(createMockRequest({ page: '0' }) as never) as unknown as {
       body: { success: boolean; error: { message: string } }
       status: number
     }
@@ -352,7 +352,7 @@ describe('GET /api/admin/providers', () => {
 
   it('returns 400 when limit exceeds max (100)', async () => {
     const { GET } = await import('@/app/api/admin/providers/route')
-    const result = await GET(createMockRequest({ limit: '200' }) as never) as {
+    const result = await GET(createMockRequest({ limit: '200' }) as never) as unknown as {
       body: { success: boolean }
       status: number
     }
@@ -372,7 +372,7 @@ describe('GET /api/admin/providers', () => {
     }
 
     const { GET } = await import('@/app/api/admin/providers/route')
-    const result = await GET(createMockRequest() as never) as {
+    const result = await GET(createMockRequest() as never) as unknown as {
       body: { success: boolean; error: { message: string; code: string } }
       status: number
     }
@@ -393,7 +393,7 @@ describe('GET /api/admin/providers', () => {
     shouldThrowOnCreate = true
 
     const { GET } = await import('@/app/api/admin/providers/route')
-    const result = await GET(createMockRequest() as never) as {
+    const result = await GET(createMockRequest() as never) as unknown as {
       body: { success: boolean; error: { message: string } }
       status: number
     }
@@ -422,18 +422,16 @@ describe('GET /api/admin/providers', () => {
         is_active: true,
         rating_average: 3.8,
         review_count: 7,
-        source: 'scraping',
+        source_api: 'scraping',
         siret: '98765432109876',
-        provider_services: [
-          { service: { name: 'Électricité', slug: 'electricite' } },
-        ],
+        specialty: 'Électricité',
       })],
       error: null,
       count: 1,
     }
 
     const { GET } = await import('@/app/api/admin/providers/route')
-    const result = await GET(createMockRequest() as never) as {
+    const result = await GET(createMockRequest() as never) as unknown as {
       body: { providers: Array<Record<string, unknown>> }
     }
 
@@ -452,7 +450,7 @@ describe('GET /api/admin/providers', () => {
     expect(provider.review_count).toBe(7)
     expect(provider.source).toBe('scraping')
     expect(provider.siret).toBe('98765432109876')
-    // Service extraction
+    // Service type from specialty column
     expect(provider.service_type).toBe('Électricité')
     // Hardcoded subscription_type
     expect(provider.subscription_type).toBe('free')
@@ -481,7 +479,7 @@ describe('GET /api/admin/providers', () => {
     mockQueryResult = { data: [], error: null, count: 40 }
 
     const { GET } = await import('@/app/api/admin/providers/route')
-    const result = await GET(createMockRequest({ limit: '20' }) as never) as {
+    const result = await GET(createMockRequest({ limit: '20' }) as never) as unknown as {
       body: { totalPages: number }
     }
 
@@ -492,7 +490,7 @@ describe('GET /api/admin/providers', () => {
     mockQueryResult = { data: [], error: null, count: 41 }
 
     const { GET } = await import('@/app/api/admin/providers/route')
-    const result = await GET(createMockRequest({ limit: '20' }) as never) as {
+    const result = await GET(createMockRequest({ limit: '20' }) as never) as unknown as {
       body: { totalPages: number }
     }
 
@@ -503,7 +501,7 @@ describe('GET /api/admin/providers', () => {
     mockQueryResult = { data: [], error: null, count: 0 }
 
     const { GET } = await import('@/app/api/admin/providers/route')
-    const result = await GET(createMockRequest() as never) as {
+    const result = await GET(createMockRequest() as never) as unknown as {
       body: { totalPages: number; total: number }
     }
 
@@ -518,7 +516,7 @@ describe('GET /api/admin/providers', () => {
     mockQueryResult = { data: [], error: null, count: 0 }
 
     const { GET } = await import('@/app/api/admin/providers/route')
-    const result = await GET(createMockRequest() as never) as {
+    const result = await GET(createMockRequest() as never) as unknown as {
       body: { success: boolean; providers: unknown[]; total: number; page: number; totalPages: number }
     }
 
@@ -533,7 +531,7 @@ describe('GET /api/admin/providers', () => {
     mockQueryResult = { data: null, error: null, count: 0 }
 
     const { GET } = await import('@/app/api/admin/providers/route')
-    const result = await GET(createMockRequest() as never) as {
+    const result = await GET(createMockRequest() as never) as unknown as {
       body: { providers: unknown[] }
     }
 
@@ -583,7 +581,7 @@ describe('GET /api/admin/providers', () => {
     }
 
     const { GET } = await import('@/app/api/admin/providers/route')
-    const result = await GET(createMockRequest() as never) as {
+    const result = await GET(createMockRequest() as never) as unknown as {
       body: { providers: Array<{ service_type: string }> }
     }
 
@@ -598,7 +596,7 @@ describe('GET /api/admin/providers', () => {
     }
 
     const { GET } = await import('@/app/api/admin/providers/route')
-    const result = await GET(createMockRequest() as never) as {
+    const result = await GET(createMockRequest() as never) as unknown as {
       body: { providers: Array<Record<string, unknown>> }
     }
 
@@ -618,7 +616,7 @@ describe('GET /api/admin/providers', () => {
 
   it('returns 400 for negative page number', async () => {
     const { GET } = await import('@/app/api/admin/providers/route')
-    const result = await GET(createMockRequest({ page: '-1' }) as never) as {
+    const result = await GET(createMockRequest({ page: '-1' }) as never) as unknown as {
       status: number
       body: { success: boolean }
     }
@@ -629,7 +627,7 @@ describe('GET /api/admin/providers', () => {
 
   it('returns 400 for invalid filter value', async () => {
     const { GET } = await import('@/app/api/admin/providers/route')
-    const result = await GET(createMockRequest({ filter: 'bogus' }) as never) as {
+    const result = await GET(createMockRequest({ filter: 'bogus' }) as never) as unknown as {
       status: number
       body: { success: boolean }
     }
@@ -638,22 +636,22 @@ describe('GET /api/admin/providers', () => {
     expect(result.body.success).toBe(false)
   })
 
-  it('includes select columns for provider_services join', async () => {
+  it('includes select columns with specialty (provider_services table does not exist)', async () => {
     const { GET } = await import('@/app/api/admin/providers/route')
     await GET(createMockRequest() as never)
 
     const selectStr = mockSelectArgs[0] as string
-    expect(selectStr).toContain('provider_services')
-    expect(selectStr).toContain('service:services')
+    expect(selectStr).toContain('specialty')
     expect(selectStr).toContain('name')
     expect(selectStr).toContain('slug')
+    expect(selectStr).not.toContain('provider_services')
   })
 
   it('returns correct total from count when null', async () => {
     mockQueryResult = { data: [sampleProvider()], error: null, count: null }
 
     const { GET } = await import('@/app/api/admin/providers/route')
-    const result = await GET(createMockRequest() as never) as {
+    const result = await GET(createMockRequest() as never) as unknown as {
       body: { total: number; totalPages: number }
     }
 

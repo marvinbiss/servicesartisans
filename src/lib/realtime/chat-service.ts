@@ -592,7 +592,7 @@ class ChatService {
       .from('conversations')
       .select(`
         id, client_id, provider_id, quote_id, booking_id, status, last_message_at, unread_count, created_at,
-        client:profiles!client_id(id, full_name, avatar_url),
+        client:profiles!client_id(id, full_name),
         provider:providers!provider_id(id, name, avatar_url),
         settings:conversation_settings(is_muted, is_archived, is_pinned, notification_preference)
       `)

@@ -26,18 +26,13 @@ const SELECT_COLUMNS = `
   address_region,
   address_department,
   siret,
+  specialty,
   is_verified,
   is_active,
-  source,
+  source_api,
   rating_average,
   review_count,
-  created_at,
-  provider_services (
-    service:services (
-      name,
-      slug
-    )
-  )
+  created_at
 `
 
 export async function GET(request: NextRequest) {
@@ -104,29 +99,24 @@ export async function GET(request: NextRequest) {
     }
 
     // Transform data for frontend
-    const transformedProviders = (providers || []).map((p: Record<string, unknown>) => {
-      const providerServices = p.provider_services as Array<{ service: { name: string; slug: string } }> | undefined
-      const firstService = providerServices?.[0]?.service
-
-      return {
-        id: p.id,
-        company_name: p.name,
-        slug: p.slug,
-        email: p.email || '',
-        phone: p.phone || '',
-        city: p.address_city || '',
-        region: p.address_region || '',
-        service_type: firstService?.name || 'Artisan',
-        is_verified: p.is_verified,
-        is_active: p.is_active,
-        subscription_type: 'free',
-        rating_average: Number(p.rating_average) || 0,
-        review_count: Number(p.review_count) || 0,
-        created_at: p.created_at,
-        source: p.source,
-        siret: p.siret,
-      }
-    })
+    const transformedProviders = (providers || []).map((p: Record<string, unknown>) => ({
+      id: p.id,
+      company_name: p.name,
+      slug: p.slug,
+      email: p.email || '',
+      phone: p.phone || '',
+      city: p.address_city || '',
+      region: p.address_region || '',
+      service_type: (p.specialty as string) || 'Artisan',
+      is_verified: p.is_verified,
+      is_active: p.is_active,
+      subscription_type: 'free',
+      rating_average: Number(p.rating_average) || 0,
+      review_count: Number(p.review_count) || 0,
+      created_at: p.created_at,
+      source: p.source_api,
+      siret: p.siret,
+    }))
 
     const response = NextResponse.json({
       success: true,
