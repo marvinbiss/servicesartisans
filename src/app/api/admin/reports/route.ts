@@ -51,8 +51,9 @@ export async function GET(request: NextRequest) {
       query = query.eq('status', status)
     }
 
-    // target_type column does not exist in user_reports table; filter is skipped
-    void targetType
+    if (targetType !== 'all') {
+      query = query.eq('target_type', targetType)
+    }
 
     const { data: reports, count, error } = await query
       .order('created_at', { ascending: false })

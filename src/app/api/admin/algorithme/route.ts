@@ -19,7 +19,7 @@ const algorithmConfigSchema = z.object({
   weight_reviews: z.number().int().min(0).max(100).optional(),
   weight_verified: z.number().int().min(0).max(100).optional(),
   weight_proximity: z.number().int().min(0).max(100).optional(),
-  weight_data_quality: z.number().int().min(0).max(100).optional(),
+  weight_response_rate: z.number().int().min(0).max(100).optional(),
   cooldown_minutes: z.number().int().min(0).max(1440).optional(),
   daily_lead_quota: z.number().int().min(0).max(1000).optional(),
   monthly_lead_quota: z.number().int().min(0).max(30000).optional(),

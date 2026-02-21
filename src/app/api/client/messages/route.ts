@@ -11,14 +11,14 @@ import { z } from 'zod'
 
 // GET query params schema
 const messagesQuerySchema = z.object({
-  with: z.string().uuid().optional(),
+  conversation_id: z.string().uuid().optional(),
 })
 
 // POST request schema
 const sendMessageSchema = z.object({
-  receiver_id: z.string().uuid(),
+  conversation_id: z.string().uuid().optional().nullable(),
+  provider_id: z.string().uuid().optional().nullable(),
   content: z.string().min(1).max(5000),
-  devis_request_id: z.string().uuid().optional().nullable(),
 })
 
 export const dynamic = 'force-dynamic'
@@ -28,7 +28,7 @@ export async function GET(request: Request) {
     const supabase = await createClient()
     const { searchParams } = new URL(request.url)
     const queryParams = {
-      with: searchParams.get('with') || undefined,
+      conversation_id: searchParams.get('conversation_id') || undefined,
     }
     const result = messagesQuerySchema.safeParse(queryParams)
     if (!result.success) {
@@ -37,7 +37,7 @@ export async function GET(request: Request) {
         { status: 400 }
       )
     }
-    const conversationWith = result.data.with
+    const conversationId = result.data.conversation_id
 
     // Get current user
     const { data: { user }, error: authError } = await supabase.auth.getUser()
@@ -49,16 +49,27 @@ export async function GET(request: Request) {
       )
     }
 
-    if (conversationWith) {
-      // Fetch specific conversation messages
+    if (conversationId) {
+      // Verify conversation belongs to this client
+      const { data: conversation } = await supabase
+        .from('conversations')
+        .select('id, client_id, provider_id')
+        .eq('id', conversationId)
+        .eq('client_id', user.id)
+        .single()
+
+      if (!conversation) {
+        return NextResponse.json(
+          { error: 'Conversation non trouvée' },
+          { status: 404 }
+        )
+      }
+
+      // Fetch messages for this conversation
       const { data: messages, error: messagesError } = await supabase
         .from('messages')
-        .select(`
-          *,
-          sender:profiles!sender_id(id, full_name, company_name, avatar_url),
-          receiver:profiles!receiver_id(id, full_name, company_name, avatar_url)
-        `)
-        .or(`and(sender_id.eq.${user.id},receiver_id.eq.${conversationWith}),and(sender_id.eq.${conversationWith},receiver_id.eq.${user.id})`)
+        .select('*')
+        .eq('conversation_id', conversationId)
         .order('created_at', { ascending: true })
 
       if (messagesError) {
@@ -69,63 +80,65 @@ export async function GET(request: Request) {
         )
       }
 
-      // Mark messages as read
+      // Mark messages sent by artisan as read
       await supabase
         .from('messages')
-        .update({ is_read: true })
-        .eq('receiver_id', user.id)
-        .eq('sender_id', conversationWith)
+        .update({ read_at: new Date().toISOString() })
+        .eq('conversation_id', conversationId)
+        .eq('sender_type', 'artisan')
+        .is('read_at', null)
 
       return NextResponse.json({ messages: messages || [] })
     }
 
-    // Fetch all conversations (grouped by artisan)
-    const { data: allMessages, error: allMessagesError } = await supabase
-      .from('messages')
+    // Fetch all conversations for this client
+    const { data: conversations, error: convsError } = await supabase
+      .from('conversations')
       .select(`
-        *,
-        sender:profiles!sender_id(id, full_name, company_name, avatar_url, user_type),
-        receiver:profiles!receiver_id(id, full_name, company_name, avatar_url, user_type),
-        devis_request:devis_requests(id, service_name)
+        id,
+        client_id,
+        provider_id,
+        created_at,
+        provider:providers!provider_id(id, name)
       `)
-      .or(`sender_id.eq.${user.id},receiver_id.eq.${user.id}`)
+      .eq('client_id', user.id)
       .order('created_at', { ascending: false })
 
-    if (allMessagesError) {
-      logger.error('Error fetching all messages:', allMessagesError)
+    if (convsError) {
+      logger.error('Error fetching conversations:', convsError)
       return NextResponse.json(
         { error: 'Erreur lors de la récupération des conversations' },
         { status: 500 }
       )
     }
 
-    // Group messages by conversation partner (artisan)
-    const conversationsMap = new Map()
+    // For each conversation, get the last message and unread count
+    const conversationsWithMeta = await Promise.all(
+      (conversations || []).map(async (conv) => {
+        const { data: lastMessages } = await supabase
+          .from('messages')
+          .select('id, content, created_at, sender_type, read_at')
+          .eq('conversation_id', conv.id)
+          .order('created_at', { ascending: false })
+          .limit(1)
 
-    allMessages?.forEach(msg => {
-      const partnerId = msg.sender_id === user.id ? msg.receiver_id : msg.sender_id
-      const partner = msg.sender_id === user.id ? msg.receiver : msg.sender
+        const { count: unreadCount } = await supabase
+          .from('messages')
+          .select('id', { count: 'exact', head: true })
+          .eq('conversation_id', conv.id)
+          .eq('sender_type', 'artisan')
+          .is('read_at', null)
 
-      if (!conversationsMap.has(partnerId)) {
-        conversationsMap.set(partnerId, {
-          id: partnerId,
-          partner,
-          lastMessage: msg,
-          unreadCount: 0,
-          service: msg.devis_request?.service_name || null,
-        })
-      }
+        return {
+          id: conv.id,
+          partner: conv.provider,
+          lastMessage: lastMessages?.[0] || null,
+          unreadCount: unreadCount || 0,
+        }
+      })
+    )
 
-      // Count unread messages
-      if (msg.receiver_id === user.id && !msg.is_read) {
-        const conv = conversationsMap.get(partnerId)
-        conv.unreadCount++
-      }
-    })
-
-    const conversations = Array.from(conversationsMap.values())
-
-    return NextResponse.json({ conversations })
+    return NextResponse.json({ conversations: conversationsWithMeta })
   } catch (error) {
     logger.error('Client Messages GET error:', error)
     return NextResponse.json(
@@ -157,17 +170,69 @@ export async function POST(request: Request) {
         { status: 400 }
       )
     }
-    const { receiver_id, content, devis_request_id } = result.data
+    const { conversation_id, provider_id, content } = result.data
+
+    let resolvedConversationId = conversation_id
+
+    if (!resolvedConversationId) {
+      // Try to find existing conversation or create one
+      if (!provider_id) {
+        return NextResponse.json(
+          { error: 'conversation_id ou provider_id requis' },
+          { status: 400 }
+        )
+      }
+
+      const { data: existingConv } = await supabase
+        .from('conversations')
+        .select('id')
+        .eq('client_id', user.id)
+        .eq('provider_id', provider_id)
+        .single()
+
+      if (existingConv) {
+        resolvedConversationId = existingConv.id
+      } else {
+        const { data: newConv, error: convError } = await supabase
+          .from('conversations')
+          .insert({ client_id: user.id, provider_id })
+          .select('id')
+          .single()
+
+        if (convError || !newConv) {
+          logger.error('Error creating conversation:', convError)
+          return NextResponse.json(
+            { error: 'Erreur lors de la création de la conversation' },
+            { status: 500 }
+          )
+        }
+        resolvedConversationId = newConv.id
+      }
+    } else {
+      // Verify conversation belongs to this client
+      const { data: conversation } = await supabase
+        .from('conversations')
+        .select('id')
+        .eq('id', resolvedConversationId)
+        .eq('client_id', user.id)
+        .single()
+
+      if (!conversation) {
+        return NextResponse.json(
+          { error: 'Conversation non trouvée ou non autorisée' },
+          { status: 403 }
+        )
+      }
+    }
 
     // Insert new message
     const { data: message, error: insertError } = await supabase
       .from('messages')
       .insert({
+        conversation_id: resolvedConversationId,
         sender_id: user.id,
-        receiver_id,
+        sender_type: 'client',
         content,
-        devis_request_id: devis_request_id || null,
-        is_read: false,
       })
       .select()
       .single()

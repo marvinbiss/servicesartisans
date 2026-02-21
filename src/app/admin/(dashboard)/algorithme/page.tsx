@@ -92,7 +92,7 @@ export default function AdminAlgorithmePage() {
   }
 
   const totalWeight = config
-    ? config.weight_rating + config.weight_reviews + config.weight_verified + config.weight_proximity + config.weight_data_quality
+    ? config.weight_rating + config.weight_reviews + config.weight_verified + config.weight_proximity + config.weight_response_rate
     : 0
 
   if (loading) {
@@ -279,9 +279,9 @@ export default function AdminAlgorithmePage() {
                 color="blue"
               />
               <WeightSlider
-                label="Qualité des données"
-                value={config.weight_data_quality}
-                onChange={(v) => update('weight_data_quality', v)}
+                label="Taux de réponse"
+                value={config.weight_response_rate}
+                onChange={(v) => update('weight_response_rate', v)}
                 color="purple"
               />
             </div>

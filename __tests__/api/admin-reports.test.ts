@@ -227,16 +227,17 @@ describe('GET /api/admin/reports', () => {
     )
   })
 
-  it('does NOT filter by target_type (column does not exist in user_reports)', async () => {
+  it('filters by targetType=review', async () => {
     const { GET } = await import('@/app/api/admin/reports/route')
     await GET(makeGetRequest({ targetType: 'review' }) as never)
 
-    // The target_type column does not exist in the user_reports table, so no
-    // .eq('target_type', ...) filter should ever be applied regardless of the
-    // targetType query param.
+    // target_type column EXISTS in user_reports (migration 004, VARCHAR(50) NOT NULL)
     const eqCalls = builderCalls.filter(c => c.method === 'eq')
-    const targetTypeFilter = eqCalls.filter(c => c.args[0] === 'target_type')
-    expect(targetTypeFilter).toHaveLength(0)
+    expect(eqCalls).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ args: ['target_type', 'review'] }),
+      ])
+    )
   })
 
   it('paginates correctly (page=2, limit=5)', async () => {
