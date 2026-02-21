@@ -8,7 +8,7 @@ import { CmsContent } from '@/components/CmsContent'
 
 export const metadata: Metadata = {
   title: 'Blog Artisanat & Travaux',
-  description: 'Conseils, guides et actualités sur l\'artisanat, les travaux de rénovation, les prix et la réglementation. Plus de 120 articles par des experts.',
+  description: `Conseils, guides et actualités sur l'artisanat, les travaux de rénovation, les prix et la réglementation. ${allArticlesMeta.length}+ articles par des experts.`,
   alternates: {
     canonical: `${SITE_URL}/blog`,
   },

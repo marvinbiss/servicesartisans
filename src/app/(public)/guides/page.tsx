@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   openGraph: {
     locale: 'fr_FR',
     title: 'Guides pratiques — Travaux et rénovation',
-    description: '30 guides pratiques pour vos travaux : artisans, entretien, normes, économies et urgences.',
+    description: `${guides.length} guides pratiques pour vos travaux : artisans, entretien, normes, économies et urgences.`,
     type: 'website',
     url: `${SITE_URL}/guides`,
   },
