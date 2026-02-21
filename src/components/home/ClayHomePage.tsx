@@ -2,10 +2,10 @@ import Link from 'next/link'
 import { Droplets, Zap, HardHat, PaintBucket, Hammer, ShieldCheck, Star, MapPin, Shield, Wrench, Thermometer, Lock, Grid3X3, Home, Bath, Flame, Key } from 'lucide-react'
 import { ClayHeroSearch } from './ClayHeroSearch'
 import { ClayReviewsCarousel } from './ClayReviewsCarousel'
-import { formatProviderCount } from '@/lib/data/stats'
+import { formatProviderCount, type SiteStats } from '@/lib/data/stats'
 
 interface Props {
-  artisanCount: number
+  stats: SiteStats
 }
 
 const SERVICES = [
@@ -92,8 +92,11 @@ const BIG_REVIEWS = [
   },
 ]
 
-export function ClayHomePage({ artisanCount }: Props) {
+export function ClayHomePage({ stats }: Props) {
+  const { artisanCount, reviewCount, avgRating, deptCount } = stats
   const countStr = artisanCount > 0 ? `${formatProviderCount(artisanCount)}+` : '50 000+'
+  const reviewStr = reviewCount > 0 ? `${formatProviderCount(reviewCount)}` : '12 400'
+  const ratingStr = avgRating > 0 ? avgRating.toFixed(1).replace('.', ',') : '4,9'
 
   return (
     <>
@@ -164,7 +167,7 @@ export function ClayHomePage({ artisanCount }: Props) {
             <div className="flex gap-2.5 flex-wrap">
               {[
                 { Icon: ShieldCheck, text: 'SIREN vérifié' },
-                { Icon: Star,        text: '4,9/5 · 12 400 avis' },
+                { Icon: Star,        text: `${ratingStr}/5 · ${reviewStr} avis` },
                 { Icon: Zap,         text: 'Devis en 24h' },
               ].map(({ Icon: PillIcon, text }) => (
                 <div
@@ -228,11 +231,11 @@ export function ClayHomePage({ artisanCount }: Props) {
       <div className="bg-white" style={{ borderBottom: '1px solid rgba(0,0,0,.06)' }}>
         <div className="max-w-[1320px] mx-auto px-6 md:px-10 py-7 flex flex-wrap justify-around items-center gap-6">
           {[
-            { Icon: ShieldCheck, label: 'SIREN vérifié',         sub: 'Chaque artisan contrôlé' },
-            { Icon: Star,        label: '4,9/5 moyenne',         sub: '+12 400 avis vérifiés' },
-            { Icon: Zap,         label: 'Devis en 24h',          sub: 'Gratuit et sans engagement' },
-            { Icon: Shield,      label: 'Garantie satisfaction', sub: 'Remboursé si insatisfait' },
-            { Icon: MapPin,      label: '96 départements',       sub: 'Toute la France couverte' },
+            { Icon: ShieldCheck, label: 'SIREN vérifié',              sub: 'Chaque artisan contrôlé' },
+            { Icon: Star,        label: `${ratingStr}/5 moyenne`,     sub: `+${reviewStr} avis vérifiés` },
+            { Icon: Zap,         label: 'Devis en 24h',               sub: 'Gratuit et sans engagement' },
+            { Icon: Shield,      label: 'Garantie satisfaction',      sub: 'Remboursé si insatisfait' },
+            { Icon: MapPin,      label: `${deptCount} départements`,  sub: 'Toute la France couverte' },
           ].map(({ Icon: TrustIcon, label, sub }, i, arr) => (
             <div key={label} className="flex items-center gap-3">
               <div
@@ -500,7 +503,7 @@ export function ClayHomePage({ artisanCount }: Props) {
           </h2>
           <div className="text-right">
             <div className="text-[2.4rem] font-black text-clay-400">★★★★★</div>
-            <div className="text-[13px]" style={{ color: 'rgba(255,255,255,.35)' }}>4,9/5 · 12 400 avis vérifiés</div>
+            <div className="text-[13px]" style={{ color: 'rgba(255,255,255,.35)' }}>{ratingStr}/5 · {reviewStr} avis vérifiés</div>
           </div>
         </div>
 
@@ -555,7 +558,7 @@ export function ClayHomePage({ artisanCount }: Props) {
               Votre projet mérite<br />le meilleur.
             </h2>
             <p className="text-[16px] leading-[1.7] mb-8" style={{ color: 'rgba(255,255,255,.75)' }}>
-              Rejoignez 180 000 propriétaires qui font confiance à ServicesArtisans pour leurs travaux — et ne l&apos;ont jamais regretté.
+              Rejoignez {reviewCount > 0 ? formatProviderCount(reviewCount) : '180 000'} propriétaires qui font confiance à ServicesArtisans pour leurs travaux — et ne l&apos;ont jamais regretté.
             </p>
             <div className="flex gap-3 flex-wrap">
               <Link
@@ -576,10 +579,10 @@ export function ClayHomePage({ artisanCount }: Props) {
           </div>
           <div className="grid grid-cols-2 gap-4">
             {[
-              { num: '50 000+', label: 'Artisans vérifiés' },
-              { num: '180 000+', label: 'Clients satisfaits' },
-              { num: '4,9 / 5', label: 'Note moyenne' },
-              { num: '96', label: 'Départements' },
+              { num: countStr,                                                       label: 'Artisans vérifiés' },
+              { num: reviewCount > 0 ? `${formatProviderCount(reviewCount)}+` : '180 000+', label: 'Avis clients' },
+              { num: `${ratingStr} / 5`,                                            label: 'Note moyenne' },
+              { num: `${deptCount}`,                                                label: 'Départements' },
             ].map(stat => (
               <div
                 key={stat.label}

@@ -53,3 +53,56 @@ export async function getProviderCountByDepartment(deptName: string): Promise<nu
 export function formatProviderCount(count: number): string {
   return count.toLocaleString('fr-FR')
 }
+
+export interface SiteStats {
+  artisanCount: number
+  reviewCount: number
+  avgRating: number
+  deptCount: number
+}
+
+/** Toutes les stats du site en un seul appel (pour la homepage) */
+export async function getSiteStats(): Promise<SiteStats> {
+  try {
+    const supabase = createAdminClient()
+
+    const [providerRes, reviewCountRes, ratingsRes, deptRes] = await Promise.all([
+      supabase
+        .from('providers')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_active', true),
+      supabase
+        .from('reviews')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'published'),
+      supabase
+        .from('reviews')
+        .select('rating')
+        .eq('status', 'published')
+        .limit(500),
+      supabase
+        .from('communes')
+        .select('departement_code')
+        .gt('provider_count', 0)
+        .not('departement_code', 'is', null)
+        .limit(10000),
+    ])
+
+    const artisanCount = providerRes.count ?? 0
+    const reviewCount = reviewCountRes.count ?? 0
+
+    let avgRating = 4.9
+    if (ratingsRes.data && ratingsRes.data.length >= 5) {
+      const sum = ratingsRes.data.reduce((acc, r) => acc + (r.rating ?? 0), 0)
+      const computed = Math.round((sum / ratingsRes.data.length) * 10) / 10
+      if (computed >= 1 && computed <= 5) avgRating = computed
+    }
+
+    const depts = new Set(deptRes.data?.map(c => c.departement_code).filter(Boolean))
+    const deptCount = depts.size || 96
+
+    return { artisanCount, reviewCount, avgRating, deptCount }
+  } catch {
+    return { artisanCount: 0, reviewCount: 0, avgRating: 4.9, deptCount: 96 }
+  }
+}

@@ -5,12 +5,12 @@ import { GeographicSectionWrapper } from '@/components/home/GeographicSectionWra
 import { ClayHomePage } from '@/components/home/ClayHomePage'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
-import { getProviderCount, formatProviderCount } from '@/lib/data/stats'
+import { getSiteStats, formatProviderCount } from '@/lib/data/stats'
 
 export const revalidate = 3600 // Rafraîchit les stats toutes les heures
 
 export async function generateMetadata(): Promise<Metadata> {
-  const count = await getProviderCount()
+  const { artisanCount: count } = await getSiteStats()
   const countStr = count > 0 ? `${formatProviderCount(count)}+` : 'Des milliers d\''
   return {
     title: `ServicesArtisans — ${countStr} artisans référencés en France`,
@@ -36,9 +36,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const [cmsPage, artisanCount] = await Promise.all([
+  const [cmsPage, siteStats] = await Promise.all([
     getPageContent('homepage', 'homepage'),
-    getProviderCount(),
+    getSiteStats(),
   ])
 
   if (cmsPage?.content_html) {
@@ -66,7 +66,7 @@ export default async function HomePage() {
       </h1>
 
       {/* ─── CLAY HOMEPAGE DESIGN ─────────────────────────────── */}
-      <ClayHomePage artisanCount={artisanCount} />
+      <ClayHomePage stats={siteStats} />
 
       {/* ─── GEOGRAPHIC COVERAGE ──────────────────────────────── */}
       <section className="py-16 bg-sand-200">
