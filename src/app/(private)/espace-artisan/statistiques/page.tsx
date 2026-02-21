@@ -42,6 +42,7 @@ const supabase = createBrowserClient(
 export default function StatistiquesPage() {
   const [stats, setStats] = useState<Stats | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [noProvider, setNoProvider] = useState(false)
   const [period, setPeriod] = useState<'week' | 'month' | 'year'>('month')
 
   useEffect(() => {
@@ -49,7 +50,22 @@ export default function StatistiquesPage() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
 
-      // Fetch bookings
+      // Look up the provider record for this auth user
+      const { data: providerData } = await supabase
+        .from('providers')
+        .select('id')
+        .eq('user_id', user.id)
+        .single()
+
+      if (!providerData) {
+        setNoProvider(true)
+        setIsLoading(false)
+        return
+      }
+
+      const providerId = providerData.id
+
+      // Fetch bookings using the provider's actual provider_id
       const { data: bookings } = await supabase
         .from('bookings')
         .select(`
@@ -60,13 +76,13 @@ export default function StatistiquesPage() {
           deposit_amount,
           slot:availability_slots(date, start_time, end_time)
         `)
-        .eq('provider_id', user.id)
+        .eq('provider_id', providerId)
 
-      // Fetch reviews
+      // Fetch reviews using the provider's actual provider_id
       const { data: reviews } = await supabase
         .from('reviews')
         .select('rating')
-        .eq('provider_id', user.id)
+        .eq('provider_id', providerId)
 
       // Calculate stats
       const now = new Date()
@@ -194,6 +210,24 @@ export default function StatistiquesPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+      </div>
+    )
+  }
+
+  if (noProvider) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <BarChart3 className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+          <h2 className="text-xl font-semibold text-gray-700 mb-2">Aucun profil artisan trouvé</h2>
+          <p className="text-gray-500">Vous devez créer votre profil artisan pour accéder aux statistiques.</p>
+          <Link
+            href="/espace-artisan/profil"
+            className="mt-4 inline-block px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          >
+            Créer mon profil
+          </Link>
+        </div>
       </div>
     )
   }

@@ -8,7 +8,7 @@ import { z } from 'zod'
 const reportsQuerySchema = z.object({
   page: z.coerce.number().int().min(1).optional().default(1),
   limit: z.coerce.number().int().min(1).max(100).optional().default(20),
-  status: z.enum(['all', 'pending', 'under_review', 'resolved', 'dismissed']).optional().default('all'),
+  status: z.enum(['all', 'pending', 'reviewed', 'resolved', 'dismissed']).optional().default('all'),
   targetType: z.enum(['all', 'user', 'provider', 'review', 'message']).optional().default('all'),
 })
 
@@ -51,9 +51,8 @@ export async function GET(request: NextRequest) {
       query = query.eq('status', status)
     }
 
-    if (targetType !== 'all') {
-      query = query.eq('target_type', targetType)
-    }
+    // target_type column does not exist in user_reports table; filter is skipped
+    void targetType
 
     const { data: reports, count, error } = await query
       .order('created_at', { ascending: false })

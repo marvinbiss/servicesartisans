@@ -50,10 +50,12 @@ export async function GET(request: NextRequest) {
         break
       }
       case 'quotes': {
+        // quotes table columns: id, request_id, provider_id, amount, description, valid_until, status
+        // client_name and client_email do not exist on quotes; join with devis_requests for client info if needed
         const { data: quotes } = await supabase
           .from('quotes')
-          .select('id, provider_id, client_name, client_email, status, created_at')
-          .order('created_at', { ascending: false })
+          .select('id, request_id, provider_id, amount, description, valid_until, status')
+          .order('status', { ascending: true })
         data = quotes || []
         filename = 'quotes'
         break
@@ -61,7 +63,7 @@ export async function GET(request: NextRequest) {
       case 'reviews': {
         const { data: reviews } = await supabase
           .from('reviews')
-          .select('id, provider_id, author_name, rating, comment, is_visible, created_at')
+          .select('id, artisan_id, client_name, rating, comment, status, created_at')
           .order('created_at', { ascending: false })
         data = reviews || []
         filename = 'reviews'

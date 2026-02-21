@@ -20,7 +20,8 @@ export function Pagination({
   if (totalPages <= 1) return null
 
   const getPageUrl = (page: number) => {
-    const url = new URL(baseUrl, 'http://localhost')
+    const origin = typeof window !== 'undefined' ? window.location.origin : 'http://localhost'
+    const url = new URL(baseUrl, origin)
     url.searchParams.set('page', String(page))
     return `${url.pathname}${url.search}`
   }

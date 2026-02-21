@@ -82,15 +82,19 @@ export async function PUT(request: Request) {
         { status: 400 }
       )
     }
-    const { full_name } = result.data
+    const { full_name, phone } = result.data
+
+    // Build update object with only defined fields
+    const updateData: Record<string, string | undefined> = {
+      updated_at: new Date().toISOString(),
+    }
+    if (full_name !== undefined) updateData.full_name = full_name
+    if (phone !== undefined) updateData.phone_e164 = phone
 
     // Update profile — only columns that exist on profiles table
     const { data: profile, error: updateError } = await supabase
       .from('profiles')
-      .update({
-        full_name,
-        updated_at: new Date().toISOString(),
-      })
+      .update(updateData)
       .eq('id', user.id)
       .select()
       .single()

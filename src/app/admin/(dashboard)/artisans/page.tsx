@@ -24,16 +24,15 @@ import { useAdminFetch, adminMutate } from '@/hooks/admin/useAdminFetch'
 
 interface Provider {
   id: string
-  company_name: string
+  name: string
   slug: string
   email: string
   phone: string
   city: string
   region: string
-  service_type: string
+  specialty: string
   is_verified: boolean
   is_active: boolean
-  subscription_type: string
   rating_average: number
   review_count: number
   created_at: string
@@ -137,26 +136,6 @@ export default function AdminProvidersPage() {
       return <span className="px-2 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-medium">En attente</span>
     }
     return <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">Vérifié</span>
-  }
-
-  const planLabels: Record<string, string> = {
-    'free': 'Gratuit',
-    'basic': 'Basique',
-    'premium': 'Premium',
-    'pro': 'Pro',
-  }
-
-  const getSubscriptionBadge = (type: string) => {
-    const colors: Record<string, string> = {
-      premium: 'bg-blue-100 text-blue-700',
-      basic: 'bg-blue-100 text-blue-700',
-      free: 'bg-gray-100 text-gray-700',
-    }
-    return (
-      <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[type] || colors.free}`}>
-        {planLabels[type] || type.charAt(0).toUpperCase() + type.slice(1)}
-      </span>
-    )
   }
 
   return (
@@ -278,9 +257,6 @@ export default function AdminProvidersPage() {
                       <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Avis
                       </th>
-                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Abonnement
-                      </th>
                       <th scope="col" className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Actions
                       </th>
@@ -295,7 +271,7 @@ export default function AdminProvidersPage() {
                         <td className="px-6 py-4">
                           <div>
                             <div className="flex items-center gap-2">
-                              <p className="font-medium text-gray-900">{provider.company_name}</p>
+                              <p className="font-medium text-gray-900">{provider.name}</p>
                               {provider.source === 'sirene-open' && (
                                 <span className="px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded text-xs">SIRENE</span>
                               )}
@@ -315,7 +291,7 @@ export default function AdminProvidersPage() {
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2">
                             <Briefcase className="w-4 h-4 text-gray-400" />
-                            <span className="text-gray-900">{provider.service_type}</span>
+                            <span className="text-gray-900">{provider.specialty}</span>
                           </div>
                         </td>
                         <td className="px-6 py-4">
@@ -339,7 +315,6 @@ export default function AdminProvidersPage() {
                             <span className="text-gray-400 text-sm">Aucun avis</span>
                           )}
                         </td>
-                        <td className="px-6 py-4">{getSubscriptionBadge(provider.subscription_type)}</td>
                         <td className="px-6 py-4">
                           <div className="flex items-center justify-end gap-1">
                             {/* View button */}

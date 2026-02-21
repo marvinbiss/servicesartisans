@@ -8,7 +8,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
-import { sanitizeSearchQuery, isValidUuid } from '@/lib/sanitize'
+import { isValidUuid } from '@/lib/sanitize'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
@@ -24,13 +24,8 @@ const updateProviderSchema = z.object({
   postal_code: z.string().max(10).optional().nullable(),
   department: z.string().max(100).optional().nullable(),
   region: z.string().max(100).optional().nullable(),
-  website: z.string().url().optional().nullable().or(z.literal('')),
-  legal_form: z.string().max(50).optional().nullable(),
   is_verified: z.boolean().optional(),
-  is_featured: z.boolean().optional(),
   is_active: z.boolean().optional(),
-  services: z.array(z.string().max(100)).optional(),
-  zones: z.array(z.string().max(100)).optional(),
 })
 
 export const dynamic = 'force-dynamic'
@@ -63,8 +58,6 @@ function buildUpdateData(body: Record<string, unknown>): Record<string, unknown>
     ['email', 'email'],
     ['siret', 'siret'],
     ['postal_code', 'address_postal_code'],
-    ['website', 'website'],
-    ['legal_form', 'legal_form'],
   ]
   for (const [src, dest] of directFields) {
     if (body[src] !== undefined) data[dest] = body[src] || null
@@ -72,7 +65,7 @@ function buildUpdateData(body: Record<string, unknown>): Record<string, unknown>
 
   // Text fields that need HTML stripping
   const textFields: [string, string][] = [
-    ['description', 'meta_description'],
+    ['description', 'description'],
     ['address', 'address_street'],
     ['city', 'address_city'],
     ['department', 'address_department'],
@@ -85,47 +78,11 @@ function buildUpdateData(body: Record<string, unknown>): Record<string, unknown>
   // Boolean fields
   if (body.is_verified !== undefined) {
     data.is_verified = Boolean(body.is_verified)
-    if (body.is_verified) data.verification_date = new Date().toISOString()
   }
   // is_premium column was dropped; is_featured is no longer stored
   if (body.is_active !== undefined) data.is_active = Boolean(body.is_active)
 
   return data
-}
-
-/**
- * Find an existing record by name (ilike) or create a new one.
- * Returns the ID, or null on failure.
- */
-async function findOrCreateRecord(
-  supabase: ReturnType<typeof createAdminClient>,
-  table: 'services' | 'locations',
-  name: string,
-  extraMatch?: Record<string, unknown>,
-  extraInsert?: Record<string, unknown>,
-): Promise<string | null> {
-  const sanitizedName = sanitizeSearchQuery(name.trim())
-  let query = supabase.from(table).select('id').ilike('name', sanitizedName)
-  if (extraMatch) {
-    for (const [k, v] of Object.entries(extraMatch)) {
-      query = query.eq(k, v)
-    }
-  }
-  const { data: existing } = await query.single()
-  if (existing?.id) return existing.id
-
-  // Create new record
-  const insertData: Record<string, unknown> = {
-    name: name.trim(),
-    is_active: true,
-    ...extraInsert,
-  }
-  if (table === 'services') {
-    insertData.slug = name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
-  }
-  const { data: created, error } = await supabase.from(table).insert(insertData).select('id').single()
-  if (error) return null
-  return created?.id ?? null
 }
 
 // GET - Récupérer un provider complet
@@ -149,28 +106,13 @@ export async function GET(
 
     const { data: provider, error } = await supabase
       .from('providers')
-      .select(`
-        *,
-        provider_services (
-          id, is_primary,
-          service:services ( id, name, slug )
-        ),
-        provider_locations (
-          id, is_primary, radius_km,
-          location:locations ( id, name, postal_code, department_name )
-        )
-      `)
+      .select('*')
       .eq('id', params.id)
       .single()
 
     if (error || !provider) {
       return NextResponse.json({ success: false, error: 'Provider non trouvé' }, { status: 404 })
     }
-
-    const services = provider.provider_services?.map((ps: { service: { name: string } }) => ps.service?.name).filter(Boolean) || []
-    const zones = provider.provider_locations?.map((pl: { location: { name: string; postal_code: string } }) =>
-      pl.location ? `${pl.location.name} (${pl.location.postal_code})` : null
-    ).filter(Boolean) || []
 
     const response = NextResponse.json({
       success: true,
@@ -182,10 +124,9 @@ export async function GET(
         company_name: provider.name,
         phone: provider.phone || '',
         siret: provider.siret || '',
-        siren: provider.siren || '',
-        description: provider.meta_description || '',
-        services,
-        zones,
+        description: provider.description || '',
+        services: [],
+        zones: [],
         address: provider.address_street || '',
         city: provider.address_city || '',
         postal_code: provider.address_postal_code || '',
@@ -193,24 +134,15 @@ export async function GET(
         region: provider.address_region || '',
         latitude: provider.latitude,
         longitude: provider.longitude,
-        hourly_rate: null,
         is_verified: provider.is_verified || false,
-        is_featured: false,
         is_active: provider.is_active !== false,
         rating: provider.rating_average || null,
         reviews_count: provider.review_count || 0,
         subscription_plan: 'gratuit',
         source: provider.source || 'manual',
-        source_id: provider.source_id || null,
-        website: provider.website || '',
-        legal_form: provider.legal_form || '',
-        creation_date: provider.creation_date || '',
-        employee_count: provider.employee_count || null,
         created_at: provider.created_at,
         updated_at: provider.updated_at,
         slug: provider.slug,
-        _provider_services: provider.provider_services,
-        _provider_locations: provider.provider_locations,
       },
     })
 
@@ -272,55 +204,6 @@ export async function PATCH(
     if (error) {
       logger.error('Database update failed', { code: error.code, message: error.message })
       return NextResponse.json({ success: false, error: 'Erreur lors de la mise à jour' }, { status: 500 })
-    }
-
-    // Update services if provided
-    if (body.services && Array.isArray(body.services)) {
-      try {
-        await supabase.from('provider_services').delete().eq('provider_id', providerId)
-        for (const serviceName of body.services) {
-          if (!serviceName || typeof serviceName !== 'string') continue
-          const serviceId = await findOrCreateRecord(supabase, 'services', serviceName)
-          if (serviceId) {
-            await supabase.from('provider_services').insert({
-              provider_id: providerId,
-              service_id: serviceId,
-              is_primary: (body.services as string[]).indexOf(serviceName) === 0,
-            })
-          }
-        }
-      } catch (servicesError) {
-        logger.warn('Services update failed (main update succeeded)')
-      }
-    }
-
-    // Update zones/locations if provided
-    if (body.zones && Array.isArray(body.zones)) {
-      try {
-        await supabase.from('provider_locations').delete().eq('provider_id', providerId)
-        for (const zone of body.zones) {
-          if (!zone || typeof zone !== 'string') continue
-          const match = zone.match(/^(.+?)(?:\s*\((\d{5})\))?$/)
-          if (!match) continue
-
-          const locationName = match[1].trim()
-          const postalCode = match[2] || null
-          const extraMatch = postalCode ? { postal_code: postalCode } : undefined
-          const extraInsert = postalCode ? { postal_code: postalCode } : undefined
-
-          const locationId = await findOrCreateRecord(supabase, 'locations', locationName, extraMatch, extraInsert)
-          if (locationId) {
-            await supabase.from('provider_locations').insert({
-              provider_id: providerId,
-              location_id: locationId,
-              is_primary: (body.zones as string[]).indexOf(zone) === 0,
-              radius_km: 20,
-            })
-          }
-        }
-      } catch (zonesError) {
-        logger.warn('Zones update failed (main update succeeded)')
-      }
     }
 
     // Audit log

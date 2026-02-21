@@ -8,14 +8,16 @@ import { logger } from './logger'
 
 // Types
 interface RateLimitConfig {
-  window: number  // Time window in milliseconds
-  max: number     // Maximum requests in window
+  window: number    // Time window in milliseconds
+  max: number       // Maximum requests in window
+  failOpen?: boolean // If true, allow requests when Redis is unavailable (default: false = fail-close)
 }
 
 interface RateLimitResult {
   allowed: boolean
   remaining: number
   resetTime: number
+  error?: string
 }
 
 // Environment detection
@@ -90,9 +92,22 @@ class UpstashRateLimiter {
 
       return { allowed, remaining, resetTime }
     } catch (error) {
-      logger.error('Redis rate limit error, falling back to in-memory limiter:', error)
-      logger.warn('Rate limiter: Redis unavailable, using in-memory fallback')
-      return memoryLimiter.checkRateLimit(`fallback:${key}`, config)
+      logger.error('Redis rate limit error:', error)
+
+      // Fail-close by default: deny requests when Redis is unavailable.
+      // Only fall back to allowing requests when failOpen is explicitly true.
+      if (config.failOpen === true) {
+        logger.warn('Rate limiter: Redis unavailable, failOpen=true — using in-memory fallback')
+        return memoryLimiter.checkRateLimit(`fallback:${key}`, config)
+      }
+
+      logger.warn('Rate limiter: Redis unavailable, failOpen=false — denying request (fail-close)')
+      return {
+        allowed: false,
+        remaining: 0,
+        resetTime: now + config.window,
+        error: 'Rate limiter unavailable',
+      }
     }
   }
 

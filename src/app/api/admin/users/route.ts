@@ -52,10 +52,13 @@ export async function GET(request: NextRequest) {
     }
     const { page, limit, filter, plan, search } = result.data
 
-    // Fetch users from Supabase Auth
+    // NOTE: Supabase Auth does not support server-side filtering by user_metadata (type, plan, etc.).
+    // To allow correct filtering before pagination, we fetch a large batch of users first,
+    // then apply type/plan/search filters in application code, and finally slice for the requested page.
+    // Limitation: for deployments with >1000 users, implement cursor-based pagination or a DB-side users view.
     const { data: authUsers, error: authError } = await supabase.auth.admin.listUsers({
-      page,
-      perPage: limit,
+      page: 1,
+      perPage: 1000,
     })
 
     if (authError) {
@@ -66,14 +69,14 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Try to get profiles only for the returned users (avoid fetching entire table)
+    // Fetch profiles for ALL returned users so type filters operate on the full set
     const profilesMap = new Map<string, Record<string, unknown>>()
     try {
       const userIds = authUsers.users.map(u => u.id)
       if (userIds.length > 0) {
         const { data: profiles } = await supabase
           .from('profiles')
-          .select('id, email, full_name, is_admin, role, phone_e164, average_rating, review_count')
+          .select('id, email, full_name, is_admin, role, phone_e164, subscription_plan, subscription_status, average_rating, review_count')
           .in('id', userIds)
 
         if (profiles) {
@@ -84,7 +87,7 @@ export async function GET(request: NextRequest) {
       // profiles table doesn't exist, continue without it
     }
 
-    // Transform users
+    // Transform ALL users first
     let users = authUsers.users.map(user => {
       const profile = profilesMap.get(user.id) || {}
       return {
@@ -92,17 +95,19 @@ export async function GET(request: NextRequest) {
         email: user.email || '',
         full_name: (profile.full_name as string) || user.user_metadata?.full_name || user.user_metadata?.name || null,
         phone: (profile.phone_e164 as string) || user.user_metadata?.phone || null,
-        user_type: (profile.role as string) === 'artisan' ? 'artisan' : (user.user_metadata?.is_artisan ? 'artisan' : 'client'),
+        user_type: user.user_metadata?.is_artisan ? 'artisan' : 'client',
         is_verified: !!user.email_confirmed_at,
-        is_banned: (profile.is_banned as boolean) || user.banned_until !== null,
+        is_banned: user.banned_until !== null,
         subscription_plan: (profile.subscription_plan as string) || 'gratuit',
         subscription_status: (profile.subscription_status as string) || null,
+        average_rating: (profile.average_rating as number) || 0,
+        review_count: (profile.review_count as number) || 0,
         created_at: user.created_at,
         last_sign_in_at: user.last_sign_in_at,
       }
     })
 
-    // Apply filters
+    // Apply type/ban filter BEFORE pagination so counts are accurate
     if (filter === 'clients') {
       users = users.filter(u => u.user_type === 'client')
     } else if (filter === 'artisans') {
@@ -128,9 +133,13 @@ export async function GET(request: NextRequest) {
 
     const total = users.length
 
+    // Apply pagination AFTER all filters
+    const offset = (page - 1) * limit
+    const paginatedUsers = users.slice(offset, offset + limit)
+
     return NextResponse.json({
       success: true,
-      users,
+      users: paginatedUsers,
       total,
       page,
       totalPages: Math.ceil(total / limit),

@@ -82,7 +82,7 @@ function createChainableBuilder(): Record<string, unknown> {
 
 // Flag to simulate createAdminClient throwing an unexpected error
 let shouldThrowOnCreateClient = false
-let mockFromFn: ReturnType<typeof vi.fn>
+let mockFromFn: (...args: unknown[]) => unknown
 
 vi.mock('@/lib/supabase/admin', () => ({
   createAdminClient: () => {
@@ -90,7 +90,7 @@ vi.mock('@/lib/supabase/admin', () => ({
       throw new Error('Simulated crash')
     }
     return {
-      from: (...args: unknown[]) => mockFromFn(...args),
+      from: (...args: unknown[]) => mockFromFn(...args as []),
     }
   },
 }))
@@ -106,8 +106,8 @@ const mockRequirePermission = vi.fn(() => Promise.resolve(mockAuthResult))
 const mockLogAdminAction = vi.fn(() => Promise.resolve())
 
 vi.mock('@/lib/admin-auth', () => ({
-  requirePermission: (...args: unknown[]) => mockRequirePermission(...args),
-  logAdminAction: (...args: unknown[]) => mockLogAdminAction(...args),
+  requirePermission: (...args: unknown[]) => mockRequirePermission(...args as []),
+  logAdminAction: (...args: unknown[]) => mockLogAdminAction(...args as []),
 }))
 
 // --- Sanitize mock ---
@@ -204,7 +204,7 @@ describe('GET /api/admin/reports', () => {
 
   it('returns reports on success', async () => {
     const { GET } = await import('@/app/api/admin/reports/route')
-    const result = (await GET(makeGetRequest() as never)) as {
+    const result = (await GET(makeGetRequest() as never)) as unknown as {
       body: { success: boolean; reports: unknown[]; total: number; page: number; totalPages: number }
     }
 
@@ -227,23 +227,23 @@ describe('GET /api/admin/reports', () => {
     )
   })
 
-  it('filters by targetType=review', async () => {
+  it('does NOT filter by target_type (column does not exist in user_reports)', async () => {
     const { GET } = await import('@/app/api/admin/reports/route')
     await GET(makeGetRequest({ targetType: 'review' }) as never)
 
+    // The target_type column does not exist in the user_reports table, so no
+    // .eq('target_type', ...) filter should ever be applied regardless of the
+    // targetType query param.
     const eqCalls = builderCalls.filter(c => c.method === 'eq')
-    expect(eqCalls).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ args: ['target_type', 'review'] }),
-      ])
-    )
+    const targetTypeFilter = eqCalls.filter(c => c.args[0] === 'target_type')
+    expect(targetTypeFilter).toHaveLength(0)
   })
 
   it('paginates correctly (page=2, limit=5)', async () => {
     queryResult = { data: [], error: null, count: 12 }
 
     const { GET } = await import('@/app/api/admin/reports/route')
-    const result = (await GET(makeGetRequest({ page: '2', limit: '5' }) as never)) as {
+    const result = (await GET(makeGetRequest({ page: '2', limit: '5' }) as never)) as unknown as {
       body: { page: number; totalPages: number }
     }
 
@@ -258,7 +258,7 @@ describe('GET /api/admin/reports', () => {
 
   it('returns 400 on invalid params (page=0)', async () => {
     const { GET } = await import('@/app/api/admin/reports/route')
-    const result = (await GET(makeGetRequest({ page: '0' }) as never)) as {
+    const result = (await GET(makeGetRequest({ page: '0' }) as never)) as unknown as {
       body: { success: boolean }
       status: number
     }
@@ -271,7 +271,7 @@ describe('GET /api/admin/reports', () => {
     queryResult = { data: null, error: { code: 'PGRST301', message: 'permission denied' }, count: null }
 
     const { GET } = await import('@/app/api/admin/reports/route')
-    const result = (await GET(makeGetRequest() as never)) as {
+    const result = (await GET(makeGetRequest() as never)) as unknown as {
       body: { success: boolean; reports: unknown[]; total: number }
       status: number
     }
@@ -287,7 +287,7 @@ describe('GET /api/admin/reports', () => {
     queryResult = { data: [], error: null, count: 0 }
 
     const { GET } = await import('@/app/api/admin/reports/route')
-    const result = (await GET(makeGetRequest() as never)) as {
+    const result = (await GET(makeGetRequest() as never)) as unknown as {
       body: { reports: unknown[]; total: number; totalPages: number }
     }
 
@@ -298,7 +298,7 @@ describe('GET /api/admin/reports', () => {
 
   it('applies default params when none provided', async () => {
     const { GET } = await import('@/app/api/admin/reports/route')
-    const result = (await GET(makeGetRequest() as never)) as {
+    const result = (await GET(makeGetRequest() as never)) as unknown as {
       body: { page: number }
     }
 
@@ -318,7 +318,7 @@ describe('GET /api/admin/reports', () => {
     shouldThrowOnCreateClient = true
 
     const { GET } = await import('@/app/api/admin/reports/route')
-    const result = (await GET(makeGetRequest() as never)) as {
+    const result = (await GET(makeGetRequest() as never)) as unknown as {
       body: { success: boolean }
       status: number
     }
@@ -367,7 +367,7 @@ describe('POST /api/admin/reports/[id]/resolve', () => {
   it('resolves report successfully (action=resolve)', async () => {
     const { POST } = await import('@/app/api/admin/reports/[id]/resolve/route')
     const req = makePostRequest({ action: 'resolve' })
-    const result = (await POST(req as never, { params: { id: REPORT_ID } })) as {
+    const result = (await POST(req as never, { params: { id: REPORT_ID } })) as unknown as {
       body: { success: boolean; report: unknown; message: string }
       status: number
     }
@@ -392,7 +392,7 @@ describe('POST /api/admin/reports/[id]/resolve', () => {
 
     const { POST } = await import('@/app/api/admin/reports/[id]/resolve/route')
     const req = makePostRequest({ action: 'dismiss' })
-    const result = (await POST(req as never, { params: { id: REPORT_ID } })) as {
+    const result = (await POST(req as never, { params: { id: REPORT_ID } })) as unknown as {
       body: { success: boolean; message: string }
       status: number
     }
@@ -411,7 +411,7 @@ describe('POST /api/admin/reports/[id]/resolve', () => {
 
     const { POST } = await import('@/app/api/admin/reports/[id]/resolve/route')
     const req = makePostRequest({ action: 'resolve' })
-    const result = (await POST(req as never, { params: { id: 'not-a-uuid' } })) as {
+    const result = (await POST(req as never, { params: { id: 'not-a-uuid' } })) as unknown as {
       body: { success: boolean; error: { message: string } }
       status: number
     }
@@ -424,7 +424,7 @@ describe('POST /api/admin/reports/[id]/resolve', () => {
   it('returns 400 on invalid body (missing action)', async () => {
     const { POST } = await import('@/app/api/admin/reports/[id]/resolve/route')
     const req = makePostRequest({ resolution_notes: 'some notes' })
-    const result = (await POST(req as never, { params: { id: REPORT_ID } })) as {
+    const result = (await POST(req as never, { params: { id: REPORT_ID } })) as unknown as {
       body: { success: boolean; error: { message: string } }
       status: number
     }
@@ -438,7 +438,7 @@ describe('POST /api/admin/reports/[id]/resolve', () => {
 
     const { POST } = await import('@/app/api/admin/reports/[id]/resolve/route')
     const req = makePostRequest({ action: 'resolve' })
-    const result = (await POST(req as never, { params: { id: REPORT_ID } })) as {
+    const result = (await POST(req as never, { params: { id: REPORT_ID } })) as unknown as {
       body: { success: boolean; error: { message: string } }
       status: number
     }
@@ -492,7 +492,7 @@ describe('POST /api/admin/reports/[id]/resolve', () => {
 
     const { POST } = await import('@/app/api/admin/reports/[id]/resolve/route')
     const req = makePostRequest({ action: 'resolve' })
-    const result = (await POST(req as never, { params: { id: REPORT_ID } })) as {
+    const result = (await POST(req as never, { params: { id: REPORT_ID } })) as unknown as {
       body: { success: boolean; error: { message: string } }
       status: number
     }
