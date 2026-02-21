@@ -28,47 +28,27 @@ export async function POST(request: Request) {
     if (!result.success) {
       return NextResponse.json({ error: 'Invalid request', details: result.error.flatten() }, { status: 400 })
     }
-    const { reviewId, isHelpful } = result.data
+    const { reviewId } = result.data
 
-    // Get voter IP for deduplication
-    const voterIp =
-      request.headers.get('x-forwarded-for')?.split(',')[0] ||
-      request.headers.get('x-real-ip') ||
-      'unknown'
-
-    // Check if already voted
-    const { data: existingVote } = await supabase
-      .from('review_votes')
-      .select('id')
-      .eq('review_id', reviewId)
-      .eq('voter_ip', voterIp)
+    // Read current helpful_count
+    const { data: review, error: fetchError } = await supabase
+      .from('reviews')
+      .select('helpful_count')
+      .eq('id', reviewId)
       .single()
 
-    if (existingVote) {
-      return NextResponse.json(
-        { error: 'Vous avez déjà voté pour cet avis' },
-        { status: 400 }
-      )
+    if (fetchError || !review) {
+      return NextResponse.json({ error: 'Avis non trouvé' }, { status: 404 })
     }
 
-    // Create vote
-    const { error: insertError } = await supabase
-      .from('review_votes')
-      .insert({
-        review_id: reviewId,
-        voter_ip: voterIp,
-        is_helpful: isHelpful !== false,
-      })
+    // Increment helpful_count
+    const { error: updateError } = await supabase
+      .from('reviews')
+      .update({ helpful_count: (review.helpful_count ?? 0) + 1 })
+      .eq('id', reviewId)
 
-    if (insertError) {
-      // Ignore unique constraint violations (already voted)
-      if (insertError.code === '23505') {
-        return NextResponse.json(
-          { error: 'Vous avez déjà voté pour cet avis' },
-          { status: 400 }
-        )
-      }
-      throw insertError
+    if (updateError) {
+      throw updateError
     }
 
     return NextResponse.json({ success: true })

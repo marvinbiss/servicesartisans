@@ -14,23 +14,18 @@ export async function GET() {
   try {
     const supabase = createAdminClient()
 
-    // Fetch top-rated recent reviews with provider info (ALL real reviews)
+    // Fetch top-rated recent reviews with artisan info (ALL real reviews)
     const { data: reviews, error } = await supabase
       .from('reviews')
       .select(`
         id,
         rating,
         comment,
-        author_name,
+        client_name,
         created_at,
-        is_verified,
-        service_name,
-        provider:providers (
+        artisan:profiles!artisan_id (
           id,
-          name,
-          specialty,
-          address_city,
-          slug
+          full_name
         )
       `)
       // REMOVED: .eq('is_visible', true) to show ALL real reviews
@@ -44,24 +39,18 @@ export async function GET() {
       return NextResponse.json({ reviews: [] })
     }
 
-    // Transform reviews to include city and service info
+    // Transform reviews to include artisan info
     const transformedReviews = (reviews || [])
       .filter(r => r.comment && r.comment.length > 20) // Only reviews with actual content
       .map(review => {
-        // Provider can be null, single object, or array depending on the relation
-        const provider = Array.isArray(review.provider) ? review.provider[0] : review.provider
+        // Artisan can be null, single object, or array depending on the relation
+        const artisan = Array.isArray(review.artisan) ? review.artisan[0] : review.artisan
         return {
           id: review.id,
-          author_name: review.author_name || 'Client',
+          author_name: review.client_name || 'Client',
           rating: review.rating,
           comment: review.comment,
-          is_verified: review.is_verified,
-          city: provider?.address_city || null,
-          city_slug: provider?.address_city?.toLowerCase().replace(/\s+/g, '-') || null,
-          service: review.service_name || provider?.specialty || null,
-          service_slug: provider?.specialty?.toLowerCase().replace(/\s+/g, '-') || null,
-          provider_name: provider?.name || null,
-          provider_slug: provider?.slug || null,
+          artisan_name: artisan?.full_name || null,
           created_at: review.created_at
         }
       })

@@ -5,17 +5,18 @@
 
 import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
-import { createClient } from '@supabase/supabase-js'
 import { getResendClient } from '@/lib/api/resend-client'
 import { z } from 'zod'
 
 export const dynamic = 'force-dynamic'
 
-function getSupabase() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  )
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;')
 }
 
 const getResend = () => getResendClient()
@@ -58,33 +59,6 @@ export async function POST(request: Request) {
     const data = validation.data
     const metierFinal = data.metier === 'Autre' ? data.autreMetier : data.metier
 
-    // Store in database
-    const { error: dbError } = await getSupabase()
-      .from('artisan_applications')
-      .insert({
-        entreprise: data.entreprise,
-        siret: data.siret.replace(/\s/g, ''),
-        metier: metierFinal,
-        nom: data.nom,
-        prenom: data.prenom,
-        email: data.email,
-        telephone: data.telephone,
-        adresse: data.adresse,
-        code_postal: data.codePostal,
-        ville: data.ville,
-        rayon_intervention: parseInt(data.rayonIntervention),
-        description: data.description || null,
-        experience: data.experience || null,
-        certifications: data.certifications || null,
-        status: 'pending',
-        created_at: new Date().toISOString(),
-      })
-
-    if (dbError) {
-      logger.error('Database error', dbError)
-      // Continue even if DB fails - we'll send email notification
-    }
-
     // Send both emails in parallel (neither should crash the signup)
     const emailResults = await Promise.allSettled([
       getResend().emails.send({
@@ -92,14 +66,14 @@ export async function POST(request: Request) {
         to: data.email,
         subject: 'Votre inscription sur ServicesArtisans - Confirmation',
         html: `
-          <h2>Bonjour ${data.prenom} ${data.nom},</h2>
+          <h2>Bonjour ${escapeHtml(data.prenom ?? '')} ${escapeHtml(data.nom ?? '')},</h2>
           <p>Nous avons bien reçu votre demande d'inscription en tant qu'artisan sur ServicesArtisans.</p>
           <p><strong>Récapitulatif de votre inscription :</strong></p>
           <ul>
-            <li><strong>Entreprise :</strong> ${data.entreprise}</li>
-            <li><strong>SIRET :</strong> ${data.siret}</li>
-            <li><strong>Métier :</strong> ${metierFinal}</li>
-            <li><strong>Zone d'intervention :</strong> ${data.ville} (${data.rayonIntervention} km)</li>
+            <li><strong>Entreprise :</strong> ${escapeHtml(data.entreprise ?? '')}</li>
+            <li><strong>SIRET :</strong> ${escapeHtml(data.siret ?? '')}</li>
+            <li><strong>Métier :</strong> ${escapeHtml(metierFinal ?? '')}</li>
+            <li><strong>Zone d'intervention :</strong> ${escapeHtml(data.ville ?? '')} (${escapeHtml(data.rayonIntervention ?? '')} km)</li>
           </ul>
           <p>Notre équipe va vérifier vos informations et vous recevrez une réponse sous 24-48 heures.</p>
           <p>À bientôt sur ServicesArtisans !</p>
@@ -112,30 +86,30 @@ export async function POST(request: Request) {
       getResend().emails.send({
         from: process.env.FROM_EMAIL || 'noreply@servicesartisans.fr',
         to: 'artisans@servicesartisans.fr',
-        subject: `[Nouvelle inscription] ${data.entreprise} - ${metierFinal}`,
+        subject: `[Nouvelle inscription] ${escapeHtml(data.entreprise ?? '')} - ${escapeHtml(metierFinal ?? '')}`,
         html: `
           <h2>Nouvelle demande d'inscription artisan</h2>
           <h3>Entreprise</h3>
           <ul>
-            <li><strong>Nom :</strong> ${data.entreprise}</li>
-            <li><strong>SIRET :</strong> ${data.siret}</li>
-            <li><strong>Métier :</strong> ${metierFinal}</li>
+            <li><strong>Nom :</strong> ${escapeHtml(data.entreprise ?? '')}</li>
+            <li><strong>SIRET :</strong> ${escapeHtml(data.siret ?? '')}</li>
+            <li><strong>Métier :</strong> ${escapeHtml(metierFinal ?? '')}</li>
           </ul>
           <h3>Contact</h3>
           <ul>
-            <li><strong>Nom :</strong> ${data.prenom} ${data.nom}</li>
-            <li><strong>Email :</strong> ${data.email}</li>
-            <li><strong>Téléphone :</strong> ${data.telephone}</li>
+            <li><strong>Nom :</strong> ${escapeHtml(data.prenom ?? '')} ${escapeHtml(data.nom ?? '')}</li>
+            <li><strong>Email :</strong> ${escapeHtml(data.email ?? '')}</li>
+            <li><strong>Téléphone :</strong> ${escapeHtml(data.telephone ?? '')}</li>
           </ul>
           <h3>Localisation</h3>
           <ul>
-            <li><strong>Adresse :</strong> ${data.adresse}</li>
-            <li><strong>Ville :</strong> ${data.codePostal} ${data.ville}</li>
-            <li><strong>Rayon d'intervention :</strong> ${data.rayonIntervention} km</li>
+            <li><strong>Adresse :</strong> ${escapeHtml(data.adresse ?? '')}</li>
+            <li><strong>Ville :</strong> ${escapeHtml(data.codePostal ?? '')} ${escapeHtml(data.ville ?? '')}</li>
+            <li><strong>Rayon d'intervention :</strong> ${escapeHtml(data.rayonIntervention ?? '')} km</li>
           </ul>
-          ${data.description ? `<h3>Description</h3><p>${data.description}</p>` : ''}
-          ${data.experience ? `<p><strong>Expérience :</strong> ${data.experience}</p>` : ''}
-          ${data.certifications ? `<p><strong>Certifications :</strong> ${data.certifications}</p>` : ''}
+          ${data.description ? `<h3>Description</h3><p>${escapeHtml(data.description)}</p>` : ''}
+          ${data.experience ? `<p><strong>Expérience :</strong> ${escapeHtml(data.experience)}</p>` : ''}
+          ${data.certifications ? `<p><strong>Certifications :</strong> ${escapeHtml(data.certifications)}</p>` : ''}
           <hr />
           <p><a href="https://servicesartisans.fr/admin">Accéder au dashboard admin</a></p>
         `,

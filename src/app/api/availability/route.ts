@@ -108,18 +108,17 @@ export async function POST(request: Request) {
 
     const supabase = await createClient()
 
-    // Verify artisan has Pro or Premium subscription
-    const { data: profile, error: profileError } = await supabase
-      .from('profiles')
-      .select('subscription_plan')
-      .eq('id', artisanId)
-      .single()
-
-    if (profileError) throw profileError
-
-    if (!profile || !['pro', 'premium'].includes(profile.subscription_plan)) {
+    // Verify ownership: artisanId must match the authenticated user
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    if (authError || !user) {
       return NextResponse.json(
-        { error: 'Cette fonctionnalité nécessite un abonnement Pro ou Premium' },
+        { error: 'Non authentifié' },
+        { status: 401 }
+      )
+    }
+    if (result.data.artisanId !== user.id) {
+      return NextResponse.json(
+        { error: 'Accès refusé' },
         { status: 403 }
       )
     }

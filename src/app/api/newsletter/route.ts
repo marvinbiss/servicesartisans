@@ -5,18 +5,10 @@
 
 import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
-import { createClient } from '@supabase/supabase-js'
 import { getResendClient } from '@/lib/api/resend-client'
 import { z } from 'zod'
 
 export const dynamic = 'force-dynamic'
-
-function getSupabase() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  )
-}
 
 const getResend = () => getResendClient()
 
@@ -38,35 +30,6 @@ export async function POST(request: Request) {
     }
 
     const { email } = validation.data
-    const supabase = getSupabase()
-
-    // Check if already subscribed
-    const { data: existing } = await supabase
-      .from('newsletter_subscribers')
-      .select('id')
-      .eq('email', email)
-      .single()
-
-    if (existing) {
-      return NextResponse.json({
-        success: true,
-        message: 'Vous êtes déjà inscrit à notre newsletter',
-      })
-    }
-
-    // Store in database
-    const { error: dbError } = await supabase
-      .from('newsletter_subscribers')
-      .insert({
-        email,
-        subscribed_at: new Date().toISOString(),
-        status: 'active',
-      })
-
-    if (dbError) {
-      logger.error('Database error', dbError)
-      // Continue even if DB fails
-    }
 
     // Send welcome email (non-blocking — don't crash signup if email fails)
     try {
@@ -98,7 +61,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message: 'Inscription réussie !',
+      message: 'Inscription enregistrée',
     })
   } catch (error) {
     logger.error('Newsletter API error', error)

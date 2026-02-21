@@ -344,9 +344,6 @@ export async function POST(request: Request) {
     // Update artisan's average rating (non-blocking)
     updateArtisanRating(supabase, booking.artisan_id).catch((err) => logger.error('Update rating failed', err))
 
-    // Award loyalty points if applicable (non-blocking)
-    awardReviewPoints(supabase, booking.artisan_id, booking.client_email).catch((err) => logger.error('Award points failed', err))
-
     return NextResponse.json(
       createSuccessResponse({
         review: {
@@ -420,25 +417,5 @@ async function updateArtisanRating(supabase: SupabaseClientType, artisanId: stri
         review_count: reviews.length,
       })
       .eq('id', artisanId)
-  }
-}
-
-// Award points for leaving a review
-async function awardReviewPoints(
-  supabase: SupabaseClientType,
-  artisanId: string,
-  clientEmail: string
-) {
-  try {
-    await supabase.from('loyalty_points').insert({
-      artisan_id: artisanId,
-      client_email: clientEmail,
-      points: 10,
-      reason: 'Avis laisse',
-      created_at: new Date().toISOString(),
-    })
-  } catch (error) {
-    // Non-critical, log and continue
-    logger.error('Failed to award review points:', error)
   }
 }

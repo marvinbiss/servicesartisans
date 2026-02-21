@@ -78,8 +78,8 @@ export default function AdminSignalementsPage() {
   const handleAction = async () => {
     try {
       setActionError(null)
-      await adminMutate(`/api/admin/reports/${actionModal.reportId}/resolve`, {
-        method: 'POST',
+      await adminMutate(`/api/admin/reports/${actionModal.reportId}`, {
+        method: 'PUT',
         body: {
           action: actionModal.action,
           resolution: resolutionNotes,

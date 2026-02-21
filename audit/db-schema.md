@@ -11,7 +11,7 @@ Colonnes JAMAIS EXISTÉES: phone (sans _e164), city, address, postal_code, is_ba
 RLS: oui
 
 ## TABLE: providers
-Colonnes: id (uuid PK), name (text), slug (text), email (text), phone (text), siret (text), siren (text), is_verified (bool), is_active (bool), stable_id (text), noindex (bool), address_city (text), address_postal_code (text), address_street (text), address_region (text), address_department (text), specialty (text), rating_average (numeric), review_count (int), created_at (timestamptz), updated_at (timestamptz), meta_description (text), latitude (numeric), longitude (numeric), source (text), source_id (text), description (text)
+Colonnes: id (uuid PK), user_id (uuid FK→auth.users NULL), name (text), slug (text), email (text), phone (text), siret (text), siren (text), is_verified (bool), is_active (bool), stable_id (text), noindex (bool), address_city (text), address_postal_code (text), address_street (text), address_region (text), address_department (text), specialty (text), rating_average (numeric), review_count (int), created_at (timestamptz), updated_at (timestamptz), meta_description (text), latitude (numeric), longitude (numeric), source (text), source_id (text), description (text)
 Colonnes SUPPRIMÉES (migration 100): is_premium, trust_badge, trust_score, company_name, hourly_rate_min, hourly_rate_max, emergency_available, certifications, insurance, payment_methods, languages, avatar_url, intervention_zone, video_enabled, video_price, response_time, response_rate
 RLS: oui
 

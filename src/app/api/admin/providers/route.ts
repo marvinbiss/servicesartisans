@@ -28,7 +28,7 @@ const SELECT_COLUMNS = `
   specialty,
   is_verified,
   is_active,
-  source_api,
+  source,
   rating_average,
   review_count,
   created_at
@@ -100,20 +100,19 @@ export async function GET(request: NextRequest) {
     // Transform data for frontend
     const transformedProviders = (providers || []).map((p: Record<string, unknown>) => ({
       id: p.id,
-      company_name: p.name,
+      name: p.name,
       slug: p.slug,
       email: p.email || '',
       phone: p.phone || '',
-      city: p.address_city || '',
-      region: p.address_region || '',
-      service_type: (p.specialty as string) || 'Artisan',
+      address_city: p.address_city || '',
+      address_region: p.address_region || '',
+      specialty: (p.specialty as string) || 'Artisan',
       is_verified: p.is_verified,
       is_active: p.is_active,
-      subscription_type: 'free',
       rating_average: Number(p.rating_average) || 0,
       review_count: Number(p.review_count) || 0,
       created_at: p.created_at,
-      source: p.source_api,
+      source: p.source,
       siret: p.siret,
     }))
 

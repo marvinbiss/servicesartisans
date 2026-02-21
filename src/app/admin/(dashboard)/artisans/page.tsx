@@ -24,13 +24,13 @@ import { useAdminFetch, adminMutate } from '@/hooks/admin/useAdminFetch'
 
 interface Provider {
   id: string
-  company_name: string
+  name: string
   slug: string
   email: string
   phone: string
-  city: string
-  region: string
-  service_type: string
+  address_city: string
+  address_region: string
+  specialty: string
   is_verified: boolean
   is_active: boolean
   rating_average: number
@@ -271,7 +271,7 @@ export default function AdminProvidersPage() {
                         <td className="px-6 py-4">
                           <div>
                             <div className="flex items-center gap-2">
-                              <p className="font-medium text-gray-900">{provider.company_name}</p>
+                              <p className="font-medium text-gray-900">{provider.name}</p>
                               {provider.source === 'sirene-open' && (
                                 <span className="px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded text-xs">SIRENE</span>
                               )}
@@ -291,16 +291,16 @@ export default function AdminProvidersPage() {
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2">
                             <Briefcase className="w-4 h-4 text-gray-400" />
-                            <span className="text-gray-900">{provider.service_type}</span>
+                            <span className="text-gray-900">{provider.specialty}</span>
                           </div>
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2">
                             <MapPin className="w-4 h-4 text-gray-400" />
-                            <span className="text-gray-900">{provider.city || 'Non renseigné'}</span>
+                            <span className="text-gray-900">{provider.address_city || 'Non renseigné'}</span>
                           </div>
-                          {provider.region && (
-                            <p className="text-sm text-gray-500">{provider.region}</p>
+                          {provider.address_region && (
+                            <p className="text-sm text-gray-500">{provider.address_region}</p>
                           )}
                         </td>
                         <td className="px-6 py-4">{getStatusBadge(provider)}</td>

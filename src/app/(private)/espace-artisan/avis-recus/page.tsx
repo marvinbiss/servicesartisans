@@ -7,11 +7,11 @@ import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
 
 interface Avis {
   id: string
-  client: string
-  date: string
-  note: number
-  commentaire: string | null
-  reponse: string | null
+  client_name: string
+  created_at: string
+  rating: number
+  comment: string | null
+  artisan_response: string | null
 }
 
 interface Stats {
@@ -69,7 +69,7 @@ export default function AvisRecusPage() {
         // Update local state
         setAvis(prev =>
           prev.map(a =>
-            a.id === reviewId ? { ...a, reponse: replyText.trim() } : a
+            a.id === reviewId ? { ...a, artisan_response: replyText.trim() } : a
           )
         )
         setReplyingTo(null)
@@ -163,23 +163,23 @@ export default function AvisRecusPage() {
                     <div className="flex items-start justify-between mb-3">
                       <div>
                         <div className="flex items-center gap-3 mb-1">
-                          <span className="font-medium text-gray-900">{item.client}</span>
+                          <span className="font-medium text-gray-900">{item.client_name}</span>
                           <div className="flex">
                             {[...Array(5)].map((_, i) => (
                               <Star
                                 key={i}
                                 className={`w-4 h-4 ${
-                                  i < item.note ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                                  i < item.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'
                                 }`}
                               />
                             ))}
                           </div>
                         </div>
                         <p className="text-sm text-gray-500">
-                          {new Date(item.date).toLocaleDateString('fr-FR')}
+                          {new Date(item.created_at).toLocaleDateString('fr-FR')}
                         </p>
                       </div>
-                      {!item.reponse && (
+                      {!item.artisan_response && (
                         <button
                           onClick={() => setReplyingTo(item.id)}
                           className="flex items-center gap-2 text-blue-600 text-sm hover:underline"
@@ -189,7 +189,7 @@ export default function AvisRecusPage() {
                         </button>
                       )}
                     </div>
-                    <p className="text-gray-700 mb-3">{item.commentaire}</p>
+                    <p className="text-gray-700 mb-3">{item.comment}</p>
 
                     {/* Reply form */}
                     {replyingTo === item.id && (
@@ -228,10 +228,10 @@ export default function AvisRecusPage() {
                       </div>
                     )}
 
-                    {item.reponse && (
+                    {item.artisan_response && (
                       <div className="bg-blue-50 rounded-lg p-4 ml-4">
                         <p className="text-sm text-blue-600 font-medium mb-1">Votre réponse :</p>
-                        <p className="text-gray-700 text-sm">{item.reponse}</p>
+                        <p className="text-gray-700 text-sm">{item.artisan_response}</p>
                       </div>
                     )}
                   </div>

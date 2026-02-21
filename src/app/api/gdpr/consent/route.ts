@@ -14,6 +14,7 @@ import { z } from 'zod'
 const consentPostSchema = z.object({
   preferences: z.object({
     necessary: z.boolean(),
+    functional: z.boolean().optional(),
     analytics: z.boolean(),
     marketing: z.boolean(),
     personalization: z.boolean(),
@@ -79,6 +80,7 @@ export async function POST(request: Request) {
       ip_address: ip,
       user_agent: userAgent,
       necessary: preferences.necessary,
+      functional: preferences.functional ?? false,
       analytics: preferences.analytics,
       marketing: preferences.marketing,
       personalization: preferences.personalization,

@@ -198,8 +198,8 @@ export async function GET(
       const [{ data: providerReviews }, { data: faqData }] = await Promise.all([
         supabase
           .from('reviews')
-          .select('id, rating, author_name, content, service_name, source_date, created_at, has_media, author_verified')
-          .eq('provider_id', provider.id)
+          .select('id, rating, client_name, comment, created_at')
+          .eq('artisan_id', provider.id)
           .order('created_at', { ascending: false })
           .limit(100),
         supabase
@@ -364,18 +364,18 @@ export async function GET(
       if (providerReviews && providerReviews.length > 0) {
         reviews = providerReviews.map(r => ({
           id: r.id,
-          author: r.author_name || 'Client',
+          author: r.client_name || 'Client',
           rating: r.rating,
-          date: new Date(r.source_date || r.created_at).toLocaleDateString('fr-FR', {
+          date: new Date(r.created_at).toLocaleDateString('fr-FR', {
             day: 'numeric',
             month: 'long',
             year: 'numeric'
           }),
-          comment: r.content || '', // FIXED: Use 'content' column
-          service: r.service_name || services[0] || 'Prestation',
-          hasPhoto: r.has_media || false,
+          comment: r.comment || '',
+          service: services[0] || 'Prestation',
+          hasPhoto: false,
           photoUrl: null,
-          verified: r.author_verified || false, // FIXED: Use 'author_verified' column
+          verified: false,
         }))
       }
       // NO fake reviews! Return empty array if no real reviews in database
@@ -396,10 +396,7 @@ export async function GET(
         // Récupérer les avis pour ce profil
         const { data: profileReviews } = await supabase
           .from('reviews')
-          .select(`
-            id, rating, comment, service_name, photo_url, is_verified, created_at,
-            client:profiles!reviews_client_id_fkey (full_name)
-          `)
+          .select('id, rating, comment, client_name, created_at')
           .eq('artisan_id', artisanId)
           .order('created_at', { ascending: false })
           .limit(20)
@@ -408,7 +405,7 @@ export async function GET(
         const { data: portfolioData } = await supabase
           .from('portfolio_items')
           .select('id, title, description, image_url, category, created_at')
-          .eq('user_id', artisanId)
+          .eq('artisan_id', artisanId)
           .order('created_at', { ascending: false })
 
         const portfolio = (portfolioData || [])
@@ -434,20 +431,8 @@ export async function GET(
             category: item.category || 'Travaux',
           }))
 
-        // Récupérer la FAQ
-        const { data: faqData } = await supabase
-          .from('artisan_faq')
-          .select('question, answer, sort_order')
-          .eq('user_id', artisanId)
-          .order('sort_order', { ascending: true })
-
-        const faq = (faqData || []).map((item: {
-          question: string
-          answer: string
-        }) => ({
-          question: item.question,
-          answer: item.answer,
-        }))
+        // artisan_faq table does not exist in migrations — return empty
+        const faq: Array<{ question: string; answer: string }> = []
 
         // Calculer la note moyenne
         let averageRating = 0
@@ -497,15 +482,9 @@ export async function GET(
         }
 
         // Transformer les avis
-        reviews = (profileReviews || []).map(r => {
-          // Supabase FK joins return object or array depending on cardinality
-          const clientData = Array.isArray(r.client) ? r.client[0] : r.client
-          const clientName = clientData?.full_name as string | undefined
-          return {
+        reviews = (profileReviews || []).map(r => ({
           id: r.id,
-          author: clientName
-            ? `${clientName.split(' ')[0]} ${clientName.split(' ')[1]?.[0] || ''}.`
-            : 'Client',
+          author: r.client_name || 'Client',
           rating: r.rating,
           date: new Date(r.created_at).toLocaleDateString('fr-FR', {
             day: 'numeric',
@@ -513,12 +492,11 @@ export async function GET(
             year: 'numeric'
           }),
           comment: r.comment || '',
-          service: r.service_name || 'Prestation',
-          hasPhoto: !!r.photo_url,
-          photoUrl: r.photo_url || null,
-          verified: r.is_verified,
-        }
-        })
+          service: 'Prestation',
+          hasPhoto: false,
+          photoUrl: null,
+          verified: false,
+        }))
       }
     }
 

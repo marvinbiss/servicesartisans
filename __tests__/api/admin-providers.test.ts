@@ -422,7 +422,7 @@ describe('GET /api/admin/providers', () => {
         is_active: true,
         rating_average: 3.8,
         review_count: 7,
-        source_api: 'scraping',
+        source: 'scraping',
         siret: '98765432109876',
         specialty: 'Électricité',
       })],
@@ -436,24 +436,21 @@ describe('GET /api/admin/providers', () => {
     }
 
     const provider = result.body.providers[0]
-    // name -> company_name mapping
-    expect(provider.company_name).toBe('Martin Électricité')
-    expect(provider).not.toHaveProperty('name')
+    // Real column names (no remapping)
+    expect(provider.name).toBe('Martin Électricité')
     // Direct field mappings
     expect(provider.email).toBe('martin@example.com')
     expect(provider.phone).toBe('+33698765432')
-    expect(provider.city).toBe('Lyon')
-    expect(provider.region).toBe('Auvergne-Rhône-Alpes')
+    expect(provider.address_city).toBe('Lyon')
+    expect(provider.address_region).toBe('Auvergne-Rhône-Alpes')
     expect(provider.is_verified).toBe(false)
     expect(provider.is_active).toBe(true)
     expect(provider.rating_average).toBe(3.8)
     expect(provider.review_count).toBe(7)
     expect(provider.source).toBe('scraping')
     expect(provider.siret).toBe('98765432109876')
-    // Service type from specialty column
-    expect(provider.service_type).toBe('Électricité')
-    // Hardcoded subscription_type
-    expect(provider.subscription_type).toBe('free')
+    // Specialty column (no remapping to service_type)
+    expect(provider.specialty).toBe('Électricité')
   })
 
   // ------------------------------------------
@@ -582,10 +579,10 @@ describe('GET /api/admin/providers', () => {
 
     const { GET } = await import('@/app/api/admin/providers/route')
     const result = await GET(createMockRequest() as never) as unknown as {
-      body: { providers: Array<{ service_type: string }> }
+      body: { providers: Array<Record<string, unknown>> }
     }
 
-    expect(result.body.providers[0].service_type).toBe('Artisan')
+    expect(result.body.providers[0].specialty).toBe('Artisan')
   })
 
   it('defaults email and phone to empty string when null', async () => {
@@ -603,8 +600,8 @@ describe('GET /api/admin/providers', () => {
     const provider = result.body.providers[0]
     expect(provider.email).toBe('')
     expect(provider.phone).toBe('')
-    expect(provider.city).toBe('')
-    expect(provider.region).toBe('')
+    expect(provider.address_city).toBe('')
+    expect(provider.address_region).toBe('')
   })
 
   it('does not apply or() when search is empty string', async () => {

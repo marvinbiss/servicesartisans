@@ -117,7 +117,7 @@ export default function AdminLeadsPage() {
     setDispatchLoading(true)
     try {
       setMutationError(null)
-      await adminMutate('/api/admin/leads', {
+      await adminMutate('/api/admin/dispatch', {
         method: 'POST',
         body: { leadId },
       })

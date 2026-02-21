@@ -45,10 +45,10 @@ export async function GET(request: NextRequest) {
         *,
         booking:bookings(
           id,
-          service_type,
+          service_name,
           scheduled_date,
-          client:users!bookings_client_id_fkey(full_name, email),
-          provider:providers(business_name)
+          client:profiles!client_id(full_name, email),
+          provider:providers(name)
         )
       `, { count: 'exact' })
 
