@@ -4,6 +4,9 @@ import { services, villes, departements } from '@/lib/data/france'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { getQuartiersByVille } from '@/lib/data/france'
 
+// Must match the BATCH constant used in sitemap.ts
+const BATCH_SIZE = 10_000
+
 /**
  * Sitemap index generator — workaround for Next.js 14.2 not auto-generating
  * the sitemap index at /sitemap.xml when using generateSitemaps().
@@ -21,16 +24,17 @@ export async function GET() {
 
   const emergencySlugs = Object.keys(tradeContent).filter(s => tradeContent[s].emergencyInfo)
   const tradeSlugs = getTradesSlugs()
-  const serviceCityBatches = Math.ceil(services.length * villes.length / 45000)
+  const avisServiceSlugs = Object.keys(tradeContent)
+  const serviceCityBatches = Math.ceil(services.length * villes.length / BATCH_SIZE)
 
   // Phase 1: service × top-300 cities only (conservative crawl budget for new domain).
   // Must match TOP_CITIES_PHASE1 in sitemap.ts.
   const TOP_CITIES_PHASE1 = 300
-  const serviceCitiesBatchCount = Math.ceil(services.length * TOP_CITIES_PHASE1 / 45000)
+  const serviceCitiesBatchCount = Math.ceil(services.length * TOP_CITIES_PHASE1 / BATCH_SIZE)
 
   const ids: string[] = [
     'static',
-    // service × city pages — batched to stay under 45K/50MB sitemap limit
+    // service × city pages — batched to stay under BATCH_SIZE limit
     ...Array.from({ length: serviceCitiesBatchCount }, (_, i) => `service-cities-${i}`),
     'cities',
     'geo',
@@ -39,13 +43,14 @@ export async function GET() {
     'devis-services',
     ...Array.from({ length: serviceCityBatches }, (_, i) => `devis-service-cities-${i}`),
     ...Array.from({ length: sqBatchCount }, (_, i) => `devis-quartiers-${i}`),
-    ...Array.from({ length: Math.ceil(emergencySlugs.length * villes.length / 45000) }, (_, i) => `urgence-service-cities-${i}`),
+    ...Array.from({ length: Math.ceil(emergencySlugs.length * villes.length / BATCH_SIZE) }, (_, i) => `urgence-service-cities-${i}`),
     ...Array.from({ length: serviceCityBatches }, (_, i) => `tarifs-service-cities-${i}`),
     'avis-services',
-    ...Array.from({ length: serviceCityBatches }, (_, i) => `avis-service-cities-${i}`),
+    // avis-service-cities uses tradeContent keys (not services) — use correct count
+    ...Array.from({ length: Math.ceil(avisServiceSlugs.length * villes.length / BATCH_SIZE) }, (_, i) => `avis-service-cities-${i}`),
     'problemes',
-    ...Array.from({ length: Math.ceil(30 * villes.length / 45000) }, (_, i) => `problemes-cities-${i}`),
-    ...Array.from({ length: Math.ceil(departements.length * tradeSlugs.length / 45000) }, (_, i) => `dept-services-${i}`),
+    ...Array.from({ length: Math.ceil(30 * villes.length / BATCH_SIZE) }, (_, i) => `problemes-cities-${i}`),
+    ...Array.from({ length: Math.ceil(departements.length * tradeSlugs.length / BATCH_SIZE) }, (_, i) => `dept-services-${i}`),
     'region-services',
     'guides',
   ]

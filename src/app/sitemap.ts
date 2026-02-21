@@ -272,67 +272,85 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── Devis service×city pages ────────────────────────────────────────
   if (id.startsWith('devis-service-cities-')) {
     const batchIndex = parseInt(id.replace('devis-service-cities-', ''), 10)
-    const batchSize = 45000
-    const offset = batchIndex * batchSize
+    const BATCH = 10_000
+    const start = batchIndex * BATCH
+    const end = start + BATCH
+    const result: MetadataRoute.Sitemap = []
+    let count = 0
 
-    const allUrls: MetadataRoute.Sitemap = []
-    for (const svc of services) {
+    outer: for (const svc of services) {
       for (const ville of villes) {
-        allUrls.push({ url: `${SITE_URL}/devis/${svc.slug}/${ville.slug}` })
+        if (count >= end) break outer
+        if (count >= start) result.push({ url: `${SITE_URL}/devis/${svc.slug}/${ville.slug}` })
+        count++
       }
     }
 
-    return allUrls.slice(offset, offset + batchSize)
+    return result
   }
 
   // ── Devis × Quartier pages ──────────────────────────────────────────
   if (id.startsWith('devis-quartiers-')) {
     const batchIndex = parseInt(id.replace('devis-quartiers-', ''), 10)
-    const batchSize = 45000
-    const offset = batchIndex * batchSize
+    const BATCH = 10_000
+    const start = batchIndex * BATCH
+    const end = start + BATCH
+    const result: MetadataRoute.Sitemap = []
+    let count = 0
 
-    const allUrls: MetadataRoute.Sitemap = []
-    for (const svc of services) {
+    outer: for (const svc of services) {
       for (const ville of villes) {
         const quartiers = getQuartiersByVille(ville.slug)
         for (const q of quartiers) {
-          allUrls.push({ url: `${SITE_URL}/devis/${svc.slug}/${ville.slug}/${q.slug}` })
+          if (count >= end) break outer
+          if (count >= start) result.push({ url: `${SITE_URL}/devis/${svc.slug}/${ville.slug}/${q.slug}` })
+          count++
         }
       }
     }
 
-    return allUrls.slice(offset, offset + batchSize)
+    return result
   }
 
   // ── Urgence service×city pages ──────────────────────────────────────
   if (id.startsWith('urgence-service-cities-')) {
     const batchIndex = parseInt(id.replace('urgence-service-cities-', ''), 10)
-    const BATCH = 45000
+    const BATCH = 10_000
+    const start = batchIndex * BATCH
+    const end = start + BATCH
     const emergencySlugs = Object.keys(tradeContent).filter(s => tradeContent[s].emergencyInfo)
-    const allUrls: MetadataRoute.Sitemap = []
+    const result: MetadataRoute.Sitemap = []
+    let count = 0
 
-    for (const svc of emergencySlugs) {
+    outer: for (const svc of emergencySlugs) {
       for (const v of villes) {
-        allUrls.push({ url: `${SITE_URL}/urgence/${svc}/${v.slug}` })
+        if (count >= end) break outer
+        if (count >= start) result.push({ url: `${SITE_URL}/urgence/${svc}/${v.slug}` })
+        count++
       }
     }
 
-    return allUrls.slice(batchIndex * BATCH, (batchIndex + 1) * BATCH)
+    return result
   }
 
   // ── Tarifs service×city pages ───────────────────────────────────────
   if (id.startsWith('tarifs-service-cities-')) {
     const batchIndex = parseInt(id.replace('tarifs-service-cities-', ''), 10)
-    const BATCH = 45000
-    const allUrls: MetadataRoute.Sitemap = []
+    const BATCH = 10_000
+    const start = batchIndex * BATCH
+    const end = start + BATCH
+    const result: MetadataRoute.Sitemap = []
+    let count = 0
 
-    for (const svc of services) {
+    outer: for (const svc of services) {
       for (const v of villes) {
-        allUrls.push({ url: `${SITE_URL}/tarifs/${svc.slug}/${v.slug}` })
+        if (count >= end) break outer
+        if (count >= start) result.push({ url: `${SITE_URL}/tarifs/${svc.slug}/${v.slug}` })
+        count++
       }
     }
 
-    return allUrls.slice(batchIndex * BATCH, (batchIndex + 1) * BATCH)
+    return result
   }
 
   // ── Avis service hub pages ──────────────────────────────────────────
@@ -347,17 +365,22 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── Avis service×city pages ─────────────────────────────────────────
   if (id.startsWith('avis-service-cities-')) {
     const batchIndex = parseInt(id.replace('avis-service-cities-', ''), 10)
-    const BATCH = 45000
+    const BATCH = 10_000
+    const start = batchIndex * BATCH
+    const end = start + BATCH
     const tradeSlugs = Object.keys(tradeContent)
-    const allUrls: MetadataRoute.Sitemap = []
+    const result: MetadataRoute.Sitemap = []
+    let count = 0
 
-    for (const svc of tradeSlugs) {
+    outer: for (const svc of tradeSlugs) {
       for (const v of villes) {
-        allUrls.push({ url: `${SITE_URL}/avis/${svc}/${v.slug}` })
+        if (count >= end) break outer
+        if (count >= start) result.push({ url: `${SITE_URL}/avis/${svc}/${v.slug}` })
+        count++
       }
     }
 
-    return allUrls.slice(batchIndex * BATCH, (batchIndex + 1) * BATCH)
+    return result
   }
 
   // ── Problemes hub + individual pages ────────────────────────────────
