@@ -19,7 +19,7 @@ const algorithmConfigSchema = z.object({
   weight_reviews: z.number().int().min(0).max(100).optional(),
   weight_verified: z.number().int().min(0).max(100).optional(),
   weight_proximity: z.number().int().min(0).max(100).optional(),
-  weight_response_rate: z.number().int().min(0).max(100).optional(),
+  weight_data_quality: z.number().int().min(0).max(100).optional(),
   cooldown_minutes: z.number().int().min(0).max(1440).optional(),
   daily_lead_quota: z.number().int().min(0).max(1000).optional(),
   monthly_lead_quota: z.number().int().min(0).max(30000).optional(),
@@ -49,7 +49,7 @@ export async function GET() {
     // Essayer d'abord le schema app
     const { data, error } = await supabase
       .from('algorithm_config')
-      .select('id, matching_strategy, max_artisans_per_lead, geo_radius_km, require_same_department, require_specialty_match, specialty_match_mode, weight_rating, weight_reviews, weight_verified, weight_proximity, weight_response_rate, daily_lead_quota, monthly_lead_quota, cooldown_minutes, lead_expiry_hours, quote_expiry_hours, auto_reassign_hours, min_rating, require_verified_urgent, exclude_inactive_days, prefer_claimed, urgency_low_multiplier, urgency_medium_multiplier, urgency_high_multiplier, urgency_emergency_multiplier, updated_at, updated_by')
+      .select('id, matching_strategy, max_artisans_per_lead, geo_radius_km, require_same_department, require_specialty_match, specialty_match_mode, weight_rating, weight_reviews, weight_verified, weight_proximity, weight_data_quality, daily_lead_quota, monthly_lead_quota, cooldown_minutes, lead_expiry_hours, quote_expiry_hours, auto_reassign_hours, min_rating, require_verified_urgent, exclude_inactive_days, prefer_claimed, urgency_low_multiplier, urgency_medium_multiplier, urgency_high_multiplier, urgency_emergency_multiplier, updated_at, updated_by')
       .limit(1)
       .single()
 

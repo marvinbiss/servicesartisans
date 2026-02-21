@@ -70,7 +70,7 @@ export type Database = {
           urgency_high_multiplier: number
           urgency_low_multiplier: number
           urgency_medium_multiplier: number
-          weight_response_rate: number
+          weight_data_quality: number
           weight_proximity: number
           weight_rating: number
           weight_reviews: number
@@ -101,7 +101,7 @@ export type Database = {
           urgency_high_multiplier?: number
           urgency_low_multiplier?: number
           urgency_medium_multiplier?: number
-          weight_response_rate?: number
+          weight_data_quality?: number
           weight_proximity?: number
           weight_rating?: number
           weight_reviews?: number
@@ -132,7 +132,7 @@ export type Database = {
           urgency_high_multiplier?: number
           urgency_low_multiplier?: number
           urgency_medium_multiplier?: number
-          weight_response_rate?: number
+          weight_data_quality?: number
           weight_proximity?: number
           weight_rating?: number
           weight_reviews?: number

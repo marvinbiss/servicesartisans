@@ -22,7 +22,7 @@ export interface AlgorithmConfig {
   weight_reviews: number
   weight_verified: number
   weight_proximity: number
-  weight_response_rate: number
+  weight_data_quality: number
 
   // Quotas
   daily_lead_quota: number
@@ -63,7 +63,7 @@ export const DEFAULT_ALGORITHM_CONFIG: Omit<AlgorithmConfig, 'id' | 'updated_at'
   weight_reviews: 15,
   weight_verified: 20,
   weight_proximity: 25,
-  weight_response_rate: 10,
+  weight_data_quality: 10,
 
   daily_lead_quota: 0,
   monthly_lead_quota: 0,
