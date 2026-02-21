@@ -10,9 +10,31 @@ import { createServerClient } from '@supabase/ssr'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
-// PUT request schema
+// PUT request schema — matches { notifications: {...}, privacy: {...}, display: {...} }
 const preferencesSchema = z.object({
-  preferences: z.record(z.string(), z.unknown()),
+  notifications: z.object({
+    email_booking_confirmation: z.boolean().optional(),
+    email_booking_reminder: z.boolean().optional(),
+    email_marketing: z.boolean().optional(),
+    email_newsletter: z.boolean().optional(),
+    sms_booking_reminder: z.boolean().optional(),
+    sms_marketing: z.boolean().optional(),
+    push_enabled: z.boolean().optional(),
+    push_booking_updates: z.boolean().optional(),
+    push_messages: z.boolean().optional(),
+    push_promotions: z.boolean().optional(),
+  }).optional(),
+  privacy: z.object({
+    profile_public: z.boolean().optional(),
+    show_online_status: z.boolean().optional(),
+    allow_reviews: z.boolean().optional(),
+  }).optional(),
+  display: z.object({
+    language: z.string().optional(),
+    currency: z.string().optional(),
+    theme: z.string().optional(),
+    timezone: z.string().optional(),
+  }).optional(),
 })
 
 const supabaseAdmin = createClient(
@@ -52,15 +74,15 @@ export async function GET() {
       )
     }
 
-    const { data: preferences } = await supabaseAdmin
+    const { data: prefs } = await supabaseAdmin
       .from('user_preferences')
-      .select('user_id, preferences, email_booking_confirmation, email_booking_reminder, email_marketing, email_newsletter, sms_booking_reminder, sms_marketing, push_enabled, push_booking_updates, push_messages, push_promotions, profile_public, show_online_status, allow_reviews, language, currency, theme, timezone, updated_at')
+      .select('user_id, email_booking_confirmation, email_booking_reminder, email_marketing, email_newsletter, sms_booking_reminder, sms_marketing, push_enabled, push_booking_updates, push_messages, push_promotions, profile_public, show_online_status, allow_reviews, language, currency, theme, timezone, updated_at')
       .eq('user_id', user.id)
       .single()
 
     return NextResponse.json({
       userId: user.id,
-      preferences: preferences?.preferences || null,
+      preferences: prefs || null,
     })
   } catch (error) {
     logger.error('Get preferences error:', error)
@@ -106,19 +128,21 @@ export async function PUT(request: Request) {
     if (!result.success) {
       return NextResponse.json({ error: 'Invalid request', details: result.error.flatten() }, { status: 400 })
     }
-    const { preferences } = result.data
+    const { notifications, privacy, display } = result.data
 
-    // Upsert preferences
+    // Map nested structure to flat columns in user_preferences
+    const flatColumns = {
+      user_id: user.id,
+      updated_at: new Date().toISOString(),
+      ...(notifications ?? {}),
+      ...(privacy ?? {}),
+      ...(display ?? {}),
+    }
+
+    // Upsert preferences using flat columns (no ghost 'preferences' jsonb column)
     const { error } = await supabaseAdmin
       .from('user_preferences')
-      .upsert(
-        {
-          user_id: user.id,
-          preferences,
-          updated_at: new Date().toISOString(),
-        },
-        { onConflict: 'user_id' }
-      )
+      .upsert(flatColumns, { onConflict: 'user_id' })
 
     if (error) throw error
 

@@ -56,7 +56,7 @@ export async function GET(
         rescheduled_at,
         payment_status,
         deposit_amount,
-        user_id,
+        client_id,
         slot:availability_slots(
           id,
           date,
@@ -81,7 +81,7 @@ export async function GET(
     // Security check: If user is authenticated, verify they have access to this booking
     // (either as the client who made it, or as the artisan)
     if (user) {
-      const isOwner = booking.user_id === user.id
+      const isOwner = booking.client_id === user.id
       const isArtisan = slot?.artisan_id === user.id
 
       // For authenticated users, they must be the owner or the artisan
@@ -189,7 +189,7 @@ export async function PATCH(
     const adminSupabase = createAdminClient()
     const { data: existingBooking, error: fetchError } = await adminSupabase
       .from('bookings')
-      .select('id, user_id, client_email, slot:availability_slots(artisan_id)')
+      .select('id, client_id, client_email, slot:availability_slots(artisan_id)')
       .eq('id', bookingId)
       .single()
 
@@ -202,7 +202,7 @@ export async function PATCH(
 
     // Check authorization: must be owner or artisan
     const slotData = existingBooking.slot as Array<{ artisan_id: string }> | null
-    const isOwner = existingBooking.user_id === user.id
+    const isOwner = existingBooking.client_id === user.id
     const isArtisan = slotData?.[0]?.artisan_id === user.id
     const isEmailMatch = user.email?.toLowerCase() === existingBooking.client_email?.toLowerCase()
 

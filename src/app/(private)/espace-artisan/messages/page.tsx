@@ -48,7 +48,7 @@ export default function MessagesArtisanPage() {
 
   useEffect(() => {
     if (selectedConversation) {
-      fetchMessages(selectedConversation.partner.id)
+      fetchMessages(selectedConversation.id, selectedConversation.partner.id)
     }
   }, [selectedConversation])
 
@@ -93,9 +93,9 @@ export default function MessagesArtisanPage() {
     }
   }
 
-  const fetchMessages = async (partnerId: string) => {
+  const fetchMessages = async (conversationId: string, partnerId: string) => {
     try {
-      const response = await fetch(`/api/artisan/messages?with=${partnerId}`)
+      const response = await fetch(`/api/artisan/messages?conversation_id=${conversationId}`)
       const data = await response.json()
 
       if (response.ok) {
@@ -132,7 +132,7 @@ export default function MessagesArtisanPage() {
       if (response.ok) {
         setNewMessage('')
         // Refresh messages
-        fetchMessages(selectedConversation.partner.id)
+        fetchMessages(selectedConversation.id, selectedConversation.partner.id)
       }
     } catch (error) {
       console.error('Error sending message:', error)

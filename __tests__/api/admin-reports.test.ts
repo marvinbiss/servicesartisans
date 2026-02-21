@@ -378,11 +378,11 @@ describe('POST /api/admin/reports/[id]/resolve', () => {
     expect(result.body.report).toBeDefined()
     expect(result.body.message).toBe('Signalement résolu')
 
-    // Verify the update call set status = 'resolved'
+    // Verify the update call set status = 'reviewed' (correct DB value)
     const updateCalls = builderCalls.filter(c => c.method === 'update')
     expect(updateCalls.length).toBe(1)
     const updateArg = updateCalls[0].args[0] as Record<string, unknown>
-    expect(updateArg.status).toBe('resolved')
+    expect(updateArg.status).toBe('reviewed')
   })
 
   it('dismisses report successfully (action=dismiss)', async () => {
@@ -452,7 +452,7 @@ describe('POST /api/admin/reports/[id]/resolve', () => {
 
   it('logs admin action on success', async () => {
     const { POST } = await import('@/app/api/admin/reports/[id]/resolve/route')
-    const req = makePostRequest({ action: 'resolve', resolution_notes: 'Confirmed spam' })
+    const req = makePostRequest({ action: 'resolve', resolution: 'Confirmed spam' })
     await POST(req as never, { params: { id: REPORT_ID } })
 
     expect(mockLogAdminAction).toHaveBeenCalledWith(
@@ -460,13 +460,13 @@ describe('POST /api/admin/reports/[id]/resolve', () => {
       'report.resolve',
       'report',
       REPORT_ID,
-      { status: 'resolved', resolution_notes: 'Confirmed spam' }
+      { status: 'reviewed', resolution: 'Confirmed spam' }
     )
   })
 
   it('includes resolution_notes in update payload', async () => {
     const { POST } = await import('@/app/api/admin/reports/[id]/resolve/route')
-    const req = makePostRequest({ action: 'dismiss', resolution_notes: 'Not a valid report' })
+    const req = makePostRequest({ action: 'dismiss', resolution: 'Not a valid report' })
     await POST(req as never, { params: { id: REPORT_ID } })
 
     const updateCalls = builderCalls.filter(c => c.method === 'update')

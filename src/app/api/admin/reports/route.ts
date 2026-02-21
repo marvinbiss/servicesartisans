@@ -8,7 +8,7 @@ import { z } from 'zod'
 const reportsQuerySchema = z.object({
   page: z.coerce.number().int().min(1).optional().default(1),
   limit: z.coerce.number().int().min(1).max(100).optional().default(20),
-  status: z.enum(['all', 'pending', 'reviewed', 'resolved', 'dismissed']).optional().default('all'),
+  status: z.enum(['all', 'pending', 'reviewed', 'dismissed']).optional().default('all'),
   targetType: z.enum(['all', 'user', 'provider', 'review', 'message']).optional().default('all'),
 })
 

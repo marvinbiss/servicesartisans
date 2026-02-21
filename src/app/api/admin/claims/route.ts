@@ -58,7 +58,7 @@ export async function GET(request: NextRequest) {
         id,
         siret_provided,
         status,
-        rejection_reason,
+        notes,
         reviewed_at,
         created_at,
         provider_id,
@@ -168,7 +168,7 @@ export async function PATCH(request: NextRequest) {
         // No row matched: provider was already claimed by another flow — auto-reject
         await supabase
           .from('provider_claims')
-          .update({ status: 'rejected', rejection_reason: 'Fiche déjà attribuée', reviewed_by: authResult.admin.id, reviewed_at: now })
+          .update({ status: 'rejected', notes: 'Fiche déjà attribuée', reviewed_by: authResult.admin.id, reviewed_at: now })
           .eq('id', claimId)
 
         return NextResponse.json(
@@ -217,7 +217,7 @@ export async function PATCH(request: NextRequest) {
         .from('provider_claims')
         .update({
           status: 'rejected',
-          rejection_reason: rejectionReason || null,
+          notes: rejectionReason || null,
           reviewed_by: authResult.admin.id,
           reviewed_at: now,
         })

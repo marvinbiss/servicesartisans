@@ -7,7 +7,7 @@ import { z } from 'zod'
 
 // PATCH request schema
 const updateBookingSchema = z.object({
-  status: z.enum(['pending', 'confirmed', 'completed', 'cancelled', 'no_show']).optional(),
+  status: z.enum(['pending', 'confirmed', 'completed', 'cancelled']).optional(),
   notes: z.string().max(1000).optional(),
   client_name: z.string().max(100).optional(),
   client_email: z.string().email().optional(),

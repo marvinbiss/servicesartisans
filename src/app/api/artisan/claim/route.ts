@@ -153,7 +153,7 @@ export async function POST(request: Request) {
       .insert({
         provider_id: providerId,
         user_id: user.id,
-        siret_provided: normalizedInput,
+        notes: `SIRET fourni: ${normalizedInput}`,
         status: 'pending',
       })
 

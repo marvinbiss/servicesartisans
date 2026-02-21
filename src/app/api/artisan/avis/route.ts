@@ -25,7 +25,7 @@ export async function GET() {
     // Fetch reviews for this artisan — explicit columns only (no fraud/scoring fields)
     const { data: reviews, error: reviewsError } = await supabase
       .from('reviews')
-      .select('id, artisan_id, user_id, rating, comment, artisan_response, artisan_responded_at, client_name, booking_id, created_at, updated_at')
+      .select('id, artisan_id, rating, comment, artisan_response, artisan_responded_at, client_name, booking_id, created_at, updated_at')
       .eq('artisan_id', user!.id)
       .order('created_at', { ascending: false })
       .limit(200)

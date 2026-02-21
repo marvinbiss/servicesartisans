@@ -8,7 +8,7 @@ import { z } from 'zod'
 // POST request schema
 const resolveReportSchema = z.object({
   action: z.enum(['resolve', 'dismiss']),
-  resolution_notes: z.string().max(1000).optional(),
+  resolution: z.string().max(1000).optional(),
 })
 
 export const dynamic = 'force-dynamic'
@@ -41,16 +41,16 @@ export async function POST(
         { status: 400 }
       )
     }
-    const { action, resolution_notes } = result.data
+    const { action, resolution } = result.data
 
-    const newStatus = action === 'resolve' ? 'resolved' : 'dismissed'
+    const newStatus = action === 'resolve' ? 'reviewed' : 'dismissed'
 
     const { data, error } = await supabase
       .from('user_reports')
       .update({
         status: newStatus,
         reviewed_by: authResult.admin.id,
-        resolution: resolution_notes || null,
+        resolution: resolution || null,
         reviewed_at: new Date().toISOString(),
       })
       .eq('id', params.id)
@@ -71,7 +71,7 @@ export async function POST(
       `report.${action}`,
       'report',
       params.id,
-      { status: newStatus, resolution_notes }
+      { status: newStatus, resolution }
     )
 
     return NextResponse.json({
