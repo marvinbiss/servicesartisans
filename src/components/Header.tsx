@@ -13,7 +13,7 @@ import { useMobileMenu } from '@/contexts/MobileMenuContext'
 import { useFavorites } from '@/hooks/useFavorites'
 import QuickSearch from '@/components/search/QuickSearch'
 import { cn } from '@/lib/utils'
-import { villes } from '@/lib/data/france'
+import { villes, regions, departements, services as allServices } from '@/lib/data/france'
 
 // Reverse geocoding for mobile geolocation
 async function getLocationFromCoords(lon: number, lat: number): Promise<string | null> {
@@ -526,7 +526,7 @@ export default function Header() {
                 <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-blue-900 px-8 py-5 flex items-center justify-between">
                   <div>
                     <h3 className="text-white font-heading font-bold text-lg">Tous nos services artisans</h3>
-                    <p className="text-slate-300 text-sm mt-0.5">15 métiers, des milliers d&apos;artisans qualifiés partout en France</p>
+                    <p className="text-slate-300 text-sm mt-0.5">{allServices.length} métiers, des milliers d&apos;artisans qualifiés partout en France</p>
                   </div>
                   <div className="hidden sm:flex items-center gap-3">
                     <div className="flex items-center gap-2 text-sm text-white/80 bg-white/10 px-4 py-2 rounded-lg">
@@ -718,7 +718,7 @@ export default function Header() {
                 <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-blue-900 px-8 py-5 flex items-center justify-between">
                   <div>
                     <h3 className="text-white font-heading font-bold text-lg">Régions de France</h3>
-                    <p className="text-slate-300 text-sm mt-0.5">18 régions, 101 départements couverts</p>
+                    <p className="text-slate-300 text-sm mt-0.5">{regions.length} régions, {departements.length} départements couverts</p>
                   </div>
                   <div className="hidden sm:flex items-center gap-3">
                     <Link

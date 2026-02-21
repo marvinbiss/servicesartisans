@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { MapPin, ArrowRight, Star, Shield, ChevronDown, BadgeCheck, Euro, Clock, Wrench } from 'lucide-react'
 import { getServiceBySlug, getLocationsByService, getProvidersByService, getProviderCountByService } from '@/lib/supabase'
+import { getProviderCount } from '@/lib/data/stats'
 import JsonLd from '@/components/JsonLd'
 import { getServiceSchema, getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { hashCode } from '@/lib/seo/location-content'
@@ -90,8 +91,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const descHash = Math.abs(hashCode(`hub-desc-${serviceSlug}`))
   const descTemplates = [
-    `Trouvez un ${svcLower} parmi 350 000+ artisans référencés. Guide des prix, conseils, FAQ et devis gratuit. 101 départements couverts.`,
-    `Comparez les ${svcLower}s en France : tarifs, avis, certifications. Devis gratuit et sans engagement. 101 départements.`,
+    `Trouvez un ${svcLower} parmi nos artisans référencés. Guide des prix, conseils, FAQ et devis gratuit. ${departements.length} départements couverts.`,
+    `Comparez les ${svcLower}s en France : tarifs, avis, certifications. Devis gratuit et sans engagement. ${departements.length} départements.`,
     `Annuaire de ${svcLower}s vérifiés par SIREN en France. Prix, FAQ et conseils d'experts. Devis gratuit.`,
     `Besoin d'un ${svcLower} ? Consultez notre annuaire national : tarifs indicatifs, artisans référencés, devis gratuit en ligne.`,
     `Guide complet du ${svcLower} en France : prix 2026, conseils, certifications requises. Comparez et demandez un devis.`,
@@ -161,6 +162,7 @@ export default async function ServicePage({ params }: PageProps) {
   let topCities: CityInfo[] = []
   let recentProviders: ServiceProvider[] = []
   let totalProviderCount = 0
+  let totalAllProviders = 0
 
   try {
     service = await getServiceBySlug(serviceSlug)
@@ -169,10 +171,11 @@ export default async function ServicePage({ params }: PageProps) {
   }
 
   // Fetch cities, providers and total count independently — failure in one should not block the other
-  const [citiesResult, providersResult, countResult] = await Promise.allSettled([
+  const [citiesResult, providersResult, countResult, totalCountResult] = await Promise.allSettled([
     getLocationsByService(serviceSlug),
     getProvidersByService(serviceSlug, 12),
     getProviderCountByService(serviceSlug),
+    getProviderCount(),
   ])
   if (citiesResult.status === 'fulfilled') {
     topCities = citiesResult.value || []
@@ -186,6 +189,9 @@ export default async function ServicePage({ params }: PageProps) {
   }
   if (countResult.status === 'fulfilled') {
     totalProviderCount = countResult.value
+  }
+  if (totalCountResult.status === 'fulfilled') {
+    totalAllProviders = totalCountResult.value
   }
 
   // Fallback to static data if DB failed
@@ -297,7 +303,11 @@ export default async function ServicePage({ params }: PageProps) {
           <div className="flex flex-wrap gap-6 md:gap-10 mt-10">
             <div className="flex flex-col">
               <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-amber-500">
-                {totalProviderCount > 0 ? totalProviderCount.toLocaleString('fr-FR') : '743 000+'}
+                {totalProviderCount > 0
+                ? totalProviderCount.toLocaleString('fr-FR')
+                : totalAllProviders > 0
+                  ? `${totalAllProviders.toLocaleString('fr-FR')}+`
+                  : '350 000+'}
               </span>
               <span className="text-sm text-slate-400 mt-1">artisans référencés</span>
             </div>
