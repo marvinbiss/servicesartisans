@@ -8,6 +8,7 @@ import Footer from '@/components/Footer'
 import { MobileMenuProvider } from '@/contexts/MobileMenuContext'
 import { getOrganizationSchema, getWebsiteSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
+import { getProviderCount } from '@/lib/data/stats'
 import GoogleAnalytics from '@/components/GoogleAnalytics'
 import { CompareProviderWrapper } from '@/components/compare/CompareProvider'
 
@@ -127,12 +128,15 @@ export const metadata: Metadata = {
   },
 }
 
+export const revalidate = 3600
+
 export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   const nonce = (await headers()).get('x-nonce') ?? undefined
+  const artisanCount = await getProviderCount()
   return (
     <html lang="fr" className={`scroll-smooth ${inter.variable} ${plusJakarta.variable}`}>
       <head>
@@ -175,7 +179,7 @@ export default async function RootLayout({
           >
             Aller au contenu principal
           </a>
-          <Header />
+          <Header artisanCount={artisanCount} />
           <main id="main-content" className="pb-16 md:pb-0">{children}</main>
           <Footer />
           <CompareBarClient />
