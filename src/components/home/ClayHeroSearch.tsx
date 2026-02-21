@@ -141,7 +141,7 @@ export function ClayHeroSearch() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex items-center gap-3" role="search" aria-label="Rechercher un artisan" onKeyDown={handleKeyDown}>
+    <form onSubmit={handleSubmit} className="flex flex-col md:flex-row items-stretch md:items-center gap-3" role="search" aria-label="Rechercher un artisan" onKeyDown={handleKeyDown}>
       {/* Service input */}
       <div ref={serviceRef} className="relative flex-1 min-w-0">
         <div className="flex items-center gap-2.5 bg-white border border-stone-200 rounded-2xl px-4 h-[60px] focus-within:border-clay-400 focus-within:ring-2 focus-within:ring-clay-400/20 transition-all">
@@ -229,7 +229,7 @@ export function ClayHeroSearch() {
       {/* Submit */}
       <button
         type="submit"
-        className="bg-clay-400 hover:bg-clay-600 text-white font-bold text-base px-7 h-[60px] rounded-2xl shrink-0 transition-colors duration-200"
+        className="bg-clay-400 hover:bg-clay-600 text-white font-bold text-base px-7 h-[60px] rounded-2xl shrink-0 transition-colors duration-200 w-full md:w-auto"
       >
         Trouver
       </button>

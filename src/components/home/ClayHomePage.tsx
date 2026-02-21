@@ -165,7 +165,7 @@ export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
           style={{ background: 'linear-gradient(to bottom,rgba(10,8,5,.85) 0%,rgba(10,8,5,.5) 100%)' }}
         />
 
-        <div className="relative z-10 max-w-3xl mx-auto px-6 md:px-10 w-full text-center">
+        <div className="relative z-10 max-w-3xl mx-auto px-4 md:px-10 w-full text-center">
           <div
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-7 text-xs font-bold tracking-[.06em] uppercase"
             style={{ background: 'rgba(232,107,75,.15)', border: '1px solid rgba(232,107,75,.35)', color: '#FFB49A' }}
