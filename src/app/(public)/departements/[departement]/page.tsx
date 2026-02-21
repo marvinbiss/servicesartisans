@@ -7,6 +7,7 @@ import JsonLd from '@/components/JsonLd'
 import { SITE_URL } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { departements, getDepartementBySlug, getVillesByDepartement, services, getRegionSlugByName } from '@/lib/data/france'
+import { getProviderCountByDepartment, formatProviderCount } from '@/lib/data/stats'
 import { getDepartmentImage } from '@/lib/data/images'
 import { generateDepartementContent, hashCode } from '@/lib/seo/location-content'
 import { Thermometer, Home, TrendingUp, AlertTriangle } from 'lucide-react'
@@ -33,6 +34,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!dept) return { title: 'Département non trouvé' }
 
   const metaContent = generateDepartementContent(dept)
+  const artisanCount = await getProviderCountByDepartment(dept.name)
 
   const titleHash = Math.abs(hashCode(`title-dept-${dept.slug}`))
   const titleTemplates = [
@@ -45,12 +47,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
   const descHash = Math.abs(hashCode(`desc-dept-${dept.slug}`))
+  const artisanStr = artisanCount > 0 ? `${formatProviderCount(artisanCount)} artisans, ` : ''
   const descTemplates = [
-    `Trouvez des artisans qualifiés dans le ${dept.name} (${dept.code}). ${metaContent.profile.climateLabel}, ${services.length} corps de métier. Devis gratuit.`,
-    `${dept.name} : annuaire d'artisans référencés SIREN. ${metaContent.profile.housingLabel}, ${metaContent.profile.climateLabel.toLowerCase()}. Comparez les devis.`,
-    `Artisans en ${dept.name} (${dept.code}), ${dept.region}. ${dept.population} hab., chef-lieu ${dept.chefLieu}. Devis gratuits en ligne.`,
-    `${services.length} corps de métier dans le ${dept.name}. ${metaContent.profile.economyLabel}, ${metaContent.profile.housingLabel.toLowerCase()}. Devis gratuit.`,
-    `Tous les artisans du ${dept.name} (${dept.code}). ${metaContent.profile.climateLabel}, ${metaContent.profile.economyLabel.toLowerCase()}. Comparez gratuitement.`,
+    `Trouvez des artisans qualifiés dans le ${dept.name} (${dept.code}). ${artisanStr}${metaContent.profile.climateLabel}, ${services.length} corps de métier. Devis gratuit.`,
+    `${dept.name} : ${artisanStr}annuaire d'artisans référencés SIREN. ${metaContent.profile.housingLabel}, ${metaContent.profile.climateLabel.toLowerCase()}. Comparez les devis.`,
+    `Artisans en ${dept.name} (${dept.code}), ${dept.region}. ${artisanStr}${dept.population} hab., chef-lieu ${dept.chefLieu}. Devis gratuits en ligne.`,
+    `${artisanStr}${services.length} corps de métier dans le ${dept.name}. ${metaContent.profile.economyLabel}, ${metaContent.profile.housingLabel.toLowerCase()}. Devis gratuit.`,
+    `Tous les artisans du ${dept.name} (${dept.code}). ${artisanStr}${metaContent.profile.climateLabel}, ${metaContent.profile.economyLabel.toLowerCase()}. Comparez gratuitement.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
@@ -84,6 +87,7 @@ export default async function DepartementPage({ params }: PageProps) {
 
   const villesDuDepartement = getVillesByDepartement(dept.code)
   const content = generateDepartementContent(dept)
+  const deptArtisanCount = await getProviderCountByDepartment(dept.name)
 
   // Other departments in the same region
   const siblingDepts = departements.filter(
@@ -192,6 +196,12 @@ export default async function DepartementPage({ params }: PageProps) {
 
             {/* Location info */}
             <div className="flex flex-wrap gap-4 mb-8 text-sm">
+              {deptArtisanCount > 0 && (
+                <div className="flex items-center gap-2 text-slate-300">
+                  <Users className="w-4 h-4 text-amber-400" />
+                  <span>{formatProviderCount(deptArtisanCount)} artisan{deptArtisanCount > 1 ? 's' : ''}</span>
+                </div>
+              )}
               <div className="flex items-center gap-2 text-slate-300">
                 <Building2 className="w-4 h-4 text-indigo-400" />
                 <span>Chef-lieu : {dept.chefLieu}</span>
@@ -202,7 +212,7 @@ export default async function DepartementPage({ params }: PageProps) {
               </div>
               <div className="flex items-center gap-2 text-slate-300">
                 <MapPin className="w-4 h-4 text-indigo-400" />
-                <span>{dept.villes.length} villes principales</span>
+                <span>{villesDuDepartement.length || dept.villes.length} ville{(villesDuDepartement.length || dept.villes.length) > 1 ? 's' : ''} couvertes</span>
               </div>
             </div>
 

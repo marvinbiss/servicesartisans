@@ -131,7 +131,7 @@ function AnimatedHeadingLine({ text, className }: { text: string; className?: st
 }
 
 // ── Main Hero Component ───────────────────────────────────────────────
-export function HeroSection() {
+export function HeroSection({ artisanCount = 0 }: { artisanCount?: number }) {
   return (
     <>
       {/* ── HERO SECTION ────────────────────────────────────── */}
@@ -234,7 +234,7 @@ export function HeroSection() {
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400" />
                 </span>
                 <span className="text-sm text-white/80 font-medium">
-                  350 000+ artisans référencés en France
+                  {artisanCount > 0 ? `${artisanCount.toLocaleString('fr-FR')} artisans référencés en France` : '350 000+ artisans référencés en France'}
                 </span>
               </div>
             </motion.div>
@@ -299,7 +299,7 @@ export function HeroSection() {
               className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 max-w-3xl mx-auto"
             >
               {[
-                { value: 350000, suffix: '+', label: 'artisans' },
+                { value: artisanCount, suffix: '', label: 'artisans' },
                 { value: villes.length, suffix: '', label: 'villes' },
                 { value: departements.length, suffix: '', label: 'départements' },
                 { value: services.length, suffix: '', label: 'métiers' },
@@ -376,7 +376,7 @@ export function HeroSection() {
               </div>
               <div>
                 <div className="font-semibold text-slate-900 text-sm">
-                  50+ corps de métier
+                  {services.length} corps de métier
                 </div>
                 <div className="text-xs text-slate-500">
                   Tous les métiers du bâtiment

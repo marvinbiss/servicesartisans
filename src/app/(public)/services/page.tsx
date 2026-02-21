@@ -27,13 +27,13 @@ export const revalidate = REVALIDATE.services
 
 export const metadata: Metadata = {
   title: 'Tous les services artisans — 350 000+ professionnels référencés',
-  description: 'Annuaire de 350 000+ artisans référencés : plombier, électricien, serrurier, chauffagiste, peintre, couvreur, menuisier, maçon et 50+ métiers. Devis gratuits dans 101 départements.',
+  description: `Annuaire de 350 000+ artisans référencés : plombier, électricien, serrurier, chauffagiste, peintre, couvreur, menuisier, maçon et ${staticServicesList.length} métiers. Devis gratuits dans 101 départements.`,
   alternates: {
     canonical: `${SITE_URL}/services`,
   },
   openGraph: {
     title: 'Tous les services artisans — 350 000+ professionnels référencés',
-    description: '50+ métiers du bâtiment, 350 000+ artisans référencés dans 101 départements. Trouvez un professionnel qualifié près de chez vous.',
+    description: `${staticServicesList.length} métiers du bâtiment, 350 000+ artisans référencés dans 101 départements. Trouvez un professionnel qualifié près de chez vous.`,
     url: `${SITE_URL}/services`,
     images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Tous les services artisans' }],
   },
@@ -245,7 +245,7 @@ export default async function ServicesPage() {
           {/* Trust badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 mb-6">
             <Award className="w-4 h-4 text-amber-400" />
-            <span className="text-sm font-medium text-white/90">50+ métiers du bâtiment</span>
+            <span className="text-sm font-medium text-white/90">{staticServicesList.length} métiers du bâtiment</span>
           </div>
 
           <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight">

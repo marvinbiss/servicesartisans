@@ -15,6 +15,7 @@ import {
   popularCities,
   popularRegions
 } from '@/lib/constants/navigation'
+import { villes, services, regions } from '@/lib/data/france'
 
 // Re-export for backward compatibility
 export { popularCities, popularRegions }
@@ -71,7 +72,7 @@ export function PopularServicesLinks({
         href="/services"
         className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3"
       >
-        47 métiers d&apos;artisanat <ArrowRight className="w-4 h-4" />
+        {services.length} métiers d&apos;artisanat <ArrowRight className="w-4 h-4" />
       </Link>
     </div>
   )
@@ -110,7 +111,7 @@ export function PopularCitiesLinks({
         href="/villes"
         className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3"
       >
-        Artisans dans 2 280 villes <ArrowRight className="w-4 h-4" />
+        Artisans dans {villes.length} villes <ArrowRight className="w-4 h-4" />
       </Link>
     </div>
   )
@@ -129,7 +130,7 @@ export function GeographicNavigation({ className = '' }: { className?: string })
         </div>
         <div>
           <div className="font-semibold text-gray-900 group-hover:text-blue-600">Par région</div>
-          <div className="text-sm text-gray-500">13 régions</div>
+          <div className="text-sm text-gray-500">{regions.length} régions</div>
         </div>
       </Link>
       <Link
@@ -153,7 +154,7 @@ export function GeographicNavigation({ className = '' }: { className?: string })
         </div>
         <div>
           <div className="font-semibold text-gray-900 group-hover:text-amber-600">Par ville</div>
-          <div className="text-sm text-gray-500">500+ villes</div>
+          <div className="text-sm text-gray-500">{villes.length} villes</div>
         </div>
       </Link>
     </div>
@@ -243,10 +244,10 @@ export function QuickSiteLinks({ className = '' }: { className?: string }) {
           Accueil
         </Link>
         <Link href="/services" className="text-gray-600 hover:text-blue-600 py-1">
-          47 métiers d&apos;artisanat
+          {services.length} métiers d&apos;artisanat
         </Link>
         <Link href="/villes" className="text-gray-600 hover:text-blue-600 py-1">
-          2 280 villes de France
+          {villes.length} villes de France
         </Link>
         <Link href="/regions" className="text-gray-600 hover:text-blue-600 py-1">
           Par région

@@ -12,6 +12,7 @@ import {
 } from 'lucide-react'
 import { getServiceImage, testimonialImages, beforeAfterPairs, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { getAvatarColor, getInitials } from '@/lib/utils'
+import { services as allServicesFromFrance } from '@/lib/data/france'
 
 // ─── ANIMATION VARIANTS ────────────────────────────────────────
 
@@ -65,7 +66,7 @@ export function ServicesShowcase() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50 text-blue-600 rounded-full text-sm font-medium mb-5">
             <Wrench className="w-3.5 h-3.5" />
-            50+ métiers disponibles
+            {allServicesFromFrance.length} métiers disponibles
           </div>
           <h2 className="font-heading text-3xl md:text-[2.5rem] font-bold text-slate-900 mb-4 tracking-tight">
             <span className="inline-block w-2 h-2 rounded-full bg-amber-400 mr-3 mb-1" />

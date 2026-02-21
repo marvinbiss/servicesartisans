@@ -14,31 +14,41 @@ import { GeographicSectionWrapper } from '@/components/home/GeographicSectionWra
 import { ScrollReveal, StaggerGrid, StaggerItem, SectionDivider } from '@/components/ui'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
+import { getProviderCount, formatProviderCount } from '@/lib/data/stats'
 
-export const metadata: Metadata = {
-  title: 'ServicesArtisans — 350 000+ artisans référencés en France',
-  description:
-    'Le plus grand annuaire d\'artisans de France. 350 000+ professionnels référencés, 101 départements couverts. Comparez les avis, obtenez des devis gratuits. Plombiers, électriciens, menuisiers et plus.',
-  alternates: { canonical: SITE_URL },
-  openGraph: {
-    title: 'ServicesArtisans — 350 000+ artisans référencés en France',
+export const revalidate = 3600 // Rafraîchit les stats toutes les heures
+
+export async function generateMetadata(): Promise<Metadata> {
+  const count = await getProviderCount()
+  const countStr = count > 0 ? `${formatProviderCount(count)}+` : '350 000+'
+  return {
+    title: `ServicesArtisans — ${countStr} artisans référencés en France`,
     description:
-      'Le plus grand annuaire d\'artisans de France. 350 000+ professionnels référencés dans 101 départements. Devis gratuits.',
-    type: 'website',
-    url: SITE_URL,
-    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Annuaire des artisans en France' }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'ServicesArtisans — 350 000+ artisans référencés en France',
-    description:
-      'Le plus grand annuaire d\'artisans de France. 350 000+ professionnels référencés dans 101 départements. Devis gratuits.',
-    images: [`${SITE_URL}/opengraph-image`],
-  },
+      `Le plus grand annuaire d'artisans de France. ${countStr} professionnels référencés, 101 départements couverts. Comparez les avis, obtenez des devis gratuits. Plombiers, électriciens, menuisiers et plus.`,
+    alternates: { canonical: SITE_URL },
+    openGraph: {
+      title: `ServicesArtisans — ${countStr} artisans référencés en France`,
+      description:
+        `Le plus grand annuaire d'artisans de France. ${countStr} professionnels référencés dans 101 départements. Devis gratuits.`,
+      type: 'website',
+      url: SITE_URL,
+      images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Annuaire des artisans en France' }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `ServicesArtisans — ${countStr} artisans référencés en France`,
+      description:
+        `Le plus grand annuaire d'artisans de France. ${countStr} professionnels référencés dans 101 départements. Devis gratuits.`,
+      images: [`${SITE_URL}/opengraph-image`],
+    },
+  }
 }
 
 export default async function HomePage() {
-  const cmsPage = await getPageContent('homepage', 'homepage')
+  const [cmsPage, artisanCount] = await Promise.all([
+    getPageContent('homepage', 'homepage'),
+    getProviderCount(),
+  ])
 
   if (cmsPage?.content_html) {
     return (
@@ -65,7 +75,7 @@ export default async function HomePage() {
       </h1>
 
       {/* ─── HERO + TRUST BAR ────────────────────────────────── */}
-      <HeroSection />
+      <HeroSection artisanCount={artisanCount} />
 
       {/* ─── SERVICES ─────────────────────────────────────────── */}
       <ScrollReveal direction="up">

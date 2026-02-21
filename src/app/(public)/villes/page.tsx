@@ -9,11 +9,11 @@ import { CmsContent } from '@/components/CmsContent'
 
 export const metadata: Metadata = {
   title: 'Artisans par ville — 350 000+ professionnels',
-  description: 'Trouvez un artisan référencé dans votre ville. Plus de 1 000 villes couvertes, 350 000+ professionnels dans 101 départements. Devis gratuits, sans engagement.',
+  description: `Trouvez un artisan référencé dans votre ville. ${villes.length} villes couvertes, 350 000+ professionnels dans 101 départements. Devis gratuits, sans engagement.`,
   alternates: { canonical: `${SITE_URL}/villes` },
   openGraph: {
     title: 'Artisans par ville — 350 000+ professionnels',
-    description: 'Trouvez un artisan référencé dans votre ville. Plus de 1 000 villes couvertes, 350 000+ professionnels dans 101 départements.',
+    description: `Trouvez un artisan référencé dans votre ville. ${villes.length} villes couvertes, 350 000+ professionnels dans 101 départements.`,
     url: `${SITE_URL}/villes`,
     type: 'website',
     images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Artisans par ville' }],
@@ -62,7 +62,7 @@ export default async function VillesIndexPage() {
         '@context': 'https://schema.org',
         '@type': 'CollectionPage',
         name: 'Artisans par ville en France',
-        description: 'Annuaire de 350 000+ artisans référencés dans plus de 1 000 villes de France.',
+        description: `Annuaire de 350 000+ artisans référencés dans ${villes.length} villes de France.`,
         url: `${SITE_URL}/villes`,
         numberOfItems: villes.length,
         isPartOf: { '@type': 'WebSite', name: 'ServicesArtisans', url: SITE_URL },
@@ -130,7 +130,7 @@ export default async function VillesIndexPage() {
             <div className="flex items-center gap-3 px-5 py-3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/10">
               <Building2 className="w-5 h-5 text-blue-400" />
               <div className="text-left">
-                <div className="text-xl font-bold text-white">101</div>
+                <div className="text-xl font-bold text-white">{departements.length}</div>
                 <div className="text-xs text-slate-400">Départements</div>
               </div>
             </div>

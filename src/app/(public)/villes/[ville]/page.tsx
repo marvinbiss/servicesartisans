@@ -495,7 +495,7 @@ export default async function VillePage({ params }: PageProps) {
                 ))}
               </div>
               <Link href="/services" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
-                47 métiers d&apos;artisanat <ArrowRight className="w-4 h-4" />
+                {services.length} métiers d&apos;artisanat <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
 

@@ -6,7 +6,8 @@ import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
-import { regions, getRegionBySlug, services as allServices } from '@/lib/data/france'
+import { regions, getRegionBySlug, services as allServices, getVillesByDepartement } from '@/lib/data/france'
+import { getProviderCountByRegion, formatProviderCount } from '@/lib/data/stats'
 import { getRegionImage } from '@/lib/data/images'
 import { generateRegionContent, hashCode } from '@/lib/seo/location-content'
 import { Thermometer, TrendingUp, AlertTriangle, Mountain } from 'lucide-react'
@@ -34,7 +35,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const metaContent = generateRegionContent(region)
   const deptCount = region.departments.length
-  const cityCount = region.departments.reduce((acc, d) => acc + d.cities.length, 0)
+  const cityCount = region.departments.reduce((acc, d) => acc + getVillesByDepartement(d.code).length, 0)
+  const artisanCount = await getProviderCountByRegion(region.name)
 
   const titleHash = Math.abs(hashCode(`title-region-${region.slug}`))
   const titleTemplates = [
@@ -47,12 +49,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
   const descHash = Math.abs(hashCode(`desc-region-${region.slug}`))
+  const artisanStr = artisanCount > 0 ? `${formatProviderCount(artisanCount)} artisans, ` : ''
   const descTemplates = [
-    `Trouvez un artisan en ${region.name}. ${metaContent.profile.climateLabel}, ${deptCount} départements, ${cityCount} villes. Devis gratuits.`,
-    `${region.name} : annuaire d'artisans référencés SIREN. ${metaContent.profile.geoLabel}, ${metaContent.profile.climateLabel.toLowerCase()}. Comparez les devis.`,
-    `Artisans en ${region.name} : ${cityCount} villes couvertes, ${allServices.length} corps de métier. ${metaContent.profile.economyLabel}. Devis gratuit.`,
-    `Tous les artisans de ${region.name}. ${deptCount} départements, ${metaContent.profile.geoLabel.toLowerCase()}. Comparez gratuitement.`,
-    `${region.name} — ${deptCount} dép., ${cityCount} villes. ${metaContent.profile.climateLabel}, artisans qualifiés. Devis gratuits en ligne.`,
+    `Trouvez un artisan en ${region.name}. ${artisanStr}${deptCount} départements, ${cityCount} villes. Devis gratuits.`,
+    `${region.name} : ${artisanStr}annuaire d'artisans référencés SIREN. ${metaContent.profile.geoLabel}, ${metaContent.profile.climateLabel.toLowerCase()}. Comparez les devis.`,
+    `Artisans en ${region.name} : ${cityCount} villes couvertes, ${allServices.length} corps de métier. ${artisanStr}${metaContent.profile.economyLabel}. Devis gratuit.`,
+    `Tous les artisans de ${region.name}. ${artisanStr}${deptCount} départements, ${metaContent.profile.geoLabel.toLowerCase()}. Comparez gratuitement.`,
+    `${region.name} — ${deptCount} dép., ${cityCount} villes${artisanCount > 0 ? `, ${formatProviderCount(artisanCount)} artisans` : ''}. ${metaContent.profile.climateLabel}. Devis gratuits en ligne.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
@@ -86,8 +89,9 @@ export default async function RegionPage({ params }: PageProps) {
 
   const content = generateRegionContent(region)
   const deptCount = region.departments.length
-  const cityCount = region.departments.reduce((acc, d) => acc + d.cities.length, 0)
-  const allCities = region.departments.flatMap(dept => dept.cities)
+  const allCities = region.departments.flatMap(dept => getVillesByDepartement(dept.code))
+  const cityCount = allCities.length
+  const regionArtisanCount = await getProviderCountByRegion(region.name)
 
   // Reorder services by climate-based priority
   const topServiceSlugsSet = new Set(content.profile.topServiceSlugs.slice(0, 5))
@@ -182,6 +186,12 @@ export default async function RegionPage({ params }: PageProps) {
 
             {/* Stats badges */}
             <div className="flex flex-wrap gap-4 mb-8 text-sm">
+              {regionArtisanCount > 0 && (
+                <div className="flex items-center gap-2 text-slate-300">
+                  <Users className="w-4 h-4 text-amber-400" />
+                  <span>{formatProviderCount(regionArtisanCount)} artisan{regionArtisanCount > 1 ? 's' : ''}</span>
+                </div>
+              )}
               <div className="flex items-center gap-2 text-slate-300">
                 <Building2 className="w-4 h-4 text-slate-400" />
                 <span>{deptCount} département{deptCount > 1 ? 's' : ''}</span>
@@ -258,7 +268,9 @@ export default async function RegionPage({ params }: PageProps) {
               </div>
               <div className="bg-amber-50 rounded-xl p-4">
                 <div className="text-xs font-semibold text-amber-700 uppercase tracking-wider mb-1">Couverture</div>
-                <div className="text-sm text-slate-800 font-medium">{deptCount} dép. · {cityCount} villes</div>
+                <div className="text-sm text-slate-800 font-medium">
+                  {regionArtisanCount > 0 ? `${formatProviderCount(regionArtisanCount)} artisans · ` : ''}{deptCount} dép. · {cityCount} villes
+                </div>
               </div>
             </div>
             <div className="mb-6">

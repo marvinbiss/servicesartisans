@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { MapPin, ArrowRight, Users, Building2, ChevronRight, Globe } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { SITE_URL } from '@/lib/seo/config'
-import { regions, departements, villes, services } from '@/lib/data/france'
+import { regions, departements, villes, services, getVillesByDepartement } from '@/lib/data/france'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 
@@ -149,7 +149,7 @@ export default async function RegionsIndexPage() {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
           {regions.map((region) => {
             const deptCount = region.departments.length
-            const cityCount = region.departments.reduce((acc, d) => acc + d.cities.length, 0)
+            const cityCount = region.departments.reduce((acc, d) => acc + getVillesByDepartement(d.code).length, 0)
 
             return (
               <Link
@@ -183,14 +183,14 @@ export default async function RegionsIndexPage() {
 
                 {/* Preview cities */}
                 <div className="flex flex-wrap gap-1.5 mt-4 pt-4 border-t border-gray-100">
-                  {region.departments.flatMap(d => d.cities).slice(0, 4).map((city) => (
+                  {region.departments.flatMap(d => getVillesByDepartement(d.code)).slice(0, 4).map((city) => (
                     <span key={city.slug} className="text-xs bg-gray-100 text-slate-600 px-2.5 py-1 rounded-full group-hover:bg-slate-100 group-hover:text-slate-800 transition-colors">
                       {city.name}
                     </span>
                   ))}
-                  {region.departments.flatMap(d => d.cities).length > 4 && (
+                  {cityCount > 4 && (
                     <span className="text-xs text-slate-400 px-2 py-1">
-                      +{region.departments.flatMap(d => d.cities).length - 4}
+                      +{cityCount - 4}
                     </span>
                   )}
                 </div>

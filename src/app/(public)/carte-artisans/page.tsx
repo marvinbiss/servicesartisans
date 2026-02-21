@@ -5,6 +5,7 @@ import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getOrganizationSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { Loader2 } from 'lucide-react'
+import { services } from '@/lib/data/france'
 
 // Dynamic import of the map client component (Leaflet is SSR-incompatible)
 const CarteClient = dynamic(() => import('./CarteClient'), {
@@ -111,7 +112,7 @@ export default function CarteArtisansPage() {
               </div>
               <div className="text-center">
                 <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl font-bold text-green-600">50+</span>
+                  <span className="text-2xl font-bold text-green-600">{services.length}</span>
                 </div>
                 <h3 className="font-semibold text-gray-900 mb-2">Métiers du bâtiment</h3>
                 <p className="text-sm text-gray-600">

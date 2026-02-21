@@ -13,6 +13,7 @@ import { useMobileMenu } from '@/contexts/MobileMenuContext'
 import { useFavorites } from '@/hooks/useFavorites'
 import QuickSearch from '@/components/search/QuickSearch'
 import { cn } from '@/lib/utils'
+import { villes } from '@/lib/data/france'
 
 // Reverse geocoding for mobile geolocation
 async function getLocationFromCoords(lon: number, lat: number): Promise<string | null> {
@@ -626,7 +627,7 @@ export default function Header() {
                 <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-blue-900 px-8 py-5 flex items-center justify-between">
                   <div>
                     <h3 className="text-white font-heading font-bold text-lg">Trouvez un artisan par ville</h3>
-                    <p className="text-slate-300 text-sm mt-0.5">Plus de 1 000 villes couvertes dans toute la France</p>
+                    <p className="text-slate-300 text-sm mt-0.5">{villes.length} villes couvertes dans toute la France</p>
                   </div>
                   <div className="hidden sm:flex items-center gap-3">
                     <Link
