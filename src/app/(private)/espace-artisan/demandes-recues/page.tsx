@@ -100,12 +100,12 @@ export default function DemandesRecuesPage() {
       try {
         const response = await fetch('/api/artisan/stats')
         const data = await response.json()
-        if (response.ok && data.profile) {
+        if (response.ok && data.provider) {
           const url = getArtisanUrl({
-            stable_id: data.profile.stable_id ?? null,
-            slug: data.profile.slug ?? null,
-            specialty: data.profile.specialty ?? null,
-            city: data.profile.address_city ?? null,
+            stable_id: data.provider.stable_id ?? null,
+            slug: data.provider.slug ?? null,
+            specialty: data.provider.specialty ?? null,
+            city: data.provider.address_city ?? null,
           })
           setPublicUrl(url)
         }
@@ -142,14 +142,17 @@ export default function DemandesRecuesPage() {
 
     setSubmitting(true)
     try {
+      const validUntil = new Date()
+      validUntil.setDate(validUntil.getDate() + devisForm.validity_days)
+
       const response = await fetch('/api/artisan/devis', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          devis_request_id: selectedLead.lead.id,
+          request_id: selectedLead.lead.id,
           amount: parseFloat(devisForm.amount),
           description: devisForm.description,
-          validity_days: devisForm.validity_days,
+          valid_until: validUntil.toISOString(),
         }),
       })
 

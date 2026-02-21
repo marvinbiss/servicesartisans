@@ -68,7 +68,7 @@ export async function GET(request: Request) {
     // Step 1: get provider record for this user
     const { data: providerForUnread } = await supabase
       .from('providers')
-      .select('id')
+      .select('id, stable_id, slug, specialty, address_city')
       .eq('user_id', user.id)
       .single()
 
@@ -170,6 +170,7 @@ export async function GET(request: Request) {
     return NextResponse.json({
       stats,
       profile,
+      provider: providerForUnread || null,
       recentDemandes: recentDemandes || [],
     })
   } catch (error) {
@@ -192,7 +193,7 @@ async function getLegacyStats(
   // Get provider record to scope unread messages correctly
   const { data: legacyProvider } = await supabase
     .from('providers')
-    .select('id')
+    .select('id, stable_id, slug, specialty, address_city')
     .eq('user_id', user.id)
     .single()
 
@@ -291,6 +292,7 @@ async function getLegacyStats(
   return NextResponse.json({
     stats,
     profile,
+    provider: legacyProvider || null,
     recentDemandes: recentDemandes || [],
   })
 }

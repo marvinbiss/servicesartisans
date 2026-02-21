@@ -123,6 +123,11 @@ export async function POST(request: Request) {
       // Continue even if DB fails - we'll still send emails
     }
 
+    // Log 'created' event — triggers "Demande bien reçue" notification to client
+    if (lead) {
+      logLeadEvent(lead.id, 'created', { actorId: clientId ?? undefined }).catch(() => {})
+    }
+
     // Dispatch to eligible artisans
     let assignedProviders: string[] = []
     if (lead) {

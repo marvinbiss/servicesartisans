@@ -8,12 +8,13 @@ import { fr } from 'date-fns/locale'
 
 interface Notification {
   id: string
-  type: 'booking' | 'message' | 'review' | 'quote' | 'system'
+  type: 'lead_created' | 'lead_dispatched' | 'lead_viewed' | 'quote_received' | 'lead_closed' | 'system'
   title: string
   message: string
   read: boolean
   link?: string
   created_at: string
+  metadata?: Record<string, unknown>
 }
 
 interface NotificationBellProps {
@@ -74,14 +75,18 @@ export function NotificationBell({ userId }: NotificationBellProps) {
 
   const getNotificationIcon = (type: Notification['type']) => {
     switch (type) {
-      case 'booking':
-        return '📅'
-      case 'message':
-        return '💬'
-      case 'review':
-        return '⭐'
-      case 'quote':
+      case 'lead_created':
+        return '📝'
+      case 'lead_dispatched':
+        return '📤'
+      case 'lead_viewed':
+        return '👁️'
+      case 'quote_received':
         return '📋'
+      case 'lead_closed':
+        return '✅'
+      case 'system':
+        return '🔔'
       default:
         return '🔔'
     }

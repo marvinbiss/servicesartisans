@@ -81,6 +81,9 @@ export async function submitLead(
       return { success: false, error: 'Erreur lors de l\'envoi. Reessayez.' }
     }
 
+    // Log 'created' event — triggers "Demande bien reçue" notification to client
+    logLeadEvent(inserted.id, 'created', { actorId: user?.id ?? undefined }).catch(() => {})
+
     if (data.providerId) {
       const adminClient = createAdminClient()
       const { error: assignError } = await adminClient.from('lead_assignments').insert({

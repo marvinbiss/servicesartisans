@@ -55,6 +55,8 @@ const EVENT_CONFIG: Record<string, {
   dispatched: { channels: ['email', 'in_app'], targetRoles: ['artisan'] },
   viewed:     { channels: ['in_app'],          targetRoles: ['client'] },
   quoted:     { channels: ['email', 'in_app'], targetRoles: ['client'] },
+  accepted:   { channels: ['email', 'in_app'], targetRoles: ['artisan'] },
+  refused:    { channels: ['in_app'],          targetRoles: ['artisan'] },
   completed:  { channels: ['email', 'in_app'], targetRoles: ['client', 'artisan'] },
   expired:    { channels: ['email', 'in_app'], targetRoles: ['client', 'artisan'] },
 }
@@ -285,6 +287,34 @@ function buildNotificationSpec(
         }),
       }
     }
+
+    case 'accepted':
+      return {
+        type: 'lead_closed',
+        title: 'Devis accepté !',
+        message: `${lead.client_name} a accepté votre devis pour "${lead.service_name}".`,
+        link: '/espace-artisan/leads',
+        emailSubject: `Devis accepté – ${lead.service_name}`,
+        emailHtml: emailTemplate({
+          heading: 'Votre devis a été accepté',
+          color: '#059669',
+          greeting: `Bonjour ${target.name}`,
+          body: `Bonne nouvelle ! <strong>${lead.client_name}</strong> a accepté votre devis pour <strong>${lead.service_name}</strong>. Vous pouvez le contacter pour organiser l'intervention.`,
+          ctaUrl: `${SITE_URL}/espace-artisan/leads`,
+          ctaLabel: 'Voir le lead',
+          footer: '',
+        }),
+      }
+
+    case 'refused':
+      return {
+        type: 'lead_closed',
+        title: 'Devis refusé',
+        message: `Votre devis pour "${lead.service_name}" n'a pas été retenu.`,
+        link: '/espace-artisan/leads',
+        emailSubject: '',
+        emailHtml: '',
+      }
 
     case 'completed':
       if (target.role === 'client') {
