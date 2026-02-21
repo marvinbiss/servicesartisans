@@ -305,7 +305,7 @@ export default async function UrgenceServiceVillePage({
     },
     {
       question: `Un ${tradeLower} d'urgence est-il assuré ?`,
-      answer: `Tout ${tradeLower} professionnel doit disposer d'une assurance responsabilité civile professionnelle et d'une garantie décennale. Exigez une attestation avant le début des travaux, même en urgence.`,
+      answer: `Tout ${tradeLower} professionnel doit disposer d'une assurance responsabilité civile professionnelle (RC Pro). Pour les travaux de bâtiment concernés par la loi Spinetta (art. 1792 du Code civil), une garantie décennale est également obligatoire. Exigez les attestations d'assurance avant le début des travaux, même en urgence.`,
     },
   ]
 
