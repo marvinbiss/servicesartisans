@@ -10,11 +10,10 @@ import {
   Save,
   Trash2,
   User,
-  CreditCard,
   Star,
   FileText,
 } from 'lucide-react'
-import { SubscriptionBadge, UserStatusBadge } from '@/components/admin/StatusBadge'
+import { UserStatusBadge } from '@/components/admin/StatusBadge'
 import { ConfirmationModal } from '@/components/admin/ConfirmationModal'
 
 interface UserProfile {
@@ -22,7 +21,6 @@ interface UserProfile {
   email: string
   full_name: string | null
   role: string | null
-  subscription_plan: 'gratuit' | 'pro' | 'premium'
   created_at: string
   updated_at: string | null
   stats?: {
@@ -147,7 +145,6 @@ export default function AdminUserDetailPage() {
               <p className="text-gray-500 mt-1">{user.email}</p>
               <div className="flex items-center gap-3 mt-2">
                 <UserStatusBadge status={getUserStatus()} />
-                <SubscriptionBadge plan={user.subscription_plan} />
                 {user.role && (
                   <span className="text-sm text-gray-500 capitalize">{user.role}</span>
                 )}
@@ -230,33 +227,6 @@ export default function AdminUserDetailPage() {
                   <Phone className="w-4 h-4 text-gray-400" />
                   {user.role || '-'}
                 </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Abonnement */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Abonnement</h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Plan</label>
-                {editMode ? (
-                  <select
-                    value={formData.subscription_plan || 'gratuit'}
-                    onChange={(e) => setFormData({ ...formData, subscription_plan: e.target.value as 'gratuit' | 'pro' | 'premium' })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="gratuit">Gratuit</option>
-                    <option value="pro">Pro</option>
-                    <option value="premium">Premium</option>
-                  </select>
-                ) : (
-                  <div className="flex items-center gap-2">
-                    <CreditCard className="w-4 h-4 text-gray-400" />
-                    <SubscriptionBadge plan={user.subscription_plan} />
-                  </div>
-                )}
               </div>
             </div>
           </div>

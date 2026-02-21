@@ -9,25 +9,15 @@ import {
   Mail,
   Phone,
   Shield,
-  CreditCard,
-  Ban,
-  CheckCircle,
 } from 'lucide-react'
 
 interface UserData {
   id: string
   email: string
   full_name: string | null
-  phone: string | null
+  phone_e164: string | null
   role: string | null
   is_admin: boolean
-  is_banned: boolean
-  user_type: 'client' | 'artisan'
-  is_verified: boolean
-  subscription_plan: 'gratuit' | 'pro' | 'premium'
-  subscription_status: string | null
-  stripe_customer_id: string | null
-  created_at: string
 }
 
 export default function EditUserPage() {
@@ -38,15 +28,14 @@ export default function EditUserPage() {
   const [user, setUser] = useState<UserData | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
-  const [banning, setBanning] = useState(false)
   const [error, setError] = useState('')
 
-  // Form state — only fields that actually exist in profiles or auth metadata
+  // Form state — only fields that actually exist in profiles
   const [formData, setFormData] = useState({
     full_name: '',
-    phone: '',
-    user_type: 'client' as 'client' | 'artisan',
-    subscription_plan: 'gratuit' as 'gratuit' | 'pro' | 'premium',
+    phone_e164: '',
+    role: '',
+    is_admin: false,
   })
 
   useEffect(() => {
@@ -63,9 +52,9 @@ export default function EditUserPage() {
         setUser(data.user)
         setFormData({
           full_name: data.user.full_name || '',
-          phone: data.user.phone || '',
-          user_type: data.user.user_type || 'client',
-          subscription_plan: data.user.subscription_plan || 'gratuit',
+          phone_e164: data.user.phone_e164 || '',
+          role: data.user.role || '',
+          is_admin: data.user.is_admin || false,
         })
       } else {
         setError('Utilisateur non trouvé')
@@ -97,31 +86,6 @@ export default function EditUserPage() {
       setError('Erreur de sauvegarde')
     } finally {
       setSaving(false)
-    }
-  }
-
-  const handleBanToggle = async () => {
-    if (!user) return
-    try {
-      setBanning(true)
-      setError('')
-      const action = user.is_banned ? 'unban' : 'ban'
-      const response = await fetch(`/api/admin/users/${userId}/ban`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action }),
-      })
-
-      if (response.ok) {
-        await fetchUser()
-      } else {
-        const data = await response.json()
-        setError(data.error?.message || data.error || 'Action échouée')
-      }
-    } catch {
-      setError('Erreur lors de la modification du statut')
-    } finally {
-      setBanning(false)
     }
   }
 
@@ -222,8 +186,8 @@ export default function EditUserPage() {
                   </label>
                   <input
                     type="tel"
-                    value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    value={formData.phone_e164}
+                    onChange={(e) => setFormData({ ...formData, phone_e164: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
@@ -241,132 +205,41 @@ export default function EditUserPage() {
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Type d&apos;utilisateur
+                    Rôle
                   </label>
-                  <select
-                    value={formData.user_type}
-                    onChange={(e) => setFormData({ ...formData, user_type: e.target.value as 'client' | 'artisan' })}
+                  <input
+                    type="text"
+                    value={formData.role}
+                    onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="client">Client</option>
-                    <option value="artisan">Artisan</option>
-                  </select>
+                    placeholder="ex: client, artisan, admin"
+                  />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Email confirmé
+                    Administrateur
                   </label>
-                  <div className="mt-2">
-                    <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium ${
-                      user?.is_verified
-                        ? 'bg-green-100 text-green-700'
-                        : 'bg-gray-100 text-gray-600'
-                    }`}>
-                      {user?.is_verified ? 'Confirmé' : 'Non confirmé'}
+                  <div className="mt-2 flex items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, is_admin: !formData.is_admin })}
+                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                        formData.is_admin ? 'bg-blue-600' : 'bg-gray-200'
+                      }`}
+                      aria-pressed={formData.is_admin}
+                    >
+                      <span
+                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                          formData.is_admin ? 'translate-x-6' : 'translate-x-1'
+                        }`}
+                      />
+                    </button>
+                    <span className="text-sm text-gray-600">
+                      {formData.is_admin ? 'Administrateur' : 'Utilisateur standard'}
                     </span>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-
-          {/* Subscription */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <CreditCard className="w-5 h-5 text-gray-400" />
-              Abonnement
-            </h2>
-            <div className="grid gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Plan
-                </label>
-                <div className="flex items-center gap-4">
-                  {(['gratuit', 'pro', 'premium'] as const).map((plan) => (
-                    <button
-                      key={plan}
-                      type="button"
-                      onClick={() => setFormData({ ...formData, subscription_plan: plan })}
-                      className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                        formData.subscription_plan === plan
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                      }`}
-                    >
-                      {plan.charAt(0).toUpperCase() + plan.slice(1)}
-                    </button>
-                  ))}
-                </div>
-                <p className="text-xs text-gray-500 mt-2">
-                  Note: Les changements de plan ici ne modifient pas automatiquement l&apos;abonnement Stripe.
-                  Utilisez la page Paiements pour les modifications Stripe.
-                </p>
-              </div>
-              {user?.stripe_customer_id && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    ID Client Stripe
-                  </label>
-                  <p className="text-sm text-gray-500 font-mono bg-gray-50 px-3 py-2 rounded-lg">
-                    {user.stripe_customer_id}
-                  </p>
-                </div>
-              )}
-              {user?.subscription_status && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Statut Stripe
-                  </label>
-                  <p className="text-sm text-gray-700 bg-gray-50 px-3 py-2 rounded-lg">
-                    {user.subscription_status}
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Ban / Unban */}
-          <div className="bg-white rounded-xl shadow-sm border border-red-100 p-6">
-            <h2 className="text-lg font-semibold text-red-900 mb-4 flex items-center gap-2">
-              <Ban className="w-5 h-5 text-red-400" />
-              Accès au compte
-            </h2>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-700 font-medium">
-                  Statut actuel :{' '}
-                  <span className={user?.is_banned ? 'text-red-600 font-semibold' : 'text-green-600 font-semibold'}>
-                    {user?.is_banned ? 'Banni' : 'Actif'}
-                  </span>
-                </p>
-                <p className="text-xs text-gray-500 mt-1">
-                  {user?.is_banned
-                    ? 'Cet utilisateur ne peut pas se connecter.'
-                    : 'Bannir empêche toute connexion via Supabase Auth.'}
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={handleBanToggle}
-                disabled={banning}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-50 ${
-                  user?.is_banned
-                    ? 'bg-green-100 text-green-700 hover:bg-green-200'
-                    : 'bg-red-100 text-red-700 hover:bg-red-200'
-                }`}
-              >
-                {user?.is_banned ? (
-                  <>
-                    <CheckCircle className="w-4 h-4" />
-                    {banning ? 'En cours...' : 'Débannir'}
-                  </>
-                ) : (
-                  <>
-                    <Ban className="w-4 h-4" />
-                    {banning ? 'En cours...' : 'Bannir'}
-                  </>
-                )}
-              </button>
             </div>
           </div>
         </div>

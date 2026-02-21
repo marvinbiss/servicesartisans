@@ -63,7 +63,7 @@ export async function GET(request: NextRequest) {
       case 'reviews': {
         const { data: reviews } = await supabase
           .from('reviews')
-          .select('id, artisan_id, client_name, rating, comment, status, created_at')
+          .select('id, artisan_id, client_name, rating, comment, moderation_status, created_at')
           .order('created_at', { ascending: false })
         data = reviews || []
         filename = 'reviews'

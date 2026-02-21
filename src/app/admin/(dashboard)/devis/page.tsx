@@ -21,7 +21,7 @@ interface Quote {
   service_name: string
   postal_code: string
   description: string | null
-  status: 'pending' | 'sent' | 'accepted' | 'refused' | 'expired'
+  status: 'pending' | 'accepted' | 'rejected' | 'expired'
   urgency: 'normal' | 'urgent' | 'tres_urgent'
   created_at: string
 }
@@ -34,7 +34,7 @@ interface QuotesResponse {
 
 export default function AdminDevisPage() {
   const [search, setSearch] = useState('')
-  const [status, setStatus] = useState<'all' | 'pending' | 'sent' | 'accepted' | 'refused' | 'expired'>('all')
+  const [status, setStatus] = useState<'all' | 'pending' | 'accepted' | 'rejected' | 'expired'>('all')
   const [page, setPage] = useState(1)
 
   const url = `/api/admin/quotes?page=${page}&limit=20&status=${status}&search=${encodeURIComponent(search)}`
@@ -55,18 +55,16 @@ export default function AdminDevisPage() {
   }
 
   const getStatusBadge = (status: string) => {
-    const variants: Record<string, 'success' | 'warning' | 'error' | 'info' | 'default'> = {
+    const variants: Record<string, 'success' | 'warning' | 'error' | 'default'> = {
       pending: 'warning',
-      sent: 'info',
       accepted: 'success',
-      refused: 'error',
+      rejected: 'error',
       expired: 'default',
     }
     const labels: Record<string, string> = {
       pending: 'En attente',
-      sent: 'Envoyé',
       accepted: 'Accepté',
-      refused: 'Refusé',
+      rejected: 'Refusé',
       expired: 'Expiré',
     }
     return <StatusBadge variant={variants[status] || 'default'}>{labels[status] || status}</StatusBadge>
@@ -109,7 +107,7 @@ export default function AdminDevisPage() {
               />
             </div>
             <div className="flex gap-2 flex-wrap">
-              {(['all', 'pending', 'sent', 'accepted', 'refused', 'expired'] as const).map((s) => (
+              {(['all', 'pending', 'accepted', 'rejected', 'expired'] as const).map((s) => (
                 <button
                   key={s}
                   onClick={() => {
@@ -124,9 +122,8 @@ export default function AdminDevisPage() {
                 >
                   {s === 'all' ? 'Tous' :
                    s === 'pending' ? 'En attente' :
-                   s === 'sent' ? 'Envoyés' :
                    s === 'accepted' ? 'Acceptés' :
-                   s === 'refused' ? 'Refusés' : 'Expirés'}
+                   s === 'rejected' ? 'Refusés' : 'Expirés'}
                 </button>
               ))}
             </div>

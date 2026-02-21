@@ -11,7 +11,7 @@ const querySchema = z.object({
   search: z.string().max(200).optional().default(''),
   department: z.string().max(10).optional(),
   tags: z.string().optional(),
-  consent: z.enum(['all', 'opted_in', 'opted_out', 'unknown']).optional().default('all'),
+  consent: z.enum(['all', 'opted_in', 'opted_out']).optional().default('all'),
 })
 
 const createSchema = z.object({

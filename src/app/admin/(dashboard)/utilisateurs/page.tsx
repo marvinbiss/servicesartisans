@@ -15,18 +15,15 @@ import {
   Shield,
 } from 'lucide-react'
 import { ErrorBanner } from '@/components/admin/ErrorBanner'
-import { SubscriptionBadge, UserStatusBadge } from '@/components/admin/StatusBadge'
+import { UserStatusBadge } from '@/components/admin/StatusBadge'
 import { useAdminFetch, adminMutate } from '@/hooks/admin/useAdminFetch'
 
 interface UserProfile {
   id: string
   email: string
   full_name: string | null
-  phone: string | null
-  user_type: 'client' | 'artisan'
-  is_verified: boolean
-  subscription_plan: 'gratuit' | 'pro' | 'premium'
-  subscription_status: string | null
+  phone_e164: string | null
+  role: string | null
   created_at: string
 }
 
@@ -40,7 +37,6 @@ export default function AdminUsersPage() {
   const router = useRouter()
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState<'all' | 'clients' | 'artisans'>('all')
-  const [plan, setPlan] = useState<'all' | 'gratuit' | 'pro' | 'premium'>('all')
   const [page, setPage] = useState(1)
 
   // Modal state (kept for future use — ban endpoint not yet active)
@@ -56,11 +52,10 @@ export default function AdminUsersPage() {
       page: String(page),
       limit: '20',
       filter,
-      plan,
       search,
     })
     return `/api/admin/users?${params}`
-  }, [page, filter, plan, search])
+  }, [page, filter, search])
 
   const { data, isLoading, error, mutate } = useAdminFetch<UsersResponse>(url)
 
@@ -82,8 +77,7 @@ export default function AdminUsersPage() {
     }
   }
 
-  const getUserStatus = (user: UserProfile): string => {
-    if (!user.is_verified) return 'pending'
+  const getUserStatus = (_user: UserProfile): string => {
     return 'active'
   }
 
@@ -153,21 +147,6 @@ export default function AdminUsersPage() {
               ))}
             </div>
 
-            {/* Plan filter */}
-            <select
-              value={plan}
-              onChange={(e) => {
-                setPlan(e.target.value as typeof plan)
-                setPage(1)
-              }}
-              aria-label="Filtrer par plan d'abonnement"
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              <option value="all">Tous les plans</option>
-              <option value="gratuit">Gratuit</option>
-              <option value="pro">Pro</option>
-              <option value="premium">Premium</option>
-            </select>
           </div>
         </div>
 
@@ -201,13 +180,10 @@ export default function AdminUsersPage() {
                         Utilisateur
                       </th>
                       <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Type
+                        Rôle
                       </th>
                       <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Statut
-                      </th>
-                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Plan
                       </th>
                       <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Inscription
@@ -229,29 +205,26 @@ export default function AdminUsersPage() {
                               <Mail className="w-3 h-3" />
                               {user.email}
                             </div>
-                            {user.phone && (
+                            {user.phone_e164 && (
                               <div className="flex items-center gap-2 mt-1 text-sm text-gray-500">
                                 <Phone className="w-3 h-3" />
-                                {user.phone}
+                                {user.phone_e164}
                               </div>
                             )}
                           </div>
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2">
-                            {user.user_type === 'artisan' ? (
+                            {user.role === 'artisan' ? (
                               <Shield className="w-4 h-4 text-blue-500" />
                             ) : (
                               <User className="w-4 h-4 text-gray-400" />
                             )}
-                            <span className="capitalize">{user.user_type}</span>
+                            <span className="capitalize">{user.role || 'client'}</span>
                           </div>
                         </td>
                         <td className="px-6 py-4">
                           <UserStatusBadge status={getUserStatus(user)} />
-                        </td>
-                        <td className="px-6 py-4">
-                          <SubscriptionBadge plan={user.subscription_plan} />
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-500">
                           {formatDate(user.created_at)}

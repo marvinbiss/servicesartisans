@@ -34,7 +34,7 @@ export async function GET(request: Request) {
       .select('id', { count: 'exact', head: true })
 
     if (city) leadsQuery = leadsQuery.ilike('city', `%${city}%`)
-    if (service) leadsQuery = leadsQuery.ilike('service_name', `%${service}%`)
+    if (service) leadsQuery = leadsQuery.ilike('service', `%${service}%`)
 
     const { count: leadsCreated } = await leadsQuery
 
@@ -44,10 +44,10 @@ export async function GET(request: Request) {
       // Try join with devis_requests (works if FK exists)
       let assignedQuery = supabase
         .from('lead_assignments')
-        .select('id, lead:devis_requests!inner(city, service_name)', { count: 'exact', head: true })
+        .select('id, lead:devis_requests!inner(city, service)', { count: 'exact', head: true })
 
       if (city) assignedQuery = assignedQuery.ilike('lead.city', `%${city}%`)
-      if (service) assignedQuery = assignedQuery.ilike('lead.service_name', `%${service}%`)
+      if (service) assignedQuery = assignedQuery.ilike('lead.service', `%${service}%`)
 
       const { count, error: assignedError } = await assignedQuery
       if (assignedError) {

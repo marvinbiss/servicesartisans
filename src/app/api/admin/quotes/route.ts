@@ -9,7 +9,7 @@ import { z } from 'zod'
 const quotesQuerySchema = z.object({
   page: z.coerce.number().int().min(1).optional().default(1),
   limit: z.coerce.number().int().min(1).max(100).optional().default(20),
-  status: z.enum(['all', 'pending', 'sent', 'accepted', 'refused', 'completed']).optional().default('all'),
+  status: z.enum(['all', 'pending', 'accepted', 'rejected', 'expired']).optional().default('all'),
   search: z.string().max(100).optional().default(''),
 })
 
@@ -45,19 +45,22 @@ export async function GET(request: NextRequest) {
     const offset = (page - 1) * limit
 
     let query = supabase
-      .from('devis_requests')
-      .select('*', { count: 'exact' })
+      .from('quotes')
+      .select(
+        'id, provider_id, request_id, amount, description, valid_until, status, created_at, request:devis_requests(id, service, city, client_id), provider:providers(id, name, slug)',
+        { count: 'exact' }
+      )
 
-    // Filtre par statut — valeurs exactes du CHECK constraint (migration 100)
+    // Filtre par statut — valeurs exactes du CHECK constraint: pending/accepted/rejected/expired
     if (status !== 'all') {
       query = query.eq('status', status)
     }
 
-    // Recherche (sanitized to prevent injection)
+    // Recherche sur le service ou la ville via la jointure devis_requests
     if (search) {
       const sanitized = sanitizeSearchQuery(search)
       if (sanitized) {
-        query = query.or(`service_name.ilike.%${sanitized}%,postal_code.ilike.%${sanitized}%`)
+        query = query.ilike('description', `%${sanitized}%`)
       }
     }
 

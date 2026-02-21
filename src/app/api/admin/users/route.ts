@@ -77,7 +77,7 @@ export async function GET(request: NextRequest) {
       if (userIds.length > 0) {
         const { data: profiles } = await supabase
           .from('profiles')
-          .select('id, email, full_name, is_admin, role, phone_e164, subscription_plan, subscription_status, average_rating, review_count')
+          .select('id, email, full_name, is_admin, role, phone_e164, average_rating, review_count')
           .in('id', userIds)
 
         if (profiles) {
@@ -99,8 +99,8 @@ export async function GET(request: NextRequest) {
         user_type: Boolean(user.user_metadata?.is_artisan) ? 'artisan' : 'client',
         is_verified: !!user.email_confirmed_at,
         is_banned: user.banned_until !== null,
-        subscription_plan: (profile.subscription_plan as string) || 'gratuit',
-        subscription_status: (profile.subscription_status as string) || null,
+        subscription_plan: 'gratuit',
+        subscription_status: null,
         average_rating: (profile.average_rating as number) || 0,
         review_count: (profile.review_count as number) || 0,
         created_at: user.created_at,

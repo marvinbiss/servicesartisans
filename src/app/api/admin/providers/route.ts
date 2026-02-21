@@ -24,7 +24,6 @@ const SELECT_COLUMNS = `
   phone,
   address_city,
   address_region,
-  address_department,
   siret,
   specialty,
   is_verified,

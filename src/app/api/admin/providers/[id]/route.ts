@@ -33,7 +33,7 @@ export const dynamic = 'force-dynamic'
 const ALLOWED_PROVIDER_FIELDS = [
   'name', 'slug', 'specialty', 'description', 'bio',
   'address_street', 'address_city', 'address_postal_code', 'address_region',
-  'address_department', 'latitude', 'longitude', 'phone', 'email', 'siret',
+  'latitude', 'longitude', 'phone', 'email', 'siret',
   'is_verified', 'is_active', 'noindex', 'code_naf',
   'updated_at',
 ]
@@ -76,7 +76,6 @@ function buildUpdateData(body: Record<string, unknown>): Record<string, unknown>
     ['description', 'description'],
     ['address', 'address_street'],
     ['city', 'address_city'],
-    ['department', 'address_department'],
     ['region', 'address_region'],
   ]
   for (const [src, dest] of textFields) {
@@ -138,7 +137,7 @@ export async function GET(
         address: provider.address_street || '',
         city: provider.address_city || '',
         postal_code: provider.address_postal_code || '',
-        department: provider.address_department || '',
+        department: provider.address_region || '',
         region: provider.address_region || '',
         latitude: provider.latitude,
         longitude: provider.longitude,

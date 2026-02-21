@@ -158,9 +158,6 @@ export async function DELETE(
       .from('bookings')
       .update({
         status: 'cancelled',
-        cancelled_at: new Date().toISOString(),
-        cancelled_by: 'admin',
-        cancellation_reason: 'Annulé par administrateur',
         updated_at: new Date().toISOString(),
       })
       .eq('id', params.id)

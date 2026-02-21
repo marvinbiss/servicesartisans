@@ -32,7 +32,7 @@ interface Conversation {
     id: string
     email: string
     full_name: string | null
-    company_name: string | null
+    name: string | null
   }
 }
 
@@ -186,7 +186,7 @@ export default function AdminMessagesPage() {
                             <div>
                               <p className="text-xs text-gray-500 uppercase">Artisan</p>
                               <p className="font-medium text-gray-900">
-                                {conversation.provider?.company_name || conversation.provider?.full_name || 'Sans nom'}
+                                {conversation.provider?.name || conversation.provider?.full_name || 'Sans nom'}
                               </p>
                               <p className="text-sm text-gray-500">
                                 {conversation.provider?.email}
