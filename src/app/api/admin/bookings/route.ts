@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission } from '@/lib/admin-auth'
-import { sanitizeSearchQuery } from '@/lib/sanitize'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
@@ -60,13 +59,10 @@ export async function GET(request: NextRequest) {
       query = query.eq('status', status)
     }
 
-    // Recherche (sanitized to prevent injection)
-    if (search) {
-      const sanitized = sanitizeSearchQuery(search)
-      if (sanitized) {
-        query = query.or(`client_email.ilike.%${sanitized}%,service.ilike.%${sanitized}%`)
-      }
-    }
+    // Recherche: bookings n'a pas de colonnes textuelles libres (client_email et service n'existent pas).
+    // La recherche par status est gérée par le filtre dédié ci-dessus.
+    // Le paramètre search est accepté pour compatibilité UI mais ignoré au niveau DB.
+    void search
 
     const { data: bookings, count, error } = await query
       .order('created_at', { ascending: false })

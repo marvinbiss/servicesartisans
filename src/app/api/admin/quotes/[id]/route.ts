@@ -7,7 +7,7 @@ import { z } from 'zod'
 
 // PATCH request schema
 const updateQuoteSchema = z.object({
-  status: z.enum(['pending', 'sent', 'accepted', 'rejected', 'expired']).optional(),
+  status: z.enum(['pending', 'accepted', 'rejected', 'expired']).optional(),
   amount: z.number().positive().max(1000000).optional(),
   notes: z.string().max(1000).optional(),
   valid_until: z.string().datetime().optional(),

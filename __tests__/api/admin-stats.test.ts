@@ -199,12 +199,12 @@ describe('GET /api/admin/stats', () => {
     expect(result.body.stats.averageRating).toBe(4)
   })
 
-  it('computes revenue in cents', async () => {
+  it('returns zero totalRevenue (no amount column in bookings)', async () => {
     const { GET } = await import('@/app/api/admin/stats/route')
     const result = await GET() as unknown as { body: { stats: { totalRevenue: number } } }
 
-    // (100 + 200) * 100 = 30000 cents
-    expect(result.body.stats.totalRevenue).toBe(30000)
+    // total_amount does not exist in bookings table — revenue is always 0
+    expect(result.body.stats.totalRevenue).toBe(0)
   })
 
   it('computes trend percentages', async () => {

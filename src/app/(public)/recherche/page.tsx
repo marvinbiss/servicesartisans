@@ -11,11 +11,11 @@ import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalL
 
 export const metadata: Metadata = {
   title: 'Rechercher un artisan — Trouvez le bon professionnel',
-  description: 'Recherchez un artisan qualifié près de chez vous. Comparez les avis, les tarifs et obtenez des devis gratuits. 350 000+ artisans référencés dans toute la France.',
+  description: 'Recherchez un artisan qualifié près de chez vous. Comparez les avis, les tarifs et obtenez des devis gratuits. Des milliers d\'artisans référencés dans toute la France.',
   alternates: { canonical: `${SITE_URL}/recherche` },
   openGraph: {
     title: 'Rechercher un artisan — Trouvez le bon professionnel',
-    description: 'Comparez les avis, les tarifs et obtenez des devis gratuits. 350 000+ artisans référencés.',
+    description: 'Comparez les avis, les tarifs et obtenez des devis gratuits. Des milliers d\'artisans référencés.',
     url: `${SITE_URL}/recherche`,
     type: 'website',
     images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Recherche artisan' }],

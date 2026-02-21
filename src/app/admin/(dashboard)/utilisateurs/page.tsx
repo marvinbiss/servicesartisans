@@ -77,10 +77,6 @@ export default function AdminUsersPage() {
     }
   }
 
-  const getUserStatus = (_user: UserProfile): string => {
-    return 'active'
-  }
-
   const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString('fr-FR', {
       day: '2-digit',
@@ -224,7 +220,7 @@ export default function AdminUsersPage() {
                           </div>
                         </td>
                         <td className="px-6 py-4">
-                          <UserStatusBadge status={getUserStatus(user)} />
+                          <UserStatusBadge status="active" />
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-500">
                           {formatDate(user.created_at)}

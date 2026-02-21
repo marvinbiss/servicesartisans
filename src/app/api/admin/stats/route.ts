@@ -106,9 +106,10 @@ export async function GET() {
       supabase.from('profiles').select('id', { count: 'exact', head: true }).gte('created_at', lastMonthStart).lt('created_at', thisMonthStart),
       supabase.from('bookings').select('id', { count: 'exact', head: true }).gte('created_at', thisMonthStart),
       supabase.from('bookings').select('id', { count: 'exact', head: true }).gte('created_at', lastMonthStart).lt('created_at', thisMonthStart),
-      // Revenue (paid bookings)
-      supabase.from('bookings').select('total_amount').gte('created_at', thisMonthStart).eq('payment_status', 'paid'),
-      supabase.from('bookings').select('total_amount').gte('created_at', lastMonthStart).lt('created_at', thisMonthStart).eq('payment_status', 'paid'),
+      // Revenue: total_amount n'existe pas dans bookings — on compte les réservations payées
+      // pour le calcul de tendance, mais le montant réel retourné sera 0.
+      supabase.from('bookings').select('id', { count: 'exact', head: true }).gte('created_at', thisMonthStart).eq('payment_status', 'paid'),
+      supabase.from('bookings').select('id', { count: 'exact', head: true }).gte('created_at', lastMonthStart).lt('created_at', thisMonthStart).eq('payment_status', 'paid'),
       // Active users (profile updated in last 7 days)
       supabase.from('profiles').select('id', { count: 'exact', head: true }).gte('updated_at', sevenDaysAgo),
       // Activity feed
@@ -139,14 +140,12 @@ export async function GET() {
       ? Math.round((ratings.reduce((s, r) => s + r.rating, 0) / ratings.length) * 10) / 10
       : 0
 
-    // Revenue sums
-    const sumAmounts = (r: PromiseSettledResult<unknown>): number => {
-      const res = r as PromiseSettledResult<{ data: { total_amount: number | null }[] | null }>
-      return safeData<{ total_amount: number | null }>(res)
-        .reduce((s, b) => s + (Number(b.total_amount) || 0), 0)
-    }
-    const revThisMonth = sumAmounts(revThisMonthR)
-    const revLastMonth = sumAmounts(revLastMonthR)
+    // Revenue: total_amount n'existe pas dans bookings.
+    // On utilise le nombre de réservations payées pour la tendance; le montant retourné est 0.
+    const revThisMonth = 0
+    // Tendance basée sur le nombre de réservations payées (pas de montant disponible)
+    const paidThisMonth = safeCount(revThisMonthR as PromiseSettledResult<{ count: number | null; error?: unknown }>)
+    const paidLastMonth = safeCount(revLastMonthR as PromiseSettledResult<{ count: number | null; error?: unknown }>)
 
     // ── Build activity feed from real data ────────────────────────────
     type ActivityItem = { id: string; type: string; action: string; details: string; timestamp: string; status?: string }
@@ -218,7 +217,7 @@ export async function GET() {
         trends: {
           users: trend(safeCount(usersThisMonthR), safeCount(usersLastMonthR)),
           bookings: trend(safeCount(bookingsThisMonthR), safeCount(bookingsLastMonthR)),
-          revenue: trend(revThisMonth, revLastMonth),
+          revenue: trend(paidThisMonth, paidLastMonth),
         },
       },
       recentActivity: activity.slice(0, 10),

@@ -255,7 +255,7 @@ export default async function AvisServicePage({
       priceCurrency: 'EUR',
       lowPrice: trade.priceRange.min,
       highPrice: trade.priceRange.max,
-      offerCount: 350000,
+      offerCount: serviceStats.providers.length > 0 ? serviceStats.providers.length : undefined,
     },
     ...(serviceStats.totalReviews > 0 ? {
       aggregateRating: {
