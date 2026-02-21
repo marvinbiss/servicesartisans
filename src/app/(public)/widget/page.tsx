@@ -227,7 +227,7 @@ export default function WidgetPage() {
             {[
               {
                 title: 'Renforcez votre credibilite',
-                desc: 'Montrez a vos visiteurs que vous etes un professionnel reference sur le plus grand annuaire d\'artisans de France.',
+                desc: 'Montrez a vos visiteurs que vous etes un professionnel reference sur l\'annuaire ServicesArtisans, base sur les donnees SIREN officielles.',
               },
               {
                 title: 'Ameliorez votre SEO',

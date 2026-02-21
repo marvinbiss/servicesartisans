@@ -72,7 +72,7 @@ export default function Footer() {
                 <Shield className="w-6 h-6 text-emerald-400" />
               </div>
               <div>
-                <p className="text-white font-semibold text-sm">350 000+ artisans</p>
+                <p className="text-white font-semibold text-sm">Artisans référencés SIREN</p>
                 <p className="text-gray-500 text-xs mt-0.5">Référencés par SIREN</p>
               </div>
             </div>

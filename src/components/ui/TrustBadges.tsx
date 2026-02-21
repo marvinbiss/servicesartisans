@@ -15,8 +15,8 @@ export function TrustBadges({ variant = 'default' }: { variant?: 'default' | 'co
     },
     {
       icon: Shield,
-      label: '350 000+ artisans',
-      description: 'La plus grande base d\'artisans référencés de France',
+      label: 'Artisans référencés SIREN',
+      description: 'Base d\'artisans référencés via les données officielles de France',
       color: 'text-green-600',
       bgColor: 'bg-green-50',
     },
@@ -151,7 +151,7 @@ export function SocialProofCounter({
 }
 
 // Badge "Disponible maintenant" style Doctolib
-export function AvailabilityBadge({ count = 350000 }: { count?: number }) {
+export function AvailabilityBadge({ count = 0 }: { count?: number }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: -10 }}
@@ -163,7 +163,7 @@ export function AvailabilityBadge({ count = 350000 }: { count?: number }) {
         <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400"></span>
       </span>
       <span className="text-sm text-white/80 font-medium">
-        {count.toLocaleString('fr-FR')}+ artisans référencés dans toute la France
+        {count > 0 ? `${count.toLocaleString('fr-FR')}+ artisans référencés dans toute la France` : 'Artisans référencés via données SIREN officielles'}
       </span>
     </motion.div>
   )

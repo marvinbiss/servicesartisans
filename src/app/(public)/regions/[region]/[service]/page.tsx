@@ -229,7 +229,7 @@ export default async function RegionServicePage({ params }: PageProps) {
                 <Shield className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Artisans vérifiés SIREN</span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Clock className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Devis gratuit sous 24h</span>
+                <Clock className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Devis 100 % gratuit</span>
               </div>
             </div>
           </div>

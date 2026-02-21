@@ -14,8 +14,10 @@ import { z } from 'zod'
 import type { SupabaseClientType } from '@/types'
 
 // Type definitions for database responses
-interface BookingSlot {
-  date: string
+interface ClientProfile {
+  full_name: string | null
+  email: string | null
+  phone_e164: string | null
 }
 
 interface ArtisanProfile {
@@ -25,12 +27,10 @@ interface ArtisanProfile {
 
 interface BookingWithRelations {
   id: string
-  client_name: string
-  client_email: string
-  service_description: string | null
-  artisan_id: string
+  provider_id: string
+  service_name: string | null
   status: string
-  slot: BookingSlot | BookingSlot[] | null
+  client: ClientProfile | ClientProfile[] | null
   artisan: ArtisanProfile | ArtisanProfile[] | null
 }
 
@@ -66,11 +66,15 @@ function getArtisanDisplayName(artisan: ArtisanProfile | ArtisanProfile[] | null
   return profile?.name || 'Artisan'
 }
 
-// Helper to get slot date
-function getSlotDate(slot: BookingSlot | BookingSlot[] | null): string | null {
-  if (!slot) return null
-  const slotData = Array.isArray(slot) ? slot[0] : slot
-  return slotData?.date || null
+// Helper to get client info from profiles join
+function getClientInfo(client: ClientProfile | ClientProfile[] | null): { name: string; email: string; phone: string | null } {
+  if (!client) return { name: 'Client', email: '', phone: null }
+  const profile = Array.isArray(client) ? client[0] : client
+  return {
+    name: profile?.full_name || 'Client',
+    email: profile?.email || '',
+    phone: profile?.phone_e164 || null,
+  }
 }
 
 // Query schema for GET request - require full UUID for bookingId to prevent enumeration
@@ -112,10 +116,10 @@ export async function GET(request: Request) {
         .from('bookings')
         .select(`
           id,
-          client_name,
-          service_description,
-          artisan_id,
-          slot:availability_slots(date),
+          provider_id,
+          service_name,
+          status,
+          client:profiles!client_id(full_name, email, phone_e164),
           artisan:providers!bookings_provider_id_fkey(id, name)
         `)
         .eq('id', bookingId)
@@ -138,19 +142,10 @@ export async function GET(request: Request) {
         .eq('booking_id', typedBooking.id)
         .single()
 
-      const slotDate = getSlotDate(typedBooking.slot)
-
       return NextResponse.json(
         createSuccessResponse({
           artisanName: getArtisanDisplayName(typedBooking.artisan),
-          serviceName: typedBooking.service_description || 'Service',
-          date: slotDate
-            ? new Date(slotDate).toLocaleDateString('fr-FR', {
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric',
-              })
-            : '',
+          serviceName: typedBooking.service_name || 'Service',
           alreadyReviewed: !!existingReview,
         })
       )
@@ -275,9 +270,15 @@ export async function POST(request: Request) {
     const supabase = getSupabaseClient()
 
     // Find the booking using exact match to prevent enumeration
+    // Join profiles via client_id to get client name and email
     const { data: booking, error: bookingError } = await supabase
       .from('bookings')
-      .select('id, artisan_id, client_name, client_email, status')
+      .select(`
+        id,
+        provider_id,
+        status,
+        client:profiles!client_id(full_name, email, phone_e164)
+      `)
       .eq('id', bookingId)
       .single()
 
@@ -311,6 +312,9 @@ export async function POST(request: Request) {
       )
     }
 
+    // Extract client info from profiles join
+    const clientInfo = getClientInfo(booking.client as ClientProfile | ClientProfile[] | null)
+
     // Basic fraud detection
     const cleanComment = comment.trim()
     const fraudIndicators = detectFraudIndicators(cleanComment, rating)
@@ -320,9 +324,9 @@ export async function POST(request: Request) {
       .from('reviews')
       .insert({
         booking_id: booking.id,
-        artisan_id: booking.artisan_id,
-        client_name: booking.client_name,
-        client_email: booking.client_email,
+        artisan_id: booking.provider_id,
+        client_name: clientInfo.name,
+        client_email: clientInfo.email,
         rating,
         comment: cleanComment,
         would_recommend: wouldRecommend,
@@ -342,7 +346,7 @@ export async function POST(request: Request) {
     }
 
     // Update artisan's average rating (non-blocking)
-    updateArtisanRating(supabase, booking.artisan_id).catch((err) => logger.error('Update rating failed', err))
+    updateArtisanRating(supabase, booking.provider_id).catch((err) => logger.error('Update rating failed', err))
 
     return NextResponse.json(
       createSuccessResponse({

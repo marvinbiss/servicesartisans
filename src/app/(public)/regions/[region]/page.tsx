@@ -87,10 +87,10 @@ export default async function RegionPage({ params }: PageProps) {
   const region = getRegionBySlug(regionSlug)
   if (!region) notFound()
 
-  const content = generateRegionContent(region)
   const deptCount = region.departments.length
   const allCities = region.departments.flatMap(dept => getVillesByDepartement(dept.code))
   const cityCount = allCities.length
+  const content = generateRegionContent(region, cityCount)
   const regionArtisanCount = await getProviderCountByRegion(region.name)
 
   // Reorder services by climate-based priority

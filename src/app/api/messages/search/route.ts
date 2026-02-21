@@ -55,15 +55,12 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Full-text search
+    // Search in message content using ilike (dropped columns: edited_at, deleted_at, reply_to_message_id, rich_content, search_vector)
     const { data: messages, error } = await supabase
       .from('messages')
-      .select('id, conversation_id, sender_id, sender_type, content, message_type, file_url, file_name, file_size, read_at, created_at, edited_at, deleted_at, reply_to_message_id, rich_content')
+      .select('id, conversation_id, sender_id, sender_type, content, message_type, file_url, file_name, file_size, read_at, created_at')
       .eq('conversation_id', conversation_id)
-      .is('deleted_at', null)
-      .textSearch('search_vector', q, {
-        config: 'french',
-      })
+      .ilike('content', `%${q}%`)
       .order('created_at', { ascending: false })
       .limit(limit)
 

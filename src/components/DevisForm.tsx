@@ -236,7 +236,7 @@ export default function DevisForm({
           Votre demande a bien été envoyée !
         </h3>
         <p className="text-slate-500 text-lg leading-relaxed max-w-md mx-auto">
-          Vous serez contacté sous 24h par des artisans qualifiés de votre région.
+          Des artisans qualifiés de votre région vont étudier votre demande et vous contacter.
         </p>
       </div>
     )

@@ -13,8 +13,8 @@ import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 
 export const metadata: Metadata = {
-  title: 'À propos — Le plus grand annuaire d\'artisans de France',
-  description: 'ServicesArtisans référence 350 000+ artisans grâce aux données ouvertes du gouvernement. Annuaire gratuit, transparent et fiable.',
+  title: 'À propos — Annuaire des artisans référencés en France',
+  description: 'ServicesArtisans référence des milliers d\'artisans grâce aux données ouvertes du gouvernement. Annuaire gratuit, transparent et fiable.',
   alternates: {
     canonical: `${SITE_URL}/a-propos`,
   },
@@ -26,16 +26,16 @@ export const metadata: Metadata = {
     'max-video-preview': -1,
   },
   openGraph: {
-    title: 'À propos — Le plus grand annuaire d\'artisans de France',
-    description: 'ServicesArtisans référence 350 000+ artisans grâce aux données ouvertes du gouvernement. Annuaire gratuit, transparent et fiable.',
+    title: 'À propos — Annuaire d\'artisans en France',
+    description: 'ServicesArtisans référence des milliers d\'artisans grâce aux données ouvertes du gouvernement. Annuaire gratuit, transparent et fiable.',
     url: `${SITE_URL}/a-propos`,
     type: 'website',
     images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Annuaire des artisans en France' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'À propos — Le plus grand annuaire d\'artisans de France',
-    description: 'ServicesArtisans référence 350 000+ artisans grâce aux données ouvertes du gouvernement.',
+    title: 'À propos — Annuaire d\'artisans en France',
+    description: 'ServicesArtisans référence des milliers d\'artisans grâce aux données ouvertes du gouvernement.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }
@@ -45,7 +45,7 @@ export const revalidate = 3600
 const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
 
 // Fallback stats used when DB is unavailable during static generation
-const FALLBACK_STATS = { artisanCount: 350_000, reviewCount: 12_000, cityCount: 2_500 }
+const FALLBACK_STATS = { artisanCount: 0, reviewCount: 0, cityCount: 0 }
 
 async function getStats() {
   if (IS_BUILD) return FALLBACK_STATS
@@ -182,12 +182,12 @@ export default async function AProposPage() {
           />
           <div className="text-center">
           <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
-            Le plus grand annuaire d&apos;artisans de France
+            Annuaire des artisans de France
           </h1>
           <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-            Nous avons construit le plus grand annuaire d&apos;artisans de France
-            en exploitant les donn&eacute;es ouvertes du gouvernement. 350 000+ professionnels
-            r&eacute;f&eacute;renc&eacute;s, accessibles gratuitement.
+            Nous avons construit un annuaire d&apos;artisans en France
+            en exploitant les donn&eacute;es ouvertes du gouvernement.
+            {stats.artisanCount > 0 ? ` ${stats.artisanCount.toLocaleString('fr-FR')}+ professionnels r\u00e9f\u00e9renc\u00e9s,` : ' Des milliers de professionnels r\u00e9f\u00e9renc\u00e9s,'} accessibles gratuitement.
           </p>
           </div>
         </div>

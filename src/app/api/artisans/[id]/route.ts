@@ -194,20 +194,13 @@ export async function GET(
     if (provider && !providerError) {
       source = 'provider'
 
-      // Parallelize reviews + FAQ queries (both only need provider.id)
-      const [{ data: providerReviews }, { data: faqData }] = await Promise.all([
-        supabase
-          .from('reviews')
-          .select('id, rating, client_name, comment, created_at')
-          .eq('artisan_id', provider.id)
-          .order('created_at', { ascending: false })
-          .limit(100),
-        supabase
-          .from('provider_faq')
-          .select('question, answer, sort_order')
-          .eq('provider_id', provider.id)
-          .order('sort_order', { ascending: true }),
-      ])
+      // Fetch reviews (provider_faq table does not exist in migrations — faq hardcoded to [])
+      const { data: providerReviews } = await supabase
+        .from('reviews')
+        .select('id, rating, client_name, comment, created_at')
+        .eq('artisan_id', provider.id)
+        .order('created_at', { ascending: false })
+        .limit(100)
 
       // Calculer la note moyenne
       let averageRating = 0
@@ -258,33 +251,8 @@ export async function GET(
           category: item.category || 'Travaux',
         }))
 
-      // Questions de démo courantes à filtrer
-      const demoFaqPatterns = [
-        'délai d\'intervention',
-        'devis sont-ils gratuits',
-        'modes de paiement',
-        'zone d\'intervention',
-        'intervenons généralement',
-        '24 à 48h',
-      ]
-
-      const faq = (faqData || [])
-        .filter((item: { question: string; answer: string }) => {
-          const lowerQuestion = item.question.toLowerCase()
-          const lowerAnswer = item.answer.toLowerCase()
-          // Exclure les FAQ qui correspondent aux patterns de démo
-          return !demoFaqPatterns.some(pattern =>
-            lowerQuestion.includes(pattern.toLowerCase()) ||
-            lowerAnswer.includes(pattern.toLowerCase())
-          )
-        })
-        .map((item: {
-          question: string
-          answer: string
-        }) => ({
-          question: item.question,
-          answer: item.answer,
-        }))
+      // provider_faq table does not exist in migrations — return empty array
+      const faq: Array<{ question: string; answer: string }> = []
 
       const postalCode = provider.address_postal_code || ''
       const deptCode = getDeptCodeFromPostal(postalCode)

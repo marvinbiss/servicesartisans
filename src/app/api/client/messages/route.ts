@@ -98,12 +98,14 @@ export async function GET(request: Request) {
         id,
         client_id,
         provider_id,
+        status,
         created_at,
         booking_id,
         provider:providers!provider_id(id, name),
         booking:bookings!booking_id(service_name)
       `)
       .eq('client_id', user.id)
+      .eq('status', 'active')
       .order('created_at', { ascending: false })
 
     if (convsError) {

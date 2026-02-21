@@ -9,11 +9,11 @@ import { CmsContent } from '@/components/CmsContent'
 
 export const metadata: Metadata = {
   title: 'Artisans par région — 18 régions de France',
-  description: 'Explorez 350 000+ artisans référencés dans les 18 régions de France. Tous les corps de métier du bâtiment. Recherche gratuite, devis sans engagement.',
+  description: 'Explorez les artisans référencés dans les 18 régions de France. Tous les corps de métier du bâtiment. Recherche gratuite, devis sans engagement.',
   alternates: { canonical: `${SITE_URL}/regions` },
   openGraph: {
     title: 'Artisans par région — 18 régions de France',
-    description: 'Explorez 350 000+ artisans référencés dans les 18 régions de France. Tous les corps de métier du bâtiment.',
+    description: 'Explorez les artisans référencés dans les 18 régions de France. Tous les corps de métier du bâtiment.',
     url: `${SITE_URL}/regions`,
     type: 'website',
     images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Artisans par région' }],
@@ -52,7 +52,7 @@ export default async function RegionsIndexPage() {
         '@context': 'https://schema.org',
         '@type': 'CollectionPage',
         name: 'Artisans par région en France',
-        description: 'Annuaire de 350 000+ artisans référencés dans les 18 régions françaises.',
+        description: 'Annuaire d\'artisans référencés dans les 18 régions françaises.',
         url: `${SITE_URL}/regions`,
         numberOfItems: regions.length,
         isPartOf: { '@type': 'WebSite', name: 'ServicesArtisans', url: SITE_URL },
@@ -103,8 +103,8 @@ export default async function RegionsIndexPage() {
               , un réseau national
             </h1>
             <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
-              350 000+ artisans référencés dans toutes les régions de France.
-              Explorez le réseau le plus complet d&apos;artisans du bâtiment.
+              Des artisans référencés via les données SIREN dans toutes les régions de France.
+              Explorez l&apos;annuaire des artisans du bâtiment.
             </p>
           </div>
 
@@ -127,8 +127,8 @@ export default async function RegionsIndexPage() {
             <div className="flex items-center gap-3 px-5 py-3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/10">
               <Users className="w-5 h-5 text-slate-300" />
               <div className="text-left">
-                <div className="text-xl font-bold text-white">350 000+</div>
-                <div className="text-xs text-slate-400">Artisans référencés</div>
+                <div className="text-xl font-bold text-white">SIREN</div>
+                <div className="text-xs text-slate-400">Données officielles</div>
               </div>
             </div>
           </div>

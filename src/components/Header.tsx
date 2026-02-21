@@ -531,7 +531,7 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
                   <div className="hidden sm:flex items-center gap-3">
                     <div className="flex items-center gap-2 text-sm text-white/80 bg-white/10 px-4 py-2 rounded-lg">
                       <Users className="w-4 h-4 text-amber-400" />
-                      <span>{artisanCount > 0 ? `${artisanCount.toLocaleString('fr-FR')}+` : '350 000+'} artisans référencés</span>
+                      <span>{artisanCount > 0 ? `${artisanCount.toLocaleString('fr-FR')}+` : 'Des milliers d\'artisans'} référencés</span>
                     </div>
                   </div>
                 </div>

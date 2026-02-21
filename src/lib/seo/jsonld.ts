@@ -18,7 +18,7 @@ export function getOrganizationSchema() {
       width: 512,
       height: 512,
     },
-    description: 'Le plus grand annuaire d\'artisans de France. 350 000+ professionnels référencés dans 101 départements.',
+    description: 'Annuaire d\'artisans de France. Professionnels référencés via les données SIREN officielles dans 101 départements.',
     ...(socialLinks.length > 0 && { sameAs: socialLinks }),
     areaServed: {
       '@type': 'Country',

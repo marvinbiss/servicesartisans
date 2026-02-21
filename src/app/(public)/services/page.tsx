@@ -26,14 +26,14 @@ const validServiceSlugs = new Set(staticServicesList.map(s => s.slug))
 export const revalidate = REVALIDATE.services
 
 export const metadata: Metadata = {
-  title: 'Tous les services artisans — 350 000+ professionnels référencés',
-  description: `Annuaire de 350 000+ artisans référencés : plombier, électricien, serrurier, chauffagiste, peintre, couvreur, menuisier, maçon et ${staticServicesList.length} métiers. Devis gratuits dans 101 départements.`,
+  title: 'Tous les services artisans — Professionnels référencés SIREN',
+  description: `Annuaire d'artisans référencés : plombier, électricien, serrurier, chauffagiste, peintre, couvreur, menuisier, maçon et ${staticServicesList.length} métiers. Devis gratuits dans 101 départements.`,
   alternates: {
     canonical: `${SITE_URL}/services`,
   },
   openGraph: {
-    title: 'Tous les services artisans — 350 000+ professionnels référencés',
-    description: `${staticServicesList.length} métiers du bâtiment, 350 000+ artisans référencés dans 101 départements. Trouvez un professionnel qualifié près de chez vous.`,
+    title: 'Tous les services artisans — Professionnels référencés SIREN',
+    description: `${staticServicesList.length} métiers du bâtiment, Des artisans référencés dans 101 départements. Trouvez un professionnel qualifié près de chez vous.`,
     url: `${SITE_URL}/services`,
     images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Tous les services artisans' }],
   },

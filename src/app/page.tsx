@@ -20,16 +20,16 @@ export const revalidate = 3600 // Rafraîchit les stats toutes les heures
 
 export async function generateMetadata(): Promise<Metadata> {
   const count = await getProviderCount()
-  const countStr = count > 0 ? `${formatProviderCount(count)}+` : '350 000+'
+  const countStr = count > 0 ? `${formatProviderCount(count)}+` : 'Des milliers d\''
   return {
     title: `ServicesArtisans — ${countStr} artisans référencés en France`,
     description:
-      `Le plus grand annuaire d'artisans de France. ${countStr} professionnels référencés, 101 départements couverts. Comparez les avis, obtenez des devis gratuits. Plombiers, électriciens, menuisiers et plus.`,
+      `Annuaire d'artisans de France basé sur les données SIREN officielles. ${countStr} professionnels référencés, 101 départements couverts. Comparez les avis, obtenez des devis gratuits. Plombiers, électriciens, menuisiers et plus.`,
     alternates: { canonical: SITE_URL },
     openGraph: {
       title: `ServicesArtisans — ${countStr} artisans référencés en France`,
       description:
-        `Le plus grand annuaire d'artisans de France. ${countStr} professionnels référencés dans 101 départements. Devis gratuits.`,
+        `Annuaire d'artisans de France basé sur les données SIREN officielles. ${countStr} professionnels référencés dans 101 départements. Devis gratuits.`,
       type: 'website',
       url: SITE_URL,
       images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Annuaire des artisans en France' }],
@@ -38,7 +38,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: 'summary_large_image',
       title: `ServicesArtisans — ${countStr} artisans référencés en France`,
       description:
-        `Le plus grand annuaire d'artisans de France. ${countStr} professionnels référencés dans 101 départements. Devis gratuits.`,
+        `Annuaire d'artisans de France basé sur les données SIREN officielles. ${countStr} professionnels référencés dans 101 départements. Devis gratuits.`,
       images: [`${SITE_URL}/opengraph-image`],
     },
   }

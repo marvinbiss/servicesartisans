@@ -13,7 +13,7 @@ import { CmsContent } from '@/components/CmsContent'
 
 export const metadata: Metadata = {
   title: 'Comment ça marche — Trouvez un artisan',
-  description: 'Recherchez, comparez et contactez un artisan en 3 étapes. 350 000+ professionnels référencés dans 101 départements. 100% gratuit, sans inscription.',
+  description: 'Recherchez, comparez et contactez un artisan en 3 étapes. Des milliers de professionnels référencés dans 101 départements. 100% gratuit, sans inscription.',
   alternates: {
     canonical: `${SITE_URL}/comment-ca-marche`,
   },
@@ -44,9 +44,9 @@ const steps = [
     number: '1',
     icon: Search,
     title: 'Recherchez',
-    description: 'Trouvez le bon professionnel en quelques secondes parmi notre base de 350 000+ artisans. Recherchez par type de service et par ville dans les 101 départements français.',
+    description: 'Trouvez le bon professionnel en quelques secondes dans notre annuaire d\'artisans. Recherchez par type de service et par ville dans les 101 départements français.',
     details: [
-      '350 000+ artisans référencés en France',
+      'Des milliers d\'artisans référencés en France',
       'Recherche par métier : plombier, électricien, couvreur...',
       'Filtrage par ville et département',
       'Résultats instantanés et à jour',
@@ -89,8 +89,8 @@ const trustReasons = [
   },
   {
     icon: MapPin,
-    title: '350 000+ artisans dans 101 départements',
-    description: 'Le plus grand annuaire d\'artisans référencés de France. Trouvez un professionnel près de chez vous, partout en France métropolitaine et outre-mer.',
+    title: 'Des milliers d\'artisans dans 101 départements',
+    description: 'Un annuaire d\'artisans référencés via les données SIREN officielles. Trouvez un professionnel près de chez vous, partout en France métropolitaine et outre-mer.',
   },
   {
     icon: Star,
@@ -123,7 +123,7 @@ const faqs = [
   },
   {
     question: 'Quelle est la différence avec les autres annuaires d\'artisans ?',
-    answer: 'ServicesArtisans se distingue par l\'utilisation des données officielles de l\'API SIREN gouvernementale, l\'absence de faux avis, la gratuité totale sans inscription, et la couverture de 101 départements avec plus de 350 000 artisans référencés.',
+    answer: 'ServicesArtisans se distingue par l\'utilisation des données officielles de l\'API SIREN gouvernementale, l\'absence de faux avis, la gratuité totale sans inscription, et la couverture des 101 départements français.',
   },
   {
     question: 'Comment sont sélectionnés les artisans affichés ?',
@@ -161,7 +161,7 @@ export default async function CommentCaMarchePage() {
   }
 
   const howToSchema = getHowToSchema([
-    { name: 'Recherchez', text: 'Trouvez le bon professionnel parmi 350 000+ artisans. Recherchez par type de service et par ville dans les 101 départements français.' },
+    { name: 'Recherchez', text: 'Trouvez le bon professionnel dans notre annuaire d\'artisans. Recherchez par type de service et par ville dans les 101 départements français.' },
     { name: 'Comparez', text: 'Consultez les profils détaillés avec données SIREN officielles. Comparez les entreprises en toute transparence grâce aux données gouvernementales.' },
     { name: 'Contactez', text: 'Contactez directement les artisans. Demandez des devis, appelez-les ou consultez leurs coordonnées complètes sans intermédiaire.' },
   ])
@@ -200,7 +200,7 @@ export default async function CommentCaMarchePage() {
               Trouvez un artisan r&eacute;f&eacute;renc&eacute; en 3 &eacute;tapes
             </h1>
             <p className="text-xl text-slate-400 max-w-3xl mx-auto mb-4">
-              Recherchez, comparez et contactez parmi 350 000+ artisans r&eacute;f&eacute;renc&eacute;s gr&acirc;ce aux donn&eacute;es officielles SIREN.
+              Recherchez, comparez et contactez des artisans r&eacute;f&eacute;renc&eacute;s gr&acirc;ce aux donn&eacute;es officielles SIREN.
               Service 100% gratuit, sans inscription.
             </p>
             <div className="flex flex-wrap justify-center gap-4 mt-8">
@@ -333,8 +333,8 @@ export default async function CommentCaMarchePage() {
           {/* Stats bar */}
           <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl p-8 text-white text-center">
             <div>
-              <div className="text-3xl md:text-4xl font-bold">350 000+</div>
-              <div className="text-blue-200 text-sm mt-1">Artisans référencés</div>
+              <div className="text-3xl md:text-4xl font-bold">18</div>
+              <div className="text-blue-200 text-sm mt-1">Régions couvertes</div>
             </div>
             <div>
               <div className="text-3xl md:text-4xl font-bold">101</div>
@@ -439,7 +439,7 @@ export default async function CommentCaMarchePage() {
             Prêt à trouver votre artisan ?
           </h2>
           <p className="text-xl text-blue-100 mb-8">
-            350 000+ artisans référencés vous attendent sur ServicesArtisans
+            Des milliers d&apos;artisans référencés vous attendent sur ServicesArtisans
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link

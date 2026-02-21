@@ -1717,7 +1717,7 @@ const FAQ_POOL: { q: (n: string, v: string) => string; a: (n: string, v: string,
   },
   {
     q: (n) => `Un artisan peut-il intervenir en urgence à ${n} ?`,
-    a: (n, v) => `Oui, plusieurs artisans de ${v} proposent des interventions d'urgence à ${n} : fuite d'eau, panne électrique, porte claquée, panne de chauffage. Service disponible 7j/7. Les tarifs d'urgence incluent un supplément pour la disponibilité immédiate.`,
+    a: (n, v) => `Certains artisans de ${v} proposent des interventions d'urgence à ${n} : fuite d'eau, panne électrique, porte claquée, panne de chauffage. Disponibilité et délais variables selon les professionnels. Les tarifs d'urgence incluent généralement un supplément.`,
   },
   {
     q: (n) => `Quelles garanties pour les travaux à ${n} ?`,
@@ -2570,14 +2570,14 @@ const DEPT_TIPS: Record<ClimateZone, ((name: string, code: string) => string)[]>
 }
 
 const DEPT_FAQ_POOL: { q: (name: string, code: string) => string; a: (name: string, code: string, region: string, pop: string, climate: string, issues: string[]) => string }[] = [
-  { q: (name, code) => `Combien d'artisans sont référencés dans le ${name} (${code}) ?`, a: (name, code, region) => `Le ${name} (${code}) en ${region} fait partie de notre réseau national de 350 000+ artisans référencés à partir des données SIREN officielles.` },
+  { q: (name, code) => `Combien d'artisans sont référencés dans le ${name} (${code}) ?`, a: (name, code, region) => `Le ${name} (${code}) en ${region} fait partie de notre réseau d'artisans référencés à partir des données SIREN officielles de l'INSEE.` },
   { q: (name) => `Quels sont les travaux les plus demandés dans le ${name} ?`, a: (name, _code, _region, _pop, climate, issues) => `Le ${climate.toLowerCase()} du ${name} génère des besoins spécifiques : ${issues.slice(0, 3).join(', ').toLowerCase()}. Les artisans locaux proposent des solutions éprouvées.` },
   { q: (name, code) => `Comment obtenir un devis gratuit dans le ${name} (${code}) ?`, a: (name) => `Choisissez le service, indiquez votre ville dans le ${name}, et décrivez votre projet. Vous recevrez jusqu'à 3 propositions d'artisans qualifiés. Service 100% gratuit et sans engagement.` },
   { q: (name) => `Les artisans du ${name} sont-ils assurés ?`, a: (name, _code, region) => `Les artisans du ${name} (${region}) sont tenus de disposer d'une assurance décennale et d'une RC pro. Exigez une attestation à jour avant les travaux.` },
   { q: (name) => `Quel est le délai moyen pour des travaux dans le ${name} ?`, a: (name) => `Dans le ${name}, comptez 1-4h pour une urgence, 1-3 semaines pour des travaux planifiés, et 2-4 mois pour une rénovation complète.` },
   { q: (name) => `Quelles aides financières sont disponibles dans le ${name} ?`, a: (name, code, region) => `Les habitants du ${name} (${code}) peuvent bénéficier de MaPrimeRénov', éco-PTZ, CEE, et aides locales de la ${region}. Travaux réalisés par un artisan RGE.` },
   { q: (name) => `Comment le climat influence-t-il les travaux dans le ${name} ?`, a: (name, _code, _region, _pop, climate, issues) => `Le ${climate.toLowerCase()} du ${name} impacte le bâti : ${issues.slice(0, 2).join(' ; ').toLowerCase()}. Les artisans adaptent techniques et matériaux à ces contraintes.` },
-  { q: (name) => `Peut-on trouver un artisan en urgence dans le ${name} ?`, a: (name) => `Oui, de nombreux artisans du ${name} proposent des interventions d'urgence 7j/7 : fuite, panne électrique, serrure, chauffage. Délai : 1 à 4 heures.` },
+  { q: (name) => `Peut-on trouver un artisan en urgence dans le ${name} ?`, a: (name) => `Certains artisans du ${name} proposent des interventions d'urgence pour les situations critiques : fuite, panne électrique, serrure bloquée, chauffage défaillant. Les délais varient selon les disponibilités et la localisation.` },
   { q: (name) => `Quel type de bâti domine dans le ${name} ?`, a: (name, _code, _region, _pop, _climate, issues) => `Le parc du ${name} est varié, avec des problématiques récurrentes : ${issues.slice(0, 3).join(', ').toLowerCase()}. L'importance de choisir un artisan expérimenté localement.` },
   { q: (name) => `Comment vérifier un artisan dans le ${name} ?`, a: (name) => `Vérifiez son SIRET actif, demandez assurance décennale et RC pro, consultez les avis, exigez un devis détaillé signé. Les certifiés RGE ou Qualibat offrent des garanties supplémentaires dans le ${name}.` },
   { q: (name) => `Combien coûte un artisan dans le ${name} ?`, a: (name, code, region) => `Dans le ${name} (${code}), comptez 45-90 €/h selon la spécialité. En ${region}, demandez plusieurs devis pour comparer. Tarifs incluant généralement le déplacement.` },
@@ -2868,7 +2868,7 @@ const REGION_TIPS: Record<ClimateZone, ((name: string) => string)[]> = {
     (name) => `Le soleil de ${name} est un atout mais aussi une contrainte. Protégez vos intérieurs avec des volets et stores extérieurs. Pour les extérieurs, choisissez des enduits minéraux et peintures résistantes aux UV.`,
     (name) => `En ${name}, préparez la saison des pluies : vérifiez gouttières, étanchéité et drainage dès septembre. Une isolation par l'extérieur réduit de 5 à 8°C la température intérieure en été.`,
     (name) => `La pergola bioclimatique est l'aménagement extérieur le plus demandé en ${name} : lames orientables pour moduler l'ombre, intégration de brumisateurs et éclairage LED. Comptez 8 000 à 15 000 € posée par un artisan qualifié.`,
-    (name) => `En ${name}, le solaire photovoltaïque est un investissement judicieux avec 2 500 à 2 800 heures d'ensoleillement par an. Une installation de 3 kWc couvre 70% de la consommation d'un foyer et se rentabilise en 8-10 ans.`,
+    (name) => `En ${name}, le solaire photovoltaïque bénéficie d'un ensoleillement favorable (2 000 à 2 800 heures/an selon la zone). Une installation de 3 kWc peut produire 3 500 à 4 000 kWh/an. Le retour sur investissement dépend du taux d'autoconsommation et des aides disponibles.`,
     (name) => `Les piscines en ${name} nécessitent un entretien spécifique : filtration renforcée contre le calcaire, traitement anti-algues et vérification de l'étanchéité du liner tous les 10 ans. Faites appel à un pisciniste certifié.`,
   ],
   'montagnard': [
@@ -2899,9 +2899,9 @@ const REGION_FAQ_POOL: { q: (name: string) => string; a: (name: string, deptCoun
   { q: (name) => `Combien coûte un artisan en ${name} ?`, a: (name) => `Les tarifs en ${name} varient selon le métier (45-90 €/h), la complexité et la zone. Les zones urbaines sont +10-25% vs rurales. Demandez plusieurs devis.` },
   { q: (name) => `Quels travaux prioritaires en ${name} ?`, a: (name, _deptCount, _cityCount, climate, facts) => `Le ${climate.toLowerCase()} de ${name} détermine les priorités : ${facts.slice(0, 2).join(' ; ').toLowerCase()}. L'isolation et la rénovation énergétique sont les investissements les plus rentables.` },
   { q: (name) => `Les devis sont-ils gratuits en ${name} ?`, a: (name) => `Oui, tous les devis via ServicesArtisans pour ${name} sont 100% gratuits et sans engagement. Jusqu'à 3 propositions de professionnels qualifiés.` },
-  { q: (name) => `Quelles aides à la rénovation en ${name} ?`, a: (name) => `En ${name} : MaPrimeRénov' (jusqu'à 20 000 €), éco-PTZ (jusqu'à 50 000 €), CEE, TVA réduite (5,5%), et aides régionales. Artisan RGE requis.` },
+  { q: (name) => `Quelles aides à la rénovation en ${name} ?`, a: (name) => `En ${name} : MaPrimeRénov' Parcours accompagné (montant variable selon revenus et travaux), éco-PTZ (jusqu'à 50 000 €), CEE, TVA réduite à 5,5%, et aides régionales. Artisan RGE requis pour les aides énergétiques.` },
   { q: (name) => `Comment le climat impacte le bâti en ${name} ?`, a: (name, _deptCount, _cityCount, climate, facts) => `Le ${climate.toLowerCase()} de ${name} a un impact direct : ${facts.slice(0, 3).join(' ; ').toLowerCase()}. Les artisans adaptent techniques et matériaux.` },
-  { q: (name) => `Urgence artisan en ${name} ?`, a: (name) => `Oui, des artisans en ${name} proposent des urgences 7j/7 : fuite, panne électrique, serrure, chauffage. Délai moyen : 1 à 4 heures.` },
+  { q: (name) => `Urgence artisan en ${name} ?`, a: (name) => `Certains artisans en ${name} proposent des interventions d'urgence, y compris le soir et le week-end : fuite, panne électrique, serrure, chauffage. Délais variables selon disponibilité et localisation.` },
   { q: (name) => `D'où proviennent les données artisans en ${name} ?`, a: (name) => `Les artisans en ${name} proviennent des données SIREN officielles. Chaque professionnel dispose d'un SIREN actif et d'une activité déclarée dans le bâtiment.` },
   { q: (name) => `Meilleure saison pour rénover en ${name} ?`, a: (name, _deptCount, _cityCount, climate) => `En ${name}, le ${climate.toLowerCase()} influence le calendrier. Extérieurs optimaux au printemps/été. Intérieurs toute l'année. Planifiez 2-3 mois à l'avance.` },
   { q: (name) => `Comment vérifier un artisan en ${name} ?`, a: (name) => `Contrôlez le SIRET sur l'INSEE, demandez assurance décennale et RC pro, vérifiez certifications (RGE, Qualibat), et consultez les avis pour les artisans de ${name}.` },
@@ -2935,11 +2935,11 @@ function getRegionProfile(region: import('@/lib/data/france').Region): RegionPro
   }
 }
 
-export function generateRegionContent(region: import('@/lib/data/france').Region): RegionContent {
+export function generateRegionContent(region: import('@/lib/data/france').Region, cityCountOverride?: number): RegionContent {
   const seed = Math.abs(hashCode(`region-${region.slug}`))
   const profile = getRegionProfile(region)
   const deptCount = region.departments.length
-  const cityCount = region.departments.reduce((acc, d) => acc + d.cities.length, 0)
+  const cityCount = cityCountOverride ?? region.departments.reduce((acc, d) => acc + d.cities.length, 0)
 
   const introFn = REGION_INTROS[seed % REGION_INTROS.length]
   const intro = introFn(region.name, deptCount, cityCount, profile.climateLabel, profile.geoLabel, profile.economyLabel)
@@ -3185,7 +3185,7 @@ const VILLE_FAQ_POOL: { q: (name: string) => string; a: (p: VilleFaqParams) => s
   },
   {
     q: (name) => `Quels types de travaux peut-on réaliser à ${name} ?`,
-    a: (p) => `À ${p.name} (${p.dept}), nos artisans couvrent 15 corps de métier : plomberie, électricité, serrurerie, chauffage, climatisation, couverture, maçonnerie, peinture, menuiserie, carrelage, façade, vitrerie, terrassement, aménagement paysager et domotique.`,
+    a: (p) => `À ${p.name} (${p.dept}), nos artisans interviennent sur les principaux corps de métier du bâtiment : plomberie, électricité, serrurerie, chauffage, climatisation, couverture, maçonnerie, peinture, menuiserie, carrelage, façade, vitrerie, terrassement, aménagement paysager et domotique.`,
   },
   {
     q: (name) => `Comment obtenir un devis gratuit à ${name} ?`,
@@ -3193,7 +3193,7 @@ const VILLE_FAQ_POOL: { q: (name: string) => string; a: (p: VilleFaqParams) => s
   },
   {
     q: (name) => `Les artisans à ${name} interviennent-ils en urgence ?`,
-    a: (p) => `Oui, de nombreux artisans référencés à ${p.name} proposent des interventions d'urgence 24h/24, notamment les plombiers, serruriers et électriciens. Consultez notre page urgence pour un dépannage rapide.`,
+    a: (p) => `Certains artisans référencés à ${p.name} proposent des interventions d'urgence, notamment les plombiers, serruriers et électriciens. Les disponibilités varient selon les professionnels. Consultez notre page urgence pour trouver un dépannage rapide.`,
   },
   {
     q: (name) => `Quel est le prix moyen d'un artisan à ${name} ?`,
@@ -3249,7 +3249,7 @@ export function generateVilleContent(ville: import('@/lib/data/france').Ville): 
   const quartierCount = ville.quartiers?.length || 0
 
   const introFn = VILLE_INTROS[seed % VILLE_INTROS.length]
-  const intro = introFn({ name: ville.name, dept: ville.departement, deptCode: ville.departementCode, pop: ville.population, region: ville.region, climate: profile.climateLabel, sizeLabel: profile.citySizeLabel })
+  const intro = introFn({ name: ville.name, dept: ville.departement, deptCode: ville.departementCode, pop: ville.population, region: ville.region, climate: profile.climateLabel.replace(/^Climat\s+/i, ''), sizeLabel: profile.citySizeLabel })
 
   const ctxTemplates = VILLE_CONTEXTS[profile.citySize]
   const contexteUrbain = ctxTemplates[Math.abs(hashCode(`ctx-ville-${ville.slug}`)) % ctxTemplates.length]({ name: ville.name, pop: ville.population, qc: quartierCount })
@@ -3263,7 +3263,7 @@ export function generateVilleContent(ville: import('@/lib/data/france').Ville): 
     return `${t.name} : ${min}–${max} ${t.priceRange.unit}`
   }).filter(Boolean)
 
-  const servicesPrioritaires = `À ${ville.name}, le climat ${profile.climateLabel.toLowerCase()} oriente les besoins en artisanat. Services les plus sollicités : ${pricingLines.join(' · ')}. Tarifs indicatifs ajustés à la zone géographique.`
+  const servicesPrioritaires = `À ${ville.name}, le ${profile.climateLabel.toLowerCase()} oriente les besoins en artisanat. Services les plus sollicités : ${pricingLines.join(' · ')}. Tarifs indicatifs ajustés à la zone géographique.`
 
   const tipTemplates = VILLE_TIPS[profile.climate]
   const conseilsVille = tipTemplates[Math.abs(hashCode(`tips-ville-${ville.slug}`)) % tipTemplates.length](ville.name)
@@ -3277,7 +3277,7 @@ export function generateVilleContent(ville: import('@/lib/data/france').Ville): 
   }
   const faqItems = faqIndices.map(idx => {
     const f = VILLE_FAQ_POOL[idx]
-    return { question: f.q(ville.name), answer: f.a({ name: ville.name, pop: ville.population, dept: ville.departement, region: ville.region, climate: profile.climateLabel, qc: quartierCount }) }
+    return { question: f.q(ville.name), answer: f.a({ name: ville.name, pop: ville.population, dept: ville.departement, region: ville.region, climate: profile.climateLabel.replace(/^Climat\s+/i, ''), qc: quartierCount }) }
   })
 
   return { profile, intro, contexteUrbain, servicesPrioritaires, conseilsVille, faqItems }

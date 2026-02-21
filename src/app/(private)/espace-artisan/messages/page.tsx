@@ -26,7 +26,6 @@ interface Conversation {
   partner: Partner
   lastMessage: Message
   unreadCount: number
-  service: string | null
 }
 
 export default function MessagesArtisanPage() {
@@ -255,7 +254,6 @@ export default function MessagesArtisanPage() {
                               <span className="font-medium text-gray-900 truncate">{getDisplayName(conv.partner)}</span>
                               <span className="text-xs text-gray-500">{formatTime(conv.lastMessage.created_at)}</span>
                             </div>
-                            {conv.service && <p className="text-xs text-blue-600 mb-1">{conv.service}</p>}
                             <p className="text-sm text-gray-500 truncate">{conv.lastMessage.content}</p>
                           </div>
                           {conv.unreadCount > 0 && (
@@ -280,9 +278,6 @@ export default function MessagesArtisanPage() {
                           </div>
                           <div>
                             <h3 className="font-semibold text-gray-900">{getDisplayName(selectedConversation.partner)}</h3>
-                            {selectedConversation.service && (
-                              <span className="text-sm text-blue-600">{selectedConversation.service}</span>
-                            )}
                           </div>
                         </div>
                         <Link

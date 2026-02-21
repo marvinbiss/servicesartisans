@@ -34,26 +34,20 @@ export async function POST(
       )
     }
 
-    // Don't create read receipt for own messages
+    // Don't mark own messages as read
     if (message.sender_id === user.id) {
       return NextResponse.json({ success: true, own_message: true })
     }
 
-    // Create read receipt
-    const { data, error } = await supabase
-      .from('message_read_receipts')
-      .insert({
-        message_id: messageId,
-        user_id: user.id,
-      })
-      .select()
-      .single()
+    // Mark message as read by updating read_at on messages table
+    // (message_read_receipts table was dropped in migration 100)
+    const { error } = await supabase
+      .from('messages')
+      .update({ read_at: new Date().toISOString() })
+      .eq('id', messageId)
+      .is('read_at', null)
 
     if (error) {
-      // Unique constraint violation means already read
-      if (error.code === '23505') {
-        return NextResponse.json({ success: true, already_read: true })
-      }
       logger.error('Error marking message as read', error)
       return NextResponse.json(
         { error: 'Impossible de marquer comme lu' },
@@ -61,14 +55,7 @@ export async function POST(
       )
     }
 
-    // Also update the read_at field on the message for backwards compatibility
-    await supabase
-      .from('messages')
-      .update({ read_at: new Date().toISOString() })
-      .eq('id', messageId)
-      .is('read_at', null)
-
-    return NextResponse.json(data, { status: 201 })
+    return NextResponse.json({ success: true })
   } catch (error) {
     logger.error('Mark as read error', error)
     return NextResponse.json(

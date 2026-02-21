@@ -10,7 +10,7 @@ import { CmsContent } from '@/components/CmsContent'
 
 export const metadata: Metadata = {
   title: 'Carrières — Rejoignez notre équipe',
-  description: 'Découvrez les opportunités de carrière chez ServicesArtisans. Rejoignez une équipe passionnée qui construit le plus grand annuaire d\'artisans de France.',
+  description: 'Découvrez les opportunités de carrière chez ServicesArtisans. Rejoignez une équipe passionnée qui construit l\'annuaire des artisans de France basé sur les données SIREN.',
   alternates: {
     canonical: `${SITE_URL}/carrieres`,
   },
@@ -69,7 +69,7 @@ export default async function CarrieresPage() {
             Carri&egrave;res
           </h1>
           <p className="text-xl text-slate-400 max-w-3xl">
-            Rejoignez une &eacute;quipe passionn&eacute;e qui construit le plus grand annuaire d&apos;artisans de France.
+            Rejoignez une &eacute;quipe passionn&eacute;e qui construit l&apos;annuaire des artisans de France bas&eacute; sur les donn&eacute;es SIREN officielles.
           </p>
         </div>
       </section>

@@ -64,11 +64,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'ServicesArtisans — 350 000+ artisans référencés en France',
+    default: 'ServicesArtisans — Annuaire d\'artisans référencés en France',
     template: '%s | ServicesArtisans',
   },
   description:
-    'Le plus grand annuaire d\'artisans de France. 350 000+ professionnels référencés dans 101 départements. Plombiers, électriciens, menuisiers, maçons et plus. Devis gratuits.',
+    'Annuaire d\'artisans de France basé sur les données SIREN officielles. Des milliers de professionnels référencés dans 101 départements. Plombiers, électriciens, menuisiers, maçons et plus. Devis gratuits.',
   authors: [{ name: 'ServicesArtisans' }],
   applicationName: 'ServicesArtisans',
   appleWebApp: {
@@ -86,16 +86,16 @@ export const metadata: Metadata = {
     locale: 'fr_FR',
     url: SITE_URL,
     siteName: 'ServicesArtisans',
-    title: 'ServicesArtisans — 350 000+ artisans référencés en France',
+    title: 'ServicesArtisans — Annuaire des artisans référencés en France',
     description:
-      'Le plus grand annuaire d\'artisans de France. 350 000+ professionnels référencés. Devis gratuits.',
-    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — 350 000+ artisans référencés en France' }],
+      'Annuaire d\'artisans de France basé sur les données SIREN officielles. Des milliers de professionnels référencés. Devis gratuits.',
+    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'ServicesArtisans — Annuaire des artisans référencés en France' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ServicesArtisans — 350 000+ artisans référencés en France',
+    title: 'ServicesArtisans — Annuaire des artisans référencés en France',
     description:
-      'Le plus grand annuaire d\'artisans de France. Devis gratuits, données gouvernementales.',
+      'Annuaire d\'artisans de France. Devis gratuits, données gouvernementales SIREN.',
   },
   robots: {
     index: true,

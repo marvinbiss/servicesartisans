@@ -87,7 +87,7 @@ export function useProvider(): UseProviderReturn {
       const [{ data: bookingsData }, { data: reviewsData }] = await Promise.all([
         supabase
           .from('bookings')
-          .select('id, status, total_price')
+          .select('id, status')
           .eq('provider_id', providerData.id)
           .limit(500),
         supabase
@@ -100,7 +100,7 @@ export function useProvider(): UseProviderReturn {
       if (bookingsData) {
         const completed = bookingsData.filter(b => b.status === 'completed')
         const pending = bookingsData.filter(b => b.status === 'pending')
-        const totalRevenue = completed.reduce((sum, b) => sum + (b.total_price || 0), 0)
+        const totalRevenue = 0 // bookings table has no price column
 
         const ratings = reviewsData?.map(r => r.rating) || []
         const avgRating = ratings.length > 0

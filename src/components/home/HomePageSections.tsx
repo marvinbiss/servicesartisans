@@ -221,7 +221,7 @@ const steps = [
   {
     step: '3',
     title: 'Contactez',
-    description: 'Demandez un devis gratuit et sans engagement. L\'artisan vous répond sous 24h avec une proposition détaillée.',
+    description: 'Demandez un devis gratuit et sans engagement. L\'artisan vous contacte pour vous faire une proposition détaillée.',
     icon: CheckCircle,
     color: 'from-emerald-500 to-emerald-600',
     bg: 'bg-emerald-50',
@@ -353,7 +353,7 @@ export function ArtisanCTASection() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-sm text-amber-300 rounded-full text-sm font-medium mb-6 border border-white/10">
             <Users className="w-3.5 h-3.5" />
-            Rejoignez 350 000+ artisans référencés
+            Rejoignez les artisans référencés SIREN
           </div>
 
           <h2 className="font-heading text-3xl md:text-[2.75rem] lg:text-5xl font-bold mb-5 tracking-tight leading-tight">

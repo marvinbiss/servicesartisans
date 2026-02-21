@@ -30,6 +30,15 @@
     --brand-error: #ef4444;
     --brand-error-50: #fef2f2;
 
+    /* Clay Homepage Palette */
+    --tc: #E86B4B;
+    --tc-dark: #C24B2A;
+    --tc-light: #F5BAA0;
+    --sand: #F4EFE8;
+    --sand2: #EDE8E1;
+    --sand3: #E5DDD4;
+    --dark-text: #1C1917;
+
     /* Neutral Colors */
     --color-white: #ffffff;
     --color-black: #000000;
@@ -838,5 +847,19 @@ img {
   color: #4b5563;
   line-height: 1.75;
   font-size: inherit;
+}
+
+/* =============================================
+   Clay Homepage — Marquee Animation
+   ============================================= */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+.animate-marquee:hover {
+  animation-play-state: paused;
 }
 

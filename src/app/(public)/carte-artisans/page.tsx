@@ -21,9 +21,9 @@ const CarteClient = dynamic(() => import('./CarteClient'), {
 })
 
 export const metadata: Metadata = {
-  title: 'Carte des artisans en France — 350\u00A0000+ professionnels',
+  title: 'Carte des artisans en France',
   description:
-    'Visualisez la couverture des artisans référencés en France. 350\u00A0000+ professionnels dans 101 départements. Trouvez un artisan près de chez vous.',
+    'Visualisez la couverture des artisans référencés en France dans 101 départements. Trouvez un artisan près de chez vous.',
   alternates: {
     canonical: `${SITE_URL}/carte-artisans`,
   },
@@ -36,9 +36,9 @@ export const metadata: Metadata = {
   },
   openGraph: {
     locale: 'fr_FR',
-    title: 'Carte des artisans en France — 350\u00A0000+ professionnels',
+    title: 'Carte des artisans en France',
     description:
-      'Visualisez la couverture des artisans référencés en France. 350\u00A0000+ professionnels dans 101 départements.',
+      'Visualisez la couverture des artisans référencés en France dans 101 départements.',
     url: `${SITE_URL}/carte-artisans`,
     type: 'website',
     images: [
@@ -52,9 +52,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Carte des artisans en France — 350\u00A0000+ professionnels',
+    title: 'Carte des artisans en France',
     description:
-      'Visualisez la couverture des artisans en France. 350\u00A0000+ professionnels dans 101 départements.',
+      'Visualisez la couverture des artisans en France dans 101 départements.',
     images: [`${SITE_URL}/opengraph-image`],
   },
 }
@@ -84,7 +84,7 @@ export default function CarteArtisansPage() {
               Carte des artisans en France
             </h1>
             <p className="text-blue-100 text-lg max-w-2xl">
-              Explorez la couverture des 350&nbsp;000+ artisans référencés sur notre plateforme. Cliquez sur une ville pour découvrir les professionnels disponibles.
+              Explorez la couverture des artisans référencés sur notre plateforme dans les 101 départements. Cliquez sur une ville pour découvrir les professionnels disponibles.
             </p>
           </div>
         </div>

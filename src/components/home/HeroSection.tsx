@@ -234,7 +234,7 @@ export function HeroSection({ artisanCount = 0 }: { artisanCount?: number }) {
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400" />
                 </span>
                 <span className="text-sm text-white/80 font-medium">
-                  {artisanCount > 0 ? `${artisanCount.toLocaleString('fr-FR')} artisans référencés en France` : '350 000+ artisans référencés en France'}
+                  {artisanCount > 0 ? `${artisanCount.toLocaleString('fr-FR')} artisans référencés en France` : 'Artisans référencés en France (données SIREN)'}
                 </span>
               </div>
             </motion.div>

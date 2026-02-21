@@ -59,7 +59,7 @@ export function QuoteForm({ providerId, serviceSlug, onSuccess }: QuoteFormProps
         <div className="text-4xl mb-2">✅</div>
         <p className="text-green-600 font-medium">Demande envoyée !</p>
         <p className="text-sm text-gray-500 mt-1">
-          L'artisan vous contactera sous 24h.
+          L'artisan vous contactera dans les meilleurs délais.
         </p>
         <Button
           variant="outline"

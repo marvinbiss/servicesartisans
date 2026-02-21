@@ -192,31 +192,41 @@ export async function GET(request: Request) {
 
 // Collect all user data for export
 async function collectUserData(userId: string) {
+  // Fetch profile first to get user email (needed for reviews written as client)
+  const profileResult = await getSupabaseAdmin()
+    .from('profiles')
+    .select('*')
+    .eq('id', userId)
+    .single()
+
+  const userEmail: string | null = profileResult.data?.email ?? null
+
   const [
-    profileResult,
     bookingsResult,
-    reviewsResult,
+    reviewsReceivedResult,
+    reviewsWrittenResult,
     messagesResult,
     preferencesResult,
   ] = await Promise.all([
-    // Profile data
-    getSupabaseAdmin()
-      .from('profiles')
-      .select('*')
-      .eq('id', userId)
-      .single(),
-
     // Bookings (as client or provider)
     getSupabaseAdmin()
       .from('bookings')
       .select('*')
       .or(`client_id.eq.${userId},provider_id.eq.${userId}`),
 
-    // Reviews where this user is the artisan (reviews.artisan_id → profiles.id)
+    // Reviews received: this user is the artisan (reviews.artisan_id → profiles.id)
     getSupabaseAdmin()
       .from('reviews')
-      .select('*')
+      .select('id, rating, comment, created_at, artisan_id')
       .eq('artisan_id', userId),
+
+    // Reviews written: this user is the client (identified by client_email)
+    userEmail
+      ? getSupabaseAdmin()
+          .from('reviews')
+          .select('id, rating, comment, created_at, artisan_id')
+          .eq('client_email', userEmail)
+      : Promise.resolve({ data: [] }),
 
     // Messages sent by this user
     getSupabaseAdmin()
@@ -236,7 +246,8 @@ async function collectUserData(userId: string) {
     exportDate: new Date().toISOString(),
     profile: profileResult.data || null,
     bookings: bookingsResult.data || [],
-    reviews: reviewsResult.data || [],
+    reviews_received: reviewsReceivedResult.data || [],
+    reviews_written: reviewsWrittenResult.data || [],
     messages: messagesResult.data || [],
     preferences: preferencesResult.data || null,
   }

@@ -42,10 +42,10 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
 
   const descHash = Math.abs(hashCode(`devis-desc-${service}`))
   const descTemplates = [
-    `Demandez un devis ${tradeLower} gratuit. Comparez jusqu’à 3 artisans référencés. Prix : ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. Réponse sous 24h.`,
+    `Demandez un devis ${tradeLower} gratuit. Comparez jusqu’à 3 artisans référencés. Prix : ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. 100 % gratuit.`,
     `Devis ${tradeLower} en ligne : ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}. Comparez les offres de professionnels qualifiés. 100 % gratuit.`,
     `Obtenez un devis gratuit pour ${tradeLower}. ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. Artisans vérifiés, sans engagement.`,
-    `Devis gratuit ${tradeLower} : de ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}. Jusqu’à 3 propositions d’artisans sous 24h.`,
+    `Devis gratuit ${tradeLower} : de ${trade.priceRange.min} à ${trade.priceRange.max} ${trade.priceRange.unit}. Jusqu’à 3 propositions d’artisans qualifiés.`,
   ]
   const description = descTemplates[descHash % descTemplates.length]
 
@@ -138,7 +138,7 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
       priceCurrency: 'EUR',
       lowPrice: trade.priceRange.min,
       highPrice: trade.priceRange.max,
-      offerCount: 350000,
+      offerCount: undefined,
     },
   }
 
@@ -179,7 +179,7 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
                   `Devis ${tradeLower} gratuit — Comparez les artisans`,
                   `Demandez un devis ${tradeLower} en ligne`,
                   `Devis ${tradeLower} : comparez jusqu’à 3 artisans`,
-                  `Devis gratuit ${tradeLower} — Réponse sous 24h`,
+                  `Devis gratuit ${tradeLower} — Sans engagement`,
                   `${trade.name} : obtenez votre devis gratuit`,
                 ]
                 return h1Templates[h1Hash % h1Templates.length]

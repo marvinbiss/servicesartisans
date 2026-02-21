@@ -39,6 +39,32 @@ module.exports = {
           900: '#713610',
           950: '#421b05',
         },
+        // Clay - Terracotta (new homepage brand color)
+        clay: {
+          50:  '#FDF1EC',
+          100: '#FADDCF',
+          200: '#F5BAA0',
+          300: '#EF9171',
+          400: '#E86B4B',
+          500: '#D4553A',
+          600: '#C24B2A',
+          700: '#A33E22',
+          800: '#85321C',
+          900: '#6B2916',
+        },
+        // Sand - Warm neutrals (clay homepage backgrounds)
+        sand: {
+          50:  '#FDFAF7',
+          100: '#F9F4EE',
+          200: '#F4EFE8',
+          300: '#EDE8E1',
+          400: '#E5DDD4',
+          500: '#D5C9BE',
+          600: '#B8A99A',
+          700: '#9A8879',
+          800: '#7D6A5C',
+          900: '#614F43',
+        },
         // Success - Green (verified badges, success states)
         accent: {
           50: '#ECFDF5',
@@ -79,6 +105,7 @@ module.exports = {
         'premium-lg': '0 25px 60px -15px rgba(0, 0, 0, 0.15)',
         'glass': '0 8px 32px rgba(0, 0, 0, 0.08)',
         'glass-lg': '0 8px 32px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.15)',
+        'glow-clay': '0 0 30px rgba(232, 107, 75, 0.3)',
         'inner-glow': 'inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
         'card-hover': '0 25px 50px -12px rgba(0, 0, 0, 0.12)',
       },

@@ -33,23 +33,18 @@ export async function GET(request: Request) {
 
     logger.info(`[Cron] Fetching bookings for ${tomorrowStr}`)
 
-    // Fetch all confirmed bookings for tomorrow
+    // Fetch all confirmed bookings for tomorrow using scheduled_date (availability_slots has no FK on bookings)
     const { data: bookings, error } = await supabase
       .from('bookings')
       .select(`
         id,
         service_name,
         status,
-        client:profiles!client_id(full_name, email, phone_e164),
-        slot:availability_slots(
-          date,
-          start_time,
-          end_time,
-          artisan_id
-        )
+        scheduled_date,
+        provider_id,
+        client:profiles!client_id(full_name, email, phone_e164)
       `)
       .eq('status', 'confirmed')
-      .not('slot', 'is', null)
       .limit(500)
 
     if (error) {
@@ -57,15 +52,9 @@ export async function GET(request: Request) {
       throw error
     }
 
-    // Helper to get slot data (handles array from Supabase join)
-    const getSlot = (slot: unknown) => {
-      if (Array.isArray(slot)) return slot[0]
-      return slot as { date: string; start_time: string; end_time: string; artisan_id: string } | undefined
-    }
-
-    // Filter bookings for tomorrow
+    // Filter bookings for tomorrow using scheduled_date
     const tomorrowBookings = bookings?.filter(
-      (b) => getSlot(b.slot)?.date === tomorrowStr
+      (b) => b.scheduled_date && b.scheduled_date.startsWith(tomorrowStr)
     ) || []
 
     logger.info(`[Cron] Found ${tomorrowBookings.length} bookings for tomorrow`)
@@ -96,7 +85,7 @@ export async function GET(request: Request) {
     logger.info(`[Cron] ${bookingsToRemind.length} bookings need reminders`)
 
     // Fetch artisan details for all bookings
-    const artisanIds = Array.from(new Set(bookingsToRemind.map((b) => getSlot(b.slot)?.artisan_id).filter(Boolean)))
+    const artisanIds = Array.from(new Set(bookingsToRemind.map((b) => b.provider_id).filter(Boolean)))
     const { data: artisans } = await supabase
       .from('profiles')
       .select('id, full_name')
@@ -106,10 +95,9 @@ export async function GET(request: Request) {
 
     // Prepare notification payloads
     const payloads: NotificationPayload[] = bookingsToRemind.map((booking) => {
-      const slot = getSlot(booking.slot)
-      const artisan = artisanMap.get(slot?.artisan_id || '')
+      const artisan = artisanMap.get(booking.provider_id || '')
       const client = Array.isArray(booking.client) ? booking.client[0] : booking.client
-      const formattedDate = slot?.date ? new Date(slot.date).toLocaleDateString('fr-FR', {
+      const formattedDate = booking.scheduled_date ? new Date(booking.scheduled_date).toLocaleDateString('fr-FR', {
         weekday: 'long',
         day: 'numeric',
         month: 'long',
@@ -124,8 +112,8 @@ export async function GET(request: Request) {
         artisanName: artisan?.full_name || 'Artisan',
         serviceName: booking.service_name || 'Service',
         date: formattedDate,
-        startTime: slot?.start_time || '',
-        endTime: slot?.end_time || '',
+        startTime: '',
+        endTime: '',
       }
     })
 

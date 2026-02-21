@@ -98,33 +98,27 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Calculate time window: appointments that ended 2-3 hours ago
+    // Calculate time window: appointments that started 2-3 hours ago (availability_slots has no FK on bookings)
     const now = new Date()
     const windowStart = new Date(now.getTime() - 3 * 60 * 60 * 1000) // 3h ago
     const windowEnd = new Date(now.getTime() - 2 * 60 * 60 * 1000) // 2h ago
 
-    const todayStr = now.toISOString().split('T')[0]
-    const windowStartTime = windowStart.toTimeString().slice(0, 5)
-    const windowEndTime = windowEnd.toTimeString().slice(0, 5)
+    logger.info(`[Review Cron] Looking for completed appointments between ${windowStart.toISOString()} and ${windowEnd.toISOString()}`)
 
-    logger.info(`[Review Cron] Looking for completed appointments between ${windowStartTime} and ${windowEndTime}`)
-
-    // Fetch completed bookings in the time window
+    // Fetch completed bookings in the time window using scheduled_date
     const { data: bookings, error } = await supabase
       .from('bookings')
       .select(`
         id,
         service_name,
         status,
-        client:profiles!client_id(full_name, email, phone_e164),
-        slot:availability_slots(
-          date,
-          end_time,
-          artisan_id
-        )
+        scheduled_date,
+        provider_id,
+        client:profiles!client_id(full_name, email, phone_e164)
       `)
       .in('status', ['confirmed', 'completed'])
-      .not('slot', 'is', null)
+      .gte('scheduled_date', windowStart.toISOString())
+      .lte('scheduled_date', windowEnd.toISOString())
       .limit(500)
 
     if (error) {
@@ -132,21 +126,8 @@ export async function GET(request: Request) {
       throw error
     }
 
-    // Helper to get slot data (handles array from Supabase join)
-    const getSlot = (slot: unknown) => {
-      if (Array.isArray(slot)) return slot[0]
-      return slot as { date: string; end_time: string; artisan_id: string } | undefined
-    }
-
-    // Filter bookings that ended in the time window
-    const completedBookings = bookings?.filter((b) => {
-      const slot = getSlot(b.slot)
-      if (!slot?.date || !slot?.end_time) return false
-      if (slot.date !== todayStr) return false
-
-      const endTime = slot.end_time.slice(0, 5)
-      return endTime >= windowStartTime && endTime <= windowEndTime
-    }) || []
+    // All returned bookings are already in the time window via the DB filter
+    const completedBookings = bookings || []
 
     logger.info(`[Review Cron] Found ${completedBookings.length} completed appointments`)
 
@@ -175,7 +156,7 @@ export async function GET(request: Request) {
     logger.info(`[Review Cron] ${bookingsToRequest.length} need review requests`)
 
     // Fetch artisan details
-    const artisanIds = Array.from(new Set(bookingsToRequest.map((b) => getSlot(b.slot)?.artisan_id).filter(Boolean)))
+    const artisanIds = Array.from(new Set(bookingsToRequest.map((b) => b.provider_id).filter(Boolean)))
     const { data: artisans } = await supabase
       .from('profiles')
       .select('id, full_name')
@@ -187,8 +168,7 @@ export async function GET(request: Request) {
     let failedCount = 0
 
     for (const booking of bookingsToRequest) {
-      const slot = getSlot(booking.slot)
-      const artisan = artisanMap.get(slot?.artisan_id || '')
+      const artisan = artisanMap.get(booking.provider_id || '')
       const client = Array.isArray(booking.client) ? booking.client[0] : booking.client
       const artisanName = artisan?.full_name || 'Artisan'
       const reviewUrl = `${SITE_URL}/donner-avis/${booking.id.slice(0, 8)}`

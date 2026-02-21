@@ -2,7 +2,7 @@ import { ImageResponse } from 'next/og'
 
 export const runtime = 'edge'
 
-export const alt = 'ServicesArtisans — 350 000+ artisans référencés en France'
+export const alt = 'ServicesArtisans — Annuaire d\'artisans référencés en France'
 export const size = {
   width: 1200,
   height: 630,
@@ -106,7 +106,7 @@ export default async function Image() {
               display: 'flex',
             }}
           >
-            350 000+ artisans référencés en France
+            Artisans référencés en France — Données SIREN
           </div>
 
           {/* Subtitle */}
@@ -118,7 +118,7 @@ export default async function Image() {
               display: 'flex',
             }}
           >
-            Le plus grand annuaire d&apos;artisans de France
+            Annuaire d&apos;artisans référencés — Données SIREN officielles
           </div>
 
           {/* Bottom accent bar */}

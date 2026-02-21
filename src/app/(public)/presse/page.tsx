@@ -9,7 +9,7 @@ import { CmsContent } from '@/components/CmsContent'
 
 export const metadata: Metadata = {
   title: 'Espace presse',
-  description: 'Espace presse de ServicesArtisans. Communiqués, kit média et contacts presse du plus grand annuaire d\'artisans de France.',
+  description: 'Espace presse de ServicesArtisans. Communiqués, kit média et contacts presse de l\'annuaire d\'artisans référencés SIREN en France.',
   robots: { index: false, follow: true },
 }
 
@@ -65,7 +65,7 @@ export default async function PressePage() {
             Espace presse
           </h1>
           <p className="text-xl text-slate-400 max-w-3xl">
-            Retrouvez toutes les informations presse de ServicesArtisans, le plus grand annuaire d&apos;artisans de France.
+            Retrouvez toutes les informations presse de ServicesArtisans, l&apos;annuaire des artisans r&eacute;f&eacute;renc&eacute;s SIREN en France.
           </p>
         </div>
       </section>

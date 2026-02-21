@@ -19,7 +19,7 @@ export const companyIdentity = {
   name: 'ServicesArtisans' as const,
   tagline: 'Trouvez des artisans qualifiés près de chez vous',
   description:
-    'Plus de 350 000 artisans référencés dans toute la France. Comparez, contactez et trouvez le bon professionnel en quelques clics.',
+    'Des artisans référencés dans toute la France grâce aux données SIREN officielles. Comparez, contactez et trouvez le bon professionnel en quelques clics.',
   url: process.env.NEXT_PUBLIC_SITE_URL || 'https://servicesartisans.fr',
 
   // Legal identity (Level 1 — from env vars, null until company registration)
@@ -66,11 +66,11 @@ export const companyIdentity = {
  * Import this in any component that displays platform numbers.
  */
 export const marketingStats = {
-  artisanCount: '350 000+',
-  artisanCountShort: '350K+',
+  artisanCount: 'SIREN',
+  artisanCountShort: 'SIREN',
   cityCount: '1 000+',
-  serviceCount: '15',
-  responseTime: '24h',
+  serviceCount: '46',
+  responseTime: 'Variable',
 } as const
 
 /** True when SIRET, legal name, and address are all filled. */

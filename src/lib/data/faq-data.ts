@@ -4,7 +4,7 @@ export const faqCategories = [
     questions: [
       {
         q: 'Qu\'est-ce que ServicesArtisans ?',
-        a: 'ServicesArtisans est l\'un des premiers annuaires d\'artisans de France. Avec plus de 350 000 professionnels référencés dans 101 départements, nos données proviennent directement des registres SIREN officiels de l\'État via l\'API Annuaire des Entreprises. Le service est 100% gratuit.',
+        a: 'ServicesArtisans est un annuaire d\'artisans de France. Les données proviennent directement des registres SIREN officiels de l\'État via l\'API Annuaire des Entreprises. Le service est 100% gratuit.',
       },
       {
         q: 'Le service est-il gratuit ?',
@@ -12,7 +12,7 @@ export const faqCategories = [
       },
       {
         q: 'Comment fonctionne ServicesArtisans ?',
-        a: 'C\'est simple : 1) Recherchez un métier et une localisation parmi nos 350 000+ artisans, 2) Comparez les profils et les informations officielles, 3) Contactez directement l\'artisan de votre choix pour obtenir un devis gratuit.',
+        a: 'C\'est simple : 1) Recherchez un métier et une localisation, 2) Comparez les profils et les informations officielles, 3) Contactez directement l\'artisan de votre choix pour obtenir un devis gratuit.',
       },
       {
         q: 'D\'où proviennent les données des artisans ?',

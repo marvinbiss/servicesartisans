@@ -82,7 +82,7 @@ export async function POST(request: Request) {
       .from('deletion_requests')
       .select('*')
       .eq('user_id', user.id)
-      .in('status', ['pending', 'scheduled'])
+      .eq('status', 'scheduled')
       .single()
 
     if (existingRequest) {

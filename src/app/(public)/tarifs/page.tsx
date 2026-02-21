@@ -119,7 +119,7 @@ export default async function TarifsPage() {
       priceCurrency: 'EUR',
       lowPrice: trade.priceRange.min,
       highPrice: trade.priceRange.max,
-      offerCount: 350000,
+      offerCount: undefined,
     },
   }))
 

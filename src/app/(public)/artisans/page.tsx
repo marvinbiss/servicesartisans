@@ -12,14 +12,14 @@ import { resolveProviderCities } from '@/lib/insee-resolver'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Annuaire des artisans en France — 743 000+ professionnels référencés',
+  title: 'Annuaire des artisans en France — Professionnels référencés SIREN',
   description:
-    'Trouvez un artisan qualifié près de chez vous parmi 743 000+ professionnels référencés. Plombier, électricien, maçon, couvreur et 40+ métiers dans toute la France.',
+    'Trouvez un artisan qualifié près de chez vous. Plombier, électricien, maçon, couvreur et 40+ métiers dans toute la France. Données SIREN officielles.',
   alternates: { canonical: `${SITE_URL}/artisans` },
   openGraph: {
     locale: 'fr_FR',
-    title: 'Annuaire des artisans en France — 743 000+ professionnels',
-    description: 'Trouvez un artisan qualifié parmi 743 000+ professionnels référencés en France.',
+    title: 'Annuaire des artisans en France — Professionnels référencés',
+    description: 'Trouvez un artisan qualifié parmi les professionnels référencés en France. Données SIREN officielles.',
     url: `${SITE_URL}/artisans`,
     siteName: 'ServicesArtisans',
     type: 'website',
@@ -58,8 +58,8 @@ async function getRecentProviders(limit = 50) {
         .eq('is_active', true)
       if (count && count > 0) totalCount = count
     } catch {
-      // Count failed — use fallback estimate
-      totalCount = 743000
+      // Count failed — use 0 to avoid displaying false numbers
+      totalCount = 0
     }
 
     return {

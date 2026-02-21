@@ -70,7 +70,7 @@ export default function RecherchePage() {
             </div>
             <div className="flex items-center gap-2 bg-white/[0.06] backdrop-blur-sm rounded-full px-4 py-2 border border-white/10">
               <Clock className="w-4 h-4 text-blue-300" />
-              <span className="text-sm text-white/80">Devis sous 24h</span>
+              <span className="text-sm text-white/80">Devis gratuit</span>
             </div>
           </div>
         </div>
