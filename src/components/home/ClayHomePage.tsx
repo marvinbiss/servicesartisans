@@ -27,18 +27,31 @@ const SERVICE_ITEMS = [
 
 const FALLBACK_ARTISANS = [
   {
-    name: 'Marc Dupont', specialty: 'Plombier', address_city: 'Paris',
+    name: 'Marc Dupont', specialty: 'Plombier', address_city: 'Paris', address_postal_code: '75011',
     rating_average: 4.9, review_count: 127, is_verified: true, slug: 'plombier', stable_id: null,
   },
   {
-    name: 'Sophie Martin', specialty: 'Électricienne', address_city: 'Lyon',
+    name: 'Sophie Martin', specialty: 'Électricienne', address_city: 'Lyon', address_postal_code: '69003',
     rating_average: 4.8, review_count: 89, is_verified: true, slug: 'electricien', stable_id: null,
   },
   {
-    name: 'Ahmed Benzara', specialty: 'Serrurier', address_city: 'Marseille',
+    name: 'Ahmed Benzara', specialty: 'Serrurier', address_city: 'Marseille', address_postal_code: '13001',
     rating_average: 5.0, review_count: 43, is_verified: true, slug: 'serrurier', stable_id: null,
   },
 ]
+
+/** Met en forme le nom : "DUPONT JEAN" → "Dupont Jean" */
+function formatName(raw: string): string {
+  // Si tout est en majuscules, convertir en Title Case
+  if (raw === raw.toUpperCase()) {
+    return raw
+      .toLowerCase()
+      .replace(/(?:^|\s|['-])\S/g, c => c.toUpperCase())
+      // Tronquer les noms de société entre parenthèses
+      .replace(/\s*\(.*$/, '')
+  }
+  return raw.replace(/\s*\(.*$/, '')
+}
 
 const FALLBACK_REVIEWS = [
   { client_name: 'Marie Fontaine', rating: 5, comment: "Marc a réglé ma fuite d'eau en urgence un dimanche soir. Rapide, propre, prix honnête. ServicesArtisans m'a littéralement sauvé la mise.", created_at: '', avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&h=80&fit=crop&crop=face&q=80' },
@@ -337,9 +350,9 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                         </div>
                       </div>
                       <div className="px-5 pb-5 pt-4">
-                        <div className="text-base font-black text-stone-900 mb-0.5 line-clamp-1">{a.name}</div>
-                        <div className="text-sm text-stone-400 mb-2.5">
-                          {a.specialty}{a.address_city ? ` · ${a.address_city}` : ''}
+                        <div className="text-base font-black text-stone-900 mb-0.5 line-clamp-1">{formatName(a.name)}</div>
+                        <div className="text-sm text-stone-400 mb-2.5 line-clamp-1">
+                          {a.specialty}{a.address_city ? ` · ${a.address_city}` : ''}{a.address_postal_code ? ` (${a.address_postal_code})` : ''}
                         </div>
                         <div className="flex items-center gap-1.5 mb-3">
                           <span className="text-sm">{renderStars(rating)}</span>

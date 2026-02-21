@@ -67,6 +67,7 @@ export interface HomepageProvider {
   slug: string
   specialty: string | null
   address_city: string | null
+  address_postal_code: string | null
   is_verified: boolean
   rating_average: number | null
   review_count: number | null
@@ -160,12 +161,17 @@ export async function getHomepageData(): Promise<HomepageData> {
       ),
       supabase
         .from('providers')
-        .select('name, slug, specialty, address_city, is_verified, rating_average, review_count, stable_id')
+        .select('name, slug, specialty, address_city, address_postal_code, is_verified, rating_average, review_count, stable_id')
         .eq('is_active', true)
+        .eq('is_verified', true)
         .not('rating_average', 'is', null)
-        .gt('review_count', 0)
-        .order('rating_average', { ascending: false })
+        .not('address_city', 'is', null)
+        .not('specialty', 'is', null)
+        .gt('review_count', 2)
+        .lt('review_count', 500)
+        .gte('rating_average', 4)
         .order('review_count', { ascending: false })
+        .order('rating_average', { ascending: false })
         .limit(3),
       supabase
         .from('reviews')
