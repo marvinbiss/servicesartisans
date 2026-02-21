@@ -5,6 +5,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -57,7 +58,7 @@ export async function GET(request: NextRequest) {
     const { count, error: countError } = await countQuery
 
     if (countError) {
-      console.error('Error counting leads:', countError)
+      logger.error('Error counting leads:', countError)
       return NextResponse.json(
         { error: 'Erreur lors du comptage des leads' },
         { status: 500 }
@@ -99,7 +100,7 @@ export async function GET(request: NextRequest) {
     const { data: assignments, error: assignError } = await dataQuery
 
     if (assignError) {
-      console.error('Error fetching assigned leads:', assignError)
+      logger.error('Error fetching assigned leads:', assignError)
       return NextResponse.json(
         { error: 'Erreur lors de la récupération des leads' },
         { status: 500 }
@@ -117,7 +118,7 @@ export async function GET(request: NextRequest) {
       },
     })
   } catch (error) {
-    console.error('Artisan leads GET error:', error)
+    logger.error('Artisan leads GET error:', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }
