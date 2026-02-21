@@ -5,7 +5,10 @@ import { GeographicSectionWrapper } from '@/components/home/GeographicSectionWra
 import { ClayHomePage } from '@/components/home/ClayHomePage'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
-import { getSiteStats, formatProviderCount } from '@/lib/data/stats'
+import { getSiteStats, getHomepageData, formatProviderCount } from '@/lib/data/stats'
+import { getFAQSchema, getItemListSchema } from '@/lib/seo/jsonld'
+import { faqItems } from '@/lib/data/faq-data'
+import { popularServices } from '@/lib/constants/navigation'
 
 export const revalidate = 3600 // Rafraîchit les stats toutes les heures
 
@@ -36,9 +39,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const [cmsPage, siteStats] = await Promise.all([
+  const [cmsPage, homepageData] = await Promise.all([
     getPageContent('homepage', 'homepage'),
-    getSiteStats(),
+    getHomepageData(),
   ])
 
   if (cmsPage?.content_html) {
@@ -56,9 +59,44 @@ export default async function HomePage() {
     )
   }
 
+  // JSON-LD structured data for homepage
+  const faqSchema = getFAQSchema(faqItems)
+  const itemListSchema = getItemListSchema({
+    name: 'Services artisans populaires en France',
+    description: 'Les métiers du bâtiment les plus recherchés sur ServicesArtisans',
+    url: '/services',
+    items: popularServices.map((s, i) => ({
+      name: s.name,
+      url: `/services/${s.slug}`,
+      position: i + 1,
+    })),
+  })
+  const aggregateRatingSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'ServicesArtisans',
+    url: SITE_URL,
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: homepageData.avgRating,
+      reviewCount: homepageData.reviewCount,
+      bestRating: 5,
+      worstRating: 1,
+    },
+  }
+
   return (
     <div className="min-h-screen">
-      {/* Organization + WebSite JSON-LD already injected globally in layout.tsx */}
+      {/* Homepage-specific JSON-LD: FAQ + ItemList + AggregateRating */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify([faqSchema, itemListSchema, aggregateRatingSchema])
+            .replace(/</g, '\\u003c')
+            .replace(/>/g, '\\u003e')
+            .replace(/&/g, '\\u0026'),
+        }}
+      />
 
       {/* Server-rendered H1 for SEO — visually hidden, ClayHomePage shows the visible version */}
       <h1 className="sr-only">
@@ -66,7 +104,12 @@ export default async function HomePage() {
       </h1>
 
       {/* ─── CLAY HOMEPAGE DESIGN ─────────────────────────────── */}
-      <ClayHomePage stats={siteStats} />
+      <ClayHomePage
+        stats={homepageData}
+        serviceCounts={homepageData.serviceCounts}
+        topProviders={homepageData.topProviders}
+        recentReviews={homepageData.recentReviews}
+      />
 
       {/* ─── GEOGRAPHIC COVERAGE ──────────────────────────────── */}
       <section className="py-16 bg-sand-200">

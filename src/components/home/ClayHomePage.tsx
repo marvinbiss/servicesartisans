@@ -1,570 +1,489 @@
 import Link from 'next/link'
-import { Droplets, Zap, HardHat, PaintBucket, Hammer, ShieldCheck, Star, MapPin, Shield, Wrench, Thermometer, Lock, Grid3X3, Home, Bath, Flame, Key } from 'lucide-react'
+import Image from 'next/image'
+import { Droplets, Zap, HardHat, PaintBucket, Hammer, ShieldCheck, Star, MapPin, Shield, Key, Flame, TreeDeciduous } from 'lucide-react'
 import { ClayHeroSearch } from './ClayHeroSearch'
 import { ClayReviewsCarousel } from './ClayReviewsCarousel'
-import { formatProviderCount, type SiteStats } from '@/lib/data/stats'
+import { ScrollReveal } from '@/components/ui/ScrollReveal'
+import { formatProviderCount, type SiteStats, type HomepageProvider, type HomepageReview } from '@/lib/data/stats'
+import { faqCategories } from '@/lib/data/faq-data'
 
 interface Props {
   stats: SiteStats
+  serviceCounts: Record<string, number>
+  topProviders: HomepageProvider[]
+  recentReviews: HomepageReview[]
 }
 
-const SERVICES = [
-  { Icon: Droplets,    name: 'Plomberie',   slug: 'plombier',            count: '3 240' },
-  { Icon: Zap,         name: 'Électricité', slug: 'electricien',         count: '2 890' },
-  { Icon: HardHat,     name: 'Maçonnerie',  slug: 'macon',               count: '1 750' },
-  { Icon: PaintBucket, name: 'Peinture',    slug: 'peintre-en-batiment', count: '4 120' },
-  { Icon: Hammer,      name: 'Menuiserie',  slug: 'menuisier',           count: '1 980' },
+const SERVICE_ITEMS = [
+  { Icon: Droplets,      name: 'Plomberie',    slug: 'plombier' },
+  { Icon: Zap,           name: 'Électricité',  slug: 'electricien' },
+  { Icon: Key,           name: 'Serrurerie',   slug: 'serrurier' },
+  { Icon: Flame,         name: 'Chauffage',    slug: 'chauffagiste' },
+  { Icon: PaintBucket,   name: 'Peinture',     slug: 'peintre-en-batiment' },
+  { Icon: Hammer,        name: 'Menuiserie',   slug: 'menuisier' },
+  { Icon: HardHat,       name: 'Maçonnerie',   slug: 'macon' },
+  { Icon: TreeDeciduous, name: 'Jardinage',    slug: 'jardinier' },
 ]
 
-const MARQUEE_ITEMS = [
-  { Icon: Wrench,      label: 'Plomberie' },
-  { Icon: Zap,         label: 'Électricité' },
-  { Icon: Hammer,      label: 'Menuiserie' },
-  { Icon: PaintBucket, label: 'Peinture' },
-  { Icon: Thermometer, label: 'Chauffage' },
-  { Icon: Lock,        label: 'Serrurerie' },
-  { Icon: Grid3X3,     label: 'Carrelage' },
-  { Icon: Home,        label: 'Isolation' },
-  { Icon: HardHat,     label: 'Maçonnerie' },
-  { Icon: Bath,        label: 'Salle de bain' },
-  { Icon: Flame,       label: 'Chauffage' },
-  { Icon: Key,         label: 'Vitrage' },
-]
-
-const ARTISANS = [
+const FALLBACK_ARTISANS = [
   {
-    bgImg: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&h=250&fit=crop&q=80',
-    face: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=104&h=104&fit=crop&crop=face&q=80',
-    name: 'Marc Dupont',
-    job: 'Plombier · Paris 11e · 15 ans exp.',
-    rating: '4,9',
-    reviews: 127,
-    quote: 'Intervention rapide et propre. Marc a résolu notre problème de canalisation en 2h.',
-    author: 'Sophie M.',
-    price: '85€',
-    badge: { label: '✓ Vérifié SIREN', type: 'green' as const },
+    name: 'Marc Dupont', specialty: 'Plombier', address_city: 'Paris',
+    rating_average: 4.9, review_count: 127, is_verified: true, slug: 'plombier', stable_id: null,
   },
   {
-    bgImg: 'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=500&h=250&fit=crop&q=80',
-    face: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=104&h=104&fit=crop&crop=face&q=80',
-    name: 'Sophie Martin',
-    job: 'Électricienne · Lyon 6e · Habilitée B2V',
-    rating: '4,8',
-    reviews: 89,
-    quote: 'Mise aux normes parfaite. Sophie a tout géré avec professionnalisme.',
-    author: 'Paul D.',
-    price: '75€',
-    badge: { label: '✓ Vérifié SIREN', type: 'green' as const },
+    name: 'Sophie Martin', specialty: 'Électricienne', address_city: 'Lyon',
+    rating_average: 4.8, review_count: 89, is_verified: true, slug: 'electricien', stable_id: null,
   },
   {
-    bgImg: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&h=250&fit=crop&q=80',
-    face: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=104&h=104&fit=crop&crop=face&q=80',
-    name: 'Ahmed Benzara',
-    job: 'Serrurier · Marseille · Disponible maintenant',
-    rating: '5,0',
-    reviews: 43,
-    quote: 'Arrivé en 20 minutes un dimanche soir. Travail parfait, prix correct.',
-    author: 'Jean-Pierre D.',
-    price: '90€',
-    badge: { label: '⚡ Urgences 24/7', type: 'red' as const },
-    urgent: true,
+    name: 'Ahmed Benzara', specialty: 'Serrurier', address_city: 'Marseille',
+    rating_average: 5.0, review_count: 43, is_verified: true, slug: 'serrurier', stable_id: null,
   },
 ]
 
-const BIG_REVIEWS = [
-  {
-    text: "Marc a réglé ma fuite d'eau en urgence un dimanche soir. Rapide, propre, prix honnête. ServicesArtisans m'a littéralement sauvé la mise.",
-    name: 'Marie Fontaine',
-    loc: 'Paris · Cliente depuis 2023',
-    avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&h=80&fit=crop&crop=face&q=80',
-  },
-  {
-    text: "Rénovation complète de notre appartement. Sophie et son équipe ont fait un travail remarquable dans les délais prévus et dans le budget annoncé.",
-    name: 'Thomas Bernard',
-    loc: 'Lyon · Client depuis 2022',
-    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face&q=80',
-  },
-  {
-    text: "Enfin une plateforme sérieuse ! Artisans vraiment vérifiés, pas des fakes. J'ai trouvé mon électricien en 5 minutes, travaux réalisés 3 jours plus tard.",
-    name: 'Amélie Leclerc',
-    loc: 'Bordeaux · Cliente depuis 2024',
-    avatar: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=80&h=80&fit=crop&crop=face&q=80',
-  },
+const FALLBACK_REVIEWS: HomepageReview[] = [
+  { client_name: 'Marie Fontaine', rating: 5, comment: "Marc a réglé ma fuite d'eau en urgence un dimanche soir. Rapide, propre, prix honnête. ServicesArtisans m'a littéralement sauvé la mise.", created_at: '' },
+  { client_name: 'Thomas Bernard', rating: 4, comment: "Rénovation complète de notre appartement. Sophie et son équipe ont fait un travail remarquable dans les délais prévus et dans le budget annoncé.", created_at: '' },
+  { client_name: 'Amélie Leclerc', rating: 5, comment: "Enfin une plateforme sérieuse ! Artisans vraiment vérifiés, pas des fakes. J'ai trouvé mon électricien en 5 minutes, travaux réalisés 3 jours plus tard.", created_at: '' },
 ]
 
-export function ClayHomePage({ stats }: Props) {
+const SPECIALTY_IMAGES: Record<string, string> = {
+  default: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=500&h=250&fit=crop&q=80',
+}
+
+const HERO_BLUR = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMCwsKCwsICw4QDQoNDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAAFAAoDASIAAhEBAxEB/8QAFAABAAAAAAAAAAAAAAAAAAAACf/EAB4QAAEEAgMBAAAAAAAAAAAAAAIAAQMEBREGEiEx/8QAFQEBAQAAAAAAAAAAAAAAAAAABAX/xAAeEQABBAEFAAAAAAAAAAAAAAABAAIDBAUREiExQf/aAAwDAQACEQMRAD8AoW+W5S/yW7PQumBOhO4iID9AA/sRFVhyGRleTIhbxs00f//Z'
+
+function getInitials(name: string): string {
+  return name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
+}
+
+function renderStars(rating: number) {
+  return [1, 2, 3, 4, 5].map(i => (
+    <span key={i} className={i <= Math.round(rating) ? 'text-amber-400' : 'text-stone-300'}>★</span>
+  ))
+}
+
+// ── FAQ Section ──────────────────────────────────────────────────
+const FAQ_CATEGORIES = ['Général', 'Demande de devis']
+
+function ClayFAQSection() {
+  const faqs = faqCategories
+    .filter(c => FAQ_CATEGORIES.includes(c.name))
+    .flatMap(c => c.questions)
+
+  return (
+    <div className="max-w-[1320px] mx-auto px-6 md:px-10 py-24">
+      <div className="text-center mb-1">
+        <div className="inline-block text-xs font-bold text-clay-400 tracking-[.12em] uppercase">
+          Questions fréquentes
+        </div>
+      </div>
+      <h2 className="font-black tracking-[-0.04em] leading-tight text-stone-900 text-center mb-12" style={{ fontSize: 'clamp(2rem,3.5vw,2.8rem)' }}>
+        Tout ce que vous devez savoir.
+      </h2>
+      <div className="max-w-3xl mx-auto space-y-3">
+        {faqs.map((faq) => (
+          <details key={faq.q} className="group rounded-2xl bg-[#FFFCF8] border border-stone-200/60 transition-shadow duration-300 hover:shadow-sm">
+            <summary className="flex items-center justify-between cursor-pointer px-6 py-4 text-left text-base font-bold text-stone-900 list-none [&::-webkit-details-marker]:hidden">
+              <span>{faq.q}</span>
+              <svg className="w-5 h-5 text-clay-400 shrink-0 ml-4 transition-transform duration-300 group-open:rotate-180" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+              </svg>
+            </summary>
+            <div className="faq-answer px-6 pb-5 text-sm text-stone-600 leading-relaxed">
+              {faq.a}
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// ── Main Component ───────────────────────────────────────────────
+export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews }: Props) {
   const { artisanCount, reviewCount, avgRating, deptCount } = stats
   const countStr = artisanCount > 0 ? `${formatProviderCount(artisanCount)}+` : '50 000+'
   const reviewStr = reviewCount > 0 ? `${formatProviderCount(reviewCount)}` : '12 400'
   const ratingStr = avgRating > 0 ? avgRating.toFixed(1).replace('.', ',') : '4,9'
 
+  const artisans = topProviders.length >= 1 ? topProviders : FALLBACK_ARTISANS
+  const bigReviews = recentReviews.length >= 3 ? recentReviews.slice(0, 3) : FALLBACK_REVIEWS
+  const carouselReviews = recentReviews.length >= 6 ? recentReviews.slice(3) : undefined
+
   return (
     <>
-      {/* ─── HERO ────────────────────────────────────────────── */}
+      {/* ─── HERO ──────────────────────────────────────────────── */}
       <section
-        className="relative flex items-center overflow-hidden"
+        className="relative flex items-center justify-center overflow-hidden"
         style={{
-          height: '100vh',
-          minHeight: '720px',
+          height: '85vh',
+          minHeight: '600px',
+          maxHeight: '900px',
           background: 'linear-gradient(160deg,#1a0f06 0%,#2d1a0e 40%,#0a0503 100%)',
         }}
       >
-        {/* Background photo */}
         <div className="absolute inset-0">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1600&h=900&fit=crop&q=80"
             alt="Artisan au travail"
-            className="w-full h-full object-cover"
+            fill
+            priority
+            placeholder="blur"
+            blurDataURL={HERO_BLUR}
+            sizes="100vw"
+            className="object-cover"
           />
         </div>
-        {/* Dark gradient overlay */}
         <div
           className="absolute inset-0"
-          style={{ background: 'linear-gradient(105deg,rgba(10,8,5,.82) 0%,rgba(10,8,5,.4) 55%,rgba(10,8,5,.1) 100%)' }}
+          style={{ background: 'linear-gradient(to bottom,rgba(10,8,5,.85) 0%,rgba(10,8,5,.5) 100%)' }}
         />
 
-        {/* Content */}
-        <div className="relative z-10 max-w-[1320px] mx-auto px-6 md:px-10 w-full grid grid-cols-1 lg:grid-cols-[1fr_520px] gap-10 lg:gap-14 items-center">
-
-          {/* Colonne gauche */}
-          <div>
-            {/* Badge */}
-            <div
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-7 text-[11px] font-bold tracking-[.06em] uppercase"
-              style={{ background: 'rgba(232,107,75,.15)', border: '1px solid rgba(232,107,75,.35)', color: '#FFB49A' }}
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-clay-400 animate-pulse inline-block" />
-              {countStr} artisans référencés · SIREN officiel
-            </div>
-
-            <h1 className="font-black tracking-[-0.05em] leading-[.92] text-white mb-8" style={{ fontSize: 'clamp(3.2rem,5.5vw,5.2rem)' }}>
-              Trouvez<br /><em className="not-italic text-clay-400">l&apos;artisan</em><br />parfait.
-            </h1>
-
-            <p className="text-[17px] text-white/60 leading-[1.75] max-w-[480px] mb-10">
-              Des professionnels vérifiés, assurés, recommandés. Des devis gratuits en 24h partout en France.
-            </p>
-
-            <div className="flex gap-3 flex-wrap mb-10">
-              <Link
-                href="/services"
-                className="bg-clay-400 hover:bg-clay-600 text-white text-sm font-extrabold px-8 py-4 rounded-full transition-all duration-300 hover:-translate-y-0.5"
-                style={{ boxShadow: '0 8px 24px rgba(232,107,75,.35)' }}
-              >
-                Trouver un artisan →
-              </Link>
-              <Link
-                href="/services"
-                className="text-white/80 hover:text-white text-sm font-semibold px-6 py-4 rounded-full transition-all duration-200"
-                style={{ border: '1.5px solid rgba(255,255,255,.25)' }}
-              >
-                Voir les artisans
-              </Link>
-            </div>
-
-            {/* Trust pills */}
-            <div className="flex gap-2.5 flex-wrap">
-              {[
-                { Icon: ShieldCheck, text: 'SIREN vérifié' },
-                { Icon: Star,        text: `${ratingStr}/5 · ${reviewStr} avis` },
-                { Icon: Zap,         text: 'Devis en 24h' },
-              ].map(({ Icon: PillIcon, text }) => (
-                <div
-                  key={text}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-semibold text-white/70"
-                  style={{ background: 'rgba(255,255,255,.08)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,.12)' }}
-                >
-                  <PillIcon className="w-3 h-3 text-clay-400" /> {text}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Carte flottante */}
+        <div className="relative z-10 max-w-3xl mx-auto px-6 md:px-10 w-full text-center">
           <div
-            className="hidden lg:flex flex-col rounded-3xl px-10 py-12"
-            style={{ background: 'rgba(244,239,232,.96)', backdropFilter: 'blur(24px)', boxShadow: '0 24px 80px rgba(0,0,0,.25)' }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-7 text-xs font-bold tracking-[.06em] uppercase"
+            style={{ background: 'rgba(232,107,75,.15)', border: '1px solid rgba(232,107,75,.35)', color: '#FFB49A' }}
           >
-            <div className="text-[12px] font-bold tracking-[.1em] uppercase mb-6" style={{ color: '#A8947E' }}>
-              Trouver un artisan
-            </div>
+            <span className="w-1.5 h-1.5 rounded-full bg-clay-400 animate-pulse inline-block" />
+            {countStr} artisans référencés · SIREN officiel
+          </div>
+
+          <h1
+            className="font-black tracking-[-0.05em] leading-[.92] text-white mb-6"
+            style={{ fontSize: 'clamp(2.8rem,5vw,4.5rem)' }}
+          >
+            Trouvez <em className="not-italic text-clay-400">l&apos;artisan</em> parfait.
+          </h1>
+
+          <p className="text-base text-white/75 leading-[1.75] max-w-xl mx-auto mb-10">
+            Des professionnels vérifiés, assurés, recommandés. Des devis gratuits en 24h partout en France.
+          </p>
+
+          <div className="max-w-2xl mx-auto mb-6">
             <ClayHeroSearch />
-            <div className="flex flex-wrap gap-2 mt-6 flex-1">
+          </div>
+
+          {/* Quick filter chips — functional links */}
+          <div className="flex flex-wrap justify-center gap-2 mb-10">
+            {SERVICE_ITEMS.map(({ Icon: ChipIcon, name, slug }) => (
+              <Link
+                key={slug}
+                href={`/services/${slug}`}
+                aria-label={`Rechercher des artisans en ${name}`}
+                className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full transition-all duration-200 text-white/75 hover:text-white"
+                style={{ background: 'rgba(255,255,255,.08)', border: '1px solid rgba(255,255,255,.12)' }}
+              >
+                <ChipIcon className="w-3 h-3 text-clay-400" />
+                {name}
+              </Link>
+            ))}
+          </div>
+
+          {/* Trust pills */}
+          <div className="flex justify-center gap-2.5 flex-wrap">
+            {[
+              { Icon: ShieldCheck, text: 'SIREN vérifié' },
+              { Icon: Star,        text: `${ratingStr}/5 · ${reviewStr} avis` },
+              { Icon: Zap,         text: 'Devis en 24h' },
+            ].map(({ Icon: PillIcon, text }) => (
+              <div
+                key={text}
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold text-white/75"
+                style={{ background: 'rgba(255,255,255,.08)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,.12)' }}
+              >
+                <PillIcon className="w-3 h-3 text-clay-400" /> {text}
+              </div>
+            ))}
+          </div>
+
+          {/* Social proof */}
+          <div className="flex items-center justify-center gap-2.5 mt-8">
+            <div className="flex">
               {[
-                { Icon: Droplets,    label: 'Plomberie' },
-                { Icon: Zap,         label: 'Électricité' },
-                { Icon: PaintBucket, label: 'Peinture' },
-                { Icon: Thermometer, label: 'Chauffage' },
-                { Icon: Lock,        label: 'Serrurerie' },
-              ].map(({ Icon: ChipIcon, label }) => (
-                <span
-                  key={label}
-                  className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-3 py-1.5 rounded-full cursor-pointer transition-all duration-200 border text-stone-500 h-fit"
-                  style={{ background: '#F4EFE8', borderColor: 'rgba(0,0,0,.07)' }}
-                >
-                  <ChipIcon className="w-3 h-3 text-clay-400" />
-                  {label}
-                </span>
+                'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=56&h=56&fit=crop&crop=face&q=80',
+                'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=56&h=56&fit=crop&crop=face&q=80',
+                'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=56&h=56&fit=crop&crop=face&q=80',
+              ].map((src, i) => (
+                <Image
+                  key={i}
+                  src={src}
+                  alt="Photo d'un client satisfait"
+                  width={28}
+                  height={28}
+                  className="rounded-full border-2 border-white/20 object-cover -mr-2"
+                />
               ))}
             </div>
-            <div className="flex items-center gap-2.5 mt-8 pt-8" style={{ borderTop: '1px solid rgba(0,0,0,.06)' }}>
-              <div className="flex">
-                {[
-                  'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=56&h=56&fit=crop&crop=face&q=80',
-                  'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=56&h=56&fit=crop&crop=face&q=80',
-                  'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=56&h=56&fit=crop&crop=face&q=80',
-                ].map((src, i) => (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img key={i} src={src} alt="" className="w-7 h-7 rounded-full border-2 border-white object-cover -mr-2" />
-                ))}
-              </div>
-              <p className="text-[11px] font-medium leading-snug" style={{ color: '#A8947E' }}>
-                <strong className="text-stone-900">+180 clients</strong> ont trouvé<br />leur artisan cette semaine
-              </p>
-            </div>
+            <p className="text-xs font-medium text-white/70">
+              <strong className="text-white/85">Des centaines de clients</strong> trouvent leur artisan chaque semaine
+            </p>
           </div>
         </div>
       </section>
 
-      {/* ─── TRUST BAR ────────────────────────────────────────── */}
-      <div className="bg-white" style={{ borderBottom: '1px solid rgba(0,0,0,.06)' }}>
-        <div className="max-w-[1320px] mx-auto px-6 md:px-10 py-7 flex flex-wrap justify-around items-center gap-6">
-          {[
-            { Icon: ShieldCheck, label: 'SIREN vérifié',              sub: 'Chaque artisan contrôlé' },
-            { Icon: Star,        label: `${ratingStr}/5 moyenne`,     sub: `+${reviewStr} avis vérifiés` },
-            { Icon: Zap,         label: 'Devis en 24h',               sub: 'Gratuit et sans engagement' },
-            { Icon: Shield,      label: 'Garantie satisfaction',      sub: 'Remboursé si insatisfait' },
-            { Icon: MapPin,      label: `${deptCount} départements`,  sub: 'Toute la France couverte' },
-          ].map(({ Icon: TrustIcon, label, sub }, i, arr) => (
-            <div key={label} className="flex items-center gap-3">
-              <div
-                className="w-[42px] h-[42px] rounded-xl flex items-center justify-center shrink-0"
-                style={{ background: '#FDF1EC' }}
-              >
-                <TrustIcon className="w-5 h-5 text-clay-400" />
-              </div>
-              <div>
-                <div className="text-sm font-bold text-stone-900">{label}</div>
-                <div className="text-[11px] text-stone-400 mt-0.5">{sub}</div>
-              </div>
-              {i < arr.length - 1 && (
-                <div className="hidden xl:block w-px h-9 ml-6" style={{ background: 'rgba(0,0,0,.07)' }} />
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* ─── MARQUEE ──────────────────────────────────────────── */}
-      <div className="overflow-hidden py-3.5" style={{ background: '#E5DDD4', borderBottom: '1px solid rgba(0,0,0,.06)' }}>
-        <div className="animate-marquee flex whitespace-nowrap">
-          {[...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map(({ Icon: MarqueeIcon, label }, i) => (
-            <span key={i} className="inline-flex items-center gap-1.5 text-[12px] font-bold px-6" style={{ color: '#A8947E' }}>
-              <MarqueeIcon className="w-3 h-3" />
-              {label}
-              <span className="mx-1.5" style={{ color: '#C4B4A4' }}>·</span>
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* ─── SERVICES GRID ────────────────────────────────────── */}
-      <section className="max-w-[1320px] mx-auto px-6 md:px-10 py-20">
-        <div className="text-[11px] font-bold text-clay-400 tracking-[.12em] uppercase mb-2.5">
-          Ce que nous proposons
-        </div>
-        <div className="flex justify-between items-end mb-9">
-          <h2 className="font-black tracking-[-0.04em] leading-tight text-stone-900" style={{ fontSize: 'clamp(2rem,3.5vw,2.8rem)' }}>
-            Tous les corps de métier
-          </h2>
-          <Link href="/services" className="text-sm font-bold text-clay-400 hover:text-clay-600 transition-colors">
-            Voir tout →
-          </Link>
-        </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-          {SERVICES.map(({ Icon: SvcIcon, name, slug, count }) => (
-            <Link
-              key={slug}
-              href={`/services/${slug}`}
-              className="group bg-white rounded-2xl p-6 text-center transition-all duration-300 border-[1.5px] border-transparent hover:border-clay-400 hover:-translate-y-1"
-              style={{ boxShadow: '0 2px 12px rgba(0,0,0,.05)' }}
-            >
-              <SvcIcon className="w-8 h-8 text-clay-400 mx-auto mb-3" />
-              <div className="text-[13px] font-extrabold text-stone-900 mb-1">{name}</div>
-              <div className="text-[11px] text-stone-400">{count} artisans</div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* ─── ARTISAN CARDS ────────────────────────────────────── */}
-      <section style={{ background: '#EDE8E1' }}>
-        <div className="max-w-[1320px] mx-auto px-6 md:px-10 py-20">
-          <div className="flex justify-between items-end mb-10">
-            <div>
-              <div className="text-[11px] font-bold text-clay-400 tracking-[.12em] uppercase mb-2.5">Près de vous</div>
-              <h2 className="font-black tracking-[-0.04em] leading-tight text-stone-900" style={{ fontSize: 'clamp(2rem,3.5vw,2.8rem)' }}>
-                Les artisans les mieux notés.
-              </h2>
-            </div>
-            <Link href="/services" className="text-sm font-bold text-clay-400 hover:text-clay-600 transition-colors">
-              Voir tous →
-            </Link>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {ARTISANS.map(a => (
-              <div
-                key={a.name}
-                className="rounded-3xl overflow-hidden cursor-pointer transition-all duration-[350ms]"
-                style={{
-                  background: '#FFFCF8',
-                  boxShadow: '0 3px 16px rgba(0,0,0,.06)',
-                  border: a.urgent ? '1.5px solid #FEE2E2' : 'none',
-                }}
-              >
-                {/* Top photo */}
-                <div className="relative overflow-hidden" style={{ height: '200px', background: 'linear-gradient(160deg,#3D2414 0%,#5C3820 100%)' }}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={a.bgImg} alt="" className="w-full h-full object-cover block" />
-                  <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom,rgba(0,0,0,0) 40%,rgba(0,0,0,.55))' }} />
-                  <div
-                    className={`absolute top-3 right-3 text-[10px] font-bold px-3 py-1 rounded-full ${
-                      a.badge.type === 'green'
-                        ? 'text-green-700 bg-white/90'
-                        : 'text-red-600'
-                    }`}
-                    style={a.badge.type === 'red' ? { background: '#FEF2F2' } : { backdropFilter: 'blur(8px)' }}
-                  >
-                    {a.badge.label}
-                  </div>
+      {/* ─── TRUST BAR ──────────────────────────────────────────── */}
+      <ScrollReveal>
+        <div className="bg-white" style={{ borderBottom: '1px solid rgba(0,0,0,.06)' }}>
+          <div className="max-w-[1320px] mx-auto px-6 md:px-10 py-16 flex flex-wrap justify-around items-center gap-6">
+            {[
+              { Icon: ShieldCheck, label: 'SIREN vérifié',              sub: 'Chaque artisan contrôlé' },
+              { Icon: Star,        label: `${ratingStr}/5 moyenne`,     sub: `+${reviewStr} avis vérifiés` },
+              { Icon: Zap,         label: 'Devis en 24h',               sub: 'Gratuit et sans engagement' },
+              { Icon: Shield,      label: 'Données officielles',        sub: 'Registres de l\'État' },
+              { Icon: MapPin,      label: `${deptCount} départements`,  sub: 'Toute la France couverte' },
+            ].map(({ Icon: TrustIcon, label, sub }, i, arr) => (
+              <div key={label} className="flex items-center gap-3">
+                <div
+                  className="w-[42px] h-[42px] rounded-xl flex items-center justify-center shrink-0"
+                  style={{ background: '#FDF1EC' }}
+                >
+                  <TrustIcon className="w-5 h-5 text-clay-400" />
                 </div>
-                {/* Body */}
-                <div className="px-5 pb-6 -mt-6 relative">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={a.face}
-                    alt={a.name}
-                    className="w-[52px] h-[52px] rounded-2xl object-cover mb-3"
-                    style={{ border: '3px solid #FFFCF8', boxShadow: '0 4px 14px rgba(0,0,0,.12)' }}
-                  />
-                  <div className="text-[16px] font-black text-stone-900 mb-0.5">{a.name}</div>
-                  <div className="text-[12px] text-stone-400 mb-2.5">{a.job}</div>
-                  <div className="flex items-center gap-1.5 mb-3">
-                    <span className="text-amber-400 text-[13px]">★★★★★</span>
-                    <span className="text-[12px] font-bold text-stone-900">{a.rating}</span>
-                    <span className="text-[11px] text-stone-400">({a.reviews} avis)</span>
-                  </div>
-                  <div
-                    className="text-[12px] text-stone-500 leading-relaxed italic px-3.5 py-2.5 rounded-xl mb-4"
-                    style={{ background: '#F4EFE8', borderLeft: '2px solid #E86B4B' }}
-                  >
-                    &ldquo;{a.quote}&rdquo; — {a.author}
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <span className="text-[20px] font-black text-stone-900">{a.price}</span>
-                      <span className="text-[12px] text-stone-400">/h</span>
-                    </div>
-                    <Link
-                      href="/services"
-                      className="text-white text-[12px] font-bold px-5 py-2.5 rounded-full transition-colors"
-                      style={{ background: a.urgent ? '#E86B4B' : '#1C1917' }}
-                    >
-                      {a.urgent ? 'Contacter →' : 'Voir le profil'}
-                    </Link>
-                  </div>
+                <div>
+                  <div className="text-sm font-bold text-stone-900">{label}</div>
+                  <div className="text-xs text-stone-400 mt-0.5">{sub}</div>
                 </div>
+                {i < arr.length - 1 && (
+                  <div className="hidden xl:block w-px h-9 ml-6" style={{ background: 'rgba(0,0,0,.07)' }} />
+                )}
               </div>
             ))}
           </div>
         </div>
-      </section>
+      </ScrollReveal>
 
-      {/* ─── FEATURED ARTISAN ─────────────────────────────────── */}
-      <section className="bg-white">
-        <div className="max-w-[1320px] mx-auto px-6 md:px-10 py-20 grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-[72px] items-center">
-          {/* Photo */}
-          <div
-            className="relative rounded-3xl overflow-hidden"
-            style={{ height: '520px', background: 'linear-gradient(160deg,#1a3a2a 0%,#2d5940 100%)' }}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=700&h=600&fit=crop&q=80"
-              alt="Lucie Bernard"
-              className="w-full h-full object-cover block"
-            />
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(to top,rgba(10,8,5,.65) 0%,transparent 50%)' }} />
-            <div
-              className="absolute top-5 left-5 text-white text-[11px] font-bold px-4 py-1.5 rounded-full flex items-center gap-1.5"
-              style={{ background: '#E86B4B' }}
-            >
-              <span className="w-1.5 h-1.5 bg-white/70 rounded-full inline-block" />
-              ★ Artisan du mois
-            </div>
-            <div
-              className="absolute bottom-5 left-5 right-5 rounded-2xl px-4 py-4 flex items-center gap-3"
-              style={{ background: 'rgba(255,255,255,.94)', backdropFilter: 'blur(16px)' }}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=88&h=88&fit=crop&crop=face&q=80"
-                alt="Lucie Bernard"
-                className="w-11 h-11 rounded-xl object-cover"
-              />
-              <div>
-                <div className="text-sm font-extrabold text-stone-900">Lucie Bernard</div>
-                <div className="text-[11px] text-stone-400">Peintre décoratrice · Bordeaux</div>
-              </div>
-              <div className="ml-auto text-amber-400 text-sm font-extrabold">★ 4,7</div>
-            </div>
+      {/* ─── SERVICES GRID (8 services, real counts) ─────────── */}
+      <ScrollReveal as="section">
+        <div className="max-w-[1320px] mx-auto px-6 md:px-10 py-24">
+          <div className="text-xs font-bold text-clay-400 tracking-[.12em] uppercase mb-2.5">
+            Ce que nous proposons
           </div>
-
-          {/* Text */}
-          <div>
-            <div className="text-[11px] font-bold text-clay-400 tracking-[.12em] uppercase mb-3">À la une</div>
-            <h2 className="font-black tracking-[-0.05em] leading-tight text-stone-900 mb-5" style={{ fontSize: 'clamp(2.2rem,3.5vw,3rem)' }}>
-              Des artisans qui font<br /><span className="text-clay-400">la différence.</span>
+          <div className="flex justify-between items-end mb-9">
+            <h2 className="font-black tracking-[-0.04em] leading-tight text-stone-900" style={{ fontSize: 'clamp(2rem,3.5vw,2.8rem)' }}>
+              Tous les corps de métier
             </h2>
-            <p className="text-[16px] text-stone-500 leading-[1.8] mb-8">
-              Lucie transforme des intérieurs ordinaires en espaces extraordinaires. Spécialisée dans la peinture décorative et les effets matières, elle a réalisé plus de 200 chantiers en Nouvelle-Aquitaine avec une note parfaite.
-            </p>
-            <div className="grid grid-cols-3 gap-4 mb-9">
-              {[
-                { num: '61', label: 'Avis clients' },
-                { num: '8 ans', label: 'Expérience' },
-                { num: '200+', label: 'Chantiers' },
-              ].map(stat => (
-                <div key={stat.label} className="rounded-2xl py-4 text-center" style={{ background: '#F4EFE8' }}>
-                  <div className="text-[1.8rem] font-black tracking-[-0.04em] text-clay-400">{stat.num}</div>
-                  <div className="text-[11px] text-stone-400 mt-0.5 font-medium">{stat.label}</div>
-                </div>
-              ))}
-            </div>
-            <Link
-              href="/services"
-              className="inline-block bg-clay-400 hover:bg-clay-600 text-white text-sm font-extrabold px-8 py-4 rounded-full transition-all duration-300"
-              style={{ boxShadow: '0 8px 24px rgba(232,107,75,.35)' }}
-            >
-              Voir son profil complet →
+            <Link href="/services" className="text-sm font-bold text-clay-400 hover:text-clay-600 transition-colors">
+              Voir tout →
             </Link>
           </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {SERVICE_ITEMS.map(({ Icon: SvcIcon, name, slug }, i) => (
+              <ScrollReveal key={slug} delay={i * 0.08}>
+                <Link
+                  href={`/services/${slug}`}
+                  className="group bg-white rounded-2xl p-6 text-center transition-all duration-300 border-[1.5px] border-transparent hover:border-clay-400 hover:-translate-y-1 block"
+                  style={{ boxShadow: '0 2px 12px rgba(0,0,0,.05)' }}
+                >
+                  <SvcIcon className="w-8 h-8 text-clay-400 mx-auto mb-3" />
+                  <div className="text-sm font-extrabold text-stone-900 mb-1">{name}</div>
+                  <div className="text-xs text-stone-400">
+                    {serviceCounts[slug] > 0 ? `${formatProviderCount(serviceCounts[slug])} artisans` : 'Artisans disponibles'}
+                  </div>
+                </Link>
+              </ScrollReveal>
+            ))}
+          </div>
         </div>
-      </section>
+      </ScrollReveal>
+
+      {/* ─── ARTISAN CARDS (real data or fallback) ───────────── */}
+      <ScrollReveal as="section">
+        <div style={{ background: '#EDE8E1' }}>
+          <div className="max-w-[1320px] mx-auto px-6 md:px-10 py-24">
+            <div className="flex justify-between items-end mb-10">
+              <div>
+                <div className="text-xs font-bold text-clay-400 tracking-[.12em] uppercase mb-2.5">Près de vous</div>
+                <h2 className="font-black tracking-[-0.04em] leading-tight text-stone-900" style={{ fontSize: 'clamp(2rem,3.5vw,2.8rem)' }}>
+                  Les artisans les mieux notés.
+                </h2>
+              </div>
+              <Link href="/services" className="text-sm font-bold text-clay-400 hover:text-clay-600 transition-colors">
+                Voir tous →
+              </Link>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              {artisans.map((a, i) => {
+                const rating = a.rating_average ?? 0
+                const ratingDisplay = rating.toFixed(1).replace('.', ',')
+                const profileHref = a.stable_id ? `/services/${a.slug}` : '/services'
+
+                return (
+                  <ScrollReveal key={a.name} delay={i * 0.1}>
+                    <div
+                      className="rounded-3xl overflow-hidden transition-all duration-[350ms]"
+                      style={{ background: '#FFFCF8', boxShadow: '0 3px 16px rgba(0,0,0,.06)' }}
+                    >
+                      <div className="relative overflow-hidden" style={{ height: '200px', background: 'linear-gradient(160deg,#3D2414 0%,#5C3820 100%)' }}>
+                        <Image
+                          src={SPECIALTY_IMAGES.default}
+                          alt=""
+                          fill
+                          sizes="(max-width: 768px) 100vw, 33vw"
+                          className="object-cover"
+                        />
+                        <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom,rgba(0,0,0,0) 40%,rgba(0,0,0,.55))' }} />
+                        <div className="absolute top-3 right-3 text-xs font-bold px-3 py-1 rounded-full text-green-700 bg-white/90" style={{ backdropFilter: 'blur(8px)' }}>
+                          {a.is_verified ? '✓ Vérifié SIREN' : '✓ Artisan référencé'}
+                        </div>
+                      </div>
+                      <div className="px-5 pb-6 -mt-6 relative">
+                        <div
+                          className="w-[52px] h-[52px] rounded-2xl bg-clay-400 flex items-center justify-center text-white text-lg font-bold mb-3"
+                          style={{ border: '3px solid #FFFCF8', boxShadow: '0 4px 14px rgba(0,0,0,.12)' }}
+                        >
+                          {getInitials(a.name)}
+                        </div>
+                        <div className="text-base font-black text-stone-900 mb-0.5">{a.name}</div>
+                        <div className="text-sm text-stone-400 mb-2.5">
+                          {a.specialty}{a.address_city ? ` · ${a.address_city}` : ''}
+                        </div>
+                        <div className="flex items-center gap-1.5 mb-3">
+                          <span className="text-sm">{renderStars(rating)}</span>
+                          <span className="text-sm font-bold text-stone-900">{ratingDisplay}</span>
+                          <span className="text-xs text-stone-400">({a.review_count ?? 0} avis)</span>
+                        </div>
+                        <div className="flex justify-end items-center">
+                          <Link
+                            href={profileHref}
+                            className="text-white text-sm font-bold px-5 py-2.5 rounded-full transition-colors bg-stone-900 hover:bg-clay-400"
+                          >
+                            Voir le profil
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </ScrollReveal>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+      </ScrollReveal>
 
       {/* ─── PROCESS ──────────────────────────────────────────── */}
-      <section style={{ background: '#EDE8E1' }}>
-        <div className="max-w-[1320px] mx-auto px-6 md:px-10 py-20">
-          <div className="text-center mb-1">
-            <div className="inline-block text-[11px] font-bold text-clay-400 tracking-[.12em] uppercase">
-              Comment ça marche
+      <ScrollReveal as="section">
+        <div style={{ background: '#EDE8E1' }}>
+          <div className="max-w-[1320px] mx-auto px-6 md:px-10 py-24">
+            <div className="text-center mb-1">
+              <div className="inline-block text-xs font-bold text-clay-400 tracking-[.12em] uppercase">
+                Comment ça marche
+              </div>
+            </div>
+            <h2 className="font-black tracking-[-0.04em] leading-tight text-stone-900 text-center mb-12" style={{ fontSize: 'clamp(2rem,3.5vw,2.8rem)' }}>
+              Simple, rapide, fiable.
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative">
+              <div
+                className="hidden lg:block absolute top-[25px] h-0.5 opacity-30"
+                style={{
+                  left: '12.5%', right: '12.5%',
+                  background: 'repeating-linear-gradient(90deg,#E86B4B 0,#E86B4B 8px,transparent 8px,transparent 18px)',
+                }}
+              />
+              {[
+                { n: '1', title: 'Décrivez vos travaux', desc: "Type, localisation, urgence — 2 minutes suffisent pour décrire votre besoin." },
+                { n: '2', title: 'Recevez des devis', desc: "Jusqu'à 3 artisans vérifiés vous contactent sous 24h. Gratuit et sans engagement." },
+                { n: '3', title: 'Choisissez librement', desc: "Comparez les profils, avis et tarifs. Choisissez l'artisan qui vous convient." },
+                { n: '4', title: 'Profitez des résultats', desc: "Travaux réalisés par des professionnels référencés. Données SIREN vérifiées." },
+              ].map((step, i) => (
+                <ScrollReveal key={step.n} delay={i * 0.1}>
+                  <div className="text-center relative z-10">
+                    <div
+                      className="w-[50px] h-[50px] rounded-full bg-white flex items-center justify-center mx-auto mb-4 text-lg font-black text-clay-400"
+                      style={{ border: '2px solid rgba(232,107,75,.2)', boxShadow: '0 4px 14px rgba(0,0,0,.07)' }}
+                    >
+                      {step.n}
+                    </div>
+                    <div className="text-base font-extrabold text-stone-900 mb-2">{step.title}</div>
+                    <p className="text-sm text-stone-500 leading-[1.65]">{step.desc}</p>
+                  </div>
+                </ScrollReveal>
+              ))}
             </div>
           </div>
-          <h2 className="font-black tracking-[-0.04em] leading-tight text-stone-900 text-center mb-12" style={{ fontSize: 'clamp(2rem,3.5vw,2.8rem)' }}>
-            Simple, rapide, fiable.
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative">
-            {/* Dashed connector line (desktop only) */}
-            <div
-              className="hidden lg:block absolute top-[25px] h-0.5 opacity-30"
-              style={{
-                left: '12.5%', right: '12.5%',
-                background: 'repeating-linear-gradient(90deg,#E86B4B 0,#E86B4B 8px,transparent 8px,transparent 18px)',
-              }}
-            />
-            {[
-              { n: '1', title: 'Décrivez vos travaux', desc: "Type, localisation, urgence — 2 minutes suffisent pour décrire votre besoin." },
-              { n: '2', title: 'Recevez des devis', desc: "Jusqu'à 3 artisans vérifiés vous contactent sous 24h. Gratuit et sans engagement." },
-              { n: '3', title: 'Choisissez librement', desc: "Comparez les profils, avis et tarifs. Choisissez l'artisan qui vous convient." },
-              { n: '4', title: 'Profitez des résultats', desc: "Travaux réalisés avec notre garantie satisfaction. Payez seulement quand c'est fait." },
-            ].map(step => (
-              <div key={step.n} className="text-center relative z-10">
-                <div
-                  className="w-[50px] h-[50px] rounded-full bg-white flex items-center justify-center mx-auto mb-4 text-lg font-black text-clay-400"
-                  style={{ border: '2px solid rgba(232,107,75,.2)', boxShadow: '0 4px 14px rgba(0,0,0,.07)' }}
-                >
-                  {step.n}
-                </div>
-                <div className="text-[15px] font-extrabold text-stone-900 mb-2">{step.title}</div>
-                <p className="text-[13px] text-stone-500 leading-[1.65]">{step.desc}</p>
-              </div>
-            ))}
-          </div>
         </div>
-      </section>
+      </ScrollReveal>
+
+      {/* ─── FAQ ──────────────────────────────────────────────── */}
+      <ScrollReveal as="section">
+        <div style={{ background: '#EDE8E1' }}>
+          <ClayFAQSection />
+        </div>
+      </ScrollReveal>
 
       {/* ─── REVIEWS ──────────────────────────────────────────── */}
-      <section style={{ background: '#1C1917', padding: '80px 0' }}>
-        {/* Header */}
-        <div className="max-w-[1320px] mx-auto px-6 md:px-10 mb-12 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
-          <h2 className="font-black tracking-[-0.04em] leading-tight text-white" style={{ fontSize: 'clamp(2rem,3.5vw,2.8rem)' }}>
-            Ils nous font <span className="text-clay-400">confiance.</span>
-          </h2>
-          <div className="text-right">
-            <div className="text-[2.4rem] font-black text-clay-400">★★★★★</div>
-            <div className="text-[13px]" style={{ color: 'rgba(255,255,255,.35)' }}>{ratingStr}/5 · {reviewStr} avis vérifiés</div>
+      <ScrollReveal as="section">
+        <div className="py-24" style={{ background: '#1C1917' }}>
+          <div className="max-w-[1320px] mx-auto px-6 md:px-10 mb-12 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+            <h2 className="font-black tracking-[-0.04em] leading-tight text-white" style={{ fontSize: 'clamp(2rem,3.5vw,2.8rem)' }}>
+              Ils nous font <span className="text-clay-400">confiance.</span>
+            </h2>
+            <div className="text-right">
+              <div className="text-[2.4rem] font-black text-clay-400">★★★★★</div>
+              <div className="text-sm" style={{ color: 'rgba(255,255,255,.60)' }}>{ratingStr}/5 · {reviewStr} avis vérifiés</div>
+            </div>
+          </div>
+
+          <div className="max-w-[1320px] mx-auto px-6 md:px-10 pb-12 grid grid-cols-1 md:grid-cols-3 gap-5">
+            {bigReviews.map((rv, i) => (
+              <ScrollReveal key={rv.client_name || i} delay={i * 0.1}>
+                <div
+                  className="rounded-2xl p-7 transition-all duration-300"
+                  style={{ background: 'rgba(255,255,255,.05)', border: '1px solid rgba(255,255,255,.08)' }}
+                >
+                  <div className="text-[48px] font-black leading-none mb-4 opacity-60 text-clay-400">&ldquo;</div>
+                  <p className="text-base leading-[1.75] mb-5 italic" style={{ color: 'rgba(255,255,255,.85)' }}>{rv.comment}</p>
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-10 h-10 rounded-full bg-clay-400/30 flex items-center justify-center text-white text-xs font-bold" style={{ border: '2px solid rgba(255,255,255,.1)' }}>
+                      {getInitials(rv.client_name || 'CV')}
+                    </div>
+                    <div>
+                      <div className="text-sm font-bold text-white">{rv.client_name || 'Client vérifié'}</div>
+                      <div className="text-xs" style={{ color: 'rgba(255,255,255,.60)' }}>Client vérifié</div>
+                    </div>
+                    <div className="ml-auto text-xs">
+                      {renderStars(rv.rating)}
+                    </div>
+                  </div>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+
+          <div className="overflow-hidden mt-2 px-10">
+            <ClayReviewsCarousel reviews={carouselReviews} />
           </div>
         </div>
-
-        {/* 3 big review cards */}
-        <div className="max-w-[1320px] mx-auto px-6 md:px-10 pb-12 grid grid-cols-1 md:grid-cols-3 gap-5">
-          {BIG_REVIEWS.map(rv => (
-            <div
-              key={rv.name}
-              className="rounded-2xl p-7 transition-all duration-300"
-              style={{ background: 'rgba(255,255,255,.05)', border: '1px solid rgba(255,255,255,.08)' }}
-            >
-              <div className="text-[48px] font-black leading-none mb-4 opacity-60 text-clay-400">&ldquo;</div>
-              <p className="text-[15px] leading-[1.75] mb-5 italic" style={{ color: 'rgba(255,255,255,.7)' }}>{rv.text}</p>
-              <div className="flex items-center gap-2.5">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={rv.avatar} alt={rv.name} className="w-10 h-10 rounded-full object-cover" style={{ border: '2px solid rgba(255,255,255,.1)' }} />
-                <div>
-                  <div className="text-sm font-bold text-white">{rv.name}</div>
-                  <div className="text-[11px]" style={{ color: 'rgba(255,255,255,.35)' }}>{rv.loc}</div>
-                </div>
-                <div className="ml-auto text-amber-400 text-xs">★★★★★</div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Scrolling carousel */}
-        <div className="overflow-hidden mt-2 px-10">
-          <ClayReviewsCarousel />
-        </div>
-      </section>
+      </ScrollReveal>
 
       {/* ─── CTA ──────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden flex items-center" style={{ minHeight: '400px' }}>
-        {/* Background photo */}
-        <div className="absolute inset-0">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1600&h=500&fit=crop&q=80"
-            alt=""
-            className="w-full h-full object-cover block"
+      <ScrollReveal as="section">
+        <div className="relative overflow-hidden flex items-center" style={{ minHeight: '400px' }}>
+          <div className="absolute inset-0">
+            <Image
+              src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1600&h=500&fit=crop&q=80"
+              alt=""
+              fill
+              sizes="100vw"
+              className="object-cover"
+            />
+          </div>
+          <div
+            className="absolute inset-0"
+            style={{ background: 'linear-gradient(135deg,rgba(232,107,75,.92) 0%,rgba(194,75,42,.88) 100%)' }}
           />
-        </div>
-        <div
-          className="absolute inset-0"
-          style={{ background: 'linear-gradient(135deg,rgba(232,107,75,.92) 0%,rgba(194,75,42,.88) 100%)' }}
-        />
 
-        <div className="relative z-10 max-w-[1320px] mx-auto px-6 md:px-10 py-20 grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-center w-full">
-          <div>
+          <div className="relative z-10 max-w-[1320px] mx-auto px-6 md:px-10 py-24 text-center w-full">
             <h2 className="font-black tracking-[-0.05em] text-white leading-[.95] mb-4" style={{ fontSize: 'clamp(2rem,4vw,3rem)' }}>
-              Votre projet mérite<br />le meilleur.
+              Votre projet mérite le meilleur.
             </h2>
-            <p className="text-[16px] leading-[1.7] mb-8" style={{ color: 'rgba(255,255,255,.75)' }}>
-              Rejoignez {reviewCount > 0 ? formatProviderCount(reviewCount) : '180 000'} propriétaires qui font confiance à ServicesArtisans pour leurs travaux — et ne l&apos;ont jamais regretté.
+            <p className="text-base leading-[1.7] mb-8 max-w-xl mx-auto" style={{ color: 'rgba(255,255,255,.80)' }}>
+              Des milliers de propriétaires font confiance à ServicesArtisans pour leurs travaux — et ne l&apos;ont jamais regretté.
             </p>
-            <div className="flex gap-3 flex-wrap">
+            <div className="flex gap-3 flex-wrap justify-center">
               <Link
                 href="/services"
                 className="text-clay-600 text-sm font-extrabold px-8 py-3.5 rounded-full transition-all duration-200 bg-white hover:-translate-y-0.5"
-                style={{ boxShadow: '0 0 0 0 transparent' }}
               >
                 Trouver un artisan
               </Link>
@@ -577,25 +496,8 @@ export function ClayHomePage({ stats }: Props) {
               </Link>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            {[
-              { num: countStr,                                                       label: 'Artisans vérifiés' },
-              { num: reviewCount > 0 ? `${formatProviderCount(reviewCount)}+` : '180 000+', label: 'Avis clients' },
-              { num: `${ratingStr} / 5`,                                            label: 'Note moyenne' },
-              { num: `${deptCount}`,                                                label: 'Départements' },
-            ].map(stat => (
-              <div
-                key={stat.label}
-                className="rounded-2xl p-5 text-center"
-                style={{ background: 'rgba(255,255,255,.12)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,.2)' }}
-              >
-                <div className="text-[1.8rem] font-black text-white tracking-[-0.04em]">{stat.num}</div>
-                <div className="text-[11px] mt-1" style={{ color: 'rgba(255,255,255,.65)' }}>{stat.label}</div>
-              </div>
-            ))}
-          </div>
         </div>
-      </section>
+      </ScrollReveal>
     </>
   )
 }

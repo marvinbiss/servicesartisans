@@ -61,6 +61,33 @@ export interface SiteStats {
   deptCount: number
 }
 
+// ── Homepage-specific types ──────────────────────────────────────
+export interface HomepageProvider {
+  name: string
+  slug: string
+  specialty: string | null
+  address_city: string | null
+  is_verified: boolean
+  rating_average: number | null
+  review_count: number | null
+  stable_id: string | null
+}
+
+export interface HomepageReview {
+  client_name: string | null
+  rating: number
+  comment: string | null
+  created_at: string
+}
+
+export interface HomepageData extends SiteStats {
+  serviceCounts: Record<string, number>
+  topProviders: HomepageProvider[]
+  recentReviews: HomepageReview[]
+}
+
+const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
+
 /** Toutes les stats du site en un seul appel (pour la homepage) */
 export async function getSiteStats(): Promise<SiteStats> {
   try {
@@ -104,5 +131,63 @@ export async function getSiteStats(): Promise<SiteStats> {
     return { artisanCount, reviewCount, avgRating, deptCount }
   } catch {
     return { artisanCount: 0, reviewCount: 0, avgRating: 4.9, deptCount: 96 }
+  }
+}
+
+const HOMEPAGE_SERVICE_SLUGS = [
+  'plombier', 'electricien', 'serrurier', 'chauffagiste',
+  'peintre-en-batiment', 'menuisier', 'macon', 'jardinier',
+]
+
+/** Données complètes pour la homepage : stats + providers + avis + compteurs */
+export async function getHomepageData(): Promise<HomepageData> {
+  const stats = await getSiteStats()
+
+  if (IS_BUILD) {
+    return { ...stats, serviceCounts: {}, topProviders: [], recentReviews: [] }
+  }
+
+  try {
+    const supabase = createAdminClient()
+    const { getProviderCountByService } = await import('@/lib/supabase')
+
+    const [countsResults, providersRes, reviewsRes] = await Promise.all([
+      Promise.all(
+        HOMEPAGE_SERVICE_SLUGS.map(async (slug) => {
+          const count = await getProviderCountByService(slug)
+          return [slug, count] as const
+        })
+      ),
+      supabase
+        .from('providers')
+        .select('name, slug, specialty, address_city, is_verified, rating_average, review_count, stable_id')
+        .eq('is_active', true)
+        .not('rating_average', 'is', null)
+        .gt('review_count', 0)
+        .order('rating_average', { ascending: false })
+        .order('review_count', { ascending: false })
+        .limit(3),
+      supabase
+        .from('reviews')
+        .select('client_name, rating, comment, created_at')
+        .eq('status', 'published')
+        .not('comment', 'is', null)
+        .order('created_at', { ascending: false })
+        .limit(10),
+    ])
+
+    const serviceCounts: Record<string, number> = {}
+    for (const [slug, count] of countsResults) {
+      serviceCounts[slug] = count
+    }
+
+    return {
+      ...stats,
+      serviceCounts,
+      topProviders: (providersRes.data ?? []) as HomepageProvider[],
+      recentReviews: (reviewsRes.data ?? []) as HomepageReview[],
+    }
+  } catch {
+    return { ...stats, serviceCounts: {}, topProviders: [], recentReviews: [] }
   }
 }

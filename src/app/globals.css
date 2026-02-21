@@ -521,6 +521,12 @@ img {
   }
 }
 
+/* Reviews carousel — infinite scroll */
+@keyframes scroll-carousel {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
 /* ===========================================
    BLOG ARTICLE - Premium Reading Experience
    =========================================== */
@@ -849,17 +855,4 @@ img {
   font-size: inherit;
 }
 
-/* =============================================
-   Clay Homepage — Marquee Animation
-   ============================================= */
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-.animate-marquee {
-  animation: marquee 30s linear infinite;
-}
-.animate-marquee:hover {
-  animation-play-state: paused;
-}
 
