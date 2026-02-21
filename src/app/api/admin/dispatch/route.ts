@@ -10,6 +10,13 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { logLeadEvent } from '@/lib/dashboard/events'
 import { dispatchLead } from '@/app/actions/dispatch'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
+
+const actionBodySchema = z.object({
+  action: z.enum(['reassign', 'replay']),
+  assignmentId: z.string().uuid(),
+  newProviderId: z.string().uuid().optional(),
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -95,15 +102,14 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json()
-    const { action, assignmentId, newProviderId } = body as {
-      action: string
-      assignmentId: string
-      newProviderId?: string
+    const bodyValidation = actionBodySchema.safeParse(body)
+    if (!bodyValidation.success) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Paramètres invalides', details: bodyValidation.error.flatten() } },
+        { status: 400 }
+      )
     }
-
-    if (!action || !assignmentId) {
-      return NextResponse.json({ error: 'action et assignmentId requis' }, { status: 400 })
-    }
+    const { action, assignmentId, newProviderId } = bodyValidation.data
 
     const supabase = createAdminClient()
 

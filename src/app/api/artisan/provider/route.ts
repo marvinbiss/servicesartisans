@@ -50,7 +50,7 @@ export async function GET() {
     // Fetch provider by user_id
     const { data: provider, error: providerError } = await supabase
       .from('providers')
-      .select('id, stable_id, name, slug, email, phone, siret, siren, specialty, description, bio, website, address_street, address_city, address_postal_code, address_region, address_department, latitude, longitude, is_verified, is_active, noindex, rating_average, review_count, code_naf, legal_form, creation_date, user_id, created_at, updated_at')
+      .select('id, stable_id, name, slug, email, phone, siret, specialty, description, bio, address_street, address_city, address_postal_code, address_region, address_department, latitude, longitude, is_verified, is_active, noindex, rating_average, review_count, code_naf, user_id, created_at, updated_at')
       .eq('user_id', user.id)
       .single()
 

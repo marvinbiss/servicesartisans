@@ -36,26 +36,13 @@ export async function POST(
     }
     const { response } = result.data
 
-    // Get provider for this user
-    const { data: provider } = await supabase
-      .from('providers')
-      .select('id')
-      .eq('user_id', user.id)
-      .single()
-
-    if (!provider) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Profil artisan non trouvé' } },
-        { status: 404 }
-      )
-    }
-
-    // Check review belongs to this provider and has no response yet
+    // Check review belongs to this artisan and has no response yet
+    // reviews.artisan_id → profiles.id, which equals user.id directly
     const { data: review } = await supabase
       .from('reviews')
-      .select('id, provider_id, response')
+      .select('id, artisan_id, artisan_response')
       .eq('id', params.id)
-      .eq('provider_id', provider.id)
+      .eq('artisan_id', user.id)
       .single()
 
     if (!review) {
@@ -65,7 +52,7 @@ export async function POST(
       )
     }
 
-    if (review.response) {
+    if (review.artisan_response) {
       return NextResponse.json(
         { success: false, error: { message: 'Cet avis a déjà une réponse' } },
         { status: 400 }
@@ -76,8 +63,8 @@ export async function POST(
     const { error: updateError } = await supabase
       .from('reviews')
       .update({
-        response: response.trim(),
-        response_at: new Date().toISOString(),
+        artisan_response: response.trim(),
+        artisan_responded_at: new Date().toISOString(),
       })
       .eq('id', params.id)
 

@@ -108,12 +108,16 @@ export default function ParametresClientPage() {
       if (profileResponse.ok) {
         const profileData = await profileResponse.json()
         if (profileData.profile) {
-          setFormData({
-            prenom: profileData.profile.first_name || '',
-            nom: profileData.profile.last_name || '',
+          const nameParts = (profileData.profile.full_name || '').split(' ')
+          const prenom = nameParts[0] || ''
+          const nom = nameParts.slice(1).join(' ')
+          setFormData(prev => ({
+            ...prev,
+            prenom,
+            nom,
             email: profileData.profile.email || '',
             telephone: profileData.profile.phone || '',
-          })
+          }))
         }
       }
     } catch (error) {

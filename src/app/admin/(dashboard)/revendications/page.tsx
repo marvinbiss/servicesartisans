@@ -73,11 +73,11 @@ export default function AdminClaimsPage() {
       setActionError(null)
       await adminMutate('/api/admin/claims', {
         method: 'PATCH',
-        body: JSON.stringify({
+        body: {
           claimId: actionModal.claimId,
           action: actionModal.action,
           ...(actionModal.action === 'reject' && rejectionReason ? { rejectionReason } : {}),
-        }),
+        },
       })
       setActionModal({ open: false, claimId: '', action: 'approve', providerName: '', userName: '' })
       setRejectionReason('')

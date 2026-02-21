@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeAll, beforeEach } from 'vitest'
 import {
   UUID_RE,
   stripHtml,
@@ -16,11 +16,18 @@ vi.mock('next/cache', () => ({
 }))
 
 // Dynamic import so the mock is in place before the module resolves
-const { revalidatePagePaths } = await import('@/lib/cms-revalidate')
+// (top-level await replaced with beforeAll to satisfy tsc isolatedModules)
+let revalidatePagePaths: typeof import('@/lib/cms-revalidate').revalidatePagePaths
+let revalidatePathMock: ReturnType<typeof vi.fn>
 
-// Grab the mock for assertions
-const { revalidatePath } = await import('next/cache')
-const revalidatePathMock = revalidatePath as ReturnType<typeof vi.fn>
+beforeAll(async () => {
+  const mod = await import('@/lib/cms-revalidate')
+  revalidatePagePaths = mod.revalidatePagePaths
+
+  // Grab the mock for assertions
+  const cache = await import('next/cache')
+  revalidatePathMock = cache.revalidatePath as ReturnType<typeof vi.fn>
+})
 
 // ---------------------------------------------------------------------------
 // Helpers

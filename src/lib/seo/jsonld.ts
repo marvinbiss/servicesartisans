@@ -12,13 +12,19 @@ export function getOrganizationSchema() {
     '@id': `${SITE_URL}#organization`,
     name: SITE_NAME,
     url: SITE_URL,
-    logo: `${SITE_URL}/icons/icon-512x512.png`,
+    logo: {
+      '@type': 'ImageObject',
+      url: `${SITE_URL}/icons/icon-512x512.png`,
+      width: 512,
+      height: 512,
+    },
     description: 'Le plus grand annuaire d\'artisans de France. 350 000+ professionnels référencés dans 101 départements.',
     ...(socialLinks.length > 0 && { sameAs: socialLinks }),
     areaServed: {
       '@type': 'Country',
       name: 'France',
     },
+    email: companyIdentity.email,
     contactPoint: {
       '@type': 'ContactPoint',
       url: `${SITE_URL}/contact`,
@@ -27,6 +33,7 @@ export function getOrganizationSchema() {
       email: companyIdentity.email,
     },
     ...(registered && {
+      legalName: companyIdentity.legalName,
       address: {
         '@type': 'PostalAddress',
         streetAddress: companyIdentity.address,
@@ -34,6 +41,7 @@ export function getOrganizationSchema() {
       },
       telephone: companyIdentity.phone,
       foundingDate: companyIdentity.foundingDate,
+      ...(companyIdentity.tvaIntracom && { vatID: companyIdentity.tvaIntracom }),
     }),
   }
 }
@@ -44,6 +52,7 @@ export function getWebsiteSchema() {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: SITE_NAME,
+    alternateName: ['servicesartisans.fr'],
     url: SITE_URL,
     publisher: { '@id': `${SITE_URL}#organization` },
     potentialAction: {

@@ -40,24 +40,27 @@ export async function GET() {
       )
     }
 
-    // Fetch invoices (invoices table uses provider_id, not profile_id)
+    // Fetch the provider record to use provider.id for FK lookups
+    const { data: provider } = await supabase
+      .from('providers')
+      .select('id')
+      .eq('user_id', user.id)
+      .single()
+
+    // Fetch invoices using provider.id (invoices.provider_id → providers.id)
     const { data: invoices } = await supabase
       .from('invoices')
       .select('id, created_at, status')
-      .eq('provider_id', user.id)
+      .eq('provider_id', provider?.id || '')
       .order('created_at', { ascending: false })
       .limit(10)
 
-    // Get devis_requests count this month (devis table doesn't exist, use devis_requests)
-    const startOfMonth = new Date()
-    startOfMonth.setDate(1)
-    startOfMonth.setHours(0, 0, 0, 0)
-
+    // Count quotes sent by this artisan via lead_assignments (not devis_requests by client_id)
     const { count: devisCount } = await supabase
-      .from('devis_requests')
+      .from('lead_assignments')
       .select('id', { count: 'exact', head: true })
-      .eq('client_id', user.id)
-      .gte('created_at', startOfMonth.toISOString())
+      .eq('provider_id', provider?.id || '')
+      .eq('status', 'quoted')
 
     // Determine limits based on plan
     const planLimits: Record<string, number> = {

@@ -107,7 +107,7 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
             <a
               href={artisan.website!.startsWith('http') ? artisan.website! : `https://${artisan.website}`}
               target="_blank"
-              rel="noopener noreferrer"
+              rel="nofollow noopener noreferrer"
               className="w-full py-3 px-4 rounded-xl border-2 border-gray-200 text-slate-700 font-medium flex items-center justify-center gap-2.5 hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 group"
               aria-label="Voir le site web de l'artisan"
             >

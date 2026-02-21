@@ -129,7 +129,6 @@ export default function AvisRecusPage() {
               >
                 <FileText className="w-5 h-5" />
                 Demandes reçues
-                <span className="ml-auto bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">3</span>
               </Link>
               <Link
                 href="/espace-artisan/messages"
@@ -137,7 +136,6 @@ export default function AvisRecusPage() {
               >
                 <MessageSquare className="w-5 h-5" />
                 Messages
-                <span className="ml-auto bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full">5</span>
               </Link>
               <Link
                 href="/espace-artisan/avis-recus"

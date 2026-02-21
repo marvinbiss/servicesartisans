@@ -7,11 +7,7 @@ import {
   Mail,
   Phone,
   Calendar,
-  MapPin,
-  Building,
   Save,
-  Ban,
-  CheckCircle,
   Trash2,
   User,
   CreditCard,
@@ -25,20 +21,8 @@ interface UserProfile {
   id: string
   email: string
   full_name: string | null
-  phone: string | null
-  user_type: 'client' | 'artisan'
-  company_name: string | null
-  siret: string | null
-  description: string | null
-  address: string | null
-  city: string | null
-  postal_code: string | null
-  is_verified: boolean
-  is_banned: boolean
-  ban_reason: string | null
+  role: string | null
   subscription_plan: 'gratuit' | 'pro' | 'premium'
-  subscription_status: string | null
-  stripe_customer_id: string | null
   created_at: string
   updated_at: string | null
   stats?: {
@@ -59,9 +43,7 @@ export default function AdminUserDetailPage() {
   const [formData, setFormData] = useState<Partial<UserProfile>>({})
 
   // Modal states
-  const [banModal, setBanModal] = useState(false)
   const [deleteModal, setDeleteModal] = useState(false)
-  const [banReason, setBanReason] = useState('')
 
   useEffect(() => {
     fetchUser()
@@ -106,22 +88,6 @@ export default function AdminUserDetailPage() {
     }
   }
 
-  const handleBan = async () => {
-    try {
-      const action = user?.is_banned ? 'unban' : 'ban'
-      await fetch(`/api/admin/users/${userId}/ban`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action, reason: banReason }),
-      })
-      setBanModal(false)
-      setBanReason('')
-      fetchUser()
-    } catch (error) {
-      console.error('Ban action failed:', error)
-    }
-  }
-
   const handleDelete = async () => {
     try {
       await fetch(`/api/admin/users/${userId}`, {
@@ -135,8 +101,6 @@ export default function AdminUserDetailPage() {
 
   const getUserStatus = (): string => {
     if (!user) return 'pending'
-    if (user.is_banned) return 'banned'
-    if (!user.is_verified) return 'pending'
     return 'active'
   }
 
@@ -184,7 +148,9 @@ export default function AdminUserDetailPage() {
               <div className="flex items-center gap-3 mt-2">
                 <UserStatusBadge status={getUserStatus()} />
                 <SubscriptionBadge plan={user.subscription_plan} />
-                <span className="text-sm text-gray-500 capitalize">{user.user_type}</span>
+                {user.role && (
+                  <span className="text-sm text-gray-500 capitalize">{user.role}</span>
+                )}
               </div>
             </div>
 
@@ -258,144 +224,21 @@ export default function AdminUserDetailPage() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Téléphone
+                  Rôle
                 </label>
-                {editMode ? (
-                  <input
-                    type="tel"
-                    value={formData.phone || ''}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  />
-                ) : (
-                  <p className="flex items-center gap-2 text-gray-900">
-                    <Phone className="w-4 h-4 text-gray-400" />
-                    {user.phone || '-'}
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Type de compte
-                </label>
-                {editMode ? (
-                  <select
-                    value={formData.user_type || 'client'}
-                    onChange={(e) => setFormData({ ...formData, user_type: e.target.value as 'client' | 'artisan' })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="client">Client</option>
-                    <option value="artisan">Artisan</option>
-                  </select>
-                ) : (
-                  <p className="capitalize text-gray-900">{user.user_type}</p>
-                )}
+                <p className="flex items-center gap-2 text-gray-900">
+                  <Phone className="w-4 h-4 text-gray-400" />
+                  {user.role || '-'}
+                </p>
               </div>
             </div>
           </div>
-
-          {/* Informations artisan */}
-          {(user.user_type === 'artisan' || editMode) && (
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Informations professionnelles</h2>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Nom de l&apos;entreprise
-                  </label>
-                  {editMode ? (
-                    <input
-                      type="text"
-                      value={formData.company_name || ''}
-                      onChange={(e) => setFormData({ ...formData, company_name: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                    />
-                  ) : (
-                    <p className="flex items-center gap-2 text-gray-900">
-                      <Building className="w-4 h-4 text-gray-400" />
-                      {user.company_name || '-'}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    SIRET
-                  </label>
-                  {editMode ? (
-                    <input
-                      type="text"
-                      value={formData.siret || ''}
-                      onChange={(e) => setFormData({ ...formData, siret: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                    />
-                  ) : (
-                    <p className="text-gray-900">{user.siret || '-'}</p>
-                  )}
-                </div>
-
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Adresse
-                  </label>
-                  {editMode ? (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                      <input
-                        type="text"
-                        placeholder="Adresse"
-                        value={formData.address || ''}
-                        onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                        className="md:col-span-3 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Code postal"
-                        value={formData.postal_code || ''}
-                        onChange={(e) => setFormData({ ...formData, postal_code: e.target.value })}
-                        className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Ville"
-                        value={formData.city || ''}
-                        onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                        className="md:col-span-2 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                      />
-                    </div>
-                  ) : (
-                    <p className="flex items-center gap-2 text-gray-900">
-                      <MapPin className="w-4 h-4 text-gray-400" />
-                      {[user.address, user.postal_code, user.city].filter(Boolean).join(', ') || '-'}
-                    </p>
-                  )}
-                </div>
-
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Description
-                  </label>
-                  {editMode ? (
-                    <textarea
-                      value={formData.description || ''}
-                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                      rows={3}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
-                    />
-                  ) : (
-                    <p className="text-gray-900">{user.description || '-'}</p>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
 
           {/* Abonnement */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Abonnement</h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Plan</label>
                 {editMode ? (
@@ -414,18 +257,6 @@ export default function AdminUserDetailPage() {
                     <SubscriptionBadge plan={user.subscription_plan} />
                   </div>
                 )}
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Statut</label>
-                <p className="text-gray-900">{user.subscription_status || 'Actif'}</p>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Stripe ID</label>
-                <p className="text-gray-500 text-sm font-mono">
-                  {user.stripe_customer_id || '-'}
-                </p>
               </div>
             </div>
           </div>
@@ -465,12 +296,6 @@ export default function AdminUserDetailPage() {
                   Dernière modification le {formatDate(user.updated_at)}
                 </p>
               )}
-              {user.is_banned && user.ban_reason && (
-                <p className="flex items-center gap-2 text-red-600">
-                  <Ban className="w-4 h-4" />
-                  Raison du ban: {user.ban_reason}
-                </p>
-              )}
             </div>
           </div>
 
@@ -479,27 +304,6 @@ export default function AdminUserDetailPage() {
             <h2 className="text-lg font-semibold text-red-900 mb-4">Zone de danger</h2>
 
             <div className="flex flex-wrap gap-3">
-              <button
-                onClick={() => setBanModal(true)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-                  user.is_banned
-                    ? 'bg-green-100 text-green-700 hover:bg-green-200'
-                    : 'bg-red-100 text-red-700 hover:bg-red-200'
-                }`}
-              >
-                {user.is_banned ? (
-                  <>
-                    <CheckCircle className="w-4 h-4" />
-                    Débannir
-                  </>
-                ) : (
-                  <>
-                    <Ban className="w-4 h-4" />
-                    Bannir
-                  </>
-                )}
-              </button>
-
               <button
                 onClick={() => setDeleteModal(true)}
                 className="flex items-center gap-2 px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200"
@@ -511,24 +315,6 @@ export default function AdminUserDetailPage() {
           </div>
         </div>
       </div>
-
-      {/* Ban Modal */}
-      <ConfirmationModal
-        isOpen={banModal}
-        onClose={() => {
-          setBanModal(false)
-          setBanReason('')
-        }}
-        onConfirm={handleBan}
-        title={user.is_banned ? 'Débannir utilisateur' : 'Bannir utilisateur'}
-        message={
-          user.is_banned
-            ? `Êtes-vous sûr de vouloir débannir ${user.full_name || user.email} ?`
-            : `Êtes-vous sûr de vouloir bannir ${user.full_name || user.email} ? L'utilisateur ne pourra plus accéder à la plateforme.`
-        }
-        confirmText={user.is_banned ? 'Débannir' : 'Bannir'}
-        variant={user.is_banned ? 'success' : 'danger'}
-      />
 
       {/* Delete Modal */}
       <ConfirmationModal

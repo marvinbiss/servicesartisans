@@ -6,7 +6,6 @@ import {
   Search,
   Eye,
   Ban,
-  CheckCircle,
   UserPlus,
   ChevronLeft,
   ChevronRight,
@@ -26,7 +25,6 @@ interface UserProfile {
   phone: string | null
   user_type: 'client' | 'artisan'
   is_verified: boolean
-  is_banned: boolean
   subscription_plan: 'gratuit' | 'pro' | 'premium'
   subscription_status: string | null
   created_at: string
@@ -41,16 +39,15 @@ interface UsersResponse {
 export default function AdminUsersPage() {
   const router = useRouter()
   const [search, setSearch] = useState('')
-  const [filter, setFilter] = useState<'all' | 'clients' | 'artisans' | 'banned'>('all')
+  const [filter, setFilter] = useState<'all' | 'clients' | 'artisans'>('all')
   const [plan, setPlan] = useState<'all' | 'gratuit' | 'pro' | 'premium'>('all')
   const [page, setPage] = useState(1)
 
-  // Modal state
-  const [banModal, setBanModal] = useState<{ open: boolean; userId: string; userName: string; isBanned: boolean }>({
+  // Modal state (kept for future use — ban endpoint not yet active)
+  const [banModal, setBanModal] = useState<{ open: boolean; userId: string; userName: string }>({
     open: false,
     userId: '',
     userName: '',
-    isBanned: false,
   })
   const [banReason, setBanReason] = useState('')
 
@@ -73,12 +70,11 @@ export default function AdminUsersPage() {
 
   const handleBanAction = async () => {
     try {
-      const action = banModal.isBanned ? 'unban' : 'ban'
       await adminMutate(`/api/admin/users/${banModal.userId}/ban`, {
         method: 'POST',
-        body: { action, reason: banReason },
+        body: { action: 'ban', reason: banReason },
       })
-      setBanModal({ open: false, userId: '', userName: '', isBanned: false })
+      setBanModal({ open: false, userId: '', userName: '' })
       setBanReason('')
       mutate()
     } catch {
@@ -87,7 +83,6 @@ export default function AdminUsersPage() {
   }
 
   const getUserStatus = (user: UserProfile): string => {
-    if (user.is_banned) return 'banned'
     if (!user.is_verified) return 'pending'
     return 'active'
   }
@@ -139,7 +134,7 @@ export default function AdminUsersPage() {
 
             {/* Type filter */}
             <div className="flex gap-2">
-              {(['all', 'clients', 'artisans', 'banned'] as const).map((f) => (
+              {(['all', 'clients', 'artisans'] as const).map((f) => (
                 <button
                   key={f}
                   onClick={() => {
@@ -153,8 +148,7 @@ export default function AdminUsersPage() {
                   }`}
                 >
                   {f === 'all' ? 'Tous' :
-                   f === 'clients' ? 'Clients' :
-                   f === 'artisans' ? 'Artisans' : 'Bannis'}
+                   f === 'clients' ? 'Clients' : 'Artisans'}
                 </button>
               ))}
             </div>
@@ -271,33 +265,17 @@ export default function AdminUsersPage() {
                             >
                               <Eye className="w-5 h-5" />
                             </button>
-                            {user.is_banned ? (
-                              <button
-                                onClick={() => setBanModal({
-                                  open: true,
-                                  userId: user.id,
-                                  userName: user.full_name || user.email,
-                                  isBanned: true,
-                                })}
-                                className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg"
-                                title="Débannir"
-                              >
-                                <CheckCircle className="w-5 h-5" />
-                              </button>
-                            ) : (
-                              <button
-                                onClick={() => setBanModal({
-                                  open: true,
-                                  userId: user.id,
-                                  userName: user.full_name || user.email,
-                                  isBanned: false,
-                                })}
-                                className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg"
-                                title="Bannir"
-                              >
-                                <Ban className="w-5 h-5" />
-                              </button>
-                            )}
+                            <button
+                              onClick={() => setBanModal({
+                                open: true,
+                                userId: user.id,
+                                userName: user.full_name || user.email,
+                              })}
+                              className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg"
+                              title="Bannir"
+                            >
+                              <Ban className="w-5 h-5" />
+                            </button>
                           </div>
                         </td>
                       </tr>
@@ -340,40 +318,35 @@ export default function AdminUsersPage() {
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex min-h-screen items-center justify-center p-4">
             <div className="fixed inset-0 bg-black/50" onClick={() => {
-              setBanModal({ open: false, userId: '', userName: '', isBanned: false })
+              setBanModal({ open: false, userId: '', userName: '' })
               setBanReason('')
             }} />
             <div role="dialog" aria-modal="true" aria-labelledby="ban-modal-title" className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6">
               <h3 id="ban-modal-title" className="text-lg font-semibold text-gray-900 mb-2">
-                {banModal.isBanned ? 'D\u00e9bannir utilisateur' : 'Bannir utilisateur'}
+                Bannir utilisateur
               </h3>
               <p className="text-gray-600 mb-4">
-                {banModal.isBanned
-                  ? `\u00cates-vous s\u00fbr de vouloir d\u00e9bannir ${banModal.userName} ?`
-                  : `\u00cates-vous s\u00fbr de vouloir bannir ${banModal.userName} ? L\u2019utilisateur ne pourra plus acc\u00e9der \u00e0 la plateforme.`
-                }
+                {`\u00cates-vous s\u00fbr de vouloir bannir ${banModal.userName} ? L\u2019utilisateur ne pourra plus acc\u00e9der \u00e0 la plateforme.`}
               </p>
 
-              {!banModal.isBanned && (
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Raison du bannissement
-                  </label>
-                  <textarea
-                    value={banReason}
-                    onChange={(e) => setBanReason(e.target.value)}
-                    rows={3}
-                    maxLength={500}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
-                    placeholder="Indiquez la raison du bannissement..."
-                  />
-                </div>
-              )}
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Raison du bannissement
+                </label>
+                <textarea
+                  value={banReason}
+                  onChange={(e) => setBanReason(e.target.value)}
+                  rows={3}
+                  maxLength={500}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
+                  placeholder="Indiquez la raison du bannissement..."
+                />
+              </div>
 
               <div className="flex gap-3 justify-end">
                 <button
                   onClick={() => {
-                    setBanModal({ open: false, userId: '', userName: '', isBanned: false })
+                    setBanModal({ open: false, userId: '', userName: '' })
                     setBanReason('')
                   }}
                   className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
@@ -382,13 +355,9 @@ export default function AdminUsersPage() {
                 </button>
                 <button
                   onClick={handleBanAction}
-                  className={`px-4 py-2 text-white rounded-lg transition-colors ${
-                    banModal.isBanned
-                      ? 'bg-green-600 hover:bg-green-700'
-                      : 'bg-red-600 hover:bg-red-700'
-                  }`}
+                  className="px-4 py-2 text-white rounded-lg transition-colors bg-red-600 hover:bg-red-700"
                 >
-                  {banModal.isBanned ? 'D\u00e9bannir' : 'Bannir'}
+                  Bannir
                 </button>
               </div>
             </div>

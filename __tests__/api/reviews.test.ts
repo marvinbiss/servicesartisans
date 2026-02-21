@@ -99,7 +99,7 @@ beforeEach(() => {
 describe('GET /api/reviews', () => {
   it('returns 400 when neither bookingId nor artisanId provided', async () => {
     const { GET } = await import('@/app/api/reviews/route')
-    const result = await GET(makeGetRequest()) as { body: Record<string, unknown>; status: number }
+    const result = await GET(makeGetRequest()) as unknown as { body: Record<string, unknown>; status: number }
 
     expect(result.status).toBe(400)
     expect(result.body.success).toBe(false)
@@ -107,7 +107,7 @@ describe('GET /api/reviews', () => {
 
   it('returns 400 when bookingId is not a valid UUID', async () => {
     const { GET } = await import('@/app/api/reviews/route')
-    const result = await GET(makeGetRequest({ bookingId: 'bad-id' })) as { body: Record<string, unknown>; status: number }
+    const result = await GET(makeGetRequest({ bookingId: 'bad-id' })) as unknown as { body: Record<string, unknown>; status: number }
 
     expect(result.status).toBe(400)
   })
@@ -116,7 +116,7 @@ describe('GET /api/reviews', () => {
     queryResults.push({ data: null, error: { message: 'No rows', code: 'PGRST116' } })
 
     const { GET } = await import('@/app/api/reviews/route')
-    const result = await GET(makeGetRequest({ bookingId: BOOKING_UUID })) as { body: Record<string, unknown>; status: number }
+    const result = await GET(makeGetRequest({ bookingId: BOOKING_UUID })) as unknown as { body: Record<string, unknown>; status: number }
 
     expect(result.status).toBe(404)
     expect(result.body.success).toBe(false)
@@ -139,7 +139,7 @@ describe('GET /api/reviews', () => {
     queryResults.push({ data: null, error: { message: 'No rows', code: 'PGRST116' } })
 
     const { GET } = await import('@/app/api/reviews/route')
-    const result = await GET(makeGetRequest({ bookingId: BOOKING_UUID })) as {
+    const result = await GET(makeGetRequest({ bookingId: BOOKING_UUID })) as unknown as {
       body: { success: boolean; data: Record<string, unknown> }; status: number
     }
 
@@ -157,7 +157,7 @@ describe('GET /api/reviews', () => {
     queryResults.push({ data: { id: 'existing-review-id' }, error: null })
 
     const { GET } = await import('@/app/api/reviews/route')
-    const result = await GET(makeGetRequest({ bookingId: BOOKING_UUID })) as {
+    const result = await GET(makeGetRequest({ bookingId: BOOKING_UUID })) as unknown as {
       body: { success: boolean; data: Record<string, unknown> }; status: number
     }
 
@@ -174,7 +174,7 @@ describe('GET /api/reviews', () => {
     })
 
     const { GET } = await import('@/app/api/reviews/route')
-    const result = await GET(makeGetRequest({ artisanId: ARTISAN_UUID })) as {
+    const result = await GET(makeGetRequest({ artisanId: ARTISAN_UUID })) as unknown as {
       body: { success: boolean; data: { reviews: unknown[]; stats: Record<string, unknown> } }; status: number
     }
 
@@ -190,7 +190,7 @@ describe('GET /api/reviews', () => {
     queryResults.push({ data: [], error: null })
 
     const { GET } = await import('@/app/api/reviews/route')
-    const result = await GET(makeGetRequest({ artisanId: ARTISAN_UUID })) as {
+    const result = await GET(makeGetRequest({ artisanId: ARTISAN_UUID })) as unknown as {
       body: { success: boolean; data: { stats: Record<string, unknown> } }; status: number
     }
 
@@ -207,7 +207,7 @@ describe('GET /api/reviews', () => {
 describe('POST /api/reviews', () => {
   it('returns 400 on missing required fields', async () => {
     const { POST } = await import('@/app/api/reviews/route')
-    const result = await POST(makePostRequest({ bookingId: BOOKING_UUID })) as { body: Record<string, unknown>; status: number }
+    const result = await POST(makePostRequest({ bookingId: BOOKING_UUID })) as unknown as { body: Record<string, unknown>; status: number }
 
     expect(result.status).toBe(400)
     expect(result.body.success).toBe(false)
@@ -215,14 +215,14 @@ describe('POST /api/reviews', () => {
 
   it('returns 400 when comment is too short', async () => {
     const { POST } = await import('@/app/api/reviews/route')
-    const result = await POST(makePostRequest({ ...validReviewBody, comment: 'Ok' })) as { body: Record<string, unknown>; status: number }
+    const result = await POST(makePostRequest({ ...validReviewBody, comment: 'Ok' })) as unknown as { body: Record<string, unknown>; status: number }
 
     expect(result.status).toBe(400)
   })
 
   it('returns 400 when rating is out of range', async () => {
     const { POST } = await import('@/app/api/reviews/route')
-    const result = await POST(makePostRequest({ ...validReviewBody, rating: 6 })) as { body: Record<string, unknown>; status: number }
+    const result = await POST(makePostRequest({ ...validReviewBody, rating: 6 })) as unknown as { body: Record<string, unknown>; status: number }
 
     expect(result.status).toBe(400)
   })
@@ -231,7 +231,7 @@ describe('POST /api/reviews', () => {
     queryResults.push({ data: null, error: { message: 'No rows', code: 'PGRST116' } })
 
     const { POST } = await import('@/app/api/reviews/route')
-    const result = await POST(makePostRequest(validReviewBody)) as { body: Record<string, unknown>; status: number }
+    const result = await POST(makePostRequest(validReviewBody)) as unknown as { body: Record<string, unknown>; status: number }
 
     expect(result.status).toBe(404)
   })
@@ -240,7 +240,7 @@ describe('POST /api/reviews', () => {
     queryResults.push({ data: { id: BOOKING_UUID, artisan_id: ARTISAN_UUID, client_name: 'Alice', client_email: 'alice@test.com', status: 'pending' }, error: null })
 
     const { POST } = await import('@/app/api/reviews/route')
-    const result = await POST(makePostRequest(validReviewBody)) as { body: Record<string, unknown>; status: number }
+    const result = await POST(makePostRequest(validReviewBody)) as unknown as { body: Record<string, unknown>; status: number }
 
     expect(result.status).toBe(400)
   })
@@ -250,7 +250,7 @@ describe('POST /api/reviews', () => {
     queryResults.push({ data: { id: 'existing-review' }, error: null }) // existing review
 
     const { POST } = await import('@/app/api/reviews/route')
-    const result = await POST(makePostRequest(validReviewBody)) as { body: Record<string, unknown>; status: number }
+    const result = await POST(makePostRequest(validReviewBody)) as unknown as { body: Record<string, unknown>; status: number }
 
     expect(result.status).toBe(409)
   })
@@ -263,7 +263,7 @@ describe('POST /api/reviews', () => {
     queryResults.push({ data: null, error: null }) // profiles update
 
     const { POST } = await import('@/app/api/reviews/route')
-    const result = await POST(makePostRequest(validReviewBody)) as {
+    const result = await POST(makePostRequest(validReviewBody)) as unknown as {
       body: { success: boolean; data: { review: Record<string, unknown>; message: string } }; status: number
     }
 
@@ -282,7 +282,7 @@ describe('POST /api/reviews', () => {
     const fraudBody = { ...validReviewBody, comment: 'THIS IS AMAZING CHECK HTTP://SPAM.COM NOW!!!' }
 
     const { POST } = await import('@/app/api/reviews/route')
-    const result = await POST(makePostRequest(fraudBody)) as {
+    const result = await POST(makePostRequest(fraudBody)) as unknown as {
       body: { success: boolean; data: { message: string } }; status: number
     }
 
@@ -295,7 +295,7 @@ describe('POST /api/reviews', () => {
     process.env.REVIEW_HMAC_SECRET = 'test-secret'
 
     const { POST } = await import('@/app/api/reviews/route')
-    const result = await POST(makePostRequest({ ...validReviewBody, reviewToken: 'deadbeefdeadbeefdeadbeefdeadbeef' })) as {
+    const result = await POST(makePostRequest({ ...validReviewBody, reviewToken: 'deadbeefdeadbeefdeadbeefdeadbeef' })) as unknown as {
       body: Record<string, unknown>; status: number
     }
 

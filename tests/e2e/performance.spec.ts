@@ -42,13 +42,8 @@ test.describe('Performance', () => {
 
     for (let i = 0; i < Math.min(count, 5); i++) {
       const script = scripts.nth(i)
-      const async = await script.getAttribute('async')
-      const defer = await script.getAttribute('defer')
-      const type = await script.getAttribute('type')
-
-      // Scripts should be async, defer, or module
-      const isNonBlocking = async !== null || defer !== null || type === 'module'
-      // Note: Next.js handles this automatically
+      // Note: Next.js handles this automatically (async/defer/module scripts)
+      await script.getAttribute('async')
     }
 
     await expect(page.locator('body')).toBeVisible()
@@ -108,11 +103,9 @@ test.describe('Performance', () => {
   })
 
   test('caching headers are set', async ({ page }) => {
-    const response = await page.goto('/')
+    await page.goto('/')
 
     // Check for caching headers
-    const headers = response?.headers() || {}
-
     // Static assets should have cache headers
     // Note: This checks the HTML page, not static assets
     await expect(page.locator('body')).toBeVisible()

@@ -16,7 +16,7 @@ interface SettingsData {
     id: string
     email: string
     full_name: string | null
-    user_type: string
+    role?: string
   } | null
   provider: {
     id: string
@@ -135,7 +135,7 @@ export default function ArtisanSettingsPage() {
             </div>
             <div>
               <span className="text-gray-500">Type :</span>{' '}
-              <span className="text-gray-900 capitalize">{data?.profile?.user_type || '—'}</span>
+              <span className="text-gray-900 capitalize">{data?.profile?.role || '—'}</span>
             </div>
             <div>
               <span className="text-gray-500">Compte actif :</span>{' '}

@@ -140,13 +140,13 @@ export function BookingStatusBadge({ status }: { status: string }) {
 export function ReportStatusBadge({ status }: { status: string }) {
   const variants: Record<string, BadgeVariant> = {
     pending: 'warning',
-    under_review: 'info',
+    reviewed: 'info',
     resolved: 'success',
     dismissed: 'default',
   }
   const labels: Record<string, string> = {
     pending: 'En attente',
-    under_review: 'En cours',
+    reviewed: 'En cours',
     resolved: 'Résolu',
     dismissed: 'Rejeté',
   }

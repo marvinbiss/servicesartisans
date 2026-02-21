@@ -62,8 +62,8 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    // Verify admin with payments:read permission (changing plans)
-    const authResult = await requirePermission('payments', 'read')
+    // Verify admin with payments:write permission (changing plans)
+    const authResult = await requirePermission('payments', 'write')
     if (!authResult.success || !authResult.admin) {
       return authResult.error
     }

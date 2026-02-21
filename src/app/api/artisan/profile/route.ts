@@ -67,7 +67,7 @@ export async function GET() {
     const { data: provider } = await supabase
       .from('providers')
       .select('id, name, slug, siret, phone, address_street, address_city, address_postal_code, address_region, specialty, rating_average, review_count, is_verified, is_active')
-      .eq('id', user.id)
+      .eq('user_id', user.id)
       .single()
 
     return NextResponse.json({ profile, provider })
@@ -175,7 +175,7 @@ export async function PUT(request: Request) {
       const { data, error: providerError } = await supabase
         .from('providers')
         .update(providerUpdate)
-        .eq('id', user.id)
+        .eq('user_id', user.id)
         .select('id, name, slug, siret, phone, address_street, address_city, address_postal_code, specialty, is_verified, is_active')
         .single()
 

@@ -23,7 +23,7 @@ interface Report {
   target_id: string
   reason: 'spam' | 'inappropriate' | 'fake' | 'harassment' | 'other'
   description: string | null
-  status: 'pending' | 'under_review' | 'resolved' | 'dismissed'
+  status: 'pending' | 'reviewed' | 'resolved' | 'dismissed'
   reviewed_by: string | null
   resolution: string | null
   created_at: string
@@ -52,7 +52,7 @@ const TARGET_TYPE_LABELS: Record<string, string> = {
 }
 
 export default function AdminSignalementsPage() {
-  const [status, setStatus] = useState<'all' | 'pending' | 'under_review' | 'resolved' | 'dismissed'>('pending')
+  const [status, setStatus] = useState<'all' | 'pending' | 'reviewed' | 'resolved' | 'dismissed'>('pending')
   const [targetType, setTargetType] = useState<'all' | 'provider' | 'review' | 'user' | 'message'>('all')
   const [page, setPage] = useState(1)
   const [actionError, setActionError] = useState<string | null>(null)
@@ -82,7 +82,7 @@ export default function AdminSignalementsPage() {
         method: 'POST',
         body: {
           action: actionModal.action,
-          resolution_notes: resolutionNotes,
+          resolution: resolutionNotes,
         },
       })
       setActionModal({ open: false, reportId: '', action: 'resolve' })
@@ -129,7 +129,7 @@ export default function AdminSignalementsPage() {
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6">
           <div className="flex flex-col lg:flex-row gap-4">
             <div className="flex gap-2 flex-wrap">
-              {(['all', 'pending', 'under_review', 'resolved', 'dismissed'] as const).map((s) => (
+              {(['all', 'pending', 'reviewed', 'resolved', 'dismissed'] as const).map((s) => (
                 <button
                   key={s}
                   onClick={() => {
@@ -144,7 +144,7 @@ export default function AdminSignalementsPage() {
                 >
                   {s === 'all' ? 'Tous' :
                    s === 'pending' ? 'En attente' :
-                   s === 'under_review' ? 'En cours' :
+                   s === 'reviewed' ? 'En cours' :
                    s === 'resolved' ? 'Résolus' : 'Rejetés'}
                 </button>
               ))}

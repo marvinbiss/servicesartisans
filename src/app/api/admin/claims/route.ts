@@ -203,14 +203,11 @@ export async function PATCH(request: NextRequest) {
         )
       }
 
-      // 3. Update user profile to artisan type
-      await supabase
-        .from('profiles')
-        .update({
-          user_type: 'artisan',
-          updated_at: now,
-        })
-        .eq('id', claim.user_id)
+      // 3. Mark user as artisan in auth metadata
+      // (profiles.role is reserved for admin roles only — see migration 309)
+      await supabase.auth.admin.updateUserById(claim.user_id, {
+        user_metadata: { is_artisan: true },
+      })
 
       logger.info('Claim approved', {
         claimId,

@@ -18,7 +18,6 @@ test.describe('Provider Detail Page', () => {
     await page.goto('/services/plombier/paris/test')
 
     // Check for quote form elements
-    const quoteSection = page.locator('text=Demander un devis, text=devis')
     // May or may not be visible depending on page structure
     await expect(page.locator('body')).toBeVisible()
   })
@@ -38,7 +37,6 @@ test.describe('Provider Detail Page', () => {
     // Use SEO-friendly URL format
     await page.goto('/services/plombier/paris/test')
 
-    const reviewsSection = page.locator('text=Avis, text=avis')
     // Reviews may or may not be present
     await expect(page.locator('body')).toBeVisible()
   })

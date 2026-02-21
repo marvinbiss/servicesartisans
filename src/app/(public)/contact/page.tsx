@@ -57,5 +57,13 @@ export default async function ContactPage() {
     )
   }
 
-  return <ContactPageClient />
+  return (
+    <>
+      <JsonLd data={getBreadcrumbSchema([
+        { name: 'Accueil', url: '/' },
+        { name: 'Contact', url: '/contact' },
+      ])} />
+      <ContactPageClient />
+    </>
+  )
 }

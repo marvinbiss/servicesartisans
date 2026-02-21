@@ -6,7 +6,6 @@ import { getProblemSlugs } from '@/lib/data/problems'
 import { getGuideSlugs } from '@/lib/data/guides'
 import { articleSlugs } from '@/lib/data/blog/articles'
 import { allArticles } from '@/lib/data/blog/articles'
-import { getBlogImage, getServiceImage, getCityImage, heroImage, getDepartmentImage, getRegionImage, pageImages, ambianceImages } from '@/lib/data/images'
 import inseeCommunes from '@/lib/data/insee-communes.json'
 
 // Provider batch size — well under the 50,000 URL sitemap limit
@@ -30,25 +29,19 @@ export async function generateSitemaps() {
   const sqBatchCount = Math.ceil(totalServiceQuartierUrls / 45000) // Stay under 50K limit
 
   // Phase 1: top 300 cities only — focused crawl budget on high-traffic cities for new domain.
-  // Phase 2 (service-cities-extended) exists as a handler but is NOT registered here yet.
-  // Add extended batches once domain authority grows (month 2-3).
   const serviceCitiesPhase1BatchCount = Math.ceil(services.length * TOP_CITIES_PHASE1 / 45000)
 
   const sitemaps: { id: string }[] = [
-    { id: 'static' },           // homepage, static pages, services index, individual services
-    // Phase 1: service × top-300 city pages (14 100 URLs, fits in 1 batch)
+    { id: 'static' },
     ...Array.from({ length: serviceCitiesPhase1BatchCount }, (_, i) => ({ id: `service-cities-${i}` })),
     // Phase 2: uncomment when domain authority grows (month 2-3):
     // ...Array.from({ length: Math.ceil(services.length * (villes.length - TOP_CITIES_PHASE1) / 45000) }, (_, i) => ({ id: `service-cities-extended-${i}` })),
-    { id: 'cities' },           // villes index + individual city pages
-    { id: 'geo' },              // departements + regions (index + individual)
-    { id: 'quartiers' },        // quartier pages within cities
-    // service×quartier sitemaps — served by [publicId] route via quartier detection
+    { id: 'cities' },
+    { id: 'geo' },
+    { id: 'quartiers' },
     ...Array.from({ length: sqBatchCount }, (_, i) => ({ id: `service-quartiers-${i}` })),
-    // devis sitemaps
-    { id: 'devis-services' },     // 46 service hub pages
+    { id: 'devis-services' },
     ...Array.from({ length: Math.ceil(services.length * villes.length / 45000) }, (_, i) => ({ id: `devis-service-cities-${i}` })),
-    // devis×quartier sitemaps — batched at 45K per sitemap
     ...(() => {
       let totalDevisQuartierUrls = 0
       for (const v of villes) {
@@ -57,37 +50,30 @@ export async function generateSitemaps() {
       const dqBatchCount = Math.ceil(totalDevisQuartierUrls / 45000)
       return Array.from({ length: dqBatchCount }, (_, i) => ({ id: `devis-quartiers-${i}` }))
     })(),
-    // urgence service×city sitemaps
     ...(() => {
       const emergencySlugs = Object.keys(tradeContent).filter(s => tradeContent[s].emergencyInfo)
       const ucBatchCount = Math.ceil(emergencySlugs.length * villes.length / 45000)
       return Array.from({ length: ucBatchCount }, (_, i) => ({ id: `urgence-service-cities-${i}` }))
     })(),
-    // tarifs service×city sitemaps
     ...Array.from(
       { length: Math.ceil(services.length * villes.length / 45000) },
       (_, i) => ({ id: `tarifs-service-cities-${i}` })
     ),
-    // avis sitemaps
     { id: 'avis-services' },
     ...Array.from(
       { length: Math.ceil(services.length * villes.length / 45000) },
       (_, i) => ({ id: `avis-service-cities-${i}` })
     ),
-    // Problemes sitemaps
-    { id: 'problemes' },  // hub + 30 problem pages
+    { id: 'problemes' },
     ...Array.from(
       { length: Math.ceil(30 * villes.length / 45000) },
       (_, i) => ({ id: `problemes-cities-${i}` })
     ),
-    // Dept×service sitemaps
     ...Array.from(
       { length: Math.ceil(departements.length * getTradesSlugs().length / 45000) },
       (_, i) => ({ id: `dept-services-${i}` })
     ),
-    // Region×service sitemap
     { id: 'region-services' },
-    // Guides sitemap
     { id: 'guides' },
   ]
 
@@ -120,155 +106,94 @@ export async function generateSitemaps() {
   return sitemaps
 }
 
-// Fixed date for static content — prevents crawl budget waste on every deploy
-const STATIC_LAST_MODIFIED = new Date('2026-02-10')
-
 export default async function sitemap({ id }: { id: string }): Promise<MetadataRoute.Sitemap> {
 
   // ── Static pages + services ─────────────────────────────────────────
   if (id === 'static') {
     const homepage: MetadataRoute.Sitemap = [
-      {
-        url: SITE_URL,
-        lastModified: STATIC_LAST_MODIFIED,
-        changeFrequency: 'daily',
-        priority: 1.0,
-      },
+      { url: SITE_URL },
     ]
 
-    const ogFallback = heroImage.src
-    // Page-specific images where a relevant photo exists
-    const staticPageImages: Record<string, string> = {
-      '/a-propos': pageImages.about[0].src,
-      '/comment-ca-marche': pageImages.howItWorks[0].src,
-      '/notre-processus-de-verification': pageImages.verification[0].src,
-      '/urgence': ambianceImages.ctaBg,
-      '/devis': ambianceImages.renovation,
-    }
     const staticPages: MetadataRoute.Sitemap = [
-      { path: '/a-propos', changeFrequency: 'monthly' as const, priority: 0.5 },
-      { path: '/contact', changeFrequency: 'monthly' as const, priority: 0.5 },
-      { path: '/blog', changeFrequency: 'weekly' as const, priority: 0.7 },
-      { path: '/faq', changeFrequency: 'monthly' as const, priority: 0.6 },
-      { path: '/comment-ca-marche', changeFrequency: 'monthly' as const, priority: 0.6 },
-      { path: '/tarifs', changeFrequency: 'weekly' as const, priority: 0.8 },
-      { path: '/urgence', changeFrequency: 'weekly' as const, priority: 0.8 },
-      { path: '/devis', changeFrequency: 'weekly' as const, priority: 0.7 },
-      { path: '/recherche', changeFrequency: 'monthly' as const, priority: 0.4 },
-      { path: '/mentions-legales', changeFrequency: 'yearly' as const, priority: 0.3 },
-      { path: '/confidentialite', changeFrequency: 'yearly' as const, priority: 0.3 },
-      { path: '/cgv', changeFrequency: 'yearly' as const, priority: 0.3 },
-      { path: '/accessibilite', changeFrequency: 'yearly' as const, priority: 0.3 },
-      { path: '/notre-processus-de-verification', changeFrequency: 'monthly' as const, priority: 0.5 },
-      { path: '/politique-avis', changeFrequency: 'monthly' as const, priority: 0.5 },
-      { path: '/mediation', changeFrequency: 'yearly' as const, priority: 0.4 },
-      { path: '/plan-du-site', changeFrequency: 'monthly' as const, priority: 0.4 },
-      { path: '/outils/calculateur-prix', changeFrequency: 'monthly' as const, priority: 0.7 },
-    ].map(({ path, changeFrequency, priority }) => ({
-      url: `${SITE_URL}${path}`,
-      lastModified: STATIC_LAST_MODIFIED,
-      changeFrequency,
-      priority,
-      images: [staticPageImages[path] || ogFallback],
-    }))
+      { url: `${SITE_URL}/a-propos` },
+      { url: `${SITE_URL}/contact` },
+      { url: `${SITE_URL}/blog` },
+      { url: `${SITE_URL}/faq` },
+      { url: `${SITE_URL}/comment-ca-marche` },
+      { url: `${SITE_URL}/tarifs` },
+      { url: `${SITE_URL}/urgence` },
+      { url: `${SITE_URL}/devis` },
+      { url: `${SITE_URL}/mentions-legales` },
+      { url: `${SITE_URL}/confidentialite` },
+      { url: `${SITE_URL}/cgv` },
+      { url: `${SITE_URL}/accessibilite` },
+      { url: `${SITE_URL}/notre-processus-de-verification` },
+      { url: `${SITE_URL}/politique-avis` },
+      { url: `${SITE_URL}/mediation` },
+      { url: `${SITE_URL}/plan-du-site` },
+      { url: `${SITE_URL}/outils/calculateur-prix` },
+      { url: `${SITE_URL}/outils/diagnostic` },
+      { url: `${SITE_URL}/carte-artisans` },
+      { url: `${SITE_URL}/artisans` },
+    ]
 
+    // Blog articles — lastModified réel (seul contenu avec vraie date vérifiable)
     const blogArticlePages: MetadataRoute.Sitemap = articleSlugs.map((slug) => {
       const article = allArticles[slug]
-      const blogImage = article ? getBlogImage(slug, article.category) : null
       return {
         url: `${SITE_URL}/blog/${slug}`,
-        lastModified: article ? new Date(article.updatedDate || article.date) : STATIC_LAST_MODIFIED,
-        changeFrequency: 'monthly' as const,
-        priority: 0.6,
-        ...(blogImage ? { images: [blogImage.src] } : {}),
+        lastModified: article ? new Date(article.updatedDate || article.date) : undefined,
       }
     })
 
     const servicesIndex: MetadataRoute.Sitemap = [
-      {
-        url: `${SITE_URL}/services`,
-        lastModified: STATIC_LAST_MODIFIED,
-        changeFrequency: 'weekly',
-        priority: 0.9,
-      },
+      { url: `${SITE_URL}/services` },
     ]
 
-    const servicePages: MetadataRoute.Sitemap = services.map((service) => {
-      const serviceImage = getServiceImage(service.slug)
-      return {
-        url: `${SITE_URL}/services/${service.slug}`,
-        lastModified: STATIC_LAST_MODIFIED,
-        changeFrequency: 'weekly' as const,
-        priority: 0.9,
-        images: [serviceImage.src],
-      }
-    })
+    const servicePages: MetadataRoute.Sitemap = services.map((service) => ({
+      url: `${SITE_URL}/services/${service.slug}`,
+    }))
 
-    // Urgence sub-pages (services with emergencyInfo)
     const emergencySlugs = Object.keys(tradeContent).filter((s) => tradeContent[s].emergencyInfo)
     const urgencePages: MetadataRoute.Sitemap = emergencySlugs.map((slug) => ({
       url: `${SITE_URL}/urgence/${slug}`,
-      lastModified: STATIC_LAST_MODIFIED,
-      changeFrequency: 'weekly' as const,
-      priority: 0.8,
-      images: [getServiceImage(slug).src],
     }))
 
-    // Tarifs per-service pages
     const tarifsPages: MetadataRoute.Sitemap = Object.keys(tradeContent).map((slug) => ({
       url: `${SITE_URL}/tarifs/${slug}`,
-      lastModified: STATIC_LAST_MODIFIED,
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
-      images: [getServiceImage(slug).src],
     }))
 
     return [...homepage, ...staticPages, ...blogArticlePages, ...servicesIndex, ...servicePages, ...urgencePages, ...tarifsPages]
   }
 
-  // ── Service + city combination pages — Phase 1: top 300 cities only ────────
+  // ── Service + city — Phase 1: top 300 cities ────────────────────────
   if (id.startsWith('service-cities-') && !id.startsWith('service-cities-extended-')) {
     const batchIndex = parseInt(id.replace('service-cities-', ''), 10)
     const BATCH = 45000
     const offset = batchIndex * BATCH
 
     const phase1Cities = villes.slice(0, TOP_CITIES_PHASE1)
-    const allUrls: { url: string; lastModified: Date; changeFrequency: 'weekly'; priority: number; images: string[] }[] = []
+    const allUrls: MetadataRoute.Sitemap = []
     for (const service of services) {
-      const serviceImage = getServiceImage(service.slug)
       for (const ville of phase1Cities) {
-        allUrls.push({
-          url: `${SITE_URL}/services/${service.slug}/${ville.slug}`,
-          lastModified: STATIC_LAST_MODIFIED,
-          changeFrequency: 'weekly' as const,
-          priority: 0.8,
-          images: [serviceImage.src],
-        })
+        allUrls.push({ url: `${SITE_URL}/services/${service.slug}/${ville.slug}` })
       }
     }
 
     return allUrls.slice(offset, offset + BATCH)
   }
 
-  // ── Service + city combination pages — Phase 2: remaining cities (not registered yet) ──
-  // Register in generateSitemaps() once domain authority grows (month 2-3).
+  // ── Service + city — Phase 2: remaining cities (not registered yet) ──
   if (id.startsWith('service-cities-extended-')) {
     const batchIndex = parseInt(id.replace('service-cities-extended-', ''), 10)
     const BATCH = 45000
     const offset = batchIndex * BATCH
 
     const phase2Cities = villes.slice(TOP_CITIES_PHASE1)
-    const allUrls: { url: string; lastModified: Date; changeFrequency: 'weekly'; priority: number; images: string[] }[] = []
+    const allUrls: MetadataRoute.Sitemap = []
     for (const service of services) {
-      const serviceImage = getServiceImage(service.slug)
       for (const ville of phase2Cities) {
-        allUrls.push({
-          url: `${SITE_URL}/services/${service.slug}/${ville.slug}`,
-          lastModified: STATIC_LAST_MODIFIED,
-          changeFrequency: 'weekly' as const,
-          priority: 0.7,
-          images: [serviceImage.src],
-        })
+        allUrls.push({ url: `${SITE_URL}/services/${service.slug}/${ville.slug}` })
       }
     }
 
@@ -278,24 +203,12 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── City pages ──────────────────────────────────────────────────────
   if (id === 'cities') {
     const villesIndex: MetadataRoute.Sitemap = [
-      {
-        url: `${SITE_URL}/villes`,
-        lastModified: STATIC_LAST_MODIFIED,
-        changeFrequency: 'weekly',
-        priority: 0.8,
-      },
+      { url: `${SITE_URL}/villes` },
     ]
 
-    const villePages: MetadataRoute.Sitemap = villes.map((ville) => {
-      const cityImage = getCityImage(ville.slug)
-      return {
-        url: `${SITE_URL}/villes/${ville.slug}`,
-        lastModified: STATIC_LAST_MODIFIED,
-        changeFrequency: 'weekly' as const,
-        priority: 0.7,
-        images: [cityImage ? cityImage.src : heroImage.src],
-      }
-    })
+    const villePages: MetadataRoute.Sitemap = villes.map((ville) => ({
+      url: `${SITE_URL}/villes/${ville.slug}`,
+    }))
 
     return [...villesIndex, ...villePages]
   }
@@ -303,37 +216,19 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── Geo pages (départements + régions) ──────────────────────────────
   if (id === 'geo') {
     const departementsIndex: MetadataRoute.Sitemap = [
-      {
-        url: `${SITE_URL}/departements`,
-        lastModified: STATIC_LAST_MODIFIED,
-        changeFrequency: 'weekly',
-        priority: 0.8,
-      },
+      { url: `${SITE_URL}/departements` },
     ]
 
     const departementPages: MetadataRoute.Sitemap = departements.map((dept) => ({
       url: `${SITE_URL}/departements/${dept.slug}`,
-      lastModified: STATIC_LAST_MODIFIED,
-      changeFrequency: 'weekly' as const,
-      priority: 0.7,
-      images: [getDepartmentImage(dept.code).src],
     }))
 
     const regionsIndex: MetadataRoute.Sitemap = [
-      {
-        url: `${SITE_URL}/regions`,
-        lastModified: STATIC_LAST_MODIFIED,
-        changeFrequency: 'weekly',
-        priority: 0.8,
-      },
+      { url: `${SITE_URL}/regions` },
     ]
 
     const regionPages: MetadataRoute.Sitemap = regions.map((region) => ({
       url: `${SITE_URL}/regions/${region.slug}`,
-      lastModified: STATIC_LAST_MODIFIED,
-      changeFrequency: 'weekly' as const,
-      priority: 0.7,
-      images: [getRegionImage(region.slug).src],
     }))
 
     return [...departementsIndex, ...departementPages, ...regionsIndex, ...regionPages]
@@ -341,38 +236,25 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
   // ── Quartier pages ─────────────────────────────────────────────────
   if (id === 'quartiers') {
-    return villes.flatMap(ville => {
-      const cityImage = getCityImage(ville.slug)
-      const images = cityImage ? [cityImage.src] : []
-      return getQuartiersByVille(ville.slug).map(q => ({
+    return villes.flatMap(ville =>
+      getQuartiersByVille(ville.slug).map(q => ({
         url: `${SITE_URL}/villes/${ville.slug}/${q.slug}`,
-        lastModified: STATIC_LAST_MODIFIED,
-        changeFrequency: 'weekly' as const,
-        priority: 0.6,
-        ...(images.length > 0 ? { images } : {}),
       }))
-    })
+    )
   }
 
-  // ── Service × Quartier pages (batched, served by [publicId] route) ─
+  // ── Service × Quartier pages ────────────────────────────────────────
   if (id.startsWith('service-quartiers-')) {
     const batchIndex = parseInt(id.replace('service-quartiers-', ''), 10)
     const batchSize = 45000
     const offset = batchIndex * batchSize
 
-    const allUrls: { url: string; lastModified: Date; changeFrequency: 'weekly'; priority: number; images: string[] }[] = []
+    const allUrls: MetadataRoute.Sitemap = []
     for (const svc of services) {
-      const serviceImage = getServiceImage(svc.slug)
       for (const ville of villes) {
         const quartiers = getQuartiersByVille(ville.slug)
         for (const q of quartiers) {
-          allUrls.push({
-            url: `${SITE_URL}/services/${svc.slug}/${ville.slug}/${q.slug}`,
-            lastModified: STATIC_LAST_MODIFIED,
-            changeFrequency: 'weekly',
-            priority: 0.6,
-            images: [serviceImage.src],
-          })
+          allUrls.push({ url: `${SITE_URL}/services/${svc.slug}/${ville.slug}/${q.slug}` })
         }
       }
     }
@@ -380,59 +262,41 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     return allUrls.slice(offset, offset + batchSize)
   }
 
-  // ── Devis service hub pages ───────────────────────────────────────
+  // ── Devis service hub pages ─────────────────────────────────────────
   if (id === 'devis-services') {
     return Object.keys(tradeContent).map((slug) => ({
       url: `${SITE_URL}/devis/${slug}`,
-      lastModified: STATIC_LAST_MODIFIED,
-      changeFrequency: 'weekly' as const,
-      priority: 0.8,
-      images: [getServiceImage(slug).src],
     }))
   }
 
-  // ── Devis service×city pages (batched) ────────────────────────────
+  // ── Devis service×city pages ────────────────────────────────────────
   if (id.startsWith('devis-service-cities-')) {
     const batchIndex = parseInt(id.replace('devis-service-cities-', ''), 10)
     const batchSize = 45000
     const offset = batchIndex * batchSize
 
-    const allUrls: { url: string; lastModified: Date; changeFrequency: 'weekly'; priority: number; images: string[] }[] = []
+    const allUrls: MetadataRoute.Sitemap = []
     for (const svc of services) {
-      const serviceImage = getServiceImage(svc.slug)
       for (const ville of villes) {
-        allUrls.push({
-          url: `${SITE_URL}/devis/${svc.slug}/${ville.slug}`,
-          lastModified: STATIC_LAST_MODIFIED,
-          changeFrequency: 'weekly',
-          priority: 0.7,
-          images: [serviceImage.src],
-        })
+        allUrls.push({ url: `${SITE_URL}/devis/${svc.slug}/${ville.slug}` })
       }
     }
 
     return allUrls.slice(offset, offset + batchSize)
   }
 
-  // ── Devis × Quartier pages (batched) ──────────────────────────────
+  // ── Devis × Quartier pages ──────────────────────────────────────────
   if (id.startsWith('devis-quartiers-')) {
     const batchIndex = parseInt(id.replace('devis-quartiers-', ''), 10)
     const batchSize = 45000
     const offset = batchIndex * batchSize
 
-    const allUrls: { url: string; lastModified: Date; changeFrequency: 'weekly'; priority: number; images: string[] }[] = []
+    const allUrls: MetadataRoute.Sitemap = []
     for (const svc of services) {
-      const serviceImage = getServiceImage(svc.slug)
       for (const ville of villes) {
         const quartiers = getQuartiersByVille(ville.slug)
         for (const q of quartiers) {
-          allUrls.push({
-            url: `${SITE_URL}/devis/${svc.slug}/${ville.slug}/${q.slug}`,
-            lastModified: STATIC_LAST_MODIFIED,
-            changeFrequency: 'weekly',
-            priority: 0.6,
-            images: [serviceImage.src],
-          })
+          allUrls.push({ url: `${SITE_URL}/devis/${svc.slug}/${ville.slug}/${q.slug}` })
         }
       }
     }
@@ -440,7 +304,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     return allUrls.slice(offset, offset + batchSize)
   }
 
-  // ── Urgence service×city pages (batched) ────────────────────────────
+  // ── Urgence service×city pages ──────────────────────────────────────
   if (id.startsWith('urgence-service-cities-')) {
     const batchIndex = parseInt(id.replace('urgence-service-cities-', ''), 10)
     const BATCH = 45000
@@ -449,19 +313,14 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
     for (const svc of emergencySlugs) {
       for (const v of villes) {
-        allUrls.push({
-          url: `${SITE_URL}/urgence/${svc}/${v.slug}`,
-          lastModified: STATIC_LAST_MODIFIED,
-          changeFrequency: 'monthly',
-          priority: 0.6,
-        })
+        allUrls.push({ url: `${SITE_URL}/urgence/${svc}/${v.slug}` })
       }
     }
 
     return allUrls.slice(batchIndex * BATCH, (batchIndex + 1) * BATCH)
   }
 
-  // ── Tarifs service×city pages (batched) ─────────────────────────────
+  // ── Tarifs service×city pages ───────────────────────────────────────
   if (id.startsWith('tarifs-service-cities-')) {
     const batchIndex = parseInt(id.replace('tarifs-service-cities-', ''), 10)
     const BATCH = 45000
@@ -469,12 +328,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
     for (const svc of services) {
       for (const v of villes) {
-        allUrls.push({
-          url: `${SITE_URL}/tarifs/${svc.slug}/${v.slug}`,
-          lastModified: STATIC_LAST_MODIFIED,
-          changeFrequency: 'monthly',
-          priority: 0.6,
-        })
+        allUrls.push({ url: `${SITE_URL}/tarifs/${svc.slug}/${v.slug}` })
       }
     }
 
@@ -485,17 +339,12 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   if (id === 'avis-services') {
     const tradeSlugs = Object.keys(tradeContent)
     return [
-      { url: `${SITE_URL}/avis`, lastModified: STATIC_LAST_MODIFIED, changeFrequency: 'monthly' as const, priority: 0.7 },
-      ...tradeSlugs.map(slug => ({
-        url: `${SITE_URL}/avis/${slug}`,
-        lastModified: STATIC_LAST_MODIFIED,
-        changeFrequency: 'monthly' as const,
-        priority: 0.6,
-      })),
+      { url: `${SITE_URL}/avis` },
+      ...tradeSlugs.map(slug => ({ url: `${SITE_URL}/avis/${slug}` })),
     ]
   }
 
-  // ── Avis service×city pages (batched) ───────────────────────────────
+  // ── Avis service×city pages ─────────────────────────────────────────
   if (id.startsWith('avis-service-cities-')) {
     const batchIndex = parseInt(id.replace('avis-service-cities-', ''), 10)
     const BATCH = 45000
@@ -504,12 +353,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
     for (const svc of tradeSlugs) {
       for (const v of villes) {
-        allUrls.push({
-          url: `${SITE_URL}/avis/${svc}/${v.slug}`,
-          lastModified: STATIC_LAST_MODIFIED,
-          changeFrequency: 'monthly',
-          priority: 0.5,
-        })
+        allUrls.push({ url: `${SITE_URL}/avis/${svc}/${v.slug}` })
       }
     }
 
@@ -520,80 +364,57 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   if (id === 'problemes') {
     const problemSlugs = getProblemSlugs()
     return [
-      { url: `${SITE_URL}/problemes`, lastModified: STATIC_LAST_MODIFIED, changeFrequency: 'weekly' as const, priority: 0.7 },
-      ...problemSlugs.map(slug => ({
-        url: `${SITE_URL}/problemes/${slug}`,
-        lastModified: STATIC_LAST_MODIFIED,
-        changeFrequency: 'monthly' as const,
-        priority: 0.6,
-      })),
+      { url: `${SITE_URL}/problemes` },
+      ...problemSlugs.map(slug => ({ url: `${SITE_URL}/problemes/${slug}` })),
     ]
   }
 
-  // ── Problemes × city pages (batched) ──────────────────────────────
+  // ── Problemes × city pages ──────────────────────────────────────────
   if (id.startsWith('problemes-cities-')) {
     const batchIndex = parseInt(id.split('-').pop()!)
     const problemSlugs = getProblemSlugs()
     const allUrls: MetadataRoute.Sitemap = []
     for (const problem of problemSlugs) {
       for (const ville of villes) {
-        allUrls.push({
-          url: `${SITE_URL}/problemes/${problem}/${ville.slug}`,
-          lastModified: STATIC_LAST_MODIFIED,
-          changeFrequency: 'monthly',
-          priority: 0.4,
-        })
+        allUrls.push({ url: `${SITE_URL}/problemes/${problem}/${ville.slug}` })
       }
     }
     return allUrls.slice(batchIndex * 45000, (batchIndex + 1) * 45000)
   }
 
-  // ── Dept × service pages (batched) ────────────────────────────────
+  // ── Dept × service pages ────────────────────────────────────────────
   if (id.startsWith('dept-services-')) {
     const batchIndex = parseInt(id.split('-').pop()!)
     const tradeSlugs = getTradesSlugs()
     const allUrls: MetadataRoute.Sitemap = []
     for (const dept of departements) {
       for (const service of tradeSlugs) {
-        allUrls.push({
-          url: `${SITE_URL}/departements/${dept.slug}/${service}`,
-          lastModified: STATIC_LAST_MODIFIED,
-          changeFrequency: 'monthly',
-          priority: 0.5,
-        })
+        allUrls.push({ url: `${SITE_URL}/departements/${dept.slug}/${service}` })
       }
     }
     return allUrls.slice(batchIndex * 45000, (batchIndex + 1) * 45000)
   }
 
-  // ── Region × service pages ────────────────────────────────────────
+  // ── Region × service pages ──────────────────────────────────────────
   if (id === 'region-services') {
     const tradeSlugs = getTradesSlugs()
     return regions.flatMap(region =>
       tradeSlugs.map(service => ({
         url: `${SITE_URL}/regions/${region.slug}/${service}`,
-        lastModified: STATIC_LAST_MODIFIED,
-        changeFrequency: 'monthly' as const,
-        priority: 0.5,
       }))
     )
   }
 
-  // ── Guides hub + individual pages ─────────────────────────────────
+  // ── Guides hub + individual pages ───────────────────────────────────
   if (id === 'guides') {
     const guideSlugs = getGuideSlugs()
     return [
-      { url: `${SITE_URL}/guides`, lastModified: STATIC_LAST_MODIFIED, changeFrequency: 'weekly' as const, priority: 0.7 },
-      ...guideSlugs.map(slug => ({
-        url: `${SITE_URL}/guides/${slug}`,
-        lastModified: STATIC_LAST_MODIFIED,
-        changeFrequency: 'monthly' as const,
-        priority: 0.6,
-      })),
+      { url: `${SITE_URL}/guides` },
+      ...guideSlugs.map(slug => ({ url: `${SITE_URL}/guides/${slug}` })),
     ]
   }
 
-  // ── Provider pages (batched) ────────────────────────────────────────
+  // ── Provider pages — lastModified réel depuis updated_at ────────────
   if (id.startsWith('providers-')) {
     const batchIndex = parseInt(id.replace('providers-', ''), 10)
     const offset = batchIndex * PROVIDER_BATCH_SIZE
@@ -618,10 +439,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         )
       }
 
-      // Reverse mapping: provider specialty → service slug (must cover ALL 46 services)
-      // Derived from SERVICE_TO_SPECIALTIES in supabase.ts
       const specialtyToSlug: Record<string, string> = {
-        // Core trades
         'plombier': 'plombier',
         'electricien': 'electricien',
         'chauffagiste': 'chauffagiste',
@@ -648,7 +466,6 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         'moquettiste': 'solier',
         'nettoyage': 'nettoyage',
         'nettoyage-professionnel': 'nettoyage',
-        // Bâtiment / Gros œuvre
         'terrassier': 'terrassier',
         'terrassement': 'terrassier',
         'zingueur': 'zingueur',
@@ -664,7 +481,6 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         'metallerie': 'metallier',
         'ferronnier': 'ferronnier',
         'ferronnerie': 'ferronnier',
-        // Finitions / Aménagement
         'storiste': 'storiste',
         'store': 'storiste',
         'volet': 'storiste',
@@ -675,7 +491,6 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         'decoration': 'decorateur',
         'decorateur': 'decorateur',
         'peintre-decorateur': 'decorateur',
-        // Énergie / Chauffage
         'domoticien': 'domoticien',
         'domotique': 'domoticien',
         'pompe-a-chaleur': 'pompe-a-chaleur',
@@ -692,11 +507,9 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         'borne-electrique': 'borne-recharge',
         'ramoneur': 'ramoneur',
         'ramonage': 'ramoneur',
-        // Extérieur
         'amenagement-exterieur': 'paysagiste',
         'pisciniste': 'pisciniste',
         'piscine': 'pisciniste',
-        // Sécurité / Technique
         'alarme': 'alarme-securite',
         'securite': 'alarme-securite',
         'videosurveillance': 'alarme-securite',
@@ -705,13 +518,11 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         'antenne': 'antenniste',
         'ascensoriste': 'ascensoriste',
         'ascenseur': 'ascensoriste',
-        // Diagnostics / Conseil
         'diagnostiqueur': 'diagnostiqueur',
         'diagnostic': 'diagnostiqueur',
         'dpe': 'diagnostiqueur',
         'geometre': 'geometre',
         'geometre-expert': 'geometre',
-        // Services spécialisés
         'desinsectisation': 'desinsectisation',
         'desinsectiseur': 'desinsectisation',
         'nuisibles': 'desinsectisation',
@@ -731,7 +542,6 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         updated_at: string | null
       }
 
-      // INSEE commune lookup (imported at top level, bundled by webpack)
       const inseeMap = inseeCommunes as Record<string, { n: string }>
 
       let allProviders: ProviderRow[] = []
@@ -759,7 +569,6 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         .map((p) => {
           const normalizedSpecialty = p.specialty!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
           const serviceSlug = serviceMap.get(normalizedSpecialty) || specialtyToSlug[p.specialty!.toLowerCase()]
-          // Resolve INSEE code → city name if needed
           const rawCity = p.address_city!
           const isInsee = /^\d{4,5}$/.test(rawCity) || /^[0-9][A-Z0-9]\d{3}$/.test(rawCity)
           const cityName = isInsee ? (inseeMap[rawCity]?.n || rawCity) : rawCity
@@ -771,21 +580,17 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
           return {
             url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}/${publicId}`,
-            lastModified: p.updated_at ? new Date(p.updated_at) : STATIC_LAST_MODIFIED,
-            changeFrequency: 'weekly' as const,
-            priority: 0.7,
-            images: [getServiceImage(serviceSlug).src],
+            // lastModified réel — seul cas où la date est vérifiable par Google
+            lastModified: p.updated_at ? new Date(p.updated_at) : undefined,
           }
         })
         .filter((entry): entry is NonNullable<typeof entry> => entry !== null)
 
       return providerEntries
     } catch {
-      // DB unavailable at build time — return empty
       return []
     }
   }
 
-  // Fallback for unknown sitemap IDs
   return []
 }

@@ -10,18 +10,15 @@ import LogoutButton from '@/components/LogoutButton'
 interface Partner {
   id: string
   full_name: string | null
-  company_name: string | null
-  avatar_url: string | null
-  user_type: string
 }
 
 interface Message {
   id: string
   sender_id: string
-  receiver_id: string
+  conversation_id: string
   content: string
   created_at: string
-  is_read: boolean
+  read_at: string | null
 }
 
 interface Conversation {
@@ -83,9 +80,13 @@ export default function MessagesClientPage() {
 
       if (response.ok) {
         setMessages(data.messages || [])
-        if (data.messages?.length > 0) {
-          const msg = data.messages[0]
-          setCurrentUserId(msg.sender_id === partnerId ? msg.receiver_id : msg.sender_id)
+        // Extract current user ID from API response (preferred) or infer from messages
+        if (data.currentUserId) {
+          setCurrentUserId(data.currentUserId)
+        } else if (data.messages?.length > 0) {
+          // Infer: the sender that is NOT the partner is the current user
+          const msg = data.messages.find((m: Message) => m.sender_id !== partnerId)
+          if (msg) setCurrentUserId(msg.sender_id)
         }
       }
     } catch (error) {
@@ -103,7 +104,7 @@ export default function MessagesClientPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          receiver_id: selectedConversation.id,
+          conversation_id: selectedConversation.id,
           content: newMessage.trim(),
         }),
       })
@@ -120,12 +121,12 @@ export default function MessagesClientPage() {
   }
 
   const getAvatar = (partner: Partner) => {
-    const name = partner.company_name || partner.full_name || 'A'
+    const name = partner.full_name || 'A'
     return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2)
   }
 
   const getDisplayName = (partner: Partner) => {
-    return partner.company_name || partner.full_name || 'Artisan'
+    return partner.full_name || 'Artisan'
   }
 
   const formatTime = (dateStr: string) => {
@@ -188,7 +189,11 @@ export default function MessagesClientPage() {
               >
                 <MessageSquare className="w-5 h-5" />
                 Messages
-                <span className="ml-auto bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full">2</span>
+                {conversations.reduce((sum, c) => sum + (c.unreadCount || 0), 0) > 0 && (
+                  <span className="ml-auto bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full">
+                    {conversations.reduce((sum, c) => sum + (c.unreadCount || 0), 0)}
+                  </span>
+                )}
               </Link>
               <Link
                 href="/espace-client/avis-donnes"

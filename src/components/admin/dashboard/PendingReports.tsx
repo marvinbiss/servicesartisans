@@ -95,7 +95,7 @@ export function PendingReports({ reports, loading, onMutate }: PendingReportsPro
       setActionLoading(reportId)
       await adminMutate(`/api/admin/reports/${reportId}/resolve`, {
         method: 'POST',
-        body: { action, ...(notes ? { resolution_notes: notes } : {}) },
+        body: { action, ...(notes ? { resolution: notes } : {}) },
       })
       setToast({
         message: action === 'resolve' ? 'Signalement résolu' : 'Signalement rejeté',

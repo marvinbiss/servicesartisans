@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
         { status: 400 }
       )
     }
-    const { page, limit, status } = result.data
+    const { page, limit } = result.data
 
     const offset = (page - 1) * limit
 
@@ -55,10 +55,6 @@ export async function GET(request: NextRequest) {
           name
         )
       `, { count: 'exact' })
-
-    if (status !== 'all') {
-      query = query.eq('status', status)
-    }
 
     const { data: conversations, count, error } = await query
       .order('last_message_at', { ascending: false })

@@ -34,7 +34,6 @@ test.describe('Chat Components', () => {
     await page.goto('/espace-artisan/messages')
 
     // Look for message input
-    const messageInput = page.locator('input[placeholder*="message"], textarea[placeholder*="message"]')
     // May or may not be visible depending on auth state
     await expect(page.locator('body')).toBeVisible()
   })
@@ -43,7 +42,6 @@ test.describe('Chat Components', () => {
     await page.goto('/espace-client/messages')
 
     // Look for send button
-    const sendButton = page.locator('button:has-text("Envoyer"), button[type="submit"]')
     // May or may not be visible depending on auth state
     await expect(page.locator('body')).toBeVisible()
   })
@@ -65,7 +63,6 @@ test.describe('Chat Accessibility', () => {
 
     // Tab through elements
     await page.keyboard.press('Tab')
-    const focused = page.locator(':focus')
     // Some element should be focused
     await expect(page.locator('body')).toBeVisible()
   })

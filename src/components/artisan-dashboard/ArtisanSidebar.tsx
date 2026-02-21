@@ -10,9 +10,10 @@ interface ArtisanSidebarProps {
   newDemandesCount?: number
   unreadMessagesCount?: number
   publicUrl?: string | null
+  subscriptionPlan?: string
 }
 
-export default function ArtisanSidebar({ activePage = 'dashboard', newDemandesCount = 0, unreadMessagesCount = 0, publicUrl }: ArtisanSidebarProps) {
+export default function ArtisanSidebar({ activePage = 'dashboard', newDemandesCount = 0, unreadMessagesCount = 0, publicUrl, subscriptionPlan }: ArtisanSidebarProps) {
   return (
     <div className="lg:col-span-1">
       <nav className="bg-white rounded-xl shadow-sm p-4 space-y-1">
@@ -54,7 +55,9 @@ export default function ArtisanSidebar({ activePage = 'dashboard', newDemandesCo
         >
           <Calendar className="w-5 h-5" />
           Calendrier
-          <span className="ml-auto bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">Pro</span>
+          {(subscriptionPlan === 'pro' || subscriptionPlan === 'premium') && (
+            <span className="ml-auto bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">Pro</span>
+          )}
         </Link>
         <Link
           href="/espace-artisan/messages"

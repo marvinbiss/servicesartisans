@@ -28,9 +28,14 @@ export async function GET() {
       .from('devis_requests')
       .select(`
         *,
-        devis:devis(
-          *,
-          artisan:profiles!artisan_id(id, full_name, company_name, avatar_url)
+        quotes(
+          id,
+          amount,
+          description,
+          valid_until,
+          status,
+          created_at,
+          provider:providers!provider_id(id, name)
         )
       `)
       .eq('client_id', user.id)
@@ -50,7 +55,8 @@ export async function GET() {
       enAttente: demandes?.filter(d => d.status === 'pending').length || 0,
       devisRecus: demandes?.filter(d => d.status === 'sent').length || 0,
       acceptes: demandes?.filter(d => d.status === 'accepted').length || 0,
-      termines: demandes?.filter(d => d.status === 'completed').length || 0,
+      refuses: demandes?.filter(d => d.status === 'refused').length || 0,
+      expires: demandes?.filter(d => d.status === 'expired').length || 0,
     }
 
     return NextResponse.json({

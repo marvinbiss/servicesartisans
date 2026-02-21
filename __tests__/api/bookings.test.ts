@@ -106,14 +106,14 @@ beforeEach(() => {
 describe('GET /api/bookings', () => {
   it('returns 400 when artisanId is missing', async () => {
     const { GET } = await import('@/app/api/bookings/route')
-    const result = await GET(makeGetRequest()) as { body: Record<string, unknown>; status: number }
+    const result = await GET(makeGetRequest()) as unknown as { body: Record<string, unknown>; status: number }
     expect(result.status).toBe(400)
     expect(result.body.success).toBe(false)
   })
 
   it('returns 400 when artisanId is not a UUID', async () => {
     const { GET } = await import('@/app/api/bookings/route')
-    const result = await GET(makeGetRequest({ artisanId: 'not-a-uuid' })) as { body: Record<string, unknown>; status: number }
+    const result = await GET(makeGetRequest({ artisanId: 'not-a-uuid' })) as unknown as { body: Record<string, unknown>; status: number }
     expect(result.status).toBe(400)
     expect(result.body.success).toBe(false)
   })
@@ -129,7 +129,7 @@ describe('GET /api/bookings', () => {
     }
 
     const { GET } = await import('@/app/api/bookings/route')
-    const result = await GET(makeGetRequest({ artisanId: ARTISAN_UUID, month: '2026-03' })) as {
+    const result = await GET(makeGetRequest({ artisanId: ARTISAN_UUID, month: '2026-03' })) as unknown as {
       body: { success: boolean; data: { slots: Record<string, unknown[]> } }; status: number
     }
 
@@ -148,7 +148,7 @@ describe('GET /api/bookings', () => {
     }
 
     const { GET } = await import('@/app/api/bookings/route')
-    const result = await GET(makeGetRequest({ artisanId: ARTISAN_UUID, date: '2026-03-05' })) as {
+    const result = await GET(makeGetRequest({ artisanId: ARTISAN_UUID, date: '2026-03-05' })) as unknown as {
       body: { success: boolean; data: { slots: unknown[] } }; status: number
     }
 
@@ -167,7 +167,7 @@ describe('GET /api/bookings', () => {
     }
 
     const { GET } = await import('@/app/api/bookings/route')
-    const result = await GET(makeGetRequest({ artisanId: ARTISAN_UUID })) as {
+    const result = await GET(makeGetRequest({ artisanId: ARTISAN_UUID })) as unknown as {
       body: { success: boolean; data: { bookings: unknown[] } }; status: number
     }
 
@@ -180,7 +180,7 @@ describe('GET /api/bookings', () => {
     mockQueryResult = { data: null, error: { message: 'DB connection failed', code: '08000' } }
 
     const { GET } = await import('@/app/api/bookings/route')
-    const result = await GET(makeGetRequest({ artisanId: ARTISAN_UUID })) as { body: Record<string, unknown>; status: number }
+    const result = await GET(makeGetRequest({ artisanId: ARTISAN_UUID })) as unknown as { body: Record<string, unknown>; status: number }
 
     expect(result.status).toBe(500)
     expect(result.body.success).toBe(false)
@@ -194,7 +194,7 @@ describe('GET /api/bookings', () => {
 describe('POST /api/bookings', () => {
   it('returns 400 on missing required fields', async () => {
     const { POST } = await import('@/app/api/bookings/route')
-    const result = await POST(makePostRequest({ artisanId: ARTISAN_UUID })) as { body: Record<string, unknown>; status: number }
+    const result = await POST(makePostRequest({ artisanId: ARTISAN_UUID })) as unknown as { body: Record<string, unknown>; status: number }
 
     expect(result.status).toBe(400)
     expect(result.body.success).toBe(false)
@@ -202,7 +202,7 @@ describe('POST /api/bookings', () => {
 
   it('returns 400 on invalid email', async () => {
     const { POST } = await import('@/app/api/bookings/route')
-    const result = await POST(makePostRequest({ ...validBookingBody, clientEmail: 'not-an-email' })) as { body: Record<string, unknown>; status: number }
+    const result = await POST(makePostRequest({ ...validBookingBody, clientEmail: 'not-an-email' })) as unknown as { body: Record<string, unknown>; status: number }
 
     expect(result.status).toBe(400)
     expect(result.body.success).toBe(false)
@@ -220,7 +220,7 @@ describe('POST /api/bookings', () => {
     mockProfileResult = { data: { full_name: 'Martin Plombier', email: 'martin@example.com' }, error: null }
 
     const { POST } = await import('@/app/api/bookings/route')
-    const result = await POST(makePostRequest(validBookingBody)) as {
+    const result = await POST(makePostRequest(validBookingBody)) as unknown as {
       body: { success: boolean; data: { booking: Record<string, unknown>; message: string } }; status: number
     }
 
@@ -237,7 +237,7 @@ describe('POST /api/bookings', () => {
     }
 
     const { POST } = await import('@/app/api/bookings/route')
-    const result = await POST(makePostRequest(validBookingBody)) as { body: Record<string, unknown>; status: number }
+    const result = await POST(makePostRequest(validBookingBody)) as unknown as { body: Record<string, unknown>; status: number }
 
     expect(result.status).toBe(409)
     expect(result.body.success).toBe(false)
@@ -250,7 +250,7 @@ describe('POST /api/bookings', () => {
     }
 
     const { POST } = await import('@/app/api/bookings/route')
-    const result = await POST(makePostRequest(validBookingBody)) as { body: Record<string, unknown>; status: number }
+    const result = await POST(makePostRequest(validBookingBody)) as unknown as { body: Record<string, unknown>; status: number }
 
     expect(result.status).toBe(409)
   })
@@ -259,7 +259,7 @@ describe('POST /api/bookings', () => {
     mockRpcResult = { data: null, error: { message: 'Internal server error', code: '500' } }
 
     const { POST } = await import('@/app/api/bookings/route')
-    const result = await POST(makePostRequest(validBookingBody)) as { body: Record<string, unknown>; status: number }
+    const result = await POST(makePostRequest(validBookingBody)) as unknown as { body: Record<string, unknown>; status: number }
 
     expect(result.status).toBe(500)
     expect(result.body.success).toBe(false)

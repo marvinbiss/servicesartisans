@@ -45,22 +45,14 @@ export async function POST(
 
     const isBanning = action === 'ban'
 
-    // Mettre à jour le profil
-    const { data, error } = await supabase
-      .from('profiles')
-      .update({
-        is_banned: isBanning,
-        ban_reason: isBanning ? reason : null,
-        banned_at: isBanning ? new Date().toISOString() : null,
-        banned_by: isBanning ? authResult.admin.id : null,
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', params.id)
-      .select()
-      .single()
+    // Ban/unban via Supabase Auth admin API
+    // ban_duration: '876600h' (~100 years) to ban, 'none' to unban
+    const { error: authError } = await supabase.auth.admin.updateUserById(params.id, {
+      ban_duration: isBanning ? '876600h' : 'none',
+    })
 
-    if (error) {
-      logger.error('User ban/unban failed', { code: error.code, message: error.message })
+    if (authError) {
+      logger.error('User ban/unban failed', { code: authError.message })
       return NextResponse.json(
         { success: false, error: { message: 'Impossible de modifier le statut de l\'utilisateur' } },
         { status: 500 }
@@ -68,15 +60,13 @@ export async function POST(
     }
 
     // Si c'est un artisan, désactiver/réactiver également le provider
-    if (data?.user_type === 'artisan') {
-      await supabase
-        .from('providers')
-        .update({
-          is_active: !isBanning,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('user_id', params.id)
-    }
+    await supabase
+      .from('providers')
+      .update({
+        is_active: !isBanning,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('user_id', params.id)
 
     // Enregistrer l'action dans les logs d'audit
     await logAdminAction(
@@ -89,7 +79,6 @@ export async function POST(
 
     return NextResponse.json({
       success: true,
-      user: data,
       message: isBanning ? 'Utilisateur banni' : 'Utilisateur débanni',
     })
   } catch (error) {

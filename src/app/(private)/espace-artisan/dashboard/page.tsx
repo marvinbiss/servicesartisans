@@ -8,6 +8,7 @@ import { QuickSiteLinks } from '@/components/InternalLinks'
 import LogoutButton from '@/components/LogoutButton'
 import PhotoUploadBanner from '@/components/dashboard/PhotoUploadBanner'
 import { createClient } from '@/lib/supabase/client'
+import { getArtisanUrl } from '@/lib/utils'
 
 interface StatsData {
   profileViews: { value: number; change: string }
@@ -28,11 +29,13 @@ interface Demande {
 }
 
 interface Profile {
-  company_name: string | null
   full_name: string | null
-  city: string | null
+  role: string | null
   is_verified: boolean
-  subscription_plan: string
+  stable_id: string | null
+  slug: string | null
+  specialty: string | null
+  address_city: string | null
 }
 
 export default function DashboardArtisanPage() {
@@ -137,8 +140,14 @@ export default function DashboardArtisanPage() {
     )
   }
 
-  const displayName = profile?.company_name || profile?.full_name || 'Mon entreprise'
-  const displayCity = profile?.city || ''
+  const displayName = profile?.full_name || 'Mon entreprise'
+  const displayCity = profile?.address_city || ''
+  const publicUrl = profile ? getArtisanUrl({
+    stable_id: profile.stable_id,
+    slug: profile.slug,
+    specialty: profile.specialty,
+    city: profile.address_city,
+  }) : null
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -189,7 +198,9 @@ export default function DashboardArtisanPage() {
               >
                 <FileText className="w-5 h-5" />
                 Demandes reçues
-                <span className="ml-auto bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">3</span>
+                {stats?.demandesRecues?.value ? (
+                  <span className="ml-auto bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">{stats.demandesRecues.value}</span>
+                ) : null}
               </Link>
               <Link
                 href="/espace-artisan/calendrier"
@@ -205,7 +216,9 @@ export default function DashboardArtisanPage() {
               >
                 <MessageSquare className="w-5 h-5" />
                 Messages
-                <span className="ml-auto bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full">5</span>
+                {stats?.unreadMessages ? (
+                  <span className="ml-auto bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full">{stats.unreadMessages}</span>
+                ) : null}
               </Link>
               <Link
                 href="/espace-artisan/portfolio"
@@ -246,15 +259,17 @@ export default function DashboardArtisanPage() {
             </nav>
 
             {/* Voir mon profil public */}
-            <div className="bg-white rounded-xl shadow-sm p-4 mt-4">
-              <Link
-                href="/services/plombier/paris/martin-plomberie-paris"
-                className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
-              >
-                <ExternalLink className="w-4 h-4" />
-                Voir mon profil public
-              </Link>
-            </div>
+            {publicUrl && (
+              <div className="bg-white rounded-xl shadow-sm p-4 mt-4">
+                <Link
+                  href={publicUrl}
+                  className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  Voir mon profil public
+                </Link>
+              </div>
+            )}
 
             {/* Quick links */}
             <div className="mt-4">
@@ -358,7 +373,7 @@ export default function DashboardArtisanPage() {
                             {demande.status === 'sent' && 'Devis envoyé'}
                             {demande.status === 'accepted' && 'Accepté'}
                             {demande.status === 'refused' && 'Refusé'}
-                            {demande.status === 'completed' && 'Terminé'}
+                            {demande.status === 'expired' && 'Expiré'}
                           </span>
                           <ChevronRight className="w-5 h-5 text-gray-400" />
                         </div>

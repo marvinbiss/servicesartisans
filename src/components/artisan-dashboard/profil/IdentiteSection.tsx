@@ -9,7 +9,7 @@ interface IdentiteSectionProps {
   onSaved: (updated: Record<string, unknown>) => void
 }
 
-const FIELDS = ['name', 'legal_form', 'siret', 'creation_date', 'team_size'] as const
+const FIELDS = ['name', 'legal_form', 'siret', 'creation_date'] as const
 
 export function IdentiteSection({ provider, onSaved }: IdentiteSectionProps) {
   const { formData, setField, isDirty, saving, error, success, handleSave } = useProviderForm(provider, FIELDS)
@@ -103,24 +103,6 @@ export function IdentiteSection({ provider, onSaved }: IdentiteSectionProps) {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          <div>
-            <label htmlFor="identite-team-size" className="block text-sm font-medium text-gray-700 mb-2">
-              Taille de l&apos;équipe
-            </label>
-            <input
-              id="identite-team-size"
-              type="number"
-              value={formData.team_size != null ? Number(formData.team_size) : ''}
-              onChange={(e) => setField('team_size', e.target.value ? parseInt(e.target.value, 10) : null)}
-              min={1}
-              max={1000}
-              placeholder="Ex : 3"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-            <p className="text-xs text-gray-500 mt-1">Nombre de personnes dans votre entreprise</p>
-          </div>
-        </div>
       </div>
     </SectionCard>
   )

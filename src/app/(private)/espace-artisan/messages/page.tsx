@@ -6,21 +6,20 @@ import { FileText, MessageSquare, Star, Settings, TrendingUp, Euro, ArrowLeft, S
 import Breadcrumb from '@/components/Breadcrumb'
 import { QuickSiteLinks } from '@/components/InternalLinks'
 import LogoutButton from '@/components/LogoutButton'
+import { getArtisanUrl } from '@/lib/utils'
 
 interface Partner {
   id: string
   full_name: string | null
-  company_name: string | null
-  avatar_url: string | null
 }
 
 interface Message {
   id: string
   sender_id: string
-  receiver_id: string
+  conversation_id: string
   content: string
   created_at: string
-  is_read: boolean
+  read_at: string | null
 }
 
 interface Conversation {
@@ -40,10 +39,12 @@ export default function MessagesArtisanPage() {
   const [newMessage, setNewMessage] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
   const [currentUserId, setCurrentUserId] = useState<string | null>(null)
+  const [publicUrl, setPublicUrl] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     fetchConversations()
+    fetchPublicUrl()
   }, [])
 
   useEffect(() => {
@@ -75,6 +76,24 @@ export default function MessagesArtisanPage() {
     }
   }
 
+  const fetchPublicUrl = async () => {
+    try {
+      const response = await fetch('/api/artisan/stats')
+      const data = await response.json()
+      if (response.ok && data.profile) {
+        const url = getArtisanUrl({
+          stable_id: data.profile.stable_id ?? null,
+          slug: data.profile.slug ?? null,
+          specialty: data.profile.specialty ?? null,
+          city: data.profile.address_city ?? null,
+        })
+        setPublicUrl(url)
+      }
+    } catch {
+      // Silently fail — link just won't show
+    }
+  }
+
   const fetchMessages = async (partnerId: string) => {
     try {
       const response = await fetch(`/api/artisan/messages?with=${partnerId}`)
@@ -82,10 +101,13 @@ export default function MessagesArtisanPage() {
 
       if (response.ok) {
         setMessages(data.messages || [])
-        // Extract current user ID from messages
-        if (data.messages?.length > 0) {
-          const msg = data.messages[0]
-          setCurrentUserId(msg.sender_id === partnerId ? msg.receiver_id : msg.sender_id)
+        // Extract current user ID from API response (preferred) or infer from messages
+        if (data.currentUserId) {
+          setCurrentUserId(data.currentUserId)
+        } else if (data.messages?.length > 0) {
+          // Infer: the sender that is NOT the partner is the current user
+          const msg = data.messages.find((m: Message) => m.sender_id !== partnerId)
+          if (msg) setCurrentUserId(msg.sender_id)
         }
       }
     } catch (error) {
@@ -103,7 +125,7 @@ export default function MessagesArtisanPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          receiver_id: selectedConversation.id,
+          conversation_id: selectedConversation.id,
           content: newMessage.trim(),
         }),
       })
@@ -121,12 +143,12 @@ export default function MessagesArtisanPage() {
   }
 
   const getAvatar = (partner: Partner) => {
-    const name = partner.company_name || partner.full_name || 'U'
+    const name = partner.full_name || 'U'
     return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2)
   }
 
   const getDisplayName = (partner: Partner) => {
-    return partner.company_name || partner.full_name || 'Utilisateur'
+    return partner.full_name || 'Utilisateur'
   }
 
   const formatTime = (dateStr: string) => {
@@ -190,7 +212,6 @@ export default function MessagesArtisanPage() {
               >
                 <FileText className="w-5 h-5" />
                 Demandes
-                <span className="ml-auto bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">3</span>
               </Link>
               <Link
                 href="/espace-artisan/messages"
@@ -198,7 +219,6 @@ export default function MessagesArtisanPage() {
               >
                 <MessageSquare className="w-5 h-5" />
                 Messages
-                <span className="ml-auto bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full">5</span>
               </Link>
               <Link
                 href="/espace-artisan/avis-recus"
@@ -225,15 +245,17 @@ export default function MessagesArtisanPage() {
             </nav>
 
             {/* Voir mon profil public */}
-            <div className="bg-white rounded-xl shadow-sm p-4 mt-4">
-              <Link
-                href="/services/plombier/paris/martin-plomberie-paris"
-                className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
-              >
-                <ExternalLink className="w-4 h-4" />
-                Voir mon profil public
-              </Link>
-            </div>
+            {publicUrl && (
+              <div className="bg-white rounded-xl shadow-sm p-4 mt-4">
+                <Link
+                  href={publicUrl}
+                  className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  Voir mon profil public
+                </Link>
+              </div>
+            )}
 
             {/* Quick links */}
             <div className="mt-4">

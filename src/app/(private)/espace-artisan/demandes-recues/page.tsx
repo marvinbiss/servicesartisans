@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { FileText, MessageSquare, Star, Settings, TrendingUp, Euro, ArrowLeft, Filter, Calendar, MapPin, ChevronRight, Eye, Send, ExternalLink, Search, Loader2, X, Phone, Mail } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { QuickSiteLinks } from '@/components/InternalLinks'
 import LogoutButton from '@/components/LogoutButton'
+import { getArtisanUrl } from '@/lib/utils'
 
 interface Demande {
   id: string
@@ -36,10 +38,11 @@ const statusConfig: Record<string, { label: string; color: string }> = {
   sent: { label: 'Devis envoyé', color: 'bg-yellow-100 text-yellow-700' },
   accepted: { label: 'Accepté', color: 'bg-green-100 text-green-700' },
   refused: { label: 'Refusé', color: 'bg-gray-100 text-gray-700' },
-  completed: { label: 'Terminé', color: 'bg-blue-100 text-blue-700' },
+  expired: { label: 'Expiré', color: 'bg-blue-100 text-blue-700' },
 }
 
 export default function DemandesRecuesPage() {
+  const router = useRouter()
   const [loading, setLoading] = useState(true)
   const [demandes, setDemandes] = useState<Demande[]>([])
   const [stats, setStats] = useState<Stats | null>(null)
@@ -48,6 +51,7 @@ export default function DemandesRecuesPage() {
   const [showDetailModal, setShowDetailModal] = useState(false)
   const [selectedDemande, setSelectedDemande] = useState<Demande | null>(null)
   const [submitting, setSubmitting] = useState(false)
+  const [publicUrl, setPublicUrl] = useState<string | null>(null)
   const [devisForm, setDevisForm] = useState({
     amount: '',
     description: '',
@@ -57,6 +61,28 @@ export default function DemandesRecuesPage() {
   useEffect(() => {
     fetchDemandes()
   }, [filterStatus])
+
+  useEffect(() => {
+    fetchPublicUrl()
+  }, [])
+
+  const fetchPublicUrl = async () => {
+    try {
+      const response = await fetch('/api/artisan/stats')
+      const data = await response.json()
+      if (response.ok && data.profile) {
+        const url = getArtisanUrl({
+          stable_id: data.profile.stable_id ?? null,
+          slug: data.profile.slug ?? null,
+          specialty: data.profile.specialty ?? null,
+          city: data.profile.address_city ?? null,
+        })
+        setPublicUrl(url)
+      }
+    } catch {
+      // Silently fail — link just won't show
+    }
+  }
 
   const fetchDemandes = async () => {
     try {
@@ -124,9 +150,9 @@ export default function DemandesRecuesPage() {
     }
   }
 
-  const handleContact = (demande: Demande) => {
-    // Navigate to messages with this client
-    window.location.href = `/espace-artisan/messages?with=${demande.client_id || ''}`
+  const handleContact = (_demande: Demande) => {
+    // Navigate to messages (param ?with= not currently handled — navigate to messages root)
+    router.push('/espace-artisan/messages')
   }
 
   const filteredDemandes = demandes
@@ -212,15 +238,17 @@ export default function DemandesRecuesPage() {
             </nav>
 
             {/* Voir mon profil public */}
-            <div className="bg-white rounded-xl shadow-sm p-4 mt-4">
-              <Link
-                href="/services/plombier/paris/martin-plomberie-paris"
-                className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
-              >
-                <ExternalLink className="w-4 h-4" />
-                Voir mon profil public
-              </Link>
-            </div>
+            {publicUrl && (
+              <div className="bg-white rounded-xl shadow-sm p-4 mt-4">
+                <Link
+                  href={publicUrl}
+                  className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  Voir mon profil public
+                </Link>
+              </div>
+            )}
 
             {/* Quick links */}
             <div className="mt-4">
@@ -324,7 +352,7 @@ export default function DemandesRecuesPage() {
                             <span className="font-medium text-gray-900">{demande.client_name}</span>
                             <span className="flex items-center gap-1">
                               <MapPin className="w-4 h-4" />
-                              {demande.city || demande.postal_code}
+                              {demande.city || demande.postal_code || 'Non précisé'}
                             </span>
                             <span className="flex items-center gap-1">
                               <Calendar className="w-4 h-4" />
@@ -367,8 +395,8 @@ export default function DemandesRecuesPage() {
                           {demande.status === 'accepted' && (
                             <span className="text-green-600 font-medium">Mission confirmée</span>
                           )}
-                          {demande.status === 'completed' && (
-                            <span className="text-blue-600 font-medium">Terminée</span>
+                          {demande.status === 'expired' && (
+                            <span className="text-blue-600 font-medium">Expirée</span>
                           )}
                           <ChevronRight className="w-5 h-5 text-gray-400" />
                         </div>
@@ -410,7 +438,7 @@ export default function DemandesRecuesPage() {
               <h3 className="font-medium text-gray-900 mb-2">{selectedDemande.service_name}</h3>
               <p className="text-sm text-gray-600 mb-2">{selectedDemande.description}</p>
               <div className="text-sm text-gray-500">
-                <span className="font-medium">{selectedDemande.client_name}</span> - {selectedDemande.city || selectedDemande.postal_code}
+                <span className="font-medium">{selectedDemande.client_name}</span> - {selectedDemande.city || selectedDemande.postal_code || 'Non précisé'}
               </div>
             </div>
 
@@ -530,7 +558,7 @@ export default function DemandesRecuesPage() {
                   </p>
                   <p className="flex items-center gap-2 text-gray-600">
                     <MapPin className="w-4 h-4" />
-                    {selectedDemande.city || selectedDemande.postal_code}
+                    {selectedDemande.city || selectedDemande.postal_code || 'Non précisé'}
                   </p>
                 </div>
               </div>

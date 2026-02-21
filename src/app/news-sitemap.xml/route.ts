@@ -45,10 +45,17 @@ export async function GET() {
 ${urls.join('\n')}
 </urlset>`
 
+  // Last-Modified = date du dernier article récent (Google utilise cet en-tête
+  // pour décider d'un HTTP 304 Not Modified et économiser des ressources côté serveur).
+  const lastModified = recentArticles[0]
+    ? new Date(recentArticles[0].date)
+    : new Date()
+
   return new Response(xml, {
     headers: {
       'Content-Type': 'application/xml; charset=utf-8',
       'Cache-Control': 'public, max-age=3600, s-maxage=3600',
+      'Last-Modified': lastModified.toUTCString(),
     },
   })
 }

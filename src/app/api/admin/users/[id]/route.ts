@@ -61,7 +61,7 @@ export async function GET(
     try {
       const { data } = await supabase
         .from('profiles')
-        .select('id, email, full_name, is_admin, role, phone_e164, average_rating, review_count')
+        .select('id, email, full_name, is_admin, role, phone_e164, subscription_plan, subscription_status, average_rating, review_count')
         .eq('id', userId)
         .single()
       if (data) profile = data
@@ -88,20 +88,23 @@ export async function GET(
       const { count } = await supabase
         .from('bookings')
         .select('id', { count: 'exact', head: true })
-        .or(`provider_id.eq.${userId},client_email.eq.${user.email}`)
+        .or(`provider_id.eq.${userId},client_id.eq.${userId}`)
       bookingsCount = count || 0
     } catch {
       // bookings table doesn't exist
     }
 
-    // Get reviews count
+    // Get reviews count (reviews has client_email, not client_id FK to profiles)
     let reviewsCount = 0
     try {
-      const { count } = await supabase
-        .from('reviews')
-        .select('id', { count: 'exact', head: true })
-        .eq('client_id', userId)
-      reviewsCount = count || 0
+      const clientEmail = user.email
+      if (clientEmail) {
+        const { count } = await supabase
+          .from('reviews')
+          .select('id', { count: 'exact', head: true })
+          .eq('client_email', clientEmail)
+        reviewsCount = count || 0
+      }
     } catch {
       // reviews table doesn't exist
     }
@@ -115,7 +118,7 @@ export async function GET(
         phone: profile.phone_e164 || user.user_metadata?.phone || null,
         user_type: profile.role === 'artisan' ? 'artisan' : (user.user_metadata?.is_artisan ? 'artisan' : 'client'),
         is_verified: !!user.email_confirmed_at,
-        is_banned: profile.is_banned || user.banned_until !== null,
+        is_banned: user.banned_until !== null,
         subscription_plan: profile.subscription_plan || 'gratuit',
         subscription_status: profile.subscription_status || null,
         created_at: user.created_at,
@@ -196,10 +199,8 @@ export async function PATCH(
           updates[field] = result.data[field as keyof typeof result.data]
         }
       }
-      // Map user_type → role (profiles has role, not user_type)
-      if (result.data.user_type !== undefined) {
-        updates.role = result.data.user_type === 'artisan' ? 'artisan' : 'user'
-      }
+      // profiles.role is for admin RBAC only (super_admin/admin/moderator/viewer — migration 309)
+      // user_type (artisan vs client) lives in auth user_metadata.is_artisan, already updated above
       updates.updated_at = new Date().toISOString()
 
       await supabase
@@ -263,13 +264,11 @@ export async function DELETE(
       throw banError
     }
 
-    // Try to soft delete in profiles table if exists
+    // Try to update profiles table if exists (only columns that exist)
     try {
       await supabase
         .from('profiles')
         .update({
-          is_deleted: true,
-          deleted_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         })
         .eq('id', userId)

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { DEFAULT_PERMISSIONS, type AdminRole } from '@/types/admin'
+import { type AdminRole } from '@/types/admin'
 import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
@@ -13,7 +13,7 @@ const adminsQuerySchema = z.object({
 
 // POST request schema
 const createAdminSchema = z.object({
-  email: z.string().email().max(255),
+  user_id: z.string().uuid(),
   role: z.enum(['super_admin', 'admin', 'moderator', 'viewer']),
 })
 
@@ -50,15 +50,16 @@ export async function GET(request: NextRequest) {
     const { page, limit } = result.data
     const offset = (page - 1) * limit
 
-    // Fetch admins from admin_roles table, join with profiles for email
-    const { data: roles, error, count } = await supabase
-      .from('admin_roles')
-      .select('id, user_id, role, permissions, created_at, profile:profiles!user_id(email, full_name)', { count: 'exact' })
-      .range(offset, offset + limit - 1)
+    // Fetch admins from profiles table (admin_roles table does not exist)
+    const { data: profiles, error, count } = await supabase
+      .from('profiles')
+      .select('id, email, full_name, role, is_admin, created_at', { count: 'exact' })
+      .or('is_admin.eq.true,role.neq.null')
       .order('created_at', { ascending: false })
+      .range(offset, offset + limit - 1)
 
     if (error) {
-      logger.warn('Admin roles query failed, returning empty list', { code: error.code, message: error.message })
+      logger.warn('Profiles admin query failed', { code: error.code, message: error.message })
       return NextResponse.json({
         admins: [],
         total: 0,
@@ -67,19 +68,14 @@ export async function GET(request: NextRequest) {
       })
     }
 
-    // Transform to expected shape
-    const admins = (roles || []).map(r => {
-      const profile = r.profile as { email?: string; full_name?: string } | null
-      return {
-        id: r.id,
-        user_id: r.user_id,
-        email: profile?.email || '',
-        full_name: profile?.full_name || null,
-        role: r.role,
-        permissions: r.permissions || DEFAULT_PERMISSIONS[r.role as AdminRole] || {},
-        created_at: r.created_at,
-      }
-    })
+    const admins = (profiles || []).map(p => ({
+      id: p.id,
+      email: p.email || '',
+      full_name: p.full_name || null,
+      role: p.role as AdminRole | null,
+      is_admin: p.is_admin,
+      created_at: p.created_at,
+    }))
 
     return NextResponse.json({
       admins,
@@ -117,50 +113,37 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
-    const { email, role } = result.data
+    const { user_id, role } = result.data
 
-    // Find user by email
-    const { data: targetUser } = await supabase
+    // Promote user to admin role via profiles table
+    const { data: updatedProfile, error } = await supabase
       .from('profiles')
-      .select('id, email')
-      .eq('email', email)
-      .single()
-
-    if (!targetUser) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Aucun utilisateur trouvé avec cet email' } },
-        { status: 404 }
-      )
-    }
-
-    // Create admin entry in admin_roles table
-    const { data: newRole, error } = await supabase
-      .from('admin_roles')
-      .insert({
-        user_id: targetUser.id,
-        role: role as AdminRole,
-        permissions: DEFAULT_PERMISSIONS[role as AdminRole],
-      })
-      .select()
+      .update({ role: role, is_admin: true, updated_at: new Date().toISOString() })
+      .eq('id', user_id)
+      .select('id, email, full_name, role, is_admin, created_at')
       .single()
 
     if (error) {
-      if (error.code === '23505') {
+      if (error.code === 'PGRST116') {
         return NextResponse.json(
-          { success: false, error: { message: 'Cet utilisateur est déjà administrateur' } },
-          { status: 409 }
+          { success: false, error: { message: 'Aucun utilisateur trouvé avec cet identifiant' } },
+          { status: 404 }
         )
       }
-      logger.error('Error creating admin role', error)
+      logger.error('Error promoting user to admin', error)
       return NextResponse.json({ error: 'Erreur lors de la création de l\'administrateur' }, { status: 500 })
     }
 
-    await logAdminAction(authResult.admin.id, 'admin_created', 'settings', newRole.id, { email, role })
+    await logAdminAction(authResult.admin.id, 'admin_created', 'settings', updatedProfile.id, { role })
 
     return NextResponse.json({
       admin: {
-        ...newRole,
-        email: targetUser.email,
+        id: updatedProfile.id,
+        email: updatedProfile.email || '',
+        full_name: updatedProfile.full_name || null,
+        role: updatedProfile.role as AdminRole | null,
+        is_admin: updatedProfile.is_admin,
+        created_at: updatedProfile.created_at,
       },
     })
   } catch (error) {

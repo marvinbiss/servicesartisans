@@ -332,12 +332,14 @@ function renderInlineMarkdown(text: string): React.ReactNode[] {
       // Bold: **text**
       nodes.push(<strong key={match.index}>{match[2]}</strong>)
     } else if (match[3] && match[4]) {
-      // Link: [text](url)
+      // Link: [text](url) — add nofollow for external URLs
+      const isExternal = match[4].startsWith('http://') || match[4].startsWith('https://')
       nodes.push(
         <a
           key={match.index}
           href={match[4]}
           className="text-amber-600 hover:underline"
+          {...(isExternal ? { target: '_blank', rel: 'nofollow noopener noreferrer' } : {})}
         >
           {match[3]}
         </a>
@@ -916,7 +918,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
               <a
                 href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`}
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="nofollow noopener noreferrer"
                 aria-label="Partager sur Facebook"
                 className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 hover:scale-110 transition-all duration-200"
               >
@@ -925,7 +927,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
               <a
                 href={`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`}
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="nofollow noopener noreferrer"
                 aria-label="Partager sur Twitter"
                 className="w-10 h-10 bg-sky-500 text-white rounded-full flex items-center justify-center hover:bg-sky-600 hover:scale-110 transition-all duration-200"
               >
@@ -934,7 +936,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
               <a
                 href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`}
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="nofollow noopener noreferrer"
                 aria-label="Partager sur LinkedIn"
                 className="w-10 h-10 bg-blue-700 text-white rounded-full flex items-center justify-center hover:bg-blue-800 hover:scale-110 transition-all duration-200"
               >

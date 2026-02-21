@@ -5,7 +5,6 @@ test.describe('API Rate Limiting', () => {
     const response = await request.get('/api/health')
 
     // Check for rate limit headers
-    const headers = response.headers()
 
     // These headers may or may not be present depending on configuration
     // Just verify the API responds

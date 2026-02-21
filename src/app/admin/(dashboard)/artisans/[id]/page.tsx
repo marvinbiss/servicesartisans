@@ -16,7 +16,6 @@ import {
   Trash2,
   Briefcase,
   Clock,
-  Euro,
   Shield,
   ExternalLink,
 } from 'lucide-react'
@@ -39,9 +38,7 @@ interface ArtisanProfile {
   address: string | null
   city: string | null
   postal_code: string | null
-  hourly_rate: number | null
   is_verified: boolean
-  is_featured: boolean
   is_active: boolean
   rating: number | null
   reviews_count: number
@@ -218,11 +215,7 @@ export default function AdminArtisanDetailPage() {
                 <h1 className="text-2xl font-bold text-gray-900">
                   {artisan.company_name || artisan.full_name || 'Sans nom'}
                 </h1>
-                {artisan.is_featured && (
-                  <span className="px-2 py-1 bg-amber-100 text-amber-700 rounded text-xs font-medium">
-                    Mis en avant
-                  </span>
-                )}
+
               </div>
               <p className="text-gray-500 mt-1">{artisan.email}</p>
               <div className="flex items-center gap-3 mt-3">
@@ -383,17 +376,6 @@ export default function AdminArtisanDetailPage() {
                   </span>
                 </div>
               </div>
-            </div>
-
-            {/* Pricing */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <Euro className="w-5 h-5 text-gray-400" />
-                Tarification
-              </h2>
-              <p className="text-2xl font-bold text-gray-900">
-                {artisan.hourly_rate ? `${artisan.hourly_rate}€/h` : 'Non défini'}
-              </p>
             </div>
 
             {/* Dates */}

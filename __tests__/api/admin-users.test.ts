@@ -208,7 +208,7 @@ describe('GET /api/admin/users', () => {
 
   it('returns users on success', async () => {
     const { GET } = await import('@/app/api/admin/users/route')
-    const result = await GET(makeRequest() as never) as { body: { success: boolean; users: unknown[]; total: number; page: number; totalPages: number } }
+    const result = await GET(makeRequest() as never) as unknown as { body: { success: boolean; users: unknown[]; total: number; page: number; totalPages: number } }
 
     expect(result.body.success).toBe(true)
     expect(result.body.users).toHaveLength(3)
@@ -219,7 +219,7 @@ describe('GET /api/admin/users', () => {
 
   it('merges profile data with auth data', async () => {
     const { GET } = await import('@/app/api/admin/users/route')
-    const result = await GET(makeRequest() as never) as { body: { users: Array<Record<string, unknown>> } }
+    const result = await GET(makeRequest() as never) as unknown as { body: { users: Array<Record<string, unknown>> } }
 
     const alice = result.body.users.find((u: Record<string, unknown>) => u.id === 'u1')
     // Profile full_name takes priority over user_metadata
@@ -232,7 +232,7 @@ describe('GET /api/admin/users', () => {
     mockProfilesResult = { data: null, error: null }
 
     const { GET } = await import('@/app/api/admin/users/route')
-    const result = await GET(makeRequest() as never) as { body: { success: boolean; users: Array<Record<string, unknown>> } }
+    const result = await GET(makeRequest() as never) as unknown as { body: { success: boolean; users: Array<Record<string, unknown>> } }
 
     expect(result.body.success).toBe(true)
     expect(result.body.users).toHaveLength(3)
@@ -244,7 +244,7 @@ describe('GET /api/admin/users', () => {
 
   it('filters by clients', async () => {
     const { GET } = await import('@/app/api/admin/users/route')
-    const result = await GET(makeRequest({ filter: 'clients' }) as never) as { body: { users: Array<Record<string, unknown>> } }
+    const result = await GET(makeRequest({ filter: 'clients' }) as never) as unknown as { body: { users: Array<Record<string, unknown>> } }
 
     // u1 is client, u3 has no profile so defaults to client
     const ids = result.body.users.map((u: Record<string, unknown>) => u.id)
@@ -255,7 +255,7 @@ describe('GET /api/admin/users', () => {
 
   it('filters by artisans', async () => {
     const { GET } = await import('@/app/api/admin/users/route')
-    const result = await GET(makeRequest({ filter: 'artisans' }) as never) as { body: { users: Array<Record<string, unknown>> } }
+    const result = await GET(makeRequest({ filter: 'artisans' }) as never) as unknown as { body: { users: Array<Record<string, unknown>> } }
 
     // u2 has user_type artisan from profile
     expect(result.body.users).toHaveLength(1)
@@ -264,7 +264,7 @@ describe('GET /api/admin/users', () => {
 
   it('filters by banned', async () => {
     const { GET } = await import('@/app/api/admin/users/route')
-    const result = await GET(makeRequest({ filter: 'banned' }) as never) as { body: { users: Array<Record<string, unknown>> } }
+    const result = await GET(makeRequest({ filter: 'banned' }) as never) as unknown as { body: { users: Array<Record<string, unknown>> } }
 
     // u3 has banned_until set
     expect(result.body.users).toHaveLength(1)
@@ -273,7 +273,7 @@ describe('GET /api/admin/users', () => {
 
   it('applies search by email', async () => {
     const { GET } = await import('@/app/api/admin/users/route')
-    const result = await GET(makeRequest({ search: 'alice' }) as never) as { body: { users: Array<Record<string, unknown>> } }
+    const result = await GET(makeRequest({ search: 'alice' }) as never) as unknown as { body: { users: Array<Record<string, unknown>> } }
 
     expect(result.body.users).toHaveLength(1)
     expect(result.body.users[0].email).toBe('alice@test.com')
@@ -281,7 +281,7 @@ describe('GET /api/admin/users', () => {
 
   it('returns 400 on invalid params', async () => {
     const { GET } = await import('@/app/api/admin/users/route')
-    const result = await GET(makeRequest({ page: '-1', limit: '0' }) as never) as { body: Record<string, unknown>; status: number }
+    const result = await GET(makeRequest({ page: '-1', limit: '0' }) as never) as unknown as { body: Record<string, unknown>; status: number }
 
     expect(result.status).toBe(400)
     expect(result.body.success).toBe(false)
@@ -294,7 +294,7 @@ describe('GET /api/admin/users', () => {
     }
 
     const { GET } = await import('@/app/api/admin/users/route')
-    const result = await GET(makeRequest() as never) as { body: Record<string, unknown>; status: number }
+    const result = await GET(makeRequest() as never) as unknown as { body: Record<string, unknown>; status: number }
 
     expect(result.status).toBe(502)
     expect(result.body.success).toBe(false)
@@ -308,7 +308,7 @@ describe('GET /api/admin/users', () => {
     mockAdminClientThrows = true
 
     const { GET } = await import('@/app/api/admin/users/route')
-    const result = await GET(makeRequest() as never) as { body: Record<string, unknown>; status: number }
+    const result = await GET(makeRequest() as never) as unknown as { body: Record<string, unknown>; status: number }
 
     expect(result.status).toBe(500)
     expect(result.body.success).toBe(false)
@@ -316,7 +316,7 @@ describe('GET /api/admin/users', () => {
 
   it('transforms user data correctly', async () => {
     const { GET } = await import('@/app/api/admin/users/route')
-    const result = await GET(makeRequest() as never) as { body: { users: Array<Record<string, unknown>> } }
+    const result = await GET(makeRequest() as never) as unknown as { body: { users: Array<Record<string, unknown>> } }
 
     const bob = result.body.users.find((u: Record<string, unknown>) => u.id === 'u2')
     expect(bob).toEqual(expect.objectContaining({
@@ -389,7 +389,7 @@ describe('POST /api/admin/users', () => {
 
   it('creates user successfully', async () => {
     const { POST } = await import('@/app/api/admin/users/route')
-    const result = await POST(makePostRequest(validBody) as never) as { body: { success: boolean; user: Record<string, unknown>; message: string }; status: number }
+    const result = await POST(makePostRequest(validBody) as never) as unknown as { body: { success: boolean; user: Record<string, unknown>; message: string }; status: number }
 
     expect(result.status).toBe(200)
     expect(result.body.success).toBe(true)
@@ -399,7 +399,7 @@ describe('POST /api/admin/users', () => {
 
   it('returns 400 on validation error - missing email', async () => {
     const { POST } = await import('@/app/api/admin/users/route')
-    const result = await POST(makePostRequest({ password: 'securePass123' }) as never) as { body: Record<string, unknown>; status: number }
+    const result = await POST(makePostRequest({ password: 'securePass123' }) as never) as unknown as { body: Record<string, unknown>; status: number }
 
     expect(result.status).toBe(400)
     expect(result.body.success).toBe(false)
@@ -408,7 +408,7 @@ describe('POST /api/admin/users', () => {
 
   it('returns 400 on validation error - short password', async () => {
     const { POST } = await import('@/app/api/admin/users/route')
-    const result = await POST(makePostRequest({ email: 'test@test.com', password: 'short' }) as never) as { body: Record<string, unknown>; status: number }
+    const result = await POST(makePostRequest({ email: 'test@test.com', password: 'short' }) as never) as unknown as { body: Record<string, unknown>; status: number }
 
     expect(result.status).toBe(400)
     expect(result.body.success).toBe(false)
@@ -421,7 +421,7 @@ describe('POST /api/admin/users', () => {
     }
 
     const { POST } = await import('@/app/api/admin/users/route')
-    const result = await POST(makePostRequest(validBody) as never) as { body: { success: boolean; error: { message: string } }; status: number }
+    const result = await POST(makePostRequest(validBody) as never) as unknown as { body: { success: boolean; error: { message: string } }; status: number }
 
     expect(result.status).toBe(400)
     expect(result.body.success).toBe(false)
@@ -473,7 +473,7 @@ describe('POST /api/admin/users', () => {
       email: 'artisan@test.com',
       full_name: 'Jean Artisan',
       user_type: 'artisan',
-    }) as never) as { body: { success: boolean; user: Record<string, unknown> } }
+    }) as never) as unknown as { body: { success: boolean; user: Record<string, unknown> } }
 
     expect(result.body.success).toBe(true)
     expect(result.body.user).toEqual(artisanUser)
@@ -491,7 +491,7 @@ describe('POST /api/admin/users', () => {
     mockAdminClientThrows = true
 
     const { POST } = await import('@/app/api/admin/users/route')
-    const result = await POST(makePostRequest(validBody) as never) as { body: Record<string, unknown>; status: number }
+    const result = await POST(makePostRequest(validBody) as never) as unknown as { body: Record<string, unknown>; status: number }
 
     expect(result.status).toBe(500)
     expect(result.body.success).toBe(false)

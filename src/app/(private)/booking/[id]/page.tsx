@@ -37,8 +37,8 @@ interface BookingDetails {
   }
   artisan: {
     id: string
+    name: string
     full_name: string
-    company_name?: string
     phone?: string
     email?: string
   }
@@ -239,7 +239,7 @@ export default function BookingPage() {
         <div className="max-w-3xl mx-auto px-4 py-8">
           <h1 className="text-2xl font-bold mb-2">Ma réservation</h1>
           <p className="text-blue-100">
-            Gérez votre rendez-vous avec {booking.artisan.company_name || booking.artisan.full_name}
+            Gérez votre rendez-vous avec {booking.artisan.name || booking.artisan.full_name}
           </p>
         </div>
       </div>
@@ -300,7 +300,7 @@ export default function BookingPage() {
               <div>
                 <p className="text-sm text-gray-500">Artisan</p>
                 <p className="font-medium text-gray-900">
-                  {booking.artisan.company_name || booking.artisan.full_name}
+                  {booking.artisan.name || booking.artisan.full_name}
                 </p>
               </div>
             </div>
@@ -405,7 +405,7 @@ export default function BookingPage() {
           bookingId={bookingId}
           bookingDate={formatDate(booking.slot.date)}
           bookingTime={`${booking.slot.start_time} - ${booking.slot.end_time}`}
-          artisanName={booking.artisan.company_name || booking.artisan.full_name}
+          artisanName={booking.artisan.name || booking.artisan.full_name}
           serviceName={booking.service_description}
           onClose={() => setShowCancelModal(false)}
           onCancelled={() => {

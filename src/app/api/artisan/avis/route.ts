@@ -36,8 +36,7 @@ export async function GET() {
       .from('reviews')
       .select(`
         *,
-        client:profiles!client_id(id, full_name, avatar_url),
-        devis:devis(request:devis_requests(service_name))
+        artisan:profiles!artisan_id(id, full_name)
       `)
       .eq('artisan_id', user.id)
       .order('created_at', { ascending: false })
@@ -71,12 +70,12 @@ export async function GET() {
     // Format reviews for frontend
     const formattedReviews = reviews?.map(r => ({
       id: r.id,
-      client: r.client?.full_name || 'Client',
-      service: r.devis?.request?.service_name || 'Service',
+      client: r.client_name || 'Client',
+      service: 'Service',
       date: r.created_at,
       note: r.rating,
       commentaire: r.comment,
-      reponse: r.response,
+      reponse: r.artisan_response,
     })) || []
 
     return NextResponse.json({
@@ -133,7 +132,7 @@ export async function POST(request: Request) {
     // Update with response
     const { error: updateError } = await supabase
       .from('reviews')
-      .update({ response })
+      .update({ artisan_response: response, artisan_responded_at: new Date().toISOString() })
       .eq('id', review_id)
 
     if (updateError) {

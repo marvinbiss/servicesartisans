@@ -65,7 +65,7 @@ beforeEach(async () => {
 
   // Trigger the hook so that DEFAULT_CONFIG is passed to our mock SWR
   useAdminFetch('/test')
-  adminFetcher = capturedConfig?.fetcher as
+  adminFetcher = (capturedConfig as unknown as Record<string, unknown>)?.fetcher as
     | ((url: string) => Promise<unknown>)
     | undefined
 })

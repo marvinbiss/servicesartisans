@@ -41,7 +41,7 @@ export async function GET(request: Request) {
     // Get profile
     const { data: profile } = await supabase
       .from('profiles')
-      .select('id, email, full_name, role, phone_e164, subscription_plan, created_at, updated_at')
+      .select('id, email, full_name, role, phone_e164, created_at, updated_at')
       .eq('id', user.id)
       .single()
 
@@ -64,19 +64,49 @@ export async function GET(request: Request) {
       return await getLegacyStats(supabase, user, profile)
     }
 
-    // Parallelize independent queries
-    const [{ count: unreadMessages }, { data: recentDemandes }] = await Promise.all([
-      supabase
-        .from('messages')
-        .select('id', { count: 'exact', head: true })
-        .eq('receiver_id', user.id)
-        .eq('is_read', false),
-      supabase
-        .from('devis_requests')
-        .select('id, service_name, postal_code, city, description, urgency, status, client_name, created_at')
-        .order('created_at', { ascending: false })
-        .limit(5),
-    ])
+    // Fetch unread messages scoped to this artisan's conversations
+    // Step 1: get provider record for this user
+    const { data: providerForUnread } = await supabase
+      .from('providers')
+      .select('id')
+      .eq('user_id', user.id)
+      .single()
+
+    // Step 2: get conversation IDs belonging to this provider
+    const { data: providerConversations } = providerForUnread
+      ? await supabase
+          .from('conversations')
+          .select('id')
+          .eq('provider_id', providerForUnread.id)
+      : { data: [] }
+
+    const convIds = providerConversations?.map(c => c.id) || []
+
+    // Step 3: count unread client messages in those conversations
+    const { count: unreadMessages } = await supabase
+      .from('messages')
+      .select('id', { count: 'exact', head: true })
+      .in('conversation_id', convIds.length > 0 ? convIds : ['00000000-0000-0000-0000-000000000000'])
+      .eq('sender_type', 'client')
+      .is('read_at', null)
+
+    // Fetch recent demandes scoped to this provider via lead_assignments
+    const { data: recentAssignments } = await supabase
+      .from('lead_assignments')
+      .select('lead_id')
+      .eq('provider_id', providerForUnread?.id)
+      .order('assigned_at', { ascending: false })
+      .limit(5)
+
+    const recentLeadIds = (recentAssignments || []).map((a: { lead_id: string }) => a.lead_id)
+
+    const { data: recentDemandes } = recentLeadIds.length > 0
+      ? await supabase
+          .from('devis_requests')
+          .select('id, service_name, postal_code, city, status, client_name, created_at')
+          .in('id', recentLeadIds)
+          .order('created_at', { ascending: false })
+      : { data: [] }
 
     // Transform bookingsByDay to include day names
     const dayNames = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']
@@ -159,9 +189,25 @@ async function getLegacyStats(
   user: { id: string },
   profile: Record<string, unknown>
 ) {
-  // Parallelize all independent queries
-  // TODO: table 'devis' does not exist — returning empty array until schema is reconciled
-  const [{ data: reviews }, { count: unreadMessages }, { data: recentDemandes }] = await Promise.all([
+  // Get provider record to scope unread messages correctly
+  const { data: legacyProvider } = await supabase
+    .from('providers')
+    .select('id')
+    .eq('user_id', user.id)
+    .single()
+
+  // Get conversation IDs belonging to this provider
+  const { data: legacyConversations } = legacyProvider
+    ? await supabase
+        .from('conversations')
+        .select('id')
+        .eq('provider_id', legacyProvider.id)
+    : { data: [] }
+
+  const legacyConvIds = legacyConversations?.map(c => c.id) || []
+
+  // Parallelize remaining independent queries
+  const [{ data: reviews }, { count: unreadMessages }] = await Promise.all([
     supabase
       .from('reviews')
       .select('id, rating')
@@ -169,14 +215,28 @@ async function getLegacyStats(
     supabase
       .from('messages')
       .select('id', { count: 'exact', head: true })
-      .eq('receiver_id', user.id)
-      .eq('is_read', false),
-    supabase
-      .from('devis_requests')
-      .select('id, service_name, postal_code, city, description, urgency, status, client_name, created_at')
-      .order('created_at', { ascending: false })
-      .limit(5),
+      .in('conversation_id', legacyConvIds.length > 0 ? legacyConvIds : ['00000000-0000-0000-0000-000000000000'])
+      .eq('sender_type', 'client')
+      .is('read_at', null),
   ])
+
+  // Fetch recent demandes scoped to this provider via lead_assignments
+  const { data: legacyRecentAssignments } = await supabase
+    .from('lead_assignments')
+    .select('lead_id')
+    .eq('provider_id', legacyProvider?.id)
+    .order('assigned_at', { ascending: false })
+    .limit(5)
+
+  const legacyRecentLeadIds = (legacyRecentAssignments || []).map((a: { lead_id: string }) => a.lead_id)
+
+  const { data: recentDemandes } = legacyRecentLeadIds.length > 0
+    ? await supabase
+        .from('devis_requests')
+        .select('id, service_name, postal_code, city, status, client_name, created_at')
+        .in('id', legacyRecentLeadIds)
+        .order('created_at', { ascending: false })
+    : { data: [] }
 
   // Calculate stats with division-by-zero protection
   const totalDevis = 0 // TODO: re-enable when 'devis' table is reconciled

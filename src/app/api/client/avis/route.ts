@@ -14,7 +14,7 @@ import { z } from 'zod'
 // POST request schema
 const createReviewSchema = z.object({
   artisan_id: z.string().uuid(),
-  devis_id: z.string().uuid().optional().nullable(),
+  booking_id: z.string().uuid().optional().nullable(),
   rating: z.number().int().min(1).max(5),
   comment: z.string().min(10).max(2000),
 })
@@ -47,7 +47,16 @@ export async function GET() {
       )
     }
 
-    // Fetch published reviews by this client
+    // Fetch published reviews by this client via bookings (reviews has no direct client FK)
+    // Step 1: get booking IDs for this client
+    const { data: clientBookings } = await supabase
+      .from('bookings')
+      .select('id')
+      .eq('client_id', user.id)
+
+    const bookingIds = clientBookings?.map((b: { id: string }) => b.id) || []
+
+    // Step 2: fetch reviews for those bookings
     // Note: 'devis' table does not exist (TODO: re-enable join when reconciled)
     // Note: profiles does not have company_name or avatar_url
     const { data: avisPublies, error: avisError } = await supabase
@@ -56,7 +65,7 @@ export async function GET() {
         *,
         artisan:profiles!artisan_id(id, full_name)
       `)
-      .eq('client_id', user.id)
+      .in('booking_id', bookingIds.length > 0 ? bookingIds : ['00000000-0000-0000-0000-000000000000'])
       .order('created_at', { ascending: false })
 
     if (avisError) {
@@ -79,7 +88,7 @@ export async function GET() {
       date: r.created_at,
       note: r.rating,
       commentaire: r.comment,
-      reponse: r.response,
+      reponse: r.artisan_response,
     })) || []
 
     return NextResponse.json({
@@ -117,15 +126,23 @@ export async function POST(request: Request) {
         { status: 400 }
       )
     }
-    const { artisan_id, devis_id, rating, comment } = result.data
+    const { artisan_id, booking_id, rating, comment } = result.data
 
-    // Insert review
+    // Fetch client profile to get name and email for the review record
+    const { data: clientProfile } = await supabase
+      .from('profiles')
+      .select('full_name, email')
+      .eq('id', user.id)
+      .single()
+
+    // Insert review (reviews has client_name, client_email — no user_id FK)
     const { data: review, error: insertError } = await supabase
       .from('reviews')
       .insert({
-        client_id: user.id,
         artisan_id,
-        devis_id: devis_id || null,
+        booking_id: booking_id || null,
+        client_name: clientProfile?.full_name || user.email || 'Client',
+        client_email: clientProfile?.email || user.email || '',
         rating,
         comment,
       })
@@ -178,14 +195,14 @@ export async function PUT(request: Request) {
     }
     const { review_id, rating, comment } = result.data
 
-    // Verify the review belongs to this client
+    // Verify the review belongs to this client (reviews has client_email, not user_id)
     const { data: existingReview } = await supabase
       .from('reviews')
-      .select('client_id')
+      .select('client_email')
       .eq('id', review_id)
       .single()
 
-    if (!existingReview || existingReview.client_id !== user.id) {
+    if (!existingReview || existingReview.client_email !== user.email) {
       return NextResponse.json(
         { error: 'Avis non trouvé ou non autorisé' },
         { status: 403 }
@@ -198,7 +215,6 @@ export async function PUT(request: Request) {
       .update({
         rating,
         comment,
-        updated_at: new Date().toISOString(),
       })
       .eq('id', review_id)
 
@@ -250,14 +266,14 @@ export async function DELETE(request: Request) {
     }
     const review_id = result.data.id
 
-    // Verify the review belongs to this client
+    // Verify the review belongs to this client (reviews has client_email, not user_id)
     const { data: existingReview } = await supabase
       .from('reviews')
-      .select('client_id')
+      .select('client_email')
       .eq('id', review_id)
       .single()
 
-    if (!existingReview || existingReview.client_id !== user.id) {
+    if (!existingReview || existingReview.client_email !== user.email) {
       return NextResponse.json(
         { error: 'Avis non trouvé ou non autorisé' },
         { status: 403 }

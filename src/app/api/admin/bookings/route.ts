@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
     }
 
     const { data: bookings, count, error } = await query
-      .order('booking_date', { ascending: false })
+      .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1)
 
     if (error) {

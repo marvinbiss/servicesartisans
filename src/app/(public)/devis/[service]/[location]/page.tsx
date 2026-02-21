@@ -104,8 +104,9 @@ export async function generateMetadata({
   const serviceImage = getServiceImage(service)
   const canonicalUrl = `${SITE_URL}/devis/${service}/${location}`
 
-  // noindex when no real providers exist for this city+service
-  let providerCount = 1 // default: assume providers exist (fail open for SEO)
+  // 404 when no real providers exist for this city+service.
+  // noindex wastes crawl budget (Google crawls then drops) — 404 is a hard stop.
+  // Fail open when DB is down to avoid false 404s.
   if (process.env.NEXT_BUILD_SKIP_DB !== '1') {
     try {
       const { createAdminClient } = await import('@/lib/supabase/admin')
@@ -116,9 +117,9 @@ export async function generateMetadata({
         .eq('is_active', true)
         .eq('address_city', villeData.name)
         .limit(1)
-      providerCount = count ?? 0
+      if ((count ?? 1) === 0) notFound()
     } catch {
-      providerCount = 1
+      // DB unavailable — fail open, do not 404
     }
   }
 
@@ -126,7 +127,6 @@ export async function generateMetadata({
     title,
     description,
     alternates: { canonical: canonicalUrl },
-    ...(providerCount === 0 ? { robots: { index: false, follow: true } } : {}),
     openGraph: {
       locale: 'fr_FR',
       title,

@@ -42,34 +42,42 @@ export async function POST(
       )
     }
 
-    // Anonymiser le profil
-    const anonymizedData = {
-      email: `deleted_${userId.slice(0, 8)}@anonymized.local`,
-      full_name: 'Utilisateur supprimé',
-      phone: null,
-      siret: null,
-      description: null,
-      address: null,
-      city: null,
-      postal_code: null,
-      is_deleted: true,
-      deleted_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    }
+    // Récupérer l'email du profil pour anonymiser les avis client
+    const { data: profileData } = await supabase
+      .from('profiles')
+      .select('email')
+      .eq('id', userId)
+      .single()
 
+    // Anonymiser le profil — seules les colonnes qui existent sur profiles
     await supabase
       .from('profiles')
-      .update(anonymizedData)
+      .update({
+        email: `deleted_${userId.slice(0, 8)}@anonymized.local`,
+        full_name: 'Utilisateur supprimé',
+        phone_e164: null,
+      })
       .eq('id', userId)
 
-    // Anonymiser les avis
+    // Anonymiser les avis client (filtrés par client_email car reviews.user_id n'existe pas)
+    if (profileData?.email) {
+      await supabase
+        .from('reviews')
+        .update({
+          client_name: 'Utilisateur supprimé',
+          client_email: 'deleted@anonymized.local',
+        })
+        .eq('client_email', profileData.email)
+    }
+
+    // Anonymiser les réponses d'avis si l'utilisateur était un artisan
     await supabase
       .from('reviews')
       .update({
-        client_name: 'Utilisateur supprimé',
-        client_email: 'deleted@anonymized.local',
+        artisan_response: null,
+        artisan_responded_at: null,
       })
-      .eq('client_id', userId)
+      .eq('artisan_id', userId)
 
     // Désactiver le provider si c'est un artisan
     await supabase

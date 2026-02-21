@@ -191,7 +191,7 @@ export function ProviderDetail({ provider, showQuoteForm = true }: ProviderDetai
                 <a
                   href={provider.website}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="nofollow noopener noreferrer"
                   className="flex items-center justify-center gap-2 px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium text-gray-700"
                 >
                   <Globe className="w-5 h-5" />

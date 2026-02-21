@@ -41,11 +41,34 @@ export async function GET(request: Request) {
       )
     }
 
-    // Build query for devis_requests
-    // TODO: zone/service filtering disabled — profiles no longer stores zones/services columns
+    // Resolve provider for this artisan
+    const { data: provider } = await supabase
+      .from('providers')
+      .select('id')
+      .eq('user_id', user.id)
+      .maybeSingle()
+
+    if (!provider) {
+      return NextResponse.json({ demandes: [], stats: { total: 0, nouveau: 0, devis_envoye: 0, accepte: 0, refuse: 0 } })
+    }
+
+    // Get lead IDs assigned to this provider via lead_assignments
+    const { data: assignments } = await supabase
+      .from('lead_assignments')
+      .select('lead_id')
+      .eq('provider_id', provider.id)
+
+    const leadIds = (assignments || []).map(a => a.lead_id)
+
+    if (leadIds.length === 0) {
+      return NextResponse.json({ demandes: [], stats: { total: 0, nouveau: 0, devis_envoye: 0, accepte: 0, refuse: 0 } })
+    }
+
+    // Fetch only devis_requests assigned to this provider
     let query = supabase
       .from('devis_requests')
       .select('id, client_id, service_id, service_name, postal_code, city, description, budget, urgency, status, client_name, client_email, client_phone, created_at, updated_at')
+      .in('id', leadIds)
       .order('created_at', { ascending: false })
 
     // Filter by status if provided
