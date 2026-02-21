@@ -223,24 +223,24 @@ export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
           </div>
 
           {/* Social proof */}
-          <div className="flex items-center justify-center gap-2.5 mt-8">
+          <div className="flex items-center justify-center gap-4 mt-8">
             <div className="flex">
               {[
-                'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=56&h=56&fit=crop&crop=face&q=80',
-                'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=56&h=56&fit=crop&crop=face&q=80',
-                'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=56&h=56&fit=crop&crop=face&q=80',
+                'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=168&h=168&fit=crop&crop=face&q=80',
+                'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=168&h=168&fit=crop&crop=face&q=80',
+                'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=168&h=168&fit=crop&crop=face&q=80',
               ].map((src, i) => (
                 <Image
                   key={i}
                   src={src}
                   alt="Photo d'un client satisfait"
-                  width={28}
-                  height={28}
-                  className="rounded-full border-2 border-white/20 object-cover -mr-2"
+                  width={56}
+                  height={56}
+                  className="rounded-full border-2 border-white/20 object-cover -mr-3"
                 />
               ))}
             </div>
-            <p className="text-xs font-medium text-white/70">
+            <p className="text-base font-medium text-white/70">
               <strong className="text-white/85">Des centaines de clients</strong> trouvent leur artisan chaque semaine
             </p>
           </div>
