@@ -13,9 +13,6 @@ import { z } from 'zod'
 const updateClientProfileSchema = z.object({
   full_name: z.string().max(100).optional(),
   phone: z.string().max(20).optional(),
-  address: z.string().max(200).optional(),
-  city: z.string().max(100).optional(),
-  postal_code: z.string().max(10).optional(),
 })
 
 export const dynamic = 'force-dynamic'

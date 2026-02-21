@@ -56,7 +56,7 @@ export async function GET() {
       devisRecus: demandes?.filter(d => d.status === 'sent').length || 0,
       acceptes: demandes?.filter(d => d.status === 'accepted').length || 0,
       refuses: demandes?.filter(d => d.status === 'refused').length || 0,
-      expires: demandes?.filter(d => d.status === 'expired').length || 0,
+      termines: demandes?.filter(d => d.status === 'completed').length || 0,
     }
 
     return NextResponse.json({

@@ -195,14 +195,28 @@ export async function PUT(request: Request) {
     }
     const { review_id, rating, comment } = result.data
 
-    // Verify the review belongs to this client (reviews has client_email, not user_id)
+    // Verify the review belongs to this client via booking ownership
     const { data: existingReview } = await supabase
       .from('reviews')
-      .select('client_email')
+      .select('booking_id')
       .eq('id', review_id)
       .single()
 
-    if (!existingReview || existingReview.client_email !== user.email) {
+    if (!existingReview) {
+      return NextResponse.json(
+        { error: 'Avis non trouvé ou non autorisé' },
+        { status: 403 }
+      )
+    }
+
+    const { data: ownerBooking } = await supabase
+      .from('bookings')
+      .select('id')
+      .eq('id', existingReview.booking_id)
+      .eq('client_id', user.id)
+      .single()
+
+    if (!ownerBooking) {
       return NextResponse.json(
         { error: 'Avis non trouvé ou non autorisé' },
         { status: 403 }
@@ -266,14 +280,28 @@ export async function DELETE(request: Request) {
     }
     const review_id = result.data.id
 
-    // Verify the review belongs to this client (reviews has client_email, not user_id)
+    // Verify the review belongs to this client via booking ownership
     const { data: existingReview } = await supabase
       .from('reviews')
-      .select('client_email')
+      .select('booking_id')
       .eq('id', review_id)
       .single()
 
-    if (!existingReview || existingReview.client_email !== user.email) {
+    if (!existingReview) {
+      return NextResponse.json(
+        { error: 'Avis non trouvé ou non autorisé' },
+        { status: 403 }
+      )
+    }
+
+    const { data: ownerBooking } = await supabase
+      .from('bookings')
+      .select('id')
+      .eq('id', existingReview.booking_id)
+      .eq('client_id', user.id)
+      .single()
+
+    if (!ownerBooking) {
       return NextResponse.json(
         { error: 'Avis non trouvé ou non autorisé' },
         { status: 403 }

@@ -24,7 +24,7 @@ interface AvisEnAttente {
   artisan_id: string
   service: string
   date: string
-  devis_id: string
+  booking_id: string
 }
 
 export default function AvisClientPage() {
@@ -87,7 +87,7 @@ export default function AvisClientPage() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             artisan_id: selectedAvis.artisan_id,
-            devis_id: selectedAvis.devis_id,
+            booking_id: selectedAvis.booking_id,
             rating: note,
             comment: commentaire,
           }),
