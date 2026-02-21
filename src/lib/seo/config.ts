@@ -6,9 +6,9 @@ export const PHONE_TEL = 'tel:+33176340000'
 // SEO configuration object
 export const defaultSEOConfig = {
   titleTemplate: '%s | ServicesArtisans',
-  defaultTitle: 'ServicesArtisans — 350 000+ artisans référencés en France',
+  defaultTitle: 'ServicesArtisans — Annuaire des artisans référencés en France',
   description:
-    'Le plus grand annuaire d\'artisans de France. 350 000+ professionnels référencés dans 101 départements. Devis gratuits.',
+    'Annuaire d\'artisans de France. Professionnels référencés via les données SIREN officielles dans 101 départements. Devis gratuits.',
   canonical: SITE_URL,
   openGraph: {
     type: 'website',
@@ -72,7 +72,7 @@ export const defaultSEOConfig = {
 export function getServiceSEO(serviceName: string, location?: string) {
   const title = location
     ? `${serviceName} à ${location} — Annuaire & Devis Gratuit`
-    : `${serviceName} en France — 350 000+ artisans référencés`
+    : `${serviceName} en France — Artisans référencés SIREN`
 
   const description = location
     ? `Trouvez un ${serviceName.toLowerCase()} à ${location} parmi des milliers de professionnels référencés. Comparez les profils, consultez les coordonnées et demandez un devis gratuit.`
@@ -100,7 +100,7 @@ export function getLocationSEO(locationType: 'ville' | 'region' | 'departement',
   const descriptions: Record<string, string> = {
     ville: `Annuaire complet des artisans à ${locationName}. Des milliers de professionnels référencés : plombiers, électriciens, menuisiers et plus. 100% gratuit.`,
     region: `Trouvez un artisan en ${locationName} parmi des milliers de professionnels référencés. Tous les corps de métier, tous les départements.`,
-    departement: `Artisans référencés dans le ${locationName}. Plus de 50 métiers du bâtiment couverts. Recherche gratuite, devis sans engagement.`,
+    departement: `Artisans référencés dans le ${locationName}. 50 métiers du bâtiment couverts. Recherche gratuite, devis sans engagement.`,
   }
 
   return {
