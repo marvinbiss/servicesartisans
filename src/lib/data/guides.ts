@@ -179,7 +179,7 @@ export const guides: Guide[] = [
     intro: 'Une installation photovoltaïque résidentielle coûte entre 8 000 et 20 000 €. Les aides et l\'économie sur la facture permettent un retour sur investissement de 8 à 12 ans.',
     sections: [
       { title: 'Prix selon la puissance installée', content: '3 kWc : 5 000–9 000 €. 6 kWc : 8 000–14 000 €. 9 kWc : 12 000–20 000 €. Coût au Wc : 1,50 à 2,50 € fourniture et pose.' },
-      { title: 'Aides et dispositifs fiscaux', content: 'Prime autoconsommation (EDF OA) : 400–1 000 €. TVA à 10 % pour ≤ 3 kWc. Revente surplus : ~0,04 €/kWh (tarif surplus ≤ 9 kWc, T1 2026 — vérifier mise à jour annuelle sur EDF OA). Certaines collectivités apportent jusqu\'à 2 000 € supplémentaires.' },
+      { title: 'Aides et dispositifs fiscaux', content: 'Prime autoconsommation (EDF OA) : 400–1 000 €. TVA à 10 % pour ≤ 3 kWc. Revente surplus : tarif révisé trimestriellement par la CRE (S17, ≤ 9 kWc) — vérifiez le tarif en vigueur sur edf-oa.fr avant tout projet. Certaines collectivités apportent jusqu\'à 2 000 € supplémentaires.' },
       { title: 'Production et rentabilité', content: '1 kWc produit 900–1 400 kWh/an selon l\'ensoleillement. Installation 6 kWc : 50 à 80 % des besoins d\'une famille de 4. Économie annuelle : 600–1 200 €.' },
     ],
     faq: [
@@ -342,7 +342,7 @@ export const guides: Guide[] = [
   {
     slug: 'panne-chaudiere-que-faire',
     title: 'Panne de chaudière en hiver : que faire ? Guide urgence',
-    metaDescription: 'Chaudière en panne en hiver ? Vérifiez ces points avant d\'appeler : pression, vanne gaz, code erreur. Dépannage chauffage 24h/24.',
+    metaDescription: 'Chaudière en panne en hiver ? Vérifiez ces points avant d\'appeler : pression, vanne gaz, code erreur. Guide de dépannage chauffage.',
     h1: 'Que faire en cas de panne de chaudière en hiver ?',
     category: 'urgence',
     trade: 'chauffagiste',
@@ -355,7 +355,7 @@ export const guides: Guide[] = [
     ],
     faq: [
       { q: 'Comment réarmer une chaudière après panne ?', a: 'Attendez 5 minutes, appuyez sur le bouton reset. Si la chaudière s\'arrête de nouveau, appelez un technicien.' },
-      { q: 'Quel est le délai d\'intervention d\'un chauffagiste en urgence ?', a: 'Avec contrat d\'entretien : sous 24h. Sans contrat : 4 à 12h en semaine.' },
+      { q: 'Quel est le délai d\'intervention d\'un chauffagiste en urgence ?', a: 'Les délais varient selon la disponibilité des techniciens et votre localisation. Avec un contrat d\'entretien, vous bénéficiez généralement d\'une priorité d\'intervention. Sans contrat, le délai peut être plus long, surtout en plein hiver lorsque la demande est forte.' },
       { q: 'L\'entretien annuel prévient-il les pannes ?', a: 'Oui, significativement. Les pannes surviennent souvent en début de saison sur des chaudières non entretenues.' },
     ],
     relatedServices: ['chauffagiste', 'pompe-a-chaleur', 'plombier'],

@@ -195,7 +195,7 @@ export const prixArticles: Record<string, {
       "1. Faites réaliser un **bilan thermique** de votre logement (200 à 500 €, parfois offert par les installateurs)\n2. Comparez au moins **trois devis détaillés** auprès de professionnels certifiés RGE\n3. Simulez vos droits aux aides sur le site France Rénov' avant de vous engager\n4. Vérifiez les certifications : RGE, QualiPAC pour les pompes à chaleur, QualiBois pour le bois",
 
       "### Pour économiser",
-      "- Planifiez vos travaux **en été** pour bénéficier de meilleurs tarifs et d'une meilleure disponibilité des artisans\n- Optez pour un **contrat d'entretien** incluant le dépannage prioritaire\n- Investissez dans un thermostat connecté (200 – 400 €) qui réduit la consommation de **15 à 25 %**\n- Couplez le changement de chauffage avec des travaux d'[isolation](/blog/prix-ravalement-facade-2026) pour maximiser les économies",
+      "- Planifiez vos travaux **en été** pour bénéficier de meilleurs tarifs et d'une meilleure disponibilité des artisans\n- Optez pour un **contrat d'entretien** incluant le dépannage prioritaire\n- Investissez dans un thermostat connecté (200 – 400 €) qui réduit la consommation de **8 à 15 %** en moyenne, et jusqu'à 20 % avec une programmation active et un abaissement nocturne régulier (source : ADEME)\n- Couplez le changement de chauffage avec des travaux d'[isolation](/blog/prix-ravalement-facade-2026) pour maximiser les économies",
 
       ":::warning Attention\nMéfiez-vous des offres « pompe à chaleur à 1 € » ou des démarcheurs téléphoniques promettant des installations gratuites. Ces pratiques, fréquemment dénoncées par la DGCCRF, cachent souvent des équipements sous-dimensionnés, des marques inconnues sans SAV, ou des montages financiers douteux. Un artisan sérieux ne démarche **jamais** par téléphone.\n:::",
 
@@ -672,7 +672,7 @@ export const prixArticles: Record<string, {
       "### Entretien obligatoire",
       "L'entretien annuel est obligatoire pour les systèmes contenant plus de 2 kg de fluide frigorigène. Le prix d'un entretien simple se situe entre **100 et 200 €**. Un contrat d'entretien annuel coûte de **150 à 350 €**. Le rechargement en gaz frigorigène revient à **200 – 500 €**.",
 
-      ":::tip Conseil pro\nChoisissez des appareils avec un **SEER élevé** (coefficient de performance saisonnier en mode froid, supérieur à 6). Un appareil SEER 7 consomme **25 % d'électricité de moins** qu'un SEER 5 pour le même confort. Sur 10 ans, l'économie compense largement le surcoût à l'achat. Vérifiez aussi le **SCOP** (performance en mode chauffage) si vous optez pour un modèle réversible.\n:::",
+      ":::tip Conseil pro\nChoisissez des appareils avec un **SEER élevé** (coefficient de performance saisonnier en mode froid, supérieur à 6). Un appareil SEER 7 consomme **28 % d'électricité de moins** qu'un SEER 5 pour le même confort (calcul : 1 − 5/7 = 28,6 %). Sur 10 ans, l'économie compense largement le surcoût à l'achat. Vérifiez aussi le **SCOP** (performance en mode chauffage) si vous optez pour un modèle réversible.\n:::",
 
       "## Variations régionales",
 
@@ -1077,7 +1077,7 @@ export const prixArticles: Record<string, {
     title: "Prix terrasse extérieure 2026 : bois, béton, carrelage",
     excerpt: "Quel budget pour créer une terrasse en 2026 ? Bois, composite, béton, pierre naturelle, carrelage : comparez les prix au m² de chaque matériau avec la pose.",
     content: [
-      "Une terrasse bien conçue peut augmenter la surface habitable perçue de **20 à 30 %** et valoriser votre bien de **5 à 15 %**. Mais entre le pin traité à 40 €/m² et la pierre naturelle à 250 €/m², les écarts de prix sont considérables. En 2026, les options de matériaux sont plus nombreuses que jamais. Ce guide compare objectivement **chaque solution** pour vous aider à faire le meilleur choix selon votre budget, votre climat et vos goûts.",
+      "Une terrasse bien conçue peut augmenter la surface habitable perçue de **20 à 30 %** et valoriser votre bien de **3 à 10 %** selon la région et le type de bien (source : Notaires de France). Mais entre le pin traité à 40 €/m² et la pierre naturelle à 250 €/m², les écarts de prix sont considérables. En 2026, les options de matériaux sont plus nombreuses que jamais. Ce guide compare objectivement **chaque solution** pour vous aider à faire le meilleur choix selon votre budget, votre climat et vos goûts.",
       "## Terrasse en bois naturel",
       "Le bois reste le matériau le plus apprécié pour les terrasses grâce à son esthétique chaleureuse. Le pin traité autoclave (classe 4) coûte entre 40 et 80 €/m² fourni-posé. Le bois exotique (ipé, cumaru, teck) revient de 100 à 200 €/m². Le mélèze et le douglas se situent entre 60 et 120 €/m². La durée de vie varie de 15 ans (pin traité) à 40 ans et plus (ipé) avec un entretien régulier.",
       "## Terrasse en composite",
@@ -1186,7 +1186,7 @@ export const prixArticles: Record<string, {
 
       "1. Vérifiez que l'artisan est certifié **RGE** pour bénéficier des aides\n2. Comparez au minimum **trois devis** détaillés avec coefficient Uw\n3. Privilégiez la **dépose totale** pour de meilleures performances\n4. Consultez notre guide du [prix vitrier](/blog/prix-vitrier-2026-remplacement-vitrage) pour le remplacement de vitrage seul",
 
-      ":::info Bon à savoir\nLe remplacement de fenêtres est l'un des travaux de rénovation énergétique les plus **rentables** : retour sur investissement en 5 à 8 ans grâce aux économies de chauffage (10 à 15 % de la facture), au confort acoustique amélioré et à la valorisation du bien. C'est aussi l'un des plus simples à mettre en œuvre (1 à 2 heures par fenêtre en pose rénovation).\n:::",
+      ":::info Bon à savoir\nLe remplacement de fenêtres est l'un des travaux de rénovation énergétique les plus **rentables** : retour sur investissement en **10 à 20 ans** selon les aides obtenues, le type de logement et les économies réalisées (10 à 15 % de la facture de chauffage). L'investissement se justifie aussi par le confort acoustique, la valorisation du bien et les obligations réglementaires futures. C'est aussi l'un des plus simples à mettre en œuvre (1 à 2 heures par fenêtre en pose rénovation).\n:::",
 
       ":::warning Attention\nEn secteur **ABF** (Architectes des Bâtiments de France) ou en copropriété, le choix du matériau peut être imposé (bois obligatoire dans certains immeubles classés). Vérifiez le règlement de copropriété et consultez le service urbanisme **avant** de commander vos fenêtres. Un changement de matériau non autorisé peut entraîner l'obligation de déposer les fenêtres à vos frais.\n:::",
 
@@ -1251,7 +1251,7 @@ export const prixArticles: Record<string, {
     faq: [
       { question: "Combien coûte la mise aux normes électrique d'un appartement ?", answer: "La mise en conformité d'une installation ancienne coûte entre 80 et 150 €/m². Pour un appartement de 70 m² : 5 600 à 10 500 €. Ce budget comprend le remplacement du tableau, la mise à la terre, la protection différentielle, la mise en conformité des circuits et le remplacement des appareillages vétustes." },
       { question: "Quel budget pour installer des panneaux solaires en 2026 ?", answer: "Une installation photovoltaïque en autoconsommation de 3 kWc (8-10 panneaux) coûte 7 000 à 14 000 € TTC. La prime à l'autoconsommation est de 260 à 500 €/kWc. Le retour sur investissement est de 8 à 12 ans. Une installation de 6 kWc coûte 12 000 à 22 000 € et convient aux grandes maisons." },
-      { question: "La domotique est-elle rentable ?", answer: "Un système domotique filaire (KNX, Legrand) coûte 5 000 à 20 000 € pour 100 m². Un système sans fil (Zigbee, Z-Wave) est plus abordable : 1 000 à 5 000 €. La domotique permet des économies d'énergie de 10 à 25 % grâce à la gestion intelligente du chauffage, de l'éclairage et des volets. Le retour sur investissement est de 5 à 10 ans pour les systèmes sans fil." },
+      { question: "La domotique est-elle rentable ?", answer: "Un système domotique filaire (KNX, Legrand) coûte 5 000 à 20 000 € pour 100 m². Un système sans fil (Zigbee, Z-Wave) est plus abordable : 1 000 à 5 000 €. La domotique permet des économies d'énergie de 10 à 15 % grâce à la gestion intelligente du chauffage, de l'éclairage et des volets (source : ADEME). Le retour sur investissement est de 5 à 10 ans pour les systèmes sans fil." },
       { question: "Le certificat Consuel est-il obligatoire ?", answer: "Oui, le Consuel est obligatoire pour toute installation électrique neuve et pour les rénovations lourdes (remplacement complet du tableau et du câblage). Il coûte 130 à 180 € et doit être obtenu avant la mise en service par le fournisseur d'énergie. L'électricien prépare le dossier et soumet l'installation au contrôle." }
     ]
   },

@@ -49,7 +49,7 @@ const problems: Problem[] = [
       'Protégez vos tuyaux extérieurs contre le gel en hiver',
     ],
     estimatedCost: { min: 80, max: 300 },
-    averageResponseTime: 'Sous 1 heure en urgence',
+    averageResponseTime: 'Généralement sous 1 à 4h (selon disponibilité et localisation)',
     faq: [
       { q: 'Comment détecter une fuite d’eau cachée ?', a: 'Relevez votre compteur d’eau le soir, ne consommez pas d’eau pendant la nuit, puis vérifiez le matin. Si le compteur a tourné, il y a une fuite. Un plombier peut également utiliser une caméra thermique ou un détecteur acoustique pour localiser la fuite sans casser.' },
       { q: 'Combien coûte la réparation d’une fuite d’eau ?', a: 'Le coût varie de 80 \u20ac pour un simple changement de joint à 300 \u20ac pour une réparation sur canalisation encastrée. En urgence de nuit ou le week-end, prévoyez une majoration de 50 à 100 %.' },
@@ -85,7 +85,7 @@ const problems: Problem[] = [
       'Évitez de jeter des lingettes dans les toilettes, même biodégradables',
     ],
     estimatedCost: { min: 100, max: 400 },
-    averageResponseTime: 'Sous 2 heures',
+    averageResponseTime: 'Généralement sous 2 à 6h (selon disponibilité)',
     faq: [
       { q: 'Comment déboucher une canalisation naturellement ?', a: 'Versez 6 cuillères à soupe de bicarbonate de soude et 25 cl de vinaigre blanc dans la canalisation. Laissez agir 30 minutes puis rincez à l’eau bouillante. Si le bouchon persiste, utilisez une ventouse ou un furet manuel.' },
       { q: 'Quel est le prix d’un débouchage professionnel ?', a: 'Un débouchage simple coûte entre 100 et 200 \u20ac. Un hydrocurage haute pression pour les canalisations enterrées peut atteindre 400 \u20ac. Demandez toujours un devis avant intervention.' },
@@ -121,7 +121,7 @@ const problems: Problem[] = [
       'Maintenez la pression du circuit entre 1 et 1,5 bar',
     ],
     estimatedCost: { min: 150, max: 600 },
-    averageResponseTime: 'Sous 4 heures',
+    averageResponseTime: 'Généralement sous 4 à 12h (selon disponibilité)',
     seasonality: 'hiver',
     faq: [
       { q: 'Pourquoi ma chaudière ne démarre plus ?', a: 'Les causes les plus fréquentes sont : pression trop basse, thermostat défaillant, problème d’allumage (brûleur encrassé ou électrode défectueuse), ou panne du circulateur. Seul un chauffagiste agréé peut diagnostiquer et réparer en toute sécurité.' },
@@ -156,7 +156,7 @@ const problems: Problem[] = [
       'Faites dupliquer vos clés chez un serrurier plutôt qu’en grande surface',
     ],
     estimatedCost: { min: 80, max: 250 },
-    averageResponseTime: 'Sous 30 minutes',
+    averageResponseTime: 'Généralement sous 30 min à 1h en zone urbaine (selon disponibilité)',
     faq: [
       { q: 'Combien coûte l’ouverture d’une porte avec serrure bloquée ?', a: 'L’ouverture par un serrurier coûte entre 80 et 250 \u20ac selon la technique utilisée (crochetage, by-pass, perçage du cylindre). Le crochetage non destructif est le moins cher. De nuit ou le week-end, comptez une majoration de 50 à 100 %.' },
       { q: 'Le serrurier peut-il ouvrir sans casser la serrure ?', a: 'Un bon serrurier privilégie toujours l’ouverture non destructive (crochetage, impression). Il ne perce le cylindre qu’en dernier recours. Méfiez-vous des serruriers qui proposent d’emblée de changer la porte ou le blindage.' },
@@ -189,7 +189,7 @@ const problems: Problem[] = [
       'Équipez votre porte d’un entrebâilleur ou d’un bloque-porte',
     ],
     estimatedCost: { min: 80, max: 200 },
-    averageResponseTime: 'Sous 30 minutes',
+    averageResponseTime: 'Généralement sous 30 min à 1h en zone urbaine (selon disponibilité)',
     faq: [
       { q: 'Combien coûte l’ouverture d’une porte claquée ?', a: 'L’ouverture d’une porte claquée coûte entre 80 et 200 \u20ac en journée. La technique la plus courante est le by-pass (feuille de radio) qui ne nécessite aucun remplacement de pièce. La nuit, comptez une majoration de 50 à 100 %.' },
       { q: 'Le serrurier va-t-il abimer ma porte ?', a: 'Dans la grande majorité des cas, non. L’ouverture d’une porte claquée est une intervention simple qui ne nécessite aucun perçage ni remplacement. Méfiez-vous des serruriers qui affirment devoir changer le cylindre après une simple porte claquée.' },
@@ -225,7 +225,7 @@ const problems: Problem[] = [
       'Remplacez les prises et interrupteurs fissurés ou noircis',
     ],
     estimatedCost: { min: 100, max: 350 },
-    averageResponseTime: 'Sous 2 heures',
+    averageResponseTime: 'Généralement sous 2 à 6h (selon disponibilité)',
     faq: [
       { q: 'Pourquoi mon disjoncteur saute-t-il régulièrement ?', a: 'Un disjoncteur qui saute régulièrement indique généralement : une surcharge du circuit (trop d’appareils branchés), un court-circuit dans l’installation, ou un défaut d’isolement (appareil ou câble défectueux). Un électricien peut identifier la cause précise avec un mégohmètre.' },
       { q: 'Combien coûte un dépannage électrique ?', a: 'Le dépannage électrique coûte entre 100 et 350 \u20ac selon la complexité : 100 à 150 \u20ac pour un diagnostic simple, 200 à 350 \u20ac pour une réparation avec remplacement de pièces. En urgence de nuit, comptez 50 à 100 % de majoration.' },
@@ -260,7 +260,7 @@ const problems: Problem[] = [
       'Installez des disjoncteurs adaptés à chaque circuit (10 A, 16 A, 32 A)',
     ],
     estimatedCost: { min: 100, max: 400 },
-    averageResponseTime: 'Sous 1 heure en urgence',
+    averageResponseTime: 'Généralement sous 1 à 4h (selon disponibilité et localisation)',
     faq: [
       { q: 'Un court-circuit peut-il provoquer un incendie ?', a: 'Oui, un court-circuit est l’une des principales causes d’incendie d’origine électrique en France (environ 25 % des incendies domestiques). Les protections (disjoncteurs, fusibles) doivent couper le courant instantanément. Si votre installation est vétuste, le risque augmente considérablement.' },
       { q: 'Comment localiser un court-circuit ?', a: 'L’électricien procède par élimination : il désactive tous les circuits au tableau, puis les réactive un par un pour identifier celui qui déclenche le disjoncteur. Il utilise ensuite un mégohmètre pour mesurer l’isolement et localiser le défaut précis.' },
@@ -330,11 +330,11 @@ const problems: Problem[] = [
       'Vérifiez l’état des solins autour des cheminées et fenêtres de toit',
     ],
     estimatedCost: { min: 200, max: 1000 },
-    averageResponseTime: 'Sous 4 heures en urgence',
+    averageResponseTime: 'Généralement sous 4 à 12h (selon disponibilité)',
     faq: [
       { q: 'Comment localiser une infiltration de toiture ?', a: 'L’eau peut parcourir un long chemin le long de la charpente avant de goutter. Inspectez les combles avec une lampe torche pendant une journée de pluie pour identifier le point d’entrée. Un couvreur expérimenté peut également réaliser un test d’étanchéité au tuyau d’arrosage.' },
       { q: 'Combien coûte la réparation d’une infiltration ?', a: 'Le coût varie de 200 \u20ac pour un remplacement de tuiles à 1 000 \u20ac pour une réfection de solin ou de zinguerie. Un bâchage d’urgence coûte 150 à 300 \u20ac. Une réfection complète de toiture peut aller de 5 000 à 15 000 \u20ac.' },
-      { q: 'Mon assurance couvre-t-elle les infiltrations de toiture ?', a: 'L’assurance habitation couvre les dégâts causés par une tempête (arrêté Cat Nat) ou une catastrophe naturelle. L’usure normale de la toiture n’est généralement pas couverte. Déclarez le sinistre dans les 5 jours (2 jours pour catastrophe naturelle).' },
+      { q: 'Mon assurance couvre-t-elle les infiltrations de toiture ?', a: 'L’assurance habitation couvre les dégâts causés par une tempête (arrêté Cat Nat) ou une catastrophe naturelle. L’usure normale de la toiture n’est généralement pas couverte. Déclarez le sinistre dans les 5 jours ouvrés. Pour une catastrophe naturelle, le délai est de 10 jours après publication de l’arrêté ministériel au Journal Officiel (Code des assurances, art. L125-1).' },
       { q: 'Peut-on réparer une infiltration en hiver ?', a: 'Oui, un bâchage d’urgence est possible en toute saison. Les réparations définitives (remplacement de tuiles, réfection de solin) sont également réalisables en hiver, sauf en cas de gel ou de neige sur le toit.' },
     ],
   },
@@ -366,7 +366,7 @@ const problems: Problem[] = [
       'Remplacez les flexibles de raccordement tous les 5 ans',
     ],
     estimatedCost: { min: 150, max: 500 },
-    averageResponseTime: 'Sous 2 heures',
+    averageResponseTime: 'Généralement sous 2 à 6h (selon disponibilité)',
     faq: [
       { q: 'Comment remplir le constat amiable dégât des eaux ?', a: 'Le constat amiable doit être rempli avec le voisin responsable ou touché. Indiquez la date, la cause supposée, la description des dégâts et joignez des photos. Chaque partie envoie sa copie à son assureur sous 5 jours ouvrés.' },
       { q: 'Mon assurance prend-elle en charge le dégât des eaux ?', a: 'La garantie dégât des eaux est incluse dans tous les contrats multirisque habitation. Elle couvre les dommages aux biens mais pas la réparation de la cause (fuite, canalisation). La vétusté est souvent déduite de l’indemnisation.' },
@@ -440,7 +440,7 @@ const problems: Problem[] = [
     averageResponseTime: 'Sous 72 heures (rendez-vous)',
     faq: [
       { q: 'Comment éliminer définitivement la moisissure ?', a: 'Pour éliminer la moisissure durablement, il faut traiter la cause : améliorer la ventilation (VMC), réparer les infiltrations, isoler les ponts thermiques. Le nettoyage seul est temporaire. Un peintre professionnel peut traiter les murs et appliquer un revêtement anti-moisissure après assainissement.' },
-      { q: 'Le vinaigre blanc est-il efficace contre la moisissure ?', a: 'Oui, le vinaigre blanc est efficace et préférable à l’eau de Javel. Il tue 82 % des espèces de moisissures et ne dégage pas de vapeurs toxiques. Vaporisez-le pur, laissez agir 1 heure puis essuyez. L’eau de Javel blanchit les moisissures sans les tuer en profondeur.' },
+      { q: 'Le vinaigre blanc est-il efficace contre la moisissure ?', a: 'Oui, le vinaigre blanc est efficace et préférable à l’eau de Javel. Il agit efficacement contre de nombreuses espèces de moisissures courantes et ne dégage pas de vapeurs toxiques. Vaporisez-le pur, laissez agir 1 heure puis essuyez. L’eau de Javel blanchit les moisissures sans les tuer en profondeur.' },
       { q: 'La moisissure est-elle dangereuse pour la santé ?', a: 'Oui, les spores de moisissure peuvent provoquer des allergies, de l’asthme, des rhinites et des infections pulmonaires. Les moisissures noires (Stachybotrys) sont les plus dangereuses. Consultez un médecin si vous présentez des symptômes respiratoires persistants.' },
       { q: 'Mon propriétaire est-il responsable de la moisissure ?', a: 'Si la moisissure est due à un défaut du logement (mauvaise ventilation, infiltration, isolation défaillante), le propriétaire est tenu de faire les réparations. Si elle résulte d’un défaut d’aération du locataire, la responsabilité peut être partagée.' },
     ],
@@ -470,7 +470,7 @@ const problems: Problem[] = [
       'Entretenez les joints de vos fenêtres pour éviter les vibrations',
     ],
     estimatedCost: { min: 100, max: 350 },
-    averageResponseTime: 'Sous 2 heures',
+    averageResponseTime: 'Généralement sous 2 à 6h (selon disponibilité)',
     faq: [
       { q: 'Combien coûte le remplacement d’une vitre ?', a: 'Le remplacement d’un simple vitrage coûte 100 à 200 \u20ac (fourniture + pose). Un double vitrage standard revient à 200 à 350 \u20ac. Une baie vitrée peut atteindre 500 à 1 500 \u20ac selon les dimensions et le type de vitrage.' },
       { q: 'Le double vitrage cassé peut-il être réparé ?', a: 'Un double vitrage cassé ne se répare pas : il faut remplacer l’ensemble du vitrage isolant (les deux vitres + l’intercalaire). Cependant, si seule une vitre est fêlée et que le joint périphérique est intact, le vitrier peut ne remplacer que la vitre abimée dans certains cas.' },
@@ -537,7 +537,7 @@ const problems: Problem[] = [
       'Faites vérifier le vase d’expansion lors de chaque entretien',
     ],
     estimatedCost: { min: 150, max: 500 },
-    averageResponseTime: 'Sous 4 heures',
+    averageResponseTime: 'Généralement sous 4 à 12h (selon disponibilité)',
     faq: [
       { q: 'Pourquoi ma chaudière fuit-elle ?', a: 'Les causes principales sont : soupape de sécurité défectueuse (pression trop élevée), vase d’expansion percé, joints usés, corps de chauffe fissuré (corrosion) ou raccords desserrés. Seul un chauffagiste agréé peut diagnostiquer et réparer la fuite en toute sécurité.' },
       { q: 'Est-ce dangereux si ma chaudière fuit ?', a: 'Une fuite d’eau de chaudière présente plusieurs risques : dégât des eaux, corrosion des composants, et si la pression descend trop bas, arrêt de la chaudière. Sur une chaudière à gaz, ne tentez aucune réparation vous-même.' },
@@ -604,11 +604,11 @@ const problems: Problem[] = [
       'Remplacez l’anode de protection tous les 5 ans',
     ],
     estimatedCost: { min: 200, max: 800 },
-    averageResponseTime: 'Sous 4 heures',
+    averageResponseTime: 'Généralement sous 4 à 12h (selon disponibilité)',
     faq: [
       { q: 'Mon ballon d’eau chaude ne chauffe plus, que faire ?', a: 'Vérifiez d’abord le disjoncteur dédié et le contacteur jour/nuit (mettez-le en marche forcée). Si le ballon ne chauffe toujours pas, appuyez sur le bouton de réarmement du thermostat de sécurité (sous le capot inférieur). Si le problème persiste, la résistance est probablement entartrée ou le thermostat défectueux.' },
       { q: 'Faut-il réparer ou remplacer le ballon ?', a: 'Si le ballon a moins de 10 ans, la réparation est rentable (remplacement de résistance : 150 à 300 \u20ac, thermostat : 100 à 200 \u20ac). Au-delà de 12 à 15 ans, le remplacement est préférable (600 à 2 000 \u20ac selon capacité et technologie).' },
-      { q: 'Quelle capacité de ballon choisir ?', a: 'Comptez environ 50 litres par personne : 100 L pour un couple, 200 L pour une famille de 4 personnes, 300 L pour 5 à 6 personnes. Un ballon thermodynamique consomme 3 à 4 fois moins d’électricité qu’un cumulus classique.' },
+      { q: 'Quelle capacité de ballon choisir ?', a: 'Comptez environ 50 litres par personne : 100 L pour un couple, 200 L pour une famille de 4 personnes, 300 L pour 5 à 6 personnes. Un ballon thermodynamique consomme 2 à 3 fois moins d’électricité qu’un cumulus classique (source : ADEME).' },
       { q: 'Mon ballon fuit, est-ce réparable ?', a: 'Si la fuite provient du groupe de sécurité, un simple remplacement suffit (80 à 150 \u20ac). Si la cuve elle-même est percée (corrosion), le remplacement du ballon est inévitable. Une fuite de cuve ne se répare pas.' },
     ],
   },
@@ -637,7 +637,7 @@ const problems: Problem[] = [
       'Évitez les blocs WC qui peuvent se décrocher et bloquer la canalisation',
     ],
     estimatedCost: { min: 80, max: 250 },
-    averageResponseTime: 'Sous 1 heure',
+    averageResponseTime: 'Généralement sous 1 à 4h (selon disponibilité)',
     faq: [
       { q: 'Comment déboucher des WC sans plombier ?', a: 'Utilisez une ventouse spéciale WC (à bords renforcés) en effectuant des mouvements de pompage vigoureux. Si cela ne fonctionne pas, essayez un furet manuel. Évitez les produits chimiques agressifs qui peuvent endommager les canalisations en PVC.' },
       { q: 'Combien coûte le débouchage de WC par un plombier ?', a: 'Le débouchage de WC coûte entre 80 et 250 \u20ac selon la difficulté. Un débouchage à la ventouse ou au furet coûte 80 à 150 \u20ac. Si le bouchon est profond dans la canalisation, un hydrocurage peut être nécessaire (200 à 400 \u20ac).' },
@@ -673,7 +673,7 @@ const problems: Problem[] = [
     faq: [
       { q: 'Comment réparer un robinet qui goutte ?', a: 'Pour un robinet mélangeur : coupez l’eau, démontez la tête du robinet, remplacez le joint clapet (2 à 5 \u20ac). Pour un mitigeur : remplacez la cartouche céramique (15 à 40 \u20ac). Si le siège est abîmé, il faudra le rectifier ou remplacer le robinet entier.' },
       { q: 'Combien coûte la réparation d’un robinet ?', a: 'Un plombier facture 60 à 120 \u20ac pour un changement de joint ou de cartouche (déplacement + main-d’\u0153uvre + pièce). Le remplacement complet d’un robinet mitigeur coûte 80 à 200 \u20ac (fourniture + pose).' },
-      { q: 'Un robinet qui fuit consomme-t-il beaucoup d’eau ?', a: 'Oui, un robinet qui goutte à raison d’une goutte par seconde gaspille environ 12 litres par jour, soit 4 380 litres par an. Cela représente 15 à 20 \u20ac sur la facture d’eau annuelle. Réparer une fuite est donc rapidement rentable.' },
+      { q: 'Un robinet qui fuit consomme-t-il beaucoup d’eau ?', a: 'Oui, un robinet qui goutte à raison d’une goutte par seconde gaspille environ 3 à 5 litres par jour, soit 1 100 à 1 800 litres par an. Cela représente 5 à 8 € sur la facture d’eau annuelle. Réparer une fuite est donc rapidement rentable.' },
       { q: 'Puis-je remplacer un robinet moi-même ?', a: 'Oui, si vous avez quelques notions de bricolage. Coupez l’eau, démontez l’ancien robinet (clé plate ou clé à molette), nettoyez le support, posez le nouveau avec les flexibles fournis. Comptez 30 minutes à 1 heure pour un remplacement standard.' },
     ],
   },
@@ -837,7 +837,7 @@ const problems: Problem[] = [
     faq: [
       { q: 'Pourquoi mon alarme se déclenche-t-elle sans raison ?', a: 'Les déclenchements intempestifs sont généralement causés par : un détecteur de mouvement sensible aux animaux ou courants d’air, une pile faible, un détecteur encrassé (poussière, insectes), ou une interférence radio. Le remplacement ou le recalibrage du détecteur règle généralement le problème.' },
       { q: 'Combien coûte la réparation d’un système d’alarme ?', a: 'Le diagnostic + réparation coûte 100 à 300 \u20ac. Le remplacement d’un détecteur coûte 50 à 100 \u20ac. La révision complète du système coûte 150 à 250 \u20ac. Un contrat de maintenance annuel (100 à 200 \u20ac) évite les pannes.' },
-      { q: 'Mon alarme dérange les voisins, quels sont les risques ?', a: 'Une sirène extérieure ne doit pas sonner plus de 3 minutes (décret). Les nuisances sonores répétées peuvent entraîner une amende. Faites réparer le système rapidement et prévenez vos voisins.' },
+      { q: 'Mon alarme dérange les voisins, quels sont les risques ?', a: 'Une sirène extérieure ne doit pas sonner plus de 3 minutes selon les recommandations professionnelles (standard APSAD R81) — certaines communes imposent également des limitations via arrêté municipal. Les nuisances sonores répétées peuvent entraîner une amende. Faites réparer le système rapidement et prévenez vos voisins.' },
       { q: 'Faut-il remplacer mon ancien système d’alarme ?', a: 'Les systèmes de plus de 10 ans utilisent des technologies obsolètes (fréquences brouillables, pas de notification smartphone). Un système connecté moderne (500 à 1 500 \u20ac installé) offre une meilleure protection et élimine la plupart des faux déclenchements.' },
     ],
   },
@@ -868,7 +868,7 @@ const problems: Problem[] = [
       'Prévoyez une pompe de relevage si votre logement est en zone inondable',
     ],
     estimatedCost: { min: 200, max: 1000 },
-    averageResponseTime: 'Sous 1 heure en urgence',
+    averageResponseTime: 'Généralement sous 1 à 4h (selon disponibilité et localisation)',
     faq: [
       { q: 'Que faire en premier en cas d’inondation ?', a: 'La priorité est la sécurité : coupez l’électricité (si possible sans marcher dans l’eau), coupez le gaz, mettez-vous en sécurité en hauteur. Si le niveau monte rapidement, appelez les pompiers (18) ou le 112. Ne tentez jamais de traverser une zone inondée à pied ou en voiture.' },
       { q: 'Mon assurance couvre-t-elle une inondation ?', a: 'Les inondations d’origine naturelle sont couvertes par la garantie catastrophe naturelle (arrêté ministériel nécessaire). Les inondations accidentelles (rupture de canalisation) sont couvertes par la garantie dégât des eaux. Déclarez le sinistre sous 5 jours (10 jours pour Cat Nat).' },
@@ -904,7 +904,7 @@ const problems: Problem[] = [
       'Maintenez une température minimale de 7 \u00b0C dans les pièces non chauffées',
     ],
     estimatedCost: { min: 150, max: 500 },
-    averageResponseTime: 'Sous 2 heures',
+    averageResponseTime: 'Généralement sous 2 à 6h (selon disponibilité)',
     seasonality: 'hiver',
     faq: [
       { q: 'Comment dégeler un tuyau gelé ?', a: 'Ouvrez le robinet concerné, puis réchauffez progressivement le tuyau avec un sèche-cheveux, une serviette chaude ou un câble chauffant. Commencez par le côté du robinet et progressez vers le point gelé. N’utilisez jamais de flamme nue (chalumeau) qui pourrait faire éclater le tuyau.' },

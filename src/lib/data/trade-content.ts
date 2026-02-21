@@ -63,7 +63,7 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'Que faire en cas de fuite d\'eau la nuit ?',
-        a: 'Coupez immédiatement l\'arrivée d\'eau au compteur général, généralement situé dans la cave ou à l\'extérieur du logement. Placez des récipients sous la fuite et épongez l\'eau stagnante pour limiter les dégâts. Contactez ensuite un plombier d\'urgence disponible 24h/24 ; les majorations nocturnes varient de 50 à 100 % du tarif de base.',
+        a: 'Coupez immédiatement l\'arrivée d\'eau au compteur général, généralement situé dans la cave ou à l\'extérieur du logement. Placez des récipients sous la fuite et épongez l\'eau stagnante pour limiter les dégâts. Contactez ensuite un plombier d\'urgence ; les majorations nocturnes et de week-end varient de 50 à 100 % du tarif de base.',
       },
       {
         q: 'Comment déboucher un évier naturellement ?',
@@ -71,7 +71,7 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'Quel est le coût d\'un remplacement de chauffe-eau ?',
-        a: 'Le remplacement d\'un chauffe-eau électrique de 200 litres coûte entre 800 et 1 500 € (fourniture + pose), tandis qu\'un chauffe-eau thermodynamique revient à 2 500 à 4 500 €. Le prix dépend du type (électrique, gaz, thermodynamique, solaire), de la capacité et de l\'accessibilité de l\'installation. Un chauffe-eau thermodynamique permet d\'économiser jusqu\'à 70 % sur la facture d\'eau chaude.',
+        a: 'Le remplacement d\'un chauffe-eau électrique de 200 litres coûte entre 800 et 1 500 € (fourniture + pose), tandis qu\'un chauffe-eau thermodynamique revient à 2 500 à 4 500 €. Le prix dépend du type (électrique, gaz, thermodynamique, solaire), de la capacité et de l\'accessibilité de l\'installation. Un chauffe-eau thermodynamique permet d\'économiser 40 à 50 % sur la facture d\'eau chaude par rapport à un chauffe-eau électrique classique (source : ADEME).',
       },
       {
         q: 'Quelle est la durée de vie d\'une installation de plomberie ?',
@@ -79,7 +79,7 @@ export const tradeContent: Record<string, TradeContent> = {
       },
     ],
     emergencyInfo:
-      'En cas de fuite d\'eau importante ou de canalisation bouchée, un plombier d\'urgence peut intervenir 24h/24 et 7j/7. Coupez immédiatement l\'arrivée d\'eau au compteur général et contactez un professionnel. Les tarifs d\'urgence sont majorés de 50 à 100 % par rapport à une intervention en journée.',
+      'En cas de fuite d\'eau importante ou de canalisation bouchée, coupez immédiatement l\'arrivée d\'eau au compteur général et contactez un plombier d\'urgence. Certains professionnels proposent des interventions en soirée ou le week-end. Les tarifs d\'urgence sont majorés de 50 à 100 % par rapport à une intervention en journée.',
     certifications: [
       'Qualibat (qualification 5111/5112 plomberie sanitaire)',
       'RGE (Reconnu Garant de l\'Environnement)',
@@ -88,7 +88,7 @@ export const tradeContent: Record<string, TradeContent> = {
       'QualiPAC (pompes à chaleur)',
       'QualiSol (chauffe-eau solaire)',
     ],
-    averageResponseTime: 'Urgence (fuite, bouchon) : 1 à 4h ; travaux planifiés sous 1 à 2 semaines',
+    averageResponseTime: 'Urgence (fuite, bouchon) : délai variable selon disponibilité ; travaux planifiés sous 1 à 2 semaines',
   },
 
   electricien: {
@@ -149,7 +149,7 @@ export const tradeContent: Record<string, TradeContent> = {
       },
     ],
     emergencyInfo:
-      'En cas de panne électrique, de fils dénudés ou d\'odeur de brûlé, coupez immédiatement le disjoncteur général et appelez un électricien d\'urgence. Ne tentez jamais de réparer vous-même un problème électrique. Un électricien d\'astreinte peut intervenir sous 1 à 3 heures, avec une majoration de 50 à 100 % en dehors des heures ouvrées.',
+      'En cas de panne électrique, de fils dénudés ou d\'odeur de brûlé, coupez immédiatement le disjoncteur général et appelez un électricien d\'urgence. Ne tentez jamais de réparer vous-même un problème électrique. Un électricien d\'astreinte peut intervenir selon sa disponibilité, avec une majoration de 50 à 100 % en dehors des heures ouvrées.',
     certifications: [
       'Qualifelec (qualification E1 à E3 selon le niveau de compétence)',
       'RGE (Reconnu Garant de l\'Environnement)',
@@ -158,7 +158,7 @@ export const tradeContent: Record<string, TradeContent> = {
       'Qualibat (qualification 5411/5412 installations électriques)',
       'Consuel (attestation de conformité électrique)',
     ],
-    averageResponseTime: 'Urgence (panne, court-circuit) : 1 à 3h ; travaux planifiés sous 1 à 2 semaines',
+    averageResponseTime: 'Urgence (panne, court-circuit) : délai variable selon disponibilité ; travaux planifiés sous 1 à 2 semaines',
   },
 
   serrurier: {
@@ -219,14 +219,14 @@ export const tradeContent: Record<string, TradeContent> = {
       },
     ],
     emergencyInfo:
-      'En cas de porte claquée ou de serrure cassée, un serrurier d\'urgence intervient généralement sous 30 minutes à 1 heure en zone urbaine. Attention aux majorations : +50 % en soirée (après 19h), +75 à 100 % la nuit (après 22h), le dimanche et les jours fériés. Exigez toujours un devis écrit avant le début de l\'intervention.',
+      'En cas de porte claquée ou de serrure cassée, un serrurier d\'urgence intervient dans les meilleurs délais (délai variable selon disponibilité et localisation). Attention aux majorations : +50 % en soirée (après 19h), +75 à 100 % la nuit (après 22h), le dimanche et les jours fériés. Exigez toujours un devis écrit avant le début de l\'intervention.',
     certifications: [
       'Certification A2P (1 à 3 étoiles — résistance à l\'effraction, délivrée par le CNPP)',
       'Qualibat (qualification 4421 serrurerie)',
       'CQP Serrurier-dépanneur (Certificat de Qualification Professionnelle)',
       'Certification FMSD (Serrurier dépanneur-installateur, inscrite au RNCP)',
     ],
-    averageResponseTime: 'Urgence (porte claquée, effraction) : 30 min à 1h en zone urbaine',
+    averageResponseTime: 'Urgence (porte claquée, effraction) : délai variable selon disponibilité et localisation',
   },
 
   chauffagiste: {
@@ -247,8 +247,8 @@ export const tradeContent: Record<string, TradeContent> = {
     ],
     tips: [
       'L\'entretien annuel de votre chaudière est obligatoire par la loi (décret du 9 juin 2009). Prévoyez-le à l\'automne, avant la saison de chauffe, pour éviter les pannes en plein hiver.',
-      'Privilégiez un chauffagiste certifié RGE pour bénéficier des aides financières : MaPrimeRenov\' (jusqu\'à 5 000 € pour une pompe à chaleur), CEE, éco-prêt à taux zéro et TVA à 5,5 %.',
-      'Comparez les performances énergétiques (COP pour les pompes à chaleur, rendement pour les chaudières) et pas seulement le prix d\'achat. Une chaudière à condensation consomme 15 à 30 % de moins qu\'un modèle classique.',
+      'Privilégiez un chauffagiste certifié RGE pour bénéficier des aides financières : MaPrimeRenov\' (jusqu\'à 5 000 € pour une pompe à chaleur), CEE, éco-prêt à taux zéro et TVA à 5,5 %. Attention : depuis le 1er mars 2025, les chaudières gaz et fioul sont soumises à la TVA à 20 % (fin du taux réduit). La TVA réduite (5,5 % ou 10 %) s\'applique uniquement aux équipements non fossiles (PAC, chaudière biomasse, etc.).',
+      'Comparez les performances énergétiques (COP pour les pompes à chaleur, rendement pour les chaudières) et pas seulement le prix d\'achat. Une chaudière à condensation consomme 15 à 30 % de moins qu\'une ancienne chaudière non-condensation (plus de 15 ans).',
       'Demandez un bilan thermique complet avant l\'installation d\'un nouveau système de chauffage. Un bon chauffagiste dimensionne l\'installation en fonction de la surface, de l\'isolation et de la zone climatique.',
       'Souscrivez un contrat d\'entretien annuel : il coûte entre 120 et 250 € par an et inclut généralement la visite obligatoire, le dépannage prioritaire et les pièces d\'usure.',
     ],
@@ -263,11 +263,11 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'Les aides de l\'État pour le chauffage sont-elles cumulables ?',
-        a: 'Oui, sous conditions de revenus et avec un artisan RGE. Vous pouvez cumuler MaPrimeRenov\', les CEE (Certificats d\'Économies d\'Énergie), l\'éco-prêt à taux zéro (jusqu\'à 50 000 €) et la TVA réduite à 5,5 %. Le montant total peut couvrir 50 à 90 % du coût des travaux pour les ménages modestes.',
+        a: 'Oui, sous conditions de revenus et avec un artisan RGE. Vous pouvez cumuler MaPrimeRenov\', les CEE (Certificats d\'Économies d\'Énergie), l\'éco-prêt à taux zéro (jusqu\'à 50 000 €) et la TVA réduite à 5,5 %. Le montant total peut couvrir 50 à 90 % du coût des travaux pour les ménages modestes. Attention : depuis le 1er mars 2025, les chaudières gaz et fioul sont soumises à la TVA à 20 % (fin du taux réduit). La TVA réduite (5,5 % ou 10 %) s\'applique uniquement aux équipements non fossiles (PAC, chaudière biomasse, etc.).',
       },
       {
         q: 'Ma chaudière est en panne en plein hiver, que faire ?',
-        a: 'Vérifiez d\'abord les éléments simples : thermostat, pression du circuit (entre 1 et 1,5 bar), disjoncteur dédié. Si le problème persiste, appelez un chauffagiste en urgence. La plupart interviennent sous 4 à 12 heures. Si vous avez un contrat d\'entretien, le dépannage est souvent inclus ou prioritaire.',
+        a: 'Vérifiez d\'abord les éléments simples : thermostat, pression du circuit (entre 1 et 1,5 bar), disjoncteur dédié. Si le problème persiste, appelez un chauffagiste en urgence. Les délais varient selon les disponibilités et votre localisation. Si vous avez un contrat d\'entretien, le dépannage est souvent inclus ou prioritaire.',
       },
       {
         q: 'L\'entretien annuel de la chaudière est-il vraiment obligatoire ?',
@@ -287,7 +287,7 @@ export const tradeContent: Record<string, TradeContent> = {
       },
     ],
     emergencyInfo:
-      'En cas de panne de chauffage en hiver ou de fuite de gaz, un chauffagiste d\'urgence peut intervenir sous 4 à 12 heures. En cas d\'odeur de gaz, ouvrez les fenêtres, ne touchez pas aux interrupteurs électriques, quittez le logement et appelez immédiatement le numéro d\'urgence GRDF : 0 800 47 33 33 (gratuit, 24h/24).',
+      'En cas de panne de chauffage en hiver, contactez un chauffagiste d\'urgence : les délais d\'intervention varient selon les disponibilités et la localisation. En cas d\'odeur de gaz, ouvrez les fenêtres, ne touchez pas aux interrupteurs électriques, quittez le logement et appelez immédiatement le numéro d\'urgence GRDF : 0 800 47 33 33 (gratuit, 24h/24).',
     certifications: [
       'RGE (Reconnu Garant de l\'Environnement)',
       'Qualibat (qualification 5211/5212 chauffage)',
@@ -298,7 +298,7 @@ export const tradeContent: Record<string, TradeContent> = {
       'Qualifioul (installations fioul)',
       'QualiSol (chauffe-eau solaire)',
     ],
-    averageResponseTime: 'Urgence : dépannage en 4 à 12h ; entretien sur rendez-vous sous 1 à 2 semaines',
+    averageResponseTime: 'Urgence : délai variable selon disponibilité ; entretien sur rendez-vous sous 1 à 2 semaines',
   },
 
   'peintre-en-batiment': {
@@ -423,7 +423,7 @@ export const tradeContent: Record<string, TradeContent> = {
       },
       {
         q: 'Quelles aides existent pour le remplacement de fenêtres ?',
-        a: 'MaPrimeRenov\' finance jusqu\'à 100 € par fenêtre (simple vers double vitrage) pour les ménages modestes. Les CEE (Certificats d\'Économies d\'Énergie) ajoutent 30 à 80 € par fenêtre. L\'éco-prêt à taux zéro permet de financer jusqu\'à 7 000 € de remplacement de fenêtres sans intérêts. Le menuisier doit être certifié RGE pour que vous puissiez bénéficier de ces aides.',
+        a: 'MaPrimeRenov\' finance jusqu\'à 100 € par fenêtre (simple vers double vitrage) pour les ménages modestes. Les CEE (Certificats d\'Économies d\'Énergie) ajoutent 40 à 100 € par fenêtre (selon profil de revenus). L\'éco-prêt à taux zéro permet de financer jusqu\'à 7 000 € de remplacement de fenêtres sans intérêts. Le menuisier doit être certifié RGE pour que vous puissiez bénéficier de ces aides.',
       },
     ],
     emergencyInfo:
@@ -563,14 +563,14 @@ export const tradeContent: Record<string, TradeContent> = {
       },
     ],
     emergencyInfo:
-      'Intervention d\'urgence pour dégâts de tempête, tuiles arrachées ou fuite de toiture. Un couvreur d\'urgence peut effectuer un bâchage provisoire sous 2 à 4 heures pour protéger votre habitation. Majorations : +80 à 120 % la nuit et le week-end.',
+      'Intervention d\'urgence pour dégâts de tempête, tuiles arrachées ou fuite de toiture. Un couvreur d\'urgence peut effectuer un bâchage provisoire pour protéger votre habitation, selon disponibilité. Majorations : +80 à 120 % la nuit et le week-end.',
     certifications: [
       'Qualibat (qualification 3111/3112 couverture en tuiles)',
       'RGE (obligatoire pour l\'isolation de toiture — aides MaPrimeRénov\')',
       'Compagnons du Devoir (formation d\'excellence)',
       'QualiPV (si pose de panneaux solaires en toiture)',
     ],
-    averageResponseTime: 'Urgence (bâchage, fuite) : 4 à 24h ; travaux de réfection sous 1 à 4 semaines',
+    averageResponseTime: 'Urgence (bâchage, fuite) : délai variable selon disponibilité ; travaux de réfection sous 1 à 4 semaines',
   },
 
   macon: {
@@ -768,13 +768,13 @@ export const tradeContent: Record<string, TradeContent> = {
       },
     ],
     emergencyInfo:
-      'En cas de vitre cassée (effraction, tempête, accident), un vitrier d\'urgence peut intervenir sous 1 à 3 heures pour sécuriser l\'ouverture avec un panneau provisoire. Le remplacement définitif se fait généralement sous 24 à 48h. Majorations : +50 à 100 % la nuit et le week-end.',
+      'En cas de vitre cassée (effraction, tempête, accident), un vitrier d\'urgence peut intervenir pour sécuriser l\'ouverture avec un panneau provisoire, selon disponibilité. Le remplacement définitif se fait généralement sous 24 à 48h. Majorations : +50 à 100 % la nuit et le week-end.',
     certifications: [
       'Qualibat (qualification 4311/4312 vitrerie-miroiterie)',
       'Certification Cekal (qualité des vitrages isolants, feuilletés et trempés)',
       'RGE (pour remplacement de vitrages isolants ouvrant droit aux aides)',
     ],
-    averageResponseTime: 'Urgence (bris de vitre) : 1 à 3h ; remplacement définitif sous 24 à 48h',
+    averageResponseTime: 'Urgence (bris de vitre) : délai variable selon disponibilité ; remplacement définitif sous 24 à 48h',
   },
 
   climaticien: {
@@ -835,7 +835,7 @@ export const tradeContent: Record<string, TradeContent> = {
       },
     ],
     emergencyInfo:
-      'En cas de panne de climatisation pendant une canicule, un climaticien d\'urgence peut intervenir sous 4 à 12 heures. Vérifiez d\'abord les réglages, le disjoncteur dédié et les filtres (encrassés = perte de performance). En attendant, fermez les volets, aérez la nuit et utilisez un ventilateur.',
+      'En cas de panne de climatisation pendant une canicule, contactez un climaticien d\'urgence : les délais varient selon les disponibilités. Vérifiez d\'abord les réglages, le disjoncteur dédié et les filtres (encrassés = perte de performance). En attendant, fermez les volets, aérez la nuit et utilisez un ventilateur.',
     certifications: [
       'Attestation de capacité fluides frigorigènes (obligatoire — catégorie I à IV)',
       'RGE (Reconnu Garant de l\'Environnement)',
@@ -843,7 +843,7 @@ export const tradeContent: Record<string, TradeContent> = {
       'Qualifroid / Qualiclimafroid (qualification froid et climatisation, accrédité COFRAC)',
       'Qualibat (qualification 5311/5312 génie climatique)',
     ],
-    averageResponseTime: 'Urgence canicule : dépannage en 4 à 12h ; installation sur devis sous 2 à 4 semaines',
+    averageResponseTime: 'Urgence canicule : délai variable selon disponibilité ; installation sur devis sous 2 à 4 semaines',
   },
 
   cuisiniste: {
@@ -1143,7 +1143,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Peut-on poser des gouttières soi-même ?', a: 'La pose de gouttières PVC avec collage est accessible aux bricoleurs confirmés. En revanche, la zinguerie (zinc soudé) requiert un savoir-faire professionnel : soudure à l\'étain, façonnage sur mesure et respect des pentes d\'écoulement (5 mm/ml minimum). Un défaut de pose entraîne des infiltrations et engage votre responsabilité en cas de sinistre.' },
     ],
     emergencyInfo:
-      'Intervention d\'urgence pour débordement de gouttière, descente d\'eau arrachée ou fuite au niveau des raccords de toiture. Un zingueur peut intervenir sous 4 à 8 heures pour une réparation provisoire. Majorations : +60 à 100 % la nuit et le week-end.',
+      'En cas de débordement de gouttière, descente d\'eau arrachée ou fuite au niveau des raccords de toiture, contactez un zingueur d\'urgence pour une réparation provisoire. Disponibilité et délais variables. Majorations : +60 à 100 % la nuit et le week-end.',
     certifications: ['Qualibat (qualification 3121/3122 couverture-zinguerie)', 'Compagnons du Devoir (formation d\'excellence)', 'Certification VMZINC Installateur (partenaire fabricant)'],
     averageResponseTime: 'Devis sous 48h, intervention sous 1 à 2 semaines',
   },
@@ -1174,7 +1174,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Peut-on végétaliser un toit-terrasse étanchéifié ?', a: 'Oui, à condition que la structure porte le surpoids (80 à 150 kg/m² selon le type de végétalisation) et que l\'étanchéité soit anti-racines (membrane bitume avec voile de verre ou EPDM). La végétalisation extensive (sedum) est la plus légère et la moins exigeante en entretien. Elle prolonge la durée de vie de l\'étanchéité en la protégeant des UV.' },
     ],
     emergencyInfo:
-      'Intervention d\'urgence pour infiltration d\'eau majeure par la toiture-terrasse ou le sous-sol. Un étanchéiste peut réaliser une réparation provisoire sous 4 à 8 heures pour stopper les dégâts. Majorations : +60 à 100 % en dehors des heures ouvrées.',
+      'En cas d\'infiltration d\'eau majeure par la toiture-terrasse ou le sous-sol, un étanchéiste peut réaliser une réparation provisoire d\'urgence pour stopper les dégâts. Disponibilité et délais variables. Majorations : +60 à 100 % en dehors des heures ouvrées.',
     certifications: ['Qualibat (qualification 1311/1312 étanchéité)', 'Certification ASQUAL (géomembranes et étanchéité)', 'RGE (obligatoire si isolation thermique associée — toiture chaude)'],
     averageResponseTime: 'Devis sous 1 semaine, intervention sous 2 à 3 semaines',
   },
@@ -1360,7 +1360,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Comment choisir un miroir pour une salle de bain ?', a: 'Optez pour un miroir avec traitement anti-buée intégré (film chauffant au dos) et bords polis pour résister à l\'humidité. Évitez les miroirs bas de gamme dont le tain (couche réfléchissante) se dégrade rapidement en milieu humide. Un miroir sur mesure avec éclairage LED intégré coûte 200 à 800 € selon les dimensions et les options.' },
     ],
     emergencyInfo:
-      'Intervention d\'urgence pour vitrine de commerce cassée, miroir brisé ou paroi de douche éclatée. Un miroitier d\'urgence peut sécuriser les lieux et poser un vitrage provisoire sous 1 à 3 heures. Majorations : +100 à 150 % la nuit et le week-end.',
+      'Intervention d\'urgence pour vitrine de commerce cassée, miroir brisé ou paroi de douche éclatée. Un miroitier d\'urgence peut sécuriser les lieux et poser un vitrage provisoire selon disponibilité. Majorations : +100 à 150 % la nuit et le week-end.',
     certifications: ['Qualibat (qualification 4311/4312 vitrerie-miroiterie)', 'Certification Cekal (qualité des vitrages isolants, feuilletés et trempés)', 'Certification NF EN 12150 (verres de sécurité trempés)'],
     averageResponseTime: 'Devis sous 48h, fabrication 1 à 3 semaines',
   },
@@ -1391,7 +1391,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Pergola bioclimatique ou store banne : que choisir ?', a: 'Le store banne (800 à 3 000 €) est idéal pour un ombrage ponctuel et se rétracte entièrement. La pergola bioclimatique (5 000 à 15 000 €) offre une protection permanente avec des lames orientables qui régulent la luminosité et la ventilation. La pergola ajoute de la valeur au bien immobilier et crée un véritable espace de vie extérieur utilisable même par temps de pluie légère.' },
     ],
     emergencyInfo:
-      'Intervention d\'urgence pour volet roulant bloqué empêchant la fermeture ou l\'ouverture d\'une fenêtre, ou store banne cassé menaçant de tomber. Un storiste peut intervenir sous 2 à 4 heures pour une réparation ou un déblocage. Majorations : +60 à 100 % en dehors des heures ouvrées.',
+      'Intervention d\'urgence pour volet roulant bloqué empêchant la fermeture ou l\'ouverture d\'une fenêtre, ou store banne cassé menaçant de tomber. Un storiste peut intervenir pour une réparation ou un déblocage selon disponibilité. Majorations : +60 à 100 % en dehors des heures ouvrées.',
     certifications: ['Qualibat (qualification 3511/3512 stores et fermetures)', 'RGE (obligatoire pour volets isolants ouvrant droit aux aides)', 'Expert Somfy (partenaire installateur certifié par le fabricant)'],
     averageResponseTime: 'Devis sous 48h, intervention sous 1 à 2 semaines',
   },
@@ -1515,7 +1515,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'La domotique est-elle compatible avec les assistants vocaux ?', a: 'La plupart des systèmes domotiques sont compatibles avec Google Home, Amazon Alexa et Apple HomeKit. Le contrôle vocal permet de piloter l\'éclairage, le chauffage, les volets et les scénarios par la voix. Pour une compatibilité maximale, le nouveau standard Matter (soutenu par Google, Apple, Amazon et Samsung) unifie les protocoles et garantit l\'interopérabilité entre marques.' },
     ],
     emergencyInfo:
-      'Intervention d\'urgence pour panne de serrure connectée vous empêchant d\'accéder à votre domicile, ou défaillance du système d\'alarme domotique. Un domoticien peut intervenir sous 2 à 4 heures pour un diagnostic et une remise en service. Majorations : +80 à 120 % la nuit et le week-end.',
+      'Intervention d\'urgence pour panne de serrure connectée vous empêchant d\'accéder à votre domicile, ou défaillance du système d\'alarme domotique. Un domoticien peut intervenir pour un diagnostic et une remise en service selon disponibilité. Majorations : +80 à 120 % la nuit et le week-end.',
     certifications: ['Certification KNX Partner (standard international de la domotique filaire)', 'Certification Crestron/Control4 (systèmes haut de gamme)', 'Habilitation électrique (obligatoire)', 'Qualifelec (mention courants faibles et domotique)'],
     averageResponseTime: 'Devis sous 1 semaine, installation 1 à 4 semaines',
   },
@@ -1569,7 +1569,7 @@ export const tradeContent: Record<string, TradeContent> = {
       'Pensez au monitoring en temps réel via une application : un dysfonctionnement non détecté peut représenter plusieurs centaines d\'euros de perte de production sur un an.',
     ],
     faq: [
-      { q: 'Est-ce rentable d\'installer des panneaux solaires ?', a: 'Oui, avec un prix de l\'électricité en hausse constante. Une installation de 3 kWc produit environ 3 500 kWh/an dans le sud de la France, soit 500 à 700 € d\'économie annuelle. Avec la prime à l\'autoconsommation (1 140 € pour 3 kWc) et la revente du surplus à 0,13 €/kWh, le retour sur investissement se fait en 8 à 12 ans pour un équipement qui dure 30 ans+.' },
+      { q: 'Est-ce rentable d\'installer des panneaux solaires ?', a: 'Oui, avec un prix de l\'électricité en hausse constante. Une installation de 3 kWc produit environ 3 500 kWh/an dans le sud de la France, soit 500 à 700 € d\'économie annuelle. Avec la prime à l\'autoconsommation (1 140 € pour 3 kWc) et la revente du surplus au tarif CRE en vigueur (révisé trimestriellement — vérifiez sur edf-oa.fr), le retour sur investissement se fait en 8 à 12 ans pour un équipement qui dure 30 ans+.' },
       { q: 'Quelle est la durée de vie des panneaux solaires ?', a: 'Les panneaux photovoltaïques ont une durée de vie de 30 à 40 ans. La garantie constructeur couvre généralement 25 ans sur la production (80 % du rendement initial garanti). L\'onduleur, en revanche, doit être remplacé tous les 10 à 15 ans (coût : 1 000 à 2 000 €).' },
       { q: 'Peut-on installer des panneaux solaires sur un toit plat ou orienté nord ?', a: 'Un toit plat convient très bien grâce à des supports inclinés à 30° orientés plein sud. En revanche, une orientation nord réduit la production de 40 à 50 %, ce qui rend le projet rarement rentable. Les orientations est et ouest restent viables avec une perte de 15 à 20 % seulement.' },
       { q: 'Faut-il une autorisation pour poser des panneaux solaires ?', a: 'Oui, une déclaration préalable de travaux en mairie est obligatoire dans tous les cas. En zone protégée (ABF, monument historique), l\'architecte des Bâtiments de France doit donner son accord, ce qui peut rallonger le délai de 2 à 6 mois. En copropriété, un vote en assemblée générale est requis.' },
@@ -1854,7 +1854,7 @@ export const tradeContent: Record<string, TradeContent> = {
       { q: 'Quelles sont les normes de sécurité pour un ascenseur ?', a: 'Les ascenseurs doivent respecter la directive européenne 2014/33/UE et la norme NF EN 81-20. Les travaux de modernisation obligatoires (loi SAE de 2003) incluent : porte palière verrouillée, dispositif anti-vandalisme, système de télécommunication en cabine, précision d\'arrêt et d\'horizontalité, et dispositif de protection contre la vitesse excessive.' },
     ],
     emergencyInfo:
-      'Intervention d\'urgence pour personne bloquée dans un ascenseur ou panne immobilisant la cabine. Un ascensoriste de garde peut intervenir sous 1 à 3 heures 24h/24 et 7j/7. Majorations : +100 à 150 % la nuit, le week-end et les jours fériés. En cas de personne bloquée, appelez également les pompiers (18).',
+      'En cas de personne bloquée dans un ascenseur ou de panne immobilisant la cabine, les sociétés d\'ascenseurs ont l\'obligation réglementaire (décret n° 2004-964) de disposer d\'un service de garde joignable à tout moment. En cas de personne bloquée, appelez également les pompiers (18). Majorations : +100 à 150 % la nuit, le week-end et les jours fériés.',
     certifications: ['Conformité NF EN 81-20/50 (norme européenne de sécurité des ascenseurs)', 'Habilitation électrique HBT (obligatoire)', 'Certification constructeur agréé (Otis, Schindler, Kone, ThyssenKrupp)', 'Contrôle technique quinquennal obligatoire (organisme agréé)'],
     averageResponseTime: 'Diagnostic sous 1 semaine, installation 4 à 12 semaines',
   },
@@ -1939,7 +1939,7 @@ export const tradeContent: Record<string, TradeContent> = {
       'Après un traitement contre les cafards, ne nettoyez pas les zones traitées pendant au moins 15 jours : le produit insecticide continue d\'agir par contact sur les insectes survivants.',
       'Pour prévenir le retour des punaises de lit après traitement, placez des housses anti-punaises sur les matelas et sommiers et inspectez régulièrement les coutures et les recoins du lit.',
     ],
-    emergencyInfo: 'Pour un nid de guêpes ou frelons dangereux (proximité de passage fréquenté), un désinsectiseur peut intervenir en urgence sous 24h. Coût : 100 à 250 €.',
+    emergencyInfo: 'Pour un nid de guêpes ou frelons dangereux (proximité de passage fréquenté), un désinsectiseur peut intervenir en urgence. Délai variable selon disponibilité. Coût : 100 à 250 €.',
     faq: [
       { q: 'Les punaises de lit sont-elles un signe de saleté ?', a: 'Non, les punaises de lit ne sont pas liées à l\'hygiène. Elles se transportent via les bagages, les vêtements et les meubles d\'occasion. Même les hôtels 5 étoiles peuvent être touchés. Le traitement professionnel (thermique ou chimique) est la seule solution efficace.' },
       { q: 'Traitement thermique ou chimique contre les punaises de lit ?', a: 'Le traitement thermique (vapeur sèche à 180°C ou canon à chaleur) tue les punaises et leurs œufs en une seule intervention, sans produit chimique. Il coûte 30 à 50 % plus cher que le traitement chimique mais est plus rapide et sans résidu. Le traitement chimique (insecticide professionnel) est efficace mais nécessite 2 à 3 passages car les œufs résistent au premier traitement.' },

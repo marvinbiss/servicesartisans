@@ -183,7 +183,7 @@ export const projetsArticles: Record<string, {
       "## 1. Évaluer le potentiel solaire de votre toiture",
       "L\'orientation idéale est plein sud, avec une inclinaison de 30 à 35°. Une orientation sud-est ou sud-ouest reste très performante (perte de 5 à 10 %). L\'ombrage (arbres, bâtiments voisins, cheminée) réduit significativement la production. Utilisez un simulateur en ligne ou demandez une étude d\'ensoleillement à un installateur certifié.",
       "## 2. Choisir entre autoconsommation et revente totale",
-      "L\'autoconsommation avec vente du surplus est le modèle le plus courant : vous consommez directement l\'électricité produite et revendez l\'excédent à EDF OA à un tarif garanti pendant 20 ans (environ 0,13 euro/kWh en 2026 pour une installation inférieure ou égale à 9 kWc). La revente totale reste possible mais moins intéressante qu\'il y a dix ans.",
+      "L\'autoconsommation avec vente du surplus est le modèle le plus courant : vous consommez directement l\'électricité produite et revendez l\'excédent à EDF OA à un tarif garanti pendant 20 ans (tarif révisé trimestriellement par la CRE — vérifiez le tarif en vigueur sur edf-oa.fr avant votre projet, pour une installation ≤ 9 kWc). La revente totale reste possible mais moins intéressante qu\'il y a dix ans.",
       "## 3. Dimensionner l\'installation",
       "Pour une maison de 100 m², une installation de 3 kWc (8 panneaux environ) couvre 30 à 50 % de la consommation électrique. Une installation de 6 kWc (16 panneaux) peut couvrir 50 à 70 %. Le dimensionnement optimal dépend de votre consommation, de votre profil horaire et de la surface disponible en toiture.",
       "## 4. Choisir la technologie",
@@ -211,7 +211,7 @@ export const projetsArticles: Record<string, {
     updatedDate: '2026-02-12',
     faq: [
       { question: 'Les panneaux solaires sont-ils rentables en France ?', answer: 'Oui, le retour sur investissement se situe entre 8 et 12 ans pour une durée de vie de 25 à 30 ans. Une installation de 3 kWc (7 000 à 10 000 €) produit 3 000 à 4 000 kWh par an, soit 500 à 800 euros d\'économie annuelle en autoconsommation.' },
-      { question: 'Faut-il choisir l\'autoconsommation ou la revente totale ?', answer: 'L\'autoconsommation avec vente du surplus est le modèle le plus intéressant en 2026. Vous consommez directement l\'électricité produite (économie au tarif plein) et revendez l\'excédent à EDF OA à 0,13 €/kWh environ, avec un tarif garanti pendant 20 ans.' },
+      { question: 'Faut-il choisir l\'autoconsommation ou la revente totale ?', answer: 'L\'autoconsommation avec vente du surplus est le modèle le plus intéressant en 2026. Vous consommez directement l\'électricité produite (économie au tarif plein) et revendez l\'excédent à EDF OA au tarif CRE en vigueur (révisé trimestriellement — vérifiez sur edf-oa.fr), avec un tarif garanti pendant 20 ans.' },
       { question: 'Quelles sont les démarches pour installer des panneaux solaires ?', answer: 'Quatre étapes administratives : déclaration préalable en mairie (1 mois), demande de raccordement Enedis (2-3 mois), contrat d\'achat EDF OA, et attestation Consuel. Prévoyez 3 à 4 mois entre le premier contact et la mise en service.' },
       { question: 'Comment éviter les arnaques aux panneaux solaires ?', answer: 'Méfiez-vous des démarcheurs téléphoniques proposant du solaire à 1 € : c\'est une arnaque. Choisissez un installateur certifié RGE QualiPV, ne signez jamais le jour même d\'un démarchage, et comparez au moins 3 devis. Évitez les crédits à la consommation proposés par les installateurs (taux souvent élevés).' }
     ]
@@ -739,7 +739,7 @@ export const projetsArticles: Record<string, {
       "## Budget pour une maison type",
       "Maison de 100 m² avec 8 fenêtres et une porte-fenêtre en PVC double vitrage ITR, pose rénovation : 5 000 à 9 000 euros. En aluminium : 7 000 à 14 000 euros. En bois : 6 000 à 12 000 euros. Ajoutez 2 500 à 7 000 euros si vous remplacez aussi les volets roulants.",
       "## Aides financières",
-      "MaPrimeRénov\' : de 40 à 100 euros par fenêtre selon les revenus. CEE (primes énergie) : 30 à 80 euros par fenêtre. TVA réduite à 5,5 % (au lieu de 20 %) pour les logements de plus de deux ans. Éco-PTZ : financement sans intérêts. Attention : les aides ne s\'appliquent que pour le remplacement de simple vitrage par du double vitrage ou plus.",
+      "MaPrimeRénov\' : de 40 à 100 euros par fenêtre selon les revenus. CEE (primes énergie) : 40 à 100 euros par fenêtre (selon profil de revenus). TVA réduite à 5,5 % (au lieu de 20 %) pour les logements de plus de deux ans. Éco-PTZ : financement sans intérêts. Attention : les aides ne s\'appliquent que pour le remplacement de simple vitrage par du double vitrage ou plus.",
       "## Économies réalisées",
       "Le remplacement de fenêtres simple vitrage par du double vitrage ITR réduit les déperditions par les menuiseries de 50 à 70 %. Pour un logement chauffé au gaz, l\'économie annuelle se situe entre 200 et 500 euros. Le retour sur investissement (aides déduites) est de huit à quinze ans.",
       "## Erreurs à éviter",
@@ -756,7 +756,7 @@ export const projetsArticles: Record<string, {
     faq: [
       { question: 'Double ou triple vitrage : que choisir ?', answer: 'Le double vitrage ITR (isolation thermique renforcée) avec gaz argon est le standard actuel (Uw de 1,1 à 1,4). Le triple vitrage (Uw de 0,6 à 0,8) est recommandé pour les façades nord et les régions froides, mais son surcoût de 30 à 50 % n\'est pas toujours justifié en climat tempéré.' },
       { question: 'PVC, aluminium ou bois : quel matériau pour les fenêtres ?', answer: 'Le PVC est le plus isolant et le plus économique (200-600 €/fenêtre), sans entretien. L\'aluminium est esthétique avec des profilés fins (400-900 €) mais moins isolant. Le bois est chaleureux et écologique (350-800 €) mais demande un entretien. Le mixte bois-aluminium (500-1 200 €) cumule les avantages.' },
-      { question: 'Quelles aides pour remplacer ses fenêtres ?', answer: 'MaPrimeRénov\' : 40 à 100 € par fenêtre selon les revenus. CEE : 30 à 80 € par fenêtre. TVA réduite à 5,5 %. Éco-PTZ sans intérêts. Attention : les aides ne s\'appliquent que pour le remplacement de simple vitrage par du double ou triple vitrage, posé par un artisan RGE.' },
+      { question: 'Quelles aides pour remplacer ses fenêtres ?', answer: 'MaPrimeRénov\' : 40 à 100 € par fenêtre selon les revenus. CEE : 40 à 100 € par fenêtre (selon profil de revenus). TVA réduite à 5,5 %. Éco-PTZ sans intérêts. Attention : les aides ne s\'appliquent que pour le remplacement de simple vitrage par du double ou triple vitrage, posé par un artisan RGE.' },
       { question: 'Pose en rénovation ou dépose totale ?', answer: 'La pose en rénovation (sur le dormant existant) est rapide et économique mais réduit la surface vitrée de 10 à 15 %. La dépose totale offre de meilleures performances thermiques et ne perd pas de surface vitrée, mais nécessite des travaux de maçonnerie et de finition plus importants.' }
     ]
   },

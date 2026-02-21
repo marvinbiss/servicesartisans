@@ -197,7 +197,7 @@ export const metiersArticles: Record<string, {
     updatedDate: "2025-01-15",
     faq: [
       { question: "Quelles qualifications doit avoir un bon carreleur ?", answer: "Un carreleur qualifié détient un CAP Carreleur-mosaïste ou un BP dans la même spécialité. La certification Qualibat en carrelage est un gage supplémentaire. Pour les travaux en pièces humides, vérifiez qu'il maîtrise les systèmes d'étanchéité sous carrelage (SPEC) conformes au DTU 52.2." },
-      { question: "Pourquoi le double encollage est-il important pour les grands formats ?", answer: "Le double encollage (colle sur le support ET sur le carreau) garantit une adhérence optimale pour les formats 60x60 cm et plus. Sans double encollage, des poches d'air se forment sous le carreau, provoquant des sonneux (carreaux creux) et des décollements prématurés. C'est une obligation du DTU 52.2." },
+      { question: "Pourquoi le double encollage est-il important pour les grands formats ?", answer: "Le double encollage (colle sur le support ET sur le carreau) est obligatoire selon le DTU 52.2 pour les formats supérieurs à 30×30 cm. Sans double encollage, des poches d'air se forment sous le carreau, provoquant des sonneux (carreaux creux) et des décollements prématurés. Cette exigence concerne donc la très grande majorité des carrelages posés aujourd'hui." },
       { question: "Comment vérifier la qualité d'une pose de carrelage ?", answer: "Tapotez les carreaux avec le manche d'un tournevis : un son creux indique un défaut de collage. Vérifiez la planéité avec une règle de 2 mètres (tolérance de 3 mm). Examinez la régularité des joints et la qualité des coupes. Testez l'étanchéité de la douche en bouchant le siphon et en remplissant d'eau pendant 24 heures." }
     ]
   },
