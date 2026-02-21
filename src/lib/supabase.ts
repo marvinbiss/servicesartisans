@@ -41,12 +41,6 @@ interface ProviderListRow {
  */
 const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
 
-// Helper to check if a string is a valid UUID
-function isValidUUID(str: string): boolean {
-  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
-  return uuidRegex.test(str)
-}
-
 /**
  * Race a promise against a timeout. If the promise doesn't resolve within
  * the given ms, rejects with a TimeoutError. Prevents Supabase queries from
@@ -290,7 +284,7 @@ export async function getProviderBySlug(slug: string) {
 // Reverse mapping: service slug → provider specialties (for fallback queries)
 // All 46 services must be mapped here — unmapped services can never show providers
 // on quartier pages, causing them to be permanently noindexed.
-const SERVICE_TO_SPECIALTIES: Record<string, string[]> = {
+export const SERVICE_TO_SPECIALTIES: Record<string, string[]> = {
   // --- Core trades (direct match) ---
   'plombier': ['plombier'],
   'electricien': ['electricien'],
@@ -415,24 +409,6 @@ export async function getProvidersByServiceAndLocation(
         }
 
         if (!directError && direct && direct.length > 0) return resolveProviderCities(direct as unknown as ProviderListRow[])
-
-        // Fallback: provider_services join (handles specialty mapping edge cases)
-        const svc = staticServices[serviceSlug]
-        if (svc && isValidUUID(svc.id)) {
-          const { data, error } = await supabase
-            .from('providers')
-            .select(`${PROVIDER_LIST_SELECT}, provider_services!inner(service_id)`)
-            .eq('provider_services.service_id', svc.id)
-            .in('address_city', cityValues)
-            .eq('is_active', true)
-          // STRICT RULE: providers with phone always rank above those without
-            .order('phone', { ascending: false, nullsFirst: false })
-            .order('is_verified', { ascending: false })
-            .order('name')
-            .range(offset, offset + limit - 1)
-
-          if (!error && data && data.length > 0) return resolveProviderCities(data as unknown as ProviderListRow[])
-        }
 
         return []
       },
@@ -577,9 +553,8 @@ export async function getAllProviders() {
 export async function getProvidersByService(serviceSlug: string, limit?: number) {
   if (IS_BUILD) return [] // Skip during build
 
-  // Use STATIC data for service — no DB needed
-  const svc = staticServices[serviceSlug]
-  if (!svc || !isValidUUID(svc.id)) return []
+  const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
+  if (!specialties || specialties.length === 0) return []
 
   const effectiveLimit = limit || 50
   try {
@@ -587,14 +562,8 @@ export async function getProvidersByService(serviceSlug: string, limit?: number)
       (async () => {
         const { data, error } = await supabase
           .from('providers')
-          .select(`
-            ${PROVIDER_LIST_SELECT},
-            provider_services!inner(service_id),
-            provider_locations(
-              location:locations(name, slug)
-            )
-          `)
-          .eq('provider_services.service_id', svc.id)
+          .select(PROVIDER_LIST_SELECT)
+          .in('specialty', specialties)
           .eq('is_active', true)
           .order('is_verified', { ascending: false })
           .limit(effectiveLimit)
@@ -635,29 +604,45 @@ export async function getProviderCountByService(serviceSlug: string): Promise<nu
 
 export async function getLocationsByService(serviceSlug: string) {
   if (IS_BUILD) return [] // Skip during build
+
+  const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
+  if (!specialties || specialties.length === 0) return []
+
   return retryWithBackoff(
     async () => {
-      const service = await getServiceBySlug(serviceSlug)
-      if (!service) return []
-      if (!isValidUUID(service.id)) return []
-
-      const { data, error } = await supabase
-        .from('locations')
-        .select(`
-          id, name, slug, postal_code, population, department, region, is_active,
-          provider_locations!inner(
-            provider:providers!inner(
-              provider_services!inner(service_id)
-            )
-          )
-        `)
-        .eq('provider_locations.provider.provider_services.service_id', service.id)
+      // Step 1: get distinct cities from active providers with this specialty
+      const { data: providerCities, error: citiesError } = await supabase
+        .from('providers')
+        .select('address_city')
+        .in('specialty', specialties)
         .eq('is_active', true)
+        .not('address_city', 'is', null)
+        .limit(500)
+
+      if (citiesError) throw citiesError
+      if (!providerCities || providerCities.length === 0) return []
+
+      const uniqueCityNames = Array.from(new Set(
+        providerCities.map(p => p.address_city).filter(Boolean)
+      )) as string[]
+
+      // Step 2: look up commune data (slug, dept, region) for those cities
+      const { data: communes, error: communesError } = await supabase
+        .from('communes')
+        .select('code_insee, name, slug, departement_code, region_name')
+        .in('name', uniqueCityNames.slice(0, 200))
         .order('population', { ascending: false })
         .limit(100)
 
-      if (error) throw error
-      return data
+      if (communesError) throw communesError
+
+      return (communes || []).map(c => ({
+        id: c.code_insee,
+        name: c.name,
+        slug: c.slug,
+        department_code: c.departement_code,
+        region_name: c.region_name,
+      }))
     },
     `getLocationsByService(${serviceSlug})`,
   )

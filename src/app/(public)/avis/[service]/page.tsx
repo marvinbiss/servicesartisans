@@ -17,6 +17,7 @@ import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
+import { SERVICE_TO_SPECIALTIES } from '@/lib/supabase'
 import { villes } from '@/lib/data/france'
 import { getServiceImage } from '@/lib/data/images'
 import { relatedServices } from '@/lib/constants/navigation'
@@ -115,35 +116,34 @@ interface ServiceAvisReview {
   artisan_id: string
 }
 
-async function getServiceStats(serviceName: string) {
+async function getServiceStats(serviceSlug: string) {
   if (IS_BUILD) return { providers: [] as ServiceAvisProvider[], reviews: [] as ServiceAvisReview[], totalReviews: 0, avgRating: 0 }
+
+  const specialties = SERVICE_TO_SPECIALTIES[serviceSlug]
+  if (!specialties || specialties.length === 0) {
+    return { providers: [] as ServiceAvisProvider[], reviews: [] as ServiceAvisReview[], totalReviews: 0, avgRating: 0 }
+  }
+
   try {
     const { createAdminClient } = await import('@/lib/supabase/admin')
     const supabase = createAdminClient()
 
-    // Get providers with reviews that match this service (user_id needed to match artisan_id in reviews)
+    // Get top providers for this specific service by specialty
     const { data: providers } = await supabase
       .from('providers')
       .select('id, user_id, name, slug, stable_id, address_city, rating_average, review_count, is_verified, specialty')
       .eq('is_active', true)
+      .in('specialty', specialties)
       .gt('review_count', 0)
       .order('rating_average', { ascending: false, nullsFirst: false })
       .order('review_count', { ascending: false })
-      .limit(50)
+      .limit(6)
 
     if (!providers || providers.length === 0) {
       return { providers: [] as ServiceAvisProvider[], reviews: [] as ServiceAvisReview[], totalReviews: 0, avgRating: 0 }
     }
 
-    // Filter by specialty matching service name (case-insensitive)
-    const serviceNameLower = serviceName.toLowerCase()
-    const matchedProviders = providers.filter(p =>
-      p.specialty?.toLowerCase().includes(serviceNameLower) ||
-      p.specialty?.toLowerCase().includes(serviceNameLower.replace(/\s/g, '-'))
-    )
-
-    // Use matched or all if not enough
-    const topProviders = matchedProviders.length >= 3 ? matchedProviders.slice(0, 6) : providers.slice(0, 6)
+    const topProviders = providers
 
     const totalReviews = topProviders.reduce((sum, p) => sum + (p.review_count || 0), 0)
     const ratedProviders = topProviders.filter(p => p.rating_average && p.rating_average > 0)
@@ -194,7 +194,7 @@ export default async function AvisServicePage({
 
   const tradeLower = trade.name.toLowerCase()
 
-  const serviceStats = await getServiceStats(trade.name)
+  const serviceStats = await getServiceStats(service)
 
   // JSON-LD schemas
   const breadcrumbSchema = getBreadcrumbSchema([
