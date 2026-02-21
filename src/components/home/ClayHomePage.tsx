@@ -25,18 +25,22 @@ const SERVICE_ITEMS = [
   { Icon: TreeDeciduous, name: 'Jardinage',    slug: 'jardinier' },
 ]
 
-const FALLBACK_ARTISANS = [
+// Artisans mis en avant (sélection manuelle — vrais profils vérifiés)
+const FEATURED_ARTISANS = [
   {
-    name: 'Marc Dupont', specialty: 'Plombier', address_city: 'Paris', address_postal_code: '75011',
-    rating_average: 4.9, review_count: 127, is_verified: true, slug: 'plombier', stable_id: null,
+    name: 'P B C Services', specialty: 'Plombier', address_city: 'Paris', address_postal_code: '75013',
+    rating_average: 4.6, review_count: 34, is_verified: true, slug: 'plombier',
+    stable_id: 'p-b-c-services-814394359', profileCity: 'paris',
   },
   {
-    name: 'Sophie Martin', specialty: 'Électricienne', address_city: 'Lyon', address_postal_code: '69003',
-    rating_average: 4.8, review_count: 89, is_verified: true, slug: 'electricien', stable_id: null,
+    name: 'Ecoterra', specialty: 'Électricien', address_city: 'Marseille', address_postal_code: '13006',
+    rating_average: 4.9, review_count: 9, is_verified: true, slug: 'electricien',
+    stable_id: 'ecoterra-940717085', profileCity: 'marseille',
   },
   {
-    name: 'Ahmed Benzara', specialty: 'Serrurier', address_city: 'Marseille', address_postal_code: '13001',
-    rating_average: 5.0, review_count: 43, is_verified: true, slug: 'serrurier', stable_id: null,
+    name: 'Romain Simon', specialty: 'Serrurier', address_city: 'Strasbourg', address_postal_code: '67000',
+    rating_average: 4.7, review_count: 95, is_verified: true, slug: 'serrurier',
+    stable_id: 'romain-simon-strasbourg', profileCity: 'strasbourg',
   },
 ]
 
@@ -122,13 +126,13 @@ function ClayFAQSection() {
 }
 
 // ── Main Component ───────────────────────────────────────────────
-export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews }: Props) {
+export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
   const { artisanCount, reviewCount, avgRating, deptCount } = stats
   const countStr = artisanCount > 0 ? `${formatProviderCount(artisanCount)}+` : '50 000+'
   const reviewStr = reviewCount > 0 ? `${formatProviderCount(reviewCount)}` : '12 400'
   const ratingStr = avgRating > 0 ? avgRating.toFixed(1).replace('.', ',') : '4,9'
 
-  const artisans = topProviders.length >= 1 ? topProviders : FALLBACK_ARTISANS
+  const artisans = FEATURED_ARTISANS
   const bigReviews = recentReviews.length >= 3 ? recentReviews.slice(0, 3) : FALLBACK_REVIEWS
   const carouselReviews = recentReviews.length >= 6 ? recentReviews.slice(3) : undefined
 
@@ -327,7 +331,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
               {artisans.map((a, i) => {
                 const rating = a.rating_average ?? 0
                 const ratingDisplay = rating.toFixed(1).replace('.', ',')
-                const profileHref = a.stable_id ? `/services/${a.slug}` : '/services'
+                const profileHref = a.stable_id ? `/services/${a.slug}/${a.profileCity}/${a.stable_id}` : `/services/${a.slug}`
                 const bgImage = CARD_BG_IMAGES[i % CARD_BG_IMAGES.length]
 
                 return (
