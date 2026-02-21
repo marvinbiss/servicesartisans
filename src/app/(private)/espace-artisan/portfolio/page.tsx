@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import Link from 'next/link'
 import {
   Plus,
   Image as ImageIcon,
@@ -9,17 +8,10 @@ import {
   Layers,
   Loader2,
   AlertCircle,
-  TrendingUp,
-  Calendar,
-  FileText,
-  MessageSquare,
-  Star,
-  Settings,
-  Euro,
   Filter,
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
-import LogoutButton from '@/components/LogoutButton'
+import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
 import { PortfolioCard } from '@/components/portfolio'
 import Button from '@/components/ui/Button'
 import type { PortfolioItem, MediaType } from '@/types/portfolio'
@@ -213,70 +205,12 @@ export default function PortfolioPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid lg:grid-cols-4 gap-8">
-          {/* Sidebar */}
-          <div className="lg:col-span-1">
-            <nav className="bg-white rounded-xl shadow-sm p-4 space-y-1">
-              <Link
-                href="/espace-artisan/dashboard"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <TrendingUp className="w-5 h-5" />
-                Tableau de bord
-              </Link>
-              <Link
-                href="/espace-artisan/portfolio"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-50 text-blue-600 font-medium"
-              >
-                <ImageIcon className="w-5 h-5" />
-                Portfolio
-              </Link>
-              <Link
-                href="/espace-artisan/calendrier"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <Calendar className="w-5 h-5" />
-                Calendrier
-              </Link>
-              <Link
-                href="/espace-artisan/demandes-recues"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <FileText className="w-5 h-5" />
-                Demandes
-              </Link>
-              <Link
-                href="/espace-artisan/messages"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <MessageSquare className="w-5 h-5" />
-                Messages
-              </Link>
-              <Link
-                href="/espace-artisan/avis-recus"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <Star className="w-5 h-5" />
-                Avis reçus
-              </Link>
-              <Link
-                href="/espace-artisan/profil"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <Settings className="w-5 h-5" />
-                Mon profil
-              </Link>
-              <Link
-                href="/espace-artisan/abonnement"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <Euro className="w-5 h-5" />
-                Abonnement
-              </Link>
-              <LogoutButton />
-            </nav>
+          <ArtisanSidebar activePage="portfolio" />
 
-            {/* Stats */}
-            <div className="bg-white rounded-xl shadow-sm p-4 mt-4">
+          {/* Main content */}
+          <div className="lg:col-span-3 space-y-6">
+            {/* Stats summary */}
+            <div className="bg-white rounded-xl shadow-sm p-4">
               <h4 className="font-medium text-gray-900 mb-3">Statistiques</h4>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between text-gray-600">
@@ -301,10 +235,7 @@ export default function PortfolioPage() {
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Main content */}
-          <div className="lg:col-span-3 space-y-6">
             {/* Filters */}
             <div className="flex items-center gap-2 flex-wrap">
               <Filter className="w-5 h-5 text-gray-500" />

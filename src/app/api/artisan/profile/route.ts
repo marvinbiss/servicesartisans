@@ -5,7 +5,7 @@
  */
 
 import { NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { requireArtisan } from '@/lib/auth/artisan-guard'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
@@ -29,23 +29,14 @@ export const dynamic = 'force-dynamic'
 
 export async function GET() {
   try {
-    const supabase = await createClient()
-
-    // Get current user
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-
-    if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Non authentifié' },
-        { status: 401 }
-      )
-    }
+    const { error: guardError, user, supabase } = await requireArtisan()
+    if (guardError) return guardError
 
     // Fetch profile with explicit column list (profiles table)
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
       .select('id, email, full_name, role, phone_e164, average_rating, review_count')
-      .eq('id', user.id)
+      .eq('id', user!.id)
       .single()
 
     if (profileError) {
@@ -56,18 +47,11 @@ export async function GET() {
       )
     }
 
-    if (profile.role !== 'artisan') {
-      return NextResponse.json(
-        { error: 'Accès réservé aux artisans' },
-        { status: 403 }
-      )
-    }
-
     // Fetch associated provider data
     const { data: provider } = await supabase
       .from('providers')
       .select('id, name, slug, siret, phone, address_street, address_city, address_postal_code, address_region, specialty, rating_average, review_count, is_verified, is_active')
-      .eq('user_id', user.id)
+      .eq('user_id', user!.id)
       .single()
 
     return NextResponse.json({ profile, provider })
@@ -82,38 +66,8 @@ export async function GET() {
 
 export async function PUT(request: Request) {
   try {
-    const supabase = await createClient()
-
-    // Get current user
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-
-    if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Non authentifié' },
-        { status: 401 }
-      )
-    }
-
-    // Verify user is an artisan before allowing profile update
-    const { data: existingProfile, error: profileFetchError } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', user.id)
-      .single()
-
-    if (profileFetchError || !existingProfile) {
-      return NextResponse.json(
-        { error: 'Profil introuvable' },
-        { status: 404 }
-      )
-    }
-
-    if (existingProfile.role !== 'artisan') {
-      return NextResponse.json(
-        { error: 'Accès réservé aux artisans' },
-        { status: 403 }
-      )
-    }
+    const { error: guardError, user, supabase } = await requireArtisan()
+    if (guardError) return guardError
 
     // Parse request body
     const body = await request.json()
@@ -146,7 +100,7 @@ export async function PUT(request: Request) {
       const { data, error: updateError } = await supabase
         .from('profiles')
         .update(profileUpdate)
-        .eq('id', user.id)
+        .eq('id', user!.id)
         .select('id, email, full_name, role, phone_e164, average_rating, review_count')
         .single()
 
@@ -175,7 +129,7 @@ export async function PUT(request: Request) {
       const { data, error: providerError } = await supabase
         .from('providers')
         .update(providerUpdate)
-        .eq('user_id', user.id)
+        .eq('user_id', user!.id)
         .select('id, name, slug, siret, phone, address_street, address_city, address_postal_code, specialty, is_verified, is_active')
         .single()
 

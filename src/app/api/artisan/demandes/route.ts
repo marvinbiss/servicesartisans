@@ -4,8 +4,8 @@
  */
 
 import { NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
+import { requireArtisan } from '@/lib/auth/artisan-guard'
 import { z } from 'zod'
 
 // GET query params schema
@@ -17,7 +17,9 @@ export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
   try {
-    const supabase = await createClient()
+    const { error: guardError, user, supabase } = await requireArtisan()
+    if (guardError) return guardError
+
     const { searchParams } = new URL(request.url)
     const queryParams = {
       status: searchParams.get('status') || 'all',
@@ -31,21 +33,11 @@ export async function GET(request: Request) {
     }
     const { status } = result.data
 
-    // Get current user
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-
-    if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Non authentifié' },
-        { status: 401 }
-      )
-    }
-
     // Resolve provider for this artisan
     const { data: provider } = await supabase
       .from('providers')
       .select('id')
-      .eq('user_id', user.id)
+      .eq('user_id', user!.id)
       .maybeSingle()
 
     if (!provider) {
@@ -64,7 +56,30 @@ export async function GET(request: Request) {
       return NextResponse.json({ demandes: [], stats: { total: 0, nouveau: 0, devis_envoye: 0, accepte: 0, refuse: 0 } })
     }
 
-    // Fetch only devis_requests assigned to this provider
+    // Fetch ALL devis_requests assigned to this provider (unfiltered) for accurate stats
+    const { data: allDemandes, error: allDemandesError } = await supabase
+      .from('devis_requests')
+      .select('id, status')
+      .in('id', leadIds)
+
+    if (allDemandesError) {
+      logger.error('Error fetching demandes for stats:', allDemandesError)
+      return NextResponse.json(
+        { error: 'Erreur lors de la récupération des demandes' },
+        { status: 500 }
+      )
+    }
+
+    // Stats calculated on ALL demandes (not filtered by status)
+    const stats = {
+      total: allDemandes?.length || 0,
+      nouveau: allDemandes?.filter(d => d.status === 'pending').length || 0,
+      devis_envoye: allDemandes?.filter(d => d.status === 'sent').length || 0,
+      accepte: allDemandes?.filter(d => d.status === 'accepted').length || 0,
+      refuse: allDemandes?.filter(d => d.status === 'refused').length || 0,
+    }
+
+    // Fetch only devis_requests assigned to this provider, filtered by status if requested
     let query = supabase
       .from('devis_requests')
       .select('id, client_id, service_id, service_name, postal_code, city, description, budget, urgency, status, client_name, client_email, client_phone, created_at, updated_at')
@@ -84,15 +99,6 @@ export async function GET(request: Request) {
         { error: 'Erreur lors de la récupération des demandes' },
         { status: 500 }
       )
-    }
-
-    // Get stats
-    const stats = {
-      total: demandes?.length || 0,
-      nouveau: demandes?.filter(d => d.status === 'pending').length || 0,
-      devis_envoye: demandes?.filter(d => d.status === 'sent').length || 0,
-      accepte: demandes?.filter(d => d.status === 'accepted').length || 0,
-      refuse: demandes?.filter(d => d.status === 'refused').length || 0,
     }
 
     return NextResponse.json({

@@ -5,8 +5,8 @@
  */
 
 import { NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
+import { requireArtisan } from '@/lib/auth/artisan-guard'
 import { z } from 'zod'
 
 // POST request schema (reply to review)
@@ -19,27 +19,16 @@ export const dynamic = 'force-dynamic'
 
 export async function GET() {
   try {
-    const supabase = await createClient()
+    const { error: guardError, user, supabase } = await requireArtisan()
+    if (guardError) return guardError
 
-    // Get current user
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-
-    if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Non authentifié' },
-        { status: 401 }
-      )
-    }
-
-    // Fetch reviews for this artisan
+    // Fetch reviews for this artisan — explicit columns only (no fraud/scoring fields)
     const { data: reviews, error: reviewsError } = await supabase
       .from('reviews')
-      .select(`
-        *,
-        artisan:profiles!artisan_id(id, full_name)
-      `)
-      .eq('artisan_id', user.id)
+      .select('id, artisan_id, user_id, rating, comment, artisan_response, artisan_responded_at, client_name, booking_id, created_at, updated_at')
+      .eq('artisan_id', user!.id)
       .order('created_at', { ascending: false })
+      .limit(200)
 
     if (reviewsError) {
       logger.error('Error fetching reviews:', reviewsError)
@@ -71,11 +60,12 @@ export async function GET() {
     const formattedReviews = reviews?.map(r => ({
       id: r.id,
       client: r.client_name || 'Client',
-      service: 'Service',
       date: r.created_at,
       note: r.rating,
       commentaire: r.comment,
       reponse: r.artisan_response,
+      artisan_responded_at: r.artisan_responded_at,
+      repondu: r.artisan_response !== null,
     })) || []
 
     return NextResponse.json({
@@ -93,17 +83,8 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const supabase = await createClient()
-
-    // Get current user
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-
-    if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Non authentifié' },
-        { status: 401 }
-      )
-    }
+    const { error: guardError, user, supabase } = await requireArtisan()
+    if (guardError) return guardError
 
     const body = await request.json()
     const result = replyToReviewSchema.safeParse(body)
@@ -115,17 +96,25 @@ export async function POST(request: Request) {
     }
     const { review_id, response } = result.data
 
-    // Verify the review belongs to this artisan
+    // Verify the review belongs to this artisan and has no existing response
     const { data: review } = await supabase
       .from('reviews')
-      .select('artisan_id')
+      .select('artisan_id, artisan_response')
       .eq('id', review_id)
       .single()
 
-    if (!review || review.artisan_id !== user.id) {
+    if (!review || review.artisan_id !== user!.id) {
       return NextResponse.json(
         { error: 'Avis non trouvé ou non autorisé' },
         { status: 403 }
+      )
+    }
+
+    // Guard against double-response
+    if (review.artisan_response !== null) {
+      return NextResponse.json(
+        { error: 'Une réponse existe déjà pour cet avis' },
+        { status: 409 }
       )
     }
 

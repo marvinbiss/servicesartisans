@@ -5,7 +5,7 @@
  */
 
 import { NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { requireArtisan } from '@/lib/auth/artisan-guard'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
@@ -25,7 +25,9 @@ export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
   try {
-    const supabase = await createClient()
+    const { error, user, supabase } = await requireArtisan()
+    if (error) return error
+
     const { searchParams } = new URL(request.url)
     const queryParams = {
       conversation_id: searchParams.get('conversation_id') || undefined,
@@ -38,16 +40,6 @@ export async function GET(request: Request) {
       )
     }
     const conversationId = result.data.conversation_id
-
-    // Get current user
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-
-    if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Non authentifié' },
-        { status: 401 }
-      )
-    }
 
     // Get provider linked to this user
     const { data: provider } = await supabase
@@ -79,10 +71,10 @@ export async function GET(request: Request) {
         )
       }
 
-      // Fetch messages for this conversation
+      // Fetch messages for this conversation (explicit columns, no select('*'))
       const { data: messages, error: messagesError } = await supabase
         .from('messages')
-        .select('*')
+        .select('id, conversation_id, sender_id, sender_type, content, read_at, created_at')
         .eq('conversation_id', conversationId)
         .order('created_at', { ascending: true })
 
@@ -105,7 +97,15 @@ export async function GET(request: Request) {
       return NextResponse.json({ messages: messages || [] })
     }
 
-    // Fetch all conversations for this artisan
+    // Bug fix: the Supabase JS client does not support .limit() on nested relation
+    // selects, so loading all messages for all conversations in one query risks
+    // pulling an unbounded number of rows into memory.
+    //
+    // Strategy: fetch conversations first (no messages embedded), then fetch the
+    // last 2 messages per conversation via a single bounded query (.limit) and
+    // group server-side. This caps the messages loaded to convCount × 2 rows.
+
+    // Step 1: fetch conversations (no messages embedded)
     const { data: conversations, error: convsError } = await supabase
       .from('conversations')
       .select(`
@@ -126,31 +126,65 @@ export async function GET(request: Request) {
       )
     }
 
-    // For each conversation, get the last message and unread count
-    const conversationsWithMeta = await Promise.all(
-      (conversations || []).map(async (conv) => {
-        const { data: lastMessages } = await supabase
-          .from('messages')
-          .select('id, content, created_at, sender_type, read_at')
-          .eq('conversation_id', conv.id)
-          .order('created_at', { ascending: false })
-          .limit(1)
+    const convList = conversations || []
+    const convIds = convList.map((c) => c.id)
 
-        const { count: unreadCount } = await supabase
-          .from('messages')
-          .select('id', { count: 'exact', head: true })
-          .eq('conversation_id', conv.id)
-          .eq('sender_type', 'client')
-          .is('read_at', null)
+    type MessageRow = {
+      id: string
+      conversation_id: string
+      content: string
+      created_at: string
+      sender_type: string
+      read_at: string | null
+    }
 
-        return {
-          id: conv.id,
-          partner: conv.client,
-          lastMessage: lastMessages?.[0] || null,
-          unreadCount: unreadCount || 0,
-        }
-      })
-    )
+    // Step 2: fetch recent messages for all conversations in one bounded query.
+    // Limit to convIds.length * 2 so we have enough rows to determine lastMessage
+    // and unread counts, without loading the entire message history.
+    let allMessages: MessageRow[] = []
+    if (convIds.length > 0) {
+      const msgLimit = Math.max(convIds.length * 2, 50)
+      const { data: recentMsgs, error: msgsError } = await supabase
+        .from('messages')
+        .select('id, conversation_id, content, created_at, sender_type, read_at')
+        .in('conversation_id', convIds)
+        .order('created_at', { ascending: false })
+        .limit(msgLimit)
+
+      if (msgsError) {
+        logger.error('Error fetching recent messages:', msgsError)
+        return NextResponse.json(
+          { error: 'Erreur lors de la récupération des messages' },
+          { status: 500 }
+        )
+      }
+      allMessages = (recentMsgs as MessageRow[]) || []
+    }
+
+    // Step 3: group messages by conversation_id server-side
+    const msgsByConv = new Map<string, MessageRow[]>()
+    for (const msg of allMessages) {
+      const bucket = msgsByConv.get(msg.conversation_id) ?? []
+      bucket.push(msg)
+      msgsByConv.set(msg.conversation_id, bucket)
+    }
+
+    // Step 4: build result — derive lastMessage and unreadCount per conversation
+    const conversationsWithMeta = convList.map((conv) => {
+      // Messages are already ordered desc from the DB query
+      const msgs = msgsByConv.get(conv.id) ?? []
+      const lastMessage = msgs[0] ?? null
+      const unreadCount = msgs.filter(
+        (m) => m.sender_type === 'client' && m.read_at === null
+      ).length
+
+      return {
+        id: conv.id,
+        partner: conv.client,
+        lastMessage,
+        unreadCount,
+      }
+    })
 
     return NextResponse.json({ conversations: conversationsWithMeta })
   } catch (error) {
@@ -164,17 +198,8 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const supabase = await createClient()
-
-    // Get current user
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-
-    if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Non authentifié' },
-        { status: 401 }
-      )
-    }
+    const { error, user, supabase } = await requireArtisan()
+    if (error) return error
 
     const body = await request.json()
     const result = sendMessageSchema.safeParse(body)
@@ -262,13 +287,13 @@ export async function POST(request: Request) {
         sender_type: 'artisan',
         content,
       })
-      .select()
+      .select('id, conversation_id, sender_id, sender_type, content, read_at, created_at')
       .single()
 
     if (insertError) {
       logger.error('Error sending message:', insertError)
       return NextResponse.json(
-        { error: 'Erreur lors de l\'envoi du message' },
+        { error: "Erreur lors de l'envoi du message" },
         { status: 500 }
       )
     }

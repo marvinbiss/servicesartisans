@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { createBrowserClient } from '@supabase/ssr'
+import { useRouter } from 'next/navigation'
 import {
   Users,
   Plus,
@@ -37,19 +37,14 @@ const COLORS = [
   { name: 'Cyan', value: '#06b6d4' },
 ]
 
-const supabase = createBrowserClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
-
 export default function EquipePage() {
+  const router = useRouter()
   const [members, setMembers] = useState<TeamMember[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [showAddModal, setShowAddModal] = useState(false)
   const [editingMember, setEditingMember] = useState<TeamMember | null>(null)
   const [isSaving, setIsSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [artisanId, setArtisanId] = useState<string | null>(null)
 
   // Form state
   const [formData, setFormData] = useState({
@@ -60,37 +55,44 @@ export default function EquipePage() {
     color: COLORS[0].value,
   })
 
-  // Fetch artisan ID and team members
+  // Fetch team members via API route
   useEffect(() => {
     async function fetchData() {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) return
+      try {
+        const res = await fetch('/api/artisan/equipe')
 
-      setArtisanId(user.id)
+        if (res.status === 401) {
+          router.push('/connexion')
+          return
+        }
 
-      const { data, error } = await supabase
-        .from('team_members')
-        .select('id, name, email, phone, role, color, avatar_url, is_active, created_at')
-        .eq('artisan_id', user.id)
-        .order('created_at', { ascending: true })
+        if (res.status === 403) {
+          router.push('/espace-artisan')
+          return
+        }
 
-      if (error) {
-        console.error('Error fetching team:', error)
+        if (!res.ok) {
+          setError('Impossible de charger l\'équipe')
+          setIsLoading(false)
+          return
+        }
+
+        const data = await res.json()
+        setMembers(data.members ?? [])
+      } catch (err) {
+        console.error('Error fetching team:', err)
         setError('Impossible de charger l\'équipe')
-      } else {
-        setMembers(data || [])
+      } finally {
+        setIsLoading(false)
       }
-
-      setIsLoading(false)
     }
 
     fetchData()
-  }, [])
+  }, [router])
 
   // Add or update team member
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!artisanId) return
 
     setIsSaving(true)
     setError(null)
@@ -98,18 +100,22 @@ export default function EquipePage() {
     try {
       if (editingMember) {
         // Update existing member
-        const { error } = await supabase
-          .from('team_members')
-          .update({
+        const res = await fetch(`/api/artisan/equipe/${editingMember.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
             name: formData.name,
             email: formData.email,
-            phone: formData.phone || null,
+            phone: formData.phone || undefined,
             role: formData.role,
             color: formData.color,
-          })
-          .eq('id', editingMember.id)
+          }),
+        })
 
-        if (error) throw error
+        if (!res.ok) {
+          const body = await res.json()
+          throw new Error(body.error ?? 'Erreur lors de la mise à jour')
+        }
 
         setMembers(members.map(m =>
           m.id === editingMember.id
@@ -118,23 +124,25 @@ export default function EquipePage() {
         ))
       } else {
         // Add new member
-        const { data, error } = await supabase
-          .from('team_members')
-          .insert({
-            artisan_id: artisanId,
+        const res = await fetch('/api/artisan/equipe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
             name: formData.name,
             email: formData.email,
-            phone: formData.phone || null,
+            phone: formData.phone || undefined,
             role: formData.role,
             color: formData.color,
-            is_active: true,
-          })
-          .select()
-          .single()
+          }),
+        })
 
-        if (error) throw error
+        if (!res.ok) {
+          const body = await res.json()
+          throw new Error(body.error ?? 'Erreur lors de l\'ajout')
+        }
 
-        setMembers([...members, data])
+        const body = await res.json()
+        setMembers([...members, body.member])
       }
 
       setShowAddModal(false)
@@ -159,12 +167,14 @@ export default function EquipePage() {
     if (!confirm('Supprimer ce membre de l\'équipe ?')) return
 
     try {
-      const { error } = await supabase
-        .from('team_members')
-        .delete()
-        .eq('id', memberId)
+      const res = await fetch(`/api/artisan/equipe/${memberId}`, {
+        method: 'DELETE',
+      })
 
-      if (error) throw error
+      if (!res.ok && res.status !== 204) {
+        const body = await res.json()
+        throw new Error(body.error ?? 'Erreur lors de la suppression')
+      }
 
       setMembers(members.filter(m => m.id !== memberId))
     } catch (err) {
@@ -176,12 +186,23 @@ export default function EquipePage() {
   // Toggle member active status
   const toggleActive = async (member: TeamMember) => {
     try {
-      const { error } = await supabase
-        .from('team_members')
-        .update({ is_active: !member.is_active })
-        .eq('id', member.id)
+      const res = await fetch(`/api/artisan/equipe/${member.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: member.name,
+          email: member.email,
+          phone: member.phone,
+          role: member.role,
+          color: member.color,
+          is_active: !member.is_active,
+        }),
+      })
 
-      if (error) throw error
+      if (!res.ok) {
+        const body = await res.json()
+        throw new Error(body.error ?? 'Erreur lors de la mise à jour')
+      }
 
       setMembers(members.map(m =>
         m.id === member.id
@@ -227,7 +248,7 @@ export default function EquipePage() {
               <ChevronLeft className="w-5 h-5" />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold">Gestion de l'équipe</h1>
+              <h1 className="text-2xl font-bold">Gestion de l&apos;équipe</h1>
               <p className="text-blue-100">Gérez les membres de votre équipe et leurs créneaux</p>
             </div>
           </div>
@@ -247,7 +268,7 @@ export default function EquipePage() {
         <div className="flex justify-between items-center mb-6">
           <div>
             <h2 className="text-lg font-semibold text-gray-900">
-              Membres de l'équipe ({members.length})
+              Membres de l&apos;équipe ({members.length})
             </h2>
             <p className="text-sm text-gray-500">
               Ajoutez des membres pour leur assigner des créneaux
@@ -277,7 +298,7 @@ export default function EquipePage() {
           <div className="bg-white rounded-xl shadow-sm p-12 text-center">
             <Users className="w-12 h-12 text-gray-300 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">
-              Aucun membre dans l'équipe
+              Aucun membre dans l&apos;équipe
             </h3>
             <p className="text-gray-500 mb-6">
               Ajoutez des membres pour leur assigner des créneaux de disponibilité

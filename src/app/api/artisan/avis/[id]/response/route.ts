@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
-import { createClient } from '@/lib/supabase/server'
+import { requireArtisan } from '@/lib/auth/artisan-guard'
 import { z } from 'zod'
 
 // POST request schema
@@ -13,18 +13,12 @@ export const dynamic = 'force-dynamic'
 // POST - Respond to a review
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Authentification requise' } },
-        { status: 401 }
-      )
-    }
+    const { id } = await params
+    const { error: guardError, user, supabase } = await requireArtisan()
+    if (guardError) return guardError
 
     const body = await request.json()
     const result = reviewResponseSchema.safeParse(body)
@@ -41,8 +35,8 @@ export async function POST(
     const { data: review } = await supabase
       .from('reviews')
       .select('id, artisan_id, artisan_response')
-      .eq('id', params.id)
-      .eq('artisan_id', user.id)
+      .eq('id', id)
+      .eq('artisan_id', user!.id)
       .single()
 
     if (!review) {
@@ -66,7 +60,7 @@ export async function POST(
         artisan_response: response.trim(),
         artisan_responded_at: new Date().toISOString(),
       })
-      .eq('id', params.id)
+      .eq('id', id)
 
     if (updateError) throw updateError
 

@@ -5,31 +5,22 @@
  */
 
 import { NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
+import { requireArtisan } from '@/lib/auth/artisan-guard'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
   try {
-    const supabase = await createClient()
-
-    // Get current user
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-
-    if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Non authentifié' },
-        { status: 401 }
-      )
-    }
+    const { error: guardError, user, supabase } = await requireArtisan()
+    if (guardError) return guardError
 
     // Fetch profile with subscription info (columns from migration 309)
     // Note: subscription_period_end does not exist in the schema
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
       .select('subscription_plan, subscription_status, stripe_customer_id')
-      .eq('id', user.id)
+      .eq('id', user!.id)
       .single()
 
     if (profileError) {
@@ -44,23 +35,38 @@ export async function GET() {
     const { data: provider } = await supabase
       .from('providers')
       .select('id')
-      .eq('user_id', user.id)
+      .eq('user_id', user!.id)
       .single()
 
+    if (!provider) {
+      return NextResponse.json(
+        { error: 'Profil artisan non trouvé' },
+        { status: 404 }
+      )
+    }
+
     // Fetch invoices using provider.id (invoices.provider_id → providers.id)
+    // invoices table: id, created_at, status, total (from migration 006)
+    // No download URL column exists in the schema — url returned as null
     const { data: invoices } = await supabase
       .from('invoices')
-      .select('id, created_at, status')
-      .eq('provider_id', provider?.id || '')
+      .select('id, created_at, status, total')
+      .eq('provider_id', provider.id)
       .order('created_at', { ascending: false })
       .limit(10)
 
-    // Count quotes sent by this artisan via lead_assignments (not devis_requests by client_id)
-    const { count: devisCount } = await supabase
-      .from('lead_assignments')
-      .select('id', { count: 'exact', head: true })
-      .eq('provider_id', provider?.id || '')
-      .eq('status', 'quoted')
+    // Count devis sent by this artisan via the quotes table (one row per devis sent)
+    const { count: devisCount, error: devisError } = await supabase
+      .from('quotes')
+      .select('*', { count: 'exact', head: true })
+      .eq('provider_id', provider.id)
+
+    if (devisError) {
+      logger.error('Error fetching devis count:', devisError)
+      return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    }
+
+    const devisUsed = devisCount ?? 0
 
     // Determine limits based on plan
     const planLimits: Record<string, number> = {
@@ -76,13 +82,15 @@ export async function GET() {
       plan: currentPlan,
       status: profile?.subscription_status || null,
       periodEnd: null,
-      devisUsed: devisCount || 0,
+      devisUsed,
       devisLimit: limit,
       hasStripeCustomer: !!profile?.stripe_customer_id,
       invoices: invoices?.map(inv => ({
         id: inv.id,
         date: inv.created_at,
+        montant: inv.total,
         status: inv.status,
+        url: null,
       })) || [],
     })
   } catch (error) {

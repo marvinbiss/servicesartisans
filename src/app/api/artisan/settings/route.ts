@@ -4,18 +4,21 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
-import { createAdminClient } from '@/lib/supabase/admin'
+import { z } from 'zod'
+import { requireArtisan } from '@/lib/auth/artisan-guard'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
+const settingsUpdateSchema = z.object({
+  phone: z.string().max(20).optional(),
+  name: z.string().min(1).max(100).optional(),
+})
+
 export async function GET() {
   try {
-    const supabase = await createClient()
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-    if (authError || !user) {
-      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
-    }
+    const { error, user, supabase } = await requireArtisan()
+    if (error) return error
 
     const { data: provider } = await supabase
       .from('providers')
@@ -34,23 +37,25 @@ export async function GET() {
       provider: provider || null,
     })
   } catch (error) {
-    console.error('Settings GET error:', error)
+    logger.error('Settings GET error:', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }
 
 export async function PUT(request: NextRequest) {
   try {
-    const supabase = await createClient()
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-    if (authError || !user) {
-      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
-    }
+    const { error, user, supabase } = await requireArtisan()
+    if (error) return error
 
     const body = await request.json()
-    const { phone, name } = body as { phone?: string; name?: string }
-
-    const adminClient = createAdminClient()
+    const result = settingsUpdateSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json(
+        { error: 'Erreur de validation', details: result.error.flatten() },
+        { status: 400 }
+      )
+    }
+    const { phone, name } = result.data
 
     // Update provider if linked
     const { data: provider } = await supabase
@@ -65,12 +70,13 @@ export async function PUT(request: NextRequest) {
       if (name !== undefined) updates.name = name
 
       if (Object.keys(updates).length > 0) {
-        const { error: updateError } = await adminClient
+        const { error: updateError } = await supabase
           .from('providers')
           .update(updates)
           .eq('id', provider.id)
 
         if (updateError) {
+          logger.error('Settings PUT provider update error:', updateError)
           return NextResponse.json({ error: 'Erreur mise à jour' }, { status: 500 })
         }
       }
@@ -78,15 +84,20 @@ export async function PUT(request: NextRequest) {
 
     // Update profile name
     if (name !== undefined) {
-      await adminClient
+      const { error: profileError } = await supabase
         .from('profiles')
         .update({ full_name: name })
         .eq('id', user.id)
+
+      if (profileError) {
+        logger.error('Settings PUT profile update error:', profileError)
+        return NextResponse.json({ error: 'Erreur mise à jour profil' }, { status: 500 })
+      }
     }
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Settings PUT error:', error)
+    logger.error('Settings PUT error:', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

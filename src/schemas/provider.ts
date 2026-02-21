@@ -74,9 +74,7 @@ export const faqItemSchema = z.object({
 export const providerArtisanUpdateSchema = z.object({
   // Identity
   name: z.string().min(2).max(100).transform(v => v.trim()).optional(),
-  legal_form: z.string().max(100).optional().nullable(),
   siret: z.string().regex(/^\d{14}$/, 'Le SIRET doit contenir 14 chiffres').optional().nullable(),
-  creation_date: z.string().max(20).optional().nullable(),
   team_size: z.number().int().min(1).max(1000).optional().nullable(),
 
   // Contact
@@ -85,10 +83,14 @@ export const providerArtisanUpdateSchema = z.object({
   email: z.string().email('Email invalide').optional().nullable(),
   website: z.string().url('URL invalide').optional().nullable(),
 
-  // Location
+  // Location — address_department, latitude, longitude exist in providers (migrations 009, 007)
   address_street: z.string().max(200).optional().nullable(),
   address_city: z.string().max(100).optional().nullable(),
   address_postal_code: z.string().regex(/^\d{5}$/, 'Code postal invalide').optional().nullable(),
+  address_region: z.string().max(50).optional().nullable(),
+  address_department: z.string().max(50).optional().nullable(),
+  latitude: z.number().min(-90).max(90).optional().nullable(),
+  longitude: z.number().min(-180).max(180).optional().nullable(),
   intervention_radius_km: z.number().int().min(1).max(200).optional(),
 
   // Presentation

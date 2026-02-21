@@ -3,10 +3,9 @@
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { FileText, MessageSquare, Star, Settings, TrendingUp, Euro, ArrowLeft, Filter, Calendar, MapPin, ChevronRight, Eye, Send, ExternalLink, Search, Loader2, X, Phone } from 'lucide-react'
+import { FileText, MessageSquare, ArrowLeft, Filter, Calendar, MapPin, ChevronRight, Eye, Send, Loader2, X, Phone } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
-import { QuickSiteLinks } from '@/components/InternalLinks'
-import LogoutButton from '@/components/LogoutButton'
+import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
 import { getArtisanUrl } from '@/lib/utils'
 import { Pagination } from '@/components/dashboard/Pagination'
 
@@ -153,7 +152,7 @@ export default function DemandesRecuesPage() {
           request_id: selectedLead.lead.id,
           amount: parseFloat(devisForm.amount),
           description: devisForm.description,
-          valid_until: validUntil.toISOString(),
+          valid_until: validUntil.toISOString().split('T')[0],
         }),
       })
 
@@ -179,7 +178,8 @@ export default function DemandesRecuesPage() {
     router.push('/espace-artisan/messages')
   }
 
-  const pendingCount = leads.filter(l => l.status === 'pending').length
+  // pendingCount is not computed from leads (current page only) to avoid misleading badge
+  const pendingCount = 0
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -222,90 +222,11 @@ export default function DemandesRecuesPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid lg:grid-cols-4 gap-8">
-          {/* Sidebar */}
-          <div className="lg:col-span-1">
-            <nav className="bg-white rounded-xl shadow-sm p-4 space-y-1">
-              <Link
-                href="/espace-artisan/dashboard"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <TrendingUp className="w-5 h-5" />
-                Tableau de bord
-              </Link>
-              <Link
-                href="/espace-artisan/demandes-recues"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-50 text-blue-600 font-medium"
-              >
-                <FileText className="w-5 h-5" />
-                Demandes reçues
-                {pendingCount > 0 ? (
-                  <span className="ml-auto bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">{pendingCount}</span>
-                ) : null}
-              </Link>
-              <Link
-                href="/espace-artisan/messages"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <MessageSquare className="w-5 h-5" />
-                Messages
-              </Link>
-              <Link
-                href="/espace-artisan/avis-recus"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <Star className="w-5 h-5" />
-                Avis reçus
-              </Link>
-              <Link
-                href="/espace-artisan/profil"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <Settings className="w-5 h-5" />
-                Mon profil
-              </Link>
-              <Link
-                href="/espace-artisan/abonnement"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <Euro className="w-5 h-5" />
-                Abonnement
-              </Link>
-              <LogoutButton />
-            </nav>
-
-            {/* Voir mon profil public */}
-            {publicUrl && (
-              <div className="bg-white rounded-xl shadow-sm p-4 mt-4">
-                <Link
-                  href={publicUrl}
-                  className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
-                >
-                  <ExternalLink className="w-4 h-4" />
-                  Voir mon profil public
-                </Link>
-              </div>
-            )}
-
-            {/* Quick links */}
-            <div className="mt-4">
-              <QuickSiteLinks />
-            </div>
-
-            {/* Additional links */}
-            <div className="bg-white rounded-xl shadow-sm p-4 mt-4">
-              <h4 className="font-medium text-gray-900 mb-3">Liens utiles</h4>
-              <div className="space-y-2 text-sm">
-                <Link href="/services" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 py-1">
-                  <Search className="w-4 h-4" />
-                  Parcourir les services
-                </Link>
-                <Link href="/recherche" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 py-1">
-                  <Search className="w-4 h-4" />
-                  Rechercher un artisan
-                </Link>
-              </div>
-            </div>
-          </div>
+          <ArtisanSidebar
+            activePage="demandes-recues"
+            newDemandesCount={pendingCount}
+            publicUrl={publicUrl}
+          />
 
           {/* Content */}
           <div className="lg:col-span-3">

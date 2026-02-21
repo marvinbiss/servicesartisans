@@ -1,15 +1,34 @@
 /**
  * POST /api/artisan/leads/:id/action — Lead actions for authenticated artisan
  * Actions: view, quote, decline
+ *
+ * RLS note: lead_assignments has policy "lead_assignments_provider_update" (migration 103)
+ * allowing artisans to UPDATE their own assignments. The authenticated `supabase` client
+ * is therefore used for mutations instead of adminClient, which would bypass RLS.
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { z } from 'zod'
+import { requireArtisan } from '@/lib/auth/artisan-guard'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logLeadEvent } from '@/lib/dashboard/events'
 import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
+
+const actionSchema = z.discriminatedUnion('action', [
+  z.object({ action: z.literal('view') }),
+  z.object({
+    action: z.literal('quote'),
+    amount: z.number().positive(),
+    description: z.string().max(2000).optional(),
+    validDays: z.number().int().positive().optional(),
+  }),
+  z.object({
+    action: z.literal('decline'),
+    reason: z.string().max(500).optional(),
+  }),
+])
 
 export async function POST(
   request: NextRequest,
@@ -17,21 +36,19 @@ export async function POST(
 ) {
   try {
     const { id } = await params
-    const body = await request.json()
-    const { action } = body as { action: string }
 
-    if (!action || !['view', 'quote', 'decline'].includes(action)) {
+    const { error: guardError, user, supabase } = await requireArtisan()
+    if (guardError) return guardError
+
+    const rawBody = await request.json()
+    const result = actionSchema.safeParse(rawBody)
+    if (!result.success) {
       return NextResponse.json(
-        { error: 'Action invalide. Valeurs: view, quote, decline' },
+        { error: 'Action invalide. Valeurs: view, quote, decline', details: result.error.flatten() },
         { status: 400 }
       )
     }
-
-    const supabase = await createClient()
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-    if (authError || !user) {
-      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
-    }
+    const body = result.data
 
     // Get provider linked to this user
     const { data: provider } = await supabase
@@ -45,7 +62,9 @@ export async function POST(
       return NextResponse.json({ error: 'Aucun profil artisan' }, { status: 403 })
     }
 
-    // Verify assignment exists and belongs to this provider
+    // Verify assignment exists and belongs to this provider.
+    // adminClient used for SELECT only (read across RLS boundary is harmless here;
+    // the provider_id check ensures the artisan only sees their own record).
     const adminClient = createAdminClient()
     const { data: assignment, error: assignError } = await adminClient
       .from('lead_assignments')
@@ -60,57 +79,114 @@ export async function POST(
 
     const now = new Date().toISOString()
 
-    if (action === 'view') {
-      await adminClient
+    if (body.action === 'view') {
+      // Bug 2 fix: only advance to 'viewed' from 'pending'.
+      // Any other status (quoted, declined, viewed) must not be downgraded.
+      if (!['pending'].includes(assignment.status)) {
+        // Just log the view event without mutating the status.
+        await logLeadEvent(assignment.lead_id, 'viewed', {
+          providerId: provider.id,
+          actorId: user.id,
+        })
+        return NextResponse.json({ success: true, action: body.action })
+      }
+
+      // Bug 1 fix: use authenticated supabase client (RLS policy "lead_assignments_provider_update"
+      // from migration 103 allows the artisan to UPDATE their own assignments).
+      const { error: updateError } = await supabase
         .from('lead_assignments')
         .update({ status: 'viewed', viewed_at: now })
         .eq('id', id)
+
+      if (updateError) {
+        logger.error('Lead view update error:', updateError)
+        return NextResponse.json({ error: 'Erreur lors de la mise à jour du lead' }, { status: 500 })
+      }
 
       await logLeadEvent(assignment.lead_id, 'viewed', {
         providerId: provider.id,
         actorId: user.id,
       })
-    } else if (action === 'quote') {
-      const { amount, description: quoteDesc, validDays } = body as {
-        amount?: number
-        description?: string
-        validDays?: number
+    } else if (body.action === 'quote') {
+      const { amount, description: quoteDesc, validDays } = body
+
+      // Check for duplicate quote (409 Conflict)
+      const { data: existingQuote } = await adminClient
+        .from('quotes')
+        .select('id')
+        .eq('request_id', assignment.lead_id)
+        .eq('provider_id', provider.id)
+        .limit(1)
+        .single()
+
+      if (existingQuote) {
+        return NextResponse.json(
+          { error: 'Un devis existe déjà pour ce lead' },
+          { status: 409 }
+        )
       }
 
-      if (!amount || amount <= 0) {
-        return NextResponse.json({ error: 'Montant requis' }, { status: 400 })
-      }
-
-      // Create quote
+      // validDays is validated as positive integer by Zod; default 30
+      const days = validDays ?? 30
       const validUntil = new Date()
-      validUntil.setDate(validUntil.getDate() + (validDays || 30))
+      validUntil.setDate(validUntil.getDate() + days)
 
-      await adminClient.from('quotes').insert({
-        request_id: assignment.lead_id,
-        provider_id: provider.id,
-        amount,
-        description: quoteDesc || '',
-        valid_until: validUntil.toISOString().split('T')[0],
-        status: 'pending',
-      })
+      // Bug 3 fix: UPDATE lead_assignment FIRST, then INSERT quote.
+      // If the UPDATE fails we bail out before creating an orphan quote row.
+      // If the INSERT fails after the UPDATE, we roll back the status to 'viewed'
+      // (the most recent prior state for a quoted action) to keep a consistent state.
 
-      await adminClient
+      // Step 1: UPDATE assignment status -> 'quoted'
+      const { error: updateError } = await supabase
         .from('lead_assignments')
         .update({ status: 'quoted' })
         .eq('id', id)
 
+      if (updateError) {
+        logger.error('Lead quote status update error:', updateError)
+        return NextResponse.json({ error: 'Erreur lors de la mise à jour du lead' }, { status: 500 })
+      }
+
+      // Step 2: INSERT quote — if this fails, roll back assignment status
+      const { error: insertError } = await supabase
+        .from('quotes')
+        .insert({
+          request_id: assignment.lead_id,
+          provider_id: provider.id,
+          amount,
+          description: quoteDesc || '',
+          valid_until: validUntil.toISOString().split('T')[0],
+          status: 'pending',
+        })
+
+      if (insertError) {
+        logger.error('Lead quote insert error (rolling back assignment status):', insertError)
+        // Rollback: restore previous status
+        await supabase
+          .from('lead_assignments')
+          .update({ status: assignment.status })
+          .eq('id', id)
+        return NextResponse.json({ error: 'Erreur lors de la création du devis' }, { status: 500 })
+      }
+
       await logLeadEvent(assignment.lead_id, 'quoted', {
         providerId: provider.id,
         actorId: user.id,
-        metadata: { amount, validDays: validDays || 30 },
+        metadata: { amount, validDays: days },
       })
-    } else if (action === 'decline') {
-      const { reason } = body as { reason?: string }
+    } else if (body.action === 'decline') {
+      const { reason } = body
 
-      await adminClient
+      // Bug 1 fix: use authenticated supabase client for mutation
+      const { error: updateError } = await supabase
         .from('lead_assignments')
         .update({ status: 'declined' })
         .eq('id', id)
+
+      if (updateError) {
+        logger.error('Lead decline update error:', updateError)
+        return NextResponse.json({ error: 'Erreur lors de la mise à jour du lead' }, { status: 500 })
+      }
 
       await logLeadEvent(assignment.lead_id, 'declined', {
         providerId: provider.id,
@@ -119,7 +195,7 @@ export async function POST(
       })
     }
 
-    return NextResponse.json({ success: true, action })
+    return NextResponse.json({ success: true, action: body.action })
   } catch (error) {
     logger.error('Lead action POST error:', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })

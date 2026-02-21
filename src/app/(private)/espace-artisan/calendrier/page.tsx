@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
-import { createBrowserClient } from '@supabase/ssr'
 import {
   Calendar,
   ChevronLeft,
@@ -27,6 +26,7 @@ import {
 import Breadcrumb from '@/components/Breadcrumb'
 import { QuickSiteLinks } from '@/components/InternalLinks'
 import LogoutButton from '@/components/LogoutButton'
+import { getArtisanUrl } from '@/lib/utils'
 
 // Types
 interface TimeSlot {
@@ -67,11 +67,20 @@ interface UserProfile {
   subscription_plan: 'gratuit' | 'pro' | 'premium'
 }
 
-// Create Supabase client
-const supabase = createBrowserClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
+interface ProviderInfo {
+  stable_id: string | null
+  slug: string | null
+  specialty: string | null
+  address_city: string | null
+}
+
+// Format date as local YYYY-MM-DD (avoids UTC timezone shift)
+const formatDateLocal = (d: Date): string => {
+  const y = d.getFullYear()
+  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${y}-${m}-${day}`
+}
 
 // Génération des jours du mois
 function getDaysInMonth(year: number, month: number) {
@@ -99,10 +108,11 @@ export default function CalendrierPage() {
   const [showSettingsModal, setShowSettingsModal] = useState(false)
   const [schedule, setSchedule] = useState<DaySchedule[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [_isLoadingSlots, setIsLoadingSlots] = useState(false)
+  const [isLoadingSlots, setIsLoadingSlots] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [profile, setProfile] = useState<UserProfile | null>(null)
+  const [provider, setProvider] = useState<ProviderInfo | null>(null)
   const [upcomingBookings, setUpcomingBookings] = useState<BookingEntry[]>([])
   const [stats, setStats] = useState({ monthlyBookings: 0, fillRate: 0, avgRating: 0 })
 
@@ -122,22 +132,46 @@ export default function CalendrierPage() {
   const paidPlans: Array<'gratuit' | 'pro' | 'premium'> = ['pro', 'premium']
   const hasCalendarAccess = profile ? paidPlans.includes(profile.subscription_plan) : false
 
-  // Fetch user profile
+  // Fetch user profile and subscription via API routes
   useEffect(() => {
     async function fetchProfile() {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        const { data } = await supabase
-          .from('profiles')
-          .select('id, full_name, subscription_plan')
-          .eq('id', user.id)
-          .single()
+      try {
+        const [subRes, statsRes] = await Promise.all([
+          fetch('/api/artisan/subscription'),
+          fetch('/api/artisan/stats'),
+        ])
 
-        if (data) {
-          setProfile(data)
+        if (!subRes.ok || !statsRes.ok) {
+          setIsLoading(false)
+          return
         }
+
+        const subData = await subRes.json()
+        const statsData = await statsRes.json()
+
+        const plan: 'gratuit' | 'pro' | 'premium' = subData.plan ?? 'gratuit'
+
+        if (statsData.profile) {
+          setProfile({
+            id: statsData.profile.id,
+            full_name: statsData.profile.full_name ?? '',
+            subscription_plan: plan,
+          })
+        }
+
+        if (statsData.provider) {
+          setProvider({
+            stable_id: statsData.provider.stable_id ?? null,
+            slug: statsData.provider.slug ?? null,
+            specialty: statsData.provider.specialty ?? null,
+            address_city: statsData.provider.address_city ?? null,
+          })
+        }
+      } catch (err) {
+        console.error('Error fetching profile:', err)
+      } finally {
+        setIsLoading(false)
       }
-      setIsLoading(false)
     }
     fetchProfile()
   }, [])
@@ -154,7 +188,7 @@ export default function CalendrierPage() {
       const endDate = new Date(year, month + 1, 0)
 
       const response = await fetch(
-        `/api/availability?artisanId=${profile.id}&startDate=${startDate.toISOString().split('T')[0]}&endDate=${endDate.toISOString().split('T')[0]}`
+        `/api/availability?artisanId=${profile.id}&startDate=${formatDateLocal(startDate)}&endDate=${formatDateLocal(endDate)}`
       )
 
       if (!response.ok) {
@@ -253,7 +287,7 @@ export default function CalendrierPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           artisanId: profile.id,
-          date: selectedDate.toISOString().split('T')[0],
+          date: formatDateLocal(selectedDate),
           startTime: newSlotStart,
           endTime: newSlotEnd,
           repeatWeekly,
@@ -350,7 +384,7 @@ export default function CalendrierPage() {
   }
 
   const getScheduleForDate = (date: Date) => {
-    const dateStr = date.toISOString().split('T')[0]
+    const dateStr = formatDateLocal(date)
     return schedule.find(s => s.date === dateStr)
   }
 
@@ -529,15 +563,22 @@ export default function CalendrierPage() {
             </nav>
 
             {/* Voir mon profil public */}
-            <div className="bg-white rounded-xl shadow-sm p-4 mt-4">
-              <Link
-                href="/services/plombier/paris/martin-plomberie-paris"
-                className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
-              >
-                <ExternalLink className="w-4 h-4" />
-                Voir mon profil public
-              </Link>
-            </div>
+            {provider && (
+              <div className="bg-white rounded-xl shadow-sm p-4 mt-4">
+                <Link
+                  href={getArtisanUrl({
+                    stable_id: provider.stable_id,
+                    slug: provider.slug,
+                    specialty: provider.specialty,
+                    city: provider.address_city,
+                  })}
+                  className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  Voir mon profil public
+                </Link>
+              </div>
+            )}
 
             {/* Quick links */}
             <div className="mt-4">
@@ -601,6 +642,14 @@ export default function CalendrierPage() {
                 </button>
               </div>
 
+              {/* Slots loading indicator */}
+              {isLoadingSlots && (
+                <div className="flex items-center justify-center py-4">
+                  <Loader2 className="w-5 h-5 animate-spin text-blue-600" />
+                  <span className="ml-2 text-sm text-gray-500">Chargement des créneaux...</span>
+                </div>
+              )}
+
               {/* Calendar Grid */}
               <div className="grid grid-cols-7 gap-1">
                 {/* Day headers */}
@@ -617,9 +666,9 @@ export default function CalendrierPage() {
 
                 {/* Days of the month */}
                 {days.map(date => {
-                  const schedule = getScheduleForDate(date)
-                  const hasBookings = schedule?.slots.some(s => !s.available)
-                  const hasAvailable = schedule?.slots.some(s => s.available)
+                  const daySchedule = getScheduleForDate(date)
+                  const hasBookings = daySchedule?.slots.some(s => !s.available)
+                  const hasAvailable = daySchedule?.slots.some(s => s.available)
                   const past = isPast(date)
 
                   return (
@@ -960,7 +1009,7 @@ export default function CalendrierPage() {
                 </div>
               </div>
               <div>
-                <h4 className="font-medium text-gray-900 mb-3">Zone d'intervention</h4>
+                <h4 className="font-medium text-gray-900 mb-3">Zone d&apos;intervention</h4>
                 <input
                   type="text"
                   placeholder="Ex: Paris et petite couronne (20km)"

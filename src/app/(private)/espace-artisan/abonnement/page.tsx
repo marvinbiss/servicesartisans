@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { FileText, MessageSquare, Star, Settings, TrendingUp, Euro, ArrowLeft, Check, Crown, Zap, CreditCard, Download, Calendar, Loader2 } from 'lucide-react'
-import LogoutButton from '@/components/LogoutButton'
+import { ArrowLeft, Check, Crown, Zap, CreditCard, Download, Calendar, Loader2 } from 'lucide-react'
+import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
 
 interface SubscriptionData {
   plan: string
@@ -97,11 +97,18 @@ export default function AbonnementArtisanPage() {
   }
 
   const currentPlan = subscription?.plan || 'gratuit'
+  const currentPlanData = plans.find(p => p.id === currentPlan)
   const factures = subscription?.invoices || []
 
   const openUpgradeModal = (planId: string) => {
     setSelectedPlan(planId)
     setShowUpgradeModal(true)
+  }
+
+  const handleCancelSubscription = async () => {
+    if (!confirm('Êtes-vous sûr de vouloir annuler votre abonnement ?')) return
+    // TODO: implémenter l'appel API Stripe
+    alert('Fonctionnalité en cours de développement. Contactez le support.')
   }
 
   const handleUpgrade = async () => {
@@ -138,7 +145,6 @@ export default function AbonnementArtisanPage() {
     )
   }
 
-  const currentPlanInfo = plans.find(p => p.id === currentPlan)
   const periodEndDate = subscription?.periodEnd
     ? new Date(subscription.periodEnd).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
     : null
@@ -162,54 +168,7 @@ export default function AbonnementArtisanPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid lg:grid-cols-4 gap-8">
-          {/* Sidebar */}
-          <div className="lg:col-span-1">
-            <nav className="bg-white rounded-xl shadow-sm p-4 space-y-1">
-              <Link
-                href="/espace-artisan/dashboard"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <TrendingUp className="w-5 h-5" />
-                Tableau de bord
-              </Link>
-              <Link
-                href="/espace-artisan/demandes-recues"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <FileText className="w-5 h-5" />
-                Demandes
-              </Link>
-              <Link
-                href="/espace-artisan/messages"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <MessageSquare className="w-5 h-5" />
-                Messages
-              </Link>
-              <Link
-                href="/espace-artisan/avis-recus"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <Star className="w-5 h-5" />
-                Avis reçus
-              </Link>
-              <Link
-                href="/espace-artisan/profil"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <Settings className="w-5 h-5" />
-                Mon profil
-              </Link>
-              <Link
-                href="/espace-artisan/abonnement"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-50 text-blue-600 font-medium"
-              >
-                <Euro className="w-5 h-5" />
-                Abonnement
-              </Link>
-              <LogoutButton />
-            </nav>
-          </div>
+          <ArtisanSidebar activePage="abonnement" />
 
           {/* Content */}
           <div className="lg:col-span-3 space-y-8">
@@ -223,7 +182,7 @@ export default function AbonnementArtisanPage() {
                   </div>
                   <h2 className="text-2xl font-bold mb-1 capitalize">{currentPlan}</h2>
                   <p className="text-blue-200">
-                    {currentPlanInfo?.price || 0}€/mois
+                    {currentPlanData?.price ?? 0}€/mois
                     {periodEndDate && ` • Renouvelé le ${periodEndDate}`}
                   </p>
                 </div>
@@ -290,7 +249,7 @@ export default function AbonnementArtisanPage() {
                             : 'bg-blue-600 text-white hover:bg-blue-700'
                         }`}
                       >
-                        {plan.price > plans.find(p => p.id === currentPlan)!.price ? (
+                        {plan.price > (currentPlanData?.price ?? 0) ? (
                           <span className="flex items-center justify-center gap-2">
                             <Zap className="w-4 h-4" />
                             Passer à {plan.name}
@@ -357,7 +316,10 @@ export default function AbonnementArtisanPage() {
 
             {/* Cancel */}
             <div className="text-center">
-              <button className="text-gray-500 text-sm hover:text-red-600">
+              <button
+                onClick={handleCancelSubscription}
+                className="text-gray-500 text-sm hover:text-red-600"
+              >
                 Annuler mon abonnement
               </button>
             </div>

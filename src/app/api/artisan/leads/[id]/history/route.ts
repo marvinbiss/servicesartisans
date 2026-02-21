@@ -3,8 +3,9 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { requireArtisan } from '@/lib/auth/artisan-guard'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -14,12 +15,8 @@ export async function GET(
 ) {
   try {
     const { id } = await params
-    const supabase = await createClient()
-
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-    if (authError || !user) {
-      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
-    }
+    const { error: guardError, user, supabase } = await requireArtisan()
+    if (guardError) return guardError
 
     // Get provider linked to this user
     const { data: provider } = await supabase
@@ -55,13 +52,13 @@ export async function GET(
       .order('created_at', { ascending: true })
 
     if (eventsError) {
-      console.error('Lead history error:', eventsError)
+      logger.error('Lead history error:', eventsError)
       return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
     }
 
     return NextResponse.json({ events: events || [] })
   } catch (error) {
-    console.error('Lead history GET error:', error)
+    logger.error('Lead history GET error:', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

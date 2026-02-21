@@ -4,19 +4,16 @@
  */
 
 import { NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { requireArtisan } from '@/lib/auth/artisan-guard'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
   try {
-    const supabase = await createClient()
-
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-    if (authError || !user) {
-      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
-    }
+    const { error: guardError, user, supabase } = await requireArtisan()
+    if (guardError) return guardError
 
     const { data: provider } = await supabase
       .from('providers')
@@ -33,38 +30,58 @@ export async function GET() {
     const providerId = provider.id
     const now = new Date()
 
-    // Fetch all assignments for this provider
-    const { data: assignments } = await adminClient
+    // Fetch only the minimal fields needed for calculations (not all columns).
+    // Limit to 1000 most recent assignments to avoid loading entire table into memory.
+    // Stats are therefore computed on the last 1000 leads maximum.
+    const { data: assignments, error: assignmentsError } = await adminClient
       .from('lead_assignments')
-      .select('id, status, assigned_at, viewed_at')
+      .select('status, assigned_at, viewed_at')
       .eq('provider_id', providerId)
+      .order('assigned_at', { ascending: false })
+      .limit(1000)
+
+    if (assignmentsError) {
+      logger.error('Leads stats assignments error:', assignmentsError)
+      return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    }
 
     const all = assignments || []
     const total = all.length
     const pending = all.filter((a) => a.status === 'pending').length
     const viewed = all.filter((a) => a.status === 'viewed').length
-    const quoted = all.filter((a) => a.status === 'quoted').length
     const declined = all.filter((a) => a.status === 'declined').length
 
-    // Fetch events for conversion stats
-    const { data: events } = await adminClient
+    // Fetch only event_type and created_at for conversion stats
+    // Both 'quoted' and 'accepted' are sourced from lead_events for consistency
+    const { data: events, error: eventsError } = await adminClient
       .from('lead_events')
       .select('event_type, created_at')
       .eq('provider_id', providerId)
 
+    if (eventsError) {
+      logger.error('Leads stats events error:', eventsError)
+      return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+    }
+
     const allEvents = events || []
+    const quoted = allEvents.filter((e) => e.event_type === 'quoted').length
     const accepted = allEvents.filter((e) => e.event_type === 'accepted').length
     const completed = allEvents.filter((e) => e.event_type === 'completed').length
 
     const conversionRate = quoted > 0 ? Math.round((accepted / quoted) * 100) : 0
 
-    // Average response time
+    // Average response time (minutes between assigned_at and viewed_at)
     const responseTimes = all
       .filter((a) => a.viewed_at)
-      .map((a) => (new Date(a.viewed_at!).getTime() - new Date(a.assigned_at).getTime()) / 60000)
-    const avgResponseMinutes = responseTimes.length > 0
-      ? Math.round(responseTimes.reduce((sum, t) => sum + t, 0) / responseTimes.length)
-      : 0
+      .map(
+        (a) =>
+          (new Date(a.viewed_at as string).getTime() - new Date(a.assigned_at).getTime()) /
+          60000
+      )
+    const avgResponseMinutes =
+      responseTimes.length > 0
+        ? Math.round(responseTimes.reduce((sum, t) => sum + t, 0) / responseTimes.length)
+        : 0
 
     // Monthly counts
     const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1)
@@ -72,9 +89,12 @@ export async function GET() {
 
     const thisMonth = all.filter((a) => new Date(a.assigned_at) >= thisMonthStart).length
     const lastMonth = all.filter(
-      (a) => new Date(a.assigned_at) >= lastMonthStart && new Date(a.assigned_at) < thisMonthStart
+      (a) =>
+        new Date(a.assigned_at) >= lastMonthStart &&
+        new Date(a.assigned_at) < thisMonthStart
     ).length
-    const monthlyGrowth = lastMonth > 0 ? Math.round(((thisMonth - lastMonth) / lastMonth) * 100) : 0
+    const monthlyGrowth =
+      lastMonth > 0 ? Math.round(((thisMonth - lastMonth) / lastMonth) * 100) : 0
 
     // Monthly trend (last 6 months)
     const monthlyTrend = Array.from({ length: 6 }, (_, i) => {
@@ -107,7 +127,7 @@ export async function GET() {
       monthlyTrend,
     })
   } catch (error) {
-    console.error('Artisan leads stats GET error:', error)
+    logger.error('Artisan leads stats GET error:', error)
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }

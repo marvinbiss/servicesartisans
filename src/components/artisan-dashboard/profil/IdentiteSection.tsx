@@ -9,7 +9,7 @@ interface IdentiteSectionProps {
   onSaved: (updated: Record<string, unknown>) => void
 }
 
-const FIELDS = ['name', 'legal_form', 'siret', 'creation_date'] as const
+const FIELDS = ['name', 'siret'] as const
 
 export function IdentiteSection({ provider, onSaved }: IdentiteSectionProps) {
   const { formData, setField, isDirty, saving, error, success, handleSave } = useProviderForm(provider, FIELDS)
@@ -47,20 +47,6 @@ export function IdentiteSection({ provider, onSaved }: IdentiteSectionProps) {
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
-          <div>
-            <label htmlFor="identite-legal-form" className="block text-sm font-medium text-gray-700 mb-2">
-              Forme juridique
-            </label>
-            <input
-              id="identite-legal-form"
-              type="text"
-              value={(formData.legal_form as string) || ''}
-              onChange={(e) => setField('legal_form', e.target.value)}
-              maxLength={100}
-              placeholder="Ex: SARL, SAS, Auto-entrepreneur..."
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
@@ -87,19 +73,6 @@ export function IdentiteSection({ provider, onSaved }: IdentiteSectionProps) {
             <p id="siret-help" className="text-xs text-gray-500 mt-1">
               {isVerified ? '14 chiffres — SIRET vérifié, non modifiable' : '14 chiffres'}
             </p>
-          </div>
-          <div>
-            <label htmlFor="identite-creation-date" className="block text-sm font-medium text-gray-700 mb-2">
-              Date de création
-            </label>
-            <input
-              id="identite-creation-date"
-              type="date"
-              value={(formData.creation_date as string) || ''}
-              onChange={(e) => setField('creation_date', e.target.value)}
-              maxLength={20}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            />
           </div>
         </div>
 

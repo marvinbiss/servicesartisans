@@ -2,13 +2,12 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { FileText, MessageSquare, Star, Settings, TrendingUp, Euro, ArrowLeft, ThumbsUp, MessageCircle, Loader2, X } from 'lucide-react'
-import LogoutButton from '@/components/LogoutButton'
+import { Star, ArrowLeft, ThumbsUp, MessageCircle, Loader2, X } from 'lucide-react'
+import ArtisanSidebar from '@/components/artisan-dashboard/ArtisanSidebar'
 
 interface Avis {
   id: string
   client: string
-  service: string
   date: string
   note: number
   commentaire: string | null
@@ -32,6 +31,7 @@ export default function AvisRecusPage() {
   const [replyingTo, setReplyingTo] = useState<string | null>(null)
   const [replyText, setReplyText] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [replyError, setReplyError] = useState<string | null>(null)
 
   useEffect(() => {
     fetchAvis()
@@ -57,6 +57,7 @@ export default function AvisRecusPage() {
     if (!replyText.trim()) return
 
     setSubmitting(true)
+    setReplyError(null)
     try {
       const response = await fetch('/api/artisan/avis', {
         method: 'POST',
@@ -76,9 +77,12 @@ export default function AvisRecusPage() {
         )
         setReplyingTo(null)
         setReplyText('')
+      } else {
+        const data = await response.json()
+        setReplyError(data.error || 'Erreur lors de l\'envoi de la réponse')
       }
-    } catch (error) {
-      console.error('Error replying:', error)
+    } catch {
+      setReplyError('Erreur lors de l\'envoi de la réponse')
     } finally {
       setSubmitting(false)
     }
@@ -113,54 +117,7 @@ export default function AvisRecusPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid lg:grid-cols-4 gap-8">
-          {/* Sidebar */}
-          <div className="lg:col-span-1">
-            <nav className="bg-white rounded-xl shadow-sm p-4 space-y-1">
-              <Link
-                href="/espace-artisan/dashboard"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <TrendingUp className="w-5 h-5" />
-                Tableau de bord
-              </Link>
-              <Link
-                href="/espace-artisan/demandes-recues"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <FileText className="w-5 h-5" />
-                Demandes reçues
-              </Link>
-              <Link
-                href="/espace-artisan/messages"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <MessageSquare className="w-5 h-5" />
-                Messages
-              </Link>
-              <Link
-                href="/espace-artisan/avis-recus"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-50 text-blue-600 font-medium"
-              >
-                <Star className="w-5 h-5" />
-                Avis reçus
-              </Link>
-              <Link
-                href="/espace-artisan/profil"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <Settings className="w-5 h-5" />
-                Mon profil
-              </Link>
-              <Link
-                href="/espace-artisan/abonnement"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
-              >
-                <Euro className="w-5 h-5" />
-                Abonnement
-              </Link>
-              <LogoutButton />
-            </nav>
-          </div>
+          <ArtisanSidebar activePage="avis-recus" />
 
           {/* Content */}
           <div className="lg:col-span-3 space-y-8">
@@ -168,7 +125,7 @@ export default function AvisRecusPage() {
             <div className="bg-white rounded-xl shadow-sm p-6">
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="text-center">
-                  <div className="text-5xl font-bold text-gray-900 mb-2">{stats.moyenne}</div>
+                  <div className="text-5xl font-bold text-gray-900 mb-2">{Number(stats.moyenne).toFixed(1)}</div>
                   <div className="flex justify-center mb-2">
                     {[...Array(5)].map((_, i) => (
                       <Star
@@ -188,7 +145,7 @@ export default function AvisRecusPage() {
                       <div className="flex-1 bg-gray-200 rounded-full h-2">
                         <div
                           className="bg-yellow-400 rounded-full h-2"
-                          style={{ width: `${(item.count / stats.total) * 100}%` }}
+                          style={{ width: `${stats.total > 0 ? (item.count / stats.total) * 100 : 0}%` }}
                         />
                       </div>
                       <span className="text-sm text-gray-500 w-8">{item.count}</span>
@@ -222,7 +179,7 @@ export default function AvisRecusPage() {
                           </div>
                         </div>
                         <p className="text-sm text-gray-500">
-                          {item.service} • {new Date(item.date).toLocaleDateString('fr-FR')}
+                          {new Date(item.date).toLocaleDateString('fr-FR')}
                         </p>
                       </div>
                       {!item.reponse && (
@@ -246,6 +203,7 @@ export default function AvisRecusPage() {
                             onClick={() => {
                               setReplyingTo(null)
                               setReplyText('')
+                              setReplyError(null)
                             }}
                             className="text-gray-400 hover:text-gray-600"
                           >
@@ -259,6 +217,9 @@ export default function AvisRecusPage() {
                           className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 mb-2"
                           rows={3}
                         />
+                        {replyError && (
+                          <p className="text-red-600 text-sm mb-2">{replyError}</p>
+                        )}
                         <button
                           onClick={() => handleReply(item.id)}
                           disabled={submitting || !replyText.trim()}

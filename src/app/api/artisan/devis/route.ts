@@ -5,33 +5,35 @@
  */
 
 import { NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
+import { requireArtisan } from '@/lib/auth/artisan-guard'
 import { z } from 'zod'
 
 export const dynamic = 'force-dynamic'
+
+const DEFAULT_VALID_UNTIL = () =>
+  new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
 
 const createQuoteSchema = z.object({
   request_id: z.string().uuid(),
   amount: z.number().positive(),
   description: z.string().min(1).max(5000),
-  valid_until: z.string().datetime().optional().nullable(),
+  valid_until: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Format YYYY-MM-DD requis')
+    .optional(),
 })
 
 export async function GET() {
   try {
-    const supabase = await createClient()
-
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-    if (authError || !user) {
-      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
-    }
+    const { error: guardError, user, supabase } = await requireArtisan()
+    if (guardError) return guardError
 
     // Get provider linked to this user
     const { data: provider } = await supabase
       .from('providers')
       .select('id')
-      .eq('user_id', user.id)
+      .eq('user_id', user!.id)
       .single()
 
     if (!provider) {
@@ -72,18 +74,14 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const supabase = await createClient()
-
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-    if (authError || !user) {
-      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
-    }
+    const { error: guardError, user, supabase } = await requireArtisan()
+    if (guardError) return guardError
 
     // Get provider linked to this user
     const { data: provider } = await supabase
       .from('providers')
       .select('id')
-      .eq('user_id', user.id)
+      .eq('user_id', user!.id)
       .single()
 
     if (!provider) {
@@ -100,6 +98,19 @@ export async function POST(request: Request) {
     }
     const { request_id, amount, description, valid_until } = result.data
 
+    // Validate valid_until is in the future if provided
+    if (valid_until !== undefined) {
+      const validUntilDate = new Date(valid_until)
+      const today = new Date()
+      today.setHours(0, 0, 0, 0)
+      if (validUntilDate < today) {
+        return NextResponse.json(
+          { error: 'La date d\'expiration doit être dans le futur' },
+          { status: 400 }
+        )
+      }
+    }
+
     // Verify the devis_request exists
     const { data: devisRequest } = await supabase
       .from('devis_requests')
@@ -111,6 +122,29 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Demande introuvable' }, { status: 404 })
     }
 
+    // Reject quotes on closed/completed requests
+    if (!['pending', 'sent'].includes(devisRequest.status)) {
+      return NextResponse.json(
+        { error: 'Cette demande n\'accepte plus de devis' },
+        { status: 409 }
+      )
+    }
+
+    // Check for duplicate quote (same request_id + provider_id)
+    const { data: existing } = await supabase
+      .from('quotes')
+      .select('id')
+      .eq('request_id', request_id)
+      .eq('provider_id', provider.id)
+      .maybeSingle()
+
+    if (existing) {
+      return NextResponse.json(
+        { error: 'Un devis a déjà été envoyé pour cette demande' },
+        { status: 409 }
+      )
+    }
+
     // Insert quote
     const { data: quote, error: insertError } = await supabase
       .from('quotes')
@@ -119,7 +153,7 @@ export async function POST(request: Request) {
         provider_id: provider.id,
         amount,
         description,
-        valid_until: valid_until || null,
+        valid_until: valid_until ?? DEFAULT_VALID_UNTIL(),
         status: 'pending',
       })
       .select()
@@ -144,19 +178,25 @@ export async function POST(request: Request) {
   }
 }
 
+const updateQuoteSchema = z.object({
+  id: z.string().uuid(),
+  amount: z.number().positive().optional(),
+  description: z.string().min(1).max(5000).optional(),
+  valid_until: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Format YYYY-MM-DD requis')
+    .optional(),
+})
+
 export async function PUT(request: Request) {
   try {
-    const supabase = await createClient()
-
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-    if (authError || !user) {
-      return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
-    }
+    const { error: guardError, user, supabase } = await requireArtisan()
+    if (guardError) return guardError
 
     const { data: provider } = await supabase
       .from('providers')
       .select('id')
-      .eq('user_id', user.id)
+      .eq('user_id', user!.id)
       .single()
 
     if (!provider) {
@@ -164,15 +204,54 @@ export async function PUT(request: Request) {
     }
 
     const body = await request.json()
-    const { id, amount, description, valid_until } = body
-
-    if (!id) {
-      return NextResponse.json({ error: 'id requis' }, { status: 400 })
+    const result = updateQuoteSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json(
+        { error: 'Validation error', details: result.error.flatten() },
+        { status: 400 }
+      )
     }
+    const { id, amount, description, valid_until } = result.data
+
+    // Validate valid_until is in the future if provided
+    if (valid_until !== undefined) {
+      const validDate = new Date(valid_until)
+      const today = new Date()
+      today.setHours(0, 0, 0, 0)
+      if (validDate <= today) {
+        return NextResponse.json(
+          { error: 'La date d\'expiration doit être dans le futur' },
+          { status: 400 }
+        )
+      }
+    }
+
+    // Verify quote exists, belongs to this provider, and is still pending
+    const { data: existingQuote } = await supabase
+      .from('quotes')
+      .select('id, status')
+      .eq('id', id)
+      .eq('provider_id', provider.id)
+      .single()
+
+    if (!existingQuote) {
+      return NextResponse.json({ error: 'Devis introuvable' }, { status: 404 })
+    }
+    if (existingQuote.status !== 'pending') {
+      return NextResponse.json(
+        { error: 'Seul un devis en attente peut être modifié' },
+        { status: 403 }
+      )
+    }
+
+    const patch: Record<string, unknown> = {}
+    if (amount !== undefined) patch.amount = amount
+    if (description !== undefined) patch.description = description
+    if (valid_until !== undefined) patch.valid_until = valid_until
 
     const { data: quote, error: updateError } = await supabase
       .from('quotes')
-      .update({ amount, description, valid_until })
+      .update(patch)
       .eq('id', id)
       .eq('provider_id', provider.id)
       .select()
