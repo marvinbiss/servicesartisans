@@ -99,7 +99,9 @@ export async function GET(request: Request) {
         client_id,
         provider_id,
         created_at,
-        provider:providers!provider_id(id, name)
+        booking_id,
+        provider:providers!provider_id(id, name),
+        booking:bookings!booking_id(service_name)
       `)
       .eq('client_id', user.id)
       .order('created_at', { ascending: false })
@@ -134,6 +136,7 @@ export async function GET(request: Request) {
           partner: conv.provider,
           lastMessage: lastMessages?.[0] || null,
           unreadCount: unreadCount || 0,
+          service: (conv.booking as unknown as { service_name: string } | null)?.service_name || null,
         }
       })
     )

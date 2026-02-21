@@ -104,7 +104,7 @@ export default function ParametresClientPage() {
       }
 
       // Load profile data
-      const profileResponse = await fetch('/api/user/profile')
+      const profileResponse = await fetch('/api/client/profile')
       if (profileResponse.ok) {
         const profileData = await profileResponse.json()
         if (profileData.profile) {
@@ -168,10 +168,13 @@ export default function ParametresClientPage() {
     setIsSaving(true)
 
     try {
-      const response = await fetch('/api/user/profile', {
+      const response = await fetch('/api/client/profile', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          full_name: [formData.prenom, formData.nom].filter(Boolean).join(' ').trim() || undefined,
+          phone: formData.telephone || undefined,
+        }),
       })
 
       if (response.ok) {

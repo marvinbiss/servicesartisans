@@ -5,6 +5,7 @@
 
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { sendBookingNotifications, type NotificationPayload } from '@/lib/notifications/unified-notification-service'
 import { createBookingSchema, validateRequest, formatZodErrors } from '@/lib/validations/schemas'
 import { createErrorResponse, createSuccessResponse, ErrorCode } from '@/lib/errors/types'
@@ -223,7 +224,9 @@ export async function POST(request: Request) {
     const slot = result.slot
 
     // Fetch artisan details for email notification
-    const { data: artisan } = await supabase
+    // Uses admin client: RLS policy 328 restricts cross-user profile reads
+    const adminSupabase = createAdminClient()
+    const { data: artisan } = await adminSupabase
       .from('profiles')
       .select('full_name, email')
       .eq('id', artisanId)
