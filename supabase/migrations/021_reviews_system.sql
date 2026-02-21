@@ -35,6 +35,17 @@ CREATE TABLE IF NOT EXISTS review_votes (
   UNIQUE(review_id, voter_ip)
 );
 
+-- Ensure all columns exist (table may have been created with different schema)
+ALTER TABLE IF EXISTS reviews ADD COLUMN IF NOT EXISTS booking_id UUID REFERENCES bookings(id) ON DELETE CASCADE;
+ALTER TABLE IF EXISTS reviews ADD COLUMN IF NOT EXISTS artisan_id UUID REFERENCES profiles(id) ON DELETE CASCADE;
+ALTER TABLE IF EXISTS reviews ADD COLUMN IF NOT EXISTS client_name VARCHAR(255);
+ALTER TABLE IF EXISTS reviews ADD COLUMN IF NOT EXISTS client_email VARCHAR(255);
+ALTER TABLE IF EXISTS reviews ADD COLUMN IF NOT EXISTS would_recommend BOOLEAN;
+ALTER TABLE IF EXISTS reviews ADD COLUMN IF NOT EXISTS fraud_indicators JSONB;
+ALTER TABLE IF EXISTS reviews ADD COLUMN IF NOT EXISTS artisan_response TEXT;
+ALTER TABLE IF EXISTS reviews ADD COLUMN IF NOT EXISTS artisan_responded_at TIMESTAMPTZ;
+ALTER TABLE IF EXISTS reviews ADD COLUMN IF NOT EXISTS helpful_count INTEGER DEFAULT 0;
+
 -- Indexes for reviews
 CREATE INDEX IF NOT EXISTS idx_reviews_artisan ON reviews(artisan_id);
 CREATE INDEX IF NOT EXISTS idx_reviews_booking ON reviews(booking_id);

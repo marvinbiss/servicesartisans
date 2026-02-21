@@ -17,6 +17,16 @@ CREATE TABLE IF NOT EXISTS audit_logs (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- Ensure all columns exist (table may have been created with minimal schema)
+ALTER TABLE IF EXISTS audit_logs ADD COLUMN IF NOT EXISTS provider_id UUID;
+ALTER TABLE IF EXISTS audit_logs ADD COLUMN IF NOT EXISTS resource_type TEXT;
+ALTER TABLE IF EXISTS audit_logs ADD COLUMN IF NOT EXISTS resource_id TEXT;
+ALTER TABLE IF EXISTS audit_logs ADD COLUMN IF NOT EXISTS old_value JSONB;
+ALTER TABLE IF EXISTS audit_logs ADD COLUMN IF NOT EXISTS new_value JSONB;
+ALTER TABLE IF EXISTS audit_logs ADD COLUMN IF NOT EXISTS metadata JSONB;
+ALTER TABLE IF EXISTS audit_logs ADD COLUMN IF NOT EXISTS ip_address INET;
+ALTER TABLE IF EXISTS audit_logs ADD COLUMN IF NOT EXISTS user_agent TEXT;
+
 -- Indexes for efficient querying
 CREATE INDEX IF NOT EXISTS idx_audit_logs_action ON audit_logs(action);
 CREATE INDEX IF NOT EXISTS idx_audit_logs_user ON audit_logs(user_id) WHERE user_id IS NOT NULL;
@@ -35,7 +45,7 @@ CREATE POLICY audit_logs_admin_read ON audit_logs
   FOR SELECT
   USING (
     EXISTS (
-      SELECT 1 FROM admin_users WHERE id = auth.uid()
+      SELECT 1 FROM profiles WHERE id = auth.uid() AND is_admin = true
     )
   );
 

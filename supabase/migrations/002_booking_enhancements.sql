@@ -197,7 +197,7 @@ ALTER TABLE notification_logs ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Artisans can view their notification logs" ON notification_logs
   FOR SELECT USING (
     booking_id IN (
-      SELECT id FROM bookings WHERE artisan_id = auth.uid()
+      SELECT id FROM bookings WHERE provider_id = auth.uid()
     )
   );
 
