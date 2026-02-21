@@ -103,8 +103,10 @@ export default function ProviderCard({
         <div className="flex items-start gap-2 text-sm text-gray-600 mb-1">
           <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0 text-gray-400" />
           <span>
-            {provider.address_street}, {provider.address_postal_code}{' '}
-            {provider.address_city}
+            {provider.address_street}
+            {provider.address_postal_code &&
+             !provider.address_street.includes(provider.address_postal_code) &&
+             `, ${provider.address_postal_code}${provider.address_city ? ` ${provider.address_city}` : ''}`}
           </span>
         </div>
       )}

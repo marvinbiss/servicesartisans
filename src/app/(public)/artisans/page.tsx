@@ -232,8 +232,11 @@ export default async function ArtisansPage() {
                     <div className="flex items-center gap-2 text-sm text-gray-600 mb-1">
                       <MapPin className="w-4 h-4 text-gray-400 flex-shrink-0" />
                       <span>
-                        {provider.address_street ? `${provider.address_street}, ` : ''}
-                        {provider.address_postal_code} {provider.address_city}
+                        {provider.address_street
+                          ? provider.address_postal_code && provider.address_street.includes(provider.address_postal_code)
+                            ? provider.address_street
+                            : `${provider.address_street}, ${provider.address_postal_code ?? ''} ${provider.address_city ?? ''}`.trim()
+                          : `${provider.address_postal_code ?? ''} ${provider.address_city ?? ''}`.trim()}
                       </span>
                     </div>
                   )}
