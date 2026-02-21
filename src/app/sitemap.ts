@@ -569,6 +569,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       }
 
       type ProviderRow = {
+        id: string
         name: string | null
         slug: string | null
         stable_id: string | null
@@ -587,7 +588,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       while (from < limit) {
         const { data, error } = await supabase
           .from('providers')
-          .select('name, slug, stable_id, specialty, address_city, updated_at')
+          .select('id, name, slug, stable_id, specialty, address_city, updated_at')
           .eq('is_active', true)
           .eq('noindex', false)
           .order('updated_at', { ascending: false })
@@ -600,7 +601,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       }
 
       const providerEntries: MetadataRoute.Sitemap = allProviders
-        .filter((p) => p.name && (p.stable_id || p.slug) && p.specialty && p.address_city)
+        .filter((p) => p.name && p.specialty && p.address_city)
         .map((p) => {
           const normalizedSpecialty = p.specialty!.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
           const serviceSlug = serviceMap.get(normalizedSpecialty) || specialtyToSlug[p.specialty!.toLowerCase()]
@@ -609,7 +610,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
           const cityName = isInsee ? (inseeMap[rawCity]?.n || rawCity) : rawCity
           const normalizedCity = cityName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
           const locationSlug = villeMap.get(normalizedCity)
-          const publicId = p.stable_id || p.slug
+          const publicId = p.stable_id || p.slug || p.id
 
           if (!serviceSlug || !locationSlug || !publicId) return null
 
