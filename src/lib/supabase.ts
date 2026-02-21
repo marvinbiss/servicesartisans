@@ -241,6 +241,29 @@ export async function getProviderByStableId(stableId: string) {
   }
 }
 
+// Lookup by primary UUID id — fallback for providers with no stable_id/slug.
+export async function getProviderById(id: string) {
+  if (IS_BUILD) return null // Skip during build — ISR will populate on first visit
+  try {
+    return await withTimeout(
+      (async () => {
+        const { data } = await supabase
+          .from('providers')
+          .select('id, name, slug, email, phone, siret, is_verified, is_active, stable_id, noindex, address_city, address_postal_code, address_street, address_region, specialty, rating_average, review_count, created_at')
+          .eq('id', id)
+          .eq('is_active', true)
+          .single()
+
+        return data ? resolveProviderCity(data) : null
+      })(),
+      QUERY_TIMEOUT_MS,
+      `getProviderById(${id})`,
+    )
+  } catch {
+    return null
+  }
+}
+
 // Legacy — still used by non-slice code paths. Will be removed in a future PR.
 export async function getProviderBySlug(slug: string) {
   if (IS_BUILD) return null // Skip during build — ISR will populate on first visit

@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
-import { getProviderByStableId, getProviderBySlug, getServiceBySlug, getLocationBySlug, getProviderCountByServiceAndLocation } from '@/lib/supabase'
+import { getProviderByStableId, getProviderBySlug, getProviderById, getServiceBySlug, getLocationBySlug, getProviderCountByServiceAndLocation } from '@/lib/supabase'
 import { getArtisanUrl } from '@/lib/utils'
 import { resolveProviderCity } from '@/lib/insee-resolver'
 import ArtisanPageClient from '@/components/artisan/ArtisanPageClient'
@@ -405,9 +405,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   // ─── PROVIDER DETAIL (existing logic) ────────────────────
   try {
     // Parallel lookups to minimize total latency
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(publicId)
     const [stableIdResult, slugResult, service] = await Promise.all([
-      getProviderByStableId(publicId).catch(() => null),
-      getProviderBySlug(publicId).catch(() => null),
+      (isUuid ? getProviderById(publicId) : getProviderByStableId(publicId)).catch(() => null),
+      (isUuid ? Promise.resolve(null) : getProviderBySlug(publicId)).catch(() => null),
       getServiceBySlug(serviceSlug).catch(() => null),
     ])
     const rawProvider = stableIdResult || slugResult
@@ -496,9 +497,10 @@ export default async function ProviderPage({ params }: PageProps) {
   let location: Location | null = null
 
   try {
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(publicId)
     const [stableIdResult, slugResult, svcResult, locResult] = await Promise.all([
-      getProviderByStableId(publicId).catch(() => null),
-      getProviderBySlug(publicId).catch(() => null),
+      (isUuid ? getProviderById(publicId) : getProviderByStableId(publicId)).catch(() => null),
+      (isUuid ? Promise.resolve(null) : getProviderBySlug(publicId)).catch(() => null),
       getServiceBySlug(serviceSlug).catch(() => null),
       getLocationBySlug(locationSlug).catch(() => null),
     ])
