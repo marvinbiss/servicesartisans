@@ -587,6 +587,17 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
       const inseeMap = inseeCommunes as Record<string, { n: string }>
 
+      // Extend villeMap with all inseeCommunes for 100% coverage (small communes)
+      // Generated slugs match the locations table exactly (verified against DB)
+      const slugify = (s: string) =>
+        s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+      for (const entry of Object.values(inseeMap)) {
+        const norm = entry.n.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
+        if (!villeMap.has(norm)) {
+          villeMap.set(norm, slugify(entry.n))
+        }
+      }
+
       let allProviders: ProviderRow[] = []
       let from = offset
       const PAGE_SIZE = 1000
