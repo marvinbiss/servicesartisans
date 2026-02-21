@@ -114,11 +114,9 @@ export async function GET(request: Request) {
       .from('bookings')
       .select(`
         id,
-        client_name,
-        client_email,
-        client_phone,
-        service_description,
+        service_name,
         status,
+        client:profiles!client_id(full_name, email, phone_e164),
         slot:availability_slots(
           date,
           end_time,
@@ -180,7 +178,7 @@ export async function GET(request: Request) {
     const artisanIds = Array.from(new Set(bookingsToRequest.map((b) => getSlot(b.slot)?.artisan_id).filter(Boolean)))
     const { data: artisans } = await supabase
       .from('profiles')
-      .select('id, full_name, slug')
+      .select('id, full_name')
       .in('id', artisanIds)
 
     const artisanMap = new Map(artisans?.map((a) => [a.id, a]) || [])
@@ -191,31 +189,32 @@ export async function GET(request: Request) {
     for (const booking of bookingsToRequest) {
       const slot = getSlot(booking.slot)
       const artisan = artisanMap.get(slot?.artisan_id || '')
+      const client = Array.isArray(booking.client) ? booking.client[0] : booking.client
       const artisanName = artisan?.full_name || 'Artisan'
       const reviewUrl = `${SITE_URL}/donner-avis/${booking.id.slice(0, 8)}`
 
       try {
         // Send email
         const emailTemplate = getReviewEmailTemplate({
-          clientName: booking.client_name,
+          clientName: client?.full_name || '',
           artisanName,
-          serviceName: booking.service_description || 'Service',
+          serviceName: booking.service_name || 'Service',
           reviewUrl,
         })
 
         const emailResult = await sendEmail({
-          to: booking.client_email,
+          to: client?.email || '',
           ...emailTemplate,
         })
 
         // Send SMS if phone available
         let smsResult = { success: false }
-        if (booking.client_phone) {
+        if (client?.phone_e164) {
           const smsData: SMSData = {
-            to: booking.client_phone,
-            clientName: booking.client_name,
+            to: client.phone_e164,
+            clientName: client?.full_name || '',
             artisanName,
-            serviceName: booking.service_description || 'Service',
+            serviceName: booking.service_name || 'Service',
             date: '',
             time: '',
             bookingId: booking.id,
@@ -228,7 +227,7 @@ export async function GET(request: Request) {
           booking_id: booking.id,
           type: 'review_request',
           status: emailResult.success || smsResult.success ? 'sent' : 'failed',
-          recipient_email: booking.client_email,
+          recipient_email: client?.email || '',
           error_message: emailResult.error,
         })
 

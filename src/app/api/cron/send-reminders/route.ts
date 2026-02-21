@@ -38,11 +38,9 @@ export async function GET(request: Request) {
       .from('bookings')
       .select(`
         id,
-        client_name,
-        client_email,
-        client_phone,
-        service_description,
+        service_name,
         status,
+        client:profiles!client_id(full_name, email, phone_e164),
         slot:availability_slots(
           date,
           start_time,
@@ -110,6 +108,7 @@ export async function GET(request: Request) {
     const payloads: NotificationPayload[] = bookingsToRemind.map((booking) => {
       const slot = getSlot(booking.slot)
       const artisan = artisanMap.get(slot?.artisan_id || '')
+      const client = Array.isArray(booking.client) ? booking.client[0] : booking.client
       const formattedDate = slot?.date ? new Date(slot.date).toLocaleDateString('fr-FR', {
         weekday: 'long',
         day: 'numeric',
@@ -119,11 +118,11 @@ export async function GET(request: Request) {
 
       return {
         bookingId: booking.id,
-        clientName: booking.client_name,
-        clientEmail: booking.client_email,
-        clientPhone: booking.client_phone,
+        clientName: client?.full_name || '',
+        clientEmail: client?.email || '',
+        clientPhone: client?.phone_e164 || '',
         artisanName: artisan?.full_name || 'Artisan',
-        serviceName: booking.service_description || 'Service',
+        serviceName: booking.service_name || 'Service',
         date: formattedDate,
         startTime: slot?.start_time || '',
         endTime: slot?.end_time || '',

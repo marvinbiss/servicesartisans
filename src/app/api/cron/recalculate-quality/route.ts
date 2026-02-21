@@ -46,16 +46,11 @@ function calculateQualityScore(provider: Record<string, unknown>): {
   if (provider.phone) score += 10; else flags.push('missing_phone')
   if (provider.email) score += 5; else flags.push('missing_email')
 
-  // Business info (20 points)
-  if (provider.code_naf) score += 5; else flags.push('missing_naf')
-  if (provider.creation_date) score += 5; else flags.push('missing_creation_date')
-  if (provider.legal_form) score += 5; else flags.push('missing_legal_form')
-  if (provider.specialty) score += 5; else flags.push('missing_specialty')
+  // Business info (10 points)
+  if (provider.specialty) score += 10; else flags.push('missing_specialty')
 
-  // Extras (10 points)
-  if (provider.website) score += 3
-  if (provider.description) score += 4
-  if (provider.employee_count) score += 3
+  // Extras (5 points)
+  if (provider.description) score += 5
 
   return { score: Math.min(100, score), flags }
 }
@@ -79,16 +74,11 @@ export async function GET(request: Request) {
     let hasMore = true
 
     while (hasMore) {
-      // Fetch providers that need recalculation:
-      // - updated_at is more recent than their data_quality_score last calc
-      // - or data_quality_score is 0/null (never calculated)
-      // - only active artisan providers
+      // Fetch active providers for quality score calculation
       const { data: providers, error } = await supabase
         .from('providers')
-        .select('id, name, siren, siret, address_street, address_city, address_postal_code, address_department, latitude, longitude, phone, email, code_naf, creation_date, legal_form, specialty, website, description, employee_count, data_quality_score, data_quality_flags, updated_at, derniere_maj_api')
-        .eq('is_artisan', true)
+        .select('id, name, siren, siret, address_street, address_city, address_postal_code, address_department, latitude, longitude, phone, email, specialty, description, updated_at')
         .eq('is_active', true)
-        .or('data_quality_score.is.null,data_quality_score.eq.0,updated_at.gt.derniere_maj_api')
         .range(offset, offset + BATCH_SIZE - 1)
         .order('id')
 
@@ -106,29 +96,8 @@ export async function GET(request: Request) {
       // Process batch
       for (const provider of providers) {
         const { score, flags } = calculateQualityScore(provider)
-
-        // Skip if score hasn't changed
-        if (
-          provider.data_quality_score === score &&
-          JSON.stringify(provider.data_quality_flags) === JSON.stringify(flags)
-        ) {
-          continue
-        }
-
-        const { error: updateError } = await supabase
-          .from('providers')
-          .update({
-            data_quality_score: score,
-            data_quality_flags: flags,
-          })
-          .eq('id', provider.id)
-
-        if (updateError) {
-          totalErrors++
-          logger.error(`[Cron] Error updating quality score for provider ${provider.id}:`, updateError)
-        } else {
-          totalUpdated++
-        }
+        logger.info(`[Cron] Provider ${provider.id}: score=${score} flags=${flags.join(',')}`)
+        totalUpdated++
       }
 
       if (providers.length < BATCH_SIZE) {

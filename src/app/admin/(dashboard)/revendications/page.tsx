@@ -19,7 +19,8 @@ import { useAdminFetch, adminMutate } from '@/hooks/admin/useAdminFetch'
 interface ProviderClaim {
   id: string
   status: 'pending' | 'approved' | 'rejected'
-  notes: string | null
+  siret_provided: string
+  rejection_reason: string | null
   reviewed_at: string | null
   created_at: string
   provider: {
@@ -203,10 +204,20 @@ export default function AdminClaimsPage() {
                     {formatDate(claim.created_at)}
                   </div>
 
-                  {/* Notes / Rejection reason */}
-                  {claim.notes && (
-                    <p className={`text-sm rounded-lg p-2 ${claim.status === 'rejected' ? 'text-red-600 bg-red-50' : 'text-gray-700 bg-gray-50'}`}>
-                      {claim.status === 'rejected' ? 'Motif de rejet' : 'Notes'} : {claim.notes}
+                  {/* SIRET fourni par le demandeur */}
+                  <div className="flex items-center gap-4 text-sm">
+                    <div>
+                      <span className="text-gray-500">SIRET fourni :</span>{' '}
+                      <span className="font-mono font-medium text-gray-900">
+                        {claim.siret_provided}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Rejection reason */}
+                  {claim.rejection_reason && (
+                    <p className="text-sm rounded-lg p-2 text-red-600 bg-red-50">
+                      Motif de rejet : {claim.rejection_reason}
                     </p>
                   )}
                 </div>
