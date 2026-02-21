@@ -53,13 +53,6 @@ const CARD_BG_IMAGES = [
   'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&h=250&fit=crop&q=80',
 ]
 
-// Photos portraits uniques par position
-const FACE_PHOTOS = [
-  'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=104&h=104&fit=crop&crop=face&q=80',
-  'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=104&h=104&fit=crop&crop=face&q=80',
-  'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=104&h=104&fit=crop&crop=face&q=80',
-]
-
 // Avatars pour les avis (fallback quand pas de photo en BDD)
 const REVIEW_AVATARS = [
   'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&h=80&fit=crop&crop=face&q=80',
@@ -323,7 +316,6 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                 const ratingDisplay = rating.toFixed(1).replace('.', ',')
                 const profileHref = a.stable_id ? `/services/${a.slug}` : '/services'
                 const bgImage = CARD_BG_IMAGES[i % CARD_BG_IMAGES.length]
-                const facePhoto = FACE_PHOTOS[i % FACE_PHOTOS.length]
 
                 return (
                   <ScrollReveal key={a.name} delay={i * 0.1}>
@@ -344,15 +336,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                           {a.is_verified ? '✓ Vérifié SIREN' : '✓ Artisan référencé'}
                         </div>
                       </div>
-                      <div className="px-5 pb-6 -mt-6 relative">
-                        <Image
-                          src={facePhoto}
-                          alt={a.name}
-                          width={52}
-                          height={52}
-                          className="rounded-2xl object-cover mb-3"
-                          style={{ border: '3px solid #FFFCF8', boxShadow: '0 4px 14px rgba(0,0,0,.12)' }}
-                        />
+                      <div className="px-5 pb-5 pt-4">
                         <div className="text-base font-black text-stone-900 mb-0.5 line-clamp-1">{a.name}</div>
                         <div className="text-sm text-stone-400 mb-2.5">
                           {a.specialty}{a.address_city ? ` · ${a.address_city}` : ''}
