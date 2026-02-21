@@ -85,8 +85,8 @@ export async function GET(request: NextRequest) {
       response: review.artisan_response,
       moderation_status: review.status === 'published' ? 'approved'
         : review.status === 'hidden' ? 'rejected'
-        : review.status === 'pending_review' ? 'pending'
-        : review.status || 'pending',
+        : review.status === 'pending_review' || review.status === 'flagged' ? 'pending'
+        : 'pending',
       is_visible: review.status === 'published',
       is_flagged: review.status === 'flagged',
       created_at: review.created_at,
