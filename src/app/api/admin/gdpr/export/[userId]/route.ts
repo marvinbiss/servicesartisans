@@ -34,19 +34,19 @@ export async function POST(
       { data: profile },
       { data: bookings },
       { data: reviews },
-      { data: conversations },
     ] = await Promise.all([
       supabase.from('profiles').select('id, email, full_name, is_admin, role, phone_e164, average_rating, review_count').eq('id', userId).single(),
       supabase.from('bookings').select('id, provider_id, client_id, status, scheduled_date, notes, created_at').or(`provider_id.eq.${userId},client_id.eq.${userId}`),
       supabase.from('reviews').select('id, booking_id, artisan_id, client_name, client_email, rating, comment, status, created_at').eq('artisan_id', userId),
-      supabase.from('conversations').select('id, client_id, provider_id, last_message_at, unread_count, created_at, updated_at').or(`client_id.eq.${userId},provider_id.eq.${userId}`),
     ])
 
     const exportData = {
       profile,
       bookings: bookings || [],
       reviews: reviews || [],
-      conversations: conversations || [],
+      // La table conversations n'est pas disponible dans ce contexte d'export.
+      conversations: null,
+      _note: 'Données de conversations non disponibles dans cet export',
       exportedAt: new Date().toISOString(),
       exportedBy: authResult.admin.id,
     }

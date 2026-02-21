@@ -53,12 +53,13 @@ export async function GET(request: NextRequest) {
     const { page, limit, filter, plan, search } = result.data
 
     // NOTE: Supabase Auth does not support server-side filtering by user_metadata (type, plan, etc.).
-    // To allow correct filtering before pagination, we fetch a large batch of users first,
-    // then apply type/plan/search filters in application code, and finally slice for the requested page.
-    // Limitation: for deployments with >1000 users, implement cursor-based pagination or a DB-side users view.
+    // We paginate the Auth list using the query params, then apply filters in application code.
+    // perPage is capped at 100 to avoid oversized responses; clients must page through results.
+    const authPage = parseInt(searchParams.get('page') || '1', 10)
+    const authPerPage = Math.min(parseInt(searchParams.get('perPage') || '50', 10), 100)
     const { data: authUsers, error: authError } = await supabase.auth.admin.listUsers({
-      page: 1,
-      perPage: 1000,
+      page: authPage,
+      perPage: authPerPage,
     })
 
     if (authError) {
@@ -95,7 +96,7 @@ export async function GET(request: NextRequest) {
         email: user.email || '',
         full_name: (profile.full_name as string) || user.user_metadata?.full_name || user.user_metadata?.name || null,
         phone: (profile.phone_e164 as string) || user.user_metadata?.phone || null,
-        user_type: user.user_metadata?.is_artisan ? 'artisan' : 'client',
+        user_type: Boolean(user.user_metadata?.is_artisan) ? 'artisan' : 'client',
         is_verified: !!user.email_confirmed_at,
         is_banned: user.banned_until !== null,
         subscription_plan: (profile.subscription_plan as string) || 'gratuit',
@@ -142,6 +143,7 @@ export async function GET(request: NextRequest) {
       users: paginatedUsers,
       total,
       page,
+      perPage: limit,
       totalPages: Math.ceil(total / limit),
     })
   } catch (error) {

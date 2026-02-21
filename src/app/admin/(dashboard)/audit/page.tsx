@@ -64,6 +64,9 @@ const eventTypeLabels: Record<string, string> = {
   'completed': 'Termin\u00e9',
   'cancelled': 'Annul\u00e9',
   'expired': 'Expir\u00e9',
+  'pending': 'En attente',
+  'reassigned': 'R\u00e9assign\u00e9',
+  'refused': 'Refus\u00e9',
 }
 
 type AuditTab = 'audit_logs' | 'lead_events'
@@ -121,7 +124,7 @@ export default function AdminAuditPage() {
     fetchLogs()
   }, [activeTab, logsPage, entityType, action, dateFrom, dateTo])
 
-  // Fetch lead events
+  // Fetch lead events from dispatch endpoint (lead_assignments with pagination)
   useEffect(() => {
     if (activeTab !== 'lead_events') return
     const fetchEvents = async () => {
@@ -129,17 +132,33 @@ export default function AdminAuditPage() {
         setEventsLoading(true)
         const params = new URLSearchParams({
           page: String(eventsPage),
-          pageSize: '50',
         })
-        if (eventTypeFilter) params.set('event_type', eventTypeFilter)
 
-        const response = await fetch(`/api/admin/audit?${params}`)
+        const response = await fetch(`/api/admin/dispatch?${params}`)
         if (response.ok) {
           const data = await response.json()
-          setLeadEvents(data.events || [])
-          setEventsTotalPages(data.pagination?.totalPages || 1)
-          setEventsTotal(data.pagination?.total || 0)
-          setEventTypeCounts(data.typeCounts || {})
+          // Map lead_assignments to LeadEvent shape
+          const assignments: LeadEvent[] = (data.assignments || []).map(
+            (a: { id: string; lead_id: string; provider_id: string | null; status: string; assigned_at: string }) => ({
+              id: a.id,
+              lead_id: a.lead_id,
+              provider_id: a.provider_id ?? null,
+              actor_id: null,
+              event_type: (a.status as LeadEventType) || 'dispatched',
+              metadata: {},
+              created_at: a.assigned_at,
+            })
+          )
+          setLeadEvents(assignments)
+          const stats: { pending: number; viewed: number; quoted: number; total: number } = data.stats || {}
+          setEventsTotal(stats.total || 0)
+          setEventsTotalPages(Math.ceil((stats.total || 0) / 20) || 1)
+          // Build type counts from stats
+          const counts: Record<string, number> = {}
+          if (stats.pending) counts['pending'] = stats.pending
+          if (stats.viewed) counts['viewed'] = stats.viewed
+          if (stats.quoted) counts['quoted'] = stats.quoted
+          setEventTypeCounts(counts)
         }
       } catch (error) {
         console.error('Failed to fetch lead events:', error)

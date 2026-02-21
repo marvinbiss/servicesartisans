@@ -9,7 +9,7 @@ import { z } from 'zod'
 const quotesQuerySchema = z.object({
   page: z.coerce.number().int().min(1).optional().default(1),
   limit: z.coerce.number().int().min(1).max(100).optional().default(20),
-  status: z.enum(['all', 'pending', 'sent', 'accepted', 'rejected', 'refused', 'expired']).optional().default('all'),
+  status: z.enum(['all', 'pending', 'sent', 'accepted', 'refused', 'completed']).optional().default('all'),
   search: z.string().max(100).optional().default(''),
 })
 
@@ -48,10 +48,9 @@ export async function GET(request: NextRequest) {
       .from('devis_requests')
       .select('*', { count: 'exact' })
 
-    // Filtre par statut — map 'refused' to 'rejected' for DB compatibility
+    // Filtre par statut — valeurs exactes du CHECK constraint (migration 100)
     if (status !== 'all') {
-      const dbStatus = status === 'refused' ? 'rejected' : status
-      query = query.eq('status', dbStatus)
+      query = query.eq('status', status)
     }
 
     // Recherche (sanitized to prevent injection)

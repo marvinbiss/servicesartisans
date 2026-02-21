@@ -76,7 +76,7 @@ export async function GET(
         .from('providers')
         .select('id, name, slug, email, phone, siret, is_verified, is_active, stable_id, noindex, address_city, address_postal_code, address_street, address_region, specialty, rating_average, review_count, created_at')
         .eq('user_id', userId)
-        .single()
+        .maybeSingle()
       providerData = provider
     } catch {
       // No provider or table doesn't exist

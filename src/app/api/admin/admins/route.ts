@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
     const { data: profiles, error, count } = await supabase
       .from('profiles')
       .select('id, email, full_name, role, is_admin, created_at', { count: 'exact' })
-      .or('is_admin.eq.true,role.neq.null')
+      .or('is_admin.eq.true,role.in.(super_admin,admin,moderator,viewer)')
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1)
 

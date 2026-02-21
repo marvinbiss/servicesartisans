@@ -19,7 +19,6 @@ import {
   Shield,
   ExternalLink,
 } from 'lucide-react'
-import { SubscriptionBadge } from '@/components/admin/StatusBadge'
 import { ConfirmationModal } from '@/components/admin/ConfirmationModal'
 import { getArtisanUrl } from '@/lib/utils'
 
@@ -29,7 +28,7 @@ interface ArtisanProfile {
   user_id: string
   email: string
   full_name: string | null
-  company_name: string | null
+  name: string | null
   phone: string | null
   siret: string | null
   description: string | null
@@ -42,7 +41,6 @@ interface ArtisanProfile {
   is_active: boolean
   rating: number | null
   reviews_count: number
-  subscription_plan: 'gratuit' | 'pro' | 'premium'
   created_at: string
   updated_at: string | null
   stats?: {
@@ -213,14 +211,13 @@ export default function AdminArtisanDetailPage() {
             <div>
               <div className="flex items-center gap-3">
                 <h1 className="text-2xl font-bold text-gray-900">
-                  {artisan.company_name || artisan.full_name || 'Sans nom'}
+                  {artisan.name || artisan.full_name || 'Sans nom'}
                 </h1>
 
               </div>
               <p className="text-gray-500 mt-1">{artisan.email}</p>
               <div className="flex items-center gap-3 mt-3">
                 {getStatusBadge()}
-                <SubscriptionBadge plan={artisan.subscription_plan} />
                 {artisan.rating && artisan.reviews_count > 0 && (
                   <div className="flex items-center gap-1 text-sm">
                     <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
@@ -458,7 +455,7 @@ export default function AdminArtisanDetailPage() {
         onClose={() => setVerifyModal(false)}
         onConfirm={handleVerify}
         title="Vérifier l'artisan"
-        message={`Confirmez-vous la vérification de ${artisan.company_name || artisan.full_name} ? Le badge référencé sera affiché sur son profil.`}
+        message={`Confirmez-vous la vérification de ${artisan.name || artisan.full_name} ? Le badge référencé sera affiché sur son profil.`}
         confirmText="Vérifier"
         variant="success"
       />
@@ -471,8 +468,8 @@ export default function AdminArtisanDetailPage() {
         title={artisan.is_active ? "Suspendre l'artisan" : "Réactiver l'artisan"}
         message={
           artisan.is_active
-            ? `Êtes-vous sûr de vouloir suspendre ${artisan.company_name || artisan.full_name} ? Son profil ne sera plus visible.`
-            : `Voulez-vous réactiver le compte de ${artisan.company_name || artisan.full_name} ?`
+            ? `Êtes-vous sûr de vouloir suspendre ${artisan.name || artisan.full_name} ? Son profil ne sera plus visible.`
+            : `Voulez-vous réactiver le compte de ${artisan.name || artisan.full_name} ?`
         }
         confirmText={artisan.is_active ? 'Suspendre' : 'Réactiver'}
         variant={artisan.is_active ? 'warning' : 'success'}
@@ -484,7 +481,7 @@ export default function AdminArtisanDetailPage() {
         onClose={() => setDeleteModal(false)}
         onConfirm={handleDelete}
         title="Supprimer l'artisan"
-        message={`Êtes-vous sûr de vouloir supprimer ${artisan.company_name || artisan.full_name} ? Cette action est irréversible.`}
+        message={`Êtes-vous sûr de vouloir supprimer ${artisan.name || artisan.full_name} ? Cette action est irréversible.`}
         confirmText="Supprimer"
         variant="danger"
         requireConfirmation="SUPPRIMER"

@@ -8,9 +8,10 @@ import {
   User,
   Mail,
   Phone,
-  MapPin,
   Shield,
   CreditCard,
+  Ban,
+  CheckCircle,
 } from 'lucide-react'
 
 interface UserData {
@@ -18,13 +19,11 @@ interface UserData {
   email: string
   full_name: string | null
   phone: string | null
-  address: string | null
-  city: string | null
-  postal_code: string | null
+  role: string | null
+  is_admin: boolean
+  is_banned: boolean
   user_type: 'client' | 'artisan'
   is_verified: boolean
-  is_banned: boolean
-  ban_reason: string | null
   subscription_plan: 'gratuit' | 'pro' | 'premium'
   subscription_status: string | null
   stripe_customer_id: string | null
@@ -39,22 +38,20 @@ export default function EditUserPage() {
   const [user, setUser] = useState<UserData | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [banning, setBanning] = useState(false)
   const [error, setError] = useState('')
 
-  // Form state
+  // Form state — only fields that actually exist in profiles or auth metadata
   const [formData, setFormData] = useState({
     full_name: '',
     phone: '',
-    address: '',
-    city: '',
-    postal_code: '',
     user_type: 'client' as 'client' | 'artisan',
-    is_verified: false,
     subscription_plan: 'gratuit' as 'gratuit' | 'pro' | 'premium',
   })
 
   useEffect(() => {
     fetchUser()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId])
 
   const fetchUser = async () => {
@@ -67,17 +64,13 @@ export default function EditUserPage() {
         setFormData({
           full_name: data.user.full_name || '',
           phone: data.user.phone || '',
-          address: data.user.address || '',
-          city: data.user.city || '',
-          postal_code: data.user.postal_code || '',
           user_type: data.user.user_type || 'client',
-          is_verified: data.user.is_verified || false,
           subscription_plan: data.user.subscription_plan || 'gratuit',
         })
       } else {
         setError('Utilisateur non trouvé')
       }
-    } catch (err) {
+    } catch {
       setError('Erreur de chargement')
     } finally {
       setLoading(false)
@@ -87,6 +80,7 @@ export default function EditUserPage() {
   const handleSave = async () => {
     try {
       setSaving(true)
+      setError('')
       const response = await fetch(`/api/admin/users/${userId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -97,12 +91,37 @@ export default function EditUserPage() {
         router.push(`/admin/utilisateurs/${userId}`)
       } else {
         const data = await response.json()
-        setError(data.error || 'Erreur de sauvegarde')
+        setError(data.error?.message || data.error || 'Erreur de sauvegarde')
       }
-    } catch (err) {
+    } catch {
       setError('Erreur de sauvegarde')
     } finally {
       setSaving(false)
+    }
+  }
+
+  const handleBanToggle = async () => {
+    if (!user) return
+    try {
+      setBanning(true)
+      setError('')
+      const action = user.is_banned ? 'unban' : 'ban'
+      const response = await fetch(`/api/admin/users/${userId}/ban`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action }),
+      })
+
+      if (response.ok) {
+        await fetchUser()
+      } else {
+        const data = await response.json()
+        setError(data.error?.message || data.error || 'Action échouée')
+      }
+    } catch {
+      setError('Erreur lors de la modification du statut')
+    } finally {
+      setBanning(false)
     }
   }
 
@@ -194,7 +213,7 @@ export default function EditUserPage() {
                     disabled
                     className="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-500"
                   />
-                  <p className="text-xs text-gray-500 mt-1">L&apos;email ne peut pas être modifié</p>
+                  <p className="text-xs text-gray-500 mt-1">L&apos;email ne peut pas être modifié ici</p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -205,51 +224,6 @@ export default function EditUserPage() {
                     type="tel"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Address */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-gray-400" />
-              Adresse
-            </h2>
-            <div className="grid gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Adresse
-                </label>
-                <input
-                  type="text"
-                  value={formData.address}
-                  onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Ville
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.city}
-                    onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Code postal
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.postal_code}
-                    onChange={(e) => setFormData({ ...formData, postal_code: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
@@ -280,27 +254,15 @@ export default function EditUserPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Statut de vérification
+                    Email confirmé
                   </label>
-                  <div className="flex items-center gap-2 mt-2">
-                    <button
-                      type="button"
-                      onClick={() => setFormData({ ...formData, is_verified: !formData.is_verified })}
-                      role="switch"
-                      aria-checked={formData.is_verified}
-                      aria-label="Statut de vérification"
-                      className={`relative w-12 h-6 rounded-full transition-colors ${
-                        formData.is_verified ? 'bg-green-600' : 'bg-gray-300'
-                      }`}
-                    >
-                      <span
-                        className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform ${
-                          formData.is_verified ? 'translate-x-6' : ''
-                        }`}
-                      />
-                    </button>
-                    <span className="text-sm text-gray-600">
-                      {formData.is_verified ? 'Référencé' : 'Non référencé'}
+                  <div className="mt-2">
+                    <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium ${
+                      user?.is_verified
+                        ? 'bg-green-100 text-green-700'
+                        : 'bg-gray-100 text-gray-600'
+                    }`}>
+                      {user?.is_verified ? 'Confirmé' : 'Non confirmé'}
                     </span>
                   </div>
                 </div>
@@ -350,6 +312,61 @@ export default function EditUserPage() {
                   </p>
                 </div>
               )}
+              {user?.subscription_status && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Statut Stripe
+                  </label>
+                  <p className="text-sm text-gray-700 bg-gray-50 px-3 py-2 rounded-lg">
+                    {user.subscription_status}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Ban / Unban */}
+          <div className="bg-white rounded-xl shadow-sm border border-red-100 p-6">
+            <h2 className="text-lg font-semibold text-red-900 mb-4 flex items-center gap-2">
+              <Ban className="w-5 h-5 text-red-400" />
+              Accès au compte
+            </h2>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-700 font-medium">
+                  Statut actuel :{' '}
+                  <span className={user?.is_banned ? 'text-red-600 font-semibold' : 'text-green-600 font-semibold'}>
+                    {user?.is_banned ? 'Banni' : 'Actif'}
+                  </span>
+                </p>
+                <p className="text-xs text-gray-500 mt-1">
+                  {user?.is_banned
+                    ? 'Cet utilisateur ne peut pas se connecter.'
+                    : 'Bannir empêche toute connexion via Supabase Auth.'}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={handleBanToggle}
+                disabled={banning}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-50 ${
+                  user?.is_banned
+                    ? 'bg-green-100 text-green-700 hover:bg-green-200'
+                    : 'bg-red-100 text-red-700 hover:bg-red-200'
+                }`}
+              >
+                {user?.is_banned ? (
+                  <>
+                    <CheckCircle className="w-4 h-4" />
+                    {banning ? 'En cours...' : 'Débannir'}
+                  </>
+                ) : (
+                  <>
+                    <Ban className="w-4 h-4" />
+                    {banning ? 'En cours...' : 'Bannir'}
+                  </>
+                )}
+              </button>
             </div>
           </div>
         </div>

@@ -1,14 +1,16 @@
 'use client'
 
-import { useEffect, useState, useCallback, use } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
+import { useParams } from 'next/navigation'
 import { ProspectionNav } from '@/components/admin/prospection/ProspectionNav'
 import { ContactTypeBadge } from '@/components/admin/prospection/StatsCards'
 import { ArrowLeft, Save, AlertCircle, X, Shield, Mail, Phone, MapPin, Building, Tag, User } from 'lucide-react'
 import type { ProspectionContact, ProspectionList, ProspectionMessage } from '@/types/prospection'
 
-export default function ContactDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params)
+export default function ContactDetailPage() {
+  const rawParams = useParams()
+  const id = rawParams.id as string
 
   const [contact, setContact] = useState<ProspectionContact | null>(null)
   const [loading, setLoading] = useState(true)

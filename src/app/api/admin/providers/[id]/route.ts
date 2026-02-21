@@ -30,6 +30,14 @@ const updateProviderSchema = z.object({
 
 export const dynamic = 'force-dynamic'
 
+const ALLOWED_PROVIDER_FIELDS = [
+  'name', 'slug', 'specialty', 'description', 'bio',
+  'address_street', 'address_city', 'address_postal_code', 'address_region',
+  'address_department', 'latitude', 'longitude', 'phone', 'email', 'siret',
+  'is_verified', 'is_active', 'noindex', 'code_naf',
+  'updated_at',
+]
+
 /** Strip HTML tags from text inputs */
 const stripTags = (val: string | null | undefined): string | null =>
   val ? val.replace(/<[^>]*>/g, '').trim() : null
@@ -139,7 +147,7 @@ export async function GET(
         rating: provider.rating_average || null,
         reviews_count: provider.review_count || 0,
         subscription_plan: 'gratuit',
-        source: provider.source || 'manual',
+        source: 'manual',
         created_at: provider.created_at,
         updated_at: provider.updated_at,
         slug: provider.slug,
@@ -191,8 +199,11 @@ export async function PATCH(
       )
     }
 
-    // Build and execute update
-    const updateData = buildUpdateData(body)
+    // Build and execute update — filter to only allowed DB columns
+    const rawUpdateData = buildUpdateData(body)
+    const updateData = Object.fromEntries(
+      Object.entries(rawUpdateData).filter(([key]) => ALLOWED_PROVIDER_FIELDS.includes(key))
+    )
 
     const { data, error } = await supabase
       .from('providers')

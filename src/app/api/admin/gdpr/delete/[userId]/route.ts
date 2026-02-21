@@ -42,54 +42,89 @@ export async function POST(
       )
     }
 
-    // Récupérer l'email du profil pour anonymiser les avis client
-    const { data: profileData } = await supabase
-      .from('profiles')
-      .select('email')
-      .eq('id', userId)
-      .single()
+    const completedSteps: string[] = []
 
-    // Anonymiser le profil — seules les colonnes qui existent sur profiles
-    await supabase
-      .from('profiles')
-      .update({
-        email: `deleted_${userId.slice(0, 8)}@anonymized.local`,
-        full_name: 'Utilisateur supprimé',
-        phone_e164: null,
-      })
-      .eq('id', userId)
+    try {
+      // Étape 1 — Récupérer l'email du profil pour anonymiser les avis client
+      completedSteps.push('fetch_profile')
+      const { data: profileData } = await supabase
+        .from('profiles')
+        .select('email')
+        .eq('id', userId)
+        .maybeSingle()
 
-    // Anonymiser les avis client (filtrés par client_email car reviews.user_id n'existe pas)
-    if (profileData?.email) {
+      // Étape 2 — Vérifier si l'utilisateur est un artisan
+      completedSteps.push('check_artisan')
+      const { data: artisanRecord } = await supabase
+        .from('providers')
+        .select('id')
+        .eq('user_id', userId)
+        .maybeSingle()
+
+      // Étape 3 — Anonymiser le profil (seules les colonnes qui existent sur profiles)
+      completedSteps.push('anonymize_profile')
       await supabase
-        .from('reviews')
+        .from('profiles')
         .update({
-          client_name: 'Utilisateur supprimé',
-          client_email: 'deleted@anonymized.local',
+          email: `deleted_${userId.slice(0, 8)}@anonymized.local`,
+          full_name: 'Utilisateur supprimé',
+          phone_e164: null,
         })
-        .eq('client_email', profileData.email)
+        .eq('id', userId)
+
+      // Étape 4 — Anonymiser les avis client (filtrés par client_email)
+      completedSteps.push('anonymize_client_reviews')
+      if (profileData?.email) {
+        await supabase
+          .from('reviews')
+          .update({
+            client_name: 'Utilisateur supprimé',
+            client_email: 'deleted@anonymized.local',
+          })
+          .eq('client_email', profileData.email)
+      }
+
+      // Étape 5 — Anonymiser les réponses d'avis uniquement si l'utilisateur est un artisan
+      completedSteps.push('anonymize_artisan_reviews')
+      if (artisanRecord) {
+        await supabase
+          .from('reviews')
+          .update({
+            artisan_response: null,
+            artisan_responded_at: null,
+          })
+          .eq('artisan_id', userId)
+      }
+
+      // Étape 6 — Désactiver le provider si c'est un artisan
+      completedSteps.push('deactivate_provider')
+      if (artisanRecord) {
+        await supabase
+          .from('providers')
+          .update({
+            is_active: false,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('user_id', userId)
+      }
+
+      // Étape 7 — Log d'audit
+      completedSteps.push('audit_log')
+      await logAdminAction(authResult.admin.id, 'gdpr.delete', 'user', userId, { anonymized: true })
+    } catch (stepError) {
+      const failedStep = completedSteps[completedSteps.length - 1] ?? 'unknown'
+      logger.error('GDPR delete failed at step', { completedSteps, userId, error: stepError })
+      return NextResponse.json(
+        {
+          success: false,
+          error: {
+            message: `Suppression partielle — étape échouée: ${failedStep}`,
+            completedSteps,
+          },
+        },
+        { status: 500 }
+      )
     }
-
-    // Anonymiser les réponses d'avis si l'utilisateur était un artisan
-    await supabase
-      .from('reviews')
-      .update({
-        artisan_response: null,
-        artisan_responded_at: null,
-      })
-      .eq('artisan_id', userId)
-
-    // Désactiver le provider si c'est un artisan
-    await supabase
-      .from('providers')
-      .update({
-        is_active: false,
-        updated_at: new Date().toISOString(),
-      })
-      .eq('user_id', userId)
-
-    // Log d'audit
-    await logAdminAction(authResult.admin.id, 'gdpr.delete', 'user', userId, { anonymized: true })
 
     return NextResponse.json({
       success: true,

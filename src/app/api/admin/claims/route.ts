@@ -142,15 +142,30 @@ export async function PATCH(request: NextRequest) {
     }
 
     if (action === 'approve') {
-      // 0. Verify provider is still unclaimed (race condition check)
-      const { data: provider } = await supabase
+      // 1. Assign the provider to the user atomically: only if user_id IS NULL.
+      // This single UPDATE eliminates the race condition — no separate check needed.
+      const { data: updatedProvider, error: providerError } = await supabase
         .from('providers')
-        .select('id, user_id, name')
+        .update({
+          user_id: claim.user_id,
+          claimed_at: now,
+          claimed_by: claim.user_id,
+          updated_at: now,
+        })
         .eq('id', claim.provider_id)
-        .single()
+        .is('user_id', null)
+        .select('id')
+        .maybeSingle()
 
-      if (provider?.user_id) {
-        // Provider was claimed by another flow — auto-reject this claim
+      if (providerError) {
+        return NextResponse.json(
+          { success: false, error: { message: 'Erreur lors de l\'attribution de la fiche' } },
+          { status: 500 }
+        )
+      }
+
+      if (!updatedProvider) {
+        // No row matched: provider was already claimed by another flow — auto-reject
         await supabase
           .from('provider_claims')
           .update({ status: 'rejected', rejection_reason: 'Fiche déjà attribuée', reviewed_by: authResult.admin.id, reviewed_at: now })
@@ -162,7 +177,7 @@ export async function PATCH(request: NextRequest) {
         )
       }
 
-      // 1. Update the claim status
+      // 2. Update the claim status (provider is now safely assigned)
       const { error: updateClaimError } = await supabase
         .from('provider_claims')
         .update({
@@ -175,30 +190,6 @@ export async function PATCH(request: NextRequest) {
       if (updateClaimError) {
         return NextResponse.json(
           { success: false, error: { message: 'Erreur lors de la mise à jour de la demande' } },
-          { status: 500 }
-        )
-      }
-
-      // 2. Assign the provider to the user
-      const { error: providerError } = await supabase
-        .from('providers')
-        .update({
-          user_id: claim.user_id,
-          claimed_at: now,
-          claimed_by: claim.user_id,
-          updated_at: now,
-        })
-        .eq('id', claim.provider_id)
-
-      if (providerError) {
-        // Rollback claim status
-        await supabase
-          .from('provider_claims')
-          .update({ status: 'pending', reviewed_by: null, reviewed_at: null })
-          .eq('id', claimId)
-
-        return NextResponse.json(
-          { success: false, error: { message: 'Erreur lors de l\'attribution de la fiche' } },
           { status: 500 }
         )
       }
