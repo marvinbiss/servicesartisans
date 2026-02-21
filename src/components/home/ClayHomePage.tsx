@@ -40,21 +40,51 @@ const FALLBACK_ARTISANS = [
   },
 ]
 
-const FALLBACK_REVIEWS: HomepageReview[] = [
-  { client_name: 'Marie Fontaine', rating: 5, comment: "Marc a réglé ma fuite d'eau en urgence un dimanche soir. Rapide, propre, prix honnête. ServicesArtisans m'a littéralement sauvé la mise.", created_at: '' },
-  { client_name: 'Thomas Bernard', rating: 4, comment: "Rénovation complète de notre appartement. Sophie et son équipe ont fait un travail remarquable dans les délais prévus et dans le budget annoncé.", created_at: '' },
-  { client_name: 'Amélie Leclerc', rating: 5, comment: "Enfin une plateforme sérieuse ! Artisans vraiment vérifiés, pas des fakes. J'ai trouvé mon électricien en 5 minutes, travaux réalisés 3 jours plus tard.", created_at: '' },
+const FALLBACK_REVIEWS = [
+  { client_name: 'Marie Fontaine', rating: 5, comment: "Marc a réglé ma fuite d'eau en urgence un dimanche soir. Rapide, propre, prix honnête. ServicesArtisans m'a littéralement sauvé la mise.", created_at: '', avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&h=80&fit=crop&crop=face&q=80' },
+  { client_name: 'Thomas Bernard', rating: 4, comment: "Rénovation complète de notre appartement. Sophie et son équipe ont fait un travail remarquable dans les délais prévus et dans le budget annoncé.", created_at: '', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face&q=80' },
+  { client_name: 'Amélie Leclerc', rating: 5, comment: "Enfin une plateforme sérieuse ! Artisans vraiment vérifiés, pas des fakes. J'ai trouvé mon électricien en 5 minutes, travaux réalisés 3 jours plus tard.", created_at: '', avatar: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=80&h=80&fit=crop&crop=face&q=80' },
 ]
 
+// Images de fond par spécialité pour les cards artisans
 const SPECIALTY_IMAGES: Record<string, string> = {
-  default: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=500&h=250&fit=crop&q=80',
+  plombier:    'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&h=250&fit=crop&q=80',
+  electricien: 'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=500&h=250&fit=crop&q=80',
+  serrurier:   'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&h=250&fit=crop&q=80',
+  chauffagiste:'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=500&h=250&fit=crop&q=80',
+  peintre:     'https://images.unsplash.com/photo-1562259929-b4e1fd3aef09?w=500&h=250&fit=crop&q=80',
+  menuisier:   'https://images.unsplash.com/photo-1601564921647-b446839d7bdf?w=500&h=250&fit=crop&q=80',
+  macon:       'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=500&h=250&fit=crop&q=80',
+  default:     'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=500&h=250&fit=crop&q=80',
+}
+
+// Photos portraits par index (pour les artisans sans avatar)
+const FACE_PHOTOS = [
+  'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=104&h=104&fit=crop&crop=face&q=80',
+  'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=104&h=104&fit=crop&crop=face&q=80',
+  'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=104&h=104&fit=crop&crop=face&q=80',
+]
+
+// Avatars pour les avis (fallback quand pas de photo en BDD)
+const REVIEW_AVATARS = [
+  'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&h=80&fit=crop&crop=face&q=80',
+  'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face&q=80',
+  'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=80&h=80&fit=crop&crop=face&q=80',
+  'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=face&q=80',
+  'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face&q=80',
+  'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=80&h=80&fit=crop&crop=face&q=80',
+]
+
+function getSpecialtyImage(specialty: string | null): string {
+  if (!specialty) return SPECIALTY_IMAGES.default
+  const lower = specialty.toLowerCase()
+  for (const [key, url] of Object.entries(SPECIALTY_IMAGES)) {
+    if (lower.includes(key)) return url
+  }
+  return SPECIALTY_IMAGES.default
 }
 
 const HERO_BLUR = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMCwsKCwsICw4QDQoNDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAAFAAoDASIAAhEBAxEB/8QAFAABAAAAAAAAAAAAAAAAAAAACf/EAB4QAAEEAgMBAAAAAAAAAAAAAAIAAQMEBREGEiEx/8QAFQEBAQAAAAAAAAAAAAAAAAAABAX/xAAeEQABBAEFAAAAAAAAAAAAAAABAAIDBAUREiExQf/aAAwDAQACEQMRAD8AoW+W5S/yW7PQumBOhO4iID9AA/sRFVhyGRleTIhbxs00f//Z'
-
-function getInitials(name: string): string {
-  return name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
-}
 
 function renderStars(rating: number) {
   return [1, 2, 3, 4, 5].map(i => (
@@ -306,6 +336,8 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                 const rating = a.rating_average ?? 0
                 const ratingDisplay = rating.toFixed(1).replace('.', ',')
                 const profileHref = a.stable_id ? `/services/${a.slug}` : '/services'
+                const bgImage = getSpecialtyImage(a.specialty)
+                const facePhoto = FACE_PHOTOS[i % FACE_PHOTOS.length]
 
                 return (
                   <ScrollReveal key={a.name} delay={i * 0.1}>
@@ -315,7 +347,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                     >
                       <div className="relative overflow-hidden" style={{ height: '200px', background: 'linear-gradient(160deg,#3D2414 0%,#5C3820 100%)' }}>
                         <Image
-                          src={SPECIALTY_IMAGES.default}
+                          src={bgImage}
                           alt=""
                           fill
                           sizes="(max-width: 768px) 100vw, 33vw"
@@ -327,12 +359,14 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                         </div>
                       </div>
                       <div className="px-5 pb-6 -mt-6 relative">
-                        <div
-                          className="w-[52px] h-[52px] rounded-2xl bg-clay-400 flex items-center justify-center text-white text-lg font-bold mb-3"
+                        <Image
+                          src={facePhoto}
+                          alt={a.name}
+                          width={52}
+                          height={52}
+                          className="rounded-2xl object-cover mb-3"
                           style={{ border: '3px solid #FFFCF8', boxShadow: '0 4px 14px rgba(0,0,0,.12)' }}
-                        >
-                          {getInitials(a.name)}
-                        </div>
+                        />
                         <div className="text-base font-black text-stone-900 mb-0.5">{a.name}</div>
                         <div className="text-sm text-stone-400 mb-2.5">
                           {a.specialty}{a.address_city ? ` · ${a.address_city}` : ''}
@@ -425,29 +459,39 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
           </div>
 
           <div className="max-w-[1320px] mx-auto px-6 md:px-10 pb-12 grid grid-cols-1 md:grid-cols-3 gap-5">
-            {bigReviews.map((rv, i) => (
-              <ScrollReveal key={rv.client_name || i} delay={i * 0.1}>
-                <div
-                  className="rounded-2xl p-7 transition-all duration-300"
-                  style={{ background: 'rgba(255,255,255,.05)', border: '1px solid rgba(255,255,255,.08)' }}
-                >
-                  <div className="text-[48px] font-black leading-none mb-4 opacity-60 text-clay-400">&ldquo;</div>
-                  <p className="text-base leading-[1.75] mb-5 italic" style={{ color: 'rgba(255,255,255,.85)' }}>{rv.comment}</p>
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-10 h-10 rounded-full bg-clay-400/30 flex items-center justify-center text-white text-xs font-bold" style={{ border: '2px solid rgba(255,255,255,.1)' }}>
-                      {getInitials(rv.client_name || 'CV')}
-                    </div>
-                    <div>
-                      <div className="text-sm font-bold text-white">{rv.client_name || 'Client vérifié'}</div>
-                      <div className="text-xs" style={{ color: 'rgba(255,255,255,.60)' }}>Client vérifié</div>
-                    </div>
-                    <div className="ml-auto text-xs">
-                      {renderStars(rv.rating)}
+            {bigReviews.map((rv, i) => {
+              const avatar = 'avatar' in rv && rv.avatar
+                ? rv.avatar as string
+                : REVIEW_AVATARS[i % REVIEW_AVATARS.length]
+              return (
+                <ScrollReveal key={rv.client_name || i} delay={i * 0.1}>
+                  <div
+                    className="rounded-2xl p-7 transition-all duration-300"
+                    style={{ background: 'rgba(255,255,255,.05)', border: '1px solid rgba(255,255,255,.08)' }}
+                  >
+                    <div className="text-[48px] font-black leading-none mb-4 opacity-60 text-clay-400">&ldquo;</div>
+                    <p className="text-base leading-[1.75] mb-5 italic" style={{ color: 'rgba(255,255,255,.85)' }}>{rv.comment}</p>
+                    <div className="flex items-center gap-2.5">
+                      <Image
+                        src={avatar}
+                        alt={rv.client_name || 'Client vérifié'}
+                        width={40}
+                        height={40}
+                        className="rounded-full object-cover"
+                        style={{ border: '2px solid rgba(255,255,255,.1)' }}
+                      />
+                      <div>
+                        <div className="text-sm font-bold text-white">{rv.client_name || 'Client vérifié'}</div>
+                        <div className="text-xs" style={{ color: 'rgba(255,255,255,.60)' }}>Client vérifié</div>
+                      </div>
+                      <div className="ml-auto text-xs">
+                        {renderStars(rv.rating)}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </ScrollReveal>
-            ))}
+                </ScrollReveal>
+              )
+            })}
           </div>
 
           <div className="overflow-hidden mt-2 px-10">

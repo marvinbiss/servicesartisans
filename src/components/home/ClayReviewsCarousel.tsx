@@ -1,7 +1,19 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import type { HomepageReview } from '@/lib/data/stats'
+
+const AVATAR_PHOTOS = [
+  'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face&q=80',
+  'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face&q=80',
+  'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face&q=80',
+  'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=face&q=80',
+  'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face&q=80',
+  'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&h=80&fit=crop&crop=face&q=80',
+  'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=80&h=80&fit=crop&crop=face&q=80',
+  'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=80&h=80&fit=crop&crop=face&q=80',
+]
 
 const FALLBACK_REVIEWS = [
   { client_name: 'Jean-Pierre D.', rating: 5, comment: 'Fuite d\'eau un samedi soir. Artisan en 20 min. Bluffant.', created_at: '' },
@@ -20,11 +32,6 @@ function StarIcon({ filled }: { filled: boolean }) {
       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
     </svg>
   )
-}
-
-function getInitials(name: string | null): string {
-  if (!name) return '?'
-  return name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
 }
 
 interface Props {
@@ -68,9 +75,14 @@ export function ClayReviewsCarousel({ reviews }: Props) {
               &ldquo;{review.comment}&rdquo;
             </p>
             <div className="flex items-center gap-2">
-              <div className="w-9 h-9 rounded-full bg-clay-400/30 flex items-center justify-center text-white text-xs font-bold shrink-0 border-2 border-white/15">
-                {getInitials(review.client_name)}
-              </div>
+              <Image
+                src={AVATAR_PHOTOS[idx % AVATAR_PHOTOS.length]}
+                alt={review.client_name || 'Client vérifié'}
+                width={36}
+                height={36}
+                className="rounded-full object-cover shrink-0"
+                style={{ border: '2px solid rgba(255,255,255,.15)' }}
+              />
               <div>
                 <p className="text-white text-sm font-medium">{review.client_name || 'Client vérifié'}</p>
                 <p className="text-white/70 text-xs">Client vérifié</p>
