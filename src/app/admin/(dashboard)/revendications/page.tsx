@@ -71,10 +71,9 @@ export default function AdminClaimsPage() {
   const confirmAction = async () => {
     try {
       setActionError(null)
-      await adminMutate('/api/admin/claims', {
-        method: 'PATCH',
+      await adminMutate(`/api/admin/claims/${actionModal.claimId}`, {
+        method: 'PUT',
         body: {
-          claimId: actionModal.claimId,
           action: actionModal.action,
           ...(actionModal.action === 'reject' && rejectionReason ? { rejectionReason } : {}),
         },

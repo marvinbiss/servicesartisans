@@ -50,7 +50,7 @@ export async function GET() {
     // Fetch provider by user_id
     const { data: provider, error: providerError } = await supabase
       .from('providers')
-      .select('id, stable_id, name, slug, email, phone, siret, specialty, description, bio, address_street, address_city, address_postal_code, address_region, address_department, latitude, longitude, is_verified, is_active, noindex, rating_average, review_count, code_naf, user_id, created_at, updated_at')
+      .select('id, stable_id, name, slug, email, phone, siret, specialty, description, address_street, address_city, address_postal_code, address_region, address_department, latitude, longitude, is_verified, is_active, noindex, rating_average, review_count, user_id, created_at, updated_at')
       .eq('user_id', user.id)
       .single()
 
@@ -139,8 +139,8 @@ export async function PUT(request: Request) {
     for (const [key, value] of Object.entries(validated)) {
       if (value === undefined) continue
 
-      if (key === 'description' || key === 'bio') {
-        // Strip all HTML tags from description and bio
+      if (key === 'description') {
+        // Strip all HTML tags from description
         if (typeof value === 'string') {
           const { default: DOMPurify } = await import('isomorphic-dompurify')
           updateData[key] = DOMPurify.sanitize(value, { ALLOWED_TAGS: [] })

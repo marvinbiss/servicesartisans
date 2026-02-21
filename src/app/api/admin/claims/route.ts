@@ -56,7 +56,6 @@ export async function GET(request: NextRequest) {
       .from('provider_claims')
       .select(`
         id,
-        siret_provided,
         status,
         notes,
         reviewed_at,
@@ -148,8 +147,6 @@ export async function PATCH(request: NextRequest) {
         .from('providers')
         .update({
           user_id: claim.user_id,
-          claimed_at: now,
-          claimed_by: claim.user_id,
           updated_at: now,
         })
         .eq('id', claim.provider_id)

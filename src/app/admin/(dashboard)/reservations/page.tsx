@@ -7,7 +7,6 @@ import {
   ChevronLeft,
   ChevronRight,
   XCircle,
-  Clock,
   User,
   Briefcase,
 } from 'lucide-react'
@@ -19,10 +18,9 @@ import { useAdminFetch, adminMutate } from '@/hooks/admin/useAdminFetch'
 interface Booking {
   id: string
   provider_id: string
-  client_email: string
-  service: string
-  booking_date: string
-  time_slot: string
+  client_id: string
+  service_name: string
+  scheduled_date: string
   status: string
   payment_status: string
   deposit_amount: number | null
@@ -161,7 +159,7 @@ export default function AdminReservationsPage() {
                   <thead className="bg-gray-50 border-b border-gray-100">
                     <tr>
                       <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
-                        Date & Heure
+                        Date
                       </th>
                       <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
                         Client
@@ -189,21 +187,15 @@ export default function AdminReservationsPage() {
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2">
                             <Calendar className="w-4 h-4 text-gray-400" />
-                            <div>
-                              <p className="font-medium text-gray-900">
-                                {formatDate(booking.booking_date)}
-                              </p>
-                              <p className="text-sm text-gray-500 flex items-center gap-1">
-                                <Clock className="w-3 h-3" />
-                                {booking.time_slot}
-                              </p>
-                            </div>
+                            <p className="font-medium text-gray-900">
+                              {formatDate(booking.scheduled_date)}
+                            </p>
                           </div>
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2">
                             <User className="w-4 h-4 text-gray-400" />
-                            <span className="text-gray-900">{booking.client_email}</span>
+                            <span className="text-gray-900">{booking.client_id}</span>
                           </div>
                         </td>
                         <td className="px-6 py-4">
@@ -218,7 +210,7 @@ export default function AdminReservationsPage() {
                           </div>
                         </td>
                         <td className="px-6 py-4 text-gray-900">
-                          {booking.service}
+                          {booking.service_name}
                         </td>
                         <td className="px-6 py-4">
                           <BookingStatusBadge status={booking.status} />

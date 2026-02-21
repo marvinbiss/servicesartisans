@@ -6,13 +6,10 @@ import { isValidUuid } from '@/lib/sanitize'
 import { z } from 'zod'
 
 // PATCH request schema
+// Note: client_name, client_email, client_phone, service_description are NOT columns on bookings
 const updateBookingSchema = z.object({
   status: z.enum(['pending', 'confirmed', 'completed', 'cancelled']).optional(),
   notes: z.string().max(1000).optional(),
-  client_name: z.string().max(100).optional(),
-  client_email: z.string().email().optional(),
-  client_phone: z.string().max(20).optional(),
-  service_description: z.string().max(500).optional(),
 })
 
 export const dynamic = 'force-dynamic'

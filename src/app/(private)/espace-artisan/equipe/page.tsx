@@ -101,7 +101,7 @@ export default function EquipePage() {
       if (editingMember) {
         // Update existing member
         const res = await fetch(`/api/artisan/equipe/${editingMember.id}`, {
-          method: 'PATCH',
+          method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             name: formData.name,

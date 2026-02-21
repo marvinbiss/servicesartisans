@@ -47,7 +47,7 @@ export async function GET(request: NextRequest) {
     let query = supabase
       .from('quotes')
       .select(
-        'id, provider_id, request_id, amount, description, valid_until, status, created_at, request:devis_requests(id, service, city, client_id), provider:providers(id, name, slug)',
+        'id, provider_id, request_id, amount, description, valid_until, status, created_at, request:devis_requests(id, service_name, city, client_id), provider:providers(id, name, slug)',
         { count: 'exact' }
       )
 

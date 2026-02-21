@@ -18,16 +18,14 @@ import { useAdminFetch, adminMutate } from '@/hooks/admin/useAdminFetch'
 
 interface Review {
   id: string
-  author_name: string
-  author_email: string
+  client_name: string
+  client_email: string
   provider_name: string
   provider_id: string
   rating: number
   comment: string
   response?: string
-  moderation_status: 'pending' | 'approved' | 'rejected'
-  is_visible: boolean
-  is_flagged: boolean
+  status: 'pending_review' | 'published' | 'hidden' | 'flagged'
   created_at: string
 }
 
@@ -37,7 +35,7 @@ interface ReviewsResponse {
 }
 
 export default function AdminReviewsPage() {
-  const [filter, setFilter] = useState<'all' | 'pending' | 'flagged' | 'approved' | 'rejected'>('pending')
+  const [filter, setFilter] = useState<'all' | 'pending_review' | 'flagged' | 'published' | 'hidden'>('pending_review')
   const [page, setPage] = useState(1)
   const [actionError, setActionError] = useState<string | null>(null)
 
@@ -50,8 +48,8 @@ export default function AdminReviewsPage() {
   const [moderationModal, setModerationModal] = useState<{
     open: boolean
     reviewId: string
-    status: 'approved' | 'rejected'
-  }>({ open: false, reviewId: '', status: 'approved' })
+    status: 'published' | 'hidden'
+  }>({ open: false, reviewId: '', status: 'published' })
 
   const confirmModeration = async () => {
     try {
@@ -59,32 +57,30 @@ export default function AdminReviewsPage() {
       await adminMutate(`/api/admin/reviews/${moderationModal.reviewId}`, {
         method: 'PATCH',
         body: {
-          moderation_status: moderationModal.status,
-          is_visible: moderationModal.status === 'approved',
+          status: moderationModal.status,
         },
       })
-      setModerationModal({ open: false, reviewId: '', status: 'approved' })
+      setModerationModal({ open: false, reviewId: '', status: 'published' })
       mutate()
     } catch {
       setActionError('Erreur lors de la modération de l\'avis')
     }
   }
 
-  const handleModeration = (reviewId: string, status: 'approved' | 'rejected') => {
-    if (status === 'rejected') {
+  const handleModeration = (reviewId: string, status: 'published' | 'hidden') => {
+    if (status === 'hidden') {
       setModerationModal({ open: true, reviewId, status })
       return
     }
-    // Approve directly
-    setModerationModal({ open: false, reviewId: '', status: 'approved' })
+    // Publish directly
+    setModerationModal({ open: false, reviewId: '', status: 'published' })
     ;(async () => {
       try {
         setActionError(null)
         await adminMutate(`/api/admin/reviews/${reviewId}`, {
           method: 'PATCH',
           body: {
-            moderation_status: status,
-            is_visible: true,
+            status,
           },
         })
         mutate()
@@ -99,16 +95,15 @@ export default function AdminReviewsPage() {
   const displayError = actionError || (error ? error.message : null)
 
   const getStatusBadge = (review: Review) => {
-    if (review.is_flagged) {
-      return <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs flex items-center gap-1"><Flag className="w-3 h-3" /> Signalé</span>
-    }
-    switch (review.moderation_status) {
-      case 'pending':
+    switch (review.status) {
+      case 'flagged':
+        return <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs flex items-center gap-1"><Flag className="w-3 h-3" /> Signalé</span>
+      case 'pending_review':
         return <span className="px-2 py-1 bg-amber-100 text-amber-700 rounded-full text-xs">En attente</span>
-      case 'approved':
-        return <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">Approuvé</span>
-      case 'rejected':
-        return <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs">Rejeté</span>
+      case 'published':
+        return <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">Publié</span>
+      case 'hidden':
+        return <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs">Masqué</span>
     }
   }
 
@@ -136,7 +131,7 @@ export default function AdminReviewsPage() {
         {/* Filters */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6">
           <div className="flex flex-wrap gap-2">
-            {(['all', 'pending', 'flagged', 'approved', 'rejected'] as const).map((f) => (
+            {(['all', 'pending_review', 'flagged', 'published', 'hidden'] as const).map((f) => (
               <button
                 key={f}
                 onClick={() => { setFilter(f); setPage(1); }}
@@ -147,9 +142,9 @@ export default function AdminReviewsPage() {
                 }`}
               >
                 {f === 'all' ? 'Tous' :
-                 f === 'pending' ? 'En attente' :
+                 f === 'pending_review' ? 'En attente' :
                  f === 'flagged' ? 'Signalés' :
-                 f === 'approved' ? 'Approuvés' : 'Rejetés'}
+                 f === 'published' ? 'Publiés' : 'Masqués'}
               </button>
             ))}
           </div>
@@ -179,10 +174,10 @@ export default function AdminReviewsPage() {
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <h3 className="font-medium text-gray-900">{review.author_name}</h3>
+                        <h3 className="font-medium text-gray-900">{review.client_name}</h3>
                         {getStatusBadge(review)}
                       </div>
-                      <p className="text-sm text-gray-500">{review.author_email}</p>
+                      <p className="text-sm text-gray-500">{review.client_email}</p>
                       <div className="flex items-center gap-3 mt-1">
                         {renderStars(review.rating)}
                         <span className="text-sm text-gray-400 flex items-center gap-1">
@@ -209,21 +204,21 @@ export default function AdminReviewsPage() {
                   </div>
                 )}
 
-                {review.moderation_status === 'pending' && (
+                {review.status === 'pending_review' && (
                   <div className="flex items-center justify-end gap-2 pt-4 border-t border-gray-100">
                     <button
-                      onClick={() => handleModeration(review.id, 'approved')}
+                      onClick={() => handleModeration(review.id, 'published')}
                       className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
                     >
                       <CheckCircle className="w-4 h-4" />
-                      Approuver
+                      Publier
                     </button>
                     <button
-                      onClick={() => handleModeration(review.id, 'rejected')}
+                      onClick={() => handleModeration(review.id, 'hidden')}
                       className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
                     >
                       <XCircle className="w-4 h-4" />
-                      Rejeter
+                      Masquer
                     </button>
                   </div>
                 )}
@@ -259,11 +254,11 @@ export default function AdminReviewsPage() {
       {/* Reject Review Confirmation Modal */}
       <ConfirmationModal
         isOpen={moderationModal.open}
-        onClose={() => setModerationModal({ open: false, reviewId: '', status: 'approved' })}
+        onClose={() => setModerationModal({ open: false, reviewId: '', status: 'published' })}
         onConfirm={confirmModeration}
-        title="Rejeter l'avis"
-        message="Êtes-vous sûr de vouloir rejeter cet avis ? Il ne sera plus visible publiquement."
-        confirmText="Rejeter"
+        title="Masquer l'avis"
+        message="Êtes-vous sûr de vouloir masquer cet avis ? Il ne sera plus visible publiquement."
+        confirmText="Masquer"
         variant="danger"
       />
     </div>

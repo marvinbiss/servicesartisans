@@ -25,22 +25,21 @@ import { getArtisanUrl } from '@/lib/utils'
 interface ArtisanProfile {
   id: string
   stable_id?: string
-  user_id: string
   email: string
-  full_name: string | null
   name: string | null
+  slug: string | null
   phone: string | null
   siret: string | null
   description: string | null
-  services: string[]
-  zones: string[]
-  address: string | null
-  city: string | null
-  postal_code: string | null
+  specialty: string | null
+  address_street: string | null
+  address_city: string | null
+  address_postal_code: string | null
+  address_region: string | null
   is_verified: boolean
   is_active: boolean
-  rating: number | null
-  reviews_count: number
+  rating_average: number | null
+  review_count: number
   created_at: string
   updated_at: string | null
   stats?: {
@@ -211,18 +210,18 @@ export default function AdminArtisanDetailPage() {
             <div>
               <div className="flex items-center gap-3">
                 <h1 className="text-2xl font-bold text-gray-900">
-                  {artisan.name || artisan.full_name || 'Sans nom'}
+                  {artisan.name || 'Sans nom'}
                 </h1>
 
               </div>
               <p className="text-gray-500 mt-1">{artisan.email}</p>
               <div className="flex items-center gap-3 mt-3">
                 {getStatusBadge()}
-                {artisan.rating && artisan.reviews_count > 0 && (
+                {artisan.rating_average && artisan.review_count > 0 && (
                   <div className="flex items-center gap-1 text-sm">
                     <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-                    <span className="font-medium">{artisan.rating.toFixed(1)}</span>
-                    <span className="text-gray-500">({artisan.reviews_count} avis)</span>
+                    <span className="font-medium">{artisan.rating_average.toFixed(1)}</span>
+                    <span className="text-gray-500">({artisan.review_count} avis)</span>
                   </div>
                 )}
               </div>
@@ -230,7 +229,7 @@ export default function AdminArtisanDetailPage() {
 
             <div className="flex items-center gap-3">
               <a
-                href={getArtisanUrl({ stable_id: artisan?.stable_id || artisanId, specialty: artisan?.services?.[0], city: artisan?.city || undefined })}
+                href={getArtisanUrl({ stable_id: artisan?.stable_id || artisanId, slug: artisan?.slug || undefined, specialty: artisan?.specialty || undefined, city: artisan?.address_city || undefined })}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
@@ -275,7 +274,7 @@ export default function AdminArtisanDetailPage() {
                   <div>
                     <p className="text-sm text-gray-500">Adresse</p>
                     <p className="text-gray-900">
-                      {[artisan.address, artisan.postal_code, artisan.city].filter(Boolean).join(', ') || '-'}
+                      {[artisan.address_street, artisan.address_postal_code, artisan.address_city].filter(Boolean).join(', ') || '-'}
                     </p>
                   </div>
                 </div>
@@ -297,49 +296,18 @@ export default function AdminArtisanDetailPage() {
               </div>
             )}
 
-            {/* Services */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <Briefcase className="w-5 h-5 text-gray-400" />
-                Services proposés
-              </h2>
-              {artisan.services && artisan.services.length > 0 ? (
-                <div className="flex flex-wrap gap-2">
-                  {artisan.services.map((service) => (
-                    <span
-                      key={service}
-                      className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm"
-                    >
-                      {service}
-                    </span>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-gray-500">Aucun service défini</p>
-              )}
-            </div>
-
-            {/* Zones */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <MapPin className="w-5 h-5 text-gray-400" />
-                Zones d&apos;intervention
-              </h2>
-              {artisan.zones && artisan.zones.length > 0 ? (
-                <div className="flex flex-wrap gap-2">
-                  {artisan.zones.map((zone) => (
-                    <span
-                      key={zone}
-                      className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm"
-                    >
-                      {zone}
-                    </span>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-gray-500">Aucune zone définie</p>
-              )}
-            </div>
+            {/* Spécialité */}
+            {artisan.specialty && (
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                  <Briefcase className="w-5 h-5 text-gray-400" />
+                  Spécialité
+                </h2>
+                <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
+                  {artisan.specialty}
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Sidebar */}
@@ -455,7 +423,7 @@ export default function AdminArtisanDetailPage() {
         onClose={() => setVerifyModal(false)}
         onConfirm={handleVerify}
         title="Vérifier l'artisan"
-        message={`Confirmez-vous la vérification de ${artisan.name || artisan.full_name} ? Le badge référencé sera affiché sur son profil.`}
+        message={`Confirmez-vous la vérification de ${artisan.name} ? Le badge référencé sera affiché sur son profil.`}
         confirmText="Vérifier"
         variant="success"
       />
@@ -468,8 +436,8 @@ export default function AdminArtisanDetailPage() {
         title={artisan.is_active ? "Suspendre l'artisan" : "Réactiver l'artisan"}
         message={
           artisan.is_active
-            ? `Êtes-vous sûr de vouloir suspendre ${artisan.name || artisan.full_name} ? Son profil ne sera plus visible.`
-            : `Voulez-vous réactiver le compte de ${artisan.name || artisan.full_name} ?`
+            ? `Êtes-vous sûr de vouloir suspendre ${artisan.name} ? Son profil ne sera plus visible.`
+            : `Voulez-vous réactiver le compte de ${artisan.name} ?`
         }
         confirmText={artisan.is_active ? 'Suspendre' : 'Réactiver'}
         variant={artisan.is_active ? 'warning' : 'success'}
@@ -481,7 +449,7 @@ export default function AdminArtisanDetailPage() {
         onClose={() => setDeleteModal(false)}
         onConfirm={handleDelete}
         title="Supprimer l'artisan"
-        message={`Êtes-vous sûr de vouloir supprimer ${artisan.name || artisan.full_name} ? Cette action est irréversible.`}
+        message={`Êtes-vous sûr de vouloir supprimer ${artisan.name} ? Cette action est irréversible.`}
         confirmText="Supprimer"
         variant="danger"
         requireConfirmation="SUPPRIMER"

@@ -95,11 +95,9 @@ export default function ParametresClientPage() {
       const response = await fetch('/api/user/preferences')
       if (response.ok) {
         const data = await response.json()
-        if (data.preferences) {
-          if (data.preferences.notifications) setNotifications(data.preferences.notifications)
-          if (data.preferences.privacy) setPrivacy(data.preferences.privacy)
-          if (data.preferences.display) setDisplay(data.preferences.display)
-        }
+        if (data.notifications) setNotifications(data.notifications)
+        if (data.privacy) setPrivacy(data.privacy)
+        if (data.display) setDisplay(data.display)
         if (data.userId) setUserId(data.userId)
       }
 
@@ -147,9 +145,7 @@ export default function ParametresClientPage() {
       const response = await fetch('/api/user/preferences', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          preferences: { notifications, privacy, display },
-        }),
+        body: JSON.stringify({ notifications, privacy, display }),
       })
 
       if (response.ok) {

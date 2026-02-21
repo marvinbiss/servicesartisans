@@ -101,7 +101,7 @@ export async function POST(request: Request) {
       .select('id')
       .eq('provider_id', user.id)
       .in('status', ['pending', 'confirmed'])
-      .gte('date', new Date().toISOString().split('T')[0])
+      .gte('scheduled_date', new Date().toISOString().split('T')[0])
 
     if (pendingBookings && pendingBookings.length > 0) {
       return NextResponse.json(

@@ -17,8 +17,6 @@ export default function ContactsPage() {
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [total, setTotal] = useState(0)
-  const [showSyncConfirm, setShowSyncConfirm] = useState(false)
-  const [syncing, setSyncing] = useState(false)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Debounce search input
@@ -63,31 +61,6 @@ export default function ContactsPage() {
     return () => controller.abort()
   }, [fetchContacts])
 
-  const handleSync = async () => {
-    setShowSyncConfirm(false)
-    setSyncing(true)
-    try {
-      setError(null)
-      const res = await fetch('/api/admin/prospection/contacts/sync', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' })
-      if (!res.ok) throw new Error(`Erreur serveur (${res.status})`)
-      const data = await res.json()
-      if (data.success) {
-        setError(null)
-        fetchContacts()
-      } else {
-        setError(data.error?.message || 'Erreur de synchronisation')
-      }
-    } catch (err) {
-      if (err instanceof Error) {
-        setError(err.message)
-      } else {
-        setError('Erreur de synchronisation')
-      }
-    } finally {
-      setSyncing(false)
-    }
-  }
-
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
@@ -96,8 +69,8 @@ export default function ContactsPage() {
           <p className="text-gray-500 mt-1">Gestion des contacts</p>
         </div>
         <div className="flex gap-2">
-          <button onClick={() => setShowSyncConfirm(true)} disabled={syncing} className="flex items-center gap-2 px-4 py-2 text-sm border rounded-lg hover:bg-gray-50 disabled:opacity-50">
-            <Users className="w-4 h-4" /> {syncing ? 'Synchronisation...' : 'Synchroniser les artisans'}
+          <button disabled title="Fonctionnalité non disponible" className="flex items-center gap-2 px-4 py-2 text-sm border rounded-lg opacity-50 cursor-not-allowed">
+            <Users className="w-4 h-4" /> Synchroniser les artisans
           </button>
           <Link href="/admin/prospection/contacts/import" className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700">
             <Upload className="w-4 h-4" /> Importer CSV
@@ -106,15 +79,6 @@ export default function ContactsPage() {
       </div>
 
       <ProspectionNav />
-
-      {/* Inline sync confirmation */}
-      {showSyncConfirm && (
-        <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg flex items-center gap-3 text-sm">
-          <span className="text-yellow-800">Synchroniser les artisans depuis la base de données ?</span>
-          <button onClick={handleSync} className="px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700">Confirmer</button>
-          <button onClick={() => setShowSyncConfirm(false)} className="px-3 py-1 border rounded text-sm hover:bg-gray-50">Annuler</button>
-        </div>
-      )}
 
       {error && (
         <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-sm text-red-700">
@@ -180,7 +144,7 @@ export default function ContactsPage() {
               <tr>
                 <td colSpan={6} className="px-4 py-8 text-center text-gray-400">
                   <Plus className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                  Aucun contact. Importez un CSV ou synchronisez depuis la base.
+                  Aucun contact. Importez un CSV pour commencer.
                 </td>
               </tr>
             ) : (

@@ -31,19 +31,10 @@ export async function POST(
 
     const supabase = await createClient()
 
-    // Fetch booking with slot and artisan info
+    // Fetch booking info
     const { data: booking, error: bookingError } = await supabase
       .from('bookings')
-      .select(`
-        *,
-        slot:availability_slots(
-          id,
-          date,
-          start_time,
-          end_time,
-          artisan_id
-        )
-      `)
+      .select('*')
       .eq('id', params.id)
       .single()
 
@@ -62,7 +53,7 @@ export async function POST(
     }
 
     // Check if cancellation is allowed (at least 24h before)
-    const bookingDate = new Date(`${booking.slot.date}T${booking.slot.start_time}`)
+    const bookingDate = new Date(booking.scheduled_date)
     const now = new Date()
     const hoursUntilBooking = (bookingDate.getTime() - now.getTime()) / (1000 * 60 * 60)
 
@@ -86,27 +77,17 @@ export async function POST(
 
     if (updateError) throw updateError
 
-    // Make the slot available again
-    const { error: slotError } = await supabase
-      .from('availability_slots')
-      .update({ is_available: true })
-      .eq('id', booking.slot.id)
-
-    if (slotError) {
-      logger.error('Error making slot available again:', slotError)
-    }
-
     // Fetch artisan details for notification
     // Uses admin client: RLS policy 328 restricts cross-user profile reads
     const adminSupabase = createAdminClient()
     const { data: artisan } = await adminSupabase
       .from('profiles')
       .select('full_name, email')
-      .eq('id', booking.slot.artisan_id)
+      .eq('id', booking.provider_id)
       .single()
 
     // Format date for email
-    const formattedDate = new Date(booking.slot.date).toLocaleDateString('fr-FR', {
+    const formattedDate = new Date(booking.scheduled_date).toLocaleDateString('fr-FR', {
       weekday: 'long',
       day: 'numeric',
       month: 'long',
@@ -123,8 +104,8 @@ export async function POST(
         artisanEmail: artisan.email,
         serviceName: booking.service_description || 'Service',
         date: formattedDate,
-        startTime: booking.slot.start_time,
-        endTime: booking.slot.end_time,
+        startTime: new Date(booking.scheduled_date).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }),
+        endTime: '',
         cancelledBy,
         reason,
       }).then(async (result) => {

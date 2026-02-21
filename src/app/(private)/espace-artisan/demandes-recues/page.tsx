@@ -178,8 +178,7 @@ export default function DemandesRecuesPage() {
     router.push('/espace-artisan/messages')
   }
 
-  // pendingCount is not computed from leads (current page only) to avoid misleading badge
-  const pendingCount = 0
+  const pendingCount = leads.filter(l => l.status === 'pending').length
 
   return (
     <div className="min-h-screen bg-gray-50">

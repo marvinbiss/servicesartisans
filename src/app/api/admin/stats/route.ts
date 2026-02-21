@@ -113,7 +113,7 @@ export async function GET() {
       // Active users (profile updated in last 7 days)
       supabase.from('profiles').select('id', { count: 'exact', head: true }).gte('updated_at', sevenDaysAgo),
       // Activity feed
-      supabase.from('bookings').select('id, status, created_at, city').order('created_at', { ascending: false }).limit(5),
+      supabase.from('bookings').select('id, status, created_at').order('created_at', { ascending: false }).limit(5),
       supabase.from('reviews').select('id, rating, client_name, status, created_at').order('created_at', { ascending: false }).limit(5),
       supabase.from('user_reports').select('id, target_type, reason, description, status, created_at, reporter_id').eq('status', 'pending').order('created_at', { ascending: false }).limit(10),
       // Chart: last 30 days — reduced from 10K to 5K per table
@@ -151,14 +151,14 @@ export async function GET() {
     type ActivityItem = { id: string; type: string; action: string; details: string; timestamp: string; status?: string }
     const activity: ActivityItem[] = []
 
-    for (const b of safeData<{ id: string; status: string; created_at: string; city: string | null }>(
-      recentBookingsR as PromiseSettledResult<{ data: { id: string; status: string; created_at: string; city: string | null }[] | null }>
+    for (const b of safeData<{ id: string; status: string; created_at: string }>(
+      recentBookingsR as PromiseSettledResult<{ data: { id: string; status: string; created_at: string }[] | null }>
     )) {
       activity.push({
         id: `b-${b.id}`,
         type: 'booking',
         action: 'Nouvelle réservation',
-        details: b.city ? `Réservation à ${b.city}` : 'Nouvelle réservation',
+        details: 'Nouvelle réservation',
         timestamp: b.created_at,
         status: b.status,
       })

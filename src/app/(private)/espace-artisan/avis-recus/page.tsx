@@ -59,13 +59,10 @@ export default function AvisRecusPage() {
     setSubmitting(true)
     setReplyError(null)
     try {
-      const response = await fetch('/api/artisan/avis', {
+      const response = await fetch(`/api/artisan/avis/${reviewId}/response`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          review_id: reviewId,
-          response: replyText.trim(),
-        }),
+        body: JSON.stringify({ response: replyText.trim() }),
       })
 
       if (response.ok) {
