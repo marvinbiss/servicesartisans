@@ -73,20 +73,15 @@ export default function MessagesClientPage() {
     }
   }
 
-  const fetchMessages = async (partnerId: string) => {
+  const fetchMessages = async (conversationId: string) => {
     try {
-      const response = await fetch(`/api/client/messages?with=${partnerId}`)
+      const response = await fetch(`/api/client/messages?conversation_id=${conversationId}`)
       const data = await response.json()
 
       if (response.ok) {
         setMessages(data.messages || [])
-        // Extract current user ID from API response (preferred) or infer from messages
         if (data.currentUserId) {
           setCurrentUserId(data.currentUserId)
-        } else if (data.messages?.length > 0) {
-          // Infer: the sender that is NOT the partner is the current user
-          const msg = data.messages.find((m: Message) => m.sender_id !== partnerId)
-          if (msg) setCurrentUserId(msg.sender_id)
         }
       }
     } catch (error) {

@@ -11,7 +11,7 @@ interface AvisPublie {
   id: string
   artisan: string
   artisan_id: string
-  service: string
+  service: string | null
   date: string
   note: number
   commentaire: string
@@ -22,7 +22,7 @@ interface AvisEnAttente {
   id: string
   artisan: string
   artisan_id: string
-  service: string
+  service: string | null
   date: string
   booking_id: string
 }

@@ -88,7 +88,7 @@ export async function GET(request: Request) {
         .eq('sender_type', 'artisan')
         .is('read_at', null)
 
-      return NextResponse.json({ messages: messages || [] })
+      return NextResponse.json({ messages: messages || [], currentUserId: user.id })
     }
 
     // Fetch all conversations for this client

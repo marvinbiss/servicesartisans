@@ -116,7 +116,7 @@ export default function ParametresClientPage() {
             prenom,
             nom,
             email: profileData.profile.email || '',
-            telephone: profileData.profile.phone || '',
+            telephone: profileData.profile.phone_e164 || '',
           }))
         }
       }
