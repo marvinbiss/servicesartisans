@@ -39,8 +39,8 @@ Colonnes JAMAIS EXISTÉES: receiver_id, is_read, devis_request_id
 RLS: oui
 
 ## TABLE: notifications
-Colonnes: id (uuid PK), user_id (uuid FK→profiles), type (text), title (text), body (text), data (jsonb), read_at (timestamptz), created_at (timestamptz)
-Note: champ est "body" pas "message"
+Colonnes: id (uuid PK), user_id (uuid FK→auth.users), type (text CHECK: lead_created|lead_dispatched|lead_viewed|quote_received|lead_closed|system), title (text), message (text), link (text NULL), read (bool DEFAULT false), metadata (jsonb DEFAULT {}), created_at (timestamptz)
+CORRECTION: champ est "message" (pas "body"), "read" (pas "read_at"), "metadata" (pas "data") — confirmé migration 107, aucun ALTER après
 RLS: oui
 
 ## TABLE: devis_requests

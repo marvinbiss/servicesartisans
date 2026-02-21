@@ -32,16 +32,7 @@ export async function GET(
     const { data: quote, error } = await supabase
       .from('quotes')
       .select(`
-        id, request_id, provider_id, client_id, booking_id, amount, description, valid_until, status, created_at, updated_at,
-        booking:bookings(
-          id,
-          service_type,
-          scheduled_date,
-          address,
-          description,
-          client:users!bookings_client_id_fkey(full_name, email, phone),
-          provider:providers(business_name, phone)
-        )
+        id, request_id, provider_id, amount, description, valid_until, status, created_at, updated_at
       `)
       .eq('id', params.id)
       .single()
@@ -56,7 +47,7 @@ export async function GET(
       )
     }
 
-    // Check authorization
+    // Check authorization: is user the provider of this quote?
     const { data: provider } = await supabase
       .from('providers')
       .select('id')
@@ -64,7 +55,15 @@ export async function GET(
       .single()
 
     const isProvider = provider?.id === quote.provider_id
-    const isClient = quote.client_id === user.id
+
+    // Check if user is the client via the devis_request
+    const { data: devisRequest } = await supabase
+      .from('devis_requests')
+      .select('client_id')
+      .eq('id', quote.request_id)
+      .single()
+
+    const isClient = devisRequest?.client_id === user.id
 
     if (!isProvider && !isClient) {
       return NextResponse.json(
@@ -126,7 +125,7 @@ export async function PATCH(
 
     const { data: quote } = await supabase
       .from('quotes')
-      .select('id, request_id, provider_id, client_id, booking_id, amount, description, valid_until, status, created_at, updated_at')
+      .select('id, request_id, provider_id, amount, description, valid_until, status, created_at, updated_at')
       .eq('id', params.id)
       .single()
 
@@ -148,7 +147,14 @@ export async function PATCH(
       .single()
 
     const isProvider = provider?.id === quote.provider_id
-    const isClient = quote.client_id === user.id
+
+    const { data: devisRequest } = await supabase
+      .from('devis_requests')
+      .select('client_id')
+      .eq('id', quote.request_id)
+      .single()
+
+    const isClient = devisRequest?.client_id === user.id
 
     let newStatus: string
 
@@ -204,14 +210,6 @@ export async function PATCH(
       .single()
 
     if (error) throw error
-
-    // If accepted, update booking status
-    if (newStatus === 'accepted') {
-      await supabase
-        .from('bookings')
-        .update({ status: 'confirmed', total_price: quote.amount })
-        .eq('id', quote.booking_id)
-    }
 
     return NextResponse.json({
       success: true,

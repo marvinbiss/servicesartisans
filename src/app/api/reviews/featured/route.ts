@@ -14,7 +14,7 @@ export async function GET() {
   try {
     const supabase = createAdminClient()
 
-    // Fetch top-rated recent reviews with artisan info (ALL real reviews)
+    // Fetch top-rated recent reviews with artisan info (only published reviews)
     const { data: reviews, error } = await supabase
       .from('reviews')
       .select(`
@@ -28,7 +28,7 @@ export async function GET() {
           full_name
         )
       `)
-      // REMOVED: .eq('is_visible', true) to show ALL real reviews
+      .eq('status', 'published')
       .gte('rating', 4)
       .not('comment', 'is', null)
       .order('created_at', { ascending: false })

@@ -20,9 +20,9 @@ export async function POST() {
     // RLS ensures user can only update their own notifications
     const { error } = await supabase
       .from('notifications')
-      .update({ read_at: new Date().toISOString() })
+      .update({ read: true })
       .eq('user_id', user.id)
-      .is('read_at', null)
+      .eq('read', false)
 
     if (error) {
       console.error('Mark all read error:', error)

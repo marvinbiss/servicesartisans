@@ -197,11 +197,7 @@ async function collectUserData(userId: string) {
     bookingsResult,
     reviewsResult,
     messagesResult,
-    paymentsResult,
-    favoritesResult,
-    searchHistoryResult,
     preferencesResult,
-    documentsResult,
   ] = await Promise.all([
     // Profile data
     getSupabaseAdmin()
@@ -210,41 +206,23 @@ async function collectUserData(userId: string) {
       .eq('id', userId)
       .single(),
 
-    // Bookings (as client or artisan)
+    // Bookings (as client or provider)
     getSupabaseAdmin()
       .from('bookings')
       .select('*')
       .or(`client_id.eq.${userId},provider_id.eq.${userId}`),
 
-    // Reviews written
+    // Reviews where this user is the artisan (reviews.artisan_id → profiles.id)
     getSupabaseAdmin()
       .from('reviews')
       .select('*')
-      .eq('client_id', userId),
+      .eq('artisan_id', userId),
 
-    // Messages
+    // Messages sent by this user
     getSupabaseAdmin()
       .from('messages')
       .select('*')
-      .or(`sender_id.eq.${userId},receiver_id.eq.${userId}`),
-
-    // Payment history
-    getSupabaseAdmin()
-      .from('payments')
-      .select('*')
-      .eq('user_id', userId),
-
-    // Favorites
-    getSupabaseAdmin()
-      .from('favorite_artisans')
-      .select('*')
-      .eq('user_id', userId),
-
-    // Search history
-    getSupabaseAdmin()
-      .from('search_history')
-      .select('*')
-      .eq('user_id', userId),
+      .eq('sender_id', userId),
 
     // Preferences
     getSupabaseAdmin()
@@ -252,12 +230,6 @@ async function collectUserData(userId: string) {
       .select('*')
       .eq('user_id', userId)
       .single(),
-
-    // Documents
-    getSupabaseAdmin()
-      .from('documents')
-      .select('*')
-      .eq('client_id', userId),
   ])
 
   return {
@@ -266,10 +238,6 @@ async function collectUserData(userId: string) {
     bookings: bookingsResult.data || [],
     reviews: reviewsResult.data || [],
     messages: messagesResult.data || [],
-    payments: paymentsResult.data || [],
-    favorites: favoritesResult.data || [],
-    searchHistory: searchHistoryResult.data || [],
     preferences: preferencesResult.data || null,
-    documents: documentsResult.data || [],
   }
 }

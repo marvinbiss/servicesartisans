@@ -84,29 +84,34 @@ export async function submitLead(
     // Log 'created' event — triggers "Demande bien reçue" notification to client
     logLeadEvent(inserted.id, 'created', { actorId: user?.id ?? undefined }).catch(() => {})
 
+    // Determine whether to use direct dispatch or algorithmic dispatch.
+    // If a providerId was given, verify the provider exists and is active.
+    // If the provider is inactive (e.g. deactivated between page load and submission),
+    // fall back to algorithmic dispatch instead of returning an error.
+    let useDirectDispatch = false
     if (data.providerId) {
       const adminClient = createAdminClient()
 
-      // Validate provider exists and is active before assigning
       const { data: provider } = await adminClient
         .from('providers')
         .select('id, is_active')
         .eq('id', data.providerId)
         .single()
 
-      if (!provider || !provider.is_active) {
-        return { success: false, error: 'Artisan invalide ou inactif.' }
+      if (provider && provider.is_active) {
+        useDirectDispatch = true
+        const { error: assignError } = await adminClient.from('lead_assignments').insert({
+          lead_id: inserted.id,
+          provider_id: data.providerId,
+          source_table: 'devis_requests',
+        })
+        if (!assignError) {
+          logLeadEvent(inserted.id, 'dispatched', { providerId: data.providerId }).catch(() => {})
+        }
       }
+    }
 
-      const { error: assignError } = await adminClient.from('lead_assignments').insert({
-        lead_id: inserted.id,
-        provider_id: data.providerId,
-        source_table: 'devis_requests',
-      })
-      if (!assignError) {
-        logLeadEvent(inserted.id, 'dispatched', { providerId: data.providerId }).catch(() => {})
-      }
-    } else {
+    if (!useDirectDispatch) {
       dispatchLead(inserted.id, {
         serviceName: data.serviceName,
         city: data.city,

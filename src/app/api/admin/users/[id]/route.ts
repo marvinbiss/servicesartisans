@@ -17,7 +17,6 @@ const updateUserSchema = z.object({
   city: z.string().max(100).optional(),
   postal_code: z.string().max(10).optional(),
   is_verified: z.boolean().optional(),
-  subscription_plan: z.string().max(50).optional(),
 })
 
 export const dynamic = 'force-dynamic'
@@ -61,7 +60,7 @@ export async function GET(
     try {
       const { data } = await supabase
         .from('profiles')
-        .select('id, email, full_name, is_admin, role, phone_e164, subscription_plan, subscription_status, average_rating, review_count')
+        .select('id, email, full_name, is_admin, role, phone_e164, average_rating, review_count')
         .eq('id', userId)
         .single()
       if (data) profile = data
@@ -119,8 +118,8 @@ export async function GET(
         user_type: profile.role === 'artisan' ? 'artisan' : (user.user_metadata?.is_artisan ? 'artisan' : 'client'),
         is_verified: !!user.email_confirmed_at,
         is_banned: user.banned_until !== null,
-        subscription_plan: profile.subscription_plan || 'gratuit',
-        subscription_status: profile.subscription_status || null,
+        subscription_plan: null,
+        subscription_status: null,
         created_at: user.created_at,
         last_sign_in_at: user.last_sign_in_at,
         provider: providerData,
@@ -190,7 +189,6 @@ export async function PATCH(
       // Only include columns that actually exist on profiles table
       const allowedFields = [
         'full_name',
-        'subscription_plan',
       ]
 
       const updates: Record<string, unknown> = {}

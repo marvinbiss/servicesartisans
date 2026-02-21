@@ -9,7 +9,6 @@ const bulkUpdateSchema = z.object({
   provider_ids: z.array(z.string().uuid()).min(1).max(100),
   updates: z.object({
     is_active: z.boolean().optional(),
-    plan: z.enum(['free', 'pro', 'premium', 'inactive']).optional(),
     is_verified: z.boolean().optional(),
   }),
 })
@@ -48,6 +47,7 @@ export async function PATCH(request: NextRequest) {
       .from('providers')
       .update({ ...updates, updated_at: new Date().toISOString() })
       .in('id', provider_ids)
+      .eq('user_id', user.id)
       .select('id')
 
     if (error) throw error
@@ -95,6 +95,7 @@ export async function DELETE(request: NextRequest) {
         .from('providers')
         .delete()
         .in('id', provider_ids)
+        .eq('user_id', user.id)
 
       if (error) throw error
     } else {
@@ -102,10 +103,10 @@ export async function DELETE(request: NextRequest) {
         .from('providers')
         .update({
           is_active: false,
-          plan: 'inactive',
           updated_at: new Date().toISOString(),
         })
         .in('id', provider_ids)
+        .eq('user_id', user.id)
 
       if (error) throw error
     }

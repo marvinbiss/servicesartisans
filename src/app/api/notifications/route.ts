@@ -23,13 +23,13 @@ export async function GET(request: NextRequest) {
 
     let query = supabase
       .from('notifications')
-      .select('id, type, title, body, data, read_at, created_at')
+      .select('id, type, title, message, link, read, metadata, created_at')
       .eq('user_id', user.id)
       .order('created_at', { ascending: false })
       .limit(limit)
 
     if (unreadOnly) {
-      query = query.is('read_at', null)
+      query = query.eq('read', false)
     }
 
     const { data: notifications, error } = await query
@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
       .from('notifications')
       .select('id', { count: 'exact', head: true })
       .eq('user_id', user.id)
-      .is('read_at', null)
+      .eq('read', false)
 
     return NextResponse.json({
       notifications: notifications || [],

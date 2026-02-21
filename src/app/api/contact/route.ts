@@ -55,6 +55,9 @@ export async function POST(request: Request) {
 
     const { nom, email, sujet, message } = validation.data
 
+    // Sanitise email against SMTP header injection (defence-in-depth on top of Zod .email())
+    const safeEmailHeader = email.replace(/[\r\n\t]/g, '').trim()
+
     // Map subject to readable text
     const sujetTexte: Record<string, string> = {
       devis: 'Question sur un devis',
@@ -74,7 +77,7 @@ export async function POST(request: Request) {
     const { error: sendError } = await getResend().emails.send({
       from: process.env.FROM_EMAIL || 'contact@servicesartisans.fr',
       to: 'contact@servicesartisans.fr',
-      reply_to: email,
+      reply_to: safeEmailHeader,
       subject: `[Contact] ${safeSujet} - ${safeNom}`,
       html: `
         <h2>Nouveau message de contact</h2>

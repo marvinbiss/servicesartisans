@@ -50,18 +50,13 @@ export async function POST(
       )
     }
 
-    // Update or create conversation settings
+    // Update conversation status (conversation_settings table removed in migration 100)
+    const newStatus = parsed.data.is_archived ? 'archived' : 'active'
     const { data, error } = await supabase
-      .from('conversation_settings')
-      .upsert({
-        conversation_id: conversationId,
-        user_id: user.id,
-        is_archived: parsed.data.is_archived,
-        updated_at: new Date().toISOString(),
-      }, {
-        onConflict: 'conversation_id,user_id',
-      })
-      .select()
+      .from('conversations')
+      .update({ status: newStatus })
+      .eq('id', conversationId)
+      .select('id, status')
       .single()
 
     if (error) {

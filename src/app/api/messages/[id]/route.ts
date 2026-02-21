@@ -41,11 +41,9 @@ export async function PATCH(
       .from('messages')
       .update({
         content: parsed.data.content,
-        edited_at: new Date().toISOString(),
       })
       .eq('id', id)
       .eq('sender_id', user.id)
-      .is('deleted_at', null)
       .select()
       .single()
 
@@ -87,27 +85,19 @@ export async function DELETE(
       return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
     }
 
-    // Soft delete message (RLS will verify ownership)
-    const { data, error } = await supabase
+    // Hard delete message (RLS will verify ownership)
+    // Note: deleted_at column was removed in migration 102, using hard delete
+    const { error } = await supabase
       .from('messages')
-      .update({ deleted_at: new Date().toISOString() })
+      .delete()
       .eq('id', id)
       .eq('sender_id', user.id)
-      .select()
-      .single()
 
     if (error) {
       logger.error('Error deleting message', error)
       return NextResponse.json(
         { error: 'Impossible de supprimer le message' },
         { status: 500 }
-      )
-    }
-
-    if (!data) {
-      return NextResponse.json(
-        { error: 'Message non trouvé ou non autorisé' },
-        { status: 404 }
       )
     }
 

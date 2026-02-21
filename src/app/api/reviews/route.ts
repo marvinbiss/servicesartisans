@@ -156,7 +156,7 @@ export async function GET(request: Request) {
       )
     }
 
-    // Get ALL reviews for an artisan (no status filter to show all real reviews)
+    // Get published reviews for an artisan (only status = 'published')
     if (artisanId) {
       const { data: reviews, error } = await supabase
         .from('reviews')
@@ -171,7 +171,7 @@ export async function GET(request: Request) {
           artisan_responded_at
         `)
         .eq('artisan_id', artisanId)
-        // REMOVED: .eq('status', 'published') to show ALL real reviews
+        .eq('status', 'published')
         .order('created_at', { ascending: false })
 
       if (error) {

@@ -18,28 +18,13 @@ const availabilityPostSchema = z.object({
   })),
 })
 
-// PUT request schema
-const availabilityPutSchema = z.object({
-  artisanId: z.string().uuid(),
-  settings: z.object({
-    default_slots: z.array(z.object({
-      start: z.string().regex(/^\d{2}:\d{2}$/),
-      end: z.string().regex(/^\d{2}:\d{2}$/),
-    })).optional(),
-    working_days: z.array(z.number().int().min(0).max(6)).optional(),
-    booking_enabled: z.boolean().optional(),
-    advance_booking_days: z.number().int().min(1).max(365).optional(),
-    min_notice_hours: z.number().int().min(0).max(168).optional(),
-    intervention_radius_km: z.number().min(1).max(200).optional(),
-  }),
-})
-
 // DELETE query params schema
 const availabilityDeleteSchema = z.object({
   slotId: z.string().uuid(),
 })
 
 // GET /api/availability - Get artisan's availability settings
+// Note: availability_settings table was removed in migration 100
 export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
@@ -54,43 +39,11 @@ export async function GET(request: Request) {
       { status: 400 }
     )
   }
-  const { artisanId } = result.data
 
-  try {
-    const supabase = await createClient()
-
-    const { data: settings, error } = await supabase
-      .from('availability_settings')
-      .select('artisan_id, default_slots, working_days, booking_enabled, advance_booking_days, min_notice_hours, intervention_radius_km, updated_at')
-      .eq('artisan_id', artisanId)
-      .single()
-
-    if (error && error.code !== 'PGRST116') throw error
-
-    // Return default settings if none exist
-    const defaultSettings = {
-      artisan_id: artisanId,
-      default_slots: [
-        { start: '08:00', end: '10:00' },
-        { start: '10:00', end: '12:00' },
-        { start: '14:00', end: '16:00' },
-        { start: '16:00', end: '18:00' },
-      ],
-      working_days: [1, 2, 3, 4, 5], // Monday to Friday
-      booking_enabled: true,
-      advance_booking_days: 30,
-      min_notice_hours: 24,
-      intervention_radius_km: 20,
-    }
-
-    return NextResponse.json({ settings: settings || defaultSettings })
-  } catch (error) {
-    logger.error('Error fetching availability settings:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch availability settings' },
-      { status: 500 }
-    )
-  }
+  return NextResponse.json({
+    settings: null,
+    message: 'Paramètres de disponibilité non disponibles',
+  })
 }
 
 // POST /api/availability - Create or update availability slots
@@ -160,44 +113,12 @@ export async function POST(request: Request) {
 }
 
 // PUT /api/availability - Update availability settings
-export async function PUT(request: Request) {
-  try {
-    const body = await request.json()
-    const result = availabilityPutSchema.safeParse(body)
-    if (!result.success) {
-      return NextResponse.json(
-        { error: 'Validation error', details: result.error.flatten() },
-        { status: 400 }
-      )
-    }
-    const { artisanId, settings } = result.data
-
-    const supabase = await createClient()
-
-    // Upsert settings
-    const { data, error } = await supabase
-      .from('availability_settings')
-      .upsert({
-        artisan_id: artisanId,
-        ...settings,
-        updated_at: new Date().toISOString(),
-      })
-      .select()
-      .single()
-
-    if (error) throw error
-
-    return NextResponse.json({
-      success: true,
-      settings: data,
-    })
-  } catch (error) {
-    logger.error('Error updating availability settings:', error)
-    return NextResponse.json(
-      { error: 'Failed to update settings' },
-      { status: 500 }
-    )
-  }
+// Note: availability_settings table was removed in migration 100
+export async function PUT(_request: Request) {
+  return NextResponse.json(
+    { success: false, error: { message: 'Fonctionnalité non disponible' } },
+    { status: 501 }
+  )
 }
 
 // DELETE /api/availability - Delete a slot
