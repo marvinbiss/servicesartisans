@@ -88,7 +88,10 @@ export default async function RegionPage({ params }: PageProps) {
   if (!region) notFound()
 
   const deptCount = region.departments.length
-  const allCities = region.departments.flatMap(dept => getVillesByDepartement(dept.code))
+  const deptCitiesMap = Object.fromEntries(
+    region.departments.map(dept => [dept.code, getVillesByDepartement(dept.code)])
+  )
+  const allCities = region.departments.flatMap(dept => deptCitiesMap[dept.code])
   const cityCount = allCities.length
   const content = generateRegionContent(region, cityCount)
   const regionArtisanCount = await getProviderCountByRegion(region.name)
@@ -340,19 +343,19 @@ export default async function RegionPage({ params }: PageProps) {
                     </div>
                     <div>
                       <h3 className="font-heading text-base font-bold text-slate-900 group-hover:text-slate-700 transition-colors">{dept.name}</h3>
-                      <span className="text-xs text-slate-400">{dept.cities.length} ville{dept.cities.length > 1 ? 's' : ''}</span>
+                      <span className="text-xs text-slate-400">{deptCitiesMap[dept.code].length} ville{deptCitiesMap[dept.code].length > 1 ? 's' : ''}</span>
                     </div>
                   </div>
                   <ArrowRight className="w-5 h-5 text-slate-300 group-hover:text-slate-600 group-hover:translate-x-0.5 transition-all" />
                 </div>
                 <div className="flex flex-wrap gap-1.5">
-                  {dept.cities.slice(0, 4).map((city) => (
+                  {deptCitiesMap[dept.code].slice(0, 4).map((city) => (
                     <span key={city.slug} className="text-xs bg-gray-50 text-slate-500 px-2.5 py-1 rounded-full group-hover:bg-slate-100 group-hover:text-slate-700 transition-colors">
                       {city.name}
                     </span>
                   ))}
-                  {dept.cities.length > 4 && (
-                    <span className="text-xs text-slate-400 px-2 py-1">+{dept.cities.length - 4}</span>
+                  {deptCitiesMap[dept.code].length > 4 && (
+                    <span className="text-xs text-slate-400 px-2 py-1">+{deptCitiesMap[dept.code].length - 4}</span>
                   )}
                 </div>
               </Link>
