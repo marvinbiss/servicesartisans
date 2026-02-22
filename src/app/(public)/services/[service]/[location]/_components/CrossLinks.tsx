@@ -66,7 +66,7 @@ export default function CrossLinks({
               </div>
               <Link
                 href={`/villes/${locationSlug}`}
-                className="inline-flex items-center gap-1 mt-4 text-blue-600 hover:text-blue-700 text-sm font-medium group"
+                className="inline-flex items-center gap-1 mt-4 text-clay-400 hover:text-clay-600 text-sm font-medium group"
               >
                 Tous les artisans à {location.name}
                 <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
@@ -83,7 +83,7 @@ export default function CrossLinks({
                   <Link
                     key={city.slug}
                     href={`/services/${serviceSlug}/${city.slug}`}
-                    className="inline-flex items-center gap-1 px-3.5 py-2 bg-gray-50 hover:bg-blue-50 text-gray-700 hover:text-blue-700 rounded-full text-sm font-medium border border-gray-100 hover:border-blue-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
+                    className="inline-flex items-center gap-1 px-3.5 py-2 bg-gray-50 hover:bg-clay-50 text-gray-700 hover:text-clay-600 rounded-full text-sm font-medium border border-gray-100 hover:border-clay-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
                   >
                     {city.name}
                   </Link>
@@ -91,7 +91,7 @@ export default function CrossLinks({
               </div>
               <Link
                 href={`/services/${serviceSlug}`}
-                className="inline-flex items-center gap-1 mt-4 text-blue-600 hover:text-blue-700 text-sm font-medium group"
+                className="inline-flex items-center gap-1 mt-4 text-clay-400 hover:text-clay-600 text-sm font-medium group"
               >
                 Voir toutes les villes
                 <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
@@ -105,7 +105,7 @@ export default function CrossLinks({
                 {location.region_name && (
                   <Link
                     href={`/regions/${getRegionSlugByName(location.region_name) || slugify(location.region_name)}`}
-                    className="flex items-center gap-2 px-4 py-3 bg-gray-50 hover:bg-blue-50 text-gray-700 hover:text-blue-700 rounded-xl text-sm font-medium border border-gray-100 hover:border-blue-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
+                    className="flex items-center gap-2 px-4 py-3 bg-gray-50 hover:bg-clay-50 text-gray-700 hover:text-clay-600 rounded-xl text-sm font-medium border border-gray-100 hover:border-clay-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
                   >
                     <svg className="w-4 h-4 shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                     Artisans en {location.region_name}
@@ -114,7 +114,7 @@ export default function CrossLinks({
                 {location.department_name && location.department_code && (
                   <Link
                     href={`/departements/${getDepartementByCode(location.department_code)?.slug || slugify(location.department_name)}`}
-                    className="flex items-center gap-2 px-4 py-3 bg-gray-50 hover:bg-blue-50 text-gray-700 hover:text-blue-700 rounded-xl text-sm font-medium border border-gray-100 hover:border-blue-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
+                    className="flex items-center gap-2 px-4 py-3 bg-gray-50 hover:bg-clay-50 text-gray-700 hover:text-clay-600 rounded-xl text-sm font-medium border border-gray-100 hover:border-clay-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
                   >
                     <svg className="w-4 h-4 shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                     Artisans dans {location.department_name} ({location.department_code})
@@ -132,7 +132,7 @@ export default function CrossLinks({
                 <Link href={`/devis/${serviceSlug}/${locationSlug}`} className="flex items-center gap-2 px-4 py-3 bg-amber-50 hover:bg-amber-100 text-amber-800 rounded-xl text-sm font-medium border border-amber-100 hover:border-amber-200 transition-all">
                   Devis {service.name.toLowerCase()} à {location.name}
                 </Link>
-                <Link href={`/avis/${serviceSlug}/${locationSlug}`} className="flex items-center gap-2 px-4 py-3 bg-blue-50 hover:bg-blue-100 text-blue-800 rounded-xl text-sm font-medium border border-blue-100 hover:border-blue-200 transition-all">
+                <Link href={`/avis/${serviceSlug}/${locationSlug}`} className="flex items-center gap-2 px-4 py-3 bg-clay-50 hover:bg-clay-100 text-clay-700 rounded-xl text-sm font-medium border border-clay-100 hover:border-clay-200 transition-all">
                   Avis {service.name.toLowerCase()} à {location.name}
                 </Link>
                 <Link href={`/tarifs/${serviceSlug}/${locationSlug}`} className="flex items-center gap-2 px-4 py-3 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 rounded-xl text-sm font-medium border border-emerald-100 hover:border-emerald-200 transition-all">
@@ -166,7 +166,7 @@ export default function CrossLinks({
                     <Link
                       key={city.slug}
                       href={`/services/${serviceSlug}/${city.slug}`}
-                      className="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-50 hover:bg-blue-50 text-gray-600 hover:text-blue-600 rounded-full text-sm border border-gray-100 hover:border-blue-200 transition-colors"
+                      className="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-50 hover:bg-clay-50 text-gray-600 hover:text-clay-400 rounded-full text-sm border border-gray-100 hover:border-clay-200 transition-colors"
                     >
                       {city.name}
                     </Link>
@@ -185,13 +185,13 @@ export default function CrossLinks({
             Confiance &amp; Sécurité
           </h2>
           <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-            <Link href="/notre-processus-de-verification" className="text-blue-600 hover:text-blue-800">
+            <Link href="/notre-processus-de-verification" className="text-clay-400 hover:text-clay-700">
               Comment nous référençons les artisans
             </Link>
-            <Link href="/politique-avis" className="text-blue-600 hover:text-blue-800">
+            <Link href="/politique-avis" className="text-clay-400 hover:text-clay-700">
               Notre politique des avis
             </Link>
-            <Link href="/mediation" className="text-blue-600 hover:text-blue-800">
+            <Link href="/mediation" className="text-clay-400 hover:text-clay-700">
               Service de médiation
             </Link>
           </nav>

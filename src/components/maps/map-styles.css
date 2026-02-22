@@ -56,6 +56,17 @@
   background: #f9fafb;
 }
 
+/* Cluster icons (TASK 2) */
+.custom-cluster-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Visited marker state (TASK 6) */
+.custom-marker.visited {
+  opacity: 0.6;
+}
+
 /* Loading simple */
 .map-loading {
   display: flex;

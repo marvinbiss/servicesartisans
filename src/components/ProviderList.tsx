@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import { Provider } from '@/types'
 
 import ProviderCard from './ProviderCard'
@@ -12,11 +12,13 @@ interface ProviderListProps {
   onProviderHover?: (provider: Provider | null) => void
   isLoading?: boolean
   totalCount?: number
+  searchQuery?: string
+  sortOrder?: 'default' | 'name' | 'rating'
+  highlightedProviderId?: string | null
 }
 
 interface FilterState {
   verified: boolean
-  premium: boolean
   minRating: number | null
   sortBy: 'relevance' | 'rating' | 'name'
 }
@@ -26,50 +28,79 @@ export default function ProviderList({
   onProviderHover,
   isLoading = false,
   totalCount,
+  searchQuery = '',
+  sortOrder,
+  highlightedProviderId,
 }: ProviderListProps) {
   const [filters, setFilters] = useState<FilterState>({
     verified: false,
-    premium: false,
     minRating: null,
     sortBy: 'relevance',
   })
   const [hoveredId, setHoveredId] = useState<string | null>(null)
+  const listRef = useRef<HTMLDivElement>(null)
 
-  // Apply filters
-  const filteredProviders = providers.filter((provider) => {
-    if (filters.verified && !provider.is_verified) return false
-    return true
-  })
-
-  // Apply sorting
-  const sortedProviders = [...filteredProviders].sort((a, b) => {
-    switch (filters.sortBy) {
-      case 'name':
-        return a.name.localeCompare(b.name)
-      case 'rating':
-        return 0
-      case 'relevance':
-      default: {
-        // STRICT RULE: providers with phone always rank above those without
-        const aPhone = !!a.phone
-        const bPhone = !!b.phone
-        if (aPhone !== bPhone) return aPhone ? -1 : 1
-        if (a.is_verified !== b.is_verified) return a.is_verified ? -1 : 1
-        return 0
-      }
+  // Scroll to highlighted card when map pin is hovered
+  useEffect(() => {
+    if (!highlightedProviderId || !listRef.current) return
+    const el = listRef.current.querySelector(`[data-provider-id="${highlightedProviderId}"]`)
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
     }
-  })
+  }, [highlightedProviderId])
+
+  // Merge external sortOrder prop into filters
+  const effectiveSortBy = sortOrder === 'name' ? 'name'
+    : sortOrder === 'rating' ? 'rating'
+    : filters.sortBy
+
+  const displayedProviders = useMemo(() => {
+    // Apply filters
+    const filtered = providers.filter((p) => {
+      if (filters.verified && !p.is_verified) return false
+      if (filters.minRating !== null && (p.rating_average ?? 0) < filters.minRating) return false
+      // Search query filter
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase()
+        const nameMatch = p.name.toLowerCase().includes(q)
+        const specialtyMatch = p.specialty?.toLowerCase().includes(q) ?? false
+        const cityMatch = p.address_city?.toLowerCase().includes(q) ?? false
+        if (!nameMatch && !specialtyMatch && !cityMatch) return false
+      }
+      return true
+    })
+
+    // Apply sorting
+    return [...filtered].sort((a, b) => {
+      switch (effectiveSortBy) {
+        case 'name':
+          return a.name.localeCompare(b.name)
+        case 'rating':
+          return (b.rating_average ?? 0) - (a.rating_average ?? 0)
+        case 'relevance':
+        default: {
+          // STRICT RULE: providers with phone always rank above those without
+          const aPhone = !!a.phone
+          const bPhone = !!b.phone
+          if (aPhone !== bPhone) return aPhone ? -1 : 1
+          if (a.is_verified !== b.is_verified) return a.is_verified ? -1 : 1
+          return 0
+        }
+      }
+    })
+  }, [providers, filters, searchQuery, effectiveSortBy])
 
   return (
     <div className="flex flex-col h-full">
       {/* Filters */}
       <SearchFilters
         onFilterChange={setFilters}
-        totalResults={isLoading ? 0 : (totalCount ?? sortedProviders.length)}
+        totalResults={isLoading ? 0 : (totalCount ?? displayedProviders.length)}
       />
 
       {/* Provider list */}
       <div
+        ref={listRef}
         className="flex-1 overflow-y-auto p-4 space-y-4"
         role="region"
         aria-label="Liste des artisans"
@@ -77,11 +108,12 @@ export default function ProviderList({
       >
         {isLoading ? (
           <ProviderListSkeleton count={5} />
-        ) : sortedProviders.length > 0 ? (
+        ) : displayedProviders.length > 0 ? (
           <ul className="space-y-4" role="list">
-            {sortedProviders.map((provider) => (
+            {displayedProviders.map((provider) => (
               <li
                 key={provider.id}
+                data-provider-id={provider.id}
                 onMouseEnter={() => {
                   setHoveredId(provider.id)
                   onProviderHover?.(provider)
@@ -101,7 +133,7 @@ export default function ProviderList({
               >
                 <ProviderCard
                   provider={provider}
-                  isHovered={hoveredId === provider.id}
+                  isHovered={hoveredId === provider.id || highlightedProviderId === provider.id}
                 />
               </li>
             ))}

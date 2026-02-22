@@ -58,7 +58,7 @@ export default function SeoContent({
                 {getQuartiersByVille(locationSlug).length > 0 && (
                   <div className="not-prose flex flex-wrap gap-2 mt-4">
                     {getQuartiersByVille(locationSlug).slice(0, 10).map(({ name, slug }) => (
-                      <Link key={slug} href={`/villes/${locationSlug}/${slug}`} className="text-sm bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full hover:bg-blue-100 transition-colors">
+                      <Link key={slug} href={`/villes/${locationSlug}/${slug}`} className="text-sm bg-clay-50 text-clay-600 px-3 py-1.5 rounded-full hover:bg-clay-100 transition-colors">
                         {name}
                       </Link>
                     ))}
@@ -118,8 +118,8 @@ export default function SeoContent({
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
 
             {locationContent.dataDriven.socioEconomic && (
-              <div className="bg-gradient-to-br from-slate-50 to-blue-50/30 rounded-2xl border border-slate-100 p-8">
-                <h2 className="text-xl font-bold text-gray-900 mb-4 border-l-4 border-blue-500 pl-4">
+              <div className="bg-gradient-to-br from-sand-50 to-clay-50/30 rounded-2xl border border-slate-100 p-8">
+                <h2 className="text-xl font-bold text-gray-900 mb-4 border-l-4 border-clay-400 pl-4">
                   Contexte socio-économique de {location.name}
                 </h2>
                 <p className="text-gray-700 leading-relaxed">{locationContent.dataDriven.socioEconomic}</p>
@@ -127,25 +127,25 @@ export default function SeoContent({
                   <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-4">
                     {communeData.revenu_median && (
                       <div className="text-center p-3 bg-white rounded-xl border border-slate-100">
-                        <div className="text-lg font-bold text-blue-700">{formatEuro(communeData.revenu_median)}</div>
+                        <div className="text-lg font-bold text-clay-600">{formatEuro(communeData.revenu_median)}</div>
                         <div className="text-xs text-gray-500 mt-1">Revenu médian/an</div>
                       </div>
                     )}
                     {communeData.nb_logements && (
                       <div className="text-center p-3 bg-white rounded-xl border border-slate-100">
-                        <div className="text-lg font-bold text-blue-700">{formatNumber(communeData.nb_logements)}</div>
+                        <div className="text-lg font-bold text-clay-600">{formatNumber(communeData.nb_logements)}</div>
                         <div className="text-xs text-gray-500 mt-1">Logements</div>
                       </div>
                     )}
                     {communeData.part_maisons_pct !== null && communeData.part_maisons_pct !== undefined && (
                       <div className="text-center p-3 bg-white rounded-xl border border-slate-100">
-                        <div className="text-lg font-bold text-blue-700">{communeData.part_maisons_pct}%</div>
+                        <div className="text-lg font-bold text-clay-600">{communeData.part_maisons_pct}%</div>
                         <div className="text-xs text-gray-500 mt-1">Maisons individuelles</div>
                       </div>
                     )}
                     {communeData.densite_population && (
                       <div className="text-center p-3 bg-white rounded-xl border border-slate-100">
-                        <div className="text-lg font-bold text-blue-700">{formatNumber(Math.round(communeData.densite_population))}</div>
+                        <div className="text-lg font-bold text-clay-600">{formatNumber(Math.round(communeData.densite_population))}</div>
                         <div className="text-xs text-gray-500 mt-1">Hab./km²</div>
                       </div>
                     )}

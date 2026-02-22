@@ -54,12 +54,12 @@ export default function TradeSections({
               </div>
             )}
             {selectedTips.length > 0 && (
-              <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
-                <h3 className="font-semibold text-blue-900 mb-2">Conseils d&apos;expert à {location.name}</h3>
+              <div className="bg-clay-50 border border-clay-100 rounded-xl p-4">
+                <h3 className="font-semibold text-stone-800 mb-2">Conseils d&apos;expert à {location.name}</h3>
                 <ul className="space-y-1">
                   {selectedTips.map((tip, i) => (
-                    <li key={i} className="text-sm text-blue-800 flex items-start gap-2">
-                      <span className="text-blue-400 mt-0.5">•</span>
+                    <li key={i} className="text-sm text-clay-700 flex items-start gap-2">
+                      <span className="text-clay-300 mt-0.5">•</span>
                       {tip}
                     </li>
                   ))}
@@ -113,7 +113,7 @@ export default function TradeSections({
             </p>
             <Link
               href={`/tarifs/${serviceSlug}`}
-              className="inline-flex items-center gap-2 mt-6 text-blue-600 hover:text-blue-800 text-sm font-medium group"
+              className="inline-flex items-center gap-2 mt-6 text-clay-400 hover:text-clay-700 text-sm font-medium group"
             >
               Voir tous les tarifs {service.name.toLowerCase()} en France
               <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>

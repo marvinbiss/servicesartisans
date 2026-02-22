@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { MapPin, List, Map as MapIcon, Search, ChevronDown } from 'lucide-react'
 import { Provider, Service, Location } from '@/types'
 import ProviderList from '@/components/ProviderList'
@@ -14,7 +15,7 @@ const GeographicMap = dynamic(() => import('@/components/maps/GeographicMap'), {
   loading: () => (
     <div className="w-full h-full bg-gray-100 animate-pulse flex items-center justify-center rounded-xl">
       <div className="text-center">
-        <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+        <div className="w-12 h-12 border-4 border-clay-400 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
         <span className="text-gray-500 font-medium">Chargement de la carte...</span>
       </div>
     </div>
@@ -40,13 +41,49 @@ export default function ServiceLocationPageClient({
   serviceSlug,
   locationSlug,
 }: ServiceLocationPageClientProps) {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+
   const [allProviders, setAllProviders] = useState<Provider[]>(initialProviders)
   const [isLoadingMore, setIsLoadingMore] = useState(false)
   const [selectedProvider, setSelectedProvider] = useState<Provider | null>(null)
   const [viewMode, setViewMode] = useState<'split' | 'list' | 'map'>('split')
   const [_isMobile, setIsMobile] = useState(false)
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
-  const [sortOrder, setSortOrder] = useState<'default' | 'name' | 'rating'>('default')
+  const [mapHoveredProviderId, setMapHoveredProviderId] = useState<string | null>(null)
+
+  // Read initial values from URL params
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '')
+  const [sortOrder, setSortOrder] = useState<'default' | 'name' | 'rating'>(
+    (searchParams.get('sort') as 'default' | 'name' | 'rating') || 'default'
+  )
+
+  // Update URL params when search/sort change
+  const updateUrlParams = useCallback((q: string, sort: string) => {
+    const params = new URLSearchParams(searchParams.toString())
+    if (q) {
+      params.set('q', q)
+    } else {
+      params.delete('q')
+    }
+    if (sort && sort !== 'default') {
+      params.set('sort', sort)
+    } else {
+      params.delete('sort')
+    }
+    const qs = params.toString()
+    router.replace(`${window.location.pathname}${qs ? `?${qs}` : ''}`, { scroll: false })
+  }, [router, searchParams])
+
+  const handleSearchChange = useCallback((value: string) => {
+    setSearchQuery(value)
+    updateUrlParams(value, sortOrder)
+  }, [sortOrder, updateUrlParams])
+
+  const handleSortChange = useCallback((value: 'default' | 'name' | 'rating') => {
+    setSortOrder(value)
+    updateUrlParams(searchQuery, value)
+  }, [searchQuery, updateUrlParams])
 
   const hasMore = allProviders.length < totalCount
 
@@ -92,7 +129,7 @@ export default function ServiceLocationPageClient({
           <div className="flex items-center justify-between">
             <div>
               <h1 className="font-heading text-xl md:text-2xl font-bold text-gray-900">
-                {h1Text || `${service.name} à ${location.name}`}
+                {h1Text || `${service.name} \u00e0 ${location.name}`}
               </h1>
               {(location.department_name || location.postal_code) && (
                 <p className="text-gray-500 text-sm flex items-center gap-1 mt-1">
@@ -175,13 +212,13 @@ export default function ServiceLocationPageClient({
           className="flex items-center gap-2 flex-1 px-3 py-2.5 bg-gray-100 rounded-xl text-sm text-gray-500 min-h-[44px] active:bg-gray-200 transition-colors"
         >
           <Search className="w-4 h-4" />
-          <span>Rechercher un artisan...</span>
+          <span>{searchQuery || 'Rechercher un artisan...'}</span>
         </button>
         <select
           value={sortOrder}
-          onChange={(e) => setSortOrder(e.target.value as 'default' | 'name' | 'rating')}
-          className="px-3 py-2.5 bg-gray-100 rounded-xl text-sm text-gray-700 font-medium min-h-[44px] border-0 focus:ring-2 focus:ring-blue-500"
-          aria-label="Trier les résultats"
+          onChange={(e) => handleSortChange(e.target.value as 'default' | 'name' | 'rating')}
+          className="px-3 py-2.5 bg-gray-100 rounded-xl text-sm text-gray-700 font-medium min-h-[44px] border-0 focus:ring-2 focus:ring-clay-400"
+          aria-label="Trier les r\u00e9sultats"
         >
           <option value="default">Trier</option>
           <option value="name">Nom A-Z</option>
@@ -212,18 +249,20 @@ export default function ServiceLocationPageClient({
       </div>
       {mobileSearchOpen && (
         <div className="bg-white border-b border-gray-100 px-4 py-3 md:hidden">
-          <div className="flex items-center gap-2 bg-gray-50 rounded-xl px-3 py-2 border border-gray-200 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20 transition-all">
+          <div className="flex items-center gap-2 bg-gray-50 rounded-xl px-3 py-2 border border-gray-200 focus-within:border-clay-400 focus-within:ring-2 focus-within:ring-clay-400/20 transition-all">
             <Search className="w-4 h-4 text-gray-400 flex-shrink-0" />
             <input
               type="text"
-              placeholder="Nom, spécialité, adresse..."
+              value={searchQuery}
+              onChange={(e) => handleSearchChange(e.target.value)}
+              placeholder="Nom, sp\u00e9cialit\u00e9, adresse..."
               className="w-full bg-transparent text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none min-h-[40px]"
               autoFocus
             />
             <button
               type="button"
               onClick={() => setMobileSearchOpen(false)}
-              className="text-xs text-blue-600 font-semibold whitespace-nowrap px-2 py-1"
+              className="text-xs text-clay-400 font-semibold whitespace-nowrap px-2 py-1"
             >
               Fermer
             </button>
@@ -246,16 +285,19 @@ export default function ServiceLocationPageClient({
               providers={allProviders}
               onProviderHover={setSelectedProvider}
               totalCount={totalCount || allProviders.length}
+              searchQuery={searchQuery}
+              sortOrder={sortOrder}
+              highlightedProviderId={mapHoveredProviderId}
             />
             {hasMore && (
               <div className="p-4 border-t border-gray-100 bg-white sticky bottom-0">
                 <button
                   onClick={loadMore}
                   disabled={isLoadingMore}
-                  className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold rounded-xl transition-colors disabled:opacity-60"
+                  className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-clay-50 hover:bg-clay-100 text-clay-600 font-semibold rounded-xl transition-colors disabled:opacity-60"
                 >
                   {isLoadingMore ? (
-                    <span className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+                    <span className="w-4 h-4 border-2 border-clay-400 border-t-transparent rounded-full animate-spin" />
                   ) : (
                     <ChevronDown className="w-4 h-4" />
                   )}
@@ -301,6 +343,7 @@ export default function ServiceLocationPageClient({
               locationName={location.name}
               height="100%"
               className="h-full"
+              onMarkerHover={setMapHoveredProviderId}
             />
           </div>
         )}

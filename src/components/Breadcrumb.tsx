@@ -20,7 +20,7 @@ export default function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
         <li className="flex items-center" itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
           <Link
             href="/"
-            className="flex items-center gap-1 text-gray-500 hover:text-blue-600 transition-colors"
+            className="flex items-center gap-1 text-gray-500 hover:text-clay-400 transition-colors"
             itemProp="item"
           >
             <Home className="w-4 h-4" />
@@ -35,7 +35,7 @@ export default function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
             {item.href && index < items.length - 1 ? (
               <Link
                 href={item.href}
-                className="text-gray-500 hover:text-blue-600 transition-colors"
+                className="text-gray-500 hover:text-clay-400 transition-colors"
                 itemProp="item"
               >
                 <span itemProp="name">{item.label}</span>

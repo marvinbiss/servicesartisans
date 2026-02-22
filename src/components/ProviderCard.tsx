@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { MapPin, Phone, Star, ChevronRight } from 'lucide-react'
+import { MapPin, Phone, Star, ChevronRight, ShieldCheck } from 'lucide-react'
 import { Provider } from '@/types'
 import { getArtisanUrl, getAvatarColor } from '@/lib/utils'
 import { FavoriteButton } from '@/components/ui/FavoriteButton'
@@ -58,14 +58,13 @@ export default function ProviderCard({
           <div className="flex items-center gap-2">
             <Link
               href={providerUrl}
-              className="text-xl font-bold text-gray-900 hover:text-blue-700 transition-colors duration-200"
+              className="text-xl font-bold text-gray-900 hover:text-clay-600 transition-colors duration-200"
             >
               {provider.name}
             </Link>
             {provider.is_verified && (
               <span
-                className="relative inline-flex items-center justify-center w-5 h-5 rounded-full overflow-hidden"
-                style={{ backgroundColor: '#1877f2' }}
+                className="relative inline-flex items-center justify-center w-5 h-5 rounded-full overflow-hidden bg-gradient-to-br from-clay-400 to-clay-600"
                 aria-label="Artisan référencé"
                 title="Artisan référencé"
               >
@@ -93,7 +92,12 @@ export default function ProviderCard({
                 {ratingValue}
               </span>
             </div>
-            <div className="text-xs text-gray-500 mt-0.5">{reviewCount} avis</div>
+            <div className="flex items-center gap-1 justify-end mt-0.5">
+              <span className="text-xs text-gray-500">{reviewCount} avis</span>
+              {reviewCount > 10 && (
+                <span className="text-2xs font-semibold text-clay-600 bg-clay-50 px-1.5 py-0.5 rounded-full">10+</span>
+              )}
+            </div>
           </div>
         )}
       </div>
@@ -111,7 +115,8 @@ export default function ProviderCard({
         </div>
       )}
       {provider.siret && (
-        <p className="text-xs text-gray-400 mb-3 ml-6">
+        <p className="flex items-center gap-1 text-xs text-stone-500 mb-3 ml-6">
+          <ShieldCheck className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
           SIREN {provider.siret.slice(0, 9)}
         </p>
       )}

@@ -1,11 +1,10 @@
 'use client'
 
 import { useState, useId } from 'react'
-import { Filter, ChevronDown, X, BadgeCheck, Award, Star } from 'lucide-react'
+import { Filter, ChevronDown, X, BadgeCheck, Star } from 'lucide-react'
 
 interface FilterState {
   verified: boolean
-  premium: boolean
   minRating: number | null
   sortBy: 'relevance' | 'rating' | 'name'
 }
@@ -18,7 +17,6 @@ interface SearchFiltersProps {
 export default function SearchFilters({ onFilterChange, totalResults }: SearchFiltersProps) {
   const [filters, setFilters] = useState<FilterState>({
     verified: false,
-    premium: false,
     minRating: null,
     sortBy: 'relevance',
   })
@@ -35,7 +33,6 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
   const clearFilters = () => {
     const defaultFilters: FilterState = {
       verified: false,
-      premium: false,
       minRating: null,
       sortBy: 'relevance',
     }
@@ -45,7 +42,6 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
 
   const activeFiltersCount = [
     filters.verified,
-    filters.premium,
     filters.minRating !== null,
   ].filter(Boolean).length
 
@@ -77,7 +73,7 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
               value={filters.sortBy}
               onChange={(e) => updateFilter('sortBy', e.target.value as FilterState['sortBy'])}
               aria-labelledby={sortLabelId}
-              className="appearance-none bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 pr-8 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer transition-colors duration-200"
+              className="appearance-none bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 pr-8 text-sm focus:ring-2 focus:ring-clay-400 focus:border-transparent cursor-pointer transition-colors duration-200"
             >
               <option value="relevance">Pertinence</option>
               <option value="rating">Meilleures notes</option>
@@ -91,9 +87,9 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
             onClick={() => setIsOpen(!isOpen)}
             aria-expanded={isOpen}
             aria-controls={filterPanelId}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-clay-400 focus-visible:ring-offset-2 ${
               activeFiltersCount > 0
-                ? 'bg-blue-50 border-blue-200 text-blue-700'
+                ? 'bg-clay-50 border-clay-200 text-clay-600'
                 : 'bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100'
             }`}
           >
@@ -101,7 +97,7 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
             <span>Filtres</span>
             {activeFiltersCount > 0 && (
               <span
-                className="bg-blue-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center"
+                className="bg-clay-400 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center"
                 aria-label={`${activeFiltersCount} filtre${activeFiltersCount > 1 ? 's' : ''} actif${activeFiltersCount > 1 ? 's' : ''}`}
               >
                 {activeFiltersCount}
@@ -124,28 +120,14 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
             <button
               onClick={() => updateFilter('verified', !filters.verified)}
               aria-pressed={filters.verified}
-              className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 ${
+              className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-clay-400 focus-visible:ring-offset-2 ${
                 filters.verified
-                  ? 'bg-green-50 border-green-200 text-green-700'
+                  ? 'bg-clay-50 border-clay-200 text-clay-600'
                   : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
               }`}
             >
               <BadgeCheck className="w-4 h-4" aria-hidden="true" />
               <span>Vérifié</span>
-            </button>
-
-            {/* Premium filter */}
-            <button
-              onClick={() => updateFilter('premium', !filters.premium)}
-              aria-pressed={filters.premium}
-              className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 ${
-                filters.premium
-                  ? 'bg-yellow-50 border-yellow-200 text-yellow-700'
-                  : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
-              }`}
-            >
-              <Award className="w-4 h-4" aria-hidden="true" />
-              <span>Premium</span>
             </button>
 
             {/* Rating filter */}
@@ -158,9 +140,9 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
                   }
                   aria-pressed={filters.minRating === rating}
                   aria-label={`Note minimum ${rating} étoiles`}
-                  className={`flex items-center gap-1 px-3 py-2 rounded-lg border text-sm font-medium transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 ${
+                  className={`flex items-center gap-1 px-3 py-2 rounded-lg border text-sm font-medium transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-clay-400 focus-visible:ring-offset-2 ${
                     filters.minRating === rating
-                      ? 'bg-green-50 border-green-200 text-green-700'
+                      ? 'bg-clay-50 border-clay-200 text-clay-600'
                       : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
                   }`}
                 >
