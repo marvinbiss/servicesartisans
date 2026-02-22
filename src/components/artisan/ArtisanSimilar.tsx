@@ -34,9 +34,9 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSi
       : null
     if (!hubUrl) return null
     return (
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+      <div className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 p-6">
         <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2 mb-4">
-          <Users className="w-5 h-5 text-blue-600" aria-hidden="true" />
+          <Users className="w-5 h-5 text-clay-400" aria-hidden="true" />
           Artisans similaires
         </h2>
         <p className="text-gray-600 mb-4">
@@ -44,7 +44,7 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSi
         </p>
         <Link
           href={hubUrl}
-          className="text-blue-600 hover:text-blue-800 font-medium"
+          className="text-clay-400 hover:text-clay-600 font-medium"
         >
           Voir tous les {_artisan.specialty?.toLowerCase() || 'artisans'} à {_artisan.city} →
         </Link>
@@ -69,11 +69,11 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSi
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.6 }}
-      className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6"
+      className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 p-6"
     >
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
-          <Users className="w-5 h-5 text-blue-600" aria-hidden="true" />
+          <Users className="w-5 h-5 text-clay-400" aria-hidden="true" />
           Artisans similaires
         </h2>
 
@@ -83,7 +83,7 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSi
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => scroll('left')}
-            className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-clay-400"
             aria-label="Voir les artisans precedents"
           >
             <ChevronLeft className="w-5 h-5 text-gray-600" aria-hidden="true" />
@@ -92,7 +92,7 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSi
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => scroll('right')}
-            className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-clay-400"
             aria-label="Voir les artisans suivants"
           >
             <ChevronRight className="w-5 h-5 text-gray-600" aria-hidden="true" />
@@ -127,7 +127,7 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSi
               >
                 {/* Header */}
                 <div className="flex items-start gap-3 mb-3">
-                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-xl font-bold flex-shrink-0">
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-clay-400 to-clay-600 flex items-center justify-center text-white text-xl font-bold flex-shrink-0">
                     <span aria-hidden="true">{item.name.charAt(0).toUpperCase()}</span>
                   </div>
                   <div className="flex-1 min-w-0">
@@ -139,7 +139,7 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSi
                 {/* Badges */}
                 <div className="flex flex-wrap gap-1.5 mb-3">
                   {item.is_verified && (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-xs font-medium">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-clay-50 text-clay-700 text-xs font-medium">
                       <BadgeCheck className="w-3 h-3" aria-hidden="true" />
                       Vérifié
                     </span>

@@ -39,10 +39,10 @@ export function ArtisanMap({ artisan }: ArtisanMapProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.5 }}
-      className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6"
+      className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 p-6"
     >
       <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
-        <MapPin className="w-5 h-5 text-blue-600" aria-hidden="true" />
+        <MapPin className="w-5 h-5 text-clay-400" aria-hidden="true" />
         Zone d&apos;intervention
       </h2>
 
@@ -67,11 +67,11 @@ export function ArtisanMap({ artisan }: ArtisanMapProps) {
           href={mapsLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-between gap-3 p-4 rounded-xl bg-blue-50 border border-blue-100 mb-4 hover:bg-blue-100 transition-colors group"
+          className="flex items-center justify-between gap-3 p-4 rounded-xl bg-clay-50 border border-clay-100 mb-4 hover:bg-clay-100 transition-colors group"
           aria-label={`Voir ${artisan.city} sur Google Maps`}
         >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center flex-shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-clay-400 flex items-center justify-center flex-shrink-0">
               <MapPin className="w-5 h-5 text-white" aria-hidden="true" />
             </div>
             <div>
@@ -81,7 +81,7 @@ export function ArtisanMap({ artisan }: ArtisanMapProps) {
               </p>
             </div>
           </div>
-          <ExternalLink className="w-4 h-4 text-blue-500 group-hover:translate-x-0.5 transition-transform" aria-hidden="true" />
+          <ExternalLink className="w-4 h-4 text-clay-400 group-hover:translate-x-0.5 transition-transform" aria-hidden="true" />
         </a>
       ) : null}
 
@@ -105,7 +105,7 @@ export function ArtisanMap({ artisan }: ArtisanMapProps) {
               <span
                 key={i}
                 role="listitem"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 text-sm"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-sand-200 text-stone-700 text-sm"
               >
                 <MapPin className="w-3.5 h-3.5" aria-hidden="true" />
                 {zone}

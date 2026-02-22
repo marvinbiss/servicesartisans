@@ -14,13 +14,13 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.2 }}
-      className="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
+      className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 overflow-hidden"
     >
       {/* Section header */}
       <div className="px-6 pt-6 pb-2">
         <h2 className="text-xl font-semibold text-gray-900 font-heading flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center">
-            <Wrench className="w-4.5 h-4.5 text-blue-600" aria-hidden="true" />
+          <div className="w-9 h-9 rounded-lg bg-clay-50 flex items-center justify-center">
+            <Wrench className="w-4.5 h-4.5 text-clay-400" aria-hidden="true" />
           </div>
           Services et Tarifs
         </h2>
@@ -34,9 +34,9 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
               <span
                 key={i}
                 role="listitem"
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gray-50 text-slate-700 text-sm font-medium border border-gray-100"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-sand-100 text-slate-700 text-sm font-medium border border-sand-300"
               >
-                <CheckCircle className="w-3.5 h-3.5 text-green-500 flex-shrink-0" aria-hidden="true" />
+                <CheckCircle className="w-3.5 h-3.5 text-clay-400 flex-shrink-0" aria-hidden="true" />
                 {service}
               </span>
             ))}
@@ -56,7 +56,7 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.3, delay: 0.1 + index * 0.05 }}
-                className="flex items-center justify-between p-4 rounded-xl bg-gray-50/80 border border-gray-100 group"
+                className="flex items-center justify-between p-4 rounded-xl bg-sand-50 border border-sand-200 group"
               >
                 <div className="flex-1 min-w-0">
                   <h3 className="font-medium text-gray-900">
@@ -74,7 +74,7 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
                       <span>{service.duration}</span>
                     </div>
                   )}
-                  <div className="flex items-center gap-1 text-lg font-bold text-blue-600 whitespace-nowrap bg-blue-50 px-3 py-1 rounded-lg" aria-label={`Prix : ${service.price} euros`}>
+                  <div className="flex items-center gap-1 text-lg font-bold text-clay-600 whitespace-nowrap bg-clay-50 px-3 py-1 rounded-lg" aria-label={`Prix : ${service.price} euros`}>
                     <Euro className="w-4 h-4" aria-hidden="true" />
                     <span>{service.price}</span>
                   </div>
@@ -83,10 +83,10 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
             ))}
           </div>
         ) : (
-          <div className="bg-emerald-50 rounded-xl border border-emerald-200 p-6 text-center mt-4">
+          <div className="bg-clay-50 rounded-xl border border-clay-200 p-6 text-center mt-4">
             <p className="text-slate-700 font-medium mb-2">Tarifs sur devis personnalis&eacute;</p>
             <p className="text-sm text-slate-500 mb-4">Cet artisan propose des tarifs adapt&eacute;s &agrave; chaque projet. Demandez un devis gratuit pour conna&icirc;tre ses prix.</p>
-            <a href="#devis" className="inline-flex items-center gap-2 bg-emerald-600 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-emerald-700 transition-colors">
+            <a href="#devis" className="inline-flex items-center gap-2 bg-clay-400 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-clay-600 transition-colors">
               Demander un devis gratuit
             </a>
           </div>

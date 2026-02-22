@@ -187,7 +187,7 @@ export function ClaimButton({ providerId, providerName, hasSiret }: ClaimButtonP
                       href="https://www.societe.com"
                       target="_blank"
                       rel="nofollow noopener noreferrer"
-                      className="text-blue-600 hover:underline"
+                      className="text-clay-400 hover:underline"
                     >
                       societe.com
                     </a>

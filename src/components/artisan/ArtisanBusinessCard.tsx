@@ -81,13 +81,13 @@ export function ArtisanBusinessCard({ artisan }: ArtisanBusinessCardProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.2 }}
-      className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
+      className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 overflow-hidden"
     >
       {/* ── Header ─────────────────────────────────────────────────── */}
-      <div className="px-6 py-5 bg-gradient-to-r from-slate-50 via-blue-50/30 to-slate-50 border-b border-gray-100">
+      <div className="px-6 py-5 bg-gradient-to-r from-sand-50 via-clay-50/30 to-sand-50 border-b border-stone-200/40">
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-sm shadow-blue-500/20 flex-shrink-0">
+            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-clay-400 to-clay-600 flex items-center justify-center shadow-sm shadow-glow-clay flex-shrink-0">
               <Shield className="w-5 h-5 text-white" aria-hidden="true" />
             </div>
             <div>
@@ -114,9 +114,9 @@ export function ArtisanBusinessCard({ artisan }: ArtisanBusinessCardProps) {
 
           {/* SIRET */}
           {artisan.siret && (
-            <div className="flex items-start gap-3 p-4 rounded-xl bg-slate-50/80 border border-slate-100 hover:bg-slate-100/60 transition-colors">
+            <div className="flex items-start gap-3 p-4 rounded-xl bg-sand-100 border border-sand-300 hover:bg-sand-200/60 transition-colors">
               <div className="w-9 h-9 rounded-lg bg-white flex items-center justify-center shadow-sm flex-shrink-0">
-                <Hash className="w-4 h-4 text-blue-600" aria-hidden="true" />
+                <Hash className="w-4 h-4 text-clay-400" aria-hidden="true" />
               </div>
               <div className="min-w-0">
                 <dt className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
@@ -157,9 +157,9 @@ export function ArtisanBusinessCard({ artisan }: ArtisanBusinessCardProps) {
 
           {/* Forme juridique */}
           {artisan.legal_form && (
-            <div className="flex items-start gap-3 p-4 rounded-xl bg-slate-50/80 border border-slate-100 hover:bg-slate-100/60 transition-colors">
+            <div className="flex items-start gap-3 p-4 rounded-xl bg-sand-100 border border-sand-300 hover:bg-sand-200/60 transition-colors">
               <div className="w-9 h-9 rounded-lg bg-white flex items-center justify-center shadow-sm flex-shrink-0">
-                <Scale className="w-4 h-4 text-purple-600" aria-hidden="true" />
+                <Scale className="w-4 h-4 text-stone-600" aria-hidden="true" />
               </div>
               <div className="min-w-0">
                 <dt className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
@@ -174,12 +174,12 @@ export function ArtisanBusinessCard({ artisan }: ArtisanBusinessCardProps) {
 
           {/* Effectif / nombre d'employés — prominent */}
           {hasEmployees && (
-            <div className="flex items-start gap-3 p-4 rounded-xl bg-blue-50/50 border border-blue-100 hover:bg-blue-50/80 transition-colors">
+            <div className="flex items-start gap-3 p-4 rounded-xl bg-clay-50/50 border border-clay-100 hover:bg-clay-50/80 transition-colors">
               <div className="w-9 h-9 rounded-lg bg-white flex items-center justify-center shadow-sm flex-shrink-0">
-                <Users className="w-4 h-4 text-blue-600" aria-hidden="true" />
+                <Users className="w-4 h-4 text-clay-400" aria-hidden="true" />
               </div>
               <div className="min-w-0">
-                <dt className="text-xs font-semibold text-blue-600/90 uppercase tracking-wide">
+                <dt className="text-xs font-semibold text-clay-600/90 uppercase tracking-wide">
                   Effectif
                 </dt>
                 <dd className="mt-0.5">
@@ -219,7 +219,7 @@ export function ArtisanBusinessCard({ artisan }: ArtisanBusinessCardProps) {
                   }
                   target="_blank"
                   rel="nofollow noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200 text-sm font-medium text-blue-600 hover:text-blue-700 hover:border-blue-200 hover:bg-blue-50/50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200 text-sm font-medium text-clay-400 hover:text-clay-600 hover:border-clay-200 hover:bg-clay-50/50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2"
                 >
                   <Building2 className="w-4 h-4" aria-hidden="true" />
                   <span className="truncate max-w-[180px]">

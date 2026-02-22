@@ -51,7 +51,7 @@ export default function ArtisanInternalLinks({
   const regionSlug = region ? getRegionSlugByName(region) : undefined
 
   return (
-    <section className="py-12 bg-gray-50 border-t">
+    <section className="py-12 bg-sand-100 border-t border-stone-200/40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-2xl font-bold text-gray-900 mb-8">Voir aussi</h2>
 
@@ -59,7 +59,7 @@ export default function ArtisanInternalLinks({
           {/* Column 1: Same service, nearby cities */}
           <div>
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-blue-600" />
+              <MapPin className="w-4 h-4 text-clay-400" />
               {serviceName} dans d&apos;autres villes
             </h3>
             {nearbyCities.length > 0 ? (
@@ -68,7 +68,7 @@ export default function ArtisanInternalLinks({
                   <Link
                     key={city.slug}
                     href={`/services/${serviceSlug}/${city.slug}`}
-                    className="inline-flex items-center px-3 py-1.5 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-full text-sm transition-colors"
+                    className="inline-flex items-center px-3 py-1.5 bg-sand-200 hover:bg-clay-50 text-stone-700 hover:text-clay-600 rounded-full text-sm transition-colors"
                   >
                     {city.name}
                   </Link>
@@ -79,7 +79,7 @@ export default function ArtisanInternalLinks({
             )}
             <Link
               href={`/services/${serviceSlug}`}
-              className="inline-block mt-3 text-blue-600 hover:text-blue-700 text-sm font-medium"
+              className="inline-block mt-3 text-clay-400 hover:text-clay-600 text-sm font-medium"
             >
               Toutes les villes →
             </Link>
@@ -88,7 +88,7 @@ export default function ArtisanInternalLinks({
           {/* Column 2: Other services in this city */}
           <div>
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <Wrench className="w-4 h-4 text-blue-600" />
+              <Wrench className="w-4 h-4 text-clay-400" />
               Autres artisans à {cityName}
             </h3>
             <div className="flex flex-wrap gap-2">
@@ -96,7 +96,7 @@ export default function ArtisanInternalLinks({
                 <Link
                   key={s.slug}
                   href={`/services/${s.slug}/${locationSlug}`}
-                  className="inline-flex items-center px-3 py-1.5 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-full text-sm transition-colors"
+                  className="inline-flex items-center px-3 py-1.5 bg-sand-200 hover:bg-clay-50 text-stone-700 hover:text-clay-600 rounded-full text-sm transition-colors"
                 >
                   {s.name}
                 </Link>
@@ -104,7 +104,7 @@ export default function ArtisanInternalLinks({
             </div>
             <Link
               href={`/villes/${locationSlug}`}
-              className="inline-block mt-3 text-blue-600 hover:text-blue-700 text-sm font-medium"
+              className="inline-block mt-3 text-clay-400 hover:text-clay-600 text-sm font-medium"
             >
               Tous les artisans à {cityName} →
             </Link>
@@ -113,14 +113,14 @@ export default function ArtisanInternalLinks({
           {/* Column 3: Geographic navigation + cross-links */}
           <div>
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <Compass className="w-4 h-4 text-blue-600" />
+              <Compass className="w-4 h-4 text-clay-400" />
               Explorer par zone
             </h3>
             <div className="space-y-2">
               {region && (
                 <Link
                   href={`/regions/${regionSlug || slugify(region)}`}
-                  className="block px-3 py-2 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-lg text-sm transition-colors"
+                  className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-stone-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
                 >
                   Artisans en {region}
                 </Link>
@@ -128,33 +128,33 @@ export default function ArtisanInternalLinks({
               {dept && (
                 <Link
                   href={`/departements/${dept.slug}`}
-                  className="block px-3 py-2 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-lg text-sm transition-colors"
+                  className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-stone-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
                 >
                   Artisans dans {departmentName || dept.name} ({dept.code})
                 </Link>
               )}
               <Link
                 href={`/villes/${locationSlug}`}
-                className="block px-3 py-2 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-lg text-sm transition-colors"
+                className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-stone-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
               >
                 Tous les artisans à {cityName}
               </Link>
               <Link
                 href={`/services/${serviceSlug}`}
-                className="block px-3 py-2 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-lg text-sm transition-colors"
+                className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-stone-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
               >
                 {serviceName} en France
               </Link>
               <Link
                 href={`/tarifs/${serviceSlug}`}
-                className="block px-3 py-2 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-lg text-sm transition-colors"
+                className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-stone-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
               >
                 Tarifs {serviceName} en France
               </Link>
               {['plombier', 'electricien', 'serrurier', 'chauffagiste', 'vitrier', 'couvreur'].includes(serviceSlug) && (
                 <Link
                   href={`/urgence/${serviceSlug}`}
-                  className="block px-3 py-2 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-lg text-sm transition-colors"
+                  className="block px-3 py-2 bg-sand-200 hover:bg-clay-50 text-stone-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
                 >
                   Urgence {serviceName}
                 </Link>

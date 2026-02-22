@@ -49,8 +49,8 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
       icon: MessageCircle,
       label: 'Avis clients',
       value: artisan.review_count.toString(),
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-50 border-blue-100',
+      color: 'text-clay-600',
+      bgColor: 'bg-clay-50 border-clay-100',
     })
   }
 
@@ -62,8 +62,8 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
       icon: Calendar,
       label: age > 1 ? `${age} ans d'expérience` : 'Entreprise créée',
       value: year.toString(),
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-50 border-purple-100',
+      color: 'text-stone-700',
+      bgColor: 'bg-sand-200 border-sand-300',
     })
   } else if (artisan.member_since && parseInt(artisan.member_since, 10) < currentYear) {
     // member_since is the platform join year — only show if it's a meaningful past year
@@ -71,8 +71,8 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
       icon: Calendar,
       label: 'Membre depuis',
       value: artisan.member_since,
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-50 border-purple-100',
+      color: 'text-stone-700',
+      bgColor: 'bg-sand-200 border-sand-300',
     })
   }
 
@@ -82,8 +82,8 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
       icon: Shield,
       label: 'Identité vérifiée',
       value: 'SIRET',
-      color: 'text-green-600',
-      bgColor: 'bg-green-50 border-green-100',
+      color: 'text-clay-700',
+      bgColor: 'bg-clay-50 border-clay-100',
     })
   }
 
@@ -93,8 +93,8 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
       icon: Clock,
       label: 'Disponibilité',
       value: '24h/7j',
-      color: 'text-red-600',
-      bgColor: 'bg-red-50 border-red-100',
+      color: 'text-clay-500',
+      bgColor: 'bg-clay-50 border-clay-100',
     })
   }
 
@@ -104,8 +104,8 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
       icon: CheckCircle,
       label: 'Devis',
       value: 'Gratuit',
-      color: 'text-emerald-600',
-      bgColor: 'bg-emerald-50 border-emerald-100',
+      color: 'text-stone-700',
+      bgColor: 'bg-sand-200 border-sand-300',
     })
   }
 
@@ -116,8 +116,8 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
       label: 'Équipe',
       value: artisan.team_size.toString(),
       subValue: 'pers.',
-      color: 'text-indigo-600',
-      bgColor: 'bg-indigo-50 border-indigo-100',
+      color: 'text-stone-700',
+      bgColor: 'bg-sand-200 border-sand-300',
     })
   }
 
@@ -128,8 +128,8 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
       label: "Zone d'action",
       value: artisan.intervention_radius_km.toString(),
       subValue: 'km',
-      color: 'text-sky-600',
-      bgColor: 'bg-sky-50 border-sky-100',
+      color: 'text-clay-600',
+      bgColor: 'bg-clay-50 border-clay-100',
     })
   }
 
@@ -147,13 +147,13 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.1 }}
-      className="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
+      className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 overflow-hidden"
     >
       {/* Section header */}
       <div className="px-6 pt-6 pb-2">
         <h2 className="text-xl font-semibold text-gray-900 font-heading flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center">
-            <Award className="w-4.5 h-4.5 text-blue-600" aria-hidden="true" />
+          <div className="w-9 h-9 rounded-lg bg-clay-50 flex items-center justify-center">
+            <Award className="w-4.5 h-4.5 text-clay-400" aria-hidden="true" />
           </div>
           En bref
         </h2>

@@ -40,7 +40,7 @@ export function ArtisanBreadcrumb({ artisan }: ArtisanBreadcrumbProps) {
             {item.href ? (
               <Link
                 href={item.href}
-                className="hover:text-blue-600 transition-colors flex items-center gap-1"
+                className="hover:text-clay-400 transition-colors flex items-center gap-1"
               >
                 {item.icon && <item.icon className="w-4 h-4" aria-hidden="true" />}
                 {item.label}

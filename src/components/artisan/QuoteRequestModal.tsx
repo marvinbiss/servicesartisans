@@ -148,7 +148,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={onClose}
-                className="p-2 rounded-full hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="p-2 rounded-full hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-clay-400"
                 aria-label="Fermer le formulaire"
               >
                 <X className="w-5 h-5 text-gray-500" aria-hidden="true" />
@@ -169,10 +169,10 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ type: 'spring', delay: 0.1 }}
-                    className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4"
+                    className="w-16 h-16 bg-clay-50 rounded-full flex items-center justify-center mx-auto mb-4"
                     aria-hidden="true"
                   >
-                    <CheckCircle className="w-8 h-8 text-green-600" />
+                    <CheckCircle className="w-8 h-8 text-clay-500" />
                   </motion.div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">
                     Demande envoyée !
@@ -208,7 +208,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                         aria-describedby={errors.name ? 'quote-name-error' : undefined}
                         className={`w-full pl-10 pr-4 py-3 rounded-xl border ${
                           errors.name ? 'border-red-300 bg-red-50' : 'border-gray-200'
-                        } focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors`}
+                        } focus:ring-2 focus:ring-clay-400 focus:border-transparent transition-colors`}
                       />
                     </div>
                     {errors.name && (
@@ -235,7 +235,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                         aria-describedby={errors.email ? 'quote-email-error' : undefined}
                         className={`w-full pl-10 pr-4 py-3 rounded-xl border ${
                           errors.email ? 'border-red-300 bg-red-50' : 'border-gray-200'
-                        } focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors`}
+                        } focus:ring-2 focus:ring-clay-400 focus:border-transparent transition-colors`}
                       />
                     </div>
                     {errors.email && (
@@ -262,7 +262,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                         aria-describedby={errors.phone ? 'quote-phone-error' : undefined}
                         className={`w-full pl-10 pr-4 py-3 rounded-xl border ${
                           errors.phone ? 'border-red-300 bg-red-50' : 'border-gray-200'
-                        } focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors`}
+                        } focus:ring-2 focus:ring-clay-400 focus:border-transparent transition-colors`}
                       />
                     </div>
                     {errors.phone && (
@@ -283,7 +283,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                         value={formData.address}
                         onChange={(e) => handleChange('address', e.target.value)}
                         placeholder="12 rue de la Paix, 75001 Paris"
-                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-clay-400 focus:border-transparent transition-colors"
                       />
                     </div>
                   </div>
@@ -305,9 +305,9 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                           role="radio"
                           aria-checked={formData.urgency === option.value}
                           onClick={() => handleChange('urgency', option.value)}
-                          className={`p-3 rounded-xl border-2 text-center transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 ${
+                          className={`p-3 rounded-xl border-2 text-center transition-all focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-1 ${
                             formData.urgency === option.value
-                              ? 'border-blue-500 bg-blue-50 text-blue-700'
+                              ? 'border-clay-400 bg-clay-50 text-clay-700'
                               : 'border-gray-200 hover:border-gray-300'
                           }`}
                         >
@@ -337,7 +337,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                         aria-describedby={errors.description ? 'quote-description-error' : 'quote-description-hint'}
                         className={`w-full pl-10 pr-4 py-3 rounded-xl border ${
                           errors.description ? 'border-red-300 bg-red-50' : 'border-gray-200'
-                        } focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none`}
+                        } focus:ring-2 focus:ring-clay-400 focus:border-transparent transition-colors resize-none`}
                       />
                     </div>
                     {errors.description && (
@@ -354,7 +354,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
                     disabled={isSubmitting}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-green-600 to-green-700 text-white font-semibold flex items-center justify-center gap-2 shadow-lg shadow-green-500/25 hover:shadow-green-500/40 transition-shadow disabled:opacity-70 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                    className="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-clay-400 to-clay-500 text-white font-semibold flex items-center justify-center gap-2 shadow-lg shadow-glow-clay hover:shadow-glow-clay transition-shadow disabled:opacity-70 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2"
                     aria-busy={isSubmitting}
                   >
                     {isSubmitting ? (

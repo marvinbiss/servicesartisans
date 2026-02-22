@@ -31,10 +31,10 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.4, delay: 0.2 }}
-      className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden"
+      className="bg-[#FFFCF8] rounded-2xl shadow-premium border border-stone-200/60 overflow-hidden"
     >
       {/* Gradient accent bar */}
-      <div className="h-1.5 bg-gradient-to-r from-blue-500 via-blue-600 to-indigo-600" />
+      <div className="h-1.5 bg-gradient-to-r from-clay-400 via-clay-500 to-clay-600" />
 
       <div className="p-6">
         {/* Status */}
@@ -55,7 +55,7 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => showPhone ? handleCall() : setShowPhone(true)}
-              className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:from-blue-700 hover:to-blue-800 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-clay-400 to-clay-500 text-white font-semibold flex items-center justify-center gap-2 shadow-lg shadow-glow-clay hover:shadow-glow-clay hover:from-clay-500 hover:to-clay-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2"
               aria-label={showPhone ? `Appeler ${artisan.phone}` : 'Afficher le numéro de téléphone'}
             >
               <Phone className="w-5 h-5" aria-hidden="true" />
@@ -67,7 +67,7 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => setShowQuoteModal(true)}
-            className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold flex items-center justify-center gap-2 shadow-lg shadow-green-500/25 hover:shadow-green-500/40 hover:from-green-700 hover:to-emerald-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+            className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-stone-800 to-stone-900 text-white font-semibold flex items-center justify-center gap-2 shadow-lg shadow-soft hover:shadow-premium hover:from-stone-900 hover:to-black transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-stone-600 focus:ring-offset-2"
             aria-label="Ouvrir le formulaire de demande de devis gratuit"
           >
             <MessageCircle className="w-5 h-5" aria-hidden="true" />
@@ -86,7 +86,7 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={handleEmail}
-              className="w-full py-3 px-4 rounded-xl border-2 border-gray-200 text-slate-700 font-medium flex items-center justify-center gap-2 hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+              className="w-full py-3 px-4 rounded-xl border-2 border-gray-200 text-slate-700 font-medium flex items-center justify-center gap-2 hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-stone-500 focus:ring-offset-2"
               aria-label={`Envoyer un email à ${artisan.email}`}
             >
               <Mail className="w-5 h-5 text-slate-400" aria-hidden="true" />
@@ -136,7 +136,7 @@ export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
         initial={{ y: 100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.3 }}
-        className="fixed bottom-16 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200 p-4 md:hidden z-40 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]"
+        className="fixed bottom-16 left-0 right-0 bg-[#FFFCF8]/95 backdrop-blur-lg border-t border-stone-200/60 p-4 md:hidden z-40 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]"
         role="group"
         aria-label="Actions rapides"
       >
@@ -145,7 +145,7 @@ export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={() => { if (showPhone) handleCall(); else setShowPhone(true) }}
-              className="flex-1 py-3.5 px-4 rounded-xl bg-blue-600 text-white font-semibold flex items-center justify-center gap-2 shadow-md shadow-blue-500/20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 min-w-0"
+              className="flex-1 py-3.5 px-4 rounded-xl bg-clay-400 text-white font-semibold flex items-center justify-center gap-2 shadow-md shadow-glow-clay focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2 min-w-0"
               aria-label={showPhone ? `Appeler l'artisan au ${artisan.phone}` : 'Afficher le numéro de téléphone'}
             >
               <Phone className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
@@ -155,7 +155,7 @@ export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
           <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={() => setShowQuoteModal(true)}
-            className="flex-1 py-3.5 px-4 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold flex items-center justify-center gap-2 shadow-md shadow-green-500/20 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+            className="flex-1 py-3.5 px-4 rounded-xl bg-gradient-to-r from-stone-800 to-stone-900 text-white font-semibold flex items-center justify-center gap-2 shadow-md shadow-soft focus:outline-none focus:ring-2 focus:ring-stone-600 focus:ring-offset-2"
             aria-label="Demander un devis gratuit"
           >
             <MessageCircle className="w-5 h-5" aria-hidden="true" />

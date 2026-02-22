@@ -20,13 +20,13 @@ export function ArtisanAbout({ artisan }: ArtisanAboutProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.15 }}
-      className="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden"
+      className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 overflow-hidden"
     >
       {/* Section header */}
       <div className="px-6 pt-6 pb-0">
         <h2 className="text-xl font-semibold text-gray-900 font-heading mb-5 flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center">
-            <User className="w-4.5 h-4.5 text-blue-600" />
+          <div className="w-9 h-9 rounded-lg bg-clay-50 flex items-center justify-center">
+            <User className="w-4.5 h-4.5 text-clay-400" />
           </div>
           &Agrave; propos
         </h2>
@@ -44,7 +44,7 @@ export function ArtisanAbout({ artisan }: ArtisanAboutProps) {
               {description}
             </div>
             {isLong && !expanded && (
-              <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-white to-transparent pointer-events-none" />
+              <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-[#FFFCF8] to-transparent pointer-events-none" />
             )}
           </div>
           {isLong && (
@@ -52,7 +52,7 @@ export function ArtisanAbout({ artisan }: ArtisanAboutProps) {
               onClick={() => setExpanded(!expanded)}
               aria-expanded={expanded}
               aria-controls="about-description"
-              className="mt-2 text-blue-600 font-medium text-sm flex items-center gap-1 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded transition-colors"
+              className="mt-2 text-clay-400 font-medium text-sm flex items-center gap-1 hover:text-clay-600 focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2 rounded transition-colors"
             >
               {expanded ? 'Voir moins' : 'Voir plus'}
               <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`} aria-hidden="true" />

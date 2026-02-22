@@ -92,7 +92,7 @@ export function ArtisanProfileCard({
         className="group relative bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500"
       >
         {/* Cover Image */}
-        <div className="relative h-48 bg-gradient-to-br from-blue-500 to-indigo-600">
+        <div className="relative h-48 bg-gradient-to-br from-clay-400 to-clay-600">
           {coverUrl && !imageError && (
             <Image
               src={coverUrl}
@@ -142,13 +142,13 @@ export function ArtisanProfileCard({
                     onError={() => setImageError(true)}
                   />
                 ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+                  <div className="w-full h-full bg-gradient-to-br from-clay-400 to-clay-600 flex items-center justify-center">
                     <span className="text-3xl font-bold text-white">{name.charAt(0)}</span>
                   </div>
                 )}
               </div>
               {isVerified && (
-                <div className="absolute -bottom-1 -right-1 w-7 h-7 bg-blue-500 rounded-full flex items-center justify-center border-2 border-white">
+                <div className="absolute -bottom-1 -right-1 w-7 h-7 bg-clay-400 rounded-full flex items-center justify-center border-2 border-white">
                   <BadgeCheck className="w-4 h-4 text-white" />
                 </div>
               )}
@@ -163,7 +163,7 @@ export function ArtisanProfileCard({
                 Disponible maintenant
               </div>
             ) : isAvailableToday ? (
-              <div className="bg-blue-500 text-white text-xs font-medium px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
+              <div className="bg-clay-400 text-white text-xs font-medium px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
                 <Clock className="w-3 h-3" />
                 Dispo aujourd'hui
               </div>
@@ -181,7 +181,7 @@ export function ArtisanProfileCard({
           {/* Header */}
           <div className="flex items-start justify-between mb-3">
             <div>
-              <h3 className="text-xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+              <h3 className="text-xl font-bold text-slate-900 group-hover:text-clay-400 transition-colors">
                 {companyName || name}
               </h3>
               <p className="text-slate-600">{profession}</p>
@@ -254,7 +254,7 @@ export function ArtisanProfileCard({
               {badges.slice(0, 2).map((badge, i) => (
                 <div
                   key={i}
-                  className="flex items-center gap-1 text-xs text-blue-700 bg-blue-50 px-2 py-1 rounded-full"
+                  className="flex items-center gap-1 text-xs text-clay-700 bg-clay-50 px-2 py-1 rounded-full"
                 >
                   <ThumbsUp className="w-3 h-3" />
                   {badge}
@@ -277,7 +277,7 @@ export function ArtisanProfileCard({
             )}
             <Link
               href={`${href}#reserver`}
-              className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition-colors"
+              className="flex-1 flex items-center justify-center gap-2 bg-clay-400 hover:bg-clay-600 text-white py-3 rounded-xl font-semibold transition-colors"
             >
               <Calendar className="w-4 h-4" />
               Réserver
@@ -295,7 +295,7 @@ export function ArtisanProfileCard({
         initial={{ opacity: 0, x: -20 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
-        className="group bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl hover:border-blue-200 transition-all duration-300"
+        className="group bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl hover:border-clay-200 transition-all duration-300"
       >
         <Link href={href} className="flex flex-col sm:flex-row">
           {/* Image */}
@@ -310,7 +310,7 @@ export function ArtisanProfileCard({
                 onError={() => setImageError(true)}
               />
             ) : (
-              <div className="w-full h-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
+              <div className="w-full h-full bg-gradient-to-br from-clay-400 to-clay-600 flex items-center justify-center">
                 <span className="text-5xl font-bold text-white/90">{name.charAt(0)}</span>
               </div>
             )}
@@ -349,10 +349,10 @@ export function ArtisanProfileCard({
             <div className="flex items-start justify-between mb-2">
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                  <h3 className="text-lg font-bold text-slate-900 group-hover:text-clay-400 transition-colors">
                     {companyName || name}
                   </h3>
-                  {isVerified && <BadgeCheck className="w-5 h-5 text-blue-500" />}
+                  {isVerified && <BadgeCheck className="w-5 h-5 text-clay-400" />}
                 </div>
                 <p className="text-slate-600">{profession}</p>
               </div>
@@ -415,7 +415,7 @@ export function ArtisanProfileCard({
                   Appeler
                 </a>
               )}
-              <span className="flex-1 flex items-center justify-center gap-1 bg-blue-600 text-white py-2.5 rounded-lg font-medium text-sm">
+              <span className="flex-1 flex items-center justify-center gap-1 bg-clay-400 text-white py-2.5 rounded-lg font-medium text-sm">
                 <Calendar className="w-4 h-4" />
                 Réserver
               </span>
@@ -424,7 +424,7 @@ export function ArtisanProfileCard({
 
           {/* Desktop CTA */}
           <div className="hidden sm:flex items-center pr-5">
-            <ChevronRight className="w-6 h-6 text-slate-400 group-hover:text-blue-500 group-hover:translate-x-1 transition-all" />
+            <ChevronRight className="w-6 h-6 text-slate-400 group-hover:text-clay-400 group-hover:translate-x-1 transition-all" />
           </div>
         </Link>
       </motion.article>
@@ -436,7 +436,7 @@ export function ArtisanProfileCard({
     return (
       <Link
         href={href}
-        className="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200 hover:border-blue-200 hover:shadow-md transition-all group"
+        className="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200 hover:border-clay-200 hover:shadow-md transition-all group"
       >
         <div className="relative w-12 h-12 rounded-xl overflow-hidden flex-shrink-0">
           {imageUrl && !imageError ? (
@@ -449,17 +449,17 @@ export function ArtisanProfileCard({
               onError={() => setImageError(true)}
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+            <div className="w-full h-full bg-gradient-to-br from-clay-400 to-clay-600 flex items-center justify-center">
               <span className="font-bold text-white">{name.charAt(0)}</span>
             </div>
           )}
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1">
-            <h4 className="font-semibold text-slate-900 truncate group-hover:text-blue-600 transition-colors">
+            <h4 className="font-semibold text-slate-900 truncate group-hover:text-clay-400 transition-colors">
               {name}
             </h4>
-            {isVerified && <BadgeCheck className="w-4 h-4 text-blue-500 flex-shrink-0" />}
+            {isVerified && <BadgeCheck className="w-4 h-4 text-clay-400 flex-shrink-0" />}
           </div>
           <p className="text-sm text-slate-500 truncate">{profession} • {location}</p>
         </div>
@@ -494,7 +494,7 @@ export function ArtisanProfileCard({
               onError={() => setImageError(true)}
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 flex items-center justify-center">
+            <div className="w-full h-full bg-gradient-to-br from-clay-400 via-clay-500 to-clay-600 flex items-center justify-center">
               <span className="text-5xl font-bold text-white/90">{name.charAt(0)}</span>
             </div>
           )}
@@ -536,10 +536,10 @@ export function ArtisanProfileCard({
         <div className="space-y-1">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5">
-              <h3 className="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
+              <h3 className="font-semibold text-slate-900 group-hover:text-clay-400 transition-colors">
                 {name}
               </h3>
-              {isVerified && <BadgeCheck className="w-4 h-4 text-blue-500" />}
+              {isVerified && <BadgeCheck className="w-4 h-4 text-clay-400" />}
             </div>
             {rating !== null && rating > 0 && (
               <div className="flex items-center gap-1">

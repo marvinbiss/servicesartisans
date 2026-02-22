@@ -25,12 +25,12 @@ import type { LegacyArtisan } from '@/types/legacy'
 // Loading skeleton for lazy-loaded sections
 function SectionSkeleton({ height = 'h-64' }: { height?: string }) {
   return (
-    <div className={`bg-white rounded-2xl shadow-sm border border-gray-100 p-6 ${height} animate-pulse`}>
-      <div className="h-6 w-40 bg-gray-200 rounded-lg mb-4" />
+    <div className={`bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 p-6 ${height} animate-pulse`}>
+      <div className="h-6 w-40 bg-sand-300 rounded-lg mb-4" />
       <div className="space-y-3">
-        <div className="h-4 bg-gray-200 rounded-lg w-full" />
-        <div className="h-4 bg-gray-200 rounded-lg w-3/4" />
-        <div className="h-4 bg-gray-200 rounded-lg w-1/2" />
+        <div className="h-4 bg-sand-300 rounded-lg w-full" />
+        <div className="h-4 bg-sand-300 rounded-lg w-3/4" />
+        <div className="h-4 bg-sand-300 rounded-lg w-1/2" />
       </div>
     </div>
   )
@@ -123,7 +123,7 @@ export default function ArtisanPageClient({
   // Not found state
   if (!artisan) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-sand-100 flex items-center justify-center">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -134,7 +134,7 @@ export default function ArtisanPageClient({
           <p className="text-slate-600 mb-6">Cet artisan n&apos;existe pas ou n&apos;est plus disponible.</p>
           <Link
             href="/recherche"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors shadow-md shadow-blue-500/20"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-clay-400 text-white rounded-xl font-medium hover:bg-clay-600 transition-colors shadow-md shadow-glow-clay"
           >
             <ArrowLeft className="w-5 h-5" />
             Retour &agrave; la recherche
@@ -155,27 +155,27 @@ export default function ArtisanPageClient({
       <nav aria-label="Liens rapides" className="sr-only focus-within:not-sr-only">
         <a
           href="#main-content"
-          className="absolute top-4 left-4 z-50 bg-blue-600 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-white"
+          className="absolute top-4 left-4 z-50 bg-clay-400 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-white"
         >
           Aller au contenu principal
         </a>
         <a
           href="#contact-sidebar"
-          className="absolute top-4 left-4 z-50 bg-blue-600 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-white"
+          className="absolute top-4 left-4 z-50 bg-clay-400 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-white"
         >
           Aller aux informations de contact
         </a>
       </nav>
 
       {/* pb-44 on mobile = CTA bar (~72px at bottom-16) + bottom nav (64px) + margin */}
-      <div className="min-h-screen bg-gray-50/80 pb-44 md:pb-8">
+      <div className="min-h-screen bg-sand-100 pb-44 md:pb-8">
         {/* Header */}
-        <header className="bg-white/95 backdrop-blur-lg border-b border-gray-100 sticky top-0 z-40 shadow-sm">
+        <header className="bg-[#FFFCF8]/95 backdrop-blur-lg border-b border-stone-200/40 sticky top-0 z-40 shadow-sm">
           <div className="max-w-7xl mx-auto px-4 py-3.5">
             <div className="flex items-center justify-between">
               <Link
                 href="/recherche"
-                className="inline-flex items-center gap-2 text-slate-600 hover:text-gray-900 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg px-2 py-1.5 -ml-2 hover:bg-gray-50"
+                className="inline-flex items-center gap-2 text-slate-600 hover:text-gray-900 transition-colors focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2 rounded-lg px-2 py-1.5 -ml-2 hover:bg-sand-100"
                 aria-label="Retour à la recherche"
               >
                 <ArrowLeft className="w-5 h-5" aria-hidden="true" />
@@ -193,10 +193,10 @@ export default function ArtisanPageClient({
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setIsFavorite(!isFavorite)}
-                  className={`p-2.5 rounded-full border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                  className={`p-2.5 rounded-full border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2 ${
                     isFavorite
                       ? 'bg-red-50 text-red-500 border-red-200 hover:bg-red-100'
-                      : 'bg-gray-50 text-slate-600 border-gray-100 hover:bg-gray-100'
+                      : 'bg-gray-50 text-slate-600 border-gray-100 hover:bg-sand-200'
                   }`}
                   aria-label={isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'}
                   aria-pressed={isFavorite}

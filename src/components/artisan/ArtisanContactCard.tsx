@@ -33,9 +33,9 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
   const [showPhone, setShowPhone] = useState(false)
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+    <div className="bg-[#FFFCF8] rounded-2xl shadow-premium border border-stone-200/60 overflow-hidden">
       {/* Header accent */}
-      <div className="h-1 bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500" />
+      <div className="h-1 bg-gradient-to-r from-clay-400 via-clay-300 to-clay-500" />
 
       <div className="p-6">
         <h3 className="text-lg font-semibold text-gray-900 font-heading mb-4">Contacter cet artisan</h3>
@@ -64,7 +64,7 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
           {/* Primary CTA: Demander un devis */}
           <Link
             href="#devis"
-            className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold flex items-center justify-center gap-2.5 shadow-lg shadow-green-500/25 hover:shadow-green-500/40 hover:from-green-700 hover:to-emerald-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 group"
+            className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-clay-400 to-clay-500 text-white font-semibold flex items-center justify-center gap-2.5 shadow-lg shadow-glow-clay hover:shadow-glow-clay hover:from-clay-500 hover:to-clay-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2 group"
           >
             <FileText className="w-5 h-5 transition-transform group-hover:scale-110" aria-hidden="true" />
             Demander un devis gratuit
@@ -80,7 +80,7 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
                   setShowPhone(true)
                 }
               }}
-              className="w-full py-3.5 px-4 rounded-xl bg-blue-600 text-white font-semibold flex items-center justify-center gap-2.5 shadow-md shadow-blue-500/20 hover:bg-blue-700 hover:shadow-blue-500/30 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="w-full py-3.5 px-4 rounded-xl bg-stone-800 text-white font-semibold flex items-center justify-center gap-2.5 shadow-md shadow-soft hover:bg-stone-900 hover:shadow-soft transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-stone-600 focus:ring-offset-2"
               aria-label={showPhone ? `Appeler le ${formatFrenchPhone(artisan.phone!)}` : 'Afficher le numéro de téléphone'}
             >
               <Phone className="w-5 h-5" aria-hidden="true" />

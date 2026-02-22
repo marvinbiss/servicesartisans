@@ -24,7 +24,7 @@ export function ArtisanReviews({ artisan }: ArtisanReviewsProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.3 }}
-      className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6"
+      className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 p-6"
     >
       <div className="flex items-center justify-between mb-5">
         <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
@@ -37,7 +37,7 @@ export function ArtisanReviews({ artisan }: ArtisanReviewsProps) {
           title="Note observée sur Google"
         >
           <span
-            className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-blue-600 text-white font-bold leading-none"
+            className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-stone-700 text-white font-bold leading-none"
             style={{ fontSize: '9px' }}
             aria-hidden="true"
           >
