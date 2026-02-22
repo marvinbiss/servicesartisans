@@ -165,9 +165,9 @@ export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
           style={{ background: 'linear-gradient(to bottom,rgba(10,8,5,.85) 0%,rgba(10,8,5,.5) 100%)' }}
         />
 
-        <div className="relative z-10 max-w-3xl mx-auto px-4 md:px-10 w-full text-center">
+        <div className="relative z-10 max-w-3xl mx-auto px-4 md:px-10 w-full text-center pt-20 md:pt-0">
           <div
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-7 text-xs font-bold tracking-[.06em] uppercase"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4 md:mb-7 text-xs font-bold tracking-[.06em] uppercase"
             style={{ background: 'rgba(232,107,75,.15)', border: '1px solid rgba(232,107,75,.35)', color: '#FFB49A' }}
           >
             <span className="w-1.5 h-1.5 rounded-full bg-clay-400 animate-pulse inline-block" />
@@ -181,7 +181,7 @@ export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
             Trouvez <em className="not-italic text-clay-400">l&apos;artisan</em> parfait.
           </h1>
 
-          <p className="text-base text-white/75 leading-[1.75] max-w-xl mx-auto mb-10">
+          <p className="text-base text-white/75 leading-[1.75] max-w-xl mx-auto mb-6 md:mb-10">
             Des professionnels vérifiés, assurés, recommandés. Des devis gratuits en 24h partout en France.
           </p>
 
@@ -190,7 +190,7 @@ export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
           </div>
 
           {/* Quick filter chips — functional links */}
-          <div className="flex flex-wrap justify-center gap-2 mb-10">
+          <div className="flex flex-wrap justify-center gap-2 mb-6 md:mb-10">
             {SERVICE_ITEMS.map(({ Icon: ChipIcon, name, slug }) => (
               <Link
                 key={slug}
@@ -205,8 +205,8 @@ export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
             ))}
           </div>
 
-          {/* Trust pills */}
-          <div className="flex justify-center gap-2.5 flex-wrap">
+          {/* Trust pills — hidden on mobile to save space */}
+          <div className="hidden md:flex justify-center gap-2.5 flex-wrap">
             {[
               { Icon: ShieldCheck, text: 'SIREN vérifié' },
               { Icon: Star,        text: `${ratingStr}/5 · ${reviewStr} avis` },
@@ -222,8 +222,8 @@ export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
             ))}
           </div>
 
-          {/* Social proof */}
-          <div className="flex items-center justify-center gap-4 mt-8">
+          {/* Social proof — hidden on mobile to save space */}
+          <div className="hidden md:flex items-center justify-center gap-4 mt-8">
             <div className="flex">
               {[
                 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=168&h=168&fit=crop&crop=face&q=80',
