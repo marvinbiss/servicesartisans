@@ -1,14 +1,15 @@
 'use client'
 
 import 'leaflet/dist/leaflet.css'
+import 'leaflet.markercluster/dist/MarkerCluster.css'
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import dynamic from 'next/dynamic'
-import { Loader2, Star, MapPin, Phone } from 'lucide-react'
-import Link from 'next/link'
+import { Loader2 } from 'lucide-react'
 import { getArtisanUrl } from '@/lib/utils'
 import './map-styles.css'
 
-// Dynamic imports for Leaflet
+// Dynamic imports for Leaflet (React components)
 const MapContainer = dynamic(
   () => import('react-leaflet').then((mod) => mod.MapContainer),
   { ssr: false }
@@ -17,20 +18,7 @@ const TileLayer = dynamic(
   () => import('react-leaflet').then((mod) => mod.TileLayer),
   { ssr: false }
 )
-const Marker = dynamic(
-  () => import('react-leaflet').then((mod) => mod.Marker),
-  { ssr: false }
-)
-const Popup = dynamic(
-  () => import('react-leaflet').then((mod) => mod.Popup),
-  { ssr: false }
-)
-
-// Dynamic import for marker clustering
-const MarkerClusterGroup = dynamic(
-  () => import('react-leaflet-cluster'),
-  { ssr: false }
-)
+// Marker and Popup are managed imperatively via leaflet.markercluster
 
 interface Provider {
   id: string
@@ -44,8 +32,6 @@ interface Provider {
   specialty?: string
   address_city?: string
   is_verified?: boolean
-  // GUARD: is_premium and trust_badge were dropped in v2 (100_v2_schema_cleanup.sql).
-  // Do NOT add them back here.
   phone?: string
   address_street?: string
   address_postal_code?: string
@@ -80,24 +66,26 @@ export default function GeographicMap({
   const [_L, setL] = useState<typeof import('leaflet') | null>(null)
   const mapRef = useRef<import('leaflet').Map | null>(null)
   const [mapMoved, setMapMoved] = useState(false)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const clusterGroupRef = useRef<any>(null)
 
-  // Marker icon cache (TASK 5)
+  // Marker icon cache
   const markerIconCache = useRef(new Map<string, import('leaflet').DivIcon>())
 
   useEffect(() => {
-    // Import Leaflet on client side (CSS already imported statically at top of file)
-    import('leaflet').then((leaflet) => {
+    import('leaflet').then(async (leaflet) => {
+      // Import markercluster plugin (side-effect: extends L)
+      await import('leaflet.markercluster')
       setL(leaflet.default)
       setMapReady(true)
     })
   }, [])
 
-  // Attach moveend listener for "Rechercher dans cette zone" (TASK 4)
+  // Attach moveend listener for "Rechercher dans cette zone"
   useEffect(() => {
     const map = mapRef.current
     if (!map) return
 
-    // Skip the initial load — only fire after user interaction
     let isInitial = true
     const handler = () => {
       if (isInitial) {
@@ -122,17 +110,16 @@ export default function GeographicMap({
     }
   }, [highlightedProviderId, providers, zoom])
 
-  // Memoized marker icon factory (TASK 1 colors + TASK 5 cache)
+  // Memoized marker icon factory
   const createMarkerIcon = useCallback((isVerified: boolean, isHighlighted: boolean) => {
     if (!_L) return undefined
 
     const size = isHighlighted ? 40 : 32
-    // Clay theme colors (TASK 1)
     const color = isHighlighted
-      ? '#C4533A'  // clay-600 for highlighted
+      ? '#C4533A'  // clay-600
       : isVerified
-        ? '#E86B4B'  // clay-400 for verified
-        : '#78716c'  // stone-500 for unverified
+        ? '#E86B4B'  // clay-400
+        : '#78716c'  // stone-500
 
     return _L.divIcon({
       className: 'custom-marker',
@@ -161,7 +148,7 @@ export default function GeographicMap({
     })
   }, [_L])
 
-  // Get cached marker icon (TASK 5)
+  // Get cached marker icon
   const getMarkerIcon = useCallback((isVerified: boolean, isHighlighted: boolean) => {
     const key = `${isVerified}-${isHighlighted}`
     if (!markerIconCache.current.has(key)) {
@@ -173,38 +160,134 @@ export default function GeographicMap({
     return markerIconCache.current.get(key)
   }, [createMarkerIcon])
 
-  // Clear icon cache when _L changes (i.e., leaflet loads)
+  // Clear icon cache when _L changes
   useEffect(() => {
     markerIconCache.current.clear()
   }, [_L])
 
-  // Handle "Rechercher dans cette zone" click (TASK 4)
+  // Imperatively manage the MarkerClusterGroup
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map || !_L) return
+
+    // Remove previous cluster group
+    if (clusterGroupRef.current) {
+      map.removeLayer(clusterGroupRef.current)
+      clusterGroupRef.current = null
+    }
+
+    const validProviders = providers.filter(p =>
+      p.latitude && p.longitude &&
+      !isNaN(p.latitude) && !isNaN(p.longitude) &&
+      p.latitude >= -90 && p.latitude <= 90 &&
+      p.longitude >= -180 && p.longitude <= 180
+    )
+
+    if (validProviders.length === 0) return
+
+    // Create cluster group with clay-themed icons
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const clusterGroup = (_L as any).markerClusterGroup({
+      chunkedLoading: true,
+      maxClusterRadius: 50,
+      spiderfyOnMaxZoom: true,
+      showCoverageOnHover: false,
+      iconCreateFunction: (cluster: { getChildCount: () => number }) => {
+        const count = cluster.getChildCount()
+        const size = count < 10 ? 36 : count < 50 ? 44 : 52
+        const fontSize = size >= 52 ? 16 : 13
+        return _L.divIcon({
+          html: `<div style="
+            width:${size}px;height:${size}px;
+            background:#E86B4B;color:white;
+            border-radius:50%;border:3px solid white;
+            display:flex;align-items:center;justify-content:center;
+            font-weight:bold;font-size:${fontSize}px;
+            box-shadow:0 2px 8px rgba(0,0,0,0.2);
+          ">${count}</div>`,
+          className: 'custom-cluster-icon',
+          iconSize: _L.point(size, size),
+        })
+      },
+    })
+
+    for (const provider of validProviders) {
+      const isVerified = provider.is_verified ?? false
+      const isHighlighted = provider.id === highlightedProviderId
+      const icon = getMarkerIcon(isVerified, isHighlighted)
+      if (!icon) continue
+
+      const marker = _L.marker([provider.latitude, provider.longitude], { icon })
+
+      // Hover events for bidirectional sync
+      marker.on('mouseover', () => onMarkerHover?.(provider.id))
+      marker.on('mouseout', () => onMarkerHover?.(null))
+
+      // Popup content
+      const ratingHtml = (provider.rating_average && provider.rating_average > 0 && provider.review_count && provider.review_count > 0)
+        ? `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <div style="display:flex;align-items:center;gap:4px">
+              <svg width="16" height="16" viewBox="0 0 20 20" fill="#f59e0b"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <span style="font-weight:700;color:#111827;font-size:14px">${provider.rating_average.toFixed(1)}</span>
+            </div>
+            <span style="font-size:12px;color:#6b7280">${provider.review_count} avis</span>
+          </div>`
+        : ''
+
+      const addressText = provider.address_street
+        ? (provider.address_postal_code && provider.address_street.includes(provider.address_postal_code)
+          ? provider.address_street
+          : `${provider.address_street}, ${provider.address_postal_code ?? ''} ${provider.address_city ?? ''}`.trim())
+        : `${provider.address_postal_code ?? ''} ${provider.address_city ?? ''}`.trim()
+
+      const profileUrl = getArtisanUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city })
+
+      const phoneBtn = provider.phone
+        ? `<a href="tel:${provider.phone}" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 12px;background:linear-gradient(to right,#44403c,#292524);color:white;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            Appeler
+          </a>`
+        : ''
+
+      const popupHtml = `
+        <div style="padding:16px">
+          <div style="display:flex;align-items:start;justify-content:space-between;gap:12px;margin-bottom:8px">
+            <h3 style="font-weight:700;color:#111827;font-size:16px;line-height:1.3;margin:0">${provider.name}</h3>
+            ${isVerified ? `<span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#E86B4B;flex-shrink:0" title="Artisan référencé"><svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg></span>` : ''}
+          </div>
+          ${provider.specialty ? `<p style="font-size:14px;color:#E86B4B;font-weight:500;margin:0 0 8px">${provider.specialty}</p>` : ''}
+          ${ratingHtml}
+          ${addressText ? `<p style="font-size:14px;color:#4b5563;margin:0 0 12px;display:flex;align-items:start;gap:6px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" style="flex-shrink:0;margin-top:2px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span>${addressText}</span></p>` : ''}
+          <div style="display:flex;gap:8px">
+            ${phoneBtn}
+            <a href="${profileUrl}" style="flex:1;text-align:center;padding:8px 12px;background:linear-gradient(to right,#E86B4B,#D4573D);color:white;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none">Voir le profil</a>
+          </div>
+        </div>
+      `
+
+      marker.bindPopup(popupHtml, { maxWidth: 320, minWidth: 280, className: 'custom-popup' })
+      clusterGroup.addLayer(marker)
+    }
+
+    map.addLayer(clusterGroup)
+    clusterGroupRef.current = clusterGroup
+
+    return () => {
+      if (clusterGroupRef.current) {
+        map.removeLayer(clusterGroupRef.current)
+        clusterGroupRef.current = null
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [_L, providers, highlightedProviderId, onMarkerHover])
+
+  // Handle "Rechercher dans cette zone" click
   const handleSearchArea = useCallback(() => {
     if (mapRef.current && onSearchArea) {
       onSearchArea(mapRef.current.getBounds())
     }
     setMapMoved(false)
   }, [onSearchArea])
-
-  // Cluster icon factory (TASK 2)
-  const createClusterIcon = useCallback((cluster: { getChildCount: () => number }) => {
-    if (!_L) return _L as unknown as import('leaflet').DivIcon
-    const count = cluster.getChildCount()
-    const size = count < 10 ? 'small' as const : count < 50 ? 'medium' as const : 'large' as const
-    const sizes = { small: 36, medium: 44, large: 52 }
-    return _L.divIcon({
-      html: `<div style="
-        width:${sizes[size]}px;height:${sizes[size]}px;
-        background:#E86B4B;color:white;
-        border-radius:50%;border:3px solid white;
-        display:flex;align-items:center;justify-content:center;
-        font-weight:bold;font-size:${size === 'large' ? '16' : '13'}px;
-        box-shadow:0 2px 8px rgba(0,0,0,0.2);
-      ">${count}</div>`,
-      className: 'custom-cluster-icon',
-      iconSize: _L.point(sizes[size], sizes[size]),
-    })
-  }, [_L])
 
   if (!mapReady) {
     return (
@@ -220,17 +303,6 @@ export default function GeographicMap({
     )
   }
 
-  const validProviders = providers.filter(p =>
-    p.latitude &&
-    p.longitude &&
-    !isNaN(p.latitude) &&
-    !isNaN(p.longitude) &&
-    p.latitude >= -90 &&
-    p.latitude <= 90 &&
-    p.longitude >= -180 &&
-    p.longitude <= 180
-  )
-
   return (
     <div className={`relative rounded-xl overflow-hidden ${className}`} style={{ height }}>
       <MapContainer
@@ -244,106 +316,9 @@ export default function GeographicMap({
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-
-        <MarkerClusterGroup
-          chunkedLoading
-          maxClusterRadius={50}
-          spiderfyOnMaxZoom
-          showCoverageOnHover={false}
-          iconCreateFunction={createClusterIcon}
-        >
-          {validProviders.map((provider) => {
-            const isHighlighted = provider.id === highlightedProviderId
-            const isVerified = provider.is_verified ?? false
-            return (
-              <Marker
-                key={provider.id}
-                position={[provider.latitude, provider.longitude]}
-                icon={getMarkerIcon(isVerified, isHighlighted)}
-                eventHandlers={{
-                  mouseover: () => onMarkerHover?.(provider.id),
-                  mouseout: () => onMarkerHover?.(null),
-                }}
-              >
-                <Popup className="custom-popup" maxWidth={320} minWidth={280}>
-                  <div className="p-4">
-                    {/* Name and verification */}
-                    <div className="flex items-start justify-between gap-3 mb-2">
-                      <div className="min-w-0">
-                        <h3 className="font-bold text-gray-900 text-base leading-tight">{provider.name}</h3>
-                      </div>
-                      {provider.is_verified && (
-                        <span
-                          className="inline-flex items-center justify-center w-5 h-5 rounded-full flex-shrink-0"
-                          style={{ backgroundColor: '#E86B4B' }}
-                          aria-label="Artisan référencé"
-                          title="Artisan référencé"
-                        >
-                          <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
-                          </svg>
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Specialty — clay color (TASK 1) */}
-                    {provider.specialty && (
-                      <p className="text-sm text-clay-400 font-medium mb-2">{provider.specialty}</p>
-                    )}
-
-                    {/* Rating */}
-                    {provider.rating_average && provider.rating_average > 0 && provider.review_count && provider.review_count > 0 && (
-                      <div className="flex items-start justify-between gap-3 mb-2">
-                        <div className="flex items-center gap-1">
-                          <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-                          <span className="font-bold text-gray-900 text-sm">{provider.rating_average.toFixed(1)}</span>
-                        </div>
-                        <div className="text-xs text-gray-500">{provider.review_count} avis</div>
-                      </div>
-                    )}
-
-                    {/* Address */}
-                    {(provider.address_street || provider.address_city) && (
-                      <p className="text-sm text-gray-600 mb-3 flex items-start gap-1.5">
-                        <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0 text-gray-400" />
-                        <span>
-                          {provider.address_street
-                            ? provider.address_postal_code && provider.address_street.includes(provider.address_postal_code)
-                              ? provider.address_street
-                              : `${provider.address_street}, ${provider.address_postal_code ?? ''} ${provider.address_city ?? ''}`.trim()
-                            : `${provider.address_postal_code ?? ''} ${provider.address_city ?? ''}`.trim()}
-                        </span>
-                      </p>
-                    )}
-
-                    {/* Actions — clay theme buttons (TASK 1) */}
-                    <div className="flex gap-2">
-                      {provider.phone && (
-                        <a
-                          href={`tel:${provider.phone}`}
-                          className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 bg-gradient-to-r from-stone-700 to-stone-800 text-white rounded-lg text-sm font-semibold hover:from-stone-800 hover:to-stone-900 transition-all shadow-md hover:shadow-lg transform hover:scale-[1.02]"
-                          title="Appeler"
-                        >
-                          <Phone className="w-4 h-4" />
-                          Appeler
-                        </a>
-                      )}
-                      <Link
-                        href={getArtisanUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city })}
-                        className="flex-1 text-center px-3 py-2 bg-gradient-to-r from-clay-400 to-clay-500 text-white rounded-lg text-sm font-semibold hover:from-clay-500 hover:to-clay-600 transition-all shadow-md hover:shadow-lg transform hover:scale-[1.02]"
-                      >
-                        Voir le profil
-                      </Link>
-                    </div>
-                  </div>
-                </Popup>
-              </Marker>
-            )
-          })}
-        </MarkerClusterGroup>
       </MapContainer>
 
-      {/* "Rechercher dans cette zone" button (TASK 4) */}
+      {/* "Rechercher dans cette zone" button */}
       {mapMoved && (
         <button
           onClick={handleSearchArea}
