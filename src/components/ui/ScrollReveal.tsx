@@ -69,18 +69,29 @@ export function ScrollReveal({
   as = 'div',
 }: ScrollRevealProps) {
   const ref = useRef<HTMLDivElement | null>(null)
-  const [isVisible, setIsVisible] = useState(false)
+  // Start VISIBLE on SSR so Lighthouse sees all content immediately.
+  // After hydration, elements below the viewport get hidden for animation.
+  const [isVisible, setIsVisible] = useState(true)
+  const [isReady, setIsReady] = useState(false)
 
   const reveal = useCallback(() => setIsVisible(true), [])
 
   useEffect(() => {
-    if (getPrefersReducedMotion()) {
-      setIsVisible(true)
-      return
-    }
+    if (getPrefersReducedMotion()) return // stays visible
 
     const el = ref.current
     if (!el) return
+
+    // Check if element is already in the viewport — if so, keep visible
+    const rect = el.getBoundingClientRect()
+    if (rect.top < window.innerHeight + 100) {
+      // Already in or near viewport — stay visible, no animation needed
+      return
+    }
+
+    // Below viewport — hide it and set up observer for animation
+    setIsVisible(false)
+    setIsReady(true)
 
     const observer = getSharedObserver()
     observerCallbacks.set(el, reveal)
@@ -94,8 +105,6 @@ export function ScrollReveal({
 
   const Component = as === 'section' ? 'section' : 'div'
 
-  // Transition is always set server-side; reduced-motion users skip via
-  // the useEffect that immediately sets isVisible=true (no animation runs).
   return (
     <Component
       ref={ref as React.RefObject<HTMLDivElement>}
@@ -103,7 +112,10 @@ export function ScrollReveal({
       style={{
         opacity: isVisible ? 1 : 0,
         transform: isVisible ? 'none' : DIRECTIONS[direction](distance),
-        transition: `opacity ${duration}s ease-out ${delay}s, transform ${duration}s ease-out ${delay}s`,
+        // Only add transition after client setup, to avoid flash
+        transition: isReady
+          ? `opacity ${duration}s ease-out ${delay}s, transform ${duration}s ease-out ${delay}s`
+          : undefined,
       }}
     >
       {children}

@@ -269,7 +269,7 @@ export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
                 </div>
                 <div>
                   <div className="text-sm font-bold text-stone-900">{label}</div>
-                  <div className="text-xs text-stone-400 mt-0.5">{sub}</div>
+                  <div className="text-xs text-stone-500 mt-0.5">{sub}</div>
                 </div>
                 {i < arr.length - 1 && (
                   <div className="hidden xl:block w-px h-9 ml-6" style={{ background: 'rgba(0,0,0,.07)' }} />
@@ -304,7 +304,7 @@ export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
                 >
                   <SvcIcon className="w-8 h-8 text-clay-400 mx-auto mb-3" />
                   <div className="text-sm font-extrabold text-stone-900 mb-1">{name}</div>
-                  <div className="text-xs text-stone-400">
+                  <div className="text-xs text-stone-500">
                     {serviceCounts[slug] > 0 ? `${formatProviderCount(serviceCounts[slug])} artisans` : 'Artisans disponibles'}
                   </div>
                 </Link>
@@ -358,13 +358,13 @@ export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
                       </div>
                       <div className="px-5 pb-5 pt-4">
                         <div className="text-base font-black text-stone-900 mb-0.5 line-clamp-1">{formatName(a.name)}</div>
-                        <div className="text-sm text-stone-400 mb-2.5 line-clamp-1">
+                        <div className="text-sm text-stone-500 mb-2.5 line-clamp-1">
                           {a.specialty}{a.address_city ? ` · ${a.address_city}` : ''}{a.address_postal_code ? ` (${a.address_postal_code})` : ''}
                         </div>
                         <div className="flex items-center gap-1.5 mb-3">
                           <span className="text-sm">{renderStars(rating)}</span>
                           <span className="text-sm font-bold text-stone-900">{ratingDisplay}</span>
-                          <span className="text-xs text-stone-400">({a.review_count ?? 0} avis)</span>
+                          <span className="text-xs text-stone-500">({a.review_count ?? 0} avis)</span>
                         </div>
                         <div className="flex justify-end items-center">
                           <Link
@@ -420,7 +420,7 @@ export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
                       {step.n}
                     </div>
                     <div className="text-base font-extrabold text-stone-900 mb-2">{step.title}</div>
-                    <p className="text-sm text-stone-500 leading-[1.65]">{step.desc}</p>
+                    <p className="text-sm text-stone-600 leading-[1.65]">{step.desc}</p>
                   </div>
                 </ScrollReveal>
               ))}

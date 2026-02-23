@@ -98,10 +98,7 @@ export default async function HomePage() {
         }}
       />
 
-      {/* Server-rendered H1 for SEO — visually hidden, ClayHomePage shows the visible version */}
-      <h1 className="sr-only">
-        L&apos;annuaire des artisans qualifi&eacute;s en France
-      </h1>
+      {/* ClayHomePage contains the visible <h1> — no duplicate sr-only h1 needed */}
 
       {/* ─── CLAY HOMEPAGE DESIGN ─────────────────────────────── */}
       <ClayHomePage
@@ -123,7 +120,7 @@ export default async function HomePage() {
               <h2 className="font-heading text-2xl md:text-3xl font-bold text-stone-900 mb-2 text-center tracking-tight">
                 Artisans partout en France
               </h2>
-              <p className="text-stone-500 text-center max-w-lg mx-auto">
+              <p className="text-stone-600 text-center max-w-lg mx-auto">
                 Trouvez des professionnels dans votre r&eacute;gion, d&eacute;partement ou ville.
               </p>
             </div>

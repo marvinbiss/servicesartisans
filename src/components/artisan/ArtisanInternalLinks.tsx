@@ -79,7 +79,7 @@ export default function ArtisanInternalLinks({
             )}
             <Link
               href={`/services/${serviceSlug}`}
-              className="inline-block mt-3 text-clay-400 hover:text-clay-600 text-sm font-medium"
+              className="inline-block mt-3 text-clay-600 hover:text-clay-700 text-sm font-medium"
             >
               Toutes les villes →
             </Link>
@@ -104,7 +104,7 @@ export default function ArtisanInternalLinks({
             </div>
             <Link
               href={`/villes/${locationSlug}`}
-              className="inline-block mt-3 text-clay-400 hover:text-clay-600 text-sm font-medium"
+              className="inline-block mt-3 text-clay-600 hover:text-clay-700 text-sm font-medium"
             >
               Tous les artisans à {cityName} →
             </Link>

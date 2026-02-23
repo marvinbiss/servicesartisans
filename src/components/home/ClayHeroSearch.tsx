@@ -219,7 +219,7 @@ export function ClayHeroSearch() {
                   <span className="w-5 h-5 rounded-md bg-clay-50 flex items-center justify-center text-clay-400 text-xs shrink-0">📍</span>
                   <span className="font-medium">{v.name}</span>
                 </div>
-                <span className="text-xs text-stone-400">{v.departementCode}</span>
+                <span className="text-xs text-stone-500">{v.departementCode}</span>
               </li>
             ))}
           </ul>

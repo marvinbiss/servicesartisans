@@ -357,13 +357,14 @@ export default function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-10">
           {/* Logo & Description */}
           <div className="col-span-2">
-            <Link href="/" className="inline-flex items-center gap-3 mb-4 group">
+            <Link href="/" className="inline-flex items-center gap-3 mb-4 group" aria-label="ServicesArtisans - Accueil">
               <svg
                 width="48"
                 height="48"
                 viewBox="0 0 48 48"
                 fill="none"
                 className="flex-shrink-0 group-hover:scale-105 transition-transform duration-300"
+                aria-hidden="true"
               >
                 <defs>
                   <linearGradient id="footerLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">

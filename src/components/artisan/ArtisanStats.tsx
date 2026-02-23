@@ -187,10 +187,10 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
               >
                 {stat.value}
                 {stat.subValue && (
-                  <span className="text-sm font-normal text-slate-500 ml-0.5">{stat.subValue}</span>
+                  <span className="text-sm font-normal text-slate-600 ml-0.5">{stat.subValue}</span>
                 )}
               </div>
-              <div className="text-xs text-slate-500 mt-1.5 font-medium leading-tight" aria-hidden="true">
+              <div className="text-xs text-slate-600 mt-1.5 font-medium leading-tight" aria-hidden="true">
                 {stat.label}
               </div>
             </motion.div>

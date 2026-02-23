@@ -426,16 +426,15 @@ button {
   touch-action: manipulation;
 }
 
-/* Smooth transitions for all interactive elements */
-a, button, input, select, textarea, [role="button"] {
-  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.3s ease, transform 0.2s ease;
-}
+/* NOTE: Global transitions on ALL interactive elements removed —
+   applying transition to every a/button/input forces the browser to
+   track 5 properties on hundreds of elements, hurting TBT/INP.
+   Components use Tailwind transition-* utilities where needed. */
 
-/* Prevent layout shifts + smooth image loading */
+/* Prevent layout shifts */
 img {
   max-width: 100%;
   height: auto;
-  transition: opacity 0.3s ease;
 }
 
 /* Smooth font rendering */
@@ -518,17 +517,8 @@ img {
   color: inherit;
 }
 
-/* Page entrance animation */
-@keyframes pageIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@media (min-width: 768px) {
-  main {
-    animation: pageIn 0.4s ease-out;
-  }
-}
+/* NOTE: pageIn animation removed — it delayed main content visibility
+   (opacity: 0 → 1 over 0.4s), hurting FCP and LCP on Lighthouse. */
 
 /* Reviews carousel — infinite scroll */
 @keyframes scroll-carousel {
