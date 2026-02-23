@@ -59,7 +59,7 @@ export default function ArtisanInternalLinks({
           {/* Column 1: Same service, nearby cities */}
           <div>
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-clay-400" />
+              <MapPin className="w-4 h-4 text-clay-600" />
               {serviceName} dans d&apos;autres villes
             </h3>
             {nearbyCities.length > 0 ? (
@@ -88,7 +88,7 @@ export default function ArtisanInternalLinks({
           {/* Column 2: Other services in this city */}
           <div>
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <Wrench className="w-4 h-4 text-clay-400" />
+              <Wrench className="w-4 h-4 text-clay-600" />
               Autres artisans à {cityName}
             </h3>
             <div className="flex flex-wrap gap-2">
@@ -113,7 +113,7 @@ export default function ArtisanInternalLinks({
           {/* Column 3: Geographic navigation + cross-links */}
           <div>
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <Compass className="w-4 h-4 text-clay-400" />
+              <Compass className="w-4 h-4 text-clay-600" />
               Explorer par zone
             </h3>
             <div className="space-y-2">

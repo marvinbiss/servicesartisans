@@ -369,7 +369,7 @@ export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
                         <div className="flex justify-end items-center">
                           <Link
                             href={profileHref}
-                            className="text-white text-sm font-bold px-5 py-2.5 rounded-full transition-colors bg-stone-900 hover:bg-clay-400"
+                            className="text-white text-sm font-bold px-5 py-2.5 rounded-full transition-colors bg-stone-900 hover:bg-clay-500"
                             aria-label={`Voir le profil de ${formatName(a.name)}, ${a.specialty} à ${a.address_city}`}
                           >
                             Voir le profil

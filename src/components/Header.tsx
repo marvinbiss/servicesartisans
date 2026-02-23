@@ -394,10 +394,10 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
                 aria-haspopup="true"
                 className={cn(
                   'relative flex items-center gap-1.5 px-4 py-2 rounded-xl font-medium text-[0.9rem] transition-all duration-200',
-                  'after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-clay-400 after:transition-all after:duration-300 after:rounded-full',
+                  'after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-clay-500 after:transition-all after:duration-300 after:rounded-full',
                   openMenu === 'services'
-                    ? 'text-clay-400 bg-[#FDF1EC]/80 after:w-[60%]'
-                    : 'text-gray-600 hover:text-clay-400 hover:bg-gray-50/80 after:w-0 hover:after:w-[60%]'
+                    ? 'text-clay-600 bg-[#FDF1EC]/80 after:w-[60%]'
+                    : 'text-gray-600 hover:text-clay-600 hover:bg-gray-50/80 after:w-0 hover:after:w-[60%]'
                 )}
               >
                 Services
@@ -419,10 +419,10 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
                 aria-haspopup="true"
                 className={cn(
                   'relative flex items-center gap-1.5 px-4 py-2 rounded-xl font-medium text-[0.9rem] transition-all duration-200',
-                  'after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-clay-400 after:transition-all after:duration-300 after:rounded-full',
+                  'after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-clay-500 after:transition-all after:duration-300 after:rounded-full',
                   openMenu === 'villes'
-                    ? 'text-clay-400 bg-[#FDF1EC]/80 after:w-[60%]'
-                    : 'text-gray-600 hover:text-clay-400 hover:bg-gray-50/80 after:w-0 hover:after:w-[60%]'
+                    ? 'text-clay-600 bg-[#FDF1EC]/80 after:w-[60%]'
+                    : 'text-gray-600 hover:text-clay-600 hover:bg-gray-50/80 after:w-0 hover:after:w-[60%]'
                 )}
               >
                 Villes
@@ -444,10 +444,10 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
                 aria-haspopup="true"
                 className={cn(
                   'relative flex items-center gap-1.5 px-4 py-2 rounded-xl font-medium text-[0.9rem] transition-all duration-200',
-                  'after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-clay-400 after:transition-all after:duration-300 after:rounded-full',
+                  'after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-clay-500 after:transition-all after:duration-300 after:rounded-full',
                   openMenu === 'regions'
-                    ? 'text-clay-400 bg-[#FDF1EC]/80 after:w-[60%]'
-                    : 'text-gray-600 hover:text-clay-400 hover:bg-gray-50/80 after:w-0 hover:after:w-[60%]'
+                    ? 'text-clay-600 bg-[#FDF1EC]/80 after:w-[60%]'
+                    : 'text-gray-600 hover:text-clay-600 hover:bg-gray-50/80 after:w-0 hover:after:w-[60%]'
                 )}
               >
                 Régions
