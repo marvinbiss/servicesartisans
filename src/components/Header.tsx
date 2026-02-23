@@ -858,6 +858,7 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
                     disabled={isLocating}
                     className="absolute right-1 top-1/2 -translate-y-1/2 p-2 hover:bg-gray-100 rounded-full transition-colors disabled:opacity-50"
                     title="Ma position"
+                    aria-label="Utiliser ma position"
                   >
                     <Navigation className={`w-4 h-4 ${isLocating ? 'animate-spin text-clay-400' : 'text-gray-400'}`} />
                   </button>

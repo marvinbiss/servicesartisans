@@ -161,7 +161,7 @@ export default function Footer() {
             {/* Par région */}
             <div>
               <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em] flex items-center gap-2">
-                <Building2 className="w-3.5 h-3.5 text-gray-500" />
+                <Building2 className="w-3.5 h-3.5 text-gray-500" aria-hidden="true" />
                 Par région
               </h4>
               <ul className="space-y-3 text-sm">
@@ -230,7 +230,7 @@ export default function Footer() {
             <details className="group border border-white/[0.06] rounded-xl overflow-hidden">
               <summary className="flex items-center justify-between cursor-pointer px-5 py-4 text-white font-heading font-semibold text-xs uppercase tracking-[0.15em] hover:bg-white/[0.03] transition-colors">
                 Services populaires
-                <ArrowRight className="w-4 h-4 text-gray-500 transition-transform duration-200 group-open:rotate-90" />
+                <ArrowRight className="w-4 h-4 text-gray-500 transition-transform duration-200 group-open:rotate-90" aria-hidden="true" />
               </summary>
               <ul className="space-y-1 text-sm px-5 pb-4">
                 {popularServices.map((service) => (
@@ -255,7 +255,7 @@ export default function Footer() {
             <details className="group border border-white/[0.06] rounded-xl overflow-hidden">
               <summary className="flex items-center justify-between cursor-pointer px-5 py-4 text-white font-heading font-semibold text-xs uppercase tracking-[0.15em] hover:bg-white/[0.03] transition-colors">
                 Villes populaires
-                <ArrowRight className="w-4 h-4 text-gray-500 transition-transform duration-200 group-open:rotate-90" />
+                <ArrowRight className="w-4 h-4 text-gray-500 transition-transform duration-200 group-open:rotate-90" aria-hidden="true" />
               </summary>
               <ul className="space-y-1 text-sm px-5 pb-4">
                 {popularCities.map((city) => (
@@ -280,10 +280,10 @@ export default function Footer() {
             <details className="group border border-white/[0.06] rounded-xl overflow-hidden">
               <summary className="flex items-center justify-between cursor-pointer px-5 py-4 text-white font-heading font-semibold text-xs uppercase tracking-[0.15em] hover:bg-white/[0.03] transition-colors">
                 <span className="flex items-center gap-2">
-                  <Building2 className="w-3.5 h-3.5 text-gray-500" />
+                  <Building2 className="w-3.5 h-3.5 text-gray-500" aria-hidden="true" />
                   Par région
                 </span>
-                <ArrowRight className="w-4 h-4 text-gray-500 transition-transform duration-200 group-open:rotate-90" />
+                <ArrowRight className="w-4 h-4 text-gray-500 transition-transform duration-200 group-open:rotate-90" aria-hidden="true" />
               </summary>
               <ul className="space-y-1 text-sm px-5 pb-4">
                 {popularRegions.map((region) => (
@@ -314,7 +314,7 @@ export default function Footer() {
             <details className="group border border-white/[0.06] rounded-xl overflow-hidden">
               <summary className="flex items-center justify-between cursor-pointer px-5 py-4 text-white font-heading font-semibold text-xs uppercase tracking-[0.15em] hover:bg-white/[0.03] transition-colors">
                 Outils gratuits
-                <ArrowRight className="w-4 h-4 text-gray-500 transition-transform duration-200 group-open:rotate-90" />
+                <ArrowRight className="w-4 h-4 text-gray-500 transition-transform duration-200 group-open:rotate-90" aria-hidden="true" />
               </summary>
               <ul className="space-y-1 text-sm px-5 pb-4">
                 {outilsLinks.map((link) => (
@@ -333,7 +333,7 @@ export default function Footer() {
             <details className="group border border-white/[0.06] rounded-xl overflow-hidden">
               <summary className="flex items-center justify-between cursor-pointer px-5 py-4 text-white font-heading font-semibold text-xs uppercase tracking-[0.15em] hover:bg-white/[0.03] transition-colors">
                 Navigation
-                <ArrowRight className="w-4 h-4 text-gray-500 transition-transform duration-200 group-open:rotate-90" />
+                <ArrowRight className="w-4 h-4 text-gray-500 transition-transform duration-200 group-open:rotate-90" aria-hidden="true" />
               </summary>
               <ul className="space-y-1 text-sm px-5 pb-4">
                 {navigationLinks.map((link) => (

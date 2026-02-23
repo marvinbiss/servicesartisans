@@ -111,7 +111,7 @@ function ClayFAQSection() {
           <details key={faq.q} className="group rounded-2xl bg-[#FFFCF8] border border-stone-200/60 transition-shadow duration-300 hover:shadow-sm">
             <summary className="flex items-center justify-between cursor-pointer px-6 py-4 text-left text-base font-bold text-stone-900 list-none [&::-webkit-details-marker]:hidden">
               <span>{faq.q}</span>
-              <svg className="w-5 h-5 text-clay-400 shrink-0 ml-4 transition-transform duration-300 group-open:rotate-180" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+              <svg className="w-5 h-5 text-clay-400 shrink-0 ml-4 transition-transform duration-300 group-open:rotate-180" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
               </svg>
             </summary>
@@ -156,7 +156,7 @@ export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
             priority
             placeholder="blur"
             blurDataURL={HERO_BLUR}
-            sizes="100vw"
+            sizes="(max-width: 768px) 100vw, (max-width: 1280px) 90vw, 1320px"
             className="object-cover"
           />
         </div>
