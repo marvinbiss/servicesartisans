@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import dynamic from 'next/dynamic'
+import { headers } from 'next/headers'
 import { Inter, Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/Header'
@@ -134,6 +135,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const nonce = (await headers()).get('x-nonce') ?? undefined
   const artisanCount = await getProviderCount()
   return (
     <html lang="fr" className={`scroll-smooth ${inter.variable} ${plusJakarta.variable}`}>
@@ -149,6 +151,7 @@ export default async function RootLayout({
             No nonce needed — application/ld+json is not executable JS, exempt from CSP script-src */}
         <script
           type="application/ld+json"
+          nonce={nonce}
           dangerouslySetInnerHTML={{
             __html: JSON.stringify([getOrganizationSchema(), getWebsiteSchema()])
               .replace(/</g, '\\u003c')
