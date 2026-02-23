@@ -764,6 +764,7 @@ export default function MapSearch() {
                           <Link
                             href={getArtisanUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city })}
                             className="flex-1 text-center py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-semibold rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all shadow-md hover:shadow-lg transform hover:scale-[1.02]"
+                            aria-label={`Voir le profil de ${provider.name}${provider.address_city ? `, ${provider.address_city}` : ''}`}
                           >
                             Voir le profil
                           </Link>

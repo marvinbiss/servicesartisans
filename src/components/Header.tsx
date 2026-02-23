@@ -313,7 +313,7 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <Link href="/inscription-artisan" className="text-amber-400 hover:text-amber-300 font-medium flex items-center gap-1 transition-colors duration-200">
+            <Link href="/inscription-artisan" className="text-amber-400 hover:text-amber-300 font-medium flex items-center gap-1 transition-colors duration-200" aria-label="Espace Pro artisan">
               <Award className="w-4 h-4" />
               <span className="hidden sm:inline">Espace Pro</span>
             </Link>
@@ -335,7 +335,7 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
           scrolled ? 'h-14' : 'h-16'
         )}>
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 flex-shrink-0 group/logo">
+          <Link href="/" className="flex items-center gap-2.5 flex-shrink-0 group/logo" aria-label="ServicesArtisans - Accueil">
             <div className="flex items-center gap-2.5 transition-transform duration-200 hover:scale-[1.02]">
               <svg
                 width="36"

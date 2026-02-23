@@ -448,6 +448,7 @@ export default function QuickSearch() {
             placeholder="Rechercher un artisan, un service, une ville..."
             autoComplete="off"
             aria-label="Recherche rapide"
+            role="combobox"
             aria-expanded={showDropdown && suggestions.length > 0}
             aria-haspopup="listbox"
             aria-autocomplete="list"

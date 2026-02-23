@@ -163,8 +163,8 @@ export default async function RootLayout({
         <link rel="preconnect" href={process.env.NEXT_PUBLIC_SUPABASE_URL || ''} />
         <link rel="dns-prefetch" href={process.env.NEXT_PUBLIC_SUPABASE_URL || ''} />
 
-        {/* Preconnect for images - Unsplash */}
-        <link rel="preconnect" href="https://images.unsplash.com" />
+        {/* Preconnect for images — crossOrigin for Next.js Image CORS */}
+        <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
       </head>
       <body className="font-sans bg-gray-50 antialiased">

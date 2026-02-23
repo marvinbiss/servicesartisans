@@ -60,7 +60,7 @@ export function PopularServicesLinks({
             <Link
               key={service.slug}
               href={`/services/${service.slug}`}
-              className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-100 hover:bg-[#FDF1EC] text-gray-700 hover:text-clay-400 rounded-full text-sm transition-colors"
+              className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-100 hover:bg-[#FDF1EC] text-gray-700 hover:text-clay-600 rounded-full text-sm transition-colors"
             >
               <Icon className="w-3.5 h-3.5" />
               {service.name}
@@ -70,7 +70,7 @@ export function PopularServicesLinks({
       </div>
       <Link
         href="/services"
-        className="inline-flex items-center gap-1 text-clay-400 hover:text-clay-600 text-sm font-medium mt-3"
+        className="inline-flex items-center gap-1 text-clay-600 hover:text-clay-700 text-sm font-medium mt-3"
       >
         {services.length} métiers d&apos;artisanat <ArrowRight className="w-4 h-4" />
       </Link>
@@ -101,7 +101,7 @@ export function PopularCitiesLinks({
           <Link
             key={city.slug}
             href={`/villes/${city.slug}`}
-            className="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-100 hover:bg-[#FDF1EC] text-gray-700 hover:text-clay-400 rounded-full text-sm transition-colors"
+            className="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-100 hover:bg-[#FDF1EC] text-gray-700 hover:text-clay-600 rounded-full text-sm transition-colors"
           >
             {city.name}
           </Link>
@@ -109,7 +109,7 @@ export function PopularCitiesLinks({
       </div>
       <Link
         href="/villes"
-        className="inline-flex items-center gap-1 text-clay-400 hover:text-clay-600 text-sm font-medium mt-3"
+        className="inline-flex items-center gap-1 text-clay-600 hover:text-clay-700 text-sm font-medium mt-3"
       >
         Artisans dans {villes.length} villes <ArrowRight className="w-4 h-4" />
       </Link>
@@ -191,7 +191,7 @@ export function PopularServiceCityLinks({
           <Link
             key={combo.href}
             href={combo.href}
-            className="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-100 hover:bg-[#FDF1EC] text-gray-700 hover:text-clay-400 rounded-full text-sm transition-colors"
+            className="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-100 hover:bg-[#FDF1EC] text-gray-700 hover:text-clay-600 rounded-full text-sm transition-colors"
           >
             {combo.label}
           </Link>
@@ -240,28 +240,28 @@ export function QuickSiteLinks({ className = '' }: { className?: string }) {
     <div className={`bg-gray-50 rounded-xl p-4 ${className}`}>
       <h4 className="font-medium text-gray-900 mb-3">Naviguer sur le site</h4>
       <div className="grid grid-cols-2 gap-2 text-sm">
-        <Link href="/" className="text-gray-600 hover:text-clay-400 py-1">
+        <Link href="/" className="text-gray-600 hover:text-clay-600 py-1">
           Accueil
         </Link>
-        <Link href="/services" className="text-gray-600 hover:text-clay-400 py-1">
+        <Link href="/services" className="text-gray-600 hover:text-clay-600 py-1">
           {services.length} métiers d&apos;artisanat
         </Link>
-        <Link href="/villes" className="text-gray-600 hover:text-clay-400 py-1">
+        <Link href="/villes" className="text-gray-600 hover:text-clay-600 py-1">
           {villes.length} villes de France
         </Link>
-        <Link href="/regions" className="text-gray-600 hover:text-clay-400 py-1">
+        <Link href="/regions" className="text-gray-600 hover:text-clay-600 py-1">
           Par région
         </Link>
-        <Link href="/recherche" className="text-gray-600 hover:text-clay-400 py-1">
+        <Link href="/recherche" className="text-gray-600 hover:text-clay-600 py-1">
           Rechercher
         </Link>
-        <Link href="/devis" className="text-gray-600 hover:text-clay-400 py-1">
+        <Link href="/devis" className="text-gray-600 hover:text-clay-600 py-1">
           Demander un devis
         </Link>
-        <Link href="/comment-ca-marche" className="text-gray-600 hover:text-clay-400 py-1">
+        <Link href="/comment-ca-marche" className="text-gray-600 hover:text-clay-600 py-1">
           Comment ça marche
         </Link>
-        <Link href="/contact" className="text-gray-600 hover:text-clay-400 py-1">
+        <Link href="/contact" className="text-gray-600 hover:text-clay-600 py-1">
           Contact
         </Link>
       </div>
@@ -295,7 +295,7 @@ export function InternalLinksFooter({ className = '' }: { className?: string }) 
             </div>
             <Link
               href="/regions"
-              className="inline-flex items-center gap-1 text-clay-400 hover:text-clay-600 text-sm font-medium mt-3"
+              className="inline-flex items-center gap-1 text-clay-600 hover:text-clay-700 text-sm font-medium mt-3"
             >
               Artisans par région <ArrowRight className="w-4 h-4" />
             </Link>

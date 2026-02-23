@@ -190,6 +190,7 @@ export default function CarteAvecListe({
                   <Link
                     href={getArtisanUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city })}
                     className="block w-full py-2 bg-blue-600 text-white text-center rounded-lg text-sm font-semibold hover:bg-blue-700"
+                    aria-label={`Voir le profil de ${provider.name}${provider.address_city ? `, ${provider.address_city}` : ''}`}
                   >
                     Voir le profil
                   </Link>

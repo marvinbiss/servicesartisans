@@ -229,7 +229,7 @@ export function ClayHeroSearch() {
       {/* Submit */}
       <button
         type="submit"
-        className="bg-clay-400 hover:bg-clay-600 text-white font-bold text-base px-7 h-[60px] rounded-2xl shrink-0 transition-colors duration-200 w-full md:w-auto"
+        className="bg-clay-600 hover:bg-clay-700 text-white font-bold text-base px-7 h-[60px] rounded-2xl shrink-0 transition-colors duration-200 w-full md:w-auto"
       >
         Trouver
       </button>

@@ -288,7 +288,7 @@ export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
             <h2 className="font-black tracking-[-0.04em] leading-tight text-stone-900" style={{ fontSize: 'clamp(2rem,3.5vw,2.8rem)' }}>
               Tous les corps de métier
             </h2>
-            <Link href="/services" className="text-sm font-bold text-clay-400 hover:text-clay-600 transition-colors">
+            <Link href="/services" className="text-sm font-bold text-clay-600 hover:text-clay-700 transition-colors">
               Voir tout →
             </Link>
           </div>
@@ -323,7 +323,7 @@ export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
                   Les artisans les mieux notés.
                 </h2>
               </div>
-              <Link href="/services" className="text-sm font-bold text-clay-400 hover:text-clay-600 transition-colors">
+              <Link href="/services" className="text-sm font-bold text-clay-600 hover:text-clay-700 transition-colors">
                 Voir tous →
               </Link>
             </div>
@@ -367,6 +367,7 @@ export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
                           <Link
                             href={profileHref}
                             className="text-white text-sm font-bold px-5 py-2.5 rounded-full transition-colors bg-stone-900 hover:bg-clay-400"
+                            aria-label={`Voir le profil de ${formatName(a.name)}, ${a.specialty} à ${a.address_city}`}
                           >
                             Voir le profil
                           </Link>
