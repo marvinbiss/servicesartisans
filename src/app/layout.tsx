@@ -159,7 +159,8 @@ export default async function RootLayout({
           }}
         />
 
-        {/* DNS prefetch for Supabase (client-side requests après interaction) */}
+        {/* Preconnect for Supabase (DNS + TCP + TLS en avance) */}
+        <link rel="preconnect" href={process.env.NEXT_PUBLIC_SUPABASE_URL || ''} />
         <link rel="dns-prefetch" href={process.env.NEXT_PUBLIC_SUPABASE_URL || ''} />
       </head>
       <body className="font-sans bg-gray-50 antialiased">

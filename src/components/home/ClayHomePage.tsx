@@ -157,6 +157,7 @@ export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
             placeholder="blur"
             blurDataURL={HERO_BLUR}
             sizes="(max-width: 768px) 100vw, (max-width: 1280px) 90vw, 1320px"
+            quality={60}
             className="object-cover"
           />
         </div>
@@ -236,6 +237,7 @@ export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
                   alt="Photo d'un client satisfait"
                   width={56}
                   height={56}
+                  loading="lazy"
                   className="rounded-full border-2 border-white/20 object-cover -mr-3"
                 />
               ))}
@@ -346,6 +348,7 @@ export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
                           alt={`Photo de l'activité de ${formatName(a.name)}`}
                           fill
                           sizes="(max-width: 768px) 100vw, 33vw"
+                          quality={60}
                           className="object-cover"
                         />
                         <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom,rgba(0,0,0,0) 40%,rgba(0,0,0,.55))' }} />
@@ -497,6 +500,7 @@ export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
               alt="Artisans qualifiés"
               fill
               sizes="100vw"
+              quality={60}
               className="object-cover"
             />
           </div>
