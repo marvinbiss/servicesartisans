@@ -145,7 +145,7 @@ export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={() => { if (showPhone) handleCall(); else setShowPhone(true) }}
-              className="flex-1 py-3.5 px-4 rounded-xl bg-clay-400 text-white font-semibold flex items-center justify-center gap-2 shadow-md shadow-glow-clay focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2 min-w-0"
+              className="flex-1 py-3.5 px-4 rounded-xl bg-clay-500 text-white font-semibold flex items-center justify-center gap-2 shadow-md shadow-glow-clay focus:outline-none focus:ring-2 focus:ring-clay-500 focus:ring-offset-2 min-w-0"
               aria-label={showPhone ? `Appeler l'artisan au ${artisan.phone}` : 'Afficher le numéro de téléphone'}
             >
               <Phone className="w-5 h-5 flex-shrink-0" aria-hidden="true" />

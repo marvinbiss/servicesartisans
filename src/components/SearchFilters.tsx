@@ -97,7 +97,7 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
             <span>Filtres</span>
             {activeFiltersCount > 0 && (
               <span
-                className="bg-clay-400 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center"
+                className="bg-clay-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center"
                 aria-label={`${activeFiltersCount} filtre${activeFiltersCount > 1 ? 's' : ''} actif${activeFiltersCount > 1 ? 's' : ''}`}
               >
                 {activeFiltersCount}

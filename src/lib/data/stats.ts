@@ -108,13 +108,13 @@ export const getSiteStats = cache(async (): Promise<SiteStats> => {
         .from('reviews')
         .select('rating')
         .eq('status', 'published')
-        .limit(500),
+        .limit(100),
       supabase
         .from('communes')
         .select('departement_code')
         .gt('provider_count', 0)
         .not('departement_code', 'is', null)
-        .limit(10000),
+        .limit(200),
     ])
 
     const artisanCount = providerRes.count ?? 0
@@ -170,13 +170,13 @@ export const getHomepageData = cache(async (): Promise<HomepageData> => {
         .from('reviews')
         .select('rating')
         .eq('status', 'published')
-        .limit(500),
+        .limit(100),
       supabase
         .from('communes')
         .select('departement_code')
         .gt('provider_count', 0)
         .not('departement_code', 'is', null)
-        .limit(10000),
+        .limit(200),
       // ── Top providers (1 query) ──
       supabase
         .from('providers')

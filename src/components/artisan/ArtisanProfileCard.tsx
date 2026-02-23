@@ -148,7 +148,7 @@ export function ArtisanProfileCard({
                 )}
               </div>
               {isVerified && (
-                <div className="absolute -bottom-1 -right-1 w-7 h-7 bg-clay-400 rounded-full flex items-center justify-center border-2 border-white">
+                <div className="absolute -bottom-1 -right-1 w-7 h-7 bg-clay-500 rounded-full flex items-center justify-center border-2 border-white">
                   <BadgeCheck className="w-4 h-4 text-white" />
                 </div>
               )}
@@ -163,7 +163,7 @@ export function ArtisanProfileCard({
                 Disponible maintenant
               </div>
             ) : isAvailableToday ? (
-              <div className="bg-clay-400 text-white text-xs font-medium px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
+              <div className="bg-clay-500 text-white text-xs font-medium px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
                 <Clock className="w-3 h-3" />
                 Dispo aujourd'hui
               </div>
@@ -277,7 +277,7 @@ export function ArtisanProfileCard({
             )}
             <Link
               href={`${href}#reserver`}
-              className="flex-1 flex items-center justify-center gap-2 bg-clay-400 hover:bg-clay-600 text-white py-3 rounded-xl font-semibold transition-colors"
+              className="flex-1 flex items-center justify-center gap-2 bg-clay-500 hover:bg-clay-600 text-white py-3 rounded-xl font-semibold transition-colors"
             >
               <Calendar className="w-4 h-4" />
               Réserver
@@ -415,7 +415,7 @@ export function ArtisanProfileCard({
                   Appeler
                 </a>
               )}
-              <span className="flex-1 flex items-center justify-center gap-1 bg-clay-400 text-white py-2.5 rounded-lg font-medium text-sm">
+              <span className="flex-1 flex items-center justify-center gap-1 bg-clay-500 text-white py-2.5 rounded-lg font-medium text-sm">
                 <Calendar className="w-4 h-4" />
                 Réserver
               </span>

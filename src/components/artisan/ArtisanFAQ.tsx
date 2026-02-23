@@ -52,7 +52,7 @@ export function ArtisanFAQ({ artisan }: ArtisanFAQProps) {
                 >
                   <span className="font-medium text-gray-900 pr-4">{item.question}</span>
                   <div
-                    className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-colors ${isOpen ? 'bg-clay-400 text-white' : 'bg-sand-300 text-stone-600'}`}
+                    className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-colors ${isOpen ? 'bg-clay-500 text-white' : 'bg-sand-300 text-stone-600'}`}
                     aria-hidden="true"
                   >
                     {isOpen ? (
