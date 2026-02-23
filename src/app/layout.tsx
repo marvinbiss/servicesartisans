@@ -159,8 +159,9 @@ export default async function RootLayout({
           }}
         />
 
-        {/* DNS prefetch for Supabase — preconnect removed (flagged as unused on homepage) */}
+        {/* DNS prefetch — early DNS resolution for third-party origins */}
         <link rel="dns-prefetch" href={process.env.NEXT_PUBLIC_SUPABASE_URL || ''} />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
       </head>
       <body className="font-sans bg-gray-50 antialiased">
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
