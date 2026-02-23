@@ -175,12 +175,21 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // Refresh session
+  // Refresh session — SKIP for anonymous visitors (no Supabase auth cookie)
+  // saves a full Supabase round-trip (~200-400ms) for 95%+ of homepage traffic
   let response: NextResponse
-  try {
-    response = await updateSession(request)
-  } catch {
-    response = NextResponse.next()
+  const hasAuthCookie = request.cookies.getAll().some(c => c.name.startsWith('sb-'))
+
+  if (hasAuthCookie) {
+    try {
+      response = await updateSession(request)
+    } catch {
+      response = NextResponse.next()
+    }
+  } else {
+    response = NextResponse.next({
+      request: { headers: request.headers },
+    })
   }
 
   response.headers.set('x-pathname', pathname)
