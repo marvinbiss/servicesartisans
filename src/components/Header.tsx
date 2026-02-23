@@ -364,7 +364,7 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
                 <path d="M37.5 9L38.5 10L40.5 8" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
               <span className="hidden sm:inline text-xl font-heading font-extrabold tracking-tight text-gray-900 group-hover/logo:text-gray-700 transition-colors duration-200">
-                Services<span className="text-clay-400 group-hover/logo:text-clay-300 transition-colors duration-200">Artisans</span>
+                Services<span className="text-clay-500 group-hover/logo:text-clay-400 transition-colors duration-200">Artisans</span>
               </span>
             </div>
           </Link>
@@ -472,7 +472,7 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
 
             <Link
               href="/connexion"
-              className="relative text-gray-600 hover:text-clay-400 px-4 py-2 rounded-xl font-medium text-[0.9rem] hover:bg-gray-50/80 transition-all duration-200 after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:w-0 hover:after:w-[60%] after:h-[2px] after:bg-clay-400 after:transition-all after:duration-300 after:rounded-full"
+              className="relative text-gray-600 hover:text-clay-600 px-4 py-2 rounded-xl font-medium text-[0.9rem] hover:bg-gray-50/80 transition-all duration-200 after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:w-0 hover:after:w-[60%] after:h-[2px] after:bg-clay-500 after:transition-all after:duration-300 after:rounded-full"
             >
               Connexion
             </Link>
