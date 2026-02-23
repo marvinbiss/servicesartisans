@@ -868,7 +868,7 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
                 {/* Search Button Mobile */}
                 <button
                   type="submit"
-                  className="flex-shrink-0 m-1.5 w-10 h-10 bg-clay-400 hover:bg-clay-600 text-white rounded-full transition-all flex items-center justify-center"
+                  className="flex-shrink-0 m-1.5 w-10 h-10 bg-clay-500 hover:bg-clay-600 text-white rounded-full transition-all flex items-center justify-center"
                   aria-label="Rechercher"
                 >
                   <Search className="w-4 h-4" />
