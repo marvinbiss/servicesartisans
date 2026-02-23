@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import { SITE_URL } from '@/lib/seo/config'
+import './blog.css'
 
 export const metadata: Metadata = {
   title: 'Blog — Conseils et actualités travaux | ServicesArtisans',

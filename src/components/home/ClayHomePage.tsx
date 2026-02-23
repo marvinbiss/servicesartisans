@@ -99,7 +99,7 @@ function ClayFAQSection() {
   return (
     <div className="max-w-[1320px] mx-auto px-6 md:px-10 py-24">
       <div className="text-center mb-1">
-        <div className="inline-block text-xs font-bold text-clay-400 tracking-[.12em] uppercase">
+        <div className="inline-block text-xs font-bold text-clay-700 tracking-[.12em] uppercase">
           Questions fréquentes
         </div>
       </div>
@@ -281,7 +281,7 @@ export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
       {/* ─── SERVICES GRID (8 services, real counts) ─────────── */}
       <ScrollReveal as="section">
         <div className="max-w-[1320px] mx-auto px-6 md:px-10 py-24">
-          <div className="text-xs font-bold text-clay-400 tracking-[.12em] uppercase mb-2.5">
+          <div className="text-xs font-bold text-clay-700 tracking-[.12em] uppercase mb-2.5">
             Ce que nous proposons
           </div>
           <div className="flex justify-between items-end mb-9">
@@ -318,7 +318,7 @@ export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
           <div className="max-w-[1320px] mx-auto px-6 md:px-10 py-24">
             <div className="flex justify-between items-end mb-10">
               <div>
-                <div className="text-xs font-bold text-clay-400 tracking-[.12em] uppercase mb-2.5">Près de vous</div>
+                <div className="text-xs font-bold text-clay-700 tracking-[.12em] uppercase mb-2.5">Près de vous</div>
                 <h2 className="font-black tracking-[-0.04em] leading-tight text-stone-900" style={{ fontSize: 'clamp(2rem,3.5vw,2.8rem)' }}>
                   Les artisans les mieux notés.
                 </h2>
@@ -387,7 +387,7 @@ export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
         <div style={{ background: '#EDE8E1' }}>
           <div className="max-w-[1320px] mx-auto px-6 md:px-10 py-24">
             <div className="text-center mb-1">
-              <div className="inline-block text-xs font-bold text-clay-400 tracking-[.12em] uppercase">
+              <div className="inline-block text-xs font-bold text-clay-700 tracking-[.12em] uppercase">
                 Comment ça marche
               </div>
             </div>
@@ -411,7 +411,7 @@ export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
                 <ScrollReveal key={step.n} delay={i * 0.1}>
                   <div className="text-center relative z-10">
                     <div
-                      className="w-[50px] h-[50px] rounded-full bg-white flex items-center justify-center mx-auto mb-4 text-lg font-black text-clay-400"
+                      className="w-[50px] h-[50px] rounded-full bg-white flex items-center justify-center mx-auto mb-4 text-lg font-black text-clay-700"
                       style={{ border: '2px solid rgba(232,107,75,.2)', boxShadow: '0 4px 14px rgba(0,0,0,.07)' }}
                     >
                       {step.n}

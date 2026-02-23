@@ -3,6 +3,7 @@
  * Utilisées dans les pages SSR/ISR — NE PAS importer dans des composants client
  */
 
+import { cache } from 'react'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 /** Nombre total d'artisans actifs dans la base */
@@ -89,8 +90,8 @@ export interface HomepageData extends SiteStats {
 
 const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
 
-/** Toutes les stats du site en un seul appel (pour la homepage) */
-export async function getSiteStats(): Promise<SiteStats> {
+/** Toutes les stats du site en un seul appel — deduplicated via React cache */
+export const getSiteStats = cache(async (): Promise<SiteStats> => {
   try {
     const supabase = createAdminClient()
 
@@ -133,32 +134,50 @@ export async function getSiteStats(): Promise<SiteStats> {
   } catch {
     return { artisanCount: 0, reviewCount: 0, avgRating: 4.9, deptCount: 96 }
   }
-}
+})
 
 const HOMEPAGE_SERVICE_SLUGS = [
   'plombier', 'electricien', 'serrurier', 'chauffagiste',
   'peintre-en-batiment', 'menuisier', 'macon', 'jardinier',
 ]
 
-/** Données complètes pour la homepage : stats + providers + avis + compteurs */
-export async function getHomepageData(): Promise<HomepageData> {
-  const stats = await getSiteStats()
-
+/** Données complètes pour la homepage — single parallel round, deduplicated via cache */
+export const getHomepageData = cache(async (): Promise<HomepageData> => {
   if (IS_BUILD) {
-    return { ...stats, serviceCounts: {}, topProviders: [], recentReviews: [] }
+    return { artisanCount: 0, reviewCount: 0, avgRating: 4.9, deptCount: 96, serviceCounts: {}, topProviders: [], recentReviews: [] }
   }
 
   try {
     const supabase = createAdminClient()
     const { getProviderCountByService } = await import('@/lib/supabase')
 
-    const [countsResults, providersRes, reviewsRes] = await Promise.all([
-      Promise.all(
-        HOMEPAGE_SERVICE_SLUGS.map(async (slug) => {
-          const count = await getProviderCountByService(slug)
-          return [slug, count] as const
-        })
-      ),
+    // Run ALL 14 queries in a single parallel round (was 2 sequential rounds)
+    const [
+      providerRes, reviewCountRes, ratingsRes, deptRes,
+      providersRes, reviewsRes,
+      ...serviceCountResults
+    ] = await Promise.all([
+      // ── Site stats (4 queries) ──
+      supabase
+        .from('providers')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_active', true),
+      supabase
+        .from('reviews')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'published'),
+      supabase
+        .from('reviews')
+        .select('rating')
+        .eq('status', 'published')
+        .limit(500),
+      supabase
+        .from('communes')
+        .select('departement_code')
+        .gt('provider_count', 0)
+        .not('departement_code', 'is', null)
+        .limit(10000),
+      // ── Top providers (1 query) ──
       supabase
         .from('providers')
         .select('name, slug, specialty, address_city, address_postal_code, is_verified, rating_average, review_count, stable_id')
@@ -173,6 +192,7 @@ export async function getHomepageData(): Promise<HomepageData> {
         .order('review_count', { ascending: false })
         .order('rating_average', { ascending: false })
         .limit(3),
+      // ── Recent reviews (1 query) ──
       supabase
         .from('reviews')
         .select('client_name, rating, comment, created_at')
@@ -180,20 +200,42 @@ export async function getHomepageData(): Promise<HomepageData> {
         .not('comment', 'is', null)
         .order('created_at', { ascending: false })
         .limit(10),
+      // ── Service counts (8 queries) ──
+      ...HOMEPAGE_SERVICE_SLUGS.map(slug =>
+        getProviderCountByService(slug).then(count => ({ slug, count }))
+      ),
     ])
 
+    // Process site stats
+    const artisanCount = providerRes.count ?? 0
+    const reviewCount = reviewCountRes.count ?? 0
+
+    let avgRating = 4.9
+    if (ratingsRes.data && ratingsRes.data.length >= 5) {
+      const sum = ratingsRes.data.reduce((acc, r) => acc + (r.rating ?? 0), 0)
+      const computed = Math.round((sum / ratingsRes.data.length) * 10) / 10
+      if (computed >= 1 && computed <= 5) avgRating = computed
+    }
+
+    const depts = new Set(deptRes.data?.map(c => c.departement_code).filter(Boolean))
+    const deptCount = depts.size || 96
+
+    // Process service counts
     const serviceCounts: Record<string, number> = {}
-    for (const [slug, count] of countsResults) {
+    for (const { slug, count } of serviceCountResults) {
       serviceCounts[slug] = count
     }
 
     return {
-      ...stats,
+      artisanCount,
+      reviewCount,
+      avgRating,
+      deptCount,
       serviceCounts,
       topProviders: (providersRes.data ?? []) as HomepageProvider[],
       recentReviews: (reviewsRes.data ?? []) as HomepageReview[],
     }
   } catch {
-    return { ...stats, serviceCounts: {}, topProviders: [], recentReviews: [] }
+    return { artisanCount: 0, reviewCount: 0, avgRating: 4.9, deptCount: 96, serviceCounts: {}, topProviders: [], recentReviews: [] }
   }
-}
+})
