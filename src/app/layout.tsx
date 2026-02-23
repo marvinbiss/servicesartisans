@@ -159,13 +159,8 @@ export default async function RootLayout({
           }}
         />
 
-        {/* Preconnect for Supabase backend */}
-        <link rel="preconnect" href={process.env.NEXT_PUBLIC_SUPABASE_URL || ''} />
+        {/* DNS prefetch for Supabase (client-side requests après interaction) */}
         <link rel="dns-prefetch" href={process.env.NEXT_PUBLIC_SUPABASE_URL || ''} />
-
-        {/* Preconnect for images — crossOrigin for Next.js Image CORS */}
-        <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://images.unsplash.com" />
       </head>
       <body className="font-sans bg-gray-50 antialiased">
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />

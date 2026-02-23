@@ -92,7 +92,7 @@ export function PopularCitiesLinks({
     <div className={className}>
       {showTitle && (
         <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-          <MapPin className="w-4 h-4 text-clay-400" />
+          <MapPin className="w-4 h-4 text-clay-600" />
           Villes populaires
         </h3>
       )}
@@ -126,10 +126,10 @@ export function GeographicNavigation({ className = '' }: { className?: string })
         className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-xl hover:border-clay-300 hover:shadow-md transition-all group"
       >
         <div className="w-10 h-10 bg-[#FDF1EC] rounded-lg flex items-center justify-center group-hover:bg-clay-100 transition-colors">
-          <Building2 className="w-5 h-5 text-clay-400" />
+          <Building2 className="w-5 h-5 text-clay-600" />
         </div>
         <div>
-          <div className="font-semibold text-gray-900 group-hover:text-clay-400">Par région</div>
+          <div className="font-semibold text-gray-900 group-hover:text-clay-600">Par région</div>
           <div className="text-sm text-gray-500">{regions.length} régions</div>
         </div>
       </Link>
@@ -182,7 +182,7 @@ export function PopularServiceCityLinks({
     <div className={className}>
       {showTitle && (
         <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-          <Wrench className="w-4 h-4 text-clay-400" />
+          <Wrench className="w-4 h-4 text-clay-600" />
           Recherches populaires
         </h3>
       )}
@@ -224,7 +224,7 @@ export function ServiceCityMatrix({
           <Link
             key={city.slug}
             href={`/services/${service}/${city.slug}`}
-            className="px-3 py-2 bg-gray-50 hover:bg-[#FDF1EC] text-gray-700 hover:text-clay-400 rounded-lg text-sm transition-colors"
+            className="px-3 py-2 bg-gray-50 hover:bg-[#FDF1EC] text-gray-700 hover:text-clay-600 rounded-lg text-sm transition-colors"
           >
             {serviceData.name} {city.name}
           </Link>
@@ -287,7 +287,7 @@ export function InternalLinksFooter({ className = '' }: { className?: string }) 
                 <Link
                   key={region.slug}
                   href={`/regions/${region.slug}`}
-                  className="block text-gray-600 hover:text-clay-400 text-sm py-1 transition-colors"
+                  className="block text-gray-600 hover:text-clay-600 text-sm py-1 transition-colors"
                 >
                   {region.name}
                 </Link>

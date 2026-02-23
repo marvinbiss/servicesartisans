@@ -343,6 +343,7 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
                 viewBox="0 0 48 48"
                 fill="none"
                 className="flex-shrink-0"
+                aria-hidden="true"
               >
                 <defs>
                   <linearGradient id="headerLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
