@@ -157,7 +157,7 @@ export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
             placeholder="blur"
             blurDataURL={HERO_BLUR}
             sizes="(max-width: 768px) 100vw, (max-width: 1280px) 90vw, 1320px"
-            quality={60}
+            quality={45}
             className="object-cover"
           />
         </div>
