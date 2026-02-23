@@ -58,26 +58,26 @@ function formatName(raw: string): string {
 }
 
 const FALLBACK_REVIEWS = [
-  { client_name: 'Marie Fontaine', rating: 5, comment: "Marc a réglé ma fuite d'eau en urgence un dimanche soir. Rapide, propre, prix honnête. ServicesArtisans m'a littéralement sauvé la mise.", created_at: '', avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&h=80&fit=crop&crop=face&q=80' },
-  { client_name: 'Thomas Bernard', rating: 4, comment: "Rénovation complète de notre appartement. Sophie et son équipe ont fait un travail remarquable dans les délais prévus et dans le budget annoncé.", created_at: '', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face&q=80' },
-  { client_name: 'Amélie Leclerc', rating: 5, comment: "Enfin une plateforme sérieuse ! Artisans vraiment vérifiés, pas des fakes. J'ai trouvé mon électricien en 5 minutes, travaux réalisés 3 jours plus tard.", created_at: '', avatar: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=80&h=80&fit=crop&crop=face&q=80' },
+  { client_name: 'Marie Fontaine', rating: 5, comment: "Marc a réglé ma fuite d'eau en urgence un dimanche soir. Rapide, propre, prix honnête. ServicesArtisans m'a littéralement sauvé la mise.", created_at: '', avatar: '/images/avatars/avatar-1.webp' },
+  { client_name: 'Thomas Bernard', rating: 4, comment: "Rénovation complète de notre appartement. Sophie et son équipe ont fait un travail remarquable dans les délais prévus et dans le budget annoncé.", created_at: '', avatar: '/images/avatars/avatar-2.webp' },
+  { client_name: 'Amélie Leclerc', rating: 5, comment: "Enfin une plateforme sérieuse ! Artisans vraiment vérifiés, pas des fakes. J'ai trouvé mon électricien en 5 minutes, travaux réalisés 3 jours plus tard.", created_at: '', avatar: '/images/avatars/avatar-3.webp' },
 ]
 
 // Images de fond uniques par position (jamais 2 identiques côte à côte)
 const CARD_BG_IMAGES = [
-  'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&h=250&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=500&h=250&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&h=250&fit=crop&q=80',
+  '/images/card-bg-1.webp',
+  '/images/card-bg-2.webp',
+  '/images/card-bg-3.webp',
 ]
 
 // Avatars pour les avis (fallback quand pas de photo en BDD)
 const REVIEW_AVATARS = [
-  'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&h=80&fit=crop&crop=face&q=80',
-  'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face&q=80',
-  'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=80&h=80&fit=crop&crop=face&q=80',
-  'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=face&q=80',
-  'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face&q=80',
-  'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=80&h=80&fit=crop&crop=face&q=80',
+  '/images/avatars/avatar-1.webp',
+  '/images/avatars/avatar-2.webp',
+  '/images/avatars/avatar-3.webp',
+  '/images/avatars/avatar-4.webp',
+  '/images/avatars/avatar-5.webp',
+  '/images/avatars/avatar-6.webp',
 ]
 
 const HERO_BLUR = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMCwsKCwsICw4QDQoNDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAAFAAoDASIAAhEBAxEB/8QAFAABAAAAAAAAAAAAAAAAAAAACf/EAB4QAAEEAgMBAAAAAAAAAAAAAAIAAQMEBREGEiEx/8QAFQEBAQAAAAAAAAAAAAAAAAAABAX/xAAeEQABBAEFAAAAAAAAAAAAAAABAAIDBAUREiExQf/aAAwDAQACEQMRAD8AoW+W5S/yW7PQumBOhO4iID9AA/sRFVhyGRleTIhbxs00f//Z'
@@ -150,7 +150,7 @@ export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
       >
         <div className="absolute inset-0">
           <Image
-            src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1600&h=900&fit=crop&q=80"
+            src="/images/hero-artisan.webp"
             alt="Artisan au travail"
             fill
             priority
@@ -226,9 +226,9 @@ export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
           <div className="hidden md:flex items-center justify-center gap-4 mt-8">
             <div className="flex">
               {[
-                'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=168&h=168&fit=crop&crop=face&q=80',
-                'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=168&h=168&fit=crop&crop=face&q=80',
-                'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=168&h=168&fit=crop&crop=face&q=80',
+                '/images/avatars/hero-1.webp',
+                '/images/avatars/hero-2.webp',
+                '/images/avatars/hero-3.webp',
               ].map((src, i) => (
                 <Image
                   key={i}
@@ -343,7 +343,7 @@ export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
                       <div className="relative overflow-hidden" style={{ height: '200px', background: 'linear-gradient(160deg,#3D2414 0%,#5C3820 100%)' }}>
                         <Image
                           src={bgImage}
-                          alt=""
+                          alt={`Photo de l'activité de ${formatName(a.name)}`}
                           fill
                           sizes="(max-width: 768px) 100vw, 33vw"
                           className="object-cover"
@@ -493,8 +493,8 @@ export function ClayHomePage({ stats, serviceCounts, recentReviews }: Props) {
         <div className="relative overflow-hidden flex items-center" style={{ minHeight: '400px' }}>
           <div className="absolute inset-0">
             <Image
-              src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1600&h=500&fit=crop&q=80"
-              alt=""
+              src="/images/cta-artisan.webp"
+              alt="Artisans qualifiés"
               fill
               sizes="100vw"
               className="object-cover"
