@@ -1,0 +1,150 @@
+name: Sitemap Nightly Audit
+
+on:
+  schedule:
+    # Every day at 03:00 UTC
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+    inputs:
+      target_url:
+        description: 'Sitemap index URL to audit'
+        required: false
+        default: 'https://servicesartisans.fr/sitemap.xml'
+      mode:
+        description: 'Audit mode'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - sample-50
+
+jobs:
+  nightly-audit:
+    name: Nightly full sitemap audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Download previous baseline (if exists)
+        uses: actions/download-artifact@v4
+        with:
+          name: sitemap-nightly-baseline
+          path: /tmp/baseline
+        continue-on-error: true
+
+      - name: Run nightly audit
+        id: audit
+        run: |
+          AUDIT_URL="${{ inputs.target_url || vars.SITEMAP_AUDIT_URL || 'https://servicesartisans.fr/sitemap.xml' }}"
+          MODE_FLAG="${{ inputs.mode == 'sample-50' && '--sample 50' || '--all' }}"
+
+          BASELINE_FLAG=""
+          if [ -f /tmp/baseline/sitemap-nightly-baseline.json ]; then
+            BASELINE_FLAG="--baseline /tmp/baseline/sitemap-nightly-baseline.json"
+          fi
+
+          node tools/audit-sitemaps.mjs \
+            --url "$AUDIT_URL" \
+            $MODE_FLAG \
+            --strict \
+            --json \
+            --slo \
+            --concurrency 15 \
+            $BASELINE_FLAG \
+            --out sitemap-nightly-report.json || true
+
+          # Parse result
+          PASS=$(node -e "const r=JSON.parse(require('fs').readFileSync('sitemap-nightly-report.json','utf8'));console.log(r.pass)")
+          echo "pass=$PASS" >> "$GITHUB_OUTPUT"
+
+      - name: Generate job summary
+        if: always()
+        run: |
+          node -e "
+          const r = JSON.parse(require('fs').readFileSync('sitemap-nightly-report.json', 'utf8'));
+          const s = r.stats;
+          let md = '## Sitemap Nightly Audit Report\n\n';
+          md += '| Metric | Value |\n|--------|-------|\n';
+          md += '| **Status** | ' + (r.pass ? '✅ PASS' : '❌ FAIL') + ' |\n';
+          md += '| **Version** | ' + r.version + ' |\n';
+          md += '| **Git SHA** | \`' + (r.gitSha || 'N/A') + '\` |\n';
+          md += '| **Timestamp** | ' + r.timestamp + ' |\n';
+          md += '| **Target** | ' + r.targetUrl + ' |\n';
+          md += '| **Mode** | ' + r.mode + ' |\n';
+          md += '| **Tested** | ' + s.tested + ' / ' + s.totalChildSitemaps + ' |\n';
+          md += '| **Passed** | ' + s.passed + ' |\n';
+          md += '| **Failed** | ' + s.failed + ' |\n';
+          md += '| **Success Rate** | ' + s.successRate + ' |\n';
+          md += '| **Total URLs** | ' + s.totalUrls.toLocaleString() + ' |\n';
+          md += '| **Empty Sitemaps** | ' + s.emptySitemaps + ' (' + s.emptySitemapRate + ') |\n';
+          md += '| **p95 Latency** | ' + s.latency.p95 + 'ms |\n';
+          md += '| **p99 Latency** | ' + s.latency.p99 + 'ms |\n';
+          md += '| **Max Size** | ' + s.responseSize.maxKB + 'KB |\n';
+          md += '| **Result Hash** | \`' + r.resultHash + '\` |\n';
+          md += '\n';
+
+          if (s.sloViolations && s.sloViolations.length > 0) {
+            md += '### SLO Violations\n\n';
+            md += '| SLO | Name | Threshold | Actual | Severity |\n';
+            md += '|-----|------|-----------|--------|----------|\n';
+            for (const v of s.sloViolations) {
+              md += '| ' + v.slo + ' | ' + v.name + ' | ' + v.threshold + ' | ' + v.actual + ' | ' + v.severity + ' |\n';
+            }
+            md += '\n';
+          }
+
+          if (r.delta) {
+            md += '### Delta vs Baseline\n\n';
+            md += '| Metric | Delta |\n|--------|-------|\n';
+            md += '| Child count | ' + (r.delta.childCountDelta >= 0 ? '+' : '') + r.delta.childCountDelta + ' (' + r.delta.childCountDeltaPct + ') |\n';
+            md += '| Total URLs | ' + (r.delta.totalUrlsDelta >= 0 ? '+' : '') + r.delta.totalUrlsDelta + ' |\n';
+            md += '| Avg latency | ' + (r.delta.latencyDeltaAvgMs >= 0 ? '+' : '') + r.delta.latencyDeltaAvgMs + 'ms |\n';
+            if (r.delta.newFailures.length > 0) {
+              md += '| New failures | ' + r.delta.newFailures.length + ' |\n';
+            }
+            if (r.delta.resolvedFailures.length > 0) {
+              md += '| Resolved | ' + r.delta.resolvedFailures.length + ' |\n';
+            }
+            md += '\n';
+          }
+
+          if (s.failures && s.failures.length > 0) {
+            md += '### Failures\n\n';
+            for (const f of s.failures) {
+              md += '- \`' + f.loc + '\` → ' + f.reason + '\n';
+            }
+          }
+
+          require('fs').appendFileSync(process.env.GITHUB_STEP_SUMMARY, md);
+          "
+
+      - name: Upload audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sitemap-nightly-report
+          path: sitemap-nightly-report.json
+          retention-days: 90
+
+      - name: Save as next baseline
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sitemap-nightly-baseline
+          path: sitemap-nightly-report.json
+          retention-days: 7
+          overwrite: true
+
+      - name: Fail if audit failed
+        if: steps.audit.outputs.pass == 'false'
+        run: |
+          echo "::error::Sitemap nightly audit FAILED — check report artifact"
+          exit 1

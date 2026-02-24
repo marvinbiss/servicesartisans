@@ -1,0 +1,104 @@
+name: Sitemap Post-Deploy Audit
+
+on:
+  push:
+    branches: ['master', 'main']
+  workflow_dispatch:
+    inputs:
+      target_url:
+        description: 'Sitemap index URL to audit'
+        required: false
+        default: 'https://servicesartisans.fr/sitemap.xml'
+
+# Cancel in-progress runs for the same branch
+concurrency:
+  group: sitemap-post-deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  post-deploy-audit:
+    name: Post-deploy sitemap audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # Wait for Vercel deploy to complete (adjust if using Vercel GitHub integration)
+    # If using Vercel, consider adding a delay or a deployment_status trigger
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Wait for deploy propagation
+        run: sleep 30
+
+      - name: Run post-deploy audit
+        id: audit
+        run: |
+          AUDIT_URL="${{ inputs.target_url || vars.SITEMAP_AUDIT_URL || 'https://servicesartisans.fr/sitemap.xml' }}"
+
+          node tools/audit-sitemaps.mjs \
+            --url "$AUDIT_URL" \
+            --sample 50 \
+            --seed 42 \
+            --strict \
+            --json \
+            --slo \
+            --out sitemap-post-deploy-report.json || true
+
+          # Parse result
+          PASS=$(node -e "const r=JSON.parse(require('fs').readFileSync('sitemap-post-deploy-report.json','utf8'));console.log(r.pass)")
+          echo "pass=$PASS" >> "$GITHUB_OUTPUT"
+
+      - name: Generate job summary
+        if: always()
+        run: |
+          node -e "
+          const r = JSON.parse(require('fs').readFileSync('sitemap-post-deploy-report.json', 'utf8'));
+          const s = r.stats;
+          let md = '## Sitemap Post-Deploy Audit\n\n';
+          md += '| Metric | Value |\n|--------|-------|\n';
+          md += '| **Status** | ' + (r.pass ? '✅ PASS' : '❌ FAIL') + ' |\n';
+          md += '| **Git SHA** | \`' + (r.gitSha || 'N/A') + '\` |\n';
+          md += '| **Timestamp** | ' + r.timestamp + ' |\n';
+          md += '| **Tested** | ' + s.tested + ' / ' + s.totalChildSitemaps + ' |\n';
+          md += '| **Passed** | ' + s.passed + ' |\n';
+          md += '| **Failed** | ' + s.failed + ' |\n';
+          md += '| **Success Rate** | ' + s.successRate + ' |\n';
+          md += '| **p95 Latency** | ' + s.latency.p95 + 'ms |\n';
+          md += '| **Max Size** | ' + s.responseSize.maxKB + 'KB |\n';
+          md += '\n';
+
+          if (s.sloViolations && s.sloViolations.length > 0) {
+            md += '### SLO Violations\n\n';
+            for (const v of s.sloViolations) {
+              md += '- **' + v.slo + '** ' + v.name + ': ' + v.actual + ' (threshold: ' + v.threshold + ')\n';
+            }
+            md += '\n';
+          }
+
+          if (s.failures && s.failures.length > 0) {
+            md += '### Failures\n\n';
+            for (const f of s.failures) {
+              md += '- \`' + f.loc + '\` → ' + f.reason + '\n';
+            }
+          }
+
+          require('fs').appendFileSync(process.env.GITHUB_STEP_SUMMARY, md);
+          "
+
+      - name: Upload audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sitemap-post-deploy-report-${{ github.sha }}
+          path: sitemap-post-deploy-report.json
+          retention-days: 30
+
+      - name: Fail if audit failed
+        if: steps.audit.outputs.pass == 'false'
+        run: |
+          echo "::error::Post-deploy sitemap audit FAILED — check report artifact and job summary"
+          exit 1

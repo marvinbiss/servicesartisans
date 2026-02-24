@@ -1,18 +1,22 @@
 #!/usr/bin/env node
 /**
- * Post-build Sitemap Validation
+ * Post-build Sitemap Validation v2
  *
  * Verifies that all expected static sitemaps from the manifest actually exist
  * in the Next.js build output (.next/server/app/). Catches regressions where
  * a code change silently breaks sitemap generation.
  *
+ * Also validates source-level invariants (imports, no local constants,
+ * escaping, caching headers, Content-Type).
+ *
  * Usage:
  *   npm run build && node tools/validate-built-sitemaps.mjs
  *   node tools/validate-built-sitemaps.mjs --build-dir .next
  *   node tools/validate-built-sitemaps.mjs --provider-count 10000
+ *   node tools/validate-built-sitemaps.mjs --json
  *
  * Exit code 0 = all expected sitemaps found
- * Exit code 1 = divergence detected (missing or extra)
+ * Exit code 1 = divergence detected
  */
 
 import fs from 'fs'
@@ -23,29 +27,23 @@ import path from 'path'
 function parseArgs() {
   const args = process.argv.slice(2)
   let buildDir = '.next'
-  let providerCount = 0 // default: only validate static sitemaps
+  let providerCount = 0
+  let json = false
 
   for (let i = 0; i < args.length; i++) {
     if (args[i] === '--build-dir' && args[i + 1]) {
       buildDir = args[++i]
     } else if (args[i] === '--provider-count' && args[i + 1]) {
       providerCount = parseInt(args[++i], 10)
+    } else if (args[i] === '--json') {
+      json = true
     }
   }
-  return { buildDir, providerCount }
+  return { buildDir, providerCount, json }
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-/**
- * Scan .next/server/app for sitemap-related files.
- * Next.js 14 with generateSitemaps() outputs files like:
- *   .next/server/app/sitemap/[__metadata_id__]/route.js
- * or pre-rendered:
- *   .next/server/app/sitemap.xml/[id]/route.js
- *
- * The exact path depends on Next.js version. We look for multiple patterns.
- */
 function findBuiltSitemapFiles(buildDir) {
   const found = new Set()
   const basePaths = [
@@ -56,13 +54,11 @@ function findBuiltSitemapFiles(buildDir) {
   for (const basePath of basePaths) {
     if (!fs.existsSync(basePath)) continue
 
-    // Check for the dynamic route handler (single handler for all sitemaps)
     const dynamicRouteFile = path.join(basePath, '[__metadata_id__]', 'route.js')
     if (fs.existsSync(dynamicRouteFile)) {
       found.add('__dynamic_handler__')
     }
 
-    // Check for per-ID pre-rendered sitemaps
     try {
       const entries = fs.readdirSync(basePath, { withFileTypes: true })
       for (const entry of entries) {
@@ -79,7 +75,6 @@ function findBuiltSitemapFiles(buildDir) {
     }
   }
 
-  // Also check for pre-rendered XML files directly
   const prerenderedPath = path.join(buildDir, 'server', 'app')
   try {
     const entries = fs.readdirSync(prerenderedPath)
@@ -95,24 +90,18 @@ function findBuiltSitemapFiles(buildDir) {
   return found
 }
 
-/**
- * Check that the build output includes the essential sitemap infrastructure.
- */
 function validateBuildInfrastructure(buildDir) {
   const checks = []
 
-  // Check .next exists
   if (!fs.existsSync(buildDir)) {
     return [{ pass: false, label: '.next directory exists', detail: `${buildDir} not found. Run 'npm run build' first.` }]
   }
   checks.push({ pass: true, label: '.next directory exists' })
 
-  // Check routes-manifest.json exists (proves build completed)
   const routesManifest = path.join(buildDir, 'routes-manifest.json')
   if (fs.existsSync(routesManifest)) {
     checks.push({ pass: true, label: 'routes-manifest.json exists' })
 
-    // Check sitemap rewrite exists
     try {
       const manifest = JSON.parse(fs.readFileSync(routesManifest, 'utf-8'))
       const rewrites = [...(manifest.rewrites || []), ...(manifest.beforeFiles || []), ...(manifest.afterFiles || [])]
@@ -129,7 +118,6 @@ function validateBuildInfrastructure(buildDir) {
     checks.push({ pass: false, label: 'routes-manifest.json exists', detail: 'Build may be incomplete' })
   }
 
-  // Check API routes exist
   const apiSitemapIndex = path.join(buildDir, 'server', 'app', 'api', 'sitemap-index', 'route.js')
   checks.push({
     pass: fs.existsSync(apiSitemapIndex),
@@ -144,7 +132,6 @@ function validateBuildInfrastructure(buildDir) {
     detail: fs.existsSync(apiSitemapProviders) ? undefined : `${apiSitemapProviders} not found`,
   })
 
-  // Check sitemap handler exists (dynamic [__metadata_id__])
   const sitemapHandler = path.join(buildDir, 'server', 'app', 'sitemap', '[__metadata_id__]', 'route.js')
   const sitemapHandlerAlt = path.join(buildDir, 'server', 'app', 'sitemap.xml', '[__metadata_id__]', 'route.js')
   const handlerExists = fs.existsSync(sitemapHandler) || fs.existsSync(sitemapHandlerAlt)
@@ -157,126 +144,199 @@ function validateBuildInfrastructure(buildDir) {
   return checks
 }
 
-// ── Main ──────────────────────────────────────────────────────────────────────
-
-async function main() {
-  const { buildDir, providerCount } = parseArgs()
-
-  console.log('\n🔍 Post-Build Sitemap Validation')
-  console.log(`   Build dir:      ${buildDir}`)
-  console.log(`   Provider count: ${providerCount}`)
-  console.log()
-
-  // 1. Infrastructure checks
-  console.log('── Infrastructure ──')
-  const infraChecks = validateBuildInfrastructure(buildDir)
-  let infraFails = 0
-  for (const check of infraChecks) {
-    const icon = check.pass ? '✅' : '❌'
-    console.log(`  ${icon} ${check.label}${check.detail ? ` — ${check.detail}` : ''}`)
-    if (!check.pass) infraFails++
-  }
-
-  if (infraFails > 0 && !fs.existsSync(buildDir)) {
-    console.log('\n❌ VALIDATION FAILED — build directory not found. Run npm run build first.\n')
-    process.exit(1)
-  }
-
-  // 2. Manifest consistency check (can run without build)
-  console.log('\n── Manifest Consistency ──')
-
-  // Dynamic import of manifest via the built version or TSX
-  // We check the source files directly to validate consistency
+function validateSourceConsistency() {
   const manifestPath = path.resolve('src/lib/seo/sitemap-manifest.ts')
   const sitemapPath = path.resolve('src/app/sitemap.ts')
   const indexRoutePath = path.resolve('src/app/api/sitemap-index/route.ts')
   const providersRoutePath = path.resolve('src/app/api/sitemap-providers/route.ts')
 
-  const sourceChecks = []
+  const checks = []
 
-  // Check manifest source exists
+  // ── Manifest ──
   if (fs.existsSync(manifestPath)) {
     const src = fs.readFileSync(manifestPath, 'utf-8')
-    sourceChecks.push({ pass: true, label: 'sitemap-manifest.ts exists' })
-    sourceChecks.push({
+    checks.push({ pass: true, label: 'sitemap-manifest.ts exists' })
+    checks.push({
       pass: src.includes('escapeXmlLoc'),
       label: 'escapeXmlLoc defined in manifest',
     })
-    sourceChecks.push({
+    checks.push({
       pass: src.includes('GOOGLE_MAX_URLS_PER_SITEMAP'),
       label: 'GOOGLE_MAX_URLS_PER_SITEMAP defined',
     })
+    checks.push({
+      pass: src.includes('PROVIDER_BATCH_SIZE'),
+      label: 'PROVIDER_BATCH_SIZE exported from manifest',
+    })
+    checks.push({
+      pass: src.includes('STATIC_BATCH'),
+      label: 'STATIC_BATCH exported from manifest',
+    })
+    checks.push({
+      pass: src.includes('LARGE_BATCH'),
+      label: 'LARGE_BATCH exported from manifest',
+    })
   } else {
-    sourceChecks.push({ pass: false, label: 'sitemap-manifest.ts exists' })
+    checks.push({ pass: false, label: 'sitemap-manifest.ts exists' })
   }
 
-  // Check sitemap.ts imports from manifest
+  // ── sitemap.ts ──
   if (fs.existsSync(sitemapPath)) {
     const src = fs.readFileSync(sitemapPath, 'utf-8')
-    sourceChecks.push({
+    checks.push({
       pass: src.includes("from '@/lib/seo/sitemap-manifest'"),
       label: 'sitemap.ts imports from manifest',
     })
-    sourceChecks.push({
-      pass: !src.match(/^const (STATIC_BATCH|LARGE_BATCH|PROVIDER_BATCH_SIZE|TOP_CITIES_PHASE1)\b/m),
+    checks.push({
+      pass: !src.match(/^(const|let|var)\s+(STATIC_BATCH|LARGE_BATCH|PROVIDER_BATCH_SIZE|TOP_CITIES_PHASE1)\b/m),
       label: 'sitemap.ts has no local batch constants',
     })
+    checks.push({
+      pass: src.includes('getStaticSitemapIds'),
+      label: 'sitemap.ts uses getStaticSitemapIds()',
+    })
+  } else {
+    checks.push({ pass: false, label: 'sitemap.ts exists', detail: 'File not found' })
   }
 
-  // Check providers route imports from manifest
+  // ── providers route ──
   if (fs.existsSync(providersRoutePath)) {
     const src = fs.readFileSync(providersRoutePath, 'utf-8')
-    sourceChecks.push({
+    checks.push({
       pass: src.includes("from '@/lib/seo/sitemap-manifest'"),
       label: 'sitemap-providers imports from manifest',
     })
-    sourceChecks.push({
-      pass: !src.match(/^const PROVIDER_BATCH_SIZE\b/m),
+    checks.push({
+      pass: !src.match(/^(const|let|var)\s+PROVIDER_BATCH_SIZE\b/m),
       label: 'sitemap-providers has no local PROVIDER_BATCH_SIZE',
     })
-    sourceChecks.push({
+    checks.push({
       pass: src.includes('escapeXmlLoc'),
       label: 'sitemap-providers uses escapeXmlLoc',
     })
+    checks.push({
+      pass: src.includes("'Content-Type': 'application/xml"),
+      label: 'sitemap-providers sets Content-Type application/xml',
+    })
+    checks.push({
+      pass: /s-maxage=\d+/.test(src),
+      label: 'sitemap-providers sets s-maxage cache header',
+    })
+    checks.push({
+      pass: src.includes('catch') && src.includes('<urlset'),
+      label: 'sitemap-providers has error fallback with valid XML',
+    })
+  } else {
+    checks.push({ pass: false, label: 'sitemap-providers/route.ts exists', detail: 'File not found' })
   }
 
-  // Check index route imports from manifest
+  // ── index route ──
   if (fs.existsSync(indexRoutePath)) {
     const src = fs.readFileSync(indexRoutePath, 'utf-8')
-    sourceChecks.push({
+    checks.push({
       pass: src.includes("from '@/lib/seo/sitemap-manifest'"),
       label: 'sitemap-index imports from manifest',
     })
-    sourceChecks.push({
+    checks.push({
       pass: src.includes('getSitemapIndexUrls'),
       label: 'sitemap-index uses getSitemapIndexUrls',
     })
+    checks.push({
+      pass: src.includes('escapeXmlLoc'),
+      label: 'sitemap-index uses escapeXmlLoc',
+    })
+    checks.push({
+      pass: src.includes("'Content-Type': 'application/xml"),
+      label: 'sitemap-index sets Content-Type application/xml',
+    })
+    checks.push({
+      pass: /s-maxage=\d+/.test(src),
+      label: 'sitemap-index sets s-maxage cache header',
+    })
+    checks.push({
+      pass: src.includes('try') && src.includes('catch'),
+      label: 'sitemap-index has try/catch for DB resilience',
+    })
+  } else {
+    checks.push({ pass: false, label: 'sitemap-index/route.ts exists', detail: 'File not found' })
   }
 
+  return checks
+}
+
+// ── Main ──────────────────────────────────────────────────────────────────────
+
+async function main() {
+  const { buildDir, providerCount, json } = parseArgs()
+
+  if (!json) {
+    console.log('\n\u{1F50D} Post-Build Sitemap Validation v2')
+    console.log(`   Build dir:      ${buildDir}`)
+    console.log(`   Provider count: ${providerCount}`)
+    console.log()
+  }
+
+  // 1. Infrastructure checks
+  if (!json) console.log('\u2500\u2500 Infrastructure \u2500\u2500')
+  const infraChecks = validateBuildInfrastructure(buildDir)
+  let infraFails = 0
+  for (const check of infraChecks) {
+    if (!json) {
+      const icon = check.pass ? '\u2705' : '\u274C'
+      console.log(`  ${icon} ${check.label}${check.detail ? ` \u2014 ${check.detail}` : ''}`)
+    }
+    if (!check.pass) infraFails++
+  }
+
+  if (infraFails > 0 && !fs.existsSync(buildDir)) {
+    if (json) {
+      console.log(JSON.stringify({ pass: false, error: 'Build directory not found', checks: infraChecks }))
+    } else {
+      console.log('\n\u274C VALIDATION FAILED \u2014 build directory not found. Run npm run build first.\n')
+    }
+    process.exit(1)
+  }
+
+  // 2. Source consistency
+  if (!json) console.log('\n\u2500\u2500 Source Consistency \u2500\u2500')
+  const sourceChecks = validateSourceConsistency()
   let sourceFails = 0
   for (const check of sourceChecks) {
-    const icon = check.pass ? '✅' : '❌'
-    console.log(`  ${icon} ${check.label}`)
+    if (!json) {
+      const icon = check.pass ? '\u2705' : '\u274C'
+      console.log(`  ${icon} ${check.label}${check.detail ? ` \u2014 ${check.detail}` : ''}`)
+    }
     if (!check.pass) sourceFails++
   }
 
   // 3. Summary
-  const totalChecks = infraChecks.length + sourceChecks.length
+  const allChecks = [...infraChecks, ...sourceChecks]
+  const totalChecks = allChecks.length
   const totalFails = infraFails + sourceFails
 
-  console.log(`\n${'─'.repeat(60)}`)
-  console.log(`📊 ${totalChecks - totalFails}/${totalChecks} checks passed`)
+  if (json) {
+    console.log(JSON.stringify({
+      pass: totalFails === 0,
+      totalChecks,
+      passed: totalChecks - totalFails,
+      failed: totalFails,
+      checks: allChecks,
+    }, null, 2))
+  } else {
+    console.log(`\n${'─'.repeat(60)}`)
+    console.log(`\u{1F4CA} ${totalChecks - totalFails}/${totalChecks} checks passed`)
 
-  if (totalFails > 0) {
-    console.log(`\n❌ VALIDATION FAILED — ${totalFails} check(s) failed\n`)
-    process.exit(1)
+    if (totalFails > 0) {
+      console.log(`\n\u274C VALIDATION FAILED \u2014 ${totalFails} check(s) failed\n`)
+    } else {
+      console.log('\n\u2705 VALIDATION PASSED \u2014 all checks green\n')
+    }
   }
 
-  console.log('\n✅ VALIDATION PASSED — all checks green\n')
-  process.exit(0)
+  process.exit(totalFails > 0 ? 1 : 0)
 }
 
 main().catch(err => {
-  console.error(`\n💥 Unexpected error: ${err.message}\n`)
+  console.error(`\n\u{1F4A5} Unexpected error: ${err.message}\n`)
   process.exit(1)
 })
