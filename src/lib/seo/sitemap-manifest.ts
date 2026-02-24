@@ -1,9 +1,14 @@
 /**
  * Sitemap Manifest — Single source of truth for all sitemap IDs.
  *
- * Both `src/app/sitemap.ts` (generateSitemaps) and
- * `src/app/api/sitemap-index/route.ts` consume these helpers so the two
- * lists can never drift apart.
+ * INVARIANTS (tested, CI-enforced):
+ * 1. Both `src/app/sitemap.ts` (generateSitemaps) and
+ *    `src/app/api/sitemap-index/route.ts` MUST consume these helpers
+ *    so the two lists can never drift apart.
+ * 2. `src/app/api/sitemap-providers/route.ts` MUST import PROVIDER_BATCH_SIZE
+ *    from this module — never define its own.
+ * 3. All batch sizes MUST stay below Google's 50,000 URL limit.
+ * 4. All sitemap `<loc>` values MUST be escaped via `escapeXmlLoc()`.
  */
 
 import { services, villes, departements, getQuartiersByVille } from '@/lib/data/france'
@@ -11,10 +16,19 @@ import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { getProblemSlugs } from '@/lib/data/problems'
 import { SITE_URL } from '@/lib/seo/config'
 
-// ── Batch constants (shared) ───────────────────────────────────────────────
+// ── Protocol limits ──────────────────────────────────────────────────────────
+/** Google sitemap protocol: max 50,000 URLs per sitemap file */
+export const GOOGLE_MAX_URLS_PER_SITEMAP = 50_000
+
+// ── Batch constants (shared — NEVER duplicate these in other files) ──────────
 export const STATIC_BATCH = 10_000
 export const LARGE_BATCH = 45_000
 export const PROVIDER_BATCH_SIZE = 5_000
+
+// Compile-time assertion: batch sizes must respect Google limits
+if (STATIC_BATCH > GOOGLE_MAX_URLS_PER_SITEMAP) throw new Error(`STATIC_BATCH (${STATIC_BATCH}) exceeds Google limit`)
+if (LARGE_BATCH > GOOGLE_MAX_URLS_PER_SITEMAP) throw new Error(`LARGE_BATCH (${LARGE_BATCH}) exceeds Google limit`)
+if (PROVIDER_BATCH_SIZE > GOOGLE_MAX_URLS_PER_SITEMAP) throw new Error(`PROVIDER_BATCH_SIZE (${PROVIDER_BATCH_SIZE}) exceeds Google limit`)
 
 /**
  * Phase 1: only submit top-N cities for new domain (conservative crawl budget).
@@ -22,7 +36,23 @@ export const PROVIDER_BATCH_SIZE = 5_000
  */
 export const TOP_CITIES_PHASE1 = 300
 
-// ── Helpers (exported for tests) ───────────────────────────────────────────
+// ── XML Escaping (centralized, reused by all sitemap routes) ─────────────────
+
+/**
+ * Escape a string for use inside XML `<loc>` elements.
+ * Handles the 5 XML special characters per the XML 1.0 spec.
+ * MUST be used for all dynamic content inserted into sitemap XML.
+ */
+export function escapeXmlLoc(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;')
+}
+
+// ── Helpers (exported for tests) ─────────────────────────────────────────────
 
 export function getTotalServiceQuartierUrls(): number {
   let total = 0
@@ -40,7 +70,7 @@ export function getAvisServiceSlugs(): string[] {
   return Object.keys(tradeContent)
 }
 
-// ── Main exports ───────────────────────────────────────────────────────────
+// ── Main exports ─────────────────────────────────────────────────────────────
 
 /**
  * All sitemap IDs that can be computed without a database call.

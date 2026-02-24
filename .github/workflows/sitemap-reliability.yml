@@ -1,0 +1,105 @@
+name: Sitemap Reliability
+
+on:
+  push:
+    branches: ['master', 'claude/**']
+    paths:
+      - 'src/app/sitemap.ts'
+      - 'src/app/api/sitemap-index/**'
+      - 'src/app/api/sitemap-providers/**'
+      - 'src/lib/seo/**'
+      - 'src/lib/data/france.ts'
+      - 'src/lib/data/trade-content.ts'
+      - 'src/lib/data/problems.ts'
+      - 'src/lib/data/guides.ts'
+      - '__tests__/lib/seo/**'
+      - 'tools/audit-sitemaps.mjs'
+      - 'tools/validate-built-sitemaps.mjs'
+  pull_request:
+    branches: ['master']
+    paths:
+      - 'src/app/sitemap.ts'
+      - 'src/app/api/sitemap-index/**'
+      - 'src/app/api/sitemap-providers/**'
+      - 'src/lib/seo/**'
+      - 'src/lib/data/france.ts'
+      - 'src/lib/data/trade-content.ts'
+      - 'src/lib/data/problems.ts'
+      - 'src/lib/data/guides.ts'
+      - '__tests__/lib/seo/**'
+      - 'tools/audit-sitemaps.mjs'
+      - 'tools/validate-built-sitemaps.mjs'
+
+jobs:
+  sitemap-tests:
+    name: Sitemap manifest tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Run sitemap manifest tests
+        run: npx vitest run __tests__/lib/seo/sitemap-manifest.test.ts
+
+  source-validation:
+    name: Source-level validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Validate source consistency
+        run: node tools/validate-built-sitemaps.mjs
+
+  sitemap-audit-staging:
+    name: Audit staging sitemaps
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    needs: [sitemap-tests, source-validation]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Audit production sitemaps
+        run: |
+          node tools/audit-sitemaps.mjs \
+            --url "${{ vars.SITEMAP_AUDIT_URL || 'https://servicesartisans.fr/sitemap.xml' }}" \
+            --sample 50 \
+            --seed 42 \
+            --json > sitemap-audit-report.json
+          cat sitemap-audit-report.json | node -e "
+            const data = JSON.parse(require('fs').readFileSync('/dev/stdin','utf8'));
+            console.log('Pass:', data.pass);
+            console.log('Tested:', data.stats.tested);
+            console.log('Failed:', data.stats.failed);
+            if (!data.pass) process.exit(1);
+          "
+        continue-on-error: true
+
+      - name: Upload audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sitemap-audit-report
+          path: sitemap-audit-report.json
+          retention-days: 30

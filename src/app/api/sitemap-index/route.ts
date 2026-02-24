@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server'
-import { getSitemapIndexUrls } from '@/lib/seo/sitemap-manifest'
+import { getSitemapIndexUrls, escapeXmlLoc } from '@/lib/seo/sitemap-manifest'
+import { logger } from '@/lib/logger'
+
+const sitemapLog = logger.child({ component: 'sitemap-index' })
 
 /**
  * Sitemap index generator — workaround for Next.js 14.2 not auto-generating
@@ -9,6 +12,8 @@ import { getSitemapIndexUrls } from '@/lib/seo/sitemap-manifest'
  * Single source of truth: `@/lib/seo/sitemap-manifest`
  */
 export async function GET() {
+  const startMs = Date.now()
+
   // Fetch active provider count for dynamic sitemaps
   let activeProvidersCount = 0
   try {
@@ -23,16 +28,23 @@ export async function GET() {
     if (!error && count && count > 0) {
       activeProvidersCount = count
     }
-  } catch {
-    // DB unavailable — omit provider sitemaps from index
+  } catch (err) {
+    sitemapLog.error('sitemap-index: DB query failed, omitting provider sitemaps', err)
   }
 
   const urls = getSitemapIndexUrls({ activeProvidersCount })
+  const durationMs = Date.now() - startMs
+
+  sitemapLog.warn('sitemap-index generated', {
+    activeProvidersCount: String(activeProvidersCount),
+    totalSitemaps: String(urls.length),
+    durationMs: String(durationMs),
+  })
 
   const xml = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-    ...urls.map(loc => `  <sitemap><loc>${loc}</loc></sitemap>`),
+    ...urls.map(loc => `  <sitemap><loc>${escapeXmlLoc(loc)}</loc></sitemap>`),
     '</sitemapindex>',
   ].join('\n')
 

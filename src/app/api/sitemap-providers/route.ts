@@ -2,9 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { SITE_URL } from '@/lib/seo/config'
 import { services, villes } from '@/lib/data/france'
 import { tradeContent } from '@/lib/data/trade-content'
+import { PROVIDER_BATCH_SIZE, escapeXmlLoc } from '@/lib/seo/sitemap-manifest'
+import { logger } from '@/lib/logger'
 import inseeCommunes from '@/lib/data/insee-communes.json'
 
-const PROVIDER_BATCH_SIZE = 5_000
 const PAGE_SIZE = 1000
 
 const specialtyToSlug: Record<string, string> = {
@@ -162,7 +163,10 @@ type ProviderRow = {
  * from the build output → 404 at runtime. This API route runs at request time
  * with 1-hour CDN caching, guaranteeing availability.
  */
+const sitemapLog = logger.child({ component: 'sitemap-providers' })
+
 export async function GET(request: NextRequest) {
+  const startMs = Date.now()
   const { searchParams } = request.nextUrl
   const id = searchParams.get('id')
 
@@ -196,6 +200,7 @@ export async function GET(request: NextRequest) {
       from += PAGE_SIZE
     }
 
+    let droppedCount = 0
     const urls = allProviders
       .filter((p) => p.name && p.specialty && p.address_city)
       .map((p) => {
@@ -209,12 +214,25 @@ export async function GET(request: NextRequest) {
         const locationSlug = arrondissementSlug || villeMap.get(normalizedCity)
         const publicId = p.slug || p.stable_id || p.id
 
-        if (!serviceSlug || !locationSlug || !publicId) return null
+        if (!serviceSlug || !locationSlug || !publicId) {
+          droppedCount++
+          return null
+        }
 
+        const loc = escapeXmlLoc(`${SITE_URL}/services/${serviceSlug}/${locationSlug}/${publicId}`)
         const lastmod = p.updated_at ? new Date(p.updated_at).toISOString().split('T')[0] : undefined
-        return `  <url><loc>${SITE_URL}/services/${serviceSlug}/${locationSlug}/${publicId}</loc>${lastmod ? `<lastmod>${lastmod}</lastmod>` : ''}</url>`
+        return `  <url><loc>${loc}</loc>${lastmod ? `<lastmod>${lastmod}</lastmod>` : ''}</url>`
       })
       .filter((entry): entry is string => entry !== null)
+
+    const durationMs = Date.now() - startMs
+    sitemapLog.warn('sitemap-providers generated', {
+      batchIndex: String(batchIndex),
+      providersQueried: String(allProviders.length),
+      urlsGenerated: String(urls.length),
+      droppedProviders: String(droppedCount),
+      durationMs: String(durationMs),
+    })
 
     const xml = [
       '<?xml version="1.0" encoding="UTF-8"?>',
@@ -229,7 +247,12 @@ export async function GET(request: NextRequest) {
         'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
       },
     })
-  } catch {
+  } catch (err) {
+    const durationMs = Date.now() - startMs
+    sitemapLog.error('sitemap-providers failed, returning empty sitemap', err, {
+      batchIndex: String(batchIndex),
+      durationMs: String(durationMs),
+    })
     // Return empty but valid sitemap on error
     const xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n</urlset>'
     return new NextResponse(xml, {
