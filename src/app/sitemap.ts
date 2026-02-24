@@ -6,81 +6,26 @@ import { getProblemSlugs } from '@/lib/data/problems'
 import { getGuideSlugs } from '@/lib/data/guides'
 import { articleSlugs } from '@/lib/data/blog/articles'
 import { allArticles } from '@/lib/data/blog/articles'
-// Batch size for static (non-DB) sitemaps — must match the BATCH used in sitemap() slicing
-const STATIC_BATCH = 10_000
-
-// Phase 1: submit only top-300 cities for new domain (conservative crawl budget).
-// Phase 2 (service-cities-extended) is handled below but NOT registered in generateSitemaps yet.
-// Uncomment the Phase 2 line in generateSitemaps() once domain authority grows (month 2-3).
-const TOP_CITIES_PHASE1 = 300
+import {
+  getStaticSitemapIds,
+  STATIC_BATCH,
+  LARGE_BATCH,
+  TOP_CITIES_PHASE1,
+  getEmergencySlugs,
+} from '@/lib/seo/sitemap-manifest'
 
 /**
  * Generate sitemap index entries.
  * Next.js 14 calls this to produce /sitemap/[id].xml and a sitemap index.
+ *
+ * Single source of truth: `@/lib/seo/sitemap-manifest`
  */
 export async function generateSitemaps() {
-  // Count total service×quartier URLs to determine batch count
-  let totalServiceQuartierUrls = 0
-  for (const v of villes) {
-    totalServiceQuartierUrls += (v.quartiers?.length || 0) * services.length
-  }
-  const sqBatchCount = Math.ceil(totalServiceQuartierUrls / STATIC_BATCH)
-
-  // Phase 1: top 300 cities only — focused crawl budget on high-traffic cities for new domain.
-  const serviceCitiesPhase1BatchCount = Math.ceil(services.length * TOP_CITIES_PHASE1 / 45000)
-
-  const sitemaps: { id: string }[] = [
-    { id: 'static' },
-    ...Array.from({ length: serviceCitiesPhase1BatchCount }, (_, i) => ({ id: `service-cities-${i}` })),
-    // Phase 2: uncomment when domain authority grows (month 2-3):
-    // ...Array.from({ length: Math.ceil(services.length * (villes.length - TOP_CITIES_PHASE1) / 45000) }, (_, i) => ({ id: `service-cities-extended-${i}` })),
-    { id: 'cities' },
-    { id: 'geo' },
-    { id: 'quartiers' },
-    ...Array.from({ length: sqBatchCount }, (_, i) => ({ id: `service-quartiers-${i}` })),
-    { id: 'devis-services' },
-    ...Array.from({ length: Math.ceil(services.length * villes.length / STATIC_BATCH) }, (_, i) => ({ id: `devis-service-cities-${i}` })),
-    ...(() => {
-      let totalDevisQuartierUrls = 0
-      for (const v of villes) {
-        totalDevisQuartierUrls += (v.quartiers?.length || 0) * services.length
-      }
-      const dqBatchCount = Math.ceil(totalDevisQuartierUrls / STATIC_BATCH)
-      return Array.from({ length: dqBatchCount }, (_, i) => ({ id: `devis-quartiers-${i}` }))
-    })(),
-    ...(() => {
-      const emergencySlugs = Object.keys(tradeContent).filter(s => tradeContent[s].emergencyInfo)
-      const ucBatchCount = Math.ceil(emergencySlugs.length * villes.length / STATIC_BATCH)
-      return Array.from({ length: ucBatchCount }, (_, i) => ({ id: `urgence-service-cities-${i}` }))
-    })(),
-    ...Array.from(
-      { length: Math.ceil(services.length * villes.length / STATIC_BATCH) },
-      (_, i) => ({ id: `tarifs-service-cities-${i}` })
-    ),
-    { id: 'avis-services' },
-    ...Array.from(
-      { length: Math.ceil(Object.keys(tradeContent).length * villes.length / STATIC_BATCH) },
-      (_, i) => ({ id: `avis-service-cities-${i}` })
-    ),
-    { id: 'problemes' },
-    ...Array.from(
-      { length: Math.ceil(getProblemSlugs().length * villes.length / STATIC_BATCH) },
-      (_, i) => ({ id: `problemes-cities-${i}` })
-    ),
-    ...Array.from(
-      { length: Math.ceil(departements.length * getTradesSlugs().length / 45000) },
-      (_, i) => ({ id: `dept-services-${i}` })
-    ),
-    { id: 'region-services' },
-    { id: 'guides' },
-  ]
-
   // Provider sitemaps are served dynamically via /api/sitemap-providers
   // (DB-dependent, can't reliably pre-render at build time).
   // They are referenced in the sitemap index (/api/sitemap-index) and
   // rewritten via next.config.js: /sitemap/providers-*.xml → /api/sitemap-providers?id=*
-
-  return sitemaps
+  return getStaticSitemapIds().map(id => ({ id }))
 }
 
 export default async function sitemap({ id }: { id: string }): Promise<MetadataRoute.Sitemap> {
@@ -131,8 +76,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       url: `${SITE_URL}/services/${service.slug}`,
     }))
 
-    const emergencySlugs = Object.keys(tradeContent).filter((s) => tradeContent[s].emergencyInfo)
-    const urgencePages: MetadataRoute.Sitemap = emergencySlugs.map((slug) => ({
+    const urgencePages: MetadataRoute.Sitemap = getEmergencySlugs().map((slug) => ({
       url: `${SITE_URL}/urgence/${slug}`,
     }))
 
@@ -146,7 +90,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── Service + city — Phase 1: top 300 cities ────────────────────────
   if (id.startsWith('service-cities-') && !id.startsWith('service-cities-extended-')) {
     const batchIndex = parseInt(id.replace('service-cities-', ''), 10)
-    const BATCH = 45000
+    const BATCH = LARGE_BATCH
     const offset = batchIndex * BATCH
 
     const phase1Cities = villes.slice(0, TOP_CITIES_PHASE1)
@@ -163,7 +107,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── Service + city — Phase 2: remaining cities (not registered yet) ──
   if (id.startsWith('service-cities-extended-')) {
     const batchIndex = parseInt(id.replace('service-cities-extended-', ''), 10)
-    const BATCH = 45000
+    const BATCH = LARGE_BATCH
     const offset = batchIndex * BATCH
 
     const phase2Cities = villes.slice(TOP_CITIES_PHASE1)
@@ -299,11 +243,10 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const BATCH = STATIC_BATCH
     const start = batchIndex * BATCH
     const end = start + BATCH
-    const emergencySlugs = Object.keys(tradeContent).filter(s => tradeContent[s].emergencyInfo)
     const result: MetadataRoute.Sitemap = []
     let count = 0
 
-    outer: for (const svc of emergencySlugs) {
+    outer: for (const svc of getEmergencySlugs()) {
       for (const v of villes) {
         if (count >= end) break outer
         if (count >= start) result.push({ url: `${SITE_URL}/urgence/${svc}/${v.slug}` })
@@ -404,7 +347,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         allUrls.push({ url: `${SITE_URL}/departements/${dept.slug}/${service}` })
       }
     }
-    return allUrls.slice(batchIndex * 45000, (batchIndex + 1) * 45000)
+    return allUrls.slice(batchIndex * LARGE_BATCH, (batchIndex + 1) * LARGE_BATCH)
   }
 
   // ── Region × service pages ──────────────────────────────────────────

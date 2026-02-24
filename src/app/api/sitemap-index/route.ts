@@ -1,63 +1,16 @@
 import { NextResponse } from 'next/server'
-import { SITE_URL } from '@/lib/seo/config'
-import { services, villes, departements } from '@/lib/data/france'
-import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
-import { getQuartiersByVille } from '@/lib/data/france'
-import { getProblemSlugs } from '@/lib/data/problems'
-
-// Must match the BATCH constants used in sitemap.ts sitemap() handlers
-const BATCH_SIZE = 10_000
-const LARGE_BATCH = 45_000
-const PROVIDER_BATCH_SIZE = 5_000
+import { getSitemapIndexUrls } from '@/lib/seo/sitemap-manifest'
 
 /**
  * Sitemap index generator — workaround for Next.js 14.2 not auto-generating
  * the sitemap index at /sitemap.xml when using generateSitemaps().
  *
  * This route is rewritten from /sitemap.xml via next.config.js.
- * Keep in sync with generateSitemaps() in src/app/sitemap.ts.
+ * Single source of truth: `@/lib/seo/sitemap-manifest`
  */
 export async function GET() {
-  // Compute the same sitemap IDs as generateSitemaps() in sitemap.ts
-  let totalQuartierUrls = 0
-  for (const v of villes) {
-    totalQuartierUrls += (getQuartiersByVille(v.slug)?.length || 0) * services.length
-  }
-  const sqBatchCount = Math.ceil(totalQuartierUrls / BATCH_SIZE)
-
-  const emergencySlugs = Object.keys(tradeContent).filter(s => tradeContent[s].emergencyInfo)
-  const tradeSlugs = getTradesSlugs()
-  const avisServiceSlugs = Object.keys(tradeContent)
-  const problemSlugs = getProblemSlugs()
-
-  // Phase 1: service × top-300 cities only (conservative crawl budget for new domain).
-  // Must match TOP_CITIES_PHASE1 in sitemap.ts.
-  const TOP_CITIES_PHASE1 = 300
-
-  const ids: string[] = [
-    'static',
-    // service × city pages — uses LARGE_BATCH (45000) in sitemap()
-    ...Array.from({ length: Math.ceil(services.length * TOP_CITIES_PHASE1 / LARGE_BATCH) }, (_, i) => `service-cities-${i}`),
-    'cities',
-    'geo',
-    'quartiers',
-    ...Array.from({ length: sqBatchCount }, (_, i) => `service-quartiers-${i}`),
-    'devis-services',
-    ...Array.from({ length: Math.ceil(services.length * villes.length / BATCH_SIZE) }, (_, i) => `devis-service-cities-${i}`),
-    ...Array.from({ length: sqBatchCount }, (_, i) => `devis-quartiers-${i}`),
-    ...Array.from({ length: Math.ceil(emergencySlugs.length * villes.length / BATCH_SIZE) }, (_, i) => `urgence-service-cities-${i}`),
-    ...Array.from({ length: Math.ceil(services.length * villes.length / BATCH_SIZE) }, (_, i) => `tarifs-service-cities-${i}`),
-    'avis-services',
-    ...Array.from({ length: Math.ceil(avisServiceSlugs.length * villes.length / BATCH_SIZE) }, (_, i) => `avis-service-cities-${i}`),
-    'problemes',
-    ...Array.from({ length: Math.ceil(problemSlugs.length * villes.length / BATCH_SIZE) }, (_, i) => `problemes-cities-${i}`),
-    // dept-services uses LARGE_BATCH (45000) in sitemap()
-    ...Array.from({ length: Math.ceil(departements.length * tradeSlugs.length / LARGE_BATCH) }, (_, i) => `dept-services-${i}`),
-    'region-services',
-    'guides',
-  ]
-
-  // Provider sitemaps (DB-dependent, served via /api/sitemap-providers)
+  // Fetch active provider count for dynamic sitemaps
+  let activeProvidersCount = 0
   try {
     const { createAdminClient } = await import('@/lib/supabase/admin')
     const supabase = createAdminClient()
@@ -68,19 +21,18 @@ export async function GET() {
       .eq('noindex', false)
 
     if (!error && count && count > 0) {
-      const batchCount = Math.ceil(count / PROVIDER_BATCH_SIZE)
-      for (let i = 0; i < batchCount; i++) {
-        ids.push(`providers-${i}`)
-      }
+      activeProvidersCount = count
     }
   } catch {
     // DB unavailable — omit provider sitemaps from index
   }
 
+  const urls = getSitemapIndexUrls({ activeProvidersCount })
+
   const xml = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-    ...ids.map(id => `  <sitemap><loc>${SITE_URL}/sitemap/${id}.xml</loc></sitemap>`),
+    ...urls.map(loc => `  <sitemap><loc>${loc}</loc></sitemap>`),
     '</sitemapindex>',
   ].join('\n')
 
