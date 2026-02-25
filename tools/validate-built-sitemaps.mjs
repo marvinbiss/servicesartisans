@@ -325,33 +325,33 @@ function validateSourceConsistency() {
     checks.push({ pass: false, label: 'refresh-provider-sitemaps.ts exists' })
   }
 
-  // ── Migration 347 ──
-  const migration347Path = path.resolve('supabase/migrations/347_sitemap_hardening.sql')
-  if (fs.existsSync(migration347Path)) {
-    const sql = fs.readFileSync(migration347Path, 'utf-8')
-    checks.push({ pass: true, label: 'migration 347 (sitemap_hardening) exists' })
+  // ── Migration 345 (combined) ──
+  const migration345Path = path.resolve('supabase/migrations/345_provider_sitemap_system.sql')
+  if (fs.existsSync(migration345Path)) {
+    const sql = fs.readFileSync(migration345Path, 'utf-8')
+    checks.push({ pass: true, label: 'migration 345 (provider_sitemap_system) exists' })
     checks.push({
-      pass: sql.includes('DROP INDEX IF EXISTS idx_psm_provider_unique'),
-      label: 'migration 347 drops old UNIQUE(provider_id) index',
+      pass: !sql.includes('idx_psm_provider_unique'),
+      label: 'migration 345 has no broken UNIQUE(provider_id) index',
     })
     checks.push({
       pass: sql.includes('idx_psm_provider_per_snapshot') && sql.includes('(snapshot_id, provider_id)'),
-      label: 'migration 347 creates UNIQUE(snapshot_id, provider_id)',
+      label: 'migration 345 creates UNIQUE(snapshot_id, provider_id)',
     })
     checks.push({
       pass: sql.includes('idx_snapshots_one_building') && sql.includes("WHERE status = 'building'"),
-      label: 'migration 347 creates DB-level concurrency lock',
+      label: 'migration 345 creates DB-level concurrency lock',
     })
     checks.push({
       pass: sql.includes('idx_snapshots_one_active') && sql.includes("WHERE status = 'active'"),
-      label: 'migration 347 creates single-active invariant',
+      label: 'migration 345 creates single-active invariant',
     })
     checks.push({
       pass: sql.includes('activate_sitemap_snapshot') && sql.includes('RETURNS BOOLEAN'),
-      label: 'migration 347 creates atomic pointer flip RPC',
+      label: 'migration 345 creates atomic pointer flip RPC',
     })
   } else {
-    checks.push({ pass: false, label: 'migration 347 (sitemap_hardening) exists' })
+    checks.push({ pass: false, label: 'migration 345 (provider_sitemap_system) exists' })
   }
 
   // ── index route ──

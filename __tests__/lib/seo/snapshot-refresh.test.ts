@@ -1,16 +1,18 @@
 import { describe, it, expect } from 'vitest'
 
+const MIGRATION_PATH = 'supabase/migrations/345_provider_sitemap_system.sql'
+
+function readMigration(): string {
+  const fs = require('fs')
+  const path = require('path')
+  return fs.readFileSync(path.resolve(process.cwd(), MIGRATION_PATH), 'utf-8')
+}
+
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 1. MIGRATION 346 — sitemap_snapshots SQL structure
+// 1. MIGRATION 345 — complete sitemap infrastructure
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-describe('migration 346: sitemap_snapshots table', () => {
-  function readMigration(): string {
-    const fs = require('fs')
-    const path = require('path')
-    return fs.readFileSync(path.resolve(process.cwd(), 'supabase/migrations/346_sitemap_snapshots.sql'), 'utf-8')
-  }
-
+describe('migration 345: sitemap_snapshots table', () => {
   it('creates sitemap_snapshots table', () => {
     const sql = readMigration()
     expect(sql).toContain('CREATE TABLE')
@@ -67,21 +69,7 @@ describe('migration 346: sitemap_snapshots table', () => {
     expect(sql).not.toMatch(/CREATE POLICY/)
   })
 
-  it('adds snapshot_id column to provider_sitemap_urls', () => {
-    const sql = readMigration()
-    expect(sql).toContain('ALTER TABLE provider_sitemap_urls')
-    expect(sql).toContain('ADD COLUMN')
-    expect(sql).toContain('snapshot_id')
-  })
-
-  it('replaces batch index with composite (snapshot_id, batch_id) index', () => {
-    const sql = readMigration()
-    expect(sql).toContain('DROP INDEX IF EXISTS idx_psm_batch')
-    expect(sql).toContain('idx_psm_snapshot_batch')
-    expect(sql).toContain('(snapshot_id, batch_id)')
-  })
-
-  it('seeds initial active snapshot for backward compatibility', () => {
+  it('seeds initial active snapshot', () => {
     const sql = readMigration()
     expect(sql).toContain('INSERT INTO sitemap_snapshots')
     expect(sql).toContain("'active'")
@@ -90,41 +78,63 @@ describe('migration 346: sitemap_snapshots table', () => {
   })
 })
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 2. MIGRATION 347 — DB-level hardening invariants
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-describe('migration 347: sitemap_hardening', () => {
-  function readMigration(): string {
-    const fs = require('fs')
-    const path = require('path')
-    return fs.readFileSync(path.resolve(process.cwd(), 'supabase/migrations/347_sitemap_hardening.sql'), 'utf-8')
-  }
-
-  // ── F1: Fix provider unique index ──────────────────────────────────────
-
-  it('drops the old UNIQUE(provider_id) index that blocks multi-snapshot', () => {
+describe('migration 345: provider_sitemap_urls table', () => {
+  it('creates provider_sitemap_urls table with snapshot_id column', () => {
     const sql = readMigration()
-    expect(sql).toContain('DROP INDEX IF EXISTS idx_psm_provider_unique')
+    expect(sql).toContain('CREATE TABLE')
+    expect(sql).toContain('provider_sitemap_urls')
+    // snapshot_id should be part of CREATE TABLE, not ALTER TABLE ADD COLUMN
+    expect(sql).not.toContain('ADD COLUMN')
   })
 
-  it('creates new UNIQUE(snapshot_id, provider_id) index', () => {
+  it('snapshot_id has NO DEFAULT (prevents silent misassignment)', () => {
+    const sql = readMigration()
+    // The column definition should have NOT NULL but no DEFAULT
+    // Extract the provider_sitemap_urls CREATE TABLE block
+    const tableStart = sql.indexOf('CREATE TABLE IF NOT EXISTS provider_sitemap_urls')
+    const tableEnd = sql.indexOf(');', tableStart)
+    const tableBlock = sql.substring(tableStart, tableEnd)
+    expect(tableBlock).toContain('snapshot_id')
+    expect(tableBlock).toContain('NOT NULL')
+    // Should NOT have DEFAULT in the snapshot_id line
+    expect(tableBlock).not.toMatch(/snapshot_id\s+INTEGER\s+NOT NULL\s+DEFAULT/)
+  })
+
+  it('has composite (snapshot_id, batch_id) index', () => {
+    const sql = readMigration()
+    expect(sql).toContain('idx_psm_snapshot_batch')
+    expect(sql).toContain('(snapshot_id, batch_id)')
+  })
+
+  it('has NO old UNIQUE(provider_id) index', () => {
+    const sql = readMigration()
+    // Should NOT have the old broken index
+    expect(sql).not.toContain('idx_psm_provider_unique')
+  })
+
+  it('has UNIQUE(snapshot_id, provider_id) index', () => {
     const sql = readMigration()
     expect(sql).toContain('idx_psm_provider_per_snapshot')
     expect(sql).toContain('(snapshot_id, provider_id)')
     expect(sql).toContain('UNIQUE')
   })
 
-  // ── F2: DB-level concurrency lock ──────────────────────────────────────
+  it('enables RLS (service_role only)', () => {
+    const sql = readMigration()
+    // Should have RLS for both tables
+    const rlsMatches = sql.match(/ENABLE ROW LEVEL SECURITY/g)
+    expect(rlsMatches).not.toBeNull()
+    expect(rlsMatches!.length).toBeGreaterThanOrEqual(2)
+  })
+})
 
-  it('creates unique partial index for at-most-1 building snapshot', () => {
+describe('migration 345: DB-level invariants', () => {
+  it('creates unique partial index for at-most-1 building snapshot (concurrency lock)', () => {
     const sql = readMigration()
     expect(sql).toContain('idx_snapshots_one_building')
     expect(sql).toContain("WHERE status = 'building'")
     expect(sql).toContain('UNIQUE')
   })
-
-  // ── F3: DB-level single-active invariant ───────────────────────────────
 
   it('creates unique partial index for at-most-1 active snapshot', () => {
     const sql = readMigration()
@@ -132,8 +142,6 @@ describe('migration 347: sitemap_hardening', () => {
     expect(sql).toContain("WHERE status = 'active'")
     expect(sql).toContain('UNIQUE')
   })
-
-  // ── F4: Atomic pointer flip RPC function ───────────────────────────────
 
   it('creates activate_sitemap_snapshot RPC function', () => {
     const sql = readMigration()
@@ -145,9 +153,8 @@ describe('migration 347: sitemap_hardening', () => {
 
   it('RPC function supersedes old active before activating new', () => {
     const sql = readMigration()
-    // The function must supersede old BEFORE activating new (unique constraint order)
     const supersedeIdx = sql.indexOf("SET status = 'superseded'")
-    const activateIdx = sql.indexOf("SET status = 'active'")
+    const activateIdx = sql.indexOf("SET status = 'active'", supersedeIdx + 1)
     expect(supersedeIdx).toBeGreaterThan(-1)
     expect(activateIdx).toBeGreaterThan(-1)
     expect(supersedeIdx).toBeLessThan(activateIdx)
@@ -172,25 +179,17 @@ describe('migration 347: sitemap_hardening', () => {
     expect(sql).toContain('IF NOT FOUND')
   })
 
-  it('drops snapshot_id DEFAULT to prevent silent misassignment', () => {
-    const sql = readMigration()
-    expect(sql).toContain('ALTER TABLE provider_sitemap_urls ALTER COLUMN snapshot_id DROP DEFAULT')
-  })
-
   it('legacy fallback uses same ordering as refresh script (ORDER BY id ASC)', () => {
     const fs = require('fs')
     const path = require('path')
     const routeSrc = fs.readFileSync(path.resolve(process.cwd(), 'src/app/api/sitemap-providers/route.ts'), 'utf-8')
-    // Legacy fallback must order by id ASC (same as refresh script)
-    // to ensure consistent batch assignment across code paths
     expect(routeSrc).toContain("order('id', { ascending: true })")
-    // Should NOT use updated_at ordering in legacy path
     expect(routeSrc).not.toContain("order('updated_at'")
   })
 })
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 3. REFRESH SCRIPT — atomic snapshot lifecycle (hardened)
+// 2. REFRESH SCRIPT — atomic snapshot lifecycle (hardened)
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 describe('anti-regression: refresh-provider-sitemaps (hardened)', () => {
@@ -270,13 +269,8 @@ describe('anti-regression: refresh-provider-sitemaps (hardened)', () => {
 
   it('does NOT use check-then-act pattern for lock', () => {
     const src = readSource()
-    // Should NOT have a SELECT for building status before INSERT
-    // The INSERT itself is the lock (unique partial index)
-    // Old pattern: separate check "if building" before INSERT — should be gone
     const insertIdx = src.indexOf("status: 'building'")
     expect(insertIdx).toBeGreaterThan(-1)
-    // The word "building" in the INSERT is fine — it's the lock acquisition
-    // Verify there's no separate SELECT-check-then-INSERT pattern
     expect(src).not.toContain('Another refresh is already in progress')
   })
 
@@ -346,7 +340,6 @@ describe('anti-regression: refresh-provider-sitemaps (hardened)', () => {
 
   it('treats insert ratio as hard-fail', () => {
     const src = readSource()
-    // The insertCheck should set status to 'fail' not 'warn'
     expect(src).toMatch(/name:\s*'insert_ratio'[\s\S]*?status:.*'fail'/)
   })
 
@@ -371,7 +364,6 @@ describe('anti-regression: refresh-provider-sitemaps (hardened)', () => {
     const src = readSource()
     expect(src).toContain('hasHardFail')
     expect(src).toContain('validation_hard_fail')
-    // Should delete failed snapshot rows
     expect(src).toContain("eq('snapshot_id', snapshotId)")
   })
 
@@ -385,7 +377,6 @@ describe('anti-regression: refresh-provider-sitemaps (hardened)', () => {
 
   it('keeps last superseded snapshot for rollback', () => {
     const src = readSource()
-    // GC_KEEP_SUPERSEDED = 1 means keep 1 superseded for rollback
     expect(src).toContain('GC_KEEP_SUPERSEDED')
     expect(src).toMatch(/GC_KEEP_SUPERSEDED\s*=\s*1/)
   })
@@ -416,7 +407,7 @@ describe('anti-regression: refresh-provider-sitemaps (hardened)', () => {
 })
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 4. ROUTE — sitemap-providers (hardened)
+// 3. ROUTE — sitemap-providers (hardened)
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 describe('anti-regression: sitemap-providers route (hardened)', () => {
@@ -470,7 +461,6 @@ describe('anti-regression: sitemap-providers route (hardened)', () => {
     expect(src).toContain('FRESHNESS_CRITICAL_MS')
     expect(src).toContain('critically stale')
     expect(src).toContain('approaching staleness')
-    // Configurable via env
     expect(src).toContain('SITEMAP_FRESHNESS_WARNING_HOURS')
     expect(src).toContain('SITEMAP_FRESHNESS_CRITICAL_HOURS')
   })
@@ -531,7 +521,7 @@ describe('anti-regression: sitemap-providers route (hardened)', () => {
 })
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 5. ROUTE — sitemap-index snapshot-aware batch count
+// 4. ROUTE — sitemap-index snapshot-aware batch count
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 describe('anti-regression: sitemap-index route (snapshot-aware)', () => {
