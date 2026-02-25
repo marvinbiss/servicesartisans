@@ -326,7 +326,7 @@ describe('failure-mode: anti-regression imports', () => {
       for (const symbol of file.mustNotDefine) {
         it(`does NOT locally define ${symbol}`, () => {
           const src = readSource(file.path)
-          expect(src).not.toMatch(new RegExp(`^(const|let|var)\\s+${symbol}\\b`, 'm'))
+          expect(src).not.toMatch(new RegExp(`^\\s*(const|let|var)\\s+${symbol}\\b`, 'm'))
         })
       }
     })

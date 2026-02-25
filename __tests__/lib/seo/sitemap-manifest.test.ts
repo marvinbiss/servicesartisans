@@ -370,20 +370,18 @@ describe('anti-regression: single source of truth enforcement', () => {
     const routeSource = readSource('src/app/api/sitemap-providers/route.ts')
     // Must import from manifest
     expect(routeSource).toContain("from '@/lib/seo/sitemap-manifest'")
-    // Must NOT define its own PROVIDER_BATCH_SIZE
-    expect(routeSource).not.toMatch(/^const PROVIDER_BATCH_SIZE\b/m)
-    expect(routeSource).not.toMatch(/^let PROVIDER_BATCH_SIZE\b/m)
-    expect(routeSource).not.toMatch(/^var PROVIDER_BATCH_SIZE\b/m)
+    // Must NOT define its own PROVIDER_BATCH_SIZE (at any indentation level)
+    expect(routeSource).not.toMatch(/^\s*(const|let|var)\s+PROVIDER_BATCH_SIZE\b/m)
   })
 
   it('sitemap.ts imports from manifest and does not define local batch constants', () => {
     const sitemapSource = readSource('src/app/sitemap.ts')
     expect(sitemapSource).toContain("from '@/lib/seo/sitemap-manifest'")
-    // Must NOT define its own constants
-    expect(sitemapSource).not.toMatch(/^const STATIC_BATCH\b/m)
-    expect(sitemapSource).not.toMatch(/^const LARGE_BATCH\b/m)
-    expect(sitemapSource).not.toMatch(/^const TOP_CITIES_PHASE1\b/m)
-    expect(sitemapSource).not.toMatch(/^const PROVIDER_BATCH_SIZE\b/m)
+    // Must NOT define its own constants (at any indentation level)
+    expect(sitemapSource).not.toMatch(/^\s*(const|let|var)\s+STATIC_BATCH\b/m)
+    expect(sitemapSource).not.toMatch(/^\s*(const|let|var)\s+LARGE_BATCH\b/m)
+    expect(sitemapSource).not.toMatch(/^\s*(const|let|var)\s+TOP_CITIES_PHASE1\b/m)
+    expect(sitemapSource).not.toMatch(/^\s*(const|let|var)\s+PROVIDER_BATCH_SIZE\b/m)
   })
 
   it('sitemap-index/route.ts imports from manifest and does not define local ID lists', () => {

@@ -1,12 +1,12 @@
-# TESTPLAN — Sitemap Reliability v3
+# TESTPLAN — Sitemap Reliability v4
 
-> Date: 2026-02-24 | Scope: validation de tous les livrables v3
+> Date: 2026-02-24 | Scope: validation de tous les livrables v3 + remédiations v4
 
 ---
 
 ## 1. Tests Vitest locaux
 
-### 1a. Tests manifest existants (55 tests)
+### 1a. Tests manifest (55 tests)
 
 ```bash
 npx vitest run __tests__/lib/seo/sitemap-manifest.test.ts
@@ -14,7 +14,7 @@ npx vitest run __tests__/lib/seo/sitemap-manifest.test.ts
 
 **Critère PASS**: 55/55 tests pass, exit code 0.
 
-### 1b. Tests failure-mode (nouveaux)
+### 1b. Tests failure-mode (65 tests)
 
 ```bash
 npx vitest run __tests__/lib/seo/sitemap-failure-modes.test.ts
@@ -37,7 +37,7 @@ npx vitest run __tests__/lib/seo/sitemap-failure-modes.test.ts
 npx vitest run __tests__/lib/seo/
 ```
 
-**Critère PASS**: tous les fichiers pass, exit code 0.
+**Critère PASS**: 120/120 tests pass, exit code 0.
 
 ---
 
@@ -69,7 +69,7 @@ node tools/validate-built-sitemaps.mjs --json
 
 ---
 
-## 3. Audit script v3
+## 3. Audit script v4
 
 ### 3a. Mode sample (rapide)
 
@@ -85,7 +85,7 @@ node tools/audit-sitemaps.mjs --sample 10 --seed 42
 node tools/audit-sitemaps.mjs --sample 10 --seed 42 --json
 ```
 
-**Critère PASS**: sortie JSON valide contenant: `version`, `timestamp`, `gitSha`, `resultHash`, `stats.latency.p99`, `stats.emptySitemaps`, `stats.responseSize.maxBytes`.
+**Critère PASS**: sortie JSON valide contenant: `version` (4.0.0), `timestamp`, `gitSha`, `resultHash`, `stats.latency.p99`, `stats.emptySitemaps`, `stats.xmlInvalid`, `stats.contentTypeBad`, `stats.responseSize.maxBytes`.
 
 ### 3c. Mode strict
 
@@ -101,7 +101,7 @@ node tools/audit-sitemaps.mjs --sample 10 --strict --json
 node tools/audit-sitemaps.mjs --sample 10 --slo --json
 ```
 
-**Critère PASS**: `stats.sloViolations` présent (tableau, possiblement vide). Si violations, `pass: false`.
+**Critère PASS**: `stats.sloViolations` présent (tableau, possiblement vide). 12/12 SLOs vérifiés (SLO-01 à SLO-12). Si violations, `pass: false`.
 
 ### 3e. Delta avec baseline
 
@@ -136,10 +136,10 @@ node tools/audit-sitemaps.mjs --all --strict --slo --json
 
 ## 4. CI Workflows (validation manuelle ou simulation)
 
-### 4a. sitemap-reliability.yml (existant, non modifié)
+### 4a. sitemap-reliability.yml (modifié v4)
 
 **Déclencheur**: push sur master ou claude/** touchant les fichiers sitemap.
-**Vérifie**: Vitest tests + source validation + audit staging.
+**Vérifie**: Vitest manifest tests + failure-mode tests + source validation + audit staging (fail-on-error).
 
 ### 4b. sitemap-post-deploy-audit.yml (nouveau)
 
@@ -151,7 +151,7 @@ node tools/audit-sitemaps.mjs --all --strict --slo --json
 
 **Déclencheur**: cron 03:00 UTC ou workflow_dispatch.
 **Vérifie**: `--all --strict --slo --baseline <previous>`.
-**Critère PASS**: artifact `sitemap-nightly-report` uploadé, baseline sauvegardée, job summary avec tableau métriques + delta, exit code 0 si pass.
+**Critère PASS**: artifact `sitemap-nightly-report` uploadé, baseline sauvegardée **uniquement si pass**, job summary avec tableau métriques + delta, exit code 0 si pass.
 
 ---
 
@@ -178,8 +178,8 @@ node tools/audit-sitemaps.mjs --all --strict --slo --json
 | 1 | Vitest manifest | `npx vitest run __tests__/lib/seo/sitemap-manifest.test.ts` | exit 0 |
 | 2 | Vitest failure-modes | `npx vitest run __tests__/lib/seo/sitemap-failure-modes.test.ts` | exit 0 |
 | 3 | Validate source | `node tools/validate-built-sitemaps.mjs` | Source checks green |
-| 4 | Audit sample JSON | `node tools/audit-sitemaps.mjs --sample 5 --json` | JSON valide, `pass: true` |
-| 5 | Audit SLO mode | `node tools/audit-sitemaps.mjs --sample 5 --slo --json` | `sloViolations` array present |
+| 4 | Audit sample JSON | `node tools/audit-sitemaps.mjs --sample 5 --json` | JSON valide, version 4.0.0, `pass: true` |
+| 5 | Audit SLO mode | `node tools/audit-sitemaps.mjs --sample 5 --slo --json` | `sloViolations` array present, 12/12 SLOs |
 | 6 | Audit delta | `--baseline` flag produit champ `delta` | `delta` non null |
 | 7 | Audit --out | `--out /tmp/x.json` crée le fichier | fichier parsable |
 | 8 | SLO-SLA.md | `test -f docs/sitemap/SLO-SLA.md` | exists |

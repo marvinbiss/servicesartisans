@@ -49,6 +49,9 @@ jobs:
       - name: Run sitemap manifest tests
         run: npx vitest run __tests__/lib/seo/sitemap-manifest.test.ts
 
+      - name: Run sitemap failure-mode tests
+        run: npx vitest run __tests__/lib/seo/sitemap-failure-modes.test.ts
+
   source-validation:
     name: Source-level validation
     runs-on: ubuntu-latest
@@ -81,20 +84,18 @@ jobs:
           node-version: 22
 
       - name: Audit production sitemaps
+        id: audit
         run: |
           node tools/audit-sitemaps.mjs \
             --url "${{ vars.SITEMAP_AUDIT_URL || 'https://servicesartisans.fr/sitemap.xml' }}" \
             --sample 50 \
             --seed 42 \
-            --json > sitemap-audit-report.json
-          cat sitemap-audit-report.json | node -e "
-            const data = JSON.parse(require('fs').readFileSync('/dev/stdin','utf8'));
-            console.log('Pass:', data.pass);
-            console.log('Tested:', data.stats.tested);
-            console.log('Failed:', data.stats.failed);
-            if (!data.pass) process.exit(1);
-          "
-        continue-on-error: true
+            --strict \
+            --json \
+            --out sitemap-audit-report.json || true
+
+          PASS=$(node -e "const r=JSON.parse(require('fs').readFileSync('sitemap-audit-report.json','utf8'));console.log(r.pass)")
+          echo "pass=$PASS" >> "$GITHUB_OUTPUT"
 
       - name: Upload audit report
         if: always()
@@ -103,3 +104,9 @@ jobs:
           name: sitemap-audit-report
           path: sitemap-audit-report.json
           retention-days: 30
+
+      - name: Fail if audit failed
+        if: steps.audit.outputs.pass == 'false'
+        run: |
+          echo "::error::Sitemap audit FAILED — check report artifact"
+          exit 1

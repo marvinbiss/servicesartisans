@@ -135,7 +135,7 @@ jobs:
           retention-days: 90
 
       - name: Save as next baseline
-        if: always()
+        if: steps.audit.outputs.pass == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: sitemap-nightly-baseline

@@ -194,7 +194,16 @@ export async function GET(request: NextRequest) {
         .order('updated_at', { ascending: false })
         .range(from, Math.min(from + PAGE_SIZE - 1, limit - 1))
 
-      if (error || !data || data.length === 0) break
+      if (error) {
+        sitemapLog.error('sitemap-providers: pagination query error, returning partial data', {
+          batchIndex: String(batchIndex),
+          pageFrom: String(from),
+          code: error.code,
+          message: error.message,
+        })
+        break
+      }
+      if (!data || data.length === 0) break
       allProviders = allProviders.concat(data)
       if (data.length < PAGE_SIZE) break
       from += PAGE_SIZE

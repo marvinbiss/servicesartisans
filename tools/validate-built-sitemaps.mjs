@@ -188,7 +188,7 @@ function validateSourceConsistency() {
       label: 'sitemap.ts imports from manifest',
     })
     checks.push({
-      pass: !src.match(/^(const|let|var)\s+(STATIC_BATCH|LARGE_BATCH|PROVIDER_BATCH_SIZE|TOP_CITIES_PHASE1)\b/m),
+      pass: !src.match(/^\s*(const|let|var)\s+(STATIC_BATCH|LARGE_BATCH|PROVIDER_BATCH_SIZE|TOP_CITIES_PHASE1)\b/m),
       label: 'sitemap.ts has no local batch constants',
     })
     checks.push({
@@ -207,7 +207,7 @@ function validateSourceConsistency() {
       label: 'sitemap-providers imports from manifest',
     })
     checks.push({
-      pass: !src.match(/^(const|let|var)\s+PROVIDER_BATCH_SIZE\b/m),
+      pass: !src.match(/^\s*(const|let|var)\s+PROVIDER_BATCH_SIZE\b/m),
       label: 'sitemap-providers has no local PROVIDER_BATCH_SIZE',
     })
     checks.push({

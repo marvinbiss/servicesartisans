@@ -25,17 +25,23 @@ export async function GET() {
       .eq('is_active', true)
       .eq('noindex', false)
 
-    if (!error && count && count > 0) {
+    if (error) {
+      sitemapLog.error('sitemap-index: Supabase query error, omitting provider sitemaps', {
+        code: error.code,
+        message: error.message,
+        details: error.details,
+      })
+    } else if (count && count > 0) {
       activeProvidersCount = count
     }
   } catch (err) {
-    sitemapLog.error('sitemap-index: DB query failed, omitting provider sitemaps', err)
+    sitemapLog.error('sitemap-index: DB query failed (thrown), omitting provider sitemaps', err)
   }
 
   const urls = getSitemapIndexUrls({ activeProvidersCount })
   const durationMs = Date.now() - startMs
 
-  sitemapLog.warn('sitemap-index generated', {
+  sitemapLog.info('sitemap-index generated', {
     activeProvidersCount: String(activeProvidersCount),
     totalSitemaps: String(urls.length),
     durationMs: String(durationMs),

@@ -30,7 +30,7 @@ import { execSync } from 'child_process'
 import { createHash } from 'crypto'
 import fs from 'fs'
 
-const SCRIPT_VERSION = '3.0.0'
+const SCRIPT_VERSION = '4.0.0'
 const SITE = 'https://servicesartisans.fr'
 const DEFAULT_SAMPLE_SIZE = 50
 const DEFAULT_CONCURRENCY = 10
@@ -41,12 +41,17 @@ const GOOGLE_MAX_SIZE_BYTES = 50 * 1024 * 1024 // 50 MB uncompressed
 // ── SLO Thresholds (from docs/sitemap/SLO-SLA.md) ──────────────────────────
 
 const SLO = {
+  INDEX_AVAILABILITY: true,             // SLO-01: index must return 200
   CHILD_200_RATE_CRITICAL: 0.995,       // SLO-02: 99.5%
+  XML_VALIDITY_RATE: 1.0,              // SLO-03: 100% well-formed XML
+  CONTENT_TYPE_RATE: 1.0,              // SLO-04: 100% application/xml
   P95_LATENCY_CRITICAL_MS: 2000,        // SLO-05
   P99_LATENCY_CRITICAL_MS: 5000,        // SLO-06
   EMPTY_SITEMAP_RATE_CRITICAL: 0.05,    // SLO-07: 5% for providers
+  PROVIDER_DROPPED_RATIO_CRITICAL: 0.10,// SLO-08: <10%
   MAX_URLS_PER_SITEMAP: GOOGLE_MAX_URLS,// SLO-09
   MAX_SIZE_BYTES: GOOGLE_MAX_SIZE_BYTES,// SLO-10
+  INDEX_CHILDREN_COHERENCE: 1.0,        // SLO-11: 100% resolvable children
   CHILD_COUNT_DELTA_CRITICAL_PCT: 0.25, // SLO-12: 25%
 }
 
@@ -104,13 +109,23 @@ function getGitSha() {
   }
 }
 
-async function fetchWithTimeout(url, timeoutMs = TIMEOUT_MS) {
-  const controller = new AbortController()
-  const timer = setTimeout(() => controller.abort(), timeoutMs)
-  try {
-    return await fetch(url, { signal: controller.signal })
-  } finally {
-    clearTimeout(timer)
+async function fetchWithTimeout(url, timeoutMs = TIMEOUT_MS, retries = 2) {
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), timeoutMs)
+    try {
+      const res = await fetch(url, { signal: controller.signal })
+      clearTimeout(timer)
+      return res
+    } catch (err) {
+      clearTimeout(timer)
+      if (attempt < retries) {
+        const delay = Math.pow(2, attempt) * 1000 // 1s, 2s backoff
+        await new Promise(r => setTimeout(r, delay))
+        continue
+      }
+      throw err
+    }
   }
 }
 
@@ -136,13 +151,13 @@ function isWellFormedXml(text) {
   if (cleaned.includes('&')) {
     return { ok: false, error: 'Contains unescaped & character' }
   }
-  // Check balanced tags
-  const openTags = text.match(/<[a-zA-Z][^/>\s]*[^/]?>/g) || []
+  // Check balanced tags (match all start tags including those with attributes)
+  const allStartTags = text.match(/<[a-zA-Z][^>]*>/g) || []
+  const selfClosing = allStartTags.filter(t => t.endsWith('/>'))
+  const openTags = allStartTags.filter(t => !t.endsWith('/>'))
   const closeTags = text.match(/<\/[a-zA-Z][^>]*>/g) || []
-  const selfClosing = text.match(/<[a-zA-Z][^>]*\/>/g) || []
-  const netOpen = openTags.length - selfClosing.length
-  if (Math.abs(netOpen - closeTags.length) > 1) {
-    return { ok: false, error: `Unbalanced tags: ${netOpen} open vs ${closeTags.length} close` }
+  if (openTags.length !== closeTags.length) {
+    return { ok: false, error: `Unbalanced tags: ${openTags.length} open vs ${closeTags.length} close` }
   }
   return { ok: true }
 }
@@ -197,8 +212,19 @@ function loadBaseline(filePath) {
 
 // ── SLO checker ──────────────────────────────────────────────────────────────
 
-function checkSloViolations(stats, baseline) {
+function checkSloViolations(stats, baseline, indexOk = true) {
   const violations = []
+
+  // SLO-01: Index availability (checked before this function, but enforce here too)
+  if (!indexOk) {
+    violations.push({
+      slo: 'SLO-01',
+      name: 'Index Availability',
+      threshold: 'HTTP 200',
+      actual: 'Index fetch failed',
+      severity: 'critical',
+    })
+  }
 
   // SLO-02: Child 200 rate
   const successRate = stats.passed / (stats.tested || 1)
@@ -208,6 +234,28 @@ function checkSloViolations(stats, baseline) {
       name: 'Child 200 Rate',
       threshold: `${(SLO.CHILD_200_RATE_CRITICAL * 100).toFixed(1)}%`,
       actual: `${(successRate * 100).toFixed(1)}%`,
+      severity: 'critical',
+    })
+  }
+
+  // SLO-03: XML validity rate (100%)
+  if (stats.xmlInvalid > 0) {
+    violations.push({
+      slo: 'SLO-03',
+      name: 'XML Validity Rate',
+      threshold: '100%',
+      actual: `${stats.xmlInvalid} invalid sitemap(s)`,
+      severity: 'critical',
+    })
+  }
+
+  // SLO-04: Content-Type correctness (100% — only enforced in strict mode)
+  if (stats.contentTypeBad > 0) {
+    violations.push({
+      slo: 'SLO-04',
+      name: 'Content-Type Correctness',
+      threshold: '100% application/xml',
+      actual: `${stats.contentTypeBad} non-XML Content-Type(s)`,
       severity: 'critical',
     })
   }
@@ -268,6 +316,20 @@ function checkSloViolations(stats, baseline) {
       actual: `${(stats.responseSize.maxBytes / 1024 / 1024).toFixed(1)}MB`,
       severity: 'critical',
     })
+  }
+
+  // SLO-11: Index ↔ Children coherence (all tested children must be 200)
+  if (stats.tested > 0 && stats.failed > 0) {
+    const coherenceRate = stats.passed / stats.tested
+    if (coherenceRate < SLO.INDEX_CHILDREN_COHERENCE) {
+      violations.push({
+        slo: 'SLO-11',
+        name: 'Index ↔ Children Coherence',
+        threshold: '100%',
+        actual: `${(coherenceRate * 100).toFixed(1)}% (${stats.failed} unresolvable)`,
+        severity: 'critical',
+      })
+    }
   }
 
   // SLO-12: Child count stability (requires baseline)
@@ -430,7 +492,7 @@ async function main() {
       const xmlCheck = isWellFormedXml(body)
       if (!xmlCheck.ok) {
         if (!json) console.error(`  ${label} \u274C Bad XML  ${loc}  (${xmlCheck.error})`)
-        return { loc, ok: false, reason: xmlCheck.error, latencyMs, urlCount: 0, sizeBytes }
+        return { loc, ok: false, reason: xmlCheck.error, latencyMs, urlCount: 0, sizeBytes, xmlInvalid: true }
       }
 
       const urlCount = extractLocs(body).length
@@ -463,6 +525,8 @@ async function main() {
   const passed = results.filter(r => r.ok)
   const failed = results.filter(r => !r.ok)
   const emptySitemaps = results.filter(r => r.ok && r.urlCount === 0).length
+  const xmlInvalid = results.filter(r => r.xmlInvalid).length
+  const contentTypeBad = results.filter(r => r.ok && r.contentTypeOk === false).length
   const latencies = results.map(r => r.latencyMs).sort((a, b) => a - b)
   const sizes = results.filter(r => r.sizeBytes > 0).map(r => r.sizeBytes).sort((a, b) => a - b)
   const urlCounts = results.filter(r => r.urlCount > 0).map(r => r.urlCount).sort((a, b) => a - b)
@@ -479,6 +543,8 @@ async function main() {
     totalUrls,
     emptySitemaps,
     emptySitemapRate: `${((emptySitemaps / (sampled.length || 1)) * 100).toFixed(1)}%`,
+    xmlInvalid,
+    contentTypeBad,
     missingCacheHeaders,
     latency: {
       min: latencies[0] || 0,
@@ -504,7 +570,7 @@ async function main() {
   // 5. SLO check
   const baseline = loadBaseline(baselineFile)
   if (baseline) baseline._sourceFile = baselineFile
-  const sloViolations = checkSloViolations(stats, baseline)
+  const sloViolations = checkSloViolations(stats, baseline, true /* indexOk — we got past index fetch */)
   stats.sloViolations = sloViolations
 
   // 6. Delta computation
