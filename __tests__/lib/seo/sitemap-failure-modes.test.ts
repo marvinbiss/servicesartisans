@@ -249,10 +249,10 @@ describe('failure-mode: Google guardrails size/count', () => {
     expect(LARGE_BATCH).toBeLessThan(GOOGLE_MAX_URLS_PER_SITEMAP)
   })
 
-  it('static sitemap count is reasonable (< 500)', () => {
+  it('static sitemap count is reasonable (smart sitemap v2: 3-10 sitemaps)', () => {
     const ids = getStaticSitemapIds()
     expect(ids.length).toBeLessThan(500)
-    expect(ids.length).toBeGreaterThan(10)
+    expect(ids.length).toBeGreaterThanOrEqual(3)
   })
 
   it('maximum theoretical URLs per static batch respects limit', () => {
@@ -305,7 +305,7 @@ describe('failure-mode: anti-regression imports', () => {
       path: 'src/app/sitemap.ts',
       label: 'sitemap.ts',
       mustImport: ['getStaticSitemapIds'],
-      mustNotDefine: ['STATIC_BATCH', 'LARGE_BATCH', 'TOP_CITIES_PHASE1', 'PROVIDER_BATCH_SIZE'],
+      mustNotDefine: ['STATIC_BATCH', 'LARGE_BATCH', 'SITEMAP_TOP_CITIES', 'PROVIDER_BATCH_SIZE'],
     },
   ]
 

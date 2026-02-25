@@ -1,6 +1,16 @@
 /**
  * Sitemap Manifest — Single source of truth for all sitemap IDs.
  *
+ * SMART SITEMAP v2 — Pruned for young domain (crawl budget optimization)
+ * Target: 2,000–3,500 static URLs (+ dynamic provider pages from DB).
+ *
+ * Strategy:
+ * - Niveau 1 (always): homepage, static pages, blog, all hub pages, geo pages
+ * - Niveau 2 (conditional): service × top N cities (most populated)
+ * - Niveau 3 (excluded from sitemap, still indexable via internal linking):
+ *   quartiers, devis×city, tarifs×city, avis×city, urgence×city,
+ *   problemes×city, dept×service, region×service, individual city pages
+ *
  * INVARIANTS (tested, CI-enforced):
  * 1. Both `src/app/sitemap.ts` (generateSitemaps) and
  *    `src/app/api/sitemap-index/route.ts` MUST consume these helpers
@@ -11,9 +21,7 @@
  * 4. All sitemap `<loc>` values MUST be escaped via `escapeXmlLoc()`.
  */
 
-import { services, villes, departements, getQuartiersByVille } from '@/lib/data/france'
-import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
-import { getProblemSlugs } from '@/lib/data/problems'
+import { services } from '@/lib/data/france'
 import { SITE_URL } from '@/lib/seo/config'
 
 // ── Protocol limits ──────────────────────────────────────────────────────────
@@ -31,10 +39,13 @@ if (LARGE_BATCH > GOOGLE_MAX_URLS_PER_SITEMAP) throw new Error(`LARGE_BATCH (${L
 if (PROVIDER_BATCH_SIZE > GOOGLE_MAX_URLS_PER_SITEMAP) throw new Error(`PROVIDER_BATCH_SIZE (${PROVIDER_BATCH_SIZE}) exceeds Google limit`)
 
 /**
- * Phase 1: only submit top-N cities for new domain (conservative crawl budget).
- * Increase to `villes.length` once domain authority grows (month 2-3).
+ * Top N cities included in service × city sitemaps.
+ * Villes array is sorted by population (Paris, Marseille, Lyon, ...).
+ * Keep low for young domains. Increase once domain authority grows (month 6+).
+ *
+ * 40 cities × 46 services = 1,840 URLs — well within crawl budget.
  */
-export const TOP_CITIES_PHASE1 = 300
+export const SITEMAP_TOP_CITIES = 40
 
 // ── XML Escaping (centralized, reused by all sitemap routes) ─────────────────
 
@@ -52,95 +63,28 @@ export function escapeXmlLoc(str: string): string {
     .replace(/'/g, '&apos;')
 }
 
-// ── Helpers (exported for tests) ─────────────────────────────────────────────
-
-export function getTotalServiceQuartierUrls(): number {
-  let total = 0
-  for (const v of villes) {
-    total += (getQuartiersByVille(v.slug)?.length || 0) * services.length
-  }
-  return total
-}
-
-export function getEmergencySlugs(): string[] {
-  return Object.keys(tradeContent).filter(s => tradeContent[s].emergencyInfo)
-}
-
-export function getAvisServiceSlugs(): string[] {
-  return Object.keys(tradeContent)
-}
-
 // ── Main exports ─────────────────────────────────────────────────────────────
 
 /**
  * All sitemap IDs that can be computed without a database call.
  * Deterministic & pure — safe to call at build-time.
+ *
+ * Smart sitemap v2: only 3 static sitemaps
+ * - 'static': homepage + static pages + blog + all hub/service pages (~520 URLs)
+ * - 'service-cities-0': top 40 cities × all services (1,840 URLs)
+ * - 'geo': départements + régions (~120 URLs)
  */
 export function getStaticSitemapIds(): string[] {
-  const sqBatchCount = Math.ceil(getTotalServiceQuartierUrls() / STATIC_BATCH)
-  const emergencySlugs = getEmergencySlugs()
-  const avisServiceSlugs = getAvisServiceSlugs()
-  const problemSlugs = getProblemSlugs()
-  const tradeSlugs = getTradesSlugs()
-
   return [
     'static',
 
-    // service × city — Phase 1: top cities only (LARGE_BATCH = 45 000)
+    // service × city — top N cities only (conservative crawl budget)
     ...Array.from(
-      { length: Math.ceil(services.length * TOP_CITIES_PHASE1 / LARGE_BATCH) },
+      { length: Math.ceil(services.length * SITEMAP_TOP_CITIES / LARGE_BATCH) },
       (_, i) => `service-cities-${i}`,
     ),
 
-    // Phase 2 (uncomment when domain authority grows):
-    // ...Array.from(
-    //   { length: Math.ceil(services.length * (villes.length - TOP_CITIES_PHASE1) / LARGE_BATCH) },
-    //   (_, i) => `service-cities-extended-${i}`,
-    // ),
-
-    'cities',
     'geo',
-    'quartiers',
-
-    ...Array.from({ length: sqBatchCount }, (_, i) => `service-quartiers-${i}`),
-
-    'devis-services',
-    ...Array.from(
-      { length: Math.ceil(services.length * villes.length / STATIC_BATCH) },
-      (_, i) => `devis-service-cities-${i}`,
-    ),
-    ...Array.from({ length: sqBatchCount }, (_, i) => `devis-quartiers-${i}`),
-
-    ...Array.from(
-      { length: Math.ceil(emergencySlugs.length * villes.length / STATIC_BATCH) },
-      (_, i) => `urgence-service-cities-${i}`,
-    ),
-
-    ...Array.from(
-      { length: Math.ceil(services.length * villes.length / STATIC_BATCH) },
-      (_, i) => `tarifs-service-cities-${i}`,
-    ),
-
-    'avis-services',
-    ...Array.from(
-      { length: Math.ceil(avisServiceSlugs.length * villes.length / STATIC_BATCH) },
-      (_, i) => `avis-service-cities-${i}`,
-    ),
-
-    'problemes',
-    ...Array.from(
-      { length: Math.ceil(problemSlugs.length * villes.length / STATIC_BATCH) },
-      (_, i) => `problemes-cities-${i}`,
-    ),
-
-    // dept × service — uses LARGE_BATCH (45 000)
-    ...Array.from(
-      { length: Math.ceil(departements.length * tradeSlugs.length / LARGE_BATCH) },
-      (_, i) => `dept-services-${i}`,
-    ),
-
-    'region-services',
-    'guides',
   ]
 }
 

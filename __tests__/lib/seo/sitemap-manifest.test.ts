@@ -3,19 +3,14 @@ import {
   getStaticSitemapIds,
   getDynamicSitemapIds,
   getSitemapIndexUrls,
-  getTotalServiceQuartierUrls,
   escapeXmlLoc,
-  getEmergencySlugs,
-  getAvisServiceSlugs,
   STATIC_BATCH,
   LARGE_BATCH,
   PROVIDER_BATCH_SIZE,
-  TOP_CITIES_PHASE1,
+  SITEMAP_TOP_CITIES,
   GOOGLE_MAX_URLS_PER_SITEMAP,
 } from '@/lib/seo/sitemap-manifest'
-import { services, villes, departements, regions, getQuartiersByVille } from '@/lib/data/france'
-import { getTradesSlugs } from '@/lib/data/trade-content'
-import { getProblemSlugs } from '@/lib/data/problems'
+import { services, villes, departements, regions } from '@/lib/data/france'
 import { SITE_URL } from '@/lib/seo/config'
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -71,95 +66,53 @@ describe('index ids ⊆ static ids + dynamic ids', () => {
 })
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 2. CARDINALITY — segment counts match expected formulas
+// 2. CARDINALITY — segment counts match expected formulas (smart sitemap v2)
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-describe('segment cardinality', () => {
+describe('segment cardinality (smart sitemap v2)', () => {
   const ids = getStaticSitemapIds()
 
   function countByPrefix(prefix: string): number {
-    return ids.filter(id => id.startsWith(prefix) && !id.startsWith(prefix + '-extended')).length
+    return ids.filter(id => id.startsWith(prefix)).length
   }
 
-  it('service-cities batch count = ceil(services × TOP_CITIES_PHASE1 / LARGE_BATCH)', () => {
-    const expected = Math.ceil(services.length * TOP_CITIES_PHASE1 / LARGE_BATCH)
+  it('service-cities batch count = ceil(services × SITEMAP_TOP_CITIES / LARGE_BATCH)', () => {
+    const expected = Math.ceil(services.length * SITEMAP_TOP_CITIES / LARGE_BATCH)
     expect(countByPrefix('service-cities-')).toBe(expected)
   })
 
-  it('devis-service-cities batch count = ceil(services × villes / STATIC_BATCH)', () => {
-    const expected = Math.ceil(services.length * villes.length / STATIC_BATCH)
-    expect(countByPrefix('devis-service-cities-')).toBe(expected)
-  })
-
-  it('urgence-service-cities batch count = ceil(emergencySlugs × villes / STATIC_BATCH)', () => {
-    const expected = Math.ceil(getEmergencySlugs().length * villes.length / STATIC_BATCH)
-    expect(countByPrefix('urgence-service-cities-')).toBe(expected)
-  })
-
-  it('tarifs-service-cities batch count = ceil(services × villes / STATIC_BATCH)', () => {
-    const expected = Math.ceil(services.length * villes.length / STATIC_BATCH)
-    expect(countByPrefix('tarifs-service-cities-')).toBe(expected)
-  })
-
-  it('avis-service-cities batch count = ceil(avisServiceSlugs × villes / STATIC_BATCH)', () => {
-    const expected = Math.ceil(getAvisServiceSlugs().length * villes.length / STATIC_BATCH)
-    expect(countByPrefix('avis-service-cities-')).toBe(expected)
-  })
-
-  it('problemes-cities batch count = ceil(problemSlugs × villes / STATIC_BATCH)', () => {
-    const expected = Math.ceil(getProblemSlugs().length * villes.length / STATIC_BATCH)
-    expect(countByPrefix('problemes-cities-')).toBe(expected)
-  })
-
-  it('dept-services batch count = ceil(departements × tradeSlugs / LARGE_BATCH)', () => {
-    const expected = Math.ceil(departements.length * getTradesSlugs().length / LARGE_BATCH)
-    expect(countByPrefix('dept-services-')).toBe(expected)
-  })
-
-  it('service-quartiers batch count = ceil(totalServiceQuartierUrls / STATIC_BATCH)', () => {
-    const expected = Math.ceil(getTotalServiceQuartierUrls() / STATIC_BATCH)
-    expect(countByPrefix('service-quartiers-')).toBe(expected)
-  })
-
-  it('devis-quartiers batch count matches service-quartiers batch count', () => {
-    const sqIds = ids.filter(id => id.startsWith('service-quartiers-'))
-    const dqIds = ids.filter(id => id.startsWith('devis-quartiers-'))
-    expect(dqIds.length).toBe(sqIds.length)
-  })
-
   it('singleton sitemaps exist exactly once', () => {
-    const singletons = ['static', 'cities', 'geo', 'quartiers', 'devis-services', 'avis-services', 'problemes', 'region-services', 'guides']
+    const singletons = ['static', 'geo']
     for (const s of singletons) {
       const count = ids.filter(id => id === s).length
       expect(count).toBe(1)
     }
   })
+
+  it('pruned categories are NOT in static ids', () => {
+    const prunedPrefixes = [
+      'quartiers', 'service-quartiers-', 'cities',
+      'devis-service-cities-', 'devis-quartiers-', 'devis-services',
+      'urgence-service-cities-', 'tarifs-service-cities-',
+      'avis-services', 'avis-service-cities-',
+      'problemes-cities-', 'problemes',
+      'dept-services-', 'region-services', 'guides',
+    ]
+    for (const prefix of prunedPrefixes) {
+      const found = ids.filter(id => id === prefix || id.startsWith(prefix))
+      expect(found.length).toBe(0)
+    }
+  })
+
+  it('total static sitemap count is small (smart sitemap v2 pruning)', () => {
+    // Smart sitemap v2: static + service-cities-0 + geo = 3 sitemaps
+    expect(ids.length).toBeGreaterThanOrEqual(3)
+    expect(ids.length).toBeLessThan(10)
+  })
 })
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 3. QUARTIERS ACCESSOR — no divergence
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-describe('no divergence quartiers accessor', () => {
-  it('getTotalServiceQuartierUrls matches via getQuartiersByVille', () => {
-    let manual = 0
-    for (const v of villes) {
-      manual += (getQuartiersByVille(v.slug)?.length || 0) * services.length
-    }
-    expect(getTotalServiceQuartierUrls()).toBe(manual)
-  })
-
-  it('getTotalServiceQuartierUrls matches ville.quartiers direct', () => {
-    let fromDirect = 0
-    for (const v of villes) {
-      fromDirect += (v.quartiers?.length || 0) * services.length
-    }
-    expect(getTotalServiceQuartierUrls()).toBe(fromDirect)
-  })
-})
-
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 4. XML ESCAPING (centralized escapeXmlLoc)
+// 3. XML ESCAPING (centralized escapeXmlLoc)
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 describe('escapeXmlLoc (centralized)', () => {
@@ -217,7 +170,7 @@ describe('escapeXmlLoc (centralized)', () => {
 })
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 5. GOOGLE PROTOCOL COMPLIANCE
+// 4. GOOGLE PROTOCOL COMPLIANCE
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 describe('Google protocol compliance', () => {
@@ -255,14 +208,14 @@ describe('Google protocol compliance', () => {
     }
   })
 
-  it('TOP_CITIES_PHASE1 is within villes range', () => {
-    expect(TOP_CITIES_PHASE1).toBeGreaterThan(0)
-    expect(TOP_CITIES_PHASE1).toBeLessThanOrEqual(villes.length)
+  it('SITEMAP_TOP_CITIES is within villes range', () => {
+    expect(SITEMAP_TOP_CITIES).toBeGreaterThan(0)
+    expect(SITEMAP_TOP_CITIES).toBeLessThanOrEqual(villes.length)
   })
 })
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 6. NO DUPLICATE SITEMAP IDS
+// 5. NO DUPLICATE SITEMAP IDS
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 describe('no duplicate sitemap IDs', () => {
@@ -293,7 +246,7 @@ describe('no duplicate sitemap IDs', () => {
 })
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 7. SITEMAP INDEX XML STRUCTURE (simulated)
+// 6. SITEMAP INDEX XML STRUCTURE (simulated)
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 describe('sitemap index XML structure', () => {
@@ -342,7 +295,7 @@ describe('sitemap index XML structure', () => {
 })
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 8. ANTI-REGRESSION: detect re-introduction of double source of truth
+// 7. ANTI-REGRESSION: detect re-introduction of double source of truth
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 describe('anti-regression: single source of truth enforcement', () => {
@@ -380,7 +333,7 @@ describe('anti-regression: single source of truth enforcement', () => {
     // Must NOT define its own constants (at any indentation level)
     expect(sitemapSource).not.toMatch(/^\s*(const|let|var)\s+STATIC_BATCH\b/m)
     expect(sitemapSource).not.toMatch(/^\s*(const|let|var)\s+LARGE_BATCH\b/m)
-    expect(sitemapSource).not.toMatch(/^\s*(const|let|var)\s+TOP_CITIES_PHASE1\b/m)
+    expect(sitemapSource).not.toMatch(/^\s*(const|let|var)\s+SITEMAP_TOP_CITIES\b/m)
     expect(sitemapSource).not.toMatch(/^\s*(const|let|var)\s+PROVIDER_BATCH_SIZE\b/m)
   })
 
@@ -408,7 +361,7 @@ describe('anti-regression: single source of truth enforcement', () => {
 })
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 9. DATA DIMENSION SANITY — catch data file truncation/corruption
+// 8. DATA DIMENSION SANITY — catch data file truncation/corruption
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 describe('data dimension sanity', () => {
@@ -426,24 +379,5 @@ describe('data dimension sanity', () => {
 
   it('regions array is non-empty', () => {
     expect(regions.length).toBeGreaterThanOrEqual(13)
-  })
-
-  it('problems array is non-empty', () => {
-    expect(getProblemSlugs().length).toBeGreaterThanOrEqual(20)
-  })
-
-  it('trade slugs are non-empty', () => {
-    expect(getTradesSlugs().length).toBeGreaterThanOrEqual(30)
-  })
-
-  it('emergency slugs are a subset of trade slugs', () => {
-    const tradeSet = new Set(getTradesSlugs())
-    for (const slug of getEmergencySlugs()) {
-      expect(tradeSet.has(slug)).toBe(true)
-    }
-  })
-
-  it('avis service slugs equal trade content keys', () => {
-    expect(getAvisServiceSlugs().length).toBe(getTradesSlugs().length)
   })
 })

@@ -120,8 +120,8 @@ export const prixArticles: Record<string, {
     ]
   },
   "prix-chauffagiste-2026-installation-entretien": {
-    title: "Prix chauffagiste 2026 : installation et entretien",
-    excerpt: "Tous les tarifs des chauffagistes en 2026 : installation de chaudière, entretien annuel, dépannage, pompe à chaleur. Comparez les prix et trouvez le meilleur rapport qualité-prix.",
+    title: "Prix chauffagiste 2026 : 45 à 95 €/h — Chaudière, PAC, entretien",
+    excerpt: "Chauffagiste en 2026 : 45–75 €/h (province), 60–95 €/h (IDF). Installation chaudière, pompe à chaleur, entretien annuel — tous les tarifs détaillés. Aides MaPrimeRénov' incluses.",
     content: [
       "Votre facture de chauffage vous semble exorbitante ? Vous n'êtes pas seul : le chauffage représente en moyenne **60 % de la facture énergétique** des ménages français, soit 1 500 à 2 500 € par an pour une maison de 100 m² mal isolée. Le choix du bon système et du bon professionnel pour l'installer constitue un enjeu financier majeur. En 2026, le marché est en pleine mutation avec la montée en puissance des pompes à chaleur, l'interdiction des chaudières fioul dans le neuf et le déclin progressif du gaz. Ce guide vous détaille les tarifs actualisés pour toutes les prestations d'un chauffagiste, et vous montre comment réduire la facture grâce aux aides de l'État.",
 
@@ -217,8 +217,8 @@ export const prixArticles: Record<string, {
     ]
   },
   "prix-menuisier-2026-tarifs-travaux": {
-    title: "Prix menuisier 2026 : tarifs et coût des travaux",
-    excerpt: "Tarifs détaillés des menuisiers en 2026 : portes, fenêtres, escaliers, placards sur mesure. Tous les prix pour budgéter vos projets.",
+    title: "Prix menuisier 2026 : 35 à 100 €/h selon la spécialité — Barème complet",
+    excerpt: "Menuisier en 2026 : 35–60 €/h (poseur) à 55–100 €/h (ébéniste). Portes, fenêtres, escaliers, placards sur mesure — prix détaillés par prestation. Comparez les devis.",
     content: [
       "Vous souhaitez remplacer vos fenêtres vieillissantes, installer un escalier sur mesure ou aménager un dressing fonctionnel ? La menuiserie est un poste de dépenses souvent sous-estimé, avec des écarts de prix qui peuvent aller du simple au quintuple selon les matériaux et le niveau de finition. En 2026, le marché reste dynamique, porté par la rénovation énergétique (remplacement de fenêtres) et la demande croissante d'agencements sur mesure qui optimisent chaque mètre carré. Ce guide complet vous donne les **vrais tarifs** pratiqués pour chaque type de prestation.",
 
@@ -640,8 +640,8 @@ export const prixArticles: Record<string, {
     ]
   },
   "prix-climaticien-2026-installation-entretien": {
-    title: "Prix climaticien 2026 : installation et entretien",
-    excerpt: "Tarifs des climaticiens en 2026 : installation de climatisation réversible, gainable, entretien annuel. Guide complet pour rafraîchir votre logement au meilleur prix.",
+    title: "Prix climaticien 2026 : 1 500 à 12 000 € selon le système — Guide complet",
+    excerpt: "Climatisation en 2026 : monosplit dès 1 500 €, multisplit 3 000–8 000 €, gainable 8 000–12 000 €. Tarifs installation et entretien annuel. Anticipez avant la canicule.",
     content: [
       "L'été 2025 a battu de nouveaux records de température en France, avec des pics à plus de 42°C dans le sud-ouest. Résultat : les ventes de climatiseurs ont explosé de 35 % et les délais d'installation ont dépassé 3 mois en pleine canicule. Avec des étés de plus en plus chauds et des épisodes caniculaires récurrents, la climatisation n'est plus un luxe mais une **nécessité** pour de nombreux foyers. Ce guide vous donne les prix 2026 pour **anticiper votre projet** et éviter l'urgence estivale.",
 
@@ -1208,8 +1208,8 @@ export const prixArticles: Record<string, {
     ]
   },
   "prix-installation-electrique-neuve-2026": {
-    title: "Prix installation électrique neuve 2026",
-    excerpt: "Quel budget pour une installation électrique neuve ou une mise aux normes complète en 2026 ? Tous les prix détaillés : tableau, câblage, prises, domotique.",
+    title: "Prix installation électrique 2026 : 8 000 à 15 000 € (neuve) — Guide complet",
+    excerpt: "Installation électrique neuve : 80 à 150 €/m² en 2026. Tableau, câblage, prises, domotique — tous les postes chiffrés. Comparez 3 devis et économisez jusqu'à 40 %.",
     content: [
       "L'installation électrique est un poste technique majeur dans toute construction neuve ou rénovation lourde. En 2026, la norme NF C 15-100 impose des exigences strictes en matière de sécurité et de confort, tandis que la domotique transforme progressivement nos habitations. Ce guide détaille les tarifs des électriciens pour tous les types de prestations.",
       "## Tarif horaire d'un électricien",
