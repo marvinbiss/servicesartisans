@@ -170,22 +170,29 @@ time curl -s "https://servicesartisans.fr/sitemap/providers-0.xml" > /dev/null
 ```
 
 ### Hypothèses
-1. **Supabase incident global** → attendre la résolution
-2. **Connection pool saturé** → trop de fonctions serverless simultanées
-3. **RLS ou permissions** → le service_role key a expiré ou a été changé
-4. **Query lente** → index manquant sur `providers(is_active, noindex)`
+1. **Table pré-calculée vide** → la table `provider_sitemap_urls` n'a pas été peuplée (refresh pas encore exécuté). Le système utilise le legacy fallback (plus lent).
+2. **Supabase incident global** → attendre la résolution
+3. **Connection pool saturé** → trop de fonctions serverless simultanées
+4. **RLS ou permissions** → le service_role key a expiré ou a été changé
+5. **Legacy fallback activé** → les logs montrent `path: 'legacy'` au lieu de `path: 'fast'`
 
 ### Actions
-1. **Si Supabase down** : rien à faire côté code. Le fallback XML vide protège contre les 500. Les sitemaps CDN-cached (1h) servent la dernière version valide.
-2. **Si timeout récurrent** :
+1. **Si table pré-calculée vide** :
+   ```bash
+   # Exécuter le refresh manuellement
+   npx tsx src/lib/seo/refresh-provider-sitemaps.ts
+   # Ou vérifier la table directement
+   # Supabase Dashboard → Table editor → provider_sitemap_urls → count
+   ```
+2. **Si Supabase down** : rien à faire côté code. Le fallback XML vide protège contre les 500. Les sitemaps CDN-cached (1h) servent la dernière version valide.
+3. **Si timeout récurrent** :
    ```sql
    -- Vérifier les index
    SELECT indexname, indexdef FROM pg_indexes WHERE tablename = 'providers';
-   -- Créer si manquant
-   CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_providers_sitemap
-     ON providers(is_active, noindex) WHERE is_active = true AND noindex = false;
+   SELECT indexname, indexdef FROM pg_indexes WHERE tablename = 'provider_sitemap_urls';
    ```
-3. **Si service_role changé** : mettre à jour `SUPABASE_SERVICE_ROLE_KEY` dans Vercel env vars et redéployer
+4. **Si service_role changé** : mettre à jour `SUPABASE_SERVICE_ROLE_KEY` dans Vercel env vars et redéployer
+5. **Si legacy fallback actif** : vérifier dans les logs Vercel que `path` = `'fast'`. Si `'legacy'`, exécuter le refresh.
 
 ### Validation post-fix
 ```bash

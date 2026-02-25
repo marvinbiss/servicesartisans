@@ -146,11 +146,29 @@ function validateBuildInfrastructure(buildDir) {
 
 function validateSourceConsistency() {
   const manifestPath = path.resolve('src/lib/seo/sitemap-manifest.ts')
+  const resolverPath = path.resolve('src/lib/seo/provider-url-resolver.ts')
   const sitemapPath = path.resolve('src/app/sitemap.ts')
   const indexRoutePath = path.resolve('src/app/api/sitemap-index/route.ts')
   const providersRoutePath = path.resolve('src/app/api/sitemap-providers/route.ts')
 
   const checks = []
+
+  // ── Provider URL Resolver ──
+  checks.push({
+    pass: fs.existsSync(resolverPath),
+    label: 'provider-url-resolver.ts exists',
+  })
+  if (fs.existsSync(resolverPath)) {
+    const src = fs.readFileSync(resolverPath, 'utf-8')
+    checks.push({
+      pass: src.includes('resolveProviderUrl'),
+      label: 'resolveProviderUrl defined in resolver',
+    })
+    checks.push({
+      pass: src.includes('PROVIDER_SELECT_COLUMNS'),
+      label: 'PROVIDER_SELECT_COLUMNS defined in resolver',
+    })
+  }
 
   // ── Manifest ──
   if (fs.existsSync(manifestPath)) {
@@ -225,6 +243,14 @@ function validateSourceConsistency() {
     checks.push({
       pass: src.includes('catch') && src.includes('<urlset'),
       label: 'sitemap-providers has error fallback with valid XML',
+    })
+    checks.push({
+      pass: src.includes('provider_sitemap_urls'),
+      label: 'sitemap-providers uses pre-computed table (fast path)',
+    })
+    checks.push({
+      pass: src.includes("from '@/lib/seo/provider-url-resolver'"),
+      label: 'sitemap-providers imports from provider-url-resolver',
     })
   } else {
     checks.push({ pass: false, label: 'sitemap-providers/route.ts exists', detail: 'File not found' })

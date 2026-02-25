@@ -113,6 +113,7 @@ Le CI **échoue** (exit code 1) si au moins un de ces critères est vrai :
 | Décision | Justification |
 |----------|--------------|
 | Provider sitemaps retournent XML vide (200) en cas d'erreur DB | Évite les 404/500 que Google pénalise. Un sitemap vide est ré-crawlé sans dommage. |
+| Provider sitemaps utilisent une table pré-calculée (`provider_sitemap_urls`) | Élimine la pagination OFFSET et la résolution de slugs runtime. Fast path p95 < 500ms. Legacy fallback si table vide. |
 | Pas de monitoring temps-réel (APM) sur les routes sitemap | Les sitemaps sont CDN-cached (1h). Le monitoring nightly --all suffit pour la fréquence de crawl Google (~1/jour). |
 | Taille XML max soft-limit à 50 MB | Google accepte jusqu'à 50 MB non compressé. Au-delà, on split. |
 | Pas d'alerte sur le nombre total d'URLs | Le nombre varie naturellement avec les providers. Seul le delta anormal est alerté. |

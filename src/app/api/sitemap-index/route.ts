@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getSitemapIndexUrls, escapeXmlLoc } from '@/lib/seo/sitemap-manifest'
+import { getSitemapIndexUrls, escapeXmlLoc, PROVIDER_BATCH_SIZE } from '@/lib/seo/sitemap-manifest'
 import { logger } from '@/lib/logger'
 
 const sitemapLog = logger.child({ component: 'sitemap-index' })
@@ -14,25 +14,45 @@ const sitemapLog = logger.child({ component: 'sitemap-index' })
 export async function GET() {
   const startMs = Date.now()
 
-  // Fetch active provider count for dynamic sitemaps
+  // Determine provider batch count for dynamic sitemaps.
+  // Strategy: try pre-computed table first (fast, accurate), fallback to provider count.
   let activeProvidersCount = 0
+  let source = 'none'
   try {
     const { createAdminClient } = await import('@/lib/supabase/admin')
     const supabase = createAdminClient()
-    const { count, error } = await supabase
-      .from('providers')
-      .select('*', { count: 'exact', head: true })
-      .eq('is_active', true)
-      .eq('noindex', false)
 
-    if (error) {
-      sitemapLog.error('sitemap-index: Supabase query error, omitting provider sitemaps', {
-        code: error.code,
-        message: error.message,
-        details: error.details,
-      })
-    } else if (count && count > 0) {
-      activeProvidersCount = count
+    // Fast path: get batch count from pre-computed table
+    const { data: batchData, error: batchError } = await supabase
+      .from('provider_sitemap_urls')
+      .select('batch_id')
+      .order('batch_id', { ascending: false })
+      .limit(1)
+
+    if (!batchError && batchData && batchData.length > 0) {
+      // Use the actual batch count from the pre-computed table
+      // Convert to equivalent provider count for getDynamicSitemapIds
+      const maxBatchId = batchData[0].batch_id
+      activeProvidersCount = (maxBatchId + 1) * PROVIDER_BATCH_SIZE
+      source = 'precomputed'
+    } else {
+      // Fallback: count providers directly (legacy behavior)
+      const { count, error } = await supabase
+        .from('providers')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_active', true)
+        .eq('noindex', false)
+
+      if (error) {
+        sitemapLog.error('sitemap-index: Supabase query error, omitting provider sitemaps', {
+          code: error.code,
+          message: error.message,
+          details: error.details,
+        })
+      } else if (count && count > 0) {
+        activeProvidersCount = count
+        source = 'providers-count'
+      }
     }
   } catch (err) {
     sitemapLog.error('sitemap-index: DB query failed (thrown), omitting provider sitemaps', err)
@@ -45,6 +65,7 @@ export async function GET() {
     activeProvidersCount: String(activeProvidersCount),
     totalSitemaps: String(urls.length),
     durationMs: String(durationMs),
+    source,
   })
 
   const xml = [
