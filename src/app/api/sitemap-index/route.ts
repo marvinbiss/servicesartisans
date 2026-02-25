@@ -14,8 +14,14 @@ const sitemapLog = logger.child({ component: 'sitemap-index' })
  * Provider batch count strategy (in order):
  *   1. Read batch_count from active snapshot in sitemap_snapshots (fast, accurate)
  *   2. Read MAX(batch_id) from provider_sitemap_urls (pre-computed table fallback)
- *   3. COUNT(*) on providers table (legacy fallback)
+ *   3. COUNT(*) on providers table (legacy fallback, CAPPED to avoid unreachable batches)
  */
+
+// Legacy fallback cap: without a precomputed snapshot, offset-based pagination
+// is extremely slow for high batch IDs (OFFSET 100K+ times out on Supabase).
+// Cap at 20 batches = 100K providers until the snapshot system is running.
+const LEGACY_MAX_PROVIDERS = 100_000
+
 export async function GET() {
   const startMs = Date.now()
 
@@ -49,7 +55,10 @@ export async function GET() {
         activeProvidersCount = (maxBatchId + 1) * PROVIDER_BATCH_SIZE
         source = 'precomputed'
       } else {
-        // Strategy 3: count providers directly (legacy behavior)
+        // Strategy 3: count providers directly (legacy fallback, CAPPED).
+        // Without precomputed URLs, offset-based pagination for batch IDs > 20
+        // times out on Supabase. Cap at LEGACY_MAX_PROVIDERS to avoid listing
+        // unreachable sitemaps that return errors to Google.
         const { count, error } = await supabase
           .from('providers')
           .select('*', { count: 'exact', head: true })
@@ -63,8 +72,16 @@ export async function GET() {
             details: error.details,
           })
         } else if (count && count > 0) {
-          activeProvidersCount = count
-          source = 'providers-count'
+          activeProvidersCount = Math.min(count, LEGACY_MAX_PROVIDERS)
+          source = 'providers-count-capped'
+
+          if (count > LEGACY_MAX_PROVIDERS) {
+            sitemapLog.warn('sitemap-index: provider count capped (no active snapshot)', {
+              actualCount: String(count),
+              cappedAt: String(LEGACY_MAX_PROVIDERS),
+              event: 'sitemap.providers_capped',
+            })
+          }
         }
       }
     }

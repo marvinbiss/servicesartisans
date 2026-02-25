@@ -93,6 +93,17 @@ export async function GET(request: NextRequest) {
 
         const tDb = Date.now() - tDbStart
 
+        if (!precomputedError && precomputed && precomputed.length === 0) {
+          // Snapshot exists but batch is empty: return 404 immediately.
+          // Don't fall through to legacy — the batch simply doesn't exist.
+          sitemapLog.info('sitemap-providers: empty batch in active snapshot, returning 404', {
+            batchIndex: String(batchIndex),
+            snapshotId: String(activeSnapshotId),
+            tDbMs: String(tDb),
+          })
+          return new NextResponse('Not found', { status: 404 })
+        }
+
         if (!precomputedError && precomputed && precomputed.length > 0) {
           // Fast path: pre-computed URLs available
           const tXmlStart = Date.now()
@@ -195,6 +206,16 @@ export async function GET(request: NextRequest) {
       path: 'legacy',
     })
 
+    // Empty batch: return 404 instead of empty <urlset> (which Google
+    // rejects with "Balise XML manquante" for missing <url> tag).
+    if (urls.length === 0) {
+      sitemapLog.info('sitemap-providers: empty batch, returning 404', {
+        batchIndex: String(batchIndex),
+        path: 'legacy',
+      })
+      return new NextResponse('Not found', { status: 404 })
+    }
+
     const xml = [
       '<?xml version="1.0" encoding="UTF-8"?>',
       '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
@@ -210,17 +231,15 @@ export async function GET(request: NextRequest) {
     })
   } catch (err) {
     const durationMs = Date.now() - startMs
-    sitemapLog.error('sitemap-providers failed, returning empty sitemap', err, {
+    sitemapLog.error('sitemap-providers failed, returning 404', err, {
       batchIndex: String(batchIndex),
       durationMs: String(durationMs),
     })
-    // Return empty but valid sitemap on error
-    const xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n</urlset>'
-    return new NextResponse(xml, {
-      headers: {
-        'Content-Type': 'application/xml; charset=utf-8',
-        'Cache-Control': 'public, s-maxage=60',
-      },
+    // Return 404 on error — an empty <urlset> without <url> tags triggers
+    // Google's "Balise XML manquante" error. A 404 is a cleaner signal.
+    return new NextResponse('Not found', {
+      status: 404,
+      headers: { 'Cache-Control': 'public, s-maxage=60' },
     })
   }
 }

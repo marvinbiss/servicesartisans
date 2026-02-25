@@ -107,14 +107,14 @@ describe('failure-mode: provider fallback XML', () => {
     expect(cleaned).not.toContain('&')
   })
 
-  it('provider route source contains try/catch with empty fallback', () => {
+  it('provider route source contains try/catch with 404 fallback', () => {
     const fs = require('fs')
     const path = require('path')
     const src = fs.readFileSync(path.resolve(process.cwd(), 'src/app/api/sitemap-providers/route.ts'), 'utf-8')
     // Must have a catch block
     expect(src).toContain('catch')
-    // Must return valid XML in catch
-    expect(src).toContain('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
+    // Must return 404 on error (not empty XML which triggers Google's "Balise XML manquante")
+    expect(src).toContain('status: 404')
     // Reduced cache TTL on error
     expect(src).toContain('s-maxage=60')
   })
