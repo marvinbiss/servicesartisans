@@ -268,8 +268,90 @@ function validateSourceConsistency() {
       pass: src.includes("eq('snapshot_id'"),
       label: 'sitemap-providers filters by snapshot_id',
     })
+    checks.push({
+      pass: src.includes("order('snapshot_id', { ascending: false })"),
+      label: 'sitemap-providers orders active snapshot by snapshot_id DESC',
+    })
+    checks.push({
+      pass: src.includes("event: 'sitemap.no_active_snapshot'"),
+      label: 'sitemap-providers logs when no active snapshot found',
+    })
+    checks.push({
+      pass: src.includes('SITEMAP_FRESHNESS_WARNING_HOURS') && src.includes('SITEMAP_FRESHNESS_CRITICAL_HOURS'),
+      label: 'sitemap-providers has configurable freshness thresholds via env',
+    })
   } else {
     checks.push({ pass: false, label: 'sitemap-providers/route.ts exists', detail: 'File not found' })
+  }
+
+  // ── Refresh script ──
+  const refreshPath = path.resolve('src/lib/seo/refresh-provider-sitemaps.ts')
+  if (fs.existsSync(refreshPath)) {
+    const src = fs.readFileSync(refreshPath, 'utf-8')
+    checks.push({ pass: true, label: 'refresh-provider-sitemaps.ts exists' })
+    checks.push({
+      pass: src.includes('PG_UNIQUE_VIOLATION') && src.includes("'23505'"),
+      label: 'refresh uses DB-level lock (PG_UNIQUE_VIOLATION 23505)',
+    })
+    checks.push({
+      pass: !src.includes('Another refresh is already in progress'),
+      label: 'refresh has no check-then-act lock pattern',
+    })
+    checks.push({
+      pass: src.includes("rpc('activate_sitemap_snapshot'"),
+      label: 'refresh uses RPC for atomic pointer flip',
+    })
+    checks.push({
+      pass: src.includes('safeGarbageCollect'),
+      label: 'refresh has safe GC with retention policy',
+    })
+    checks.push({
+      pass: src.includes('GC_KEEP_SUPERSEDED'),
+      label: 'refresh has GC retention constant',
+    })
+    checks.push({
+      pass: src.includes('ValidationCheck') && src.includes("'pass'") && src.includes("'warn'") && src.includes("'fail'"),
+      label: 'refresh has structured validation (pass/warn/fail)',
+    })
+    checks.push({
+      pass: src.includes('MIN_INSERT_RATIO') && src.includes('MIN_RESOLVED_RATIO'),
+      label: 'refresh has named threshold constants',
+    })
+    checks.push({
+      pass: src.includes("event: 'refresh.lock_acquired'") && src.includes("event: 'refresh.complete'"),
+      label: 'refresh uses structured event names',
+    })
+  } else {
+    checks.push({ pass: false, label: 'refresh-provider-sitemaps.ts exists' })
+  }
+
+  // ── Migration 347 ──
+  const migration347Path = path.resolve('supabase/migrations/347_sitemap_hardening.sql')
+  if (fs.existsSync(migration347Path)) {
+    const sql = fs.readFileSync(migration347Path, 'utf-8')
+    checks.push({ pass: true, label: 'migration 347 (sitemap_hardening) exists' })
+    checks.push({
+      pass: sql.includes('DROP INDEX IF EXISTS idx_psm_provider_unique'),
+      label: 'migration 347 drops old UNIQUE(provider_id) index',
+    })
+    checks.push({
+      pass: sql.includes('idx_psm_provider_per_snapshot') && sql.includes('(snapshot_id, provider_id)'),
+      label: 'migration 347 creates UNIQUE(snapshot_id, provider_id)',
+    })
+    checks.push({
+      pass: sql.includes('idx_snapshots_one_building') && sql.includes("WHERE status = 'building'"),
+      label: 'migration 347 creates DB-level concurrency lock',
+    })
+    checks.push({
+      pass: sql.includes('idx_snapshots_one_active') && sql.includes("WHERE status = 'active'"),
+      label: 'migration 347 creates single-active invariant',
+    })
+    checks.push({
+      pass: sql.includes('activate_sitemap_snapshot') && sql.includes('RETURNS BOOLEAN'),
+      label: 'migration 347 creates atomic pointer flip RPC',
+    })
+  } else {
+    checks.push({ pass: false, label: 'migration 347 (sitemap_hardening) exists' })
   }
 
   // ── index route ──

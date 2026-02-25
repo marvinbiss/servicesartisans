@@ -418,22 +418,62 @@ curl -s "https://servicesartisans.fr/sitemap/providers-0.xml" | head -5
 
 ### Hypothèses
 1. **Refresh échoué** → la validation post-refresh a rejeté le nouveau snapshot (ratio d'insert < 90%, ratio résolu < 50%, delta batch count > 50%)
-2. **Zombie snapshot** → un refresh précédent a crashé, laissant un snapshot en `building` qui bloque les suivants. Le cleanup automatique se fait après 30 min.
-3. **Concurrence bloquée** → deux refreshes tentés simultanément, le second est rejeté
+2. **Zombie snapshot** → un refresh précédent a crashé, laissant un snapshot en `building` qui bloque les suivants (DB-level lock via unique partial index `idx_snapshots_one_building`). Le cleanup automatique se fait après 30 min (ZOMBIE_TIMEOUT_MS).
+3. **Concurrence bloquée** → deux refreshes tentés simultanément, le second est rejeté avec PostgreSQL error code `23505` (unique_violation). C'est le comportement normal du DB-level lock — aucune intervention nécessaire.
 4. **Supabase down** → les requêtes INSERT échouent pendant le refresh
 5. **Données source corrompues** → les providers ont changé massivement (nouvelle migration de spécialités)
+6. **RPC indisponible** → la function `activate_sitemap_snapshot()` n'est pas déployée (migration 347 non appliquée). Le script utilise le fallback à deux UPDATEs séparés.
+7. **Double active snapshot** → l'index unique `idx_snapshots_one_active` empêche > 1 active. Si violation détectée, la route prend le snapshot_id le plus élevé (ORDER BY snapshot_id DESC).
+
+### Diagnostic avancé (DB-level invariants)
+
+```sql
+-- Vérifier les index de protection (migration 347)
+SELECT indexname, indexdef FROM pg_indexes
+WHERE indexname IN (
+  'idx_snapshots_one_building',   -- DB-level lock (at most 1 building)
+  'idx_snapshots_one_active',     -- single active invariant
+  'idx_psm_provider_per_snapshot' -- UNIQUE(snapshot_id, provider_id)
+);
+
+-- Vérifier qu'il n'y a jamais > 1 active
+SELECT count(*) FROM sitemap_snapshots WHERE status = 'active';
+-- Attendu: 0 ou 1
+
+-- Vérifier s'il y a un lock actif (building)
+SELECT snapshot_id, created_at, now() - created_at AS age
+FROM sitemap_snapshots WHERE status = 'building';
+
+-- Vérifier la RPC function
+SELECT proname, prosrc FROM pg_proc WHERE proname = 'activate_sitemap_snapshot';
+
+-- Vérifier les validation checks du dernier échec
+SELECT snapshot_id, status, validation_errors, error_message, created_at
+FROM sitemap_snapshots WHERE status = 'failed'
+ORDER BY snapshot_id DESC LIMIT 3;
+
+-- Vérifier la rétention GC (doit garder active + 1 superseded)
+SELECT snapshot_id, status, activated_at, superseded_at
+FROM sitemap_snapshots
+WHERE status IN ('active', 'superseded')
+ORDER BY snapshot_id DESC;
+```
 
 ### Actions
-1. **Si snapshot zombie (building > 30 min)** : le prochain refresh nettoiera automatiquement. Sinon, manuellement :
+1. **Si snapshot zombie (building > 30 min)** : le prochain refresh nettoiera automatiquement (ZOMBIE_TIMEOUT_MS = 30 min). Pour forcer manuellement :
    ```sql
-   -- Marquer le zombie comme failed
+   -- Marquer le zombie comme failed (libère le DB-level lock)
    UPDATE sitemap_snapshots SET status = 'failed', error_message = 'Manual cleanup'
    WHERE status = 'building';
-   -- Nettoyer les rows orphelines
+   -- Nettoyer les rows orphelines du zombie
    DELETE FROM provider_sitemap_urls
-   WHERE snapshot_id NOT IN (SELECT snapshot_id FROM sitemap_snapshots WHERE status = 'active');
+   WHERE snapshot_id IN (SELECT snapshot_id FROM sitemap_snapshots WHERE status = 'failed');
    ```
-2. **Si validation échouée** : examiner `validation_errors` dans le snapshot record. Corriger la cause (mappings manquants, données corrompues) et relancer.
+2. **Si validation hard-fail** : examiner `validation_errors` dans le snapshot record. Les checks sont :
+   - `insert_ratio` (hard-fail si < 90%) : inserts DB échoués → vérifier connectivity Supabase
+   - `resolved_ratio` (hard-fail si < 50%) : trop de providers non résolus → vérifier mappings dans provider-url-resolver.ts
+   - `db_row_count` (hard-fail si != expected) : corruption → investiguer les rows partielles
+   - `batch_count_delta` (warning si > 50%) : variation normale possible, mais investiguer si inattendu
 3. **Si données stale** : relancer le refresh manuellement :
    ```bash
    npx tsx src/lib/seo/refresh-provider-sitemaps.ts
@@ -444,6 +484,17 @@ curl -s "https://servicesartisans.fr/sitemap/providers-0.xml" | head -5
    SITEMAP_PROVIDERS_FORCE_LEGACY=true
    # Redéployer
    ```
+5. **Si rollback nécessaire** : le GC conserve le dernier snapshot superseded. Pour rollback :
+   ```sql
+   -- Identifier le dernier superseded
+   SELECT snapshot_id FROM sitemap_snapshots WHERE status = 'superseded'
+   ORDER BY snapshot_id DESC LIMIT 1;
+   -- Rollback via la RPC (atomique)
+   SELECT activate_sitemap_snapshot(<superseded_snapshot_id>);
+   -- Note: changer d'abord le status du superseded à 'validating'
+   UPDATE sitemap_snapshots SET status = 'validating' WHERE snapshot_id = <superseded_snapshot_id>;
+   SELECT activate_sitemap_snapshot(<superseded_snapshot_id>);
+   ```
 
 ### Validation post-fix
 ```bash
@@ -453,6 +504,10 @@ curl -s "https://servicesartisans.fr/sitemap/providers-0.xml" | head -5
 # Vérifier le fast path
 curl -s "https://servicesartisans.fr/sitemap/providers-0.xml" | grep -c '<url>'
 # Doit être > 0
+
+# Vérifier les invariants DB
+# SELECT count(*) FROM sitemap_snapshots WHERE status = 'active'; -- doit être 1
+# SELECT count(*) FROM sitemap_snapshots WHERE status = 'building'; -- doit être 0
 
 # Audit rapide
 node tools/audit-sitemaps.mjs --sample 10 --strict --json

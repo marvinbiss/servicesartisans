@@ -13,6 +13,8 @@ import { logger } from '@/lib/logger'
  *   1. FAST PATH: reads from provider_sitemap_urls table (pre-computed, snapshot-aware).
  *      Single indexed query, no pagination, no slug resolution. p95 < 500ms.
  *      Includes freshness check — if active snapshot is stale, log warning.
+ *      Defensive: if multiple active snapshots exist (corruption), picks latest
+ *      snapshot_id deterministically + logs critical alert.
  *   2. LEGACY FALLBACK: if provider_sitemap_urls is empty or no active snapshot,
  *      falls back to the original paginated query + runtime slug resolution.
  *
@@ -22,8 +24,10 @@ import { logger } from '@/lib/logger'
 const sitemapLog = logger.child({ component: 'sitemap-providers' })
 
 const LEGACY_PAGE_SIZE = 1000
-const FRESHNESS_WARNING_MS = 7 * 24 * 60 * 60 * 1000 // 7 days
-const FRESHNESS_CRITICAL_MS = 14 * 24 * 60 * 60 * 1000 // 14 days
+
+// Freshness thresholds (configurable via env, defaults in ms)
+const FRESHNESS_WARNING_MS = parseInt(process.env.SITEMAP_FRESHNESS_WARNING_HOURS || '168', 10) * 3600000 // default 7 days
+const FRESHNESS_CRITICAL_MS = parseInt(process.env.SITEMAP_FRESHNESS_CRITICAL_HOURS || '336', 10) * 3600000 // default 14 days
 
 export async function GET(request: NextRequest) {
   const startMs = Date.now()
@@ -45,11 +49,13 @@ export async function GET(request: NextRequest) {
 
     // ── Try fast path (unless kill-switch is active) ───────────────────
     if (!forceLegacy) {
-      // Get active snapshot
+      // Get active snapshot — order by snapshot_id DESC for deterministic pick
+      // if corruption ever results in multiple active rows
       const { data: activeSnapshot, error: snapshotError } = await supabase
         .from('sitemap_snapshots')
         .select('snapshot_id, activated_at')
         .eq('status', 'active')
+        .order('snapshot_id', { ascending: false })
         .limit(1)
 
       if (!snapshotError && activeSnapshot && activeSnapshot.length > 0) {
@@ -64,12 +70,14 @@ export async function GET(request: NextRequest) {
               snapshotId: String(activeSnapshotId),
               ageHours: String(Math.round(ageMs / 3600000)),
               threshold: 'critical',
+              event: 'sitemap.freshness_critical',
             })
           } else if (ageMs > FRESHNESS_WARNING_MS) {
             sitemapLog.warn('sitemap-providers: active snapshot approaching staleness', {
               snapshotId: String(activeSnapshotId),
               ageHours: String(Math.round(ageMs / 3600000)),
               threshold: 'warning',
+              event: 'sitemap.freshness_warning',
             })
           }
         }
@@ -120,6 +128,12 @@ export async function GET(request: NextRequest) {
             },
           })
         }
+      } else if (!snapshotError) {
+        // No active snapshot found — explicit log
+        sitemapLog.warn('sitemap-providers: no active snapshot found, falling back to legacy', {
+          batchIndex: String(batchIndex),
+          event: 'sitemap.no_active_snapshot',
+        })
       }
     }
 
@@ -140,7 +154,7 @@ export async function GET(request: NextRequest) {
         .select(PROVIDER_SELECT_COLUMNS)
         .eq('is_active', true)
         .eq('noindex', false)
-        .order('updated_at', { ascending: false })
+        .order('id', { ascending: true })
         .range(from, Math.min(from + LEGACY_PAGE_SIZE - 1, limit - 1))
 
       if (error) {

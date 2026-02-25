@@ -7,30 +7,67 @@
  *   2. API: called by /api/admin/refresh-provider-sitemaps
  *
  * Algorithm (atomic snapshot refresh):
- *   1. Acquire concurrency lock (reject if another refresh is in progress)
+ *   1. Clean up zombie snapshots (building for > ZOMBIE_TIMEOUT_MS)
  *   2. Allocate new snapshot_id
- *   3. Fetch all active, non-noindex providers (keyset pagination by id)
- *   4. Resolve each → sitemap URL (using provider-url-resolver)
- *   5. INSERT rows with new snapshot_id (old snapshot untouched)
- *   6. Post-refresh validation (batch counts, URL sanity, row integrity)
- *   7. Activate new snapshot (pointer flip — atomic UPDATE)
- *   8. Mark old snapshot as superseded
- *   9. Garbage collect old snapshot rows (async cleanup)
+ *   3. Acquire DB-level concurrency lock (INSERT with status='building';
+ *      unique partial index rejects if another refresh is in progress)
+ *   4. Fetch all active, non-noindex providers (keyset pagination by id)
+ *   5. Resolve each → sitemap URL (using provider-url-resolver)
+ *   6. INSERT rows with new snapshot_id (old snapshot untouched, reads continue)
+ *   7. Post-refresh validation (structured: hard-fail vs warning)
+ *   8. Activate new snapshot via RPC (atomic pointer flip in one transaction)
+ *   9. Safe GC (keep active + last superseded for rollback, delete the rest)
  *
  * Ordering: by provider `id` (immutable, deterministic) — NOT by updated_at.
  * This guarantees stable batch assignment across refreshes.
+ *
+ * DB-level guarantees (migration 347):
+ *   - UNIQUE partial index on status='building' → at most 1 concurrent refresh
+ *   - UNIQUE partial index on status='active'  → at most 1 active snapshot
+ *   - UNIQUE(snapshot_id, provider_id)          → no duplicate providers per snapshot
+ *   - RPC activate_sitemap_snapshot()           → atomic pointer flip
  */
 
 import { PROVIDER_BATCH_SIZE } from '@/lib/seo/sitemap-manifest'
 import { resolveProviderUrl, PROVIDER_SELECT_COLUMNS } from '@/lib/seo/provider-url-resolver'
 import type { ProviderRow } from '@/lib/seo/provider-url-resolver'
 
+// ── Configurable thresholds ─────────────────────────────────────────────────
+// These can be overridden in future via env vars if needed.
+
 const FETCH_PAGE_SIZE = 5000
 const INSERT_CHUNK_SIZE = 1000
+
+/** Google sitemap limit: max URLs per sitemap file */
 const MAX_URLS_PER_BATCH = 50_000
-const MIN_RESOLVED_RATIO = 0.5 // Require at least 50% of providers to resolve
-const MAX_BATCH_DELTA_RATIO = 0.5 // Batch count can't change by more than 50% vs current
-const ZOMBIE_TIMEOUT_MS = 30 * 60 * 1000 // 30 minutes — building snapshots older than this are zombies
+
+/** Hard fail: reject snapshot if fewer than this ratio of providers resolved to URLs */
+const MIN_RESOLVED_RATIO = 0.5
+
+/** Hard fail: reject snapshot if fewer than this ratio of resolved URLs were inserted */
+const MIN_INSERT_RATIO = 0.9
+
+/** Warning: log if batch count changes by more than this ratio vs current active */
+const MAX_BATCH_DELTA_RATIO = 0.5
+
+/** Zombie timeout: building snapshots older than this are cleaned up automatically */
+const ZOMBIE_TIMEOUT_MS = 30 * 60 * 1000 // 30 minutes
+
+/** GC retention: keep the active snapshot + this many superseded snapshots for rollback */
+const GC_KEEP_SUPERSEDED = 1
+
+/** PostgreSQL error code for unique constraint violation */
+const PG_UNIQUE_VIOLATION = '23505'
+
+// ── Types ───────────────────────────────────────────────────────────────────
+
+export type ValidationCheck = {
+  name: string
+  status: 'pass' | 'warn' | 'fail'
+  message: string
+  metric?: number
+  threshold?: number
+}
 
 export type RefreshResult = {
   success: boolean
@@ -41,6 +78,7 @@ export type RefreshResult = {
   batchCount: number
   maxBatchId: number
   durationMs: number
+  validationChecks: ValidationCheck[]
   validationErrors: string[]
   error?: string
 }
@@ -60,6 +98,7 @@ async function getActiveSnapshotId(supabase: SupabaseClient): Promise<number | n
     .from('sitemap_snapshots')
     .select('snapshot_id')
     .eq('status', 'active')
+    .order('snapshot_id', { ascending: false })
     .limit(1)
 
   if (error || !data || data.length === 0) return null
@@ -106,6 +145,18 @@ async function cleanupZombieSnapshots(
   }
 }
 
+async function markSnapshotFailed(supabase: SupabaseClient, snapshotId: number, errorMessage: string): Promise<void> {
+  await supabase
+    .from('sitemap_snapshots')
+    .update({
+      status: 'failed',
+      error_message: errorMessage,
+    })
+    .eq('snapshot_id', snapshotId)
+}
+
+// ── Main refresh function ───────────────────────────────────────────────────
+
 /**
  * Run a full atomic refresh of provider_sitemap_urls.
  *
@@ -130,6 +181,7 @@ export async function refreshProviderSitemaps(params: {
     batchCount: 0,
     maxBatchId: -1,
     durationMs: Date.now() - startMs,
+    validationChecks: [],
     validationErrors: [],
     error,
     ...extra,
@@ -138,28 +190,16 @@ export async function refreshProviderSitemaps(params: {
   let snapshotId = 0
 
   try {
-    // ── Step 0: Cleanup zombie snapshots ──────────────────────────────────
+    // ── Step 1: Cleanup zombie snapshots ──────────────────────────────────
     await cleanupZombieSnapshots(supabase, logger)
-
-    // ── Step 1: Concurrency lock — reject if another refresh is in progress ──
-    const { data: building } = await supabase
-      .from('sitemap_snapshots')
-      .select('snapshot_id, created_at')
-      .eq('status', 'building')
-      .limit(1)
-
-    if (building && building.length > 0) {
-      const age = Date.now() - new Date(building[0].created_at).getTime()
-      logger.error('Another refresh is already in progress', {
-        snapshotId: String(building[0].snapshot_id),
-        ageMs: String(age),
-      })
-      return emptyResult(0, `Concurrent refresh blocked — snapshot ${building[0].snapshot_id} is building (age: ${Math.round(age / 1000)}s)`)
-    }
 
     // ── Step 2: Allocate new snapshot_id ─────────────────────────────────
     snapshotId = await allocateSnapshotId(supabase)
 
+    // ── Step 3: Acquire DB-level lock via INSERT ────────────────────────
+    // The unique partial index idx_snapshots_one_building ensures at most
+    // 1 row with status='building'. If another refresh is already running,
+    // this INSERT fails with 23505 (unique_violation). No check-then-act race.
     const { error: createError } = await supabase
       .from('sitemap_snapshots')
       .insert({
@@ -168,17 +208,29 @@ export async function refreshProviderSitemaps(params: {
       })
 
     if (createError) {
+      if (createError.code === PG_UNIQUE_VIOLATION) {
+        logger.error('Concurrent refresh blocked — DB lock active (unique constraint on building)', {
+          snapshotId: String(snapshotId),
+          code: createError.code,
+          event: 'refresh.lock_denied',
+        })
+        return emptyResult(snapshotId, 'Concurrent refresh blocked — another refresh is building (DB-level lock)')
+      }
       logger.error('Failed to create snapshot record', {
         code: createError.code,
         message: createError.message,
+        event: 'refresh.snapshot_create_failed',
       })
       return emptyResult(snapshotId, `Failed to create snapshot: ${createError.message}`)
     }
 
-    logger.info('Snapshot allocated', { snapshotId: String(snapshotId) })
+    logger.info('Lock acquired — snapshot allocated', {
+      snapshotId: String(snapshotId),
+      event: 'refresh.lock_acquired',
+    })
 
-    // ── Step 3: Fetch all active, non-noindex providers (keyset pagination) ──
-    logger.info('Starting provider fetch')
+    // ── Step 4: Fetch all active, non-noindex providers (keyset pagination) ──
+    logger.info('Starting provider fetch', { event: 'refresh.fetch_start' })
 
     let allProviders: ProviderRow[] = []
     let lastId: string | null = null
@@ -200,7 +252,11 @@ export async function refreshProviderSitemaps(params: {
       const { data, error } = await query
 
       if (error) {
-        logger.error('Fetch page error', { code: error.code, message: error.message })
+        logger.error('Fetch page error', {
+          code: error.code,
+          message: error.message,
+          event: 'refresh.fetch_error',
+        })
         await markSnapshotFailed(supabase, snapshotId, `DB fetch error: ${error.message}`)
         return emptyResult(snapshotId, `DB fetch error: ${error.message}`, {
           totalProviders: allProviders.length,
@@ -221,9 +277,12 @@ export async function refreshProviderSitemaps(params: {
       if (data.length < FETCH_PAGE_SIZE) break
     }
 
-    logger.info('All providers fetched', { total: String(allProviders.length) })
+    logger.info('All providers fetched', {
+      total: String(allProviders.length),
+      event: 'refresh.fetch_complete',
+    })
 
-    // ── Step 4: Resolve URLs ──────────────────────────────────────────────
+    // ── Step 5: Resolve URLs ──────────────────────────────────────────────
     const resolvedRows: Array<{
       batch_id: number
       url: string
@@ -257,11 +316,14 @@ export async function refreshProviderSitemaps(params: {
       resolved: String(resolvedRows.length),
       dropped: String(droppedCount),
       batchCount: String(batchCount),
+      event: 'refresh.resolve_complete',
     })
 
-    // ── Step 5: Pre-insert guardrails ────────────────────────────────────
+    // ── Step 6: Pre-insert guardrails ────────────────────────────────────
     if (resolvedRows.length === 0) {
-      logger.warn('No URLs resolved — skipping table update to preserve existing data')
+      logger.warn('No URLs resolved — skipping table update to preserve existing data', {
+        event: 'refresh.zero_urls',
+      })
       await markSnapshotFailed(supabase, snapshotId, 'No URLs resolved — table not modified')
       return emptyResult(snapshotId, 'No URLs resolved — table not modified', {
         totalProviders: allProviders.length,
@@ -269,7 +331,7 @@ export async function refreshProviderSitemaps(params: {
       })
     }
 
-    // Check max URLs per batch
+    // Check max URLs per batch (50k limit)
     const batchCounts = new Map<number, number>()
     for (const row of resolvedRows) {
       batchCounts.set(row.batch_id, (batchCounts.get(row.batch_id) || 0) + 1)
@@ -277,7 +339,11 @@ export async function refreshProviderSitemaps(params: {
     for (const [batchId, count] of Array.from(batchCounts.entries())) {
       if (count > MAX_URLS_PER_BATCH) {
         const msg = `Batch ${batchId} has ${count} URLs (> 50k limit)`
-        logger.error('Batch exceeds 50k URLs', { batchId: String(batchId), count: String(count) })
+        logger.error('Batch exceeds 50k URLs', {
+          batchId: String(batchId),
+          count: String(count),
+          event: 'refresh.batch_overflow',
+        })
         await markSnapshotFailed(supabase, snapshotId, msg)
         return emptyResult(snapshotId, msg, {
           totalProviders: allProviders.length,
@@ -289,7 +355,7 @@ export async function refreshProviderSitemaps(params: {
       }
     }
 
-    // ── Step 6: INSERT new rows with new snapshot_id ─────────────────────
+    // ── Step 7: INSERT new rows with new snapshot_id ─────────────────────
     // Old snapshot rows are untouched — reads continue serving old data
     let insertedCount = 0
     for (let i = 0; i < resolvedRows.length; i += INSERT_CHUNK_SIZE) {
@@ -304,6 +370,7 @@ export async function refreshProviderSitemaps(params: {
           chunkSize: String(chunk.length),
           code: insertError.code,
           message: insertError.message,
+          event: 'refresh.insert_error',
         })
         // Continue inserting remaining chunks — partial data is better than none
         continue
@@ -321,7 +388,7 @@ export async function refreshProviderSitemaps(params: {
 
     if (insertedCount === 0) {
       const msg = 'All inserts failed — snapshot abandoned. Existing data preserved.'
-      logger.error(msg)
+      logger.error(msg, { event: 'refresh.insert_total_failure' })
       await markSnapshotFailed(supabase, snapshotId, msg)
       return emptyResult(snapshotId, msg, {
         totalProviders: allProviders.length,
@@ -329,28 +396,41 @@ export async function refreshProviderSitemaps(params: {
       })
     }
 
-    // ── Step 7: Post-refresh validation ──────────────────────────────────
-    logger.info('Running post-refresh validation')
+    // ── Step 8: Post-refresh validation ──────────────────────────────────
+    logger.info('Running post-refresh validation', { event: 'refresh.validation_start' })
     await supabase
       .from('sitemap_snapshots')
       .update({ status: 'validating' })
       .eq('snapshot_id', snapshotId)
 
-    const validationErrors: string[] = []
+    const checks: ValidationCheck[] = []
+    let hasHardFail = false
 
-    // 7a. Verify insert ratio
+    // Check 1: Insert ratio
     const insertRatio = insertedCount / resolvedRows.length
-    if (insertRatio < 0.9) {
-      validationErrors.push(`Insert ratio ${Math.round(insertRatio * 100)}% < 90% threshold`)
+    const insertCheck: ValidationCheck = {
+      name: 'insert_ratio',
+      status: insertRatio >= MIN_INSERT_RATIO ? 'pass' : 'fail',
+      message: `Insert ratio ${Math.round(insertRatio * 100)}% (threshold: ${MIN_INSERT_RATIO * 100}%)`,
+      metric: insertRatio,
+      threshold: MIN_INSERT_RATIO,
     }
+    checks.push(insertCheck)
+    if (insertCheck.status === 'fail') hasHardFail = true
 
-    // 7b. Verify resolved ratio
+    // Check 2: Resolved ratio
     const resolvedRatio = resolvedRows.length / allProviders.length
-    if (resolvedRatio < MIN_RESOLVED_RATIO) {
-      validationErrors.push(`Resolved ratio ${Math.round(resolvedRatio * 100)}% < ${MIN_RESOLVED_RATIO * 100}% minimum`)
+    const resolvedCheck: ValidationCheck = {
+      name: 'resolved_ratio',
+      status: resolvedRatio >= MIN_RESOLVED_RATIO ? 'pass' : 'fail',
+      message: `Resolved ratio ${Math.round(resolvedRatio * 100)}% (threshold: ${MIN_RESOLVED_RATIO * 100}%)`,
+      metric: resolvedRatio,
+      threshold: MIN_RESOLVED_RATIO,
     }
+    checks.push(resolvedCheck)
+    if (resolvedCheck.status === 'fail') hasHardFail = true
 
-    // 7c. Compare batch count with current active snapshot
+    // Check 3: Batch count delta vs current active
     const activeSnapshotId = await getActiveSnapshotId(supabase)
     if (activeSnapshotId) {
       const { data: activeBatchData } = await supabase
@@ -362,27 +442,39 @@ export async function refreshProviderSitemaps(params: {
       if (activeBatchData && activeBatchData.length > 0 && activeBatchData[0].batch_count) {
         const currentBatchCount = activeBatchData[0].batch_count
         const delta = Math.abs(batchCount - currentBatchCount) / currentBatchCount
-        if (delta > MAX_BATCH_DELTA_RATIO) {
-          validationErrors.push(
-            `Batch count delta ${Math.round(delta * 100)}% exceeds ${MAX_BATCH_DELTA_RATIO * 100}% threshold (${currentBatchCount} → ${batchCount})`
-          )
-        }
+        checks.push({
+          name: 'batch_count_delta',
+          status: delta <= MAX_BATCH_DELTA_RATIO ? 'pass' : 'warn',
+          message: `Batch count delta ${Math.round(delta * 100)}% (threshold: ${MAX_BATCH_DELTA_RATIO * 100}%, ${currentBatchCount} → ${batchCount})`,
+          metric: delta,
+          threshold: MAX_BATCH_DELTA_RATIO,
+        })
       }
     }
 
-    // 7d. Verify actual row count in DB matches expectations
+    // Check 4: DB row count matches expected
     const { count: dbRowCount, error: countError } = await supabase
       .from('provider_sitemap_urls')
       .select('*', { count: 'exact', head: true })
       .eq('snapshot_id', snapshotId)
 
     if (!countError && dbRowCount !== null) {
-      if (dbRowCount !== insertedCount) {
-        validationErrors.push(`DB row count ${dbRowCount} != expected ${insertedCount}`)
+      const rowCountMatch = dbRowCount === insertedCount
+      const rowCountCheck: ValidationCheck = {
+        name: 'db_row_count',
+        status: rowCountMatch ? 'pass' : 'fail',
+        message: rowCountMatch
+          ? `DB row count matches: ${dbRowCount}`
+          : `DB row count ${dbRowCount} != expected ${insertedCount} (data corruption)`,
+        metric: dbRowCount,
+        threshold: insertedCount,
       }
+      checks.push(rowCountCheck)
+      if (!rowCountMatch) hasHardFail = true
     }
 
     const buildDurationMs = Date.now() - startMs
+    const validationErrors = checks.filter(c => c.status !== 'pass').map(c => c.message)
 
     // Update snapshot with stats
     await supabase
@@ -398,10 +490,23 @@ export async function refreshProviderSitemaps(params: {
       })
       .eq('snapshot_id', snapshotId)
 
-    // If validation has HARD failures (insert ratio < 90% or resolved ratio < minimum), abort
-    if (insertRatio < 0.9 || resolvedRatio < MIN_RESOLVED_RATIO) {
-      const msg = `Validation failed: ${validationErrors.join('; ')}`
-      logger.error(msg)
+    // Log validation summary
+    const passCount = checks.filter(c => c.status === 'pass').length
+    const warnCount = checks.filter(c => c.status === 'warn').length
+    const failCount = checks.filter(c => c.status === 'fail').length
+    logger.info('Validation summary', {
+      total: String(checks.length),
+      pass: String(passCount),
+      warn: String(warnCount),
+      fail: String(failCount),
+      event: 'refresh.validation_complete',
+    })
+
+    // If hard-fail, abort activation
+    if (hasHardFail) {
+      const failedChecks = checks.filter(c => c.status === 'fail').map(c => c.message)
+      const msg = `Validation hard-fail: ${failedChecks.join('; ')}`
+      logger.error(msg, { event: 'refresh.validation_hard_fail' })
       await markSnapshotFailed(supabase, snapshotId, msg)
       // Clean up the failed snapshot's rows
       await supabase
@@ -417,83 +522,83 @@ export async function refreshProviderSitemaps(params: {
         batchCount,
         maxBatchId,
         durationMs: buildDurationMs,
+        validationChecks: checks,
         validationErrors,
         error: msg,
       }
     }
 
     // Log warnings but proceed with activation
-    for (const warning of validationErrors) {
-      logger.warn('Validation warning (non-blocking)', { warning })
-    }
-
-    // ── Step 8: Activate new snapshot (atomic pointer flip) ──────────────
-    logger.info('Activating snapshot', { snapshotId: String(snapshotId) })
-
-    // Supersede the old active snapshot
-    if (activeSnapshotId) {
-      await supabase
-        .from('sitemap_snapshots')
-        .update({ status: 'superseded', superseded_at: new Date().toISOString() })
-        .eq('snapshot_id', activeSnapshotId)
-    }
-
-    // Activate the new snapshot
-    await supabase
-      .from('sitemap_snapshots')
-      .update({ status: 'active', activated_at: new Date().toISOString() })
-      .eq('snapshot_id', snapshotId)
-
-    logger.info('Snapshot activated', { snapshotId: String(snapshotId) })
-
-    // ── Step 9: Garbage collect old snapshot rows (async, best-effort) ───
-    if (activeSnapshotId) {
-      logger.info('Garbage collecting old snapshot rows', {
-        oldSnapshotId: String(activeSnapshotId),
+    for (const check of checks.filter(c => c.status === 'warn')) {
+      logger.warn('Validation warning (non-blocking)', {
+        check: check.name,
+        message: check.message,
+        event: 'refresh.validation_warning',
       })
-      const { error: gcError } = await supabase
-        .from('provider_sitemap_urls')
-        .delete()
-        .eq('snapshot_id', activeSnapshotId)
+    }
 
-      if (gcError) {
-        logger.warn('GC delete failed (non-critical, old rows remain)', {
-          oldSnapshotId: String(activeSnapshotId),
-          code: gcError.code,
-          message: gcError.message,
-        })
-      } else {
+    // ── Step 9: Activate new snapshot (atomic pointer flip) ──────────────
+    logger.info('Activating snapshot', {
+      snapshotId: String(snapshotId),
+      event: 'refresh.activation_start',
+    })
+
+    // Try RPC function first (atomic, single transaction)
+    const { data: rpcResult, error: rpcError } = await supabase
+      .rpc('activate_sitemap_snapshot', { p_new_snapshot_id: snapshotId })
+
+    if (rpcError) {
+      // RPC not available (migration 347 not applied?) — fallback to two UPDATEs
+      logger.warn('RPC activate_sitemap_snapshot failed, falling back to two UPDATEs', {
+        code: rpcError.code,
+        message: rpcError.message,
+        event: 'refresh.rpc_fallback',
+      })
+
+      // Supersede the old active snapshot first (order matters: unique partial index)
+      if (activeSnapshotId) {
         await supabase
           .from('sitemap_snapshots')
-          .update({ status: 'garbage_collected' })
+          .update({ status: 'superseded', superseded_at: new Date().toISOString() })
           .eq('snapshot_id', activeSnapshotId)
       }
-    }
 
-    // Also GC any snapshots older than the previous active
-    if (activeSnapshotId && activeSnapshotId > 1) {
-      const { data: oldSnapshots } = await supabase
+      // Activate the new snapshot
+      await supabase
         .from('sitemap_snapshots')
-        .select('snapshot_id')
-        .in('status', ['superseded', 'failed'])
-        .lt('snapshot_id', activeSnapshotId)
-
-      if (oldSnapshots && oldSnapshots.length > 0) {
-        for (const old of oldSnapshots) {
-          await supabase
-            .from('provider_sitemap_urls')
-            .delete()
-            .eq('snapshot_id', old.snapshot_id)
-          await supabase
-            .from('sitemap_snapshots')
-            .update({ status: 'garbage_collected' })
-            .eq('snapshot_id', old.snapshot_id)
-        }
-        logger.info('GC: cleaned up older snapshots', {
-          count: String(oldSnapshots.length),
-        })
+        .update({ status: 'active', activated_at: new Date().toISOString() })
+        .eq('snapshot_id', snapshotId)
+    } else if (rpcResult === false) {
+      // RPC returned false — snapshot wasn't in 'validating' state
+      logger.error('RPC activate_sitemap_snapshot returned false — snapshot not in validating state', {
+        snapshotId: String(snapshotId),
+        event: 'refresh.activation_failed',
+      })
+      await markSnapshotFailed(supabase, snapshotId, 'Activation failed — snapshot not in validating state')
+      return {
+        success: false,
+        snapshotId,
+        totalProviders: allProviders.length,
+        resolvedUrls: insertedCount,
+        droppedProviders: droppedCount,
+        batchCount,
+        maxBatchId,
+        durationMs: Date.now() - startMs,
+        validationChecks: checks,
+        validationErrors,
+        error: 'Activation failed — snapshot not in validating state',
       }
     }
+
+    logger.info('Snapshot activated', {
+      snapshotId: String(snapshotId),
+      event: 'refresh.activated',
+    })
+
+    // ── Step 10: Safe garbage collection ─────────────────────────────────
+    // Retention policy: keep active + GC_KEEP_SUPERSEDED most recent superseded
+    // Delete everything else (older superseded, failed, garbage_collected)
+    await safeGarbageCollect(supabase, logger, snapshotId)
 
     const durationMs = Date.now() - startMs
     logger.info('Refresh complete', {
@@ -503,6 +608,7 @@ export async function refreshProviderSitemaps(params: {
       droppedProviders: String(droppedCount),
       batchCount: String(batchCount),
       durationMs: String(durationMs),
+      event: 'refresh.complete',
     })
 
     return {
@@ -514,11 +620,15 @@ export async function refreshProviderSitemaps(params: {
       batchCount,
       maxBatchId,
       durationMs,
+      validationChecks: checks,
       validationErrors,
     }
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err)
-    logger.error('Refresh failed with exception', { error: message })
+    logger.error('Refresh failed with exception', {
+      error: message,
+      event: 'refresh.exception',
+    })
     if (snapshotId > 0) {
       await markSnapshotFailed(supabase, snapshotId, message).catch(() => {})
       // Best-effort cleanup of partial rows
@@ -537,20 +647,80 @@ export async function refreshProviderSitemaps(params: {
       batchCount: 0,
       maxBatchId: -1,
       durationMs: Date.now() - startMs,
+      validationChecks: [],
       validationErrors: [],
       error: message,
     }
   }
 }
 
-async function markSnapshotFailed(supabase: SupabaseClient, snapshotId: number, errorMessage: string): Promise<void> {
-  await supabase
+// ── Safe Garbage Collection ─────────────────────────────────────────────────
+
+async function safeGarbageCollect(
+  supabase: SupabaseClient,
+  logger: RefreshLogger,
+  currentActiveSnapshotId: number,
+): Promise<void> {
+  const gcStartMs = Date.now()
+
+  // Find all superseded snapshots, ordered by most recent first
+  const { data: superseded } = await supabase
     .from('sitemap_snapshots')
-    .update({
-      status: 'failed',
-      error_message: errorMessage,
-    })
-    .eq('snapshot_id', snapshotId)
+    .select('snapshot_id')
+    .eq('status', 'superseded')
+    .order('snapshot_id', { ascending: false })
+
+  // Keep GC_KEEP_SUPERSEDED most recent superseded for rollback
+  const toKeep = superseded ? superseded.slice(0, GC_KEEP_SUPERSEDED) : []
+  const toGc = superseded ? superseded.slice(GC_KEEP_SUPERSEDED) : []
+  const keepIds = new Set(toKeep.map(s => s.snapshot_id))
+  keepIds.add(currentActiveSnapshotId) // never GC the active
+
+  // Also GC failed snapshots (rows + metadata kept for forensics, rows cleaned)
+  const { data: failed } = await supabase
+    .from('sitemap_snapshots')
+    .select('snapshot_id')
+    .in('status', ['failed'])
+
+  const allGcCandidates = [
+    ...toGc.map(s => s.snapshot_id),
+    ...(failed || []).map(s => s.snapshot_id),
+  ].filter(id => !keepIds.has(id))
+
+  if (allGcCandidates.length === 0) {
+    logger.info('GC: nothing to clean up', { event: 'refresh.gc_noop' })
+    return
+  }
+
+  let totalRowsDeleted = 0
+  for (const gcSnapshotId of allGcCandidates) {
+    // Count rows before deleting (Supabase delete doesn't return count directly)
+    const { count } = await supabase
+      .from('provider_sitemap_urls')
+      .select('*', { count: 'exact', head: true })
+      .eq('snapshot_id', gcSnapshotId)
+
+    await supabase
+      .from('provider_sitemap_urls')
+      .delete()
+      .eq('snapshot_id', gcSnapshotId)
+
+    totalRowsDeleted += count || 0
+
+    await supabase
+      .from('sitemap_snapshots')
+      .update({ status: 'garbage_collected' })
+      .eq('snapshot_id', gcSnapshotId)
+  }
+
+  const gcDurationMs = Date.now() - gcStartMs
+  logger.info('GC complete', {
+    snapshotsGCed: String(allGcCandidates.length),
+    rowsDeleted: String(totalRowsDeleted),
+    keptSuperseded: String(toKeep.length),
+    durationMs: String(gcDurationMs),
+    event: 'refresh.gc_complete',
+  })
 }
 
 /**

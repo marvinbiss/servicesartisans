@@ -1,10 +1,10 @@
 import { describe, it, expect } from 'vitest'
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 1. MIGRATION — sitemap_snapshots SQL structure
+// 1. MIGRATION 346 — sitemap_snapshots SQL structure
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-describe('migration: sitemap_snapshots table', () => {
+describe('migration 346: sitemap_snapshots table', () => {
   function readMigration(): string {
     const fs = require('fs')
     const path = require('path')
@@ -91,15 +91,116 @@ describe('migration: sitemap_snapshots table', () => {
 })
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 2. REFRESH SCRIPT — atomic snapshot lifecycle
+// 2. MIGRATION 347 — DB-level hardening invariants
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-describe('anti-regression: refresh-provider-sitemaps module (v2 atomic)', () => {
+describe('migration 347: sitemap_hardening', () => {
+  function readMigration(): string {
+    const fs = require('fs')
+    const path = require('path')
+    return fs.readFileSync(path.resolve(process.cwd(), 'supabase/migrations/347_sitemap_hardening.sql'), 'utf-8')
+  }
+
+  // ── F1: Fix provider unique index ──────────────────────────────────────
+
+  it('drops the old UNIQUE(provider_id) index that blocks multi-snapshot', () => {
+    const sql = readMigration()
+    expect(sql).toContain('DROP INDEX IF EXISTS idx_psm_provider_unique')
+  })
+
+  it('creates new UNIQUE(snapshot_id, provider_id) index', () => {
+    const sql = readMigration()
+    expect(sql).toContain('idx_psm_provider_per_snapshot')
+    expect(sql).toContain('(snapshot_id, provider_id)')
+    expect(sql).toContain('UNIQUE')
+  })
+
+  // ── F2: DB-level concurrency lock ──────────────────────────────────────
+
+  it('creates unique partial index for at-most-1 building snapshot', () => {
+    const sql = readMigration()
+    expect(sql).toContain('idx_snapshots_one_building')
+    expect(sql).toContain("WHERE status = 'building'")
+    expect(sql).toContain('UNIQUE')
+  })
+
+  // ── F3: DB-level single-active invariant ───────────────────────────────
+
+  it('creates unique partial index for at-most-1 active snapshot', () => {
+    const sql = readMigration()
+    expect(sql).toContain('idx_snapshots_one_active')
+    expect(sql).toContain("WHERE status = 'active'")
+    expect(sql).toContain('UNIQUE')
+  })
+
+  // ── F4: Atomic pointer flip RPC function ───────────────────────────────
+
+  it('creates activate_sitemap_snapshot RPC function', () => {
+    const sql = readMigration()
+    expect(sql).toContain('CREATE OR REPLACE FUNCTION activate_sitemap_snapshot')
+    expect(sql).toContain('p_new_snapshot_id INTEGER')
+    expect(sql).toContain('RETURNS BOOLEAN')
+    expect(sql).toContain('plpgsql')
+  })
+
+  it('RPC function supersedes old active before activating new', () => {
+    const sql = readMigration()
+    // The function must supersede old BEFORE activating new (unique constraint order)
+    const supersedeIdx = sql.indexOf("SET status = 'superseded'")
+    const activateIdx = sql.indexOf("SET status = 'active'")
+    expect(supersedeIdx).toBeGreaterThan(-1)
+    expect(activateIdx).toBeGreaterThan(-1)
+    expect(supersedeIdx).toBeLessThan(activateIdx)
+  })
+
+  it('RPC function runs in single transaction (plpgsql block)', () => {
+    const sql = readMigration()
+    expect(sql).toContain('BEGIN')
+    expect(sql).toContain('RETURN TRUE')
+    expect(sql).toContain('END;')
+  })
+
+  it('RPC function uses SECURITY DEFINER', () => {
+    const sql = readMigration()
+    expect(sql).toContain('SECURITY DEFINER')
+  })
+
+  it('RPC function RAISE EXCEPTION if snapshot not in validating state (prevents 0 active)', () => {
+    const sql = readMigration()
+    expect(sql).toContain('RAISE EXCEPTION')
+    expect(sql).toContain('not in validating state')
+    expect(sql).toContain('IF NOT FOUND')
+  })
+
+  it('drops snapshot_id DEFAULT to prevent silent misassignment', () => {
+    const sql = readMigration()
+    expect(sql).toContain('ALTER TABLE provider_sitemap_urls ALTER COLUMN snapshot_id DROP DEFAULT')
+  })
+
+  it('legacy fallback uses same ordering as refresh script (ORDER BY id ASC)', () => {
+    const fs = require('fs')
+    const path = require('path')
+    const routeSrc = fs.readFileSync(path.resolve(process.cwd(), 'src/app/api/sitemap-providers/route.ts'), 'utf-8')
+    // Legacy fallback must order by id ASC (same as refresh script)
+    // to ensure consistent batch assignment across code paths
+    expect(routeSrc).toContain("order('id', { ascending: true })")
+    // Should NOT use updated_at ordering in legacy path
+    expect(routeSrc).not.toContain("order('updated_at'")
+  })
+})
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 3. REFRESH SCRIPT — atomic snapshot lifecycle (hardened)
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+describe('anti-regression: refresh-provider-sitemaps (hardened)', () => {
   function readSource(): string {
     const fs = require('fs')
     const path = require('path')
     return fs.readFileSync(path.resolve(process.cwd(), 'src/lib/seo/refresh-provider-sitemaps.ts'), 'utf-8')
   }
+
+  // ── Imports ────────────────────────────────────────────────────────────
 
   it('imports PROVIDER_BATCH_SIZE from manifest', () => {
     const src = readSource()
@@ -118,6 +219,8 @@ describe('anti-regression: refresh-provider-sitemaps module (v2 atomic)', () => 
     expect(src).not.toMatch(/^\s*(const|let|var)\s+PROVIDER_BATCH_SIZE\b/m)
   })
 
+  // ── Keyset pagination ─────────────────────────────────────────────────
+
   it('uses keyset pagination (ORDER BY id) not OFFSET', () => {
     const src = readSource()
     expect(src).toContain("order('id'")
@@ -125,31 +228,74 @@ describe('anti-regression: refresh-provider-sitemaps module (v2 atomic)', () => 
     expect(src).not.toContain('.range(')
   })
 
+  // ── Guardrails ────────────────────────────────────────────────────────
+
   it('has 50k guardrail check', () => {
     const src = readSource()
     expect(src).toContain('50_000')
     expect(src).toContain('50k')
   })
 
-  it('exports RefreshResult type with snapshotId', () => {
+  it('skips table update when no URLs resolved (safety net)', () => {
+    const src = readSource()
+    expect(src).toContain('No URLs resolved')
+    expect(src).toContain('table not modified')
+  })
+
+  // ── Types ─────────────────────────────────────────────────────────────
+
+  it('exports RefreshResult type with snapshotId and validationChecks', () => {
     const src = readSource()
     expect(src).toContain('export type RefreshResult')
     expect(src).toContain('snapshotId')
+    expect(src).toContain('validationChecks')
   })
 
-  // ── Atomic snapshot lifecycle checks ─────────────────────────────────
-
-  it('has concurrency lock — checks for building snapshots before starting', () => {
+  it('exports ValidationCheck type with structured fields', () => {
     const src = readSource()
-    expect(src).toContain("eq('status', 'building')")
-    expect(src).toContain('Concurrent refresh blocked')
+    expect(src).toContain('export type ValidationCheck')
+    expect(src).toContain("'pass'")
+    expect(src).toContain("'warn'")
+    expect(src).toContain("'fail'")
   })
 
-  it('allocates new snapshot_id', () => {
+  // ── DB-level lock (P1 — concurrency) ──────────────────────────────────
+
+  it('uses PostgreSQL unique constraint violation (23505) for lock detection', () => {
     const src = readSource()
-    expect(src).toContain('allocateSnapshotId')
-    expect(src).toContain('snapshot_id')
+    expect(src).toContain('PG_UNIQUE_VIOLATION')
+    expect(src).toContain("'23505'")
+    expect(src).toContain('DB lock active')
   })
+
+  it('does NOT use check-then-act pattern for lock', () => {
+    const src = readSource()
+    // Should NOT have a SELECT for building status before INSERT
+    // The INSERT itself is the lock (unique partial index)
+    // Old pattern: separate check "if building" before INSERT — should be gone
+    const insertIdx = src.indexOf("status: 'building'")
+    expect(insertIdx).toBeGreaterThan(-1)
+    // The word "building" in the INSERT is fine — it's the lock acquisition
+    // Verify there's no separate SELECT-check-then-INSERT pattern
+    expect(src).not.toContain('Another refresh is already in progress')
+  })
+
+  // ── Atomic pointer flip (P1 — invariant) ──────────────────────────────
+
+  it('uses RPC function for atomic pointer flip', () => {
+    const src = readSource()
+    expect(src).toContain("rpc('activate_sitemap_snapshot'")
+    expect(src).toContain('p_new_snapshot_id')
+  })
+
+  it('has fallback to two UPDATEs if RPC unavailable', () => {
+    const src = readSource()
+    expect(src).toContain('rpc_fallback')
+    expect(src).toContain("status: 'superseded'")
+    expect(src).toContain("status: 'active'")
+  })
+
+  // ── Snapshot lifecycle ────────────────────────────────────────────────
 
   it('creates snapshot record with building status', () => {
     const src = readSource()
@@ -160,25 +306,6 @@ describe('anti-regression: refresh-provider-sitemaps module (v2 atomic)', () => 
   it('transitions through validating state', () => {
     const src = readSource()
     expect(src).toContain("status: 'validating'")
-  })
-
-  it('activates new snapshot (atomic pointer flip)', () => {
-    const src = readSource()
-    expect(src).toContain("status: 'active'")
-    expect(src).toContain('activated_at')
-    expect(src).toContain('Activating snapshot')
-  })
-
-  it('supersedes old active snapshot', () => {
-    const src = readSource()
-    expect(src).toContain("status: 'superseded'")
-    expect(src).toContain('superseded_at')
-  })
-
-  it('garbage collects old snapshot rows', () => {
-    const src = readSource()
-    expect(src).toContain('Garbage collecting old snapshot rows')
-    expect(src).toContain("status: 'garbage_collected'")
   })
 
   it('has zombie snapshot cleanup', () => {
@@ -200,48 +327,86 @@ describe('anti-regression: refresh-provider-sitemaps module (v2 atomic)', () => 
     expect(src).toContain('error_message')
   })
 
-  // ── Post-refresh validation ──────────────────────────────────────────
+  // ── Structured validation (P4) ────────────────────────────────────────
 
-  it('validates insert ratio (>= 90%)', () => {
+  it('uses named ValidationCheck objects with pass/warn/fail', () => {
     const src = readSource()
-    expect(src).toContain('insertRatio')
-    expect(src).toContain('Insert ratio')
+    expect(src).toContain("name: 'insert_ratio'")
+    expect(src).toContain("name: 'resolved_ratio'")
+    expect(src).toContain("name: 'batch_count_delta'")
+    expect(src).toContain("name: 'db_row_count'")
   })
 
-  it('validates resolved ratio', () => {
+  it('has named threshold constants for all validations', () => {
     const src = readSource()
+    expect(src).toContain('MIN_INSERT_RATIO')
     expect(src).toContain('MIN_RESOLVED_RATIO')
-    expect(src).toContain('Resolved ratio')
-  })
-
-  it('validates batch count delta vs current active', () => {
-    const src = readSource()
     expect(src).toContain('MAX_BATCH_DELTA_RATIO')
-    expect(src).toContain('Batch count delta')
   })
 
-  it('verifies DB row count matches expected', () => {
+  it('treats insert ratio as hard-fail', () => {
     const src = readSource()
-    expect(src).toContain("count: 'exact'")
-    expect(src).toContain('DB row count')
+    // The insertCheck should set status to 'fail' not 'warn'
+    expect(src).toMatch(/name:\s*'insert_ratio'[\s\S]*?status:.*'fail'/)
   })
 
-  it('stores validation errors in snapshot metadata', () => {
+  it('treats DB row count mismatch as hard-fail', () => {
     const src = readSource()
-    expect(src).toContain('validation_errors')
-    expect(src).toContain('validationErrors')
+    expect(src).toMatch(/name:\s*'db_row_count'[\s\S]*?'fail'/)
+    expect(src).toContain('data corruption')
   })
 
-  it('cleans up failed snapshot rows', () => {
+  it('treats batch count delta as warning (not hard-fail)', () => {
     const src = readSource()
-    // When validation fails hard, should delete the new snapshot's rows
+    expect(src).toMatch(/name:\s*'batch_count_delta'[\s\S]*?'warn'/)
+  })
+
+  it('logs structured validation summary', () => {
+    const src = readSource()
+    expect(src).toContain('Validation summary')
+    expect(src).toContain("event: 'refresh.validation_complete'")
+  })
+
+  it('aborts activation on hard-fail and cleans up rows', () => {
+    const src = readSource()
+    expect(src).toContain('hasHardFail')
+    expect(src).toContain('validation_hard_fail')
+    // Should delete failed snapshot rows
     expect(src).toContain("eq('snapshot_id', snapshotId)")
   })
 
-  it('skips table update when no URLs resolved (safety net)', () => {
+  // ── Safe GC with retention (P3) ───────────────────────────────────────
+
+  it('has safe GC function with retention policy', () => {
     const src = readSource()
-    expect(src).toContain('No URLs resolved')
-    expect(src).toContain('table not modified')
+    expect(src).toContain('safeGarbageCollect')
+    expect(src).toContain('GC_KEEP_SUPERSEDED')
+  })
+
+  it('keeps last superseded snapshot for rollback', () => {
+    const src = readSource()
+    // GC_KEEP_SUPERSEDED = 1 means keep 1 superseded for rollback
+    expect(src).toContain('GC_KEEP_SUPERSEDED')
+    expect(src).toMatch(/GC_KEEP_SUPERSEDED\s*=\s*1/)
+  })
+
+  it('logs GC metrics (snapshots, rows deleted, duration)', () => {
+    const src = readSource()
+    expect(src).toContain('snapshotsGCed')
+    expect(src).toContain('rowsDeleted')
+    expect(src).toContain('keptSuperseded')
+    expect(src).toContain("event: 'refresh.gc_complete'")
+  })
+
+  // ── Observability (P5) ────────────────────────────────────────────────
+
+  it('uses structured event names in logs', () => {
+    const src = readSource()
+    expect(src).toContain("event: 'refresh.lock_acquired'")
+    expect(src).toContain("event: 'refresh.lock_denied'")
+    expect(src).toContain("event: 'refresh.complete'")
+    expect(src).toContain("event: 'refresh.exception'")
+    expect(src).toContain("event: 'refresh.activated'")
   })
 
   it('exports getActiveSnapshotId for route handlers', () => {
@@ -251,10 +416,10 @@ describe('anti-regression: refresh-provider-sitemaps module (v2 atomic)', () => 
 })
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 3. ROUTE — sitemap-providers snapshot-aware fast path
+// 4. ROUTE — sitemap-providers (hardened)
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-describe('anti-regression: sitemap-providers route (v2 snapshot-aware)', () => {
+describe('anti-regression: sitemap-providers route (hardened)', () => {
   function readSource(): string {
     const fs = require('fs')
     const path = require('path')
@@ -288,18 +453,32 @@ describe('anti-regression: sitemap-providers route (v2 snapshot-aware)', () => {
     expect(src).toContain('activeSnapshotId')
   })
 
+  it('orders active snapshot query by snapshot_id DESC (deterministic pick)', () => {
+    const src = readSource()
+    expect(src).toContain("order('snapshot_id', { ascending: false })")
+  })
+
   it('queries provider_sitemap_urls with snapshot_id filter', () => {
     const src = readSource()
     expect(src).toContain("eq('snapshot_id', activeSnapshotId)")
     expect(src).toContain("eq('batch_id', batchIndex)")
   })
 
-  it('has freshness check with warning and critical thresholds', () => {
+  it('has freshness check with configurable thresholds', () => {
     const src = readSource()
     expect(src).toContain('FRESHNESS_WARNING_MS')
     expect(src).toContain('FRESHNESS_CRITICAL_MS')
     expect(src).toContain('critically stale')
     expect(src).toContain('approaching staleness')
+    // Configurable via env
+    expect(src).toContain('SITEMAP_FRESHNESS_WARNING_HOURS')
+    expect(src).toContain('SITEMAP_FRESHNESS_CRITICAL_HOURS')
+  })
+
+  it('logs specifically when no active snapshot found', () => {
+    const src = readSource()
+    expect(src).toContain('no active snapshot found')
+    expect(src).toContain("event: 'sitemap.no_active_snapshot'")
   })
 
   it('has fast path with timing observability', () => {
@@ -352,10 +531,10 @@ describe('anti-regression: sitemap-providers route (v2 snapshot-aware)', () => {
 })
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 4. ROUTE — sitemap-index snapshot-aware batch count
+// 5. ROUTE — sitemap-index snapshot-aware batch count
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-describe('anti-regression: sitemap-index route (v2 snapshot-aware)', () => {
+describe('anti-regression: sitemap-index route (snapshot-aware)', () => {
   function readSource(): string {
     const fs = require('fs')
     const path = require('path')

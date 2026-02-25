@@ -122,4 +122,8 @@ Le CI **échoue** (exit code 1) si au moins un de ces critères est vrai :
 | Refresh atomique via snapshot_id (Option 1) | Zéro-downtime pendant le refresh. Les anciennes données restent servies jusqu'à l'activation du nouveau snapshot. Pas de DDL nécessaire (compatible Supabase PostgREST). |
 | Kill-switch `SITEMAP_PROVIDERS_FORCE_LEGACY=true` | Permet de forcer le legacy fallback sans deploy de code. Variable Vercel env. |
 | Validation post-refresh avant activation | Le snapshot passe par building → validating → active. Insert ratio < 90% ou resolved ratio < 50% = snapshot rejeté (failed). |
-| Concurrency lock via status=building | Un seul refresh à la fois. Les snapshots zombie (> 30 min en building) sont nettoyés automatiquement. |
+| Concurrency lock DB-level (unique partial index) | `idx_snapshots_one_building` : au max 1 row status='building'. INSERT échoue avec 23505 si lock déjà pris. Ferme la race check-then-act. |
+| Invariant DB : 1 seul active | `idx_snapshots_one_active` : unique partial index empêche 2 snapshots actifs. Le pointer flip passe par RPC transactionnel. |
+| Pointer flip atomique via RPC | `activate_sitemap_snapshot()` : supersede + activate dans une seule transaction PostgreSQL. Pas de window avec 0 active. |
+| UNIQUE(snapshot_id, provider_id) | Remplace UNIQUE(provider_id) qui bloquait le multi-snapshot. Chaque provider unique par snapshot. |
+| GC avec rétention : active + 1 superseded | Le dernier snapshot superseded est conservé pour rollback. Les plus anciens sont GC. |
