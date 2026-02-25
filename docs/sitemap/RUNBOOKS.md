@@ -385,3 +385,100 @@ node tools/audit-sitemaps.mjs --all --strict --json
 
 ### Escalade
 P3 si drop ratio < 15%. P2 si > 15% (perte significative de couverture SEO providers).
+
+---
+
+## RB-07: Snapshot refresh — Échec ou données corrompues
+
+### Symptômes
+- Les logs montrent `Refresh failed` ou `Validation failed`
+- La table `sitemap_snapshots` montre le dernier snapshot en `failed` ou `building` (zombie)
+- Le fast path sert des données périmées (snapshot stale > 7 jours)
+- Les logs route montrent `critically stale` ou `approaching staleness`
+
+### Diagnostic
+
+```bash
+# 1. Vérifier l'état des snapshots
+# Supabase Dashboard → Table editor → sitemap_snapshots → ORDER BY snapshot_id DESC
+
+# 2. Vérifier le snapshot actif
+# SELECT * FROM sitemap_snapshots WHERE status = 'active'
+
+# 3. Vérifier les logs de refresh
+# Chercher dans Vercel Functions les logs avec "Refresh complete" ou "Refresh failed"
+
+# 4. Vérifier s'il y a un zombie (building depuis > 30 min)
+# SELECT * FROM sitemap_snapshots WHERE status = 'building'
+
+# 5. Tester le fast path
+curl -s "https://servicesartisans.fr/sitemap/providers-0.xml" | head -5
+# Vérifier dans les logs: path = 'fast' ou 'legacy'
+```
+
+### Hypothèses
+1. **Refresh échoué** → la validation post-refresh a rejeté le nouveau snapshot (ratio d'insert < 90%, ratio résolu < 50%, delta batch count > 50%)
+2. **Zombie snapshot** → un refresh précédent a crashé, laissant un snapshot en `building` qui bloque les suivants. Le cleanup automatique se fait après 30 min.
+3. **Concurrence bloquée** → deux refreshes tentés simultanément, le second est rejeté
+4. **Supabase down** → les requêtes INSERT échouent pendant le refresh
+5. **Données source corrompues** → les providers ont changé massivement (nouvelle migration de spécialités)
+
+### Actions
+1. **Si snapshot zombie (building > 30 min)** : le prochain refresh nettoiera automatiquement. Sinon, manuellement :
+   ```sql
+   -- Marquer le zombie comme failed
+   UPDATE sitemap_snapshots SET status = 'failed', error_message = 'Manual cleanup'
+   WHERE status = 'building';
+   -- Nettoyer les rows orphelines
+   DELETE FROM provider_sitemap_urls
+   WHERE snapshot_id NOT IN (SELECT snapshot_id FROM sitemap_snapshots WHERE status = 'active');
+   ```
+2. **Si validation échouée** : examiner `validation_errors` dans le snapshot record. Corriger la cause (mappings manquants, données corrompues) et relancer.
+3. **Si données stale** : relancer le refresh manuellement :
+   ```bash
+   npx tsx src/lib/seo/refresh-provider-sitemaps.ts
+   ```
+4. **Si le fast path doit être désactivé en urgence** (kill-switch) :
+   ```bash
+   # Dans Vercel Environment Variables
+   SITEMAP_PROVIDERS_FORCE_LEGACY=true
+   # Redéployer
+   ```
+
+### Validation post-fix
+```bash
+# Vérifier que le snapshot est actif
+# SELECT status, activated_at, resolved_urls, batch_count FROM sitemap_snapshots WHERE status = 'active'
+
+# Vérifier le fast path
+curl -s "https://servicesartisans.fr/sitemap/providers-0.xml" | grep -c '<url>'
+# Doit être > 0
+
+# Audit rapide
+node tools/audit-sitemaps.mjs --sample 10 --strict --json
+```
+
+### Escalade
+P3 si le legacy fallback fonctionne correctement. P2 si les sitemaps providers sont vides ou très lents (> 5s).
+
+---
+
+## RB-08: Kill-switch activé — forcer le retour au fast path
+
+### Symptômes
+- Les logs montrent `kill-switch active (SITEMAP_PROVIDERS_FORCE_LEGACY=true)` sur toutes les requêtes
+- Performance dégradée (latence legacy > 2s vs fast path < 500ms)
+
+### Actions
+1. Vérifier que le problème qui a motivé le kill-switch est résolu
+2. Relancer un refresh si nécessaire : `npx tsx src/lib/seo/refresh-provider-sitemaps.ts`
+3. Retirer la variable d'environnement :
+   ```bash
+   # Vercel Dashboard → Settings → Environment Variables
+   # Supprimer SITEMAP_PROVIDERS_FORCE_LEGACY
+   # Redéployer
+   ```
+4. Vérifier dans les logs que `path: 'fast'` revient
+
+### Escalade
+P3 — le legacy fallback est fonctionnel, seule la performance est impactée.

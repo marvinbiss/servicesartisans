@@ -252,6 +252,22 @@ function validateSourceConsistency() {
       pass: src.includes("from '@/lib/seo/provider-url-resolver'"),
       label: 'sitemap-providers imports from provider-url-resolver',
     })
+    checks.push({
+      pass: src.includes('sitemap_snapshots') && src.includes("eq('status', 'active')"),
+      label: 'sitemap-providers reads active snapshot from metadata',
+    })
+    checks.push({
+      pass: src.includes('SITEMAP_PROVIDERS_FORCE_LEGACY'),
+      label: 'sitemap-providers has kill-switch env var',
+    })
+    checks.push({
+      pass: src.includes('FRESHNESS_WARNING_MS') || src.includes('FRESHNESS_CRITICAL_MS'),
+      label: 'sitemap-providers has freshness check',
+    })
+    checks.push({
+      pass: src.includes("eq('snapshot_id'"),
+      label: 'sitemap-providers filters by snapshot_id',
+    })
   } else {
     checks.push({ pass: false, label: 'sitemap-providers/route.ts exists', detail: 'File not found' })
   }
@@ -282,6 +298,10 @@ function validateSourceConsistency() {
     checks.push({
       pass: src.includes('try') && src.includes('catch'),
       label: 'sitemap-index has try/catch for DB resilience',
+    })
+    checks.push({
+      pass: src.includes('sitemap_snapshots'),
+      label: 'sitemap-index reads from snapshot metadata',
     })
   } else {
     checks.push({ pass: false, label: 'sitemap-index/route.ts exists', detail: 'File not found' })

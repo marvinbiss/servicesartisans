@@ -26,6 +26,8 @@ Garantir que Google et tous les moteurs de recherche peuvent **toujours** crawle
 | SLO-10 | **XML Size Limit** — taille non compressée par sitemap | < 50 MB | > 40 MB | > 50 MB | sizeBytes check |
 | SLO-11 | **Index ↔ Children Coherence** — chaque `<loc>` de l'index résolvable | 100% | 1 enfant 404 | 1 enfant 404 | cross-check index vs children |
 | SLO-12 | **Sitemap Count Stability** — delta sitemaps entre runs | variation < 10% | variation > 10% | variation > 25% | delta comparison |
+| SLO-13 | **Snapshot Freshness** — âge du snapshot actif provider_sitemap_urls | < 7 jours | > 7 jours | > 14 jours | sitemap_snapshots.activated_at |
+| SLO-14 | **Snapshot Refresh Success** — refreshes réussis sur les 7 derniers jours | > 0 refresh OK | 0 réussi + 1 échec | 0 réussi + 3 échecs | sitemap_snapshots.status history |
 
 ---
 
@@ -117,3 +119,7 @@ Le CI **échoue** (exit code 1) si au moins un de ces critères est vrai :
 | Pas de monitoring temps-réel (APM) sur les routes sitemap | Les sitemaps sont CDN-cached (1h). Le monitoring nightly --all suffit pour la fréquence de crawl Google (~1/jour). |
 | Taille XML max soft-limit à 50 MB | Google accepte jusqu'à 50 MB non compressé. Au-delà, on split. |
 | Pas d'alerte sur le nombre total d'URLs | Le nombre varie naturellement avec les providers. Seul le delta anormal est alerté. |
+| Refresh atomique via snapshot_id (Option 1) | Zéro-downtime pendant le refresh. Les anciennes données restent servies jusqu'à l'activation du nouveau snapshot. Pas de DDL nécessaire (compatible Supabase PostgREST). |
+| Kill-switch `SITEMAP_PROVIDERS_FORCE_LEGACY=true` | Permet de forcer le legacy fallback sans deploy de code. Variable Vercel env. |
+| Validation post-refresh avant activation | Le snapshot passe par building → validating → active. Insert ratio < 90% ou resolved ratio < 50% = snapshot rejeté (failed). |
+| Concurrency lock via status=building | Un seul refresh à la fois. Les snapshots zombie (> 30 min en building) sont nettoyés automatiquement. |

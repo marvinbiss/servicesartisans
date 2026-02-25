@@ -8,18 +8,22 @@ import { logger } from '@/lib/logger'
  * Dynamic API route for provider sitemaps.
  * Serves /sitemap/providers-{id}.xml via next.config.js rewrite.
  *
- * Two code paths:
- *   1. FAST PATH: reads from provider_sitemap_urls table (pre-computed).
+ * Three code paths (evaluated in order):
+ *   0. KILL-SWITCH: if SITEMAP_PROVIDERS_FORCE_LEGACY=true, skip fast path entirely.
+ *   1. FAST PATH: reads from provider_sitemap_urls table (pre-computed, snapshot-aware).
  *      Single indexed query, no pagination, no slug resolution. p95 < 500ms.
- *   2. LEGACY FALLBACK: if provider_sitemap_urls is empty (table not yet
- *      populated), falls back to the original paginated query + runtime
- *      slug resolution. This ensures zero-downtime during migration.
+ *      Includes freshness check — if active snapshot is stale, log warning.
+ *   2. LEGACY FALLBACK: if provider_sitemap_urls is empty or no active snapshot,
+ *      falls back to the original paginated query + runtime slug resolution.
  *
- * The fast path is used automatically once the refresh script has been run.
+ * The fast path is used automatically once the refresh script has been run
+ * and an active snapshot exists in the sitemap_snapshots table.
  */
 const sitemapLog = logger.child({ component: 'sitemap-providers' })
 
 const LEGACY_PAGE_SIZE = 1000
+const FRESHNESS_WARNING_MS = 7 * 24 * 60 * 60 * 1000 // 7 days
+const FRESHNESS_CRITICAL_MS = 14 * 24 * 60 * 60 * 1000 // 14 days
 
 export async function GET(request: NextRequest) {
   const startMs = Date.now()
@@ -32,60 +36,97 @@ export async function GET(request: NextRequest) {
 
   const batchIndex = parseInt(id, 10)
 
+  // ── Kill-switch: force legacy fallback via env var ────────────────────
+  const forceLegacy = process.env.SITEMAP_PROVIDERS_FORCE_LEGACY === 'true'
+
   try {
     const { createAdminClient } = await import('@/lib/supabase/admin')
     const supabase = createAdminClient()
 
-    // ── Try fast path first ─────────────────────────────────────────────
-    const tDbStart = Date.now()
-    const { data: precomputed, error: precomputedError } = await supabase
-      .from('provider_sitemap_urls')
-      .select('url, lastmod')
-      .eq('batch_id', batchIndex)
-      .order('id', { ascending: true })
+    // ── Try fast path (unless kill-switch is active) ───────────────────
+    if (!forceLegacy) {
+      // Get active snapshot
+      const { data: activeSnapshot, error: snapshotError } = await supabase
+        .from('sitemap_snapshots')
+        .select('snapshot_id, activated_at')
+        .eq('status', 'active')
+        .limit(1)
 
-    const tDb = Date.now() - tDbStart
+      if (!snapshotError && activeSnapshot && activeSnapshot.length > 0) {
+        const activeSnapshotId = activeSnapshot[0].snapshot_id
 
-    if (!precomputedError && precomputed && precomputed.length > 0) {
-      // Fast path: pre-computed URLs available
-      const tXmlStart = Date.now()
-      const urls = precomputed.map(row => {
-        const loc = escapeXmlLoc(row.url)
-        const lastmod = row.lastmod ? row.lastmod : undefined
-        return `  <url><loc>${loc}</loc>${lastmod ? `<lastmod>${lastmod}</lastmod>` : ''}</url>`
-      })
+        // Freshness check
+        const activatedAt = activeSnapshot[0].activated_at
+        if (activatedAt) {
+          const ageMs = Date.now() - new Date(activatedAt).getTime()
+          if (ageMs > FRESHNESS_CRITICAL_MS) {
+            sitemapLog.error('sitemap-providers: active snapshot is critically stale', {
+              snapshotId: String(activeSnapshotId),
+              ageHours: String(Math.round(ageMs / 3600000)),
+              threshold: 'critical',
+            })
+          } else if (ageMs > FRESHNESS_WARNING_MS) {
+            sitemapLog.warn('sitemap-providers: active snapshot approaching staleness', {
+              snapshotId: String(activeSnapshotId),
+              ageHours: String(Math.round(ageMs / 3600000)),
+              threshold: 'warning',
+            })
+          }
+        }
 
-      const xml = [
-        '<?xml version="1.0" encoding="UTF-8"?>',
-        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-        ...urls,
-        '</urlset>',
-      ].join('\n')
-      const tXml = Date.now() - tXmlStart
+        // Fast path: read from pre-computed table with snapshot filter
+        const tDbStart = Date.now()
+        const { data: precomputed, error: precomputedError } = await supabase
+          .from('provider_sitemap_urls')
+          .select('url, lastmod')
+          .eq('snapshot_id', activeSnapshotId)
+          .eq('batch_id', batchIndex)
+          .order('id', { ascending: true })
 
-      const durationMs = Date.now() - startMs
-      sitemapLog.info('sitemap-providers generated (fast path)', {
-        batchIndex: String(batchIndex),
-        urlsGenerated: String(urls.length),
-        tDbMs: String(tDb),
-        tXmlMs: String(tXml),
-        durationMs: String(durationMs),
-        path: 'fast',
-      })
+        const tDb = Date.now() - tDbStart
 
-      return new NextResponse(xml, {
-        headers: {
-          'Content-Type': 'application/xml; charset=utf-8',
-          'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
-        },
-      })
+        if (!precomputedError && precomputed && precomputed.length > 0) {
+          // Fast path: pre-computed URLs available
+          const tXmlStart = Date.now()
+          const urls = precomputed.map(row => {
+            const loc = escapeXmlLoc(row.url)
+            const lastmod = row.lastmod ? row.lastmod : undefined
+            return `  <url><loc>${loc}</loc>${lastmod ? `<lastmod>${lastmod}</lastmod>` : ''}</url>`
+          })
+
+          const xml = [
+            '<?xml version="1.0" encoding="UTF-8"?>',
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+            ...urls,
+            '</urlset>',
+          ].join('\n')
+          const tXml = Date.now() - tXmlStart
+
+          const durationMs = Date.now() - startMs
+          sitemapLog.info('sitemap-providers generated (fast path)', {
+            batchIndex: String(batchIndex),
+            urlsGenerated: String(urls.length),
+            snapshotId: String(activeSnapshotId),
+            tDbMs: String(tDb),
+            tXmlMs: String(tXml),
+            durationMs: String(durationMs),
+            path: 'fast',
+          })
+
+          return new NextResponse(xml, {
+            headers: {
+              'Content-Type': 'application/xml; charset=utf-8',
+              'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
+            },
+          })
+        }
+      }
     }
 
     // ── Legacy fallback: paginated query + runtime resolution ────────────
-    sitemapLog.warn('sitemap-providers using legacy fallback (provider_sitemap_urls empty or error)', {
+    sitemapLog.warn('sitemap-providers using legacy fallback', {
       batchIndex: String(batchIndex),
-      precomputedError: precomputedError?.message || 'none',
-      precomputedCount: String(precomputed?.length ?? 0),
+      reason: forceLegacy ? 'kill-switch active (SITEMAP_PROVIDERS_FORCE_LEGACY=true)' : 'no active snapshot or empty batch',
     })
 
     const offset = batchIndex * PROVIDER_BATCH_SIZE
