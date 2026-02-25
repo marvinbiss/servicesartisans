@@ -105,15 +105,68 @@ async function getActiveSnapshotId(supabase: SupabaseClient): Promise<number | n
   return data[0].snapshot_id
 }
 
-async function allocateSnapshotId(supabase: SupabaseClient): Promise<number> {
-  const { data, error } = await supabase
-    .from('sitemap_snapshots')
-    .select('snapshot_id')
-    .order('snapshot_id', { ascending: false })
-    .limit(1)
+/**
+ * Allocate a new snapshot ID via RPC (INSERT RETURNING, sequence-backed).
+ * This atomically creates the snapshot record AND acquires the DB-level lock
+ * (unique partial index on status='building'). No TOCTOU.
+ *
+ * Falls back to app-level INSERT if the RPC is not available.
+ */
+async function allocateSnapshotId(
+  supabase: SupabaseClient,
+  logger: RefreshLogger,
+): Promise<number> {
+  // Try RPC first (sequence-backed, no TOCTOU)
+  const { data: rpcId, error: rpcError } = await supabase
+    .rpc('allocate_snapshot_id')
 
-  if (error) throw new Error(`Failed to query max snapshot_id: ${error.message}`)
-  return (data && data.length > 0) ? data[0].snapshot_id + 1 : 1
+  if (!rpcError && typeof rpcId === 'number') {
+    logger.info('Snapshot ID allocated via RPC (sequence-backed)', {
+      snapshotId: String(rpcId),
+      event: 'refresh.snapshot_allocated_rpc',
+    })
+    return rpcId
+  }
+
+  // RPC not available — the INSERT below will still acquire the lock
+  // via the unique partial index, but snapshot_id uses the sequence default
+  logger.warn('allocate_snapshot_id RPC not available, falling back to direct INSERT', {
+    code: rpcError?.code || 'unknown',
+    message: rpcError?.message || 'unknown',
+    event: 'refresh.allocate_rpc_unavailable',
+  })
+
+  const { data: inserted, error: insertError } = await supabase
+    .from('sitemap_snapshots')
+    .insert({ status: 'building' })
+    .select('snapshot_id')
+    .single()
+
+  if (insertError) {
+    if (insertError.code === PG_UNIQUE_VIOLATION) {
+      throw new ConcurrencyLockError(insertError.code)
+    }
+    throw new Error(`Failed to allocate snapshot ID: ${insertError.message}`)
+  }
+
+  if (!inserted || typeof inserted.snapshot_id !== 'number') {
+    throw new Error('Failed to allocate snapshot ID: no snapshot_id returned')
+  }
+
+  logger.info('Snapshot ID allocated via direct INSERT (sequence default)', {
+    snapshotId: String(inserted.snapshot_id),
+    event: 'refresh.snapshot_allocated_insert',
+  })
+  return inserted.snapshot_id
+}
+
+class ConcurrencyLockError extends Error {
+  code: string
+  constructor(code: string) {
+    super('Concurrent refresh blocked — another refresh is building (DB-level lock)')
+    this.name = 'ConcurrencyLockError'
+    this.code = code
+  }
 }
 
 async function cleanupZombieSnapshots(
@@ -193,35 +246,21 @@ export async function refreshProviderSitemaps(params: {
     // ── Step 1: Cleanup zombie snapshots ──────────────────────────────────
     await cleanupZombieSnapshots(supabase, logger)
 
-    // ── Step 2: Allocate new snapshot_id ─────────────────────────────────
-    snapshotId = await allocateSnapshotId(supabase)
-
-    // ── Step 3: Acquire DB-level lock via INSERT ────────────────────────
-    // The unique partial index idx_snapshots_one_building ensures at most
-    // 1 row with status='building'. If another refresh is already running,
-    // this INSERT fails with 23505 (unique_violation). No check-then-act race.
-    const { error: createError } = await supabase
-      .from('sitemap_snapshots')
-      .insert({
-        snapshot_id: snapshotId,
-        status: 'building',
-      })
-
-    if (createError) {
-      if (createError.code === PG_UNIQUE_VIOLATION) {
-        logger.error('Concurrent refresh blocked — DB lock active (unique constraint on building)', {
-          snapshotId: String(snapshotId),
-          code: createError.code,
+    // ── Step 2+3: Allocate snapshot ID + acquire DB-level lock ──────────
+    // allocateSnapshotId() does INSERT with status='building' via RPC or
+    // direct INSERT. Both use the sequence for TOCTOU-free ID allocation
+    // and the unique partial index for concurrency lock.
+    try {
+      snapshotId = await allocateSnapshotId(supabase, logger)
+    } catch (err) {
+      if (err instanceof ConcurrencyLockError) {
+        logger.error('Concurrent refresh blocked — DB lock active', {
+          code: err.code,
           event: 'refresh.lock_denied',
         })
-        return emptyResult(snapshotId, 'Concurrent refresh blocked — another refresh is building (DB-level lock)')
+        return emptyResult(0, err.message)
       }
-      logger.error('Failed to create snapshot record', {
-        code: createError.code,
-        message: createError.message,
-        event: 'refresh.snapshot_create_failed',
-      })
-      return emptyResult(snapshotId, `Failed to create snapshot: ${createError.message}`)
+      throw err
     }
 
     logger.info('Lock acquired — snapshot allocated', {
@@ -543,38 +582,20 @@ export async function refreshProviderSitemaps(params: {
       event: 'refresh.activation_start',
     })
 
-    // Try RPC function first (atomic, single transaction)
-    const { data: rpcResult, error: rpcError } = await supabase
+    // Atomic pointer flip via RPC — no fallback, hard-fail if unavailable
+    const { error: rpcError } = await supabase
       .rpc('activate_sitemap_snapshot', { p_new_snapshot_id: snapshotId })
 
     if (rpcError) {
-      // RPC not available (migration 347 not applied?) — fallback to two UPDATEs
-      logger.warn('RPC activate_sitemap_snapshot failed, falling back to two UPDATEs', {
-        code: rpcError.code,
-        message: rpcError.message,
-        event: 'refresh.rpc_fallback',
-      })
-
-      // Supersede the old active snapshot first (order matters: unique partial index)
-      if (activeSnapshotId) {
-        await supabase
-          .from('sitemap_snapshots')
-          .update({ status: 'superseded', superseded_at: new Date().toISOString() })
-          .eq('snapshot_id', activeSnapshotId)
-      }
-
-      // Activate the new snapshot
-      await supabase
-        .from('sitemap_snapshots')
-        .update({ status: 'active', activated_at: new Date().toISOString() })
-        .eq('snapshot_id', snapshotId)
-    } else if (rpcResult === false) {
-      // RPC returned false — snapshot wasn't in 'validating' state
-      logger.error('RPC activate_sitemap_snapshot returned false — snapshot not in validating state', {
+      // RPC failed — hard fail. No non-atomic fallback.
+      // The old active snapshot is preserved (RPC rolls back on error).
+      const msg = `Atomic activation failed (RPC error): ${rpcError.message}`
+      logger.error(msg, {
         snapshotId: String(snapshotId),
-        event: 'refresh.activation_failed',
+        code: rpcError.code,
+        event: 'refresh.activation_rpc_failed',
       })
-      await markSnapshotFailed(supabase, snapshotId, 'Activation failed — snapshot not in validating state')
+      await markSnapshotFailed(supabase, snapshotId, msg)
       return {
         success: false,
         snapshotId,
@@ -586,7 +607,7 @@ export async function refreshProviderSitemaps(params: {
         durationMs: Date.now() - startMs,
         validationChecks: checks,
         validationErrors,
-        error: 'Activation failed — snapshot not in validating state',
+        error: msg,
       }
     }
 
@@ -728,6 +749,58 @@ async function safeGarbageCollect(
  * Exported for use by route handlers.
  */
 export { getActiveSnapshotId }
+
+/**
+ * Force-activate a snapshot for ops recovery.
+ * Calls the force_activate_sitemap_snapshot RPC which:
+ * - Validates source states (superseded, failed, validating)
+ * - Is idempotent (no-op if already active)
+ * - Logs the reason for audit trail
+ * - Is atomic (single transaction)
+ */
+export async function forceActivateSnapshot(params: {
+  supabase: SupabaseClient
+  snapshotId: number
+  reason: string
+  log?: RefreshLogger
+}): Promise<{ success: boolean; error?: string }> {
+  const { supabase, snapshotId, reason, log } = params
+  const noop = () => {}
+  const logger = log || { info: noop, warn: noop, error: noop }
+
+  if (!reason || reason.trim().length === 0) {
+    return { success: false, error: 'Reason is required for force-activate (audit trail)' }
+  }
+
+  logger.info('Force-activate requested', {
+    snapshotId: String(snapshotId),
+    reason,
+    event: 'refresh.force_activate_start',
+  })
+
+  const { error: rpcError } = await supabase
+    .rpc('force_activate_sitemap_snapshot', {
+      p_snapshot_id: snapshotId,
+      p_reason: reason,
+    })
+
+  if (rpcError) {
+    logger.error('Force-activate failed', {
+      snapshotId: String(snapshotId),
+      code: rpcError.code,
+      message: rpcError.message,
+      event: 'refresh.force_activate_failed',
+    })
+    return { success: false, error: rpcError.message }
+  }
+
+  logger.info('Force-activate succeeded', {
+    snapshotId: String(snapshotId),
+    reason,
+    event: 'refresh.force_activate_success',
+  })
+  return { success: true }
+}
 
 // ── CLI entrypoint ──────────────────────────────────────────────────────────
 

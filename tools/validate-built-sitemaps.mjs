@@ -302,6 +302,18 @@ function validateSourceConsistency() {
       label: 'refresh uses RPC for atomic pointer flip',
     })
     checks.push({
+      pass: !src.includes('rpc_fallback'),
+      label: 'refresh has NO non-atomic fallback (strict RPC)',
+    })
+    checks.push({
+      pass: src.includes("rpc('allocate_snapshot_id')"),
+      label: 'refresh allocates snapshot ID via RPC (sequence-backed)',
+    })
+    checks.push({
+      pass: src.includes('forceActivateSnapshot'),
+      label: 'refresh exports forceActivateSnapshot for ops recovery',
+    })
+    checks.push({
       pass: src.includes('safeGarbageCollect'),
       label: 'refresh has safe GC with retention policy',
     })
@@ -352,6 +364,27 @@ function validateSourceConsistency() {
     })
   } else {
     checks.push({ pass: false, label: 'migration 345 (provider_sitemap_system) exists' })
+  }
+
+  // ── Migration 346 ──
+  const migration346Path = path.resolve('supabase/migrations/346_snapshot_identity.sql')
+  if (fs.existsSync(migration346Path)) {
+    const sql = fs.readFileSync(migration346Path, 'utf-8')
+    checks.push({ pass: true, label: 'migration 346 (snapshot_identity) exists' })
+    checks.push({
+      pass: sql.includes('CREATE SEQUENCE') && sql.includes('sitemap_snapshots_snapshot_id_seq'),
+      label: 'migration 346 creates sequence for snapshot_id',
+    })
+    checks.push({
+      pass: sql.includes('allocate_snapshot_id') && sql.includes('RETURNING snapshot_id'),
+      label: 'migration 346 creates allocate_snapshot_id RPC',
+    })
+    checks.push({
+      pass: sql.includes('force_activate_sitemap_snapshot') && sql.includes('p_reason TEXT'),
+      label: 'migration 346 creates force_activate RPC with reason param',
+    })
+  } else {
+    checks.push({ pass: false, label: 'migration 346 (snapshot_identity) exists' })
   }
 
   // ── index route ──

@@ -189,6 +189,104 @@ describe('migration 345: DB-level invariants', () => {
 })
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 1b. MIGRATION 346 — sequence-backed ID + force-activate RPC
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+describe('migration 346: snapshot_identity', () => {
+  function readMigration346(): string {
+    const fs = require('fs')
+    const path = require('path')
+    return fs.readFileSync(path.resolve(process.cwd(), 'supabase/migrations/346_snapshot_identity.sql'), 'utf-8')
+  }
+
+  it('creates a sequence for snapshot_id (eliminates TOCTOU)', () => {
+    const sql = readMigration346()
+    expect(sql).toContain('CREATE SEQUENCE')
+    expect(sql).toContain('sitemap_snapshots_snapshot_id_seq')
+    expect(sql).toContain('nextval')
+  })
+
+  it('creates allocate_snapshot_id RPC (INSERT RETURNING)', () => {
+    const sql = readMigration346()
+    expect(sql).toContain('CREATE OR REPLACE FUNCTION allocate_snapshot_id()')
+    expect(sql).toContain('RETURNS INTEGER')
+    expect(sql).toContain('RETURNING snapshot_id INTO new_id')
+    expect(sql).toContain("INSERT INTO sitemap_snapshots")
+    expect(sql).toContain("'building'")
+  })
+
+  it('allocate_snapshot_id uses SECURITY DEFINER', () => {
+    const sql = readMigration346()
+    // Find the allocate function block
+    const funcStart = sql.indexOf('CREATE OR REPLACE FUNCTION allocate_snapshot_id()')
+    const funcEnd = sql.indexOf('$$;', funcStart)
+    const funcBlock = sql.substring(funcStart, funcEnd)
+    expect(funcBlock).toContain('SECURITY DEFINER')
+  })
+
+  it('creates force_activate_sitemap_snapshot RPC', () => {
+    const sql = readMigration346()
+    expect(sql).toContain('CREATE OR REPLACE FUNCTION force_activate_sitemap_snapshot')
+    expect(sql).toContain('p_snapshot_id INTEGER')
+    expect(sql).toContain('p_reason TEXT')
+    expect(sql).toContain('RETURNS BOOLEAN')
+  })
+
+  it('force_activate validates reason is provided', () => {
+    const sql = readMigration346()
+    expect(sql).toContain('reason is required for audit trail')
+    expect(sql).toContain('RAISE EXCEPTION')
+  })
+
+  it('force_activate checks snapshot existence', () => {
+    const sql = readMigration346()
+    expect(sql).toContain('does not exist')
+  })
+
+  it('force_activate is idempotent (no-op if already active)', () => {
+    const sql = readMigration346()
+    expect(sql).toContain("IF v_status = 'active' THEN")
+    expect(sql).toContain('RETURN TRUE')
+  })
+
+  it('force_activate only allows from safe source states', () => {
+    const sql = readMigration346()
+    expect(sql).toContain("'superseded'")
+    expect(sql).toContain("'failed'")
+    expect(sql).toContain("'validating'")
+    expect(sql).toContain('only superseded, failed, or validating allowed')
+  })
+
+  it('force_activate records reason in error_message (audit trail)', () => {
+    const sql = readMigration346()
+    expect(sql).toContain("'force-activate: '")
+    expect(sql).toContain('error_message')
+  })
+
+  it('force_activate performs atomic supersede + activate', () => {
+    const sql = readMigration346()
+    // Within the function body, supersede comes before activate
+    const funcStart = sql.indexOf('force_activate_sitemap_snapshot')
+    const supersedeIdx = sql.indexOf("SET status = 'superseded'", funcStart)
+    const activateIdx = sql.indexOf("SET status = 'active'", supersedeIdx + 1)
+    expect(supersedeIdx).toBeGreaterThan(-1)
+    expect(activateIdx).toBeGreaterThan(-1)
+    expect(supersedeIdx).toBeLessThan(activateIdx)
+  })
+
+  it('force_activate uses SECURITY DEFINER', () => {
+    const sql = readMigration346()
+    // The force_activate function declaration must include SECURITY DEFINER
+    // Find the CREATE FUNCTION line and check the signature block up to AS $$
+    const funcStart = sql.indexOf('CREATE OR REPLACE FUNCTION force_activate_sitemap_snapshot')
+    expect(funcStart).toBeGreaterThan(-1)
+    const asIdx = sql.indexOf('AS $$', funcStart)
+    const funcSignature = sql.substring(funcStart, asIdx)
+    expect(funcSignature).toContain('SECURITY DEFINER')
+  })
+})
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // 2. REFRESH SCRIPT — atomic snapshot lifecycle (hardened)
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -282,11 +380,48 @@ describe('anti-regression: refresh-provider-sitemaps (hardened)', () => {
     expect(src).toContain('p_new_snapshot_id')
   })
 
-  it('has fallback to two UPDATEs if RPC unavailable', () => {
+  it('has NO non-atomic fallback for pointer flip (hard-fail only)', () => {
     const src = readSource()
-    expect(src).toContain('rpc_fallback')
-    expect(src).toContain("status: 'superseded'")
-    expect(src).toContain("status: 'active'")
+    // The old fallback pattern was: if rpcError, do 2 UPDATEs separately
+    // This is GONE — RPC failure = hard fail, period.
+    expect(src).not.toContain('rpc_fallback')
+    expect(src).toContain('activation_rpc_failed')
+    // The word 'Atomic activation failed' should appear
+    expect(src).toContain('Atomic activation failed')
+  })
+
+  it('allocates snapshot ID via RPC (sequence-backed, no TOCTOU)', () => {
+    const src = readSource()
+    expect(src).toContain("rpc('allocate_snapshot_id')")
+    expect(src).toContain('snapshot_allocated_rpc')
+    // Should NOT have the old max()+1 pattern
+    expect(src).not.toMatch(/\.select\('snapshot_id'\)[\s\S]*?data\[0\]\.snapshot_id\s*\+\s*1/)
+  })
+
+  it('uses ConcurrencyLockError for structured lock detection', () => {
+    const src = readSource()
+    expect(src).toContain('ConcurrencyLockError')
+    expect(src).toContain('instanceof ConcurrencyLockError')
+  })
+
+  it('exports forceActivateSnapshot for ops recovery', () => {
+    const src = readSource()
+    expect(src).toContain('export async function forceActivateSnapshot')
+    expect(src).toContain("rpc('force_activate_sitemap_snapshot'")
+    expect(src).toContain('p_snapshot_id')
+    expect(src).toContain('p_reason')
+  })
+
+  it('forceActivateSnapshot requires reason (audit trail)', () => {
+    const src = readSource()
+    expect(src).toContain('Reason is required for force-activate')
+  })
+
+  it('forceActivateSnapshot logs structured events', () => {
+    const src = readSource()
+    expect(src).toContain("event: 'refresh.force_activate_start'")
+    expect(src).toContain("event: 'refresh.force_activate_success'")
+    expect(src).toContain("event: 'refresh.force_activate_failed'")
   })
 
   // ── Snapshot lifecycle ────────────────────────────────────────────────

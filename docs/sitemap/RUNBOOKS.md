@@ -484,17 +484,20 @@ ORDER BY snapshot_id DESC;
    SITEMAP_PROVIDERS_FORCE_LEGACY=true
    # Redéployer
    ```
-5. **Si rollback nécessaire** : le GC conserve le dernier snapshot superseded. Pour rollback :
+5. **Si rollback nécessaire** : le GC conserve le dernier snapshot superseded. Pour rollback, utiliser la RPC `force_activate_sitemap_snapshot` (atomique, auditée, idempotente) :
    ```sql
    -- Identifier le dernier superseded
-   SELECT snapshot_id FROM sitemap_snapshots WHERE status = 'superseded'
+   SELECT snapshot_id, activated_at, resolved_urls, batch_count
+   FROM sitemap_snapshots WHERE status = 'superseded'
    ORDER BY snapshot_id DESC LIMIT 1;
-   -- Rollback via la RPC (atomique)
-   SELECT activate_sitemap_snapshot(<superseded_snapshot_id>);
-   -- Note: changer d'abord le status du superseded à 'validating'
-   UPDATE sitemap_snapshots SET status = 'validating' WHERE snapshot_id = <superseded_snapshot_id>;
-   SELECT activate_sitemap_snapshot(<superseded_snapshot_id>);
+
+   -- Force-activate le snapshot superseded (atomique, audit trail)
+   SELECT force_activate_sitemap_snapshot(<snapshot_id>, 'Rollback: <raison>');
+
+   -- Vérifier le résultat
+   SELECT snapshot_id, status FROM sitemap_snapshots WHERE status = 'active';
    ```
+   Note: `force_activate` accepte les snapshots en état `superseded`, `failed`, ou `validating`. Il est idempotent (no-op si déjà active). La raison est stockée dans `error_message` pour audit.
 
 ### Validation post-fix
 ```bash
