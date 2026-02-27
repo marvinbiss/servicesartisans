@@ -64,10 +64,20 @@ export async function sendProspectionEmailBatch(
 
     const results = await sendBatchEmails({ emails: batchParams })
 
+    // Ensure results array matches input length to prevent false failures
+    // If Resend returns fewer results than emails sent, pad with failures
+    const mappedResults: EmailResult[] = emails.map((_, i) => {
+      const r = results[i]
+      if (r) {
+        return { success: true, id: r.id }
+      }
+      return { success: false, error: 'No result returned from batch API' }
+    })
+
     return {
       sent: results.length,
       failed: emails.length - results.length,
-      results: results.map(r => ({ success: true, id: r.id })),
+      results: mappedResults,
     }
   } catch (error) {
     logger.error('Prospection email batch error', error as Error)

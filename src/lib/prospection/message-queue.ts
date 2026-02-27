@@ -254,11 +254,42 @@ export async function processBatch(
     .select('id, email, phone_e164')
     .in('id', contactIds)
 
+  // Deduplication: check if any of these contacts already received this campaign
+  // This prevents re-sending when messages are incorrectly re-queued
+  const { data: alreadySent } = await supabase
+    .from('prospection_messages')
+    .select('contact_id')
+    .eq('campaign_id', campaignId)
+    .in('status', ['sent', 'delivered'])
+    .in('contact_id', contactIds)
+
+  const alreadySentContactIds = new Set((alreadySent || []).map(m => m.contact_id))
+
   const contactMap = new Map(((contacts || []) as unknown as ProspectionContact[]).map((c: ProspectionContact) => [c.id, c]))
-  const messages = claimedMessages.map((m: ProspectionMessage) => ({
+
+  // Filter out messages for contacts that already received this campaign
+  const allMessages = claimedMessages.map((m: ProspectionMessage) => ({
     ...m,
     contact: contactMap.get(m.contact_id) || null,
   })) as (ProspectionMessage & { contact: ProspectionContact })[]
+
+  const duplicateMessages = allMessages.filter(m => alreadySentContactIds.has(m.contact_id))
+  const messages = allMessages.filter(m => !alreadySentContactIds.has(m.contact_id))
+
+  // Mark duplicate messages as 'sent' to prevent future re-processing
+  for (const msg of duplicateMessages) {
+    result.processed++
+    result.sent++
+    logger.warn('Skipping duplicate message - contact already received campaign', {
+      messageId: msg.id,
+      contactId: msg.contact_id,
+      campaignId,
+    })
+    await supabase
+      .from('prospection_messages')
+      .update({ status: 'sent', error_message: 'Duplicate skipped - already delivered' })
+      .eq('id', msg.id)
+  }
 
   // Rate limiting
   const rateLimit = CHANNEL_RATE_LIMITS[channel]
@@ -511,25 +542,44 @@ export async function getQueueStats(campaignId: string): Promise<QueueStats> {
 export async function reconcileOrphanedMessages(supabase: ReturnType<typeof createAdminClient>): Promise<number> {
   const TEN_MINUTES_AGO = new Date(Date.now() - 10 * 60 * 1000).toISOString()
 
-  // Reset stuck 'sending' messages that have been in that state for > 10 minutes
-  // Messages with retries remaining go back to 'queued'
-  const { data: stuck, error } = await supabase
+  // First, find stuck messages to re-queue (retry_count < 3)
+  const { data: stuckMessages, error: fetchError } = await supabase
     .from('prospection_messages')
-    .update({
-      status: 'queued',
-      sent_at: null,
-    })
+    .select('id, retry_count')
     .eq('status', 'sending')
     .lt('sent_at', TEN_MINUTES_AGO)
     .lt('retry_count', 3)
-    .select('id')
 
-  if (error) {
-    logger.error('Failed to reconcile orphaned messages', error)
+  if (fetchError) {
+    logger.error('Failed to fetch orphaned messages', fetchError)
     return 0
   }
 
-  // Messages that exceeded max retries -> mark as failed
+  // Re-queue each stuck message WITH incremented retry_count to prevent infinite loops
+  let requeuedCount = 0
+  for (const msg of stuckMessages || []) {
+    const newRetryCount = (msg.retry_count || 0) + 1
+    const { error: updateError } = await supabase
+      .from('prospection_messages')
+      .update({
+        status: newRetryCount >= 3 ? 'failed' : 'queued',
+        sent_at: null,
+        retry_count: newRetryCount,
+        ...(newRetryCount >= 3 ? {
+          error_message: 'Message stuck in sending state - max retries exceeded',
+          failed_at: new Date().toISOString(),
+        } : {
+          // Exponential backoff: 2min, 8min, 32min
+          next_retry_at: new Date(Date.now() + Math.pow(4, newRetryCount) * 30000).toISOString(),
+        }),
+      })
+      .eq('id', msg.id)
+      .eq('status', 'sending') // Ensure we only update if still in 'sending'
+
+    if (!updateError) requeuedCount++
+  }
+
+  // Messages that already exceeded max retries -> mark as failed
   const { data: failed } = await supabase
     .from('prospection_messages')
     .update({
@@ -542,9 +592,9 @@ export async function reconcileOrphanedMessages(supabase: ReturnType<typeof crea
     .gte('retry_count', 3)
     .select('id')
 
-  const reconciledCount = (stuck?.length || 0) + (failed?.length || 0)
+  const reconciledCount = requeuedCount + (failed?.length || 0)
   if (reconciledCount > 0) {
-    logger.warn(`Reconciled ${reconciledCount} orphaned messages (${stuck?.length || 0} requeued, ${failed?.length || 0} failed)`)
+    logger.warn(`Reconciled ${reconciledCount} orphaned messages (${requeuedCount} requeued, ${failed?.length || 0} failed)`)
   }
 
   return reconciledCount
