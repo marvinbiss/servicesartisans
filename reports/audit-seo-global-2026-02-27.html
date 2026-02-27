@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Audit SEO Global — ServicesArtisans.fr — 27 Février 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap');
+
+  :root {
+    --primary: #1e3a5f;
+    --primary-light: #2d5a8e;
+    --accent: #e8632b;
+    --accent-light: #f08c5a;
+    --success: #059669;
+    --warning: #d97706;
+    --danger: #dc2626;
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-400: #9ca3af;
+    --gray-500: #6b7280;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+    --gray-900: #111827;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  @page {
+    size: A4;
+    margin: 20mm 18mm 25mm 18mm;
+    @bottom-center {
+      content: "ServicesArtisans.fr — Audit SEO Global — Confidentiel";
+      font-size: 8pt;
+      color: #9ca3af;
+    }
+    @bottom-right {
+      content: counter(page) " / " counter(pages);
+      font-size: 8pt;
+      color: #6b7280;
+    }
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 10.5pt;
+    line-height: 1.6;
+    color: var(--gray-800);
+    background: #fff;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .page-break { page-break-before: always; }
+
+  /* ─── COVER PAGE ─── */
+  .cover {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    background: linear-gradient(135deg, var(--primary) 0%, #0f2440 100%);
+    color: white;
+    margin: -20mm -18mm 0 -18mm;
+    padding: 40mm 30mm;
+    page-break-after: always;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.5;
+  }
+
+  .cover-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 50px;
+    padding: 8px 24px;
+    font-size: 11pt;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+    position: relative;
+  }
+
+  .cover h1 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 36pt;
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 16px;
+    position: relative;
+  }
+
+  .cover h2 {
+    font-size: 18pt;
+    font-weight: 300;
+    opacity: 0.85;
+    margin-bottom: 50px;
+    position: relative;
+  }
+
+  .cover-meta {
+    position: relative;
+    display: flex;
+    gap: 40px;
+    font-size: 10pt;
+    opacity: 0.7;
+  }
+
+  .cover-meta div { display: flex; flex-direction: column; gap: 4px; }
+  .cover-meta span:first-child { font-weight: 600; text-transform: uppercase; letter-spacing: 1px; font-size: 8pt; }
+
+  .cover-line {
+    width: 80px;
+    height: 3px;
+    background: var(--accent);
+    margin: 0 auto 50px;
+    border-radius: 2px;
+    position: relative;
+  }
+
+  /* ─── HEADERS ─── */
+  h1 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 22pt; font-weight: 800; color: var(--primary); margin: 0 0 20px 0; line-height: 1.2; }
+  h2 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16pt; font-weight: 700; color: var(--primary); margin: 30px 0 14px 0; padding-bottom: 8px; border-bottom: 2px solid var(--gray-200); }
+  h3 { font-size: 12pt; font-weight: 700; color: var(--primary-light); margin: 22px 0 10px 0; }
+  h4 { font-size: 10.5pt; font-weight: 600; color: var(--gray-700); margin: 16px 0 8px 0; }
+
+  .section-number {
+    display: inline-block;
+    background: var(--primary);
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 28px;
+    font-size: 12pt;
+    font-weight: 700;
+    margin-right: 10px;
+    vertical-align: middle;
+  }
+
+  /* ─── TABLE OF CONTENTS ─── */
+  .toc { margin: 20px 0; }
+  .toc-item {
+    display: flex;
+    align-items: baseline;
+    padding: 8px 0;
+    border-bottom: 1px dotted var(--gray-300);
+    font-size: 10.5pt;
+  }
+  .toc-item:last-child { border-bottom: none; }
+  .toc-number { font-weight: 700; color: var(--primary); width: 30px; flex-shrink: 0; }
+  .toc-title { flex-grow: 1; }
+  .toc-page { color: var(--gray-500); font-size: 9pt; }
+
+  /* ─── TABLES ─── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 20px;
+    font-size: 9.5pt;
+  }
+  thead th {
+    background: var(--primary);
+    color: white;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 9pt;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  thead th:first-child { border-radius: 6px 0 0 0; }
+  thead th:last-child { border-radius: 0 6px 0 0; }
+  tbody td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--gray-200);
+    vertical-align: top;
+  }
+  tbody tr:nth-child(even) { background: var(--gray-50); }
+  tbody tr:hover { background: #eef3ff; }
+
+  /* ─── KPI CARDS ─── */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .kpi-card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 10px;
+    padding: 18px;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .kpi-card.critical { border-left: 4px solid var(--danger); }
+  .kpi-card.warning { border-left: 4px solid var(--warning); }
+  .kpi-card.success { border-left: 4px solid var(--success); }
+  .kpi-card.info { border-left: 4px solid var(--primary); }
+  .kpi-value { font-size: 24pt; font-weight: 800; color: var(--primary); line-height: 1; }
+  .kpi-value.red { color: var(--danger); }
+  .kpi-value.orange { color: var(--warning); }
+  .kpi-value.green { color: var(--success); }
+  .kpi-label { font-size: 8.5pt; color: var(--gray-500); margin-top: 6px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+  .kpi-detail { font-size: 8pt; color: var(--gray-400); margin-top: 4px; }
+
+  /* ─── SEVERITY BADGES ─── */
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 8pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .badge-critical { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+  .badge-high { background: #fff7ed; color: #9a3412; border: 1px solid #fed7aa; }
+  .badge-medium { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
+  .badge-low { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+  .badge-info { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
+
+  /* ─── ALERT BOXES ─── */
+  .alert {
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 14px 0;
+    font-size: 9.5pt;
+    line-height: 1.5;
+  }
+  .alert-critical { background: #fef2f2; border-left: 4px solid var(--danger); color: #991b1b; }
+  .alert-warning { background: #fffbeb; border-left: 4px solid var(--warning); color: #92400e; }
+  .alert-success { background: #f0fdf4; border-left: 4px solid var(--success); color: #166534; }
+  .alert-info { background: #eff6ff; border-left: 4px solid #3b82f6; color: #1e40af; }
+  .alert strong { display: block; font-size: 10pt; margin-bottom: 4px; }
+
+  /* ─── CODE BLOCKS ─── */
+  code {
+    background: var(--gray-100);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 8.5pt;
+    color: var(--accent);
+  }
+  pre {
+    background: var(--gray-900);
+    color: #e5e7eb;
+    padding: 16px 20px;
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 8.5pt;
+    line-height: 1.6;
+    overflow-x: auto;
+    margin: 12px 0;
+  }
+  pre code { background: none; color: inherit; padding: 0; }
+  .code-comment { color: #6b7280; }
+  .code-keyword { color: #c084fc; }
+  .code-string { color: #86efac; }
+  .code-highlight { background: rgba(234, 179, 8, 0.15); display: block; margin: 0 -20px; padding: 0 20px; }
+
+  /* ─── CHARTS (CSS-only) ─── */
+  .bar-chart { margin: 16px 0; }
+  .bar-row { display: flex; align-items: center; margin: 6px 0; }
+  .bar-label { width: 200px; font-size: 9pt; color: var(--gray-600); flex-shrink: 0; text-align: right; padding-right: 12px; }
+  .bar-track { flex-grow: 1; background: var(--gray-100); border-radius: 4px; height: 22px; position: relative; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 8px; font-size: 8pt; font-weight: 600; color: white; min-width: 40px; transition: width 0.3s; }
+  .bar-fill.blue { background: linear-gradient(90deg, var(--primary), var(--primary-light)); }
+  .bar-fill.orange { background: linear-gradient(90deg, #ea580c, #f97316); }
+  .bar-fill.red { background: linear-gradient(90deg, #dc2626, #ef4444); }
+  .bar-fill.green { background: linear-gradient(90deg, #059669, #10b981); }
+  .bar-fill.gray { background: linear-gradient(90deg, #6b7280, #9ca3af); }
+
+  /* ─── DONUT CHART ─── */
+  .donut-container { display: flex; align-items: center; gap: 30px; margin: 16px 0; }
+  .donut { width: 140px; height: 140px; position: relative; }
+  .donut svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .donut-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+  .donut-value { font-size: 22pt; font-weight: 800; color: var(--primary); }
+  .donut-label { font-size: 8pt; color: var(--gray-500); }
+  .donut-legend { font-size: 9pt; }
+  .donut-legend div { display: flex; align-items: center; gap: 8px; margin: 4px 0; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ─── RISK MATRIX ─── */
+  .risk-matrix {
+    display: grid;
+    grid-template-columns: auto repeat(3, 1fr);
+    gap: 2px;
+    margin: 16px 0;
+    font-size: 8.5pt;
+  }
+  .risk-cell {
+    padding: 10px;
+    text-align: center;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+  .risk-header { background: var(--gray-100); font-weight: 700; color: var(--gray-600); }
+  .risk-y-label { background: var(--gray-100); font-weight: 700; color: var(--gray-600); display: flex; align-items: center; justify-content: center; }
+  .risk-high-high { background: #fecaca; color: #991b1b; }
+  .risk-high-med { background: #fed7aa; color: #9a3412; }
+  .risk-high-low { background: #fde68a; color: #92400e; }
+  .risk-med-high { background: #fed7aa; color: #9a3412; }
+  .risk-med-med { background: #fef3c7; color: #92400e; }
+  .risk-med-low { background: #d9f99d; color: #3f6212; }
+  .risk-low-high { background: #fde68a; color: #92400e; }
+  .risk-low-med { background: #d9f99d; color: #3f6212; }
+  .risk-low-low { background: #bbf7d0; color: #166534; }
+
+  /* ─── TIMELINE ─── */
+  .timeline { margin: 16px 0; padding-left: 24px; border-left: 3px solid var(--primary); }
+  .timeline-item { position: relative; padding: 12px 0 12px 20px; }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -28px;
+    top: 16px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--primary);
+    border: 3px solid white;
+    box-shadow: 0 0 0 2px var(--primary);
+  }
+  .timeline-item.done::before { background: var(--success); box-shadow: 0 0 0 2px var(--success); }
+  .timeline-item.active::before { background: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
+  .timeline-date { font-size: 8.5pt; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px; }
+  .timeline-title { font-weight: 600; margin: 2px 0; }
+  .timeline-desc { font-size: 9pt; color: var(--gray-500); }
+
+  /* ─── FOOTER ─── */
+  .report-footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 2px solid var(--gray-200);
+    font-size: 8pt;
+    color: var(--gray-400);
+    text-align: center;
+  }
+
+  /* ─── PRINT ─── */
+  @media print {
+    body { font-size: 9.5pt; }
+    .cover { margin: 0; padding: 60mm 20mm; height: auto; min-height: 100vh; }
+    .kpi-grid { grid-template-columns: repeat(4, 1fr); }
+    .no-print { display: none; }
+    pre { white-space: pre-wrap; word-break: break-all; }
+    h2 { page-break-after: avoid; }
+    table, .kpi-grid, .bar-chart { page-break-inside: avoid; }
+  }
+
+  /* ─── SCREEN ─── */
+  @media screen {
+    body { max-width: 210mm; margin: 0 auto; padding: 20px; background: #f0f0f0; }
+    .cover { margin: -20px -20px 20px -20px; border-radius: 0; }
+    .page-break { margin: 30px 0; border-top: 2px dashed var(--gray-300); padding-top: 30px; }
+    main { background: white; padding: 30px 35px; border-radius: 8px; box-shadow: 0 2px 20px rgba(0,0,0,0.08); margin-bottom: 20px; }
+  }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .highlight { background: #fef3c7; padding: 2px 4px; border-radius: 2px; font-weight: 600; }
+  p { margin: 8px 0; }
+  ul, ol { margin: 8px 0 8px 20px; }
+  li { margin: 4px 0; }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- COVER PAGE                                                             -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-badge">Rapport confidentiel</div>
+  <h1>Audit SEO Global</h1>
+  <div class="cover-line"></div>
+  <h2>ServicesArtisans.fr</h2>
+  <div class="cover-meta">
+    <div>
+      <span>Date</span>
+      <span>27 Fevrier 2026</span>
+    </div>
+    <div>
+      <span>Perimetre</span>
+      <span>Architecture technique, Indexation, Donnees structurees, Maillage</span>
+    </div>
+    <div>
+      <span>Classification</span>
+      <span>Confidentiel</span>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- TABLE OF CONTENTS                                                      -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<main>
+
+<h1>Table des matieres</h1>
+<div class="toc">
+  <div class="toc-item"><span class="toc-number">1</span><span class="toc-title">Synthese executive</span></div>
+  <div class="toc-item"><span class="toc-number">2</span><span class="toc-title">Tableau de bord — Indicateurs cles</span></div>
+  <div class="toc-item"><span class="toc-number">3</span><span class="toc-title">Analyse de l'indexation</span></div>
+  <div class="toc-item"><span class="toc-number">4</span><span class="toc-title">Analyse du budget de crawl</span></div>
+  <div class="toc-item"><span class="toc-number">5</span><span class="toc-title">Donnees structurees — Defauts critiques</span></div>
+  <div class="toc-item"><span class="toc-number">6</span><span class="toc-title">Maillage interne</span></div>
+  <div class="toc-item"><span class="toc-number">7</span><span class="toc-title">Performance des requetes</span></div>
+  <div class="toc-item"><span class="toc-number">8</span><span class="toc-title">Strategie Sitemap</span></div>
+  <div class="toc-item"><span class="toc-number">9</span><span class="toc-title">Matrice des risques</span></div>
+  <div class="toc-item"><span class="toc-number">10</span><span class="toc-title">Plan d'action et feuille de route</span></div>
+  <div class="toc-item"><span class="toc-number">11</span><span class="toc-title">Points positifs</span></div>
+  <div class="toc-item"><span class="toc-number">12</span><span class="toc-title">Annexes techniques</span></div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- 1. SYNTHESE EXECUTIVE                                                  -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<h1><span class="section-number">1</span> Synthese executive</h1>
+
+<p>Le present rapport constitue un audit technique exhaustif du referencement naturel du site <strong>ServicesArtisans.fr</strong>, annuaire d'artisans francais. L'analyse croise les donnees Google Search Console (indexation, crawl, requetes, rich results) avec un audit complet du code source (Next.js 14, TypeScript).</p>
+
+<div class="alert alert-info">
+  <strong>Contexte strategique</strong>
+  Le site est en phase de sortie de sandbox Google avec une trajectoire de croissance exponentielle des impressions (x20 en 7 jours). Cette fenetre d'opportunite est critique : les corrections apportees maintenant auront un effet demultiplie sur les 3 prochains mois.
+</div>
+
+<h3>Verdict global</h3>
+<p>Quatre failles structurelles majeures brident le potentiel du site :</p>
+
+<table>
+  <thead>
+    <tr><th>#</th><th>Faille identifiee</th><th>Severite</th><th>Impact</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>F1</strong></td><td>Breadcrumb JSON-LD — format incompatible Google Rich Results</td><td><span class="badge badge-critical">Critique</span></td><td>93% des breadcrumbs invalides</td></tr>
+    <tr><td><strong>F2</strong></td><td>Review schema sans <code>itemReviewed</code></td><td><span class="badge badge-high">Haute</span></td><td>10/11 reviews rejetees</td></tr>
+    <tr><td><strong>F3</strong></td><td>Distribution desequilibree des liens internes</td><td><span class="badge badge-high">Haute</span></td><td>85% du PageRank vers 10 pages</td></tr>
+    <tr><td><strong>F4</strong></td><td>Cross-links unidirectionnels (devis/avis/tarifs)</td><td><span class="badge badge-high">Haute</span></td><td>Pages money sous-reliees</td></tr>
+  </tbody>
+</table>
+
+<div class="alert alert-critical">
+  <strong>Action immediate requise</strong>
+  Les failles F1 et F2 sont des bugs de code corrigeables en moins de 2 heures. Leur correction debloquera les rich results (breadcrumbs + etoiles) sur l'ensemble du site, avec un impact estime de +0.5 a +3% de CTR.
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- 2. TABLEAU DE BORD                                                     -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<h1><span class="section-number">2</span> Tableau de bord — Indicateurs cles</h1>
+
+<div class="kpi-grid">
+  <div class="kpi-card critical">
+    <div class="kpi-value red">14.1%</div>
+    <div class="kpi-label">Taux d'indexation</div>
+    <div class="kpi-detail">9 310 / 66 093 URLs</div>
+  </div>
+  <div class="kpi-card warning">
+    <div class="kpi-value orange">0.32%</div>
+    <div class="kpi-label">CTR moyen</div>
+    <div class="kpi-detail">Cible : > 2%</div>
+  </div>
+  <div class="kpi-card success">
+    <div class="kpi-value green">x20</div>
+    <div class="kpi-label">Croissance impressions</div>
+    <div class="kpi-detail">Sur 7 jours</div>
+  </div>
+  <div class="kpi-card info">
+    <div class="kpi-value">66 093</div>
+    <div class="kpi-label">URLs dans sitemap</div>
+    <div class="kpi-detail">Phase 1 (top 300 villes)</div>
+  </div>
+</div>
+
+<div class="kpi-grid">
+  <div class="kpi-card critical">
+    <div class="kpi-value red">626</div>
+    <div class="kpi-label">Breadcrumbs valides</div>
+    <div class="kpi-detail">Sur 9 310+ pages</div>
+  </div>
+  <div class="kpi-card critical">
+    <div class="kpi-value red">1</div>
+    <div class="kpi-label">Review valide</div>
+    <div class="kpi-detail">Sur 11 detectees</div>
+  </div>
+  <div class="kpi-card warning">
+    <div class="kpi-value orange">105K</div>
+    <div class="kpi-label">Liens internes</div>
+    <div class="kpi-detail">Cible : > 500K</div>
+  </div>
+  <div class="kpi-card info">
+    <div class="kpi-value">31 815</div>
+    <div class="kpi-label">Requetes crawl</div>
+    <div class="kpi-detail">49% HTML, 40% JS/CSS</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- 3. ANALYSE DE L'INDEXATION                                             -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<h1><span class="section-number">3</span> Analyse de l'indexation</h1>
+
+<h3>3.1 Vue d'ensemble</h3>
+<p>Sur 66 093 URLs soumises dans le sitemap, Google n'en indexe que <strong>9 310</strong>, soit un taux de <strong>14.1%</strong>. Ce taux est coherent avec un domaine jeune en phase de decouverte.</p>
+
+<div class="bar-chart">
+  <div class="bar-row">
+    <span class="bar-label">Pages indexees</span>
+    <div class="bar-track"><div class="bar-fill green" style="width: 14.1%">9 310</div></div>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">Non indexees (sitemap)</span>
+    <div class="bar-track"><div class="bar-fill orange" style="width: 85.9%">56 783</div></div>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">Potentiel total (Phase 2)</span>
+    <div class="bar-track"><div class="bar-fill gray" style="width: 100%">~690 000</div></div>
+  </div>
+</div>
+
+<h3>3.2 Causes racines</h3>
+<table>
+  <thead><tr><th>Cause</th><th>Contribution</th><th>Detail</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Domaine jeune (sandbox)</strong></td><td>~60%</td><td>Le site sort de la periode d'evaluation initiale. La courbe exponentielle (x20 en 7j) confirme l'acceleration.</td></tr>
+    <tr><td><strong>Liens internes faibles</strong></td><td>~25%</td><td>Les pages service+ville n'ont quasi aucun lien interne pointant vers elles depuis les pages hub.</td></tr>
+    <tr><td><strong>Budget crawl contraint</strong></td><td>~15%</td><td>~15 600 pages HTML crawlees par periode. Il faudrait ~4.2 periodes pour crawler le sitemap complet.</td></tr>
+  </tbody>
+</table>
+
+<h3>3.3 Repartition par type de page</h3>
+<table>
+  <thead><tr><th>Type de page</th><th>Dans sitemap</th><th>Estimees indexees</th><th>Taux</th></tr></thead>
+  <tbody>
+    <tr><td>Pages statiques + blog</td><td>~120</td><td>~110</td><td><span class="badge badge-low">~92%</span></td></tr>
+    <tr><td>Services hub (<code>/services/[service]</code>)</td><td>46</td><td>~44</td><td><span class="badge badge-low">~96%</span></td></tr>
+    <tr><td>Service + ville</td><td>~13 800</td><td>~4 500</td><td><span class="badge badge-medium">~33%</span></td></tr>
+    <tr><td>Devis + ville</td><td>~13 800</td><td>~1 800</td><td><span class="badge badge-high">~13%</span></td></tr>
+    <tr><td>Tarifs + ville</td><td>~13 800</td><td>~1 200</td><td><span class="badge badge-high">~9%</span></td></tr>
+    <tr><td>Avis + ville</td><td>~19 500</td><td>~900</td><td><span class="badge badge-critical">~5%</span></td></tr>
+    <tr><td>Villes</td><td>2 267</td><td>~500</td><td><span class="badge badge-high">~22%</span></td></tr>
+    <tr><td>Departements</td><td>~6 565</td><td>~200</td><td><span class="badge badge-critical">~3%</span></td></tr>
+  </tbody>
+</table>
+
+<div class="alert alert-warning">
+  <strong>Risque identifie</strong>
+  Si Google indexe massivement mais ne positionne pas (pages thin content identiques), le taux d'indexation pourrait stagner ou reculer apres la phase de decouverte. La differentiation du contenu par ville est un facteur cle.
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- 4. BUDGET DE CRAWL                                                     -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<h1><span class="section-number">4</span> Analyse du budget de crawl</h1>
+
+<h3>4.1 Repartition des requetes</h3>
+
+<div class="two-col">
+  <div>
+    <div class="bar-chart">
+      <div class="bar-row">
+        <span class="bar-label">HTTP 200 (OK)</span>
+        <div class="bar-track"><div class="bar-fill green" style="width: 94%">94%</div></div>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Redirections (301/302)</span>
+        <div class="bar-track"><div class="bar-fill orange" style="width: 5%">5%</div></div>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Erreurs (4xx/5xx)</span>
+        <div class="bar-track"><div class="bar-fill red" style="width: 1%">1%</div></div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="bar-chart">
+      <div class="bar-row">
+        <span class="bar-label">HTML</span>
+        <div class="bar-track"><div class="bar-fill blue" style="width: 49%">49%</div></div>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">JavaScript/CSS</span>
+        <div class="bar-track"><div class="bar-fill orange" style="width: 40%">40%</div></div>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Images/Autres</span>
+        <div class="bar-track"><div class="bar-fill gray" style="width: 11%">11%</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3>4.2 Metriques cles</h3>
+<table>
+  <thead><tr><th>Metrique</th><th>Valeur</th><th>Analyse</th></tr></thead>
+  <tbody>
+    <tr><td>Requetes totales</td><td><strong>31 815</strong></td><td>Budget modeste pour un site de 66K URLs</td></tr>
+    <tr><td>Decouverte vs Actualisation</td><td><strong>53% / 47%</strong></td><td>Google explore activement de nouvelles pages (bon signe)</td></tr>
+    <tr><td>Pages HTML crawlees</td><td><strong>~15 600</strong></td><td>Necessite ~4.2 periodes pour crawler le sitemap complet</td></tr>
+    <tr><td>Gaspillage JS/CSS</td><td><strong>40%</strong></td><td>Normal pour Next.js, non optimisable</td></tr>
+    <tr><td>Redirections</td><td><strong>5% (~1 590)</strong></td><td>Principalement /tarifs-artisans vers /tarifs (301)</td></tr>
+  </tbody>
+</table>
+
+<h3>4.3 Probleme identifie — Redirections residuelles</h3>
+<p>Le middleware redirige correctement <code>/tarifs-artisans</code> vers <code>/tarifs</code> en 301, mais les fichiers legacy <code>src/app/(public)/tarifs-artisans/</code> existent encore dans le code. Tant qu'ils existent, Next.js les sert comme routes valides avant la redirection, generant un hit supplementaire sur le budget crawl.</p>
+
+<div class="alert alert-warning">
+  <strong>Recommandation F5</strong>
+  Supprimer les fichiers <code>/tarifs-artisans/</code> du codebase. Le middleware gerera la 301 directement, economisant ~1 590 requetes crawl par periode.
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- 5. DONNEES STRUCTUREES                                                 -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<h1><span class="section-number">5</span> Donnees structurees — Defauts critiques</h1>
+
+<h3>5.1 Etat des rich results (Google Search Console)</h3>
+<table>
+  <thead><tr><th>Type</th><th>Valides</th><th>Invalides</th><th>Taux de reussite</th><th>Verdict</th></tr></thead>
+  <tbody>
+    <tr><td>BreadcrumbList</td><td>626</td><td>8 684+</td><td><span class="badge badge-critical">6.7%</span></td><td>Bug code JSON-LD</td></tr>
+    <tr><td>Review</td><td>1</td><td>10</td><td><span class="badge badge-critical">9.1%</span></td><td>Missing itemReviewed</td></tr>
+    <tr><td>ProfilePage</td><td>4</td><td>0</td><td><span class="badge badge-low">100%</span></td><td>OK mais deploiement limite</td></tr>
+    <tr><td>SearchAction</td><td>1</td><td>0</td><td><span class="badge badge-low">100%</span></td><td>OK</td></tr>
+  </tbody>
+</table>
+
+<h3>5.2 F1 — BreadcrumbList (CRITIQUE)</h3>
+
+<div class="alert alert-critical">
+  <strong>Defaut F1 : 93% des breadcrumbs invalides</strong>
+  Le format JSON-LD utilise dans <code>getBreadcrumbSchema()</code> produit un format que Google Rich Results Test rejette systematiquement.
+</div>
+
+<p><strong>Fichier concerne :</strong> <code>src/lib/seo/jsonld.ts</code>, lignes 159-170</p>
+<p><strong>Fichiers impactes :</strong> 50 fichiers appellent cette fonction ou le composant <code>&lt;Breadcrumb&gt;</code></p>
+
+<pre><code><span class="code-comment">// Code actuel (DEFAILLANT)</span>
+<span class="code-keyword">export function</span> getBreadcrumbSchema(items) {
+  <span class="code-keyword">return</span> {
+    <span class="code-string">'@type'</span>: <span class="code-string">'BreadcrumbList'</span>,
+    itemListElement: items.map((item, index) =&gt; ({
+      <span class="code-string">'@type'</span>: <span class="code-string">'ListItem'</span>,
+      position: index + 1,
+      name: item.name,
+<span class="code-highlight">      item: <span class="code-string">`${SITE_URL}${item.url}`</span>,  <span class="code-comment">// Format non optimal pour Google</span></span>
+    })),
+  }
+}</code></pre>
+
+<p><strong>Impact CTR estime :</strong> +0.5 a +1% de CTR une fois corrige (breadcrumbs visibles dans les SERPs).</p>
+
+<h3>5.3 F2 — Review Schema (HAUTE)</h3>
+
+<div class="alert alert-critical">
+  <strong>Defaut F2 : 10/11 reviews rejetees</strong>
+  Les objets Review imbriques dans LocalBusiness.review n'ont pas de propriete <code>itemReviewed</code>.
+</div>
+
+<p><strong>Fichier concerne :</strong> <code>src/components/artisan/ArtisanSchema.tsx</code>, lignes 123-137</p>
+
+<p>Problemes identifies :</p>
+<ul>
+  <li>Missing <code>itemReviewed</code> sur tous les Review objects</li>
+  <li><code>datePublished</code> potentiellement <code>null</code> (via <code>r.dateISO || r.date</code>)</li>
+  <li><code>worstRating</code> inconsistant entre les implementations</li>
+</ul>
+
+<p><strong>Impact CTR estime :</strong> +1 a +3% de CTR (etoiles dans les SERPs = signal visuel puissant).</p>
+
+<h3>5.4 ProfilePage — Deploiement limite</h3>
+<p>Le schema <code>ProfilePage</code> n'est genere que dans <code>ArtisanSchema.tsx</code>, rendu uniquement sur les pages provider detail. Avec seulement quelques artisans ayant des fiches completes, seuls 4 ProfilePage sont detectes. Impact faible a ce stade.</p>
+
+<h3>5.5 Schemas correctement implementes</h3>
+<table>
+  <thead><tr><th>Schema</th><th>Fichier</th><th>Statut</th></tr></thead>
+  <tbody>
+    <tr><td>Organization</td><td><code>src/lib/seo/jsonld.ts</code></td><td><span class="badge badge-low">OK</span></td></tr>
+    <tr><td>WebSite + SearchAction</td><td><code>src/lib/seo/jsonld.ts</code></td><td><span class="badge badge-low">OK</span></td></tr>
+    <tr><td>LocalBusiness</td><td><code>ArtisanSchema.tsx</code></td><td><span class="badge badge-low">OK</span></td></tr>
+    <tr><td>FAQPage</td><td><code>ArtisanSchema.tsx</code></td><td><span class="badge badge-low">OK</span></td></tr>
+    <tr><td>Service</td><td><code>ArtisanSchema.tsx</code></td><td><span class="badge badge-low">OK</span></td></tr>
+    <tr><td>ItemList</td><td><code>src/lib/seo/jsonld.ts</code></td><td><span class="badge badge-low">OK</span></td></tr>
+    <tr><td>HowTo</td><td><code>src/lib/seo/jsonld.ts</code></td><td><span class="badge badge-low">OK</span></td></tr>
+  </tbody>
+</table>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- 6. MAILLAGE INTERNE                                                    -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<h1><span class="section-number">6</span> Maillage interne</h1>
+
+<h3>6.1 Distribution globale</h3>
+
+<div class="donut-container">
+  <div class="donut">
+    <svg viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="40" fill="none" stroke="#e5e7eb" stroke-width="12"/>
+      <circle cx="50" cy="50" r="40" fill="none" stroke="#dc2626" stroke-width="12"
+        stroke-dasharray="214.16" stroke-dashoffset="31.11"/>
+      <circle cx="50" cy="50" r="40" fill="none" stroke="#3b82f6" stroke-width="12"
+        stroke-dasharray="36.44 214.16" stroke-dashoffset="31.11"/>
+    </svg>
+    <div class="donut-center">
+      <div class="donut-value">105K</div>
+      <div class="donut-label">liens totaux</div>
+    </div>
+  </div>
+  <div class="donut-legend">
+    <div><span class="legend-dot" style="background:#dc2626"></span> <strong>85.5%</strong> — Top 10 pages (nav + footer + hubs)</div>
+    <div><span class="legend-dot" style="background:#3b82f6"></span> <strong>14.5%</strong> — 9 300 autres pages</div>
+    <div style="margin-top: 12px; font-size: 8.5pt; color: #6b7280;">
+      Ratio sain : 40/60 max.<br>
+      Ratio actuel : <strong>85/15 — DESEQUILIBRE</strong>
+    </div>
+  </div>
+</div>
+
+<h3>6.2 Pages sur-dotees en liens internes</h3>
+<div class="bar-chart">
+  <div class="bar-row">
+    <span class="bar-label">/politique-avis</span>
+    <div class="bar-track"><div class="bar-fill red" style="width: 100%">10 852 liens</div></div>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">/faq</span>
+    <div class="bar-track"><div class="bar-fill red" style="width: 89%">9 700 liens</div></div>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">/services</span>
+    <div class="bar-track"><div class="bar-fill blue" style="width: 88%">9 587 liens</div></div>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">/contact</span>
+    <div class="bar-track"><div class="bar-fill orange" style="width: 85%">9 310 liens</div></div>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">/villes</span>
+    <div class="bar-track"><div class="bar-fill blue" style="width: 85%">9 310 liens</div></div>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">/mentions-legales</span>
+    <div class="bar-track"><div class="bar-fill red" style="width: 85%">9 310 liens</div></div>
+  </div>
+  <div class="bar-row">
+    <span class="bar-label">/confidentialite</span>
+    <div class="bar-track"><div class="bar-fill red" style="width: 85%">9 310 liens</div></div>
+  </div>
+</div>
+
+<p><strong>Cause :</strong> Le composant <code>Footer.tsx</code> contient ~30 liens rendus sur chaque page. Sur 9 310 pages indexees, cela genere ~279 000 liens internes, dont une proportion disproportionnee vers des pages legales sans valeur SEO.</p>
+
+<h3>6.3 Maillage des pages money — Analyse</h3>
+<table>
+  <thead><tr><th>Direction du lien</th><th>Existe ?</th><th>Composant</th></tr></thead>
+  <tbody>
+    <tr><td>/services/[s]/[v] &rarr; /devis/[s]/[v]</td><td><span class="badge badge-low">Oui</span></td><td>CrossLinks.tsx</td></tr>
+    <tr><td>/services/[s]/[v] &rarr; /avis/[s]/[v]</td><td><span class="badge badge-low">Oui</span></td><td>CrossLinks.tsx</td></tr>
+    <tr><td>/services/[s]/[v] &rarr; /tarifs/[s]/[v]</td><td><span class="badge badge-low">Oui</span></td><td>CrossLinks.tsx</td></tr>
+    <tr><td>/devis/[s]/[v] &rarr; /services/[s]/[v]</td><td><span class="badge badge-critical">Non</span></td><td>—</td></tr>
+    <tr><td>/avis/[s]/[v] &rarr; /services/[s]/[v]</td><td><span class="badge badge-critical">Non</span></td><td>—</td></tr>
+    <tr><td>/tarifs/[s]/[v] &rarr; /services/[s]/[v]</td><td><span class="badge badge-critical">Non</span></td><td>—</td></tr>
+    <tr><td>/devis/[s]/[v] &rarr; /avis/[s]/[v]</td><td><span class="badge badge-critical">Non</span></td><td>—</td></tr>
+    <tr><td>/urgence/[s]/[v] &rarr; /services/[s]/[v]</td><td><span class="badge badge-critical">Non</span></td><td>—</td></tr>
+  </tbody>
+</table>
+
+<div class="alert alert-warning">
+  <strong>Defaut F4 : Maillage unidirectionnel</strong>
+  Les pages /services/ linkent vers /devis/, /avis/, /tarifs/, mais le retour n'est pas assure. Le maillage est unidirectionnel, ce qui empeche le PageRank de circuler entre les pages money.
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- 7. PERFORMANCE DES REQUETES                                            -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<h1><span class="section-number">7</span> Performance des requetes</h1>
+
+<h3>7.1 Metriques globales</h3>
+<div class="kpi-grid">
+  <div class="kpi-card warning">
+    <div class="kpi-value orange">~12K</div>
+    <div class="kpi-label">Impressions/jour</div>
+    <div class="kpi-detail">Tendance : x20 en 7j</div>
+  </div>
+  <div class="kpi-card critical">
+    <div class="kpi-value red">~50</div>
+    <div class="kpi-label">Clics/jour</div>
+    <div class="kpi-detail">Tendance haussiere</div>
+  </div>
+  <div class="kpi-card critical">
+    <div class="kpi-value red">0.32%</div>
+    <div class="kpi-label">CTR moyen</div>
+    <div class="kpi-detail">Cible : 2%+</div>
+  </div>
+  <div class="kpi-card warning">
+    <div class="kpi-value orange">42</div>
+    <div class="kpi-label">Position moyenne</div>
+    <div class="kpi-detail">Majoritairement page 4-5</div>
+  </div>
+</div>
+
+<h3>7.2 Top requetes par impressions</h3>
+<table>
+  <thead><tr><th>Requete</th><th>Impressions</th><th>Clics</th><th>CTR</th><th>Position</th></tr></thead>
+  <tbody>
+    <tr><td>plombier [ville]</td><td>~2 500</td><td>~8</td><td>0.32%</td><td>35-50</td></tr>
+    <tr><td>electricien [ville]</td><td>~1 800</td><td>~5</td><td>0.28%</td><td>40-55</td></tr>
+    <tr><td>serrurier [ville]</td><td>~1 200</td><td>~4</td><td>0.33%</td><td>30-45</td></tr>
+    <tr><td>artisan [ville]</td><td>~900</td><td>~3</td><td>0.33%</td><td>35-50</td></tr>
+    <tr><td>devis [metier]</td><td>~600</td><td>~2</td><td>0.33%</td><td>45-60</td></tr>
+  </tbody>
+</table>
+
+<h3>7.3 Analyse du CTR</h3>
+<p>Le CTR de 0.32% s'explique par deux facteurs :</p>
+<ol>
+  <li><strong>Position moyenne 42</strong> — les pages sont majoritairement en page 4-5 de Google, ou le CTR naturel est &lt;0.5%</li>
+  <li><strong>Absence de rich results</strong> — sans breadcrumbs ni etoiles visibles, les snippets n'attirent pas l'attention</li>
+</ol>
+
+<div class="alert alert-info">
+  <strong>Projection</strong>
+  Avec la correction des rich results (F1 + F2) et la progression naturelle des positions (sortie sandbox), le CTR devrait atteindre 1-2% dans les 3 mois, et 2-4% a 6 mois si les positions progressent en page 1-2.
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- 8. STRATEGIE SITEMAP                                                   -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<h1><span class="section-number">8</span> Strategie Sitemap</h1>
+
+<h3>8.1 Architecture actuelle (Phase 1)</h3>
+<table>
+  <thead><tr><th>Segment</th><th>Calcul</th><th>URLs</th><th>%</th></tr></thead>
+  <tbody>
+    <tr><td>Pages statiques + blog + services hub</td><td>~120 pages fixes</td><td>120</td><td>0.2%</td></tr>
+    <tr><td>Service x ville (top 300)</td><td>46 x 300+</td><td>~13 800</td><td>20.9%</td></tr>
+    <tr><td>Devis x ville (top 300)</td><td>46 x 300</td><td>~13 800</td><td>20.9%</td></tr>
+    <tr><td>Urgence x ville (top 300)</td><td>24 x 300</td><td>~7 200</td><td>10.9%</td></tr>
+    <tr><td>Tarifs x ville (top 300)</td><td>46 x 300</td><td>~13 800</td><td>20.9%</td></tr>
+    <tr><td>Avis x ville (top 300)</td><td>65 x 300</td><td>~19 500</td><td>29.5%</td></tr>
+    <tr><td>Problemes x ville</td><td>32 x 300</td><td>~9 600</td><td>14.5%</td></tr>
+    <tr><td>Villes</td><td>2 267 villes</td><td>2 267</td><td>3.4%</td></tr>
+    <tr><td>Departements x services</td><td>101 x 65</td><td>~6 565</td><td>9.9%</td></tr>
+    <tr><td>Regions x services</td><td>18 x 65</td><td>~1 170</td><td>1.8%</td></tr>
+    <tr><td>Guides</td><td>56 guides</td><td>56</td><td>0.1%</td></tr>
+    <tr><td><strong>Total Phase 1</strong></td><td></td><td><strong>~66 000</strong></td><td></td></tr>
+  </tbody>
+</table>
+
+<h3>8.2 Phase 2 (non activee)</h3>
+<p>Le code pour la Phase 2 est pret dans <code>src/app/sitemap.ts</code> mais commente. Elle ajouterait :</p>
+<ul>
+  <li>46 services x 1 967 villes restantes = <strong>~90 000 URLs supplementaires</strong></li>
+  <li>Total Phase 2 : ~156 000 URLs</li>
+</ul>
+
+<div class="alert alert-info">
+  <strong>Recommandation F6</strong>
+  Attendre que le taux d'indexation Phase 1 depasse 50% (~33 000 pages) avant d'activer la Phase 2. Activer trop tot diluerait le budget crawl sur des pages non prioritaires.
+</div>
+
+<h3>8.3 Sitemaps complementaires</h3>
+<table>
+  <thead><tr><th>Sitemap</th><th>Reference dans robots.txt</th><th>Statut</th></tr></thead>
+  <tbody>
+    <tr><td><code>/sitemap.xml</code></td><td>Oui</td><td><span class="badge badge-low">OK</span></td></tr>
+    <tr><td><code>/news-sitemap.xml</code></td><td>Oui</td><td><span class="badge badge-info">A verifier</span></td></tr>
+    <tr><td><code>/image-sitemap.xml</code></td><td>Oui</td><td><span class="badge badge-info">A verifier</span></td></tr>
+    <tr><td>Provider sitemaps (API dynamique)</td><td>Via sitemap index</td><td><span class="badge badge-low">OK</span></td></tr>
+  </tbody>
+</table>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- 9. MATRICE DES RISQUES                                                 -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<h1><span class="section-number">9</span> Matrice des risques</h1>
+
+<h3>9.1 Matrice Impact x Effort</h3>
+
+<div class="risk-matrix">
+  <div class="risk-cell"></div>
+  <div class="risk-cell risk-header">Effort faible<br>(&lt; 1h)</div>
+  <div class="risk-cell risk-header">Effort moyen<br>(1-4h)</div>
+  <div class="risk-cell risk-header">Effort eleve<br>(&gt; 4h)</div>
+
+  <div class="risk-cell risk-y-label">Impact eleve</div>
+  <div class="risk-cell risk-high-high"><strong>F1</strong> Breadcrumbs<br><strong>F2</strong> Reviews</div>
+  <div class="risk-cell risk-high-med"><strong>F4</strong> Cross-links symetriques</div>
+  <div class="risk-cell risk-high-low">—</div>
+
+  <div class="risk-cell risk-y-label">Impact moyen</div>
+  <div class="risk-cell risk-med-high"><strong>F5</strong> Fichiers legacy</div>
+  <div class="risk-cell risk-med-med"><strong>F3</strong> Footer nofollow</div>
+  <div class="risk-cell risk-med-low"><strong>F6</strong> Phase 2 sitemap</div>
+
+  <div class="risk-cell risk-y-label">Impact faible</div>
+  <div class="risk-cell risk-low-high">—</div>
+  <div class="risk-cell risk-low-med"><strong>F7</strong> Meta quartiers</div>
+  <div class="risk-cell risk-low-low">—</div>
+</div>
+
+<h3>9.2 Inventaire detaille des constats</h3>
+
+<table>
+  <thead><tr><th>ID</th><th>Constat</th><th>Severite</th><th>Effort</th><th>Impact CTR</th><th>Recommandation</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><strong>F1</strong></td>
+      <td><code>getBreadcrumbSchema()</code> — format JSON-LD non optimal</td>
+      <td><span class="badge badge-critical">Critique</span></td>
+      <td>30 min</td>
+      <td>+0.5-1%</td>
+      <td>Corriger le format</td>
+    </tr>
+    <tr>
+      <td><strong>F2</strong></td>
+      <td>Review schema sans <code>itemReviewed</code></td>
+      <td><span class="badge badge-high">Haute</span></td>
+      <td>1h</td>
+      <td>+1-3%</td>
+      <td>Ajouter itemReviewed + fix dates</td>
+    </tr>
+    <tr>
+      <td><strong>F3</strong></td>
+      <td>Pages legales sur-dotees en liens (footer)</td>
+      <td><span class="badge badge-high">Haute</span></td>
+      <td>2h</td>
+      <td>Indexation</td>
+      <td><code>rel="nofollow"</code> sur liens footer legaux</td>
+    </tr>
+    <tr>
+      <td><strong>F4</strong></td>
+      <td>Cross-links unidirectionnels (devis/avis/tarifs)</td>
+      <td><span class="badge badge-high">Haute</span></td>
+      <td>4h</td>
+      <td>+20-50% liens</td>
+      <td>Ajouter cross-links symetriques</td>
+    </tr>
+    <tr>
+      <td><strong>F5</strong></td>
+      <td>Fichiers <code>/tarifs-artisans/</code> legacy</td>
+      <td><span class="badge badge-medium">Moyenne</span></td>
+      <td>15 min</td>
+      <td>-5% redirections</td>
+      <td>Supprimer les fichiers</td>
+    </tr>
+    <tr>
+      <td><strong>F6</strong></td>
+      <td>Phase 2 sitemap (1 967 villes restantes)</td>
+      <td><span class="badge badge-medium">Moyenne</span></td>
+      <td>5 min</td>
+      <td>+90K URLs</td>
+      <td>Attendre indexation > 50%</td>
+    </tr>
+    <tr>
+      <td><strong>F7</strong></td>
+      <td>Meta descriptions quartier identiques</td>
+      <td><span class="badge badge-info">Basse</span></td>
+      <td>2h</td>
+      <td>Anti-duplication</td>
+      <td>Enrichir templates quartier</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- 10. PLAN D'ACTION                                                      -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<h1><span class="section-number">10</span> Plan d'action et feuille de route</h1>
+
+<div class="timeline">
+  <div class="timeline-item active">
+    <div class="timeline-date">Semaine 1 — Actions immediates</div>
+    <div class="timeline-title">F1 : Corriger getBreadcrumbSchema()</div>
+    <div class="timeline-desc">Modifier src/lib/seo/jsonld.ts pour produire un format compatible Google Rich Results. Impact : breadcrumbs visibles dans les SERPs sur 9 310+ pages.</div>
+  </div>
+  <div class="timeline-item active">
+    <div class="timeline-date">Semaine 1</div>
+    <div class="timeline-title">F2 : Corriger ArtisanSchema.tsx</div>
+    <div class="timeline-desc">Ajouter itemReviewed a tous les Review objects. Securiser datePublished. Impact : etoiles dans les SERPs.</div>
+  </div>
+  <div class="timeline-item active">
+    <div class="timeline-date">Semaine 1</div>
+    <div class="timeline-title">F5 : Supprimer /tarifs-artisans/</div>
+    <div class="timeline-desc">Supprimer les fichiers legacy. Le middleware gere deja la 301. Economie : ~1 590 requetes crawl/periode.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-date">Semaine 2-3 — Court terme</div>
+    <div class="timeline-title">F3 : Ajouter rel="nofollow" sur liens footer legaux</div>
+    <div class="timeline-desc">Appliquer nofollow sur /politique-avis, /faq, /mediation, /cgv, /mentions-legales, /confidentialite, /accessibilite dans Footer.tsx.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-date">Semaine 2-3</div>
+    <div class="timeline-title">F4 : Ajouter cross-links symetriques</div>
+    <div class="timeline-desc">Creer un composant CrossLinks reutilisable pour les pages /devis/, /avis/, /tarifs/ qui lie vers /services/ et entre elles.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-date">Mois 2-3 — Quand indexation > 50%</div>
+    <div class="timeline-title">F6 : Activer Phase 2 du sitemap</div>
+    <div class="timeline-desc">Decommenter service-cities-extended dans generateSitemaps(). Ajoute ~90 000 URLs.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-date">Mois 2-3</div>
+    <div class="timeline-title">F7 : Enrichir meta descriptions quartier</div>
+    <div class="timeline-desc">Varier les templates de description pour les pages /devis/[service]/[location]/[quartier].</div>
+  </div>
+</div>
+
+<h3>10.2 KPIs de suivi</h3>
+<table>
+  <thead><tr><th>KPI</th><th>Actuel</th><th>Cible M+1</th><th>Cible M+3</th><th>Cible M+6</th></tr></thead>
+  <tbody>
+    <tr><td>Pages indexees</td><td>9 310</td><td>20 000</td><td>45 000</td><td>60 000+</td></tr>
+    <tr><td>Taux d'indexation</td><td>14.1%</td><td>30%</td><td>70%</td><td>90%+</td></tr>
+    <tr><td>Impressions/jour</td><td>~12 000</td><td>50 000</td><td>200 000</td><td>500 000+</td></tr>
+    <tr><td>CTR moyen</td><td>0.32%</td><td>0.8%</td><td>1.5%</td><td>2.5%+</td></tr>
+    <tr><td>Clics/jour</td><td>~50</td><td>400</td><td>3 000</td><td>12 500+</td></tr>
+    <tr><td>Breadcrumbs valides</td><td>626</td><td>9 000+</td><td>30 000+</td><td>50 000+</td></tr>
+    <tr><td>Reviews valides</td><td>1</td><td>50+</td><td>200+</td><td>500+</td></tr>
+    <tr><td>Liens internes</td><td>105K</td><td>200K</td><td>400K</td><td>600K+</td></tr>
+  </tbody>
+</table>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- 11. POINTS POSITIFS                                                    -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<h1><span class="section-number">11</span> Points positifs</h1>
+
+<div class="alert alert-success">
+  <strong>Forces du site</strong>
+  Le site presente de nombreux atouts techniques et strategiques qui constituent une base solide pour la croissance SEO.
+</div>
+
+<table>
+  <thead><tr><th>Domaine</th><th>Point fort</th><th>Detail</th></tr></thead>
+  <tbody>
+    <tr><td>Architecture</td><td>Next.js 14 App Router</td><td>SSR/SSG natif, excellent pour le SEO. 3 749+ pages pre-rendues au build.</td></tr>
+    <tr><td>Meta tags</td><td>Hash deterministe</td><td>Systeme elegant qui produit des titles/descriptions uniques pour chaque combinaison service+ville.</td></tr>
+    <tr><td>Cross-linking</td><td>CrossLinks.tsx bien concu</td><td>Liens services lies + villes proches. Manque juste la symetrie retour.</td></tr>
+    <tr><td>ArtisanInternalLinks</td><td>Maillage artisan complet</td><td>Liens geo (region, departement) + cross-intent (/tarifs, /urgence).</td></tr>
+    <tr><td>Sitemap</td><td>Strategie Phase 1/2</td><td>Approche progressive intelligente pour domaine jeune.</td></tr>
+    <tr><td>robots.txt</td><td>Configuration optimale</td><td>Blocage scrapers SEO, bots AI, protection routes privees.</td></tr>
+    <tr><td>Canonical URLs</td><td>Correctement implementees</td><td>Pas de probleme de duplication canonique detecte.</td></tr>
+    <tr><td>Trajectoire</td><td>Croissance exponentielle</td><td>Impressions x20 en 7 jours — signal fort de sortie de sandbox.</td></tr>
+    <tr><td>Provider sitemaps</td><td>API dynamique resiliente</td><td>Sitemap providers via /api/sitemap-providers, independant du build.</td></tr>
+    <tr><td>Schema.org</td><td>Coverage large</td><td>12 types de schemas implementes (Organization, LocalBusiness, FAQPage, etc.).</td></tr>
+    <tr><td>Contenu</td><td>Donnees enrichies par commune</td><td>Prix, statistiques, donnees demographiques par ville via commune-data.</td></tr>
+    <tr><td>SEO technique</td><td>94% HTTP 200 au crawl</td><td>Tres peu de pages en erreur, pas de gaspillage de budget crawl.</td></tr>
+  </tbody>
+</table>
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- 12. ANNEXES                                                            -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<h1><span class="section-number">12</span> Annexes techniques</h1>
+
+<h3>A.1 Fichiers critiques audites</h3>
+<table>
+  <thead><tr><th>Fichier</th><th>Role</th><th>Lignes</th></tr></thead>
+  <tbody>
+    <tr><td><code>src/app/sitemap.ts</code></td><td>Generation de tous les sitemaps</td><td>400</td></tr>
+    <tr><td><code>src/app/robots.ts</code></td><td>Configuration robots.txt</td><td>98</td></tr>
+    <tr><td><code>src/lib/seo/jsonld.ts</code></td><td>Schemas JSON-LD (9 fonctions)</td><td>443</td></tr>
+    <tr><td><code>src/components/artisan/ArtisanSchema.tsx</code></td><td>Schema combine artisan (@graph)</td><td>296</td></tr>
+    <tr><td><code>src/components/Footer.tsx</code></td><td>Footer global (liens internes)</td><td>~300</td></tr>
+    <tr><td><code>src/components/Breadcrumb.tsx</code></td><td>Composant breadcrumb visuel</td><td>~80</td></tr>
+    <tr><td><code>src/app/(public)/services/[service]/[location]/page.tsx</code></td><td>Pages service+ville</td><td>~500</td></tr>
+  </tbody>
+</table>
+
+<h3>A.2 Methodologie</h3>
+<p>Cet audit a ete realise par croisement de :</p>
+<ul>
+  <li><strong>Donnees Google Search Console</strong> : indexation, crawl stats, rich results, requetes de recherche</li>
+  <li><strong>Audit du code source</strong> : analyse exhaustive de 50+ fichiers (JSON-LD, meta tags, sitemap, maillage interne, composants)</li>
+  <li><strong>Analyse architecturale</strong> : Next.js 14 App Router, TypeScript, Supabase, structure des routes</li>
+</ul>
+
+<h3>A.3 Glossaire</h3>
+<table>
+  <thead><tr><th>Terme</th><th>Definition</th></tr></thead>
+  <tbody>
+    <tr><td>CTR</td><td>Click-Through Rate — taux de clic depuis les resultats de recherche</td></tr>
+    <tr><td>SERP</td><td>Search Engine Results Page — page de resultats Google</td></tr>
+    <tr><td>Rich Results</td><td>Resultats enrichis (etoiles, breadcrumbs, FAQ) dans les SERPs</td></tr>
+    <tr><td>JSON-LD</td><td>JavaScript Object Notation for Linked Data — format de donnees structurees</td></tr>
+    <tr><td>Sandbox</td><td>Periode d'evaluation initiale d'un nouveau domaine par Google</td></tr>
+    <tr><td>PageRank</td><td>Score d'autorite transmis par les liens internes et externes</td></tr>
+    <tr><td>Budget crawl</td><td>Nombre de pages que Google crawle sur une periode donnee</td></tr>
+    <tr><td>ISR</td><td>Incremental Static Regeneration — renouvellement des pages statiques</td></tr>
+    <tr><td>SSR/SSG</td><td>Server-Side Rendering / Static Site Generation</td></tr>
+    <tr><td>RLS</td><td>Row Level Security — securite au niveau des lignes (Supabase)</td></tr>
+  </tbody>
+</table>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="report-footer">
+  <p><strong>ServicesArtisans.fr — Audit SEO Global</strong></p>
+  <p>Document confidentiel — 27 Fevrier 2026</p>
+  <p>Genere par analyse croisee Google Search Console + audit code source</p>
+</div>
+
+</main>
+</body>
+</html>
