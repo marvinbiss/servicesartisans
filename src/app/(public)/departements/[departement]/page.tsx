@@ -62,6 +62,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
+    robots: { index: true, follow: true, 'max-snippet': -1 as const, 'max-image-preview': 'large' as const, 'max-video-preview': -1 as const },
     alternates: { canonical: `${SITE_URL}/departements/${deptSlug}` },
     openGraph: {
       locale: 'fr_FR',
