@@ -11,6 +11,7 @@ import { tradeContent } from '@/lib/data/trade-content'
 import { villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
 import { hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { getCommuneBySlug, formatNumber } from '@/lib/data/commune-data'
+import { getCityValues } from '@/lib/insee-resolver'
 
 // ---------------------------------------------------------------------------
 // Static params: top 10 problems x top 30 cities = 300 pre-rendered pages
@@ -115,7 +116,7 @@ export async function generateMetadata({
         .from('providers')
         .select('id', { count: 'exact', head: true })
         .eq('is_active', true)
-        .eq('address_city', villeData.name)
+        .in('address_city', getCityValues(villeData.name))
         .limit(1)
       providerCount = count ?? 0
     } catch {

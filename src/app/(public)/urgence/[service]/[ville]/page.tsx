@@ -18,6 +18,7 @@ import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME, PHONE_TEL } from '@/lib/seo/config'
 import { tradeContent } from '@/lib/data/trade-content'
+import { getCityValues } from '@/lib/insee-resolver'
 import { hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
 import { getCommuneBySlug, formatNumber } from '@/lib/data/commune-data'
@@ -224,7 +225,7 @@ export async function generateMetadata({
         .from('providers')
         .select('id', { count: 'exact', head: true })
         .eq('is_active', true)
-        .eq('address_city', villeData.name)
+        .in('address_city', getCityValues(villeData.name))
         .limit(1)
       providerCount = count ?? 0
     } catch {
