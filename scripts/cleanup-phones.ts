@@ -28,9 +28,11 @@ const DEPT_FILTER = process.argv.includes('--dept')
   ? process.argv[process.argv.indexOf('--dept') + 1]
   : undefined
 
-const DATA_DIR = path.join(__dirname, '.enrich-data')
+const GM_DATA_DIR = path.join(__dirname, '.gm-data')
+const OUTPUT_DIR = path.join(__dirname, '.enrich-data')
 const GM_FILES = ['gm-listings.jsonl', 'gm-listings-v2.jsonl', 'gm-listings-cities.jsonl']
-const REPORT_FILE = path.join(DATA_DIR, 'audit-report.json')
+
+if (!fs.existsSync(OUTPUT_DIR)) fs.mkdirSync(OUTPUT_DIR, { recursive: true })
 
 // ═══════════════════════════════════════════
 // Fuzzy matching
@@ -97,7 +99,7 @@ function loadGMRecords(): Map<string, GMRecord> {
   const phoneMap = new Map<string, GMRecord>()
 
   for (const file of GM_FILES) {
-    const filepath = path.join(DATA_DIR, file)
+    const filepath = path.join(GM_DATA_DIR, file)
     if (!fs.existsSync(filepath)) continue
 
     const lines = fs.readFileSync(filepath, 'utf-8').trim().split('\n')
@@ -294,7 +296,7 @@ async function main() {
     console.log('─'.repeat(70) + '\n')
 
     // Save cleanup plan
-    const planFile = path.join(DATA_DIR, 'cleanup-plan.json')
+    const planFile = path.join(OUTPUT_DIR, 'cleanup-plan.json')
     fs.writeFileSync(planFile, JSON.stringify({
       date: new Date().toISOString(),
       totalToClean: idsToClean.size,
@@ -350,7 +352,7 @@ async function main() {
     console.log('═'.repeat(70) + '\n')
 
     // Save cleanup log
-    const logFile = path.join(DATA_DIR, 'cleanup-log.json')
+    const logFile = path.join(OUTPUT_DIR, 'cleanup-log.json')
     fs.writeFileSync(logFile, JSON.stringify({
       date: new Date().toISOString(),
       phoneBefore,

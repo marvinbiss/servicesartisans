@@ -24,9 +24,12 @@ import { Client } from 'pg'
 const PG_URL = process.env.DATABASE_URL
   || 'postgresql://postgres:BEB6LnGlT6U9bkTe@db.umjmbdbwcsxrvfqktiui.supabase.co:5432/postgres'
 
-const DATA_DIR = path.join(__dirname, '.enrich-data')
+const GM_DATA_DIR = path.join(__dirname, '.gm-data')
 const GM_FILES = ['gm-listings.jsonl', 'gm-listings-v2.jsonl', 'gm-listings-cities.jsonl']
-const REPORT_FILE = path.join(__dirname, '.enrich-data', 'audit-report.json')
+const REPORT_DIR = path.join(__dirname, '.enrich-data')
+const REPORT_FILE = path.join(REPORT_DIR, 'audit-report.json')
+
+if (!fs.existsSync(REPORT_DIR)) fs.mkdirSync(REPORT_DIR, { recursive: true })
 
 const VERBOSE = process.argv.includes('--verbose')
 const DEPT_FILTER = process.argv.includes('--dept')
@@ -124,7 +127,7 @@ function loadGMRecords(): Map<string, GMRecord> {
   let totalLoaded = 0
 
   for (const file of GM_FILES) {
-    const filepath = path.join(DATA_DIR, file)
+    const filepath = path.join(GM_DATA_DIR, file)
     if (!fs.existsSync(filepath)) {
       console.log(`  SKIP (introuvable) : ${file}`)
       continue
