@@ -31,7 +31,7 @@ const SCALE_INTERVAL_MS = 2 * 60 * 1000  // Add 1 worker every 2 min
 const DELAY_PER_WORKER_MS = 5000          // Min delay between requests per worker
 const SCRAPER_TIMEOUT_MS = 90000
 const MAX_RETRIES = 2
-const MATCH_THRESHOLD = 0.35
+const MATCH_THRESHOLD = 0.50
 
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true })
 

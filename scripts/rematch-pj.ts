@@ -25,7 +25,7 @@ dotenv.config({ path: path.join(__dirname, '..', '.env.local') })
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!
 
-const MATCH_THRESHOLD = 0.35
+const MATCH_THRESHOLD = 0.50
 const LISTINGS_FILE = path.join(__dirname, '.enrich-data', 'pj-listings.jsonl')
 const ARTISANS_CACHE = path.join(__dirname, '.enrich-data', 'artisans-cache.jsonl')
 const MATCHES_DIR = path.join(__dirname, '.enrich-data', 'matches')
@@ -543,7 +543,7 @@ function matchLocal(allArtisans: MemArtisan[], listings: PJListing[]): MatchResu
         deptAlready++; alreadyHad++; found = true
       }
 
-      // === Phase B: Postal code + relaxed threshold 0.25 ===
+      // === Phase B: Postal code + relaxed threshold 0.45 ===
       if (!found && listing.postalCode) {
         const cpArtisans = byCP.get(listing.postalCode) || []
         let bestMatch: { artisan: MemArtisan; score: number } | null = null
@@ -551,7 +551,7 @@ function matchLocal(allArtisans: MemArtisan[], listings: PJListing[]): MatchResu
         for (const c of cpArtisans) {
           if (c.phone || assignedArtisans.has(c.id)) continue
           const score = nameSimilarity(normalizedPJ, c.norm)
-          if (score >= 0.25 && (!bestMatch || score > bestMatch.score)) {
+          if (score >= 0.45 && (!bestMatch || score > bestMatch.score)) {
             bestMatch = { artisan: c, score }
           }
         }
@@ -594,7 +594,7 @@ function matchLocal(allArtisans: MemArtisan[], listings: PJListing[]): MatchResu
           let bestMatch: { artisan: MemArtisan; score: number } | null = null
           for (const c of cityCandidates) {
             const score = nameSimilarity(normalizedPJ, c.norm)
-            if (score >= 0.3 && (!bestMatch || score > bestMatch.score)) {
+            if (score >= 0.45 && (!bestMatch || score > bestMatch.score)) {
               bestMatch = { artisan: c, score }
             }
           }

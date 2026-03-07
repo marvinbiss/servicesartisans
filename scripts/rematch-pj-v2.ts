@@ -17,9 +17,9 @@ const PG_URL = 'postgresql://postgres:BEB6LnGlT6U9bkTe@db.umjmbdbwcsxrvfqktiui.s
 const LISTINGS_FILE = path.join(__dirname, '.enrich-data', 'pj-listings.jsonl')
 
 // ── Config ──
-const MATCH_THRESHOLD = 0.35
-const CP_MATCH_THRESHOLD = 0.45 // Plus strict pour match par CP seul
-const MIN_DISTINCTIVE_LEN = 4   // Mot distinctif minimum pour CP match
+const MATCH_THRESHOLD = 0.50
+const CP_MATCH_THRESHOLD = 0.55 // Plus strict pour match par CP seul
+const MIN_DISTINCTIVE_LEN = 5   // Mot distinctif minimum pour CP match
 
 // ── Common words (métiers, formes juridiques, mots génériques) ──
 const COMMON_WORDS = new Set([

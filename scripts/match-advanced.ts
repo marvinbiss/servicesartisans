@@ -227,7 +227,7 @@ function strategyAddress(
           score = streetSim * 0.4 + nameSim * 0.6
         }
 
-        if (score > bestScore && score >= 0.35) {
+        if (score > bestScore && score >= 0.50) {
           bestScore = score
           bestProvider = prov
         }
@@ -313,7 +313,7 @@ function strategyReverse(
     for (const pj of candidateSet) {
       if (assignedPhones.has(pj.phone!)) continue
       const score = dice(pj.name, prov.name)
-      if (score > bestScore && score >= 0.30) {
+      if (score > bestScore && score >= 0.50) {
         bestScore = score
         bestPJ = pj
       }
@@ -406,7 +406,7 @@ function strategyCityWord(
 
         if (tokenOverlap > 0) {
           const score = dice(pj.name, prov.name)
-          if (score > bestScore && score >= 0.25) {
+          if (score > bestScore && score >= 0.50) {
             bestScore = score
             bestProvider = prov
           }
@@ -482,11 +482,11 @@ function strategyInitials(
           if (assignedProviders.has(prov.id)) continue
           // Verify with name similarity
           const score = dice(pj.name, prov.name)
-          if (score >= 0.15) {
+          if (score >= 0.40) {
             results.push({
               artisanId: prov.id,
               phone: pj.phone,
-              score: Math.max(score, 0.30),
+              score: Math.max(score, 0.40),
               strategy: 'initials',
               pjName: pj.name,
               artisanName: prov.name,

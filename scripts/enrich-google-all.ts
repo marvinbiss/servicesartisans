@@ -14,7 +14,7 @@ import { Pool } from 'pg'
 const PG_URL = 'postgresql://postgres:BEB6LnGlT6U9bkTe@db.umjmbdbwcsxrvfqktiui.supabase.co:5432/postgres'
 const GM_FILE = path.join(__dirname, '.gm-data', 'gm-listings.jsonl')
 
-const MATCH_THRESHOLD = 0.35
+const MATCH_THRESHOLD = 0.50
 
 const COMMON_WORDS = new Set([
   'plomberie','plombier','chauffage','chauffagiste','electricite','electricien',

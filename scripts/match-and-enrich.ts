@@ -18,7 +18,7 @@ const PG_URL = 'postgresql://postgres:BEB6LnGlT6U9bkTe@db.umjmbdbwcsxrvfqktiui.s
 const PJ_FILE = path.join(__dirname, '.enrich-data', 'pj-listings.jsonl')
 const GM_FILE = path.join(__dirname, '.gm-data', 'gm-listings.jsonl')
 const WORKERS = 4
-const MATCH_THRESHOLD = 0.35
+const MATCH_THRESHOLD = 0.50
 
 const DEPTS = [
   '01','02','03','04','05','06','07','08','09','10',
