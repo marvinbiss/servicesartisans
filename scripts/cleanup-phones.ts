@@ -1,11 +1,11 @@
 /**
  * Nettoyage Complet des Numéros de Téléphone
  *
- * Supprime les numéros problématiques détectés par l'audit :
- *   1. Numéros fictifs des seeds (migrations 104, 105)
- *   2. Numéros dupliqués (même numéro sur plusieurs artisans)
- *   3. Numéros au format invalide
- *   4. Numéros mal attribués (cross-check GM → similarité < 20%)
+ * Actions :
+ *   1. Normaliser les +33 → 0x format (pas de suppression)
+ *   2. Supprimer les numéros fictifs des seeds
+ *   3. Dédupliquer (même numéro sur plusieurs artisans)
+ *   4. Supprimer les numéros mal attribués (cross-check GM, sim < 20%)
  *
  * IMPORTANT : Les artisans revendiqués (claimed_at IS NOT NULL) ne sont
  * JAMAIS modifiés — leur phone est considéré fiable.
@@ -18,10 +18,10 @@
 
 import * as fs from 'fs'
 import * as path from 'path'
-import { Client } from 'pg'
+import { execSync } from 'child_process'
 
-const PG_URL = process.env.DATABASE_URL
-  || 'postgresql://postgres:BEB6LnGlT6U9bkTe@db.umjmbdbwcsxrvfqktiui.supabase.co:5432/postgres'
+const SUPABASE_URL = 'https://umjmbdbwcsxrvfqktiui.supabase.co'
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtam1iZGJ3Y3N4cnZmcWt0aXVpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2OTY2NjQ1OCwiZXhwIjoyMDg1MjQyNDU4fQ.6hXdR5jfhCl1AA5052k3YrBmI-UMhu36mxV2IPvYxjc'
 
 const DRY_RUN = !process.argv.includes('--apply')
 const DEPT_FILTER = process.argv.includes('--dept')
@@ -33,6 +33,45 @@ const OUTPUT_DIR = path.join(__dirname, '.enrich-data')
 const GM_FILES = ['gm-listings.jsonl', 'gm-listings-v2.jsonl', 'gm-listings-cities.jsonl']
 
 if (!fs.existsSync(OUTPUT_DIR)) fs.mkdirSync(OUTPUT_DIR, { recursive: true })
+
+// ═══════════════════════════════════════════
+// Supabase REST via curl
+// ═══════════════════════════════════════════
+
+function supaGet(queryPath: string): any {
+  const url = `${SUPABASE_URL}/rest/v1${queryPath}`
+  const cmd = `curl -s -H 'apikey: ${SUPABASE_KEY}' -H 'Authorization: Bearer ${SUPABASE_KEY}' '${url}'`
+  const out = execSync(cmd, { encoding: 'utf-8', timeout: 60000 })
+  return JSON.parse(out)
+}
+
+function supaPatch(queryPath: string, body: Record<string, any>): any {
+  const url = `${SUPABASE_URL}/rest/v1${queryPath}`
+  const bodyStr = JSON.stringify(body).replace(/'/g, "'\\''")
+  const cmd = `curl -s -X PATCH -H 'apikey: ${SUPABASE_KEY}' -H 'Authorization: Bearer ${SUPABASE_KEY}' -H 'Content-Type: application/json' -H 'Prefer: return=minimal' -d '${bodyStr}' '${url}'`
+  try {
+    execSync(cmd, { encoding: 'utf-8', timeout: 30000 })
+    return true
+  } catch {
+    return false
+  }
+}
+
+function supaFetchAll(queryPath: string): any[] {
+  const PAGE = 1000
+  const all: any[] = []
+  let offset = 0
+  while (true) {
+    const sep = queryPath.includes('?') ? '&' : '?'
+    const data = supaGet(`${queryPath}${sep}offset=${offset}&limit=${PAGE}`)
+    if (!data || !Array.isArray(data) || data.length === 0) break
+    all.push(...data)
+    if (data.length < PAGE) break
+    offset += PAGE
+    process.stdout.write(`    ${all.length} chargés...\r`)
+  }
+  return all
+}
 
 // ═══════════════════════════════════════════
 // Fuzzy matching
@@ -70,7 +109,19 @@ function diceSimilarity(a: string, b: string): number {
 }
 
 // ═══════════════════════════════════════════
-// Numéros fictifs
+// Phone normalization
+// ═══════════════════════════════════════════
+
+function normalizePhone(raw: string): string | null {
+  let cleaned = raw.replace(/[\s.\-()]/g, '')
+  if (cleaned.startsWith('+33')) cleaned = '0' + cleaned.substring(3)
+  if (cleaned.startsWith('0033')) cleaned = '0' + cleaned.substring(4)
+  if (/^0[1-9]\d{8}$/.test(cleaned)) return cleaned
+  return null
+}
+
+// ═══════════════════════════════════════════
+// Constants
 // ═══════════════════════════════════════════
 
 const FAKE_PHONES = [
@@ -83,38 +134,29 @@ const FAKE_PHONES = [
   '0320456701','0320456702','0320456703','0320456704','0320456705',
   '0656789001','0656789002','0656789003','0656789004','0656789005',
 ]
+const FAKE_SET = new Set(FAKE_PHONES)
 
 // ═══════════════════════════════════════════
-// Load GM data for cross-check
+// Load GM data
 // ═══════════════════════════════════════════
 
-interface GMRecord {
-  name: string
-  phone: string
-  trade: string
-  deptCode: string
-}
+interface GMRecord { name: string; phone: string; trade: string; deptCode: string }
 
 function loadGMRecords(): Map<string, GMRecord> {
   const phoneMap = new Map<string, GMRecord>()
-
   for (const file of GM_FILES) {
     const filepath = path.join(GM_DATA_DIR, file)
     if (!fs.existsSync(filepath)) continue
-
     const lines = fs.readFileSync(filepath, 'utf-8').trim().split('\n')
     for (const line of lines) {
       try {
         const obj: GMRecord = JSON.parse(line)
         if (!obj.phone || !obj.name) continue
         if (DEPT_FILTER && obj.deptCode !== DEPT_FILTER) continue
-        if (!phoneMap.has(obj.phone)) {
-          phoneMap.set(obj.phone, obj)
-        }
+        if (!phoneMap.has(obj.phone)) phoneMap.set(obj.phone, obj)
       } catch { /* skip */ }
     }
   }
-
   return phoneMap
 }
 
@@ -122,168 +164,174 @@ function loadGMRecords(): Map<string, GMRecord> {
 // MAIN
 // ═══════════════════════════════════════════
 
-async function main() {
+interface ProviderRow {
+  id: string
+  name: string
+  phone: string | null
+  claimed_at: string | null
+  review_count: number | null
+  created_at: string | null
+}
+
+function main() {
   console.log('\n' + '═'.repeat(70))
   console.log('  NETTOYAGE DES NUMÉROS DE TÉLÉPHONE')
   console.log(`  Mode : ${DRY_RUN ? '🔍 DRY-RUN (aucune modification)' : '⚠️  APPLICATION RÉELLE'}`)
   if (DEPT_FILTER) console.log(`  Département : ${DEPT_FILTER}`)
   console.log('═'.repeat(70))
 
-  const client = new Client({
-    connectionString: PG_URL,
-    ssl: { rejectUnauthorized: false },
-    connectionTimeoutMillis: 30000,
-  })
-  await client.connect()
+  // Test connection
+  const test = supaGet('/providers?select=id&limit=1&is_active=eq.true')
+  if (!test || test.length === 0) {
+    console.error('  ERREUR : Connexion Supabase impossible')
+    process.exit(1)
+  }
   console.log('  Connexion OK\n')
 
-  const deptFilter = DEPT_FILTER ? `AND address_department = '${DEPT_FILTER}'` : ''
-  const idsToClean = new Set<string>()
-  const cleanupReasons: { id: string; name: string; phone: string; reason: string }[] = []
-
-  // Stats avant
-  const beforeRes = await client.query(`
-    SELECT COUNT(phone) FILTER (WHERE phone IS NOT NULL) as with_phone
-    FROM providers WHERE is_active = true ${deptFilter}
-  `)
-  const phoneBefore = Number(beforeRes.rows[0].with_phone)
-
-  // ═══════════════════════════════════════════
-  // ÉTAPE 1 : Numéros fictifs
-  // ═══════════════════════════════════════════
-  console.log('── Étape 1 : Numéros fictifs des seeds ──')
-
-  const fakePlaceholders = FAKE_PHONES.map((_, i) => `$${i + 1}`).join(',')
-  const fakeRes = await client.query(
-    `SELECT id, name, phone FROM providers
-     WHERE phone IN (${fakePlaceholders}) AND claimed_at IS NULL ${deptFilter}`,
-    FAKE_PHONES
+  // Load all providers with phone
+  console.log('  Chargement des providers avec phone...')
+  const deptQ = DEPT_FILTER ? `&address_department=eq.${DEPT_FILTER}` : ''
+  const allWithPhone: ProviderRow[] = supaFetchAll(
+    `/providers?select=id,name,phone,claimed_at,review_count,created_at&is_active=eq.true&phone=not.is.null${deptQ}&order=created_at`
   )
+  console.log(`  → ${allWithPhone.length} providers chargés\n`)
 
-  for (const row of fakeRes.rows) {
-    idsToClean.add(row.id)
-    cleanupReasons.push({ id: row.id, name: row.name, phone: row.phone, reason: 'fictif (seed)' })
-  }
-  console.log(`  → ${fakeRes.rows.length} numéros fictifs à supprimer`)
+  const toNormalize: { id: string; oldPhone: string; newPhone: string; name: string }[] = []
+  const toDelete: { id: string; name: string; phone: string; reason: string }[] = []
 
   // ═══════════════════════════════════════════
-  // ÉTAPE 2 : Numéros format invalide
+  // ÉTAPE 1 : Normaliser +33 → 0x
   // ═══════════════════════════════════════════
-  console.log('\n── Étape 2 : Numéros au format invalide ──')
+  console.log('── Étape 1 : Normalisation +33 → 0x ──')
 
-  const invalidRes = await client.query(`
-    SELECT id, name, phone FROM providers
-    WHERE phone IS NOT NULL AND is_active = true AND claimed_at IS NULL ${deptFilter}
-      AND (
-        phone !~ '^0[1-9][0-9]{8}$'
-        OR phone ~ '^(089|036|099)'
-        OR LENGTH(REGEXP_REPLACE(phone, '[^0-9]', '', 'g')) != 10
-      )
-    LIMIT 1000
-  `)
-
-  for (const row of invalidRes.rows) {
-    if (!idsToClean.has(row.id)) {
-      idsToClean.add(row.id)
-      cleanupReasons.push({ id: row.id, name: row.name, phone: row.phone, reason: 'format invalide' })
+  for (const p of allWithPhone) {
+    if (!p.phone) continue
+    // Already in correct format?
+    if (/^0[1-9]\d{8}$/.test(p.phone)) continue
+    const normalized = normalizePhone(p.phone)
+    if (normalized && normalized !== p.phone) {
+      toNormalize.push({ id: p.id, oldPhone: p.phone, newPhone: normalized, name: p.name })
+    } else if (!normalized) {
+      // Truly invalid phone (can't be normalized)
+      if (!p.claimed_at) {
+        toDelete.push({ id: p.id, name: p.name, phone: p.phone, reason: 'format invalide (non normalisable)' })
+      }
     }
   }
-  console.log(`  → ${invalidRes.rows.length} numéros invalides à supprimer`)
+  console.log(`  → ${toNormalize.length} numéros à normaliser (+33 → 0x)`)
+  console.log(`  → ${toDelete.length} numéros réellement invalides à supprimer`)
 
   // ═══════════════════════════════════════════
-  // ÉTAPE 3 : Numéros dupliqués
+  // ÉTAPE 2 : Numéros fictifs
+  // ═══════════════════════════════════════════
+  console.log('\n── Étape 2 : Numéros fictifs des seeds ──')
+
+  const alreadyDeleting = new Set(toDelete.map(d => d.id))
+  let fakeCount = 0
+  for (const p of allWithPhone) {
+    if (p.claimed_at || !p.phone || alreadyDeleting.has(p.id)) continue
+    const digits = normalizePhone(p.phone) || p.phone
+    if (FAKE_SET.has(digits)) {
+      toDelete.push({ id: p.id, name: p.name, phone: p.phone, reason: 'fictif (seed)' })
+      alreadyDeleting.add(p.id)
+      fakeCount++
+    }
+  }
+  console.log(`  → ${fakeCount} numéros fictifs`)
+
+  // ═══════════════════════════════════════════
+  // ÉTAPE 3 : Numéros dupliqués (après normalisation)
   // ═══════════════════════════════════════════
   console.log('\n── Étape 3 : Numéros dupliqués ──')
 
-  const dupRes = await client.query(`
-    WITH ranked AS (
-      SELECT id, name, phone,
-             ROW_NUMBER() OVER (PARTITION BY phone ORDER BY
-               claimed_at DESC NULLS LAST,
-               review_count DESC NULLS LAST,
-               created_at ASC
-             ) as rn
-      FROM providers
-      WHERE phone IS NOT NULL AND is_active = true ${deptFilter}
-    )
-    SELECT id, name, phone FROM ranked
-    WHERE rn > 1 AND id NOT IN (
-      SELECT id FROM providers WHERE claimed_at IS NOT NULL
-    )
-  `)
+  // Build map with normalized phones
+  const normalizeMap = new Map<string, string>()
+  for (const n of toNormalize) normalizeMap.set(n.id, n.newPhone)
 
-  for (const row of dupRes.rows) {
-    if (!idsToClean.has(row.id)) {
-      idsToClean.add(row.id)
-      cleanupReasons.push({ id: row.id, name: row.name, phone: row.phone, reason: 'doublon' })
+  const phoneGroups = new Map<string, ProviderRow[]>()
+  for (const p of allWithPhone) {
+    if (!p.phone || alreadyDeleting.has(p.id)) continue
+    const normalized = normalizeMap.get(p.id) || normalizePhone(p.phone) || p.phone
+    const arr = phoneGroups.get(normalized) || []
+    arr.push(p)
+    phoneGroups.set(normalized, arr)
+  }
+
+  let dupCount = 0
+  for (const [, group] of phoneGroups) {
+    if (group.length <= 1) continue
+    // Sort: claimed first, then review_count desc, then oldest first
+    group.sort((a, b) => {
+      if (a.claimed_at && !b.claimed_at) return -1
+      if (!a.claimed_at && b.claimed_at) return 1
+      const ra = a.review_count || 0
+      const rb = b.review_count || 0
+      if (rb !== ra) return rb - ra
+      return (a.created_at || '').localeCompare(b.created_at || '')
+    })
+    // Keep first, remove rest
+    for (let i = 1; i < group.length; i++) {
+      if (group[i].claimed_at || alreadyDeleting.has(group[i].id)) continue
+      toDelete.push({ id: group[i].id, name: group[i].name, phone: group[i].phone!, reason: 'doublon' })
+      alreadyDeleting.add(group[i].id)
+      dupCount++
     }
   }
-  console.log(`  → ${dupRes.rows.length} doublons à nettoyer`)
+  console.log(`  → ${dupCount} doublons`)
 
   // ═══════════════════════════════════════════
   // ÉTAPE 4 : Cross-check GM (mauvais artisan)
   // ═══════════════════════════════════════════
-  console.log('\n── Étape 4 : Numéros attribués au mauvais artisan (cross-check GM) ──')
+  console.log('\n── Étape 4 : Cross-check GM ──')
 
   const gmRecords = loadGMRecords()
   console.log(`  ${gmRecords.size} numéros GM chargés`)
 
-  // Get all non-claimed providers with phone
-  const providersRes = await client.query(`
-    SELECT id, name, phone FROM providers
-    WHERE phone IS NOT NULL AND is_active = true AND claimed_at IS NULL ${deptFilter}
-  `)
+  let crossCount = 0
+  for (const p of allWithPhone) {
+    if (p.claimed_at || !p.phone || alreadyDeleting.has(p.id)) continue
+    const digits = normalizeMap.get(p.id) || normalizePhone(p.phone) || p.phone
 
-  let crossCheckCritical = 0
-  for (const provider of providersRes.rows) {
-    if (idsToClean.has(provider.id)) continue
-    const phone = provider.phone?.replace(/\D/g, '')
-    if (!phone) continue
+    const gmRec = gmRecords.get(digits)
+    if (!gmRec) continue
 
-    const gmRec = gmRecords.get(phone)
-    if (!gmRec) continue // Phone not in GM data, can't cross-check
-
-    const similarity = diceSimilarity(gmRec.name, provider.name)
-
-    // Critical: GM has this phone for a completely different business
+    const similarity = diceSimilarity(gmRec.name, p.name)
     if (similarity < 0.20) {
-      idsToClean.add(provider.id)
-      cleanupReasons.push({
-        id: provider.id,
-        name: provider.name,
-        phone: provider.phone,
+      toDelete.push({
+        id: p.id,
+        name: p.name,
+        phone: p.phone,
         reason: `mauvais artisan (GM: "${gmRec.name}", sim: ${Math.round(similarity * 100)}%)`,
       })
-      crossCheckCritical++
+      alreadyDeleting.add(p.id)
+      crossCount++
     }
   }
-  console.log(`  → ${crossCheckCritical} numéros sur le mauvais artisan (sim < 20%)`)
+  console.log(`  → ${crossCount} numéros sur le mauvais artisan`)
 
   // ═══════════════════════════════════════════
   // RÉSUMÉ
   // ═══════════════════════════════════════════
   console.log('\n' + '═'.repeat(70))
-  console.log(`  TOTAL : ${idsToClean.size} numéros à supprimer`)
+  console.log('  RÉSUMÉ')
   console.log('═'.repeat(70))
+  console.log(`  Normalisation (+33 → 0x) : ${toNormalize.length}`)
+  console.log(`  Suppression phone :        ${toDelete.length}`)
 
-  // Breakdown by reason
   const byReason: Record<string, number> = {}
-  for (const r of cleanupReasons) {
-    const key = r.reason.split(' (')[0] // Group by main reason
+  for (const r of toDelete) {
+    const key = r.reason.split(' (')[0]
     byReason[key] = (byReason[key] || 0) + 1
   }
   for (const [reason, count] of Object.entries(byReason)) {
-    console.log(`    ${reason}: ${count}`)
+    console.log(`    └ ${reason}: ${count}`)
   }
 
-  // Show some examples
-  console.log('\n  Exemples :')
-  for (const r of cleanupReasons.slice(0, 15)) {
+  console.log('\n  Exemples suppression :')
+  for (const r of toDelete.slice(0, 10)) {
     console.log(`    ${r.phone} | ${r.name} | ${r.reason}`)
   }
-  if (cleanupReasons.length > 15) {
-    console.log(`    ... et ${cleanupReasons.length - 15} autres`)
-  }
+  if (toDelete.length > 10) console.log(`    ... et ${toDelete.length - 10} autres`)
 
   // ═══════════════════════════════════════════
   // APPLICATION
@@ -295,78 +343,63 @@ async function main() {
     console.log('  Pour appliquer : npx tsx scripts/cleanup-phones.ts --apply')
     console.log('─'.repeat(70) + '\n')
 
-    // Save cleanup plan
-    const planFile = path.join(OUTPUT_DIR, 'cleanup-plan.json')
-    fs.writeFileSync(planFile, JSON.stringify({
+    fs.writeFileSync(path.join(OUTPUT_DIR, 'cleanup-plan.json'), JSON.stringify({
       date: new Date().toISOString(),
-      totalToClean: idsToClean.size,
-      phoneBefore,
-      items: cleanupReasons,
+      toNormalize: toNormalize.length,
+      toDelete: toDelete.length,
+      phoneBefore: allWithPhone.length,
+      normalizeItems: toNormalize.slice(0, 50),
+      deleteItems: toDelete,
     }, null, 2))
-    console.log(`  Plan sauvegardé : ${planFile}`)
-  } else {
-    console.log('\n── Application des corrections ──')
-
-    if (idsToClean.size === 0) {
-      console.log('  Rien à nettoyer !')
-      await client.end()
-      return
-    }
-
-    const idsArr = Array.from(idsToClean)
-    const CHUNK = 500
-    let totalCleaned = 0
-
-    for (let i = 0; i < idsArr.length; i += CHUNK) {
-      const chunk = idsArr.slice(i, i + CHUNK)
-      const placeholders = chunk.map((_, idx) => `$${idx + 1}`).join(',')
-
-      const res = await client.query(
-        `UPDATE providers
-         SET phone = NULL, updated_at = NOW()
-         WHERE id IN (${placeholders}) AND claimed_at IS NULL
-         RETURNING id`,
-        chunk
-      )
-      totalCleaned += res.rowCount || 0
-
-      if ((i + CHUNK) % 2000 === 0 || i + CHUNK >= idsArr.length) {
-        console.log(`  Progression : ${Math.min(i + CHUNK, idsArr.length)}/${idsArr.length} — ${totalCleaned} nettoyés`)
-      }
-    }
-
-    // Stats après
-    const afterRes = await client.query(`
-      SELECT COUNT(phone) FILTER (WHERE phone IS NOT NULL) as with_phone
-      FROM providers WHERE is_active = true ${deptFilter}
-    `)
-    const phoneAfter = Number(afterRes.rows[0].with_phone)
-
-    console.log('\n' + '═'.repeat(70))
-    console.log('  ✅ NETTOYAGE TERMINÉ')
-    console.log('═'.repeat(70))
-    console.log(`  Avant :    ${phoneBefore.toLocaleString('fr-FR')} artisans avec phone`)
-    console.log(`  Nettoyés : ${totalCleaned}`)
-    console.log(`  Après :    ${phoneAfter.toLocaleString('fr-FR')} artisans avec phone`)
-    console.log(`  Δ :        -${(phoneBefore - phoneAfter).toLocaleString('fr-FR')}`)
-    console.log('═'.repeat(70) + '\n')
-
-    // Save cleanup log
-    const logFile = path.join(OUTPUT_DIR, 'cleanup-log.json')
-    fs.writeFileSync(logFile, JSON.stringify({
-      date: new Date().toISOString(),
-      phoneBefore,
-      phoneAfter,
-      totalCleaned,
-      items: cleanupReasons,
-    }, null, 2))
-    console.log(`  Log : ${logFile}`)
+    console.log(`  Plan sauvegardé : ${path.join(OUTPUT_DIR, 'cleanup-plan.json')}`)
+    return
   }
 
-  await client.end()
+  console.log('\n── Application des corrections ──')
+
+  // 1. Normalize +33 → 0x
+  let normalizedCount = 0
+  console.log(`\n  [1/2] Normalisation de ${toNormalize.length} numéros...`)
+  for (let i = 0; i < toNormalize.length; i++) {
+    const { id, newPhone } = toNormalize[i]
+    const ok = supaPatch(`/providers?id=eq.${id}`, { phone: newPhone })
+    if (ok) normalizedCount++
+    if ((i + 1) % 100 === 0 || i + 1 === toNormalize.length) {
+      process.stdout.write(`    ${i + 1}/${toNormalize.length} — ${normalizedCount} normalisés\r`)
+    }
+  }
+  console.log(`\n    → ${normalizedCount} numéros normalisés`)
+
+  // 2. Delete bad phones
+  let deletedCount = 0
+  console.log(`\n  [2/2] Suppression de ${toDelete.length} numéros...`)
+  for (let i = 0; i < toDelete.length; i++) {
+    const { id } = toDelete[i]
+    const ok = supaPatch(`/providers?id=eq.${id}&claimed_at=is.null`, { phone: null })
+    if (ok) deletedCount++
+    if ((i + 1) % 50 === 0 || i + 1 === toDelete.length) {
+      process.stdout.write(`    ${i + 1}/${toDelete.length} — ${deletedCount} supprimés\r`)
+    }
+  }
+  console.log(`\n    → ${deletedCount} numéros supprimés`)
+
+  console.log('\n' + '═'.repeat(70))
+  console.log('  ✅ NETTOYAGE TERMINÉ')
+  console.log('═'.repeat(70))
+  console.log(`  Normalisés :  ${normalizedCount}`)
+  console.log(`  Supprimés :   ${deletedCount}`)
+  console.log(`  Avant :       ${allWithPhone.length} artisans avec phone`)
+  console.log(`  Après :       ~${allWithPhone.length - deletedCount} artisans avec phone`)
+  console.log('═'.repeat(70) + '\n')
+
+  fs.writeFileSync(path.join(OUTPUT_DIR, 'cleanup-log.json'), JSON.stringify({
+    date: new Date().toISOString(),
+    normalizedCount,
+    deletedCount,
+    phoneBefore: allWithPhone.length,
+    normalizeItems: toNormalize,
+    deleteItems: toDelete,
+  }, null, 2))
 }
 
-main().catch(err => {
-  console.error('ERREUR:', err)
-  process.exit(1)
-})
+main()

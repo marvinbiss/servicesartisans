@@ -19,10 +19,10 @@
 
 import * as fs from 'fs'
 import * as path from 'path'
-import { Client } from 'pg'
+import { execSync } from 'child_process'
 
-const PG_URL = process.env.DATABASE_URL
-  || 'postgresql://postgres:BEB6LnGlT6U9bkTe@db.umjmbdbwcsxrvfqktiui.supabase.co:5432/postgres'
+const SUPABASE_URL = 'https://umjmbdbwcsxrvfqktiui.supabase.co'
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtam1iZGJ3Y3N4cnZmcWt0aXVpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2OTY2NjQ1OCwiZXhwIjoyMDg1MjQyNDU4fQ.6hXdR5jfhCl1AA5052k3YrBmI-UMhu36mxV2IPvYxjc'
 
 const GM_DATA_DIR = path.join(__dirname, '.gm-data')
 const GM_FILES = ['gm-listings.jsonl', 'gm-listings-v2.jsonl', 'gm-listings-cities.jsonl']
@@ -35,6 +35,44 @@ const VERBOSE = process.argv.includes('--verbose')
 const DEPT_FILTER = process.argv.includes('--dept')
   ? process.argv[process.argv.indexOf('--dept') + 1]
   : undefined
+
+// ═══════════════════════════════════════════
+// Supabase REST via curl (bypass Node DNS issues)
+// ═══════════════════════════════════════════
+
+function supaGet(queryPath: string, headers?: Record<string, string>): any {
+  const extraHeaders = headers
+    ? Object.entries(headers).map(([k, v]) => `-H '${k}: ${v}'`).join(' ')
+    : ''
+  const url = `${SUPABASE_URL}/rest/v1${queryPath}`
+  const cmd = `curl -s -H 'apikey: ${SUPABASE_KEY}' -H 'Authorization: Bearer ${SUPABASE_KEY}' ${extraHeaders} '${url}'`
+  const out = execSync(cmd, { encoding: 'utf-8', timeout: 60000 })
+  return JSON.parse(out)
+}
+
+function supaCount(queryPath: string): number {
+  const url = `${SUPABASE_URL}/rest/v1${queryPath}`
+  const cmd = `curl -s -H 'apikey: ${SUPABASE_KEY}' -H 'Authorization: Bearer ${SUPABASE_KEY}' -H 'Prefer: count=exact' -H 'Range: 0-0' -I '${url}'`
+  const out = execSync(cmd, { encoding: 'utf-8', timeout: 60000 })
+  const match = out.match(/content-range:\s*\d+-\d+\/(\d+)/i)
+  return match ? parseInt(match[1]) : 0
+}
+
+function supaFetchAll(queryPath: string): any[] {
+  const PAGE = 1000
+  const all: any[] = []
+  let offset = 0
+  while (true) {
+    const sep = queryPath.includes('?') ? '&' : '?'
+    const data = supaGet(`${queryPath}${sep}offset=${offset}&limit=${PAGE}`)
+    if (!data || !Array.isArray(data) || data.length === 0) break
+    all.push(...data)
+    if (data.length < PAGE) break
+    offset += PAGE
+    process.stdout.write(`    ${all.length} chargés...\r`)
+  }
+  return all
+}
 
 // ═══════════════════════════════════════════
 // Types
@@ -58,8 +96,8 @@ interface ProviderRow {
   address_department: string
   address_city: string | null
   specialty: string | null
-  siret: string | null
   claimed_at: string | null
+  review_count: number | null
 }
 
 interface Mismatch {
@@ -140,7 +178,6 @@ function loadGMRecords(): Map<string, GMRecord> {
         const obj: GMRecord = JSON.parse(line)
         if (!obj.phone || !obj.name) continue
         if (DEPT_FILTER && obj.deptCode !== DEPT_FILTER) continue
-        // Deduplicate: keep the record with more info
         const existing = phoneMap.get(obj.phone)
         if (!existing || (obj.city && !existing.city) || (obj.website && !existing.website)) {
           phoneMap.set(obj.phone, { ...existing, ...obj })
@@ -160,7 +197,7 @@ function loadGMRecords(): Map<string, GMRecord> {
 // MAIN
 // ═══════════════════════════════════════════
 
-async function main() {
+function main() {
   console.log('\n' + '═'.repeat(70))
   console.log('  AUDIT QUALITÉ DES NUMÉROS DE TÉLÉPHONE')
   console.log('═'.repeat(70))
@@ -170,33 +207,38 @@ async function main() {
   console.log('\n[1] Chargement des données Google Maps brutes...')
   const gmRecords = loadGMRecords()
 
-  // Step 2: Connect to DB
-  console.log('\n[2] Connexion base de données...')
-  const client = new Client({
-    connectionString: PG_URL,
-    ssl: { rejectUnauthorized: false },
-    connectionTimeoutMillis: 30000,
-  })
-  await client.connect()
-  console.log('  → Connecté')
+  // Step 2: Connect to Supabase
+  console.log('\n[2] Connexion Supabase (via curl)...')
+  // Quick test
+  const testData = supaGet('/providers?select=id&limit=1&is_active=eq.true')
+  if (!testData || testData.length === 0) {
+    console.error('  ERREUR : Impossible de se connecter à Supabase')
+    process.exit(1)
+  }
+  console.log('  → OK')
 
   // Step 3: Stats de base
   console.log('\n[3] Statistiques actuelles...')
-  const deptFilter = DEPT_FILTER ? `AND address_department = '${DEPT_FILTER}'` : ''
-  const statsRes = await client.query(`
-    SELECT
-      COUNT(*) as total,
-      COUNT(phone) FILTER (WHERE phone IS NOT NULL) as with_phone,
-      COUNT(*) FILTER (WHERE phone IS NOT NULL AND claimed_at IS NOT NULL) as claimed_with_phone,
-      COUNT(*) FILTER (WHERE phone IS NULL) as without_phone
-    FROM providers
-    WHERE is_active = true ${deptFilter}
-  `)
-  const dbStats = statsRes.rows[0]
-  console.log(`  Total artisans actifs :       ${Number(dbStats.total).toLocaleString('fr-FR')}`)
-  console.log(`  Avec téléphone :              ${Number(dbStats.with_phone).toLocaleString('fr-FR')} (${(Number(dbStats.with_phone) / Number(dbStats.total) * 100).toFixed(1)}%)`)
-  console.log(`  Sans téléphone :              ${Number(dbStats.without_phone).toLocaleString('fr-FR')}`)
-  console.log(`  Revendiqués avec téléphone :  ${Number(dbStats.claimed_with_phone).toLocaleString('fr-FR')}`)
+
+  const deptQ = DEPT_FILTER ? `&address_department=eq.${DEPT_FILTER}` : ''
+  const total = supaCount(`/providers?is_active=eq.true${deptQ}`)
+  const withPhone = supaCount(`/providers?is_active=eq.true&phone=not.is.null${deptQ}`)
+  const withoutPhone = supaCount(`/providers?is_active=eq.true&phone=is.null${deptQ}`)
+  const claimedWithPhone = supaCount(`/providers?is_active=eq.true&phone=not.is.null&claimed_at=not.is.null${deptQ}`)
+
+  console.log(`  Total artisans actifs :       ${total.toLocaleString('fr-FR')}`)
+  console.log(`  Avec téléphone :              ${withPhone.toLocaleString('fr-FR')} (${total > 0 ? (withPhone / total * 100).toFixed(1) : 0}%)`)
+  console.log(`  Sans téléphone :              ${withoutPhone.toLocaleString('fr-FR')}`)
+  console.log(`  Revendiqués avec téléphone :  ${claimedWithPhone.toLocaleString('fr-FR')}`)
+
+  // ═══════════════════════════════════════════
+  // Fetch all providers with phone
+  // ═══════════════════════════════════════════
+  console.log('\n[4] Chargement des providers avec phone...')
+  const allWithPhone: ProviderRow[] = supaFetchAll(
+    `/providers?select=id,name,phone,address_department,address_city,specialty,claimed_at,review_count&is_active=eq.true&phone=not.is.null${deptQ}&order=address_department,name`
+  )
+  console.log(`  → ${allWithPhone.length} providers chargés`)
 
   // ═══════════════════════════════════════════
   // CHECK 1: Numéros dupliqués
@@ -205,30 +247,37 @@ async function main() {
   console.log('  CHECK 1 : Numéros dupliqués (même numéro sur plusieurs artisans)')
   console.log('─'.repeat(70))
 
-  const dupRes = await client.query(`
-    SELECT phone, COUNT(*) as cnt,
-           array_agg(name ORDER BY name) as names,
-           array_agg(id ORDER BY name) as ids,
-           array_agg(address_department ORDER BY name) as depts
-    FROM providers
-    WHERE phone IS NOT NULL AND is_active = true ${deptFilter}
-    GROUP BY phone
-    HAVING COUNT(*) > 1
-    ORDER BY COUNT(*) DESC
-    LIMIT 100
-  `)
-
-  let totalDupArtisans = 0
-  for (const row of dupRes.rows) {
-    totalDupArtisans += Number(row.cnt) - 1
+  const phoneGroups = new Map<string, ProviderRow[]>()
+  for (const p of allWithPhone) {
+    if (!p.phone) continue
+    // Normalize phone for grouping
+    const normalized = p.phone.replace(/[\s.+\-]/g, '').replace(/^0033/, '0').replace(/^\+33/, '0')
+    const arr = phoneGroups.get(normalized) || []
+    arr.push(p)
+    phoneGroups.set(normalized, arr)
   }
 
-  console.log(`  Numéros en double :     ${dupRes.rows.length}`)
+  const duplicates: { phone: string; count: number; names: string[]; ids: string[] }[] = []
+  let totalDupArtisans = 0
+  for (const [phone, group] of phoneGroups) {
+    if (group.length > 1) {
+      duplicates.push({
+        phone,
+        count: group.length,
+        names: group.map(p => p.name).sort(),
+        ids: group.map(p => p.id),
+      })
+      totalDupArtisans += group.length - 1
+    }
+  }
+  duplicates.sort((a, b) => b.count - a.count)
+
+  console.log(`  Numéros en double :     ${duplicates.length}`)
   console.log(`  Artisans à nettoyer :   ${totalDupArtisans}`)
-  if (dupRes.rows.length > 0 && VERBOSE) {
-    for (const row of dupRes.rows.slice(0, 20)) {
-      const names = row.names.slice(0, 3).join(' | ')
-      console.log(`    ${row.phone} → ${row.cnt}x : ${names}${Number(row.cnt) > 3 ? ' ...' : ''}`)
+  if (duplicates.length > 0 && VERBOSE) {
+    for (const dup of duplicates.slice(0, 20)) {
+      const names = dup.names.slice(0, 3).join(' | ')
+      console.log(`    ${dup.phone} → ${dup.count}x : ${names}${dup.count > 3 ? ' ...' : ''}`)
     }
   }
 
@@ -249,13 +298,18 @@ async function main() {
     '0320456701','0320456702','0320456703','0320456704','0320456705',
     '0656789001','0656789002','0656789003','0656789004','0656789005',
   ]
-
-  const fakePlaceholders = FAKE_PHONES.map((_, i) => `$${i + 1}`).join(',')
-  const fakeRes = await client.query(
-    `SELECT COUNT(*) as cnt FROM providers WHERE phone IN (${fakePlaceholders})`,
-    FAKE_PHONES
-  )
-  console.log(`  Numéros fictifs encore en base : ${fakeRes.rows[0].cnt}`)
+  const fakeSet = new Set(FAKE_PHONES)
+  const fakeInDb = allWithPhone.filter(p => {
+    if (!p.phone) return false
+    const digits = p.phone.replace(/[\s.+\-]/g, '').replace(/^0033/, '0').replace(/^\+33/, '0')
+    return fakeSet.has(digits)
+  })
+  console.log(`  Numéros fictifs encore en base : ${fakeInDb.length}`)
+  if (fakeInDb.length > 0) {
+    for (const p of fakeInDb.slice(0, 5)) {
+      console.log(`    ${p.phone} → ${p.name}`)
+    }
+  }
 
   // ═══════════════════════════════════════════
   // CHECK 3 : Numéros au format suspect
@@ -264,24 +318,17 @@ async function main() {
   console.log('  CHECK 3 : Numéros au format suspect')
   console.log('─'.repeat(70))
 
-  const suspectRes = await client.query(`
-    SELECT phone, name, id FROM providers
-    WHERE phone IS NOT NULL AND is_active = true ${deptFilter}
-      AND (
-        -- Pas un numéro français standard
-        phone !~ '^0[1-9][0-9]{8}$'
-        -- Numéros surtaxés
-        OR phone ~ '^(089|036|099)'
-        -- Numéros trop courts/longs
-        OR LENGTH(REGEXP_REPLACE(phone, '[^0-9]', '', 'g')) != 10
-      )
-    ORDER BY phone
-    LIMIT 50
-  `)
-  console.log(`  Numéros suspects : ${suspectRes.rows.length}`)
-  if (suspectRes.rows.length > 0 && VERBOSE) {
-    for (const row of suspectRes.rows.slice(0, 10)) {
-      console.log(`    "${row.phone}" → ${row.name}`)
+  const phoneRegex = /^0[1-9]\d{8}$/
+  const surtaxRegex = /^(089|036|099)/
+  const suspectPhones = allWithPhone.filter(p => {
+    if (!p.phone) return false
+    const digits = p.phone.replace(/[\s.+\-]/g, '').replace(/^0033/, '0').replace(/^\+33/, '0')
+    return !phoneRegex.test(digits) || surtaxRegex.test(digits)
+  })
+  console.log(`  Numéros suspects : ${suspectPhones.length}`)
+  if (suspectPhones.length > 0 && VERBOSE) {
+    for (const p of suspectPhones.slice(0, 10)) {
+      console.log(`    "${p.phone}" → ${p.name}`)
     }
   }
 
@@ -293,26 +340,17 @@ async function main() {
   console.log('  (Un numéro GM existe en base → est-il chez le BON artisan ?)')
   console.log('─'.repeat(70))
 
-  // Get all providers with phone
-  const providersRes = await client.query(`
-    SELECT id, name, phone, address_department, address_city, specialty, siret, claimed_at
-    FROM providers
-    WHERE phone IS NOT NULL AND is_active = true ${deptFilter}
-    ORDER BY address_department, name
-  `)
-  const providers: ProviderRow[] = providersRes.rows
-
-  // Build phone → provider map
+  // Build normalized phone → providers map
   const phoneToProvider = new Map<string, ProviderRow[]>()
-  for (const p of providers) {
+  for (const p of allWithPhone) {
     if (!p.phone) continue
-    const normalized = p.phone.replace(/\D/g, '')
-    const arr = phoneToProvider.get(normalized) || []
+    const digits = p.phone.replace(/[\s.+\-]/g, '').replace(/^0033/, '0').replace(/^\+33/, '0')
+    const arr = phoneToProvider.get(digits) || []
     arr.push(p)
-    phoneToProvider.set(normalized, arr)
+    phoneToProvider.set(digits, arr)
   }
 
-  console.log(`  Providers avec phone en base : ${providers.length}`)
+  console.log(`  Providers avec phone en base : ${allWithPhone.length}`)
   console.log(`  Numéros GM disponibles :       ${gmRecords.size}`)
 
   const mismatches: Mismatch[] = []
@@ -322,7 +360,7 @@ async function main() {
   let gmNotInDb = 0
 
   for (const [gmPhone, gmRec] of gmRecords) {
-    const normalized = gmPhone.replace(/\D/g, '')
+    const normalized = gmPhone.replace(/[\s.+\-]/g, '').replace(/^0033/, '0').replace(/^\+33/, '0')
     const dbProviders = phoneToProvider.get(normalized)
 
     if (!dbProviders || dbProviders.length === 0) {
@@ -332,7 +370,6 @@ async function main() {
 
     gmMatchedCount++
 
-    // Check if the GM name matches any of the DB providers with this phone
     let bestSim = 0
     let bestProvider: ProviderRow | null = null
     for (const p of dbProviders) {
@@ -372,9 +409,7 @@ async function main() {
   console.log(`    ✗ Nom différent (sim < 0.40) :   ${gmWrongCount} (${gmMatchedCount > 0 ? (gmWrongCount / gmMatchedCount * 100).toFixed(1) : 0}%)`)
   console.log(`    Non trouvés en base :            ${gmNotInDb}`)
 
-  // Sort mismatches by severity
   mismatches.sort((a, b) => a.similarity - b.similarity)
-
   const criticalMismatches = mismatches.filter(m => m.similarity < 20)
   const suspectMismatches = mismatches.filter(m => m.similarity >= 20)
 
@@ -404,20 +439,12 @@ async function main() {
   }
 
   // ═══════════════════════════════════════════
-  // CHECK 5 : Providers revendiqués avec phone ≠ phone_secondary
+  // CHECK 5 : Artisans revendiqués
   // ═══════════════════════════════════════════
   console.log('\n' + '─'.repeat(70))
   console.log('  CHECK 5 : Artisans revendiqués (phone fiable vs phone importé)')
   console.log('─'.repeat(70))
-
-  const claimedRes = await client.query(`
-    SELECT COUNT(*) as total,
-           COUNT(phone) FILTER (WHERE phone IS NOT NULL) as with_phone
-    FROM providers
-    WHERE claimed_at IS NOT NULL AND is_active = true ${deptFilter}
-  `)
-  console.log(`  Artisans revendiqués :       ${claimedRes.rows[0].total}`)
-  console.log(`  Dont avec phone :            ${claimedRes.rows[0].with_phone}`)
+  console.log(`  Artisans revendiqués avec phone : ${claimedWithPhone}`)
   console.log(`  (Les phones des revendiqués sont considérés fiables)`)
 
   // ═══════════════════════════════════════════
@@ -428,9 +455,9 @@ async function main() {
   console.log('═'.repeat(70))
 
   const issues = []
-  if (Number(fakeRes.rows[0].cnt) > 0) issues.push(`${fakeRes.rows[0].cnt} numéros fictifs`)
-  if (dupRes.rows.length > 0) issues.push(`${dupRes.rows.length} numéros dupliqués (${totalDupArtisans} artisans concernés)`)
-  if (suspectRes.rows.length > 0) issues.push(`${suspectRes.rows.length} numéros au format suspect`)
+  if (fakeInDb.length > 0) issues.push(`${fakeInDb.length} numéros fictifs`)
+  if (duplicates.length > 0) issues.push(`${duplicates.length} numéros dupliqués (${totalDupArtisans} artisans concernés)`)
+  if (suspectPhones.length > 0) issues.push(`${suspectPhones.length} numéros au format suspect`)
   if (criticalMismatches.length > 0) issues.push(`${criticalMismatches.length} numéros probablement sur le MAUVAIS artisan`)
   if (suspectMismatches.length > 0) issues.push(`${suspectMismatches.length} numéros à vérifier (matching faible)`)
 
@@ -447,16 +474,12 @@ async function main() {
   const report = {
     date: new Date().toISOString(),
     deptFilter: DEPT_FILTER || 'all',
-    stats: {
-      totalProviders: Number(dbStats.total),
-      withPhone: Number(dbStats.with_phone),
-      withoutPhone: Number(dbStats.without_phone),
-    },
+    stats: { totalProviders: total, withPhone, withoutPhone },
     issues: {
-      fakePhones: Number(fakeRes.rows[0].cnt),
-      duplicatePhones: dupRes.rows.length,
+      fakePhones: fakeInDb.length,
+      duplicatePhones: duplicates.length,
       duplicateArtisans: totalDupArtisans,
-      suspectFormat: suspectRes.rows.length,
+      suspectFormat: suspectPhones.length,
       criticalMismatches: criticalMismatches.length,
       suspectMismatches: suspectMismatches.length,
     },
@@ -469,25 +492,20 @@ async function main() {
       issue: m.issue,
       department: m.department,
     })),
-    duplicates: dupRes.rows.map((r: any) => ({
-      phone: r.phone,
-      count: Number(r.cnt),
-      names: r.names,
-      ids: r.ids,
-    })),
+    duplicates,
   }
 
   fs.writeFileSync(REPORT_FILE, JSON.stringify(report, null, 2))
   console.log(`\n  Rapport détaillé : ${REPORT_FILE}`)
 
   console.log('\n  Recommandations :')
-  if (Number(fakeRes.rows[0].cnt) > 0) {
+  if (fakeInDb.length > 0) {
     console.log('    1. Supprimer les numéros fictifs → npx tsx scripts/cleanup-phones.ts --apply')
   }
   if (criticalMismatches.length > 0) {
-    console.log(`    2. Supprimer ${criticalMismatches.length} numéros critiques (mauvais artisan) → npx tsx scripts/cleanup-phones.ts --apply`)
+    console.log(`    2. Supprimer ${criticalMismatches.length} numéros critiques → npx tsx scripts/cleanup-phones.ts --apply`)
   }
-  if (dupRes.rows.length > 0) {
+  if (duplicates.length > 0) {
     console.log(`    3. Dédupliquer ${totalDupArtisans} numéros en double → npx tsx scripts/cleanup-phones.ts --apply`)
   }
   if (suspectMismatches.length > 0) {
@@ -495,11 +513,6 @@ async function main() {
   }
 
   console.log('\n' + '═'.repeat(70) + '\n')
-
-  await client.end()
 }
 
-main().catch(err => {
-  console.error('ERREUR:', err)
-  process.exit(1)
-})
+main()
