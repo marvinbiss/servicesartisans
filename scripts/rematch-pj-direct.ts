@@ -3,6 +3,10 @@
  * Pas d'export global : pour chaque dept, on charge les artisans depuis Postgres,
  * on matche en mémoire contre les listings PJ, et on upload les résultats.
  * Tout en une passe, ~30-60 min.
+ *
+ * ⚠️  Seuil relevé de 0.35 → 0.50 pour éviter les faux positifs.
+ *     La recherche dans les départements voisins a été SUPPRIMÉE
+ *     car elle causait des attributions de numéros incorrectes.
  */
 import * as fs from 'fs'
 import * as path from 'path'
@@ -11,7 +15,7 @@ import { Client, Pool } from 'pg'
 const PG_URL = 'postgresql://postgres:BEB6LnGlT6U9bkTe@db.umjmbdbwcsxrvfqktiui.supabase.co:5432/postgres'
 const LISTINGS_FILE = path.join(__dirname, '.enrich-data', 'pj-listings.jsonl')
 
-const MATCH_THRESHOLD = 0.35
+const MATCH_THRESHOLD = 0.50
 
 const DEPTS = [
   '01','02','03','04','05','06','07','08','09','10',
@@ -294,18 +298,8 @@ async function main() {
       if (normPJ.length < 2) continue
       const searchTerms = getSearchTerms(normPJ)
 
-      // Phase A: same dept
-      let match = tryMatch(listing, normPJ, artisans, searchTerms)
-
-      // Phase B: neighbors (top 3)
-      if (!match) {
-        const neighbors = DEPT_NEIGHBORS[dept] || []
-        for (const nd of neighbors.slice(0, 3)) {
-          const nArtisans = await loadDept(nd)
-          match = tryMatch(listing, normPJ, nArtisans, searchTerms.slice(0, 2))
-          if (match) break
-        }
-      }
+      // Match dans le même département uniquement (plus de recherche voisins)
+      const match = tryMatch(listing, normPJ, artisans, searchTerms)
 
       if (match) {
         if (match.phone) { deptAlready++; totalAlready++; continue }
