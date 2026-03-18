@@ -181,7 +181,7 @@ export default async function RootLayout({
       </head>
       <body className="font-sans bg-gray-50 antialiased">
         {/* Google Tag Manager */}
-        <Script id="gtm" strategy="lazyOnload">
+        <Script id="gtm" strategy="afterInteractive">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -212,22 +212,8 @@ fbq('init', '${process.env.NEXT_PUBLIC_META_PIXEL_ID}');
 fbq('track', 'PageView');`}
           </Script>
         )}
-        {/* Google Ads Remarketing */}
-        {process.env.NEXT_PUBLIC_GOOGLE_ADS_ID && (
-          <Script
-            id="google-ads"
-            strategy="lazyOnload"
-            src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ADS_ID}`}
-          />
-        )}
-        {process.env.NEXT_PUBLIC_GOOGLE_ADS_ID && (
-          <Script id="google-ads-config" strategy="lazyOnload">
-            {`window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ADS_ID}');`}
-          </Script>
-        )}
+        {/* Contentsquare UX Analytics */}
+        <Script src="https://t.contentsquare.net/uxa/8da7eeef2dab8.js" strategy="lazyOnload" />
         {/* Microsoft Clarity — chargé uniquement après consentement analytics (RGPD) via CookieConsent */}
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
         <WebVitals />
@@ -236,12 +222,12 @@ gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ADS_ID}');`}
           {/* Skip to main content for accessibility */}
           <a
             href="#main-content"
-            className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary-600 text-white px-4 py-2 rounded-lg z-50 font-medium"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
           >
             Aller au contenu principal
           </a>
           <Header artisanCount={artisanCount} />
-          <main id="main-content" className="pb-16 md:pb-0">{children}</main>
+          <main id="main-content" tabIndex={-1} className="pb-16 md:pb-0 outline-none">{children}</main>
           <Footer />
           <MobileBottomNav />
           <ServiceWorkerRegistration />
