@@ -1,4 +1,4 @@
-import { type NextRequest, NextResponse } from 'next/server'
+import { type NextRequest, NextResponse, type NextFetchEvent } from 'next/server'
 import { updateSession } from '@/lib/supabase/middleware'
 import { checkRateLimit, getRateLimitConfig, getRateLimitKey, getClientIp } from '@/lib/rate-limiter'
 import { logger } from '@/lib/logger'
@@ -96,7 +96,21 @@ function getCanonicalRedirect(request: NextRequest): string | null {
   return null
 }
 
-export async function middleware(request: NextRequest) {
+// Googlebot detection — includes Googlebot, Googlebot-Mobile, Googlebot-Image, AdsBot-Google, etc.
+const GOOGLEBOT_RE = /Googlebot|AdsBot-Google|APIs-Google|Mediapartners-Google|Google-InspectionTool/i
+
+/** Fire-and-forget Googlebot log to Supabase (runs in waitUntil, never blocks response) */
+async function logGooglebotCrawl(url: string, userAgent: string) {
+  try {
+    const { createAdminClient } = await import('@/lib/supabase/admin')
+    const supabase = createAdminClient()
+    await supabase.from('googlebot_logs').insert({ url, user_agent: userAgent })
+  } catch {
+    // Silent fail — logging must never impact user experience
+  }
+}
+
+export async function middleware(request: NextRequest, event: NextFetchEvent) {
   const { pathname } = request.nextUrl
 
   // Redirect /tarifs-artisans → /tarifs (301 permanent, cached at CDN edge)
@@ -301,6 +315,12 @@ export async function middleware(request: NextRequest) {
   if (publicCacheExact.has(pathname) || publicCachePrefixes.some(p => pathname.startsWith(p))) {
     response.headers.set('Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800')
     response.headers.set('CDN-Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800')
+  }
+
+  // Googlebot crawl logging — non-blocking via waitUntil
+  const ua = request.headers.get('user-agent') || ''
+  if (GOOGLEBOT_RE.test(ua)) {
+    event.waitUntil(logGooglebotCrawl(pathname, ua))
   }
 
   return addCspHeaders(response, request, nonce)

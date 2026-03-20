@@ -206,7 +206,7 @@ export async function GET(request: NextRequest) {
 
         const lastmod = p.updated_at ? new Date(p.updated_at).toISOString().split('T')[0] : undefined
         const loc = escapeXml(`${SITE_URL}/services/${serviceSlug}/${locationSlug}/${publicId}`)
-        return `  <url><loc>${loc}</loc>${lastmod ? `<lastmod>${lastmod}</lastmod>` : ''}</url>`
+        return `  <url><loc>${loc}</loc>${lastmod ? `<lastmod>${lastmod}</lastmod>` : ''}<changefreq>monthly</changefreq><priority>0.3</priority></url>`
       })
       .filter((entry): entry is string => entry !== null)
 

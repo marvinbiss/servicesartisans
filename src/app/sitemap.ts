@@ -80,45 +80,46 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── Static pages + services ─────────────────────────────────────────
   if (id === 'static') {
     const homepage: MetadataRoute.Sitemap = [
-      { url: SITE_URL, lastModified: BUILD_DATE },
+      { url: SITE_URL, lastModified: BUILD_DATE, changeFrequency: 'daily', priority: 1.0 },
+    ]
+
+    const hubPages: MetadataRoute.Sitemap = [
+      { url: `${SITE_URL}/tarifs`, lastModified: BUILD_DATE, changeFrequency: 'weekly', priority: 0.9 },
+      { url: `${SITE_URL}/urgence`, lastModified: BUILD_DATE, changeFrequency: 'weekly', priority: 0.9 },
+      { url: `${SITE_URL}/devis`, lastModified: BUILD_DATE, changeFrequency: 'weekly', priority: 0.9 },
+      { url: `${SITE_URL}/avis`, lastModified: BUILD_DATE, changeFrequency: 'weekly', priority: 0.9 },
+      { url: `${SITE_URL}/blog`, lastModified: BUILD_DATE, changeFrequency: 'weekly', priority: 0.9 },
+      { url: `${SITE_URL}/guides`, lastModified: BUILD_DATE, changeFrequency: 'weekly', priority: 0.9 },
+      { url: `${SITE_URL}/questions`, lastModified: BUILD_DATE, changeFrequency: 'weekly', priority: 0.9 },
+      { url: `${SITE_URL}/barometre`, lastModified: BUILD_DATE, changeFrequency: 'weekly', priority: 0.9 },
+      { url: `${SITE_URL}/barometre/regions`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.5 },
+      { url: `${SITE_URL}/barometre/tarifs`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.5 },
+      { url: `${SITE_URL}/comparaison`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.5 },
+      { url: `${SITE_URL}/glossaire`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.5 },
+      { url: `${SITE_URL}/normes`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.5 },
+      { url: `${SITE_URL}/statistiques-artisans-france`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.5 },
     ]
 
     const staticPages: MetadataRoute.Sitemap = [
-      { url: `${SITE_URL}/a-propos`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/contact`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/blog`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/faq`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/comment-ca-marche`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/tarifs`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/urgence`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/devis`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/notre-processus-de-verification`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/politique-avis`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/mediation`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/garantie`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/outils/calculateur-prix`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/outils/diagnostic`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/carte-artisans`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/artisans`, lastModified: BUILD_DATE },
-      // Pages outils & contenu
-      { url: `${SITE_URL}/guides`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/avant-apres`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/calendrier-travaux`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/checklist-travaux`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/comparaison`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/glossaire`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/normes`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/statistiques-artisans-france`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/badge-artisan`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/verifier-artisan`, lastModified: BUILD_DATE },
-      // /barometre-prix removed — 301 redirects to /barometre (cannibalization fix)
-      { url: `${SITE_URL}/questions`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/avis`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/barometre`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/barometre/regions`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/barometre/tarifs`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/widget-prix`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/plan-du-site`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/a-propos`, lastModified: BUILD_DATE, changeFrequency: 'yearly', priority: 0.3 },
+      { url: `${SITE_URL}/contact`, lastModified: BUILD_DATE, changeFrequency: 'yearly', priority: 0.3 },
+      { url: `${SITE_URL}/faq`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.4 },
+      { url: `${SITE_URL}/comment-ca-marche`, lastModified: BUILD_DATE, changeFrequency: 'yearly', priority: 0.3 },
+      { url: `${SITE_URL}/notre-processus-de-verification`, lastModified: BUILD_DATE, changeFrequency: 'yearly', priority: 0.3 },
+      { url: `${SITE_URL}/politique-avis`, lastModified: BUILD_DATE, changeFrequency: 'yearly', priority: 0.3 },
+      { url: `${SITE_URL}/mediation`, lastModified: BUILD_DATE, changeFrequency: 'yearly', priority: 0.3 },
+      { url: `${SITE_URL}/garantie`, lastModified: BUILD_DATE, changeFrequency: 'yearly', priority: 0.3 },
+      { url: `${SITE_URL}/outils/calculateur-prix`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.4 },
+      { url: `${SITE_URL}/outils/diagnostic`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.4 },
+      { url: `${SITE_URL}/carte-artisans`, lastModified: BUILD_DATE, changeFrequency: 'weekly', priority: 0.5 },
+      { url: `${SITE_URL}/artisans`, lastModified: BUILD_DATE, changeFrequency: 'weekly', priority: 0.5 },
+      { url: `${SITE_URL}/avant-apres`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.4 },
+      { url: `${SITE_URL}/calendrier-travaux`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.4 },
+      { url: `${SITE_URL}/checklist-travaux`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.4 },
+      { url: `${SITE_URL}/badge-artisan`, lastModified: BUILD_DATE, changeFrequency: 'yearly', priority: 0.3 },
+      { url: `${SITE_URL}/verifier-artisan`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.4 },
+      { url: `${SITE_URL}/widget-prix`, lastModified: BUILD_DATE, changeFrequency: 'yearly', priority: 0.3 },
+      { url: `${SITE_URL}/plan-du-site`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.1 },
     ]
 
     // Guide pages
@@ -150,18 +151,24 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const guidePages: MetadataRoute.Sitemap = guideSlugs.map(slug => ({
       url: `${SITE_URL}/guides/${slug}`,
       lastModified: BUILD_DATE,
+      changeFrequency: 'monthly' as const,
+      priority: 0.5,
     }))
 
     // Question pages
     const questionPages: MetadataRoute.Sitemap = getQuestionSlugs().map(slug => ({
       url: `${SITE_URL}/questions/${slug}`,
       lastModified: BUILD_DATE,
+      changeFrequency: 'monthly' as const,
+      priority: 0.4,
     }))
 
     // Comparison pages
     const comparisonPages: MetadataRoute.Sitemap = comparisons.map(c => ({
       url: `${SITE_URL}/comparaison/${c.slug}`,
       lastModified: BUILD_DATE,
+      changeFrequency: 'monthly' as const,
+      priority: 0.5,
     }))
 
     // Blog articles — lastModified réel (seul contenu avec vraie date vérifiable)
@@ -170,27 +177,35 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       return {
         url: `${SITE_URL}/blog/${slug}`,
         lastModified: article ? new Date(article.updatedDate || article.date) : undefined,
+        changeFrequency: 'weekly' as const,
+        priority: 0.6,
       }
     })
 
     const servicesIndex: MetadataRoute.Sitemap = [
-      { url: `${SITE_URL}/services`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/services`, lastModified: BUILD_DATE, changeFrequency: 'weekly', priority: 0.9 },
     ]
 
     const servicePages: MetadataRoute.Sitemap = services.map((service) => ({
       url: `${SITE_URL}/services/${service.slug}`,
       lastModified: BUILD_DATE,
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
     }))
 
     const emergencySlugs = Object.keys(tradeContent)
     const urgencePages: MetadataRoute.Sitemap = emergencySlugs.map((slug) => ({
       url: `${SITE_URL}/urgence/${slug}`,
       lastModified: BUILD_DATE,
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
     }))
 
     const tarifsPages: MetadataRoute.Sitemap = Object.keys(tradeContent).map((slug) => ({
       url: `${SITE_URL}/tarifs/${slug}`,
       lastModified: BUILD_DATE,
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
     }))
 
     // Blog category pages — lastModified = date du dernier article de la catégorie
@@ -229,7 +244,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       }
     })
 
-    return [...homepage, ...staticPages, ...guidePages, ...questionPages, ...comparisonPages, ...blogArticlePages, ...blogCategoryPages, ...blogTagPages, ...servicesIndex, ...servicePages, ...urgencePages, ...tarifsPages]
+    return [...homepage, ...hubPages, ...staticPages, ...guidePages, ...questionPages, ...comparisonPages, ...blogArticlePages, ...blogCategoryPages, ...blogTagPages, ...servicesIndex, ...servicePages, ...urgencePages, ...tarifsPages]
   }
 
   // ── Service + city — Phase 1: top 300 cities ────────────────────────
@@ -250,7 +265,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const allUrls: MetadataRoute.Sitemap = []
     for (const service of services) {
       for (const ville of mergedCities) {
-        allUrls.push({ url: `${SITE_URL}/services/${service.slug}/${ville.slug}`, lastModified: BUILD_DATE })
+        allUrls.push({ url: `${SITE_URL}/services/${service.slug}/${ville.slug}`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.7 })
       }
     }
 
@@ -261,11 +276,11 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── City pages ──────────────────────────────────────────────────────
   if (id === 'cities') {
     const villesIndex: MetadataRoute.Sitemap = [
-      { url: `${SITE_URL}/villes`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/villes`, lastModified: BUILD_DATE, changeFrequency: 'weekly', priority: 0.6 },
     ]
 
     const villePages: MetadataRoute.Sitemap = villes.map((ville) => ({
-      url: `${SITE_URL}/villes/${ville.slug}`, lastModified: BUILD_DATE,
+      url: `${SITE_URL}/villes/${ville.slug}`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.4,
     }))
 
     return [...villesIndex, ...villePages]
@@ -274,19 +289,19 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── Geo pages (départements + régions) ──────────────────────────────
   if (id === 'geo') {
     const departementsIndex: MetadataRoute.Sitemap = [
-      { url: `${SITE_URL}/departements`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/departements`, lastModified: BUILD_DATE, changeFrequency: 'weekly', priority: 0.7 },
     ]
 
     const departementPages: MetadataRoute.Sitemap = departements.map((dept) => ({
-      url: `${SITE_URL}/departements/${dept.slug}`, lastModified: BUILD_DATE,
+      url: `${SITE_URL}/departements/${dept.slug}`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.5,
     }))
 
     const regionsIndex: MetadataRoute.Sitemap = [
-      { url: `${SITE_URL}/regions`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/regions`, lastModified: BUILD_DATE, changeFrequency: 'weekly', priority: 0.7 },
     ]
 
     const regionPages: MetadataRoute.Sitemap = regions.map((region) => ({
-      url: `${SITE_URL}/regions/${region.slug}`, lastModified: BUILD_DATE,
+      url: `${SITE_URL}/regions/${region.slug}`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.5,
     }))
 
     return [...departementsIndex, ...departementPages, ...regionsIndex, ...regionPages]
@@ -298,6 +313,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     return Object.keys(tradeContent).map((slug) => ({
       url: `${SITE_URL}/devis/${slug}`,
       lastModified: BUILD_DATE,
+      changeFrequency: 'weekly' as const,
+      priority: 0.7,
     }))
   }
 
@@ -314,7 +331,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     outer: for (const svc of services) {
       for (const ville of phase1Cities) {
         if (count >= end) break outer
-        if (count >= start) result.push({ url: `${SITE_URL}/devis/${svc.slug}/${ville.slug}`, lastModified: BUILD_DATE })
+        if (count >= start) result.push({ url: `${SITE_URL}/devis/${svc.slug}/${ville.slug}`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.6 })
         count++
       }
     }
@@ -336,7 +353,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     outer: for (const svc of emergencySlugs) {
       for (const v of phase1Cities) {
         if (count >= end) break outer
-        if (count >= start) result.push({ url: `${SITE_URL}/urgence/${svc}/${v.slug}`, lastModified: BUILD_DATE })
+        if (count >= start) result.push({ url: `${SITE_URL}/urgence/${svc}/${v.slug}`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.5 })
         count++
       }
     }
@@ -357,7 +374,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     outer: for (const svc of services) {
       for (const v of phase1Cities) {
         if (count >= end) break outer
-        if (count >= start) result.push({ url: `${SITE_URL}/tarifs/${svc.slug}/${v.slug}`, lastModified: BUILD_DATE })
+        if (count >= start) result.push({ url: `${SITE_URL}/tarifs/${svc.slug}/${v.slug}`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.6 })
         count++
       }
     }
@@ -380,7 +397,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         const { slug: taskSlug } = parseTask(task)
         for (const v of phase1Cities) {
           if (count >= end) break outer
-          if (count >= start) result.push({ url: `${SITE_URL}/tarifs/${serviceSlug}/${v.slug}/${taskSlug}`, lastModified: BUILD_DATE })
+          if (count >= start) result.push({ url: `${SITE_URL}/tarifs/${serviceSlug}/${v.slug}/${taskSlug}`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.5 })
           count++
         }
       }
@@ -393,8 +410,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   if (id === 'avis-services') {
     const tradeSlugs = Object.keys(tradeContent)
     return [
-      { url: `${SITE_URL}/avis`, lastModified: BUILD_DATE },
-      ...tradeSlugs.map(slug => ({ url: `${SITE_URL}/avis/${slug}`, lastModified: BUILD_DATE })),
+      { url: `${SITE_URL}/avis`, lastModified: BUILD_DATE, changeFrequency: 'weekly' as const, priority: 0.7 },
+      ...tradeSlugs.map(slug => ({ url: `${SITE_URL}/avis/${slug}`, lastModified: BUILD_DATE, changeFrequency: 'weekly' as const, priority: 0.6 })),
     ]
   }
 
@@ -412,7 +429,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     outer: for (const svc of tradeSlugs) {
       for (const v of phase1Cities) {
         if (count >= end) break outer
-        if (count >= start) result.push({ url: `${SITE_URL}/avis/${svc}/${v.slug}`, lastModified: BUILD_DATE })
+        if (count >= start) result.push({ url: `${SITE_URL}/avis/${svc}/${v.slug}`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.5 })
         count++
       }
     }
@@ -424,8 +441,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   if (id === 'problemes') {
     const problemSlugs = getProblemSlugs()
     return [
-      { url: `${SITE_URL}/problemes`, lastModified: BUILD_DATE },
-      ...problemSlugs.map(slug => ({ url: `${SITE_URL}/problemes/${slug}`, lastModified: BUILD_DATE })),
+      { url: `${SITE_URL}/problemes`, lastModified: BUILD_DATE, changeFrequency: 'weekly' as const, priority: 0.6 },
+      ...problemSlugs.map(slug => ({ url: `${SITE_URL}/problemes/${slug}`, lastModified: BUILD_DATE, changeFrequency: 'monthly' as const, priority: 0.5 })),
     ]
   }
 
@@ -443,7 +460,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     outer: for (const problem of problemSlugs) {
       for (const ville of phase1Cities) {
         if (count >= end) break outer
-        if (count >= start) result.push({ url: `${SITE_URL}/problemes/${problem}/${ville.slug}`, lastModified: BUILD_DATE })
+        if (count >= start) result.push({ url: `${SITE_URL}/problemes/${problem}/${ville.slug}`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.4 })
         count++
       }
     }
@@ -458,7 +475,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const allUrls: MetadataRoute.Sitemap = []
     for (const dept of departements) {
       for (const service of tradeSlugs) {
-        allUrls.push({ url: `${SITE_URL}/departements/${dept.slug}/${service}`, lastModified: BUILD_DATE })
+        allUrls.push({ url: `${SITE_URL}/departements/${dept.slug}/${service}`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.5 })
       }
     }
     return allUrls.slice(batchIndex * LARGE_BATCH, (batchIndex + 1) * LARGE_BATCH)
@@ -469,10 +486,14 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const barometreRegions: MetadataRoute.Sitemap = regions.map(region => ({
       url: `${SITE_URL}/barometre/regions/${region.slug}`,
       lastModified: BUILD_DATE,
+      changeFrequency: 'monthly' as const,
+      priority: 0.5,
     }))
     const barometreMetiers: MetadataRoute.Sitemap = getTradesSlugs().map(slug => ({
       url: `${SITE_URL}/barometre/tarifs/${slug}`,
       lastModified: BUILD_DATE,
+      changeFrequency: 'monthly' as const,
+      priority: 0.5,
     }))
     return [...barometreRegions, ...barometreMetiers]
   }
@@ -482,7 +503,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const tradeSlugs = getTradesSlugs()
     return regions.flatMap(region =>
       tradeSlugs.map(service => ({
-        url: `${SITE_URL}/regions/${region.slug}/${service}`, lastModified: BUILD_DATE,
+        url: `${SITE_URL}/regions/${region.slug}/${service}`, lastModified: BUILD_DATE, changeFrequency: 'monthly' as const, priority: 0.5,
       }))
     )
   }

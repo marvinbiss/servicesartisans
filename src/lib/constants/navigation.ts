@@ -17,11 +17,7 @@ export const popularCities = [
   { name: 'Marseille', slug: 'marseille', department: '13' },
   { name: 'Toulouse', slug: 'toulouse', department: '31' },
   { name: 'Bordeaux', slug: 'bordeaux', department: '33' },
-  { name: 'Lille', slug: 'lille', department: '59' },
   { name: 'Nantes', slug: 'nantes', department: '44' },
-  { name: 'Nice', slug: 'nice', department: '06' },
-  { name: 'Strasbourg', slug: 'strasbourg', department: '67' },
-  { name: 'Montpellier', slug: 'montpellier', department: '34' },
 ]
 
 export const relatedServices: Record<string, string[]> = {
@@ -79,5 +75,4 @@ export const popularRegions = [
   { name: 'Provence-Alpes-Côte d\'Azur', slug: 'provence-alpes-cote-d-azur' },
   { name: 'Occitanie', slug: 'occitanie' },
   { name: 'Nouvelle-Aquitaine', slug: 'nouvelle-aquitaine' },
-  { name: 'Hauts-de-France', slug: 'hauts-de-france' },
 ]

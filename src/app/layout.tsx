@@ -111,7 +111,11 @@ export const metadata: Metadata = {
       'x-default': SITE_URL,
     },
     types: {
-      'application/rss+xml': `${SITE_URL}/feed.xml`,
+      'application/rss+xml': [
+        { url: `${SITE_URL}/feed/blog.xml`, title: 'Blog ServicesArtisans' },
+        { url: `${SITE_URL}/feed/nouveaux-artisans.xml`, title: 'Nouveaux artisans' },
+        { url: `${SITE_URL}/feed/nouvelles-pages.xml`, title: 'Nouvelles pages' },
+      ],
     },
   },
   manifest: '/manifest.json',

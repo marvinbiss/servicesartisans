@@ -220,9 +220,6 @@ export default function Footer() {
                 <li><Link href="/comparaison" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">Comparatifs artisans</Link></li>
                 <li><Link href="/barometre" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">Baromètre des prix</Link></li>
                 <li><Link href="/glossaire" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">Glossaire</Link></li>
-                <li><Link href="/normes" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">Normes et réglementations</Link></li>
-                <li><Link href="/calendrier-travaux" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">Calendrier travaux</Link></li>
-                <li><Link href="/avant-apres" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">Avant/Après</Link></li>
                 <li><Link href="/statistiques-artisans-france" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">Statistiques artisans</Link></li>
               </ul>
             </div>
@@ -361,9 +358,6 @@ export default function Footer() {
                 <li><Link href="/comparaison" className="text-gray-400 hover:text-white transition-all duration-200 inline-block py-1.5">Comparatifs artisans</Link></li>
                 <li><Link href="/barometre" className="text-gray-400 hover:text-white transition-all duration-200 inline-block py-1.5">Baromètre des prix</Link></li>
                 <li><Link href="/glossaire" className="text-gray-400 hover:text-white transition-all duration-200 inline-block py-1.5">Glossaire</Link></li>
-                <li><Link href="/normes" className="text-gray-400 hover:text-white transition-all duration-200 inline-block py-1.5">Normes et réglementations</Link></li>
-                <li><Link href="/calendrier-travaux" className="text-gray-400 hover:text-white transition-all duration-200 inline-block py-1.5">Calendrier travaux</Link></li>
-                <li><Link href="/avant-apres" className="text-gray-400 hover:text-white transition-all duration-200 inline-block py-1.5">Avant/Après</Link></li>
                 <li><Link href="/statistiques-artisans-france" className="text-gray-400 hover:text-white transition-all duration-200 inline-block py-1.5">Statistiques artisans</Link></li>
               </ul>
             </details>
@@ -493,16 +487,6 @@ export default function Footer() {
               <li>
                 <Link href="/presse" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   Espace presse
-                </Link>
-              </li>
-              <li>
-                <Link href="/carrieres" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
-                  Carrières
-                </Link>
-              </li>
-              <li>
-                <Link href="/partenaires" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
-                  Partenaires
                 </Link>
               </li>
             </ul>

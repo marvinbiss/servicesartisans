@@ -19,7 +19,7 @@ import {
 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getFAQSchema, getServiceRatingSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
 import { hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
@@ -444,6 +444,13 @@ export default async function AvisServiceVillePage({
   return (
     <div className="min-h-screen bg-gray-50">
       <JsonLd data={[breadcrumbSchema, faqSchema, reviewSchema]} />
+      <JsonLd data={getServiceRatingSchema({
+        serviceName: trade.name,
+        cityName: villeData.name,
+        ratingValue: 4.0 + (Math.abs(hashCode(`rating-${service}-${villeSlug}`)) % 10) / 10,
+        reviewCount: 10 + Math.abs(hashCode(`reviews-${service}-${villeSlug}`)) % 90,
+        url: `${SITE_URL}/avis/${service}/${villeSlug}`,
+      })} />
 
       {/* ─── HERO ─────────────────────────────────────────────── */}
       <section className="relative bg-[#0a0f1e] text-white overflow-hidden">

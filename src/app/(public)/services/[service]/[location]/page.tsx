@@ -14,7 +14,7 @@ import CrossLinks from './_components/CrossLinks'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
 
-import { getBreadcrumbSchema, getItemListSchema, getSpeakableSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getItemListSchema, getSpeakableSchema, getLocalServiceSchema } from '@/lib/seo/jsonld'
 import { popularServices, relatedServices } from '@/lib/constants/navigation'
 import Breadcrumb from '@/components/Breadcrumb'
 import { getArtisanUrl } from '@/lib/utils'
@@ -484,6 +484,15 @@ export default async function ServiceLocationPage({ params }: PageProps) {
     title: h1Text,
   })
   jsonLdSchemas.push(speakableSchema)
+
+  jsonLdSchemas.push(getLocalServiceSchema({
+    serviceName: trade?.name || service.name,
+    serviceType: trade?.name || service.name,
+    description: `${service.name} à ${location.name} — artisans référencés SIREN. Devis gratuit.`,
+    cityName: location.name,
+    regionName: location.region_name || '',
+    url: `${SITE_URL}/services/${serviceSlug}/${locationSlug}`,
+  }))
 
   return (
     <>

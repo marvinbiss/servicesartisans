@@ -306,6 +306,101 @@ export function getServicePricingSchema(params: {
   }
 }
 
+// Schema.org Service with City-level areaServed (for /services/[service]/[ville])
+export function getLocalServiceSchema(params: {
+  serviceName: string
+  serviceType: string
+  description: string
+  cityName: string
+  regionName: string
+  url: string
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: `${params.serviceName} à ${params.cityName}`,
+    description: params.description,
+    url: params.url,
+    serviceType: params.serviceType,
+    areaServed: {
+      '@type': 'City',
+      name: params.cityName,
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: params.cityName,
+        addressRegion: params.regionName,
+        addressCountry: 'FR',
+      },
+    },
+    provider: {
+      '@type': 'Organization',
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
+  }
+}
+
+// Schema.org Service with AggregateRating (for /avis/[service]/[ville])
+export function getServiceRatingSchema(params: {
+  serviceName: string
+  cityName: string
+  ratingValue: number
+  reviewCount: number
+  url: string
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: `${params.serviceName} à ${params.cityName}`,
+    url: params.url,
+    provider: { '@type': 'Organization', name: SITE_NAME },
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: params.ratingValue,
+      reviewCount: params.reviewCount,
+      bestRating: 5,
+      worstRating: 1,
+    },
+  }
+}
+
+// Schema.org Review with positiveNotes/negativeNotes (for /comparaison/[slug])
+export function getComparisonReviewSchema(params: {
+  title: string
+  description: string
+  options: { name: string; avantages: string[]; inconvenients: string[] }[]
+  url: string
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Review',
+    name: params.title,
+    description: params.description,
+    url: params.url,
+    author: { '@type': 'Organization', name: SITE_NAME },
+    itemReviewed: {
+      '@type': 'Product',
+      name: params.title,
+    },
+    positiveNotes: {
+      '@type': 'ItemList',
+      itemListElement: params.options.flatMap(o => o.avantages).slice(0, 8).map((note, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: note,
+      })),
+    },
+    negativeNotes: {
+      '@type': 'ItemList',
+      itemListElement: params.options.flatMap(o => o.inconvenients).slice(0, 8).map((note, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: note,
+      })),
+    },
+  }
+}
+
 // Schema.org SpeakableSpecification (voice AI optimization)
 export function getSpeakableSchema(params: {
   url: string
