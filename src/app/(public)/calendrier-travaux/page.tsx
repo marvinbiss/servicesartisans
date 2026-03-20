@@ -18,6 +18,7 @@ import {
   Sun,
   Leaf,
 } from 'lucide-react'
+import RelatedHubs from '@/components/seo/RelatedHubs'
 
 const PAGE_URL = `${SITE_URL}/calendrier-travaux`
 
@@ -405,6 +406,8 @@ export default function CalendrierTravauxPage() {
           </div>
         </section>
       </div>
+
+      <RelatedHubs currentPath="/calendrier-travaux" />
     </>
   )
 }

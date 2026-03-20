@@ -9,6 +9,7 @@ import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
 import { getNationalStats, getTopMetiers, getTopVilles } from '@/lib/barometre/queries'
+import RelatedHubs from '@/components/seo/RelatedHubs'
 import { getBarometreMetierBySlug } from '@/lib/barometre/constants'
 
 // ---------------------------------------------------------------------------
@@ -487,6 +488,8 @@ export default async function BarometrePage() {
           </div>
         </section>
       </div>
+
+      <RelatedHubs currentPath="/barometre" />
     </>
   )
 }

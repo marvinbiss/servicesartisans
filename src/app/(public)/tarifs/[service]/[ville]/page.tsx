@@ -19,6 +19,7 @@ import PriceTableHTML from '@/components/seo/PriceTableHTML'
 import LastUpdated from '@/components/seo/LastUpdated'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
+import VerticalCrossLinks from '@/components/seo/VerticalCrossLinks'
 import { getDefaultAuthor } from '@/lib/data/team'
 import StickyMobileCTA from '@/components/StickyMobileCTA'
 import SearchRecorder from '@/components/SearchRecorder'
@@ -880,6 +881,8 @@ export default async function TarifsServiceVillePage({
           </div>
         </div>
       </section>
+
+      <VerticalCrossLinks currentService={service} villeSlug={villeSlug} villeName={villeData.name} intent="tarifs" />
 
       <CrossIntentLinks
         service={service}

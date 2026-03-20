@@ -17,6 +17,7 @@ import {
   Euro,
   Target,
 } from "lucide-react"
+import RelatedHubs from '@/components/seo/RelatedHubs'
 
 export const revalidate = false
 export const dynamicParams = false
@@ -375,6 +376,8 @@ export default async function ComparaisonSlugPage({ params }: PageProps) {
           </div>
         </section>
       </div>
+
+      <RelatedHubs currentPath="/comparaison" extraLinks={[{href: "/tarifs", label: "Tarifs artisans"}, {href: "/avis", label: "Avis artisans"}]} />
     </>
   )
 }

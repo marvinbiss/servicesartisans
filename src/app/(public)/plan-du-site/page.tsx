@@ -14,7 +14,6 @@ export const revalidate = 86400
 export const metadata: Metadata = {
   title: 'Plan du site',
   description: 'Plan du site complet de ServicesArtisans. Accédez à tous nos services, villes, départements et régions.',
-  robots: { index: false, follow: true },
   alternates: { canonical: `${SITE_URL}/plan-du-site` },
   openGraph: {
     title: 'Plan du site',

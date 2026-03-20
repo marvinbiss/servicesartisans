@@ -1072,7 +1072,7 @@ export default async function ProblemeVillePage({
         </div>
       </section>
 
-      <CrossIntentLinks service={problem.primaryService} serviceName={tradeName} ville={ville} villeName={villeData.name} currentIntent="services" />
+      <CrossIntentLinks service={problem.primaryService} serviceName={tradeName} ville={ville} villeName={villeData.name} />
 
       {/* Editorial credibility */}
       <section className="mb-8">

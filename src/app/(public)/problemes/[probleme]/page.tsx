@@ -518,7 +518,7 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
         </div>
       </section>
 
-      <CrossIntentLinks service={problem.primaryService} serviceName={tradeName} currentIntent="services" />
+      <CrossIntentLinks service={problem.primaryService} serviceName={tradeName} />
 
       {/* Editorial credibility */}
       <section className="mb-8">

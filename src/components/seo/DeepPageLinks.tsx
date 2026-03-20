@@ -82,7 +82,7 @@ export default async function DeepPageLinks({
   let module1Links: { href: string; label: string }[] = []
 
   // Try GPS-based proximity (works at runtime/ISR, not during build)
-  const gpsCities = await getNearbyVilleSlugs(currentVille, 30, 8)
+  const gpsCities = await getNearbyVilleSlugs(currentVille, 8)
   if (gpsCities && gpsCities.length > 0) {
     module1Links = gpsCities
       .map(c => {
@@ -182,6 +182,27 @@ export default async function DeepPageLinks({
     }
   }
 
+  // ── Module 7: Grandes villes de France ───────────────────────────────
+  const GRANDES_VILLES = [
+    'paris', 'lyon', 'marseille', 'toulouse', 'bordeaux',
+    'nantes', 'strasbourg', 'lille', 'montpellier', 'nice',
+    'rennes', 'toulon', 'grenoble', 'dijon', 'angers',
+  ]
+  const module1Slugs = new Set(module1Links.map(l => l.href.split('/').pop()!))
+  const deptSlugs = new Set(
+    dept ? getVillesByDepartement(ville.departementCode).map(v => v.slug) : []
+  )
+  const module7Links = GRANDES_VILLES
+    .filter(slug => slug !== currentVille && !module1Slugs.has(slug) && !deptSlugs.has(slug))
+    .slice(0, 5)
+    .map(slug => {
+      const v = getVilleBySlug(slug)
+      return v
+        ? { href: `/services/${currentService}/${slug}`, label: `${serviceName} à ${v.name}` }
+        : null
+    })
+    .filter((x): x is { href: string; label: string } => x !== null)
+
   // ── Build modules array ───────────────────────────────────────────────
   const modules: { title: string; links: { href: string; label: string }[] }[] = []
 
@@ -202,6 +223,9 @@ export default async function DeepPageLinks({
   }
   if (module6Links.length > 0) {
     modules.push({ title: 'Guides et articles', links: module6Links })
+  }
+  if (module7Links.length > 0) {
+    modules.push({ title: `${serviceName} dans les grandes villes`, links: module7Links })
   }
 
   if (modules.length === 0) return null

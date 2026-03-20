@@ -5,6 +5,7 @@ import Breadcrumb from "@/components/Breadcrumb"
 import JsonLd from "@/components/JsonLd"
 import { getBreadcrumbSchema, getCollectionPageSchema } from "@/lib/seo/jsonld"
 import { SITE_URL } from "@/lib/seo/config"
+import RelatedHubs from '@/components/seo/RelatedHubs'
 import { questions, categoryLabels, type QuestionCategory } from "@/lib/data/questions"
 
 // ---------------------------------------------------------------------------
@@ -189,6 +190,8 @@ export default function QuestionsHubPage() {
           </div>
         )}
       </div>
+
+      <RelatedHubs currentPath="/questions" />
     </>
   )
 }

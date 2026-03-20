@@ -5,6 +5,7 @@ import Breadcrumb from "@/components/Breadcrumb"
 import JsonLd from "@/components/JsonLd"
 import { getBreadcrumbSchema } from "@/lib/seo/jsonld"
 import { SITE_URL } from "@/lib/seo/config"
+import RelatedHubs from '@/components/seo/RelatedHubs'
 
 export const revalidate = 86400
 
@@ -352,6 +353,8 @@ export default function GuidesPage() {
           </div>
         </div>
       </div>
+
+      <RelatedHubs currentPath="/guides" />
     </>
   )
 }

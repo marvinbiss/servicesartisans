@@ -12,6 +12,7 @@ const canonicalUrl = `${SITE_URL}/widget`
 export const metadata: Metadata = {
   title: `Widget ${SITE_NAME} — Affichez votre profil`,
   description: `Intégrez le widget ${SITE_NAME} sur votre site web pour renforcer votre crédibilité en ligne. Badge artisan gratuit, installation en 2 minutes.`,
+  robots: { index: false, follow: true },
   alternates: { canonical: canonicalUrl },
   openGraph: {
     locale: 'fr_FR',

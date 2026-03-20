@@ -9,6 +9,7 @@ import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
 import { BAROMETRE_METIERS, getBarometreMetierBySlug, TOP_VILLES } from '@/lib/barometre/constants'
 import { getStatsByMetier, getMetierTopVilles } from '@/lib/barometre/queries'
 import type { BarometreStatRow } from '@/lib/barometre/queries'
+import RelatedHubs from '@/components/seo/RelatedHubs'
 
 // ---------------------------------------------------------------------------
 // Static params (top 30 métiers)
@@ -294,6 +295,8 @@ export default async function BarometreMetierPage({ params }: PageProps) {
           </div>
         </section>
       </div>
+
+      <RelatedHubs currentPath="/barometre" extraLinks={[{href: "/comparaison", label: "Comparatifs artisans"}]} />
     </>
   )
 }

@@ -208,7 +208,6 @@ export function monthName(m: number): string {
 
 export async function getNearbyVilleSlugs(
   originSlug: string,
-  radiusKm: number = 30,
   limit: number = 8,
 ): Promise<{ slug: string; distanceKm: number }[] | null> {
   if (IS_BUILD) return null
@@ -217,45 +216,76 @@ export async function getNearbyVilleSlugs(
     const origin = await getCommuneBySlug(originSlug)
     if (!origin?.latitude || !origin?.longitude) return null
 
-    // Bounding box: ~1 degree ≈ 111km latitude, longitude varies with cos(lat)
-    const latDelta = radiusKm / 111
-    const lngDelta = radiusKm / (111 * Math.cos(origin.latitude * Math.PI / 180))
-
     const { createAdminClient } = await import('@/lib/supabase/admin')
     const supabase = createAdminClient()
 
-    const { data, error } = await supabase
-      .from('communes')
-      .select('slug,latitude,longitude')
-      .eq('is_active', true)
-      .gte('latitude', origin.latitude - latDelta)
-      .lte('latitude', origin.latitude + latDelta)
-      .gte('longitude', origin.longitude - lngDelta)
-      .lte('longitude', origin.longitude + lngDelta)
-      .neq('slug', originSlug)
-      .not('latitude', 'is', null)
-      .limit(200) // cap candidates for Haversine sort
+    // Progressive fallback: widen radius + lower pop threshold until >= limit results
+    const tiers = [
+      { radiusKm: 30, minPop: 2000 },
+      { radiusKm: 50, minPop: 1000 },
+      { radiusKm: 80, minPop: 500 },
+    ]
 
-    if (error || !data) return null
+    for (const { radiusKm, minPop } of tiers) {
+      const results = await queryNearby(supabase, origin, originSlug, radiusKm, minPop, limit)
+      if (results && results.length >= limit) return results
+    }
 
-    // Haversine distance
-    const R = 6371
-    const results = data
-      .map(c => {
-        const dLat = (c.latitude! - origin.latitude!) * Math.PI / 180
-        const dLng = (c.longitude! - origin.longitude!) * Math.PI / 180
-        const a = Math.sin(dLat / 2) ** 2 +
-          Math.cos(origin.latitude! * Math.PI / 180) * Math.cos(c.latitude! * Math.PI / 180) *
-          Math.sin(dLng / 2) ** 2
-        const distanceKm = R * 2 * Math.asin(Math.sqrt(a))
-        return { slug: c.slug as string, distanceKm }
-      })
-      .filter(c => c.distanceKm <= radiusKm)
-      .sort((a, b) => a.distanceKm - b.distanceKm)
-      .slice(0, limit)
+    // Final fallback: no population filter, 80km
+    const lastTry = await queryNearby(supabase, origin, originSlug, 80, 0, limit)
+    if (lastTry && lastTry.length > 0) return lastTry
 
-    return results
+    return null
   } catch {
     return null
   }
+}
+
+/** Internal: query nearby communes within bounding box + Haversine filter */
+async function queryNearby(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  supabase: any,
+  origin: CommuneData,
+  originSlug: string,
+  radiusKm: number,
+  minPop: number,
+  limit: number,
+): Promise<{ slug: string; distanceKm: number }[] | null> {
+  const latDelta = radiusKm / 111
+  const lngDelta = radiusKm / (111 * Math.cos(origin.latitude! * Math.PI / 180))
+
+  let query = supabase
+    .from('communes')
+    .select('slug,latitude,longitude,population')
+    .eq('is_active', true)
+    .gte('latitude', origin.latitude! - latDelta)
+    .lte('latitude', origin.latitude! + latDelta)
+    .gte('longitude', origin.longitude! - lngDelta)
+    .lte('longitude', origin.longitude! + lngDelta)
+    .neq('slug', originSlug)
+    .not('latitude', 'is', null)
+    .limit(300)
+
+  if (minPop > 0) {
+    query = query.gte('population', minPop)
+  }
+
+  const { data, error } = await query.order('population', { ascending: false })
+
+  if (error || !data) return null
+
+  const R = 6371
+  return (data as { slug: string; latitude: number; longitude: number; population: number }[])
+    .map(c => {
+      const dLat = (c.latitude - origin.latitude!) * Math.PI / 180
+      const dLng = (c.longitude - origin.longitude!) * Math.PI / 180
+      const a = Math.sin(dLat / 2) ** 2 +
+        Math.cos(origin.latitude! * Math.PI / 180) * Math.cos(c.latitude * Math.PI / 180) *
+        Math.sin(dLng / 2) ** 2
+      const distanceKm = R * 2 * Math.asin(Math.sqrt(a))
+      return { slug: c.slug, distanceKm }
+    })
+    .filter(c => c.distanceKm <= radiusKm)
+    .sort((a, b) => a.distanceKm - b.distanceKm)
+    .slice(0, limit)
 }

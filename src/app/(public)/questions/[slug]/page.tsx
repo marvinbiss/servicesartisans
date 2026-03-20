@@ -7,6 +7,7 @@ import JsonLd from "@/components/JsonLd"
 import { getBreadcrumbSchema, getFAQSchema } from "@/lib/seo/jsonld"
 import { SITE_URL, SITE_NAME } from "@/lib/seo/config"
 import { getQuestionBySlug, getQuestionSlugs, getQuestionsByCategory } from "@/lib/data/questions"
+import RelatedHubs from '@/components/seo/RelatedHubs'
 
 // ---------------------------------------------------------------------------
 // Static params
@@ -220,6 +221,8 @@ export default function QuestionPage({
           )}
         </div>
       </div>
+
+      <RelatedHubs currentPath="/questions" extraLinks={[{href: "/glossaire", label: "Glossaire"}, {href: "/guides", label: "Guides travaux"}]} />
     </>
   )
 }

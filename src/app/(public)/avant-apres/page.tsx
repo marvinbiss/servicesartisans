@@ -12,6 +12,7 @@ import {
   FileCheck,
   Search,
 } from "lucide-react"
+import RelatedHubs from '@/components/seo/RelatedHubs'
 
 const PAGE_URL = `${SITE_URL}/avant-apres`
 
@@ -306,6 +307,8 @@ export default function AvantApresPage() {
           </div>
         </section>
       </div>
+
+      <RelatedHubs currentPath="/avant-apres" />
     </>
   )
 }

@@ -9,6 +9,7 @@ import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
 import { BAROMETRE_REGIONS, getBarometreRegionBySlug, getBarometreMetierBySlug } from '@/lib/barometre/constants'
 import { getStatsByRegion } from '@/lib/barometre/queries'
 import { regionalIndices } from '@/lib/data/barometre'
+import RelatedHubs from '@/components/seo/RelatedHubs'
 
 // ---------------------------------------------------------------------------
 // Static params (13 régions métropolitaines)
@@ -280,6 +281,8 @@ export default async function BarometreRegionPage({ params }: PageProps) {
           </div>
         </section>
       </div>
+
+      <RelatedHubs currentPath="/barometre" extraLinks={[{href: "/statistiques-artisans-france", label: "Statistiques artisans"}]} />
     </>
   )
 }

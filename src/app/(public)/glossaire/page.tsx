@@ -17,6 +17,7 @@ import {
   PaintBucket,
   Scale,
 } from 'lucide-react'
+import RelatedHubs from '@/components/seo/RelatedHubs'
 
 const PAGE_URL = `${SITE_URL}/glossaire`
 
@@ -395,6 +396,8 @@ export default function GlossairePage() {
           </div>
         </section>
       </div>
+
+      <RelatedHubs currentPath="/glossaire" />
     </>
   )
 }

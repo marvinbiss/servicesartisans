@@ -17,6 +17,7 @@ import {
   getPrixMoyenNational,
   getVariationMoyenne,
 } from '@/lib/data/barometre'
+import RelatedHubs from '@/components/seo/RelatedHubs'
 
 // ---------------------------------------------------------------------------
 // Compute stats from real data
@@ -1125,6 +1126,8 @@ export default function StatistiquesArtisansFrancePage() {
 
         </div>
       </div>
+
+      <RelatedHubs currentPath="/statistiques-artisans-france" />
     </>
   )
 }

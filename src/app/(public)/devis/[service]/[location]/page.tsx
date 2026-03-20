@@ -14,6 +14,7 @@ import { getServiceImage } from '@/lib/data/images'
 import { relatedServices } from '@/lib/constants/navigation'
 import { getProblemsByService } from '@/lib/data/problems'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
+import VerticalCrossLinks from '@/components/seo/VerticalCrossLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import DevisForm from '@/components/DevisForm'
 
@@ -855,6 +856,8 @@ export default async function DevisServiceLocationPage({
           </div>
         </div>
       </section>
+
+      <VerticalCrossLinks currentService={service} villeSlug={location} villeName={villeData.name} intent="devis" />
 
       <CrossIntentLinks
         service={service}

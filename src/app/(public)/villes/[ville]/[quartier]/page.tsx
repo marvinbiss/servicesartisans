@@ -64,7 +64,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
-    // All quartier pages indexed — each has unique content (profil bâti, FAQ, données)
+    robots: { index: false, follow: true },
     openGraph: {
       locale: 'fr_FR',
       title,

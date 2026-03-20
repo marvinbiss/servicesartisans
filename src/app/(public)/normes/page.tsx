@@ -15,6 +15,7 @@ import {
   FileCheck,
   Search,
 } from "lucide-react"
+import RelatedHubs from '@/components/seo/RelatedHubs'
 
 const PAGE_URL = `${SITE_URL}/normes`
 
@@ -376,6 +377,8 @@ export default function NormesPage() {
           </div>
         </section>
       </div>
+
+      <RelatedHubs currentPath="/normes" />
     </>
   )
 }

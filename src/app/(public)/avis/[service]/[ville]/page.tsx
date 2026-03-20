@@ -33,6 +33,7 @@ import { allArticlesMeta } from '@/lib/data/blog/articles-index'
 import LastUpdated from '@/components/seo/LastUpdated'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
+import VerticalCrossLinks from '@/components/seo/VerticalCrossLinks'
 import dynamic from 'next/dynamic'
 
 const EstimationWidget = dynamic(
@@ -1383,6 +1384,8 @@ export default async function AvisServiceVillePage({
           </div>
         </div>
       </section>
+
+      <VerticalCrossLinks currentService={service} villeSlug={villeSlug} villeName={villeData.name} intent="avis" />
 
       <CrossIntentLinks
         service={service}

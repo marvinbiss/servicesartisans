@@ -118,6 +118,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       { url: `${SITE_URL}/barometre/regions`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/barometre/tarifs`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/widget-prix`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/plan-du-site`, lastModified: BUILD_DATE },
     ]
 
     // Guide pages

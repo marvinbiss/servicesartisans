@@ -6,7 +6,7 @@ interface CrossIntentLinksProps {
   serviceName: string
   ville?: string
   villeName?: string
-  currentIntent: 'tarifs' | 'avis' | 'services' | 'urgence' | 'devis'
+  currentIntent?: 'tarifs' | 'avis' | 'services' | 'urgence' | 'devis'
 }
 
 const intents = [
