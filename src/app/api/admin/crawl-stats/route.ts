@@ -2,9 +2,13 @@ import { NextResponse } from 'next/server'
 import { requirePermission } from '@/lib/admin-auth'
 import { createAdminClient } from '@/lib/supabase/admin'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
-  const authError = await requirePermission('audit', 'read')
-  if (authError) return authError
+  const authResult = await requirePermission('audit', 'read')
+  if (!authResult.success || !authResult.admin) {
+    return authResult.error
+  }
 
   const supabase = createAdminClient()
 
