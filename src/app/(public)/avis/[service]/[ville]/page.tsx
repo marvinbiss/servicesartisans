@@ -32,6 +32,7 @@ import { getProblemsByService } from '@/lib/data/problems'
 import { allArticlesMeta } from '@/lib/data/blog/articles-index'
 import LastUpdated from '@/components/seo/LastUpdated'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
+import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import dynamic from 'next/dynamic'
 
 const EstimationWidget = dynamic(
@@ -1390,6 +1391,8 @@ export default async function AvisServiceVillePage({
         villeName={villeData.name}
         currentIntent="avis"
       />
+
+      <DeepPageLinks currentService={service} currentVille={villeSlug} currentIntent="avis" />
 
       <EstimationWidget context={{
         metier: trade.name,

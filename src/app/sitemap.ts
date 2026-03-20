@@ -63,6 +63,7 @@ export async function generateSitemaps() {
       { length: Math.ceil(departements.length * getTradesSlugs().length / LARGE_BATCH) },
       (_, i) => ({ id: `dept-services-${i}` })
     ),
+    { id: 'barometre' },
     { id: 'region-services' },
   ]
 
@@ -248,7 +249,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const allUrls: MetadataRoute.Sitemap = []
     for (const service of services) {
       for (const ville of mergedCities) {
-        allUrls.push({ url: `${SITE_URL}/services/${service.slug}/${ville.slug}` })
+        allUrls.push({ url: `${SITE_URL}/services/${service.slug}/${ville.slug}`, lastModified: BUILD_DATE })
       }
     }
 
@@ -259,11 +260,11 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── City pages ──────────────────────────────────────────────────────
   if (id === 'cities') {
     const villesIndex: MetadataRoute.Sitemap = [
-      { url: `${SITE_URL}/villes` },
+      { url: `${SITE_URL}/villes`, lastModified: BUILD_DATE },
     ]
 
     const villePages: MetadataRoute.Sitemap = villes.map((ville) => ({
-      url: `${SITE_URL}/villes/${ville.slug}`,
+      url: `${SITE_URL}/villes/${ville.slug}`, lastModified: BUILD_DATE,
     }))
 
     return [...villesIndex, ...villePages]
@@ -272,19 +273,19 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── Geo pages (départements + régions) ──────────────────────────────
   if (id === 'geo') {
     const departementsIndex: MetadataRoute.Sitemap = [
-      { url: `${SITE_URL}/departements` },
+      { url: `${SITE_URL}/departements`, lastModified: BUILD_DATE },
     ]
 
     const departementPages: MetadataRoute.Sitemap = departements.map((dept) => ({
-      url: `${SITE_URL}/departements/${dept.slug}`,
+      url: `${SITE_URL}/departements/${dept.slug}`, lastModified: BUILD_DATE,
     }))
 
     const regionsIndex: MetadataRoute.Sitemap = [
-      { url: `${SITE_URL}/regions` },
+      { url: `${SITE_URL}/regions`, lastModified: BUILD_DATE },
     ]
 
     const regionPages: MetadataRoute.Sitemap = regions.map((region) => ({
-      url: `${SITE_URL}/regions/${region.slug}`,
+      url: `${SITE_URL}/regions/${region.slug}`, lastModified: BUILD_DATE,
     }))
 
     return [...departementsIndex, ...departementPages, ...regionsIndex, ...regionPages]
@@ -312,7 +313,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     outer: for (const svc of services) {
       for (const ville of phase1Cities) {
         if (count >= end) break outer
-        if (count >= start) result.push({ url: `${SITE_URL}/devis/${svc.slug}/${ville.slug}` })
+        if (count >= start) result.push({ url: `${SITE_URL}/devis/${svc.slug}/${ville.slug}`, lastModified: BUILD_DATE })
         count++
       }
     }
@@ -334,7 +335,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     outer: for (const svc of emergencySlugs) {
       for (const v of phase1Cities) {
         if (count >= end) break outer
-        if (count >= start) result.push({ url: `${SITE_URL}/urgence/${svc}/${v.slug}` })
+        if (count >= start) result.push({ url: `${SITE_URL}/urgence/${svc}/${v.slug}`, lastModified: BUILD_DATE })
         count++
       }
     }
@@ -355,7 +356,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     outer: for (const svc of services) {
       for (const v of phase1Cities) {
         if (count >= end) break outer
-        if (count >= start) result.push({ url: `${SITE_URL}/tarifs/${svc.slug}/${v.slug}` })
+        if (count >= start) result.push({ url: `${SITE_URL}/tarifs/${svc.slug}/${v.slug}`, lastModified: BUILD_DATE })
         count++
       }
     }
@@ -410,7 +411,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     outer: for (const svc of tradeSlugs) {
       for (const v of phase1Cities) {
         if (count >= end) break outer
-        if (count >= start) result.push({ url: `${SITE_URL}/avis/${svc}/${v.slug}` })
+        if (count >= start) result.push({ url: `${SITE_URL}/avis/${svc}/${v.slug}`, lastModified: BUILD_DATE })
         count++
       }
     }
@@ -441,7 +442,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     outer: for (const problem of problemSlugs) {
       for (const ville of phase1Cities) {
         if (count >= end) break outer
-        if (count >= start) result.push({ url: `${SITE_URL}/problemes/${problem}/${ville.slug}` })
+        if (count >= start) result.push({ url: `${SITE_URL}/problemes/${problem}/${ville.slug}`, lastModified: BUILD_DATE })
         count++
       }
     }
@@ -456,10 +457,23 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const allUrls: MetadataRoute.Sitemap = []
     for (const dept of departements) {
       for (const service of tradeSlugs) {
-        allUrls.push({ url: `${SITE_URL}/departements/${dept.slug}/${service}` })
+        allUrls.push({ url: `${SITE_URL}/departements/${dept.slug}/${service}`, lastModified: BUILD_DATE })
       }
     }
     return allUrls.slice(batchIndex * LARGE_BATCH, (batchIndex + 1) * LARGE_BATCH)
+  }
+
+  // ── Baromètre pages (regions + tarifs by métier) ────────────────────
+  if (id === 'barometre') {
+    const barometreRegions: MetadataRoute.Sitemap = regions.map(region => ({
+      url: `${SITE_URL}/barometre/regions/${region.slug}`,
+      lastModified: BUILD_DATE,
+    }))
+    const barometreMetiers: MetadataRoute.Sitemap = getTradesSlugs().map(slug => ({
+      url: `${SITE_URL}/barometre/tarifs/${slug}`,
+      lastModified: BUILD_DATE,
+    }))
+    return [...barometreRegions, ...barometreMetiers]
   }
 
   // ── Region × service pages ──────────────────────────────────────────
@@ -467,7 +481,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const tradeSlugs = getTradesSlugs()
     return regions.flatMap(region =>
       tradeSlugs.map(service => ({
-        url: `${SITE_URL}/regions/${region.slug}/${service}`,
+        url: `${SITE_URL}/regions/${region.slug}/${service}`, lastModified: BUILD_DATE,
       }))
     )
   }

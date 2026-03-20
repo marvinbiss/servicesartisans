@@ -417,7 +417,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       getServiceBySlug(serviceSlug).catch(() => null),
     ])
     const rawProvider = stableIdResult || slugResult
-    if (!rawProvider) return { title: 'Artisan non trouvé', robots: { index: false, follow: false } }
+    if (!rawProvider || (rawProvider as unknown as ProviderRecord).is_active === false) {
+      notFound()
+    }
 
     // Cast to access DB columns that TS can't infer from select('*')
     const provider = rawProvider as unknown as ProviderRecord
@@ -521,7 +523,7 @@ export default async function ProviderPage({ params }: PageProps) {
     // Graceful degradation
   }
 
-  if (!provider) {
+  if (!provider || provider.is_active === false) {
     notFound()
   }
 

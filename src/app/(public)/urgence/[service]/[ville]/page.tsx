@@ -30,6 +30,7 @@ import { getServiceImage } from '@/lib/data/images'
 import { relatedServices } from '@/lib/constants/navigation'
 import { getProblemsByService } from '@/lib/data/problems'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
+import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import StickyMobileCTA from '@/components/StickyMobileCTA'
 import SearchRecorder from '@/components/SearchRecorder'
 import dynamic from 'next/dynamic'
@@ -1337,6 +1338,8 @@ export default async function UrgenceServiceVillePage({
         villeName={villeData.name}
         currentIntent="urgence"
       />
+
+      <DeepPageLinks currentService={service} currentVille={villeSlug} currentIntent="urgence" />
 
       <StickyMobileCTA serviceSlug={service} citySlug={villeSlug} ctaText="Intervention urgente — Devis gratuit" />
 

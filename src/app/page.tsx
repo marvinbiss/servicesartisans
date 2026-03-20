@@ -161,6 +161,62 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* ─── RESOURCES & TOOLS ──────────────────────────────── */}
+      <section className="py-12 bg-white border-t border-slate-100">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="text-center mb-8">
+            <h2 className="font-heading text-xl md:text-2xl font-bold text-stone-900 tracking-tight">
+              Ressources et outils
+            </h2>
+            <p className="text-stone-500 mt-2 text-sm max-w-lg mx-auto">
+              Guides, comparatifs et outils pour pr&eacute;parer vos travaux
+            </p>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+            <Link href="/guides" className="flex flex-col items-center gap-2 p-4 rounded-xl bg-slate-50 hover:bg-clay-50 hover:text-clay-600 text-stone-700 transition-colors text-center group">
+              <svg className="w-5 h-5 text-stone-400 group-hover:text-clay-500 transition-colors" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>
+              <span className="text-sm font-medium">Guides travaux</span>
+            </Link>
+            <Link href="/questions" className="flex flex-col items-center gap-2 p-4 rounded-xl bg-slate-50 hover:bg-clay-50 hover:text-clay-600 text-stone-700 transition-colors text-center group">
+              <svg className="w-5 h-5 text-stone-400 group-hover:text-clay-500 transition-colors" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" /></svg>
+              <span className="text-sm font-medium">Questions fr&eacute;quentes</span>
+            </Link>
+            <Link href="/comparaison" className="flex flex-col items-center gap-2 p-4 rounded-xl bg-slate-50 hover:bg-clay-50 hover:text-clay-600 text-stone-700 transition-colors text-center group">
+              <svg className="w-5 h-5 text-stone-400 group-hover:text-clay-500 transition-colors" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" /></svg>
+              <span className="text-sm font-medium">Comparatifs</span>
+            </Link>
+            <Link href="/barometre" className="flex flex-col items-center gap-2 p-4 rounded-xl bg-slate-50 hover:bg-clay-50 hover:text-clay-600 text-stone-700 transition-colors text-center group">
+              <svg className="w-5 h-5 text-stone-400 group-hover:text-clay-500 transition-colors" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg>
+              <span className="text-sm font-medium">Barom&egrave;tre prix</span>
+            </Link>
+            <Link href="/glossaire" className="flex flex-col items-center gap-2 p-4 rounded-xl bg-slate-50 hover:bg-clay-50 hover:text-clay-600 text-stone-700 transition-colors text-center group">
+              <svg className="w-5 h-5 text-stone-400 group-hover:text-clay-500 transition-colors" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" /></svg>
+              <span className="text-sm font-medium">Glossaire</span>
+            </Link>
+            <Link href="/normes" className="flex flex-col items-center gap-2 p-4 rounded-xl bg-slate-50 hover:bg-clay-50 hover:text-clay-600 text-stone-700 transition-colors text-center group">
+              <svg className="w-5 h-5 text-stone-400 group-hover:text-clay-500 transition-colors" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" /></svg>
+              <span className="text-sm font-medium">Normes</span>
+            </Link>
+            <Link href="/calendrier-travaux" className="flex flex-col items-center gap-2 p-4 rounded-xl bg-slate-50 hover:bg-clay-50 hover:text-clay-600 text-stone-700 transition-colors text-center group">
+              <svg className="w-5 h-5 text-stone-400 group-hover:text-clay-500 transition-colors" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>
+              <span className="text-sm font-medium">Calendrier travaux</span>
+            </Link>
+            <Link href="/checklist-travaux" className="flex flex-col items-center gap-2 p-4 rounded-xl bg-slate-50 hover:bg-clay-50 hover:text-clay-600 text-stone-700 transition-colors text-center group">
+              <svg className="w-5 h-5 text-stone-400 group-hover:text-clay-500 transition-colors" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              <span className="text-sm font-medium">Checklist travaux</span>
+            </Link>
+            <Link href="/avant-apres" className="flex flex-col items-center gap-2 p-4 rounded-xl bg-slate-50 hover:bg-clay-50 hover:text-clay-600 text-stone-700 transition-colors text-center group">
+              <svg className="w-5 h-5 text-stone-400 group-hover:text-clay-500 transition-colors" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5a2.25 2.25 0 002.25-2.25V5.25a2.25 2.25 0 00-2.25-2.25H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z" /></svg>
+              <span className="text-sm font-medium">Avant/Apr&egrave;s</span>
+            </Link>
+            <Link href="/statistiques-artisans-france" className="flex flex-col items-center gap-2 p-4 rounded-xl bg-slate-50 hover:bg-clay-50 hover:text-clay-600 text-stone-700 transition-colors text-center group">
+              <svg className="w-5 h-5 text-stone-400 group-hover:text-clay-500 transition-colors" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" /><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" /></svg>
+              <span className="text-sm font-medium">Statistiques</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* ─── POPULAR LINKS (SEO) ──────────────────────────────── */}
       <section className="py-16 bg-slate-50 border-t border-slate-100 cv-auto">
         <div className="max-w-6xl mx-auto px-4">

@@ -18,6 +18,7 @@ import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
 import PriceTableHTML from '@/components/seo/PriceTableHTML'
 import LastUpdated from '@/components/seo/LastUpdated'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
+import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import { getDefaultAuthor } from '@/lib/data/team'
 import StickyMobileCTA from '@/components/StickyMobileCTA'
 import SearchRecorder from '@/components/SearchRecorder'
@@ -887,6 +888,8 @@ export default async function TarifsServiceVillePage({
         villeName={villeData.name}
         currentIntent="tarifs"
       />
+
+      <DeepPageLinks currentService={service} currentVille={villeSlug} currentIntent="tarifs" />
 
       <StickyMobileCTA serviceSlug={service} citySlug={villeSlug} />
 

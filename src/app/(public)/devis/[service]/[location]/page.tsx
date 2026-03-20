@@ -14,6 +14,7 @@ import { getServiceImage } from '@/lib/data/images'
 import { relatedServices } from '@/lib/constants/navigation'
 import { getProblemsByService } from '@/lib/data/problems'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
+import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import DevisForm from '@/components/DevisForm'
 
 // ---------------------------------------------------------------------------
@@ -862,6 +863,8 @@ export default async function DevisServiceLocationPage({
         villeName={villeData.name}
         currentIntent="devis"
       />
+
+      <DeepPageLinks currentService={service} currentVille={location} currentIntent="devis" />
     </div>
   )
 }

@@ -76,6 +76,105 @@ const serviceMapping: Record<string, { slug: string; label: string }> = {
   'revêtement de sol': { slug: 'solier-moquettiste', label: 'solier moquettiste' },
   // Entreprise de nettoyage
   'nettoyage': { slug: 'entreprise-de-nettoyage', label: 'entreprise de nettoyage' },
+  // Charpentier
+  'charpentier': { slug: 'charpentier', label: 'charpentier' },
+  'charpente': { slug: 'charpentier', label: 'charpentier' },
+  // Terrassier
+  'terrassier': { slug: 'terrassier', label: 'terrassier' },
+  'terrassement': { slug: 'terrassier', label: 'terrassier' },
+  // Zingueur
+  'zingueur': { slug: 'zingueur', label: 'zingueur' },
+  'zinguerie': { slug: 'zingueur', label: 'zingueur' },
+  'gouttière': { slug: 'zingueur', label: 'zingueur' },
+  'gouttiere': { slug: 'zingueur', label: 'zingueur' },
+  // Étanchéiste
+  'étanchéiste': { slug: 'etancheiste', label: 'étanchéiste' },
+  'etancheiste': { slug: 'etancheiste', label: 'étanchéiste' },
+  'étanchéité': { slug: 'etancheiste', label: 'étanchéiste' },
+  'etancheite': { slug: 'etancheiste', label: 'étanchéiste' },
+  // Façadier
+  'façadier': { slug: 'facadier', label: 'façadier' },
+  'facadier': { slug: 'facadier', label: 'façadier' },
+  'enduit': { slug: 'facadier', label: 'façadier' },
+  // Plâtrier
+  'plâtrier': { slug: 'platrier-plaquiste', label: 'plâtrier plaquiste' },
+  'platrier': { slug: 'platrier-plaquiste', label: 'plâtrier plaquiste' },
+  'plaquiste': { slug: 'platrier-plaquiste', label: 'plâtrier plaquiste' },
+  'placo': { slug: 'platrier-plaquiste', label: 'plâtrier plaquiste' },
+  // Métallier / Ferronnier
+  'métallier': { slug: 'metallier-serrurier', label: 'métallier serrurier' },
+  'metallier': { slug: 'metallier-serrurier', label: 'métallier serrurier' },
+  'ferronnier': { slug: 'ferronnier', label: 'ferronnier' },
+  'ferronnerie': { slug: 'ferronnier', label: 'ferronnier' },
+  // Storiste
+  'storiste': { slug: 'storiste', label: 'storiste' },
+  'store': { slug: 'storiste', label: 'storiste' },
+  'volet roulant': { slug: 'storiste', label: 'storiste' },
+  // Salle de bain
+  'salle de bain': { slug: 'salle-de-bain', label: 'spécialiste salle de bain' },
+  'salle-de-bain': { slug: 'salle-de-bain', label: 'spécialiste salle de bain' },
+  // Architecte intérieur / Décorateur
+  'architecte intérieur': { slug: 'architecte-interieur', label: 'architecte d\'intérieur' },
+  'architecte-interieur': { slug: 'architecte-interieur', label: 'architecte d\'intérieur' },
+  'décorateur': { slug: 'decorateur-interieur', label: 'décorateur d\'intérieur' },
+  'decorateur': { slug: 'decorateur-interieur', label: 'décorateur d\'intérieur' },
+  'décoration': { slug: 'decorateur-interieur', label: 'décorateur d\'intérieur' },
+  // Domoticien
+  'domoticien': { slug: 'domoticien', label: 'domoticien' },
+  'maison connectée': { slug: 'domoticien', label: 'domoticien' },
+  // Pompe à chaleur (distinct du chauffagiste)
+  'installateur pac': { slug: 'pompe-a-chaleur', label: 'installateur pompe à chaleur' },
+  // Panneaux solaires
+  'panneaux solaires': { slug: 'panneaux-solaires', label: 'installateur panneaux solaires' },
+  'panneau solaire': { slug: 'panneaux-solaires', label: 'installateur panneaux solaires' },
+  'photovoltaïque': { slug: 'panneaux-solaires', label: 'installateur panneaux solaires' },
+  'photovoltaique': { slug: 'panneaux-solaires', label: 'installateur panneaux solaires' },
+  // Isolation thermique
+  'isolation': { slug: 'isolation-thermique', label: 'spécialiste isolation thermique' },
+  'isolation thermique': { slug: 'isolation-thermique', label: 'spécialiste isolation thermique' },
+  'isolant': { slug: 'isolation-thermique', label: 'spécialiste isolation thermique' },
+  // Rénovation énergétique
+  'rénovation énergétique': { slug: 'renovation-energetique', label: 'spécialiste rénovation énergétique' },
+  'renovation-energetique': { slug: 'renovation-energetique', label: 'spécialiste rénovation énergétique' },
+  // Borne de recharge
+  'borne de recharge': { slug: 'borne-recharge', label: 'installateur borne de recharge' },
+  'borne-recharge': { slug: 'borne-recharge', label: 'installateur borne de recharge' },
+  'irve': { slug: 'borne-recharge', label: 'installateur borne de recharge' },
+  // Ramoneur
+  'ramoneur': { slug: 'ramoneur', label: 'ramoneur' },
+  'ramonage': { slug: 'ramoneur', label: 'ramoneur' },
+  // Pisciniste
+  'pisciniste': { slug: 'pisciniste', label: 'pisciniste' },
+  'piscine': { slug: 'pisciniste', label: 'pisciniste' },
+  // Alarme / Sécurité
+  'alarme': { slug: 'alarme-securite', label: 'installateur alarme et sécurité' },
+  'alarme-securite': { slug: 'alarme-securite', label: 'installateur alarme et sécurité' },
+  'vidéosurveillance': { slug: 'alarme-securite', label: 'installateur alarme et sécurité' },
+  // Antenniste
+  'antenniste': { slug: 'antenniste', label: 'antenniste' },
+  'antenne': { slug: 'antenniste', label: 'antenniste' },
+  // Ascensoriste
+  'ascensoriste': { slug: 'ascensoriste', label: 'ascensoriste' },
+  'ascenseur': { slug: 'ascensoriste', label: 'ascensoriste' },
+  // Diagnostiqueur
+  'diagnostiqueur': { slug: 'diagnostiqueur-immobilier', label: 'diagnostiqueur immobilier' },
+  'diagnostic immobilier': { slug: 'diagnostiqueur-immobilier', label: 'diagnostiqueur immobilier' },
+  'dpe': { slug: 'diagnostiqueur-immobilier', label: 'diagnostiqueur immobilier' },
+  // Géomètre
+  'géomètre': { slug: 'geometre-expert', label: 'géomètre expert' },
+  'geometre': { slug: 'geometre-expert', label: 'géomètre expert' },
+  'bornage': { slug: 'geometre-expert', label: 'géomètre expert' },
+  // Désinsectisation / Dératisation
+  'désinsectisation': { slug: 'desinsectisation', label: 'désinsectiseur' },
+  'desinsectisation': { slug: 'desinsectisation', label: 'désinsectiseur' },
+  'punaise': { slug: 'desinsectisation', label: 'désinsectiseur' },
+  'dératisation': { slug: 'deratisation', label: 'dératiseur' },
+  'deratisation': { slug: 'deratisation', label: 'dératiseur' },
+  // Déménageur
+  'déménageur': { slug: 'demenageur', label: 'déménageur' },
+  'demenageur': { slug: 'demenageur', label: 'déménageur' },
+  'déménagement': { slug: 'demenageur', label: 'déménageur' },
+  'demenagement': { slug: 'demenageur', label: 'déménageur' },
 }
 
 /**

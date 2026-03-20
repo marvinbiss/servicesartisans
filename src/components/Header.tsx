@@ -189,11 +189,16 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
       </button>
       {/* Plus dropdown inline */}
       {menu === 'plus' && openMenu === 'plus' && (
-        <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
+        <div className="absolute top-full right-0 mt-2 w-52 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
           <Link href="/avis" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Avis artisans</Link>
           <Link href="/tarifs" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Tarifs</Link>
           <Link href="/blog" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Blog</Link>
           <Link href="/guides" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Guides travaux</Link>
+          <div className="h-px bg-gray-100 my-1" />
+          <Link href="/questions" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>FAQ</Link>
+          <Link href="/comparaison" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Comparatifs</Link>
+          <Link href="/barometre" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Baromètre prix</Link>
+          <Link href="/glossaire" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Glossaire</Link>
         </div>
       )}
     </div>

@@ -12,6 +12,7 @@ import TradeSections from './_components/TradeSections'
 import FaqAndBlogSection from './_components/FaqAndBlogSection'
 import CrossLinks from './_components/CrossLinks'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
+import DeepPageLinks from '@/components/seo/DeepPageLinks'
 
 import { getBreadcrumbSchema, getItemListSchema, getSpeakableSchema } from '@/lib/seo/jsonld'
 import { popularServices, relatedServices } from '@/lib/constants/navigation'
@@ -587,6 +588,12 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         serviceName={service.name}
         ville={locationSlug}
         villeName={location.name}
+        currentIntent="services"
+      />
+
+      <DeepPageLinks
+        currentService={serviceSlug}
+        currentVille={locationSlug}
         currentIntent="services"
       />
 
