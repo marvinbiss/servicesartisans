@@ -11,6 +11,7 @@ import { tradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { villes } from '@/lib/data/france'
 import { getServiceImage } from '@/lib/data/images'
 import { relatedServices } from '@/lib/constants/navigation'
+import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import dynamic from 'next/dynamic'
 
 const EstimationWidget = dynamic(
@@ -494,6 +495,8 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
           </nav>
         </div>
       </section>
+
+      <CrossIntentLinks service={service} serviceName={trade.name} currentIntent="devis" />
 
       {/* Editorial credibility */}
       <section className="mb-8">

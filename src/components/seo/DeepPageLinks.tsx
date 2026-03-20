@@ -8,6 +8,7 @@ import {
   getRegionSlugByName,
 } from '@/lib/data/france'
 import { allArticles } from '@/lib/data/blog/articles'
+import { getNearbyVilleSlugs } from '@/lib/data/commune-data'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -65,7 +66,7 @@ const SERVICE_ARTICLE_MAP = new Map<string, string[]>([
 // Component
 // ---------------------------------------------------------------------------
 
-export default function DeepPageLinks({
+export default async function DeepPageLinks({
   currentService,
   currentVille,
   currentIntent,
@@ -77,12 +78,29 @@ export default function DeepPageLinks({
   const serviceName = serviceData.name
   const villeName = ville.name
 
-  // ── Module 1: Villes proches ──────────────────────────────────────────
-  const nearbyCities = getNearbyCities(currentVille, 8)
-  const module1Links = nearbyCities.map(v => ({
-    href: `/services/${currentService}/${v.slug}`,
-    label: `${serviceName} à ${v.name}`,
-  }))
+  // ── Module 1: Villes proches (GPS Haversine with dept/region fallback) ─
+  let module1Links: { href: string; label: string }[] = []
+
+  // Try GPS-based proximity (works at runtime/ISR, not during build)
+  const gpsCities = await getNearbyVilleSlugs(currentVille, 30, 8)
+  if (gpsCities && gpsCities.length > 0) {
+    module1Links = gpsCities
+      .map(c => {
+        const v = getVilleBySlug(c.slug)
+        if (!v) return null
+        return { href: `/services/${currentService}/${v.slug}`, label: `${serviceName} à ${v.name}` }
+      })
+      .filter((x): x is { href: string; label: string } => x !== null)
+  }
+
+  // Fallback: department/region proximity (build time or no GPS data)
+  if (module1Links.length === 0) {
+    const nearbyCities = getNearbyCities(currentVille, 8)
+    module1Links = nearbyCities.map(v => ({
+      href: `/services/${currentService}/${v.slug}`,
+      label: `${serviceName} à ${v.name}`,
+    }))
+  }
 
   // ── Module 2: Autres artisans dans cette ville ────────────────────────
   const otherServices = services

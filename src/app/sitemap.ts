@@ -19,7 +19,7 @@ const BUILD_DATE = new Date().toISOString().split('T')[0]
 
 // Batch size for static (non-DB) sitemaps — must match the BATCH used in sitemap() slicing
 const STATIC_BATCH = 10_000
-const LARGE_BATCH = 45_000
+const LARGE_BATCH = 25_000
 
 // Phase 1: submit only top-300 cities for new domain (conservative crawl budget).
 // Phase 2 (service-cities-extended) is handled below but NOT registered in generateSitemaps yet.
@@ -430,7 +430,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
   // ── Problemes × city pages (Phase 1: top 300 cities only) ───────────
   if (id.startsWith('problemes-cities-')) {
-    const batchIndex = parseInt(id.split('-').pop()!)
+    const batchIndex = parseInt(id.replace('problemes-cities-', ''))
     const BATCH = STATIC_BATCH
     const start = batchIndex * BATCH
     const end = start + BATCH
@@ -452,7 +452,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
   // ── Dept × service pages ────────────────────────────────────────────
   if (id.startsWith('dept-services-')) {
-    const batchIndex = parseInt(id.split('-').pop()!)
+    const batchIndex = parseInt(id.replace('dept-services-', ''))
     const tradeSlugs = getTradesSlugs()
     const allUrls: MetadataRoute.Sitemap = []
     for (const dept of departements) {

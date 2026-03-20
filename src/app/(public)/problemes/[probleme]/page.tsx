@@ -10,6 +10,7 @@ import { getProblemBySlug, getProblemSlugs, getProblemsByService } from '@/lib/d
 import { tradeContent } from '@/lib/data/trade-content'
 import { villes } from '@/lib/data/france'
 import { hashCode } from '@/lib/seo/location-content'
+import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 
 export const revalidate = 86400
 export const dynamicParams = true
@@ -516,6 +517,8 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
           </div>
         </div>
       </section>
+
+      <CrossIntentLinks service={problem.primaryService} serviceName={tradeName} currentIntent="services" />
 
       {/* Editorial credibility */}
       <section className="mb-8">

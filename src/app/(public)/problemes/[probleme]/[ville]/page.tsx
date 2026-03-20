@@ -12,6 +12,7 @@ import { villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
 import { hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { getCommuneBySlug, formatNumber, type CommuneData } from '@/lib/data/commune-data'
 import { allArticlesMeta } from '@/lib/data/blog/articles-index'
+import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 
 // ---------------------------------------------------------------------------
 // Static params: top 10 problems x top 30 cities = 300 pre-rendered pages
@@ -1070,6 +1071,8 @@ export default async function ProblemeVillePage({
           </div>
         </div>
       </section>
+
+      <CrossIntentLinks service={problem.primaryService} serviceName={tradeName} ville={ville} villeName={villeData.name} currentIntent="services" />
 
       {/* Editorial credibility */}
       <section className="mb-8">

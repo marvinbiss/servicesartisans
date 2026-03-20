@@ -199,3 +199,63 @@ const MONTH_NAMES = [
 export function monthName(m: number): string {
   return MONTH_NAMES[m] || ''
 }
+
+// ---------------------------------------------------------------------------
+// Get nearby commune slugs by GPS distance (bounding box + Haversine)
+// Returns slugs sorted by distance, excluding the origin city.
+// Returns null if DB is unavailable (build time) — caller should fallback.
+// ---------------------------------------------------------------------------
+
+export async function getNearbyVilleSlugs(
+  originSlug: string,
+  radiusKm: number = 30,
+  limit: number = 8,
+): Promise<{ slug: string; distanceKm: number }[] | null> {
+  if (IS_BUILD) return null
+
+  try {
+    const origin = await getCommuneBySlug(originSlug)
+    if (!origin?.latitude || !origin?.longitude) return null
+
+    // Bounding box: ~1 degree ≈ 111km latitude, longitude varies with cos(lat)
+    const latDelta = radiusKm / 111
+    const lngDelta = radiusKm / (111 * Math.cos(origin.latitude * Math.PI / 180))
+
+    const { createAdminClient } = await import('@/lib/supabase/admin')
+    const supabase = createAdminClient()
+
+    const { data, error } = await supabase
+      .from('communes')
+      .select('slug,latitude,longitude')
+      .eq('is_active', true)
+      .gte('latitude', origin.latitude - latDelta)
+      .lte('latitude', origin.latitude + latDelta)
+      .gte('longitude', origin.longitude - lngDelta)
+      .lte('longitude', origin.longitude + lngDelta)
+      .neq('slug', originSlug)
+      .not('latitude', 'is', null)
+      .limit(200) // cap candidates for Haversine sort
+
+    if (error || !data) return null
+
+    // Haversine distance
+    const R = 6371
+    const results = data
+      .map(c => {
+        const dLat = (c.latitude! - origin.latitude!) * Math.PI / 180
+        const dLng = (c.longitude! - origin.longitude!) * Math.PI / 180
+        const a = Math.sin(dLat / 2) ** 2 +
+          Math.cos(origin.latitude! * Math.PI / 180) * Math.cos(c.latitude! * Math.PI / 180) *
+          Math.sin(dLng / 2) ** 2
+        const distanceKm = R * 2 * Math.asin(Math.sqrt(a))
+        return { slug: c.slug as string, distanceKm }
+      })
+      .filter(c => c.distanceKm <= radiusKm)
+      .sort((a, b) => a.distanceKm - b.distanceKm)
+      .slice(0, limit)
+
+    return results
+  } catch {
+    return null
+  }
+}

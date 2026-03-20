@@ -36,9 +36,6 @@ const informationLinks = [
   { name: 'Blog', href: '/blog' },
   { name: 'Guides travaux', href: '/guides' },
   { name: 'Avis artisans', href: '/avis' },
-  { name: 'CGV', href: '/cgv' },
-  { name: 'Mentions légales', href: '/mentions-legales' },
-  { name: 'Confidentialité', href: '/confidentialite' },
 ]
 
 
@@ -469,11 +466,6 @@ export default function Footer() {
             <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Entreprise</h4>
             <ul className="space-y-3 text-sm">
               <li>
-                <Link href="/a-propos" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
-                  À propos
-                </Link>
-              </li>
-              <li>
                 <Link href="/inscription-artisan" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   Devenir partenaire
                 </Link>
@@ -598,24 +590,6 @@ export default function Footer() {
               <span className="hidden sm:inline"> &mdash; Données mises à jour en {new Date().getFullYear()}</span>
             </p>
             <div className="flex flex-wrap justify-center gap-x-6 gap-y-1 text-sm text-gray-500">
-              <Link href="/mentions-legales" className="hover:text-white transition-colors duration-200 py-1.5">
-                Mentions légales
-              </Link>
-              <Link href="/confidentialite" className="hover:text-white transition-colors duration-200 py-1.5">
-                Confidentialité
-              </Link>
-              <Link href="/cgv" className="hover:text-white transition-colors duration-200 py-1.5">
-                CGV
-              </Link>
-              <Link href="/accessibilite" className="hover:text-white transition-colors duration-200 py-1.5">
-                Accessibilité
-              </Link>
-              <Link href="/faq" className="hover:text-white transition-colors duration-200 py-1.5">
-                FAQ
-              </Link>
-              <Link href="/contact" className="hover:text-white transition-colors duration-200 py-1.5">
-                Contact
-              </Link>
               <Link href="/plan-du-site" className="hover:text-white transition-colors duration-200 py-1.5">
                 Plan du site
               </Link>

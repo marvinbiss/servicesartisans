@@ -21,6 +21,7 @@ import { SERVICE_TO_SPECIALTIES } from '@/lib/supabase'
 import { villes } from '@/lib/data/france'
 import { getServiceImage } from '@/lib/data/images'
 import { relatedServices } from '@/lib/constants/navigation'
+import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 
 export const revalidate = 86400 // 24h
 
@@ -872,6 +873,8 @@ export default async function AvisServicePage({
           </nav>
         </div>
       </section>
+
+      <CrossIntentLinks service={service} serviceName={trade.name} currentIntent="avis" />
 
       {/* Editorial credibility */}
       <section className="mb-8">

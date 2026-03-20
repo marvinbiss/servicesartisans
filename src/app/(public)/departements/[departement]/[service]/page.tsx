@@ -11,6 +11,7 @@ import { getTradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { generateDepartementContent, hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { getServiceImage } from '@/lib/data/images'
 import PriceTable from '@/components/seo/PriceTable'
+import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 
 const topServices = ['plombier', 'electricien', 'serrurier', 'chauffagiste', 'couvreur']
 
@@ -552,6 +553,8 @@ export default async function DeptServicePage({ params }: PageProps) {
           </div>
         </div>
       </section>
+
+      <CrossIntentLinks service={serviceSlug} serviceName={trade.name} currentIntent="services" />
 
       {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
       <section className="mb-8">

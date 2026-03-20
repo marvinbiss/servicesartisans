@@ -11,6 +11,7 @@ import { getTradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { generateRegionContent, hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { getServiceImage } from '@/lib/data/images'
 import PriceTable from '@/components/seo/PriceTable'
+import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 
 export function generateStaticParams() {
   // Pre-render ALL services per region (16 × 46 = 736 pages)
@@ -496,6 +497,8 @@ export default async function RegionServicePage({ params }: PageProps) {
           </div>
         </div>
       </section>
+
+      <CrossIntentLinks service={serviceSlug} serviceName={trade.name} currentIntent="services" />
 
       {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
       <section className="mb-8">
