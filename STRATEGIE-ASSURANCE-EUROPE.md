@@ -807,13 +807,559 @@ COUNTRY=fr node scripts/generate-sitemaps.ts
 # Puis notifie IndexNow avec les URLs modifiées
 ```
 
-### Maillage interne
+### Maillage interne — Architecture complète
 
-Chaque page inclut des liens vers :
-- Les autres couches de la même ville (`/assurance-auto/lyon` → `/assurance-auto/lyon/tarifs`)
-- Les villes voisines (`/assurance-auto/lyon` → `/assurance-auto/villeurbanne`)
-- Le département parent (`/assurance-auto/lyon` → `/assurance-auto/departement/rhone-69`)
-- Les autres verticales de la même ville (`/assurance-auto/lyon` → `/assurance-habitation/lyon`)
+Le maillage interne est le **levier SEO #1** sur un site programmatique. Avec 29.5M pages, on ne peut pas se permettre des pages orphelines ou un maillage aléatoire. Chaque lien doit être **intentionnel, calculé, et bidirectionnel**.
+
+#### Principe : Graphe hiérarchique à 4 niveaux
+
+```
+                    ┌─────────────┐
+                    │   PAYS      │
+                    │ /assurance  │
+                    └──────┬──────┘
+                           │
+              ┌────────────┼────────────┐
+              │            │            │
+        ┌─────┴─────┐ ┌───┴────┐ ┌────┴─────┐
+        │  RÉGION   │ │ RÉGION │ │  RÉGION  │
+        │ /region/  │ │        │ │          │
+        │ idf       │ │  aura  │ │   paca   │
+        └─────┬─────┘ └───┬────┘ └────┬─────┘
+              │            │            │
+        ┌─────┴─────┐     │      ┌────┴─────┐
+        │   DEPT    │     │      │   DEPT   │
+        │ /dept/    │     │      │ /dept/   │
+        │ paris-75  │     │      │ bdr-13   │
+        └─────┬─────┘     │      └────┬─────┘
+              │            │            │
+     ┌────────┼────┐       │     ┌─────┼────────┐
+     │        │    │       │     │     │        │
+  ┌──┴──┐ ┌──┴─┐ ┌┴──┐    │  ┌──┴──┐ ┌┴───┐ ┌──┴──┐
+  │VILLE│ │VILL│ │VIL│    │  │VILLE│ │VILL│ │VILLE│
+  │paris│ │boul│ │nan│    │  │mars│ │aix │ │toulo│
+  └──┬──┘ └────┘ └───┘    │  └──┬──┘ └────┘ └─────┘
+     │                     │     │
+  ┌──┴───────────────┐     │  ┌──┴───────────────┐
+  │ 12 LAYERS        │     │  │ 12 LAYERS        │
+  │ /tarifs           │     │  │ /tarifs           │
+  │ /devis            │     │  │ /devis            │
+  │ /avis             │     │  │ /avis             │
+  │ /maif (assureur) │     │  │ /maif (assureur) │
+  └──────────────────┘     │  └──────────────────┘
+```
+
+#### 7 types de liens par page
+
+Chaque page générée inclut **exactement 7 catégories de liens internes**, calculés par la Couche 3 (Calcul) :
+
+| # | Type de lien | Direction | Exemple depuis `/assurance-auto/lyon` | Nombre de liens |
+|---|-------------|-----------|--------------------------------------|-----------------|
+| 1 | **Layers frères** | Horizontal | → `/lyon/tarifs`, `/lyon/devis`, `/lyon/avis` | 4-8 liens |
+| 2 | **Villes voisines** | Horizontal | → `/villeurbanne`, `/vénissieux`, `/caluire` | 5-10 liens |
+| 3 | **Département parent** | Ascendant | → `/departement/rhone-69` | 1 lien |
+| 4 | **Région parent** | Ascendant | → `/region/auvergne-rhone-alpes` | 1 lien |
+| 5 | **Verticales croisées** | Transversal | → `/assurance-habitation/lyon`, `/mutuelle-sante/lyon` | 6 liens |
+| 6 | **Assureurs locaux** | Descendant | → `/lyon/maif`, `/lyon/axa`, `/lyon/macif` | 3-5 liens |
+| 7 | **Contenu éditorial** | Transversal | → `/guides/jeune-conducteur`, `/questions/bonus-malus` | 2-4 liens |
+
+**Total par page : 22-35 liens internes contextuels**
+
+#### Calcul des villes voisines
+
+```typescript
+// src/engine/compute.ts — dans computeInsights()
+function findNearbyCities(city: City, allCities: City[], limit = 10): City[] {
+  // Haversine distance — pré-calculée et stockée en DB
+  // Critères de sélection :
+  // 1. Distance < 30km
+  // 2. Priorité aux villes de population supérieure (PageRank effect)
+  // 3. Maximum 10 villes, minimum 3
+  // 4. Toujours inclure la préfecture du département si différente
+  return allCities
+    .filter(c => c.id !== city.id && haversine(city, c) < 30)
+    .sort((a, b) => b.population - a.population)
+    .slice(0, limit)
+}
+```
+
+**Table DB de support** :
+
+```sql
+-- Table pré-calculée pour éviter le calcul Haversine à chaque requête
+CREATE TABLE city_neighbors (
+  city_id UUID REFERENCES cities(id),
+  neighbor_id UUID REFERENCES cities(id),
+  distance_km DECIMAL(6,2) NOT NULL,
+  PRIMARY KEY(city_id, neighbor_id)
+);
+
+CREATE INDEX idx_neighbors_city ON city_neighbors(city_id, distance_km);
+
+-- Peuplé par script : ~71 400 villes × 10 voisins = ~714K lignes
+-- Recalculé uniquement si la table cities change (jamais en pratique)
+```
+
+#### Composant de maillage
+
+```typescript
+// src/components/seo/InternalLinks.tsx
+type InternalLinksProps = {
+  ctx: PageContext
+  nearby: City[]
+  parentDept: Department
+  parentRegion: Region
+  verticals: VerticalKey[]
+  topInsurers: Insurer[]
+  relatedGuides: Guide[]
+}
+
+// Rendu : blocs de liens en bas de page
+// - "Assurance auto dans les villes proches"
+// - "Autres assurances à Lyon"
+// - "Lyon, Rhône — Auvergne-Rhône-Alpes" (breadcrumb géo)
+// - "Nos guides assurance auto"
+// - "Comparez les assureurs à Lyon"
+```
+
+#### Maillage entre verticales (liens transversaux)
+
+```
+/assurance-auto/lyon ←→ /assurance-habitation/lyon
+                     ←→ /mutuelle-sante/lyon
+                     ←→ /assurance-moto/lyon
+                     ←→ /assurance-emprunteur/lyon
+                     ←→ /assurance-professionnelle/lyon
+                     ←→ /assurance-vie/lyon
+```
+
+Chaque page de ville affiche un bloc **"Toutes les assurances à {ville}"** avec des liens vers les 6 autres verticales. Ce maillage transversal est **critique** : il distribue l'autorité SEO entre verticales et augmente le temps passé sur le site.
+
+#### Maillage des pages contenu (guides/questions/blog)
+
+Les pages éditoriales ont un rôle spécial dans le maillage :
+
+```
+Guide "Jeune conducteur"
+  → liens vers les 10 plus grandes villes (auto)
+  → liens vers les questions liées (bonus-malus, permis)
+  → liens vers les assureurs spécialisés jeunes
+
+Page commune "Paris / Auto"
+  → lien vers le guide "Jeune conducteur" (si pertinent)
+  → lien vers le baromètre auto
+  → lien vers le blog (articles récents auto)
+```
+
+**Règle** : chaque guide/question contient **au minimum 5 liens vers des pages programmatiques** (villes). Les pages programmatiques contiennent **au maximum 3 liens vers du contenu éditorial** (pour ne pas diluer le jus vers des pages à faible volume).
+
+#### Breadcrumbs (fil d'Ariane)
+
+Chaque page inclut un breadcrumb structuré (JSON-LD `BreadcrumbList`) :
+
+```
+Accueil > Assurance Auto > Rhône (69) > Lyon > Tarifs
+Accueil > Assurance Habitation > Île-de-France > Paris
+Accueil > Assurance Auto > Guides > Jeune conducteur
+```
+
+#### Métriques de maillage à surveiller
+
+| Métrique | Cible | Outil |
+|----------|-------|-------|
+| Pages orphelines (0 lien entrant) | 0 | Screaming Frog / script crawl |
+| Profondeur max (clics depuis homepage) | ≤ 4 | Crawl interne |
+| Ratio liens internes / liens externes | > 10:1 | Audit SEO |
+| Pages à 1 seul lien entrant | < 5% | Crawl interne |
+| Couverture breadcrumb | 100% | Validation JSON-LD |
+
+#### Pagination et liens "Voir plus"
+
+Pour les pages département (101 communes en moyenne) et région (5-10 départements) :
+- **Départements** : afficher les 20 plus grandes villes + lien "Voir les {n} communes du {département}"
+- **Régions** : afficher tous les départements (toujours < 15)
+- Pas de pagination infinie — une seule page avec lazy-loading si nécessaire
+
+---
+
+## 7bis. Performance & Vitesse Serveur
+
+### Objectifs Core Web Vitals
+
+| Métrique | Cible | Seuil Google "Good" |
+|----------|-------|---------------------|
+| **LCP** (Largest Contentful Paint) | < 1.5s | < 2.5s |
+| **FID/INP** (Interaction to Next Paint) | < 100ms | < 200ms |
+| **CLS** (Cumulative Layout Shift) | < 0.05 | < 0.1 |
+| **TTFB** (Time to First Byte) | < 200ms (cache hit), < 800ms (cache miss) | < 800ms |
+| **FCP** (First Contentful Paint) | < 1.0s | < 1.8s |
+
+### Architecture de cache — 4 niveaux
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│                    REQUÊTE UTILISATEUR                         │
+│                    GET /assurance-auto/lyon                    │
+└───────────────────────────┬────────────────────────────────────┘
+                            │
+                            ▼
+┌────────────────────────────────────────────────────────────────┐
+│  NIVEAU 1 — CDN EDGE (Vercel Edge Network)                    │
+│                                                                │
+│  Cache-Control: s-maxage=86400, stale-while-revalidate=604800 │
+│  = Page servie depuis le POP le plus proche                   │
+│  = 0 compute, ~50ms TTFB                                      │
+│                                                                │
+│  HIT → Réponse instantanée (~50ms)                            │
+│  STALE → Réponse instantanée + revalidation en background     │
+│  MISS ↓                                                       │
+└───────────────────────────┬────────────────────────────────────┘
+                            │
+                            ▼
+┌────────────────────────────────────────────────────────────────┐
+│  NIVEAU 2 — ISR CACHE (Vercel Data Cache)                     │
+│                                                                │
+│  Next.js ISR : revalidate = 86400 (24h)                       │
+│  = Page HTML pré-rendue stockée                               │
+│  = Si expiré, régénération en background                      │
+│                                                                │
+│  HIT → ~100ms TTFB                                            │
+│  MISS ↓ (première visite de cette page)                       │
+└───────────────────────────┬────────────────────────────────────┘
+                            │
+                            ▼
+┌────────────────────────────────────────────────────────────────┐
+│  NIVEAU 3 — RSC RENDERING (Serverless Function)               │
+│                                                                │
+│  Couche 1 → 2 → 3 → 4 du moteur                              │
+│  = 6 queries Supabase parallèles                              │
+│  = Calcul insights                                            │
+│  = Rendu React Server Component                               │
+│                                                                │
+│  Temps : ~500-800ms                                           │
+│  Cold start : +200-500ms supplémentaires                      │
+└───────────────────────────┬────────────────────────────────────┘
+                            │
+                            ▼
+┌────────────────────────────────────────────────────────────────┐
+│  NIVEAU 4 — BASE DE DONNÉES (Supabase / PostgreSQL)           │
+│                                                                │
+│  Connection pooler (PgBouncer) : transaction mode              │
+│  6 queries parallèles → ~50-150ms total                       │
+│  Indexes couvrants → zero heap fetch                          │
+│                                                                │
+│  Résultat mis en cache aux niveaux 2 et 1                     │
+└────────────────────────────────────────────────────────────────┘
+```
+
+### Scénarios de performance réels
+
+| Scénario | TTFB | LCP | Comment |
+|----------|------|-----|---------|
+| Page populaire (Paris, Lyon) — cache chaud | ~50ms | ~800ms | CDN edge hit |
+| Page moyenne — ISR cache | ~100ms | ~1.0s | Vercel data cache |
+| Page rare (petite commune) — 1ère visite | ~800ms | ~1.8s | Rendering complet |
+| Page rare — cold start serverless | ~1.2s | ~2.2s | Worst case, encore dans le "Good" |
+| Page déjà visitée — navigateur | 0ms | ~300ms | Cache navigateur |
+
+### Optimisations Supabase — Queries ultra-rapides
+
+#### Indexes couvrants (zero heap fetch)
+
+```sql
+-- L'index contient TOUTES les colonnes nécessaires → pas besoin de lire la table
+CREATE INDEX idx_cities_lookup ON cities(country_code, slug)
+  INCLUDE (id, name, postal_code, population, latitude, longitude, department_id);
+
+CREATE INDEX idx_risk_lookup ON city_risk_data(city_id, vertical_key, year DESC)
+  INCLUDE (data, source);
+
+CREATE INDEX idx_insurers_vertical ON insurer_verticals(vertical_key)
+  INCLUDE (insurer_id, price_range_min, price_range_max, features);
+
+CREATE INDEX idx_neighbors_lookup ON city_neighbors(city_id, distance_km)
+  INCLUDE (neighbor_id);
+
+CREATE INDEX idx_guides_lookup ON guides(country_code, vertical_key, slug)
+  INCLUDE (id, title, meta_description);
+```
+
+**Pourquoi c'est critique** : un index couvrant sert la requête **entièrement depuis l'index B-tree**, sans aller lire le heap (la table). Sur une table de 1.5M lignes (`city_risk_data`), ça transforme une query de ~50ms en ~2ms.
+
+#### Connection pooling
+
+```
+Supabase connection string :
+postgresql://postgres:[password]@db.[ref].supabase.co:6543/postgres
+                                                      ^^^^
+                                                      Port 6543 = PgBouncer (transaction mode)
+                                                      Port 5432 = Direct (session mode)
+```
+
+**Toujours utiliser le port 6543** (PgBouncer) pour les serverless functions :
+- Pool de connexions partagé
+- Pas de surcharge de connexion à chaque cold start
+- Max 200 connexions simultanées (vs ~20 en direct)
+
+#### Batch des 6 queries avec Promise.all()
+
+```typescript
+// src/engine/data.ts
+async function fetchPageData(ctx: PageContext): Promise<PageData> {
+  // TOUTES les queries partent en parallèle — temps total = max(queries) pas sum(queries)
+  const [city, risk, insurers, neighbors, guides, stats] = await Promise.all([
+    // Query 1 : Ville + département + région — ~2ms (index couvrant)
+    supabase.from('cities')
+      .select('*, department:departments(*), region:departments!inner(region:regions(*))')
+      .eq('country_code', ctx.country)
+      .eq('slug', ctx.citySlug)
+      .single(),
+
+    // Query 2 : Données de risque — ~3ms (index couvrant sur city_id + vertical)
+    supabase.from('city_risk_data')
+      .select('data, year, source')
+      .eq('city_id', ctx.cityId)
+      .eq('vertical_key', ctx.vertical)
+      .order('year', { ascending: false })
+      .limit(3),
+
+    // Query 3 : Assureurs pour cette verticale — ~5ms
+    supabase.from('insurer_verticals')
+      .select('*, insurer:insurers(*)')
+      .eq('vertical_key', ctx.vertical)
+      .order('price_range_min'),
+
+    // Query 4 : Villes voisines — ~2ms (index + limit 10)
+    supabase.from('city_neighbors')
+      .select('neighbor:cities!neighbor_id(id, name, slug, population)')
+      .eq('city_id', ctx.cityId)
+      .order('distance_km')
+      .limit(10),
+
+    // Query 5 : Guides liés — ~2ms
+    supabase.from('guides')
+      .select('slug, title')
+      .eq('country_code', ctx.country)
+      .eq('vertical_key', ctx.vertical)
+      .limit(5),
+
+    // Query 6 : Stats agrégées département — ~5ms
+    supabase.rpc('get_department_stats', {
+      dept_id: ctx.departmentId,
+      vertical: ctx.vertical
+    }),
+  ])
+
+  // Temps total : ~5-10ms (max des 6 queries)
+  // Pas 20-30ms (sum des 6 queries en séquentiel)
+  return { city, risk, insurers, neighbors, guides, stats }
+}
+```
+
+### Optimisations Next.js / React
+
+#### RSC (React Server Components) — zéro JS client
+
+```typescript
+// Toutes les pages sont 100% RSC — pas de "use client"
+// Le HTML est streamé directement, pas de hydration
+// Bundle JS client : ~0 KB pour les pages de contenu
+
+// Exception unique : le formulaire lead
+// src/components/forms/LeadForm.tsx
+'use client'  // Seul composant client — interactivité formulaire
+```
+
+**Impact** : une page typique envoie **~50 KB de HTML** et **~15 KB de JS** (framework Next.js + formulaire). Pas de React hydration = FID/INP quasi-nul.
+
+#### Streaming et Suspense
+
+```typescript
+// src/app/[...slug]/page.tsx
+import { Suspense } from 'react'
+
+export default async function Page({ params }) {
+  const ctx = resolve(params.slug)
+  const data = await fetchPageData(ctx)  // Données critiques — bloque le rendu
+  const insights = computeInsights(ctx, data)
+
+  return (
+    <>
+      {/* Contenu principal — rendu immédiat */}
+      <HeroSection ctx={ctx} insights={insights} />
+      <RiskAnalysis data={data} insights={insights} />
+      <InsurerRanking insurers={data.insurers} insights={insights} />
+
+      {/* Formulaire — streamé en priorité */}
+      <LeadForm ctx={ctx} />
+
+      {/* Contenu secondaire — streamé après */}
+      <Suspense fallback={<LinksSkeleton />}>
+        <NearbyLinks ctx={ctx} neighbors={data.neighbors} />
+        <VerticalCrossLinks ctx={ctx} />
+        <RelatedGuides guides={data.guides} />
+      </Suspense>
+    </>
+  )
+}
+```
+
+#### Images optimisées
+
+```typescript
+// next.config.js
+module.exports = {
+  images: {
+    formats: ['image/avif', 'image/webp'],
+    deviceSizes: [640, 768, 1024, 1280],  // Pas de 1920/2560 — pas besoin pour ce type de site
+    minimumCacheTTL: 2592000,  // 30 jours
+    // Images servies depuis Vercel Image Optimization (CDN edge)
+  },
+}
+
+// Logos assureurs : SVG quand possible (vectoriel, ~2 KB)
+// Sinon : WebP/AVIF via next/image, lazy-loading natif
+// Pas de hero images géantes — ce n'est pas un site vitrine
+```
+
+#### Fonts optimisées
+
+```typescript
+// src/app/layout.tsx
+import { Inter } from 'next/font/google'
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',           // Texte visible immédiatement
+  preload: true,
+  variable: '--font-inter',
+  // Subset automatique par Next.js : seuls les glyphes utilisés sont chargés
+})
+```
+
+### Headers de cache — Stratégie par type de page
+
+```typescript
+// src/middleware.ts ou dans les pages directement
+
+// Pages programmatiques (communes, départements, régions)
+// = Données changent rarement (import trimestriel)
+export const revalidate = 86400  // 24h ISR
+// CDN : s-maxage=86400, stale-while-revalidate=604800
+
+// Pages contenu (guides, questions, blog)
+// = Changent quand on édite
+export const revalidate = 3600  // 1h ISR
+// On-demand revalidation via webhook admin
+
+// API leads
+// = Jamais caché
+// Cache-Control: no-store, no-cache
+
+// Sitemaps (fichiers statiques /public/sitemaps/)
+// = Changent au cron
+// Cache-Control: public, max-age=86400, stale-while-revalidate=86400
+```
+
+### Protection contre les cold starts
+
+```
+Problème : Vercel serverless = cold start de 200-500ms après inactivité
+Impact : TTFB passe de ~200ms à ~800ms pour la première requête
+
+Solutions :
+```
+
+| Solution | Coût | Efficacité |
+|----------|------|------------|
+| **ISR cache** (déjà en place) | $0 | ✅ 99% des requêtes servies depuis le cache |
+| **Vercel Fluid Compute** | Inclus Pro | ✅ Fonctions restent chaudes plus longtemps |
+| **Edge Runtime** pour le resolve | $0 | ✅ Couche 1 (résolution) en <5ms edge, pas de cold start |
+| **Cron keep-alive** | $0 | ⚠️ Ping toutes les 5min — hacky mais efficace |
+| **Provisioned concurrency** | ~$30/mois | ✅ Garantit 1+ instance toujours chaude |
+
+#### Edge Runtime pour la Couche 1
+
+```typescript
+// src/middleware.ts
+export const config = { matcher: ['/((?!api|_next|sitemaps).*)'] }
+
+export default function middleware(request: NextRequest) {
+  // S'exécute en Edge Runtime (~5ms, 0 cold start)
+  // Peut faire :
+  // - Validation URL basique (format, 404 évidentes)
+  // - Redirections (anciennes URLs, trailing slash)
+  // - Détection bot (Googlebot → priorité ISR)
+  // - Headers de cache
+  // Ne peut PAS faire :
+  // - Queries DB (pas de connexion TCP en edge)
+  // - Logique lourde
+}
+```
+
+### Budget de taille par page
+
+| Ressource | Budget | Réel estimé |
+|-----------|--------|-------------|
+| HTML (streamé) | < 100 KB | ~50 KB |
+| CSS (Tailwind purgé) | < 30 KB | ~15 KB |
+| JS (framework + formulaire) | < 50 KB | ~15-30 KB |
+| Fonts (Inter subset) | < 30 KB | ~20 KB |
+| Images (logos assureurs) | < 50 KB | ~10-30 KB |
+| **Total page** | **< 260 KB** | **~120-150 KB** |
+
+À comparer : LeLynx.fr charge **~2.5 MB** par page (React SPA, trackers, pubs).
+
+### Monitoring performance en production
+
+```typescript
+// src/lib/performance.ts — envoyé vers analytics
+export function reportWebVitals(metric: NextWebVitalsMetric) {
+  // Envoie LCP, FID, CLS, TTFB, FCP vers Vercel Analytics
+  // ou vers un endpoint custom /api/vitals
+}
+```
+
+| Outil | Usage | Fréquence |
+|-------|-------|-----------|
+| **Vercel Analytics** | Core Web Vitals en temps réel (RUM) | Continu |
+| **Vercel Speed Insights** | Distribution LCP/CLS/INP | Continu |
+| **Google Search Console** | Core Web Vitals (données terrain) | Hebdo |
+| **PageSpeed Insights API** | Tests synthétiques sur pages clés | Cron quotidien |
+| **Sentry Performance** | Traces serveur (TTFB, query time) | Continu |
+
+#### Script de monitoring automatisé
+
+```bash
+# scripts/monitor-performance.ts
+# Cron quotidien : teste 50 pages représentatives
+
+# Pages testées :
+# - 10 grandes villes (Paris, Lyon, Marseille...) → cache chaud
+# - 10 petites communes aléatoires → cache froid
+# - 7 pages département (1 par verticale)
+# - 7 pages région
+# - 7 pages guide
+# - 7 pages assureur × ville
+# - 2 pages baromètre
+
+# Alerte si :
+# - TTFB > 1.5s sur une page (même cache froid)
+# - LCP > 2.5s
+# - Taux d'erreur > 0.1%
+```
+
+### Comparaison performance vs concurrents
+
+| Métrique | Notre cible | LeLynx | Assurland | LesFurets |
+|----------|-------------|--------|-----------|-----------|
+| TTFB | < 200ms | ~800ms | ~1.2s | ~600ms |
+| LCP | < 1.5s | ~3.5s | ~4.0s | ~2.8s |
+| Total page size | ~150 KB | ~2.5 MB | ~3.0 MB | ~2.0 MB |
+| JS chargé | ~20 KB | ~800 KB | ~1.2 MB | ~600 KB |
+| CLS | < 0.05 | ~0.15 | ~0.25 | ~0.12 |
+
+**Avantage : RSC + ISR + pas de SPA = 10-20x plus léger que les concurrents qui sont des React SPA classiques avec des tonnes de trackers.**
 
 ---
 
