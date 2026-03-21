@@ -1,14 +1,15 @@
-# Stratégie Réseau Comparateur Assurance Europe
+# Stratégie Réseau Comparateur Assurance — 4 Pays Cibles
 
-> Document de référence — Version 3.0 — 2026-03-21
-> Mis à jour après analyse scientifique de 8 licornes (Wise, Canva, NerdWallet, Check24, Facile.it, MoneySuperMarket, PolicyBazaar) + audit 6 axes (Firefly/Google, Revenue, Tech, Data, Legal, Compétition)
+> Document de référence — Version 4.0 — 2026-03-22
+> Recentrage stratégique sur 4 pays (FR, BE, ES, PT) — 397Md€ de marché, 136M consommateurs, 1.32M pages, 3 langues
+> Analyse scientifique de 8 licornes (Wise, Canva, NerdWallet, Check24, Facile.it, MoneySuperMarket, PolicyBazaar) + audit 6 axes (Firefly/Google, Revenue, Tech, Data, Legal, Compétition)
 
 ---
 
 ## Table des matières
 
 1. [Vision & Positionnement](#1-vision--positionnement)
-2. [Périmètre : 10 pays, 7 verticales, 2.3M pages robustes](#2-périmètre)
+2. [Périmètre : 4 pays, 7 verticales, 1.32M pages robustes](#2-périmètre)
 3. [Architecture des URLs : 12 couches par verticale](#3-architecture-des-urls)
 4. [Architecture Technique : Moteur 5 couches](#4-architecture-technique)
 5. [Schéma Base de Données](#5-schéma-base-de-données)
@@ -34,10 +35,10 @@
 ## 1. Vision & Positionnement
 
 ### Concept
-Réseau de 10 sites de comparaison d'assurance (ccTLD par pays) couvrant 10 pays européens, avec :
+Réseau de 4 sites de comparaison d'assurance (ccTLD par pays) couvrant 4 pays européens (FR, BE, ES, PT), avec :
 - **Comparateur fonctionnel day one** (devis en temps réel)
-- **2.3M pages data-rich** enrichies de 26+ sources gouvernementales vérifiées
-- **Data moat par agrégation croisée** : personne en Europe ne croise ces données sur 10 pays
+- **1.32M pages data-rich** enrichies de 20+ sources gouvernementales vérifiées
+- **Data moat par agrégation croisée** : personne en Europe ne croise ces données sur 4 pays
 
 ### Modèle opérationnel — 3 phases
 ```
@@ -50,7 +51,7 @@ Phase 3 (M24-M36) : Propre produit d'assurance (MGA marque blanche)
 ### Différenciateur clé — Ce que PERSONNE ne fait
 | Avantage | Check24 | Facile.it | NerdWallet | **Ce projet** |
 |---|---|---|---|---|
-| Multi-pays (10) | ❌ (DE) | ❌ (IT) | ❌ (US) | **✅** |
+| Multi-pays (4) | ❌ (DE) | ❌ (IT) | ❌ (US) | **✅** |
 | Comparateur day one | ✅ | ✅ | ❌ | **✅** |
 | Données gouv croisées 26+ sources | ❌ | ❌ | ❌ | **✅** |
 | Données cross-pays | ❌ | ❌ | ❌ | **✅** |
@@ -60,10 +61,10 @@ Phase 3 (M24-M36) : Propre produit d'assurance (MGA marque blanche)
 Courtier en assurance enregistré **ORIAS** + **passeport européen LPS** (Libre Prestation de Services, directive IDD 2016/97) notifié via l'ACPR pour les 9 autres pays. Pas un simple affilié.
 
 ### Cible
-- **2.3M pages** (10 domaines expirés DA 30-50, soumission sitemap progressive ~20K/semaine/domaine)
-- **10 pays européens** (1 domaine = 1 pays, ouverture quand l'API est prête)
+- **1.32M pages** (4 domaines expirés DA 30-50, soumission sitemap progressive ~20K/semaine/domaine)
+- **4 pays européens** (1 domaine = 1 pays, ouverture quand l'API est prête)
 - **7 verticales** par pays (5-6 pour petits marchés)
-- **7 langues**
+- **3 langues (fr, es, pt)**
 - Codebase estimée : **120-160K lignes** (monorepo Turborepo, moteur générique partagé)
 
 ### Validation scientifique
@@ -86,21 +87,15 @@ Analyse de 8 licornes du SEO programmatique (Wise $11B, Canva $42B, NerdWallet $
 
 ## 2. Périmètre
 
-### 10 Pays cibles — 2.3M pages robustes sur domaines expirés DA 30-50
+### 4 Pays cibles — 1.32M pages robustes sur domaines expirés DA 30-50
 
 | # | Pays | Domaine (ccTLD) | Langue | Pages | Couches principales | Sources vérifiées |
 |---|------|-----------------|--------|-------|--------------------|--------------------|
 | 1 | **France** | comparateur-assurance.fr | fr | **880K** | 36K communes × 7 vert. × 3 intents (756K) + profils/besoins/assureurs/contenu (124K) | Géorisques, DVF, DPE, ONISR, GASPAR, INSEE, DREES, Ameli, SIV |
-| 2 | **Allemagne** | versicherungsvergleich.de | de | **380K** | 11K Gemeinden × 7 × 3 (231K) + 8K PLZ × 3 vert. (24K) + Ortsteile (21K) + extras (104K) | GDV Typklassen, Destatis, KBA, KfZ-Zulassung |
-| 3 | **Italie** | confronta-assicurazioni.it | it | **280K** | 7.9K comuni × 7 × 3 (166K) + Cat Nat obligatoire (16K) + zones sismiques (8K) + extras (90K) | ISTAT, IVASS, ISPRA, ACI |
-| 4 | **Espagne** | comparador-seguros.es | es | **270K** | 8.1K municipios × 7 × 3 (170K) + decesos (16K) + barrios (13K) + extras (71K) | INE, DGT, Consorcio |
-| 5 | **Autriche** | versicherungsvergleich.at | de | **100K** | 2K Gemeinden × 6 × 3 (38K) + 5K Ortschaften × 3 × 2 (30K) + extras (32K) | Statistik Austria, HORA |
-| 6 | **Portugal** | comparador-seguros.pt | pt | **90K** | 3K freguesias × 6 × 3 (56K) + municípios hubs (6K) + expat (1K) + extras (27K) | INE PT, ASF, IMT |
-| 7 | **Irlande** | insurance-comparator.ie | en | **85K** | 3.4K EDs × 5 × 3 (52K) + 800 towns × 5 × 2 (8K) + extras (25K) | CSO, OPW, RSA/Garda |
-| 8 | **Belgique** | comparateur-assurance.be | fr/nl | **80K** | 565 communes × 6 × 3 × 1.7 bilingue (17K) + 1.5K anc. communes (27K) + extras ×2 (36K) | Statbel, FSMA |
-| 9 | **Pays-Bas** | verzekeringsvergelijker.nl | nl | **75K** | 2.5K woonplaatsen × 6 × 3 (45K) + zorgverzekering depth (15K) + extras (15K) | CBS, Kadaster/BAG, RDW |
-| 10 | **Luxembourg** | comparateur-assurance.lu | fr | **35K** | 600 localités × 5 × 3 (9K) × 2.5 langues (23K) + frontaliers/contenu (12K) | STATEC, CAA |
-| | **TOTAL** | | **7 langues** | **~2.3M** | **3+ données uniques par page, 0 thin content** | **26+ sources vérifiées** |
+| 2 | **Belgique** | comparateur-assurance.be | fr/nl | **80K** | 565 communes × 6 × 3 × 1.7 bilingue (17K) + 1.5K anc. communes (27K) + extras ×2 (36K) | Statbel, FSMA |
+| 3 | **Espagne** | comparador-seguros.es | es | **270K** | 8.1K municipios × 7 × 3 (170K) + decesos (16K) + barrios (13K) + extras (71K) | INE, DGT, Consorcio |
+| 4 | **Portugal** | comparador-seguros.pt | pt | **90K** | 3K freguesias × 6 × 3 (56K) + municípios hubs (6K) + expat (1K) + extras (27K) | INE PT, ASF, IMT |
+| | **TOTAL** | | **3 langues** | **~1.32M** | **3+ données uniques par page, 0 thin content** | **20+ sources vérifiées** |
 
 ### Détail des 12 couches — Modèle France (880K pages)
 
@@ -126,27 +121,20 @@ Analyse de 8 licornes du SEO programmatique (Wise $11B, Canva $42B, NerdWallet $
 
 | Catégorie | Pays | Seuil | Atteint |
 |-----------|------|-------|---------|
-| **Grand** | FR, DE, IT, ES | 200K+ | ✅ 880K, 380K, 280K, 270K |
-| **Moyen** | AT, PT, IE, BE, NL | 70K+ | ✅ 100K, 90K, 85K, 80K, 75K |
-| **Petit** | LU | 30K+ | ✅ 35K |
+| **Grand** | FR, ES | 200K+ | ✅ 880K, 270K |
+| **Moyen** | PT, BE | 70K+ | ✅ 90K, 80K |
 
-> Chaque domaine dépasse sa masse critique SEO. Le plus petit (LU 35K) reste robuste grâce au trilinguisme (fr/de/en) et aux frontaliers.
+> Chaque domaine dépasse sa masse critique SEO.
 
 ### Projection d'indexation — Domaines expirés DA 30-50
 
 | Pays | Pages | Mois 1 (39%) | Mois 3 (69%) | Mois 6 (84%) |
 |------|-------|-------------|-------------|-------------|
 | France | 880K | 350K | 615K | 750K |
-| Allemagne | 380K | 150K | 265K | 325K |
-| Italie | 280K | 110K | 195K | 240K |
-| Espagne | 270K | 108K | 190K | 230K |
-| Autriche | 100K | 40K | 70K | 85K |
-| Portugal | 90K | 36K | 63K | 77K |
-| Irlande | 85K | 34K | 60K | 72K |
 | Belgique | 80K | 32K | 56K | 68K |
-| Pays-Bas | 75K | 30K | 52K | 64K |
-| Luxembourg | 35K | 14K | 24K | 30K |
-| **TOTAL** | **2.3M** | **904K** | **1.59M** | **1.94M** |
+| Espagne | 270K | 108K | 190K | 230K |
+| Portugal | 90K | 36K | 63K | 77K |
+| **TOTAL** | **~1.32M** | **526K** | **924K** | **1.13M** |
 
 > Référence : ServicesArtisans (domaine 15 ans) = 40% indexé en 35 jours. Domaines expirés DA 30-50 = comportement similaire (35-45%).
 
@@ -164,15 +152,10 @@ Analyse de 8 licornes du SEO programmatique (Wise $11B, Canva $42B, NerdWallet $
 
 | Phase | Pays | Raison | Timeline |
 |---|---|---|---|
-| **M0** | **France** | ORIAS, 5 sources communales, marché connu | Day one |
-| **M1** | **Portugal** | Marché vierge (8/10), INE API simple | Quand API prête |
-| **M2** | **Belgique** | Pas de leader digital (7/10), francophone | Quand Statbel branchée |
-| **M3** | **Espagne + Luxembourg** | ES en croissance, LU = extension FR/BE | Quand INE ES prête |
-| **M4** | **Italie** | Gros marché, ISTAT API ok | Quand ISTAT branchée |
-| **M5** | **Irlande** | CSO API clean, anglophone | Quand CSO prête |
-| **M6** | **Pays-Bas** | CBS = meilleure API d'Europe, mais AFM strict | Quand CBS branchée |
-| **M7** | **Autriche** | StatAT partiellement payant | Quand négocié |
-| **M8** | **Allemagne** | GDV = PDF à scraper, Check24 = mur | En dernier |
+| **M0** | **France** | ORIAS, 5 sources communales, marché connu, cash machine | Day one |
+| **M1** | **Belgique** | Même langue (fr), 4% digital, leader potentiel | Quand Statbel branchée |
+| **M2** | **Portugal** | Marché vierge (<1% digital), ASF modéré | Quand INE PT prête |
+| **M3** | **Espagne** | Gros marché, INE API, volume | Quand INE ES prête |
 
 ### 5-7 Verticales (variable par pays)
 
@@ -247,14 +230,13 @@ Chaque page commune lie vers : ↑ département (parent), ↔ communes voisines 
 ```
 Couche 1 — Ville
   FR: /assurance-auto/lyon
-  DE: /kfz-versicherung/münchen
   ES: /seguro-coche/madrid
-  IT: /assicurazione-auto/roma
-  IE: /car-insurance/dublin
+  PT: /seguro-automovel/lisboa
+  BE: /assurance-auto/bruxelles
 
 Couche 2 — Profil × Ville
   FR: /assurance-auto/jeune-conducteur/lyon
-  DE: /kfz-versicherung/fahranfaenger/münchen
+  ES: /seguro-coche/conductor-joven/madrid
 
 Couche 3 — Assureur × Ville
   FR: /assurance-auto/maif/lyon
@@ -262,15 +244,15 @@ Couche 3 — Assureur × Ville
 
 Couche 6 — Comparatif × Ville
   FR: /maif-vs-axa/lyon
-  DE: /allianz-vs-huk-coburg/münchen
+  ES: /mapfre-vs-liberty/madrid
 
 Couche 9 — Besoin × Ville
   FR: /assurance-auto/suv/lyon
-  IE: /car-insurance/electric-vehicle/dublin
+  PT: /seguro-automovel/veiculo-eletrico/lisboa
 
 Couche 11 — Événement × Ville
   FR: /assurance-auto/resiliation/lyon
-  IT: /assicurazione-auto/cambio-residenza/roma
+  ES: /seguro-coche/cancelacion/madrid
 ```
 
 Les slugs sont définis dans la config pays — pas de traduction runtime.
@@ -584,7 +566,7 @@ function generateFAQContent(ctx, risk, city): FAQItem[] { /* ... */ }
 'intro.auto': '{city}, {cityLabel} de {population} habitantes, presenta una prima media de seguro de auto de {premium}€/año en {year}, un nivel {primeLabel} ({vsNational} vs la media nacional). Con {accidents} accidentes por cada 1.000 habitantes y una tasa de robo de {thefts}‰, el nivel de riesgo se clasifica como {riskLabel}.',
 ```
 
-**Le texte change de langue mais la structure reste identique. Les mêmes placeholders dans toutes les langues = 1 moteur, 7 langues (FR, DE, ES, IT, NL, PT, EN).**
+**Le texte change de langue mais la structure reste identique. Les mêmes placeholders dans toutes les langues = 1 moteur, 3 langues (FR, ES, PT).**
 
 #### Seuils de qualité contenu
 
@@ -641,9 +623,9 @@ src/
 ├── config/
 │   └── countries/
 │       ├── fr.ts                 # Config France
-│       ├── de.ts                 # Config Allemagne
+│       ├── be.ts                 # Config Belgique
 │       ├── es.ts                 # Config Espagne
-│       └── ...                   # 10 fichiers pays
+│       ├── pt.ts                 # Config Portugal
 ├── engine/
 │   ├── resolve.ts                # Couche 1
 │   ├── data.ts                   # Couche 2
@@ -670,11 +652,8 @@ src/
 │       └── JsonLd.tsx            # Structured data
 ├── i18n/
 │   ├── fr.ts
-│   ├── de.ts
 │   ├── es.ts
-│   ├── it.ts
-│   ├── nl.ts
-│   ├── en.ts
+│   ├── pt.ts
 │   └── t.ts                     # Fonction t(key, params)
 ├── lib/
 │   ├── supabase.ts               # 1 seul client (pas 4 comme SA)
@@ -1086,14 +1065,14 @@ CREATE TABLE gsc_boost_pages (
 
 | Table | Lignes estimées | Taille |
 |-------|-----------------|--------|
-| cities | ~71 700 | ~22 MB |
-| city_risk_data | ~71 700 × 7 × 3 ans = ~1.6M | ~180 MB (colonnes normalisées, ~120 bytes/row) |
+| cities | ~47 700 | ~15 MB |
+| city_risk_data | ~47 700 × 7 × 3 ans = ~1.0M | ~120 MB (colonnes normalisées, ~120 bytes/row) |
 | insurers | ~500 | ~1 MB |
 | insurer_verticals | ~2 000 | ~1 MB |
 | guides | ~3 500 | ~50 MB |
 | questions | ~14 000 | ~100 MB |
 | leads | Croissance | Variable |
-| **Total initial** | | **~350 MB** (vs ~700 MB si JSONB) |
+| **Total initial** | | **~250 MB** (vs ~700 MB si JSONB) |
 
 ### Validation des variables d'environnement (pattern ServicesArtisans)
 
@@ -1105,7 +1084,7 @@ import { z } from 'zod'
 
 const envSchema = z.object({
   // Core — obligatoire
-  COUNTRY: z.enum(['fr', 'de', 'es', 'it', 'be', 'nl', 'at', 'ch', 'lu', 'ie']),
+  COUNTRY: z.enum(['fr', 'be', 'es', 'pt']),
   NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
   NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1),
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
@@ -1250,19 +1229,6 @@ Les données publiques sont **gratuites et accessibles** mais leur **collecte, n
 | 9 | BCE/KBO | Banque Carrefour des Entreprises. Registre public. Nb entreprises par commune et code NACE (équiv. NAF) | `nb_entreprises_construction`, `nb_entreprises_total`, `creations_annuelles` | API | kbopub.economie.fgov.be |
 | 10 | data.gov.be | Portail open data fédéral. Agrège toutes les sources ci-dessus. API REST | Toutes | CSV/API | data.gov.be |
 
-#### Allemagne (11 014 Gemeinden — 8 sources)
-
-| # | Source | Données | Colonnes DB | Format | URL |
-|---|--------|---------|-------------|--------|-----|
-| 1 | Destatis GENESIS-Online | Base statistique fédérale. Population, logement, âges, revenus PAR Gemeinde. API REST/JSON. Regionalstatistik.de pour données infra-Land. Licence Datenlizenz Deutschland 2.0 | `einwohner`, `flaeche`, `bevoelkerungsdichte`, `altersstruktur` | API | www-genesis.destatis.de |
-| 2 | Unfallatlas | Accidents de la route géolocalisés depuis 2016. CSV + shapefile. Chaque accident avec coordonnées GPS + gravité | `nb_unfaelle`, `nb_verletzte`, `nb_getoetete`, `unfallschwere` | CSV | unfallatlas.statistikportal.de |
-| 3 | KBA Open Data | Kraftfahrt-Bundesamt. Parc automobile par Zulassungsbezirk (district). Marques, types, motorisation, âge | `nb_fahrzeuge`, `pct_elektro`, `pct_diesel`, `durchschnittsalter_pkw` | CSV | kba.de/DE/Service/OpenData |
-| 4 | BKA / PKS | Polizeiliche Kriminalstatistik. Vols véhicules, cambriolages par Landkreis | `nb_kfz_diebstahl`, `nb_wohnungseinbruch`, `haeufigkeitszahl` | CSV | bka.de/polizeiliche-kriminalstatistik |
-| 5 | Handelsregister + Gewerbeanmeldungen | Registre du commerce. Entreprises par Gemeinde et WZ-Code (équiv. NAF). Via Destatis Regionalstatistik | `nb_unternehmen_bau`, `nb_handwerker`, `gewerbe_anmeldungen` | CSV | destatis.de |
-| 6 | GKV-Spitzenverband / Destatis Gesundheit | Statistiques santé. Démographie médicale par Kreis. Dépenses GKV/PKV | `aerzte_je_100000`, `zahnaerzte_dichte`, `gesundheitsausgaben_kopf` | CSV | gkv-spitzenverband.de |
-| 7 | Gutachterausschuss / BORIS | Prix immobilier par Gemeinde. Bodenrichtwerte (valeurs foncières). Chaque Land a son propre portail BORIS | `bodenrichtwert`, `kaufpreis_m2`, `nb_transaktionen` | CSV | boris.nrw.de (et équivalents par Land) |
-| 8 | OpenPLZ API | API gratuite. Codes postaux, communes, coordonnées pour DE, AT, CH. Complément geocoding | `plz`, `gemeinde`, `lat`, `lon` | API | openplzapi.org |
-
 #### Espagne (8 131 municipios — 8 sources)
 
 | # | Source | Données | Colonnes DB | Format | URL |
@@ -1276,51 +1242,9 @@ Les données publiques sont **gratuites et accessibles** mais leur **collecte, n
 | 7 | Catastro | Cadastre espagnol. Données sur les biens immobiliers par municipio | Complément habitation | API | catastro.minhap.es |
 | 8 | datos.gob.es | Portail open data national espagnol. 40 000+ datasets | Toutes | API | datos.gob.es |
 
-#### Italie (7 904 comuni — 8 sources)
-
-| # | Source | Données | Colonnes DB | Format | URL |
-|---|--------|---------|-------------|--------|-----|
-| 1 | ISTAT | Istituto Nazionale di Statistica. Population, logement, âges, revenus PAR comune. I.Stat = base interrogeable | `popolazione`, `densita`, `pct_over65`, `reddito_medio` | API | dati.istat.it |
-| 2 | ACI + ISTAT | Automobile Club d'Italia. Parc automobile par provincia. Base ISTAT incidenti stradali | `nb_veicoli`, `nb_incidenti`, `nb_morti`, `nb_feriti`, `tasso_incidenti` | CSV | aci.it/lautomobilista/open-data |
-| 3 | Ministero dell'Interno | Criminalité par provincia. Vols véhicules, cambriolages | `nb_furti_auto`, `nb_furti_abitazione`, `tasso_criminalita` | CSV | dati.interno.gov.it |
-| 4 | Registro Imprese + ISTAT ASIA | Entreprises par comune et code ATECO (équiv. NAF). Via Camera di Commercio | `nb_imprese_costruzione`, `nb_artigiani`, `iscrizioni_annuali` | API | registroimprese.it |
-| 5 | Ministero della Salute | Statistiques santé par ASL/regione. Médecins, hôpitaux, dépenses | `medici_per_1000ab`, `spesa_sanitaria_capita`, `posti_letto` | CSV | dati.salute.gov.it |
-| 6 | OMI Agenzia delle Entrate | Osservatorio Mercato Immobiliare. Prix immobilier par comune. LA référence officielle italienne | `prezzo_m2_residenziale`, `nb_transazioni`, `valore_medio` | CSV | agenziaentrate.gov.it/portale/omi |
-| 7 | INGV + Protezione Civile | Risque sismique par comune (classificazione sismica). Essentiel pour assicurazione terremoto | `zona_sismica` (1-4), `rischio_idrogeologico` | API | ingv.it |
-| 8 | dati.gov.it | Portail open data national italien. 50 000+ datasets publics | Toutes | API | dati.gov.it |
-
 #### Belgique — détail complémentaire
 
 > Sources déjà détaillées ci-dessus avec colonnes DB. data.gov.be agrège toutes les sources via API REST.
-
-#### Pays-Bas (345 gemeenten — 10 sources)
-
-| # | Source | Données | Colonnes DB | Format | URL |
-|---|--------|---------|-------------|--------|-----|
-| 1 | CBS (StatLine) | Démographie, revenus, logement par gemeente. OData protocol, 4000+ datasets | `bevolking`, `dichtheid`, `gemiddeld_inkomen` | API | opendata.cbs.nl |
-| 2 | CBS Verkeer | Accidents route par gemeente, type véhicule | `nb_verkeersongevallen`, `nb_doden`, `nb_gewonden` | API | opendata.cbs.nl |
-| 3 | Politie | Criminalité par quartier/gemeente | `nb_autodiefstal`, `nb_woninginbraak`, `misdaadcijfer` | CSV | data.politie.nl |
-| 4 | RDW | Parc véhicules, immatriculations, APK (contrôle technique) | `nb_voertuigen`, `pct_elektrisch`, `gemiddelde_leeftijd` | API | opendata.rdw.nl |
-| 5 | Kadaster | Transactions immobilières, prix/m² par gemeente | `prijs_m2`, `nb_transacties`, `gemiddelde_koopsom` | API | kadaster.nl |
-| 6 | RIVM | Santé publique, espérance de vie, soins par région | `levensverwachting`, `huisartsen_per_1000` | API | statline.rivm.nl |
-| 7 | Zorginstituut NL | Coûts santé, remboursements par type de soin | `zorgkosten_capita`, `nb_ziekenhuizen` | CSV | zorgcijfersdatabank.nl |
-| 8 | KVK | Entreprises par gemeente, secteurs (Kamer van Koophandel) | `nb_bedrijven_bouw`, `nb_zzp`, `nieuwe_inschrijvingen` | API | developers.kvk.nl |
-| 9 | Rijkswaterstaat | Risques inondation, niveau eau par zone | `overstromingsrisico`, `waterstand` | API | waterinfo.rws.nl |
-| 10 | KNMI | Météo, événements extrêmes par station (tempêtes, grêle) | `nb_stormen`, `nb_hagelbuien` | API | dataplatform.knmi.nl |
-
-#### Autriche (2 093 Gemeinden — 9 sources)
-
-| # | Source | Données | Colonnes DB | Format | URL |
-|---|--------|---------|-------------|--------|-----|
-| 1 | Statistik Austria | Démographie, revenus, logement par Gemeinde | `einwohner`, `flaeche`, `medianeinkommen` | CSV/API | data.statistik.gv.at |
-| 2 | BMI Kriminalstatistik | Criminalité par Bezirk (vols, cambriolages) | `nb_kfz_diebstahl`, `nb_einbruch`, `kriminalitaetsrate` | PDF/CSV | bundeskriminalamt.at/kriminalstatistik |
-| 3 | Statistik Austria Verkehrsunfälle | Accidents route par Bundesland/Bezirk | `nb_unfaelle`, `nb_verletzte`, `nb_getoetete` | CSV | data.statistik.gv.at |
-| 4 | Statistik Austria KFZ | Parc auto, immatriculations par Bundesland | `nb_fahrzeuge`, `pct_elektro`, `durchschnittsalter` | CSV | data.statistik.gv.at |
-| 5 | Grundbuch / Immobilienpreisspiegel | Transactions immobilières, prix/m² par Bezirk | `kaufpreis_m2`, `nb_transaktionen` | CSV | data.gv.at |
-| 6 | Hauptverband Sozialversicherung | Dépenses santé, médecins par Bezirk | `aerzte_dichte`, `gesundheitsausgaben` | CSV | sozialversicherung.at |
-| 7 | OeNB (Banque nationale) | Taux crédit, endettement | `hypothekenzins`, `verschuldung` | CSV | oenb.at/statistik |
-| 8 | WKO (Wirtschaftskammer) | Entreprises par Bezirk, secteurs d'activité | `nb_unternehmen_bau`, `nb_handwerker` | API | firmen.wko.at |
-| 9 | data.gv.at | Portail open data fédéral (géorisques, énergie, ZAMG météo, communes) | Toutes | CSV/API | data.gv.at |
 
 #### Portugal (308 municípios — 9 sources)
 
@@ -1335,32 +1259,6 @@ Les données publiques sont **gratuites et accessibles** mais leur **collecte, n
 | 7 | Banco de Portugal | Taux crédit immobilier, endettement ménages | `taxa_juro_habitacao`, `endividamento` | CSV | bportugal.pt/estatisticas |
 | 8 | PORDATA | Entreprises par município, registre commercial | `nb_empresas`, `nb_criadas` | API | pordata.pt |
 | 9 | IPMA (Instituto Português do Mar e da Atmosfera) | Événements météo extrêmes, sécheresse, incendies par distrito | `nb_incendios`, `area_ardida`, `seca_nivel` | API | ipma.pt |
-
-#### Luxembourg (102 communes — 7 sources)
-
-| # | Source | Données | Colonnes DB | Format | URL |
-|---|--------|---------|-------------|--------|-----|
-| 1 | STATEC (LUSTAT) | Démographie, revenus, logement par commune (650+ tables) | `population`, `densite`, `revenu_median` | API | statistiques.public.lu |
-| 2 | Police Grand-Ducale | Accidents route, criminalité par commune | `nb_accidents`, `nb_vols`, `nb_cambriolages` | CSV | police.public.lu/fr/statistiques |
-| 3 | SNCA | Immatriculations, parc véhicules | `nb_vehicules`, `age_moyen_parc` | CSV | snca.lu |
-| 4 | Administration du Cadastre | Transactions immobilières, prix/m² par commune | `prix_m2`, `nb_transactions` | CSV | data.public.lu |
-| 5 | CNS (Caisse nationale de santé) | Dépenses santé, remboursements | `depense_sante_habitant`, `densite_medecins` | CSV | cns.public.lu |
-| 6 | BCL (Banque centrale) | Taux crédit, endettement | `taux_moyen_pret`, `endettement_menages` | CSV | bcl.lu/fr/statistiques |
-| 7 | data.public.lu | Portail open data national (MCP server expérimental, cadastre, météo, communes) | Toutes | API | data.public.lu |
-
-#### Irlande (3 440 communes — 9 sources)
-
-| # | Source | Données | Colonnes DB | Format | URL |
-|---|--------|---------|-------------|--------|-----|
-| 1 | CSO (Central Statistics Office) | Démographie, revenus, logement par county/ED. PxStat API | `population`, `density`, `median_income` | API | data.cso.ie |
-| 2 | RSA (Road Safety Authority) | Accidents route par county | `nb_accidents`, `nb_fatalities`, `nb_injuries` | CSV | rsa.ie/road-safety/statistics |
-| 3 | An Garda Síochána | Criminalité par Garda division (vols, cambriolages) | `nb_vehicle_theft`, `nb_burglary`, `crime_rate` | CSV | cso.ie/en/statistics/crimeandjustice |
-| 4 | DTTS | Parc véhicules, immatriculations par county | `nb_vehicles`, `avg_vehicle_age`, `pct_electric` | CSV | gov.ie/transport |
-| 5 | Property Price Register | Transactions immobilières, prix par county/Eircode | `price_per_m2`, `nb_transactions`, `avg_price` | CSV | propertypriceregister.ie |
-| 6 | HSE / HIA | Dépenses santé, densité médecins par county | `gp_per_1000`, `health_spend_capita` | CSV | hia.ie/data |
-| 7 | Central Bank of Ireland | Taux hypothécaires, endettement ménages | `avg_mortgage_rate`, `household_debt` | CSV | centralbank.ie/statistics |
-| 8 | CRO (Companies Registration Office) | Entreprises par county | `nb_construction_companies`, `new_registrations` | API | core.cro.ie |
-| 9 | data.gov.ie | Portail open data national (géorisques, énergie, météo Met Éireann) | Toutes | CSV/API | data.gov.ie |
 
 ### Pipeline d'import
 
@@ -1393,11 +1291,11 @@ Invalidation ISR (IndexNow)
 7. **Pruning actif** — suppression des pages non-rankées après 6 mois
 8. **Log file analysis** — comprendre le comportement réel de Googlebot
 9. **IndexNow** pour notifier Google/Bing après chaque import de données
-10. **Hreflang** pour les pays multilingues (BE, CH)
+10. **Hreflang** pour la Belgique (fr/nl en phase 2)
 
 ### Pourquoi 0 pages pré-rendues
 
-Avec 2.3M pages, le pré-rendu complet est **impossible** :
+Avec 1.32M pages, le pré-rendu complet est **impossible** :
 - À 1 page/seconde = 341 jours de build
 - ISR on-demand : la page est générée au premier visit, puis mise en cache
 - Les crawlers Google/Bing sont le premier visiteur → IndexNow les guide
@@ -2633,15 +2531,9 @@ Le statut **ORIAS** français ne permet pas d'exercer le courtage direct dans le
 | Pays | Régulateur | Licence requise | Registre | Passeport IDD depuis FR |
 |------|-----------|-----------------|----------|-------------------------|
 | France | ACPR | Courtier ORIAS | orias.fr | — (pays d'origine) |
-| Allemagne | BaFin | §34d GewO (Versicherungsvermittler) | vermittlerregister.info | Oui — notification ACPR → BaFin |
 | Espagne | DGSFP | Mediador de seguros | dgsfp.mineco.es | Oui — notification ACPR → DGSFP |
-| Italie | IVASS | Intermediario RUI sezione B | servizi.ivass.it/RuirPubblica | Oui — notification ACPR → IVASS |
 | Belgique | FSMA | Intermédiaire d'assurance | fsma.be/fr/registre | Oui — notification ACPR → FSMA |
-| Pays-Bas | AFM | Vergunning verzekeringsbemiddeling | afm.nl/registers | Oui — notification ACPR → AFM |
-| Autriche | FMA | Versicherungsvermittler | fma.gv.at | Oui — notification ACPR → FMA |
 | Portugal | ASF | Mediador de seguros | asf.com.pt/registos | Oui — notification ACPR → ASF |
-| Luxembourg | CAA | Intermédiaire d'assurance | caa.lu | Oui — notification ACPR → CAA |
-| Irlande | Central Bank | Insurance Intermediary | centralbank.ie/regulation | Oui — notification ACPR → CBI |
 
 ### Passeport européen IDD (Insurance Distribution Directive)
 
@@ -2671,28 +2563,23 @@ Phase 1 — France uniquement
   → Lead gen en complément
 
 Phase 2 — Expansion EEE via passeport IDD
-  → Notification ACPR pour DE, ES, IT, BE, NL, AT, LU, IE
+  → Notification ACPR pour BE, ES, PT
   → 1-2 mois par pays
   → Lead gen immédiat, courtage après notification
-
-Phase 3 — Portugal
-  → Notification ACPR → ASF
-  → Lead gen immédiat, courtage après notification
-  → 1-2 mois de délai
 ```
 
 ### Compliance matrix multi-pays
 
-> **Chaque pays a des exigences différentes.** Un consentement valide en France peut être insuffisant en Allemagne. La config légale est per-country, pas globale.
+> **Chaque pays a des exigences différentes.** Un consentement valide en France peut être insuffisant dans un autre pays. La config légale est per-country, pas globale.
 
-| Obligation | FR (CNIL) | DE (BfDI) | IT (Garante) | ES (AEPD) | BE (APD) | PT (CNPD) |
-|------------|-----------|-----------|--------------|-----------|----------|------------|
-| Base légale leads | Consentement | Consentement (strict) | Consentement + info | Consentement | Consentement | Consentement |
-| Double opt-in | Recommandé | **Obligatoire** | Recommandé | Recommandé | Recommandé | Recommandé |
-| Conservation max | 3 ans | 3 ans | 2 ans | 3 ans | 3 ans | 3 ans |
-| DPO obligatoire | > 5000 leads/mois | **Toujours** (si courtage) | > 250 employés | > 250 employés | > 5000 | > 5000 |
-| Transfert hors EEE | Interdit sans CCT | Interdit | Interdit | Interdit | Interdit | Interdit |
-| DSA (Digital Services Act) | Oui (depuis 2024) | Oui | Oui | Oui | Oui | Oui |
+| Obligation | FR (CNIL) | ES (AEPD) | BE (APD) | PT (CNPD) |
+|------------|-----------|-----------|----------|------------|
+| Base légale leads | Consentement | Consentement | Consentement | Consentement |
+| Double opt-in | Recommandé | Recommandé | Recommandé | Recommandé |
+| Conservation max | 3 ans | 3 ans | 3 ans | 3 ans |
+| DPO obligatoire | > 5000 leads/mois | > 250 employés | > 5000 | > 5000 |
+| Transfert hors EEE | Interdit sans CCT | Interdit | Interdit | Interdit |
+| DSA (Digital Services Act) | Oui (depuis 2024) | Oui | Oui | Oui |
 
 ```sql
 -- Table de configuration légale par pays
@@ -2886,11 +2773,8 @@ type Translations = Record<string, string>
 
 const translations: Record<string, Translations> = {
   fr: { /* lazy import */ },
-  de: { /* lazy import */ },
-  nl: { /* lazy import */ },
   es: { /* lazy import */ },
-  it: { /* lazy import */ },
-  en: { /* lazy import */ },
+  pt: { /* lazy import */ },
 }
 
 export function t(key: string, params?: Record<string, string | number>): string {
@@ -2927,10 +2811,10 @@ export default {
 
 ### Pays multilingues
 
+- **France** : `fr` uniquement
 - **Belgique** : `fr` (Wallonie) + `nl` (Flandre) → préfixe URL `/nl/`
+- **Espagne** : `es` uniquement
 - **Portugal** : `pt` uniquement
-- **Luxembourg** : `fr` uniquement (marché petit)
-- **Irlande** : `en` uniquement
 
 ### Routing multilingue BE
 
@@ -3164,11 +3048,16 @@ scripts/import/
 │   ├── catnat.ts       # Catastrophes naturelles (Gaspar)
 │   ├── drees.ts        # Densité médecins (DREES)
 │   └── sirene.ts       # Entreprises (SIRENE API)
-├── de/
+├── be/
 │   ├── index.ts
-│   ├── destatis.ts     # Statistisches Bundesamt
-│   ├── gdv.ts          # Assurance auto régionale
-│   └── polizei.ts      # Statistiques accidents
+│   ├── statbel.ts      # Statbel demographics
+│   ├── ibsr.ts         # Accidents routiers (IBSR/VIAS)
+│   └── fsma.ts         # Données assurance FSMA
+├── es/
+│   ├── index.ts
+│   ├── ine-es.ts       # INE demographics
+│   ├── dgt.ts          # Accidents routiers (DGT)
+│   └── dgsfp.ts        # Données assurance DGSFP
 ├── pt/
 │   ├── index.ts
 │   ├── ine.ts          # INE demographics
@@ -3179,7 +3068,7 @@ scripts/import/
     ├── geo-matcher.ts  # Matching commune → city_code
     ├── validators.ts   # Validation schemas Zod (copié de SA schemas.ts)
     ├── sanitize.ts     # Copié de SA sanitize.ts (+ sanitizeIBAN, sanitizeCountryCode)
-    └── geography.ts    # Copié de SA geography.ts (DEPARTMENTS, getDeptCodeFromPostal) × 10 pays
+    └── geography.ts    # Copié de SA geography.ts (DEPARTMENTS, getDeptCodeFromPostal) × 4 pays
 ```
 
 ### Commandes
@@ -3475,15 +3364,9 @@ async function checkIndexation() {
 
 ```
 comparateur-assurance.fr     → COUNTRY=fr  vercel deploy
-versicherungsvergleich.de    → COUNTRY=de  vercel deploy
-comparador-seguros.es        → COUNTRY=es  vercel deploy
-confronta-assicurazioni.it   → COUNTRY=it  vercel deploy
 comparateur-assurance.be     → COUNTRY=be  vercel deploy
-verzekeringsvergelijker.nl   → COUNTRY=nl  vercel deploy
-versicherungsvergleich.at    → COUNTRY=at  vercel deploy
+comparador-seguros.es        → COUNTRY=es  vercel deploy
 comparador-seguros.pt        → COUNTRY=pt  vercel deploy
-comparateur-assurance.lu     → COUNTRY=lu  vercel deploy
-insurance-comparator.ie      → COUNTRY=ie  vercel deploy
 ```
 
 ### Pourquoi ccTLD et pas sous-domaines ou sous-répertoires
@@ -3502,7 +3385,7 @@ Chaque pays = 1 projet Vercel avec :
 - Son propre ISR cache
 - Ses propres sitemaps
 
-Le **même code source** est déployé 10 fois avec une variable d'environnement différente.
+Le **même code source** est déployé 4 fois avec une variable d'environnement différente.
 
 ### CI/CD
 
@@ -3517,7 +3400,7 @@ jobs:
   deploy:
     strategy:
       matrix:
-        country: [fr, de, es, it, be, nl, at, pt, lu, ie]
+        country: [fr, be, es, pt]
     steps:
       - uses: actions/checkout@v4
       - run: vercel deploy --prod --env COUNTRY=${{ matrix.country }}
@@ -3533,8 +3416,8 @@ jobs:
 |-----------|------------------|------------------|
 | **Type** | Marketplace biface | Site contenu + lead gen |
 | **Lignes de code** | 294K | 120-160K (estimation) |
-| **Pays** | France uniquement | 10 pays européens |
-| **Pages** | ~2 millions | ~1.5 million (data-backed, comparateur sur chaque page) |
+| **Pays** | France uniquement | 4 pays européens (FR, BE, ES, PT) |
+| **Pages** | ~2 millions | ~1.32 million (data-backed, comparateur sur chaque page) |
 | **Ratio pages/code** | ~7 pages/ligne | ~250-370 pages/ligne (moteur générique, données font le travail) |
 | **Migrations DB** | 89 | ~15-20 (estimation) |
 | **Routes API** | 189 | ~30 |
@@ -3915,37 +3798,35 @@ Avec ces 72 fichiers copiés (~12 000 lignes), la **Phase 0 passe de 17 jours à
 
 **Objectif** : Revenus récurrents depuis la France
 
-### Phase 3 — Expansion Européenne
+### Phase 3 — Expansion Européenne (BE, ES, PT)
 
 ```
-□ Allemagne (versicherungsvergleich.de) — 2ème marché
-□ Portugal (comparador-seguros.pt)
-□ Espagne (comparador-seguros.es)
-□ Italie (confronta-assicurazioni.it)
-□ Import données par pays (8 sources chacun)
-□ Traductions DE, ES, IT
-□ Partenariats assureurs locaux
-□ Passeport IDD pour DE, ES, IT (notification ACPR, 1-2 mois chacun)
-□ Passeport IDD pour PT (notification ACPR → ASF, 1-2 mois)
+□ Belgique (comparateur-assurance.be) — même langue, jackpot
+□ Portugal (comparador-seguros.pt) — marché vierge
+□ Espagne (comparador-seguros.es) — volume
+□ Import données par pays (8-10 sources chacun)
+□ Traductions ES, PT
+□ Partenariats : APRIL Portugal, Caser/Howden ES, AG Insurance BE
+□ Passeport IDD pour BE, ES, PT (notification ACPR, 1-2 mois chacun)
 ```
 
-**Objectif** : 4-5 pays live, ~14M pages
+**Objectif** : 4 pays live, ~1.32M pages
 **Pré-requis** : France opérationnelle (> 500 leads/mois)
 
-### Phase 4 — Scale
+### Phase 4 — Scale & Domination
 
 ```
-□ Belgique, Pays-Bas, Autriche
-□ Luxembourg, Irlande
-□ Multilingue BE (fr/nl)
+□ Belgique phase 2 : Flandre (nl) — 60% de la population
 □ Optimisation performance (cache, CDN)
-□ CRM courtier
+□ CRM courtier multi-pays
 □ Support client multi-pays (chatbot + email)
-□ Monitoring centralisé 10 déploiements
+□ Monitoring centralisé 4 déploiements
+□ A/B testing formulaires par pays
+□ Données de devis propriétaires → data moat Phase 2
 ```
 
-**Objectif** : 10 pays live, ~2.3M pages data-backed avec comparateur
-**Pré-requis** : API branchée par pays
+**Objectif** : 4 pays optimisés, positions #1 BE+PT consolidées
+**Pré-requis** : API branchée par pays, >1000 leads/mois total
 
 ---
 
@@ -3963,27 +3844,24 @@ Avec ces 72 fichiers copiés (~12 000 lignes), la **Phase 0 passe de 17 jours à
 | Cross-domain footprint détecté | Moyen | Faible | Pas de hreflang entre domaines, templates variés par pays, pas de WHOIS identique |
 | **Risque global Firefly (avec comparateur + API)** | | | **2-3/10** (vs 7.3/10 sans comparateur) |
 
-### Risques réglementaires (audit 10 pays)
+### Risques réglementaires (audit 4 pays)
 
 | Pays | Risque | Mitigation |
 |------|--------|------------|
-| **NL** | TRÈS ÉLEVÉ — AFM considère le lead gen comme intermédiation | Notification LPS obligatoire + formulaire minimaliste |
-| **DE** | TRÈS ÉLEVÉ — BaFin §34d GewO, infraction pénale possible | Notification LPS + formulaire sans qualification des besoins |
-| **AT** | ÉLEVÉ — aligné approche germanophone | Notification LPS via ACPR |
-| **IT** | MOYEN-ÉLEVÉ — IVASS actif sur surveillance web | Inscription RUI section E via LPS |
-| **IE/BE/ES** | MOYEN | Notification LPS standard |
 | **FR** | FAIBLE — ORIAS en poche | Déjà couvert |
-| **PT/LU** | FAIBLE | Notification LPS, marchés peu surveillés |
+| **BE** | MOYEN — FSMA "disponible et réactive", notification LPS simple | Notification LPS via ACPR |
+| **ES** | FAIBLE — DGSFP exclusion explicite article 129.5 RDL 3/2020 | Notification LPS standard |
+| **PT** | FAIBLE — ASF modéré, marché peu surveillé | Notification LPS, marché peu surveillé |
 
-**Action immédiate** : Notifier l'ACPR pour LPS dans les 9 pays (coût quasi nul, délai 1-3 mois). RC Pro avec couverture territoriale européenne.
+**Action immédiate** : Notifier l'ACPR pour LPS dans les 3 pays (coût quasi nul, délai 1-3 mois). RC Pro avec couverture territoriale européenne.
 
 ### Risques techniques
 
 | Risque | Impact | Probabilité | Mitigation |
 |--------|--------|-------------|------------|
 | ISR cold starts en cascade (Googlebot crawle 10K pages/jour) | Élevé | Moyen | Pre-warmer cron sur top pages, `Crawl-delay` dans robots.txt |
-| Supabase SPOF (1 instance pour 10 apps) | Critique | Moyen | Read replicas, ou 2 instances (FR+BE+LU / reste) |
-| 26+ parsers de sources cassent silencieusement | Élevé | Élevé | Table `data_source_runs`, alertes sur échec 2x, smoke tests quotidiens |
+| Supabase SPOF (1 instance pour 4 apps) | Critique | Moyen | Read replicas, ou 2 instances (FR+BE / ES+PT) |
+| 20+ parsers de sources cassent silencieusement | Élevé | Élevé | Table `data_source_runs`, alertes sur échec 2x, smoke tests quotidiens |
 | Facture Vercel explose avec succès SEO | Moyen | Moyen | Cloudflare CDN devant Vercel, monitoring hebdo |
 | Build time 150K pages SSG | Bloquant | Certain | ISR on-demand (pas SSG). Pre-build top 1-5K pages seulement |
 
@@ -3993,13 +3871,13 @@ Avec ces 72 fichiers copiés (~12 000 lignes), la **Phase 0 passe de 17 jours à
 |--------|--------|-------------|------------|
 | Courtiers grossistes baissent le prix du lead | Élevé | Moyen | Diversifier les partenaires, monter en Phase 2 rapidement |
 | Revenue A1 insuffisant (€1-3M) pour survivre | Élevé | Moyen | Coûts opérationnels ultra-bas ($300-700/mois infra) |
-| Concurrents copient le data moat | Moyen | Faible | First mover + 26 sources croisées + données de devis Phase 2 |
-| Dépendance 100% Google | Critique | Moyen | 10 domaines séparés = diversification. Phase 2 = trafic direct/brand |
+| Concurrents copient le data moat | Moyen | Faible | First mover + 20 sources croisées + données de devis Phase 2 |
+| Dépendance 100% Google | Critique | Moyen | 4 domaines séparés = diversification. Phase 2 = trafic direct/brand |
 | Phase 3 (MGA) = métier différent | Élevé | Moyen | Capital réglementaire + actuaires nécessaires (levée €10-20M) |
 
 ---
 
-## 18. Analyse Concurrentielle (audit 10 pays)
+## 18. Analyse Concurrentielle (audit 4 pays)
 
 ### Classement marchés — du plus ouvert au plus fermé
 
@@ -4008,13 +3886,7 @@ Avec ces 72 fichiers copiés (~12 000 lignes), la **Phase 0 passe de 17 jours à
 | 1 | **Portugal** | 8/10 | ComparaJá (300-500K) | Faible | Marché vierge, dominable en 6 mois |
 | 2 | **Belgique** | 7/10 | TopCompare (300-500K) | Faible | Pas de leader digital, culture courtier = bon fit |
 | 3 | **Espagne** | 6/10 | Rastreator (3-4M) | Moyen | Programmatique sous-exploité, santé en croissance |
-| 4 | **Luxembourg** | 6/10 | Aucun vrai comparateur | Quasi nul | Marché vide mais microscopique |
-| 5 | **Irlande** | 5/10 | Bonkers.ie (500K-1M) | Faible | Accessible, anglophone, petit |
-| 6 | **Italie** | 4/10 | Facile.it (5-7M) | Élevé | Auto saturé, mais santé/habitation ouverts |
-| 7 | **France** | 3/10 | LeLynx (4-5M) | Élevé | Très saturé, 15 ans d'avance, budgets massifs |
-| 8 | **Pays-Bas** | 3/10 | Independer (3-5M) | Élevé | Petit, mature, AFM strict |
-| 9 | **Autriche** | 3/10 | durchblicker (1-2M) | Moyen | Quasi-monopole durchblicker |
-| 10 | **Allemagne** | 2/10 | Check24 (15-20M) | Écrasant | Check24 = mur infranchissable |
+| 4 | **France** | 3/10 | LeLynx (4-5M) | Élevé | Très saturé, 15 ans d'avance, budgets massifs |
 
 ### France — Positionnement détaillé
 
@@ -4023,12 +3895,12 @@ Avec ces 72 fichiers copiés (~12 000 lignes), la **Phase 0 passe de 17 jours à
 | LeLynx | Comparateur (Moneysupermarket Group) | ~10K | Non | €20-30M |
 | LesFurets | Multi-vertical | ~8K | Non | €15-25M |
 | Assurland | Comparateur (Covéa) | ~5K | Non (conflit d'intérêts) | €10-20M |
-| **Ce projet** | **Comparateur + data locale + ORIAS** | **350K** | **Oui (26+ sources)** | **€0 (SEO pur)** |
+| **Ce projet** | **Comparateur + data locale + ORIAS** | **880K** | **Oui (20+ sources)** | **€0 (SEO pur)** |
 
 ### Avantage compétitif structurel
 
 1. **Multi-pays** : seul acteur avec vue comparative pan-européenne (contenu cross-pays exclusif)
-2. **350K pages FR** vs ~10K pour LeLynx → domination long-tail
+2. **880K pages FR** vs ~10K pour LeLynx → domination long-tail
 3. **Données locales croisées** : aucun concurrent ne croise CatNat + DVF + DPE + ONISR par commune
 4. **Comparateur + données** : double valeur sur chaque page (outil + information)
 5. **Coût marginal quasi-nul** : ajouter un pays = brancher l'API + config, pas de nouveau code
@@ -4043,12 +3915,15 @@ Avec ces 72 fichiers copiés (~12 000 lignes), la **Phase 0 passe de 17 jours à
 
 ### Projection revenue
 
-| Année | Pages | Trafic/mois | Devis/mois | Revenue | Valorisation |
+| Année | Pages | Trafic/mois | Devis/mois | Revenue (4 pays) | Valorisation |
 |---|---|---|---|---|---|
-| **A1** | 500-700K | 5-12M | 100-400K | **€5-15M** | €25-75M |
-| **A2** | 700K-1M | 15-30M | 500K-1.5M | **€20-50M** | €100-300M |
-| **A3** | 1M+ | 30-60M | 1.5-3M | **€60-150M** | €300-750M |
-| **A4** | 1-2.3M | 50-100M | 3-6M | **€120-300M** | **€600M-1.5B** |
+| **A1** | 300-500K | 3-8M | 50-200K | **€6.5-18M** | €30-90M |
+| **A2** | 500K-1M | 10-25M | 300K-1M | **€18-35M** | €90-200M |
+| **A3** | 1M-1.32M | 25-50M | 1-2.5M | **€31-55M** | €150-300M |
+| **A4** | 1.32M+ | 40-80M | 2-5M | **€60-120M** | **€300-600M** |
+
+> **Détail A1 par pays** : FR €3-8M, BE €1-3M, ES €2-5M, PT €0.5-2M
+> **Détail A3 par pays** : FR €15-25M, BE €5-10M, ES €8-15M, PT €3-5M
 
 ---
 
@@ -4133,35 +4008,35 @@ gh workflow run deploy.yml
 
 ## 19. Budget détaillé
 
-### Investissement initial — ~50K€
+### Investissement initial — ~45K€
 
 | Poste | Coût | Fréquence | Notes |
 |-------|------|-----------|-------|
-| **Domaines expirés DA 30-50 × 10** | €500-2 000 | One-shot | Achat sur ExpiredDomains, Afternic, ou enchères |
+| **Domaines expirés DA 30-50 × 4** | €200-800 | One-shot | Achat sur ExpiredDomains, Afternic, ou enchères |
 | **ORIAS** | €500 | Annuel | Inscription courtier en assurance |
 | **RC Professionnelle** | €1 500 | Annuel | Obligatoire pour courtier ORIAS |
 | **Structure SAS** | €1 000 | One-shot | Capital social + greffe + statuts |
 | **Avocat fiscaliste** | €2 000 | One-shot | Structure holding, TVA intra-EU, LPS |
-| **Claude Code** | €1 200 | 6 mois | Développement moteur + 2.3M pages |
-| **Vercel Pro × 10** | €2 400 | Annuel | $20/mois × 10 domaines |
+| **Claude Code** | €1 200 | 6 mois | Développement moteur + 1.32M pages |
+| **Vercel Pro × 4** | €960 | Annuel | $20/mois × 4 domaines |
 | **Supabase Pro** | €300 | Annuel | 1-2 instances partagées entre domaines |
 | **Google Ads test** | €5 000 | One-shot | Validation des verticales à fort CPC |
-| **Réserve** | €37 000 | — | Trésorerie opérationnelle 6 mois |
-| **TOTAL** | **~€50 000** | | |
+| **Réserve** | €32 000 | — | Trésorerie opérationnelle 6 mois |
+| **TOTAL** | **~€45 000** | | |
 
-### Coûts récurrents — ~€6 000/an
+### Coûts récurrents — ~€3 400/an
 
 ```
 ORIAS           : €500/an
 RC Pro          : €1 500/an
-Vercel Pro ×10  : €2 400/an
+Vercel Pro ×4   : €960/an
 Supabase Pro    : €300/an
-Domaines renouvellement : €200/an
+Domaines renouvellement : €80/an
 ───────────────────────────────
-TOTAL récurrent : ~€5 000/an (hors Google Ads)
+TOTAL récurrent : ~€3 400/an (hors Google Ads)
 ```
 
-> **Breakeven** : à €15/lead moyen et 50 leads/jour = €750/jour = €22K/mois. Les coûts récurrents (~€500/mois) sont couverts dès ~2 leads/jour. Le breakeven opérationnel arrive **semaine 2-3** du premier domaine.
+> **Breakeven** : à €15/lead moyen et 50 leads/jour = €750/jour = €22K/mois. Les coûts récurrents (~€280/mois) sont couverts dès ~1 lead/jour. Le breakeven opérationnel arrive **semaine 2-3** du premier domaine.
 
 ---
 
@@ -4172,15 +4047,9 @@ TOTAL récurrent : ~€5 000/an (hors Google Ads)
 | Pays | Grossistes cibles | Spécialité | Modèle |
 |------|------------------|------------|--------|
 | **France** | **Assuréa**, **Spring Assur**, **April**, **Solly Azar** | Multi-verticales (auto, habitation, santé, pro) | Partage commission 30-50% |
-| **Allemagne** | **Dual**, **Getsafe**, **FRIDAY** | Digital-first, API-ready | CPA par lead qualifié |
-| **Espagne** | **Caser**, **Howden Artai** | Auto + hogar + decesos | Partage commission |
-| **Italie** | **Facile.it Partner**, **Prima** | RC auto + Cat Nat | CPA + revenue share |
 | **Belgique** | **AG Insurance** | Leader marché belge, multi-produits | Courtage classique |
+| **Espagne** | **Caser**, **Howden Artai** | Auto + hogar + decesos | Partage commission |
 | **Portugal** | **Fidelidade** (via courtier local) | Leader PT, tous risques | Via intermédiaire local |
-| **Pays-Bas** | À identifier (via AFM register) | Zorgverzekering + auto | CPA |
-| **Autriche** | À identifier (via FMA register) | Kfz + Haushaltsversicherung | CPA |
-| **Irlande** | À identifier (via Central Bank register) | Motor + home + health | CPA |
-| **Luxembourg** | À identifier (via CAA register) | Frontaliers FR/BE/DE | Courtage |
 
 > **Stratégie** : commencer par FR (4 grossistes identifiés, marché connu) puis étendre pays par pays. Chaque grossiste reçoit les leads via API (webhook JSON) avec scoring qualité. Pas de téléphone — le grossiste rappelle le client directement.
 
@@ -4189,7 +4058,7 @@ TOTAL récurrent : ~€5 000/an (hors Google Ads)
 ---
 
 > **Statut** : Stratégie validée v3.0 — Analyse scientifique complète (8 licornes + 6 audits)
-> **Configuration** : 2.3M pages, 10 ccTLD (domaines expirés DA 30-50), 7 verticales, comparateur day one, 26+ sources API, ORIAS + LPS, modèle 12 couches
-> **Budget** : ~50K€ investissement initial, ~5K€/an récurrent, breakeven semaine 2-3
+> **Configuration** : 1.32M pages, 4 ccTLD (domaines expirés DA 30-50), 7 verticales, comparateur day one, 20+ sources API, ORIAS + LPS, modèle 12 couches
+> **Budget** : ~45K€ investissement initial, ~3.4K€/an récurrent, breakeven semaine 2-3
 > **Prochaine étape** : Notification LPS à l'ACPR + branchement APIs + lancement FR
 > **Auteur** : Claude Opus 4.6 × Marvin
