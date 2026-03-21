@@ -26,6 +26,8 @@
 16. [Roadmap & Phases](#16-roadmap--phases)
 17. [Risques & Mitigations](#17-risques--mitigations)
 18. [Analyse Concurrentielle](#18-analyse-concurrentielle)
+19. [Budget détaillé](#19-budget-détaillé)
+20. [Courtiers grossistes par pays](#20-courtiers-grossistes-par-pays)
 
 ---
 
@@ -582,7 +584,7 @@ function generateFAQContent(ctx, risk, city): FAQItem[] { /* ... */ }
 'intro.auto': '{city}, {cityLabel} de {population} habitantes, presenta una prima media de seguro de auto de {premium}€/año en {year}, un nivel {primeLabel} ({vsNational} vs la media nacional). Con {accidents} accidentes por cada 1.000 habitantes y una tasa de robo de {thefts}‰, el nivel de riesgo se clasifica como {riskLabel}.',
 ```
 
-**Le texte change de langue mais la structure reste identique. Les mêmes placeholders dans toutes les langues = 1 moteur, 6 langues.**
+**Le texte change de langue mais la structure reste identique. Les mêmes placeholders dans toutes les langues = 1 moteur, 7 langues (FR, DE, ES, IT, NL, PT, EN).**
 
 #### Seuils de qualité contenu
 
@@ -4129,7 +4131,65 @@ gh workflow run deploy.yml
 
 ---
 
-> **Statut** : Stratégie validée v2.0 — Analyse scientifique complète (8 licornes + 6 audits)
+## 19. Budget détaillé
+
+### Investissement initial — ~50K€
+
+| Poste | Coût | Fréquence | Notes |
+|-------|------|-----------|-------|
+| **Domaines expirés DA 30-50 × 10** | €500-2 000 | One-shot | Achat sur ExpiredDomains, Afternic, ou enchères |
+| **ORIAS** | €500 | Annuel | Inscription courtier en assurance |
+| **RC Professionnelle** | €1 500 | Annuel | Obligatoire pour courtier ORIAS |
+| **Structure SAS** | €1 000 | One-shot | Capital social + greffe + statuts |
+| **Avocat fiscaliste** | €2 000 | One-shot | Structure holding, TVA intra-EU, LPS |
+| **Claude Code** | €1 200 | 6 mois | Développement moteur + 2.3M pages |
+| **Vercel Pro × 10** | €2 400 | Annuel | $20/mois × 10 domaines |
+| **Supabase Pro** | €300 | Annuel | 1-2 instances partagées entre domaines |
+| **Google Ads test** | €5 000 | One-shot | Validation des verticales à fort CPC |
+| **Réserve** | €37 000 | — | Trésorerie opérationnelle 6 mois |
+| **TOTAL** | **~€50 000** | | |
+
+### Coûts récurrents — ~€6 000/an
+
+```
+ORIAS           : €500/an
+RC Pro          : €1 500/an
+Vercel Pro ×10  : €2 400/an
+Supabase Pro    : €300/an
+Domaines renouvellement : €200/an
+───────────────────────────────
+TOTAL récurrent : ~€5 000/an (hors Google Ads)
+```
+
+> **Breakeven** : à €15/lead moyen et 50 leads/jour = €750/jour = €22K/mois. Les coûts récurrents (~€500/mois) sont couverts dès ~2 leads/jour. Le breakeven opérationnel arrive **semaine 2-3** du premier domaine.
+
+---
+
+## 20. Courtiers grossistes par pays
+
+### Partenaires cibles — Phase 1 (lead gen, partage commission)
+
+| Pays | Grossistes cibles | Spécialité | Modèle |
+|------|------------------|------------|--------|
+| **France** | **Assuréa**, **Spring Assur**, **April**, **Solly Azar** | Multi-verticales (auto, habitation, santé, pro) | Partage commission 30-50% |
+| **Allemagne** | **Dual**, **Getsafe**, **FRIDAY** | Digital-first, API-ready | CPA par lead qualifié |
+| **Espagne** | **Caser**, **Howden Artai** | Auto + hogar + decesos | Partage commission |
+| **Italie** | **Facile.it Partner**, **Prima** | RC auto + Cat Nat | CPA + revenue share |
+| **Belgique** | **AG Insurance** | Leader marché belge, multi-produits | Courtage classique |
+| **Portugal** | **Fidelidade** (via courtier local) | Leader PT, tous risques | Via intermédiaire local |
+| **Pays-Bas** | À identifier (via AFM register) | Zorgverzekering + auto | CPA |
+| **Autriche** | À identifier (via FMA register) | Kfz + Haushaltsversicherung | CPA |
+| **Irlande** | À identifier (via Central Bank register) | Motor + home + health | CPA |
+| **Luxembourg** | À identifier (via CAA register) | Frontaliers FR/BE/DE | Courtage |
+
+> **Stratégie** : commencer par FR (4 grossistes identifiés, marché connu) puis étendre pays par pays. Chaque grossiste reçoit les leads via API (webhook JSON) avec scoring qualité. Pas de téléphone — le grossiste rappelle le client directement.
+
+> **Marge type** : Lead assurance auto = €8-15, le grossiste paie €5-10, marge nette €3-5/lead. Lead emprunteur = €40-120, marge nette €15-50/lead. Volume > marge unitaire.
+
+---
+
+> **Statut** : Stratégie validée v3.0 — Analyse scientifique complète (8 licornes + 6 audits)
 > **Configuration** : 2.3M pages, 10 ccTLD (domaines expirés DA 30-50), 7 verticales, comparateur day one, 26+ sources API, ORIAS + LPS, modèle 12 couches
+> **Budget** : ~50K€ investissement initial, ~5K€/an récurrent, breakeven semaine 2-3
 > **Prochaine étape** : Notification LPS à l'ACPR + branchement APIs + lancement FR
 > **Auteur** : Claude Opus 4.6 × Marvin
