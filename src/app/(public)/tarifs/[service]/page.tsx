@@ -270,7 +270,7 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
     }
   )
 
-  const otherTrades = tradeSlugs.filter((s) => s !== service).slice(0, 8)
+  const otherTrades = tradeSlugs.filter((s) => s !== service).slice(0, 4)
 
   return (
     <div className="min-h-screen bg-sand-50">
@@ -417,14 +417,14 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
             Découvrez les tarifs précis pour chaque type d'intervention dans les principales villes de France.
           </p>
           <div className="space-y-6">
-            {trade.commonTasks.slice(0, 8).map((task) => {
+            {trade.commonTasks.slice(0, 4).map((task) => {
               const taskName = task.split(':')[0].trim()
               const taskSlug = slugifyTask(taskName)
               return (
                 <div key={taskSlug} className="bg-sand-50 rounded-xl border border-sand-300 p-5">
                   <h3 className="font-semibold text-charcoal-900 text-sm mb-3">{taskName}</h3>
                   <div className="flex flex-wrap gap-2">
-                    {topCities.slice(0, 8).map((ville) => (
+                    {topCities.slice(0, 4).map((ville) => (
                       <Link
                         key={ville.slug}
                         href={`/tarifs/${service}/${ville.slug}/${taskSlug}`}
@@ -571,8 +571,8 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
             ))}
           </div>
           <div className="text-center mt-6">
-            <Link href={`/services/${service}`} className="inline-flex items-center gap-2 text-primary-500 hover:text-primary-600 font-semibold text-sm">
-              Voir tous les {trade.name.toLowerCase()}s
+            <Link href="/villes" className="inline-flex items-center gap-2 text-primary-500 hover:text-primary-600 font-semibold text-sm">
+              Voir les tarifs {trade.name.toLowerCase()} dans toutes les villes ({villes.length})
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -678,7 +678,7 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
                 {trade.emergencyInfo && (
                   <Link href={`/urgence/${service}`} className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">{trade.name} urgence</Link>
                 )}
-                {topCities.slice(0, 4).map((v) => (
+                {topCities.slice(0, 3).map((v) => (
                   <Link key={v.slug} href={`/services/${service}/${v.slug}`} className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">
                     {trade.name} à {v.name}
                   </Link>
@@ -688,7 +688,7 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
             <div>
               <h3 className="font-semibold text-charcoal-900 mb-3">Tarifs associés</h3>
               <div className="space-y-2">
-                {otherTrades.slice(0, 6).map((slug) => (
+                {otherTrades.slice(0, 4).map((slug) => (
                   <Link key={slug} href={`/tarifs/${slug}`} className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">
                     Tarifs {tradeContent[slug].name.toLowerCase()}
                   </Link>

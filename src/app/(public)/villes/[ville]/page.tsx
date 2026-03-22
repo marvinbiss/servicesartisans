@@ -89,11 +89,6 @@ export default async function VillePage({ params }: PageProps) {
   const ville = getVilleBySlug(villeSlug)
   if (!ville) notFound()
 
-  // Get other villes in the same departement
-  const nearbyVilles = villes.filter(
-    (v) => v.departementCode === ville.departementCode && v.slug !== ville.slug
-  )
-
   const regionSlug = getRegionSlugByName(ville.region)
   const dept = getDepartementByCode(ville.departementCode)
   const deptSlug = dept?.slug
@@ -244,7 +239,7 @@ export default async function VillePage({ params }: PageProps) {
             </div>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {orderedServices.map((service) => (
+            {orderedServices.slice(0, 10).map((service) => (
               <Link
                 key={service.slug}
                 href={`/services/${service.slug}/${villeSlug}`}
@@ -258,6 +253,16 @@ export default async function VillePage({ params }: PageProps) {
               </Link>
             ))}
           </div>
+          {orderedServices.length > 10 && (
+            <div className="text-center mt-6">
+              <Link
+                href="/services"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-primary-400 hover:text-primary-600 transition-colors"
+              >
+                Voir les {services.length} corps de métier <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          )}
         </section>
 
         {/* ─── QUARTIERS ────────────────────────────────────── */}
@@ -372,64 +377,9 @@ export default async function VillePage({ params }: PageProps) {
           </div>
         </section>
 
-        {/* ─── DEVIS RAPIDES ─────────────────────────────────── */}
-        <section className="mb-16">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
-              <ArrowRight className="w-5 h-5 text-amber-600" />
-            </div>
-            <div>
-              <h2 className="font-heading text-2xl font-bold text-charcoal-900 tracking-tight">
-                Devis artisan à {ville.name}
-              </h2>
-              <p className="text-sm text-charcoal-500">Demandez un devis gratuit en ligne</p>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { slug: 'plombier', label: 'Plombier' },
-              { slug: 'electricien', label: 'Électricien' },
-              { slug: 'chauffagiste', label: 'Chauffagiste' },
-              { slug: 'serrurier', label: 'Serrurier' },
-            ].map((s) => (
-              <Link
-                key={s.slug}
-                href={`/devis/${s.slug}/${villeSlug}`}
-                className="bg-white rounded-2xl border border-sand-300 p-5 text-center hover:border-primary-200 hover:shadow-card-hover transition-all group"
-              >
-                <h3 className="font-semibold text-charcoal-800 group-hover:text-primary-400 transition-colors text-sm">
-                  Devis {s.label}
-                </h3>
-                <p className="text-xs text-charcoal-400 mt-1.5">à {ville.name}</p>
-              </Link>
-            ))}
-          </div>
-        </section>
+        {/* Devis links handled by CityHubLinks below */}
 
-        {/* ─── NEARBY VILLES ────────────────────────────────── */}
-        {nearbyVilles.length > 0 && (
-          <section className="mb-16">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-violet-100 rounded-xl flex items-center justify-center">
-                <Building2 className="w-5 h-5 text-violet-600" />
-              </div>
-              <h2 className="font-heading text-xl font-bold text-charcoal-900 tracking-tight">
-                Autres villes du {ville.departement}
-              </h2>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-              {nearbyVilles.map((v) => (
-                <Link key={v.slug} href={`/villes/${v.slug}`} className="flex items-center gap-2.5 bg-white rounded-2xl border border-sand-300 p-3.5 hover:border-primary-200 hover:shadow-card-hover transition-all group">
-                  <MapPin className="w-4 h-4 text-charcoal-400 group-hover:text-primary-400 flex-shrink-0 transition-colors" />
-                  <div className="min-w-0">
-                    <span className="block text-sm font-medium text-charcoal-800 group-hover:text-primary-400 truncate transition-colors">{v.name}</span>
-                    <span className="text-xs text-charcoal-400">{v.population} hab.</span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </section>
-        )}
+        {/* Nearby villes handled by CityHubLinks below — no duplication */}
 
         {/* ─── FAQ SECTION ──────────────────────────────────── */}
         <section className="mb-16">
@@ -496,26 +446,7 @@ export default async function VillePage({ params }: PageProps) {
           </div>
         </section>
 
-      {/* Confiance & Sécurité */}
-      <section className="py-8 border-t">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-lg font-bold text-charcoal-900 mb-4">Confiance & Sécurité</h2>
-          <div className="flex flex-wrap gap-4">
-            <Link href="/notre-processus-de-verification" className="text-sm text-primary-400 hover:text-primary-600 flex items-center gap-1.5">
-              Processus de vérification
-            </Link>
-            <Link href="/politique-avis" className="text-sm text-primary-400 hover:text-primary-600 flex items-center gap-1.5">
-              Politique d'avis
-            </Link>
-            <Link href="/mediation" className="text-sm text-primary-400 hover:text-primary-600 flex items-center gap-1.5">
-              Médiation
-            </Link>
-            <Link href="/cgv" className="text-sm text-primary-400 hover:text-primary-600 flex items-center gap-1.5">
-              CGV
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* Confiance & Sécurité links available in footer */}
     </div>
   )
 }

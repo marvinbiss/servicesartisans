@@ -103,7 +103,7 @@ export default async function DeptServicePage({ params }: PageProps) {
   const allTradeSlugs = getTradesSlugs()
   const otherServices = allTradeSlugs
     .filter(s => s !== serviceSlug)
-    .slice(0, 8)
+    .slice(0, 5)
     .map(s => {
       const t = getTradeContent(s)
       return t ? { slug: s, name: t.name } : null
@@ -113,7 +113,7 @@ export default async function DeptServicePage({ params }: PageProps) {
   // Sibling depts with same service
   const siblingDepts = departements
     .filter(d => d.region === dept.region && d.slug !== dept.slug)
-    .slice(0, 8)
+    .slice(0, 4)
 
   // Hash-selected tips
   const selectedTips = trade.tips
@@ -366,7 +366,7 @@ export default async function DeptServicePage({ params }: PageProps) {
               </div>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-              {villesDuDepartement.map((ville) => (
+              {villesDuDepartement.slice(0, 15).map((ville) => (
                 <Link
                   key={ville.slug}
                   href={`/services/${serviceSlug}/${ville.slug}`}
@@ -384,6 +384,13 @@ export default async function DeptServicePage({ params }: PageProps) {
                 </Link>
               ))}
             </div>
+            {villesDuDepartement.length > 15 && (
+              <div className="mt-6 text-center">
+                <Link href={`/departements/${deptSlug}`} className="inline-flex items-center gap-2 text-primary-400 hover:text-primary-500 font-medium text-sm transition-colors">
+                  Voir les {villesDuDepartement.length} villes du {dept.name} <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            )}
           </section>
         )}
 
@@ -504,7 +511,7 @@ export default async function DeptServicePage({ params }: PageProps) {
             <div>
               <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">{trade.name} par ville</h3>
               <div className="space-y-2">
-                {villesDuDepartement.slice(0, 6).map((v) => (
+                {villesDuDepartement.slice(0, 5).map((v) => (
                   <Link key={v.slug} href={`/services/${serviceSlug}/${v.slug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {trade.name} à {v.name}

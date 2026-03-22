@@ -377,12 +377,12 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
           </div>
           <div className="text-center mt-6">
             <Link href="/villes" className="inline-flex items-center gap-2 text-amber-600 hover:text-amber-700 font-semibold text-sm">
-              Toutes les villes <ArrowRight className="w-4 h-4" />
+              Voir {problem.name.toLowerCase()} dans toutes les villes ({villes.length}) <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
           {/* Service×ville cross-links — maillage interne vers pages artisans */}
           <div className="mt-6 flex flex-wrap gap-2">
-            {top20Cities.slice(0, 8).map((ville) => (
+            {top20Cities.slice(0, 4).map((ville) => (
               <Link
                 key={ville.slug}
                 href={`/services/${problem.primaryService}/${ville.slug}`}
@@ -423,7 +423,7 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Problèmes similaires</h2>
             <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {relatedProblems.map((rp) => {
+              {relatedProblems.slice(0, 4).map((rp) => {
                 const rpUrgency = urgencyBadgeColors[rp.urgencyLevel]
                 return (
                   <Link
@@ -495,7 +495,7 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
             <div>
               <h3 className="font-semibold text-gray-900 mb-3">Problèmes similaires</h3>
               <div className="space-y-2">
-                {relatedProblems.slice(0, 5).map((rp) => (
+                {relatedProblems.slice(0, 3).map((rp) => (
                   <Link key={rp.slug} href={`/problemes/${rp.slug}`} className="block text-sm text-gray-600 hover:text-amber-600 py-1">
                     {rp.name}
                   </Link>

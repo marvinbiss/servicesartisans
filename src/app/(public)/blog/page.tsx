@@ -93,13 +93,13 @@ export default async function BlogPage({ searchParams }: PageProps) {
     { name: 'Blog', url: '/blog' },
   ])
 
-  // Category article counts for the cross-link section
+  // Category article counts for the cross-link section — top 8 by article count
   const categoryCounts = blogCategories.map(c => ({
     ...c,
     count: allArticlesMeta.filter(
       a => categoryToSlug(normalizeCategory(a.category)) === c.slug
     ).length,
-  }))
+  })).sort((a, b) => b.count - a.count).slice(0, 8)
 
   const categoryColors: Record<string, string> = {
     'Conseils': 'bg-amber-100 text-amber-700',
@@ -146,6 +146,13 @@ export default async function BlogPage({ searchParams }: PageProps) {
               )
             })}
           </div>
+          {blogCategories.length > 8 && (
+            <div className="text-center mt-6">
+              <p className="text-sm text-gray-500">
+                Et {blogCategories.length - 8} autres catégories disponibles via les filtres ci-dessus.
+              </p>
+            </div>
+          )}
         </div>
       </section>
     </>

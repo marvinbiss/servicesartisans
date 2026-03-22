@@ -41,7 +41,7 @@ export default function CityHubLinks({
 
   // ── Module 1 : Services populaires dans cette ville (8-10 liens) ──
   const topServices = topServiceSlugs
-    .slice(0, 10)
+    .slice(0, 6)
     .map(slug => services.find(s => s.slug === slug))
     .filter((s): s is (typeof services)[number] => s != null)
 

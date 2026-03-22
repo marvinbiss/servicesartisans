@@ -271,8 +271,8 @@ export default async function AvisServicePage({
   const relatedSlugs = relatedServices[service] || []
   const otherTrades =
     relatedSlugs.length > 0
-      ? relatedSlugs.slice(0, 8).filter((s) => tradeContent[s])
-      : tradeSlugs.filter((s) => s !== service).slice(0, 8)
+      ? relatedSlugs.slice(0, 4).filter((s) => tradeContent[s])
+      : tradeSlugs.filter((s) => s !== service).slice(0, 4)
 
   // Hash-selected tips (3)
   const sortedTips = [...trade.tips].sort((a, b) => {
@@ -642,10 +642,10 @@ export default async function AvisServicePage({
           </div>
           <div className="text-center mt-6">
             <Link
-              href={`/services/${service}`}
+              href="/villes"
               className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold text-sm"
             >
-              Voir tous les {tradeLower}s en France
+              Voir les avis {tradeLower} dans toutes les villes ({villes.length})
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -773,7 +773,7 @@ export default async function AvisServicePage({
                     {trade.name} urgence
                   </Link>
                 )}
-                {topCities.slice(0, 4).map((v) => (
+                {topCities.slice(0, 3).map((v) => (
                   <Link
                     key={v.slug}
                     href={`/avis/${service}/${v.slug}`}
@@ -789,7 +789,7 @@ export default async function AvisServicePage({
                 Avis associés
               </h3>
               <div className="space-y-2">
-                {otherTrades.slice(0, 6).map((slug) => {
+                {otherTrades.slice(0, 4).map((slug) => {
                   const t = tradeContent[slug]
                   if (!t) return null
                   return (

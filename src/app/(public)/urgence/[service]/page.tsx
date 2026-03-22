@@ -286,7 +286,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
   }
 
   // Related services for cross-linking
-  const relatedServices = services.filter((s) => s.slug !== service).slice(0, 4)
+  const relatedServices = services.filter((s) => s.slug !== service).slice(0, 3)
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -488,7 +488,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
           </div>
           <div className="text-center mt-6">
             <Link href="/villes" className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold text-sm">
-              Toutes les villes <ArrowRight className="w-4 h-4" />
+              Voir {trade.name.toLowerCase()} urgence dans toutes les villes ({villes.length}) <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
@@ -540,7 +540,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Autres urgences</h2>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {otherEmergencies.map((slug) => {
+            {otherEmergencies.slice(0, 4).map((slug) => {
               const t = tradeContent[slug]
               return (
                 <Link
@@ -577,7 +577,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
             <div>
               <h3 className="font-semibold text-gray-900 mb-3">{trade.name} par ville</h3>
               <div className="space-y-2">
-                {topCities.slice(0, 6).map((v) => (
+                {topCities.slice(0, 3).map((v) => (
                   <Link key={v.slug} href={`/urgence/${service}/${v.slug}`} className="block text-sm text-gray-600 hover:text-blue-600 py-1">
                     {trade.name} à {v.name}
                   </Link>

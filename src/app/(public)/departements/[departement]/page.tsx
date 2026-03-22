@@ -11,7 +11,7 @@ import { getProviderCountByDepartment, formatProviderCount } from '@/lib/data/st
 import { getDepartmentImage } from '@/lib/data/images'
 import { generateDepartementContent, hashCode } from '@/lib/seo/location-content'
 import { Thermometer, Home, TrendingUp, AlertTriangle } from 'lucide-react'
-import problems from '@/lib/data/problems'
+
 
 export function generateStaticParams() {
   return departements.map((dept) => ({ departement: dept.slug }))
@@ -247,7 +247,7 @@ export default async function DepartementPage({ params }: PageProps) {
             </div>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {orderedServices.map((service) => (
+            {orderedServices.slice(0, 8).map((service) => (
               <Link
                 key={service.slug}
                 href={`/departements/${dept.slug}/${service.slug}`}
@@ -261,6 +261,13 @@ export default async function DepartementPage({ params }: PageProps) {
               </Link>
             ))}
           </div>
+          {orderedServices.length > 8 && (
+            <div className="mt-6 text-center">
+              <Link href="/services" className="inline-flex items-center gap-2 text-primary-400 hover:text-primary-500 font-medium text-sm transition-colors">
+                Voir les {orderedServices.length} services disponibles <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          )}
         </section>
 
         {/* ─── PROFIL DU DÉPARTEMENT ────────────────────────── */}
@@ -350,24 +357,33 @@ export default async function DepartementPage({ params }: PageProps) {
             </div>
           </div>
           {villesDuDepartement.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-              {villesDuDepartement.map((ville) => (
-                <Link key={ville.slug} href={`/villes/${ville.slug}`} className="bg-white rounded-2xl border border-sand-300 p-4 hover:shadow-card-hover hover:border-primary-200 hover:-translate-y-0.5 transition-all group">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-lg flex items-center justify-center group-hover:from-indigo-100 group-hover:to-indigo-200 transition-colors">
-                      <MapPin className="w-5 h-5 text-accent-600" />
+            <>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                {villesDuDepartement.slice(0, 20).map((ville) => (
+                  <Link key={ville.slug} href={`/villes/${ville.slug}`} className="bg-white rounded-2xl border border-sand-300 p-4 hover:shadow-card-hover hover:border-primary-200 hover:-translate-y-0.5 transition-all group">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-lg flex items-center justify-center group-hover:from-indigo-100 group-hover:to-indigo-200 transition-colors">
+                        <MapPin className="w-5 h-5 text-accent-600" />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="font-semibold text-charcoal-800 group-hover:text-primary-400 transition-colors text-sm truncate">{ville.name}</div>
+                        <div className="text-xs text-charcoal-400">{ville.population} hab.</div>
+                      </div>
                     </div>
-                    <div className="min-w-0">
-                      <div className="font-semibold text-charcoal-800 group-hover:text-primary-400 transition-colors text-sm truncate">{ville.name}</div>
-                      <div className="text-xs text-charcoal-400">{ville.population} hab.</div>
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
+                  </Link>
+                ))}
+              </div>
+              {villesDuDepartement.length > 20 && (
+                <div className="mt-6 text-center">
+                  <Link href="/villes" className="inline-flex items-center gap-2 text-primary-400 hover:text-primary-500 font-medium text-sm transition-colors">
+                    Voir les {villesDuDepartement.length} villes du {dept.name} <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
+              )}
+            </>
           ) : (
             <div className="flex flex-wrap gap-2.5">
-              {dept.villes.map((villeName) => (
+              {dept.villes.slice(0, 20).map((villeName) => (
                 <span key={villeName} className="bg-white border border-sand-300 rounded-full px-4 py-2 text-sm text-charcoal-700 hover:bg-primary-50 hover:text-primary-500 hover:border-primary-200 transition-colors">
                   {villeName}
                 </span>
@@ -387,12 +403,12 @@ export default async function DepartementPage({ params }: PageProps) {
                 Services par ville dans le {dept.name}
               </h2>
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {villesDuDepartement.slice(0, 12).map((ville) => (
+            <div className="grid md:grid-cols-2 gap-5">
+              {villesDuDepartement.slice(0, 2).map((ville) => (
                 <div key={ville.slug} className="bg-white rounded-2xl border border-sand-300 p-6">
                   <h3 className="font-heading font-semibold text-charcoal-900 mb-4">Artisans à {ville.name}</h3>
                   <div className="flex flex-wrap gap-2">
-                    {services.map((service) => (
+                    {orderedServices.slice(0, 5).map((service) => (
                       <Link
                         key={`${service.slug}-${ville.slug}`}
                         href={`/services/${service.slug}/${ville.slug}`}
@@ -423,7 +439,7 @@ export default async function DepartementPage({ params }: PageProps) {
               </h2>
             </div>
             <div className="flex flex-wrap gap-3">
-              {siblingDepts.slice(0, 10).map((d) => (
+              {siblingDepts.slice(0, 4).map((d) => (
                 <Link key={d.slug} href={`/departements/${d.slug}`} className="bg-white border border-sand-300 hover:bg-primary-50 hover:border-primary-200 text-charcoal-700 hover:text-primary-500 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors">
                   {d.name} ({d.code})
                 </Link>
@@ -487,7 +503,7 @@ export default async function DepartementPage({ params }: PageProps) {
             <div>
               <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Services populaires</h3>
               <div className="space-y-2">
-                {orderedServices.slice(0, 8).map((s) => (
+                {orderedServices.slice(0, 5).map((s) => (
                   <Link key={s.slug} href={`/services/${s.slug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {s.name}
@@ -509,7 +525,7 @@ export default async function DepartementPage({ params }: PageProps) {
                     Artisans en {dept.region}
                   </Link>
                 )}
-                {siblingDepts.slice(0, 5).map((d) => (
+                {siblingDepts.slice(0, 3).map((d) => (
                   <Link key={d.slug} href={`/departements/${d.slug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {d.name} ({d.code})
@@ -548,7 +564,7 @@ export default async function DepartementPage({ params }: PageProps) {
           <div className="mt-10">
             <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Services dans le {dept.name}</h3>
             <div className="flex flex-wrap gap-2">
-              {orderedServices.slice(0, 10).map((s) => (
+              {orderedServices.slice(0, 5).map((s) => (
                 <Link key={`dept-svc-${s.slug}`} href={`/departements/${dept.slug}/${s.slug}`} className="inline-flex items-center gap-1.5 bg-accent-50 text-accent-700 hover:bg-accent-100 hover:text-accent-800 px-3 py-1.5 rounded-lg text-sm transition-colors border border-accent-100 hover:border-accent-200">
                   {s.name} dans le {dept.code}
                 </Link>
@@ -562,69 +578,35 @@ export default async function DepartementPage({ params }: PageProps) {
               <div>
                 <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Devis dans le {dept.name}</h3>
                 <div className="space-y-1.5">
-                  {villesDuDepartement.slice(0, 6).flatMap((ville) =>
-                    orderedServices.slice(0, 5).map((s) => (
-                      <Link key={`devis-${s.slug}-${ville.slug}`} href={`/devis/${s.slug}/${ville.slug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-1 transition-colors">
-                        <ChevronRight className="w-3 h-3" />
-                        Devis {s.name.toLowerCase()} à {ville.name}
-                      </Link>
-                    ))
-                  )}
+                  {orderedServices.slice(0, 2).map((s) => (
+                    <Link key={`devis-${s.slug}-${villesDuDepartement[0].slug}`} href={`/devis/${s.slug}/${villesDuDepartement[0].slug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-1 transition-colors">
+                      <ChevronRight className="w-3 h-3" />
+                      Devis {s.name.toLowerCase()} à {villesDuDepartement[0].name}
+                    </Link>
+                  ))}
                 </div>
               </div>
               <div>
                 <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Avis dans le {dept.name}</h3>
                 <div className="space-y-1.5">
-                  {villesDuDepartement.slice(0, 6).flatMap((ville) =>
-                    orderedServices.slice(0, 5).map((s) => (
-                      <Link key={`avis-${s.slug}-${ville.slug}`} href={`/avis/${s.slug}/${ville.slug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-1 transition-colors">
-                        <ChevronRight className="w-3 h-3" />
-                        Avis {s.name.toLowerCase()} à {ville.name}
-                      </Link>
-                    ))
-                  )}
+                  {orderedServices.slice(0, 2).map((s) => (
+                    <Link key={`avis-${s.slug}-${villesDuDepartement[0].slug}`} href={`/avis/${s.slug}/${villesDuDepartement[0].slug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-1 transition-colors">
+                      <ChevronRight className="w-3 h-3" />
+                      Avis {s.name.toLowerCase()} à {villesDuDepartement[0].name}
+                    </Link>
+                  ))}
                 </div>
               </div>
               <div>
                 <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Tarifs dans le {dept.name}</h3>
                 <div className="space-y-1.5">
-                  {villesDuDepartement.slice(0, 6).flatMap((ville) =>
-                    orderedServices.slice(0, 5).map((s) => (
-                      <Link key={`tarifs-${s.slug}-${ville.slug}`} href={`/tarifs/${s.slug}/${ville.slug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-1 transition-colors">
-                        <ChevronRight className="w-3 h-3" />
-                        Tarifs {s.name.toLowerCase()} à {ville.name}
-                      </Link>
-                    ))
-                  )}
+                  {orderedServices.slice(0, 2).map((s) => (
+                    <Link key={`tarifs-${s.slug}-${villesDuDepartement[0].slug}`} href={`/tarifs/${s.slug}/${villesDuDepartement[0].slug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-1 transition-colors">
+                      <ChevronRight className="w-3 h-3" />
+                      Tarifs {s.name.toLowerCase()} à {villesDuDepartement[0].name}
+                    </Link>
+                  ))}
                 </div>
-              </div>
-            </div>
-          )}
-          {villesDuDepartement.length > 0 && (
-            <div className="mt-8">
-              <h3 className="text-sm font-semibold text-red-700 uppercase tracking-wider mb-4">Urgences dans le {dept.name}</h3>
-              <div className="flex flex-wrap gap-2">
-                {villesDuDepartement.slice(0, 6).flatMap((ville) =>
-                  orderedServices.slice(0, 5).map((s) => (
-                    <Link key={`urgence-${s.slug}-${ville.slug}`} href={`/urgence/${s.slug}/${ville.slug}`} className="inline-flex items-center gap-1.5 bg-red-50 text-red-700 hover:bg-red-100 hover:text-red-800 px-3 py-1.5 rounded-lg text-sm transition-colors border border-red-100 hover:border-red-200">
-                      Urgence {s.name.toLowerCase()} à {ville.name}
-                    </Link>
-                  ))
-                )}
-              </div>
-            </div>
-          )}
-          {villesDuDepartement.length > 0 && (
-            <div className="mt-8">
-              <h3 className="text-sm font-semibold text-orange-700 uppercase tracking-wider mb-4">Problèmes courants dans le {dept.name}</h3>
-              <div className="flex flex-wrap gap-2">
-                {villesDuDepartement.slice(0, 4).flatMap((ville) =>
-                  problems.slice(0, 6).map((p) => (
-                    <Link key={`prob-${p.slug}-${ville.slug}`} href={`/problemes/${p.slug}/${ville.slug}`} className="inline-flex items-center gap-1.5 bg-orange-50 text-orange-700 hover:bg-orange-100 hover:text-orange-800 px-3 py-1.5 rounded-lg text-sm transition-colors border border-orange-100 hover:border-orange-200">
-                      {p.name} à {ville.name}
-                    </Link>
-                  ))
-                )}
               </div>
             </div>
           )}

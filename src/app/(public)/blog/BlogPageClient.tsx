@@ -24,7 +24,7 @@ interface BlogPageClientProps {
   initialTag?: string
 }
 
-const ARTICLES_PER_PAGE = 24
+const ARTICLES_PER_PAGE = 12
 
 export default function BlogPageClient({ articles, categories, initialTag }: BlogPageClientProps) {
   const [email, setEmail] = useState('')
@@ -255,7 +255,7 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
                 onClick={handleLoadMore}
                 className="bg-white border border-gray-300 text-gray-700 px-8 py-3 rounded-lg font-medium hover:bg-gray-50 transition-colors"
               >
-                Voir plus d'articles
+                Voir plus d&apos;articles ({filteredArticles.length - visibleCount} restants)
               </button>
             </div>
           )}

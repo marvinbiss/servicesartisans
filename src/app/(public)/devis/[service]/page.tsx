@@ -141,8 +141,8 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
 
   const relatedSlugs = relatedServices[service] || []
   const otherTrades = relatedSlugs.length > 0
-    ? relatedSlugs.slice(0, 8).filter((s) => tradeContent[s])
-    : tradeSlugs.filter((s) => s !== service).slice(0, 8)
+    ? relatedSlugs.slice(0, 4).filter((s) => tradeContent[s])
+    : tradeSlugs.filter((s) => s !== service).slice(0, 4)
 
   // H1 variation
   const h1Text = (() => {
@@ -274,8 +274,8 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
             ))}
           </div>
           <div className="text-center mt-6">
-            <Link href={`/services/${service}`} className="inline-flex items-center gap-2 text-primary-500 hover:text-primary-600 font-semibold text-sm">
-              Voir tous les {tradeLower}s en France
+            <Link href="/villes" className="inline-flex items-center gap-2 text-primary-500 hover:text-primary-600 font-semibold text-sm">
+              Voir devis {tradeLower} dans toutes les villes ({villes.length})
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -394,7 +394,7 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
                 {trade.emergencyInfo && (
                   <Link href={`/urgence/${service}`} className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">{trade.name} urgence</Link>
                 )}
-                {topCities.slice(0, 4).map((v) => (
+                {topCities.slice(0, 3).map((v) => (
                   <Link key={v.slug} href={`/devis/${service}/${v.slug}`} className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">
                     Devis {tradeLower} à {v.name}
                   </Link>
@@ -404,7 +404,7 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
             <div>
               <h3 className="font-semibold text-charcoal-900 mb-3">Devis associés</h3>
               <div className="space-y-2">
-                {otherTrades.slice(0, 6).map((slug) => {
+                {otherTrades.slice(0, 4).map((slug) => {
                   const t = tradeContent[slug]
                   if (!t) return null
                   return (
