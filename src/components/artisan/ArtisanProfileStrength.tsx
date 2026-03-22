@@ -15,14 +15,14 @@ function computeProfileStrength(artisan: LegacyArtisan): { score: number; criter
   const criteria: CriterionResult[] = [
     { label: 'Nom', met: !!artisan.business_name, points: 10 },
     { label: 'Description', met: !!artisan.description && artisan.description.length > 50, points: 15 },
-    { label: 'Téléphone', met: !!artisan.phone, points: 10 },
+    { label: 'Telephone', met: !!artisan.phone, points: 10 },
     { label: 'Email', met: !!artisan.email, points: 5 },
-    { label: 'Vérifié', met: !!artisan.is_verified, points: 15 },
+    { label: 'Verifie', met: !!artisan.is_verified, points: 15 },
     { label: 'Services', met: artisan.services.length > 0, points: 10 },
     { label: 'Tarifs', met: artisan.service_prices.length > 0, points: 10 },
     { label: 'Portfolio', met: !!(artisan.portfolio && artisan.portfolio.length > 0), points: 10 },
     { label: 'Avis', met: artisan.average_rating > 0, points: 10 },
-    { label: 'Ancienneté', met: !!artisan.creation_date, points: 5 },
+    { label: 'Anciennete', met: !!artisan.creation_date, points: 5 },
   ]
 
   const score = criteria.reduce((sum, c) => sum + (c.met ? c.points : 0), 0)
@@ -30,14 +30,14 @@ function computeProfileStrength(artisan: LegacyArtisan): { score: number; criter
 }
 
 function getBarColor(score: number): string {
-  if (score >= 90) return 'from-green-400 to-green-500'
-  if (score >= 70) return 'from-clay-400 to-clay-500'
+  if (score >= 90) return 'from-accent-400 to-accent-500'
+  if (score >= 70) return 'from-primary-400 to-primary-500'
   return 'from-amber-400 to-amber-500'
 }
 
 function getTextColor(score: number): string {
-  if (score >= 90) return 'text-green-600'
-  if (score >= 70) return 'text-clay-600'
+  if (score >= 90) return 'text-accent-600'
+  if (score >= 70) return 'text-primary-600'
   return 'text-amber-600'
 }
 
@@ -50,10 +50,10 @@ export function ArtisanProfileStrength({ artisan }: { artisan: LegacyArtisan }) 
   const metCriteria = criteria.filter(c => c.met)
 
   return (
-    <div className="bg-[#FFFCF8] rounded-2xl border border-stone-200/60 p-5">
+    <div className="bg-white rounded-2xl border border-sand-200 p-5">
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
-        <span className="text-sm font-semibold text-gray-900">Force du profil</span>
+        <span className="text-sm font-semibold text-charcoal-900">Force du profil</span>
         <span className={`text-sm font-bold ${getTextColor(score)}`}>{score}%</span>
       </div>
 
@@ -72,9 +72,9 @@ export function ArtisanProfileStrength({ artisan }: { artisan: LegacyArtisan }) 
         {metCriteria.map(c => (
           <span
             key={c.label}
-            className="inline-flex items-center gap-0.5 text-xs text-slate-500 bg-sand-100 rounded-full px-2 py-0.5"
+            className="inline-flex items-center gap-0.5 text-xs text-charcoal-500 bg-sand-100 rounded-full px-2 py-0.5"
           >
-            <Check className="w-3 h-3 text-green-500" />
+            <Check className="w-3 h-3 text-accent-500" />
             {c.label}
           </span>
         ))}

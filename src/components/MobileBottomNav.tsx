@@ -3,15 +3,14 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, Search, FileText, Wrench, AlertTriangle } from 'lucide-react'
+import { Home, Search, FileText, User } from 'lucide-react'
 import { useMobileMenu } from '@/contexts/MobileMenuContext'
 
-const navItems: { href: string; icon: typeof Home; label: string; isPrimary?: boolean }[] = [
+const navItems: { href: string; icon: typeof Home; label: string }[] = [
   { href: '/', icon: Home, label: 'Accueil' },
   { href: '/recherche', icon: Search, label: 'Recherche' },
-  { href: '/devis', icon: FileText, label: 'Devis', isPrimary: true },
-  { href: '/services', icon: Wrench, label: 'Services' },
-  { href: '/urgence', icon: AlertTriangle, label: 'Urgence' },
+  { href: '/devis', icon: FileText, label: 'Devis' },
+  { href: '/connexion', icon: User, label: 'Mon compte' },
 ]
 
 export default function MobileBottomNav() {
@@ -37,28 +36,12 @@ export default function MobileBottomNav() {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white/95 backdrop-blur-xl border-t border-gray-200/80 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]"
+      className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white shadow-lg shadow-charcoal-900/10 border-t border-sand-200"
       aria-label="Navigation mobile"
     >
-      <div className="flex items-center justify-around h-16 pb-safe">
-        {navItems.map(({ href, icon: Icon, label, isPrimary }) => {
+      <div className="flex items-center justify-around h-14 pb-safe">
+        {navItems.map(({ href, icon: Icon, label }) => {
           const isActive = pathname === href || (href !== '/' && pathname.startsWith(href))
-
-          if (isPrimary) {
-            return (
-              <Link
-                key={href}
-                href={href}
-                aria-current={isActive ? 'page' : undefined}
-                className="flex flex-col items-center justify-center gap-0.5 w-full h-full transition-colors touch-manipulation active:scale-95"
-              >
-                <div className="w-11 h-11 -mt-5 rounded-full bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center shadow-lg shadow-blue-500/30 ring-4 ring-white">
-                  <Icon className="w-5 h-5 text-white stroke-[2.5]" />
-                </div>
-                <span className="text-[11px] font-semibold text-blue-600">{label}</span>
-              </Link>
-            )
-          }
 
           return (
             <Link
@@ -66,11 +49,11 @@ export default function MobileBottomNav() {
               href={href}
               aria-current={isActive ? 'page' : undefined}
               className={`flex flex-col items-center justify-center gap-0.5 w-full h-full transition-colors touch-manipulation active:scale-95 ${
-                isActive ? 'text-amber-600' : 'text-gray-500'
+                isActive ? 'text-primary-400' : 'text-charcoal-400'
               }`}
             >
               <Icon className={`w-5 h-5 ${isActive ? 'stroke-[2.5]' : 'stroke-[1.5]'}`} />
-              <span className={`text-[11px] ${isActive ? 'font-semibold' : 'font-medium'}`}>{label}</span>
+              <span className={`text-[10px] ${isActive ? 'font-semibold' : 'font-medium'}`}>{label}</span>
             </Link>
           )
         })}
@@ -81,5 +64,5 @@ export default function MobileBottomNav() {
 
 // Wrapper component to add padding for bottom nav
 export function MobileNavSpacer() {
-  return <div className="h-16 md:hidden" />
+  return <div className="h-14 md:hidden" />
 }

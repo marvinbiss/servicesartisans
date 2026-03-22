@@ -13,21 +13,21 @@ export interface BadgeProps {
 }
 
 const variantStyles = {
-  primary: 'bg-blue-100 text-blue-700 border-blue-200',
-  secondary: 'bg-violet-100 text-violet-700 border-violet-200',
-  success: 'bg-green-100 text-green-700 border-green-200',
-  warning: 'bg-amber-100 text-amber-700 border-amber-200',
-  error: 'bg-red-100 text-red-700 border-red-200',
-  neutral: 'bg-gray-100 text-gray-700 border-gray-200',
+  primary: 'bg-primary-50 text-primary-700 border-primary-200',
+  secondary: 'bg-charcoal-100 text-charcoal-700 border-charcoal-200',
+  success: 'bg-accent-50 text-accent-700 border-accent-200',
+  warning: 'bg-secondary-50 text-secondary-700 border-secondary-200',
+  error: 'bg-red-50 text-red-700 border-red-200',
+  neutral: 'bg-sand-200 text-charcoal-700 border-sand-300',
 }
 
 const dotColors = {
-  primary: 'bg-blue-500',
-  secondary: 'bg-violet-500',
-  success: 'bg-green-500',
-  warning: 'bg-amber-500',
+  primary: 'bg-primary-400',
+  secondary: 'bg-charcoal-500',
+  success: 'bg-accent-500',
+  warning: 'bg-secondary-500',
   error: 'bg-red-500',
-  neutral: 'bg-gray-500',
+  neutral: 'bg-charcoal-400',
 }
 
 const sizeStyles = {

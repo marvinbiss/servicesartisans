@@ -37,10 +37,6 @@ import dynamic from 'next/dynamic'
 
 export const revalidate = 86400 // ISR 24h
 
-const EstimationWidget = dynamic(
-  () => import('@/components/estimation/EstimationWidget'),
-  { ssr: false }
-)
 
 const MicroConversions = dynamic(
   () => import('@/components/MicroConversions'),
@@ -1342,14 +1338,6 @@ export default async function UrgenceServiceVillePage({
       <DeepPageLinks currentService={service} currentVille={villeSlug} currentIntent="urgence" />
 
       <StickyMobileCTA serviceSlug={service} citySlug={villeSlug} ctaText="Intervention urgente — Devis gratuit" />
-
-      <EstimationWidget context={{
-        metier: trade.name,
-        metierSlug: service,
-        ville: villeData.name,
-        departement: villeData.departementCode,
-        pageUrl: `/urgence/${service}/${villeSlug}`,
-      }} />
 
       <MicroConversions pageType="urgence-ville" serviceSlug={service} cityName={villeData.name} />
     </div>

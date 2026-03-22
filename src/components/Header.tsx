@@ -177,11 +177,11 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
         aria-expanded={openMenu === menu}
         aria-haspopup="true"
         className={cn(
-          'relative flex items-center gap-1 px-3 py-2 rounded-xl font-medium text-[0.85rem] transition-all duration-200',
-          'after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-clay-400 after:transition-all after:duration-300 after:rounded-full',
+          'relative flex items-center gap-1 px-3 py-2 rounded-lg font-medium text-[0.85rem] transition-all duration-200',
+          'after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:h-[2px] after:bg-primary-400 after:transition-all after:duration-300 after:rounded-full',
           openMenu === menu
-            ? 'text-clay-400 bg-[#FDF1EC]/80 after:w-[60%]'
-            : 'text-gray-600 hover:text-clay-400 hover:bg-gray-50/80 after:w-0 hover:after:w-[60%]'
+            ? 'text-primary-400 bg-primary-50/80 after:w-[60%]'
+            : 'text-charcoal-600 hover:text-primary-400 hover:bg-sand-100/80 after:w-0 hover:after:w-[60%]'
         )}
       >
         {label}
@@ -189,16 +189,16 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
       </button>
       {/* Plus dropdown inline */}
       {menu === 'plus' && openMenu === 'plus' && (
-        <div className="absolute top-full right-0 mt-2 w-52 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
-          <Link href="/avis" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Avis artisans</Link>
-          <Link href="/tarifs" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Tarifs</Link>
-          <Link href="/blog" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Blog</Link>
-          <Link href="/guides" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Guides travaux</Link>
-          <div className="h-px bg-gray-100 my-1" />
-          <Link href="/questions" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>FAQ</Link>
-          <Link href="/comparaison" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Comparatifs</Link>
-          <Link href="/barometre" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Baromètre prix</Link>
-          <Link href="/glossaire" className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-clay-400 hover:bg-gray-50 transition-colors" onClick={() => setOpenMenu(null)}>Glossaire</Link>
+        <div className="absolute top-full right-0 mt-2 w-52 bg-white rounded-xl shadow-soft border border-sand-200 py-2 z-50">
+          <Link href="/avis" className="block px-4 py-2.5 text-sm font-medium text-charcoal-700 hover:text-primary-400 hover:bg-sand-50 transition-colors" onClick={() => setOpenMenu(null)}>Avis artisans</Link>
+          <Link href="/tarifs" className="block px-4 py-2.5 text-sm font-medium text-charcoal-700 hover:text-primary-400 hover:bg-sand-50 transition-colors" onClick={() => setOpenMenu(null)}>Tarifs</Link>
+          <Link href="/blog" className="block px-4 py-2.5 text-sm font-medium text-charcoal-700 hover:text-primary-400 hover:bg-sand-50 transition-colors" onClick={() => setOpenMenu(null)}>Blog</Link>
+          <Link href="/guides" className="block px-4 py-2.5 text-sm font-medium text-charcoal-700 hover:text-primary-400 hover:bg-sand-50 transition-colors" onClick={() => setOpenMenu(null)}>Guides travaux</Link>
+          <div className="h-px bg-sand-200 my-1" />
+          <Link href="/questions" className="block px-4 py-2.5 text-sm font-medium text-charcoal-700 hover:text-primary-400 hover:bg-sand-50 transition-colors" onClick={() => setOpenMenu(null)}>FAQ</Link>
+          <Link href="/comparaison" className="block px-4 py-2.5 text-sm font-medium text-charcoal-700 hover:text-primary-400 hover:bg-sand-50 transition-colors" onClick={() => setOpenMenu(null)}>Comparatifs</Link>
+          <Link href="/barometre" className="block px-4 py-2.5 text-sm font-medium text-charcoal-700 hover:text-primary-400 hover:bg-sand-50 transition-colors" onClick={() => setOpenMenu(null)}>Baromètre prix</Link>
+          <Link href="/glossaire" className="block px-4 py-2.5 text-sm font-medium text-charcoal-700 hover:text-primary-400 hover:bg-sand-50 transition-colors" onClick={() => setOpenMenu(null)}>Glossaire</Link>
         </div>
       )}
     </div>
@@ -209,9 +209,20 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
     <header className={cn(
       'fixed top-0 left-0 right-0 z-[9999] transition-all duration-300',
       scrolled
-        ? 'bg-white/80 backdrop-blur-xl shadow-lg shadow-gray-900/5 border-b border-gray-200/50'
-        : 'bg-white/95 backdrop-blur-sm border-b border-gray-100/80'
+        ? 'bg-white/95 backdrop-blur-xl shadow-soft border-b border-sand-200/60'
+        : 'bg-white/60 backdrop-blur-sm border-b border-transparent'
     )}>
+      {/* Reassurance bar */}
+      <div className={cn(
+        'hidden lg:block text-center py-1 text-xs font-medium text-accent-600 bg-accent-50/60 border-b border-accent-100/40 transition-all duration-300',
+        scrolled && 'hidden'
+      )}>
+        <span className="inline-flex items-center gap-1.5">
+          <svg className="w-3.5 h-3.5 text-accent-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
+          Artisans vérifiés SIREN &mdash; Service 100% gratuit
+        </span>
+      </div>
+
       {/* Main header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className={cn(
@@ -236,8 +247,8 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
                 <rect x="2" y="2" width="44" height="44" rx="12" fill="url(#headerShine)" />
                 <path fillRule="evenodd" fill="#fff" fillOpacity="0.95" d="M24 11 L38.5 24 L35 24 L35 37 L13 37 L13 24 L9.5 24Z M21 37 V29 A3 3 0 0 1 27 29 V37Z" />
               </svg>
-              <span className="hidden sm:inline text-xl font-heading font-extrabold tracking-tight text-gray-900 group-hover/logo:text-gray-700 transition-colors duration-200">
-                Services<span className="text-clay-400 group-hover/logo:text-clay-300 transition-colors duration-200">Artisans</span>
+              <span className="hidden sm:inline text-xl font-heading font-extrabold tracking-tight text-charcoal-900 group-hover/logo:text-charcoal-700 transition-colors duration-200">
+                Services<span className="text-primary-400 group-hover/logo:text-primary-300 transition-colors duration-200">Artisans</span>
               </span>
             </div>
           </Link>
@@ -247,7 +258,7 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
             {mounted ? (
               <QuickSearch />
             ) : (
-              <div className="w-full rounded-full border border-gray-200 bg-gray-50 h-[38px] animate-pulse" />
+              <div className="w-full rounded-full border border-sand-300 bg-sand-50 h-[38px] animate-pulse" />
             )}
           </div>
 
@@ -261,7 +272,7 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
             {/* Favoris */}
             <Link
               href="/mes-favoris"
-              className="relative text-gray-600 hover:text-red-500 px-3 py-2 rounded-xl transition-all duration-200 hover:bg-red-50/80"
+              className="relative text-charcoal-500 hover:text-red-500 px-3 py-2 rounded-lg transition-all duration-200 hover:bg-red-50/80"
               aria-label={`Mes favoris${favoritesCount > 0 ? ` (${favoritesCount})` : ''}`}
               title="Mes favoris"
             >
@@ -275,7 +286,7 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
 
             <Link
               href="/connexion"
-              className="relative text-gray-600 hover:text-clay-400 px-3 py-2 rounded-xl font-medium text-[0.85rem] hover:bg-gray-50/80 transition-all duration-200 after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:w-0 hover:after:w-[60%] after:h-[2px] after:bg-clay-400 after:transition-all after:duration-300 after:rounded-full"
+              className="relative text-charcoal-600 hover:text-primary-400 px-3 py-2 rounded-lg font-medium text-[0.85rem] hover:bg-sand-100/80 transition-all duration-200 after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:w-0 hover:after:w-[60%] after:h-[2px] after:bg-primary-400 after:transition-all after:duration-300 after:rounded-full"
             >
               Connexion
             </Link>
@@ -294,26 +305,34 @@ export default function Header({ artisanCount = 0 }: { artisanCount?: number }) 
             <Link
               href="/devis"
               onClick={() => trackEvent('header_devis_click', {})}
-              className="ml-2 px-4 py-2 bg-gradient-to-r from-clay-400 to-clay-600 hover:from-clay-500 hover:to-clay-700 text-white font-semibold text-sm rounded-xl shadow-md shadow-clay-400/20 hover:shadow-lg hover:shadow-clay-400/30 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
+              className="ml-2 px-5 py-2 bg-primary-400 hover:bg-primary-500 text-white font-heading font-semibold text-sm rounded-xl shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
             >
-              Devis gratuit
+              Trouver un artisan
             </Link>
           </nav>
 
-          {/* Mobile menu button */}
-          <button
-            type="button"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label={isMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
-            aria-expanded={isMenuOpen}
-            className="lg:hidden flex items-center justify-center w-12 h-12 -mr-2 rounded-xl active:bg-gray-200 hover:bg-gray-100 transition-colors"
-          >
-            {isMenuOpen ? (
-              <X className="w-6 h-6 text-gray-700" />
-            ) : (
-              <Menu className="w-6 h-6 text-gray-700" />
-            )}
-          </button>
+          {/* Mobile: CTA compact + hamburger */}
+          <div className="flex lg:hidden items-center gap-2">
+            <Link
+              href="/devis"
+              className="px-3.5 py-2 bg-primary-400 hover:bg-primary-500 text-white font-heading font-semibold text-xs rounded-lg shadow-cta transition-all duration-200"
+            >
+              Devis gratuit
+            </Link>
+            <button
+              type="button"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label={isMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+              aria-expanded={isMenuOpen}
+              className="flex items-center justify-center w-11 h-11 rounded-lg active:bg-sand-200 hover:bg-sand-100 transition-colors"
+            >
+              {isMenuOpen ? (
+                <X className="w-6 h-6 text-charcoal-700" />
+              ) : (
+                <Menu className="w-6 h-6 text-charcoal-700" />
+              )}
+            </button>
+          </div>
         </div>
       </div>
 

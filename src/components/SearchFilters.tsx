@@ -47,23 +47,23 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
 
   return (
     <div
-      className="bg-white border-b border-gray-200 py-3 px-4"
+      className="bg-white border-b border-sand-300 py-3 px-4"
       role="search"
       aria-label="Filtres de recherche"
     >
       <div className="flex items-center justify-between gap-4">
         {/* Results count */}
         <div
-          className="text-sm text-gray-600"
+          className="text-sm text-charcoal-600"
           role="status"
           aria-live="polite"
           aria-atomic="true"
         >
-          <span className="font-semibold text-gray-900">{totalResults}</span> artisan{totalResults > 1 ? 's' : ''} trouvé{totalResults > 1 ? 's' : ''}
+          <span className="font-bold text-charcoal-900">{totalResults}</span> artisan{totalResults > 1 ? 's' : ''} trouv&eacute;{totalResults > 1 ? 's' : ''}
         </div>
 
         {/* Filter controls */}
-        <div className="flex items-center gap-3" role="group" aria-label="Contrôles de tri et filtrage">
+        <div className="flex items-center gap-3" role="group" aria-label="Controles de tri et filtrage">
           {/* Sort dropdown */}
           <div className="relative">
             <label id={sortLabelId} className="sr-only">
@@ -73,13 +73,13 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
               value={filters.sortBy}
               onChange={(e) => updateFilter('sortBy', e.target.value as FilterState['sortBy'])}
               aria-labelledby={sortLabelId}
-              className="appearance-none bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 pr-8 text-sm focus:ring-2 focus:ring-clay-400 focus:border-transparent cursor-pointer transition-colors duration-200"
+              className="appearance-none bg-sand-100 border border-sand-300 rounded-lg px-3 py-2 pr-8 text-sm text-charcoal-700 focus:ring-2 focus:ring-primary-400 focus:border-transparent cursor-pointer transition-colors duration-200"
             >
               <option value="relevance">Pertinence</option>
               <option value="rating">Meilleures notes</option>
               <option value="name">Nom A-Z</option>
             </select>
-            <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" aria-hidden="true" />
+            <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-400 pointer-events-none" aria-hidden="true" />
           </div>
 
           {/* Filter button */}
@@ -87,17 +87,17 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
             onClick={() => setIsOpen(!isOpen)}
             aria-expanded={isOpen}
             aria-controls={filterPanelId}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-clay-400 focus-visible:ring-offset-2 ${
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 ${
               activeFiltersCount > 0
-                ? 'bg-clay-50 border-clay-200 text-clay-600'
-                : 'bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100'
+                ? 'bg-primary-50 border-primary-200 text-primary-600'
+                : 'bg-sand-100 border-sand-300 text-charcoal-700 hover:bg-sand-200'
             }`}
           >
             <Filter className="w-4 h-4" aria-hidden="true" />
             <span>Filtres</span>
             {activeFiltersCount > 0 && (
               <span
-                className="bg-clay-400 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center"
+                className="bg-primary-400 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center"
                 aria-label={`${activeFiltersCount} filtre${activeFiltersCount > 1 ? 's' : ''} actif${activeFiltersCount > 1 ? 's' : ''}`}
               >
                 {activeFiltersCount}
@@ -111,7 +111,7 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
       {isOpen && (
         <div
           id={filterPanelId}
-          className="mt-4 pt-4 border-t border-gray-100"
+          className="mt-4 pt-4 border-t border-sand-200"
           role="group"
           aria-label="Options de filtrage"
         >
@@ -120,14 +120,14 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
             <button
               onClick={() => updateFilter('verified', !filters.verified)}
               aria-pressed={filters.verified}
-              className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-clay-400 focus-visible:ring-offset-2 ${
+              className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 ${
                 filters.verified
-                  ? 'bg-clay-50 border-clay-200 text-clay-600'
-                  : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
+                  ? 'bg-accent-50 border-accent-200 text-accent-700'
+                  : 'bg-white border-sand-300 text-charcoal-700 hover:bg-sand-50'
               }`}
             >
               <BadgeCheck className="w-4 h-4" aria-hidden="true" />
-              <span>Vérifié</span>
+              <span>Verifie</span>
             </button>
 
             {/* Rating filter */}
@@ -139,11 +139,11 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
                     updateFilter('minRating', filters.minRating === rating ? null : rating)
                   }
                   aria-pressed={filters.minRating === rating}
-                  aria-label={`Note minimum ${rating} étoiles`}
-                  className={`flex items-center gap-1 px-3 py-2 rounded-lg border text-sm font-medium transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-clay-400 focus-visible:ring-offset-2 ${
+                  aria-label={`Note minimum ${rating} etoiles`}
+                  className={`flex items-center gap-1 px-3 py-2 rounded-lg border text-sm font-medium transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 ${
                     filters.minRating === rating
-                      ? 'bg-clay-50 border-clay-200 text-clay-600'
-                      : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
+                      ? 'bg-secondary-50 border-secondary-200 text-secondary-700'
+                      : 'bg-white border-sand-300 text-charcoal-700 hover:bg-sand-50'
                   }`}
                 >
                   <Star className="w-4 h-4 fill-current" aria-hidden="true" />
@@ -157,7 +157,7 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
               <button
                 onClick={clearFilters}
                 aria-label="Effacer tous les filtres"
-                className="flex items-center gap-1 px-3 py-2 text-sm text-gray-500 hover:text-gray-700 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 rounded-lg"
+                className="flex items-center gap-1 px-3 py-2 text-sm text-charcoal-500 hover:text-charcoal-700 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-charcoal-500 focus-visible:ring-offset-2 rounded-lg"
               >
                 <X className="w-4 h-4" aria-hidden="true" />
                 <span>Effacer</span>

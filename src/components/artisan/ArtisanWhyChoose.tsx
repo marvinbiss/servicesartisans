@@ -20,8 +20,8 @@ function getWhyCards(artisan: LegacyArtisan): WhyCard[] {
     if (years > 0) {
       cards.push({
         icon: Calendar,
-        title: 'Expérience',
-        description: `${years} ans d'activité`,
+        title: 'Experience',
+        description: `${years} ans d'activite`,
       })
     }
   }
@@ -29,8 +29,8 @@ function getWhyCards(artisan: LegacyArtisan): WhyCard[] {
   if (artisan.is_verified) {
     cards.push({
       icon: Shield,
-      title: 'Fiabilité',
-      description: 'Identité vérifiée (SIRET)',
+      title: 'Fiabilite',
+      description: 'Identite verifiee (SIRET)',
     })
   }
 
@@ -45,15 +45,15 @@ function getWhyCards(artisan: LegacyArtisan): WhyCard[] {
   if (artisan.team_size && artisan.team_size > 1) {
     cards.push({
       icon: Users,
-      title: 'Équipe',
-      description: `Équipe de ${artisan.team_size} professionnels`,
+      title: 'Equipe',
+      description: `Equipe de ${artisan.team_size} professionnels`,
     })
   }
 
   if (artisan.intervention_radius_km) {
     cards.push({
       icon: MapPin,
-      title: 'Proximité',
+      title: 'Proximite',
       description: `Intervention dans un rayon de ${artisan.intervention_radius_km} km`,
     })
   }
@@ -93,12 +93,12 @@ export function ArtisanWhyChoose({ artisan }: { artisan: LegacyArtisan }) {
   if (cards.length === 0) return null
 
   return (
-    <div className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 p-6">
+    <div className="bg-white rounded-2xl shadow-soft border border-sand-200 p-6">
       <div className="flex items-center gap-2.5 mb-5">
         <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-amber-50">
           <Trophy className="w-4.5 h-4.5 text-amber-500" aria-hidden="true" />
         </div>
-        <h2 className="text-lg font-semibold text-gray-900 font-heading">
+        <h2 className="text-lg font-semibold text-charcoal-900 font-heading">
           Pourquoi choisir cet artisan
         </h2>
       </div>
@@ -114,13 +114,13 @@ export function ArtisanWhyChoose({ artisan }: { artisan: LegacyArtisan }) {
           <motion.div
             key={card.title}
             variants={cardVariants}
-            className="rounded-xl bg-white border border-stone-200/60 p-5"
+            className="rounded-xl bg-sand-50 border border-sand-200 p-5 hover:border-primary-200 transition-colors"
           >
-            <div className="flex items-center justify-center w-10 h-10 rounded-full bg-clay-50 mb-3">
-              <card.icon className="w-5 h-5 text-clay-400" aria-hidden="true" />
+            <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary-50 mb-3">
+              <card.icon className="w-5 h-5 text-primary-400" aria-hidden="true" />
             </div>
-            <p className="font-semibold text-gray-900 mb-1">{card.title}</p>
-            <p className="text-sm text-slate-600">{card.description}</p>
+            <p className="font-semibold text-charcoal-900 mb-1">{card.title}</p>
+            <p className="text-sm text-charcoal-600">{card.description}</p>
           </motion.div>
         ))}
       </motion.div>

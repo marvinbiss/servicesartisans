@@ -16,7 +16,7 @@ const AVATAR_PHOTOS = [
 ]
 
 const FALLBACK_REVIEWS = [
-  { client_name: 'Jean-Pierre D.', rating: 5, comment: 'Fuite d\'eau un samedi soir. Artisan en 20 min. Bluffant.', created_at: '' },
+  { client_name: 'Jean-Pierre D.', rating: 5, comment: "Fuite d'eau un samedi soir. Artisan en 20 min. Bluffant.", created_at: '' },
   { client_name: 'Camille R.', rating: 5, comment: 'Peintre exceptionnel, salon refait en un week-end.', created_at: '' },
   { client_name: 'Nicolas P.', rating: 4, comment: 'Maçon très compétent pour la rénovation de façade.', created_at: '' },
   { client_name: 'Claire M.', rating: 5, comment: 'Serrurier arrivé rapidement, travail propre et efficace.', created_at: '' },
@@ -28,7 +28,7 @@ const FALLBACK_REVIEWS = [
 
 function StarIcon({ filled }: { filled: boolean }) {
   return (
-    <svg className={`w-3.5 h-3.5 ${filled ? 'text-amber-400' : 'text-stone-500'}`} viewBox="0 0 20 20" fill="currentColor">
+    <svg className={`w-4 h-4 ${filled ? 'text-amber-400' : 'text-charcoal-200'}`} viewBox="0 0 20 20" fill="currentColor">
       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
     </svg>
   )
@@ -64,30 +64,29 @@ export function ClayReviewsCarousel({ reviews }: Props) {
         {doubled.map((review, idx) => (
           <div
             key={idx}
-            className="shrink-0 w-72 bg-white/10 border border-white/20 rounded-2xl p-5 backdrop-blur-sm"
+            className="shrink-0 w-80 bg-sand-50 border border-sand-200 rounded-2xl p-5 hover:shadow-card-hover transition-shadow duration-300"
           >
             <div className="flex gap-0.5 mb-3">
               {[1, 2, 3, 4, 5].map(i => (
                 <StarIcon key={i} filled={i <= review.rating} />
               ))}
             </div>
-            <p className="text-white/90 text-sm leading-relaxed mb-4 line-clamp-3">
+            <p className="text-charcoal-700 text-sm leading-relaxed mb-4 line-clamp-3">
               &ldquo;{review.comment}&rdquo;
             </p>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2.5">
               <Image
                 src={AVATAR_PHOTOS[idx % AVATAR_PHOTOS.length]}
                 alt={review.client_name || 'Client vérifié'}
-                width={36}
-                height={36}
-                sizes="36px"
+                width={40}
+                height={40}
+                sizes="40px"
                 loading="lazy"
-                className="rounded-full object-cover shrink-0"
-                style={{ border: '2px solid rgba(255,255,255,.15)' }}
+                className="rounded-full object-cover shrink-0 border-2 border-sand-200"
               />
               <div>
-                <p className="text-white text-sm font-medium">{review.client_name || 'Client vérifié'}</p>
-                <p className="text-white/70 text-xs">Client vérifié</p>
+                <p className="text-charcoal-900 text-sm font-semibold">{review.client_name || 'Client vérifié'}</p>
+                <p className="text-charcoal-400 text-xs">Client v&eacute;rifi&eacute;</p>
               </div>
             </div>
           </div>

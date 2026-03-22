@@ -12,12 +12,6 @@ import { villes, getQuartierBySlug, getQuartiersByVille, getNearbyCities } from 
 import { getServiceImage } from '@/lib/data/images'
 import { relatedServices } from '@/lib/constants/navigation'
 import DevisForm from '@/components/DevisForm'
-import dynamic from 'next/dynamic'
-
-const EstimationWidget = dynamic(
-  () => import('@/components/estimation/EstimationWidget'),
-  { ssr: false }
-)
 
 // ---------------------------------------------------------------------------
 // Static params: top 3 services x top 10 cities x their quartiers
@@ -544,13 +538,6 @@ export default async function DevisQuartierPage({
         </div>
       </section>
 
-      <EstimationWidget context={{
-        metier: trade.name,
-        metierSlug: service,
-        ville: ville.name,
-        departement: ville.departementCode,
-        pageUrl: `/devis/${service}/${location}/${quartier}`,
-      }} />
     </div>
   )
 }

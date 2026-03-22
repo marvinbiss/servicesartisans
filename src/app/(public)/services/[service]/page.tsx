@@ -28,10 +28,6 @@ import DemandIndicator from '@/components/DemandIndicator'
 import TrustGuarantee from '@/components/TrustGuarantee'
 import dynamic from 'next/dynamic'
 
-const EstimationWidget = dynamic(
-  () => import('@/components/estimation/EstimationWidget'),
-  { ssr: false }
-)
 
 const ExitIntentPopup = dynamic(
   () => import('@/components/ExitIntentPopup'),
@@ -177,10 +173,10 @@ export default async function ServicePage({ params }: PageProps) {
   const cmsPage = await getPageContent(serviceSlug, 'service', { serviceSlug })
   if (cmsPage?.content_html) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-sand-50">
         <section className="bg-white border-b">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h1 className="font-heading text-3xl font-bold text-gray-900">
+            <h1 className="font-heading text-3xl font-bold text-charcoal-900">
               {cmsPage.title}
             </h1>
           </div>
@@ -298,12 +294,12 @@ export default async function ServicePage({ params }: PageProps) {
   }) : null
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-sand-50">
       {/* JSON-LD */}
       <JsonLd data={[serviceSchema, breadcrumbSchema, speakableSchema, ...(faqSchema ? [faqSchema] : []), ...(pricingSchema ? [pricingSchema] : [])]} />
 
       {/* Breadcrumb */}
-      <div className="bg-white border-b">
+      <div className="bg-white border-b border-sand-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <Breadcrumb
             items={[
@@ -314,8 +310,8 @@ export default async function ServicePage({ params }: PageProps) {
         </div>
       </div>
 
-      {/* Hero — Premium gradient */}
-      <section className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-hidden">
+      {/* Hero — Premium gradient with charcoal + terracotta */}
+      <section className="relative bg-gradient-hero overflow-hidden">
         {/* Service photo background */}
         <Image
           src={getServiceImage(serviceSlug).src}
@@ -327,10 +323,10 @@ export default async function ServicePage({ params }: PageProps) {
           placeholder="blur"
           blurDataURL={BLUR_PLACEHOLDER}
         />
-        <div className="absolute inset-0 bg-gray-900/75" />
-        {/* Ambient glow */}
+        <div className="absolute inset-0 bg-charcoal-900/75" />
+        {/* Ambient glow — terracotta */}
         <div className="absolute inset-0" style={{
-          background: 'radial-gradient(ellipse 60% 50% at 50% 100%, rgba(245,158,11,0.10) 0%, transparent 60%), radial-gradient(ellipse 40% 40% at 80% 20%, rgba(59,130,246,0.06) 0%, transparent 50%)',
+          background: 'radial-gradient(ellipse 60% 50% at 50% 100%, rgba(232,107,75,0.12) 0%, transparent 60%), radial-gradient(ellipse 40% 40% at 80% 20%, rgba(61,139,104,0.06) 0%, transparent 50%)',
         }} />
         <div className="absolute inset-0 opacity-[0.03]" style={{
           backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
@@ -341,38 +337,38 @@ export default async function ServicePage({ params }: PageProps) {
           <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 tracking-tight">
             {h1Text}
           </h1>
-          <p className="text-lg md:text-xl text-slate-400 max-w-3xl leading-relaxed">
+          <p className="text-lg md:text-xl text-sand-400 max-w-3xl leading-relaxed">
             {service.description ||
-              `Trouvez les meilleurs ${service.name.toLowerCase()}s près de chez vous. Comparez les avis, les tarifs et obtenez des devis gratuits.`}
+              `Trouvez les meilleurs ${service.name.toLowerCase()}s pr\u00e8s de chez vous. Comparez les avis, les tarifs et obtenez des devis gratuits.`}
           </p>
-          <LastUpdated label="Données artisans mises à jour le" className="text-slate-500 mt-3" />
+          <LastUpdated label="Donn\u00e9es artisans mises \u00e0 jour le" className="text-sand-500 mt-3" />
 
           {/* Stats — Large gradient numbers */}
           <div className="flex flex-wrap gap-6 md:gap-10 mt-10">
             <div className="flex flex-col">
-              <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-amber-500">
-                {totalProviderCount > 0 ? totalProviderCount.toLocaleString('fr-FR') : '—'}
+              <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-terra">
+                {totalProviderCount > 0 ? totalProviderCount.toLocaleString('fr-FR') : '\u2014'}
               </span>
-              <span className="text-sm text-slate-400 mt-1">artisans référencés</span>
+              <span className="text-sm text-sand-400 mt-1">artisans r&eacute;f&eacute;renc&eacute;s</span>
             </div>
             <div className="flex flex-col">
-              <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-blue-500">
+              <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-accent-300 to-accent-500">
                 {topCities?.length || 0}+
               </span>
-              <span className="text-sm text-slate-400 mt-1">villes couvertes</span>
+              <span className="text-sm text-sand-400 mt-1">villes couvertes</span>
             </div>
             <div className="flex flex-col">
-              <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-emerald-500">
+              <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-accent-300 to-accent-500">
                 100%
               </span>
-              <span className="text-sm text-slate-400 mt-1">données SIREN</span>
+              <span className="text-sm text-sand-400 mt-1">donn&eacute;es SIREN</span>
             </div>
             {trade && (
               <div className="flex flex-col">
-                <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-purple-500">
-                  {trade.priceRange.min}–{trade.priceRange.max}
+                <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-premium">
+                  {trade.priceRange.min}\u2013{trade.priceRange.max}
                 </span>
-                <span className="text-sm text-slate-400 mt-1">{trade.priceRange.unit}</span>
+                <span className="text-sm text-sand-400 mt-1">{trade.priceRange.unit}</span>
               </div>
             )}
           </div>
@@ -380,17 +376,17 @@ export default async function ServicePage({ params }: PageProps) {
           {/* Badges row */}
           <div className="flex flex-wrap gap-3 mt-8">
             <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/10 px-4 py-2 rounded-full">
-              <Shield className="w-4 h-4 text-emerald-400" />
-              <span className="text-sm text-slate-300 font-medium">Artisans vérifiés</span>
+              <Shield className="w-4 h-4 text-accent-400" />
+              <span className="text-sm text-sand-200 font-medium">Artisans v&eacute;rifi&eacute;s</span>
             </div>
             <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/10 px-4 py-2 rounded-full">
-              <Star className="w-4 h-4 text-amber-400" />
-              <span className="text-sm text-slate-300 font-medium">Qualité contrôlée</span>
+              <Star className="w-4 h-4 text-secondary-400" />
+              <span className="text-sm text-sand-200 font-medium">Qualit&eacute; contr&ocirc;l&eacute;e</span>
             </div>
             {trade && (
               <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/10 px-4 py-2 rounded-full">
-                <Clock className="w-4 h-4 text-purple-400" />
-                <span className="text-sm text-slate-300 font-medium">{trade.averageResponseTime.split(',')[0]}</span>
+                <Clock className="w-4 h-4 text-primary-300" />
+                <span className="text-sm text-sand-200 font-medium">{trade.averageResponseTime.split(',')[0]}</span>
               </div>
             )}
           </div>
@@ -399,9 +395,9 @@ export default async function ServicePage({ params }: PageProps) {
           <div className="mt-10">
             <Link
               href={`/devis/${serviceSlug}`}
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-[0_8px_30px_-4px_rgba(245,158,11,0.5)] hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
+              className="inline-flex items-center gap-2 bg-primary-400 hover:bg-primary-500 text-white font-bold px-8 py-4 rounded-xl shadow-cta hover:shadow-cta-hover hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
             >
-              Comparer les artisans près de chez moi
+              Comparer les artisans pr&egrave;s de chez moi
               <ArrowRight className="w-5 h-5" />
             </Link>
           </div>
@@ -434,19 +430,19 @@ export default async function ServicePage({ params }: PageProps) {
           </div>
           <SocialProofBanner metier={service.name} variant="card" />
 
-          <div className="mt-6 bg-gradient-to-r from-clay-500 to-clay-600 rounded-2xl p-8 text-center">
-            <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">
+          <div className="mt-6 bg-gradient-primary rounded-2xl p-8 text-center">
+            <h2 className="font-heading text-xl sm:text-2xl font-bold text-white mb-2">
               Besoin d&apos;un {service.name.toLowerCase()} ?
             </h2>
-            <p className="text-clay-100 mb-6">
-              Recevez jusqu&apos;à 3 devis gratuits en 2 minutes
+            <p className="text-primary-100 mb-6">
+              Recevez jusqu&apos;&agrave; 3 devis gratuits en 2 minutes
             </p>
             <Link
               href={`/devis/${serviceSlug}`}
-              className="inline-flex items-center gap-2 bg-white text-clay-600 hover:bg-clay-50 px-8 py-3.5 rounded-xl font-semibold transition-colors shadow-lg"
+              className="inline-flex items-center gap-2 bg-white text-primary-600 hover:bg-sand-50 px-8 py-3.5 rounded-xl font-semibold transition-colors shadow-cta"
             >
               <FileText className="w-5 h-5" />
-              Comparer les artisans près de chez moi
+              Comparer les artisans pr&egrave;s de chez moi
             </Link>
           </div>
         </div>
@@ -455,7 +451,7 @@ export default async function ServicePage({ params }: PageProps) {
       {/* Search by city */}
       <section className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 tracking-tight">
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6 tracking-tight">
             Trouver un {service.name.toLowerCase()} par ville
           </h2>
 
@@ -465,16 +461,16 @@ export default async function ServicePage({ params }: PageProps) {
               <Link
                 key={city.id}
                 href={`/services/${serviceSlug}/${city.slug}`}
-                className="bg-white rounded-lg border border-gray-200 p-4 hover:border-blue-300 hover:shadow-md transition-all group"
+                className="bg-white rounded-lg border border-sand-200 p-4 hover:border-primary-300 hover:shadow-card-hover transition-all group"
               >
                 <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-gray-400 group-hover:text-blue-600" />
-                  <span className="font-medium text-gray-900 group-hover:text-blue-600 truncate">
+                  <MapPin className="w-4 h-4 text-charcoal-400 group-hover:text-primary-500" />
+                  <span className="font-medium text-charcoal-900 group-hover:text-primary-500 truncate">
                     {city.name}
                   </span>
                 </div>
                 {city.department_code && (
-                  <span className="text-xs text-gray-500 mt-1 block">
+                  <span className="text-xs text-charcoal-500 mt-1 block">
                     ({city.department_code})
                   </span>
                 )}
@@ -488,7 +484,7 @@ export default async function ServicePage({ params }: PageProps) {
               {Object.entries(citiesByRegion)
                 .map(([region, cities]) => (
                   <div key={region}>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                    <h3 className="font-heading text-lg font-semibold text-charcoal-900 mb-4">
                       {service.name} en {region}
                     </h3>
                     <div className="flex flex-wrap gap-2">
@@ -496,13 +492,13 @@ export default async function ServicePage({ params }: PageProps) {
                         <Link
                           key={city.id}
                           href={`/services/${serviceSlug}/${city.slug}`}
-                          className="text-sm bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 px-4 py-2.5 rounded-full transition-colors"
+                          className="text-sm bg-sand-200 hover:bg-primary-50 text-charcoal-700 hover:text-primary-600 px-4 py-2.5 rounded-full transition-colors"
                         >
                           {city.name}
                         </Link>
                       ))}
                       {cities.length > 10 && (
-                        <span className="text-sm text-gray-500 px-3 py-1.5">
+                        <span className="text-sm text-charcoal-500 px-3 py-1.5">
                           +{cities.length - 10} villes
                         </span>
                       )}
@@ -515,9 +511,9 @@ export default async function ServicePage({ params }: PageProps) {
       </section>
 
       {/* Par département — SEO internal links to service+ville pages */}
-      <section className="py-12 border-t">
+      <section className="py-12 border-t border-sand-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-8 tracking-tight">
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-8 tracking-tight">
             {service.name} par département
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -525,9 +521,9 @@ export default async function ServicePage({ params }: PageProps) {
               const deptVilles = getVillesByDepartement(dept.code)
               if (deptVilles.length === 0) return null
               return (
-                <div key={dept.code} className="bg-gray-50 rounded-xl p-5">
-                  <h3 className="font-semibold text-gray-900 mb-3 text-sm">
-                    <Link href={`/departements/${dept.slug}`} className="hover:text-blue-600 transition-colors">
+                <div key={dept.code} className="bg-sand-50 rounded-xl p-5">
+                  <h3 className="font-semibold text-charcoal-900 mb-3 text-sm">
+                    <Link href={`/departements/${dept.slug}`} className="hover:text-primary-500 transition-colors">
                       {dept.name} ({dept.code})
                     </Link>
                   </h3>
@@ -536,7 +532,7 @@ export default async function ServicePage({ params }: PageProps) {
                       <Link
                         key={ville.slug}
                         href={`/services/${serviceSlug}/${ville.slug}`}
-                        className="text-xs text-gray-600 hover:text-blue-600 px-2.5 py-1 bg-white rounded-full border border-gray-200 hover:border-blue-200 transition-colors"
+                        className="text-xs text-charcoal-600 hover:text-primary-500 px-2.5 py-1 bg-white rounded-full border border-sand-200 hover:border-primary-200 transition-colors"
                       >
                         {ville.name}
                       </Link>
@@ -544,7 +540,7 @@ export default async function ServicePage({ params }: PageProps) {
                     {deptVilles.length > 5 && (
                       <Link
                         href={`/departements/${dept.slug}`}
-                        className="text-xs text-blue-600 px-2.5 py-1"
+                        className="text-xs text-primary-500 px-2.5 py-1"
                       >
                         +{deptVilles.length - 5} villes
                       </Link>
@@ -555,9 +551,9 @@ export default async function ServicePage({ params }: PageProps) {
             })}
           </div>
           <div className="mt-6 flex flex-wrap gap-4 text-sm">
-            <Link href="/departements" className="text-blue-600 hover:underline">Tous les départements →</Link>
-            <Link href="/regions" className="text-blue-600 hover:underline">Toutes les régions →</Link>
-            <Link href="/villes" className="text-blue-600 hover:underline">Toutes les villes →</Link>
+            <Link href="/departements" className="text-primary-500 hover:underline">Tous les départements →</Link>
+            <Link href="/regions" className="text-primary-500 hover:underline">Toutes les régions →</Link>
+            <Link href="/villes" className="text-primary-500 hover:underline">Toutes les villes →</Link>
           </div>
         </div>
       </section>
@@ -566,7 +562,7 @@ export default async function ServicePage({ params }: PageProps) {
       {recentProviders && recentProviders.length > 0 && (
         <section className="py-12 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 tracking-tight">
+            <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6 tracking-tight">
               {service.name}s récemment ajoutés
             </h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -576,13 +572,13 @@ export default async function ServicePage({ params }: PageProps) {
                   <Link
                     key={provider.id}
                     href={`/services/${serviceSlug}/${location?.slug || 'france'}/${provider.stable_id || provider.slug}`}
-                    className="bg-gray-50 rounded-lg p-4 hover:bg-blue-50 transition-colors group"
+                    className="bg-sand-50 rounded-lg p-4 hover:bg-primary-50 transition-colors group"
                   >
-                    <h3 className="font-semibold text-gray-900 group-hover:text-blue-600">
+                    <h3 className="font-semibold text-charcoal-900 group-hover:text-primary-500">
                       {provider.name}
                     </h3>
                     {provider.address_city && (
-                      <p className="text-sm text-gray-500 mt-1 flex items-center gap-1">
+                      <p className="text-sm text-charcoal-500 mt-1 flex items-center gap-1">
                         <MapPin className="w-3 h-3" />
                         {provider.address_postal_code} {provider.address_city}
                       </p>
@@ -599,7 +595,7 @@ export default async function ServicePage({ params }: PageProps) {
       {trade && (
         <section className="py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-xl p-8 shadow-sm">
+            <div className="bg-white rounded-xl p-8 shadow-soft">
               <PriceTable tasks={trade.commonTasks} tradeName={service.name} priceRange={trade.priceRange} />
             </div>
           </div>
@@ -614,18 +610,18 @@ export default async function ServicePage({ params }: PageProps) {
               {/* Conseils pratiques */}
               <div className="lg:col-span-2">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 bg-blue-100 rounded-lg">
-                    <Shield className="w-6 h-6 text-blue-600" />
+                  <div className="p-2 bg-primary-50 rounded-lg">
+                    <Shield className="w-6 h-6 text-primary-500" />
                   </div>
-                  <h2 className="text-2xl font-bold text-gray-900">
+                  <h2 className="text-2xl font-bold text-charcoal-900">
                     Conseils pour choisir votre {service.name.toLowerCase()}
                   </h2>
                 </div>
                 <div className="space-y-4">
                   {trade.tips.map((tip, i) => (
-                    <div key={i} className="flex gap-3 p-4 bg-blue-50 rounded-lg">
-                      <BadgeCheck className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                      <p className="text-gray-700 text-sm leading-relaxed">{tip}</p>
+                    <div key={i} className="flex gap-3 p-4 bg-accent-50 rounded-lg">
+                      <BadgeCheck className="w-5 h-5 text-primary-500 mt-0.5 flex-shrink-0" />
+                      <p className="text-charcoal-700 text-sm leading-relaxed">{tip}</p>
                     </div>
                   ))}
                 </div>
@@ -633,14 +629,14 @@ export default async function ServicePage({ params }: PageProps) {
 
               {/* Certifications + Urgence */}
               <div className="space-y-6">
-                <div className="bg-gray-50 rounded-xl p-6">
+                <div className="bg-sand-50 rounded-xl p-6">
                   <div className="flex items-center gap-2 mb-4">
                     <BadgeCheck className="w-5 h-5 text-green-600" />
-                    <h3 className="font-semibold text-gray-900">Certifications à vérifier</h3>
+                    <h3 className="font-semibold text-charcoal-900">Certifications à vérifier</h3>
                   </div>
                   <ul className="space-y-2">
                     {trade.certifications.map((cert, i) => (
-                      <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
+                      <li key={i} className="flex items-start gap-2 text-sm text-charcoal-700">
                         <span className="text-green-500 mt-1">✓</span>
                         {cert}
                       </li>
@@ -658,12 +654,12 @@ export default async function ServicePage({ params }: PageProps) {
                   </div>
                 )}
 
-                <div className="bg-blue-50 rounded-xl p-6">
+                <div className="bg-accent-50 rounded-xl p-6">
                   <div className="flex items-center gap-2 mb-3">
-                    <Wrench className="w-5 h-5 text-blue-600" />
-                    <h3 className="font-semibold text-gray-900">Délai d&apos;intervention</h3>
+                    <Wrench className="w-5 h-5 text-primary-500" />
+                    <h3 className="font-semibold text-charcoal-900">Délai d&apos;intervention</h3>
                   </div>
-                  <p className="text-sm text-gray-700">{trade.averageResponseTime}</p>
+                  <p className="text-sm text-charcoal-700">{trade.averageResponseTime}</p>
                 </div>
               </div>
             </div>
@@ -675,20 +671,20 @@ export default async function ServicePage({ params }: PageProps) {
       {trade && (
         <section className="py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-            <h2 className="text-xl font-heading font-semibold text-gray-900">
+            <h2 className="text-xl font-heading font-semibold text-charcoal-900">
               Pourquoi faire appel à un {service.name.toLowerCase()} professionnel ?
             </h2>
-            <p className="text-gray-700 leading-relaxed">
+            <p className="text-charcoal-700 leading-relaxed">
               Faire appel à un {service.name.toLowerCase()} professionnel garantit un travail conforme aux normes en vigueur
               et couvert par une assurance décennale. Un artisan qualifié dispose de l&apos;expérience,
               de l&apos;outillage adapté et des certifications nécessaires pour réaliser vos travaux en toute sécurité.
               De plus, recourir à un professionnel référencé vous protège en cas de malfaçon.
             </p>
 
-            <h2 className="text-xl font-heading font-semibold text-gray-900">
+            <h2 className="text-xl font-heading font-semibold text-charcoal-900">
               Quelles certifications doit avoir un {service.name.toLowerCase()} ?
             </h2>
-            <p className="text-gray-700 leading-relaxed">
+            <p className="text-charcoal-700 leading-relaxed">
               {trade.certifications.length > 0
                 ? `Un ${service.name.toLowerCase()} qualifié doit idéalement posséder les certifications suivantes : ${trade.certifications.slice(0, 3).join(', ')}. Ces labels garantissent un niveau de compétence reconnu et vous permettent, dans certains cas, de bénéficier d'aides financières de l'État.`
                 : `Un ${service.name.toLowerCase()} doit au minimum disposer d'une assurance responsabilité civile professionnelle et d'une garantie décennale. Vérifiez également son inscription au registre des métiers et son numéro SIRET.`
@@ -703,19 +699,19 @@ export default async function ServicePage({ params }: PageProps) {
         <section className="py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-3 mb-8">
-              <h2 className="text-2xl font-bold text-gray-900">
+              <h2 className="text-2xl font-bold text-charcoal-900">
                 Questions fréquentes — {service.name}
               </h2>
             </div>
             <div className="space-y-4">
               {trade.faq.map((item, i) => (
-                <details key={i} className="group bg-white rounded-xl shadow-sm border border-gray-100">
+                <details key={i} className="group bg-white rounded-xl shadow-soft border border-sand-200">
                   <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
-                    <h3 className="font-semibold text-gray-900 pr-4">{item.q}</h3>
-                    <ChevronDown className="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform flex-shrink-0" />
+                    <h3 className="font-semibold text-charcoal-900 pr-4">{item.q}</h3>
+                    <ChevronDown className="w-5 h-5 text-primary-400 group-open:rotate-180 transition-transform flex-shrink-0" />
                   </summary>
                   <div className="px-6 pb-6 pt-0">
-                    <p className="text-gray-600 leading-relaxed">{item.a}</p>
+                    <p className="text-charcoal-600 leading-relaxed">{item.a}</p>
                   </div>
                 </details>
               ))}
@@ -728,8 +724,8 @@ export default async function ServicePage({ params }: PageProps) {
       {!trade && (
         <section className="py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-xl p-8 shadow-sm">
-              <h2 className="font-heading text-2xl font-bold text-gray-900 mb-4 tracking-tight">
+            <div className="bg-white rounded-xl p-8 shadow-soft">
+              <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-4 tracking-tight">
                 Comment trouver un bon {service.name.toLowerCase()} ?
               </h2>
               <div className="prose prose-gray max-w-none">
@@ -828,21 +824,21 @@ export default async function ServicePage({ params }: PageProps) {
                 <div className="p-2 bg-amber-100 rounded-lg">
                   <BookOpen className="w-5 h-5 text-amber-600" />
                 </div>
-                <h2 className="text-xl font-bold text-gray-900">Guides utiles</h2>
+                <h2 className="text-xl font-bold text-charcoal-900">Guides utiles</h2>
               </div>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {guides.map((guide) => (
                   <Link
                     key={guide.slug}
                     href={`/guides/${guide.slug}`}
-                    className="flex items-start gap-3 p-5 bg-gray-50 hover:bg-amber-50 rounded-xl border border-gray-200 hover:border-amber-300 transition-all group"
+                    className="flex items-start gap-3 p-5 bg-sand-50 hover:bg-amber-50 rounded-xl border border-sand-200 hover:border-amber-300 transition-all group"
                   >
-                    <BookOpen className="w-5 h-5 text-gray-400 group-hover:text-amber-600 mt-0.5 flex-shrink-0" />
+                    <BookOpen className="w-5 h-5 text-charcoal-400 group-hover:text-amber-600 mt-0.5 flex-shrink-0" />
                     <div>
-                      <span className="font-medium text-gray-900 group-hover:text-amber-600 text-sm">
+                      <span className="font-medium text-charcoal-900 group-hover:text-amber-600 text-sm">
                         {guide.title}
                       </span>
-                      <span className="block text-xs text-gray-500 mt-1">Lire le guide complet</span>
+                      <span className="block text-xs text-charcoal-500 mt-1">Lire le guide complet</span>
                     </div>
                   </Link>
                 ))}
@@ -853,22 +849,22 @@ export default async function ServicePage({ params }: PageProps) {
       })()}
 
       {/* CTA */}
-      <section className="relative py-16 overflow-hidden bg-gradient-to-br from-[#0a0f1e] via-[#111827] to-[#0a0f1e]">
+      <section className="relative py-16 overflow-hidden bg-gradient-hero">
         <div className="absolute inset-0" style={{
-          background: 'radial-gradient(ellipse 50% 60% at 50% 50%, rgba(245,158,11,0.06) 0%, transparent 60%)',
+          background: 'radial-gradient(ellipse 50% 60% at 50% 50%, rgba(232,107,75,0.08) 0%, transparent 60%)',
         }} />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4">
-            Vous êtes {service.name.toLowerCase()} ?
+            Vous &ecirc;tes {service.name.toLowerCase()} ?
           </h2>
-          <p className="text-slate-400 mb-8 max-w-xl mx-auto">
-            Inscrivez-vous gratuitement et recevez des demandes de devis qualifiées
+          <p className="text-sand-400 mb-8 max-w-xl mx-auto">
+            Inscrivez-vous gratuitement et recevez des demandes de devis qualifi&eacute;es
           </p>
           <Link
             href="/inscription-artisan"
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 text-slate-900 font-bold px-8 py-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-[0_8px_30px_-4px_rgba(245,158,11,0.5)] hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
+            className="inline-flex items-center gap-2 bg-primary-400 hover:bg-primary-500 text-white font-bold px-8 py-4 rounded-xl shadow-cta hover:shadow-cta-hover hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
           >
-            Créer mon profil
+            Cr&eacute;er mon profil
             <ArrowRight className="w-5 h-5" />
           </Link>
         </div>
@@ -877,9 +873,9 @@ export default async function ServicePage({ params }: PageProps) {
       {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
       <section className="mb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
-            <h3 className="text-sm font-semibold text-slate-700 mb-2">Méthodologie éditoriale</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">
+          <div className="bg-sand-100 rounded-2xl border border-sand-300 p-6">
+            <h3 className="text-sm font-semibold text-charcoal-700 mb-2">M&eacute;thodologie &eacute;ditoriale</h3>
+            <p className="text-xs text-charcoal-500 leading-relaxed">
               Les tarifs et informations présentés sont indicatifs, basés sur des moyennes nationales et régionales. Les artisans sont référencés via leur numéro SIREN. ServicesArtisans est un annuaire indépendant — nous ne réalisons pas de travaux et ne garantissons pas les prestations.
             </p>
           </div>
@@ -887,19 +883,19 @@ export default async function ServicePage({ params }: PageProps) {
       </section>
 
       {/* Trust & Safety Links (E-E-A-T) */}
-      <section className="py-8 bg-white border-t">
+      <section className="py-8 bg-white border-t border-sand-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
-            Confiance &amp; Sécurité
+          <h2 className="text-sm font-semibold text-charcoal-500 uppercase tracking-wide mb-3">
+            Confiance &amp; S&eacute;curit&eacute;
           </h2>
           <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-            <Link href="/notre-processus-de-verification" className="text-blue-600 hover:text-blue-800">
+            <Link href="/notre-processus-de-verification" className="text-primary-500 hover:text-primary-700">
               Comment nous référençons les artisans
             </Link>
-            <Link href="/politique-avis" className="text-blue-600 hover:text-blue-800">
+            <Link href="/politique-avis" className="text-primary-500 hover:text-primary-700">
               Notre politique des avis
             </Link>
-            <Link href="/mediation" className="text-blue-600 hover:text-blue-800">
+            <Link href="/mediation" className="text-primary-500 hover:text-primary-700">
               Service de médiation
             </Link>
           </nav>
@@ -909,10 +905,10 @@ export default async function ServicePage({ params }: PageProps) {
       {/* Voir aussi - Autres services */}
       <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 tracking-tight">Voir aussi</h2>
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6 tracking-tight">Voir aussi</h2>
           <div className="grid md:grid-cols-2 gap-8">
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4">Services connexes</h3>
+              <h3 className="font-semibold text-charcoal-900 mb-4">Services connexes</h3>
               <div className="flex flex-wrap gap-2">
                 {(relatedServices[serviceSlug] || popularServices.filter(s => s.slug !== serviceSlug).map(s => s.slug))
                   .slice(0, 6)
@@ -923,24 +919,24 @@ export default async function ServicePage({ params }: PageProps) {
                       <Link
                         key={slug}
                         href={`/services/${slug}`}
-                        className="inline-flex items-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-full text-sm transition-colors"
+                        className="inline-flex items-center gap-2 px-4 py-2.5 bg-sand-200 hover:bg-primary-50 text-charcoal-700 hover:text-primary-500 rounded-full text-sm transition-colors"
                       >
                         {svc.name}
                       </Link>
                     )
                   })}
               </div>
-              <h3 className="font-semibold text-gray-900 mb-4 mt-6">Outils pratiques</h3>
+              <h3 className="font-semibold text-charcoal-900 mb-4 mt-6">Outils pratiques</h3>
               <div className="flex flex-wrap gap-2">
                 <Link
                   href="/outils/calculateur-prix"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-full text-sm transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-sand-200 hover:bg-primary-50 text-charcoal-700 hover:text-primary-500 rounded-full text-sm transition-colors"
                 >
                   Calculateur de prix
                 </Link>
                 <Link
                   href="/outils/diagnostic"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-full text-sm transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-sand-200 hover:bg-primary-50 text-charcoal-700 hover:text-primary-500 rounded-full text-sm transition-colors"
                 >
                   Diagnostic artisan
                 </Link>
@@ -959,20 +955,20 @@ export default async function ServicePage({ params }: PageProps) {
               if (relatedArticles.length === 0) return null
               return (
                 <div className="mt-8">
-                  <h3 className="font-semibold text-gray-900 mb-4">Articles sur ce métier</h3>
+                  <h3 className="font-semibold text-charcoal-900 mb-4">Articles sur ce métier</h3>
                   <div className="grid md:grid-cols-2 gap-3">
                     {relatedArticles.map((article) => (
                       <Link
                         key={article.slug}
                         href={`/blog/${article.slug}`}
-                        className="flex items-start gap-3 p-4 bg-gray-50 hover:bg-blue-50 rounded-xl border border-gray-100 hover:border-blue-200 transition-colors group"
+                        className="flex items-start gap-3 p-4 bg-sand-50 hover:bg-accent-50 rounded-xl border border-sand-200 hover:border-primary-200 transition-colors group"
                       >
                         <span className="text-2xl flex-shrink-0">{article.image}</span>
                         <div>
-                          <div className="font-medium text-gray-900 group-hover:text-blue-600 text-sm leading-snug">
+                          <div className="font-medium text-charcoal-900 group-hover:text-primary-500 text-sm leading-snug">
                             {article.title}
                           </div>
-                          <div className="text-xs text-gray-500 mt-1">{article.readTime} · {article.category}</div>
+                          <div className="text-xs text-charcoal-500 mt-1">{article.readTime} · {article.category}</div>
                         </div>
                       </Link>
                     ))}
@@ -984,13 +980,13 @@ export default async function ServicePage({ params }: PageProps) {
           {/* Intent variants — devis, avis, tarifs by city */}
           <div className="mt-8 grid md:grid-cols-3 gap-8">
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4">Devis {service.name.toLowerCase()} par ville</h3>
+              <h3 className="font-semibold text-charcoal-900 mb-4">Devis {service.name.toLowerCase()} par ville</h3>
               <div className="flex flex-wrap gap-2">
                 {topCities?.slice(0, 12).map((city) => (
                   <Link
                     key={`devis-${city.slug}`}
                     href={`/devis/${serviceSlug}/${city.slug}`}
-                    className="text-sm text-gray-600 hover:text-blue-600 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-100 hover:border-blue-200 transition-colors"
+                    className="text-sm text-charcoal-600 hover:text-primary-500 px-3 py-1.5 bg-sand-50 rounded-full border border-sand-200 hover:border-primary-200 transition-colors"
                   >
                     {city.name}
                   </Link>
@@ -998,13 +994,13 @@ export default async function ServicePage({ params }: PageProps) {
               </div>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4">Avis {service.name.toLowerCase()} par ville</h3>
+              <h3 className="font-semibold text-charcoal-900 mb-4">Avis {service.name.toLowerCase()} par ville</h3>
               <div className="flex flex-wrap gap-2">
                 {topCities?.slice(0, 12).map((city) => (
                   <Link
                     key={`avis-${city.slug}`}
                     href={`/avis/${serviceSlug}/${city.slug}`}
-                    className="text-sm text-gray-600 hover:text-blue-600 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-100 hover:border-blue-200 transition-colors"
+                    className="text-sm text-charcoal-600 hover:text-primary-500 px-3 py-1.5 bg-sand-50 rounded-full border border-sand-200 hover:border-primary-200 transition-colors"
                   >
                     {city.name}
                   </Link>
@@ -1012,13 +1008,13 @@ export default async function ServicePage({ params }: PageProps) {
               </div>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4">Tarifs {service.name.toLowerCase()} par ville</h3>
+              <h3 className="font-semibold text-charcoal-900 mb-4">Tarifs {service.name.toLowerCase()} par ville</h3>
               <div className="flex flex-wrap gap-2">
                 {topCities?.slice(0, 12).map((city) => (
                   <Link
                     key={`tarifs-${city.slug}`}
                     href={`/tarifs/${serviceSlug}/${city.slug}`}
-                    className="text-sm text-gray-600 hover:text-blue-600 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-100 hover:border-blue-200 transition-colors"
+                    className="text-sm text-charcoal-600 hover:text-primary-500 px-3 py-1.5 bg-sand-50 rounded-full border border-sand-200 hover:border-primary-200 transition-colors"
                   >
                     {city.name}
                   </Link>
@@ -1032,14 +1028,6 @@ export default async function ServicePage({ params }: PageProps) {
       {/* Internal Links Footer */}
 
       <StickyMobileCTA serviceSlug={serviceSlug} />
-
-      <EstimationWidget context={{
-        metier: service.name,
-        metierSlug: serviceSlug,
-        ville: 'France',
-        departement: '',
-        pageUrl: `/services/${serviceSlug}`,
-      }} />
 
       <ExitIntentPopup
         sessionKey="sa:exit-services"

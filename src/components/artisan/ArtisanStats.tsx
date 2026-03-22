@@ -49,30 +49,29 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
       icon: MessageCircle,
       label: 'Avis clients',
       value: artisan.review_count.toString(),
-      color: 'text-clay-600',
-      bgColor: 'bg-clay-50 border-clay-100',
+      color: 'text-primary-600',
+      bgColor: 'bg-primary-50 border-primary-100',
     })
   }
 
-  // Company creation year (from SIRENE / provider data)
+  // Company creation year
   if (artisan.creation_date) {
     const year = new Date(artisan.creation_date).getFullYear()
     const age = currentYear - year
     stats.push({
       icon: Calendar,
-      label: age > 1 ? `${age} ans d'expérience` : 'Entreprise créée',
+      label: age > 1 ? `${age} ans d'experience` : 'Entreprise creee',
       value: year.toString(),
-      color: 'text-stone-700',
-      bgColor: 'bg-sand-200 border-sand-300',
+      color: 'text-charcoal-700',
+      bgColor: 'bg-sand-100 border-sand-200',
     })
   } else if (artisan.member_since && parseInt(artisan.member_since, 10) < currentYear) {
-    // member_since is the platform join year — only show if it's a meaningful past year
     stats.push({
       icon: Calendar,
       label: 'Membre depuis',
       value: artisan.member_since,
-      color: 'text-stone-700',
-      bgColor: 'bg-sand-200 border-sand-300',
+      color: 'text-charcoal-700',
+      bgColor: 'bg-sand-100 border-sand-200',
     })
   }
 
@@ -80,10 +79,10 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
   if (artisan.is_verified) {
     stats.push({
       icon: Shield,
-      label: 'Identité vérifiée',
+      label: 'Identite verifiee',
       value: 'SIRET',
-      color: 'text-clay-700',
-      bgColor: 'bg-clay-50 border-clay-100',
+      color: 'text-accent-700',
+      bgColor: 'bg-accent-50 border-accent-200',
     })
   }
 
@@ -91,10 +90,10 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
   if (artisan.available_24h) {
     stats.push({
       icon: Clock,
-      label: 'Disponibilité',
+      label: 'Disponibilite',
       value: '24h/7j',
-      color: 'text-clay-500',
-      bgColor: 'bg-clay-50 border-clay-100',
+      color: 'text-primary-500',
+      bgColor: 'bg-primary-50 border-primary-100',
     })
   }
 
@@ -104,8 +103,8 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
       icon: CheckCircle,
       label: 'Devis',
       value: 'Gratuit',
-      color: 'text-stone-700',
-      bgColor: 'bg-sand-200 border-sand-300',
+      color: 'text-accent-700',
+      bgColor: 'bg-accent-50 border-accent-200',
     })
   }
 
@@ -113,11 +112,11 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
   if (artisan.team_size && artisan.team_size > 1) {
     stats.push({
       icon: Users,
-      label: 'Équipe',
+      label: 'Equipe',
       value: artisan.team_size.toString(),
       subValue: 'pers.',
-      color: 'text-stone-700',
-      bgColor: 'bg-sand-200 border-sand-300',
+      color: 'text-charcoal-700',
+      bgColor: 'bg-sand-100 border-sand-200',
     })
   }
 
@@ -128,8 +127,8 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
       label: "Zone d'action",
       value: artisan.intervention_radius_km.toString(),
       subValue: 'km',
-      color: 'text-clay-600',
-      bgColor: 'bg-clay-50 border-clay-100',
+      color: 'text-primary-600',
+      bgColor: 'bg-primary-50 border-primary-100',
     })
   }
 
@@ -147,13 +146,13 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.1 }}
-      className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 overflow-hidden"
+      className="bg-white rounded-2xl shadow-soft border border-sand-200 overflow-hidden"
     >
       {/* Section header */}
       <div className="px-6 pt-6 pb-2">
-        <h2 className="text-xl font-semibold text-gray-900 font-heading flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-lg bg-clay-50 flex items-center justify-center">
-            <Award className="w-4.5 h-4.5 text-clay-400" aria-hidden="true" />
+        <h2 className="text-xl font-semibold text-charcoal-900 font-heading flex items-center gap-2.5">
+          <div className="w-9 h-9 rounded-lg bg-primary-50 flex items-center justify-center">
+            <Award className="w-4.5 h-4.5 text-primary-400" aria-hidden="true" />
           </div>
           En bref
         </h2>
@@ -164,7 +163,7 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
         <div
           className={`grid grid-cols-2 ${gridCols} gap-3`}
           role="list"
-          aria-label="Informations clés de l'artisan"
+          aria-label="Informations cles de l'artisan"
         >
           {stats.map((stat, index) => (
             <motion.div
@@ -183,15 +182,15 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
                 <stat.icon className="w-5 h-5" />
               </div>
               <div
-                className="text-2xl font-bold text-gray-900 leading-none"
+                className="text-2xl font-bold text-charcoal-900 leading-none"
                 aria-label={`${stat.label} : ${stat.value}${stat.subValue ? ' ' + stat.subValue : ''}`}
               >
                 {stat.value}
                 {stat.subValue && (
-                  <span className="text-sm font-normal text-slate-500 ml-0.5">{stat.subValue}</span>
+                  <span className="text-sm font-normal text-charcoal-500 ml-0.5">{stat.subValue}</span>
                 )}
               </div>
-              <div className="text-xs text-slate-500 mt-1.5 font-medium leading-tight" aria-hidden="true">
+              <div className="text-xs text-charcoal-500 mt-1.5 font-medium leading-tight" aria-hidden="true">
                 {stat.label}
               </div>
             </motion.div>

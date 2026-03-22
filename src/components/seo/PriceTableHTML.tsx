@@ -69,25 +69,25 @@ export default function PriceTableHTML({
     : `Tarifs ${serviceName.toLowerCase()} en France — 2026`
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
+    <div className="overflow-x-auto rounded-xl border border-sand-300 shadow-sm">
       <table className="w-full text-left">
-        <caption className="px-5 py-3 text-left text-base font-semibold text-gray-900 bg-white border-b border-gray-100">
+        <caption className="px-5 py-3 text-left text-base font-semibold text-charcoal-900 bg-white border-b border-sand-200">
           {captionText}
           {unit && (
-            <span className="ml-2 text-sm font-normal text-gray-500">
+            <span className="ml-2 text-sm font-normal text-charcoal-500">
               ({unit})
             </span>
           )}
         </caption>
         <thead>
-          <tr className="bg-gray-50 border-b border-gray-200">
-            <th scope="col" className="px-5 py-3.5 text-sm font-semibold text-gray-700">
+          <tr className="bg-sand-50 border-b border-sand-300">
+            <th scope="col" className="px-5 py-3.5 text-sm font-semibold text-charcoal-700">
               Prestation
             </th>
-            <th scope="col" className="px-5 py-3.5 text-sm font-semibold text-gray-700 text-right">
+            <th scope="col" className="px-5 py-3.5 text-sm font-semibold text-charcoal-700 text-right">
               Prix indicatif
             </th>
-            <th scope="col" className="hidden sm:table-cell px-5 py-3.5 text-sm font-semibold text-gray-700 text-center w-28">
+            <th scope="col" className="hidden sm:table-cell px-5 py-3.5 text-sm font-semibold text-charcoal-700 text-center w-28">
               Action
             </th>
           </tr>
@@ -99,35 +99,35 @@ export default function PriceTableHTML({
             return (
               <tr
                 key={i}
-                className={`hover:bg-blue-50/60 transition-colors ${i % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}
+                className={`hover:bg-primary-50/60 transition-colors ${i % 2 === 0 ? 'bg-white' : 'bg-sand-50/50'}`}
               >
-                <td className="px-5 py-4 text-sm border-t border-gray-100">
+                <td className="px-5 py-4 text-sm border-t border-sand-200">
                   {canLink ? (
                     <Link
                       href={`/tarifs/${serviceSlug}/${locationSlug}/${taskSlug}`}
-                      className="text-blue-700 hover:text-blue-900 hover:underline"
+                      className="text-primary-600 hover:text-primary-700 hover:underline"
                     >
                       {name}
                     </Link>
                   ) : (
-                    <span className="text-gray-800">{name}</span>
+                    <span className="text-charcoal-800">{name}</span>
                   )}
                 </td>
-                <td className="px-5 py-4 text-gray-900 text-sm font-medium border-t border-gray-100 text-right whitespace-nowrap">
+                <td className="px-5 py-4 text-charcoal-900 text-sm font-medium border-t border-sand-200 text-right whitespace-nowrap">
                   {price}
                 </td>
-                <td className="hidden sm:table-cell px-3 py-4 border-t border-gray-100 text-center">
+                <td className="hidden sm:table-cell px-3 py-4 border-t border-sand-200 text-center">
                   {serviceSlug ? (
                     <Link
                       href={locationSlug ? `/devis/${serviceSlug}/${locationSlug}` : `/devis/${serviceSlug}`}
-                      className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors"
+                      className="inline-flex items-center gap-1 text-xs font-semibold text-primary-500 hover:text-primary-700 bg-primary-50 hover:bg-primary-100 px-3 py-1.5 rounded-lg transition-colors"
                     >
                       Devis gratuit
                     </Link>
                   ) : (
                     <Link
                       href="/devis"
-                      className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors"
+                      className="inline-flex items-center gap-1 text-xs font-semibold text-primary-500 hover:text-primary-700 bg-primary-50 hover:bg-primary-100 px-3 py-1.5 rounded-lg transition-colors"
                     >
                       Devis gratuit
                     </Link>
@@ -138,8 +138,8 @@ export default function PriceTableHTML({
           })}
         </tbody>
         <tfoot>
-          <tr className="bg-gray-50/80 border-t border-gray-200">
-            <td colSpan={3} className="px-5 py-3 text-xs text-gray-500 italic">
+          <tr className="bg-sand-50/80 border-t border-sand-300">
+            <td colSpan={3} className="px-5 py-3 text-xs text-charcoal-500 italic">
               Prix indicatifs, peuvent varier selon la complexité des travaux, la région et le professionnel.
               {location && multiplier !== 1 && (
                 <span className="ml-1">

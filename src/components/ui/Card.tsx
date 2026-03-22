@@ -22,10 +22,10 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
     ref
   ) => {
     const variants = {
-      default: 'bg-white border border-gray-200 rounded-2xl shadow-sm',
-      outlined: 'bg-transparent border-2 border-gray-200 rounded-2xl',
-      elevated: 'bg-white rounded-2xl shadow-[0_4px_20px_-2px_rgba(0,0,0,0.06),0_12px_40px_-4px_rgba(0,0,0,0.08)]',
-      premium: 'bg-gradient-to-br from-white via-white to-blue-50/50 border border-blue-100/50 rounded-2xl shadow-[0_4px_20px_-2px_rgba(37,99,235,0.08),0_12px_40px_-4px_rgba(37,99,235,0.06)]',
+      default: 'bg-white border border-sand-300 rounded-2xl shadow-soft',
+      outlined: 'bg-transparent border-2 border-sand-400 rounded-2xl',
+      elevated: 'bg-white rounded-2xl shadow-[0_4px_20px_-2px_rgba(28,25,23,0.05),0_12px_40px_-4px_rgba(28,25,23,0.06)]',
+      premium: 'bg-gradient-to-br from-white via-white to-primary-50/50 border border-primary-100/50 rounded-2xl shadow-[0_4px_20px_-2px_rgba(232,107,75,0.06),0_12px_40px_-4px_rgba(232,107,75,0.04)]',
     }
 
     const paddings = {
@@ -42,7 +42,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
           variants[variant],
           paddings[padding],
           'transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]',
-          hover && 'hover:shadow-[0_12px_40px_-8px_rgba(0,0,0,0.12),0_20px_60px_-12px_rgba(0,0,0,0.15)] hover:-translate-y-1 cursor-pointer',
+          hover && 'hover:shadow-card-hover hover:-translate-y-1 cursor-pointer',
           className
         )}
         {...props}
@@ -65,8 +65,8 @@ export function CardHeader({ title, subtitle, action, className, ...props }: Car
   return (
     <div className={clsx('flex items-start justify-between', className)} {...props}>
       <div>
-        <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
-        {subtitle && <p className="mt-1 text-sm text-gray-500">{subtitle}</p>}
+        <h3 className="text-lg font-heading font-semibold text-charcoal-900">{title}</h3>
+        {subtitle && <p className="mt-1 text-sm text-charcoal-500">{subtitle}</p>}
       </div>
       {action && <div>{action}</div>}
     </div>
@@ -87,7 +87,7 @@ export interface CardFooterProps extends HTMLAttributes<HTMLDivElement> {}
 
 export function CardFooter({ className, children, ...props }: CardFooterProps) {
   return (
-    <div className={clsx('mt-6 pt-4 border-t border-gray-100', className)} {...props}>
+    <div className={clsx('mt-6 pt-4 border-t border-sand-200', className)} {...props}>
       {children}
     </div>
   )

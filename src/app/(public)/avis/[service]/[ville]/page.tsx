@@ -36,10 +36,6 @@ import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import VerticalCrossLinks from '@/components/seo/VerticalCrossLinks'
 import dynamic from 'next/dynamic'
 
-const EstimationWidget = dynamic(
-  () => import('@/components/estimation/EstimationWidget'),
-  { ssr: false }
-)
 
 const ExitIntentPopup = dynamic(
   () => import('@/components/ExitIntentPopup'),
@@ -1403,14 +1399,6 @@ export default async function AvisServiceVillePage({
       />
 
       <DeepPageLinks currentService={service} currentVille={villeSlug} currentIntent="avis" />
-
-      <EstimationWidget context={{
-        metier: trade.name,
-        metierSlug: service,
-        ville: villeData.name,
-        departement: villeData.departementCode,
-        pageUrl: `/avis/${service}/${villeSlug}`,
-      }} />
 
       <ExitIntentPopup
         sessionKey="sa:exit-avis"

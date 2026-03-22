@@ -61,12 +61,6 @@ import { SITE_URL } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
 import { getQuartierBySlug, services as staticServicesList, villes } from '@/lib/data/france'
 import ServiceQuartierPage from './ServiceQuartierPage'
-import dynamic from 'next/dynamic'
-
-const EstimationWidget = dynamic(
-  () => import('@/components/estimation/EstimationWidget'),
-  { ssr: false }
-)
 
 export const revalidate = 86400
 
@@ -576,20 +570,20 @@ export default async function ProviderPage({ params }: PageProps) {
       />
 
       {/* ─── DEVIS CTA BANNER ────────────────────────────────── */}
-      <section className="py-8 bg-gradient-to-r from-blue-50 to-blue-100 border-t border-b border-blue-200">
+      <section className="py-8 bg-gradient-to-r from-primary-50 to-sand-100 border-t border-b border-primary-200/40">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
-              <h2 className="text-lg font-bold text-gray-900">
+              <h2 className="text-lg font-bold text-charcoal-900 font-heading">
                 Besoin de ce professionnel ?
               </h2>
-              <p className="text-sm text-gray-600 mt-1">
+              <p className="text-sm text-charcoal-600 mt-1">
                 Demandez un devis gratuit et sans engagement.
               </p>
             </div>
             <Link
               href={`/devis/${serviceSlug}/${locationSlug}`}
-              className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-xl shadow-sm hover:shadow-md transition-all whitespace-nowrap"
+              className="inline-flex items-center gap-2 bg-primary-400 hover:bg-primary-600 text-white font-semibold px-6 py-3 rounded-xl shadow-cta hover:shadow-lg transition-all whitespace-nowrap"
             >
               Demander un devis gratuit
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -601,11 +595,11 @@ export default async function ProviderPage({ params }: PageProps) {
       </section>
 
       {/* Lien retour vers le listing service+location (maillage bidirectionnel) */}
-      <section className="py-6 bg-white border-t">
+      <section className="py-6 bg-white border-t border-sand-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link
             href={`/services/${serviceSlug}/${locationSlug}`}
-            className="inline-flex items-center gap-2 px-5 py-3 bg-gray-50 hover:bg-blue-50 border border-gray-200 hover:border-blue-200 rounded-xl text-sm font-medium text-gray-700 hover:text-blue-700 transition-all"
+            className="inline-flex items-center gap-2 px-5 py-3 bg-sand-50 hover:bg-primary-50 border border-sand-200 hover:border-primary-200 rounded-xl text-sm font-medium text-charcoal-700 hover:text-primary-600 transition-all"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -629,9 +623,9 @@ export default async function ProviderPage({ params }: PageProps) {
       {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
       <section className="mb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
-            <h3 className="text-sm font-semibold text-slate-700 mb-2">Informations sur ce profil</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">
+          <div className="bg-sand-50 rounded-2xl border border-sand-200 p-6">
+            <h3 className="text-sm font-semibold text-charcoal-700 mb-2">Informations sur ce profil</h3>
+            <p className="text-xs text-charcoal-500 leading-relaxed">
               Les informations de ce profil sont fournies par l&apos;artisan et vérifiées via l&apos;API SIRENE (INSEE). Les tarifs affichés, lorsqu&apos;ils sont renseignés, sont indicatifs et propres à cet artisan. Les avis sont collectés auprès de clients ayant fait appel à ses services. ServicesArtisans est un annuaire indépendant — nous facilitons la mise en relation mais ne garantissons pas les prestations.
             </p>
           </div>
@@ -639,37 +633,25 @@ export default async function ProviderPage({ params }: PageProps) {
       </section>
 
       {/* Trust & Safety Links (E-E-A-T) */}
-      <section className="py-8 bg-gray-50 border-t">
+      <section className="py-8 bg-sand-50 border-t border-sand-200">
         <div className="max-w-4xl mx-auto px-4">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+          <h2 className="text-sm font-semibold text-charcoal-500 uppercase tracking-wide mb-3">
             Confiance &amp; Sécurité
           </h2>
           <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-            <Link href="/notre-processus-de-verification" className="text-blue-600 hover:text-blue-800">
+            <Link href="/notre-processus-de-verification" className="text-primary-400 hover:text-primary-600">
               Comment nous référençons les artisans
             </Link>
-            <Link href="/politique-avis" className="text-blue-600 hover:text-blue-800">
+            <Link href="/politique-avis" className="text-primary-400 hover:text-primary-600">
               Notre politique des avis
             </Link>
-            <Link href="/mediation" className="text-blue-600 hover:text-blue-800">
+            <Link href="/mediation" className="text-primary-400 hover:text-primary-600">
               Service de médiation
             </Link>
           </nav>
         </div>
       </section>
 
-      <EstimationWidget hideLauncher context={{
-        metier: service?.name || artisan.specialty,
-        metierSlug: serviceSlug,
-        ville: artisan.city,
-        departement: location?.department_code || '',
-        pageUrl: `/services/${serviceSlug}/${locationSlug}/${publicId}`,
-        artisan: {
-          name: artisan.business_name || 'Artisan',
-          slug: provider.slug || '',
-          publicId: provider.stable_id || provider.slug || publicId,
-        },
-      }} />
     </>
   )
 }

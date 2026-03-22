@@ -34,14 +34,14 @@ export const LauncherButton = memo(function LauncherButton({
       onClick={onClick}
       aria-label="Ouvrir le chat d'estimation"
       className={
-        'relative flex items-center justify-center bg-[#E07040] text-white shadow-lg hover:bg-[#c9603a] focus:outline-none focus:ring-2 focus:ring-[#E07040] focus:ring-offset-2 transition-all duration-500 ' +
+        'relative flex items-center justify-center bg-primary-400 text-white shadow-cta hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 transition-all duration-500 ' +
         (isExpanded
           ? 'h-12 rounded-full px-5 gap-2.5'
           : 'h-14 w-14 rounded-full')
       }
     >
       {/* Ping ring animation */}
-      <span className="absolute inset-0 rounded-full bg-[#E07040] animate-ping opacity-20" />
+      <span className="absolute inset-0 rounded-full bg-primary-400 animate-ping opacity-20" />
 
       {/* Notification badge */}
       {showNotification && (

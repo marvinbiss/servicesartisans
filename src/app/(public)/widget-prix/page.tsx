@@ -104,14 +104,14 @@ export default function WidgetPrixPage() {
       <JsonLd data={webAppSchema} />
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 text-white">
+      <section className="bg-gradient-to-br from-primary-400 via-primary-500 to-primary-700 text-white">
         <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
           <Breadcrumb
             items={[
               { label: 'Accueil', href: '/' },
               { label: 'Widget Prix' },
             ]}
-            className="mb-8 text-blue-200"
+            className="mb-8 text-primary-200"
           />
 
           <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
@@ -123,14 +123,14 @@ export default function WidgetPrixPage() {
               <h1 className="mb-6 font-heading text-3xl font-extrabold leading-tight sm:text-4xl lg:text-5xl">
                 Widget Prix Artisan
               </h1>
-              <p className="mb-8 text-lg leading-relaxed text-blue-100">
+              <p className="mb-8 text-lg leading-relaxed text-primary-100">
                 Intégrez un widget de tarifs artisans sur votre site ou blog en une ligne de code.
                 Données actualisées, design responsive, {slugs.length} métiers et toutes les villes de France.
               </p>
               <div className="flex flex-wrap gap-4">
                 <a
                   href="#integration"
-                  className="inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 font-semibold text-blue-700 shadow-lg transition hover:bg-blue-50"
+                  className="inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 font-semibold text-primary-600 shadow-lg transition hover:bg-primary-50"
                 >
                   <Code className="h-5 w-5" />
                   Intégrer le widget
@@ -148,10 +148,10 @@ export default function WidgetPrixPage() {
             {/* Live preview */}
             <div className="relative">
               <div className="rounded-xl bg-white/10 p-4 backdrop-blur-sm">
-                <div className="mb-3 flex items-center gap-2 text-sm text-blue-200">
+                <div className="mb-3 flex items-center gap-2 text-sm text-primary-200">
                   <div className="h-3 w-3 rounded-full bg-red-400" />
-                  <div className="h-3 w-3 rounded-full bg-yellow-400" />
-                  <div className="h-3 w-3 rounded-full bg-green-400" />
+                  <div className="h-3 w-3 rounded-full bg-secondary-400" />
+                  <div className="h-3 w-3 rounded-full bg-accent-400" />
                   <span className="ml-2 font-mono text-xs">votre-site.fr</span>
                 </div>
                 <iframe
@@ -171,7 +171,7 @@ export default function WidgetPrixPage() {
       {/* Features */}
       <section className="bg-white py-16">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <h2 className="mb-12 text-center font-heading text-2xl font-bold text-gray-900 sm:text-3xl">
+          <h2 className="mb-12 text-center font-heading text-2xl font-bold text-charcoal-900 sm:text-3xl">
             Pourquoi utiliser notre widget ?
           </h2>
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
@@ -197,12 +197,12 @@ export default function WidgetPrixPage() {
                 desc: 'HTML auto-contenu avec CSS inline. Aucun script externe, aucun cookie.',
               },
             ].map(({ icon: Icon, title, desc }) => (
-              <div key={title} className="rounded-xl border border-gray-100 p-6 shadow-sm">
-                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+              <div key={title} className="rounded-xl border border-sand-200 p-6 shadow-soft hover:shadow-card-hover transition-shadow">
+                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-primary-50 text-primary-500">
                   <Icon className="h-5 w-5" />
                 </div>
-                <h3 className="mb-2 font-heading text-lg font-bold text-gray-900">{title}</h3>
-                <p className="text-sm leading-relaxed text-gray-600">{desc}</p>
+                <h3 className="mb-2 font-heading text-lg font-bold text-charcoal-900">{title}</h3>
+                <p className="text-sm leading-relaxed text-charcoal-600">{desc}</p>
               </div>
             ))}
           </div>
@@ -210,27 +210,27 @@ export default function WidgetPrixPage() {
       </section>
 
       {/* Integration section */}
-      <section id="integration" className="bg-gray-50 py-16">
+      <section id="integration" className="bg-sand-50 py-16">
         <div className="mx-auto max-w-4xl px-4 sm:px-6">
-          <h2 className="mb-4 font-heading text-2xl font-bold text-gray-900 sm:text-3xl">
+          <h2 className="mb-4 font-heading text-2xl font-bold text-charcoal-900 sm:text-3xl">
             Intégration en 1 minute
           </h2>
-          <p className="mb-8 text-gray-600">
+          <p className="mb-8 text-charcoal-600">
             Copiez-collez ce code HTML dans votre site ou article de blog. Modifiez les paramètres
-            <code className="mx-1 rounded bg-gray-200 px-1.5 py-0.5 text-sm font-mono text-blue-700">service</code>
+            <code className="mx-1 rounded bg-sand-200 px-1.5 py-0.5 text-sm font-mono text-primary-600">service</code>
             et
-            <code className="mx-1 rounded bg-gray-200 px-1.5 py-0.5 text-sm font-mono text-blue-700">ville</code>
+            <code className="mx-1 rounded bg-sand-200 px-1.5 py-0.5 text-sm font-mono text-primary-600">ville</code>
             selon vos besoins.
           </p>
 
-          <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
-            <div className="flex items-center justify-between border-b border-gray-200 px-4 py-3">
-              <span className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+          <div className="rounded-xl border border-sand-200 bg-white shadow-soft">
+            <div className="flex items-center justify-between border-b border-sand-200 px-4 py-3">
+              <span className="flex items-center gap-2 text-sm font-semibold text-charcoal-700">
                 <Code className="h-4 w-4" />
                 Code HTML à copier
               </span>
               <button
-                className="flex items-center gap-1.5 rounded-md bg-blue-50 px-3 py-1.5 text-xs font-medium text-blue-700 transition hover:bg-blue-100"
+                className="flex items-center gap-1.5 rounded-md bg-primary-50 px-3 py-1.5 text-xs font-medium text-primary-600 transition hover:bg-primary-100"
                 title="Copier le code"
               >
                 <Copy className="h-3.5 w-3.5" />
@@ -238,40 +238,40 @@ export default function WidgetPrixPage() {
               </button>
             </div>
             <pre className="overflow-x-auto p-4 text-sm leading-relaxed">
-              <code className="text-gray-800">{embedCode}</code>
+              <code className="text-charcoal-800">{embedCode}</code>
             </pre>
           </div>
 
           <div className="mt-8">
-            <h3 className="mb-4 font-heading text-lg font-bold text-gray-900">Paramètres disponibles</h3>
-            <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm">
+            <h3 className="mb-4 font-heading text-lg font-bold text-charcoal-900">Paramètres disponibles</h3>
+            <div className="overflow-x-auto rounded-xl border border-sand-200 bg-white shadow-soft">
               <table className="w-full text-left text-sm">
-                <thead className="border-b border-gray-200 bg-gray-50">
+                <thead className="border-b border-sand-200 bg-sand-50">
                   <tr>
-                    <th className="px-4 py-3 font-semibold text-gray-700">Paramètre</th>
-                    <th className="px-4 py-3 font-semibold text-gray-700">Type</th>
-                    <th className="px-4 py-3 font-semibold text-gray-700">Description</th>
-                    <th className="px-4 py-3 font-semibold text-gray-700">Exemple</th>
+                    <th className="px-4 py-3 font-semibold text-charcoal-700">Paramètre</th>
+                    <th className="px-4 py-3 font-semibold text-charcoal-700">Type</th>
+                    <th className="px-4 py-3 font-semibold text-charcoal-700">Description</th>
+                    <th className="px-4 py-3 font-semibold text-charcoal-700">Exemple</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-100">
+                <tbody className="divide-y divide-sand-100">
                   <tr>
-                    <td className="px-4 py-3 font-mono text-blue-700">service</td>
-                    <td className="px-4 py-3 text-gray-600">string</td>
-                    <td className="px-4 py-3 text-gray-600">Slug du métier (obligatoire)</td>
-                    <td className="px-4 py-3 font-mono text-gray-500">plombier</td>
+                    <td className="px-4 py-3 font-mono text-primary-600">service</td>
+                    <td className="px-4 py-3 text-charcoal-600">string</td>
+                    <td className="px-4 py-3 text-charcoal-600">Slug du métier (obligatoire)</td>
+                    <td className="px-4 py-3 font-mono text-charcoal-500">plombier</td>
                   </tr>
                   <tr>
-                    <td className="px-4 py-3 font-mono text-blue-700">ville</td>
-                    <td className="px-4 py-3 text-gray-600">string</td>
-                    <td className="px-4 py-3 text-gray-600">Slug de la ville (obligatoire)</td>
-                    <td className="px-4 py-3 font-mono text-gray-500">lyon</td>
+                    <td className="px-4 py-3 font-mono text-primary-600">ville</td>
+                    <td className="px-4 py-3 text-charcoal-600">string</td>
+                    <td className="px-4 py-3 text-charcoal-600">Slug de la ville (obligatoire)</td>
+                    <td className="px-4 py-3 font-mono text-charcoal-500">lyon</td>
                   </tr>
                   <tr>
-                    <td className="px-4 py-3 font-mono text-blue-700">format</td>
-                    <td className="px-4 py-3 text-gray-600">string</td>
-                    <td className="px-4 py-3 text-gray-600">{'"json"'} pour la réponse API (optionnel)</td>
-                    <td className="px-4 py-3 font-mono text-gray-500">json</td>
+                    <td className="px-4 py-3 font-mono text-primary-600">format</td>
+                    <td className="px-4 py-3 text-charcoal-600">string</td>
+                    <td className="px-4 py-3 text-charcoal-600">{'"json"'} pour la réponse API (optionnel)</td>
+                    <td className="px-4 py-3 font-mono text-charcoal-500">json</td>
                   </tr>
                 </tbody>
               </table>
@@ -283,19 +283,19 @@ export default function WidgetPrixPage() {
       {/* API documentation */}
       <section id="api" className="bg-white py-16">
         <div className="mx-auto max-w-4xl px-4 sm:px-6">
-          <h2 className="mb-4 font-heading text-2xl font-bold text-gray-900 sm:text-3xl">
+          <h2 className="mb-4 font-heading text-2xl font-bold text-charcoal-900 sm:text-3xl">
             Documentation API
           </h2>
-          <p className="mb-8 text-gray-600">
+          <p className="mb-8 text-charcoal-600">
             Utilisez notre API JSON gratuite pour intégrer les prix des artisans directement dans votre application.
           </p>
 
           {/* Endpoint */}
-          <div className="mb-8 rounded-xl border border-gray-200 bg-gray-50 p-6">
-            <h3 className="mb-3 font-heading text-lg font-bold text-gray-900">Endpoint</h3>
-            <div className="flex items-center gap-3 overflow-x-auto rounded-lg bg-gray-900 px-4 py-3">
-              <span className="shrink-0 rounded bg-green-500 px-2 py-0.5 text-xs font-bold text-white">GET</span>
-              <code className="text-sm text-green-300">
+          <div className="mb-8 rounded-xl border border-sand-200 bg-sand-50 p-6">
+            <h3 className="mb-3 font-heading text-lg font-bold text-charcoal-900">Endpoint</h3>
+            <div className="flex items-center gap-3 overflow-x-auto rounded-lg bg-charcoal-900 px-4 py-3">
+              <span className="shrink-0 rounded bg-accent-500 px-2 py-0.5 text-xs font-bold text-white">GET</span>
+              <code className="text-sm text-accent-300">
                 /api/prix-widget?service=&#123;slug&#125;&amp;ville=&#123;slug&#125;&amp;format=json
               </code>
             </div>
@@ -303,37 +303,37 @@ export default function WidgetPrixPage() {
 
           {/* Example request */}
           <div className="mb-8">
-            <h3 className="mb-3 font-heading text-lg font-bold text-gray-900">Exemple de requête</h3>
-            <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
-              <div className="border-b border-gray-200 px-4 py-3">
-                <span className="text-sm font-semibold text-gray-700">JavaScript (fetch)</span>
+            <h3 className="mb-3 font-heading text-lg font-bold text-charcoal-900">Exemple de requête</h3>
+            <div className="rounded-xl border border-sand-200 bg-white shadow-soft">
+              <div className="border-b border-sand-200 px-4 py-3">
+                <span className="text-sm font-semibold text-charcoal-700">JavaScript (fetch)</span>
               </div>
               <pre className="overflow-x-auto p-4 text-sm leading-relaxed">
-                <code className="text-gray-800">{apiExample}</code>
+                <code className="text-charcoal-800">{apiExample}</code>
               </pre>
             </div>
           </div>
 
           {/* Example response */}
           <div className="mb-8">
-            <h3 className="mb-3 font-heading text-lg font-bold text-gray-900">Exemple de réponse</h3>
-            <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
-              <div className="border-b border-gray-200 px-4 py-3">
-                <span className="text-sm font-semibold text-gray-700">JSON</span>
+            <h3 className="mb-3 font-heading text-lg font-bold text-charcoal-900">Exemple de réponse</h3>
+            <div className="rounded-xl border border-sand-200 bg-white shadow-soft">
+              <div className="border-b border-sand-200 px-4 py-3">
+                <span className="text-sm font-semibold text-charcoal-700">JSON</span>
               </div>
               <pre className="overflow-x-auto p-4 text-sm leading-relaxed">
-                <code className="text-gray-800">{jsonResponseExample}</code>
+                <code className="text-charcoal-800">{jsonResponseExample}</code>
               </pre>
             </div>
           </div>
 
           {/* Rate limits */}
-          <div className="mb-8 rounded-xl border border-amber-200 bg-amber-50 p-6">
-            <h3 className="mb-2 flex items-center gap-2 font-heading text-lg font-bold text-amber-800">
+          <div className="mb-8 rounded-xl border border-secondary-200 bg-secondary-50 p-6">
+            <h3 className="mb-2 flex items-center gap-2 font-heading text-lg font-bold text-secondary-800">
               <Shield className="h-5 w-5" />
               Limites d&apos;utilisation
             </h3>
-            <ul className="space-y-2 text-sm text-amber-700">
+            <ul className="space-y-2 text-sm text-secondary-700">
               <li>100 requêtes par heure et par adresse IP</li>
               <li>Les réponses sont cachées pendant 24 heures (CDN)</li>
               <li>Usage commercial autorisé sous réserve d&apos;attribution</li>
@@ -341,18 +341,18 @@ export default function WidgetPrixPage() {
           </div>
 
           {/* Attribution */}
-          <div className="rounded-xl border border-blue-200 bg-blue-50 p-6">
-            <h3 className="mb-2 flex items-center gap-2 font-heading text-lg font-bold text-blue-800">
+          <div className="rounded-xl border border-primary-200 bg-primary-50 p-6">
+            <h3 className="mb-2 flex items-center gap-2 font-heading text-lg font-bold text-primary-800">
               <ExternalLink className="h-5 w-5" />
               Attribution obligatoire
             </h3>
-            <p className="mb-3 text-sm text-blue-700">
+            <p className="mb-3 text-sm text-primary-700">
               En utilisant le widget ou l&apos;API, vous devez inclure un lien visible vers ServicesArtisans.fr.
               Le widget HTML inclut automatiquement ce lien. Si vous utilisez l&apos;API JSON,
               ajoutez le lien suivant sur votre page :
             </p>
             <div className="rounded-lg bg-white p-3">
-              <code className="text-sm text-gray-800">
+              <code className="text-sm text-charcoal-800">
                 {`Source : <a href="https://servicesartisans.fr">ServicesArtisans.fr</a>`}
               </code>
             </div>
@@ -361,19 +361,19 @@ export default function WidgetPrixPage() {
       </section>
 
       {/* Available services */}
-      <section className="bg-gray-50 py-16">
+      <section className="bg-sand-50 py-16">
         <div className="mx-auto max-w-4xl px-4 sm:px-6">
-          <h2 className="mb-8 font-heading text-2xl font-bold text-gray-900 sm:text-3xl">
+          <h2 className="mb-8 font-heading text-2xl font-bold text-charcoal-900 sm:text-3xl">
             Services disponibles ({servicesWithNames.length} métiers)
           </h2>
           <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
             {servicesWithNames.map(({ slug, name }) => (
               <div
                 key={slug}
-                className="flex items-center justify-between rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm"
+                className="flex items-center justify-between rounded-lg border border-sand-200 bg-white px-4 py-2.5 text-sm"
               >
-                <span className="text-gray-700">{name}</span>
-                <code className="rounded bg-gray-100 px-2 py-0.5 font-mono text-xs text-gray-500">{slug}</code>
+                <span className="text-charcoal-700">{name}</span>
+                <code className="rounded bg-sand-100 px-2 py-0.5 font-mono text-xs text-charcoal-500">{slug}</code>
               </div>
             ))}
           </div>
@@ -383,8 +383,8 @@ export default function WidgetPrixPage() {
       {/* FAQ */}
       <section className="bg-white py-16">
         <div className="mx-auto max-w-4xl px-4 sm:px-6">
-          <h2 className="mb-8 flex items-center gap-3 font-heading text-2xl font-bold text-gray-900 sm:text-3xl">
-            <HelpCircle className="h-7 w-7 text-blue-600" />
+          <h2 className="mb-8 flex items-center gap-3 font-heading text-2xl font-bold text-charcoal-900 sm:text-3xl">
+            <HelpCircle className="h-7 w-7 text-primary-400" />
             Questions fréquentes
           </h2>
           <div className="space-y-6">
@@ -414,14 +414,14 @@ export default function WidgetPrixPage() {
                 a: 'Les prix sont mis à jour régulièrement en fonction des évolutions du marché. Les réponses API sont cachées pendant 24 heures pour garantir des performances optimales.',
               },
             ].map(({ q, a }) => (
-              <details key={q} className="group rounded-xl border border-gray-200 bg-white shadow-sm">
-                <summary className="flex cursor-pointer items-center justify-between px-6 py-4 text-left font-semibold text-gray-900 hover:bg-gray-50">
+              <details key={q} className="group rounded-xl border border-sand-200 bg-white shadow-soft">
+                <summary className="flex cursor-pointer items-center justify-between px-6 py-4 text-left font-semibold text-charcoal-900 hover:bg-sand-50">
                   {q}
-                  <span className="ml-4 shrink-0 text-gray-400 transition-transform group-open:rotate-180">
+                  <span className="ml-4 shrink-0 text-charcoal-400 transition-transform group-open:rotate-180">
                     &#9660;
                   </span>
                 </summary>
-                <div className="border-t border-gray-100 px-6 py-4 text-sm leading-relaxed text-gray-600">
+                <div className="border-t border-sand-100 px-6 py-4 text-sm leading-relaxed text-charcoal-600">
                   {a}
                 </div>
               </details>
@@ -431,18 +431,18 @@ export default function WidgetPrixPage() {
       </section>
 
       {/* CTA */}
-      <section className="bg-gradient-to-r from-blue-600 to-indigo-700 py-16 text-white">
+      <section className="bg-gradient-to-r from-primary-400 to-primary-600 py-16 text-white">
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
           <h2 className="mb-4 font-heading text-2xl font-bold sm:text-3xl">
             Prêt à intégrer les prix artisans ?
           </h2>
-          <p className="mb-8 text-blue-100">
+          <p className="mb-8 text-primary-100">
             Copiez le code ci-dessus et collez-le dans votre site. C&apos;est aussi simple que ça.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a
               href="#integration"
-              className="inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 font-semibold text-blue-700 shadow-lg transition hover:bg-blue-50"
+              className="inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 font-semibold text-primary-600 shadow-lg transition hover:bg-primary-50"
             >
               <Code className="h-5 w-5" />
               Voir le code d&apos;intégration

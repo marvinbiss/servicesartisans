@@ -9,23 +9,21 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Primary - Blue (Trust, CTAs, links, primary actions)
-        // Custom richer blue — not Tailwind default
+        // Primary - Terracotta (THE brand color — warm, artisan, distinctive)
         primary: {
-          50: '#eef4ff',
-          100: '#d9e7ff',
-          200: '#bbcfff',
-          300: '#8eaffe',
-          400: '#5a86fc',
-          500: '#3464f4',
-          600: '#1d4fd7',
-          700: '#1840b8',
-          800: '#1a369a',
-          900: '#1b3179',
-          950: '#13214a',
+          50:  '#FDF1EC',
+          100: '#FADDCF',
+          200: '#F5BAA0',
+          300: '#EF9171',
+          400: '#E86B4B',
+          500: '#D4553A',
+          600: '#C24B2A',
+          700: '#A33E22',
+          800: '#85321C',
+          900: '#6B2916',
+          950: '#451A0E',
         },
-        // Secondary - Honey Gold (highlights, stars, badges)
-        // Custom warmer gold — not Tailwind default amber
+        // Secondary - Honey Gold (highlights, stars, badges, premium)
         secondary: {
           50: '#fefaec',
           100: '#fcf0c9',
@@ -39,7 +37,7 @@ module.exports = {
           900: '#713610',
           950: '#421b05',
         },
-        // Clay - Terracotta (new homepage brand color)
+        // Clay - Kept for backward compat, aliased to primary
         clay: {
           50:  '#FDF1EC',
           100: '#FADDCF',
@@ -52,7 +50,7 @@ module.exports = {
           800: '#85321C',
           900: '#6B2916',
         },
-        // Sand - Warm neutrals (clay homepage backgrounds)
+        // Sand - Warm neutrals (backgrounds, surfaces)
         sand: {
           50:  '#FDFAF7',
           100: '#F9F4EE',
@@ -65,24 +63,38 @@ module.exports = {
           800: '#7D6A5C',
           900: '#614F43',
         },
-        // Success - Green (verified badges, success states)
+        // Accent - Forest Green (trust, verified, success — NOT emerald/generic)
         accent: {
-          50: '#ECFDF5',
-          100: '#D1FAE5',
-          200: '#A7F3D0',
-          300: '#6EE7B7',
-          400: '#34D399',
-          500: '#10B981',
-          600: '#059669',
-          700: '#047857',
-          800: '#065F46',
-          900: '#064E3B',
-          950: '#022C22',
+          50:  '#F0F7F4',
+          100: '#D9EDE3',
+          200: '#B5DBC9',
+          300: '#85C4A6',
+          400: '#55A882',
+          500: '#3D8B68',
+          600: '#2D7054',
+          700: '#245A44',
+          800: '#1E4837',
+          900: '#1A3C2E',
+          950: '#0D2119',
+        },
+        // Charcoal - Warm dark tones (not pure black)
+        charcoal: {
+          50:  '#F7F6F5',
+          100: '#EEEDEB',
+          200: '#D9D7D4',
+          300: '#B8B4AF',
+          400: '#918C85',
+          500: '#706A62',
+          600: '#5A544D',
+          700: '#45403B',
+          800: '#302C28',
+          900: '#1C1917',
+          950: '#0F0E0C',
         },
       },
       fontFamily: {
-        sans: ['var(--font-inter)', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
-        heading: ['var(--font-heading)', 'Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-dm-sans)', 'DM Sans', 'system-ui', '-apple-system', 'sans-serif'],
+        heading: ['var(--font-heading)', 'Sora', 'DM Sans', 'system-ui', 'sans-serif'],
         mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
       },
       fontSize: {
@@ -93,31 +105,35 @@ module.exports = {
         'display': '-0.02em',
       },
       boxShadow: {
-        'glow': '0 0 20px rgba(29, 79, 215, 0.3)',
-        'glow-lg': '0 0 40px rgba(29, 79, 215, 0.4)',
+        'glow': '0 0 20px rgba(232, 107, 75, 0.25)',
+        'glow-lg': '0 0 40px rgba(232, 107, 75, 0.35)',
         'glow-amber': '0 0 30px rgba(232, 150, 10, 0.15)',
         'glow-gold': '0 0 30px rgba(232, 150, 10, 0.4)',
-        'glow-blue': '0 0 30px rgba(52, 100, 244, 0.15)',
-        'glow-emerald': '0 0 30px rgba(16, 185, 129, 0.15)',
-        'soft': '0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)',
-        'soft-lg': '0 10px 40px -10px rgba(0, 0, 0, 0.08)',
-        'premium': '0 25px 50px -12px rgba(0, 0, 0, 0.15), 0 12px 24px -8px rgba(0, 0, 0, 0.1)',
-        'premium-lg': '0 25px 60px -15px rgba(0, 0, 0, 0.15)',
-        'glass': '0 8px 32px rgba(0, 0, 0, 0.08)',
-        'glass-lg': '0 8px 32px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.15)',
+        'glow-terra': '0 0 30px rgba(232, 107, 75, 0.2)',
+        'glow-green': '0 0 30px rgba(61, 139, 104, 0.15)',
+        'soft': '0 2px 15px -3px rgba(28, 25, 23, 0.06), 0 10px 20px -2px rgba(28, 25, 23, 0.03)',
+        'soft-lg': '0 10px 40px -10px rgba(28, 25, 23, 0.07)',
+        'premium': '0 25px 50px -12px rgba(28, 25, 23, 0.12), 0 12px 24px -8px rgba(28, 25, 23, 0.08)',
+        'premium-lg': '0 25px 60px -15px rgba(28, 25, 23, 0.14)',
+        'glass': '0 8px 32px rgba(28, 25, 23, 0.06)',
+        'glass-lg': '0 8px 32px rgba(28, 25, 23, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.15)',
         'glow-clay': '0 0 30px rgba(232, 107, 75, 0.3)',
         'inner-glow': 'inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
-        'card-hover': '0 25px 50px -12px rgba(0, 0, 0, 0.12)',
+        'card-hover': '0 20px 40px -12px rgba(28, 25, 23, 0.1), 0 8px 20px -8px rgba(232, 107, 75, 0.08)',
+        'cta': '0 4px 14px 0 rgba(232, 107, 75, 0.3)',
+        'cta-hover': '0 8px 25px 0 rgba(212, 85, 58, 0.4)',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-primary': 'linear-gradient(135deg, #3464f4 0%, #1d4fd7 100%)',
+        'gradient-primary': 'linear-gradient(135deg, #E86B4B 0%, #C24B2A 100%)',
         'gradient-secondary': 'linear-gradient(135deg, #e8960a 0%, #c97308 100%)',
-        'gradient-hero': 'linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #334155 100%)',
+        'gradient-hero': 'linear-gradient(135deg, #1C1917 0%, #302C28 50%, #45403B 100%)',
+        'gradient-hero-warm': 'linear-gradient(135deg, #6B2916 0%, #C24B2A 50%, #E86B4B 100%)',
         'gradient-premium': 'linear-gradient(135deg, #e8960a 0%, #f2b523 50%, #e8960a 100%)',
         'gradient-premium-gold': 'linear-gradient(135deg, #c97308 0%, #e8960a 25%, #f2b523 50%, #e8960a 75%, #c97308 100%)',
-        'gradient-premium-blue': 'linear-gradient(135deg, #1a369a 0%, #1d4fd7 50%, #3464f4 100%)',
-        'gradient-dark': 'linear-gradient(180deg, #0F172A 0%, #1E293B 100%)',
+        'gradient-terra': 'linear-gradient(135deg, #C24B2A 0%, #E86B4B 50%, #EF9171 100%)',
+        'gradient-sand': 'linear-gradient(180deg, #FDFAF7 0%, #F4EFE8 100%)',
+        'gradient-dark': 'linear-gradient(180deg, #1C1917 0%, #302C28 100%)',
         'gradient-glass': 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
         'gradient-shine': 'linear-gradient(110deg, transparent 25%, rgba(255,255,255,0.1) 50%, transparent 75%)',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',

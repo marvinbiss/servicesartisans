@@ -174,12 +174,12 @@ export default function EstimationWidget({ context, hideLauncher = false }: Esti
             }
           >
             {/* Header */}
-            <div className="flex items-center justify-between gap-3 bg-[#E07040] px-4 py-3 text-white sm:rounded-t-[20px] shrink-0">
+            <div className="flex items-center justify-between gap-3 bg-primary-400 px-4 py-3 text-white sm:rounded-t-[20px] shrink-0">
               <div className="flex items-center gap-2.5 min-w-0">
                 {/* Mini logo SA */}
                 <div className="flex items-center font-heading font-bold text-base shrink-0">
                   <span className="text-black">S</span>
-                  <span className="bg-white text-[#E07040] rounded-sm px-0.5 mx-0.5 text-xs font-extrabold leading-none">
+                  <span className="bg-white text-primary-400 rounded-sm px-0.5 mx-0.5 text-xs font-extrabold leading-none">
                     A
                   </span>
                 </div>
@@ -204,14 +204,14 @@ export default function EstimationWidget({ context, hideLauncher = false }: Esti
             </div>
 
             {/* Tabs */}
-            <div className="flex border-b border-gray-200 shrink-0">
+            <div className="flex border-b border-sand-200 shrink-0">
               <button
                 onClick={() => setActiveTab('chat')}
                 className={
                   'flex-1 py-2.5 text-sm font-medium transition-colors ' +
                   (activeTab === 'chat'
-                    ? 'text-[#E07040] border-b-2 border-[#E07040]'
-                    : 'text-gray-500 hover:text-gray-700')
+                    ? 'text-primary-400 border-b-2 border-primary-400'
+                    : 'text-charcoal-500 hover:text-charcoal-700')
                 }
               >
                 Estimer mon projet
@@ -221,8 +221,8 @@ export default function EstimationWidget({ context, hideLauncher = false }: Esti
                 className={
                   'flex-1 py-2.5 text-sm font-medium transition-colors ' +
                   (activeTab === 'callback'
-                    ? 'text-[#E07040] border-b-2 border-[#E07040]'
-                    : 'text-gray-500 hover:text-gray-700')
+                    ? 'text-primary-400 border-b-2 border-primary-400'
+                    : 'text-charcoal-500 hover:text-charcoal-700')
                 }
               >
                 Demande de rappel
@@ -245,14 +245,14 @@ export default function EstimationWidget({ context, hideLauncher = false }: Esti
             )}
 
             {/* Footer with privacy link */}
-            <div className="border-t border-gray-100 px-4 py-2 text-center shrink-0">
-              <p className="text-[11px] text-gray-400">
+            <div className="border-t border-sand-100 px-4 py-2 text-center shrink-0">
+              <p className="text-[11px] text-charcoal-400">
                 Propulsé par{' '}
                 <a
                   href="https://servicesartisans.fr"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-gray-500 transition-colors"
+                  className="hover:text-charcoal-500 transition-colors"
                 >
                   ServicesArtisans.fr
                 </a>
@@ -261,7 +261,7 @@ export default function EstimationWidget({ context, hideLauncher = false }: Esti
                 <a
                   href="/confidentialite"
                   target="_blank"
-                  className="hover:text-gray-500"
+                  className="hover:text-charcoal-500"
                 >
                   Confidentialité
                 </a>

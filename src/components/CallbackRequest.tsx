@@ -96,7 +96,7 @@ export default function CallbackRequest({ serviceSlug, cityName }: CallbackReque
           value={phone}
           onChange={(e) => { setPhone(e.target.value); setError('') }}
           style={{ fontSize: '16px' }}
-          className={`flex-1 rounded-lg border ${error ? 'border-red-400' : 'border-amber-300'} bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500`}
+          className={`flex-1 rounded-lg border ${error ? 'border-red-400' : 'border-amber-300'} bg-white px-3 py-2.5 text-sm text-charcoal-900 placeholder:text-charcoal-400 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500`}
         />
         <button
           type="submit"

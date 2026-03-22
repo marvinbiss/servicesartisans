@@ -83,10 +83,10 @@ export default async function TarifsPage() {
 
   if (cmsPage?.content_html) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-sand-50">
         <section className="bg-white border-b">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h1 className="font-heading text-3xl font-bold text-gray-900">
+            <h1 className="font-heading text-3xl font-bold text-charcoal-900">
               {cmsPage.title}
             </h1>
           </div>
@@ -129,43 +129,43 @@ export default async function TarifsPage() {
   return (
     <>
       <JsonLd data={[breadcrumbSchema, faqSchema, ...serviceSchemas]} />
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-sand-50">
         {/* Hero */}
-        <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
+        <section className="relative bg-gradient-hero text-white overflow-hidden">
           <div className="absolute inset-0">
             <div className="absolute inset-0" style={{
-              background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(37,99,235,0.1) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(59,130,246,0.06) 0%, transparent 50%)',
+              background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(232,107,75,0.15) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(61,139,104,0.08) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(232,107,75,0.06) 0%, transparent 50%)',
             }} />
             <div className="absolute inset-0 opacity-[0.025]" style={{
               backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
               backgroundSize: '64px 64px',
             }} />
-            <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-50 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-sand-50 to-transparent" />
           </div>
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-20 sm:pt-10 sm:pb-28 md:pt-14 md:pb-36">
             <Breadcrumb
               items={[{ label: 'Tarifs artisans' }]}
-              className="mb-6 text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
+              className="mb-6 text-sand-400 [&_a]:text-sand-400 [[&_a:hover]:text-white_a:hover]:text-white [&_svg]:text-sand-600"
             />
             <div className="text-center">
               <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 sm:mb-6 tracking-[-0.025em]">
                 Guide des prix artisans 2026
               </h1>
-              <p className="text-base sm:text-xl text-slate-400 max-w-3xl mx-auto mb-4">
+              <p className="text-base sm:text-xl text-sand-400 max-w-3xl mx-auto mb-4">
                 Tarifs moyens par corps de m&eacute;tier en France. Comparez les prix de {trades.length} m&eacute;tiers
                 du b&acirc;timent pour estimer votre budget travaux avant de demander un devis.
               </p>
               <div className="flex flex-wrap justify-center gap-3 mt-8">
                 <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
-                  <Euro className="w-4 h-4 text-amber-400" />
+                  <Euro className="w-4 h-4 text-secondary-400" />
                   <span>Prix actualis&eacute;s 2026</span>
                 </div>
                 <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
-                  <TrendingUp className="w-4 h-4 text-amber-400" />
+                  <TrendingUp className="w-4 h-4 text-secondary-400" />
                   <span>{trades.length} corps de m&eacute;tier</span>
                 </div>
                 <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
-                  <CheckCircle className="w-4 h-4 text-amber-400" />
+                  <CheckCircle className="w-4 h-4 text-secondary-400" />
                   <span>Donn&eacute;es v&eacute;rifi&eacute;es</span>
                 </div>
               </div>
@@ -181,7 +181,7 @@ export default async function TarifsPage() {
                 <a
                   key={trade.slug}
                   href={`#${trade.slug}`}
-                  className="shrink-0 sm:shrink px-3 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-blue-100 hover:text-blue-700 transition-colors whitespace-nowrap"
+                  className="shrink-0 sm:shrink px-3 py-1.5 rounded-full text-sm font-medium bg-sand-200 text-charcoal-700 hover:bg-primary-100 hover:text-primary-600 transition-colors whitespace-nowrap"
                 >
                   {trade.name}
                 </a>
@@ -194,10 +194,10 @@ export default async function TarifsPage() {
         <section className="py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="font-heading text-3xl font-bold text-charcoal-900 mb-4">
                 Tarifs par corps de métier
               </h2>
-              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              <p className="text-xl text-charcoal-600 max-w-2xl mx-auto">
                 Prix moyens constatés en France métropolitaine, main-d&apos;oeuvre incluse
               </p>
             </div>
@@ -211,33 +211,36 @@ export default async function TarifsPage() {
                   <div
                     key={trade.slug}
                     id={trade.slug}
-                    className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow scroll-mt-24"
+                    className="bg-white rounded-xl border border-sand-300 overflow-hidden hover:shadow-soft transition-shadow scroll-mt-24"
                   >
-                    <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-6">
+                    <div className="bg-gradient-to-r from-sand-100 to-sand-200 p-6">
                       <div className="flex items-center gap-3 mb-3">
                         <span className="text-3xl">{emoji}</span>
-                        <h3 className="text-xl font-bold text-gray-900">
+                        <h3 className="font-heading text-xl font-bold text-charcoal-900">
                           {trade.name}
                         </h3>
                       </div>
                       <div className="flex items-baseline gap-1">
-                        <span className="text-3xl font-bold text-blue-600">
+                        <span className="font-heading text-3xl font-bold text-primary-500">
                           {trade.priceRange.min} - {trade.priceRange.max}
                         </span>
-                        <span className="text-gray-600 text-sm">
+                        <span className="text-charcoal-600 text-sm">
                           {trade.priceRange.unit}
                         </span>
                       </div>
+                      <span className="inline-block mt-2 text-xs font-medium px-2.5 py-1 rounded-full bg-secondary-50 text-secondary-700">
+                        Prix moyen
+                      </span>
                     </div>
 
                     <div className="p-6">
-                      <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+                      <h4 className="text-sm font-semibold text-charcoal-500 uppercase tracking-wider mb-3">
                         Prestations courantes
                       </h4>
                       <ul className="space-y-2 mb-6">
                         {topTasks.map((task, i) => (
-                          <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
-                            <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                          <li key={i} className="flex items-start gap-2 text-sm text-charcoal-700">
+                            <CheckCircle className="w-4 h-4 text-accent-500 flex-shrink-0 mt-0.5" />
                             <span>{task}</span>
                           </li>
                         ))}
@@ -247,12 +250,12 @@ export default async function TarifsPage() {
                         <div className="mb-4">
                           <div className="flex flex-wrap gap-1">
                             {trade.certifications.slice(0, 2).map((cert, i) => (
-                              <span key={i} className="inline-block bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded">
+                              <span key={i} className="inline-block bg-primary-50 text-primary-600 text-xs px-2 py-1 rounded">
                                 {cert}
                               </span>
                             ))}
                             {trade.certifications.length > 2 && (
-                              <span className="inline-block bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded">
+                              <span className="inline-block bg-sand-200 text-charcoal-600 text-xs px-2 py-1 rounded">
                                 +{trade.certifications.length - 2}
                               </span>
                             )}
@@ -262,7 +265,7 @@ export default async function TarifsPage() {
 
                       <Link
                         href={`/tarifs/${trade.slug}`}
-                        className="flex items-center justify-between w-full bg-blue-600 text-white px-4 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm"
+                        className="flex items-center justify-between w-full bg-primary-400 text-white px-4 py-3 rounded-lg font-medium hover:bg-primary-500 transition-colors text-sm"
                       >
                         <span>Voir les tarifs détaillés</span>
                         <ArrowRight className="w-4 h-4" />
@@ -279,10 +282,10 @@ export default async function TarifsPage() {
         <section className="py-16 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="font-heading text-3xl font-bold text-charcoal-900 mb-4">
                 Comment obtenir le meilleur prix ?
               </h2>
-              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              <p className="text-xl text-charcoal-600 max-w-2xl mx-auto">
                 Nos conseils pour réduire le coût de vos travaux sans sacrifier la qualité
               </p>
             </div>
@@ -295,11 +298,11 @@ export default async function TarifsPage() {
                 { n: 4, title: 'Vérifiez l\'artisan', text: 'Un artisan référencé avec SIRET, assurance et certifications vous protège contre les malfaçons et les arnaques.' },
               ].map(({ n, title, text }) => (
                 <div key={n} className="text-center p-6">
-                  <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-4">
-                    <span className="text-2xl font-bold text-blue-600">{n}</span>
+                  <div className="w-14 h-14 bg-primary-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                    <span className="text-2xl font-bold text-primary-500">{n}</span>
                   </div>
-                  <h3 className="font-semibold text-gray-900 mb-2">{title}</h3>
-                  <p className="text-gray-600 text-sm">{text}</p>
+                  <h3 className="font-semibold text-charcoal-900 mb-2">{title}</h3>
+                  <p className="text-charcoal-600 text-sm">{text}</p>
                 </div>
               ))}
             </div>
@@ -307,24 +310,24 @@ export default async function TarifsPage() {
         </section>
 
         {/* FAQ */}
-        <section className="py-16 bg-gray-50">
+        <section className="py-16 bg-sand-50">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="font-heading text-3xl font-bold text-charcoal-900 mb-4">
                 Questions fréquentes sur les tarifs artisans
               </h2>
             </div>
 
             <div className="space-y-4">
               {tradeFaqs.map((faq, index) => (
-                <details key={index} className="bg-white rounded-xl border border-gray-200 group">
+                <details key={index} className="bg-white rounded-xl border border-sand-300 group">
                   <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
-                    <h3 className="text-lg font-semibold text-gray-900 pr-4">
+                    <h3 className="text-lg font-semibold text-charcoal-900 pr-4">
                       {faq.question}
                     </h3>
-                    <ChevronDown className="w-5 h-5 text-gray-400 flex-shrink-0 group-open:rotate-180 transition-transform" />
+                    <ChevronDown className="w-5 h-5 text-charcoal-400 flex-shrink-0 group-open:rotate-180 transition-transform" />
                   </summary>
-                  <div className="px-6 pb-6 text-gray-600 leading-relaxed">
+                  <div className="px-6 pb-6 text-charcoal-600 leading-relaxed">
                     {faq.answer}
                   </div>
                 </details>
@@ -334,25 +337,25 @@ export default async function TarifsPage() {
         </section>
 
         {/* CTA */}
-        <section className="py-20 bg-blue-600">
+        <section className="py-20 bg-gradient-primary">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-3xl font-bold text-white mb-4">
+            <h2 className="font-heading text-3xl font-bold text-white mb-4">
               Obtenez un devis précis pour vos travaux
             </h2>
-            <p className="text-xl text-blue-100 mb-8">
+            <p className="text-xl text-primary-100 mb-8">
               Les prix varient selon votre projet. Demandez un devis gratuit pour connaître le coût exact.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link
                 href="/devis"
-                className="inline-flex items-center justify-center gap-2 bg-white text-blue-600 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold hover:bg-blue-50 transition-colors text-base sm:text-lg w-full sm:w-auto"
+                className="inline-flex items-center justify-center gap-2 bg-white text-primary-500 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold hover:bg-primary-50 transition-colors text-base sm:text-lg w-full sm:w-auto"
               >
                 Demander un devis gratuit
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <Link
                 href="/services"
-                className="inline-flex items-center justify-center gap-2 bg-blue-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold hover:bg-blue-400 transition-colors text-base sm:text-lg border border-blue-400 w-full sm:w-auto"
+                className="inline-flex items-center justify-center gap-2 bg-primary-300 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold hover:bg-primary-200 transition-colors text-base sm:text-lg border border-primary-300 w-full sm:w-auto"
               >
                 <Search className="w-5 h-5" />
                 Trouver un artisan
@@ -364,15 +367,15 @@ export default async function TarifsPage() {
         {/* Section A: Tarifs par métier et ville — Service×City matrix */}
         <section className="py-12 border-t">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-heading text-2xl font-bold text-gray-900 mb-8">Tarifs par métier et ville</h2>
+            <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-8">Tarifs par métier et ville</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {services.slice(0, 8).map((service) => (
                 <div key={service.slug}>
-                  <h3 className="font-semibold text-gray-900 mb-3">Tarifs {service.name.toLowerCase()}</h3>
+                  <h3 className="font-semibold text-charcoal-900 mb-3">Tarifs {service.name.toLowerCase()}</h3>
                   <div className="space-y-1.5">
                     {villes.slice(0, 6).map((ville) => (
                       <Link key={ville.slug} href={`/tarifs/${service.slug}/${ville.slug}`}
-                        className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
+                        className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
                         <ChevronRight className="w-3 h-3" /> {ville.name}
                       </Link>
                     ))}
@@ -386,15 +389,15 @@ export default async function TarifsPage() {
         {/* Section B: Cross-intent "Voir aussi" */}
         <section className="py-12 bg-white border-t">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-heading text-2xl font-bold text-gray-900 mb-8">Voir aussi</h2>
+            <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-8">Voir aussi</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               {/* Devis */}
               <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Demander un devis</h3>
+                <h3 className="font-semibold text-charcoal-900 mb-3">Demander un devis</h3>
                 <div className="space-y-1.5">
                   {services.slice(0, 10).map((s) => (
                     <Link key={s.slug} href={`/devis/${s.slug}`}
-                      className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
+                      className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
                       <ChevronRight className="w-3 h-3" /> Devis {s.name.toLowerCase()}
                     </Link>
                   ))}
@@ -402,11 +405,11 @@ export default async function TarifsPage() {
               </div>
               {/* Avis */}
               <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Avis clients</h3>
+                <h3 className="font-semibold text-charcoal-900 mb-3">Avis clients</h3>
                 <div className="space-y-1.5">
                   {services.slice(0, 10).map((s) => (
                     <Link key={s.slug} href={`/avis/${s.slug}`}
-                      className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
+                      className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
                       <ChevronRight className="w-3 h-3" /> Avis {s.name.toLowerCase()}
                     </Link>
                   ))}
@@ -414,11 +417,11 @@ export default async function TarifsPage() {
               </div>
               {/* Urgence */}
               <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Urgence artisan</h3>
+                <h3 className="font-semibold text-charcoal-900 mb-3">Urgence artisan</h3>
                 <div className="space-y-1.5">
                   {services.slice(0, 10).map((s) => (
                     <Link key={s.slug} href={`/urgence/${s.slug}`}
-                      className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
+                      className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
                       <ChevronRight className="w-3 h-3" /> Urgence {s.name.toLowerCase()}
                     </Link>
                   ))}
@@ -426,33 +429,33 @@ export default async function TarifsPage() {
               </div>
               {/* Navigation */}
               <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Navigation</h3>
+                <h3 className="font-semibold text-charcoal-900 mb-3">Navigation</h3>
                 <div className="space-y-1.5">
-                  <Link href="/services" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
+                  <Link href="/services" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
                     <ChevronRight className="w-3 h-3" /> Tous les services
                   </Link>
-                  <Link href="/villes" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
+                  <Link href="/villes" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
                     <ChevronRight className="w-3 h-3" /> Toutes les villes
                   </Link>
-                  <Link href="/departements" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
+                  <Link href="/departements" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
                     <ChevronRight className="w-3 h-3" /> Tous les départements
                   </Link>
-                  <Link href="/regions" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
+                  <Link href="/regions" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
                     <ChevronRight className="w-3 h-3" /> Toutes les régions
                   </Link>
-                  <Link href="/blog" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
+                  <Link href="/blog" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
                     <ChevronRight className="w-3 h-3" /> Blog
                   </Link>
-                  <Link href="/devis" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
+                  <Link href="/devis" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
                     <ChevronRight className="w-3 h-3" /> Demander un devis
                   </Link>
-                  <Link href="/urgence" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
+                  <Link href="/urgence" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
                     <ChevronRight className="w-3 h-3" /> Urgence artisan
                   </Link>
-                  <Link href="/avis" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
+                  <Link href="/avis" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
                     <ChevronRight className="w-3 h-3" /> Avis clients
                   </Link>
-                  <Link href="/outils/calculateur-prix" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
+                  <Link href="/outils/calculateur-prix" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
                     <ChevronRight className="w-3 h-3" /> Calculateur de prix
                   </Link>
                 </div>
@@ -462,9 +465,9 @@ export default async function TarifsPage() {
         </section>
 
         {/* Related Links */}
-        <section className="bg-gray-50 py-12 border-t">
+        <section className="bg-sand-50 py-12 border-t">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">
+            <h2 className="font-heading text-xl font-bold text-charcoal-900 mb-6">
               Trouvez un artisan près de chez vous
             </h2>
             <div className="grid md:grid-cols-2 gap-8">

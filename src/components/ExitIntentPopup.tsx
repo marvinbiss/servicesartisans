@@ -102,11 +102,11 @@ export default function ExitIntentPopup({
 
   return (
     <div className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-50 w-[calc(100%-2rem)] max-w-sm animate-in slide-in-from-bottom-4 duration-300">
-      <div className="bg-white rounded-2xl shadow-2xl border border-gray-200/60 p-5 relative">
+      <div className="bg-white rounded-2xl shadow-2xl border border-sand-300/60 p-5 relative">
         {/* Close button */}
         <button
           onClick={close}
-          className="absolute top-3 right-3 p-1.5 rounded-full text-slate-400 hover:text-slate-600 hover:bg-gray-100 transition-colors"
+          className="absolute top-3 right-3 p-1.5 rounded-full text-slate-400 hover:text-slate-600 hover:bg-sand-200 transition-colors"
           aria-label="Fermer"
         >
           <X className="w-4 h-4" />
@@ -134,7 +134,7 @@ export default function ExitIntentPopup({
           </Link>
         )}
 
-        <p className="text-[10px] text-gray-400 text-center mt-2">
+        <p className="text-[10px] text-charcoal-400 text-center mt-2">
           Gratuit · Sans engagement · Réponse sous 24h
         </p>
       </div>

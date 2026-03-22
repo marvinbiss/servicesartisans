@@ -36,8 +36,8 @@ export function WidgetCopyButton({ code }: WidgetCopyButtonProps) {
     >
       {copied ? (
         <>
-          <CheckCircle className="w-4 h-4 text-green-400" />
-          <span className="text-green-400">Copie !</span>
+          <CheckCircle className="w-4 h-4 text-accent-400" />
+          <span className="text-accent-400">Copie !</span>
         </>
       ) : (
         <>

@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import dynamic from 'next/dynamic'
 import Script from 'next/script'
-import { Inter, Plus_Jakarta_Sans } from 'next/font/google'
+import { DM_Sans, Sora } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
@@ -11,18 +11,18 @@ import { SITE_URL } from '@/lib/seo/config'
 import { getProviderCount } from '@/lib/data/stats'
 import GoogleAnalytics from '@/components/GoogleAnalytics'
 
-const inter = Inter({
+const dmSans = DM_Sans({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-dm-sans',
   display: 'swap',
   adjustFontFallback: true,
 })
 
-const plusJakarta = Plus_Jakarta_Sans({
+const sora = Sora({
   subsets: ['latin'],
   variable: '--font-heading',
   display: 'swap',
-  weight: ['500', '600', '700', '800'],
+  weight: ['400', '500', '600', '700', '800'],
   adjustFontFallback: true,
 })
 
@@ -141,7 +141,7 @@ export default async function RootLayout({
 }) {
   const artisanCount = await getProviderCount()
   return (
-    <html lang="fr" className={`scroll-smooth ${inter.variable} ${plusJakarta.variable}`}>
+    <html lang="fr" className={`scroll-smooth ${dmSans.variable} ${sora.variable}`}>
       <head>
         {/* PWA Meta Tags (apple-mobile-web-app, mobile-web-app-capable, theme-color handled by metadata/viewport exports) */}
         <meta name="msapplication-TileColor" content="#E86B4B" />
@@ -183,7 +183,7 @@ export default async function RootLayout({
         <link rel="preconnect" href="https://images.unsplash.com" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
       </head>
-      <body className="font-sans bg-gray-50 antialiased">
+      <body className="font-sans bg-sand-50 antialiased text-charcoal-900">
         {/* Google Tag Manager */}
         <Script id="gtm" strategy="afterInteractive">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':

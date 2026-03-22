@@ -21,25 +21,25 @@ export default function FaqAndBlogSection({ combinedFaq, service, location, serv
     <>
       {/* FAQ accordion */}
       {combinedFaq.length > 0 && (
-        <section className="py-12 bg-white border-t">
+        <section className="py-12 bg-white border-t border-sand-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-              <h2 className="text-xl font-bold text-gray-900 mb-6 border-l-4 border-amber-500 pl-4">
-                Questions fréquentes — {service.name.toLowerCase()} à {location.name}
+            <div className="bg-white rounded-2xl shadow-soft border border-sand-200 p-8">
+              <h2 className="font-heading text-xl font-bold text-charcoal-900 mb-6 border-l-4 border-primary-400 pl-4">
+                Questions fr&eacute;quentes — {service.name.toLowerCase()} &agrave; {location.name}
               </h2>
               <div className="space-y-3">
                 {combinedFaq.map((item, i) => (
                   <details
                     key={i}
-                    className="group bg-gray-50 rounded-xl border border-gray-100 overflow-hidden transition-shadow duration-300 hover:shadow-sm"
+                    className="group bg-sand-50 rounded-xl border border-sand-200 overflow-hidden transition-shadow duration-300 hover:shadow-soft"
                   >
-                    <summary className="flex items-center justify-between cursor-pointer px-6 py-5 text-left hover:bg-gray-100/80 transition-colors duration-200 [&::-webkit-details-marker]:hidden list-none">
-                      <span className="font-semibold text-slate-900 pr-4">{item.question}</span>
-                      <svg className="w-5 h-5 text-amber-500 shrink-0 group-open:rotate-180 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <summary className="flex items-center justify-between cursor-pointer px-6 py-5 text-left hover:bg-sand-100 transition-colors duration-200 [&::-webkit-details-marker]:hidden list-none">
+                      <span className="font-semibold text-charcoal-900 pr-4">{item.question}</span>
+                      <svg className="w-5 h-5 text-primary-400 shrink-0 group-open:rotate-180 transition-transform duration-300 ease-premium" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                       </svg>
                     </summary>
-                    <div className="px-6 pb-5 text-slate-600 leading-relaxed text-sm animate-fade-in">
+                    <div className="px-6 pb-5 text-charcoal-600 leading-relaxed text-sm animate-fade-in">
                       {item.answer}
                     </div>
                   </details>
@@ -51,10 +51,10 @@ export default function FaqAndBlogSection({ combinedFaq, service, location, serv
       )}
 
       {/* Blog articles */}
-      <section className="py-12 bg-gray-50 border-t">
+      <section className="py-12 bg-sand-50 border-t border-sand-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2 border-l-4 border-amber-500 pl-4">
-            <svg className="w-5 h-5 text-clay-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <h2 className="font-heading text-xl font-bold text-charcoal-900 mb-6 flex items-center gap-2 border-l-4 border-primary-400 pl-4">
+            <svg className="w-5 h-5 text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
             </svg>
             Guides et conseils
@@ -62,18 +62,18 @@ export default function FaqAndBlogSection({ combinedFaq, service, location, serv
           <div className="grid sm:grid-cols-2 gap-4">
             {isPlombier ? (
               <>
-                <BlogLink href="/blog/comment-choisir-plombier" emoji="&#128295;" title="Comment choisir son plombier ?" desc="Les critères essentiels pour trouver un plombier fiable et compétent." />
-                <BlogLink href="/blog/urgence-plomberie-que-faire" emoji="&#128680;" title="Urgence plomberie : que faire ?" desc="Les bons réflexes en cas de fuite ou de dégât des eaux." />
+                <BlogLink href="/blog/comment-choisir-plombier" emoji="&#128295;" title="Comment choisir son plombier ?" desc="Les crit&egrave;res essentiels pour trouver un plombier fiable et comp&eacute;tent." />
+                <BlogLink href="/blog/urgence-plomberie-que-faire" emoji="&#128680;" title="Urgence plomberie : que faire ?" desc="Les bons r&eacute;flexes en cas de fuite ou de d&eacute;g&acirc;t des eaux." />
               </>
             ) : isBatiment ? (
               <>
-                <BlogLink href="/blog/renovation-energetique-2026" emoji="&#127969;" title="Rénovation énergétique 2026 : aides et conseils" desc="Découvrez les aides disponibles et les travaux prioritaires pour votre logement." />
-                <BlogLink href="/blog/tendances-decoration-2026" emoji="&#127912;" title="Tendances décoration 2026" desc="Les styles et matériaux qui font la tendance cette année." />
+                <BlogLink href="/blog/renovation-energetique-2026" emoji="&#127969;" title="R&eacute;novation &eacute;nerg&eacute;tique 2026 : aides et conseils" desc="D&eacute;couvrez les aides disponibles et les travaux prioritaires pour votre logement." />
+                <BlogLink href="/blog/tendances-decoration-2026" emoji="&#127912;" title="Tendances d&eacute;coration 2026" desc="Les styles et mat&eacute;riaux qui font la tendance cette ann&eacute;e." />
               </>
             ) : (
               <>
-                <BlogLink href="/blog/tendances-decoration-2026" emoji="&#127912;" title="Tendances décoration 2026" desc="Les styles et matériaux qui font la tendance cette année." />
-                <BlogLink href="/blog/renovation-energetique-2026" emoji="&#127969;" title="Rénovation énergétique 2026 : aides et conseils" desc="Découvrez les aides disponibles et les travaux prioritaires pour votre logement." />
+                <BlogLink href="/blog/tendances-decoration-2026" emoji="&#127912;" title="Tendances d&eacute;coration 2026" desc="Les styles et mat&eacute;riaux qui font la tendance cette ann&eacute;e." />
+                <BlogLink href="/blog/renovation-energetique-2026" emoji="&#127969;" title="R&eacute;novation &eacute;nerg&eacute;tique 2026 : aides et conseils" desc="D&eacute;couvrez les aides disponibles et les travaux prioritaires pour votre logement." />
               </>
             )}
           </div>
@@ -87,12 +87,12 @@ function BlogLink({ href, emoji, title, desc }: { href: string; emoji: string; t
   return (
     <Link
       href={href}
-      className="flex items-start gap-3 p-4 bg-white rounded-xl border border-gray-100 hover:border-clay-200 hover:shadow-sm transition-all group"
+      className="flex items-start gap-3 p-4 bg-white rounded-xl border border-sand-200 hover:border-primary-200 hover:shadow-soft transition-all group"
     >
       <span className="text-2xl shrink-0" aria-hidden="true" dangerouslySetInnerHTML={{ __html: emoji }} />
       <div>
-        <span className="font-semibold text-gray-900 group-hover:text-clay-600 transition-colors">{title}</span>
-        <p className="text-sm text-gray-500 mt-1">{desc}</p>
+        <span className="font-semibold text-charcoal-900 group-hover:text-primary-500 transition-colors">{title}</span>
+        <p className="text-sm text-charcoal-500 mt-1">{desc}</p>
       </div>
     </Link>
   )

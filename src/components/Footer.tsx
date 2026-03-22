@@ -41,21 +41,21 @@ const informationLinks = [
 
 export default function Footer() {
   return (
-    <footer className="relative bg-gray-950 text-gray-400" role="contentinfo">
+    <footer className="relative bg-charcoal-900 text-sand-400" role="contentinfo">
       {/* Top gradient separator */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gray-700/50 to-transparent" />
-      <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-gray-900/80 to-transparent pointer-events-none" />
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-charcoal-700/50 to-transparent" />
+      <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-charcoal-800/80 to-transparent pointer-events-none" />
 
       {/* Subtle noise texture overlay */}
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjc1IiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIzMDAiIGZpbHRlcj0idXJsKCNhKSIgb3BhY2l0eT0iMSIvPjwvc3ZnPg==')]" aria-hidden="true" />
 
       {/* Newsletter Section Premium */}
-      <div className="relative border-b border-white/[0.06]">
+      <div className="relative border-b border-charcoal-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-          <div className="relative flex flex-col lg:flex-row items-center justify-between gap-8 bg-gradient-to-br from-clay-400 to-clay-600 rounded-2xl p-8 lg:p-10 overflow-hidden shadow-2xl shadow-clay-900/30">
+          <div className="relative flex flex-col lg:flex-row items-center justify-between gap-8 bg-gradient-to-br from-primary-400 to-primary-600 rounded-2xl p-8 lg:p-10 overflow-hidden shadow-2xl shadow-primary-900/30">
             {/* Decorative gradient orbs */}
-            <div className="absolute -top-20 -right-20 w-60 h-60 bg-clay-300/20 rounded-full blur-3xl" aria-hidden="true" />
-            <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-clay-200/15 rounded-full blur-3xl" aria-hidden="true" />
+            <div className="absolute -top-20 -right-20 w-60 h-60 bg-primary-300/20 rounded-full blur-3xl" aria-hidden="true" />
+            <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-primary-200/15 rounded-full blur-3xl" aria-hidden="true" />
             <div className="relative text-center lg:text-left">
               <h3 className="font-heading text-2xl lg:text-3xl font-bold text-white mb-2 tracking-tight">Restez informé</h3>
               <p className="text-white/80 text-base">Recevez nos conseils et offres exclusives</p>
@@ -68,43 +68,43 @@ export default function Footer() {
       </div>
 
       {/* Trust Badges Premium */}
-      <div className="relative border-b border-white/[0.06]">
+      <div className="relative border-b border-charcoal-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-5">
-            <div className="group flex items-center gap-3.5 bg-white/[0.03] hover:bg-white/[0.06] backdrop-blur-sm rounded-2xl border border-white/[0.06] hover:border-white/[0.12] p-5 transition-all duration-300">
-              <div className="w-12 h-12 bg-emerald-500/10 group-hover:bg-emerald-500/15 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-300">
-                <Shield className="w-6 h-6 text-emerald-400" />
+            <div className="group flex items-center gap-3.5 bg-white/[0.03] hover:bg-white/[0.06] backdrop-blur-sm rounded-2xl border border-charcoal-700 hover:border-charcoal-600 p-5 transition-all duration-300">
+              <div className="w-12 h-12 bg-accent-500/10 group-hover:bg-accent-500/15 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-300">
+                <Shield className="w-6 h-6 text-accent-400" />
               </div>
               <div>
                 <p className="text-white font-semibold text-sm">Artisans référencés SIREN</p>
-                <p className="text-gray-500 text-xs mt-0.5">Référencés par SIREN</p>
+                <p className="text-sand-500 text-xs mt-0.5">Référencés par SIREN</p>
               </div>
             </div>
-            <div className="group flex items-center gap-3.5 bg-white/[0.03] hover:bg-white/[0.06] backdrop-blur-sm rounded-2xl border border-white/[0.06] hover:border-white/[0.12] p-5 transition-all duration-300">
-              <div className="w-12 h-12 bg-clay-400/10 group-hover:bg-clay-400/15 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-300">
-                <Building2 className="w-6 h-6 text-clay-400" />
+            <div className="group flex items-center gap-3.5 bg-white/[0.03] hover:bg-white/[0.06] backdrop-blur-sm rounded-2xl border border-charcoal-700 hover:border-charcoal-600 p-5 transition-all duration-300">
+              <div className="w-12 h-12 bg-primary-400/10 group-hover:bg-primary-400/15 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-300">
+                <Building2 className="w-6 h-6 text-primary-400" />
               </div>
               <div>
                 <p className="text-white font-semibold text-sm">101 départements</p>
-                <p className="text-gray-500 text-xs mt-0.5">Couverture nationale</p>
+                <p className="text-sand-500 text-xs mt-0.5">Couverture nationale</p>
               </div>
             </div>
-            <div className="group flex items-center gap-3.5 bg-white/[0.03] hover:bg-white/[0.06] backdrop-blur-sm rounded-2xl border border-white/[0.06] hover:border-white/[0.12] p-5 transition-all duration-300">
-              <div className="w-12 h-12 bg-amber-500/10 group-hover:bg-amber-500/15 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-300">
-                <Award className="w-6 h-6 text-amber-400" />
+            <div className="group flex items-center gap-3.5 bg-white/[0.03] hover:bg-white/[0.06] backdrop-blur-sm rounded-2xl border border-charcoal-700 hover:border-charcoal-600 p-5 transition-all duration-300">
+              <div className="w-12 h-12 bg-secondary-500/10 group-hover:bg-secondary-500/15 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-300">
+                <Award className="w-6 h-6 text-secondary-400" />
               </div>
               <div>
                 <p className="text-white font-semibold text-sm">100% gratuit</p>
-                <p className="text-gray-500 text-xs mt-0.5">Sans engagement</p>
+                <p className="text-sand-500 text-xs mt-0.5">Sans engagement</p>
               </div>
             </div>
-            <div className="group flex items-center gap-3.5 bg-white/[0.03] hover:bg-white/[0.06] backdrop-blur-sm rounded-2xl border border-white/[0.06] hover:border-white/[0.12] p-5 transition-all duration-300">
-              <div className="w-12 h-12 bg-clay-400/10 group-hover:bg-clay-400/15 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-300">
-                <CreditCard className="w-6 h-6 text-clay-400" />
+            <div className="group flex items-center gap-3.5 bg-white/[0.03] hover:bg-white/[0.06] backdrop-blur-sm rounded-2xl border border-charcoal-700 hover:border-charcoal-600 p-5 transition-all duration-300">
+              <div className="w-12 h-12 bg-primary-400/10 group-hover:bg-primary-400/15 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-300">
+                <CreditCard className="w-6 h-6 text-primary-400" />
               </div>
               <div>
                 <p className="text-white font-semibold text-sm">Devis gratuit</p>
-                <p className="text-gray-500 text-xs mt-0.5">Sans engagement</p>
+                <p className="text-sand-500 text-xs mt-0.5">Sans engagement</p>
               </div>
             </div>
           </div>
@@ -112,7 +112,7 @@ export default function Footer() {
       </div>
 
       {/* SEO Internal Links Section */}
-      <nav className="relative border-b border-white/[0.06]" aria-label="Liens populaires">
+      <nav className="relative border-b border-charcoal-700" aria-label="Liens populaires">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
           {/* Desktop: full grid visible */}
           <div className="hidden md:grid md:grid-cols-6 gap-8 lg:gap-12">
@@ -124,14 +124,14 @@ export default function Footer() {
                   <li key={service.slug}>
                     <Link
                       href={`/services/${service.slug}`}
-                      className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5"
+                      className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5"
                     >
                       {service.name}
                     </Link>
                   </li>
                 ))}
                 <li className="pt-2">
-                  <Link href="/services" className="text-clay-400 hover:text-clay-300 flex items-center gap-1 group py-1.5">
+                  <Link href="/services" className="text-primary-400 hover:text-primary-300 flex items-center gap-1 group py-1.5">
                     Tous les services
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
@@ -147,14 +147,14 @@ export default function Footer() {
                   <li key={city.slug}>
                     <Link
                       href={`/villes/${city.slug}`}
-                      className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5"
+                      className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5"
                     >
                       {city.name}
                     </Link>
                   </li>
                 ))}
                 <li className="pt-2">
-                  <Link href="/villes" className="text-clay-400 hover:text-clay-300 flex items-center gap-1 group py-1.5">
+                  <Link href="/villes" className="text-primary-400 hover:text-primary-300 flex items-center gap-1 group py-1.5">
                     Toutes les villes
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
@@ -165,7 +165,7 @@ export default function Footer() {
             {/* Par région */}
             <div>
               <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em] flex items-center gap-2">
-                <Building2 className="w-3.5 h-3.5 text-gray-500" />
+                <Building2 className="w-3.5 h-3.5 text-charcoal-400" />
                 Par région
               </h4>
               <ul className="space-y-3 text-sm">
@@ -173,20 +173,20 @@ export default function Footer() {
                   <li key={region.slug}>
                     <Link
                       href={`/regions/${region.slug}`}
-                      className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5"
+                      className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5"
                     >
                       {region.name}
                     </Link>
                   </li>
                 ))}
                 <li className="pt-2">
-                  <Link href="/regions" className="text-clay-400 hover:text-clay-300 flex items-center gap-1 group py-1.5">
+                  <Link href="/regions" className="text-primary-400 hover:text-primary-300 flex items-center gap-1 group py-1.5">
                     Toutes les régions
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </li>
                 <li>
-                  <Link href="/departements" className="text-clay-400 hover:text-clay-300 flex items-center gap-1 group py-1.5">
+                  <Link href="/departements" className="text-primary-400 hover:text-primary-300 flex items-center gap-1 group py-1.5">
                     Tous les départements
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
@@ -202,7 +202,7 @@ export default function Footer() {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5"
+                      className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5"
                     >
                       {link.name}
                     </Link>
@@ -215,12 +215,12 @@ export default function Footer() {
             <div>
               <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Ressources</h4>
               <ul className="space-y-3 text-sm">
-                <li><Link href="/guides" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">Guides travaux</Link></li>
-                <li><Link href="/questions" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">Questions fréquentes</Link></li>
-                <li><Link href="/comparaison" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">Comparatifs artisans</Link></li>
-                <li><Link href="/barometre" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">Baromètre des prix</Link></li>
-                <li><Link href="/glossaire" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">Glossaire</Link></li>
-                <li><Link href="/statistiques-artisans-france" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">Statistiques artisans</Link></li>
+                <li><Link href="/guides" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">Guides travaux</Link></li>
+                <li><Link href="/questions" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">Questions fréquentes</Link></li>
+                <li><Link href="/comparaison" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">Comparatifs artisans</Link></li>
+                <li><Link href="/barometre" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">Baromètre des prix</Link></li>
+                <li><Link href="/glossaire" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">Glossaire</Link></li>
+                <li><Link href="/statistiques-artisans-france" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">Statistiques artisans</Link></li>
               </ul>
             </div>
 
@@ -232,7 +232,7 @@ export default function Footer() {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5"
+                      className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5"
                     >
                       {link.name}
                     </Link>
@@ -244,24 +244,24 @@ export default function Footer() {
 
           {/* Mobile: collapsible accordions */}
           <div className="md:hidden space-y-2">
-            <details className="group border border-white/[0.06] rounded-xl overflow-hidden">
+            <details className="group border border-charcoal-700 rounded-xl overflow-hidden">
               <summary className="flex items-center justify-between cursor-pointer px-5 py-4 text-white font-heading font-semibold text-xs uppercase tracking-[0.15em] hover:bg-white/[0.03] transition-colors">
                 Services populaires
-                <ArrowRight className="w-4 h-4 text-gray-500 transition-transform duration-200 group-open:rotate-90" />
+                <ArrowRight className="w-4 h-4 text-charcoal-400 transition-transform duration-200 group-open:rotate-90" />
               </summary>
               <ul className="space-y-1 text-sm px-5 pb-4">
                 {popularServices.map((service) => (
                   <li key={service.slug}>
                     <Link
                       href={`/services/${service.slug}`}
-                      className="text-gray-400 hover:text-white transition-all duration-200 inline-block py-1.5"
+                      className="text-sand-400 hover:text-primary-400 transition-all duration-200 inline-block py-1.5"
                     >
                       {service.name}
                     </Link>
                   </li>
                 ))}
                 <li className="pt-1">
-                  <Link href="/services" className="text-clay-400 hover:text-clay-300 flex items-center gap-1 group py-1.5">
+                  <Link href="/services" className="text-primary-400 hover:text-primary-300 flex items-center gap-1 group py-1.5">
                     Tous les services
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
@@ -269,24 +269,24 @@ export default function Footer() {
               </ul>
             </details>
 
-            <details className="group border border-white/[0.06] rounded-xl overflow-hidden">
+            <details className="group border border-charcoal-700 rounded-xl overflow-hidden">
               <summary className="flex items-center justify-between cursor-pointer px-5 py-4 text-white font-heading font-semibold text-xs uppercase tracking-[0.15em] hover:bg-white/[0.03] transition-colors">
                 Villes populaires
-                <ArrowRight className="w-4 h-4 text-gray-500 transition-transform duration-200 group-open:rotate-90" />
+                <ArrowRight className="w-4 h-4 text-charcoal-400 transition-transform duration-200 group-open:rotate-90" />
               </summary>
               <ul className="space-y-1 text-sm px-5 pb-4">
                 {popularCities.map((city) => (
                   <li key={city.slug}>
                     <Link
                       href={`/villes/${city.slug}`}
-                      className="text-gray-400 hover:text-white transition-all duration-200 inline-block py-1.5"
+                      className="text-sand-400 hover:text-primary-400 transition-all duration-200 inline-block py-1.5"
                     >
                       {city.name}
                     </Link>
                   </li>
                 ))}
                 <li className="pt-1">
-                  <Link href="/villes" className="text-clay-400 hover:text-clay-300 flex items-center gap-1 group py-1.5">
+                  <Link href="/villes" className="text-primary-400 hover:text-primary-300 flex items-center gap-1 group py-1.5">
                     Toutes les villes
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
@@ -294,33 +294,33 @@ export default function Footer() {
               </ul>
             </details>
 
-            <details className="group border border-white/[0.06] rounded-xl overflow-hidden">
+            <details className="group border border-charcoal-700 rounded-xl overflow-hidden">
               <summary className="flex items-center justify-between cursor-pointer px-5 py-4 text-white font-heading font-semibold text-xs uppercase tracking-[0.15em] hover:bg-white/[0.03] transition-colors">
                 <span className="flex items-center gap-2">
-                  <Building2 className="w-3.5 h-3.5 text-gray-500" />
+                  <Building2 className="w-3.5 h-3.5 text-charcoal-400" />
                   Par région
                 </span>
-                <ArrowRight className="w-4 h-4 text-gray-500 transition-transform duration-200 group-open:rotate-90" />
+                <ArrowRight className="w-4 h-4 text-charcoal-400 transition-transform duration-200 group-open:rotate-90" />
               </summary>
               <ul className="space-y-1 text-sm px-5 pb-4">
                 {popularRegions.map((region) => (
                   <li key={region.slug}>
                     <Link
                       href={`/regions/${region.slug}`}
-                      className="text-gray-400 hover:text-white transition-all duration-200 inline-block py-1.5"
+                      className="text-sand-400 hover:text-primary-400 transition-all duration-200 inline-block py-1.5"
                     >
                       {region.name}
                     </Link>
                   </li>
                 ))}
                 <li className="pt-1">
-                  <Link href="/regions" className="text-clay-400 hover:text-clay-300 flex items-center gap-1 group py-1.5">
+                  <Link href="/regions" className="text-primary-400 hover:text-primary-300 flex items-center gap-1 group py-1.5">
                     Toutes les régions
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </li>
                 <li>
-                  <Link href="/departements" className="text-clay-400 hover:text-clay-300 flex items-center gap-1 group py-1.5">
+                  <Link href="/departements" className="text-primary-400 hover:text-primary-300 flex items-center gap-1 group py-1.5">
                     Tous les départements
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
@@ -328,17 +328,17 @@ export default function Footer() {
               </ul>
             </details>
 
-            <details className="group border border-white/[0.06] rounded-xl overflow-hidden">
+            <details className="group border border-charcoal-700 rounded-xl overflow-hidden">
               <summary className="flex items-center justify-between cursor-pointer px-5 py-4 text-white font-heading font-semibold text-xs uppercase tracking-[0.15em] hover:bg-white/[0.03] transition-colors">
                 Outils gratuits
-                <ArrowRight className="w-4 h-4 text-gray-500 transition-transform duration-200 group-open:rotate-90" />
+                <ArrowRight className="w-4 h-4 text-charcoal-400 transition-transform duration-200 group-open:rotate-90" />
               </summary>
               <ul className="space-y-1 text-sm px-5 pb-4">
                 {outilsLinks.map((link) => (
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-gray-400 hover:text-white transition-all duration-200 inline-block py-1.5"
+                      className="text-sand-400 hover:text-primary-400 transition-all duration-200 inline-block py-1.5"
                     >
                       {link.name}
                     </Link>
@@ -347,32 +347,32 @@ export default function Footer() {
               </ul>
             </details>
 
-            <details className="group border border-white/[0.06] rounded-xl overflow-hidden">
+            <details className="group border border-charcoal-700 rounded-xl overflow-hidden">
               <summary className="flex items-center justify-between cursor-pointer px-5 py-4 text-white font-heading font-semibold text-xs uppercase tracking-[0.15em] hover:bg-white/[0.03] transition-colors">
                 Ressources
-                <ArrowRight className="w-4 h-4 text-gray-500 transition-transform duration-200 group-open:rotate-90" />
+                <ArrowRight className="w-4 h-4 text-charcoal-400 transition-transform duration-200 group-open:rotate-90" />
               </summary>
               <ul className="space-y-1 text-sm px-5 pb-4">
-                <li><Link href="/guides" className="text-gray-400 hover:text-white transition-all duration-200 inline-block py-1.5">Guides travaux</Link></li>
-                <li><Link href="/questions" className="text-gray-400 hover:text-white transition-all duration-200 inline-block py-1.5">Questions fréquentes</Link></li>
-                <li><Link href="/comparaison" className="text-gray-400 hover:text-white transition-all duration-200 inline-block py-1.5">Comparatifs artisans</Link></li>
-                <li><Link href="/barometre" className="text-gray-400 hover:text-white transition-all duration-200 inline-block py-1.5">Baromètre des prix</Link></li>
-                <li><Link href="/glossaire" className="text-gray-400 hover:text-white transition-all duration-200 inline-block py-1.5">Glossaire</Link></li>
-                <li><Link href="/statistiques-artisans-france" className="text-gray-400 hover:text-white transition-all duration-200 inline-block py-1.5">Statistiques artisans</Link></li>
+                <li><Link href="/guides" className="text-sand-400 hover:text-primary-400 transition-all duration-200 inline-block py-1.5">Guides travaux</Link></li>
+                <li><Link href="/questions" className="text-sand-400 hover:text-primary-400 transition-all duration-200 inline-block py-1.5">Questions fréquentes</Link></li>
+                <li><Link href="/comparaison" className="text-sand-400 hover:text-primary-400 transition-all duration-200 inline-block py-1.5">Comparatifs artisans</Link></li>
+                <li><Link href="/barometre" className="text-sand-400 hover:text-primary-400 transition-all duration-200 inline-block py-1.5">Baromètre des prix</Link></li>
+                <li><Link href="/glossaire" className="text-sand-400 hover:text-primary-400 transition-all duration-200 inline-block py-1.5">Glossaire</Link></li>
+                <li><Link href="/statistiques-artisans-france" className="text-sand-400 hover:text-primary-400 transition-all duration-200 inline-block py-1.5">Statistiques artisans</Link></li>
               </ul>
             </details>
 
-            <details className="group border border-white/[0.06] rounded-xl overflow-hidden">
+            <details className="group border border-charcoal-700 rounded-xl overflow-hidden">
               <summary className="flex items-center justify-between cursor-pointer px-5 py-4 text-white font-heading font-semibold text-xs uppercase tracking-[0.15em] hover:bg-white/[0.03] transition-colors">
                 Navigation
-                <ArrowRight className="w-4 h-4 text-gray-500 transition-transform duration-200 group-open:rotate-90" />
+                <ArrowRight className="w-4 h-4 text-charcoal-400 transition-transform duration-200 group-open:rotate-90" />
               </summary>
               <ul className="space-y-1 text-sm px-5 pb-4">
                 {navigationLinks.map((link) => (
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-gray-400 hover:text-white transition-all duration-200 inline-block py-1.5"
+                      className="text-sand-400 hover:text-primary-400 transition-all duration-200 inline-block py-1.5"
                     >
                       {link.name}
                     </Link>
@@ -411,26 +411,26 @@ export default function Footer() {
                 <rect x="2" y="2" width="44" height="44" rx="12" fill="url(#footerShine)" />
                 <path fillRule="evenodd" fill="#fff" fillOpacity="0.95" d="M24 11 L38.5 24 L35 24 L35 37 L13 37 L13 24 L9.5 24Z M21 37 V29 A3 3 0 0 1 27 29 V37Z" />
               </svg>
-              <span className="text-2xl font-heading font-extrabold tracking-tight text-white group-hover:text-gray-200 transition-colors duration-200">
-                Services<span className="text-clay-400">Artisans</span>
+              <span className="text-2xl font-heading font-extrabold tracking-tight text-white group-hover:text-sand-200 transition-colors duration-200">
+                Services<span className="text-primary-400">Artisans</span>
               </span>
             </Link>
-            <p className="text-sm text-gray-500 mb-2 font-medium">La plateforme de confiance pour trouver votre artisan</p>
-            <p className="text-sm leading-relaxed mb-8 text-gray-400/80">
+            <p className="text-sm text-sand-300 mb-2 font-medium">La plateforme de confiance pour trouver votre artisan</p>
+            <p className="text-sm leading-relaxed mb-8 text-sand-400/80">
               {companyIdentity.description}
             </p>
             <div className="flex gap-2.5">
-              <a href="https://facebook.com/servicesartisans" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center hover:bg-blue-600 hover:scale-110 border border-white/[0.06] hover:border-blue-500 transition-all duration-300 group" aria-label="Facebook">
-                <Facebook className="w-[18px] h-[18px] text-gray-500 group-hover:text-white transition-colors duration-300" />
+              <a href="https://facebook.com/servicesartisans" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center hover:bg-primary-400 hover:scale-110 border border-charcoal-700 hover:border-primary-400 transition-all duration-300 group" aria-label="Facebook">
+                <Facebook className="w-[18px] h-[18px] text-sand-400 group-hover:text-white transition-colors duration-300" />
               </a>
-              <a href="https://twitter.com/servicesartisans" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center hover:bg-sky-500 hover:scale-110 border border-white/[0.06] hover:border-sky-400 transition-all duration-300 group" aria-label="Twitter">
-                <Twitter className="w-[18px] h-[18px] text-gray-500 group-hover:text-white transition-colors duration-300" />
+              <a href="https://twitter.com/servicesartisans" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center hover:bg-primary-400 hover:scale-110 border border-charcoal-700 hover:border-primary-400 transition-all duration-300 group" aria-label="Twitter">
+                <Twitter className="w-[18px] h-[18px] text-sand-400 group-hover:text-white transition-colors duration-300" />
               </a>
-              <a href="https://linkedin.com/company/servicesartisans" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center hover:bg-blue-700 hover:scale-110 border border-white/[0.06] hover:border-blue-600 transition-all duration-300 group" aria-label="LinkedIn">
-                <Linkedin className="w-[18px] h-[18px] text-gray-500 group-hover:text-white transition-colors duration-300" />
+              <a href="https://linkedin.com/company/servicesartisans" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center hover:bg-primary-400 hover:scale-110 border border-charcoal-700 hover:border-primary-400 transition-all duration-300 group" aria-label="LinkedIn">
+                <Linkedin className="w-[18px] h-[18px] text-sand-400 group-hover:text-white transition-colors duration-300" />
               </a>
-              <a href="https://instagram.com/servicesartisans" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center hover:bg-gradient-to-br hover:from-purple-600 hover:to-pink-500 hover:scale-110 border border-white/[0.06] hover:border-purple-400 transition-all duration-300 group" aria-label="Instagram">
-                <Instagram className="w-[18px] h-[18px] text-gray-500 group-hover:text-white transition-colors duration-300" />
+              <a href="https://instagram.com/servicesartisans" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/[0.05] rounded-xl flex items-center justify-center hover:bg-primary-400 hover:scale-110 border border-charcoal-700 hover:border-primary-400 transition-all duration-300 group" aria-label="Instagram">
+                <Instagram className="w-[18px] h-[18px] text-sand-400 group-hover:text-white transition-colors duration-300" />
               </a>
             </div>
           </div>
@@ -441,13 +441,13 @@ export default function Footer() {
             <ul className="space-y-3 text-sm">
               {informationLinks.slice(0, 6).map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                  <Link href={link.href} className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                     {link.name}
                   </Link>
                 </li>
               ))}
               <li>
-                <Link href="/services" className="inline-flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-amber-500/20 to-amber-600/20 text-amber-400 rounded-lg hover:from-amber-500/30 hover:to-amber-600/30 transition-all mt-2 group">
+                <Link href="/services" className="inline-flex items-center gap-1.5 px-4 py-2 bg-primary-400/15 text-primary-400 rounded-lg hover:bg-primary-400/25 transition-all mt-2 group">
                   Voir les services
                   <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                 </Link>
@@ -460,32 +460,32 @@ export default function Footer() {
             <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Entreprise</h4>
             <ul className="space-y-3 text-sm">
               <li>
-                <Link href="/inscription-artisan" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link href="/inscription-artisan" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   Devenir partenaire
                 </Link>
               </li>
               <li>
-                <Link href="/notre-processus-de-verification" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link href="/notre-processus-de-verification" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   Processus de vérification
                 </Link>
               </li>
               <li>
-                <Link href="/garantie" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link href="/garantie" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   Notre garantie
                 </Link>
               </li>
               <li>
-                <Link href="/politique-avis" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link href="/politique-avis" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   Politique des avis
                 </Link>
               </li>
               <li>
-                <Link href="/mediation" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link href="/mediation" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   Médiation
                 </Link>
               </li>
               <li>
-                <Link href="/presse" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link href="/presse" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   Espace presse
                 </Link>
               </li>
@@ -497,22 +497,22 @@ export default function Footer() {
             <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Juridique</h4>
             <ul className="space-y-3 text-sm">
               <li>
-                <Link href="/mentions-legales" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link href="/mentions-legales" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   Mentions légales
                 </Link>
               </li>
               <li>
-                <Link href="/cgv" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link href="/cgv" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   CGV
                 </Link>
               </li>
               <li>
-                <Link href="/confidentialite" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link href="/confidentialite" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   Confidentialité
                 </Link>
               </li>
               <li>
-                <Link href="/accessibilite" className="text-gray-400 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
+                <Link href="/accessibilite" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   Accessibilité
                 </Link>
               </li>
@@ -521,37 +521,37 @@ export default function Footer() {
         </div>
 
         {/* Contact section */}
-        <div className="mt-16 pt-10 border-t border-white/[0.06]">
+        <div className="mt-16 pt-10 border-t border-charcoal-700">
           <div className="grid md:grid-cols-3 gap-6">
             {companyIdentity.address && (
-              <div className="group flex items-center gap-4 p-5 bg-white/[0.02] hover:bg-white/[0.05] rounded-2xl border border-white/[0.04] hover:border-white/[0.08] transition-all duration-300">
-                <div className="w-12 h-12 bg-clay-400/10 group-hover:bg-clay-400/15 rounded-xl flex items-center justify-center transition-colors duration-300">
-                  <MapPin className="w-5 h-5 text-clay-400" />
+              <div className="group flex items-center gap-4 p-5 bg-white/[0.02] hover:bg-white/[0.05] rounded-2xl border border-charcoal-700 hover:border-charcoal-600 transition-all duration-300">
+                <div className="w-12 h-12 bg-primary-400/10 group-hover:bg-primary-400/15 rounded-xl flex items-center justify-center transition-colors duration-300">
+                  <MapPin className="w-5 h-5 text-primary-400" />
                 </div>
                 <div>
                   <p className="text-white font-medium text-sm mb-0.5">Adresse</p>
-                  <span className="text-sm text-gray-500">{companyIdentity.address}</span>
+                  <span className="text-sm text-sand-400">{companyIdentity.address}</span>
                 </div>
               </div>
             )}
             {companyIdentity.phone && (
-              <div className="group flex items-center gap-4 p-5 bg-white/[0.02] hover:bg-white/[0.05] rounded-2xl border border-white/[0.04] hover:border-white/[0.08] transition-all duration-300">
-                <div className="w-12 h-12 bg-clay-400/10 group-hover:bg-clay-400/15 rounded-xl flex items-center justify-center transition-colors duration-300">
-                  <Phone className="w-5 h-5 text-clay-400" />
+              <div className="group flex items-center gap-4 p-5 bg-white/[0.02] hover:bg-white/[0.05] rounded-2xl border border-charcoal-700 hover:border-charcoal-600 transition-all duration-300">
+                <div className="w-12 h-12 bg-primary-400/10 group-hover:bg-primary-400/15 rounded-xl flex items-center justify-center transition-colors duration-300">
+                  <Phone className="w-5 h-5 text-primary-400" />
                 </div>
                 <div>
                   <p className="text-white font-medium text-sm mb-0.5">Téléphone</p>
-                  <a href={`tel:${companyIdentity.phone}`} className="text-sm text-gray-500 hover:text-white transition-colors duration-200">{companyIdentity.phone}</a>
+                  <a href={`tel:${companyIdentity.phone}`} className="text-sm text-sand-400 hover:text-primary-400 transition-colors duration-200">{companyIdentity.phone}</a>
                 </div>
               </div>
             )}
-            <div className="group flex items-center gap-4 p-5 bg-white/[0.02] hover:bg-white/[0.05] rounded-2xl border border-white/[0.04] hover:border-white/[0.08] transition-all duration-300">
-              <div className="w-12 h-12 bg-clay-400/10 group-hover:bg-clay-400/15 rounded-xl flex items-center justify-center transition-colors duration-300">
-                <Mail className="w-5 h-5 text-clay-400" />
+            <div className="group flex items-center gap-4 p-5 bg-white/[0.02] hover:bg-white/[0.05] rounded-2xl border border-charcoal-700 hover:border-charcoal-600 transition-all duration-300">
+              <div className="w-12 h-12 bg-primary-400/10 group-hover:bg-primary-400/15 rounded-xl flex items-center justify-center transition-colors duration-300">
+                <Mail className="w-5 h-5 text-primary-400" />
               </div>
               <div>
                 <p className="text-white font-medium text-sm mb-0.5">Email</p>
-                <a href={`mailto:${companyIdentity.email}`} className="text-sm text-gray-500 hover:text-white transition-colors duration-200">
+                <a href={`mailto:${companyIdentity.email}`} className="text-sm text-sand-400 hover:text-primary-400 transition-colors duration-200">
                   {companyIdentity.email}
                 </a>
               </div>
@@ -562,19 +562,19 @@ export default function Footer() {
 
       {/* Horizontal separator before copyright */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="h-px bg-gradient-to-r from-transparent via-white/[0.08] to-transparent" />
+        <div className="h-px bg-gradient-to-r from-transparent via-charcoal-700/60 to-transparent" />
       </div>
 
-      {/* Bottom Bar Premium */}
-      <div className="relative bg-gray-900/50">
+      {/* Bottom Bar */}
+      <div className="relative bg-charcoal-950/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
-            <p className="text-gray-500">
-              &copy; {new Date().getFullYear()} <span className="text-gray-400 font-medium">ServicesArtisans</span>. Tous droits réservés.
+            <p className="text-sand-500">
+              &copy; {new Date().getFullYear()} <span className="text-sand-300 font-medium">ServicesArtisans</span>. Tous droits réservés.
               <span className="hidden sm:inline"> &mdash; Données mises à jour en {new Date().getFullYear()}</span>
             </p>
-            <div className="flex flex-wrap justify-center gap-x-6 gap-y-1 text-sm text-gray-500">
-              <Link href="/plan-du-site" className="hover:text-white transition-colors duration-200 py-1.5">
+            <div className="flex flex-wrap justify-center gap-x-6 gap-y-1 text-sm text-sand-500">
+              <Link href="/plan-du-site" className="hover:text-primary-400 transition-colors duration-200 py-1.5">
                 Plan du site
               </Link>
             </div>

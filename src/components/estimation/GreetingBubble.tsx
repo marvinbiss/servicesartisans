@@ -23,7 +23,7 @@ export const GreetingBubble = memo(function GreetingBubble({
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: 10, scale: 0.9 }}
       transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-      className="relative max-w-[260px] sm:max-w-[300px] bg-white rounded-2xl rounded-br-sm shadow-xl border border-gray-100 px-4 py-3 cursor-pointer"
+      className="relative max-w-[260px] sm:max-w-[300px] bg-white rounded-2xl rounded-br-sm shadow-xl border border-sand-100 px-4 py-3 cursor-pointer"
       onClick={onOpen}
     >
       <button
@@ -31,22 +31,22 @@ export const GreetingBubble = memo(function GreetingBubble({
           e.stopPropagation()
           onDismiss()
         }}
-        className="absolute -top-2 -right-2 flex h-6 w-6 items-center justify-center rounded-full bg-gray-100 text-gray-400 hover:bg-gray-200 hover:text-gray-600 transition-colors shadow-sm"
+        className="absolute -top-2 -right-2 flex h-6 w-6 items-center justify-center rounded-full bg-sand-100 text-charcoal-400 hover:bg-sand-200 hover:text-charcoal-600 transition-colors shadow-sm"
         aria-label="Fermer"
       >
         <X className="h-3.5 w-3.5" />
       </button>
-      <p className="text-sm text-gray-800 font-medium leading-snug">
+      <p className="text-sm text-charcoal-800 font-medium leading-snug">
         {message}
       </p>
       {/* Price teaser */}
       {priceTeaser && (
-        <p className="text-xs text-gray-500 mt-1 italic">
+        <p className="text-xs text-charcoal-500 mt-1 italic">
           {priceTeaser}
         </p>
       )}
       <div className="flex items-center mt-1.5">
-        <p className="text-xs text-[#E07040] font-semibold flex items-center gap-1">
+        <p className="text-xs text-primary-400 font-semibold flex items-center gap-1">
           <Sparkles className="h-3 w-3" />
           Estimation IA gratuite
         </p>

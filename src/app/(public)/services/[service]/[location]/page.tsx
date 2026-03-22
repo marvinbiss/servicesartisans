@@ -36,10 +36,6 @@ import DemandIndicator from '@/components/DemandIndicator'
 import dynamic from 'next/dynamic'
 import type { Service, Location as LocationType, Provider } from '@/types'
 
-const EstimationWidget = dynamic(
-  () => import('@/components/estimation/EstimationWidget'),
-  { ssr: false }
-)
 
 const MicroConversions = dynamic(
   () => import('@/components/MicroConversions'),
@@ -313,10 +309,10 @@ export default async function ServiceLocationPage({ params }: PageProps) {
 
   if (cmsPage?.content_html) {
     return (
-      <div className="min-h-screen bg-sand-100">
-        <section className="bg-white border-b">
+      <div className="min-h-screen bg-sand-50">
+        <section className="bg-white border-b border-sand-200">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h1 className="font-heading text-3xl font-bold text-gray-900">
+            <h1 className="font-heading text-3xl font-bold text-charcoal-900">
               {cmsPage.title}
             </h1>
           </div>
@@ -506,7 +502,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
       ))}
 
       {/* Visual breadcrumb for navigation and SEO */}
-      <div className="bg-white border-b">
+      <div className="bg-white border-b border-sand-200">
         <div className="max-w-7xl mx-auto px-4 py-3">
           <Breadcrumb items={[
             { label: 'Services', href: '/services' },
@@ -523,7 +519,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
       />
 
       {/* Demand indicator — urgency/scarcity signal */}
-      <div className="max-w-7xl mx-auto px-4 py-3">
+      <div className="max-w-7xl mx-auto px-4 py-3 bg-sand-50">
         <DemandIndicator serviceSlug={serviceSlug} cityName={location.name} variant="banner" />
       </div>
 
@@ -607,14 +603,6 @@ export default async function ServiceLocationPage({ params }: PageProps) {
       />
 
       <StickyMobileCTA serviceSlug={serviceSlug} citySlug={locationSlug} />
-
-      <EstimationWidget context={{
-        metier: service.name,
-        metierSlug: serviceSlug,
-        ville: location.name,
-        departement: location.department_code || '',
-        pageUrl: `/services/${serviceSlug}/${locationSlug}`,
-      }} />
 
       <MicroConversions pageType="service-ville" serviceSlug={serviceSlug} cityName={location.name} />
 
