@@ -164,7 +164,7 @@ export default function ProblemesPage() {
               </span>
             </h1>
             <p className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10">
-              Identifiez votre problème, suivez nos conseils d&apos;urgence et trouvez un artisan référencé
+              Identifiez votre problème, suivez nos conseils d'urgence et trouvez un artisan référencé
               pour intervenir rapidement. Fiches complètes avec symptômes, coûts et prévention.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
@@ -319,10 +319,10 @@ export default function ProblemesPage() {
       <section className="py-16 bg-gradient-to-br from-amber-600 to-orange-600 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Besoin d&apos;un artisan ?
+            Besoin d'un artisan ?
           </h2>
           <p className="text-xl text-amber-100/90 mb-8 max-w-2xl mx-auto">
-            Demandez un devis gratuit et recevez jusqu&apos;à 3 propositions d&apos;artisans référencés dans votre région.
+            Demandez un devis gratuit et recevez jusqu'à 3 propositions d'artisans référencés dans votre région.
           </p>
           <Link
             href="/devis"
@@ -340,7 +340,7 @@ export default function ProblemesPage() {
           <h2 className="text-xl font-bold text-gray-900 mb-6">Voir aussi</h2>
           <div className="grid md:grid-cols-3 gap-6">
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">Services d&apos;urgence</h3>
+              <h3 className="font-semibold text-gray-900 mb-3">Services d'urgence</h3>
               <div className="space-y-2">
                 <Link href="/urgence" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Urgence artisan 24h/24</Link>
                 <Link href="/urgence/plombier" className="block text-sm text-gray-600 hover:text-amber-600 py-1 transition-colors">Plombier urgence</Link>
@@ -379,7 +379,7 @@ export default function ProblemesPage() {
           <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
             <h3 className="text-sm font-semibold text-slate-700 mb-2">Information importante</h3>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Les coûts et délais indiqués sont des estimations moyennes constatées en France métropolitaine. Ils varient selon la complexité du problème, votre région et l&apos;urgence. Seul un devis personnalisé fait foi. ServicesArtisans est un annuaire indépendant — nous mettons en relation mais ne réalisons pas les interventions. En cas d&apos;urgence vitale, appelez le 18 (pompiers) ou le 112.
+              Les coûts et délais indiqués sont des estimations moyennes constatées en France métropolitaine. Ils varient selon la complexité du problème, votre région et l'urgence. Seul un devis personnalisé fait foi. ServicesArtisans est un annuaire indépendant — nous mettons en relation mais ne réalisons pas les interventions. En cas d'urgence vitale, appelez le 18 (pompiers) ou le 112.
             </p>
           </div>
         </div>

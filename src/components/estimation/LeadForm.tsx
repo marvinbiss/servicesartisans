@@ -68,7 +68,7 @@ export const LeadForm = memo(function LeadForm({ context, lead }: LeadFormProps)
           className="mt-0.5"
         />
         <span>
-          J&apos;accepte que mes données soient traitées pour recevoir une estimation.{' '}
+          J'accepte que mes données soient traitées pour recevoir une estimation.{' '}
           <a
             href="/confidentialite"
             target="_blank"

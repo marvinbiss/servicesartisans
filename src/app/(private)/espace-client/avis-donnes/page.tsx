@@ -254,7 +254,7 @@ export default function AvisDonnesPage() {
               </h2>
               {avisPublies.length === 0 ? (
                 <p className="text-gray-500 text-center py-8">
-                  Vous n&apos;avez pas encore publié d&apos;avis.
+                  Vous n'avez pas encore publié d'avis.
                 </p>
               ) : (
                 <div className="space-y-4">
@@ -282,7 +282,7 @@ export default function AvisDonnesPage() {
                           <p className="text-gray-700">{avis.commentaire}</p>
                           {avis.reponse && (
                             <div className="mt-3 bg-gray-50 rounded-lg p-3">
-                              <p className="text-sm font-medium text-gray-700 mb-1">Réponse de l&apos;artisan :</p>
+                              <p className="text-sm font-medium text-gray-700 mb-1">Réponse de l'artisan :</p>
                               <p className="text-sm text-gray-600">{avis.reponse}</p>
                             </div>
                           )}

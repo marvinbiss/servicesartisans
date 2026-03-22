@@ -72,7 +72,7 @@ export function ClayReviewsCarousel({ reviews }: Props) {
               ))}
             </div>
             <p className="text-charcoal-700 text-sm leading-relaxed mb-4 line-clamp-3">
-              &ldquo;{review.comment}&rdquo;
+              “{review.comment}”
             </p>
             <div className="flex items-center gap-2.5">
               <Image
@@ -86,7 +86,7 @@ export function ClayReviewsCarousel({ reviews }: Props) {
               />
               <div>
                 <p className="text-charcoal-900 text-sm font-semibold">{review.client_name || 'Client vérifié'}</p>
-                <p className="text-charcoal-400 text-xs">Client v&eacute;rifi&eacute;</p>
+                <p className="text-charcoal-400 text-xs">Client vérifié</p>
               </div>
             </div>
           </div>

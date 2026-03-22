@@ -53,7 +53,7 @@ export const ChatPanel = memo(function ChatPanel({
             <div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-sand-100 px-4 py-3 text-sm text-charcoal-800">
               {context.artisan ? (
                 <>
-                  Bonjour ! Je suis l&apos;assistant IA d&apos;estimation de{' '}
+                  Bonjour ! Je suis l'assistant IA d'estimation de{' '}
                   <strong>{context.artisan.name}</strong>,{' '}
                   {context.metier.toLowerCase()} à{' '}
                   <strong>{context.ville}</strong>. Décrivez votre
@@ -61,7 +61,7 @@ export const ChatPanel = memo(function ChatPanel({
                 </>
               ) : (
                 <>
-                  Bonjour ! Je suis l&apos;assistant IA d&apos;estimation.
+                  Bonjour ! Je suis l'assistant IA d'estimation.
                   Dites-moi quel projet vous avez en tête avec votre{' '}
                   <strong>{context.metier.toLowerCase()}</strong> à{' '}
                   <strong>{context.ville}</strong>, et je vous

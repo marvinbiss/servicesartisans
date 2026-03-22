@@ -169,7 +169,7 @@ export function ArtisanProfileCard({
             ) : isAvailableToday ? (
               <div className="bg-primary-400 text-white text-xs font-medium px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
                 <Clock className="w-3 h-3" />
-                Dispo aujourd&apos;hui
+                Dispo aujourd'hui
               </div>
             ) : nextSlot ? (
               <div className="bg-white/90 backdrop-blur-sm text-charcoal-700 text-xs font-medium px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
@@ -218,7 +218,7 @@ export function ArtisanProfileCard({
             {yearsExperience && (
               <div className="text-center">
                 <div className="text-lg font-bold text-charcoal-900">{yearsExperience}+</div>
-                <div className="text-xs text-charcoal-500">ans d&apos;exp.</div>
+                <div className="text-xs text-charcoal-500">ans d'exp.</div>
               </div>
             )}
             {completedJobs && (
@@ -399,7 +399,7 @@ export function ArtisanProfileCard({
             <div className="flex items-center gap-4 text-sm">
               {yearsExperience && (
                 <span className="text-charcoal-600">
-                  <strong>{yearsExperience}</strong> ans d&apos;exp.
+                  <strong>{yearsExperience}</strong> ans d'exp.
                 </span>
               )}
               {completedJobs && (

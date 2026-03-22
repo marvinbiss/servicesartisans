@@ -62,7 +62,7 @@ export default function DesktopMegaMenus({
             <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-blue-900 px-8 py-5 flex items-center justify-between">
               <div>
                 <h3 className="text-white font-heading font-bold text-lg">Tous nos services artisans</h3>
-                <p className="text-slate-300 text-sm mt-0.5">{allServicesCount} métiers, des milliers d&apos;artisans qualifiés partout en France</p>
+                <p className="text-slate-300 text-sm mt-0.5">{allServicesCount} métiers, des milliers d'artisans qualifiés partout en France</p>
               </div>
               <div className="hidden sm:flex items-center gap-3">
                 <div className="flex items-center gap-2 text-sm text-white/80 bg-white/10 px-4 py-2 rounded-lg">

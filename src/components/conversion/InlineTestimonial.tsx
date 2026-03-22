@@ -174,7 +174,7 @@ export default function InlineTestimonial({
                   {t.name}
                 </p>
                 <p className="text-2xs text-charcoal-500">
-                  {t.city} &middot; {t.service}
+                  {t.city} · {t.service}
                 </p>
               </div>
             </div>
@@ -182,7 +182,7 @@ export default function InlineTestimonial({
             <StarRating rating={t.rating} />
 
             <p className="mt-2 text-xs leading-relaxed text-charcoal-600 line-clamp-3">
-              &laquo; {t.text} &raquo;
+              « {t.text} »
             </p>
           </article>
         ))}

@@ -67,7 +67,7 @@ export function PagePreview({ isOpen, onClose, title, contentHtml, structuredDat
             {(author || readTime) && (
               <p className="text-sm text-gray-500 mb-4">
                 {author && <>Par {author}</>}
-                {author && readTime && <> &middot; </>}
+                {author && readTime && <> · </>}
                 {readTime && <>{readTime}</>}
               </p>
             )}
@@ -111,7 +111,7 @@ export function PagePreview({ isOpen, onClose, title, contentHtml, structuredDat
               <div className="text-center py-12">
                 <Eye className="w-12 h-12 text-gray-300 mx-auto mb-3" />
                 <p className="text-gray-500">
-                  Aucun contenu à afficher. Commencez à rédiger dans l&apos;éditeur.
+                  Aucun contenu à afficher. Commencez à rédiger dans l'éditeur.
                 </p>
               </div>
             )}

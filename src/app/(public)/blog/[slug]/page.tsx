@@ -499,7 +499,7 @@ function renderCalloutContent(block: CalloutBlock) {
     return (
       <div className="article-callout-content">
         <p className="italic text-lg leading-relaxed text-gray-700">
-          &laquo;&nbsp;{quoteLines.join(' ')}&nbsp;&raquo;
+          «&nbsp;{quoteLines.join(' ')}&nbsp;»
         </p>
         {author && (
           <p className="mt-3 font-semibold text-sm text-slate-600">
@@ -778,8 +778,8 @@ export default async function BlogArticlePage({ params }: PageProps) {
                   <div className="not-prose my-8 bg-gradient-to-r from-clay-50 to-amber-50 border border-clay-200 rounded-xl p-6 sm:p-8">
                     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                       <div className="flex-1">
-                        <p className="font-semibold text-gray-900 mb-1">Besoin d&apos;un professionnel ?</p>
-                        <p className="text-sm text-gray-600">Recevez jusqu&apos;à 3 devis gratuits d&apos;artisans vérifiés près de chez vous.</p>
+                        <p className="font-semibold text-gray-900 mb-1">Besoin d'un professionnel ?</p>
+                        <p className="text-sm text-gray-600">Recevez jusqu'à 3 devis gratuits d'artisans vérifiés près de chez vous.</p>
                       </div>
                       <Link
                         href={devisHref}
@@ -1053,7 +1053,7 @@ export default async function BlogArticlePage({ params }: PageProps) {
                         <div className="flex flex-wrap items-center gap-4 text-xs text-gray-500">
                           <span className="flex items-center gap-1">
                             <Clock className="w-3.5 h-3.5" />
-                            {authorProfile.yearsExperience} ans d&apos;experience
+                            {authorProfile.yearsExperience} ans d'experience
                           </span>
                           <Link
                             href={`/blog?author=${encodeURIComponent(article.author.toLowerCase())}`}
@@ -1113,10 +1113,10 @@ export default async function BlogArticlePage({ params }: PageProps) {
         }} />
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4">
-            Besoin d&apos;un artisan ?
+            Besoin d'un artisan ?
           </h2>
           <p className="text-slate-400 mb-8 max-w-xl mx-auto">
-            Trouvez le professionnel qu&apos;il vous faut en quelques clics
+            Trouvez le professionnel qu'il vous faut en quelques clics
           </p>
           <Link
             href={devisHref}

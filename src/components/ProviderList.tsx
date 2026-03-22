@@ -144,7 +144,7 @@ export default function ProviderList({
             role="status"
             aria-live="polite"
           >
-            <p className="text-charcoal-500 text-lg">Aucun artisan trouv&eacute;</p>
+            <p className="text-charcoal-500 text-lg">Aucun artisan trouvé</p>
             <p className="text-charcoal-400 text-sm mt-2">
               Essayez de modifier vos filtres
             </p>

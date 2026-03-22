@@ -164,8 +164,8 @@ export default function CalculateurPrixPage() {
                 Calculateur de prix artisan 2026
               </h1>
               <p className="text-xl text-slate-400 max-w-3xl mx-auto mb-4">
-                Estimez le co&ucirc;t de vos travaux en quelques clics.
-                Tarifs actualis&eacute;s pour {Object.keys(tradeContent).length} m&eacute;tiers du b&acirc;timent.
+                Estimez le coût de vos travaux en quelques clics.
+                Tarifs actualisés pour {Object.keys(tradeContent).length} métiers du bâtiment.
               </p>
             </div>
           </div>
@@ -192,18 +192,18 @@ export default function CalculateurPrixPage() {
                 <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl font-bold text-blue-600">1</span>
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">Choisissez un m&eacute;tier</h3>
+                <h3 className="font-semibold text-gray-900 mb-2">Choisissez un métier</h3>
                 <p className="text-gray-600 text-sm">
-                  S&eacute;lectionnez parmi 10 corps de m&eacute;tier : plombier, &eacute;lectricien, serrurier, peintre et plus.
+                  Sélectionnez parmi 10 corps de métier : plombier, électricien, serrurier, peintre et plus.
                 </p>
               </div>
               <div className="text-center p-6">
                 <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl font-bold text-blue-600">2</span>
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">S&eacute;lectionnez une prestation</h3>
+                <h3 className="font-semibold text-gray-900 mb-2">Sélectionnez une prestation</h3>
                 <p className="text-gray-600 text-sm">
-                  Choisissez l&apos;intervention souhait&eacute;e pour obtenir une estimation pr&eacute;cise du co&ucirc;t.
+                  Choisissez l'intervention souhaitée pour obtenir une estimation précise du coût.
                 </p>
               </div>
               <div className="text-center p-6">
@@ -212,7 +212,7 @@ export default function CalculateurPrixPage() {
                 </div>
                 <h3 className="font-semibold text-gray-900 mb-2">Obtenez votre estimation</h3>
                 <p className="text-gray-600 text-sm">
-                  Consultez la fourchette de prix, les conseils pratiques et trouvez un artisan qualifi&eacute;.
+                  Consultez la fourchette de prix, les conseils pratiques et trouvez un artisan qualifié.
                 </p>
               </div>
             </div>

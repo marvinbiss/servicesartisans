@@ -426,7 +426,7 @@ export default async function ServiceQuartierPage({
                 </div>
                 <p className="text-sm text-gray-600 mt-4">
                   Ces risques naturels identifiés à {quartierName} ({ville.name}) peuvent impacter
-                  les travaux et l&apos;entretien de votre logement. Un {svcLower} expérimenté saura
+                  les travaux et l'entretien de votre logement. Un {svcLower} expérimenté saura
                   adapter ses interventions en conséquence.
                 </p>
               </div>
@@ -598,7 +598,7 @@ export default async function ServiceQuartierPage({
           {otherQuartiers.length > 0 && (
             <div>
               <h3 className="font-semibold text-gray-900 mb-3">
-                {service.name} dans d&apos;autres quartiers de {ville.name}
+                {service.name} dans d'autres quartiers de {ville.name}
               </h3>
               <div className="flex flex-wrap gap-2">
                 {otherQuartiers.map(q => (

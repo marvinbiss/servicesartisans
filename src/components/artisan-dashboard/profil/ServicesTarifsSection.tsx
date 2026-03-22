@@ -87,7 +87,7 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
         <div>
           <div className="flex items-center justify-between mb-2">
             <label htmlFor="services-new" className="block text-sm font-medium text-gray-700">
-              Services propos&eacute;s
+              Services proposés
             </label>
             <span className="text-xs text-gray-400">{servicesOffered.length}/{MAX_SERVICES}</span>
           </div>
@@ -156,7 +156,7 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
 
           {servicePrices.length === 0 && (
             <p className="text-sm text-gray-500 italic bg-gray-50 px-4 py-3 rounded-lg">
-              Vos tarifs actuels sont estim&eacute;s. Ajoutez vos vrais prix pour les remplacer.
+              Vos tarifs actuels sont estimés. Ajoutez vos vrais prix pour les remplacer.
             </p>
           )}
 
@@ -228,7 +228,7 @@ export function ServicesTarifsSection({ provider, onSaved }: ServicesTarifsSecti
                     </div>
                     <div>
                       <label htmlFor={`sp-duration-${index}`} className="block text-xs text-gray-500 mb-1">
-                        Dur&eacute;e estim&eacute;e
+                        Durée estimée
                       </label>
                       <input
                         id={`sp-duration-${index}`}

@@ -142,8 +142,8 @@ export default async function PolitiqueAvisPage() {
             Politique de gestion des avis
           </h1>
           <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-            Transparence sur la mani&egrave;re dont les avis sont collect&eacute;s, mod&eacute;r&eacute;s
-            et publi&eacute;s sur {companyIdentity.name}.
+            Transparence sur la manière dont les avis sont collectés, modérés
+            et publiés sur {companyIdentity.name}.
           </p>
         </div>
       </section>

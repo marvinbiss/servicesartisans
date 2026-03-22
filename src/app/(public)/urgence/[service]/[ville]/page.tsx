@@ -476,7 +476,7 @@ export default async function UrgenceServiceVillePage({
                 className="inline-flex items-center justify-center gap-3 bg-white text-gray-900 px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all"
               >
                 <Phone className="w-6 h-6" />
-                Appeler l&apos;assistance
+                Appeler l'assistance
               </a>
               <span className="text-sm text-white/60 mt-2">Service de mise en relation</span>
             </div>
@@ -519,7 +519,7 @@ export default async function UrgenceServiceVillePage({
               Urgences {tradeLower} courantes à {villeData.name}
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Les {tradeLower}s d&apos;urgence référencés
+              Les {tradeLower}s d'urgence référencés
               interviennent rapidement à {villeData.name} pour tous ces
               problèmes.
             </p>
@@ -545,9 +545,9 @@ export default async function UrgenceServiceVillePage({
             Tarifs {tradeLower} urgence à {villeData.name}
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto text-center mb-10">
-            Prix indicatifs pour les interventions d&apos;urgence à{' '}
-            {villeData.name}. Les majorations varient selon l&apos;horaire et le
-            jour d&apos;intervention.
+            Prix indicatifs pour les interventions d'urgence à{' '}
+            {villeData.name}. Les majorations varient selon l'horaire et le
+            jour d'intervention.
           </p>
 
           {/* 3 pricing cards */}
@@ -646,7 +646,7 @@ export default async function UrgenceServiceVillePage({
             Contexte local à {villeData.name}
           </h2>
           <p className="text-gray-500 text-sm text-center mb-8">
-            Données locales qui influencent les interventions d&apos;urgence{' '}
+            Données locales qui influencent les interventions d'urgence{' '}
             {tradeLower} à {villeData.name}.
           </p>
           <div className="grid sm:grid-cols-2 gap-6">
@@ -825,7 +825,7 @@ export default async function UrgenceServiceVillePage({
                       <div className="flex items-start gap-3">
                         <Shield className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
                         <p className="text-gray-700 text-sm leading-relaxed">
-                          Dont <strong>{formatNumber(commune.nb_artisans_rge)} artisans certifiés RGE</strong> — utile si vos travaux urgents nécessitent une certification pour bénéficier des aides (MaPrimeRénov&apos;, CEE).
+                          Dont <strong>{formatNumber(commune.nb_artisans_rge)} artisans certifiés RGE</strong> — utile si vos travaux urgents nécessitent une certification pour bénéficier des aides (MaPrimeRénov', CEE).
                         </p>
                       </div>
                     )}
@@ -849,7 +849,7 @@ export default async function UrgenceServiceVillePage({
                       <div className="flex items-start gap-3">
                         <Building2 className="w-5 h-5 text-purple-500 flex-shrink-0 mt-0.5" />
                         <p className="text-gray-700 text-sm leading-relaxed">
-                          Avec <strong>{commune.part_maisons_pct} % de maisons</strong> à {villeData.name}, les urgences de toiture, plomberie extérieure et serrurerie sont plus fréquentes que dans les villes à dominante d&apos;appartements.
+                          Avec <strong>{commune.part_maisons_pct} % de maisons</strong> à {villeData.name}, les urgences de toiture, plomberie extérieure et serrurerie sont plus fréquentes que dans les villes à dominante d'appartements.
                         </p>
                       </div>
                     )}
@@ -973,13 +973,13 @@ export default async function UrgenceServiceVillePage({
               </div>
               <div>
                 <h3 className="font-heading text-lg font-semibold text-amber-800 mb-2">
-                  Conseils de sécurité en attendant l&apos;artisan
+                  Conseils de sécurité en attendant l'artisan
                 </h3>
                 <p className="text-amber-700 leading-relaxed">
                   {trade.emergencyInfo}
                 </p>
                 <p className="text-amber-600 text-sm mt-4">
-                  En cas d&apos;urgence vitale (fuite de gaz, incendie),
+                  En cas d'urgence vitale (fuite de gaz, incendie),
                   appelez le 18 (pompiers) ou le 112 avant toute autre
                   démarche.
                 </p>
@@ -1069,7 +1069,7 @@ export default async function UrgenceServiceVillePage({
       >
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-heading text-3xl font-bold mb-4">
-            Besoin d&apos;un {tradeLower} en urgence à {villeData.name}
+            Besoin d'un {tradeLower} en urgence à {villeData.name}
             &nbsp;?
           </h2>
           <p className="text-xl opacity-90 mb-8">
@@ -1083,7 +1083,7 @@ export default async function UrgenceServiceVillePage({
                 className="inline-flex items-center justify-center gap-3 bg-white text-gray-900 px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all"
               >
                 <Phone className="w-6 h-6" />
-                Appeler l&apos;assistance
+                Appeler l'assistance
               </a>
               <span className="text-sm text-white/60 mt-2">Service de mise en relation</span>
             </div>
@@ -1102,7 +1102,7 @@ export default async function UrgenceServiceVillePage({
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6">
-            {trade.name} urgence dans d&apos;autres villes
+            {trade.name} urgence dans d'autres villes
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-3xl">
             {nearbyCities.map((v) => (
@@ -1313,14 +1313,14 @@ export default async function UrgenceServiceVillePage({
               Information importante
             </h3>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Les délais d&apos;intervention et tarifs affichés pour{' '}
+              Les délais d'intervention et tarifs affichés pour{' '}
               {villeData.name} sont des estimations basées sur la
               disponibilité habituelle des artisans et les données
               régionales ({villeData.region}). Ils peuvent varier selon la
-              complexité de l&apos;intervention et la disponibilité
+              complexité de l'intervention et la disponibilité
               des professionnels. {SITE_NAME} est un annuaire indépendant
               — nous mettons en relation mais ne réalisons pas les
-              interventions. En cas d&apos;urgence vitale, appelez le 18
+              interventions. En cas d'urgence vitale, appelez le 18
               (pompiers) ou le 112.
             </p>
           </div>

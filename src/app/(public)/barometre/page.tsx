@@ -277,7 +277,7 @@ export default async function BarometrePage() {
             <div className="flex items-center justify-between mb-8">
               <div>
                 <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Top 10 des villes</h2>
-                <p className="text-gray-600 mt-1">Les villes avec le plus grand nombre d&apos;artisans</p>
+                <p className="text-gray-600 mt-1">Les villes avec le plus grand nombre d'artisans</p>
               </div>
               <Link
                 href="/barometre/regions"
@@ -330,7 +330,7 @@ export default async function BarometrePage() {
             </div>
             <p className="text-slate-300 mb-6 max-w-2xl">
               Vous pouvez utiliser les données du Baromètre des Artisans dans vos articles, études ou sites web.
-              Merci de toujours inclure l&apos;attribution suivante :
+              Merci de toujours inclure l'attribution suivante :
             </p>
             <div className="bg-slate-950/50 rounded-lg p-4 font-mono text-sm text-slate-300 mb-6 overflow-x-auto">
               <code>
@@ -372,7 +372,7 @@ export default async function BarometrePage() {
                 className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
               >
                 <BookOpen className="w-5 h-5" />
-                Documentation de l&apos;API
+                Documentation de l'API
               </Link>
             </div>
           </div>
@@ -390,7 +390,7 @@ export default async function BarometrePage() {
               </div>
               <h3 className="font-semibold text-gray-900 mb-2">Référencement SIREN</h3>
               <p className="text-sm text-gray-600">
-                Les artisans sont référencés à partir des données SIREN/SIRET officielles de l&apos;INSEE,
+                Les artisans sont référencés à partir des données SIREN/SIRET officielles de l'INSEE,
                 complétées par les registres des métiers (CMA).
               </p>
             </div>
@@ -400,7 +400,7 @@ export default async function BarometrePage() {
               </div>
               <h3 className="font-semibold text-gray-900 mb-2">Avis authentifiés</h3>
               <p className="text-sm text-gray-600">
-                Les avis sont collectés auprès de clients ayant effectivement fait appel à l&apos;artisan.
+                Les avis sont collectés auprès de clients ayant effectivement fait appel à l'artisan.
                 Chaque avis est modéré avant publication.
               </p>
             </div>
@@ -410,7 +410,7 @@ export default async function BarometrePage() {
               </div>
               <h3 className="font-semibold text-gray-900 mb-2">Agrégation quotidienne</h3>
               <p className="text-sm text-gray-600">
-                Les statistiques sont recalculées chaque jour à partir de l&apos;intégralité de la base.
+                Les statistiques sont recalculées chaque jour à partir de l'intégralité de la base.
                 Les pages sont régénérées toutes les 24 heures.
               </p>
             </div>

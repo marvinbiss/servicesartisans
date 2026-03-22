@@ -425,7 +425,7 @@ export function QuoteRequestModal({ artisan, isOpen, onClose }: QuoteRequestModa
 
                   {/* Privacy note */}
                   <p className="text-xs text-gray-500 text-center">
-                    En envoyant ce formulaire, vous acceptez d&apos;être contacté par {displayName}.
+                    En envoyant ce formulaire, vous acceptez d'être contacté par {displayName}.
                     Vos données sont protégées conformément à notre politique de confidentialité.
                   </p>
                 </form>

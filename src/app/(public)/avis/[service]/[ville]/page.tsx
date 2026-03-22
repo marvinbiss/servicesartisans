@@ -493,8 +493,8 @@ export default async function AvisServiceVillePage({
             </h1>
             <p className="text-xl text-slate-400 max-w-3xl mx-auto mb-4">
               Consultez les avis et recommandations pour choisir un {tradeLower} de confiance
-              &agrave; {villeData.name} ({villeData.departement}).
-              Prix local : {minPrice} &agrave; {maxPrice} {trade.priceRange.unit}.
+              à {villeData.name} ({villeData.departement}).
+              Prix local : {minPrice} à {maxPrice} {trade.priceRange.unit}.
             </p>
             <LastUpdated label="Avis vérifiés le" className="justify-center text-slate-500 mb-4" />
             <div className="flex flex-wrap justify-center gap-3 mt-8">
@@ -507,12 +507,12 @@ export default async function AvisServiceVillePage({
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
                 <Euro className="w-4 h-4 text-amber-400" />
                 <span>
-                  {minPrice} &ndash; {maxPrice} {trade.priceRange.unit}
+                  {minPrice} – {maxPrice} {trade.priceRange.unit}
                 </span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
                 <MapPin className="w-4 h-4 text-amber-400" />
-                <span>Artisans r&eacute;f&eacute;renc&eacute;s</span>
+                <span>Artisans référencés</span>
               </div>
               {commune?.nb_entreprises_artisanales && (
                 <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
@@ -573,16 +573,16 @@ export default async function AvisServiceVillePage({
               <Star className="w-8 h-8 text-amber-500" />
             </div>
             <h2 className="font-heading text-xl font-bold text-gray-900 mb-2">
-              Aucun avis pour {tradeLower} &agrave; {villeData.name} pour le moment
+              Aucun avis pour {tradeLower} à {villeData.name} pour le moment
             </h2>
             <p className="text-gray-500 mb-6">
-              Soyez le premier &agrave; partager votre exp&eacute;rience !
+              Soyez le premier à partager votre expérience !
             </p>
             <Link
               href={`/services/${service}/${villeSlug}`}
               className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold text-sm"
             >
-              Trouver un {tradeLower} &agrave; {villeData.name}
+              Trouver un {tradeLower} à {villeData.name}
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -740,10 +740,10 @@ export default async function AvisServiceVillePage({
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-gray-900 mb-2 text-center">
-            Comment choisir un {tradeLower} &agrave; {villeData.name}
+            Comment choisir un {tradeLower} à {villeData.name}
           </h2>
           <p className="text-gray-500 text-sm text-center mb-8">
-            Les crit&egrave;res essentiels pour trouver un artisan de confiance &agrave;{' '}
+            Les critères essentiels pour trouver un artisan de confiance à{' '}
             {villeData.name}.
           </p>
           <div className="space-y-4">
@@ -776,18 +776,18 @@ export default async function AvisServiceVillePage({
       <section className="py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 text-center">
-            Tarifs indicatifs {tradeLower} &agrave; {villeData.name}
+            Tarifs indicatifs {tradeLower} à {villeData.name}
           </h2>
           <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-8 text-center mb-8">
             <div className="flex items-baseline justify-center gap-2">
               <span className="text-5xl font-bold text-blue-600">
-                {minPrice} &mdash; {maxPrice}
+                {minPrice} — {maxPrice}
               </span>
               <span className="text-gray-600 text-lg">{trade.priceRange.unit}</span>
             </div>
             <p className="text-gray-500 text-sm mt-3">
-              Prix moyen constat&eacute; &agrave; {villeData.name} et ses alentours,
-              main-d&apos;&oelig;uvre incluse
+              Prix moyen constaté à {villeData.name} et ses alentours,
+              main-d'&oelig;uvre incluse
             </p>
             {multiplier !== 1.0 && (
               <p className="text-xs text-gray-400 mt-2">
@@ -817,11 +817,11 @@ export default async function AvisServiceVillePage({
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-gray-900 mb-2 text-center">
-            Facteurs locaux &agrave; {villeData.name}
+            Facteurs locaux à {villeData.name}
           </h2>
           <p className="text-gray-500 text-sm text-center mb-8">
-            Plusieurs facteurs locaux influencent le choix d&apos;un {tradeLower}
-            &agrave; {villeData.name}.
+            Plusieurs facteurs locaux influencent le choix d'un {tradeLower}
+            à {villeData.name}.
           </p>
           <div className="grid sm:grid-cols-2 gap-6">
             {/* Artisan density */}
@@ -894,10 +894,10 @@ export default async function AvisServiceVillePage({
         <section className="py-16 bg-gray-50">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="font-heading text-2xl font-bold text-gray-900 mb-2 text-center">
-              Le march&eacute; &agrave; {villeData.name}
+              Le marché à {villeData.name}
             </h2>
             <p className="text-gray-500 text-sm text-center mb-8">
-              Donn&eacute;es locales pour contextualiser votre recherche de {tradeLower} &agrave; {villeData.name}.
+              Données locales pour contextualiser votre recherche de {tradeLower} à {villeData.name}.
             </p>
             <div className="grid sm:grid-cols-2 gap-6">
               {/* Marché artisanal local */}
@@ -907,15 +907,15 @@ export default async function AvisServiceVillePage({
                     <div className="w-10 h-10 bg-amber-50 rounded-lg flex items-center justify-center flex-shrink-0">
                       <Building2 className="w-5 h-5 text-amber-600" />
                     </div>
-                    <h3 className="font-semibold text-gray-900">March&eacute; artisanal local</h3>
+                    <h3 className="font-semibold text-gray-900">Marché artisanal local</h3>
                   </div>
                   <ul className="space-y-2 text-sm text-gray-700">
-                    <li>&Agrave; {villeData.name}, <span className="font-semibold">{formatNumber(commune.nb_entreprises_artisanales)}</span> entreprises artisanales sont r&eacute;f&eacute;renc&eacute;es.</li>
+                    <li>&Agrave; {villeData.name}, <span className="font-semibold">{formatNumber(commune.nb_entreprises_artisanales)}</span> entreprises artisanales sont référencées.</li>
                     {commune.nb_artisans_btp != null && (
-                      <li><span className="font-semibold">{formatNumber(commune.nb_artisans_btp)}</span> sp&eacute;cialis&eacute;es dans le b&acirc;timent.</li>
+                      <li><span className="font-semibold">{formatNumber(commune.nb_artisans_btp)}</span> spécialisées dans le bâtiment.</li>
                     )}
                     {commune.nb_artisans_rge != null && (
-                      <li>Dont <span className="font-semibold">{formatNumber(commune.nb_artisans_rge)}</span> certifi&eacute;es RGE.</li>
+                      <li>Dont <span className="font-semibold">{formatNumber(commune.nb_artisans_rge)}</span> certifiées RGE.</li>
                     )}
                   </ul>
                   {commune.population > 0 && (
@@ -937,14 +937,14 @@ export default async function AvisServiceVillePage({
                     <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center flex-shrink-0">
                       <Zap className="w-5 h-5 text-green-600" />
                     </div>
-                    <h3 className="font-semibold text-gray-900">Qualit&eacute; du parc immobilier</h3>
+                    <h3 className="font-semibold text-gray-900">Qualité du parc immobilier</h3>
                   </div>
                   <ul className="space-y-2 text-sm text-gray-700">
                     {commune.pct_passoires_dpe != null && (
                       <li><span className="font-semibold">{commune.pct_passoires_dpe}&nbsp;%</span> de passoires thermiques (DPE F ou G).</li>
                     )}
                     {commune.nb_dpe_total != null && (
-                      <li>Sur <span className="font-semibold">{formatNumber(commune.nb_dpe_total)}</span> diagnostics r&eacute;alis&eacute;s.</li>
+                      <li>Sur <span className="font-semibold">{formatNumber(commune.nb_dpe_total)}</span> diagnostics réalisés.</li>
                     )}
                     {commune.part_maisons_pct != null && (
                       <li>{commune.part_maisons_pct}&nbsp;% de maisons individuelles.</li>
@@ -952,7 +952,7 @@ export default async function AvisServiceVillePage({
                   </ul>
                   {commune.pct_passoires_dpe != null && commune.pct_passoires_dpe > 15 && (
                     <p className="mt-3 text-xs text-gray-500 leading-relaxed">
-                      Un parc avec {commune.pct_passoires_dpe}&nbsp;% de passoires thermiques g&eacute;n&egrave;re une forte demande en r&eacute;novation &eacute;nerg&eacute;tique &agrave; {villeData.name}.
+                      Un parc avec {commune.pct_passoires_dpe}&nbsp;% de passoires thermiques génère une forte demande en rénovation énergétique à {villeData.name}.
                     </p>
                   )}
                 </div>
@@ -965,14 +965,14 @@ export default async function AvisServiceVillePage({
                     <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
                       <Euro className="w-5 h-5 text-blue-600" />
                     </div>
-                    <h3 className="font-semibold text-gray-900">Pouvoir d&apos;achat et prix</h3>
+                    <h3 className="font-semibold text-gray-900">Pouvoir d'achat et prix</h3>
                   </div>
                   <ul className="space-y-2 text-sm text-gray-700">
                     {commune.revenu_median != null && (
-                      <li>Revenu m&eacute;dian : <span className="font-semibold">{formatNumber(commune.revenu_median)}&nbsp;&euro;</span> / an.</li>
+                      <li>Revenu médian : <span className="font-semibold">{formatNumber(commune.revenu_median)}&nbsp;€</span> / an.</li>
                     )}
                     {commune.prix_m2_moyen != null && (
-                      <li>Prix au m&sup2; : <span className="font-semibold">{formatNumber(commune.prix_m2_moyen)}&nbsp;&euro;</span>.</li>
+                      <li>Prix au m&sup2; : <span className="font-semibold">{formatNumber(commune.prix_m2_moyen)}&nbsp;€</span>.</li>
                     )}
                   </ul>
                   {commune.revenu_median != null && commune.prix_m2_moyen != null && (
@@ -993,14 +993,14 @@ export default async function AvisServiceVillePage({
                     <div className="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center flex-shrink-0">
                       <TrendingUp className="w-5 h-5 text-purple-600" />
                     </div>
-                    <h3 className="font-semibold text-gray-900">Indicateurs d&apos;activit&eacute;</h3>
+                    <h3 className="font-semibold text-gray-900">Indicateurs d'activité</h3>
                   </div>
                   <ul className="space-y-2 text-sm text-gray-700">
                     {commune.nb_maprimerenov_annuel != null && (
-                      <li><span className="font-semibold">{formatNumber(commune.nb_maprimerenov_annuel)}</span> dossiers MaPrimeR&eacute;nov&apos; d&eacute;pos&eacute;s, signe d&apos;un march&eacute; actif.</li>
+                      <li><span className="font-semibold">{formatNumber(commune.nb_maprimerenov_annuel)}</span> dossiers MaPrimeRénov' déposés, signe d'un marché actif.</li>
                     )}
                     {commune.nb_transactions_annuelles != null && (
-                      <li><span className="font-semibold">{formatNumber(commune.nb_transactions_annuelles)}</span> transactions immobili&egrave;res, source de demande en travaux.</li>
+                      <li><span className="font-semibold">{formatNumber(commune.nb_transactions_annuelles)}</span> transactions immobilières, source de demande en travaux.</li>
                     )}
                   </ul>
                 </div>
@@ -1014,7 +1014,7 @@ export default async function AvisServiceVillePage({
       <section className="py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 text-center">
-            Conseils pour choisir un {tradeLower} &agrave; {villeData.name}
+            Conseils pour choisir un {tradeLower} à {villeData.name}
           </h2>
           <div className="space-y-4">
             {selectedTips.map((tip, i) => (
@@ -1037,11 +1037,11 @@ export default async function AvisServiceVillePage({
         <section className="py-16 bg-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 text-center">
-              Certifications &agrave; v&eacute;rifier &agrave; {villeData.name}
+              Certifications à vérifier à {villeData.name}
             </h2>
             <p className="text-gray-600 text-center mb-8">
-              V&eacute;rifiez que votre {tradeLower} &agrave; {villeData.name} poss&egrave;de
-              les certifications adapt&eacute;es &agrave; votre projet.
+              Vérifiez que votre {tradeLower} à {villeData.name} possède
+              les certifications adaptées à votre projet.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
               {trade.certifications.map((cert) => (
@@ -1062,7 +1062,7 @@ export default async function AvisServiceVillePage({
       <section className="py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-gray-900 mb-8 text-center">
-            Questions fr&eacute;quentes &mdash; Avis {trade.name} &agrave; {villeData.name}
+            Questions fréquentes — Avis {trade.name} à {villeData.name}
           </h2>
           <div className="space-y-4">
             {allFaqItems.map((item, i) => (
@@ -1089,11 +1089,11 @@ export default async function AvisServiceVillePage({
       <section className="py-20 bg-gradient-to-r from-blue-600 to-blue-700">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-heading text-3xl font-bold text-white mb-4">
-            Trouver un {tradeLower} de confiance &agrave; {villeData.name}
+            Trouver un {tradeLower} de confiance à {villeData.name}
           </h2>
           <p className="text-xl text-blue-100 mb-8">
-            Comparez les profils et obtenez un devis gratuit aupr&egrave;s de
-            professionnels r&eacute;f&eacute;renc&eacute;s &agrave; {villeData.name}.
+            Comparez les profils et obtenez un devis gratuit auprès de
+            professionnels référencés à {villeData.name}.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
@@ -1118,7 +1118,7 @@ export default async function AvisServiceVillePage({
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6">
-            Avis {tradeLower} dans d&apos;autres villes
+            Avis {tradeLower} dans d'autres villes
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-3xl">
             {nearbyCities.map((v) => (
@@ -1128,7 +1128,7 @@ export default async function AvisServiceVillePage({
                 className="bg-gray-50 hover:bg-blue-50 border border-gray-200 hover:border-blue-300 rounded-xl p-4 transition-all group text-center"
               >
                 <div className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors text-sm">
-                  Avis {tradeLower} &agrave; {v.name}
+                  Avis {tradeLower} à {v.name}
                 </div>
               </Link>
             ))}
@@ -1140,7 +1140,7 @@ export default async function AvisServiceVillePage({
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6">
-            Autres avis artisans &agrave; {villeData.name}
+            Autres avis artisans à {villeData.name}
           </h2>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
             {otherTrades.map((slug) => {
@@ -1154,10 +1154,10 @@ export default async function AvisServiceVillePage({
                   className="bg-white hover:bg-blue-50 border border-gray-200 hover:border-blue-300 rounded-xl p-4 transition-all group"
                 >
                   <div className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors text-sm">
-                    Avis {t.name.toLowerCase()} &agrave; {villeData.name}
+                    Avis {t.name.toLowerCase()} à {villeData.name}
                   </div>
                   <div className="text-xs text-gray-500 mt-1">
-                    {Math.round(t.priceRange.min * m)} &mdash;{' '}
+                    {Math.round(t.priceRange.min * m)} —{' '}
                     {Math.round(t.priceRange.max * m)} {t.priceRange.unit}
                   </div>
                 </Link>
@@ -1171,7 +1171,7 @@ export default async function AvisServiceVillePage({
       <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-xl font-bold text-gray-900 mb-4">
-            Grandes villes &agrave; proximit&eacute;
+            Grandes villes à proximité
           </h2>
           <div className="flex flex-wrap gap-2">
             {nearbyCitiesByPop.map((v) => (
@@ -1194,7 +1194,7 @@ export default async function AvisServiceVillePage({
         return (
           <section className="py-12 bg-white border-t">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Probl&egrave;mes courants</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-4">Problèmes courants</h2>
               <div className="flex flex-wrap gap-3">
                 {problems.map((p) => (
                   <Link
@@ -1202,7 +1202,7 @@ export default async function AvisServiceVillePage({
                     href={`/problemes/${p.slug}/${villeSlug}`}
                     className="px-4 py-2.5 bg-gray-50 hover:bg-orange-50 text-gray-700 hover:text-orange-800 rounded-lg text-sm font-medium border border-gray-200 hover:border-orange-200 transition-all"
                   >
-                    {p.name} &agrave; {villeData.name}
+                    {p.name} à {villeData.name}
                   </Link>
                 ))}
               </div>
@@ -1217,16 +1217,16 @@ export default async function AvisServiceVillePage({
           <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Voir aussi</h2>
           <div className="flex flex-wrap gap-3">
             <Link href={`/devis/${service}/${villeSlug}`} className="px-4 py-2 bg-amber-50 text-amber-800 rounded-lg text-sm font-medium border border-amber-100 hover:border-amber-200 transition-colors">
-              Devis {tradeLower} &agrave; {villeData.name}
+              Devis {tradeLower} à {villeData.name}
             </Link>
             <Link href={`/tarifs/${service}/${villeSlug}`} className="px-4 py-2 bg-emerald-50 text-emerald-800 rounded-lg text-sm font-medium border border-emerald-100 hover:border-emerald-200 transition-colors">
-              Tarifs {tradeLower} &agrave; {villeData.name}
+              Tarifs {tradeLower} à {villeData.name}
             </Link>
             <Link href={`/urgence/${service}/${villeSlug}`} className="px-4 py-2 bg-red-50 text-red-800 rounded-lg text-sm font-medium border border-red-100 hover:border-red-200 transition-colors">
-              Urgence {tradeLower} &agrave; {villeData.name}
+              Urgence {tradeLower} à {villeData.name}
             </Link>
             <Link href={`/services/${service}/${villeSlug}`} className="px-4 py-2 bg-gray-50 text-gray-800 rounded-lg text-sm font-medium border border-gray-200 hover:border-gray-300 transition-colors">
-              {trade.name} &agrave; {villeData.name}
+              {trade.name} à {villeData.name}
             </Link>
           </div>
         </div>
@@ -1252,25 +1252,25 @@ export default async function AvisServiceVillePage({
                   href={`/services/${service}/${villeSlug}`}
                   className="block text-sm text-gray-600 hover:text-blue-600 py-1"
                 >
-                  {trade.name} &agrave; {villeData.name}
+                  {trade.name} à {villeData.name}
                 </Link>
                 <Link
                   href={`/devis/${service}/${villeSlug}`}
                   className="block text-sm text-gray-600 hover:text-blue-600 py-1"
                 >
-                  Devis {tradeLower} &agrave; {villeData.name}
+                  Devis {tradeLower} à {villeData.name}
                 </Link>
                 <Link
                   href={`/tarifs/${service}/${villeSlug}`}
                   className="block text-sm text-gray-600 hover:text-blue-600 py-1"
                 >
-                  Tarifs {tradeLower} &agrave; {villeData.name}
+                  Tarifs {tradeLower} à {villeData.name}
                 </Link>
                 <Link
                   href={`/urgence/${service}/${villeSlug}`}
                   className="block text-sm text-gray-600 hover:text-blue-600 py-1"
                 >
-                  {trade.name} urgence &agrave; {villeData.name}
+                  {trade.name} urgence à {villeData.name}
                 </Link>
               </div>
             </div>
@@ -1281,7 +1281,7 @@ export default async function AvisServiceVillePage({
                   href={`/villes/${villeSlug}`}
                   className="block text-sm text-gray-600 hover:text-blue-600 py-1"
                 >
-                  Artisans &agrave; {villeData.name}
+                  Artisans à {villeData.name}
                 </Link>
                 {otherTrades.slice(0, 3).map((slug) => {
                   const t = tradeContent[slug]
@@ -1292,7 +1292,7 @@ export default async function AvisServiceVillePage({
                       href={`/avis/${slug}/${villeSlug}`}
                       className="block text-sm text-gray-600 hover:text-blue-600 py-1"
                     >
-                      Avis {t.name.toLowerCase()} &agrave; {villeData.name}
+                      Avis {t.name.toLowerCase()} à {villeData.name}
                     </Link>
                   )
                 })}
@@ -1325,7 +1325,7 @@ export default async function AvisServiceVillePage({
                   href="/comment-ca-marche"
                   className="block text-sm text-gray-600 hover:text-blue-600 py-1"
                 >
-                  Comment &ccedil;a marche
+                  Comment ça marche
                 </Link>
                 <Link
                   href="/faq"
@@ -1345,7 +1345,7 @@ export default async function AvisServiceVillePage({
             if (relatedArticles.length === 0) return null
             return (
               <div className="mt-8">
-                <h3 className="font-semibold text-gray-900 mb-4">Articles sur ce m&eacute;tier</h3>
+                <h3 className="font-semibold text-gray-900 mb-4">Articles sur ce métier</h3>
                 <div className="grid md:grid-cols-3 gap-3">
                   {relatedArticles.map((article) => (
                     <Link
@@ -1358,7 +1358,7 @@ export default async function AvisServiceVillePage({
                         <div className="font-medium text-gray-900 group-hover:text-blue-600 text-sm leading-snug">
                           {article.title}
                         </div>
-                        <div className="text-xs text-gray-500 mt-1">{article.readTime} &middot; {article.category}</div>
+                        <div className="text-xs text-gray-500 mt-1">{article.readTime} · {article.category}</div>
                       </div>
                     </Link>
                   ))}
@@ -1374,15 +1374,15 @@ export default async function AvisServiceVillePage({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
             <h3 className="text-sm font-semibold text-slate-700 mb-2">
-              Transparence &eacute;ditoriale
+              Transparence éditoriale
             </h3>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Les informations pr&eacute;sent&eacute;es pour {villeData.name} sont
-              indicatives et destin&eacute;es &agrave; vous aider dans le choix
-              d&apos;un {tradeLower}. Les prix affich&eacute;s sont des fourchettes
-              ajust&eacute;es en fonction des donn&eacute;es r&eacute;gionales (
-              {villeData.region}). Seul un devis personnalis&eacute; fait foi.{' '}
-              {SITE_NAME} est un annuaire ind&eacute;pendant.
+              Les informations présentées pour {villeData.name} sont
+              indicatives et destinées à vous aider dans le choix
+              d'un {tradeLower}. Les prix affichés sont des fourchettes
+              ajustées en fonction des données régionales (
+              {villeData.region}). Seul un devis personnalisé fait foi.{' '}
+              {SITE_NAME} est un annuaire indépendant.
             </p>
           </div>
         </div>

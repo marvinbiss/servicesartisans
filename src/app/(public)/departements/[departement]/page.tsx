@@ -460,10 +460,10 @@ export default async function DepartementPage({ params }: PageProps) {
         }} />
         <div className="relative max-w-4xl mx-auto px-4 py-16 md:py-20 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">
-            Besoin d&apos;un artisan dans le {dept.name} ?
+            Besoin d'un artisan dans le {dept.name} ?
           </h2>
           <p className="text-charcoal-400 mb-8 max-w-lg mx-auto">
-            Recevez jusqu&apos;à 3 devis gratuits de professionnels qualifiés.
+            Recevez jusqu'à 3 devis gratuits de professionnels qualifiés.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/devis" className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-400 via-primary-400 to-primary-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-cta hover:shadow-cta hover:-translate-y-0.5 transition-all duration-300">
@@ -637,7 +637,7 @@ export default async function DepartementPage({ params }: PageProps) {
             <div className="bg-sand-100 rounded-2xl border border-sand-300 p-6">
               <h3 className="text-sm font-semibold text-charcoal-700 mb-2">Méthodologie éditoriale</h3>
               <p className="text-xs text-charcoal-500 leading-relaxed">
-                Les profils climatiques et économiques sont des estimations basées sur les caractéristiques régionales. Les données démographiques proviennent de l&apos;INSEE. ServicesArtisans est un annuaire indépendant — nous ne réalisons pas de travaux.
+                Les profils climatiques et économiques sont des estimations basées sur les caractéristiques régionales. Les données démographiques proviennent de l'INSEE. ServicesArtisans est un annuaire indépendant — nous ne réalisons pas de travaux.
               </p>
             </div>
           </div>
@@ -652,7 +652,7 @@ export default async function DepartementPage({ params }: PageProps) {
               Processus de vérification
             </Link>
             <Link href="/politique-avis" className="text-sm text-primary-400 hover:text-primary-600 flex items-center gap-1.5">
-              Politique d&apos;avis
+              Politique d'avis
             </Link>
             <Link href="/mediation" className="text-sm text-primary-400 hover:text-primary-600 flex items-center gap-1.5">
               Médiation

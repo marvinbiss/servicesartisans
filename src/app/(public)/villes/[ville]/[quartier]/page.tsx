@@ -334,7 +334,7 @@ export default async function QuartierPage({ params }: PageProps) {
           <p className="text-charcoal-600 leading-relaxed">{content.intro}</p>
 
           <h3 className="font-heading text-xl font-semibold text-charcoal-900 tracking-tight mt-8">
-            Le bâti à {quartierName} : ce qu&apos;il faut savoir
+            Le bâti à {quartierName} : ce qu'il faut savoir
           </h3>
           <p className="text-charcoal-600 leading-relaxed">{content.batimentContext}</p>
 
@@ -467,7 +467,7 @@ export default async function QuartierPage({ params }: PageProps) {
             <h3 className="text-sm font-semibold text-charcoal-700 mb-2">Méthodologie éditoriale</h3>
             <p className="text-xs text-charcoal-500 leading-relaxed">
               Les informations de cette page sont compilées à partir de données publiques (INSEE, base SIRENE, cadastre).
-              Le profil de bâti est estimé selon les caractéristiques urbaines de {ville.name} et peut varier d&apos;un immeuble à l&apos;autre.
+              Le profil de bâti est estimé selon les caractéristiques urbaines de {ville.name} et peut varier d'un immeuble à l'autre.
               {content.dataDriven?.statCards.prixM2Quartier
                 ? <> Le prix immobilier estimé à {quartierName} ({formatEuro(content.dataDriven.statCards.prixM2Quartier)}/m²) est dérivé des moyennes communales ajustées par époque de construction ({content.profile.eraLabel.toLowerCase()}) et densité urbaine ({content.profile.densityLabel.toLowerCase()}).</>
                 : <> Les tarifs sont indicatifs et basés sur des moyennes régionales ({ville.region}).</>
@@ -685,7 +685,7 @@ export default async function QuartierPage({ params }: PageProps) {
               Processus de vérification
             </Link>
             <Link href="/politique-avis" className="text-sm text-primary-400 hover:text-primary-600 flex items-center gap-1.5">
-              Politique d&apos;avis
+              Politique d'avis
             </Link>
             <Link href="/mediation" className="text-sm text-primary-400 hover:text-primary-600 flex items-center gap-1.5">
               Médiation

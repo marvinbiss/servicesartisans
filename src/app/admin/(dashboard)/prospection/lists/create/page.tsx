@@ -179,7 +179,7 @@ export default function CreateListPage() {
                 className="text-blue-600"
               />
               <span className="text-sm">Dynamique</span>
-              <span className="text-xs text-gray-400">- bas&eacute;e sur des filtres</span>
+              <span className="text-xs text-gray-400">- basée sur des filtres</span>
             </label>
           </div>
         </div>
@@ -187,7 +187,7 @@ export default function CreateListPage() {
         {/* Dynamic filters */}
         {listType === 'dynamic' && (
           <div className="border-t pt-4 space-y-4">
-            <h3 className="text-sm font-medium text-gray-700">Crit&egrave;res de filtrage</h3>
+            <h3 className="text-sm font-medium text-gray-700">Critères de filtrage</h3>
 
             <div>
               <label className="block text-sm font-medium mb-1">Type de contact</label>
@@ -204,7 +204,7 @@ export default function CreateListPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1">D&eacute;partement</label>
+              <label className="block text-sm font-medium mb-1">Département</label>
               <select
                 value={filterDepartment}
                 onChange={(e) => setFilterDepartment(e.target.value)}
@@ -218,7 +218,7 @@ export default function CreateListPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1">R&eacute;gion</label>
+              <label className="block text-sm font-medium mb-1">Région</label>
               <select
                 value={filterRegion}
                 onChange={(e) => setFilterRegion(e.target.value)}

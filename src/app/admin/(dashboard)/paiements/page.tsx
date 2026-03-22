@@ -26,7 +26,7 @@ export default function AdminPaymentsPage() {
             </div>
             <p className="text-gray-500 max-w-md">
               La gestion des paiements et abonnements sera disponible prochainement.
-              L&apos;intégration Stripe est en cours de configuration.
+              L'intégration Stripe est en cours de configuration.
             </p>
           </div>
         </div>

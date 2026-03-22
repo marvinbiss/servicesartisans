@@ -155,7 +155,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-500" />
               </span>
-              {countStr} artisans disponibles aujourd&apos;hui
+              {countStr} artisans disponibles aujourd'hui
             </div>
           </div>
 
@@ -169,7 +169,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
           </h2>
 
           <p className="text-center text-charcoal-500 text-base md:text-lg max-w-xl mx-auto mb-6 md:mb-8 leading-relaxed">
-            Trouvez un artisan v&eacute;rifi&eacute; pr&egrave;s de chez vous. Devis gratuit, r&eacute;ponse rapide.
+            Trouvez un artisan vérifié près de chez vous. Devis gratuit, réponse rapide.
           </p>
 
           {/* Two big option buttons — "problème-first" approach */}
@@ -204,7 +204,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
             <span className="hidden sm:inline text-charcoal-200">|</span>
             <span className="inline-flex items-center gap-1.5">
               <ShieldCheck className="w-4 h-4 text-accent-500" />
-              Artisans v&eacute;rifi&eacute;s SIREN
+              Artisans vérifiés SIREN
             </span>
             <span className="hidden sm:inline text-charcoal-200">|</span>
             <span className="inline-flex items-center gap-1.5">
@@ -223,7 +223,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
               <div>
                 <div className="text-xs font-bold text-primary-400 tracking-[.12em] uppercase mb-2">Services populaires</div>
                 <h2 className="font-heading font-black tracking-[-0.04em] leading-tight text-charcoal-900" style={{ fontSize: 'clamp(1.75rem,3vw,2.5rem)' }}>
-                  Tous les corps de m&eacute;tier
+                  Tous les corps de métier
                 </h2>
               </div>
               <Link href="/services" className="text-sm font-bold text-primary-400 hover:text-primary-600 transition-colors hidden sm:block">
@@ -267,7 +267,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
           <div className="max-w-[1320px] mx-auto px-5 md:px-10">
             <div className="text-center mb-12">
               <div className="inline-block text-xs font-bold text-primary-400 tracking-[.12em] uppercase mb-2">
-                Comment &ccedil;a marche
+                Comment ça marche
               </div>
               <h2 className="font-heading font-black tracking-[-0.04em] leading-tight text-charcoal-900" style={{ fontSize: 'clamp(1.75rem,3.5vw,2.5rem)' }}>
                 Simple, rapide, fiable.
@@ -347,7 +347,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
               </h2>
               <div className="text-right">
                 <div className="text-2xl font-black text-amber-400">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-                <div className="text-sm text-charcoal-400">{ratingStr}/5 &middot; {reviewStr} avis v&eacute;rifi&eacute;s</div>
+                <div className="text-sm text-charcoal-400">{ratingStr}/5 · {reviewStr} avis vérifiés</div>
               </div>
             </div>
 
@@ -360,7 +360,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                 return (
                   <ScrollReveal key={rv.client_name || i} delay={i * 0.1}>
                     <div className="bg-sand-50 rounded-2xl p-6 border border-sand-200 hover:shadow-card-hover transition-all duration-300">
-                      <div className="text-4xl font-black leading-none mb-3 text-primary-200">&ldquo;</div>
+                      <div className="text-4xl font-black leading-none mb-3 text-primary-200">“</div>
                       <p className="text-base leading-[1.75] mb-5 text-charcoal-700 italic">{rv.comment}</p>
                       <div className="flex items-center gap-2.5">
                         <Image
@@ -375,7 +375,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                         />
                         <div>
                           <div className="text-sm font-bold text-charcoal-900">{rv.client_name || 'Client vérifié'}</div>
-                          <div className="text-xs text-charcoal-400">Client v&eacute;rifi&eacute;</div>
+                          <div className="text-xs text-charcoal-400">Client vérifié</div>
                         </div>
                         <div className="ml-auto text-xs">
                           {renderStars(rv.rating)}
@@ -403,9 +403,9 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
           <div className="max-w-[1320px] mx-auto px-5 md:px-10">
             <div className="flex justify-between items-end mb-10">
               <div>
-                <div className="text-xs font-bold text-primary-400 tracking-[.12em] uppercase mb-2">Pr&egrave;s de vous</div>
+                <div className="text-xs font-bold text-primary-400 tracking-[.12em] uppercase mb-2">Près de vous</div>
                 <h2 className="font-heading font-black tracking-[-0.04em] leading-tight text-charcoal-900" style={{ fontSize: 'clamp(1.75rem,3.5vw,2.5rem)' }}>
-                  Les artisans les mieux not&eacute;s.
+                  Les artisans les mieux notés.
                 </h2>
               </div>
               <Link href="/services" className="text-sm font-bold text-primary-400 hover:text-primary-600 transition-colors">
@@ -520,10 +520,10 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
 
           <div className="relative z-10 max-w-[1320px] mx-auto px-5 md:px-10 py-20 text-center w-full">
             <h2 className="font-heading font-black tracking-[-0.04em] text-white leading-[1.05] mb-4" style={{ fontSize: 'clamp(1.75rem,4vw,2.8rem)' }}>
-              Pr&ecirc;t &agrave; d&eacute;marrer votre projet ?
+              Prêt à démarrer votre projet ?
             </h2>
             <p className="text-base leading-[1.7] mb-8 max-w-xl mx-auto text-white/80">
-              Des milliers de propri&eacute;taires font confiance &agrave; ServicesArtisans pour leurs travaux.
+              Des milliers de propriétaires font confiance à ServicesArtisans pour leurs travaux.
             </p>
             <div className="flex gap-3 flex-wrap justify-center">
               <Link

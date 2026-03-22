@@ -109,6 +109,28 @@ export default function ServiceLocationPageClient({
     }
   }, [isLoadingMore, hasMore, serviceSlug, locationSlug, allProviders.length])
 
+  // Client-side fallback: if the server pre-rendered with 0 providers
+  // (e.g. build with NEXT_BUILD_SKIP_DB=1), fetch them from the API.
+  const [isHydrating, setIsHydrating] = useState(initialProviders.length === 0)
+  useEffect(() => {
+    if (initialProviders.length > 0 || !serviceSlug || !locationSlug) {
+      setIsHydrating(false)
+      return
+    }
+    let cancelled = false
+    fetch(`/api/providers/listing?service=${serviceSlug}&location=${locationSlug}&limit=${PAGE_SIZE}`)
+      .then(r => r.ok ? r.json() : null)
+      .then(data => {
+        if (cancelled) return
+        if (data?.providers?.length) {
+          setAllProviders(data.providers)
+        }
+        setIsHydrating(false)
+      })
+      .catch(() => { if (!cancelled) setIsHydrating(false) })
+    return () => { cancelled = true }
+  }, [initialProviders.length, serviceSlug, locationSlug])
+
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768)
     checkMobile()
@@ -183,7 +205,7 @@ export default function ServiceLocationPageClient({
                 {totalCount > 0 && (
                   <span className="inline-flex items-center gap-1.5 text-sm text-charcoal-600">
                     <ShieldCheck className="w-4 h-4 text-accent-500" />
-                    <span className="font-semibold text-charcoal-900">{totalCount}</span> artisan{totalCount > 1 ? 's' : ''} v&eacute;rifi&eacute;{totalCount > 1 ? 's' : ''}
+                    <span className="font-semibold text-charcoal-900">{totalCount}</span> artisan{totalCount > 1 ? 's' : ''} vérifié{totalCount > 1 ? 's' : ''}
                   </span>
                 )}
                 {avgRating && (
@@ -344,7 +366,7 @@ export default function ServiceLocationPageClient({
             </div>
             <div className="text-center sm:text-left">
               <p className="font-heading font-bold text-base sm:text-lg">
-                Recevez jusqu&apos;&agrave; 3 devis gratuits de {service.name.toLowerCase()} &agrave; {location.name}
+                Recevez jusqu'à 3 devis gratuits de {service.name.toLowerCase()} à {location.name}
               </p>
               <p className="text-primary-100 text-sm hidden sm:block">
                 Comparez les prix et choisissez le meilleur artisan
@@ -372,17 +394,23 @@ export default function ServiceLocationPageClient({
               viewMode === 'split' ? 'w-full md:w-1/2 lg:w-2/5' : 'w-full'
             }`}
           >
-            {allProviders.length === 0 ? (
+            {isHydrating ? (
+              /* Loading state while client-side fetch is in progress */
+              <div className="flex flex-col items-center justify-center text-center px-6 py-16 sm:py-24">
+                <div className="w-12 h-12 border-4 border-primary-400 border-t-transparent rounded-full animate-spin mx-auto mb-6" />
+                <p className="text-charcoal-500 font-medium">Chargement des artisans...</p>
+              </div>
+            ) : allProviders.length === 0 ? (
               /* Empty state when 0 providers */
               <div className="flex flex-col items-center justify-center text-center px-6 py-16 sm:py-24">
                 <div className="w-16 h-16 bg-sand-200 rounded-2xl flex items-center justify-center mb-6">
                   <SearchX className="w-8 h-8 text-charcoal-400" />
                 </div>
                 <h2 className="font-heading text-xl font-bold text-charcoal-900 mb-2">
-                  Aucun {service.name.toLowerCase()} r&eacute;f&eacute;renc&eacute; &agrave; {location.name} pour le moment
+                  Aucun {service.name.toLowerCase()} référencé à {location.name} pour le moment
                 </h2>
                 <p className="text-charcoal-500 max-w-md mb-8">
-                  Demandez un devis et nous rechercherons un professionnel qualifi&eacute; pour vous dans les plus brefs d&eacute;lais.
+                  Demandez un devis et nous rechercherons un professionnel qualifié pour vous dans les plus brefs délais.
                 </p>
                 <Link
                   href={`/devis/${serviceSlug || service.slug}/${locationSlug || ''}`}

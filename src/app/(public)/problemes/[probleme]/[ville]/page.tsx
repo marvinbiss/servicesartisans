@@ -879,7 +879,7 @@ export default async function ProblemeVillePage({
       <section className={`bg-gradient-to-br ${gradient} text-white py-16 overflow-hidden`}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">
-            Besoin d&apos;un {tradeName.toLowerCase()} à {villeData.name} ?
+            Besoin d'un {tradeName.toLowerCase()} à {villeData.name} ?
           </h2>
           <p className="text-xl opacity-90 mb-8">
             Comparez les artisans référencés et obtenez un devis gratuit.
@@ -972,7 +972,7 @@ export default async function ProblemeVillePage({
         <section className="py-16 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">
-              {problem.name} dans d&apos;autres villes
+              {problem.name} dans d'autres villes
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-3xl">
               {nearbyCities.map((v) => (
@@ -1080,7 +1080,7 @@ export default async function ProblemeVillePage({
           <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
             <h3 className="text-sm font-semibold text-slate-700 mb-2">Transparence tarifaire</h3>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Les prix affichés pour {villeData.name} sont des fourchettes indicatives ajustées en fonction des données régionales ({villeData.region}). Ils varient selon la complexité du problème et l&apos;urgence. Seul un devis personnalisé fait foi. {SITE_NAME} est un annuaire indépendant — nous mettons en relation mais ne réalisons pas les interventions.
+              Les prix affichés pour {villeData.name} sont des fourchettes indicatives ajustées en fonction des données régionales ({villeData.region}). Ils varient selon la complexité du problème et l'urgence. Seul un devis personnalisé fait foi. {SITE_NAME} est un annuaire indépendant — nous mettons en relation mais ne réalisons pas les interventions.
             </p>
           </div>
         </div>

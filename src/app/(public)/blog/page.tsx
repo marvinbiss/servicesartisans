@@ -124,7 +124,7 @@ export default async function BlogPage({ searchParams }: PageProps) {
       <section className="py-12 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-8 border-l-4 border-blue-500 pl-4">
-            Parcourir par cat&eacute;gorie
+            Parcourir par catégorie
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {categoryCounts.map(c => {

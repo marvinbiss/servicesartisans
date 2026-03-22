@@ -133,7 +133,7 @@ export default function BarometreRegionsPage() {
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-xl font-bold text-gray-900 mb-4">Indice régional des prix</h2>
             <p className="text-gray-600 mb-6">
-              L&apos;indice affiché sur chaque carte représente le niveau de prix par rapport à la moyenne nationale (base 100).
+              L'indice affiché sur chaque carte représente le niveau de prix par rapport à la moyenne nationale (base 100).
               Un indice de 130 signifie que les prix sont 30% supérieurs à la moyenne.
             </p>
             <div className="flex flex-wrap justify-center gap-4">

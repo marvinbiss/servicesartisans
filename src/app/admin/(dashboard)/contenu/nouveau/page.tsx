@@ -391,7 +391,7 @@ export default function AdminNouveauContenuPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Biographie de l&apos;auteur
+                    Biographie de l'auteur
                   </label>
                   <textarea
                     value={authorBio}

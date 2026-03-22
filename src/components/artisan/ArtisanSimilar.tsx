@@ -40,7 +40,7 @@ export function ArtisanSimilar({ artisan: _artisan, similarArtisans }: ArtisanSi
           Artisans similaires
         </h2>
         <p className="text-gray-600 mb-4">
-          Découvrez d&apos;autres {_artisan.specialty?.toLowerCase() || 'artisans'} à {_artisan.city}
+          Découvrez d'autres {_artisan.specialty?.toLowerCase() || 'artisans'} à {_artisan.city}
         </p>
         <Link
           href={hubUrl}

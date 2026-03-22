@@ -260,7 +260,7 @@ export default function ContactDetailPage() {
                     <input type="email" value={editFields.email} onChange={(e) => setEditFields(f => ({ ...f, email: e.target.value }))} className="w-full px-3 py-2 border rounded-lg text-sm" />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-500 mb-1">T&eacute;l&eacute;phone</label>
+                    <label className="block text-xs font-medium text-gray-500 mb-1">Téléphone</label>
                     <input type="text" value={editFields.phone} onChange={(e) => setEditFields(f => ({ ...f, phone: e.target.value }))} className="w-full px-3 py-2 border rounded-lg text-sm" />
                   </div>
                 </div>
@@ -278,16 +278,16 @@ export default function ContactDetailPage() {
                     <input type="text" value={editFields.city} onChange={(e) => setEditFields(f => ({ ...f, city: e.target.value }))} className="w-full px-3 py-2 border rounded-lg text-sm" />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-500 mb-1">D&eacute;partement</label>
+                    <label className="block text-xs font-medium text-gray-500 mb-1">Département</label>
                     <input type="text" value={editFields.department} onChange={(e) => setEditFields(f => ({ ...f, department: e.target.value }))} className="w-full px-3 py-2 border rounded-lg text-sm" />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1">R&eacute;gion</label>
+                  <label className="block text-xs font-medium text-gray-500 mb-1">Région</label>
                   <input type="text" value={editFields.region} onChange={(e) => setEditFields(f => ({ ...f, region: e.target.value }))} className="w-full px-3 py-2 border rounded-lg text-sm" />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1">Tags (s&eacute;par&eacute;s par des virgules)</label>
+                  <label className="block text-xs font-medium text-gray-500 mb-1">Tags (séparés par des virgules)</label>
                   <input type="text" value={editFields.tags} onChange={(e) => setEditFields(f => ({ ...f, tags: e.target.value }))} className="w-full px-3 py-2 border rounded-lg text-sm" placeholder="tag1, tag2, tag3" />
                 </div>
                 <div>
@@ -299,7 +299,7 @@ export default function ContactDetailPage() {
                   >
                     <option value="unknown">Inconnu</option>
                     <option value="opted_in">Inscrit (opt-in)</option>
-                    <option value="opted_out">D&eacute;sinscrit (opt-out)</option>
+                    <option value="opted_out">Désinscrit (opt-out)</option>
                   </select>
                 </div>
                 <div className="flex gap-2 pt-2">
@@ -337,7 +337,7 @@ export default function ContactDetailPage() {
                 </div>
                 <div className="flex items-center gap-3 text-sm">
                   <Phone className="w-4 h-4 text-gray-400" />
-                  <span className="text-gray-500 w-24">T&eacute;l&eacute;phone</span>
+                  <span className="text-gray-500 w-24">Téléphone</span>
                   <span className="text-gray-900">{contact.phone || '-'}</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
@@ -374,7 +374,7 @@ export default function ContactDetailPage() {
                 </div>
                 <div className="flex items-center gap-3 text-sm">
                   <span className="w-4 h-4" />
-                  <span className="text-gray-500 w-24">Cr&eacute;&eacute; le</span>
+                  <span className="text-gray-500 w-24">Créé le</span>
                   <span className="text-gray-400 text-xs">{new Date(contact.created_at).toLocaleDateString('fr-FR')}</span>
                 </div>
               </div>
@@ -385,7 +385,7 @@ export default function ContactDetailPage() {
           <div className="bg-white rounded-lg border p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Historique des messages</h2>
             {messages.length === 0 ? (
-              <p className="text-sm text-gray-400 text-center py-6">Aucun message envoy&eacute; &agrave; ce contact.</p>
+              <p className="text-sm text-gray-400 text-center py-6">Aucun message envoyé à ce contact.</p>
             ) : (
               <div className="space-y-3">
                 {messages.map((msg) => (
@@ -446,7 +446,7 @@ export default function ContactDetailPage() {
               </div>
               {contact.opted_out_at && (
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-500">D&eacute;sinscrit le</span>
+                  <span className="text-sm text-gray-500">Désinscrit le</span>
                   <span className="text-xs text-gray-400">{new Date(contact.opted_out_at).toLocaleDateString('fr-FR')}</span>
                 </div>
               )}
@@ -457,7 +457,7 @@ export default function ContactDetailPage() {
           <div className="bg-white rounded-lg border p-4">
             <h3 className="text-sm font-medium mb-3">Listes</h3>
             {lists.length === 0 ? (
-              <p className="text-sm text-gray-400">Aucune liste charg&eacute;e</p>
+              <p className="text-sm text-gray-400">Aucune liste chargée</p>
             ) : (
               <div className="space-y-1">
                 {lists.map((list) => (

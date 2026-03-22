@@ -226,7 +226,7 @@ export default function EmailTemplatesPage() {
               <ChevronLeft className="w-4 h-4" />
               Retour aux paramètres
             </button>
-            <h1 className="text-2xl font-bold text-gray-900">Modèles d&apos;email</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Modèles d'email</h1>
             <p className="text-gray-500 mt-1">Personnalisez les emails envoyés par la plateforme</p>
           </div>
           {saved && (
@@ -371,7 +371,7 @@ export default function EmailTemplatesPage() {
           <p className="text-sm text-blue-700">
             Les modifications apportées aux templates seront appliquées à tous les futurs emails.
             Les variables entre doubles accolades (ex: {"{{user_name}}"}) seront automatiquement
-            remplacées par les valeurs réelles lors de l&apos;envoi.
+            remplacées par les valeurs réelles lors de l'envoi.
           </p>
         </div>
       </div>

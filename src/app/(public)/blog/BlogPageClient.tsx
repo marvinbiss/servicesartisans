@@ -113,7 +113,7 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
           />
           <div className="text-center">
             <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-4 tracking-[-0.025em]">
-              Blog & Actualit&eacute;s
+              Blog & Actualités
             </h1>
             <p className="text-xl text-slate-400 max-w-2xl mx-auto">
               Conseils, guides de prix et tendances pour vos projets de travaux. Par les experts de ServicesArtisans.
@@ -255,7 +255,7 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
                 onClick={handleLoadMore}
                 className="bg-white border border-gray-300 text-gray-700 px-8 py-3 rounded-lg font-medium hover:bg-gray-50 transition-colors"
               >
-                Voir plus d&apos;articles
+                Voir plus d'articles
               </button>
             </div>
           )}

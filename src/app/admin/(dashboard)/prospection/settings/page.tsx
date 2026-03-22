@@ -121,7 +121,7 @@ export default function SettingsPage() {
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Prospection</h1>
-          <p className="text-gray-500 mt-1">Configuration de l&apos;IA et des canaux</p>
+          <p className="text-gray-500 mt-1">Configuration de l'IA et des canaux</p>
         </div>
         <div className="flex items-center gap-3">
           {hasUnsavedChanges && (
@@ -191,7 +191,7 @@ export default function SettingsPage() {
             </label>
 
             <div>
-              <label className="block text-sm font-medium mb-1">Mots-clés d&apos;escalade (transfert humain)</label>
+              <label className="block text-sm font-medium mb-1">Mots-clés d'escalade (transfert humain)</label>
               <input
                 type="text"
                 value={settings.escalation_keywords.join(', ')}

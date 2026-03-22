@@ -94,7 +94,7 @@ export default function ListsPage() {
               <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Type</th>
               <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">Contacts</th>
               <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Description</th>
-              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Cr&eacute;&eacute;e le</th>
+              <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Créée le</th>
             </tr>
           </thead>
           <tbody className="divide-y">

@@ -123,11 +123,11 @@ export default async function NotreProcessusDeVerificationPage() {
           />
           <div className="text-center">
           <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
-            Notre processus de v&eacute;rification des artisans
+            Notre processus de vérification des artisans
           </h1>
           <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-            Chaque artisan r&eacute;f&eacute;renc&eacute; sur {companyIdentity.name} passe par un processus
-            de v&eacute;rification structur&eacute;. Voici les &eacute;tapes que nous suivons.
+            Chaque artisan référencé sur {companyIdentity.name} passe par un processus
+            de vérification structuré. Voici les étapes que nous suivons.
           </p>
           </div>
         </div>

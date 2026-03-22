@@ -83,10 +83,10 @@ export default async function CarrieresPage() {
             className="mb-6 text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
           />
           <h1 className="font-heading text-4xl font-extrabold mb-4 tracking-[-0.025em]">
-            Carri&egrave;res
+            Carrières
           </h1>
           <p className="text-xl text-slate-400 max-w-3xl">
-            Rejoignez une &eacute;quipe passionn&eacute;e qui construit l&apos;annuaire des artisans de France bas&eacute; sur les donn&eacute;es SIREN officielles.
+            Rejoignez une équipe passionnée qui construit l'annuaire des artisans de France basé sur les données SIREN officielles.
           </p>
         </div>
       </section>
@@ -97,7 +97,7 @@ export default async function CarrieresPage() {
             Aucune offre disponible pour le moment
           </h2>
           <p className="text-gray-600 mb-6">
-            Nous n&apos;avons pas de poste ouvert actuellement, mais nous sommes toujours à la recherche de talents. N&apos;hésitez pas à nous envoyer une candidature spontanée.
+            Nous n'avons pas de poste ouvert actuellement, mais nous sommes toujours à la recherche de talents. N'hésitez pas à nous envoyer une candidature spontanée.
           </p>
           <p className="text-gray-500 mb-8">
             Pour toute candidature spontanée, contactez-nous à{' '}

@@ -25,7 +25,7 @@ export default function DashboardError({
           Une erreur est survenue
         </h2>
         <p className="text-gray-600 mb-8 text-sm">
-          Le tableau de bord n&apos;a pas pu être chargé. Cela peut être dû à un problème temporaire.
+          Le tableau de bord n'a pas pu être chargé. Cela peut être dû à un problème temporaire.
         </p>
         <div className="flex flex-col gap-3">
           <button
@@ -40,7 +40,7 @@ export default function DashboardError({
             className="inline-flex items-center justify-center gap-2 text-gray-600 hover:text-gray-800 text-sm py-2 transition-colors"
           >
             <Home className="w-4 h-4" />
-            Retour à l&apos;espace artisan
+            Retour à l'espace artisan
           </Link>
         </div>
       </div>

@@ -279,7 +279,7 @@ export default async function DevisServiceLocationPage({
             {h1Text}
           </h1>
           <p className="text-charcoal-500 mt-2 max-w-xl">
-            Comparez jusqu&apos;à 3 devis de {tradeLower}s à {villeData.name} ({villeData.departement}).
+            Comparez jusqu'à 3 devis de {tradeLower}s à {villeData.name} ({villeData.departement}).
             Prix local : {minPrice} à {maxPrice} {trade.priceRange.unit}.
           </p>
           {/* Inline trust signals */}
@@ -364,7 +364,7 @@ export default async function DevisServiceLocationPage({
               <span className="text-charcoal-600 text-lg">{trade.priceRange.unit}</span>
             </div>
             <p className="text-charcoal-500 text-sm mt-3">
-              Prix moyen constaté à {villeData.name} et ses alentours, main-d&apos;œuvre incluse
+              Prix moyen constaté à {villeData.name} et ses alentours, main-d'œuvre incluse
             </p>
             {multiplier !== 1.0 && (
               <p className="text-xs text-charcoal-400 mt-2">
@@ -398,7 +398,7 @@ export default async function DevisServiceLocationPage({
             Facteurs locaux à {villeData.name}
           </h2>
           <p className="text-charcoal-500 text-sm text-center mb-8">
-            Plusieurs facteurs locaux influencent le coût d&apos;un {tradeLower} à {villeData.name}.
+            Plusieurs facteurs locaux influencent le coût d'un {tradeLower} à {villeData.name}.
           </p>
           <div className="grid sm:grid-cols-2 gap-6">
             <LocalFactorCard
@@ -506,7 +506,7 @@ export default async function DevisServiceLocationPage({
                     <h3 className="font-semibold text-charcoal-900 text-sm">Prix immobilier</h3>
                   </div>
                   <p className="text-charcoal-600 text-sm leading-relaxed">
-                    Le prix au m² de {formatEuro(commune.prix_m2_moyen)} à {villeData.name} permet d&apos;estimer le budget travaux proportionnel à la valeur du bien.
+                    Le prix au m² de {formatEuro(commune.prix_m2_moyen)} à {villeData.name} permet d'estimer le budget travaux proportionnel à la valeur du bien.
                   </p>
                 </div>
               )}
@@ -568,25 +568,25 @@ export default async function DevisServiceLocationPage({
                   {commune.revenu_median != null && commune.revenu_median < 22000 && (
                     <li className="flex items-start gap-2">
                       <CheckCircle className="w-4 h-4 text-primary-500 flex-shrink-0 mt-0.5" />
-                      <span>Avec un revenu médian de {formatEuro(commune.revenu_median)}/an, de nombreux ménages à {villeData.name} peuvent être éligibles à <strong>MaPrimeRénov&apos; Bleu</strong> (barème le plus avantageux).</span>
+                      <span>Avec un revenu médian de {formatEuro(commune.revenu_median)}/an, de nombreux ménages à {villeData.name} peuvent être éligibles à <strong>MaPrimeRénov' Bleu</strong> (barème le plus avantageux).</span>
                     </li>
                   )}
                   {commune.revenu_median != null && commune.revenu_median >= 22000 && commune.revenu_median < 28000 && (
                     <li className="flex items-start gap-2">
                       <CheckCircle className="w-4 h-4 text-primary-500 flex-shrink-0 mt-0.5" />
-                      <span>Avec un revenu médian de {formatEuro(commune.revenu_median)}/an, de nombreux ménages à {villeData.name} peuvent être éligibles à <strong>MaPrimeRénov&apos; Jaune</strong> (barème avantageux).</span>
+                      <span>Avec un revenu médian de {formatEuro(commune.revenu_median)}/an, de nombreux ménages à {villeData.name} peuvent être éligibles à <strong>MaPrimeRénov' Jaune</strong> (barème avantageux).</span>
                     </li>
                   )}
                   {commune.pct_passoires_dpe != null && commune.pct_passoires_dpe > 20 && (
                     <li className="flex items-start gap-2">
                       <CheckCircle className="w-4 h-4 text-primary-500 flex-shrink-0 mt-0.5" />
-                      <span>Avec {commune.pct_passoires_dpe}&nbsp;% de passoires thermiques, la rénovation énergétique est une <strong>urgence</strong> à {villeData.name}. Les aides de l&apos;État sont renforcées pour ces logements.</span>
+                      <span>Avec {commune.pct_passoires_dpe}&nbsp;% de passoires thermiques, la rénovation énergétique est une <strong>urgence</strong> à {villeData.name}. Les aides de l'État sont renforcées pour ces logements.</span>
                     </li>
                   )}
                   {commune.jours_gel_annuels != null && commune.jours_gel_annuels > 30 && (
                     <li className="flex items-start gap-2">
                       <CheckCircle className="w-4 h-4 text-primary-500 flex-shrink-0 mt-0.5" />
-                      <span>Avec {commune.jours_gel_annuels} jours de gel par an, l&apos;<strong>isolation</strong> est une priorité à {villeData.name} pour réduire la facture de chauffage.</span>
+                      <span>Avec {commune.jours_gel_annuels} jours de gel par an, l'<strong>isolation</strong> est une priorité à {villeData.name} pour réduire la facture de chauffage.</span>
                     </li>
                   )}
                 </ul>
@@ -671,7 +671,7 @@ export default async function DevisServiceLocationPage({
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6">
-            Devis {tradeLower} dans d&apos;autres villes
+            Devis {tradeLower} dans d'autres villes
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-3xl">
             {nearbyCities.map((v) => (
@@ -883,7 +883,7 @@ export default async function DevisServiceLocationPage({
           <div className="bg-sand-100 rounded-2xl border border-sand-300 p-6">
             <h3 className="text-sm font-semibold text-charcoal-700 mb-2">Transparence tarifaire</h3>
             <p className="text-xs text-sand-500 leading-relaxed">
-              Les prix affichés pour {villeData.name} sont des fourchettes indicatives ajustées en fonction des données régionales ({villeData.region}). Ils varient selon la complexité du chantier, les matériaux et l&apos;urgence. Seul un devis personnalisé fait foi. {SITE_NAME} est un annuaire indépendant.
+              Les prix affichés pour {villeData.name} sont des fourchettes indicatives ajustées en fonction des données régionales ({villeData.region}). Ils varient selon la complexité du chantier, les matériaux et l'urgence. Seul un devis personnalisé fait foi. {SITE_NAME} est un annuaire indépendant.
             </p>
           </div>
         </div>

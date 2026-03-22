@@ -240,15 +240,15 @@ export default async function AvisPage() {
 
           <div className="text-center max-w-3xl mx-auto">
             <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
-              Avis artisans &mdash;{' '}
+              Avis artisans —{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-300 to-cyan-300">
                 Trouvez un professionnel
               </span>{' '}
               de confiance
             </h1>
             <p className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10">
-              Consultez les avis v&eacute;rifi&eacute;s, comparez les profils
-              et choisissez l&apos;artisan qui correspond &agrave; votre projet.
+              Consultez les avis vérifiés, comparez les profils
+              et choisissez l'artisan qui correspond à votre projet.
             </p>
 
             {/* Trust badges */}
@@ -291,11 +291,11 @@ export default async function AvisPage() {
                 </div>
                 <div>
                   <div className="text-3xl font-bold text-gray-900">{platformStats.totalReviews.toLocaleString('fr-FR')}</div>
-                  <div className="text-sm text-gray-500">Avis v&eacute;rifi&eacute;s</div>
+                  <div className="text-sm text-gray-500">Avis vérifiés</div>
                 </div>
                 <div>
                   <div className="text-3xl font-bold text-gray-900">{platformStats.providerCount.toLocaleString('fr-FR')}</div>
-                  <div className="text-sm text-gray-500">Artisans not&eacute;s</div>
+                  <div className="text-sm text-gray-500">Artisans notés</div>
                 </div>
               </div>
             </div>
@@ -311,10 +311,10 @@ export default async function AvisPage() {
               Simple et rapide
             </p>
             <h2 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-3 tracking-tight">
-              Comment &ccedil;a marche&nbsp;?
+              Comment ça marche&nbsp;?
             </h2>
             <p className="text-slate-500 max-w-lg mx-auto">
-              Trois &eacute;tapes pour trouver un artisan de confiance pr&egrave;s de chez vous.
+              Trois étapes pour trouver un artisan de confiance près de chez vous.
             </p>
           </div>
 
@@ -359,7 +359,7 @@ export default async function AvisPage() {
               FAQ
             </p>
             <h2 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-3 tracking-tight">
-              Questions fr&eacute;quentes
+              Questions fréquentes
             </h2>
             <p className="text-slate-500 max-w-lg mx-auto">
               Tout ce que vous devez savoir sur les avis artisans.
@@ -392,10 +392,10 @@ export default async function AvisPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <h2 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-3 tracking-tight">
-              Avis par m&eacute;tier
+              Avis par métier
             </h2>
             <p className="text-slate-500 max-w-lg mx-auto">
-              S&eacute;lectionnez un m&eacute;tier pour consulter les avis et recommandations.
+              Sélectionnez un métier pour consulter les avis et recommandations.
             </p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
@@ -409,7 +409,7 @@ export default async function AvisPage() {
                   {trade.name}
                 </div>
                 <div className="text-xs text-gray-400 mt-1">
-                  {trade.priceRange.min}&ndash;{trade.priceRange.max}{' '}
+                  {trade.priceRange.min}–{trade.priceRange.max}{' '}
                   {trade.priceRange.unit}
                 </div>
               </Link>
@@ -448,10 +448,10 @@ export default async function AvisPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <h2 className="font-heading text-2xl md:text-3xl font-bold text-slate-900 mb-3 tracking-tight">
-              Avis par m&eacute;tier et ville
+              Avis par métier et ville
             </h2>
             <p className="text-slate-500 max-w-lg mx-auto">
-              Trouvez les avis d&apos;artisans par sp&eacute;cialit&eacute; dans votre ville.
+              Trouvez les avis d'artisans par spécialité dans votre ville.
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -485,7 +485,7 @@ export default async function AvisPage() {
               Voir aussi
             </h2>
             <p className="text-slate-500 max-w-lg mx-auto">
-              Explorez nos autres rubriques pour trouver l&apos;artisan id&eacute;al.
+              Explorez nos autres rubriques pour trouver l'artisan idéal.
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -545,10 +545,10 @@ export default async function AvisPage() {
                   <ChevronRight className="w-3 h-3" /> Toutes les villes
                 </Link>
                 <Link href="/departements" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
-                  <ChevronRight className="w-3 h-3" /> Tous les d&eacute;partements
+                  <ChevronRight className="w-3 h-3" /> Tous les départements
                 </Link>
                 <Link href="/regions" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
-                  <ChevronRight className="w-3 h-3" /> Toutes les r&eacute;gions
+                  <ChevronRight className="w-3 h-3" /> Toutes les régions
                 </Link>
                 <Link href="/blog" className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
                   <ChevronRight className="w-3 h-3" /> Blog
@@ -564,11 +564,11 @@ export default async function AvisPage() {
         <div className="max-w-3xl mx-auto px-4 text-center">
           <Star className="w-8 h-8 text-amber-400 mx-auto mb-4" />
           <h2 className="font-heading text-xl md:text-2xl font-bold text-slate-900 mb-3">
-            Besoin d&apos;un artisan de confiance&nbsp;?
+            Besoin d'un artisan de confiance&nbsp;?
           </h2>
           <p className="text-slate-500 mb-6 max-w-md mx-auto">
             Comparez les avis, consultez les profils et demandez un devis gratuit
-            aupr&egrave;s d&apos;artisans r&eacute;f&eacute;renc&eacute;s.
+            auprès d'artisans référencés.
           </p>
           <Link
             href="/devis"

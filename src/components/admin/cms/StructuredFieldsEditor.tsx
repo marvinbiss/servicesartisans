@@ -38,7 +38,7 @@ export function StructuredFieldsEditor({ value, pageType, onChange }: Structured
     default:
       return (
         <div className="text-sm text-gray-500 bg-gray-50 rounded-lg p-4">
-          Aucun champ structuré disponible pour le type de page &laquo;{pageType}&raquo;.
+          Aucun champ structuré disponible pour le type de page «{pageType}».
         </div>
       )
   }

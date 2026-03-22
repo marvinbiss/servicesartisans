@@ -175,7 +175,7 @@ export default function AdminEstimationLeadsPage() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Leads Estimation IA</h1>
           <p className="text-sm text-gray-500 mt-1">
-            Leads capturés par le widget d&apos;estimation sur les pages services et artisans
+            Leads capturés par le widget d'estimation sur les pages services et artisans
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -204,7 +204,7 @@ export default function AdminEstimationLeadsPage() {
           <p className="text-2xl font-bold text-gray-900 mt-1">{stats.total}</p>
         </div>
         <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <p className="text-sm text-gray-500">Aujourd&apos;hui</p>
+          <p className="text-sm text-gray-500">Aujourd'hui</p>
           <p className="text-2xl font-bold text-blue-600 mt-1">{stats.today}</p>
         </div>
         <div className="bg-white rounded-xl border border-gray-200 p-4">
@@ -288,7 +288,7 @@ export default function AdminEstimationLeadsPage() {
         <div className="text-center py-16 text-gray-500">
           <MessageSquare className="w-12 h-12 mx-auto mb-3 text-gray-300" />
           <p className="font-medium">Aucun lead pour le moment</p>
-          <p className="text-sm mt-1">Les leads apparaîtront ici quand les visiteurs utiliseront le widget d&apos;estimation.</p>
+          <p className="text-sm mt-1">Les leads apparaîtront ici quand les visiteurs utiliseront le widget d'estimation.</p>
         </div>
       ) : (
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">

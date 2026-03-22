@@ -71,7 +71,7 @@ export default async function BarometreTarifsPage() {
             </h1>
             <p className="text-lg text-gray-600 leading-relaxed">
               Explorez les données détaillées pour chaque corps de métier du bâtiment :
-              nombre d&apos;artisans, note moyenne et avis clients.
+              nombre d'artisans, note moyenne et avis clients.
             </p>
           </div>
         </header>

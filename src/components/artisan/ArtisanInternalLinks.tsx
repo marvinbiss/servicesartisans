@@ -60,7 +60,7 @@ export default function ArtisanInternalLinks({
           <div>
             <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <MapPin className="w-4 h-4 text-clay-400" />
-              {serviceName} dans d&apos;autres villes
+              {serviceName} dans d'autres villes
             </h3>
             {nearbyCities.length > 0 ? (
               <div className="flex flex-wrap gap-2">

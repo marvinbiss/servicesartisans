@@ -174,7 +174,7 @@ export default function GarantiePage() {
             Prêt à trouver votre artisan ?
           </h2>
           <p className="text-blue-100 mb-6 max-w-lg mx-auto">
-            Recevez jusqu&apos;à 3 devis gratuits d&apos;artisans vérifiés, en moins de 60 secondes.
+            Recevez jusqu'à 3 devis gratuits d'artisans vérifiés, en moins de 60 secondes.
           </p>
           <Link
             href="/devis"

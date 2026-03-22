@@ -126,7 +126,7 @@ export default function EditUserPage() {
               <ChevronLeft className="w-4 h-4" />
               Retour au profil
             </button>
-            <h1 className="text-2xl font-bold text-gray-900">Modifier l&apos;utilisateur</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Modifier l'utilisateur</h1>
             <p className="text-gray-500 mt-1">{user?.email}</p>
           </div>
           <button
@@ -177,7 +177,7 @@ export default function EditUserPage() {
                     disabled
                     className="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-500"
                   />
-                  <p className="text-xs text-gray-500 mt-1">L&apos;email ne peut pas être modifié ici</p>
+                  <p className="text-xs text-gray-500 mt-1">L'email ne peut pas être modifié ici</p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">

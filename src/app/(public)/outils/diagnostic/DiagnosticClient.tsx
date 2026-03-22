@@ -217,10 +217,10 @@ export default function DiagnosticClient() {
                 </div>
                 <div className="text-center">
                   <span className="font-semibold text-gray-900 group-hover:text-red-700 transition-colors block">
-                    Oui, c&apos;est urgent
+                    Oui, c'est urgent
                   </span>
                   <span className="text-sm text-gray-500 mt-1 block">
-                    J&apos;ai besoin d&apos;une intervention aujourd&apos;hui ou demain
+                    J'ai besoin d'une intervention aujourd'hui ou demain
                   </span>
                 </div>
               </button>
@@ -255,14 +255,14 @@ export default function DiagnosticClient() {
                 <div>
                   <p className="text-sm text-blue-600 font-medium">Notre recommandation</p>
                   <h2 className="text-2xl font-bold text-gray-900 font-heading">
-                    Vous avez besoin d&apos;un {serviceLabel}
+                    Vous avez besoin d'un {serviceLabel}
                   </h2>
                 </div>
               </div>
 
               <p className="text-gray-700 mb-4">
                 Pour votre problème de <strong>{selectedProblem.label.toLowerCase()}</strong>,
-                un <strong>{serviceLabel.toLowerCase()}</strong> est le professionnel le plus adapt&eacute;.
+                un <strong>{serviceLabel.toLowerCase()}</strong> est le professionnel le plus adapté.
               </p>
 
               {selectedProblem.estimatedPriceRange && (
@@ -357,7 +357,7 @@ export default function DiagnosticClient() {
               <ul className="space-y-2">
                 <li className="flex items-start gap-2 text-sm text-gray-700">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                  Vérifiez le numéro SIRET de l&apos;entreprise sur le site de l&apos;INSEE.
+                  Vérifiez le numéro SIRET de l'entreprise sur le site de l'INSEE.
                 </li>
                 <li className="flex items-start gap-2 text-sm text-gray-700">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
@@ -369,7 +369,7 @@ export default function DiagnosticClient() {
                 </li>
                 <li className="flex items-start gap-2 text-sm text-gray-700">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                  Assurez-vous que l&apos;artisan possède une assurance responsabilité civile professionnelle.
+                  Assurez-vous que l'artisan possède une assurance responsabilité civile professionnelle.
                 </li>
                 <li className="flex items-start gap-2 text-sm text-gray-700">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />

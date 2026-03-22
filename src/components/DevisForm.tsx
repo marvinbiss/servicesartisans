@@ -516,13 +516,13 @@ export default function DevisForm({
             href="/services"
             className="flex-1 inline-flex items-center justify-center gap-2 bg-primary-400 hover:bg-primary-500 text-white font-semibold px-6 py-3.5 rounded-xl shadow-cta hover:shadow-cta-hover hover:-translate-y-0.5 transition-all duration-300"
           >
-            Trouver d&apos;autres artisans
+            Trouver d'autres artisans
           </Link>
           <Link
             href="/"
             className="flex-1 inline-flex items-center justify-center gap-2 border-2 border-sand-300 hover:border-sand-400 text-charcoal-700 font-semibold px-6 py-3.5 rounded-xl hover:bg-sand-50 transition-all duration-300"
           >
-            Retour à l&apos;accueil
+            Retour à l'accueil
           </Link>
         </div>
       </div>
@@ -535,7 +535,7 @@ export default function DevisForm({
       <div className="flex items-center justify-center gap-2 mb-4 px-4 py-2.5 bg-gradient-to-r from-primary-50 to-primary-100 rounded-2xl border border-primary-200/50">
         <Shield className="w-4 h-4 text-primary-500 flex-shrink-0" />
         <p className="text-sm font-medium text-primary-700">
-          Gratuit &middot; Sans engagement &middot; Données confidentielles
+          Gratuit · Sans engagement · Données confidentielles
         </p>
       </div>
 
@@ -1021,7 +1021,7 @@ export default function DevisForm({
                     className="sr-only"
                   />
                   <span className="text-sm text-charcoal-600 leading-relaxed">
-                    J&apos;accepte d&apos;être contacté par des artisans pour recevoir des devis
+                    J'accepte d'être contacté par des artisans pour recevoir des devis
                     en lien avec ma demande.{' '}
                     <span className="text-charcoal-400">Seuls votre nom, téléphone et description du projet sont transmis aux artisans contactés.</span>
                   </span>

@@ -118,7 +118,7 @@ export default function CarteArtisansPage() {
                 </div>
                 <h3 className="font-semibold text-gray-900 mb-2">Métiers du bâtiment</h3>
                 <p className="text-sm text-gray-600">
-                  Plombiers, électriciens, maçons, couvreurs, peintres et bien d&apos;autres corps de métier.
+                  Plombiers, électriciens, maçons, couvreurs, peintres et bien d'autres corps de métier.
                 </p>
               </div>
               <div className="text-center">

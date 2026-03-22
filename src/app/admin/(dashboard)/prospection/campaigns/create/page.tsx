@@ -205,7 +205,7 @@ export default function CreateCampaignPage() {
           <div className="space-y-4">
             <h3 className="text-lg font-medium">Choisir un modèle</h3>
             {filteredTemplates.length === 0 ? (
-              <p className="text-gray-400 py-4">Aucun modèle disponible pour ce canal. Créez-en un d&apos;abord.</p>
+              <p className="text-gray-400 py-4">Aucun modèle disponible pour ce canal. Créez-en un d'abord.</p>
             ) : (
               <div className="space-y-2">
                 {filteredTemplates.map((tmpl) => (
@@ -229,7 +229,7 @@ export default function CreateCampaignPage() {
           <div className="space-y-4">
             <h3 className="text-lg font-medium">Choisir une liste de contacts</h3>
             {lists.length === 0 ? (
-              <p className="text-gray-400 py-4">Aucune liste de contacts. Créez-en une d&apos;abord.</p>
+              <p className="text-gray-400 py-4">Aucune liste de contacts. Créez-en une d'abord.</p>
             ) : (
               <div className="space-y-2">
                 {lists.map((list) => (
@@ -263,7 +263,7 @@ export default function CreateCampaignPage() {
               />
               <div>
                 <span className="font-medium">Activer les réponses IA</span>
-                <p className="text-sm text-gray-500">L&apos;IA répondra automatiquement aux contacts qui répondent</p>
+                <p className="text-sm text-gray-500">L'IA répondra automatiquement aux contacts qui répondent</p>
               </div>
             </label>
             {aiAutoReply && (

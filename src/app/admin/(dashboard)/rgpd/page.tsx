@@ -173,7 +173,7 @@ export default function AdminRgpdPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-gray-900">Conformité RGPD</h1>
-          <p className="text-gray-500 mt-1">Gestion des demandes d&apos;export et de suppression de données</p>
+          <p className="text-gray-500 mt-1">Gestion des demandes d'export et de suppression de données</p>
         </div>
 
         {/* Manual Action Card */}
@@ -246,7 +246,7 @@ export default function AdminRgpdPage() {
           <div>
             <p className="font-medium text-amber-800">Attention</p>
             <p className="text-sm text-amber-700">
-              La suppression des données est irréversible. Assurez-vous d&apos;avoir effectué un export avant toute suppression.
+              La suppression des données est irréversible. Assurez-vous d'avoir effectué un export avant toute suppression.
               Les données seront anonymisées conformément au RGPD.
             </p>
           </div>

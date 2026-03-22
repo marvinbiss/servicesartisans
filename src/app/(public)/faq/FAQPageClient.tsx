@@ -49,10 +49,10 @@ export default function FAQPageClient() {
           <div className="text-center">
             <HelpCircle className="w-16 h-16 mx-auto mb-6 opacity-60" />
             <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-4 tracking-[-0.025em]">
-              Questions fr&eacute;quentes
+              Questions fréquentes
             </h1>
             <p className="text-xl text-slate-400 mb-8">
-              Trouvez rapidement les r&eacute;ponses &agrave; vos questions
+              Trouvez rapidement les réponses à vos questions
             </p>
 
             {/* Search */}

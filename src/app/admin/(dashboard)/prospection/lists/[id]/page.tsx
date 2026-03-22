@@ -325,7 +325,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
       {showDeleteConfirm && (
         <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
           <p className="text-sm text-red-700 mb-3">
-            Voulez-vous vraiment supprimer la liste &laquo; {list.name} &raquo; ? Cette action est irr&eacute;versible.
+            Voulez-vous vraiment supprimer la liste « {list.name} » ? Cette action est irréversible.
           </p>
           <div className="flex gap-2">
             <button
@@ -348,7 +348,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
       {/* Dynamic filter info */}
       {list.list_type === 'dynamic' && list.filter_criteria && (
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-          <h3 className="text-sm font-medium text-blue-700 mb-2">Crit&egrave;res de filtrage dynamique</h3>
+          <h3 className="text-sm font-medium text-blue-700 mb-2">Critères de filtrage dynamique</h3>
           <div className="flex flex-wrap gap-2">
             {list.filter_criteria.contact_type && (
               <span className="text-xs px-2 py-1 bg-white rounded border">
@@ -357,12 +357,12 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
             )}
             {list.filter_criteria.department && (
               <span className="text-xs px-2 py-1 bg-white rounded border">
-                D&eacute;partement: {list.filter_criteria.department}
+                Département: {list.filter_criteria.department}
               </span>
             )}
             {list.filter_criteria.region && (
               <span className="text-xs px-2 py-1 bg-white rounded border">
-                R&eacute;gion: {list.filter_criteria.region}
+                Région: {list.filter_criteria.region}
               </span>
             )}
             {list.filter_criteria.city && (
@@ -392,8 +392,8 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
                   <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Nom</th>
                   <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Type</th>
                   <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Email</th>
-                  <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">T&eacute;l&eacute;phone</th>
-                  <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Ajout&eacute; le</th>
+                  <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Téléphone</th>
+                  <th scope="col" className="text-left px-4 py-3 font-medium text-gray-500">Ajouté le</th>
                   <th scope="col" className="text-right px-4 py-3 font-medium text-gray-500">Actions</th>
                 </tr>
               </thead>
@@ -458,7 +458,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
                 disabled={page === 1}
                 className="px-3 py-1.5 text-sm border rounded-lg disabled:opacity-50"
               >
-                Pr&eacute;c&eacute;dent
+                Précédent
               </button>
               <span className="text-sm text-gray-500">Page {page} / {totalPages}</span>
               <button

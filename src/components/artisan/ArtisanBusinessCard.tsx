@@ -95,7 +95,7 @@ export function ArtisanBusinessCard({ artisan }: ArtisanBusinessCardProps) {
                 Fiche entreprise
               </h3>
               <p className="text-sm text-charcoal-500">
-                Donnees verifiees par l&apos;API gouvernementale
+                Donnees verifiees par l'API gouvernementale
               </p>
             </div>
           </div>
@@ -146,7 +146,7 @@ export function ArtisanBusinessCard({ artisan }: ArtisanBusinessCardProps) {
                   {yearsSinceCreation !== null && yearsSinceCreation > 0 && (
                     <span className="mt-1.5 flex">
                       <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 text-xs font-semibold border border-amber-200">
-                        {yearsSinceCreation}&nbsp;an{yearsSinceCreation > 1 ? 's' : ''}&nbsp;d&apos;activite
+                        {yearsSinceCreation}&nbsp;an{yearsSinceCreation > 1 ? 's' : ''}&nbsp;d'activite
                       </span>
                     </span>
                   )}

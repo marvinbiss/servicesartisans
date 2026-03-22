@@ -121,7 +121,7 @@ export default async function DevisPage() {
             Recevez vos devis gratuits
           </h1>
           <p className="text-charcoal-500 mt-2 max-w-xl">
-            D&eacute;crivez votre besoin, recevez jusqu&apos;&agrave; 3 devis d&apos;artisans v&eacute;rifi&eacute;s sous 24&nbsp;h.
+            Décrivez votre besoin, recevez jusqu'à 3 devis d'artisans vérifiés sous 24&nbsp;h.
           </p>
         </div>
       </section>
@@ -161,10 +161,10 @@ export default async function DevisPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <h2 className="font-heading text-2xl md:text-3xl font-bold text-charcoal-900 mb-3 tracking-tight">
-              Devis par m&eacute;tier
+              Devis par métier
             </h2>
             <p className="text-charcoal-500 max-w-lg mx-auto">
-              S&eacute;lectionnez un m&eacute;tier pour obtenir un devis adapt&eacute; &agrave; votre projet.
+              Sélectionnez un métier pour obtenir un devis adapté à votre projet.
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
@@ -178,7 +178,7 @@ export default async function DevisPage() {
                   {trade.name}
                 </div>
                 <div className="text-xs text-charcoal-400 mt-1">
-                  {trade.priceRange.min}&ndash;{trade.priceRange.max} {trade.priceRange.unit}
+                  {trade.priceRange.min}–{trade.priceRange.max} {trade.priceRange.unit}
                 </div>
               </Link>
             ))}
@@ -191,7 +191,7 @@ export default async function DevisPage() {
         <div className="max-w-3xl mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="font-heading text-2xl md:text-3xl font-bold text-charcoal-900 mb-3 tracking-tight">
-              Questions fr&eacute;quentes
+              Questions fréquentes
             </h2>
             <p className="text-charcoal-500 max-w-lg mx-auto">
               Tout ce que vous devez savoir avant de demander votre devis gratuit.
@@ -241,7 +241,7 @@ export default async function DevisPage() {
       <section className="py-12 border-t border-sand-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-8">
-            Devis par m&eacute;tier et ville
+            Devis par métier et ville
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {services.slice(0, 8).map((service) => (
@@ -330,11 +330,11 @@ export default async function DevisPage() {
                 </Link>
                 <Link href="/departements" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
                   <ChevronRight className="w-3 h-3" />
-                  Tous les d&eacute;partements
+                  Tous les départements
                 </Link>
                 <Link href="/regions" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
                   <ChevronRight className="w-3 h-3" />
-                  Toutes les r&eacute;gions
+                  Toutes les régions
                 </Link>
                 <Link href="/blog" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-500 py-1 transition-colors">
                   <ChevronRight className="w-3 h-3" />

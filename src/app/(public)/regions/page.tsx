@@ -109,7 +109,7 @@ export default async function RegionsIndexPage() {
             </h1>
             <p className="text-lg md:text-xl text-charcoal-400 max-w-2xl mx-auto leading-relaxed">
               Des artisans référencés via les données SIREN dans toutes les régions de France.
-              Explorez l&apos;annuaire des artisans du bâtiment.
+              Explorez l'annuaire des artisans du bâtiment.
             </p>
           </div>
 
@@ -147,7 +147,7 @@ export default async function RegionsIndexPage() {
             Choisissez votre région
           </h2>
           <p className="text-charcoal-500 max-w-lg mx-auto">
-            Chaque région dispose d&apos;artisans qualifiés pour tous vos projets de travaux.
+            Chaque région dispose d'artisans qualifiés pour tous vos projets de travaux.
           </p>
         </div>
 
@@ -212,7 +212,7 @@ export default async function RegionsIndexPage() {
         }} />
         <div className="relative max-w-4xl mx-auto px-4 py-16 md:py-20 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-semibold text-white mb-4 tracking-tight">
-            Besoin d&apos;un artisan ?
+            Besoin d'un artisan ?
           </h2>
           <p className="text-charcoal-400 mb-8 max-w-lg mx-auto">
             Décrivez votre projet et recevez des devis gratuits de professionnels référencés.

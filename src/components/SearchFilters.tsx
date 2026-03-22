@@ -59,7 +59,7 @@ export default function SearchFilters({ onFilterChange, totalResults }: SearchFi
           aria-live="polite"
           aria-atomic="true"
         >
-          <span className="font-bold text-charcoal-900">{totalResults}</span> artisan{totalResults > 1 ? 's' : ''} trouv&eacute;{totalResults > 1 ? 's' : ''}
+          <span className="font-bold text-charcoal-900">{totalResults}</span> artisan{totalResults > 1 ? 's' : ''} trouvé{totalResults > 1 ? 's' : ''}
         </div>
 
         {/* Filter controls */}

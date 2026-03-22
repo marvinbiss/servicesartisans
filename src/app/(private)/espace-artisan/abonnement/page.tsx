@@ -70,7 +70,7 @@ export default function AbonnementArtisanPage() {
                 ServicesArtisans est 100% gratuit pour les artisans.
               </p>
               <p className="text-blue-600 text-sm mt-1">
-                Pas d&apos;abonnement, pas de commission, pas de frais cachés.
+                Pas d'abonnement, pas de commission, pas de frais cachés.
               </p>
             </div>
           </div>

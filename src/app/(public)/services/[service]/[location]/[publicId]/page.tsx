@@ -626,7 +626,7 @@ export default async function ProviderPage({ params }: PageProps) {
           <div className="bg-sand-50 rounded-2xl border border-sand-200 p-6">
             <h3 className="text-sm font-semibold text-charcoal-700 mb-2">Informations sur ce profil</h3>
             <p className="text-xs text-charcoal-500 leading-relaxed">
-              Les informations de ce profil sont fournies par l&apos;artisan et vérifiées via l&apos;API SIRENE (INSEE). Les tarifs affichés, lorsqu&apos;ils sont renseignés, sont indicatifs et propres à cet artisan. Les avis sont collectés auprès de clients ayant fait appel à ses services. ServicesArtisans est un annuaire indépendant — nous facilitons la mise en relation mais ne garantissons pas les prestations.
+              Les informations de ce profil sont fournies par l'artisan et vérifiées via l'API SIRENE (INSEE). Les tarifs affichés, lorsqu'ils sont renseignés, sont indicatifs et propres à cet artisan. Les avis sont collectés auprès de clients ayant fait appel à ses services. ServicesArtisans est un annuaire indépendant — nous facilitons la mise en relation mais ne garantissons pas les prestations.
             </p>
           </div>
         </div>

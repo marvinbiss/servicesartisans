@@ -232,7 +232,7 @@ export default async function DevisQuartierPage({
               })()}
             </h1>
             <p className="text-xl text-slate-400 max-w-3xl mx-auto mb-4">
-              Comparez jusqu&apos;à 3 devis de {tradeLower}s à {quartierName} ({ville.departement}).
+              Comparez jusqu'à 3 devis de {tradeLower}s à {quartierName} ({ville.departement}).
             </p>
             <div className="flex flex-wrap justify-center gap-3 mt-8">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
@@ -292,7 +292,7 @@ export default async function DevisQuartierPage({
               <span className="text-gray-600 text-lg">{unit}</span>
             </div>
             <p className="text-gray-500 text-sm mt-3">
-              Prix moyen constaté à {quartierName}, main-d&apos;œuvre incluse
+              Prix moyen constaté à {quartierName}, main-d'œuvre incluse
             </p>
             {multiplier !== 1.0 && (
               <p className="text-xs text-gray-400 mt-2">
@@ -412,7 +412,7 @@ export default async function DevisQuartierPage({
           {otherQuartiers.length > 0 && (
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                Devis {tradeLower} dans d&apos;autres quartiers de {ville.name}
+                Devis {tradeLower} dans d'autres quartiers de {ville.name}
               </h2>
               <div className="flex flex-wrap gap-2">
                 {otherQuartiers.map((q) => (
@@ -532,7 +532,7 @@ export default async function DevisQuartierPage({
           <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
             <h3 className="text-sm font-semibold text-slate-700 mb-2">Transparence tarifaire</h3>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Les prix affichés pour {quartierName} à {ville.name} sont des fourchettes indicatives ajustées en fonction des données régionales ({ville.region}). Ils varient selon la complexité du chantier, les matériaux et l&apos;urgence. Seul un devis personnalisé fait foi. {SITE_NAME} est un annuaire indépendant.
+              Les prix affichés pour {quartierName} à {ville.name} sont des fourchettes indicatives ajustées en fonction des données régionales ({ville.region}). Ils varient selon la complexité du chantier, les matériaux et l'urgence. Seul un devis personnalisé fait foi. {SITE_NAME} est un annuaire indépendant.
             </p>
           </div>
         </div>

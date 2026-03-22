@@ -26,6 +26,7 @@ import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import StickyMobileCTA from '@/components/StickyMobileCTA'
 import DemandIndicator from '@/components/DemandIndicator'
 import TrustGuarantee from '@/components/TrustGuarantee'
+import RecentProviders from './RecentProviders'
 import dynamic from 'next/dynamic'
 
 
@@ -432,10 +433,10 @@ export default async function ServicePage({ params }: PageProps) {
 
           <div className="mt-6 bg-gradient-primary rounded-2xl p-8 text-center">
             <h2 className="font-heading text-xl sm:text-2xl font-bold text-white mb-2">
-              Besoin d&apos;un {service.name.toLowerCase()} ?
+              Besoin d'un {service.name.toLowerCase()} ?
             </h2>
             <p className="text-primary-100 mb-6">
-              Recevez jusqu&apos;à 3 devis gratuits en 2 minutes
+              Recevez jusqu'à 3 devis gratuits en 2 minutes
             </p>
             <Link
               href={`/devis/${serviceSlug}`}
@@ -558,38 +559,12 @@ export default async function ServicePage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* Recent providers */}
-      {recentProviders && recentProviders.length > 0 && (
-        <section className="py-12 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6 tracking-tight">
-              {service.name}s récemment ajoutés
-            </h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {recentProviders.slice(0, 6).map((provider) => {
-                const location = provider.provider_locations?.[0]?.location
-                return (
-                  <Link
-                    key={provider.id}
-                    href={`/services/${serviceSlug}/${location?.slug || 'france'}/${provider.stable_id || provider.slug}`}
-                    className="bg-sand-50 rounded-lg p-4 hover:bg-primary-50 transition-colors group"
-                  >
-                    <h3 className="font-semibold text-charcoal-900 group-hover:text-primary-500">
-                      {provider.name}
-                    </h3>
-                    {provider.address_city && (
-                      <p className="text-sm text-charcoal-500 mt-1 flex items-center gap-1">
-                        <MapPin className="w-3 h-3" />
-                        {provider.address_postal_code} {provider.address_city}
-                      </p>
-                    )}
-                  </Link>
-                )
-              })}
-            </div>
-          </div>
-        </section>
-      )}
+      {/* Recent providers — client component with fallback for NEXT_BUILD_SKIP_DB=1 */}
+      <RecentProviders
+        initialProviders={recentProviders}
+        serviceSlug={serviceSlug}
+        serviceName={service.name}
+      />
 
       {/* Price Guide — unique per trade */}
       {trade && (
@@ -657,7 +632,7 @@ export default async function ServicePage({ params }: PageProps) {
                 <div className="bg-accent-50 rounded-xl p-6">
                   <div className="flex items-center gap-2 mb-3">
                     <Wrench className="w-5 h-5 text-primary-500" />
-                    <h3 className="font-semibold text-charcoal-900">Délai d&apos;intervention</h3>
+                    <h3 className="font-semibold text-charcoal-900">Délai d'intervention</h3>
                   </div>
                   <p className="text-sm text-charcoal-700">{trade.averageResponseTime}</p>
                 </div>
@@ -676,8 +651,8 @@ export default async function ServicePage({ params }: PageProps) {
             </h2>
             <p className="text-charcoal-700 leading-relaxed">
               Faire appel à un {service.name.toLowerCase()} professionnel garantit un travail conforme aux normes en vigueur
-              et couvert par une assurance décennale. Un artisan qualifié dispose de l&apos;expérience,
-              de l&apos;outillage adapté et des certifications nécessaires pour réaliser vos travaux en toute sécurité.
+              et couvert par une assurance décennale. Un artisan qualifié dispose de l'expérience,
+              de l'outillage adapté et des certifications nécessaires pour réaliser vos travaux en toute sécurité.
               De plus, recourir à un professionnel référencé vous protège en cas de malfaçon.
             </p>
 
@@ -737,11 +712,11 @@ export default async function ServicePage({ params }: PageProps) {
                 <h3>Les critères pour choisir votre {service.name.toLowerCase()}</h3>
                 <ul>
                   <li>
-                    <strong>Les avis clients</strong> : Consultez les retours d&apos;expérience
+                    <strong>Les avis clients</strong> : Consultez les retours d'expérience
                     des autres clients pour vous faire une idée de la qualité du travail.
                   </li>
                   <li>
-                    <strong>Les certifications</strong> : Vérifiez que l&apos;artisan dispose
+                    <strong>Les certifications</strong> : Vérifiez que l'artisan dispose
                     des qualifications nécessaires pour réaliser vos travaux.
                   </li>
                   <li>
@@ -886,7 +861,7 @@ export default async function ServicePage({ params }: PageProps) {
       <section className="py-8 bg-white border-t border-sand-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-sm font-semibold text-charcoal-500 uppercase tracking-wide mb-3">
-            Confiance &amp; Sécurité
+            Confiance & Sécurité
           </h2>
           <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
             <Link href="/notre-processus-de-verification" className="text-primary-500 hover:text-primary-700">

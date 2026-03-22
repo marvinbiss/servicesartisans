@@ -100,7 +100,7 @@ export default async function MentionsLegalesPage() {
                 <p className="text-blue-800 text-sm">
                   Le site {companyIdentity.name} est en cours de développement.
                   Les informations légales complètes (dénomination sociale, SIRET, adresse du siège)
-                  seront publiées lors de l&apos;immatriculation de la société.
+                  seront publiées lors de l'immatriculation de la société.
                 </p>
                 <p className="text-blue-800 text-sm mt-2">
                   Contact : <strong>{companyIdentity.email}</strong>

@@ -492,7 +492,7 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
                               <span className={`font-normal ml-1 ${isLarge ? 'text-xs' : 'text-[11px]'} text-gray-400`}>({city.departementCode})</span>
                             </div>
                             <div className={`text-gray-500 truncate ${isLarge ? 'text-xs' : 'text-[11px]'}`}>
-                              {city.departement} &middot; {formatPopulation(city.population)}
+                              {city.departement} · {formatPopulation(city.population)}
                             </div>
                           </div>
                           <span className={`text-gray-400 bg-gray-100 rounded-full flex-shrink-0 ${isLarge ? 'text-xs px-2 py-0.5' : 'text-[10px] px-1.5 py-0.5'}`}>
@@ -508,7 +508,7 @@ export default function SearchBar({ size = 'compact' }: SearchBarProps) {
                 {hasNoResults && (
                   <div className={`text-center ${isLarge ? 'py-4 px-3' : 'py-3 px-2.5'}`}>
                     <div className={`text-gray-500 mb-1 ${isLarge ? 'text-sm' : 'text-xs'}`}>
-                      Aucune ville trouv&eacute;e pour <span className="font-semibold text-gray-700">&laquo;&thinsp;{cityQuery}&thinsp;&raquo;</span>
+                      Aucune ville trouvée pour <span className="font-semibold text-gray-700">«&thinsp;{cityQuery}&thinsp;»</span>
                     </div>
                     <div className={`text-gray-400 mb-3 ${isLarge ? 'text-xs' : 'text-[11px]'}`}>
                       Essayez une ville voisine :

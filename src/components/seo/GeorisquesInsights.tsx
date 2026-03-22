@@ -117,7 +117,7 @@ export default function GeorisquesInsights({ communeData, villeName, serviceSlug
           <Droplets className="mt-0.5 h-5 w-5 flex-shrink-0 text-blue-600" />
           <div>
             <div className="flex items-center gap-2">
-              <h4 className="font-semibold text-gray-900">Risque d&apos;inondation</h4>
+              <h4 className="font-semibold text-gray-900">Risque d'inondation</h4>
               <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${getRiskBadgeColor('high')}`}>
                 Zone exposée
               </span>

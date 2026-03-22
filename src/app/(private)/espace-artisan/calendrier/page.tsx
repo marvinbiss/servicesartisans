@@ -1008,7 +1008,7 @@ export default function CalendrierPage() {
                 </div>
               </div>
               <div>
-                <h4 className="font-medium text-gray-900 mb-3">Zone d&apos;intervention</h4>
+                <h4 className="font-medium text-gray-900 mb-3">Zone d'intervention</h4>
                 <input
                   type="text"
                   placeholder="Ex: Paris et petite couronne (20km)"

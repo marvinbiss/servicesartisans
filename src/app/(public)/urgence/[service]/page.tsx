@@ -351,7 +351,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
                 className="inline-flex items-center justify-center gap-3 bg-white text-gray-900 px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all"
               >
                 <Phone className="w-6 h-6" />
-                Appeler l&apos;assistance
+                Appeler l'assistance
               </a>
               <span className="text-sm text-white/60 mt-2">Service de mise en relation</span>
             </div>
@@ -393,7 +393,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
               Urgences {trade.name.toLowerCase()} les plus courantes
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Les {trade.name.toLowerCase()}s d&apos;urgence référencés interviennent rapidement pour tous ces problèmes.
+              Les {trade.name.toLowerCase()}s d'urgence référencés interviennent rapidement pour tous ces problèmes.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -417,8 +417,8 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
             Tarifs {trade.name.toLowerCase()} urgence
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto text-center mb-10">
-            Prix indicatifs pour les interventions d&apos;urgence. Tarif horaire standard : {trade.priceRange.min} à {trade.priceRange.max} {trade.priceRange.unit}.
-            Les majorations d&apos;urgence varient de +50% à +100%.
+            Prix indicatifs pour les interventions d'urgence. Tarif horaire standard : {trade.priceRange.min} à {trade.priceRange.max} {trade.priceRange.unit}.
+            Les majorations d'urgence varient de +50% à +100%.
           </p>
           <div className="grid md:grid-cols-2 gap-4 max-w-4xl mx-auto">
             {trade.commonTasks.map((task, i) => (
@@ -604,7 +604,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
           <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
             <h3 className="text-sm font-semibold text-slate-700 mb-2">Information importante</h3>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Les délais d&apos;intervention sont des estimations basées sur la disponibilité habituelle des artisans et peuvent varier. ServicesArtisans est un annuaire — nous mettons en relation mais ne réalisons pas les interventions. En cas d&apos;urgence vitale, appelez le 18 (pompiers) ou le 112.
+              Les délais d'intervention sont des estimations basées sur la disponibilité habituelle des artisans et peuvent varier. ServicesArtisans est un annuaire — nous mettons en relation mais ne réalisons pas les interventions. En cas d'urgence vitale, appelez le 18 (pompiers) ou le 112.
             </p>
           </div>
         </div>
@@ -641,7 +641,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
       <section className={`bg-gradient-to-br ${meta.gradient} text-white py-16 overflow-hidden`}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">
-            Besoin d&apos;un {trade.name.toLowerCase()} en urgence ?
+            Besoin d'un {trade.name.toLowerCase()} en urgence ?
           </h2>
           <p className="text-xl opacity-90 mb-8">
             Les {trade.name.toLowerCase()}s référencés sur ServicesArtisans sont disponibles selon leurs horaires, y compris parfois les jours fériés.
@@ -652,7 +652,7 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
               className="inline-flex items-center justify-center gap-3 bg-white text-gray-900 px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all"
             >
               <Phone className="w-6 h-6" />
-              Appeler l&apos;assistance
+              Appeler l'assistance
             </a>
             <span className="text-sm text-white/60 mt-2">Service de mise en relation</span>
           </div>

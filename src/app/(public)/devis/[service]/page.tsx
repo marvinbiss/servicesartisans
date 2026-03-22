@@ -178,7 +178,7 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
             {h1Text}
           </h1>
           <p className="text-charcoal-500 mt-2 max-w-xl">
-            Recevez jusqu&apos;à 3 devis gratuits de {tradeLower}s référencés.
+            Recevez jusqu'à 3 devis gratuits de {tradeLower}s référencés.
             Prix indicatif : {trade.priceRange.min} à {trade.priceRange.max} {trade.priceRange.unit}.
           </p>
         </div>
@@ -234,7 +234,7 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
               <span className="text-charcoal-600 text-lg">{trade.priceRange.unit}</span>
             </div>
             <p className="text-charcoal-500 text-sm mt-3">
-              Prix moyen constaté en France métropolitaine, main-d&apos;œuvre incluse
+              Prix moyen constaté en France métropolitaine, main-d'œuvre incluse
             </p>
           </div>
 
@@ -357,7 +357,7 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
       {/* ─── Devis associés ──────────────────────────────── */}
       <section className="py-16 bg-sand-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6">Devis pour d&apos;autres métiers</h2>
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6">Devis pour d'autres métiers</h2>
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
             {otherTrades.map((slug) => {
               const t = tradeContent[slug]
@@ -457,7 +457,7 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
           <div className="bg-sand-100 rounded-2xl border border-sand-300 p-6">
             <h3 className="text-sm font-semibold text-charcoal-700 mb-2">Transparence tarifaire</h3>
             <p className="text-xs text-sand-500 leading-relaxed">
-              Les prix affichés sont des fourchettes indicatives basées sur des moyennes constatées en France. Ils varient selon la région, la complexité du chantier, les matériaux et l&apos;urgence. Seul un devis personnalisé fait foi. ServicesArtisans est un annuaire indépendant.
+              Les prix affichés sont des fourchettes indicatives basées sur des moyennes constatées en France. Ils varient selon la région, la complexité du chantier, les matériaux et l'urgence. Seul un devis personnalisé fait foi. ServicesArtisans est un annuaire indépendant.
             </p>
           </div>
         </div>

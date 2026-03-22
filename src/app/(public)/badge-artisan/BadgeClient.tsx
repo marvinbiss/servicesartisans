@@ -209,7 +209,7 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
                           <div className="p-4 text-center text-charcoal-500 text-sm">Recherche...</div>
                         ) : searchResults.length === 0 ? (
                           <div className="p-4 text-center text-charcoal-500 text-sm">
-                            Aucun resultat. Essayez un autre nom ou passez en mode &laquo; Badge personnalise &raquo;.
+                            Aucun resultat. Essayez un autre nom ou passez en mode « Badge personnalise ».
                           </div>
                         ) : (
                           searchResults.map((p) => (

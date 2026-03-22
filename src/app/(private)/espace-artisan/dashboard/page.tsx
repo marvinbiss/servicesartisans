@@ -166,7 +166,7 @@ function ProfileCompletionCTA() {
         <h3 className="font-semibold text-gray-900">Complétez votre profil</h3>
       </div>
       <p className="text-sm text-gray-500 mb-4">
-        Un profil complet et vérifié vous permet d&apos;apparaître en priorité dans les résultats de recherche et d&apos;inspirer confiance aux clients.
+        Un profil complet et vérifié vous permet d'apparaître en priorité dans les résultats de recherche et d'inspirer confiance aux clients.
       </p>
       <ul className="space-y-2 mb-5 text-sm text-gray-600">
         <li className="flex items-center gap-2">
@@ -202,7 +202,7 @@ function EmptyDemandesState() {
         <FileText className="w-8 h-8 text-gray-400" aria-hidden="true" />
       </div>
       <h3 className="text-lg font-semibold text-gray-900 mb-2">
-        Vous n&apos;avez pas encore de demandes
+        Vous n'avez pas encore de demandes
       </h3>
       <p className="text-sm text-gray-500 max-w-sm mx-auto mb-6">
         Complétez votre profil et ajoutez des photos pour apparaître dans les résultats de recherche
@@ -254,13 +254,13 @@ export default function DashboardArtisanPage() {
           <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" aria-hidden="true" />
           <h2 className="text-xl font-semibold text-gray-900 mb-2">Accès réservé</h2>
           <p className="text-gray-600 mb-6">
-            Accès réservé aux artisans. Veuillez vous inscrire en tant qu&apos;artisan.
+            Accès réservé aux artisans. Veuillez vous inscrire en tant qu'artisan.
           </p>
           <Link
             href="/inscription-artisan"
             className="inline-block bg-blue-600 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-blue-700 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-colors"
           >
-            S&apos;inscrire en tant qu&apos;artisan
+            S'inscrire en tant qu'artisan
           </Link>
         </div>
       </div>

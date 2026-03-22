@@ -307,7 +307,7 @@ export default function AdminParametresPage() {
               <Mail className="w-5 h-5 text-green-600" />
             </div>
             <div>
-              <p className="font-medium text-gray-900">Modèles d&apos;email</p>
+              <p className="font-medium text-gray-900">Modèles d'email</p>
               <p className="text-sm text-gray-500">Personnaliser les emails</p>
             </div>
           </button>
@@ -320,7 +320,7 @@ export default function AdminParametresPage() {
               <Settings className="w-5 h-5 text-blue-600" />
             </div>
             <div>
-              <p className="font-medium text-gray-900">Logs d&apos;audit</p>
+              <p className="font-medium text-gray-900">Logs d'audit</p>
               <p className="text-sm text-gray-500">Historique des actions</p>
             </div>
           </button>

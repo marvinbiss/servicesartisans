@@ -118,7 +118,7 @@ export default async function Image() {
               display: 'flex',
             }}
           >
-            Annuaire d&apos;artisans référencés — Données SIREN officielles
+            Annuaire d'artisans référencés — Données SIREN officielles
           </div>
 
           {/* Bottom accent bar */}

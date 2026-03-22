@@ -237,7 +237,7 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
         )}
         {campaign.status === 'completed' && (
           <span className="flex items-center gap-1 px-3 py-1.5 text-sm text-gray-500">
-            <BarChart3 className="w-4 h-4" /> Campagne termin&eacute;e
+            <BarChart3 className="w-4 h-4" /> Campagne terminée
           </span>
         )}
       </div>
@@ -266,7 +266,7 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
       {campaign.total_recipients > 0 && (
         <div className="bg-white rounded-lg border p-4 mb-6">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-gray-700">Progression d&apos;envoi</span>
+            <span className="text-sm font-medium text-gray-700">Progression d'envoi</span>
             <span className="text-sm text-gray-500">
               {campaign.sent_count.toLocaleString('fr-FR')} / {campaign.total_recipients.toLocaleString('fr-FR')} ({sentPercent}%)
             </span>
@@ -313,7 +313,7 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
               <p className="text-xs text-gray-400 mt-1">{campaign.list.contact_count.toLocaleString('fr-FR')} contacts</p>
             </div>
           ) : (
-            <p className="text-sm text-gray-400">Aucune liste associ&eacute;e</p>
+            <p className="text-sm text-gray-400">Aucune liste associée</p>
           )}
         </div>
       </div>
@@ -321,18 +321,18 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
       {/* Detailed stats (if available) */}
       {stats && (
         <div className="bg-white rounded-lg border p-4 mt-6">
-          <h3 className="text-sm font-medium text-gray-700 mb-3">Statistiques d&eacute;taill&eacute;es</h3>
+          <h3 className="text-sm font-medium text-gray-700 mb-3">Statistiques détaillées</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
             <div>
               <p className="text-gray-500">Taux de livraison</p>
               <p className="font-bold text-gray-900">{stats.delivery_rate.toFixed(1)}%</p>
             </div>
             <div>
-              <p className="text-gray-500">Taux d&apos;ouverture</p>
+              <p className="text-gray-500">Taux d'ouverture</p>
               <p className="font-bold text-gray-900">{stats.open_rate.toFixed(1)}%</p>
             </div>
             <div>
-              <p className="text-gray-500">Taux de r&eacute;ponse</p>
+              <p className="text-gray-500">Taux de réponse</p>
               <p className="font-bold text-gray-900">{stats.reply_rate.toFixed(1)}%</p>
             </div>
             <div>
@@ -359,34 +359,34 @@ export default function CampaignDetailPage({ params }: { params: Promise<{ id: s
             <p className="text-gray-900 capitalize">{campaign.audience_type}</p>
           </div>
           <div>
-            <p className="text-gray-500">Cr&eacute;&eacute;e le</p>
+            <p className="text-gray-500">Créée le</p>
             <p className="text-gray-900">{new Date(campaign.created_at).toLocaleDateString('fr-FR')}</p>
           </div>
           {campaign.started_at && (
             <div>
-              <p className="text-gray-500">Lanc&eacute;e le</p>
+              <p className="text-gray-500">Lancée le</p>
               <p className="text-gray-900">{new Date(campaign.started_at).toLocaleString('fr-FR')}</p>
             </div>
           )}
           {campaign.completed_at && (
             <div>
-              <p className="text-gray-500">Termin&eacute;e le</p>
+              <p className="text-gray-500">Terminée le</p>
               <p className="text-gray-900">{new Date(campaign.completed_at).toLocaleString('fr-FR')}</p>
             </div>
           )}
           {campaign.scheduled_at && (
             <div>
-              <p className="text-gray-500">Planifi&eacute;e le</p>
+              <p className="text-gray-500">Planifiée le</p>
               <p className="text-gray-900">{new Date(campaign.scheduled_at).toLocaleString('fr-FR')}</p>
             </div>
           )}
           <div>
-            <p className="text-gray-500">R&eacute;ponse IA auto</p>
+            <p className="text-gray-500">Réponse IA auto</p>
             <p className="text-gray-900">{campaign.ai_auto_reply ? 'Oui' : 'Non'}</p>
           </div>
           <div>
-            <p className="text-gray-500">Co&ucirc;t estim&eacute;</p>
-            <p className="text-gray-900">{campaign.estimated_cost.toFixed(2)} &euro;</p>
+            <p className="text-gray-500">Coût estimé</p>
+            <p className="text-gray-900">{campaign.estimated_cost.toFixed(2)} €</p>
           </div>
         </div>
       </div>

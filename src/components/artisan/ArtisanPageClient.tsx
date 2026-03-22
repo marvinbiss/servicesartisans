@@ -149,7 +149,7 @@ export default function ArtisanPageClient({
         >
           <AlertCircle className="w-16 h-16 text-charcoal-400 mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-charcoal-900 font-heading mb-2">Artisan non trouve</h1>
-          <p className="text-charcoal-600 mb-6">Cet artisan n&apos;existe pas ou n&apos;est plus disponible.</p>
+          <p className="text-charcoal-600 mb-6">Cet artisan n'existe pas ou n'est plus disponible.</p>
           <Link
             href="/recherche"
             className="inline-flex items-center gap-2 px-6 py-3 bg-primary-400 text-white rounded-xl font-medium hover:bg-primary-600 transition-colors shadow-cta"

@@ -103,7 +103,7 @@ export default function MesFavorisPage() {
               <Heart className="w-10 h-10 text-red-300" />
             </div>
             <h2 className="text-xl font-semibold text-slate-800 mb-3">
-              Vous n&apos;avez pas encore d&apos;artisans favoris
+              Vous n'avez pas encore d'artisans favoris
             </h2>
             <p className="text-slate-500 max-w-md mx-auto mb-8">
               Parcourez nos artisans et cliquez sur{' '}

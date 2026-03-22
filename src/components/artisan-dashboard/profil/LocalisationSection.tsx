@@ -81,7 +81,7 @@ export function LocalisationSection({ provider, onSaved }: LocalisationSectionPr
 
         <div>
           <label htmlFor="localisation-radius" className="block text-sm font-medium text-gray-700 mb-2">
-            Rayon d&apos;intervention : <span className="text-blue-600 font-semibold">{radiusValue} km</span>
+            Rayon d'intervention : <span className="text-blue-600 font-semibold">{radiusValue} km</span>
           </label>
           <input
             id="localisation-radius"

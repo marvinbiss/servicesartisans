@@ -57,7 +57,7 @@ export function ArtisanMap({ artisan }: ArtisanMapProps) {
     >
       <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
         <MapPin className="w-5 h-5 text-clay-400" aria-hidden="true" />
-        Zone d&apos;intervention
+        Zone d'intervention
       </h2>
 
       {/* Leaflet map when GPS coordinates are available */}
@@ -131,7 +131,7 @@ export function ArtisanMap({ artisan }: ArtisanMapProps) {
         <div className="mt-4 pt-4 border-t border-gray-100">
           <div className="flex items-center gap-2 text-gray-600">
             <Navigation className="w-4 h-4" aria-hidden="true" />
-            <span>Rayon d&apos;intervention : <strong>{artisan.intervention_zone}</strong></span>
+            <span>Rayon d'intervention : <strong>{artisan.intervention_zone}</strong></span>
           </div>
         </div>
       )}

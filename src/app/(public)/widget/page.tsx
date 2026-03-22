@@ -283,7 +283,7 @@ export default function WidgetPage() {
       <section className="py-20 bg-primary-400">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-heading text-3xl font-bold text-white mb-4">
-            Vous n&apos;etes pas encore reference ?
+            Vous n'etes pas encore reference ?
           </h2>
           <p className="text-xl text-primary-100 mb-8">
             Inscrivez-vous gratuitement sur {SITE_NAME} et obtenez votre widget personnalise.

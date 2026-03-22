@@ -362,25 +362,25 @@ export default async function AvisServicePage({
             </h1>
             <p className="text-xl text-slate-400 max-w-3xl mx-auto mb-4">
               Consultez les avis et recommandations pour bien choisir votre {tradeLower}.
-              Prix indicatif : {trade.priceRange.min} &agrave; {trade.priceRange.max}{' '}
+              Prix indicatif : {trade.priceRange.min} à {trade.priceRange.max}{' '}
               {trade.priceRange.unit}.
             </p>
             <div className="flex flex-wrap justify-center gap-3 mt-8">
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
                 <Euro className="w-4 h-4 text-amber-400" />
                 <span>
-                  {trade.priceRange.min} &ndash; {trade.priceRange.max}{' '}
+                  {trade.priceRange.min} – {trade.priceRange.max}{' '}
                   {trade.priceRange.unit}
                 </span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
                 <Star className="w-4 h-4 text-amber-400" />
-                <span>Avis v&eacute;rifi&eacute;s</span>
+                <span>Avis vérifiés</span>
               </div>
               {serviceStats.totalReviews > 0 && (
                 <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/10 rounded-full px-4 py-2">
                   <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-                  <span className="text-sm font-medium">{serviceStats.avgRating.toFixed(1)}/5 &mdash; {serviceStats.totalReviews} avis</span>
+                  <span className="text-sm font-medium">{serviceStats.avgRating.toFixed(1)}/5 — {serviceStats.totalReviews} avis</span>
                 </div>
               )}
             </div>
@@ -392,10 +392,10 @@ export default async function AvisServicePage({
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-gray-900 mb-2 text-center">
-            Ce qu&apos;il faut v&eacute;rifier
+            Ce qu'il faut vérifier
           </h2>
           <p className="text-gray-500 text-sm text-center mb-8">
-            Les crit&egrave;res essentiels pour choisir un {tradeLower} de confiance.
+            Les critères essentiels pour choisir un {tradeLower} de confiance.
           </p>
           <div className="space-y-4">
             {reviewCriteria.map((criterion) => {
@@ -428,10 +428,10 @@ export default async function AvisServicePage({
         <section className="py-12 bg-gray-50">
           <div className="max-w-5xl mx-auto px-4">
             <h2 className="font-heading text-2xl font-bold text-slate-900 mb-2 text-center">
-              {trade.name}s les mieux not&eacute;s en France
+              {trade.name}s les mieux notés en France
             </h2>
             <p className="text-slate-500 text-center mb-8 max-w-lg mx-auto">
-              Classement bas&eacute; sur les avis clients v&eacute;rifi&eacute;s.
+              Classement basé sur les avis clients vérifiés.
             </p>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {serviceStats.providers.map((provider, i) => (
@@ -480,7 +480,7 @@ export default async function AvisServicePage({
                   {provider.is_verified && (
                     <div className="flex items-center gap-1 text-green-600 text-xs mt-2">
                       <CheckCircle className="w-3 h-3" />
-                      SIREN v&eacute;rifi&eacute;
+                      SIREN vérifié
                     </div>
                   )}
                 </div>
@@ -495,10 +495,10 @@ export default async function AvisServicePage({
         <section className="py-12 bg-white border-t">
           <div className="max-w-4xl mx-auto px-4">
             <h2 className="font-heading text-2xl font-bold text-slate-900 mb-2 text-center">
-              Derniers avis clients &mdash; {trade.name}
+              Derniers avis clients — {trade.name}
             </h2>
             <p className="text-slate-500 text-center mb-8">
-              Retours d&apos;exp&eacute;rience v&eacute;rifi&eacute;s de clients.
+              Retours d'expérience vérifiés de clients.
             </p>
             <div className="space-y-4">
               {serviceStats.reviews.map(review => (
@@ -510,7 +510,7 @@ export default async function AvisServicePage({
                       </span>
                       <span className="inline-flex items-center gap-1 text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
                         <CheckCircle className="w-3 h-3" />
-                        V&eacute;rifi&eacute;
+                        Vérifié
                       </span>
                     </div>
                     <div className="flex items-center gap-1 shrink-0">
@@ -550,12 +550,12 @@ export default async function AvisServicePage({
           <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-8 text-center mb-8">
             <div className="flex items-baseline justify-center gap-2">
               <span className="text-5xl font-bold text-blue-600">
-                {trade.priceRange.min} &mdash; {trade.priceRange.max}
+                {trade.priceRange.min} — {trade.priceRange.max}
               </span>
               <span className="text-gray-600 text-lg">{trade.priceRange.unit}</span>
             </div>
             <p className="text-gray-500 text-sm mt-3">
-              Prix moyen constat&eacute; en France m&eacute;tropolitaine, main-d&apos;&oelig;uvre incluse
+              Prix moyen constaté en France métropolitaine, main-d'&oelig;uvre incluse
             </p>
           </div>
           <div className="grid sm:grid-cols-2 gap-4">
@@ -579,10 +579,10 @@ export default async function AvisServicePage({
         <section className="py-16 bg-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 text-center">
-              Certifications &agrave; v&eacute;rifier
+              Certifications à vérifier
             </h2>
             <p className="text-gray-600 text-center mb-8">
-              V&eacute;rifiez que votre {tradeLower} poss&egrave;de les certifications adapt&eacute;es &agrave; votre projet.
+              Vérifiez que votre {tradeLower} possède les certifications adaptées à votre projet.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
               {trade.certifications.map((cert) => (
@@ -635,7 +635,7 @@ export default async function AvisServicePage({
                 className="bg-white hover:bg-blue-50 border border-gray-200 hover:border-blue-300 rounded-xl p-4 transition-all group text-center"
               >
                 <div className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors text-sm">
-                  Avis {tradeLower} &agrave; {ville.name}
+                  Avis {tradeLower} à {ville.name}
                 </div>
               </Link>
             ))}
@@ -656,7 +656,7 @@ export default async function AvisServicePage({
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-gray-900 mb-8 text-center">
-            Questions fr&eacute;quentes &mdash; Avis {trade.name}
+            Questions fréquentes — Avis {trade.name}
           </h2>
           <div className="space-y-4">
             {allFaqItems.map((item, i) => (
@@ -683,10 +683,10 @@ export default async function AvisServicePage({
       <section className="py-20 bg-blue-600">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-heading text-3xl font-bold text-white mb-4">
-            Pr&ecirc;t &agrave; trouver votre {tradeLower}&nbsp;?
+            Prêt à trouver votre {tradeLower}&nbsp;?
           </h2>
           <p className="text-xl text-blue-100 mb-8">
-            Demandez un devis gratuit et comparez les artisans pr&egrave;s de chez vous.
+            Demandez un devis gratuit et comparez les artisans près de chez vous.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
@@ -711,7 +711,7 @@ export default async function AvisServicePage({
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6">
-            Avis pour d&apos;autres m&eacute;tiers
+            Avis pour d'autres métiers
           </h2>
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
             {otherTrades.map((slug) => {
@@ -727,7 +727,7 @@ export default async function AvisServicePage({
                     Avis {t.name.toLowerCase()}
                   </div>
                   <div className="text-xs text-gray-500 mt-1">
-                    {t.priceRange.min} &mdash; {t.priceRange.max}{' '}
+                    {t.priceRange.min} — {t.priceRange.max}{' '}
                     {t.priceRange.unit}
                   </div>
                 </Link>
@@ -751,7 +751,7 @@ export default async function AvisServicePage({
                   href={`/services/${service}`}
                   className="block text-sm text-gray-600 hover:text-blue-600 py-1"
                 >
-                  {trade.name} &mdash; tous les artisans
+                  {trade.name} — tous les artisans
                 </Link>
                 <Link
                   href={`/devis/${service}`}
@@ -779,14 +779,14 @@ export default async function AvisServicePage({
                     href={`/avis/${service}/${v.slug}`}
                     className="block text-sm text-gray-600 hover:text-blue-600 py-1"
                   >
-                    Avis {tradeLower} &agrave; {v.name}
+                    Avis {tradeLower} à {v.name}
                   </Link>
                 ))}
               </div>
             </div>
             <div>
               <h3 className="font-semibold text-gray-900 mb-3">
-                Avis associ&eacute;s
+                Avis associés
               </h3>
               <div className="space-y-2">
                 {otherTrades.slice(0, 6).map((slug) => {
@@ -831,7 +831,7 @@ export default async function AvisServicePage({
                   href="/comment-ca-marche"
                   className="block text-sm text-gray-600 hover:text-blue-600 py-1"
                 >
-                  Comment &ccedil;a marche
+                  Comment ça marche
                 </Link>
                 <Link
                   href="/faq"
@@ -849,14 +849,14 @@ export default async function AvisServicePage({
       <section className="py-8 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
-            Confiance &amp; S&eacute;curit&eacute;
+            Confiance &amp; Sécurité
           </h2>
           <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
             <Link
               href="/notre-processus-de-verification"
               className="text-blue-600 hover:text-blue-800"
             >
-              Comment nous r&eacute;f&eacute;ren&ccedil;ons les artisans
+              Comment nous référençons les artisans
             </Link>
             <Link
               href="/politique-avis"
@@ -868,7 +868,7 @@ export default async function AvisServicePage({
               href="/mediation"
               className="text-blue-600 hover:text-blue-800"
             >
-              Service de m&eacute;diation
+              Service de médiation
             </Link>
           </nav>
         </div>
@@ -881,15 +881,15 @@ export default async function AvisServicePage({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
             <h3 className="text-sm font-semibold text-slate-700 mb-2">
-              Transparence &eacute;ditoriale
+              Transparence éditoriale
             </h3>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Les informations pr&eacute;sent&eacute;es sur cette page sont
-              indicatives et destin&eacute;es &agrave; vous aider dans le choix
-              d&apos;un artisan. Les prix affich&eacute;s sont des fourchettes
-              bas&eacute;es sur des moyennes constat&eacute;es en France. Seul un
-              devis personnalis&eacute; fait foi. ServicesArtisans est un annuaire
-              ind&eacute;pendant.
+              Les informations présentées sur cette page sont
+              indicatives et destinées à vous aider dans le choix
+              d'un artisan. Les prix affichés sont des fourchettes
+              basées sur des moyennes constatées en France. Seul un
+              devis personnalisé fait foi. ServicesArtisans est un annuaire
+              indépendant.
             </p>
           </div>
         </div>

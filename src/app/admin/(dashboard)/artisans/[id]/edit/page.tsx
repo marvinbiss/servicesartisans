@@ -222,7 +222,7 @@ export default function EditArtisanPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-8 h-8 text-blue-600 mx-auto animate-spin" />
-          <p className="text-gray-500 mt-4">Chargement de l&apos;artisan...</p>
+          <p className="text-gray-500 mt-4">Chargement de l'artisan...</p>
         </div>
       </div>
     )
@@ -234,7 +234,7 @@ export default function EditArtisanPage() {
         <div className="text-center">
           <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
           <h2 className="text-xl font-semibold text-gray-900 mb-2">Artisan non trouvé</h2>
-          <p className="text-gray-500 mb-4">L&apos;artisan demandé n&apos;existe pas ou a été supprimé.</p>
+          <p className="text-gray-500 mb-4">L'artisan demandé n'existe pas ou a été supprimé.</p>
           <button
             onClick={() => router.push('/admin/artisans')}
             className="text-blue-600 hover:underline"
@@ -265,7 +265,7 @@ export default function EditArtisanPage() {
               <ChevronLeft className="w-4 h-4" />
               Retour à la liste
             </button>
-            <h1 className="text-2xl font-bold text-gray-900">Modifier l&apos;artisan</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Modifier l'artisan</h1>
             <p className="text-gray-500 mt-1">{artisan.full_name}</p>
           </div>
           <button

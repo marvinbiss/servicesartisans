@@ -429,10 +429,10 @@ export default async function RegionServicePage({ params }: PageProps) {
         }} />
         <div className="relative max-w-4xl mx-auto px-4 py-16 md:py-20 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">
-            Besoin d&apos;un {trade.name.toLowerCase()} en {region.name} ?
+            Besoin d'un {trade.name.toLowerCase()} en {region.name} ?
           </h2>
           <p className="text-charcoal-400 mb-8 max-w-lg mx-auto">
-            Recevez jusqu&apos;à 3 devis gratuits de professionnels qualifiés.
+            Recevez jusqu'à 3 devis gratuits de professionnels qualifiés.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href={`/devis/${serviceSlug}`} className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-400 via-primary-400 to-primary-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-cta hover:shadow-cta hover:-translate-y-0.5 transition-all duration-300">

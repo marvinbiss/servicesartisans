@@ -40,7 +40,7 @@ export default function SeoContent({
                 </h2>
                 <p>{locationContent.introText}</p>
 
-                <h3 className="font-heading text-charcoal-800">Tarifs et prix d&apos;un {service.name.toLowerCase()} à {location.name}</h3>
+                <h3 className="font-heading text-charcoal-800">Tarifs et prix d'un {service.name.toLowerCase()} à {location.name}</h3>
                 <p>{locationContent.pricingNote}</p>
 
                 <h3 className="font-heading text-charcoal-800">Conseils pour vos travaux à {location.name}</h3>
@@ -53,7 +53,7 @@ export default function SeoContent({
                 <h3 className="font-heading text-charcoal-800">Contexte local : {locationContent.climateLabel}</h3>
                 <p>{locationContent.climateTip}</p>
 
-                <h3 className="font-heading text-charcoal-800">Zones d&apos;intervention à {location.name}</h3>
+                <h3 className="font-heading text-charcoal-800">Zones d'intervention à {location.name}</h3>
                 <p>{locationContent.quartierText}</p>
                 {getQuartiersByVille(locationSlug).length > 0 && (
                   <div className="not-prose flex flex-wrap gap-2 mt-4">
@@ -91,7 +91,7 @@ export default function SeoContent({
                   <>
                     <h3>Tarifs indicatifs à {location.name}</h3>
                     <p>
-                      Le tarif horaire moyen d&apos;un {service.name.toLowerCase()} à {location.name} se situe
+                      Le tarif horaire moyen d'un {service.name.toLowerCase()} à {location.name} se situe
                       entre <strong>{Math.round(trade.priceRange.min * pricingMultiplier)} et {Math.round(trade.priceRange.max * pricingMultiplier)} {trade.priceRange.unit}</strong>.
                       Les prix varient selon la complexité des travaux et le professionnel choisi.
                     </p>
@@ -99,7 +99,7 @@ export default function SeoContent({
                       <>
                         <h3>Certifications à vérifier</h3>
                         <p>
-                          Avant de choisir un {service.name.toLowerCase()}, vérifiez qu&apos;il dispose
+                          Avant de choisir un {service.name.toLowerCase()}, vérifiez qu'il dispose
                           des certifications suivantes : {trade.certifications.slice(0, 3).join(', ')}.
                         </p>
                       </>
@@ -239,7 +239,7 @@ export default function SeoContent({
                     {communeData.nb_maprimerenov_annuel && (
                       <div className="text-center p-3 bg-white rounded-xl border border-orange-100">
                         <div className="text-lg font-bold text-orange-700">{formatNumber(communeData.nb_maprimerenov_annuel)}</div>
-                        <div className="text-xs text-charcoal-500 mt-1">Dossiers MaPrimeRénov&apos;/an</div>
+                        <div className="text-xs text-charcoal-500 mt-1">Dossiers MaPrimeRénov'/an</div>
                       </div>
                     )}
                   </div>

@@ -72,7 +72,7 @@ export function PopularServicesLinks({
         href="/services"
         className="inline-flex items-center gap-1 text-clay-400 hover:text-clay-600 text-sm font-medium mt-3"
       >
-        {services.length} métiers d&apos;artisanat <ArrowRight className="w-4 h-4" />
+        {services.length} métiers d'artisanat <ArrowRight className="w-4 h-4" />
       </Link>
     </div>
   )
@@ -244,7 +244,7 @@ export function QuickSiteLinks({ className = '' }: { className?: string }) {
           Accueil
         </Link>
         <Link href="/services" className="text-gray-600 hover:text-clay-400 py-1">
-          {services.length} métiers d&apos;artisanat
+          {services.length} métiers d'artisanat
         </Link>
         <Link href="/villes" className="text-gray-600 hover:text-clay-400 py-1">
           {villes.length} villes de France

@@ -670,7 +670,7 @@ export default function ParametresClientPage() {
                 {activeTab === 'display' && (
                   <div className="bg-white rounded-xl shadow-sm p-6 space-y-6">
                     <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                      Préférences d&apos;affichage
+                      Préférences d'affichage
                     </h2>
 
                     <div>

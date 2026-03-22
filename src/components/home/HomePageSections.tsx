@@ -75,7 +75,7 @@ export function ServicesShowcase() {
             Tous les corps de métier
           </h2>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-            Trouvez le bon professionnel pour chaque besoin, de l&apos;urgence à la rénovation complète.
+            Trouvez le bon professionnel pour chaque besoin, de l'urgence à la rénovation complète.
           </p>
         </motion.div>
 
@@ -249,7 +249,7 @@ export function HowItWorksSection() {
             Comment ça marche ?
           </h2>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-            En 3 étapes simples, trouvez l&apos;artisan idéal pour votre projet.
+            En 3 étapes simples, trouvez l'artisan idéal pour votre projet.
           </p>
         </motion.div>
 
@@ -465,7 +465,7 @@ export function TrustSection() {
           </h2>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
             Contrairement aux annuaires classiques, nos données proviennent directement
-            des registres officiels de l&apos;État français. Transparence et fiabilité garanties.
+            des registres officiels de l'État français. Transparence et fiabilité garanties.
           </p>
         </motion.div>
 
@@ -540,7 +540,7 @@ export function TestimonialsSection() {
             Ils nous font confiance
           </h2>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-            Des milliers de particuliers trouvent chaque jour l&apos;artisan idéal sur ServicesArtisans.
+            Des milliers de particuliers trouvent chaque jour l'artisan idéal sur ServicesArtisans.
           </p>
         </motion.div>
 

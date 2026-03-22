@@ -241,8 +241,8 @@ export default async function AProposPage() {
             Annuaire des artisans de France
           </h1>
           <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-            Nous avons construit un annuaire d&apos;artisans en France
-            en exploitant les donn&eacute;es ouvertes du gouvernement.
+            Nous avons construit un annuaire d'artisans en France
+            en exploitant les données ouvertes du gouvernement.
             {stats.artisanCount > 0 ? ` ${stats.artisanCount.toLocaleString('fr-FR')}+ professionnels référencés,` : ' Des milliers de professionnels référencés,'} accessibles gratuitement.
           </p>
           </div>
@@ -303,7 +303,7 @@ export default async function AProposPage() {
                   <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                     <span className="text-blue-600 text-xs font-bold">1</span>
                   </div>
-                  <p>Données artisans issues de l&apos;<strong>API Annuaire des Entreprises</strong> du gouvernement (données ouvertes SIREN).</p>
+                  <p>Données artisans issues de l'<strong>API Annuaire des Entreprises</strong> du gouvernement (données ouvertes SIREN).</p>
                 </div>
                 <div className="flex items-start gap-3">
                   <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -354,7 +354,7 @@ export default async function AProposPage() {
                   <Search className="w-5 h-5 text-blue-200 flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="font-semibold">Gratuit pour les particuliers</p>
-                    <p className="text-blue-100 text-sm">Recherche d&apos;artisans, demandes de devis, comparaison : tout est gratuit.</p>
+                    <p className="text-blue-100 text-sm">Recherche d'artisans, demandes de devis, comparaison : tout est gratuit.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -384,7 +384,7 @@ export default async function AProposPage() {
           {hasArtisans ? (
             <>
               <h2 className="text-3xl font-bold text-gray-900 mb-8">
-                L&apos;annuaire en chiffres
+                L'annuaire en chiffres
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8 max-w-2xl mx-auto">
                 <div>
@@ -416,8 +416,8 @@ export default async function AProposPage() {
                   Annuaire en cours de constitution
                 </h2>
                 <p className="text-gray-600 mb-6">
-                  Nous importons les données de l&apos;API Annuaire des Entreprises pour constituer
-                  le plus grand répertoire d&apos;artisans de France. Les premiers professionnels
+                  Nous importons les données de l'API Annuaire des Entreprises pour constituer
+                  le plus grand répertoire d'artisans de France. Les premiers professionnels
                   référencés seront bientôt accessibles.
                 </p>
                 <Link
@@ -592,7 +592,7 @@ export default async function AProposPage() {
                       </span>
                     ))}
                   </div>
-                  <p className="text-xs text-gray-400 mt-2">{author.yearsExperience} ans d&apos;expérience</p>
+                  <p className="text-xs text-gray-400 mt-2">{author.yearsExperience} ans d'expérience</p>
                 </div>
               )
             })}

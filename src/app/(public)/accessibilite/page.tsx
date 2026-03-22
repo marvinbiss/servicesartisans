@@ -83,11 +83,11 @@ export default async function AccessibilitePage() {
             className="mb-6 text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
           />
           <h1 className="font-heading text-4xl font-extrabold mb-4 tracking-[-0.025em]">
-            D&eacute;claration d&apos;accessibilit&eacute;
+            Déclaration d'accessibilité
           </h1>
           <p className="text-xl text-slate-400 max-w-3xl">
-            ServicesArtisans s&apos;engage &agrave; rendre son site web accessible &agrave; tous,
-            conform&eacute;ment au R&eacute;f&eacute;rentiel G&eacute;n&eacute;ral d&apos;Am&eacute;lioration de l&apos;Accessibilit&eacute; (RGAA).
+            ServicesArtisans s'engage à rendre son site web accessible à tous,
+            conformément au Référentiel Général d'Amélioration de l'Accessibilité (RGAA).
           </p>
         </div>
       </section>

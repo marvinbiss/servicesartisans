@@ -71,7 +71,7 @@ function CityListFallback({
             onChange={(e) => setSortBy(e.target.value as 'name' | 'count')}
             className="text-xs border border-gray-300 rounded px-2 py-1"
           >
-            <option value="count">Nombre d&apos;artisans</option>
+            <option value="count">Nombre d'artisans</option>
             <option value="name">Nom de ville</option>
           </select>
         </div>
@@ -95,7 +95,7 @@ function CityListFallback({
                   {city.name}
                 </p>
                 <p className="text-xs text-gray-500">
-                  {city.departement} &middot; {city.region}
+                  {city.departement} · {city.region}
                 </p>
               </div>
             </div>
@@ -384,7 +384,7 @@ export default function CarteClient() {
                     <Popup maxWidth={280}>
                       <div className="p-3">
                         <h3 className="font-bold text-gray-900 text-base mb-1">{city.name}</h3>
-                        <p className="text-sm text-gray-600 mb-1">{city.departement} &middot; {city.region}</p>
+                        <p className="text-sm text-gray-600 mb-1">{city.departement} · {city.region}</p>
                         <p className="text-sm font-medium text-blue-700 mb-3">
                           {city.providerCount.toLocaleString('fr-FR')} artisans référencés
                         </p>
@@ -430,7 +430,7 @@ export default function CarteClient() {
           <div className="bg-amber-50 border border-amber-200 rounded-xl flex items-center justify-center" style={{ height: '300px' }}>
             <div className="text-center px-6">
               <AlertTriangle className="w-10 h-10 text-amber-500 mx-auto mb-3" />
-              <p className="font-medium text-gray-900 mb-1">La carte n&apos;a pas pu se charger</p>
+              <p className="font-medium text-gray-900 mb-1">La carte n'a pas pu se charger</p>
               <p className="text-sm text-gray-600 mb-4">
                 Utilisez la vue liste ci-dessous pour parcourir les villes.
               </p>

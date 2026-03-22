@@ -129,7 +129,7 @@ export default function DevisSidebar({ serviceName, faqItems, priceRange }: Devi
           ))}
         </div>
         <blockquote className="text-sm text-charcoal-700 leading-relaxed mb-3 italic">
-          &ldquo;{testimonial.text}&rdquo;
+          “{testimonial.text}”
         </blockquote>
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">

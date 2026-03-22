@@ -575,11 +575,11 @@ export default function QuickSearch() {
               naviguer
             </span>
             <span className="flex items-center gap-1">
-              <kbd className="px-1 py-0.5 bg-white rounded border border-gray-200 font-mono">Entr&eacute;e</kbd>
+              <kbd className="px-1 py-0.5 bg-white rounded border border-gray-200 font-mono">Entrée</kbd>
               valider
             </span>
             <span className="flex items-center gap-1">
-              <kbd className="px-1 py-0.5 bg-white rounded border border-gray-200 font-mono">&Eacute;chap</kbd>
+              <kbd className="px-1 py-0.5 bg-white rounded border border-gray-200 font-mono">Échap</kbd>
               fermer
             </span>
           </div>

@@ -765,7 +765,7 @@ export function HeroSearch() {
                                   <span className="text-slate-400 font-normal ml-1">({city.departementCode})</span>
                                 </div>
                                 <div className="text-xs text-slate-500 truncate">
-                                  {city.departement} &middot; {formatPopulation(city.population)}
+                                  {city.departement} · {formatPopulation(city.population)}
                                 </div>
                               </div>
                               <span className="text-xs text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full flex-shrink-0">
@@ -782,7 +782,7 @@ export function HeroSearch() {
                       <div className="p-4">
                         <div className="text-center py-3">
                           <div className="text-sm text-slate-500 mb-1">
-                            Aucune ville trouvée pour <span className="font-semibold text-slate-700">&laquo;&thinsp;{location}&thinsp;&raquo;</span>
+                            Aucune ville trouvée pour <span className="font-semibold text-slate-700">«&thinsp;{location}&thinsp;»</span>
                           </div>
                           <div className="text-xs text-slate-400 mb-4">
                             Nous ne couvrons pas encore cette ville. Essayez une ville voisine.

@@ -194,7 +194,7 @@ export default async function VillesIndexPage() {
                       >
                         {ville.name}
                       </Link>
-                      {i < regionVilles.length - 1 && <span className="text-sand-400 mx-1">&middot;</span>}
+                      {i < regionVilles.length - 1 && <span className="text-sand-400 mx-1">·</span>}
                     </span>
                   ))}
                 </div>
@@ -211,7 +211,7 @@ export default async function VillesIndexPage() {
         }} />
         <div className="relative max-w-4xl mx-auto px-4 py-16 md:py-20 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-semibold text-white mb-4 tracking-tight">
-            Besoin d&apos;un artisan ?
+            Besoin d'un artisan ?
           </h2>
           <p className="text-charcoal-400 mb-8 max-w-lg mx-auto">
             Décrivez votre projet et recevez des devis gratuits de professionnels référencés.

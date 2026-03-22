@@ -355,7 +355,7 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
               <span className="text-charcoal-600 text-lg">{trade.priceRange.unit}</span>
             </div>
             <p className="text-charcoal-500 text-sm mt-3">
-              Prix moyen constaté en France métropolitaine, main-d&apos;oeuvre incluse
+              Prix moyen constaté en France métropolitaine, main-d'oeuvre incluse
             </p>
           </div>
 
@@ -382,8 +382,8 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
             Combien coûte un {trade.name.toLowerCase()} en France ?
           </h2>
           <p className="text-charcoal-700 leading-relaxed">
-            Le tarif horaire moyen d&apos;un {trade.name.toLowerCase()} en France se situe entre {trade.priceRange.min} et {trade.priceRange.max} {trade.priceRange.unit}.
-            Ce prix varie selon la région, la complexité de l&apos;intervention et les matériaux nécessaires.
+            Le tarif horaire moyen d'un {trade.name.toLowerCase()} en France se situe entre {trade.priceRange.min} et {trade.priceRange.max} {trade.priceRange.unit}.
+            Ce prix varie selon la région, la complexité de l'intervention et les matériaux nécessaires.
             En Île-de-France, comptez une majoration de 20 à 25 % par rapport à la moyenne nationale.
           </p>
 
@@ -391,16 +391,16 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
             Comment choisir son {trade.name.toLowerCase()} ?
           </h2>
           <p className="text-charcoal-700 leading-relaxed">
-            Pour bien choisir votre {trade.name.toLowerCase()}, vérifiez son numéro SIRET sur le site de l&apos;INSEE,
+            Pour bien choisir votre {trade.name.toLowerCase()}, vérifiez son numéro SIRET sur le site de l'INSEE,
             demandez une copie de son assurance décennale et comparez au moins 3 devis détaillés.
             Privilégiez les artisans certifiés{trade.certifications.length > 0 ? ` (${trade.certifications[0]})` : ''} et consultez les avis clients en ligne.
           </p>
 
           <h2 className="text-xl font-heading font-semibold text-charcoal-900">
-            Quels sont les tarifs moyens d&apos;un {trade.name.toLowerCase()} ?
+            Quels sont les tarifs moyens d'un {trade.name.toLowerCase()} ?
           </h2>
           <p className="text-charcoal-700 leading-relaxed">
-            Les tarifs d&apos;un {trade.name.toLowerCase()} dépendent du type de prestation.
+            Les tarifs d'un {trade.name.toLowerCase()} dépendent du type de prestation.
             Pour les interventions courantes : {trade.commonTasks.slice(0, 2).map(t => t.split(':')[0].trim().toLowerCase()).join(', ')}.
             Le tarif horaire de base est de {trade.priceRange.min} à {trade.priceRange.max} {trade.priceRange.unit}, hors fournitures et déplacement.
           </p>
@@ -414,7 +414,7 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
             Prix détaillés par prestation et par ville
           </h2>
           <p className="text-charcoal-500 text-sm text-center mb-8">
-            Découvrez les tarifs précis pour chaque type d&apos;intervention dans les principales villes de France.
+            Découvrez les tarifs précis pour chaque type d'intervention dans les principales villes de France.
           </p>
           <div className="space-y-6">
             {trade.commonTasks.slice(0, 8).map((task) => {
@@ -603,7 +603,7 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
       {/* Other trades */}
       <section className="py-16 bg-sand-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6">Tarifs d&apos;autres corps de métier</h2>
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6">Tarifs d'autres corps de métier</h2>
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
             {otherTrades.map((slug) => {
               const t = tradeContent[slug]
@@ -660,7 +660,7 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
           <div className="bg-sand-100 rounded-2xl border border-sand-300 p-6">
             <h3 className="text-sm font-semibold text-charcoal-700 mb-2">Méthodologie tarifaire</h3>
             <p className="text-xs text-sand-500 leading-relaxed">
-              Les prix affichés sont des fourchettes indicatives basées sur des moyennes constatées en France. Ils varient selon la région, la complexité du chantier, les matériaux et l&apos;urgence. Seul un devis personnalisé fait foi. ServicesArtisans est un annuaire indépendant.
+              Les prix affichés sont des fourchettes indicatives basées sur des moyennes constatées en France. Ils varient selon la région, la complexité du chantier, les matériaux et l'urgence. Seul un devis personnalisé fait foi. ServicesArtisans est un annuaire indépendant.
             </p>
           </div>
         </div>

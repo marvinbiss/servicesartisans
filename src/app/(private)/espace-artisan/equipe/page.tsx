@@ -248,7 +248,7 @@ export default function EquipePage() {
               <ChevronLeft className="w-5 h-5" />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold">Gestion de l&apos;équipe</h1>
+              <h1 className="text-2xl font-bold">Gestion de l'équipe</h1>
               <p className="text-blue-100">Gérez les membres de votre équipe et leurs créneaux</p>
             </div>
           </div>
@@ -268,7 +268,7 @@ export default function EquipePage() {
         <div className="flex justify-between items-center mb-6">
           <div>
             <h2 className="text-lg font-semibold text-gray-900">
-              Membres de l&apos;équipe ({members.length})
+              Membres de l'équipe ({members.length})
             </h2>
             <p className="text-sm text-gray-500">
               Ajoutez des membres pour leur assigner des créneaux
@@ -298,7 +298,7 @@ export default function EquipePage() {
           <div className="bg-white rounded-xl shadow-sm p-12 text-center">
             <Users className="w-12 h-12 text-gray-300 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">
-              Aucun membre dans l&apos;équipe
+              Aucun membre dans l'équipe
             </h3>
             <p className="text-gray-500 mb-6">
               Ajoutez des membres pour leur assigner des créneaux de disponibilité

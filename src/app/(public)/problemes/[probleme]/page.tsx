@@ -227,7 +227,7 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
               Comment reconnaître ce problème ?
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Voici les signes qui permettent d&apos;identifier un problème de {problem.name.toLowerCase()}.
+              Voici les signes qui permettent d'identifier un problème de {problem.name.toLowerCase()}.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
@@ -256,7 +256,7 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
               Que faire en urgence ?
             </h2>
             <p className="text-gray-600 max-w-xl mx-auto">
-              Suivez ces étapes en attendant l&apos;intervention d&apos;un professionnel.
+              Suivez ces étapes en attendant l'intervention d'un professionnel.
             </p>
           </div>
           <div className="space-y-4">
@@ -289,10 +289,10 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
               <span className="text-gray-600 text-lg">€</span>
             </div>
             <p className="text-gray-500 text-sm mt-3">
-              Prix moyen constaté en France métropolitaine, main-d&apos;œuvre incluse
+              Prix moyen constaté en France métropolitaine, main-d'œuvre incluse
             </p>
             <p className="text-xs text-gray-400 mt-2">
-              Les tarifs varient selon votre région, la complexité du problème et l&apos;urgence. Majorations possibles en nuit/week-end.
+              Les tarifs varient selon votre région, la complexité du problème et l'urgence. Majorations possibles en nuit/week-end.
             </p>
           </div>
 
@@ -455,7 +455,7 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
       <section className={`bg-gradient-to-br ${gradient} text-white py-16 overflow-hidden`}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">
-            Besoin d&apos;un {tradeName.toLowerCase()} ?
+            Besoin d'un {tradeName.toLowerCase()} ?
           </h2>
           <p className="text-xl opacity-90 mb-8">
             Demandez un devis gratuit et comparez les artisans référencés près de chez vous.
@@ -526,7 +526,7 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
           <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
             <h3 className="text-sm font-semibold text-slate-700 mb-2">Information importante</h3>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Les coûts et délais indiqués sont des estimations moyennes. Ils varient selon la complexité, votre région et l&apos;urgence. Seul un devis personnalisé fait foi. {SITE_NAME} est un annuaire indépendant. En cas d&apos;urgence vitale, appelez le 18 (pompiers) ou le 112.
+              Les coûts et délais indiqués sont des estimations moyennes. Ils varient selon la complexité, votre région et l'urgence. Seul un devis personnalisé fait foi. {SITE_NAME} est un annuaire indépendant. En cas d'urgence vitale, appelez le 18 (pompiers) ou le 112.
             </p>
           </div>
         </div>

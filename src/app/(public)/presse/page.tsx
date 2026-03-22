@@ -83,7 +83,7 @@ export default async function PressePage() {
             Espace presse
           </h1>
           <p className="text-xl text-slate-400 max-w-3xl">
-            Retrouvez toutes les informations presse de ServicesArtisans, l&apos;annuaire des artisans r&eacute;f&eacute;renc&eacute;s SIREN en France.
+            Retrouvez toutes les informations presse de ServicesArtisans, l'annuaire des artisans référencés SIREN en France.
           </p>
         </div>
       </section>

@@ -100,7 +100,7 @@ export default function ContactPageClient() {
               Contactez-nous
             </h1>
             <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-              Une question ? Un probl&egrave;me ? Notre &eacute;quipe est l&agrave; pour vous aider.
+              Une question ? Un problème ? Notre équipe est là pour vous aider.
             </p>
           </div>
         </div>

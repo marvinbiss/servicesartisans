@@ -61,12 +61,12 @@ export default function UrgencyCountdown({ serviceName, cityName }: UrgencyCount
             <Zap className="w-4 h-4 text-amber-600" />
             <span className="text-2xl font-bold text-amber-700">{recentRequests}</span>
           </div>
-          <p className="text-xs text-gray-600">Demandes dans l&apos;heure</p>
+          <p className="text-xs text-gray-600">Demandes dans l'heure</p>
         </div>
       </div>
 
       <p className="text-xs text-red-700/70 mt-3 text-center">
-        Les artisans d&apos;urgence sont disponibles 24h/24 et 7j/7
+        Les artisans d'urgence sont disponibles 24h/24 et 7j/7
       </p>
     </div>
   )

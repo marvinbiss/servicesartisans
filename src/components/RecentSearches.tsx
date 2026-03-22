@@ -56,7 +56,7 @@ export default function RecentSearches() {
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <Clock className="w-4 h-4 text-gray-400" />
-          <h3 className="text-sm font-semibold text-gray-900">Vos recherches r&eacute;centes</h3>
+          <h3 className="text-sm font-semibold text-gray-900">Vos recherches récentes</h3>
         </div>
         <button
           onClick={clearAll}

@@ -47,7 +47,7 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
         {artisan.service_prices.length > 0 ? (
           <div className="space-y-2.5 mt-4" role="list" aria-label="Tarifs des services">
             {artisan.service_prices[0]?.price?.startsWith('A partir') && (
-              <p className="text-xs text-charcoal-400 italic mb-3">* Tarifs indicatifs, le prix final depend de la nature exacte de l&apos;intervention. Demandez un devis pour un prix precis.</p>
+              <p className="text-xs text-charcoal-400 italic mb-3">* Tarifs indicatifs, le prix final depend de la nature exacte de l'intervention. Demandez un devis pour un prix precis.</p>
             )}
             {artisan.service_prices.map((service, index) => (
               <motion.div

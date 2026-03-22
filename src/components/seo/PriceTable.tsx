@@ -15,10 +15,10 @@ export default function PriceTable({ tasks, tradeName, priceRange }: PriceTableP
   return (
     <div className="mt-8">
       <h2 className="text-2xl font-bold text-gray-900 mb-4">
-        Combien co&ucirc;te un {tradeName.toLowerCase()} ?
+        Combien coûte un {tradeName.toLowerCase()} ?
       </h2>
       <p className="text-sm text-gray-600 mb-4">
-        Tarif horaire moyen : <strong className="text-gray-900">{priceRange.min}&ndash;{priceRange.max} {priceRange.unit}</strong>.
+        Tarif horaire moyen : <strong className="text-gray-900">{priceRange.min}–{priceRange.max} {priceRange.unit}</strong>.
         Voici les prix indicatifs des prestations courantes :
       </p>
       <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
@@ -48,7 +48,7 @@ export default function PriceTable({ tasks, tradeName, priceRange }: PriceTableP
         </table>
       </div>
       <p className="text-xs text-gray-500 mt-3">
-        * Prix indicatifs constat&eacute;s en France m&eacute;tropolitaine. Les tarifs varient selon la r&eacute;gion, la complexit&eacute; des travaux et le professionnel.
+        * Prix indicatifs constatés en France métropolitaine. Les tarifs varient selon la région, la complexité des travaux et le professionnel.
       </p>
     </div>
   )

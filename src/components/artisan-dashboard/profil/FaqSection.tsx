@@ -78,7 +78,7 @@ export function FaqSection({ provider, onSaved }: FaqSectionProps) {
         {/* Empty state */}
         {faqItems.length === 0 && (
           <p className="text-sm text-gray-500 italic bg-gray-50 px-4 py-3 rounded-lg">
-            Ajoutez des questions fr&eacute;quentes pour aider vos clients &agrave; mieux comprendre vos services.
+            Ajoutez des questions fréquentes pour aider vos clients à mieux comprendre vos services.
           </p>
         )}
 
@@ -109,18 +109,18 @@ export function FaqSection({ provider, onSaved }: FaqSectionProps) {
                       onChange={(e) => updateFaq(index, 'question', e.target.value)}
                       maxLength={200}
                       minLength={MIN_QUESTION_LENGTH}
-                      placeholder="Ex : Quels sont vos d&eacute;lais d'intervention ?"
+                      placeholder="Ex : Quels sont vos délais d'intervention ?"
                       className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm ${
                         questionTooShort ? 'border-amber-300' : 'border-gray-300'
                       }`}
                     />
                     {questionTooShort && (
-                      <p className="text-xs text-amber-600 mt-0.5">{MIN_QUESTION_LENGTH} caract&egrave;res minimum</p>
+                      <p className="text-xs text-amber-600 mt-0.5">{MIN_QUESTION_LENGTH} caractères minimum</p>
                     )}
                   </div>
                   <div>
                     <label htmlFor={`faq-answer-${index}`} className="block text-xs text-gray-500 mb-1">
-                      R&eacute;ponse *
+                      Réponse *
                     </label>
                     <textarea
                       id={`faq-answer-${index}`}
@@ -129,13 +129,13 @@ export function FaqSection({ provider, onSaved }: FaqSectionProps) {
                       maxLength={2000}
                       minLength={MIN_ANSWER_LENGTH}
                       rows={3}
-                      placeholder="Votre r&eacute;ponse d&eacute;taill&eacute;e..."
+                      placeholder="Votre réponse détaillée..."
                       className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm resize-y ${
                         answerTooShort ? 'border-amber-300' : 'border-gray-300'
                       }`}
                     />
                     {answerTooShort && (
-                      <p className="text-xs text-amber-600 mt-0.5">{MIN_ANSWER_LENGTH} caract&egrave;res minimum</p>
+                      <p className="text-xs text-amber-600 mt-0.5">{MIN_ANSWER_LENGTH} caractères minimum</p>
                     )}
                   </div>
                 </div>

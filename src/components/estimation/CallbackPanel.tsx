@@ -119,7 +119,7 @@ export const CallbackPanel = memo(function CallbackPanel({
                 className="mt-0.5"
               />
               <span>
-                J&apos;accepte que mes données soient traitées pour recevoir un rappel.{' '}
+                J'accepte que mes données soient traitées pour recevoir un rappel.{' '}
                 <a
                   href="/confidentialite"
                   target="_blank"

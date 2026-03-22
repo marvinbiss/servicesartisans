@@ -571,7 +571,7 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
             <p className="text-sand-500">
               &copy; {new Date().getFullYear()} <span className="text-sand-300 font-medium">ServicesArtisans</span>. Tous droits réservés.
-              <span className="hidden sm:inline"> &mdash; Données mises à jour en {new Date().getFullYear()}</span>
+              <span className="hidden sm:inline"> — Données mises à jour en {new Date().getFullYear()}</span>
             </p>
             <div className="flex flex-wrap justify-center gap-x-6 gap-y-1 text-sm text-sand-500">
               <Link href="/plan-du-site" className="hover:text-primary-400 transition-colors duration-200 py-1.5">

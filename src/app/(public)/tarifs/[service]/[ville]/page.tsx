@@ -430,7 +430,7 @@ export default async function TarifsServiceVillePage({
             </div>
             <p className="text-charcoal-500 text-sm mt-3">
               Prix moyen constat{'é'} {'à'} {villeData.name} et ses alentours,
-              main-d&apos;oeuvre incluse
+              main-d'oeuvre incluse
             </p>
             {multiplier !== 1.0 && (
               <p className="text-xs text-charcoal-400 mt-2">
@@ -562,8 +562,8 @@ export default async function TarifsServiceVillePage({
             Combien co{'û'}te un {tradeLower} {'à'} {villeData.name} ?
           </h2>
           <p className="text-charcoal-700 leading-relaxed">
-            Le tarif horaire d&apos;un {tradeLower} {'à'} {villeData.name} se situe entre {minPrice} et {maxPrice} {trade.priceRange.unit}.
-            Ce prix varie selon la complexit{'é'} de l&apos;intervention, l&apos;accessibilit{'é'} du chantier et les mat{'é'}riaux n{'é'}cessaires.
+            Le tarif horaire d'un {tradeLower} {'à'} {villeData.name} se situe entre {minPrice} et {maxPrice} {trade.priceRange.unit}.
+            Ce prix varie selon la complexit{'é'} de l'intervention, l'accessibilit{'é'} du chantier et les mat{'é'}riaux n{'é'}cessaires.
             {multiplier >= 1.2 ? ` Les tarifs en ${villeData.region} sont généralement 20 à 25 % supérieurs à la moyenne nationale.` : ''}
           </p>
 
@@ -577,11 +577,11 @@ export default async function TarifsServiceVillePage({
           </p>
 
           <h2 className="text-xl font-heading font-semibold text-charcoal-900">
-            Quel est le d{'é'}lai d&apos;intervention d&apos;un {tradeLower} {'à'} {villeData.name} ?
+            Quel est le d{'é'}lai d'intervention d'un {tradeLower} {'à'} {villeData.name} ?
           </h2>
           <p className="text-charcoal-700 leading-relaxed">
             En moyenne, un {tradeLower} {'à'} {villeData.name} peut intervenir sous {trade.averageResponseTime.split(',')[0].toLowerCase()}.
-            En cas d&apos;urgence, certains professionnels proposent des interventions sous 1 {'à'} 2 heures,
+            En cas d'urgence, certains professionnels proposent des interventions sous 1 {'à'} 2 heures,
             avec une majoration tarifaire de 50 {'à'} 100 %.
           </p>
         </div>
@@ -660,7 +660,7 @@ export default async function TarifsServiceVillePage({
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6">
-            Tarifs {tradeLower} dans d&apos;autres villes
+            Tarifs {tradeLower} dans d'autres villes
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-3xl">
             {relatedCities.map((v) => (
@@ -872,7 +872,7 @@ export default async function TarifsServiceVillePage({
           <div className="bg-sand-100 rounded-2xl border border-sand-300 p-6">
             <h3 className="text-sm font-semibold text-charcoal-700 mb-2">M{'é'}thodologie tarifaire</h3>
             <p className="text-xs text-sand-500 leading-relaxed">
-              Les prix affich{'é'}s pour {villeData.name} sont des fourchettes indicatives ajust{'é'}es en fonction des donn{'é'}es r{'é'}gionales ({villeData.region}). Ils varient selon la complexit{'é'} du chantier, les mat{'é'}riaux et l&apos;urgence. Seul un devis personnalis{'é'} fait foi. {SITE_NAME} est un annuaire ind{'é'}pendant.
+              Les prix affich{'é'}s pour {villeData.name} sont des fourchettes indicatives ajust{'é'}es en fonction des donn{'é'}es r{'é'}gionales ({villeData.region}). Ils varient selon la complexit{'é'} du chantier, les mat{'é'}riaux et l'urgence. Seul un devis personnalis{'é'} fait foi. {SITE_NAME} est un annuaire ind{'é'}pendant.
             </p>
           </div>
         </div>

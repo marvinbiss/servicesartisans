@@ -152,21 +152,21 @@ export default async function TarifsPage() {
                 Guide des prix artisans 2026
               </h1>
               <p className="text-base sm:text-xl text-sand-400 max-w-3xl mx-auto mb-4">
-                Tarifs moyens par corps de m&eacute;tier en France. Comparez les prix de {trades.length} m&eacute;tiers
-                du b&acirc;timent pour estimer votre budget travaux avant de demander un devis.
+                Tarifs moyens par corps de métier en France. Comparez les prix de {trades.length} métiers
+                du bâtiment pour estimer votre budget travaux avant de demander un devis.
               </p>
               <div className="flex flex-wrap justify-center gap-3 mt-8">
                 <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
                   <Euro className="w-4 h-4 text-secondary-400" />
-                  <span>Prix actualis&eacute;s 2026</span>
+                  <span>Prix actualisés 2026</span>
                 </div>
                 <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
                   <TrendingUp className="w-4 h-4 text-secondary-400" />
-                  <span>{trades.length} corps de m&eacute;tier</span>
+                  <span>{trades.length} corps de métier</span>
                 </div>
                 <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10 text-sm">
                   <CheckCircle className="w-4 h-4 text-secondary-400" />
-                  <span>Donn&eacute;es v&eacute;rifi&eacute;es</span>
+                  <span>Données vérifiées</span>
                 </div>
               </div>
             </div>
@@ -198,7 +198,7 @@ export default async function TarifsPage() {
                 Tarifs par corps de métier
               </h2>
               <p className="text-xl text-charcoal-600 max-w-2xl mx-auto">
-                Prix moyens constatés en France métropolitaine, main-d&apos;oeuvre incluse
+                Prix moyens constatés en France métropolitaine, main-d'oeuvre incluse
               </p>
             </div>
 

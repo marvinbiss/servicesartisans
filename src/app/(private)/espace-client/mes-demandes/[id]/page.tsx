@@ -404,7 +404,7 @@ export default function LeadDetailPage() {
                                 </div>
                                 {quote.valid_until && (
                                   <p className="text-xs text-gray-400 mt-1">
-                                    Valable jusqu&apos;au {formatDate(quote.valid_until)}
+                                    Valable jusqu'au {formatDate(quote.valid_until)}
                                   </p>
                                 )}
                               </div>
@@ -482,7 +482,7 @@ export default function LeadDetailPage() {
                             {quote.status === 'accepted' && (
                               <div className="flex items-center gap-2 text-emerald-700 text-sm font-medium">
                                 <CheckCircle className="w-4 h-4" />
-                                Vous avez accepté ce devis — l&apos;artisan va vous contacter.
+                                Vous avez accepté ce devis — l'artisan va vous contacter.
                               </div>
                             )}
                           </div>
@@ -496,7 +496,7 @@ export default function LeadDetailPage() {
                 <div className="bg-blue-50 rounded-xl border border-blue-100 p-6">
                   <h2 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
                     <MessageSquare className="w-5 h-5 text-blue-500" />
-                    Besoin d&apos;aide ?
+                    Besoin d'aide ?
                   </h2>
                   <p className="text-sm text-gray-600 mb-4">
                     Si vous avez des questions sur cette demande, contactez-nous via la messagerie.

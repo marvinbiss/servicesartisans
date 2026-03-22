@@ -131,11 +131,11 @@ export default async function MediationPage() {
             />
           </div>
           <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
-            M&eacute;diation et r&eacute;solution des litiges
+            Médiation et résolution des litiges
           </h1>
           <p className="text-xl text-slate-400 max-w-3xl mx-auto">
             En cas de litige, {companyIdentity.name} met en place un processus
-            de m&eacute;diation pour faciliter la r&eacute;solution amiable des diff&eacute;rends.
+            de médiation pour faciliter la résolution amiable des différends.
           </p>
         </div>
       </section>

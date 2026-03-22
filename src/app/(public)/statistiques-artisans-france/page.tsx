@@ -383,7 +383,7 @@ export default function StatistiquesArtisansFrancePage() {
 
             <p className="text-lg md:text-xl text-blue-100 max-w-3xl mb-10">
               Toutes les données essentielles sur le marché artisanal français :
-              nombre d&apos;artisans, répartition géographique, tarifs moyens par métier,
+              nombre d'artisans, répartition géographique, tarifs moyens par métier,
               rénovation énergétique et perspectives 2026. Données actualisées, sources officielles.
             </p>
 
@@ -394,8 +394,8 @@ export default function StatistiquesArtisansFrancePage() {
                 <p className="text-sm text-blue-200 mt-1">Artisans en France</p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-white/20">
-                <p className="text-3xl md:text-4xl font-bold">300 Md&euro;</p>
-                <p className="text-sm text-blue-200 mt-1">Chiffre d&apos;affaires</p>
+                <p className="text-3xl md:text-4xl font-bold">300 Md€</p>
+                <p className="text-sm text-blue-200 mt-1">Chiffre d'affaires</p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-white/20">
                 <p className="text-3xl md:text-4xl font-bold">{totalArtisans.toLocaleString('fr-FR')}</p>
@@ -527,7 +527,7 @@ export default function StatistiquesArtisansFrancePage() {
               {/* Top 10 by count */}
               <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                 <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
-                  <h3 className="font-bold text-gray-900">Top 10 départements par nombre d&apos;artisans</h3>
+                  <h3 className="font-bold text-gray-900">Top 10 départements par nombre d'artisans</h3>
                   <p className="text-sm text-gray-500 mt-1">Source : CMA, CAPEB, INSEE — calculs ServicesArtisans</p>
                 </div>
                 <div className="divide-y divide-gray-100">
@@ -597,11 +597,11 @@ export default function StatistiquesArtisansFrancePage() {
 
             {/* Regional insights */}
             <div className="mt-8 bg-blue-50 rounded-xl border border-blue-200 p-6">
-              <h3 className="font-bold text-blue-900 mb-3">Disparités régionales : ce qu&apos;il faut retenir</h3>
+              <h3 className="font-bold text-blue-900 mb-3">Disparités régionales : ce qu'il faut retenir</h3>
               <ul className="space-y-2 text-sm text-blue-800">
                 <li className="flex items-start gap-2">
                   <ChevronRight className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                  <span><strong>L&apos;Île-de-France</strong> concentre environ 27 % des entreprises artisanales, avec Paris (75) et la Seine-Saint-Denis (93) en tête.</span>
+                  <span><strong>L'Île-de-France</strong> concentre environ 27 % des entreprises artisanales, avec Paris (75) et la Seine-Saint-Denis (93) en tête.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <ChevronRight className="w-4 h-4 mt-0.5 flex-shrink-0" />
@@ -609,7 +609,7 @@ export default function StatistiquesArtisansFrancePage() {
                 </li>
                 <li className="flex items-start gap-2">
                   <ChevronRight className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                  <span>Les zones rurales (Creuse, Lozère) ont moins d&apos;artisans en valeur absolue mais souvent une <strong>densité supérieure</strong> à la moyenne nationale.</span>
+                  <span>Les zones rurales (Creuse, Lozère) ont moins d'artisans en valeur absolue mais souvent une <strong>densité supérieure</strong> à la moyenne nationale.</span>
                 </li>
               </ul>
             </div>
@@ -677,7 +677,7 @@ export default function StatistiquesArtisansFrancePage() {
                         <tr key={int.name} className="hover:bg-gray-50">
                           <td className="px-5 py-2.5 text-gray-700">{int.name}</td>
                           <td className="px-3 py-2.5 text-right text-gray-900 font-medium whitespace-nowrap">
-                            {int.prixMin}&ndash;{int.prixMax} &euro;
+                            {int.prixMin}–{int.prixMax} €
                             {int.unite !== 'intervention' && (
                               <span className="text-gray-400 font-normal">/{int.unite}</span>
                             )}
@@ -774,7 +774,7 @@ export default function StatistiquesArtisansFrancePage() {
             </div>
 
             <div className="bg-orange-50 rounded-xl border border-orange-200 p-6">
-              <h3 className="font-bold text-orange-900 mb-3">L&apos;enjeu de la rénovation énergétique</h3>
+              <h3 className="font-bold text-orange-900 mb-3">L'enjeu de la rénovation énergétique</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-orange-800">
                 <div>
                   <p className="mb-2">La loi Climat et Résilience interdit progressivement la location des passoires thermiques :</p>
@@ -785,10 +785,10 @@ export default function StatistiquesArtisansFrancePage() {
                   </ul>
                 </div>
                 <div>
-                  <p className="mb-2">Ce calendrier génère une demande massive d&apos;artisans qualifiés RGE, notamment :</p>
+                  <p className="mb-2">Ce calendrier génère une demande massive d'artisans qualifiés RGE, notamment :</p>
                   <ul className="space-y-1 ml-4">
                     <li>&bull; Installateurs de pompes à chaleur</li>
-                    <li>&bull; Poseurs d&apos;isolation (ITE, combles, planchers)</li>
+                    <li>&bull; Poseurs d'isolation (ITE, combles, planchers)</li>
                     <li>&bull; Menuisiers (remplacement fenêtres)</li>
                     <li>&bull; Chauffagistes (systèmes performants)</li>
                   </ul>
@@ -854,15 +854,15 @@ export default function StatistiquesArtisansFrancePage() {
             </div>
 
             <div className="bg-purple-50 rounded-xl border border-purple-200 p-6">
-              <h3 className="font-bold text-purple-900 mb-3">La pénurie de main d&apos;oeuvre dans le BTP</h3>
+              <h3 className="font-bold text-purple-900 mb-3">La pénurie de main d'oeuvre dans le BTP</h3>
               <p className="text-sm text-purple-800 mb-3">
                 Le secteur du bâtiment fait face à une tension majeure sur le recrutement.
                 Selon la FFB et la CAPEB, 70 000 à 80 000 postes restent vacants chaque année,
-                soit un taux de vacance parmi les plus élevés de l&apos;économie française.
+                soit un taux de vacance parmi les plus élevés de l'économie française.
               </p>
               <p className="text-sm text-purple-800">
                 Les métiers les plus en tension : <strong>couvreurs, plombiers-chauffagistes, électriciens,
-                menuisiers</strong> et <strong>maçons</strong>. L&apos;apprentissage et la reconversion professionnelle
+                menuisiers</strong> et <strong>maçons</strong>. L'apprentissage et la reconversion professionnelle
                 sont les leviers prioritaires pour combler ce déficit.
               </p>
             </div>
@@ -888,7 +888,7 @@ export default function StatistiquesArtisansFrancePage() {
                 <h3 className="font-bold text-green-900 mb-2">Boom de la rénovation</h3>
                 <p className="text-sm text-green-800 mb-3">
                   Le marché de la rénovation progresse de 4 à 6 % par an, tiré par les obligations
-                  réglementaires (loi Climat, RE2020) et les aides publiques (MaPrimeRénov&apos;).
+                  réglementaires (loi Climat, RE2020) et les aides publiques (MaPrimeRénov').
                 </p>
                 <p className="text-sm text-green-700">
                   <strong>+4,5 %</strong> de croissance attendue en 2026 pour la rénovation énergétique.
@@ -906,7 +906,7 @@ export default function StatistiquesArtisansFrancePage() {
                   sur les constructions neuves : bas carbone, biosourcés, performance thermique.
                 </p>
                 <p className="text-sm text-blue-700">
-                  <strong>+15 %</strong> de demande estimée pour les artisans qualifiés RE2020 d&apos;ici 2027.
+                  <strong>+15 %</strong> de demande estimée pour les artisans qualifiés RE2020 d'ici 2027.
                 </p>
               </div>
 
@@ -971,25 +971,25 @@ export default function StatistiquesArtisansFrancePage() {
               <div className="prose prose-sm max-w-none text-gray-700">
                 <p>
                   Les statistiques présentées sur cette page proviennent de sources officielles
-                  et de calculs réalisés par l&apos;équipe ServicesArtisans. Voici notre méthodologie :
+                  et de calculs réalisés par l'équipe ServicesArtisans. Voici notre méthodologie :
                 </p>
                 <ul className="space-y-2 mt-3">
                   <li>
-                    <strong>Nombre d&apos;artisans par département :</strong> dérivés des données
+                    <strong>Nombre d'artisans par département :</strong> dérivés des données
                     INSEE (populations légales 2024) croisées avec les ratios de densité artisanale
                     publiés par Le Moniteur, la CMA et la CAPEB. Calibrés sur les totaux régionaux
                     et nationaux connus (CMA : 1,3M ; CAPEB : 621 803 BTP).
                   </li>
                   <li>
                     <strong>Tarifs :</strong> fourchettes issues de notre baromètre de prix 2026,
-                    constitué à partir d&apos;enquêtes auprès d&apos;artisans partenaires et de données
-                    sectorielles (CAPEB, FFB, QUALIT&apos;EnR). Les variations sont calculées
+                    constitué à partir d'enquêtes auprès d'artisans partenaires et de données
+                    sectorielles (CAPEB, FFB, QUALIT'EnR). Les variations sont calculées
                     en glissement annuel.
                   </li>
                   <li>
                     <strong>Indices régionaux :</strong> base 100 correspondant à la moyenne
                     nationale. Calculés à partir des écarts de prix constatés entre régions,
-                    pondérés par le volume d&apos;interventions.
+                    pondérés par le volume d'interventions.
                   </li>
                   <li>
                     <strong>Données rénovation énergétique :</strong> sources ADEME, ANAH,
@@ -1003,7 +1003,7 @@ export default function StatistiquesArtisansFrancePage() {
                 </ul>
                 <p className="mt-3 text-xs text-gray-500">
                   Les chiffres sont arrondis pour faciliter la lecture. Les estimations sont
-                  signalées par le symbole &laquo; ~ &raquo;. Dernière mise à jour : mars 2026.
+                  signalées par le symbole « ~ ». Dernière mise à jour : mars 2026.
                 </p>
               </div>
             </div>

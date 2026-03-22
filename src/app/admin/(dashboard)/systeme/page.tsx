@@ -355,7 +355,7 @@ export default function SystemDashboardPage() {
               </div>
               <div className="p-3 bg-yellow-50 rounded-lg text-center">
                 <p className="text-2xl font-bold text-yellow-700 tabular-nums">{data.events.today}</p>
-                <p className="text-xs text-yellow-500 mt-1">Aujourd&apos;hui</p>
+                <p className="text-xs text-yellow-500 mt-1">Aujourd'hui</p>
               </div>
             </div>
           </div>

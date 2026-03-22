@@ -180,10 +180,10 @@ export default function CalculateurClient({ services, tradeContent }: Calculateu
       {/* ── Step 1: Select service ───────────────────────── */}
       <div className={`transition-all duration-500 ${step === 1 ? 'opacity-100' : 'hidden'}`}>
         <h2 className="text-2xl font-bold text-gray-900 mb-2 text-center">
-          Quel type d&apos;artisan recherchez-vous ?
+          Quel type d'artisan recherchez-vous ?
         </h2>
         <p className="text-gray-500 text-center mb-8">
-          S&eacute;lectionnez un m&eacute;tier pour obtenir une estimation de prix
+          Sélectionnez un métier pour obtenir une estimation de prix
         </p>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
           {services.map((service) => {
@@ -202,7 +202,7 @@ export default function CalculateurClient({ services, tradeContent }: Calculateu
                 </span>
                 {tradeContent[service.slug] && (
                   <span className="text-xs text-gray-400 mt-1 block">
-                    {tradeContent[service.slug].priceRange.min}&ndash;{tradeContent[service.slug].priceRange.max} {tradeContent[service.slug].priceRange.unit}
+                    {tradeContent[service.slug].priceRange.min}–{tradeContent[service.slug].priceRange.max} {tradeContent[service.slug].priceRange.unit}
                   </span>
                 )}
               </button>
@@ -238,7 +238,7 @@ export default function CalculateurClient({ services, tradeContent }: Calculateu
                       </span>
                       {task.priceMin > 0 && (
                         <span className="text-sm text-blue-600 font-semibold mt-1 block">
-                          {task.priceMin.toLocaleString('fr-FR')} &ndash; {task.priceMax.toLocaleString('fr-FR')} &euro;
+                          {task.priceMin.toLocaleString('fr-FR')} – {task.priceMax.toLocaleString('fr-FR')} €
                         </span>
                       )}
                     </div>
@@ -263,10 +263,10 @@ export default function CalculateurClient({ services, tradeContent }: Calculateu
                   </div>
                   <div>
                     <span className="text-sm sm:text-base font-medium text-blue-800 block">
-                      Tarif horaire g&eacute;n&eacute;ral
+                      Tarif horaire général
                     </span>
                     <span className="text-sm text-blue-600 font-semibold mt-0.5 block">
-                      {trade.priceRange.min} &ndash; {trade.priceRange.max} {trade.priceRange.unit}
+                      {trade.priceRange.min} – {trade.priceRange.max} {trade.priceRange.unit}
                     </span>
                   </div>
                 </div>
@@ -283,7 +283,7 @@ export default function CalculateurClient({ services, tradeContent }: Calculateu
           Dans quelle ville ? <span className="text-gray-400 text-lg font-normal">(facultatif)</span>
         </h2>
         <p className="text-gray-500 text-center mb-8">
-          Les prix peuvent varier selon la r&eacute;gion. Indiquez votre ville pour contextualiser l&apos;estimation.
+          Les prix peuvent varier selon la région. Indiquez votre ville pour contextualiser l'estimation.
         </p>
         <div className="max-w-md mx-auto">
           <div className="relative mb-6">
@@ -301,13 +301,13 @@ export default function CalculateurClient({ services, tradeContent }: Calculateu
             className="w-full bg-blue-600 text-white py-4 rounded-xl font-semibold text-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 shadow-lg shadow-blue-200"
           >
             <Calculator className="w-5 h-5" />
-            Voir l&apos;estimation
+            Voir l'estimation
           </button>
           <button
             onClick={() => { setCity(''); handleShowResult() }}
             className="w-full text-gray-500 py-3 text-sm hover:text-gray-700 transition-colors mt-2"
           >
-            Passer cette &eacute;tape
+            Passer cette étape
           </button>
         </div>
       </div>
@@ -331,12 +331,12 @@ export default function CalculateurClient({ services, tradeContent }: Calculateu
               {/* Price display */}
               <div className="p-6 sm:p-8">
                 <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-6 text-center mb-6">
-                  <p className="text-sm text-gray-600 mb-2">Fourchette de prix estim&eacute;e</p>
+                  <p className="text-sm text-gray-600 mb-2">Fourchette de prix estimée</p>
                   <div className="flex items-baseline justify-center gap-2">
                     <span className="text-4xl sm:text-5xl font-bold text-blue-600">
-                      {selectedTask.priceMin.toLocaleString('fr-FR')} &ndash; {selectedTask.priceMax.toLocaleString('fr-FR')}
+                      {selectedTask.priceMin.toLocaleString('fr-FR')} – {selectedTask.priceMax.toLocaleString('fr-FR')}
                     </span>
-                    <span className="text-gray-600 text-lg">&euro;</span>
+                    <span className="text-gray-600 text-lg">€</span>
                   </div>
                   {city && (
                     <p className="text-xs text-gray-500 mt-2 flex items-center justify-center gap-1">
@@ -365,10 +365,10 @@ export default function CalculateurClient({ services, tradeContent }: Calculateu
                 <div className="bg-gray-50 rounded-xl p-4 mb-6">
                   <div className="flex items-center gap-2 mb-1">
                     <Euro className="w-4 h-4 text-gray-500" />
-                    <span className="text-sm font-medium text-gray-700">Tarif horaire de r&eacute;f&eacute;rence</span>
+                    <span className="text-sm font-medium text-gray-700">Tarif horaire de référence</span>
                   </div>
                   <p className="text-sm text-gray-600">
-                    {trade.priceRange.min} &ndash; {trade.priceRange.max} {trade.priceRange.unit} en moyenne
+                    {trade.priceRange.min} – {trade.priceRange.max} {trade.priceRange.unit} en moyenne
                   </p>
                 </div>
 

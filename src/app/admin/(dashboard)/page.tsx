@@ -120,7 +120,7 @@ export default function AdminDashboard() {
               <Shield className="w-8 h-8 text-blue-600" />
               <div>
                 <h1 className="text-xl font-bold text-gray-900">Tableau de bord</h1>
-                <p className="text-sm text-gray-500">Vue d&apos;ensemble de la plateforme</p>
+                <p className="text-sm text-gray-500">Vue d'ensemble de la plateforme</p>
               </div>
             </div>
             <div className="flex items-center gap-4">
@@ -153,7 +153,7 @@ export default function AdminDashboard() {
           <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
             <div className="flex items-center gap-3 mb-4">
               <Activity className="w-5 h-5 text-blue-600" />
-              <h3 className="font-semibold text-gray-900">Aujourd&apos;hui</h3>
+              <h3 className="font-semibold text-gray-900">Aujourd'hui</h3>
             </div>
             {isLoading ? (
               <div className="space-y-3 animate-pulse">
@@ -266,7 +266,7 @@ export default function AdminDashboard() {
                       ? 'bg-emerald-100 text-emerald-700'
                       : 'bg-gray-100 text-gray-500'
                   }`}>
-                    {data?.estimationLeads?.today ?? 0} aujourd&apos;hui
+                    {data?.estimationLeads?.today ?? 0} aujourd'hui
                   </span>
                 </>
               )}

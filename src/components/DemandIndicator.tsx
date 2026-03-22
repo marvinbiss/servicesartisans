@@ -43,7 +43,7 @@ export default function DemandIndicator({ serviceSlug, cityName, variant = 'inli
           </span>
           <span className="flex items-center gap-1.5">
             <Eye className="w-3.5 h-3.5" />
-            {viewsToday} consultations aujourd&apos;hui
+            {viewsToday} consultations aujourd'hui
           </span>
         </div>
       </div>
@@ -61,7 +61,7 @@ export default function DemandIndicator({ serviceSlug, cityName, variant = 'inli
       </span>
       <span className="flex items-center gap-1">
         <Eye className="w-3 h-3" />
-        {viewsToday} vues aujourd&apos;hui
+        {viewsToday} vues aujourd'hui
       </span>
     </div>
   )

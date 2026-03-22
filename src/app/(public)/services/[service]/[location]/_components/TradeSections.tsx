@@ -56,7 +56,7 @@ export default function TradeSections({
             )}
             {selectedTips.length > 0 && (
               <div className="bg-primary-50 border border-primary-100 rounded-xl p-4">
-                <h3 className="font-heading font-semibold text-charcoal-800 mb-2">Conseils d&apos;expert à {location.name}</h3>
+                <h3 className="font-heading font-semibold text-charcoal-800 mb-2">Conseils d'expert à {location.name}</h3>
                 <ul className="space-y-1">
                   {selectedTips.map((tip, i) => (
                     <li key={i} className="text-sm text-charcoal-700 flex items-start gap-2">

@@ -154,11 +154,11 @@ export default function InscriptionArtisanPage() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <h1 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
-                Rejoignez le r&eacute;seau ServicesArtisans
+                Rejoignez le réseau ServicesArtisans
               </h1>
               <p className="text-xl text-slate-400 mb-8">
-                Inscription gratuite. Recevez des demandes de devis qualifi&eacute;es et
-                d&eacute;veloppez votre activit&eacute;.
+                Inscription gratuite. Recevez des demandes de devis qualifiées et
+                développez votre activité.
               </p>
               <div className="grid grid-cols-3 gap-6">
                 {benefits.map((benefit) => {

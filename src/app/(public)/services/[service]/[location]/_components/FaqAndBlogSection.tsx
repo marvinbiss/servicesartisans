@@ -25,7 +25,7 @@ export default function FaqAndBlogSection({ combinedFaq, service, location, serv
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-white rounded-2xl shadow-soft border border-sand-200 p-8">
               <h2 className="font-heading text-xl font-bold text-charcoal-900 mb-6 border-l-4 border-primary-400 pl-4">
-                Questions fr&eacute;quentes — {service.name.toLowerCase()} &agrave; {location.name}
+                Questions fréquentes — {service.name.toLowerCase()} à {location.name}
               </h2>
               <div className="space-y-3">
                 {combinedFaq.map((item, i) => (
@@ -62,18 +62,18 @@ export default function FaqAndBlogSection({ combinedFaq, service, location, serv
           <div className="grid sm:grid-cols-2 gap-4">
             {isPlombier ? (
               <>
-                <BlogLink href="/blog/comment-choisir-plombier" emoji="&#128295;" title="Comment choisir son plombier ?" desc="Les crit&egrave;res essentiels pour trouver un plombier fiable et comp&eacute;tent." />
-                <BlogLink href="/blog/urgence-plomberie-que-faire" emoji="&#128680;" title="Urgence plomberie : que faire ?" desc="Les bons r&eacute;flexes en cas de fuite ou de d&eacute;g&acirc;t des eaux." />
+                <BlogLink href="/blog/comment-choisir-plombier" emoji="&#128295;" title="Comment choisir son plombier ?" desc="Les critères essentiels pour trouver un plombier fiable et compétent." />
+                <BlogLink href="/blog/urgence-plomberie-que-faire" emoji="&#128680;" title="Urgence plomberie : que faire ?" desc="Les bons réflexes en cas de fuite ou de dégât des eaux." />
               </>
             ) : isBatiment ? (
               <>
-                <BlogLink href="/blog/renovation-energetique-2026" emoji="&#127969;" title="R&eacute;novation &eacute;nerg&eacute;tique 2026 : aides et conseils" desc="D&eacute;couvrez les aides disponibles et les travaux prioritaires pour votre logement." />
-                <BlogLink href="/blog/tendances-decoration-2026" emoji="&#127912;" title="Tendances d&eacute;coration 2026" desc="Les styles et mat&eacute;riaux qui font la tendance cette ann&eacute;e." />
+                <BlogLink href="/blog/renovation-energetique-2026" emoji="&#127969;" title="Rénovation énergétique 2026 : aides et conseils" desc="Découvrez les aides disponibles et les travaux prioritaires pour votre logement." />
+                <BlogLink href="/blog/tendances-decoration-2026" emoji="&#127912;" title="Tendances décoration 2026" desc="Les styles et matériaux qui font la tendance cette année." />
               </>
             ) : (
               <>
-                <BlogLink href="/blog/tendances-decoration-2026" emoji="&#127912;" title="Tendances d&eacute;coration 2026" desc="Les styles et mat&eacute;riaux qui font la tendance cette ann&eacute;e." />
-                <BlogLink href="/blog/renovation-energetique-2026" emoji="&#127969;" title="R&eacute;novation &eacute;nerg&eacute;tique 2026 : aides et conseils" desc="D&eacute;couvrez les aides disponibles et les travaux prioritaires pour votre logement." />
+                <BlogLink href="/blog/tendances-decoration-2026" emoji="&#127912;" title="Tendances décoration 2026" desc="Les styles et matériaux qui font la tendance cette année." />
+                <BlogLink href="/blog/renovation-energetique-2026" emoji="&#127969;" title="Rénovation énergétique 2026 : aides et conseils" desc="Découvrez les aides disponibles et les travaux prioritaires pour votre logement." />
               </>
             )}
           </div>

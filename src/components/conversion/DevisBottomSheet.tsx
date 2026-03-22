@@ -393,7 +393,7 @@ export default function DevisBottomSheet({
                   Demande envoyee !
                 </h3>
                 <p className="text-charcoal-500 text-sm mb-6">
-                  Vous recevrez jusqu&apos;a 3 devis gratuits sous 24h.
+                  Vous recevrez jusqu'a 3 devis gratuits sous 24h.
                 </p>
                 <button
                   onClick={onClose}
@@ -630,7 +630,7 @@ export default function DevisBottomSheet({
                         className="mt-0.5 w-5 h-5 rounded border-sand-400 text-primary-400 focus:ring-primary-400/40 flex-shrink-0"
                       />
                       <span className="text-xs text-charcoal-500 leading-relaxed">
-                        J&apos;accepte d&apos;etre contacte par des artisans pour recevoir mes devis gratuits.
+                        J'accepte d'etre contacte par des artisans pour recevoir mes devis gratuits.
                       </span>
                     </label>
                     {errors.consentement && (

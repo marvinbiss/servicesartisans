@@ -287,7 +287,7 @@ export default function AdminAuditPage() {
                         <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Date</th>
                         <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Type</th>
                         <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">ID du lead</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">ID de l&apos;artisan</th>
+                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">ID de l'artisan</th>
                         <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Métadonnées</th>
                       </tr>
                     </thead>
@@ -379,7 +379,7 @@ export default function AdminAuditPage() {
             <div className="bg-white rounded-xl border border-gray-200 p-4 mb-6">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 uppercase mb-1">Type d&apos;entité</label>
+                  <label className="block text-xs font-medium text-gray-500 uppercase mb-1">Type d'entité</label>
                   <select
                     value={entityType}
                     onChange={(e) => { setEntityType(e.target.value); setLogsPage(1) }}
@@ -431,7 +431,7 @@ export default function AdminAuditPage() {
               ) : logs.length === 0 ? (
                 <div className="p-16 text-center text-gray-500">
                   <Shield className="w-10 h-10 mx-auto mb-3 text-gray-300" />
-                  <p>Aucun log d&apos;audit trouvé</p>
+                  <p>Aucun log d'audit trouvé</p>
                 </div>
               ) : (
                 <>

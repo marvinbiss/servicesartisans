@@ -331,12 +331,12 @@ export default function WidgetPrixPage() {
           <div className="mb-8 rounded-xl border border-secondary-200 bg-secondary-50 p-6">
             <h3 className="mb-2 flex items-center gap-2 font-heading text-lg font-bold text-secondary-800">
               <Shield className="h-5 w-5" />
-              Limites d&apos;utilisation
+              Limites d'utilisation
             </h3>
             <ul className="space-y-2 text-sm text-secondary-700">
               <li>100 requêtes par heure et par adresse IP</li>
               <li>Les réponses sont cachées pendant 24 heures (CDN)</li>
-              <li>Usage commercial autorisé sous réserve d&apos;attribution</li>
+              <li>Usage commercial autorisé sous réserve d'attribution</li>
             </ul>
           </div>
 
@@ -347,8 +347,8 @@ export default function WidgetPrixPage() {
               Attribution obligatoire
             </h3>
             <p className="mb-3 text-sm text-primary-700">
-              En utilisant le widget ou l&apos;API, vous devez inclure un lien visible vers ServicesArtisans.fr.
-              Le widget HTML inclut automatiquement ce lien. Si vous utilisez l&apos;API JSON,
+              En utilisant le widget ou l'API, vous devez inclure un lien visible vers ServicesArtisans.fr.
+              Le widget HTML inclut automatiquement ce lien. Si vous utilisez l'API JSON,
               ajoutez le lien suivant sur votre page :
             </p>
             <div className="rounded-lg bg-white p-3">
@@ -437,7 +437,7 @@ export default function WidgetPrixPage() {
             Prêt à intégrer les prix artisans ?
           </h2>
           <p className="mb-8 text-primary-100">
-            Copiez le code ci-dessus et collez-le dans votre site. C&apos;est aussi simple que ça.
+            Copiez le code ci-dessus et collez-le dans votre site. C'est aussi simple que ça.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a
@@ -445,7 +445,7 @@ export default function WidgetPrixPage() {
               className="inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 font-semibold text-primary-600 shadow-lg transition hover:bg-primary-50"
             >
               <Code className="h-5 w-5" />
-              Voir le code d&apos;intégration
+              Voir le code d'intégration
             </a>
             <Link
               href="/contact"

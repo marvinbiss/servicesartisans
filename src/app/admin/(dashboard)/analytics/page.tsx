@@ -947,7 +947,7 @@ function MetricCell({ value, total, color }: { value: number; total: number; col
 
 function ConversionBadge({ rate }: { rate: number }) {
   if (rate === 0) {
-    return <span className="text-xs text-gray-300 font-medium">&mdash;</span>
+    return <span className="text-xs text-gray-300 font-medium">—</span>
   }
 
   const color = rate >= 20

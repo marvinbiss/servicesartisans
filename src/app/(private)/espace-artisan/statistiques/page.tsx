@@ -298,7 +298,7 @@ export default function StatistiquesPage() {
             <div className="space-y-4">
               <div className="flex items-center justify-between p-4 bg-red-50 rounded-lg">
                 <div>
-                  <div className="text-sm text-red-700">Taux d&apos;annulation</div>
+                  <div className="text-sm text-red-700">Taux d'annulation</div>
                   <div className="text-2xl font-bold text-red-800">{stats.cancelRate}%</div>
                 </div>
                 <div className="w-16 h-16 relative">

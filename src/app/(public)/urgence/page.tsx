@@ -196,7 +196,7 @@ export default async function UrgencePage() {
                 className="inline-flex items-center justify-center gap-3 bg-red-500 hover:bg-red-400 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg shadow-red-500/30 hover:shadow-red-400/40 transition-all"
               >
                 <Phone className="w-6 h-6" />
-                Appeler l&apos;assistance
+                Appeler l'assistance
               </a>
               <span className="text-sm text-red-200/70 mt-2">Service de mise en relation</span>
             </div>
@@ -237,10 +237,10 @@ export default async function UrgencePage() {
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-red-50 text-red-600 rounded-full text-sm font-medium mb-4">
               <Zap className="w-4 h-4" />
-              Services d&apos;urgence
+              Services d'urgence
             </div>
             <h2 className="text-3xl font-bold text-gray-900 mb-3">
-              Quel type d&apos;urgence ?
+              Quel type d'urgence ?
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
               Sélectionnez votre type de problème pour être mis en relation avec un artisan spécialisé disponible dans votre secteur.
@@ -353,7 +353,7 @@ export default async function UrgencePage() {
               Urgence artisan dans votre ville
             </h2>
             <p className="text-gray-600 max-w-xl mx-auto">
-              Nos artisans d&apos;urgence interviennent dans plus de 140 villes en France.
+              Nos artisans d'urgence interviennent dans plus de 140 villes en France.
             </p>
           </div>
 
@@ -392,7 +392,7 @@ export default async function UrgencePage() {
       {/* Emergency Services by City — Internal Links */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8">Services d&apos;urgence par ville</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-8">Services d'urgence par ville</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {topEmergencyCities.slice(0, 6).map((ville) => (
               <div key={ville.slug} className="bg-white rounded-xl border border-gray-200 p-5">
@@ -425,7 +425,7 @@ export default async function UrgencePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <h2 className="text-3xl font-bold text-gray-900 mb-3">Pourquoi choisir ServicesArtisans ?</h2>
-            <p className="text-gray-600 max-w-xl mx-auto">Des garanties concrètes pour votre tranquillité d&apos;esprit.</p>
+            <p className="text-gray-600 max-w-xl mx-auto">Des garanties concrètes pour votre tranquillité d'esprit.</p>
           </div>
           <div className="grid md:grid-cols-4 gap-6">
             <div className="text-center p-6 bg-gray-50 rounded-2xl">
@@ -479,7 +479,7 @@ export default async function UrgencePage() {
                 className="inline-flex items-center justify-center gap-3 bg-red-500 hover:bg-red-400 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg shadow-red-500/30 transition-all"
               >
                 <Phone className="w-6 h-6" />
-                Appeler l&apos;assistance
+                Appeler l'assistance
               </a>
               <span className="text-sm text-red-200/70 mt-2">Service de mise en relation</span>
             </div>
@@ -597,7 +597,7 @@ export default async function UrgencePage() {
           <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
             <h3 className="text-sm font-semibold text-slate-700 mb-2">Information importante</h3>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Les délais d&apos;intervention sont des estimations basées sur la disponibilité habituelle des artisans et peuvent varier. ServicesArtisans est un annuaire — nous mettons en relation mais ne réalisons pas les interventions. En cas d&apos;urgence vitale, appelez le 18 (pompiers) ou le 112.
+              Les délais d'intervention sont des estimations basées sur la disponibilité habituelle des artisans et peuvent varier. ServicesArtisans est un annuaire — nous mettons en relation mais ne réalisons pas les interventions. En cas d'urgence vitale, appelez le 18 (pompiers) ou le 112.
             </p>
           </div>
         </div>

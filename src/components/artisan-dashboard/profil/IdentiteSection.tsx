@@ -35,7 +35,7 @@ export function IdentiteSection({ provider, onSaved }: IdentiteSectionProps) {
         <div className="grid md:grid-cols-2 gap-6">
           <div>
             <label htmlFor="identite-name" className="block text-sm font-medium text-gray-700 mb-2">
-              Nom de l&apos;entreprise *
+              Nom de l'entreprise *
             </label>
             <input
               id="identite-name"

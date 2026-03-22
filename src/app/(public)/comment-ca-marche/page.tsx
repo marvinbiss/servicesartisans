@@ -199,10 +199,10 @@ export default async function CommentCaMarchePage() {
           />
           <div className="text-center">
             <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-6 tracking-[-0.025em]">
-              Trouvez un artisan r&eacute;f&eacute;renc&eacute; en 3 &eacute;tapes
+              Trouvez un artisan référencé en 3 étapes
             </h1>
             <p className="text-xl text-slate-400 max-w-3xl mx-auto mb-4">
-              Recherchez, comparez et contactez des artisans r&eacute;f&eacute;renc&eacute;s gr&acirc;ce aux donn&eacute;es officielles SIREN.
+              Recherchez, comparez et contactez des artisans référencés grâce aux données officielles SIREN.
               Service 100% gratuit, sans inscription.
             </p>
             <div className="flex flex-wrap justify-center gap-4 mt-8">
@@ -311,7 +311,7 @@ export default async function CommentCaMarchePage() {
               Pourquoi nous faire confiance ?
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              ServicesArtisans s&apos;appuie sur les données officielles de l&apos;État pour vous garantir des informations fiables
+              ServicesArtisans s'appuie sur les données officielles de l'État pour vous garantir des informations fiables
             </p>
           </div>
 
@@ -400,7 +400,7 @@ export default async function CommentCaMarchePage() {
             >
               <h3 className="font-semibold text-gray-900 mb-2">Tous les services</h3>
               <p className="text-gray-600 text-sm mb-3">
-                Parcourez tous les métiers d&apos;artisans disponibles sur ServicesArtisans.
+                Parcourez tous les métiers d'artisans disponibles sur ServicesArtisans.
               </p>
               <span className="text-blue-600 text-sm font-medium inline-flex items-center gap-1">
                 Voir les services <ArrowRight className="w-4 h-4" />
@@ -412,7 +412,7 @@ export default async function CommentCaMarchePage() {
             >
               <h3 className="font-semibold text-gray-900 mb-2">Demander un devis</h3>
               <p className="text-gray-600 text-sm mb-3">
-                Recevez des devis gratuits et sans engagement de la part d&apos;artisans référencés.
+                Recevez des devis gratuits et sans engagement de la part d'artisans référencés.
               </p>
               <span className="text-blue-600 text-sm font-medium inline-flex items-center gap-1">
                 Demander un devis <ArrowRight className="w-4 h-4" />
@@ -441,7 +441,7 @@ export default async function CommentCaMarchePage() {
             Prêt à trouver votre artisan ?
           </h2>
           <p className="text-xl text-blue-100 mb-8">
-            Des milliers d&apos;artisans référencés vous attendent sur ServicesArtisans
+            Des milliers d'artisans référencés vous attendent sur ServicesArtisans
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link

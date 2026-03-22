@@ -336,7 +336,7 @@ export default function AdminArtisanDetailPage() {
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-500">Nombre d&apos;avis</span>
+                  <span className="text-gray-500">Nombre d'avis</span>
                   <span className="font-semibold text-gray-900">
                     {artisan.review_count || 0}
                   </span>
@@ -371,7 +371,7 @@ export default function AdminArtisanDetailPage() {
                     className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200"
                   >
                     <Shield className="w-4 h-4" />
-                    Vérifier l&apos;artisan
+                    Vérifier l'artisan
                   </button>
                 )}
                 <button

@@ -200,7 +200,7 @@ export default function ExitIntentModal() {
             Attendez !
           </h2>
           <p className="text-charcoal-600 mb-6">
-            Vous n&apos;avez pas encore reçu vos devis gratuits.
+            Vous n'avez pas encore reçu vos devis gratuits.
           </p>
 
           {/* What they lose */}

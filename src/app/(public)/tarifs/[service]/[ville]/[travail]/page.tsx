@@ -303,7 +303,7 @@ export default async function TarifsServiceTravailVillePage({
               </div>
             )}
             <p className="text-gray-500 text-sm mt-3">
-              Ce tarif peut varier selon la complexit{'é'}, l&apos;accessibilit{'é'} et les mat{'é'}riaux utilis{'é'}s.
+              Ce tarif peut varier selon la complexit{'é'}, l'accessibilit{'é'} et les mat{'é'}riaux utilis{'é'}s.
             </p>
             {multiplier !== 1.0 && (
               <p className="text-xs text-gray-400 mt-2">
@@ -475,7 +475,7 @@ export default async function TarifsServiceTravailVillePage({
         <section className="py-16 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">
-              Prix {currentTask.name.toLowerCase()} dans d&apos;autres villes
+              Prix {currentTask.name.toLowerCase()} dans d'autres villes
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-3xl">
               {relatedCities.map((v) => {
@@ -531,7 +531,7 @@ export default async function TarifsServiceTravailVillePage({
           <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
             <h3 className="text-sm font-semibold text-slate-700 mb-2">M{'é'}thodologie tarifaire</h3>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Les prix affich{'é'}s pour {currentTask.name.toLowerCase()} {'à'} {villeData.name} sont des fourchettes indicatives ajust{'é'}es en fonction des donn{'é'}es r{'é'}gionales ({villeData.region}). Ils varient selon la complexit{'é'} du chantier, les mat{'é'}riaux et l&apos;urgence. Seul un devis personnalis{'é'} fait foi. {SITE_NAME} est un annuaire ind{'é'}pendant.
+              Les prix affich{'é'}s pour {currentTask.name.toLowerCase()} {'à'} {villeData.name} sont des fourchettes indicatives ajust{'é'}es en fonction des donn{'é'}es r{'é'}gionales ({villeData.region}). Ils varient selon la complexit{'é'} du chantier, les mat{'é'}riaux et l'urgence. Seul un devis personnalis{'é'} fait foi. {SITE_NAME} est un annuaire ind{'é'}pendant.
             </p>
           </div>
         </div>
