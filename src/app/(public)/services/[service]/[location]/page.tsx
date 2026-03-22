@@ -101,6 +101,9 @@ interface PageProps {
   }>
 }
 
+// Valid slug: lowercase alphanumeric + hyphens, 2-80 chars, no leading/trailing hyphen
+const VALID_SLUG = /^[a-z0-9][a-z0-9-]{0,78}[a-z0-9]$/
+
 /** Truncate title to ~42 chars to leave room for " | ServicesArtisans" suffix (18 chars → total ~60, Google's display limit) */
 function truncateTitle(title: string, maxLen = 42): string {
   if (title.length <= maxLen) return title
@@ -109,6 +112,11 @@ function truncateTitle(title: string, maxLen = 42): string {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { service: serviceSlug, location: locationSlug } = await params
+
+  // Early reject: invalid slugs
+  if (!VALID_SLUG.test(serviceSlug) || !VALID_SLUG.test(locationSlug)) {
+    return { title: 'Non trouvé', robots: { index: false, follow: false } }
+  }
 
   let serviceName = ''
   let locationName = ''
@@ -299,6 +307,11 @@ function generateJsonLd(
 export default async function ServiceLocationPage({ params }: PageProps) {
   const { service: serviceSlug, location: locationSlug } = await params
 
+  // Early reject: invalid slugs (XSS attempts, random strings, special chars)
+  if (!VALID_SLUG.test(serviceSlug) || !VALID_SLUG.test(locationSlug)) {
+    notFound()
+  }
+
   // CMS override — if admin published content for this specific service+city page
   let cmsPage = null
   try {
@@ -356,6 +369,11 @@ export default async function ServiceLocationPage({ params }: PageProps) {
     const fallback = villeToLocation(locationSlug)
     if (!fallback) notFound()
     location = fallback
+  }
+
+  // 2b. Validate location has a real name (guards against DB returning partial/empty rows)
+  if (!location.name || location.name === locationSlug) {
+    notFound()
   }
 
   // 3. Fetch providers + total count in parallel
