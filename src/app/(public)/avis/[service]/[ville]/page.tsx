@@ -44,7 +44,7 @@ const ExitIntentPopup = dynamic(
 
 export const revalidate = 86400 // Revalidate every 24h
 
-const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
+const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1' && !process.env.NEXT_PUBLIC_SUPABASE_URL
 
 // ---------------------------------------------------------------------------
 // Types & data-fetching (Supabase)

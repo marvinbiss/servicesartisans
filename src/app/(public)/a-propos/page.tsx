@@ -43,7 +43,7 @@ export const metadata: Metadata = {
 
 export const revalidate = 3600
 
-const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
+const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1' && !process.env.NEXT_PUBLIC_SUPABASE_URL
 
 // Fallback stats used when DB is unavailable during static generation
 const FALLBACK_STATS = { artisanCount: 0, reviewCount: 0, cityCount: 0 }

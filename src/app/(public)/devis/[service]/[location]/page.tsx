@@ -172,7 +172,7 @@ export default async function DevisServiceLocationPage({
 
   // Count recent devis requests for freshness signal
   let recentDevisCount = 0
-  if (process.env.NEXT_BUILD_SKIP_DB !== '1') {
+  if (!(process.env.NEXT_BUILD_SKIP_DB === '1' && !process.env.NEXT_PUBLIC_SUPABASE_URL)) {
     try {
       const { createAdminClient } = await import('@/lib/supabase/admin')
       const supabase = createAdminClient()

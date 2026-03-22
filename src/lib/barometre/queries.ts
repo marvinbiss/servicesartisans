@@ -12,7 +12,7 @@
 import { unstable_cache } from 'next/cache'
 import { createAdminClient } from '@/lib/supabase/admin'
 
-const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
+const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1' && !process.env.NEXT_PUBLIC_SUPABASE_URL
 
 /** Durée de cache par défaut : 24h (alignée sur revalidate des pages baromètre) */
 const CACHE_TTL = 86400

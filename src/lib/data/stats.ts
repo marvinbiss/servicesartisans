@@ -10,7 +10,7 @@
 import { unstable_cache } from 'next/cache'
 import { createAdminClient } from '@/lib/supabase/admin'
 
-const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
+const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1' && !process.env.NEXT_PUBLIC_SUPABASE_URL
 
 /** Nombre total d'artisans actifs dans la base */
 async function _getProviderCount(): Promise<number> {

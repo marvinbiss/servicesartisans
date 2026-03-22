@@ -12,7 +12,7 @@ import { villes, services } from '@/lib/data/france'
 
 export const revalidate = 86400 // 24h
 
-const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
+const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1' && !process.env.NEXT_PUBLIC_SUPABASE_URL
 
 export const metadata: Metadata = {
   title: 'Avis Artisans Vérifiés — Choisir un Pro',

@@ -25,7 +25,7 @@ import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 
 export const revalidate = 86400 // 24h
 
-const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
+const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1' && !process.env.NEXT_PUBLIC_SUPABASE_URL
 const tradeSlugs = getTradesSlugs()
 
 export function generateStaticParams() {

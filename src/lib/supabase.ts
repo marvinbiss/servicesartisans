@@ -5,13 +5,15 @@ import { logger } from '@/lib/logger'
 import { getCachedData, CACHE_TTL } from '@/lib/cache'
 
 /**
- * Detect if we're inside `next build` (static generation phase).
- * During build, skip Supabase client creation to avoid crashes when
- * env vars are not available (e.g. Vercel preview deployments).
+ * Should we skip DB queries?
+ * Only skip if explicitly requested AND Supabase env vars are missing.
+ * On Vercel production, env vars are available → build pre-renders with real data.
+ * Exported so other modules can reuse the same logic.
  */
-const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
+export const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
+  && !process.env.NEXT_PUBLIC_SUPABASE_URL
 
-export const supabase = IS_BUILD
+export const supabase = IS_BUILD || !process.env.NEXT_PUBLIC_SUPABASE_URL
   ? (null as unknown as ReturnType<typeof createClient>)
   : createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
       global: {
