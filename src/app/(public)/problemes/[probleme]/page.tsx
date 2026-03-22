@@ -127,23 +127,8 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
     problem.faq.map((f) => ({ question: f.q, answer: f.a }))
   )
 
-  const howToSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'HowTo',
-    name: `Que faire en cas de ${problem.name.toLowerCase()}`,
-    description: problem.description,
-    step: problem.immediateActions.map((action, i) => ({
-      '@type': 'HowToStep',
-      position: i + 1,
-      text: action,
-    })),
-    estimatedCost: {
-      '@type': 'MonetaryAmount',
-      currency: 'EUR',
-      minValue: problem.estimatedCost.min,
-      maxValue: problem.estimatedCost.max,
-    },
-  }
+  // HowTo JSON-LD removed — Google no longer supports HowTo rich results
+  const howToSchema = null
 
   return (
     <div className="min-h-screen bg-gray-50">

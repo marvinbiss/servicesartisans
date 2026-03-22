@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
-import { faqCategories } from '@/lib/data/faq-data'
+
 import FAQPageClient from './FAQPageClient'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
@@ -36,40 +36,15 @@ const breadcrumbSchema = getBreadcrumbSchema([
   { name: 'FAQ', url: '/faq' },
 ])
 
-// Build FAQPage JSON-LD schema from all FAQ categories
-const faqJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: faqCategories.flatMap((category) =>
-    category.questions.map((item) => ({
-      '@type': 'Question',
-      name: item.q,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: item.a,
-      },
-    }))
-  ),
-}
+// FAQPage JSON-LD removed — Google no longer supports FAQPage rich results
+const faqJsonLd = null
 
 export default async function FAQPage() {
   const cmsPage = await getPageContent('faq', 'faq')
 
   if (cmsPage?.content_html) {
-    // If CMS has structured_data, build FAQ JSON-LD from it
-    const cmsJsonLd = cmsPage.structured_data
-      ? {
-          '@context': 'https://schema.org',
-          '@type': 'FAQPage',
-          mainEntity: (cmsPage.structured_data as unknown as Array<{ categoryName: string; items: Array<{ question: string; answer: string }> }>).flatMap((cat) =>
-            cat.items.map((item) => ({
-              '@type': 'Question',
-              name: item.question,
-              acceptedAnswer: { '@type': 'Answer', text: item.answer },
-            }))
-          ),
-        }
-      : faqJsonLd
+    // FAQPage JSON-LD removed — Google no longer supports FAQPage rich results
+    const cmsJsonLd = null
 
     return (
       <div className="min-h-screen bg-gray-50">

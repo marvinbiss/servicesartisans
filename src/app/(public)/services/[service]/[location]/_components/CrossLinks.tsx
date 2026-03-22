@@ -130,7 +130,7 @@ export default function CrossLinks({
 
             {/* Related problems */}
             {(() => {
-              const problems = getProblemsByService(serviceSlug).slice(0, 4)
+              const problems = getProblemsByService(serviceSlug).slice(0, 2)
               if (problems.length === 0) return null
               return (
                 <div className="bg-white rounded-2xl shadow-soft border border-sand-200 p-6">
@@ -161,7 +161,7 @@ export default function CrossLinks({
               const complementarySlugs = relatedServices[serviceSlug] || []
               const complementaryServices = complementarySlugs
                 .filter((slug) => slug !== serviceSlug && tradeContent[slug])
-                .slice(0, 2)
+                .slice(0, 1)
 
               if (complementaryServices.length === 0) return null
 

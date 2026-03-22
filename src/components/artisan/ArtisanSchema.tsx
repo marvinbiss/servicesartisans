@@ -230,18 +230,8 @@ export function ArtisanSchema({ artisan, reviews }: ArtisanSchemaProps) {
     },
   }
 
-  // FAQPage Schema
-  const faqSchema = artisan.faq && artisan.faq.length > 0 ? {
-    '@type': 'FAQPage',
-    mainEntity: artisan.faq.map(faq => ({
-      '@type': 'Question',
-      name: faq.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: faq.answer,
-      },
-    })),
-  } : null
+  // FAQPage Schema — REMOVED: deprecated by Google (Aug 2023) for non-gov/non-health sites
+  const faqSchema = null
 
   // BreadcrumbList Schema — 5 levels matching visible breadcrumb
   // Structure: Accueil > Services > {Service} > {Ville} > {Nom artisan}

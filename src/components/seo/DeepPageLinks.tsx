@@ -226,7 +226,8 @@ export default async function DeepPageLinks({
     'rennes', 'toulon', 'grenoble', 'dijon', 'angers',
   ]
 
-  const maxGrandesVilles = isHubMode ? 10 : 3
+  // City mode: skip grandes villes (already covered by CrossLinks nearby cities)
+  const maxGrandesVilles = isHubMode ? 10 : 0
   const module1Slugs = new Set(module1Links.map(l => l.href.split('/').pop()!))
   const deptSlugs = new Set(
     dept && ville ? getVillesByDepartement(ville.departementCode).map(v => v.slug) : []

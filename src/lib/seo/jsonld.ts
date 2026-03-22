@@ -124,45 +124,19 @@ export function getBreadcrumbSchema(items: { name: string; url: string }[]) {
   }
 }
 
-// Schema.org FAQPage
-export function getFAQSchema(faqs: { question: string; answer: string }[]): Record<string, unknown> | null {
-  if (!faqs || faqs.length === 0) return null
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faqs.map((faq) => ({
-      '@type': 'Question',
-      name: faq.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: faq.answer,
-      },
-    })),
-  }
+// FAQPage schema — DEPRECATED by Google (Aug 2023) for non-governmental/non-health sites.
+// Kept as no-op stub so existing callers don't break. Returns null → schemas skip it.
+export function getFAQSchema(_faqs: { question: string; answer: string }[]): null {
+  return null
 }
 
-// Schema.org HowTo (for guide pages, "Comment ca marche" page and problem pages)
-// Google spec: https://developers.google.com/search/docs/appearance/structured-data/how-to
+// HowTo schema — DEPRECATED by Google (Aug 2023) for non-governmental/non-health sites.
+// Kept as no-op stub so existing callers don't break. Returns null → schemas skip it.
 export function getHowToSchema(
-  steps: { name: string; text: string; image?: string }[],
-  options?: { name?: string; description?: string; totalTime?: string }
-): Record<string, unknown> | null {
-  if (!steps || steps.length === 0) return null
-
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'HowTo',
-    name: options?.name ?? 'Comment trouver un artisan sur ServicesArtisans',
-    description: options?.description ?? 'Guide étape par étape pour trouver et contacter un artisan qualifié.',
-    ...(options?.totalTime && { totalTime: options.totalTime }),
-    step: steps.map((step, index) => ({
-      '@type': 'HowToStep',
-      position: index + 1,
-      name: step.name,
-      text: step.text,
-      ...(step.image && { image: step.image }),
-    })),
-  }
+  _steps: { name: string; text: string; image?: string }[],
+  _options?: { name?: string; description?: string; totalTime?: string }
+): null {
+  return null
 }
 
 // Schema.org ItemList (pour les pages de listing SEO programmatique style TripAdvisor)
@@ -256,7 +230,7 @@ export function getCollectionPageSchema(params: {
   }
 }
 
-// Schema.org Product + AggregateOffer (rich snippets with prices in SERP)
+// Schema.org Service with pricing (for tarifs pages — NOT Product)
 export function getServicePricingSchema(params: {
   serviceName: string
   serviceSlug: string
@@ -271,23 +245,23 @@ export function getServicePricingSchema(params: {
   location?: string
   url: string
 }) {
-  const now = new Date()
-  const dateModified = now.toISOString().split('T')[0]
-  const priceValidUntil = `${now.getFullYear()}-12-31`
-
   return {
     '@context': 'https://schema.org',
-    '@type': 'Product',
+    '@type': 'Service',
     name: params.location
-      ? `${params.serviceName} à ${params.location} — Tarifs`
-      : `${params.serviceName} — Tarifs France`,
+      ? `${params.serviceName} à ${params.location}`
+      : `${params.serviceName} en France`,
     description: params.description,
     url: params.url,
-    dateModified,
-    brand: {
+    serviceType: params.serviceName,
+    provider: {
       '@type': 'Organization',
-      name: 'ServicesArtisans',
+      '@id': `${SITE_URL}#organization`,
+      name: SITE_NAME,
     },
+    areaServed: params.location
+      ? { '@type': 'City', name: params.location }
+      : { '@type': 'Country', name: 'France' },
     offers: {
       '@type': 'AggregateOffer',
       lowPrice: params.lowPrice,
@@ -295,10 +269,9 @@ export function getServicePricingSchema(params: {
       priceCurrency: params.priceCurrency || 'EUR',
       ...(params.priceUnit && { unitText: params.priceUnit }),
       ...(params.offerCount && { offerCount: params.offerCount }),
-      availability: 'https://schema.org/InStock',
-      priceValidUntil,
     },
-    ...(params.ratingValue && params.reviewCount && {
+    // Only include aggregateRating with real, plausible data (ratingValue < 5.0, reviewCount >= 5)
+    ...(params.ratingValue && params.reviewCount && params.reviewCount >= 5 && params.ratingValue < 5.0 && {
       aggregateRating: {
         '@type': 'AggregateRating',
         ratingValue: params.ratingValue,
@@ -383,7 +356,7 @@ export function getComparisonReviewSchema(params: {
     url: params.url,
     author: { '@type': 'Organization', name: SITE_NAME },
     itemReviewed: {
-      '@type': 'Product',
+      '@type': 'Service',
       name: params.title,
     },
     positiveNotes: {

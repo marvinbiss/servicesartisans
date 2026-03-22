@@ -161,18 +161,8 @@ export default function ExtensionMaisonPage() {
     ],
   }
 
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqItems.map((item) => ({
-      "@type": "Question",
-      name: item.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: item.answer,
-      },
-    })),
-  }
+  // FAQPage JSON-LD removed — Google no longer supports FAQPage rich results
+  const faqSchema = null
 
   return (
     <>

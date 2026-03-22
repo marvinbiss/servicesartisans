@@ -603,21 +603,8 @@ export default async function BlogArticlePage({ params }: PageProps) {
     ? article.faq
     : extractFAQFromBlocks(blocks)
 
-  // Build FAQ schema if we have items
-  const faqSchema = faqItems.length >= 2
-    ? {
-        '@context': 'https://schema.org',
-        '@type': 'FAQPage',
-        mainEntity: faqItems.map((faq) => ({
-          '@type': 'Question',
-          name: faq.question,
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: faq.answer,
-          },
-        })),
-      }
-    : null
+  // FAQPage JSON-LD removed — Google no longer supports FAQPage rich results
+  const faqSchema = null
 
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Accueil', url: '/' },

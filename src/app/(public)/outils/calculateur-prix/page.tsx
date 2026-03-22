@@ -55,55 +55,11 @@ export default function CalculateurPrixPage() {
     { name: 'Calculateur de prix', url: '/outils/calculateur-prix' },
   ])
 
-  // HowTo schema for the 3 steps
-  const howToSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'HowTo',
-    name: 'Comment estimer le prix de vos travaux',
-    description:
-      'Utilisez notre calculateur pour estimer le coût de vos travaux en 3 étapes simples.',
-    step: [
-      {
-        '@type': 'HowToStep',
-        position: 1,
-        name: 'Choisissez un métier',
-        text: 'Sélectionnez le type d’artisan dont vous avez besoin parmi 10 corps de métier : plombier, électricien, serrurier, chauffagiste, peintre, etc.',
-      },
-      {
-        '@type': 'HowToStep',
-        position: 2,
-        name: 'Sélectionnez une prestation',
-        text: 'Choisissez la prestation souhaitée parmi les interventions courantes du métier sélectionné pour obtenir un prix précis.',
-      },
-      {
-        '@type': 'HowToStep',
-        position: 3,
-        name: 'Obtenez votre estimation',
-        text: 'Consultez la fourchette de prix estimée, les conseils pratiques et trouvez un artisan qualifié près de chez vous.',
-      },
-    ],
-  }
+  // HowTo JSON-LD removed — Google no longer supports HowTo rich results
+  const howToSchema = null
 
-  // FAQPage schema — aggregate FAQ from all trades (first 2 questions from top 5 trades)
-  const topTradeSlugs = ['plombier', 'electricien', 'serrurier', 'chauffagiste', 'peintre-en-batiment']
-  const faqItems = topTradeSlugs.flatMap((slug) => {
-    const trade = tradeContent[slug]
-    if (!trade) return []
-    return trade.faq.slice(0, 2).map((f) => ({
-      '@type': 'Question' as const,
-      name: f.q,
-      acceptedAnswer: {
-        '@type': 'Answer' as const,
-        text: f.a,
-      },
-    }))
-  })
-
-  const faqSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faqItems,
-  }
+  // FAQPage JSON-LD removed — Google no longer supports FAQPage rich results
+  const faqSchema = null
 
   // Serialize trade content for client component (only what's needed)
   const clientTradeContent: Record<string, {

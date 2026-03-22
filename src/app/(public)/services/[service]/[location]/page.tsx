@@ -19,7 +19,7 @@ import { popularServices, relatedServices } from '@/lib/constants/navigation'
 import Breadcrumb from '@/components/Breadcrumb'
 import { getArtisanUrl } from '@/lib/utils'
 import { getServiceImage } from '@/lib/data/images'
-import { services as staticServicesList, villes, getVilleBySlug, getNearbyCities, getVillesByDepartement } from '@/lib/data/france'
+import { services as staticServicesList, villes, getVilleBySlug, getNearbyCities } from '@/lib/data/france'
 import { getTradeContent } from '@/lib/data/trade-content'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
@@ -384,8 +384,14 @@ export default async function ServiceLocationPage({ params }: PageProps) {
   // (throw on providers failure so ISR keeps stale cache)
   const [providers, totalProviderCount] = await Promise.all([
     getProvidersByServiceAndLocation(serviceSlug, locationSlug),
-    getProviderCountByServiceAndLocation(serviceSlug, locationSlug).catch(() => 0),
+    getProviderCountByServiceAndLocation(serviceSlug, locationSlug).catch(() => -1),
   ])
+
+  // Hard 404: if DB confirmed 0 providers for this combo → not a real page.
+  // -1 means DB was unreachable → fail-open (keep serving stale ISR cache).
+  if (providers.length === 0 && totalProviderCount === 0) {
+    notFound()
+  }
 
   const trade = getTradeContent(serviceSlug)
 
@@ -465,15 +471,13 @@ export default async function ServiceLocationPage({ params }: PageProps) {
   // Cross-link to semantically related services (with fallback to popular)
   const relatedSlugs = relatedServices[serviceSlug] || []
   const otherServices = relatedSlugs.length > 0
-    ? relatedSlugs.slice(0, 6).map(slug => {
+    ? relatedSlugs.slice(0, 5).map(slug => {
         const svc = staticServicesList.find(s => s.slug === slug)
         return svc ? { slug: svc.slug, name: svc.name, icon: svc.icon } : null
       }).filter(Boolean) as { slug: string; name: string; icon: string }[]
-    : popularServices.filter(s => s.slug !== serviceSlug).slice(0, 6)
-  const nearbyCities = getNearbyCities(locationSlug, 12)
-  const deptCities = location.department_code
-    ? getVillesByDepartement(location.department_code).filter(v => v.slug !== locationSlug).slice(0, 10)
-    : []
+    : popularServices.filter(s => s.slug !== serviceSlug).slice(0, 5)
+  const nearbyCities = getNearbyCities(locationSlug, 6)
+  const deptCities: { slug: string; name: string }[] = [] // Removed: duplicated by DeepPageLinks module 3
 
   // H1 uses same seed as title for coherence (seo- prefix)
   const providerCount = totalProviderCount

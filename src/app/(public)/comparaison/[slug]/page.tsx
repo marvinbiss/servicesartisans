@@ -94,18 +94,8 @@ export default async function ComparaisonSlugPage({ params }: PageProps) {
     ],
   }
 
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: comparison.faq.map((item) => ({
-      "@type": "Question",
-      name: item.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: item.answer,
-      },
-    })),
-  }
+  // FAQPage JSON-LD removed — Google no longer supports FAQPage rich results
+  const faqSchema = null
 
   // Related comparisons (same category, excluding current)
   const relatedComparisons = comparisons
