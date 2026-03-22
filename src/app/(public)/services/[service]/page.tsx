@@ -27,6 +27,7 @@ import StickyMobileCTA from '@/components/StickyMobileCTA'
 import DemandIndicator from '@/components/DemandIndicator'
 import TrustGuarantee from '@/components/TrustGuarantee'
 import RecentProviders from './RecentProviders'
+import LiveProviderCount from './LiveProviderCount'
 import dynamic from 'next/dynamic'
 
 
@@ -347,9 +348,11 @@ export default async function ServicePage({ params }: PageProps) {
           {/* Stats — Large gradient numbers */}
           <div className="flex flex-wrap gap-6 md:gap-10 mt-10">
             <div className="flex flex-col">
-              <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-terra">
-                {totalProviderCount > 0 ? totalProviderCount.toLocaleString('fr-FR') : '—'}
-              </span>
+              <LiveProviderCount
+                initialCount={totalProviderCount}
+                serviceSlug={serviceSlug}
+                className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-terra"
+              />
               <span className="text-sm text-sand-400 mt-1">artisans référencés</span>
             </div>
             <div className="flex flex-col">

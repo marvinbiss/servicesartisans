@@ -48,6 +48,7 @@ export default function ServiceLocationPageClient({
   const searchParams = useSearchParams()
 
   const [allProviders, setAllProviders] = useState<Provider[]>(initialProviders)
+  const [liveCount, setLiveCount] = useState(totalCount)
   const [isLoadingMore, setIsLoadingMore] = useState(false)
   const [selectedProvider, setSelectedProvider] = useState<Provider | null>(null)
   const [viewMode, setViewMode] = useState<'split' | 'list' | 'map'>('split')
@@ -88,7 +89,7 @@ export default function ServiceLocationPageClient({
     updateUrlParams(searchQuery, value)
   }, [searchQuery, updateUrlParams])
 
-  const hasMore = allProviders.length < totalCount
+  const hasMore = allProviders.length < liveCount
 
   const loadMore = useCallback(async () => {
     if (isLoadingMore || !hasMore || !serviceSlug || !locationSlug) return
@@ -124,6 +125,9 @@ export default function ServiceLocationPageClient({
         if (cancelled) return
         if (data?.providers?.length) {
           setAllProviders(data.providers)
+        }
+        if (typeof data?.totalCount === 'number' && data.totalCount > 0) {
+          setLiveCount(data.totalCount)
         }
         setIsHydrating(false)
       })
@@ -202,10 +206,10 @@ export default function ServiceLocationPageClient({
 
               {/* Reassurance bar */}
               <div className="flex flex-wrap items-center gap-3 sm:gap-4 mt-3">
-                {totalCount > 0 && (
+                {liveCount > 0 && (
                   <span className="inline-flex items-center gap-1.5 text-sm text-charcoal-600">
                     <ShieldCheck className="w-4 h-4 text-accent-500" />
-                    <span className="font-semibold text-charcoal-900">{totalCount}</span> artisan{totalCount > 1 ? 's' : ''} vérifié{totalCount > 1 ? 's' : ''}
+                    <span className="font-semibold text-charcoal-900">{liveCount}</span> artisan{liveCount > 1 ? 's' : ''} vérifié{liveCount > 1 ? 's' : ''}
                   </span>
                 )}
                 {avgRating && (
@@ -426,7 +430,7 @@ export default function ServiceLocationPageClient({
                 <ProviderList
                   providers={allProviders}
                   onProviderHover={setSelectedProvider}
-                  totalCount={totalCount || allProviders.length}
+                  totalCount={liveCount || allProviders.length}
                   searchQuery={searchQuery}
                   sortOrder={sortOrder}
                   highlightedProviderId={mapHoveredProviderId}
@@ -445,7 +449,7 @@ export default function ServiceLocationPageClient({
                       )}
                       {isLoadingMore
                         ? 'Chargement...'
-                        : `Afficher plus (${allProviders.length} / ${totalCount.toLocaleString('fr-FR')})`}
+                        : `Afficher plus (${allProviders.length} / ${liveCount.toLocaleString('fr-FR')})`}
                     </button>
                   </div>
                 )}
