@@ -66,9 +66,9 @@ const envSchema = z.object({
   // Email (Resend) (optional)
   // ──────────────────────────────────────────────
   RESEND_API_KEY: z.string().optional(),
-  RESEND_FROM_EMAIL: z.string().email().optional().or(z.literal('')),
+  RESEND_FROM_EMAIL: z.string().optional(),
   RESEND_WEBHOOK_SECRET: z.string().optional(),
-  FROM_EMAIL: z.string().email().optional().or(z.literal('')),
+  FROM_EMAIL: z.string().optional(),
 
   // ──────────────────────────────────────────────
   // Twilio (optional)
