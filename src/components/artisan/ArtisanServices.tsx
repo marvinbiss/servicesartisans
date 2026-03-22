@@ -29,7 +29,7 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
       <div className="px-6 pb-6">
         {/* Services tags - sand-200 border chips */}
         {artisan.services.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-6 mt-4" role="list" aria-label="Services proposes">
+          <div className="flex flex-wrap gap-2 mb-6 mt-4" role="list" aria-label="Services proposés">
             {artisan.services.map((service, i) => (
               <span
                 key={i}
@@ -47,7 +47,7 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
         {artisan.service_prices.length > 0 ? (
           <div className="space-y-2.5 mt-4" role="list" aria-label="Tarifs des services">
             {artisan.service_prices[0]?.price?.startsWith('A partir') && (
-              <p className="text-xs text-charcoal-400 italic mb-3">* Tarifs indicatifs, le prix final depend de la nature exacte de l'intervention. Demandez un devis pour un prix precis.</p>
+              <p className="text-xs text-charcoal-400 italic mb-3">* Tarifs indicatifs, le prix final dépend de la nature exacte de l'intervention. Demandez un devis pour un prix précis.</p>
             )}
             {artisan.service_prices.map((service, index) => (
               <motion.div
@@ -69,7 +69,7 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
 
                 <div className="flex items-center gap-4 ml-4">
                   {service.duration && (
-                    <div className="hidden sm:flex items-center gap-1 text-sm text-charcoal-400" aria-label={`Duree : ${service.duration}`}>
+                    <div className="hidden sm:flex items-center gap-1 text-sm text-charcoal-400" aria-label={`Durée : ${service.duration}`}>
                       <Clock className="w-4 h-4" aria-hidden="true" />
                       <span>{service.duration}</span>
                     </div>
@@ -84,15 +84,14 @@ export function ArtisanServices({ artisan }: ArtisanServicesProps) {
           </div>
         ) : (
           <div className="bg-primary-50 rounded-xl border border-primary-200 p-6 text-center mt-4">
-            <p className="text-charcoal-700 font-medium mb-2">Tarifs sur devis personnalise</p>
-            <p className="text-sm text-charcoal-500 mb-4">Cet artisan propose des tarifs adaptes a chaque projet. Demandez un devis gratuit pour connaitre ses prix.</p>
-            <button
-              type="button"
-              onClick={() => {}}
+            <p className="text-charcoal-700 font-medium mb-2">Tarifs sur devis personnalisé</p>
+            <p className="text-sm text-charcoal-500 mb-4">Cet artisan propose des tarifs adaptés à chaque projet. Demandez un devis gratuit pour connaître ses prix.</p>
+            <a
+              href="#devis"
               className="inline-flex items-center gap-2 bg-primary-400 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-primary-600 transition-colors shadow-cta"
             >
               Demander un devis gratuit
-            </button>
+            </a>
           </div>
         )}
 

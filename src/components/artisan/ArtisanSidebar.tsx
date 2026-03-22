@@ -6,6 +6,21 @@ import { Phone, Mail, MessageCircle, ShieldCheck, CheckCircle, Users } from 'luc
 import type { LegacyArtisan } from '@/types/legacy'
 import { BookingFunnel } from '@/lib/analytics/tracking'
 
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
+
+function getDevisUrl(artisan: LegacyArtisan): string {
+  const specialtySlug = artisan.specialty ? slugify(artisan.specialty) : 'artisan'
+  const citySlug = artisan.city ? slugify(artisan.city) : ''
+  return `/devis/${specialtySlug}/${citySlug}`
+}
+
 interface ArtisanSidebarProps {
   artisan: LegacyArtisan
 }
@@ -73,8 +88,12 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
               ],
             } : {}}
             transition={shouldPulse ? { duration: 0.6, ease: 'easeInOut' } : {}}
+            onClick={() => {
+              BookingFunnel.clickPhone(artisan.id, artisan.business_name || '', 'sidebar_devis')
+              window.location.href = getDevisUrl(artisan)
+            }}
             className="w-full py-4 px-5 rounded-xl bg-primary-400 hover:bg-primary-600 text-white font-bold text-base flex items-center justify-center gap-2.5 shadow-cta transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2"
-            aria-label="Ouvrir le chat d'estimation pour un devis gratuit"
+            aria-label="Demander un devis gratuit"
           >
             <MessageCircle className="w-5 h-5" aria-hidden="true" />
             Demander un devis gratuit
@@ -89,7 +108,7 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
             <span className="text-charcoal-300" aria-hidden="true">-</span>
             <span>Sans engagement</span>
             <span className="text-charcoal-300" aria-hidden="true">-</span>
-            <span>Reponse rapide</span>
+            <span>Réponse rapide</span>
           </div>
 
           {artisan.phone && (
@@ -106,10 +125,10 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
                 }
               }}
               className="w-full py-3.5 px-4 rounded-xl bg-charcoal-800 hover:bg-charcoal-900 text-white font-semibold flex items-center justify-center gap-2 shadow-soft transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-charcoal-600 focus:ring-offset-2"
-              aria-label={showPhone ? `Appeler ${artisan.phone}` : 'Afficher le numero de telephone'}
+              aria-label={showPhone ? `Appeler ${artisan.phone}` : 'Afficher le numéro de téléphone'}
             >
               <Phone className="w-5 h-5" aria-hidden="true" />
-              {showPhone ? artisan.phone : 'Afficher le telephone'}
+              {showPhone ? artisan.phone : 'Afficher le téléphone'}
             </motion.button>
           )}
 
@@ -119,7 +138,7 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
               whileTap={{ scale: 0.98 }}
               onClick={handleEmail}
               className="w-full py-3 px-4 rounded-xl border-2 border-sand-300 text-charcoal-700 font-medium flex items-center justify-center gap-2 hover:border-charcoal-300 hover:bg-sand-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-charcoal-500 focus:ring-offset-2"
-              aria-label={`Envoyer un email a ${artisan.email}`}
+              aria-label={`Envoyer un email à ${artisan.email}`}
             >
               <Mail className="w-5 h-5 text-charcoal-400" aria-hidden="true" />
               Envoyer un email
@@ -130,16 +149,16 @@ export function ArtisanSidebar({ artisan }: ArtisanSidebarProps) {
         {/* Social proof */}
         <div className="flex items-center gap-2 text-sm text-charcoal-600 mb-5 pb-5 border-b border-sand-200">
           <Users className="w-4 h-4 text-primary-400 flex-shrink-0" aria-hidden="true" />
-          <span><strong>{contactsThisMonth}</strong> personnes ont contacte cet artisan ce mois</span>
+          <span><strong>{contactsThisMonth}</strong> personnes ont contacté cet artisan ce mois</span>
         </div>
 
         {/* Trust badges */}
         <div className="space-y-2.5 mb-5 pb-5 border-b border-sand-200">
-          <h4 className="text-xs font-semibold text-charcoal-400 uppercase tracking-wider mb-3">Verifications</h4>
+          <h4 className="text-xs font-semibold text-charcoal-400 uppercase tracking-wider mb-3">Vérifications</h4>
           {artisan.is_verified && (
             <div className="flex items-center gap-2.5 text-sm text-charcoal-700">
               <ShieldCheck className="w-4 h-4 text-accent-500 flex-shrink-0" />
-              <span>Identite verifiee (SIREN)</span>
+              <span>Identité vérifiée (SIREN)</span>
             </div>
           )}
         </div>
@@ -201,6 +220,7 @@ export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
           animate="pulse"
           onClick={() => {
             BookingFunnel.clickPhone(artisan.id, artisan.business_name || '', 'mobile_cta')
+            window.location.href = getDevisUrl(artisan)
           }}
           className="w-full py-4 px-6 rounded-xl bg-primary-400 hover:bg-primary-600 text-white font-bold text-base flex items-center justify-center gap-2.5 shadow-cta transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2"
           aria-label="Demander un devis gratuit"
@@ -212,7 +232,7 @@ export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
         {/* Trust line under CTA */}
         <div className="flex items-center gap-2 text-[11px] text-charcoal-500">
           <CheckCircle className="w-3 h-3 text-accent-500" aria-hidden="true" />
-          <span>Gratuit - Sans engagement - Reponse rapide</span>
+          <span>Gratuit - Sans engagement - Réponse rapide</span>
         </div>
 
         {/* Secondary: Small phone text link */}
@@ -229,7 +249,7 @@ export function ArtisanMobileCTA({ artisan }: ArtisanSidebarProps) {
               }
             }}
             className="flex items-center gap-1.5 text-sm text-charcoal-500 hover:text-charcoal-700 transition-colors py-1 focus:outline-none focus:underline"
-            aria-label={showPhone ? `Appeler le ${artisan.phone}` : 'Afficher le numero de telephone'}
+            aria-label={showPhone ? `Appeler le ${artisan.phone}` : 'Afficher le numéro de téléphone'}
           >
             <Phone className="w-3.5 h-3.5" aria-hidden="true" />
             {showPhone ? (

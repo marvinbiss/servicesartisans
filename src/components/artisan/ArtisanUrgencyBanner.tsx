@@ -24,7 +24,7 @@ function getUrgencyItems(artisan: LegacyArtisan): UrgencyItem[] {
   if (artisan.available_24h === true) {
     items.push({
       icon: Clock,
-      label: 'Disponible 24h/7j -- Urgences',
+      label: 'Disponible 24h/7j — Urgences',
       color: 'text-amber-500',
     })
   }
@@ -65,7 +65,7 @@ function getUrgencyItems(artisan: LegacyArtisan): UrgencyItem[] {
     } else if (diffDays < 30) {
       items.push({
         icon: RefreshCw,
-        label: 'Profil mis a jour ce mois',
+        label: 'Profil mis à jour ce mois',
         color: 'text-accent-600',
       })
     }

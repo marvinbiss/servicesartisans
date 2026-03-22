@@ -19,8 +19,6 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
 
   const hasPortfolioImage = artisan.portfolio && artisan.portfolio.length > 0 && artisan.portfolio[0].imageUrl
 
-  // Simulated social proof
-  const contactsThisMonth = Math.floor(Math.abs((artisan.id.charCodeAt(0) * 7 + artisan.id.charCodeAt(1) * 3) % 18) + 5)
   const responseTimeMin = artisan.accepts_new_clients ? Math.floor(Math.abs(artisan.id.charCodeAt(2) % 45) + 15) : null
 
   return (
@@ -60,7 +58,7 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
                 {hasPortfolioImage ? (
                   <Image
                     src={artisan.portfolio![0].imageUrl}
-                    alt={`${displayName} - ${artisan.specialty} a ${artisan.city}`}
+                    alt={`${displayName} - ${artisan.specialty} à ${artisan.city}`}
                     fill
                     className="object-cover"
                     sizes="120px"
@@ -74,8 +72,8 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
                 <Link
                   href="/notre-processus-de-verification"
                   className="absolute -bottom-1.5 -right-1.5 bg-accent-500 text-white p-1.5 rounded-full shadow-lg ring-2 ring-white hover:ring-accent-100 transition-all"
-                  aria-label="Artisan verifie - voir le processus de verification"
-                  title="Voir notre processus de verification"
+                  aria-label="Artisan vérifié - voir le processus de vérification"
+                  title="Voir notre processus de vérification"
                 >
                   <CheckCircle className="w-5 h-5" aria-hidden="true" />
                 </Link>
@@ -84,7 +82,7 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
               {artisan.team_size && artisan.team_size > 1 && (
                 <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 inline-flex items-center gap-1 bg-white px-2.5 py-0.5 rounded-full shadow-md border border-sand-200 text-xs font-medium text-charcoal-700 whitespace-nowrap">
                   <Users className="w-3 h-3 text-primary-400" aria-hidden="true" />
-                  Equipe de {artisan.team_size}
+                  Équipe de {artisan.team_size}
                 </div>
               )}
             </div>
@@ -95,7 +93,7 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
             {/* Name - font-heading text-2xl font-bold */}
             <h1 className="text-2xl md:text-3xl font-bold text-charcoal-900 font-heading mb-1 tracking-tight">
               {displayName}
-              <span className="sr-only"> -- {artisan.specialty} a {artisan.city}</span>
+              <span className="sr-only"> — {artisan.specialty} à {artisan.city}</span>
             </h1>
 
             {/* Specialty */}
@@ -105,7 +103,7 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
             {artisan.is_verified && (
               <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent-50 text-accent-700 text-sm font-semibold border border-accent-200 mb-3">
                 <ShieldCheck className="w-4 h-4 text-accent-500" aria-hidden="true" />
-                Verifie SIREN
+                Vérifié SIREN
               </div>
             )}
 
@@ -129,7 +127,7 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
               {responseTimeMin && (
                 <div className="flex items-center gap-1.5 text-sm text-charcoal-600 bg-sand-100 px-3 py-1.5 rounded-lg border border-sand-200">
                   <Clock className="w-4 h-4 text-primary-400" aria-hidden="true" />
-                  <span>Repond en moyenne en <strong>{responseTimeMin}min</strong></span>
+                  <span>Répond en moyenne en <strong>{responseTimeMin}min</strong></span>
                 </div>
               )}
             </div>
@@ -160,27 +158,20 @@ export function ArtisanHero({ artisan }: ArtisanHeroProps) {
                   }
                 }}
                 className="inline-flex items-center gap-2 text-primary-400 hover:text-primary-600 font-medium mb-3 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 rounded"
-                aria-label={showPhone ? `Appeler au ${artisan.phone}` : 'Afficher le numero de telephone'}
+                aria-label={showPhone ? `Appeler au ${artisan.phone}` : 'Afficher le numéro de téléphone'}
               >
                 <Phone className="w-4 h-4" />
-                <span>{showPhone ? artisan.phone : 'Afficher le numero'}</span>
+                <span>{showPhone ? artisan.phone : 'Afficher le numéro'}</span>
               </button>
             )}
 
-            {/* Social proof */}
-            <div className="flex items-center gap-4 flex-wrap text-sm">
-              <div className="flex items-center gap-1.5 text-charcoal-600">
-                <Users className="w-4 h-4 text-primary-400" aria-hidden="true" />
-                <span><strong>{contactsThisMonth}</strong> personnes ont contacte cet artisan ce mois</span>
+            {/* Member since */}
+            {artisan.member_since && (
+              <div className="flex items-center gap-1.5 text-sm text-charcoal-600">
+                <CalendarCheck className="w-4 h-4 text-charcoal-400" aria-hidden="true" />
+                <span>Inscrit depuis {artisan.member_since}</span>
               </div>
-
-              {artisan.member_since && (
-                <div className="flex items-center gap-1.5 text-charcoal-600">
-                  <CalendarCheck className="w-4 h-4 text-charcoal-400" aria-hidden="true" />
-                  <span>Inscrit depuis {artisan.member_since}</span>
-                </div>
-              )}
-            </div>
+            )}
 
             {/* Active profile indicator */}
             {artisan.accepts_new_clients === true && (

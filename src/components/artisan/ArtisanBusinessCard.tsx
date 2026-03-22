@@ -25,7 +25,7 @@ function formatSiret(siret: string): string {
   return `${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6, 9)} ${digits.slice(9, 14)}`
 }
 
-/** Format creation date to French locale -- full date */
+/** Format creation date to French locale — full date */
 function formatCreationDate(dateStr: string): string {
   try {
     const date = new Date(dateStr)
@@ -54,9 +54,9 @@ function getYearsSinceCreation(dateStr: string): number | null {
 
 /** Format employee / team size to a readable label */
 function formatTeamSize(size: number): string {
-  if (size === 0) return 'Independant'
-  if (size === 1) return '1 salarie'
-  return `${size} salaries`
+  if (size === 0) return 'Indépendant'
+  if (size === 1) return '1 salarié'
+  return `${size} salariés`
 }
 
 export function ArtisanBusinessCard({ artisan }: ArtisanBusinessCardProps) {
@@ -95,14 +95,14 @@ export function ArtisanBusinessCard({ artisan }: ArtisanBusinessCardProps) {
                 Fiche entreprise
               </h3>
               <p className="text-sm text-charcoal-500">
-                Donnees verifiees par l'API gouvernementale
+                Données vérifiées par l'API gouvernementale
               </p>
             </div>
           </div>
           {hasSiret && (
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent-50 text-accent-700 text-xs font-semibold border border-accent-200 shadow-sm flex-shrink-0">
               <CheckCircle className="w-3.5 h-3.5" aria-hidden="true" />
-              Verifiee
+              Vérifiée
             </span>
           )}
         </div>
@@ -129,7 +129,7 @@ export function ArtisanBusinessCard({ artisan }: ArtisanBusinessCardProps) {
             </div>
           )}
 
-          {/* Date de creation */}
+          {/* Date de création */}
           {artisan.creation_date && (
             <div className="flex items-start gap-3 p-4 rounded-xl bg-amber-50/60 border border-amber-100 hover:bg-amber-50 transition-colors">
               <div className="w-9 h-9 rounded-lg bg-white flex items-center justify-center shadow-sm flex-shrink-0">
@@ -137,7 +137,7 @@ export function ArtisanBusinessCard({ artisan }: ArtisanBusinessCardProps) {
               </div>
               <div className="min-w-0">
                 <dt className="text-xs font-semibold text-amber-600/90 uppercase tracking-wide">
-                  Creee le
+                  Créée le
                 </dt>
                 <dd className="mt-0.5">
                   <span className="text-sm font-bold text-charcoal-900">
@@ -146,7 +146,7 @@ export function ArtisanBusinessCard({ artisan }: ArtisanBusinessCardProps) {
                   {yearsSinceCreation !== null && yearsSinceCreation > 0 && (
                     <span className="mt-1.5 flex">
                       <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 text-xs font-semibold border border-amber-200">
-                        {yearsSinceCreation}&nbsp;an{yearsSinceCreation > 1 ? 's' : ''}&nbsp;d'activite
+                        {yearsSinceCreation}&nbsp;an{yearsSinceCreation > 1 ? 's' : ''}&nbsp;d'activité
                       </span>
                     </span>
                   )}
@@ -203,7 +203,7 @@ export function ArtisanBusinessCard({ artisan }: ArtisanBusinessCardProps) {
                 <a
                   href={`mailto:${artisan.email}`}
                   className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-sand-300 text-sm font-medium text-charcoal-700 hover:border-charcoal-300 hover:bg-sand-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-charcoal-400 focus:ring-offset-2"
-                  aria-label={`Envoyer un email a ${artisan.email}`}
+                  aria-label={`Envoyer un email à ${artisan.email}`}
                 >
                   <Briefcase className="w-4 h-4 text-charcoal-400" aria-hidden="true" />
                   <span className="truncate max-w-[200px]">{artisan.email}</span>

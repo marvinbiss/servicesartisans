@@ -65,10 +65,10 @@ function ReviewCard({ review, index }: { review: Review; index: number }) {
             {review.verified && (
               <span
                 className="inline-flex items-center gap-1 text-[10px] font-semibold text-accent-700 bg-accent-50 border border-accent-200 px-2 py-0.5 rounded-full"
-                title="Cet avis provient d'un client ayant utilise la plateforme"
+                title="Cet avis provient d'un client ayant utilisé la plateforme"
               >
                 <ShieldCheck className="w-3 h-3" aria-hidden="true" />
-                Avis verifie
+                Avis vérifié
               </span>
             )}
           </div>
@@ -138,12 +138,12 @@ export function ArtisanReviews({ artisan, reviews }: ArtisanReviewsProps) {
       <div className="flex items-center justify-between mb-5">
         <h2 className="text-xl font-semibold text-charcoal-900 font-heading flex items-center gap-2">
           <Star className="w-5 h-5 text-amber-500 fill-amber-500" aria-hidden="true" />
-          Reputation
+          Réputation
         </h2>
         {/* Source attribution badge */}
         <span
           className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-sand-100 border border-sand-200 text-xs font-medium text-charcoal-500"
-          title="Note observee sur Google"
+          title="Note observée sur Google"
         >
           <span
             className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-charcoal-700 text-white font-bold leading-none"
@@ -152,7 +152,7 @@ export function ArtisanReviews({ artisan, reviews }: ArtisanReviewsProps) {
           >
             G
           </span>
-          Observe sur Google
+          Observé sur Google
         </span>
       </div>
 
@@ -194,7 +194,7 @@ export function ArtisanReviews({ artisan, reviews }: ArtisanReviewsProps) {
         {/* Contextual note */}
         <div className="flex-1 pl-5 border-l border-sand-200">
           <p className="text-sm text-charcoal-600 leading-relaxed">
-            Note consolidee basee sur les avis clients collectes en ligne.
+            Note consolidée basée sur les avis clients collectés en ligne.
           </p>
           {count > 0 && (
             <p className="text-xs text-charcoal-400 mt-1.5">

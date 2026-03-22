@@ -19,7 +19,7 @@ import {
   ArtisanPhotoGridSkeleton,
 } from '@/components/artisan'
 import { ArtisanUrgencyBanner } from '@/components/artisan/ArtisanUrgencyBanner'
-import { ArtisanWhyChoose } from '@/components/artisan/ArtisanWhyChoose'
+
 import { ArtisanProfileStrength } from '@/components/artisan/ArtisanProfileStrength'
 import { ShareButton } from '@/components/ui/ShareButton'
 import { useFavorites } from '@/hooks/useFavorites'
@@ -148,14 +148,14 @@ export default function ArtisanPageClient({
           className="text-center p-8"
         >
           <AlertCircle className="w-16 h-16 text-charcoal-400 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-charcoal-900 font-heading mb-2">Artisan non trouve</h1>
+          <h1 className="text-2xl font-bold text-charcoal-900 font-heading mb-2">Artisan non trouvé</h1>
           <p className="text-charcoal-600 mb-6">Cet artisan n'existe pas ou n'est plus disponible.</p>
           <Link
             href="/recherche"
             className="inline-flex items-center gap-2 px-6 py-3 bg-primary-400 text-white rounded-xl font-medium hover:bg-primary-600 transition-colors shadow-cta"
           >
             <ArrowLeft className="w-5 h-5" />
-            Retour a la recherche
+            Retour à la recherche
           </Link>
         </motion.div>
       </div>
@@ -194,7 +194,7 @@ export default function ArtisanPageClient({
               <Link
                 href="/recherche"
                 className="inline-flex items-center gap-2 text-charcoal-600 hover:text-charcoal-900 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 rounded-lg px-2 py-1.5 -ml-2 hover:bg-sand-100"
-                aria-label="Retour a la recherche"
+                aria-label="Retour à la recherche"
               >
                 <ArrowLeft className="w-5 h-5" aria-hidden="true" />
                 <span className="hidden sm:inline font-medium text-sm">Retour</span>
@@ -203,8 +203,8 @@ export default function ArtisanPageClient({
               <div className="flex items-center gap-2">
                 <ShareButton
                   url={typeof window !== 'undefined' ? window.location.href : ''}
-                  title={`Decouvrez ${displayName}, artisan sur ServicesArtisans`}
-                  description={`${displayName} -- ${artisan.specialty} a ${artisan.city}. Consultez son profil sur ServicesArtisans.`}
+                  title={`Découvrez ${displayName}, artisan sur ServicesArtisans`}
+                  description={`${displayName} — ${artisan.specialty} à ${artisan.city}. Consultez son profil sur ServicesArtisans.`}
                   variant="icon"
                 />
                 <motion.button
@@ -242,27 +242,41 @@ export default function ArtisanPageClient({
 
           {/* Grid layout */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Left column - Main content */}
+            {/* Left column - Main content (ordered for conversion) */}
             <div className="lg:col-span-2 space-y-6">
+              {/* 1. Hero — first impression, identity, trust signals */}
               <section aria-label="Informations principales">
                 <ArtisanHero artisan={artisan} />
               </section>
-              <section aria-label="Disponibilite et avantages">
+              {/* 2. Urgency — availability signals push to action */}
+              <section aria-label="Disponibilité et avantages">
                 <ArtisanUrgencyBanner artisan={artisan} />
               </section>
+              {/* 3. DEVIS FORM — above the fold on desktop, 2nd scroll on mobile */}
+              <section id="devis" aria-label="Demande de devis">
+                <ArtisanQuoteForm artisan={artisan} />
+              </section>
+              {/* 4. Stats — social proof reinforces after form view */}
               <section aria-label="Statistiques">
                 <ArtisanStats artisan={artisan} />
               </section>
-              <section aria-label="A propos">
+              {/* 5. Reviews — strongest trust signal */}
+              <section id="reviews" aria-label="Avis clients">
+                <ArtisanReviews artisan={artisan} reviews={reviews} />
+              </section>
+              {/* 6. About — details for those doing due diligence */}
+              <section aria-label="À propos">
                 <ArtisanAbout artisan={artisan} />
               </section>
-              <section aria-label="Pourquoi choisir cet artisan">
-                <ArtisanWhyChoose artisan={artisan} />
+              {/* 7. Services & pricing — transactional detail */}
+              <section id="services" aria-label="Services et tarifs">
+                <ArtisanServices artisan={artisan} />
               </section>
+              {/* 8. Business card — verification details */}
               <section aria-label="Fiche entreprise">
                 <ArtisanBusinessCard artisan={artisan} />
               </section>
-              {/* Mobile-only contact section (hidden on desktop where sidebar is visible) */}
+              {/* Mobile-only contact section */}
               <section className="lg:hidden" aria-label="Contacter cet artisan">
                 <ArtisanContactCard artisan={artisan} />
               </section>
@@ -271,18 +285,11 @@ export default function ArtisanPageClient({
                   <ClaimButton providerId={artisanId} providerName={artisan.business_name || displayName} hasSiret={hasSiret} />
                 </section>
               )}
-              <section id="services" aria-label="Services et tarifs">
-                <ArtisanServices artisan={artisan} />
-              </section>
-              <section id="devis" aria-label="Demande de devis">
-                <ArtisanQuoteForm artisan={artisan} />
-              </section>
-              <section id="reviews" aria-label="Avis clients">
-                <ArtisanReviews artisan={artisan} reviews={reviews} />
-              </section>
-              <section aria-label="Questions frequentes">
+              {/* 9. FAQ — address remaining objections */}
+              <section aria-label="Questions fréquentes">
                 <ArtisanFAQ artisan={artisan} />
               </section>
+              {/* 10. Map + similar — secondary info */}
               <section aria-label="Localisation">
                 <ArtisanMap artisan={artisan} />
               </section>

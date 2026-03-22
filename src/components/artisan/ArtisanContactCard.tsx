@@ -82,7 +82,7 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
             <span className="text-charcoal-300">-</span>
             <span>Sans engagement</span>
             <span className="text-charcoal-300">-</span>
-            <span>Reponse rapide</span>
+            <span>Réponse rapide</span>
           </div>
 
           {/* 2. Telephone */}
@@ -110,7 +110,7 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
                 trackEvent('artisan_email_click' as any, { artisan_slug: artisan.slug })
               }}
               className="w-full py-3 px-4 rounded-xl border-2 border-sand-300 text-charcoal-700 font-medium flex items-center justify-center gap-2.5 hover:border-charcoal-300 hover:bg-sand-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-charcoal-400 focus:ring-offset-2 group"
-              aria-label={`Envoyer un email a ${artisan.email}`}
+              aria-label={`Envoyer un email à ${artisan.email}`}
             >
               <Mail className="w-5 h-5 text-charcoal-400 transition-colors group-hover:text-charcoal-600" aria-hidden="true" />
               Envoyer un email
@@ -122,14 +122,14 @@ export function ArtisanContactCard({ artisan }: ArtisanContactCardProps) {
         {/* Social proof */}
         <div className="flex items-center gap-2 text-sm text-charcoal-600 pt-4 mt-4 border-t border-sand-200">
           <Users className="w-4 h-4 text-primary-400 flex-shrink-0" aria-hidden="true" />
-          <span><strong>{contactsThisMonth}</strong> personnes ont contacte cet artisan ce mois</span>
+          <span><strong>{contactsThisMonth}</strong> personnes ont contacté cet artisan ce mois</span>
         </div>
 
         {/* Trust footer */}
         <div className="flex items-center gap-2 pt-3 mt-3 border-t border-sand-200">
           <ShieldCheck className="w-4 h-4 text-accent-500 flex-shrink-0" aria-hidden="true" />
           <span className="text-xs text-charcoal-500">
-            Service gratuit - Donnees protegees (RGPD) - Sans engagement
+            Service gratuit - Données protégées (RGPD) - Sans engagement
           </span>
         </div>
       </div>

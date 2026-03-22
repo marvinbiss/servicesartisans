@@ -60,7 +60,7 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
     const age = currentYear - year
     stats.push({
       icon: Calendar,
-      label: age > 1 ? `${age} ans d'experience` : 'Entreprise creee',
+      label: age > 1 ? `${age} ans d'expérience` : 'Entreprise créée',
       value: year.toString(),
       color: 'text-charcoal-700',
       bgColor: 'bg-sand-100 border-sand-200',
@@ -79,7 +79,7 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
   if (artisan.is_verified) {
     stats.push({
       icon: Shield,
-      label: 'Identite verifiee',
+      label: 'Identité vérifiée',
       value: 'SIRET',
       color: 'text-accent-700',
       bgColor: 'bg-accent-50 border-accent-200',
@@ -90,7 +90,7 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
   if (artisan.available_24h) {
     stats.push({
       icon: Clock,
-      label: 'Disponibilite',
+      label: 'Disponibilité',
       value: '24h/7j',
       color: 'text-primary-500',
       bgColor: 'bg-primary-50 border-primary-100',
@@ -112,7 +112,7 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
   if (artisan.team_size && artisan.team_size > 1) {
     stats.push({
       icon: Users,
-      label: 'Equipe',
+      label: 'Équipe',
       value: artisan.team_size.toString(),
       subValue: 'pers.',
       color: 'text-charcoal-700',
@@ -163,7 +163,7 @@ export function ArtisanStats({ artisan }: ArtisanStatsProps) {
         <div
           className={`grid grid-cols-2 ${gridCols} gap-3`}
           role="list"
-          aria-label="Informations cles de l'artisan"
+          aria-label="Informations clés de l'artisan"
         >
           {stats.map((stat, index) => (
             <motion.div
