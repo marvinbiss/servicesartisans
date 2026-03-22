@@ -246,7 +246,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                     <div className="text-xs text-charcoal-400">
                       {serviceCounts[slug] > 0
                         ? `${formatProviderCount(serviceCounts[slug])} artisans`
-                        : `\u00C0 partir de ${price}\u20AC`}
+                        : `À partir de ${price}\u20AC`}
                     </div>
                     <ArrowRight className="w-4 h-4 text-charcoal-200 group-hover:text-primary-400 mx-auto mt-2 transition-colors" />
                   </Link>
@@ -441,7 +441,7 @@ export function ClayHomePage({ stats, serviceCounts, topProviders, recentReviews
                       <div className="px-5 pb-5 pt-4">
                         <div className="text-base font-black text-charcoal-900 mb-0.5 line-clamp-1">{formatName(a.name)}</div>
                         <div className="text-sm text-charcoal-400 mb-2.5 line-clamp-1">
-                          {a.specialty}{a.address_city ? ` \u00B7 ${a.address_city}` : ''}{a.address_postal_code ? ` (${a.address_postal_code})` : ''}
+                          {a.specialty}{a.address_city ? ` · ${a.address_city}` : ''}{a.address_postal_code ? ` (${a.address_postal_code})` : ''}
                         </div>
                         <div className="flex items-center gap-1.5 mb-3">
                           <span className="text-sm">{renderStars(rating)}</span>

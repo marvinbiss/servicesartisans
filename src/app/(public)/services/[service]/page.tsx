@@ -339,17 +339,17 @@ export default async function ServicePage({ params }: PageProps) {
           </h1>
           <p className="text-lg md:text-xl text-sand-400 max-w-3xl leading-relaxed">
             {service.description ||
-              `Trouvez les meilleurs ${service.name.toLowerCase()}s pr\u00e8s de chez vous. Comparez les avis, les tarifs et obtenez des devis gratuits.`}
+              `Trouvez les meilleurs ${service.name.toLowerCase()}s près de chez vous. Comparez les avis, les tarifs et obtenez des devis gratuits.`}
           </p>
-          <LastUpdated label="Donn\u00e9es artisans mises \u00e0 jour le" className="text-sand-500 mt-3" />
+          <LastUpdated label="Données artisans mises à jour le" className="text-sand-500 mt-3" />
 
           {/* Stats — Large gradient numbers */}
           <div className="flex flex-wrap gap-6 md:gap-10 mt-10">
             <div className="flex flex-col">
               <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-terra">
-                {totalProviderCount > 0 ? totalProviderCount.toLocaleString('fr-FR') : '\u2014'}
+                {totalProviderCount > 0 ? totalProviderCount.toLocaleString('fr-FR') : '—'}
               </span>
-              <span className="text-sm text-sand-400 mt-1">artisans r&eacute;f&eacute;renc&eacute;s</span>
+              <span className="text-sm text-sand-400 mt-1">artisans référencés</span>
             </div>
             <div className="flex flex-col">
               <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-accent-300 to-accent-500">
@@ -361,12 +361,12 @@ export default async function ServicePage({ params }: PageProps) {
               <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-accent-300 to-accent-500">
                 100%
               </span>
-              <span className="text-sm text-sand-400 mt-1">donn&eacute;es SIREN</span>
+              <span className="text-sm text-sand-400 mt-1">données SIREN</span>
             </div>
             {trade && (
               <div className="flex flex-col">
                 <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-premium">
-                  {trade.priceRange.min}\u2013{trade.priceRange.max}
+                  {trade.priceRange.min}–{trade.priceRange.max}
                 </span>
                 <span className="text-sm text-sand-400 mt-1">{trade.priceRange.unit}</span>
               </div>
@@ -377,11 +377,11 @@ export default async function ServicePage({ params }: PageProps) {
           <div className="flex flex-wrap gap-3 mt-8">
             <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/10 px-4 py-2 rounded-full">
               <Shield className="w-4 h-4 text-accent-400" />
-              <span className="text-sm text-sand-200 font-medium">Artisans v&eacute;rifi&eacute;s</span>
+              <span className="text-sm text-sand-200 font-medium">Artisans vérifiés</span>
             </div>
             <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/10 px-4 py-2 rounded-full">
               <Star className="w-4 h-4 text-secondary-400" />
-              <span className="text-sm text-sand-200 font-medium">Qualit&eacute; contr&ocirc;l&eacute;e</span>
+              <span className="text-sm text-sand-200 font-medium">Qualité contrôlée</span>
             </div>
             {trade && (
               <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/10 px-4 py-2 rounded-full">
@@ -397,7 +397,7 @@ export default async function ServicePage({ params }: PageProps) {
               href={`/devis/${serviceSlug}`}
               className="inline-flex items-center gap-2 bg-primary-400 hover:bg-primary-500 text-white font-bold px-8 py-4 rounded-xl shadow-cta hover:shadow-cta-hover hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
             >
-              Comparer les artisans pr&egrave;s de chez moi
+              Comparer les artisans près de chez moi
               <ArrowRight className="w-5 h-5" />
             </Link>
           </div>
@@ -435,14 +435,14 @@ export default async function ServicePage({ params }: PageProps) {
               Besoin d&apos;un {service.name.toLowerCase()} ?
             </h2>
             <p className="text-primary-100 mb-6">
-              Recevez jusqu&apos;&agrave; 3 devis gratuits en 2 minutes
+              Recevez jusqu&apos;à 3 devis gratuits en 2 minutes
             </p>
             <Link
               href={`/devis/${serviceSlug}`}
               className="inline-flex items-center gap-2 bg-white text-primary-600 hover:bg-sand-50 px-8 py-3.5 rounded-xl font-semibold transition-colors shadow-cta"
             >
               <FileText className="w-5 h-5" />
-              Comparer les artisans pr&egrave;s de chez moi
+              Comparer les artisans près de chez moi
             </Link>
           </div>
         </div>
@@ -855,16 +855,16 @@ export default async function ServicePage({ params }: PageProps) {
         }} />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4">
-            Vous &ecirc;tes {service.name.toLowerCase()} ?
+            Vous êtes {service.name.toLowerCase()} ?
           </h2>
           <p className="text-sand-400 mb-8 max-w-xl mx-auto">
-            Inscrivez-vous gratuitement et recevez des demandes de devis qualifi&eacute;es
+            Inscrivez-vous gratuitement et recevez des demandes de devis qualifiées
           </p>
           <Link
             href="/inscription-artisan"
             className="inline-flex items-center gap-2 bg-primary-400 hover:bg-primary-500 text-white font-bold px-8 py-4 rounded-xl shadow-cta hover:shadow-cta-hover hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
           >
-            Cr&eacute;er mon profil
+            Créer mon profil
             <ArrowRight className="w-5 h-5" />
           </Link>
         </div>
@@ -874,7 +874,7 @@ export default async function ServicePage({ params }: PageProps) {
       <section className="mb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-sand-100 rounded-2xl border border-sand-300 p-6">
-            <h3 className="text-sm font-semibold text-charcoal-700 mb-2">M&eacute;thodologie &eacute;ditoriale</h3>
+            <h3 className="text-sm font-semibold text-charcoal-700 mb-2">Méthodologie éditoriale</h3>
             <p className="text-xs text-charcoal-500 leading-relaxed">
               Les tarifs et informations présentés sont indicatifs, basés sur des moyennes nationales et régionales. Les artisans sont référencés via leur numéro SIREN. ServicesArtisans est un annuaire indépendant — nous ne réalisons pas de travaux et ne garantissons pas les prestations.
             </p>
@@ -886,7 +886,7 @@ export default async function ServicePage({ params }: PageProps) {
       <section className="py-8 bg-white border-t border-sand-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-sm font-semibold text-charcoal-500 uppercase tracking-wide mb-3">
-            Confiance &amp; S&eacute;curit&eacute;
+            Confiance &amp; Sécurité
           </h2>
           <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
             <Link href="/notre-processus-de-verification" className="text-primary-500 hover:text-primary-700">

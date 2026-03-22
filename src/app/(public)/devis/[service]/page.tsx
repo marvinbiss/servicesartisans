@@ -178,8 +178,8 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
             {h1Text}
           </h1>
           <p className="text-charcoal-500 mt-2 max-w-xl">
-            Recevez jusqu&apos;&agrave; 3 devis gratuits de {tradeLower}s r&eacute;f&eacute;renc&eacute;s.
-            Prix indicatif : {trade.priceRange.min} &agrave; {trade.priceRange.max} {trade.priceRange.unit}.
+            Recevez jusqu&apos;à 3 devis gratuits de {tradeLower}s référencés.
+            Prix indicatif : {trade.priceRange.min} à {trade.priceRange.max} {trade.priceRange.unit}.
           </p>
         </div>
       </section>
@@ -234,7 +234,7 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
               <span className="text-charcoal-600 text-lg">{trade.priceRange.unit}</span>
             </div>
             <p className="text-charcoal-500 text-sm mt-3">
-              Prix moyen constat&eacute; en France m&eacute;tropolitaine, main-d&apos;&oelig;uvre incluse
+              Prix moyen constaté en France métropolitaine, main-d&apos;œuvre incluse
             </p>
           </div>
 
@@ -268,7 +268,7 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
                 className="bg-white hover:bg-primary-50 border border-sand-300 hover:border-primary-300 rounded-xl p-4 transition-all group text-center"
               >
                 <div className="font-semibold text-charcoal-900 group-hover:text-primary-500 transition-colors text-sm">
-                  Devis {tradeLower} &agrave; {ville.name}
+                  Devis {tradeLower} à {ville.name}
                 </div>
               </Link>
             ))}
@@ -290,7 +290,7 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
               Certifications et qualifications
             </h2>
             <p className="text-charcoal-600 text-center mb-8">
-              V&eacute;rifiez que votre {tradeLower} poss&egrave;de les certifications adapt&eacute;es &agrave; votre projet.
+              Vérifiez que votre {tradeLower} possède les certifications adaptées à votre projet.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
               {trade.certifications.map((cert) => (
@@ -308,7 +308,7 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
       <section className="py-16 bg-sand-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-8 text-center">
-            Questions fr&eacute;quentes — Devis {trade.name}
+            Questions fréquentes — Devis {trade.name}
           </h2>
           <div className="space-y-4">
             {trade.faq.map((item, i) => (
@@ -330,10 +330,10 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
       <section className="py-16 bg-gradient-primary">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-heading text-3xl font-bold text-white mb-4">
-            Pr&ecirc;t &agrave; recevoir votre devis {tradeLower}&nbsp;?
+            Prêt à recevoir votre devis {tradeLower}&nbsp;?
           </h2>
           <p className="text-xl text-primary-100 mb-8">
-            Commencez par choisir votre ville pour un devis adapt&eacute; aux tarifs locaux.
+            Commencez par choisir votre ville pour un devis adapté aux tarifs locaux.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a
@@ -357,7 +357,7 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
       {/* ─── Devis associés ──────────────────────────────── */}
       <section className="py-16 bg-sand-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6">Devis pour d&apos;autres m&eacute;tiers</h2>
+          <h2 className="font-heading text-2xl font-bold text-charcoal-900 mb-6">Devis pour d&apos;autres métiers</h2>
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
             {otherTrades.map((slug) => {
               const t = tradeContent[slug]
@@ -396,13 +396,13 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
                 )}
                 {topCities.slice(0, 4).map((v) => (
                   <Link key={v.slug} href={`/devis/${service}/${v.slug}`} className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">
-                    Devis {tradeLower} &agrave; {v.name}
+                    Devis {tradeLower} à {v.name}
                   </Link>
                 ))}
               </div>
             </div>
             <div>
-              <h3 className="font-semibold text-charcoal-900 mb-3">Devis associ&eacute;s</h3>
+              <h3 className="font-semibold text-charcoal-900 mb-3">Devis associés</h3>
               <div className="space-y-2">
                 {otherTrades.slice(0, 6).map((slug) => {
                   const t = tradeContent[slug]
@@ -420,9 +420,9 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
               <div className="space-y-2">
                 <Link href="/devis" className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">Demander un devis</Link>
                 <Link href="/tarifs" className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">Guide complet des tarifs</Link>
-                <Link href="/comment-ca-marche" className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">Comment &ccedil;a marche</Link>
+                <Link href="/comment-ca-marche" className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">Comment ça marche</Link>
                 <Link href="/faq" className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">FAQ</Link>
-                <Link href="/notre-processus-de-verification" className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">Processus de v&eacute;rification</Link>
+                <Link href="/notre-processus-de-verification" className="block text-sm text-charcoal-600 hover:text-primary-500 py-1">Processus de vérification</Link>
               </div>
             </div>
           </div>
@@ -433,17 +433,17 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
       <section className="py-8 bg-white border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-sm font-semibold text-charcoal-500 uppercase tracking-wide mb-3">
-            Confiance &amp; S&eacute;curit&eacute;
+            Confiance &amp; Sécurité
           </h2>
           <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
             <Link href="/notre-processus-de-verification" className="text-primary-500 hover:text-primary-700">
-              Comment nous r&eacute;f&eacute;ren&ccedil;ons les artisans
+              Comment nous référençons les artisans
             </Link>
             <Link href="/politique-avis" className="text-primary-500 hover:text-primary-700">
               Notre politique des avis
             </Link>
             <Link href="/mediation" className="text-primary-500 hover:text-primary-700">
-              Service de m&eacute;diation
+              Service de médiation
             </Link>
           </nav>
         </div>
@@ -457,7 +457,7 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
           <div className="bg-sand-100 rounded-2xl border border-sand-300 p-6">
             <h3 className="text-sm font-semibold text-charcoal-700 mb-2">Transparence tarifaire</h3>
             <p className="text-xs text-sand-500 leading-relaxed">
-              Les prix affich&eacute;s sont des fourchettes indicatives bas&eacute;es sur des moyennes constat&eacute;es en France. Ils varient selon la r&eacute;gion, la complexit&eacute; du chantier, les mat&eacute;riaux et l&apos;urgence. Seul un devis personnalis&eacute; fait foi. ServicesArtisans est un annuaire ind&eacute;pendant.
+              Les prix affichés sont des fourchettes indicatives basées sur des moyennes constatées en France. Ils varient selon la région, la complexité du chantier, les matériaux et l&apos;urgence. Seul un devis personnalisé fait foi. ServicesArtisans est un annuaire indépendant.
             </p>
           </div>
         </div>

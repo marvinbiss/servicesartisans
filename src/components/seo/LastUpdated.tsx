@@ -8,26 +8,44 @@ interface LastUpdatedProps {
 }
 
 /**
+ * Mois en français — hardcodés pour éviter les problèmes de locale sur
+ * certains environnements de build (Edge, Node minimal sans ICU complet).
+ */
+const MOIS_FR = [
+  'janvier', 'février', 'mars', 'avril', 'mai', 'juin',
+  'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre',
+]
+
+/**
+ * Formate une date en français (ex : "22 mars 2026").
+ * Ne dépend PAS de toLocaleDateString pour éviter les bugs de locale.
+ */
+function formatDateFR(date: Date): string {
+  const day = date.getDate()
+  const month = MOIS_FR[date.getMonth()]
+  const year = date.getFullYear()
+  return `${day} ${month} ${year}`
+}
+
+/**
  * Server component — displays the ISR generation date for freshness signals.
  * Uses <time datetime="..."> for SEO structured data.
+ *
+ * La date est calculée au moment du rendu serveur (build ou ISR revalidation).
+ * Elle ne cause PAS de mismatch d'hydratation car c'est un Server Component pur.
  */
 export default function LastUpdated({
   label = 'Tarifs vérifiés et mis à jour le',
   className,
 }: LastUpdatedProps) {
   const now = new Date()
-  const formatted = now.toLocaleDateString('fr-FR', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  })
+  const formatted = formatDateFR(now)
   const iso = now.toISOString().split('T')[0]
 
   return (
-    <p className={cn('text-sm text-gray-500 flex items-center gap-1.5', className)}>
+    <p className={cn('text-sm flex items-center gap-1.5', className)}>
       <Clock className="h-3.5 w-3.5" />
-      {label}{' '}
-      <time dateTime={iso}>{formatted}</time>
+      <span>{label} <time dateTime={iso}>{formatted}</time></span>
     </p>
   )
 }

@@ -167,7 +167,7 @@ export default function ServiceLocationPageClient({
           <div className="flex items-center justify-between">
             <div>
               <h1 className="font-heading text-2xl md:text-3xl font-bold text-charcoal-900 tracking-tight">
-                {h1Text || `${service.name} \u00e0 ${location.name}`}
+                {h1Text || `${service.name} à ${location.name}`}
               </h1>
               {(location.department_name || location.postal_code) && (
                 <p className="text-charcoal-500 text-sm flex items-center gap-1 mt-1">

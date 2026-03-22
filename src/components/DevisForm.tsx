@@ -47,16 +47,16 @@ const budgetOptions = [
 
 /** Common project types per service for quick selection */
 const serviceSubcategories: Record<string, string[]> = {
-  plombier: ['Fuite d\'eau', 'D\u00e9bouchage', 'Chauffe-eau', 'Robinetterie', 'WC / Sanitaires', 'Tuyauterie'],
-  electricien: ['Panne \u00e9lectrique', 'Installation prise/interrupteur', 'Tableau \u00e9lectrique', '\u00c9clairage', 'Mise aux normes', 'Domotique'],
-  serrurier: ['Porte claqu\u00e9e', 'Serrure cass\u00e9e', 'Changement de serrure', 'Double de cl\u00e9', 'Blindage de porte'],
-  chauffagiste: ['Panne chaudi\u00e8re', 'Entretien chaudi\u00e8re', 'Radiateur', 'Plancher chauffant', 'Pompe \u00e0 chaleur'],
-  peintre: ['Peinture int\u00e9rieure', 'Peinture ext\u00e9rieure', 'Ravalement fa\u00e7ade', 'Papier peint', 'Plafond'],
-  menuisier: ['Porte int\u00e9rieure', 'Fen\u00eatre', 'Escalier', 'Placard sur mesure', 'Parquet'],
-  carreleur: ['Carrelage sol', 'Carrelage mural', 'Fa\u00efence salle de bain', 'Terrasse ext\u00e9rieure'],
-  couvreur: ['Fuite toiture', 'R\u00e9novation toiture', 'Goutti\u00e8re', 'Isolation toiture', 'D\u00e9moussage'],
-  macon: ['Mur / Cloison', 'Fondation', 'Terrasse', 'Extension', 'D\u00e9molition'],
-  jardinier: ['Tonte pelouse', 'Taille haie', '\u00c9lagage', 'Am\u00e9nagement jardin', 'Cl\u00f4ture'],
+  plombier: ['Fuite d\'eau', 'Débouchage', 'Chauffe-eau', 'Robinetterie', 'WC / Sanitaires', 'Tuyauterie'],
+  electricien: ['Panne électrique', 'Installation prise/interrupteur', 'Tableau électrique', 'Éclairage', 'Mise aux normes', 'Domotique'],
+  serrurier: ['Porte claquée', 'Serrure cassée', 'Changement de serrure', 'Double de clé', 'Blindage de porte'],
+  chauffagiste: ['Panne chaudière', 'Entretien chaudière', 'Radiateur', 'Plancher chauffant', 'Pompe à chaleur'],
+  peintre: ['Peinture intérieure', 'Peinture extérieure', 'Ravalement façade', 'Papier peint', 'Plafond'],
+  menuisier: ['Porte intérieure', 'Fenêtre', 'Escalier', 'Placard sur mesure', 'Parquet'],
+  carreleur: ['Carrelage sol', 'Carrelage mural', 'Faïence salle de bain', 'Terrasse extérieure'],
+  couvreur: ['Fuite toiture', 'Rénovation toiture', 'Gouttière', 'Isolation toiture', 'Démoussage'],
+  macon: ['Mur / Cloison', 'Fondation', 'Terrasse', 'Extension', 'Démolition'],
+  jardinier: ['Tonte pelouse', 'Taille haie', 'Élagage', 'Aménagement jardin', 'Clôture'],
 }
 
 function isValidFrenchPhone(phone: string): boolean {
@@ -70,10 +70,10 @@ function isValidFrenchPhone(phone: string): boolean {
 const STORAGE_KEY = 'sa:devis-draft'
 
 const stepTitles = [
-  { title: 'De quel artisan avez-vous besoin ?', subtitle: 'Choisissez le m\u00e9tier qui correspond \u00e0 votre besoin.' },
-  { title: 'O\u00f9 habitez-vous ?', subtitle: 'Pour trouver les artisans les plus proches de chez vous.' },
+  { title: 'De quel artisan avez-vous besoin ?', subtitle: 'Choisissez le métier qui correspond à votre besoin.' },
+  { title: 'Où habitez-vous ?', subtitle: 'Pour trouver les artisans les plus proches de chez vous.' },
   { title: 'Parlez-nous de votre projet', subtitle: 'Plus on en sait, meilleurs seront les devis.' },
-  { title: 'Derni\u00e8re \u00e9tape \u2014 comment vous joindre ?', subtitle: 'Les artisans vous contacteront avec leurs devis.' },
+  { title: 'Dernière étape \u2014 comment vous joindre ?', subtitle: 'Les artisans vous contacteront avec leurs devis.' },
 ]
 
 const stepLabels = ['Service', 'Ville', 'Projet', 'Contact']
@@ -87,7 +87,7 @@ function ProgressBar({ currentStep }: { currentStep: number }) {
       {/* Step label */}
       <div className="flex items-center justify-between mb-3">
         <span className="text-sm font-heading font-semibold text-charcoal-600">
-          \u00c9tape {currentStep} sur 4
+          Étape {currentStep} sur 4
         </span>
         <span className="text-sm font-semibold text-primary-500">
           {Math.round(progress)}%
@@ -219,8 +219,8 @@ export default function DevisForm({
           else delete next.nom
           break
         case 'telephone':
-          if (!formData.telephone.trim()) next.telephone = 'Veuillez entrer votre num\u00e9ro de t\u00e9l\u00e9phone'
-          else if (!isValidFrenchPhone(formData.telephone.trim())) next.telephone = 'Veuillez entrer un num\u00e9ro de t\u00e9l\u00e9phone fran\u00e7ais valide'
+          if (!formData.telephone.trim()) next.telephone = 'Veuillez entrer votre numéro de téléphone'
+          else if (!isValidFrenchPhone(formData.telephone.trim())) next.telephone = 'Veuillez entrer un numéro de téléphone français valide'
           else delete next.telephone
           break
         case 'email':
@@ -297,9 +297,9 @@ export default function DevisForm({
 
   const validateStep3 = (): boolean => {
     const newErrors: Partial<Record<keyof FormData, string>> = {}
-    if (!formData.urgence) newErrors.urgence = 'Veuillez indiquer le d\u00e9lai souhait\u00e9'
+    if (!formData.urgence) newErrors.urgence = 'Veuillez indiquer le délai souhaité'
     if (formData.description.trim().length > 0 && formData.description.trim().length < 10) {
-      newErrors.description = 'Veuillez d\u00e9tailler davantage (10 caract\u00e8res minimum) ou laisser le champ vide'
+      newErrors.description = 'Veuillez détailler davantage (10 caractères minimum) ou laisser le champ vide'
     }
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -309,9 +309,9 @@ export default function DevisForm({
     const newErrors: Partial<Record<keyof FormData, string>> = {}
     if (!formData.nom.trim()) newErrors.nom = 'Veuillez entrer votre nom'
     if (!formData.telephone.trim()) {
-      newErrors.telephone = 'Veuillez entrer votre num\u00e9ro de t\u00e9l\u00e9phone'
+      newErrors.telephone = 'Veuillez entrer votre numéro de téléphone'
     } else if (!isValidFrenchPhone(formData.telephone.trim())) {
-      newErrors.telephone = 'Veuillez entrer un num\u00e9ro de t\u00e9l\u00e9phone fran\u00e7ais valide'
+      newErrors.telephone = 'Veuillez entrer un numéro de téléphone français valide'
     }
     if (!formData.email.trim()) {
       newErrors.email = 'Veuillez entrer votre adresse e-mail'
@@ -319,7 +319,7 @@ export default function DevisForm({
       newErrors.email = 'Veuillez entrer une adresse e-mail valide'
     }
     if (!formData.consentement) {
-      newErrors.consentement = "Veuillez accepter d'\u00eatre contact\u00e9 par des artisans"
+      newErrors.consentement = "Veuillez accepter d'être contacté par des artisans"
     }
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -413,7 +413,7 @@ export default function DevisForm({
       localStorage.removeItem(STORAGE_KEY)
     } catch (err) {
       setSubmitError(
-        err instanceof Error ? err.message : 'Une erreur est survenue. Veuillez r\u00e9essayer.'
+        err instanceof Error ? err.message : 'Une erreur est survenue. Veuillez réessayer.'
       )
     } finally {
       setSubmitting(false)
@@ -481,10 +481,10 @@ export default function DevisForm({
         </div>
 
         <h3 className="font-heading text-2xl md:text-3xl font-bold text-charcoal-900 mb-3">
-          Votre demande a bien \u00e9t\u00e9 envoy\u00e9e !
+          Votre demande a bien été envoyée !
         </h3>
         <p className="text-charcoal-500 mb-8 max-w-md mx-auto">
-          Des artisans qualifi\u00e9s pr\u00e8s de chez vous vont \u00e9tudier votre projet et vous contacter rapidement.
+          Des artisans qualifiés près de chez vous vont étudier votre projet et vous contacter rapidement.
         </p>
 
         {/* Premium timeline next steps */}
@@ -494,8 +494,8 @@ export default function DevisForm({
 
           <div className="space-y-6">
             {[
-              { num: '1', title: 'Analyse de votre demande', desc: 'Nous recherchons les artisans les plus adapt\u00e9s \u00e0 votre projet' },
-              { num: '2', title: 'R\u00e9ception des devis sous 24h', desc: "Jusqu'\u00e0 3 artisans qualifi\u00e9s vous contactent par email ou t\u00e9l\u00e9phone" },
+              { num: '1', title: 'Analyse de votre demande', desc: 'Nous recherchons les artisans les plus adaptés à votre projet' },
+              { num: '2', title: 'Réception des devis sous 24h', desc: "Jusqu'à 3 artisans qualifiés vous contactent par email ou téléphone" },
               { num: '3', title: 'Comparez et choisissez', desc: 'Comparez les devis, consultez les avis et choisissez librement' },
             ].map((item) => (
               <div key={item.num} className="flex items-start gap-4 relative">
@@ -522,7 +522,7 @@ export default function DevisForm({
             href="/"
             className="flex-1 inline-flex items-center justify-center gap-2 border-2 border-sand-300 hover:border-sand-400 text-charcoal-700 font-semibold px-6 py-3.5 rounded-xl hover:bg-sand-50 transition-all duration-300"
           >
-            Retour \u00e0 l&apos;accueil
+            Retour à l&apos;accueil
           </Link>
         </div>
       </div>
@@ -535,7 +535,7 @@ export default function DevisForm({
       <div className="flex items-center justify-center gap-2 mb-4 px-4 py-2.5 bg-gradient-to-r from-primary-50 to-primary-100 rounded-2xl border border-primary-200/50">
         <Shield className="w-4 h-4 text-primary-500 flex-shrink-0" />
         <p className="text-sm font-medium text-primary-700">
-          Gratuit &middot; Sans engagement &middot; Donn\u00e9es confidentielles
+          Gratuit &middot; Sans engagement &middot; Données confidentielles
         </p>
       </div>
 
@@ -600,7 +600,7 @@ export default function DevisForm({
               {/* Social proof */}
               <div className="flex items-center gap-2 text-charcoal-400">
                 <Users className="w-4 h-4 flex-shrink-0" />
-                <p className="text-sm">14 500+ artisans r\u00e9f\u00e9renc\u00e9s sur notre plateforme</p>
+                <p className="text-sm">14 500+ artisans référencés sur notre plateforme</p>
               </div>
 
               <button
@@ -709,7 +709,7 @@ export default function DevisForm({
                   onClick={handlePrev}
                   className="inline-flex items-center justify-center gap-2 text-charcoal-600 hover:text-charcoal-900 hover:bg-sand-100 font-medium px-5 py-3 rounded-xl transition-all duration-300"
                 >
-                  <ArrowLeft className="w-4 h-4" /> Pr\u00e9c\u00e9dent
+                  <ArrowLeft className="w-4 h-4" /> Précédent
                 </button>
                 <button
                   type="button"
@@ -742,7 +742,7 @@ export default function DevisForm({
               {/* Urgency chips */}
               <div>
                 <label className={labelClass}>
-                  D\u00e9lai souhait\u00e9 <span className="text-red-500">*</span>
+                  Délai souhaité <span className="text-red-500">*</span>
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   {urgencyOptions.map((opt) => (
@@ -778,7 +778,7 @@ export default function DevisForm({
               {formData.service && serviceSubcategories[formData.service] && (
                 <div>
                   <label className={labelClass}>
-                    Type de projet <span className="text-charcoal-400 font-normal">(cliquez pour s\u00e9lectionner)</span>
+                    Type de projet <span className="text-charcoal-400 font-normal">(cliquez pour sélectionner)</span>
                   </label>
                   <div className="flex flex-wrap gap-2">
                     {serviceSubcategories[formData.service].map((cat) => {
@@ -812,14 +812,14 @@ export default function DevisForm({
               {/* Description */}
               <div>
                 <label htmlFor="description" className={labelClass}>
-                  D\u00e9crivez votre projet <span className="text-charcoal-400 font-normal">(optionnel)</span>
+                  Décrivez votre projet <span className="text-charcoal-400 font-normal">(optionnel)</span>
                 </label>
                 <textarea
                   id="description"
                   rows={3}
                   placeholder={formData.service && serviceSubcategories[formData.service]
-                    ? "Pr\u00e9cisions suppl\u00e9mentaires (optionnel)..."
-                    : "Ex : fuite robinet cuisine, remplacement chaudi\u00e8re..."}
+                    ? "Précisions supplémentaires (optionnel)..."
+                    : "Ex : fuite robinet cuisine, remplacement chaudière..."}
                   value={formData.description}
                   onChange={(e) => updateField('description', e.target.value)}
                   aria-describedby={errors.description ? 'description-error' : undefined}
@@ -850,7 +850,7 @@ export default function DevisForm({
               {/* Budget chips */}
               <div>
                 <label className={labelClass}>
-                  Budget estim\u00e9 <span className="text-charcoal-400 font-normal">(optionnel)</span>
+                  Budget estimé <span className="text-charcoal-400 font-normal">(optionnel)</span>
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {budgetOptions.map((opt) => (
@@ -883,7 +883,7 @@ export default function DevisForm({
                     onClick={handlePrev}
                     className="inline-flex items-center justify-center gap-2 text-charcoal-600 hover:text-charcoal-900 hover:bg-sand-100 font-medium px-5 py-3 rounded-xl transition-all duration-300"
                   >
-                    <ArrowLeft className="w-4 h-4" /> Pr\u00e9c\u00e9dent
+                    <ArrowLeft className="w-4 h-4" /> Précédent
                   </button>
                 )}
                 <button
@@ -947,7 +947,7 @@ export default function DevisForm({
               {/* Phone */}
               <div>
                 <label htmlFor="telephone" className={labelClass}>
-                  T\u00e9l\u00e9phone <span className="text-red-500">*</span>
+                  Téléphone <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
                   <input
@@ -1021,9 +1021,9 @@ export default function DevisForm({
                     className="sr-only"
                   />
                   <span className="text-sm text-charcoal-600 leading-relaxed">
-                    J&apos;accepte d&apos;\u00eatre contact\u00e9 par des artisans pour recevoir des devis
+                    J&apos;accepte d&apos;être contacté par des artisans pour recevoir des devis
                     en lien avec ma demande.{' '}
-                    <span className="text-charcoal-400">Seuls votre nom, t\u00e9l\u00e9phone et description du projet sont transmis aux artisans contact\u00e9s.</span>
+                    <span className="text-charcoal-400">Seuls votre nom, téléphone et description du projet sont transmis aux artisans contactés.</span>
                   </span>
                 </label>
                 {errors.consentement && (
@@ -1044,7 +1044,7 @@ export default function DevisForm({
                   disabled={submitting}
                   className="inline-flex items-center justify-center gap-2 text-charcoal-600 hover:text-charcoal-900 hover:bg-sand-100 font-medium px-5 py-3 rounded-xl transition-all duration-300 disabled:opacity-50"
                 >
-                  <ArrowLeft className="w-4 h-4" /> Pr\u00e9c\u00e9dent
+                  <ArrowLeft className="w-4 h-4" /> Précédent
                 </button>
                 <button
                   type="submit"
@@ -1078,7 +1078,7 @@ export default function DevisForm({
                   <Check className="w-3.5 h-3.5" /> 3 devis max
                 </span>
                 <span className="flex items-center gap-1">
-                  <Check className="w-3.5 h-3.5" /> Artisans v\u00e9rifi\u00e9s SIREN
+                  <Check className="w-3.5 h-3.5" /> Artisans vérifiés SIREN
                 </span>
               </div>
             </div>
