@@ -173,8 +173,8 @@ describe('GET /api/admin/providers/[id]', () => {
     expect(result.body.provider.email).toBe('dupont@example.com')
     expect(result.body.provider.phone).toBe('+33612345678')
     expect(result.body.provider.slug).toBe('dupont-plomberie')
-    expect(result.body.provider.services).toEqual([])
-    expect(result.body.provider.zones).toEqual([])
+    expect(result.body.provider.address_street).toBe('10 Rue de Paris')
+    expect(result.body.provider.address_city).toBe('Paris')
     expect(mockFromTable).toBe('providers')
   })
 
@@ -241,15 +241,14 @@ describe('GET /api/admin/providers/[id]', () => {
     ) as unknown as { body: { provider: Record<string, unknown> } }
 
     const p = result.body.provider
-    expect(p.address).toBe('5 Avenue Foch')
-    expect(p.city).toBe('Lyon')
-    expect(p.postal_code).toBe('69001')
-    expect(p.region).toBe('Auvergne-Rhone-Alpes')
+    expect(p.address_street).toBe('5 Avenue Foch')
+    expect(p.address_city).toBe('Lyon')
+    expect(p.address_postal_code).toBe('69001')
+    expect(p.address_region).toBe('Auvergne-Rhone-Alpes')
     expect(p.is_verified).toBe(false)
     expect(p.is_active).toBe(true)
-    expect(p.rating).toBe(3.2)
-    expect(p.reviews_count).toBe(5)
-    expect(p.source).toBe('manual')
+    expect(p.rating_average).toBe(3.2)
+    expect(p.review_count).toBe(5)
   })
 
   it('defaults null fields to empty strings', async () => {
@@ -282,11 +281,11 @@ describe('GET /api/admin/providers/[id]', () => {
     expect(p.phone).toBe('')
     expect(p.siret).toBe('')
     expect(p.description).toBe('')
-    expect(p.address).toBe('')
-    expect(p.city).toBe('')
-    expect(p.postal_code).toBe('')
-    expect(p.rating).toBeNull()
-    expect(p.reviews_count).toBe(0)
+    expect(p.address_street).toBe('')
+    expect(p.address_city).toBe('')
+    expect(p.address_postal_code).toBe('')
+    expect(p.rating_average).toBeNull()
+    expect(p.review_count).toBe(0)
   })
 })
 

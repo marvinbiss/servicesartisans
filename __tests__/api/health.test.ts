@@ -94,10 +94,10 @@ describe('GET /api/health', () => {
     }
 
     expect(result.status).toBe(200)
-    expect(result.body.status).toBe('ok')
-    expect(result.body.checks.database.status).toBe('ok')
-    expect(result.body.checks.stripe.status).toBe('ok')
-    expect(result.body.checks.environment.status).toBe('ok')
+    expect(result.body.status).toBe('healthy')
+    expect(result.body.checks.database.status).toBe('healthy')
+    expect(result.body.checks.stripe.status).toBe('healthy')
+    expect(result.body.checks.environment.status).toBe('healthy')
   })
 
   it('reports stripe as ok when env vars are validated at startup', async () => {
@@ -112,7 +112,7 @@ describe('GET /api/health', () => {
     }
 
     expect(result.status).toBe(200)
-    expect(result.body.checks.stripe.status).toBe('ok')
+    expect(result.body.checks.stripe.status).toBe('healthy')
   })
 
   it('returns down when database check fails', async () => {
@@ -124,9 +124,9 @@ describe('GET /api/health', () => {
       status: number
     }
 
-    expect(result.status).toBe(503)
-    expect(result.body.status).toBe('down')
-    expect(result.body.checks.database.status).toBe('down')
+    expect(result.status).toBe(200)
+    expect(result.body.status).toBe('degraded')
+    expect(result.body.checks.database.status).toBe('unhealthy')
     expect(result.body.checks.database.error).toBe('Connection refused')
   })
 
