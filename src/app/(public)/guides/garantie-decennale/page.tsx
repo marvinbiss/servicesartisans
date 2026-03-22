@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { SITE_URL, SITE_NAME } from "@/lib/seo/config"
 import JsonLd from "@/components/JsonLd"
+import { getInsuranceProductSchema } from "@/lib/seo/jsonld"
 import Breadcrumb from "@/components/Breadcrumb"
 import {
   ShieldCheck,
@@ -149,9 +150,18 @@ export default function GarantieDecennalePage() {
     })),
   }
 
+  const insuranceSchema = getInsuranceProductSchema({
+    name: "Assurance Garantie Décennale Artisan",
+    description:
+      "Assurance de responsabilité civile décennale obligatoire pour tout constructeur (artisan, architecte, promoteur). Couvre les dommages compromettant la solidité de l'ouvrage pendant 10 ans après réception des travaux.",
+    insuranceType: "liability insurance",
+    url: PAGE_URL,
+    category: "Construction Insurance",
+  })
+
   return (
     <>
-      <JsonLd data={[breadcrumbSchema, faqSchema]} />
+      <JsonLd data={[breadcrumbSchema, faqSchema, insuranceSchema]} />
 
       <div className="min-h-screen bg-gradient-to-b from-blue-50/60 to-white">
         {/* Breadcrumb */}

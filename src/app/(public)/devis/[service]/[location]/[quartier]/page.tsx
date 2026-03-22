@@ -12,6 +12,7 @@ import { villes, getQuartierBySlug, getQuartiersByVille, getNearbyCities } from 
 import { getServiceImage } from '@/lib/data/images'
 import { relatedServices } from '@/lib/constants/navigation'
 import DevisForm from '@/components/DevisForm'
+import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 
 // ---------------------------------------------------------------------------
 // Static params: top 3 services x top 10 cities x their quartiers
@@ -404,6 +405,14 @@ export default async function DevisQuartierPage({
           </div>
         </div>
       </section>
+
+      <CrossIntentLinks
+        service={service}
+        serviceName={trade.name}
+        ville={location}
+        villeName={ville.name}
+        currentIntent="devis"
+      />
 
       {/* ─── 8. CROSS-LINKS ───────────────────────────────────── */}
       <section className="py-16 bg-white">

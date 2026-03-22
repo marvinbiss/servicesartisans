@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { SITE_URL, SITE_NAME } from "@/lib/seo/config"
 import JsonLd from "@/components/JsonLd"
+import { getFinancialProductSchema, getLoanOrCreditSchema } from "@/lib/seo/jsonld"
 import Breadcrumb from "@/components/Breadcrumb"
 import {
   Euro,
@@ -222,9 +223,38 @@ export default function AidesRenovation2026Page() {
     },
   }
 
+  const maprimeRenovSchema = getFinancialProductSchema({
+    name: "MaPrimeRénov' — Aide à la Rénovation Énergétique",
+    description:
+      "Aide financière de l'État pour la rénovation énergétique. Jusqu'à 63 000 € en parcours accompagné. Résidence principale de plus de 15 ans, artisan RGE obligatoire.",
+    url: PAGE_URL,
+    category: "Government Grant",
+    amount: "63000",
+  })
+
+  const ceeSchema = getFinancialProductSchema({
+    name: "Certificats d'Économie d'Énergie (CEE)",
+    description:
+      "Prime versée par les fournisseurs d'énergie pour les travaux de rénovation énergétique. De 500 à 4 000 € selon les travaux. Logement de plus de 2 ans, artisan RGE.",
+    url: PAGE_URL,
+    category: "Energy Savings Certificate",
+    amount: "4000",
+  })
+
+  const ecoPtzSchema = getLoanOrCreditSchema({
+    name: "Éco-PTZ — Prêt à Taux Zéro Rénovation",
+    description:
+      "Prêt à taux zéro jusqu'à 50 000 € remboursable sur 20 ans pour financer les travaux de rénovation énergétique. Sans condition de revenus.",
+    url: PAGE_URL,
+    loanType: "Éco-prêt à taux zéro",
+    amount: "50000",
+    annualPercentageRate: 0,
+    loanTerm: "P20Y",
+  })
+
   return (
     <>
-      <JsonLd data={[breadcrumbSchema, faqSchema, articleSchema]} />
+      <JsonLd data={[breadcrumbSchema, faqSchema, articleSchema, maprimeRenovSchema, ceeSchema, ecoPtzSchema]} />
 
       <div className="min-h-screen bg-gradient-to-b from-blue-50/60 to-white">
         {/* Breadcrumb */}

@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { SITE_URL, SITE_NAME } from "@/lib/seo/config"
 import JsonLd from "@/components/JsonLd"
+import { getInsuranceProductSchema } from "@/lib/seo/jsonld"
 import Breadcrumb from "@/components/Breadcrumb"
 import {
   ShieldCheck,
@@ -150,9 +151,21 @@ export default function AssuranceDommageOuvragePage() {
     })),
   }
 
+  const insuranceSchema = getInsuranceProductSchema({
+    name: "Assurance Dommage-Ouvrage",
+    description:
+      "Assurance dommage-ouvrage (DO) pour le maître d'ouvrage. Préfinance les réparations des dommages décennaux sous 90 jours, sans attendre la recherche de responsabilité. Obligatoire avant le début du chantier.",
+    insuranceType: "property insurance",
+    url: PAGE_URL,
+    lowPrice: 1500,
+    highPrice: 10000,
+    priceCurrency: "EUR",
+    category: "Construction Insurance",
+  })
+
   return (
     <>
-      <JsonLd data={[breadcrumbSchema, faqSchema]} />
+      <JsonLd data={[breadcrumbSchema, faqSchema, insuranceSchema]} />
 
       <div className="min-h-screen bg-gradient-to-b from-teal-50/60 to-white">
         {/* Breadcrumb */}

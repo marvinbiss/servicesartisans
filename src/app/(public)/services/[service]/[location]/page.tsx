@@ -26,6 +26,7 @@ import { SITE_URL } from '@/lib/seo/config'
 import { generateLocationContent, hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { getNaturalTerm } from '@/lib/seo/natural-terms'
 import { getPageContent } from '@/lib/cms'
+import { shouldNoindex } from '@/lib/seo/pruning'
 import { logger } from '@/lib/logger'
 import { CmsContent } from '@/components/CmsContent'
 import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
@@ -203,10 +204,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       ]
   const description = descTemplates[descHash % descTemplates.length]
 
+  // Pruning: noindex pages with zero providers AND no unique data (fail-open safe)
+  const tradeContent = getTradeContent(serviceSlug)
+  const isNoindex = shouldNoindex(`/services/${serviceSlug}/${locationSlug}`, {
+    providerCount,
+    isQuartierPage: false,
+    hasUniqueData: !!(tradeContent || getCommuneBySlug(locationSlug)),
+  })
+
   return {
     title,
     description,
-    robots: { index: true, follow: true, 'max-snippet': -1 as const, 'max-image-preview': 'large' as const, 'max-video-preview': -1 as const },
+    robots: isNoindex
+      ? { index: false, follow: true }
+      : { index: true, follow: true, 'max-snippet': -1 as const, 'max-image-preview': 'large' as const, 'max-video-preview': -1 as const },
     openGraph: {
       title,
       description,

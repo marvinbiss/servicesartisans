@@ -23,6 +23,7 @@ import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
 import { SocialProofBanner } from '@/components/SocialProofBanner'
 import LastUpdated from '@/components/seo/LastUpdated'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
+import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import StickyMobileCTA from '@/components/StickyMobileCTA'
 import DemandIndicator from '@/components/DemandIndicator'
 import TrustGuarantee from '@/components/TrustGuarantee'
@@ -1003,7 +1004,8 @@ export default async function ServicePage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* Internal Links Footer */}
+      {/* DeepPageLinks — Hub mode (no city) */}
+      <DeepPageLinks currentService={serviceSlug} currentIntent="services" />
 
       <StickyMobileCTA serviceSlug={serviceSlug} />
 

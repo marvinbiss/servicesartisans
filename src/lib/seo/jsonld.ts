@@ -141,22 +141,26 @@ export function getFAQSchema(faqs: { question: string; answer: string }[]): Reco
   }
 }
 
-// Schema.org HowTo (for "Comment ça marche" page and problem pages)
+// Schema.org HowTo (for guide pages, "Comment ca marche" page and problem pages)
+// Google spec: https://developers.google.com/search/docs/appearance/structured-data/how-to
 export function getHowToSchema(
   steps: { name: string; text: string; image?: string }[],
-  options?: { name?: string; description?: string }
-) {
+  options?: { name?: string; description?: string; totalTime?: string }
+): Record<string, unknown> | null {
+  if (!steps || steps.length === 0) return null
+
   return {
     '@context': 'https://schema.org',
     '@type': 'HowTo',
     name: options?.name ?? 'Comment trouver un artisan sur ServicesArtisans',
     description: options?.description ?? 'Guide étape par étape pour trouver et contacter un artisan qualifié.',
+    ...(options?.totalTime && { totalTime: options.totalTime }),
     step: steps.map((step, index) => ({
       '@type': 'HowToStep',
       position: index + 1,
       name: step.name,
       text: step.text,
-      image: step.image,
+      ...(step.image && { image: step.image }),
     })),
   }
 }
@@ -401,6 +405,129 @@ export function getComparisonReviewSchema(params: {
   }
 }
 
+// Schema.org InsuranceProduct (for insurance guide pages: décennale, dommage-ouvrage, RC pro)
+export function getInsuranceProductSchema(params: {
+  name: string
+  description: string
+  insuranceType: string
+  url: string
+  lowPrice?: number
+  highPrice?: number
+  priceCurrency?: string
+  priceUnit?: string
+  category?: string
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FinancialProduct',
+    additionalType: 'https://schema.org/InsuranceProduct',
+    name: params.name,
+    description: params.description,
+    url: params.url,
+    category: params.category || 'Insurance',
+    provider: {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
+      name: SITE_NAME,
+    },
+    areaServed: {
+      '@type': 'Country',
+      name: 'France',
+    },
+    ...(params.lowPrice != null && params.highPrice != null && {
+      offers: {
+        '@type': 'AggregateOffer',
+        lowPrice: params.lowPrice,
+        highPrice: params.highPrice,
+        priceCurrency: params.priceCurrency || 'EUR',
+        ...(params.priceUnit && { unitText: params.priceUnit }),
+      },
+    }),
+  }
+}
+
+// Schema.org FinancialProduct (for financial aid pages: MaPrimeRénov, éco-PTZ, CEE, aides)
+export function getFinancialProductSchema(params: {
+  name: string
+  description: string
+  url: string
+  category?: string
+  amount?: string
+  feesAndCommissionsSpecification?: string
+  annualPercentageRate?: number
+  interestRate?: number
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FinancialProduct',
+    name: params.name,
+    description: params.description,
+    url: params.url,
+    category: params.category || 'Government Grant',
+    provider: {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
+      name: SITE_NAME,
+    },
+    areaServed: {
+      '@type': 'Country',
+      name: 'France',
+    },
+    ...(params.amount && { amount: params.amount }),
+    ...(params.feesAndCommissionsSpecification && {
+      feesAndCommissionsSpecification: params.feesAndCommissionsSpecification,
+    }),
+    ...(params.annualPercentageRate != null && {
+      annualPercentageRate: params.annualPercentageRate,
+    }),
+    ...(params.interestRate != null && {
+      interestRate: params.interestRate,
+    }),
+  }
+}
+
+// Schema.org LoanOrCredit (for loan/credit pages: éco-PTZ, prêt travaux)
+export function getLoanOrCreditSchema(params: {
+  name: string
+  description: string
+  url: string
+  loanType?: string
+  amount?: string
+  currency?: string
+  annualPercentageRate: number
+  loanTerm?: string
+  requiredCollateral?: string
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'LoanOrCredit',
+    name: params.name,
+    description: params.description,
+    url: params.url,
+    ...(params.loanType && { loanType: params.loanType }),
+    ...(params.amount && {
+      amount: {
+        '@type': 'MonetaryAmount',
+        value: params.amount,
+        currency: params.currency || 'EUR',
+      },
+    }),
+    annualPercentageRate: params.annualPercentageRate,
+    ...(params.loanTerm && { loanTerm: params.loanTerm }),
+    ...(params.requiredCollateral && { requiredCollateral: params.requiredCollateral }),
+    currency: params.currency || 'EUR',
+    provider: {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}#organization`,
+      name: SITE_NAME,
+    },
+    areaServed: {
+      '@type': 'Country',
+      name: 'France',
+    },
+  }
+}
+
 // Schema.org SpeakableSpecification (voice AI optimization)
 export function getSpeakableSchema(params: {
   url: string
@@ -422,4 +549,3 @@ export function getSpeakableSchema(params: {
     },
   }
 }
-

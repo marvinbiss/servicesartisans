@@ -24,6 +24,7 @@ import {
 } from '@/lib/seo/location-content'
 import { popularServices, relatedServices } from '@/lib/constants/navigation'
 import Breadcrumb from '@/components/Breadcrumb'
+import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import { formatEuro } from '@/lib/data/commune-data'
 import type { Service, Location as LocationType, Provider } from '@/types'
 
@@ -579,6 +580,14 @@ export default async function ServiceQuartierPage({
           </div>
         </section>
       )}
+
+      <CrossIntentLinks
+        service={serviceSlug}
+        serviceName={service.name}
+        ville={locationSlug}
+        villeName={ville.name}
+        currentIntent="services"
+      />
 
       {/* ─── INTERNAL LINKS ─────────────────────────────────── */}
       <section className="py-12 bg-gray-50 border-t">

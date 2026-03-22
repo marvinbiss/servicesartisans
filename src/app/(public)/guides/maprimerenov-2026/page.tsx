@@ -32,7 +32,7 @@ import {
 } from "lucide-react"
 import Breadcrumb from "@/components/Breadcrumb"
 import JsonLd from "@/components/JsonLd"
-import { getBreadcrumbSchema, getFAQSchema } from "@/lib/seo/jsonld"
+import { getBreadcrumbSchema, getFAQSchema, getFinancialProductSchema, getLoanOrCreditSchema } from "@/lib/seo/jsonld"
 import { SITE_URL, SITE_NAME } from "@/lib/seo/config"
 
 // ---------------------------------------------------------------------------
@@ -370,9 +370,30 @@ export default function MaPrimeRenov2026Page() {
     inLanguage: "fr-FR",
   }
 
+  const financialProductSchema = getFinancialProductSchema({
+    name: "MaPrimeRénov' 2026",
+    description:
+      "Aide financière de l'État pour la rénovation énergétique des logements. Jusqu'à 70 000 € pour le parcours accompagné. Accessible à tous les propriétaires, artisan RGE obligatoire.",
+    url: `${SITE_URL}/guides/maprimerenov-2026`,
+    category: "Government Grant",
+    amount: "70000",
+    feesAndCommissionsSpecification: "Aucuns frais — aide directe de l'ANAH versée après travaux",
+  })
+
+  const ecoPtzSchema = getLoanOrCreditSchema({
+    name: "Éco-PTZ — Prêt à Taux Zéro Rénovation Énergétique",
+    description:
+      "Prêt à taux zéro pour financer les travaux de rénovation énergétique. Jusqu'à 50 000 € remboursables sur 20 ans, sans condition de revenus. Cumulable avec MaPrimeRénov'.",
+    url: `${SITE_URL}/guides/maprimerenov-2026`,
+    loanType: "Éco-prêt à taux zéro",
+    amount: "50000",
+    annualPercentageRate: 0,
+    loanTerm: "P20Y",
+  })
+
   return (
     <>
-      <JsonLd data={[breadcrumbSchema, faqSchema, articleSchema]} />
+      <JsonLd data={[breadcrumbSchema, faqSchema, articleSchema, financialProductSchema, ecoPtzSchema]} />
 
       <div className="min-h-screen bg-gray-50">
         {/* Breadcrumb */}

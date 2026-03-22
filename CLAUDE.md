@@ -182,6 +182,16 @@ Architecture : 39 sitemaps (17 statiques + 20 providers dynamiques + image + new
 
 **Migration 348** : Index couvrant `idx_providers_sitemap_v2` — sert la requête provider sitemap entièrement depuis l'index (zero heap fetch).
 
+**Stratégie lastmod** (mise à jour 2026-03-22) :
+- `STATIC_DATE = '2025-11-01'` — pages statiques/hub dont le contenu ne change pas (honnête)
+- **Pages géo** (villes, départements, régions) — lastmod = `MAX(providers.updated_at)` dans la zone. Si aucun provider → lastmod omis
+- **Pages service hub** (`/services/{slug}`, `/tarifs/{slug}`, `/urgence/{slug}`) — lastmod = dernier provider modifié pour ce service. Fallback `STATIC_DATE`
+- **Pages avis** (`/avis/{slug}`) — lastmod = date du dernier avis publié pour ce service
+- **Pages dept×service, region×service, baromètre** — lastmod = dernier provider modifié dans la zone×service
+- **Pages composition statique** (devis×ville, urgence×ville, tarifs×ville, problemes×ville) — pas de lastmod (composition template, pas de vrai changement)
+- **Requêtes DB** centralisées dans `src/lib/seo/lastmod-queries.ts` — 7 requêtes batch en parallèle, lazy-loaded une seule fois
+- **Fail-safe** : si Supabase indisponible au build → toutes les maps vides → lastmod omis (jamais de faux lastmod)
+
 ### IndexNow
 
 - Clé : `55e191c6b56d89e07bbf8fcba3552fcd` (fichier de vérification dans `/public/`)

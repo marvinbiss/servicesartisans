@@ -6,6 +6,7 @@ import {
   getVillesByDepartement,
   getDepartementByCode,
   getRegionSlugByName,
+  regions,
 } from '@/lib/data/france'
 import { allArticles } from '@/lib/data/blog/articles'
 import { getNearbyVilleSlugs } from '@/lib/data/commune-data'
@@ -16,7 +17,7 @@ import { getNearbyVilleSlugs } from '@/lib/data/commune-data'
 
 interface DeepPageLinksProps {
   currentService: string   // slug du service (ex: "plombier")
-  currentVille: string     // slug de la ville (ex: "paris")
+  currentVille?: string    // slug de la ville (ex: "paris") — optionnel pour le mode hub
   currentIntent?: 'services' | 'tarifs' | 'devis' | 'avis' | 'urgence'
 }
 
@@ -71,50 +72,62 @@ export default async function DeepPageLinks({
   currentVille,
   currentIntent,
 }: DeepPageLinksProps) {
-  const ville = getVilleBySlug(currentVille)
   const serviceData = services.find(s => s.slug === currentService)
-  if (!ville || !serviceData) return null
+  if (!serviceData) return null
 
   const serviceName = serviceData.name
-  const villeName = ville.name
+  const isHubMode = !currentVille
+  const ville = currentVille ? getVilleBySlug(currentVille) : null
 
-  // ── Module 1: Villes proches (GPS Haversine with dept/region fallback) ─
+  // In city mode, ville must exist
+  if (!isHubMode && !ville) return null
+
+  const villeName = ville?.name || ''
+
+  // ── Module 1: Villes proches (city mode only) ─────────────────────────
   let module1Links: { href: string; label: string }[] = []
 
-  // Try GPS-based proximity (works at runtime/ISR, not during build)
-  const gpsCities = await getNearbyVilleSlugs(currentVille, 8)
-  if (gpsCities && gpsCities.length > 0) {
-    module1Links = gpsCities
-      .map(c => {
-        const v = getVilleBySlug(c.slug)
-        if (!v) return null
-        return { href: `/services/${currentService}/${v.slug}`, label: `${serviceName} à ${v.name}` }
-      })
-      .filter((x): x is { href: string; label: string } => x !== null)
+  if (!isHubMode && currentVille) {
+    // Try GPS-based proximity (works at runtime/ISR, not during build)
+    const gpsCities = await getNearbyVilleSlugs(currentVille, 8)
+    if (gpsCities && gpsCities.length > 0) {
+      module1Links = gpsCities
+        .map(c => {
+          const v = getVilleBySlug(c.slug)
+          if (!v) return null
+          return { href: `/services/${currentService}/${v.slug}`, label: `${serviceName} à ${v.name}` }
+        })
+        .filter((x): x is { href: string; label: string } => x !== null)
+    }
+
+    // Fallback: department/region proximity (build time or no GPS data)
+    if (module1Links.length === 0) {
+      const nearbyCities = getNearbyCities(currentVille, 8)
+      module1Links = nearbyCities.map(v => ({
+        href: `/services/${currentService}/${v.slug}`,
+        label: `${serviceName} à ${v.name}`,
+      }))
+    }
   }
 
-  // Fallback: department/region proximity (build time or no GPS data)
-  if (module1Links.length === 0) {
-    const nearbyCities = getNearbyCities(currentVille, 8)
-    module1Links = nearbyCities.map(v => ({
-      href: `/services/${currentService}/${v.slug}`,
-      label: `${serviceName} à ${v.name}`,
-    }))
-  }
-
-  // ── Module 2: Autres artisans dans cette ville ────────────────────────
+  // ── Module 2: Autres services ─────────────────────────────────────────
   const otherServices = services
     .filter(s => s.slug !== currentService)
     .slice(0, 8)
-  const module2Links = otherServices.map(s => ({
-    href: `/services/${s.slug}/${currentVille}`,
-    label: `${s.name} à ${villeName}`,
-  }))
+  const module2Links = isHubMode
+    ? otherServices.map(s => ({
+        href: `/services/${s.slug}`,
+        label: `${s.name} en France`,
+      }))
+    : otherServices.map(s => ({
+        href: `/services/${s.slug}/${currentVille}`,
+        label: `${s.name} à ${villeName}`,
+      }))
 
-  // ── Module 3: Dans le département ─────────────────────────────────────
-  const dept = getDepartementByCode(ville.departementCode)
+  // ── Module 3: Dans le département (city mode only) ────────────────────
+  const dept = ville ? getDepartementByCode(ville.departementCode) : null
   const module3Links: { href: string; label: string }[] = []
-  if (dept) {
+  if (!isHubMode && dept && ville) {
     module3Links.push({
       href: `/departements/${dept.slug}`,
       label: `Artisans dans le ${dept.name}`,
@@ -135,44 +148,67 @@ export default async function DeepPageLinks({
     }
   }
 
-  // ── Module 4: Voir aussi (cross-intent) ───────────────────────────────
+  // ── Module 4: Cross-intent ────────────────────────────────────────────
   const intents: { intent: DeepPageLinksProps['currentIntent']; prefix: string; label: string }[] = [
     { intent: 'tarifs', prefix: 'tarifs', label: 'Tarifs' },
     { intent: 'devis', prefix: 'devis', label: 'Devis' },
     { intent: 'avis', prefix: 'avis', label: 'Avis' },
     { intent: 'urgence', prefix: 'urgence', label: 'Urgence' },
   ]
-  const module4Links = intents
-    .filter(i => i.intent !== currentIntent)
-    .map(i => ({
-      href: `/${i.prefix}/${currentService}/${currentVille}`,
-      label: `${i.label} ${serviceName} à ${villeName}`,
-    }))
+  const module4Links = isHubMode
+    ? intents
+        .filter(i => i.intent !== currentIntent)
+        .map(i => ({
+          href: `/${i.prefix}/${currentService}`,
+          label: `${i.label} ${serviceName}`,
+        }))
+    : intents
+        .filter(i => i.intent !== currentIntent)
+        .map(i => ({
+          href: `/${i.prefix}/${currentService}/${currentVille}`,
+          label: `${i.label} ${serviceName} à ${villeName}`,
+        }))
 
   // ── Module 5: Hub service et région ───────────────────────────────────
-  const regionSlug = getRegionSlugByName(ville.region)
-  const module5Links: { href: string; label: string }[] = [
-    {
+  const module5Links: { href: string; label: string }[] = []
+  if (isHubMode) {
+    // In hub mode: link to service×region pages for all metro regions
+    const metroRegions = regions.filter(r =>
+      !['guadeloupe', 'martinique', 'guyane', 'la-reunion', 'mayotte',
+        'saint-barthelemy', 'saint-martin', 'polynesie-francaise', 'nouvelle-caledonie'].includes(r.slug)
+    )
+    for (const r of metroRegions.slice(0, 8)) {
+      module5Links.push({
+        href: `/regions/${r.slug}/${currentService}`,
+        label: `${serviceName} en ${r.name}`,
+      })
+    }
+  } else {
+    module5Links.push({
       href: `/services/${currentService}`,
       label: `${serviceName} en France`,
-    },
-  ]
-  if (regionSlug) {
-    module5Links.push({
-      href: `/regions/${regionSlug}`,
-      label: `Artisans en ${ville.region}`,
     })
-    module5Links.push({
-      href: `/regions/${regionSlug}/${currentService}`,
-      label: `${serviceName} en ${ville.region}`,
-    })
+    if (ville) {
+      const regionSlug = getRegionSlugByName(ville.region)
+      if (regionSlug) {
+        module5Links.push({
+          href: `/regions/${regionSlug}`,
+          label: `Artisans en ${ville.region}`,
+        })
+        module5Links.push({
+          href: `/regions/${regionSlug}/${currentService}`,
+          label: `${serviceName} en ${ville.region}`,
+        })
+      }
+    }
   }
 
   // ── Module 6: Guides et articles ──────────────────────────────────────
   const articleSlugs = SERVICE_ARTICLE_MAP.get(currentService) || []
   const module6Links: { href: string; label: string }[] = []
+  const maxArticles = isHubMode ? 3 : 2
   for (const slug of articleSlugs) {
-    if (module6Links.length >= 2) break
+    if (module6Links.length >= maxArticles) break
     const article = allArticles[slug]
     if (article) {
       module6Links.push({
@@ -188,13 +224,15 @@ export default async function DeepPageLinks({
     'nantes', 'strasbourg', 'lille', 'montpellier', 'nice',
     'rennes', 'toulon', 'grenoble', 'dijon', 'angers',
   ]
+
+  const maxGrandesVilles = isHubMode ? 10 : 5
   const module1Slugs = new Set(module1Links.map(l => l.href.split('/').pop()!))
   const deptSlugs = new Set(
-    dept ? getVillesByDepartement(ville.departementCode).map(v => v.slug) : []
+    dept && ville ? getVillesByDepartement(ville.departementCode).map(v => v.slug) : []
   )
   const module7Links = GRANDES_VILLES
     .filter(slug => slug !== currentVille && !module1Slugs.has(slug) && !deptSlugs.has(slug))
-    .slice(0, 5)
+    .slice(0, maxGrandesVilles)
     .map(slug => {
       const v = getVilleBySlug(slug)
       return v
@@ -210,16 +248,19 @@ export default async function DeepPageLinks({
     modules.push({ title: `${serviceName} à proximité de ${villeName}`, links: module1Links })
   }
   if (module2Links.length > 0) {
-    modules.push({ title: `Autres artisans à ${villeName}`, links: module2Links })
+    modules.push({
+      title: isHubMode ? 'Autres services artisans' : `Autres artisans à ${villeName}`,
+      links: module2Links,
+    })
   }
   if (module3Links.length > 0 && dept) {
     modules.push({ title: `${serviceName} dans le ${dept.name}`, links: module3Links })
   }
   if (module4Links.length > 0) {
-    modules.push({ title: 'Voir aussi', links: module4Links })
+    modules.push({ title: isHubMode ? `Tarifs, devis et avis ${serviceName.toLowerCase()}` : 'Voir aussi', links: module4Links })
   }
   if (module5Links.length > 0) {
-    modules.push({ title: 'Hub service et région', links: module5Links })
+    modules.push({ title: isHubMode ? `${serviceName} par région` : 'Hub service et région', links: module5Links })
   }
   if (module6Links.length > 0) {
     modules.push({ title: 'Guides et articles', links: module6Links })

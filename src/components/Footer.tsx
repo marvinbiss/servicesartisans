@@ -4,28 +4,12 @@ import { popularServices, popularCities, popularRegions } from '@/lib/constants/
 import NewsletterForm from './NewsletterForm'
 import { companyIdentity } from '@/lib/config/company-identity'
 
-// Navigation links
-const navigationLinks = [
-  { name: 'Accueil', href: '/' },
-  { name: 'Services', href: '/services' },
-  { name: 'Villes', href: '/villes' },
-  { name: 'Carte des artisans', href: '/carte-artisans' },
-  { name: 'Recherche', href: '/recherche' },
-  { name: 'Comment ça marche', href: '/comment-ca-marche' },
-]
-
-// Outils links
+// Outils links (reduced from 10 to 4 — PageRank dilution optimization)
 const outilsLinks = [
-  { name: 'Calculateur de prix', href: '/outils/calculateur-prix' },
-  { name: 'Diagnostic artisan', href: '/outils/diagnostic' },
-  { name: 'Carte des artisans', href: '/carte-artisans' },
   { name: 'Tarifs artisans', href: '/tarifs' },
   { name: 'Demander un devis', href: '/devis' },
   { name: 'Urgence artisan', href: '/urgence' },
-  { name: 'Problèmes courants', href: '/problemes' },
   { name: 'Vérifier un artisan', href: '/verifier-artisan' },
-  { name: 'Statistiques artisans', href: '/statistiques-artisans-france' },
-  { name: 'Widget pour artisans', href: '/widget' },
 ]
 
 // Information links
@@ -34,7 +18,6 @@ const informationLinks = [
   { name: 'Contact', href: '/contact' },
   { name: 'FAQ', href: '/faq' },
   { name: 'Blog', href: '/blog' },
-  { name: 'Guides travaux', href: '/guides' },
   { name: 'Avis artisans', href: '/avis' },
 ]
 
@@ -115,12 +98,12 @@ export default function Footer() {
       <nav className="relative border-b border-charcoal-700" aria-label="Liens populaires">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
           {/* Desktop: full grid visible */}
-          <div className="hidden md:grid md:grid-cols-6 gap-8 lg:gap-12">
-            {/* Services populaires */}
+          <div className="hidden md:grid md:grid-cols-5 gap-8 lg:gap-12">
+            {/* Services populaires — top 6 + CTA */}
             <div>
               <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Services populaires</h4>
               <ul className="space-y-3 text-sm">
-                {popularServices.map((service) => (
+                {popularServices.slice(0, 6).map((service) => (
                   <li key={service.slug}>
                     <Link
                       href={`/services/${service.slug}`}
@@ -132,7 +115,7 @@ export default function Footer() {
                 ))}
                 <li className="pt-2">
                   <Link href="/services" className="text-primary-400 hover:text-primary-300 flex items-center gap-1 group py-1.5">
-                    Tous les services
+                    Voir tous les services
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </li>
@@ -155,21 +138,21 @@ export default function Footer() {
                 ))}
                 <li className="pt-2">
                   <Link href="/villes" className="text-primary-400 hover:text-primary-300 flex items-center gap-1 group py-1.5">
-                    Toutes les villes
+                    Voir toutes les villes
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </li>
               </ul>
             </div>
 
-            {/* Par région */}
+            {/* Par région — top 4 + CTAs */}
             <div>
               <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em] flex items-center gap-2">
                 <Building2 className="w-3.5 h-3.5 text-charcoal-400" />
                 Par région
               </h4>
               <ul className="space-y-3 text-sm">
-                {popularRegions.map((region) => (
+                {popularRegions.slice(0, 4).map((region) => (
                   <li key={region.slug}>
                     <Link
                       href={`/regions/${region.slug}`}
@@ -194,9 +177,9 @@ export default function Footer() {
               </ul>
             </div>
 
-            {/* Outils */}
+            {/* Outils & Ressources — merged */}
             <div>
-              <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Outils gratuits</h4>
+              <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Outils & Ressources</h4>
               <ul className="space-y-3 text-sm">
                 {outilsLinks.map((link) => (
                   <li key={link.href}>
@@ -208,27 +191,22 @@ export default function Footer() {
                     </Link>
                   </li>
                 ))}
-              </ul>
-            </div>
-
-            {/* Ressources */}
-            <div>
-              <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Ressources</h4>
-              <ul className="space-y-3 text-sm">
-                <li><Link href="/guides" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">Guides travaux</Link></li>
+                <li className="pt-2 border-t border-charcoal-700/50">
+                  <Link href="/guides" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">Guides travaux</Link>
+                </li>
                 <li><Link href="/questions" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">Questions fréquentes</Link></li>
                 <li><Link href="/comparaison" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">Comparatifs artisans</Link></li>
                 <li><Link href="/barometre" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">Baromètre des prix</Link></li>
                 <li><Link href="/glossaire" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">Glossaire</Link></li>
-                <li><Link href="/statistiques-artisans-france" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">Statistiques artisans</Link></li>
+                <li><Link href="/normes" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">Normes et réglementations</Link></li>
               </ul>
             </div>
 
-            {/* Navigation */}
+            {/* Informations */}
             <div>
-              <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Navigation</h4>
+              <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Informations</h4>
               <ul className="space-y-3 text-sm">
-                {navigationLinks.map((link) => (
+                {informationLinks.map((link) => (
                   <li key={link.href}>
                     <Link
                       href={link.href}
@@ -250,7 +228,7 @@ export default function Footer() {
                 <ArrowRight className="w-4 h-4 text-charcoal-400 transition-transform duration-200 group-open:rotate-90" />
               </summary>
               <ul className="space-y-1 text-sm px-5 pb-4">
-                {popularServices.map((service) => (
+                {popularServices.slice(0, 6).map((service) => (
                   <li key={service.slug}>
                     <Link
                       href={`/services/${service.slug}`}
@@ -262,7 +240,7 @@ export default function Footer() {
                 ))}
                 <li className="pt-1">
                   <Link href="/services" className="text-primary-400 hover:text-primary-300 flex items-center gap-1 group py-1.5">
-                    Tous les services
+                    Voir tous les services
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </li>
@@ -287,7 +265,7 @@ export default function Footer() {
                 ))}
                 <li className="pt-1">
                   <Link href="/villes" className="text-primary-400 hover:text-primary-300 flex items-center gap-1 group py-1.5">
-                    Toutes les villes
+                    Voir toutes les villes
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </li>
@@ -303,7 +281,7 @@ export default function Footer() {
                 <ArrowRight className="w-4 h-4 text-charcoal-400 transition-transform duration-200 group-open:rotate-90" />
               </summary>
               <ul className="space-y-1 text-sm px-5 pb-4">
-                {popularRegions.map((region) => (
+                {popularRegions.slice(0, 4).map((region) => (
                   <li key={region.slug}>
                     <Link
                       href={`/regions/${region.slug}`}
@@ -330,7 +308,7 @@ export default function Footer() {
 
             <details className="group border border-charcoal-700 rounded-xl overflow-hidden">
               <summary className="flex items-center justify-between cursor-pointer px-5 py-4 text-white font-heading font-semibold text-xs uppercase tracking-[0.15em] hover:bg-white/[0.03] transition-colors">
-                Outils gratuits
+                Outils & Ressources
                 <ArrowRight className="w-4 h-4 text-charcoal-400 transition-transform duration-200 group-open:rotate-90" />
               </summary>
               <ul className="space-y-1 text-sm px-5 pb-4">
@@ -344,31 +322,24 @@ export default function Footer() {
                     </Link>
                   </li>
                 ))}
-              </ul>
-            </details>
-
-            <details className="group border border-charcoal-700 rounded-xl overflow-hidden">
-              <summary className="flex items-center justify-between cursor-pointer px-5 py-4 text-white font-heading font-semibold text-xs uppercase tracking-[0.15em] hover:bg-white/[0.03] transition-colors">
-                Ressources
-                <ArrowRight className="w-4 h-4 text-charcoal-400 transition-transform duration-200 group-open:rotate-90" />
-              </summary>
-              <ul className="space-y-1 text-sm px-5 pb-4">
-                <li><Link href="/guides" className="text-sand-400 hover:text-primary-400 transition-all duration-200 inline-block py-1.5">Guides travaux</Link></li>
+                <li className="pt-1 border-t border-charcoal-700/50">
+                  <Link href="/guides" className="text-sand-400 hover:text-primary-400 transition-all duration-200 inline-block py-1.5">Guides travaux</Link>
+                </li>
                 <li><Link href="/questions" className="text-sand-400 hover:text-primary-400 transition-all duration-200 inline-block py-1.5">Questions fréquentes</Link></li>
                 <li><Link href="/comparaison" className="text-sand-400 hover:text-primary-400 transition-all duration-200 inline-block py-1.5">Comparatifs artisans</Link></li>
                 <li><Link href="/barometre" className="text-sand-400 hover:text-primary-400 transition-all duration-200 inline-block py-1.5">Baromètre des prix</Link></li>
                 <li><Link href="/glossaire" className="text-sand-400 hover:text-primary-400 transition-all duration-200 inline-block py-1.5">Glossaire</Link></li>
-                <li><Link href="/statistiques-artisans-france" className="text-sand-400 hover:text-primary-400 transition-all duration-200 inline-block py-1.5">Statistiques artisans</Link></li>
+                <li><Link href="/normes" className="text-sand-400 hover:text-primary-400 transition-all duration-200 inline-block py-1.5">Normes et réglementations</Link></li>
               </ul>
             </details>
 
             <details className="group border border-charcoal-700 rounded-xl overflow-hidden">
               <summary className="flex items-center justify-between cursor-pointer px-5 py-4 text-white font-heading font-semibold text-xs uppercase tracking-[0.15em] hover:bg-white/[0.03] transition-colors">
-                Navigation
+                Informations
                 <ArrowRight className="w-4 h-4 text-charcoal-400 transition-transform duration-200 group-open:rotate-90" />
               </summary>
               <ul className="space-y-1 text-sm px-5 pb-4">
-                {navigationLinks.map((link) => (
+                {informationLinks.map((link) => (
                   <li key={link.href}>
                     <Link
                       href={link.href}
@@ -439,19 +410,13 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-heading font-semibold mb-5 text-xs uppercase tracking-[0.15em]">Informations</h4>
             <ul className="space-y-3 text-sm">
-              {informationLinks.slice(0, 6).map((link) => (
+              {informationLinks.map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                     {link.name}
                   </Link>
                 </li>
               ))}
-              <li>
-                <Link href="/services" className="inline-flex items-center gap-1.5 px-4 py-2 bg-primary-400/15 text-primary-400 rounded-lg hover:bg-primary-400/25 transition-all mt-2 group">
-                  Voir les services
-                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </li>
             </ul>
           </div>
 
@@ -472,21 +437,6 @@ export default function Footer() {
               <li>
                 <Link href="/garantie" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
                   Notre garantie
-                </Link>
-              </li>
-              <li>
-                <Link href="/politique-avis" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
-                  Politique des avis
-                </Link>
-              </li>
-              <li>
-                <Link href="/mediation" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
-                  Médiation
-                </Link>
-              </li>
-              <li>
-                <Link href="/presse" className="text-sand-400 hover:text-primary-400 transition-all duration-200 hover:translate-x-1 inline-block py-1.5">
-                  Espace presse
                 </Link>
               </li>
             </ul>

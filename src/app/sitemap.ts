@@ -6,25 +6,37 @@ import { getProblemSlugs } from '@/lib/data/problems'
 import { getQuestionSlugs } from '@/lib/data/questions'
 import { comparisons } from '@/lib/data/comparisons'
 import { GSC_PRIORITY_CITIES } from '@/lib/seo/gsc-priority-cities'
+import { STATIC_BATCH, LARGE_BATCH, TOP_CITIES_PHASE1 } from '@/lib/seo/sitemap-config'
 import { articleSlugs } from '@/lib/data/blog/articles'
 import { allArticles } from '@/lib/data/blog/articles'
 import { blogCategories, categoryToSlug, normalizeCategory } from '@/lib/data/blog/categories'
 import { allArticlesMeta } from '@/lib/data/blog/articles-index'
+import { fetchAllLastmodData, type SitemapLastmodData } from '@/lib/seo/lastmod-queries'
 // Return 404 for sitemap IDs not in generateSitemaps() — prevents ghost sitemaps
 // from returning empty-but-valid XML that Google keeps crawling forever.
 export const dynamicParams = false
 
-// Use build date as lastModified for static hub pages — signals freshness to Google
-const BUILD_DATE = new Date().toISOString().split('T')[0]
+// Fixed date for pages whose content rarely changes (hub pages, static pages, guides, etc.)
+// Google penalizes false freshness signals (Dec 2025 update). Better honest than fake-fresh.
+const STATIC_DATE = '2025-11-01'
 
-// Batch size for static (non-DB) sitemaps — must match the BATCH used in sitemap() slicing
-const STATIC_BATCH = 10_000
-const LARGE_BATCH = 25_000
+// Lazily-loaded lastmod data from DB. Fetched once, reused across all sitemap IDs.
+// If DB is unavailable, all maps are empty → lastmod is omitted (honest).
+let _lastmodData: SitemapLastmodData | null = null
+async function getLastmodData(): Promise<SitemapLastmodData> {
+  if (!_lastmodData) {
+    _lastmodData = await fetchAllLastmodData()
+  }
+  return _lastmodData
+}
 
-// Phase 1: submit only top-300 cities for new domain (conservative crawl budget).
-// Phase 2 (service-cities-extended) is handled below but NOT registered in generateSitemaps yet.
-// Uncomment the Phase 2 line in generateSitemaps() once domain authority grows (month 2-3).
-const TOP_CITIES_PHASE1 = 300
+/**
+ * Lookup helpers — normalize city/dept/region names for map lookup.
+ * Returns undefined if no real lastmod data exists (= omit lastmod).
+ */
+function normalizeName(s: string): string {
+  return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
+}
 
 /**
  * Generate sitemap index entries.
@@ -79,47 +91,50 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
   // ── Static pages + services ─────────────────────────────────────────
   if (id === 'static') {
+    // Homepage — STATIC_DATE: content changes rarely (hero, sections are stable)
     const homepage: MetadataRoute.Sitemap = [
-      { url: SITE_URL, lastModified: BUILD_DATE, changeFrequency: 'daily', priority: 1.0 },
+      { url: SITE_URL, lastModified: STATIC_DATE, changeFrequency: 'weekly', priority: 1.0 },
     ]
 
+    // Hub pages — STATIC_DATE: aggregation pages with stable structure
     const hubPages: MetadataRoute.Sitemap = [
-      { url: `${SITE_URL}/tarifs`, lastModified: BUILD_DATE, changeFrequency: 'weekly', priority: 0.9 },
-      { url: `${SITE_URL}/urgence`, lastModified: BUILD_DATE, changeFrequency: 'weekly', priority: 0.9 },
-      { url: `${SITE_URL}/devis`, lastModified: BUILD_DATE, changeFrequency: 'weekly', priority: 0.9 },
-      { url: `${SITE_URL}/avis`, lastModified: BUILD_DATE, changeFrequency: 'weekly', priority: 0.9 },
-      { url: `${SITE_URL}/blog`, lastModified: BUILD_DATE, changeFrequency: 'weekly', priority: 0.9 },
-      { url: `${SITE_URL}/guides`, lastModified: BUILD_DATE, changeFrequency: 'weekly', priority: 0.9 },
-      { url: `${SITE_URL}/questions`, lastModified: BUILD_DATE, changeFrequency: 'weekly', priority: 0.9 },
-      { url: `${SITE_URL}/barometre`, lastModified: BUILD_DATE, changeFrequency: 'weekly', priority: 0.9 },
-      { url: `${SITE_URL}/barometre/regions`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.5 },
-      { url: `${SITE_URL}/barometre/tarifs`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.5 },
-      { url: `${SITE_URL}/comparaison`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.5 },
-      { url: `${SITE_URL}/glossaire`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.5 },
-      { url: `${SITE_URL}/normes`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.5 },
-      { url: `${SITE_URL}/statistiques-artisans-france`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.5 },
+      { url: `${SITE_URL}/tarifs`, lastModified: STATIC_DATE, changeFrequency: 'weekly', priority: 0.9 },
+      { url: `${SITE_URL}/urgence`, lastModified: STATIC_DATE, changeFrequency: 'weekly', priority: 0.9 },
+      { url: `${SITE_URL}/devis`, lastModified: STATIC_DATE, changeFrequency: 'weekly', priority: 0.9 },
+      { url: `${SITE_URL}/avis`, lastModified: STATIC_DATE, changeFrequency: 'weekly', priority: 0.9 },
+      { url: `${SITE_URL}/blog`, lastModified: STATIC_DATE, changeFrequency: 'weekly', priority: 0.9 },
+      { url: `${SITE_URL}/guides`, lastModified: STATIC_DATE, changeFrequency: 'weekly', priority: 0.9 },
+      { url: `${SITE_URL}/questions`, lastModified: STATIC_DATE, changeFrequency: 'weekly', priority: 0.9 },
+      { url: `${SITE_URL}/barometre`, lastModified: STATIC_DATE, changeFrequency: 'weekly', priority: 0.9 },
+      { url: `${SITE_URL}/barometre/regions`, lastModified: STATIC_DATE, changeFrequency: 'monthly', priority: 0.5 },
+      { url: `${SITE_URL}/barometre/tarifs`, lastModified: STATIC_DATE, changeFrequency: 'monthly', priority: 0.5 },
+      { url: `${SITE_URL}/comparaison`, lastModified: STATIC_DATE, changeFrequency: 'monthly', priority: 0.5 },
+      { url: `${SITE_URL}/glossaire`, lastModified: STATIC_DATE, changeFrequency: 'monthly', priority: 0.5 },
+      { url: `${SITE_URL}/normes`, lastModified: STATIC_DATE, changeFrequency: 'monthly', priority: 0.5 },
+      { url: `${SITE_URL}/statistiques-artisans-france`, lastModified: STATIC_DATE, changeFrequency: 'monthly', priority: 0.5 },
     ]
 
+    // Static pages — STATIC_DATE: rarely change, honest lastmod
     const staticPages: MetadataRoute.Sitemap = [
-      { url: `${SITE_URL}/a-propos`, lastModified: BUILD_DATE, changeFrequency: 'yearly', priority: 0.3 },
-      { url: `${SITE_URL}/contact`, lastModified: BUILD_DATE, changeFrequency: 'yearly', priority: 0.3 },
-      { url: `${SITE_URL}/faq`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.4 },
-      { url: `${SITE_URL}/comment-ca-marche`, lastModified: BUILD_DATE, changeFrequency: 'yearly', priority: 0.3 },
-      { url: `${SITE_URL}/notre-processus-de-verification`, lastModified: BUILD_DATE, changeFrequency: 'yearly', priority: 0.3 },
-      { url: `${SITE_URL}/politique-avis`, lastModified: BUILD_DATE, changeFrequency: 'yearly', priority: 0.3 },
-      { url: `${SITE_URL}/mediation`, lastModified: BUILD_DATE, changeFrequency: 'yearly', priority: 0.3 },
-      { url: `${SITE_URL}/garantie`, lastModified: BUILD_DATE, changeFrequency: 'yearly', priority: 0.3 },
-      { url: `${SITE_URL}/outils/calculateur-prix`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.4 },
-      { url: `${SITE_URL}/outils/diagnostic`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.4 },
-      { url: `${SITE_URL}/carte-artisans`, lastModified: BUILD_DATE, changeFrequency: 'weekly', priority: 0.5 },
-      { url: `${SITE_URL}/artisans`, lastModified: BUILD_DATE, changeFrequency: 'weekly', priority: 0.5 },
-      { url: `${SITE_URL}/avant-apres`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.4 },
-      { url: `${SITE_URL}/calendrier-travaux`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.4 },
-      { url: `${SITE_URL}/checklist-travaux`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.4 },
-      { url: `${SITE_URL}/badge-artisan`, lastModified: BUILD_DATE, changeFrequency: 'yearly', priority: 0.3 },
-      { url: `${SITE_URL}/verifier-artisan`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.4 },
-      { url: `${SITE_URL}/widget-prix`, lastModified: BUILD_DATE, changeFrequency: 'yearly', priority: 0.3 },
-      { url: `${SITE_URL}/plan-du-site`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.1 },
+      { url: `${SITE_URL}/a-propos`, lastModified: STATIC_DATE, changeFrequency: 'yearly', priority: 0.3 },
+      { url: `${SITE_URL}/contact`, lastModified: STATIC_DATE, changeFrequency: 'yearly', priority: 0.3 },
+      { url: `${SITE_URL}/faq`, lastModified: STATIC_DATE, changeFrequency: 'monthly', priority: 0.4 },
+      { url: `${SITE_URL}/comment-ca-marche`, lastModified: STATIC_DATE, changeFrequency: 'yearly', priority: 0.3 },
+      { url: `${SITE_URL}/notre-processus-de-verification`, lastModified: STATIC_DATE, changeFrequency: 'yearly', priority: 0.3 },
+      { url: `${SITE_URL}/politique-avis`, lastModified: STATIC_DATE, changeFrequency: 'yearly', priority: 0.3 },
+      { url: `${SITE_URL}/mediation`, lastModified: STATIC_DATE, changeFrequency: 'yearly', priority: 0.3 },
+      { url: `${SITE_URL}/garantie`, lastModified: STATIC_DATE, changeFrequency: 'yearly', priority: 0.3 },
+      { url: `${SITE_URL}/outils/calculateur-prix`, lastModified: STATIC_DATE, changeFrequency: 'monthly', priority: 0.4 },
+      { url: `${SITE_URL}/outils/diagnostic`, lastModified: STATIC_DATE, changeFrequency: 'monthly', priority: 0.4 },
+      { url: `${SITE_URL}/carte-artisans`, lastModified: STATIC_DATE, changeFrequency: 'weekly', priority: 0.5 },
+      { url: `${SITE_URL}/artisans`, lastModified: STATIC_DATE, changeFrequency: 'weekly', priority: 0.5 },
+      { url: `${SITE_URL}/avant-apres`, lastModified: STATIC_DATE, changeFrequency: 'monthly', priority: 0.4 },
+      { url: `${SITE_URL}/calendrier-travaux`, lastModified: STATIC_DATE, changeFrequency: 'monthly', priority: 0.4 },
+      { url: `${SITE_URL}/checklist-travaux`, lastModified: STATIC_DATE, changeFrequency: 'monthly', priority: 0.4 },
+      { url: `${SITE_URL}/badge-artisan`, lastModified: STATIC_DATE, changeFrequency: 'yearly', priority: 0.3 },
+      { url: `${SITE_URL}/verifier-artisan`, lastModified: STATIC_DATE, changeFrequency: 'monthly', priority: 0.4 },
+      { url: `${SITE_URL}/widget-prix`, lastModified: STATIC_DATE, changeFrequency: 'yearly', priority: 0.3 },
+      { url: `${SITE_URL}/plan-du-site`, lastModified: STATIC_DATE, changeFrequency: 'monthly', priority: 0.1 },
     ]
 
     // Guide pages
@@ -148,25 +163,28 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       'travaux-copropriete',
       'trouver-artisan',
     ]
+    // Guides — STATIC_DATE: editorial content, updated manually when revised
     const guidePages: MetadataRoute.Sitemap = guideSlugs.map(slug => ({
       url: `${SITE_URL}/guides/${slug}`,
-      lastModified: BUILD_DATE,
+      lastModified: STATIC_DATE,
       changeFrequency: 'monthly' as const,
       priority: 0.5,
     }))
 
     // Question pages
+    // Questions — STATIC_DATE: Q&A content, stable once published
     const questionPages: MetadataRoute.Sitemap = getQuestionSlugs().map(slug => ({
       url: `${SITE_URL}/questions/${slug}`,
-      lastModified: BUILD_DATE,
+      lastModified: STATIC_DATE,
       changeFrequency: 'monthly' as const,
       priority: 0.4,
     }))
 
     // Comparison pages
+    // Comparisons — STATIC_DATE: editorial content, stable once published
     const comparisonPages: MetadataRoute.Sitemap = comparisons.map(c => ({
       url: `${SITE_URL}/comparaison/${c.slug}`,
-      lastModified: BUILD_DATE,
+      lastModified: STATIC_DATE,
       changeFrequency: 'monthly' as const,
       priority: 0.5,
     }))
@@ -182,29 +200,33 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       }
     })
 
+    // Service hub pages — lastmod = dernier provider ajouté/modifié pour ce service.
+    // Falls back to STATIC_DATE for services with no providers yet.
+    const { byService } = await getLastmodData()
+
     const servicesIndex: MetadataRoute.Sitemap = [
-      { url: `${SITE_URL}/services`, lastModified: BUILD_DATE, changeFrequency: 'weekly', priority: 0.9 },
+      { url: `${SITE_URL}/services`, lastModified: STATIC_DATE, changeFrequency: 'weekly', priority: 0.9 },
     ]
 
     const servicePages: MetadataRoute.Sitemap = services.map((service) => ({
       url: `${SITE_URL}/services/${service.slug}`,
-      lastModified: BUILD_DATE,
-      changeFrequency: 'weekly' as const,
+      lastModified: byService.get(service.slug) || STATIC_DATE,
+      changeFrequency: 'monthly' as const,
       priority: 0.8,
     }))
 
     const emergencySlugs = Object.keys(tradeContent)
     const urgencePages: MetadataRoute.Sitemap = emergencySlugs.map((slug) => ({
       url: `${SITE_URL}/urgence/${slug}`,
-      lastModified: BUILD_DATE,
-      changeFrequency: 'weekly' as const,
+      lastModified: byService.get(slug) || STATIC_DATE,
+      changeFrequency: 'monthly' as const,
       priority: 0.8,
     }))
 
     const tarifsPages: MetadataRoute.Sitemap = Object.keys(tradeContent).map((slug) => ({
       url: `${SITE_URL}/tarifs/${slug}`,
-      lastModified: BUILD_DATE,
-      changeFrequency: 'weekly' as const,
+      lastModified: byService.get(slug) || STATIC_DATE,
+      changeFrequency: 'monthly' as const,
       priority: 0.8,
     }))
 
@@ -218,7 +240,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
           : undefined
         return {
           url: `${SITE_URL}/blog/categorie/${c.slug}`,
-          lastModified: latestDate || BUILD_DATE,
+          lastModified: latestDate,
         }
       })
 
@@ -240,7 +262,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         : undefined
       return {
         url: `${SITE_URL}/blog/tag/${tagSlug}`,
-        lastModified: latestDate || BUILD_DATE,
+        lastModified: latestDate,
       }
     })
 
@@ -265,7 +287,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const allUrls: MetadataRoute.Sitemap = []
     for (const service of services) {
       for (const ville of mergedCities) {
-        allUrls.push({ url: `${SITE_URL}/services/${service.slug}/${ville.slug}`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.7 })
+        // Service×city — no lastmod: static composition, never truly changes between deploys
+        allUrls.push({ url: `${SITE_URL}/services/${service.slug}/${ville.slug}`, changeFrequency: 'monthly', priority: 0.7 })
       }
     }
 
@@ -275,12 +298,18 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
   // ── City pages ──────────────────────────────────────────────────────
   if (id === 'cities') {
+    const { byCity } = await getLastmodData()
+
     const villesIndex: MetadataRoute.Sitemap = [
-      { url: `${SITE_URL}/villes`, lastModified: BUILD_DATE, changeFrequency: 'weekly', priority: 0.6 },
+      { url: `${SITE_URL}/villes`, changeFrequency: 'weekly', priority: 0.6 },
     ]
 
+    // lastmod = date du dernier provider modifié dans cette ville. Si aucun → omis.
     const villePages: MetadataRoute.Sitemap = villes.map((ville) => ({
-      url: `${SITE_URL}/villes/${ville.slug}`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.4,
+      url: `${SITE_URL}/villes/${ville.slug}`,
+      lastModified: byCity.get(normalizeName(ville.name)),
+      changeFrequency: 'monthly' as const,
+      priority: 0.4,
     }))
 
     return [...villesIndex, ...villePages]
@@ -288,20 +317,30 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
   // ── Geo pages (départements + régions) ──────────────────────────────
   if (id === 'geo') {
+    const { byDepartment, byRegion } = await getLastmodData()
+
     const departementsIndex: MetadataRoute.Sitemap = [
-      { url: `${SITE_URL}/departements`, lastModified: BUILD_DATE, changeFrequency: 'weekly', priority: 0.7 },
+      { url: `${SITE_URL}/departements`, changeFrequency: 'weekly', priority: 0.7 },
     ]
 
+    // lastmod = date du dernier provider modifié dans ce département. Si aucun → omis.
     const departementPages: MetadataRoute.Sitemap = departements.map((dept) => ({
-      url: `${SITE_URL}/departements/${dept.slug}`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.5,
+      url: `${SITE_URL}/departements/${dept.slug}`,
+      lastModified: byDepartment.get(normalizeName(dept.name)),
+      changeFrequency: 'monthly' as const,
+      priority: 0.5,
     }))
 
     const regionsIndex: MetadataRoute.Sitemap = [
-      { url: `${SITE_URL}/regions`, lastModified: BUILD_DATE, changeFrequency: 'weekly', priority: 0.7 },
+      { url: `${SITE_URL}/regions`, changeFrequency: 'weekly', priority: 0.7 },
     ]
 
+    // lastmod = date du dernier provider modifié dans cette région. Si aucun → omis.
     const regionPages: MetadataRoute.Sitemap = regions.map((region) => ({
-      url: `${SITE_URL}/regions/${region.slug}`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.5,
+      url: `${SITE_URL}/regions/${region.slug}`,
+      lastModified: byRegion.get(normalizeName(region.name)),
+      changeFrequency: 'monthly' as const,
+      priority: 0.5,
     }))
 
     return [...departementsIndex, ...departementPages, ...regionsIndex, ...regionPages]
@@ -309,11 +348,12 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
 
   // ── Devis service hub pages ─────────────────────────────────────────
+  // Devis hub pages — STATIC_DATE: template content, stable
   if (id === 'devis-services') {
     return Object.keys(tradeContent).map((slug) => ({
       url: `${SITE_URL}/devis/${slug}`,
-      lastModified: BUILD_DATE,
-      changeFrequency: 'weekly' as const,
+      lastModified: STATIC_DATE,
+      changeFrequency: 'monthly' as const,
       priority: 0.7,
     }))
   }
@@ -331,7 +371,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     outer: for (const svc of services) {
       for (const ville of phase1Cities) {
         if (count >= end) break outer
-        if (count >= start) result.push({ url: `${SITE_URL}/devis/${svc.slug}/${ville.slug}`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.6 })
+        if (count >= start) result.push({ url: `${SITE_URL}/devis/${svc.slug}/${ville.slug}`, changeFrequency: 'monthly', priority: 0.6 })
         count++
       }
     }
@@ -353,7 +393,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     outer: for (const svc of emergencySlugs) {
       for (const v of phase1Cities) {
         if (count >= end) break outer
-        if (count >= start) result.push({ url: `${SITE_URL}/urgence/${svc}/${v.slug}`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.5 })
+        if (count >= start) result.push({ url: `${SITE_URL}/urgence/${svc}/${v.slug}`, changeFrequency: 'monthly', priority: 0.5 })
         count++
       }
     }
@@ -374,7 +414,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     outer: for (const svc of services) {
       for (const v of phase1Cities) {
         if (count >= end) break outer
-        if (count >= start) result.push({ url: `${SITE_URL}/tarifs/${svc.slug}/${v.slug}`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.6 })
+        if (count >= start) result.push({ url: `${SITE_URL}/tarifs/${svc.slug}/${v.slug}`, changeFrequency: 'monthly', priority: 0.6 })
         count++
       }
     }
@@ -397,7 +437,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         const { slug: taskSlug } = parseTask(task)
         for (const v of phase1Cities) {
           if (count >= end) break outer
-          if (count >= start) result.push({ url: `${SITE_URL}/tarifs/${serviceSlug}/${v.slug}/${taskSlug}`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.5 })
+          if (count >= start) result.push({ url: `${SITE_URL}/tarifs/${serviceSlug}/${v.slug}/${taskSlug}`, changeFrequency: 'monthly', priority: 0.5 })
           count++
         }
       }
@@ -408,10 +448,20 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
   // ── Avis service hub pages ──────────────────────────────────────────
   if (id === 'avis-services') {
+    const { reviewByService } = await getLastmodData()
     const tradeSlugs = Object.keys(tradeContent)
+    // Hub /avis — lastmod = date du dernier avis toutes catégories confondues
+    const allReviewDates = Array.from(reviewByService.values())
+    const latestReview = allReviewDates.length > 0 ? allReviewDates.sort().reverse()[0] : undefined
     return [
-      { url: `${SITE_URL}/avis`, lastModified: BUILD_DATE, changeFrequency: 'weekly' as const, priority: 0.7 },
-      ...tradeSlugs.map(slug => ({ url: `${SITE_URL}/avis/${slug}`, lastModified: BUILD_DATE, changeFrequency: 'weekly' as const, priority: 0.6 })),
+      { url: `${SITE_URL}/avis`, lastModified: latestReview, changeFrequency: 'weekly' as const, priority: 0.7 },
+      // /avis/{service} — lastmod = date du dernier avis pour ce service. Si aucun → omis.
+      ...tradeSlugs.map(slug => ({
+        url: `${SITE_URL}/avis/${slug}`,
+        lastModified: reviewByService.get(slug),
+        changeFrequency: 'weekly' as const,
+        priority: 0.6,
+      })),
     ]
   }
 
@@ -429,7 +479,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     outer: for (const svc of tradeSlugs) {
       for (const v of phase1Cities) {
         if (count >= end) break outer
-        if (count >= start) result.push({ url: `${SITE_URL}/avis/${svc}/${v.slug}`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.5 })
+        if (count >= start) result.push({ url: `${SITE_URL}/avis/${svc}/${v.slug}`, changeFrequency: 'monthly', priority: 0.5 })
         count++
       }
     }
@@ -438,11 +488,12 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   }
 
   // ── Problemes hub + individual pages ────────────────────────────────
+  // Problemes = contenu éditorial statique. Pas de lastmod (honnête).
   if (id === 'problemes') {
     const problemSlugs = getProblemSlugs()
     return [
-      { url: `${SITE_URL}/problemes`, lastModified: BUILD_DATE, changeFrequency: 'weekly' as const, priority: 0.6 },
-      ...problemSlugs.map(slug => ({ url: `${SITE_URL}/problemes/${slug}`, lastModified: BUILD_DATE, changeFrequency: 'monthly' as const, priority: 0.5 })),
+      { url: `${SITE_URL}/problemes`, lastModified: STATIC_DATE, changeFrequency: 'weekly' as const, priority: 0.6 },
+      ...problemSlugs.map(slug => ({ url: `${SITE_URL}/problemes/${slug}`, lastModified: STATIC_DATE, changeFrequency: 'monthly' as const, priority: 0.5 })),
     ]
   }
 
@@ -460,7 +511,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     outer: for (const problem of problemSlugs) {
       for (const ville of phase1Cities) {
         if (count >= end) break outer
-        if (count >= start) result.push({ url: `${SITE_URL}/problemes/${problem}/${ville.slug}`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.4 })
+        if (count >= start) result.push({ url: `${SITE_URL}/problemes/${problem}/${ville.slug}`, changeFrequency: 'monthly', priority: 0.4 })
         count++
       }
     }
@@ -470,12 +521,20 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
   // ── Dept × service pages ────────────────────────────────────────────
   if (id.startsWith('dept-services-')) {
+    const { byDeptService } = await getLastmodData()
     const batchIndex = parseInt(id.replace('dept-services-', ''))
     const tradeSlugs = getTradesSlugs()
     const allUrls: MetadataRoute.Sitemap = []
     for (const dept of departements) {
       for (const service of tradeSlugs) {
-        allUrls.push({ url: `${SITE_URL}/departements/${dept.slug}/${service}`, lastModified: BUILD_DATE, changeFrequency: 'monthly', priority: 0.5 })
+        // lastmod = date du dernier provider (dept, service). Si aucun → omis.
+        const key = `${normalizeName(dept.name)}::${service}`
+        allUrls.push({
+          url: `${SITE_URL}/departements/${dept.slug}/${service}`,
+          lastModified: byDeptService.get(key),
+          changeFrequency: 'monthly',
+          priority: 0.5,
+        })
       }
     }
     return allUrls.slice(batchIndex * LARGE_BATCH, (batchIndex + 1) * LARGE_BATCH)
@@ -483,15 +542,18 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
   // ── Baromètre pages (regions + tarifs by métier) ────────────────────
   if (id === 'barometre') {
+    const { byRegion, byService } = await getLastmodData()
+    // Baromètre régions — lastmod = dernier provider modifié dans la région
     const barometreRegions: MetadataRoute.Sitemap = regions.map(region => ({
       url: `${SITE_URL}/barometre/regions/${region.slug}`,
-      lastModified: BUILD_DATE,
+      lastModified: byRegion.get(normalizeName(region.name)),
       changeFrequency: 'monthly' as const,
       priority: 0.5,
     }))
+    // Baromètre métiers — lastmod = dernier provider modifié pour ce service
     const barometreMetiers: MetadataRoute.Sitemap = getTradesSlugs().map(slug => ({
       url: `${SITE_URL}/barometre/tarifs/${slug}`,
-      lastModified: BUILD_DATE,
+      lastModified: byService.get(slug),
       changeFrequency: 'monthly' as const,
       priority: 0.5,
     }))
@@ -500,11 +562,18 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
   // ── Region × service pages ──────────────────────────────────────────
   if (id === 'region-services') {
+    const { byRegionService } = await getLastmodData()
     const tradeSlugs = getTradesSlugs()
     return regions.flatMap(region =>
-      tradeSlugs.map(service => ({
-        url: `${SITE_URL}/regions/${region.slug}/${service}`, lastModified: BUILD_DATE, changeFrequency: 'monthly' as const, priority: 0.5,
-      }))
+      tradeSlugs.map(service => {
+        const key = `${normalizeName(region.name)}::${service}`
+        return {
+          url: `${SITE_URL}/regions/${region.slug}/${service}`,
+          lastModified: byRegionService.get(key),
+          changeFrequency: 'monthly' as const,
+          priority: 0.5,
+        }
+      })
     )
   }
 

@@ -264,6 +264,24 @@ export function QuickSiteLinks({ className = '' }: { className?: string }) {
         <Link href="/contact" className="text-gray-600 hover:text-clay-400 py-1">
           Contact
         </Link>
+        <Link href="/questions" className="text-gray-600 hover:text-clay-400 py-1">
+          Questions fréquentes
+        </Link>
+        <Link href="/barometre" className="text-gray-600 hover:text-clay-400 py-1">
+          Baromètre des prix
+        </Link>
+        <Link href="/comparaison" className="text-gray-600 hover:text-clay-400 py-1">
+          Comparatifs artisans
+        </Link>
+        <Link href="/normes" className="text-gray-600 hover:text-clay-400 py-1">
+          Normes et réglementations
+        </Link>
+        <Link href="/guides" className="text-gray-600 hover:text-clay-400 py-1">
+          Guides travaux
+        </Link>
+        <Link href="/glossaire" className="text-gray-600 hover:text-clay-400 py-1">
+          Glossaire
+        </Link>
       </div>
     </div>
   )
