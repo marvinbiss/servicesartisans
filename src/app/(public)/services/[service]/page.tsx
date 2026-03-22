@@ -235,13 +235,18 @@ export default async function ServicePage({ params }: PageProps) {
     topCities = getStaticCities()
   }
 
-  // Grouper les villes par région
-  const citiesByRegion = topCities?.reduce((acc: Record<string, CityInfo[]>, city: CityInfo) => {
+  // Limit to top 50 cities (already sorted by population from DB/static data)
+  const MAX_CITIES = 50
+  const totalCityCount = topCities.length
+  const limitedCities = topCities.slice(0, MAX_CITIES)
+
+  // Grouper les villes par région (sur les 50 top villes uniquement)
+  const citiesByRegion = limitedCities.reduce((acc: Record<string, CityInfo[]>, city: CityInfo) => {
     const region = city.region_name || 'Autres'
     if (!acc[region]) acc[region] = []
     acc[region].push(city)
     return acc
-  }, {} as Record<string, CityInfo[]>) || {}
+  }, {} as Record<string, CityInfo[]>)
 
   // Trade-specific rich content (prices, FAQ, tips, certifications)
   const tradeBase = getTradeContent(serviceSlug)
@@ -460,9 +465,9 @@ export default async function ServicePage({ params }: PageProps) {
             Trouver un {service.name.toLowerCase()} par ville
           </h2>
 
-          {/* Popular cities grid */}
+          {/* Popular cities grid — top 12 */}
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 mb-8">
-            {topCities?.slice(0, 12).map((city) => (
+            {limitedCities.slice(0, 12).map((city) => (
               <Link
                 key={city.id}
                 href={`/services/${serviceSlug}/${city.slug}`}
@@ -483,7 +488,7 @@ export default async function ServicePage({ params }: PageProps) {
             ))}
           </div>
 
-          {/* Cities by region */}
+          {/* Cities by region — limited to top 50 cities total */}
           {Object.keys(citiesByRegion).length > 0 && (
             <div className="space-y-8">
               {Object.entries(citiesByRegion)
@@ -493,7 +498,7 @@ export default async function ServicePage({ params }: PageProps) {
                       {service.name} en {region}
                     </h3>
                     <div className="flex flex-wrap gap-2">
-                      {cities.slice(0, 10).map((city) => (
+                      {cities.map((city) => (
                         <Link
                           key={city.id}
                           href={`/services/${serviceSlug}/${city.slug}`}
@@ -502,14 +507,23 @@ export default async function ServicePage({ params }: PageProps) {
                           {city.name}
                         </Link>
                       ))}
-                      {cities.length > 10 && (
-                        <span className="text-sm text-charcoal-500 px-3 py-1.5">
-                          +{cities.length - 10} villes
-                        </span>
-                      )}
                     </div>
                   </div>
                 ))}
+            </div>
+          )}
+
+          {/* CTA "Voir toutes les villes" if there are more than 50 */}
+          {totalCityCount > MAX_CITIES && (
+            <div className="mt-8 text-center">
+              <Link
+                href="/villes"
+                className="inline-flex items-center gap-2 bg-primary-50 hover:bg-primary-100 text-primary-600 hover:text-primary-700 font-semibold px-6 py-3 rounded-xl transition-colors border border-primary-200"
+              >
+                <MapPin className="w-4 h-4" />
+                Voir {service.name.toLowerCase()} dans toutes les villes ({totalCityCount})
+                <ArrowRight className="w-4 h-4" />
+              </Link>
             </div>
           )}
         </div>
@@ -522,10 +536,11 @@ export default async function ServicePage({ params }: PageProps) {
             {service.name} par département
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {departements.map((dept) => {
-              const deptVilles = getVillesByDepartement(dept.code)
-              if (deptVilles.length === 0) return null
-              return (
+            {departements
+              .map((dept) => ({ dept, villes: getVillesByDepartement(dept.code) }))
+              .filter(({ villes: v }) => v.length > 0)
+              .slice(0, 6)
+              .map(({ dept, villes: deptVilles }) => (
                 <div key={dept.code} className="bg-sand-50 rounded-xl p-5">
                   <h3 className="font-semibold text-charcoal-900 mb-3 text-sm">
                     <Link href={`/departements/${dept.slug}`} className="hover:text-primary-500 transition-colors">
@@ -533,7 +548,7 @@ export default async function ServicePage({ params }: PageProps) {
                     </Link>
                   </h3>
                   <div className="flex flex-wrap gap-1.5">
-                    {deptVilles.slice(0, 5).map((ville) => (
+                    {deptVilles.slice(0, 3).map((ville) => (
                       <Link
                         key={ville.slug}
                         href={`/services/${serviceSlug}/${ville.slug}`}
@@ -542,18 +557,17 @@ export default async function ServicePage({ params }: PageProps) {
                         {ville.name}
                       </Link>
                     ))}
-                    {deptVilles.length > 5 && (
+                    {deptVilles.length > 3 && (
                       <Link
                         href={`/departements/${dept.slug}`}
                         className="text-xs text-primary-500 px-2.5 py-1"
                       >
-                        +{deptVilles.length - 5} villes
+                        +{deptVilles.length - 3} villes
                       </Link>
                     )}
                   </div>
                 </div>
-              )
-            })}
+              ))}
           </div>
           <div className="mt-6 flex flex-wrap gap-4 text-sm">
             <Link href="/departements" className="text-primary-500 hover:underline">Tous les départements →</Link>

@@ -366,7 +366,7 @@ export default async function RegionPage({ params }: PageProps) {
           </div>
         </section>
 
-        {/* ─── SERVICES BY CITY ─────────────────────────────── */}
+        {/* ─── SERVICES BY CITY — top 3 cities × all services ≈ 45 links ── */}
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-8">
             <div className="w-10 h-10 bg-accent-100 rounded-xl flex items-center justify-center">
@@ -376,11 +376,11 @@ export default async function RegionPage({ params }: PageProps) {
               <h2 className="font-heading text-2xl font-semibold text-charcoal-900 tracking-tight">
                 Services par ville en {region.name}
               </h2>
-              <p className="text-sm text-charcoal-500">Accès rapide aux artisans par ville</p>
+              <p className="text-sm text-charcoal-500">Top {Math.min(3, allCities.length)} villes · {allServices.length} corps de métier</p>
             </div>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {allCities.slice(0, 12).map((city) => (
+            {allCities.slice(0, 3).map((city) => (
               <div key={city.slug} className="bg-white rounded-2xl border border-sand-300 p-6">
                 <h3 className="font-heading font-semibold text-charcoal-900 mb-4">Artisans à {city.name}</h3>
                 <div className="flex flex-wrap gap-2">
@@ -400,6 +400,19 @@ export default async function RegionPage({ params }: PageProps) {
               </div>
             ))}
           </div>
+          {/* CTA vers toutes les villes de la région */}
+          {allCities.length > 3 && (
+            <div className="mt-8 text-center">
+              <Link
+                href={`/regions/${regionSlug}#departements`}
+                className="inline-flex items-center gap-2 bg-primary-50 hover:bg-primary-100 text-primary-600 hover:text-primary-700 font-semibold px-6 py-3 rounded-xl transition-colors border border-primary-200"
+              >
+                <MapPin className="w-4 h-4" />
+                Voir tous les artisans en {region.name} ({cityCount} villes)
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          )}
         </section>
 
         {/* ─── OTHER REGIONS ────────────────────────────────── */}
@@ -476,7 +489,7 @@ export default async function RegionPage({ params }: PageProps) {
             <div>
               <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Services en {region.name}</h3>
               <div className="space-y-2">
-                {allServices.slice(0, 8).map((s) => (
+                {allServices.slice(0, 6).map((s) => (
                   <Link key={s.slug} href={`/regions/${regionSlug}/${s.slug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {s.name} en {region.name}
@@ -508,7 +521,7 @@ export default async function RegionPage({ params }: PageProps) {
             <div>
               <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Villes en {region.name}</h3>
               <div className="space-y-2">
-                {allCities.slice(0, 6).map((city) => (
+                {allCities.slice(0, 4).map((city) => (
                   <Link key={city.slug} href={`/villes/${city.slug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     Artisans à {city.name}
@@ -521,13 +534,13 @@ export default async function RegionPage({ params }: PageProps) {
             </div>
           </div>
 
-          {/* Intent variant links — devis, avis, tarifs */}
+          {/* Intent variant links — devis, avis, tarifs (3 cities × 3 services per intent = 9 links each) */}
           <div className="mt-10 grid md:grid-cols-3 gap-8">
             <div>
               <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Devis en {region.name}</h3>
               <div className="space-y-1.5">
-                {allCities.slice(0, 6).flatMap((city) =>
-                  allServices.slice(0, 5).map((s) => (
+                {allCities.slice(0, 3).flatMap((city) =>
+                  allServices.slice(0, 3).map((s) => (
                     <Link key={`devis-${s.slug}-${city.slug}`} href={`/devis/${s.slug}/${city.slug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-1 transition-colors">
                       <ChevronRight className="w-3 h-3" />
                       Devis {s.name.toLowerCase()} à {city.name}
@@ -539,8 +552,8 @@ export default async function RegionPage({ params }: PageProps) {
             <div>
               <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Avis en {region.name}</h3>
               <div className="space-y-1.5">
-                {allCities.slice(0, 6).flatMap((city) =>
-                  allServices.slice(0, 5).map((s) => (
+                {allCities.slice(0, 3).flatMap((city) =>
+                  allServices.slice(0, 3).map((s) => (
                     <Link key={`avis-${s.slug}-${city.slug}`} href={`/avis/${s.slug}/${city.slug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-1 transition-colors">
                       <ChevronRight className="w-3 h-3" />
                       Avis {s.name.toLowerCase()} à {city.name}
@@ -552,8 +565,8 @@ export default async function RegionPage({ params }: PageProps) {
             <div>
               <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Tarifs en {region.name}</h3>
               <div className="space-y-1.5">
-                {allCities.slice(0, 6).flatMap((city) =>
-                  allServices.slice(0, 5).map((s) => (
+                {allCities.slice(0, 3).flatMap((city) =>
+                  allServices.slice(0, 3).map((s) => (
                     <Link key={`tarifs-${s.slug}-${city.slug}`} href={`/tarifs/${s.slug}/${city.slug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-1 transition-colors">
                       <ChevronRight className="w-3 h-3" />
                       Tarifs {s.name.toLowerCase()} à {city.name}
@@ -566,8 +579,8 @@ export default async function RegionPage({ params }: PageProps) {
           <div className="mt-8">
             <h3 className="text-sm font-semibold text-red-700 uppercase tracking-wider mb-4">Urgences en {region.name}</h3>
             <div className="flex flex-wrap gap-2">
-              {allCities.slice(0, 6).flatMap((city) =>
-                allServices.slice(0, 5).map((s) => (
+              {allCities.slice(0, 3).flatMap((city) =>
+                allServices.slice(0, 3).map((s) => (
                   <Link key={`urgence-${s.slug}-${city.slug}`} href={`/urgence/${s.slug}/${city.slug}`} className="inline-flex items-center gap-1.5 bg-red-50 text-red-700 hover:bg-red-100 hover:text-red-800 px-3 py-1.5 rounded-lg text-sm transition-colors border border-red-100 hover:border-red-200">
                     Urgence {s.name.toLowerCase()} à {city.name}
                   </Link>
@@ -578,8 +591,8 @@ export default async function RegionPage({ params }: PageProps) {
           <div className="mt-8">
             <h3 className="text-sm font-semibold text-orange-700 uppercase tracking-wider mb-4">Problèmes courants en {region.name}</h3>
             <div className="flex flex-wrap gap-2">
-              {allCities.slice(0, 4).flatMap((city) =>
-                problems.slice(0, 6).map((p) => (
+              {allCities.slice(0, 3).flatMap((city) =>
+                problems.slice(0, 4).map((p) => (
                   <Link key={`prob-${p.slug}-${city.slug}`} href={`/problemes/${p.slug}/${city.slug}`} className="inline-flex items-center gap-1.5 bg-orange-50 text-orange-700 hover:bg-orange-100 hover:text-orange-800 px-3 py-1.5 rounded-lg text-sm transition-colors border border-orange-100 hover:border-orange-200">
                     {p.name} à {city.name}
                   </Link>
