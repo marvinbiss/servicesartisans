@@ -127,9 +127,7 @@ export async function GET(request: Request) {
         hubPages.add(`${SITE_URL}/services/${serviceSlug}/${citySlug}`)
       }
 
-      for (const hubUrl of hubPages) {
-        urls.push(hubUrl)
-      }
+      urls.push(...Array.from(hubPages))
       counts.providers = hubPages.size
 
       // Also submit the artisans listing page
@@ -155,7 +153,7 @@ export async function GET(request: Request) {
   }
 
   // ── Deduplicate and cap at MAX_URLS_PER_DAY ─────────────────────────
-  const uniqueUrls = [...new Set(urls)].slice(0, MAX_URLS_PER_DAY)
+  const uniqueUrls = Array.from(new Set(urls)).slice(0, MAX_URLS_PER_DAY)
 
   logger.info('IndexNow cron: submitting URLs', {
     action: 'indexnow-cron',

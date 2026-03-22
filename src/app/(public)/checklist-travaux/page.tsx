@@ -432,7 +432,7 @@ export default function ChecklistTravauxPage() {
   return (
     <>
       <JsonLd data={breadcrumbSchema} />
-      <JsonLd data={howToSchema} />
+      {howToSchema && <JsonLd data={howToSchema} />}
 
       <div className="min-h-screen bg-gray-50">
         {/* Header */}

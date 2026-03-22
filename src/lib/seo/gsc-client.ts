@@ -102,7 +102,7 @@ export async function getSitemapStatus(): Promise<GSCSitemapStatus[]> {
       submitted,
       indexed,
       isPending: sm.isPending || false,
-      hasErrors: (sm.errors ?? 0) > 0,
+      hasErrors: Number(sm.errors ?? 0) > 0,
       lastDownloaded: sm.lastDownloaded || null,
       warnings: Number(sm.warnings) || 0,
       errors: Number(sm.errors) || 0,
