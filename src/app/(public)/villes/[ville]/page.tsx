@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { MapPin, Users, Building2, ArrowRight, Shield, Clock, ChevronRight, Wrench, HelpCircle, Thermometer, Home, TrendingUp, AlertTriangle } from 'lucide-react'
+import { MapPin, Users, Building2, ArrowRight, Shield, Clock, Wrench, HelpCircle, Thermometer, Home, TrendingUp, AlertTriangle } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getPlaceSchema, getBreadcrumbSchema, getFAQSchema } from '@/lib/seo/jsonld'
@@ -10,7 +10,7 @@ import { SITE_URL } from '@/lib/seo/config'
 import { villes, getVilleBySlug, services, getRegionSlugByName, getDepartementByCode, getQuartiersByVille } from '@/lib/data/france'
 import { getCityImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { generateVilleContent, hashCode } from '@/lib/seo/location-content'
-import problems from '@/lib/data/problems'
+import CityHubLinks from '@/components/seo/CityHubLinks'
 
 // Pre-render top 20 cities, rest generated on-demand via ISR
 const TOP_CITIES_COUNT = 20
@@ -93,11 +93,6 @@ export default async function VillePage({ params }: PageProps) {
   const nearbyVilles = villes.filter(
     (v) => v.departementCode === ville.departementCode && v.slug !== ville.slug
   )
-
-  // Get other villes in the same region
-  const regionVilles = villes.filter(
-    (v) => v.region === ville.region && v.slug !== ville.slug
-  ).slice(0, 8)
 
   const regionSlug = getRegionSlugByName(ville.region)
   const dept = getDepartementByCode(ville.departementCode)
@@ -481,150 +476,13 @@ export default async function VillePage({ params }: PageProps) {
       </section>
 
       {/* ─── SEO INTERNAL LINKS ─────────────────────────────── */}
-      <section className="py-16 bg-white border-t border-sand-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-xl font-bold text-charcoal-900 mb-8 tracking-tight">
-            Voir aussi
-          </h2>
-          <div className="grid md:grid-cols-3 gap-10">
-            {/* Services in this city */}
-            <div>
-              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Services à {ville.name}</h3>
-              <div className="space-y-2">
-                {services.map((s) => (
-                  <Link key={s.slug} href={`/services/${s.slug}/${villeSlug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
-                    <ChevronRight className="w-3 h-3" />
-                    {s.name} à {ville.name}
-                  </Link>
-                ))}
-              </div>
-              <Link href="/services" className="inline-flex items-center gap-1 text-primary-400 hover:text-primary-500 text-sm font-medium mt-3">
-                {services.length} métiers d'artisanat <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-
-            {/* Region cities */}
-            <div>
-              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Villes en {ville.region}</h3>
-              <div className="space-y-2">
-                {regionVilles.slice(0, 10).map((v) => (
-                  <Link key={v.slug} href={`/villes/${v.slug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
-                    <ChevronRight className="w-3 h-3" />
-                    Artisans à {v.name}
-                  </Link>
-                ))}
-              </div>
-              <Link href="/villes" className="inline-flex items-center gap-1 text-primary-400 hover:text-primary-500 text-sm font-medium mt-3">
-                Toutes les villes <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-
-            {/* Geographic navigation */}
-            <div>
-              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Navigation</h3>
-              <div className="space-y-2">
-                {regionSlug && (
-                  <Link href={`/regions/${regionSlug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
-                    <ChevronRight className="w-3 h-3" />
-                    Région {ville.region}
-                  </Link>
-                )}
-                <Link href="/departements" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
-                  <ChevronRight className="w-3 h-3" />
-                  Tous les départements
-                </Link>
-                <Link href="/regions" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
-                  <ChevronRight className="w-3 h-3" />
-                  Toutes les régions
-                </Link>
-                <Link href="/villes" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
-                  <ChevronRight className="w-3 h-3" />
-                  Toutes les villes
-                </Link>
-                <Link href="/devis" className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
-                  <ChevronRight className="w-3 h-3" />
-                  Demander un devis
-                </Link>
-                <Link href={`/devis/plombier/${villeSlug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
-                  <ChevronRight className="w-3 h-3" />
-                  Devis plombier à {ville.name}
-                </Link>
-                <Link href={`/devis/electricien/${villeSlug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
-                  <ChevronRight className="w-3 h-3" />
-                  Devis électricien à {ville.name}
-                </Link>
-                <Link href={`/devis/chauffagiste/${villeSlug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
-                  <ChevronRight className="w-3 h-3" />
-                  Devis chauffagiste à {ville.name}
-                </Link>
-                <Link href={`/devis/serrurier/${villeSlug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
-                  <ChevronRight className="w-3 h-3" />
-                  Devis serrurier à {ville.name}
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* Intent variant links — devis, avis, tarifs, urgence, problèmes */}
-          <div className="mt-10 grid md:grid-cols-2 lg:grid-cols-5 gap-8">
-            <div>
-              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Devis à {ville.name}</h3>
-              <div className="space-y-1.5">
-                {orderedServices.slice(0, 15).map((s) => (
-                  <Link key={`devis-${s.slug}`} href={`/devis/${s.slug}/${villeSlug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-1 transition-colors">
-                    <ChevronRight className="w-3 h-3" />
-                    Devis {s.name.toLowerCase()}
-                  </Link>
-                ))}
-              </div>
-            </div>
-            <div>
-              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Avis à {ville.name}</h3>
-              <div className="space-y-1.5">
-                {orderedServices.slice(0, 15).map((s) => (
-                  <Link key={`avis-${s.slug}`} href={`/avis/${s.slug}/${villeSlug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-1 transition-colors">
-                    <ChevronRight className="w-3 h-3" />
-                    Avis {s.name.toLowerCase()}
-                  </Link>
-                ))}
-              </div>
-            </div>
-            <div>
-              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Tarifs à {ville.name}</h3>
-              <div className="space-y-1.5">
-                {orderedServices.slice(0, 15).map((s) => (
-                  <Link key={`tarifs-${s.slug}`} href={`/tarifs/${s.slug}/${villeSlug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-1 transition-colors">
-                    <ChevronRight className="w-3 h-3" />
-                    Tarifs {s.name.toLowerCase()}
-                  </Link>
-                ))}
-              </div>
-            </div>
-            <div>
-              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Urgence à {ville.name}</h3>
-              <div className="space-y-1.5">
-                {orderedServices.slice(0, 15).map((s) => (
-                  <Link key={`urgence-${s.slug}`} href={`/urgence/${s.slug}/${villeSlug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-1 transition-colors">
-                    <ChevronRight className="w-3 h-3" />
-                    {s.name} urgence
-                  </Link>
-                ))}
-              </div>
-            </div>
-            <div>
-              <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Problèmes à {ville.name}</h3>
-              <div className="space-y-1.5">
-                {problems.slice(0, 15).map((p) => (
-                  <Link key={`prob-${p.slug}`} href={`/problemes/${p.slug}/${villeSlug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-1 transition-colors">
-                    <ChevronRight className="w-3 h-3" />
-                    {p.name}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <CityHubLinks
+        ville={ville}
+        villeSlug={villeSlug}
+        topServiceSlugs={content.profile.topServiceSlugs}
+        regionSlug={regionSlug}
+        deptSlug={deptSlug}
+      />
 
         {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
         <section className="mb-8">

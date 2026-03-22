@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import { PopularServicesLinks } from '@/components/InternalLinks'
 import { slugify } from '@/lib/utils'
 import { getDepartementByCode, getRegionSlugByName } from '@/lib/data/france'
 import type { LocationContent } from '@/lib/seo/location-content'
@@ -40,7 +39,7 @@ export default function CrossLinks({
   locationSlug,
   otherServices,
   nearbyCities,
-  deptCities,
+  deptCities: _deptCities,
   locationContent,
   communeData,
 }: Props) {
@@ -58,7 +57,7 @@ export default function CrossLinks({
                 Autres artisans à {location.name}
               </h3>
               <div className="flex flex-wrap gap-2">
-                {otherServices.map((s) => (
+                {otherServices.slice(0, 4).map((s) => (
                   <Link
                     key={s.slug}
                     href={`/services/${s.slug}/${locationSlug}`}
@@ -83,7 +82,7 @@ export default function CrossLinks({
                 {service.name} près de {location.name}
               </h3>
               <div className="flex flex-wrap gap-2">
-                {nearbyCities.map((city) => (
+                {nearbyCities.slice(0, 3).map((city) => (
                   <Link
                     key={city.slug}
                     href={`/services/${serviceSlug}/${city.slug}`}
@@ -127,26 +126,7 @@ export default function CrossLinks({
               </div>
             </div>
 
-            {/* Intent variants */}
-            <div className="bg-white rounded-2xl shadow-soft border border-sand-200 p-6">
-              <h3 className="font-heading font-semibold text-charcoal-900 mb-4">
-                {service.name} à {location.name}
-              </h3>
-              <div className="space-y-2">
-                <Link href={`/devis/${serviceSlug}/${locationSlug}`} className="flex items-center gap-2 px-4 py-3 bg-amber-50 hover:bg-amber-100 text-amber-800 rounded-xl text-sm font-medium border border-amber-100 hover:border-amber-200 transition-all">
-                  Devis {service.name.toLowerCase()} à {location.name}
-                </Link>
-                <Link href={`/avis/${serviceSlug}/${locationSlug}`} className="flex items-center gap-2 px-4 py-3 bg-clay-50 hover:bg-clay-100 text-clay-700 rounded-xl text-sm font-medium border border-clay-100 hover:border-clay-200 transition-all">
-                  Avis {service.name.toLowerCase()} à {location.name}
-                </Link>
-                <Link href={`/tarifs/${serviceSlug}/${locationSlug}`} className="flex items-center gap-2 px-4 py-3 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 rounded-xl text-sm font-medium border border-emerald-100 hover:border-emerald-200 transition-all">
-                  Tarifs {service.name.toLowerCase()} à {location.name}
-                </Link>
-                <Link href={`/urgence/${serviceSlug}/${locationSlug}`} className="flex items-center gap-2 px-4 py-3 bg-red-50 hover:bg-red-100 text-red-800 rounded-xl text-sm font-medium border border-red-100 hover:border-red-200 transition-all">
-                  {service.name} urgence à {location.name}
-                </Link>
-              </div>
-            </div>
+            {/* Intent variants — removed: duplicated by CrossIntentLinks component below */}
 
             {/* Related problems */}
             {(() => {
@@ -172,46 +152,16 @@ export default function CrossLinks({
               )
             })()}
 
-            {/* Cross-service callouts */}
-            {otherServices.slice(0, 3).map((s) => (
-              <Link
-                key={`cross-${s.slug}`}
-                href={`/services/${s.slug}/${locationSlug}`}
-                className="flex items-center justify-between p-4 bg-amber-50 rounded-xl border border-amber-100 hover:border-amber-200 transition-all group"
-              >
-                <span className="text-sm text-amber-800 font-medium">
-                  Besoin d'un {s.name.toLowerCase()} à {location.name} ?
-                </span>
-                <svg className="w-4 h-4 text-amber-600 group-hover:translate-x-0.5 transition-transform shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
-              </Link>
-            ))}
+            {/* Cross-service callouts — removed: duplicated by card 1 above */}
 
-            {/* Villes du département */}
-            {deptCities.length > 3 && (
-              <div className="bg-white rounded-2xl shadow-soft border border-sand-200 p-6 md:col-span-2 lg:col-span-3">
-                <h3 className="font-heading font-semibold text-charcoal-900 mb-4">
-                  {service.name} dans {location.department_name ? `le ${location.department_name}` : 'le département'}
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {deptCities.map((city) => (
-                    <Link
-                      key={city.slug}
-                      href={`/services/${serviceSlug}/${city.slug}`}
-                      className="inline-flex items-center gap-1 px-3 py-1.5 bg-sand-100 hover:bg-primary-50 text-charcoal-600 hover:text-primary-500 rounded-full text-sm border border-sand-200 hover:border-primary-200 transition-colors"
-                    >
-                      {city.name}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
+            {/* Villes du département — removed: duplicated by DeepPageLinks module 3 */}
 
             {/* Services complémentaires dans cette ville */}
             {(() => {
               const complementarySlugs = relatedServices[serviceSlug] || []
               const complementaryServices = complementarySlugs
                 .filter((slug) => slug !== serviceSlug && tradeContent[slug])
-                .slice(0, 6)
+                .slice(0, 2)
 
               if (complementaryServices.length === 0) return null
 
@@ -263,7 +213,7 @@ export default function CrossLinks({
               const currentPath = `/services/${serviceSlug}/${locationSlug}`
               const boostLinks = GSC_BOOST_PAGES
                 .filter(path => path !== currentPath)
-                .slice(0, 3)
+                .slice(0, 1)
 
               if (boostLinks.length === 0) return null
 
@@ -293,25 +243,7 @@ export default function CrossLinks({
         </div>
       </section>
 
-      {/* Trust & Safety */}
-      <section className="py-8 bg-white border-t border-sand-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-sm font-semibold text-charcoal-500 uppercase tracking-wide mb-3">
-            Confiance &amp; Sécurité
-          </h2>
-          <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-            <Link href="/notre-processus-de-verification" className="text-primary-400 hover:text-primary-700">
-              Comment nous référençons les artisans
-            </Link>
-            <Link href="/politique-avis" className="text-primary-400 hover:text-primary-700">
-              Notre politique des avis
-            </Link>
-            <Link href="/mediation" className="text-primary-400 hover:text-primary-700">
-              Service de médiation
-            </Link>
-          </nav>
-        </div>
-      </section>
+      {/* Trust & Safety — removed: duplicated by global footer */}
 
       {/* E-E-A-T editorial note */}
       <section className="py-6 bg-sand-50 border-t border-sand-200">
@@ -334,12 +266,7 @@ export default function CrossLinks({
         </div>
       </section>
 
-      {/* Popular services footer */}
-      <section className="bg-sand-50 py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <PopularServicesLinks showTitle={true} limit={8} />
-        </div>
-      </section>
+      {/* Popular services footer — removed: duplicated by global footer */}
     </>
   )
 }

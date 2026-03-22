@@ -89,7 +89,9 @@ export default async function DeepPageLinks({
 
   if (!isHubMode && currentVille) {
     // Try GPS-based proximity (works at runtime/ISR, not during build)
-    const gpsCities = await getNearbyVilleSlugs(currentVille, 8)
+    // City mode: cap at 4 (reduced from 8 to stay under 50 total links)
+    const nearbyLimit = 4
+    const gpsCities = await getNearbyVilleSlugs(currentVille, nearbyLimit)
     if (gpsCities && gpsCities.length > 0) {
       module1Links = gpsCities
         .map(c => {
@@ -102,7 +104,7 @@ export default async function DeepPageLinks({
 
     // Fallback: department/region proximity (build time or no GPS data)
     if (module1Links.length === 0) {
-      const nearbyCities = getNearbyCities(currentVille, 8)
+      const nearbyCities = getNearbyCities(currentVille, nearbyLimit)
       module1Links = nearbyCities.map(v => ({
         href: `/services/${currentService}/${v.slug}`,
         label: `${serviceName} à ${v.name}`,
@@ -111,9 +113,11 @@ export default async function DeepPageLinks({
   }
 
   // ── Module 2: Autres services ─────────────────────────────────────────
+  // City mode: 4 services (reduced from 8); Hub mode: keep 8
+  const maxOtherServices = isHubMode ? 8 : 4
   const otherServices = services
     .filter(s => s.slug !== currentService)
-    .slice(0, 8)
+    .slice(0, maxOtherServices)
   const module2Links = isHubMode
     ? otherServices.map(s => ({
         href: `/services/${s.slug}`,
@@ -139,7 +143,7 @@ export default async function DeepPageLinks({
     const deptCities = getVillesByDepartement(ville.departementCode)
       .filter(v => v.slug !== currentVille)
       .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
-      .slice(0, 3)
+      .slice(0, 1)
     for (const c of deptCities) {
       module3Links.push({
         href: `/services/${currentService}/${c.slug}`,
@@ -184,6 +188,7 @@ export default async function DeepPageLinks({
       })
     }
   } else {
+    // City mode: 2 links (reduced from 3 — drop generic region link, keep hub + region×service)
     module5Links.push({
       href: `/services/${currentService}`,
       label: `${serviceName} en France`,
@@ -191,10 +196,6 @@ export default async function DeepPageLinks({
     if (ville) {
       const regionSlug = getRegionSlugByName(ville.region)
       if (regionSlug) {
-        module5Links.push({
-          href: `/regions/${regionSlug}`,
-          label: `Artisans en ${ville.region}`,
-        })
         module5Links.push({
           href: `/regions/${regionSlug}/${currentService}`,
           label: `${serviceName} en ${ville.region}`,
@@ -206,7 +207,7 @@ export default async function DeepPageLinks({
   // ── Module 6: Guides et articles ──────────────────────────────────────
   const articleSlugs = SERVICE_ARTICLE_MAP.get(currentService) || []
   const module6Links: { href: string; label: string }[] = []
-  const maxArticles = isHubMode ? 3 : 2
+  const maxArticles = isHubMode ? 3 : 1
   for (const slug of articleSlugs) {
     if (module6Links.length >= maxArticles) break
     const article = allArticles[slug]
@@ -225,7 +226,7 @@ export default async function DeepPageLinks({
     'rennes', 'toulon', 'grenoble', 'dijon', 'angers',
   ]
 
-  const maxGrandesVilles = isHubMode ? 10 : 5
+  const maxGrandesVilles = isHubMode ? 10 : 3
   const module1Slugs = new Set(module1Links.map(l => l.href.split('/').pop()!))
   const deptSlugs = new Set(
     dept && ville ? getVillesByDepartement(ville.departementCode).map(v => v.slug) : []
