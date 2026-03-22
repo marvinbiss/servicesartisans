@@ -167,10 +167,10 @@ Architecture : 39 sitemaps (17 statiques + 20 providers dynamiques + image + new
 | `src/app/news-sitemap.xml/route.ts` | Sitemap Google News (articles < 48h) |
 | `src/app/robots.ts` | robots.txt dynamique (déclare les 3 sitemaps) |
 
-**Constantes clés** (doivent rester synchronisées entre `sitemap.ts` et `sitemap-index/route.ts`) :
-- `TOP_CITIES_PHASE1 = 300` — nombre de villes soumises (Phase 1 conservatrice)
+**Constantes clés** (source unique : `src/lib/seo/sitemap-config.ts`, importée par `sitemap.ts` et `sitemap-index/route.ts`) :
+- `SITEMAP_CITY_COUNT = 2_267` — full scale : toutes les villes françaises 5K+ hab (~1.4M URLs)
 - `STATIC_BATCH = 10_000` — taille batch pages d'intention
-- `LARGE_BATCH = 45_000` — taille batch service×ville et dept×service
+- `LARGE_BATCH = 25_000` — taille batch service×ville et dept×service
 - `PROVIDER_BATCH_SIZE = 5_000` — taille batch providers
 - `MAX_PROVIDER_SITEMAPS = 20` — cap pour éviter les sitemaps fantômes
 

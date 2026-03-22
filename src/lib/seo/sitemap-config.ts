@@ -22,5 +22,19 @@ export const PROVIDER_BATCH_SIZE = 5_000
 /** Cap on provider sitemaps to avoid declaring hundreds of broken sitemaps */
 export const MAX_PROVIDER_SITEMAPS = 20
 
-/** Phase 1: submit only top-N cities for new domain (conservative crawl budget) */
-export const TOP_CITIES_PHASE1 = 300
+/**
+ * City counts for sitemap generation — tiered strategy.
+ *
+ * Tier 1 pages (service×ville, devis, tarifs, urgence) = contenu le plus riche
+ * (25-50 data points uniques/page) → full scale, toutes les villes.
+ *
+ * Tier 2 pages (tarifs-tâche, avis, problèmes) = plus template-like
+ * → top 500 villes seulement, pour éviter de diluer le ratio d'indexation
+ * pendant que Google évalue la qualité du site (HCU site-level signal).
+ *
+ * Quand le ratio d'indexation Tier 1 dépassera 30-40%, scaler Tier 2 au full.
+ *
+ * Total: ~742K URLs.
+ */
+export const SITEMAP_CITY_COUNT = 2_267
+export const SITEMAP_CITY_COUNT_TIER2 = 500

@@ -6,7 +6,7 @@ import { getProblemSlugs } from '@/lib/data/problems'
 import { getQuestionSlugs } from '@/lib/data/questions'
 import { comparisons } from '@/lib/data/comparisons'
 import { GSC_PRIORITY_CITIES } from '@/lib/seo/gsc-priority-cities'
-import { STATIC_BATCH, LARGE_BATCH, TOP_CITIES_PHASE1 } from '@/lib/seo/sitemap-config'
+import { STATIC_BATCH, LARGE_BATCH, SITEMAP_CITY_COUNT, SITEMAP_CITY_COUNT_TIER2 } from '@/lib/seo/sitemap-config'
 import { articleSlugs } from '@/lib/data/blog/articles'
 import { allArticles } from '@/lib/data/blog/articles'
 import { blogCategories, categoryToSlug, normalizeCategory } from '@/lib/data/blog/categories'
@@ -43,34 +43,36 @@ function normalizeName(s: string): string {
  * Next.js 14 calls this to produce /sitemap/[id].xml and a sitemap index.
  */
 export async function generateSitemaps() {
-  // Phase 1: top 300 cities only — focused crawl budget on high-traffic cities for new domain.
-  // ALL intent pages (devis, avis, tarifs, urgence, problemes) also use Phase 1 cities.
-  // Quartier-level sitemaps are removed entirely (800K+ thin URLs = crawl budget waste).
-  const serviceCitiesPhase1BatchCount = Math.ceil(services.length * TOP_CITIES_PHASE1 / LARGE_BATCH)
+  // Tiered sitemap strategy — ~742K URLs total.
+  // Tier 1 (service, devis, tarifs, urgence × ALL cities): contenu le plus riche.
+  // Tier 2 (tarifs-tâche, avis, problèmes × top 500 cities): plus template-like.
+  // Quartier-level sitemaps removed (too granular, thin content).
+  const serviceCitiesBatchCount = Math.ceil(services.length * SITEMAP_CITY_COUNT / LARGE_BATCH)
 
   const emergencySlugs = Object.keys(tradeContent)
   const avisServiceSlugs = Object.keys(tradeContent)
   const problemSlugs = getProblemSlugs()
 
-  // Count total task×city combinations for tarifs-task-cities sitemaps
+  // Tier 2: tarifs-task, avis, problemes use top 500 cities only
   const totalTaskCount = Object.values(tradeContent).reduce((sum, t) => sum + t.commonTasks.length, 0)
-  const tarifsTaskCitiesBatchCount = Math.ceil(totalTaskCount * TOP_CITIES_PHASE1 / LARGE_BATCH)
+  const tarifsTaskCitiesBatchCount = Math.ceil(totalTaskCount * SITEMAP_CITY_COUNT_TIER2 / LARGE_BATCH)
 
   const sitemaps: { id: string }[] = [
     { id: 'static' },
-    ...Array.from({ length: serviceCitiesPhase1BatchCount }, (_, i) => ({ id: `service-cities-${i}` })),
+    ...Array.from({ length: serviceCitiesBatchCount }, (_, i) => ({ id: `service-cities-${i}` })),
     { id: 'cities' },
     { id: 'geo' },
-    // Quartier & service-quartier sitemaps REMOVED — too granular for new domain
     { id: 'devis-services' },
-    ...Array.from({ length: Math.ceil(services.length * TOP_CITIES_PHASE1 / STATIC_BATCH) }, (_, i) => ({ id: `devis-service-cities-${i}` })),
-    ...Array.from({ length: Math.ceil(emergencySlugs.length * TOP_CITIES_PHASE1 / STATIC_BATCH) }, (_, i) => ({ id: `urgence-service-cities-${i}` })),
-    ...Array.from({ length: Math.ceil(services.length * TOP_CITIES_PHASE1 / STATIC_BATCH) }, (_, i) => ({ id: `tarifs-service-cities-${i}` })),
+    // Tier 1: devis, urgence, tarifs → all 2 267 cities
+    ...Array.from({ length: Math.ceil(services.length * SITEMAP_CITY_COUNT / STATIC_BATCH) }, (_, i) => ({ id: `devis-service-cities-${i}` })),
+    ...Array.from({ length: Math.ceil(emergencySlugs.length * SITEMAP_CITY_COUNT / STATIC_BATCH) }, (_, i) => ({ id: `urgence-service-cities-${i}` })),
+    ...Array.from({ length: Math.ceil(services.length * SITEMAP_CITY_COUNT / STATIC_BATCH) }, (_, i) => ({ id: `tarifs-service-cities-${i}` })),
+    // Tier 2: tarifs-tâche, avis, problèmes → top 500 cities
     ...Array.from({ length: tarifsTaskCitiesBatchCount }, (_, i) => ({ id: `tarifs-task-cities-${i}` })),
     { id: 'avis-services' },
-    ...Array.from({ length: Math.ceil(avisServiceSlugs.length * TOP_CITIES_PHASE1 / STATIC_BATCH) }, (_, i) => ({ id: `avis-service-cities-${i}` })),
+    ...Array.from({ length: Math.ceil(avisServiceSlugs.length * SITEMAP_CITY_COUNT_TIER2 / STATIC_BATCH) }, (_, i) => ({ id: `avis-service-cities-${i}` })),
     { id: 'problemes' },
-    ...Array.from({ length: Math.ceil(problemSlugs.length * TOP_CITIES_PHASE1 / STATIC_BATCH) }, (_, i) => ({ id: `problemes-cities-${i}` })),
+    ...Array.from({ length: Math.ceil(problemSlugs.length * SITEMAP_CITY_COUNT_TIER2 / STATIC_BATCH) }, (_, i) => ({ id: `problemes-cities-${i}` })),
     ...Array.from(
       { length: Math.ceil(departements.length * getTradesSlugs().length / LARGE_BATCH) },
       (_, i) => ({ id: `dept-services-${i}` })
@@ -269,14 +271,14 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     return [...homepage, ...hubPages, ...staticPages, ...guidePages, ...questionPages, ...comparisonPages, ...blogArticlePages, ...blogCategoryPages, ...blogTagPages, ...servicesIndex, ...servicePages, ...urgencePages, ...tarifsPages]
   }
 
-  // ── Service + city — Phase 1: top 300 cities ────────────────────────
+  // ── Service × city — full scale: all 2 267 cities ──────────────────
   if (id.startsWith('service-cities-') && !id.startsWith('service-cities-extended-')) {
     const batchIndex = parseInt(id.replace('service-cities-', ''), 10)
     const BATCH = LARGE_BATCH
     const offset = batchIndex * BATCH
 
     // Merge top cities by population + GSC priority cities (deduplicated)
-    const phase1Cities = villes.slice(0, TOP_CITIES_PHASE1)
+    const phase1Cities = villes.slice(0, SITEMAP_CITY_COUNT)
     const phase1Slugs = new Set(phase1Cities.map(v => v.slug))
     const gscExtras = GSC_PRIORITY_CITIES
       .filter(slug => !phase1Slugs.has(slug))
@@ -358,13 +360,13 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     }))
   }
 
-  // ── Devis service×city pages (Phase 1: top 300 cities only) ─────────
+  // ── Devis service×city pages (Full scale: all cities) ─────────
   if (id.startsWith('devis-service-cities-')) {
     const batchIndex = parseInt(id.replace('devis-service-cities-', ''), 10)
     const BATCH = STATIC_BATCH
     const start = batchIndex * BATCH
     const end = start + BATCH
-    const phase1Cities = villes.slice(0, TOP_CITIES_PHASE1)
+    const phase1Cities = villes.slice(0, SITEMAP_CITY_COUNT)
     const result: MetadataRoute.Sitemap = []
     let count = 0
 
@@ -379,14 +381,14 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     return result
   }
 
-  // ── Urgence service×city pages (Phase 1: top 300 cities only) ───────
+  // ── Urgence service×city pages (Full scale: all cities) ───────
   if (id.startsWith('urgence-service-cities-')) {
     const batchIndex = parseInt(id.replace('urgence-service-cities-', ''), 10)
     const BATCH = STATIC_BATCH
     const start = batchIndex * BATCH
     const end = start + BATCH
     const emergencySlugs = Object.keys(tradeContent)
-    const phase1Cities = villes.slice(0, TOP_CITIES_PHASE1)
+    const phase1Cities = villes.slice(0, SITEMAP_CITY_COUNT)
     const result: MetadataRoute.Sitemap = []
     let count = 0
 
@@ -401,13 +403,13 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     return result
   }
 
-  // ── Tarifs service×city pages (Phase 1: top 300 cities only) ────────
+  // ── Tarifs service×city pages (Full scale: all cities) ────────
   if (id.startsWith('tarifs-service-cities-')) {
     const batchIndex = parseInt(id.replace('tarifs-service-cities-', ''), 10)
     const BATCH = STATIC_BATCH
     const start = batchIndex * BATCH
     const end = start + BATCH
-    const phase1Cities = villes.slice(0, TOP_CITIES_PHASE1)
+    const phase1Cities = villes.slice(0, SITEMAP_CITY_COUNT)
     const result: MetadataRoute.Sitemap = []
     let count = 0
 
@@ -422,13 +424,13 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     return result
   }
 
-  // ── Tarifs task×city pages (Phase 1: top 300 cities only) ───────────
+  // ── Tarifs task×city pages (Tier 2: top 500 cities) ────────────
   if (id.startsWith('tarifs-task-cities-')) {
     const batchIndex = parseInt(id.replace('tarifs-task-cities-', ''), 10)
     const BATCH = LARGE_BATCH
     const start = batchIndex * BATCH
     const end = start + BATCH
-    const phase1Cities = villes.slice(0, TOP_CITIES_PHASE1)
+    const phase1Cities = villes.slice(0, SITEMAP_CITY_COUNT_TIER2)
     const result: MetadataRoute.Sitemap = []
     let count = 0
 
@@ -465,14 +467,14 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     ]
   }
 
-  // ── Avis service×city pages (Phase 1: top 300 cities only) ──────────
+  // ── Avis service×city pages (Tier 2: top 500 cities) ───────────
   if (id.startsWith('avis-service-cities-')) {
     const batchIndex = parseInt(id.replace('avis-service-cities-', ''), 10)
     const BATCH = STATIC_BATCH
     const start = batchIndex * BATCH
     const end = start + BATCH
     const tradeSlugs = Object.keys(tradeContent)
-    const phase1Cities = villes.slice(0, TOP_CITIES_PHASE1)
+    const phase1Cities = villes.slice(0, SITEMAP_CITY_COUNT_TIER2)
     const result: MetadataRoute.Sitemap = []
     let count = 0
 
@@ -497,14 +499,14 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     ]
   }
 
-  // ── Problemes × city pages (Phase 1: top 300 cities only) ───────────
+  // ── Problemes × city pages (Tier 2: top 500 cities) ────────────
   if (id.startsWith('problemes-cities-')) {
     const batchIndex = parseInt(id.replace('problemes-cities-', ''))
     const BATCH = STATIC_BATCH
     const start = batchIndex * BATCH
     const end = start + BATCH
     const problemSlugs = getProblemSlugs()
-    const phase1Cities = villes.slice(0, TOP_CITIES_PHASE1)
+    const phase1Cities = villes.slice(0, SITEMAP_CITY_COUNT_TIER2)
     const result: MetadataRoute.Sitemap = []
     let count = 0
 
