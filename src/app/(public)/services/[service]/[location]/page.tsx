@@ -339,42 +339,35 @@ export default async function ServiceLocationPage({ params }: PageProps) {
     )
   }
 
-  // 1. Resolve service (DB → static fallback)
-  let service: Service
+  // 1. Resolve service (DB → static fallback) — notFound() OUTSIDE try/catch to avoid swallowing
+  let resolvedService: Service | null = null
   try {
-    service = await getServiceBySlug(serviceSlug)
-    if (!service) {
+    resolvedService = await getServiceBySlug(serviceSlug)
+    if (!resolvedService) {
       const staticSvc = staticServicesList.find(s => s.slug === serviceSlug)
-      if (!staticSvc) notFound()
-      service = { id: '', name: staticSvc.name, slug: staticSvc.slug, is_active: true, created_at: '' }
+      if (staticSvc) resolvedService = { id: '', name: staticSvc.name, slug: staticSvc.slug, is_active: true, created_at: '' }
     }
   } catch {
     const staticSvc = staticServicesList.find(s => s.slug === serviceSlug)
-    if (!staticSvc) notFound()
-    service = { id: '', name: staticSvc.name, slug: staticSvc.slug, is_active: true, created_at: '' }
+    if (staticSvc) resolvedService = { id: '', name: staticSvc.name, slug: staticSvc.slug, is_active: true, created_at: '' }
   }
+  if (!resolvedService) notFound()
+  const service: Service = resolvedService
 
-  // 2. Resolve location (DB → france.ts fallback)
-  let location: LocationType
+  // 2. Resolve location (DB → france.ts fallback) — notFound() OUTSIDE try/catch
+  let resolvedLocation: LocationType | null = null
   try {
     const dbLocation = await getLocationBySlug(locationSlug)
-    if (!dbLocation) {
-      const fallback = villeToLocation(locationSlug)
-      if (!fallback) notFound()
-      location = fallback
+    if (dbLocation) {
+      resolvedLocation = { ...dbLocation, id: (dbLocation as Record<string, unknown>).code_insee as string || '' }
     } else {
-      location = { ...dbLocation, id: (dbLocation as Record<string, unknown>).code_insee as string || '' }
+      resolvedLocation = villeToLocation(locationSlug)
     }
   } catch {
-    const fallback = villeToLocation(locationSlug)
-    if (!fallback) notFound()
-    location = fallback
+    resolvedLocation = villeToLocation(locationSlug)
   }
-
-  // 2b. Validate location has a real name (guards against DB returning partial/empty rows)
-  if (!location.name || location.name === locationSlug) {
-    notFound()
-  }
+  if (!resolvedLocation || !resolvedLocation.name) notFound()
+  const location: LocationType = resolvedLocation
 
   // 3. Fetch providers + total count in parallel
   // (throw on providers failure so ISR keeps stale cache)
