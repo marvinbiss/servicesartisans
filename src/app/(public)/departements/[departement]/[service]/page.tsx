@@ -16,7 +16,7 @@ import InContentLinks from '@/components/seo/InContentLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import { relatedServices } from '@/lib/constants/navigation'
 
-const topServices = ['plombier', 'electricien', 'serrurier', 'chauffagiste', 'couvreur']
+const topServices = ['plombier', 'electricien', 'serrurier']
 
 export function generateStaticParams() {
   return departements.flatMap(d =>

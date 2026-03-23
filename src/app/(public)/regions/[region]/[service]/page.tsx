@@ -16,10 +16,10 @@ import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import { relatedServices } from '@/lib/constants/navigation'
 
 export function generateStaticParams() {
-  // Pre-render ALL services per region (16 × 46 = 736 pages)
-  const allSlugs = getTradesSlugs()
+  // Pre-render top 5 services per region (16 × 5 = 80 pages) — rest via ISR
+  const topServices = ['plombier', 'electricien', 'serrurier', 'chauffagiste', 'couvreur']
   return regions.flatMap(r =>
-    allSlugs.map(s => ({ region: r.slug, service: s }))
+    topServices.map(s => ({ region: r.slug, service: s }))
   )
 }
 
