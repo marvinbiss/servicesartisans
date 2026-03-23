@@ -6,7 +6,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
-import { regions, getRegionBySlug, services as allServices, getVillesByDepartement } from '@/lib/data/france'
+import { regions, getRegionBySlug, services as allServices, getVillesByDepartement, parsePopulation } from '@/lib/data/france'
 import { getProviderCountByRegion, formatProviderCount } from '@/lib/data/stats'
 import { getRegionImage } from '@/lib/data/images'
 import { generateRegionContent, hashCode } from '@/lib/seo/location-content'
@@ -95,6 +95,7 @@ export default async function RegionPage({ params }: PageProps) {
     region.departments.map(dept => [dept.code, getVillesByDepartement(dept.code)])
   )
   const allCities = region.departments.flatMap(dept => deptCitiesMap[dept.code])
+    .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
   const cityCount = allCities.length
   const content = generateRegionContent(region, cityCount)
   const regionArtisanCount = await getProviderCountByRegion(region.name)

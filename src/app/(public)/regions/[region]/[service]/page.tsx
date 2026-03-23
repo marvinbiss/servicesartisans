@@ -6,7 +6,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { SITE_URL } from '@/lib/seo/config'
 import { getBreadcrumbSchema, getFAQSchema, getServiceSchema } from '@/lib/seo/jsonld'
-import { regions, getRegionBySlug, services as allServices, getVillesByDepartement } from '@/lib/data/france'
+import { regions, getRegionBySlug, services as allServices, getVillesByDepartement, parsePopulation } from '@/lib/data/france'
 import { getTradeContent, getTradesSlugs } from '@/lib/data/trade-content'
 import { generateRegionContent, hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { getServiceImage } from '@/lib/data/images'
@@ -100,6 +100,7 @@ export default async function RegionServicePage({ params }: PageProps) {
     region.departments.map(dept => [dept.code, getVillesByDepartement(dept.code)])
   )
   const allCities = region.departments.flatMap(dept => deptCitiesMap[dept.code])
+    .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
   const cityCount = allCities.length
   const multiplier = getRegionalMultiplier(region.name)
   const minPrice = Math.round(trade.priceRange.min * multiplier)

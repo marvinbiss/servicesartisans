@@ -13,7 +13,7 @@ import PriceTable from '@/components/seo/PriceTable'
 import Breadcrumb from '@/components/Breadcrumb'
 import { PopularCitiesLinks } from '@/components/InternalLinks'
 import { popularServices, relatedServices } from '@/lib/constants/navigation'
-import { services as staticServicesList, villes, departements, getVillesByDepartement } from '@/lib/data/france'
+import { services as staticServicesList, villes, departements, getVillesByDepartement, parsePopulation } from '@/lib/data/france'
 import { getTradeContent } from '@/lib/data/trade-content'
 import { allArticlesMeta } from '@/lib/data/blog/articles-index'
 import { getServiceImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
@@ -162,7 +162,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 /** Convert static villes to Location-like shape for fallback display */
 function getStaticCities() {
-  return villes.slice(0, 20).map(v => ({
+  return [...villes].sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population)).slice(0, 20).map(v => ({
     id: v.slug,
     name: v.name,
     slug: v.slug,
@@ -236,6 +236,11 @@ export default async function ServicePage({ params }: PageProps) {
   if (!topCities || topCities.length === 0) {
     topCities = getStaticCities()
   }
+
+  // Filter: only keep cities that exist in the validated villes array (2,280 cities)
+  // This prevents links to tiny communes that would show "Page non trouvée"
+  const validSlugs = new Set(villes.map(v => v.slug))
+  topCities = topCities.filter(c => validSlugs.has(c.slug))
 
   // Limit to top 50 cities (already sorted by population from DB/static data)
   const MAX_CITIES = 50

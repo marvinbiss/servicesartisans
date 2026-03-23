@@ -25088,9 +25088,11 @@ export function getDepartementByCode(code: string): Departement | undefined {
   return departements.find(d => d.code === code)
 }
 
-// Fonction pour obtenir toutes les villes d'un département
+// Fonction pour obtenir toutes les villes d'un département (triées par population décroissante)
 export function getVillesByDepartement(departementCode: string): Ville[] {
-  return villes.filter(v => v.departementCode === departementCode)
+  return villes
+    .filter(v => v.departementCode === departementCode)
+    .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
 }
 
 /** Parse population string like '156 000' into a number (156000) */

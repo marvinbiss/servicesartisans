@@ -13,11 +13,11 @@ export const popularServices = [
 
 export const popularCities = [
   { name: 'Paris', slug: 'paris', department: '75' },
-  { name: 'Lyon', slug: 'lyon', department: '69' },
   { name: 'Marseille', slug: 'marseille', department: '13' },
+  { name: 'Lyon', slug: 'lyon', department: '69' },
   { name: 'Toulouse', slug: 'toulouse', department: '31' },
-  { name: 'Bordeaux', slug: 'bordeaux', department: '33' },
   { name: 'Nantes', slug: 'nantes', department: '44' },
+  { name: 'Bordeaux', slug: 'bordeaux', department: '33' },
 ]
 
 export const relatedServices: Record<string, string[]> = {
