@@ -9,6 +9,8 @@ import { CmsContent } from '@/components/CmsContent'
 import { SITE_URL, PHONE_TEL } from '@/lib/seo/config'
 import { villes, services } from '@/lib/data/france'
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: 'Artisan Urgence — Dépannage Soir & Week-end',
   description: 'Artisan en urgence : plombier, électricien, serrurier. Dépannage soir et week-end partout en France. Devis gratuit, artisans vérifiés SIREN.',

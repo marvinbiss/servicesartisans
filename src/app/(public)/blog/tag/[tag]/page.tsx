@@ -10,6 +10,8 @@ import { allArticlesMeta } from '@/lib/data/blog/articles-index'
 import { allArticles } from '@/lib/data/blog/articles'
 import { getBlogImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 
+export const revalidate = 86400
+
 function slugifyTag(tag: string): string {
   return tag
     .toLowerCase()

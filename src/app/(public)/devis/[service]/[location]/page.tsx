@@ -19,6 +19,8 @@ import DeepPageLinks from '@/components/seo/DeepPageLinks'
 import DevisForm from '@/components/DevisForm'
 import DevisSidebar from '@/components/conversion/DevisSidebar'
 
+export const revalidate = 86400
+
 // ---------------------------------------------------------------------------
 // Static params: top 5 cities x 46 services = 230 pages
 // ---------------------------------------------------------------------------

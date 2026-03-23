@@ -21,7 +21,9 @@ describe('cn (classNames utility)', () => {
   })
 
   it('should handle conditional classes', () => {
-    expect(cn('base', true && 'included', false && 'excluded')).toBe('base included')
+    const shouldInclude = true
+    const shouldExclude = false
+    expect(cn('base', shouldInclude && 'included', shouldExclude && 'excluded')).toBe('base included')
   })
 
   it('should handle undefined and null values', () => {

@@ -12,6 +12,8 @@ import { CmsContent } from '@/components/CmsContent'
 import { tradeContent } from '@/lib/data/trade-content'
 import { villes, services } from '@/lib/data/france'
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: 'Devis Artisan Gratuit — Comparez les Offres',
   description:

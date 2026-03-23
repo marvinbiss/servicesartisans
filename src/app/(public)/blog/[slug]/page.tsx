@@ -18,6 +18,8 @@ import { ArticleFAQ } from './ArticleFAQ'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 
+export const revalidate = 86400
+
 /** Lightweight map for the related-articles scorer */
 const allArticlesMeta: Record<string, { category: string; tags: string[]; title: string; readTime: string }> =
   Object.fromEntries(

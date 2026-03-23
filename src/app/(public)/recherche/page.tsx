@@ -9,6 +9,8 @@ import { SITE_URL } from '@/lib/seo/config'
 import { services, villes, regions } from '@/lib/data/france'
 import { PopularServicesLinks, PopularCitiesLinks } from '@/components/InternalLinks'
 
+export const revalidate = 86400
+
 export const metadata: Metadata = {
   title: 'Rechercher un artisan — Trouvez le bon professionnel',
   description: 'Recherchez un artisan qualifié près de chez vous. Comparez les avis, les tarifs et obtenez des devis gratuits. Des milliers d\'artisans référencés dans toute la France.',
