@@ -13,6 +13,10 @@ import FaqAndBlogSection from './_components/FaqAndBlogSection'
 import CrossLinks from './_components/CrossLinks'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
+import MoneyPageBoost from '@/components/seo/MoneyPageBoost'
+import InBodyLinks from '@/components/seo/InBodyLinks'
+import SeasonalLinks from '@/components/seo/SeasonalLinks'
+import InContentLinks from '@/components/seo/InContentLinks'
 
 import { getBreadcrumbSchema, getItemListSchema, getSpeakableSchema, getLocalServiceSchema } from '@/lib/seo/jsonld'
 import { popularServices, relatedServices } from '@/lib/constants/navigation'
@@ -615,6 +619,17 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         <CallbackRequest serviceSlug={serviceSlug} cityName={location.name} />
       </div>
 
+      <InContentLinks
+        serviceSlug={serviceSlug}
+        serviceName={service.name}
+        villeSlug={locationSlug}
+        villeName={location.name}
+        currentIntent="services"
+        departement={location.department_name}
+        departementCode={location.department_code}
+        region={location.region_name}
+      />
+
       <CrossIntentLinks
         service={serviceSlug}
         serviceName={service.name}
@@ -623,11 +638,17 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         currentIntent="services"
       />
 
+      <InBodyLinks serviceSlug={serviceSlug} villeSlug={locationSlug} villeName={location.name} serviceName={service.name} />
+
       <DeepPageLinks
         currentService={serviceSlug}
         currentVille={locationSlug}
         currentIntent="services"
+        skipCrossIntent
       />
+
+      <MoneyPageBoost currentService={serviceSlug} currentVille={locationSlug} />
+      <SeasonalLinks currentService={serviceSlug} villeSlug={locationSlug} villeName={location.name} />
 
       <StickyMobileCTA serviceSlug={serviceSlug} citySlug={locationSlug} />
 

@@ -31,6 +31,8 @@ import { relatedServices } from '@/lib/constants/navigation'
 import { getProblemsByService } from '@/lib/data/problems'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
+import MoneyPageBoost from '@/components/seo/MoneyPageBoost'
+import InContentLinks from '@/components/seo/InContentLinks'
 import StickyMobileCTA from '@/components/StickyMobileCTA'
 import SearchRecorder from '@/components/SearchRecorder'
 import dynamic from 'next/dynamic'
@@ -1327,6 +1329,17 @@ export default async function UrgenceServiceVillePage({
         </div>
       </section>
 
+      <InContentLinks
+        serviceSlug={service}
+        serviceName={trade.name}
+        villeSlug={villeSlug}
+        villeName={villeData.name}
+        currentIntent="urgence"
+        departement={villeData.departement}
+        departementCode={villeData.departementCode}
+        region={villeData.region}
+      />
+
       <CrossIntentLinks
         service={service}
         serviceName={trade.name}
@@ -1335,7 +1348,9 @@ export default async function UrgenceServiceVillePage({
         currentIntent="urgence"
       />
 
-      <DeepPageLinks currentService={service} currentVille={villeSlug} currentIntent="urgence" />
+      <DeepPageLinks currentService={service} currentVille={villeSlug} currentIntent="urgence" skipCrossIntent />
+
+      <MoneyPageBoost currentService={service} currentVille={villeSlug} />
 
       <StickyMobileCTA serviceSlug={service} citySlug={villeSlug} ctaText="Intervention urgente — Devis gratuit" />
 

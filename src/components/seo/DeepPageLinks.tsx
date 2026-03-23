@@ -7,9 +7,13 @@ import {
   getDepartementByCode,
   getRegionSlugByName,
   regions,
+  departements,
+  getCityScore,
 } from '@/lib/data/france'
+import { relatedServices } from '@/lib/constants/navigation'
 import { allArticles } from '@/lib/data/blog/articles'
-import { getNearbyVilleSlugs } from '@/lib/data/commune-data'
+import { getNearbyVilleSlugs, getCommuneScore } from '@/lib/data/commune-data'
+import { isMoneyPage, TOP_CITIES } from '@/lib/seo/top-pages'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -19,6 +23,7 @@ interface DeepPageLinksProps {
   currentService: string   // slug du service (ex: "plombier")
   currentVille?: string    // slug de la ville (ex: "paris") — optionnel pour le mode hub
   currentIntent?: 'services' | 'tarifs' | 'devis' | 'avis' | 'urgence'
+  skipCrossIntent?: boolean // true when CrossIntentLinks is already rendered above
 }
 
 // ---------------------------------------------------------------------------
@@ -71,6 +76,7 @@ export default async function DeepPageLinks({
   currentService,
   currentVille,
   currentIntent,
+  skipCrossIntent = false,
 }: DeepPageLinksProps) {
   const serviceData = services.find(s => s.slug === currentService)
   if (!serviceData) return null
@@ -84,13 +90,28 @@ export default async function DeepPageLinks({
 
   const villeName = ville?.name || ''
 
-  // ── Module 1: Villes proches (city mode only) ─────────────────────────
+  // Deduplication set — tracks all hrefs to prevent duplicate links across modules
+  const usedHrefs = new Set<string>()
+
+  function dedup(links: { href: string; label: string }[]): { href: string; label: string }[] {
+    const result: { href: string; label: string }[] = []
+    for (const link of links) {
+      if (!usedHrefs.has(link.href)) {
+        usedHrefs.add(link.href)
+        result.push(link)
+      }
+    }
+    return result
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // MODULE 1: Villes proches — SAME SERVICE (city mode only) — SILO
+  // City mode: 6 nearby cities (up from 4 — core topical silo links)
+  // ═══════════════════════════════════════════════════════════════════════════
   let module1Links: { href: string; label: string }[] = []
 
   if (!isHubMode && currentVille) {
-    // Try GPS-based proximity (works at runtime/ISR, not during build)
-    // City mode: cap at 4 (reduced from 8 to stay under 50 total links)
-    const nearbyLimit = 4
+    const nearbyLimit = 6
     const gpsCities = await getNearbyVilleSlugs(currentVille, nearbyLimit)
     if (gpsCities && gpsCities.length > 0) {
       module1Links = gpsCities
@@ -103,77 +124,206 @@ export default async function DeepPageLinks({
     }
 
     // Fallback: department/region proximity (build time or no GPS data)
+    // Sort by city score (population + capital bonus) for better internal linking
+    // Money pages get a boost to ensure they appear more often
     if (module1Links.length === 0) {
-      const nearbyCities = getNearbyCities(currentVille, nearbyLimit)
-      module1Links = nearbyCities.map(v => ({
+      const nearbyCities = getNearbyCities(currentVille, nearbyLimit * 2, getCityScore)
+      const sorted = nearbyCities.sort((a, b) => {
+        const aIsMP = isMoneyPage(currentService, a.slug) ? 1 : 0
+        const bIsMP = isMoneyPage(currentService, b.slug) ? 1 : 0
+        if (aIsMP !== bIsMP) return bIsMP - aIsMP
+        return getCityScore(b) - getCityScore(a)
+      })
+      module1Links = sorted.slice(0, nearbyLimit).map(v => ({
         href: `/services/${currentService}/${v.slug}`,
         label: `${serviceName} à ${v.name}`,
       }))
     }
   }
+  module1Links = dedup(module1Links)
 
-  // ── Module 2: Autres services ─────────────────────────────────────────
-  // City mode: 4 services (reduced from 8); Hub mode: keep 8
-  const maxOtherServices = isHubMode ? 8 : 4
-  const otherServices = services
-    .filter(s => s.slug !== currentService)
-    .slice(0, maxOtherServices)
-  const module2Links = isHubMode
-    ? otherServices.map(s => ({
-        href: `/services/${s.slug}`,
-        label: `${s.name} en France`,
-      }))
-    : otherServices.map(s => ({
-        href: `/services/${s.slug}/${currentVille}`,
-        label: `${s.name} à ${villeName}`,
-      }))
+  // ═══════════════════════════════════════════════════════════════════════════
+  // MODULE 4: Cross-intent — SAME SERVICE — SILO
+  // Skipped if CrossIntentLinks is rendered above (skipCrossIntent=true)
+  // City mode: all 5 intents minus current (up to 5 links for full silo coverage)
+  // Hub mode: 4 non-services intents minus current
+  // ═══════════════════════════════════════════════════════════════════════════
+  const allIntents: { intent: DeepPageLinksProps['currentIntent']; prefix: string; label: string }[] = [
+    { intent: 'services', prefix: 'services', label: 'Services' },
+    { intent: 'tarifs', prefix: 'tarifs', label: 'Tarifs' },
+    { intent: 'devis', prefix: 'devis', label: 'Devis' },
+    { intent: 'avis', prefix: 'avis', label: 'Avis' },
+    { intent: 'urgence', prefix: 'urgence', label: 'Urgence' },
+  ]
+  const filteredIntents = isHubMode
+    ? allIntents.filter(i => i.intent !== 'services' && i.intent !== currentIntent)
+    : allIntents.filter(i => i.intent !== currentIntent)
+  const module4Links = skipCrossIntent ? [] : dedup(
+    isHubMode
+      ? filteredIntents.map(i => ({
+          href: `/${i.prefix}/${currentService}`,
+          label: `${i.label} ${serviceName}`,
+        }))
+      : filteredIntents.map(i => ({
+          href: i.intent === 'services'
+            ? `/services/${currentService}/${currentVille}`
+            : `/${i.prefix}/${currentService}/${currentVille}`,
+          label: `${i.label} ${serviceName} à ${villeName}`,
+        }))
+  )
 
-  // ── Module 3: Dans le département (city mode only) ────────────────────
+  // ═══════════════════════════════════════════════════════════════════════════
+  // MODULE 8 (NEW): Same service, other departments — SILO (city mode only)
+  // Picks departments by proximity: same region first, then by population
+  // ═══════════════════════════════════════════════════════════════════════════
   const dept = ville ? getDepartementByCode(ville.departementCode) : null
+  const module8Links: { href: string; label: string }[] = []
+  if (!isHubMode && ville) {
+    const currentDeptCode = ville.departementCode
+    const currentRegion = ville.region
+
+    const sameRegionDepts = departements
+      .filter(d => d.region === currentRegion && d.code !== currentDeptCode)
+      .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
+
+    const otherRegionDepts = departements
+      .filter(d => d.region !== currentRegion && d.code !== currentDeptCode)
+      .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
+
+    const candidateDepts = [...sameRegionDepts, ...otherRegionDepts]
+    for (const d of candidateDepts) {
+      if (module8Links.length >= 3) break
+      const link = {
+        href: `/departements/${d.slug}/${currentService}`,
+        label: `${serviceName} dans le ${d.name}`,
+      }
+      if (!usedHrefs.has(link.href)) {
+        usedHrefs.add(link.href)
+        module8Links.push(link)
+      }
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // MODULE 7: Grandes villes de France — SAME SERVICE — SILO
+  // Hub mode: all 20 TOP_CITIES (money pages); City mode: 8
+  // Uses TOP_CITIES from top-pages.ts for consistency with money page strategy
+  // ═══════════════════════════════════════════════════════════════════════════
+  const GRANDES_VILLES = TOP_CITIES.map(c => c.slug)
+
+  const maxGrandesVilles = isHubMode ? 20 : 8
+  const module1Slugs = new Set(module1Links.map(l => l.href.split('/').pop()!))
+  const deptSlugs = new Set(
+    dept && ville ? getVillesByDepartement(ville.departementCode).map(v => v.slug) : []
+  )
+  const filteredGrandesVilles = GRANDES_VILLES
+    .filter(slug => slug !== currentVille && !module1Slugs.has(slug) && !deptSlugs.has(slug))
+
+  // Sort grandes villes by commune score (provider count + artisan density + population)
+  // Money pages get a boost (+10000) to ensure they appear first
+  const grandesVillesScores = await Promise.all(
+    filteredGrandesVilles.map(async slug => ({
+      slug,
+      score: (await getCommuneScore(slug)) + (isMoneyPage(currentService, slug) ? 10000 : 0),
+    }))
+  )
+  grandesVillesScores.sort((a, b) => b.score - a.score)
+
+  const module7Links = dedup(
+    grandesVillesScores
+      .slice(0, maxGrandesVilles)
+      .map(({ slug }) => {
+        const v = getVilleBySlug(slug)
+        return v
+          ? { href: `/services/${currentService}/${slug}`, label: `${serviceName} à ${v.name}` }
+          : null
+      })
+      .filter((x): x is { href: string; label: string } => x !== null)
+  )
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // MODULE 2: Related services — CROSS-SILO (restricted to relatedServices)
+  // City mode: cap at 3 (down from 4); Hub mode: cap at 5 (down from 8)
+  // Uses relatedServices mapping first, falls back to all services only if empty
+  // Money page boost preserved for fallback
+  // ═══════════════════════════════════════════════════════════════════════════
+  const related = relatedServices[currentService] || []
+  const maxOtherServices = isHubMode ? 5 : 3
+
+  let otherServiceSlugs: string[]
+  if (related.length > 0) {
+    // Use semantically related services — prioritize money pages among them
+    if (!isHubMode && currentVille) {
+      otherServiceSlugs = [...related]
+        .sort((a, b) => {
+          const aIsMP = isMoneyPage(a, currentVille) ? 1 : 0
+          const bIsMP = isMoneyPage(b, currentVille) ? 1 : 0
+          return bIsMP - aIsMP
+        })
+        .slice(0, maxOtherServices)
+    } else {
+      otherServiceSlugs = related.slice(0, maxOtherServices)
+    }
+  } else {
+    // Fallback: pick from all services if no related mapping exists
+    const otherServicesAll = services.filter(s => s.slug !== currentService)
+    otherServiceSlugs = (!isHubMode && currentVille
+      ? [...otherServicesAll].sort((a, b) => {
+          const aIsMP = isMoneyPage(a.slug, currentVille) ? 1 : 0
+          const bIsMP = isMoneyPage(b.slug, currentVille) ? 1 : 0
+          return bIsMP - aIsMP
+        })
+      : otherServicesAll
+    ).slice(0, maxOtherServices).map(s => s.slug)
+  }
+
+  const module2Links = dedup(
+    otherServiceSlugs
+      .map(slug => {
+        const s = services.find(svc => svc.slug === slug)
+        if (!s) return null
+        return isHubMode
+          ? { href: `/services/${s.slug}`, label: `${s.name} en France` }
+          : { href: `/services/${s.slug}/${currentVille}`, label: `${s.name} à ${villeName}` }
+      })
+      .filter((x): x is { href: string; label: string } => x !== null)
+  )
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // MODULE 3: Dans le département — GEO (city mode only)
+  // ═══════════════════════════════════════════════════════════════════════════
   const module3Links: { href: string; label: string }[] = []
   if (!isHubMode && dept && ville) {
+    // CRITICAL: dept×service link is UNCONDITIONAL — forced without dedup
+    const deptServiceHref = `/departements/${dept.slug}/${currentService}`
+    usedHrefs.add(deptServiceHref)
     module3Links.push({
+      href: deptServiceHref,
+      label: `${serviceName} dans le ${dept.name}`,
+    })
+
+    // Other dept links go through normal dedup
+    const deptCandidates: { href: string; label: string }[] = []
+    deptCandidates.push({
       href: `/departements/${dept.slug}`,
       label: `Artisans dans le ${dept.name}`,
-    })
-    module3Links.push({
-      href: `/departements/${dept.slug}/${currentService}`,
-      label: `${serviceName} dans le ${dept.name}`,
     })
     const deptCities = getVillesByDepartement(ville.departementCode)
       .filter(v => v.slug !== currentVille)
       .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
       .slice(0, 1)
     for (const c of deptCities) {
-      module3Links.push({
+      deptCandidates.push({
         href: `/services/${currentService}/${c.slug}`,
         label: `${serviceName} à ${c.name}`,
       })
     }
+    module3Links.push(...dedup(deptCandidates))
   }
 
-  // ── Module 4: Cross-intent ────────────────────────────────────────────
-  const intents: { intent: DeepPageLinksProps['currentIntent']; prefix: string; label: string }[] = [
-    { intent: 'tarifs', prefix: 'tarifs', label: 'Tarifs' },
-    { intent: 'devis', prefix: 'devis', label: 'Devis' },
-    { intent: 'avis', prefix: 'avis', label: 'Avis' },
-    { intent: 'urgence', prefix: 'urgence', label: 'Urgence' },
-  ]
-  const module4Links = isHubMode
-    ? intents
-        .filter(i => i.intent !== currentIntent)
-        .map(i => ({
-          href: `/${i.prefix}/${currentService}`,
-          label: `${i.label} ${serviceName}`,
-        }))
-    : intents
-        .filter(i => i.intent !== currentIntent)
-        .map(i => ({
-          href: `/${i.prefix}/${currentService}/${currentVille}`,
-          label: `${i.label} ${serviceName} à ${villeName}`,
-        }))
-
-  // ── Module 5: Hub service et région ───────────────────────────────────
+  // ═══════════════════════════════════════════════════════════════════════════
+  // MODULE 5: Hub service et région — GEO
+  // ═══════════════════════════════════════════════════════════════════════════
   const module5Links: { href: string; label: string }[] = []
   if (isHubMode) {
     // In hub mode: link to service×region pages for all metro regions
@@ -188,7 +338,7 @@ export default async function DeepPageLinks({
       })
     }
   } else {
-    // City mode: 2 links (reduced from 3 — drop generic region link, keep hub + region×service)
+    // City mode: hub service + region×service + city hub
     module5Links.push({
       href: `/services/${currentService}`,
       label: `${serviceName} en France`,
@@ -202,73 +352,73 @@ export default async function DeepPageLinks({
         })
       }
     }
+    // City hub link — geographic counterpart of the service hub
+    if (currentVille) {
+      const villeHubLink = { href: `/villes/${currentVille}`, label: `Artisans à ${villeName}` }
+      if (!usedHrefs.has(villeHubLink.href)) {
+        usedHrefs.add(villeHubLink.href)
+        module5Links.push(villeHubLink)
+      }
+    }
   }
 
-  // ── Module 6: Guides et articles ──────────────────────────────────────
+  // ═══════════════════════════════════════════════════════════════════════════
+  // MODULE 6: Guides et articles — EDITORIAL
+  // ═══════════════════════════════════════════════════════════════════════════
   const articleSlugs = SERVICE_ARTICLE_MAP.get(currentService) || []
-  const module6Links: { href: string; label: string }[] = []
+  const module6Candidates: { href: string; label: string }[] = []
   const maxArticles = isHubMode ? 3 : 1
   for (const slug of articleSlugs) {
-    if (module6Links.length >= maxArticles) break
+    if (module6Candidates.length >= maxArticles) break
     const article = allArticles[slug]
     if (article) {
-      module6Links.push({
+      module6Candidates.push({
         href: `/blog/${slug}`,
         label: article.title,
       })
     }
   }
+  const module6Links = dedup(module6Candidates)
 
-  // ── Module 7: Grandes villes de France ───────────────────────────────
-  const GRANDES_VILLES = [
-    'paris', 'lyon', 'marseille', 'toulouse', 'bordeaux',
-    'nantes', 'strasbourg', 'lille', 'montpellier', 'nice',
-    'rennes', 'toulon', 'grenoble', 'dijon', 'angers',
-  ]
-
-  // City mode: skip grandes villes (already covered by CrossLinks nearby cities)
-  const maxGrandesVilles = isHubMode ? 10 : 0
-  const module1Slugs = new Set(module1Links.map(l => l.href.split('/').pop()!))
-  const deptSlugs = new Set(
-    dept && ville ? getVillesByDepartement(ville.departementCode).map(v => v.slug) : []
-  )
-  const module7Links = GRANDES_VILLES
-    .filter(slug => slug !== currentVille && !module1Slugs.has(slug) && !deptSlugs.has(slug))
-    .slice(0, maxGrandesVilles)
-    .map(slug => {
-      const v = getVilleBySlug(slug)
-      return v
-        ? { href: `/services/${currentService}/${slug}`, label: `${serviceName} à ${v.name}` }
-        : null
-    })
-    .filter((x): x is { href: string; label: string } => x !== null)
-
-  // ── Build modules array ───────────────────────────────────────────────
+  // ═══════════════════════════════════════════════════════════════════════════
+  // Build modules array — ordered for topical silo priority
+  // ═══════════════════════════════════════════════════════════════════════════
+  // 1. Nearby cities (same service) — SILO
+  // 2. Cross-intent same service — SILO
+  // 3. Same service other departments — SILO (new)
+  // 4. Great cities same service — SILO
+  // 5. Related services (restricted) — CROSS-SILO
+  // 6. Department links — GEO
+  // 7. Hub + region — GEO
+  // 8. Blog articles — EDITORIAL
   const modules: { title: string; links: { href: string; label: string }[] }[] = []
 
   if (module1Links.length > 0) {
     modules.push({ title: `${serviceName} à proximité de ${villeName}`, links: module1Links })
   }
+  if (module4Links.length > 0) {
+    modules.push({ title: isHubMode ? `Tarifs, devis et avis ${serviceName.toLowerCase()}` : 'Voir aussi', links: module4Links })
+  }
+  if (module8Links.length > 0) {
+    modules.push({ title: `${serviceName} dans d'autres départements`, links: module8Links })
+  }
+  if (module7Links.length > 0) {
+    modules.push({ title: `${serviceName} dans les grandes villes`, links: module7Links })
+  }
   if (module2Links.length > 0) {
     modules.push({
-      title: isHubMode ? 'Autres services artisans' : `Autres artisans à ${villeName}`,
+      title: isHubMode ? 'Services artisans similaires' : `Autres artisans à ${villeName}`,
       links: module2Links,
     })
   }
   if (module3Links.length > 0 && dept) {
     modules.push({ title: `${serviceName} dans le ${dept.name}`, links: module3Links })
   }
-  if (module4Links.length > 0) {
-    modules.push({ title: isHubMode ? `Tarifs, devis et avis ${serviceName.toLowerCase()}` : 'Voir aussi', links: module4Links })
-  }
   if (module5Links.length > 0) {
     modules.push({ title: isHubMode ? `${serviceName} par région` : 'Hub service et région', links: module5Links })
   }
   if (module6Links.length > 0) {
     modules.push({ title: 'Guides et articles', links: module6Links })
-  }
-  if (module7Links.length > 0) {
-    modules.push({ title: `${serviceName} dans les grandes villes`, links: module7Links })
   }
 
   if (modules.length === 0) return null

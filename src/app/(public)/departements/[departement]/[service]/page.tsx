@@ -12,6 +12,9 @@ import { generateDepartementContent, hashCode, getRegionalMultiplier } from '@/l
 import { getServiceImage } from '@/lib/data/images'
 import PriceTable from '@/components/seo/PriceTable'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
+import InContentLinks from '@/components/seo/InContentLinks'
+import DeepPageLinks from '@/components/seo/DeepPageLinks'
+import { relatedServices } from '@/lib/constants/navigation'
 
 const topServices = ['plombier', 'electricien', 'serrurier', 'chauffagiste', 'couvreur']
 
@@ -103,12 +106,18 @@ export default async function DeptServicePage({ params }: PageProps) {
   const allTradeSlugs = getTradesSlugs()
   const otherServices = allTradeSlugs
     .filter(s => s !== serviceSlug)
-    .slice(0, 5)
+    .slice(0, 8)
     .map(s => {
       const t = getTradeContent(s)
       return t ? { slug: s, name: t.name } : null
     })
     .filter(Boolean) as { slug: string; name: string }[]
+
+  // Related services from navigation.ts
+  const relatedSlugs = relatedServices[serviceSlug] || []
+  const relatedServicesData = relatedSlugs
+    .map(s => { const t = getTradeContent(s); return t ? { slug: s, name: t.name } : null })
+    .filter((x): x is { slug: string; name: string } => x !== null)
 
   // Sibling depts with same service
   const siblingDepts = departements
@@ -366,7 +375,7 @@ export default async function DeptServicePage({ params }: PageProps) {
               </div>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-              {villesDuDepartement.slice(0, 15).map((ville) => (
+              {villesDuDepartement.slice(0, 10).map((ville) => (
                 <Link
                   key={ville.slug}
                   href={`/services/${serviceSlug}/${ville.slug}`}
@@ -384,7 +393,7 @@ export default async function DeptServicePage({ params }: PageProps) {
                 </Link>
               ))}
             </div>
-            {villesDuDepartement.length > 15 && (
+            {villesDuDepartement.length > 10 && (
               <div className="mt-6 text-center">
                 <Link href={`/departements/${deptSlug}`} className="inline-flex items-center gap-2 text-primary-400 hover:text-primary-500 font-medium text-sm transition-colors">
                   Voir les {villesDuDepartement.length} villes du {dept.name} <ArrowRight className="w-4 h-4" />
@@ -414,10 +423,35 @@ export default async function DeptServicePage({ params }: PageProps) {
         </section>
 
         {/* ─── RELATED SERVICES ─────────────────────────────── */}
+        {relatedServicesData.length > 0 && (
+          <section className="mb-16">
+            <div className="flex items-center gap-3 mb-8">
+              <div className="w-10 h-10 bg-violet-100 rounded-xl flex items-center justify-center">
+                <Wrench className="w-5 h-5 text-violet-600" />
+              </div>
+              <h2 className="font-heading text-xl font-semibold text-charcoal-900 tracking-tight">
+                Services complémentaires dans le {dept.name}
+              </h2>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              {relatedServicesData.map((s) => (
+                <Link
+                  key={s.slug}
+                  href={`/departements/${deptSlug}/${s.slug}`}
+                  className="bg-white border border-violet-200 hover:bg-violet-50 hover:border-violet-300 text-charcoal-700 hover:text-violet-700 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors"
+                >
+                  {s.name} dans le {dept.code}
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* ─── OTHER SERVICES ─────────────────────────────── */}
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 bg-violet-100 rounded-xl flex items-center justify-center">
-              <Wrench className="w-5 h-5 text-violet-600" />
+            <div className="w-10 h-10 bg-accent-100 rounded-xl flex items-center justify-center">
+              <Wrench className="w-5 h-5 text-accent-600" />
             </div>
             <h2 className="font-heading text-xl font-semibold text-charcoal-900 tracking-tight">
               Autres artisans dans le {dept.name}
@@ -561,7 +595,17 @@ export default async function DeptServicePage({ params }: PageProps) {
         </div>
       </section>
 
+      <InContentLinks
+        serviceSlug={serviceSlug}
+        serviceName={trade.name}
+        currentIntent="services"
+        departementCode={dept.code}
+        region={dept.region}
+      />
+
       <CrossIntentLinks service={serviceSlug} serviceName={trade.name} currentIntent="services" />
+
+      <DeepPageLinks currentService={serviceSlug} currentIntent="services" skipCrossIntent />
 
       {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
       <section className="mb-8">

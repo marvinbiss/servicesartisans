@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { MapPin, Phone, Mail, Facebook, Twitter, Linkedin, Instagram, Shield, CreditCard, Award, Building2 } from 'lucide-react'
 import NewsletterForm from './NewsletterForm'
 import { companyIdentity } from '@/lib/config/company-identity'
+// DynamicFooterLinks removed — replaced by 8 fixed strategic links for permanent PageRank equity
 
 // Information links
 const informationLinks = [
@@ -22,6 +23,25 @@ export default function Footer() {
 
       {/* Subtle noise texture overlay */}
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjc1IiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIzMDAiIGZpbHRlcj0idXJsKCNhKSIgb3BhY2l0eT0iMSIvPjwvc3ZnPg==')]" aria-hidden="true" />
+
+      {/* ─── Strategic Fixed Links (SEO — permanent equity to money pages) ── */}
+      <div className="relative border-b border-charcoal-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <h4 className="text-white font-heading font-semibold mb-4 text-xs uppercase tracking-[0.15em]">
+            Services et villes populaires
+          </h4>
+          <div className="flex flex-wrap gap-x-6 gap-y-2">
+            <Link href="/services" className="text-xs text-sand-500 hover:text-primary-400 transition-colors duration-200 py-0.5">Tous les services</Link>
+            <Link href="/services/plombier" className="text-xs text-sand-500 hover:text-primary-400 transition-colors duration-200 py-0.5">Plombier</Link>
+            <Link href="/services/electricien" className="text-xs text-sand-500 hover:text-primary-400 transition-colors duration-200 py-0.5">Électricien</Link>
+            <Link href="/services/serrurier" className="text-xs text-sand-500 hover:text-primary-400 transition-colors duration-200 py-0.5">Serrurier</Link>
+            <Link href="/villes/paris" className="text-xs text-sand-500 hover:text-primary-400 transition-colors duration-200 py-0.5">Artisans à Paris</Link>
+            <Link href="/villes/lyon" className="text-xs text-sand-500 hover:text-primary-400 transition-colors duration-200 py-0.5">Artisans à Lyon</Link>
+            <Link href="/villes/marseille" className="text-xs text-sand-500 hover:text-primary-400 transition-colors duration-200 py-0.5">Artisans à Marseille</Link>
+            <Link href="/devis" className="text-xs text-sand-500 hover:text-primary-400 transition-colors duration-200 py-0.5">Devis gratuit</Link>
+          </div>
+        </div>
+      </div>
 
       {/* Newsletter Section Premium */}
       <div className="relative border-b border-charcoal-700">

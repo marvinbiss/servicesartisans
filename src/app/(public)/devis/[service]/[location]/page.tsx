@@ -14,8 +14,11 @@ import { getServiceImage } from '@/lib/data/images'
 import { relatedServices } from '@/lib/constants/navigation'
 import { getProblemsByService } from '@/lib/data/problems'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
+import InContentLinks from '@/components/seo/InContentLinks'
 import VerticalCrossLinks from '@/components/seo/VerticalCrossLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
+import MoneyPageBoost from '@/components/seo/MoneyPageBoost'
+import InBodyLinks from '@/components/seo/InBodyLinks'
 import DevisForm from '@/components/DevisForm'
 import DevisSidebar from '@/components/conversion/DevisSidebar'
 
@@ -892,6 +895,16 @@ export default async function DevisServiceLocationPage({
         </div>
       </section>
 
+      <InContentLinks
+        serviceSlug={service}
+        serviceName={trade.name}
+        villeSlug={location}
+        villeName={villeData.name}
+        currentIntent="devis"
+        departementCode={villeData.departementCode}
+        region={villeData.region}
+      />
+
       <VerticalCrossLinks currentService={service} villeSlug={location} villeName={villeData.name} intent="devis" />
 
       <CrossIntentLinks
@@ -902,7 +915,11 @@ export default async function DevisServiceLocationPage({
         currentIntent="devis"
       />
 
-      <DeepPageLinks currentService={service} currentVille={location} currentIntent="devis" />
+      <InBodyLinks serviceSlug={service} villeSlug={location} villeName={villeData.name} serviceName={trade.name} />
+
+      <DeepPageLinks currentService={service} currentVille={location} currentIntent="devis" skipCrossIntent />
+
+      <MoneyPageBoost currentService={service} currentVille={location} />
     </div>
   )
 }

@@ -11,6 +11,8 @@ import { villes, getVilleBySlug, services, getRegionSlugByName, getDepartementBy
 import { getCityImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { generateVilleContent, hashCode } from '@/lib/seo/location-content'
 import CityHubLinks from '@/components/seo/CityHubLinks'
+import SeasonalLinks from '@/components/seo/SeasonalLinks'
+import InContentLinks from '@/components/seo/InContentLinks'
 
 // Pre-render top 20 cities, rest generated on-demand via ISR
 const TOP_CITIES_COUNT = 20
@@ -433,6 +435,18 @@ export default async function VillePage({ params }: PageProps) {
         regionSlug={regionSlug}
         deptSlug={deptSlug}
       />
+
+      <InContentLinks
+        serviceSlug={content.profile.topServiceSlugs[0] ?? 'plombier'}
+        serviceName={services.find(s => s.slug === (content.profile.topServiceSlugs[0] ?? 'plombier'))?.name ?? 'Plombier'}
+        villeSlug={villeSlug}
+        villeName={ville.name}
+        currentIntent="services"
+        departementCode={ville.departementCode}
+        region={ville.region}
+      />
+
+      <SeasonalLinks villeSlug={villeSlug} villeName={ville.name} />
 
         {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
         <section className="mb-8">

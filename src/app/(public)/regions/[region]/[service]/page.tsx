@@ -12,6 +12,8 @@ import { generateRegionContent, hashCode, getRegionalMultiplier } from '@/lib/se
 import { getServiceImage } from '@/lib/data/images'
 import PriceTable from '@/components/seo/PriceTable'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
+import DeepPageLinks from '@/components/seo/DeepPageLinks'
+import { relatedServices } from '@/lib/constants/navigation'
 
 export function generateStaticParams() {
   // Pre-render ALL services per region (16 × 46 = 736 pages)
@@ -107,12 +109,18 @@ export default async function RegionServicePage({ params }: PageProps) {
   const allTradeSlugs = getTradesSlugs()
   const otherServices = allTradeSlugs
     .filter(s => s !== serviceSlug)
-    .slice(0, 8)
+    .slice(0, 12)
     .map(s => { const t = getTradeContent(s); return t ? { slug: s, name: t.name } : null })
     .filter(Boolean) as { slug: string; name: string }[]
 
+  // Related services
+  const relatedSlugs = relatedServices[serviceSlug] || []
+  const relatedServicesData = relatedSlugs
+    .map(s => { const t = getTradeContent(s); return t ? { slug: s, name: t.name } : null })
+    .filter((x): x is { slug: string; name: string } => x !== null)
+
   // Other regions
-  const otherRegions = regions.filter(r => r.slug !== regionSlug).slice(0, 6)
+  const otherRegions = regions.filter(r => r.slug !== regionSlug)
 
   // Hash-selected tips
   const selectedTips = trade.tips
@@ -346,7 +354,7 @@ export default async function RegionServicePage({ params }: PageProps) {
             </div>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {allCities.slice(0, 10).map((city) => (
+            {allCities.slice(0, 15).map((city) => (
               <Link
                 key={city.slug}
                 href={`/services/${serviceSlug}/${city.slug}`}
@@ -399,10 +407,35 @@ export default async function RegionServicePage({ params }: PageProps) {
         </section>
 
         {/* ─── RELATED SERVICES ─────────────────────────────── */}
+        {relatedServicesData.length > 0 && (
+          <section className="mb-16">
+            <div className="flex items-center gap-3 mb-8">
+              <div className="w-10 h-10 bg-violet-100 rounded-xl flex items-center justify-center">
+                <Wrench className="w-5 h-5 text-violet-600" />
+              </div>
+              <h2 className="font-heading text-xl font-semibold text-charcoal-900 tracking-tight">
+                Services complémentaires en {region.name}
+              </h2>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              {relatedServicesData.map((s) => (
+                <Link
+                  key={`related-${s.slug}`}
+                  href={`/regions/${regionSlug}/${s.slug}`}
+                  className="bg-white border border-violet-200 hover:bg-violet-50 hover:border-violet-300 text-charcoal-700 hover:text-violet-700 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors"
+                >
+                  {s.name} en {region.name}
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* ─── OTHER SERVICES ─────────────────────────────── */}
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 bg-violet-100 rounded-xl flex items-center justify-center">
-              <Wrench className="w-5 h-5 text-violet-600" />
+            <div className="w-10 h-10 bg-accent-100 rounded-xl flex items-center justify-center">
+              <Wrench className="w-5 h-5 text-accent-600" />
             </div>
             <h2 className="font-heading text-xl font-semibold text-charcoal-900 tracking-tight">
               Autres services en {region.name}
@@ -418,6 +451,32 @@ export default async function RegionServicePage({ params }: PageProps) {
                 {s.name}
               </Link>
             ))}
+          </div>
+        </section>
+
+        {/* ─── NATIONAL HUB LINKS ─────────────────────────── */}
+        <section className="mb-16">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center">
+              <Globe className="w-5 h-5 text-primary-400" />
+            </div>
+            <h2 className="font-heading text-xl font-semibold text-charcoal-900 tracking-tight">
+              {trade.name} en France
+            </h2>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <Link href={`/services/${serviceSlug}`} className="bg-white border-2 border-primary-200 hover:bg-primary-50 hover:border-primary-300 text-charcoal-700 hover:text-primary-600 px-5 py-3 rounded-xl text-sm font-semibold transition-colors">
+              {trade.name} — Annuaire national
+            </Link>
+            <Link href={`/tarifs/${serviceSlug}`} className="bg-white border border-sand-300 hover:bg-sand-50 hover:border-sand-400 text-charcoal-700 hover:text-charcoal-900 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors">
+              Tarifs {trade.name.toLowerCase()} en France
+            </Link>
+            <Link href={`/avis/${serviceSlug}`} className="bg-white border border-sand-300 hover:bg-sand-50 hover:border-sand-400 text-charcoal-700 hover:text-charcoal-900 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors">
+              Avis {trade.name.toLowerCase()}
+            </Link>
+            <Link href={`/devis/${serviceSlug}`} className="bg-white border border-sand-300 hover:bg-sand-50 hover:border-sand-400 text-charcoal-700 hover:text-charcoal-900 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors">
+              Devis {trade.name.toLowerCase()}
+            </Link>
           </div>
         </section>
       </div>
@@ -455,7 +514,7 @@ export default async function RegionServicePage({ params }: PageProps) {
             <div>
               <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">{trade.name} par département</h3>
               <div className="space-y-2">
-                {region.departments.slice(0, 6).map((d) => (
+                {region.departments.map((d) => (
                   <Link key={d.slug} href={`/departements/${d.slug}/${serviceSlug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {trade.name} en {d.name}
@@ -466,7 +525,7 @@ export default async function RegionServicePage({ params }: PageProps) {
             <div>
               <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-4">Autres régions</h3>
               <div className="space-y-2">
-                {otherRegions.map((r) => (
+                {otherRegions.slice(0, 12).map((r) => (
                   <Link key={r.slug} href={`/regions/${r.slug}/${serviceSlug}`} className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-primary-400 py-2 transition-colors">
                     <ChevronRight className="w-3 h-3" />
                     {trade.name} en {r.name}
@@ -499,6 +558,8 @@ export default async function RegionServicePage({ params }: PageProps) {
       </section>
 
       <CrossIntentLinks service={serviceSlug} serviceName={trade.name} currentIntent="services" />
+
+      <DeepPageLinks currentService={serviceSlug} currentIntent="services" skipCrossIntent />
 
       {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
       <section className="mb-8">

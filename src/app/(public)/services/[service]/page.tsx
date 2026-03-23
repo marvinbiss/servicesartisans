@@ -24,6 +24,8 @@ import { SocialProofBanner } from '@/components/SocialProofBanner'
 import LastUpdated from '@/components/seo/LastUpdated'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
+import SeasonalLinks from '@/components/seo/SeasonalLinks'
+import InContentLinks from '@/components/seo/InContentLinks'
 import StickyMobileCTA from '@/components/StickyMobileCTA'
 import DemandIndicator from '@/components/DemandIndicator'
 import TrustGuarantee from '@/components/TrustGuarantee'
@@ -1018,8 +1020,16 @@ export default async function ServicePage({ params }: PageProps) {
         </div>
       </section>
 
+      <InContentLinks
+        serviceSlug={serviceSlug}
+        serviceName={service.name}
+        currentIntent="services"
+      />
+
       {/* DeepPageLinks — Hub mode (no city) */}
-      <DeepPageLinks currentService={serviceSlug} currentIntent="services" />
+      <DeepPageLinks currentService={serviceSlug} currentIntent="services" skipCrossIntent />
+
+      <SeasonalLinks currentService={serviceSlug} />
 
       <StickyMobileCTA serviceSlug={serviceSlug} />
 

@@ -19,6 +19,9 @@ import PriceTableHTML from '@/components/seo/PriceTableHTML'
 import LastUpdated from '@/components/seo/LastUpdated'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import DeepPageLinks from '@/components/seo/DeepPageLinks'
+import MoneyPageBoost from '@/components/seo/MoneyPageBoost'
+import InBodyLinks from '@/components/seo/InBodyLinks'
+import InContentLinks from '@/components/seo/InContentLinks'
 import VerticalCrossLinks from '@/components/seo/VerticalCrossLinks'
 import { getDefaultAuthor } from '@/lib/data/team'
 import StickyMobileCTA from '@/components/StickyMobileCTA'
@@ -880,6 +883,17 @@ export default async function TarifsServiceVillePage({
 
       <VerticalCrossLinks currentService={service} villeSlug={villeSlug} villeName={villeData.name} intent="tarifs" />
 
+      <InContentLinks
+        serviceSlug={service}
+        serviceName={trade.name}
+        villeSlug={villeSlug}
+        villeName={villeData.name}
+        currentIntent="tarifs"
+        departement={villeData.departement}
+        departementCode={villeData.departementCode}
+        region={villeData.region}
+      />
+
       <CrossIntentLinks
         service={service}
         serviceName={trade.name}
@@ -888,7 +902,11 @@ export default async function TarifsServiceVillePage({
         currentIntent="tarifs"
       />
 
-      <DeepPageLinks currentService={service} currentVille={villeSlug} currentIntent="tarifs" />
+      <InBodyLinks serviceSlug={service} villeSlug={villeSlug} villeName={villeData.name} serviceName={trade.name} />
+
+      <DeepPageLinks currentService={service} currentVille={villeSlug} currentIntent="tarifs" skipCrossIntent />
+
+      <MoneyPageBoost currentService={service} currentVille={villeSlug} />
 
       <StickyMobileCTA serviceSlug={service} citySlug={villeSlug} />
 
