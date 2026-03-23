@@ -165,7 +165,7 @@ function parsePopulation(pop: string): number {
   return parseInt(pop.replace(/\s/g, ''), 10) || 0
 }
 
-const TOP_CITIES_COUNT = 50
+const TOP_CITIES_COUNT = 5
 const topCities = [...villes]
   .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
   .slice(0, TOP_CITIES_COUNT)
