@@ -12,8 +12,8 @@ import { getCityImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { generateQuartierContent, hashCode } from '@/lib/seo/location-content'
 import { formatNumber, formatEuro } from '@/lib/data/commune-data'
 
-// Pre-render top 50 cities × their quartiers (~500+ pages)
-const TOP_CITIES = 50
+// Pre-render top 5 cities × their quartiers — rest via ISR
+const TOP_CITIES = 5
 export function generateStaticParams() {
   return villes.slice(0, TOP_CITIES).flatMap(v =>
     getQuartiersByVille(v.slug).map(q => ({ ville: v.slug, quartier: q.slug }))
