@@ -3,8 +3,10 @@ import {
   services,
   getVillesByDepartement,
   getDepartementByCode,
+  getCityScore,
   type Ville,
 } from '@/lib/data/france'
+import { getAnchorText } from '@/lib/seo/anchor-variants'
 
 // ---------------------------------------------------------------------------
 // Services d'urgence et services populaires (slugs)
@@ -46,14 +48,11 @@ export default function CityHubLinks({
     .filter((s): s is (typeof services)[number] => s != null)
 
   // ── Module 2 : Villes proches du même département (6 liens) ──
+  // Sort by city score (population + capital bonus) for better internal linking
   const nearbyDeptCities = dept
     ? getVillesByDepartement(ville.departementCode)
         .filter(v => v.slug !== villeSlug)
-        .sort((a, b) => {
-          const popA = parseInt(a.population.replace(/\s/g, ''), 10) || 0
-          const popB = parseInt(b.population.replace(/\s/g, ''), 10) || 0
-          return popB - popA
-        })
+        .sort((a, b) => getCityScore(b) - getCityScore(a))
         .slice(0, 6)
     : []
 
@@ -62,8 +61,8 @@ export default function CityHubLinks({
     const s = services.find(sv => sv.slug === slug)
     if (!s) return []
     return [
-      { href: `/devis/${slug}/${villeSlug}`, label: `Devis ${s.name.toLowerCase()} à ${ville.name}` },
-      { href: `/tarifs/${slug}/${villeSlug}`, label: `Tarifs ${s.name.toLowerCase()} à ${ville.name}` },
+      { href: `/devis/${slug}/${villeSlug}`, label: getAnchorText({ serviceSlug: slug, serviceName: s.name, villeName: ville.name, intent: 'devis', seed: 'city-hub' }) },
+      { href: `/tarifs/${slug}/${villeSlug}`, label: getAnchorText({ serviceSlug: slug, serviceName: s.name, villeName: ville.name, intent: 'tarifs', seed: 'city-hub' }) },
     ]
   })
 
@@ -72,7 +71,7 @@ export default function CityHubLinks({
     .map(slug => {
       const s = services.find(sv => sv.slug === slug)
       if (!s) return null
-      return { href: `/urgence/${slug}/${villeSlug}`, label: `${s.name} urgence à ${ville.name}` }
+      return { href: `/urgence/${slug}/${villeSlug}`, label: getAnchorText({ serviceSlug: slug, serviceName: s.name, villeName: ville.name, intent: 'urgence', seed: 'city-hub' }) }
     })
     .filter((x): x is { href: string; label: string } => x != null)
 
@@ -81,7 +80,7 @@ export default function CityHubLinks({
     .map(slug => {
       const s = services.find(sv => sv.slug === slug)
       if (!s) return null
-      return { href: `/avis/${slug}/${villeSlug}`, label: `Avis ${s.name.toLowerCase()} à ${ville.name}` }
+      return { href: `/avis/${slug}/${villeSlug}`, label: getAnchorText({ serviceSlug: slug, serviceName: s.name, villeName: ville.name, intent: 'avis', seed: 'city-hub' }) }
     })
     .filter((x): x is { href: string; label: string } => x != null)
 
@@ -123,7 +122,7 @@ export default function CityHubLinks({
       title: `Services populaires à ${ville.name}`,
       links: topServices.map(s => ({
         href: `/services/${s.slug}/${villeSlug}`,
-        label: `${s.name} à ${ville.name}`,
+        label: getAnchorText({ serviceSlug: s.slug, serviceName: s.name, villeName: ville.name, intent: 'services', seed: 'city-hub-top' }),
       })),
     })
   }

@@ -11,6 +11,7 @@ import { tradeContent } from '@/lib/data/trade-content'
 import { villes } from '@/lib/data/france'
 import { hashCode } from '@/lib/seo/location-content'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
+import InContentLinks from '@/components/seo/InContentLinks'
 
 export const revalidate = 86400
 export const dynamicParams = true
@@ -502,6 +503,8 @@ export default async function ProblemePage({ params }: { params: Promise<{ probl
           </div>
         </div>
       </section>
+
+      <InContentLinks serviceSlug={problem.primaryService} serviceName={tradeName} currentIntent="problemes" />
 
       <CrossIntentLinks service={problem.primaryService} serviceName={tradeName} />
 

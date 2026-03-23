@@ -10,7 +10,9 @@ import { departements, getDepartementBySlug, getVillesByDepartement, services, g
 import { getProviderCountByDepartment, formatProviderCount } from '@/lib/data/stats'
 import { getDepartmentImage } from '@/lib/data/images'
 import { generateDepartementContent, hashCode } from '@/lib/seo/location-content'
-import { Thermometer, Home, TrendingUp, AlertTriangle } from 'lucide-react'
+import { getTradeContent } from '@/lib/data/trade-content'
+import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
+import { Thermometer, Home, TrendingUp, AlertTriangle, Globe, Star, Euro } from 'lucide-react'
 
 
 export function generateStaticParams() {
@@ -98,6 +100,18 @@ export default async function DepartementPage({ params }: PageProps) {
   )
 
   const regionSlug = getRegionSlugByName(dept.region)
+
+
+  // Top service for cross-linking
+  const topServiceSlug = content.profile.topServiceSlugs[0] || 'plombier'
+  const topServiceTrade = getTradeContent(topServiceSlug)
+  const topServiceName = topServiceTrade?.name || 'Plombier'
+
+  // Top 5 services for intent variants
+  const top5Services = content.profile.topServiceSlugs.slice(0, 5).map(s => {
+    const t = getTradeContent(s)
+    return t ? { slug: s, name: t.name } : null
+  }).filter((x): x is { slug: string; name: string } => x !== null)
 
   // Reorder services by profile priority
   const topServiceSlugsSet = new Set(content.profile.topServiceSlugs.slice(0, 5))
@@ -247,7 +261,7 @@ export default async function DepartementPage({ params }: PageProps) {
             </div>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {orderedServices.slice(0, 8).map((service) => (
+            {orderedServices.map((service) => (
               <Link
                 key={service.slug}
                 href={`/departements/${dept.slug}/${service.slug}`}
@@ -261,13 +275,6 @@ export default async function DepartementPage({ params }: PageProps) {
               </Link>
             ))}
           </div>
-          {orderedServices.length > 8 && (
-            <div className="mt-6 text-center">
-              <Link href="/services" className="inline-flex items-center gap-2 text-primary-400 hover:text-primary-500 font-medium text-sm transition-colors">
-                Voir les {orderedServices.length} services disponibles <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-          )}
         </section>
 
         {/* ─── PROFIL DU DÉPARTEMENT ────────────────────────── */}
@@ -373,6 +380,21 @@ export default async function DepartementPage({ params }: PageProps) {
                   </Link>
                 ))}
               </div>
+              {/* Service links per city for top service */}
+              <div className="mt-6">
+                <h3 className="text-sm font-semibold text-charcoal-900 uppercase tracking-wider mb-3">{topServiceName} par ville</h3>
+                <div className="flex flex-wrap gap-2">
+                  {villesDuDepartement.slice(0, 20).map((ville) => (
+                    <Link
+                      key={`svc-${ville.slug}`}
+                      href={`/services/${topServiceSlug}/${ville.slug}`}
+                      className="text-sm text-blue-600 hover:text-blue-800 hover:bg-blue-50 px-3 py-1.5 rounded-lg transition-colors border border-transparent hover:border-blue-100"
+                    >
+                      {topServiceName} à {ville.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
               {villesDuDepartement.length > 20 && (
                 <div className="mt-6 text-center">
                   <Link href="/villes" className="inline-flex items-center gap-2 text-primary-400 hover:text-primary-500 font-medium text-sm transition-colors">
@@ -427,6 +449,28 @@ export default async function DepartementPage({ params }: PageProps) {
           </section>
         )}
 
+        {/* ─── PARENT REGION ────────────────────────────────── */}
+        {regionSlug && (
+          <section className="mb-16">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center">
+                <Globe className="w-5 h-5 text-primary-400" />
+              </div>
+              <h2 className="font-heading text-xl font-semibold text-charcoal-900 tracking-tight">
+                Région {dept.region}
+              </h2>
+            </div>
+            <Link
+              href={`/regions/${regionSlug}`}
+              className="inline-flex items-center gap-3 bg-white border-2 border-primary-200 hover:bg-primary-50 hover:border-primary-300 text-charcoal-800 hover:text-primary-600 px-6 py-4 rounded-2xl text-base font-semibold transition-colors"
+            >
+              <Globe className="w-5 h-5 text-primary-400" />
+              Tous les artisans en {dept.region}
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </section>
+        )}
+
         {/* ─── OTHER DEPARTMENTS ─────────────────────────────── */}
         {siblingDepts.length > 0 && (
           <section className="mb-16">
@@ -439,10 +483,51 @@ export default async function DepartementPage({ params }: PageProps) {
               </h2>
             </div>
             <div className="flex flex-wrap gap-3">
-              {siblingDepts.slice(0, 4).map((d) => (
+              {siblingDepts.map((d) => (
                 <Link key={d.slug} href={`/departements/${d.slug}`} className="bg-white border border-sand-300 hover:bg-primary-50 hover:border-primary-200 text-charcoal-700 hover:text-primary-500 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors">
                   {d.name} ({d.code})
                 </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* ─── INTENT VARIANTS FOR TOP SERVICES ──────────────── */}
+        {villesDuDepartement.length > 0 && top5Services.length > 0 && (
+          <section className="mb-16">
+            <div className="flex items-center gap-3 mb-8">
+              <div className="w-10 h-10 bg-violet-100 rounded-xl flex items-center justify-center">
+                <Star className="w-5 h-5 text-violet-600" />
+              </div>
+              <div>
+                <h2 className="font-heading text-xl font-semibold text-charcoal-900 tracking-tight">
+                  Recherches populaires dans le {dept.name}
+                </h2>
+                <p className="text-sm text-charcoal-500">Tarifs, avis, devis, urgences</p>
+              </div>
+            </div>
+            <div className="space-y-4">
+              {top5Services.map((svc) => (
+                <div key={svc.slug} className="bg-white rounded-2xl border border-sand-300 p-5">
+                  <h3 className="font-semibold text-charcoal-900 mb-3 text-sm">{svc.name} à {villesDuDepartement[0].name}</h3>
+                  <div className="flex flex-wrap gap-2">
+                    <Link href={`/tarifs/${svc.slug}/${villesDuDepartement[0].slug}`} className="inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors">
+                      <Euro className="w-3.5 h-3.5" /> Tarifs
+                    </Link>
+                    <Link href={`/avis/${svc.slug}/${villesDuDepartement[0].slug}`} className="inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors">
+                      <Star className="w-3.5 h-3.5" /> Avis
+                    </Link>
+                    <Link href={`/devis/${svc.slug}/${villesDuDepartement[0].slug}`} className="inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors">
+                      Devis
+                    </Link>
+                    <Link href={`/urgence/${svc.slug}/${villesDuDepartement[0].slug}`} className="inline-flex items-center gap-1.5 text-sm text-red-600 hover:text-red-800 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg transition-colors">
+                      Urgence
+                    </Link>
+                    <Link href={`/services/${svc.slug}/${villesDuDepartement[0].slug}`} className="inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors">
+                      Artisans
+                    </Link>
+                  </div>
+                </div>
               ))}
             </div>
           </section>
@@ -612,6 +697,11 @@ export default async function DepartementPage({ params }: PageProps) {
           )}
         </div>
       </section>
+
+      {/* ─── CROSS-INTENT LINKS FOR TOP SERVICES ────────────── */}
+      {top5Services.slice(0, 3).map((svc) => (
+        <CrossIntentLinks key={svc.slug} service={svc.slug} serviceName={svc.name} currentIntent="services" />
+      ))}
 
         {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
         <section className="mb-8">

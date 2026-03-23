@@ -17,6 +17,7 @@ import { SpeakableAnswerBox } from '@/components/SpeakableAnswerBox'
 import PriceTableHTML from '@/components/seo/PriceTableHTML'
 import LastUpdated from '@/components/seo/LastUpdated'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
+import InContentLinks from '@/components/seo/InContentLinks'
 import StickyMobileCTA from '@/components/StickyMobileCTA'
 import dynamic from 'next/dynamic'
 
@@ -665,6 +666,12 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
           </div>
         </div>
       </section>
+
+      <InContentLinks
+        serviceSlug={service}
+        serviceName={trade.name}
+        currentIntent="tarifs"
+      />
 
       {/* Voir aussi */}
       <section className="py-12 bg-white border-t">

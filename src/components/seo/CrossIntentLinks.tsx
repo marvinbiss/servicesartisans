@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Euro, Star, Search, AlertTriangle, FileText } from 'lucide-react'
+import { getAnchorText, type Intent } from '@/lib/seo/anchor-variants'
 
 interface CrossIntentLinksProps {
   service: string
@@ -10,12 +11,12 @@ interface CrossIntentLinksProps {
 }
 
 const intents = [
-  { key: 'tarifs', label: 'Tarifs', icon: Euro, href: (s: string, v?: string) => v ? `/tarifs/${s}/${v}` : `/tarifs/${s}` },
-  { key: 'avis', label: 'Avis', icon: Star, href: (s: string, v?: string) => v ? `/avis/${s}/${v}` : `/avis/${s}` },
-  { key: 'services', label: 'Artisans', icon: Search, href: (s: string, v?: string) => v ? `/services/${s}/${v}` : `/services/${s}` },
-  { key: 'urgence', label: 'Urgence', icon: AlertTriangle, href: (s: string, v?: string) => v ? `/urgence/${s}/${v}` : `/urgence/${s}` },
-  { key: 'devis', label: 'Devis', icon: FileText, href: (s: string, v?: string) => v ? `/devis/${s}/${v}` : `/devis/${s}` },
-] as const
+  { key: 'tarifs' as Intent, label: 'Tarifs', icon: Euro, href: (s: string, v?: string) => v ? `/tarifs/${s}/${v}` : `/tarifs/${s}` },
+  { key: 'avis' as Intent, label: 'Avis', icon: Star, href: (s: string, v?: string) => v ? `/avis/${s}/${v}` : `/avis/${s}` },
+  { key: 'services' as Intent, label: 'Artisans', icon: Search, href: (s: string, v?: string) => v ? `/services/${s}/${v}` : `/services/${s}` },
+  { key: 'urgence' as Intent, label: 'Urgence', icon: AlertTriangle, href: (s: string, v?: string) => v ? `/urgence/${s}/${v}` : `/urgence/${s}` },
+  { key: 'devis' as Intent, label: 'Devis', icon: FileText, href: (s: string, v?: string) => v ? `/devis/${s}/${v}` : `/devis/${s}` },
+]
 
 export default function CrossIntentLinks({
   service,
@@ -36,6 +37,13 @@ export default function CrossIntentLinks({
         <div className="flex flex-wrap gap-2">
           {intents.map(({ key, label, icon: Icon, href }) => {
             const isCurrent = key === currentIntent
+            const anchorText = getAnchorText({
+              serviceSlug: service,
+              serviceName,
+              villeName,
+              intent: key,
+              seed: 'cross-intent',
+            })
             if (isCurrent) {
               return (
                 <span
@@ -55,7 +63,7 @@ export default function CrossIntentLinks({
                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-white text-charcoal-700 border border-sand-300 hover:border-blue-300 hover:bg-primary-50 hover:text-primary-600 transition-colors"
               >
                 <Icon className="w-4 h-4" />
-                {label}
+                {anchorText}
               </Link>
             )
           })}

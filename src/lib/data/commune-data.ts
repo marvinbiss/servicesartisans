@@ -144,6 +144,31 @@ export async function getCommuneBySlug(slug: string): Promise<CommuneData | null
 }
 
 // ---------------------------------------------------------------------------
+// Scoring: compute popularity score from commune data
+// ---------------------------------------------------------------------------
+
+/**
+ * Compute a popularity score from already-fetched CommuneData.
+ * Synchronous — no DB calls. Weights: provider_count x3, artisan count x2, population/1000.
+ */
+export function getCommuneScoreFromData(commune: CommuneData): number {
+  const providerCount = commune.provider_count || 0
+  const artisanCount = commune.nb_entreprises_artisanales || 0
+  const pop = commune.population || 0
+  return (providerCount * 3) + (artisanCount * 2) + (pop / 1000)
+}
+
+/**
+ * Async scoring: fetch commune data then compute score.
+ * Returns 0 if commune not found or DB unavailable.
+ */
+export async function getCommuneScore(slug: string): Promise<number> {
+  const commune = await getCommuneBySlug(slug)
+  if (!commune) return 0
+  return getCommuneScoreFromData(commune)
+}
+
+// ---------------------------------------------------------------------------
 // Helper: check if commune has enrichment data (beyond basic demographics)
 // ---------------------------------------------------------------------------
 

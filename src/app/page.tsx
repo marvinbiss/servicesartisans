@@ -11,6 +11,7 @@ import { getFAQSchema, getItemListSchema, getWebsiteSchema } from '@/lib/seo/jso
 import JsonLd from '@/components/JsonLd'
 import { faqItems } from '@/lib/data/faq-data'
 import { popularServices } from '@/lib/constants/navigation'
+import { TOP_SERVICES, TOP_CITIES } from '@/lib/seo/top-pages'
 import dynamic from 'next/dynamic'
 
 const SocialProofBanner = dynamic(() => import('@/components/SocialProofBanner'), { ssr: false })
@@ -123,6 +124,86 @@ export default async function HomePage() {
       <section className="py-6 bg-white">
         <div className="max-w-4xl mx-auto px-4">
           <SocialProofBanner variant="card" />
+        </div>
+      </section>
+
+      {/* ─── SERVICE × CITY MATRIX (60 money page links) ─────── */}
+      <section className="py-16 bg-white border-t border-sand-200">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="text-center mb-10">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-primary-50 text-primary-400 rounded-full text-sm font-medium mb-5">
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
+              Recherche rapide
+            </div>
+            <h2 className="font-heading text-2xl md:text-3xl font-bold text-charcoal-900 mb-2 tracking-tight">
+              Trouvez un artisan près de chez vous
+            </h2>
+            <p className="text-charcoal-500 max-w-lg mx-auto">
+              Accédez directement aux artisans les plus demandés dans les grandes villes de France
+            </p>
+          </div>
+          <div className="overflow-x-auto -mx-4 px-4">
+            <table className="w-full text-sm border-collapse">
+              <thead>
+                <tr>
+                  <th className="text-left py-3 px-3 text-charcoal-500 font-medium text-xs uppercase tracking-wider border-b border-sand-200">
+                    Métier
+                  </th>
+                  {TOP_CITIES.slice(0, 6).map(city => (
+                    <th key={city.slug} className="text-center py-3 px-2 text-charcoal-500 font-medium text-xs uppercase tracking-wider border-b border-sand-200">
+                      {city.name}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {TOP_SERVICES.map((service, si) => (
+                  <tr key={service.slug} className={si % 2 === 0 ? 'bg-sand-50/50' : ''}>
+                    <td className="py-2.5 px-3 font-medium text-charcoal-800 whitespace-nowrap border-b border-sand-100">
+                      {service.name}
+                    </td>
+                    {TOP_CITIES.slice(0, 6).map((city, ci) => (
+                      <td key={city.slug} className="py-2.5 px-2 text-center border-b border-sand-100">
+                        <Link
+                          href={`/services/${service.slug}/${city.slug}`}
+                          className="text-primary-600 hover:text-primary-700 hover:underline transition-colors"
+                        >
+                          {ci % 3 === 0 ? `${service.name} ${city.name}` : ci % 3 === 1 ? `à ${city.name}` : city.name}
+                        </Link>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── TARIFS POPULAIRES (18 money page links) ──────────── */}
+      <section className="py-12 bg-sand-50 border-t border-sand-200">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="text-center mb-8">
+            <h2 className="font-heading text-xl md:text-2xl font-bold text-charcoal-900 tracking-tight">
+              Tarifs artisans par ville
+            </h2>
+            <p className="text-charcoal-500 mt-2 text-sm max-w-lg mx-auto">
+              Consultez les grilles tarifaires des métiers les plus demandés
+            </p>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+            {TOP_SERVICES.slice(0, 6).map(service =>
+              TOP_CITIES.slice(0, 3).map(city => (
+                <Link
+                  key={`tarif-${service.slug}-${city.slug}`}
+                  href={`/tarifs/${service.slug}/${city.slug}`}
+                  className="flex items-center justify-center px-3 py-2.5 text-sm text-charcoal-700 bg-white hover:bg-primary-50 hover:text-primary-600 rounded-xl border border-sand-200 transition-colors text-center"
+                >
+                  Tarif {service.name.toLowerCase()} {city.name}
+                </Link>
+              ))
+            )}
+          </div>
         </div>
       </section>
 

@@ -25094,22 +25094,43 @@ export function getVillesByDepartement(departementCode: string): Ville[] {
 }
 
 /** Parse population string like '156 000' into a number (156000) */
-function parsePopulation(pop: string): number {
+export function parsePopulation(pop: string): number {
   return parseInt(pop.replace(/\s/g, ''), 10) || 0
 }
 
 /**
- * Retourne les villes proches (même département, puis même région) d'une ville donnée.
- * Triées par population décroissante pour un maillage interne SEO optimal.
+ * Compute a popularity score for a city based on static data.
+ * Larger cities and department capitals get higher scores.
  */
-export function getNearbyCities(villeSlug: string, limit: number = 5): Ville[] {
+export function getCityScore(ville: Ville): number {
+  const pop = parsePopulation(ville.population)
+  // Bonus for department capitals (chef-lieu) — they concentrate artisan activity
+  const dept = getDepartementByCode(ville.departementCode)
+  const isCapital = dept?.chefLieu === ville.name
+  const capitalBonus = isCapital ? pop * 0.2 : 0
+  return pop + capitalBonus
+}
+
+/**
+ * Retourne les villes proches (même département, puis même région) d'une ville donnée.
+ * Triées par population décroissante (ou par scoreFn si fourni) pour un maillage interne SEO optimal.
+ */
+export function getNearbyCities(
+  villeSlug: string,
+  limit: number = 5,
+  scoreFn?: (ville: Ville) => number,
+): Ville[] {
   const ville = getVilleBySlug(villeSlug)
   if (!ville) return []
 
-  // 1. Villes du même département (hors ville actuelle), triées par population
+  const sortFn = scoreFn
+    ? (a: Ville, b: Ville) => scoreFn(b) - scoreFn(a)
+    : (a: Ville, b: Ville) => parsePopulation(b.population) - parsePopulation(a.population)
+
+  // 1. Villes du même département (hors ville actuelle), triées par score
   const sameDept = villes
     .filter(v => v.departementCode === ville.departementCode && v.slug !== villeSlug)
-    .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
+    .sort(sortFn)
 
   if (sameDept.length >= limit) {
     return sameDept.slice(0, limit)
@@ -25121,7 +25142,7 @@ export function getNearbyCities(villeSlug: string, limit: number = 5): Ville[] {
 
   const sameRegion = villes
     .filter(v => v.region === ville.region && !sameDeptSlugs.has(v.slug))
-    .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
+    .sort(sortFn)
 
   return [...sameDept, ...sameRegion].slice(0, limit)
 }

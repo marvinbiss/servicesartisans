@@ -415,6 +415,104 @@ export default async function RegionPage({ params }: PageProps) {
           )}
         </section>
 
+        {/* ─── TOP 30 CITIES ───────────────────────────────── */}
+        <section className="mb-16">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center">
+              <MapPin className="w-5 h-5 text-primary-400" />
+            </div>
+            <div>
+              <h2 className="font-heading text-2xl font-semibold text-charcoal-900 tracking-tight">
+                Principales villes de {region.name}
+              </h2>
+              <p className="text-sm text-charcoal-500">{Math.min(30, allCities.length)} villes par population</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+            {allCities.slice(0, 30).map((city) => (
+              <Link
+                key={`city-${city.slug}`}
+                href={`/villes/${city.slug}`}
+                className="bg-white rounded-xl border border-sand-300 p-3 hover:shadow-card-hover hover:border-primary-200 hover:-translate-y-0.5 transition-all group text-center"
+              >
+                <div className="font-semibold text-charcoal-800 group-hover:text-primary-400 transition-colors text-sm truncate">{city.name}</div>
+                <div className="text-xs text-charcoal-400 mt-0.5">{city.population} hab.</div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* ─── ALL SERVICES IN REGION ─────────────────────── */}
+        <section className="mb-16">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-10 h-10 bg-accent-100 rounded-xl flex items-center justify-center">
+              <Wrench className="w-5 h-5 text-accent-600" />
+            </div>
+            <div>
+              <h2 className="font-heading text-2xl font-semibold text-charcoal-900 tracking-tight">
+                Tous les métiers en {region.name}
+              </h2>
+              <p className="text-sm text-charcoal-500">{allServices.length} corps de métier</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+            {allServices.map((service) => (
+              <Link
+                key={`all-svc-${service.slug}`}
+                href={`/regions/${regionSlug}/${service.slug}`}
+                className="bg-white rounded-xl border border-sand-300 p-3 hover:shadow-card-hover hover:border-accent-200 hover:-translate-y-0.5 transition-all group"
+              >
+                <span className="font-semibold text-charcoal-800 group-hover:text-accent-700 transition-colors text-sm">{service.name}</span>
+                <span className="block text-xs text-charcoal-400 mt-0.5">en {region.name}</span>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* ─── TOP 5 SERVICES × TOP 5 CITIES MATRIX ──────── */}
+        <section className="mb-16">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-10 h-10 bg-cyan-100 rounded-xl flex items-center justify-center">
+              <Wrench className="w-5 h-5 text-cyan-600" />
+            </div>
+            <div>
+              <h2 className="font-heading text-xl font-semibold text-charcoal-900 tracking-tight">
+                Services les plus demandés par ville
+              </h2>
+              <p className="text-sm text-charcoal-500">Top 5 services × Top 5 villes</p>
+            </div>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full bg-white rounded-2xl border border-sand-300 overflow-hidden">
+              <thead>
+                <tr className="bg-sand-100">
+                  <th className="text-left text-xs font-semibold text-charcoal-700 uppercase tracking-wider px-4 py-3">Service</th>
+                  {allCities.slice(0, 5).map((city) => (
+                    <th key={city.slug} className="text-left text-xs font-semibold text-charcoal-700 uppercase tracking-wider px-4 py-3">{city.name}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {orderedServices.slice(0, 5).map((service, i) => (
+                  <tr key={service.slug} className={i % 2 === 0 ? 'bg-white' : 'bg-sand-50'}>
+                    <td className="px-4 py-2.5 text-sm font-medium text-charcoal-900">{service.name}</td>
+                    {allCities.slice(0, 5).map((city) => (
+                      <td key={`${service.slug}-${city.slug}`} className="px-4 py-2.5">
+                        <Link
+                          href={`/services/${service.slug}/${city.slug}`}
+                          className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
+                        >
+                          Voir
+                        </Link>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
         {/* ─── OTHER REGIONS ────────────────────────────────── */}
         <section className="mb-16">
           <div className="flex items-center gap-3 mb-6">
@@ -426,7 +524,7 @@ export default async function RegionPage({ params }: PageProps) {
             </h2>
           </div>
           <div className="flex flex-wrap gap-3">
-            {otherRegions.slice(0, 12).map((r) => (
+            {otherRegions.map((r) => (
               <Link key={r.slug} href={`/regions/${r.slug}`} className="bg-white border border-sand-300 hover:bg-sand-50 hover:border-sand-400 text-charcoal-700 hover:text-charcoal-900 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors">
                 {r.name}
               </Link>

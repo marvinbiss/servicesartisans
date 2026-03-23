@@ -16,6 +16,7 @@ import {
   popularRegions
 } from '@/lib/constants/navigation'
 import { villes, services, regions } from '@/lib/data/france'
+import { getAnchorText } from '@/lib/seo/anchor-variants'
 
 // Re-export for backward compatibility
 export { popularCities, popularRegions }
@@ -173,7 +174,13 @@ export function PopularServiceCityLinks({
 }) {
   const topCombos = popularServices.slice(0, 4).flatMap(service =>
     popularCities.slice(0, 3).map(city => ({
-      label: `${service.name} ${city.name}`,
+      label: getAnchorText({
+        serviceSlug: service.slug,
+        serviceName: service.name,
+        villeName: city.name,
+        intent: 'services',
+        seed: `popular-${city.slug}`,
+      }),
       href: `/services/${service.slug}/${city.slug}`,
     }))
   )
@@ -226,7 +233,13 @@ export function ServiceCityMatrix({
             href={`/services/${service}/${city.slug}`}
             className="px-3 py-2 bg-gray-50 hover:bg-[#FDF1EC] text-gray-700 hover:text-clay-400 rounded-lg text-sm transition-colors"
           >
-            {serviceData.name} {city.name}
+            {getAnchorText({
+              serviceSlug: service,
+              serviceName: serviceData.name,
+              villeName: city.name,
+              intent: 'services',
+              seed: `matrix-${city.slug}`,
+            })}
           </Link>
         ))}
       </div>

@@ -13,6 +13,7 @@ import { hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
 import { getCommuneBySlug, formatNumber, type CommuneData } from '@/lib/data/commune-data'
 import { allArticlesMeta } from '@/lib/data/blog/articles-index'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
+import InContentLinks from '@/components/seo/InContentLinks'
 
 // ---------------------------------------------------------------------------
 // Static params: top 10 problems x top 30 cities = 300 pre-rendered pages
@@ -1071,6 +1072,16 @@ export default async function ProblemeVillePage({
           </div>
         </div>
       </section>
+
+      <InContentLinks
+        serviceSlug={problem.primaryService}
+        serviceName={tradeName}
+        villeSlug={ville}
+        villeName={villeData.name}
+        currentIntent="problemes"
+        departementCode={villeData.departementCode}
+        region={villeData.region}
+      />
 
       <CrossIntentLinks service={problem.primaryService} serviceName={tradeName} ville={ville} villeName={villeData.name} />
 

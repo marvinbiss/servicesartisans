@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { services } from '@/lib/data/france'
+import { getAnchorText, type Intent } from '@/lib/seo/anchor-variants'
 
 interface VerticalCrossLinksProps {
   currentService: string
@@ -39,7 +40,13 @@ export default function VerticalCrossLinks({
               href={`/${intent}/${s.slug}/${villeSlug}`}
               className="px-3 py-1.5 text-sm text-stone-600 bg-slate-100 hover:bg-clay-100 hover:text-clay-600 rounded-full transition-colors"
             >
-              {s.name} à {villeName}
+              {getAnchorText({
+                serviceSlug: s.slug,
+                serviceName: s.name,
+                villeName,
+                intent: intent as Intent,
+                seed: `vertical-${currentService}`,
+              })}
             </Link>
           ))}
         </div>

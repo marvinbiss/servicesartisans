@@ -12,6 +12,7 @@ import { villes } from '@/lib/data/france'
 import { getServiceImage } from '@/lib/data/images'
 import { relatedServices } from '@/lib/constants/navigation'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
+import InContentLinks from '@/components/seo/InContentLinks'
 import DevisForm from '@/components/DevisForm'
 import DevisSidebar from '@/components/conversion/DevisSidebar'
 
@@ -448,6 +449,8 @@ export default async function DevisServicePage({ params }: { params: Promise<{ s
           </nav>
         </div>
       </section>
+
+      <InContentLinks serviceSlug={service} serviceName={trade.name} currentIntent="devis" />
 
       <CrossIntentLinks service={service} serviceName={trade.name} currentIntent="devis" />
 
