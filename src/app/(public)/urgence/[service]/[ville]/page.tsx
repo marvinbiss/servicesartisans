@@ -153,7 +153,7 @@ function getDefaultProblems(trade: (typeof tradeContent)[string]): string[] {
 }
 
 // ---------------------------------------------------------------------------
-// Static params: top 8 emergency services x top 30 cities = 240 pages
+// Static params: all emergency services x top 50 cities
 // ---------------------------------------------------------------------------
 
 // All services are available for emergency pages
@@ -163,16 +163,16 @@ function parsePopulation(pop: string): number {
   return parseInt(pop.replace(/\s/g, ''), 10) || 0
 }
 
-const top10Cities = [...villes]
+const TOP_CITIES_COUNT = 50
+const topCities = [...villes]
   .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
-  .slice(0, 10)
+  .slice(0, TOP_CITIES_COUNT)
 
 export const dynamicParams = true
 
 export function generateStaticParams() {
-  const topServices = emergencySlugs.slice(0, 5)
-  return topServices.flatMap((s) =>
-    top10Cities.map((v) => ({ service: s, ville: v.slug }))
+  return emergencySlugs.flatMap((s) =>
+    topCities.map((v) => ({ service: s, ville: v.slug }))
   )
 }
 

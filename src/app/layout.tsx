@@ -132,7 +132,7 @@ export const metadata: Metadata = {
   },
 }
 
-export const revalidate = 3600
+// revalidate removed — each page sets its own (86400 for pSEO pages)
 
 export default async function RootLayout({
   children,

@@ -553,7 +553,8 @@ export default async function ServiceLocationPage({ params }: PageProps) {
       <ServiceLocationPageClient
         service={service}
         location={location}
-        providers={(providers || []) as unknown as Provider[]}
+        // Limit to 10 providers to reduce RSC payload (~100KB savings)
+        providers={(providers || []).slice(0, 10) as unknown as Provider[]}
         h1Text={h1Text}
         totalCount={totalProviderCount}
         serviceSlug={serviceSlug}

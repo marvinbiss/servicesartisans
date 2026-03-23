@@ -22,7 +22,7 @@ import DevisSidebar from '@/components/conversion/DevisSidebar'
 export const revalidate = 86400
 
 // ---------------------------------------------------------------------------
-// Static params: top 5 cities x 46 services = 230 pages
+// Static params: top 50 cities x 46 services = 2300 pages
 // ---------------------------------------------------------------------------
 
 const tradeSlugs = getTradesSlugs()
@@ -31,14 +31,15 @@ function parsePopulation(pop: string): number {
   return parseInt(pop.replace(/\s/g, ''), 10) || 0
 }
 
-const top5Cities = [...villes]
+const TOP_CITIES_COUNT = 50
+const topCities = [...villes]
   .sort((a, b) => parsePopulation(b.population) - parsePopulation(a.population))
-  .slice(0, 5)
+  .slice(0, TOP_CITIES_COUNT)
 
 export function generateStaticParams() {
   const params: { service: string; location: string }[] = []
   for (const service of tradeSlugs) {
-    for (const ville of top5Cities) {
+    for (const ville of topCities) {
       params.push({ service, location: ville.slug })
     }
   }
