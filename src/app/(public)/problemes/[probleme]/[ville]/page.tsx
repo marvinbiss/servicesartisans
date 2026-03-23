@@ -388,7 +388,7 @@ export async function generateMetadata({
   const { probleme, ville } = await params
   const problem = getProblemBySlug(probleme)
   const villeData = getVilleBySlug(ville)
-  if (!problem || !villeData) return {}
+  if (!problem || !villeData) notFound()
 
   const titleHash = Math.abs(hashCode(`probleme-ville-title-${probleme}-${ville}`))
   const titleTemplates = [

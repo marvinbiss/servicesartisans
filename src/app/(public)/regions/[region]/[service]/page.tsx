@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { region: regionSlug, service: serviceSlug } = await params
   const region = getRegionBySlug(regionSlug)
   const trade = getTradeContent(serviceSlug)
-  if (!region || !trade) return { title: 'Page non trouvée' }
+  if (!region || !trade) notFound()
 
   const multiplier = getRegionalMultiplier(region.name)
   const minPrice = Math.round(trade.priceRange.min * multiplier)

@@ -151,7 +151,7 @@ export async function generateMetadata({
   const { service, ville: villeSlug } = await params
   const trade = tradeContent[service]
   const villeData = getVilleBySlug(villeSlug)
-  if (!trade || !villeData) return {}
+  if (!trade || !villeData) notFound()
 
   const tradeLower = trade.name.toLowerCase()
   const multiplier = getRegionalMultiplier(villeData.region)

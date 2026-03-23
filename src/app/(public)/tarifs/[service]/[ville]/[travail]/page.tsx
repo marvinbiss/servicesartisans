@@ -90,11 +90,11 @@ export async function generateMetadata({
   const { service, ville: villeSlug, travail } = await params
   const trade = tradeContent[service]
   const villeData = getVilleBySlug(villeSlug)
-  if (!trade || !villeData) return {}
+  if (!trade || !villeData) notFound()
 
   const tasks = getTasksForService(service)
   const currentTask = tasks.find((t) => t.slug === travail)
-  if (!currentTask) return {}
+  if (!currentTask) notFound()
 
   const multiplier = getRegionalMultiplier(villeData.region)
   const priceRange = extractPriceRange(currentTask.priceText, multiplier)

@@ -116,7 +116,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   // Early reject: invalid slugs
   if (!VALID_SLUG.test(serviceSlug) || !VALID_SLUG.test(locationSlug)) {
-    return { title: 'Non trouvé', robots: { index: false, follow: false } }
+    notFound()
   }
 
   let serviceName = ''
@@ -156,7 +156,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   if (!serviceName || !locationName) {
-    return { title: 'Non trouvé', robots: { index: false, follow: false } }
+    notFound()
   }
 
   const hasProviders = providerCount > 0

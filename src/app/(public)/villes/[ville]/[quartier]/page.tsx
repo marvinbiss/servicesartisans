@@ -35,7 +35,7 @@ function truncateTitle(title: string, maxLen = 42): string {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { ville: villeSlug, quartier: quartierSlug } = await params
   const result = getQuartierBySlug(villeSlug, quartierSlug)
-  if (!result) return { title: 'Quartier non trouvé' }
+  if (!result) notFound()
 
   const { ville, quartierName } = result
   const metaContent = generateQuartierContent(ville, quartierName)
