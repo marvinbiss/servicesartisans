@@ -53,7 +53,9 @@ const nextConfig = {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com",
+              // 'unsafe-inline' is a known limitation: required for Next.js inline scripts on static routes
+              // (full nonce-based CSP for static routes requires Next.js 15+; middleware handles dynamic routes)
+              "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com",
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: blob: https:",
               "font-src 'self' https://fonts.gstatic.com",

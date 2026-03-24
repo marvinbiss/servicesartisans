@@ -8,6 +8,7 @@ import { createClient } from '@supabase/supabase-js'
 import { signUpSchema, validateRequest, formatZodErrors } from '@/lib/validations/schemas'
 import { createErrorResponse, createSuccessResponse, ErrorCode, getHttpStatus as _getHttpStatus } from '@/lib/errors/types'
 import { logger } from '@/lib/logger'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -16,6 +17,16 @@ export const dynamic = 'force-dynamic'
 
 export async function POST(request: Request) {
   try {
+    // Rate limiting (5 requests per 15 min per IP)
+    const ip = getClientIp(request.headers)
+    const rl = await checkRateLimit(`signup:${ip}`, { window: 900_000, max: 5 })
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { error: 'Trop de tentatives d\'inscription, veuillez réessayer plus tard' },
+        { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.resetTime - Date.now()) / 1000)) } }
+      )
+    }
+
     // Validate environment
     if (!supabaseUrl || !supabaseServiceKey) {
       return NextResponse.json(
@@ -51,9 +62,14 @@ export async function POST(request: Request) {
       .single()
 
     if (existingUser) {
+      // SECURITY: Don't reveal that the email already exists (prevents email enumeration)
+      // Return the same success format as a real signup
       return NextResponse.json(
-        createErrorResponse(ErrorCode.ALREADY_EXISTS, 'Un compte existe deja avec cet email'),
-        { status: 409 }
+        createSuccessResponse({
+          message: 'Compte créé avec succès. Vérifiez votre email pour activer votre compte.',
+          requiresVerification: true,
+        }),
+        { status: 201 }
       )
     }
 

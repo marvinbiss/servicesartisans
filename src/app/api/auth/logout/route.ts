@@ -23,10 +23,21 @@ export async function POST() {
       )
     }
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       message: 'Deconnexion reussie'
     })
+
+    // Explicitly clear the refresh token cookie
+    response.cookies.set('sb-refresh-token', '', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      path: '/',
+      maxAge: 0,
+    })
+
+    return response
   } catch (error) {
     logger.error('Logout error', error)
     return NextResponse.json(

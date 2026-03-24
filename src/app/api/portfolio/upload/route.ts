@@ -19,6 +19,40 @@ const MAX_VIDEO_SIZE = 50 * 1024 * 1024 // 50MB
 
 export const dynamic = 'force-dynamic'
 
+/**
+ * Valide les magic bytes du buffer pour confirmer le vrai format du fichier.
+ * Protège contre le MIME type spoofing (le client peut envoyer n'importe quel file.type).
+ */
+function validateMagicBytes(bytes: Uint8Array): boolean {
+  // JPEG: FF D8 FF
+  const isJpeg = bytes[0] === 0xFF && bytes[1] === 0xD8 && bytes[2] === 0xFF
+  // PNG: 89 50 4E 47
+  const isPng =
+    bytes[0] === 0x89 &&
+    bytes[1] === 0x50 &&
+    bytes[2] === 0x4E &&
+    bytes[3] === 0x47
+  // WebP: RIFF....WEBP (bytes 0-3 = RIFF, bytes 8-11 = WEBP)
+  const isWebp =
+    bytes.length >= 12 &&
+    bytes[0] === 0x52 &&
+    bytes[1] === 0x49 &&
+    bytes[2] === 0x46 &&
+    bytes[3] === 0x46 &&
+    bytes[8] === 0x57 &&
+    bytes[9] === 0x45 &&
+    bytes[10] === 0x42 &&
+    bytes[11] === 0x50
+  // GIF: 47 49 46 38
+  const isGif =
+    bytes[0] === 0x47 &&
+    bytes[1] === 0x49 &&
+    bytes[2] === 0x46 &&
+    bytes[3] === 0x38
+
+  return isJpeg || isPng || isWebp || isGif
+}
+
 function generateFilePath(artisanId: string, fileName: string): string {
   const timestamp = Date.now()
   const randomStr = crypto.randomUUID().replace(/-/g, '').substring(0, 12)
@@ -107,6 +141,14 @@ export async function POST(request: NextRequest) {
     // Convert File to ArrayBuffer for upload
     const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
+
+    // Validate magic bytes to prevent MIME type spoofing (images only)
+    if (!isVideo && !validateMagicBytes(new Uint8Array(arrayBuffer))) {
+      return NextResponse.json(
+        { error: 'Format de fichier invalide. Le contenu ne correspond pas au type déclaré.' },
+        { status: 400 }
+      )
+    }
 
     // Upload to Supabase Storage
     const { data: uploadData, error: uploadError } = await supabase.storage

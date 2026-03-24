@@ -59,9 +59,21 @@ export async function POST(request: Request) {
 
     const data = validation.data
 
-    // Sanitize page_url: must start with "/" or "https://servicesartisans.fr"
-    if (data.page_url && !data.page_url.startsWith('/') && !data.page_url.startsWith('https://servicesartisans.fr')) {
-      data.page_url = undefined
+    // Sanitize page_url: must be a relative path or exact domain match
+    if (data.page_url) {
+      if (data.page_url.startsWith('/')) {
+        // Relative URL — OK, but prevent protocol-relative //evil.com
+        if (data.page_url.startsWith('//')) data.page_url = undefined
+      } else {
+        try {
+          const url = new URL(data.page_url)
+          if (url.hostname !== 'servicesartisans.fr' && url.hostname !== 'www.servicesartisans.fr') {
+            data.page_url = undefined
+          }
+        } catch {
+          data.page_url = undefined
+        }
+      }
     }
     const supabase = createAdminClient()
 

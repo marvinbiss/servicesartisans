@@ -14,6 +14,8 @@ import { sendClaimApprovedEmail } from '@/lib/api/resend-client'
 import { z } from 'zod'
 import crypto from 'crypto'
 
+const redactEmail = (e: string) => e ? e.substring(0, 2) + '***@' + (e.split('@')[1] || '***') : '***'
+
 export const dynamic = 'force-dynamic'
 
 // GET query params
@@ -272,7 +274,7 @@ export async function PATCH(request: NextRequest) {
 
         if (existingProfile) {
           resolvedUserId = existingProfile.id
-          logger.info('Anonymous claim: reusing existing user from profiles', { claimId, email: claimEmail, userId: resolvedUserId })
+          logger.info('Anonymous claim: reusing existing user from profiles', { claimId, email: redactEmail(claimEmail), userId: resolvedUserId })
         } else {
           // Try to create new account via Supabase admin auth
           const { data: newUser, error: createUserError } = await supabase.auth.admin.createUser({
@@ -295,7 +297,7 @@ export async function PATCH(request: NextRequest) {
 
             if (linkData?.user?.id) {
               resolvedUserId = linkData.user.id
-              logger.info('Anonymous claim: found existing auth user via recovery', { claimId, email: claimEmail, userId: resolvedUserId })
+              logger.info('Anonymous claim: found existing auth user via recovery', { claimId, email: redactEmail(claimEmail), userId: resolvedUserId })
 
               // Ensure profile exists (upsert with role)
               const { error: upsertError } = await supabase.from('profiles').upsert({
@@ -347,7 +349,7 @@ export async function PATCH(request: NextRequest) {
               )
             }
 
-            logger.info('Anonymous claim: created new user', { claimId, email: claimEmail, userId: resolvedUserId })
+            logger.info('Anonymous claim: created new user', { claimId, email: redactEmail(claimEmail), userId: resolvedUserId })
           }
         }
       }
@@ -367,8 +369,9 @@ export async function PATCH(request: NextRequest) {
         .maybeSingle()
 
       if (providerError) {
+        logger.error('Error assigning provider during claim approval', { claimId, providerId: claim.provider_id, error: providerError })
         return NextResponse.json(
-          { success: false, error: { message: `Erreur attribution: ${providerError.message} [code=${providerError.code}] [details=${providerError.details}]` } },
+          { success: false, error: { message: 'Erreur lors de l\'attribution de la fiche' } },
           { status: 500 }
         )
       }
@@ -453,7 +456,7 @@ export async function PATCH(request: NextRequest) {
             })
 
             emailStatus = emailResult?.id ? `sent (id: ${emailResult.id})` : 'sent (no id)'
-            logger.info('Claim approval email result', { claimId, email: claimEmail, emailResult })
+            logger.info('Claim approval email result', { claimId, email: redactEmail(claimEmail), emailResult })
           }
         } catch (emailErr) {
           emailStatus = `exception: ${emailErr instanceof Error ? emailErr.message : String(emailErr)}`

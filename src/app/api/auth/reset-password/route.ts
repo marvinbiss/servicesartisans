@@ -7,6 +7,7 @@ import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { createClient } from '@supabase/supabase-js'
 import { z } from 'zod'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 
 export const dynamic = 'force-dynamic'
 
@@ -19,6 +20,16 @@ const resetSchema = z.object({
 
 export async function POST(request: Request) {
   try {
+    // Rate limiting (3 requests per 15 min per IP)
+    const ip = getClientIp(request.headers)
+    const rl = await checkRateLimit(`reset-password:${ip}`, { window: 900_000, max: 3 })
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { error: 'Trop de demandes de réinitialisation, veuillez réessayer plus tard' },
+        { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.resetTime - Date.now()) / 1000)) } }
+      )
+    }
+
     if (!supabaseUrl || !supabaseServiceKey) {
       return NextResponse.json(
         { error: 'Configuration serveur manquante' },

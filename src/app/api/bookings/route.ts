@@ -55,6 +55,29 @@ export async function GET(request: Request) {
       )
     }
 
+    // SECURITY: Verify the authenticated user owns the artisan profile (IDOR protection)
+    const adminSupabase = createAdminClient()
+    const { data: provider, error: providerError } = await adminSupabase
+      .from('providers')
+      .select('user_id')
+      .eq('id', artisanId)
+      .single()
+
+    if (providerError || !provider) {
+      return NextResponse.json(
+        createErrorResponse(ErrorCode.NOT_FOUND, 'Artisan introuvable'),
+        { status: 404 }
+      )
+    }
+
+    if (provider.user_id !== user.id) {
+      logger.warn('IDOR attempt blocked', { userId: user.id, artisanId })
+      return NextResponse.json(
+        createErrorResponse(ErrorCode.INSUFFICIENT_PERMISSIONS, 'Accès non autorisé à ces réservations'),
+        { status: 403 }
+      )
+    }
+
     // If fetching for a specific month (client view - available slots)
     if (month) {
       const startDate = new Date(month)

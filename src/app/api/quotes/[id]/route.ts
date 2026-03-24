@@ -199,13 +199,25 @@ export async function PATCH(
         break
     }
 
-    const { data: updatedQuote, error } = await supabase
+    // Defense-in-depth: filter by owner in the UPDATE itself
+    // For 'cancel' (provider action), filter by provider_id
+    // For 'accept'/'reject' (client actions), filter by request_id + client ownership
+    const updateQuery = supabase
       .from('quotes')
       .update({
         status: newStatus,
         updated_at: new Date().toISOString(),
       })
       .eq('id', params.id)
+
+    if (action === 'cancel') {
+      updateQuery.eq('provider_id', provider!.id)
+    } else {
+      // accept/reject: ensure the quote belongs to the client's request
+      updateQuery.eq('request_id', quote.request_id)
+    }
+
+    const { data: updatedQuote, error } = await updateQuery
       .select()
       .single()
 

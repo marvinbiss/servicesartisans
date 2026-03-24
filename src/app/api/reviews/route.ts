@@ -8,6 +8,7 @@ import { NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@supabase/supabase-js'
 import { createHmac, timingSafeEqual } from 'crypto'
+import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
 import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 import { slugify } from '@/lib/utils'
@@ -257,31 +258,22 @@ export async function POST(request: Request) {
     const { bookingId, rating, comment, reviewToken } = validation.data
     const wouldRecommend = body.wouldRecommend ?? true
 
-    // Validate HMAC review token (prevents fake reviews) — MANDATORY
-    if (!process.env.REVIEW_HMAC_SECRET || !reviewToken) {
-      return NextResponse.json(
-        createErrorResponse(ErrorCode.REVIEW_TOKEN_INVALID, 'Token de vérification requis'),
-        { status: 403 }
-      )
-    }
-    {
-      const expected = createHmac('sha256', process.env.REVIEW_HMAC_SECRET)
-        .update(bookingId)
-        .digest('hex')
-        .slice(0, 32)
-      const provided = Buffer.from(reviewToken, 'hex')
-      const expectedBuf = Buffer.from(expected, 'hex')
-      if (provided.length !== expectedBuf.length || !timingSafeEqual(provided, expectedBuf)) {
-        return NextResponse.json(createErrorResponse(ErrorCode.UNAUTHORIZED, 'Token invalide'), { status: 401 })
-      }
-    }
-
     // Validate bookingId is a valid UUID to prevent enumeration
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
     if (!uuidRegex.test(bookingId)) {
       return NextResponse.json(
         createErrorResponse(ErrorCode.VALIDATION_ERROR, 'ID de réservation invalide'),
         { status: 400 }
+      )
+    }
+
+    // Auth check: reviewer must be authenticated
+    const authSupabase = await createClient()
+    const { data: { user } } = await authSupabase.auth.getUser()
+    if (!user) {
+      return NextResponse.json(
+        createErrorResponse(ErrorCode.UNAUTHORIZED, 'Authentification requise pour laisser un avis'),
+        { status: 401 }
       )
     }
 
@@ -293,6 +285,7 @@ export async function POST(request: Request) {
       .from('bookings')
       .select(`
         id,
+        client_id,
         provider_id,
         status,
         client:profiles!client_id(full_name, email, phone_e164)
@@ -306,6 +299,34 @@ export async function POST(request: Request) {
         createErrorResponse(ErrorCode.NOT_FOUND, 'Reservation non trouvee'),
         { status: 404 }
       )
+    }
+
+    // Auth check: the reviewer must be the booking's client
+    if (booking.client_id !== user.id) {
+      return NextResponse.json(
+        createErrorResponse(ErrorCode.UNAUTHORIZED, 'Vous ne pouvez laisser un avis que pour vos propres réservations'),
+        { status: 403 }
+      )
+    }
+
+    // Validate HMAC review token (prevents fake reviews) — MANDATORY
+    // HMAC includes both bookingId and client_id to prevent cross-user token reuse
+    if (!process.env.REVIEW_HMAC_SECRET || !reviewToken) {
+      return NextResponse.json(
+        createErrorResponse(ErrorCode.REVIEW_TOKEN_INVALID, 'Token de vérification requis'),
+        { status: 403 }
+      )
+    }
+    {
+      const expected = createHmac('sha256', process.env.REVIEW_HMAC_SECRET)
+        .update(`${bookingId}:${booking.client_id}`)
+        .digest('hex')
+        .slice(0, 32)
+      const provided = Buffer.from(reviewToken, 'hex')
+      const expectedBuf = Buffer.from(expected, 'hex')
+      if (provided.length !== expectedBuf.length || !timingSafeEqual(provided, expectedBuf)) {
+        return NextResponse.json(createErrorResponse(ErrorCode.UNAUTHORIZED, 'Token invalide'), { status: 401 })
+      }
     }
 
     // Check booking status

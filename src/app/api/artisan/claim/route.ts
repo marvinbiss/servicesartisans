@@ -24,12 +24,12 @@ const claimSchema = z.object({
 
 export async function POST(request: Request) {
   try {
-    // Rate limiting (public endpoint — 3 requests per 5 min per IP)
+    // Rate limiting (public endpoint — 3 requests per hour per IP)
     const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
       || request.headers.get('x-real-ip')
       || request.headers.get('cf-connecting-ip')
       || 'unknown'
-    const rl = await checkRateLimit(`claim:${ip}`, { window: 300_000, max: 20 })
+    const rl = await checkRateLimit(`claim:${ip}`, { window: 3_600_000, max: 3 })
     if (!rl.allowed) {
       return NextResponse.json(
         { error: 'Trop de demandes. Réessayez dans quelques minutes.' },

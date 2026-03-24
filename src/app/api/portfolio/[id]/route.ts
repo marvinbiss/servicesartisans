@@ -149,6 +149,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
         updated_at: new Date().toISOString(),
       })
       .eq('id', id)
+      .eq('artisan_id', user.id)
       .select()
       .single()
 
@@ -223,6 +224,7 @@ export async function DELETE(_request: NextRequest, { params }: RouteParams) {
       .from('portfolio_items')
       .delete()
       .eq('id', id)
+      .eq('artisan_id', user.id)
 
     if (deleteError) {
       logger.error('Error deleting portfolio item:', deleteError)

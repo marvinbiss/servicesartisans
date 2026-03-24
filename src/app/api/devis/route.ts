@@ -31,7 +31,7 @@ const getResend = () => getResendClient()
 const devisSchema = z.object({
   service: z.string().min(1, 'Veuillez sélectionner un service'),
   urgency: z.string().min(1, 'Veuillez sélectionner l\'urgence'),
-  budget: z.string().optional(),
+  budget: z.string().max(20).optional(),
   description: z.string().optional(),
   codePostal: z.string().optional(),
   ville: z.string().optional(),

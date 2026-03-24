@@ -9,6 +9,7 @@ import { cookies } from 'next/headers'
 import { signInSchema, validateRequest, formatZodErrors } from '@/lib/validations/schemas'
 import { createErrorResponse, createSuccessResponse, ErrorCode } from '@/lib/errors/types'
 import { logger } from '@/lib/logger'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limiter'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
@@ -17,6 +18,16 @@ export const dynamic = 'force-dynamic'
 
 export async function POST(request: Request) {
   try {
+    // Rate limiting (10 requests per 5 min per IP)
+    const ip = getClientIp(request.headers)
+    const rl = await checkRateLimit(`signin:${ip}`, { window: 300_000, max: 10 })
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { error: 'Trop de tentatives de connexion, veuillez réessayer plus tard' },
+        { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.resetTime - Date.now()) / 1000)) } }
+      )
+    }
+
     // Validate environment
     if (!supabaseUrl || !supabaseAnonKey) {
       return NextResponse.json(
@@ -130,7 +141,7 @@ export async function POST(request: Request) {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      path: '/api/auth',
+      path: '/',
       maxAge: 60 * 60 * 24 * 7, // 7 days
     })
 
