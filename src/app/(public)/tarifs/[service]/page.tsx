@@ -19,6 +19,7 @@ import LastUpdated from '@/components/seo/LastUpdated'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import InContentLinks from '@/components/seo/InContentLinks'
 import StickyMobileCTA from '@/components/StickyMobileCTA'
+import SeasonalLinks from '@/components/seo/SeasonalLinks'
 import dynamic from 'next/dynamic'
 
 
@@ -687,6 +688,11 @@ export default async function TarifsServicePage({ params }: { params: Promise<{ 
           </div>
         </div>
       </section>
+
+      {/* Services de saison */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <SeasonalLinks currentService={service} />
+      </div>
 
       {/* Trust */}
       <section className="py-8 bg-white border-t">

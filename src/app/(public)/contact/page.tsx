@@ -7,14 +7,16 @@ import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 
+const contactTitle = 'Contactez l\'équipe ServicesArtisans — Support & Questions'
+
 export const metadata: Metadata = {
-  title: 'Contactez l\'équipe ServicesArtisans — Support & Questions',
+  title: contactTitle,
   description: 'Contactez l\'équipe ServicesArtisans pour toute question sur notre annuaire d\'artisans. Formulaire de contact, email et assistance rapide.',
   alternates: {
     canonical: `${SITE_URL}/contact`,
   },
   openGraph: {
-    title: 'Contactez-nous',
+    title: contactTitle,
     description: 'Contactez l\'équipe ServicesArtisans pour toute question sur notre annuaire d\'artisans.',
     url: `${SITE_URL}/contact`,
     type: 'website',
@@ -22,7 +24,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Contactez-nous',
+    title: contactTitle,
     description: 'Contactez l\'équipe ServicesArtisans pour toute question sur notre annuaire d\'artisans.',
     images: [`${SITE_URL}/opengraph-image`],
   },

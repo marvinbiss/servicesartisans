@@ -12,6 +12,7 @@ import { getRegionImage } from '@/lib/data/images'
 import { generateRegionContent, hashCode } from '@/lib/seo/location-content'
 import { Thermometer, TrendingUp, AlertTriangle, Mountain } from 'lucide-react'
 import problems from '@/lib/data/problems'
+import SeasonalLinks from '@/components/seo/SeasonalLinks'
 
 export function generateStaticParams() {
   return regions.map((region) => ({ region: region.slug }))
@@ -713,6 +714,11 @@ export default async function RegionPage({ params }: PageProps) {
             </div>
           </div>
         </section>
+
+      {/* Services de saison */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <SeasonalLinks />
+      </div>
 
       {/* Confiance & Sécurité */}
       <section className="py-8 border-t">

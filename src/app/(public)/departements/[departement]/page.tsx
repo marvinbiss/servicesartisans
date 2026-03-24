@@ -13,6 +13,7 @@ import { generateDepartementContent, hashCode } from '@/lib/seo/location-content
 import { getTradeContent } from '@/lib/data/trade-content'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import OrphanRescueLinks from '@/components/seo/OrphanRescueLinks'
+import SeasonalLinks from '@/components/seo/SeasonalLinks'
 import { Thermometer, Home, TrendingUp, AlertTriangle, Globe, Star, Euro } from 'lucide-react'
 
 
@@ -717,6 +718,11 @@ export default async function DepartementPage({ params }: PageProps) {
             </div>
           </div>
         </section>
+
+      {/* Services de saison */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <SeasonalLinks />
+      </div>
 
       {/* Confiance & Sécurité */}
       <section className="py-8 border-t">

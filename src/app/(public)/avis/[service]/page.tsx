@@ -22,6 +22,8 @@ import { villes } from '@/lib/data/france'
 import { getServiceImage } from '@/lib/data/images'
 import { relatedServices } from '@/lib/constants/navigation'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
+import DeepPageLinks from '@/components/seo/DeepPageLinks'
+import InContentLinks from '@/components/seo/InContentLinks'
 
 export const revalidate = 86400 // 24h
 
@@ -944,6 +946,9 @@ export default async function AvisServicePage({
       </section>
 
       <CrossIntentLinks service={service} serviceName={trade.name} currentIntent="avis" />
+
+      <InContentLinks serviceSlug={service} serviceName={trade.name} currentIntent="avis" />
+      <DeepPageLinks currentService={service} currentIntent="avis" skipCrossIntent />
 
       {/* Editorial credibility */}
       <section className="mb-8">

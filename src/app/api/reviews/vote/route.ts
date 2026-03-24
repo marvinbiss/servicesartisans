@@ -1,10 +1,13 @@
 /**
  * Review Vote API - ServicesArtisans
- * Handles "Was this review helpful?" votes with deduplication
+ * Handles "Was this review helpful?" votes.
+ *
+ * NOTE: The `review_votes` table was dropped. Deduplication is no longer
+ * performed server-side — we simply increment `helpful_count` on the
+ * `reviews` row. Client-side localStorage prevents casual double-votes.
  */
 
 import { NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
@@ -14,23 +17,6 @@ const voteSchema = z.object({
 })
 
 export const dynamic = 'force-dynamic'
-
-/**
- * Build a voter fingerprint for deduplication.
- * Authenticated user -> user id; anonymous -> IP address.
- */
-function getVoterFingerprint(
-  userId: string | null,
-  request: Request
-): string {
-  if (userId) return `user:${userId}`
-  const forwarded = request.headers.get('x-forwarded-for')
-  const ip =
-    forwarded?.split(',')[0]?.trim() ||
-    request.headers.get('x-real-ip') ||
-    'unknown'
-  return `ip:${ip}`
-}
 
 export async function POST(request: Request) {
   try {
@@ -43,12 +29,6 @@ export async function POST(request: Request) {
       )
     }
     const { reviewId } = result.data
-
-    const supabase = await createClient()
-
-    // Optional auth for fingerprint
-    const { data: { user } } = await supabase.auth.getUser()
-    const fingerprint = getVoterFingerprint(user?.id ?? null, request)
 
     const adminSupabase = createAdminClient()
 
@@ -67,67 +47,16 @@ export async function POST(request: Request) {
       )
     }
 
-    // Try deduplication via review_votes upsert
-    try {
-      const { error: voteError } = await adminSupabase
-        .from('review_votes')
-        .upsert(
-          {
-            review_id: reviewId,
-            voter_fingerprint: fingerprint,
-            is_helpful: true,
-          },
-          { onConflict: 'review_id,voter_fingerprint', ignoreDuplicates: true }
-        )
+    // Simple increment — review_votes table was dropped, no server-side dedup
+    const newCount = (review.helpful_count ?? 0) + 1
+    const { error: updateError } = await adminSupabase
+      .from('reviews')
+      .update({ helpful_count: newCount })
+      .eq('id', reviewId)
 
-      if (voteError) {
-        // If review_votes table doesn't exist yet (42P01), fall through
-        const pgCode = typeof voteError === 'object' && voteError !== null && 'code' in voteError
-          ? (voteError as { code: string }).code
-          : undefined
-        if (pgCode === '42P01') {
-          throw new Error('TABLE_NOT_FOUND')
-        }
-        throw voteError
-      }
+    if (updateError) throw updateError
 
-      // Recount from actual votes (authoritative, avoids race condition)
-      const { count, error: countError } = await adminSupabase
-        .from('review_votes')
-        .select('id', { count: 'exact', head: true })
-        .eq('review_id', reviewId)
-        .eq('is_helpful', true)
-
-      if (countError) throw countError
-
-      const newCount = count ?? 0
-      const { error: updateError } = await adminSupabase
-        .from('reviews')
-        .update({ helpful_count: newCount })
-        .eq('id', reviewId)
-
-      if (updateError) throw updateError
-
-      return NextResponse.json({ success: true, helpful_count: newCount })
-    } catch (err) {
-      // Fallback: review_votes table doesn't exist yet
-      const msg = err instanceof Error ? err.message : ''
-      if (msg === 'TABLE_NOT_FOUND') {
-        logger.warn('review_votes table missing - falling back to simple increment')
-        const { error: updateError } = await adminSupabase
-          .from('reviews')
-          .update({ helpful_count: (review.helpful_count ?? 0) + 1 })
-          .eq('id', reviewId)
-
-        if (updateError) throw updateError
-
-        return NextResponse.json({
-          success: true,
-          helpful_count: (review.helpful_count ?? 0) + 1,
-        })
-      }
-      throw err
-    }
+    return NextResponse.json({ success: true, helpful_count: newCount })
   } catch (error) {
     logger.error('Erreur vote avis:', error)
     return NextResponse.json(

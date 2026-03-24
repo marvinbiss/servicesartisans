@@ -8,14 +8,16 @@ import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import Breadcrumb from '@/components/Breadcrumb'
 
+const faqTitle = 'FAQ — Questions Artisans et Travaux | ServicesArtisans'
+
 export const metadata: Metadata = {
-  title: 'FAQ ServicesArtisans — Questions sur les artisans et travaux',
+  title: faqTitle,
   description: 'Retrouvez les réponses aux questions les plus fréquentes sur ServicesArtisans : inscription, devis, fonctionnement de l\'annuaire d\'artisans.',
   alternates: {
     canonical: `${SITE_URL}/faq`,
   },
   openGraph: {
-    title: 'Questions fréquentes (FAQ)',
+    title: faqTitle,
     description: 'Retrouvez les réponses aux questions fréquentes sur ServicesArtisans.',
     url: `${SITE_URL}/faq`,
     type: 'website',
@@ -23,7 +25,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Questions fréquentes (FAQ)',
+    title: faqTitle,
     description: 'Retrouvez les réponses aux questions fréquentes sur ServicesArtisans.',
     images: [`${SITE_URL}/opengraph-image`],
   },

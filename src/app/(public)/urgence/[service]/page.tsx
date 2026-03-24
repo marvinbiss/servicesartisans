@@ -14,6 +14,8 @@ import { getServiceImage } from '@/lib/data/images'
 import { getPageContent } from '@/lib/cms'
 import { CmsContent } from '@/components/CmsContent'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
+import DeepPageLinks from '@/components/seo/DeepPageLinks'
+import InContentLinks from '@/components/seo/InContentLinks'
 import dynamic from 'next/dynamic'
 
 const ExitIntentPopup = dynamic(
@@ -628,6 +630,20 @@ export default async function UrgenceServicePage({ params }: { params: Promise<{
         service={service}
         serviceName={trade.name}
         currentIntent="urgence"
+      />
+
+      {/* In-content contextual links */}
+      <InContentLinks
+        serviceSlug={service}
+        serviceName={trade.name}
+        currentIntent="urgence"
+      />
+
+      {/* Deep page links */}
+      <DeepPageLinks
+        currentService={service}
+        currentIntent="urgence"
+        skipCrossIntent
       />
 
       {/* Final CTA */}

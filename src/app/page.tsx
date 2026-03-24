@@ -22,7 +22,7 @@ export const revalidate = 86400 // ISR : la homepage est revalidée toutes les 2
 export async function generateMetadata(): Promise<Metadata> {
   const { artisanCount: count } = await getSiteStats()
   const countStr = count > 0 ? `${formatProviderCount(count)}+` : 'Des milliers d\''
-  const absoluteTitle = `Artisans de France — ${countStr} Pros Vérifiés | ServicesArtisans`
+  const absoluteTitle = `Artisans de France — ${countStr} Pros Vérifiés`
     const metaDescription = `Trouvez un artisan qualifié parmi ${countStr} professionnels vérifiés SIREN. Plombier, électricien, serrurier : 101 départements couverts. Devis gratuit.`
     return {
     title: { absolute: absoluteTitle },
